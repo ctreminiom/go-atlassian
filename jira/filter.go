@@ -9,10 +9,13 @@ import (
 	"strconv"
 )
 
-type FilterService struct{ client *Client }
+type FilterService struct {
+	client *Client
+	Share  *FilterShareService
+}
 
 type FilterBodyScheme struct {
-	Name        string `json:"name"`
+	Name        string `json:"name,omitempty"`
 	Description string `json:"description,omitempty"`
 	JQL         string `json:"jql,omitempty"`
 	Favorite    bool   `json:"favourite,omitempty"`
@@ -58,7 +61,9 @@ func (f *FilterService) Favorite(ctx context.Context, expands []string) (result 
 		expand += "," + value
 	}
 
-	params.Add("expand", expand)
+	if len(expand) != 0 {
+		params.Add("expand", expand)
+	}
 
 	var endpoint string
 	if params.Encode() != "" {
@@ -144,6 +149,8 @@ type FilterSearchOptionScheme struct {
 	Expand    []string
 }
 
+// Returns a paginated list of filters. Use this operation to get:
+// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-filters/#api-rest-api-3-filter-search-get
 func (f *FilterService) Search(ctx context.Context, options *FilterSearchOptionScheme, startAt, maxResults int) (result *FilterSearchScheme, response *Response, err error) {
 
 	params := url.Values{}
@@ -217,6 +224,8 @@ func (f *FilterService) Search(ctx context.Context, options *FilterSearchOptionS
 	return
 }
 
+// Returns a filter.
+// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-filters/#api-rest-api-3-filter-id-get
 func (f *FilterService) Get(ctx context.Context, id string, expands []string) (result *FilterScheme, response *Response, err error) {
 
 	params := url.Values{}
@@ -259,6 +268,8 @@ func (f *FilterService) Get(ctx context.Context, id string, expands []string) (r
 	return
 }
 
+// Updates a filter. Use this operation to update a filter's name, description, JQL, or sharing.
+// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-filters/#api-rest-api-3-filter-id-put
 func (f *FilterService) Update(ctx context.Context, id string, payload *FilterBodyScheme) (result *FilterScheme, response *Response, err error) {
 
 	var endpoint = fmt.Sprintf("rest/api/3/filter/%v", id)
@@ -280,6 +291,8 @@ func (f *FilterService) Update(ctx context.Context, id string, payload *FilterBo
 	return
 }
 
+// Delete a filter.
+// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-filters/#api-rest-api-3-filter-id-delete
 func (f *FilterService) Delete(ctx context.Context, id string) (response *Response, err error) {
 
 	var endpoint = fmt.Sprintf("rest/api/3/filter/%v", id)

@@ -42,6 +42,7 @@ func New(httpClient *http.Client, site string) (client *Client, err error) {
 	}
 
 	client = &Client{}
+	client.HTTP = httpClient
 	client.Site = siteAsURL
 
 	client.Role = &ApplicationRoleService{client: client}
@@ -97,12 +98,12 @@ func (c *Client) Do(request *http.Request) (response *Response, err error) {
 		return
 	}
 
-	response, err = checkResponse(httpResponse, request.RequestURI)
+	response, err = checkResponse(httpResponse, request.URL.String())
 	if err != nil {
 		return
 	}
 
-	response, err = newResponse(httpResponse, request.RequestURI)
+	response, err = newResponse(httpResponse, request.URL.String())
 	if err != nil {
 		return
 	}

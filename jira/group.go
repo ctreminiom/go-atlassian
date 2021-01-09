@@ -90,14 +90,14 @@ type BulkGroupScheme struct {
 	} `json:"values"`
 }
 
-type BulkOptionsScheme struct {
+type GroupBulkOptionsScheme struct {
 	GroupIDs   []string
 	GroupNames []string
 }
 
 // Returns a paginated list of groups.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-groups/#api-rest-api-3-group-bulk-get
-func (g *GroupService) Bulk(ctx context.Context, options *BulkOptionsScheme, startAt, maxResults int) (result *BulkGroupScheme, response *Response, err error) {
+func (g *GroupService) Bulk(ctx context.Context, options *GroupBulkOptionsScheme, startAt, maxResults int) (result *BulkGroupScheme, response *Response, err error) {
 
 	params := url.Values{}
 

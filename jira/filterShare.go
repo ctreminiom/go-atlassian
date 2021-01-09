@@ -152,10 +152,10 @@ type PermissionFilterBodyScheme struct {
 // If you add a global share permission (one for all logged-in users or the public)
 // it will overwrite all share permissions for the filter.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-filter-sharing/#api-rest-api-3-filter-id-permission-post
-func (f *FilterShareService) Add(ctx context.Context, filterID string, body *PermissionFilterBodyScheme) (result *[]ShareFilterPermissionScheme, response *Response, err error) {
+func (f *FilterShareService) Add(ctx context.Context, filterID string, payload *PermissionFilterBodyScheme) (result *[]ShareFilterPermissionScheme, response *Response, err error) {
 
 	var endpoint = fmt.Sprintf("rest/api/3/filter/%v/permission", filterID)
-	request, err := f.client.newRequest(ctx, http.MethodPost, endpoint, &body)
+	request, err := f.client.newRequest(ctx, http.MethodPost, endpoint, &payload)
 	if err != nil {
 		return
 	}

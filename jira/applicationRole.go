@@ -26,7 +26,7 @@ type ApplicationRoleScheme struct {
 
 // Returns all application roles.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-application-roles/#api-rest-api-3-applicationrole-get
-func (a *ApplicationRoleService) Gets(ctx context.Context) (applicationRoles *[]ApplicationRoleScheme, response *Response, err error) {
+func (a *ApplicationRoleService) Gets(ctx context.Context) (result *[]ApplicationRoleScheme, response *Response, err error) {
 
 	var endpoint = "rest/api/3/applicationrole"
 	request, err := a.client.newRequest(ctx, http.MethodGet, endpoint, nil)
@@ -39,7 +39,7 @@ func (a *ApplicationRoleService) Gets(ctx context.Context) (applicationRoles *[]
 		return
 	}
 
-	result := new([]ApplicationRoleScheme)
+	result = new([]ApplicationRoleScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
@@ -49,7 +49,7 @@ func (a *ApplicationRoleService) Gets(ctx context.Context) (applicationRoles *[]
 
 // Returns an application role.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-application-roles/#api-rest-api-3-applicationrole-key-get
-func (a *ApplicationRoleService) Get(ctx context.Context, key string) (applicationRoles *ApplicationRoleScheme, response *Response, err error) {
+func (a *ApplicationRoleService) Get(ctx context.Context, key string) (result *ApplicationRoleScheme, response *Response, err error) {
 
 	var endpoint = fmt.Sprintf("rest/api/3/applicationrole/%v", key)
 	request, err := a.client.newRequest(ctx, http.MethodGet, endpoint, nil)
@@ -62,7 +62,7 @@ func (a *ApplicationRoleService) Get(ctx context.Context, key string) (applicati
 		return
 	}
 
-	result := new(ApplicationRoleScheme)
+	result = new(ApplicationRoleScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}

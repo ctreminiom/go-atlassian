@@ -33,7 +33,7 @@ type DashboardScheme struct {
 
 // Returns a list of dashboards owned by or shared with the user. The list may be filtered to include only favorite or owned dashboards.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-dashboards/#api-rest-api-3-dashboard-get
-func (d *DashboardService) Gets(ctx context.Context, startAt, maxResults int, filter string) (dashboards *DashboardsSchemeResult, response *Response, err error) {
+func (d *DashboardService) Gets(ctx context.Context, startAt, maxResults int, filter string) (result *DashboardsSchemeResult, response *Response, err error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -52,26 +52,10 @@ func (d *DashboardService) Gets(ctx context.Context, startAt, maxResults int, fi
 		return
 	}
 
-	result := new(DashboardsSchemeResult)
+	result = new(DashboardsSchemeResult)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
 	return
 }
-
-/*
-func find(listAsString []string, value string) (isAvailable bool) {
-
-	sort.Strings(listAsString)
-
-	//Make the binary string using a custom sort algorithm
-	binarySearchIndex := sort.Search(len(listAsString), func(position int) bool { return value <= listAsString[position] })
-
-	if binarySearchIndex < len(listAsString) && listAsString[binarySearchIndex] == value {
-		return true
-	}
-
-	return false
-}
-*/

@@ -31,6 +31,8 @@ func (f *FilterService) Create(ctx context.Context, payload *FilterBodyScheme) (
 		return
 	}
 
+	request.Header.Set("Content-Type", "application/json")
+
 	response, err = f.client.Do(request)
 	if err != nil {
 		return
@@ -76,6 +78,7 @@ func (f *FilterService) Favorite(ctx context.Context, expands []string) (result 
 	if err != nil {
 		return
 	}
+	request.Header.Set("Content-Type", "application/json")
 
 	response, err = f.client.Do(request)
 	if err != nil {
@@ -126,6 +129,7 @@ func (f *FilterService) My(ctx context.Context, expands []string, favorites bool
 	if err != nil {
 		return
 	}
+	request.Header.Set("Content-Type", "application/json")
 
 	response, err = f.client.Do(request)
 	if err != nil {
@@ -143,7 +147,6 @@ func (f *FilterService) My(ctx context.Context, expands []string, favorites bool
 type FilterSearchOptionScheme struct {
 	Name      string
 	AccountID string
-	Owner     string
 	Group     string
 	ProjectID int
 	IDs       []int
@@ -165,10 +168,6 @@ func (f *FilterService) Search(ctx context.Context, options *FilterSearchOptionS
 		params.Add("accountId", options.AccountID)
 	}
 
-	if options.Owner != "" {
-		params.Add("owner", options.Owner)
-	}
-
 	if options.Group != "" {
 		params.Add("groupname", options.Group)
 	}
@@ -186,7 +185,10 @@ func (f *FilterService) Search(ctx context.Context, options *FilterSearchOptionS
 
 		filtersIDs += "," + strconv.Itoa(value)
 	}
-	params.Add("id", filtersIDs)
+
+	if len(filtersIDs) != 0 {
+		params.Add("id", filtersIDs)
+	}
 
 	if options.OrderBy != "" {
 		params.Add("orderBy", options.OrderBy)
@@ -203,7 +205,10 @@ func (f *FilterService) Search(ctx context.Context, options *FilterSearchOptionS
 		expand += "," + value
 	}
 
-	params.Add("expand", expand)
+	if len(expand) != 0 {
+		params.Add("expand", expand)
+	}
+
 	params.Add("startAt", strconv.Itoa(startAt))
 	params.Add("maxResults", strconv.Itoa(maxResults))
 
@@ -212,6 +217,7 @@ func (f *FilterService) Search(ctx context.Context, options *FilterSearchOptionS
 	if err != nil {
 		return
 	}
+	request.Header.Set("Content-Type", "application/json")
 
 	response, err = f.client.Do(request)
 	if err != nil {
@@ -228,7 +234,7 @@ func (f *FilterService) Search(ctx context.Context, options *FilterSearchOptionS
 
 // Returns a filter.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-filters/#api-rest-api-3-filter-id-get
-func (f *FilterService) Get(ctx context.Context, id string, expands []string) (result *FilterScheme, response *Response, err error) {
+func (f *FilterService) Get(ctx context.Context, filterID string, expands []string) (result *FilterScheme, response *Response, err error) {
 
 	params := url.Values{}
 
@@ -247,15 +253,16 @@ func (f *FilterService) Get(ctx context.Context, id string, expands []string) (r
 
 	var endpoint string
 	if params.Encode() != "" {
-		endpoint = fmt.Sprintf("rest/api/3/filter/%v?%v", id, params.Encode())
+		endpoint = fmt.Sprintf("rest/api/3/filter/%v?%v", filterID, params.Encode())
 	} else {
-		endpoint = fmt.Sprintf("rest/api/3/filter/%v", id)
+		endpoint = fmt.Sprintf("rest/api/3/filter/%v", filterID)
 	}
 
 	request, err := f.client.newRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
 		return
 	}
+	request.Header.Set("Content-Type", "application/json")
 
 	response, err = f.client.Do(request)
 	if err != nil {
@@ -272,13 +279,14 @@ func (f *FilterService) Get(ctx context.Context, id string, expands []string) (r
 
 // Updates a filter. Use this operation to update a filter's name, description, JQL, or sharing.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-filters/#api-rest-api-3-filter-id-put
-func (f *FilterService) Update(ctx context.Context, id string, payload *FilterBodyScheme) (result *FilterScheme, response *Response, err error) {
+func (f *FilterService) Update(ctx context.Context, filterID string, payload *FilterBodyScheme) (result *FilterScheme, response *Response, err error) {
 
-	var endpoint = fmt.Sprintf("rest/api/3/filter/%v", id)
+	var endpoint = fmt.Sprintf("rest/api/3/filter/%v", filterID)
 	request, err := f.client.newRequest(ctx, http.MethodPut, endpoint, &payload)
 	if err != nil {
 		return
 	}
+	request.Header.Set("Content-Type", "application/json")
 
 	response, err = f.client.Do(request)
 	if err != nil {
@@ -295,13 +303,14 @@ func (f *FilterService) Update(ctx context.Context, id string, payload *FilterBo
 
 // Delete a filter.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-filters/#api-rest-api-3-filter-id-delete
-func (f *FilterService) Delete(ctx context.Context, id string) (response *Response, err error) {
+func (f *FilterService) Delete(ctx context.Context, filterID string) (response *Response, err error) {
 
-	var endpoint = fmt.Sprintf("rest/api/3/filter/%v", id)
+	var endpoint = fmt.Sprintf("rest/api/3/filter/%v", filterID)
 	request, err := f.client.newRequest(ctx, http.MethodDelete, endpoint, nil)
 	if err != nil {
 		return
 	}
+	request.Header.Set("Content-Type", "application/json")
 
 	response, err = f.client.Do(request)
 	if err != nil {

@@ -15,6 +15,14 @@ import (
 type Client struct {
 	HTTP *http.Client
 	Site *url.URL
+
+	Role      *ApplicationRoleService
+	Audit     *AuditService
+	Auth      *AuthenticationService
+	Dashboard *DashboardService
+	Filter    *FilterService
+	Group     *GroupService
+	Issue     *IssueService
 }
 
 //New
@@ -35,6 +43,20 @@ func New(httpClient *http.Client, site string) (client *Client, err error) {
 
 	client = &Client{}
 	client.Site = siteAsURL
+
+	client.Role = &ApplicationRoleService{client: client}
+	client.Audit = &AuditService{client: client}
+	client.Auth = &AuthenticationService{client: client}
+	client.Dashboard = &DashboardService{client: client}
+
+	client.Filter = &FilterService{
+		client: client,
+		Share:  &FilterShareService{client: client},
+	}
+
+	client.Group = &GroupService{client: client}
+
+	client.Issue = &IssueService{client: client}
 
 	return
 }
@@ -62,6 +84,8 @@ func (c *Client) newRequest(ctx context.Context, method, urlAsString string, pay
 	if err != nil {
 		return
 	}
+
+	request.SetBasicAuth(c.Auth.mail, c.Auth.token)
 
 	return
 }
@@ -109,6 +133,7 @@ func newResponse(http *http.Response, endpoint string) (response *Response, err 
 		StatusCode:  statusCode,
 		Headers:     http.Header,
 		BodyAsBytes: httpResponseAsBytes,
+		Endpoint:    endpoint,
 	}
 
 	return &newResponse, nil
@@ -133,6 +158,7 @@ func checkResponse(http *http.Response, endpoint string) (response *Response, er
 		StatusCode:  statusCode,
 		Headers:     http.Header,
 		BodyAsBytes: httpResponseAsBytes,
+		Endpoint:    endpoint,
 	}
 
 	return &newErrorResponse, fmt.Errorf("request failed. Please analyze the request body for more details. Status Code: %d", statusCode)

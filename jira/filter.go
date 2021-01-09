@@ -107,7 +107,9 @@ func (f *FilterService) My(ctx context.Context, expands []string, favorites bool
 		expand += "," + value
 	}
 
-	params.Add("expand", expand)
+	if len(expand) != 0 {
+		params.Add("expand", expand)
+	}
 
 	if favorites {
 		params.Add("includeFavourites", "true")

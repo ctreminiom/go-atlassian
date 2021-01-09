@@ -9,7 +9,11 @@ import (
 	"strconv"
 )
 
-type IssueService struct{ client *Client }
+type IssueService struct {
+	client     *Client
+	Attachment *AttachmentService
+	Comment    *CommentService
+}
 
 type IssueScheme struct {
 	ID   string `json:"id"`

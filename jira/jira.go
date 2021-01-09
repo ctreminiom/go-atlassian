@@ -57,7 +57,15 @@ func New(httpClient *http.Client, site string) (client *Client, err error) {
 
 	client.Group = &GroupService{client: client}
 
-	client.Issue = &IssueService{client: client}
+	client.Issue = &IssueService{
+		client:     client,
+		Attachment: &AttachmentService{client: client},
+
+		Comment: &CommentService{
+			client:     client,
+			Properties: &CommentPropertiesService{client: client},
+		},
+	}
 
 	return
 }

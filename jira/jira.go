@@ -65,6 +65,18 @@ func New(httpClient *http.Client, site string) (client *Client, err error) {
 			client:     client,
 			Properties: &CommentPropertiesService{client: client},
 		},
+
+		Field: &FieldService{
+			client:        client,
+			Configuration: &FieldConfigurationService{client: client},
+
+			Context: &FieldContextService{
+				client: client,
+				Option: &FieldOptionContextService{client: client},
+			},
+
+			Option: &FieldOptionService{client: client},
+		},
 	}
 
 	return

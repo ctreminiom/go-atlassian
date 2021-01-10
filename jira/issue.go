@@ -13,6 +13,8 @@ type IssueService struct {
 	client     *Client
 	Attachment *AttachmentService
 	Comment    *CommentService
+
+	Field *FieldService
 }
 
 type IssueScheme struct {

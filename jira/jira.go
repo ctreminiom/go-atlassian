@@ -136,6 +136,7 @@ type Response struct {
 	Endpoint    string
 	Headers     map[string][]string
 	BodyAsBytes []byte
+	Method      string
 }
 
 func newResponse(http *http.Response, endpoint string) (response *Response, err error) {
@@ -155,6 +156,7 @@ func newResponse(http *http.Response, endpoint string) (response *Response, err 
 		Headers:     http.Header,
 		BodyAsBytes: httpResponseAsBytes,
 		Endpoint:    endpoint,
+		Method:      http.Request.Method,
 	}
 
 	return &newResponse, nil
@@ -180,6 +182,7 @@ func checkResponse(http *http.Response, endpoint string) (response *Response, er
 		Headers:     http.Header,
 		BodyAsBytes: httpResponseAsBytes,
 		Endpoint:    endpoint,
+		Method:      http.Request.Method,
 	}
 
 	return &newErrorResponse, fmt.Errorf("request failed. Please analyze the request body for more details. Status Code: %d", statusCode)

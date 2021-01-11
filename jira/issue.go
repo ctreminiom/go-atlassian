@@ -15,6 +15,7 @@ type IssueService struct {
 	Comment    *CommentService
 
 	Field *FieldService
+	Link  *IssueLinkService
 }
 
 type IssueScheme struct {

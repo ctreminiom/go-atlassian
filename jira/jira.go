@@ -77,6 +77,8 @@ func New(httpClient *http.Client, site string) (client *Client, err error) {
 
 			Option: &FieldOptionService{client: client},
 		},
+
+		Priority: &PriorityService{client: client},
 	}
 
 	return

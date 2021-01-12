@@ -17,12 +17,6 @@ type mockServerOptions struct {
 
 func startMockServer(opts *mockServerOptions) (*httptest.Server, error) {
 
-	//Load the mock json file
-	mockResponse, err := ioutil.ReadFile(opts.MockFilePath)
-	if err != nil {
-		return nil, err
-	}
-
 	mockServer := httptest.NewServer(
 
 		http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -44,7 +38,16 @@ func startMockServer(opts *mockServerOptions) (*httptest.Server, error) {
 
 			//Append the Method
 			w.WriteHeader(opts.ResponseCodeWanted)
-			_, _ = w.Write(mockResponse)
+
+			//Append the JSON Mock file if it's provided
+			if len(opts.MockFilePath) != 0 {
+				mockResponse, err := ioutil.ReadFile(opts.MockFilePath)
+				if err != nil {
+					http.Error(w, err.Error(), 500)
+					return
+				}
+				_, _ = w.Write(mockResponse)
+			}
 
 		}),
 	)

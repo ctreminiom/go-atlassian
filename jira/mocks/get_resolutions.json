@@ -1,0 +1,14 @@
+[
+  {
+    "self": "https://your-domain.atlassian.net/rest/api/3/resolution/1",
+    "id": "10000",
+    "description": "A fix for this issue is checked into the tree and tested.",
+    "name": "Fixed"
+  },
+  {
+    "self": "https://your-domain.atlassian.net/rest/api/3/resolution/3",
+    "id": "10001",
+    "description": "This is what it is supposed to do.",
+    "name": "Works as designed"
+  }
+]

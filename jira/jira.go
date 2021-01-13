@@ -79,6 +79,9 @@ func New(httpClient *http.Client, site string) (client *Client, err error) {
 		},
 
 		Priority: &PriorityService{client: client},
+
+		Property:   &IssuePropertyService{client: client},
+		Resolution: &ResolutionService{client: client},
 	}
 
 	return

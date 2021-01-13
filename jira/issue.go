@@ -14,9 +14,11 @@ type IssueService struct {
 	Attachment *AttachmentService
 	Comment    *CommentService
 
-	Field    *FieldService
-	Link     *IssueLinkService
-	Priority *PriorityService
+	Field      *FieldService
+	Link       *IssueLinkService
+	Priority   *PriorityService
+	Property   *IssuePropertyService
+	Resolution *ResolutionService
 }
 
 type IssueScheme struct {

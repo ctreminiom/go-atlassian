@@ -1,6 +1,7 @@
 # Still in developement ⌛
 
- - Each Jira Cloud endpoint will be documented on the following GitBook [site](https://ctreminiom.gitbook.io/go-atlassian/)
+ - Each Jira Cloud endpoint will be documented on the following GitBook side below:
+ - https://docs.go-atlassian.io/
 
 <img src="https://i.ibb.co/xJpnxQR/gopher-1.png" width="200">
 

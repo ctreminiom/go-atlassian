@@ -153,7 +153,7 @@ func getMyFilters() (err error) {
 
 	atlassian.Auth.SetBasicAuth(mail, token)
 
-	myFilters, response, err := atlassian.Filter.My(context.Background(), nil, false)
+	myFilters, response, err := atlassian.Filter.My(context.Background(), false)
 	if err != nil {
 		if response != nil {
 			log.Println("Response HTTP Response", string(response.BodyAsBytes))
@@ -183,7 +183,7 @@ func getFavoriteFilters() (err error) {
 
 	atlassian.Auth.SetBasicAuth(mail, token)
 
-	filters, response, err := atlassian.Filter.Favorite(context.Background(), []string{})
+	filters, response, err := atlassian.Filter.Favorite(context.Background())
 	if err != nil {
 		if response != nil {
 			log.Println("Response HTTP Response", string(response.BodyAsBytes))

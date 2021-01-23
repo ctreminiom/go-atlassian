@@ -229,16 +229,6 @@ func TestFilterService_Favorite(t *testing.T) {
 			wantHTTPCodeReturn: http.StatusOK,
 			wantErr:            false,
 		},
-		{
-			name:               "GetFavoriteFiltersWhenTheIsExpandHasValuesCorrect",
-			mockFile:           "./mocks/get_favorites_filters.json",
-			expand:             []string{"sharedUsers", "subscriptions"},
-			wantHTTPMethod:     http.MethodGet,
-			endpoint:           "/rest/api/3/filter/favourite?expand=sharedUsers%2Csubscriptions",
-			context:            context.Background(),
-			wantHTTPCodeReturn: http.StatusOK,
-			wantErr:            false,
-		},
 	}
 
 	for _, testCase := range testCases {
@@ -266,7 +256,7 @@ func TestFilterService_Favorite(t *testing.T) {
 			}
 
 			service := &FilterService{client: mockClient}
-			gotResult, gotResponse, err := service.Favorite(testCase.context, testCase.expand)
+			gotResult, gotResponse, err := service.Favorite(testCase.context)
 
 			if testCase.wantErr {
 
@@ -452,7 +442,7 @@ func TestFilterService_My(t *testing.T) {
 			}
 
 			service := &FilterService{client: mockClient}
-			gotResult, gotResponse, err := service.My(testCase.context, testCase.expand, testCase.favorites)
+			gotResult, gotResponse, err := service.My(testCase.context, testCase.favorites)
 
 			if testCase.wantErr {
 

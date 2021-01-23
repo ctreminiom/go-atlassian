@@ -75,7 +75,7 @@ func deleteGroup(groupName string) (err error) {
 	return
 }
 
-func getGroups(groupName string) (err error) {
+func getGroups() (groupsNames []string, err error) {
 
 	log.Println("------------- getGroups -----------------")
 
@@ -88,7 +88,7 @@ func getGroups(groupName string) (err error) {
 
 	options := jira.GroupBulkOptionsScheme{
 		GroupIDs:   nil,
-		GroupNames: []string{groupName},
+		GroupNames: nil,
 	}
 
 	groups, response, err := atlassian.Group.Bulk(context.Background(), &options, 0, 50)
@@ -102,6 +102,11 @@ func getGroups(groupName string) (err error) {
 	log.Println("Response HTTP Code", response.StatusCode)
 	log.Println("HTTP Endpoint Used", response.Endpoint)
 	log.Println(groups.IsLast)
+
+	for index, group := range groups.Values {
+		groupsNames = append(groupsNames, group.Name)
+		log.Printf("#%v, Group: %v", index, group.Name)
+	}
 
 	return
 }
@@ -128,6 +133,10 @@ func getGroupMembers(groupName string) (err error) {
 	log.Println("Response HTTP Code", response.StatusCode)
 	log.Println("HTTP Endpoint Used", response.Endpoint)
 	log.Println(members.IsLast)
+
+	for index, member := range members.Values {
+		log.Printf("#%v - Group %v - Member Mail %v - Member AccountID %v", index, groupName, member.EmailAddress, member.AccountID)
+	}
 
 	return
 }
@@ -180,4 +189,44 @@ func removeUserFromGroup(groupName, accountID string) (err error) {
 	log.Println("HTTP Endpoint Used", response.Endpoint)
 
 	return
+}
+
+func main() {
+
+	log.Println("Creating the new Jira Cloud group")
+	groupName, err := createGroup()
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Printf("The group has been created, %v", groupName)
+
+	log.Println("Adding user to a group")
+	if err := addUserToGroup("jira-users", "5b86be50b8e3cb5895860d6d"); err != nil {
+		log.Fatal(err)
+	}
+
+	log.Println("Removing user to a group")
+	if err := removeUserFromGroup("jira-users", "5b86be50b8e3cb5895860d6d"); err != nil {
+		log.Fatal(err)
+	}
+
+	log.Printf("Delete the group %v", groupName)
+	if err := deleteGroup(groupName); err != nil {
+		log.Fatal(err)
+	}
+
+	log.Println("Getting the Jira Groups")
+	groups, err := getGroups()
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Printf("We've found %v groups in your Jira Cloud instance", len(groups))
+	log.Println("Extracting the group members")
+
+	for _, group := range groups {
+		if err = getGroupMembers(group); err != nil {
+			log.Println(err)
+		}
+	}
+
 }

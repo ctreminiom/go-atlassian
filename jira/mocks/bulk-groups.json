@@ -1,0 +1,16 @@
+{
+  "maxResults": 10,
+  "startAt": 0,
+  "total": 2,
+  "isLast": true,
+  "values": [
+    {
+      "name": "jdog-developers",
+      "groupId": "276f955c-63d7-42c8-9520-92d01dca0625"
+    },
+    {
+      "name": "juvenal-bot",
+      "groupId": "6e87dc72-4f1f-421f-9382-2fee8b652487"
+    }
+  ]
+}

@@ -13,21 +13,21 @@ import (
 type GroupService struct{ client *Client }
 
 type GroupScheme struct {
-	Name  string `json:"name"`
-	Self  string `json:"self"`
+	Name  string `json:"name,omitempty"`
+	Self  string `json:"self,omitempty"`
 	Users struct {
-		Size  int `json:"size"`
+		Size  int `json:"size,omitempty"`
 		Items []struct {
-			Self        string `json:"self"`
-			AccountID   string `json:"accountId"`
-			DisplayName string `json:"displayName"`
-			Active      bool   `json:"active"`
-		} `json:"items"`
-		MaxResults int `json:"max-results"`
-		StartIndex int `json:"start-index"`
-		EndIndex   int `json:"end-index"`
-	} `json:"users"`
-	Expand string `json:"expand"`
+			Self        string `json:"self,omitempty"`
+			AccountID   string `json:"accountId,omitempty"`
+			DisplayName string `json:"displayName,omitempty"`
+			Active      bool   `json:"active,omitempty"`
+		} `json:"items,omitempty"`
+		MaxResults int `json:"max-results,omitempty"`
+		StartIndex int `json:"start-index,omitempty"`
+		EndIndex   int `json:"end-index,omitempty"`
+	} `json:"users,omitempty"`
+	Expand string `json:"expand,omitempty"`
 }
 
 // Creates a group.
@@ -95,14 +95,14 @@ func (g *GroupService) Delete(ctx context.Context, name string) (response *Respo
 }
 
 type BulkGroupScheme struct {
-	MaxResults int  `json:"maxResults"`
-	StartAt    int  `json:"startAt"`
-	Total      int  `json:"total"`
-	IsLast     bool `json:"isLast"`
+	MaxResults int  `json:"maxResults,omitempty"`
+	StartAt    int  `json:"startAt,omitempty"`
+	Total      int  `json:"total,omitempty"`
+	IsLast     bool `json:"isLast,omitempty"`
 	Values     []struct {
-		Name    string `json:"name"`
-		GroupID string `json:"groupId"`
-	} `json:"values"`
+		Name    string `json:"name,omitempty"`
+		GroupID string `json:"groupId,omitempty"`
+	} `json:"values,omitempty"`
 }
 
 type GroupBulkOptionsScheme struct {
@@ -176,25 +176,25 @@ func (g *GroupService) Bulk(ctx context.Context, options *GroupBulkOptionsScheme
 }
 
 type GroupUsersScheme struct {
-	Self       string `json:"self"`
-	NextPage   string `json:"nextPage"`
-	MaxResults int    `json:"maxResults"`
-	StartAt    int    `json:"startAt"`
-	Total      int    `json:"total"`
-	IsLast     bool   `json:"isLast"`
+	Self       string `json:"self,omitempty"`
+	NextPage   string `json:"nextPage,omitempty"`
+	MaxResults int    `json:"maxResults,omitempty"`
+	StartAt    int    `json:"startAt,omitempty"`
+	Total      int    `json:"total,omitempty"`
+	IsLast     bool   `json:"isLast,omitempty"`
 	Values     []struct {
-		Self         string `json:"self"`
-		Name         string `json:"name"`
-		Key          string `json:"key"`
-		AccountID    string `json:"accountId"`
-		EmailAddress string `json:"emailAddress"`
+		Self         string `json:"self,omitempty"`
+		Name         string `json:"name,omitempty"`
+		Key          string `json:"key,omitempty"`
+		AccountID    string `json:"accountId,omitempty"`
+		EmailAddress string `json:"emailAddress,omitempty"`
 		AvatarUrls   struct {
-		} `json:"avatarUrls"`
-		DisplayName string `json:"displayName"`
-		Active      bool   `json:"active"`
-		TimeZone    string `json:"timeZone"`
-		AccountType string `json:"accountType"`
-	} `json:"values"`
+		} `json:"avatarUrls,omitempty"`
+		DisplayName string `json:"displayName,omitempty"`
+		Active      bool   `json:"active,omitempty"`
+		TimeZone    string `json:"timeZone,omitempty"`
+		AccountType string `json:"accountType,omitempty"`
+	} `json:"values,omitempty"`
 }
 
 // Returns a paginated list of all users in a group.

@@ -51,6 +51,8 @@ func createFilter() (filterID string, err error) {
 		return
 	}
 
+	log.Println(string(response.BodyAsBytes))
+
 	log.Println("Response HTTP Code", response.StatusCode)
 	log.Println("HTTP Endpoint Used", response.Endpoint)
 	log.Printf("The filter has been created: %v - %v", filter.ID, filter.Name)
@@ -140,6 +142,36 @@ func deleteFilter(filterID string) (err error) {
 	return
 }
 
+func getMyFilters() (err error) {
+
+	log.Println("------------- getMyFilters -----------------")
+
+	atlassian, err := jira.New(nil, host)
+	if err != nil {
+		return
+	}
+
+	atlassian.Auth.SetBasicAuth(mail, token)
+
+	myFilters, response, err := atlassian.Filter.My(context.Background(), nil, false)
+	if err != nil {
+		if response != nil {
+			log.Println("Response HTTP Response", string(response.BodyAsBytes))
+		}
+		return
+	}
+
+	log.Println("Response HTTP Code", response.StatusCode)
+	log.Println("HTTP Endpoint Used", response.Endpoint)
+	log.Println("my filters", len(*myFilters))
+
+	for _, filter := range *myFilters {
+		log.Println(filter)
+	}
+
+	return
+}
+
 func getFavoriteFilters() (err error) {
 
 	log.Println("------------- getFavoriteFilters -----------------")
@@ -162,6 +194,10 @@ func getFavoriteFilters() (err error) {
 	log.Println("Response HTTP Code", response.StatusCode)
 	log.Println("HTTP Endpoint Used", response.Endpoint)
 	log.Println("favorite filters", len(*filters))
+
+	for _, filter := range *filters {
+		log.Println(filter)
+	}
 
 	return
 }
@@ -204,6 +240,10 @@ func searchFilters() (err error) {
 }
 
 func main() {
+
+	if err := getMyFilters(); err != nil {
+		log.Fatal(err)
+	}
 
 	if err := searchFilters(); err != nil {
 		log.Fatal(err)

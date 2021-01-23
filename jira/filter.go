@@ -3,6 +3,7 @@ package jira
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -25,6 +26,10 @@ type FilterBodyScheme struct {
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-filters/#api-rest-api-3-filter-post
 func (f *FilterService) Create(ctx context.Context, payload *FilterBodyScheme) (result *FilterScheme, response *Response, err error) {
 
+	if ctx == nil {
+		return nil, nil, errors.New("the context param is nil, please provide a valid one")
+	}
+
 	var endpoint = "rest/api/3/filter"
 	request, err := f.client.newRequest(ctx, http.MethodPost, endpoint, &payload)
 	if err != nil {
@@ -38,6 +43,10 @@ func (f *FilterService) Create(ctx context.Context, payload *FilterBodyScheme) (
 		return
 	}
 
+	if len(response.BodyAsBytes) == 0 {
+		return nil, nil, errors.New("unable to marshall the response body, the HTTP callback did not return any bytes")
+	}
+
 	result = new(FilterScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
@@ -49,6 +58,10 @@ func (f *FilterService) Create(ctx context.Context, payload *FilterBodyScheme) (
 // Returns the visible favorite filters of the user.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-filters/#api-rest-api-3-filter-favourite-get
 func (f *FilterService) Favorite(ctx context.Context, expands []string) (result *[]FilterScheme, response *Response, err error) {
+
+	if ctx == nil {
+		return nil, nil, errors.New("the context param is nil, please provide a valid one")
+	}
 
 	params := url.Values{}
 
@@ -85,6 +98,10 @@ func (f *FilterService) Favorite(ctx context.Context, expands []string) (result 
 		return
 	}
 
+	if len(response.BodyAsBytes) == 0 {
+		return nil, nil, errors.New("unable to marshall the response body, the HTTP callback did not return any bytes")
+	}
+
 	result = new([]FilterScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
@@ -96,6 +113,10 @@ func (f *FilterService) Favorite(ctx context.Context, expands []string) (result 
 // Returns the filters owned by the user. If includeFavourites is true, the user's visible favorite filters are also returned.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-filters/#api-rest-api-3-filter-my-get
 func (f *FilterService) My(ctx context.Context, expands []string, favorites bool) (result *[]FilterScheme, response *Response, err error) {
+
+	if ctx == nil {
+		return nil, nil, errors.New("the context param is nil, please provide a valid one")
+	}
 
 	params := url.Values{}
 
@@ -136,6 +157,10 @@ func (f *FilterService) My(ctx context.Context, expands []string, favorites bool
 		return
 	}
 
+	if len(response.BodyAsBytes) == 0 {
+		return nil, nil, errors.New("unable to marshall the response body, the HTTP callback did not return any bytes")
+	}
+
 	result = new([]FilterScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
@@ -157,6 +182,10 @@ type FilterSearchOptionScheme struct {
 // Returns a paginated list of filters. Use this operation to get:
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-filters/#api-rest-api-3-filter-search-get
 func (f *FilterService) Search(ctx context.Context, options *FilterSearchOptionScheme, startAt, maxResults int) (result *FilterSearchScheme, response *Response, err error) {
+
+	if ctx == nil {
+		return nil, nil, errors.New("the context param is nil, please provide a valid one")
+	}
 
 	params := url.Values{}
 
@@ -224,6 +253,10 @@ func (f *FilterService) Search(ctx context.Context, options *FilterSearchOptionS
 		return
 	}
 
+	if len(response.BodyAsBytes) == 0 {
+		return nil, nil, errors.New("unable to marshall the response body, the HTTP callback did not return any bytes")
+	}
+
 	result = new(FilterSearchScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
@@ -235,6 +268,10 @@ func (f *FilterService) Search(ctx context.Context, options *FilterSearchOptionS
 // Returns a filter.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-filters/#api-rest-api-3-filter-id-get
 func (f *FilterService) Get(ctx context.Context, filterID string, expands []string) (result *FilterScheme, response *Response, err error) {
+
+	if ctx == nil {
+		return nil, nil, errors.New("the context param is nil, please provide a valid one")
+	}
 
 	params := url.Values{}
 
@@ -249,7 +286,9 @@ func (f *FilterService) Get(ctx context.Context, filterID string, expands []stri
 		expand += "," + value
 	}
 
-	params.Add("expand", expand)
+	if len(expand) != 0 {
+		params.Add("expand", expand)
+	}
 
 	var endpoint string
 	if params.Encode() != "" {
@@ -269,6 +308,10 @@ func (f *FilterService) Get(ctx context.Context, filterID string, expands []stri
 		return
 	}
 
+	if len(response.BodyAsBytes) == 0 {
+		return nil, nil, errors.New("unable to marshall the response body, the HTTP callback did not return any bytes")
+	}
+
 	result = new(FilterScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
@@ -280,6 +323,10 @@ func (f *FilterService) Get(ctx context.Context, filterID string, expands []stri
 // Updates a filter. Use this operation to update a filter's name, description, JQL, or sharing.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-filters/#api-rest-api-3-filter-id-put
 func (f *FilterService) Update(ctx context.Context, filterID string, payload *FilterBodyScheme) (result *FilterScheme, response *Response, err error) {
+
+	if ctx == nil {
+		return nil, nil, errors.New("the context param is nil, please provide a valid one")
+	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/filter/%v", filterID)
 	request, err := f.client.newRequest(ctx, http.MethodPut, endpoint, &payload)
@@ -293,6 +340,10 @@ func (f *FilterService) Update(ctx context.Context, filterID string, payload *Fi
 		return
 	}
 
+	if len(response.BodyAsBytes) == 0 {
+		return nil, nil, errors.New("unable to marshall the response body, the HTTP callback did not return any bytes")
+	}
+
 	result = new(FilterScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
@@ -304,6 +355,10 @@ func (f *FilterService) Update(ctx context.Context, filterID string, payload *Fi
 // Delete a filter.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-filters/#api-rest-api-3-filter-id-delete
 func (f *FilterService) Delete(ctx context.Context, filterID string) (response *Response, err error) {
+
+	if ctx == nil {
+		return nil, errors.New("the context param is nil, please provide a valid one")
+	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/filter/%v", filterID)
 	request, err := f.client.newRequest(ctx, http.MethodDelete, endpoint, nil)

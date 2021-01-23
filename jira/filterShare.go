@@ -3,8 +3,10 @@ package jira
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
+	"strings"
 )
 
 type FilterShareService struct{ client *Client }
@@ -17,6 +19,10 @@ type shareFilterScopeScheme struct {
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-filter-sharing/#api-rest-api-3-filter-defaultsharescope-get
 func (f *FilterShareService) Scope(ctx context.Context) (scope string, response *Response, err error) {
 
+	if ctx == nil {
+		return "", nil, errors.New("the context param is nil, please provide a valid one")
+	}
+
 	var endpoint = "rest/api/3/filter/defaultShareScope"
 	request, err := f.client.newRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
@@ -26,6 +32,10 @@ func (f *FilterShareService) Scope(ctx context.Context) (scope string, response 
 	response, err = f.client.Do(request)
 	if err != nil {
 		return
+	}
+
+	if len(response.BodyAsBytes) == 0 {
+		return "", nil, errors.New("unable to marshall the response body, the HTTP callback did not return any bytes")
 	}
 
 	result := new(shareFilterScopeScheme)
@@ -41,6 +51,30 @@ func (f *FilterShareService) Scope(ctx context.Context) (scope string, response 
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-filter-sharing/#api-rest-api-3-filter-defaultsharescope-put
 // Valid values: GLOBAL, AUTHENTICATED, PRIVATE
 func (f *FilterShareService) SetScope(ctx context.Context, scope string) (response *Response, err error) {
+
+	//Valid the share filter scope
+	var (
+		validScopeValuesAsList = []string{"GLOBAL", "AUTHENTICATED", "PRIVATE"}
+		isValid                bool
+	)
+
+	for _, validScope := range validScopeValuesAsList {
+		if validScope == scope {
+			isValid = true
+			break
+		}
+	}
+
+	if !isValid {
+		//Join the valid values and create the custom error
+		var validScopeValuesAsString = strings.Join(validScopeValuesAsList, ",")
+
+		return nil, fmt.Errorf("invalid scope, please provide one of the following: %v", validScopeValuesAsString)
+	}
+
+	if ctx == nil {
+		return nil, errors.New("the context param is nil, please provide a valid one")
+	}
 
 	var endpoint = "rest/api/3/filter/defaultShareScope"
 	request, err := f.client.newRequest(ctx, http.MethodPut, endpoint, shareFilterScopeScheme{Scope: scope})
@@ -122,6 +156,10 @@ type ShareFilterPermissionScheme struct {
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-filter-sharing/#api-rest-api-3-filter-id-permission-get
 func (f *FilterShareService) Gets(ctx context.Context, filterID string) (result *[]ShareFilterPermissionScheme, response *Response, err error) {
 
+	if ctx == nil {
+		return nil, nil, errors.New("the context param is nil, please provide a valid one")
+	}
+
 	var endpoint = fmt.Sprintf("rest/api/3/filter/%v/permission", filterID)
 	request, err := f.client.newRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
@@ -131,6 +169,10 @@ func (f *FilterShareService) Gets(ctx context.Context, filterID string) (result 
 	response, err = f.client.Do(request)
 	if err != nil {
 		return
+	}
+
+	if len(response.BodyAsBytes) == 0 {
+		return nil, nil, errors.New("unable to marshall the response body, the HTTP callback did not return any bytes")
 	}
 
 	result = new([]ShareFilterPermissionScheme)
@@ -154,15 +196,26 @@ type PermissionFilterBodyScheme struct {
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-filter-sharing/#api-rest-api-3-filter-id-permission-post
 func (f *FilterShareService) Add(ctx context.Context, filterID string, payload *PermissionFilterBodyScheme) (result *[]ShareFilterPermissionScheme, response *Response, err error) {
 
+	if ctx == nil {
+		return nil, nil, errors.New("the context param is nil, please provide a valid one")
+	}
+
 	var endpoint = fmt.Sprintf("rest/api/3/filter/%v/permission", filterID)
 	request, err := f.client.newRequest(ctx, http.MethodPost, endpoint, &payload)
 	if err != nil {
 		return
 	}
 
+	request.Header.Set("Accept", "application/json")
+	request.Header.Set("Content-Type", "application/json")
+
 	response, err = f.client.Do(request)
 	if err != nil {
 		return
+	}
+
+	if len(response.BodyAsBytes) == 0 {
+		return nil, nil, errors.New("unable to marshall the response body, the HTTP callback did not return any bytes")
 	}
 
 	result = new([]ShareFilterPermissionScheme)
@@ -179,6 +232,10 @@ func (f *FilterShareService) Add(ctx context.Context, filterID string, payload *
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-filter-sharing/#api-rest-api-3-filter-id-permission-permissionid-get
 func (f *FilterShareService) Get(ctx context.Context, filterID, permissionID string) (result *ShareFilterPermissionScheme, response *Response, err error) {
 
+	if ctx == nil {
+		return nil, nil, errors.New("the context param is nil, please provide a valid one")
+	}
+
 	var endpoint = fmt.Sprintf("rest/api/3/filter/%v/permission/%v", filterID, permissionID)
 	request, err := f.client.newRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
@@ -188,6 +245,10 @@ func (f *FilterShareService) Get(ctx context.Context, filterID, permissionID str
 	response, err = f.client.Do(request)
 	if err != nil {
 		return
+	}
+
+	if len(response.BodyAsBytes) == 0 {
+		return nil, nil, errors.New("unable to marshall the response body, the HTTP callback did not return any bytes")
 	}
 
 	result = new(ShareFilterPermissionScheme)
@@ -201,6 +262,10 @@ func (f *FilterShareService) Get(ctx context.Context, filterID, permissionID str
 // Deletes a share permission from a filter.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-filter-sharing/#api-rest-api-3-filter-id-permission-permissionid-delete
 func (f *FilterShareService) Delete(ctx context.Context, filterID, permissionID string) (response *Response, err error) {
+
+	if ctx == nil {
+		return nil, errors.New("the context param is nil, please provide a valid one")
+	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/filter/%v/permission/%v", filterID, permissionID)
 	request, err := f.client.newRequest(ctx, http.MethodDelete, endpoint, nil)

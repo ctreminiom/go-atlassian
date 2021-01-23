@@ -19,6 +19,11 @@ type IssueService struct {
 	Priority   *PriorityService
 	Property   *IssuePropertyService
 	Resolution *ResolutionService
+	Security   *IssueSecurityService
+	Type       *IssueTypeService
+	Votes      *VoteService
+	Watchers   *WatcherService
+	Label      *LabelService
 }
 
 type IssueScheme struct {

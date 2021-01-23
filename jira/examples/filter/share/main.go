@@ -22,6 +22,30 @@ var (
 	token = os.Getenv("TOKEN")
 )
 
+func setDefaultShareScope() (err error) {
+
+	log.Println("------------- setDefaultShareScope -----------------")
+
+	atlassian, err := jira.New(nil, host)
+	if err != nil {
+		return
+	}
+
+	atlassian.Auth.SetBasicAuth(mail, token)
+
+	response, err := atlassian.Filter.Share.SetScope(context.Background(), "GLOBAL")
+	if err != nil {
+		if response != nil {
+			log.Println("Response HTTP Response", string(response.BodyAsBytes))
+		}
+		return
+	}
+
+	log.Println(response)
+
+	return
+}
+
 func getFilterShareScope() (err error) {
 
 	log.Println("------------- getFilterShareScope -----------------")
@@ -88,17 +112,40 @@ func addSharePermission(filterID string) (err error) {
 
 	atlassian.Auth.SetBasicAuth(mail, token)
 
+	/*
+		We can add different share permissions, for example:
+
+		---- Project ID only
+		payload := jira.PermissionFilterBodyScheme{
+				Type:      "project",
+				ProjectID: "10000",
+			}
+
+		---- Project ID and role ID
+		payload := jira.PermissionFilterBodyScheme{
+				Type:          "project",
+				ProjectID:     "10000",
+				ProjectRoleID: "222222",
+			}
+
+		==== Group Name
+		payload := jira.PermissionFilterBodyScheme{
+				Type:          "group",
+				GroupName: "jira-users",
+			}
+	*/
+
 	payload := jira.PermissionFilterBodyScheme{
-		Type:          "group",
-		ProjectID:     "",
-		GroupName:     "jira-software-users",
-		ProjectRoleID: "",
+		Type:      "project",
+		ProjectID: "10000",
 	}
 
 	permissions, response, err := atlassian.Filter.Share.Add(context.Background(), filterID, &payload)
 	if err != nil {
 		if response != nil {
 			log.Println("Response HTTP Response", string(response.BodyAsBytes))
+			log.Println("Response HTTP Code", response.StatusCode)
+			log.Println("HTTP Endpoint Used", response.Endpoint)
 		}
 		return
 	}
@@ -171,6 +218,10 @@ func main() {
 	}
 
 	if err := getFilterPermissions("10000"); err != nil {
+		log.Fatal(err)
+	}
+
+	if err := addSharePermission("10000"); err != nil {
 		log.Fatal(err)
 	}
 

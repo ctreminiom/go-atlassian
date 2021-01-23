@@ -22,13 +22,24 @@ func startMockServer(opts *mockServerOptions) (*httptest.Server, error) {
 		http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
 			if r.Method != opts.MethodAccepted {
-				http.Error(w, fmt.Sprintf("Request method: %v, want %v", r.Method, opts.MethodAccepted), 415)
+				http.Error(w, fmt.Sprintf("Request method: %v, want %v", r.Method, opts.MethodAccepted), http.StatusMethodNotAllowed)
 				return
 			}
 
-			if r.URL.Path != opts.Endpoint {
-				http.Error(w, fmt.Sprintf("Request URL: %v, want %v", r.URL.Path, opts.Endpoint), 400)
-				return
+			if r.URL.Query().Encode() != "" {
+
+				var pathWithQueries = fmt.Sprintf("%v?%v", r.URL.Path, r.URL.Query().Encode())
+
+				if pathWithQueries != opts.Endpoint {
+					http.Error(w, fmt.Sprintf("Request URL: %v, want %v", r.URL.Path, opts.Endpoint), 400)
+					return
+				}
+
+			} else {
+				if r.URL.Path != opts.Endpoint {
+					http.Error(w, fmt.Sprintf("Request URL: %v, want %v", r.URL.Path, opts.Endpoint), 400)
+					return
+				}
 			}
 
 			//Append the custom headers

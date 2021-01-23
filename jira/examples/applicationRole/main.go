@@ -78,6 +78,25 @@ func getApplicationRole() (err error) {
 
 func main() {
 
+	atlassian, err := jira.New(nil, host)
+	if err != nil {
+		return
+	}
+
+	atlassian.Auth.SetBasicAuth(mail, token)
+
+	roles, response, err := atlassian.Role.Gets(context.Background())
+	if err != nil {
+		return
+	}
+
+	log.Println("Response HTTP Code", response.StatusCode)
+	log.Println("HTTP Endpoint Used", response.Endpoint)
+
+	for _, role := range *roles {
+		log.Println(role.Key)
+	}
+
 	if err := getApplicationRoles(); err != nil {
 		log.Fatal(err)
 	}

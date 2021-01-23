@@ -7,12 +7,6 @@ import (
 	"testing"
 )
 
-/*
-  TODO
-  1. Create the TestIssueLinkTypeService_Update test cases
-  2. Create the TestIssueLinkTypeService_Delete test cases
-*/
-
 func TestIssueLinkTypeService_Create(t *testing.T) {
 
 	testCases := []struct {

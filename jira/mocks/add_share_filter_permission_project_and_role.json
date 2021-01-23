@@ -1,0 +1,81 @@
+[
+  {
+    "id": 10010,
+    "type": "project",
+    "project": {
+      "self": "https://your-domain.atlassian.net/rest/api/3/project/MKY",
+      "id": "10002",
+      "key": "MKY",
+      "name": "Example",
+      "avatarUrls": {
+        "48x48": "https://your-domain.atlassian.net/secure/projectavatar?size=large&pid=10002",
+        "24x24": "https://your-domain.atlassian.net/secure/projectavatar?size=small&pid=10002",
+        "16x16": "https://your-domain.atlassian.net/secure/projectavatar?size=xsmall&pid=10002",
+        "32x32": "https://your-domain.atlassian.net/secure/projectavatar?size=medium&pid=10002"
+      },
+      "projectCategory": {
+        "self": "https://your-domain.atlassian.net/rest/api/3/projectCategory/10000",
+        "id": "10000",
+        "name": "FIRST",
+        "description": "First Project Category"
+      },
+      "simplified": false,
+      "style": "classic",
+      "insight": {
+        "totalIssueCount": 100,
+        "lastIssueUpdateTime": "2021-01-20T01:43:02.690+0000"
+      },
+      "deleted": true,
+      "retentionTillDate": "2021-03-21T01:43:02.690+0000",
+      "deletedDate": "2021-01-20T01:43:02.690+0000",
+      "deletedBy": {
+        "self": "https://your-domain.atlassian.net/rest/api/3/user?accountId=5b10a2844c20165700ede21g",
+        "key": "",
+        "accountId": "5b10a2844c20165700ede21g",
+        "name": "",
+        "avatarUrls": {
+          "48x48": "https://avatar-management--avatars.server-location.prod.public.atl-paas.net/initials/MK-5.png?size=48&s=48",
+          "24x24": "https://avatar-management--avatars.server-location.prod.public.atl-paas.net/initials/MK-5.png?size=24&s=24",
+          "16x16": "https://avatar-management--avatars.server-location.prod.public.atl-paas.net/initials/MK-5.png?size=16&s=16",
+          "32x32": "https://avatar-management--avatars.server-location.prod.public.atl-paas.net/initials/MK-5.png?size=32&s=32"
+        },
+        "displayName": "Mia Krystof",
+        "active": false
+      }
+    },
+    "role": {
+      "self": "https://your-domain.atlassian.net/rest/api/3/project/MKY/role/10360",
+      "name": "Developers",
+      "id": 10360,
+      "description": "A project role that represents developers in a project",
+      "actors": [
+        {
+          "id": 10240,
+          "displayName": "jira-developers",
+          "type": "atlassian-group-role-actor",
+          "name": "jira-developers",
+          "actorGroup": {
+            "name": "jira-developers",
+            "displayName": "jira-developers"
+          }
+        },
+        {
+          "id": 10241,
+          "displayName": "Mia Krystof",
+          "type": "atlassian-user-role-actor",
+          "actorUser": {
+            "accountId": "5b10a2844c20165700ede21g"
+          }
+        }
+      ],
+      "scope": {
+        "type": "PROJECT",
+        "project": {
+          "id": "10000",
+          "key": "KEY",
+          "name": "Next Gen Project"
+        }
+      }
+    }
+  }
+]

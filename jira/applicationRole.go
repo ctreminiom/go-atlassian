@@ -3,6 +3,7 @@ package jira
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 )
@@ -28,6 +29,10 @@ type ApplicationRoleScheme struct {
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-application-roles/#api-rest-api-3-applicationrole-get
 func (a *ApplicationRoleService) Gets(ctx context.Context) (result *[]ApplicationRoleScheme, response *Response, err error) {
 
+	if ctx == nil {
+		return nil, nil, errors.New("the context param is nil, please provide a valid one")
+	}
+
 	var endpoint = "rest/api/3/applicationrole"
 	request, err := a.client.newRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
@@ -37,6 +42,10 @@ func (a *ApplicationRoleService) Gets(ctx context.Context) (result *[]Applicatio
 	response, err = a.client.Do(request)
 	if err != nil {
 		return
+	}
+
+	if len(response.BodyAsBytes) == 0 {
+		return nil, nil, errors.New("unable to marshall the response body, the HTTP callback did not return any bytes")
 	}
 
 	result = new([]ApplicationRoleScheme)
@@ -51,6 +60,10 @@ func (a *ApplicationRoleService) Gets(ctx context.Context) (result *[]Applicatio
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-application-roles/#api-rest-api-3-applicationrole-key-get
 func (a *ApplicationRoleService) Get(ctx context.Context, key string) (result *ApplicationRoleScheme, response *Response, err error) {
 
+	if ctx == nil {
+		return nil, nil, errors.New("the context param is nil, please provide a valid one")
+	}
+
 	var endpoint = fmt.Sprintf("rest/api/3/applicationrole/%v", key)
 	request, err := a.client.newRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
@@ -60,6 +73,10 @@ func (a *ApplicationRoleService) Get(ctx context.Context, key string) (result *A
 	response, err = a.client.Do(request)
 	if err != nil {
 		return
+	}
+
+	if len(response.BodyAsBytes) == 0 {
+		return nil, nil, errors.New("unable to marshall the response body, the HTTP callback did not return any bytes")
 	}
 
 	result = new(ApplicationRoleScheme)

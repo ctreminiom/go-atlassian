@@ -16,13 +16,15 @@ type Client struct {
 	HTTP *http.Client
 	Site *url.URL
 
-	Role      *ApplicationRoleService
-	Audit     *AuditService
-	Auth      *AuthenticationService
-	Dashboard *DashboardService
-	Filter    *FilterService
-	Group     *GroupService
-	Issue     *IssueService
+	Role       *ApplicationRoleService
+	Audit      *AuditService
+	Auth       *AuthenticationService
+	Dashboard  *DashboardService
+	Filter     *FilterService
+	Group      *GroupService
+	Issue      *IssueService
+	Search     *SearchService
+	Permission *PermissionService
 }
 
 //New
@@ -56,16 +58,15 @@ func New(httpClient *http.Client, site string) (client *Client, err error) {
 	}
 
 	client.Group = &GroupService{client: client}
+	client.Search = &SearchService{client: client}
 
 	client.Issue = &IssueService{
 		client:     client,
 		Attachment: &AttachmentService{client: client},
-
 		Comment: &CommentService{
 			client:     client,
 			Properties: &CommentPropertiesService{client: client},
 		},
-
 		Field: &FieldService{
 			client:        client,
 			Configuration: &FieldConfigurationService{client: client},
@@ -77,11 +78,30 @@ func New(httpClient *http.Client, site string) (client *Client, err error) {
 
 			Option: &FieldOptionService{client: client},
 		},
-
-		Priority: &PriorityService{client: client},
-
+		Priority:   &PriorityService{client: client},
 		Property:   &IssuePropertyService{client: client},
 		Resolution: &ResolutionService{client: client},
+		Security: &IssueSecurityService{
+			client: client,
+			Scheme: &IssueSecuritySchemeService{client: client},
+		},
+		Type: &IssueTypeService{
+			client: client,
+			Scheme: &IssueTypeSchemeService{client: client},
+		},
+
+		Link: &IssueLinkService{
+			client: client,
+			Type:   &IssueLinkTypeService{client: client},
+		},
+		Votes:    &VoteService{client: client},
+		Watchers: &WatcherService{client: client},
+		Label:    &LabelService{client: client},
+	}
+
+	client.Permission = &PermissionService{
+		client: client,
+		Scheme: &PermissionSchemeService{client: client},
 	}
 
 	return
@@ -191,10 +211,4 @@ func checkResponse(http *http.Response, endpoint string) (response *Response, er
 	}
 
 	return &newErrorResponse, fmt.Errorf("request failed. Please analyze the request body for more details. Status Code: %d", statusCode)
-}
-
-func validateURLParam(urls *url.Values, key, value string) {
-	if len(value) != 0 {
-		urls.Add(key, value)
-	}
 }

@@ -3,6 +3,7 @@ package jira
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -35,11 +36,17 @@ type DashboardScheme struct {
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-dashboards/#api-rest-api-3-dashboard-get
 func (d *DashboardService) Gets(ctx context.Context, startAt, maxResults int, filter string) (result *DashboardsSchemeResult, response *Response, err error) {
 
+	if ctx == nil {
+		return nil, nil, errors.New("the context param is nil, please provide a valid one")
+	}
+
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
 	params.Add("maxResults", strconv.Itoa(maxResults))
 
-	validateURLParam(&params, "filter", filter)
+	if len(filter) != 0 {
+		params.Add("filter", filter)
+	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/dashboard?%s", params.Encode())
 	request, err := d.client.newRequest(ctx, http.MethodGet, endpoint, nil)
@@ -50,6 +57,10 @@ func (d *DashboardService) Gets(ctx context.Context, startAt, maxResults int, fi
 	response, err = d.client.Do(request)
 	if err != nil {
 		return
+	}
+
+	if len(response.BodyAsBytes) == 0 {
+		return nil, nil, errors.New("unable to marshall the response body, the HTTP callback did not return any bytes")
 	}
 
 	result = new(DashboardsSchemeResult)

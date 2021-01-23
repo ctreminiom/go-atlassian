@@ -3,6 +3,7 @@ package jira
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -46,15 +47,33 @@ type AuditRecordScheme struct {
 	} `json:"records,omitempty"`
 }
 
-func (a *AuditService) Get(ctx context.Context, offset, limit int, filter, from, to string) (records *AuditRecordScheme, response *Response, err error) {
+type AuditRecordGetOptions struct {
+	Filter string
+	From   string
+	To     string
+}
+
+func (a *AuditService) Get(ctx context.Context, options *AuditRecordGetOptions, offset, limit int) (records *AuditRecordScheme, response *Response, err error) {
+
+	if ctx == nil {
+		return nil, nil, errors.New("the context param is nil, please provide a valid one")
+	}
 
 	params := url.Values{}
 	params.Add("offset", strconv.Itoa(offset))
 	params.Add("limit", strconv.Itoa(limit))
 
-	validateURLParam(&params, "filter", filter)
-	validateURLParam(&params, "from", from)
-	validateURLParam(&params, "to", to)
+	if len(options.Filter) != 0 {
+		params.Add("filter", options.Filter)
+	}
+
+	if len(options.From) != 0 {
+		params.Add("from", options.From)
+	}
+
+	if len(options.To) != 0 {
+		params.Add("to", options.To)
+	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/auditing/record?%s", params.Encode())
 	request, err := a.client.newRequest(ctx, http.MethodGet, endpoint, nil)
@@ -65,6 +84,10 @@ func (a *AuditService) Get(ctx context.Context, offset, limit int, filter, from,
 	response, err = a.client.Do(request)
 	if err != nil {
 		return
+	}
+
+	if len(response.BodyAsBytes) == 0 {
+		return nil, nil, errors.New("unable to marshall the response body, the HTTP callback did not return any bytes")
 	}
 
 	result := new(AuditRecordScheme)

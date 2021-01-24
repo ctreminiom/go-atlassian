@@ -119,7 +119,6 @@ func (c *Client) newRequest(ctx context.Context, method, urlAsString string, pay
 	endpointPath := c.Site.ResolveReference(relativePath)
 	var payloadBuffer io.ReadWriter
 	if payload != nil {
-
 		payloadBuffer = new(bytes.Buffer)
 		if err = json.NewEncoder(payloadBuffer).Encode(payload); err != nil {
 			return

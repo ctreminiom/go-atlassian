@@ -1,0 +1,24 @@
+{
+  "id": 10000,
+  "self": "https://your-domain.atlassian.net/rest/api/3/attachments/10000",
+  "filename": "picture.jpg",
+  "author": {
+    "self": "https://your-domain.atlassian.net/rest/api/3/user?accountId=5b10a2844c20165700ede21g",
+    "key": "",
+    "accountId": "5b10a2844c20165700ede21g",
+    "name": "",
+    "avatarUrls": {
+      "48x48": "https://avatar-management--avatars.server-location.prod.public.atl-paas.net/initials/MK-5.png?size=48&s=48",
+      "24x24": "https://avatar-management--avatars.server-location.prod.public.atl-paas.net/initials/MK-5.png?size=24&s=24",
+      "16x16": "https://avatar-management--avatars.server-location.prod.public.atl-paas.net/initials/MK-5.png?size=16&s=16",
+      "32x32": "https://avatar-management--avatars.server-location.prod.public.atl-paas.net/initials/MK-5.png?size=32&s=32"
+    },
+    "displayName": "Mia Krystof",
+    "active": false
+  },
+  "created": "2021-01-22T07:18:27.064+0000",
+  "size": 23123,
+  "mimeType": "image/jpeg",
+  "content": "https://your-domain.atlassian.net/jira/secure/attachments/10000/picture.jpg",
+  "thumbnail": "https://your-domain.atlassian.net/jira/secure/thumbnail/10000/picture.jpg"
+}

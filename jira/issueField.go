@@ -63,9 +63,17 @@ type CustomFieldScheme struct {
 	SearcherKey string `json:"searcherKey,omitempty"`
 }
 
+func (c *CustomFieldScheme) Format() {
+	//Append the atlassian plugin name convention
+	c.FieldType = fmt.Sprintf("com.atlassian.jira.plugin.system.customfieldtypes:%v", c.FieldType)
+	c.SearcherKey = fmt.Sprintf("com.atlassian.jira.plugin.system.customfieldtypes:%v", c.SearcherKey)
+}
+
 // Creates a custom field.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-fields/#api-rest-api-3-field-post
 func (f *FieldService) Create(ctx context.Context, payload *CustomFieldScheme) (result *FieldScheme, response *Response, err error) {
+
+	payload.Format()
 
 	var endpoint = "rest/api/3/field"
 	request, err := f.client.newRequest(ctx, http.MethodPost, endpoint, &payload)
@@ -87,7 +95,7 @@ func (f *FieldService) Create(ctx context.Context, payload *CustomFieldScheme) (
 	return
 }
 
-type SearchOptionScheme struct {
+type FieldSearchOptionsScheme struct {
 	Types   []string
 	IDs     []string
 	Query   string
@@ -121,7 +129,7 @@ type FieldSearchScheme struct {
 
 // Returns a paginated list of fields for Classic Jira projects.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-fields/#api-rest-api-3-field-search-get
-func (f *FieldService) Search(ctx context.Context, opts *SearchOptionScheme, startAt, maxResults int) (result *FieldSearchScheme, response *Response, err error) {
+func (f *FieldService) Search(ctx context.Context, opts *FieldSearchOptionsScheme, startAt, maxResults int) (result *FieldSearchScheme, response *Response, err error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))

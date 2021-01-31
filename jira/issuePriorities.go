@@ -27,7 +27,7 @@ func (p *PriorityService) Gets(ctx context.Context) (result *[]PriorityScheme, r
 	if err != nil {
 		return
 	}
-	request.Header.Set("Content-Type", "application/json")
+	request.Header.Set("Accept", "application/json")
 
 	response, err = p.client.Do(request)
 	if err != nil {

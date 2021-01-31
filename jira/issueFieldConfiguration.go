@@ -38,19 +38,8 @@ func (f *FieldConfigurationService) Gets(ctx context.Context, IDs []int, isDefau
 		params.Add("isDefault", "true")
 	}
 
-	var IDsAsString string
-	for index, value := range IDs {
-
-		if index == 0 {
-			IDsAsString = strconv.Itoa(value)
-			continue
-		}
-
-		IDsAsString += "," + strconv.Itoa(value)
-	}
-
-	if len(IDsAsString) != 0 {
-		params.Add("id", IDsAsString)
+	for _, id := range IDs {
+		params.Add("id", strconv.Itoa(id))
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/fieldconfiguration?%v", params.Encode())
@@ -183,7 +172,7 @@ type FieldConfigSchemeItemsScheme struct {
 
 // Returns a paginated list of field configuration issue type items.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-field-configurations/#api-rest-api-3-fieldconfigurationscheme-mapping-get
-func (f *FieldConfigurationService) SchemesItems(ctx context.Context, fieldConfigIDs []int, startAt, maxResults int) (result *FieldConfigSchemeItemsScheme, response *Response, err error) {
+func (f *FieldConfigurationService) IssueTypeItems(ctx context.Context, fieldConfigIDs []int, startAt, maxResults int) (result *FieldConfigSchemeItemsScheme, response *Response, err error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -247,19 +236,8 @@ func (f *FieldConfigurationService) SchemesByProject(ctx context.Context, projec
 	params.Add("startAt", strconv.Itoa(startAt))
 	params.Add("maxResults", strconv.Itoa(maxResults))
 
-	var IDsAsString string
-	for index, value := range projectIDs {
-
-		if index == 0 {
-			IDsAsString = strconv.Itoa(value)
-			continue
-		}
-
-		IDsAsString += "," + strconv.Itoa(value)
-	}
-
-	if len(IDsAsString) != 0 {
-		params.Add("projectId", IDsAsString)
+	for _, projectID := range projectIDs {
+		params.Add("projectId", strconv.Itoa(projectID))
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/fieldconfigurationscheme/project?%v", params.Encode())

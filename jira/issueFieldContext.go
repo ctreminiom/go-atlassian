@@ -50,19 +50,8 @@ func (f *FieldContextService) Gets(ctx context.Context, fieldID string, opts *Fi
 		params.Add("isGlobalContext", "true")
 	}
 
-	var contextsIDsAsString string
-	for index, value := range opts.ContextID {
-
-		if index == 0 {
-			contextsIDsAsString = strconv.Itoa(value)
-			continue
-		}
-
-		contextsIDsAsString += "," + strconv.Itoa(value)
-	}
-
-	if len(contextsIDsAsString) != 0 {
-		params.Add("contextId", contextsIDsAsString)
+	for _, contextID := range opts.ContextID {
+		params.Add("contextId", strconv.Itoa(contextID))
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/field/%v/context?%v", fieldID, params.Encode())
@@ -86,10 +75,10 @@ func (f *FieldContextService) Gets(ctx context.Context, fieldID string, opts *Fi
 }
 
 type FieldContextPayloadScheme struct {
-	IssueTypeIDs []string `json:"issueTypeIds,omitempty"`
-	ProjectIDs   []string `json:"projectIds ,omitempty"`
-	Name         []string `json:"name,omitempty"`
-	Description  []string `json:"description,omitempty"`
+	IssueTypeIDs []int  `json:"issueTypeIds,omitempty"`
+	ProjectIDs   []int  `json:"projectIds,omitempty"`
+	Name         string `json:"name,omitempty"`
+	Description  string `json:"description,omitempty"`
 }
 
 // Creates a custom field context.

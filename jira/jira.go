@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -108,6 +109,10 @@ func New(httpClient *http.Client, site string) (client *Client, err error) {
 }
 
 func (c *Client) newRequest(ctx context.Context, method, urlAsString string, payload interface{}) (request *http.Request, err error) {
+
+	if ctx == nil {
+		return nil, errors.New("the context param is nil, please provide a valid one")
+	}
 
 	relativePath, err := url.Parse(urlAsString)
 	if err != nil {

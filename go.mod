@@ -8,6 +8,7 @@ require (
 	github.com/google/uuid v1.1.4
 	github.com/leodido/go-urn v1.2.0 // indirect
 	github.com/stretchr/testify v1.6.1
+	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
 	gopkg.in/go-playground/assert.v1 v1.2.1 // indirect
 	gopkg.in/go-playground/validator.v9 v9.31.0
 )

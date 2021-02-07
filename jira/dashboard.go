@@ -48,7 +48,7 @@ func (d *DashboardService) Gets(ctx context.Context, startAt, maxResults int, fi
 		params.Add("filter", filter)
 	}
 
-	var endpoint = fmt.Sprintf("rest/api/3/dashboard?%s", params.Encode())
+	var endpoint = fmt.Sprintf("rest/api/3/dashboard?%v", params.Encode())
 	request, err := d.client.newRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
 		return
@@ -59,13 +59,9 @@ func (d *DashboardService) Gets(ctx context.Context, startAt, maxResults int, fi
 		return
 	}
 
-	if len(response.BodyAsBytes) == 0 {
-		return nil, nil, errors.New("unable to marshall the response body, the HTTP callback did not return any bytes")
-	}
-
 	result = new(DashboardsSchemeResult)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return
+		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
 
 	return

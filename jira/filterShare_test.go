@@ -6,7 +6,6 @@ import (
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/url"
-	"strconv"
 	"testing"
 )
 
@@ -16,7 +15,7 @@ func TestFilterShareService_Add(t *testing.T) {
 		name               string
 		payload            *PermissionFilterBodyScheme
 		mockFile           string
-		filterID           string
+		filterID           int
 		wantHTTPMethod     string
 		endpoint           string
 		context            context.Context
@@ -29,7 +28,7 @@ func TestFilterShareService_Add(t *testing.T) {
 				Type:      "group",
 				ProjectID: "jira-administrators",
 			},
-			filterID:           "10010",
+			filterID:           10010,
 			mockFile:           "./mocks/add_share_filter_permission_group.json",
 			wantHTTPMethod:     http.MethodPost,
 			endpoint:           "/rest/api/3/filter/10010/permission",
@@ -38,12 +37,37 @@ func TestFilterShareService_Add(t *testing.T) {
 			wantErr:            false,
 		},
 		{
+			name:               "AddShareFilterPermissionWhenThePayloadIsNil",
+			payload:            nil,
+			filterID:           10010,
+			mockFile:           "./mocks/add_share_filter_permission_group.json",
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/api/3/filter/10010/permission",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusCreated,
+			wantErr:            true,
+		},
+		{
+			name: "AddShareFilterPermissionWhenTheResponseBodyHasADifferentFormat",
+			payload: &PermissionFilterBodyScheme{
+				Type:      "group",
+				ProjectID: "jira-administrators",
+			},
+			filterID:           10010,
+			mockFile:           "./mocks/empty_json.json",
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/api/3/filter/10010/permission",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusCreated,
+			wantErr:            true,
+		},
+		{
 			name: "AddShareFilterPermissionWhenTheTypeIsAProject",
 			payload: &PermissionFilterBodyScheme{
 				Type:      "project",
 				ProjectID: "EX",
 			},
-			filterID:           "10010",
+			filterID:           10010,
 			mockFile:           "./mocks/add_share_filter_permission_project.json",
 			wantHTTPMethod:     http.MethodPost,
 			endpoint:           "/rest/api/3/filter/10010/permission",
@@ -58,7 +82,7 @@ func TestFilterShareService_Add(t *testing.T) {
 				ProjectID:     "EX",
 				ProjectRoleID: "10360",
 			},
-			filterID:           "10010",
+			filterID:           10010,
 			mockFile:           "./mocks/add_share_filter_permission_project_and_role.json",
 			wantHTTPMethod:     http.MethodPost,
 			endpoint:           "/rest/api/3/filter/10010/permission",
@@ -73,7 +97,7 @@ func TestFilterShareService_Add(t *testing.T) {
 				ProjectID:     "EX",
 				ProjectRoleID: "10360",
 			},
-			filterID:           "10010",
+			filterID:           10010,
 			mockFile:           "./mocks/add_share_filter_permission_project_and_role.json",
 			wantHTTPMethod:     http.MethodPost,
 			endpoint:           "/rest/api/3/filter/10010/permission",
@@ -88,7 +112,7 @@ func TestFilterShareService_Add(t *testing.T) {
 				ProjectID:     "EX",
 				ProjectRoleID: "10360",
 			},
-			filterID:           "10010",
+			filterID:           10010,
 			mockFile:           "./mocks/add_share_filter_permission_project_and_role.json",
 			wantHTTPMethod:     http.MethodPost,
 			endpoint:           "/rest/api/3/filter/10010/permissiosdasdn",
@@ -164,12 +188,7 @@ func TestFilterShareService_Add(t *testing.T) {
 				for _, filterPermission := range *gotResult {
 					t.Logf("Filter ID Wanted: %v, Filter ID Returned: %v", filterPermission.ID, testCase.filterID)
 
-					filterIDWantedAsString, err := strconv.Atoi(testCase.filterID)
-					if err != nil {
-						t.Fatal(err)
-					}
-
-					assert.Equal(t, filterPermission.ID, filterIDWantedAsString)
+					assert.Equal(t, filterPermission.ID, testCase.filterID)
 				}
 			}
 
@@ -182,8 +201,8 @@ func TestFilterShareService_Delete(t *testing.T) {
 	testCases := []struct {
 		name               string
 		mockFile           string
-		filterID           string
-		permissionID       string
+		filterID           int
+		permissionID       int
 		wantHTTPMethod     string
 		endpoint           string
 		context            context.Context
@@ -192,13 +211,33 @@ func TestFilterShareService_Delete(t *testing.T) {
 	}{
 		{
 			name:               "DeleteShareFilterPermissionWhenTheFilterIsCorrect",
-			filterID:           "10010",
-			permissionID:       "1111",
+			filterID:           10010,
+			permissionID:       1111,
 			wantHTTPMethod:     http.MethodDelete,
 			endpoint:           "/rest/api/3/filter/10010/permission/1111",
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusNoContent,
 			wantErr:            false,
+		},
+		{
+			name:               "DeleteShareFilterPermissionWhenTheFilterIDIsIncorrect",
+			filterID:           10011,
+			permissionID:       1111,
+			wantHTTPMethod:     http.MethodDelete,
+			endpoint:           "/rest/api/3/filter/10010/permission/1111",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+		{
+			name:               "DeleteShareFilterPermissionWhenTheContextIsNil",
+			filterID:           10010,
+			permissionID:       1111,
+			wantHTTPMethod:     http.MethodDelete,
+			endpoint:           "/rest/api/3/filter/10010/permission/1111",
+			context:            nil,
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
 		},
 	}
 
@@ -274,8 +313,8 @@ func TestFilterShareService_Get(t *testing.T) {
 	testCases := []struct {
 		name               string
 		mockFile           string
-		filterID           string
-		permissionID       string
+		filterID           int
+		permissionID       int
 		wantHTTPMethod     string
 		endpoint           string
 		context            context.Context
@@ -284,9 +323,9 @@ func TestFilterShareService_Get(t *testing.T) {
 	}{
 		{
 			name:               "GetShareFilterPermissionWhenTheFilterIsCorrect",
-			filterID:           "10000",
+			filterID:           10000,
 			mockFile:           "./mocks/get_share_permission.json",
-			permissionID:       "1111",
+			permissionID:       1111,
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/api/3/filter/10000/permission/1111",
 			context:            context.Background(),
@@ -294,32 +333,21 @@ func TestFilterShareService_Get(t *testing.T) {
 			wantErr:            false,
 		},
 		{
+			name:               "GetShareFilterPermissionWhenTheResponseBodyHasADifferentFormat",
+			filterID:           10000,
+			mockFile:           "./mocks/empty_json.json",
+			permissionID:       1111,
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/rest/api/3/filter/10000/permission/1111",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+		{
 			name:               "GetShareFilterPermissionWhenTheFilterIDIsIncorrect",
-			filterID:           "10001",
+			filterID:           10001,
 			mockFile:           "./mocks/get_share_permission.json",
-			permissionID:       "1111",
-			wantHTTPMethod:     http.MethodGet,
-			endpoint:           "/rest/api/3/filter/10000/permission/1111",
-			context:            context.Background(),
-			wantHTTPCodeReturn: http.StatusOK,
-			wantErr:            true,
-		},
-		{
-			name:               "GetShareFilterPermissionWhenTheFilterIDIsEmpty",
-			filterID:           "",
-			mockFile:           "./mocks/get_share_permission.json",
-			permissionID:       "1111",
-			wantHTTPMethod:     http.MethodGet,
-			endpoint:           "/rest/api/3/filter/10000/permission/1111",
-			context:            context.Background(),
-			wantHTTPCodeReturn: http.StatusOK,
-			wantErr:            true,
-		},
-		{
-			name:               "GetShareFilterPermissionWhenTheFilterIDIsASpecialCharacter",
-			filterID:           "*%$&$&£",
-			mockFile:           "./mocks/get_share_permission.json",
-			permissionID:       "1111",
+			permissionID:       1111,
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/api/3/filter/10000/permission/1111",
 			context:            context.Background(),
@@ -328,9 +356,9 @@ func TestFilterShareService_Get(t *testing.T) {
 		},
 		{
 			name:               "GetShareFilterPermissionWhenTheContextIsNil",
-			filterID:           "10000",
+			filterID:           10000,
 			mockFile:           "./mocks/get_share_permission.json",
-			permissionID:       "1111",
+			permissionID:       1111,
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/api/3/filter/10000/permission/1111",
 			context:            nil,
@@ -339,9 +367,9 @@ func TestFilterShareService_Get(t *testing.T) {
 		},
 		{
 			name:               "GetShareFilterPermissionWhenThePermissionIDIsIncorrect",
-			filterID:           "10000",
+			filterID:           10000,
 			mockFile:           "./mocks/get_share_permission.json",
-			permissionID:       "111123",
+			permissionID:       111123,
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/api/3/filter/10000/permission/1111",
 			context:            context.Background(),
@@ -350,20 +378,9 @@ func TestFilterShareService_Get(t *testing.T) {
 		},
 		{
 			name:               "GetShareFilterPermissionWhenThePermissionIDIsEmpty",
-			filterID:           "10000",
+			filterID:           10000,
 			mockFile:           "./mocks/get_share_permission.json",
-			permissionID:       "",
-			wantHTTPMethod:     http.MethodGet,
-			endpoint:           "/rest/api/3/filter/10000/permission/1111",
-			context:            context.Background(),
-			wantHTTPCodeReturn: http.StatusOK,
-			wantErr:            true,
-		},
-		{
-			name:               "GetShareFilterPermissionWhenThePermissionIDIsASpecialCharacter",
-			filterID:           "10000",
-			mockFile:           "./mocks/get_share_permission.json",
-			permissionID:       "%*^((%",
+			permissionID:       0,
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/api/3/filter/10000/permission/1111",
 			context:            context.Background(),
@@ -437,12 +454,7 @@ func TestFilterShareService_Get(t *testing.T) {
 
 				t.Logf("HTTP Filter ID Wanted: %v, HTTP Filter ID Returned: %v", testCase.filterID, getResult.ID)
 
-				filterIDWantedAsString, err := strconv.Atoi(testCase.filterID)
-				if err != nil {
-					t.Fatal(err)
-				}
-
-				assert.Equal(t, filterIDWantedAsString, getResult.ID)
+				assert.Equal(t, testCase.filterID, getResult.ID)
 
 			}
 
@@ -455,7 +467,7 @@ func TestFilterShareService_Gets(t *testing.T) {
 	testCases := []struct {
 		name               string
 		mockFile           string
-		filterID           string
+		filterID           int
 		wantHTTPMethod     string
 		endpoint           string
 		context            context.Context
@@ -464,7 +476,7 @@ func TestFilterShareService_Gets(t *testing.T) {
 	}{
 		{
 			name:               "GetShareFilterPermissionsWhenTheFilterIDIsCorrect",
-			filterID:           "10000",
+			filterID:           10000,
 			mockFile:           "./mocks/get_share_permissions.json",
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/api/3/filter/10000/permission",
@@ -473,8 +485,18 @@ func TestFilterShareService_Gets(t *testing.T) {
 			wantErr:            false,
 		},
 		{
+			name:               "GetShareFilterPermissionsWhenTheResponseBodyHasADifferentFormat",
+			filterID:           10000,
+			mockFile:           "./mocks/empty_json.json",
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/rest/api/3/filter/10000/permission",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+		{
 			name:               "GetShareFilterPermissionsWhenTheFilterIDIsIncorrect",
-			filterID:           "10001",
+			filterID:           10001,
 			mockFile:           "./mocks/get_share_permissions.json",
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/api/3/filter/10000/permission",
@@ -484,7 +506,7 @@ func TestFilterShareService_Gets(t *testing.T) {
 		},
 		{
 			name:               "GetShareFilterPermissionsWhenTheContextIsNil",
-			filterID:           "10000",
+			filterID:           10000,
 			mockFile:           "./mocks/get_share_permissions.json",
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/api/3/filter/10000/permission",
@@ -598,6 +620,36 @@ func TestFilterShareService_Scope(t *testing.T) {
 			wantHTTPCodeReturn: http.StatusOK,
 			wantErr:            true,
 		},
+		{
+			name:               "GetDefaultFilterScopeWhenTheRequestMethodIsIncorrect",
+			defaultScope:       "GLOBAL",
+			mockFile:           "./mocks/get_default_share_scope.json",
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/api/3/filter/defaultShareScope",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+		{
+			name:               "GetDefaultFilterScopeWhenTheStatusCodeIsIncorrect",
+			defaultScope:       "GLOBAL",
+			mockFile:           "./mocks/get_default_share_scope.json",
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/rest/api/3/filter/defaultShareScope",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusBadRequest,
+			wantErr:            true,
+		},
+		{
+			name:               "GetDefaultFilterScopeWhenTheResponseBodyHasADifferentFormat",
+			defaultScope:       "GLOBAL",
+			mockFile:           "./mocks/empty_json.json",
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/rest/api/3/filter/defaultShareScope",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
 	}
 
 	for _, testCase := range testCases {
@@ -708,6 +760,24 @@ func TestFilterShareService_SetScope(t *testing.T) {
 			endpoint:           "/rest/api/3/filter/defaultShareScope",
 			context:            nil,
 			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+		{
+			name:               "SetDefaultFilterScopeWhenTheRequestMethodIsIncorrect",
+			defaultScope:       "GLOBAL",
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/rest/api/3/filter/defaultShareScope",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+		{
+			name:               "SetDefaultFilterScopeWhenTheStatusCodeIsIncorrect",
+			defaultScope:       "GLOBAL",
+			wantHTTPMethod:     http.MethodPut,
+			endpoint:           "/rest/api/3/filter/defaultShareScope",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusBadRequest,
 			wantErr:            true,
 		},
 	}

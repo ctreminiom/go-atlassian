@@ -72,7 +72,7 @@ func getFilterShareScope() (err error) {
 	return
 }
 
-func getFilterPermissions(filterID string) (err error) {
+func getFilterPermissions(filterID int) (err error) {
 
 	log.Println("------------- getFilterPermissions -----------------")
 
@@ -101,7 +101,7 @@ func getFilterPermissions(filterID string) (err error) {
 	return
 }
 
-func addSharePermission(filterID string) (err error) {
+func addSharePermission(filterID int) (err error) {
 
 	log.Println("------------- addSharePermission -----------------")
 
@@ -160,7 +160,7 @@ func addSharePermission(filterID string) (err error) {
 	return
 }
 
-func getFilterPermission(filterID, permissionID string) (err error) {
+func getFilterPermission(filterID, permissionID int) (err error) {
 
 	log.Println("------------- getFilterPermission -----------------")
 
@@ -186,7 +186,7 @@ func getFilterPermission(filterID, permissionID string) (err error) {
 	return
 }
 
-func deleteFilterPermission(filterID, permissionID string) (err error) {
+func deleteFilterPermission(filterID, permissionID int) (err error) {
 
 	log.Println("------------- deleteFilterPermission -----------------")
 
@@ -217,11 +217,11 @@ func main() {
 		log.Fatal(err)
 	}
 
-	if err := getFilterPermissions("10000"); err != nil {
+	if err := getFilterPermissions(10000); err != nil {
 		log.Fatal(err)
 	}
 
-	if err := addSharePermission("10000"); err != nil {
+	if err := addSharePermission(10000); err != nil {
 		log.Fatal(err)
 	}
 

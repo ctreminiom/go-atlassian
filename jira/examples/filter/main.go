@@ -7,6 +7,7 @@ import (
 	"github.com/google/uuid"
 	"log"
 	"os"
+	"strconv"
 )
 
 /*
@@ -61,7 +62,7 @@ func createFilter() (filterID string, err error) {
 	return
 }
 
-func getFilter(filterID string) (err error) {
+func getFilter(filterID int) (err error) {
 
 	log.Println("------------- getFilter -----------------")
 
@@ -87,7 +88,7 @@ func getFilter(filterID string) (err error) {
 	return
 }
 
-func updateFilter(filterID string) (err error) {
+func updateFilter(filterID int) (err error) {
 
 	log.Println("------------- updateFilter -----------------")
 
@@ -117,7 +118,7 @@ func updateFilter(filterID string) (err error) {
 	return
 }
 
-func deleteFilter(filterID string) (err error) {
+func deleteFilter(filterID int) (err error) {
 
 	log.Println("------------- deleteFilter -----------------")
 
@@ -153,7 +154,7 @@ func getMyFilters() (err error) {
 
 	atlassian.Auth.SetBasicAuth(mail, token)
 
-	myFilters, response, err := atlassian.Filter.My(context.Background(), false)
+	myFilters, response, err := atlassian.Filter.My(context.Background(), false, nil)
 	if err != nil {
 		if response != nil {
 			log.Println("Response HTTP Response", string(response.BodyAsBytes))
@@ -258,15 +259,20 @@ func main() {
 		log.Fatal(err)
 	}
 
-	if err := getFilter(filterID); err != nil {
+	filterIDAsInt, err := strconv.Atoi(filterID)
+	if err != nil {
 		log.Fatal(err)
 	}
 
-	if err := updateFilter(filterID); err != nil {
+	if err := getFilter(filterIDAsInt); err != nil {
 		log.Fatal(err)
 	}
 
-	if err := deleteFilter(filterID); err != nil {
+	if err := updateFilter(filterIDAsInt); err != nil {
+		log.Fatal(err)
+	}
+
+	if err := deleteFilter(filterIDAsInt); err != nil {
 		log.Fatal(err)
 	}
 

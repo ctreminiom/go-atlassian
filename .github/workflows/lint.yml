@@ -10,18 +10,18 @@ jobs:
 
     strategy:
       matrix:
-        go-version: [1.12.x, 1.13.x, 1.14.x, 1.15.x]
-        platform: [ubuntu-latest, macos-latest, windows-latest]
+        go-version: [1.13.x, 1.14.x, 1.15.x]
+        os: [ubuntu-latest, macos-latest, windows-latest]
 
     name: lint
-    runs-on: ${{ matrix.platform }}
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v2
         with:
           # Required: the version of golangci-lint is required and must be specified without patch version: we always use the latest patch version.
-          version: ${{ matrix.go-version }}
+          version: v1.29
 
           # Optional: working directory, useful for monorepos
           # working-directory: somedir

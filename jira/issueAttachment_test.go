@@ -6,6 +6,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/url"
+	"path/filepath"
 	"testing"
 )
 
@@ -212,6 +213,16 @@ func TestAttachmentService_Human(t *testing.T) {
 			wantHTTPCodeReturn: http.StatusOK,
 			wantErr:            true,
 		},
+		{
+			name:               "GetHumanReadableAttachmentWhenTheResponseBodyHasADifferentFormat",
+			mockFile:           "./mocks/empty_json.json",
+			attachmentID:       "10006",
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/rest/api/3/attachment/10006/expand/human",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
 	}
 
 	for _, testCase := range testCases {
@@ -344,6 +355,16 @@ func TestAttachmentService_Metadata(t *testing.T) {
 			wantHTTPCodeReturn: http.StatusOK,
 			wantErr:            true,
 		},
+		{
+			name:               "GetAttachmentMetadataWhenTheResponseBodyHasADifferentFormat",
+			mockFile:           "./mocks/empty_json.json",
+			attachmentID:       "10006",
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/rest/api/3/attachment/10006",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
 	}
 
 	for _, testCase := range testCases {
@@ -452,6 +473,24 @@ func TestAttachmentService_Settings(t *testing.T) {
 			wantHTTPCodeReturn: http.StatusOK,
 			wantErr:            true,
 		},
+		{
+			name:               "GetAttachmentSettingWhenTheResponseBodyLengthIsZero",
+			mockFile:           "",
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/rest/api/3/attachment/meta",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+		{
+			name:               "GetAttachmentSettingWhenTheResponseBodyHasADifferentFormat",
+			mockFile:           "./mocks/empty_json.json",
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/rest/api/3/attachment/meta",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
 	}
 
 	for _, testCase := range testCases {
@@ -481,6 +520,190 @@ func TestAttachmentService_Settings(t *testing.T) {
 			service := &AttachmentService{client: mockClient}
 
 			getResult, gotResponse, err := service.Settings(testCase.context)
+
+			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+
+				assert.Error(t, err)
+
+				if gotResponse != nil {
+					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
+				}
+			} else {
+
+				assert.NoError(t, err)
+				assert.NotEqual(t, gotResponse, nil)
+				assert.NotEqual(t, getResult, nil)
+
+				apiEndpoint, err := url.Parse(gotResponse.Endpoint)
+				if err != nil {
+					t.Fatal(err)
+				}
+
+				var endpointToAssert string
+
+				if apiEndpoint.Query().Encode() != "" {
+					endpointToAssert = fmt.Sprintf("%v?%v", apiEndpoint.Path, apiEndpoint.Query().Encode())
+				} else {
+					endpointToAssert = apiEndpoint.Path
+				}
+
+				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
+				assert.Equal(t, testCase.endpoint, endpointToAssert)
+
+				t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
+				assert.Equal(t, gotResponse.StatusCode, testCase.wantHTTPCodeReturn)
+			}
+
+		})
+	}
+}
+
+func TestAttachmentService_Add(t *testing.T) {
+
+	testCases := []struct {
+		name               string
+		mockFile           string
+		issueKeyOrID       string
+		path               string
+		wannaAbsolutePath  bool
+		wantHTTPMethod     string
+		endpoint           string
+		wantHTTPCodeReturn int
+		wantErr            bool
+	}{
+		{
+			name:               "AddAttachmentWhenThePathIsAbsolute",
+			mockFile:           "./mocks/get-attachments.json",
+			issueKeyOrID:       "KP-1",
+			path:               "./mocks/image.png",
+			wannaAbsolutePath:  true,
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/api/3/issue/KP-1/attachments",
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            false,
+		},
+		{
+			name:               "AddAttachmentWhenTheFilePathDoesNotExists",
+			mockFile:           "./mocks/get-attachments.json",
+			issueKeyOrID:       "KP-1",
+			path:               "./mocks",
+			wannaAbsolutePath:  true,
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/api/3/issue/KP-1/attachments",
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+		{
+			name:               "AddAttachmentWhenTheFilePathIsEmpty",
+			mockFile:           "./mocks/get-attachments.json",
+			issueKeyOrID:       "KP-1",
+			path:               "",
+			wannaAbsolutePath:  true,
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/api/3/issue/KP-1/attachments",
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+		{
+			name:               "AddAttachmentWhenTheFilePathIsAFolder",
+			mockFile:           "./mocks/get-attachments.json",
+			issueKeyOrID:       "KP-1",
+			path:               "./mocks/",
+			wannaAbsolutePath:  true,
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/api/3/issue/KP-1/attachments",
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+		{
+			name:               "AddAttachmentWhenThePathIsNotAbsolute",
+			mockFile:           "./mocks/get-attachments.json",
+			issueKeyOrID:       "KP-1",
+			path:               "./mocks/image.png",
+			wannaAbsolutePath:  false,
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/api/3/issue/KP-1/attachments",
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+		{
+			name:               "AddAttachmentWhenTheRequestMethodIsInvalid",
+			mockFile:           "./mocks/get-attachments.json",
+			issueKeyOrID:       "KP-1",
+			path:               "./mocks/image.png",
+			wannaAbsolutePath:  true,
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/rest/api/3/issue/KP-1/attachments",
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+		{
+			name:               "AddAttachmentWhenTheStatusCodeIsIncorrect",
+			mockFile:           "./mocks/get-attachments.json",
+			issueKeyOrID:       "KP-1",
+			path:               "./mocks/image.png",
+			wannaAbsolutePath:  true,
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/api/3/issue/KP-1/attachments",
+			wantHTTPCodeReturn: http.StatusBadRequest,
+			wantErr:            true,
+		},
+		{
+			name:               "AddAttachmentWhenTheResponseBodyHasADifferentFormat",
+			mockFile:           "./mocks/empty_json.json",
+			issueKeyOrID:       "KP-1",
+			path:               "./mocks/image.png",
+			wannaAbsolutePath:  true,
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/api/3/issue/KP-1/attachments",
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+
+			//Init a new HTTP mock server
+			mockOptions := mockServerOptions{
+				Endpoint:           testCase.endpoint,
+				MockFilePath:       testCase.mockFile,
+				MethodAccepted:     testCase.wantHTTPMethod,
+				ResponseCodeWanted: testCase.wantHTTPCodeReturn,
+			}
+
+			mockServer, err := startMockServer(&mockOptions)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			defer mockServer.Close()
+
+			//Init the library instance
+			mockClient, err := startMockClient(mockServer.URL)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			service := &AttachmentService{client: mockClient}
+
+			var pathToUse string
+			if testCase.wannaAbsolutePath {
+
+				pathToUse, err = filepath.Abs(testCase.path)
+				if err != nil {
+					t.Fatal(err)
+				}
+
+			} else {
+				pathToUse = testCase.path
+			}
+
+			getResult, gotResponse, err := service.Add(testCase.issueKeyOrID, pathToUse)
 
 			if testCase.wantErr {
 

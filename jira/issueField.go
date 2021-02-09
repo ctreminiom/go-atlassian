@@ -50,7 +50,7 @@ func (f *FieldService) Gets(ctx context.Context) (result *[]FieldScheme, respons
 
 	result = new([]FieldScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return
+		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
 
 	return
@@ -73,6 +73,10 @@ func (c *CustomFieldScheme) Format() {
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-fields/#api-rest-api-3-field-post
 func (f *FieldService) Create(ctx context.Context, payload *CustomFieldScheme) (result *FieldScheme, response *Response, err error) {
 
+	if payload == nil {
+		return nil, nil, fmt.Errorf("error, payload value is nil, please provide a valid CustomFieldScheme pointer")
+	}
+
 	payload.Format()
 
 	var endpoint = "rest/api/3/field"
@@ -80,6 +84,7 @@ func (f *FieldService) Create(ctx context.Context, payload *CustomFieldScheme) (
 	if err != nil {
 		return
 	}
+	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Content-Type", "application/json")
 
 	response, err = f.client.Do(request)
@@ -89,7 +94,7 @@ func (f *FieldService) Create(ctx context.Context, payload *CustomFieldScheme) (
 
 	result = new(FieldScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return
+		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
 
 	return
@@ -116,20 +121,24 @@ type FieldSearchScheme struct {
 			Items  string `json:"items"`
 			System string `json:"system"`
 		} `json:"schema,omitempty"`
-		Description   string `json:"description"`
-		Key           string `json:"key"`
-		IsLocked      bool   `json:"isLocked"`
-		ScreensCount  int    `json:"screensCount"`
-		ContextsCount int    `json:"contextsCount"`
+		Description   string `json:"description,omitempty"`
+		Key           string `json:"key,omitempty"`
+		IsLocked      bool   `json:"isLocked,omitempty"`
+		ScreensCount  int    `json:"screensCount,omitempty"`
+		ContextsCount int    `json:"contextsCount,omitempty"`
 		LastUsed      struct {
-			Type string `json:"type"`
-		} `json:"lastUsed"`
-	} `json:"values"`
+			Type string `json:"type,omitempty"`
+		} `json:"lastUsed,omitempty"`
+	} `json:"values,omitempty"`
 }
 
 // Returns a paginated list of fields for Classic Jira projects.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-fields/#api-rest-api-3-field-search-get
 func (f *FieldService) Search(ctx context.Context, opts *FieldSearchOptionsScheme, startAt, maxResults int) (result *FieldSearchScheme, response *Response, err error) {
+
+	if opts == nil {
+		return nil, nil, fmt.Errorf("error, opts value is nil, please provide a valid FieldSearchOptionsScheme pointer")
+	}
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -178,7 +187,7 @@ func (f *FieldService) Search(ctx context.Context, opts *FieldSearchOptionsSchem
 	if err != nil {
 		return
 	}
-	request.Header.Set("Content-Type", "application/json")
+	request.Header.Set("Accept", "application/json")
 
 	response, err = f.client.Do(request)
 	if err != nil {
@@ -187,7 +196,7 @@ func (f *FieldService) Search(ctx context.Context, opts *FieldSearchOptionsSchem
 
 	result = new(FieldSearchScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return
+		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
 
 	return

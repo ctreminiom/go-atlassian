@@ -1,0 +1,19 @@
+{
+  "id": "customfield_10101",
+  "key": "customfield_10101",
+  "name": "New custom field",
+  "untranslatedName": "New custom field",
+  "custom": true,
+  "orderable": true,
+  "navigable": true,
+  "searchable": true,
+  "clauseNames": [
+    "cf[10101]",
+    "New custom field"
+  ],
+  "schema": {
+    "type": "project",
+    "custom": "com.atlassian.jira.plugin.system.customfieldtypes:project",
+    "customId": 10101
+  }
+}

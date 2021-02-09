@@ -25,18 +25,18 @@ type IssueService struct {
 }
 
 type IssueScheme struct {
-	ID          string                        `json:"id,omitemtpy"`
-	Key         string                        `json:"key,omitemtpy"`
-	Self        string                        `json:"self,omitemtpy"`
-	Transitions []IssueSearchTransitionScheme `json:"transitions,omitemtpy"`
-	Changelog   IssueChangelogScheme          `json:"changelog"`
+	ID          string                        `json:"id,omitempty"`
+	Key         string                        `json:"key,omitempty"`
+	Self        string                        `json:"self,omitempty"`
+	Transitions []IssueSearchTransitionScheme `json:"transitions,omitempty"`
+	Changelog   IssueChangelogScheme          `json:"changelog,omitempty"`
 	Fields      struct {
-		IssueType  IssueTypeScheme        `json:"issuetype,omitemtpy"`
-		IssueLinks []IssueLinkScheme      `json:"issuelinks,omitemtpy"`
-		Watcher    IssueWatcherScheme     `json:"watches,omitemtpy"`
-		Votes      IssueVoteScheme        `json:"votes,omitemtpy"`
-		Versions   []ProjectVersionScheme `json:"versions,omitemtpy"`
-	} `json:"fields,omitemtpy"`
+		IssueType  IssueTypeScheme        `json:"issuetype,omitempty"`
+		IssueLinks []IssueLinkScheme      `json:"issuelinks,omitempty"`
+		Watcher    IssueWatcherScheme     `json:"watches,omitempty"`
+		Votes      IssueVoteScheme        `json:"votes,omitempty"`
+		Versions   []ProjectVersionScheme `json:"versions,omitempty"`
+	} `json:"fields,omitempty"`
 }
 
 // Creates an issue or, where the option to create subtasks is enabled in Jira, a subtask.

@@ -103,7 +103,7 @@ type ShareFilterPermissionScheme struct {
 			TotalIssueCount     int    `json:"totalIssueCount,omitempty"`
 			LastIssueUpdateTime string `json:"lastIssueUpdateTime,omitempty"`
 		} `json:"insight,omitempty"`
-	} `json:"project,omitempty,omitempty"`
+	} `json:"project,omitempty"`
 	Role struct {
 		Self        string `json:"self,omitempty"`
 		Name        string `json:"name,omitempty"`

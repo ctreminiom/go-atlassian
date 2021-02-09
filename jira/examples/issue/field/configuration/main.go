@@ -68,7 +68,7 @@ func getIssueFieldConfigurationItems() (err error) {
 
 	atlassian.Auth.SetBasicAuth(mail, token)
 
-	configurationItems, response, err := atlassian.Issue.Field.Configuration.Items(context.Background(), "10000", 0, 50)
+	configurationItems, response, err := atlassian.Issue.Field.Configuration.Items(context.Background(), 10000, 0, 50)
 	if err != nil {
 		if response != nil {
 			log.Println("Response HTTP Response", string(response.BodyAsBytes))

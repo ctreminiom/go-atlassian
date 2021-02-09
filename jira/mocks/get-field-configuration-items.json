@@ -1,0 +1,19 @@
+{
+  "maxResults": 50,
+  "startAt": 0,
+  "total": 2,
+  "isLast": true,
+  "values": [
+    {
+      "id": "environment",
+      "description": "For example operating system, software platform and/or hardware specifications (include as appropriate for the issue).",
+      "isHidden": false,
+      "isRequired": false
+    },
+    {
+      "id": "description",
+      "isHidden": false,
+      "isRequired": false
+    }
+  ]
+}

@@ -47,7 +47,7 @@ func (f *FieldConfigurationService) Gets(ctx context.Context, IDs []int, isDefau
 	if err != nil {
 		return
 	}
-	request.Header.Set("Content-Type", "application/json")
+	request.Header.Set("Accept", "application/json")
 
 	response, err = f.client.Do(request)
 	if err != nil {
@@ -56,7 +56,7 @@ func (f *FieldConfigurationService) Gets(ctx context.Context, IDs []int, isDefau
 
 	result = new(FieldConfigSearchScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return
+		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
 
 	return
@@ -77,7 +77,7 @@ type FieldConfigItemSearchScheme struct {
 
 // Returns a paginated list of all fields for a configuration.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-field-configurations/#api-rest-api-3-fieldconfiguration-id-fields-get
-func (f *FieldConfigurationService) Items(ctx context.Context, fieldConfigID string, startAt, maxResults int) (result *FieldConfigItemSearchScheme, response *Response, err error) {
+func (f *FieldConfigurationService) Items(ctx context.Context, fieldConfigID int, startAt, maxResults int) (result *FieldConfigItemSearchScheme, response *Response, err error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -88,7 +88,8 @@ func (f *FieldConfigurationService) Items(ctx context.Context, fieldConfigID str
 	if err != nil {
 		return
 	}
-	request.Header.Set("Content-Type", "application/json")
+
+	request.Header.Set("Accept", "application/json")
 
 	response, err = f.client.Do(request)
 	if err != nil {
@@ -97,7 +98,7 @@ func (f *FieldConfigurationService) Items(ctx context.Context, fieldConfigID str
 
 	result = new(FieldConfigItemSearchScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return
+		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
 
 	return
@@ -123,19 +124,8 @@ func (f *FieldConfigurationService) Schemes(ctx context.Context, IDs []int, star
 	params.Add("startAt", strconv.Itoa(startAt))
 	params.Add("maxResults", strconv.Itoa(maxResults))
 
-	var IDsAsString string
-	for index, value := range IDs {
-
-		if index == 0 {
-			IDsAsString = strconv.Itoa(value)
-			continue
-		}
-
-		IDsAsString += "," + strconv.Itoa(value)
-	}
-
-	if len(IDsAsString) != 0 {
-		params.Add("id", IDsAsString)
+	for _, id := range IDs {
+		params.Add("id", strconv.Itoa(id))
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/fieldconfigurationscheme?%v", params.Encode())
@@ -143,7 +133,8 @@ func (f *FieldConfigurationService) Schemes(ctx context.Context, IDs []int, star
 	if err != nil {
 		return
 	}
-	request.Header.Set("Content-Type", "application/json")
+
+	request.Header.Set("Accept", "application/json")
 
 	response, err = f.client.Do(request)
 	if err != nil {
@@ -152,7 +143,7 @@ func (f *FieldConfigurationService) Schemes(ctx context.Context, IDs []int, star
 
 	result = new(FieldConfigSchemeScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return
+		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
 
 	return
@@ -178,19 +169,8 @@ func (f *FieldConfigurationService) IssueTypeItems(ctx context.Context, fieldCon
 	params.Add("startAt", strconv.Itoa(startAt))
 	params.Add("maxResults", strconv.Itoa(maxResults))
 
-	var IDsAsString string
-	for index, value := range fieldConfigIDs {
-
-		if index == 0 {
-			IDsAsString = strconv.Itoa(value)
-			continue
-		}
-
-		IDsAsString += "," + strconv.Itoa(value)
-	}
-
-	if len(IDsAsString) != 0 {
-		params.Add("fieldConfigurationSchemeId", IDsAsString)
+	for _, id := range fieldConfigIDs {
+		params.Add("fieldConfigurationSchemeId", strconv.Itoa(id))
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/fieldconfigurationscheme/mapping?%v", params.Encode())
@@ -198,7 +178,7 @@ func (f *FieldConfigurationService) IssueTypeItems(ctx context.Context, fieldCon
 	if err != nil {
 		return
 	}
-	request.Header.Set("Content-Type", "application/json")
+	request.Header.Set("Accept", "application/json")
 
 	response, err = f.client.Do(request)
 	if err != nil {
@@ -207,7 +187,7 @@ func (f *FieldConfigurationService) IssueTypeItems(ctx context.Context, fieldCon
 
 	result = new(FieldConfigSchemeItemsScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return
+		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
 
 	return
@@ -245,7 +225,7 @@ func (f *FieldConfigurationService) SchemesByProject(ctx context.Context, projec
 	if err != nil {
 		return
 	}
-	request.Header.Set("Content-Type", "application/json")
+	request.Header.Set("Accept", "application/json")
 
 	response, err = f.client.Do(request)
 	if err != nil {
@@ -254,7 +234,7 @@ func (f *FieldConfigurationService) SchemesByProject(ctx context.Context, projec
 
 	result = new(FieldProjectSchemeScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return
+		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
 
 	return

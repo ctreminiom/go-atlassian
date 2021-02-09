@@ -3,7 +3,6 @@ package jira
 import (
 	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -16,16 +15,11 @@ type GroupScheme struct {
 	Name  string `json:"name,omitempty"`
 	Self  string `json:"self,omitempty"`
 	Users struct {
-		Size  int `json:"size,omitempty"`
-		Items []struct {
-			Self        string `json:"self,omitempty"`
-			AccountID   string `json:"accountId,omitempty"`
-			DisplayName string `json:"displayName,omitempty"`
-			Active      bool   `json:"active,omitempty"`
-		} `json:"items,omitempty"`
-		MaxResults int `json:"max-results,omitempty"`
-		StartIndex int `json:"start-index,omitempty"`
-		EndIndex   int `json:"end-index,omitempty"`
+		Size       int          `json:"size,omitempty"`
+		Items      []UserScheme `json:"items,omitempty"`
+		MaxResults int          `json:"max-results,omitempty"`
+		StartIndex int          `json:"start-index,omitempty"`
+		EndIndex   int          `json:"end-index,omitempty"`
 	} `json:"users,omitempty"`
 	Expand string `json:"expand,omitempty"`
 }
@@ -33,10 +27,6 @@ type GroupScheme struct {
 // Creates a group.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-groups/#api-rest-api-3-group-post
 func (g *GroupService) Create(ctx context.Context, name string) (result *GroupScheme, response *Response, err error) {
-
-	if ctx == nil {
-		return nil, nil, errors.New("the context param is nil, please provide a valid one")
-	}
 
 	payload := struct {
 		Name string `json:"name"`
@@ -49,6 +39,7 @@ func (g *GroupService) Create(ctx context.Context, name string) (result *GroupSc
 	if err != nil {
 		return
 	}
+
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Content-Type", "application/json")
 
@@ -57,13 +48,9 @@ func (g *GroupService) Create(ctx context.Context, name string) (result *GroupSc
 		return
 	}
 
-	if len(response.BodyAsBytes) == 0 {
-		return nil, nil, errors.New("unable to marshall the response body, the HTTP callback did not return any bytes")
-	}
-
 	result = new(GroupScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return
+		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
 
 	return
@@ -72,10 +59,6 @@ func (g *GroupService) Create(ctx context.Context, name string) (result *GroupSc
 // Deletes a group.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-groups/#api-rest-api-3-group-delete
 func (g *GroupService) Delete(ctx context.Context, name string) (response *Response, err error) {
-
-	if ctx == nil {
-		return nil, errors.New("the context param is nil, please provide a valid one")
-	}
 
 	params := url.Values{}
 	params.Add("groupname", name)
@@ -114,38 +97,18 @@ type GroupBulkOptionsScheme struct {
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-groups/#api-rest-api-3-group-bulk-get
 func (g *GroupService) Bulk(ctx context.Context, options *GroupBulkOptionsScheme, startAt, maxResults int) (result *BulkGroupScheme, response *Response, err error) {
 
-	if ctx == nil {
-		return nil, nil, errors.New("the context param is nil, please provide a valid one")
+	if options == nil {
+		return nil, nil, fmt.Errorf("error, options value is nil, please provide a valid GroupBulkOptionsScheme pointer")
 	}
 
 	params := url.Values{}
 
-	var groupIDs string
-	for index, value := range options.GroupIDs {
-
-		if index == 0 {
-			groupIDs = value
-		}
-
-		groupIDs += "," + value
+	for _, groupID := range options.GroupIDs {
+		params.Add("groupId", groupID)
 	}
 
-	if len(groupIDs) != 0 {
-		params.Add("groupId", groupIDs)
-	}
-
-	var groupNames string
-	for index, value := range options.GroupNames {
-
-		if index == 0 {
-			groupNames = value
-		}
-
-		groupNames += "," + value
-	}
-
-	if len(groupNames) != 0 {
-		params.Add("groupName", groupNames)
+	for _, groupName := range options.GroupNames {
+		params.Add("groupName", groupName)
 	}
 
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -163,13 +126,9 @@ func (g *GroupService) Bulk(ctx context.Context, options *GroupBulkOptionsScheme
 		return
 	}
 
-	if len(response.BodyAsBytes) == 0 {
-		return nil, nil, errors.New("unable to marshall the response body, the HTTP callback did not return any bytes")
-	}
-
 	result = new(BulkGroupScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return
+		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
 
 	return
@@ -201,10 +160,6 @@ type GroupUsersScheme struct {
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-groups/#api-rest-api-3-group-member-get
 func (g *GroupService) Members(ctx context.Context, group string, inactive bool, startAt, maxResults int) (result *GroupUsersScheme, response *Response, err error) {
 
-	if ctx == nil {
-		return nil, nil, errors.New("the context param is nil, please provide a valid one")
-	}
-
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
 	params.Add("maxResults", strconv.Itoa(maxResults))
@@ -226,13 +181,9 @@ func (g *GroupService) Members(ctx context.Context, group string, inactive bool,
 		return
 	}
 
-	if len(response.BodyAsBytes) == 0 {
-		return nil, nil, errors.New("unable to marshall the response body, the HTTP callback did not return any bytes")
-	}
-
 	result = new(GroupUsersScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return
+		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
 
 	return
@@ -241,10 +192,6 @@ func (g *GroupService) Members(ctx context.Context, group string, inactive bool,
 // Adds a user to a group.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-groups/#api-rest-api-3-group-user-post
 func (g *GroupService) Add(ctx context.Context, group, accountID string) (result *GroupScheme, response *Response, err error) {
-
-	if ctx == nil {
-		return nil, nil, errors.New("the context param is nil, please provide a valid one")
-	}
 
 	payload := struct {
 		AccountID string `json:"accountId"`
@@ -267,13 +214,9 @@ func (g *GroupService) Add(ctx context.Context, group, accountID string) (result
 		return
 	}
 
-	if len(response.BodyAsBytes) == 0 {
-		return nil, nil, errors.New("unable to marshall the response body, the HTTP callback did not return any bytes")
-	}
-
 	result = new(GroupScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return
+		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
 
 	return
@@ -282,10 +225,6 @@ func (g *GroupService) Add(ctx context.Context, group, accountID string) (result
 // Removes a user from a group.
 // https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-groups/#api-rest-api-3-group-user-delete
 func (g *GroupService) Remove(ctx context.Context, group, accountID string) (response *Response, err error) {
-
-	if ctx == nil {
-		return nil, errors.New("the context param is nil, please provide a valid one")
-	}
 
 	params := url.Values{}
 	params.Add("groupname", group)

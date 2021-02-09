@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"net/url"
 )
 
 type ScreenTabService struct {
@@ -19,9 +20,20 @@ type ScreenTabScheme struct {
 
 // Returns the list of tabs for a screen.
 // https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screen-tabs/#api-rest-api-3-screens-screenid-tabs-get
-func (s *ScreenTabService) Gets(ctx context.Context, screenID string) (result *[]ScreenTabScheme, response *Response, err error) {
+func (s *ScreenTabService) Gets(ctx context.Context, screenID int, projectKey string) (result *[]ScreenTabScheme, response *Response, err error) {
 
-	var endpoint = fmt.Sprintf("rest/api/3/screens/%v/tabs", screenID)
+	params := url.Values{}
+
+	if len(projectKey) != 0 {
+		params.Add("projectKey", projectKey)
+	}
+
+	var endpoint string
+	if len(params.Encode()) != 0 {
+		endpoint = fmt.Sprintf("rest/api/3/screens/%v/tabs?%v", screenID, params.Encode())
+	} else {
+		endpoint = fmt.Sprintf("rest/api/3/screens/%v/tabs", screenID)
+	}
 
 	request, err := s.client.newRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
@@ -45,7 +57,7 @@ func (s *ScreenTabService) Gets(ctx context.Context, screenID string) (result *[
 
 // Creates a tab for a screen.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screen-tabs/#api-rest-api-3-screens-screenid-tabs-post
-func (s *ScreenTabService) Create(ctx context.Context, screenID, tabName string) (result *ScreenTabScheme, response *Response, err error) {
+func (s *ScreenTabService) Create(ctx context.Context, screenID int, tabName string) (result *ScreenTabScheme, response *Response, err error) {
 
 	payload := struct {
 		Name string `json:"name"`
@@ -107,7 +119,7 @@ func (s *ScreenTabService) Update(ctx context.Context, screenID, tabID, newTabNa
 
 // Deletes a screen tab.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screen-tabs/#api-rest-api-3-screens-screenid-tabs-tabid-delete
-func (s *ScreenTabService) Delete(ctx context.Context, screenID, tabID string) (response *Response, err error) {
+func (s *ScreenTabService) Delete(ctx context.Context, screenID int, tabID string) (response *Response, err error) {
 
 	var endpoint = fmt.Sprintf("rest/api/3/screens/%v/tabs/%v", screenID, tabID)
 
@@ -126,7 +138,7 @@ func (s *ScreenTabService) Delete(ctx context.Context, screenID, tabID string) (
 
 // Moves a screen tab.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screen-tabs/#api-rest-api-3-screens-screenid-tabs-tabid-move-pos-post
-func (s *ScreenTabService) Move(ctx context.Context, screenID, tabID string, tabPosition int) (response *Response, err error) {
+func (s *ScreenTabService) Move(ctx context.Context, screenID, tabID, tabPosition int) (response *Response, err error) {
 
 	var endpoint = fmt.Sprintf("rest/api/3/screens/%v/tabs/%v/move/%v", screenID, tabID, tabPosition)
 

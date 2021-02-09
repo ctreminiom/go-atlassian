@@ -32,13 +32,9 @@ type UserScheme struct {
 	TimeZone    string `json:"timeZone"`
 	Locale      string `json:"locale"`
 	Groups      struct {
-		Size           int               `json:"size"`
-		Items          []UserGroupScheme `json:"items"`
-		PagingCallback struct {
-		} `json:"pagingCallback"`
-		Callback struct {
-		} `json:"callback"`
-		MaxResults int `json:"max-results"`
+		Size       int               `json:"size"`
+		Items      []UserGroupScheme `json:"items"`
+		MaxResults int               `json:"max-results"`
 	} `json:"groups"`
 	ApplicationRoles struct {
 		Size  int `json:"size"`
@@ -56,10 +52,6 @@ type UserScheme struct {
 			HasUnlimitedSeats    bool     `json:"hasUnlimitedSeats"`
 			Platform             bool     `json:"platform"`
 		} `json:"items"`
-		PagingCallback struct {
-		} `json:"pagingCallback"`
-		Callback struct {
-		} `json:"callback"`
 		MaxResults int `json:"max-results"`
 	} `json:"applicationRoles"`
 	Expand string `json:"expand"`
@@ -110,6 +102,42 @@ func (u *UserService) Get(ctx context.Context, accountID string, expands []strin
 	return
 }
 
+type UserPayloadScheme struct {
+	Password     string `json:"password,omitempty"`
+	EmailAddress string `json:"emailAddress,omitempty"`
+	DisplayName  string `json:"displayName,omitempty"`
+	Name         string `json:"name,omitempty"`
+	Notification bool   `json:"notification,omitempty"`
+}
+
+// Creates a user. This resource is retained for legacy compatibility.
+// As soon as a more suitable alternative is available this resource will be deprecated.
+// The option is provided to set or generate a password for the user.
+// When using the option to generate a password, by omitting password from the request, include "notification": "true" to ensure the user is
+// sent an email advising them that their account is created.
+// This email includes a link for the user to set their password. If the notification isn't sent for a generated password,
+// the user will need to be sent a reset password request from Jira.
+// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-users/#api-rest-api-3-user-post
+func (u *UserService) Create(ctx context.Context, payload *UserPayloadScheme) (result *UserScheme, response *Response, err error) {
+
+	var endpoint = "rest/api/3/user"
+
+	request, err := u.client.newRequest(ctx, http.MethodPost, endpoint, &payload)
+	if err != nil {
+		return
+	}
+
+	request.Header.Set("Accept", "application/json")
+	request.Header.Set("Content-Type", "application/json")
+
+	response, err = u.client.Do(request)
+	if err != nil {
+		return
+	}
+
+	return
+}
+
 // Deletes a user.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-users/#api-rest-api-3-user-delete
 func (u *UserService) Delete(ctx context.Context, accountID string) (response *Response, err error) {
@@ -122,8 +150,6 @@ func (u *UserService) Delete(ctx context.Context, accountID string) (response *R
 	if err != nil {
 		return
 	}
-
-	request.Header.Set("Accept", "application/json")
 
 	response, err = u.client.Do(request)
 	if err != nil {

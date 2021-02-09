@@ -23,12 +23,12 @@ type ScreenSchemePageScheme struct {
 
 type ScreenSchemeScheme struct {
 	ID          int    `json:"id,omitempty"`
-	Name        string `json:"name,omitempty" validate:"required"`
+	Name        string `json:"name,omitempty"`
 	Description string `json:"description,omitempty"`
 	Screens     struct {
-		Default int `json:"default,omitempty" validate:"required"`
-		View    int `json:"view,omitempty" validate:"required"`
-		Edit    int `json:"edit,omitempty" validate:"required"`
+		Default int `json:"default,omitempty"`
+		View    int `json:"view,omitempty"`
+		Edit    int `json:"edit,omitempty"`
 		Create  int `json:"create,omitempty"`
 	} `json:"screens,omitempty"`
 }
@@ -68,9 +68,19 @@ func (s *ScreenSchemeService) Gets(ctx context.Context, screenSchemeIDs []int, s
 	return
 }
 
+type ScreenSchemePayloadScheme struct {
+	Screens struct {
+		Default int `json:"default" validate:"required"`
+		View    int `json:"view" validate:"required"`
+		Edit    int `json:"edit" validate:"required"`
+	} `json:"screens"`
+	Name        string `json:"name" validate:"required"`
+	Description string `json:"description,omitempty"`
+}
+
 // Creates a screen scheme.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screen-schemes/#api-rest-api-3-screenscheme-post
-func (s *ScreenSchemeService) Create(ctx context.Context, payload *ScreenSchemeScheme) (result *ScreenSchemeScheme, response *Response, err error) {
+func (s *ScreenSchemeService) Create(ctx context.Context, payload *ScreenSchemePayloadScheme) (result *ScreenSchemeScheme, response *Response, err error) {
 
 	validate := validator.New()
 	if err = validate.Struct(payload); err != nil {

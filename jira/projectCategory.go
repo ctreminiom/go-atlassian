@@ -71,8 +71,8 @@ func (p *ProjectCategoryService) Get(ctx context.Context, projectCategoryID int)
 func (p *ProjectCategoryService) Create(ctx context.Context, name, description string) (result *ProjectCategoryScheme, response *Response, err error) {
 
 	payload := struct {
-		Name        string `json:"name"`
-		Description string `json:"description"`
+		Name        string `json:"name,omitempty"`
+		Description string `json:"description,omitempty"`
 	}{
 		Name:        name,
 		Description: description,
@@ -84,7 +84,9 @@ func (p *ProjectCategoryService) Create(ctx context.Context, name, description s
 	if err != nil {
 		return
 	}
+
 	request.Header.Set("Accept", "application/json")
+	request.Header.Set("Content-Type", "application/json")
 
 	response, err = p.client.Do(request)
 	if err != nil {
@@ -104,8 +106,8 @@ func (p *ProjectCategoryService) Create(ctx context.Context, name, description s
 func (p *ProjectCategoryService) Update(ctx context.Context, projectCategoryID, name, description string) (result *ProjectCategoryScheme, response *Response, err error) {
 
 	payload := struct {
-		Name        string `json:"name"`
-		Description string `json:"description"`
+		Name        string `json:"name,omitempty"`
+		Description string `json:"description,omitempty"`
 	}{
 		Name:        name,
 		Description: description,

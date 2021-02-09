@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"gopkg.in/go-playground/validator.v9"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -34,19 +33,8 @@ func (i *IssueTypeSchemeService) Gets(ctx context.Context, issueTypeSchemeIDs []
 	params.Add("startAt", strconv.Itoa(startAt))
 	params.Add("maxResults", strconv.Itoa(maxResults))
 
-	var levelIDs string
-	for index, value := range issueTypeSchemeIDs {
-
-		if index == 0 {
-			levelIDs = strconv.Itoa(value)
-			continue
-		}
-
-		levelIDs += "," + strconv.Itoa(value)
-	}
-
-	if len(levelIDs) != 0 {
-		params.Add("id", levelIDs)
+	for _, id := range issueTypeSchemeIDs {
+		params.Add("id", strconv.Itoa(id))
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/issuetypescheme?%v", params.Encode())
@@ -71,10 +59,10 @@ func (i *IssueTypeSchemeService) Gets(ctx context.Context, issueTypeSchemeIDs []
 }
 
 type IssueTypeSchemePayloadScheme struct {
-	DefaultIssueTypeID string   `json:"defaultIssueTypeId" validate:"required"`
-	IssueTypeIds       []string `json:"issueTypeIds"`
-	Name               string   `json:"name"`
-	Description        string   `json:"description"`
+	DefaultIssueTypeID string   `json:"defaultIssueTypeId,omitempty"`
+	IssueTypeIds       []string `json:"issueTypeIds,omitempty"`
+	Name               string   `json:"name,omitempty"`
+	Description        string   `json:"description,omitempty"`
 }
 
 type newIssueTypeSchemeScheme struct {
@@ -85,18 +73,15 @@ type newIssueTypeSchemeScheme struct {
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-type-schemes/#api-rest-api-3-issuetypescheme-post
 func (i *IssueTypeSchemeService) Create(ctx context.Context, payload *IssueTypeSchemePayloadScheme) (issueTypeSchemeID string, response *Response, err error) {
 
-	validate := validator.New()
-	if err = validate.Struct(payload); err != nil {
-		return
-	}
-
 	var endpoint = "rest/api/3/issuetypescheme"
 
 	request, err := i.client.newRequest(ctx, http.MethodPost, endpoint, &payload)
 	if err != nil {
 		return
 	}
+
 	request.Header.Set("Accept", "application/json")
+	request.Header.Set("Content-Type", "application/json")
 
 	response, err = i.client.Do(request)
 	if err != nil {
@@ -131,19 +116,8 @@ func (i *IssueTypeSchemeService) Items(ctx context.Context, issueTypeSchemeIDs [
 	params.Add("startAt", strconv.Itoa(startAt))
 	params.Add("maxResults", strconv.Itoa(maxResults))
 
-	var levelIDs string
-	for index, value := range issueTypeSchemeIDs {
-
-		if index == 0 {
-			levelIDs = strconv.Itoa(value)
-			continue
-		}
-
-		levelIDs += "," + strconv.Itoa(value)
-	}
-
-	if len(levelIDs) != 0 {
-		params.Add("issueTypeSchemeId", levelIDs)
+	for _, id := range issueTypeSchemeIDs {
+		params.Add("issueTypeSchemeId", strconv.Itoa(id))
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/issuetypescheme/mapping?%v", params.Encode())
@@ -192,19 +166,8 @@ func (i *IssueTypeSchemeService) Projects(ctx context.Context, projectIDs []int,
 	params.Add("startAt", strconv.Itoa(startAt))
 	params.Add("maxResults", strconv.Itoa(maxResults))
 
-	var projectIDsAsString string
-	for index, value := range projectIDs {
-
-		if index == 0 {
-			projectIDsAsString = strconv.Itoa(value)
-			continue
-		}
-
-		projectIDsAsString += "," + strconv.Itoa(value)
-	}
-
-	if len(projectIDsAsString) != 0 {
-		params.Add("projectId", projectIDsAsString)
+	for _, id := range projectIDs {
+		params.Add("projectId", strconv.Itoa(id))
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/issuetypescheme/project?%v", params.Encode())
@@ -213,6 +176,7 @@ func (i *IssueTypeSchemeService) Projects(ctx context.Context, projectIDs []int,
 	if err != nil {
 		return
 	}
+
 	request.Header.Set("Accept", "application/json")
 
 	response, err = i.client.Do(request)
@@ -247,6 +211,7 @@ func (i *IssueTypeSchemeService) Assign(ctx context.Context, issueTypeSchemeID, 
 		return
 	}
 	request.Header.Set("Accept", "application/json")
+	request.Header.Set("Content-Type", "application/json")
 
 	response, err = i.client.Do(request)
 	if err != nil {
@@ -266,7 +231,9 @@ func (i *IssueTypeSchemeService) Update(ctx context.Context, issueTypeSchemeID i
 	if err != nil {
 		return
 	}
+
 	request.Header.Set("Accept", "application/json")
+	request.Header.Set("Content-Type", "application/json")
 
 	response, err = i.client.Do(request)
 	if err != nil {
@@ -313,7 +280,7 @@ func (i *IssueTypeSchemeService) AddIssueTypes(ctx context.Context, issueTypeSch
 
 	var endpoint = fmt.Sprintf("rest/api/3/issuetypescheme/%v/issuetype", issueTypeSchemeID)
 
-	request, err := i.client.newRequest(ctx, http.MethodDelete, endpoint, &payload)
+	request, err := i.client.newRequest(ctx, http.MethodPut, endpoint, &payload)
 	if err != nil {
 		return
 	}
@@ -332,10 +299,8 @@ func (i *IssueTypeSchemeService) AddIssueTypes(ctx context.Context, issueTypeSch
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-type-schemes/#api-rest-api-3-issuetypescheme-issuetypeschemeid-issuetype-issuetypeid-delete
 func (i *IssueTypeSchemeService) RemoveIssueType(ctx context.Context, issueTypeSchemeID, issueTypeID int) (response *Response, err error) {
 
-	params := url.Values{}
-	params.Add("issueTypeId", strconv.Itoa(issueTypeID))
+	var endpoint = fmt.Sprintf("rest/api/3/issuetypescheme/%v/issuetype/%v", issueTypeSchemeID, issueTypeID)
 
-	var endpoint = fmt.Sprintf("rest/api/3/issuetypescheme/%v/issuetype?%v", issueTypeSchemeID, params.Encode())
 	request, err := i.client.newRequest(ctx, http.MethodDelete, endpoint, nil)
 	if err != nil {
 		return

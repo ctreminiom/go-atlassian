@@ -5,6 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"net/url"
+	"strconv"
+	"strings"
 )
 
 type ProjectRoleService struct {
@@ -12,7 +15,57 @@ type ProjectRoleService struct {
 	Actor  *ProjectRoleActorService
 }
 
-type ProjectRoleDetailScheme struct {
+// Returns a list of project roles for the project returning the name and self URL for each role.
+// Note that all project roles are shared with all projects in Jira Cloud.
+// See Get all project roles for more information.
+// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-roles/#api-rest-api-3-project-projectidorkey-role-get
+func (p *ProjectRoleService) Gets(ctx context.Context, projectKeyOrID string) (result *map[string]int, response *Response, err error) {
+
+	var endpoint = fmt.Sprintf("rest/api/3/project/%v/role", projectKeyOrID)
+
+	request, err := p.client.newRequest(ctx, http.MethodGet, endpoint, nil)
+	if err != nil {
+		return
+	}
+	request.Header.Set("Accept", "application/json")
+
+	response, err = p.client.Do(request)
+	if err != nil {
+		return
+	}
+
+	var (
+		roles          = make(map[string]int)
+		resultAsObject map[string]interface{}
+	)
+
+	if err = json.Unmarshal(response.BodyAsBytes, &resultAsObject); err != nil {
+		return
+	}
+
+	for roleName, roleURL := range resultAsObject {
+
+		urlParsed, err := url.Parse(roleURL.(string))
+		if err != nil {
+			return nil, response, err
+		}
+
+		urlPart := strings.Split(urlParsed.Path, "/")
+
+		projectRoleIDAsInt, err := strconv.Atoi(urlPart[len(urlPart)-1])
+		if err != nil {
+			return nil, response, err
+		}
+
+		roles[roleName] = projectRoleIDAsInt
+	}
+
+	result = &roles
+
+	return
+}
+
+type ProjectRoleScheme struct {
 	Self        string `json:"self"`
 	Name        string `json:"name"`
 	ID          int    `json:"id"`
@@ -38,6 +91,45 @@ type ProjectRoleDetailScheme struct {
 			Name string `json:"name"`
 		} `json:"project"`
 	} `json:"scope"`
+}
+
+// Returns a project role's details and actors associated with the project.
+// The list of actors is sorted by display name.
+// To check whether a user belongs to a role based on their group memberships, use Get user with the groups expand parameter selected.
+// Then check whether the user keys and groups match with the actors returned for the project.
+// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-roles/#api-rest-api-3-project-projectidorkey-role-id-get
+func (p *ProjectRoleService) Get(ctx context.Context, projectKeyOrID string, roleID int) (result *ProjectRoleScheme, response *Response, err error) {
+
+	var endpoint = fmt.Sprintf("rest/api/3/project/%v/role/%v", projectKeyOrID, roleID)
+
+	request, err := p.client.newRequest(ctx, http.MethodGet, endpoint, nil)
+	if err != nil {
+		return
+	}
+	request.Header.Set("Accept", "application/json")
+
+	response, err = p.client.Do(request)
+	if err != nil {
+		return
+	}
+
+	result = new(ProjectRoleScheme)
+	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
+		return
+	}
+
+	return
+}
+
+type ProjectRoleDetailScheme struct {
+	Self             string `json:"self"`
+	Name             string `json:"name"`
+	ID               int    `json:"id"`
+	Description      string `json:"description"`
+	Admin            bool   `json:"admin"`
+	Default          bool   `json:"default"`
+	RoleConfigurable bool   `json:"roleConfigurable"`
+	TranslatedName   string `json:"translatedName"`
 }
 
 // Returns all project roles and the details for each role.
@@ -68,7 +160,7 @@ func (p *ProjectRoleService) Details(ctx context.Context, projectKeyOrID string)
 
 // Gets a list of all project roles, complete with project role details and default actors.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-roles/#api-rest-api-3-role-get
-func (p *ProjectRoleService) Global(ctx context.Context) (result *[]ProjectRoleDetailScheme, response *Response, err error) {
+func (p *ProjectRoleService) Global(ctx context.Context) (result *[]ProjectRoleScheme, response *Response, err error) {
 
 	var endpoint = "rest/api/3/role"
 
@@ -83,19 +175,12 @@ func (p *ProjectRoleService) Global(ctx context.Context) (result *[]ProjectRoleD
 		return
 	}
 
-	result = new([]ProjectRoleDetailScheme)
+	result = new([]ProjectRoleScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
 	return
-}
-
-type ProjectRoleScheme struct {
-	Self        string `json:"self"`
-	Name        string `json:"name"`
-	ID          int    `json:"id"`
-	Description string `json:"description"`
 }
 
 // Creates a new project role with no default actors.
@@ -104,8 +189,8 @@ type ProjectRoleScheme struct {
 func (p *ProjectRoleService) Create(ctx context.Context, name, description string) (result *ProjectRoleScheme, response *Response, err error) {
 
 	payload := struct {
-		Name        string `json:"name"`
-		Description string `json:"description"`
+		Name        string `json:"name,omitempty"`
+		Description string `json:"description,omitempty"`
 	}{
 		Name:        name,
 		Description: description,
@@ -127,32 +212,6 @@ func (p *ProjectRoleService) Create(ctx context.Context, name, description strin
 	}
 
 	result = new(ProjectRoleScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return
-	}
-
-	return
-}
-
-// Gets the project role details and the default actors associated with the role. The list of default actors is sorted by display name.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-roles/#api-rest-api-3-role-id-get
-func (p *ProjectRoleService) Get(ctx context.Context, projectRoleID string) (result *ProjectRoleDetailScheme, response *Response, err error) {
-
-	var endpoint = fmt.Sprintf("rest/api/3/role/%v", projectRoleID)
-
-	request, err := p.client.newRequest(ctx, http.MethodGet, endpoint, nil)
-	if err != nil {
-		return
-	}
-
-	request.Header.Set("Accept", "application/json")
-
-	response, err = p.client.Do(request)
-	if err != nil {
-		return
-	}
-
-	result = new(ProjectRoleDetailScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}

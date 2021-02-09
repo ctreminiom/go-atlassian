@@ -9,7 +9,7 @@ import (
 
 type VoteService struct{ client *Client }
 
-type IssueVotesScheme struct {
+type IssueVoteScheme struct {
 	Self     string `json:"self"`
 	Votes    int    `json:"votes"`
 	HasVoted bool   `json:"hasVoted"`
@@ -31,7 +31,7 @@ type IssueVotesScheme struct {
 
 // Returns details about the votes on an issue.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-votes/#api-rest-api-3-issue-issueidorkey-votes-get
-func (v *VoteService) Gets(ctx context.Context, issueKeyOrID string) (result *IssueVotesScheme, response *Response, err error) {
+func (v *VoteService) Gets(ctx context.Context, issueKeyOrID string) (result *IssueVoteScheme, response *Response, err error) {
 
 	var endpoint = fmt.Sprintf("rest/api/3/issue/%v/votes", issueKeyOrID)
 
@@ -46,7 +46,7 @@ func (v *VoteService) Gets(ctx context.Context, issueKeyOrID string) (result *Is
 		return
 	}
 
-	result = new(IssueVotesScheme)
+	result = new(IssueVoteScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}

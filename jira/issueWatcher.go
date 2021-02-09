@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"net/url"
 )
 
 type WatcherService struct{ client *Client }
@@ -57,7 +58,9 @@ func (w *WatcherService) Add(ctx context.Context, issueKeyOrID string) (response
 	if err != nil {
 		return
 	}
+
 	request.Header.Set("Content-Type", "application/json")
+	request.Header.Set("Accept", "application/json")
 
 	response, err = w.client.Do(request)
 	if err != nil {
@@ -69,14 +72,18 @@ func (w *WatcherService) Add(ctx context.Context, issueKeyOrID string) (response
 
 // Deletes a user as a watcher of an issue.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-watchers/#api-rest-api-3-issue-issueidorkey-watchers-delete
-func (w *WatcherService) Delete(ctx context.Context, issueKeyOrID string) (response *Response, err error) {
+func (w *WatcherService) Delete(ctx context.Context, issueKeyOrID, accountID string) (response *Response, err error) {
 
-	var endpoint = fmt.Sprintf("rest/api/3/issue/%v/watchers", issueKeyOrID)
+	params := url.Values{}
+	params.Add("accountId", accountID)
+
+	var endpoint = fmt.Sprintf("rest/api/3/issue/%v/watchers?%v", issueKeyOrID, params.Encode())
 
 	request, err := w.client.newRequest(ctx, http.MethodDelete, endpoint, nil)
 	if err != nil {
 		return
 	}
+
 	request.Header.Set("Content-Type", "application/json")
 
 	response, err = w.client.Do(request)

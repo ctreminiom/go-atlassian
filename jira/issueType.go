@@ -14,21 +14,21 @@ type IssueTypeService struct {
 }
 
 type IssueTypeScheme struct {
-	Self        string `json:"self"`
-	ID          string `json:"id"`
-	Description string `json:"description"`
-	IconURL     string `json:"iconUrl"`
-	Name        string `json:"name"`
-	Subtask     bool   `json:"subtask"`
-	AvatarID    int    `json:"avatarId"`
+	Self        string `json:"self,omitempty"`
+	ID          string `json:"id,omitempty"`
+	Description string `json:"description,omitempty"`
+	IconURL     string `json:"iconUrl,omitempty"`
+	Name        string `json:"name,omitempty"`
+	Subtask     bool   `json:"subtask,omitempty"`
+	AvatarID    int    `json:"avatarId,omitempty"`
 	EntityID    string `json:"entityId,omitempty"`
 	Scope       struct {
-		Type    string `json:"type"`
+		Type    string `json:"type,omitempty"`
 		Project struct {
-			ID   string `json:"id"`
-			Key  string `json:"key"`
-			Name string `json:"name"`
-		} `json:"project"`
+			ID   string `json:"id,omitempty"`
+			Key  string `json:"key,omitempty"`
+			Name string `json:"name,omitempty"`
+		} `json:"project,omitempty"`
 	} `json:"scope,omitempty"`
 }
 
@@ -60,7 +60,7 @@ func (i *IssueTypeService) Gets(ctx context.Context) (result *[]IssueTypeScheme,
 type IssueTypePayloadScheme struct {
 	Name        string `json:"name,omitempty" validate:"required"`
 	Description string `json:"description,omitempty"`
-	Type        string `json:"type,omitempty" validate:"oneof= 'subtask' 'standard'"`
+	Type        string `json:"type,omitempty" validate:"required,oneof=subtask standard"`
 }
 
 // Creates an issue type and adds it to the default issue type scheme.
@@ -69,6 +69,7 @@ func (i *IssueTypeService) Create(ctx context.Context, payload *IssueTypePayload
 
 	validate := validator.New()
 	if err = validate.Struct(payload); err != nil {
+		err = fmt.Errorf("error: issuetype type payload invalid: %v", err.Error())
 		return
 	}
 
@@ -78,7 +79,9 @@ func (i *IssueTypeService) Create(ctx context.Context, payload *IssueTypePayload
 	if err != nil {
 		return
 	}
+
 	request.Header.Set("Accept", "application/json")
+	request.Header.Set("Content-Type", "application/json")
 
 	response, err = i.client.Do(request)
 	if err != nil {
@@ -127,6 +130,7 @@ func (i *IssueTypeService) Update(ctx context.Context, issueTypeID string, paylo
 		return
 	}
 	request.Header.Set("Accept", "application/json")
+	request.Header.Set("Content-Type", "application/json")
 
 	response, err = i.client.Do(request)
 	if err != nil {
@@ -153,7 +157,6 @@ func (i *IssueTypeService) Delete(ctx context.Context, issueTypeID string) (resp
 	if err != nil {
 		return
 	}
-	request.Header.Set("Accept", "application/json")
 
 	response, err = i.client.Do(request)
 	if err != nil {

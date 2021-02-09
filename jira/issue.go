@@ -6,30 +6,37 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"strconv"
 )
 
 type IssueService struct {
 	client     *Client
 	Attachment *AttachmentService
 	Comment    *CommentService
-
 	Field      *FieldService
 	Link       *IssueLinkService
 	Priority   *PriorityService
-	Property   *IssuePropertyService
 	Resolution *ResolutionService
 	Security   *IssueSecurityService
 	Type       *IssueTypeService
 	Votes      *VoteService
 	Watchers   *WatcherService
 	Label      *LabelService
+	Search     *IssueSearchService
 }
 
 type IssueScheme struct {
-	ID   string `json:"id"`
-	Key  string `json:"key"`
-	Self string `json:"self"`
+	ID          string                        `json:"id,omitemtpy"`
+	Key         string                        `json:"key,omitemtpy"`
+	Self        string                        `json:"self,omitemtpy"`
+	Transitions []IssueSearchTransitionScheme `json:"transitions,omitemtpy"`
+	Changelog   IssueChangelogScheme          `json:"changelog"`
+	Fields      struct {
+		IssueType  IssueTypeScheme        `json:"issuetype,omitemtpy"`
+		IssueLinks []IssueLinkScheme      `json:"issuelinks,omitemtpy"`
+		Watcher    IssueWatcherScheme     `json:"watches,omitemtpy"`
+		Votes      IssueVoteScheme        `json:"votes,omitemtpy"`
+		Versions   []ProjectVersionScheme `json:"versions,omitemtpy"`
+	} `json:"fields,omitemtpy"`
 }
 
 // Creates an issue or, where the option to create subtasks is enabled in Jira, a subtask.
@@ -570,74 +577,6 @@ func (i *IssueService) Assign(ctx context.Context, issueKeyOrID, accountID strin
 
 	response, err = i.client.Do(request)
 	if err != nil {
-		return
-	}
-
-	return
-}
-
-type IssueChangelogScheme struct {
-	Self       string            `json:"self"`
-	MaxResults int               `json:"maxResults"`
-	StartAt    int               `json:"startAt"`
-	Total      int               `json:"total"`
-	IsLast     bool              `json:"isLast"`
-	Values     []ChangelogScheme `json:"values"`
-}
-
-type ChangelogScheme struct {
-	ID string `json:"id"`
-
-	Author struct {
-		Self         string `json:"self"`
-		AccountID    string `json:"accountId"`
-		EmailAddress string `json:"emailAddress"`
-		AvatarUrls   struct {
-			Four8X48  string `json:"48x48"`
-			Two4X24   string `json:"24x24"`
-			One6X16   string `json:"16x16"`
-			Three2X32 string `json:"32x32"`
-		} `json:"avatarUrls"`
-		DisplayName string `json:"displayName"`
-		Active      bool   `json:"active"`
-		TimeZone    string `json:"timeZone"`
-		AccountType string `json:"accountType"`
-	} `json:"author"`
-
-	Created string `json:"created"`
-
-	Items []struct {
-		Field            string `json:"field"`
-		FieldType        string `json:"fieldtype"`
-		FieldID          string `json:"fieldId"`
-		From             string `json:"from"`
-		FromString       string `json:"fromString"`
-		To               string `json:"to"`
-		TmpFromAccountID string `json:"tmpFromAccountId"`
-		TmpToAccountID   string `json:"tmpToAccountId"`
-	} `json:"items"`
-}
-
-func (i *IssueService) Changelogs(ctx context.Context, issueKeyOrID string, startAt, maxResults int) (result *IssueChangelogScheme, response *Response, err error) {
-
-	params := url.Values{}
-	params.Add("startAt", strconv.Itoa(startAt))
-	params.Add("maxResults", strconv.Itoa(maxResults))
-
-	var endpoint = fmt.Sprintf("rest/api/3/issue/%v/changelog?%v", issueKeyOrID, params.Encode())
-
-	request, err := i.client.newRequest(ctx, http.MethodGet, endpoint, nil)
-	if err != nil {
-		return
-	}
-
-	response, err = i.client.Do(request)
-	if err != nil {
-		return
-	}
-
-	result = new(IssueChangelogScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 

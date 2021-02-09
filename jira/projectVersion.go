@@ -29,16 +29,23 @@ type ProjectVersionPageScheme struct {
 }
 
 type ProjectVersionScheme struct {
-	Self                      string `json:"self,omitempty"`
-	ID                        string `json:"id,omitempty"`
-	Description               string `json:"description,omitempty"`
-	Name                      string `json:"name,omitempty"`
-	Archived                  bool   `json:"archived,omitempty"`
-	Released                  bool   `json:"released,omitempty"`
-	ReleaseDate               string `json:"releaseDate,omitempty"`
-	Overdue                   bool   `json:"overdue,omitempty"`
-	UserReleaseDate           string `json:"userReleaseDate,omitempty"`
-	ProjectID                 int    `json:"projectId,omitempty"`
+	Self            string `json:"self,omitempty"`
+	ID              string `json:"id,omitempty"`
+	Description     string `json:"description,omitempty"`
+	Name            string `json:"name,omitempty"`
+	Archived        bool   `json:"archived,omitempty"`
+	Released        bool   `json:"released,omitempty"`
+	ReleaseDate     string `json:"releaseDate,omitempty"`
+	Overdue         bool   `json:"overdue,omitempty"`
+	UserReleaseDate string `json:"userReleaseDate,omitempty"`
+	ProjectID       int    `json:"projectId,omitempty"`
+	Operations      []struct {
+		ID         string `json:"id,omitempty"`
+		StyleClass string `json:"styleClass,omitempty"`
+		Label      string `json:"label,omitempty"`
+		Href       string `json:"href,omitempty"`
+		Weight     int    `json:"weight,omitempty"`
+	} `json:"operations,omitempty"`
 	IssuesStatusForFixVersion struct {
 		Unmapped   int `json:"unmapped,omitempty"`
 		ToDo       int `json:"toDo,omitempty"`
@@ -83,7 +90,12 @@ func (p *ProjectVersionService) Gets(ctx context.Context, projectKeyOrID string,
 		params.Add("orderBy", options.OrderBy)
 	}
 
-	var endpoint = fmt.Sprintf("rest/api/3/project/%v/version?%v", projectKeyOrID, params.Encode())
+	var endpoint string
+	if len(params.Encode()) != 0 {
+		endpoint = fmt.Sprintf("rest/api/3/project/%v/version?%v", projectKeyOrID, params.Encode())
+	} else {
+		endpoint = fmt.Sprintf("rest/api/3/project/%v/version", projectKeyOrID)
+	}
 
 	request, err := p.client.newRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
@@ -105,9 +117,19 @@ func (p *ProjectVersionService) Gets(ctx context.Context, projectKeyOrID string,
 	return
 }
 
+type ProjectVersionPayloadScheme struct {
+	Archived    bool   `json:"archived,omitempty"`
+	ReleaseDate string `json:"releaseDate,omitempty"`
+	Name        string `json:"name,omitempty"`
+	Description string `json:"description,omitempty"`
+	ProjectID   int    `json:"projectId,omitempty"`
+	Released    bool   `json:"released,omitempty"`
+	StartDate   string `json:"startDate,omitempty"`
+}
+
 // Creates a project version.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-versions/#api-rest-api-3-version-post
-func (p *ProjectVersionService) Create(ctx context.Context, payload *ProjectVersionScheme) (result *ProjectVersionScheme, response *Response, err error) {
+func (p *ProjectVersionService) Create(ctx context.Context, payload *ProjectVersionPayloadScheme) (result *ProjectVersionScheme, response *Response, err error) {
 
 	var endpoint = "rest/api/3/version"
 
@@ -134,9 +156,31 @@ func (p *ProjectVersionService) Create(ctx context.Context, payload *ProjectVers
 
 // Returns a project version.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-versions/#api-rest-api-3-version-id-get
-func (p *ProjectVersionService) Get(ctx context.Context, versionID string) (result *ProjectVersionScheme, response *Response, err error) {
+func (p *ProjectVersionService) Get(ctx context.Context, versionID string, expands []string) (result *ProjectVersionScheme, response *Response, err error) {
 
-	var endpoint = fmt.Sprintf("rest/api/3/version/%v", versionID)
+	params := url.Values{}
+
+	var expand string
+	for index, value := range expands {
+
+		if index == 0 {
+			expand = value
+			continue
+		}
+
+		expand += "," + value
+	}
+
+	if len(expand) != 0 {
+		params.Add("expand", expand)
+	}
+
+	var endpoint string
+	if len(params.Encode()) != 0 {
+		endpoint = fmt.Sprintf("rest/api/3/version/%v?%v", versionID, params.Encode())
+	} else {
+		endpoint = fmt.Sprintf("rest/api/3/version/%v", versionID)
+	}
 
 	request, err := p.client.newRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
@@ -160,7 +204,7 @@ func (p *ProjectVersionService) Get(ctx context.Context, versionID string) (resu
 
 // Updates a project version.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-versions/#api-rest-api-3-version-id-put
-func (p *ProjectVersionService) Update(ctx context.Context, versionID string, payload *ProjectVersionScheme) (response *Response, err error) {
+func (p *ProjectVersionService) Update(ctx context.Context, versionID string, payload *ProjectVersionPayloadScheme) (response *Response, err error) {
 
 	var endpoint = fmt.Sprintf("rest/api/3/version/%v", versionID)
 
@@ -173,6 +217,101 @@ func (p *ProjectVersionService) Update(ctx context.Context, versionID string, pa
 
 	response, err = p.client.Do(request)
 	if err != nil {
+		return
+	}
+
+	return
+}
+
+// Merges two project versions.
+// The merge is completed by deleting the version specified in id and replacing any occurrences of its ID in fixVersion with the version ID specified in moveIssuesTo.
+// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-versions/#api-rest-api-3-version-id-mergeto-moveissuesto-put
+func (p *ProjectVersionService) Merge(ctx context.Context, versionID, moveIssuesTo string) (response *Response, err error) {
+
+	var endpoint = fmt.Sprintf("rest/api/3/version/%v/mergeto/%v", versionID, moveIssuesTo)
+
+	request, err := p.client.newRequest(ctx, http.MethodPut, endpoint, nil)
+	if err != nil {
+		return
+	}
+
+	request.Header.Set("Accept", "application/json")
+
+	response, err = p.client.Do(request)
+	if err != nil {
+		return
+	}
+
+	return
+}
+
+type VersionIssueCountsScheme struct {
+	Self                                     string `json:"self"`
+	IssuesFixedCount                         int    `json:"issuesFixedCount"`
+	IssuesAffectedCount                      int    `json:"issuesAffectedCount"`
+	IssueCountWithCustomFieldsShowingVersion int    `json:"issueCountWithCustomFieldsShowingVersion"`
+	CustomFieldUsage                         []struct {
+		FieldName                          string `json:"fieldName"`
+		CustomFieldID                      int    `json:"customFieldId"`
+		IssueCountWithVersionInCustomField int    `json:"issueCountWithVersionInCustomField"`
+	} `json:"customFieldUsage"`
+}
+
+// Returns the following counts for a version:
+// 1. Number of issues where the fixVersion is set to the version.
+// 2. Number of issues where the affectedVersion is set to the version.
+// 3. Number of issues where a version custom field is set to the version.
+// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-versions/#api-rest-api-3-version-id-relatedissuecounts-get
+func (p *ProjectVersionService) RelatedIssueCounts(ctx context.Context, versionID string) (result *VersionIssueCountsScheme, response *Response, err error) {
+
+	var endpoint = fmt.Sprintf("rest/api/3/version/%v/relatedIssueCounts", versionID)
+
+	request, err := p.client.newRequest(ctx, http.MethodGet, endpoint, nil)
+	if err != nil {
+		return
+	}
+
+	request.Header.Set("Accept", "application/json")
+
+	response, err = p.client.Do(request)
+	if err != nil {
+		return
+	}
+
+	result = new(VersionIssueCountsScheme)
+	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
+		return
+	}
+
+	return
+}
+
+type VersionUnresolvedIssuesCountScheme struct {
+	Self                  string `json:"self"`
+	IssuesUnresolvedCount int    `json:"issuesUnresolvedCount"`
+	IssuesCount           int    `json:"issuesCount"`
+}
+
+// Returns counts of the issues and unresolved issues for the project version.
+// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-versions/#api-rest-api-3-version-id-unresolvedissuecount-get
+func (p *ProjectVersionService) UnresolvedIssueCount(ctx context.Context, versionID string) (result *VersionUnresolvedIssuesCountScheme, response *Response, err error) {
+
+	var endpoint = fmt.Sprintf("rest/api/3/version/%v/unresolvedIssueCount", versionID)
+
+	request, err := p.client.newRequest(ctx, http.MethodGet, endpoint, nil)
+	if err != nil {
+		return
+	}
+
+	request.Header.Set("Accept", "application/json")
+
+	response, err = p.client.Do(request)
+	if err != nil {
+		return
+	}
+
+	result = new(VersionUnresolvedIssuesCountScheme)
+	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 

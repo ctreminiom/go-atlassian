@@ -24,8 +24,8 @@ type Client struct {
 	Filter     *FilterService
 	Group      *GroupService
 	Issue      *IssueService
-	Search     *SearchService
 	Permission *PermissionService
+	Project    *ProjectService
 }
 
 //New
@@ -59,14 +59,12 @@ func New(httpClient *http.Client, site string) (client *Client, err error) {
 	}
 
 	client.Group = &GroupService{client: client}
-	client.Search = &SearchService{client: client}
 
 	client.Issue = &IssueService{
 		client:     client,
 		Attachment: &AttachmentService{client: client},
 		Comment: &CommentService{
-			client:     client,
-			Properties: &CommentPropertiesService{client: client},
+			client: client,
 		},
 		Field: &FieldService{
 			client:        client,
@@ -80,12 +78,14 @@ func New(httpClient *http.Client, site string) (client *Client, err error) {
 			Option: &FieldOptionService{client: client},
 		},
 		Priority:   &PriorityService{client: client},
-		Property:   &IssuePropertyService{client: client},
 		Resolution: &ResolutionService{client: client},
 		Security: &IssueSecurityService{
 			client: client,
 			Scheme: &IssueSecuritySchemeService{client: client},
 		},
+
+		Search: &IssueSearchService{client: client},
+
 		Type: &IssueTypeService{
 			client: client,
 			Scheme: &IssueTypeSchemeService{client: client},
@@ -103,6 +103,23 @@ func New(httpClient *http.Client, site string) (client *Client, err error) {
 	client.Permission = &PermissionService{
 		client: client,
 		Scheme: &PermissionSchemeService{client: client},
+	}
+
+	client.Project = &ProjectService{
+		client: client,
+
+		Category:   &ProjectCategoryService{client: client},
+		Component:  &ProjectComponentService{client: client},
+		Valid:      &ProjectValidationService{client: client},
+		Permission: &ProjectPermissionSchemeService{client: client},
+
+		Role: &ProjectRoleService{
+			client: client,
+			Actor:  &ProjectRoleActorService{client: client},
+		},
+
+		Type:    &ProjectTypeService{client: client},
+		Version: &ProjectVersionService{client: client},
 	}
 
 	return

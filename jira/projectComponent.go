@@ -9,58 +9,56 @@ import (
 
 type ProjectComponentService struct{ client *Client }
 
+type ProjectComponentPayloadScheme struct {
+	IsAssigneeTypeValid bool   `json:"isAssigneeTypeValid,omitempty"`
+	Name                string `json:"name,omitempty"`
+	Description         string `json:"description,omitempty"`
+	Project             string `json:"project,omitempty"`
+	AssigneeType        string `json:"assigneeType,omitempty"`
+	LeadAccountID       string `json:"leadAccountId,omitempty"`
+}
+
+// Creates a component.
+// Use components to provide containers for issues within a project.
+// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-components/#api-rest-api-3-component-post
+func (p *ProjectComponentService) Create(ctx context.Context, payload *ProjectComponentPayloadScheme) (result *ProjectComponentScheme, response *Response, err error) {
+
+	var endpoint = "rest/api/3/component"
+
+	request, err := p.client.newRequest(ctx, http.MethodPost, endpoint, &payload)
+	if err != nil {
+		return
+	}
+
+	request.Header.Set("Accept", "application/json")
+	request.Header.Set("Content-Type", "application/json")
+
+	response, err = p.client.Do(request)
+	if err != nil {
+		return
+	}
+
+	result = new(ProjectComponentScheme)
+	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
+		return
+	}
+
+	return
+}
+
 type ProjectComponentScheme struct {
-	Self        string `json:"self"`
-	ID          string `json:"id"`
-	Name        string `json:"name"`
-	Description string `json:"description"`
-	Lead        struct {
-		Self       string `json:"self"`
-		Key        string `json:"key"`
-		AccountID  string `json:"accountId"`
-		Name       string `json:"name"`
-		AvatarUrls struct {
-			Four8X48  string `json:"48x48"`
-			Two4X24   string `json:"24x24"`
-			One6X16   string `json:"16x16"`
-			Three2X32 string `json:"32x32"`
-		} `json:"avatarUrls"`
-		DisplayName string `json:"displayName"`
-		Active      bool   `json:"active"`
-	} `json:"lead"`
-	AssigneeType string `json:"assigneeType"`
-	Assignee     struct {
-		Self       string `json:"self"`
-		Key        string `json:"key"`
-		AccountID  string `json:"accountId"`
-		Name       string `json:"name"`
-		AvatarUrls struct {
-			Four8X48  string `json:"48x48"`
-			Two4X24   string `json:"24x24"`
-			One6X16   string `json:"16x16"`
-			Three2X32 string `json:"32x32"`
-		} `json:"avatarUrls"`
-		DisplayName string `json:"displayName"`
-		Active      bool   `json:"active"`
-	} `json:"assignee"`
-	RealAssigneeType string `json:"realAssigneeType"`
-	RealAssignee     struct {
-		Self       string `json:"self"`
-		Key        string `json:"key"`
-		AccountID  string `json:"accountId"`
-		Name       string `json:"name"`
-		AvatarUrls struct {
-			Four8X48  string `json:"48x48"`
-			Two4X24   string `json:"24x24"`
-			One6X16   string `json:"16x16"`
-			Three2X32 string `json:"32x32"`
-		} `json:"avatarUrls"`
-		DisplayName string `json:"displayName"`
-		Active      bool   `json:"active"`
-	} `json:"realAssignee"`
-	IsAssigneeTypeValid bool   `json:"isAssigneeTypeValid"`
-	Project             string `json:"project"`
-	ProjectID           int    `json:"projectId"`
+	Self                string     `json:"self"`
+	ID                  string     `json:"id"`
+	Name                string     `json:"name"`
+	Description         string     `json:"description"`
+	Lead                UserScheme `json:"lead"`
+	AssigneeType        string     `json:"assigneeType"`
+	Assignee            UserScheme `json:"assignee"`
+	RealAssigneeType    string     `json:"realAssigneeType"`
+	RealAssignee        UserScheme `json:"realAssignee"`
+	IsAssigneeTypeValid bool       `json:"isAssigneeTypeValid"`
+	Project             string     `json:"project"`
+	ProjectID           int        `json:"projectId"`
 }
 
 // Returns all components in a project.
@@ -138,19 +136,11 @@ func (p *ProjectComponentService) Delete(ctx context.Context, componentID string
 	return
 }
 
-type ProjectComponentUpdatePayloadScheme struct {
-	IsAssigneeTypeValid bool   `json:"isAssigneeTypeValid"`
-	Name                string `json:"name"`
-	Description         string `json:"description"`
-	AssigneeType        string `json:"assigneeType"`
-	LeadAccountID       string `json:"leadAccountId"`
-}
-
 // Updates a component.
 // Any fields included in the request are overwritten.
 // If leadAccountId is an empty string ("") the component lead is removed.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-components/#api-rest-api-3-component-id-put
-func (p *ProjectComponentService) Update(ctx context.Context, componentID string, payload *ProjectComponentUpdatePayloadScheme) (result *ProjectComponentScheme, response *Response, err error) {
+func (p *ProjectComponentService) Update(ctx context.Context, componentID string, payload *ProjectComponentPayloadScheme) (result *ProjectComponentScheme, response *Response, err error) {
 
 	var endpoint = fmt.Sprintf("rest/api/3/component/%v", componentID)
 

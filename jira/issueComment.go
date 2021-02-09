@@ -9,10 +9,7 @@ import (
 	"strconv"
 )
 
-type CommentService struct {
-	client     *Client
-	Properties *CommentPropertiesService
-}
+type CommentService struct{ client *Client }
 
 type IssueCommentScheme struct {
 	StartAt    int             `json:"startAt"`

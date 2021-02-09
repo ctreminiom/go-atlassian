@@ -107,8 +107,8 @@ func (s *ScreenService) Gets(ctx context.Context, screenIDs []int, startAt, maxR
 func (s *ScreenService) Create(ctx context.Context, name, description string) (result *ScreenScheme, response *Response, err error) {
 
 	payload := struct {
-		Name        string `json:"name"`
-		Description string `json:"description"`
+		Name        string `json:"name,omitempty"`
+		Description string `json:"description,omitempty"`
 	}{
 		Name:        name,
 		Description: description,
@@ -137,7 +137,9 @@ func (s *ScreenService) Create(ctx context.Context, name, description string) (r
 	return
 }
 
-func (s *ScreenService) AddField(ctx context.Context, fieldID string) (response *Response, err error) {
+// Adds a field to the default tab of the default screen.
+// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screens/#api-rest-api-3-screens-addtodefault-fieldid-post
+func (s *ScreenService) AddToDefault(ctx context.Context, fieldID string) (response *Response, err error) {
 
 	var endpoint = fmt.Sprintf("rest/api/3/screens/addToDefault/%v", fieldID)
 
@@ -158,7 +160,7 @@ func (s *ScreenService) AddField(ctx context.Context, fieldID string) (response 
 
 // Updates a screen. Only screens used in classic projects can be updated.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screens/#api-rest-api-3-screens-screenid-put
-func (s *ScreenService) Update(ctx context.Context, screenID, name, description string) (result *ScreenScheme, response *Response, err error) {
+func (s *ScreenService) Update(ctx context.Context, screenID int, name, description string) (result *ScreenScheme, response *Response, err error) {
 
 	payload := struct {
 		Name        string `json:"name"`
@@ -195,7 +197,7 @@ func (s *ScreenService) Update(ctx context.Context, screenID, name, description 
 // A screen cannot be deleted if it is used in a screen scheme,
 // workflow, or workflow draft. Only screens used in classic projects can be deleted.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screens/#api-rest-api-3-screens-screenid-delete
-func (s *ScreenService) Delete(ctx context.Context, screenID string) (response *Response, err error) {
+func (s *ScreenService) Delete(ctx context.Context, screenID int) (response *Response, err error) {
 
 	var endpoint = fmt.Sprintf("rest/api/3/screens/%v", screenID)
 
@@ -217,7 +219,7 @@ type AvailableScreenFieldScheme struct {
 	Name string `json:"name"`
 }
 
-func (s *ScreenService) Available(ctx context.Context, screenID string) (result *[]AvailableScreenFieldScheme, response *Response, err error) {
+func (s *ScreenService) Available(ctx context.Context, screenID int) (result *[]AvailableScreenFieldScheme, response *Response, err error) {
 
 	var endpoint = fmt.Sprintf("rest/api/3/screens/%v/availableFields", screenID)
 

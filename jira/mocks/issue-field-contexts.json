@@ -1,0 +1,22 @@
+{
+  "maxResults": 100,
+  "startAt": 0,
+  "total": 2,
+  "isLast": true,
+  "values": [
+    {
+      "id": "10025",
+      "name": "Bug fields context",
+      "description": "A context used to define the custom field options for bugs.",
+      "isGlobalContext": true,
+      "isAnyIssueType": false
+    },
+    {
+      "id": "10026",
+      "name": "Task fields context",
+      "description": "A context used to define the custom field options for tasks.",
+      "isGlobalContext": false,
+      "isAnyIssueType": false
+    }
+  ]
+}

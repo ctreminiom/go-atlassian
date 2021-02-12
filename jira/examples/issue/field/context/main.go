@@ -81,7 +81,7 @@ func createFieldContexts() (err error) {
 
 	fmt.Println(payload)
 
-	response, err := atlassian.Issue.Field.Context.Create(context.Background(), fieldID, &payload)
+	_, response, err := atlassian.Issue.Field.Context.Create(context.Background(), fieldID, &payload)
 	if err != nil {
 		if response != nil {
 			log.Println("Response HTTP Response", string(response.BodyAsBytes))

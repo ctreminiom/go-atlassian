@@ -42,6 +42,10 @@ type FieldContextOptionListScheme struct {
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-custom-field-options/#api-rest-api-3-field-fieldid-context-contextid-option-get
 func (f *FieldOptionContextService) Gets(ctx context.Context, opts *FieldOptionContextParams, startAt, maxResults int) (result *FieldContextOptionScheme, response *Response, err error) {
 
+	if opts == nil {
+		return nil, nil, fmt.Errorf("error, payload value is nil, please provide a valid FieldOptionContextParams pointer")
+	}
+
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
 	params.Add("maxResults", strconv.Itoa(maxResults))
@@ -76,7 +80,7 @@ func (f *FieldOptionContextService) Gets(ctx context.Context, opts *FieldOptionC
 
 	result = new(FieldContextOptionScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return
+		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
 
 	return
@@ -90,6 +94,14 @@ type CreateCustomFieldOptionPayloadScheme struct {
 // cascading options for a custom select field. The options are added to a context of the field.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-custom-field-options/#api-rest-api-3-field-fieldid-context-contextid-option-post
 func (f *FieldOptionContextService) Create(ctx context.Context, fieldID string, contextID int, payload *CreateCustomFieldOptionPayloadScheme) (result *FieldContextOptionListScheme, response *Response, err error) {
+
+	if payload == nil {
+		return nil, nil, fmt.Errorf("error, payload value is nil, please provide a valid CreateCustomFieldOptionPayloadScheme pointer")
+	}
+
+	if fieldID == "" {
+		return nil, nil, fmt.Errorf("error, fieldID value is nil, please provide a valid fieldID value")
+	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/field/%v/context/%v/option", fieldID, contextID)
 
@@ -107,7 +119,7 @@ func (f *FieldOptionContextService) Create(ctx context.Context, fieldID string, 
 
 	result = new(FieldContextOptionListScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return
+		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
 
 	return
@@ -118,6 +130,14 @@ func (f *FieldOptionContextService) Create(ctx context.Context, fieldID string, 
 // Options where the values in the request match the current values aren't updated and aren't reported in the response.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-custom-field-options/#api-rest-api-3-field-fieldid-context-contextid-option-put
 func (f *FieldOptionContextService) Update(ctx context.Context, fieldID string, contextID int, payload *CreateCustomFieldOptionPayloadScheme) (result *FieldContextOptionListScheme, response *Response, err error) {
+
+	if payload == nil {
+		return nil, nil, fmt.Errorf("error, payload value is nil, please provide a valid CreateCustomFieldOptionPayloadScheme pointer")
+	}
+
+	if fieldID == "" {
+		return nil, nil, fmt.Errorf("error, fieldID value is nil, please provide a valid fieldID value")
+	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/field/%v/context/%v/option", fieldID, contextID)
 
@@ -135,7 +155,7 @@ func (f *FieldOptionContextService) Update(ctx context.Context, fieldID string, 
 
 	result = new(FieldContextOptionListScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return
+		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
 
 	return
@@ -143,7 +163,12 @@ func (f *FieldOptionContextService) Update(ctx context.Context, fieldID string, 
 
 // Deletes a custom field option.
 // Options with cascading options cannot be deleted without deleting the cascading options first.
+// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-custom-field-options/#api-rest-api-3-field-fieldid-context-contextid-option-optionid-delete
 func (f *FieldOptionContextService) Delete(ctx context.Context, fieldID string, contextID, optionID int) (response *Response, err error) {
+
+	if fieldID == "" {
+		return nil, fmt.Errorf("error, fieldID value is nil, please provide a valid fieldID value")
+	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/field/%v/context/%v/option/%v", fieldID, contextID, optionID)
 

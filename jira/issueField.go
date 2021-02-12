@@ -13,7 +13,6 @@ type FieldService struct {
 	client        *Client
 	Configuration *FieldConfigurationService
 	Context       *FieldContextService
-	Option        *FieldOptionService
 }
 
 type FieldScheme struct {

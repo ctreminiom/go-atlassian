@@ -1,0 +1,20 @@
+{
+  "options": [
+    {
+      "id": "10001",
+      "value": "Scranton",
+      "disabled": false
+    },
+    {
+      "id": "10002",
+      "value": "Manhattan",
+      "optionId": "10000",
+      "disabled": true
+    },
+    {
+      "id": "10003",
+      "value": "The Electric City",
+      "disabled": false
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "maxResults": 100,
+  "startAt": 0,
+  "total": 4,
+  "isLast": true,
+  "values": [
+    {
+      "id": "10001",
+      "value": "New York"
+    },
+    {
+      "id": "10002",
+      "value": "Boston",
+      "disabled": true
+    },
+    {
+      "id": "10004",
+      "value": "Denver"
+    },
+    {
+      "id": "10003",
+      "value": "Brooklyn",
+      "optionId": "10001"
+    }
+  ]
+}

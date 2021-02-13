@@ -180,7 +180,7 @@ func TestFieldOptionContextService_Create(t *testing.T) {
 			wantErr:            true,
 		},
 		{
-			name:      "GetsFieldContextsWhenTheTheResponseBodyHasADifferentFormat",
+			name:      "GetsFieldContextsWhenTheResponseBodyHasADifferentFormat",
 			fieldID:   "100001",
 			contextID: 01111,
 			payload: &CreateCustomFieldOptionPayloadScheme{Options: []FieldContextOptionValueScheme{

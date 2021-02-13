@@ -42,7 +42,7 @@ func (l *LabelService) Gets(ctx context.Context, startAt, maxResults int) (resul
 
 	result = new(IssueLabelsScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return
+		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
 
 	return

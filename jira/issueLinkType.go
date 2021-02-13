@@ -42,7 +42,7 @@ func (i *IssueLinkTypeService) Gets(ctx context.Context) (result *IssueLinkTypeS
 
 	result = new(IssueLinkTypeSearchScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return
+		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
 
 	return
@@ -68,7 +68,7 @@ func (i *IssueLinkTypeService) Get(ctx context.Context, issueLinkTypeID string) 
 
 	result = new(IssueLinkTypeScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return
+		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
 
 	return
@@ -85,6 +85,10 @@ type IssueLinkTypePayloadScheme struct {
 // The issue link type consists of a name and descriptions for a link's inward and outward relationships.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-link-types/#api-rest-api-3-issuelinktype-post
 func (i *IssueLinkTypeService) Create(ctx context.Context, payload *IssueLinkTypePayloadScheme) (result *IssueLinkTypeScheme, response *Response, err error) {
+
+	if payload == nil {
+		return nil, nil, fmt.Errorf("error, payload value is nil, please provide a valid IssueLinkTypePayloadScheme pointer")
+	}
 
 	validate := validator.New()
 	if err = validate.Struct(payload); err != nil {
@@ -108,7 +112,7 @@ func (i *IssueLinkTypeService) Create(ctx context.Context, payload *IssueLinkTyp
 
 	result = new(IssueLinkTypeScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return
+		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
 
 	return
@@ -117,6 +121,10 @@ func (i *IssueLinkTypeService) Create(ctx context.Context, payload *IssueLinkTyp
 // Updates an issue link type.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-link-types/#api-rest-api-3-issuelinktype-issuelinktypeid-put
 func (i *IssueLinkTypeService) Update(ctx context.Context, issueLinkTypeID string, payload *IssueLinkTypePayloadScheme) (result *IssueLinkTypeScheme, response *Response, err error) {
+
+	if payload == nil {
+		return nil, nil, fmt.Errorf("error, payload value is nil, please provide a valid IssueLinkTypePayloadScheme pointer")
+	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/issueLinkType/%v", issueLinkTypeID)
 
@@ -135,7 +143,7 @@ func (i *IssueLinkTypeService) Update(ctx context.Context, issueLinkTypeID strin
 
 	result = new(IssueLinkTypeScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return
+		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
 
 	return

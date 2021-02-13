@@ -160,7 +160,7 @@ func (i *IssueLinkService) Get(ctx context.Context, linkID string) (result *Issu
 
 	result = new(IssueLinkScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return
+		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
 
 	return
@@ -195,7 +195,7 @@ func (i *IssueLinkService) Gets(ctx context.Context, issueKeyOrID string) (resul
 
 	result = new(IssueLinksScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return
+		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
 
 	return

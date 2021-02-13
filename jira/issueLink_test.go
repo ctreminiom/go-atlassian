@@ -2,80 +2,92 @@ package jira
 
 import (
 	"context"
+	"fmt"
 	"github.com/stretchr/testify/assert"
 	"net/http"
+	"net/url"
 	"testing"
 )
 
-func TestIssueLinkService_Get(t *testing.T) {
+func TestIssueLinkService_Create(t *testing.T) {
 
 	testCases := []struct {
-		name               string
-		mockFile           string
-		issueTypeLinkID    string
-		wantHTTPMethod     string
-		endpoint           string
-		context            context.Context
-		wantHTTPHeaders    map[string]string
-		wantHTTPCodeReturn int
-		wantErr            bool
+		name                                string
+		linkType, inWardIssue, outWardIssue string
+		wantHTTPMethod                      string
+		endpoint                            string
+		context                             context.Context
+		wantHTTPCodeReturn                  int
+		wantErr                             bool
 	}{
 		{
-			name:               "GetIssueLinksWhenTheIDIsCorrect",
-			issueTypeLinkID:    "10001",
-			mockFile:           "./mocks/get_issue_link_id_10001.json",
-			wantHTTPCodeReturn: http.StatusOK,
-			wantHTTPMethod:     http.MethodGet,
-			endpoint:           "/rest/api/3/issueLink/10001",
+			name:               "CreateIssueLinkWhenThePayloadAreCorrect",
+			linkType:           "Duplicate",
+			inWardIssue:        "MKY-2",
+			outWardIssue:       "MKY-1",
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/api/3/issueLink",
 			context:            context.Background(),
-			wantHTTPHeaders:    map[string]string{"Accept": "application/json"},
+			wantHTTPCodeReturn: http.StatusCreated,
 			wantErr:            false,
 		},
+
 		{
-			name:               "GetIssueLinksWhenTheIDIsIncorrect",
-			issueTypeLinkID:    "10002",
-			mockFile:           "./mocks/get_issue_link_id_10001.json",
-			wantHTTPCodeReturn: http.StatusOK,
-			wantHTTPMethod:     http.MethodGet,
-			endpoint:           "/rest/api/3/issueLink/10001",
-			context:            context.Background(),
-			wantHTTPHeaders:    map[string]string{"Accept": "application/json"},
-			wantErr:            true,
-		},
-		{
-			name:               "GetIssueLinksWhenTheIDEmpty",
-			issueTypeLinkID:    "",
-			mockFile:           "./mocks/get_issue_link_id_10001.json",
-			wantHTTPCodeReturn: http.StatusOK,
-			wantHTTPMethod:     http.MethodGet,
-			endpoint:           "/rest/api/3/issueLink/10001",
-			context:            context.Background(),
-			wantHTTPHeaders:    map[string]string{"Accept": "application/json"},
-			wantErr:            true,
-		},
-		{
-			name:               "GetIssueLinksWhenTheHTTPMethodIsInvalid",
-			issueTypeLinkID:    "10001",
-			mockFile:           "./mocks/get_issue_link_id_10001.json",
-			wantHTTPCodeReturn: http.StatusOK,
+			name:               "CreateIssueLinkWhenTheEndpointIsIncorrect",
+			linkType:           "Duplicate",
+			inWardIssue:        "MKY-2",
+			outWardIssue:       "MKY-1",
 			wantHTTPMethod:     http.MethodPost,
-			endpoint:           "/rest/api/3/issueLink/10001",
+			endpoint:           "/rest/api/3/issueLinks",
 			context:            context.Background(),
-			wantHTTPHeaders:    map[string]string{"Accept": "application/json"},
+			wantHTTPCodeReturn: http.StatusCreated,
+			wantErr:            true,
+		},
+
+		{
+			name:               "CreateIssueLinkWhenTheRequestMethodIsIncorrect",
+			linkType:           "Duplicate",
+			inWardIssue:        "MKY-2",
+			outWardIssue:       "MKY-1",
+			wantHTTPMethod:     http.MethodDelete,
+			endpoint:           "/rest/api/3/issueLink",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusCreated,
+			wantErr:            true,
+		},
+
+		{
+			name:               "CreateIssueLinkWhenTheStatusCodeIsIncorrect",
+			linkType:           "Duplicate",
+			inWardIssue:        "MKY-2",
+			outWardIssue:       "MKY-1",
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/api/3/issueLink",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusBadRequest,
+			wantErr:            true,
+		},
+
+		{
+			name:               "CreateIssueLinkWhenTheContextIsNil",
+			linkType:           "Duplicate",
+			inWardIssue:        "MKY-2",
+			outWardIssue:       "MKY-1",
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/api/3/issueLink",
+			context:            nil,
+			wantHTTPCodeReturn: http.StatusCreated,
 			wantErr:            true,
 		},
 	}
 
 	for _, testCase := range testCases {
-
 		t.Run(testCase.name, func(t *testing.T) {
 
 			//Init a new HTTP mock server
 			mockOptions := mockServerOptions{
 				Endpoint:           testCase.endpoint,
-				MockFilePath:       testCase.mockFile,
 				MethodAccepted:     testCase.wantHTTPMethod,
-				Headers:            testCase.wantHTTPHeaders,
 				ResponseCodeWanted: testCase.wantHTTPCodeReturn,
 			}
 
@@ -92,21 +104,39 @@ func TestIssueLinkService_Get(t *testing.T) {
 				t.Fatal(err)
 			}
 
-			i := &IssueLinkService{client: mockClient}
-
-			gotResult, gotResponse, err := i.Get(testCase.context, testCase.issueTypeLinkID)
+			service := &IssueLinkService{client: mockClient}
+			gotResponse, err := service.Create(testCase.context, testCase.linkType, testCase.inWardIssue, testCase.outWardIssue)
 
 			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+
 				assert.Error(t, err)
 			} else {
+
 				assert.NoError(t, err)
 				assert.NotEqual(t, gotResponse, nil)
-				assert.NotEqual(t, gotResult, nil)
 
-				assert.Equal(t, gotResult.ID, testCase.issueTypeLinkID)
+				apiEndpoint, err := url.Parse(gotResponse.Endpoint)
+				if err != nil {
+					t.Fatal(err)
+				}
+
+				var endpointToAssert string
+
+				if apiEndpoint.Query().Encode() != "" {
+					endpointToAssert = fmt.Sprintf("%v?%v", apiEndpoint.Path, apiEndpoint.Query().Encode())
+				} else {
+					endpointToAssert = apiEndpoint.Path
+				}
+
+				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
+				assert.Equal(t, testCase.endpoint, endpointToAssert)
 			}
-		})
 
+		})
 	}
 
 }
@@ -115,75 +145,78 @@ func TestIssueLinkService_Delete(t *testing.T) {
 
 	testCases := []struct {
 		name               string
+		linkID             string
+		mockFile           string
 		wantHTTPMethod     string
-		issueTypeLinkID    string
 		endpoint           string
 		context            context.Context
-		wantHTTPHeaders    map[string]string
 		wantHTTPCodeReturn int
 		wantErr            bool
 	}{
 		{
-			name:               "DeleteIssueLinksWhenTheIDCorrect",
-			wantHTTPCodeReturn: http.StatusNoContent,
+			name:               "DeleteIssueLinkWhenTheLinkIDIDIsCorrect",
+			linkID:             "10001",
 			wantHTTPMethod:     http.MethodDelete,
-			issueTypeLinkID:    "10000",
-			endpoint:           "/rest/api/3/issueLink/10000",
+			mockFile:           "./mocks/get-issue-link-by-id.json",
+			endpoint:           "/rest/api/3/issueLink/10001",
 			context:            context.Background(),
-			wantHTTPHeaders:    map[string]string{"Accept": "application/json"},
+			wantHTTPCodeReturn: http.StatusOK,
 			wantErr:            false,
 		},
+
 		{
-			name:               "DeleteIssueLinksWhenTheIDIncorrect",
-			wantHTTPCodeReturn: http.StatusNoContent,
+			name:               "DeleteIssueLinkWhenTheLinkIDIDIsIncorrect",
+			linkID:             "10002",
 			wantHTTPMethod:     http.MethodDelete,
-			issueTypeLinkID:    "10001",
-			endpoint:           "/rest/api/3/issueLink/10000",
+			mockFile:           "./mocks/get-issue-link-by-id.json",
+			endpoint:           "/rest/api/3/issueLink/10001",
 			context:            context.Background(),
-			wantHTTPHeaders:    map[string]string{"Accept": "application/json"},
+			wantHTTPCodeReturn: http.StatusOK,
 			wantErr:            true,
 		},
+
 		{
-			name:               "DeleteIssueLinksWhenTheIDEmpty",
-			wantHTTPCodeReturn: http.StatusNoContent,
-			wantHTTPMethod:     http.MethodDelete,
-			issueTypeLinkID:    "",
-			endpoint:           "/rest/api/3/issueLink/10000",
+			name:               "DeleteIssueLinkWhenTheRequestMethodIsIncorrect",
+			linkID:             "10001",
+			wantHTTPMethod:     http.MethodPost,
+			mockFile:           "./mocks/get-issue-link-by-id.json",
+			endpoint:           "/rest/api/3/issueLink/10001",
 			context:            context.Background(),
-			wantHTTPHeaders:    map[string]string{"Accept": "application/json"},
+			wantHTTPCodeReturn: http.StatusOK,
 			wantErr:            true,
 		},
+
 		{
-			name:               "DeleteIssueLinksWhenTheURLIsIncorrect",
-			wantHTTPCodeReturn: http.StatusNoContent,
+			name:               "DeleteIssueLinkWhenTheStatusCodeIsIncorrect",
+			linkID:             "10001",
 			wantHTTPMethod:     http.MethodDelete,
-			issueTypeLinkID:    "",
-			endpoint:           "/rest/api/3/issueLassdsadink/10000",
+			mockFile:           "./mocks/get-issue-link-by-id.json",
+			endpoint:           "/rest/api/3/issueLink/10001",
 			context:            context.Background(),
-			wantHTTPHeaders:    map[string]string{"Accept": "application/json"},
+			wantHTTPCodeReturn: http.StatusBadRequest,
 			wantErr:            true,
 		},
+
 		{
-			name:               "DeleteIssueLinksWhenTheURLIsEmpty",
-			wantHTTPCodeReturn: http.StatusNoContent,
+			name:               "DeleteIssueLinkWhenTheContextIsNil",
+			linkID:             "10001",
 			wantHTTPMethod:     http.MethodDelete,
-			issueTypeLinkID:    "",
-			endpoint:           "",
-			context:            context.Background(),
-			wantHTTPHeaders:    map[string]string{"Accept": "application/json"},
+			mockFile:           "./mocks/get-issue-link-by-id.json",
+			endpoint:           "/rest/api/3/issueLink/10001",
+			context:            nil,
+			wantHTTPCodeReturn: http.StatusOK,
 			wantErr:            true,
 		},
 	}
 
 	for _, testCase := range testCases {
-
 		t.Run(testCase.name, func(t *testing.T) {
 
 			//Init a new HTTP mock server
 			mockOptions := mockServerOptions{
 				Endpoint:           testCase.endpoint,
+				MockFilePath:       testCase.mockFile,
 				MethodAccepted:     testCase.wantHTTPMethod,
-				Headers:            testCase.wantHTTPHeaders,
 				ResponseCodeWanted: testCase.wantHTTPCodeReturn,
 			}
 
@@ -200,21 +233,343 @@ func TestIssueLinkService_Delete(t *testing.T) {
 				t.Fatal(err)
 			}
 
-			i := &IssueLinkService{client: mockClient}
-
-			gotResponse, err := i.Delete(testCase.context, testCase.issueTypeLinkID)
+			service := &IssueLinkService{client: mockClient}
+			gotResponse, err := service.Delete(testCase.context, testCase.linkID)
 
 			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+
 				assert.Error(t, err)
-				assert.NotEqual(t, gotResponse, nil)
-				assert.NotEqual(t, gotResponse.StatusCode, 204)
 			} else {
+
 				assert.NoError(t, err)
 				assert.NotEqual(t, gotResponse, nil)
-				assert.Equal(t, gotResponse.StatusCode, 204)
-			}
-		})
 
+				apiEndpoint, err := url.Parse(gotResponse.Endpoint)
+				if err != nil {
+					t.Fatal(err)
+				}
+
+				var endpointToAssert string
+
+				if apiEndpoint.Query().Encode() != "" {
+					endpointToAssert = fmt.Sprintf("%v?%v", apiEndpoint.Path, apiEndpoint.Query().Encode())
+				} else {
+					endpointToAssert = apiEndpoint.Path
+				}
+
+				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
+				assert.Equal(t, testCase.endpoint, endpointToAssert)
+			}
+
+		})
+	}
+
+}
+
+func TestIssueLinkService_Get(t *testing.T) {
+
+	testCases := []struct {
+		name               string
+		linkID             string
+		mockFile           string
+		wantHTTPMethod     string
+		endpoint           string
+		context            context.Context
+		wantHTTPCodeReturn int
+		wantErr            bool
+	}{
+		{
+			name:               "GetIssueLinkWhenTheIDIsCorrect",
+			linkID:             "10001",
+			wantHTTPMethod:     http.MethodGet,
+			mockFile:           "./mocks/get-issue-link-by-id.json",
+			endpoint:           "/rest/api/3/issueLink/10001",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            false,
+		},
+
+		{
+			name:               "GetIssueLinkWhenTheIDIsIncorrect",
+			linkID:             "10002",
+			wantHTTPMethod:     http.MethodGet,
+			mockFile:           "./mocks/get-issue-link-by-id.json",
+			endpoint:           "/rest/api/3/issueLink/10001",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+
+		{
+			name:               "GetIssueLinkWhenTheEndpointIsIncorrect",
+			linkID:             "10001",
+			wantHTTPMethod:     http.MethodGet,
+			mockFile:           "./mocks/get-issue-link-by-id.json",
+			endpoint:           "/rest/api/3/issueLinks/10001",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+
+		{
+			name:               "GetIssueLinkWhenTheContextIsNil",
+			linkID:             "10001",
+			wantHTTPMethod:     http.MethodGet,
+			mockFile:           "./mocks/get-issue-link-by-id.json",
+			endpoint:           "/rest/api/3/issueLink/10001",
+			context:            nil,
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+
+		{
+			name:               "GetIssueLinkWhenTheRequestMethodIsIncorrect",
+			linkID:             "10001",
+			wantHTTPMethod:     http.MethodPost,
+			mockFile:           "./mocks/get-issue-link-by-id.json",
+			endpoint:           "/rest/api/3/issueLink/10001",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+
+		{
+			name:               "GetIssueLinkWhenTheStatusCodeIsIncorrect",
+			linkID:             "10001",
+			wantHTTPMethod:     http.MethodGet,
+			mockFile:           "./mocks/get-issue-link-by-id.json",
+			endpoint:           "/rest/api/3/issueLink/10001",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusBadRequest,
+			wantErr:            true,
+		},
+
+		{
+			name:               "GetIssueLinkWhenTheResponseBodyHasADifferentFormat",
+			linkID:             "10001",
+			wantHTTPMethod:     http.MethodGet,
+			mockFile:           "./mocks/empty_json.json",
+			endpoint:           "/rest/api/3/issueLink/10001",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+
+			//Init a new HTTP mock server
+			mockOptions := mockServerOptions{
+				Endpoint:           testCase.endpoint,
+				MockFilePath:       testCase.mockFile,
+				MethodAccepted:     testCase.wantHTTPMethod,
+				ResponseCodeWanted: testCase.wantHTTPCodeReturn,
+			}
+
+			mockServer, err := startMockServer(&mockOptions)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			defer mockServer.Close()
+
+			//Init the library instance
+			mockClient, err := startMockClient(mockServer.URL)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			service := &IssueLinkService{client: mockClient}
+			gotResult, gotResponse, err := service.Get(testCase.context, testCase.linkID)
+
+			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+
+				assert.Error(t, err)
+			} else {
+
+				assert.NoError(t, err)
+				assert.NotEqual(t, gotResponse, nil)
+				assert.NotEqual(t, gotResult, nil)
+
+				apiEndpoint, err := url.Parse(gotResponse.Endpoint)
+				if err != nil {
+					t.Fatal(err)
+				}
+
+				var endpointToAssert string
+
+				if apiEndpoint.Query().Encode() != "" {
+					endpointToAssert = fmt.Sprintf("%v?%v", apiEndpoint.Path, apiEndpoint.Query().Encode())
+				} else {
+					endpointToAssert = apiEndpoint.Path
+				}
+
+				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
+				assert.Equal(t, testCase.endpoint, endpointToAssert)
+			}
+
+		})
+	}
+
+}
+
+func TestIssueLinkService_Gets(t *testing.T) {
+
+	testCases := []struct {
+		name               string
+		issueKeyOrID       string
+		mockFile           string
+		wantHTTPMethod     string
+		endpoint           string
+		context            context.Context
+		wantHTTPCodeReturn int
+		wantErr            bool
+	}{
+		{
+			name:               "GetsIssueLinkWhenTheIssueKeyOrIDIsCorrect",
+			issueKeyOrID:       "DUMMY-3",
+			wantHTTPMethod:     http.MethodGet,
+			mockFile:           "./mocks/get-issue-link-by-id.json",
+			endpoint:           "/rest/api/3/issue/DUMMY-3?fields=issuelinks",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            false,
+		},
+
+		{
+			name:               "GetsIssueLinkWhenTheIssueKeyOrIDIsIncorrect",
+			issueKeyOrID:       "DUMMY-4",
+			wantHTTPMethod:     http.MethodGet,
+			mockFile:           "./mocks/get-issue-link-by-id.json",
+			endpoint:           "/rest/api/3/issue/DUMMY-3?fields=issuelinks",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+
+		{
+			name:               "GetsIssueLinkWhenTheEndpointIsIncorrect",
+			issueKeyOrID:       "DUMMY-3",
+			wantHTTPMethod:     http.MethodGet,
+			mockFile:           "./mocks/get-issue-link-by-id.json",
+			endpoint:           "/rest/api/3/issues/DUMMY-3?fields=issuelinks",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+
+		{
+			name:               "GetsIssueLinkWhenTheContextIsNil",
+			issueKeyOrID:       "DUMMY-3",
+			wantHTTPMethod:     http.MethodGet,
+			mockFile:           "./mocks/get-issue-link-by-id.json",
+			endpoint:           "/rest/api/3/issue/DUMMY-3?fields=issuelinks",
+			context:            nil,
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+
+		{
+			name:               "GetsIssueLinkWhenTheRequestMethodIsIncorrect",
+			issueKeyOrID:       "DUMMY-3",
+			wantHTTPMethod:     http.MethodPost,
+			mockFile:           "./mocks/get-issue-link-by-id.json",
+			endpoint:           "/rest/api/3/issue/DUMMY-3?fields=issuelinks",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+
+		{
+			name:               "GetsIssueLinkWhenTheStatusCodeIsIncorrect",
+			issueKeyOrID:       "DUMMY-3",
+			wantHTTPMethod:     http.MethodGet,
+			mockFile:           "./mocks/get-issue-link-by-id.json",
+			endpoint:           "/rest/api/3/issue/DUMMY-3?fields=issuelinks",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusBadRequest,
+			wantErr:            true,
+		},
+
+		{
+			name:               "GetsIssueLinkWhenTheResponseBodyHasADifferentFormat",
+			issueKeyOrID:       "DUMMY-3",
+			wantHTTPMethod:     http.MethodGet,
+			mockFile:           "./mocks/empty_json.json",
+			endpoint:           "/rest/api/3/issue/DUMMY-3?fields=issuelinks",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+
+			//Init a new HTTP mock server
+			mockOptions := mockServerOptions{
+				Endpoint:           testCase.endpoint,
+				MockFilePath:       testCase.mockFile,
+				MethodAccepted:     testCase.wantHTTPMethod,
+				ResponseCodeWanted: testCase.wantHTTPCodeReturn,
+			}
+
+			mockServer, err := startMockServer(&mockOptions)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			defer mockServer.Close()
+
+			//Init the library instance
+			mockClient, err := startMockClient(mockServer.URL)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			service := &IssueLinkService{client: mockClient}
+			gotResult, gotResponse, err := service.Gets(testCase.context, testCase.issueKeyOrID)
+
+			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+
+				assert.Error(t, err)
+			} else {
+
+				assert.NoError(t, err)
+				assert.NotEqual(t, gotResponse, nil)
+				assert.NotEqual(t, gotResult, nil)
+
+				apiEndpoint, err := url.Parse(gotResponse.Endpoint)
+				if err != nil {
+					t.Fatal(err)
+				}
+
+				var endpointToAssert string
+
+				if apiEndpoint.Query().Encode() != "" {
+					endpointToAssert = fmt.Sprintf("%v?%v", apiEndpoint.Path, apiEndpoint.Query().Encode())
+				} else {
+					endpointToAssert = apiEndpoint.Path
+				}
+
+				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
+				assert.Equal(t, testCase.endpoint, endpointToAssert)
+			}
+
+		})
 	}
 
 }

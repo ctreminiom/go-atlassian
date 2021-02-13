@@ -36,7 +36,7 @@ func (p *PriorityService) Gets(ctx context.Context) (result *[]PriorityScheme, r
 
 	result = new([]PriorityScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return
+		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
 
 	return
@@ -58,7 +58,7 @@ func (p *PriorityService) Get(ctx context.Context, priorityID string) (result *P
 
 	result = new(PriorityScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return
+		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
 
 	return

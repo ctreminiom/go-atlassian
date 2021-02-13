@@ -34,7 +34,7 @@ func (r *ResolutionService) Gets(ctx context.Context) (result *[]IssueResolution
 
 	result = new([]IssueResolutionScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return
+		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
 
 	return
@@ -58,7 +58,7 @@ func (r *ResolutionService) Get(ctx context.Context, resolutionID string) (resul
 
 	result = new(IssueResolutionScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return
+		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
 
 	return

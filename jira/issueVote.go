@@ -58,6 +58,10 @@ func (v *VoteService) Gets(ctx context.Context, issueKeyOrID string) (result *Is
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-votes/#api-rest-api-3-issue-issueidorkey-votes-post
 func (v *VoteService) Add(ctx context.Context, issueKeyOrID string) (response *Response, err error) {
 
+	if len(issueKeyOrID) == 0 {
+		return nil, fmt.Errorf("error, please provide a issueKeyOrID value")
+	}
+
 	var endpoint = fmt.Sprintf("rest/api/3/issue/%v/votes", issueKeyOrID)
 
 	request, err := v.client.newRequest(ctx, http.MethodPost, endpoint, nil)
@@ -77,6 +81,10 @@ func (v *VoteService) Add(ctx context.Context, issueKeyOrID string) (response *R
 // Deletes a user's vote from an issue. This is the equivalent of the user clicking Unvote on an issue in Jira.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-votes/#api-rest-api-3-issue-issueidorkey-votes-delete
 func (v *VoteService) Delete(ctx context.Context, issueKeyOrID string) (response *Response, err error) {
+
+	if len(issueKeyOrID) == 0 {
+		return nil, fmt.Errorf("error, please provide a issueKeyOrID value")
+	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/issue/%v/votes", issueKeyOrID)
 

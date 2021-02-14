@@ -1,0 +1,44 @@
+{
+  "maxResults": 100,
+  "startAt": 0,
+  "total": 3,
+  "isLast": true,
+  "values": [
+    {
+      "issueTypeScheme": {
+        "id": "10000",
+        "name": "Default Issue Type Scheme",
+        "description": "Default issue type scheme is the list of global issue types. All newly created issue types will automatically be added to this scheme.",
+        "defaultIssueTypeId": "10003",
+        "isDefault": true
+      },
+      "projectIds": [
+        "10000",
+        "10001"
+      ]
+    },
+    {
+      "issueTypeScheme": {
+        "id": "10001",
+        "name": "SUP: Kanban Issue Type Scheme",
+        "description": "A collection of issue types suited to use in a kanban style project."
+      },
+      "projectIds": [
+        "10002"
+      ]
+    },
+    {
+      "issueTypeScheme": {
+        "id": "10002",
+        "name": "HR: Scrum issue type scheme",
+        "description": "",
+        "defaultIssueTypeId": "10004"
+      },
+      "projectIds": [
+        "10003",
+        "10004",
+        "10005"
+      ]
+    }
+  ]
+}

@@ -201,7 +201,7 @@ func getIssueTypeSchemesForProjects() {
 
 }
 
-func assignIssueTypeToProject(schemeID, projectID int) {
+func assignIssueTypeToProject(schemeID, projectID string) {
 
 	log.Println("---------------------- assignIssueTypeToProject ----------------------")
 
@@ -288,7 +288,7 @@ func main() {
 	deleteIssueTypeScheme(idAsInt)
 	getIssueTypeSchemeItems()
 	getIssueTypeSchemesForProjects()
-	assignIssueTypeToProject(10131, 10000)
-	assignIssueTypeToProject(10130, 10000)
+	assignIssueTypeToProject("10131", "10000")
+	assignIssueTypeToProject("10131", "10000")
 
 }

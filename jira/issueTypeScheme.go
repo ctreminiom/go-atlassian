@@ -73,6 +73,42 @@ type newIssueTypeSchemeScheme struct {
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-type-schemes/#api-rest-api-3-issuetypescheme-post
 func (i *IssueTypeSchemeService) Create(ctx context.Context, payload *IssueTypeSchemePayloadScheme) (issueTypeSchemeID string, response *Response, err error) {
 
+	if payload == nil {
+		return "", nil, fmt.Errorf("error, payload value is nil, please provide a valid IssueTypeSchemePayloadScheme pointer")
+	}
+
+	/*
+		Validation considerations for the Atlassian Documentation.
+
+		-------------------------
+		value: defaultIssueTypeId
+		validation: This ID must be included in issueTypeIds.
+		-------------------------
+
+		-------------------------
+		value: issueTypeIds
+		validation: At least one standard issue type ID is required
+	*/
+
+	var containsTheIssueType bool
+	for _, issueType := range payload.IssueTypeIds {
+
+		// The DefaultIssueTypeID value is not required
+		if payload.DefaultIssueTypeID == "" {
+			containsTheIssueType = true
+			break
+		}
+
+		if issueType == payload.DefaultIssueTypeID {
+			containsTheIssueType = true
+			break
+		}
+	}
+
+	if !containsTheIssueType {
+		return "", nil, fmt.Errorf("error, please add the DefaultIssueTypeID value on the IssueTypeIds value")
+	}
+
 	var endpoint = "rest/api/3/issuetypescheme"
 
 	request, err := i.client.newRequest(ctx, http.MethodPost, endpoint, &payload)
@@ -166,6 +202,10 @@ func (i *IssueTypeSchemeService) Projects(ctx context.Context, projectIDs []int,
 	params.Add("startAt", strconv.Itoa(startAt))
 	params.Add("maxResults", strconv.Itoa(maxResults))
 
+	if len(projectIDs) == 0 {
+		return nil, nil, fmt.Errorf("error, please provide values on the projectIDs param")
+	}
+
 	for _, id := range projectIDs {
 		params.Add("projectId", strconv.Itoa(id))
 	}
@@ -194,14 +234,14 @@ func (i *IssueTypeSchemeService) Projects(ctx context.Context, projectIDs []int,
 
 // Assigns an issue type scheme to a project.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-type-schemes/#api-rest-api-3-issuetypescheme-project-put
-func (i *IssueTypeSchemeService) Assign(ctx context.Context, issueTypeSchemeID, projectID int) (response *Response, err error) {
+func (i *IssueTypeSchemeService) Assign(ctx context.Context, issueTypeSchemeID, projectID string) (response *Response, err error) {
 
 	payload := struct {
 		IssueTypeSchemeID string `json:"issueTypeSchemeId"`
 		ProjectID         string `json:"projectId"`
 	}{
-		IssueTypeSchemeID: strconv.Itoa(issueTypeSchemeID),
-		ProjectID:         strconv.Itoa(projectID),
+		IssueTypeSchemeID: issueTypeSchemeID,
+		ProjectID:         projectID,
 	}
 
 	var endpoint = "rest/api/3/issuetypescheme/project"
@@ -224,6 +264,10 @@ func (i *IssueTypeSchemeService) Assign(ctx context.Context, issueTypeSchemeID, 
 // Updates an issue type scheme.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-type-schemes/#api-rest-api-3-issuetypescheme-issuetypeschemeid-put
 func (i *IssueTypeSchemeService) Update(ctx context.Context, issueTypeSchemeID int, payload *IssueTypeSchemePayloadScheme) (response *Response, err error) {
+
+	if payload == nil {
+		return nil, fmt.Errorf("error, payload value is nil, please provide a valid IssueTypeSchemePayloadScheme pointer")
+	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/issuetypescheme/%v", issueTypeSchemeID)
 
@@ -253,7 +297,6 @@ func (i *IssueTypeSchemeService) Delete(ctx context.Context, issueTypeSchemeID i
 	if err != nil {
 		return
 	}
-	request.Header.Set("Accept", "application/json")
 
 	response, err = i.client.Do(request)
 	if err != nil {
@@ -266,6 +309,10 @@ func (i *IssueTypeSchemeService) Delete(ctx context.Context, issueTypeSchemeID i
 // Adds issue types to an issue type scheme.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-type-schemes/#api-rest-api-3-issuetypescheme-issuetypeschemeid-issuetype-put
 func (i *IssueTypeSchemeService) AddIssueTypes(ctx context.Context, issueTypeSchemeID int, issueTypeIDs []int) (response *Response, err error) {
+
+	if len(issueTypeIDs) == 0 {
+		return nil, fmt.Errorf("error, please provide a issue types ID under the issueTypeIDs param")
+	}
 
 	var issueTypesIDsAsStringSlice []string
 	for _, issueTypeID := range issueTypeIDs {
@@ -284,6 +331,7 @@ func (i *IssueTypeSchemeService) AddIssueTypes(ctx context.Context, issueTypeSch
 	if err != nil {
 		return
 	}
+
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Content-Type", "application/json")
 

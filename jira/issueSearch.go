@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"net/url"
 	"strconv"
+	"strings"
 )
 
 type IssueSearchService struct{ client *Client }
@@ -87,7 +88,7 @@ type IssueChangelogHistoryItemScheme struct {
 // Search issues using JQL query under the HTTP Method GET
 // If the JQL query expression is too large to be encoded as a query parameter, use the POST version of this resource.
 // https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-search/#api-rest-api-3-search-get
-func (s *IssueSearchService) Get(ctx context.Context, jql string, fields, expands []string, startAt, maxResults int) (result *IssueSearchScheme, response *Response, err error) {
+func (s *IssueSearchService) Get(ctx context.Context, jql string, fields, expands []string, startAt, maxResults int, validate string) (result *IssueSearchScheme, response *Response, err error) {
 
 	params := url.Values{}
 	params.Add("jql", jql)
@@ -107,6 +108,34 @@ func (s *IssueSearchService) Get(ctx context.Context, jql string, fields, expand
 
 	if len(expand) != 0 {
 		params.Add("expand", expand)
+	}
+
+	//Valid the share filter scope
+	var (
+		validValidationValuesAsList = []string{"strict", "warn", "none"}
+		isValid                     bool
+	)
+
+	for _, validScope := range validValidationValuesAsList {
+		if validScope == validate {
+			isValid = true
+			break
+		}
+
+		if validate == "" {
+			isValid = true
+			break
+		}
+	}
+
+	if !isValid {
+		//Join the valid values and create the custom error
+		var validScopeValuesAsString = strings.Join(validValidationValuesAsList, ",")
+		return nil, nil, fmt.Errorf("invalid validateQuery, please provide one of the following: %v", validScopeValuesAsString)
+	}
+
+	if len(validate) != 0 {
+		params.Add("validateQuery", validate)
 	}
 
 	var fieldFormatted string
@@ -138,7 +167,7 @@ func (s *IssueSearchService) Get(ctx context.Context, jql string, fields, expand
 
 	result = new(IssueSearchScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return
+		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
 
 	return
@@ -147,20 +176,46 @@ func (s *IssueSearchService) Get(ctx context.Context, jql string, fields, expand
 // Search issues using JQL query under the HTTP Method POST
 // There is a GET version of this resource that can be used for smaller JQL query expressions.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-search/#api-rest-api-3-search-post
-func (s *IssueSearchService) Post(ctx context.Context, jql string, fields, expands []string, startAt, maxResults int) (result *IssueSearchScheme, response *Response, err error) {
+func (s *IssueSearchService) Post(ctx context.Context, jql string, fields, expands []string, startAt, maxResults int, validate string) (result *IssueSearchScheme, response *Response, err error) {
+
+	//Valid the share filter scope
+	var (
+		validValidationValuesAsList = []string{"strict", "warn", "none"}
+		isValid                     bool
+	)
+
+	for _, validScope := range validValidationValuesAsList {
+		if validScope == validate {
+			isValid = true
+			break
+		}
+
+		if validate == "" {
+			isValid = true
+			break
+		}
+	}
+
+	if !isValid {
+		//Join the valid values and create the custom error
+		var validScopeValuesAsString = strings.Join(validValidationValuesAsList, ",")
+		return nil, nil, fmt.Errorf("invalid validateQuery, please provide one of the following: %v", validScopeValuesAsString)
+	}
 
 	payload := struct {
-		Expand     []string `json:"expand"`
-		Jql        string   `json:"jql"`
-		MaxResults int      `json:"maxResults"`
-		Fields     []string `json:"fields"`
-		StartAt    int      `json:"startAt"`
+		Expand        []string `json:"expand"`
+		Jql           string   `json:"jql"`
+		MaxResults    int      `json:"maxResults"`
+		Fields        []string `json:"fields"`
+		StartAt       int      `json:"startAt"`
+		ValidateQuery string   `json:"validateQuery,omitempty"`
 	}{
-		Expand:     expands,
-		Jql:        jql,
-		MaxResults: maxResults,
-		Fields:     fields,
-		StartAt:    startAt,
+		Expand:        expands,
+		Jql:           jql,
+		MaxResults:    maxResults,
+		Fields:        fields,
+		StartAt:       startAt,
+		ValidateQuery: validate,
 	}
 
 	var endpoint = "rest/api/3/search"
@@ -179,7 +234,7 @@ func (s *IssueSearchService) Post(ctx context.Context, jql string, fields, expan
 
 	result = new(IssueSearchScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return
+		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
 
 	return

@@ -37,7 +37,7 @@ func searchUsingGET() {
 		expand = []string{"changelog", "renderedFields", "names", "schema", "transitions", "operations", "editmeta"}
 	)
 
-	issues, response, err := atlassian.Issue.Search.Get(context.Background(), jql, fields, expand, 0, 50)
+	issues, response, err := atlassian.Issue.Search.Get(context.Background(), jql, fields, expand, 0, 50, "")
 	if err != nil {
 		if response != nil {
 			log.Println("Response HTTP Response", string(response.BodyAsBytes))
@@ -83,7 +83,7 @@ func searchUsingPost() {
 		expand = []string{"changelog", "renderedFields", "names", "schema", "transitions", "operations", "editmeta"}
 	)
 
-	issues, response, err := atlassian.Issue.Search.Post(context.Background(), jql, fields, expand, 0, 50)
+	issues, response, err := atlassian.Issue.Search.Post(context.Background(), jql, fields, expand, 0, 50, "")
 	if err != nil {
 		if response != nil {
 			log.Println("Response HTTP Response", string(response.BodyAsBytes))

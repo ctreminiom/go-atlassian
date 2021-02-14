@@ -16,7 +16,6 @@ type IssueService struct {
 	Link       *IssueLinkService
 	Priority   *PriorityService
 	Resolution *ResolutionService
-	Security   *IssueSecurityService
 	Type       *IssueTypeService
 	Votes      *VoteService
 	Watchers   *WatcherService

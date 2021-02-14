@@ -10,31 +10,6 @@ import (
 
 type ProjectPermissionSchemeService struct{ client *Client }
 
-// Returns the issue security scheme associated with the project.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-permission-schemes/#api-rest-api-3-project-projectkeyorid-issuesecuritylevelscheme-get
-func (p *ProjectPermissionSchemeService) SecurityScheme(ctx context.Context, projectKeyOrID string) (result *IssueSecurityScheme, response *Response, err error) {
-
-	var endpoint = fmt.Sprintf("rest/api/3/project/%v/issuesecuritylevelscheme", projectKeyOrID)
-
-	request, err := p.client.newRequest(ctx, http.MethodGet, endpoint, nil)
-	if err != nil {
-		return
-	}
-	request.Header.Set("Accept", "application/json")
-
-	response, err = p.client.Do(request)
-	if err != nil {
-		return
-	}
-
-	result = new(IssueSecurityScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return
-	}
-
-	return
-}
-
 type ProjectPermissionSchemeScheme struct {
 	Expand      string `json:"expand"`
 	ID          int    `json:"id"`

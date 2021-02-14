@@ -59,7 +59,6 @@ func (f *FilterShareService) SetScope(ctx context.Context, scope string) (respon
 	if !isValid {
 		//Join the valid values and create the custom error
 		var validScopeValuesAsString = strings.Join(validScopeValuesAsList, ",")
-
 		return nil, fmt.Errorf("invalid scope, please provide one of the following: %v", validScopeValuesAsString)
 	}
 

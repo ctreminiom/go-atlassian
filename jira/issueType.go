@@ -51,7 +51,7 @@ func (i *IssueTypeService) Gets(ctx context.Context) (result *[]IssueTypeScheme,
 
 	result = new([]IssueTypeScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return
+		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
 
 	return
@@ -66,6 +66,10 @@ type IssueTypePayloadScheme struct {
 // Creates an issue type and adds it to the default issue type scheme.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-types/#api-rest-api-3-issuetype-post
 func (i *IssueTypeService) Create(ctx context.Context, payload *IssueTypePayloadScheme) (result *IssueTypeScheme, response *Response, err error) {
+
+	if payload == nil {
+		return nil, nil, fmt.Errorf("error, payload value is nil, please provide a valid IssueTypePayloadScheme pointer")
+	}
 
 	validate := validator.New()
 	if err = validate.Struct(payload); err != nil {
@@ -90,12 +94,15 @@ func (i *IssueTypeService) Create(ctx context.Context, payload *IssueTypePayload
 
 	result = new(IssueTypeScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return
+		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
+
 	}
 
 	return
 }
 
+// Returns an issue type.
+// https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-types/#api-rest-api-3-issuetype-id-get
 func (i *IssueTypeService) Get(ctx context.Context, issueTypeID string) (result *IssueTypeScheme, response *Response, err error) {
 
 	var endpoint = fmt.Sprintf("rest/api/3/issuetype/%v", issueTypeID)
@@ -113,15 +120,19 @@ func (i *IssueTypeService) Get(ctx context.Context, issueTypeID string) (result 
 
 	result = new(IssueTypeScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return
-	}
+		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 
+	}
 	return
 }
 
 // Updates the issue type.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-types/#api-rest-api-3-issuetype-id-put
 func (i *IssueTypeService) Update(ctx context.Context, issueTypeID string, payload *IssueTypePayloadScheme) (result *IssueTypeScheme, response *Response, err error) {
+
+	if payload == nil {
+		return nil, nil, fmt.Errorf("error, payload value is nil, please provide a valid IssueTypePayloadScheme pointer")
+	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/issuetype/%v", issueTypeID)
 
@@ -139,7 +150,8 @@ func (i *IssueTypeService) Update(ctx context.Context, issueTypeID string, paylo
 
 	result = new(IssueTypeScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return
+		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
+
 	}
 
 	return
@@ -177,6 +189,7 @@ func (i *IssueTypeService) Alternatives(ctx context.Context, issueTypeID string)
 	if err != nil {
 		return
 	}
+
 	request.Header.Set("Accept", "application/json")
 
 	response, err = i.client.Do(request)
@@ -186,7 +199,7 @@ func (i *IssueTypeService) Alternatives(ctx context.Context, issueTypeID string)
 
 	result = new([]IssueTypeScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return
+		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
 
 	return

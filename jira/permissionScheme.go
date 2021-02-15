@@ -106,7 +106,15 @@ func (p *PermissionSchemeService) Delete(ctx context.Context, permissionSchemeID
 // Creates a new permission scheme.
 // You can create a permission scheme with or without defining a set of permission grants.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permission-schemes/#api-rest-api-3-permissionscheme-post
-func (p *PermissionSchemeService) Create(ctx context.Context, name, description string, permissions []PermissionGrantPayloadScheme) (result *PermissionScheme, response *Response, err error) {
+func (p *PermissionSchemeService) Create(ctx context.Context, name, description string, permissions *[]PermissionGrantPayloadScheme) (result *PermissionScheme, response *Response, err error) {
+
+	if permissions == nil {
+		return nil, nil, fmt.Errorf("error, please provide a PermissionGrantPayloadScheme slice pointer")
+	}
+
+	if len(name) == 0 {
+		return nil, nil, fmt.Errorf("error, please provide a permission scheme name value")
+	}
 
 	payload := struct {
 		Permissions []PermissionGrantPayloadScheme `json:"permissions,omitempty"`
@@ -115,7 +123,7 @@ func (p *PermissionSchemeService) Create(ctx context.Context, name, description 
 	}{
 		Name:        name,
 		Description: description,
-		Permissions: permissions,
+		Permissions: *permissions,
 	}
 
 	var endpoint = "rest/api/3/permissionscheme"
@@ -146,7 +154,12 @@ func (p *PermissionSchemeService) Create(ctx context.Context, name, description 
 // 1. If a permissions list is present in the request, then it is set in the permission scheme, overwriting all existing grants.
 // 2. If you want to update only the name and description, then do not send a permissions list in the request.
 // 3. Sending an empty list will remove all permission grants from the permission scheme.
-func (p *PermissionSchemeService) Update(ctx context.Context, schemeID int, name, description string, permissions []PermissionGrantPayloadScheme) (result *PermissionScheme, response *Response, err error) {
+// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permission-schemes/#api-rest-api-3-permissionscheme-schemeid-put
+func (p *PermissionSchemeService) Update(ctx context.Context, schemeID int, name, description string, permissions *[]PermissionGrantPayloadScheme) (result *PermissionScheme, response *Response, err error) {
+
+	if permissions == nil {
+		return nil, nil, fmt.Errorf("error, please provide a PermissionGrantPayloadScheme slice pointer")
+	}
 
 	payload := struct {
 		Permissions []PermissionGrantPayloadScheme `json:"permissions,omitempty"`
@@ -155,7 +168,7 @@ func (p *PermissionSchemeService) Update(ctx context.Context, schemeID int, name
 	}{
 		Name:        name,
 		Description: description,
-		Permissions: permissions,
+		Permissions: *permissions,
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/permissionscheme/%v", schemeID)

@@ -23,7 +23,7 @@ type ProjectService struct {
 
 type ProjectPayloadScheme struct {
 	NotificationScheme  int    `json:"notificationScheme" validate:"required"`
-	Description         string `json:"description" validate:"required"`
+	Description         string `json:"description"`
 	LeadAccountID       string `json:"leadAccountId" validate:"required"`
 	URL                 string `json:"url"`
 	ProjectTemplateKey  string `json:"projectTemplateKey" validate:"required"`
@@ -47,6 +47,10 @@ type NewProjectCreatedScheme struct {
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-projects/#api-rest-api-3-project-post
 func (p *ProjectService) Create(ctx context.Context, payload *ProjectPayloadScheme) (result *NewProjectCreatedScheme, response *Response, err error) {
 
+	if payload == nil {
+		return nil, nil, fmt.Errorf("error, please provide a ProjectPayloadScheme pointer")
+	}
+
 	validate := validator.New()
 	if err = validate.Struct(payload); err != nil {
 		return
@@ -58,6 +62,7 @@ func (p *ProjectService) Create(ctx context.Context, payload *ProjectPayloadSche
 	if err != nil {
 		return
 	}
+
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Content-Type", "application/json")
 
@@ -84,16 +89,21 @@ type ProjectSearchScheme struct {
 }
 
 type ProjectSearchOptionsScheme struct {
-	OrderBy, Query   string
-	SearchBy, Action string
-	ProjectKeyType   string
-	CategoryID       int
-	Expand           []string
+	OrderBy        string
+	Query          string
+	Action         string
+	ProjectKeyType string
+	CategoryID     int
+	Expand         []string
 }
 
 // Returns a paginated list of projects visible to the user.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-projects/#api-rest-api-3-project-search-get
 func (p *ProjectService) Search(ctx context.Context, opts *ProjectSearchOptionsScheme, startAt, maxResults int) (result *ProjectSearchScheme, response *Response, err error) {
+
+	if opts == nil {
+		return nil, nil, fmt.Errorf("error, please provide a valid ProjectSearchOptionsScheme pointer")
+	}
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -128,10 +138,6 @@ func (p *ProjectService) Search(ctx context.Context, opts *ProjectSearchOptionsS
 
 	if opts.CategoryID != 0 {
 		params.Add("categoryId", strconv.Itoa(opts.CategoryID))
-	}
-
-	if len(opts.SearchBy) != 0 {
-		params.Add("searchBy", opts.SearchBy)
 	}
 
 	if len(opts.Action) != 0 {
@@ -200,6 +206,10 @@ type ProjectScheme struct {
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-projects/#api-rest-api-3-project-projectidorkey-get
 func (p *ProjectService) Get(ctx context.Context, projectKeyOrID string, expands []string) (result *ProjectScheme, response *Response, err error) {
 
+	if len(projectKeyOrID) == 0 {
+		return nil, nil, fmt.Errorf("error, please provide a projectKeyOrID value")
+	}
+
 	params := url.Values{}
 	var expand string
 	for index, value := range expands {
@@ -261,6 +271,10 @@ type ProjectUpdateScheme struct {
 // Updates the project details of a project.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-projects/#api-rest-api-3-project-projectidorkey-put
 func (p *ProjectService) Update(ctx context.Context, projectKeyOrID string, payload *ProjectUpdateScheme) (result *ProjectScheme, response *Response, err error) {
+
+	if payload == nil {
+		return nil, nil, fmt.Errorf("error, please provide a valid ProjectUpdateScheme pointer")
+	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/project/%v", projectKeyOrID)
 

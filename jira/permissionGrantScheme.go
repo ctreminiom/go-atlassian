@@ -44,6 +44,10 @@ type PermissionGrantPayloadScheme struct {
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permission-schemes/#api-rest-api-3-permissionscheme-schemeid-permission-post
 func (p *PermissionGrantSchemeService) Create(ctx context.Context, schemeID int, payload *PermissionGrantPayloadScheme) (result *PermissionGrantScheme, response *Response, err error) {
 
+	if payload == nil {
+		return nil, nil, fmt.Errorf("error, please provide a PermissionGrantPayloadScheme pointer")
+	}
+
 	var endpoint = fmt.Sprintf("rest/api/3/permissionscheme/%v/permission", schemeID)
 
 	request, err := p.client.newRequest(ctx, http.MethodPost, endpoint, &payload)

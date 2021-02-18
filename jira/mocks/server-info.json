@@ -1,0 +1,17 @@
+{
+  "baseUrl": "https://your-domain.atlassian.net/jira",
+  "version": "1001.0.0-SNAPSHOT",
+  "versionNumbers": [
+    5,
+    0,
+    0
+  ],
+  "buildNumber": 582,
+  "buildDate": "2021-02-17T04:52:42.955+0000",
+  "serverTime": "2021-02-17T04:52:42.955+0000",
+  "scmInfo": "1f51473f5c7b75c1a69a0090f4832cdc5053702a",
+  "serverTitle": "My Jira instance",
+  "defaultLocale": {
+    "locale": "en_AU"
+  }
+}

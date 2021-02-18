@@ -26,6 +26,7 @@ func (p *ProjectCategoryService) Gets(ctx context.Context) (result *[]ProjectCat
 	if err != nil {
 		return
 	}
+
 	request.Header.Set("Accept", "application/json")
 
 	response, err = p.client.Do(request)
@@ -70,6 +71,10 @@ func (p *ProjectCategoryService) Get(ctx context.Context, projectCategoryID int)
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-categories/#api-rest-api-3-projectcategory-post
 func (p *ProjectCategoryService) Create(ctx context.Context, name, description string) (result *ProjectCategoryScheme, response *Response, err error) {
 
+	if len(name) == 0 {
+		return nil, nil, fmt.Errorf("error, please provide a project category name")
+	}
+
 	payload := struct {
 		Name        string `json:"name,omitempty"`
 		Description string `json:"description,omitempty"`
@@ -103,7 +108,7 @@ func (p *ProjectCategoryService) Create(ctx context.Context, name, description s
 
 // Updates a project category.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-categories/#api-rest-api-3-projectcategory-id-put
-func (p *ProjectCategoryService) Update(ctx context.Context, projectCategoryID, name, description string) (result *ProjectCategoryScheme, response *Response, err error) {
+func (p *ProjectCategoryService) Update(ctx context.Context, projectCategoryID int, name, description string) (result *ProjectCategoryScheme, response *Response, err error) {
 
 	payload := struct {
 		Name        string `json:"name,omitempty"`
@@ -137,7 +142,7 @@ func (p *ProjectCategoryService) Update(ctx context.Context, projectCategoryID, 
 
 // Deletes a project category.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-categories/#api-rest-api-3-projectcategory-id-delete
-func (p *ProjectCategoryService) Delete(ctx context.Context, projectCategoryID string) (response *Response, err error) {
+func (p *ProjectCategoryService) Delete(ctx context.Context, projectCategoryID int) (response *Response, err error) {
 
 	var endpoint = fmt.Sprintf("rest/api/3/projectCategory/%v", projectCategoryID)
 

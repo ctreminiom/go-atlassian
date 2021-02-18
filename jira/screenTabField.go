@@ -44,6 +44,10 @@ func (s *ScreenTabFieldService) Gets(ctx context.Context, screenID, tabID int) (
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screen-tab-fields/#api-rest-api-3-screens-screenid-tabs-tabid-fields-post
 func (s *ScreenTabFieldService) Add(ctx context.Context, screenID, tabID int, fieldID string) (result *ScreenTabFieldScheme, response *Response, err error) {
 
+	if len(fieldID) == 0 {
+		return nil, nil, fmt.Errorf("error, please provide valid fieldID value")
+	}
+
 	payload := struct {
 		FieldID string `json:"fieldId"`
 	}{FieldID: fieldID}
@@ -74,6 +78,10 @@ func (s *ScreenTabFieldService) Add(ctx context.Context, screenID, tabID int, fi
 // Removes a field from a screen tab.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screen-tab-fields/#api-rest-api-3-screens-screenid-tabs-tabid-fields-id-delete
 func (s *ScreenTabFieldService) Remove(ctx context.Context, screenID, tabID int, fieldID string) (response *Response, err error) {
+
+	if len(fieldID) == 0 {
+		return nil, fmt.Errorf("error, please provide valid fieldID value")
+	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/screens/%v/tabs/%v/fields/%v", screenID, tabID, fieldID)
 

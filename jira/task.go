@@ -32,6 +32,10 @@ type TaskScheme struct {
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-tasks/#api-rest-api-3-task-taskid-get
 func (t *TaskService) Get(ctx context.Context, taskID string) (result *TaskScheme, response *Response, err error) {
 
+	if len(taskID) == 0 {
+		return nil, nil, fmt.Errorf("error, please provide a valid taskID value")
+	}
+
 	var endpoint = fmt.Sprintf("rest/api/3/task/%v", taskID)
 
 	request, err := t.client.newRequest(ctx, http.MethodGet, endpoint, nil)
@@ -57,6 +61,10 @@ func (t *TaskService) Get(ctx context.Context, taskID string) (result *TaskSchem
 // Cancels a task.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-tasks/#api-rest-api-3-task-taskid-cancel-post
 func (t *TaskService) Cancel(ctx context.Context, taskID string) (response *Response, err error) {
+
+	if len(taskID) == 0 {
+		return nil, fmt.Errorf("error, please provide a valid taskID value")
+	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/task/%v/cancel", taskID)
 

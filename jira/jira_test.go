@@ -57,7 +57,11 @@ func startMockServer(opts *mockServerOptions) (*httptest.Server, error) {
 					http.Error(w, err.Error(), 500)
 					return
 				}
-				_, _ = w.Write(mockResponse)
+				_, err = w.Write(mockResponse)
+				if err != nil {
+					http.Error(w, err.Error(), 500)
+					return
+				}
 			}
 
 		}),

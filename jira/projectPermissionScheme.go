@@ -38,6 +38,10 @@ type ProjectPermissionSchemeScheme struct {
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-permission-schemes/#api-rest-api-3-project-projectkeyorid-permissionscheme-get
 func (p *ProjectPermissionSchemeService) Get(ctx context.Context, projectKeyOrID string, expands []string) (result *ProjectPermissionSchemeScheme, response *Response, err error) {
 
+	if len(projectKeyOrID) == 0 {
+		return nil, nil, fmt.Errorf("error, please provide a valid projectKeyOrID value")
+	}
+
 	params := url.Values{}
 
 	var expand string
@@ -87,6 +91,10 @@ func (p *ProjectPermissionSchemeService) Get(ctx context.Context, projectKeyOrID
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-permission-schemes/#api-rest-api-3-project-projectkeyorid-permissionscheme-put
 func (p *ProjectPermissionSchemeService) Assign(ctx context.Context, projectKeyOrID string, permissionSchemeID int) (result *ProjectPermissionSchemeScheme, response *Response, err error) {
 
+	if len(projectKeyOrID) == 0 {
+		return nil, nil, fmt.Errorf("error, please provide a valid projectKeyOrID value")
+	}
+
 	payload := struct {
 		ID int `json:"id"`
 	}{ID: permissionSchemeID}
@@ -126,6 +134,10 @@ type ProjectIssueSecurityLevelsScheme struct {
 // Returns all issue security levels for the project that the user has access to.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-permission-schemes/#api-rest-api-3-project-projectkeyorid-securitylevel-get
 func (p *ProjectPermissionSchemeService) SecurityLevels(ctx context.Context, projectKeyOrID string) (result *ProjectIssueSecurityLevelsScheme, response *Response, err error) {
+
+	if len(projectKeyOrID) == 0 {
+		return nil, nil, fmt.Errorf("error, please provide a valid projectKeyOrID value")
+	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/project/%v/securitylevel", projectKeyOrID)
 

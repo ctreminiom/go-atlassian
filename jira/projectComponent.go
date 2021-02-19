@@ -23,6 +23,10 @@ type ProjectComponentPayloadScheme struct {
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-components/#api-rest-api-3-component-post
 func (p *ProjectComponentService) Create(ctx context.Context, payload *ProjectComponentPayloadScheme) (result *ProjectComponentScheme, response *Response, err error) {
 
+	if payload == nil {
+		return nil, nil, fmt.Errorf("error, please provide a valid ProjectComponentPayloadScheme pointer")
+	}
+
 	var endpoint = "rest/api/3/component"
 
 	request, err := p.client.newRequest(ctx, http.MethodPost, endpoint, &payload)
@@ -66,6 +70,10 @@ type ProjectComponentScheme struct {
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-components/#api-rest-api-3-project-projectidorkey-components-get
 func (p *ProjectComponentService) Gets(ctx context.Context, projectKeyOrID string) (result *[]ProjectComponentScheme, response *Response, err error) {
 
+	if len(projectKeyOrID) == 0 {
+		return nil, nil, fmt.Errorf("error, please provide a valid projectKeyOrID value")
+	}
+
 	var endpoint = fmt.Sprintf("rest/api/3/project/%v/components", projectKeyOrID)
 
 	request, err := p.client.newRequest(ctx, http.MethodGet, endpoint, nil)
@@ -96,6 +104,10 @@ type ProjectComponentCountScheme struct {
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-components/#api-rest-api-3-component-id-relatedissuecounts-get
 func (p *ProjectComponentService) Count(ctx context.Context, componentID string) (result *ProjectComponentCountScheme, response *Response, err error) {
 
+	if len(componentID) == 0 {
+		return nil, nil, fmt.Errorf("error, please provide a valida componentID value")
+	}
+
 	var endpoint = fmt.Sprintf("rest/api/3/component/%v/relatedIssueCounts", componentID)
 
 	request, err := p.client.newRequest(ctx, http.MethodGet, endpoint, nil)
@@ -121,6 +133,10 @@ func (p *ProjectComponentService) Count(ctx context.Context, componentID string)
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-components/#api-rest-api-3-component-id-delete
 func (p *ProjectComponentService) Delete(ctx context.Context, componentID string) (response *Response, err error) {
 
+	if len(componentID) == 0 {
+		return nil, fmt.Errorf("error, please provide a valida componentID value")
+	}
+
 	var endpoint = fmt.Sprintf("rest/api/3/component/%v", componentID)
 
 	request, err := p.client.newRequest(ctx, http.MethodDelete, endpoint, nil)
@@ -142,12 +158,23 @@ func (p *ProjectComponentService) Delete(ctx context.Context, componentID string
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-components/#api-rest-api-3-component-id-put
 func (p *ProjectComponentService) Update(ctx context.Context, componentID string, payload *ProjectComponentPayloadScheme) (result *ProjectComponentScheme, response *Response, err error) {
 
+	if len(componentID) == 0 {
+		return nil, nil, fmt.Errorf("error, please provide a valid componentID value")
+	}
+
+	if payload == nil {
+		return nil, nil, fmt.Errorf("error, please provide a valid ProjectComponentPayloadScheme pointer")
+	}
+
 	var endpoint = fmt.Sprintf("rest/api/3/component/%v", componentID)
 
 	request, err := p.client.newRequest(ctx, http.MethodPut, endpoint, &payload)
 	if err != nil {
 		return
 	}
+
+	request.Header.Set("Accept", "application/json")
+	request.Header.Set("Content-Type", "application/json")
 
 	response, err = p.client.Do(request)
 	if err != nil {
@@ -165,6 +192,10 @@ func (p *ProjectComponentService) Update(ctx context.Context, componentID string
 // Returns a component.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-components/#api-rest-api-3-component-id-get
 func (p *ProjectComponentService) Get(ctx context.Context, componentID string) (result *ProjectComponentScheme, response *Response, err error) {
+
+	if len(componentID) == 0 {
+		return nil, nil, fmt.Errorf("error, please provide a valid componentID value")
+	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/component/%v", componentID)
 

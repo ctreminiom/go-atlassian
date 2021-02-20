@@ -14,6 +14,10 @@ type ProjectRoleActorService struct{ client *Client }
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-role-actors/#api-rest-api-3-project-projectidorkey-role-id-post
 func (p *ProjectRoleActorService) Add(ctx context.Context, projectKeyOrID string, projectRoleID int, accountIDs, groups []string) (result *ProjectRoleScheme, response *Response, err error) {
 
+	if len(projectKeyOrID) == 0 {
+		return nil, nil, fmt.Errorf("error, please provide a valid projectKeyOrID value")
+	}
+
 	payload := struct {
 		Group []string `json:"group,omitempty"`
 		Users []string `json:"user,omitempty"`
@@ -48,6 +52,10 @@ func (p *ProjectRoleActorService) Add(ctx context.Context, projectKeyOrID string
 // Deletes actors from a project role for the project.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-role-actors/#api-rest-api-3-project-projectidorkey-role-id-delete
 func (p *ProjectRoleActorService) Delete(ctx context.Context, projectKeyOrID string, projectRoleID int, accountID, group string) (response *Response, err error) {
+
+	if len(projectKeyOrID) == 0 {
+		return nil, fmt.Errorf("error, please provide a valid projectKeyOrID value")
+	}
 
 	params := url.Values{}
 

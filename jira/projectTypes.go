@@ -73,6 +73,10 @@ func (p *ProjectTypeService) Licensed(ctx context.Context) (result *[]ProjectTyp
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-types/#api-rest-api-3-project-type-projecttypekey-get
 func (p *ProjectTypeService) Get(ctx context.Context, projectTypeKey string) (result *ProjectTypeScheme, response *Response, err error) {
 
+	if len(projectTypeKey) == 0 {
+		return nil, nil, fmt.Errorf("error, please provide a valid projectTypeKey value")
+	}
+
 	var endpoint = fmt.Sprintf("rest/api/3/project/type/%v", projectTypeKey)
 
 	request, err := p.client.newRequest(ctx, http.MethodGet, endpoint, nil)
@@ -98,6 +102,10 @@ func (p *ProjectTypeService) Get(ctx context.Context, projectTypeKey string) (re
 // Returns a project type if it is accessible to the user.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-types/#api-rest-api-3-project-type-projecttypekey-accessible-get
 func (p *ProjectTypeService) Accessible(ctx context.Context, projectTypeKey string) (result *ProjectTypeScheme, response *Response, err error) {
+
+	if len(projectTypeKey) == 0 {
+		return nil, nil, fmt.Errorf("error, please provide a valid projectTypeKey value")
+	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/project/type/%v/accessible", projectTypeKey)
 

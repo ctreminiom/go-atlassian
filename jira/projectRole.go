@@ -21,6 +21,10 @@ type ProjectRoleService struct {
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-roles/#api-rest-api-3-project-projectidorkey-role-get
 func (p *ProjectRoleService) Gets(ctx context.Context, projectKeyOrID string) (result *map[string]int, response *Response, err error) {
 
+	if len(projectKeyOrID) == 0 {
+		return nil, nil, fmt.Errorf("error, please provide a valid projectKeyOrID value")
+	}
+
 	var endpoint = fmt.Sprintf("rest/api/3/project/%v/role", projectKeyOrID)
 
 	request, err := p.client.newRequest(ctx, http.MethodGet, endpoint, nil)
@@ -100,6 +104,10 @@ type ProjectRoleScheme struct {
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-roles/#api-rest-api-3-project-projectidorkey-role-id-get
 func (p *ProjectRoleService) Get(ctx context.Context, projectKeyOrID string, roleID int) (result *ProjectRoleScheme, response *Response, err error) {
 
+	if len(projectKeyOrID) == 0 {
+		return nil, nil, fmt.Errorf("error, please provide a valid projectKeyOrID value")
+	}
+
 	var endpoint = fmt.Sprintf("rest/api/3/project/%v/role/%v", projectKeyOrID, roleID)
 
 	request, err := p.client.newRequest(ctx, http.MethodGet, endpoint, nil)
@@ -136,6 +144,10 @@ type ProjectRoleDetailScheme struct {
 // Note that the list of project roles is common to all projects.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-roles/#api-rest-api-3-project-projectidorkey-roledetails-get
 func (p *ProjectRoleService) Details(ctx context.Context, projectKeyOrID string) (result *[]ProjectRoleDetailScheme, response *Response, err error) {
+
+	if len(projectKeyOrID) == 0 {
+		return nil, nil, fmt.Errorf("error, please provide a valid projectKeyOrID value")
+	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/project/%v/roledetails", projectKeyOrID)
 
@@ -187,6 +199,10 @@ func (p *ProjectRoleService) Global(ctx context.Context) (result *[]ProjectRoleS
 // You can use the Add default actors to project role operation to add default actors to the project role after creating it.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-roles/#api-rest-api-3-role-post
 func (p *ProjectRoleService) Create(ctx context.Context, name, description string) (result *ProjectRoleScheme, response *Response, err error) {
+
+	if len(name) == 0 {
+		return nil, nil, fmt.Errorf("error, please provide a valid projectKeyOrID value")
+	}
 
 	payload := struct {
 		Name        string `json:"name,omitempty"`

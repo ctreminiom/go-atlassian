@@ -11,7 +11,7 @@ import (
 type ProjectValidationService struct{ client *Client }
 
 type ProjectValidationMessageScheme struct {
-	ErrorMessages []interface{} `json:"errorMessages"`
+	ErrorMessages []string `json:"errorMessages"`
 	Errors        struct {
 		ProjectKey string `json:"projectKey"`
 	} `json:"errors"`
@@ -20,6 +20,10 @@ type ProjectValidationMessageScheme struct {
 // Validates a project key by confirming the key is a valid string and not in use.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-key-and-name-validation/#api-rest-api-3-projectvalidate-key-get
 func (p *ProjectValidationService) Validate(ctx context.Context, projectKey string) (result *ProjectValidationMessageScheme, response *Response, err error) {
+
+	if len(projectKey) == 0 {
+		return nil, nil, fmt.Errorf("error, please provide a valid projectKey value")
+	}
 
 	params := url.Values{}
 	params.Add("key", projectKey)
@@ -49,6 +53,10 @@ func (p *ProjectValidationService) Validate(ctx context.Context, projectKey stri
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-key-and-name-validation/#api-rest-api-3-projectvalidate-validprojectkey-get
 func (p *ProjectValidationService) Key(ctx context.Context, projectKey string) (randomKey string, response *Response, err error) {
 
+	if len(projectKey) == 0 {
+		return "", nil, fmt.Errorf("error, please provide a valid projectKey value")
+	}
+
 	params := url.Values{}
 	params.Add("key", projectKey)
 
@@ -77,6 +85,10 @@ func (p *ProjectValidationService) Key(ctx context.Context, projectKey string) (
 // usually by adding a sequence number. If a valid project name cannot be generated, a 404 response is returned.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-key-and-name-validation/#api-rest-api-3-projectvalidate-validprojectname-get
 func (p *ProjectValidationService) Name(ctx context.Context, projectName string) (randomKey string, response *Response, err error) {
+
+	if len(projectName) == 0 {
+		return "", nil, fmt.Errorf("error, please provide a valid projectKey value")
+	}
 
 	params := url.Values{}
 	params.Add("name", projectName)

@@ -1,0 +1,13 @@
+{
+  "maxResults": 1,
+  "startAt": 0,
+  "total": 5,
+  "isLast": false,
+  "values": [
+    {
+      "id": 10001,
+      "name": "Default Screen",
+      "description": "Provides for the update of all system fields."
+    }
+  ]
+}

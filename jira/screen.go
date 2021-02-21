@@ -33,6 +33,10 @@ type ScreenFieldSearchScheme struct {
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screens/#api-rest-api-3-field-fieldid-screens-get
 func (s *ScreenService) Get(ctx context.Context, fieldID string, startAt, maxResults int) (result *ScreenFieldSearchScheme, response *Response, err error) {
 
+	if len(fieldID) == 0 {
+		return nil, nil, fmt.Errorf("error, please provide a valid fieldID value ")
+	}
+
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
 	params.Add("maxResults", strconv.Itoa(maxResults))
@@ -106,6 +110,10 @@ func (s *ScreenService) Gets(ctx context.Context, screenIDs []int, startAt, maxR
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screens/#api-rest-api-3-screens-post
 func (s *ScreenService) Create(ctx context.Context, name, description string) (result *ScreenScheme, response *Response, err error) {
 
+	if len(name) == 0 {
+		return nil, nil, fmt.Errorf("error, please project a valid screen name value")
+	}
+
 	payload := struct {
 		Name        string `json:"name,omitempty"`
 		Description string `json:"description,omitempty"`
@@ -141,6 +149,10 @@ func (s *ScreenService) Create(ctx context.Context, name, description string) (r
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screens/#api-rest-api-3-screens-addtodefault-fieldid-post
 func (s *ScreenService) AddToDefault(ctx context.Context, fieldID string) (response *Response, err error) {
 
+	if len(fieldID) == 0 {
+		return nil, fmt.Errorf("error, please provide a valid fieldID value")
+	}
+
 	var endpoint = fmt.Sprintf("rest/api/3/screens/addToDefault/%v", fieldID)
 
 	request, err := s.client.newRequest(ctx, http.MethodPost, endpoint, nil)
@@ -163,8 +175,8 @@ func (s *ScreenService) AddToDefault(ctx context.Context, fieldID string) (respo
 func (s *ScreenService) Update(ctx context.Context, screenID int, name, description string) (result *ScreenScheme, response *Response, err error) {
 
 	payload := struct {
-		Name        string `json:"name"`
-		Description string `json:"description"`
+		Name        string `json:"name,omitempty"`
+		Description string `json:"description,omitempty"`
 	}{
 		Name:        name,
 		Description: description,
@@ -219,6 +231,8 @@ type AvailableScreenFieldScheme struct {
 	Name string `json:"name"`
 }
 
+// Returns the fields that can be added to a tab on a screen.
+// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screens/#api-rest-api-3-screens-screenid-availablefields-get
 func (s *ScreenService) Available(ctx context.Context, screenID int) (result *[]AvailableScreenFieldScheme, response *Response, err error) {
 
 	var endpoint = fmt.Sprintf("rest/api/3/screens/%v/availableFields", screenID)

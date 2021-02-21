@@ -59,6 +59,10 @@ func (s *ScreenTabService) Gets(ctx context.Context, screenID int, projectKey st
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screen-tabs/#api-rest-api-3-screens-screenid-tabs-post
 func (s *ScreenTabService) Create(ctx context.Context, screenID int, tabName string) (result *ScreenTabScheme, response *Response, err error) {
 
+	if len(tabName) == 0 {
+		return nil, nil, fmt.Errorf("error, please provide a valid tabName value")
+	}
+
 	payload := struct {
 		Name string `json:"name"`
 	}{Name: tabName}
@@ -88,7 +92,11 @@ func (s *ScreenTabService) Create(ctx context.Context, screenID int, tabName str
 
 // Updates the name of a screen tab.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screen-tabs/#api-rest-api-3-screens-screenid-tabs-tabid-put
-func (s *ScreenTabService) Update(ctx context.Context, screenID, tabID, newTabName string) (result *ScreenTabScheme, response *Response, err error) {
+func (s *ScreenTabService) Update(ctx context.Context, screenID, tabID int, newTabName string) (result *ScreenTabScheme, response *Response, err error) {
+
+	if len(newTabName) == 0 {
+		return nil, nil, fmt.Errorf("error, please provide a valid newTabName value")
+	}
 
 	payload := struct {
 		Name string `json:"name"`
@@ -119,7 +127,7 @@ func (s *ScreenTabService) Update(ctx context.Context, screenID, tabID, newTabNa
 
 // Deletes a screen tab.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screen-tabs/#api-rest-api-3-screens-screenid-tabs-tabid-delete
-func (s *ScreenTabService) Delete(ctx context.Context, screenID int, tabID string) (response *Response, err error) {
+func (s *ScreenTabService) Delete(ctx context.Context, screenID, tabID int) (response *Response, err error) {
 
 	var endpoint = fmt.Sprintf("rest/api/3/screens/%v/tabs/%v", screenID, tabID)
 

@@ -82,6 +82,10 @@ type ScreenSchemePayloadScheme struct {
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screen-schemes/#api-rest-api-3-screenscheme-post
 func (s *ScreenSchemeService) Create(ctx context.Context, payload *ScreenSchemePayloadScheme) (result *ScreenSchemeScheme, response *Response, err error) {
 
+	if payload == nil {
+		return nil, nil, fmt.Errorf("error, please provide a valid ScreenSchemePayloadScheme pointer")
+	}
+
 	validate := validator.New()
 	if err = validate.Struct(payload); err != nil {
 		return
@@ -110,9 +114,28 @@ func (s *ScreenSchemeService) Create(ctx context.Context, payload *ScreenSchemeP
 	return
 }
 
+type ScreenSchemeUpdatePayloadScheme struct {
+	Screens struct {
+		Edit    string `json:"edit"`
+		Create  string `json:"create"`
+		View    string `json:"view"`
+		Default string `json:"default"`
+	} `json:"screens"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+}
+
 // Updates a screen scheme. Only screen schemes used in classic projects can be updated.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screen-schemes/#api-rest-api-3-screenscheme-screenschemeid-put
-func (s *ScreenSchemeService) Update(ctx context.Context, screenSchemeID string, payload *ScreenSchemeScheme) (response *Response, err error) {
+func (s *ScreenSchemeService) Update(ctx context.Context, screenSchemeID string, payload *ScreenSchemeUpdatePayloadScheme) (response *Response, err error) {
+
+	if len(screenSchemeID) == 0 {
+		return nil, fmt.Errorf("error, please provide a valid screenSchemeID value")
+	}
+
+	if payload == nil {
+		return nil, fmt.Errorf("error, please provide a valid ScreenSchemeScheme pointer")
+	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/screenscheme/%v", screenSchemeID)
 
@@ -137,6 +160,10 @@ func (s *ScreenSchemeService) Update(ctx context.Context, screenSchemeID string,
 // Only screens schemes used in classic projects can be deleted.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screen-schemes/#api-rest-api-3-screenscheme-screenschemeid-delete
 func (s *ScreenSchemeService) Delete(ctx context.Context, screenSchemeID string) (response *Response, err error) {
+
+	if len(screenSchemeID) == 0 {
+		return nil, fmt.Errorf("error, please provide a valid screenSchemeID value")
+	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/screenscheme/%v", screenSchemeID)
 

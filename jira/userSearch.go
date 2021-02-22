@@ -16,10 +16,17 @@ type UserSearchService struct{ client *Client }
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-user-search/#api-rest-api-3-user-assignable-multiprojectsearch-get
 func (u *UserSearchService) Projects(ctx context.Context, accountID string, projectKeys []string, startAt, maxResults int) (result *[]UserScheme, response *Response, err error) {
 
+	if len(projectKeys) == 0 {
+		return nil, nil, fmt.Errorf("error, please provide a valid projectKeys values")
+	}
+
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
 	params.Add("maxResults", strconv.Itoa(maxResults))
-	params.Add("accountId", accountID)
+
+	if len(accountID) != 0 {
+		params.Add("accountId", accountID)
+	}
 
 	var keys string
 	for index, value := range projectKeys {
@@ -58,18 +65,26 @@ func (u *UserSearchService) Projects(ctx context.Context, accountID string, proj
 	return
 }
 
-// Returns a list of users that can be assigned to an issue.
-// Use this operation to find the list of users who can be assigned to:
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-user-search/#api-rest-api-3-user-assignable-search-get
-func (u *UserSearchService) Issues(ctx context.Context, accountID, issueKey string, startAt, maxResults int) (result *[]UserScheme, response *Response, err error) {
+// Returns a list of users that match the search string and property.
+// This operation takes the users in the range defined by startAt and maxResults, up to the thousandth user,
+// and then returns only the users from that range that match the search string and property.
+// This means the operation usually returns fewer users than specified in maxResults
+// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-user-search/#api-rest-api-3-user-search-get
+func (u *UserSearchService) Do(ctx context.Context, accountID, query string, startAt, maxResults int) (result *[]UserScheme, response *Response, err error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
 	params.Add("maxResults", strconv.Itoa(maxResults))
-	params.Add("accountId", accountID)
-	params.Add("issueKey", issueKey)
 
-	var endpoint = fmt.Sprintf("rest/api/3/user/assignable/search?%v", params.Encode())
+	if len(accountID) != 0 {
+		params.Add("accountId", accountID)
+	}
+
+	if len(query) != 0 {
+		params.Add("query", accountID)
+	}
+
+	var endpoint = fmt.Sprintf("rest/api/3/user/search?%v", params.Encode())
 
 	request, err := u.client.newRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {

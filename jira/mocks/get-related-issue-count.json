@@ -1,0 +1,18 @@
+{
+  "self": "https://your-domain.atlassian.net/rest/api/3/version/10000",
+  "issuesFixedCount": 23,
+  "issuesAffectedCount": 101,
+  "issueCountWithCustomFieldsShowingVersion": 54,
+  "customFieldUsage": [
+    {
+      "fieldName": "Field1",
+      "customFieldId": 10000,
+      "issueCountWithVersionInCustomField": 2
+    },
+    {
+      "fieldName": "Field2",
+      "customFieldId": 10010,
+      "issueCountWithVersionInCustomField": 3
+    }
+  ]
+}

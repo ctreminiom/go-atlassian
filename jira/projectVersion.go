@@ -59,6 +59,14 @@ type ProjectVersionScheme struct {
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-versions/#api-rest-api-3-project-projectidorkey-version-get
 func (p *ProjectVersionService) Gets(ctx context.Context, projectKeyOrID string, options *ProjectVersionGetsOptions, startAt, maxResults int) (result *ProjectVersionPageScheme, response *Response, err error) {
 
+	if len(projectKeyOrID) == 0 {
+		return nil, nil, fmt.Errorf("error, please provide a valid projectKeyOrID value")
+	}
+
+	if options == nil {
+		return nil, nil, fmt.Errorf("error, please provide a valid ProjectVersionGetsOptions pointer")
+	}
+
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
 	params.Add("maxResults", strconv.Itoa(maxResults))
@@ -90,12 +98,7 @@ func (p *ProjectVersionService) Gets(ctx context.Context, projectKeyOrID string,
 		params.Add("orderBy", options.OrderBy)
 	}
 
-	var endpoint string
-	if len(params.Encode()) != 0 {
-		endpoint = fmt.Sprintf("rest/api/3/project/%v/version?%v", projectKeyOrID, params.Encode())
-	} else {
-		endpoint = fmt.Sprintf("rest/api/3/project/%v/version", projectKeyOrID)
-	}
+	var endpoint = fmt.Sprintf("rest/api/3/project/%v/version?%v", projectKeyOrID, params.Encode())
 
 	request, err := p.client.newRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
@@ -130,6 +133,10 @@ type ProjectVersionPayloadScheme struct {
 // Creates a project version.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-versions/#api-rest-api-3-version-post
 func (p *ProjectVersionService) Create(ctx context.Context, payload *ProjectVersionPayloadScheme) (result *ProjectVersionScheme, response *Response, err error) {
+
+	if payload == nil {
+		return nil, nil, fmt.Errorf("error, please provide a valid ProjectVersionPayloadScheme pointer")
+	}
 
 	var endpoint = "rest/api/3/version"
 
@@ -204,7 +211,15 @@ func (p *ProjectVersionService) Get(ctx context.Context, versionID string, expan
 
 // Updates a project version.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-versions/#api-rest-api-3-version-id-put
-func (p *ProjectVersionService) Update(ctx context.Context, versionID string, payload *ProjectVersionPayloadScheme) (response *Response, err error) {
+func (p *ProjectVersionService) Update(ctx context.Context, versionID string, payload *ProjectVersionPayloadScheme) (result *ProjectVersionScheme, response *Response, err error) {
+
+	if len(versionID) == 0 {
+		return nil, nil, fmt.Errorf("error, please provide a valid versionID value")
+	}
+
+	if payload == nil {
+		return nil, nil, fmt.Errorf("error, please provide a valid ProjectVersionPayloadScheme pointer")
+	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/version/%v", versionID)
 
@@ -220,6 +235,11 @@ func (p *ProjectVersionService) Update(ctx context.Context, versionID string, pa
 		return
 	}
 
+	result = new(ProjectVersionScheme)
+	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
+		return
+	}
+
 	return
 }
 
@@ -227,6 +247,14 @@ func (p *ProjectVersionService) Update(ctx context.Context, versionID string, pa
 // The merge is completed by deleting the version specified in id and replacing any occurrences of its ID in fixVersion with the version ID specified in moveIssuesTo.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-versions/#api-rest-api-3-version-id-mergeto-moveissuesto-put
 func (p *ProjectVersionService) Merge(ctx context.Context, versionID, moveIssuesTo string) (response *Response, err error) {
+
+	if len(versionID) == 0 {
+		return nil, fmt.Errorf("error, please provide a valid versionID value")
+	}
+
+	if len(moveIssuesTo) == 0 {
+		return nil, fmt.Errorf("error, please provide a valid moveIssuesTo value")
+	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/version/%v/mergeto/%v", versionID, moveIssuesTo)
 
@@ -264,6 +292,10 @@ type VersionIssueCountsScheme struct {
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-versions/#api-rest-api-3-version-id-relatedissuecounts-get
 func (p *ProjectVersionService) RelatedIssueCounts(ctx context.Context, versionID string) (result *VersionIssueCountsScheme, response *Response, err error) {
 
+	if len(versionID) == 0 {
+		return nil, nil, fmt.Errorf("error, please provide a valid versionID value")
+	}
+
 	var endpoint = fmt.Sprintf("rest/api/3/version/%v/relatedIssueCounts", versionID)
 
 	request, err := p.client.newRequest(ctx, http.MethodGet, endpoint, nil)
@@ -295,6 +327,10 @@ type VersionUnresolvedIssuesCountScheme struct {
 // Returns counts of the issues and unresolved issues for the project version.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-versions/#api-rest-api-3-version-id-unresolvedissuecount-get
 func (p *ProjectVersionService) UnresolvedIssueCount(ctx context.Context, versionID string) (result *VersionUnresolvedIssuesCountScheme, response *Response, err error) {
+
+	if len(versionID) == 0 {
+		return nil, nil, fmt.Errorf("error, please provide a valid versionID value")
+	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/version/%v/unresolvedIssueCount", versionID)
 

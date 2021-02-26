@@ -10,6 +10,9 @@ github.com/go-playground/universal-translator
 # github.com/google/uuid v1.1.4
 ## explicit
 github.com/google/uuid
+# github.com/imdario/mergo v0.3.11
+## explicit
+github.com/imdario/mergo
 # github.com/leodido/go-urn v1.2.0
 ## explicit
 github.com/leodido/go-urn

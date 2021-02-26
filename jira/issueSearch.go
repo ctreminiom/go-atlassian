@@ -21,7 +21,12 @@ type IssueSearchScheme struct {
 	WarningMessages []string      `json:"warningMessages"`
 }
 
-type IssueSearchTransitionScheme struct {
+type IssueTransitionsScheme struct {
+	Expand      string                   `json:"expand"`
+	Transitions []*IssueTransitionScheme `json:"transitions"`
+}
+
+type IssueTransitionScheme struct {
 	ID   string `json:"id"`
 	Name string `json:"name"`
 	To   struct {

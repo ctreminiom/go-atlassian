@@ -19,39 +19,43 @@ type ProjectVersionGetsOptions struct {
 }
 
 type ProjectVersionPageScheme struct {
-	Self       string                 `json:"self,omitempty"`
-	NextPage   string                 `json:"nextPage,omitempty"`
-	MaxResults int                    `json:"maxResults,omitempty"`
-	StartAt    int                    `json:"startAt,omitempty"`
-	Total      int                    `json:"total,omitempty"`
-	IsLast     bool                   `json:"isLast,omitempty"`
-	Values     []ProjectVersionScheme `json:"values,omitempty"`
+	Self       string                  `json:"self,omitempty"`
+	NextPage   string                  `json:"nextPage,omitempty"`
+	MaxResults int                     `json:"maxResults,omitempty"`
+	StartAt    int                     `json:"startAt,omitempty"`
+	Total      int                     `json:"total,omitempty"`
+	IsLast     bool                    `json:"isLast,omitempty"`
+	Values     []*ProjectVersionScheme `json:"values,omitempty"`
 }
 
 type ProjectVersionScheme struct {
-	Self            string `json:"self,omitempty"`
-	ID              string `json:"id,omitempty"`
-	Description     string `json:"description,omitempty"`
-	Name            string `json:"name,omitempty"`
-	Archived        bool   `json:"archived,omitempty"`
-	Released        bool   `json:"released,omitempty"`
-	ReleaseDate     string `json:"releaseDate,omitempty"`
-	Overdue         bool   `json:"overdue,omitempty"`
-	UserReleaseDate string `json:"userReleaseDate,omitempty"`
-	ProjectID       int    `json:"projectId,omitempty"`
-	Operations      []struct {
-		ID         string `json:"id,omitempty"`
-		StyleClass string `json:"styleClass,omitempty"`
-		Label      string `json:"label,omitempty"`
-		Href       string `json:"href,omitempty"`
-		Weight     int    `json:"weight,omitempty"`
-	} `json:"operations,omitempty"`
-	IssuesStatusForFixVersion struct {
-		Unmapped   int `json:"unmapped,omitempty"`
-		ToDo       int `json:"toDo,omitempty"`
-		InProgress int `json:"inProgress,omitempty"`
-		Done       int `json:"done,omitempty"`
-	} `json:"issuesStatusForFixVersion,omitempty"`
+	Self                      string                                         `json:"self,omitempty"`
+	ID                        string                                         `json:"id,omitempty"`
+	Description               string                                         `json:"description,omitempty"`
+	Name                      string                                         `json:"name,omitempty"`
+	Archived                  bool                                           `json:"archived,omitempty"`
+	Released                  bool                                           `json:"released,omitempty"`
+	ReleaseDate               string                                         `json:"releaseDate,omitempty"`
+	Overdue                   bool                                           `json:"overdue,omitempty"`
+	UserReleaseDate           string                                         `json:"userReleaseDate,omitempty"`
+	ProjectID                 int                                            `json:"projectId,omitempty"`
+	Operations                []*ProjectVersionOperation                     `json:"operations,omitempty"`
+	IssuesStatusForFixVersion *ProjectVersionIssuesStatusForFixVersionScheme `json:"issuesStatusForFixVersion,omitempty"`
+}
+
+type ProjectVersionOperation struct {
+	ID         string `json:"id,omitempty"`
+	StyleClass string `json:"styleClass,omitempty"`
+	Label      string `json:"label,omitempty"`
+	Href       string `json:"href,omitempty"`
+	Weight     int    `json:"weight,omitempty"`
+}
+
+type ProjectVersionIssuesStatusForFixVersionScheme struct {
+	Unmapped   int `json:"unmapped,omitempty"`
+	ToDo       int `json:"toDo,omitempty"`
+	InProgress int `json:"inProgress,omitempty"`
+	Done       int `json:"done,omitempty"`
 }
 
 // Returns a paginated list of all versions in a project.
@@ -274,15 +278,17 @@ func (p *ProjectVersionService) Merge(ctx context.Context, versionID, moveIssues
 }
 
 type VersionIssueCountsScheme struct {
-	Self                                     string `json:"self"`
-	IssuesFixedCount                         int    `json:"issuesFixedCount"`
-	IssuesAffectedCount                      int    `json:"issuesAffectedCount"`
-	IssueCountWithCustomFieldsShowingVersion int    `json:"issueCountWithCustomFieldsShowingVersion"`
-	CustomFieldUsage                         []struct {
-		FieldName                          string `json:"fieldName"`
-		CustomFieldID                      int    `json:"customFieldId"`
-		IssueCountWithVersionInCustomField int    `json:"issueCountWithVersionInCustomField"`
-	} `json:"customFieldUsage"`
+	Self                                     string                                     `json:"self,omitempty"`
+	IssuesFixedCount                         int                                        `json:"issuesFixedCount,omitempty"`
+	IssuesAffectedCount                      int                                        `json:"issuesAffectedCount,omitempty"`
+	IssueCountWithCustomFieldsShowingVersion int                                        `json:"issueCountWithCustomFieldsShowingVersion,omitempty"`
+	CustomFieldUsage                         []*VersionIssueCountCustomFieldUsageScheme `json:"customFieldUsage,omitempty"`
+}
+
+type VersionIssueCountCustomFieldUsageScheme struct {
+	FieldName                          string `json:"fieldName,omitempty"`
+	CustomFieldID                      int    `json:"customFieldId,omitempty"`
+	IssueCountWithVersionInCustomField int    `json:"issueCountWithVersionInCustomField,omitempty"`
 }
 
 // Returns the following counts for a version:

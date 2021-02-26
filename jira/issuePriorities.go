@@ -10,12 +10,12 @@ import (
 type PriorityService struct{ client *Client }
 
 type PriorityScheme struct {
-	Self        string `json:"self"`
-	StatusColor string `json:"statusColor"`
-	Description string `json:"description"`
-	IconURL     string `json:"iconUrl"`
-	Name        string `json:"name"`
-	ID          string `json:"id"`
+	Self        string `json:"self,omitempty"`
+	StatusColor string `json:"statusColor,omitempty"`
+	Description string `json:"description,omitempty"`
+	IconURL     string `json:"iconUrl,omitempty"`
+	Name        string `json:"name,omitempty"`
+	ID          string `json:"id,omitempty"`
 }
 
 // Returns the list of all issue priorities.

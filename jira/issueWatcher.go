@@ -11,15 +11,15 @@ import (
 type WatcherService struct{ client *Client }
 
 type IssueWatcherScheme struct {
-	Self       string `json:"self"`
-	IsWatching bool   `json:"isWatching"`
-	WatchCount int    `json:"watchCount"`
+	Self       string `json:"self,omitempty"`
+	IsWatching bool   `json:"isWatching,omitempty"`
+	WatchCount int    `json:"watchCount,omitempty"`
 	Watchers   []struct {
-		Self        string `json:"self"`
-		AccountID   string `json:"accountId"`
-		DisplayName string `json:"displayName"`
-		Active      bool   `json:"active"`
-	} `json:"watchers"`
+		Self        string `json:"self,omitempty"`
+		AccountID   string `json:"accountId,omitempty"`
+		DisplayName string `json:"displayName,omitempty"`
+		Active      bool   `json:"active,omitempty"`
+	} `json:"watchers,omitempty"`
 }
 
 // Returns the watchers for an issue.

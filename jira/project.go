@@ -166,40 +166,44 @@ func (p *ProjectService) Search(ctx context.Context, opts *ProjectSearchOptionsS
 }
 
 type ProjectScheme struct {
-	Expand       string                   `json:"expand"`
-	Self         string                   `json:"self"`
-	ID           string                   `json:"id"`
-	Key          string                   `json:"key"`
-	Description  string                   `json:"description"`
-	Lead         UserScheme               `json:"lead"`
-	Components   []ProjectComponentScheme `json:"components"`
-	IssueTypes   []IssueTypeScheme        `json:"issueTypes"`
-	AssigneeType string                   `json:"assigneeType"`
-	Versions     []ProjectVersionScheme   `json:"versions"`
-	Name         string                   `json:"name"`
-	Roles        struct {
-		AtlassianAddonsProjectAccess string `json:"atlassian-addons-project-access"`
-		ServiceDeskTeam              string `json:"Service Desk Team"`
-		ServiceDeskCustomers         string `json:"Service Desk Customers"`
-		Administrators               string `json:"Administrators"`
-	} `json:"roles"`
-	AvatarUrls struct {
-		Four8X48  string `json:"48x48"`
-		Two4X24   string `json:"24x24"`
-		One6X16   string `json:"16x16"`
-		Three2X32 string `json:"32x32"`
-	} `json:"avatarUrls"`
-	ProjectKeys    []string `json:"projectKeys"`
-	ProjectTypeKey string   `json:"projectTypeKey"`
-	Simplified     bool     `json:"simplified"`
-	Style          string   `json:"style"`
-	IsPrivate      bool     `json:"isPrivate"`
-	Properties     struct {
-	} `json:"properties"`
-	Insight struct {
-		TotalIssueCount     int    `json:"totalIssueCount"`
-		LastIssueUpdateTime string `json:"lastIssueUpdateTime"`
-	} `json:"insight"`
+	Expand         string                    `json:"expand,omitempty"`
+	Self           string                    `json:"self,omitempty"`
+	ID             string                    `json:"id,omitempty"`
+	Key            string                    `json:"key,omitempty"`
+	Description    string                    `json:"description,omitempty"`
+	Lead           *UserScheme               `json:"lead,omitempty"`
+	Components     []*ProjectComponentScheme `json:"components,omitempty"`
+	IssueTypes     []*IssueTypeScheme        `json:"issueTypes,omitempty"`
+	AssigneeType   string                    `json:"assigneeType,omitempty"`
+	Versions       []*ProjectVersionScheme   `json:"versions,omitempty"`
+	Name           string                    `json:"name,omitempty"`
+	Roles          *ProjectRolesScheme       `json:"roles,omitempty"`
+	AvatarUrls     *AvatarURLScheme          `json:"avatarUrls,omitempty"`
+	ProjectKeys    []string                  `json:"projectKeys,omitempty"`
+	ProjectTypeKey string                    `json:"projectTypeKey,omitempty"`
+	Simplified     bool                      `json:"simplified,omitempty"`
+	Style          string                    `json:"style,omitempty"`
+	IsPrivate      bool                      `json:"isPrivate,omitempty"`
+	Insight        *ProjectInsightScheme     `json:"insight,omitempty"`
+}
+
+type ProjectInsightScheme struct {
+	TotalIssueCount     int    `json:"totalIssueCount,omitempty"`
+	LastIssueUpdateTime string `json:"lastIssueUpdateTime,omitempty"`
+}
+
+type AvatarURLScheme struct {
+	Four8X48  string `json:"48x48,omitempty"`
+	Two4X24   string `json:"24x24,omitempty"`
+	One6X16   string `json:"16x16,omitempty"`
+	Three2X32 string `json:"32x32,omitempty"`
+}
+
+type ProjectRolesScheme struct {
+	AtlassianAddonsProjectAccess string `json:"atlassian-addons-project-access,omitempty"`
+	ServiceDeskTeam              string `json:"Service Desk Team,omitempty"`
+	ServiceDeskCustomers         string `json:"Service Desk Customers,omitempty"`
+	Administrators               string `json:"Administrators,omitempty"`
 }
 
 // Returns the project details for a project.

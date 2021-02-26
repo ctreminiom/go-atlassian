@@ -16,46 +16,47 @@ type UserService struct {
 }
 
 type UserScheme struct {
-	Self         string `json:"self"`
-	Key          string `json:"key"`
-	AccountID    string `json:"accountId"`
-	AccountType  string `json:"accountType"`
-	Name         string `json:"name"`
-	EmailAddress string `json:"emailAddress"`
-	AvatarUrls   struct {
-		One6X16   string `json:"16x16"`
-		Two4X24   string `json:"24x24"`
-		Three2X32 string `json:"32x32"`
-		Four8X48  string `json:"48x48"`
-	} `json:"avatarUrls"`
-	DisplayName string `json:"displayName"`
-	Active      bool   `json:"active"`
-	TimeZone    string `json:"timeZone"`
-	Locale      string `json:"locale"`
-	Groups      struct {
-		Size       int               `json:"size"`
-		Items      []UserGroupScheme `json:"items"`
-		MaxResults int               `json:"max-results"`
-	} `json:"groups"`
-	ApplicationRoles struct {
-		Size  int `json:"size"`
-		Items []struct {
-			Key                  string   `json:"key"`
-			Groups               []string `json:"groups"`
-			Name                 string   `json:"name"`
-			DefaultGroups        []string `json:"defaultGroups"`
-			SelectedByDefault    bool     `json:"selectedByDefault"`
-			Defined              bool     `json:"defined"`
-			NumberOfSeats        int      `json:"numberOfSeats"`
-			RemainingSeats       int      `json:"remainingSeats"`
-			UserCount            int      `json:"userCount"`
-			UserCountDescription string   `json:"userCountDescription"`
-			HasUnlimitedSeats    bool     `json:"hasUnlimitedSeats"`
-			Platform             bool     `json:"platform"`
-		} `json:"items"`
-		MaxResults int `json:"max-results"`
-	} `json:"applicationRoles"`
-	Expand string `json:"expand"`
+	Self             string                      `json:"self,omitempty"`
+	Key              string                      `json:"key,omitempty"`
+	AccountID        string                      `json:"accountId,omitempty"`
+	AccountType      string                      `json:"accountType,omitempty"`
+	Name             string                      `json:"name,omitempty"`
+	EmailAddress     string                      `json:"emailAddress,omitempty"`
+	AvatarUrls       *AvatarURLScheme            `json:"avatarUrls,omitempty"`
+	DisplayName      string                      `json:"displayName,omitempty"`
+	Active           bool                        `json:"active,omitempty"`
+	TimeZone         string                      `json:"timeZone,omitempty"`
+	Locale           string                      `json:"locale,omitempty"`
+	Groups           *UserGroupsScheme           `json:"groups,omitempty"`
+	ApplicationRoles *UserApplicationRolesScheme `json:"applicationRoles,omitempty"`
+	Expand           string                      `json:"expand,omitempty"`
+}
+
+type UserApplicationRolesScheme struct {
+	Size       int                               `json:"size,omitempty"`
+	Items      []*UserApplicationRoleItemsScheme `json:"items,omitempty"`
+	MaxResults int                               `json:"max-results,omitempty"`
+}
+
+type UserApplicationRoleItemsScheme struct {
+	Key                  string   `json:"key,omitempty"`
+	Groups               []string `json:"groups,omitempty"`
+	Name                 string   `json:"name,omitempty"`
+	DefaultGroups        []string `json:"defaultGroups,omitempty"`
+	SelectedByDefault    bool     `json:"selectedByDefault,omitempty"`
+	Defined              bool     `json:"defined,omitempty"`
+	NumberOfSeats        int      `json:"numberOfSeats,omitempty"`
+	RemainingSeats       int      `json:"remainingSeats,omitempty"`
+	UserCount            int      `json:"userCount,omitempty"`
+	UserCountDescription string   `json:"userCountDescription,omitempty"`
+	HasUnlimitedSeats    bool     `json:"hasUnlimitedSeats,omitempty"`
+	Platform             bool     `json:"platform,omitempty"`
+}
+
+type UserGroupsScheme struct {
+	Size       int                `json:"size,omitempty"`
+	Items      []*UserGroupScheme `json:"items,omitempty"`
+	MaxResults int                `json:"max-results,omitempty"`
 }
 
 // Returns a user.
@@ -183,11 +184,11 @@ func (u *UserService) Delete(ctx context.Context, accountID string) (response *R
 }
 
 type UserSearchPageScheme struct {
-	MaxResults int          `json:"maxResults"`
-	StartAt    int          `json:"startAt"`
-	Total      int          `json:"total"`
-	IsLast     bool         `json:"isLast"`
-	Values     []UserScheme `json:"values"`
+	MaxResults int           `json:"maxResults,omitempty"`
+	StartAt    int           `json:"startAt,omitempty"`
+	Total      int           `json:"total,omitempty"`
+	IsLast     bool          `json:"isLast,omitempty"`
+	Values     []*UserScheme `json:"values,omitempty"`
 }
 
 // Returns a paginated list of the users specified by one or more account IDs.
@@ -229,8 +230,8 @@ func (u *UserService) Find(ctx context.Context, accountIDs []string, startAt, ma
 }
 
 type UserGroupScheme struct {
-	Name string `json:"name"`
-	Self string `json:"self"`
+	Name string `json:"name,omitempty"`
+	Self string `json:"self,omitempty"`
 }
 
 // Returns the groups to which a user belongs.

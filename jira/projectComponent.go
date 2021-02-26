@@ -51,18 +51,18 @@ func (p *ProjectComponentService) Create(ctx context.Context, payload *ProjectCo
 }
 
 type ProjectComponentScheme struct {
-	Self                string     `json:"self"`
-	ID                  string     `json:"id"`
-	Name                string     `json:"name"`
-	Description         string     `json:"description"`
-	Lead                UserScheme `json:"lead"`
-	AssigneeType        string     `json:"assigneeType"`
-	Assignee            UserScheme `json:"assignee"`
-	RealAssigneeType    string     `json:"realAssigneeType"`
-	RealAssignee        UserScheme `json:"realAssignee"`
-	IsAssigneeTypeValid bool       `json:"isAssigneeTypeValid"`
-	Project             string     `json:"project"`
-	ProjectID           int        `json:"projectId"`
+	Self                string      `json:"self,omitempty"`
+	ID                  string      `json:"id,omitempty"`
+	Name                string      `json:"name,omitempty"`
+	Description         string      `json:"description,omitempty"`
+	Lead                *UserScheme `json:"lead,omitempty"`
+	AssigneeType        string      `json:"assigneeType,omitempty"`
+	Assignee            *UserScheme `json:"assignee,omitempty"`
+	RealAssigneeType    string      `json:"realAssigneeType,omitempty"`
+	RealAssignee        *UserScheme `json:"realAssignee,omitempty"`
+	IsAssigneeTypeValid bool        `json:"isAssigneeTypeValid,omitempty"`
+	Project             string      `json:"project,omitempty"`
+	ProjectID           int         `json:"projectId,omitempty"`
 }
 
 // Returns all components in a project.
@@ -96,8 +96,8 @@ func (p *ProjectComponentService) Gets(ctx context.Context, projectKeyOrID strin
 }
 
 type ProjectComponentCountScheme struct {
-	Self       string `json:"self"`
-	IssueCount int    `json:"issueCount"`
+	Self       string `json:"self,omitempty"`
+	IssueCount int    `json:"issueCount,omitempty"`
 }
 
 // Returns the counts of issues assigned to the component.

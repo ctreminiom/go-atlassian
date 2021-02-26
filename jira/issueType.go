@@ -14,22 +14,26 @@ type IssueTypeService struct {
 }
 
 type IssueTypeScheme struct {
-	Self        string `json:"self,omitempty"`
-	ID          string `json:"id,omitempty"`
-	Description string `json:"description,omitempty"`
-	IconURL     string `json:"iconUrl,omitempty"`
-	Name        string `json:"name,omitempty"`
-	Subtask     bool   `json:"subtask,omitempty"`
-	AvatarID    int    `json:"avatarId,omitempty"`
-	EntityID    string `json:"entityId,omitempty"`
-	Scope       struct {
-		Type    string `json:"type,omitempty"`
-		Project struct {
-			ID   string `json:"id,omitempty"`
-			Key  string `json:"key,omitempty"`
-			Name string `json:"name,omitempty"`
-		} `json:"project,omitempty"`
-	} `json:"scope,omitempty"`
+	Self        string                `json:"self,omitempty"`
+	ID          string                `json:"id,omitempty"`
+	Description string                `json:"description,omitempty"`
+	IconURL     string                `json:"iconUrl,omitempty"`
+	Name        string                `json:"name,omitempty"`
+	Subtask     bool                  `json:"subtask,omitempty"`
+	AvatarID    int                   `json:"avatarId,omitempty"`
+	EntityID    string                `json:"entityId,omitempty"`
+	Scope       *IssueTypeScopeScheme `json:"scope,omitempty"`
+}
+
+type IssueTypeScopeScheme struct {
+	Type    string                       `json:"type,omitempty"`
+	Project *IssueTypeScopeProjectScheme `json:"project,omitempty"`
+}
+
+type IssueTypeScopeProjectScheme struct {
+	ID   string `json:"id,omitempty"`
+	Key  string `json:"key,omitempty"`
+	Name string `json:"name,omitempty"`
 }
 
 // Returns all issue types.

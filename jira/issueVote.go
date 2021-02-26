@@ -10,23 +10,23 @@ import (
 type VoteService struct{ client *Client }
 
 type IssueVoteScheme struct {
-	Self     string `json:"self"`
-	Votes    int    `json:"votes"`
-	HasVoted bool   `json:"hasVoted"`
+	Self     string `json:"self,omitempty"`
+	Votes    int    `json:"votes,omitempty"`
+	HasVoted bool   `json:"hasVoted,omitempty"`
 	Voters   []struct {
-		Self       string `json:"self"`
-		Key        string `json:"key"`
-		AccountID  string `json:"accountId"`
-		Name       string `json:"name"`
+		Self       string `json:"self,omitempty"`
+		Key        string `json:"key,omitempty"`
+		AccountID  string `json:"accountId,omitempty"`
+		Name       string `json:"name,omitempty"`
 		AvatarUrls struct {
-			Four8X48  string `json:"48x48"`
-			Two4X24   string `json:"24x24"`
-			One6X16   string `json:"16x16"`
-			Three2X32 string `json:"32x32"`
-		} `json:"avatarUrls"`
-		DisplayName string `json:"displayName"`
-		Active      bool   `json:"active"`
-	} `json:"voters"`
+			Four8X48  string `json:"48x48,omitempty"`
+			Two4X24   string `json:"24x24,omitempty"`
+			One6X16   string `json:"16x16,omitempty"`
+			Three2X32 string `json:"32x32,omitempty"`
+		} `json:"avatarUrls,omitempty"`
+		DisplayName string `json:"displayName,omitempty"`
+		Active      bool   `json:"active,omitempty"`
+	} `json:"voters,omitempty"`
 }
 
 // Returns details about the votes on an issue.

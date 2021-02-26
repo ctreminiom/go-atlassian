@@ -146,7 +146,13 @@ func (c *Client) newRequest(ctx context.Context, method, urlAsString string, pay
 		return
 	}
 
-	request.SetBasicAuth(c.Auth.mail, c.Auth.token)
+	if c.Auth.basicAuthProvided {
+		request.SetBasicAuth(c.Auth.mail, c.Auth.token)
+	}
+
+	if c.Auth.userAgentProvided {
+		request.Header.Set("User-Agent", c.Auth.agent)
+	}
 
 	return
 }

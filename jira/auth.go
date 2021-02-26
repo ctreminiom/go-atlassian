@@ -11,6 +11,7 @@ type AuthenticationService struct {
 }
 
 func (a *AuthenticationService) SetBasicAuth(mail, token string) {
+
 	a.mail = mail
 	a.token = token
 

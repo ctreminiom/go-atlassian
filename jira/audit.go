@@ -3,7 +3,6 @@ package jira
 import (
 	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -53,26 +52,31 @@ type AuditRecordGetOptions struct {
 	To     string
 }
 
-func (a *AuditService) Get(ctx context.Context, options *AuditRecordGetOptions, offset, limit int) (records *AuditRecordScheme, response *Response, err error) {
-
-	if ctx == nil {
-		return nil, nil, errors.New("the context param is nil, please provide a valid one")
-	}
+// Returns a list of audit records. The list can be filtered to include items:
+// 1. containing a string in at least one field. For example, providing up will return all audit records where one or more fields contains words such as update.
+// 2. created on or after a date and time.
+// 3. created or or before a date and time.
+// 4. created during a time period.
+// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-audit-records/#api-rest-api-3-auditing-record-get
+func (a *AuditService) Get(ctx context.Context, options *AuditRecordGetOptions, offset, limit int) (result *AuditRecordScheme, response *Response, err error) {
 
 	params := url.Values{}
 	params.Add("offset", strconv.Itoa(offset))
 	params.Add("limit", strconv.Itoa(limit))
 
-	if len(options.Filter) != 0 {
-		params.Add("filter", options.Filter)
-	}
+	if options != nil {
 
-	if len(options.From) != 0 {
-		params.Add("from", options.From)
-	}
+		if len(options.Filter) != 0 {
+			params.Add("filter", options.Filter)
+		}
 
-	if len(options.To) != 0 {
-		params.Add("to", options.To)
+		if len(options.From) != 0 {
+			params.Add("from", options.From)
+		}
+
+		if len(options.To) != 0 {
+			params.Add("to", options.To)
+		}
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/auditing/record?%s", params.Encode())
@@ -81,16 +85,14 @@ func (a *AuditService) Get(ctx context.Context, options *AuditRecordGetOptions, 
 		return
 	}
 
+	request.Header.Set("Accept", "application/json")
+
 	response, err = a.client.Do(request)
 	if err != nil {
 		return
 	}
 
-	if len(response.BodyAsBytes) == 0 {
-		return nil, nil, errors.New("unable to marshall the response body, the HTTP callback did not return any bytes")
-	}
-
-	result := new(AuditRecordScheme)
+	result = new(AuditRecordScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}

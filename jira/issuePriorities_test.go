@@ -10,9 +10,8 @@ import (
 func TestPriorityService_Gets(t *testing.T) {
 
 	testCases := []struct {
-		name     string
-		mockFile string
-		//priorityID         string
+		name               string
+		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string
 		context            context.Context
@@ -47,6 +46,50 @@ func TestPriorityService_Gets(t *testing.T) {
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/api/3/priority",
 			context:            nil,
+			wantHTTPHeaders:    map[string]string{"Accept": "application/json"},
+			wantErr:            true,
+		},
+
+		{
+			name:               "GetIssuePrioritiesWhenTheResponseBodyHasADifferentFormat",
+			mockFile:           "./mocks/empty_json.json",
+			wantHTTPCodeReturn: http.StatusOK,
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/rest/api/3/priority",
+			context:            context.Background(),
+			wantHTTPHeaders:    map[string]string{"Accept": "application/json"},
+			wantErr:            true,
+		},
+
+		{
+			name:               "GetIssuePrioritiesWhenTheRequestMethodIsIncorrect",
+			mockFile:           "./mocks/get_priorities.json",
+			wantHTTPCodeReturn: http.StatusOK,
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/api/3/priority",
+			context:            context.Background(),
+			wantHTTPHeaders:    map[string]string{"Accept": "application/json"},
+			wantErr:            true,
+		},
+
+		{
+			name:               "GetIssuePrioritiesWhenTheStatusCodeIsIncorrect",
+			mockFile:           "./mocks/get_priorities.json",
+			wantHTTPCodeReturn: http.StatusBadRequest,
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/rest/api/3/priority",
+			context:            context.Background(),
+			wantHTTPHeaders:    map[string]string{"Accept": "application/json"},
+			wantErr:            true,
+		},
+
+		{
+			name:               "GetIssuePrioritiesWhenTheEndpointIsIncorrect",
+			mockFile:           "./mocks/get_priorities.json",
+			wantHTTPCodeReturn: http.StatusOK,
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/rest/api/2/priority",
+			context:            context.Background(),
 			wantHTTPHeaders:    map[string]string{"Accept": "application/json"},
 			wantErr:            true,
 		},
@@ -146,6 +189,42 @@ func TestPriorityService_Get(t *testing.T) {
 			wantHTTPCodeReturn: http.StatusOK,
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/api/3/priority/1asd",
+			context:            context.Background(),
+			wantHTTPHeaders:    map[string]string{"Accept": "application/json"},
+			wantErr:            true,
+		},
+
+		{
+			name:               "GetIssuePriorityByIDWhenTheRequestMethodIsIncorrect",
+			mockFile:           "./mocks/get_priorities_1.json",
+			priorityID:         "1",
+			wantHTTPCodeReturn: http.StatusOK,
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/api/3/priority/1",
+			context:            context.Background(),
+			wantHTTPHeaders:    map[string]string{"Accept": "application/json"},
+			wantErr:            true,
+		},
+
+		{
+			name:               "GetIssuePriorityByIDWhenTheStatusCodeIsIncorrect",
+			mockFile:           "./mocks/get_priorities_1.json",
+			priorityID:         "1",
+			wantHTTPCodeReturn: http.StatusBadRequest,
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/rest/api/3/priority/1",
+			context:            context.Background(),
+			wantHTTPHeaders:    map[string]string{"Accept": "application/json"},
+			wantErr:            true,
+		},
+
+		{
+			name:               "GetIssuePriorityByIDWhenTheResponseBodyHasADifferentFormat",
+			mockFile:           "./mocks/empty_json.json",
+			priorityID:         "1",
+			wantHTTPCodeReturn: http.StatusOK,
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/rest/api/3/priority/1",
 			context:            context.Background(),
 			wantHTTPHeaders:    map[string]string{"Accept": "application/json"},
 			wantErr:            true,

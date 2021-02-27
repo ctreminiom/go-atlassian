@@ -49,8 +49,8 @@ type CommentScheme struct {
 }
 
 // Returns all comments for an issue.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-comments/#api-rest-api-3-issue-issueidorkey-comment-get
-func (c *CommentService) Comments(ctx context.Context, issueKeyOrID, orderBy string, expands []string, startAt, maxResults int) (result *IssueCommentScheme, response *Response, err error) {
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/comments#get-comments
+func (c *CommentService) Gets(ctx context.Context, issueKeyOrID, orderBy string, expands []string, startAt, maxResults int) (result *IssueCommentScheme, response *Response, err error) {
 
 	if len(issueKeyOrID) == 0 {
 		return nil, nil, fmt.Errorf("error, please provide a valid issueKeyOrID value")
@@ -101,7 +101,7 @@ func (c *CommentService) Comments(ctx context.Context, issueKeyOrID, orderBy str
 }
 
 // Returns a comment.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-comments/#api-rest-api-3-issue-issueidorkey-comment-id-get
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/comments#get-comment
 func (c *CommentService) Get(ctx context.Context, issueKeyOrID, commentID string) (result *CommentScheme, response *Response, err error) {
 
 	if len(issueKeyOrID) == 0 {
@@ -135,7 +135,7 @@ func (c *CommentService) Get(ctx context.Context, issueKeyOrID, commentID string
 }
 
 // Deletes a comment.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-comments/#api-rest-api-3-issue-issueidorkey-comment-id-delete
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/comments#delete-comment
 func (c *CommentService) Delete(ctx context.Context, issueKeyOrID, commentID string) (response *Response, err error) {
 
 	if len(issueKeyOrID) == 0 {

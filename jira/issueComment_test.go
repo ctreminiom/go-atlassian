@@ -172,7 +172,7 @@ func TestCommentService_Comments(t *testing.T) {
 
 			i := &CommentService{client: mockClient}
 
-			gotResult, gotResponse, err := i.Comments(
+			gotResult, gotResponse, err := i.Gets(
 				testCase.context,
 				testCase.issueKeyOrID,
 				testCase.orderBy,

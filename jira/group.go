@@ -15,23 +15,27 @@ type GroupScheme struct {
 	Name  string `json:"name,omitempty"`
 	Self  string `json:"self,omitempty"`
 	Users struct {
-		Size       int          `json:"size,omitempty"`
-		Items      []UserScheme `json:"items,omitempty"`
-		MaxResults int          `json:"max-results,omitempty"`
-		StartIndex int          `json:"start-index,omitempty"`
-		EndIndex   int          `json:"end-index,omitempty"`
+		Size       int           `json:"size,omitempty"`
+		Items      []*UserScheme `json:"items,omitempty"`
+		MaxResults int           `json:"max-results,omitempty"`
+		StartIndex int           `json:"start-index,omitempty"`
+		EndIndex   int           `json:"end-index,omitempty"`
 	} `json:"users,omitempty"`
 	Expand string `json:"expand,omitempty"`
 }
 
 // Creates a group.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-groups/#api-rest-api-3-group-post
-func (g *GroupService) Create(ctx context.Context, name string) (result *GroupScheme, response *Response, err error) {
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/groups#create-group
+func (g *GroupService) Create(ctx context.Context, groupName string) (result *GroupScheme, response *Response, err error) {
+
+	if len(groupName) == 0 {
+		return nil, nil, fmt.Errorf("error, please provide a valid groupName value")
+	}
 
 	payload := struct {
 		Name string `json:"name"`
 	}{
-		Name: name,
+		Name: groupName,
 	}
 
 	var endpoint = "rest/api/3/group"
@@ -57,11 +61,15 @@ func (g *GroupService) Create(ctx context.Context, name string) (result *GroupSc
 }
 
 // Deletes a group.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-groups/#api-rest-api-3-group-delete
-func (g *GroupService) Delete(ctx context.Context, name string) (response *Response, err error) {
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/groups#remove-group
+func (g *GroupService) Delete(ctx context.Context, groupName string) (response *Response, err error) {
+
+	if len(groupName) == 0 {
+		return nil, fmt.Errorf("error, please provide a valid groupName value")
+	}
 
 	params := url.Values{}
-	params.Add("groupname", name)
+	params.Add("groupname", groupName)
 	var endpoint = fmt.Sprintf("rest/api/3/group?%v", params.Encode())
 
 	request, err := g.client.newRequest(ctx, http.MethodDelete, endpoint, nil)
@@ -94,7 +102,7 @@ type GroupBulkOptionsScheme struct {
 }
 
 // Returns a paginated list of groups.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-groups/#api-rest-api-3-group-bulk-get
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/groups#bulk-groups
 func (g *GroupService) Bulk(ctx context.Context, options *GroupBulkOptionsScheme, startAt, maxResults int) (result *BulkGroupScheme, response *Response, err error) {
 
 	if options == nil {
@@ -157,13 +165,17 @@ type GroupUsersScheme struct {
 }
 
 // Returns a paginated list of all users in a group.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-groups/#api-rest-api-3-group-member-get
-func (g *GroupService) Members(ctx context.Context, group string, inactive bool, startAt, maxResults int) (result *GroupUsersScheme, response *Response, err error) {
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/groups#get-users-from-groups
+func (g *GroupService) Members(ctx context.Context, groupName string, inactive bool, startAt, maxResults int) (result *GroupUsersScheme, response *Response, err error) {
+
+	if len(groupName) == 0 {
+		return nil, nil, fmt.Errorf("error, please provide a valid groupName value")
+	}
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
 	params.Add("maxResults", strconv.Itoa(maxResults))
-	params.Add("groupname", group)
+	params.Add("groupname", groupName)
 
 	if inactive {
 		params.Add("includeInactiveUsers", "true")
@@ -190,15 +202,23 @@ func (g *GroupService) Members(ctx context.Context, group string, inactive bool,
 }
 
 // Adds a user to a group.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-groups/#api-rest-api-3-group-user-post
-func (g *GroupService) Add(ctx context.Context, group, accountID string) (result *GroupScheme, response *Response, err error) {
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/groups#add-user-to-group
+func (g *GroupService) Add(ctx context.Context, groupName, accountID string) (result *GroupScheme, response *Response, err error) {
+
+	if len(groupName) == 0 {
+		return nil, nil, fmt.Errorf("error, please provide a valid groupName value")
+	}
+
+	if len(accountID) == 0 {
+		return nil, nil, fmt.Errorf("error, please provide a valid accountID value")
+	}
 
 	payload := struct {
 		AccountID string `json:"accountId"`
 	}{AccountID: accountID}
 
 	params := url.Values{}
-	params.Add("groupname", group)
+	params.Add("groupname", groupName)
 	var endpoint = fmt.Sprintf("rest/api/3/group/user?%v", params.Encode())
 
 	request, err := g.client.newRequest(ctx, http.MethodPost, endpoint, &payload)
@@ -223,11 +243,19 @@ func (g *GroupService) Add(ctx context.Context, group, accountID string) (result
 }
 
 // Removes a user from a group.
-// https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-groups/#api-rest-api-3-group-user-delete
-func (g *GroupService) Remove(ctx context.Context, group, accountID string) (response *Response, err error) {
+// https://docs.go-atlassian.io/jira-software-cloud/groups#remove-user-from-group
+func (g *GroupService) Remove(ctx context.Context, groupName, accountID string) (response *Response, err error) {
+
+	if len(groupName) == 0 {
+		return nil, fmt.Errorf("error, please provide a valid groupName value")
+	}
+
+	if len(accountID) == 0 {
+		return nil, fmt.Errorf("error, please provide a valid accountID value")
+	}
 
 	params := url.Values{}
-	params.Add("groupname", group)
+	params.Add("groupname", groupName)
 	params.Add("accountId", accountID)
 	var endpoint = fmt.Sprintf("rest/api/3/group/user?%v", params.Encode())
 

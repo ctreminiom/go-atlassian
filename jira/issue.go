@@ -437,8 +437,7 @@ func (c *CustomFields) Cascading(customFieldID, parent, child string) (err error
 }
 
 // Creates an issue or, where the option to create subtasks is enabled in Jira, a subtask.
-// A transition may be applied, to move the issue or subtask to a workflow step other than the default start step, and issue properties set.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-post
+// https://docs.go-atlassian.io/jira-software-cloud/issues#create-issue
 func (i *IssueService) Create(ctx context.Context, payload *IssueScheme, customFields *CustomFields) (result *IssueScheme, response *Response, err error) {
 
 	var endpoint = "rest/api/3/issue"
@@ -498,8 +497,7 @@ type IssueBulkScheme struct {
 }
 
 // Creates issues and, where the option to create subtasks is enabled in Jira, subtasks.
-// Transitions may be applied, to move the issues or subtasks to a workflow step other than the default start step, and issue properties set.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-bulk-post
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues#bulk-create-issue
 func (i *IssueService) Creates(ctx context.Context, payload []*IssueBulkScheme) (result *IssuesScheme, response *Response, err error) {
 
 	if len(payload) == 0 {
@@ -553,7 +551,7 @@ type BulkIssueScheme struct {
 }
 
 // Returns the details for an issue.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-get
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues#get-issue
 func (i *IssueService) Get(ctx context.Context, issueKeyOrID string, fields []string, expands []string) (result *IssueScheme, response *Response, err error) {
 
 	if len(issueKeyOrID) == 0 {
@@ -617,8 +615,8 @@ func (i *IssueService) Get(ctx context.Context, issueKeyOrID string, fields []st
 	return
 }
 
-// Edits an issue. A transition may be applied and issue properties updated as part of the edit.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-put
+// Edits an issue.
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues#edit-issue
 func (i *IssueService) Update(ctx context.Context, issueKeyOrID string, notify bool, payload *IssueScheme, customFields *CustomFields) (response *Response, err error) {
 
 	if len(issueKeyOrID) == 0 {
@@ -663,7 +661,7 @@ func (i *IssueService) Update(ctx context.Context, issueKeyOrID string, notify b
 }
 
 // Deletes an issue.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-delete
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues#delete-issue
 func (i *IssueService) Delete(ctx context.Context, issueKeyOrID string) (response *Response, err error) {
 
 	if len(issueKeyOrID) == 0 {
@@ -690,7 +688,7 @@ func (i *IssueService) Delete(ctx context.Context, issueKeyOrID string) (respons
 // If accountId is set to:
 //  1. "-1", the issue is assigned to the default assignee for the project.
 //  2. null, the issue is set to unassigned.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-assignee-put
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues#assign-issue
 func (i *IssueService) Assign(ctx context.Context, issueKeyOrID, accountID string) (response *Response, err error) {
 
 	if len(issueKeyOrID) == 0 {
@@ -707,6 +705,9 @@ func (i *IssueService) Assign(ctx context.Context, issueKeyOrID, accountID strin
 	if err != nil {
 		return
 	}
+
+	request.Header.Set("Accept", "application/json")
+	request.Header.Set("Content-Type", "application/json")
 
 	response, err = i.client.Do(request)
 	if err != nil {
@@ -752,7 +753,7 @@ type IssueNotifyGroupScheme struct {
 }
 
 // Creates an email notification for an issue and adds it to the mail queue.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-notify-post
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues#send-notification-for-issue
 func (i *IssueService) Notify(ctx context.Context, issueKeyOrID string, options *IssueNotifyOptionsScheme) (response *Response, err error) {
 
 	if len(issueKeyOrID) == 0 {
@@ -769,6 +770,9 @@ func (i *IssueService) Notify(ctx context.Context, issueKeyOrID string, options 
 		return
 	}
 
+	request.Header.Set("Accept", "application/json")
+	request.Header.Set("Content-Type", "application/json")
+
 	response, err = i.client.Do(request)
 	if err != nil {
 		return
@@ -780,7 +784,7 @@ func (i *IssueService) Notify(ctx context.Context, issueKeyOrID string, options 
 // Returns either all transitions or a transition that can be performed by the user on an issue, based on the issue's status.
 // Note, if a request is made for a transition that does not exist or cannot be performed on the issue,
 // given its status, the response will return any empty transitions list.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-transitions-get
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues#get-transitions
 func (i *IssueService) Transitions(ctx context.Context, issueKeyOrID string) (result *IssueTransitionsScheme, response *Response, err error) {
 
 	if len(issueKeyOrID) == 0 {
@@ -793,6 +797,8 @@ func (i *IssueService) Transitions(ctx context.Context, issueKeyOrID string) (re
 	if err != nil {
 		return
 	}
+
+	request.Header.Set("Accept", "application/json")
 
 	response, err = i.client.Do(request)
 	if err != nil {
@@ -808,7 +814,7 @@ func (i *IssueService) Transitions(ctx context.Context, issueKeyOrID string) (re
 }
 
 // Performs an issue transition and
-// Screen field is not supported yet
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues#transition-issue
 func (i *IssueService) Move(ctx context.Context, issueKeyOrID, transitionID string) (response *Response, err error) {
 
 	if len(issueKeyOrID) == 0 {
@@ -835,6 +841,9 @@ func (i *IssueService) Move(ctx context.Context, issueKeyOrID, transitionID stri
 	if err != nil {
 		return
 	}
+
+	request.Header.Set("Accept", "application/json")
+	request.Header.Set("Content-Type", "application/json")
 
 	response, err = i.client.Do(request)
 	if err != nil {

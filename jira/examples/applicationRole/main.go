@@ -16,92 +16,77 @@ export TOKEN="TOKEN_API"
 Docs: https://stackoverflow.com/questions/34169721/set-an-environment-variable-in-git-bash
 */
 
-var (
-	host  = os.Getenv("HOST")
-	mail  = os.Getenv("MAIL")
-	token = os.Getenv("TOKEN")
-)
+func getApplicationRoles() {
 
-func getApplicationRoles() (err error) {
+	var (
+		host  = os.Getenv("HOST")
+		mail  = os.Getenv("MAIL")
+		token = os.Getenv("TOKEN")
+	)
 
-	log.Println("------------- getApplicationRoles -----------------")
-
-	atlassian, err := jira.New(nil, host)
+	jiraCloud, err := jira.New(nil, host)
 	if err != nil {
 		return
 	}
 
-	atlassian.Auth.SetBasicAuth(mail, token)
+	jiraCloud.Auth.SetBasicAuth(mail, token)
+	jiraCloud.Auth.SetUserAgent("curl/7.54.0")
 
-	roles, response, err := atlassian.Role.Gets(context.Background())
+	applicationRoles, response, err := jiraCloud.Role.Gets(context.Background())
 	if err != nil {
-		return
-	}
-
-	log.Println("Response HTTP Code", response.StatusCode)
-	log.Println("HTTP Endpoint Used", response.Endpoint)
-
-	for _, role := range *roles {
-		log.Println(role.Key)
-	}
-
-	return
-}
-
-func getApplicationRole() (err error) {
-
-	log.Println("------------- getApplicationRole -----------------")
-
-	atlassian, err := jira.New(nil, host)
-	if err != nil {
-		return
-	}
-
-	atlassian.Auth.SetBasicAuth(mail, token)
-
-	role, response, err := atlassian.Role.Get(context.Background(), "jira-software")
-	if err != nil {
-
 		if response != nil {
 			log.Println("Response HTTP Response", string(response.BodyAsBytes))
 		}
-
-		return
+		log.Fatal(err)
 	}
 
 	log.Println("Response HTTP Code", response.StatusCode)
 	log.Println("HTTP Endpoint Used", response.Endpoint)
-	log.Println(role.Key)
+
+	for _, applicationRole := range *applicationRoles {
+		log.Printf("Application Role Name: %v", applicationRole.Name)
+		log.Printf("Application Role Key: %v", applicationRole.Key)
+		log.Printf("Application Role User Count: %v", applicationRole.UserCount)
+	}
+
+}
+
+func getApplicationRole() {
+
+	var (
+		host  = os.Getenv("HOST")
+		mail  = os.Getenv("MAIL")
+		token = os.Getenv("TOKEN")
+	)
+
+	jiraCloud, err := jira.New(nil, host)
+	if err != nil {
+		return
+	}
+
+	jiraCloud.Auth.SetBasicAuth(mail, token)
+	jiraCloud.Auth.SetUserAgent("curl/7.54.0")
+
+	applicationRole, response, err := jiraCloud.Role.Get(context.Background(), "jira-software")
+	if err != nil {
+		if response != nil {
+			log.Println("Response HTTP Response", string(response.BodyAsBytes))
+		}
+		log.Fatal(err)
+	}
+
+	log.Println("Response HTTP Code", response.StatusCode)
+	log.Println("HTTP Endpoint Used", response.Endpoint)
+
+	log.Printf("Application Role Name: %v", applicationRole.Name)
+	log.Printf("Application Role Key: %v", applicationRole.Key)
+	log.Printf("Application Role User Count: %v", applicationRole.UserCount)
 
 	return
 }
 
 func main() {
 
-	atlassian, err := jira.New(nil, host)
-	if err != nil {
-		return
-	}
-
-	atlassian.Auth.SetBasicAuth(mail, token)
-
-	roles, response, err := atlassian.Role.Gets(context.Background())
-	if err != nil {
-		return
-	}
-
-	log.Println("Response HTTP Code", response.StatusCode)
-	log.Println("HTTP Endpoint Used", response.Endpoint)
-
-	for _, role := range *roles {
-		log.Println(role.Key)
-	}
-
-	if err := getApplicationRoles(); err != nil {
-		log.Fatal(err)
-	}
-
-	if err := getApplicationRole(); err != nil {
-		log.Fatal(err)
-	}
+	getApplicationRoles()
+	getApplicationRole()
 }

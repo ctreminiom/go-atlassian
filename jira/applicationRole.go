@@ -3,7 +3,6 @@ package jira
 import (
 	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"net/http"
 )
@@ -26,7 +25,7 @@ type ApplicationRoleScheme struct {
 }
 
 // Returns all application roles.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-application-roles/#api-rest-api-3-applicationrole-get
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/application-roles#application-roles
 func (a *ApplicationRoleService) Gets(ctx context.Context) (result *[]ApplicationRoleScheme, response *Response, err error) {
 
 	var endpoint = "rest/api/3/applicationrole"
@@ -35,13 +34,11 @@ func (a *ApplicationRoleService) Gets(ctx context.Context) (result *[]Applicatio
 		return
 	}
 
+	request.Header.Set("Accept", "application/json")
+
 	response, err = a.client.Do(request)
 	if err != nil {
 		return
-	}
-
-	if len(response.BodyAsBytes) == 0 {
-		return nil, nil, errors.New("unable to marshall the response body, the HTTP callback did not return any bytes")
 	}
 
 	result = new([]ApplicationRoleScheme)
@@ -53,8 +50,12 @@ func (a *ApplicationRoleService) Gets(ctx context.Context) (result *[]Applicatio
 }
 
 // Returns an application role.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-application-roles/#api-rest-api-3-applicationrole-key-get
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/application-roles#application-role
 func (a *ApplicationRoleService) Get(ctx context.Context, key string) (result *ApplicationRoleScheme, response *Response, err error) {
+
+	if len(key) == 0 {
+		return nil, nil, fmt.Errorf("error, please provide a valid key application role value")
+	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/applicationrole/%v", key)
 	request, err := a.client.newRequest(ctx, http.MethodGet, endpoint, nil)
@@ -62,13 +63,11 @@ func (a *ApplicationRoleService) Get(ctx context.Context, key string) (result *A
 		return
 	}
 
+	request.Header.Set("Accept", "application/json")
+
 	response, err = a.client.Do(request)
 	if err != nil {
 		return
-	}
-
-	if len(response.BodyAsBytes) == 0 {
-		return nil, nil, errors.New("unable to marshall the response body, the HTTP callback did not return any bytes")
 	}
 
 	result = new(ApplicationRoleScheme)

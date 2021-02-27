@@ -15,7 +15,7 @@ type shareFilterScopeScheme struct {
 }
 
 // Returns the default sharing settings for new filters and dashboards for a user.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-filter-sharing/#api-rest-api-3-filter-defaultsharescope-get
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/filters/sharing#get-default-share-scope
 func (f *FilterShareService) Scope(ctx context.Context) (scope string, response *Response, err error) {
 
 	var endpoint = "rest/api/3/filter/defaultShareScope"
@@ -39,7 +39,7 @@ func (f *FilterShareService) Scope(ctx context.Context) (scope string, response 
 }
 
 // Sets the default sharing for new filters and dashboards for a user.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-filter-sharing/#api-rest-api-3-filter-defaultsharescope-put
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/filters/sharing#set-default-share-scope
 // Valid values: GLOBAL, AUTHENTICATED, PRIVATE
 func (f *FilterShareService) SetScope(ctx context.Context, scope string) (response *Response, err error) {
 
@@ -139,7 +139,7 @@ type ShareFilterPermissionScheme struct {
 // Returns the share permissions for a filter.
 // A filter can be shared with groups, projects, all logged-in users, or the public.
 // Sharing with all logged-in users or the public is known as a global share permission.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-filter-sharing/#api-rest-api-3-filter-id-permission-get
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/filters/sharing#get-share-permissions
 func (f *FilterShareService) Gets(ctx context.Context, filterID int) (result *[]ShareFilterPermissionScheme, response *Response, err error) {
 
 	var endpoint = fmt.Sprintf("rest/api/3/filter/%v/permission", filterID)
@@ -171,7 +171,7 @@ type PermissionFilterBodyScheme struct {
 // Add a share permissions to a filter.
 // If you add a global share permission (one for all logged-in users or the public)
 // it will overwrite all share permissions for the filter.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-filter-sharing/#api-rest-api-3-filter-id-permission-post
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/filters/sharing#add-share-permission
 func (f *FilterShareService) Add(ctx context.Context, filterID int, payload *PermissionFilterBodyScheme) (result *[]ShareFilterPermissionScheme, response *Response, err error) {
 
 	if payload == nil {
@@ -203,7 +203,7 @@ func (f *FilterShareService) Add(ctx context.Context, filterID int, payload *Per
 // Returns a share permission for a filter.
 // A filter can be shared with groups, projects, all logged-in users, or the public.
 // Sharing with all logged-in users or the public is known as a global share permission.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-filter-sharing/#api-rest-api-3-filter-id-permission-permissionid-get
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/filters/sharing#get-share-permission
 func (f *FilterShareService) Get(ctx context.Context, filterID, permissionID int) (result *ShareFilterPermissionScheme, response *Response, err error) {
 
 	var endpoint = fmt.Sprintf("rest/api/3/filter/%v/permission/%v", filterID, permissionID)
@@ -226,7 +226,7 @@ func (f *FilterShareService) Get(ctx context.Context, filterID, permissionID int
 }
 
 // Deletes a share permission from a filter.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-filter-sharing/#api-rest-api-3-filter-id-permission-permissionid-delete
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/filters/sharing#delete-share-permission
 func (f *FilterShareService) Delete(ctx context.Context, filterID, permissionID int) (response *Response, err error) {
 
 	var endpoint = fmt.Sprintf("rest/api/3/filter/%v/permission/%v", filterID, permissionID)

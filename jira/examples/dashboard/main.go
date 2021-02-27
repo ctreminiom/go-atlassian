@@ -16,12 +16,6 @@ export TOKEN="TOKEN_API"
 Docs: https://stackoverflow.com/questions/34169721/set-an-environment-variable-in-git-bash
 */
 
-var (
-	host  = os.Getenv("HOST")
-	mail  = os.Getenv("MAIL")
-	token = os.Getenv("TOKEN")
-)
-
 func getDashboardByID() {
 
 	var (
@@ -146,26 +140,30 @@ func createDashboard() {
 
 }
 
-func getDashboards() (err error) {
+func getDashboards() {
 
-	log.Println("------------- getDashboards -----------------")
+	var (
+		host  = os.Getenv("HOST")
+		mail  = os.Getenv("MAIL")
+		token = os.Getenv("TOKEN")
+	)
 
-	atlassian, err := jira.New(nil, host)
+	jiraCloud, err := jira.New(nil, host)
 	if err != nil {
 		return
 	}
 
-	atlassian.Auth.SetBasicAuth(mail, token)
+	jiraCloud.Auth.SetBasicAuth(mail, token)
+	jiraCloud.Auth.SetUserAgent("curl/7.54.0")
 
-	dashboards, response, err := atlassian.Dashboard.Gets(context.Background(), 0, 50, "")
+	dashboards, response, err := jiraCloud.Dashboard.Gets(context.Background(), 0, 50, "")
 
 	if err != nil {
-
 		if response != nil {
 			log.Println("Response HTTP Response", string(response.BodyAsBytes))
 		}
 
-		return
+		log.Fatal(err)
 	}
 
 	log.Println("Response HTTP Code", response.StatusCode)
@@ -175,7 +173,168 @@ func getDashboards() (err error) {
 	return
 }
 
+func getDashboard() {
+
+	var (
+		host  = os.Getenv("HOST")
+		mail  = os.Getenv("MAIL")
+		token = os.Getenv("TOKEN")
+	)
+
+	jiraCloud, err := jira.New(nil, host)
+	if err != nil {
+		return
+	}
+
+	jiraCloud.Auth.SetBasicAuth(mail, token)
+	jiraCloud.Auth.SetUserAgent("curl/7.54.0")
+
+	dashboard, response, err := jiraCloud.Dashboard.Get(context.Background(), "10001")
+	if err != nil {
+		if response != nil {
+			log.Println("Response HTTP Response", string(response.BodyAsBytes))
+		}
+		log.Fatal(err)
+	}
+
+	log.Println("Response HTTP Code", response.StatusCode)
+	log.Println("HTTP Endpoint Used", response.Endpoint)
+
+	log.Printf("Dashboard Name: %v", dashboard.Name)
+	log.Printf("Dashboard ID: %v", dashboard.ID)
+	log.Printf("Dashboard View: %v", dashboard.View)
+
+}
+
+func updateDashboard() {
+
+	var (
+		host  = os.Getenv("HOST")
+		mail  = os.Getenv("MAIL")
+		token = os.Getenv("TOKEN")
+	)
+
+	jiraCloud, err := jira.New(nil, host)
+	if err != nil {
+		return
+	}
+
+	jiraCloud.Auth.SetBasicAuth(mail, token)
+	jiraCloud.Auth.SetUserAgent("curl/7.54.0")
+
+	var sharePermissions []jira.SharePermissionScheme
+
+	projectPermission := &jira.SharePermissionScheme{
+		Type: "project",
+		Project: &jira.SharePermissionProjectScheme{
+			ID: "10000",
+		},
+	}
+
+	groupPermission := &jira.SharePermissionScheme{
+		Type:  "group",
+		Group: &jira.SharePermissionGroupScheme{Name: "jira-administrators"},
+	}
+
+	sharePermissions = append(sharePermissions, *projectPermission, *groupPermission)
+
+	dashboard, response, err := jiraCloud.Dashboard.Update(context.Background(), "10001", "Team Tracking #1", "", &sharePermissions)
+	if err != nil {
+		if response != nil {
+			log.Println("Response HTTP Response", string(response.BodyAsBytes))
+		}
+		log.Fatal(err)
+	}
+
+	log.Println("Response HTTP Code", response.StatusCode)
+	log.Println("HTTP Endpoint Used", response.Endpoint)
+
+	log.Printf("Dashboard Name: %v", dashboard.Name)
+	log.Printf("Dashboard ID: %v", dashboard.ID)
+	log.Printf("Dashboard View: %v", dashboard.View)
+
+}
+
+func copyDashboard() {
+
+	var (
+		host  = os.Getenv("HOST")
+		mail  = os.Getenv("MAIL")
+		token = os.Getenv("TOKEN")
+	)
+
+	jiraCloud, err := jira.New(nil, host)
+	if err != nil {
+		return
+	}
+
+	jiraCloud.Auth.SetBasicAuth(mail, token)
+	jiraCloud.Auth.SetUserAgent("curl/7.54.0")
+
+	var sharePermissions []jira.SharePermissionScheme
+
+	projectPermission := &jira.SharePermissionScheme{
+		Type: "project",
+		Project: &jira.SharePermissionProjectScheme{
+			ID: "10000",
+		},
+	}
+
+	groupPermission := &jira.SharePermissionScheme{
+		Type:  "group",
+		Group: &jira.SharePermissionGroupScheme{Name: "jira-administrators"},
+	}
+
+	sharePermissions = append(sharePermissions, *projectPermission, *groupPermission)
+
+	dashboard, response, err := jiraCloud.Dashboard.Copy(context.Background(), "10001", "Team Tracking #2 copy", "", &sharePermissions)
+	if err != nil {
+		if response != nil {
+			log.Println("Response HTTP Response", string(response.BodyAsBytes))
+		}
+		log.Fatal(err)
+	}
+
+	log.Println("Response HTTP Code", response.StatusCode)
+	log.Println("HTTP Endpoint Used", response.Endpoint)
+
+	log.Printf("Dashboard Name: %v", dashboard.Name)
+	log.Printf("Dashboard ID: %v", dashboard.ID)
+	log.Printf("Dashboard View: %v", dashboard.View)
+
+}
+
+func deleteDashboard() {
+
+	var (
+		host  = os.Getenv("HOST")
+		mail  = os.Getenv("MAIL")
+		token = os.Getenv("TOKEN")
+	)
+
+	jiraCloud, err := jira.New(nil, host)
+	if err != nil {
+		return
+	}
+
+	jiraCloud.Auth.SetBasicAuth(mail, token)
+	jiraCloud.Auth.SetUserAgent("curl/7.54.0")
+
+	response, err := jiraCloud.Dashboard.Delete(context.Background(), "10003")
+	if err != nil {
+		if response != nil {
+			log.Println("Response HTTP Response", string(response.BodyAsBytes))
+		}
+		log.Fatal(err)
+	}
+
+	log.Println("Response HTTP Code", response.StatusCode)
+	log.Println("HTTP Endpoint Used", response.Endpoint)
+}
+
 func main() {
+
+	//10003
 
 	/*
 		if err := getDashboards(); err != nil {
@@ -183,7 +342,8 @@ func main() {
 		}
 	*/
 
+	//deleteDashboard()
 	//createDashboard()
-	searchDashboard()
-	getDashboardByID()
+	//searchDashboard()
+	//getDashboardByID()
 }

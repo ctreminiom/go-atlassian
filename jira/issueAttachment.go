@@ -20,7 +20,7 @@ type AttachmentSettingScheme struct {
 }
 
 // Returns the attachment settings, that is, whether attachments are enabled and the maximum attachment size allowed.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-attachments/#api-rest-api-3-attachment-meta-get
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/attachments#get-jira-attachment-settings
 func (a *AttachmentService) Settings(ctx context.Context) (result *AttachmentSettingScheme, response *Response, err error) {
 
 	var endpoint = "rest/api/3/attachment/meta"
@@ -28,7 +28,8 @@ func (a *AttachmentService) Settings(ctx context.Context) (result *AttachmentSet
 	if err != nil {
 		return
 	}
-	request.Header.Set("Content-Type", "application/json")
+
+	request.Header.Set("Accept", "application/json")
 
 	response, err = a.client.Do(request)
 	if err != nil {
@@ -37,7 +38,7 @@ func (a *AttachmentService) Settings(ctx context.Context) (result *AttachmentSet
 
 	result = new(AttachmentSettingScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
+		return
 	}
 
 	return
@@ -56,15 +57,20 @@ type AttachmentMetadataScheme struct {
 }
 
 // Returns the metadata for an attachment. Note that the attachment itself is not returned.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-attachments/#api-rest-api-3-attachment-id-get
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/attachments#get-attachment-metadata
 func (a *AttachmentService) Metadata(ctx context.Context, attachmentID string) (result *AttachmentMetadataScheme, response *Response, err error) {
+
+	if len(attachmentID) == 0 {
+		return nil, nil, fmt.Errorf("error, please provide a valid attachmentID value")
+	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/attachment/%v", attachmentID)
 	request, err := a.client.newRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
 		return
 	}
-	request.Header.Set("Content-Type", "application/json")
+
+	request.Header.Set("Accept", "application/json")
 
 	response, err = a.client.Do(request)
 	if err != nil {
@@ -73,15 +79,19 @@ func (a *AttachmentService) Metadata(ctx context.Context, attachmentID string) (
 
 	result = new(AttachmentMetadataScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
+		return
 	}
 
 	return
 }
 
 // Deletes an attachment from an issue.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-attachments/#api-rest-api-3-attachment-id-delete
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/attachments#delete-attachment
 func (a *AttachmentService) Delete(ctx context.Context, attachmentID string) (response *Response, err error) {
+
+	if len(attachmentID) == 0 {
+		return nil, fmt.Errorf("error, please provide a valid attachmentID value")
+	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/attachment/%v", attachmentID)
 	request, err := a.client.newRequest(ctx, http.MethodDelete, endpoint, nil)
@@ -114,15 +124,20 @@ type AttachmentHumanMetadataScheme struct {
 // Returns the metadata for the contents of an attachment, if it is an archive, and metadata for the attachment itself.
 // For example, if the attachment is a ZIP archive, then information about the files in the archive is returned and metadata for the ZIP archive.
 // Currently, only the ZIP archive format is supported.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-attachments/#api-rest-api-3-attachment-id-expand-human-get
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/attachments#get-all-metadata-for-an-expanded-attachment
 func (a *AttachmentService) Human(ctx context.Context, attachmentID string) (result *AttachmentHumanMetadataScheme, response *Response, err error) {
+
+	if len(attachmentID) == 0 {
+		return nil, nil, fmt.Errorf("error, please provide a valid attachmentID value")
+	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/attachment/%v/expand/human", attachmentID)
 	request, err := a.client.newRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
 		return
 	}
-	request.Header.Set("Content-Type", "application/json")
+
+	request.Header.Set("Accept", "application/json")
 
 	response, err = a.client.Do(request)
 	if err != nil {
@@ -131,7 +146,7 @@ func (a *AttachmentService) Human(ctx context.Context, attachmentID string) (res
 
 	result = new(AttachmentHumanMetadataScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
+		return
 	}
 
 	return
@@ -150,8 +165,16 @@ type AttachmentScheme struct {
 }
 
 // Adds one or more attachments to an issue. Attachments are posted as multipart/form-data (RFC 1867).
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-attachments/#api-rest-api-3-issue-issueidorkey-attachments-post
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/attachments#add-attachment
 func (a *AttachmentService) Add(issueKeyOrID string, path string) (result *[]AttachmentScheme, response *Response, err error) {
+
+	if len(issueKeyOrID) == 0 {
+		return nil, nil, fmt.Errorf("error, please provide a valid issueKeyOrID value")
+	}
+
+	if len(path) == 0 {
+		return nil, nil, fmt.Errorf("error, please provide a valid path value")
+	}
 
 	if !filepath.IsAbs(path) {
 		return nil, nil, fmt.Errorf("the path provided is not an absolute path, please provide a valid one")

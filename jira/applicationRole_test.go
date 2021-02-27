@@ -157,7 +157,7 @@ func TestApplicationRoleService_Get(t *testing.T) {
 		wantErr            bool
 	}{
 		{
-			name:               "GetApplicationRoleWhenTheKeyIsCorrect",
+			name:               "GetApplicationRoleWhenTheKeyIsSet",
 			applicationRoleKey: "jira-software",
 			mockFile:           "./mocks/get_application_role_by_key.json",
 			wantHTTPCodeReturn: http.StatusOK,
@@ -166,6 +166,18 @@ func TestApplicationRoleService_Get(t *testing.T) {
 			context:            context.Background(),
 			wantErr:            false,
 		},
+
+		{
+			name:               "GetApplicationRoleWhenTheKeyIsNotSet",
+			applicationRoleKey: "",
+			mockFile:           "./mocks/get_application_role_by_key.json",
+			wantHTTPCodeReturn: http.StatusOK,
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/rest/api/3/applicationrole/jira-software",
+			context:            context.Background(),
+			wantErr:            true,
+		},
+
 		{
 			name:               "GetApplicationRoleWhenTheKeyIsIncorrect",
 			applicationRoleKey: "jira-scrum-masters",
@@ -219,7 +231,7 @@ func TestApplicationRoleService_Get(t *testing.T) {
 		{
 			name:               "GetApplicationRoleWhenTheResponseBodyHasADifferentFormat",
 			applicationRoleKey: "jira-software",
-			mockFile:           "./mocks/get_application_roles.json",
+			mockFile:           "./mocks/empty_json.json",
 			wantHTTPCodeReturn: http.StatusOK,
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/api/3/applicationrole/jira-software",

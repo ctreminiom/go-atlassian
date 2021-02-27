@@ -53,11 +53,7 @@ type AuditRecordGetOptions struct {
 }
 
 // Returns a list of audit records. The list can be filtered to include items:
-// 1. containing a string in at least one field. For example, providing up will return all audit records where one or more fields contains words such as update.
-// 2. created on or after a date and time.
-// 3. created or or before a date and time.
-// 4. created during a time period.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-audit-records/#api-rest-api-3-auditing-record-get
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/audit-records#get-audit-records
 func (a *AuditService) Get(ctx context.Context, options *AuditRecordGetOptions, offset, limit int) (result *AuditRecordScheme, response *Response, err error) {
 
 	params := url.Values{}

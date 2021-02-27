@@ -1,5 +1,4 @@
-# github.com/davecgh/go-spew v1.1.1
-## explicit
+# github.com/davecgh/go-spew v1.1.0
 github.com/davecgh/go-spew/spew
 # github.com/go-playground/locales v0.13.0
 github.com/go-playground/locales
@@ -13,7 +12,7 @@ github.com/google/uuid
 # github.com/imdario/mergo v0.3.11
 ## explicit
 github.com/imdario/mergo
-# github.com/leodido/go-urn v1.2.0
+# github.com/leodido/go-urn v1.2.1
 ## explicit
 github.com/leodido/go-urn
 # github.com/pmezard/go-difflib v1.0.0
@@ -21,8 +20,6 @@ github.com/pmezard/go-difflib/difflib
 # github.com/stretchr/testify v1.6.1
 ## explicit
 github.com/stretchr/testify/assert
-# gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c
-## explicit
 # gopkg.in/go-playground/assert.v1 v1.2.1
 ## explicit
 # gopkg.in/go-playground/validator.v9 v9.31.0

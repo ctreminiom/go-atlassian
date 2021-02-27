@@ -32,7 +32,7 @@ type FieldScheme struct {
 }
 
 // Returns system and custom issue fields according to the following rules:
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-fields/
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields#get-fields
 func (f *FieldService) Gets(ctx context.Context) (result *[]FieldScheme, response *Response, err error) {
 
 	var endpoint = "rest/api/3/field"
@@ -69,7 +69,7 @@ func (c *CustomFieldScheme) Format() {
 }
 
 // Creates a custom field.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-fields/#api-rest-api-3-field-post
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields#create-custom-field
 func (f *FieldService) Create(ctx context.Context, payload *CustomFieldScheme) (result *FieldScheme, response *Response, err error) {
 
 	if payload == nil {
@@ -83,6 +83,7 @@ func (f *FieldService) Create(ctx context.Context, payload *CustomFieldScheme) (
 	if err != nil {
 		return
 	}
+
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Content-Type", "application/json")
 
@@ -132,7 +133,7 @@ type FieldSearchScheme struct {
 }
 
 // Returns a paginated list of fields for Classic Jira projects.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-fields/#api-rest-api-3-field-search-get
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields#get-fields-paginated
 func (f *FieldService) Search(ctx context.Context, opts *FieldSearchOptionsScheme, startAt, maxResults int) (result *FieldSearchScheme, response *Response, err error) {
 
 	if opts == nil {
@@ -186,6 +187,7 @@ func (f *FieldService) Search(ctx context.Context, opts *FieldSearchOptionsSchem
 	if err != nil {
 		return
 	}
+
 	request.Header.Set("Accept", "application/json")
 
 	response, err = f.client.Do(request)

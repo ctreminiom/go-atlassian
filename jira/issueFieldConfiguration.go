@@ -27,7 +27,7 @@ type FieldConfigScheme struct {
 }
 
 // Returns a paginated list of all field configurations.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-field-configurations/#api-rest-api-3-fieldconfiguration-get
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration#get-all-field-configurations
 func (f *FieldConfigurationService) Gets(ctx context.Context, IDs []int, isDefault bool, startAt, maxResults int) (result *FieldConfigSearchScheme, response *Response, err error) {
 
 	params := url.Values{}
@@ -76,7 +76,7 @@ type FieldConfigItemSearchScheme struct {
 }
 
 // Returns a paginated list of all fields for a configuration.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-field-configurations/#api-rest-api-3-fieldconfiguration-id-fields-get
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration#get-field-configuration-items
 func (f *FieldConfigurationService) Items(ctx context.Context, fieldConfigID int, startAt, maxResults int) (result *FieldConfigItemSearchScheme, response *Response, err error) {
 
 	params := url.Values{}
@@ -117,7 +117,7 @@ type FieldConfigSchemeScheme struct {
 }
 
 // Returns a paginated list of field configuration schemes.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-field-configurations/#api-rest-api-3-fieldconfigurationscheme-get
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration#get-all-field-configuration-schemes
 func (f *FieldConfigurationService) Schemes(ctx context.Context, IDs []int, startAt, maxResults int) (result *FieldConfigSchemeScheme, response *Response, err error) {
 
 	params := url.Values{}
@@ -162,7 +162,7 @@ type FieldConfigSchemeItemsScheme struct {
 }
 
 // Returns a paginated list of field configuration issue type items.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-field-configurations/#api-rest-api-3-fieldconfigurationscheme-mapping-get
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration#get-field-configuration-issue-type-items
 func (f *FieldConfigurationService) IssueTypeItems(ctx context.Context, fieldConfigIDs []int, startAt, maxResults int) (result *FieldConfigSchemeItemsScheme, response *Response, err error) {
 
 	params := url.Values{}
@@ -209,7 +209,7 @@ type FieldProjectSchemeScheme struct {
 }
 
 // Returns a paginated list of field configuration schemes and, for each scheme, a list of the projects that use it.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-field-configurations/#api-rest-api-3-fieldconfigurationscheme-project-get
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration#get-field-configuration-schemes-for-projects
 func (f *FieldConfigurationService) SchemesByProject(ctx context.Context, projectIDs []int, startAt, maxResults int) (result *FieldProjectSchemeScheme, response *Response, err error) {
 
 	params := url.Values{}

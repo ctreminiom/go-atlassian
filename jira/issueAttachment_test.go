@@ -31,6 +31,17 @@ func TestAttachmentService_Delete(t *testing.T) {
 			wantHTTPCodeReturn: http.StatusNoContent,
 			wantErr:            false,
 		},
+
+		{
+			name:               "DeleteAttachmentWhenTheAttachmentIDIsNotSet",
+			attachmentID:       "",
+			wantHTTPMethod:     http.MethodDelete,
+			endpoint:           "/rest/api/3/attachment/10006",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+
 		{
 			name:               "DeleteAttachmentWhenTheAttachmentIDIsIncorrect",
 			attachmentID:       "10007",
@@ -158,6 +169,18 @@ func TestAttachmentService_Human(t *testing.T) {
 			wantHTTPCodeReturn: http.StatusOK,
 			wantErr:            false,
 		},
+
+		{
+			name:               "GetHumanReadableAttachmentWhenTheAttachmentIDIsNotSet",
+			mockFile:           "./mocks/get-attachment-human-view.json",
+			attachmentID:       "",
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/rest/api/3/attachment/10006/expand/human",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+
 		{
 			name:         "GetHumanReadableAttachmentWhenTheAttachmentIDIsIncorrect",
 			attachmentID: "10007",
@@ -315,6 +338,18 @@ func TestAttachmentService_Metadata(t *testing.T) {
 			wantHTTPCodeReturn: http.StatusOK,
 			wantErr:            false,
 		},
+
+		{
+			name:               "GetAttachmentMetadataWhenTheAttachmentIDIsNotSet",
+			mockFile:           "./mocks/get-attachment-metadata.json",
+			attachmentID:       "",
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/rest/api/3/attachment/10006",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+
 		{
 			name:               "GetAttachmentMetadataWhenTheAttachmentIDIsIncorrect",
 			mockFile:           "./mocks/get-attachment-metadata.json",
@@ -586,6 +621,31 @@ func TestAttachmentService_Add(t *testing.T) {
 			wantHTTPCodeReturn: http.StatusOK,
 			wantErr:            false,
 		},
+
+		{
+			name:               "AddAttachmentWhenThePathIsNotSet",
+			mockFile:           "./mocks/get-attachments.json",
+			issueKeyOrID:       "KP-1",
+			path:               "",
+			wannaAbsolutePath:  true,
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/api/3/issue/KP-1/attachments",
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+
+		{
+			name:               "AddAttachmentWhenTheIssueKeyOrIDIsNotSet",
+			mockFile:           "./mocks/get-attachments.json",
+			issueKeyOrID:       "",
+			path:               "./mocks/image.png",
+			wannaAbsolutePath:  true,
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/api/3/issue/KP-1/attachments",
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+
 		{
 			name:               "AddAttachmentWhenTheFilePathDoesNotExists",
 			mockFile:           "./mocks/get-attachments.json",

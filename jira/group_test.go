@@ -31,6 +31,18 @@ func TestGroupService_Create(t *testing.T) {
 			wantHTTPCodeReturn: http.StatusCreated,
 			wantErr:            false,
 		},
+
+		{
+			name:               "CreateGroupWhenTheGroupNameIsNotSet",
+			groupName:          "",
+			mockFile:           "./mocks/create-group.json",
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/api/3/group",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusCreated,
+			wantErr:            true,
+		},
+
 		{
 			name:               "CreateGroupWhenTheContextIsNil",
 			groupName:          "power-users",
@@ -352,6 +364,17 @@ func TestGroupService_Delete(t *testing.T) {
 			wantHTTPCodeReturn: http.StatusNoContent,
 			wantErr:            false,
 		},
+
+		{
+			name:               "DeleteGroupWhenTheGroupNameIsNotSet",
+			groupName:          "",
+			wantHTTPMethod:     http.MethodDelete,
+			endpoint:           "/rest/api/3/group?groupname=power-users",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+
 		{
 			name:               "DeleteGroupWhenTheNameIsIncorrect",
 			groupName:          "power-users-uat",
@@ -486,6 +509,21 @@ func TestGroupService_Members(t *testing.T) {
 			wantHTTPCodeReturn: http.StatusOK,
 			wantErr:            false,
 		},
+
+		{
+			name:               "GetMembersGroupWhenTheGroupNameIsNotSet",
+			groupName:          "",
+			inactive:           false,
+			startAt:            0,
+			maxResults:         50,
+			mockFile:           "./mocks/group-members.json",
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/rest/api/3/group/member?groupname=power-users&maxResults=50&startAt=0",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+
 		{
 			name:               "GetMembersGroupWhenTheInactiveParameterIsSelected",
 			groupName:          "power-users",
@@ -672,6 +710,31 @@ func TestGroupService_Add(t *testing.T) {
 			wantHTTPCodeReturn: http.StatusCreated,
 			wantErr:            false,
 		},
+
+		{
+			name:               "AddGroupMemberWhenTheGroupNameIsNotSet",
+			groupName:          "",
+			accountID:          "b78f3e47-f267-48a2-b91d-682993f9a0b0",
+			mockFile:           "./mocks/group-members.json",
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/api/3/group/user?groupname=power-users",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusCreated,
+			wantErr:            true,
+		},
+
+		{
+			name:               "AddGroupMemberWhenTheAccountIDIsNotSet",
+			groupName:          "power-users",
+			accountID:          "",
+			mockFile:           "./mocks/group-members.json",
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/api/3/group/user?groupname=power-users",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusCreated,
+			wantErr:            true,
+		},
+
 		{
 			name:               "AddGroupMemberWhenTheGroupNameIsIncorrect",
 			groupName:          "power-users-uat",
@@ -827,6 +890,29 @@ func TestGroupService_Remove(t *testing.T) {
 			wantHTTPCodeReturn: http.StatusOK,
 			wantErr:            false,
 		},
+
+		{
+			name:               "RemoveGroupMemberWhenTheGroupNameIsNotSet",
+			groupName:          "",
+			accountID:          "b78f3e47-f267-48a2-b91d-682993f9a0b0",
+			wantHTTPMethod:     http.MethodDelete,
+			endpoint:           "/rest/api/3/group/user?accountId=b78f3e47-f267-48a2-b91d-682993f9a0b0&groupname=power-users",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+
+		{
+			name:               "RemoveGroupMemberWhenTheAccountIDIsNotSet",
+			groupName:          "power-users",
+			accountID:          "",
+			wantHTTPMethod:     http.MethodDelete,
+			endpoint:           "/rest/api/3/group/user?accountId=b78f3e47-f267-48a2-b91d-682993f9a0b0&groupname=power-users",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+
 		{
 			name:               "RemoveGroupMemberWhenTheGroupNameIsIncorrect",
 			groupName:          "power-users-uat",

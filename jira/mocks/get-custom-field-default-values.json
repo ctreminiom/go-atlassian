@@ -1,0 +1,22 @@
+{
+  "maxResults": 50,
+  "startAt": 0,
+  "total": 3,
+  "isLast": true,
+  "values": [
+    {
+      "type": "option.single",
+      "contextId": "10100",
+      "optionId": "10001"
+    },
+    {
+      "type": "option.single",
+      "contextId": "10101",
+      "optionId": "10003"
+    },
+    {
+      "type": "option.single",
+      "contextId": "10103"
+    }
+  ]
+}

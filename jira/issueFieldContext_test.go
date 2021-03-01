@@ -543,3 +543,1339 @@ func TestFieldContextService_Gets(t *testing.T) {
 	}
 
 }
+
+func TestFieldContextService_AddIssueTypes(t *testing.T) {
+
+	testCases := []struct {
+		name               string
+		fieldID            string
+		contextID          int
+		issueTypesIDs      []string
+		mockFile           string
+		wantHTTPMethod     string
+		endpoint           string
+		context            context.Context
+		wantHTTPCodeReturn int
+		wantErr            bool
+	}{
+		{
+			name:               "AddIssueTypesToFieldContextWhenTheParametersAreCorrect",
+			fieldID:            "customfield_10002",
+			contextID:          2001,
+			issueTypesIDs:      []string{"10001", "10002"},
+			wantHTTPMethod:     http.MethodPut,
+			endpoint:           "/rest/api/3/field/customfield_10002/context/2001/issuetype",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            false,
+		},
+
+		{
+			name:               "AddIssueTypesToFieldContextWhenTheFieldIDIsNotSet",
+			fieldID:            "",
+			contextID:          2001,
+			issueTypesIDs:      []string{"10001", "10002"},
+			wantHTTPMethod:     http.MethodPut,
+			endpoint:           "/rest/api/3/field/customfield_10002/context/2001/issuetype",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+
+		{
+			name:               "AddIssueTypesToFieldContextWhenTheIssueTypeIDsAreNotSet",
+			fieldID:            "customfield_10002",
+			contextID:          2001,
+			issueTypesIDs:      nil,
+			wantHTTPMethod:     http.MethodPut,
+			endpoint:           "/rest/api/3/field/customfield_10002/context/2001/issuetype",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+
+		{
+			name:               "AddIssueTypesToFieldContextWhenTheRequestMethodIsIncorrect",
+			fieldID:            "customfield_10002",
+			contextID:          2001,
+			issueTypesIDs:      []string{"10001", "10002"},
+			wantHTTPMethod:     http.MethodDelete,
+			endpoint:           "/rest/api/3/field/customfield_10002/context/2001/issuetype",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+
+		{
+			name:               "AddIssueTypesToFieldContextWhenTheStatusCodeIsIncorrect",
+			fieldID:            "customfield_10002",
+			contextID:          2001,
+			issueTypesIDs:      []string{"10001", "10002"},
+			wantHTTPMethod:     http.MethodPut,
+			endpoint:           "/rest/api/3/field/customfield_10002/context/2001/issuetype",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusBadRequest,
+			wantErr:            true,
+		},
+		{
+			name:               "AddIssueTypesToFieldContextWhenTheEndpointIsEmpty",
+			fieldID:            "customfield_10002",
+			contextID:          2001,
+			issueTypesIDs:      []string{"10001", "10002"},
+			wantHTTPMethod:     http.MethodPut,
+			endpoint:           "",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+
+		{
+			name:               "AddIssueTypesToFieldContextWhenTheContextIsNil",
+			fieldID:            "customfield_10002",
+			contextID:          2001,
+			issueTypesIDs:      []string{"10001", "10002"},
+			wantHTTPMethod:     http.MethodPut,
+			endpoint:           "/rest/api/3/field/customfield_10002/context/2001/issuetype",
+			context:            nil,
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+
+			//Init a new HTTP mock server
+			mockOptions := mockServerOptions{
+				Endpoint:           testCase.endpoint,
+				MockFilePath:       testCase.mockFile,
+				MethodAccepted:     testCase.wantHTTPMethod,
+				ResponseCodeWanted: testCase.wantHTTPCodeReturn,
+			}
+
+			mockServer, err := startMockServer(&mockOptions)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			defer mockServer.Close()
+
+			//Init the library instance
+			mockClient, err := startMockClient(mockServer.URL)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			service := &FieldContextService{client: mockClient}
+			gotResponse, err := service.AddIssueTypes(testCase.context, testCase.fieldID, testCase.contextID, testCase.issueTypesIDs)
+
+			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+
+				assert.Error(t, err)
+
+				if gotResponse != nil {
+					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
+				}
+			} else {
+
+				assert.NoError(t, err)
+				assert.NotEqual(t, gotResponse, nil)
+
+				apiEndpoint, err := url.Parse(gotResponse.Endpoint)
+				if err != nil {
+					t.Fatal(err)
+				}
+
+				var endpointToAssert string
+
+				if apiEndpoint.Query().Encode() != "" {
+					endpointToAssert = fmt.Sprintf("%v?%v", apiEndpoint.Path, apiEndpoint.Query().Encode())
+				} else {
+					endpointToAssert = apiEndpoint.Path
+				}
+
+				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
+				assert.Equal(t, testCase.endpoint, endpointToAssert)
+			}
+
+		})
+	}
+
+}
+
+func TestFieldContextService_Delete(t *testing.T) {
+
+	testCases := []struct {
+		name               string
+		fieldID            string
+		contextID          int
+		mockFile           string
+		wantHTTPMethod     string
+		endpoint           string
+		context            context.Context
+		wantHTTPCodeReturn int
+		wantErr            bool
+	}{
+		{
+			name:               "DeleteCustomFieldContextWhenTheParametersAreCorrect",
+			fieldID:            "customfield_10002",
+			contextID:          2001,
+			wantHTTPMethod:     http.MethodDelete,
+			endpoint:           "/rest/api/3/field/customfield_10002/context/2001",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            false,
+		},
+
+		{
+			name:               "DeleteCustomFieldContextWhenTheFieldIsNotSet",
+			fieldID:            "",
+			contextID:          2001,
+			wantHTTPMethod:     http.MethodDelete,
+			endpoint:           "/rest/api/3/field/customfield_10002/context/2001",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+
+		{
+			name:               "DeleteCustomFieldContextWhenTheRequestMethodIsIncorrect",
+			fieldID:            "customfield_10002",
+			contextID:          2001,
+			wantHTTPMethod:     http.MethodPut,
+			endpoint:           "/rest/api/3/field/customfield_10002/context/2001",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+		{
+			name:               "DeleteCustomFieldContextWhenTheStatusCodeIsIncorrect",
+			fieldID:            "customfield_10002",
+			contextID:          2001,
+			wantHTTPMethod:     http.MethodDelete,
+			endpoint:           "/rest/api/3/field/customfield_10002/context/2001",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusBadRequest,
+			wantErr:            true,
+		},
+		{
+			name:               "DeleteCustomFieldContextWhenTheEndpointIsEmpty",
+			fieldID:            "customfield_10002",
+			contextID:          2001,
+			wantHTTPMethod:     http.MethodDelete,
+			endpoint:           "",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+		{
+			name:               "DeleteCustomFieldContextWhenTheContextIsNil",
+			fieldID:            "customfield_10002",
+			contextID:          2001,
+			wantHTTPMethod:     http.MethodDelete,
+			endpoint:           "/rest/api/3/field/customfield_10002/context/2001",
+			context:            nil,
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+
+			//Init a new HTTP mock server
+			mockOptions := mockServerOptions{
+				Endpoint:           testCase.endpoint,
+				MockFilePath:       testCase.mockFile,
+				MethodAccepted:     testCase.wantHTTPMethod,
+				ResponseCodeWanted: testCase.wantHTTPCodeReturn,
+			}
+
+			mockServer, err := startMockServer(&mockOptions)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			defer mockServer.Close()
+
+			//Init the library instance
+			mockClient, err := startMockClient(mockServer.URL)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			service := &FieldContextService{client: mockClient}
+			gotResponse, err := service.Delete(testCase.context, testCase.fieldID, testCase.contextID)
+
+			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+
+				assert.Error(t, err)
+
+				if gotResponse != nil {
+					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
+				}
+			} else {
+
+				assert.NoError(t, err)
+				assert.NotEqual(t, gotResponse, nil)
+
+				apiEndpoint, err := url.Parse(gotResponse.Endpoint)
+				if err != nil {
+					t.Fatal(err)
+				}
+
+				var endpointToAssert string
+
+				if apiEndpoint.Query().Encode() != "" {
+					endpointToAssert = fmt.Sprintf("%v?%v", apiEndpoint.Path, apiEndpoint.Query().Encode())
+				} else {
+					endpointToAssert = apiEndpoint.Path
+				}
+
+				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
+				assert.Equal(t, testCase.endpoint, endpointToAssert)
+			}
+
+		})
+	}
+
+}
+
+func TestFieldContextService_GetDefaultValues(t *testing.T) {
+
+	testCases := []struct {
+		name                string
+		fieldID             string
+		contextIDs          []int
+		startAt, maxResults int
+		mockFile            string
+		wantHTTPMethod      string
+		endpoint            string
+		context             context.Context
+		wantHTTPCodeReturn  int
+		wantErr             bool
+	}{
+		{
+			name:               "GetCustomFieldContextDefaultValuesWhenTheParametersAreCorrect",
+			fieldID:            "customfield_10002",
+			contextIDs:         []int{1001, 1002},
+			startAt:            0,
+			maxResults:         50,
+			mockFile:           "./mocks/get-custom-field-default-values.json",
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/rest/api/3/field/customfield_10002/context/defaultValue?contextId=1001&contextId=1002&maxResults=50&startAt=0",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            false,
+		},
+
+		{
+			name:               "GetCustomFieldContextDefaultValuesWhenTheContextIDsAreNotSet",
+			fieldID:            "customfield_10002",
+			contextIDs:         nil,
+			startAt:            0,
+			maxResults:         50,
+			mockFile:           "./mocks/get-custom-field-default-values.json",
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/rest/api/3/field/customfield_10002/context/defaultValue?maxResults=50&startAt=0",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            false,
+		},
+
+		{
+			name:               "GetCustomFieldContextDefaultValuesWhenTheFieldIDIsNotSet",
+			fieldID:            "",
+			contextIDs:         []int{1001, 1002},
+			startAt:            0,
+			maxResults:         50,
+			mockFile:           "./mocks/get-custom-field-default-values.json",
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/rest/api/3/field/customfield_10002/context/defaultValue?contextId=1001&contextId=1002&maxResults=50&startAt=0",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+
+		{
+			name:               "GetCustomFieldContextDefaultValuesWhenTheRequestMethodIsIncorrect",
+			fieldID:            "customfield_10002",
+			contextIDs:         []int{1001, 1002},
+			startAt:            0,
+			maxResults:         50,
+			mockFile:           "./mocks/get-custom-field-default-values.json",
+			wantHTTPMethod:     http.MethodPut,
+			endpoint:           "/rest/api/3/field/customfield_10002/context/defaultValue?contextId=1001&contextId=1002&maxResults=50&startAt=0",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+
+		{
+			name:               "GetCustomFieldContextDefaultValuesWhenTheStatusCodeIsIncorrect",
+			fieldID:            "customfield_10002",
+			contextIDs:         []int{1001, 1002},
+			startAt:            0,
+			maxResults:         50,
+			mockFile:           "./mocks/get-custom-field-default-values.json",
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/rest/api/3/field/customfield_10002/context/defaultValue?contextId=1001&contextId=1002&maxResults=50&startAt=0",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusBadRequest,
+			wantErr:            true,
+		},
+		{
+			name:               "GetCustomFieldContextDefaultValuesWhenTheEndpointIsEmpty",
+			fieldID:            "customfield_10002",
+			contextIDs:         []int{1001, 1002},
+			startAt:            0,
+			maxResults:         50,
+			mockFile:           "./mocks/get-custom-field-default-values.json",
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+
+		{
+			name:               "GetCustomFieldContextDefaultValuesWhenTheContextIsNil",
+			fieldID:            "customfield_10002",
+			contextIDs:         []int{1001, 1002},
+			startAt:            0,
+			maxResults:         50,
+			mockFile:           "./mocks/get-custom-field-default-values.json",
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/rest/api/3/field/customfield_10002/context/defaultValue?contextId=1001&contextId=1002&maxResults=50&startAt=0",
+			context:            nil,
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+
+			//Init a new HTTP mock server
+			mockOptions := mockServerOptions{
+				Endpoint:           testCase.endpoint,
+				MockFilePath:       testCase.mockFile,
+				MethodAccepted:     testCase.wantHTTPMethod,
+				ResponseCodeWanted: testCase.wantHTTPCodeReturn,
+			}
+
+			mockServer, err := startMockServer(&mockOptions)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			defer mockServer.Close()
+
+			//Init the library instance
+			mockClient, err := startMockClient(mockServer.URL)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			service := &FieldContextService{client: mockClient}
+			gotResult, gotResponse, err := service.GetDefaultValues(testCase.context, testCase.fieldID, testCase.contextIDs,
+				testCase.startAt, testCase.maxResults)
+
+			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+
+				assert.Error(t, err)
+
+				if gotResponse != nil {
+					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
+				}
+			} else {
+
+				assert.NoError(t, err)
+				assert.NotEqual(t, gotResponse, nil)
+				assert.NotEqual(t, gotResult, nil)
+
+				apiEndpoint, err := url.Parse(gotResponse.Endpoint)
+				if err != nil {
+					t.Fatal(err)
+				}
+
+				var endpointToAssert string
+
+				if apiEndpoint.Query().Encode() != "" {
+					endpointToAssert = fmt.Sprintf("%v?%v", apiEndpoint.Path, apiEndpoint.Query().Encode())
+				} else {
+					endpointToAssert = apiEndpoint.Path
+				}
+
+				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
+				assert.Equal(t, testCase.endpoint, endpointToAssert)
+
+				for _, contextData := range gotResult.Values {
+
+					t.Log("------------------------------")
+					t.Logf("Field Type: %v", contextData.Type)
+					t.Logf("Context ID : %v", contextData.ContextID)
+					t.Logf("Context Default Value: %v", contextData.OptionID)
+					t.Log("------------------------------ \n")
+
+				}
+
+			}
+
+		})
+	}
+
+}
+
+func TestFieldContextService_Link(t *testing.T) {
+
+	testCases := []struct {
+		name               string
+		fieldID            string
+		contextID          int
+		projectIDs         []string
+		mockFile           string
+		wantHTTPMethod     string
+		endpoint           string
+		context            context.Context
+		wantHTTPCodeReturn int
+		wantErr            bool
+	}{
+		{
+			name:               "LinkCustomFieldContextToProjectWhenTheParametersAreCorrect",
+			fieldID:            "customfield_10002",
+			contextID:          2001,
+			projectIDs:         []string{"10001", "10002", "10003"},
+			wantHTTPMethod:     http.MethodPut,
+			endpoint:           "/rest/api/3/field/customfield_10002/context/2001/project",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            false,
+		},
+
+		{
+			name:               "LinkCustomFieldContextToProjectWhenTheFieldIDIsNotSet",
+			fieldID:            "",
+			contextID:          2001,
+			projectIDs:         []string{"10001", "10002", "10003"},
+			wantHTTPMethod:     http.MethodPut,
+			endpoint:           "/rest/api/3/field/customfield_10002/context/2001/project",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+
+		{
+			name:               "LinkCustomFieldContextToProjectWhenTheProjectIDsAreNotSet",
+			fieldID:            "customfield_10002",
+			contextID:          2001,
+			projectIDs:         nil,
+			wantHTTPMethod:     http.MethodPut,
+			endpoint:           "/rest/api/3/field/customfield_10002/context/2001/project",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+
+		{
+			name:               "LinkCustomFieldContextToProjectWhenTheRequestMethodIsIncorrect",
+			fieldID:            "customfield_10002",
+			contextID:          2001,
+			projectIDs:         []string{"10001", "10002", "10003"},
+			wantHTTPMethod:     http.MethodDelete,
+			endpoint:           "/rest/api/3/field/customfield_10002/context/2001/project",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+
+		{
+			name:               "LinkCustomFieldContextToProjectWhenTheStatusCodeIsIncorrect",
+			fieldID:            "customfield_10002",
+			contextID:          2001,
+			projectIDs:         []string{"10001", "10002", "10003"},
+			wantHTTPMethod:     http.MethodPut,
+			endpoint:           "/rest/api/3/field/customfield_10002/context/2001/project",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusBadRequest,
+			wantErr:            true,
+		},
+
+		{
+			name:               "LinkCustomFieldContextToProjectWhenTheContextIsNil",
+			fieldID:            "customfield_10002",
+			contextID:          2001,
+			projectIDs:         []string{"10001", "10002", "10003"},
+			wantHTTPMethod:     http.MethodPut,
+			endpoint:           "/rest/api/3/field/customfield_10002/context/2001/project",
+			context:            nil,
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+
+		{
+			name:               "LinkCustomFieldContextToProjectWhenTheEndpointIsEmpty",
+			fieldID:            "customfield_10002",
+			contextID:          2001,
+			projectIDs:         []string{"10001", "10002", "10003"},
+			wantHTTPMethod:     http.MethodPut,
+			endpoint:           "",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+
+			//Init a new HTTP mock server
+			mockOptions := mockServerOptions{
+				Endpoint:           testCase.endpoint,
+				MockFilePath:       testCase.mockFile,
+				MethodAccepted:     testCase.wantHTTPMethod,
+				ResponseCodeWanted: testCase.wantHTTPCodeReturn,
+			}
+
+			mockServer, err := startMockServer(&mockOptions)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			defer mockServer.Close()
+
+			//Init the library instance
+			mockClient, err := startMockClient(mockServer.URL)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			service := &FieldContextService{client: mockClient}
+			gotResponse, err := service.Link(testCase.context, testCase.fieldID, testCase.contextID, testCase.projectIDs)
+
+			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+
+				assert.Error(t, err)
+
+				if gotResponse != nil {
+					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
+				}
+			} else {
+
+				assert.NoError(t, err)
+				assert.NotEqual(t, gotResponse, nil)
+
+				apiEndpoint, err := url.Parse(gotResponse.Endpoint)
+				if err != nil {
+					t.Fatal(err)
+				}
+
+				var endpointToAssert string
+
+				if apiEndpoint.Query().Encode() != "" {
+					endpointToAssert = fmt.Sprintf("%v?%v", apiEndpoint.Path, apiEndpoint.Query().Encode())
+				} else {
+					endpointToAssert = apiEndpoint.Path
+				}
+
+				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
+				assert.Equal(t, testCase.endpoint, endpointToAssert)
+			}
+
+		})
+	}
+
+}
+
+func TestFieldContextService_RemoveIssueTypes(t *testing.T) {
+
+	testCases := []struct {
+		name               string
+		fieldID            string
+		contextID          int
+		issueTypesIDs      []string
+		mockFile           string
+		wantHTTPMethod     string
+		endpoint           string
+		context            context.Context
+		wantHTTPCodeReturn int
+		wantErr            bool
+	}{
+		{
+			name:               "RemoveIssueTypesFromFieldContextWhenTheParametersAreCorrect",
+			fieldID:            "customfield_10002",
+			contextID:          2001,
+			issueTypesIDs:      []string{"10001", "10002", "10003"},
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/api/3/field/customfield_10002/context/2001/issuetype/remove",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            false,
+		},
+
+		{
+			name:               "RemoveIssueTypesFromFieldContextWhenTheFieldIDIsNotSet",
+			fieldID:            "",
+			contextID:          2001,
+			issueTypesIDs:      []string{"10001", "10002", "10003"},
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/api/3/field/customfield_10002/context/2001/issuetype/remove",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+
+		{
+			name:               "RemoveIssueTypesFromFieldContextWhenTheIssueTypeIDsAreNotSet",
+			fieldID:            "customfield_10002",
+			contextID:          2001,
+			issueTypesIDs:      nil,
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/api/3/field/customfield_10002/context/2001/issuetype/remove",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+
+		{
+			name:               "RemoveIssueTypesFromFieldContextWhenTheRequestMethodIsIncorrect",
+			fieldID:            "customfield_10002",
+			contextID:          2001,
+			issueTypesIDs:      []string{"10001", "10002", "10003"},
+			wantHTTPMethod:     http.MethodDelete,
+			endpoint:           "/rest/api/3/field/customfield_10002/context/2001/issuetype/remove",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+
+		{
+			name:               "RemoveIssueTypesFromFieldContextWhenTheStatusCodeIsIncorrect",
+			fieldID:            "customfield_10002",
+			contextID:          2001,
+			issueTypesIDs:      []string{"10001", "10002", "10003"},
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/api/3/field/customfield_10002/context/2001/issuetype/remove",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusBadRequest,
+			wantErr:            true,
+		},
+		{
+			name:               "RemoveIssueTypesFromFieldContextWhenTheEndpointIsEmpty",
+			fieldID:            "customfield_10002",
+			contextID:          2001,
+			issueTypesIDs:      []string{"10001", "10002", "10003"},
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+
+		{
+			name:               "RemoveIssueTypesFromFieldContextWhenTheContextIsNil",
+			fieldID:            "customfield_10002",
+			contextID:          2001,
+			issueTypesIDs:      []string{"10001", "10002", "10003"},
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/api/3/field/customfield_10002/context/2001/issuetype/remove",
+			context:            nil,
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+
+			//Init a new HTTP mock server
+			mockOptions := mockServerOptions{
+				Endpoint:           testCase.endpoint,
+				MockFilePath:       testCase.mockFile,
+				MethodAccepted:     testCase.wantHTTPMethod,
+				ResponseCodeWanted: testCase.wantHTTPCodeReturn,
+			}
+
+			mockServer, err := startMockServer(&mockOptions)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			defer mockServer.Close()
+
+			//Init the library instance
+			mockClient, err := startMockClient(mockServer.URL)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			service := &FieldContextService{client: mockClient}
+			gotResponse, err := service.RemoveIssueTypes(testCase.context, testCase.fieldID, testCase.contextID, testCase.issueTypesIDs)
+
+			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+
+				assert.Error(t, err)
+
+				if gotResponse != nil {
+					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
+				}
+			} else {
+
+				assert.NoError(t, err)
+				assert.NotEqual(t, gotResponse, nil)
+
+				apiEndpoint, err := url.Parse(gotResponse.Endpoint)
+				if err != nil {
+					t.Fatal(err)
+				}
+
+				var endpointToAssert string
+
+				if apiEndpoint.Query().Encode() != "" {
+					endpointToAssert = fmt.Sprintf("%v?%v", apiEndpoint.Path, apiEndpoint.Query().Encode())
+				} else {
+					endpointToAssert = apiEndpoint.Path
+				}
+
+				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
+				assert.Equal(t, testCase.endpoint, endpointToAssert)
+			}
+
+		})
+	}
+
+}
+
+func TestFieldContextService_SetDefaultValue(t *testing.T) {
+
+	var defaultValuesMockedWithValues []*DefaultValueScheme
+
+	var defaultValuesMockedWithNoValues []*DefaultValueScheme
+
+	defaultValueSingleOption := &DefaultValueScheme{
+		ContextID: "10100",
+		OptionID:  "10001",
+		Type:      "option.single",
+	}
+
+	defaultValueMultipleOptions := &DefaultValueScheme{
+		ContextID: "10101",
+		Type:      "option.multiple",
+		OptionIds: []string{"Option 1", "Option 2", "Option 3"},
+	}
+
+	defaultValueCascading := &DefaultValueScheme{
+		ContextID:         "10103",
+		OptionID:          "10005",
+		CascadingOptionID: "10051",
+		Type:              "option.cascading",
+	}
+
+	defaultValuesMockedWithValues = append(
+		defaultValuesMockedWithValues,
+		defaultValueSingleOption, defaultValueMultipleOptions,
+		defaultValueCascading,
+	)
+
+	testCases := []struct {
+		name               string
+		fieldID            string
+		values             []*DefaultValueScheme
+		mockFile           string
+		wantHTTPMethod     string
+		endpoint           string
+		context            context.Context
+		wantHTTPCodeReturn int
+		wantErr            bool
+	}{
+		{
+			name:               "SetDefaultValueToCustomFieldContextWhenTheParametersAreCorrect",
+			fieldID:            "customfield_10002",
+			values:             defaultValuesMockedWithValues,
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/api/3/field/customfield_10002/context/defaultValue",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            false,
+		},
+
+		{
+			name:               "SetDefaultValueToCustomFieldContextWhenTheValuesAreEmpty",
+			fieldID:            "customfield_10002",
+			values:             defaultValuesMockedWithNoValues,
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/api/3/field/customfield_10002/context/defaultValue",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+
+		{
+			name:               "SetDefaultValueToCustomFieldContextWhenTheFieldIDIsNotSet",
+			fieldID:            "",
+			values:             defaultValuesMockedWithValues,
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/api/3/field/customfield_10002/context/defaultValue",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+
+		{
+			name:               "SetDefaultValueToCustomFieldContextWhenTheValuesAreNotSet",
+			fieldID:            "customfield_10002",
+			values:             nil,
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/api/3/field/customfield_10002/context/defaultValue",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+
+		{
+			name:               "SetDefaultValueToCustomFieldContextWhenTheRequestMethodIsIncorrect",
+			fieldID:            "customfield_10002",
+			values:             defaultValuesMockedWithValues,
+			wantHTTPMethod:     http.MethodDelete,
+			endpoint:           "/rest/api/3/field/customfield_10002/context/defaultValue",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+		{
+			name:               "SetDefaultValueToCustomFieldContextWhenTheStatusCodeIsIncorrect",
+			fieldID:            "customfield_10002",
+			values:             defaultValuesMockedWithValues,
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/api/3/field/customfield_10002/context/defaultValue",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusBadRequest,
+			wantErr:            true,
+		},
+		{
+			name:               "SetDefaultValueToCustomFieldContextWhenTheContextIsNil",
+			fieldID:            "customfield_10002",
+			values:             defaultValuesMockedWithValues,
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/api/3/field/customfield_10002/context/defaultValue",
+			context:            nil,
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+		{
+			name:               "SetDefaultValueToCustomFieldContextWhenTheEndpointIsEmpty",
+			fieldID:            "customfield_10002",
+			values:             defaultValuesMockedWithValues,
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+
+			//Init a new HTTP mock server
+			mockOptions := mockServerOptions{
+				Endpoint:           testCase.endpoint,
+				MockFilePath:       testCase.mockFile,
+				MethodAccepted:     testCase.wantHTTPMethod,
+				ResponseCodeWanted: testCase.wantHTTPCodeReturn,
+			}
+
+			mockServer, err := startMockServer(&mockOptions)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			defer mockServer.Close()
+
+			//Init the library instance
+			mockClient, err := startMockClient(mockServer.URL)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			service := &FieldContextService{client: mockClient}
+			gotResponse, err := service.SetDefaultValue(testCase.context, testCase.fieldID, testCase.values)
+
+			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+
+				assert.Error(t, err)
+
+				if gotResponse != nil {
+					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
+				}
+			} else {
+
+				assert.NoError(t, err)
+				assert.NotEqual(t, gotResponse, nil)
+
+				apiEndpoint, err := url.Parse(gotResponse.Endpoint)
+				if err != nil {
+					t.Fatal(err)
+				}
+
+				var endpointToAssert string
+
+				if apiEndpoint.Query().Encode() != "" {
+					endpointToAssert = fmt.Sprintf("%v?%v", apiEndpoint.Path, apiEndpoint.Query().Encode())
+				} else {
+					endpointToAssert = apiEndpoint.Path
+				}
+
+				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
+				assert.Equal(t, testCase.endpoint, endpointToAssert)
+			}
+
+		})
+	}
+
+}
+
+func TestFieldContextService_UnLink(t *testing.T) {
+
+	testCases := []struct {
+		name               string
+		fieldID            string
+		contextID          int
+		projectIDs         []string
+		mockFile           string
+		wantHTTPMethod     string
+		endpoint           string
+		context            context.Context
+		wantHTTPCodeReturn int
+		wantErr            bool
+	}{
+		{
+			name:               "UnLinkCustomFieldContextToProjectWhenTheParametersAreCorrect",
+			fieldID:            "customfield_10002",
+			contextID:          2001,
+			projectIDs:         []string{"10001", "10002", "10003"},
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/api/3/field/customfield_10002/context/2001/project/remove",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            false,
+		},
+
+		{
+			name:               "UnLinkCustomFieldContextToProjectWhenTheFieldIDIsNotSet",
+			fieldID:            "",
+			contextID:          2001,
+			projectIDs:         []string{"10001", "10002", "10003"},
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/api/3/field/customfield_10002/context/2001/project/remove",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+
+		{
+			name:               "UnLinkCustomFieldContextToProjectWhenTheProjectIDsAreNotSet",
+			fieldID:            "customfield_10002",
+			contextID:          2001,
+			projectIDs:         nil,
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/api/3/field/customfield_10002/context/2001/project/remove",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+
+		{
+			name:               "UnLinkCustomFieldContextToProjectWhenTheRequestMethodIsIncorrect",
+			fieldID:            "customfield_10002",
+			contextID:          2001,
+			projectIDs:         []string{"10001", "10002", "10003"},
+			wantHTTPMethod:     http.MethodDelete,
+			endpoint:           "/rest/api/3/field/customfield_10002/context/2001/project/remove",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+
+		{
+			name:               "UnLinkCustomFieldContextToProjectWhenTheStatusCodeIsIncorrect",
+			fieldID:            "customfield_10002",
+			contextID:          2001,
+			projectIDs:         []string{"10001", "10002", "10003"},
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/api/3/field/customfield_10002/context/2001/project/remove",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusBadRequest,
+			wantErr:            true,
+		},
+
+		{
+			name:               "UnLinkCustomFieldContextToProjectWhenTheContextIsNil",
+			fieldID:            "customfield_10002",
+			contextID:          2001,
+			projectIDs:         []string{"10001", "10002", "10003"},
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/api/3/field/customfield_10002/context/2001/project/remove",
+			context:            nil,
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+
+		{
+			name:               "UnLinkCustomFieldContextToProjectWhenTheEndpointIsEmpty",
+			fieldID:            "customfield_10002",
+			contextID:          2001,
+			projectIDs:         []string{"10001", "10002", "10003"},
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+
+			//Init a new HTTP mock server
+			mockOptions := mockServerOptions{
+				Endpoint:           testCase.endpoint,
+				MockFilePath:       testCase.mockFile,
+				MethodAccepted:     testCase.wantHTTPMethod,
+				ResponseCodeWanted: testCase.wantHTTPCodeReturn,
+			}
+
+			mockServer, err := startMockServer(&mockOptions)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			defer mockServer.Close()
+
+			//Init the library instance
+			mockClient, err := startMockClient(mockServer.URL)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			service := &FieldContextService{client: mockClient}
+			gotResponse, err := service.UnLink(testCase.context, testCase.fieldID, testCase.contextID, testCase.projectIDs)
+
+			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+
+				assert.Error(t, err)
+
+				if gotResponse != nil {
+					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
+				}
+			} else {
+
+				assert.NoError(t, err)
+				assert.NotEqual(t, gotResponse, nil)
+
+				apiEndpoint, err := url.Parse(gotResponse.Endpoint)
+				if err != nil {
+					t.Fatal(err)
+				}
+
+				var endpointToAssert string
+
+				if apiEndpoint.Query().Encode() != "" {
+					endpointToAssert = fmt.Sprintf("%v?%v", apiEndpoint.Path, apiEndpoint.Query().Encode())
+				} else {
+					endpointToAssert = apiEndpoint.Path
+				}
+
+				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
+				assert.Equal(t, testCase.endpoint, endpointToAssert)
+			}
+
+		})
+	}
+
+}
+
+func TestFieldContextService_Update(t *testing.T) {
+
+	testCases := []struct {
+		name                          string
+		fieldID                       string
+		contextID                     int
+		fieldContextName, description string
+		mockFile                      string
+		wantHTTPMethod                string
+		endpoint                      string
+		context                       context.Context
+		wantHTTPCodeReturn            int
+		wantErr                       bool
+	}{
+		{
+			name:               "UpdateCustomFieldContextWhenTheParametersAreCorrect",
+			fieldID:            "customfield_10002",
+			contextID:          2001,
+			fieldContextName:   "new customfield context",
+			description:        "new customfield description",
+			wantHTTPMethod:     http.MethodPut,
+			endpoint:           "/rest/api/3/field/customfield_10002/context/2001",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            false,
+		},
+
+		{
+			name:               "UpdateCustomFieldContextWhenTheFieldIDIsNotSet",
+			fieldID:            "",
+			contextID:          2001,
+			fieldContextName:   "new customfield context",
+			description:        "new customfield description",
+			wantHTTPMethod:     http.MethodPut,
+			endpoint:           "/rest/api/3/field/customfield_10002/context/2001",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+
+		{
+			name:               "UpdateCustomFieldContextWhenTheRequestMethodIsIncorrect",
+			fieldID:            "customfield_10002",
+			contextID:          2001,
+			fieldContextName:   "new customfield context",
+			description:        "new customfield description",
+			wantHTTPMethod:     http.MethodDelete,
+			endpoint:           "/rest/api/3/field/customfield_10002/context/2001",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+		{
+			name:               "UpdateCustomFieldContextWhenTheStatusCodeIsIncorrect",
+			fieldID:            "customfield_10002",
+			contextID:          2001,
+			fieldContextName:   "new customfield context",
+			description:        "new customfield description",
+			wantHTTPMethod:     http.MethodPut,
+			endpoint:           "/rest/api/3/field/customfield_10002/context/2001",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusBadRequest,
+			wantErr:            true,
+		},
+
+		{
+			name:               "UpdateCustomFieldContextWhenTheEndpointIsEmpty",
+			fieldID:            "customfield_10002",
+			contextID:          2001,
+			fieldContextName:   "new customfield context",
+			description:        "new customfield description",
+			wantHTTPMethod:     http.MethodPut,
+			endpoint:           "",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+		{
+			name:               "UpdateCustomFieldContextWhenTheContextIsNil",
+			fieldID:            "customfield_10002",
+			contextID:          2001,
+			fieldContextName:   "new customfield context",
+			description:        "new customfield description",
+			wantHTTPMethod:     http.MethodPut,
+			endpoint:           "/rest/api/3/field/customfield_10002/context/2001",
+			context:            nil,
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+
+			//Init a new HTTP mock server
+			mockOptions := mockServerOptions{
+				Endpoint:           testCase.endpoint,
+				MockFilePath:       testCase.mockFile,
+				MethodAccepted:     testCase.wantHTTPMethod,
+				ResponseCodeWanted: testCase.wantHTTPCodeReturn,
+			}
+
+			mockServer, err := startMockServer(&mockOptions)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			defer mockServer.Close()
+
+			//Init the library instance
+			mockClient, err := startMockClient(mockServer.URL)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			service := &FieldContextService{client: mockClient}
+			gotResponse, err := service.Update(testCase.context, testCase.fieldID, testCase.contextID,
+				testCase.fieldContextName, testCase.description)
+
+			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+
+				assert.Error(t, err)
+
+				if gotResponse != nil {
+					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
+				}
+			} else {
+
+				assert.NoError(t, err)
+				assert.NotEqual(t, gotResponse, nil)
+
+				apiEndpoint, err := url.Parse(gotResponse.Endpoint)
+				if err != nil {
+					t.Fatal(err)
+				}
+
+				var endpointToAssert string
+
+				if apiEndpoint.Query().Encode() != "" {
+					endpointToAssert = fmt.Sprintf("%v?%v", apiEndpoint.Path, apiEndpoint.Query().Encode())
+				} else {
+					endpointToAssert = apiEndpoint.Path
+				}
+
+				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
+				assert.Equal(t, testCase.endpoint, endpointToAssert)
+			}
+
+		})
+	}
+
+}

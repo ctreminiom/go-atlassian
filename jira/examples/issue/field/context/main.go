@@ -105,9 +105,11 @@ func main() {
 		log.Fatal(err)
 	}
 
-	err = createFieldContexts()
-	if err != nil {
-		log.Fatal(err)
-	}
+	/*
+		err = createFieldContexts()
+		if err != nil {
+			log.Fatal(err)
+		}
+	*/
 
 }

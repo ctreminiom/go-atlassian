@@ -20,7 +20,7 @@ type IssueLabelsScheme struct {
 }
 
 // Returns a paginated list of labels.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-labels/#api-rest-api-3-label-get
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/labels#get-all-labels
 func (l *LabelService) Gets(ctx context.Context, startAt, maxResults int) (result *IssueLabelsScheme, response *Response, err error) {
 
 	params := url.Values{}

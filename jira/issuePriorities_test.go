@@ -160,6 +160,19 @@ func TestPriorityService_Get(t *testing.T) {
 			wantHTTPHeaders:    map[string]string{"Accept": "application/json"},
 			wantErr:            false,
 		},
+
+		{
+			name:               "GetIssuePriorityByIDWhenTheIDIsNotSet",
+			mockFile:           "./mocks/get_priorities_1.json",
+			priorityID:         "",
+			wantHTTPCodeReturn: http.StatusOK,
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/rest/api/3/priority/1",
+			context:            context.Background(),
+			wantHTTPHeaders:    map[string]string{"Accept": "application/json"},
+			wantErr:            true,
+		},
+
 		{
 			name:               "GetIssuePriorityByIDWhenTheIDIsIncorrect",
 			mockFile:           "./mocks/get_priorities_1.json",

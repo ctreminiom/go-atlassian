@@ -19,7 +19,7 @@ type PriorityScheme struct {
 }
 
 // Returns the list of all issue priorities.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-priorities/#api-rest-api-3-priority-get
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/priorities#get-priorities
 func (p *PriorityService) Gets(ctx context.Context) (result *[]PriorityScheme, response *Response, err error) {
 
 	var endpoint = "rest/api/3/priority"
@@ -42,7 +42,13 @@ func (p *PriorityService) Gets(ctx context.Context) (result *[]PriorityScheme, r
 	return
 }
 
+// Returns an issue priority.
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/priorities#get-priority
 func (p *PriorityService) Get(ctx context.Context, priorityID string) (result *PriorityScheme, response *Response, err error) {
+
+	if len(priorityID) == 0 {
+		return nil, nil, fmt.Errorf("error, please provide a valid priorityID value")
+	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/priority/%v", priorityID)
 	request, err := p.client.newRequest(ctx, http.MethodGet, endpoint, nil)

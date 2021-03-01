@@ -25,7 +25,7 @@ type IssueTypeScreenSchemesScheme struct {
 }
 
 // Returns a paginated list of issue type screen schemes.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-type-screen-schemes/#api-rest-api-3-issuetypescreenscheme-get
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/types/screen-scheme#get-issue-type-screen-schemes
 func (i *IssueTypeScreenSchemeService) Gets(ctx context.Context, ids []int, startAt, maxResults int) (result *IssueTypeScreenSchemesScheme, response *Response, err error) {
 
 	params := url.Values{}
@@ -72,7 +72,7 @@ type issueTypeScreenScreenCreatedScheme struct {
 }
 
 // Creates an issue type screen scheme.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-type-screen-schemes/#api-rest-api-3-issuetypescreenscheme-post
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/types/screen-scheme#create-issue-type-screen-scheme
 func (i *IssueTypeScreenSchemeService) Create(ctx context.Context, payload *IssueTypeScreenSchemePayloadScheme) (issueTypeScreenSchemeID int, response *Response, err error) {
 
 	if payload == nil {
@@ -115,7 +115,7 @@ func (i *IssueTypeScreenSchemeService) Create(ctx context.Context, payload *Issu
 
 // Assigns an issue type screen scheme to a project.
 // Issue type screen schemes can only be assigned to classic projects.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-type-screen-schemes/#api-rest-api-3-issuetypescreenscheme-project-put
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/types/screen-scheme#assign-issue-type-screen-scheme-to-project
 func (i *IssueTypeScreenSchemeService) Assign(ctx context.Context, issueTypeScreenSchemeID, projectID string) (response *Response, err error) {
 
 	if len(issueTypeScreenSchemeID) == 0 {
@@ -153,7 +153,7 @@ func (i *IssueTypeScreenSchemeService) Assign(ctx context.Context, issueTypeScre
 }
 
 // Updates an issue type screen scheme.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-type-screen-schemes/#api-rest-api-3-issuetypescreenscheme-issuetypescreenschemeid-put
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/types/screen-scheme#update-issue-type-screen-scheme
 func (i *IssueTypeScreenSchemeService) Update(ctx context.Context, issueTypeScreenSchemeID, name, description string) (response *Response, err error) {
 
 	if len(issueTypeScreenSchemeID) == 0 {
@@ -187,7 +187,7 @@ func (i *IssueTypeScreenSchemeService) Update(ctx context.Context, issueTypeScre
 }
 
 // Deletes an issue type screen scheme.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-type-screen-schemes/#api-rest-api-3-issuetypescreenscheme-issuetypescreenschemeid-delete
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/types/screen-scheme#delete-issue-type-screen-scheme
 func (i *IssueTypeScreenSchemeService) Delete(ctx context.Context, issueTypeScreenSchemeID string) (response *Response, err error) {
 
 	if len(issueTypeScreenSchemeID) == 0 {
@@ -212,7 +212,7 @@ func (i *IssueTypeScreenSchemeService) Delete(ctx context.Context, issueTypeScre
 }
 
 // Appends issue type to screen scheme mappings to an issue type screen scheme.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-type-screen-schemes/#api-rest-api-3-issuetypescreenscheme-issuetypescreenschemeid-mapping-put
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/types/screen-scheme#append-mappings-to-issue-type-screen-scheme
 func (i *IssueTypeScreenSchemeService) Append(ctx context.Context, issueTypeScreenSchemeID string, mappings *[]IssueTypeScreenSchemeMappingPayloadScheme) (response *Response, err error) {
 
 	if len(issueTypeScreenSchemeID) == 0 {
@@ -232,6 +232,74 @@ func (i *IssueTypeScreenSchemeService) Append(ctx context.Context, issueTypeScre
 	}
 
 	request, err := i.client.newRequest(ctx, http.MethodPut, endpoint, &payload)
+	if err != nil {
+		return
+	}
+
+	request.Header.Set("Accept", "application/json")
+	request.Header.Set("Content-Type", "application/json")
+
+	response, err = i.client.Do(request)
+	if err != nil {
+		return
+	}
+
+	return
+}
+
+// Updates the default screen scheme of an issue type screen scheme. The default screen scheme is used for all unmapped issue types.
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/types/screen-scheme#update-issue-type-screen-scheme-default-screen-scheme
+func (i *IssueTypeScreenSchemeService) UpdateDefault(ctx context.Context, issueTypeScreenSchemeID, screenSchemeID string) (response *Response, err error) {
+
+	if len(issueTypeScreenSchemeID) == 0 {
+		return nil, fmt.Errorf("error, please provide a issueTypeScreenSchemeID value")
+	}
+
+	if len(screenSchemeID) == 0 {
+		return nil, fmt.Errorf("error, please provide a screenSchemeID value")
+	}
+
+	var endpoint = fmt.Sprintf("rest/api/3/issuetypescreenscheme/%v/mapping/default", issueTypeScreenSchemeID)
+
+	payload := struct {
+		ScreenSchemeID string `json:"screenSchemeId"`
+	}{ScreenSchemeID: screenSchemeID}
+
+	request, err := i.client.newRequest(ctx, http.MethodPut, endpoint, &payload)
+	if err != nil {
+		return
+	}
+
+	request.Header.Set("Accept", "application/json")
+	request.Header.Set("Content-Type", "application/json")
+
+	response, err = i.client.Do(request)
+	if err != nil {
+		return
+	}
+
+	return
+}
+
+// Removes issue type to screen scheme mappings from an issue type screen scheme.
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/types/screen-scheme#remove-mappings-from-issue-type-screen-scheme
+func (i *IssueTypeScreenSchemeService) Remove(ctx context.Context, issueTypeScreenSchemeID string, issueTypeIDs []string) (response *Response, err error) {
+
+	if len(issueTypeScreenSchemeID) == 0 {
+		return nil, fmt.Errorf("error, please provide a issueTypeScreenSchemeID value")
+	}
+
+	if len(issueTypeIDs) == 0 {
+		return nil, fmt.Errorf("error, please provide a issueTypeIDs value")
+	}
+
+	var endpoint = fmt.Sprintf("rest/api/3/issuetypescreenscheme/%v/mapping/remove", issueTypeScreenSchemeID)
+
+	payload := struct {
+		IssueTypeIds []string `json:"issueTypeIds"`
+	}{IssueTypeIds: issueTypeIDs}
+
+	request, err := i.client.newRequest(ctx, http.MethodPost, endpoint, &payload)
 	if err != nil {
 		return
 	}

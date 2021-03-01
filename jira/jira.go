@@ -85,8 +85,9 @@ func New(httpClient *http.Client, site string) (client *Client, err error) {
 		Search: &IssueSearchService{client: client},
 
 		Type: &IssueTypeService{
-			client: client,
-			Scheme: &IssueTypeSchemeService{client: client},
+			client:       client,
+			Scheme:       &IssueTypeSchemeService{client: client},
+			ScreenScheme: &IssueTypeScreenSchemeService{client: client},
 		},
 
 		Link: &IssueLinkService{

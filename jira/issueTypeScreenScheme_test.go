@@ -1082,3 +1082,311 @@ func TestIssueTypeScreenSchemeService_Update(t *testing.T) {
 
 	}
 }
+
+func TestIssueTypeScreenSchemeService_UpdateDefault(t *testing.T) {
+
+	testCases := []struct {
+		name                    string
+		issueTypeScreenSchemeID string
+		screenSchemeID          string
+		mockFile                string
+		wantHTTPMethod          string
+		endpoint                string
+		context                 context.Context
+		wantHTTPCodeReturn      int
+		wantErr                 bool
+	}{
+		{
+			name:                    "UpdateIssueTypeScreenSchemeDefaultScreenWhenTheParametersAreCorrect",
+			issueTypeScreenSchemeID: "10000",
+			screenSchemeID:          "10001",
+			wantHTTPMethod:          http.MethodPut,
+			endpoint:                "/rest/api/3/issuetypescreenscheme/10000/mapping/default",
+			context:                 context.Background(),
+			wantHTTPCodeReturn:      http.StatusNoContent,
+			wantErr:                 false,
+		},
+
+		{
+			name:                    "UpdateIssueTypeScreenSchemeDefaultScreenWhenTheIssueTypeScreenSchemeIDIsNotSet",
+			issueTypeScreenSchemeID: "",
+			screenSchemeID:          "10001",
+			wantHTTPMethod:          http.MethodPut,
+			endpoint:                "/rest/api/3/issuetypescreenscheme/10000/mapping/default",
+			context:                 context.Background(),
+			wantHTTPCodeReturn:      http.StatusNoContent,
+			wantErr:                 true,
+		},
+
+		{
+			name:                    "UpdateIssueTypeScreenSchemeDefaultScreenWhenTheScreenSchemeIDIsNotSet",
+			issueTypeScreenSchemeID: "10000",
+			screenSchemeID:          "",
+			wantHTTPMethod:          http.MethodPut,
+			endpoint:                "/rest/api/3/issuetypescreenscheme/10000/mapping/default",
+			context:                 context.Background(),
+			wantHTTPCodeReturn:      http.StatusNoContent,
+			wantErr:                 true,
+		},
+
+		{
+			name:                    "UpdateIssueTypeScreenSchemeDefaultScreenWhenTheRequestMethodIsIncorrect",
+			issueTypeScreenSchemeID: "10000",
+			screenSchemeID:          "10001",
+			wantHTTPMethod:          http.MethodDelete,
+			endpoint:                "/rest/api/3/issuetypescreenscheme/10000/mapping/default",
+			context:                 context.Background(),
+			wantHTTPCodeReturn:      http.StatusNoContent,
+			wantErr:                 true,
+		},
+
+		{
+			name:                    "UpdateIssueTypeScreenSchemeDefaultScreenWhenTheStatusCodeIsIncorrect",
+			issueTypeScreenSchemeID: "10000",
+			screenSchemeID:          "10001",
+			wantHTTPMethod:          http.MethodPut,
+			endpoint:                "/rest/api/3/issuetypescreenscheme/10000/mapping/default",
+			context:                 context.Background(),
+			wantHTTPCodeReturn:      http.StatusBadRequest,
+			wantErr:                 true,
+		},
+
+		{
+			name:                    "UpdateIssueTypeScreenSchemeDefaultScreenWhenTheContextIsNil",
+			issueTypeScreenSchemeID: "10000",
+			screenSchemeID:          "10001",
+			wantHTTPMethod:          http.MethodPut,
+			endpoint:                "/rest/api/3/issuetypescreenscheme/10000/mapping/default",
+			context:                 nil,
+			wantHTTPCodeReturn:      http.StatusNoContent,
+			wantErr:                 true,
+		},
+
+		{
+			name:                    "UpdateIssueTypeScreenSchemeDefaultScreenWhenTheEndpointIsEmpty",
+			issueTypeScreenSchemeID: "10000",
+			screenSchemeID:          "10001",
+			wantHTTPMethod:          http.MethodPut,
+			endpoint:                "",
+			context:                 context.Background(),
+			wantHTTPCodeReturn:      http.StatusNoContent,
+			wantErr:                 true,
+		},
+	}
+
+	for _, testCase := range testCases {
+
+		t.Run(testCase.name, func(t *testing.T) {
+
+			//Init a new HTTP mock server
+			mockOptions := mockServerOptions{
+				Endpoint:           testCase.endpoint,
+				MockFilePath:       testCase.mockFile,
+				MethodAccepted:     testCase.wantHTTPMethod,
+				ResponseCodeWanted: testCase.wantHTTPCodeReturn,
+			}
+
+			mockServer, err := startMockServer(&mockOptions)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			defer mockServer.Close()
+
+			//Init the library instance
+			mockClient, err := startMockClient(mockServer.URL)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			i := &IssueTypeScreenSchemeService{client: mockClient}
+
+			gotResponse, err := i.UpdateDefault(testCase.context, testCase.issueTypeScreenSchemeID, testCase.screenSchemeID)
+
+			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+
+				assert.Error(t, err)
+			} else {
+
+				assert.NoError(t, err)
+				assert.NotEqual(t, gotResponse, nil)
+
+				apiEndpoint, err := url.Parse(gotResponse.Endpoint)
+				if err != nil {
+					t.Fatal(err)
+				}
+
+				var endpointToAssert string
+
+				if apiEndpoint.Query().Encode() != "" {
+					endpointToAssert = fmt.Sprintf("%v?%v", apiEndpoint.Path, apiEndpoint.Query().Encode())
+				} else {
+					endpointToAssert = apiEndpoint.Path
+				}
+
+				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
+				assert.Equal(t, testCase.endpoint, endpointToAssert)
+			}
+		})
+
+	}
+
+}
+
+func TestIssueTypeScreenSchemeService_Remove(t *testing.T) {
+
+	testCases := []struct {
+		name                    string
+		issueTypeScreenSchemeID string
+		issueTypeIDs            []string
+		mockFile                string
+		wantHTTPMethod          string
+		endpoint                string
+		context                 context.Context
+		wantHTTPCodeReturn      int
+		wantErr                 bool
+	}{
+		{
+			name:                    "RemoveMappingsFromIssueTypeScreenSchemeWhenTheParametersAreCorrect",
+			issueTypeScreenSchemeID: "10000",
+			issueTypeIDs:            []string{"10001", "10002"},
+			wantHTTPMethod:          http.MethodPost,
+			endpoint:                "/rest/api/3/issuetypescreenscheme/10000/mapping/remove",
+			context:                 context.Background(),
+			wantHTTPCodeReturn:      http.StatusNoContent,
+			wantErr:                 false,
+		},
+
+		{
+			name:                    "RemoveMappingsFromIssueTypeScreenSchemeWhenTheIssueTypeScreenSchemeIDIsNotSet",
+			issueTypeScreenSchemeID: "",
+			issueTypeIDs:            []string{"10001", "10002"},
+			wantHTTPMethod:          http.MethodPost,
+			endpoint:                "/rest/api/3/issuetypescreenscheme/10000/mapping/remove",
+			context:                 context.Background(),
+			wantHTTPCodeReturn:      http.StatusNoContent,
+			wantErr:                 true,
+		},
+
+		{
+			name:                    "RemoveMappingsFromIssueTypeScreenSchemeWhenTheIssueTypeIDsAreNotSet",
+			issueTypeScreenSchemeID: "10000",
+			issueTypeIDs:            nil,
+			wantHTTPMethod:          http.MethodPost,
+			endpoint:                "/rest/api/3/issuetypescreenscheme/10000/mapping/remove",
+			context:                 context.Background(),
+			wantHTTPCodeReturn:      http.StatusNoContent,
+			wantErr:                 true,
+		},
+
+		{
+			name:                    "RemoveMappingsFromIssueTypeScreenSchemeWhenTheRequestMethodIsIncorrect",
+			issueTypeScreenSchemeID: "10000",
+			issueTypeIDs:            []string{"10001", "10002"},
+			wantHTTPMethod:          http.MethodDelete,
+			endpoint:                "/rest/api/3/issuetypescreenscheme/10000/mapping/remove",
+			context:                 context.Background(),
+			wantHTTPCodeReturn:      http.StatusNoContent,
+			wantErr:                 true,
+		},
+
+		{
+			name:                    "RemoveMappingsFromIssueTypeScreenSchemeWhenTheStatusCodeIsIncorrect",
+			issueTypeScreenSchemeID: "10000",
+			issueTypeIDs:            []string{"10001", "10002"},
+			wantHTTPMethod:          http.MethodPost,
+			endpoint:                "/rest/api/3/issuetypescreenscheme/10000/mapping/remove",
+			context:                 context.Background(),
+			wantHTTPCodeReturn:      http.StatusBadRequest,
+			wantErr:                 true,
+		},
+
+		{
+			name:                    "RemoveMappingsFromIssueTypeScreenSchemeWhenTheContextIsNil",
+			issueTypeScreenSchemeID: "10000",
+			issueTypeIDs:            []string{"10001", "10002"},
+			wantHTTPMethod:          http.MethodPost,
+			endpoint:                "/rest/api/3/issuetypescreenscheme/10000/mapping/remove",
+			context:                 nil,
+			wantHTTPCodeReturn:      http.StatusNoContent,
+			wantErr:                 true,
+		},
+
+		{
+			name:                    "RemoveMappingsFromIssueTypeScreenSchemeWhenTheEndpointIsEmpty",
+			issueTypeScreenSchemeID: "10000",
+			issueTypeIDs:            []string{"10001", "10002"},
+			wantHTTPMethod:          http.MethodPost,
+			endpoint:                "",
+			context:                 context.Background(),
+			wantHTTPCodeReturn:      http.StatusNoContent,
+			wantErr:                 true,
+		},
+	}
+
+	for _, testCase := range testCases {
+
+		t.Run(testCase.name, func(t *testing.T) {
+
+			//Init a new HTTP mock server
+			mockOptions := mockServerOptions{
+				Endpoint:           testCase.endpoint,
+				MockFilePath:       testCase.mockFile,
+				MethodAccepted:     testCase.wantHTTPMethod,
+				ResponseCodeWanted: testCase.wantHTTPCodeReturn,
+			}
+
+			mockServer, err := startMockServer(&mockOptions)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			defer mockServer.Close()
+
+			//Init the library instance
+			mockClient, err := startMockClient(mockServer.URL)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			i := &IssueTypeScreenSchemeService{client: mockClient}
+
+			gotResponse, err := i.Remove(testCase.context, testCase.issueTypeScreenSchemeID, testCase.issueTypeIDs)
+
+			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+
+				assert.Error(t, err)
+			} else {
+
+				assert.NoError(t, err)
+				assert.NotEqual(t, gotResponse, nil)
+
+				apiEndpoint, err := url.Parse(gotResponse.Endpoint)
+				if err != nil {
+					t.Fatal(err)
+				}
+
+				var endpointToAssert string
+
+				if apiEndpoint.Query().Encode() != "" {
+					endpointToAssert = fmt.Sprintf("%v?%v", apiEndpoint.Path, apiEndpoint.Query().Encode())
+				} else {
+					endpointToAssert = apiEndpoint.Path
+				}
+
+				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
+				assert.Equal(t, testCase.endpoint, endpointToAssert)
+			}
+		})
+
+	}
+
+}

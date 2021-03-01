@@ -15,7 +15,7 @@ func TestFieldOptionContextService_Create(t *testing.T) {
 		name               string
 		fieldID            string
 		contextID          int
-		payload            *CreateCustomFieldOptionPayloadScheme
+		payload            *CustomFieldOptionPayloadScheme
 		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string
@@ -27,7 +27,7 @@ func TestFieldOptionContextService_Create(t *testing.T) {
 			name:      "GetsFieldContextsWhenTheParametersAreCorrect",
 			fieldID:   "100001",
 			contextID: 01111,
-			payload: &CreateCustomFieldOptionPayloadScheme{Options: []FieldContextOptionValueScheme{
+			payload: &CustomFieldOptionPayloadScheme{Options: []FieldContextOptionValueScheme{
 				{Value: "Argentina", Disabled: false, OptionID: "10027"},
 				{Value: "Canada", Disabled: false, OptionID: "10027"},
 			}},
@@ -43,7 +43,7 @@ func TestFieldOptionContextService_Create(t *testing.T) {
 			name:      "GetsFieldContextsWhenTheContextIsNil",
 			fieldID:   "100001",
 			contextID: 01111,
-			payload: &CreateCustomFieldOptionPayloadScheme{Options: []FieldContextOptionValueScheme{
+			payload: &CustomFieldOptionPayloadScheme{Options: []FieldContextOptionValueScheme{
 				{Value: "Argentina", Disabled: false, OptionID: "10027"},
 				{Value: "Canada", Disabled: false, OptionID: "10027"},
 			}},
@@ -59,7 +59,7 @@ func TestFieldOptionContextService_Create(t *testing.T) {
 			name:      "GetsFieldContextsWhenTheFieldIDIncorrect",
 			fieldID:   "100002",
 			contextID: 01111,
-			payload: &CreateCustomFieldOptionPayloadScheme{Options: []FieldContextOptionValueScheme{
+			payload: &CustomFieldOptionPayloadScheme{Options: []FieldContextOptionValueScheme{
 				{Value: "Argentina", Disabled: false, OptionID: "10027"},
 				{Value: "Canada", Disabled: false, OptionID: "10027"},
 			}},
@@ -75,7 +75,7 @@ func TestFieldOptionContextService_Create(t *testing.T) {
 			name:      "GetsFieldContextsWhenTheContextIDIsIncorrect",
 			fieldID:   "100001",
 			contextID: 01110,
-			payload: &CreateCustomFieldOptionPayloadScheme{Options: []FieldContextOptionValueScheme{
+			payload: &CustomFieldOptionPayloadScheme{Options: []FieldContextOptionValueScheme{
 				{Value: "Argentina", Disabled: false, OptionID: "10027"},
 				{Value: "Canada", Disabled: false, OptionID: "10027"},
 			}},
@@ -91,7 +91,7 @@ func TestFieldOptionContextService_Create(t *testing.T) {
 			name:      "GetsFieldContextsWhenTheFieldIDIsEmpty",
 			fieldID:   "",
 			contextID: 01111,
-			payload: &CreateCustomFieldOptionPayloadScheme{Options: []FieldContextOptionValueScheme{
+			payload: &CustomFieldOptionPayloadScheme{Options: []FieldContextOptionValueScheme{
 				{Value: "Argentina", Disabled: false, OptionID: "10027"},
 				{Value: "Canada", Disabled: false, OptionID: "10027"},
 			}},
@@ -107,7 +107,7 @@ func TestFieldOptionContextService_Create(t *testing.T) {
 			name:      "GetsFieldContextsWhenTheEndpointIsIncorrect",
 			fieldID:   "100001",
 			contextID: 01111,
-			payload: &CreateCustomFieldOptionPayloadScheme{Options: []FieldContextOptionValueScheme{
+			payload: &CustomFieldOptionPayloadScheme{Options: []FieldContextOptionValueScheme{
 				{Value: "Argentina", Disabled: false, OptionID: "10027"},
 				{Value: "Canada", Disabled: false, OptionID: "10027"},
 			}},
@@ -136,7 +136,7 @@ func TestFieldOptionContextService_Create(t *testing.T) {
 			name:      "GetsFieldContextsWhenTheRequestMethodIsIncorrect",
 			fieldID:   "100001",
 			contextID: 01111,
-			payload: &CreateCustomFieldOptionPayloadScheme{Options: []FieldContextOptionValueScheme{
+			payload: &CustomFieldOptionPayloadScheme{Options: []FieldContextOptionValueScheme{
 				{Value: "Argentina", Disabled: false, OptionID: "10027"},
 				{Value: "Canada", Disabled: false, OptionID: "10027"},
 			}},
@@ -152,7 +152,7 @@ func TestFieldOptionContextService_Create(t *testing.T) {
 			name:      "GetsFieldContextsWhenTheStatusCodeIsIncorrect",
 			fieldID:   "100001",
 			contextID: 01111,
-			payload: &CreateCustomFieldOptionPayloadScheme{Options: []FieldContextOptionValueScheme{
+			payload: &CustomFieldOptionPayloadScheme{Options: []FieldContextOptionValueScheme{
 				{Value: "Argentina", Disabled: false, OptionID: "10027"},
 				{Value: "Canada", Disabled: false, OptionID: "10027"},
 			}},
@@ -168,7 +168,7 @@ func TestFieldOptionContextService_Create(t *testing.T) {
 			name:      "GetsFieldContextsWhenTheTheResponseBodyLengthIsZero",
 			fieldID:   "100001",
 			contextID: 01111,
-			payload: &CreateCustomFieldOptionPayloadScheme{Options: []FieldContextOptionValueScheme{
+			payload: &CustomFieldOptionPayloadScheme{Options: []FieldContextOptionValueScheme{
 				{Value: "Argentina", Disabled: false, OptionID: "10027"},
 				{Value: "Canada", Disabled: false, OptionID: "10027"},
 			}},
@@ -183,7 +183,7 @@ func TestFieldOptionContextService_Create(t *testing.T) {
 			name:      "GetsFieldContextsWhenTheResponseBodyHasADifferentFormat",
 			fieldID:   "100001",
 			contextID: 01111,
-			payload: &CreateCustomFieldOptionPayloadScheme{Options: []FieldContextOptionValueScheme{
+			payload: &CustomFieldOptionPayloadScheme{Options: []FieldContextOptionValueScheme{
 				{Value: "Argentina", Disabled: false, OptionID: "10027"},
 				{Value: "Canada", Disabled: false, OptionID: "10027"},
 			}},
@@ -651,7 +651,7 @@ func TestFieldOptionContextService_Update(t *testing.T) {
 		name               string
 		fieldID            string
 		contextID          int
-		payload            *CreateCustomFieldOptionPayloadScheme
+		payload            *CustomFieldOptionPayloadScheme
 		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string
@@ -663,7 +663,7 @@ func TestFieldOptionContextService_Update(t *testing.T) {
 			name:      "UpdateFieldContextsWhenTheParametersAreCorrect",
 			fieldID:   "100001",
 			contextID: 01111,
-			payload: &CreateCustomFieldOptionPayloadScheme{Options: []FieldContextOptionValueScheme{
+			payload: &CustomFieldOptionPayloadScheme{Options: []FieldContextOptionValueScheme{
 				{Value: "Argentina", Disabled: false, OptionID: "10027"},
 				{Value: "Canada", Disabled: false, OptionID: "10027"},
 			}},
@@ -679,7 +679,7 @@ func TestFieldOptionContextService_Update(t *testing.T) {
 			name:      "UpdateFieldContextsWhenTheContextIDIsNil",
 			fieldID:   "100001",
 			contextID: 01111,
-			payload: &CreateCustomFieldOptionPayloadScheme{Options: []FieldContextOptionValueScheme{
+			payload: &CustomFieldOptionPayloadScheme{Options: []FieldContextOptionValueScheme{
 				{Value: "Argentina", Disabled: false, OptionID: "10027"},
 				{Value: "Canada", Disabled: false, OptionID: "10027"},
 			}},
@@ -695,7 +695,7 @@ func TestFieldOptionContextService_Update(t *testing.T) {
 			name:      "UpdateFieldContextsWhenTheFieldIDIncorrect",
 			fieldID:   "100002",
 			contextID: 01111,
-			payload: &CreateCustomFieldOptionPayloadScheme{Options: []FieldContextOptionValueScheme{
+			payload: &CustomFieldOptionPayloadScheme{Options: []FieldContextOptionValueScheme{
 				{Value: "Argentina", Disabled: false, OptionID: "10027"},
 				{Value: "Canada", Disabled: false, OptionID: "10027"},
 			}},
@@ -711,7 +711,7 @@ func TestFieldOptionContextService_Update(t *testing.T) {
 			name:      "UpdateFieldContextsWhenTheContextIDIsIncorrect",
 			fieldID:   "100001",
 			contextID: 01110,
-			payload: &CreateCustomFieldOptionPayloadScheme{Options: []FieldContextOptionValueScheme{
+			payload: &CustomFieldOptionPayloadScheme{Options: []FieldContextOptionValueScheme{
 				{Value: "Argentina", Disabled: false, OptionID: "10027"},
 				{Value: "Canada", Disabled: false, OptionID: "10027"},
 			}},
@@ -727,7 +727,7 @@ func TestFieldOptionContextService_Update(t *testing.T) {
 			name:      "UpdateFieldContextsWhenTheFieldIDIsEmpty",
 			fieldID:   "",
 			contextID: 01111,
-			payload: &CreateCustomFieldOptionPayloadScheme{Options: []FieldContextOptionValueScheme{
+			payload: &CustomFieldOptionPayloadScheme{Options: []FieldContextOptionValueScheme{
 				{Value: "Argentina", Disabled: false, OptionID: "10027"},
 				{Value: "Canada", Disabled: false, OptionID: "10027"},
 			}},
@@ -743,7 +743,7 @@ func TestFieldOptionContextService_Update(t *testing.T) {
 			name:      "UpdateFieldContextsWhenTheEndpointIsIncorrect",
 			fieldID:   "100001",
 			contextID: 01111,
-			payload: &CreateCustomFieldOptionPayloadScheme{Options: []FieldContextOptionValueScheme{
+			payload: &CustomFieldOptionPayloadScheme{Options: []FieldContextOptionValueScheme{
 				{Value: "Argentina", Disabled: false, OptionID: "10027"},
 				{Value: "Canada", Disabled: false, OptionID: "10027"},
 			}},
@@ -772,7 +772,7 @@ func TestFieldOptionContextService_Update(t *testing.T) {
 			name:      "UpdateFieldContextsWhenTheRequestMethodIsIncorrect",
 			fieldID:   "100001",
 			contextID: 01111,
-			payload: &CreateCustomFieldOptionPayloadScheme{Options: []FieldContextOptionValueScheme{
+			payload: &CustomFieldOptionPayloadScheme{Options: []FieldContextOptionValueScheme{
 				{Value: "Argentina", Disabled: false, OptionID: "10027"},
 				{Value: "Canada", Disabled: false, OptionID: "10027"},
 			}},
@@ -788,7 +788,7 @@ func TestFieldOptionContextService_Update(t *testing.T) {
 			name:      "UpdateFieldContextsWhenTheStatusCodeIsIncorrect",
 			fieldID:   "100001",
 			contextID: 01111,
-			payload: &CreateCustomFieldOptionPayloadScheme{Options: []FieldContextOptionValueScheme{
+			payload: &CustomFieldOptionPayloadScheme{Options: []FieldContextOptionValueScheme{
 				{Value: "Argentina", Disabled: false, OptionID: "10027"},
 				{Value: "Canada", Disabled: false, OptionID: "10027"},
 			}},
@@ -804,7 +804,7 @@ func TestFieldOptionContextService_Update(t *testing.T) {
 			name:      "UpdateFieldContextsWhenTheTheResponseBodyLengthIsZero",
 			fieldID:   "100001",
 			contextID: 01111,
-			payload: &CreateCustomFieldOptionPayloadScheme{Options: []FieldContextOptionValueScheme{
+			payload: &CustomFieldOptionPayloadScheme{Options: []FieldContextOptionValueScheme{
 				{Value: "Argentina", Disabled: false, OptionID: "10027"},
 				{Value: "Canada", Disabled: false, OptionID: "10027"},
 			}},
@@ -819,7 +819,7 @@ func TestFieldOptionContextService_Update(t *testing.T) {
 			name:      "UpdateFieldContextsWhenTheTheResponseBodyHasADifferentFormat",
 			fieldID:   "100001",
 			contextID: 01111,
-			payload: &CreateCustomFieldOptionPayloadScheme{Options: []FieldContextOptionValueScheme{
+			payload: &CustomFieldOptionPayloadScheme{Options: []FieldContextOptionValueScheme{
 				{Value: "Argentina", Disabled: false, OptionID: "10027"},
 				{Value: "Canada", Disabled: false, OptionID: "10027"},
 			}},

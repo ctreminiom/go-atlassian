@@ -39,7 +39,7 @@ type FieldContextOptionListScheme struct {
 
 // Returns a paginated list of all custom field option for a context.
 // Options are returned first then cascading options, in the order they display in Jira.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-custom-field-options/#api-rest-api-3-field-fieldid-context-contextid-option-get
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields/context/option#get-custom-field-options
 func (f *FieldOptionContextService) Gets(ctx context.Context, opts *FieldOptionContextParams, startAt, maxResults int) (result *FieldContextOptionScheme, response *Response, err error) {
 
 	if opts == nil {
@@ -86,17 +86,17 @@ func (f *FieldOptionContextService) Gets(ctx context.Context, opts *FieldOptionC
 	return
 }
 
-type CreateCustomFieldOptionPayloadScheme struct {
+type CustomFieldOptionPayloadScheme struct {
 	Options []FieldContextOptionValueScheme `json:"options"`
 }
 
 // Creates options and, where the custom select field is of the type Select List (cascading),
 // cascading options for a custom select field. The options are added to a context of the field.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-custom-field-options/#api-rest-api-3-field-fieldid-context-contextid-option-post
-func (f *FieldOptionContextService) Create(ctx context.Context, fieldID string, contextID int, payload *CreateCustomFieldOptionPayloadScheme) (result *FieldContextOptionListScheme, response *Response, err error) {
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields/context/option#create-custom-field-options
+func (f *FieldOptionContextService) Create(ctx context.Context, fieldID string, contextID int, payload *CustomFieldOptionPayloadScheme) (result *FieldContextOptionListScheme, response *Response, err error) {
 
 	if payload == nil {
-		return nil, nil, fmt.Errorf("error, payload value is nil, please provide a valid CreateCustomFieldOptionPayloadScheme pointer")
+		return nil, nil, fmt.Errorf("error, payload value is nil, please provide a valid CustomFieldOptionPayloadScheme pointer")
 	}
 
 	if fieldID == "" {
@@ -128,11 +128,11 @@ func (f *FieldOptionContextService) Create(ctx context.Context, fieldID string, 
 // Updates the options of a custom field.
 // If any of the options are not found, no options are updated.
 // Options where the values in the request match the current values aren't updated and aren't reported in the response.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-custom-field-options/#api-rest-api-3-field-fieldid-context-contextid-option-put
-func (f *FieldOptionContextService) Update(ctx context.Context, fieldID string, contextID int, payload *CreateCustomFieldOptionPayloadScheme) (result *FieldContextOptionListScheme, response *Response, err error) {
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields/context/option#update-custom-field-options
+func (f *FieldOptionContextService) Update(ctx context.Context, fieldID string, contextID int, payload *CustomFieldOptionPayloadScheme) (result *FieldContextOptionListScheme, response *Response, err error) {
 
 	if payload == nil {
-		return nil, nil, fmt.Errorf("error, payload value is nil, please provide a valid CreateCustomFieldOptionPayloadScheme pointer")
+		return nil, nil, fmt.Errorf("error, payload value is nil, please provide a valid CustomFieldOptionPayloadScheme pointer")
 	}
 
 	if fieldID == "" {
@@ -163,7 +163,7 @@ func (f *FieldOptionContextService) Update(ctx context.Context, fieldID string, 
 
 // Deletes a custom field option.
 // Options with cascading options cannot be deleted without deleting the cascading options first.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-custom-field-options/#api-rest-api-3-field-fieldid-context-contextid-option-optionid-delete
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields/context/option#delete-custom-field-options
 func (f *FieldOptionContextService) Delete(ctx context.Context, fieldID string, contextID, optionID int) (response *Response, err error) {
 
 	if fieldID == "" {

@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -16,14 +17,24 @@ type Client struct {
 	HTTP *http.Client
 	Site *url.URL
 
-	Role      *ApplicationRoleService
-	Audit     *AuditService
-	Auth      *AuthenticationService
-	Dashboard *DashboardService
-	Filter    *FilterService
-	Group     *GroupService
-	Issue     *IssueService
+	Role       *ApplicationRoleService
+	Audit      *AuditService
+	Auth       *AuthenticationService
+	Dashboard  *DashboardService
+	Filter     *FilterService
+	Group      *GroupService
+	Issue      *IssueService
+	Permission *PermissionService
+	Project    *ProjectService
+	Screen     *ScreenService
+	Server     *ServerService
+	Task       *TaskService
+	User       *UserService
 }
+
+const (
+	DateFormatJira = "2006-01-02T15:04:05.999-0700"
+)
 
 //New
 func New(httpClient *http.Client, site string) (client *Client, err error) {
@@ -50,6 +61,19 @@ func New(httpClient *http.Client, site string) (client *Client, err error) {
 	client.Auth = &AuthenticationService{client: client}
 	client.Dashboard = &DashboardService{client: client}
 
+	// Admin Endpoints
+	client.Server = &ServerService{client: client}
+	client.Task = &TaskService{client: client}
+
+	client.Screen = &ScreenService{
+		client: client,
+		Tab: &ScreenTabService{
+			client: client,
+			Field:  &ScreenTabFieldService{client: client},
+		},
+		Scheme: &ScreenSchemeService{client: client},
+	}
+
 	client.Filter = &FilterService{
 		client: client,
 		Share:  &FilterShareService{client: client},
@@ -60,12 +84,9 @@ func New(httpClient *http.Client, site string) (client *Client, err error) {
 	client.Issue = &IssueService{
 		client:     client,
 		Attachment: &AttachmentService{client: client},
-
 		Comment: &CommentService{
-			client:     client,
-			Properties: &CommentPropertiesService{client: client},
+			client: client,
 		},
-
 		Field: &FieldService{
 			client:        client,
 			Configuration: &FieldConfigurationService{client: client},
@@ -74,15 +95,65 @@ func New(httpClient *http.Client, site string) (client *Client, err error) {
 				client: client,
 				Option: &FieldOptionContextService{client: client},
 			},
-
-			Option: &FieldOptionService{client: client},
 		},
+		Priority:   &PriorityService{client: client},
+		Resolution: &ResolutionService{client: client},
+
+		Search: &IssueSearchService{client: client},
+
+		Type: &IssueTypeService{
+			client:       client,
+			Scheme:       &IssueTypeSchemeService{client: client},
+			ScreenScheme: &IssueTypeScreenSchemeService{client: client},
+		},
+
+		Link: &IssueLinkService{
+			client: client,
+			Type:   &IssueLinkTypeService{client: client},
+		},
+		Votes:    &VoteService{client: client},
+		Watchers: &WatcherService{client: client},
+		Label:    &LabelService{client: client},
+	}
+
+	client.Permission = &PermissionService{
+		client: client,
+		Scheme: &PermissionSchemeService{
+			client: client,
+			Grant:  &PermissionGrantSchemeService{client: client},
+		},
+	}
+
+	client.Project = &ProjectService{
+		client: client,
+
+		Category:   &ProjectCategoryService{client: client},
+		Component:  &ProjectComponentService{client: client},
+		Valid:      &ProjectValidationService{client: client},
+		Permission: &ProjectPermissionSchemeService{client: client},
+
+		Role: &ProjectRoleService{
+			client: client,
+			Actor:  &ProjectRoleActorService{client: client},
+		},
+
+		Type:    &ProjectTypeService{client: client},
+		Version: &ProjectVersionService{client: client},
+	}
+
+	client.User = &UserService{
+		client: client,
+		Search: &UserSearchService{client: client},
 	}
 
 	return
 }
 
 func (c *Client) newRequest(ctx context.Context, method, urlAsString string, payload interface{}) (request *http.Request, err error) {
+
+	if ctx == nil {
+		return nil, errors.New("the context param is nil, please provide a valid one")
+	}
 
 	relativePath, err := url.Parse(urlAsString)
 	if err != nil {
@@ -94,7 +165,6 @@ func (c *Client) newRequest(ctx context.Context, method, urlAsString string, pay
 	endpointPath := c.Site.ResolveReference(relativePath)
 	var payloadBuffer io.ReadWriter
 	if payload != nil {
-
 		payloadBuffer = new(bytes.Buffer)
 		if err = json.NewEncoder(payloadBuffer).Encode(payload); err != nil {
 			return
@@ -106,7 +176,13 @@ func (c *Client) newRequest(ctx context.Context, method, urlAsString string, pay
 		return
 	}
 
-	request.SetBasicAuth(c.Auth.mail, c.Auth.token)
+	if c.Auth.basicAuthProvided {
+		request.SetBasicAuth(c.Auth.mail, c.Auth.token)
+	}
+
+	if c.Auth.userAgentProvided {
+		request.Header.Set("User-Agent", c.Auth.agent)
+	}
 
 	return
 }
@@ -136,6 +212,7 @@ type Response struct {
 	Endpoint    string
 	Headers     map[string][]string
 	BodyAsBytes []byte
+	Method      string
 }
 
 func newResponse(http *http.Response, endpoint string) (response *Response, err error) {
@@ -155,6 +232,7 @@ func newResponse(http *http.Response, endpoint string) (response *Response, err 
 		Headers:     http.Header,
 		BodyAsBytes: httpResponseAsBytes,
 		Endpoint:    endpoint,
+		Method:      http.Request.Method,
 	}
 
 	return &newResponse, nil
@@ -180,13 +258,8 @@ func checkResponse(http *http.Response, endpoint string) (response *Response, er
 		Headers:     http.Header,
 		BodyAsBytes: httpResponseAsBytes,
 		Endpoint:    endpoint,
+		Method:      http.Request.Method,
 	}
 
 	return &newErrorResponse, fmt.Errorf("request failed. Please analyze the request body for more details. Status Code: %d", statusCode)
-}
-
-func validateURLParam(urls *url.Values, key, value string) {
-	if len(value) != 0 {
-		urls.Add(key, value)
-	}
 }

@@ -1,0 +1,6 @@
+{
+  "errorMessages": [],
+  "errors": {
+    "projectKey": "A project with that project key already exists."
+  }
+}

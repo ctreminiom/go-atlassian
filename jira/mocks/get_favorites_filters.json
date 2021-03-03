@@ -1,0 +1,101 @@
+[
+  {
+    "self": "https://your-domain.atlassian.net/rest/api/3/filter/10000",
+    "id": "10000",
+    "name": "All Open Bugs",
+    "description": "Lists all open bugs",
+    "owner": {
+      "self": "https://your-domain.atlassian.net/rest/api/3/user?accountId=5b10a2844c20165700ede21g",
+      "key": "",
+      "accountId": "5b10a2844c20165700ede21g",
+      "name": "",
+      "avatarUrls": {
+        "48x48": "https://avatar-management--avatars.server-location.prod.public.atl-paas.net/initials/MK-5.png?size=48&s=48",
+        "24x24": "https://avatar-management--avatars.server-location.prod.public.atl-paas.net/initials/MK-5.png?size=24&s=24",
+        "16x16": "https://avatar-management--avatars.server-location.prod.public.atl-paas.net/initials/MK-5.png?size=16&s=16",
+        "32x32": "https://avatar-management--avatars.server-location.prod.public.atl-paas.net/initials/MK-5.png?size=32&s=32"
+      },
+      "displayName": "Mia Krystof",
+      "active": false
+    },
+    "jql": "type = Bug and resolution is empty",
+    "viewUrl": "https://your-domain.atlassian.net/issues/?filter=10000",
+    "searchUrl": "https://your-domain.atlassian.net/rest/api/3/search?jql=type%20%3D%20Bug%20and%20resolutino%20is%20empty",
+    "favourite": true,
+    "favouritedCount": 0,
+    "sharePermissions": [],
+    "subscriptions": {
+      "size": 0,
+      "items": [],
+      "max-results": 0,
+      "start-index": 0,
+      "end-index": 0
+    }
+  },
+  {
+    "self": "https://your-domain.atlassian.net/rest/api/3/filter/10010",
+    "id": "10010",
+    "name": "My issues",
+    "description": "Issues assigned to me",
+    "owner": {
+      "self": "https://your-domain.atlassian.net/rest/api/3/user?accountId=5b10a2844c20165700ede21g",
+      "key": "",
+      "accountId": "5b10a2844c20165700ede21g",
+      "name": "",
+      "avatarUrls": {
+        "48x48": "https://avatar-management--avatars.server-location.prod.public.atl-paas.net/initials/MK-5.png?size=48&s=48",
+        "24x24": "https://avatar-management--avatars.server-location.prod.public.atl-paas.net/initials/MK-5.png?size=24&s=24",
+        "16x16": "https://avatar-management--avatars.server-location.prod.public.atl-paas.net/initials/MK-5.png?size=16&s=16",
+        "32x32": "https://avatar-management--avatars.server-location.prod.public.atl-paas.net/initials/MK-5.png?size=32&s=32"
+      },
+      "displayName": "Mia Krystof",
+      "active": false
+    },
+    "jql": "assignee = currentUser() and resolution is empty",
+    "viewUrl": "https://your-domain.atlassian.net/issues/?filter=10010",
+    "searchUrl": "https://your-domain.atlassian.net/rest/api/3/search?jql=assignee+in+%28currentUser%28%29%29+and+resolution+is+empty",
+    "favourite": true,
+    "favouritedCount": 0,
+    "sharePermissions": [
+      {
+        "id": 10000,
+        "type": "global"
+      },
+      {
+        "id": 10010,
+        "type": "project",
+        "project": {
+          "self": "https://your-domain.atlassian.net/rest/api/3/project/EX",
+          "id": "10000",
+          "key": "EX",
+          "name": "Example",
+          "avatarUrls": {
+            "48x48": "https://your-domain.atlassian.net/secure/projectavatar?size=large&pid=10000",
+            "24x24": "https://your-domain.atlassian.net/secure/projectavatar?size=small&pid=10000",
+            "16x16": "https://your-domain.atlassian.net/secure/projectavatar?size=xsmall&pid=10000",
+            "32x32": "https://your-domain.atlassian.net/secure/projectavatar?size=medium&pid=10000"
+          },
+          "projectCategory": {
+            "self": "https://your-domain.atlassian.net/rest/api/3/projectCategory/10000",
+            "id": "10000",
+            "name": "FIRST",
+            "description": "First Project Category"
+          },
+          "simplified": false,
+          "style": "classic",
+          "insight": {
+            "totalIssueCount": 100,
+            "lastIssueUpdateTime": "2021-01-18T02:59:25.893+0000"
+          }
+        }
+      }
+    ],
+    "subscriptions": {
+      "size": 0,
+      "items": [],
+      "max-results": 0,
+      "start-index": 0,
+      "end-index": 0
+    }
+  }
+]

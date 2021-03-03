@@ -9,10 +9,7 @@ import (
 	"strconv"
 )
 
-type CommentService struct {
-	client     *Client
-	Properties *CommentPropertiesService
-}
+type CommentService struct{ client *Client }
 
 type IssueCommentScheme struct {
 	StartAt    int             `json:"startAt"`
@@ -22,24 +19,10 @@ type IssueCommentScheme struct {
 }
 
 type CommentScheme struct {
-	Self   string `json:"self"`
-	ID     string `json:"id"`
-	Author struct {
-		Self         string `json:"self"`
-		AccountID    string `json:"accountId"`
-		EmailAddress string `json:"emailAddress"`
-		AvatarUrls   struct {
-			Four8X48  string `json:"48x48"`
-			Two4X24   string `json:"24x24"`
-			One6X16   string `json:"16x16"`
-			Three2X32 string `json:"32x32"`
-		} `json:"avatarUrls"`
-		DisplayName string `json:"displayName"`
-		Active      bool   `json:"active"`
-		TimeZone    string `json:"timeZone"`
-		AccountType string `json:"accountType"`
-	} `json:"author"`
-	Body struct {
+	Self   string      `json:"self"`
+	ID     string      `json:"id"`
+	Author *UserScheme `json:"author"`
+	Body   struct {
 		Version int    `json:"version"`
 		Type    string `json:"type"`
 		Content []struct {
@@ -57,9 +40,8 @@ type CommentScheme struct {
 		DisplayName string `json:"displayName"`
 		Active      bool   `json:"active"`
 	} `json:"updateAuthor"`
-	Created string `json:"created"`
-	Updated string `json:"updated"`
-
+	Created    string `json:"created"`
+	Updated    string `json:"updated"`
 	Visibility struct {
 		Type  string `json:"type"`
 		Value string `json:"value"`
@@ -67,8 +49,12 @@ type CommentScheme struct {
 }
 
 // Returns all comments for an issue.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-comments/#api-rest-api-3-issue-issueidorkey-comment-get
-func (c *CommentService) Comments(ctx context.Context, issueKeyOrID string, orderBy string, expands []string, startAt, maxResults int) (result *IssueCommentScheme, response *Response, err error) {
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/comments#get-comments
+func (c *CommentService) Gets(ctx context.Context, issueKeyOrID, orderBy string, expands []string, startAt, maxResults int) (result *IssueCommentScheme, response *Response, err error) {
+
+	if len(issueKeyOrID) == 0 {
+		return nil, nil, fmt.Errorf("error, please provide a valid issueKeyOrID value")
+	}
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -98,6 +84,7 @@ func (c *CommentService) Comments(ctx context.Context, issueKeyOrID string, orde
 	if err != nil {
 		return
 	}
+
 	request.Header.Set("Content-Type", "application/json")
 
 	response, err = c.client.Do(request)
@@ -113,34 +100,17 @@ func (c *CommentService) Comments(ctx context.Context, issueKeyOrID string, orde
 	return
 }
 
-// Adds a comment to an issue.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-comments/#api-rest-api-3-issue-issueidorkey-comment-post
-func (c *CommentService) Add(ctx context.Context, issueKeyOrID string, payload interface{}) (result *CommentScheme, response *Response, err error) {
-
-	var endpoint = fmt.Sprintf("rest/api/3/issue/%v/comment", issueKeyOrID)
-	request, err := c.client.newRequest(ctx, http.MethodPost, endpoint, payload)
-	if err != nil {
-		return
-	}
-
-	request.Header.Set("Content-Type", "application/json")
-
-	response, err = c.client.Do(request)
-	if err != nil {
-		return
-	}
-
-	result = new(CommentScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return
-	}
-
-	return
-}
-
 // Returns a comment.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-comments/#api-rest-api-3-issue-issueidorkey-comment-id-get
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/comments#get-comment
 func (c *CommentService) Get(ctx context.Context, issueKeyOrID, commentID string) (result *CommentScheme, response *Response, err error) {
+
+	if len(issueKeyOrID) == 0 {
+		return nil, nil, fmt.Errorf("error, please provide a valid issueKeyOrID value")
+	}
+
+	if len(commentID) == 0 {
+		return nil, nil, fmt.Errorf("error, please provide a valid commentID value")
+	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/issue/%v/comment/%v", issueKeyOrID, commentID)
 
@@ -149,33 +119,7 @@ func (c *CommentService) Get(ctx context.Context, issueKeyOrID, commentID string
 		return
 	}
 
-	request.Header.Set("Content-Type", "application/json")
-
-	response, err = c.client.Do(request)
-	if err != nil {
-		return
-	}
-
-	result = new(CommentScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return
-	}
-
-	return
-}
-
-// Updates a comment.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-comments/#api-rest-api-3-issue-issueidorkey-comment-id-put
-func (c *CommentService) Update(ctx context.Context, issueKeyOrID, commentID string, payload interface{}) (result *CommentScheme, response *Response, err error) {
-
-	var endpoint = fmt.Sprintf("rest/api/3/issue/%v/comment/%v", issueKeyOrID, commentID)
-
-	request, err := c.client.newRequest(ctx, http.MethodPut, endpoint, payload)
-	if err != nil {
-		return
-	}
-
-	request.Header.Set("Content-Type", "application/json")
+	request.Header.Set("Accept", "application/json")
 
 	response, err = c.client.Do(request)
 	if err != nil {
@@ -191,8 +135,16 @@ func (c *CommentService) Update(ctx context.Context, issueKeyOrID, commentID str
 }
 
 // Deletes a comment.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-comments/#api-rest-api-3-issue-issueidorkey-comment-id-delete
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/comments#delete-comment
 func (c *CommentService) Delete(ctx context.Context, issueKeyOrID, commentID string) (response *Response, err error) {
+
+	if len(issueKeyOrID) == 0 {
+		return nil, fmt.Errorf("error, please provide a valid issueKeyOrID value")
+	}
+
+	if len(commentID) == 0 {
+		return nil, fmt.Errorf("error, please provide a valid commentID value")
+	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/issue/%v/comment/%v", issueKeyOrID, commentID)
 

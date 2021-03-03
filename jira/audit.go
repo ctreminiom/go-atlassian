@@ -46,15 +46,34 @@ type AuditRecordScheme struct {
 	} `json:"records,omitempty"`
 }
 
-func (a *AuditService) Get(ctx context.Context, offset, limit int, filter, from, to string) (records *AuditRecordScheme, response *Response, err error) {
+type AuditRecordGetOptions struct {
+	Filter string
+	From   string
+	To     string
+}
+
+// Returns a list of audit records. The list can be filtered to include items:
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/audit-records#get-audit-records
+func (a *AuditService) Get(ctx context.Context, options *AuditRecordGetOptions, offset, limit int) (result *AuditRecordScheme, response *Response, err error) {
 
 	params := url.Values{}
 	params.Add("offset", strconv.Itoa(offset))
 	params.Add("limit", strconv.Itoa(limit))
 
-	validateURLParam(&params, "filter", filter)
-	validateURLParam(&params, "from", from)
-	validateURLParam(&params, "to", to)
+	if options != nil {
+
+		if len(options.Filter) != 0 {
+			params.Add("filter", options.Filter)
+		}
+
+		if len(options.From) != 0 {
+			params.Add("from", options.From)
+		}
+
+		if len(options.To) != 0 {
+			params.Add("to", options.To)
+		}
+	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/auditing/record?%s", params.Encode())
 	request, err := a.client.newRequest(ctx, http.MethodGet, endpoint, nil)
@@ -62,12 +81,14 @@ func (a *AuditService) Get(ctx context.Context, offset, limit int, filter, from,
 		return
 	}
 
+	request.Header.Set("Accept", "application/json")
+
 	response, err = a.client.Do(request)
 	if err != nil {
 		return
 	}
 
-	result := new(AuditRecordScheme)
+	result = new(AuditRecordScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}

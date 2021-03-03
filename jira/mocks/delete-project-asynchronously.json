@@ -1,0 +1,14 @@
+{
+  "self": "<string>",
+  "id": "<string>",
+  "description": "<string>",
+  "status": "ENQUEUED",
+  "message": "<string>",
+  "submittedBy": 42,
+  "progress": 51,
+  "elapsedRuntime": 48,
+  "submitted": 50,
+  "started": 48,
+  "finished": 49,
+  "lastUpdate": 62
+}

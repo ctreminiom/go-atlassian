@@ -1,0 +1,10 @@
+[
+  {
+    "id": 10010,
+    "type": "group",
+    "group": {
+      "name": "jira-administrators",
+      "self": "https://your-domain.atlassian.net/rest/api/3/group?groupname=jira-administrators"
+    }
+  }
+]

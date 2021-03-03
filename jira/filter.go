@@ -22,8 +22,12 @@ type FilterBodyScheme struct {
 }
 
 // Creates a filter. The filter is shared according to the default share scope. The filter is not selected as a favorite.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-filters/#api-rest-api-3-filter-post
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/filters#create-filter
 func (f *FilterService) Create(ctx context.Context, payload *FilterBodyScheme) (result *FilterScheme, response *Response, err error) {
+
+	if payload == nil {
+		return nil, nil, fmt.Errorf("error, payload value is nil, please provide a valid FilterBodyScheme pointer")
+	}
 
 	var endpoint = "rest/api/3/filter"
 	request, err := f.client.newRequest(ctx, http.MethodPost, endpoint, &payload)
@@ -31,6 +35,7 @@ func (f *FilterService) Create(ctx context.Context, payload *FilterBodyScheme) (
 		return
 	}
 
+	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Content-Type", "application/json")
 
 	response, err = f.client.Do(request)
@@ -40,45 +45,23 @@ func (f *FilterService) Create(ctx context.Context, payload *FilterBodyScheme) (
 
 	result = new(FilterScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return
+		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
 
 	return
 }
 
 // Returns the visible favorite filters of the user.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-filters/#api-rest-api-3-filter-favourite-get
-func (f *FilterService) Favorite(ctx context.Context, expands []string) (result *[]FilterScheme, response *Response, err error) {
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/filters#get-favorites
+func (f *FilterService) Favorite(ctx context.Context) (result *[]FilterScheme, response *Response, err error) {
 
-	params := url.Values{}
-
-	var expand string
-	for index, value := range expands {
-
-		if index == 0 {
-			expand = value
-			continue
-		}
-
-		expand += "," + value
-	}
-
-	if len(expand) != 0 {
-		params.Add("expand", expand)
-	}
-
-	var endpoint string
-	if params.Encode() != "" {
-		endpoint = fmt.Sprintf("rest/api/3/filter/favourite?%v", params.Encode())
-	} else {
-		endpoint = "rest/api/3/filter/favourite"
-	}
+	var endpoint = "rest/api/3/filter/favourite"
 
 	request, err := f.client.newRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
 		return
 	}
-	request.Header.Set("Content-Type", "application/json")
+	request.Header.Set("Accept", "application/json")
 
 	response, err = f.client.Do(request)
 	if err != nil {
@@ -87,15 +70,15 @@ func (f *FilterService) Favorite(ctx context.Context, expands []string) (result 
 
 	result = new([]FilterScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return
+		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
 
 	return
 }
 
 // Returns the filters owned by the user. If includeFavourites is true, the user's visible favorite filters are also returned.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-filters/#api-rest-api-3-filter-my-get
-func (f *FilterService) My(ctx context.Context, expands []string, favorites bool) (result *[]FilterScheme, response *Response, err error) {
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/filters#get-my-filters
+func (f *FilterService) My(ctx context.Context, favorites bool, expands []string) (result *[]FilterScheme, response *Response, err error) {
 
 	params := url.Values{}
 
@@ -129,7 +112,8 @@ func (f *FilterService) My(ctx context.Context, expands []string, favorites bool
 	if err != nil {
 		return
 	}
-	request.Header.Set("Content-Type", "application/json")
+
+	request.Header.Set("Accept", "application/json")
 
 	response, err = f.client.Do(request)
 	if err != nil {
@@ -138,7 +122,7 @@ func (f *FilterService) My(ctx context.Context, expands []string, favorites bool
 
 	result = new([]FilterScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return
+		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
 
 	return
@@ -155,8 +139,12 @@ type FilterSearchOptionScheme struct {
 }
 
 // Returns a paginated list of filters. Use this operation to get:
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-filters/#api-rest-api-3-filter-search-get
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/filters#search-filters
 func (f *FilterService) Search(ctx context.Context, options *FilterSearchOptionScheme, startAt, maxResults int) (result *FilterSearchScheme, response *Response, err error) {
+
+	if options == nil {
+		return nil, nil, fmt.Errorf("error, options value is nil, please provide a valid FilterSearchOptionScheme pointer")
+	}
 
 	params := url.Values{}
 
@@ -176,18 +164,8 @@ func (f *FilterService) Search(ctx context.Context, options *FilterSearchOptionS
 		params.Add("projectId", strconv.Itoa(options.ProjectID))
 	}
 
-	var filtersIDs string
-	for index, value := range options.IDs {
-
-		if index == 0 {
-			filtersIDs = strconv.Itoa(value)
-		}
-
-		filtersIDs += "," + strconv.Itoa(value)
-	}
-
-	if len(filtersIDs) != 0 {
-		params.Add("id", filtersIDs)
+	for _, filterID := range options.IDs {
+		params.Add("id", strconv.Itoa(filterID))
 	}
 
 	if options.OrderBy != "" {
@@ -217,7 +195,7 @@ func (f *FilterService) Search(ctx context.Context, options *FilterSearchOptionS
 	if err != nil {
 		return
 	}
-	request.Header.Set("Content-Type", "application/json")
+	request.Header.Set("Accept", "application/json")
 
 	response, err = f.client.Do(request)
 	if err != nil {
@@ -226,15 +204,15 @@ func (f *FilterService) Search(ctx context.Context, options *FilterSearchOptionS
 
 	result = new(FilterSearchScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return
+		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
 
 	return
 }
 
 // Returns a filter.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-filters/#api-rest-api-3-filter-id-get
-func (f *FilterService) Get(ctx context.Context, filterID string, expands []string) (result *FilterScheme, response *Response, err error) {
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/filters#get-filter
+func (f *FilterService) Get(ctx context.Context, filterID int, expands []string) (result *FilterScheme, response *Response, err error) {
 
 	params := url.Values{}
 
@@ -249,7 +227,9 @@ func (f *FilterService) Get(ctx context.Context, filterID string, expands []stri
 		expand += "," + value
 	}
 
-	params.Add("expand", expand)
+	if len(expand) != 0 {
+		params.Add("expand", expand)
+	}
 
 	var endpoint string
 	if params.Encode() != "" {
@@ -271,21 +251,27 @@ func (f *FilterService) Get(ctx context.Context, filterID string, expands []stri
 
 	result = new(FilterScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return
+		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
 
 	return
 }
 
 // Updates a filter. Use this operation to update a filter's name, description, JQL, or sharing.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-filters/#api-rest-api-3-filter-id-put
-func (f *FilterService) Update(ctx context.Context, filterID string, payload *FilterBodyScheme) (result *FilterScheme, response *Response, err error) {
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/filters#update-filter
+func (f *FilterService) Update(ctx context.Context, filterID int, payload *FilterBodyScheme) (result *FilterScheme, response *Response, err error) {
+
+	if payload == nil {
+		return nil, nil, fmt.Errorf("error, payload value is nil, please provide a valid FilterBodyScheme pointer")
+	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/filter/%v", filterID)
 	request, err := f.client.newRequest(ctx, http.MethodPut, endpoint, &payload)
 	if err != nil {
 		return
 	}
+
+	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Content-Type", "application/json")
 
 	response, err = f.client.Do(request)
@@ -295,22 +281,21 @@ func (f *FilterService) Update(ctx context.Context, filterID string, payload *Fi
 
 	result = new(FilterScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return
+		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
 
 	return
 }
 
 // Delete a filter.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-filters/#api-rest-api-3-filter-id-delete
-func (f *FilterService) Delete(ctx context.Context, filterID string) (response *Response, err error) {
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/filters#delete-filter
+func (f *FilterService) Delete(ctx context.Context, filterID int) (response *Response, err error) {
 
 	var endpoint = fmt.Sprintf("rest/api/3/filter/%v", filterID)
 	request, err := f.client.newRequest(ctx, http.MethodDelete, endpoint, nil)
 	if err != nil {
 		return
 	}
-	request.Header.Set("Content-Type", "application/json")
 
 	response, err = f.client.Do(request)
 	if err != nil {
@@ -354,87 +339,87 @@ type FilterSearchScheme struct {
 }
 
 type FilterScheme struct {
-	Self  string `json:"self"`
-	ID    string `json:"id"`
-	Name  string `json:"name"`
+	Self  string `json:"self,omitempty"`
+	ID    string `json:"id,omitempty"`
+	Name  string `json:"name,omitempty"`
 	Owner struct {
-		Self       string `json:"self"`
-		AccountID  string `json:"accountId"`
+		Self       string `json:"self,omitempty"`
+		AccountID  string `json:"accountId,omitempty"`
 		AvatarUrls struct {
-			Four8X48  string `json:"48x48"`
-			Two4X24   string `json:"24x24"`
-			One6X16   string `json:"16x16"`
-			Three2X32 string `json:"32x32"`
-		} `json:"avatarUrls"`
-		DisplayName string `json:"displayName"`
-		Active      bool   `json:"active"`
-	} `json:"owner"`
-	Jql              string `json:"jql"`
-	ViewURL          string `json:"viewUrl"`
-	SearchURL        string `json:"searchUrl"`
-	Favourite        bool   `json:"favourite"`
-	FavouritedCount  int    `json:"favouritedCount"`
+			Four8X48  string `json:"48x48,omitempty"`
+			Two4X24   string `json:"24x24,omitempty"`
+			One6X16   string `json:"16x16,omitempty"`
+			Three2X32 string `json:"32x32,omitempty"`
+		} `json:"avatarUrls,omitempty"`
+		DisplayName string `json:"displayName,omitempty"`
+		Active      bool   `json:"active,omitempty"`
+	} `json:"owner,omitempty"`
+	Jql              string `json:"jql,omitempty"`
+	ViewURL          string `json:"viewUrl,omitempty"`
+	SearchURL        string `json:"searchUrl,omitempty"`
+	Favourite        bool   `json:"favourite,omitempty"`
+	FavouritedCount  int    `json:"favouritedCount,omitempty"`
 	SharePermissions []struct {
-		ID      int    `json:"id"`
-		Type    string `json:"type"`
+		ID      int    `json:"id,omitempty"`
+		Type    string `json:"type,omitempty"`
 		Project struct {
-			Self         string `json:"self"`
-			ID           string `json:"id"`
-			Key          string `json:"key"`
-			AssigneeType string `json:"assigneeType"`
-			Name         string `json:"name"`
+			Self         string `json:"self,omitempty"`
+			ID           string `json:"id,omitempty"`
+			Key          string `json:"key,omitempty"`
+			AssigneeType string `json:"assigneeType,omitempty"`
+			Name         string `json:"name,omitempty"`
 			Roles        struct {
-			} `json:"roles"`
+			} `json:"roles,omitempty"`
 			AvatarUrls struct {
-				Four8X48  string `json:"48x48"`
-				Two4X24   string `json:"24x24"`
-				One6X16   string `json:"16x16"`
-				Three2X32 string `json:"32x32"`
-			} `json:"avatarUrls"`
-			ProjectTypeKey string `json:"projectTypeKey"`
-			Simplified     bool   `json:"simplified"`
-			Style          string `json:"style"`
+				Four8X48  string `json:"48x48,omitempty"`
+				Two4X24   string `json:"24x24,omitempty"`
+				One6X16   string `json:"16x16,omitempty"`
+				Three2X32 string `json:"32x32,omitempty"`
+			} `json:"avatarUrls,omitempty"`
+			ProjectTypeKey string `json:"projectTypeKey,omitempty"`
+			Simplified     bool   `json:"simplified,omitempty"`
+			Style          string `json:"style,omitempty"`
 			Properties     struct {
-			} `json:"properties"`
-		} `json:"project"`
-	} `json:"sharePermissions"`
+			} `json:"properties,omitempty"`
+		} `json:"project,omitempty"`
+	} `json:"sharePermissions,omitempty"`
 	SharedUsers struct {
-		Size  int `json:"size"`
+		Size  int `json:"size,omitempty"`
 		Items []struct {
-			Self       string `json:"self"`
-			AccountID  string `json:"accountId"`
+			Self       string `json:"self,omitempty"`
+			AccountID  string `json:"accountId,omitempty"`
 			AvatarUrls struct {
-				Four8X48  string `json:"48x48"`
-				Two4X24   string `json:"24x24"`
-				One6X16   string `json:"16x16"`
-				Three2X32 string `json:"32x32"`
-			} `json:"avatarUrls"`
-			DisplayName string `json:"displayName"`
-			Active      bool   `json:"active"`
-		} `json:"items"`
-		MaxResults int `json:"max-results"`
-		StartIndex int `json:"start-index"`
-		EndIndex   int `json:"end-index"`
-	} `json:"sharedUsers"`
+				Four8X48  string `json:"48x48,omitempty"`
+				Two4X24   string `json:"24x24,omitempty"`
+				One6X16   string `json:"16x16,omitempty"`
+				Three2X32 string `json:"32x32,omitempty"`
+			} `json:"avatarUrls,omitempty"`
+			DisplayName string `json:"displayName,omitempty"`
+			Active      bool   `json:"active,omitempty"`
+		} `json:"items,omitempty"`
+		MaxResults int `json:"max-results,omitempty"`
+		StartIndex int `json:"start-index,omitempty"`
+		EndIndex   int `json:"end-index,omitempty"`
+	} `json:"sharedUsers,omitempty"`
 	Subscriptions struct {
-		Size  int `json:"size"`
+		Size  int `json:"size,omitempty"`
 		Items []struct {
-			ID   int `json:"id"`
+			ID   int `json:"id,omitempty"`
 			User struct {
-				Self       string `json:"self"`
-				AccountID  string `json:"accountId"`
+				Self       string `json:"self,omitempty"`
+				AccountID  string `json:"accountId,omitempty"`
 				AvatarUrls struct {
-					Four8X48  string `json:"48x48"`
-					Two4X24   string `json:"24x24"`
-					One6X16   string `json:"16x16"`
-					Three2X32 string `json:"32x32"`
-				} `json:"avatarUrls"`
-				DisplayName string `json:"displayName"`
-				Active      bool   `json:"active"`
-			} `json:"user"`
-		} `json:"items"`
-		MaxResults int `json:"max-results"`
-		StartIndex int `json:"start-index"`
-		EndIndex   int `json:"end-index"`
-	} `json:"subscriptions"`
+					Four8X48  string `json:"48x48,omitempty"`
+					Two4X24   string `json:"24x24,omitempty"`
+					One6X16   string `json:"16x16,omitempty"`
+					Three2X32 string `json:"32x32,omitempty"`
+				} `json:"avatarUrls,omitempty"`
+				DisplayName string `json:"displayName,omitempty"`
+				Active      bool   `json:"active,omitempty"`
+			} `json:"user,omitempty"`
+		} `json:"items,omitempty"`
+		MaxResults int `json:"max-results,omitempty"`
+		StartIndex int `json:"start-index,omitempty"`
+		EndIndex   int `json:"end-index,omitempty"`
+	} `json:"subscriptions,omitempty"`
 }

@@ -1,0 +1,33 @@
+{
+  "maxResults": 100,
+  "startAt": 0,
+  "total": 5,
+  "isLast": true,
+  "values": [
+    {
+      "fieldConfigurationSchemeId": "10020",
+      "issueTypeId": "10000",
+      "fieldConfigurationId": "10010"
+    },
+    {
+      "fieldConfigurationSchemeId": "10020",
+      "issueTypeId": "10001",
+      "fieldConfigurationId": "10010"
+    },
+    {
+      "fieldConfigurationSchemeId": "10021",
+      "issueTypeId": "10002",
+      "fieldConfigurationId": "10000"
+    },
+    {
+      "fieldConfigurationSchemeId": "10022",
+      "issueTypeId": "default",
+      "fieldConfigurationId": "10011"
+    },
+    {
+      "fieldConfigurationSchemeId": "10023",
+      "issueTypeId": "default",
+      "fieldConfigurationId": "10000"
+    }
+  ]
+}

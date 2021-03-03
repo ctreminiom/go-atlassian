@@ -1,0 +1,22 @@
+
+{
+
+  "maxResults": 50,
+  "startAt": 0,
+  "total": 2,
+  "isLast": true,
+  "values": [
+    {
+      "id": 10000,
+      "name": "Default Field Configuration",
+      "description": "The default field configuration",
+      "isDefault": true
+    },
+    {
+      "id": 10001,
+      "name": "Jira Service Management Field Configuration for Project DESK",
+      "description": "This Jira Service Management Field Configuration was generated for Project DESK"
+    }
+  ]
+
+}

@@ -1,0 +1,7 @@
+{
+  "id": "10000",
+  "name": "Blocks",
+  "inward": "is blocked by",
+  "outward": "blocks",
+  "self": "https://ctreminiom.atlassian.net/rest/api/3/issueLinkType/10000"
+}

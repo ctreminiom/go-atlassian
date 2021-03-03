@@ -1,0 +1,29 @@
+{
+  "id": 7237823,
+  "name": "images.zip",
+  "entries": [
+    {
+      "path": "MG00N067.JPG",
+      "index": 0,
+      "size": "119 kB",
+      "mediaType": "image/jpeg",
+      "label": "MG00N067.JPG"
+    },
+    {
+      "path": "Allegro from Duet in C Major.mp3",
+      "index": 1,
+      "size": "1.36 MB",
+      "mediaType": "audio/mpeg",
+      "label": "Allegro from Duet in C Major.mp3"
+    },
+    {
+      "path": "long/path/thanks/to/lots/of/subdirectories/inside/making/it/quite/hard/to/reach/the/leaf.txt",
+      "index": 2,
+      "size": "0.0 k",
+      "mediaType": "text/plain",
+      "label": "long/path/thanks/to/.../reach/the/leaf.txt"
+    }
+  ],
+  "totalEntryCount": 39,
+  "mediaType": "application/zip"
+}

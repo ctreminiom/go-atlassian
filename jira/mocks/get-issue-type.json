@@ -1,0 +1,10 @@
+{
+  "self": "https://your-domain.atlassian.net/rest/api/3/issueType/3",
+  "id": "3",
+  "description": "A task that needs to be done.",
+  "iconUrl": "https://your-domain.atlassian.net//secure/viewavatar?size=xsmall&avatarId=10299&avatarType=issuetype\",",
+  "name": "Task",
+  "subtask": false,
+  "avatarId": 1,
+  "hierarchyLevel": 0
+}

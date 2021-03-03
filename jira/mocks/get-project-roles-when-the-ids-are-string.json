@@ -1,0 +1,5 @@
+{
+  "Administrators": "https://your-domain.atlassian.net/rest/api/3/project/MKY/role/ROLE_AS_STRING",
+  "Users": "https://your-domain.atlassian.net/rest/api/3/project/MKY/role/10001/ROLE_AS_STRING",
+  "Developers": "https://your-domain.atlassian.net/rest/api/3/project/MKY/role/10000/ROLE_AS_STRING"
+}

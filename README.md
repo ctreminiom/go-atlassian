@@ -15,7 +15,7 @@
 [5]: https://codecov.io/gh/ctreminiom/go-atlassian/branch/main/graph/badge.svg?token=G0KPNMTIRV
 [6]: https://codecov.io/gh/ctreminiom/go-atlassian
 [7]: https://img.shields.io/badge/license-MIT-blue.svg
-[8]: https://github.com/virtomize/confluence-go-api/blob/master/LICENSE
+[8]: https://github.com/ctreminiom/go-atlassian/blob/master/LICENSE
 [9]:  https://img.shields.io/github/workflow/status/ctreminiom/go-atlassian/Testing?label=%F0%9F%A7%AA%20tests&style=flat&color=75C46B
 [10]: https://github.com/ctreminiom/go-atlassian/actions?query=workflow%3ATesting
 [11]: https://img.shields.io/badge/%F0%9F%92%A1%20go-documentation-00ACD7.svg?style=flat
@@ -33,21 +33,18 @@
 |Confluence Cloud | In development 👷|
 |Atlassian Admin Cloud | In development 👷|
 
-
-## Jira Cloud
-
-### Features
+## Features
 - Create issue issues with custom fields
 - Manage the screens, screens schemes, issue type screen schemes and all endpoints that interacts with the customfields
 - The 90% of the endpoints documented [here](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro/) were mapped and documented with examples.
 
-### Installation 📖
+## Installation 📖
 Make sure you have a working Go 1.14+ workspace (_[instructions](https://golang.org/doc/install)_), then:
 ```sh
 $ go get github.com/ctreminiom/go-atlassian/jira
 ```
 
-### Usage ✒️
+## Usage ✒️
 All interaction starts with a `jira.Client` struct. Create one with your Atlassian site host URL and a custom HTTP client if it's necessary.
 ```go
 package main
@@ -113,6 +110,8 @@ Contributions, issues and feature requests are welcome!
 Feel free to check [issues page](https://github.com/ctreminiom/go-atlassian/issues).
 ## Show your support
 Give a ⭐️ if this project helped you!
+[![Buy Me A Coffee](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/ctreminiom)
+
 ## 📝 License
 Copyright © 2021 [Carlos Treminio](https://github.com/ctreminiom).
 This project is [MIT](https://opensource.org/licenses/MIT) licensed.

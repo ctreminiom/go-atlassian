@@ -17,7 +17,7 @@ type ProjectCategoryScheme struct {
 }
 
 // Returns all project categories.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-categories/#api-rest-api-3-projectcategory-get
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/projects/categories#get-all-project-categories
 func (p *ProjectCategoryService) Gets(ctx context.Context) (result *[]ProjectCategoryScheme, response *Response, err error) {
 
 	var endpoint = "rest/api/3/projectCategory"
@@ -43,7 +43,7 @@ func (p *ProjectCategoryService) Gets(ctx context.Context) (result *[]ProjectCat
 }
 
 // Returns a project category.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-categories/#api-rest-api-3-projectcategory-id-get
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/projects/categories#get-project-category-by-id
 func (p *ProjectCategoryService) Get(ctx context.Context, projectCategoryID int) (result *ProjectCategoryScheme, response *Response, err error) {
 
 	var endpoint = fmt.Sprintf("rest/api/3/projectCategory/%v", projectCategoryID)
@@ -68,7 +68,7 @@ func (p *ProjectCategoryService) Get(ctx context.Context, projectCategoryID int)
 }
 
 // Creates a project category.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-categories/#api-rest-api-3-projectcategory-post
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/projects/categories#create-project-category
 func (p *ProjectCategoryService) Create(ctx context.Context, name, description string) (result *ProjectCategoryScheme, response *Response, err error) {
 
 	if len(name) == 0 {
@@ -107,7 +107,7 @@ func (p *ProjectCategoryService) Create(ctx context.Context, name, description s
 }
 
 // Updates a project category.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-categories/#api-rest-api-3-projectcategory-id-put
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/projects/categories#update-project-category
 func (p *ProjectCategoryService) Update(ctx context.Context, projectCategoryID int, name, description string) (result *ProjectCategoryScheme, response *Response, err error) {
 
 	payload := struct {
@@ -141,7 +141,7 @@ func (p *ProjectCategoryService) Update(ctx context.Context, projectCategoryID i
 }
 
 // Deletes a project category.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-categories/#api-rest-api-3-projectcategory-id-delete
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/projects/categories#delete-project-category
 func (p *ProjectCategoryService) Delete(ctx context.Context, projectCategoryID int) (response *Response, err error) {
 
 	var endpoint = fmt.Sprintf("rest/api/3/projectCategory/%v", projectCategoryID)

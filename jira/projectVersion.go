@@ -59,8 +59,7 @@ type ProjectVersionIssuesStatusForFixVersionScheme struct {
 }
 
 // Returns a paginated list of all versions in a project.
-// See the Get project versions resource if you want to get a full list of versions without pagination.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-versions/#api-rest-api-3-project-projectidorkey-version-get
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/projects/versions#get-project-versions-paginated
 func (p *ProjectVersionService) Gets(ctx context.Context, projectKeyOrID string, options *ProjectVersionGetsOptions, startAt, maxResults int) (result *ProjectVersionPageScheme, response *Response, err error) {
 
 	if len(projectKeyOrID) == 0 {
@@ -135,7 +134,7 @@ type ProjectVersionPayloadScheme struct {
 }
 
 // Creates a project version.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-versions/#api-rest-api-3-version-post
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/projects/versions#create-version
 func (p *ProjectVersionService) Create(ctx context.Context, payload *ProjectVersionPayloadScheme) (result *ProjectVersionScheme, response *Response, err error) {
 
 	if payload == nil {
@@ -166,7 +165,7 @@ func (p *ProjectVersionService) Create(ctx context.Context, payload *ProjectVers
 }
 
 // Returns a project version.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-versions/#api-rest-api-3-version-id-get
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/projects/versions#get-version
 func (p *ProjectVersionService) Get(ctx context.Context, versionID string, expands []string) (result *ProjectVersionScheme, response *Response, err error) {
 
 	params := url.Values{}
@@ -214,7 +213,7 @@ func (p *ProjectVersionService) Get(ctx context.Context, versionID string, expan
 }
 
 // Updates a project version.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-versions/#api-rest-api-3-version-id-put
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/projects/versions#update-version
 func (p *ProjectVersionService) Update(ctx context.Context, versionID string, payload *ProjectVersionPayloadScheme) (result *ProjectVersionScheme, response *Response, err error) {
 
 	if len(versionID) == 0 {
@@ -233,6 +232,7 @@ func (p *ProjectVersionService) Update(ctx context.Context, versionID string, pa
 	}
 
 	request.Header.Set("Accept", "application/json")
+	request.Header.Set("Content-Type", "application/json")
 
 	response, err = p.client.Do(request)
 	if err != nil {
@@ -249,7 +249,7 @@ func (p *ProjectVersionService) Update(ctx context.Context, versionID string, pa
 
 // Merges two project versions.
 // The merge is completed by deleting the version specified in id and replacing any occurrences of its ID in fixVersion with the version ID specified in moveIssuesTo.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-versions/#api-rest-api-3-version-id-mergeto-moveissuesto-put
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/projects/versions#merge-versions
 func (p *ProjectVersionService) Merge(ctx context.Context, versionID, moveIssuesTo string) (response *Response, err error) {
 
 	if len(versionID) == 0 {
@@ -295,7 +295,7 @@ type VersionIssueCountCustomFieldUsageScheme struct {
 // 1. Number of issues where the fixVersion is set to the version.
 // 2. Number of issues where the affectedVersion is set to the version.
 // 3. Number of issues where a version custom field is set to the version.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-versions/#api-rest-api-3-version-id-relatedissuecounts-get
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/projects/versions#get-versions-related-issues-count
 func (p *ProjectVersionService) RelatedIssueCounts(ctx context.Context, versionID string) (result *VersionIssueCountsScheme, response *Response, err error) {
 
 	if len(versionID) == 0 {
@@ -331,7 +331,7 @@ type VersionUnresolvedIssuesCountScheme struct {
 }
 
 // Returns counts of the issues and unresolved issues for the project version.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-versions/#api-rest-api-3-version-id-unresolvedissuecount-get
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/projects/versions#get-versions-unresolved-issues-count
 func (p *ProjectVersionService) UnresolvedIssueCount(ctx context.Context, versionID string) (result *VersionUnresolvedIssuesCountScheme, response *Response, err error) {
 
 	if len(versionID) == 0 {

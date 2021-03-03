@@ -35,7 +35,7 @@ type ScreenSchemeScheme struct {
 
 // Returns a paginated list of screen schemes.
 // Only screen schemes used in classic projects are returned.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screen-schemes/#api-rest-api-3-screenscheme-get
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/screens/schemes#get-screen-schemes
 func (s *ScreenSchemeService) Gets(ctx context.Context, screenSchemeIDs []int, startAt, maxResults int) (result *ScreenSchemePageScheme, response *Response, err error) {
 
 	params := url.Values{}
@@ -69,17 +69,19 @@ func (s *ScreenSchemeService) Gets(ctx context.Context, screenSchemeIDs []int, s
 }
 
 type ScreenSchemePayloadScheme struct {
-	Screens struct {
-		Default int `json:"default" validate:"required"`
-		View    int `json:"view" validate:"required"`
-		Edit    int `json:"edit" validate:"required"`
-	} `json:"screens"`
-	Name        string `json:"name" validate:"required"`
-	Description string `json:"description,omitempty"`
+	Screens     *ScreenSchemeScreensPayloadScheme `json:"screens"`
+	Name        string                            `json:"name" validate:"required"`
+	Description string                            `json:"description,omitempty"`
+}
+
+type ScreenSchemeScreensPayloadScheme struct {
+	Default int `json:"default" validate:"required"`
+	View    int `json:"view" validate:"required"`
+	Edit    int `json:"edit" validate:"required"`
 }
 
 // Creates a screen scheme.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screen-schemes/#api-rest-api-3-screenscheme-post
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/screens/schemes#create-screen-scheme
 func (s *ScreenSchemeService) Create(ctx context.Context, payload *ScreenSchemePayloadScheme) (result *ScreenSchemeScheme, response *Response, err error) {
 
 	if payload == nil {
@@ -114,20 +116,9 @@ func (s *ScreenSchemeService) Create(ctx context.Context, payload *ScreenSchemeP
 	return
 }
 
-type ScreenSchemeUpdatePayloadScheme struct {
-	Screens struct {
-		Edit    string `json:"edit"`
-		Create  string `json:"create"`
-		View    string `json:"view"`
-		Default string `json:"default"`
-	} `json:"screens"`
-	Name        string `json:"name"`
-	Description string `json:"description"`
-}
-
 // Updates a screen scheme. Only screen schemes used in classic projects can be updated.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screen-schemes/#api-rest-api-3-screenscheme-screenschemeid-put
-func (s *ScreenSchemeService) Update(ctx context.Context, screenSchemeID string, payload *ScreenSchemeUpdatePayloadScheme) (response *Response, err error) {
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/screens/schemes#update-screen-scheme
+func (s *ScreenSchemeService) Update(ctx context.Context, screenSchemeID string, payload *ScreenSchemePayloadScheme) (response *Response, err error) {
 
 	if len(screenSchemeID) == 0 {
 		return nil, fmt.Errorf("error, please provide a valid screenSchemeID value")
@@ -158,7 +149,7 @@ func (s *ScreenSchemeService) Update(ctx context.Context, screenSchemeID string,
 // Deletes a screen scheme.
 // A screen scheme cannot be deleted if it is used in an issue type screen scheme.
 // Only screens schemes used in classic projects can be deleted.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screen-schemes/#api-rest-api-3-screenscheme-screenschemeid-delete
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/screens/schemes#delete-screen-scheme
 func (s *ScreenSchemeService) Delete(ctx context.Context, screenSchemeID string) (response *Response, err error) {
 
 	if len(screenSchemeID) == 0 {

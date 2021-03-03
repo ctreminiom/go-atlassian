@@ -26,14 +26,11 @@ func TestPermissionGrantSchemeService_Create(t *testing.T) {
 			name:     "CreatePermissionGrantWhenTheParametersAreCorrect",
 			schemeID: 1000,
 			payload: &PermissionGrantPayloadScheme{
-				Holder: struct {
-					Parameter string `json:"parameter,omitempty"`
-					Type      string `json:"type,omitempty"`
-				}{
-					Parameter: "jira-core-users",
+				Holder: &PermissionGrantHolderPayloadScheme{
+					Parameter: "scrum-masters",
 					Type:      "group",
 				},
-				Permission: "ADMINISTER_PROJECTS",
+				Permission: "EDIT_ISSUES",
 			},
 			mockFile:           "./mocks/get-permission-grant.json",
 			wantHTTPMethod:     http.MethodPost,
@@ -59,14 +56,11 @@ func TestPermissionGrantSchemeService_Create(t *testing.T) {
 			name:     "CreatePermissionGrantWhenTheEndpointIsIncorrect",
 			schemeID: 1000,
 			payload: &PermissionGrantPayloadScheme{
-				Holder: struct {
-					Parameter string `json:"parameter,omitempty"`
-					Type      string `json:"type,omitempty"`
-				}{
-					Parameter: "jira-core-users",
+				Holder: &PermissionGrantHolderPayloadScheme{
+					Parameter: "scrum-masters",
 					Type:      "group",
 				},
-				Permission: "ADMINISTER_PROJECTS",
+				Permission: "EDIT_ISSUES",
 			},
 			mockFile:           "./mocks/get-permission-grant.json",
 			wantHTTPMethod:     http.MethodPost,
@@ -80,14 +74,11 @@ func TestPermissionGrantSchemeService_Create(t *testing.T) {
 			name:     "CreatePermissionGrantWhenTheRequestMethodIsIncorrect",
 			schemeID: 1000,
 			payload: &PermissionGrantPayloadScheme{
-				Holder: struct {
-					Parameter string `json:"parameter,omitempty"`
-					Type      string `json:"type,omitempty"`
-				}{
-					Parameter: "jira-core-users",
+				Holder: &PermissionGrantHolderPayloadScheme{
+					Parameter: "scrum-masters",
 					Type:      "group",
 				},
-				Permission: "ADMINISTER_PROJECTS",
+				Permission: "EDIT_ISSUES",
 			},
 			mockFile:           "./mocks/get-permission-grant.json",
 			wantHTTPMethod:     http.MethodDelete,
@@ -101,14 +92,11 @@ func TestPermissionGrantSchemeService_Create(t *testing.T) {
 			name:     "CreatePermissionGrantWhenTheStatusCodeIsIncorrect",
 			schemeID: 1000,
 			payload: &PermissionGrantPayloadScheme{
-				Holder: struct {
-					Parameter string `json:"parameter,omitempty"`
-					Type      string `json:"type,omitempty"`
-				}{
-					Parameter: "jira-core-users",
+				Holder: &PermissionGrantHolderPayloadScheme{
+					Parameter: "scrum-masters",
 					Type:      "group",
 				},
-				Permission: "ADMINISTER_PROJECTS",
+				Permission: "EDIT_ISSUES",
 			},
 			mockFile:           "./mocks/get-permission-grant.json",
 			wantHTTPMethod:     http.MethodPost,
@@ -122,14 +110,11 @@ func TestPermissionGrantSchemeService_Create(t *testing.T) {
 			name:     "CreatePermissionGrantWhenTheContextIsNil",
 			schemeID: 1000,
 			payload: &PermissionGrantPayloadScheme{
-				Holder: struct {
-					Parameter string `json:"parameter,omitempty"`
-					Type      string `json:"type,omitempty"`
-				}{
-					Parameter: "jira-core-users",
+				Holder: &PermissionGrantHolderPayloadScheme{
+					Parameter: "scrum-masters",
 					Type:      "group",
 				},
-				Permission: "ADMINISTER_PROJECTS",
+				Permission: "EDIT_ISSUES",
 			},
 			mockFile:           "./mocks/get-permission-grant.json",
 			wantHTTPMethod:     http.MethodPost,
@@ -143,14 +128,11 @@ func TestPermissionGrantSchemeService_Create(t *testing.T) {
 			name:     "CreatePermissionGrantWhenTheResponseBodyHasADifferentFormat",
 			schemeID: 1000,
 			payload: &PermissionGrantPayloadScheme{
-				Holder: struct {
-					Parameter string `json:"parameter,omitempty"`
-					Type      string `json:"type,omitempty"`
-				}{
-					Parameter: "jira-core-users",
+				Holder: &PermissionGrantHolderPayloadScheme{
+					Parameter: "scrum-masters",
 					Type:      "group",
 				},
-				Permission: "ADMINISTER_PROJECTS",
+				Permission: "EDIT_ISSUES",
 			},
 			mockFile:           "./mocks/empty_json.json",
 			wantHTTPMethod:     http.MethodPost,

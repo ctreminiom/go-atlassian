@@ -27,7 +27,7 @@ type issueLinkPayloadScheme struct {
 // Creates a link between two issues. Use this operation to indicate a relationship between two issues
 // and optionally add a comment to the from (outward) issue.
 // To use this resource the site must have Issue Linking enabled.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-links/#api-rest-api-3-issuelink-post
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/link#create-issue-link
 func (i *IssueLinkService) Create(ctx context.Context, linkType, inWardIssue, outWardIssue string) (response *Response, err error) {
 
 	payload := issueLinkPayloadScheme{
@@ -141,7 +141,7 @@ type IssueLinkScheme struct {
 }
 
 // Returns an issue link.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-links/#api-rest-api-3-issuelink-linkid-get
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/link#get-issue-link
 func (i *IssueLinkService) Get(ctx context.Context, linkID string) (result *IssueLinkScheme, response *Response, err error) {
 
 	var endpoint = fmt.Sprintf("rest/api/3/issueLink/%v", linkID)
@@ -177,6 +177,7 @@ type IssueLinksScheme struct {
 }
 
 // Get the issue links ID's associated with a Jira Issue
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/link#get-issue-links
 func (i *IssueLinkService) Gets(ctx context.Context, issueKeyOrID string) (result *IssueLinksScheme, response *Response, err error) {
 
 	var endpoint = fmt.Sprintf("rest/api/3/issue/%v?fields=issuelinks", issueKeyOrID)
@@ -202,7 +203,7 @@ func (i *IssueLinkService) Gets(ctx context.Context, issueKeyOrID string) (resul
 }
 
 // Deletes an issue link.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-links/#api-rest-api-3-issuelink-linkid-delete
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/link#delete-issue-link
 func (i *IssueLinkService) Delete(ctx context.Context, linkID string) (response *Response, err error) {
 
 	var endpoint = fmt.Sprintf("rest/api/3/issueLink/%v", linkID)

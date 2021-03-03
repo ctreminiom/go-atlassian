@@ -15,7 +15,7 @@ type ScreenTabFieldScheme struct {
 }
 
 // Returns all fields for a screen tab.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screen-tab-fields/#api-rest-api-3-screens-screenid-tabs-tabid-fields-get
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/screens/tabs/fields#get-all-screen-tab-fields
 func (s *ScreenTabFieldService) Gets(ctx context.Context, screenID, tabID int) (result *[]ScreenTabFieldScheme, response *Response, err error) {
 
 	var endpoint = fmt.Sprintf("rest/api/3/screens/%v/tabs/%v/fields", screenID, tabID)
@@ -41,7 +41,7 @@ func (s *ScreenTabFieldService) Gets(ctx context.Context, screenID, tabID int) (
 }
 
 // Adds a field to a screen tab.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screen-tab-fields/#api-rest-api-3-screens-screenid-tabs-tabid-fields-post
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/screens/tabs/fields#add-screen-tab-field
 func (s *ScreenTabFieldService) Add(ctx context.Context, screenID, tabID int, fieldID string) (result *ScreenTabFieldScheme, response *Response, err error) {
 
 	if len(fieldID) == 0 {
@@ -76,7 +76,7 @@ func (s *ScreenTabFieldService) Add(ctx context.Context, screenID, tabID int, fi
 }
 
 // Removes a field from a screen tab.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screen-tab-fields/#api-rest-api-3-screens-screenid-tabs-tabid-fields-id-delete
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/screens/tabs/fields#remove-screen-tab-field
 func (s *ScreenTabFieldService) Remove(ctx context.Context, screenID, tabID int, fieldID string) (response *Response, err error) {
 
 	if len(fieldID) == 0 {

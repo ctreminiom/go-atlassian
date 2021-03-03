@@ -36,6 +36,7 @@ func getIssueTypeSchemes() {
 
 	var startAt int
 	for {
+
 		issueTypesSchemes, response, err := atlassian.Issue.Type.Scheme.Gets(context.Background(), nil, startAt, 50)
 		if err != nil {
 			if response != nil {
@@ -273,8 +274,6 @@ func removeIssueTypeFromIssueScheme(schemeID int) {
 
 func main() {
 	getIssueTypeSchemes()
-
-	deleteIssueTypeScheme(10154)
 
 	id := createIssueTypeScheme()
 	idAsInt, err := strconv.Atoi(id)

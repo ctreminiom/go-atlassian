@@ -24,14 +24,10 @@ func TestScreenSchemeService_Create(t *testing.T) {
 		{
 			name: "CreateScreenSchemeWhenTheParamsAreCorrect",
 			payload: &ScreenSchemePayloadScheme{
-				Screens: struct {
-					Default int `json:"default" validate:"required"`
-					View    int `json:"view" validate:"required"`
-					Edit    int `json:"edit" validate:"required"`
-				}{
-					Default: 1000,
-					View:    1001,
-					Edit:    1002,
+				Screens: &ScreenSchemeScreensPayloadScheme{
+					Default: 10000,
+					View:    10000,
+					Edit:    10000,
 				},
 				Name:        "Screen Scheme Name",
 				Description: "Screen Scheme Description",
@@ -47,14 +43,10 @@ func TestScreenSchemeService_Create(t *testing.T) {
 		{
 			name: "CreateScreenSchemeWhenAPayloadParamIsNotSet",
 			payload: &ScreenSchemePayloadScheme{
-				Screens: struct {
-					Default int `json:"default" validate:"required"`
-					View    int `json:"view" validate:"required"`
-					Edit    int `json:"edit" validate:"required"`
-				}{
-					Default: 1000,
-					View:    1001,
-					Edit:    1002,
+				Screens: &ScreenSchemeScreensPayloadScheme{
+					Default: 10000,
+					View:    10000,
+					Edit:    10000,
 				},
 				Name:        "",
 				Description: "Screen Scheme Description",
@@ -70,14 +62,10 @@ func TestScreenSchemeService_Create(t *testing.T) {
 		{
 			name: "CreateScreenSchemeWhenTheContextIsNil",
 			payload: &ScreenSchemePayloadScheme{
-				Screens: struct {
-					Default int `json:"default" validate:"required"`
-					View    int `json:"view" validate:"required"`
-					Edit    int `json:"edit" validate:"required"`
-				}{
-					Default: 1000,
-					View:    1001,
-					Edit:    1002,
+				Screens: &ScreenSchemeScreensPayloadScheme{
+					Default: 10000,
+					View:    10000,
+					Edit:    10000,
 				},
 				Name:        "Screen Scheme Name",
 				Description: "Screen Scheme Description",
@@ -104,14 +92,10 @@ func TestScreenSchemeService_Create(t *testing.T) {
 		{
 			name: "CreateScreenSchemeWhenTheRequestMethodIsIncorrect",
 			payload: &ScreenSchemePayloadScheme{
-				Screens: struct {
-					Default int `json:"default" validate:"required"`
-					View    int `json:"view" validate:"required"`
-					Edit    int `json:"edit" validate:"required"`
-				}{
-					Default: 1000,
-					View:    1001,
-					Edit:    1002,
+				Screens: &ScreenSchemeScreensPayloadScheme{
+					Default: 10000,
+					View:    10000,
+					Edit:    10000,
 				},
 				Name:        "Screen Scheme Name",
 				Description: "Screen Scheme Description",
@@ -127,14 +111,10 @@ func TestScreenSchemeService_Create(t *testing.T) {
 		{
 			name: "CreateScreenSchemeWhenTheStatusCodeIsIncorrect",
 			payload: &ScreenSchemePayloadScheme{
-				Screens: struct {
-					Default int `json:"default" validate:"required"`
-					View    int `json:"view" validate:"required"`
-					Edit    int `json:"edit" validate:"required"`
-				}{
-					Default: 1000,
-					View:    1001,
-					Edit:    1002,
+				Screens: &ScreenSchemeScreensPayloadScheme{
+					Default: 10000,
+					View:    10000,
+					Edit:    10000,
 				},
 				Name:        "Screen Scheme Name",
 				Description: "Screen Scheme Description",
@@ -150,14 +130,10 @@ func TestScreenSchemeService_Create(t *testing.T) {
 		{
 			name: "CreateScreenSchemeWhenTheEndpointIsIncorrect",
 			payload: &ScreenSchemePayloadScheme{
-				Screens: struct {
-					Default int `json:"default" validate:"required"`
-					View    int `json:"view" validate:"required"`
-					Edit    int `json:"edit" validate:"required"`
-				}{
-					Default: 1000,
-					View:    1001,
-					Edit:    1002,
+				Screens: &ScreenSchemeScreensPayloadScheme{
+					Default: 10000,
+					View:    10000,
+					Edit:    10000,
 				},
 				Name:        "Screen Scheme Name",
 				Description: "Screen Scheme Description",
@@ -173,14 +149,10 @@ func TestScreenSchemeService_Create(t *testing.T) {
 		{
 			name: "CreateScreenSchemeWhenTheResponseBodyHasADifferentFormat",
 			payload: &ScreenSchemePayloadScheme{
-				Screens: struct {
-					Default int `json:"default" validate:"required"`
-					View    int `json:"view" validate:"required"`
-					Edit    int `json:"edit" validate:"required"`
-				}{
-					Default: 1000,
-					View:    1001,
-					Edit:    1002,
+				Screens: &ScreenSchemeScreensPayloadScheme{
+					Default: 10000,
+					View:    10000,
+					Edit:    10000,
 				},
 				Name:        "Screen Scheme Name",
 				Description: "Screen Scheme Description",
@@ -564,7 +536,7 @@ func TestScreenSchemeService_Update(t *testing.T) {
 	testCases := []struct {
 		name               string
 		screenSchemeID     string
-		payload            *ScreenSchemeUpdatePayloadScheme
+		payload            *ScreenSchemePayloadScheme
 		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string
@@ -575,16 +547,14 @@ func TestScreenSchemeService_Update(t *testing.T) {
 		{
 			name:           "UpdateScreenSchemeWhenTheParamsAreCorrect",
 			screenSchemeID: "2001",
-			payload: &ScreenSchemeUpdatePayloadScheme{
-				Screens: struct {
-					Edit    string `json:"edit"`
-					Create  string `json:"create"`
-					View    string `json:"view"`
-					Default string `json:"default"`
-				}{
-					Edit: "1001",
+			payload: &ScreenSchemePayloadScheme{
+				Screens: &ScreenSchemeScreensPayloadScheme{
+					Default: 10000,
+					View:    10000,
+					Edit:    10000,
 				},
-				Name: "Updated Screen Scheme",
+				Name:        "FX | Epic Screen Scheme",
+				Description: "sample description",
 			},
 			wantHTTPMethod:     http.MethodPut,
 			endpoint:           "/rest/api/3/screenscheme/2001",
@@ -596,16 +566,14 @@ func TestScreenSchemeService_Update(t *testing.T) {
 		{
 			name:           "UpdateScreenSchemeWhenTheScreenSchemeIDIsEmpty",
 			screenSchemeID: "",
-			payload: &ScreenSchemeUpdatePayloadScheme{
-				Screens: struct {
-					Edit    string `json:"edit"`
-					Create  string `json:"create"`
-					View    string `json:"view"`
-					Default string `json:"default"`
-				}{
-					Edit: "1001",
+			payload: &ScreenSchemePayloadScheme{
+				Screens: &ScreenSchemeScreensPayloadScheme{
+					Default: 10000,
+					View:    10000,
+					Edit:    10000,
 				},
-				Name: "Updated Screen Scheme",
+				Name:        "FX | Epic Screen Scheme",
+				Description: "sample description",
 			},
 			wantHTTPMethod:     http.MethodPut,
 			endpoint:           "/rest/api/3/screenscheme/2001",
@@ -628,16 +596,14 @@ func TestScreenSchemeService_Update(t *testing.T) {
 		{
 			name:           "UpdateScreenSchemeWhenTheRequestMethodIsIncorrect",
 			screenSchemeID: "2001",
-			payload: &ScreenSchemeUpdatePayloadScheme{
-				Screens: struct {
-					Edit    string `json:"edit"`
-					Create  string `json:"create"`
-					View    string `json:"view"`
-					Default string `json:"default"`
-				}{
-					Edit: "1001",
+			payload: &ScreenSchemePayloadScheme{
+				Screens: &ScreenSchemeScreensPayloadScheme{
+					Default: 10000,
+					View:    10000,
+					Edit:    10000,
 				},
-				Name: "Updated Screen Scheme",
+				Name:        "FX | Epic Screen Scheme",
+				Description: "sample description",
 			},
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/api/3/screenscheme/2001",
@@ -649,16 +615,14 @@ func TestScreenSchemeService_Update(t *testing.T) {
 		{
 			name:           "UpdateScreenSchemeWhenTheStatusCodeIsIncorrect",
 			screenSchemeID: "2001",
-			payload: &ScreenSchemeUpdatePayloadScheme{
-				Screens: struct {
-					Edit    string `json:"edit"`
-					Create  string `json:"create"`
-					View    string `json:"view"`
-					Default string `json:"default"`
-				}{
-					Edit: "1001",
+			payload: &ScreenSchemePayloadScheme{
+				Screens: &ScreenSchemeScreensPayloadScheme{
+					Default: 10000,
+					View:    10000,
+					Edit:    10000,
 				},
-				Name: "Updated Screen Scheme",
+				Name:        "FX | Epic Screen Scheme",
+				Description: "sample description",
 			},
 			wantHTTPMethod:     http.MethodPut,
 			endpoint:           "/rest/api/3/screenscheme/2001",
@@ -670,16 +634,14 @@ func TestScreenSchemeService_Update(t *testing.T) {
 		{
 			name:           "UpdateScreenSchemeWhenTheContextIsNil",
 			screenSchemeID: "2001",
-			payload: &ScreenSchemeUpdatePayloadScheme{
-				Screens: struct {
-					Edit    string `json:"edit"`
-					Create  string `json:"create"`
-					View    string `json:"view"`
-					Default string `json:"default"`
-				}{
-					Edit: "1001",
+			payload: &ScreenSchemePayloadScheme{
+				Screens: &ScreenSchemeScreensPayloadScheme{
+					Default: 10000,
+					View:    10000,
+					Edit:    10000,
 				},
-				Name: "Updated Screen Scheme",
+				Name:        "FX | Epic Screen Scheme",
+				Description: "sample description",
 			},
 			wantHTTPMethod:     http.MethodPut,
 			endpoint:           "/rest/api/3/screenscheme/2001",

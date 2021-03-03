@@ -30,7 +30,7 @@ type IssueVoteScheme struct {
 }
 
 // Returns details about the votes on an issue.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-votes/#api-rest-api-3-issue-issueidorkey-votes-get
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/vote#get-votes
 func (v *VoteService) Gets(ctx context.Context, issueKeyOrID string) (result *IssueVoteScheme, response *Response, err error) {
 
 	var endpoint = fmt.Sprintf("rest/api/3/issue/%v/votes", issueKeyOrID)
@@ -55,7 +55,7 @@ func (v *VoteService) Gets(ctx context.Context, issueKeyOrID string) (result *Is
 }
 
 // Adds the user's vote to an issue. This is the equivalent of the user clicking Vote on an issue in Jira.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-votes/#api-rest-api-3-issue-issueidorkey-votes-post
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/vote#add-vote
 func (v *VoteService) Add(ctx context.Context, issueKeyOrID string) (response *Response, err error) {
 
 	if len(issueKeyOrID) == 0 {
@@ -79,7 +79,7 @@ func (v *VoteService) Add(ctx context.Context, issueKeyOrID string) (response *R
 }
 
 // Deletes a user's vote from an issue. This is the equivalent of the user clicking Unvote on an issue in Jira.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-votes/#api-rest-api-3-issue-issueidorkey-votes-delete
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/vote#delete-vote
 func (v *VoteService) Delete(ctx context.Context, issueKeyOrID string) (response *Response, err error) {
 
 	if len(issueKeyOrID) == 0 {

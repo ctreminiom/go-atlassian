@@ -20,7 +20,7 @@ type ProjectComponentPayloadScheme struct {
 
 // Creates a component.
 // Use components to provide containers for issues within a project.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-components/#api-rest-api-3-component-post
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/projects/components#create-component
 func (p *ProjectComponentService) Create(ctx context.Context, payload *ProjectComponentPayloadScheme) (result *ProjectComponentScheme, response *Response, err error) {
 
 	if payload == nil {
@@ -67,7 +67,7 @@ type ProjectComponentScheme struct {
 
 // Returns all components in a project.
 // See the Get project components paginated resource if you want to get a full list of components with pagination.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-components/#api-rest-api-3-project-projectidorkey-components-get
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/projects/components#get-project-components-paginated
 func (p *ProjectComponentService) Gets(ctx context.Context, projectKeyOrID string) (result *[]ProjectComponentScheme, response *Response, err error) {
 
 	if len(projectKeyOrID) == 0 {
@@ -101,7 +101,7 @@ type ProjectComponentCountScheme struct {
 }
 
 // Returns the counts of issues assigned to the component.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-components/#api-rest-api-3-component-id-relatedissuecounts-get
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/projects/components#get-component-issues-count
 func (p *ProjectComponentService) Count(ctx context.Context, componentID string) (result *ProjectComponentCountScheme, response *Response, err error) {
 
 	if len(componentID) == 0 {
@@ -130,7 +130,7 @@ func (p *ProjectComponentService) Count(ctx context.Context, componentID string)
 }
 
 // Deletes a component.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-components/#api-rest-api-3-component-id-delete
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/projects/components#delete-component
 func (p *ProjectComponentService) Delete(ctx context.Context, componentID string) (response *Response, err error) {
 
 	if len(componentID) == 0 {
@@ -155,7 +155,7 @@ func (p *ProjectComponentService) Delete(ctx context.Context, componentID string
 // Updates a component.
 // Any fields included in the request are overwritten.
 // If leadAccountId is an empty string ("") the component lead is removed.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-components/#api-rest-api-3-component-id-put
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/projects/components#update-component
 func (p *ProjectComponentService) Update(ctx context.Context, componentID string, payload *ProjectComponentPayloadScheme) (result *ProjectComponentScheme, response *Response, err error) {
 
 	if len(componentID) == 0 {
@@ -190,7 +190,7 @@ func (p *ProjectComponentService) Update(ctx context.Context, componentID string
 }
 
 // Returns a component.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-components/#api-rest-api-3-component-id-get
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/projects/components#get-component
 func (p *ProjectComponentService) Get(ctx context.Context, componentID string) (result *ProjectComponentScheme, response *Response, err error) {
 
 	if len(componentID) == 0 {

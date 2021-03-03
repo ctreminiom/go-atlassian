@@ -26,7 +26,7 @@ type IssueTypeSchemesScheme struct {
 }
 
 // Returns a paginated list of issue type schemes.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-type-schemes/#api-rest-api-3-issuetypescheme-get
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/types/scheme#get-all-issue-type-schemes
 func (i *IssueTypeSchemeService) Gets(ctx context.Context, issueTypeSchemeIDs []int, startAt, maxResults int) (result *IssueTypeSchemesScheme, response *Response, err error) {
 
 	params := url.Values{}
@@ -70,7 +70,7 @@ type newIssueTypeSchemeScheme struct {
 }
 
 // Creates an issue type scheme.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-type-schemes/#api-rest-api-3-issuetypescheme-post
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/types/scheme#create-issue-type-scheme
 func (i *IssueTypeSchemeService) Create(ctx context.Context, payload *IssueTypeSchemePayloadScheme) (issueTypeSchemeID string, response *Response, err error) {
 
 	if payload == nil {
@@ -145,7 +145,7 @@ type IssueTypeSchemeItemsScheme struct {
 }
 
 // Returns a paginated list of issue type scheme items.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-type-schemes/#api-rest-api-3-issuetypescheme-mapping-get
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/types/scheme#get-issue-type-scheme-items
 func (i *IssueTypeSchemeService) Items(ctx context.Context, issueTypeSchemeIDs []int, startAt, maxResults int) (result *IssueTypeSchemeItemsScheme, response *Response, err error) {
 
 	params := url.Values{}
@@ -195,7 +195,7 @@ type ProjectIssueTypeSchemeScheme struct {
 }
 
 // Returns a paginated list of issue type schemes and, for each issue type scheme, a list of the projects that use it.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-type-schemes/#api-rest-api-3-issuetypescheme-project-get
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/types/scheme#get-issue-type-schemes-for-projects
 func (i *IssueTypeSchemeService) Projects(ctx context.Context, projectIDs []int, startAt, maxResults int) (result *ProjectIssueTypeSchemeScheme, response *Response, err error) {
 
 	params := url.Values{}
@@ -233,7 +233,7 @@ func (i *IssueTypeSchemeService) Projects(ctx context.Context, projectIDs []int,
 }
 
 // Assigns an issue type scheme to a project.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-type-schemes/#api-rest-api-3-issuetypescheme-project-put
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/types/scheme#assign-issue-type-scheme-to-project
 func (i *IssueTypeSchemeService) Assign(ctx context.Context, issueTypeSchemeID, projectID string) (response *Response, err error) {
 
 	payload := struct {
@@ -262,7 +262,7 @@ func (i *IssueTypeSchemeService) Assign(ctx context.Context, issueTypeSchemeID, 
 }
 
 // Updates an issue type scheme.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-type-schemes/#api-rest-api-3-issuetypescheme-issuetypeschemeid-put
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/types/scheme#update-issue-type-scheme
 func (i *IssueTypeSchemeService) Update(ctx context.Context, issueTypeSchemeID int, payload *IssueTypeSchemePayloadScheme) (response *Response, err error) {
 
 	if payload == nil {
@@ -288,7 +288,7 @@ func (i *IssueTypeSchemeService) Update(ctx context.Context, issueTypeSchemeID i
 }
 
 // Deletes an issue type scheme.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-type-schemes/#api-rest-api-3-issuetypescheme-issuetypeschemeid-delete
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/types/scheme#delete-issue-type-scheme
 func (i *IssueTypeSchemeService) Delete(ctx context.Context, issueTypeSchemeID int) (response *Response, err error) {
 
 	var endpoint = fmt.Sprintf("rest/api/3/issuetypescheme/%v", issueTypeSchemeID)
@@ -307,7 +307,7 @@ func (i *IssueTypeSchemeService) Delete(ctx context.Context, issueTypeSchemeID i
 }
 
 // Adds issue types to an issue type scheme.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-type-schemes/#api-rest-api-3-issuetypescheme-issuetypeschemeid-issuetype-put
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/types/scheme#add-issue-types-to-issue-type-scheme
 func (i *IssueTypeSchemeService) AddIssueTypes(ctx context.Context, issueTypeSchemeID int, issueTypeIDs []int) (response *Response, err error) {
 
 	if len(issueTypeIDs) == 0 {
@@ -344,7 +344,7 @@ func (i *IssueTypeSchemeService) AddIssueTypes(ctx context.Context, issueTypeSch
 }
 
 // Removes an issue type from an issue type scheme.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-type-schemes/#api-rest-api-3-issuetypescheme-issuetypeschemeid-issuetype-issuetypeid-delete
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/types/scheme#remove-issue-type-from-issue-type-scheme
 func (i *IssueTypeSchemeService) RemoveIssueType(ctx context.Context, issueTypeSchemeID, issueTypeID int) (response *Response, err error) {
 
 	var endpoint = fmt.Sprintf("rest/api/3/issuetypescheme/%v/issuetype/%v", issueTypeSchemeID, issueTypeID)

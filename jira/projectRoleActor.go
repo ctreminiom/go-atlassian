@@ -11,7 +11,7 @@ import (
 type ProjectRoleActorService struct{ client *Client }
 
 // Adds actors to a project role for the project.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-role-actors/#api-rest-api-3-project-projectidorkey-role-id-post
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/projects/roles/actors#add-actors-to-project-role
 func (p *ProjectRoleActorService) Add(ctx context.Context, projectKeyOrID string, projectRoleID int, accountIDs, groups []string) (result *ProjectRoleScheme, response *Response, err error) {
 
 	if len(projectKeyOrID) == 0 {
@@ -50,7 +50,7 @@ func (p *ProjectRoleActorService) Add(ctx context.Context, projectKeyOrID string
 }
 
 // Deletes actors from a project role for the project.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-role-actors/#api-rest-api-3-project-projectidorkey-role-id-delete
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/projects/roles/actors#delete-actors-from-project-role
 func (p *ProjectRoleActorService) Delete(ctx context.Context, projectKeyOrID string, projectRoleID int, accountID, group string) (response *Response, err error) {
 
 	if len(projectKeyOrID) == 0 {

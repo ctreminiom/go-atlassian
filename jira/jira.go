@@ -26,6 +26,10 @@ type Client struct {
 	Issue      *IssueService
 	Permission *PermissionService
 	Project    *ProjectService
+	Screen     *ScreenService
+	Server     *ServerService
+	Task       *TaskService
+	User       *UserService
 }
 
 const (
@@ -56,6 +60,19 @@ func New(httpClient *http.Client, site string) (client *Client, err error) {
 	client.Audit = &AuditService{client: client}
 	client.Auth = &AuthenticationService{client: client}
 	client.Dashboard = &DashboardService{client: client}
+
+	// Admin Endpoints
+	client.Server = &ServerService{client: client}
+	client.Task = &TaskService{client: client}
+
+	client.Screen = &ScreenService{
+		client: client,
+		Tab: &ScreenTabService{
+			client: client,
+			Field:  &ScreenTabFieldService{client: client},
+		},
+		Scheme: &ScreenSchemeService{client: client},
+	}
 
 	client.Filter = &FilterService{
 		client: client,
@@ -101,7 +118,10 @@ func New(httpClient *http.Client, site string) (client *Client, err error) {
 
 	client.Permission = &PermissionService{
 		client: client,
-		Scheme: &PermissionSchemeService{client: client},
+		Scheme: &PermissionSchemeService{
+			client: client,
+			Grant:  &PermissionGrantSchemeService{client: client},
+		},
 	}
 
 	client.Project = &ProjectService{
@@ -119,6 +139,11 @@ func New(httpClient *http.Client, site string) (client *Client, err error) {
 
 		Type:    &ProjectTypeService{client: client},
 		Version: &ProjectVersionService{client: client},
+	}
+
+	client.User = &UserService{
+		client: client,
+		Search: &UserSearchService{client: client},
 	}
 
 	return

@@ -91,8 +91,7 @@ type IssueChangelogHistoryItemScheme struct {
 }
 
 // Search issues using JQL query under the HTTP Method GET
-// If the JQL query expression is too large to be encoded as a query parameter, use the POST version of this resource.
-// https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-search/#api-rest-api-3-search-get
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/search#search-for-issues-using-jql-get
 func (s *IssueSearchService) Get(ctx context.Context, jql string, fields, expands []string, startAt, maxResults int, validate string) (result *IssueSearchScheme, response *Response, err error) {
 
 	params := url.Values{}
@@ -179,8 +178,7 @@ func (s *IssueSearchService) Get(ctx context.Context, jql string, fields, expand
 }
 
 // Search issues using JQL query under the HTTP Method POST
-// There is a GET version of this resource that can be used for smaller JQL query expressions.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-search/#api-rest-api-3-search-post
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/search#search-for-issues-using-jql-post
 func (s *IssueSearchService) Post(ctx context.Context, jql string, fields, expands []string, startAt, maxResults int, validate string) (result *IssueSearchScheme, response *Response, err error) {
 
 	//Valid the share filter scope

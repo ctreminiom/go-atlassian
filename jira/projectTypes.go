@@ -18,7 +18,7 @@ type ProjectTypeScheme struct {
 }
 
 // Returns all project types, whether or not the instance has a valid license for each type.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-types/#api-rest-api-3-project-type-get
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/projects/types#get-all-project-types
 func (p *ProjectTypeService) Gets(ctx context.Context) (result *[]ProjectTypeScheme, response *Response, err error) {
 
 	var endpoint = "rest/api/3/project/type"
@@ -44,7 +44,7 @@ func (p *ProjectTypeService) Gets(ctx context.Context) (result *[]ProjectTypeSch
 }
 
 // Returns all project types with a valid license.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-types/#api-rest-api-3-project-type-accessible-get
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/projects/types#get-licensed-project-types
 func (p *ProjectTypeService) Licensed(ctx context.Context) (result *[]ProjectTypeScheme, response *Response, err error) {
 
 	var endpoint = "rest/api/3/project/type/accessible"
@@ -70,7 +70,7 @@ func (p *ProjectTypeService) Licensed(ctx context.Context) (result *[]ProjectTyp
 }
 
 // Returns a project type.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-types/#api-rest-api-3-project-type-projecttypekey-get
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/projects/types#get-project-type-by-key
 func (p *ProjectTypeService) Get(ctx context.Context, projectTypeKey string) (result *ProjectTypeScheme, response *Response, err error) {
 
 	if len(projectTypeKey) == 0 {
@@ -100,7 +100,7 @@ func (p *ProjectTypeService) Get(ctx context.Context, projectTypeKey string) (re
 }
 
 // Returns a project type if it is accessible to the user.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-types/#api-rest-api-3-project-type-projecttypekey-accessible-get
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/projects/types#get-accessible-project-type-by-key
 func (p *ProjectTypeService) Accessible(ctx context.Context, projectTypeKey string) (result *ProjectTypeScheme, response *Response, err error) {
 
 	if len(projectTypeKey) == 0 {

@@ -29,7 +29,7 @@ type TaskScheme struct {
 // See the documentation of the operation that created the task for details.
 // Task details are not permanently retained.
 // As of September 2019, details are retained for 14 days although this period may change without notice.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-tasks/#api-rest-api-3-task-taskid-get
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/tasks#get-task
 func (t *TaskService) Get(ctx context.Context, taskID string) (result *TaskScheme, response *Response, err error) {
 
 	if len(taskID) == 0 {
@@ -59,7 +59,7 @@ func (t *TaskService) Get(ctx context.Context, taskID string) (result *TaskSchem
 }
 
 // Cancels a task.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-tasks/#api-rest-api-3-task-taskid-cancel-post
+// Docs: https://app.gitbook.com/@ctreminiom/s/go-atlassian/jira-software-cloud/tasks#cancel-task
 func (t *TaskService) Cancel(ctx context.Context, taskID string) (response *Response, err error) {
 
 	if len(taskID) == 0 {

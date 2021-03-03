@@ -30,7 +30,7 @@ type ScreenFieldSearchScheme struct {
 }
 
 // Returns a paginated list of the screens a field is used in.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screens/#api-rest-api-3-field-fieldid-screens-get
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/screens#get-screens-for-a-field
 func (s *ScreenService) Get(ctx context.Context, fieldID string, startAt, maxResults int) (result *ScreenFieldSearchScheme, response *Response, err error) {
 
 	if len(fieldID) == 0 {
@@ -73,7 +73,7 @@ type ScreenSearchPageScheme struct {
 }
 
 // Returns a paginated list of all screens or those specified by one or more screen IDs.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screens/#api-rest-api-3-screens-get
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/screens#get-screens
 func (s *ScreenService) Gets(ctx context.Context, screenIDs []int, startAt, maxResults int) (result *ScreenSearchPageScheme, response *Response, err error) {
 
 	params := url.Values{}
@@ -107,7 +107,7 @@ func (s *ScreenService) Gets(ctx context.Context, screenIDs []int, startAt, maxR
 }
 
 // Creates a screen with a default field tab.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screens/#api-rest-api-3-screens-post
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/screens#create-screen
 func (s *ScreenService) Create(ctx context.Context, name, description string) (result *ScreenScheme, response *Response, err error) {
 
 	if len(name) == 0 {
@@ -146,7 +146,7 @@ func (s *ScreenService) Create(ctx context.Context, name, description string) (r
 }
 
 // Adds a field to the default tab of the default screen.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screens/#api-rest-api-3-screens-addtodefault-fieldid-post
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/screens#add-field-to-default-screen
 func (s *ScreenService) AddToDefault(ctx context.Context, fieldID string) (response *Response, err error) {
 
 	if len(fieldID) == 0 {
@@ -171,7 +171,7 @@ func (s *ScreenService) AddToDefault(ctx context.Context, fieldID string) (respo
 }
 
 // Updates a screen. Only screens used in classic projects can be updated.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screens/#api-rest-api-3-screens-screenid-put
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/screens#update-screen
 func (s *ScreenService) Update(ctx context.Context, screenID int, name, description string) (result *ScreenScheme, response *Response, err error) {
 
 	payload := struct {
@@ -208,7 +208,7 @@ func (s *ScreenService) Update(ctx context.Context, screenID int, name, descript
 // Deletes a screen.
 // A screen cannot be deleted if it is used in a screen scheme,
 // workflow, or workflow draft. Only screens used in classic projects can be deleted.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screens/#api-rest-api-3-screens-screenid-delete
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/screens#delete-screen
 func (s *ScreenService) Delete(ctx context.Context, screenID int) (response *Response, err error) {
 
 	var endpoint = fmt.Sprintf("rest/api/3/screens/%v", screenID)
@@ -232,7 +232,7 @@ type AvailableScreenFieldScheme struct {
 }
 
 // Returns the fields that can be added to a tab on a screen.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screens/#api-rest-api-3-screens-screenid-availablefields-get
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/screens#get-available-screen-fields
 func (s *ScreenService) Available(ctx context.Context, screenID int) (result *[]AvailableScreenFieldScheme, response *Response, err error) {
 
 	var endpoint = fmt.Sprintf("rest/api/3/screens/%v/availableFields", screenID)

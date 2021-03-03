@@ -9,8 +9,9 @@ import (
 )
 
 type IssueTypeService struct {
-	client *Client
-	Scheme *IssueTypeSchemeService
+	client       *Client
+	Scheme       *IssueTypeSchemeService
+	ScreenScheme *IssueTypeScreenSchemeService
 }
 
 type IssueTypeScheme struct {
@@ -37,7 +38,7 @@ type IssueTypeScopeProjectScheme struct {
 }
 
 // Returns all issue types.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-types/#api-rest-api-3-issuetype-get
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/type#get-all-issue-types-for-user
 func (i *IssueTypeService) Gets(ctx context.Context) (result *[]IssueTypeScheme, response *Response, err error) {
 
 	var endpoint = "rest/api/3/issuetype"
@@ -68,7 +69,7 @@ type IssueTypePayloadScheme struct {
 }
 
 // Creates an issue type and adds it to the default issue type scheme.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-types/#api-rest-api-3-issuetype-post
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/type#create-issue-type
 func (i *IssueTypeService) Create(ctx context.Context, payload *IssueTypePayloadScheme) (result *IssueTypeScheme, response *Response, err error) {
 
 	if payload == nil {
@@ -106,7 +107,7 @@ func (i *IssueTypeService) Create(ctx context.Context, payload *IssueTypePayload
 }
 
 // Returns an issue type.
-// https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-types/#api-rest-api-3-issuetype-id-get
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/type#get-issue-type
 func (i *IssueTypeService) Get(ctx context.Context, issueTypeID string) (result *IssueTypeScheme, response *Response, err error) {
 
 	var endpoint = fmt.Sprintf("rest/api/3/issuetype/%v", issueTypeID)
@@ -131,7 +132,7 @@ func (i *IssueTypeService) Get(ctx context.Context, issueTypeID string) (result 
 }
 
 // Updates the issue type.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-types/#api-rest-api-3-issuetype-id-put
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/type#update-issue-type
 func (i *IssueTypeService) Update(ctx context.Context, issueTypeID string, payload *IssueTypePayloadScheme) (result *IssueTypeScheme, response *Response, err error) {
 
 	if payload == nil {
@@ -164,7 +165,7 @@ func (i *IssueTypeService) Update(ctx context.Context, issueTypeID string, paylo
 // Deletes the issue type.
 // If the issue type is in use, all uses are updated with the alternative issue type (alternativeIssueTypeId).
 // A list of alternative issue types are obtained from the Get alternative issue types resource.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-types/#api-rest-api-3-issuetype-id-delete
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/type#delete-issue-type
 func (i *IssueTypeService) Delete(ctx context.Context, issueTypeID string) (response *Response, err error) {
 
 	var endpoint = fmt.Sprintf("rest/api/3/issuetype/%v", issueTypeID)
@@ -184,7 +185,7 @@ func (i *IssueTypeService) Delete(ctx context.Context, issueTypeID string) (resp
 
 // Returns a list of issue types that can be used to replace the issue type.
 // The alternative issue types are those assigned to the same workflow scheme, field configuration scheme, and screen scheme.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-types/#api-rest-api-3-issuetype-id-alternatives-get
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/type#get-alternative-issue-types
 func (i *IssueTypeService) Alternatives(ctx context.Context, issueTypeID string) (result *[]IssueTypeScheme, response *Response, err error) {
 
 	var endpoint = fmt.Sprintf("rest/api/3/issuetype/%v/alternatives", issueTypeID)

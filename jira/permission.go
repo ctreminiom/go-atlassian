@@ -84,7 +84,7 @@ type GlobalPermissionsScheme struct {
 
 // Returns a list of permissions indicating which permissions the user has.
 // Details of the user's permissions can be obtained in a global, project, or issue context.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permissions/#api-rest-api-3-mypermissions-get
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/permissions#get-my-permissions
 func (p *PermissionService) Gets(ctx context.Context) (result *GlobalPermissionsScheme, response *Response, err error) {
 
 	var endpoint = "rest/api/3/permissions"

@@ -26,7 +26,7 @@ type ServerInformationScheme struct {
 }
 
 // Returns information about the Jira instance.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-server-info/#api-rest-api-3-serverinfo-get
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/server#get-jira-instance-info
 func (s *ServerService) Info(ctx context.Context) (result *ServerInformationScheme, response *Response, err error) {
 
 	var endpoint = "rest/api/3/serverInfo"

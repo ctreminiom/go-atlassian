@@ -23,7 +23,7 @@ type IssueLinkTypeScheme struct {
 }
 
 // Returns a list of all issue link types.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-link-types/#api-rest-api-3-issuelinktype-get
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/link/types#get-issue-link-types
 func (i *IssueLinkTypeService) Gets(ctx context.Context) (result *IssueLinkTypeSearchScheme, response *Response, err error) {
 
 	var endpoint = "rest/api/3/issueLinkType"
@@ -49,7 +49,7 @@ func (i *IssueLinkTypeService) Gets(ctx context.Context) (result *IssueLinkTypeS
 }
 
 // Returns an issue link type.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-link-types/#api-rest-api-3-issuelinktype-issuelinktypeid-get
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/link/types#get-issue-link-type
 func (i *IssueLinkTypeService) Get(ctx context.Context, issueLinkTypeID string) (result *IssueLinkTypeScheme, response *Response, err error) {
 
 	var endpoint = fmt.Sprintf("rest/api/3/issueLinkType/%v", issueLinkTypeID)
@@ -83,7 +83,7 @@ type IssueLinkTypePayloadScheme struct {
 // Creates an issue link type.
 // Use this operation to create descriptions of the reasons why issues are linked.
 // The issue link type consists of a name and descriptions for a link's inward and outward relationships.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-link-types/#api-rest-api-3-issuelinktype-post
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/link/types#create-issue-link-type
 func (i *IssueLinkTypeService) Create(ctx context.Context, payload *IssueLinkTypePayloadScheme) (result *IssueLinkTypeScheme, response *Response, err error) {
 
 	if payload == nil {
@@ -119,7 +119,7 @@ func (i *IssueLinkTypeService) Create(ctx context.Context, payload *IssueLinkTyp
 }
 
 // Updates an issue link type.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-link-types/#api-rest-api-3-issuelinktype-issuelinktypeid-put
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/link/types#update-issue-link-type
 func (i *IssueLinkTypeService) Update(ctx context.Context, issueLinkTypeID string, payload *IssueLinkTypePayloadScheme) (result *IssueLinkTypeScheme, response *Response, err error) {
 
 	if payload == nil {
@@ -150,7 +150,7 @@ func (i *IssueLinkTypeService) Update(ctx context.Context, issueLinkTypeID strin
 }
 
 // Deletes an issue link type.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-link-types/#api-rest-api-3-issuelinktype-issuelinktypeid-delete
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/link/types#delete-issue-link-type
 func (i *IssueLinkTypeService) Delete(ctx context.Context, issueLinkTypeID string) (response *Response, err error) {
 
 	var endpoint = fmt.Sprintf("rest/api/3/issueLinkType/%v", issueLinkTypeID)

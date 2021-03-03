@@ -29,24 +29,18 @@ func TestPermissionSchemeService_Create(t *testing.T) {
 			permissionSchemeDescription: "Dummy permission scheme description",
 			permissionGrants: &[]PermissionGrantPayloadScheme{
 				{
-					Holder: struct {
-						Parameter string `json:"parameter,omitempty"`
-						Type      string `json:"type,omitempty"`
-					}{
-						Parameter: "jira-core-users",
+					Holder: &PermissionGrantHolderPayloadScheme{
+						Parameter: "scrum-masters",
 						Type:      "group",
 					},
-					Permission: "ADMINISTER_PROJECTS",
+					Permission: "EDIT_ISSUES",
 				},
 				{
-					Holder: struct {
-						Parameter string `json:"parameter,omitempty"`
-						Type      string `json:"type,omitempty"`
-					}{
-						Parameter: "Developers",
-						Type:      "role",
+					Holder: &PermissionGrantHolderPayloadScheme{
+						Parameter: "scrum-masters",
+						Type:      "group",
 					},
-					Permission: "ADMINISTER_ISSUES",
+					Permission: "EDIT_ISSUES",
 				},
 			},
 			mockFile:           "./mocks/get-permission-scheme.json",
@@ -76,24 +70,18 @@ func TestPermissionSchemeService_Create(t *testing.T) {
 			permissionSchemeDescription: "Dummy permission scheme description",
 			permissionGrants: &[]PermissionGrantPayloadScheme{
 				{
-					Holder: struct {
-						Parameter string `json:"parameter,omitempty"`
-						Type      string `json:"type,omitempty"`
-					}{
-						Parameter: "jira-core-users",
+					Holder: &PermissionGrantHolderPayloadScheme{
+						Parameter: "scrum-masters",
 						Type:      "group",
 					},
-					Permission: "ADMINISTER_PROJECTS",
+					Permission: "EDIT_ISSUES",
 				},
 				{
-					Holder: struct {
-						Parameter string `json:"parameter,omitempty"`
-						Type      string `json:"type,omitempty"`
-					}{
-						Parameter: "Developers",
-						Type:      "role",
+					Holder: &PermissionGrantHolderPayloadScheme{
+						Parameter: "scrum-masters",
+						Type:      "group",
 					},
-					Permission: "ADMINISTER_ISSUES",
+					Permission: "EDIT_ISSUES",
 				},
 			},
 			mockFile:           "./mocks/get-permission-scheme.json",
@@ -110,24 +98,18 @@ func TestPermissionSchemeService_Create(t *testing.T) {
 			permissionSchemeDescription: "Dummy permission scheme description",
 			permissionGrants: &[]PermissionGrantPayloadScheme{
 				{
-					Holder: struct {
-						Parameter string `json:"parameter,omitempty"`
-						Type      string `json:"type,omitempty"`
-					}{
-						Parameter: "jira-core-users",
+					Holder: &PermissionGrantHolderPayloadScheme{
+						Parameter: "scrum-masters",
 						Type:      "group",
 					},
-					Permission: "ADMINISTER_PROJECTS",
+					Permission: "EDIT_ISSUES",
 				},
 				{
-					Holder: struct {
-						Parameter string `json:"parameter,omitempty"`
-						Type      string `json:"type,omitempty"`
-					}{
-						Parameter: "Developers",
-						Type:      "role",
+					Holder: &PermissionGrantHolderPayloadScheme{
+						Parameter: "scrum-masters",
+						Type:      "group",
 					},
-					Permission: "ADMINISTER_ISSUES",
+					Permission: "EDIT_ISSUES",
 				},
 			},
 			mockFile:           "./mocks/get-permission-scheme.json",
@@ -144,24 +126,18 @@ func TestPermissionSchemeService_Create(t *testing.T) {
 			permissionSchemeDescription: "Dummy permission scheme description",
 			permissionGrants: &[]PermissionGrantPayloadScheme{
 				{
-					Holder: struct {
-						Parameter string `json:"parameter,omitempty"`
-						Type      string `json:"type,omitempty"`
-					}{
-						Parameter: "jira-core-users",
+					Holder: &PermissionGrantHolderPayloadScheme{
+						Parameter: "scrum-masters",
 						Type:      "group",
 					},
-					Permission: "ADMINISTER_PROJECTS",
+					Permission: "EDIT_ISSUES",
 				},
 				{
-					Holder: struct {
-						Parameter string `json:"parameter,omitempty"`
-						Type      string `json:"type,omitempty"`
-					}{
-						Parameter: "Developers",
-						Type:      "role",
+					Holder: &PermissionGrantHolderPayloadScheme{
+						Parameter: "scrum-masters",
+						Type:      "group",
 					},
-					Permission: "ADMINISTER_ISSUES",
+					Permission: "EDIT_ISSUES",
 				},
 			},
 			mockFile:           "./mocks/get-permission-scheme.json",
@@ -178,24 +154,18 @@ func TestPermissionSchemeService_Create(t *testing.T) {
 			permissionSchemeDescription: "Dummy permission scheme description",
 			permissionGrants: &[]PermissionGrantPayloadScheme{
 				{
-					Holder: struct {
-						Parameter string `json:"parameter,omitempty"`
-						Type      string `json:"type,omitempty"`
-					}{
-						Parameter: "jira-core-users",
+					Holder: &PermissionGrantHolderPayloadScheme{
+						Parameter: "scrum-masters",
 						Type:      "group",
 					},
-					Permission: "ADMINISTER_PROJECTS",
+					Permission: "EDIT_ISSUES",
 				},
 				{
-					Holder: struct {
-						Parameter string `json:"parameter,omitempty"`
-						Type      string `json:"type,omitempty"`
-					}{
-						Parameter: "Developers",
-						Type:      "role",
+					Holder: &PermissionGrantHolderPayloadScheme{
+						Parameter: "scrum-masters",
+						Type:      "group",
 					},
-					Permission: "ADMINISTER_ISSUES",
+					Permission: "EDIT_ISSUES",
 				},
 			},
 			mockFile:           "./mocks/get-permission-scheme.json",
@@ -212,24 +182,18 @@ func TestPermissionSchemeService_Create(t *testing.T) {
 			permissionSchemeDescription: "Dummy permission scheme description",
 			permissionGrants: &[]PermissionGrantPayloadScheme{
 				{
-					Holder: struct {
-						Parameter string `json:"parameter,omitempty"`
-						Type      string `json:"type,omitempty"`
-					}{
-						Parameter: "jira-core-users",
+					Holder: &PermissionGrantHolderPayloadScheme{
+						Parameter: "scrum-masters",
 						Type:      "group",
 					},
-					Permission: "ADMINISTER_PROJECTS",
+					Permission: "EDIT_ISSUES",
 				},
 				{
-					Holder: struct {
-						Parameter string `json:"parameter,omitempty"`
-						Type      string `json:"type,omitempty"`
-					}{
-						Parameter: "Developers",
-						Type:      "role",
+					Holder: &PermissionGrantHolderPayloadScheme{
+						Parameter: "scrum-masters",
+						Type:      "group",
 					},
-					Permission: "ADMINISTER_ISSUES",
+					Permission: "EDIT_ISSUES",
 				},
 			},
 			mockFile:           "./mocks/get-permission-scheme.json",
@@ -246,24 +210,18 @@ func TestPermissionSchemeService_Create(t *testing.T) {
 			permissionSchemeDescription: "Dummy permission scheme description",
 			permissionGrants: &[]PermissionGrantPayloadScheme{
 				{
-					Holder: struct {
-						Parameter string `json:"parameter,omitempty"`
-						Type      string `json:"type,omitempty"`
-					}{
-						Parameter: "jira-core-users",
+					Holder: &PermissionGrantHolderPayloadScheme{
+						Parameter: "scrum-masters",
 						Type:      "group",
 					},
-					Permission: "ADMINISTER_PROJECTS",
+					Permission: "EDIT_ISSUES",
 				},
 				{
-					Holder: struct {
-						Parameter string `json:"parameter,omitempty"`
-						Type      string `json:"type,omitempty"`
-					}{
-						Parameter: "Developers",
-						Type:      "role",
+					Holder: &PermissionGrantHolderPayloadScheme{
+						Parameter: "scrum-masters",
+						Type:      "group",
 					},
-					Permission: "ADMINISTER_ISSUES",
+					Permission: "EDIT_ISSUES",
 				},
 			},
 			mockFile:           "./mocks/empty_json.json",
@@ -756,24 +714,18 @@ func TestPermissionSchemeService_Update(t *testing.T) {
 			permissionSchemeDescription: "Dummy permission scheme description",
 			permissionGrants: &[]PermissionGrantPayloadScheme{
 				{
-					Holder: struct {
-						Parameter string `json:"parameter,omitempty"`
-						Type      string `json:"type,omitempty"`
-					}{
-						Parameter: "jira-core-users",
+					Holder: &PermissionGrantHolderPayloadScheme{
+						Parameter: "scrum-masters",
 						Type:      "group",
 					},
-					Permission: "ADMINISTER_PROJECTS",
+					Permission: "EDIT_ISSUES",
 				},
 				{
-					Holder: struct {
-						Parameter string `json:"parameter,omitempty"`
-						Type      string `json:"type,omitempty"`
-					}{
-						Parameter: "Developers",
-						Type:      "role",
+					Holder: &PermissionGrantHolderPayloadScheme{
+						Parameter: "scrum-masters",
+						Type:      "group",
 					},
-					Permission: "ADMINISTER_ISSUES",
+					Permission: "EDIT_ISSUES",
 				},
 			},
 			mockFile:           "./mocks/get-permission-scheme.json",
@@ -805,24 +757,18 @@ func TestPermissionSchemeService_Update(t *testing.T) {
 			permissionSchemeDescription: "Dummy permission scheme description",
 			permissionGrants: &[]PermissionGrantPayloadScheme{
 				{
-					Holder: struct {
-						Parameter string `json:"parameter,omitempty"`
-						Type      string `json:"type,omitempty"`
-					}{
-						Parameter: "jira-core-users",
+					Holder: &PermissionGrantHolderPayloadScheme{
+						Parameter: "scrum-masters",
 						Type:      "group",
 					},
-					Permission: "ADMINISTER_PROJECTS",
+					Permission: "EDIT_ISSUES",
 				},
 				{
-					Holder: struct {
-						Parameter string `json:"parameter,omitempty"`
-						Type      string `json:"type,omitempty"`
-					}{
-						Parameter: "Developers",
-						Type:      "role",
+					Holder: &PermissionGrantHolderPayloadScheme{
+						Parameter: "scrum-masters",
+						Type:      "group",
 					},
-					Permission: "ADMINISTER_ISSUES",
+					Permission: "EDIT_ISSUES",
 				},
 			},
 			mockFile:           "./mocks/get-permission-scheme.json",
@@ -840,24 +786,18 @@ func TestPermissionSchemeService_Update(t *testing.T) {
 			permissionSchemeDescription: "Dummy permission scheme description",
 			permissionGrants: &[]PermissionGrantPayloadScheme{
 				{
-					Holder: struct {
-						Parameter string `json:"parameter,omitempty"`
-						Type      string `json:"type,omitempty"`
-					}{
-						Parameter: "jira-core-users",
+					Holder: &PermissionGrantHolderPayloadScheme{
+						Parameter: "scrum-masters",
 						Type:      "group",
 					},
-					Permission: "ADMINISTER_PROJECTS",
+					Permission: "EDIT_ISSUES",
 				},
 				{
-					Holder: struct {
-						Parameter string `json:"parameter,omitempty"`
-						Type      string `json:"type,omitempty"`
-					}{
-						Parameter: "Developers",
-						Type:      "role",
+					Holder: &PermissionGrantHolderPayloadScheme{
+						Parameter: "scrum-masters",
+						Type:      "group",
 					},
-					Permission: "ADMINISTER_ISSUES",
+					Permission: "EDIT_ISSUES",
 				},
 			},
 			mockFile:           "./mocks/get-permission-scheme.json",
@@ -875,24 +815,18 @@ func TestPermissionSchemeService_Update(t *testing.T) {
 			permissionSchemeDescription: "Dummy permission scheme description",
 			permissionGrants: &[]PermissionGrantPayloadScheme{
 				{
-					Holder: struct {
-						Parameter string `json:"parameter,omitempty"`
-						Type      string `json:"type,omitempty"`
-					}{
-						Parameter: "jira-core-users",
+					Holder: &PermissionGrantHolderPayloadScheme{
+						Parameter: "scrum-masters",
 						Type:      "group",
 					},
-					Permission: "ADMINISTER_PROJECTS",
+					Permission: "EDIT_ISSUES",
 				},
 				{
-					Holder: struct {
-						Parameter string `json:"parameter,omitempty"`
-						Type      string `json:"type,omitempty"`
-					}{
-						Parameter: "Developers",
-						Type:      "role",
+					Holder: &PermissionGrantHolderPayloadScheme{
+						Parameter: "scrum-masters",
+						Type:      "group",
 					},
-					Permission: "ADMINISTER_ISSUES",
+					Permission: "EDIT_ISSUES",
 				},
 			},
 			mockFile:           "./mocks/get-permission-scheme.json",
@@ -911,24 +845,18 @@ func TestPermissionSchemeService_Update(t *testing.T) {
 			permissionSchemeDescription: "Dummy permission scheme description",
 			permissionGrants: &[]PermissionGrantPayloadScheme{
 				{
-					Holder: struct {
-						Parameter string `json:"parameter,omitempty"`
-						Type      string `json:"type,omitempty"`
-					}{
-						Parameter: "jira-core-users",
+					Holder: &PermissionGrantHolderPayloadScheme{
+						Parameter: "scrum-masters",
 						Type:      "group",
 					},
-					Permission: "ADMINISTER_PROJECTS",
+					Permission: "EDIT_ISSUES",
 				},
 				{
-					Holder: struct {
-						Parameter string `json:"parameter,omitempty"`
-						Type      string `json:"type,omitempty"`
-					}{
-						Parameter: "Developers",
-						Type:      "role",
+					Holder: &PermissionGrantHolderPayloadScheme{
+						Parameter: "scrum-masters",
+						Type:      "group",
 					},
-					Permission: "ADMINISTER_ISSUES",
+					Permission: "EDIT_ISSUES",
 				},
 			},
 			mockFile:           "./mocks/get-permission-scheme.json",
@@ -947,24 +875,18 @@ func TestPermissionSchemeService_Update(t *testing.T) {
 			permissionSchemeDescription: "Dummy permission scheme description",
 			permissionGrants: &[]PermissionGrantPayloadScheme{
 				{
-					Holder: struct {
-						Parameter string `json:"parameter,omitempty"`
-						Type      string `json:"type,omitempty"`
-					}{
-						Parameter: "jira-core-users",
+					Holder: &PermissionGrantHolderPayloadScheme{
+						Parameter: "scrum-masters",
 						Type:      "group",
 					},
-					Permission: "ADMINISTER_PROJECTS",
+					Permission: "EDIT_ISSUES",
 				},
 				{
-					Holder: struct {
-						Parameter string `json:"parameter,omitempty"`
-						Type      string `json:"type,omitempty"`
-					}{
-						Parameter: "Developers",
-						Type:      "role",
+					Holder: &PermissionGrantHolderPayloadScheme{
+						Parameter: "scrum-masters",
+						Type:      "group",
 					},
-					Permission: "ADMINISTER_ISSUES",
+					Permission: "EDIT_ISSUES",
 				},
 			},
 			mockFile:           "./mocks/empty_json.json",

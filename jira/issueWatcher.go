@@ -23,7 +23,7 @@ type IssueWatcherScheme struct {
 }
 
 // Returns the watchers for an issue.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-watchers/#api-rest-api-3-issue-issueidorkey-watchers-get
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/watcher#get-issue-watchers
 func (w *WatcherService) Get(ctx context.Context, issueKeyOrID string) (result *IssueWatcherScheme, response *Response, err error) {
 
 	var endpoint = fmt.Sprintf("rest/api/3/issue/%v/watchers", issueKeyOrID)
@@ -32,7 +32,7 @@ func (w *WatcherService) Get(ctx context.Context, issueKeyOrID string) (result *
 	if err != nil {
 		return
 	}
-	request.Header.Set("Content-Type", "application/json")
+	request.Header.Set("Accept", "application/json")
 
 	response, err = w.client.Do(request)
 	if err != nil {
@@ -49,7 +49,7 @@ func (w *WatcherService) Get(ctx context.Context, issueKeyOrID string) (result *
 
 // Adds a user as a watcher of an issue by passing the account ID of the user.
 // For example, "5b10ac8d82e05b22cc7d4ef5". If no user is specified the calling user is added.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-watchers/#api-rest-api-3-issue-issueidorkey-watchers-post
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/watcher#add-watcher
 func (w *WatcherService) Add(ctx context.Context, issueKeyOrID string) (response *Response, err error) {
 
 	var endpoint = fmt.Sprintf("rest/api/3/issue/%v/watchers", issueKeyOrID)
@@ -71,7 +71,7 @@ func (w *WatcherService) Add(ctx context.Context, issueKeyOrID string) (response
 }
 
 // Deletes a user as a watcher of an issue.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-watchers/#api-rest-api-3-issue-issueidorkey-watchers-delete
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/watcher#delete-watcher
 func (w *WatcherService) Delete(ctx context.Context, issueKeyOrID, accountID string) (response *Response, err error) {
 
 	params := url.Values{}
@@ -84,7 +84,7 @@ func (w *WatcherService) Delete(ctx context.Context, issueKeyOrID, accountID str
 		return
 	}
 
-	request.Header.Set("Content-Type", "application/json")
+	request.Header.Set("Accept", "application/json")
 
 	response, err = w.client.Do(request)
 	if err != nil {

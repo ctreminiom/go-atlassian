@@ -13,7 +13,7 @@ type UserSearchService struct{ client *Client }
 
 // Returns a list of users who can be assigned issues in one or more projects.
 // The list may be restricted to users whose attributes match a string.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-user-search/#api-rest-api-3-user-assignable-multiprojectsearch-get
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/users/search#find-users-assignable-to-projects
 func (u *UserSearchService) Projects(ctx context.Context, accountID string, projectKeys []string, startAt, maxResults int) (result *[]UserScheme, response *Response, err error) {
 
 	if len(projectKeys) == 0 {
@@ -69,7 +69,7 @@ func (u *UserSearchService) Projects(ctx context.Context, accountID string, proj
 // This operation takes the users in the range defined by startAt and maxResults, up to the thousandth user,
 // and then returns only the users from that range that match the search string and property.
 // This means the operation usually returns fewer users than specified in maxResults
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-user-search/#api-rest-api-3-user-search-get
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/users/search#find-users
 func (u *UserSearchService) Do(ctx context.Context, accountID, query string, startAt, maxResults int) (result *[]UserScheme, response *Response, err error) {
 
 	params := url.Values{}

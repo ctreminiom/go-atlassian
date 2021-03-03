@@ -17,7 +17,7 @@ type PermissionSchemesScheme struct {
 }
 
 // Returns all permission schemes.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permission-schemes/#api-rest-api-3-permissionscheme-get
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/permissions/scheme#get-all-permission-schemes
 func (p *PermissionSchemeService) Gets(ctx context.Context) (result *PermissionSchemesScheme, response *Response, err error) {
 
 	var endpoint = "rest/api/3/permissionscheme"
@@ -59,7 +59,7 @@ type PermissionScheme struct {
 }
 
 // Returns a permission scheme.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permission-schemes/#api-rest-api-3-permissionscheme-schemeid-get
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/permissions/scheme#get-permission-scheme
 func (p *PermissionSchemeService) Get(ctx context.Context, permissionSchemeID int) (result *PermissionScheme, response *Response, err error) {
 
 	var endpoint = fmt.Sprintf("rest/api/3/permissionscheme/%v", permissionSchemeID)
@@ -84,7 +84,7 @@ func (p *PermissionSchemeService) Get(ctx context.Context, permissionSchemeID in
 }
 
 // Deletes a permission scheme.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permission-schemes/#api-rest-api-3-permissionscheme-schemeid-delete
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/permissions/scheme#delete-permission-scheme
 func (p *PermissionSchemeService) Delete(ctx context.Context, permissionSchemeID int) (response *Response, err error) {
 
 	var endpoint = fmt.Sprintf("rest/api/3/permissionscheme/%v", permissionSchemeID)
@@ -105,7 +105,7 @@ func (p *PermissionSchemeService) Delete(ctx context.Context, permissionSchemeID
 
 // Creates a new permission scheme.
 // You can create a permission scheme with or without defining a set of permission grants.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permission-schemes/#api-rest-api-3-permissionscheme-post
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/permissions/scheme#create-permission-scheme
 func (p *PermissionSchemeService) Create(ctx context.Context, name, description string, permissions *[]PermissionGrantPayloadScheme) (result *PermissionScheme, response *Response, err error) {
 
 	if permissions == nil {
@@ -154,7 +154,7 @@ func (p *PermissionSchemeService) Create(ctx context.Context, name, description 
 // 1. If a permissions list is present in the request, then it is set in the permission scheme, overwriting all existing grants.
 // 2. If you want to update only the name and description, then do not send a permissions list in the request.
 // 3. Sending an empty list will remove all permission grants from the permission scheme.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permission-schemes/#api-rest-api-3-permissionscheme-schemeid-put
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/permissions/scheme#update-permission-scheme
 func (p *PermissionSchemeService) Update(ctx context.Context, schemeID int, name, description string, permissions *[]PermissionGrantPayloadScheme) (result *PermissionScheme, response *Response, err error) {
 
 	if permissions == nil {

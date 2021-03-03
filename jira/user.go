@@ -60,7 +60,7 @@ type UserGroupsScheme struct {
 }
 
 // Returns a user.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-users/#api-rest-api-3-user-get
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/users#get-user
 func (u *UserService) Get(ctx context.Context, accountID string, expands []string) (result *UserScheme, response *Response, err error) {
 
 	if len(accountID) == 0 {
@@ -122,7 +122,7 @@ type UserPayloadScheme struct {
 // sent an email advising them that their account is created.
 // This email includes a link for the user to set their password. If the notification isn't sent for a generated password,
 // the user will need to be sent a reset password request from Jira.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-users/#api-rest-api-3-user-post
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/users#create-user
 func (u *UserService) Create(ctx context.Context, payload *UserPayloadScheme) (result *UserScheme, response *Response, err error) {
 
 	if payload == nil {
@@ -159,7 +159,7 @@ func (u *UserService) Create(ctx context.Context, payload *UserPayloadScheme) (r
 }
 
 // Deletes a user.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-users/#api-rest-api-3-user-delete
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/users#delete-user
 func (u *UserService) Delete(ctx context.Context, accountID string) (response *Response, err error) {
 
 	if len(accountID) == 0 {
@@ -192,7 +192,7 @@ type UserSearchPageScheme struct {
 }
 
 // Returns a paginated list of the users specified by one or more account IDs.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-users/#api-rest-api-3-user-bulk-get
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/users#bulk-get-users
 func (u *UserService) Find(ctx context.Context, accountIDs []string, startAt, maxResults int) (result *UserSearchPageScheme, response *Response, err error) {
 
 	if len(accountIDs) == 0 {
@@ -235,7 +235,7 @@ type UserGroupScheme struct {
 }
 
 // Returns the groups to which a user belongs.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-users/#api-rest-api-3-user-groups-get
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/users#get-user-groups
 func (u *UserService) Groups(ctx context.Context, accountID string) (result *[]UserGroupScheme, response *Response, err error) {
 
 	if len(accountID) == 0 {
@@ -245,7 +245,7 @@ func (u *UserService) Groups(ctx context.Context, accountID string) (result *[]U
 	params := url.Values{}
 	params.Add("accountId", accountID)
 
-	var endpoint = fmt.Sprintf("rest/api/3/user/groups?%v", accountID)
+	var endpoint = fmt.Sprintf("rest/api/3/user/groups?%v", params.Encode())
 
 	request, err := u.client.newRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
@@ -268,7 +268,7 @@ func (u *UserService) Groups(ctx context.Context, accountID string) (result *[]U
 }
 
 // Returns a list of all (active and inactive) users.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-users/#api-rest-api-3-users-search-get
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/users#get-all-users
 func (u *UserService) Gets(ctx context.Context, startAt, maxResults int) (result *[]UserScheme, response *Response, err error) {
 
 	params := url.Values{}

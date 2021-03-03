@@ -33,15 +33,17 @@ type PermissionGrantScheme struct {
 }
 
 type PermissionGrantPayloadScheme struct {
-	Holder struct {
-		Parameter string `json:"parameter,omitempty"`
-		Type      string `json:"type,omitempty"`
-	} `json:"holder,omitempty"`
-	Permission string `json:"permission,omitempty"`
+	Holder     *PermissionGrantHolderPayloadScheme `json:"holder,omitempty"`
+	Permission string                              `json:"permission,omitempty"`
+}
+
+type PermissionGrantHolderPayloadScheme struct {
+	Parameter string `json:"parameter,omitempty"`
+	Type      string `json:"type,omitempty"`
 }
 
 // Creates a permission grant in a permission scheme.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permission-schemes/#api-rest-api-3-permissionscheme-schemeid-permission-post
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/permissions/scheme/grant#create-permission-grant
 func (p *PermissionGrantSchemeService) Create(ctx context.Context, schemeID int, payload *PermissionGrantPayloadScheme) (result *PermissionGrantScheme, response *Response, err error) {
 
 	if payload == nil {
@@ -72,7 +74,7 @@ func (p *PermissionGrantSchemeService) Create(ctx context.Context, schemeID int,
 }
 
 // Returns all permission grants for a permission scheme.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permission-schemes/#api-rest-api-3-permissionscheme-schemeid-permission-get
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/permissions/scheme/grant#get-permission-scheme-grants
 func (p *PermissionGrantSchemeService) Gets(ctx context.Context, permissionSchemeID int, expands []string) (result *PermissionSchemeGrantsScheme, response *Response, err error) {
 
 	params := url.Values{}
@@ -120,7 +122,7 @@ func (p *PermissionGrantSchemeService) Gets(ctx context.Context, permissionSchem
 }
 
 // Returns a permission grant.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permission-schemes/#api-rest-api-3-permissionscheme-schemeid-permission-permissionid-get
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/permissions/scheme/grant#get-permission-scheme-grant
 func (p *PermissionGrantSchemeService) Get(ctx context.Context, schemeID, permissionID int, expands []string) (result *PermissionGrantScheme, response *Response, err error) {
 
 	params := url.Values{}
@@ -169,7 +171,7 @@ func (p *PermissionGrantSchemeService) Get(ctx context.Context, schemeID, permis
 }
 
 // Deletes a permission grant from a permission scheme. See About permission schemes and grants for more details.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permission-schemes/#api-rest-api-3-permissionscheme-schemeid-permission-permissionid-delete
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/permissions/scheme/grant#delete-permission-scheme-grant
 func (p *PermissionGrantSchemeService) Delete(ctx context.Context, schemeID, permissionID int) (response *Response, err error) {
 
 	var endpoint = fmt.Sprintf("rest/api/3/permissionscheme/%v/permission/%v", schemeID, permissionID)

@@ -35,7 +35,7 @@ type ProjectPermissionSchemeScheme struct {
 }
 
 // Gets the permission scheme associated with the project.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-permission-schemes/#api-rest-api-3-project-projectkeyorid-permissionscheme-get
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/projects/permission-schemes#get-assigned-permission-scheme
 func (p *ProjectPermissionSchemeService) Get(ctx context.Context, projectKeyOrID string, expands []string) (result *ProjectPermissionSchemeScheme, response *Response, err error) {
 
 	if len(projectKeyOrID) == 0 {
@@ -88,7 +88,7 @@ func (p *ProjectPermissionSchemeService) Get(ctx context.Context, projectKeyOrID
 
 // Assigns a permission scheme with a project.
 // See Managing project permissions for more information about permission schemes.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-permission-schemes/#api-rest-api-3-project-projectkeyorid-permissionscheme-put
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/projects/permission-schemes#assign-permission-scheme
 func (p *ProjectPermissionSchemeService) Assign(ctx context.Context, projectKeyOrID string, permissionSchemeID int) (result *ProjectPermissionSchemeScheme, response *Response, err error) {
 
 	if len(projectKeyOrID) == 0 {
@@ -132,7 +132,7 @@ type ProjectIssueSecurityLevelsScheme struct {
 }
 
 // Returns all issue security levels for the project that the user has access to.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-permission-schemes/#api-rest-api-3-project-projectkeyorid-securitylevel-get
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/projects/permission-schemes#get-project-issue-security-levels
 func (p *ProjectPermissionSchemeService) SecurityLevels(ctx context.Context, projectKeyOrID string) (result *ProjectIssueSecurityLevelsScheme, response *Response, err error) {
 
 	if len(projectKeyOrID) == 0 {

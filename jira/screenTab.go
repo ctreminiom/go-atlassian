@@ -19,7 +19,7 @@ type ScreenTabScheme struct {
 }
 
 // Returns the list of tabs for a screen.
-// https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screen-tabs/#api-rest-api-3-screens-screenid-tabs-get
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/screens/tabs#get-all-screen-tabs
 func (s *ScreenTabService) Gets(ctx context.Context, screenID int, projectKey string) (result *[]ScreenTabScheme, response *Response, err error) {
 
 	params := url.Values{}
@@ -56,7 +56,7 @@ func (s *ScreenTabService) Gets(ctx context.Context, screenID int, projectKey st
 }
 
 // Creates a tab for a screen.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screen-tabs/#api-rest-api-3-screens-screenid-tabs-post
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/screens/tabs#create-screen-tab
 func (s *ScreenTabService) Create(ctx context.Context, screenID int, tabName string) (result *ScreenTabScheme, response *Response, err error) {
 
 	if len(tabName) == 0 {
@@ -91,7 +91,7 @@ func (s *ScreenTabService) Create(ctx context.Context, screenID int, tabName str
 }
 
 // Updates the name of a screen tab.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screen-tabs/#api-rest-api-3-screens-screenid-tabs-tabid-put
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/screens/tabs#update-screen-tab
 func (s *ScreenTabService) Update(ctx context.Context, screenID, tabID int, newTabName string) (result *ScreenTabScheme, response *Response, err error) {
 
 	if len(newTabName) == 0 {
@@ -126,7 +126,7 @@ func (s *ScreenTabService) Update(ctx context.Context, screenID, tabID int, newT
 }
 
 // Deletes a screen tab.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screen-tabs/#api-rest-api-3-screens-screenid-tabs-tabid-delete
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/screens/tabs#delete-screen-tab
 func (s *ScreenTabService) Delete(ctx context.Context, screenID, tabID int) (response *Response, err error) {
 
 	var endpoint = fmt.Sprintf("rest/api/3/screens/%v/tabs/%v", screenID, tabID)
@@ -145,7 +145,7 @@ func (s *ScreenTabService) Delete(ctx context.Context, screenID, tabID int) (res
 }
 
 // Moves a screen tab.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screen-tabs/#api-rest-api-3-screens-screenid-tabs-tabid-move-pos-post
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/screens/tabs#move-screen-tab
 func (s *ScreenTabService) Move(ctx context.Context, screenID, tabID, tabPosition int) (response *Response, err error) {
 
 	var endpoint = fmt.Sprintf("rest/api/3/screens/%v/tabs/%v/move/%v", screenID, tabID, tabPosition)

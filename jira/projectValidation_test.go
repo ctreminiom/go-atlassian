@@ -86,17 +86,6 @@ func TestProjectValidationService_Key(t *testing.T) {
 			wantHTTPCodeReturn: http.StatusOK,
 			wantErr:            true,
 		},
-
-		{
-			name:               "ValidateProjectKeyWhenTheResponseBodyHasADifferentFormat",
-			projectKey:         "DUMMY",
-			mockFile:           "./mocks/empty_json.json",
-			wantHTTPMethod:     http.MethodGet,
-			endpoint:           "/rest/api/3/projectvalidate/validProjectKey?key=DUMMY",
-			context:            context.Background(),
-			wantHTTPCodeReturn: http.StatusOK,
-			wantErr:            true,
-		},
 	}
 
 	for _, testCase := range testCases {
@@ -241,17 +230,6 @@ func TestProjectValidationService_Name(t *testing.T) {
 			mockFile:           "./mocks/validate-project-name.json",
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/api/2/projectvalidate/validProjectName?name=Project+name+example",
-			context:            context.Background(),
-			wantHTTPCodeReturn: http.StatusOK,
-			wantErr:            true,
-		},
-
-		{
-			name:               "ValidateProjectKeyWhenTheResponseBodyHasADifferentFormat",
-			projectName:        "Project name example",
-			mockFile:           "./mocks/empty_json.json",
-			wantHTTPMethod:     http.MethodGet,
-			endpoint:           "/rest/api/3/projectvalidate/validProjectName?name=Project+name+example",
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusOK,
 			wantErr:            true,

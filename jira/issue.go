@@ -35,22 +35,22 @@ type IssueScheme struct {
 }
 
 type IssueFieldsScheme struct {
-	IssueType                *IssueTypeScheme        `json:"issuetype,omitempty"`
-	IssueLinks               []*IssueLinkScheme      `json:"issuelinks,omitempty"`
-	Watcher                  *IssueWatcherScheme     `json:"watches,omitempty"`
-	Votes                    *IssueVoteScheme        `json:"votes,omitempty"`
-	Versions                 []*ProjectVersionScheme `json:"versions,omitempty"`
-	Project                  *ProjectScheme          `json:"project,omitempty"`
-	FixVersions              []*ProjectVersionScheme `json:"fixVersions,omitempty"`
-	Priority                 *PriorityScheme         `json:"priority,omitempty"`
-	Components               *ProjectComponentScheme `json:"components,omitempty"`
-	Creator                  *UserScheme             `json:"creator,omitempty"`
-	Reporter                 *UserScheme             `json:"reporter,omitempty"`
-	Statuscategorychangedate string                  `json:"statuscategorychangedate,omitempty"`
-	LastViewed               string                  `json:"lastViewed,omitempty"`
-	Summary                  string                  `json:"summary,omitempty"`
-	Created                  string                  `json:"created,omitempty"`
-	Labels                   []string                `json:"labels,omitempty"`
+	IssueType                *IssueTypeScheme          `json:"issuetype,omitempty"`
+	IssueLinks               []*IssueLinkScheme        `json:"issuelinks,omitempty"`
+	Watcher                  *IssueWatcherScheme       `json:"watches,omitempty"`
+	Votes                    *IssueVoteScheme          `json:"votes,omitempty"`
+	Versions                 []*ProjectVersionScheme   `json:"versions,omitempty"`
+	Project                  *ProjectScheme            `json:"project,omitempty"`
+	FixVersions              []*ProjectVersionScheme   `json:"fixVersions,omitempty"`
+	Priority                 *PriorityScheme           `json:"priority,omitempty"`
+	Components               *[]ProjectComponentScheme `json:"components,omitempty"`
+	Creator                  *UserScheme               `json:"creator,omitempty"`
+	Reporter                 *UserScheme               `json:"reporter,omitempty"`
+	Statuscategorychangedate string                    `json:"statuscategorychangedate,omitempty"`
+	LastViewed               string                    `json:"lastViewed,omitempty"`
+	Summary                  string                    `json:"summary,omitempty"`
+	Created                  string                    `json:"created,omitempty"`
+	Labels                   []string                  `json:"labels,omitempty"`
 }
 
 func (i *IssueScheme) Merge(fields *CustomFields) (result map[string]interface{}, err error) {

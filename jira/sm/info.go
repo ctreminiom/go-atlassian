@@ -3,7 +3,6 @@ package sm
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"net/http"
 )
 
@@ -13,7 +12,7 @@ type InfoService struct{ client *Client }
 // builds, and related links.
 func (i *InfoService) Get(ctx context.Context) (result *InfoScheme, response *Response, err error) {
 
-	var endpoint = fmt.Sprintf("rest/servicedeskapi/info")
+	var endpoint = "rest/servicedeskapi/info"
 
 	request, err := i.client.newRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {

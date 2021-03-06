@@ -1,4 +1,4 @@
-package jira
+package sm
 
 import (
 	"bytes"
@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/ctreminiom/go-atlassian/jira/sm"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -18,27 +17,12 @@ type Client struct {
 	HTTP *http.Client
 	Site *url.URL
 
-	Role       *ApplicationRoleService
-	Audit      *AuditService
-	Auth       *AuthenticationService
-	Dashboard  *DashboardService
-	Filter     *FilterService
-	Group      *GroupService
-	Issue      *IssueService
-	Permission *PermissionService
-	Project    *ProjectService
-	Screen     *ScreenService
-	Server     *ServerService
-	Task       *TaskService
-	User       *UserService
-
-	//Service Management Module
-	ServiceManagement *sm.Client
+	Auth          *AuthenticationService
+	Customer      *CustomerService
+	Info          *InfoService
+	Knowledgebase *KnowledgebaseService
+	Organization  *OrganizationService
 }
-
-const (
-	DateFormatJira = "2006-01-02T15:04:05.999-0700"
-)
 
 //New
 func New(httpClient *http.Client, site string) (client *Client, err error) {
@@ -60,103 +44,11 @@ func New(httpClient *http.Client, site string) (client *Client, err error) {
 	client.HTTP = httpClient
 	client.Site = siteAsURL
 
-	//Service Management module integration
-	serviceManagementClient, err := sm.New(httpClient, site)
-	if err != nil {
-		return nil, err
-	}
-
-	client.ServiceManagement = serviceManagementClient
-
-	client.Role = &ApplicationRoleService{client: client}
-	client.Audit = &AuditService{client: client}
 	client.Auth = &AuthenticationService{client: client}
-	client.Dashboard = &DashboardService{client: client}
-
-	// Admin Endpoints
-	client.Server = &ServerService{client: client}
-	client.Task = &TaskService{client: client}
-
-	client.Screen = &ScreenService{
-		client: client,
-		Tab: &ScreenTabService{
-			client: client,
-			Field:  &ScreenTabFieldService{client: client},
-		},
-		Scheme: &ScreenSchemeService{client: client},
-	}
-
-	client.Filter = &FilterService{
-		client: client,
-		Share:  &FilterShareService{client: client},
-	}
-
-	client.Group = &GroupService{client: client}
-
-	client.Issue = &IssueService{
-		client:     client,
-		Attachment: &AttachmentService{client: client},
-		Comment: &CommentService{
-			client: client,
-		},
-		Field: &FieldService{
-			client:        client,
-			Configuration: &FieldConfigurationService{client: client},
-
-			Context: &FieldContextService{
-				client: client,
-				Option: &FieldOptionContextService{client: client},
-			},
-		},
-		Priority:   &PriorityService{client: client},
-		Resolution: &ResolutionService{client: client},
-
-		Search: &IssueSearchService{client: client},
-
-		Type: &IssueTypeService{
-			client:       client,
-			Scheme:       &IssueTypeSchemeService{client: client},
-			ScreenScheme: &IssueTypeScreenSchemeService{client: client},
-		},
-
-		Link: &IssueLinkService{
-			client: client,
-			Type:   &IssueLinkTypeService{client: client},
-		},
-		Votes:    &VoteService{client: client},
-		Watchers: &WatcherService{client: client},
-		Label:    &LabelService{client: client},
-	}
-
-	client.Permission = &PermissionService{
-		client: client,
-		Scheme: &PermissionSchemeService{
-			client: client,
-			Grant:  &PermissionGrantSchemeService{client: client},
-		},
-	}
-
-	client.Project = &ProjectService{
-		client: client,
-
-		Category:   &ProjectCategoryService{client: client},
-		Component:  &ProjectComponentService{client: client},
-		Valid:      &ProjectValidationService{client: client},
-		Permission: &ProjectPermissionSchemeService{client: client},
-
-		Role: &ProjectRoleService{
-			client: client,
-			Actor:  &ProjectRoleActorService{client: client},
-		},
-
-		Type:    &ProjectTypeService{client: client},
-		Version: &ProjectVersionService{client: client},
-	}
-
-	client.User = &UserService{
-		client: client,
-		Search: &UserSearchService{client: client},
-	}
+	client.Customer = &CustomerService{client: client}
+	client.Info = &InfoService{client: client}
+	client.Knowledgebase = &KnowledgebaseService{client: client}
+	client.Organization = &OrganizationService{client: client}
 
 	return
 }

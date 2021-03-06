@@ -7,7 +7,7 @@ import (
 	"os"
 )
 
-func getServiceManagementInfo() {
+func createCustomer() {
 
 	var (
 		host  = os.Getenv("HOST")
@@ -23,7 +23,12 @@ func getServiceManagementInfo() {
 	jiraCloud.Auth.SetBasicAuth(mail, token)
 	jiraCloud.Auth.SetUserAgent("curl/7.54.0")
 
-	info, response, err := jiraCloud.ServiceManagement.Info.Get(context.Background())
+	var (
+		email       = "example@gmail.com"
+		displayName = "Example Customer"
+	)
+
+	newCustomer, response, err := jiraCloud.ServiceManagement.Customer.Create(context.Background(), email, displayName)
 	if err != nil {
 		if response != nil {
 			log.Println("Response HTTP Response", string(response.BodyAsBytes))
@@ -33,5 +38,13 @@ func getServiceManagementInfo() {
 
 	log.Println("Response HTTP Code", response.StatusCode)
 	log.Println("HTTP Endpoint Used", response.Endpoint)
-	log.Println(info)
+
+	log.Println("The new customer has been created!!")
+	log.Println("-------------------------")
+	log.Println(newCustomer.Name)
+	log.Println(newCustomer.DisplayName)
+	log.Println(newCustomer.AccountID)
+	log.Println(newCustomer.EmailAddress)
+	log.Println(newCustomer.Links)
+	log.Println("-------------------------")
 }

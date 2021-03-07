@@ -25,6 +25,8 @@ func (o *OrganizationService) Gets(ctx context.Context, accountID string, start,
 
 	var endpoint = fmt.Sprintf("rest/servicedeskapi/organization?%v", params.Encode())
 
+	fmt.Println(endpoint)
+
 	request, err := o.client.newRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
 		return
@@ -214,7 +216,7 @@ func (o *OrganizationService) Remove(ctx context.Context, organizationID int, ac
 }
 
 // This method returns a list of all organizations associated with a service desk.
-func (o *OrganizationService) Project(ctx context.Context, accountID string, projectID, start, limit int) (result *OrganizationPageScheme, response *Response, err error) {
+func (o *OrganizationService) Project(ctx context.Context, accountID string, serviceDeskPortalID, start, limit int) (result *OrganizationPageScheme, response *Response, err error) {
 
 	params := url.Values{}
 	params.Add("start", strconv.Itoa(start))
@@ -224,7 +226,7 @@ func (o *OrganizationService) Project(ctx context.Context, accountID string, pro
 		params.Add("accountId", accountID)
 	}
 
-	var endpoint = fmt.Sprintf("rest/servicedeskapi/servicedesk/%v/organization?%v", projectID, params.Encode())
+	var endpoint = fmt.Sprintf("rest/servicedeskapi/servicedesk/%v/organization?%v", serviceDeskPortalID, params.Encode())
 
 	request, err := o.client.newRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
@@ -249,13 +251,13 @@ func (o *OrganizationService) Project(ctx context.Context, accountID string, pro
 // This method adds an organization to a service desk.
 // If the organization ID is already associated with the service desk,
 // no change is made and the resource returns a 204 success code.
-func (o *OrganizationService) Associate(ctx context.Context, projectID, organizationID int) (response *Response, err error) {
+func (o *OrganizationService) Associate(ctx context.Context, serviceDeskPortalID, organizationID int) (response *Response, err error) {
 
 	payload := struct {
 		OrganizationID int `json:"organizationId"`
 	}{OrganizationID: organizationID}
 
-	var endpoint = fmt.Sprintf("rest/servicedeskapi/servicedesk/%v/organization", projectID)
+	var endpoint = fmt.Sprintf("rest/servicedeskapi/servicedesk/%v/organization", serviceDeskPortalID)
 
 	request, err := o.client.newRequest(ctx, http.MethodPost, endpoint, payload)
 	if err != nil {
@@ -275,15 +277,15 @@ func (o *OrganizationService) Associate(ctx context.Context, projectID, organiza
 // This method removes an organization from a service desk.
 // If the organization ID does not match an organization associated with the service desk,
 // no change is made and the resource returns a 204 success code.
-func (o *OrganizationService) Detach(ctx context.Context, projectID, organizationID int) (response *Response, err error) {
+func (o *OrganizationService) Detach(ctx context.Context, serviceDeskPortalID, organizationID int) (response *Response, err error) {
 
 	payload := struct {
 		OrganizationID int `json:"organizationId"`
 	}{OrganizationID: organizationID}
 
-	var endpoint = fmt.Sprintf("rest/servicedeskapi/servicedesk/%v/organization", projectID)
+	var endpoint = fmt.Sprintf("rest/servicedeskapi/servicedesk/%v/organization", serviceDeskPortalID)
 
-	request, err := o.client.newRequest(ctx, http.MethodPost, endpoint, payload)
+	request, err := o.client.newRequest(ctx, http.MethodDelete, endpoint, payload)
 	if err != nil {
 		return
 	}

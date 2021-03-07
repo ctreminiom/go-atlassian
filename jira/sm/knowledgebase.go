@@ -35,6 +35,7 @@ func (k *KnowledgebaseService) Articles(ctx context.Context, query string, highl
 	}
 
 	request.Header.Set("Accept", "application/json")
+	request.Header.Set("X-ExperimentalApi", "opt-in")
 
 	response, err = k.client.Do(request)
 	if err != nil {

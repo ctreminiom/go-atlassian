@@ -2,5 +2,12 @@ package main
 
 func main() {
 	//getServiceManagementInfo
-	createCustomer()
+	//createCustomer()
+	//getOrganizations()
+	//createOrganization() //1
+	//deleteOrganization()
+	//addUsersToOrganization()
+	//getOrganizationUsers()
+	//removeUsersOrganization()
+	projectOrganization()
 }

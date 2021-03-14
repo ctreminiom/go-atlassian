@@ -7,7 +7,7 @@ import (
 	"os"
 )
 
-func getServiceManagementInfo() {
+func main() {
 
 	var (
 		host  = os.Getenv("HOST")
@@ -15,23 +15,28 @@ func getServiceManagementInfo() {
 		token = os.Getenv("TOKEN")
 	)
 
-	jiraCloud, err := jira.New(nil, host)
+	atlassian, err := jira.New(nil, host)
 	if err != nil {
 		return
 	}
 
-	jiraCloud.Auth.SetBasicAuth(mail, token)
-	jiraCloud.Auth.SetUserAgent("curl/7.54.0")
+	atlassian.Auth.SetBasicAuth(mail, token)
+	atlassian.Auth.SetUserAgent("curl/7.54.0")
 
-	info, response, err := jiraCloud.ServiceManagement.Info.Get(context.Background())
+	var (
+		projectID      = 1
+		organizationID = 2
+	)
+
+	response, err := atlassian.ServiceManagement.Organization.Detach(context.Background(), projectID, organizationID)
 	if err != nil {
 		if response != nil {
 			log.Println("Response HTTP Response", string(response.BodyAsBytes))
+			log.Println("HTTP Endpoint Used", response.Endpoint)
 		}
 		log.Fatal(err)
 	}
 
 	log.Println("Response HTTP Code", response.StatusCode)
 	log.Println("HTTP Endpoint Used", response.Endpoint)
-	log.Println(info)
 }

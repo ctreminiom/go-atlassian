@@ -7,7 +7,7 @@ import (
 	"os"
 )
 
-func createCustomer() {
+func main() {
 
 	var (
 		host  = os.Getenv("HOST")
@@ -15,20 +15,20 @@ func createCustomer() {
 		token = os.Getenv("TOKEN")
 	)
 
-	jiraCloud, err := jira.New(nil, host)
+	atlassian, err := jira.New(nil, host)
 	if err != nil {
 		return
 	}
 
-	jiraCloud.Auth.SetBasicAuth(mail, token)
-	jiraCloud.Auth.SetUserAgent("curl/7.54.0")
+	atlassian.Auth.SetBasicAuth(mail, token)
+	atlassian.Auth.SetUserAgent("curl/7.54.0")
 
 	var (
 		email       = "example@gmail.com"
 		displayName = "Example Customer"
 	)
 
-	newCustomer, response, err := jiraCloud.ServiceManagement.Customer.Create(context.Background(), email, displayName)
+	newCustomer, response, err := atlassian.ServiceManagement.Customer.Create(context.Background(), email, displayName)
 	if err != nil {
 		if response != nil {
 			log.Println("Response HTTP Response", string(response.BodyAsBytes))
@@ -47,4 +47,5 @@ func createCustomer() {
 	log.Println(newCustomer.EmailAddress)
 	log.Println(newCustomer.Links)
 	log.Println("-------------------------")
+
 }

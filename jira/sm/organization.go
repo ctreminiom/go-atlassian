@@ -25,8 +25,6 @@ func (o *OrganizationService) Gets(ctx context.Context, accountID string, start,
 
 	var endpoint = fmt.Sprintf("rest/servicedeskapi/organization?%v", params.Encode())
 
-	fmt.Println(endpoint)
-
 	request, err := o.client.newRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
 		return

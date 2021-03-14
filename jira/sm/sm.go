@@ -22,6 +22,7 @@ type Client struct {
 	Info          *InfoService
 	Knowledgebase *KnowledgebaseService
 	Organization  *OrganizationService
+	Request       *RequestService
 }
 
 //New
@@ -49,6 +50,12 @@ func New(httpClient *http.Client, site string) (client *Client, err error) {
 	client.Info = &InfoService{client: client}
 	client.Knowledgebase = &KnowledgebaseService{client: client}
 	client.Organization = &OrganizationService{client: client}
+
+	client.Request = &RequestService{
+		client:   client,
+		Type:     &RequestTypeService{client: client},
+		Approval: &RequestApprovalService{client: client},
+	}
 
 	return
 }

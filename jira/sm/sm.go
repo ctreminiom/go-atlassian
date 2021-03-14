@@ -52,9 +52,10 @@ func New(httpClient *http.Client, site string) (client *Client, err error) {
 	client.Organization = &OrganizationService{client: client}
 
 	client.Request = &RequestService{
-		client:   client,
-		Type:     &RequestTypeService{client: client},
-		Approval: &RequestApprovalService{client: client},
+		client:     client,
+		Type:       &RequestTypeService{client: client},
+		Approval:   &RequestApprovalService{client: client},
+		Attachment: &RequestAttachmentService{client: client},
 	}
 
 	return

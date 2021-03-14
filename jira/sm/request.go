@@ -14,6 +14,7 @@ type RequestService struct {
 	Type       *RequestTypeService
 	Approval   *RequestApprovalService
 	Attachment *RequestAttachmentService
+	Comment    *RequestCommentService
 }
 
 type RequestGetOptionsScheme struct {

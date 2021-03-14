@@ -56,6 +56,7 @@ func New(httpClient *http.Client, site string) (client *Client, err error) {
 		Type:       &RequestTypeService{client: client},
 		Approval:   &RequestApprovalService{client: client},
 		Attachment: &RequestAttachmentService{client: client},
+		Comment:    &RequestCommentService{client: client},
 	}
 
 	return

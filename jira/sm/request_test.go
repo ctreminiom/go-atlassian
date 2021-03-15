@@ -378,3 +378,243 @@ func TestRequestService_Get(t *testing.T) {
 	}
 
 }
+
+func TestRequestService_Subscribe(t *testing.T) {
+
+	testCases := []struct {
+		name               string
+		issueKeyOrID       string
+		mockFile           string
+		wantHTTPMethod     string
+		endpoint           string
+		context            context.Context
+		wantHTTPCodeReturn int
+		wantErr            bool
+	}{
+		{
+			name:               "SubscribeToRequestWhenTheParametersAreCorrect",
+			issueKeyOrID:       "DUMMY-3",
+			wantHTTPMethod:     http.MethodPut,
+			endpoint:           "/rest/servicedeskapi/request/DUMMY-3/notification",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            false,
+		},
+
+		{
+			name:               "SubscribeToRequestWhenTheIssueKeyOrIDIsNotSet",
+			issueKeyOrID:       "",
+			wantHTTPMethod:     http.MethodPut,
+			endpoint:           "/rest/servicedeskapi/request/DUMMY-3/notification",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+
+		{
+			name:               "SubscribeToRequestWhenTheRequestMethodIsIncorrect",
+			issueKeyOrID:       "DUMMY-3",
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/rest/servicedeskapi/request/DUMMY-3/notification",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+
+		{
+			name:               "SubscribeToRequestWhenTheContextIsNil",
+			issueKeyOrID:       "DUMMY-3",
+			wantHTTPMethod:     http.MethodPut,
+			endpoint:           "/rest/servicedeskapi/request/DUMMY-3/notification",
+			context:            nil,
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+
+			//Init a new HTTP mock server
+			mockOptions := mockServerOptions{
+				Endpoint:           testCase.endpoint,
+				MockFilePath:       testCase.mockFile,
+				MethodAccepted:     testCase.wantHTTPMethod,
+				ResponseCodeWanted: testCase.wantHTTPCodeReturn,
+			}
+
+			mockServer, err := startMockServer(&mockOptions)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			defer mockServer.Close()
+
+			//Init the library instance
+			mockClient, err := startMockClient(mockServer.URL)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			service := &RequestService{client: mockClient}
+			gotResponse, err := service.Subscribe(testCase.context, testCase.issueKeyOrID)
+
+			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+				assert.Error(t, err)
+
+				if gotResponse != nil {
+					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
+				}
+			} else {
+
+				assert.NoError(t, err)
+				assert.NotEqual(t, gotResponse, nil)
+
+				apiEndpoint, err := url.Parse(gotResponse.Endpoint)
+				if err != nil {
+					t.Fatal(err)
+				}
+
+				var endpointToAssert string
+
+				if apiEndpoint.Query().Encode() != "" {
+					endpointToAssert = fmt.Sprintf("%v?%v", apiEndpoint.Path, apiEndpoint.Query().Encode())
+				} else {
+					endpointToAssert = apiEndpoint.Path
+				}
+
+				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
+				assert.Equal(t, testCase.endpoint, endpointToAssert)
+
+				t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
+				assert.Equal(t, gotResponse.StatusCode, testCase.wantHTTPCodeReturn)
+			}
+
+		})
+	}
+
+}
+
+func TestRequestService_Unsubscribe(t *testing.T) {
+
+	testCases := []struct {
+		name               string
+		issueKeyOrID       string
+		mockFile           string
+		wantHTTPMethod     string
+		endpoint           string
+		context            context.Context
+		wantHTTPCodeReturn int
+		wantErr            bool
+	}{
+		{
+			name:               "UnsubscribeToRequestWhenTheParametersAreCorrect",
+			issueKeyOrID:       "DUMMY-3",
+			wantHTTPMethod:     http.MethodDelete,
+			endpoint:           "/rest/servicedeskapi/request/DUMMY-3/notification",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            false,
+		},
+
+		{
+			name:               "UnsubscribeToRequestWhenTheIssueKeyOrIDIsNotSet",
+			issueKeyOrID:       "",
+			wantHTTPMethod:     http.MethodDelete,
+			endpoint:           "/rest/servicedeskapi/request/DUMMY-3/notification",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+
+		{
+			name:               "UnsubscribeToRequestWhenTheRequestMethodIsIncorrect",
+			issueKeyOrID:       "DUMMY-3",
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/rest/servicedeskapi/request/DUMMY-3/notification",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+
+		{
+			name:               "UnsubscribeToRequestWhenTheContextIsNil",
+			issueKeyOrID:       "DUMMY-3",
+			wantHTTPMethod:     http.MethodDelete,
+			endpoint:           "/rest/servicedeskapi/request/DUMMY-3/notification",
+			context:            nil,
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+
+			//Init a new HTTP mock server
+			mockOptions := mockServerOptions{
+				Endpoint:           testCase.endpoint,
+				MockFilePath:       testCase.mockFile,
+				MethodAccepted:     testCase.wantHTTPMethod,
+				ResponseCodeWanted: testCase.wantHTTPCodeReturn,
+			}
+
+			mockServer, err := startMockServer(&mockOptions)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			defer mockServer.Close()
+
+			//Init the library instance
+			mockClient, err := startMockClient(mockServer.URL)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			service := &RequestService{client: mockClient}
+			gotResponse, err := service.Unsubscribe(testCase.context, testCase.issueKeyOrID)
+
+			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+				assert.Error(t, err)
+
+				if gotResponse != nil {
+					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
+				}
+			} else {
+
+				assert.NoError(t, err)
+				assert.NotEqual(t, gotResponse, nil)
+
+				apiEndpoint, err := url.Parse(gotResponse.Endpoint)
+				if err != nil {
+					t.Fatal(err)
+				}
+
+				var endpointToAssert string
+
+				if apiEndpoint.Query().Encode() != "" {
+					endpointToAssert = fmt.Sprintf("%v?%v", apiEndpoint.Path, apiEndpoint.Query().Encode())
+				} else {
+					endpointToAssert = apiEndpoint.Path
+				}
+
+				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
+				assert.Equal(t, testCase.endpoint, endpointToAssert)
+
+				t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
+				assert.Equal(t, gotResponse.StatusCode, testCase.wantHTTPCodeReturn)
+			}
+
+		})
+	}
+
+}

@@ -159,6 +159,48 @@ func (r *RequestService) Get(ctx context.Context, issueKeyOrID string, expands [
 	return
 }
 
+func (r *RequestService) Subscribe(ctx context.Context, issueKeyOrID string) (response *Response, err error) {
+
+	if len(issueKeyOrID) == 0 {
+		return nil, fmt.Errorf("error, please provide a valid issueKeyOrID value")
+	}
+
+	var endpoint = fmt.Sprintf("rest/servicedeskapi/request/%v/notification", issueKeyOrID)
+
+	request, err := r.client.newRequest(ctx, http.MethodPut, endpoint, nil)
+	if err != nil {
+		return
+	}
+
+	response, err = r.client.Do(request)
+	if err != nil {
+		return
+	}
+
+	return
+}
+
+func (r *RequestService) Unsubscribe(ctx context.Context, issueKeyOrID string) (response *Response, err error) {
+
+	if len(issueKeyOrID) == 0 {
+		return nil, fmt.Errorf("error, please provide a valid issueKeyOrID value")
+	}
+
+	var endpoint = fmt.Sprintf("rest/servicedeskapi/request/%v/notification", issueKeyOrID)
+
+	request, err := r.client.newRequest(ctx, http.MethodDelete, endpoint, nil)
+	if err != nil {
+		return
+	}
+
+	response, err = r.client.Do(request)
+	if err != nil {
+		return
+	}
+
+	return
+}
+
 type CustomerRequestsScheme struct {
 	Size       int                      `json:"size"`
 	Start      int                      `json:"start"`

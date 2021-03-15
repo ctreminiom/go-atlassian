@@ -10,11 +10,12 @@ import (
 )
 
 type RequestService struct {
-	client     *Client
-	Type       *RequestTypeService
-	Approval   *RequestApprovalService
-	Attachment *RequestAttachmentService
-	Comment    *RequestCommentService
+	client      *Client
+	Type        *RequestTypeService
+	Approval    *RequestApprovalService
+	Attachment  *RequestAttachmentService
+	Comment     *RequestCommentService
+	Participant *RequestParticipantService
 }
 
 type RequestGetOptionsScheme struct {

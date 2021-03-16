@@ -203,6 +203,98 @@ func (r *RequestService) Unsubscribe(ctx context.Context, issueKeyOrID string) (
 	return
 }
 
+func (r *RequestService) Transitions(ctx context.Context, issueKeyOrID string, start, limit int) (result *CustomerRequestTransitionsScheme, response *Response, err error) {
+
+	if len(issueKeyOrID) == 0 {
+		return nil, nil, fmt.Errorf("error, please provide a valid issueKeyOrID value")
+	}
+
+	params := url.Values{}
+	params.Add("start", strconv.Itoa(start))
+	params.Add("limit", strconv.Itoa(limit))
+
+	var endpoint = fmt.Sprintf("rest/servicedeskapi/request/%v/transition?%v", issueKeyOrID, params.Encode())
+
+	request, err := r.client.newRequest(ctx, http.MethodGet, endpoint, nil)
+	if err != nil {
+		return
+	}
+
+	request.Header.Set("Accept", "application/json")
+
+	response, err = r.client.Do(request)
+	if err != nil {
+		return
+	}
+
+	result = new(CustomerRequestTransitionsScheme)
+	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
+		return
+	}
+
+	return
+}
+
+func (r *RequestService) Transition(ctx context.Context, issueKeyOrID, transitionID, comment string) (response *Response, err error) {
+
+	if len(issueKeyOrID) == 0 {
+		return nil, fmt.Errorf("error, please provide a valid issueKeyOrID value")
+	}
+
+	if len(transitionID) == 0 {
+		return nil, fmt.Errorf("error, please provide a valid transitionID value")
+	}
+
+	payload := struct {
+		ID                string `json:"id"`
+		AdditionalComment struct {
+			Body string `json:"body,omitempty"`
+		} `json:"additionalComment,omitempty"`
+	}{
+		ID: transitionID,
+		AdditionalComment: struct {
+			Body string `json:"body,omitempty"`
+		}{
+			Body: comment,
+		},
+	}
+
+	var endpoint = fmt.Sprintf("rest/servicedeskapi/request/%v/transition", issueKeyOrID)
+
+	request, err := r.client.newRequest(ctx, http.MethodPost, endpoint, &payload)
+	if err != nil {
+		return
+	}
+
+	request.Header.Set("Content-Type", "application/json")
+
+	response, err = r.client.Do(request)
+	if err != nil {
+		return
+	}
+
+	return
+}
+
+type CustomerRequestTransitionsScheme struct {
+	Size       int  `json:"size"`
+	Start      int  `json:"start"`
+	Limit      int  `json:"limit"`
+	IsLastPage bool `json:"isLastPage"`
+	Values     []struct {
+		ID   string `json:"id"`
+		Name string `json:"name"`
+	} `json:"values"`
+	Expands []string `json:"_expands"`
+	Links   struct {
+		Self    string `json:"self"`
+		Base    string `json:"base"`
+		Context string `json:"context"`
+		Next    string `json:"next"`
+		Prev    string `json:"prev"`
+	} `json:"_links"`
+}
+
 type CustomerRequestsScheme struct {
 	Size       int                      `json:"size"`
 	Start      int                      `json:"start"`

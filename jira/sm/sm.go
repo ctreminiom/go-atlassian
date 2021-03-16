@@ -58,6 +58,7 @@ func New(httpClient *http.Client, site string) (client *Client, err error) {
 		Attachment:  &RequestAttachmentService{client: client},
 		Comment:     &RequestCommentService{client: client},
 		Participant: &RequestParticipantService{client: client},
+		SLA:         &RequestSLAService{client: client},
 	}
 
 	return

@@ -16,6 +16,7 @@ type RequestService struct {
 	Attachment  *RequestAttachmentService
 	Comment     *RequestCommentService
 	Participant *RequestParticipantService
+	SLA         *RequestSLAService
 }
 
 type RequestGetOptionsScheme struct {

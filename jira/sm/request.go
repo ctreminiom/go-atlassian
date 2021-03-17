@@ -17,6 +17,7 @@ type RequestService struct {
 	Comment     *RequestCommentService
 	Participant *RequestParticipantService
 	SLA         *RequestSLAService
+	Feedback    *RequestFeedbackService
 }
 
 type RequestGetOptionsScheme struct {

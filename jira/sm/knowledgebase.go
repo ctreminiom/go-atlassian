@@ -12,7 +12,7 @@ import (
 type KnowledgebaseService struct{ client *Client }
 
 // Returns articles which match the given query string across all service desks.
-func (k *KnowledgebaseService) Articles(ctx context.Context, query string, highlight bool, start, limit int) (result *ArticlePageScheme, response *Response, err error) {
+func (k *KnowledgebaseService) Search(ctx context.Context, query string, highlight bool, start, limit int) (result *ArticlePageScheme, response *Response, err error) {
 
 	if len(query) == 0 {
 		return nil, nil, fmt.Errorf("error, please provide a valid query value")
@@ -28,6 +28,43 @@ func (k *KnowledgebaseService) Articles(ctx context.Context, query string, highl
 	}
 
 	var endpoint = fmt.Sprintf("rest/servicedeskapi/knowledgebase/article?%v", params.Encode())
+
+	request, err := k.client.newRequest(ctx, http.MethodGet, endpoint, nil)
+	if err != nil {
+		return
+	}
+
+	request.Header.Set("Accept", "application/json")
+	request.Header.Set("X-ExperimentalApi", "opt-in")
+
+	response, err = k.client.Do(request)
+	if err != nil {
+		return
+	}
+
+	result = new(ArticlePageScheme)
+	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
+		return
+	}
+
+	return
+}
+
+func (k *KnowledgebaseService) Gets(ctx context.Context, serviceDeskID int, query string, highlight bool, start, limit int) (result *ArticlePageScheme, response *Response, err error) {
+
+	params := url.Values{}
+	params.Add("start", strconv.Itoa(start))
+	params.Add("limit", strconv.Itoa(limit))
+
+	if query != "" {
+		params.Add("query", query)
+	}
+
+	if !highlight {
+		params.Add("highlight", "false")
+	}
+
+	var endpoint = fmt.Sprintf("rest/servicedeskapi/servicedesk/%v/knowledgebase/article?%v", serviceDeskID, params.Encode())
 
 	request, err := k.client.newRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {

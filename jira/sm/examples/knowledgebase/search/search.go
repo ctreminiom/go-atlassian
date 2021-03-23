@@ -29,7 +29,7 @@ func main() {
 		limit = 50
 	)
 
-	articles, response, err := atlassian.ServiceManagement.Knowledgebase.Articles(
+	articles, response, err := atlassian.ServiceManagement.Knowledgebase.Search(
 		context.Background(),
 		query,
 		false,

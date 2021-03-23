@@ -63,7 +63,10 @@ func New(httpClient *http.Client, site string) (client *Client, err error) {
 		Feedback:    &RequestFeedbackService{client: client},
 	}
 
-	client.ServiceDesk = &ServiceDeskService{client: client}
+	client.ServiceDesk = &ServiceDeskService{
+		client: client,
+		Queue:  &ServiceDeskQueueService{client: client},
+	}
 
 	return
 }

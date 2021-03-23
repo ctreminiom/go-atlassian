@@ -14,7 +14,10 @@ import (
 	"strconv"
 )
 
-type ServiceDeskService struct{ client *Client }
+type ServiceDeskService struct {
+	client *Client
+	Queue  *ServiceDeskQueueService
+}
 
 func (s *ServiceDeskService) Gets(ctx context.Context, start, limit int) (result *ServiceDeskPageScheme, response *Response, err error) {
 

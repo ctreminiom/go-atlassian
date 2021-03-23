@@ -1,0 +1,17 @@
+{
+  "id": "20",
+  "name": "Assigned to me",
+  "jql": "project = SD AND assignee = currentUser() AND resolution = Unresolved ORDER BY \"Time to resolution\" ASC",
+  "fields": [
+    "issuetype",
+    "issuekey",
+    "summary",
+    "created",
+    "reporter",
+    "duedate"
+  ],
+  "issueCount": 10,
+  "_links": {
+    "self": "https://your-domain.atlassian.net/rest/servicedeskapi/servicedesk/1/queue/20"
+  }
+}

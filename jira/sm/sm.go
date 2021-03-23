@@ -23,6 +23,7 @@ type Client struct {
 	Knowledgebase *KnowledgebaseService
 	Organization  *OrganizationService
 	Request       *RequestService
+	RequestType   *RequestTypeService
 	ServiceDesk   *ServiceDeskService
 }
 
@@ -62,6 +63,8 @@ func New(httpClient *http.Client, site string) (client *Client, err error) {
 		SLA:         &RequestSLAService{client: client},
 		Feedback:    &RequestFeedbackService{client: client},
 	}
+
+	client.RequestType = &RequestTypeService{client: client}
 
 	client.ServiceDesk = &ServiceDeskService{
 		client: client,

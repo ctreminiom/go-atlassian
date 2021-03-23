@@ -564,7 +564,7 @@ type NotificationSchemeScheme struct {
 	} `json:"notificationSchemeEvents"`
 }
 
-// Gets a notification scheme associated with the project.
+// Search a notification scheme associated with the project.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-projects/#api-rest-api-3-project-projectkeyorid-notificationscheme-get
 func (p *ProjectService) NotificationScheme(ctx context.Context, projectKeyOrID string, expands []string) (result *NotificationSchemeScheme, response *Response, err error) {
 

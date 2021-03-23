@@ -1,0 +1,85 @@
+{
+  "name": "Time To First Response",
+  "_links": {
+    "self": "https://your-domain.atlassian.net/rest/servicedeskapi/request/101102/sla/10030"
+  },
+  "completedCycles": [
+    {
+      "startTime": {
+        "iso8601": "2015-10-09T10:45:23+0700",
+        "jira": "2015-10-09T10:45:23.000+0700",
+        "friendly": "Yesterday 10:45 AM",
+        "epochMillis": 1444362323000
+      },
+      "stopTime": {
+        "iso8601": "2015-10-09T10:52:23+0700",
+        "jira": "2015-10-09T10:52:23.000+0700",
+        "friendly": "Yesterday 10:52 AM",
+        "epochMillis": 1444362743000
+      },
+      "breached": false,
+      "goalDuration": {
+        "millis": 14400000,
+        "friendly": "4h 240m"
+      },
+      "elapsedTime": {
+        "millis": 420000,
+        "friendly": "0h 7m"
+      },
+      "remainingTime": {
+        "millis": 13980000,
+        "friendly": "3h 233m"
+      }
+    },
+    {
+      "startTime": {
+        "iso8601": "2015-10-10T10:52:23+0700",
+        "jira": "2015-10-10T10:52:23.000+0700",
+        "friendly": "Today 10:52 AM",
+        "epochMillis": 1444449143000
+      },
+      "stopTime": {
+        "iso8601": "2015-10-10T16:15:23+0700",
+        "jira": "2015-10-10T16:15:23.000+0700",
+        "friendly": "Today 16:15 PM",
+        "epochMillis": 1444468523000
+      },
+      "breached": true,
+      "goalDuration": {
+        "millis": 14400000,
+        "friendly": "4h 240m"
+      },
+      "elapsedTime": {
+        "millis": 19380000,
+        "friendly": "5h 323m"
+      },
+      "remainingTime": {
+        "millis": -4980000,
+        "friendly": "-1h -83m"
+      }
+    }
+  ],
+  "ongoingCycle": {
+    "startTime": {
+      "iso8601": "2015-10-10T19:15:23+0700",
+      "jira": "2015-10-10T19:15:23.000+0700",
+      "friendly": "Today 19:15 PM",
+      "epochMillis": 1444479323000
+    },
+    "breached": false,
+    "paused": false,
+    "withinCalendarHours": false,
+    "goalDuration": {
+      "millis": 14400000,
+      "friendly": "4h 240m"
+    },
+    "elapsedTime": {
+      "millis": 5640000,
+      "friendly": "1h 94m"
+    },
+    "remainingTime": {
+      "millis": 8760000,
+      "friendly": "2h 146m"
+    }
+  }
+}

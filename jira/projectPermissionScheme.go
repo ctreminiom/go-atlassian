@@ -34,7 +34,7 @@ type ProjectPermissionSchemeScheme struct {
 	} `json:"permissions"`
 }
 
-// Gets the permission scheme associated with the project.
+// Search the permission scheme associated with the project.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/projects/permission-schemes#get-assigned-permission-scheme
 func (p *ProjectPermissionSchemeService) Get(ctx context.Context, projectKeyOrID string, expands []string) (result *ProjectPermissionSchemeScheme, response *Response, err error) {
 

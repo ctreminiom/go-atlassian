@@ -12,6 +12,11 @@ type AuthenticationService struct {
 
 func (a *AuthenticationService) SetBasicAuth(mail, token string) {
 
+	//Inject the auth credentials into the child modules
+	if a.client.ServiceManagement != nil {
+		a.client.ServiceManagement.Auth.SetBasicAuth(mail, token)
+	}
+
 	a.mail = mail
 	a.token = token
 
@@ -19,6 +24,11 @@ func (a *AuthenticationService) SetBasicAuth(mail, token string) {
 }
 
 func (a *AuthenticationService) SetUserAgent(agent string) {
+
+	if a.client.ServiceManagement != nil {
+		a.client.ServiceManagement.Auth.SetUserAgent(agent)
+	}
+
 	a.agent = agent
 
 	a.userAgentProvided = true

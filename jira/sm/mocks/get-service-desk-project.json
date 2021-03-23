@@ -1,0 +1,9 @@
+{
+  "id": "10001",
+  "projectId": "11001",
+  "projectName": "IT Help Desk",
+  "projectKey": "ITH",
+  "_links": {
+    "self": "https://your-domain.atlassian.net/rest/servicedeskapi/servicedesk/10001"
+  }
+}

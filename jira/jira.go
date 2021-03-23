@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/ctreminiom/go-atlassian/jira/sm"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -30,6 +31,9 @@ type Client struct {
 	Server     *ServerService
 	Task       *TaskService
 	User       *UserService
+
+	//Service Management Module
+	ServiceManagement *sm.Client
 }
 
 const (
@@ -55,6 +59,14 @@ func New(httpClient *http.Client, site string) (client *Client, err error) {
 	client = &Client{}
 	client.HTTP = httpClient
 	client.Site = siteAsURL
+
+	//Service Management module integration
+	serviceManagementClient, err := sm.New(httpClient, site)
+	if err != nil {
+		return nil, err
+	}
+
+	client.ServiceManagement = serviceManagementClient
 
 	client.Role = &ApplicationRoleService{client: client}
 	client.Audit = &AuditService{client: client}

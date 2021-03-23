@@ -1,0 +1,15 @@
+{
+  "version": "c6c33a4381164a65dc4b8ecd123c6fa071fac773",
+  "platformVersion": "c6c33a4381164a65dc4b8ecd123c6fa071fac773",
+  "buildDate": {
+    "iso8601": "2021-03-04T10:49:28-0600",
+    "jira": "2021-03-04T16:49:28.000+0000",
+    "friendly": "Thursday 10:49 AM",
+    "epochMillis": 1614876568000
+  },
+  "buildChangeSet": "c6c33a4381164a65dc4b8ecd123c6fa071fac773",
+  "isLicensedForUse": true,
+  "_links": {
+    "self": "https://ctreminiom.atlassian.net/rest/servicedeskapi/info"
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "_expands": [],
+  "size": 3,
+  "start": 3,
+  "limit": 3,
+  "isLastPage": false,
+  "_links": {
+    "base": "https://your-domain.atlassian.net/rest/servicedeskapi",
+    "context": "context",
+    "next": "https://your-domain.atlassian.net/rest/servicedeskapi/servicedesk?start=6&limit=3",
+    "prev": "https://your-domain.atlassian.net/rest/servicedeskapi/servicedesk?start=0&limit=3"
+  },
+  "values": [
+    {
+      "id": "10001",
+      "projectId": "11001",
+      "projectName": "IT Help Desk",
+      "projectKey": "ITH",
+      "_links": {
+        "self": "https://your-domain.atlassian.net/rest/servicedeskapi/servicedesk/10001"
+      }
+    },
+    {
+      "id": "10002",
+      "projectId": "11002",
+      "projectName": "HR Self Serve Desk",
+      "projectKey": "HR",
+      "_links": {
+        "self": "https://your-domain.atlassian.net/rest/servicedeskapi/servicedesk/10002"
+      }
+    },
+    {
+      "id": "10003",
+      "projectId": "11003",
+      "projectName": "Foundation Leave",
+      "projectKey": "FL",
+      "_links": {
+        "self": "https://your-domain.atlassian.net/rest/servicedeskapi/servicedesk/10003"
+      }
+    }
+  ]
+}

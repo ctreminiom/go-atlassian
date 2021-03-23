@@ -1,0 +1,23 @@
+{
+  "_expands": [],
+  "size": 2,
+  "start": 2,
+  "limit": 2,
+  "isLastPage": false,
+  "_links": {
+    "base": "https://your-domain.atlassian.net/rest/servicedeskapi",
+    "context": "context",
+    "next": "https://your-domain.atlassian.net/rest/servicedeskapi/request/1/transition?start=4&limit=2",
+    "prev": "https://your-domain.atlassian.net/rest/servicedeskapi/request/1/transition?start=0&limit=2"
+  },
+  "values": [
+    {
+      "id": "1",
+      "name": "Close Request"
+    },
+    {
+      "id": "2",
+      "name": "Escalate Request"
+    }
+  ]
+}

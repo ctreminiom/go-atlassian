@@ -1,0 +1,49 @@
+{
+  "_expands": [],
+  "size": 2,
+  "start": 2,
+  "limit": 2,
+  "isLastPage": false,
+  "_links": {
+    "base": "https://your-domain.atlassian.net/rest/servicedeskapi",
+    "context": "context",
+    "next": "https://your-domain.atlassian.net/rest/servicedeskapi/servicedesk/1/queue?start=4&limit=2",
+    "prev": "https://your-domain.atlassian.net/rest/servicedeskapi/servicedesk/1/queue?start=0&limit=2"
+  },
+  "values": [
+    {
+      "id": "10",
+      "name": "Unassigned issues",
+      "jql": "project = SD AND assignee is EMPTY AND resolution = Unresolved ORDER BY \"Time to resolution\" ASC",
+      "fields": [
+        "issuetype",
+        "issuekey",
+        "summary",
+        "created",
+        "reporter",
+        "duedate"
+      ],
+      "issueCount": 10,
+      "_links": {
+        "self": "https://your-domain.atlassian.net/rest/servicedeskapi/servicedesk/1/queue/10"
+      }
+    },
+    {
+      "id": "20",
+      "name": "Assigned to me",
+      "jql": "project = SD AND assignee = currentUser() AND resolution = Unresolved ORDER BY \"Time to resolution\" ASC",
+      "fields": [
+        "issuetype",
+        "issuekey",
+        "summary",
+        "created",
+        "reporter",
+        "duedate"
+      ],
+      "issueCount": 10,
+      "_links": {
+        "self": "https://your-domain.atlassian.net/rest/servicedeskapi/servicedesk/1/queue/20"
+      }
+    }
+  ]
+}

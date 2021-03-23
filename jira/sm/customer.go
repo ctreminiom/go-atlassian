@@ -5,7 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"net/url"
 	"regexp"
+	"strconv"
 )
 
 type CustomerService struct{ client *Client }
@@ -88,4 +90,121 @@ func isEmailValid(email string) bool {
 		return false
 	}
 	return regex.MatchString(email)
+}
+
+func (c *CustomerService) Get(ctx context.Context, serviceDeskID int, query string, start, limit int) (result *CustomerPageScheme, response *Response, err error) {
+
+	params := url.Values{}
+	params.Add("start", strconv.Itoa(start))
+	params.Add("limit", strconv.Itoa(limit))
+
+	if query != "" {
+		params.Add("query", query)
+	}
+
+	var endpoint = fmt.Sprintf("rest/servicedeskapi/servicedesk/%v/customer?%v", serviceDeskID, params.Encode())
+
+	request, err := c.client.newRequest(ctx, http.MethodGet, endpoint, nil)
+	if err != nil {
+		return
+	}
+
+	request.Header.Set("Accept", "application/json")
+
+	/*
+		This API is experimental.
+		Experimental APIs are not guaranteed to be stable within the preview period.
+	*/
+	request.Header.Set("X-ExperimentalApi", "opt-in")
+
+	response, err = c.client.Do(request)
+	if err != nil {
+		return
+	}
+
+	result = new(CustomerPageScheme)
+	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
+		return
+	}
+
+	return
+}
+
+func (c *CustomerService) Add(ctx context.Context, serviceDeskID int, accountIDs []string) (response *Response, err error) {
+
+	if len(accountIDs) == 0 {
+		return nil, fmt.Errorf("error, please provide a valid accountIDs slice value")
+	}
+
+	payload := struct {
+		AccountIds []string `json:"accountIds"`
+	}{
+		AccountIds: accountIDs,
+	}
+
+	var endpoint = fmt.Sprintf("rest/servicedeskapi/servicedesk/%v/customer", serviceDeskID)
+
+	request, err := c.client.newRequest(ctx, http.MethodPost, endpoint, &payload)
+	if err != nil {
+		return
+	}
+
+	request.Header.Set("Content-Type", "application/json")
+
+	response, err = c.client.Do(request)
+	if err != nil {
+		return
+	}
+
+	return
+}
+
+func (c *CustomerService) Remove(ctx context.Context, serviceDeskID int, accountIDs []string) (response *Response, err error) {
+
+	if len(accountIDs) == 0 {
+		return nil, fmt.Errorf("error, please provide a valid accountIDs slice value")
+	}
+
+	payload := struct {
+		AccountIds []string `json:"accountIds"`
+	}{
+		AccountIds: accountIDs,
+	}
+
+	var endpoint = fmt.Sprintf("rest/servicedeskapi/servicedesk/%v/customer", serviceDeskID)
+
+	request, err := c.client.newRequest(ctx, http.MethodDelete, endpoint, &payload)
+	if err != nil {
+		return
+	}
+
+	request.Header.Set("Content-Type", "application/json")
+
+	/*
+		This API is experimental.
+		Experimental APIs are not guaranteed to be stable within the preview period.
+	*/
+	request.Header.Set("X-ExperimentalApi", "opt-in")
+
+	response, err = c.client.Do(request)
+	if err != nil {
+		return
+	}
+
+	return
+}
+
+type CustomerPageScheme struct {
+	Expands    []interface{} `json:"_expands"`
+	Size       int           `json:"size"`
+	Start      int           `json:"start"`
+	Limit      int           `json:"limit"`
+	IsLastPage bool          `json:"isLastPage"`
+	Links      struct {
+		Base    string `json:"base"`
+		Context string `json:"context"`
+		Next    string `json:"next"`
+		Prev    string `json:"prev"`
+	} `json:"_links"`
+	Values []*CustomerScheme `json:"values"`
 }

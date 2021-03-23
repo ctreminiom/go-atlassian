@@ -24,11 +24,13 @@ func main() {
 	atlassian.Auth.SetUserAgent("curl/7.54.0")
 
 	var (
-		email       = "example1@gmail.com"
-		displayName = "Example Customer 1"
+		serviceDeskID = 1
+		query         = ""
+		start         = 0
+		limit         = 50
 	)
 
-	newCustomer, response, err := atlassian.ServiceManagement.Customer.Create(context.Background(), email, displayName)
+	customers, response, err := atlassian.ServiceManagement.Customer.Get(context.Background(), serviceDeskID, query, start, limit)
 	if err != nil {
 		if response != nil {
 			log.Println("Response HTTP Response", string(response.BodyAsBytes))
@@ -39,14 +41,8 @@ func main() {
 	log.Println("Response HTTP Code", response.StatusCode)
 	log.Println("HTTP Endpoint Used", response.Endpoint)
 
-	log.Println("The new customer has been created!!")
-	log.Println("-------------------------")
-	log.Println(newCustomer.Name)
-	log.Println(newCustomer.DisplayName)
-	log.Println(newCustomer.AccountID)
-	log.Println(newCustomer.EmailAddress)
-	log.Println(newCustomer.Links)
-	log.Println(newCustomer)
-	log.Println("-------------------------")
+	for _, customer := range customers.Values {
+		log.Println(customer)
+	}
 
 }

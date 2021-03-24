@@ -1,51 +1,48 @@
-# go-atlassian 
+<p align="center"><img width="530" src="./jira/mocks/go-atlassian.png" alt="Go-Atlassian logo"></p>
 
-[![GoDoc][1]][2]
-[![GoCard][3]][4]
-[![Codecov][5]][6]
-[![License][7]][8]
-[![][9]][10]
-[![a][11]][12]
+<p align="center">
+    <a href="https://pkg.go.dev/github.com/ctreminiom/go-atlassian"><img src="https://pkg.go.dev/badge/github.com/ctreminiom/go-atlassian?utm_source=godoc"></a>
+    <a href="https://goreportcard.com/report/github.com/ctreminiom/go-atlassian"><img src="https://goreportcard.com/badge/ctreminiom/go-atlassian"></a>
+    <a href="https://codecov.io/gh/ctreminiom/go-atlassian"><img src="https://codecov.io/gh/ctreminiom/go-atlassian/branch/main/graph/badge.svg?token=G0KPNMTIRV"></a>
+    <a href="https://github.com/ctreminiom/go-atlassian/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg"></a>
+    <a href="https://github.com/ctreminiom/go-atlassian/actions?query=workflow%3ATesting"><img src="https://img.shields.io/github/workflow/status/ctreminiom/go-atlassian/Testing?label=%F0%9F%A7%AA%20tests&style=flat&color=75C46B"></a>
+    <a href="https://docs.go-atlassian.io/"><img src="https://img.shields.io/badge/%F0%9F%92%A1%20go-documentation-00ACD7.svg?style=flat"></a>
+</p>
 
+## Introduction 📖
 
-[1]: https://pkg.go.dev/badge/github.com/ctreminiom/go-atlassian?utm_source=godoc
-[2]: https://pkg.go.dev/github.com/ctreminiom/go-atlassian
-[3]: https://goreportcard.com/badge/ctreminiom/go-atlassian
-[4]: https://goreportcard.com/report/github.com/ctreminiom/go-atlassian
-[5]: https://codecov.io/gh/ctreminiom/go-atlassian/branch/main/graph/badge.svg?token=G0KPNMTIRV
-[6]: https://codecov.io/gh/ctreminiom/go-atlassian
-[7]: https://img.shields.io/badge/license-MIT-blue.svg
-[8]: https://github.com/ctreminiom/go-atlassian/blob/master/LICENSE
-[9]:  https://img.shields.io/github/workflow/status/ctreminiom/go-atlassian/Testing?label=%F0%9F%A7%AA%20tests&style=flat&color=75C46B
-[10]: https://github.com/ctreminiom/go-atlassian/actions?query=workflow%3ATesting
-[11]: https://img.shields.io/badge/%F0%9F%92%A1%20go-documentation-00ACD7.svg?style=flat
-[12]: https://docs.go-atlassian.io/
+go-atlassian is a library written in Go programming language that enables the interaction with the Atlassian Cloud API's. It consists of the following services that Atlassian provide us:
+* Jira Software Cloud
+* Jira Service Management Cloud
+* Confluence Cloud
+* Atlassian Access 
+* Opsgenie
+* Trello
+* Bitbucket Cloud
 
-> `go-atlassian` is a [Atlassian Cloud](https://www.atlassian.com/cloud) client library written in Golang. It interacts with the following services:
+The Complete documentation is available at [docs.go-atlassian.io](https://docs.go-atlassian.io/).
 
-### 📘 [Documentation](https://docs.go-atlassian.io/)
+## Development
+Right now, the library supports the Jira Software Cloud and Jira Service Management Cloud services. This project's still in progress, and the remaining services will be mapped and documented.
 
-|Application|  Status|
-|--|--|
-|Jira Cloud | Available ✅|
-|Jira Agile Cloud | In development 👷|
-|Jira Service Management Cloud | In development 👷|
-|Confluence Cloud | In development 👷|
-|Atlassian Admin Cloud | In development 👷|
+## Jira Software Cloud 
+Plan, track, and release world-class software with the #1 software development tool used by agile teams.
 
-## Features
-- Create issue issues with custom fields
-- Manage the screens, screens schemes, issue type screen schemes and all endpoints that interacts with the customfields
-- The 90% of the endpoints documented [here](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro/) were mapped and documented with examples.
+### Features
+* Create/Edit/Delete/View issues 
+* Support the Jira issue custom-fields interactions
+* Manage the project screen, screen screens, issue type scheme screens, etc.
+* Change the issue status, retrieve the issue changelogs, search issues based on the JQL query and more!!.
 
-## Installation 📖
-Make sure you have a working Go 1.14+ workspace (_[instructions](https://golang.org/doc/install)_), then:
+#### Installation ✒
 ```sh
-$ go get github.com/ctreminiom/go-atlassian/jira
+$ go get -u -v github.com/ctreminiom/go-atlassian/jira
 ```
 
-## Usage ✒️
-All interaction starts with a `jira.Client` struct. Create one with your Atlassian site host URL and a custom HTTP client if it's necessary.
+#### Use Cases
+
+<details><summary>Get Issue</summary>
+
 ```go
 package main
 
@@ -64,16 +61,66 @@ func main() {
 		token = os.Getenv("TOKEN")
 	)
 
-    // You can set custom *http.Client here
-	jiraCloud, err := jira.New(nil, host)
+	atlassian, err := jira.New(nil, host)
 	if err != nil {
 		return
 	}
 
-	jiraCloud.Auth.SetBasicAuth(mail, token)
-	jiraCloud.Auth.SetUserAgent("curl/7.54.0")
+	atlassian.Auth.SetBasicAuth(mail, token)
 
-	applicationRoles, response, err := jiraCloud.Role.Gets(context.Background())
+	issue, response, err := atlassian.Issue.Get(context.Background(), "KP-12", []string{"status"}, []string{"transitions"})
+	if err != nil {
+		if response != nil {
+			log.Println("Response HTTP Response", string(response.BodyAsBytes))
+			log.Println(response.StatusCode)
+		}
+		log.Fatal(err)
+	}
+
+	log.Println("Response HTTP Code", response.StatusCode)
+	log.Println("HTTP Endpoint Used", response.Endpoint)
+	log.Println(issue.Key)
+}
+```
+</details>
+
+<details><summary>Get Project Categories</summary>
+
+```go
+package main
+
+import (
+	"context"
+	"github.com/ctreminiom/go-atlassian/jira"
+	"log"
+	"os"
+)
+
+func main() {
+
+	/*
+		----------- Set an environment variable in git bash -----------
+		export HOST="https://ctreminiom.atlassian.net/"
+		export MAIL="MAIL_ADDRESS"
+		export TOKEN="TOKEN_API"
+
+		Docs: https://stackoverflow.com/questions/34169721/set-an-environment-variable-in-git-bash
+	*/
+
+	var (
+		host  = os.Getenv("HOST")
+		mail  = os.Getenv("MAIL")
+		token = os.Getenv("TOKEN")
+	)
+
+	atlassian, err := jira.New(nil, host)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	atlassian.Auth.SetBasicAuth(mail, token)
+
+	categories, response, err := atlassian.Project.Category.Gets(context.Background())
 	if err != nil {
 		if response != nil {
 			log.Println("Response HTTP Response", string(response.BodyAsBytes))
@@ -84,14 +131,256 @@ func main() {
 	log.Println("Response HTTP Code", response.StatusCode)
 	log.Println("HTTP Endpoint Used", response.Endpoint)
 
-	for _, applicationRole := range *applicationRoles {
-		log.Printf("Application Role Name: %v", applicationRole.Name)
-		log.Printf("Application Role Key: %v", applicationRole.Key)
-		log.Printf("Application Role User Count: %v", applicationRole.UserCount)
+	for _, category := range *categories {
+
+		log.Println("----------------")
+		log.Println(category.Self)
+		log.Println(category.ID)
+		log.Println(category.Name)
+		log.Println(category.Description)
+		log.Println("----------------")
+	}
+}
+
+```
+</details>
+
+<details><summary>Create Project Version</summary>
+
+```go
+package main
+
+import (
+	"context"
+	"github.com/ctreminiom/go-atlassian/jira"
+	"log"
+	"os"
+)
+
+func main() {
+
+	/*
+		----------- Set an environment variable in git bash -----------
+		export HOST="https://ctreminiom.atlassian.net/"
+		export MAIL="MAIL_ADDRESS"
+		export TOKEN="TOKEN_API"
+
+		Docs: https://stackoverflow.com/questions/34169721/set-an-environment-variable-in-git-bash
+	*/
+
+	var (
+		host  = os.Getenv("HOST")
+		mail  = os.Getenv("MAIL")
+		token = os.Getenv("TOKEN")
+	)
+
+	atlassian, err := jira.New(nil, host)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	atlassian.Auth.SetBasicAuth(mail, token)
+
+	payload := &jira.ProjectVersionPayloadScheme{
+		Archived:    false,
+		ReleaseDate: "2021-03-06",
+		Name:        "Version Sandbox",
+		Description: "Version Sandbox description",
+		ProjectID:   10000,
+		Released:    false,
+		StartDate:   "2021-03-02",
+	}
+
+	newVersion, response, err := atlassian.Project.Version.Create(context.Background(), payload)
+	if err != nil {
+		if response != nil {
+			log.Println("Response HTTP Response", string(response.BodyAsBytes))
+		}
+		log.Fatal(err)
+	}
+
+	log.Println("Response HTTP Code", response.StatusCode)
+	log.Println("HTTP Endpoint Used", response.Endpoint)
+	log.Printf("The new version has been created with the ID %v", newVersion.ID)
+}
+
+```
+</details>
+
+## Jira Service Management Cloud
+Collaborate at high-velocity, respond to business changes and deliver great customer and employee service experiences fast.
+
+### Features
+* Create/Edit/Delete/View Service Desk Organizations
+* Create Request Types, Customers.
+* Get the Service Desk Articles, Queues, Request Comments, Participants, etc  
+
+#### Installation ✒
+```sh
+$ go get -u -v github.com/ctreminiom/go-atlassian/jira
+```
+
+#### Use Cases
+
+<details><summary>Create Organization</summary>
+
+```go
+package main
+
+import (
+	"context"
+	"github.com/ctreminiom/go-atlassian/jira"
+	"log"
+	"os"
+)
+
+func main() {
+
+	var (
+		host  = os.Getenv("HOST")
+		mail  = os.Getenv("MAIL")
+		token = os.Getenv("TOKEN")
+	)
+
+	atlassian, err := jira.New(nil, host)
+	if err != nil {
+		return
+	}
+
+	atlassian.Auth.SetBasicAuth(mail, token)
+	atlassian.Auth.SetUserAgent("curl/7.54.0")
+
+	var organizationName = "Organization Name"
+
+	newOrganization, response, err := atlassian.ServiceManagement.Organization.Create(context.Background(), organizationName)
+	if err != nil {
+		if response != nil {
+			log.Println("Response HTTP Response", string(response.BodyAsBytes))
+			log.Println("HTTP Endpoint Used", response.Endpoint)
+		}
+		log.Fatal(err)
+	}
+
+	log.Println("Response HTTP Code", response.StatusCode)
+	log.Println("HTTP Endpoint Used", response.Endpoint)
+	log.Printf("The organization has been created: %v", newOrganization.ID)
+}
+```
+</details>
+
+<details><summary>Get Request Approvals</summary>
+
+```go
+package main
+
+import (
+	"context"
+	"encoding/json"
+	"github.com/ctreminiom/go-atlassian/jira"
+	"log"
+	"os"
+)
+
+func main() {
+
+	var (
+		host  = os.Getenv("HOST")
+		mail  = os.Getenv("MAIL")
+		token = os.Getenv("TOKEN")
+	)
+
+	atlassian, err := jira.New(nil, host)
+	if err != nil {
+		return
+	}
+
+	atlassian.Auth.SetBasicAuth(mail, token)
+	atlassian.Auth.SetUserAgent("curl/7.54.0")
+
+	var issueKey = "DESK-12"
+	approvals, response, err := atlassian.ServiceManagement.Request.Approval.Gets(context.Background(), issueKey, 0, 50)
+	if err != nil {
+		if response != nil {
+			log.Println("Response HTTP Response", string(response.BodyAsBytes))
+			log.Println("HTTP Endpoint Used", response.Endpoint)
+		}
+		log.Fatal(err)
+	}
+
+	log.Println("Response HTTP Code", response.StatusCode)
+	log.Println("HTTP Endpoint Used", response.Endpoint)
+
+	for _, customRequest := range approvals.Values {
+
+		dataAsJson, err := json.MarshalIndent(customRequest, "", "\t")
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		log.Println(string(dataAsJson))
 	}
 
 }
 ```
+</details>
+
+<details><summary>Get Service Desk Queues</summary>
+
+```go
+package main
+
+import (
+	"context"
+	"github.com/ctreminiom/go-atlassian/jira"
+	"log"
+	"os"
+)
+
+func main() {
+
+	var (
+		host  = os.Getenv("HOST")
+		mail  = os.Getenv("MAIL")
+		token = os.Getenv("TOKEN")
+	)
+
+	atlassian, err := jira.New(nil, host)
+	if err != nil {
+		return
+	}
+
+	atlassian.Auth.SetBasicAuth(mail, token)
+	atlassian.Auth.SetUserAgent("curl/7.54.0")
+
+	var (
+		serviceDeskID      = 1
+		includeCount  bool = true
+		start, limit  int  = 0, 50
+	)
+
+	queues, response, err := atlassian.ServiceManagement.ServiceDesk.Queue.Gets(context.Background(), serviceDeskID, includeCount, start, limit)
+	if err != nil {
+		if response != nil {
+			log.Println("Response HTTP Response", string(response.BodyAsBytes))
+			log.Println("HTTP Endpoint Used", response.Endpoint)
+		}
+		log.Fatal(err)
+	}
+
+	for pos, queue := range queues.Values {
+
+		log.Println("------------------------------------")
+		log.Printf("Queue ID #%v: %v", pos+1, queue.ID)
+		log.Printf("Queue Name #%v: %v", pos+1, queue.Name)
+		log.Printf("Queue JQL #%v: %v", pos+1, queue.Jql)
+		log.Printf("Queue Issue Count #%v: %v", pos+1, queue.IssueCount)
+		log.Printf("Queue Fields #%v: %v", pos+1, queue.Fields)
+		log.Println("------------------------------------")
+	}
+
+}
+```
+</details>
 
 ## Run tests
 ```sh

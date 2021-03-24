@@ -293,6 +293,28 @@ func TestCommentService_Delete(t *testing.T) {
 			wantHTTPCodeReturn: http.StatusBadRequest,
 			wantErr:            true,
 		},
+
+		{
+			name:               "DeleteIssueCommentWhenTheContextIsNil",
+			issueKeyOrID:       "DUMMY-3",
+			commentID:          "10001",
+			wantHTTPMethod:     http.MethodDelete,
+			endpoint:           "/rest/api/3/issue/DUMMY-3/comment/10001",
+			context:            nil,
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+
+		{
+			name:               "DeleteIssueCommentWhenTheEndpointIsEmpty",
+			issueKeyOrID:       "DUMMY-3",
+			commentID:          "10001",
+			wantHTTPMethod:     http.MethodDelete,
+			endpoint:           "",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
 	}
 
 	for _, testCase := range testCases {
@@ -553,6 +575,11 @@ func TestCommentService_Add(t *testing.T) {
 			{
 				Type: "text",
 				Text: "Carlos Test",
+				Marks: []*MarkScheme{
+					{
+						Type: "strong",
+					},
+				},
 			},
 			{
 				Type: "emoji",
@@ -587,10 +614,10 @@ func TestCommentService_Add(t *testing.T) {
 			visibilityType:     "role",
 			visibilityValue:    "Administrators",
 			body:               &commentBody,
-			expands:            []string{"renderedBody"},
+			expands:            []string{"renderedBody", "comment.id"},
 			mockFile:           "./mocks/get-issue-comment-by-id.json",
 			wantHTTPMethod:     http.MethodPost,
-			endpoint:           "/rest/api/3/issue/DUMMY-3/comment?expand=renderedBody",
+			endpoint:           "/rest/api/3/issue/DUMMY-3/comment?expand=renderedBody%2Ccomment.id",
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusCreated,
 			wantErr:            false,

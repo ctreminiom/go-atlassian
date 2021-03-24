@@ -237,10 +237,6 @@ func (n *CommentNodeScheme) AppendNode(node *CommentNodeScheme) {
 	n.Content = append(n.Content, node)
 }
 
-func (n *CommentNodeScheme) AddendMark(mark *MarkScheme) {
-	n.Marks = append(n.Marks, mark)
-}
-
 type MarkScheme struct {
 	Type  string                 `json:"type"`
 	Attrs map[string]interface{} `json:"attrs"`

@@ -1,4 +1,4 @@
-<p align="center"><img width="530" src="./jira/mocks/go-atlassian.png" alt="Go-Atlassian logo"></p>
+<p align="center"><img width="600" src="./jira/mocks/go-atlassian-logo.svg" alt="Go-Atlassian logo"></p>
 
 <p align="center">
     <a href="https://pkg.go.dev/github.com/ctreminiom/go-atlassian"><img src="https://pkg.go.dev/badge/github.com/ctreminiom/go-atlassian?utm_source=godoc"></a>

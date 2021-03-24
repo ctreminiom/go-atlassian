@@ -11,7 +11,7 @@
 
 ## Introduction 📖
 
-go-atlassian is a library written in Go programming language that enables the interaction with the Atlassian Cloud API's. It consists of the following services Atlassian provides
+go-atlassian is a library written in Go programming language that enables the interaction with the Atlassian Cloud API's. It consists of the following services that Atlassian provide us:
 * Jira Software Cloud
 * Jira Service Management Cloud
 * Confluence Cloud
@@ -19,6 +19,8 @@ go-atlassian is a library written in Go programming language that enables the in
 * Opsgenie
 * Trello
 * Bitbucket Cloud
+
+The Complete documentation is available at [docs.go-atlassian.io](https://docs.go-atlassian.io/).
 
 ## Development
 Right now, the library supports the Jira Software Cloud and Jira Service Management Cloud services. This project's still in progress, and the remaining services will be mapped and documented.

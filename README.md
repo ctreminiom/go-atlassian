@@ -1,27 +1,15 @@
 <p align="center"><img width="530" src="./jira/mocks/go-atlassian.png" alt="Go-Atlassian logo"></p>
 
-# go-atlassian 
+<p align="center">
+    <a href="https://pkg.go.dev/github.com/ctreminiom/go-atlassian"><img src="https://pkg.go.dev/badge/github.com/ctreminiom/go-atlassian?utm_source=godoc"></a>
+    <a href="https://goreportcard.com/report/github.com/ctreminiom/go-atlassian"><img src="https://goreportcard.com/badge/ctreminiom/go-atlassian"></a>
+    <a href="https://codecov.io/gh/ctreminiom/go-atlassian"><img src="https://codecov.io/gh/ctreminiom/go-atlassian/branch/main/graph/badge.svg?token=G0KPNMTIRV"></a>
+    <a href="https://github.com/ctreminiom/go-atlassian/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg"></a>
+    <a href="https://github.com/ctreminiom/go-atlassian/actions?query=workflow%3ATesting"><img src="https://img.shields.io/github/workflow/status/ctreminiom/go-atlassian/Testing?label=%F0%9F%A7%AA%20tests&style=flat&color=75C46B"></a>
+    <a href="https://docs.go-atlassian.io/"><img src="https://img.shields.io/badge/%F0%9F%92%A1%20go-documentation-00ACD7.svg?style=flat"></a>
+</p>
 
-[![GoDoc][1]][2]
-[![GoCard][3]][4]
-[![Codecov][5]][6]
-[![License][7]][8]
-[![][9]][10]
-[![a][11]][12]
 
-
-[1]: https://pkg.go.dev/badge/github.com/ctreminiom/go-atlassian?utm_source=godoc
-[2]: https://pkg.go.dev/github.com/ctreminiom/go-atlassian
-[3]: https://goreportcard.com/badge/ctreminiom/go-atlassian
-[4]: https://goreportcard.com/report/github.com/ctreminiom/go-atlassian
-[5]: https://codecov.io/gh/ctreminiom/go-atlassian/branch/main/graph/badge.svg?token=G0KPNMTIRV
-[6]: https://codecov.io/gh/ctreminiom/go-atlassian
-[7]: https://img.shields.io/badge/license-MIT-blue.svg
-[8]: https://github.com/ctreminiom/go-atlassian/blob/master/LICENSE
-[9]:  https://img.shields.io/github/workflow/status/ctreminiom/go-atlassian/Testing?label=%F0%9F%A7%AA%20tests&style=flat&color=75C46B
-[10]: https://github.com/ctreminiom/go-atlassian/actions?query=workflow%3ATesting
-[11]: https://img.shields.io/badge/%F0%9F%92%A1%20go-documentation-00ACD7.svg?style=flat
-[12]: https://docs.go-atlassian.io/
 
 > `go-atlassian` is a [Atlassian Cloud](https://www.atlassian.com/cloud) client library written in Golang. It interacts with the following services:
 

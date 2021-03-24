@@ -1,3 +1,5 @@
+<p align="center"><img width="530" src="./jira/mocks/go-atlassian.png" alt="Go-Atlassian logo"></p>
+
 # go-atlassian 
 
 [![GoDoc][1]][2]

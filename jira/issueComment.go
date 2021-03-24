@@ -160,3 +160,84 @@ func (c *CommentService) Delete(ctx context.Context, issueKeyOrID, commentID str
 
 	return
 }
+
+func (c *CommentService) Add(ctx context.Context, issueKeyOrID, visibilityType, visibilityValue string, body *CommentNodeScheme, expands []string) (result *CommentScheme, response *Response, err error) {
+
+	if len(issueKeyOrID) == 0 {
+		return nil, nil, fmt.Errorf("error, please provide a valid issueKeyOrID value")
+	}
+
+	if body == nil {
+		return nil, nil, fmt.Errorf("error, please provide a valid CommentNodeScheme pointer")
+	}
+
+	var commentPayload = map[string]interface{}{}
+	commentPayload["body"] = body
+
+	var visibilityPayload = map[string]interface{}{}
+	visibilityPayload["type"] = visibilityType
+	visibilityPayload["value"] = visibilityValue
+
+	commentPayload["visibility"] = visibilityPayload
+
+	params := url.Values{}
+	var expand string
+	for index, value := range expands {
+
+		if index == 0 {
+			expand = value
+			continue
+		}
+
+		expand += "," + value
+	}
+
+	if len(expand) != 0 {
+		params.Add("expand", expand)
+	}
+
+	var endpoint string
+	if len(params.Encode()) != 0 {
+		endpoint = fmt.Sprintf("rest/api/3/issue/%v/comment?%v", issueKeyOrID, params.Encode())
+	} else {
+		endpoint = fmt.Sprintf("rest/api/3/issue/%v/comment", issueKeyOrID)
+	}
+
+	request, err := c.client.newRequest(ctx, http.MethodPost, endpoint, &commentPayload)
+	if err != nil {
+		return
+	}
+
+	request.Header.Set("Accept", "application/json")
+	request.Header.Set("Content-Type", "application/json")
+
+	response, err = c.client.Do(request)
+	if err != nil {
+		return
+	}
+
+	result = new(CommentScheme)
+	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
+		return
+	}
+
+	return
+}
+
+type CommentNodeScheme struct {
+	Version int                    `json:"version,omitempty"`
+	Type    string                 `json:"type,omitempty"`
+	Content []*CommentNodeScheme   `json:"content,omitempty"`
+	Text    string                 `json:"text,omitempty"`
+	Attrs   map[string]interface{} `json:"attrs,omitempty"`
+	Marks   []*MarkScheme          `json:"marks,omitempty"`
+}
+
+func (n *CommentNodeScheme) AppendNode(node *CommentNodeScheme) {
+	n.Content = append(n.Content, node)
+}
+
+type MarkScheme struct {
+	Type  string                 `json:"type"`
+	Attrs map[string]interface{} `json:"attrs"`
+}

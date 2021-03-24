@@ -540,3 +540,254 @@ func TestCommentService_Get(t *testing.T) {
 	}
 
 }
+
+func TestCommentService_Add(t *testing.T) {
+
+	commentBody := CommentNodeScheme{}
+	commentBody.Version = 1
+	commentBody.Type = "doc"
+
+	commentBody.AppendNode(&CommentNodeScheme{
+		Type: "paragraph",
+		Content: []*CommentNodeScheme{
+			{
+				Type: "text",
+				Text: "Carlos Test",
+			},
+			{
+				Type: "emoji",
+				Attrs: map[string]interface{}{
+					"shortName": ":grin",
+					"id":        "1f601",
+					"text":      "😁",
+				},
+			},
+			{
+				Type: "text",
+				Text: " ",
+			},
+		},
+	})
+
+	testCases := []struct {
+		name                                          string
+		issueKeyOrID, visibilityType, visibilityValue string
+		body                                          *CommentNodeScheme
+		expands                                       []string
+		mockFile                                      string
+		wantHTTPMethod                                string
+		endpoint                                      string
+		context                                       context.Context
+		wantHTTPCodeReturn                            int
+		wantErr                                       bool
+	}{
+		{
+			name:               "AddIssueCommentWhenTheParametersAreCorrect",
+			issueKeyOrID:       "DUMMY-3",
+			visibilityType:     "role",
+			visibilityValue:    "Administrators",
+			body:               &commentBody,
+			expands:            []string{"renderedBody"},
+			mockFile:           "./mocks/get-issue-comment-by-id.json",
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/api/3/issue/DUMMY-3/comment?expand=renderedBody",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusCreated,
+			wantErr:            false,
+		},
+
+		{
+			name:               "AddIssueCommentWhenTheResponseBodyHasADifferentFormat",
+			issueKeyOrID:       "DUMMY-3",
+			visibilityType:     "role",
+			visibilityValue:    "Administrators",
+			body:               &commentBody,
+			expands:            []string{"renderedBody"},
+			mockFile:           "./mocks/empty_json.json",
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/api/3/issue/DUMMY-3/comment?expand=renderedBody",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusCreated,
+			wantErr:            true,
+		},
+
+		{
+			name:               "AddIssueCommentWhenTheIssueKeyIsNotSet",
+			issueKeyOrID:       "",
+			visibilityType:     "role",
+			visibilityValue:    "Administrators",
+			body:               &commentBody,
+			expands:            []string{"renderedBody"},
+			mockFile:           "./mocks/get-issue-comment-by-id.json",
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/api/3/issue/DUMMY-3/comment?expand=renderedBody",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusCreated,
+			wantErr:            true,
+		},
+
+		{
+			name:               "AddIssueCommentWhenTheCommentBodyIsNotSet",
+			issueKeyOrID:       "DUMMY-3",
+			visibilityType:     "role",
+			visibilityValue:    "Administrators",
+			body:               nil,
+			expands:            []string{"renderedBody"},
+			mockFile:           "./mocks/get-issue-comment-by-id.json",
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/api/3/issue/DUMMY-3/comment?expand=renderedBody",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusCreated,
+			wantErr:            true,
+		},
+
+		{
+			name:               "AddIssueCommentWhenTheVisibilityIsNotSet",
+			issueKeyOrID:       "DUMMY-3",
+			visibilityType:     "",
+			visibilityValue:    "",
+			body:               &commentBody,
+			expands:            []string{"renderedBody"},
+			mockFile:           "./mocks/get-issue-comment-by-id.json",
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/api/3/issue/DUMMY-3/comment?expand=renderedBody",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusCreated,
+			wantErr:            false,
+		},
+
+		{
+			name:               "AddIssueCommentWhenTheExpandsAreNotSet",
+			issueKeyOrID:       "DUMMY-3",
+			visibilityType:     "role",
+			visibilityValue:    "Administrators",
+			body:               &commentBody,
+			expands:            nil,
+			mockFile:           "./mocks/get-issue-comment-by-id.json",
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/api/3/issue/DUMMY-3/comment?expand=renderedBody",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusCreated,
+			wantErr:            true,
+		},
+
+		{
+			name:               "AddIssueCommentWhenTheRequestMethodIsIncorrect",
+			issueKeyOrID:       "DUMMY-3",
+			visibilityType:     "role",
+			visibilityValue:    "Administrators",
+			body:               &commentBody,
+			expands:            []string{"renderedBody"},
+			mockFile:           "./mocks/get-issue-comment-by-id.json",
+			wantHTTPMethod:     http.MethodDelete,
+			endpoint:           "/rest/api/3/issue/DUMMY-3/comment?expand=renderedBody",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusCreated,
+			wantErr:            true,
+		},
+
+		{
+			name:               "AddIssueCommentWhenTheStatusCodeIsIncorrect",
+			issueKeyOrID:       "DUMMY-3",
+			visibilityType:     "role",
+			visibilityValue:    "Administrators",
+			body:               &commentBody,
+			expands:            []string{"renderedBody"},
+			mockFile:           "./mocks/get-issue-comment-by-id.json",
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/api/3/issue/DUMMY-3/comment?expand=renderedBody",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusBadRequest,
+			wantErr:            true,
+		},
+
+		{
+			name:               "AddIssueCommentWhenTheContextIsNil",
+			issueKeyOrID:       "DUMMY-3",
+			visibilityType:     "role",
+			visibilityValue:    "Administrators",
+			body:               &commentBody,
+			expands:            []string{"renderedBody"},
+			mockFile:           "./mocks/get-issue-comment-by-id.json",
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/api/3/issue/DUMMY-3/comment?expand=renderedBody",
+			context:            nil,
+			wantHTTPCodeReturn: http.StatusCreated,
+			wantErr:            true,
+		},
+	}
+
+	for _, testCase := range testCases {
+
+		t.Run(testCase.name, func(t *testing.T) {
+
+			//Init a new HTTP mock server
+			mockOptions := mockServerOptions{
+				Endpoint:           testCase.endpoint,
+				MockFilePath:       testCase.mockFile,
+				MethodAccepted:     testCase.wantHTTPMethod,
+				ResponseCodeWanted: testCase.wantHTTPCodeReturn,
+			}
+
+			mockServer, err := startMockServer(&mockOptions)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			defer mockServer.Close()
+
+			//Init the library instance
+			mockClient, err := startMockClient(mockServer.URL)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			i := &CommentService{client: mockClient}
+
+			gotResult, gotResponse, err := i.Add(testCase.context,
+				testCase.issueKeyOrID, testCase.visibilityType,
+				testCase.visibilityValue, testCase.body,
+				testCase.expands)
+
+			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+
+				assert.Error(t, err)
+			} else {
+
+				assert.NoError(t, err)
+				assert.NotEqual(t, gotResponse, nil)
+				assert.NotEqual(t, gotResult, nil)
+
+				apiEndpoint, err := url.Parse(gotResponse.Endpoint)
+				if err != nil {
+					t.Fatal(err)
+				}
+
+				var endpointToAssert string
+
+				if apiEndpoint.Query().Encode() != "" {
+					endpointToAssert = fmt.Sprintf("%v?%v", apiEndpoint.Path, apiEndpoint.Query().Encode())
+				} else {
+					endpointToAssert = apiEndpoint.Path
+				}
+
+				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
+				assert.Equal(t, testCase.endpoint, endpointToAssert)
+
+				t.Log("-------------------------")
+				t.Logf("Comment ID: %v", gotResult.ID)
+				t.Logf("Comment Created: %v", gotResult.Created)
+				t.Logf("Comment Author EmailAddress: %v", gotResult.Author.EmailAddress)
+				t.Logf("Comment Author AccountID: %v", gotResult.Author.AccountID)
+				t.Log("------------------------- \n")
+
+			}
+		})
+
+	}
+
+}

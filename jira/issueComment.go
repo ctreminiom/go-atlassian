@@ -238,6 +238,6 @@ func (n *CommentNodeScheme) AppendNode(node *CommentNodeScheme) {
 }
 
 type MarkScheme struct {
-	Type  string                 `json:"type"`
-	Attrs map[string]interface{} `json:"attrs"`
+	Type  string                 `json:"type,omitempty"`
+	Attrs map[string]interface{} `json:"attrs,omitempty"`
 }

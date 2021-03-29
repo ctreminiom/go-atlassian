@@ -660,6 +660,16 @@ func TestIssueTypeScreenSchemeService_Delete(t *testing.T) {
 		},
 
 		{
+			name:                    "DeleteIssueTypeSchemeWhenTheIssueTypeScreenSchemeIDIsNotSet",
+			issueTypeScreenSchemeID: "",
+			wantHTTPMethod:          http.MethodDelete,
+			endpoint:                "/rest/api/3/issuetypescreenscheme/10000",
+			context:                 context.Background(),
+			wantHTTPCodeReturn:      http.StatusNoContent,
+			wantErr:                 true,
+		},
+
+		{
 			name:                    "DeleteIssueTypeSchemeWhenTheEndpointIsIncorrect",
 			issueTypeScreenSchemeID: "10001",
 			wantHTTPMethod:          http.MethodDelete,
@@ -1384,6 +1394,352 @@ func TestIssueTypeScreenSchemeService_Remove(t *testing.T) {
 
 				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
 				assert.Equal(t, testCase.endpoint, endpointToAssert)
+			}
+		})
+
+	}
+
+}
+
+func TestIssueTypeScreenSchemeService_Mapping(t *testing.T) {
+
+	testCases := []struct {
+		name                     string
+		issueTypeScreenSchemeIDs []int
+		startAt, maxResults      int
+		mockFile                 string
+		wantHTTPMethod           string
+		endpoint                 string
+		context                  context.Context
+		wantHTTPCodeReturn       int
+		wantErr                  bool
+	}{
+		{
+			name:                     "GetIssueTypeScreenSchemeMappingsWhenTheParametersAreCorrect",
+			issueTypeScreenSchemeIDs: []int{1000, 1001},
+			startAt:                  0,
+			maxResults:               50,
+			mockFile:                 "./mocks/get-issue-type-screen-scheme-items.json",
+			wantHTTPMethod:           http.MethodGet,
+			endpoint:                 "/rest/api/3/issuetypescreenscheme/mapping?issueTypeScreenSchemeId=1000&issueTypeScreenSchemeId=1001&maxResults=50&startAt=0",
+			context:                  context.Background(),
+			wantHTTPCodeReturn:       http.StatusOK,
+			wantErr:                  false,
+		},
+
+		{
+			name:                     "GetIssueTypeScreenSchemeMappingsWhenTheRequestMethodIsIncorrect",
+			issueTypeScreenSchemeIDs: []int{1000, 1001},
+			startAt:                  0,
+			maxResults:               50,
+			mockFile:                 "./mocks/get-issue-type-screen-scheme-items.json",
+			wantHTTPMethod:           http.MethodPost,
+			endpoint:                 "/rest/api/3/issuetypescreenscheme/mapping?issueTypeScreenSchemeId=1000&issueTypeScreenSchemeId=1001&maxResults=50&startAt=0",
+			context:                  context.Background(),
+			wantHTTPCodeReturn:       http.StatusOK,
+			wantErr:                  true,
+		},
+
+		{
+			name:                     "GetIssueTypeScreenSchemeMappingsWhenTheStatusCodeIsIncorrect",
+			issueTypeScreenSchemeIDs: []int{1000, 1001},
+			startAt:                  0,
+			maxResults:               50,
+			mockFile:                 "./mocks/get-issue-type-screen-scheme-items.json",
+			wantHTTPMethod:           http.MethodGet,
+			endpoint:                 "/rest/api/3/issuetypescreenscheme/mapping?issueTypeScreenSchemeId=1000&issueTypeScreenSchemeId=1001&maxResults=50&startAt=0",
+			context:                  context.Background(),
+			wantHTTPCodeReturn:       http.StatusBadRequest,
+			wantErr:                  true,
+		},
+
+		{
+			name:                     "GetIssueTypeScreenSchemeMappingsWhenTheContextIsNil",
+			issueTypeScreenSchemeIDs: []int{1000, 1001},
+			startAt:                  0,
+			maxResults:               50,
+			mockFile:                 "./mocks/get-issue-type-screen-scheme-items.json",
+			wantHTTPMethod:           http.MethodGet,
+			endpoint:                 "/rest/api/3/issuetypescreenscheme/mapping?issueTypeScreenSchemeId=1000&issueTypeScreenSchemeId=1001&maxResults=50&startAt=0",
+			context:                  nil,
+			wantHTTPCodeReturn:       http.StatusOK,
+			wantErr:                  true,
+		},
+
+		{
+			name:                     "GetIssueTypeScreenSchemeMappingsWhenTheEndpointIsIncorrect",
+			issueTypeScreenSchemeIDs: []int{1000, 1001},
+			startAt:                  0,
+			maxResults:               50,
+			mockFile:                 "./mocks/get-issue-type-screen-scheme-items.json",
+			wantHTTPMethod:           http.MethodGet,
+			endpoint:                 "/rest/chemeId=1000&issueTypeScreenSchemeId=1001&maxResults=50&startAt=0",
+			context:                  context.Background(),
+			wantHTTPCodeReturn:       http.StatusOK,
+			wantErr:                  true,
+		},
+
+		{
+			name:                     "GetIssueTypeScreenSchemeMappingsWhenTheResponseBodyHasADifferentFormat",
+			issueTypeScreenSchemeIDs: []int{1000, 1001},
+			startAt:                  0,
+			maxResults:               50,
+			mockFile:                 "./mocks/empty_json.json",
+			wantHTTPMethod:           http.MethodGet,
+			endpoint:                 "/rest/api/3/issuetypescreenscheme/mapping?issueTypeScreenSchemeId=1000&issueTypeScreenSchemeId=1001&maxResults=50&startAt=0",
+			context:                  context.Background(),
+			wantHTTPCodeReturn:       http.StatusOK,
+			wantErr:                  true,
+		},
+	}
+
+	for _, testCase := range testCases {
+
+		t.Run(testCase.name, func(t *testing.T) {
+
+			//Init a new HTTP mock server
+			mockOptions := mockServerOptions{
+				Endpoint:           testCase.endpoint,
+				MockFilePath:       testCase.mockFile,
+				MethodAccepted:     testCase.wantHTTPMethod,
+				ResponseCodeWanted: testCase.wantHTTPCodeReturn,
+			}
+
+			mockServer, err := startMockServer(&mockOptions)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			defer mockServer.Close()
+
+			//Init the library instance
+			mockClient, err := startMockClient(mockServer.URL)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			i := &IssueTypeScreenSchemeService{client: mockClient}
+
+			gotResult, gotResponse, err := i.Mapping(testCase.context, testCase.issueTypeScreenSchemeIDs, testCase.startAt, testCase.maxResults)
+
+			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+
+				assert.Error(t, err)
+			} else {
+
+				assert.NoError(t, err)
+				assert.NotEqual(t, gotResponse, nil)
+				assert.NotEqual(t, gotResult, nil)
+
+				apiEndpoint, err := url.Parse(gotResponse.Endpoint)
+				if err != nil {
+					t.Fatal(err)
+				}
+
+				var endpointToAssert string
+
+				if apiEndpoint.Query().Encode() != "" {
+					endpointToAssert = fmt.Sprintf("%v?%v", apiEndpoint.Path, apiEndpoint.Query().Encode())
+				} else {
+					endpointToAssert = apiEndpoint.Path
+				}
+
+				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
+				assert.Equal(t, testCase.endpoint, endpointToAssert)
+
+				//issue type screen scheme items
+				for _, item := range gotResult.Values {
+
+					t.Log("------------------------------")
+					t.Logf("Screen Scheme Item IssueTypeID: %v", item.IssueTypeID)
+					t.Logf("Screen Scheme Item ScreenSchemeID: %v", item.ScreenSchemeID)
+					t.Logf("Screen Scheme Item IssueTypeScreenSchemeID: %v", item.IssueTypeScreenSchemeID)
+					t.Log("------------------------------")
+
+				}
+
+			}
+		})
+
+	}
+
+}
+
+func TestIssueTypeScreenSchemeService_Projects(t *testing.T) {
+
+	testCases := []struct {
+		name                string
+		projectIDs          []int
+		startAt, maxResults int
+		mockFile            string
+		wantHTTPMethod      string
+		endpoint            string
+		context             context.Context
+		wantHTTPCodeReturn  int
+		wantErr             bool
+	}{
+		{
+			name:               "GetIssueTypeScreenSchemeProjectsWhenTheParametersAreCorrect",
+			projectIDs:         []int{1000, 1001},
+			startAt:            0,
+			maxResults:         50,
+			mockFile:           "./mocks/get-issue-type-screen-schemes-for-projects.json",
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/rest/api/3/issuetypescreenscheme/project?maxResults=50&projectId=1000&projectId=1001&startAt=0",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            false,
+		},
+
+		{
+			name:               "GetIssueTypeScreenSchemeProjectsWhenTheProjectIDsAreNotSet",
+			startAt:            0,
+			maxResults:         50,
+			mockFile:           "./mocks/get-issue-type-screen-schemes-for-projects.json",
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/rest/api/3/issuetypescreenscheme/project?maxResults=50&projectId=1000&projectId=1001&startAt=0",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+
+		{
+			name:               "GetIssueTypeScreenSchemeProjectsWhenTheRequestMethodIsIncorrect",
+			projectIDs:         []int{1000, 1001},
+			startAt:            0,
+			maxResults:         50,
+			mockFile:           "./mocks/get-issue-type-screen-schemes-for-projects.json",
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/api/3/issuetypescreenscheme/project?maxResults=50&projectId=1000&projectId=1001&startAt=0",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+
+		{
+			name:               "GetIssueTypeScreenSchemeProjectsWhenTheStatusCodeIsIncorrect",
+			projectIDs:         []int{1000, 1001},
+			startAt:            0,
+			maxResults:         50,
+			mockFile:           "./mocks/get-issue-type-screen-schemes-for-projects.json",
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/rest/api/3/issuetypescreenscheme/project?maxResults=50&projectId=1000&projectId=1001&startAt=0",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusBadRequest,
+			wantErr:            true,
+		},
+
+		{
+			name:               "GetIssueTypeScreenSchemeProjectsWhenTheContextIsNil",
+			projectIDs:         []int{1000, 1001},
+			startAt:            0,
+			maxResults:         50,
+			mockFile:           "./mocks/get-issue-type-screen-schemes-for-projects.json",
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/rest/api/3/issuetypescreenscheme/project?maxResults=50&projectId=1000&projectId=1001&startAt=0",
+			context:            nil,
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+
+		{
+			name:               "GetIssueTypeScreenSchemeProjectsWhenTheEndpointIsIncorrect",
+			projectIDs:         []int{1000, 1001},
+			startAt:            0,
+			maxResults:         50,
+			mockFile:           "./mocks/get-issue-type-screen-schemes-for-projects.json",
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/rest/chemeId=1000&issueTypeScreenSchemeId=1001&maxResults=50&startAt=0",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+
+		{
+			name:               "GetIssueTypeScreenSchemeProjectsWhenTheResponseBodyHasADifferentFormat",
+			projectIDs:         []int{1000, 1001},
+			startAt:            0,
+			maxResults:         50,
+			mockFile:           "./mocks/empty_json.json",
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/rest/api/3/issuetypescreenscheme/project?maxResults=50&projectId=1000&projectId=1001&startAt=0",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+	}
+
+	for _, testCase := range testCases {
+
+		t.Run(testCase.name, func(t *testing.T) {
+
+			//Init a new HTTP mock server
+			mockOptions := mockServerOptions{
+				Endpoint:           testCase.endpoint,
+				MockFilePath:       testCase.mockFile,
+				MethodAccepted:     testCase.wantHTTPMethod,
+				ResponseCodeWanted: testCase.wantHTTPCodeReturn,
+			}
+
+			mockServer, err := startMockServer(&mockOptions)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			defer mockServer.Close()
+
+			//Init the library instance
+			mockClient, err := startMockClient(mockServer.URL)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			i := &IssueTypeScreenSchemeService{client: mockClient}
+
+			gotResult, gotResponse, err := i.Projects(testCase.context, testCase.projectIDs, testCase.startAt, testCase.maxResults)
+
+			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+
+				assert.Error(t, err)
+			} else {
+
+				assert.NoError(t, err)
+				assert.NotEqual(t, gotResponse, nil)
+				assert.NotEqual(t, gotResult, nil)
+
+				apiEndpoint, err := url.Parse(gotResponse.Endpoint)
+				if err != nil {
+					t.Fatal(err)
+				}
+
+				var endpointToAssert string
+
+				if apiEndpoint.Query().Encode() != "" {
+					endpointToAssert = fmt.Sprintf("%v?%v", apiEndpoint.Path, apiEndpoint.Query().Encode())
+				} else {
+					endpointToAssert = apiEndpoint.Path
+				}
+
+				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
+				assert.Equal(t, testCase.endpoint, endpointToAssert)
+
+				//issue type screen scheme items
+				for _, item := range gotResult.Values {
+
+					t.Log("------------------------------")
+					t.Log(item.IssueTypeScreenScheme.ID, item.IssueTypeScreenScheme.Name, item.IssueTypeScreenScheme.Description)
+					t.Log(item.ProjectIds)
+					t.Log("------------------------------")
+				}
+
 			}
 		})
 

@@ -12,7 +12,7 @@ import (
 
 type IssueTypeScreenSchemeService struct{ client *Client }
 
-type IssueTypeScreenSchemesScheme struct {
+type IssueTypeScreenSchemePageScheme struct {
 	MaxResults int  `json:"maxResults"`
 	StartAt    int  `json:"startAt"`
 	Total      int  `json:"total"`
@@ -26,7 +26,7 @@ type IssueTypeScreenSchemesScheme struct {
 
 // Returns a paginated list of issue type screen schemes.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/types/screen-scheme#get-issue-type-screen-schemes
-func (i *IssueTypeScreenSchemeService) Gets(ctx context.Context, ids []int, startAt, maxResults int) (result *IssueTypeScreenSchemesScheme, response *Response, err error) {
+func (i *IssueTypeScreenSchemeService) Gets(ctx context.Context, ids []int, startAt, maxResults int) (result *IssueTypeScreenSchemePageScheme, response *Response, err error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -49,7 +49,7 @@ func (i *IssueTypeScreenSchemeService) Gets(ctx context.Context, ids []int, star
 		return
 	}
 
-	result = new(IssueTypeScreenSchemesScheme)
+	result = new(IssueTypeScreenSchemePageScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
@@ -150,6 +150,102 @@ func (i *IssueTypeScreenSchemeService) Assign(ctx context.Context, issueTypeScre
 	}
 
 	return
+}
+
+func (i *IssueTypeScreenSchemeService) Projects(ctx context.Context, projectIDs []int, startAt, maxResults int) (result *IssueTypeProjectScreenSchemePageScheme, response *Response, err error) {
+
+	params := url.Values{}
+	params.Add("startAt", strconv.Itoa(startAt))
+	params.Add("maxResults", strconv.Itoa(maxResults))
+
+	if len(projectIDs) == 0 {
+		return nil, nil, fmt.Errorf("error, please provide a valid projectIDs slice value")
+	}
+
+	for _, id := range projectIDs {
+		params.Add("projectId", strconv.Itoa(id))
+	}
+
+	var endpoint = fmt.Sprintf("rest/api/3/issuetypescreenscheme/project?%v", params.Encode())
+
+	request, err := i.client.newRequest(ctx, http.MethodGet, endpoint, nil)
+	if err != nil {
+		return
+	}
+	request.Header.Set("Accept", "application/json")
+
+	response, err = i.client.Do(request)
+	if err != nil {
+		return
+	}
+
+	result = new(IssueTypeProjectScreenSchemePageScheme)
+	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
+		return
+	}
+
+	return
+}
+
+type IssueTypeProjectScreenSchemePageScheme struct {
+	MaxResults int  `json:"maxResults"`
+	StartAt    int  `json:"startAt"`
+	Total      int  `json:"total"`
+	IsLast     bool `json:"isLast"`
+	Values     []struct {
+		IssueTypeScreenScheme struct {
+			ID          string `json:"id"`
+			Name        string `json:"name"`
+			Description string `json:"description"`
+		} `json:"issueTypeScreenScheme"`
+		ProjectIds []string `json:"projectIds"`
+	} `json:"values"`
+}
+
+// Returns a paginated list of issue type screen scheme items.
+func (i *IssueTypeScreenSchemeService) Mapping(ctx context.Context, issueTypeScreenSchemeIDs []int, startAt, maxResults int) (result *IssueTypeProjectScreenSchemeMappingPageScheme, response *Response, err error) {
+
+	params := url.Values{}
+	params.Add("startAt", strconv.Itoa(startAt))
+	params.Add("maxResults", strconv.Itoa(maxResults))
+
+	for _, id := range issueTypeScreenSchemeIDs {
+		params.Add("issueTypeScreenSchemeId", strconv.Itoa(id))
+	}
+
+	var endpoint = fmt.Sprintf("rest/api/3/issuetypescreenscheme/mapping?%v", params.Encode())
+
+	request, err := i.client.newRequest(ctx, http.MethodGet, endpoint, nil)
+	if err != nil {
+		return
+	}
+	request.Header.Set("Accept", "application/json")
+
+	response, err = i.client.Do(request)
+	if err != nil {
+		return
+	}
+
+	result = new(IssueTypeProjectScreenSchemeMappingPageScheme)
+	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
+		return
+	}
+
+	return
+}
+
+type IssueTypeProjectScreenSchemeMappingPageScheme struct {
+	Self       string `json:"self"`
+	NextPage   string `json:"nextPage"`
+	MaxResults int    `json:"maxResults"`
+	StartAt    int    `json:"startAt"`
+	Total      int    `json:"total"`
+	IsLast     bool   `json:"isLast"`
+	Values     []struct {
+		IssueTypeScreenSchemeID string `json:"issueTypeScreenSchemeId"`
+		IssueTypeID             string `json:"issueTypeId"`
+		ScreenSchemeID          string `json:"screenSchemeId"`
+	} `json:"values"`
 }
 
 // Updates an issue type screen scheme.

@@ -44,5 +44,4 @@ func main() {
 	for _, organization := range organizations.Values {
 		log.Println(organization)
 	}
-
 }

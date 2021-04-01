@@ -14,3 +14,4 @@
 # Dependency directories (remove the comment below to include it)
 # vendor/
 .idea/
+/jira/examples/advanced/issue-changelogs/issue-changelogs.csv

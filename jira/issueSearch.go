@@ -85,9 +85,11 @@ type IssueChangelogHistoryScheme struct {
 type IssueChangelogHistoryItemScheme struct {
 	Field      string `json:"field"`
 	Fieldtype  string `json:"fieldtype"`
+	FieldID    string `json:"fieldId"`
 	From       string `json:"from"`
 	FromString string `json:"fromString"`
 	To         string `json:"to"`
+	ToString   string `json:"toString"`
 }
 
 // Search issues using JQL query under the HTTP Method GET

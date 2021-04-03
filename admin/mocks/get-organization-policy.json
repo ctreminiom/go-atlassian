@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "policy",
+    "id": "60f0f660-be3e-4d70-bd34-9c2858ec040f",
+    "attributes": {
+      "type": "admin-notification-settings",
+      "name": "default-admin-notification-policy",
+      "resources": [],
+      "rule": {
+        "off": []
+      },
+      "status": "enabled",
+      "createdAt": "2021-02-08T23:27:30.951Z",
+      "updatedAt": null
+    },
+    "links": null,
+    "relations": null
+  }
+}

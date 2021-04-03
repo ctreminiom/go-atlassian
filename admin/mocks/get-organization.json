@@ -1,0 +1,20 @@
+{
+  "data": {
+    "id": "9a1jj823-jac8-123d-jj01-63315k059cb2",
+    "type": "orgs",
+    "attributes": {
+      "name": "ctreminiom"
+    },
+    "links": {
+      "self": "https://api.atlassian.com/admin/v1/orgs/9a1jj823-jac8-123d-jj01-63315k059cb2"
+    },
+    "relationships": {
+      "domains": {
+        "related": "https://api.atlassian.com/admin/v1/orgs/9a1jj823-jac8-123d-jj01-63315k059cb2/domains"
+      },
+      "users": {
+        "related": "https://api.atlassian.com/admin/v1/orgs/9a1jj823-jac8-123d-jj01-63315k059cb2/users"
+      }
+    }
+  }
+}

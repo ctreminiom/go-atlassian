@@ -330,6 +330,7 @@ type OrganizationEventOptScheme struct {
 // 2. organizationID = ID of the organization to return (REQUIRED)
 // 3. opts = the Event options
 // 4. cursor = the next pagination result, The cursor is not a number that you can increment through predictably.
+// Atlassian Docs: https://developer.atlassian.com/cloud/admin/organization/rest/api-group-orgs/#api-orgs-orgid-events-get
 func (o *OrganizationService) Events(ctx context.Context, organizationID string, opts *OrganizationEventOptScheme, cursor string) (result *OrganizationEventPageScheme, response *Response, err error) {
 
 	if len(organizationID) == 0 {

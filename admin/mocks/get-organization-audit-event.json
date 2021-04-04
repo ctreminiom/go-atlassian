@@ -1,0 +1,54 @@
+{
+  "data": {
+    "id": "002ca68b-50b6-47c7-b985-566944bc89e8",
+    "type": "events",
+    "attributes": {
+      "actor": {
+        "name": "Atlassian Internal System",
+        "email": "Atlassian Internal System",
+        "links": {
+          "alt": "https://admin.atlassian.com/o/9a1jj823-jac8-123d-jj01-63315k059cb2/users/atlassian-internal-system",
+          "self": "https://api.atlassian.com/users/atlassian-internal-system/manage/profile"
+        },
+        "id": "atlassian-internal-system"
+      },
+      "container": [
+        {
+          "id": "9a1jj823-jac8-123d-jj01-63315k059cb2",
+          "type": "orgs",
+          "attributes": {
+            "name": "team-1609551813462"
+          },
+          "links": {
+            "alt": "https://admin.atlassian.com/o/9a1jj823-jac8-123d-jj01-63315k059cb2",
+            "self": "https://api.atlassian.com/admin/v1/orgs/9a1jj823-jac8-123d-jj01-63315k059cb2"
+          }
+        }
+      ],
+      "context": [
+        {
+          "id": "5b86be50b8e3cb5895860d6d",
+          "type": "users",
+          "attributes": {
+            "name": "ctreminiom079@gmail.com",
+            "email": "ctreminiom079@gmail.com",
+            "accountType": "atlassian"
+          },
+          "links": {
+            "alt": "https://admin.atlassian.com/o/9a1jj823-jac8-123d-jj01-63315k059cb2/users/5b86be50b8e3cb5895860d6d",
+            "self": "https://api.atlassian.com/users/5b86be50b8e3cb5895860d6d/manage/profile"
+          }
+        }
+      ],
+      "action": "added_org_admin",
+      "time": "2021-01-02T01:43:37.922191Z"
+    },
+    "links": {
+      "self": "https://api.atlassian.com/admin/v1/orgs/9a1jj823-jac8-123d-jj01-63315k059cb2/events/002ca68b-50b6-47c7-b985-566944bc89e8"
+    },
+    "message": {
+      "content": "Added ctreminiom079@gmail.com as an organization admin",
+      "format": "simple"
+    }
+  }
+}

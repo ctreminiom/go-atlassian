@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"github.com/ctreminiom/go-atlassian/admin"
 	"log"
 	"os"
@@ -36,5 +37,7 @@ func main() {
 	for _, action := range actions.Data {
 		log.Println(action.ID, action.Type, action.Attributes.DisplayName)
 	}
+
+	fmt.Println(string(response.BodyAsBytes))
 
 }

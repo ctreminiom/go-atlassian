@@ -32,7 +32,7 @@ func main() {
 
 		opts := &admin.OrganizationEventOptScheme{
 			Q:      "",
-			From:   time.Time{},
+			From:   time.Now().Add(time.Duration(-24) * time.Hour),
 			To:     time.Time{},
 			Action: "",
 		}

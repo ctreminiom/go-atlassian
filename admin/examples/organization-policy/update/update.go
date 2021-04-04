@@ -24,7 +24,7 @@ func main() {
 
 	payload := &admin.OrganizationPolicyData{
 		Type: "policy",
-		Attributes: admin.OrganizationPolicyAttributes{
+		Attributes: &admin.OrganizationPolicyAttributes{
 			Status: "disabled", //disabled
 		},
 	}

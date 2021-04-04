@@ -20,9 +20,9 @@ func main() {
 	cloudAdmin.Auth.SetAccessToken(apiKey)
 	cloudAdmin.Auth.SetUserAgent("curl/7.54.0")
 
-	var organizationID = "9a1jj823-jac8-123d-jj01-63315k059cb2"
+	var accountID = "5e5f6a63157ed50cd2b9eaca"
 
-	actions, response, err := cloudAdmin.Organization.Actions(context.Background(), organizationID)
+	tokens, response, err := cloudAdmin.User.Token.Gets(context.Background(), accountID)
 	if err != nil {
 		if response != nil {
 			log.Println("Response HTTP Response", string(response.BodyAsBytes))
@@ -33,8 +33,7 @@ func main() {
 	log.Println("Response HTTP Code", response.StatusCode)
 	log.Println("HTTP Endpoint Used", response.Endpoint)
 
-	for _, action := range actions.Data {
-		log.Println(action.ID, action.Type, action.Attributes.DisplayName)
+	for _, token := range *tokens {
+		log.Println(token.ID, token.Label, token.CreatedAt, token.LastAccess)
 	}
-
 }

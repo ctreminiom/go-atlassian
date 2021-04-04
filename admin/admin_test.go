@@ -194,5 +194,10 @@ func startMockClient(site string) (*Client, error) {
 		},
 	}
 
+	client.User = &UserService{
+		client: client,
+		Token:  &UserTokenService{client: client},
+	}
+
 	return client, nil
 }

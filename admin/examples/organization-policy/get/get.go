@@ -43,7 +43,5 @@ func main() {
 		log.Fatal(err)
 	}
 
-	fmt.Println(string(response.BodyAsBytes))
-
 	fmt.Printf("MarshalIndent Struct keys output\n %s\n", string(policyAsJSONKeys))
 }

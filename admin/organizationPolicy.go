@@ -130,9 +130,9 @@ type OrganizationPolicyAttributes struct {
 	UpdatedAt time.Time                     `json:"updatedAt,omitempty"`
 }
 type OrganizationPolicyData struct {
-	ID         string                       `json:"id,omitempty"`
-	Type       string                       `json:"type,omitempty"`
-	Attributes OrganizationPolicyAttributes `json:"attributes,omitempty"`
+	ID         string                        `json:"id,omitempty"`
+	Type       string                        `json:"type,omitempty"`
+	Attributes *OrganizationPolicyAttributes `json:"attributes,omitempty"`
 }
 
 // Create a policy for an org, this func needs the following parameters:

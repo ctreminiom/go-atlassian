@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"net/url"
+	"reflect"
 	"testing"
 )
 
@@ -199,5 +200,61 @@ func startMockClient(site string) (*Client, error) {
 		Token:  &UserTokenService{client: client},
 	}
 
+	client.SCIM = &SCIMService{
+		client:   client,
+		User:     &SCIMUserService{client: client},
+		Group:    &SCIMGroupService{client: client},
+		Scheme:   &SCIMSchemeService{client: client},
+		Resource: &SCIMResourceService{client: client},
+	}
+
 	return client, nil
+}
+
+func TestNew(t *testing.T) {
+
+	mockedClient, err := startMockClient(ApiEndpoint)
+	if err != nil {
+		t.Log(err)
+	}
+
+	type args struct {
+		httpClient *http.Client
+	}
+	tests := []struct {
+		name       string
+		args       args
+		wantClient *Client
+		wantErr    bool
+	}{
+		{
+			name: "NewClientWhenTheParametersAreCorrect",
+			args: args{
+				httpClient: http.DefaultClient,
+			},
+			wantClient: mockedClient,
+			wantErr:    false,
+		},
+
+		{
+			name: "NewClientWhenTheHTTPClientIsNil",
+			args: args{
+				httpClient: nil,
+			},
+			wantClient: mockedClient,
+			wantErr:    false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			gotClient, err := New(tt.args.httpClient)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("New() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(gotClient, tt.wantClient) {
+				t.Errorf("New() gotClient = %v, want %v", gotClient, tt.wantClient)
+			}
+		})
+	}
 }

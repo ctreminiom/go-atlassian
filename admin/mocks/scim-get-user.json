@@ -1,0 +1,38 @@
+{
+  "schemas": [
+    "urn:scim:schemas:extension:atlassian-external:1.0",
+    "urn:ietf:params:scim:schemas:core:2.0:User",
+    "urn:ietf:params:scim:schemas:extension:enterprise:2.0:User"
+  ],
+  "userName": "Example Username 2",
+  "emails": [
+    {
+      "value": "example-2@go-atlassian.io",
+      "type": "work",
+      "primary": true
+    }
+  ],
+  "externalId": "",
+  "name": {
+    "formatted": "Example Full Name with Last Name",
+    "familyName": "Example Family Name",
+    "givenName": "Example Name",
+    "middleName": "Name"
+  },
+  "displayName": "Example Display Name",
+  "nickName": "Example NickName",
+  "title": "Atlassian Administrator",
+  "preferredLanguage": "en-US",
+  "meta": {
+    "resourceType": "User",
+    "location": "https://api.atlassian.com/scim/directory/bcdde508-ee40-4df2-89cc-d3f6292c5971/Users/ef5ff80e-9ca6-449c-8cca-5b621085c6c9",
+    "lastModified": "2021-04-05T03:16:10.993365Z",
+    "created": "2021-04-05T03:16:10.993365Z"
+  },
+  "groups": [],
+  "urn:scim:schemas:extension:atlassian-external:1.0": {
+    "atlassianAccountId": "606a80fbbc3c3f006ff3024a"
+  },
+  "id": "ef5ff80e-9ca6-449c-8cca-5b621085c6c9",
+  "active": true
+}

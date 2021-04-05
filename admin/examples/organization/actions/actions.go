@@ -17,7 +17,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	cloudAdmin.Auth.SetAccessToken(apiKey)
+	cloudAdmin.Auth.SetBearerToken(apiKey)
 	cloudAdmin.Auth.SetUserAgent("curl/7.54.0")
 
 	var organizationID = "9a1jj823-jac8-123d-jj01-63315k059cb2"

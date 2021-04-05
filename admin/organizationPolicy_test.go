@@ -430,7 +430,7 @@ func TestOrganizationPolicyService_Create(t *testing.T) {
 				Type: "policy",
 				Attributes: &OrganizationPolicyAttributes{
 					Type:   "data-residency", //ip-allowlist
-					Name:   "Name of this Policy",
+					Name:   "SCIMUserNameScheme of this Policy",
 					Status: "enabled", //disabled
 				},
 			},
@@ -449,7 +449,7 @@ func TestOrganizationPolicyService_Create(t *testing.T) {
 				Type: "policy",
 				Attributes: &OrganizationPolicyAttributes{
 					Type:   "data-residency", //ip-allowlist
-					Name:   "Name of this Policy",
+					Name:   "SCIMUserNameScheme of this Policy",
 					Status: "enabled", //disabled
 				},
 			},
@@ -480,7 +480,7 @@ func TestOrganizationPolicyService_Create(t *testing.T) {
 				Type: "policy",
 				Attributes: &OrganizationPolicyAttributes{
 					Type:   "data-residency", //ip-allowlist
-					Name:   "Name of this Policy",
+					Name:   "SCIMUserNameScheme of this Policy",
 					Status: "enabled", //disabled
 				},
 			},
@@ -499,7 +499,7 @@ func TestOrganizationPolicyService_Create(t *testing.T) {
 				Type: "policy",
 				Attributes: &OrganizationPolicyAttributes{
 					Type:   "data-residency", //ip-allowlist
-					Name:   "Name of this Policy",
+					Name:   "SCIMUserNameScheme of this Policy",
 					Status: "enabled", //disabled
 				},
 			},
@@ -518,7 +518,7 @@ func TestOrganizationPolicyService_Create(t *testing.T) {
 				Type: "policy",
 				Attributes: &OrganizationPolicyAttributes{
 					Type:   "data-residency", //ip-allowlist
-					Name:   "Name of this Policy",
+					Name:   "SCIMUserNameScheme of this Policy",
 					Status: "enabled", //disabled
 				},
 			},
@@ -537,7 +537,7 @@ func TestOrganizationPolicyService_Create(t *testing.T) {
 				Type: "policy",
 				Attributes: &OrganizationPolicyAttributes{
 					Type:   "data-residency", //ip-allowlist
-					Name:   "Name of this Policy",
+					Name:   "SCIMUserNameScheme of this Policy",
 					Status: "enabled", //disabled
 				},
 			},
@@ -556,7 +556,7 @@ func TestOrganizationPolicyService_Create(t *testing.T) {
 				Type: "policy",
 				Attributes: &OrganizationPolicyAttributes{
 					Type:   "data-residency", //ip-allowlist
-					Name:   "Name of this Policy",
+					Name:   "SCIMUserNameScheme of this Policy",
 					Status: "enabled", //disabled
 				},
 			},
@@ -575,7 +575,7 @@ func TestOrganizationPolicyService_Create(t *testing.T) {
 				Type: "policy",
 				Attributes: &OrganizationPolicyAttributes{
 					Type:   "data-residency", //ip-allowlist
-					Name:   "Name of this Policy",
+					Name:   "SCIMUserNameScheme of this Policy",
 					Status: "enabled", //disabled
 				},
 			},
@@ -682,7 +682,7 @@ func TestOrganizationPolicyService_Update(t *testing.T) {
 				Type: "policy",
 				Attributes: &OrganizationPolicyAttributes{
 					Type:   "data-residency", //ip-allowlist
-					Name:   "Name of this Policy",
+					Name:   "SCIMUserNameScheme of this Policy",
 					Status: "enabled", //disabled
 				},
 			},
@@ -702,7 +702,7 @@ func TestOrganizationPolicyService_Update(t *testing.T) {
 				Type: "policy",
 				Attributes: &OrganizationPolicyAttributes{
 					Type:   "data-residency", //ip-allowlist
-					Name:   "Name of this Policy",
+					Name:   "SCIMUserNameScheme of this Policy",
 					Status: "enabled", //disabled
 				},
 			},
@@ -722,7 +722,7 @@ func TestOrganizationPolicyService_Update(t *testing.T) {
 				Type: "policy",
 				Attributes: &OrganizationPolicyAttributes{
 					Type:   "data-residency", //ip-allowlist
-					Name:   "Name of this Policy",
+					Name:   "SCIMUserNameScheme of this Policy",
 					Status: "enabled", //disabled
 				},
 			},
@@ -755,7 +755,7 @@ func TestOrganizationPolicyService_Update(t *testing.T) {
 				Type: "policy",
 				Attributes: &OrganizationPolicyAttributes{
 					Type:   "data-residency", //ip-allowlist
-					Name:   "Name of this Policy",
+					Name:   "SCIMUserNameScheme of this Policy",
 					Status: "enabled", //disabled
 				},
 			},
@@ -775,7 +775,7 @@ func TestOrganizationPolicyService_Update(t *testing.T) {
 				Type: "policy",
 				Attributes: &OrganizationPolicyAttributes{
 					Type:   "data-residency", //ip-allowlist
-					Name:   "Name of this Policy",
+					Name:   "SCIMUserNameScheme of this Policy",
 					Status: "enabled", //disabled
 				},
 			},
@@ -795,7 +795,7 @@ func TestOrganizationPolicyService_Update(t *testing.T) {
 				Type: "policy",
 				Attributes: &OrganizationPolicyAttributes{
 					Type:   "data-residency", //ip-allowlist
-					Name:   "Name of this Policy",
+					Name:   "SCIMUserNameScheme of this Policy",
 					Status: "enabled", //disabled
 				},
 			},
@@ -815,7 +815,7 @@ func TestOrganizationPolicyService_Update(t *testing.T) {
 				Type: "policy",
 				Attributes: &OrganizationPolicyAttributes{
 					Type:   "data-residency", //ip-allowlist
-					Name:   "Name of this Policy",
+					Name:   "SCIMUserNameScheme of this Policy",
 					Status: "enabled", //disabled
 				},
 			},
@@ -835,7 +835,7 @@ func TestOrganizationPolicyService_Update(t *testing.T) {
 				Type: "policy",
 				Attributes: &OrganizationPolicyAttributes{
 					Type:   "data-residency", //ip-allowlist
-					Name:   "Name of this Policy",
+					Name:   "SCIMUserNameScheme of this Policy",
 					Status: "enabled", //disabled
 				},
 			},
@@ -855,7 +855,7 @@ func TestOrganizationPolicyService_Update(t *testing.T) {
 				Type: "policy",
 				Attributes: &OrganizationPolicyAttributes{
 					Type:   "data-residency", //ip-allowlist
-					Name:   "Name of this Policy",
+					Name:   "SCIMUserNameScheme of this Policy",
 					Status: "enabled", //disabled
 				},
 			},

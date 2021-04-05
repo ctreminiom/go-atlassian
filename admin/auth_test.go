@@ -41,7 +41,7 @@ func TestAuthenticationService_SetAccessToken(t *testing.T) {
 				agent:       tt.fields.agent,
 			}
 
-			a.SetAccessToken(tt.args.token)
+			a.SetBearerToken(tt.args.token)
 		})
 	}
 }

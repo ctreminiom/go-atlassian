@@ -19,7 +19,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	cloudAdmin.Auth.SetAccessToken(apiKey)
+	cloudAdmin.Auth.SetBearerToken(apiKey)
 	cloudAdmin.Auth.SetUserAgent("curl/7.54.0")
 
 	payload := &admin.OrganizationPolicyData{

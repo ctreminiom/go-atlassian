@@ -19,14 +19,14 @@ func main() {
 		log.Fatal(err)
 	}
 
-	cloudAdmin.Auth.SetAccessToken(apiKey)
+	cloudAdmin.Auth.SetBearerToken(apiKey)
 	cloudAdmin.Auth.SetUserAgent("curl/7.54.0")
 
 	payload := &admin.OrganizationPolicyData{
 		Type: "policy",
 		Attributes: &admin.OrganizationPolicyAttributes{
 			Type:   "data-residency", //ip-allowlist
-			Name:   "Name of this Policy",
+			Name:   "SCIMUserNameScheme of this Policy",
 			Status: "enabled", //disabled
 		},
 	}

@@ -20,6 +20,8 @@ type Client struct {
 	Auth         *AuthenticationService
 	Organization *OrganizationService
 	User         *UserService
+
+	SCIM *SCIMService
 }
 
 const ApiEndpoint = "https://api.atlassian.com/"
@@ -52,6 +54,14 @@ func New(httpClient *http.Client) (client *Client, err error) {
 	client.User = &UserService{
 		client: client,
 		Token:  &UserTokenService{client: client},
+	}
+
+	client.SCIM = &SCIMService{
+		client:   client,
+		User:     &SCIMUserService{client: client},
+		Group:    &SCIMGroupService{client: client},
+		Scheme:   &SCIMSchemeService{client: client},
+		Resource: &SCIMResourceService{client: client},
 	}
 
 	return

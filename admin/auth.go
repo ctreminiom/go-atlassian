@@ -6,7 +6,7 @@ type AuthenticationService struct {
 	agent       string
 }
 
-func (a *AuthenticationService) SetAccessToken(token string) {
+func (a *AuthenticationService) SetBearerToken(token string) {
 	a.beaverToken = token
 }
 

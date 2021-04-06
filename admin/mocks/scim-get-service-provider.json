@@ -1,0 +1,39 @@
+{
+  "schemas": [
+    "urn:ietf:params:scim:schemas:core:2.0:ServiceProviderConfig"
+  ],
+  "patch": {
+    "supported": true
+  },
+  "bulk": {
+    "supported": false,
+    "maxOperations":0,
+    "maxPayloadSize":0
+  },
+  "filter": {
+    "maxResults": 10000,
+    "supported": true
+  },
+  "changePassword": {
+    "supported": false
+  },
+  "sort": {
+    "supported": false
+  },
+  "etag": {
+    "supported": false
+  },
+  "authenticationSchemes": [
+    {
+      "type": "oauthbearertoken",
+      "name": "OAuth Bearer Token",
+      "description": "Authentication scheme using the OAuth Bearer Token Standard"
+    }
+  ],
+  "meta": {
+    "location": "https://api.atlassian.com/scim/directory/bcdde508-ee40-4df2-89cc-d3f6292c5971/ServiceProviderConfig",
+    "resourceType": "ServiceProviderConfig",
+    "lastModified": "2018-05-03T19:31:29.723Z",
+    "created": "2018-05-03T19:31:29.723Z"
+  }
+}

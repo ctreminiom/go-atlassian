@@ -1,0 +1,34 @@
+{
+  "id" : "urn:ietf:params:scim:schemas:extension:enterprise:2.0:User",
+  "name" : "EnterpriseUser",
+  "description" : "Enterprise User",
+  "attributes" : [
+    {
+      "name" : "organization",
+      "type" : "string",
+      "multiValued" : false,
+      "description" : "Identifies the name of an organization.",
+      "required" : false,
+      "caseExact" : false,
+      "mutability" : "readWrite",
+      "returned" : "default",
+      "uniqueness" : "none"
+    },
+    {
+      "name" : "department",
+      "type" : "string",
+      "multiValued" : false,
+      "description" : "Identifies the name of a department.",
+      "required" : false,
+      "caseExact" : false,
+      "mutability" : "readWrite",
+      "returned" : "default",
+      "uniqueness" : "none"
+    }
+  ],
+  "meta" : {
+    "resourceType" : "Schema",
+    "location" :
+    "https://api.atlassian.com/scim/directory/bcdde508-ee40-4df2-89cc-d3f6292c5971/Schemas/urn:ietf:params:scim:schemas:extension:enterprise:2.0:User"
+  }
+}

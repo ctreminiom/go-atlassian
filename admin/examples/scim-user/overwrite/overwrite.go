@@ -25,7 +25,21 @@ func main() {
 		userID      = "ef5ff80e-9ca6-449c-8cca-5b621085c6c9"
 	)
 
-	user, response, err := cloudAdmin.SCIM.User.Get(context.Background(), directoryID, userID, nil, nil)
+	payload := &admin.SCIMUserScheme{
+		UserName:    "username-updated-with-overwrite-method",
+		DisplayName: "AA",
+		NickName:    "AA",
+		Title:       "AA",
+		Department:  "President",
+		Emails: []*admin.SCIMUserEmailScheme{
+			{
+				Value:   "carlos@go-atlassian.io",
+				Type:    "work",
+				Primary: true,
+			},
+		},
+	}
+	userUpdated, response, err := cloudAdmin.SCIM.User.Overwrite(context.Background(), directoryID, userID, payload, nil, nil)
 	if err != nil {
 		if response != nil {
 			log.Println("Response HTTP Response", string(response.BodyAsBytes))
@@ -35,7 +49,8 @@ func main() {
 
 	log.Println("Response HTTP Code", response.StatusCode)
 	log.Println("HTTP Endpoint Used", response.Endpoint)
-	log.Println(user.UserName)
-	log.Println(user.Name)
+	log.Println(userUpdated.DisplayName)
+	log.Println(userUpdated.Active)
+	log.Println(userUpdated.Department)
 
 }

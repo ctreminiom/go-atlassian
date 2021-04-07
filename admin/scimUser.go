@@ -167,7 +167,7 @@ type SCIMUserGetsOptionsScheme struct {
 // 5. count = Desired maximum number of query results in the list response page.
 // Atlassian Docs: https://developer.atlassian.com/cloud/admin/user-provisioning/rest/api-group-users/#api-scim-directory-directoryid-users-get
 // Library Docs: N/A
-func (s *SCIMUserService) Gets(ctx context.Context, directoryID string, opts *SCIMUserGetsOptionsScheme, startIndex int, count int) (result *SCIMUserPageScheme, response *Response, err error) {
+func (s *SCIMUserService) Gets(ctx context.Context, directoryID string, opts *SCIMUserGetsOptionsScheme, startIndex, count int) (result *SCIMUserPageScheme, response *Response, err error) {
 
 	if len(directoryID) == 0 {
 		return nil, nil, fmt.Errorf("error!, please provide a valid directoryID value")
@@ -446,6 +446,82 @@ type SCIMUserToPathScheme struct {
 	Schemas    []string                         `json:"schemas,omitempty"`
 	Operations []*SCIMUserToPathOperationScheme `json:"operations,omitempty"`
 }
+
+func (s *SCIMUserToPathScheme) AddStringOperation(operation, path, value string) (err error) {
+
+	if len(operation) == 0 {
+		return fmt.Errorf("error!, please provide a valid operation value, you can check the availables values calling the user schemas")
+	}
+
+	if len(path) == 0 {
+		return fmt.Errorf("error!, please provide a valid path value")
+	}
+
+	if len(value) == 0 {
+		return fmt.Errorf("error!, please provide a valid value value")
+	}
+
+	s.Operations = append(s.Operations, &SCIMUserToPathOperationScheme{
+		Op:    operation,
+		Path:  path,
+		Value: value,
+	})
+
+	return
+}
+
+func (s *SCIMUserToPathScheme) AddBoolOperation(operation, path string, value bool) (err error) {
+
+	if len(operation) == 0 {
+		return fmt.Errorf("error!, please provide a valid operation value, you can check the availables values calling the user schemas")
+	}
+
+	if len(path) == 0 {
+		return fmt.Errorf("error!, please provide a valid path value")
+	}
+
+	s.Operations = append(s.Operations, &SCIMUserToPathOperationScheme{
+		Op:    operation,
+		Path:  path,
+		Value: value,
+	})
+
+	return
+}
+
+func (s *SCIMUserToPathScheme) AddComplexOperation(operation, path string, values []*SCIMUserComplexOperationScheme) (err error) {
+
+	if len(operation) == 0 {
+		return fmt.Errorf("error!, please provide a valid operation value, you can check the availables values calling the user schemas")
+	}
+
+	if len(path) == 0 {
+		return fmt.Errorf("error!, please provide a valid path value")
+	}
+
+	if values == nil {
+		return fmt.Errorf("error!, please provide a valid SCIMUserComplexOperationScheme slice pointer")
+	}
+
+	if len(values) == 0 {
+		return fmt.Errorf("error!, the values variable must contains SCIMUserComplexOperationScheme nodes")
+	}
+
+	s.Operations = append(s.Operations, &SCIMUserToPathOperationScheme{
+		Op:    operation,
+		Path:  path,
+		Value: values,
+	})
+
+	return
+}
+
+type SCIMUserComplexOperationScheme struct {
+	Value     string `json:"value,omitempty"`
+	ValueType string `json:"type,omitempty"` // Available values (work, home, other)
+	Primary   bool   `json:"primary,omitempty"`
+}
+
 type SCIMUserToPathValueScheme struct {
 	Array               bool   `json:"array,omitempty"`
 	Null                bool   `json:"null,omitempty"`
@@ -469,10 +545,11 @@ type SCIMUserToPathValueScheme struct {
 	Binary              bool   `json:"binary,omitempty"`
 	Float               bool   `json:"float,omitempty"`
 }
+
 type SCIMUserToPathOperationScheme struct {
-	Op    string                     `json:"op,omitempty"`
-	Path  string                     `json:"path,omitempty"`
-	Value *SCIMUserToPathValueScheme `json:"value,omitempty"`
+	Op    string      `json:"op,omitempty"`
+	Path  string      `json:"path,omitempty"`
+	Value interface{} `json:"value,omitempty"`
 }
 
 // Updates a user's information in a directory by userId via user attributes.

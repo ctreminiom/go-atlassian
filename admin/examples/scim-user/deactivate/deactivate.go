@@ -25,7 +25,7 @@ func main() {
 		userID      = "ef5ff80e-9ca6-449c-8cca-5b621085c6c9"
 	)
 
-	user, response, err := cloudAdmin.SCIM.User.Get(context.Background(), directoryID, userID, nil, nil)
+	response, err := cloudAdmin.SCIM.User.Deactivate(context.Background(), directoryID, userID)
 	if err != nil {
 		if response != nil {
 			log.Println("Response HTTP Response", string(response.BodyAsBytes))
@@ -35,7 +35,4 @@ func main() {
 
 	log.Println("Response HTTP Code", response.StatusCode)
 	log.Println("HTTP Endpoint Used", response.Endpoint)
-	log.Println(user.UserName)
-	log.Println(user.Name)
-
 }

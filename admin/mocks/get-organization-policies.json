@@ -1,0 +1,64 @@
+{
+  "data": [
+    {
+      "type": "policy",
+      "id": "60f0f660-be3e-4d70-bd34-9c2858ec040f",
+      "attributes": {
+        "type": "admin-notification-settings",
+        "name": "default-admin-notification-policy",
+        "resources": [],
+        "rule": {
+          "off": []
+        },
+        "status": "enabled",
+        "createdAt": "2021-02-08T23:27:30.951Z",
+        "updatedAt": null
+      },
+      "links": null,
+      "relations": null
+    },
+    {
+      "type": "policy",
+      "id": "75a9fbf7-c4c7-46f8-92ce-ce51799b98a4",
+      "attributes": {
+        "type": "data-residency",
+        "name": "eu-realm-policy",
+        "resources": [],
+        "rule": {
+          "in": [
+            "eu"
+          ]
+        },
+        "status": "enabled",
+        "createdAt": "2021-02-08T23:27:30.951Z",
+        "updatedAt": null
+      },
+      "links": null,
+      "relations": null
+    },
+    {
+      "type": "policy",
+      "id": "c28a08d9-8460-4959-bbd3-59fdd2e5d83b",
+      "attributes": {
+        "type": "data-residency",
+        "name": "us-realm-policy",
+        "resources": [],
+        "rule": {
+          "in": [
+            "us"
+          ]
+        },
+        "status": "enabled",
+        "createdAt": "2021-02-08T23:27:30.951Z",
+        "updatedAt": null
+      },
+      "links": null,
+      "relations": null
+    }
+  ],
+  "links": {},
+  "meta": {
+    "next": null,
+    "page_size": 3
+  }
+}

@@ -1,0 +1,1206 @@
+{
+  "data": [
+    {
+      "id": "API_TOKEN_CREATED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "API_TOKEN_REVOKED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "ADDED_ORG_ADMIN",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "DOMAIN_CLAIMED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "SITE_CREATED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "TWOSV_ENABLED_FOR_USER",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "TWOSV_ENFORCED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "EXPORT_DOMAIN_ACCOUNT",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "EXPORT_AUDIT_LOG",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "EXPORT_MANAGED_ACCOUNT",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "SITE_INITIATED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "DOMAIN_REMOVED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "REMOVED_ORG_ADMIN",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "SITE_RENAME_EVENT",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "SITE_TRANSFERRED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "RESET_ALL_MANAGED_ACCOUNT_PASSWORDS",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "SET_SESSION_POLICY",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "DOMAIN_VERIFICATION_STARTED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "SITE_TRANSFERRED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "TWOSV_DISABLED_FOR_USER",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "TWOSV_UNENFORCED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "AUTH_POLICY_CREATED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "POLICY_CREATED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "SAML_CONFIG_CREATED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "AUTH_POLICY_DELETED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "POLICY_DELETED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "SAML_CONFIG_DELETED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "POLICY_DISABLED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "POLICY_ENFORCED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "EXPORT_UNMANAGED_PRODUCT_INSTANCES",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "MIGRATION_SCHEDULED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "AUTH_POLICY_UPDATED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "AUTH_POLICY_TYPE_UPDATED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "DEFAULT_AUTH_POLICY_UPDATED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "POLICY_UPDATED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "SAML_CONFIG_UPDATED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "DOMAIN_ADDED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "TWOSV_DISABLED_FOR_USER",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "USER_ACCESS_SETTINGS_DOMAIN_ADDED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "GROUP_ADDED_TO_SITE",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "SCIM_GROUP_ADD_MEMBER",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "USER_ADDED_TO_GROUP",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "SCIM_GROUP_UNMANAGED_MEMBER_ADDED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "USER_ADDED_TO_SITE",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "BECOME_MANAGED_SCIM_USER",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "BECOME_UNMANAGED_SCIM_USER",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "DOMAIN_AUTH_POLICY_CHANGED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "PASSWORD_POLICY_CHANGED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "SAML_POLICY_CHANGED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "SET_SESSION_POLICY",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "USER_AUTH_POLICY_CHANGED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "SCIM_TROUBLESHOOTING_LOG_CLEARED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "SCIM_AUTO_SYNC_COMPLETE",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "SCIM_MANUAL_SYNC_COMPLETE",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "SCIM_DIRECTORY_CREATED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "SCIM_GROUP_CREATE",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "SCIM_USER_CREATE",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "SCIM_UNMANAGED_USER_CREATED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "MANAGED_ACCOUNT_DEACTIVATED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "DOMAIN_DELETED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "DOMAIN_AUTH_POLICY_DELETED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "MANAGED_ACCOUNT_DELETED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "TWOSV_UNENFORCED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "TWOSV_ENABLED_FOR_USER",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "SAML_POLICY_DELETED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "USER_AUTH_POLICY_DELETED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "SCIM_DIRECTORY_DELETED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "SCIM_GROUP_DELETE",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "SCIM_USER_DELETE",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "SCIM_UNMANAGED_USER_DELETED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "MANAGED_ACCOUNT_DELETION_CANCELLED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "MANAGED_ACCOUNT_DELETION_SCHEDULED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "GSYNC_SSO_DISABLED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "SCIM_SYNC_DISABLED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "GSYNC_SSO_ENABLED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "SCIM_SYNC_ENABLED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "DOMAIN_AUTH_POLICY_FAILED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "USER_AUTH_POLICY_FAILED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "GROUP_ADDED_AS_PRODUCT_DEFAULT",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "GROUP_ADDED_AS_ROLE_DEFAULT",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "GROUP_CREATED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "GROUP_DELETED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "GROUP_GRANTED_ADMIN_ACCESS",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "GROUP_GRANTED_PRODUCT_ACCESS",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "GROUP_GRANTED_ROLE",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "GROUP_CREATED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "GROUP_DELETED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "GROUP_REMOVED_AS_PRODUCT_DEFAULT",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "GROUP_REMOVED_AS_ROLE_DEFAULT",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "GROUP_REVOKED_ADMIN_ACCESS",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "GROUP_REVOKED_PRODUCT_ACCESS",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "GROUP_REVOKED_ROLE",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "GSYNC_CONNECTION",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "GSYNC_DISCONNECTION",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "SCIM_AUTO_SYNC_INITIATED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "SCIM_MANUAL_SYNC_INITIATED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "EMAIL_CHANGE",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "GSYNC_USER_INVITE",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "SCIM_USER_LINKED_TO_AA",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "USER_LOGIN",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "USER_LOGOUT",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "PASSWORD_CHANGE",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "PASSWORD_RESET_COMPLETE",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "PASSWORD_RESET_REQUEST",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "MANAGED_ACCOUNT_REACTIVATED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "DOMAIN_VERIFICATION_REMOVED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "USER_ACCESS_SETTINGS_DOMAIN_REMOVED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "GROUP_DELETED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "SCIM_GROUP_REMOVE_MEMBER",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "USER_REMOVED_FROM_GROUP",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "SCIM_GROUP_UNMANAGED_MEMBER_REMOVED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "SCIM_DIRECTORY_TOKEN_ROTATED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "SITE_SYNC_ALL_CONFLICTING_GROUPS",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "SITE_SYNC_CONFLICTING_GROUP",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "SCIM_USER_UNLINKED_FROM_AA",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "GSYNC_USER_INVITATION_MESSAGE_UPDATED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "TWOSV_ENFORCED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "USER_DETAIL_CHANGE",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "GROUP_UPDATED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "SCIM_GROUP_UPDATE",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "SCIM_USER_UPDATE",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "SCIM_UNMANAGED_USER_UPDATED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "USER_ADDED_TO_GROUP",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "USER_CREATED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "USER_DISABLED_ORG_ACCESS",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "USER_DISABLED_SITE_ACCESS",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "USER_ENABLED_ORG_ACCESS",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "USER_ENABLED_SITE_ACCESS",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "USER_GRANTED_PRODUCT_ACCESS",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "USER_GRANTED_ROLE",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "USER_INVITED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "USER_INVITE_TO_ORG",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "USER_LOGGED_IN_AS_USER",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "USER_ADDED_TO_GROUP",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "USER_LOGGED_IN_AS_USER",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "USER_PASSWORD_RESET_REQUESTED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "USER_RE_INVITED_TO_ORG",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "USER_REMOVED_FROM_GROUP",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "USER_DETAIL_CHANGE_REQUESTED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "USER_PASSWORD_RESET_REQUESTED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "USER_RE_INVITED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "USER_REMOVED_FROM_GROUP",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "USER_REMOVED_FROM_ORG",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "USER_REMOVED_FROM_SITE",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "USER_DETAILS_CHANGE_REQUESTED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "USER_REVOKED_PRODUCT_ACCESS",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "USER_REVOKED_ROLE",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "DOMAIN_VERIFICATION_COMPLETED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "RELEASE_TRACK_BUNDLE_RELEASED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    },
+    {
+      "id": "RELEASE_TRACK_SUBSCRIPTION_UPDATED",
+      "type": "eventActions",
+      "attributes": {
+        "groupDisplayName": "",
+        "displayName": ""
+      }
+    }
+  ],
+  "links": null,
+  "meta": null
+}

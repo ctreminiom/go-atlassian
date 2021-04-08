@@ -741,6 +741,10 @@ func TestIssueScheme_MergeCustomFields(t *testing.T) {
 		t.Fatal(err)
 	}
 
+	var customFieldMockedWithOutFields = CustomFields{
+		nil,
+	}
+
 	testCases := []struct {
 		name    string
 		fields  *CustomFields
@@ -751,6 +755,13 @@ func TestIssueScheme_MergeCustomFields(t *testing.T) {
 			fields:  &customFieldMockedWithFields,
 			wantErr: false,
 		},
+
+		{
+			name:    "MergeCustomFieldsWhenTheCustomFieldsAreEmpty",
+			fields:  &customFieldMockedWithOutFields,
+			wantErr: false,
+		},
+
 		{
 			name:    "MergeCustomFieldsWhenTheCustomFieldsIsNil",
 			fields:  nil,
@@ -762,13 +773,18 @@ func TestIssueScheme_MergeCustomFields(t *testing.T) {
 
 		t.Run(testCase.name, func(t *testing.T) {
 
-			issueScheme := &IssueScheme{
-				Fields: &IssueFieldsScheme{
-					Summary:   "New summary test",
-					Project:   &ProjectScheme{ID: "10000"},
-					IssueType: &IssueTypeScheme{Name: "Story"},
-				},
-			}
+			/*
+				issueScheme := &IssueScheme{
+					Fields: &IssueFieldsScheme{
+						Summary:   "New summary test",
+						Project:   &ProjectScheme{ID: "10000"},
+						IssueType: &IssueTypeScheme{Name: "Story"},
+					},
+				}
+
+			*/
+
+			issueScheme := &IssueScheme{}
 
 			issueSchemeWithCustomFields, err := issueScheme.MergeCustomFields(testCase.fields)
 
@@ -2837,6 +2853,65 @@ func TestUpdateOperations_AddStringOperation(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 				assert.Error(t, err)
+			}
+
+		})
+
+	}
+
+}
+
+func TestIssueScheme_ToMap(t *testing.T) {
+
+	testCases := []struct {
+		name    string
+		issue   *IssueScheme
+		wantErr bool
+	}{
+		{
+			name: "ConvertIssueStructToMapWhenTheParametersAreCorrect",
+			issue: &IssueScheme{
+				Fields: &IssueFieldsScheme{
+					Summary:   "New summary test",
+					Project:   &ProjectScheme{ID: "10000"},
+					IssueType: &IssueTypeScheme{Name: "Story"},
+				},
+			},
+			wantErr: false,
+		},
+
+		{
+			name:    "ConvertIssueStructToMapWhenTheIssueStructIsNil",
+			issue:   nil,
+			wantErr: false,
+		},
+
+		{
+			name: "ConvertIssueStructToMapWhenTheParametersAreCorrect",
+			issue: &IssueScheme{
+				Fields: &IssueFieldsScheme{
+					Summary:   "New summary test",
+					Project:   &ProjectScheme{ID: "10000"},
+					IssueType: &IssueTypeScheme{Name: "Story"},
+				},
+			},
+			wantErr: false,
+		},
+	}
+
+	for _, testCase := range testCases {
+
+		t.Run(testCase.name, func(t *testing.T) {
+
+			result, err := testCase.issue.ToMap()
+
+			if testCase.wantErr {
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+				assert.Error(t, err)
+			} else {
+				t.Log(result)
 			}
 
 		})

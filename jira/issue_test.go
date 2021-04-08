@@ -791,6 +791,71 @@ func TestIssueScheme_MergeCustomFields(t *testing.T) {
 
 }
 
+func TestIssueScheme_MergeOperations(t *testing.T) {
+
+	var operations = &UpdateOperations{}
+
+	err := operations.AddArrayOperation("labels", map[string]string{
+		"triaged":   "remove",
+		"triaged-2": "remove",
+		"triaged-1": "remove",
+		"blocker":   "remove",
+	})
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	testCases := []struct {
+		name       string
+		operations *UpdateOperations
+		wantErr    bool
+	}{
+		{
+			name:       "MergeOperationsWhenTheOperationsAreCorrect",
+			operations: operations,
+			wantErr:    false,
+		},
+		{
+			name:       "MergeOperationsWhenTheOperationsAreNil",
+			operations: nil,
+			wantErr:    true,
+		},
+	}
+
+	for _, testCase := range testCases {
+
+		t.Run(testCase.name, func(t *testing.T) {
+
+			issueScheme := &IssueScheme{
+				Fields: &IssueFieldsScheme{
+					Summary:   "New summary test",
+					Project:   &ProjectScheme{ID: "10000"},
+					IssueType: &IssueTypeScheme{Name: "Story"},
+				},
+			}
+
+			issueSchemeWithOperations, err := issueScheme.MergeOperations(testCase.operations)
+
+			if testCase.wantErr {
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+				assert.Error(t, err)
+			}
+
+			empJSON, err := json.MarshalIndent(issueSchemeWithOperations, "", "  ")
+			if err != nil {
+				log.Fatalf(err.Error())
+			}
+
+			t.Log(string(empJSON))
+		})
+
+	}
+
+}
+
 func TestIssueService_Assign(t *testing.T) {
 
 	testCases := []struct {

@@ -53,7 +53,7 @@ type IssueFieldsScheme struct {
 	Labels                   []string                  `json:"labels,omitempty"`
 }
 
-func (i *IssueScheme) Merge(fields *CustomFields) (result map[string]interface{}, err error) {
+func (i *IssueScheme) MergeCustomFields(fields *CustomFields) (result map[string]interface{}, err error) {
 
 	if fields == nil {
 		return nil, fmt.Errorf("error, please provide a value *CustomFields pointer")
@@ -82,7 +82,11 @@ func (i *IssueScheme) Merge(fields *CustomFields) (result map[string]interface{}
 	return issueSchemeAsMap, nil
 }
 
-func (i *IssueScheme) ToMap() (result map[string]interface{}, err error) {
+func (i *IssueScheme) MergeOperations(operations *UpdateOperations) (result map[string]interface{}, err error) {
+
+	if operations == nil {
+		return nil, fmt.Errorf("error, please provide a value *CustomFields pointer")
+	}
 
 	//Convert the IssueScheme struct to map[string]interface{}
 	issueSchemeAsBytes, err := json.Marshal(i)
@@ -91,11 +95,29 @@ func (i *IssueScheme) ToMap() (result map[string]interface{}, err error) {
 	}
 
 	issueSchemeAsMap := make(map[string]interface{})
-	err = json.Unmarshal(issueSchemeAsBytes, &issueSchemeAsMap)
-	if err != nil {
+	if err = json.Unmarshal(issueSchemeAsBytes, &issueSchemeAsMap); err != nil {
 		return nil, err
 	}
 
+	//For each customField created, merge it into the eAsMap
+	for _, customField := range operations.Fields {
+		if err = mergo.Merge(&issueSchemeAsMap, customField, mergo.WithOverride); err != nil {
+			return nil, err
+		}
+	}
+
+	return issueSchemeAsMap, nil
+}
+
+func (i *IssueScheme) ToMap() (result map[string]interface{}, err error) {
+
+	//Convert the IssueScheme struct to map[string]interface{}
+	issueSchemeAsBytes, _ := json.Marshal(i)
+
+	issueSchemeAsMap := make(map[string]interface{})
+	if err = json.Unmarshal(issueSchemeAsBytes, &issueSchemeAsMap); err != nil {
+		return nil, err
+	}
 	return issueSchemeAsMap, err
 }
 
@@ -442,7 +464,7 @@ func (i *IssueService) Create(ctx context.Context, payload *IssueScheme, customF
 
 	var endpoint = "rest/api/3/issue"
 
-	payloadWithCustomFields, err := payload.Merge(customFields)
+	payloadWithCustomFields, err := payload.MergeCustomFields(customFields)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -512,7 +534,7 @@ func (i *IssueService) Creates(ctx context.Context, payload []*IssueBulkScheme) 
 		}
 
 		//Convert the issueScheme struct to map
-		newIssueAsMap, err := newIssue.Payload.Merge(newIssue.CustomFields)
+		newIssueAsMap, err := newIssue.Payload.MergeCustomFields(newIssue.CustomFields)
 		if err != nil {
 			return nil, nil, err
 		}
@@ -615,9 +637,68 @@ func (i *IssueService) Get(ctx context.Context, issueKeyOrID string, fields []st
 	return
 }
 
+type UpdateOperations struct{ Fields []map[string]interface{} }
+
+func (u *UpdateOperations) AddArrayOperation(customFieldID string, mapping map[string]string) (err error) {
+
+	if len(customFieldID) == 0 {
+		return fmt.Errorf("error, please provide a valid customFieldID value")
+	}
+
+	var operations []map[string]interface{}
+	for value, operation := range mapping {
+
+		var operationNode = map[string]interface{}{}
+		operationNode[operation] = value
+
+		operations = append(operations, operationNode)
+	}
+
+	var fieldNode = map[string]interface{}{}
+	fieldNode[customFieldID] = operations
+
+	var updateNode = map[string]interface{}{}
+	updateNode["update"] = fieldNode
+
+	u.Fields = append(u.Fields, updateNode)
+	return
+}
+
+func (u *UpdateOperations) AddStringOperation(customFieldID, operation, value string) (err error) {
+
+	if len(customFieldID) == 0 {
+		return fmt.Errorf("error, please provide a valid customFieldID value")
+	}
+
+	if len(operation) == 0 {
+		return fmt.Errorf("error, please provide a valid operation value")
+	}
+
+	if len(value) == 0 {
+		return fmt.Errorf("error, please provide a valid value value")
+	}
+
+	var operations []map[string]interface{}
+
+	var operationNode = map[string]interface{}{}
+	operationNode[operation] = value
+
+	operations = append(operations, operationNode)
+
+	var fieldNode = map[string]interface{}{}
+	fieldNode[customFieldID] = operations
+
+	var updateNode = map[string]interface{}{}
+	updateNode["update"] = fieldNode
+
+	u.Fields = append(u.Fields, updateNode)
+
+	return
+}
+
 // Edits an issue.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues#edit-issue
-func (i *IssueService) Update(ctx context.Context, issueKeyOrID string, notify bool, payload *IssueScheme, customFields *CustomFields) (response *Response, err error) {
+func (i *IssueService) Update(ctx context.Context, issueKeyOrID string, notify bool, payload *IssueScheme, customFields *CustomFields, operations *UpdateOperations) (response *Response, err error) {
 
 	if len(issueKeyOrID) == 0 {
 		return nil, fmt.Errorf("error, please provide a valid issueKeyOrID value")
@@ -639,14 +720,42 @@ func (i *IssueService) Update(ctx context.Context, issueKeyOrID string, notify b
 		endpoint = fmt.Sprintf("rest/api/3/issue/%v", issueKeyOrID)
 	}
 
-	payloadWithCustomFields, err := payload.Merge(customFields)
-	if err != nil {
-		return nil, err
+	//Check if the method contais custom fields
+	var payloadAsMap map[string]interface{}
+
+	if customFields != nil {
+
+		payloadWithCustomFields, err := payload.MergeCustomFields(customFields)
+		if err != nil {
+			return nil, err
+		}
+
+		payloadAsMap = payloadWithCustomFields
+
 	}
 
-	request, err := i.client.newRequest(ctx, http.MethodPut, endpoint, payloadWithCustomFields)
-	if err != nil {
-		return nil, err
+	if operations != nil {
+
+		payloadWithOperations, err := payload.MergeOperations(operations)
+		if err != nil {
+			return nil, err
+		}
+
+		payloadAsMap = payloadWithOperations
+	}
+
+	var request *http.Request
+
+	if payloadAsMap != nil {
+		request, err = i.client.newRequest(ctx, http.MethodPut, endpoint, payloadAsMap)
+		if err != nil {
+			return nil, err
+		}
+	} else {
+		request, err = i.client.newRequest(ctx, http.MethodPut, endpoint, payload)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	request.Header.Set("Accept", "application/json")

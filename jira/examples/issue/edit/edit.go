@@ -40,7 +40,26 @@ func main() {
 		log.Fatal(err)
 	}
 
-	response, err := atlassian.Issue.Update(context.Background(), "KP-2", false, &payload, &customFields)
+	//Issue Update Operations
+	var operations = &jira.UpdateOperations{}
+
+	err = operations.AddArrayOperation("labels", map[string]string{
+		"triaged":   "remove",
+		"triaged-2": "remove",
+		"triaged-1": "remove",
+		"blocker":   "remove",
+	})
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = operations.AddStringOperation("summary", "set", "new summary using operation")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	response, err := atlassian.Issue.Update(context.Background(), "KP-2", false, &payload, &customFields, operations)
 	if err != nil {
 		if response != nil {
 			log.Println("Response HTTP Response", string(response.BodyAsBytes))

@@ -726,7 +726,7 @@ func TestCustomFields_Users(t *testing.T) {
 
 }
 
-func TestIssueScheme_Merge(t *testing.T) {
+func TestIssueScheme_MergeCustomFields(t *testing.T) {
 
 	var customFieldMockedWithFields = CustomFields{}
 
@@ -741,6 +741,10 @@ func TestIssueScheme_Merge(t *testing.T) {
 		t.Fatal(err)
 	}
 
+	var customFieldMockedWithOutFields = CustomFields{
+		nil,
+	}
+
 	testCases := []struct {
 		name    string
 		fields  *CustomFields
@@ -751,10 +755,87 @@ func TestIssueScheme_Merge(t *testing.T) {
 			fields:  &customFieldMockedWithFields,
 			wantErr: false,
 		},
+
+		{
+			name:    "MergeCustomFieldsWhenTheCustomFieldsAreEmpty",
+			fields:  &customFieldMockedWithOutFields,
+			wantErr: false,
+		},
+
 		{
 			name:    "MergeCustomFieldsWhenTheCustomFieldsIsNil",
 			fields:  nil,
 			wantErr: true,
+		},
+	}
+
+	for _, testCase := range testCases {
+
+		t.Run(testCase.name, func(t *testing.T) {
+
+			/*
+				issueScheme := &IssueScheme{
+					Fields: &IssueFieldsScheme{
+						Summary:   "New summary test",
+						Project:   &ProjectScheme{ID: "10000"},
+						IssueType: &IssueTypeScheme{Name: "Story"},
+					},
+				}
+
+			*/
+
+			issueScheme := &IssueScheme{}
+
+			issueSchemeWithCustomFields, err := issueScheme.MergeCustomFields(testCase.fields)
+
+			if testCase.wantErr {
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+				assert.Error(t, err)
+			}
+
+			empJSON, err := json.MarshalIndent(issueSchemeWithCustomFields, "", "  ")
+			if err != nil {
+				log.Fatalf(err.Error())
+			}
+
+			t.Log(string(empJSON))
+		})
+
+	}
+
+}
+
+func TestIssueScheme_MergeOperations(t *testing.T) {
+
+	var operations = &UpdateOperations{}
+
+	err := operations.AddArrayOperation("labels", map[string]string{
+		"triaged":   "remove",
+		"triaged-2": "remove",
+		"triaged-1": "remove",
+		"blocker":   "remove",
+	})
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	testCases := []struct {
+		name       string
+		operations *UpdateOperations
+		wantErr    bool
+	}{
+		{
+			name:       "MergeOperationsWhenTheOperationsAreCorrect",
+			operations: operations,
+			wantErr:    false,
+		},
+		{
+			name:       "MergeOperationsWhenTheOperationsAreNil",
+			operations: nil,
+			wantErr:    true,
 		},
 	}
 
@@ -770,7 +851,7 @@ func TestIssueScheme_Merge(t *testing.T) {
 				},
 			}
 
-			issueSchemeWithCustomFields, err := issueScheme.Merge(testCase.fields)
+			issueSchemeWithOperations, err := issueScheme.MergeOperations(testCase.operations)
 
 			if testCase.wantErr {
 				if err != nil {
@@ -779,7 +860,7 @@ func TestIssueScheme_Merge(t *testing.T) {
 				assert.Error(t, err)
 			}
 
-			empJSON, err := json.MarshalIndent(issueSchemeWithCustomFields, "", "  ")
+			empJSON, err := json.MarshalIndent(issueSchemeWithOperations, "", "  ")
 			if err != nil {
 				log.Fatalf(err.Error())
 			}
@@ -2369,12 +2450,26 @@ func TestIssueService_Update(t *testing.T) {
 
 	var customFieldMockedWithOutFields = CustomFields{}
 
+	var operationMocked = UpdateOperations{}
+
+	err = operationMocked.AddArrayOperation("labels", map[string]string{
+		"triaged":   "remove",
+		"triaged-2": "remove",
+		"triaged-1": "remove",
+		"blocker":   "remove",
+	})
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
 	testCases := []struct {
 		name               string
 		issueKeyOrID       string
 		notify             bool
 		payload            *IssueScheme
 		customFields       *CustomFields
+		operations         *UpdateOperations
 		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string
@@ -2391,12 +2486,67 @@ func TestIssueService_Update(t *testing.T) {
 					Summary: "New summary test",
 				},
 			},
+			operations:         nil,
 			customFields:       &customFieldMockedWithFields,
 			wantHTTPMethod:     http.MethodPut,
 			endpoint:           "/rest/api/3/issue/DUMMY-3?notifyUsers=false",
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusNoContent,
 			wantErr:            false,
+		},
+
+		{
+			name:         "UpdateIssueWhenTheOperationsAreProvided",
+			issueKeyOrID: "DUMMY-3",
+			notify:       false,
+			payload: &IssueScheme{
+				Fields: &IssueFieldsScheme{
+					Summary: "New summary test",
+				},
+			},
+			operations:         &operationMocked,
+			customFields:       &customFieldMockedWithFields,
+			wantHTTPMethod:     http.MethodPut,
+			endpoint:           "/rest/api/3/issue/DUMMY-3?notifyUsers=false",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            false,
+		},
+
+		{
+			name:         "UpdateIssueWhenTheOperationsAndCustomFieldsAreNotSet",
+			issueKeyOrID: "DUMMY-3",
+			notify:       false,
+			payload: &IssueScheme{
+				Fields: &IssueFieldsScheme{
+					Summary: "New summary test",
+				},
+			},
+			operations:         nil,
+			customFields:       nil,
+			wantHTTPMethod:     http.MethodPut,
+			endpoint:           "/rest/api/3/issue/DUMMY-3?notifyUsers=false",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            false,
+		},
+
+		{
+			name:         "UpdateIssueWhenTheOperationsAndCustomFieldsAreNotSetAndContextIsNil",
+			issueKeyOrID: "DUMMY-3",
+			notify:       false,
+			payload: &IssueScheme{
+				Fields: &IssueFieldsScheme{
+					Summary: "New summary test",
+				},
+			},
+			operations:         nil,
+			customFields:       nil,
+			wantHTTPMethod:     http.MethodPut,
+			endpoint:           "/rest/api/3/issue/DUMMY-3?notifyUsers=false",
+			context:            nil,
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
 		},
 
 		{
@@ -2447,7 +2597,7 @@ func TestIssueService_Update(t *testing.T) {
 			endpoint:           "/rest/api/3/issue/DUMMY-3?notifyUsers=false",
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusNoContent,
-			wantErr:            true,
+			wantErr:            false,
 		},
 
 		{
@@ -2578,6 +2728,7 @@ func TestIssueService_Update(t *testing.T) {
 				testCase.notify,
 				testCase.payload,
 				testCase.customFields,
+				nil,
 			)
 
 			if testCase.wantErr {
@@ -2609,6 +2760,178 @@ func TestIssueService_Update(t *testing.T) {
 				assert.Equal(t, testCase.endpoint, endpointToAssert)
 
 			}
+		})
+
+	}
+
+}
+
+func TestUpdateOperations_AddArrayOperation(t *testing.T) {
+
+	testCases := []struct {
+		name          string
+		customFieldID string
+		mapping       map[string]string
+		wantErr       bool
+	}{
+		{
+			name:          "AddArrayOperationWhenTheParametersAreSet",
+			customFieldID: "customfield_000",
+			mapping: map[string]string{
+				"triaged":   "remove",
+				"triaged-2": "remove",
+				"triaged-1": "remove",
+				"blocker":   "remove",
+			},
+			wantErr: false,
+		},
+
+		{
+			name:          "AddArrayOperationWhenTheCustomFieldIDIsNotSet",
+			customFieldID: "",
+			mapping: map[string]string{
+				"triaged":   "remove",
+				"triaged-2": "remove",
+				"triaged-1": "remove",
+				"blocker":   "remove",
+			},
+			wantErr: true,
+		},
+	}
+
+	for _, testCase := range testCases {
+
+		t.Run(testCase.name, func(t *testing.T) {
+
+			var operations = UpdateOperations{}
+			err := operations.AddArrayOperation(testCase.customFieldID, testCase.mapping)
+
+			if testCase.wantErr {
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+				assert.Error(t, err)
+			}
+
+		})
+
+	}
+
+}
+
+func TestUpdateOperations_AddStringOperation(t *testing.T) {
+
+	testCases := []struct {
+		name                            string
+		customFieldID, operation, value string
+		wantErr                         bool
+	}{
+		{
+			name:          "AddStringOperationWhenTheParametersAreSet",
+			customFieldID: "summary",
+			operation:     "set",
+			value:         "new summary using operation",
+			wantErr:       false,
+		},
+
+		{
+			name:          "AddStringOperationWhenTheCustomFieldIDIsNotSet",
+			customFieldID: "",
+			operation:     "set",
+			value:         "new summary using operation",
+			wantErr:       true,
+		},
+
+		{
+			name:          "AddStringOperationWhenTheOperationIsNotSet",
+			customFieldID: "summary",
+			operation:     "",
+			value:         "new summary using operation",
+			wantErr:       true,
+		},
+
+		{
+			name:          "AddStringOperationWhenTheValueIsNotSet",
+			customFieldID: "summary",
+			operation:     "set",
+			value:         "",
+			wantErr:       true,
+		},
+	}
+
+	for _, testCase := range testCases {
+
+		t.Run(testCase.name, func(t *testing.T) {
+
+			var operations = UpdateOperations{}
+			err := operations.AddStringOperation(testCase.customFieldID, testCase.operation, testCase.value)
+
+			if testCase.wantErr {
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+				assert.Error(t, err)
+			}
+
+		})
+
+	}
+
+}
+
+func TestIssueScheme_ToMap(t *testing.T) {
+
+	testCases := []struct {
+		name    string
+		issue   *IssueScheme
+		wantErr bool
+	}{
+		{
+			name: "ConvertIssueStructToMapWhenTheParametersAreCorrect",
+			issue: &IssueScheme{
+				Fields: &IssueFieldsScheme{
+					Summary:   "New summary test",
+					Project:   &ProjectScheme{ID: "10000"},
+					IssueType: &IssueTypeScheme{Name: "Story"},
+				},
+			},
+			wantErr: false,
+		},
+
+		{
+			name:    "ConvertIssueStructToMapWhenTheIssueStructIsNil",
+			issue:   nil,
+			wantErr: false,
+		},
+
+		{
+			name: "ConvertIssueStructToMapWhenTheParametersAreCorrect",
+			issue: &IssueScheme{
+				Fields: &IssueFieldsScheme{
+					Summary:   "New summary test",
+					Project:   &ProjectScheme{ID: "10000"},
+					IssueType: &IssueTypeScheme{Name: "Story"},
+				},
+			},
+			wantErr: false,
+		},
+	}
+
+	for _, testCase := range testCases {
+
+		t.Run(testCase.name, func(t *testing.T) {
+
+			result, err := testCase.issue.ToMap()
+
+			if testCase.wantErr {
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+				assert.Error(t, err)
+			} else {
+				t.Log(result)
+			}
+
 		})
 
 	}

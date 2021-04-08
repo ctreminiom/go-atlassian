@@ -726,7 +726,7 @@ func TestCustomFields_Users(t *testing.T) {
 
 }
 
-func TestIssueScheme_Merge(t *testing.T) {
+func TestIssueScheme_MergeCustomFields(t *testing.T) {
 
 	var customFieldMockedWithFields = CustomFields{}
 
@@ -770,7 +770,7 @@ func TestIssueScheme_Merge(t *testing.T) {
 				},
 			}
 
-			issueSchemeWithCustomFields, err := issueScheme.Merge(testCase.fields)
+			issueSchemeWithCustomFields, err := issueScheme.MergeCustomFields(testCase.fields)
 
 			if testCase.wantErr {
 				if err != nil {
@@ -2369,12 +2369,26 @@ func TestIssueService_Update(t *testing.T) {
 
 	var customFieldMockedWithOutFields = CustomFields{}
 
+	var operationMocked = UpdateOperations{}
+
+	err = operationMocked.AddArrayOperation("labels", map[string]string{
+		"triaged":   "remove",
+		"triaged-2": "remove",
+		"triaged-1": "remove",
+		"blocker":   "remove",
+	})
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
 	testCases := []struct {
 		name               string
 		issueKeyOrID       string
 		notify             bool
 		payload            *IssueScheme
 		customFields       *CustomFields
+		operations         *UpdateOperations
 		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string
@@ -2391,7 +2405,44 @@ func TestIssueService_Update(t *testing.T) {
 					Summary: "New summary test",
 				},
 			},
+			operations:         nil,
 			customFields:       &customFieldMockedWithFields,
+			wantHTTPMethod:     http.MethodPut,
+			endpoint:           "/rest/api/3/issue/DUMMY-3?notifyUsers=false",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            false,
+		},
+
+		{
+			name:         "UpdateIssueWhenTheOperationsAreProvided",
+			issueKeyOrID: "DUMMY-3",
+			notify:       false,
+			payload: &IssueScheme{
+				Fields: &IssueFieldsScheme{
+					Summary: "New summary test",
+				},
+			},
+			operations:         &operationMocked,
+			customFields:       &customFieldMockedWithFields,
+			wantHTTPMethod:     http.MethodPut,
+			endpoint:           "/rest/api/3/issue/DUMMY-3?notifyUsers=false",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            false,
+		},
+
+		{
+			name:         "UpdateIssueWhenTheOperationsAndCustomFieldsAreNotSet",
+			issueKeyOrID: "DUMMY-3",
+			notify:       false,
+			payload: &IssueScheme{
+				Fields: &IssueFieldsScheme{
+					Summary: "New summary test",
+				},
+			},
+			operations:         nil,
+			customFields:       nil,
 			wantHTTPMethod:     http.MethodPut,
 			endpoint:           "/rest/api/3/issue/DUMMY-3?notifyUsers=false",
 			context:            context.Background(),
@@ -2447,7 +2498,7 @@ func TestIssueService_Update(t *testing.T) {
 			endpoint:           "/rest/api/3/issue/DUMMY-3?notifyUsers=false",
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusNoContent,
-			wantErr:            true,
+			wantErr:            false,
 		},
 
 		{
@@ -2578,6 +2629,7 @@ func TestIssueService_Update(t *testing.T) {
 				testCase.notify,
 				testCase.payload,
 				testCase.customFields,
+				nil,
 			)
 
 			if testCase.wantErr {
@@ -2609,6 +2661,119 @@ func TestIssueService_Update(t *testing.T) {
 				assert.Equal(t, testCase.endpoint, endpointToAssert)
 
 			}
+		})
+
+	}
+
+}
+
+func TestUpdateOperations_AddArrayOperation(t *testing.T) {
+
+	testCases := []struct {
+		name          string
+		customFieldID string
+		mapping       map[string]string
+		wantErr       bool
+	}{
+		{
+			name:          "AddArrayOperationWhenTheParametersAreSet",
+			customFieldID: "customfield_000",
+			mapping: map[string]string{
+				"triaged":   "remove",
+				"triaged-2": "remove",
+				"triaged-1": "remove",
+				"blocker":   "remove",
+			},
+			wantErr: false,
+		},
+
+		{
+			name:          "AddArrayOperationWhenTheCustomFieldIDIsNotSet",
+			customFieldID: "",
+			mapping: map[string]string{
+				"triaged":   "remove",
+				"triaged-2": "remove",
+				"triaged-1": "remove",
+				"blocker":   "remove",
+			},
+			wantErr: true,
+		},
+	}
+
+	for _, testCase := range testCases {
+
+		t.Run(testCase.name, func(t *testing.T) {
+
+			var operations = UpdateOperations{}
+			err := operations.AddArrayOperation(testCase.customFieldID, testCase.mapping)
+
+			if testCase.wantErr {
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+				assert.Error(t, err)
+			}
+
+		})
+
+	}
+
+}
+
+func TestUpdateOperations_AddStringOperation(t *testing.T) {
+
+	testCases := []struct {
+		name                            string
+		customFieldID, operation, value string
+		wantErr                         bool
+	}{
+		{
+			name:          "AddStringOperationWhenTheParametersAreSet",
+			customFieldID: "summary",
+			operation:     "set",
+			value:         "new summary using operation",
+			wantErr:       false,
+		},
+
+		{
+			name:          "AddStringOperationWhenTheCustomFieldIDIsNotSet",
+			customFieldID: "",
+			operation:     "set",
+			value:         "new summary using operation",
+			wantErr:       true,
+		},
+
+		{
+			name:          "AddStringOperationWhenTheOperationIsNotSet",
+			customFieldID: "summary",
+			operation:     "",
+			value:         "new summary using operation",
+			wantErr:       true,
+		},
+
+		{
+			name:          "AddStringOperationWhenTheValueIsNotSet",
+			customFieldID: "summary",
+			operation:     "set",
+			value:         "",
+			wantErr:       true,
+		},
+	}
+
+	for _, testCase := range testCases {
+
+		t.Run(testCase.name, func(t *testing.T) {
+
+			var operations = UpdateOperations{}
+			err := operations.AddStringOperation(testCase.customFieldID, testCase.operation, testCase.value)
+
+			if testCase.wantErr {
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+				assert.Error(t, err)
+			}
+
 		})
 
 	}

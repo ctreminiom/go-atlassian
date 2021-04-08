@@ -32,6 +32,10 @@ type IssueScheme struct {
 	Transitions []*IssueTransitionScheme `json:"transitions,omitempty"`
 	Changelog   *IssueChangelogScheme    `json:"changelog,omitempty"`
 	Fields      *IssueFieldsScheme       `json:"fields,omitempty"`
+	Update      *UpdateIssueScheme       `json:"fields,update"`
+}
+
+type UpdateIssueScheme struct {
 }
 
 type IssueFieldsScheme struct {

@@ -130,14 +130,15 @@ func main() {
 
 				csvRows = append(csvRows, csvRow{
 					Key:     issue,
-					From:    record.FromString,
-					To:      record.ToString,
+					Status:  record.FromString,
 					Pretty:  durafmt.ParseShort(diff).LimitFirstN(4).String(),
 					Days:    diff.Hours() / 24,
 					Hours:   diff.Hours(),
 					Minutes: diff.Minutes(),
 					Seconds: diff.Seconds(),
 				})
+
+				log.Println(index, durafmt.ParseShort(diff).LimitFirstN(4).String())
 
 			}
 
@@ -148,14 +149,15 @@ func main() {
 
 				csvRows = append(csvRows, csvRow{
 					Key:     issue,
-					From:    record.FromString,
-					To:      record.ToString,
+					Status:  record.ToString,
 					Pretty:  durafmt.ParseShort(diff).LimitFirstN(4).String(),
 					Days:    diff.Hours() / 24,
 					Hours:   diff.Hours(),
 					Minutes: diff.Minutes(),
 					Seconds: diff.Seconds(),
 				})
+
+				log.Println(index == len(records)-1, durafmt.ParseShort(diff).LimitFirstN(4).String())
 
 				break
 			}
@@ -165,14 +167,16 @@ func main() {
 
 			csvRows = append(csvRows, csvRow{
 				Key:     issue,
-				From:    record.FromString,
-				To:      record.ToString,
+				Status:  record.ToString,
 				Pretty:  durafmt.ParseShort(diff).LimitFirstN(4).String(),
 				Days:    diff.Hours() / 24,
 				Hours:   diff.Hours(),
 				Minutes: diff.Minutes(),
 				Seconds: diff.Seconds(),
 			})
+
+			log.Println(index, durafmt.ParseShort(diff).LimitFirstN(4).String())
+
 		}
 
 	}
@@ -191,7 +195,7 @@ func main() {
 	defer writer.Flush()
 
 	//Write the csv headers
-	if err = writer.Write([]string{"issue-key", "status-from", "status-to", "pretty", "days", "hours", "minutes", "seconds"}); err != nil {
+	if err = writer.Write([]string{"issue-key", "status", "pretty", "days", "hours", "minutes", "seconds"}); err != nil {
 		log.Fatal(err)
 	}
 
@@ -199,8 +203,7 @@ func main() {
 
 		if err = writer.Write([]string{
 			row.Key,
-			row.From,
-			row.To,
+			row.Status,
 			row.Pretty,
 			fmt.Sprintf("%.2f", row.Days),
 			fmt.Sprintf("%.2f", row.Hours),
@@ -234,8 +237,7 @@ type changelogRecord struct {
 
 type csvRow struct {
 	Key     string
-	From    string
-	To      string
+	Status  string
 	Pretty  string
 	Days    float64
 	Hours   float64

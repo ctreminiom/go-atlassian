@@ -1,14 +1,4 @@
-issue-key,status-from,status-to,pretty,days,hours,minutes,seconds
-DESK-12,Needs Approval,Waiting for support,9 minutes 43 seconds 216 milliseconds,0.01,0.16,9.72,583.22
-DESK-12,Needs Approval,Waiting for support,1 week 1 day 19 hours 56 minutes,8.83,211.94,12716.66,762999.59
-DESK-12,Waiting for support,Resolved,2 weeks 1 day 19 hours 10 minutes,15.80,379.17,22750.06,1365003.41
-DESK-11,Waiting for support,Resolved,2 hours 35 minutes 16 seconds 106 milliseconds,0.11,2.59,155.27,9316.11
-DESK-11,Waiting for support,Resolved,3 weeks 3 days 15 hours 25 minutes,24.64,591.43,35485.79,2129147.33
-KP-2,Backlog,Backlog,3 weeks 4 days 12 hours 54 minutes,25.54,612.90,36774.18,2206450.56
-KP-2,Backlog,Backlog,4 weeks 5 days 51 minutes 37 seconds,33.04,792.86,47571.63,2854297.91
-KP-1,Backlog,Done,10 seconds 616 milliseconds,0.00,0.00,0.18,10.62
-KP-1,Backlog,Done,11 weeks 5 days 16 hours 14 minutes,82.68,1984.25,119054.94,7143296.42
-DESK-5,Waiting for support,Resolved,856 milliseconds,0.00,0.00,0.01,0.86
-DESK-5,Waiting for support,Resolved,12 weeks 5 days 19 hours 1 minute,89.79,2155.02,129301.16,7758069.46
-DESK-3,Waiting for support,Escalated,10 weeks 3 days 2 hours 14 minutes,73.09,1754.24,105254.13,6315248.07
-DESK-3,Waiting for support,Escalated,2 weeks 2 days 16 hours 47 minutes,16.70,400.78,24047.05,1442823.25
+issue-key,status,pretty,days,hours,minutes,seconds
+DESK-12,Needs Approval,9 minutes 43 seconds 216 milliseconds,0.01,0.16,9.72,583.22
+DESK-12,Waiting for support,1 week 1 day 19 hours 56 minutes,8.83,211.94,12716.66,762999.59
+DESK-12,Resolved,3 weeks 18 hours 10 minutes 32 seconds,21.76,522.18,31330.55,1879832.99

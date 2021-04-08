@@ -56,9 +56,8 @@ func TestAuthenticationService_SetUserAgent(t *testing.T) {
 	}
 
 	type fields struct {
-		client    *Client
-		userAgent string
-		agent     string
+		client *Client
+		agent  string
 	}
 	type args struct {
 		userAgent string

@@ -2532,6 +2532,24 @@ func TestIssueService_Update(t *testing.T) {
 		},
 
 		{
+			name:         "UpdateIssueWhenTheOperationsAndCustomFieldsAreNotSetAndContextIsNil",
+			issueKeyOrID: "DUMMY-3",
+			notify:       false,
+			payload: &IssueScheme{
+				Fields: &IssueFieldsScheme{
+					Summary: "New summary test",
+				},
+			},
+			operations:         nil,
+			customFields:       nil,
+			wantHTTPMethod:     http.MethodPut,
+			endpoint:           "/rest/api/3/issue/DUMMY-3?notifyUsers=false",
+			context:            nil,
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+
+		{
 			name:         "UpdateIssueWhenTheNotifyParamIsTrue",
 			issueKeyOrID: "DUMMY-3",
 			notify:       true,

@@ -95,11 +95,15 @@ func (i *IssueScheme) MergeOperations(operations *UpdateOperations) (result map[
 	}
 
 	issueSchemeAsMap := make(map[string]interface{})
-	_ = json.Unmarshal(issueSchemeAsBytes, &issueSchemeAsMap)
+	if err = json.Unmarshal(issueSchemeAsBytes, &issueSchemeAsMap); err != nil {
+		return nil, err
+	}
 
 	//For each customField created, merge it into the eAsMap
 	for _, customField := range operations.Fields {
-		_ = mergo.Merge(&issueSchemeAsMap, customField, mergo.WithOverride)
+		if err = mergo.Merge(&issueSchemeAsMap, customField, mergo.WithOverride); err != nil {
+			return nil, err
+		}
 	}
 
 	return issueSchemeAsMap, nil
@@ -111,8 +115,9 @@ func (i *IssueScheme) ToMap() (result map[string]interface{}, err error) {
 	issueSchemeAsBytes, _ := json.Marshal(i)
 
 	issueSchemeAsMap := make(map[string]interface{})
-	_ = json.Unmarshal(issueSchemeAsBytes, &issueSchemeAsMap)
-
+	if err = json.Unmarshal(issueSchemeAsBytes, &issueSchemeAsMap); err != nil {
+		return nil, err
+	}
 	return issueSchemeAsMap, err
 }
 

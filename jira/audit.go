@@ -7,54 +7,62 @@ import (
 	"net/http"
 	"net/url"
 	"strconv"
+	"time"
 )
 
 type AuditService struct{ client *Client }
 
+type AuditRecordPageScheme struct {
+	Offset  int                  `json:"offset,omitempty"`
+	Limit   int                  `json:"limit,omitempty"`
+	Total   int                  `json:"total,omitempty"`
+	Records []*AuditRecordScheme `json:"records,omitempty"`
+}
+
 type AuditRecordScheme struct {
-	Offset  int `json:"offset,omitempty"`
-	Limit   int `json:"limit,omitempty"`
-	Total   int `json:"total,omitempty"`
-	Records []struct {
-		ID            int    `json:"id,omitempty"`
-		Summary       string `json:"summary,omitempty"`
-		RemoteAddress string `json:"remoteAddress,omitempty"`
-		AuthorKey     string `json:"authorKey,omitempty"`
-		Created       string `json:"created,omitempty"`
-		Category      string `json:"category,omitempty"`
-		EventSource   string `json:"eventSource,omitempty"`
-		Description   string `json:"description,omitempty"`
-		ObjectItem    struct {
-			ID         string `json:"id,omitempty"`
-			Name       string `json:"name,omitempty"`
-			TypeName   string `json:"typeName,omitempty"`
-			ParentID   string `json:"parentId,omitempty"`
-			ParentName string `json:"parentName,omitempty"`
-		} `json:"objectItem,omitempty"`
-		ChangedValues []struct {
-			FieldName   string `json:"fieldName,omitempty"`
-			ChangedFrom string `json:"changedFrom,omitempty"`
-			ChangedTo   string `json:"changedTo,omitempty"`
-		} `json:"changedValues,omitempty"`
-		AssociatedItems []struct {
-			ID         string `json:"id,omitempty"`
-			Name       string `json:"name,omitempty"`
-			TypeName   string `json:"typeName,omitempty"`
-			ParentID   string `json:"parentId,omitempty"`
-			ParentName string `json:"parentName,omitempty"`
-		} `json:"associatedItems,omitempty"`
-	} `json:"records,omitempty"`
+	ID              int                                `json:"id,omitempty"`
+	Summary         string                             `json:"summary,omitempty"`
+	RemoteAddress   string                             `json:"remoteAddress,omitempty"`
+	AuthorKey       string                             `json:"authorKey,omitempty"`
+	Created         string                             `json:"created,omitempty"`
+	Category        string                             `json:"category,omitempty"`
+	EventSource     string                             `json:"eventSource,omitempty"`
+	Description     string                             `json:"description,omitempty"`
+	ObjectItem      *AuditRecordObjectItemScheme       `json:"objectItem,omitempty"`
+	ChangedValues   []*AuditRecordChangedValueScheme   `json:"changedValues,omitempty"`
+	AssociatedItems []*AuditRecordAssociatedItemScheme `json:"associatedItems,omitempty"`
+}
+
+type AuditRecordObjectItemScheme struct {
+	ID         string `json:"id,omitempty"`
+	Name       string `json:"name,omitempty"`
+	TypeName   string `json:"typeName,omitempty"`
+	ParentID   string `json:"parentId,omitempty"`
+	ParentName string `json:"parentName,omitempty"`
+}
+
+type AuditRecordChangedValueScheme struct {
+	FieldName   string `json:"fieldName,omitempty"`
+	ChangedFrom string `json:"changedFrom,omitempty"`
+	ChangedTo   string `json:"changedTo,omitempty"`
+}
+
+type AuditRecordAssociatedItemScheme struct {
+	ID         string `json:"id,omitempty"`
+	Name       string `json:"name,omitempty"`
+	TypeName   string `json:"typeName,omitempty"`
+	ParentID   string `json:"parentId,omitempty"`
+	ParentName string `json:"parentName,omitempty"`
 }
 
 type AuditRecordGetOptions struct {
-	Filter string
-	From   string
-	To     string
+	Filter   string
+	From, To time.Time
 }
 
 // Returns a list of audit records. The list can be filtered to include items:
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/audit-records#get-audit-records
-func (a *AuditService) Get(ctx context.Context, options *AuditRecordGetOptions, offset, limit int) (result *AuditRecordScheme, response *Response, err error) {
+func (a *AuditService) Get(ctx context.Context, options *AuditRecordGetOptions, offset, limit int) (result *AuditRecordPageScheme, response *Response, err error) {
 
 	params := url.Values{}
 	params.Add("offset", strconv.Itoa(offset))
@@ -66,12 +74,12 @@ func (a *AuditService) Get(ctx context.Context, options *AuditRecordGetOptions, 
 			params.Add("filter", options.Filter)
 		}
 
-		if len(options.From) != 0 {
-			params.Add("from", options.From)
+		if !options.From.IsZero() {
+			params.Add("from", options.From.Format(DateFormatJira))
 		}
 
-		if len(options.To) != 0 {
-			params.Add("to", options.To)
+		if !options.To.IsZero() {
+			params.Add("to", options.To.Format(DateFormatJira))
 		}
 	}
 
@@ -88,7 +96,7 @@ func (a *AuditService) Get(ctx context.Context, options *AuditRecordGetOptions, 
 		return
 	}
 
-	result = new(AuditRecordScheme)
+	result = new(AuditRecordPageScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}

@@ -34,8 +34,8 @@ func TestAuditService_Get(t *testing.T) {
 			name: "GetAuditRecordsWhenTheOptionsAreSet",
 			options: &AuditRecordGetOptions{
 				Filter: "",
-				From:   mockDateTimeAsTime.AddDate(0, -1, 0).Format(DateFormatJira),
-				To:     mockDateTimeAsTime.Format(DateFormatJira),
+				From:   mockDateTimeAsTime.AddDate(0, -1, 0),
+				To:     mockDateTimeAsTime,
 			},
 			offset:             0,
 			limit:              1000,
@@ -51,8 +51,8 @@ func TestAuditService_Get(t *testing.T) {
 			name: "GetAuditRecordsWhenTheOptionFilterIsSet",
 			options: &AuditRecordGetOptions{
 				Filter: "Workflow",
-				From:   mockDateTimeAsTime.AddDate(0, -1, 0).Format(DateFormatJira),
-				To:     mockDateTimeAsTime.Format(DateFormatJira),
+				From:   mockDateTimeAsTime.AddDate(0, -1, 0),
+				To:     mockDateTimeAsTime,
 			},
 			offset:             0,
 			limit:              1000,
@@ -81,8 +81,8 @@ func TestAuditService_Get(t *testing.T) {
 			name: "GetAuditRecordsWhenTheRequestMethodIsIncorrect",
 			options: &AuditRecordGetOptions{
 				Filter: "",
-				From:   mockDateTimeAsTime.AddDate(0, -1, 0).Format(DateFormatJira),
-				To:     mockDateTimeAsTime.Format(DateFormatJira),
+				From:   mockDateTimeAsTime.AddDate(0, -1, 0),
+				To:     mockDateTimeAsTime,
 			},
 			offset:             0,
 			limit:              1000,
@@ -98,8 +98,8 @@ func TestAuditService_Get(t *testing.T) {
 			name: "GetAuditRecordsWhenTheStatusCodeIsIncorrect",
 			options: &AuditRecordGetOptions{
 				Filter: "",
-				From:   mockDateTimeAsTime.AddDate(0, -1, 0).Format(DateFormatJira),
-				To:     mockDateTimeAsTime.Format(DateFormatJira),
+				From:   mockDateTimeAsTime.AddDate(0, -1, 0),
+				To:     mockDateTimeAsTime,
 			},
 			offset:             0,
 			limit:              1000,
@@ -115,8 +115,8 @@ func TestAuditService_Get(t *testing.T) {
 			name: "GetAuditRecordsWhenTheContextIsNil",
 			options: &AuditRecordGetOptions{
 				Filter: "",
-				From:   mockDateTimeAsTime.AddDate(0, -1, 0).Format(DateFormatJira),
-				To:     mockDateTimeAsTime.Format(DateFormatJira),
+				From:   mockDateTimeAsTime.AddDate(0, -1, 0),
+				To:     mockDateTimeAsTime,
 			},
 			offset:             0,
 			limit:              1000,
@@ -132,8 +132,8 @@ func TestAuditService_Get(t *testing.T) {
 			name: "GetAuditRecordsWhenTheEndpointIsIncorrect",
 			options: &AuditRecordGetOptions{
 				Filter: "",
-				From:   mockDateTimeAsTime.AddDate(0, -1, 0).Format(DateFormatJira),
-				To:     mockDateTimeAsTime.Format(DateFormatJira),
+				From:   mockDateTimeAsTime.AddDate(0, -1, 0),
+				To:     mockDateTimeAsTime,
 			},
 			offset:             0,
 			limit:              1000,
@@ -149,8 +149,8 @@ func TestAuditService_Get(t *testing.T) {
 			name: "GetAuditRecordsWhenTheResponseBodyHasADifferentFormat",
 			options: &AuditRecordGetOptions{
 				Filter: "",
-				From:   mockDateTimeAsTime.AddDate(0, -1, 0).Format(DateFormatJira),
-				To:     mockDateTimeAsTime.Format(DateFormatJira),
+				From:   mockDateTimeAsTime.AddDate(0, -1, 0),
+				To:     mockDateTimeAsTime,
 			},
 			offset:             0,
 			limit:              1000,
@@ -164,9 +164,9 @@ func TestAuditService_Get(t *testing.T) {
 	}
 
 	for _, testCase := range testCases {
-
+		testCase := testCase
 		t.Run(testCase.name, func(t *testing.T) {
-
+			t.Parallel()
 			//Init a new HTTP mock server
 			mockOptions := mockServerOptions{
 				Endpoint:           testCase.endpoint,

@@ -23,21 +23,20 @@ func main() {
 	jiraCloud.Auth.SetBasicAuth(mail, token)
 	jiraCloud.Auth.SetUserAgent("curl/7.54.0")
 
-	var sharePermissions []jira.SharePermissionScheme
-
-	projectPermission := &jira.SharePermissionScheme{
-		Type: "project",
-		Project: &jira.SharePermissionProjectScheme{
-			ID: "10000",
+	var sharePermissions = []jira.SharePermissionScheme{
+		{
+			Type: "project",
+			Project: &jira.ProjectScheme{
+				ID: "10000",
+			},
+			Role:  nil,
+			Group: nil,
+		},
+		{
+			Type:  "group",
+			Group: &jira.GroupScheme{Name: "jira-administrators"},
 		},
 	}
-
-	groupPermission := &jira.SharePermissionScheme{
-		Type:  "group",
-		Group: &jira.SharePermissionGroupScheme{Name: "jira-administrators"},
-	}
-
-	sharePermissions = append(sharePermissions, *projectPermission, *groupPermission)
 
 	dashboard, response, err := jiraCloud.Dashboard.Copy(context.Background(), "10001", "Team Tracking #2 copy", "", &sharePermissions)
 	if err != nil {

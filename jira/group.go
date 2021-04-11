@@ -12,16 +12,18 @@ import (
 type GroupService struct{ client *Client }
 
 type GroupScheme struct {
-	Name  string `json:"name,omitempty"`
-	Self  string `json:"self,omitempty"`
-	Users struct {
-		Size       int           `json:"size,omitempty"`
-		Items      []*UserScheme `json:"items,omitempty"`
-		MaxResults int           `json:"max-results,omitempty"`
-		StartIndex int           `json:"start-index,omitempty"`
-		EndIndex   int           `json:"end-index,omitempty"`
-	} `json:"users,omitempty"`
-	Expand string `json:"expand,omitempty"`
+	Name   string               `json:"name,omitempty"`
+	Self   string               `json:"self,omitempty"`
+	Users  *GroupUserPageScheme `json:"users,omitempty"`
+	Expand string               `json:"expand,omitempty"`
+}
+
+type GroupUserPageScheme struct {
+	Size       int           `json:"size,omitempty"`
+	Items      []*UserScheme `json:"items,omitempty"`
+	MaxResults int           `json:"max-results,omitempty"`
+	StartIndex int           `json:"start-index,omitempty"`
+	EndIndex   int           `json:"end-index,omitempty"`
 }
 
 // Creates a group.

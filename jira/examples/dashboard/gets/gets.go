@@ -35,7 +35,10 @@ func main() {
 
 	log.Println("Response HTTP Code", response.StatusCode)
 	log.Println("HTTP Endpoint Used", response.Endpoint)
-	log.Println(len(dashboards.Dashboards))
+
+	for _, dashboard := range dashboards.Dashboards {
+		log.Println(dashboard.ID, dashboard.Name)
+	}
 
 	return
 

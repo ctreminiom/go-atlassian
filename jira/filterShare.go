@@ -76,71 +76,11 @@ func (f *FilterShareService) SetScope(ctx context.Context, scope string) (respon
 	return
 }
 
-type ShareFilterPermissionScheme struct {
-	ID      int    `json:"id,omitempty"`
-	Type    string `json:"type,omitempty"`
-	Project struct {
-		Self       string `json:"self,omitempty"`
-		ID         string `json:"id,omitempty"`
-		Key        string `json:"key,omitempty"`
-		Name       string `json:"name,omitempty"`
-		AvatarUrls struct {
-			Four8X48  string `json:"48x48,omitempty"`
-			Two4X24   string `json:"24x24,omitempty"`
-			One6X16   string `json:"16x16,omitempty"`
-			Three2X32 string `json:"32x32,omitempty"`
-		} `json:"avatarUrls,omitempty"`
-		ProjectCategory struct {
-			Self        string `json:"self,omitempty"`
-			ID          string `json:"id,omitempty"`
-			Name        string `json:"name,omitempty"`
-			Description string `json:"description,omitempty"`
-		} `json:"projectCategory,omitempty"`
-		Simplified bool   `json:"simplified,omitempty"`
-		Style      string `json:"style,omitempty"`
-		Insight    struct {
-			TotalIssueCount     int    `json:"totalIssueCount,omitempty"`
-			LastIssueUpdateTime string `json:"lastIssueUpdateTime,omitempty"`
-		} `json:"insight,omitempty"`
-	} `json:"project,omitempty"`
-	Role struct {
-		Self        string `json:"self,omitempty"`
-		Name        string `json:"name,omitempty"`
-		ID          int    `json:"id,omitempty"`
-		Description string `json:"description,omitempty"`
-		Actors      []struct {
-			ID          int    `json:"id,omitempty"`
-			DisplayName string `json:"displayName,omitempty"`
-			Type        string `json:"type,omitempty"`
-			Name        string `json:"name,omitempty"`
-			ActorGroup  struct {
-				Name        string `json:"name,omitempty"`
-				DisplayName string `json:"displayName,omitempty"`
-			} `json:"actorGroup,omitempty"`
-			ActorUser struct {
-				AccountID string `json:"accountId,omitempty"`
-			} `json:"actorUser,omitempty"`
-		} `json:"actors,omitempty"`
-		Scope struct {
-			Type    string `json:"type,omitempty"`
-			Project struct {
-				ID   string `json:"id,omitempty"`
-				Key  string `json:"key,omitempty"`
-				Name string `json:"name,omitempty"`
-			} `json:"project,omitempty"`
-		} `json:"scope,omitempty"`
-	} `json:"role,omitempty"`
-	Group struct {
-		Name string `json:"name,omitempty"`
-		Self string `json:"self,omitempty"`
-	} `json:"group,omitempty"`
-}
-
 // Returns the share permissions for a filter.
 // A filter can be shared with groups, projects, all logged-in users, or the public.
 // Sharing with all logged-in users or the public is known as a global share permission.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/filters/sharing#get-share-permissions
-func (f *FilterShareService) Gets(ctx context.Context, filterID int) (result *[]ShareFilterPermissionScheme, response *Response, err error) {
+func (f *FilterShareService) Gets(ctx context.Context, filterID int) (result *[]SharePermissionScheme, response *Response, err error) {
 
 	var endpoint = fmt.Sprintf("rest/api/3/filter/%v/permission", filterID)
 	request, err := f.client.newRequest(ctx, http.MethodGet, endpoint, nil)
@@ -153,7 +93,7 @@ func (f *FilterShareService) Gets(ctx context.Context, filterID int) (result *[]
 		return
 	}
 
-	result = new([]ShareFilterPermissionScheme)
+	result = new([]SharePermissionScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
@@ -172,7 +112,7 @@ type PermissionFilterBodyScheme struct {
 // If you add a global share permission (one for all logged-in users or the public)
 // it will overwrite all share permissions for the filter.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/filters/sharing#add-share-permission
-func (f *FilterShareService) Add(ctx context.Context, filterID int, payload *PermissionFilterBodyScheme) (result *[]ShareFilterPermissionScheme, response *Response, err error) {
+func (f *FilterShareService) Add(ctx context.Context, filterID int, payload *PermissionFilterBodyScheme) (result *[]SharePermissionScheme, response *Response, err error) {
 
 	if payload == nil {
 		return nil, nil, fmt.Errorf("error, payload value is nil, please provide a valid PermissionFilterBodyScheme pointer")
@@ -192,7 +132,7 @@ func (f *FilterShareService) Add(ctx context.Context, filterID int, payload *Per
 		return
 	}
 
-	result = new([]ShareFilterPermissionScheme)
+	result = new([]SharePermissionScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
@@ -204,7 +144,7 @@ func (f *FilterShareService) Add(ctx context.Context, filterID int, payload *Per
 // A filter can be shared with groups, projects, all logged-in users, or the public.
 // Sharing with all logged-in users or the public is known as a global share permission.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/filters/sharing#get-share-permission
-func (f *FilterShareService) Get(ctx context.Context, filterID, permissionID int) (result *ShareFilterPermissionScheme, response *Response, err error) {
+func (f *FilterShareService) Get(ctx context.Context, filterID, permissionID int) (result *SharePermissionScheme, response *Response, err error) {
 
 	var endpoint = fmt.Sprintf("rest/api/3/filter/%v/permission/%v", filterID, permissionID)
 	request, err := f.client.newRequest(ctx, http.MethodGet, endpoint, nil)
@@ -217,7 +157,7 @@ func (f *FilterShareService) Get(ctx context.Context, filterID, permissionID int
 		return
 	}
 
-	result = new(ShareFilterPermissionScheme)
+	result = new(SharePermissionScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}

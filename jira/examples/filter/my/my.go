@@ -35,7 +35,16 @@ func main() {
 	log.Println("my filters", len(*myFilters))
 
 	for _, filter := range *myFilters {
-		log.Println(filter)
+		log.Println(filter.ID)
+
+		for _, shareUser := range filter.ShareUsers.Items {
+			log.Println(shareUser.Name, shareUser.DisplayName)
+		}
+
+		for _, subscription := range filter.Subscriptions.Items {
+			log.Println(subscription.ID)
+		}
+
 	}
 
 }

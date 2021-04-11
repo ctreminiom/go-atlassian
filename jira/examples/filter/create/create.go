@@ -29,6 +29,20 @@ func main() {
 		Description: "Filter's description",
 		JQL:         "issuetype = Bug",
 		Favorite:    false,
+		SharePermissions: []*jira.SharePermissionScheme{
+			{
+				Type: "project",
+				Project: &jira.ProjectScheme{
+					ID: "10000",
+				},
+				Role:  nil,
+				Group: nil,
+			},
+			{
+				Type:  "group",
+				Group: &jira.GroupScheme{Name: "jira-administrators"},
+			},
+		},
 	}
 
 	filter, response, err := atlassian.Filter.Create(context.Background(), &newFilterBody)
@@ -36,7 +50,7 @@ func main() {
 		if response != nil {
 			log.Println("Response HTTP Response", string(response.BodyAsBytes))
 		}
-		return
+		log.Fatal(err)
 	}
 
 	log.Println("Response HTTP Code", response.StatusCode)

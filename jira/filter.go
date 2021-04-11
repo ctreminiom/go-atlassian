@@ -15,10 +15,11 @@ type FilterService struct {
 }
 
 type FilterBodyScheme struct {
-	Name        string `json:"name,omitempty"`
-	Description string `json:"description,omitempty"`
-	JQL         string `json:"jql,omitempty"`
-	Favorite    bool   `json:"favourite,omitempty"`
+	Name             string                   `json:"name,omitempty"`
+	Description      string                   `json:"description,omitempty"`
+	JQL              string                   `json:"jql,omitempty"`
+	Favorite         bool                     `json:"favourite,omitempty"`
+	SharePermissions []*SharePermissionScheme `json:"sharePermissions,omitempty"`
 }
 
 // Creates a filter. The filter is shared according to the default share scope. The filter is not selected as a favorite.
@@ -129,18 +130,16 @@ func (f *FilterService) My(ctx context.Context, favorites bool, expands []string
 }
 
 type FilterSearchOptionScheme struct {
-	Name      string
-	AccountID string
-	Group     string
-	ProjectID int
-	IDs       []int
-	OrderBy   string
-	Expand    []string
+	Name, AccountID string
+	Group, OrderBy  string
+	ProjectID       int
+	IDs             []int
+	Expand          []string
 }
 
 // Returns a paginated list of filters. Use this operation to get:
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/filters#search-filters
-func (f *FilterService) Search(ctx context.Context, options *FilterSearchOptionScheme, startAt, maxResults int) (result *FilterSearchScheme, response *Response, err error) {
+func (f *FilterService) Search(ctx context.Context, options *FilterSearchOptionScheme, startAt, maxResults int) (result *FilterPageScheme, response *Response, err error) {
 
 	if options == nil {
 		return nil, nil, fmt.Errorf("error, options value is nil, please provide a valid FilterSearchOptionScheme pointer")
@@ -202,7 +201,7 @@ func (f *FilterService) Search(ctx context.Context, options *FilterSearchOptionS
 		return
 	}
 
-	result = new(FilterSearchScheme)
+	result = new(FilterPageScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
@@ -305,121 +304,63 @@ func (f *FilterService) Delete(ctx context.Context, filterID int) (response *Res
 	return
 }
 
-type FilterSearchScheme struct {
-	Self       string `json:"self"`
-	MaxResults int    `json:"maxResults"`
-	StartAt    int    `json:"startAt"`
-	Total      int    `json:"total"`
-	IsLast     bool   `json:"isLast"`
-	Values     []struct {
-		Self        string `json:"self"`
-		ID          string `json:"id"`
-		Name        string `json:"name"`
-		Description string `json:"description,omitempty"`
-		Owner       struct {
-			Self       string `json:"self"`
-			AccountID  string `json:"accountId"`
-			AvatarUrls struct {
-				Four8X48  string `json:"48x48"`
-				Two4X24   string `json:"24x24"`
-				One6X16   string `json:"16x16"`
-				Three2X32 string `json:"32x32"`
-			} `json:"avatarUrls"`
-			DisplayName string `json:"displayName"`
-			Active      bool   `json:"active"`
-		} `json:"owner"`
-		Jql              string        `json:"jql"`
-		ViewURL          string        `json:"viewUrl"`
-		SearchURL        string        `json:"searchUrl"`
-		Favourite        bool          `json:"favourite"`
-		FavouritedCount  int           `json:"favouritedCount"`
-		SharePermissions []interface{} `json:"sharePermissions"`
-		Subscriptions    []interface{} `json:"subscriptions"`
-	} `json:"values"`
+type FilterPageScheme struct {
+	Self       string                  `json:"self,omitempty"`
+	MaxResults int                     `json:"maxResults,omitempty"`
+	StartAt    int                     `json:"startAt,omitempty"`
+	Total      int                     `json:"total,omitempty"`
+	IsLast     bool                    `json:"isLast,omitempty"`
+	Values     []*FilterPageNodeScheme `json:"values,omitempty"`
 }
 
 type FilterScheme struct {
-	Self  string `json:"self,omitempty"`
-	ID    string `json:"id,omitempty"`
-	Name  string `json:"name,omitempty"`
-	Owner struct {
-		Self       string `json:"self,omitempty"`
-		AccountID  string `json:"accountId,omitempty"`
-		AvatarUrls struct {
-			Four8X48  string `json:"48x48,omitempty"`
-			Two4X24   string `json:"24x24,omitempty"`
-			One6X16   string `json:"16x16,omitempty"`
-			Three2X32 string `json:"32x32,omitempty"`
-		} `json:"avatarUrls,omitempty"`
-		DisplayName string `json:"displayName,omitempty"`
-		Active      bool   `json:"active,omitempty"`
-	} `json:"owner,omitempty"`
-	Jql              string `json:"jql,omitempty"`
-	ViewURL          string `json:"viewUrl,omitempty"`
-	SearchURL        string `json:"searchUrl,omitempty"`
-	Favourite        bool   `json:"favourite,omitempty"`
-	FavouritedCount  int    `json:"favouritedCount,omitempty"`
-	SharePermissions []struct {
-		ID      int    `json:"id,omitempty"`
-		Type    string `json:"type,omitempty"`
-		Project struct {
-			Self         string `json:"self,omitempty"`
-			ID           string `json:"id,omitempty"`
-			Key          string `json:"key,omitempty"`
-			AssigneeType string `json:"assigneeType,omitempty"`
-			Name         string `json:"name,omitempty"`
-			Roles        struct {
-			} `json:"roles,omitempty"`
-			AvatarUrls struct {
-				Four8X48  string `json:"48x48,omitempty"`
-				Two4X24   string `json:"24x24,omitempty"`
-				One6X16   string `json:"16x16,omitempty"`
-				Three2X32 string `json:"32x32,omitempty"`
-			} `json:"avatarUrls,omitempty"`
-			ProjectTypeKey string `json:"projectTypeKey,omitempty"`
-			Simplified     bool   `json:"simplified,omitempty"`
-			Style          string `json:"style,omitempty"`
-			Properties     struct {
-			} `json:"properties,omitempty"`
-		} `json:"project,omitempty"`
-	} `json:"sharePermissions,omitempty"`
-	SharedUsers struct {
-		Size  int `json:"size,omitempty"`
-		Items []struct {
-			Self       string `json:"self,omitempty"`
-			AccountID  string `json:"accountId,omitempty"`
-			AvatarUrls struct {
-				Four8X48  string `json:"48x48,omitempty"`
-				Two4X24   string `json:"24x24,omitempty"`
-				One6X16   string `json:"16x16,omitempty"`
-				Three2X32 string `json:"32x32,omitempty"`
-			} `json:"avatarUrls,omitempty"`
-			DisplayName string `json:"displayName,omitempty"`
-			Active      bool   `json:"active,omitempty"`
-		} `json:"items,omitempty"`
-		MaxResults int `json:"max-results,omitempty"`
-		StartIndex int `json:"start-index,omitempty"`
-		EndIndex   int `json:"end-index,omitempty"`
-	} `json:"sharedUsers,omitempty"`
-	Subscriptions struct {
-		Size  int `json:"size,omitempty"`
-		Items []struct {
-			ID   int `json:"id,omitempty"`
-			User struct {
-				Self       string `json:"self,omitempty"`
-				AccountID  string `json:"accountId,omitempty"`
-				AvatarUrls struct {
-					Four8X48  string `json:"48x48,omitempty"`
-					Two4X24   string `json:"24x24,omitempty"`
-					One6X16   string `json:"16x16,omitempty"`
-					Three2X32 string `json:"32x32,omitempty"`
-				} `json:"avatarUrls,omitempty"`
-				DisplayName string `json:"displayName,omitempty"`
-				Active      bool   `json:"active,omitempty"`
-			} `json:"user,omitempty"`
-		} `json:"items,omitempty"`
-		MaxResults int `json:"max-results,omitempty"`
-		StartIndex int `json:"start-index,omitempty"`
-		EndIndex   int `json:"end-index,omitempty"`
-	} `json:"subscriptions,omitempty"`
+	Self             string                        `json:"self,omitempty"`
+	ID               string                        `json:"id,omitempty"`
+	Name             string                        `json:"name,omitempty"`
+	Owner            *UserScheme                   `json:"owner,omitempty"`
+	Jql              string                        `json:"jql,omitempty"`
+	ViewURL          string                        `json:"viewUrl,omitempty"`
+	SearchURL        string                        `json:"searchUrl,omitempty"`
+	Favourite        bool                          `json:"favourite,omitempty"`
+	FavouritedCount  int                           `json:"favouritedCount,omitempty"`
+	SharePermissions []*SharePermissionScheme      `json:"sharePermissions,omitempty"`
+	ShareUsers       *FilterUsersScheme            `json:"sharedUsers,omitempty"`
+	Subscriptions    *FilterSubscriptionPageScheme `json:"subscriptions,omitempty"`
+}
+
+type FilterPageNodeScheme struct {
+	Self             string                   `json:"self,omitempty"`
+	ID               string                   `json:"id,omitempty"`
+	Name             string                   `json:"name,omitempty"`
+	Owner            *UserScheme              `json:"owner,omitempty"`
+	Jql              string                   `json:"jql,omitempty"`
+	ViewURL          string                   `json:"viewUrl,omitempty"`
+	SearchURL        string                   `json:"searchUrl,omitempty"`
+	Favourite        bool                     `json:"favourite,omitempty"`
+	FavouritedCount  int                      `json:"favouritedCount,omitempty"`
+	SharePermissions []*SharePermissionScheme `json:"sharePermissions,omitempty"`
+	ShareUsers       *FilterUsersScheme       `json:"sharedUsers,omitempty"`
+	Subscriptions    *[]FilterUsersScheme     `json:"subscriptions,omitempty"`
+}
+
+type FilterSubscriptionPageScheme struct {
+	Size       int                         `json:"size,omitempty"`
+	Items      []*FilterSubscriptionScheme `json:"items,omitempty"`
+	MaxResults int                         `json:"max-results,omitempty"`
+	StartIndex int                         `json:"start-index,omitempty"`
+	EndIndex   int                         `json:"end-index,omitempty"`
+}
+
+type FilterSubscriptionScheme struct {
+	ID    int          `json:"id,omitempty"`
+	User  *UserScheme  `json:"user,omitempty"`
+	Group *GroupScheme `json:"group,omitempty"`
+}
+
+type FilterUsersScheme struct {
+	Size       int           `json:"size,omitempty"`
+	Items      []*UserScheme `json:"items,omitempty"`
+	MaxResults int           `json:"max-results,omitempty"`
+	StartIndex int           `json:"start-index,omitempty"`
+	EndIndex   int           `json:"end-index,omitempty"`
 }

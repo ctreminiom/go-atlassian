@@ -60,7 +60,8 @@ func (d *DashboardService) Gets(ctx context.Context, startAt, maxResults int, fi
 }
 
 type SharePermissionScheme struct {
-	Type    string             `json:"type"`
+	ID      int                `json:"id,omitempty"`
+	Type    string             `json:"type,omitempty"`
 	Project *ProjectScheme     `json:"project,omitempty"`
 	Role    *ProjectRoleScheme `json:"role,omitempty"`
 	Group   *GroupScheme       `json:"group,omitempty"`

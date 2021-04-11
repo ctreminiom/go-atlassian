@@ -7,6 +7,9 @@ import (
 	"net/http"
 )
 
+// This service represents the Jira Cloud application roles
+// Use it to get details of an application role or all application roles.
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/application-roles
 type ApplicationRoleService struct{ client *Client }
 
 type ApplicationRoleScheme struct {
@@ -24,8 +27,9 @@ type ApplicationRoleScheme struct {
 	Platform             bool     `json:"platform,omitempty"`
 }
 
-// Returns all application roles.
-// Docs: https://docs.go-atlassian.io/jira-software-cloud/application-roles#application-roles
+// Returns all application roles, this func needs the following parameters:
+// 1. ctx = it's the context.context value
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/application-roles#get-all-application-roles
 func (a *ApplicationRoleService) Gets(ctx context.Context) (result *[]ApplicationRoleScheme, response *Response, err error) {
 
 	var endpoint = "rest/api/3/applicationrole"
@@ -49,8 +53,10 @@ func (a *ApplicationRoleService) Gets(ctx context.Context) (result *[]Applicatio
 	return
 }
 
-// Returns an application role.
-// Docs: https://docs.go-atlassian.io/jira-software-cloud/application-roles#application-role
+// Returns an application role, this func needs the following parameters:
+// 1. ctx = it's the context.context value
+// 2. key = The key of the application role, use Gets() method to get the key for each application role.
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/application-roles#get-application-role
 func (a *ApplicationRoleService) Get(ctx context.Context, key string) (result *ApplicationRoleScheme, response *Response, err error) {
 
 	if len(key) == 0 {

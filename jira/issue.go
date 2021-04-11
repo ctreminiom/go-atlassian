@@ -460,18 +460,30 @@ func (c *CustomFields) Cascading(customFieldID, parent, child string) (err error
 
 // Creates an issue or, where the option to create subtasks is enabled in Jira, a subtask.
 // https://docs.go-atlassian.io/jira-software-cloud/issues#create-issue
-func (i *IssueService) Create(ctx context.Context, payload *IssueScheme, customFields *CustomFields) (result *IssueScheme, response *Response, err error) {
+func (i *IssueService) Create(ctx context.Context, payload *IssueScheme, customFields *CustomFields) (result *IssueResponseScheme, response *Response, err error) {
 
-	var endpoint = "rest/api/3/issue"
+	var (
+		endpoint = "rest/api/3/issue"
+		request  *http.Request
+	)
 
-	payloadWithCustomFields, err := payload.MergeCustomFields(customFields)
-	if err != nil {
-		return nil, nil, err
-	}
+	if customFields != nil {
 
-	request, err := i.client.newRequest(ctx, http.MethodPost, endpoint, payloadWithCustomFields)
-	if err != nil {
-		return nil, nil, err
+		payloadWithCustomFields, err := payload.MergeCustomFields(customFields)
+		if err != nil {
+			return nil, nil, err
+		}
+
+		request, err = i.client.newRequest(ctx, http.MethodPost, endpoint, payloadWithCustomFields)
+		if err != nil {
+			return nil, nil, err
+		}
+	} else {
+
+		request, err = i.client.newRequest(ctx, http.MethodPost, endpoint, payload)
+		if err != nil {
+			return nil, nil, err
+		}
 	}
 
 	request.Header.Set("Accept", "application/json")
@@ -482,7 +494,7 @@ func (i *IssueService) Create(ctx context.Context, payload *IssueScheme, customF
 		return
 	}
 
-	result = new(IssueScheme)
+	result = new(IssueResponseScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
@@ -490,27 +502,19 @@ func (i *IssueService) Create(ctx context.Context, payload *IssueScheme, customF
 	return
 }
 
-type IssuesScheme struct {
-	Issues []struct {
-		ID         string `json:"id"`
-		Key        string `json:"key"`
-		Self       string `json:"self"`
-		Transition struct {
-			Status          int `json:"status"`
-			ErrorCollection struct {
-			} `json:"errorCollection"`
-		} `json:"transition"`
-	} `json:"issues"`
-	Errors []struct {
-		Status        int `json:"status"`
-		ElementErrors struct {
+type IssueResponseScheme struct {
+	ID         string `json:"id"`
+	Key        string `json:"key"`
+	Self       string `json:"self"`
+	Transition struct {
+		Status          int `json:"status"`
+		ErrorCollection struct {
 			ErrorMessages []string `json:"errorMessages"`
 			Errors        struct {
 			} `json:"errors"`
 			Status int `json:"status"`
-		} `json:"elementErrors"`
-		FailedElementNumber int `json:"failedElementNumber"`
-	} `json:"errors"`
+		} `json:"errorCollection"`
+	} `json:"transition"`
 }
 
 type IssueBulkScheme struct {
@@ -520,7 +524,7 @@ type IssueBulkScheme struct {
 
 // Creates issues and, where the option to create subtasks is enabled in Jira, subtasks.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues#bulk-create-issue
-func (i *IssueService) Creates(ctx context.Context, payload []*IssueBulkScheme) (result *IssuesScheme, response *Response, err error) {
+func (i *IssueService) Creates(ctx context.Context, payload []*IssueBulkScheme) (result *IssueBulkResponseScheme, response *Response, err error) {
 
 	if len(payload) == 0 {
 		return nil, nil, fmt.Errorf("error, please provide a valid []*IssueBulkScheme slice of pointers")
@@ -560,7 +564,7 @@ func (i *IssueService) Creates(ctx context.Context, payload []*IssueBulkScheme) 
 		return
 	}
 
-	result = new(IssuesScheme)
+	result = new(IssueBulkResponseScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
@@ -570,6 +574,29 @@ func (i *IssueService) Creates(ctx context.Context, payload []*IssueBulkScheme) 
 
 type BulkIssueScheme struct {
 	Issues []IssueScheme `json:"issues"`
+}
+
+type IssueBulkResponseScheme struct {
+	Issues []struct {
+		ID         string `json:"id"`
+		Key        string `json:"key"`
+		Self       string `json:"self"`
+		Transition struct {
+			Status          int `json:"status"`
+			ErrorCollection struct {
+			} `json:"errorCollection"`
+		} `json:"transition"`
+	} `json:"issues"`
+	Errors []struct {
+		Status        int `json:"status"`
+		ElementErrors struct {
+			ErrorMessages []string `json:"errorMessages"`
+			Errors        struct {
+			} `json:"errors"`
+			Status int `json:"status"`
+		} `json:"elementErrors"`
+		FailedElementNumber int `json:"failedElementNumber"`
+	} `json:"errors"`
 }
 
 // Returns the details for an issue.

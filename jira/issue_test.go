@@ -1115,7 +1115,7 @@ func TestIssueService_Create(t *testing.T) {
 			endpoint:           "/rest/api/3/issue",
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusCreated,
-			wantErr:            true,
+			wantErr:            false,
 		},
 
 		{
@@ -1187,6 +1187,25 @@ func TestIssueService_Create(t *testing.T) {
 			wantHTTPCodeReturn: http.StatusCreated,
 			wantErr:            true,
 		},
+
+		{
+			name: "CreateIssueWhenTheContextIsNilAndCustomFieldsAreNotProvided",
+			payload: &IssueScheme{
+				Fields: &IssueFieldsScheme{
+					Summary:   "New summary test",
+					Project:   &ProjectScheme{ID: "10000"},
+					IssueType: &IssueTypeScheme{Name: "Story"},
+				},
+			},
+			customFields:       nil,
+			mockFile:           "./mocks/create-issue.json",
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/api/3/issue",
+			context:            nil,
+			wantHTTPCodeReturn: http.StatusCreated,
+			wantErr:            true,
+		},
+
 		{
 			name: "CreateIssueWhenTheTheResponseBodyHasADifferentFormat",
 			payload: &IssueScheme{

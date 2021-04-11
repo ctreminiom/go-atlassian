@@ -13,49 +13,53 @@ import (
 type IssueSearchService struct{ client *Client }
 
 type IssueSearchScheme struct {
-	Expand          string        `json:"expand"`
-	StartAt         int           `json:"startAt"`
-	MaxResults      int           `json:"maxResults"`
-	Total           int           `json:"total"`
-	Issues          []IssueScheme `json:"issues"`
-	WarningMessages []string      `json:"warningMessages"`
+	Expand          string         `json:"expand"`
+	StartAt         int            `json:"startAt"`
+	MaxResults      int            `json:"maxResults"`
+	Total           int            `json:"total"`
+	Issues          []*IssueScheme `json:"issues"`
+	WarningMessages []string       `json:"warningMessages"`
 }
 
 type IssueTransitionsScheme struct {
-	Expand      string                   `json:"expand"`
-	Transitions []*IssueTransitionScheme `json:"transitions"`
+	Expand      string                   `json:"expand,omitempty"`
+	Transitions []*IssueTransitionScheme `json:"transitions,omitempty"`
 }
 
 type IssueTransitionScheme struct {
-	ID   string `json:"id"`
-	Name string `json:"name"`
-	To   struct {
-		Self           string `json:"self"`
-		Description    string `json:"description"`
-		IconURL        string `json:"iconUrl"`
-		Name           string `json:"name"`
-		ID             string `json:"id"`
-		StatusCategory struct {
-			Self      string `json:"self"`
-			ID        int    `json:"id"`
-			Key       string `json:"key"`
-			ColorName string `json:"colorName"`
-			Name      string `json:"name"`
-		} `json:"statusCategory"`
-	} `json:"to"`
-	HasScreen     bool `json:"hasScreen"`
-	IsGlobal      bool `json:"isGlobal"`
-	IsInitial     bool `json:"isInitial"`
-	IsAvailable   bool `json:"isAvailable"`
-	IsConditional bool `json:"isConditional"`
-	IsLooped      bool `json:"isLooped"`
+	ID            string              `json:"id,omitempty"`
+	Name          string              `json:"name,omitempty"`
+	To            *TransitionToScheme `json:"to,omitempty"`
+	HasScreen     bool                `json:"hasScreen,omitempty"`
+	IsGlobal      bool                `json:"isGlobal,omitempty"`
+	IsInitial     bool                `json:"isInitial,omitempty"`
+	IsAvailable   bool                `json:"isAvailable,omitempty"`
+	IsConditional bool                `json:"isConditional,omitempty"`
+	IsLooped      bool                `json:"isLooped,omitempty"`
+}
+
+type TransitionToScheme struct {
+	Self           string                `json:"self,omitempty"`
+	Description    string                `json:"description,omitempty"`
+	IconURL        string                `json:"iconUrl,omitempty"`
+	Name           string                `json:"name,omitempty"`
+	ID             string                `json:"id,omitempty"`
+	StatusCategory *StatusCategoryScheme `json:"statusCategory,omitempty"`
+}
+
+type StatusCategoryScheme struct {
+	Self      string `json:"self,omitempty"`
+	ID        int    `json:"id,omitempty"`
+	Key       string `json:"key,omitempty"`
+	ColorName string `json:"colorName,omitempty"`
+	Name      string `json:"name,omitempty"`
 }
 
 type IssueChangelogScheme struct {
-	StartAt    int                           `json:"startAt"`
-	MaxResults int                           `json:"maxResults"`
-	Total      int                           `json:"total"`
-	Histories  []IssueChangelogHistoryScheme `json:"histories"`
+	StartAt    int                            `json:"startAt"`
+	MaxResults int                            `json:"maxResults"`
+	Total      int                            `json:"total"`
+	Histories  []*IssueChangelogHistoryScheme `json:"histories"`
 }
 
 type IssueChangelogHistoryScheme struct {

@@ -59,24 +59,19 @@ func (i *IssueScheme) MergeCustomFields(fields *CustomFields) (result map[string
 		return nil, fmt.Errorf("error, please provide a value *CustomFields pointer")
 	}
 
-	//Convert the IssueScheme struct to map[string]interface{}
-	issueSchemeAsBytes, err := json.Marshal(i)
-	if err != nil {
-		return nil, err
+	if len(fields.Fields) == 0 {
+		return nil, fmt.Errorf("error!, the Fields tag does not contains custom fields")
 	}
 
+	//Convert the IssueScheme struct to map[string]interface{}
+	issueSchemeAsBytes, _ := json.Marshal(i)
+
 	issueSchemeAsMap := make(map[string]interface{})
-	err = json.Unmarshal(issueSchemeAsBytes, &issueSchemeAsMap)
-	if err != nil {
-		return nil, err
-	}
+	_ = json.Unmarshal(issueSchemeAsBytes, &issueSchemeAsMap)
 
 	//For each customField created, merge it into the eAsMap
 	for _, customField := range fields.Fields {
-		err = mergo.Merge(&issueSchemeAsMap, customField, mergo.WithOverride)
-		if err != nil {
-			return nil, err
-		}
+		_ = mergo.Merge(&issueSchemeAsMap, customField, mergo.WithOverride)
 	}
 
 	return issueSchemeAsMap, nil
@@ -85,25 +80,22 @@ func (i *IssueScheme) MergeCustomFields(fields *CustomFields) (result map[string
 func (i *IssueScheme) MergeOperations(operations *UpdateOperations) (result map[string]interface{}, err error) {
 
 	if operations == nil {
-		return nil, fmt.Errorf("error, please provide a value *CustomFields pointer")
+		return nil, fmt.Errorf("error, please provide a value *UpdateOperations pointer")
+	}
+
+	if len(operations.Fields) == 0 {
+		return nil, fmt.Errorf("error!, the Fields tag does not contains custom fields")
 	}
 
 	//Convert the IssueScheme struct to map[string]interface{}
-	issueSchemeAsBytes, err := json.Marshal(i)
-	if err != nil {
-		return nil, err
-	}
+	issueSchemeAsBytes, _ := json.Marshal(i)
 
 	issueSchemeAsMap := make(map[string]interface{})
-	if err = json.Unmarshal(issueSchemeAsBytes, &issueSchemeAsMap); err != nil {
-		return nil, err
-	}
+	_ = json.Unmarshal(issueSchemeAsBytes, &issueSchemeAsMap)
 
 	//For each customField created, merge it into the eAsMap
 	for _, customField := range operations.Fields {
-		if err = mergo.Merge(&issueSchemeAsMap, customField, mergo.WithOverride); err != nil {
-			return nil, err
-		}
+		_ = mergo.Merge(&issueSchemeAsMap, customField, mergo.WithOverride)
 	}
 
 	return issueSchemeAsMap, nil
@@ -115,9 +107,8 @@ func (i *IssueScheme) ToMap() (result map[string]interface{}, err error) {
 	issueSchemeAsBytes, _ := json.Marshal(i)
 
 	issueSchemeAsMap := make(map[string]interface{})
-	if err = json.Unmarshal(issueSchemeAsBytes, &issueSchemeAsMap); err != nil {
-		return nil, err
-	}
+	_ = json.Unmarshal(issueSchemeAsBytes, &issueSchemeAsMap)
+
 	return issueSchemeAsMap, err
 }
 
@@ -747,39 +738,65 @@ func (i *IssueService) Update(ctx context.Context, issueKeyOrID string, notify b
 		endpoint = fmt.Sprintf("rest/api/3/issue/%v", issueKeyOrID)
 	}
 
-	//Check if the method contais custom fields
-	var payloadAsMap map[string]interface{}
+	var request *http.Request
 
-	if customFields != nil {
+	// Executed when customfields or operation are not provided
+	if customFields == nil && operations == nil {
+
+		request, err = i.client.newRequest(ctx, http.MethodPut, endpoint, payload)
+		if err != nil {
+			return nil, err
+		}
+
+	}
+
+	// Executed when customfields and operation are provided
+	if customFields != nil && operations != nil {
 
 		payloadWithCustomFields, err := payload.MergeCustomFields(customFields)
 		if err != nil {
 			return nil, err
 		}
 
-		payloadAsMap = payloadWithCustomFields
+		payloadWithOperations, err := payload.MergeOperations(operations)
+		if err != nil {
+			return nil, err
+		}
+
+		//Merge the map[string]interface{} into one
+		_ = mergo.Map(&payloadWithCustomFields, &payloadWithOperations, mergo.WithOverride)
+
+		request, err = i.client.newRequest(ctx, http.MethodPut, endpoint, payloadWithCustomFields)
+		if err != nil {
+			return nil, err
+		}
 
 	}
 
-	if operations != nil {
+	// Executed when customfields are provided but not the operations
+	if customFields != nil && operations == nil {
+
+		payloadWithCustomFields, err := payload.MergeCustomFields(customFields)
+		if err != nil {
+			return nil, err
+		}
+
+		request, err = i.client.newRequest(ctx, http.MethodPut, endpoint, payloadWithCustomFields)
+		if err != nil {
+			return nil, err
+		}
+
+	}
+
+	// Executed when operations are provided but not the customfields
+	if customFields == nil && operations != nil {
 
 		payloadWithOperations, err := payload.MergeOperations(operations)
 		if err != nil {
 			return nil, err
 		}
 
-		payloadAsMap = payloadWithOperations
-	}
-
-	var request *http.Request
-
-	if payloadAsMap != nil {
-		request, err = i.client.newRequest(ctx, http.MethodPut, endpoint, payloadAsMap)
-		if err != nil {
-			return nil, err
-		}
-	} else {
-		request, err = i.client.newRequest(ctx, http.MethodPut, endpoint, payload)
+		request, err = i.client.newRequest(ctx, http.MethodPut, endpoint, payloadWithOperations)
 		if err != nil {
 			return nil, err
 		}

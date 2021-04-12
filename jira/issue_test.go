@@ -746,24 +746,46 @@ func TestIssueScheme_MergeCustomFields(t *testing.T) {
 	}
 
 	testCases := []struct {
-		name    string
-		fields  *CustomFields
-		wantErr bool
+		name         string
+		fields       *CustomFields
+		issuePayload *IssueScheme
+		wantErr      bool
 	}{
 		{
-			name:    "MergeCustomFieldsWhenTheCustomFieldsAreValue",
+			name: "MergeCustomFieldsWhenTheCustomFieldsAreValue",
+			issuePayload: &IssueScheme{
+				Fields: &IssueFieldsScheme{
+					Summary:   "New summary test",
+					Project:   &ProjectScheme{ID: "10000"},
+					IssueType: &IssueTypeScheme{Name: "Story"},
+				},
+			},
 			fields:  &customFieldMockedWithFields,
 			wantErr: false,
 		},
 
 		{
-			name:    "MergeCustomFieldsWhenTheCustomFieldsAreEmpty",
+			name: "MergeCustomFieldsWhenTheCustomFieldsAreEmpty",
+			issuePayload: &IssueScheme{
+				Fields: &IssueFieldsScheme{
+					Summary:   "New summary test",
+					Project:   &ProjectScheme{ID: "10000"},
+					IssueType: &IssueTypeScheme{Name: "Story"},
+				},
+			},
 			fields:  &customFieldMockedWithOutFields,
-			wantErr: false,
+			wantErr: true,
 		},
 
 		{
-			name:    "MergeCustomFieldsWhenTheCustomFieldsIsNil",
+			name: "MergeCustomFieldsWhenTheCustomFieldsIsNil",
+			issuePayload: &IssueScheme{
+				Fields: &IssueFieldsScheme{
+					Summary:   "New summary test",
+					Project:   &ProjectScheme{ID: "10000"},
+					IssueType: &IssueTypeScheme{Name: "Story"},
+				},
+			},
 			fields:  nil,
 			wantErr: true,
 		},
@@ -773,20 +795,7 @@ func TestIssueScheme_MergeCustomFields(t *testing.T) {
 
 		t.Run(testCase.name, func(t *testing.T) {
 
-			/*
-				issueScheme := &IssueScheme{
-					Fields: &IssueFieldsScheme{
-						Summary:   "New summary test",
-						Project:   &ProjectScheme{ID: "10000"},
-						IssueType: &IssueTypeScheme{Name: "Story"},
-					},
-				}
-
-			*/
-
-			issueScheme := &IssueScheme{}
-
-			issueSchemeWithCustomFields, err := issueScheme.MergeCustomFields(testCase.fields)
+			issueSchemeWithCustomFields, err := testCase.issuePayload.MergeCustomFields(testCase.fields)
 
 			if testCase.wantErr {
 				if err != nil {
@@ -822,19 +831,48 @@ func TestIssueScheme_MergeOperations(t *testing.T) {
 		t.Fatal(err)
 	}
 
+	var operationsWithOutFields = &UpdateOperations{}
+
 	testCases := []struct {
-		name       string
-		operations *UpdateOperations
-		wantErr    bool
+		name         string
+		operations   *UpdateOperations
+		issuePayload *IssueScheme
+		wantErr      bool
 	}{
 		{
-			name:       "MergeOperationsWhenTheOperationsAreCorrect",
+			name: "MergeOperationsWhenTheOperationsAreCorrect",
+			issuePayload: &IssueScheme{
+				Fields: &IssueFieldsScheme{
+					Summary:   "New summary test",
+					Project:   &ProjectScheme{ID: "10000"},
+					IssueType: &IssueTypeScheme{Name: "Story"},
+				},
+			},
 			operations: operations,
 			wantErr:    false,
 		},
 		{
-			name:       "MergeOperationsWhenTheOperationsAreNil",
+			name: "MergeOperationsWhenTheOperationsAreNil",
+			issuePayload: &IssueScheme{
+				Fields: &IssueFieldsScheme{
+					Summary:   "New summary test",
+					Project:   &ProjectScheme{ID: "10000"},
+					IssueType: &IssueTypeScheme{Name: "Story"},
+				},
+			},
 			operations: nil,
+			wantErr:    true,
+		},
+		{
+			name: "MergeOperationsWhenTheOperationsDoNotHaveFields",
+			issuePayload: &IssueScheme{
+				Fields: &IssueFieldsScheme{
+					Summary:   "New summary test",
+					Project:   &ProjectScheme{ID: "10000"},
+					IssueType: &IssueTypeScheme{Name: "Story"},
+				},
+			},
+			operations: operationsWithOutFields,
 			wantErr:    true,
 		},
 	}
@@ -843,15 +881,7 @@ func TestIssueScheme_MergeOperations(t *testing.T) {
 
 		t.Run(testCase.name, func(t *testing.T) {
 
-			issueScheme := &IssueScheme{
-				Fields: &IssueFieldsScheme{
-					Summary:   "New summary test",
-					Project:   &ProjectScheme{ID: "10000"},
-					IssueType: &IssueTypeScheme{Name: "Story"},
-				},
-			}
-
-			issueSchemeWithOperations, err := issueScheme.MergeOperations(testCase.operations)
+			issueSchemeWithOperations, err := testCase.issuePayload.MergeOperations(testCase.operations)
 
 			if testCase.wantErr {
 				if err != nil {
@@ -1083,6 +1113,24 @@ func TestIssueService_Create(t *testing.T) {
 		},
 
 		{
+			name: "CreateIssueWhenTheCustomFieldsAreProvidedButNotContainsFields",
+			payload: &IssueScheme{
+				Fields: &IssueFieldsScheme{
+					Summary:   "New summary test",
+					Project:   &ProjectScheme{ID: "10000"},
+					IssueType: &IssueTypeScheme{Name: "Story"},
+				},
+			},
+			customFields:       &customFieldMockedWithFields,
+			mockFile:           "./mocks/create-issue.json",
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/api/3/issue",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusCreated,
+			wantErr:            false,
+		},
+
+		{
 			name: "CreateIssueWhenTheCustomFieldsAreNotProvided",
 			payload: &IssueScheme{
 				Fields: &IssueFieldsScheme{
@@ -1097,7 +1145,7 @@ func TestIssueService_Create(t *testing.T) {
 			endpoint:           "/rest/api/3/issue",
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusCreated,
-			wantErr:            false,
+			wantErr:            true,
 		},
 
 		{
@@ -1651,6 +1699,26 @@ func TestIssueService_Delete(t *testing.T) {
 			issueKeyOrID:       "DUMMY-3",
 			wantHTTPMethod:     http.MethodDelete,
 			endpoint:           "/rest/api/2/issue/DUMMY-3",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+
+		{
+			name:               "DeleteIssueWhenTheContextIsNil",
+			issueKeyOrID:       "DUMMY-3",
+			wantHTTPMethod:     http.MethodDelete,
+			endpoint:           "/rest/api/3/issue/DUMMY-3",
+			context:            nil,
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+
+		{
+			name:               "DeleteIssueWhenTheEndpointIsEmpty",
+			issueKeyOrID:       "DUMMY-3",
+			wantHTTPMethod:     http.MethodDelete,
+			endpoint:           "",
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusNoContent,
 			wantErr:            true,
@@ -2469,9 +2537,9 @@ func TestIssueService_Update(t *testing.T) {
 
 	var customFieldMockedWithOutFields = CustomFields{}
 
-	var operationMocked = UpdateOperations{}
+	var operationMockedWithFields = UpdateOperations{}
 
-	err = operationMocked.AddArrayOperation("labels", map[string]string{
+	err = operationMockedWithFields.AddArrayOperation("labels", map[string]string{
 		"triaged":   "remove",
 		"triaged-2": "remove",
 		"triaged-1": "remove",
@@ -2481,6 +2549,8 @@ func TestIssueService_Update(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+
+	var operationMockedWithOutFields = UpdateOperations{}
 
 	testCases := []struct {
 		name               string
@@ -2497,79 +2567,7 @@ func TestIssueService_Update(t *testing.T) {
 		wantErr            bool
 	}{
 		{
-			name:         "UpdateIssueWhenTheCustomFieldsAreProvided",
-			issueKeyOrID: "DUMMY-3",
-			notify:       false,
-			payload: &IssueScheme{
-				Fields: &IssueFieldsScheme{
-					Summary: "New summary test",
-				},
-			},
-			operations:         nil,
-			customFields:       &customFieldMockedWithFields,
-			wantHTTPMethod:     http.MethodPut,
-			endpoint:           "/rest/api/3/issue/DUMMY-3?notifyUsers=false",
-			context:            context.Background(),
-			wantHTTPCodeReturn: http.StatusNoContent,
-			wantErr:            false,
-		},
-
-		{
-			name:         "UpdateIssueWhenTheOperationsAreProvided",
-			issueKeyOrID: "DUMMY-3",
-			notify:       false,
-			payload: &IssueScheme{
-				Fields: &IssueFieldsScheme{
-					Summary: "New summary test",
-				},
-			},
-			operations:         &operationMocked,
-			customFields:       &customFieldMockedWithFields,
-			wantHTTPMethod:     http.MethodPut,
-			endpoint:           "/rest/api/3/issue/DUMMY-3?notifyUsers=false",
-			context:            context.Background(),
-			wantHTTPCodeReturn: http.StatusNoContent,
-			wantErr:            false,
-		},
-
-		{
-			name:         "UpdateIssueWhenTheOperationsAndCustomFieldsAreNotSet",
-			issueKeyOrID: "DUMMY-3",
-			notify:       false,
-			payload: &IssueScheme{
-				Fields: &IssueFieldsScheme{
-					Summary: "New summary test",
-				},
-			},
-			operations:         nil,
-			customFields:       nil,
-			wantHTTPMethod:     http.MethodPut,
-			endpoint:           "/rest/api/3/issue/DUMMY-3?notifyUsers=false",
-			context:            context.Background(),
-			wantHTTPCodeReturn: http.StatusNoContent,
-			wantErr:            false,
-		},
-
-		{
-			name:         "UpdateIssueWhenTheOperationsAndCustomFieldsAreNotSetAndContextIsNil",
-			issueKeyOrID: "DUMMY-3",
-			notify:       false,
-			payload: &IssueScheme{
-				Fields: &IssueFieldsScheme{
-					Summary: "New summary test",
-				},
-			},
-			operations:         nil,
-			customFields:       nil,
-			wantHTTPMethod:     http.MethodPut,
-			endpoint:           "/rest/api/3/issue/DUMMY-3?notifyUsers=false",
-			context:            nil,
-			wantHTTPCodeReturn: http.StatusNoContent,
-			wantErr:            true,
-		},
-
-		{
-			name:         "UpdateIssueWhenTheNotifyParamIsTrue",
+			name:         "EditIssueWhenTheCustomFieldsAndOperationAreProvided",
 			issueKeyOrID: "DUMMY-3",
 			notify:       true,
 			payload: &IssueScheme{
@@ -2577,6 +2575,7 @@ func TestIssueService_Update(t *testing.T) {
 					Summary: "New summary test",
 				},
 			},
+			operations:         &operationMockedWithFields,
 			customFields:       &customFieldMockedWithFields,
 			wantHTTPMethod:     http.MethodPut,
 			endpoint:           "/rest/api/3/issue/DUMMY-3",
@@ -2586,33 +2585,53 @@ func TestIssueService_Update(t *testing.T) {
 		},
 
 		{
-			name:         "UpdateIssueWhenTheCustomFieldsAreEmpty",
+			name:         "EditIssueWhenTheCustomFieldsAreProvided",
 			issueKeyOrID: "DUMMY-3",
-			notify:       false,
+			notify:       true,
 			payload: &IssueScheme{
 				Fields: &IssueFieldsScheme{
 					Summary: "New summary test",
 				},
 			},
-			customFields:       &customFieldMockedWithOutFields,
+			operations:         nil,
+			customFields:       &customFieldMockedWithFields,
 			wantHTTPMethod:     http.MethodPut,
-			endpoint:           "/rest/api/3/issue/DUMMY-3?notifyUsers=false",
+			endpoint:           "/rest/api/3/issue/DUMMY-3",
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusNoContent,
 			wantErr:            false,
 		},
 
 		{
-			name:         "UpdateIssueWhenTheCustomFieldsAreNil",
+			name:         "EditIssueWhenTheOperationsAreProvided",
 			issueKeyOrID: "DUMMY-3",
-			notify:       false,
+			notify:       true,
 			payload: &IssueScheme{
 				Fields: &IssueFieldsScheme{
 					Summary: "New summary test",
 				},
 			},
+			operations:         &operationMockedWithFields,
 			customFields:       nil,
 			wantHTTPMethod:     http.MethodPut,
+			endpoint:           "/rest/api/3/issue/DUMMY-3",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            false,
+		},
+
+		{
+			name:         "EditIssueWhenTheNotificationIsDisabled",
+			issueKeyOrID: "DUMMY-3",
+			notify:       false,
+			payload: &IssueScheme{
+				Fields: &IssueFieldsScheme{
+					Summary: "New summary test",
+				},
+			},
+			operations:         &operationMockedWithFields,
+			customFields:       &customFieldMockedWithFields,
+			wantHTTPMethod:     http.MethodPut,
 			endpoint:           "/rest/api/3/issue/DUMMY-3?notifyUsers=false",
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusNoContent,
@@ -2620,94 +2639,248 @@ func TestIssueService_Update(t *testing.T) {
 		},
 
 		{
-			name:               "UpdateIssueWhenTheUpdatePayloadIsNil",
+			name:               "EditIssueWhenThePayloadIsNotProvided",
 			issueKeyOrID:       "DUMMY-3",
-			notify:             false,
+			notify:             true,
 			payload:            nil,
+			operations:         &operationMockedWithFields,
 			customFields:       &customFieldMockedWithFields,
 			wantHTTPMethod:     http.MethodPut,
-			endpoint:           "/rest/api/3/issue/DUMMY-3?notifyUsers=false",
+			endpoint:           "/rest/api/3/issue/DUMMY-3",
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusNoContent,
 			wantErr:            true,
 		},
+
 		{
-			name:         "UpdateIssueWhenTheIssueKeyOrIDIsNotSet",
+			name:         "EditIssueWhenTheIssueKeyOrIDIsNotProvided",
 			issueKeyOrID: "",
-			notify:       false,
+			notify:       true,
 			payload: &IssueScheme{
 				Fields: &IssueFieldsScheme{
 					Summary: "New summary test",
 				},
 			},
+			operations:         &operationMockedWithFields,
 			customFields:       &customFieldMockedWithFields,
 			wantHTTPMethod:     http.MethodPut,
-			endpoint:           "/rest/api/3/issue/DUMMY-3?notifyUsers=false",
+			endpoint:           "/rest/api/3/issue/DUMMY-3",
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusNoContent,
 			wantErr:            true,
 		},
+
 		{
-			name:         "UpdateIssueWhenTheRequestMethodIsIncorrect",
+			name:         "EditIssueWhenTheCustomFieldsAndOperationAreNotProvided",
 			issueKeyOrID: "DUMMY-3",
-			notify:       false,
+			notify:       true,
 			payload: &IssueScheme{
 				Fields: &IssueFieldsScheme{
 					Summary: "New summary test",
 				},
 			},
-			customFields:       &customFieldMockedWithFields,
-			wantHTTPMethod:     http.MethodDelete,
-			endpoint:           "/rest/api/3/issue/DUMMY-3?notifyUsers=false",
+			operations:         nil,
+			customFields:       nil,
+			wantHTTPMethod:     http.MethodPut,
+			endpoint:           "/rest/api/3/issue/DUMMY-3",
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusNoContent,
-			wantErr:            true,
+			wantErr:            false,
 		},
+
 		{
-			name:         "UpdateIssueWhenTheStatusCodeIsIncorrect",
+			name:         "EditIssueWhenTheCustomFields,OperationAndContextAreNotProvided",
 			issueKeyOrID: "DUMMY-3",
-			notify:       false,
+			notify:       true,
 			payload: &IssueScheme{
 				Fields: &IssueFieldsScheme{
 					Summary: "New summary test",
 				},
 			},
-			customFields:       &customFieldMockedWithFields,
+			operations:         nil,
+			customFields:       nil,
 			wantHTTPMethod:     http.MethodPut,
-			endpoint:           "/rest/api/3/issue/DUMMY-3?notifyUsers=false",
-			context:            context.Background(),
-			wantHTTPCodeReturn: http.StatusBadRequest,
-			wantErr:            true,
-		},
-		{
-			name:         "UpdateIssueWhenTheContextIsNil",
-			issueKeyOrID: "DUMMY-3",
-			notify:       false,
-			payload: &IssueScheme{
-				Fields: &IssueFieldsScheme{
-					Summary: "New summary test",
-				},
-			},
-			customFields:       &customFieldMockedWithFields,
-			wantHTTPMethod:     http.MethodPut,
-			endpoint:           "/rest/api/3/issue/DUMMY-3?notifyUsers=false",
+			endpoint:           "/rest/api/3/issue/DUMMY-3",
 			context:            nil,
 			wantHTTPCodeReturn: http.StatusNoContent,
 			wantErr:            true,
 		},
 
 		{
-			name:         "UpdateIssueWhenTheEndpointIsIncorrect",
+			name:         "EditIssueWhenTheCustomFieldsAndOperationAndProvideButNoTheContext",
 			issueKeyOrID: "DUMMY-3",
-			notify:       false,
+			notify:       true,
 			payload: &IssueScheme{
 				Fields: &IssueFieldsScheme{
 					Summary: "New summary test",
 				},
 			},
+			operations:         &operationMockedWithFields,
 			customFields:       &customFieldMockedWithFields,
 			wantHTTPMethod:     http.MethodPut,
-			endpoint:           "/rest/api/2/issue/DUMMY-3?notifyUsers=false",
+			endpoint:           "/rest/api/3/issue/DUMMY-3",
+			context:            nil,
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+
+		{
+			name:         "EditIssueWhenTheCustomFieldsAndOperationAreProvidedButCustomfieldDoNotHaveFields",
+			issueKeyOrID: "DUMMY-3",
+			notify:       true,
+			payload: &IssueScheme{
+				Fields: &IssueFieldsScheme{
+					Summary: "New summary test",
+				},
+			},
+			operations:         &operationMockedWithFields,
+			customFields:       &customFieldMockedWithOutFields,
+			wantHTTPMethod:     http.MethodPut,
+			endpoint:           "/rest/api/3/issue/DUMMY-3",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+
+		{
+			name:         "EditIssueWhenTheCustomFieldsAndOperationAreProvidedButOperationsDoNotHaveFields",
+			issueKeyOrID: "DUMMY-3",
+			notify:       true,
+			payload: &IssueScheme{
+				Fields: &IssueFieldsScheme{
+					Summary: "New summary test",
+				},
+			},
+			operations:         &operationMockedWithOutFields,
+			customFields:       &customFieldMockedWithFields,
+			wantHTTPMethod:     http.MethodPut,
+			endpoint:           "/rest/api/3/issue/DUMMY-3",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+
+		{
+			name:         "EditIssueWhenTheCustomFieldsAreProvidedButCustomfieldDoNotHaveFields",
+			issueKeyOrID: "DUMMY-3",
+			notify:       true,
+			payload: &IssueScheme{
+				Fields: &IssueFieldsScheme{
+					Summary: "New summary test",
+				},
+			},
+			operations:         nil,
+			customFields:       &customFieldMockedWithOutFields,
+			wantHTTPMethod:     http.MethodPut,
+			endpoint:           "/rest/api/3/issue/DUMMY-3",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+
+		{
+			name:         "EditIssueWhenTheOperationsAreProvidedButOperationsDoNotHaveFields",
+			issueKeyOrID: "DUMMY-3",
+			notify:       true,
+			payload: &IssueScheme{
+				Fields: &IssueFieldsScheme{
+					Summary: "New summary test",
+				},
+			},
+			operations:         &operationMockedWithOutFields,
+			customFields:       nil,
+			wantHTTPMethod:     http.MethodPut,
+			endpoint:           "/rest/api/3/issue/DUMMY-3",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+
+		{
+			name:         "EditIssueWhenTheCustomFieldsAreProvidedButContextIsNil",
+			issueKeyOrID: "DUMMY-3",
+			notify:       true,
+			payload: &IssueScheme{
+				Fields: &IssueFieldsScheme{
+					Summary: "New summary test",
+				},
+			},
+			operations:         nil,
+			customFields:       &customFieldMockedWithFields,
+			wantHTTPMethod:     http.MethodPut,
+			endpoint:           "/rest/api/3/issue/DUMMY-3",
+			context:            nil,
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+
+		{
+			name:         "EditIssueWhenTheOperationsAreProvidedButContextIsNil",
+			issueKeyOrID: "DUMMY-3",
+			notify:       true,
+			payload: &IssueScheme{
+				Fields: &IssueFieldsScheme{
+					Summary: "New summary test",
+				},
+			},
+			operations:         &operationMockedWithFields,
+			customFields:       nil,
+			wantHTTPMethod:     http.MethodPut,
+			endpoint:           "/rest/api/3/issue/DUMMY-3",
+			context:            nil,
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+
+		{
+			name:         "EditIssueWhenTheRequestMethodIsIncorrect",
+			issueKeyOrID: "DUMMY-3",
+			notify:       true,
+			payload: &IssueScheme{
+				Fields: &IssueFieldsScheme{
+					Summary: "New summary test",
+				},
+			},
+			operations:         &operationMockedWithFields,
+			customFields:       &customFieldMockedWithFields,
+			wantHTTPMethod:     http.MethodDelete,
+			endpoint:           "/rest/api/3/issue/DUMMY-3",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+
+		{
+			name:         "EditIssueWhenTheStatusCodeIsIncorrect",
+			issueKeyOrID: "DUMMY-3",
+			notify:       true,
+			payload: &IssueScheme{
+				Fields: &IssueFieldsScheme{
+					Summary: "New summary test",
+				},
+			},
+			operations:         &operationMockedWithFields,
+			customFields:       &customFieldMockedWithFields,
+			wantHTTPMethod:     http.MethodPut,
+			endpoint:           "/rest/api/3/issue/DUMMY-3",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusBadRequest,
+			wantErr:            true,
+		},
+
+		{
+			name:         "EditIssueWhenTheEndpointIsEmpty",
+			issueKeyOrID: "DUMMY-3",
+			notify:       true,
+			payload: &IssueScheme{
+				Fields: &IssueFieldsScheme{
+					Summary: "New summary test",
+				},
+			},
+			operations:         &operationMockedWithFields,
+			customFields:       &customFieldMockedWithFields,
+			wantHTTPMethod:     http.MethodPut,
+			endpoint:           "",
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusNoContent,
 			wantErr:            true,
@@ -2747,7 +2920,7 @@ func TestIssueService_Update(t *testing.T) {
 				testCase.notify,
 				testCase.payload,
 				testCase.customFields,
-				nil,
+				testCase.operations,
 			)
 
 			if testCase.wantErr {

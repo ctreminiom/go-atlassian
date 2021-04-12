@@ -34,7 +34,7 @@ func main() {
 	log.Println("HTTP Endpoint Used", response.Endpoint)
 
 	for _, field := range *fields {
-		log.Println(field.ID, field.Name, field.Schema.Type)
+		log.Println(field)
 	}
 
 }

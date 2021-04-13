@@ -15,25 +15,46 @@ type FieldService struct {
 	Context       *FieldContextService
 }
 
-type FieldScheme struct {
-	ID          string   `json:"id"`
-	Key         string   `json:"key"`
-	Name        string   `json:"name"`
-	Custom      bool     `json:"custom"`
-	Orderable   bool     `json:"orderable"`
-	Navigable   bool     `json:"navigable"`
-	Searchable  bool     `json:"searchable"`
-	ClauseNames []string `json:"clauseNames"`
-	Schema      struct {
-		Type   string `json:"type"`
-		System string `json:"system"`
-	} `json:"schema,omitempty"`
-	UntranslatedName string `json:"untranslatedName,omitempty"`
+type IssueFieldScheme struct {
+	ID            string                    `json:"id,omitempty"`
+	Key           string                    `json:"key,omitempty"`
+	Name          string                    `json:"name,omitempty"`
+	Custom        bool                      `json:"custom,omitempty"`
+	Orderable     bool                      `json:"orderable,omitempty"`
+	Navigable     bool                      `json:"navigable,omitempty"`
+	Searchable    bool                      `json:"searchable,omitempty"`
+	ClauseNames   []string                  `json:"clauseNames,omitempty"`
+	Scope         *IssueFieldScopeScheme    `json:"scope,omitempty"`
+	Schema        *IssueFieldSchemaScheme   `json:"schema,omitempty"`
+	Description   string                    `json:"description,omitempty"`
+	IsLocked      bool                      `json:"isLocked,omitempty"`
+	SearcherKey   string                    `json:"searcherKey,omitempty"`
+	ScreensCount  int                       `json:"screensCount,omitempty"`
+	ContextsCount int                       `json:"contextsCount,omitempty"`
+	LastUsed      *IssueFieldLastUsedScheme `json:"lastUsed,omitempty"`
+}
+
+type IssueFieldLastUsedScheme struct {
+	Type  string `json:"type,omitempty"`
+	Value string `json:"value,omitempty"`
+}
+
+type IssueFieldScopeScheme struct {
+	Type    string         `json:"type,omitempty"`
+	Project *ProjectScheme `json:"project,omitempty"`
+}
+
+type IssueFieldSchemaScheme struct {
+	Type     string `json:"type,omitempty"`
+	Items    string `json:"items,omitempty"`
+	System   string `json:"system,omitempty"`
+	Custom   string `json:"custom,omitempty"`
+	CustomID int    `json:"customId,omitempty"`
 }
 
 // Returns system and custom issue fields according to the following rules:
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields#get-fields
-func (f *FieldService) Gets(ctx context.Context) (result *[]FieldScheme, response *Response, err error) {
+func (f *FieldService) Gets(ctx context.Context) (result *[]IssueFieldScheme, response *Response, err error) {
 
 	var endpoint = "rest/api/3/field"
 	request, err := f.client.newRequest(ctx, http.MethodGet, endpoint, nil)
@@ -47,7 +68,7 @@ func (f *FieldService) Gets(ctx context.Context) (result *[]FieldScheme, respons
 		return
 	}
 
-	result = new([]FieldScheme)
+	result = new([]IssueFieldScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
@@ -70,7 +91,7 @@ func (c *CustomFieldScheme) Format() {
 
 // Creates a custom field.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields#create-custom-field
-func (f *FieldService) Create(ctx context.Context, payload *CustomFieldScheme) (result *FieldScheme, response *Response, err error) {
+func (f *FieldService) Create(ctx context.Context, payload *CustomFieldScheme) (result *IssueFieldScheme, response *Response, err error) {
 
 	if payload == nil {
 		return nil, nil, fmt.Errorf("error, payload value is nil, please provide a valid CustomFieldScheme pointer")
@@ -92,7 +113,7 @@ func (f *FieldService) Create(ctx context.Context, payload *CustomFieldScheme) (
 		return
 	}
 
-	result = new(FieldScheme)
+	result = new(IssueFieldScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
@@ -109,27 +130,11 @@ type FieldSearchOptionsScheme struct {
 }
 
 type FieldSearchScheme struct {
-	MaxResults int  `json:"maxResults"`
-	StartAt    int  `json:"startAt"`
-	Total      int  `json:"total"`
-	IsLast     bool `json:"isLast"`
-	Values     []struct {
-		ID     string `json:"id"`
-		Name   string `json:"name"`
-		Schema struct {
-			Type   string `json:"type"`
-			Items  string `json:"items"`
-			System string `json:"system"`
-		} `json:"schema,omitempty"`
-		Description   string `json:"description,omitempty"`
-		Key           string `json:"key,omitempty"`
-		IsLocked      bool   `json:"isLocked,omitempty"`
-		ScreensCount  int    `json:"screensCount,omitempty"`
-		ContextsCount int    `json:"contextsCount,omitempty"`
-		LastUsed      struct {
-			Type string `json:"type,omitempty"`
-		} `json:"lastUsed,omitempty"`
-	} `json:"values,omitempty"`
+	MaxResults int                 `json:"maxResults,omitempty"`
+	StartAt    int                 `json:"startAt,omitempty"`
+	Total      int                 `json:"total,omitempty"`
+	IsLast     bool                `json:"isLast,omitempty"`
+	Values     []*IssueFieldScheme `json:"values,omitempty"`
 }
 
 // Returns a paginated list of fields for Classic Jira projects.

@@ -596,24 +596,30 @@ func TestCommentService_Add(t *testing.T) {
 		},
 	})
 
+	payloadMocked := &CommentPayloadScheme{
+		Visibility: &CommentVisibilityScheme{
+			Type:  "role",
+			Value: "Administrators",
+		},
+		Body: &commentBody,
+	}
+
 	testCases := []struct {
-		name                                          string
-		issueKeyOrID, visibilityType, visibilityValue string
-		body                                          *CommentNodeScheme
-		expands                                       []string
-		mockFile                                      string
-		wantHTTPMethod                                string
-		endpoint                                      string
-		context                                       context.Context
-		wantHTTPCodeReturn                            int
-		wantErr                                       bool
+		name               string
+		issueKeyOrID       string
+		body               *CommentPayloadScheme
+		expands            []string
+		mockFile           string
+		wantHTTPMethod     string
+		endpoint           string
+		context            context.Context
+		wantHTTPCodeReturn int
+		wantErr            bool
 	}{
 		{
 			name:               "AddIssueCommentWhenTheParametersAreCorrect",
 			issueKeyOrID:       "DUMMY-3",
-			visibilityType:     "role",
-			visibilityValue:    "Administrators",
-			body:               &commentBody,
+			body:               payloadMocked,
 			expands:            []string{"renderedBody", "comment.id"},
 			mockFile:           "./mocks/get-issue-comment-by-id.json",
 			wantHTTPMethod:     http.MethodPost,
@@ -626,9 +632,7 @@ func TestCommentService_Add(t *testing.T) {
 		{
 			name:               "AddIssueCommentWhenTheResponseBodyHasADifferentFormat",
 			issueKeyOrID:       "DUMMY-3",
-			visibilityType:     "role",
-			visibilityValue:    "Administrators",
-			body:               &commentBody,
+			body:               payloadMocked,
 			expands:            []string{"renderedBody"},
 			mockFile:           "./mocks/empty_json.json",
 			wantHTTPMethod:     http.MethodPost,
@@ -641,9 +645,7 @@ func TestCommentService_Add(t *testing.T) {
 		{
 			name:               "AddIssueCommentWhenTheIssueKeyIsNotSet",
 			issueKeyOrID:       "",
-			visibilityType:     "role",
-			visibilityValue:    "Administrators",
-			body:               &commentBody,
+			body:               payloadMocked,
 			expands:            []string{"renderedBody"},
 			mockFile:           "./mocks/get-issue-comment-by-id.json",
 			wantHTTPMethod:     http.MethodPost,
@@ -656,8 +658,6 @@ func TestCommentService_Add(t *testing.T) {
 		{
 			name:               "AddIssueCommentWhenTheCommentBodyIsNotSet",
 			issueKeyOrID:       "DUMMY-3",
-			visibilityType:     "role",
-			visibilityValue:    "Administrators",
 			body:               nil,
 			expands:            []string{"renderedBody"},
 			mockFile:           "./mocks/get-issue-comment-by-id.json",
@@ -671,9 +671,7 @@ func TestCommentService_Add(t *testing.T) {
 		{
 			name:               "AddIssueCommentWhenTheVisibilityIsNotSet",
 			issueKeyOrID:       "DUMMY-3",
-			visibilityType:     "",
-			visibilityValue:    "",
-			body:               &commentBody,
+			body:               payloadMocked,
 			expands:            []string{"renderedBody"},
 			mockFile:           "./mocks/get-issue-comment-by-id.json",
 			wantHTTPMethod:     http.MethodPost,
@@ -686,9 +684,7 @@ func TestCommentService_Add(t *testing.T) {
 		{
 			name:               "AddIssueCommentWhenTheExpandsAreNotSet",
 			issueKeyOrID:       "DUMMY-3",
-			visibilityType:     "role",
-			visibilityValue:    "Administrators",
-			body:               &commentBody,
+			body:               payloadMocked,
 			expands:            nil,
 			mockFile:           "./mocks/get-issue-comment-by-id.json",
 			wantHTTPMethod:     http.MethodPost,
@@ -701,9 +697,7 @@ func TestCommentService_Add(t *testing.T) {
 		{
 			name:               "AddIssueCommentWhenTheRequestMethodIsIncorrect",
 			issueKeyOrID:       "DUMMY-3",
-			visibilityType:     "role",
-			visibilityValue:    "Administrators",
-			body:               &commentBody,
+			body:               payloadMocked,
 			expands:            []string{"renderedBody"},
 			mockFile:           "./mocks/get-issue-comment-by-id.json",
 			wantHTTPMethod:     http.MethodDelete,
@@ -716,9 +710,7 @@ func TestCommentService_Add(t *testing.T) {
 		{
 			name:               "AddIssueCommentWhenTheStatusCodeIsIncorrect",
 			issueKeyOrID:       "DUMMY-3",
-			visibilityType:     "role",
-			visibilityValue:    "Administrators",
-			body:               &commentBody,
+			body:               payloadMocked,
 			expands:            []string{"renderedBody"},
 			mockFile:           "./mocks/get-issue-comment-by-id.json",
 			wantHTTPMethod:     http.MethodPost,
@@ -731,9 +723,7 @@ func TestCommentService_Add(t *testing.T) {
 		{
 			name:               "AddIssueCommentWhenTheContextIsNil",
 			issueKeyOrID:       "DUMMY-3",
-			visibilityType:     "role",
-			visibilityValue:    "Administrators",
-			body:               &commentBody,
+			body:               payloadMocked,
 			expands:            []string{"renderedBody"},
 			mockFile:           "./mocks/get-issue-comment-by-id.json",
 			wantHTTPMethod:     http.MethodPost,
@@ -772,8 +762,7 @@ func TestCommentService_Add(t *testing.T) {
 			i := &CommentService{client: mockClient}
 
 			gotResult, gotResponse, err := i.Add(testCase.context,
-				testCase.issueKeyOrID, testCase.visibilityType,
-				testCase.visibilityValue, testCase.body,
+				testCase.issueKeyOrID, testCase.body,
 				testCase.expands)
 
 			if testCase.wantErr {

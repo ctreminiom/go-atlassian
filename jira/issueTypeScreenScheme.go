@@ -13,15 +13,19 @@ import (
 type IssueTypeScreenSchemeService struct{ client *Client }
 
 type IssueTypeScreenSchemePageScheme struct {
-	MaxResults int  `json:"maxResults"`
-	StartAt    int  `json:"startAt"`
-	Total      int  `json:"total"`
-	IsLast     bool `json:"isLast"`
-	Values     []struct {
-		ID          string `json:"id"`
-		Name        string `json:"name"`
-		Description string `json:"description"`
-	} `json:"values"`
+	Self       string                         `json:"self,omitempty"`
+	NextPage   string                         `json:"nextPage,omitempty"`
+	MaxResults int                            `json:"maxResults,omitempty"`
+	StartAt    int                            `json:"startAt,omitempty"`
+	Total      int                            `json:"total,omitempty"`
+	IsLast     bool                           `json:"isLast,omitempty"`
+	Values     []*IssueTypeScreenSchemeScheme `json:"values,omitempty"`
+}
+
+type IssueTypeScreenSchemeScheme struct {
+	ID          string `json:"id,omitempty"`
+	Name        string `json:"name,omitempty"`
+	Description string `json:"description,omitempty"`
 }
 
 // Returns a paginated list of issue type screen schemes.
@@ -42,6 +46,7 @@ func (i *IssueTypeScreenSchemeService) Gets(ctx context.Context, ids []int, star
 	if err != nil {
 		return
 	}
+
 	request.Header.Set("Accept", "application/json")
 
 	response, err = i.client.Do(request)
@@ -58,8 +63,8 @@ func (i *IssueTypeScreenSchemeService) Gets(ctx context.Context, ids []int, star
 }
 
 type IssueTypeScreenSchemePayloadScheme struct {
-	Name              string                                      `json:"name" validate:"required"`
-	IssueTypeMappings []IssueTypeScreenSchemeMappingPayloadScheme `json:"issueTypeMappings" validate:"required"`
+	Name              string                                       `json:"name,omitempty" validate:"required"`
+	IssueTypeMappings []*IssueTypeScreenSchemeMappingPayloadScheme `json:"issueTypeMappings,omitempty" validate:"required"`
 }
 
 type IssueTypeScreenSchemeMappingPayloadScheme struct {
@@ -104,13 +109,9 @@ func (i *IssueTypeScreenSchemeService) Create(ctx context.Context, payload *Issu
 		return
 	}
 
-	newIssueTypeScreenSchemeIDAsInt, err := strconv.Atoi(result.ID)
-	if err != nil {
-		return
-	}
+	newIssueTypeScreenSchemeIDAsInt, _ := strconv.Atoi(result.ID)
 
-	issueTypeScreenSchemeID = newIssueTypeScreenSchemeIDAsInt
-	return
+	return newIssueTypeScreenSchemeIDAsInt, response, nil
 }
 
 // Assigns an issue type screen scheme to a project.
@@ -152,6 +153,9 @@ func (i *IssueTypeScreenSchemeService) Assign(ctx context.Context, issueTypeScre
 	return
 }
 
+// Returns a paginated list of issue type screen schemes and,
+// for each issue type screen scheme, a list of the projects that use it.
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/types/screen-scheme#assign-issue-type-screen-scheme-to-project
 func (i *IssueTypeScreenSchemeService) Projects(ctx context.Context, projectIDs []int, startAt, maxResults int) (result *IssueTypeProjectScreenSchemePageScheme, response *Response, err error) {
 
 	params := url.Values{}
@@ -188,22 +192,23 @@ func (i *IssueTypeScreenSchemeService) Projects(ctx context.Context, projectIDs 
 }
 
 type IssueTypeProjectScreenSchemePageScheme struct {
-	MaxResults int  `json:"maxResults"`
-	StartAt    int  `json:"startAt"`
-	Total      int  `json:"total"`
-	IsLast     bool `json:"isLast"`
-	Values     []struct {
-		IssueTypeScreenScheme struct {
-			ID          string `json:"id"`
-			Name        string `json:"name"`
-			Description string `json:"description"`
-		} `json:"issueTypeScreenScheme"`
-		ProjectIds []string `json:"projectIds"`
-	} `json:"values"`
+	Self       string                                 `json:"self,omitempty"`
+	NextPage   string                                 `json:"nextPage,omitempty"`
+	MaxResults int                                    `json:"maxResults,omitempty"`
+	StartAt    int                                    `json:"startAt,omitempty"`
+	Total      int                                    `json:"total,omitempty"`
+	IsLast     bool                                   `json:"isLast,omitempty"`
+	Values     []*IssueTypeScreenSchemesProjectScheme `json:"values,omitempty"`
+}
+
+type IssueTypeScreenSchemesProjectScheme struct {
+	IssueTypeScreenScheme *IssueTypeScreenSchemeScheme `json:"issueTypeScreenScheme,omitempty"`
+	ProjectIds            []string                     `json:"projectIds,omitempty"`
 }
 
 // Returns a paginated list of issue type screen scheme items.
-func (i *IssueTypeScreenSchemeService) Mapping(ctx context.Context, issueTypeScreenSchemeIDs []int, startAt, maxResults int) (result *IssueTypeProjectScreenSchemeMappingPageScheme, response *Response, err error) {
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/types/screen-scheme#get-issue-type-screen-scheme-items
+func (i *IssueTypeScreenSchemeService) Mapping(ctx context.Context, issueTypeScreenSchemeIDs []int, startAt, maxResults int) (result *IssueTypeScreenSchemeMappingScheme, response *Response, err error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -226,7 +231,7 @@ func (i *IssueTypeScreenSchemeService) Mapping(ctx context.Context, issueTypeScr
 		return
 	}
 
-	result = new(IssueTypeProjectScreenSchemeMappingPageScheme)
+	result = new(IssueTypeScreenSchemeMappingScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
@@ -234,18 +239,20 @@ func (i *IssueTypeScreenSchemeService) Mapping(ctx context.Context, issueTypeScr
 	return
 }
 
-type IssueTypeProjectScreenSchemeMappingPageScheme struct {
-	Self       string `json:"self"`
-	NextPage   string `json:"nextPage"`
-	MaxResults int    `json:"maxResults"`
-	StartAt    int    `json:"startAt"`
-	Total      int    `json:"total"`
-	IsLast     bool   `json:"isLast"`
-	Values     []struct {
-		IssueTypeScreenSchemeID string `json:"issueTypeScreenSchemeId"`
-		IssueTypeID             string `json:"issueTypeId"`
-		ScreenSchemeID          string `json:"screenSchemeId"`
-	} `json:"values"`
+type IssueTypeScreenSchemeMappingScheme struct {
+	Self       string                             `json:"self,omitempty"`
+	NextPage   string                             `json:"nextPage,omitempty"`
+	MaxResults int                                `json:"maxResults,omitempty"`
+	StartAt    int                                `json:"startAt,omitempty"`
+	Total      int                                `json:"total,omitempty"`
+	IsLast     bool                               `json:"isLast,omitempty"`
+	Values     []*IssueTypeScreenSchemeItemScheme `json:"values,omitempty"`
+}
+
+type IssueTypeScreenSchemeItemScheme struct {
+	IssueTypeScreenSchemeID string `json:"issueTypeScreenSchemeId,omitempty"`
+	IssueTypeID             string `json:"issueTypeId,omitempty"`
+	ScreenSchemeID          string `json:"screenSchemeId,omitempty"`
 }
 
 // Updates an issue type screen scheme.
@@ -309,23 +316,17 @@ func (i *IssueTypeScreenSchemeService) Delete(ctx context.Context, issueTypeScre
 
 // Appends issue type to screen scheme mappings to an issue type screen scheme.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/types/screen-scheme#append-mappings-to-issue-type-screen-scheme
-func (i *IssueTypeScreenSchemeService) Append(ctx context.Context, issueTypeScreenSchemeID string, mappings *[]IssueTypeScreenSchemeMappingPayloadScheme) (response *Response, err error) {
+func (i *IssueTypeScreenSchemeService) Append(ctx context.Context, issueTypeScreenSchemeID string, payload *IssueTypeScreenSchemePayloadScheme) (response *Response, err error) {
 
 	if len(issueTypeScreenSchemeID) == 0 {
 		return nil, fmt.Errorf("error, please provide a issueTypeScreenSchemeID value")
 	}
 
-	if mappings == nil {
-		return nil, fmt.Errorf("error, payload value is nil, please provide a valid IssueTypeScreenSchemeMappingPayloadScheme slice pointer")
+	if payload == nil {
+		return nil, fmt.Errorf("error, payload value is nil, please provide a valid IssueTypeScreenSchemePayloadScheme pointer")
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/issuetypescreenscheme/%v/mapping", issueTypeScreenSchemeID)
-
-	payload := struct {
-		IssueTypeMappings []IssueTypeScreenSchemeMappingPayloadScheme `json:"issueTypeMappings"`
-	}{
-		IssueTypeMappings: *mappings,
-	}
 
 	request, err := i.client.newRequest(ctx, http.MethodPut, endpoint, &payload)
 	if err != nil {

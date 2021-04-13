@@ -202,14 +202,14 @@ func TestDashboardService_Copy(t *testing.T) {
 
 	projectPermission := &SharePermissionScheme{
 		Type: "project",
-		Project: &SharePermissionProjectScheme{
+		Project: &ProjectScheme{
 			ID: "10000",
 		},
 	}
 
 	groupPermission := &SharePermissionScheme{
 		Type:  "group",
-		Group: &SharePermissionGroupScheme{Name: "jira-administrators"},
+		Group: &GroupScheme{Name: "jira-administrators"},
 	}
 
 	sharePermissionsMocked = append(sharePermissionsMocked, *projectPermission, *groupPermission)
@@ -453,14 +453,14 @@ func TestDashboardService_Create(t *testing.T) {
 
 	projectPermission := &SharePermissionScheme{
 		Type: "project",
-		Project: &SharePermissionProjectScheme{
+		Project: &ProjectScheme{
 			ID: "10000",
 		},
 	}
 
 	groupPermission := &SharePermissionScheme{
 		Type:  "group",
-		Group: &SharePermissionGroupScheme{Name: "jira-administrators"},
+		Group: &GroupScheme{Name: "jira-administrators"},
 	}
 
 	sharePermissionsMocked = append(sharePermissionsMocked, *projectPermission, *groupPermission)
@@ -1185,14 +1185,14 @@ func TestDashboardService_Update(t *testing.T) {
 
 	projectPermission := &SharePermissionScheme{
 		Type: "project",
-		Project: &SharePermissionProjectScheme{
+		Project: &ProjectScheme{
 			ID: "10000",
 		},
 	}
 
 	groupPermission := &SharePermissionScheme{
 		Type:  "group",
-		Group: &SharePermissionGroupScheme{Name: "jira-administrators"},
+		Group: &GroupScheme{Name: "jira-administrators"},
 	}
 
 	sharePermissionsMocked = append(sharePermissionsMocked, *projectPermission, *groupPermission)

@@ -59,24 +59,19 @@ func (i *IssueScheme) MergeCustomFields(fields *CustomFields) (result map[string
 		return nil, fmt.Errorf("error, please provide a value *CustomFields pointer")
 	}
 
-	//Convert the IssueScheme struct to map[string]interface{}
-	issueSchemeAsBytes, err := json.Marshal(i)
-	if err != nil {
-		return nil, err
+	if len(fields.Fields) == 0 {
+		return nil, fmt.Errorf("error!, the Fields tag does not contains custom fields")
 	}
 
+	//Convert the IssueScheme struct to map[string]interface{}
+	issueSchemeAsBytes, _ := json.Marshal(i)
+
 	issueSchemeAsMap := make(map[string]interface{})
-	err = json.Unmarshal(issueSchemeAsBytes, &issueSchemeAsMap)
-	if err != nil {
-		return nil, err
-	}
+	_ = json.Unmarshal(issueSchemeAsBytes, &issueSchemeAsMap)
 
 	//For each customField created, merge it into the eAsMap
 	for _, customField := range fields.Fields {
-		err = mergo.Merge(&issueSchemeAsMap, customField, mergo.WithOverride)
-		if err != nil {
-			return nil, err
-		}
+		_ = mergo.Merge(&issueSchemeAsMap, customField, mergo.WithOverride)
 	}
 
 	return issueSchemeAsMap, nil
@@ -85,25 +80,22 @@ func (i *IssueScheme) MergeCustomFields(fields *CustomFields) (result map[string
 func (i *IssueScheme) MergeOperations(operations *UpdateOperations) (result map[string]interface{}, err error) {
 
 	if operations == nil {
-		return nil, fmt.Errorf("error, please provide a value *CustomFields pointer")
+		return nil, fmt.Errorf("error, please provide a value *UpdateOperations pointer")
+	}
+
+	if len(operations.Fields) == 0 {
+		return nil, fmt.Errorf("error!, the Fields tag does not contains custom fields")
 	}
 
 	//Convert the IssueScheme struct to map[string]interface{}
-	issueSchemeAsBytes, err := json.Marshal(i)
-	if err != nil {
-		return nil, err
-	}
+	issueSchemeAsBytes, _ := json.Marshal(i)
 
 	issueSchemeAsMap := make(map[string]interface{})
-	if err = json.Unmarshal(issueSchemeAsBytes, &issueSchemeAsMap); err != nil {
-		return nil, err
-	}
+	_ = json.Unmarshal(issueSchemeAsBytes, &issueSchemeAsMap)
 
 	//For each customField created, merge it into the eAsMap
 	for _, customField := range operations.Fields {
-		if err = mergo.Merge(&issueSchemeAsMap, customField, mergo.WithOverride); err != nil {
-			return nil, err
-		}
+		_ = mergo.Merge(&issueSchemeAsMap, customField, mergo.WithOverride)
 	}
 
 	return issueSchemeAsMap, nil
@@ -115,9 +107,8 @@ func (i *IssueScheme) ToMap() (result map[string]interface{}, err error) {
 	issueSchemeAsBytes, _ := json.Marshal(i)
 
 	issueSchemeAsMap := make(map[string]interface{})
-	if err = json.Unmarshal(issueSchemeAsBytes, &issueSchemeAsMap); err != nil {
-		return nil, err
-	}
+	_ = json.Unmarshal(issueSchemeAsBytes, &issueSchemeAsMap)
+
 	return issueSchemeAsMap, err
 }
 
@@ -460,18 +451,30 @@ func (c *CustomFields) Cascading(customFieldID, parent, child string) (err error
 
 // Creates an issue or, where the option to create subtasks is enabled in Jira, a subtask.
 // https://docs.go-atlassian.io/jira-software-cloud/issues#create-issue
-func (i *IssueService) Create(ctx context.Context, payload *IssueScheme, customFields *CustomFields) (result *IssueScheme, response *Response, err error) {
+func (i *IssueService) Create(ctx context.Context, payload *IssueScheme, customFields *CustomFields) (result *IssueResponseScheme, response *Response, err error) {
 
-	var endpoint = "rest/api/3/issue"
+	var (
+		endpoint = "rest/api/3/issue"
+		request  *http.Request
+	)
 
-	payloadWithCustomFields, err := payload.MergeCustomFields(customFields)
-	if err != nil {
-		return nil, nil, err
-	}
+	if customFields != nil {
 
-	request, err := i.client.newRequest(ctx, http.MethodPost, endpoint, payloadWithCustomFields)
-	if err != nil {
-		return nil, nil, err
+		payloadWithCustomFields, err := payload.MergeCustomFields(customFields)
+		if err != nil {
+			return nil, nil, err
+		}
+
+		request, err = i.client.newRequest(ctx, http.MethodPost, endpoint, payloadWithCustomFields)
+		if err != nil {
+			return nil, nil, err
+		}
+	} else {
+
+		request, err = i.client.newRequest(ctx, http.MethodPost, endpoint, payload)
+		if err != nil {
+			return nil, nil, err
+		}
 	}
 
 	request.Header.Set("Accept", "application/json")
@@ -482,7 +485,7 @@ func (i *IssueService) Create(ctx context.Context, payload *IssueScheme, customF
 		return
 	}
 
-	result = new(IssueScheme)
+	result = new(IssueResponseScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
@@ -490,27 +493,19 @@ func (i *IssueService) Create(ctx context.Context, payload *IssueScheme, customF
 	return
 }
 
-type IssuesScheme struct {
-	Issues []struct {
-		ID         string `json:"id"`
-		Key        string `json:"key"`
-		Self       string `json:"self"`
-		Transition struct {
-			Status          int `json:"status"`
-			ErrorCollection struct {
-			} `json:"errorCollection"`
-		} `json:"transition"`
-	} `json:"issues"`
-	Errors []struct {
-		Status        int `json:"status"`
-		ElementErrors struct {
+type IssueResponseScheme struct {
+	ID         string `json:"id"`
+	Key        string `json:"key"`
+	Self       string `json:"self"`
+	Transition struct {
+		Status          int `json:"status"`
+		ErrorCollection struct {
 			ErrorMessages []string `json:"errorMessages"`
 			Errors        struct {
 			} `json:"errors"`
 			Status int `json:"status"`
-		} `json:"elementErrors"`
-		FailedElementNumber int `json:"failedElementNumber"`
-	} `json:"errors"`
+		} `json:"errorCollection"`
+	} `json:"transition"`
 }
 
 type IssueBulkScheme struct {
@@ -520,7 +515,7 @@ type IssueBulkScheme struct {
 
 // Creates issues and, where the option to create subtasks is enabled in Jira, subtasks.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues#bulk-create-issue
-func (i *IssueService) Creates(ctx context.Context, payload []*IssueBulkScheme) (result *IssuesScheme, response *Response, err error) {
+func (i *IssueService) Creates(ctx context.Context, payload []*IssueBulkScheme) (result *IssueBulkResponseScheme, response *Response, err error) {
 
 	if len(payload) == 0 {
 		return nil, nil, fmt.Errorf("error, please provide a valid []*IssueBulkScheme slice of pointers")
@@ -560,7 +555,7 @@ func (i *IssueService) Creates(ctx context.Context, payload []*IssueBulkScheme) 
 		return
 	}
 
-	result = new(IssuesScheme)
+	result = new(IssueBulkResponseScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
@@ -570,6 +565,29 @@ func (i *IssueService) Creates(ctx context.Context, payload []*IssueBulkScheme) 
 
 type BulkIssueScheme struct {
 	Issues []IssueScheme `json:"issues"`
+}
+
+type IssueBulkResponseScheme struct {
+	Issues []struct {
+		ID         string `json:"id"`
+		Key        string `json:"key"`
+		Self       string `json:"self"`
+		Transition struct {
+			Status          int `json:"status"`
+			ErrorCollection struct {
+			} `json:"errorCollection"`
+		} `json:"transition"`
+	} `json:"issues"`
+	Errors []struct {
+		Status        int `json:"status"`
+		ElementErrors struct {
+			ErrorMessages []string `json:"errorMessages"`
+			Errors        struct {
+			} `json:"errors"`
+			Status int `json:"status"`
+		} `json:"elementErrors"`
+		FailedElementNumber int `json:"failedElementNumber"`
+	} `json:"errors"`
 }
 
 // Returns the details for an issue.
@@ -720,39 +738,65 @@ func (i *IssueService) Update(ctx context.Context, issueKeyOrID string, notify b
 		endpoint = fmt.Sprintf("rest/api/3/issue/%v", issueKeyOrID)
 	}
 
-	//Check if the method contais custom fields
-	var payloadAsMap map[string]interface{}
+	var request *http.Request
 
-	if customFields != nil {
+	// Executed when customfields or operation are not provided
+	if customFields == nil && operations == nil {
+
+		request, err = i.client.newRequest(ctx, http.MethodPut, endpoint, payload)
+		if err != nil {
+			return nil, err
+		}
+
+	}
+
+	// Executed when customfields and operation are provided
+	if customFields != nil && operations != nil {
 
 		payloadWithCustomFields, err := payload.MergeCustomFields(customFields)
 		if err != nil {
 			return nil, err
 		}
 
-		payloadAsMap = payloadWithCustomFields
+		payloadWithOperations, err := payload.MergeOperations(operations)
+		if err != nil {
+			return nil, err
+		}
+
+		//Merge the map[string]interface{} into one
+		_ = mergo.Map(&payloadWithCustomFields, &payloadWithOperations, mergo.WithOverride)
+
+		request, err = i.client.newRequest(ctx, http.MethodPut, endpoint, payloadWithCustomFields)
+		if err != nil {
+			return nil, err
+		}
 
 	}
 
-	if operations != nil {
+	// Executed when customfields are provided but not the operations
+	if customFields != nil && operations == nil {
+
+		payloadWithCustomFields, err := payload.MergeCustomFields(customFields)
+		if err != nil {
+			return nil, err
+		}
+
+		request, err = i.client.newRequest(ctx, http.MethodPut, endpoint, payloadWithCustomFields)
+		if err != nil {
+			return nil, err
+		}
+
+	}
+
+	// Executed when operations are provided but not the customfields
+	if customFields == nil && operations != nil {
 
 		payloadWithOperations, err := payload.MergeOperations(operations)
 		if err != nil {
 			return nil, err
 		}
 
-		payloadAsMap = payloadWithOperations
-	}
-
-	var request *http.Request
-
-	if payloadAsMap != nil {
-		request, err = i.client.newRequest(ctx, http.MethodPut, endpoint, payloadAsMap)
-		if err != nil {
-			return nil, err
-		}
-	} else {
-		request, err = i.client.newRequest(ctx, http.MethodPut, endpoint, payload)
+		request, err = i.client.newRequest(ctx, http.MethodPut, endpoint, payloadWithOperations)
 		if err != nil {
 			return nil, err
 		}

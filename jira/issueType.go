@@ -15,26 +15,21 @@ type IssueTypeService struct {
 }
 
 type IssueTypeScheme struct {
-	Self        string                `json:"self,omitempty"`
-	ID          string                `json:"id,omitempty"`
-	Description string                `json:"description,omitempty"`
-	IconURL     string                `json:"iconUrl,omitempty"`
-	Name        string                `json:"name,omitempty"`
-	Subtask     bool                  `json:"subtask,omitempty"`
-	AvatarID    int                   `json:"avatarId,omitempty"`
-	EntityID    string                `json:"entityId,omitempty"`
-	Scope       *IssueTypeScopeScheme `json:"scope,omitempty"`
+	Self           string                `json:"self,omitempty"`
+	ID             string                `json:"id,omitempty"`
+	Description    string                `json:"description,omitempty"`
+	IconURL        string                `json:"iconUrl,omitempty"`
+	Name           string                `json:"name,omitempty"`
+	Subtask        bool                  `json:"subtask,omitempty"`
+	AvatarID       int                   `json:"avatarId,omitempty"`
+	EntityID       string                `json:"entityId,omitempty"`
+	HierarchyLevel int                   `json:"hierarchyLevel,omitempty"`
+	Scope          *IssueTypeScopeScheme `json:"scope,omitempty"`
 }
 
 type IssueTypeScopeScheme struct {
-	Type    string                       `json:"type,omitempty"`
-	Project *IssueTypeScopeProjectScheme `json:"project,omitempty"`
-}
-
-type IssueTypeScopeProjectScheme struct {
-	ID   string `json:"id,omitempty"`
-	Key  string `json:"key,omitempty"`
-	Name string `json:"name,omitempty"`
+	Type    string         `json:"type,omitempty"`
+	Project *ProjectScheme `json:"project,omitempty"`
 }
 
 // Returns all issue types.
@@ -78,8 +73,7 @@ func (i *IssueTypeService) Create(ctx context.Context, payload *IssueTypePayload
 
 	validate := validator.New()
 	if err = validate.Struct(payload); err != nil {
-		err = fmt.Errorf("error: issuetype type payload invalid: %v", err.Error())
-		return
+		return nil, nil, fmt.Errorf("error: issuetype type payload invalid: %v", err.Error())
 	}
 
 	var endpoint = "rest/api/3/issuetype"
@@ -100,7 +94,6 @@ func (i *IssueTypeService) Create(ctx context.Context, payload *IssueTypePayload
 	result = new(IssueTypeScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
-
 	}
 
 	return

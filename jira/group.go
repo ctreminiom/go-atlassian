@@ -12,16 +12,18 @@ import (
 type GroupService struct{ client *Client }
 
 type GroupScheme struct {
-	Name  string `json:"name,omitempty"`
-	Self  string `json:"self,omitempty"`
-	Users struct {
-		Size       int           `json:"size,omitempty"`
-		Items      []*UserScheme `json:"items,omitempty"`
-		MaxResults int           `json:"max-results,omitempty"`
-		StartIndex int           `json:"start-index,omitempty"`
-		EndIndex   int           `json:"end-index,omitempty"`
-	} `json:"users,omitempty"`
-	Expand string `json:"expand,omitempty"`
+	Name   string               `json:"name,omitempty"`
+	Self   string               `json:"self,omitempty"`
+	Users  *GroupUserPageScheme `json:"users,omitempty"`
+	Expand string               `json:"expand,omitempty"`
+}
+
+type GroupUserPageScheme struct {
+	Size       int           `json:"size,omitempty"`
+	Items      []*UserScheme `json:"items,omitempty"`
+	MaxResults int           `json:"max-results,omitempty"`
+	StartIndex int           `json:"start-index,omitempty"`
+	EndIndex   int           `json:"end-index,omitempty"`
 }
 
 // Creates a group.
@@ -142,31 +144,37 @@ func (g *GroupService) Bulk(ctx context.Context, options *GroupBulkOptionsScheme
 	return
 }
 
-type GroupUsersScheme struct {
-	Self       string `json:"self,omitempty"`
-	NextPage   string `json:"nextPage,omitempty"`
-	MaxResults int    `json:"maxResults,omitempty"`
-	StartAt    int    `json:"startAt,omitempty"`
-	Total      int    `json:"total,omitempty"`
-	IsLast     bool   `json:"isLast,omitempty"`
-	Values     []struct {
-		Self         string `json:"self,omitempty"`
-		Name         string `json:"name,omitempty"`
-		Key          string `json:"key,omitempty"`
-		AccountID    string `json:"accountId,omitempty"`
-		EmailAddress string `json:"emailAddress,omitempty"`
-		AvatarUrls   struct {
-		} `json:"avatarUrls,omitempty"`
-		DisplayName string `json:"displayName,omitempty"`
-		Active      bool   `json:"active,omitempty"`
-		TimeZone    string `json:"timeZone,omitempty"`
-		AccountType string `json:"accountType,omitempty"`
-	} `json:"values,omitempty"`
+type GroupMemberPageScheme struct {
+	Self       string               `json:"self,omitempty"`
+	NextPage   string               `json:"nextPage,omitempty"`
+	MaxResults int                  `json:"maxResults,omitempty"`
+	StartAt    int                  `json:"startAt,omitempty"`
+	Total      int                  `json:"total,omitempty"`
+	IsLast     bool                 `json:"isLast,omitempty"`
+	Values     []*GroupMemberScheme `json:"values,omitempty"`
+}
+
+type GroupMemberScheme struct {
+	Self         string `json:"self"`
+	Name         string `json:"name"`
+	Key          string `json:"key"`
+	AccountID    string `json:"accountId"`
+	EmailAddress string `json:"emailAddress"`
+	AvatarUrls   struct {
+		One6X16   string `json:"16x16"`
+		Two4X24   string `json:"24x24"`
+		Three2X32 string `json:"32x32"`
+		Four8X48  string `json:"48x48"`
+	} `json:"avatarUrls"`
+	DisplayName string `json:"displayName"`
+	Active      bool   `json:"active"`
+	TimeZone    string `json:"timeZone"`
+	AccountType string `json:"accountType"`
 }
 
 // Returns a paginated list of all users in a group.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/groups#get-users-from-groups
-func (g *GroupService) Members(ctx context.Context, groupName string, inactive bool, startAt, maxResults int) (result *GroupUsersScheme, response *Response, err error) {
+func (g *GroupService) Members(ctx context.Context, groupName string, inactive bool, startAt, maxResults int) (result *GroupMemberPageScheme, response *Response, err error) {
 
 	if len(groupName) == 0 {
 		return nil, nil, fmt.Errorf("error, please provide a valid groupName value")
@@ -193,7 +201,7 @@ func (g *GroupService) Members(ctx context.Context, groupName string, inactive b
 		return
 	}
 
-	result = new(GroupUsersScheme)
+	result = new(GroupMemberPageScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}

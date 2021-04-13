@@ -732,6 +732,17 @@ func TestFieldContextService_Delete(t *testing.T) {
 		},
 
 		{
+			name:               "DeleteCustomFieldContextWhenTheContextIDIsNotProvided",
+			fieldID:            "customfield_10002",
+			contextID:          0,
+			wantHTTPMethod:     http.MethodDelete,
+			endpoint:           "/rest/api/3/field/customfield_10002/context/2001",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+
+		{
 			name:               "DeleteCustomFieldContextWhenTheFieldIsNotSet",
 			fieldID:            "",
 			contextID:          2001,
@@ -956,6 +967,20 @@ func TestFieldContextService_GetDefaultValues(t *testing.T) {
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/api/3/field/customfield_10002/context/defaultValue?contextId=1001&contextId=1002&maxResults=50&startAt=0",
 			context:            nil,
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+
+		{
+			name:               "GetCustomFieldContextDefaultValuesWhenResponseBodyIsEmpty",
+			fieldID:            "customfield_10002",
+			contextIDs:         []int{1001, 1002},
+			startAt:            0,
+			maxResults:         50,
+			mockFile:           "./mocks/empty_json.json",
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/rest/api/3/field/customfield_10002/context/defaultValue?contextId=1001&contextId=1002&maxResults=50&startAt=0",
+			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusOK,
 			wantErr:            true,
 		},
@@ -1368,39 +1393,22 @@ func TestFieldContextService_RemoveIssueTypes(t *testing.T) {
 
 func TestFieldContextService_SetDefaultValue(t *testing.T) {
 
-	var defaultValuesMockedWithValues []*DefaultValueScheme
-
-	var defaultValuesMockedWithNoValues []*DefaultValueScheme
-
-	defaultValueSingleOption := &DefaultValueScheme{
-		ContextID: "10100",
-		OptionID:  "10001",
-		Type:      "option.single",
+	var defaultValuesMockedWithValues = &FieldContextDefaultPayloadScheme{
+		DefaultValues: []*CustomFieldDefaultValueScheme{
+			{
+				ContextID: "10138",
+				OptionID:  "10022",
+				Type:      "option.single",
+			},
+		},
 	}
 
-	defaultValueMultipleOptions := &DefaultValueScheme{
-		ContextID: "10101",
-		Type:      "option.multiple",
-		OptionIds: []string{"Option 1", "Option 2", "Option 3"},
-	}
-
-	defaultValueCascading := &DefaultValueScheme{
-		ContextID:         "10103",
-		OptionID:          "10005",
-		CascadingOptionID: "10051",
-		Type:              "option.cascading",
-	}
-
-	defaultValuesMockedWithValues = append(
-		defaultValuesMockedWithValues,
-		defaultValueSingleOption, defaultValueMultipleOptions,
-		defaultValueCascading,
-	)
+	var defaultValuesMockedWithNotValues = &FieldContextDefaultPayloadScheme{}
 
 	testCases := []struct {
 		name               string
 		fieldID            string
-		values             []*DefaultValueScheme
+		payload            *FieldContextDefaultPayloadScheme
 		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string
@@ -1411,8 +1419,8 @@ func TestFieldContextService_SetDefaultValue(t *testing.T) {
 		{
 			name:               "SetDefaultValueToCustomFieldContextWhenTheParametersAreCorrect",
 			fieldID:            "customfield_10002",
-			values:             defaultValuesMockedWithValues,
-			wantHTTPMethod:     http.MethodPost,
+			payload:            defaultValuesMockedWithValues,
+			wantHTTPMethod:     http.MethodPut,
 			endpoint:           "/rest/api/3/field/customfield_10002/context/defaultValue",
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusNoContent,
@@ -1422,8 +1430,8 @@ func TestFieldContextService_SetDefaultValue(t *testing.T) {
 		{
 			name:               "SetDefaultValueToCustomFieldContextWhenTheValuesAreEmpty",
 			fieldID:            "customfield_10002",
-			values:             defaultValuesMockedWithNoValues,
-			wantHTTPMethod:     http.MethodPost,
+			payload:            defaultValuesMockedWithNotValues,
+			wantHTTPMethod:     http.MethodPut,
 			endpoint:           "/rest/api/3/field/customfield_10002/context/defaultValue",
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusNoContent,
@@ -1433,8 +1441,8 @@ func TestFieldContextService_SetDefaultValue(t *testing.T) {
 		{
 			name:               "SetDefaultValueToCustomFieldContextWhenTheFieldIDIsNotSet",
 			fieldID:            "",
-			values:             defaultValuesMockedWithValues,
-			wantHTTPMethod:     http.MethodPost,
+			payload:            defaultValuesMockedWithValues,
+			wantHTTPMethod:     http.MethodPut,
 			endpoint:           "/rest/api/3/field/customfield_10002/context/defaultValue",
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusNoContent,
@@ -1444,8 +1452,8 @@ func TestFieldContextService_SetDefaultValue(t *testing.T) {
 		{
 			name:               "SetDefaultValueToCustomFieldContextWhenTheValuesAreNotSet",
 			fieldID:            "customfield_10002",
-			values:             nil,
-			wantHTTPMethod:     http.MethodPost,
+			payload:            nil,
+			wantHTTPMethod:     http.MethodPut,
 			endpoint:           "/rest/api/3/field/customfield_10002/context/defaultValue",
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusNoContent,
@@ -1455,7 +1463,7 @@ func TestFieldContextService_SetDefaultValue(t *testing.T) {
 		{
 			name:               "SetDefaultValueToCustomFieldContextWhenTheRequestMethodIsIncorrect",
 			fieldID:            "customfield_10002",
-			values:             defaultValuesMockedWithValues,
+			payload:            defaultValuesMockedWithValues,
 			wantHTTPMethod:     http.MethodDelete,
 			endpoint:           "/rest/api/3/field/customfield_10002/context/defaultValue",
 			context:            context.Background(),
@@ -1465,8 +1473,8 @@ func TestFieldContextService_SetDefaultValue(t *testing.T) {
 		{
 			name:               "SetDefaultValueToCustomFieldContextWhenTheStatusCodeIsIncorrect",
 			fieldID:            "customfield_10002",
-			values:             defaultValuesMockedWithValues,
-			wantHTTPMethod:     http.MethodPost,
+			payload:            defaultValuesMockedWithValues,
+			wantHTTPMethod:     http.MethodPut,
 			endpoint:           "/rest/api/3/field/customfield_10002/context/defaultValue",
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusBadRequest,
@@ -1475,8 +1483,8 @@ func TestFieldContextService_SetDefaultValue(t *testing.T) {
 		{
 			name:               "SetDefaultValueToCustomFieldContextWhenTheContextIsNil",
 			fieldID:            "customfield_10002",
-			values:             defaultValuesMockedWithValues,
-			wantHTTPMethod:     http.MethodPost,
+			payload:            defaultValuesMockedWithValues,
+			wantHTTPMethod:     http.MethodPut,
 			endpoint:           "/rest/api/3/field/customfield_10002/context/defaultValue",
 			context:            nil,
 			wantHTTPCodeReturn: http.StatusNoContent,
@@ -1485,8 +1493,8 @@ func TestFieldContextService_SetDefaultValue(t *testing.T) {
 		{
 			name:               "SetDefaultValueToCustomFieldContextWhenTheEndpointIsEmpty",
 			fieldID:            "customfield_10002",
-			values:             defaultValuesMockedWithValues,
-			wantHTTPMethod:     http.MethodPost,
+			payload:            defaultValuesMockedWithValues,
+			wantHTTPMethod:     http.MethodPut,
 			endpoint:           "",
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusNoContent,
@@ -1519,7 +1527,7 @@ func TestFieldContextService_SetDefaultValue(t *testing.T) {
 			}
 
 			service := &FieldContextService{client: mockClient}
-			gotResponse, err := service.SetDefaultValue(testCase.context, testCase.fieldID, testCase.values)
+			gotResponse, err := service.SetDefaultValue(testCase.context, testCase.fieldID, testCase.payload)
 
 			if testCase.wantErr {
 
@@ -1748,6 +1756,19 @@ func TestFieldContextService_Update(t *testing.T) {
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusNoContent,
 			wantErr:            false,
+		},
+
+		{
+			name:               "UpdateCustomFieldContextWhenTheContextIDIsNotProvided",
+			fieldID:            "customfield_10002",
+			contextID:          0,
+			fieldContextName:   "new customfield context",
+			description:        "new customfield description",
+			wantHTTPMethod:     http.MethodPut,
+			endpoint:           "/rest/api/3/field/customfield_10002/context/2001",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
 		},
 
 		{

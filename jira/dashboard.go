@@ -11,11 +11,11 @@ import (
 
 type DashboardService struct{ client *Client }
 
-type DashboardsSchemeResult struct {
-	StartAt    int               `json:"startAt,omitempty"`
-	MaxResults int               `json:"maxResults,omitempty"`
-	Total      int               `json:"total,omitempty"`
-	Dashboards []DashboardScheme `json:"dashboards,omitempty"`
+type DashboardPageScheme struct {
+	StartAt    int                `json:"startAt,omitempty"`
+	MaxResults int                `json:"maxResults,omitempty"`
+	Total      int                `json:"total,omitempty"`
+	Dashboards []*DashboardScheme `json:"dashboards,omitempty"`
 }
 
 type DashboardScheme struct {
@@ -29,8 +29,8 @@ type DashboardScheme struct {
 }
 
 // Returns a list of dashboards owned by or shared with the user. The list may be filtered to include only favorite or owned dashboards.
-// Docs: https://docs.go-atlassian.io/jira-software-cloud/dashboards#get-dashboards
-func (d *DashboardService) Gets(ctx context.Context, startAt, maxResults int, filter string) (result *DashboardsSchemeResult, response *Response, err error) {
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/dashboards#get-all-dashboards
+func (d *DashboardService) Gets(ctx context.Context, startAt, maxResults int, filter string) (result *DashboardPageScheme, response *Response, err error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -51,7 +51,7 @@ func (d *DashboardService) Gets(ctx context.Context, startAt, maxResults int, fi
 		return
 	}
 
-	result = new(DashboardsSchemeResult)
+	result = new(DashboardPageScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
@@ -60,26 +60,11 @@ func (d *DashboardService) Gets(ctx context.Context, startAt, maxResults int, fi
 }
 
 type SharePermissionScheme struct {
-	Type    string                        `json:"type"`
-	Project *SharePermissionProjectScheme `json:"project,omitempty"`
-	Role    *SharePermissionRoleScheme    `json:"role,omitempty"`
-	Group   *SharePermissionGroupScheme   `json:"group,omitempty"`
-}
-
-type SharePermissionProjectScheme struct {
-	ID        string `json:"id,omitempty"`
-	Email     string `json:"email,omitempty"`
-	Favourite bool   `json:"favourite,omitempty"`
-}
-
-type SharePermissionRoleScheme struct {
-	Name            string `json:"name,omitempty"`
-	TranslatedName  string `json:"translatedName,omitempty"`
-	CurrentUserRole bool   `json:"currentUserRole,omitempty"`
-}
-
-type SharePermissionGroupScheme struct {
-	Name string `json:"name,omitempty"`
+	ID      int                `json:"id,omitempty"`
+	Type    string             `json:"type,omitempty"`
+	Project *ProjectScheme     `json:"project,omitempty"`
+	Role    *ProjectRoleScheme `json:"role,omitempty"`
+	Group   *GroupScheme       `json:"group,omitempty"`
 }
 
 // Creates a dashboard.
@@ -170,6 +155,7 @@ type DashboardSearchScheme struct {
 		Self             string                   `json:"self"`
 		SharePermissions []*SharePermissionScheme `json:"sharePermissions"`
 		View             string                   `json:"view"`
+		Rank             int                      `json:"rank"`
 	} `json:"values"`
 }
 

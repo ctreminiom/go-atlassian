@@ -85,7 +85,9 @@ func TestApplicationRoleService_Gets(t *testing.T) {
 	}
 
 	for _, testCase := range testCases {
+		testCase := testCase
 		t.Run(testCase.name, func(t *testing.T) {
+			t.Parallel()
 
 			//Init a new HTTP mock server
 			mockOptions := mockServerOptions{

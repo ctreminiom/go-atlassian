@@ -14,7 +14,7 @@ func TestIssueTypeScreenSchemeService_Append(t *testing.T) {
 	testCases := []struct {
 		name                    string
 		issueTypeScreenSchemeID string
-		mappings                *[]IssueTypeScreenSchemeMappingPayloadScheme
+		payload                 *IssueTypeScreenSchemePayloadScheme
 		mockFile                string
 		wantHTTPMethod          string
 		endpoint                string
@@ -25,18 +25,16 @@ func TestIssueTypeScreenSchemeService_Append(t *testing.T) {
 		{
 			name:                    "AppendMappingsToIssueTypeScreenSchemeWhenTheParametersAreCorrect",
 			issueTypeScreenSchemeID: "10000",
-			mappings: &[]IssueTypeScreenSchemeMappingPayloadScheme{
-				{
-					IssueTypeID:    "10000",
-					ScreenSchemeID: "10001",
-				},
-				{
-					IssueTypeID:    "10001",
-					ScreenSchemeID: "10002",
-				},
-				{
-					IssueTypeID:    "10002",
-					ScreenSchemeID: "10003",
+			payload: &IssueTypeScreenSchemePayloadScheme{
+				IssueTypeMappings: []*IssueTypeScreenSchemeMappingPayloadScheme{
+					{
+						IssueTypeID:    "10000", // Epic Issue Type
+						ScreenSchemeID: "10002",
+					},
+					{
+						IssueTypeID:    "10002", // Task Issue Type
+						ScreenSchemeID: "10002",
+					},
 				},
 			},
 			wantHTTPMethod:     http.MethodPut,
@@ -49,18 +47,16 @@ func TestIssueTypeScreenSchemeService_Append(t *testing.T) {
 		{
 			name:                    "AppendMappingsToIssueTypeScreenSchemeWhenTheIssueTypeScreenSchemeIDParamIsEmpty",
 			issueTypeScreenSchemeID: "",
-			mappings: &[]IssueTypeScreenSchemeMappingPayloadScheme{
-				{
-					IssueTypeID:    "10000",
-					ScreenSchemeID: "10001",
-				},
-				{
-					IssueTypeID:    "10001",
-					ScreenSchemeID: "10002",
-				},
-				{
-					IssueTypeID:    "10002",
-					ScreenSchemeID: "10003",
+			payload: &IssueTypeScreenSchemePayloadScheme{
+				IssueTypeMappings: []*IssueTypeScreenSchemeMappingPayloadScheme{
+					{
+						IssueTypeID:    "10000", // Epic Issue Type
+						ScreenSchemeID: "10002",
+					},
+					{
+						IssueTypeID:    "10002", // Task Issue Type
+						ScreenSchemeID: "10002",
+					},
 				},
 			},
 			wantHTTPMethod:     http.MethodPut,
@@ -73,7 +69,7 @@ func TestIssueTypeScreenSchemeService_Append(t *testing.T) {
 		{
 			name:                    "AppendMappingsToIssueTypeScreenSchemeWhenTheMappingsParamIsNil",
 			issueTypeScreenSchemeID: "10000",
-			mappings:                nil,
+			payload:                 nil,
 			wantHTTPMethod:          http.MethodPut,
 			endpoint:                "/rest/api/3/issuetypescreenscheme/10000/mapping",
 			context:                 context.Background(),
@@ -84,18 +80,16 @@ func TestIssueTypeScreenSchemeService_Append(t *testing.T) {
 		{
 			name:                    "AppendMappingsToIssueTypeScreenSchemeWhenTheEndpointIsIncorrect",
 			issueTypeScreenSchemeID: "10000",
-			mappings: &[]IssueTypeScreenSchemeMappingPayloadScheme{
-				{
-					IssueTypeID:    "10000",
-					ScreenSchemeID: "10001",
-				},
-				{
-					IssueTypeID:    "10001",
-					ScreenSchemeID: "10002",
-				},
-				{
-					IssueTypeID:    "10002",
-					ScreenSchemeID: "10003",
+			payload: &IssueTypeScreenSchemePayloadScheme{
+				IssueTypeMappings: []*IssueTypeScreenSchemeMappingPayloadScheme{
+					{
+						IssueTypeID:    "10000", // Epic Issue Type
+						ScreenSchemeID: "10002",
+					},
+					{
+						IssueTypeID:    "10002", // Task Issue Type
+						ScreenSchemeID: "10002",
+					},
 				},
 			},
 			wantHTTPMethod:     http.MethodPut,
@@ -108,18 +102,16 @@ func TestIssueTypeScreenSchemeService_Append(t *testing.T) {
 		{
 			name:                    "AppendMappingsToIssueTypeScreenSchemeWhenTheRequestMethodIsIncorrect",
 			issueTypeScreenSchemeID: "10000",
-			mappings: &[]IssueTypeScreenSchemeMappingPayloadScheme{
-				{
-					IssueTypeID:    "10000",
-					ScreenSchemeID: "10001",
-				},
-				{
-					IssueTypeID:    "10001",
-					ScreenSchemeID: "10002",
-				},
-				{
-					IssueTypeID:    "10002",
-					ScreenSchemeID: "10003",
+			payload: &IssueTypeScreenSchemePayloadScheme{
+				IssueTypeMappings: []*IssueTypeScreenSchemeMappingPayloadScheme{
+					{
+						IssueTypeID:    "10000", // Epic Issue Type
+						ScreenSchemeID: "10002",
+					},
+					{
+						IssueTypeID:    "10002", // Task Issue Type
+						ScreenSchemeID: "10002",
+					},
 				},
 			},
 			wantHTTPMethod:     http.MethodDelete,
@@ -132,18 +124,16 @@ func TestIssueTypeScreenSchemeService_Append(t *testing.T) {
 		{
 			name:                    "AppendMappingsToIssueTypeScreenSchemeWhenTheStatusCodeIsIncorrect",
 			issueTypeScreenSchemeID: "10000",
-			mappings: &[]IssueTypeScreenSchemeMappingPayloadScheme{
-				{
-					IssueTypeID:    "10000",
-					ScreenSchemeID: "10001",
-				},
-				{
-					IssueTypeID:    "10001",
-					ScreenSchemeID: "10002",
-				},
-				{
-					IssueTypeID:    "10002",
-					ScreenSchemeID: "10003",
+			payload: &IssueTypeScreenSchemePayloadScheme{
+				IssueTypeMappings: []*IssueTypeScreenSchemeMappingPayloadScheme{
+					{
+						IssueTypeID:    "10000", // Epic Issue Type
+						ScreenSchemeID: "10002",
+					},
+					{
+						IssueTypeID:    "10002", // Task Issue Type
+						ScreenSchemeID: "10002",
+					},
 				},
 			},
 			wantHTTPMethod:     http.MethodPut,
@@ -156,18 +146,16 @@ func TestIssueTypeScreenSchemeService_Append(t *testing.T) {
 		{
 			name:                    "AppendMappingsToIssueTypeScreenSchemeWhenTheContextIsNil",
 			issueTypeScreenSchemeID: "10000",
-			mappings: &[]IssueTypeScreenSchemeMappingPayloadScheme{
-				{
-					IssueTypeID:    "10000",
-					ScreenSchemeID: "10001",
-				},
-				{
-					IssueTypeID:    "10001",
-					ScreenSchemeID: "10002",
-				},
-				{
-					IssueTypeID:    "10002",
-					ScreenSchemeID: "10003",
+			payload: &IssueTypeScreenSchemePayloadScheme{
+				IssueTypeMappings: []*IssueTypeScreenSchemeMappingPayloadScheme{
+					{
+						IssueTypeID:    "10000", // Epic Issue Type
+						ScreenSchemeID: "10002",
+					},
+					{
+						IssueTypeID:    "10002", // Task Issue Type
+						ScreenSchemeID: "10002",
+					},
 				},
 			},
 			wantHTTPMethod:     http.MethodPut,
@@ -205,7 +193,7 @@ func TestIssueTypeScreenSchemeService_Append(t *testing.T) {
 
 			i := &IssueTypeScreenSchemeService{client: mockClient}
 
-			gotResponse, err := i.Append(testCase.context, testCase.issueTypeScreenSchemeID, testCase.mappings)
+			gotResponse, err := i.Append(testCase.context, testCase.issueTypeScreenSchemeID, testCase.payload)
 
 			if testCase.wantErr {
 
@@ -411,13 +399,16 @@ func TestIssueTypeScreenSchemeService_Create(t *testing.T) {
 			name: "CreateIssueTypeSchemeWhenTheParametersAreCorrect",
 			payload: &IssueTypeScreenSchemePayloadScheme{
 				Name: "Scrum issue type screen scheme",
-				IssueTypeMappings: []IssueTypeScreenSchemeMappingPayloadScheme{{
-					IssueTypeID:    "default",
-					ScreenSchemeID: "10001",
-				}, {
-					IssueTypeID:    "10001",
-					ScreenSchemeID: "10002",
-				}},
+				IssueTypeMappings: []*IssueTypeScreenSchemeMappingPayloadScheme{
+					{
+						IssueTypeID:    "default",
+						ScreenSchemeID: "10000",
+					},
+					{
+						IssueTypeID:    "10004", // Bug
+						ScreenSchemeID: "10002",
+					},
+				},
 			},
 			mockFile:           "./mocks/create-issue-type-screen-scheme.json",
 			wantHTTPMethod:     http.MethodPost,
@@ -425,6 +416,29 @@ func TestIssueTypeScreenSchemeService_Create(t *testing.T) {
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusCreated,
 			wantErr:            false,
+		},
+
+		{
+			name: "CreateIssueTypeSchemeWhenTheResponseBodyIsNotAStringValue",
+			payload: &IssueTypeScreenSchemePayloadScheme{
+				Name: "Scrum issue type screen scheme",
+				IssueTypeMappings: []*IssueTypeScreenSchemeMappingPayloadScheme{
+					{
+						IssueTypeID:    "default",
+						ScreenSchemeID: "10000",
+					},
+					{
+						IssueTypeID:    "10004", // Bug
+						ScreenSchemeID: "10002",
+					},
+				},
+			},
+			mockFile:           "./mocks/create-issue-type-screen-scheme-not-string.json",
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/api/3/issuetypescreenscheme",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusCreated,
+			wantErr:            true,
 		},
 
 		{
@@ -442,13 +456,16 @@ func TestIssueTypeScreenSchemeService_Create(t *testing.T) {
 			name: "CreateIssueTypeSchemeWhenTheIssueTypeScreenSchemePayloadSchemeNameIsNotSet",
 			payload: &IssueTypeScreenSchemePayloadScheme{
 				Name: "",
-				IssueTypeMappings: []IssueTypeScreenSchemeMappingPayloadScheme{{
-					IssueTypeID:    "default",
-					ScreenSchemeID: "10001",
-				}, {
-					IssueTypeID:    "10001",
-					ScreenSchemeID: "10002",
-				}},
+				IssueTypeMappings: []*IssueTypeScreenSchemeMappingPayloadScheme{
+					{
+						IssueTypeID:    "default",
+						ScreenSchemeID: "10000",
+					},
+					{
+						IssueTypeID:    "10004", // Bug
+						ScreenSchemeID: "10002",
+					},
+				},
 			},
 			mockFile:           "./mocks/create-issue-type-screen-scheme.json",
 			wantHTTPMethod:     http.MethodPost,
@@ -476,13 +493,16 @@ func TestIssueTypeScreenSchemeService_Create(t *testing.T) {
 			name: "CreateIssueTypeSchemeWhenTheEndpointIsIncorrect",
 			payload: &IssueTypeScreenSchemePayloadScheme{
 				Name: "Scrum issue type screen scheme",
-				IssueTypeMappings: []IssueTypeScreenSchemeMappingPayloadScheme{{
-					IssueTypeID:    "default",
-					ScreenSchemeID: "10001",
-				}, {
-					IssueTypeID:    "10001",
-					ScreenSchemeID: "10002",
-				}},
+				IssueTypeMappings: []*IssueTypeScreenSchemeMappingPayloadScheme{
+					{
+						IssueTypeID:    "default",
+						ScreenSchemeID: "10000",
+					},
+					{
+						IssueTypeID:    "10004", // Bug
+						ScreenSchemeID: "10002",
+					},
+				},
 			},
 			mockFile:           "./mocks/create-issue-type-screen-scheme.json",
 			wantHTTPMethod:     http.MethodPost,
@@ -496,13 +516,16 @@ func TestIssueTypeScreenSchemeService_Create(t *testing.T) {
 			name: "CreateIssueTypeSchemeWhenTheRequestMethodIsIncorrect",
 			payload: &IssueTypeScreenSchemePayloadScheme{
 				Name: "Scrum issue type screen scheme",
-				IssueTypeMappings: []IssueTypeScreenSchemeMappingPayloadScheme{{
-					IssueTypeID:    "default",
-					ScreenSchemeID: "10001",
-				}, {
-					IssueTypeID:    "10001",
-					ScreenSchemeID: "10002",
-				}},
+				IssueTypeMappings: []*IssueTypeScreenSchemeMappingPayloadScheme{
+					{
+						IssueTypeID:    "default",
+						ScreenSchemeID: "10000",
+					},
+					{
+						IssueTypeID:    "10004", // Bug
+						ScreenSchemeID: "10002",
+					},
+				},
 			},
 			mockFile:           "./mocks/create-issue-type-screen-scheme.json",
 			wantHTTPMethod:     http.MethodPut,
@@ -516,13 +539,16 @@ func TestIssueTypeScreenSchemeService_Create(t *testing.T) {
 			name: "CreateIssueTypeSchemeWhenTheStatusCodeIsIncorrect",
 			payload: &IssueTypeScreenSchemePayloadScheme{
 				Name: "Scrum issue type screen scheme",
-				IssueTypeMappings: []IssueTypeScreenSchemeMappingPayloadScheme{{
-					IssueTypeID:    "default",
-					ScreenSchemeID: "10001",
-				}, {
-					IssueTypeID:    "10001",
-					ScreenSchemeID: "10002",
-				}},
+				IssueTypeMappings: []*IssueTypeScreenSchemeMappingPayloadScheme{
+					{
+						IssueTypeID:    "default",
+						ScreenSchemeID: "10000",
+					},
+					{
+						IssueTypeID:    "10004", // Bug
+						ScreenSchemeID: "10002",
+					},
+				},
 			},
 			mockFile:           "./mocks/create-issue-type-screen-scheme.json",
 			wantHTTPMethod:     http.MethodPost,
@@ -536,13 +562,16 @@ func TestIssueTypeScreenSchemeService_Create(t *testing.T) {
 			name: "CreateIssueTypeSchemeWhenTheContextIsNil",
 			payload: &IssueTypeScreenSchemePayloadScheme{
 				Name: "Scrum issue type screen scheme",
-				IssueTypeMappings: []IssueTypeScreenSchemeMappingPayloadScheme{{
-					IssueTypeID:    "default",
-					ScreenSchemeID: "10001",
-				}, {
-					IssueTypeID:    "10001",
-					ScreenSchemeID: "10002",
-				}},
+				IssueTypeMappings: []*IssueTypeScreenSchemeMappingPayloadScheme{
+					{
+						IssueTypeID:    "default",
+						ScreenSchemeID: "10000",
+					},
+					{
+						IssueTypeID:    "10004", // Bug
+						ScreenSchemeID: "10002",
+					},
+				},
 			},
 			mockFile:           "./mocks/create-issue-type-screen-scheme.json",
 			wantHTTPMethod:     http.MethodPost,
@@ -556,13 +585,16 @@ func TestIssueTypeScreenSchemeService_Create(t *testing.T) {
 			name: "CreateIssueTypeSchemeWhenTheResponseBodyHasADifferentFormat",
 			payload: &IssueTypeScreenSchemePayloadScheme{
 				Name: "Scrum issue type screen scheme",
-				IssueTypeMappings: []IssueTypeScreenSchemeMappingPayloadScheme{{
-					IssueTypeID:    "default",
-					ScreenSchemeID: "10001",
-				}, {
-					IssueTypeID:    "10001",
-					ScreenSchemeID: "10002",
-				}},
+				IssueTypeMappings: []*IssueTypeScreenSchemeMappingPayloadScheme{
+					{
+						IssueTypeID:    "default",
+						ScreenSchemeID: "10000",
+					},
+					{
+						IssueTypeID:    "10004", // Bug
+						ScreenSchemeID: "10002",
+					},
+				},
 			},
 			mockFile:           "./mocks/empty_json.json",
 			wantHTTPMethod:     http.MethodPost,

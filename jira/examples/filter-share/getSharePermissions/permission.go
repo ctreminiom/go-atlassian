@@ -34,6 +34,6 @@ func main() {
 	log.Println("HTTP Endpoint Used", response.Endpoint)
 
 	for index, permission := range *permissions {
-		log.Println(index, permission.ID, permission.Type)
+		log.Println(index, permission.Type, permission.Type)
 	}
 }

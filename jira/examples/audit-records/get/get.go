@@ -30,10 +30,10 @@ func main() {
 		Filter: "",
 
 		//Filter the records by the last month
-		From: time.Now().AddDate(0, -1, 0).Format(jira.DateFormatJira),
+		From: time.Now().AddDate(0, -1, 0),
 
 		// Today
-		To: time.Now().Format(jira.DateFormatJira),
+		To: time.Now(),
 	}
 
 	auditRecords, response, err := jiraCloud.Audit.Get(context.Background(), auditRecordOption, 0, 500)

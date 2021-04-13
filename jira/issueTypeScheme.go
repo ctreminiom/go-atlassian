@@ -11,23 +11,27 @@ import (
 
 type IssueTypeSchemeService struct{ client *Client }
 
-type IssueTypeSchemesScheme struct {
-	MaxResults int  `json:"maxResults"`
-	StartAt    int  `json:"startAt"`
-	Total      int  `json:"total"`
-	IsLast     bool `json:"isLast"`
-	Values     []struct {
-		ID                 string `json:"id"`
-		Name               string `json:"name"`
-		Description        string `json:"description"`
-		DefaultIssueTypeID string `json:"defaultIssueTypeId,omitempty"`
-		IsDefault          bool   `json:"isDefault,omitempty"`
-	} `json:"values"`
+type IssueTypeSchemePageScheme struct {
+	Self       string                   `json:"self,omitempty"`
+	NextPage   string                   `json:"nextPage,omitempty"`
+	MaxResults int                      `json:"maxResults,omitempty"`
+	StartAt    int                      `json:"startAt,omitempty"`
+	Total      int                      `json:"total,omitempty"`
+	IsLast     bool                     `json:"isLast,omitempty"`
+	Values     []*IssueTypeSchemeScheme `json:"values,omitempty"`
+}
+
+type IssueTypeSchemeScheme struct {
+	ID                 string `json:"id,omitempty"`
+	Name               string `json:"name,omitempty"`
+	Description        string `json:"description,omitempty"`
+	DefaultIssueTypeID string `json:"defaultIssueTypeId,omitempty"`
+	IsDefault          bool   `json:"isDefault,omitempty"`
 }
 
 // Returns a paginated list of issue type schemes.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/types/scheme#get-all-issue-type-schemes
-func (i *IssueTypeSchemeService) Gets(ctx context.Context, issueTypeSchemeIDs []int, startAt, maxResults int) (result *IssueTypeSchemesScheme, response *Response, err error) {
+func (i *IssueTypeSchemeService) Gets(ctx context.Context, issueTypeSchemeIDs []int, startAt, maxResults int) (result *IssueTypeSchemePageScheme, response *Response, err error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -50,7 +54,7 @@ func (i *IssueTypeSchemeService) Gets(ctx context.Context, issueTypeSchemeIDs []
 		return
 	}
 
-	result = new(IssueTypeSchemesScheme)
+	result = new(IssueTypeSchemePageScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
@@ -133,20 +137,22 @@ func (i *IssueTypeSchemeService) Create(ctx context.Context, payload *IssueTypeS
 	return
 }
 
-type IssueTypeSchemeItemsScheme struct {
-	MaxResults int  `json:"maxResults"`
-	StartAt    int  `json:"startAt"`
-	Total      int  `json:"total"`
-	IsLast     bool `json:"isLast"`
-	Values     []struct {
-		IssueTypeSchemeID string `json:"issueTypeSchemeId"`
-		IssueTypeID       string `json:"issueTypeId"`
-	} `json:"values"`
+type IssueTypeSchemeItemPageScheme struct {
+	MaxResults int                             `json:"maxResults,omitempty"`
+	StartAt    int                             `json:"startAt,omitempty"`
+	Total      int                             `json:"total,omitempty"`
+	IsLast     bool                            `json:"isLast,omitempty"`
+	Values     []*IssueTypeSchemeMappingScheme `json:"values,omitempty"`
+}
+
+type IssueTypeSchemeMappingScheme struct {
+	IssueTypeSchemeID string `json:"issueTypeSchemeId,omitempty"`
+	IssueTypeID       string `json:"issueTypeId,omitempty"`
 }
 
 // Returns a paginated list of issue type scheme items.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/types/scheme#get-issue-type-scheme-items
-func (i *IssueTypeSchemeService) Items(ctx context.Context, issueTypeSchemeIDs []int, startAt, maxResults int) (result *IssueTypeSchemeItemsScheme, response *Response, err error) {
+func (i *IssueTypeSchemeService) Items(ctx context.Context, issueTypeSchemeIDs []int, startAt, maxResults int) (result *IssueTypeSchemeItemPageScheme, response *Response, err error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -169,7 +175,7 @@ func (i *IssueTypeSchemeService) Items(ctx context.Context, issueTypeSchemeIDs [
 		return
 	}
 
-	result = new(IssueTypeSchemeItemsScheme)
+	result = new(IssueTypeSchemeItemPageScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
@@ -177,26 +183,22 @@ func (i *IssueTypeSchemeService) Items(ctx context.Context, issueTypeSchemeIDs [
 	return
 }
 
-type ProjectIssueTypeSchemeScheme struct {
-	MaxResults int  `json:"maxResults"`
-	StartAt    int  `json:"startAt"`
-	Total      int  `json:"total"`
-	IsLast     bool `json:"isLast"`
-	Values     []struct {
-		IssueTypeScheme struct {
-			ID                 string `json:"id"`
-			Name               string `json:"name"`
-			Description        string `json:"description"`
-			DefaultIssueTypeID string `json:"defaultIssueTypeId"`
-			IsDefault          bool   `json:"isDefault"`
-		} `json:"issueTypeScheme"`
-		ProjectIds []string `json:"projectIds"`
-	} `json:"values"`
+type ProjectIssueTypeSchemePageScheme struct {
+	MaxResults int                              `json:"maxResults"`
+	StartAt    int                              `json:"startAt"`
+	Total      int                              `json:"total"`
+	IsLast     bool                             `json:"isLast"`
+	Values     []*IssueTypeSchemeProjectsScheme `json:"values"`
+}
+
+type IssueTypeSchemeProjectsScheme struct {
+	IssueTypeScheme *IssueTypeSchemeScheme `json:"issueTypeScheme,omitempty"`
+	ProjectIds      []string               `json:"projectIds,omitempty"`
 }
 
 // Returns a paginated list of issue type schemes and, for each issue type scheme, a list of the projects that use it.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/types/scheme#get-issue-type-schemes-for-projects
-func (i *IssueTypeSchemeService) Projects(ctx context.Context, projectIDs []int, startAt, maxResults int) (result *ProjectIssueTypeSchemeScheme, response *Response, err error) {
+func (i *IssueTypeSchemeService) Projects(ctx context.Context, projectIDs []int, startAt, maxResults int) (result *ProjectIssueTypeSchemePageScheme, response *Response, err error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -224,7 +226,7 @@ func (i *IssueTypeSchemeService) Projects(ctx context.Context, projectIDs []int,
 		return
 	}
 
-	result = new(ProjectIssueTypeSchemeScheme)
+	result = new(ProjectIssueTypeSchemePageScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
@@ -235,6 +237,14 @@ func (i *IssueTypeSchemeService) Projects(ctx context.Context, projectIDs []int,
 // Assigns an issue type scheme to a project.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/types/scheme#assign-issue-type-scheme-to-project
 func (i *IssueTypeSchemeService) Assign(ctx context.Context, issueTypeSchemeID, projectID string) (response *Response, err error) {
+
+	if len(issueTypeSchemeID) == 0 {
+		return nil, fmt.Errorf("error!, please provide a valid issueTypeSchemeID value")
+	}
+
+	if len(projectID) == 0 {
+		return nil, fmt.Errorf("error!, please provide a valid projectID value")
+	}
 
 	payload := struct {
 		IssueTypeSchemeID string `json:"issueTypeSchemeId"`
@@ -250,6 +260,7 @@ func (i *IssueTypeSchemeService) Assign(ctx context.Context, issueTypeSchemeID, 
 	if err != nil {
 		return
 	}
+
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Content-Type", "application/json")
 
@@ -264,6 +275,10 @@ func (i *IssueTypeSchemeService) Assign(ctx context.Context, issueTypeSchemeID, 
 // Updates an issue type scheme.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/types/scheme#update-issue-type-scheme
 func (i *IssueTypeSchemeService) Update(ctx context.Context, issueTypeSchemeID int, payload *IssueTypeSchemePayloadScheme) (response *Response, err error) {
+
+	if issueTypeSchemeID == 0 {
+		return nil, fmt.Errorf("error!, please provide a valid issueTypeSchemeID value")
+	}
 
 	if payload == nil {
 		return nil, fmt.Errorf("error, payload value is nil, please provide a valid IssueTypeSchemePayloadScheme pointer")
@@ -291,12 +306,18 @@ func (i *IssueTypeSchemeService) Update(ctx context.Context, issueTypeSchemeID i
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/types/scheme#delete-issue-type-scheme
 func (i *IssueTypeSchemeService) Delete(ctx context.Context, issueTypeSchemeID int) (response *Response, err error) {
 
+	if issueTypeSchemeID == 0 {
+		return nil, fmt.Errorf("error!, please provide a valid issueTypeSchemeID value")
+	}
+
 	var endpoint = fmt.Sprintf("rest/api/3/issuetypescheme/%v", issueTypeSchemeID)
 
 	request, err := i.client.newRequest(ctx, http.MethodDelete, endpoint, nil)
 	if err != nil {
 		return
 	}
+
+	request.Header.Set("Accept", "application/json")
 
 	response, err = i.client.Do(request)
 	if err != nil {

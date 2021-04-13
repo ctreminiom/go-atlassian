@@ -178,6 +178,42 @@ func TestIssueTypeSchemeService_Assign(t *testing.T) {
 		},
 
 		{
+			name:               "AssignIssueTypeSchemeToProjectWhenTheContextIsNil",
+			issueTypeSchemeID:  "10001",
+			projectID:          "10001",
+			wantHTTPMethod:     http.MethodPut,
+			mockFile:           "",
+			endpoint:           "/rest/api/3/issuetypescheme/project",
+			context:            nil,
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+
+		{
+			name:               "AssignIssueTypeSchemeToProjectWhenTheProjectIDIsNotProvided",
+			issueTypeSchemeID:  "10001",
+			projectID:          "",
+			wantHTTPMethod:     http.MethodPut,
+			mockFile:           "",
+			endpoint:           "/rest/api/3/issuetypescheme/project",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+
+		{
+			name:               "AssignIssueTypeSchemeToProjectWhenTheIssueTypeSchemeIDIsNotProvided",
+			issueTypeSchemeID:  "",
+			projectID:          "10001",
+			wantHTTPMethod:     http.MethodPut,
+			mockFile:           "",
+			endpoint:           "/rest/api/3/issuetypescheme/project",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+
+		{
 			name:               "AssignIssueTypeSchemeToProjectWhenTheEndpointDoesNotHaveACorrectFormat",
 			issueTypeSchemeID:  "10001",
 			projectID:          "10001",
@@ -525,6 +561,16 @@ func TestIssueTypeSchemeService_Delete(t *testing.T) {
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusNoContent,
 			wantErr:            false,
+		},
+
+		{
+			name:               "DeleteIssueTypeSchemeWhenTheIssueTypeSchemeIDIsNotProvided",
+			issueTypeSchemeID:  0,
+			wantHTTPMethod:     http.MethodDelete,
+			endpoint:           "/rest/api/3/issuetypescheme/10001",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
 		},
 
 		{
@@ -1288,6 +1334,38 @@ func TestIssueTypeSchemeService_Update(t *testing.T) {
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusNoContent,
 			wantErr:            false,
+		},
+
+		{
+			name:              "UpdateIssueTypeSchemeWhenTheContextIsNil",
+			issueTypeSchemeID: 12,
+			payload: &IssueTypeSchemePayloadScheme{
+				DefaultIssueTypeID: "1000",
+				IssueTypeIds:       []string{"1000", "1001", "1002"},
+				Name:               "Default Issue Type Scheme",
+				Description:        "Issue Type Scheme description",
+			},
+			wantHTTPMethod:     http.MethodPut,
+			endpoint:           "/rest/api/3/issuetypescheme/12",
+			context:            nil,
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+
+		{
+			name:              "UpdateIssueTypeSchemeWhenTheIssueTypeSchemeIDIsNotProvided",
+			issueTypeSchemeID: 0,
+			payload: &IssueTypeSchemePayloadScheme{
+				DefaultIssueTypeID: "1000",
+				IssueTypeIds:       []string{"1000", "1001", "1002"},
+				Name:               "Default Issue Type Scheme",
+				Description:        "Issue Type Scheme description",
+			},
+			wantHTTPMethod:     http.MethodPut,
+			endpoint:           "/rest/api/3/issuetypescheme/12",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
 		},
 
 		{

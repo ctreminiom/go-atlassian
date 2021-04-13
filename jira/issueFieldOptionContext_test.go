@@ -15,7 +15,7 @@ func TestFieldOptionContextService_Create(t *testing.T) {
 		name               string
 		fieldID            string
 		contextID          int
-		payload            *CustomFieldOptionPayloadScheme
+		payload            *FieldContextOptionListScheme
 		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string
@@ -27,10 +27,19 @@ func TestFieldOptionContextService_Create(t *testing.T) {
 			name:      "GetsFieldContextsWhenTheParametersAreCorrect",
 			fieldID:   "100001",
 			contextID: 01111,
-			payload: &CustomFieldOptionPayloadScheme{Options: []FieldContextOptionValueScheme{
-				{Value: "Argentina", Disabled: false, OptionID: "10027"},
-				{Value: "Canada", Disabled: false, OptionID: "10027"},
-			}},
+			payload: &FieldContextOptionListScheme{
+				Options: []*CustomFieldContextOptionScheme{
+
+					// Single/Multiple Choice example
+					{
+						Value:    "Option 3",
+						Disabled: false,
+					},
+					{
+						Value:    "Option 4",
+						Disabled: false,
+					},
+				}},
 			mockFile:           "./mocks/create-custom-field-context-option.json",
 			wantHTTPMethod:     http.MethodPost,
 			endpoint:           "/rest/api/3/field/100001/context/585/option",
@@ -43,10 +52,19 @@ func TestFieldOptionContextService_Create(t *testing.T) {
 			name:      "GetsFieldContextsWhenTheContextIsNil",
 			fieldID:   "100001",
 			contextID: 01111,
-			payload: &CustomFieldOptionPayloadScheme{Options: []FieldContextOptionValueScheme{
-				{Value: "Argentina", Disabled: false, OptionID: "10027"},
-				{Value: "Canada", Disabled: false, OptionID: "10027"},
-			}},
+			payload: &FieldContextOptionListScheme{
+				Options: []*CustomFieldContextOptionScheme{
+
+					// Single/Multiple Choice example
+					{
+						Value:    "Option 3",
+						Disabled: false,
+					},
+					{
+						Value:    "Option 4",
+						Disabled: false,
+					},
+				}},
 			mockFile:           "./mocks/create-custom-field-context-option.json",
 			wantHTTPMethod:     http.MethodPost,
 			endpoint:           "/rest/api/3/field/100001/context/585/option",
@@ -59,10 +77,19 @@ func TestFieldOptionContextService_Create(t *testing.T) {
 			name:      "GetsFieldContextsWhenTheFieldIDIncorrect",
 			fieldID:   "100002",
 			contextID: 01111,
-			payload: &CustomFieldOptionPayloadScheme{Options: []FieldContextOptionValueScheme{
-				{Value: "Argentina", Disabled: false, OptionID: "10027"},
-				{Value: "Canada", Disabled: false, OptionID: "10027"},
-			}},
+			payload: &FieldContextOptionListScheme{
+				Options: []*CustomFieldContextOptionScheme{
+
+					// Single/Multiple Choice example
+					{
+						Value:    "Option 3",
+						Disabled: false,
+					},
+					{
+						Value:    "Option 4",
+						Disabled: false,
+					},
+				}},
 			mockFile:           "./mocks/create-custom-field-context-option.json",
 			wantHTTPMethod:     http.MethodPost,
 			endpoint:           "/rest/api/3/field/100001/context/585/option",
@@ -75,10 +102,19 @@ func TestFieldOptionContextService_Create(t *testing.T) {
 			name:      "GetsFieldContextsWhenTheContextIDIsIncorrect",
 			fieldID:   "100001",
 			contextID: 01110,
-			payload: &CustomFieldOptionPayloadScheme{Options: []FieldContextOptionValueScheme{
-				{Value: "Argentina", Disabled: false, OptionID: "10027"},
-				{Value: "Canada", Disabled: false, OptionID: "10027"},
-			}},
+			payload: &FieldContextOptionListScheme{
+				Options: []*CustomFieldContextOptionScheme{
+
+					// Single/Multiple Choice example
+					{
+						Value:    "Option 3",
+						Disabled: false,
+					},
+					{
+						Value:    "Option 4",
+						Disabled: false,
+					},
+				}},
 			mockFile:           "./mocks/create-custom-field-context-option.json",
 			wantHTTPMethod:     http.MethodPost,
 			endpoint:           "/rest/api/3/field/100001/context/585/option",
@@ -91,10 +127,19 @@ func TestFieldOptionContextService_Create(t *testing.T) {
 			name:      "GetsFieldContextsWhenTheFieldIDIsEmpty",
 			fieldID:   "",
 			contextID: 01111,
-			payload: &CustomFieldOptionPayloadScheme{Options: []FieldContextOptionValueScheme{
-				{Value: "Argentina", Disabled: false, OptionID: "10027"},
-				{Value: "Canada", Disabled: false, OptionID: "10027"},
-			}},
+			payload: &FieldContextOptionListScheme{
+				Options: []*CustomFieldContextOptionScheme{
+
+					// Single/Multiple Choice example
+					{
+						Value:    "Option 3",
+						Disabled: false,
+					},
+					{
+						Value:    "Option 4",
+						Disabled: false,
+					},
+				}},
 			mockFile:           "./mocks/create-custom-field-context-option.json",
 			wantHTTPMethod:     http.MethodPost,
 			endpoint:           "/rest/api/3/field/100001/context/585/option",
@@ -107,10 +152,19 @@ func TestFieldOptionContextService_Create(t *testing.T) {
 			name:      "GetsFieldContextsWhenTheEndpointIsIncorrect",
 			fieldID:   "100001",
 			contextID: 01111,
-			payload: &CustomFieldOptionPayloadScheme{Options: []FieldContextOptionValueScheme{
-				{Value: "Argentina", Disabled: false, OptionID: "10027"},
-				{Value: "Canada", Disabled: false, OptionID: "10027"},
-			}},
+			payload: &FieldContextOptionListScheme{
+				Options: []*CustomFieldContextOptionScheme{
+
+					// Single/Multiple Choice example
+					{
+						Value:    "Option 3",
+						Disabled: false,
+					},
+					{
+						Value:    "Option 4",
+						Disabled: false,
+					},
+				}},
 			mockFile:           "./mocks/create-custom-field-context-option.json",
 			wantHTTPMethod:     http.MethodPost,
 			endpoint:           "/rest/api/3/fields/100001/context/585/option",
@@ -136,10 +190,19 @@ func TestFieldOptionContextService_Create(t *testing.T) {
 			name:      "GetsFieldContextsWhenTheRequestMethodIsIncorrect",
 			fieldID:   "100001",
 			contextID: 01111,
-			payload: &CustomFieldOptionPayloadScheme{Options: []FieldContextOptionValueScheme{
-				{Value: "Argentina", Disabled: false, OptionID: "10027"},
-				{Value: "Canada", Disabled: false, OptionID: "10027"},
-			}},
+			payload: &FieldContextOptionListScheme{
+				Options: []*CustomFieldContextOptionScheme{
+
+					// Single/Multiple Choice example
+					{
+						Value:    "Option 3",
+						Disabled: false,
+					},
+					{
+						Value:    "Option 4",
+						Disabled: false,
+					},
+				}},
 			mockFile:           "./mocks/create-custom-field-context-option.json",
 			wantHTTPMethod:     http.MethodDelete,
 			endpoint:           "/rest/api/3/field/100001/context/585/option",
@@ -152,10 +215,19 @@ func TestFieldOptionContextService_Create(t *testing.T) {
 			name:      "GetsFieldContextsWhenTheStatusCodeIsIncorrect",
 			fieldID:   "100001",
 			contextID: 01111,
-			payload: &CustomFieldOptionPayloadScheme{Options: []FieldContextOptionValueScheme{
-				{Value: "Argentina", Disabled: false, OptionID: "10027"},
-				{Value: "Canada", Disabled: false, OptionID: "10027"},
-			}},
+			payload: &FieldContextOptionListScheme{
+				Options: []*CustomFieldContextOptionScheme{
+
+					// Single/Multiple Choice example
+					{
+						Value:    "Option 3",
+						Disabled: false,
+					},
+					{
+						Value:    "Option 4",
+						Disabled: false,
+					},
+				}},
 			mockFile:           "./mocks/create-custom-field-context-option.json",
 			wantHTTPMethod:     http.MethodPost,
 			endpoint:           "/rest/api/3/field/100001/context/585/option",
@@ -168,10 +240,19 @@ func TestFieldOptionContextService_Create(t *testing.T) {
 			name:      "GetsFieldContextsWhenTheTheResponseBodyLengthIsZero",
 			fieldID:   "100001",
 			contextID: 01111,
-			payload: &CustomFieldOptionPayloadScheme{Options: []FieldContextOptionValueScheme{
-				{Value: "Argentina", Disabled: false, OptionID: "10027"},
-				{Value: "Canada", Disabled: false, OptionID: "10027"},
-			}},
+			payload: &FieldContextOptionListScheme{
+				Options: []*CustomFieldContextOptionScheme{
+
+					// Single/Multiple Choice example
+					{
+						Value:    "Option 3",
+						Disabled: false,
+					},
+					{
+						Value:    "Option 4",
+						Disabled: false,
+					},
+				}},
 			mockFile:           "",
 			wantHTTPMethod:     http.MethodPost,
 			endpoint:           "/rest/api/3/field/100001/context/585/option",
@@ -183,10 +264,19 @@ func TestFieldOptionContextService_Create(t *testing.T) {
 			name:      "GetsFieldContextsWhenTheResponseBodyHasADifferentFormat",
 			fieldID:   "100001",
 			contextID: 01111,
-			payload: &CustomFieldOptionPayloadScheme{Options: []FieldContextOptionValueScheme{
-				{Value: "Argentina", Disabled: false, OptionID: "10027"},
-				{Value: "Canada", Disabled: false, OptionID: "10027"},
-			}},
+			payload: &FieldContextOptionListScheme{
+				Options: []*CustomFieldContextOptionScheme{
+
+					// Single/Multiple Choice example
+					{
+						Value:    "Option 3",
+						Disabled: false,
+					},
+					{
+						Value:    "Option 4",
+						Disabled: false,
+					},
+				}},
 			mockFile:           "./mocks/invalid-json.json",
 			wantHTTPMethod:     http.MethodPost,
 			endpoint:           "/rest/api/3/field/100001/context/585/option",
@@ -274,22 +364,45 @@ func TestFieldOptionContextService_Delete(t *testing.T) {
 		{
 			name:               "DeleteFieldContextsWhenTheParametersAreCorrect",
 			fieldID:            "0001",
-			contextID:          0,
-			optionID:           0,
+			contextID:          100,
+			optionID:           222,
 			wantHTTPMethod:     http.MethodDelete,
-			endpoint:           "/rest/api/3/field/0001/context/0/option/0",
+			endpoint:           "/rest/api/3/field/0001/context/100/option/222",
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusNoContent,
 			wantErr:            false,
+		},
+		{
+			name:               "DeleteFieldContextsWhenTheOptionIDIsNotProvided",
+			fieldID:            "0001",
+			contextID:          100,
+			optionID:           0,
+			wantHTTPMethod:     http.MethodDelete,
+			endpoint:           "/rest/api/3/field/0001/context/100/option/222",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+
+		{
+			name:               "DeleteFieldContextsWhenTheContextIDIsNotProvided",
+			fieldID:            "0001",
+			contextID:          0,
+			optionID:           222,
+			wantHTTPMethod:     http.MethodDelete,
+			endpoint:           "/rest/api/3/field/0001/context/100/option/222",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
 		},
 
 		{
 			name:               "DeleteFieldContextsWhenTheFieldIDIsEmpty",
 			fieldID:            "",
-			contextID:          0,
-			optionID:           0,
+			contextID:          100,
+			optionID:           222,
 			wantHTTPMethod:     http.MethodDelete,
-			endpoint:           "/rest/api/3/field/0001/context/0/option/0",
+			endpoint:           "/rest/api/3/field/0001/context/100/option/222",
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusNoContent,
 			wantErr:            true,
@@ -298,10 +411,10 @@ func TestFieldOptionContextService_Delete(t *testing.T) {
 		{
 			name:               "DeleteFieldContextsWhenTheContextIsNil",
 			fieldID:            "0001",
-			contextID:          0,
-			optionID:           0,
+			contextID:          100,
+			optionID:           222,
 			wantHTTPMethod:     http.MethodDelete,
-			endpoint:           "/rest/api/3/field/0001/context/0/option/0",
+			endpoint:           "/rest/api/3/field/0001/context/100/option/222",
 			context:            nil,
 			wantHTTPCodeReturn: http.StatusNoContent,
 			wantErr:            true,
@@ -310,10 +423,10 @@ func TestFieldOptionContextService_Delete(t *testing.T) {
 		{
 			name:               "DeleteFieldContextsWhenTheRequestMethodIsIncorrect",
 			fieldID:            "0001",
-			contextID:          0,
-			optionID:           0,
+			contextID:          100,
+			optionID:           222,
 			wantHTTPMethod:     http.MethodPut,
-			endpoint:           "/rest/api/3/field/0001/context/0/option/0",
+			endpoint:           "/rest/api/3/field/0001/context/100/option/222",
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusNoContent,
 			wantErr:            true,
@@ -322,10 +435,10 @@ func TestFieldOptionContextService_Delete(t *testing.T) {
 		{
 			name:               "DeleteFieldContextsWhenTheEndpointIsIncorrect",
 			fieldID:            "0001",
-			contextID:          0,
-			optionID:           0,
+			contextID:          100,
+			optionID:           222,
 			wantHTTPMethod:     http.MethodDelete,
-			endpoint:           "/rest/api/3/field/0001/contexts/0/option/0",
+			endpoint:           "/rest/api/3/field/0001/context/100/option/000",
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusNoContent,
 			wantErr:            true,
@@ -334,10 +447,10 @@ func TestFieldOptionContextService_Delete(t *testing.T) {
 		{
 			name:               "DeleteFieldContextsWhenTheStatusCodeIsIncorrect",
 			fieldID:            "0001",
-			contextID:          0,
-			optionID:           0,
+			contextID:          100,
+			optionID:           222,
 			wantHTTPMethod:     http.MethodDelete,
-			endpoint:           "/rest/api/3/field/0001/context/0/option/0",
+			endpoint:           "/rest/api/3/field/0001/context/100/option/222",
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusBadRequest,
 			wantErr:            true,
@@ -412,6 +525,8 @@ func TestFieldOptionContextService_Gets(t *testing.T) {
 
 	testCases := []struct {
 		name               string
+		FieldID            string
+		ContextID          int
 		opts               *FieldOptionContextParams
 		startAt            int
 		maxResult          int
@@ -423,10 +538,10 @@ func TestFieldOptionContextService_Gets(t *testing.T) {
 		wantErr            bool
 	}{
 		{
-			name: "GetsFieldContextsWhenTheParametersAreCorrect",
+			name:      "GetsFieldContextsWhenTheParametersAreCorrect",
+			FieldID:   "100001",
+			ContextID: 10001,
 			opts: &FieldOptionContextParams{
-				FieldID:     "100001",
-				ContextID:   10001,
 				OptionID:    1000,
 				OnlyOptions: true,
 			},
@@ -434,28 +549,10 @@ func TestFieldOptionContextService_Gets(t *testing.T) {
 			maxResult:          50,
 			mockFile:           "./mocks/get-custom-field-context-options.json",
 			wantHTTPMethod:     http.MethodGet,
-			endpoint:           "/rest/api/3/field/100001/context/10001/option?contextId=10001&fieldId=100001&maxResults=50&onlyOptions=true&optionId=1000&startAt=0",
+			endpoint:           "/rest/api/3/field/100001/context/10001/option?maxResults=50&onlyOptions=true&optionId=1000&startAt=0",
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusOK,
 			wantErr:            false,
-		},
-
-		{
-			name: "GetsFieldContextsWhenTheParametersAreIncorrect",
-			opts: &FieldOptionContextParams{
-				FieldID:     "100000",
-				ContextID:   10001,
-				OptionID:    1000,
-				OnlyOptions: true,
-			},
-			startAt:            0,
-			maxResult:          50,
-			mockFile:           "./mocks/get-custom-field-context-options.json",
-			wantHTTPMethod:     http.MethodGet,
-			endpoint:           "/rest/api/3/field/100001/context/10001/option?contextId=10001&fieldId=100001&maxResults=50&onlyOptions=true&optionId=1000&startAt=0",
-			context:            context.Background(),
-			wantHTTPCodeReturn: http.StatusOK,
-			wantErr:            true,
 		},
 
 		{
@@ -465,16 +562,16 @@ func TestFieldOptionContextService_Gets(t *testing.T) {
 			maxResult:          50,
 			mockFile:           "./mocks/get-custom-field-context-options.json",
 			wantHTTPMethod:     http.MethodGet,
-			endpoint:           "/rest/api/3/field/100001/context/10001/option?contextId=10001&fieldId=100001&maxResults=50&onlyOptions=true&optionId=1000&startAt=0",
+			endpoint:           "/rest/api/3/field/100001/context/10001/option?maxResults=50&onlyOptions=true&optionId=1000&startAt=0",
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusOK,
 			wantErr:            true,
 		},
 		{
-			name: "GetsFieldContextsWhenTheEndpointIsIncorrect",
+			name:      "GetsFieldContextsWhenTheEndpointIsIncorrect",
+			FieldID:   "100001",
+			ContextID: 10001,
 			opts: &FieldOptionContextParams{
-				FieldID:     "100001",
-				ContextID:   10001,
 				OptionID:    1000,
 				OnlyOptions: true,
 			},
@@ -482,17 +579,17 @@ func TestFieldOptionContextService_Gets(t *testing.T) {
 			maxResult:          50,
 			mockFile:           "./mocks/get-custom-field-context-options.json",
 			wantHTTPMethod:     http.MethodGet,
-			endpoint:           "/rest/api/3/fields/100001/context/10001/option?contextId=10001&fieldId=100001&maxResults=50&onlyOptions=true&optionId=1000&startAt=0",
+			endpoint:           "/rest/api/3/field/100001/context/10001/option?maxResults=50&onlyOptions=true&optionId=1000&saaaaaartAt=0",
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusOK,
 			wantErr:            true,
 		},
 
 		{
-			name: "GetsFieldContextsWhenTheContextIsNil",
+			name:      "GetsFieldContextsWhenTheContextIsNil",
+			FieldID:   "100001",
+			ContextID: 10001,
 			opts: &FieldOptionContextParams{
-				FieldID:     "100001",
-				ContextID:   10001,
 				OptionID:    1000,
 				OnlyOptions: true,
 			},
@@ -500,17 +597,17 @@ func TestFieldOptionContextService_Gets(t *testing.T) {
 			maxResult:          50,
 			mockFile:           "./mocks/get-custom-field-context-options.json",
 			wantHTTPMethod:     http.MethodGet,
-			endpoint:           "/rest/api/3/field/100001/context/10001/option?contextId=10001&fieldId=100001&maxResults=50&onlyOptions=true&optionId=1000&startAt=0",
+			endpoint:           "/rest/api/3/field/100001/context/10001/option?maxResults=50&onlyOptions=true&optionId=1000&startAt=0",
 			context:            nil,
 			wantHTTPCodeReturn: http.StatusOK,
 			wantErr:            true,
 		},
 
 		{
-			name: "GetsFieldContextsWhenTheRequestMethodIsIncorrect",
+			name:      "GetsFieldContextsWhenTheRequestMethodIsIncorrect",
+			FieldID:   "100001",
+			ContextID: 10001,
 			opts: &FieldOptionContextParams{
-				FieldID:     "100001",
-				ContextID:   10001,
 				OptionID:    1000,
 				OnlyOptions: true,
 			},
@@ -518,17 +615,17 @@ func TestFieldOptionContextService_Gets(t *testing.T) {
 			maxResult:          50,
 			mockFile:           "./mocks/get-custom-field-context-options.json",
 			wantHTTPMethod:     http.MethodDelete,
-			endpoint:           "/rest/api/3/field/100001/context/10001/option?contextId=10001&fieldId=100001&maxResults=50&onlyOptions=true&optionId=1000&startAt=0",
+			endpoint:           "/rest/api/3/field/100001/context/10001/option?maxResults=50&onlyOptions=true&optionId=1000&startAt=0",
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusOK,
 			wantErr:            true,
 		},
 
 		{
-			name: "GetsFieldContextsWhenTheStatusCodeIsIncorrect",
+			name:      "GetsFieldContextsWhenTheStatusCodeIsIncorrect",
+			FieldID:   "100001",
+			ContextID: 10001,
 			opts: &FieldOptionContextParams{
-				FieldID:     "100001",
-				ContextID:   10001,
 				OptionID:    1000,
 				OnlyOptions: true,
 			},
@@ -536,17 +633,17 @@ func TestFieldOptionContextService_Gets(t *testing.T) {
 			maxResult:          50,
 			mockFile:           "./mocks/get-custom-field-context-options.json",
 			wantHTTPMethod:     http.MethodGet,
-			endpoint:           "/rest/api/3/field/100001/context/10001/option?contextId=10001&fieldId=100001&maxResults=50&onlyOptions=true&optionId=1000&startAt=0",
+			endpoint:           "/rest/api/3/field/100001/context/10001/option?maxResults=50&onlyOptions=true&optionId=1000&startAt=0",
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusBadRequest,
 			wantErr:            true,
 		},
 
 		{
-			name: "GetsFieldContextsWhenTheResponseBodyHasADifferentFormat",
+			name:      "GetsFieldContextsWhenTheResponseBodyHasADifferentFormat",
+			FieldID:   "100001",
+			ContextID: 10001,
 			opts: &FieldOptionContextParams{
-				FieldID:     "100001",
-				ContextID:   10001,
 				OptionID:    1000,
 				OnlyOptions: true,
 			},
@@ -554,17 +651,17 @@ func TestFieldOptionContextService_Gets(t *testing.T) {
 			maxResult:          50,
 			mockFile:           "./mocks/invalid-json.json",
 			wantHTTPMethod:     http.MethodGet,
-			endpoint:           "/rest/api/3/field/100001/context/10001/option?contextId=10001&fieldId=100001&maxResults=50&onlyOptions=true&optionId=1000&startAt=0",
+			endpoint:           "/rest/api/3/field/100001/context/10001/option?maxResults=50&onlyOptions=true&optionId=1000&startAt=0",
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusOK,
 			wantErr:            true,
 		},
 
 		{
-			name: "GetsFieldContextsWhenTheResponseBodyLengthIsZero",
+			name:      "GetsFieldContextsWhenTheResponseBodyLengthIsZero",
+			FieldID:   "100001",
+			ContextID: 10001,
 			opts: &FieldOptionContextParams{
-				FieldID:     "100001",
-				ContextID:   10001,
 				OptionID:    1000,
 				OnlyOptions: true,
 			},
@@ -572,7 +669,7 @@ func TestFieldOptionContextService_Gets(t *testing.T) {
 			maxResult:          50,
 			mockFile:           "",
 			wantHTTPMethod:     http.MethodGet,
-			endpoint:           "/rest/api/3/field/100001/context/10001/option?contextId=10001&fieldId=100001&maxResults=50&onlyOptions=true&optionId=1000&startAt=0",
+			endpoint:           "/rest/api/3/field/100001/context/10001/option?maxResults=50&onlyOptions=true&optionId=1000&startAt=0",
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusOK,
 			wantErr:            true,
@@ -604,7 +701,7 @@ func TestFieldOptionContextService_Gets(t *testing.T) {
 			}
 
 			service := &FieldOptionContextService{client: mockClient}
-			getResult, gotResponse, err := service.Gets(testCase.context, testCase.opts, testCase.startAt, testCase.maxResult)
+			getResult, gotResponse, err := service.Gets(testCase.context, testCase.FieldID, testCase.ContextID, testCase.opts, testCase.startAt, testCase.maxResult)
 
 			if testCase.wantErr {
 
@@ -651,7 +748,7 @@ func TestFieldOptionContextService_Update(t *testing.T) {
 		name               string
 		fieldID            string
 		contextID          int
-		payload            *CustomFieldOptionPayloadScheme
+		payload            *FieldContextOptionListScheme
 		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string
@@ -663,10 +760,19 @@ func TestFieldOptionContextService_Update(t *testing.T) {
 			name:      "UpdateFieldContextsWhenTheParametersAreCorrect",
 			fieldID:   "100001",
 			contextID: 01111,
-			payload: &CustomFieldOptionPayloadScheme{Options: []FieldContextOptionValueScheme{
-				{Value: "Argentina", Disabled: false, OptionID: "10027"},
-				{Value: "Canada", Disabled: false, OptionID: "10027"},
-			}},
+			payload: &FieldContextOptionListScheme{
+				Options: []*CustomFieldContextOptionScheme{
+					{
+						ID:       "10064",
+						Value:    "Option 3 - Updated",
+						Disabled: false,
+					},
+					{
+						ID:       "10065",
+						Value:    "Option 4 - Updated",
+						Disabled: true,
+					},
+				}},
 			mockFile:           "./mocks/create-custom-field-context-option.json",
 			wantHTTPMethod:     http.MethodPut,
 			endpoint:           "/rest/api/3/field/100001/context/585/option",
@@ -679,10 +785,19 @@ func TestFieldOptionContextService_Update(t *testing.T) {
 			name:      "UpdateFieldContextsWhenTheContextIDIsNil",
 			fieldID:   "100001",
 			contextID: 01111,
-			payload: &CustomFieldOptionPayloadScheme{Options: []FieldContextOptionValueScheme{
-				{Value: "Argentina", Disabled: false, OptionID: "10027"},
-				{Value: "Canada", Disabled: false, OptionID: "10027"},
-			}},
+			payload: &FieldContextOptionListScheme{
+				Options: []*CustomFieldContextOptionScheme{
+					{
+						ID:       "10064",
+						Value:    "Option 3 - Updated",
+						Disabled: false,
+					},
+					{
+						ID:       "10065",
+						Value:    "Option 4 - Updated",
+						Disabled: true,
+					},
+				}},
 			mockFile:           "./mocks/create-custom-field-context-option.json",
 			wantHTTPMethod:     http.MethodPut,
 			endpoint:           "/rest/api/3/field/100001/context/585/option",
@@ -695,10 +810,19 @@ func TestFieldOptionContextService_Update(t *testing.T) {
 			name:      "UpdateFieldContextsWhenTheFieldIDIncorrect",
 			fieldID:   "100002",
 			contextID: 01111,
-			payload: &CustomFieldOptionPayloadScheme{Options: []FieldContextOptionValueScheme{
-				{Value: "Argentina", Disabled: false, OptionID: "10027"},
-				{Value: "Canada", Disabled: false, OptionID: "10027"},
-			}},
+			payload: &FieldContextOptionListScheme{
+				Options: []*CustomFieldContextOptionScheme{
+					{
+						ID:       "10064",
+						Value:    "Option 3 - Updated",
+						Disabled: false,
+					},
+					{
+						ID:       "10065",
+						Value:    "Option 4 - Updated",
+						Disabled: true,
+					},
+				}},
 			mockFile:           "./mocks/create-custom-field-context-option.json",
 			wantHTTPMethod:     http.MethodPut,
 			endpoint:           "/rest/api/3/field/100001/context/585/option",
@@ -711,10 +835,19 @@ func TestFieldOptionContextService_Update(t *testing.T) {
 			name:      "UpdateFieldContextsWhenTheContextIDIsIncorrect",
 			fieldID:   "100001",
 			contextID: 01110,
-			payload: &CustomFieldOptionPayloadScheme{Options: []FieldContextOptionValueScheme{
-				{Value: "Argentina", Disabled: false, OptionID: "10027"},
-				{Value: "Canada", Disabled: false, OptionID: "10027"},
-			}},
+			payload: &FieldContextOptionListScheme{
+				Options: []*CustomFieldContextOptionScheme{
+					{
+						ID:       "10064",
+						Value:    "Option 3 - Updated",
+						Disabled: false,
+					},
+					{
+						ID:       "10065",
+						Value:    "Option 4 - Updated",
+						Disabled: true,
+					},
+				}},
 			mockFile:           "./mocks/create-custom-field-context-option.json",
 			wantHTTPMethod:     http.MethodPut,
 			endpoint:           "/rest/api/3/field/100001/context/585/option",
@@ -727,10 +860,19 @@ func TestFieldOptionContextService_Update(t *testing.T) {
 			name:      "UpdateFieldContextsWhenTheFieldIDIsEmpty",
 			fieldID:   "",
 			contextID: 01111,
-			payload: &CustomFieldOptionPayloadScheme{Options: []FieldContextOptionValueScheme{
-				{Value: "Argentina", Disabled: false, OptionID: "10027"},
-				{Value: "Canada", Disabled: false, OptionID: "10027"},
-			}},
+			payload: &FieldContextOptionListScheme{
+				Options: []*CustomFieldContextOptionScheme{
+					{
+						ID:       "10064",
+						Value:    "Option 3 - Updated",
+						Disabled: false,
+					},
+					{
+						ID:       "10065",
+						Value:    "Option 4 - Updated",
+						Disabled: true,
+					},
+				}},
 			mockFile:           "./mocks/create-custom-field-context-option.json",
 			wantHTTPMethod:     http.MethodPut,
 			endpoint:           "/rest/api/3/field/100001/context/585/option",
@@ -743,10 +885,19 @@ func TestFieldOptionContextService_Update(t *testing.T) {
 			name:      "UpdateFieldContextsWhenTheEndpointIsIncorrect",
 			fieldID:   "100001",
 			contextID: 01111,
-			payload: &CustomFieldOptionPayloadScheme{Options: []FieldContextOptionValueScheme{
-				{Value: "Argentina", Disabled: false, OptionID: "10027"},
-				{Value: "Canada", Disabled: false, OptionID: "10027"},
-			}},
+			payload: &FieldContextOptionListScheme{
+				Options: []*CustomFieldContextOptionScheme{
+					{
+						ID:       "10064",
+						Value:    "Option 3 - Updated",
+						Disabled: false,
+					},
+					{
+						ID:       "10065",
+						Value:    "Option 4 - Updated",
+						Disabled: true,
+					},
+				}},
 			mockFile:           "./mocks/create-custom-field-context-option.json",
 			wantHTTPMethod:     http.MethodPut,
 			endpoint:           "/rest/api/3/fields/100001/context/585/option",
@@ -772,10 +923,19 @@ func TestFieldOptionContextService_Update(t *testing.T) {
 			name:      "UpdateFieldContextsWhenTheRequestMethodIsIncorrect",
 			fieldID:   "100001",
 			contextID: 01111,
-			payload: &CustomFieldOptionPayloadScheme{Options: []FieldContextOptionValueScheme{
-				{Value: "Argentina", Disabled: false, OptionID: "10027"},
-				{Value: "Canada", Disabled: false, OptionID: "10027"},
-			}},
+			payload: &FieldContextOptionListScheme{
+				Options: []*CustomFieldContextOptionScheme{
+					{
+						ID:       "10064",
+						Value:    "Option 3 - Updated",
+						Disabled: false,
+					},
+					{
+						ID:       "10065",
+						Value:    "Option 4 - Updated",
+						Disabled: true,
+					},
+				}},
 			mockFile:           "./mocks/create-custom-field-context-option.json",
 			wantHTTPMethod:     http.MethodDelete,
 			endpoint:           "/rest/api/3/field/100001/context/585/option",
@@ -788,10 +948,19 @@ func TestFieldOptionContextService_Update(t *testing.T) {
 			name:      "UpdateFieldContextsWhenTheStatusCodeIsIncorrect",
 			fieldID:   "100001",
 			contextID: 01111,
-			payload: &CustomFieldOptionPayloadScheme{Options: []FieldContextOptionValueScheme{
-				{Value: "Argentina", Disabled: false, OptionID: "10027"},
-				{Value: "Canada", Disabled: false, OptionID: "10027"},
-			}},
+			payload: &FieldContextOptionListScheme{
+				Options: []*CustomFieldContextOptionScheme{
+					{
+						ID:       "10064",
+						Value:    "Option 3 - Updated",
+						Disabled: false,
+					},
+					{
+						ID:       "10065",
+						Value:    "Option 4 - Updated",
+						Disabled: true,
+					},
+				}},
 			mockFile:           "./mocks/create-custom-field-context-option.json",
 			wantHTTPMethod:     http.MethodPut,
 			endpoint:           "/rest/api/3/field/100001/context/585/option",
@@ -804,10 +973,19 @@ func TestFieldOptionContextService_Update(t *testing.T) {
 			name:      "UpdateFieldContextsWhenTheTheResponseBodyLengthIsZero",
 			fieldID:   "100001",
 			contextID: 01111,
-			payload: &CustomFieldOptionPayloadScheme{Options: []FieldContextOptionValueScheme{
-				{Value: "Argentina", Disabled: false, OptionID: "10027"},
-				{Value: "Canada", Disabled: false, OptionID: "10027"},
-			}},
+			payload: &FieldContextOptionListScheme{
+				Options: []*CustomFieldContextOptionScheme{
+					{
+						ID:       "10064",
+						Value:    "Option 3 - Updated",
+						Disabled: false,
+					},
+					{
+						ID:       "10065",
+						Value:    "Option 4 - Updated",
+						Disabled: true,
+					},
+				}},
 			mockFile:           "",
 			wantHTTPMethod:     http.MethodPut,
 			endpoint:           "/rest/api/3/field/100001/context/585/option",
@@ -819,10 +997,19 @@ func TestFieldOptionContextService_Update(t *testing.T) {
 			name:      "UpdateFieldContextsWhenTheTheResponseBodyHasADifferentFormat",
 			fieldID:   "100001",
 			contextID: 01111,
-			payload: &CustomFieldOptionPayloadScheme{Options: []FieldContextOptionValueScheme{
-				{Value: "Argentina", Disabled: false, OptionID: "10027"},
-				{Value: "Canada", Disabled: false, OptionID: "10027"},
-			}},
+			payload: &FieldContextOptionListScheme{
+				Options: []*CustomFieldContextOptionScheme{
+					{
+						ID:       "10064",
+						Value:    "Option 3 - Updated",
+						Disabled: false,
+					},
+					{
+						ID:       "10065",
+						Value:    "Option 4 - Updated",
+						Disabled: true,
+					},
+				}},
 			mockFile:           "./mocks/invalid-json.json",
 			wantHTTPMethod:     http.MethodPut,
 			endpoint:           "/rest/api/3/field/100001/context/585/option",

@@ -12,65 +12,53 @@ import (
 type FieldOptionContextService struct{ client *Client }
 
 type FieldOptionContextParams struct {
-	FieldID     string
-	ContextID   int
 	OptionID    int
 	OnlyOptions bool
 }
 
-type FieldContextOptionScheme struct {
-	MaxResults int                             `json:"maxResults,omitempty"`
-	StartAt    int                             `json:"startAt,omitempty"`
-	Total      int                             `json:"total,omitempty"`
-	IsLast     bool                            `json:"isLast,omitempty"`
-	Values     []FieldContextOptionValueScheme `json:"values,omitempty"`
+type CustomFieldContextOptionPageScheme struct {
+	Self       string                            `json:"self,omitempty"`
+	NextPage   string                            `json:"nextPage,omitempty"`
+	MaxResults int                               `json:"maxResults,omitempty"`
+	StartAt    int                               `json:"startAt,omitempty"`
+	Total      int                               `json:"total,omitempty"`
+	IsLast     bool                              `json:"isLast,omitempty"`
+	Values     []*CustomFieldContextOptionScheme `json:"values,omitempty"`
 }
 
-type FieldContextOptionValueScheme struct {
+type CustomFieldContextOptionScheme struct {
 	ID       string `json:"id,omitempty"`
 	Value    string `json:"value,omitempty"`
 	Disabled bool   `json:"disabled,omitempty"`
 	OptionID string `json:"optionId,omitempty"`
 }
 
-type FieldContextOptionListScheme struct {
-	Options []FieldContextOptionValueScheme `json:"options"`
-}
-
 // Returns a paginated list of all custom field option for a context.
 // Options are returned first then cascading options, in the order they display in Jira.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields/context/option#get-custom-field-options
-func (f *FieldOptionContextService) Gets(ctx context.Context, opts *FieldOptionContextParams, startAt, maxResults int) (result *FieldContextOptionScheme, response *Response, err error) {
-
-	if opts == nil {
-		return nil, nil, fmt.Errorf("error, payload value is nil, please provide a valid FieldOptionContextParams pointer")
-	}
+func (f *FieldOptionContextService) Gets(ctx context.Context, fieldID string, contextID int, opts *FieldOptionContextParams, startAt, maxResults int) (result *CustomFieldContextOptionPageScheme, response *Response, err error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
 	params.Add("maxResults", strconv.Itoa(maxResults))
 
-	if len(opts.FieldID) != 0 {
-		params.Add("fieldId", opts.FieldID)
+	if opts != nil {
+
+		if opts.OptionID != 0 {
+			params.Add("optionId", strconv.Itoa(opts.OptionID))
+		}
+
+		if opts.OnlyOptions {
+			params.Add("onlyOptions", "true")
+		}
 	}
 
-	if opts.ContextID != 0 {
-		params.Add("contextId", strconv.Itoa(opts.ContextID))
-	}
-
-	if opts.OptionID != 0 {
-		params.Add("optionId", strconv.Itoa(opts.OptionID))
-	}
-
-	if opts.OnlyOptions {
-		params.Add("onlyOptions", "true")
-	}
-
-	var endpoint = fmt.Sprintf("rest/api/3/field/%v/context/%v/option?%v", opts.FieldID, opts.ContextID, params.Encode())
+	var endpoint = fmt.Sprintf("rest/api/3/field/%v/context/%v/option?%v", fieldID, contextID, params.Encode())
 	request, err := f.client.newRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
 		return
 	}
+
 	request.Header.Set("Accept", "application/json")
 
 	response, err = f.client.Do(request)
@@ -78,7 +66,7 @@ func (f *FieldOptionContextService) Gets(ctx context.Context, opts *FieldOptionC
 		return
 	}
 
-	result = new(FieldContextOptionScheme)
+	result = new(CustomFieldContextOptionPageScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
@@ -86,14 +74,14 @@ func (f *FieldOptionContextService) Gets(ctx context.Context, opts *FieldOptionC
 	return
 }
 
-type CustomFieldOptionPayloadScheme struct {
-	Options []FieldContextOptionValueScheme `json:"options"`
+type FieldContextOptionListScheme struct {
+	Options []*CustomFieldContextOptionScheme `json:"options,omitempty"`
 }
 
 // Creates options and, where the custom select field is of the type Select List (cascading),
 // cascading options for a custom select field. The options are added to a context of the field.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields/context/option#create-custom-field-options
-func (f *FieldOptionContextService) Create(ctx context.Context, fieldID string, contextID int, payload *CustomFieldOptionPayloadScheme) (result *FieldContextOptionListScheme, response *Response, err error) {
+func (f *FieldOptionContextService) Create(ctx context.Context, fieldID string, contextID int, payload *FieldContextOptionListScheme) (result *FieldContextOptionListScheme, response *Response, err error) {
 
 	if payload == nil {
 		return nil, nil, fmt.Errorf("error, payload value is nil, please provide a valid CustomFieldOptionPayloadScheme pointer")
@@ -109,6 +97,7 @@ func (f *FieldOptionContextService) Create(ctx context.Context, fieldID string, 
 	if err != nil {
 		return
 	}
+
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Content-Type", "application/json")
 
@@ -129,7 +118,7 @@ func (f *FieldOptionContextService) Create(ctx context.Context, fieldID string, 
 // If any of the options are not found, no options are updated.
 // Options where the values in the request match the current values aren't updated and aren't reported in the response.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields/context/option#update-custom-field-options
-func (f *FieldOptionContextService) Update(ctx context.Context, fieldID string, contextID int, payload *CustomFieldOptionPayloadScheme) (result *FieldContextOptionListScheme, response *Response, err error) {
+func (f *FieldOptionContextService) Update(ctx context.Context, fieldID string, contextID int, payload *FieldContextOptionListScheme) (result *FieldContextOptionListScheme, response *Response, err error) {
 
 	if payload == nil {
 		return nil, nil, fmt.Errorf("error, payload value is nil, please provide a valid CustomFieldOptionPayloadScheme pointer")
@@ -168,6 +157,14 @@ func (f *FieldOptionContextService) Delete(ctx context.Context, fieldID string, 
 
 	if fieldID == "" {
 		return nil, fmt.Errorf("error, fieldID value is nil, please provide a valid fieldID value")
+	}
+
+	if contextID == 0 {
+		return nil, fmt.Errorf("error, fieldID value is nil, please provide a valid contextID value")
+	}
+
+	if optionID == 0 {
+		return nil, fmt.Errorf("error, fieldID value is nil, please provide a valid optionID value")
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/field/%v/context/%v/option/%v", fieldID, contextID, optionID)

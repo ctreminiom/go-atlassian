@@ -11,20 +11,62 @@ import (
 
 func TestIssueLinkService_Create(t *testing.T) {
 
+	payloadMocked := &LinkPayloadScheme{
+
+		Comment: &CommentPayloadScheme{
+
+			Body: &CommentNodeScheme{
+				Version: 1,
+				Type:    "doc",
+				Content: []*CommentNodeScheme{
+					{
+						Type: "paragraph",
+						Content: []*CommentNodeScheme{
+							{
+								Type: "text",
+								Text: "Carlos Test",
+							},
+							{
+								Type: "emoji",
+								Attrs: map[string]interface{}{
+									"shortName": ":grin",
+									"id":        "1f601",
+									"text":      "😁",
+								},
+							},
+							{
+								Type: "text",
+								Text: " ",
+							},
+						},
+					},
+				},
+			},
+		},
+
+		InwardIssue: &LinkedIssueScheme{
+			Key: "KP-1",
+		},
+		OutwardIssue: &LinkedIssueScheme{
+			Key: "KP-2",
+		},
+		Type: &LinkTypeScheme{
+			Name: "Duplicate",
+		},
+	}
+
 	testCases := []struct {
-		name                                string
-		linkType, inWardIssue, outWardIssue string
-		wantHTTPMethod                      string
-		endpoint                            string
-		context                             context.Context
-		wantHTTPCodeReturn                  int
-		wantErr                             bool
+		name               string
+		payload            *LinkPayloadScheme
+		wantHTTPMethod     string
+		endpoint           string
+		context            context.Context
+		wantHTTPCodeReturn int
+		wantErr            bool
 	}{
 		{
 			name:               "CreateIssueLinkWhenThePayloadAreCorrect",
-			linkType:           "Duplicate",
-			inWardIssue:        "MKY-2",
-			outWardIssue:       "MKY-1",
+			payload:            payloadMocked,
 			wantHTTPMethod:     http.MethodPost,
 			endpoint:           "/rest/api/3/issueLink",
 			context:            context.Background(),
@@ -34,9 +76,7 @@ func TestIssueLinkService_Create(t *testing.T) {
 
 		{
 			name:               "CreateIssueLinkWhenTheEndpointIsIncorrect",
-			linkType:           "Duplicate",
-			inWardIssue:        "MKY-2",
-			outWardIssue:       "MKY-1",
+			payload:            payloadMocked,
 			wantHTTPMethod:     http.MethodPost,
 			endpoint:           "/rest/api/3/issueLinks",
 			context:            context.Background(),
@@ -46,9 +86,7 @@ func TestIssueLinkService_Create(t *testing.T) {
 
 		{
 			name:               "CreateIssueLinkWhenTheRequestMethodIsIncorrect",
-			linkType:           "Duplicate",
-			inWardIssue:        "MKY-2",
-			outWardIssue:       "MKY-1",
+			payload:            payloadMocked,
 			wantHTTPMethod:     http.MethodDelete,
 			endpoint:           "/rest/api/3/issueLink",
 			context:            context.Background(),
@@ -58,9 +96,7 @@ func TestIssueLinkService_Create(t *testing.T) {
 
 		{
 			name:               "CreateIssueLinkWhenTheStatusCodeIsIncorrect",
-			linkType:           "Duplicate",
-			inWardIssue:        "MKY-2",
-			outWardIssue:       "MKY-1",
+			payload:            payloadMocked,
 			wantHTTPMethod:     http.MethodPost,
 			endpoint:           "/rest/api/3/issueLink",
 			context:            context.Background(),
@@ -70,9 +106,7 @@ func TestIssueLinkService_Create(t *testing.T) {
 
 		{
 			name:               "CreateIssueLinkWhenTheContextIsNil",
-			linkType:           "Duplicate",
-			inWardIssue:        "MKY-2",
-			outWardIssue:       "MKY-1",
+			payload:            payloadMocked,
 			wantHTTPMethod:     http.MethodPost,
 			endpoint:           "/rest/api/3/issueLink",
 			context:            nil,
@@ -105,7 +139,7 @@ func TestIssueLinkService_Create(t *testing.T) {
 			}
 
 			service := &IssueLinkService{client: mockClient}
-			gotResponse, err := service.Create(testCase.context, testCase.linkType, testCase.inWardIssue, testCase.outWardIssue)
+			gotResponse, err := service.Create(testCase.context, testCase.payload)
 
 			if testCase.wantErr {
 
@@ -162,6 +196,17 @@ func TestIssueLinkService_Delete(t *testing.T) {
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusOK,
 			wantErr:            false,
+		},
+
+		{
+			name:               "DeleteIssueLinkWhenTheLinkIDIsNotProvided",
+			linkID:             "",
+			wantHTTPMethod:     http.MethodDelete,
+			mockFile:           "./mocks/get-issue-link-by-id.json",
+			endpoint:           "/rest/api/3/issueLink/10001",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
 		},
 
 		{
@@ -291,6 +336,17 @@ func TestIssueLinkService_Get(t *testing.T) {
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusOK,
 			wantErr:            false,
+		},
+
+		{
+			name:               "GetIssueLinkWhenTheLinkIDIsNotProvided",
+			linkID:             "",
+			wantHTTPMethod:     http.MethodGet,
+			mockFile:           "./mocks/get-issue-link-by-id.json",
+			endpoint:           "/rest/api/3/issueLink/10001",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
 		},
 
 		{
@@ -443,6 +499,17 @@ func TestIssueLinkService_Gets(t *testing.T) {
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusOK,
 			wantErr:            false,
+		},
+
+		{
+			name:               "GetsIssueLinkWhenTheIssueKeyOrIDIsNotProvided",
+			issueKeyOrID:       "",
+			wantHTTPMethod:     http.MethodGet,
+			mockFile:           "./mocks/get-issue-link-by-id.json",
+			endpoint:           "/rest/api/3/issue/DUMMY-3?fields=issuelinks",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
 		},
 
 		{

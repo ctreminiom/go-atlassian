@@ -49,7 +49,15 @@ func main() {
 		},
 	})
 
-	newComment, response, err := atlassian.Issue.Comment.Add(context.Background(), "KP-2", "role", "Administrators", &commentBody, nil)
+	payload := &jira.CommentPayloadScheme{
+		Visibility: &jira.CommentVisibilityScheme{
+			Type:  "role",
+			Value: "Administrators",
+		},
+		Body: &commentBody,
+	}
+
+	newComment, response, err := atlassian.Issue.Comment.Add(context.Background(), "KP-2", payload, nil)
 	if err != nil {
 		if response != nil {
 			log.Println("Response HTTP Response", string(response.BodyAsBytes))

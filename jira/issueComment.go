@@ -160,24 +160,15 @@ func (c *CommentService) Delete(ctx context.Context, issueKeyOrID, commentID str
 	return
 }
 
-func (c *CommentService) Add(ctx context.Context, issueKeyOrID, visibilityType, visibilityValue string, body *CommentNodeScheme, expands []string) (result *IssueCommentScheme, response *Response, err error) {
+func (c *CommentService) Add(ctx context.Context, issueKeyOrID string, payload *CommentPayloadScheme, expands []string) (result *IssueCommentScheme, response *Response, err error) {
 
 	if len(issueKeyOrID) == 0 {
 		return nil, nil, fmt.Errorf("error, please provide a valid issueKeyOrID value")
 	}
 
-	if body == nil {
+	if payload == nil {
 		return nil, nil, fmt.Errorf("error, please provide a valid CommentNodeScheme pointer")
 	}
-
-	var commentPayload = map[string]interface{}{}
-	commentPayload["body"] = body
-
-	var visibilityPayload = map[string]interface{}{}
-	visibilityPayload["type"] = visibilityType
-	visibilityPayload["value"] = visibilityValue
-
-	commentPayload["visibility"] = visibilityPayload
 
 	params := url.Values{}
 	var expand string
@@ -202,7 +193,7 @@ func (c *CommentService) Add(ctx context.Context, issueKeyOrID, visibilityType, 
 		endpoint = fmt.Sprintf("rest/api/3/issue/%v/comment", issueKeyOrID)
 	}
 
-	request, err := c.client.newRequest(ctx, http.MethodPost, endpoint, &commentPayload)
+	request, err := c.client.newRequest(ctx, http.MethodPost, endpoint, payload)
 	if err != nil {
 		return
 	}

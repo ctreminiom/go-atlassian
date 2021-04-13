@@ -20,31 +20,27 @@ type FieldContextOptionsScheme struct {
 	ContextID       []int
 }
 
-type FieldContextSearchScheme struct {
-	MaxResults int                  `json:"maxResults"`
-	StartAt    int                  `json:"startAt"`
-	Total      int                  `json:"total"`
-	IsLast     bool                 `json:"isLast"`
-	Values     []FieldContextScheme `json:"values"`
+type CustomFieldContextPageScheme struct {
+	MaxResults int                   `json:"maxResults,omitempty"`
+	StartAt    int                   `json:"startAt,omitempty"`
+	Total      int                   `json:"total,omitempty"`
+	IsLast     bool                  `json:"isLast,omitempty"`
+	Values     []*FieldContextScheme `json:"values,omitempty"`
 }
 
 type FieldContextScheme struct {
-	ID              string        `json:"id"`
-	Name            string        `json:"name"`
-	Description     string        `json:"description"`
-	IsGlobalContext bool          `json:"isGlobalContext"`
-	IsAnyIssueType  bool          `json:"isAnyIssueType"`
-	ProjectIds      []interface{} `json:"projectIds,omitempty"`
-	IssueTypeIds    []string      `json:"issueTypeIds,omitempty"`
+	ID              string   `json:"id,omitempty"`
+	Name            string   `json:"name,omitempty"`
+	Description     string   `json:"description,omitempty"`
+	IsGlobalContext bool     `json:"isGlobalContext,omitempty"`
+	IsAnyIssueType  bool     `json:"isAnyIssueType,omitempty"`
+	ProjectIds      []string `json:"projectIds,omitempty"`
+	IssueTypeIds    []string `json:"issueTypeIds,omitempty"`
 }
 
 // Returns a paginated list of contexts for a custom field. Contexts can be returned as follows:
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields/context#get-custom-field-contexts
-func (f *FieldContextService) Gets(ctx context.Context, fieldID string, opts *FieldContextOptionsScheme, startAt, maxResults int) (result *FieldContextSearchScheme, response *Response, err error) {
-
-	if opts == nil {
-		return nil, nil, fmt.Errorf("error, payload value is nil, please provide a valid FieldContextOptionsScheme pointer")
-	}
+func (f *FieldContextService) Gets(ctx context.Context, fieldID string, opts *FieldContextOptionsScheme, startAt, maxResults int) (result *CustomFieldContextPageScheme, response *Response, err error) {
 
 	if fieldID == "" {
 		return nil, nil, fmt.Errorf("error, fieldID value is nil, please provide a valid fieldID value")
@@ -54,16 +50,20 @@ func (f *FieldContextService) Gets(ctx context.Context, fieldID string, opts *Fi
 	params.Add("startAt", strconv.Itoa(startAt))
 	params.Add("maxResults", strconv.Itoa(maxResults))
 
-	if opts.IsAnyIssueType {
-		params.Add("isAnyIssueType", "true")
-	}
+	if opts != nil {
 
-	if opts.IsGlobalContext {
-		params.Add("isGlobalContext", "true")
-	}
+		if opts.IsAnyIssueType {
+			params.Add("isAnyIssueType", "true")
+		}
 
-	for _, contextID := range opts.ContextID {
-		params.Add("contextId", strconv.Itoa(contextID))
+		if opts.IsGlobalContext {
+			params.Add("isGlobalContext", "true")
+		}
+
+		for _, contextID := range opts.ContextID {
+			params.Add("contextId", strconv.Itoa(contextID))
+		}
+
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/field/%v/context?%v", fieldID, params.Encode())
@@ -79,7 +79,7 @@ func (f *FieldContextService) Gets(ctx context.Context, fieldID string, opts *Fi
 		return
 	}
 
-	result = new(FieldContextSearchScheme)
+	result = new(CustomFieldContextPageScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
@@ -128,23 +128,27 @@ func (f *FieldContextService) Create(ctx context.Context, fieldID string, payloa
 	return
 }
 
-type FieldContextsDefaultValueScheme struct {
-	MaxResults int  `json:"maxResults"`
-	StartAt    int  `json:"startAt"`
-	Total      int  `json:"total"`
-	IsLast     bool `json:"isLast"`
-	Values     []struct {
-		Type      string `json:"type"`
-		ContextID string `json:"contextId"`
-		OptionID  string `json:"optionId,omitempty"`
-	} `json:"values"`
+type CustomFieldDefaultValuePageScheme struct {
+	MaxResults int                              `json:"maxResults,omitempty"`
+	StartAt    int                              `json:"startAt,omitempty"`
+	Total      int                              `json:"total,omitempty"`
+	IsLast     bool                             `json:"isLast,omitempty"`
+	Values     []*CustomFieldDefaultValueScheme `json:"values,omitempty"`
+}
+
+type CustomFieldDefaultValueScheme struct {
+	ContextID         string   `json:"contextId,omitempty"`
+	OptionID          string   `json:"optionId,omitempty"`
+	CascadingOptionID string   `json:"cascadingOptionId,omitempty"`
+	OptionIDs         []string `json:"optionIds,omitempty"`
+	Type              string   `json:"type,omitempty"`
 }
 
 // Returns a paginated list of defaults for a custom field.
 // The results can be filtered by contextId, otherwise all values are returned.
 // If no defaults are set for a context, nothing is returned.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields/context#get-custom-field-contexts-default-values
-func (f *FieldContextService) GetDefaultValues(ctx context.Context, fieldID string, contextIDs []int, startAt, maxResults int) (result *FieldContextsDefaultValueScheme, response *Response, err error) {
+func (f *FieldContextService) GetDefaultValues(ctx context.Context, fieldID string, contextIDs []int, startAt, maxResults int) (result *CustomFieldDefaultValuePageScheme, response *Response, err error) {
 
 	if len(fieldID) == 0 {
 		return nil, nil, fmt.Errorf("error, please provide a valid fieldID value")
@@ -171,7 +175,7 @@ func (f *FieldContextService) GetDefaultValues(ctx context.Context, fieldID stri
 		return
 	}
 
-	result = new(FieldContextsDefaultValueScheme)
+	result = new(CustomFieldDefaultValuePageScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
@@ -180,58 +184,28 @@ func (f *FieldContextService) GetDefaultValues(ctx context.Context, fieldID stri
 }
 
 type FieldContextDefaultPayloadScheme struct {
-	DefaultValues []*DefaultValueScheme `json:"defaultValues"`
-}
-
-type DefaultValueScheme struct {
-	ContextID         string   `json:"contextId,omitempty"`
-	OptionID          string   `json:"optionId,omitempty"`
-	CascadingOptionID string   `json:"cascadingOptionId,omitempty"`
-	Type              string   `json:"type,omitempty"`
-	OptionIds         []string `json:"optionIds,omitempty"`
+	DefaultValues []*CustomFieldDefaultValueScheme `json:"defaultValues,omitempty"`
 }
 
 // Sets default for contexts of a custom field.
 // Default are defined using these objects:
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields/context#set-custom-field-contexts-default-values
-func (f *FieldContextService) SetDefaultValue(ctx context.Context, fieldID string, values []*DefaultValueScheme) (response *Response, err error) {
+func (f *FieldContextService) SetDefaultValue(ctx context.Context, fieldID string, payload *FieldContextDefaultPayloadScheme) (response *Response, err error) {
 
 	if len(fieldID) == 0 {
 		return nil, fmt.Errorf("error, please provide a valid fieldID value")
 	}
 
-	if values == nil {
+	if payload == nil {
 		return nil, fmt.Errorf("error, please provide a valid slice of DefaultValueScheme pointers")
 	}
 
-	if len(values) == 0 {
+	if len(payload.DefaultValues) == 0 {
 		return nil, fmt.Errorf("error, please provide a valid Custom Field Context default value")
 	}
 
-	//Create the payload
-	var nodeAsList []map[string]interface{}
-
-	for _, value := range values {
-
-		valueAsBytes, err := json.Marshal(value)
-		if err != nil {
-			return nil, err
-		}
-
-		valueAsMap := make(map[string]interface{})
-		err = json.Unmarshal(valueAsBytes, &valueAsMap)
-		if err != nil {
-			return nil, err
-		}
-
-		nodeAsList = append(nodeAsList, valueAsMap)
-	}
-
-	var payload = map[string]interface{}{}
-	payload["defaultValues"] = nodeAsList
-
 	var endpoint = fmt.Sprintf("rest/api/3/field/%v/context/defaultValue", fieldID)
-	request, err := f.client.newRequest(ctx, http.MethodPost, endpoint, payload)
+	request, err := f.client.newRequest(ctx, http.MethodPut, endpoint, payload)
 	if err != nil {
 		return
 	}
@@ -255,12 +229,16 @@ func (f *FieldContextService) Update(ctx context.Context, fieldID string, contex
 		return nil, fmt.Errorf("error, please provide a valid fieldID value")
 	}
 
-	var payload = map[string]interface{}{}
-	if len(name) != 0 {
-		payload["name"] = name
+	if contextID == 0 {
+		return nil, fmt.Errorf("error, please provide a valid contextID value")
 	}
-	if len(description) != 0 {
-		payload["description"] = description
+
+	payload := struct {
+		Name        string `json:"name,omitempty"`
+		Description string `json:"description,omitempty"`
+	}{
+		Name:        name,
+		Description: description,
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/field/%v/context/%v", fieldID, contextID)
@@ -287,6 +265,10 @@ func (f *FieldContextService) Delete(ctx context.Context, fieldID string, contex
 
 	if len(fieldID) == 0 {
 		return nil, fmt.Errorf("error, please provide a valid fieldID value")
+	}
+
+	if contextID == 0 {
+		return nil, fmt.Errorf("error, please provide a valid contextID value")
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/field/%v/context/%v", fieldID, contextID)

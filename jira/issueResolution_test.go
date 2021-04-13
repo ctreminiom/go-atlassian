@@ -34,6 +34,18 @@ func TestResolutionService_Get(t *testing.T) {
 		},
 
 		{
+			name:               "GetIssueResolutionWhenTheResponseBodyIsEmpty",
+			mockFile:           "./mocks/empty_json.json",
+			resolutionID:       "10000",
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/rest/api/3/resolution/10000",
+			context:            context.Background(),
+			wantHTTPHeaders:    map[string]string{"Accept": "application/json"},
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+
+		{
 			name:               "GetIssueResolutionWhenTheIDIsNotSet",
 			mockFile:           "./mocks/get_resolution_10000.json",
 			resolutionID:       "",
@@ -165,6 +177,18 @@ func TestResolutionService_Gets(t *testing.T) {
 			wantHTTPCodeReturn: http.StatusOK,
 			wantErr:            false,
 		},
+
+		{
+			name:               "GetsIssueResolutionWhenTheResponseBodyIsEmpty",
+			mockFile:           "./mocks/empty_json.json",
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/rest/api/3/resolution",
+			context:            context.Background(),
+			wantHTTPHeaders:    map[string]string{"Accept": "application/json"},
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+
 		{
 			name:               "GetsIssueResolutionWhenTheMethodIsDifferent",
 			mockFile:           "./mocks/get_resolutions.json",

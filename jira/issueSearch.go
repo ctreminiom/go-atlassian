@@ -83,7 +83,7 @@ type IssueChangelogHistoryScheme struct {
 
 	Created string `json:"created"`
 
-	Items []IssueChangelogHistoryItemScheme `json:"items"`
+	Items []*IssueChangelogHistoryItemScheme `json:"items"`
 }
 
 type IssueChangelogHistoryItemScheme struct {
@@ -212,11 +212,11 @@ func (s *IssueSearchService) Post(ctx context.Context, jql string, fields, expan
 	}
 
 	payload := struct {
-		Expand        []string `json:"expand"`
-		Jql           string   `json:"jql"`
-		MaxResults    int      `json:"maxResults"`
-		Fields        []string `json:"fields"`
-		StartAt       int      `json:"startAt"`
+		Expand        []string `json:"expand,omitempty"`
+		Jql           string   `json:"jql,omitempty"`
+		MaxResults    int      `json:"maxResults,omitempty"`
+		Fields        []string `json:"fields,omitempty"`
+		StartAt       int      `json:"startAt,omitempty"`
 		ValidateQuery string   `json:"validateQuery,omitempty"`
 	}{
 		Expand:        expands,

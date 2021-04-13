@@ -12,17 +12,17 @@ import (
 type FieldConfigurationService struct{ client *Client }
 
 type FieldConfigSearchScheme struct {
-	MaxResults int                 `json:"maxResults"`
-	StartAt    int                 `json:"startAt"`
-	Total      int                 `json:"total"`
-	IsLast     bool                `json:"isLast"`
-	Values     []FieldConfigScheme `json:"values"`
+	MaxResults int                  `json:"maxResults,omitempty"`
+	StartAt    int                  `json:"startAt,omitempty"`
+	Total      int                  `json:"total,omitempty"`
+	IsLast     bool                 `json:"isLast,omitempty"`
+	Values     []*FieldConfigScheme `json:"values,omitempty"`
 }
 
 type FieldConfigScheme struct {
-	ID          int    `json:"id"`
-	Name        string `json:"name"`
-	Description string `json:"description"`
+	ID          int    `json:"id,omitempty"`
+	Name        string `json:"name,omitempty"`
+	Description string `json:"description,omitempty"`
 	IsDefault   bool   `json:"isDefault,omitempty"`
 }
 
@@ -62,28 +62,30 @@ func (f *FieldConfigurationService) Gets(ctx context.Context, IDs []int, isDefau
 	return
 }
 
-type FieldConfigItemSearchScheme struct {
-	MaxResults int  `json:"maxResults"`
-	StartAt    int  `json:"startAt"`
-	Total      int  `json:"total"`
-	IsLast     bool `json:"isLast"`
-	Values     []struct {
-		ID          string `json:"id"`
-		IsHidden    bool   `json:"isHidden"`
-		IsRequired  bool   `json:"isRequired"`
-		Description string `json:"description,omitempty"`
-	} `json:"values"`
+type FieldConfigurationItemPageScheme struct {
+	MaxResults int                             `json:"maxResults,omitempty"`
+	StartAt    int                             `json:"startAt,omitempty"`
+	Total      int                             `json:"total,omitempty"`
+	IsLast     bool                            `json:"isLast,omitempty"`
+	Values     []*FieldConfigurationItemScheme `json:"values,omitempty"`
+}
+
+type FieldConfigurationItemScheme struct {
+	ID          string `json:"id,omitempty"`
+	IsHidden    bool   `json:"isHidden,omitempty"`
+	IsRequired  bool   `json:"isRequired,omitempty"`
+	Description string `json:"description,omitempty"`
 }
 
 // Returns a paginated list of all fields for a configuration.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration#get-field-configuration-items
-func (f *FieldConfigurationService) Items(ctx context.Context, fieldConfigID int, startAt, maxResults int) (result *FieldConfigItemSearchScheme, response *Response, err error) {
+func (f *FieldConfigurationService) Items(ctx context.Context, fieldConfigurationID, startAt, maxResults int) (result *FieldConfigurationItemPageScheme, response *Response, err error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
 	params.Add("maxResults", strconv.Itoa(maxResults))
 
-	var endpoint = fmt.Sprintf("rest/api/3/fieldconfiguration/%v/fields?%v", fieldConfigID, params.Encode())
+	var endpoint = fmt.Sprintf("rest/api/3/fieldconfiguration/%v/fields?%v", fieldConfigurationID, params.Encode())
 	request, err := f.client.newRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
 		return
@@ -96,7 +98,7 @@ func (f *FieldConfigurationService) Items(ctx context.Context, fieldConfigID int
 		return
 	}
 
-	result = new(FieldConfigItemSearchScheme)
+	result = new(FieldConfigurationItemPageScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
@@ -104,21 +106,23 @@ func (f *FieldConfigurationService) Items(ctx context.Context, fieldConfigID int
 	return
 }
 
-type FieldConfigSchemeScheme struct {
-	MaxResults int  `json:"maxResults"`
-	StartAt    int  `json:"startAt"`
-	Total      int  `json:"total"`
-	IsLast     bool `json:"isLast"`
-	Values     []struct {
-		ID          string `json:"id"`
-		Name        string `json:"name"`
-		Description string `json:"description"`
-	} `json:"values"`
+type FieldConfigurationSchemePageScheme struct {
+	MaxResults int                               `json:"maxResults,omitempty"`
+	StartAt    int                               `json:"startAt,omitempty"`
+	Total      int                               `json:"total,omitempty"`
+	IsLast     bool                              `json:"isLast,omitempty"`
+	Values     []*FieldConfigurationSchemeScheme `json:"values,omitempty"`
+}
+
+type FieldConfigurationSchemeScheme struct {
+	ID          string `json:"id,omitempty"`
+	Name        string `json:"name,omitempty"`
+	Description string `json:"description,omitempty"`
 }
 
 // Returns a paginated list of field configuration schemes.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration#get-all-field-configuration-schemes
-func (f *FieldConfigurationService) Schemes(ctx context.Context, IDs []int, startAt, maxResults int) (result *FieldConfigSchemeScheme, response *Response, err error) {
+func (f *FieldConfigurationService) Schemes(ctx context.Context, IDs []int, startAt, maxResults int) (result *FieldConfigurationSchemePageScheme, response *Response, err error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -141,7 +145,7 @@ func (f *FieldConfigurationService) Schemes(ctx context.Context, IDs []int, star
 		return
 	}
 
-	result = new(FieldConfigSchemeScheme)
+	result = new(FieldConfigurationSchemePageScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
@@ -149,21 +153,23 @@ func (f *FieldConfigurationService) Schemes(ctx context.Context, IDs []int, star
 	return
 }
 
-type FieldConfigSchemeItemsScheme struct {
-	MaxResults int  `json:"maxResults"`
-	StartAt    int  `json:"startAt"`
-	Total      int  `json:"total"`
-	IsLast     bool `json:"isLast"`
-	Values     []struct {
-		FieldConfigurationSchemeID string `json:"fieldConfigurationSchemeId"`
-		IssueTypeID                string `json:"issueTypeId"`
-		FieldConfigurationID       string `json:"fieldConfigurationId"`
-	} `json:"values"`
+type FieldConfigurationIssueTypeItemPageScheme struct {
+	MaxResults int                                      `json:"maxResults,omitempty"`
+	StartAt    int                                      `json:"startAt,omitempty"`
+	Total      int                                      `json:"total,omitempty"`
+	IsLast     bool                                     `json:"isLast,omitempty"`
+	Values     []*FieldConfigurationIssueTypeItemScheme `json:"values,omitempty"`
+}
+
+type FieldConfigurationIssueTypeItemScheme struct {
+	FieldConfigurationSchemeID string `json:"fieldConfigurationSchemeId,omitempty"`
+	IssueTypeID                string `json:"issueTypeId,omitempty"`
+	FieldConfigurationID       string `json:"fieldConfigurationId,omitempty"`
 }
 
 // Returns a paginated list of field configuration issue type items.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration#get-field-configuration-issue-type-items
-func (f *FieldConfigurationService) IssueTypeItems(ctx context.Context, fieldConfigIDs []int, startAt, maxResults int) (result *FieldConfigSchemeItemsScheme, response *Response, err error) {
+func (f *FieldConfigurationService) IssueTypeItems(ctx context.Context, fieldConfigIDs []int, startAt, maxResults int) (result *FieldConfigurationIssueTypeItemPageScheme, response *Response, err error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -185,7 +191,7 @@ func (f *FieldConfigurationService) IssueTypeItems(ctx context.Context, fieldCon
 		return
 	}
 
-	result = new(FieldConfigSchemeItemsScheme)
+	result = new(FieldConfigurationIssueTypeItemPageScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
@@ -193,24 +199,22 @@ func (f *FieldConfigurationService) IssueTypeItems(ctx context.Context, fieldCon
 	return
 }
 
-type FieldProjectSchemeScheme struct {
-	MaxResults int  `json:"maxResults"`
-	StartAt    int  `json:"startAt"`
-	Total      int  `json:"total"`
-	IsLast     bool `json:"isLast"`
-	Values     []struct {
-		ProjectIds               []string `json:"projectIds"`
-		FieldConfigurationScheme struct {
-			ID          string `json:"id"`
-			Name        string `json:"name"`
-			Description string `json:"description"`
-		} `json:"fieldConfigurationScheme,omitempty"`
-	} `json:"values"`
+type FieldConfigurationSchemeProjectPageScheme struct {
+	MaxResults int                                      `json:"maxResults,omitempty"`
+	StartAt    int                                      `json:"startAt,omitempty"`
+	Total      int                                      `json:"total,omitempty"`
+	IsLast     bool                                     `json:"isLast,omitempty"`
+	Values     []*FieldConfigurationSchemeProjectScheme `json:"values,omitempty"`
+}
+
+type FieldConfigurationSchemeProjectScheme struct {
+	ProjectIds               []string                        `json:"projectIds,omitempty"`
+	FieldConfigurationScheme *FieldConfigurationSchemeScheme `json:"fieldConfigurationScheme,omitempty"`
 }
 
 // Returns a paginated list of field configuration schemes and, for each scheme, a list of the projects that use it.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration#get-field-configuration-schemes-for-projects
-func (f *FieldConfigurationService) SchemesByProject(ctx context.Context, projectIDs []int, startAt, maxResults int) (result *FieldProjectSchemeScheme, response *Response, err error) {
+func (f *FieldConfigurationService) SchemesByProject(ctx context.Context, projectIDs []int, startAt, maxResults int) (result *FieldConfigurationSchemeProjectPageScheme, response *Response, err error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -232,7 +236,7 @@ func (f *FieldConfigurationService) SchemesByProject(ctx context.Context, projec
 		return
 	}
 
-	result = new(FieldProjectSchemeScheme)
+	result = new(FieldConfigurationSchemeProjectPageScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}

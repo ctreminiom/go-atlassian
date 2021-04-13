@@ -4,14 +4,13 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"gopkg.in/go-playground/validator.v9"
 	"net/http"
 )
 
 type IssueLinkTypeService struct{ client *Client }
 
 type IssueLinkTypeSearchScheme struct {
-	IssueLinkTypes []IssueLinkTypeScheme `json:"issueLinkTypes"`
+	IssueLinkTypes []*LinkTypeScheme `json:"issueLinkTypes,omitempty"`
 }
 
 type IssueLinkTypeScheme struct {
@@ -50,7 +49,11 @@ func (i *IssueLinkTypeService) Gets(ctx context.Context) (result *IssueLinkTypeS
 
 // Returns an issue link type.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/link/types#get-issue-link-type
-func (i *IssueLinkTypeService) Get(ctx context.Context, issueLinkTypeID string) (result *IssueLinkTypeScheme, response *Response, err error) {
+func (i *IssueLinkTypeService) Get(ctx context.Context, issueLinkTypeID string) (result *LinkTypeScheme, response *Response, err error) {
+
+	if len(issueLinkTypeID) == 0 {
+		return nil, nil, fmt.Errorf("error!, please provide a valid issueLinkTypeID value")
+	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/issueLinkType/%v", issueLinkTypeID)
 
@@ -66,7 +69,7 @@ func (i *IssueLinkTypeService) Get(ctx context.Context, issueLinkTypeID string) 
 		return
 	}
 
-	result = new(IssueLinkTypeScheme)
+	result = new(LinkTypeScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
@@ -74,25 +77,14 @@ func (i *IssueLinkTypeService) Get(ctx context.Context, issueLinkTypeID string) 
 	return
 }
 
-type IssueLinkTypePayloadScheme struct {
-	Inward  string `json:"inward,omitempty" validate:"required"`
-	Name    string `json:"name,omitempty" validate:"required"`
-	Outward string `json:"outward,omitempty" validate:"required"`
-}
-
 // Creates an issue link type.
 // Use this operation to create descriptions of the reasons why issues are linked.
 // The issue link type consists of a name and descriptions for a link's inward and outward relationships.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/link/types#create-issue-link-type
-func (i *IssueLinkTypeService) Create(ctx context.Context, payload *IssueLinkTypePayloadScheme) (result *IssueLinkTypeScheme, response *Response, err error) {
+func (i *IssueLinkTypeService) Create(ctx context.Context, payload *LinkTypeScheme) (result *LinkTypeScheme, response *Response, err error) {
 
 	if payload == nil {
 		return nil, nil, fmt.Errorf("error, payload value is nil, please provide a valid IssueLinkTypePayloadScheme pointer")
-	}
-
-	validate := validator.New()
-	if err = validate.Struct(payload); err != nil {
-		return
 	}
 
 	var endpoint = "rest/api/3/issueLinkType"
@@ -110,7 +102,7 @@ func (i *IssueLinkTypeService) Create(ctx context.Context, payload *IssueLinkTyp
 		return
 	}
 
-	result = new(IssueLinkTypeScheme)
+	result = new(LinkTypeScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
@@ -120,7 +112,11 @@ func (i *IssueLinkTypeService) Create(ctx context.Context, payload *IssueLinkTyp
 
 // Updates an issue link type.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/link/types#update-issue-link-type
-func (i *IssueLinkTypeService) Update(ctx context.Context, issueLinkTypeID string, payload *IssueLinkTypePayloadScheme) (result *IssueLinkTypeScheme, response *Response, err error) {
+func (i *IssueLinkTypeService) Update(ctx context.Context, issueLinkTypeID string, payload *LinkTypeScheme) (result *LinkTypeScheme, response *Response, err error) {
+
+	if len(issueLinkTypeID) == 0 {
+		return nil, nil, fmt.Errorf("error!, please provide a valid issueLinkTypeID value")
+	}
 
 	if payload == nil {
 		return nil, nil, fmt.Errorf("error, payload value is nil, please provide a valid IssueLinkTypePayloadScheme pointer")
@@ -141,7 +137,7 @@ func (i *IssueLinkTypeService) Update(ctx context.Context, issueLinkTypeID strin
 		return
 	}
 
-	result = new(IssueLinkTypeScheme)
+	result = new(LinkTypeScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
@@ -152,6 +148,10 @@ func (i *IssueLinkTypeService) Update(ctx context.Context, issueLinkTypeID strin
 // Deletes an issue link type.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/link/types#delete-issue-link-type
 func (i *IssueLinkTypeService) Delete(ctx context.Context, issueLinkTypeID string) (response *Response, err error) {
+
+	if len(issueLinkTypeID) == 0 {
+		return nil, fmt.Errorf("error!, please provide a valid issueLinkTypeID value")
+	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/issueLinkType/%v", issueLinkTypeID)
 

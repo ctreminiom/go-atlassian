@@ -14,7 +14,7 @@ func TestIssueLinkTypeService_Create(t *testing.T) {
 	testCases := []struct {
 		name               string
 		mockFile           string
-		payload            *IssueLinkTypePayloadScheme
+		payload            *LinkTypeScheme
 		wantHTTPMethod     string
 		endpoint           string
 		context            context.Context
@@ -24,7 +24,7 @@ func TestIssueLinkTypeService_Create(t *testing.T) {
 	}{
 		{
 			name: "CreateIssueLinksTypeWhenThePayloadIsCorrect",
-			payload: &IssueLinkTypePayloadScheme{
+			payload: &LinkTypeScheme{
 				Inward:  "Duplicated by",
 				Name:    "Duplicate",
 				Outward: "Duplicates",
@@ -39,7 +39,7 @@ func TestIssueLinkTypeService_Create(t *testing.T) {
 		},
 		{
 			name: "CreateIssueLinksTypeWhenTheResponseBodyHasADifferentFormat",
-			payload: &IssueLinkTypePayloadScheme{
+			payload: &LinkTypeScheme{
 				Inward:  "Duplicated by",
 				Name:    "Duplicate",
 				Outward: "Duplicates",
@@ -54,7 +54,7 @@ func TestIssueLinkTypeService_Create(t *testing.T) {
 		},
 		{
 			name: "CreateIssueLinksTypeWhenTheContextIsNil",
-			payload: &IssueLinkTypePayloadScheme{
+			payload: &LinkTypeScheme{
 				Inward:  "Duplicated by",
 				Name:    "Duplicate",
 				Outward: "Duplicates",
@@ -69,7 +69,7 @@ func TestIssueLinkTypeService_Create(t *testing.T) {
 		},
 		{
 			name: "CreateIssueLinksTypeWhenTheStatusCodeIsIncorrect",
-			payload: &IssueLinkTypePayloadScheme{
+			payload: &LinkTypeScheme{
 				Inward:  "Duplicated by",
 				Name:    "Duplicate",
 				Outward: "Duplicates",
@@ -84,7 +84,7 @@ func TestIssueLinkTypeService_Create(t *testing.T) {
 		},
 		{
 			name: "CreateIssueLinksTypeWhenTheMethodIsIncorrect",
-			payload: &IssueLinkTypePayloadScheme{
+			payload: &LinkTypeScheme{
 				Inward:  "Duplicated by",
 				Name:    "Duplicate",
 				Outward: "Duplicates",
@@ -109,12 +109,8 @@ func TestIssueLinkTypeService_Create(t *testing.T) {
 			wantErr:            true,
 		},
 		{
-			name: "CreateIssueLinksTypeWhenThePayloadIsEmpty",
-			payload: &IssueLinkTypePayloadScheme{
-				Inward:  "",
-				Name:    "",
-				Outward: "",
-			},
+			name:               "CreateIssueLinksTypeWhenThePayloadIsEmpty",
+			payload:            nil,
 			mockFile:           "./mocks/create_issue_link_type_duplicate_case.json",
 			wantHTTPCodeReturn: http.StatusCreated,
 			wantHTTPMethod:     http.MethodPost,
@@ -382,6 +378,18 @@ func TestIssueLinkTypeService_Gets(t *testing.T) {
 			wantHTTPHeaders:    map[string]string{"Accept": "application/json"},
 			wantErr:            false,
 		},
+
+		{
+			name:               "GetIssueLinksTypesWhenTheContextIsNil",
+			mockFile:           "./mocks/get_issue_link_types.json",
+			wantHTTPCodeReturn: http.StatusOK,
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/rest/api/3/issueLinkType",
+			context:            nil,
+			wantHTTPHeaders:    map[string]string{"Accept": "application/json"},
+			wantErr:            true,
+		},
+
 		{
 			name:               "GetIssueLinksTypesWhenTheStatusCodeIsIncorrect",
 			mockFile:           "./mocks/get_issue_link_types.json",
@@ -561,6 +569,17 @@ func TestIssueLinkTypeService_Delete(t *testing.T) {
 			wantHTTPCodeReturn: http.StatusNoContent,
 			wantErr:            false,
 		},
+
+		{
+			name:               "DeleteIssueLinkTypeWhenTheIssueLinkTypeIDIsNotProvided",
+			issueLinkTypeID:    "",
+			wantHTTPMethod:     http.MethodDelete,
+			endpoint:           "/rest/api/3/issueLinkType/10001",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+
 		{
 			name:               "DeleteIssueLinkTypeWhenTheIDIsIncorrect",
 			issueLinkTypeID:    "10002",
@@ -682,7 +701,7 @@ func TestIssueLinkTypeService_Update(t *testing.T) {
 		name               string
 		mockFile           string
 		issueLinkTypeID    string
-		payload            *IssueLinkTypePayloadScheme
+		payload            *LinkTypeScheme
 		wantHTTPMethod     string
 		endpoint           string
 		context            context.Context
@@ -693,7 +712,7 @@ func TestIssueLinkTypeService_Update(t *testing.T) {
 		{
 			name:            "UpdateIssueLinksTypeWhenThePayloadIsCorrect",
 			issueLinkTypeID: "10001",
-			payload: &IssueLinkTypePayloadScheme{
+			payload: &LinkTypeScheme{
 				Inward:  "Duplicated by",
 				Name:    "Duplicate",
 				Outward: "Duplicates",
@@ -707,9 +726,25 @@ func TestIssueLinkTypeService_Update(t *testing.T) {
 		},
 
 		{
+			name:            "UpdateIssueLinksTypeWhenTheIssueLinkTypeIDIsNotProvided",
+			issueLinkTypeID: "",
+			payload: &LinkTypeScheme{
+				Inward:  "Duplicated by",
+				Name:    "Duplicate",
+				Outward: "Duplicates",
+			},
+			mockFile:           "./mocks/create_issue_link_type_duplicate_case.json",
+			wantHTTPCodeReturn: http.StatusOK,
+			wantHTTPMethod:     http.MethodPut,
+			endpoint:           "/rest/api/3/issueLinkType/10001",
+			context:            context.Background(),
+			wantErr:            true,
+		},
+
+		{
 			name:            "UpdateIssueLinksTypeWhenTheIDInsIncorrect",
 			issueLinkTypeID: "10000",
-			payload: &IssueLinkTypePayloadScheme{
+			payload: &LinkTypeScheme{
 				Inward:  "Duplicated by",
 				Name:    "Duplicate",
 				Outward: "Duplicates",
@@ -725,7 +760,7 @@ func TestIssueLinkTypeService_Update(t *testing.T) {
 		{
 			name:            "UpdateIssueLinksTypeWhenTheContextIsNil",
 			issueLinkTypeID: "10001",
-			payload: &IssueLinkTypePayloadScheme{
+			payload: &LinkTypeScheme{
 				Inward:  "Duplicated by",
 				Name:    "Duplicate",
 				Outward: "Duplicates",
@@ -753,7 +788,7 @@ func TestIssueLinkTypeService_Update(t *testing.T) {
 		{
 			name:            "UpdateIssueLinksTypeWhenTheRequestMethodIsIncorrect",
 			issueLinkTypeID: "10001",
-			payload: &IssueLinkTypePayloadScheme{
+			payload: &LinkTypeScheme{
 				Inward:  "Duplicated by",
 				Name:    "Duplicate",
 				Outward: "Duplicates",
@@ -769,7 +804,7 @@ func TestIssueLinkTypeService_Update(t *testing.T) {
 		{
 			name:            "UpdateIssueLinksTypeWhenTheStatusCodeIsIncorrect",
 			issueLinkTypeID: "10001",
-			payload: &IssueLinkTypePayloadScheme{
+			payload: &LinkTypeScheme{
 				Inward:  "Duplicated by",
 				Name:    "Duplicate",
 				Outward: "Duplicates",
@@ -785,7 +820,7 @@ func TestIssueLinkTypeService_Update(t *testing.T) {
 		{
 			name:            "UpdateIssueLinksTypeWhenTheResponseBodyHasADifferentFormat",
 			issueLinkTypeID: "10001",
-			payload: &IssueLinkTypePayloadScheme{
+			payload: &LinkTypeScheme{
 				Inward:  "Duplicated by",
 				Name:    "Duplicate",
 				Outward: "Duplicates",

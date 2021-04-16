@@ -303,6 +303,17 @@ func TestVoteService_Gets(t *testing.T) {
 		},
 
 		{
+			name:               "GetIssueVotesWhenTheResponseBodyIsEmpty",
+			issueKeyOrID:       "DUMMY-3",
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/rest/api/3/issue/DUMMY-3/votes",
+			mockFile:           "./mocks/empty_json.json",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+
+		{
 			name:               "GetIssueVotesWhenTheIssueKeyIsEmpty",
 			issueKeyOrID:       "",
 			wantHTTPMethod:     http.MethodGet,

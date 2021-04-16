@@ -169,6 +169,28 @@ func TestWatcherService_Delete(t *testing.T) {
 		},
 
 		{
+			name:               "DeleteIssueWatcherWhenTheEmptyIsEmpty",
+			issueKeyOrID:       "DUMMY-3",
+			accountID:          "e75fa4ab-c86b-4500-b522-de963f31b928",
+			wantHTTPMethod:     http.MethodDelete,
+			endpoint:           "",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+
+		{
+			name:               "DeleteIssueWatcherWhenTheContextIsNil",
+			issueKeyOrID:       "DUMMY-3",
+			accountID:          "e75fa4ab-c86b-4500-b522-de963f31b928",
+			wantHTTPMethod:     http.MethodDelete,
+			endpoint:           "/rest/api/3/issue/DUMMY-3/watchers?accountId=e75fa4ab-c86b-4500-b522-de963f31b928",
+			context:            nil,
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+
+		{
 			name:               "DeleteIssueWatcherWhenTheIssueKeyIsEmpty",
 			issueKeyOrID:       "",
 			wantHTTPMethod:     http.MethodDelete,
@@ -305,6 +327,17 @@ func TestWatcherService_Get(t *testing.T) {
 		},
 
 		{
+			name:               "GetsIssueWatchersWhenTheResponseBodyIsEmpty",
+			issueKeyOrID:       "DUMMY-3",
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/rest/api/3/issue/DUMMY-3/watchers",
+			mockFile:           "./mocks/empty_json.json",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+
+		{
 			name:               "GetsIssueWatchersWhenTheIssueKeyIsEmpty",
 			issueKeyOrID:       "",
 			wantHTTPMethod:     http.MethodGet,
@@ -386,7 +419,7 @@ func TestWatcherService_Get(t *testing.T) {
 
 			i := &WatcherService{client: mockClient}
 
-			gotResult, gotResponse, err := i.Get(testCase.context, testCase.issueKeyOrID)
+			gotResult, gotResponse, err := i.Gets(testCase.context, testCase.issueKeyOrID)
 
 			if testCase.wantErr {
 

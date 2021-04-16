@@ -12,35 +12,35 @@ import (
 func TestPermissionSchemeService_Create(t *testing.T) {
 
 	testCases := []struct {
-		name                        string
-		permissionSchemeName        string
-		permissionSchemeDescription string
-		permissionGrants            *[]PermissionGrantPayloadScheme
-		mockFile                    string
-		wantHTTPMethod              string
-		endpoint                    string
-		context                     context.Context
-		wantHTTPCodeReturn          int
-		wantErr                     bool
+		name               string
+		payload            *PermissionSchemeScheme
+		mockFile           string
+		wantHTTPMethod     string
+		endpoint           string
+		context            context.Context
+		wantHTTPCodeReturn int
+		wantErr            bool
 	}{
 		{
-			name:                        "CreatePermissionSchemeWhenTheParametersAreCorrect",
-			permissionSchemeName:        "DUMMY - Permission Scheme",
-			permissionSchemeDescription: "Dummy permission scheme description",
-			permissionGrants: &[]PermissionGrantPayloadScheme{
-				{
-					Holder: &PermissionGrantHolderPayloadScheme{
-						Parameter: "scrum-masters",
-						Type:      "group",
+			name: "CreatePermissionSchemeWhenTheParametersAreCorrect",
+			payload: &PermissionSchemeScheme{
+				Name:        "EF Permission Scheme",
+				Description: "EF Permission Scheme description",
+
+				Permissions: []*PermissionGrantScheme{
+					{
+						Permission: "ADMINISTER_PROJECTS",
+						Holder: &PermissionGrantHolderScheme{
+							Parameter: "jira-administrators-system",
+							Type:      "group",
+						},
 					},
-					Permission: "EDIT_ISSUES",
-				},
-				{
-					Holder: &PermissionGrantHolderPayloadScheme{
-						Parameter: "scrum-masters",
-						Type:      "group",
+					{
+						Permission: "CLOSE_ISSUES",
+						Holder: &PermissionGrantHolderScheme{
+							Type: "assignee",
+						},
 					},
-					Permission: "EDIT_ISSUES",
 				},
 			},
 			mockFile:           "./mocks/get-permission-scheme.json",
@@ -52,38 +52,8 @@ func TestPermissionSchemeService_Create(t *testing.T) {
 		},
 
 		{
-			name:                        "CreatePermissionSchemeWhenThePermissionGrantsIsNil",
-			permissionSchemeName:        "DUMMY - Permission Scheme",
-			permissionSchemeDescription: "Dummy permission scheme description",
-			permissionGrants:            nil,
-			mockFile:                    "./mocks/get-permission-scheme.json",
-			wantHTTPMethod:              http.MethodPost,
-			endpoint:                    "/rest/api/3/permissionscheme",
-			context:                     context.Background(),
-			wantHTTPCodeReturn:          http.StatusCreated,
-			wantErr:                     true,
-		},
-
-		{
-			name:                        "CreatePermissionSchemeWhenThePermissionSchemeNameParamIsEmpty",
-			permissionSchemeName:        "",
-			permissionSchemeDescription: "Dummy permission scheme description",
-			permissionGrants: &[]PermissionGrantPayloadScheme{
-				{
-					Holder: &PermissionGrantHolderPayloadScheme{
-						Parameter: "scrum-masters",
-						Type:      "group",
-					},
-					Permission: "EDIT_ISSUES",
-				},
-				{
-					Holder: &PermissionGrantHolderPayloadScheme{
-						Parameter: "scrum-masters",
-						Type:      "group",
-					},
-					Permission: "EDIT_ISSUES",
-				},
-			},
+			name:               "CreatePermissionSchemeWhenThePayloadIsNotProvided",
+			payload:            nil,
 			mockFile:           "./mocks/get-permission-scheme.json",
 			wantHTTPMethod:     http.MethodPost,
 			endpoint:           "/rest/api/3/permissionscheme",
@@ -93,23 +63,25 @@ func TestPermissionSchemeService_Create(t *testing.T) {
 		},
 
 		{
-			name:                        "CreatePermissionSchemeWhenTheEndpointIsIncorrect",
-			permissionSchemeName:        "DUMMY - Permission Scheme",
-			permissionSchemeDescription: "Dummy permission scheme description",
-			permissionGrants: &[]PermissionGrantPayloadScheme{
-				{
-					Holder: &PermissionGrantHolderPayloadScheme{
-						Parameter: "scrum-masters",
-						Type:      "group",
+			name: "CreatePermissionSchemeWhenTheEndpointIsIncorrect",
+			payload: &PermissionSchemeScheme{
+				Name:        "EF Permission Scheme",
+				Description: "EF Permission Scheme description",
+
+				Permissions: []*PermissionGrantScheme{
+					{
+						Permission: "ADMINISTER_PROJECTS",
+						Holder: &PermissionGrantHolderScheme{
+							Parameter: "jira-administrators-system",
+							Type:      "group",
+						},
 					},
-					Permission: "EDIT_ISSUES",
-				},
-				{
-					Holder: &PermissionGrantHolderPayloadScheme{
-						Parameter: "scrum-masters",
-						Type:      "group",
+					{
+						Permission: "CLOSE_ISSUES",
+						Holder: &PermissionGrantHolderScheme{
+							Type: "assignee",
+						},
 					},
-					Permission: "EDIT_ISSUES",
 				},
 			},
 			mockFile:           "./mocks/get-permission-scheme.json",
@@ -121,23 +93,25 @@ func TestPermissionSchemeService_Create(t *testing.T) {
 		},
 
 		{
-			name:                        "CreatePermissionSchemeWhenTheRequestMethodIsIncorrect",
-			permissionSchemeName:        "DUMMY - Permission Scheme",
-			permissionSchemeDescription: "Dummy permission scheme description",
-			permissionGrants: &[]PermissionGrantPayloadScheme{
-				{
-					Holder: &PermissionGrantHolderPayloadScheme{
-						Parameter: "scrum-masters",
-						Type:      "group",
+			name: "CreatePermissionSchemeWhenTheRequestMethodIsIncorrect",
+			payload: &PermissionSchemeScheme{
+				Name:        "EF Permission Scheme",
+				Description: "EF Permission Scheme description",
+
+				Permissions: []*PermissionGrantScheme{
+					{
+						Permission: "ADMINISTER_PROJECTS",
+						Holder: &PermissionGrantHolderScheme{
+							Parameter: "jira-administrators-system",
+							Type:      "group",
+						},
 					},
-					Permission: "EDIT_ISSUES",
-				},
-				{
-					Holder: &PermissionGrantHolderPayloadScheme{
-						Parameter: "scrum-masters",
-						Type:      "group",
+					{
+						Permission: "CLOSE_ISSUES",
+						Holder: &PermissionGrantHolderScheme{
+							Type: "assignee",
+						},
 					},
-					Permission: "EDIT_ISSUES",
 				},
 			},
 			mockFile:           "./mocks/get-permission-scheme.json",
@@ -149,23 +123,25 @@ func TestPermissionSchemeService_Create(t *testing.T) {
 		},
 
 		{
-			name:                        "CreatePermissionSchemeWhenTheStatusCodeIsIncorrect",
-			permissionSchemeName:        "DUMMY - Permission Scheme",
-			permissionSchemeDescription: "Dummy permission scheme description",
-			permissionGrants: &[]PermissionGrantPayloadScheme{
-				{
-					Holder: &PermissionGrantHolderPayloadScheme{
-						Parameter: "scrum-masters",
-						Type:      "group",
+			name: "CreatePermissionSchemeWhenTheStatusCodeIsIncorrect",
+			payload: &PermissionSchemeScheme{
+				Name:        "EF Permission Scheme",
+				Description: "EF Permission Scheme description",
+
+				Permissions: []*PermissionGrantScheme{
+					{
+						Permission: "ADMINISTER_PROJECTS",
+						Holder: &PermissionGrantHolderScheme{
+							Parameter: "jira-administrators-system",
+							Type:      "group",
+						},
 					},
-					Permission: "EDIT_ISSUES",
-				},
-				{
-					Holder: &PermissionGrantHolderPayloadScheme{
-						Parameter: "scrum-masters",
-						Type:      "group",
+					{
+						Permission: "CLOSE_ISSUES",
+						Holder: &PermissionGrantHolderScheme{
+							Type: "assignee",
+						},
 					},
-					Permission: "EDIT_ISSUES",
 				},
 			},
 			mockFile:           "./mocks/get-permission-scheme.json",
@@ -177,23 +153,25 @@ func TestPermissionSchemeService_Create(t *testing.T) {
 		},
 
 		{
-			name:                        "CreatePermissionSchemeWhenTheContextIsNil",
-			permissionSchemeName:        "DUMMY - Permission Scheme",
-			permissionSchemeDescription: "Dummy permission scheme description",
-			permissionGrants: &[]PermissionGrantPayloadScheme{
-				{
-					Holder: &PermissionGrantHolderPayloadScheme{
-						Parameter: "scrum-masters",
-						Type:      "group",
+			name: "CreatePermissionSchemeWhenTheContextIsNil",
+			payload: &PermissionSchemeScheme{
+				Name:        "EF Permission Scheme",
+				Description: "EF Permission Scheme description",
+
+				Permissions: []*PermissionGrantScheme{
+					{
+						Permission: "ADMINISTER_PROJECTS",
+						Holder: &PermissionGrantHolderScheme{
+							Parameter: "jira-administrators-system",
+							Type:      "group",
+						},
 					},
-					Permission: "EDIT_ISSUES",
-				},
-				{
-					Holder: &PermissionGrantHolderPayloadScheme{
-						Parameter: "scrum-masters",
-						Type:      "group",
+					{
+						Permission: "CLOSE_ISSUES",
+						Holder: &PermissionGrantHolderScheme{
+							Type: "assignee",
+						},
 					},
-					Permission: "EDIT_ISSUES",
 				},
 			},
 			mockFile:           "./mocks/get-permission-scheme.json",
@@ -205,23 +183,25 @@ func TestPermissionSchemeService_Create(t *testing.T) {
 		},
 
 		{
-			name:                        "CreatePermissionSchemeWhenTheResponseBodyHasADifferentFormat",
-			permissionSchemeName:        "DUMMY - Permission Scheme",
-			permissionSchemeDescription: "Dummy permission scheme description",
-			permissionGrants: &[]PermissionGrantPayloadScheme{
-				{
-					Holder: &PermissionGrantHolderPayloadScheme{
-						Parameter: "scrum-masters",
-						Type:      "group",
+			name: "CreatePermissionSchemeWhenTheResponseBodyHasADifferentFormat",
+			payload: &PermissionSchemeScheme{
+				Name:        "EF Permission Scheme",
+				Description: "EF Permission Scheme description",
+
+				Permissions: []*PermissionGrantScheme{
+					{
+						Permission: "ADMINISTER_PROJECTS",
+						Holder: &PermissionGrantHolderScheme{
+							Parameter: "jira-administrators-system",
+							Type:      "group",
+						},
 					},
-					Permission: "EDIT_ISSUES",
-				},
-				{
-					Holder: &PermissionGrantHolderPayloadScheme{
-						Parameter: "scrum-masters",
-						Type:      "group",
+					{
+						Permission: "CLOSE_ISSUES",
+						Holder: &PermissionGrantHolderScheme{
+							Type: "assignee",
+						},
 					},
-					Permission: "EDIT_ISSUES",
 				},
 			},
 			mockFile:           "./mocks/empty_json.json",
@@ -260,9 +240,7 @@ func TestPermissionSchemeService_Create(t *testing.T) {
 
 			i := &PermissionSchemeService{client: mockClient}
 
-			gotResult, gotResponse, err := i.Create(testCase.context,
-				testCase.permissionSchemeName,
-				testCase.permissionSchemeDescription, testCase.permissionGrants)
+			gotResult, gotResponse, err := i.Create(testCase.context, testCase.payload)
 
 			if testCase.wantErr {
 
@@ -319,6 +297,16 @@ func TestPermissionSchemeService_Delete(t *testing.T) {
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusNoContent,
 			wantErr:            false,
+		},
+
+		{
+			name:               "DeletePermissionSchemeWhenThePermissionSchemeIDIsNotProvided",
+			permissionSchemeID: 0,
+			wantHTTPMethod:     http.MethodDelete,
+			endpoint:           "/rest/api/3/permissionscheme/1000",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
 		},
 
 		{
@@ -446,6 +434,17 @@ func TestPermissionSchemeService_Get(t *testing.T) {
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusOK,
 			wantErr:            false,
+		},
+
+		{
+			name:               "GetPermissionSchemeWhenThePermissionSchemeIDIsNotProvided",
+			permissionSchemeID: 0,
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/rest/api/3/permissionscheme/1000",
+			mockFile:           "./mocks/get-permission-scheme.json",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
 		},
 
 		{
@@ -695,37 +694,31 @@ func TestPermissionSchemeService_Gets(t *testing.T) {
 
 func TestPermissionSchemeService_Update(t *testing.T) {
 	testCases := []struct {
-		name                        string
-		schemeID                    int
-		permissionSchemeName        string
-		permissionSchemeDescription string
-		permissionGrants            *[]PermissionGrantPayloadScheme
-		mockFile                    string
-		wantHTTPMethod              string
-		endpoint                    string
-		context                     context.Context
-		wantHTTPCodeReturn          int
-		wantErr                     bool
+		name               string
+		schemeID           int
+		payload            *PermissionSchemeScheme
+		mockFile           string
+		wantHTTPMethod     string
+		endpoint           string
+		context            context.Context
+		wantHTTPCodeReturn int
+		wantErr            bool
 	}{
 		{
-			name:                        "UpdatePermissionSchemeWhenTheParametersAreCorrect",
-			schemeID:                    1000,
-			permissionSchemeName:        "DUMMY - Permission Scheme",
-			permissionSchemeDescription: "Dummy permission scheme description",
-			permissionGrants: &[]PermissionGrantPayloadScheme{
-				{
-					Holder: &PermissionGrantHolderPayloadScheme{
-						Parameter: "scrum-masters",
-						Type:      "group",
+			name:     "UpdatePermissionSchemeWhenTheParametersAreCorrect",
+			schemeID: 1000,
+			payload: &PermissionSchemeScheme{
+				Name:        "EF Permission Scheme - UPDATED",
+				Description: "EF Permission Scheme description - UPDATED",
+
+				Permissions: []*PermissionGrantScheme{
+					{
+						Permission: "CLOSE_ISSUES",
+						Holder: &PermissionGrantHolderScheme{
+							Parameter: "jira-administrators-system",
+							Type:      "group",
+						},
 					},
-					Permission: "EDIT_ISSUES",
-				},
-				{
-					Holder: &PermissionGrantHolderPayloadScheme{
-						Parameter: "scrum-masters",
-						Type:      "group",
-					},
-					Permission: "EDIT_ISSUES",
 				},
 			},
 			mockFile:           "./mocks/get-permission-scheme.json",
@@ -737,38 +730,72 @@ func TestPermissionSchemeService_Update(t *testing.T) {
 		},
 
 		{
-			name:                        "UpdatePermissionSchemeWhenThePermissionGrantsIsNil",
-			schemeID:                    1000,
-			permissionSchemeName:        "DUMMY - Permission Scheme",
-			permissionSchemeDescription: "Dummy permission scheme description",
-			permissionGrants:            nil,
-			mockFile:                    "./mocks/get-permission-scheme.json",
-			wantHTTPMethod:              http.MethodPost,
-			endpoint:                    "/rest/api/3/permissionscheme/1000",
-			context:                     context.Background(),
-			wantHTTPCodeReturn:          http.StatusCreated,
-			wantErr:                     true,
+			name:     "UpdatePermissionSchemeWhenThePermissionSchemeIDIsNotProvided",
+			schemeID: 0,
+			payload: &PermissionSchemeScheme{
+				Name:        "EF Permission Scheme - UPDATED",
+				Description: "EF Permission Scheme description - UPDATED",
+
+				Permissions: []*PermissionGrantScheme{
+					{
+						Permission: "CLOSE_ISSUES",
+						Holder: &PermissionGrantHolderScheme{
+							Parameter: "jira-administrators-system",
+							Type:      "group",
+						},
+					},
+				},
+			},
+			mockFile:           "./mocks/get-permission-scheme.json",
+			wantHTTPMethod:     http.MethodPut,
+			endpoint:           "/rest/api/3/permissionscheme/1000",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
 		},
 
 		{
-			name:                        "CreatePermissionSchemeWhenTheEndpointIsIncorrect",
-			schemeID:                    1000,
-			permissionSchemeName:        "DUMMY - Permission Scheme",
-			permissionSchemeDescription: "Dummy permission scheme description",
-			permissionGrants: &[]PermissionGrantPayloadScheme{
-				{
-					Holder: &PermissionGrantHolderPayloadScheme{
-						Parameter: "scrum-masters",
-						Type:      "group",
+			name:               "UpdatePermissionSchemeWhenThePayloadIsNotProvided",
+			schemeID:           1000,
+			payload:            nil,
+			mockFile:           "./mocks/get-permission-scheme.json",
+			wantHTTPMethod:     http.MethodPut,
+			endpoint:           "/rest/api/3/permissionscheme/1000",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+
+		{
+			name:     "UpdatePermissionSchemeWhenThePermissionGrantsIsNil",
+			schemeID: 1000,
+			payload: &PermissionSchemeScheme{
+				Name:        "EF Permission Scheme - UPDATED",
+				Description: "EF Permission Scheme description - UPDATED",
+			},
+			mockFile:           "./mocks/get-permission-scheme.json",
+			wantHTTPMethod:     http.MethodPut,
+			endpoint:           "/rest/api/3/permissionscheme/1000",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusCreated,
+			wantErr:            false,
+		},
+
+		{
+			name:     "CreatePermissionSchemeWhenTheEndpointIsIncorrect",
+			schemeID: 1000,
+			payload: &PermissionSchemeScheme{
+				Name:        "EF Permission Scheme - UPDATED",
+				Description: "EF Permission Scheme description - UPDATED",
+
+				Permissions: []*PermissionGrantScheme{
+					{
+						Permission: "CLOSE_ISSUES",
+						Holder: &PermissionGrantHolderScheme{
+							Parameter: "jira-administrators-system",
+							Type:      "group",
+						},
 					},
-					Permission: "EDIT_ISSUES",
-				},
-				{
-					Holder: &PermissionGrantHolderPayloadScheme{
-						Parameter: "scrum-masters",
-						Type:      "group",
-					},
-					Permission: "EDIT_ISSUES",
 				},
 			},
 			mockFile:           "./mocks/get-permission-scheme.json",
@@ -780,24 +807,20 @@ func TestPermissionSchemeService_Update(t *testing.T) {
 		},
 
 		{
-			name:                        "CreatePermissionSchemeWhenTheRequestMethodIsIncorrect",
-			schemeID:                    1000,
-			permissionSchemeName:        "DUMMY - Permission Scheme",
-			permissionSchemeDescription: "Dummy permission scheme description",
-			permissionGrants: &[]PermissionGrantPayloadScheme{
-				{
-					Holder: &PermissionGrantHolderPayloadScheme{
-						Parameter: "scrum-masters",
-						Type:      "group",
+			name:     "CreatePermissionSchemeWhenTheRequestMethodIsIncorrect",
+			schemeID: 1000,
+			payload: &PermissionSchemeScheme{
+				Name:        "EF Permission Scheme - UPDATED",
+				Description: "EF Permission Scheme description - UPDATED",
+
+				Permissions: []*PermissionGrantScheme{
+					{
+						Permission: "CLOSE_ISSUES",
+						Holder: &PermissionGrantHolderScheme{
+							Parameter: "jira-administrators-system",
+							Type:      "group",
+						},
 					},
-					Permission: "EDIT_ISSUES",
-				},
-				{
-					Holder: &PermissionGrantHolderPayloadScheme{
-						Parameter: "scrum-masters",
-						Type:      "group",
-					},
-					Permission: "EDIT_ISSUES",
 				},
 			},
 			mockFile:           "./mocks/get-permission-scheme.json",
@@ -809,24 +832,20 @@ func TestPermissionSchemeService_Update(t *testing.T) {
 		},
 
 		{
-			name:                        "CreatePermissionSchemeWhenTheStatusCodeIsIncorrect",
-			schemeID:                    1000,
-			permissionSchemeName:        "DUMMY - Permission Scheme",
-			permissionSchemeDescription: "Dummy permission scheme description",
-			permissionGrants: &[]PermissionGrantPayloadScheme{
-				{
-					Holder: &PermissionGrantHolderPayloadScheme{
-						Parameter: "scrum-masters",
-						Type:      "group",
+			name:     "CreatePermissionSchemeWhenTheStatusCodeIsIncorrect",
+			schemeID: 1000,
+			payload: &PermissionSchemeScheme{
+				Name:        "EF Permission Scheme - UPDATED",
+				Description: "EF Permission Scheme description - UPDATED",
+
+				Permissions: []*PermissionGrantScheme{
+					{
+						Permission: "CLOSE_ISSUES",
+						Holder: &PermissionGrantHolderScheme{
+							Parameter: "jira-administrators-system",
+							Type:      "group",
+						},
 					},
-					Permission: "EDIT_ISSUES",
-				},
-				{
-					Holder: &PermissionGrantHolderPayloadScheme{
-						Parameter: "scrum-masters",
-						Type:      "group",
-					},
-					Permission: "EDIT_ISSUES",
 				},
 			},
 			mockFile:           "./mocks/get-permission-scheme.json",
@@ -841,22 +860,18 @@ func TestPermissionSchemeService_Update(t *testing.T) {
 			name:     "CreatePermissionSchemeWhenTheContextIsNil",
 			schemeID: 1000,
 
-			permissionSchemeName:        "DUMMY - Permission Scheme",
-			permissionSchemeDescription: "Dummy permission scheme description",
-			permissionGrants: &[]PermissionGrantPayloadScheme{
-				{
-					Holder: &PermissionGrantHolderPayloadScheme{
-						Parameter: "scrum-masters",
-						Type:      "group",
+			payload: &PermissionSchemeScheme{
+				Name:        "EF Permission Scheme - UPDATED",
+				Description: "EF Permission Scheme description - UPDATED",
+
+				Permissions: []*PermissionGrantScheme{
+					{
+						Permission: "CLOSE_ISSUES",
+						Holder: &PermissionGrantHolderScheme{
+							Parameter: "jira-administrators-system",
+							Type:      "group",
+						},
 					},
-					Permission: "EDIT_ISSUES",
-				},
-				{
-					Holder: &PermissionGrantHolderPayloadScheme{
-						Parameter: "scrum-masters",
-						Type:      "group",
-					},
-					Permission: "EDIT_ISSUES",
 				},
 			},
 			mockFile:           "./mocks/get-permission-scheme.json",
@@ -871,22 +886,18 @@ func TestPermissionSchemeService_Update(t *testing.T) {
 			name:     "CreatePermissionSchemeWhenTheResponseBodyHasADifferentFormat",
 			schemeID: 1000,
 
-			permissionSchemeName:        "DUMMY - Permission Scheme",
-			permissionSchemeDescription: "Dummy permission scheme description",
-			permissionGrants: &[]PermissionGrantPayloadScheme{
-				{
-					Holder: &PermissionGrantHolderPayloadScheme{
-						Parameter: "scrum-masters",
-						Type:      "group",
+			payload: &PermissionSchemeScheme{
+				Name:        "EF Permission Scheme - UPDATED",
+				Description: "EF Permission Scheme description - UPDATED",
+
+				Permissions: []*PermissionGrantScheme{
+					{
+						Permission: "CLOSE_ISSUES",
+						Holder: &PermissionGrantHolderScheme{
+							Parameter: "jira-administrators-system",
+							Type:      "group",
+						},
 					},
-					Permission: "EDIT_ISSUES",
-				},
-				{
-					Holder: &PermissionGrantHolderPayloadScheme{
-						Parameter: "scrum-masters",
-						Type:      "group",
-					},
-					Permission: "EDIT_ISSUES",
 				},
 			},
 			mockFile:           "./mocks/empty_json.json",
@@ -925,8 +936,7 @@ func TestPermissionSchemeService_Update(t *testing.T) {
 
 			i := &PermissionSchemeService{client: mockClient}
 
-			gotResult, gotResponse, err := i.Update(testCase.context, testCase.schemeID, testCase.permissionSchemeName,
-				testCase.permissionSchemeDescription, testCase.permissionGrants)
+			gotResult, gotResponse, err := i.Update(testCase.context, testCase.schemeID, testCase.payload)
 
 			if testCase.wantErr {
 

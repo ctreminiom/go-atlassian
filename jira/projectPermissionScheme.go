@@ -10,33 +10,9 @@ import (
 
 type ProjectPermissionSchemeService struct{ client *Client }
 
-type ProjectPermissionSchemeScheme struct {
-	Expand      string `json:"expand"`
-	ID          int    `json:"id"`
-	Self        string `json:"self"`
-	Name        string `json:"name"`
-	Description string `json:"description"`
-	Permissions []struct {
-		ID     int    `json:"id"`
-		Self   string `json:"self"`
-		Holder struct {
-			Type        string `json:"type"`
-			Parameter   string `json:"parameter"`
-			ProjectRole struct {
-				Self        string `json:"self"`
-				Name        string `json:"name"`
-				ID          int    `json:"id"`
-				Description string `json:"description"`
-			} `json:"projectRole"`
-			Expand string `json:"expand"`
-		} `json:"holder"`
-		Permission string `json:"permission"`
-	} `json:"permissions"`
-}
-
 // Search the permission scheme associated with the project.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/projects/permission-schemes#get-assigned-permission-scheme
-func (p *ProjectPermissionSchemeService) Get(ctx context.Context, projectKeyOrID string, expands []string) (result *ProjectPermissionSchemeScheme, response *Response, err error) {
+func (p *ProjectPermissionSchemeService) Get(ctx context.Context, projectKeyOrID string, expands []string) (result *PermissionSchemeScheme, response *Response, err error) {
 
 	if len(projectKeyOrID) == 0 {
 		return nil, nil, fmt.Errorf("error, please provide a valid projectKeyOrID value")
@@ -78,7 +54,7 @@ func (p *ProjectPermissionSchemeService) Get(ctx context.Context, projectKeyOrID
 		return
 	}
 
-	result = new(ProjectPermissionSchemeScheme)
+	result = new(PermissionSchemeScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
@@ -89,7 +65,7 @@ func (p *ProjectPermissionSchemeService) Get(ctx context.Context, projectKeyOrID
 // Assigns a permission scheme with a project.
 // See Managing project permissions for more information about permission schemes.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/projects/permission-schemes#assign-permission-scheme
-func (p *ProjectPermissionSchemeService) Assign(ctx context.Context, projectKeyOrID string, permissionSchemeID int) (result *ProjectPermissionSchemeScheme, response *Response, err error) {
+func (p *ProjectPermissionSchemeService) Assign(ctx context.Context, projectKeyOrID string, permissionSchemeID int) (result *PermissionSchemeScheme, response *Response, err error) {
 
 	if len(projectKeyOrID) == 0 {
 		return nil, nil, fmt.Errorf("error, please provide a valid projectKeyOrID value")
@@ -114,7 +90,7 @@ func (p *ProjectPermissionSchemeService) Assign(ctx context.Context, projectKeyO
 		return
 	}
 
-	result = new(ProjectPermissionSchemeScheme)
+	result = new(PermissionSchemeScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}

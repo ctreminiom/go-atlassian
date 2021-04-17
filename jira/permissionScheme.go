@@ -43,18 +43,13 @@ func (p *PermissionSchemeService) Gets(ctx context.Context) (result *PermissionS
 }
 
 type PermissionSchemeScheme struct {
-	Expand      string                       `json:"expand,omitempty"`
-	ID          int                          `json:"id,omitempty"`
-	Self        string                       `json:"self,omitempty"`
-	Name        string                       `json:"name,omitempty"`
-	Description string                       `json:"description,omitempty"`
-	Permissions []*PermissionGrantScheme     `json:"permissions,omitempty"`
-	Scope       *PermissionSchemeScopeScheme `json:"scope,omitempty"`
-}
-
-type PermissionSchemeScopeScheme struct {
-	Type    string                     `json:"type,omitempty"`
-	Project *PermissionScopeItemScheme `json:"project,omitempty"`
+	Expand      string                         `json:"expand,omitempty"`
+	ID          int                            `json:"id,omitempty"`
+	Self        string                         `json:"self,omitempty"`
+	Name        string                         `json:"name,omitempty"`
+	Description string                         `json:"description,omitempty"`
+	Permissions []*PermissionGrantScheme       `json:"permissions,omitempty"`
+	Scope       *TeamManagedProjectScopeScheme `json:"scope,omitempty"`
 }
 
 type PermissionScopeItemScheme struct {

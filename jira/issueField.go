@@ -16,22 +16,22 @@ type FieldService struct {
 }
 
 type IssueFieldScheme struct {
-	ID            string                    `json:"id,omitempty"`
-	Key           string                    `json:"key,omitempty"`
-	Name          string                    `json:"name,omitempty"`
-	Custom        bool                      `json:"custom,omitempty"`
-	Orderable     bool                      `json:"orderable,omitempty"`
-	Navigable     bool                      `json:"navigable,omitempty"`
-	Searchable    bool                      `json:"searchable,omitempty"`
-	ClauseNames   []string                  `json:"clauseNames,omitempty"`
-	Scope         *IssueFieldScopeScheme    `json:"scope,omitempty"`
-	Schema        *IssueFieldSchemaScheme   `json:"schema,omitempty"`
-	Description   string                    `json:"description,omitempty"`
-	IsLocked      bool                      `json:"isLocked,omitempty"`
-	SearcherKey   string                    `json:"searcherKey,omitempty"`
-	ScreensCount  int                       `json:"screensCount,omitempty"`
-	ContextsCount int                       `json:"contextsCount,omitempty"`
-	LastUsed      *IssueFieldLastUsedScheme `json:"lastUsed,omitempty"`
+	ID            string                         `json:"id,omitempty"`
+	Key           string                         `json:"key,omitempty"`
+	Name          string                         `json:"name,omitempty"`
+	Custom        bool                           `json:"custom,omitempty"`
+	Orderable     bool                           `json:"orderable,omitempty"`
+	Navigable     bool                           `json:"navigable,omitempty"`
+	Searchable    bool                           `json:"searchable,omitempty"`
+	ClauseNames   []string                       `json:"clauseNames,omitempty"`
+	Scope         *TeamManagedProjectScopeScheme `json:"scope,omitempty"`
+	Schema        *IssueFieldSchemaScheme        `json:"schema,omitempty"`
+	Description   string                         `json:"description,omitempty"`
+	IsLocked      bool                           `json:"isLocked,omitempty"`
+	SearcherKey   string                         `json:"searcherKey,omitempty"`
+	ScreensCount  int                            `json:"screensCount,omitempty"`
+	ContextsCount int                            `json:"contextsCount,omitempty"`
+	LastUsed      *IssueFieldLastUsedScheme      `json:"lastUsed,omitempty"`
 }
 
 type IssueFieldLastUsedScheme struct {
@@ -39,7 +39,7 @@ type IssueFieldLastUsedScheme struct {
 	Value string `json:"value,omitempty"`
 }
 
-type IssueFieldScopeScheme struct {
+type TeamManagedProjectScopeScheme struct {
 	Type    string         `json:"type,omitempty"`
 	Project *ProjectScheme `json:"project,omitempty"`
 }

@@ -32,6 +32,16 @@ func TestProjectService_Archive(t *testing.T) {
 		},
 
 		{
+			name:               "ArchiveProjectWhenTheProjectKeyOrIDIsNotProvided",
+			projectKeyOrID:     "",
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/api/3/project/DUMMY/archive",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+
+		{
 			name:               "ArchiveProjectWhenTheProjectKeyOrIDIsIncorrect",
 			projectKeyOrID:     "DUMMYS",
 			wantHTTPMethod:     http.MethodPost,
@@ -423,6 +433,17 @@ func TestProjectService_Delete(t *testing.T) {
 		},
 
 		{
+			name:               "DeleteProjectWhenTheProjectKeyOrIDIsNotProvided",
+			projectKeyOrID:     "",
+			enableUndo:         true,
+			wantHTTPMethod:     http.MethodDelete,
+			endpoint:           "/rest/api/3/project/DUMMY?enableUndo=true",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+
+		{
 			name:               "DeleteProjectWhenTheEnableUndoIsFalse",
 			projectKeyOrID:     "DUMMY",
 			enableUndo:         false,
@@ -562,6 +583,17 @@ func TestProjectService_DeleteAsynchronously(t *testing.T) {
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusOK,
 			wantErr:            false,
+		},
+
+		{
+			name:               "DeleteProjectAsynchronouslyWhenTheProjectKeyOrIDIsNotProvided",
+			projectKeyOrID:     "",
+			wantHTTPMethod:     http.MethodPost,
+			mockFile:           "./mocks/delete-project-asynchronously.json",
+			endpoint:           "/rest/api/3/project/DUMMY/delete",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
 		},
 
 		{
@@ -882,6 +914,17 @@ func TestProjectService_Hierarchy(t *testing.T) {
 		},
 
 		{
+			name:               "GetProjectIssueTypeHierarchyWhenTheProjectKeyOrIDIsNotProvided",
+			projectKeyOrID:     "",
+			mockFile:           "./mocks/get-project-issue-type-hierarchy.json",
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/rest/api/3/project/DUMMY/hierarchy",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+
+		{
 			name:               "GetProjectIssueTypeHierarchyWhenTheProjectKeyOrIDIsIncorrect",
 			projectKeyOrID:     "DUMMY",
 			mockFile:           "./mocks/get-project-issue-type-hierarchy.json",
@@ -1023,6 +1066,17 @@ func TestProjectService_NotificationScheme(t *testing.T) {
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusOK,
 			wantErr:            false,
+		},
+
+		{
+			name:               "GetProjectNotificationSchemeWhenTheProjectKeyOrIDIsNotProvided",
+			projectKeyOrID:     "",
+			mockFile:           "./mocks/get-project-notification-scheme.json",
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/rest/api/3/project/DUMMY/notificationscheme",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
 		},
 
 		{
@@ -1178,6 +1232,17 @@ func TestProjectService_Restore(t *testing.T) {
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusOK,
 			wantErr:            false,
+		},
+
+		{
+			name:               "RestoreDeletedProjectWhenTheProjectKeyOrIDIsNotProvided",
+			projectKeyOrID:     "",
+			mockFile:           "./mocks/get-project.json",
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/api/3/project/DUMMY/restore",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
 		},
 
 		{
@@ -1536,6 +1601,17 @@ func TestProjectService_Statuses(t *testing.T) {
 		},
 
 		{
+			name:               "GetProjectStatusesWhenTheProjectKeyIsNotProvided",
+			projectKeyOrID:     "",
+			mockFile:           "./mocks/get-project-statuses.json",
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/rest/api/3/project/DUMMY/statuses",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+
+		{
 			name:               "GetProjectStatusesWhenTheProjectKeyIsIncorrect",
 			projectKeyOrID:     "DUMMY",
 			mockFile:           "./mocks/get-project-statuses.json",
@@ -1682,6 +1758,22 @@ func TestProjectService_Update(t *testing.T) {
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusOK,
 			wantErr:            false,
+		},
+
+		{
+			name:           "UpdateProjectWhenTheProjectKeyOrIDIsNotProvided",
+			projectKeyOrID: "",
+			payload: &ProjectUpdateScheme{
+				NotificationScheme: 10000,
+				Name:               "New project",
+				PermissionScheme:   10001,
+			},
+			mockFile:           "./mocks/get-project.json",
+			wantHTTPMethod:     http.MethodPut,
+			endpoint:           "/rest/api/3/project/DUMMY",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
 		},
 
 		{

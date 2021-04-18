@@ -26,7 +26,7 @@ func TestPermissionGrantSchemeService_Create(t *testing.T) {
 			name:     "CreatePermissionGrantWhenTheParametersAreCorrect",
 			schemeID: 1000,
 			payload: &PermissionGrantPayloadScheme{
-				Holder: &PermissionGrantHolderPayloadScheme{
+				Holder: &PermissionGrantHolderScheme{
 					Parameter: "scrum-masters",
 					Type:      "group",
 				},
@@ -38,6 +38,24 @@ func TestPermissionGrantSchemeService_Create(t *testing.T) {
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusCreated,
 			wantErr:            false,
+		},
+
+		{
+			name:     "CreatePermissionGrantWhenThePermissionSchemeIDIsNotProvided",
+			schemeID: 0,
+			payload: &PermissionGrantPayloadScheme{
+				Holder: &PermissionGrantHolderScheme{
+					Parameter: "scrum-masters",
+					Type:      "group",
+				},
+				Permission: "EDIT_ISSUES",
+			},
+			mockFile:           "./mocks/get-permission-grant.json",
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/api/3/permissionscheme/1000/permission",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusCreated,
+			wantErr:            true,
 		},
 
 		{
@@ -56,7 +74,7 @@ func TestPermissionGrantSchemeService_Create(t *testing.T) {
 			name:     "CreatePermissionGrantWhenTheEndpointIsIncorrect",
 			schemeID: 1000,
 			payload: &PermissionGrantPayloadScheme{
-				Holder: &PermissionGrantHolderPayloadScheme{
+				Holder: &PermissionGrantHolderScheme{
 					Parameter: "scrum-masters",
 					Type:      "group",
 				},
@@ -74,7 +92,7 @@ func TestPermissionGrantSchemeService_Create(t *testing.T) {
 			name:     "CreatePermissionGrantWhenTheRequestMethodIsIncorrect",
 			schemeID: 1000,
 			payload: &PermissionGrantPayloadScheme{
-				Holder: &PermissionGrantHolderPayloadScheme{
+				Holder: &PermissionGrantHolderScheme{
 					Parameter: "scrum-masters",
 					Type:      "group",
 				},
@@ -92,7 +110,7 @@ func TestPermissionGrantSchemeService_Create(t *testing.T) {
 			name:     "CreatePermissionGrantWhenTheStatusCodeIsIncorrect",
 			schemeID: 1000,
 			payload: &PermissionGrantPayloadScheme{
-				Holder: &PermissionGrantHolderPayloadScheme{
+				Holder: &PermissionGrantHolderScheme{
 					Parameter: "scrum-masters",
 					Type:      "group",
 				},
@@ -110,7 +128,7 @@ func TestPermissionGrantSchemeService_Create(t *testing.T) {
 			name:     "CreatePermissionGrantWhenTheContextIsNil",
 			schemeID: 1000,
 			payload: &PermissionGrantPayloadScheme{
-				Holder: &PermissionGrantHolderPayloadScheme{
+				Holder: &PermissionGrantHolderScheme{
 					Parameter: "scrum-masters",
 					Type:      "group",
 				},
@@ -128,7 +146,7 @@ func TestPermissionGrantSchemeService_Create(t *testing.T) {
 			name:     "CreatePermissionGrantWhenTheResponseBodyHasADifferentFormat",
 			schemeID: 1000,
 			payload: &PermissionGrantPayloadScheme{
-				Holder: &PermissionGrantHolderPayloadScheme{
+				Holder: &PermissionGrantHolderScheme{
 					Parameter: "scrum-masters",
 					Type:      "group",
 				},
@@ -229,6 +247,28 @@ func TestPermissionGrantSchemeService_Delete(t *testing.T) {
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusNoContent,
 			wantErr:            false,
+		},
+
+		{
+			name:               "DeletePermissionGrantWhenThePermissionSchemeIDIsNotProvided",
+			schemeID:           0,
+			permissionID:       10002,
+			wantHTTPMethod:     http.MethodDelete,
+			endpoint:           "/rest/api/3/permissionscheme/1000/permission/10002",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+
+		{
+			name:               "DeletePermissionGrantWhenThePermissionGrantIDIsNotProvided",
+			schemeID:           1000,
+			permissionID:       0,
+			wantHTTPMethod:     http.MethodDelete,
+			endpoint:           "/rest/api/3/permissionscheme/1000/permission/10002",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
 		},
 
 		{
@@ -364,6 +404,32 @@ func TestPermissionGrantSchemeService_Get(t *testing.T) {
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusOK,
 			wantErr:            false,
+		},
+
+		{
+			name:               "GetPermissionGrantWhenThePermissionSchemeIDIsNotProvided",
+			schemeID:           0,
+			permissionID:       10002,
+			expands:            []string{"field", "group", "permissions"},
+			wantHTTPMethod:     http.MethodGet,
+			mockFile:           "./mocks/get-permission-grant.json",
+			endpoint:           "/rest/api/3/permissionscheme/1000/permission/10002?expand=field%2Cgroup%2Cpermissions",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+
+		{
+			name:               "GetPermissionGrantWhenThePermissionGrantIDIsNotProvided",
+			schemeID:           1000,
+			permissionID:       0,
+			expands:            []string{"field", "group", "permissions"},
+			wantHTTPMethod:     http.MethodGet,
+			mockFile:           "./mocks/get-permission-grant.json",
+			endpoint:           "/rest/api/3/permissionscheme/1000/permission/10002?expand=field%2Cgroup%2Cpermissions",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
 		},
 
 		{
@@ -519,6 +585,18 @@ func TestPermissionGrantSchemeService_Gets(t *testing.T) {
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusOK,
 			wantErr:            false,
+		},
+
+		{
+			name:               "GetPermissionGrantsWhenThePermissionSchemeIDIsNotProvided",
+			schemeID:           0,
+			expands:            []string{"field", "group", "permissions"},
+			wantHTTPMethod:     http.MethodGet,
+			mockFile:           "./mocks/get-permission-grants.json",
+			endpoint:           "/rest/api/3/permissionscheme/1000/permission?expand=field%2Cgroup%2Cpermissions",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
 		},
 
 		{

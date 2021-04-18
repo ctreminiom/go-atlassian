@@ -16,22 +16,33 @@ type ScreenService struct {
 }
 
 type ScreenScheme struct {
-	ID          int    `json:"id"`
-	Name        string `json:"name"`
-	Description string `json:"description"`
+	ID          int                            `json:"id,omitempty"`
+	Name        string                         `json:"name,omitempty"`
+	Description string                         `json:"description,omitempty"`
+	Scope       *TeamManagedProjectScopeScheme `json:"scope,omitempty"`
 }
 
-type ScreenFieldSearchScheme struct {
-	MaxResults int            `json:"maxResults"`
-	StartAt    int            `json:"startAt"`
-	Total      int            `json:"total"`
-	IsLast     bool           `json:"isLast"`
-	Values     []ScreenScheme `json:"values"`
+type ScreenFieldPageScheme struct {
+	Self       string                 `json:"self,omitempty"`
+	NextPage   string                 `json:"nextPage,omitempty"`
+	MaxResults int                    `json:"maxResults,omitempty"`
+	StartAt    int                    `json:"startAt,omitempty"`
+	Total      int                    `json:"total,omitempty"`
+	IsLast     bool                   `json:"isLast,omitempty"`
+	Values     []*ScreenWithTabScheme `json:"values,omitempty"`
+}
+
+type ScreenWithTabScheme struct {
+	ID          int                            `json:"id,omitempty"`
+	Name        string                         `json:"name,omitempty"`
+	Description string                         `json:"description,omitempty"`
+	Scope       *TeamManagedProjectScopeScheme `json:"scope,omitempty"`
+	Tab         *ScreenTabScheme               `json:"tab,omitempty"`
 }
 
 // Returns a paginated list of the screens a field is used in.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/screens#get-screens-for-a-field
-func (s *ScreenService) Get(ctx context.Context, fieldID string, startAt, maxResults int) (result *ScreenFieldSearchScheme, response *Response, err error) {
+func (s *ScreenService) Fields(ctx context.Context, fieldID string, startAt, maxResults int) (result *ScreenFieldPageScheme, response *Response, err error) {
 
 	if len(fieldID) == 0 {
 		return nil, nil, fmt.Errorf("error, please provide a valid fieldID value ")
@@ -55,7 +66,7 @@ func (s *ScreenService) Get(ctx context.Context, fieldID string, startAt, maxRes
 		return
 	}
 
-	result = new(ScreenFieldSearchScheme)
+	result = new(ScreenFieldPageScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
@@ -64,12 +75,12 @@ func (s *ScreenService) Get(ctx context.Context, fieldID string, startAt, maxRes
 }
 
 type ScreenSearchPageScheme struct {
-	Self       string         `json:"self"`
-	MaxResults int            `json:"maxResults"`
-	StartAt    int            `json:"startAt"`
-	Total      int            `json:"total"`
-	IsLast     bool           `json:"isLast"`
-	Values     []ScreenScheme `json:"values"`
+	Self       string          `json:"self,omitempty"`
+	MaxResults int             `json:"maxResults,omitempty"`
+	StartAt    int             `json:"startAt,omitempty"`
+	Total      int             `json:"total,omitempty"`
+	IsLast     bool            `json:"isLast,omitempty"`
+	Values     []*ScreenScheme `json:"values,omitempty"`
 }
 
 // Returns a paginated list of all screens or those specified by one or more screen IDs.

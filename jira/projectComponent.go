@@ -56,6 +56,7 @@ type ProjectComponentScheme struct {
 	Name                string      `json:"name,omitempty"`
 	Description         string      `json:"description,omitempty"`
 	Lead                *UserScheme `json:"lead,omitempty"`
+	LeadUserName        string      `json:"leadUserName,omitempty"`
 	AssigneeType        string      `json:"assigneeType,omitempty"`
 	Assignee            *UserScheme `json:"assignee,omitempty"`
 	RealAssigneeType    string      `json:"realAssigneeType,omitempty"`

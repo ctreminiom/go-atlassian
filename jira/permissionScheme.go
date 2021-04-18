@@ -12,13 +12,13 @@ type PermissionSchemeService struct {
 	Grant  *PermissionGrantSchemeService
 }
 
-type PermissionSchemesScheme struct {
-	PermissionSchemes []PermissionScheme `json:"permissionSchemes"`
+type PermissionSchemePageScheme struct {
+	PermissionSchemes []*PermissionSchemeScheme `json:"permissionSchemes,omitempty"`
 }
 
 // Returns all permission schemes.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/permissions/scheme#get-all-permission-schemes
-func (p *PermissionSchemeService) Gets(ctx context.Context) (result *PermissionSchemesScheme, response *Response, err error) {
+func (p *PermissionSchemeService) Gets(ctx context.Context) (result *PermissionSchemePageScheme, response *Response, err error) {
 
 	var endpoint = "rest/api/3/permissionscheme"
 
@@ -26,6 +26,7 @@ func (p *PermissionSchemeService) Gets(ctx context.Context) (result *PermissionS
 	if err != nil {
 		return
 	}
+
 	request.Header.Set("Accept", "application/json")
 
 	response, err = p.client.Do(request)
@@ -33,7 +34,7 @@ func (p *PermissionSchemeService) Gets(ctx context.Context) (result *PermissionS
 		return
 	}
 
-	result = new(PermissionSchemesScheme)
+	result = new(PermissionSchemePageScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
@@ -41,26 +42,33 @@ func (p *PermissionSchemeService) Gets(ctx context.Context) (result *PermissionS
 	return
 }
 
-type PermissionScheme struct {
-	ID          int    `json:"id"`
-	Self        string `json:"self"`
-	Name        string `json:"name"`
-	Description string `json:"description"`
-	Permissions []struct {
-		ID     int    `json:"id"`
-		Self   string `json:"self"`
-		Holder struct {
-			Type      string `json:"type"`
-			Parameter string `json:"parameter"`
-			Expand    string `json:"expand"`
-		} `json:"holder"`
-		Permission string `json:"permission"`
-	} `json:"permissions"`
+type PermissionSchemeScheme struct {
+	Expand      string                         `json:"expand,omitempty"`
+	ID          int                            `json:"id,omitempty"`
+	Self        string                         `json:"self,omitempty"`
+	Name        string                         `json:"name,omitempty"`
+	Description string                         `json:"description,omitempty"`
+	Permissions []*PermissionGrantScheme       `json:"permissions,omitempty"`
+	Scope       *TeamManagedProjectScopeScheme `json:"scope,omitempty"`
+}
+
+type PermissionScopeItemScheme struct {
+	Self            string                 `json:"self,omitempty"`
+	ID              string                 `json:"id,omitempty"`
+	Key             string                 `json:"key,omitempty"`
+	Name            string                 `json:"name,omitempty"`
+	ProjectTypeKey  string                 `json:"projectTypeKey,omitempty"`
+	Simplified      bool                   `json:"simplified,omitempty"`
+	ProjectCategory *ProjectCategoryScheme `json:"projectCategory,omitempty"`
 }
 
 // Returns a permission scheme.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/permissions/scheme#get-permission-scheme
-func (p *PermissionSchemeService) Get(ctx context.Context, permissionSchemeID int) (result *PermissionScheme, response *Response, err error) {
+func (p *PermissionSchemeService) Get(ctx context.Context, permissionSchemeID int) (result *PermissionSchemeScheme, response *Response, err error) {
+
+	if permissionSchemeID == 0 {
+		return nil, nil, fmt.Errorf("error!, please provide a valid permissionSchemeID value")
+	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/permissionscheme/%v", permissionSchemeID)
 
@@ -68,6 +76,7 @@ func (p *PermissionSchemeService) Get(ctx context.Context, permissionSchemeID in
 	if err != nil {
 		return
 	}
+
 	request.Header.Set("Accept", "application/json")
 
 	response, err = p.client.Do(request)
@@ -75,7 +84,7 @@ func (p *PermissionSchemeService) Get(ctx context.Context, permissionSchemeID in
 		return
 	}
 
-	result = new(PermissionScheme)
+	result = new(PermissionSchemeScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
@@ -87,13 +96,16 @@ func (p *PermissionSchemeService) Get(ctx context.Context, permissionSchemeID in
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/permissions/scheme#delete-permission-scheme
 func (p *PermissionSchemeService) Delete(ctx context.Context, permissionSchemeID int) (response *Response, err error) {
 
+	if permissionSchemeID == 0 {
+		return nil, fmt.Errorf("error!, please provide a valid permissionSchemeID value")
+	}
+
 	var endpoint = fmt.Sprintf("rest/api/3/permissionscheme/%v", permissionSchemeID)
 
 	request, err := p.client.newRequest(ctx, http.MethodDelete, endpoint, nil)
 	if err != nil {
 		return
 	}
-	request.Header.Set("Accept", "application/json")
 
 	response, err = p.client.Do(request)
 	if err != nil {
@@ -106,24 +118,10 @@ func (p *PermissionSchemeService) Delete(ctx context.Context, permissionSchemeID
 // Creates a new permission scheme.
 // You can create a permission scheme with or without defining a set of permission grants.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/permissions/scheme#create-permission-scheme
-func (p *PermissionSchemeService) Create(ctx context.Context, name, description string, permissions *[]PermissionGrantPayloadScheme) (result *PermissionScheme, response *Response, err error) {
+func (p *PermissionSchemeService) Create(ctx context.Context, payload *PermissionSchemeScheme) (result *PermissionSchemeScheme, response *Response, err error) {
 
-	if permissions == nil {
-		return nil, nil, fmt.Errorf("error, please provide a PermissionGrantPayloadScheme slice pointer")
-	}
-
-	if len(name) == 0 {
-		return nil, nil, fmt.Errorf("error, please provide a permission scheme name value")
-	}
-
-	payload := struct {
-		Permissions []PermissionGrantPayloadScheme `json:"permissions,omitempty"`
-		Name        string                         `json:"name,omitempty"`
-		Description string                         `json:"description,omitempty"`
-	}{
-		Name:        name,
-		Description: description,
-		Permissions: *permissions,
+	if payload == nil {
+		return nil, nil, fmt.Errorf("error, please provide a PermissionSchemeScheme pointer")
 	}
 
 	var endpoint = "rest/api/3/permissionscheme"
@@ -141,7 +139,7 @@ func (p *PermissionSchemeService) Create(ctx context.Context, name, description 
 		return
 	}
 
-	result = new(PermissionScheme)
+	result = new(PermissionSchemeScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
@@ -155,20 +153,14 @@ func (p *PermissionSchemeService) Create(ctx context.Context, name, description 
 // 2. If you want to update only the name and description, then do not send a permissions list in the request.
 // 3. Sending an empty list will remove all permission grants from the permission scheme.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/permissions/scheme#update-permission-scheme
-func (p *PermissionSchemeService) Update(ctx context.Context, schemeID int, name, description string, permissions *[]PermissionGrantPayloadScheme) (result *PermissionScheme, response *Response, err error) {
+func (p *PermissionSchemeService) Update(ctx context.Context, schemeID int, payload *PermissionSchemeScheme) (result *PermissionSchemeScheme, response *Response, err error) {
 
-	if permissions == nil {
-		return nil, nil, fmt.Errorf("error, please provide a PermissionGrantPayloadScheme slice pointer")
+	if schemeID == 0 {
+		return nil, nil, fmt.Errorf("error, please provide a valid schemeID value")
 	}
 
-	payload := struct {
-		Permissions []PermissionGrantPayloadScheme `json:"permissions,omitempty"`
-		Name        string                         `json:"name,omitempty"`
-		Description string                         `json:"description,omitempty"`
-	}{
-		Name:        name,
-		Description: description,
-		Permissions: *permissions,
+	if payload == nil {
+		return nil, nil, fmt.Errorf("error, please provide a payload pointer")
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/permissionscheme/%v", schemeID)
@@ -186,7 +178,7 @@ func (p *PermissionSchemeService) Update(ctx context.Context, schemeID int, name
 		return
 	}
 
-	result = new(PermissionScheme)
+	result = new(PermissionSchemeScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}

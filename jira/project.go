@@ -80,12 +80,13 @@ func (p *ProjectService) Create(ctx context.Context, payload *ProjectPayloadSche
 }
 
 type ProjectSearchScheme struct {
-	Self       string          `json:"self"`
-	MaxResults int             `json:"maxResults"`
-	StartAt    int             `json:"startAt"`
-	Total      int             `json:"total"`
-	IsLast     bool            `json:"isLast"`
-	Values     []ProjectScheme `json:"values"`
+	Self       string           `json:"self,omitempty"`
+	NextPage   string           `json:"nextPage,omitempty"`
+	MaxResults int              `json:"maxResults,omitempty"`
+	StartAt    int              `json:"startAt,omitempty"`
+	Total      int              `json:"total,omitempty"`
+	IsLast     bool             `json:"isLast,omitempty"`
+	Values     []*ProjectScheme `json:"values,omitempty"`
 }
 
 type ProjectSearchOptionsScheme struct {
@@ -101,47 +102,46 @@ type ProjectSearchOptionsScheme struct {
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-projects/#api-rest-api-3-project-search-get
 func (p *ProjectService) Search(ctx context.Context, opts *ProjectSearchOptionsScheme, startAt, maxResults int) (result *ProjectSearchScheme, response *Response, err error) {
 
-	if opts == nil {
-		return nil, nil, fmt.Errorf("error, please provide a valid ProjectSearchOptionsScheme pointer")
-	}
-
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
 	params.Add("maxResults", strconv.Itoa(maxResults))
 
-	var expand string
-	for index, value := range opts.Expand {
+	if opts != nil {
 
-		if index == 0 {
-			expand = value
-			continue
+		var expand string
+		for index, value := range opts.Expand {
+
+			if index == 0 {
+				expand = value
+				continue
+			}
+
+			expand += "," + value
 		}
 
-		expand += "," + value
-	}
+		if len(expand) != 0 {
+			params.Add("expand", expand)
+		}
 
-	if len(expand) != 0 {
-		params.Add("expand", expand)
-	}
+		if len(opts.OrderBy) != 0 {
+			params.Add("orderBy", opts.OrderBy)
+		}
 
-	if len(opts.OrderBy) != 0 {
-		params.Add("orderBy", opts.OrderBy)
-	}
+		if len(opts.Query) != 0 {
+			params.Add("query", opts.Query)
+		}
 
-	if len(opts.Query) != 0 {
-		params.Add("query", opts.Query)
-	}
+		if len(opts.ProjectKeyType) != 0 {
+			params.Add("typeKey", opts.ProjectKeyType)
+		}
 
-	if len(opts.ProjectKeyType) != 0 {
-		params.Add("typeKey", opts.ProjectKeyType)
-	}
+		if opts.CategoryID != 0 {
+			params.Add("categoryId", strconv.Itoa(opts.CategoryID))
+		}
 
-	if opts.CategoryID != 0 {
-		params.Add("categoryId", strconv.Itoa(opts.CategoryID))
-	}
-
-	if len(opts.Action) != 0 {
-		params.Add("action", opts.Action)
+		if len(opts.Action) != 0 {
+			params.Add("action", opts.Action)
+		}
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/project/search?%v", params.Encode())
@@ -166,25 +166,37 @@ func (p *ProjectService) Search(ctx context.Context, opts *ProjectSearchOptionsS
 }
 
 type ProjectScheme struct {
-	Expand         string                    `json:"expand,omitempty"`
-	Self           string                    `json:"self,omitempty"`
-	ID             string                    `json:"id,omitempty"`
-	Key            string                    `json:"key,omitempty"`
-	Description    string                    `json:"description,omitempty"`
-	Lead           *UserScheme               `json:"lead,omitempty"`
-	Components     []*ProjectComponentScheme `json:"components,omitempty"`
-	IssueTypes     []*IssueTypeScheme        `json:"issueTypes,omitempty"`
-	AssigneeType   string                    `json:"assigneeType,omitempty"`
-	Versions       []*ProjectVersionScheme   `json:"versions,omitempty"`
-	Name           string                    `json:"name,omitempty"`
-	Roles          *ProjectRolesScheme       `json:"roles,omitempty"`
-	AvatarUrls     *AvatarURLScheme          `json:"avatarUrls,omitempty"`
-	ProjectKeys    []string                  `json:"projectKeys,omitempty"`
-	ProjectTypeKey string                    `json:"projectTypeKey,omitempty"`
-	Simplified     bool                      `json:"simplified,omitempty"`
-	Style          string                    `json:"style,omitempty"`
-	IsPrivate      bool                      `json:"isPrivate,omitempty"`
-	Insight        *ProjectInsightScheme     `json:"insight,omitempty"`
+	Expand            string                    `json:"expand,omitempty"`
+	Self              string                    `json:"self,omitempty"`
+	ID                string                    `json:"id,omitempty"`
+	Key               string                    `json:"key,omitempty"`
+	Description       string                    `json:"description,omitempty"`
+	URL               string                    `json:"url,omitempty"`
+	Email             string                    `json:"email,omitempty"`
+	AssigneeType      string                    `json:"assigneeType,omitempty"`
+	Name              string                    `json:"name,omitempty"`
+	ProjectTypeKey    string                    `json:"projectTypeKey,omitempty"`
+	Simplified        bool                      `json:"simplified,omitempty"`
+	Style             string                    `json:"style,omitempty"`
+	Favourite         bool                      `json:"favourite,omitempty"`
+	IsPrivate         bool                      `json:"isPrivate,omitempty"`
+	UUID              string                    `json:"uuid,omitempty"`
+	Lead              *UserScheme               `json:"lead,omitempty"`
+	Components        []*ProjectComponentScheme `json:"components,omitempty"`
+	IssueTypes        []*IssueTypeScheme        `json:"issueTypes,omitempty"`
+	Versions          []*ProjectVersionScheme   `json:"versions,omitempty"`
+	Roles             *ProjectRolesScheme       `json:"roles,omitempty"`
+	AvatarUrls        *AvatarURLScheme          `json:"avatarUrls,omitempty"`
+	ProjectKeys       []string                  `json:"projectKeys,omitempty"`
+	Insight           *ProjectInsightScheme     `json:"insight,omitempty"`
+	Category          *ProjectCategoryScheme    `json:"projectCategory,omitempty"`
+	Deleted           bool                      `json:"deleted,omitempty"`
+	RetentionTillDate string                    `json:"retentionTillDate,omitempty"`
+	DeletedDate       string                    `json:"deletedDate,omitempty"`
+	DeletedBy         *UserScheme               `json:"deletedBy,omitempty"`
+	Archived          bool                      `json:"archived,omitempty"`
+	ArchivedDate      string                    `json:"archivedDate,omitempty"`
+	ArchivedBy        *UserScheme               `json:"archivedBy,omitempty"`
 }
 
 type ProjectInsightScheme struct {
@@ -276,6 +288,10 @@ type ProjectUpdateScheme struct {
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-projects/#api-rest-api-3-project-projectidorkey-put
 func (p *ProjectService) Update(ctx context.Context, projectKeyOrID string, payload *ProjectUpdateScheme) (result *ProjectScheme, response *Response, err error) {
 
+	if len(projectKeyOrID) == 0 {
+		return nil, nil, fmt.Errorf("erro!, please provide a valid projectKeyOrID value")
+	}
+
 	if payload == nil {
 		return nil, nil, fmt.Errorf("error, please provide a valid ProjectUpdateScheme pointer")
 	}
@@ -305,6 +321,10 @@ func (p *ProjectService) Update(ctx context.Context, projectKeyOrID string, payl
 // Deletes a project.
 // https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-projects/#api-rest-api-3-project-projectidorkey-delete
 func (p *ProjectService) Delete(ctx context.Context, projectKeyOrID string, enableUndo bool) (response *Response, err error) {
+
+	if len(projectKeyOrID) == 0 {
+		return nil, fmt.Errorf("erro!, please provide a valid projectKeyOrID value")
+	}
 
 	params := url.Values{}
 	if enableUndo {
@@ -337,6 +357,10 @@ func (p *ProjectService) Delete(ctx context.Context, projectKeyOrID string, enab
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-projects/#api-rest-api-3-project-projectidorkey-delete-post
 func (p *ProjectService) DeleteAsynchronously(ctx context.Context, projectKeyOrID string) (result *TaskScheme, response *Response, err error) {
 
+	if len(projectKeyOrID) == 0 {
+		return nil, nil, fmt.Errorf("erro!, please provide a valid projectKeyOrID value")
+	}
+
 	var endpoint = fmt.Sprintf("rest/api/3/project/%v/delete", projectKeyOrID)
 
 	request, err := p.client.newRequest(ctx, http.MethodPost, endpoint, nil)
@@ -363,6 +387,10 @@ func (p *ProjectService) DeleteAsynchronously(ctx context.Context, projectKeyOrI
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-projects/#api-rest-api-3-project-projectidorkey-archive-post
 func (p *ProjectService) Archive(ctx context.Context, projectKeyOrID string) (response *Response, err error) {
 
+	if len(projectKeyOrID) == 0 {
+		return nil, fmt.Errorf("erro!, please provide a valid projectKeyOrID value")
+	}
+
 	var endpoint = fmt.Sprintf("rest/api/3/project/%v/archive", projectKeyOrID)
 
 	request, err := p.client.newRequest(ctx, http.MethodPost, endpoint, nil)
@@ -381,6 +409,10 @@ func (p *ProjectService) Archive(ctx context.Context, projectKeyOrID string) (re
 // Restores a project from the Jira recycle bin.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-projects/#api-rest-api-3-project-projectidorkey-restore-post
 func (p *ProjectService) Restore(ctx context.Context, projectKeyOrID string) (result *ProjectScheme, response *Response, err error) {
+
+	if len(projectKeyOrID) == 0 {
+		return nil, nil, fmt.Errorf("erro!, please provide a valid projectKeyOrID value")
+	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/project/%v/restore", projectKeyOrID)
 
@@ -402,32 +434,31 @@ func (p *ProjectService) Restore(ctx context.Context, projectKeyOrID string) (re
 	return
 }
 
-type ProjectStatusScheme struct {
-	Self     string `json:"self"`
-	ID       string `json:"id"`
-	Name     string `json:"name"`
-	Subtask  bool   `json:"subtask"`
-	Statuses []struct {
-		Self             string `json:"self"`
-		Description      string `json:"description"`
-		IconURL          string `json:"iconUrl"`
-		Name             string `json:"name"`
-		UntranslatedName string `json:"untranslatedName"`
-		ID               string `json:"id"`
-		StatusCategory   struct {
-			Self      string `json:"self"`
-			ID        int    `json:"id"`
-			Key       string `json:"key"`
-			ColorName string `json:"colorName"`
-			Name      string `json:"name"`
-		} `json:"statusCategory"`
-	} `json:"statuses"`
+type ProjectStatusPageScheme struct {
+	Self     string                        `json:"self,omitempty"`
+	ID       string                        `json:"id,omitempty"`
+	Name     string                        `json:"name,omitempty"`
+	Subtask  bool                          `json:"subtask,omitempty"`
+	Statuses []*ProjectStatusDetailsScheme `json:"statuses,omitempty"`
+}
+
+type ProjectStatusDetailsScheme struct {
+	Self           string                `json:"self,omitempty"`
+	Description    string                `json:"description,omitempty"`
+	IconURL        string                `json:"iconUrl,omitempty"`
+	Name           string                `json:"name,omitempty"`
+	ID             string                `json:"id,omitempty"`
+	StatusCategory *StatusCategoryScheme `json:"statusCategory,omitempty"`
 }
 
 // Returns the valid statuses for a project.
 // The statuses are grouped by issue type, as each project has a set of valid issue types and each issue type has a set of valid statuses.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-projects/#api-rest-api-3-project-projectidorkey-statuses-get
-func (p *ProjectService) Statuses(ctx context.Context, projectKeyOrID string) (result *[]ProjectStatusScheme, response *Response, err error) {
+func (p *ProjectService) Statuses(ctx context.Context, projectKeyOrID string) (result *[]ProjectStatusPageScheme, response *Response, err error) {
+
+	if len(projectKeyOrID) == 0 {
+		return nil, nil, fmt.Errorf("erro!, please provide a valid projectKeyOrID value")
+	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/project/%v/statuses", projectKeyOrID)
 
@@ -441,7 +472,7 @@ func (p *ProjectService) Statuses(ctx context.Context, projectKeyOrID string) (r
 		return
 	}
 
-	result = new([]ProjectStatusScheme)
+	result = new([]ProjectStatusPageScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
@@ -468,6 +499,10 @@ type ProjectIssueTypeHierarchyScheme struct {
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-projects/#api-rest-api-3-project-projectid-hierarchy-get
 func (p *ProjectService) Hierarchy(ctx context.Context, projectKeyOrID string) (result *ProjectIssueTypeHierarchyScheme, response *Response, err error) {
 
+	if len(projectKeyOrID) == 0 {
+		return nil, nil, fmt.Errorf("erro!, please provide a valid projectKeyOrID value")
+	}
+
 	var endpoint = fmt.Sprintf("rest/api/3/project/%v/hierarchy", projectKeyOrID)
 
 	request, err := p.client.newRequest(ctx, http.MethodGet, endpoint, nil)
@@ -489,84 +524,46 @@ func (p *ProjectService) Hierarchy(ctx context.Context, projectKeyOrID string) (
 }
 
 type NotificationSchemeScheme struct {
-	Expand                   string `json:"expand"`
-	ID                       int    `json:"id"`
-	Self                     string `json:"self"`
-	Name                     string `json:"name"`
-	Description              string `json:"description"`
-	NotificationSchemeEvents []struct {
-		Event struct {
-			ID          int    `json:"id"`
-			Name        string `json:"name"`
-			Description string `json:"description"`
-		} `json:"event"`
+	Expand                   string                                  `json:"expand,omitempty"`
+	ID                       int                                     `json:"id,omitempty"`
+	Self                     string                                  `json:"self,omitempty"`
+	Name                     string                                  `json:"name,omitempty"`
+	Description              string                                  `json:"description,omitempty"`
+	NotificationSchemeEvents []*ProjectNotificationSchemeEventScheme `json:"notificationSchemeEvents,omitempty"`
+	Scope                    *TeamManagedProjectScopeScheme          `json:"scope,omitempty"`
+}
 
-		Notifications []struct {
-			ID               int    `json:"id"`
-			NotificationType string `json:"notificationType"`
-			Parameter        string `json:"parameter,omitempty"`
-			Group            struct {
-				Name string `json:"name"`
-				Self string `json:"self"`
-			} `json:"group,omitempty"`
-			Expand      string `json:"expand,omitempty"`
-			ProjectRole struct {
-				Self        string `json:"self"`
-				Name        string `json:"name"`
-				ID          int    `json:"id"`
-				Description string `json:"description"`
-				Actors      []struct {
-					ID          int    `json:"id"`
-					DisplayName string `json:"displayName"`
-					Type        string `json:"type"`
-					Name        string `json:"name,omitempty"`
-					ActorGroup  struct {
-						Name        string `json:"name"`
-						DisplayName string `json:"displayName"`
-					} `json:"actorGroup,omitempty"`
-					ActorUser struct {
-						AccountID string `json:"accountId"`
-					} `json:"actorUser,omitempty"`
-				} `json:"actors"`
-				Scope struct {
-					Type    string `json:"type"`
-					Project struct {
-						ID   string `json:"id"`
-						Key  string `json:"key"`
-						Name string `json:"name"`
-					} `json:"project"`
-				} `json:"scope"`
-			} `json:"projectRole,omitempty"`
-			EmailAddress string `json:"emailAddress,omitempty"`
-			User         struct {
-				Self        string `json:"self"`
-				AccountID   string `json:"accountId"`
-				DisplayName string `json:"displayName"`
-				Active      bool   `json:"active"`
-			} `json:"user,omitempty"`
-			Field struct {
-				ID               string   `json:"id"`
-				Key              string   `json:"key"`
-				Name             string   `json:"name"`
-				UntranslatedName string   `json:"untranslatedName"`
-				Custom           bool     `json:"custom"`
-				Orderable        bool     `json:"orderable"`
-				Navigable        bool     `json:"navigable"`
-				Searchable       bool     `json:"searchable"`
-				ClauseNames      []string `json:"clauseNames"`
-				Schema           struct {
-					Type     string `json:"type"`
-					Custom   string `json:"custom"`
-					CustomID int    `json:"customId"`
-				} `json:"schema"`
-			} `json:"field,omitempty"`
-		} `json:"notifications"`
-	} `json:"notificationSchemeEvents"`
+type ProjectNotificationSchemeEventScheme struct {
+	Event         *NotificationEventScheme   `json:"event,omitempty"`
+	Notifications []*EventNotificationScheme `json:"notifications,omitempty"`
+}
+
+type NotificationEventScheme struct {
+	ID            int                      `json:"id,omitempty"`
+	Name          string                   `json:"name,omitempty"`
+	Description   string                   `json:"description,omitempty"`
+	TemplateEvent *NotificationEventScheme `json:"templateEvent,omitempty"`
+}
+
+type EventNotificationScheme struct {
+	Expand           string             `json:"expand,omitempty"`
+	ID               int                `json:"id,omitempty"`
+	NotificationType string             `json:"notificationType,omitempty"`
+	Parameter        string             `json:"parameter,omitempty"`
+	EmailAddress     string             `json:"emailAddress,omitempty"`
+	Group            *GroupScheme       `json:"group,omitempty"`
+	Field            *IssueFieldScheme  `json:"field,omitempty"`
+	ProjectRole      *ProjectRoleScheme `json:"projectRole,omitempty"`
+	User             *UserScheme        `json:"user,omitempty"`
 }
 
 // Search a notification scheme associated with the project.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-projects/#api-rest-api-3-project-projectkeyorid-notificationscheme-get
 func (p *ProjectService) NotificationScheme(ctx context.Context, projectKeyOrID string, expands []string) (result *NotificationSchemeScheme, response *Response, err error) {
+
+	if len(projectKeyOrID) == 0 {
+		return nil, nil, fmt.Errorf("erro!, please provide a valid projectKeyOrID value")
+	}
 
 	params := url.Values{}
 	var expand string

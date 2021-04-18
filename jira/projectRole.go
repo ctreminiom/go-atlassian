@@ -68,31 +68,29 @@ func (p *ProjectRoleService) Gets(ctx context.Context, projectKeyOrID string) (r
 }
 
 type ProjectRoleScheme struct {
-	Self        string `json:"self"`
-	Name        string `json:"name"`
-	ID          int    `json:"id"`
-	Description string `json:"description"`
-	Actors      []struct {
-		ID          int    `json:"id"`
-		DisplayName string `json:"displayName"`
-		Type        string `json:"type"`
-		Name        string `json:"name,omitempty"`
-		ActorGroup  struct {
-			Name        string `json:"name"`
-			DisplayName string `json:"displayName"`
-		} `json:"actorGroup,omitempty"`
-		ActorUser struct {
-			AccountID string `json:"accountId"`
-		} `json:"actorUser,omitempty"`
-	} `json:"actors"`
-	Scope struct {
-		Type    string `json:"type"`
-		Project struct {
-			ID   string `json:"id"`
-			Key  string `json:"key"`
-			Name string `json:"name"`
-		} `json:"project"`
-	} `json:"scope"`
+	Self             string                         `json:"self,omitempty"`
+	Name             string                         `json:"name,omitempty"`
+	ID               int                            `json:"id,omitempty"`
+	Description      string                         `json:"description,omitempty"`
+	Actors           []*RoleActorScheme             `json:"actors,omitempty"`
+	Scope            *TeamManagedProjectScopeScheme `json:"scope,omitempty"`
+	TranslatedName   string                         `json:"translatedName,omitempty"`
+	CurrentUserRole  bool                           `json:"currentUserRole,omitempty"`
+	Admin            bool                           `json:"admin,omitempty"`
+	RoleConfigurable bool                           `json:"roleConfigurable,omitempty"`
+	Default          bool                           `json:"default,omitempty"`
+}
+
+type RoleActorScheme struct {
+	ID          int    `json:"id,omitempty"`
+	DisplayName string `json:"displayName,omitempty"`
+	Type        string `json:"type,omitempty"`
+	Name        string `json:"name,omitempty"`
+	AvatarURL   string `json:"avatarUrl,omitempty"`
+	ActorUser   struct {
+		AccountID string `json:"accountId,omitempty"`
+	} `json:"actorUser,omitempty"`
+	ActorGroup *GroupScheme `json:"actorGroup,omitempty"`
 }
 
 // Returns a project role's details and actors associated with the project.
@@ -125,14 +123,15 @@ func (p *ProjectRoleService) Get(ctx context.Context, projectKeyOrID string, rol
 }
 
 type ProjectRoleDetailScheme struct {
-	Self             string `json:"self"`
-	Name             string `json:"name"`
-	ID               int    `json:"id"`
-	Description      string `json:"description"`
-	Admin            bool   `json:"admin"`
-	Default          bool   `json:"default"`
-	RoleConfigurable bool   `json:"roleConfigurable"`
-	TranslatedName   string `json:"translatedName"`
+	Self             string                         `json:"self,omitempty"`
+	Name             string                         `json:"name,omitempty"`
+	ID               int                            `json:"id,omitempty"`
+	Description      string                         `json:"description,omitempty"`
+	Admin            bool                           `json:"admin,omitempty"`
+	Scope            *TeamManagedProjectScopeScheme `json:"scope,omitempty"`
+	RoleConfigurable bool                           `json:"roleConfigurable,omitempty"`
+	TranslatedName   string                         `json:"translatedName,omitempty"`
+	Default          bool                           `json:"default,omitempty"`
 }
 
 // Returns all project roles and the details for each role.

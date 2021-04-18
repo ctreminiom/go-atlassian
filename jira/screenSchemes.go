@@ -13,24 +13,28 @@ import (
 type ScreenSchemeService struct{ client *Client }
 
 type ScreenSchemePageScheme struct {
-	Self       string               `json:"self"`
-	MaxResults int                  `json:"maxResults"`
-	StartAt    int                  `json:"startAt"`
-	Total      int                  `json:"total"`
-	IsLast     bool                 `json:"isLast"`
-	Values     []ScreenSchemeScheme `json:"values"`
+	Self       string                `json:"self,omitempty"`
+	NextPage   string                `json:"nextPage,omitempty"`
+	MaxResults int                   `json:"maxResults,omitempty"`
+	StartAt    int                   `json:"startAt,omitempty"`
+	Total      int                   `json:"total,omitempty"`
+	IsLast     bool                  `json:"isLast,omitempty"`
+	Values     []*ScreenSchemeScheme `json:"values,omitempty"`
 }
 
 type ScreenSchemeScheme struct {
-	ID          int    `json:"id,omitempty"`
-	Name        string `json:"name,omitempty"`
-	Description string `json:"description,omitempty"`
-	Screens     struct {
-		Default int `json:"default,omitempty"`
-		View    int `json:"view,omitempty"`
-		Edit    int `json:"edit,omitempty"`
-		Create  int `json:"create,omitempty"`
-	} `json:"screens,omitempty"`
+	ID                     int                        `json:"id,omitempty"`
+	Name                   string                     `json:"name,omitempty"`
+	Description            string                     `json:"description,omitempty"`
+	Screens                *ScreenTypesScheme         `json:"screens,omitempty"`
+	IssueTypeScreenSchemes *IssueTypeSchemePageScheme `json:"issueTypeScreenSchemes,omitempty"`
+}
+
+type ScreenTypesScheme struct {
+	Create  int `json:"create,omitempty"`
+	Default int `json:"default" validate:"required"`
+	View    int `json:"view" validate:"required"`
+	Edit    int `json:"edit" validate:"required"`
 }
 
 // Returns a paginated list of screen schemes.
@@ -69,15 +73,9 @@ func (s *ScreenSchemeService) Gets(ctx context.Context, screenSchemeIDs []int, s
 }
 
 type ScreenSchemePayloadScheme struct {
-	Screens     *ScreenSchemeScreensPayloadScheme `json:"screens"`
-	Name        string                            `json:"name" validate:"required"`
-	Description string                            `json:"description,omitempty"`
-}
-
-type ScreenSchemeScreensPayloadScheme struct {
-	Default int `json:"default" validate:"required"`
-	View    int `json:"view" validate:"required"`
-	Edit    int `json:"edit" validate:"required"`
+	Screens     *ScreenTypesScheme `json:"screens"`
+	Name        string             `json:"name" validate:"required"`
+	Description string             `json:"description,omitempty"`
 }
 
 // Creates a screen scheme.

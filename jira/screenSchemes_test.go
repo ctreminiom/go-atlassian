@@ -24,7 +24,7 @@ func TestScreenSchemeService_Create(t *testing.T) {
 		{
 			name: "CreateScreenSchemeWhenTheParamsAreCorrect",
 			payload: &ScreenSchemePayloadScheme{
-				Screens: &ScreenSchemeScreensPayloadScheme{
+				Screens: &ScreenTypesScheme{
 					Default: 10000,
 					View:    10000,
 					Edit:    10000,
@@ -43,7 +43,7 @@ func TestScreenSchemeService_Create(t *testing.T) {
 		{
 			name: "CreateScreenSchemeWhenAPayloadParamIsNotSet",
 			payload: &ScreenSchemePayloadScheme{
-				Screens: &ScreenSchemeScreensPayloadScheme{
+				Screens: &ScreenTypesScheme{
 					Default: 10000,
 					View:    10000,
 					Edit:    10000,
@@ -62,7 +62,7 @@ func TestScreenSchemeService_Create(t *testing.T) {
 		{
 			name: "CreateScreenSchemeWhenTheContextIsNil",
 			payload: &ScreenSchemePayloadScheme{
-				Screens: &ScreenSchemeScreensPayloadScheme{
+				Screens: &ScreenTypesScheme{
 					Default: 10000,
 					View:    10000,
 					Edit:    10000,
@@ -92,7 +92,7 @@ func TestScreenSchemeService_Create(t *testing.T) {
 		{
 			name: "CreateScreenSchemeWhenTheRequestMethodIsIncorrect",
 			payload: &ScreenSchemePayloadScheme{
-				Screens: &ScreenSchemeScreensPayloadScheme{
+				Screens: &ScreenTypesScheme{
 					Default: 10000,
 					View:    10000,
 					Edit:    10000,
@@ -111,7 +111,7 @@ func TestScreenSchemeService_Create(t *testing.T) {
 		{
 			name: "CreateScreenSchemeWhenTheStatusCodeIsIncorrect",
 			payload: &ScreenSchemePayloadScheme{
-				Screens: &ScreenSchemeScreensPayloadScheme{
+				Screens: &ScreenTypesScheme{
 					Default: 10000,
 					View:    10000,
 					Edit:    10000,
@@ -130,7 +130,7 @@ func TestScreenSchemeService_Create(t *testing.T) {
 		{
 			name: "CreateScreenSchemeWhenTheEndpointIsIncorrect",
 			payload: &ScreenSchemePayloadScheme{
-				Screens: &ScreenSchemeScreensPayloadScheme{
+				Screens: &ScreenTypesScheme{
 					Default: 10000,
 					View:    10000,
 					Edit:    10000,
@@ -149,7 +149,7 @@ func TestScreenSchemeService_Create(t *testing.T) {
 		{
 			name: "CreateScreenSchemeWhenTheResponseBodyHasADifferentFormat",
 			payload: &ScreenSchemePayloadScheme{
-				Screens: &ScreenSchemeScreensPayloadScheme{
+				Screens: &ScreenTypesScheme{
 					Default: 10000,
 					View:    10000,
 					Edit:    10000,
@@ -548,7 +548,7 @@ func TestScreenSchemeService_Update(t *testing.T) {
 			name:           "UpdateScreenSchemeWhenTheParamsAreCorrect",
 			screenSchemeID: "2001",
 			payload: &ScreenSchemePayloadScheme{
-				Screens: &ScreenSchemeScreensPayloadScheme{
+				Screens: &ScreenTypesScheme{
 					Default: 10000,
 					View:    10000,
 					Edit:    10000,
@@ -567,7 +567,7 @@ func TestScreenSchemeService_Update(t *testing.T) {
 			name:           "UpdateScreenSchemeWhenTheScreenSchemeIDIsEmpty",
 			screenSchemeID: "",
 			payload: &ScreenSchemePayloadScheme{
-				Screens: &ScreenSchemeScreensPayloadScheme{
+				Screens: &ScreenTypesScheme{
 					Default: 10000,
 					View:    10000,
 					Edit:    10000,
@@ -597,7 +597,7 @@ func TestScreenSchemeService_Update(t *testing.T) {
 			name:           "UpdateScreenSchemeWhenTheRequestMethodIsIncorrect",
 			screenSchemeID: "2001",
 			payload: &ScreenSchemePayloadScheme{
-				Screens: &ScreenSchemeScreensPayloadScheme{
+				Screens: &ScreenTypesScheme{
 					Default: 10000,
 					View:    10000,
 					Edit:    10000,
@@ -616,7 +616,7 @@ func TestScreenSchemeService_Update(t *testing.T) {
 			name:           "UpdateScreenSchemeWhenTheStatusCodeIsIncorrect",
 			screenSchemeID: "2001",
 			payload: &ScreenSchemePayloadScheme{
-				Screens: &ScreenSchemeScreensPayloadScheme{
+				Screens: &ScreenTypesScheme{
 					Default: 10000,
 					View:    10000,
 					Edit:    10000,
@@ -635,7 +635,7 @@ func TestScreenSchemeService_Update(t *testing.T) {
 			name:           "UpdateScreenSchemeWhenTheContextIsNil",
 			screenSchemeID: "2001",
 			payload: &ScreenSchemePayloadScheme{
-				Screens: &ScreenSchemeScreensPayloadScheme{
+				Screens: &ScreenTypesScheme{
 					Default: 10000,
 					View:    10000,
 					Edit:    10000,

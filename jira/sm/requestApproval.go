@@ -11,6 +11,7 @@ import (
 
 type RequestApprovalService struct{ client *Client }
 
+// Docs: https://docs.go-atlassian.io/jira-service-management-cloud/request/approval#get-approvals
 func (r *RequestApprovalService) Gets(ctx context.Context, issueKeyOrID string, start, limit int) (result *CustomerApprovalsScheme, response *Response, err error) {
 
 	if len(issueKeyOrID) == 0 {
@@ -43,6 +44,7 @@ func (r *RequestApprovalService) Gets(ctx context.Context, issueKeyOrID string, 
 	return
 }
 
+// Docs: https://docs.go-atlassian.io/jira-service-management-cloud/request/approval#get-approval-by-id
 func (r *RequestApprovalService) Get(ctx context.Context, issueKeyOrID string, approvalID int) (result *CustomerApprovalScheme, response *Response, err error) {
 
 	if len(issueKeyOrID) == 0 {
@@ -71,6 +73,7 @@ func (r *RequestApprovalService) Get(ctx context.Context, issueKeyOrID string, a
 	return
 }
 
+// Docs: https://docs.go-atlassian.io/jira-service-management-cloud/request/approval#answer-approval
 func (r *RequestApprovalService) Answer(ctx context.Context, issueKeyOrID string, approvalID int, approve bool) (result *CustomerApprovalScheme, response *Response, err error) {
 
 	if len(issueKeyOrID) == 0 {

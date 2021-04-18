@@ -33,6 +33,7 @@ type RequestGetOptionsScheme struct {
 
 // This method returns all customer requests for the user executing the query.
 // The returned customer requests are ordered chronologically by the latest activity on each request. For example, the latest status transition or comment.
+// Docs: https://docs.go-atlassian.io/jira-service-management-cloud/request#get-customer-requests
 func (r *RequestService) Gets(ctx context.Context, opts *RequestGetOptionsScheme, start, limit int) (result *CustomerRequestsScheme, response *Response, err error) {
 
 	params := url.Values{}
@@ -109,6 +110,7 @@ func (r *RequestService) Gets(ctx context.Context, opts *RequestGetOptionsScheme
 }
 
 // This method returns a customer request.
+// Docs: https://docs.go-atlassian.io/jira-service-management-cloud/request#get-customer-request-by-id-or-key
 func (r *RequestService) Get(ctx context.Context, issueKeyOrID string, expands []string) (result *CustomerRequestScheme, response *Response, err error) {
 
 	if len(issueKeyOrID) == 0 {
@@ -162,6 +164,7 @@ func (r *RequestService) Get(ctx context.Context, issueKeyOrID string, expands [
 	return
 }
 
+// Docs: https://docs.go-atlassian.io/jira-service-management-cloud/request#subscribe
 func (r *RequestService) Subscribe(ctx context.Context, issueKeyOrID string) (response *Response, err error) {
 
 	if len(issueKeyOrID) == 0 {
@@ -183,6 +186,7 @@ func (r *RequestService) Subscribe(ctx context.Context, issueKeyOrID string) (re
 	return
 }
 
+// Docs: https://docs.go-atlassian.io/jira-service-management-cloud/request#unsubscribe
 func (r *RequestService) Unsubscribe(ctx context.Context, issueKeyOrID string) (response *Response, err error) {
 
 	if len(issueKeyOrID) == 0 {
@@ -204,6 +208,7 @@ func (r *RequestService) Unsubscribe(ctx context.Context, issueKeyOrID string) (
 	return
 }
 
+// Docs: https://docs.go-atlassian.io/jira-service-management-cloud/request#get-customer-transitions
 func (r *RequestService) Transitions(ctx context.Context, issueKeyOrID string, start, limit int) (result *CustomerRequestTransitionsScheme, response *Response, err error) {
 
 	if len(issueKeyOrID) == 0 {
@@ -236,6 +241,7 @@ func (r *RequestService) Transitions(ctx context.Context, issueKeyOrID string, s
 	return
 }
 
+// Docs: https://docs.go-atlassian.io/jira-service-management-cloud/request#perform-customer-transition
 func (r *RequestService) Transition(ctx context.Context, issueKeyOrID, transitionID, comment string) (response *Response, err error) {
 
 	if len(issueKeyOrID) == 0 {

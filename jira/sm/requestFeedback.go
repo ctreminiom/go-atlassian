@@ -9,6 +9,7 @@ import (
 
 type RequestFeedbackService struct{ client *Client }
 
+// Docs: https://docs.go-atlassian.io/jira-service-management-cloud/request/feedback#get-feedback
 func (r *RequestFeedbackService) Get(ctx context.Context, requestIDOrKey string) (result *CustomerFeedbackScheme, response *Response, err error) {
 
 	if len(requestIDOrKey) == 0 {
@@ -38,6 +39,7 @@ func (r *RequestFeedbackService) Get(ctx context.Context, requestIDOrKey string)
 	return
 }
 
+// Docs: https://docs.go-atlassian.io/jira-service-management-cloud/request/feedback#post-feedback
 func (r *RequestFeedbackService) Post(ctx context.Context, requestIDOrKey string, rating int, comment string) (result *CustomerFeedbackScheme, response *Response, err error) {
 
 	if len(requestIDOrKey) == 0 {
@@ -84,6 +86,7 @@ func (r *RequestFeedbackService) Post(ctx context.Context, requestIDOrKey string
 	return
 }
 
+// Docs: https://docs.go-atlassian.io/jira-service-management-cloud/request/feedback#delete-feedback
 func (r *RequestFeedbackService) Delete(ctx context.Context, requestIDOrKey string) (response *Response, err error) {
 
 	if len(requestIDOrKey) == 0 {

@@ -11,6 +11,7 @@ import (
 
 type RequestCommentService struct{ client *Client }
 
+// Docs: https://docs.go-atlassian.io/jira-service-management-cloud/request/comments#get-request-comments
 func (r *RequestCommentService) Gets(ctx context.Context, issueKeyOrID string, public bool, expands []string, start, limit int) (result *RequestCommentPageScheme, response *Response, err error) {
 
 	if len(issueKeyOrID) == 0 {
@@ -62,6 +63,7 @@ func (r *RequestCommentService) Gets(ctx context.Context, issueKeyOrID string, p
 	return
 }
 
+// Docs: https://docs.go-atlassian.io/jira-service-management-cloud/request/comments#get-request-comment-by-id
 func (r *RequestCommentService) Get(ctx context.Context, issueKeyOrID string, commentID int, expands []string) (result *RequestCommentScheme, response *Response, err error) {
 
 	if len(issueKeyOrID) == 0 {
@@ -111,6 +113,7 @@ func (r *RequestCommentService) Get(ctx context.Context, issueKeyOrID string, co
 	return
 }
 
+// Docs: https://docs.go-atlassian.io/jira-service-management-cloud/request/comments#create-request-comment
 func (r *RequestCommentService) Create(ctx context.Context, issueKeyOrID, body string, public bool) (result *RequestCommentScheme, response *Response, err error) {
 
 	if len(issueKeyOrID) == 0 {
@@ -152,6 +155,7 @@ func (r *RequestCommentService) Create(ctx context.Context, issueKeyOrID, body s
 	return
 }
 
+// Docs: https://docs.go-atlassian.io/jira-service-management-cloud/request/comments#get-comment-attachments
 func (r *RequestCommentService) Attachments(ctx context.Context, issueKeyOrID string, commentID, start, limit int) (result *RequestCommentAttachmentPageScheme, response *Response, err error) {
 
 	if len(issueKeyOrID) == 0 {

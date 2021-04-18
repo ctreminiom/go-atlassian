@@ -374,7 +374,7 @@ func TestCustomerService_Get(t *testing.T) {
 			}
 
 			service := &CustomerService{client: mockClient}
-			gotResult, gotResponse, err := service.Get(testCase.context, testCase.serviceDeskID, testCase.query, testCase.start, testCase.limit)
+			gotResult, gotResponse, err := service.Gets(testCase.context, testCase.serviceDeskID, testCase.query, testCase.start, testCase.limit)
 
 			if testCase.wantErr {
 

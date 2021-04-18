@@ -30,7 +30,7 @@ func main() {
 		limit         = 50
 	)
 
-	customers, response, err := atlassian.ServiceManagement.Customer.Get(context.Background(), serviceDeskID, query, start, limit)
+	customers, response, err := atlassian.ServiceManagement.Customer.Gets(context.Background(), serviceDeskID, query, start, limit)
 	if err != nil {
 		if response != nil {
 			log.Println("Response HTTP Response", string(response.BodyAsBytes))

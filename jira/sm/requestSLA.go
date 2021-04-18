@@ -11,6 +11,7 @@ import (
 
 type RequestSLAService struct{ client *Client }
 
+// Docs: https://docs.go-atlassian.io/jira-service-management-cloud/request/sla#get-sla-information
 func (r *RequestSLAService) Gets(ctx context.Context, issueKeyOrID string, start, limit int) (result *RequestSLAPageScheme, response *Response, err error) {
 
 	if len(issueKeyOrID) == 0 {
@@ -43,6 +44,7 @@ func (r *RequestSLAService) Gets(ctx context.Context, issueKeyOrID string, start
 	return
 }
 
+// Docs: https://docs.go-atlassian.io/jira-service-management-cloud/request/sla#get-sla-information-by-id
 func (r *RequestSLAService) Get(ctx context.Context, issueKeyOrID string, slaMetricID int) (result *RequestSLAScheme, response *Response, err error) {
 
 	if len(issueKeyOrID) == 0 {

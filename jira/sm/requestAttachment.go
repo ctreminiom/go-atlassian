@@ -11,6 +11,7 @@ import (
 
 type RequestAttachmentService struct{ client *Client }
 
+// Docs: https://docs.go-atlassian.io/jira-service-management-cloud/request/attachment#get-attachments-for-request
 func (r *RequestAttachmentService) Gets(ctx context.Context, issueKeyOrID string, start, limit int) (result *RequestAttachmentPageScheme, response *Response, err error) {
 
 	if len(issueKeyOrID) == 0 {
@@ -43,6 +44,7 @@ func (r *RequestAttachmentService) Gets(ctx context.Context, issueKeyOrID string
 	return
 }
 
+// Docs: https://docs.go-atlassian.io/jira-service-management-cloud/request/attachment#create-attachment
 func (r *RequestAttachmentService) Create(ctx context.Context, issueKeyOrID string, temporaryAttachmentIDs []string, public bool) (result *RequestAttachmentCreationScheme, response *Response, err error) {
 
 	if len(issueKeyOrID) == 0 {

@@ -704,7 +704,7 @@ func TestScreenService_Get(t *testing.T) {
 
 			i := &ScreenService{client: mockClient}
 
-			gotResult, gotResponse, err := i.Get(testCase.context, testCase.fieldID, testCase.startAt,
+			gotResult, gotResponse, err := i.Fields(testCase.context, testCase.fieldID, testCase.startAt,
 				testCase.maxResults)
 
 			if testCase.wantErr {

@@ -1,5 +1,15 @@
 package main
 
+/*
+
+import (
+	"context"
+	"github.com/AlecAivazis/survey/v2"
+	"github.com/ctreminiom/go-atlassian/jira"
+	"log"
+	"os"
+)
+
 import (
 	"context"
 	"encoding/csv"
@@ -244,3 +254,5 @@ type csvRow struct {
 	Minutes float64
 	Seconds float64
 }
+
+*/

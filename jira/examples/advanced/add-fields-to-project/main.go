@@ -1,5 +1,7 @@
 package main
 
+/*
+
 import (
 	"context"
 	"encoding/json"
@@ -13,7 +15,6 @@ import (
 
 func main() {
 
-	/*
 		Workflow:
 
 		1. Select the project to use
@@ -25,7 +26,6 @@ func main() {
 		5.1. For each screen found
 		5.1.1 Extract the default tab ID
 		5.1.2 Add the customfield ID on the default tab
-	*/
 
 	var (
 		host  = os.Getenv("HOST")
@@ -274,3 +274,5 @@ func removeDuplicateValues(intSlice []int) []int {
 	}
 	return list
 }
+
+*/

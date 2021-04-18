@@ -3,10 +3,9 @@ module github.com/ctreminiom/go-atlassian
 go 1.15
 
 require (
-	github.com/AlecAivazis/survey/v2 v2.2.9
+	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/go-playground/universal-translator v0.17.0 // indirect
 	github.com/google/uuid v1.1.4
-	github.com/hako/durafmt v0.0.0-20210316092057-3a2c319c1acd
 	github.com/imdario/mergo v0.3.11
 	github.com/leodido/go-urn v1.2.1 // indirect
 	github.com/stretchr/testify v1.6.1

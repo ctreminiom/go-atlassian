@@ -1,5 +1,6 @@
 package main
 
+/*
 import (
 	"context"
 	"encoding/csv"
@@ -122,3 +123,4 @@ type changelogRecord struct {
 	From       string
 	To         string
 }
+*/

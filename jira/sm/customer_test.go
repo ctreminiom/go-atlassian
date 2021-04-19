@@ -210,6 +210,11 @@ func Test_isEmailValid(t *testing.T) {
 			wantErr: false,
 		},
 		{
+			name:    "ValidateEmailWhenTheEmailDoesNotHaveFormat",
+			email:   "ex",
+			wantErr: true,
+		},
+		{
 			name:    "ValidateEmailWhenTheEmailIsIncorrect",
 			email:   "exampleeaasc",
 			wantErr: true,
@@ -454,6 +459,17 @@ func TestCustomerService_Add(t *testing.T) {
 		},
 
 		{
+			name:               "AddCustomerToProjectWhenTheContextIsNil",
+			serviceDeskID:      1,
+			accountIDs:         []string{"f81a5efd-992a-4f3c-b079-95ea536c1205", "ed7e6547-9677-497f-8f7d-89021fdd8fdb"},
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/servicedeskapi/servicedesk/1/customer",
+			context:            nil,
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+
+		{
 			name:               "AddCustomerToProjectWhenTheAccountIDsAreNotSet",
 			serviceDeskID:      1,
 			accountIDs:         nil,
@@ -606,6 +622,17 @@ func TestCustomerService_Remove(t *testing.T) {
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusOK,
 			wantErr:            false,
+		},
+
+		{
+			name:               "RemoveCustomerToProjectWhenTheContextIsNil",
+			serviceDeskID:      1,
+			accountIDs:         []string{"f81a5efd-992a-4f3c-b079-95ea536c1205", "ed7e6547-9677-497f-8f7d-89021fdd8fdb"},
+			wantHTTPMethod:     http.MethodDelete,
+			endpoint:           "/rest/servicedeskapi/servicedesk/1/customer",
+			context:            nil,
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
 		},
 
 		{

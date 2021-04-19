@@ -46,8 +46,7 @@ func New(httpClient *http.Client) (client *Client, err error) {
 	client.Organization = &OrganizationService{
 		client: client,
 		Policy: &OrganizationPolicyService{
-			client:   client,
-			Resource: &OrganizationPolicyResourceService{client: client},
+			client: client,
 		},
 	}
 

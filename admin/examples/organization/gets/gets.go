@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"github.com/ctreminiom/go-atlassian/admin"
 	"log"
 	"os"
@@ -32,9 +31,6 @@ func main() {
 	log.Println("Response HTTP Code", response.StatusCode)
 	log.Println("HTTP Endpoint Used", response.Endpoint)
 
-	fmt.Println(string(response.BodyAsBytes))
-
-	log.Println(organizations.Links)
 	for _, organization := range organizations.Data {
 		log.Println(organization.ID, organization.Attributes.Name)
 	}

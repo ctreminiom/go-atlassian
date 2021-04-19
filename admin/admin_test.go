@@ -190,8 +190,7 @@ func startMockClient(site string) (*Client, error) {
 	client.Organization = &OrganizationService{
 		client: client,
 		Policy: &OrganizationPolicyService{
-			client:   client,
-			Resource: &OrganizationPolicyResourceService{client: client},
+			client: client,
 		},
 	}
 

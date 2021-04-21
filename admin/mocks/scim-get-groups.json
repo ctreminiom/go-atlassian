@@ -1,0 +1,31 @@
+{
+  "schemas": [
+    "urn:ietf:params:scim:api:messages:2.0:ListResponse"
+  ],
+  "totalResults": 1,
+  "startIndex": 1,
+  "itemsPerPage": 50,
+  "Resources": [
+    {
+      "schemas": [
+        "urn:ietf:params:scim:schemas:core:2.0:Group"
+      ],
+      "id": "e18da5e4-ba2e-4039-9046-30000af6c0b7",
+      "displayName": "scim-jira-users",
+      "members": [
+        {
+          "type": "User",
+          "value": "635cdb2f-e72c-4122-bfd3-3aa6c7f02f96",
+          "display": "example username 3",
+          "$ref": "https://api.atlassian.com/scim/directory/bcdde508-ee40-4df2-89cc-d3f6292c5971/Users/635cdb2f-e72c-4122-bfd3-3aa6c7f02f96"
+        }
+      ],
+      "meta": {
+        "resourceType": "Group",
+        "location": "https://api.atlassian.com/scim/directory/bcdde508-ee40-4df2-89cc-d3f6292c5971/Groups/e18da5e4-ba2e-4039-9046-30000af6c0b7",
+        "lastModified": "2021-04-20T05:17:25.107602Z",
+        "created": "2021-04-20T04:54:27.04421Z"
+      }
+    }
+  ]
+}

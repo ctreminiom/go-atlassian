@@ -119,6 +119,7 @@ type SCIMUserEmailScheme struct {
 	Type    string `json:"type,omitempty"`
 	Primary bool   `json:"primary,omitempty"`
 }
+
 type SCIMUserNameScheme struct {
 	Formatted       string `json:"formatted,omitempty"`
 	FamilyName      string `json:"familyName,omitempty"`
@@ -127,27 +128,32 @@ type SCIMUserNameScheme struct {
 	HonorificPrefix string `json:"honorificPrefix,omitempty"`
 	HonorificSuffix string `json:"honorificSuffix,omitempty"`
 }
+
 type SCIMUserPhoneNumberScheme struct {
 	Value   string `json:"value,omitempty"`
 	Type    string `json:"type,omitempty"`
 	Primary bool   `json:"primary,omitempty"`
 }
+
 type SCIMUserMetaScheme struct {
 	ResourceType string `json:"resourceType,omitempty"`
 	Location     string `json:"location,omitempty"`
 	LastModified string `json:"lastModified,omitempty"`
 	Created      string `json:"created,omitempty"`
 }
+
 type SCIMUserGroupScheme struct {
 	Type    string `json:"type,omitempty"`
 	Value   string `json:"value,omitempty"`
 	Display string `json:"display,omitempty"`
 	Ref     string `json:"$ref,omitempty"`
 }
+
 type SCIMEnterpriseUserInfoScheme struct {
 	Organization string `json:"organization,omitempty"`
 	Department   string `json:"department,omitempty"`
 }
+
 type SCIMExtensionScheme struct {
 	AtlassianAccountID string `json:"atlassianAccountId,omitempty"`
 }
@@ -368,7 +374,7 @@ func (s *SCIMUserService) Deactivate(ctx context.Context, directoryID, userID st
 // 6. excludedAttributes = Resource attributes to be excluded from response.
 // Atlassian Docs: https://developer.atlassian.com/cloud/admin/user-provisioning/rest/api-group-users/#api-scim-directory-directoryid-users-userid-patch
 // Library Docs: N/A
-func (s *SCIMUserService) Update(ctx context.Context, directoryID, userID string, payload *SCIMUserToPathScheme, attributes, excludedAttributes []string) (result *SCIMUserScheme, response *Response, err error) {
+func (s *SCIMUserService) Path(ctx context.Context, directoryID, userID string, payload *SCIMUserToPathScheme, attributes, excludedAttributes []string) (result *SCIMUserScheme, response *Response, err error) {
 
 	if len(directoryID) == 0 {
 		return nil, nil, fmt.Errorf("error!, please provide a valid directoryID value")
@@ -564,7 +570,7 @@ type SCIMUserToPathOperationScheme struct {
 // 6. excludedAttributes = Resource attributes to be excluded from response.
 // Atlassian Docs: https://developer.atlassian.com/cloud/admin/user-provisioning/rest/api-group-users/#api-scim-directory-directoryid-users-userid-put
 // Library Docs: N/A
-func (s *SCIMUserService) Overwrite(ctx context.Context, directoryID, userID string, payload *SCIMUserScheme, attributes, excludedAttributes []string) (result *SCIMUserScheme, response *Response, err error) {
+func (s *SCIMUserService) Update(ctx context.Context, directoryID, userID string, payload *SCIMUserScheme, attributes, excludedAttributes []string) (result *SCIMUserScheme, response *Response, err error) {
 
 	if len(directoryID) == 0 {
 		return nil, nil, fmt.Errorf("error!, please provide a valid directoryID value")

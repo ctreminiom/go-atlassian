@@ -23,7 +23,7 @@ type SCIMUserService struct{ client *Client }
 // 4. attributes = Resource attributes to be included in response
 // 5. excludedAttributes = Resource attributes to be excluded from response
 // Atlassian Docs: https://developer.atlassian.com/cloud/admin/user-provisioning/rest/api-group-users/#api-scim-directory-directoryid-users-post
-// Library Docs: N/A
+// Library Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/scim/users#create-a-user
 func (s *SCIMUserService) Create(ctx context.Context, directoryID string, payload *SCIMUserScheme, attributes, excludedAttributes []string) (result *SCIMUserScheme, response *Response, err error) {
 
 	if len(directoryID) == 0 {
@@ -114,6 +114,7 @@ type SCIMUserScheme struct {
 	EnterpriseInfo    *SCIMEnterpriseUserInfoScheme `json:"urn:ietf:params:scim:schemas:extension:enterprise:2.1:User,omitempty"`
 	SCIMExtension     *SCIMExtensionScheme          `json:"urn:scim:schemas:extension:atlassian-external:1.1,omitempty"`
 }
+
 type SCIMUserEmailScheme struct {
 	Value   string `json:"value,omitempty"`
 	Type    string `json:"type,omitempty"`
@@ -172,7 +173,7 @@ type SCIMUserGetsOptionsScheme struct {
 // 4. startIndex = A 1-based index of the first query result.
 // 5. count = Desired maximum number of query results in the list response page.
 // Atlassian Docs: https://developer.atlassian.com/cloud/admin/user-provisioning/rest/api-group-users/#api-scim-directory-directoryid-users-get
-// Library Docs: N/A
+// Library Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/scim/users#get-users
 func (s *SCIMUserService) Gets(ctx context.Context, directoryID string, opts *SCIMUserGetsOptionsScheme, startIndex, count int) (result *SCIMUserPageScheme, response *Response, err error) {
 
 	if len(directoryID) == 0 {
@@ -259,7 +260,7 @@ type SCIMUserPageScheme struct {
 // 4. attributes = Resource attributes to be included in response
 // 5. excludedAttributes = Resource attributes to be excluded from response
 // Atlassian Docs: https://developer.atlassian.com/cloud/admin/user-provisioning/rest/api-group-users/#api-scim-directory-directoryid-users-userid-get
-// Library Docs: N/A
+// Library Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/scim/users#get-a-user-by-id
 func (s *SCIMUserService) Get(ctx context.Context, directoryID, userID string, attributes, excludedAttributes []string) (result *SCIMUserScheme, response *Response, err error) {
 
 	if len(directoryID) == 0 {
@@ -337,7 +338,7 @@ func (s *SCIMUserService) Get(ctx context.Context, directoryID, userID string, a
 // 2. directoryId = Directory Id (REQUIRED)
 // 3. userId = The user ID (REQUIRED)
 // Atlassian Docs: https://developer.atlassian.com/cloud/admin/user-provisioning/rest/api-group-users/#api-scim-directory-directoryid-users-userid-delete
-// Library Docs: N/A
+// Library Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/scim/users#deactivate-a-user
 func (s *SCIMUserService) Deactivate(ctx context.Context, directoryID, userID string) (response *Response, err error) {
 
 	if len(directoryID) == 0 {
@@ -373,7 +374,7 @@ func (s *SCIMUserService) Deactivate(ctx context.Context, directoryID, userID st
 // 5. attributes = Resource attributes to be included in response.
 // 6. excludedAttributes = Resource attributes to be excluded from response.
 // Atlassian Docs: https://developer.atlassian.com/cloud/admin/user-provisioning/rest/api-group-users/#api-scim-directory-directoryid-users-userid-patch
-// Library Docs: N/A
+// Library Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/scim/users#update-user-by-id-patch
 func (s *SCIMUserService) Path(ctx context.Context, directoryID, userID string, payload *SCIMUserToPathScheme, attributes, excludedAttributes []string) (result *SCIMUserScheme, response *Response, err error) {
 
 	if len(directoryID) == 0 {
@@ -569,7 +570,7 @@ type SCIMUserToPathOperationScheme struct {
 // 5. attributes = Resource attributes to be included in response.
 // 6. excludedAttributes = Resource attributes to be excluded from response.
 // Atlassian Docs: https://developer.atlassian.com/cloud/admin/user-provisioning/rest/api-group-users/#api-scim-directory-directoryid-users-userid-put
-// Library Docs: N/A
+// Library Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/scim/users#update-user-via-user-attributes
 func (s *SCIMUserService) Update(ctx context.Context, directoryID, userID string, payload *SCIMUserScheme, attributes, excludedAttributes []string) (result *SCIMUserScheme, response *Response, err error) {
 
 	if len(directoryID) == 0 {

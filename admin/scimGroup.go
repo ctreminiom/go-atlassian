@@ -11,6 +11,7 @@ import (
 
 type SCIMGroupService struct{ client *Client }
 
+// Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/scim/groups#get-groups
 func (g *SCIMGroupService) Gets(ctx context.Context, directoryID, filter string, startAt, maxResults int) (result *ScimGroupPageScheme, response *Response, err error) {
 
 	if directoryID == "" {
@@ -47,6 +48,7 @@ func (g *SCIMGroupService) Gets(ctx context.Context, directoryID, filter string,
 	return
 }
 
+// Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/scim/groups#get-a-group-by-id
 func (g *SCIMGroupService) Get(ctx context.Context, directoryID, groupID string) (result *ScimGroupScheme, response *Response, err error) {
 
 	if directoryID == "" {
@@ -79,6 +81,7 @@ func (g *SCIMGroupService) Get(ctx context.Context, directoryID, groupID string)
 	return
 }
 
+// Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/scim/groups#update-a-group-by-id
 func (g *SCIMGroupService) Update(ctx context.Context, directoryID, groupID string, newGroupName string) (result *ScimGroupScheme, response *Response, err error) {
 
 	if directoryID == "" {
@@ -122,6 +125,7 @@ func (g *SCIMGroupService) Update(ctx context.Context, directoryID, groupID stri
 	return
 }
 
+// Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/scim/groups#delete-a-group-by-id
 func (g *SCIMGroupService) Delete(ctx context.Context, directoryID, groupID string) (response *Response, err error) {
 
 	if directoryID == "" {
@@ -147,6 +151,7 @@ func (g *SCIMGroupService) Delete(ctx context.Context, directoryID, groupID stri
 	return
 }
 
+// Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/scim/groups#create-a-group
 func (g *SCIMGroupService) Create(ctx context.Context, directoryID, groupName string) (result *ScimGroupScheme, response *Response, err error) {
 
 	if directoryID == "" {
@@ -186,6 +191,7 @@ func (g *SCIMGroupService) Create(ctx context.Context, directoryID, groupName st
 	return
 }
 
+// Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/scim/groups#update-a-group-by-id-patch
 func (g *SCIMGroupService) Path(ctx context.Context, directoryID, groupID string, payload *SCIMGroupPathScheme) (result *ScimGroupScheme, response *Response, err error) {
 
 	if directoryID == "" {

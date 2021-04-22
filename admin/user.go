@@ -18,7 +18,7 @@ type UserService struct {
 // 2. accountID = The user account to manage (REQUIRED)
 // 3. privileges = the expanded privileges
 // Atlassian Docs: https://developer.atlassian.com/cloud/admin/user-management/rest/api-group-users/#api-users-account-id-manage-get
-// Library Example: N/A
+// Library Example: https://docs.go-atlassian.io/atlassian-admin-cloud/user#get-user-management-permissions
 func (u *UserService) Permissions(ctx context.Context, accountID string, privileges []string) (result *UserPermissionScheme, response *Response, err error) {
 
 	if len(accountID) == 0 {
@@ -73,7 +73,7 @@ func (u *UserService) Permissions(ctx context.Context, accountID string, privile
 // 1. ctx = it's the context.context value
 // 2. accountID = The user account to manage (REQUIRED)
 // Atlassian Docs: https://developer.atlassian.com/cloud/admin/user-management/rest/api-group-users/#api-users-account-id-manage-profile-get
-// Library Example: N/A
+// Library Example: https://docs.go-atlassian.io/atlassian-admin-cloud/user#get-profile
 func (u *UserService) Get(ctx context.Context, accountID string) (result *UserScheme, response *Response, err error) {
 
 	if len(accountID) == 0 {
@@ -249,7 +249,7 @@ type UserPermissionScheme struct {
 // 2. accountID = The user account to manage (REQUIRED)
 // 3. payload = the fields you want to update (REQUIRED)
 // Atlassian Docs: https://developer.atlassian.com/cloud/admin/user-management/rest/api-group-users/#api-users-account-id-manage-profile-patch
-// Library Example: N/A
+// Library Example: https://docs.go-atlassian.io/atlassian-admin-cloud/user#update-profile
 func (u *UserService) Update(ctx context.Context, accountID string, payload map[string]interface{}) (result *UserScheme, response *Response, err error) {
 
 	if len(accountID) == 0 {
@@ -296,7 +296,7 @@ func (u *UserService) Update(ctx context.Context, accountID string, payload map[
 // 2. accountID = The user account to manage (REQUIRED)
 // 3. message = the notification message to use
 // Atlassian Docs: https://developer.atlassian.com/cloud/admin/user-management/rest/api-group-users/#api-users-account-id-manage-lifecycle-disable-post
-// Library Example: N/A
+// Library Example: https://docs.go-atlassian.io/atlassian-admin-cloud/user#disable-a-user
 func (u *UserService) Disable(ctx context.Context, accountID, message string) (response *Response, err error) {
 
 	if len(accountID) == 0 {
@@ -345,7 +345,7 @@ func (u *UserService) Disable(ctx context.Context, accountID, message string) (r
 // 1. ctx = it's the context.context value
 // 2. accountID = The user account to manage (REQUIRED)
 // Atlassian Docs: https://developer.atlassian.com/cloud/admin/user-management/rest/api-group-users/#api-users-account-id-manage-lifecycle-enable-post
-// Library Example: N/A
+// Library Example: https://docs.go-atlassian.io/atlassian-admin-cloud/user#enable-a-user
 func (u *UserService) Enable(ctx context.Context, accountID string) (response *Response, err error) {
 
 	if len(accountID) == 0 {

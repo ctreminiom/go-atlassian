@@ -11,10 +11,60 @@
     <a href="https://docs.go-atlassian.io/"><img src="https://img.shields.io/badge/%F0%9F%92%A1%20go-documentation-00ACD7.svg?style=flat"></a>
 </p>
 
+go-atlassian is a Go module that enables the interaction with the Atlassian Cloud Services.
 
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fctreminiom%2Fgo-atlassian.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fctreminiom%2Fgo-atlassian?ref=badge_large)
+## ✨ Features
 
+- Jira Software Cloud
+    - CRUD Application Roles, Dashboards, Filters, Groups, Issues.
+    - Search Issues using the JQL query.
+    - Add attachments into JIRA issues, and transition issues.
+    - Creation of issue(s) using the instance custom_fields.
+    - Edit issues using the operation's method **(add,remove,replace).**
+    - Assign issues and send custom mail notifications.
+    - CRUD the Issue Field Configuration, Issue Type Screen Scheme, and Permission Scheme.
+    - CRUD custom_fields contexts and options.
+    - Link issues and create new issue link types.
+    - Get the issue priorities and resolutions.
+    - CRUD Screen Screens, Screens and Screen Tabs.
+    - CRUD issue votes and watchers.
+    - CRUD Jira Project(s), Project Categories, Project Components, Project Versions.
+    - CRUD Project Roles and add/remove project actors(users).
+    - Validate new Jira Project Name or Key.
+    - Add Jira Field into Screen.
+    - Get or Cancel Jira Async Task(s).
+    - CRUD Jira Users and Search users.
+
+- Jira Service Management Cloud
+    - CRUD JSM Customer(s).
+    - Search JSM Knowledgebase Articles.
+    - CRUD JSM Organizations and manipulates the Organization's Users.
+    - Get(s) and Answer Approval(s) and SLA(s).
+    - CRUD JSM Feedback(s) and Participant(s).
+    - Get(s) JSM Projects and Queues.
+    - CRUD JSM Request Types.
+
+|                                  **Jira Software Cloud**                                 	|                   **Jira Service Management Cloud**                   	|
+|:------------------------------------------------------------------------------------:	|:----------------------------------------------------------------:	|
+|             CRUD Application Roles, Dashboards, Filters, Groups, Issues.             	|                       CRUD JSM Customer(s).                      	|
+|                          Search Issues using the JQL query.                          	|                Search JSM Knowledgebase Articles.                	|
+|               Add attachments into JIRA issues, and transition issues.               	| CRUD JSM Organizations and manipulates the Organization's Users. 	|
+|                Creation of issue(s) using the instance custom_fields.                	|             Get(s) and Answer Approval(s) and SLA(s).            	|
+|         Edit issues using the operation's method  ** (add,remove,replace). **        	|             CRUD JSM Feedback(s) and Participant(s).             	|
+|                   Assign issues and send custom mail notifications.                  	|                  Get(s) JSM Projects and Queues.                 	|
+| CRUD the Issue Field Configuration, Issue Type Screen Scheme, and Permission Scheme. 	|                      CRUD JSM Request Types.                     	|
+|                     Link issues and create new issue link types.                     	|                                                                  	|
+|                       Get the issue priorities and resolutions.                      	|                                                                  	|
+|                     CRUD Screen Screens, Screens and Screen Tabs.                    	|                                                                  	|
+|                            CRUD issue votes and watchers.                            	|                                                                  	|
+|    CRUD Jira Project(s), Project Categories, Project Components, Project Versions.   	|                                                                  	|
+|               CRUD Project Roles and add/remove project actors(users).               	|                                                                  	|
+|                        Validate new Jira Project Name or Key.                        	|                                                                  	|
+|                              Add Jira Field into Screen.                             	|                                                                  	|
+|                           Get or Cancel Jira Async Task(s).                          	|                                                                  	|
+|                           CRUD Jira Users and Search users.                          	|                                                                  	|
 ## Introduction 📖
+go-atlassian is a Go module that enables the interaction with the Atlassian Cloud Services.
 
 go-atlassian is a library written in Go programming language that enables the interaction with the Atlassian Cloud API's. It consists of the following services that Atlassian provide us:
 * Jira Software Cloud
@@ -409,3 +459,5 @@ Give a ⭐️ if this project helped you!
 ## 📝 License
 Copyright © 2021 [Carlos Treminio](https://github.com/ctreminiom).
 This project is [MIT](https://opensource.org/licenses/MIT) licensed.
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fctreminiom%2Fgo-atlassian.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fctreminiom%2Fgo-atlassian?ref=badge_large)

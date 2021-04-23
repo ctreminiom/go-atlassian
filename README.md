@@ -15,90 +15,67 @@ go-atlassian is a Go module that enables the interaction with the Atlassian Clou
 
 ## ✨ Features
 
-- Jira Software Cloud
-    - CRUD Application Roles, Dashboards, Filters, Groups, Issues.
-    - Search Issues using the JQL query.
-    - Add attachments into JIRA issues, and transition issues.
-    - Creation of issue(s) using the instance custom_fields.
-    - Edit issues using the operation's method **(add,remove,replace).**
-    - Assign issues and send custom mail notifications.
-    - CRUD the Issue Field Configuration, Issue Type Screen Scheme, and Permission Scheme.
-    - CRUD custom_fields contexts and options.
-    - Link issues and create new issue link types.
-    - Get the issue priorities and resolutions.
-    - CRUD Screen Screens, Screens and Screen Tabs.
-    - CRUD issue votes and watchers.
-    - CRUD Jira Project(s), Project Categories, Project Components, Project Versions.
-    - CRUD Project Roles and add/remove project actors(users).
-    - Validate new Jira Project Name or Key.
-    - Add Jira Field into Screen.
-    - Get or Cancel Jira Async Task(s).
-    - CRUD Jira Users and Search users.
+### 🛫 Jira Software Cloud
+- CRUD Application Roles, Dashboards, Filters, Groups, Issues.
+- Search Issues using the JQL query.
+- Add attachments into JIRA issues, and transition issues.
+- Creation of issue(s) using the instance custom_fields.
+- Edit issues using the operation's method **(add,remove,replace).**
+- Assign issues and send custom mail notifications.
+- CRUD the Issue Field Configuration, Issue Type Screen Scheme, and Permission Scheme.
+- CRUD custom_fields contexts and options.
+- Link issues and create new issue link types.
+- Get the issue priorities and resolutions.
+- CRUD Screen Screens, Screens and Screen Tabs.
+- CRUD issue votes and watchers.
+- CRUD Jira Project(s), Project Categories, Project Components, Project Versions.
+- CRUD Project Roles and add/remove project actors(users).
+- Validate new Jira Project Name or Key.
+- Add Jira Field into Screen.
+- Get or Cancel Jira Async Task(s).
+- CRUD Jira Users and Search users.
 
-- Jira Service Management Cloud
-    - CRUD JSM Customer(s).
-    - Search JSM Knowledgebase Articles.
-    - CRUD JSM Organizations and manipulates the Organization's Users.
-    - Get(s) and Answer Approval(s) and SLA(s).
-    - CRUD JSM Feedback(s) and Participant(s).
-    - Get(s) JSM Projects and Queues.
-    - CRUD JSM Request Types.
+### 🛬 Jira Service Management Cloud
+- CRUD JSM Customer(s).
+- Search JSM Knowledgebase Articles.
+- CRUD JSM Organizations and manipulates the Organization's Users.
+- Get(s) and Answer Approval(s) and SLA(s).
+- CRUD JSM Feedback(s) and Participant(s).
+- Get(s) JSM Projects and Queues.
+- CRUD JSM Request Types.
 
-|                                  **Jira Software Cloud**                                 	|                   **Jira Service Management Cloud**                   	|
-|:------------------------------------------------------------------------------------:	|:----------------------------------------------------------------:	|
-|             CRUD Application Roles, Dashboards, Filters, Groups, Issues.             	|                       CRUD JSM Customer(s).                      	|
-|                          Search Issues using the JQL query.                          	|                Search JSM Knowledgebase Articles.                	|
-|               Add attachments into JIRA issues, and transition issues.               	| CRUD JSM Organizations and manipulates the Organization's Users. 	|
-|                Creation of issue(s) using the instance custom_fields.                	|             Get(s) and Answer Approval(s) and SLA(s).            	|
-|         Edit issues using the operation's method  ** (add,remove,replace). **        	|             CRUD JSM Feedback(s) and Participant(s).             	|
-|                   Assign issues and send custom mail notifications.                  	|                  Get(s) JSM Projects and Queues.                 	|
-| CRUD the Issue Field Configuration, Issue Type Screen Scheme, and Permission Scheme. 	|                      CRUD JSM Request Types.                     	|
-|                     Link issues and create new issue link types.                     	|                                                                  	|
-|                       Get the issue priorities and resolutions.                      	|                                                                  	|
-|                     CRUD Screen Screens, Screens and Screen Tabs.                    	|                                                                  	|
-|                            CRUD issue votes and watchers.                            	|                                                                  	|
-|    CRUD Jira Project(s), Project Categories, Project Components, Project Versions.   	|                                                                  	|
-|               CRUD Project Roles and add/remove project actors(users).               	|                                                                  	|
-|                        Validate new Jira Project Name or Key.                        	|                                                                  	|
-|                              Add Jira Field into Screen.                             	|                                                                  	|
-|                           Get or Cancel Jira Async Task(s).                          	|                                                                  	|
-|                           CRUD Jira Users and Search users.                          	|                                                                  	|
-## Introduction 📖
-go-atlassian is a Go module that enables the interaction with the Atlassian Cloud Services.
+### 🛸 Atlassian Admin Cloud    
+- Get Organization(s), Verified Domain(s), Audit Log(s), and Event Actions.
+- CRUD Organization Polities.
+- Enable/Disable an Organization User.
+- Get/Update Organization User.
+- Get/Delete Organization User Token(s).
+- Create/Deactivate/Get(s)/Update/Path SCIM User(s).
+- Create/Get(s)/Update/Delete SCIM Group(s).
+- Get SCIM Schema(s).
 
-go-atlassian is a library written in Go programming language that enables the interaction with the Atlassian Cloud API's. It consists of the following services that Atlassian provide us:
-* Jira Software Cloud
-* Jira Service Management Cloud
-* Confluence Cloud
-* Atlassian Access 
-* Opsgenie
-* Trello
-* Bitbucket Cloud
+### 🛰️ Confluence Cloud
+- In Development 🔨
 
-The Complete documentation is available at [docs.go-atlassian.io](https://docs.go-atlassian.io/).
+### 🚠 Jira Agile Cloud
+- In Development 🔨
 
-## Development
-Right now, the library supports the Jira Software Cloud and Jira Service Management Cloud services. This project's still in progress, and the remaining services will be mapped and documented.
-
-## Jira Software Cloud 
-Plan, track, and release world-class software with the #1 software development tool used by agile teams.
-
-### Features
-* Create/Edit/Delete/View issues 
-* Support the Jira issue custom-fields interactions
-* Manage the project screen, screen screens, issue type scheme screens, etc.
-* Change the issue status, retrieve the issue changelogs, search issues based on the JQL query and more!!.
-
-#### Installation ✒
+##  🔰 Installation
+Make sure you have Go installed (download). Version `1.13` or higher is required.
 ```sh
-$ go get -u -v github.com/ctreminiom/go-atlassian/jira
+## Jira Software Cloud / Service Management
+$ go get -u -v github.com/ctreminiom/go-atlassian/jira/
+
+## Atlassian Cloud Admin
+$ go get -u -v github.com/ctreminiom/go-atlassian/admin/
 ```
 
-#### Use Cases
+## 📓 Documentation
+Documentation is hosted live at https://docs.go-atlassian.io/
 
-<details><summary>Get Issue</summary>
-
-```go
+## 📝 Usage
+More examples in `jira/examples` `admin/examples` `jira/sm/examples` directories. Here's a short example of how to get a Jira Issue:
+````go
 package main
 
 import (
@@ -123,7 +100,7 @@ func main() {
 
 	atlassian.Auth.SetBasicAuth(mail, token)
 
-	issue, response, err := atlassian.Issue.Get(context.Background(), "KP-12", []string{"status"}, []string{"transitions"})
+	issue, response, err := atlassian.Issue.Get(context.Background(), "KP-12", nil, []string{"transitions"})
 	if err != nil {
 		if response != nil {
 			log.Println("Response HTTP Response", string(response.BodyAsBytes))
@@ -134,327 +111,34 @@ func main() {
 
 	log.Println("Response HTTP Code", response.StatusCode)
 	log.Println("HTTP Endpoint Used", response.Endpoint)
+
 	log.Println(issue.Key)
-}
-```
-</details>
+	log.Println(issue.Fields.Reporter.AccountID)
 
-<details><summary>Get Project Categories</summary>
-
-```go
-package main
-
-import (
-	"context"
-	"github.com/ctreminiom/go-atlassian/jira"
-	"log"
-	"os"
-)
-
-func main() {
-
-	/*
-		----------- Set an environment variable in git bash -----------
-		export HOST="https://ctreminiom.atlassian.net/"
-		export MAIL="MAIL_ADDRESS"
-		export TOKEN="TOKEN_API"
-
-		Docs: https://stackoverflow.com/questions/34169721/set-an-environment-variable-in-git-bash
-	*/
-
-	var (
-		host  = os.Getenv("HOST")
-		mail  = os.Getenv("MAIL")
-		token = os.Getenv("TOKEN")
-	)
-
-	atlassian, err := jira.New(nil, host)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	atlassian.Auth.SetBasicAuth(mail, token)
-
-	categories, response, err := atlassian.Project.Category.Gets(context.Background())
-	if err != nil {
-		if response != nil {
-			log.Println("Response HTTP Response", string(response.BodyAsBytes))
-		}
-		log.Fatal(err)
-	}
-
-	log.Println("Response HTTP Code", response.StatusCode)
-	log.Println("HTTP Endpoint Used", response.Endpoint)
-
-	for _, category := range *categories {
-
-		log.Println("----------------")
-		log.Println(category.Self)
-		log.Println(category.ID)
-		log.Println(category.Name)
-		log.Println(category.Description)
-		log.Println("----------------")
-	}
-}
-
-```
-</details>
-
-<details><summary>Create Project Version</summary>
-
-```go
-package main
-
-import (
-	"context"
-	"github.com/ctreminiom/go-atlassian/jira"
-	"log"
-	"os"
-)
-
-func main() {
-
-	/*
-		----------- Set an environment variable in git bash -----------
-		export HOST="https://ctreminiom.atlassian.net/"
-		export MAIL="MAIL_ADDRESS"
-		export TOKEN="TOKEN_API"
-
-		Docs: https://stackoverflow.com/questions/34169721/set-an-environment-variable-in-git-bash
-	*/
-
-	var (
-		host  = os.Getenv("HOST")
-		mail  = os.Getenv("MAIL")
-		token = os.Getenv("TOKEN")
-	)
-
-	atlassian, err := jira.New(nil, host)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	atlassian.Auth.SetBasicAuth(mail, token)
-
-	payload := &jira.ProjectVersionPayloadScheme{
-		Archived:    false,
-		ReleaseDate: "2021-03-06",
-		Name:        "Version Sandbox",
-		Description: "Version Sandbox description",
-		ProjectID:   10000,
-		Released:    false,
-		StartDate:   "2021-03-02",
-	}
-
-	newVersion, response, err := atlassian.Project.Version.Create(context.Background(), payload)
-	if err != nil {
-		if response != nil {
-			log.Println("Response HTTP Response", string(response.BodyAsBytes))
-		}
-		log.Fatal(err)
-	}
-
-	log.Println("Response HTTP Code", response.StatusCode)
-	log.Println("HTTP Endpoint Used", response.Endpoint)
-	log.Printf("The new version has been created with the ID %v", newVersion.ID)
-}
-
-```
-</details>
-
-## Jira Service Management Cloud
-Collaborate at high-velocity, respond to business changes and deliver great customer and employee service experiences fast.
-
-### Features
-* Create/Edit/Delete/View Service Desk Organizations
-* Create Request Types, Customers.
-* Get the Service Desk Articles, Queues, Request Comments, Participants, etc  
-
-#### Installation ✒
-```sh
-$ go get -u -v github.com/ctreminiom/go-atlassian/jira
-```
-
-#### Use Cases
-
-<details><summary>Create Organization</summary>
-
-```go
-package main
-
-import (
-	"context"
-	"github.com/ctreminiom/go-atlassian/jira"
-	"log"
-	"os"
-)
-
-func main() {
-
-	var (
-		host  = os.Getenv("HOST")
-		mail  = os.Getenv("MAIL")
-		token = os.Getenv("TOKEN")
-	)
-
-	atlassian, err := jira.New(nil, host)
-	if err != nil {
-		return
-	}
-
-	atlassian.Auth.SetBasicAuth(mail, token)
-	atlassian.Auth.SetUserAgent("curl/7.54.0")
-
-	var organizationName = "Organization Name"
-
-	newOrganization, response, err := atlassian.ServiceManagement.Organization.Create(context.Background(), organizationName)
-	if err != nil {
-		if response != nil {
-			log.Println("Response HTTP Response", string(response.BodyAsBytes))
-			log.Println("HTTP Endpoint Used", response.Endpoint)
-		}
-		log.Fatal(err)
-	}
-
-	log.Println("Response HTTP Code", response.StatusCode)
-	log.Println("HTTP Endpoint Used", response.Endpoint)
-	log.Printf("The organization has been created: %v", newOrganization.ID)
-}
-```
-</details>
-
-<details><summary>Get Request Approvals</summary>
-
-```go
-package main
-
-import (
-	"context"
-	"encoding/json"
-	"github.com/ctreminiom/go-atlassian/jira"
-	"log"
-	"os"
-)
-
-func main() {
-
-	var (
-		host  = os.Getenv("HOST")
-		mail  = os.Getenv("MAIL")
-		token = os.Getenv("TOKEN")
-	)
-
-	atlassian, err := jira.New(nil, host)
-	if err != nil {
-		return
-	}
-
-	atlassian.Auth.SetBasicAuth(mail, token)
-	atlassian.Auth.SetUserAgent("curl/7.54.0")
-
-	var issueKey = "DESK-12"
-	approvals, response, err := atlassian.ServiceManagement.Request.Approval.Gets(context.Background(), issueKey, 0, 50)
-	if err != nil {
-		if response != nil {
-			log.Println("Response HTTP Response", string(response.BodyAsBytes))
-			log.Println("HTTP Endpoint Used", response.Endpoint)
-		}
-		log.Fatal(err)
-	}
-
-	log.Println("Response HTTP Code", response.StatusCode)
-	log.Println("HTTP Endpoint Used", response.Endpoint)
-
-	for _, customRequest := range approvals.Values {
-
-		dataAsJson, err := json.MarshalIndent(customRequest, "", "\t")
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		log.Println(string(dataAsJson))
+	for _, transition := range issue.Transitions {
+		log.Println(transition.Name, transition.ID, transition.To.ID, transition.HasScreen)
 	}
 
 }
-```
-</details>
+````
 
-<details><summary>Get Service Desk Queues</summary>
+## ⭐️ Project assistance
 
-```go
-package main
+If you want to say **thank you** or/and support active development of `go-atlassian`:
 
-import (
-	"context"
-	"github.com/ctreminiom/go-atlassian/jira"
-	"log"
-	"os"
-)
+- Add a [GitHub Star](https://github.com/ctreminiom/go-atlassian) to the project.
+- Write interesting articles about project on [Dev.to](https://dev.to/), [Medium](https://medium.com/) or personal blog.
+- Support the project by donating a cup of coffee.
+- Contributions, issues and feature requests are welcome!
+-  Feel free to check [issues page](https://github.com/ctreminiom/go-atlassian/issues).
+    
+[![Buy Me A Coffee](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/ctreminiom)
 
-func main() {
 
-	var (
-		host  = os.Getenv("HOST")
-		mail  = os.Getenv("MAIL")
-		token = os.Getenv("TOKEN")
-	)
-
-	atlassian, err := jira.New(nil, host)
-	if err != nil {
-		return
-	}
-
-	atlassian.Auth.SetBasicAuth(mail, token)
-	atlassian.Auth.SetUserAgent("curl/7.54.0")
-
-	var (
-		serviceDeskID      = 1
-		includeCount  bool = true
-		start, limit  int  = 0, 50
-	)
-
-	queues, response, err := atlassian.ServiceManagement.ServiceDesk.Queue.Gets(context.Background(), serviceDeskID, includeCount, start, limit)
-	if err != nil {
-		if response != nil {
-			log.Println("Response HTTP Response", string(response.BodyAsBytes))
-			log.Println("HTTP Endpoint Used", response.Endpoint)
-		}
-		log.Fatal(err)
-	}
-
-	for pos, queue := range queues.Values {
-
-		log.Println("------------------------------------")
-		log.Printf("Queue ID #%v: %v", pos+1, queue.ID)
-		log.Printf("Queue Name #%v: %v", pos+1, queue.Name)
-		log.Printf("Queue JQL #%v: %v", pos+1, queue.Jql)
-		log.Printf("Queue Issue Count #%v: %v", pos+1, queue.IssueCount)
-		log.Printf("Queue Fields #%v: %v", pos+1, queue.Fields)
-		log.Println("------------------------------------")
-	}
-
-}
-```
-</details>
-
-## Run tests
+## 🧪 Run Test Cases
 ```sh
 go test -v ./...
 ```
-
-## Author 
-
-👤 **Carlos Treminio**
-* Website: https://ctreminiom.gitbook.io/docs/
-* Github: [@ctreminiom](https://github.com/ctreminiom)
-* LinkedIn: [@ctreminio](https://linkedin.com/in/ctreminio)
-
-## 🤝 Contributing
-Contributions, issues and feature requests are welcome!
-Feel free to check [issues page](https://github.com/ctreminiom/go-atlassian/issues).
-## Show your support
-Give a ⭐️ if this project helped you!
-[![Buy Me A Coffee](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/ctreminiom)
 
 ## 📝 License
 Copyright © 2021 [Carlos Treminio](https://github.com/ctreminiom).

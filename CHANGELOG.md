@@ -1,8 +1,6 @@
 
 <a name="v1.1.4"></a>
-## [v1.1.4](https://github.com/ctreminiom/go-atlassian/compare/v1.1.3...v1.1.4)
-
-> 2021-04-07
+## [v1.1.4](https://github.com/ctreminiom/go-atlassian/compare/v1.1.3...v1.1.4) (2021-04-07)
 
 ### Bug
 
@@ -23,11 +21,13 @@
 * Increased the code coverage on the issueService
 * Added test cases on the Operations Update
 
+### Pull Requests
+
+* Merge pull request [#17](https://github.com/ctreminiom/go-atlassian/issues/17) from ctreminiom/dev
+
 
 <a name="v1.1.3"></a>
-## [v1.1.3](https://github.com/ctreminiom/go-atlassian/compare/v1.1.2...v1.1.3)
-
-> 2021-04-07
+## [v1.1.3](https://github.com/ctreminiom/go-atlassian/compare/v1.1.2...v1.1.3) (2021-04-07)
 
 ### Beers
 
@@ -62,21 +62,27 @@
 * added the test cases on the OrganizationPolicyService
 * added more test cases on the OrganizationService
 
+### Pull Requests
+
+* Merge pull request [#16](https://github.com/ctreminiom/go-atlassian/issues/16) from ctreminiom/feature/cloud-admin
+* Merge pull request [#15](https://github.com/ctreminiom/go-atlassian/issues/15) from ctreminiom/dev
+* Merge pull request [#13](https://github.com/ctreminiom/go-atlassian/issues/13) from ctreminiom/dev
+
 
 <a name="v1.1.2"></a>
-## [v1.1.2](https://github.com/ctreminiom/go-atlassian/compare/v1.1.1...v1.1.2)
-
-> 2021-03-24
+## [v1.1.2](https://github.com/ctreminiom/go-atlassian/compare/v1.1.1...v1.1.2) (2021-03-24)
 
 ### Memo
 
 * added examples
 
+### Pull Requests
+
+* Merge pull request [#11](https://github.com/ctreminiom/go-atlassian/issues/11) from ctreminiom/feature/jira-software-example
+
 
 <a name="v1.1.1"></a>
-## [v1.1.1](https://github.com/ctreminiom/go-atlassian/compare/v1.0.2...v1.1.1)
-
-> 2021-03-24
+## [v1.1.1](https://github.com/ctreminiom/go-atlassian/compare/v1.0.2...v1.1.1) (2021-03-24)
 
 ### Alembic
 
@@ -101,17 +107,19 @@
 
 * Increased the coverage adding more Test on the issueComment.go
 
+### Pull Requests
+
+* Merge pull request [#8](https://github.com/ctreminiom/go-atlassian/issues/8) from ctreminiom/feature-adf-comments
+* Merge pull request [#6](https://github.com/ctreminiom/go-atlassian/issues/6) from ctreminiom/feat/updated-readme.md
+* Merge pull request [#5](https://github.com/ctreminiom/go-atlassian/issues/5) from ctreminiom/feature/jira-service-management
+
 
 <a name="v1.0.2"></a>
-## [v1.0.2](https://github.com/ctreminiom/go-atlassian/compare/v1.1.0...v1.0.2)
-
-> 2021-03-23
+## [v1.0.2](https://github.com/ctreminiom/go-atlassian/compare/v1.1.0...v1.0.2) (2021-03-23)
 
 
 <a name="v1.1.0"></a>
-## [v1.1.0](https://github.com/ctreminiom/go-atlassian/compare/v1.0.1...v1.1.0)
-
-> 2021-03-23
+## [v1.1.0](https://github.com/ctreminiom/go-atlassian/compare/v1.0.1...v1.1.0) (2021-03-23)
 
 ### Ambulance
 
@@ -151,21 +159,25 @@
 * Added the Unit Test cases on the KnowledgebaseService and OrganizationService
 * Added the Unit Test cases on the customerService
 
+### Pull Requests
+
+* Merge pull request [#5](https://github.com/ctreminiom/go-atlassian/issues/5) from ctreminiom/feature/jira-service-management
+
 
 <a name="v1.0.1"></a>
-## [v1.0.1](https://github.com/ctreminiom/go-atlassian/compare/v1.0.0...v1.0.1)
-
-> 2021-03-04
+## [v1.0.1](https://github.com/ctreminiom/go-atlassian/compare/v1.0.0...v1.0.1) (2021-03-04)
 
 ### Bug
 
 * Closes [#2](https://github.com/ctreminiom/go-atlassian/issues/2)
 
+### Pull Requests
+
+* Merge pull request [#3](https://github.com/ctreminiom/go-atlassian/issues/3) from ctreminiom/issue-2-unmarshal_array_error_on_IssueSearchService
+
 
 <a name="v1.0.0"></a>
-## v1.0.0
-
-> 2021-03-03
+## v1.0.0 (2021-03-03)
 
 ### Ambulance
 
@@ -263,4 +275,8 @@
 ### Wrench
 
 * mapped more endpoint on the issueFieldContext service.
+
+### Pull Requests
+
+* Merge pull request [#1](https://github.com/ctreminiom/go-atlassian/issues/1) from ctreminiom/dev
 

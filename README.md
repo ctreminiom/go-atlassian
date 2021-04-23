@@ -134,11 +134,19 @@ If you want to say **thank you** or/and support active development of `go-atlass
     
 [![Buy Me A Coffee](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/ctreminiom)
 
+## 💡 Inspiration
+The project was created with the purpose to provide a unique point to provide an interface for interacting with Atlassian products. This module is highly inspired by the Go library https://github.com/andygrunwald/go-jira
+but focused on Cloud solutions.
 
 ## 🧪 Run Test Cases
 ```sh
 go test -v ./...
 ```
+
+## 💳 Credits
+In addition to all the contributors we would like to thank these vendors:
+- **Atlassian** for developing such a powerful ecosystem.
+- **Gitbook** for provided full features for open-source projects
 
 ## 📝 License
 Copyright © 2021 [Carlos Treminio](https://github.com/ctreminiom).

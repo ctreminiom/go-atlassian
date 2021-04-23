@@ -1,21 +1,23 @@
 
 <a name="v1.1.4"></a>
-## [v1.1.4](https://github.com/ctreminiom/go-atlassian/compare/v1.1.3...v1.1.4) (2021-04-07)
+## [v1.1.4](https://github.com/ctreminiom/go-atlassian/compare/v1.1.3...v1.1.4)
 
-### Bug
+> 2021-04-07
+
+### :bug: Bug Fixes
 
 * Fixed Issue Test Cases coverage issues
 * Types the Lint problems
 
-### Memo
+### :memo: Add or update documentation.
 
 * updated the time-in-status example
 
-### Sparkles
+### :sparkles: Features
 
 * Implemented the Issue Update using operations
 
-### White_check_mark
+### :white_check_mark: Ad/Update Test Cases
 
 * Added the Test Cases for the AuthService
 * Increased the code coverage on the issueService
@@ -27,28 +29,18 @@
 
 
 <a name="v1.1.3"></a>
-## [v1.1.3](https://github.com/ctreminiom/go-atlassian/compare/v1.1.2...v1.1.3) (2021-04-07)
+## [v1.1.3](https://github.com/ctreminiom/go-atlassian/compare/v1.1.2...v1.1.3)
 
-### Beers
+> 2021-04-07
 
-* added the Atlassian Cloud Admin Organization Module with examples
-
-### Children_crossing
-
-* Updated the dev branch with the most recent changes.
-
-### Memo
+### :memo: Add or update documentation.
 
 * added the issue labels examples
 * added the issue fields examples
 * added the time-in-status example and updated the dependencies,
 * added advanced examples like "add field to project" or extract issue changelogs
 
-### Pencil2
-
-* Fixed the policy Update example
-
-### Sparkles
+### :sparkles: Features
 
 * Added the SCIM User Service
 * Added the SCIM Scheme Service
@@ -56,7 +48,7 @@
 * added the Atlassian User Admin service with examples and test cases
 * mapped the /rest/api/3/issuetypescreenscheme/project and /rest/api/3/issuetypescreenscheme/mapping endpoints
 
-### White_check_mark
+### :white_check_mark: Ad/Update Test Cases
 
 * added more test cases on the admin and auth services
 * added the test cases on the OrganizationPolicyService
@@ -70,9 +62,11 @@
 
 
 <a name="v1.1.2"></a>
-## [v1.1.2](https://github.com/ctreminiom/go-atlassian/compare/v1.1.1...v1.1.2) (2021-03-24)
+## [v1.1.2](https://github.com/ctreminiom/go-atlassian/compare/v1.1.1...v1.1.2)
 
-### Memo
+> 2021-03-24
+
+### :memo: Add or update documentation.
 
 * added examples
 
@@ -82,28 +76,18 @@
 
 
 <a name="v1.1.1"></a>
-## [v1.1.1](https://github.com/ctreminiom/go-atlassian/compare/v1.0.2...v1.1.1) (2021-03-24)
+## [v1.1.1](https://github.com/ctreminiom/go-atlassian/compare/v1.0.2...v1.1.1)
 
-### Alembic
+> 2021-03-24
 
-* Added the Issue.Comment.Add method
-
-### Art
+### :art: Improve structure / format of the code.
 
 * Updated README.md
 * Updated README.md
 * Format the badges
 * Added the new Library Logo
 
-### Lipstick
-
-* Added the go-atlassian-logo in the .svg format
-
-### Page_facing_up
-
-* changed the logo image
-
-### White_check_mark
+### :white_check_mark: Ad/Update Test Cases
 
 * Increased the coverage adding more Test on the issueComment.go
 
@@ -115,31 +99,21 @@
 
 
 <a name="v1.0.2"></a>
-## [v1.0.2](https://github.com/ctreminiom/go-atlassian/compare/v1.1.0...v1.0.2) (2021-03-23)
+## [v1.0.2](https://github.com/ctreminiom/go-atlassian/compare/v1.1.0...v1.0.2)
+
+> 2021-03-23
 
 
 <a name="v1.1.0"></a>
-## [v1.1.0](https://github.com/ctreminiom/go-atlassian/compare/v1.0.1...v1.1.0) (2021-03-23)
+## [v1.1.0](https://github.com/ctreminiom/go-atlassian/compare/v1.0.1...v1.1.0)
 
-### Ambulance
+> 2021-03-23
 
-* fixed the GoLint non-used warning on the Service Management code samples
-
-### Art
+### :art: Improve structure / format of the code.
 
 * Improved the code samples folder
 
-### Construction
-
-* Created the first Jira Service Management services and linked it into the JiraService struct.
-
-### Rocket
-
-*  Added the ability to retrieves the customer transitions and move issues on the Service Management Module
-* Fixed the Lint error S1039: unnecessary use of fmt.Sprintf (gosimple)
-* added the feature/* branches on the CI/CD Actions
-
-### Sparkles
+### :sparkles: Features
 
 * Added the RequestTypeService on the Service Management Module
 * Added the ServiceDeskQueueService on the Service Management Module
@@ -154,10 +128,18 @@
 * Added the RequestAttachmentService on the Service Management Module
 * Added the RequestService, RequestApprovalService and RequestTypeService
 
-### White_check_mark
+### :white_check_mark: Ad/Update Test Cases
 
 * Added the Unit Test cases on the KnowledgebaseService and OrganizationService
 * Added the Unit Test cases on the customerService
+
+### Ambulance
+
+* fixed the GoLint non-used warning on the Service Management code samples
+
+### Construction
+
+* Created the first Jira Service Management services and linked it into the JiraService struct.
 
 ### Pull Requests
 
@@ -165,9 +147,11 @@
 
 
 <a name="v1.0.1"></a>
-## [v1.0.1](https://github.com/ctreminiom/go-atlassian/compare/v1.0.0...v1.0.1) (2021-03-04)
+## [v1.0.1](https://github.com/ctreminiom/go-atlassian/compare/v1.0.0...v1.0.1)
 
-### Bug
+> 2021-03-04
+
+### :bug: Bug Fixes
 
 * Closes [#2](https://github.com/ctreminiom/go-atlassian/issues/2)
 
@@ -177,34 +161,19 @@
 
 
 <a name="v1.0.0"></a>
-## v1.0.0 (2021-03-03)
+## v1.0.0
 
-### Ambulance
+> 2021-03-03
 
-* Fixed empty key param on the applicationRole.go and updated the code examples
-
-### Art
+### :art: Improve structure / format of the code.
 
 * added the Jira Date Format constant
 
-### Bug
+### :bug: Bug Fixes
 
 * Fixed the missing request headers blocking the HTTP callback returning a 415 and updated the comments documentation.
 
-### Construction
-
-* updated the /vendor folder
-* updated the /vendor folder
-
-### Fire
-
-* Implemented the dynamic customfield parsing on the issue create/creates/update method in the issue.go module
-
-### Lipstick
-
-* Increased the code coverage on the issuePriorities_test.go
-
-### Memo
+### :memo: Add or update documentation.
 
 * updated license source link
 * Added the PULL_REQUEST_TEMPLATE.md
@@ -223,46 +192,19 @@
 * linked the documentation docs.go-atlassian.io with the FilterService.
 * added the mergo golang module and updated the dependencies.
 
-### Passport_control
-
-* Added the SetUserAgent method.
-
-### Pushpin
-
-* formatted the dashboards examples
-
-### Recycle
+### :recycle: Code Refactoring
 
 * Added the Unit Test cases with a 100% of coverage on the issueComment.go file and the .json mock files needed to run the tests.
 * Added the Unit Test cases with a 100% of coverage on the audit.go file and the .json mock files needed to run the tests.
 
-### Rocket
-
-* changed the nested struct under the IssueScheme struct to pointers with the purpose to use the omitempty tag on custom issue payload creations.
-
-### Seedling
-
-* Added more Test cases on the issueAttachment_test.go
-* Added more Test cases on the GroupService
-* Increased the code coverage on the applicationRole_test.go
-* added the .json mock field needed to the issue.go test cases.
-
-### Sparkles
+### :sparkles: Features
 
 * updated Readme.md
 * Added more test case on the issueTypeScreenScheme.go
 * handled the non resolutionID or priorityID params.
 * added more method in the dashboardService
 
-### Speech_balloon
-
-* ignored the .idea/ folder created by GoLand
-
-### Truck
-
-* migrated the code samples into https://docs.go-atlassian.io/
-
-### White_check_mark
+### :white_check_mark: Ad/Update Test Cases
 
 * Added the Unit Test cases with a 100% of coverage on the userSearch.go file and the .json mock files needed to run the tests.
 * Added the Unit Test cases with a 100% of coverage on the projectVersion.go file and the .json mock files needed to run the tests.
@@ -272,9 +214,14 @@
 * Added the Unit Test cases with a 100% of coverage on the user.go file and the .json mock files needed to run the tests.
 * Added the Unit Test cases with a 100% of coverage on the projectTypes.go file and the .json mock files needed to run the tests.
 
-### Wrench
+### Ambulance
 
-* mapped more endpoint on the issueFieldContext service.
+* Fixed empty key param on the applicationRole.go and updated the code examples
+
+### Construction
+
+* updated the /vendor folder
+* updated the /vendor folder
 
 ### Pull Requests
 

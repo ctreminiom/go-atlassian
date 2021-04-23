@@ -5,37 +5,37 @@ info:
   repository_url: https://github.com/ctreminiom/go-atlassian
 options:
   commits:
-     filters:
-       Type:
-         - sparkles
-         - bug
-         - zap
-         - recycle
-         - art
-         - memo
-         - white_check_mark
-         - tada
-         - bookmark
-         - books
-         - bulb
-         - hammer
-         - lock
-         - hammer
-         - ambulance
-         - construction
-         - construction_worker
-         - package
+    filters:
+      Type:
+        - sparkles
+        - bug
+        - zap
+        - recycle
+        - art
+        - memo
+        - white_check_mark
+        - tada
+        - bookmark
+        - books
+        - bulb
+        - hammer
+        - lock
+        - hammer
+        - ambulance
+        - construction
+        - construction_worker
+        - package
   commit_groups:
-     title_maps:
-       sparkles: ":sparkles: Features"
-       bug: ":bug: Bug Fixes"
-       zap: ":zap: Performance Improvements"
-       recycle: ":recycle: Code Refactoring"
-       art: ":art: Improve structure / format of the code."
-       memo: ":memo: Add or update documentation."
-       white_check_mark: ":white_check_mark: Ad/Update Test Cases"
-       package: ":package: Dependencies"
-       lock: ":lock: Security"
+    title_maps:
+      sparkles: ":sparkles: Features"
+      bug: ":bug: Bug Fixes"
+      zap: ":zap: Performance Improvements"
+      recycle: ":recycle: Code Refactoring"
+      art: ":art: Improve structure / format of the code."
+      memo: ":memo: Add or update documentation."
+      white_check_mark: ":white_check_mark: Ad/Update Test Cases"
+      package: ":package: Dependencies"
+      lock: ":lock: Security"
   header:
     pattern: "^:(\\w*)\\:\\s(.*)$"
     pattern_maps:

@@ -1,4 +1,82 @@
 
+<a name="v1.1.5"></a>
+## [v1.1.5](https://github.com/ctreminiom/go-atlassian/compare/v1.1.4...v1.1.5)
+
+> 2021-04-23
+
+### :bug: Bug Fixes
+
+* replaced the Overwrite method with the Update method in the User SCIM service.
+
+### :memo: Add or update documentation.
+
+* Updated the CHANGELOG.md configurations
+* Updated the CHANGELOG.md
+* Added the CHANGELOG.md
+* Updated README.md
+* Updated README.md and Issue Get example
+* Updated README.md
+* Document the SCIM methods linking those with the Official Documentation.
+* Added the codacy.com badge on the README.md
+
+### :package: Dependencies
+
+* removed dependencies unused on the library itself and used on the advance examples
+* removed the /vendor folder and update go.mod dependencies file
+
+### :recycle: Code Refactoring
+
+* refactor OrganizationService and OrganizationPolicyService with the correct struct types and documented examples
+* refactor Service Management Module linking the methods with the official documentation
+* refactor UserService with the correct struct types and documented examples
+* refactor ScreenSchemeService with the correct struct types
+* refactor ScreenService with the correct struct types
+* refactor ProjectRoleService with the correct struct types, and documented the examples.
+* refactor ProjectPermissionSchemeService with the correct struct types, and documented the examples.
+* refactor ProjectComponentService with the correct struct types, and documented the examples.
+* refactor ProjectService with the correct struct types, and documented the examples.
+* refactor PermissionSchemeService and PermissionGrantService with the correct struct types, increased the code coverage and documented the examples.
+* refactor IssueWatcherScheme with the correct struct types and documented the examples
+* refactor IssueVoteScheme with the correct struct types and documented the examples
+* refactor IssueTypeScreenSchemeService with the correct struct types and documented the examples
+* refactor IssueTypeSchemeService with the correct struct types and documented the examples
+* refactor IssueTypeService with the correct struct types and documented the examples
+* refactor IssueSearchService with the correct struct types and documented the examples
+* refactor IssueSearchService with the correct struct types and documented the examples
+* refactor IssueLinkTypeService with the correct struct types and documented the examples
+* refactor IssueLinkService with the correct struct types and documented the examples
+* refactor IssueFieldContextOptionService with the correct struct types and documented the examples
+* refactor IssueFieldContextService with the correct struct types and documented the examples
+* refactor IssueFieldConfigurationService with the correct struct types and documented the examples
+* refactor IssueFieldService with the correct struct types and examples
+* refactor IssueCommentService with the correct struct types and examples
+* refactor IssueService with the correct struct types and examples
+* refactor GroupService with the correct struct types
+* refactor FilterShareService with the correct struct types, added more struct tags and format examples
+* refactor FilterService with the correct struct types, added more struct tags and format examples
+* refactor ApplicationRoleService with the correct struct types and examples
+* refactor DashboardService with the correct struct types and examples
+
+### :sparkles: Features
+
+* Added the SCIMGroupService on the Atlassian User provisioning API
+
+### :white_check_mark: Ad/Update Test Cases
+
+* Increased the code coverage on the OrganizationService on the Atlassian Admin module
+* Increased the code coverage on the CustomerService on the Service Management module.
+* Increased the code coverage on the IssueResolutionService
+* Increased the code coverage on the IssuePriorityService
+* Increased the code coverage on the issueService
+
+### Pull Requests
+
+* Merge pull request [#29](https://github.com/ctreminiom/go-atlassian/issues/29) from ctreminiom/dev
+* Merge pull request [#28](https://github.com/ctreminiom/go-atlassian/issues/28) from fossabot/add-license-scan-badge
+* Merge pull request [#27](https://github.com/ctreminiom/go-atlassian/issues/27) from ctreminiom/dev
+* Merge pull request [#22](https://github.com/ctreminiom/go-atlassian/issues/22) from ctreminiom/dev
+
+
 <a name="v1.1.4"></a>
 ## [v1.1.4](https://github.com/ctreminiom/go-atlassian/compare/v1.1.3...v1.1.4)
 

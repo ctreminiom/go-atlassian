@@ -210,6 +210,11 @@ func Test_isEmailValid(t *testing.T) {
 			wantErr: false,
 		},
 		{
+			name:    "ValidateEmailWhenTheEmailDoesNotHaveFormat",
+			email:   "ex",
+			wantErr: true,
+		},
+		{
 			name:    "ValidateEmailWhenTheEmailIsIncorrect",
 			email:   "exampleeaasc",
 			wantErr: true,
@@ -374,7 +379,7 @@ func TestCustomerService_Get(t *testing.T) {
 			}
 
 			service := &CustomerService{client: mockClient}
-			gotResult, gotResponse, err := service.Get(testCase.context, testCase.serviceDeskID, testCase.query, testCase.start, testCase.limit)
+			gotResult, gotResponse, err := service.Gets(testCase.context, testCase.serviceDeskID, testCase.query, testCase.start, testCase.limit)
 
 			if testCase.wantErr {
 
@@ -451,6 +456,17 @@ func TestCustomerService_Add(t *testing.T) {
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusNoContent,
 			wantErr:            false,
+		},
+
+		{
+			name:               "AddCustomerToProjectWhenTheContextIsNil",
+			serviceDeskID:      1,
+			accountIDs:         []string{"f81a5efd-992a-4f3c-b079-95ea536c1205", "ed7e6547-9677-497f-8f7d-89021fdd8fdb"},
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/servicedeskapi/servicedesk/1/customer",
+			context:            nil,
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
 		},
 
 		{
@@ -606,6 +622,17 @@ func TestCustomerService_Remove(t *testing.T) {
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusOK,
 			wantErr:            false,
+		},
+
+		{
+			name:               "RemoveCustomerToProjectWhenTheContextIsNil",
+			serviceDeskID:      1,
+			accountIDs:         []string{"f81a5efd-992a-4f3c-b079-95ea536c1205", "ed7e6547-9677-497f-8f7d-89021fdd8fdb"},
+			wantHTTPMethod:     http.MethodDelete,
+			endpoint:           "/rest/servicedeskapi/servicedesk/1/customer",
+			context:            nil,
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
 		},
 
 		{

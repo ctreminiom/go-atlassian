@@ -1042,7 +1042,7 @@ func TestSCIMUserService_Deactivate(t *testing.T) {
 
 }
 
-func TestSCIMUserService_Overwrite(t *testing.T) {
+func TestSCIMUserService_Update(t *testing.T) {
 
 	testCases := []struct {
 		name                           string
@@ -1449,7 +1449,7 @@ func TestSCIMUserService_Overwrite(t *testing.T) {
 			}
 
 			service := &SCIMUserService{client: mockClient}
-			gotResult, gotResponse, err := service.Overwrite(testCase.context, testCase.directoryID,
+			gotResult, gotResponse, err := service.Update(testCase.context, testCase.directoryID,
 				testCase.userID, testCase.payload, testCase.attributes, testCase.excludedAttributes)
 
 			if testCase.wantErr {
@@ -1503,7 +1503,7 @@ func TestSCIMUserService_Overwrite(t *testing.T) {
 
 }
 
-func TestSCIMUserService_Update(t *testing.T) {
+func TestSCIMUserService_Path(t *testing.T) {
 
 	payload := &SCIMUserToPathScheme{
 		Schemas: []string{"urn:ietf:params:scim:api:messages:2.0:PatchOp"},
@@ -1741,7 +1741,7 @@ func TestSCIMUserService_Update(t *testing.T) {
 			}
 
 			service := &SCIMUserService{client: mockClient}
-			gotResult, gotResponse, err := service.Update(testCase.context, testCase.directoryID,
+			gotResult, gotResponse, err := service.Path(testCase.context, testCase.directoryID,
 				testCase.userID, testCase.payload, testCase.attributes, testCase.excludedAttributes)
 
 			if testCase.wantErr {

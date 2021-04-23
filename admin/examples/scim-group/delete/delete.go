@@ -10,19 +10,22 @@ import (
 func main() {
 
 	//ATLASSIAN_ADMIN_TOKEN
-	var apiKey = os.Getenv("ATLASSIAN_ADMIN_TOKEN")
+	var scimApiKey = os.Getenv("ATLASSIAN_SCIM_API_KEY")
 
 	cloudAdmin, err := admin.New(nil)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	cloudAdmin.Auth.SetBearerToken(apiKey)
+	cloudAdmin.Auth.SetBearerToken(scimApiKey)
 	cloudAdmin.Auth.SetUserAgent("curl/7.54.0")
 
-	var accountID = "606a7ff396e8d60068a5c652"
+	var (
+		directoryID = "bcdde508-ee40-4df2-89cc-d3f6292c5971"
+		groupID     = "e18da5e4-ba2e-4039-9046-30000af6c0b7"
+	)
 
-	permissions, response, err := cloudAdmin.User.Permissions(context.Background(), accountID, nil)
+	response, err := cloudAdmin.SCIM.Group.Delete(context.Background(), directoryID, groupID)
 	if err != nil {
 		if response != nil {
 			log.Println("Response HTTP Response", string(response.BodyAsBytes))
@@ -32,7 +35,4 @@ func main() {
 
 	log.Println("Response HTTP Code", response.StatusCode)
 	log.Println("HTTP Endpoint Used", response.Endpoint)
-
-	log.Println(permissions.APITokenDelete.Allowed)
-	log.Println(permissions.EmailSet.Allowed)
 }

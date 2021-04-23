@@ -190,8 +190,7 @@ func startMockClient(site string) (*Client, error) {
 	client.Organization = &OrganizationService{
 		client: client,
 		Policy: &OrganizationPolicyService{
-			client:   client,
-			Resource: &OrganizationPolicyResourceService{client: client},
+			client: client,
 		},
 	}
 
@@ -201,11 +200,10 @@ func startMockClient(site string) (*Client, error) {
 	}
 
 	client.SCIM = &SCIMService{
-		client:   client,
-		User:     &SCIMUserService{client: client},
-		Group:    &SCIMGroupService{client: client},
-		Scheme:   &SCIMSchemeService{client: client},
-		Resource: &SCIMResourceService{client: client},
+		client: client,
+		User:   &SCIMUserService{client: client},
+		Group:  &SCIMGroupService{client: client},
+		Scheme: &SCIMSchemeService{client: client},
 	}
 
 	return client, nil

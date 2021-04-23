@@ -44,41 +44,49 @@ func (s *SCIMSchemeService) Gets(ctx context.Context, directoryID string) (resul
 }
 
 type SCIMSchemasScheme struct {
-	TotalResults int      `json:"totalResults"`
-	ItemsPerPage int      `json:"itemsPerPage"`
-	StartIndex   int      `json:"startIndex"`
-	Schemas      []string `json:"schemas"`
-	Resources    []struct {
-		ID          string `json:"id"`
-		Name        string `json:"name"`
-		Description string `json:"description"`
-		Attributes  []struct {
-			Name          string `json:"name"`
-			Type          string `json:"type"`
-			MultiValued   bool   `json:"multiValued"`
-			Description   string `json:"description"`
-			Required      bool   `json:"required"`
-			CaseExact     bool   `json:"caseExact,omitempty"`
-			Mutability    string `json:"mutability"`
-			Returned      string `json:"returned"`
-			Uniqueness    string `json:"uniqueness,omitempty"`
-			SubAttributes []struct {
-				Name        string `json:"name"`
-				Type        string `json:"type"`
-				MultiValued bool   `json:"multiValued"`
-				Description string `json:"description"`
-				Required    bool   `json:"required"`
-				CaseExact   bool   `json:"caseExact"`
-				Mutability  string `json:"mutability"`
-				Returned    string `json:"returned"`
-				Uniqueness  string `json:"uniqueness"`
-			} `json:"subAttributes,omitempty"`
-		} `json:"attributes"`
-		Meta struct {
-			ResourceType string `json:"resourceType"`
-			Location     string `json:"location"`
-		} `json:"meta"`
-	} `json:"Resources"`
+	TotalResults int               `json:"totalResults,omitempty"`
+	ItemsPerPage int               `json:"itemsPerPage,omitempty"`
+	StartIndex   int               `json:"startIndex,omitempty"`
+	Schemas      []string          `json:"schemas,omitempty"`
+	Resources    []*ResourceScheme `json:"Resources,omitempty"`
+}
+
+type ResourceScheme struct {
+	ID          string              `json:"id,omitempty"`
+	Name        string              `json:"name,omitempty"`
+	Description string              `json:"description,omitempty"`
+	Attributes  []*AttributeScheme  `json:"attributes,omitempty"`
+	Meta        *ResourceMetaScheme `json:"meta,omitempty"`
+}
+
+type ResourceMetaScheme struct {
+	ResourceType string `json:"resourceType,omitempty"`
+	Location     string `json:"location,omitempty"`
+}
+
+type AttributeScheme struct {
+	Name          string                `json:"name,omitempty"`
+	Type          string                `json:"type,omitempty"`
+	MultiValued   bool                  `json:"multiValued,omitempty"`
+	Description   string                `json:"description,omitempty"`
+	Required      bool                  `json:"required,omitempty"`
+	CaseExact     bool                  `json:"caseExact,omitempty"`
+	Mutability    string                `json:"mutability,omitempty"`
+	Returned      string                `json:"returned,omitempty"`
+	Uniqueness    string                `json:"uniqueness,omitempty"`
+	SubAttributes []*SubAttributeScheme `json:"subAttributes,omitempty"`
+}
+
+type SubAttributeScheme struct {
+	Name        string `json:"name,omitempty"`
+	Type        string `json:"type,omitempty"`
+	MultiValued bool   `json:"multiValued,omitempty"`
+	Description string `json:"description,omitempty"`
+	Required    bool   `json:"required,omitempty"`
+	CaseExact   bool   `json:"caseExact,omitempty"`
+	Mutability  string `json:"mutability,omitempty"`
+	Returned    string `json:"returned,omitempty"`
+	Uniqueness  string `json:"uniqueness,omitempty"`
 }
 
 // Get the group schemas from the SCIM provider. Filtering, pagination and sorting are not supported.
@@ -181,35 +189,11 @@ func (s *SCIMSchemeService) Enterprise(ctx context.Context, directoryID string) 
 }
 
 type SCIMSchemaScheme struct {
-	ID          string `json:"id"`
-	Name        string `json:"name"`
-	Description string `json:"description"`
-	Attributes  []struct {
-		Name          string `json:"name"`
-		Type          string `json:"type"`
-		MultiValued   bool   `json:"multiValued"`
-		Description   string `json:"description"`
-		Required      bool   `json:"required"`
-		CaseExact     bool   `json:"caseExact,omitempty"`
-		Mutability    string `json:"mutability"`
-		Returned      string `json:"returned"`
-		Uniqueness    string `json:"uniqueness,omitempty"`
-		SubAttributes []struct {
-			Name        string `json:"name"`
-			Type        string `json:"type"`
-			MultiValued bool   `json:"multiValued"`
-			Description string `json:"description"`
-			Required    bool   `json:"required"`
-			CaseExact   bool   `json:"caseExact"`
-			Mutability  string `json:"mutability"`
-			Returned    string `json:"returned"`
-			Uniqueness  string `json:"uniqueness"`
-		} `json:"subAttributes,omitempty"`
-	} `json:"attributes"`
-	Meta struct {
-		ResourceType string `json:"resourceType"`
-		Location     string `json:"location"`
-	} `json:"meta"`
+	ID          string              `json:"id,omitempty"`
+	Name        string              `json:"name,omitempty"`
+	Description string              `json:"description,omitempty"`
+	Attributes  []*AttributeScheme  `json:"attributes,omitempty"`
+	Meta        *ResourceMetaScheme `json:"meta,omitempty"`
 }
 
 // Get metadata about the supported SCIM features.

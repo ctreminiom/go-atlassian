@@ -940,6 +940,24 @@ func TestOrganizationService_Events(t *testing.T) {
 		},
 
 		{
+			name:           "GetOrganizationAuditEventsWhenTheResponseBodyIsEmpty",
+			mockFile:       "./mocks/empty.json",
+			organizationID: "d094d850-d57e-483a-bd03-ca8855919267",
+			opts: &OrganizationEventOptScheme{
+				Q:      "qq",
+				From:   fromMocked.Add(time.Duration(-24) * time.Hour),
+				To:     toMocked.Add(time.Duration(-1) * time.Hour),
+				Action: "user_added_to_group",
+			},
+			cursor:             "d57e-483a",
+			wantHTTPCodeReturn: http.StatusOK,
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/admin/v1/orgs/d094d850-d57e-483a-bd03-ca8855919267/events?action=user_added_to_group&cursor=d57e-483a&from=1589197526&q=qq&to=1605177926",
+			context:            context.Background(),
+			wantErr:            true,
+		},
+
+		{
 			name:               "GetOrganizationAuditEventsWhenTheDomainIDIsNotSet",
 			mockFile:           "./mocks/get-organization-audit-events.json",
 			organizationID:     "d094d850-d57e-483a-bd03-ca8855919267",

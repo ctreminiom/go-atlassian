@@ -12,6 +12,7 @@ import (
 type KnowledgebaseService struct{ client *Client }
 
 // Returns articles which match the given query string across all service desks.
+// Docs: https://docs.go-atlassian.io/jira-service-management-cloud/knowledgebase#search-articles
 func (k *KnowledgebaseService) Search(ctx context.Context, query string, highlight bool, start, limit int) (result *ArticlePageScheme, response *Response, err error) {
 
 	if len(query) == 0 {
@@ -50,6 +51,7 @@ func (k *KnowledgebaseService) Search(ctx context.Context, query string, highlig
 	return
 }
 
+// Docs: https://docs.go-atlassian.io/jira-service-management-cloud/knowledgebase#get-articles
 func (k *KnowledgebaseService) Gets(ctx context.Context, serviceDeskID int, query string, highlight bool, start, limit int) (result *ArticlePageScheme, response *Response, err error) {
 
 	params := url.Values{}

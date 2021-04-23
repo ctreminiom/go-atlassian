@@ -22,7 +22,7 @@ func main() {
 
 	atlassian.Auth.SetBasicAuth(mail, token)
 
-	issue, response, err := atlassian.Issue.Get(context.Background(), "KP-12", []string{"status"}, []string{"transitions"})
+	issue, response, err := atlassian.Issue.Get(context.Background(), "KP-12", nil, []string{"transitions"})
 	if err != nil {
 		if response != nil {
 			log.Println("Response HTTP Response", string(response.BodyAsBytes))
@@ -33,5 +33,12 @@ func main() {
 
 	log.Println("Response HTTP Code", response.StatusCode)
 	log.Println("HTTP Endpoint Used", response.Endpoint)
-	log.Println(issue)
+
+	log.Println(issue.Key)
+	log.Println(issue.Fields.Reporter.AccountID)
+
+	for _, transition := range issue.Transitions {
+		log.Println(transition.Name, transition.ID, transition.To.ID, transition.HasScreen)
+	}
+
 }

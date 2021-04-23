@@ -13,6 +13,7 @@ type RequestTypeService struct{ client *Client }
 
 // This method returns all customer request types used in the Jira Service Management instance,
 // optionally filtered by a query string.
+// Docs: https://docs.go-atlassian.io/jira-service-management-cloud/request/types#get-all-request-types
 func (r *RequestTypeService) Search(ctx context.Context, query string, start, limit int) (result *RequestTypePageScheme, response *Response, err error) {
 
 	params := url.Values{}
@@ -51,6 +52,7 @@ func (r *RequestTypeService) Search(ctx context.Context, query string, start, li
 	return
 }
 
+// Docs: https://docs.go-atlassian.io/jira-service-management-cloud/request/types#get-request-types
 func (r *RequestTypeService) Gets(ctx context.Context, serviceDeskID, groupID, start, limit int) (result *ProjectRequestTypePageScheme, response *Response, err error) {
 
 	if serviceDeskID == 0 {
@@ -102,6 +104,7 @@ type ProjectRequestTypePageScheme struct {
 	Values []*RequestTypeScheme `json:"values"`
 }
 
+// Docs: https://docs.go-atlassian.io/jira-service-management-cloud/request/types#create-request-type
 func (r *RequestTypeService) Create(ctx context.Context, serviceDeskID int, issueTypeID, name, description, helpText string) (result *RequestTypeScheme, response *Response, err error) {
 
 	if serviceDeskID == 0 {
@@ -149,6 +152,7 @@ func (r *RequestTypeService) Create(ctx context.Context, serviceDeskID int, issu
 	return
 }
 
+// Docs: https://docs.go-atlassian.io/jira-service-management-cloud/request/types#get-request-type-by-id
 func (r *RequestTypeService) Get(ctx context.Context, serviceDeskID, requestTypeID int) (result *RequestTypeScheme, response *Response, err error) {
 
 	if serviceDeskID == 0 {
@@ -181,6 +185,7 @@ func (r *RequestTypeService) Get(ctx context.Context, serviceDeskID, requestType
 	return
 }
 
+// Docs: https://docs.go-atlassian.io/jira-service-management-cloud/request/types#delete-request-type
 func (r *RequestTypeService) Delete(ctx context.Context, serviceDeskID, requestTypeID int) (response *Response, err error) {
 
 	if serviceDeskID == 0 {
@@ -214,6 +219,7 @@ func (r *RequestTypeService) Delete(ctx context.Context, serviceDeskID, requestT
 	return
 }
 
+// Docs: https://docs.go-atlassian.io/jira-service-management-cloud/request/types#get-request-type-fields
 func (r *RequestTypeService) Fields(ctx context.Context, serviceDeskID, requestTypeID int) (result *RequestTypeFieldsScheme, response *Response, err error) {
 
 	if serviceDeskID == 0 {

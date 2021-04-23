@@ -10,8 +10,7 @@ import (
 )
 
 type OrganizationPolicyService struct {
-	client   *Client
-	Resource *OrganizationPolicyResourceService
+	client *Client
 }
 
 // Returns information about org policies, this func needs the following parameters:
@@ -20,7 +19,7 @@ type OrganizationPolicyService struct {
 // 3. policyType = Sets the type for the page of policies to return.
 // 3. cursor = the next pagination result, The cursor is not a number that you can increment through predictably.
 // Atlassian Docs: Docs: https://developer.atlassian.com/cloud/admin/organization/rest/api-group-orgs/#api-orgs-orgid-policies-get
-// Library Docs: N/A
+// Library Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/organization/policy#get-list-of-policies
 func (o *OrganizationPolicyService) Gets(ctx context.Context, organizationID, policyType, cursor string) (result *OrganizationPolicyPageScheme, response *Response, err error) {
 
 	if len(organizationID) == 0 {
@@ -64,16 +63,12 @@ func (o *OrganizationPolicyService) Gets(ctx context.Context, organizationID, po
 }
 
 type OrganizationPolicyPageScheme struct {
-	Data []*OrganizationPolicyData `json:"data"`
-	Meta struct {
+	Data  []*OrganizationPolicyData `json:"data"`
+	Links *LinkPageModelScheme      `json:"links"`
+	Meta  struct {
 		Next     string `json:"next"`
 		PageSize int    `json:"page_size"`
 	} `json:"meta"`
-	Links struct {
-		Self string `json:"self"`
-		Prev string `json:"prev"`
-		Next string `json:"next"`
-	} `json:"links"`
 }
 
 // Returns information about a single policy by ID, this func needs the following parameters:
@@ -81,7 +76,7 @@ type OrganizationPolicyPageScheme struct {
 // 2. organizationID = ID of the organization to return (REQUIRED)
 // 2. policyID = ID of the policy to query (REQUIRED)
 // Official Docs: https://developer.atlassian.com/cloud/admin/organization/rest/api-group-orgs/#api-orgs-orgid-policies-policyid-get
-// Example Library: N/A
+// Example Library: https://docs.go-atlassian.io/atlassian-admin-cloud/organization/policy#get-a-policy-by-id
 func (o *OrganizationPolicyService) Get(ctx context.Context, organizationID, policyID string) (result *OrganizationPolicyScheme, response *Response, err error) {
 
 	if len(organizationID) == 0 {
@@ -140,7 +135,7 @@ type OrganizationPolicyData struct {
 // 2. organizationID = ID of the organization to return (REQUIRED)
 // 2. payload = PolicyCreateModel (REQUIRED)
 // Official Docs: https://developer.atlassian.com/cloud/admin/organization/rest/api-group-orgs/#api-orgs-orgid-policies-post
-// Library Example: N/A
+// Library Example: https://docs.go-atlassian.io/atlassian-admin-cloud/organization/policy#create-a-policy
 func (o *OrganizationPolicyService) Create(ctx context.Context, organizationID string, payload *OrganizationPolicyData) (result *OrganizationPolicyScheme, response *Response, err error) {
 
 	if len(organizationID) == 0 {
@@ -180,6 +175,7 @@ func (o *OrganizationPolicyService) Create(ctx context.Context, organizationID s
 // 3. payload = PolicyCreateModel (REQUIRED)
 // 4. policyID = ID of the policy to update (REQUIRED)
 // Official Docs: https://developer.atlassian.com/cloud/admin/organization/rest/api-group-orgs/#api-orgs-orgid-policies-policyid-put
+// Library Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/organization/policy#update-a-policy
 func (o *OrganizationPolicyService) Update(ctx context.Context, organizationID, policyID string, payload *OrganizationPolicyData) (result *OrganizationPolicyScheme, response *Response, err error) {
 
 	if len(organizationID) == 0 {
@@ -222,6 +218,7 @@ func (o *OrganizationPolicyService) Update(ctx context.Context, organizationID, 
 // 2. organizationID = ID of the organization to return (REQUIRED)
 // 3. policyID = ID of the policy to update (REQUIRED)
 // Official Docs: https://developer.atlassian.com/cloud/admin/organization/rest/api-group-orgs/#api-orgs-orgid-policies-policyid-delete
+// Library Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/organization/policy#delete-a-policy
 func (o *OrganizationPolicyService) Delete(ctx context.Context, organizationID, policyID string) (response *Response, err error) {
 
 	if len(organizationID) == 0 {

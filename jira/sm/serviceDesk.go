@@ -19,6 +19,7 @@ type ServiceDeskService struct {
 	Queue  *ServiceDeskQueueService
 }
 
+// Docs: https://docs.go-atlassian.io/jira-service-management-cloud/request/service-desk#get-service-desks
 func (s *ServiceDeskService) Gets(ctx context.Context, start, limit int) (result *ServiceDeskPageScheme, response *Response, err error) {
 
 	params := url.Values{}
@@ -47,6 +48,7 @@ func (s *ServiceDeskService) Gets(ctx context.Context, start, limit int) (result
 	return
 }
 
+// Docs: https://docs.go-atlassian.io/jira-service-management-cloud/request/service-desk#get-service-desk-by-id
 func (s *ServiceDeskService) Get(ctx context.Context, serviceDeskID int) (result *ServiceDeskScheme, response *Response, err error) {
 
 	var endpoint = fmt.Sprintf("rest/servicedeskapi/servicedesk/%v", serviceDeskID)
@@ -71,6 +73,7 @@ func (s *ServiceDeskService) Get(ctx context.Context, serviceDeskID int) (result
 	return
 }
 
+// Docs: https://docs.go-atlassian.io/jira-service-management-cloud/request/service-desk#attach-temporary-file
 func (s *ServiceDeskService) Attach(ctx context.Context, serviceDeskID int, path string) (result *ServiceDeskTemporaryFileScheme, response *Response, err error) {
 
 	if len(path) == 0 {

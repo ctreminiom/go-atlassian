@@ -23,7 +23,7 @@ func main() {
 	var directoryID = "bcdde508-ee40-4df2-89cc-d3f6292c5971"
 
 	var payload = &admin.SCIMUserScheme{
-		UserName: "Example Username 2",
+		UserName: "Example Username 3",
 		Emails: []*admin.SCIMUserEmailScheme{
 			{
 				Value:   "example-2@go-atlassian.io",
@@ -40,7 +40,7 @@ func main() {
 			HonorificSuffix: "",
 		},
 
-		DisplayName:       "Example Display Name",
+		DisplayName:       "Example Display Name 3",
 		NickName:          "Example NickName",
 		Title:             "Atlassian Administrator",
 		PreferredLanguage: "en-US",

@@ -13,6 +13,7 @@ type OrganizationService struct{ client *Client }
 
 // This method returns a list of organizations in the Jira Service Management instance.
 // Use this method when you want to present a list of organizations or want to locate an organization by name.
+// Docs: https://docs.go-atlassian.io/jira-service-management-cloud/organization#get-organizations
 func (o *OrganizationService) Gets(ctx context.Context, accountID string, start, limit int) (result *OrganizationPageScheme, response *Response, err error) {
 
 	params := url.Values{}
@@ -48,6 +49,7 @@ func (o *OrganizationService) Gets(ctx context.Context, accountID string, start,
 // This method returns details of an organization.
 // Use this method to get organization details whenever your application component is passed an organization ID
 // but needs to display other organization details.
+// Docs: https://docs.go-atlassian.io/jira-service-management-cloud/organization#get-organization
 func (o *OrganizationService) Get(ctx context.Context, organizationID int) (result *OrganizationScheme, response *Response, err error) {
 
 	var endpoint = fmt.Sprintf("rest/servicedeskapi/organization/%v", organizationID)
@@ -93,6 +95,7 @@ func (o *OrganizationService) Delete(ctx context.Context, organizationID int) (r
 }
 
 // This method creates an organization by passing the name of the organization.
+// Docs: https://docs.go-atlassian.io/jira-service-management-cloud/organization#create-organization
 func (o *OrganizationService) Create(ctx context.Context, name string) (result *OrganizationScheme, response *Response, err error) {
 
 	if len(name) == 0 {
@@ -129,6 +132,7 @@ func (o *OrganizationService) Create(ctx context.Context, name string) (result *
 // This method returns all the users associated with an organization.
 // Use this method where you want to provide a list of users for an
 // organization or determine if a user is associated with an organization.
+// Docs: https://docs.go-atlassian.io/jira-service-management-cloud/organization#get-users-in-organization
 func (o *OrganizationService) Users(ctx context.Context, organizationID, start, limit int) (result *OrganizationUsersPageScheme, response *Response, err error) {
 
 	params := url.Values{}
@@ -158,6 +162,7 @@ func (o *OrganizationService) Users(ctx context.Context, organizationID, start, 
 }
 
 // This method adds users to an organization.
+// Docs: https://docs.go-atlassian.io/jira-service-management-cloud/organization#add-users-to-organization
 func (o *OrganizationService) Add(ctx context.Context, organizationID int, accountIDs []string) (response *Response, err error) {
 
 	if len(accountIDs) == 0 {
@@ -186,6 +191,7 @@ func (o *OrganizationService) Add(ctx context.Context, organizationID int, accou
 }
 
 // This method removes users from an organization.
+// Docs: https://docs.go-atlassian.io/jira-service-management-cloud/organization#remove-users-from-organization
 func (o *OrganizationService) Remove(ctx context.Context, organizationID int, accountIDs []string) (response *Response, err error) {
 
 	if len(accountIDs) == 0 {
@@ -249,6 +255,7 @@ func (o *OrganizationService) Project(ctx context.Context, accountID string, ser
 // This method adds an organization to a service desk.
 // If the organization ID is already associated with the service desk,
 // no change is made and the resource returns a 204 success code.
+// Docs: https://docs.go-atlassian.io/jira-service-management-cloud/organization#associate-organization
 func (o *OrganizationService) Associate(ctx context.Context, serviceDeskPortalID, organizationID int) (response *Response, err error) {
 
 	payload := struct {
@@ -275,6 +282,7 @@ func (o *OrganizationService) Associate(ctx context.Context, serviceDeskPortalID
 // This method removes an organization from a service desk.
 // If the organization ID does not match an organization associated with the service desk,
 // no change is made and the resource returns a 204 success code.
+// Docs: https://docs.go-atlassian.io/jira-service-management-cloud/organization#detach-organization
 func (o *OrganizationService) Detach(ctx context.Context, serviceDeskPortalID, organizationID int) (response *Response, err error) {
 
 	payload := struct {

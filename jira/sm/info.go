@@ -10,6 +10,7 @@ type InfoService struct{ client *Client }
 
 // This method retrieves information about the Jira Service Management instance such as software version,
 // builds, and related links.
+// Docs: https://docs.go-atlassian.io/jira-service-management-cloud/info#get-info
 func (i *InfoService) Get(ctx context.Context) (result *InfoScheme, response *Response, err error) {
 
 	var endpoint = "rest/servicedeskapi/info"

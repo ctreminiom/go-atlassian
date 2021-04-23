@@ -2,8 +2,6 @@ package main
 
 import (
 	"context"
-	"encoding/json"
-	"fmt"
 	"github.com/ctreminiom/go-atlassian/admin"
 	"log"
 	"os"
@@ -38,10 +36,6 @@ func main() {
 	log.Println("Response HTTP Code", response.StatusCode)
 	log.Println("HTTP Endpoint Used", response.Endpoint)
 
-	policyAsJSONKeys, err := json.MarshalIndent(policy, "", "  ")
-	if err != nil {
-		log.Fatal(err)
-	}
+	log.Println(policy.Data.Type, policy.Data.ID, policy.Data.Attributes)
 
-	fmt.Printf("MarshalIndent Struct keys output\n %s\n", string(policyAsJSONKeys))
 }

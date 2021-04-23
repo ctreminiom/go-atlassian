@@ -14,7 +14,7 @@ type UserTokenService struct{ client *Client }
 // 1. ctx = it's the context.context value
 // 2. accountID = The user account to manage (REQUIRED)
 // Atlassian Docs: https://developer.atlassian.com/cloud/admin/user-management/rest/api-group-users/#api-users-accountid-manage-api-tokens-get
-// Library Example: N/A
+// Library Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/user/token#get-api-tokens
 func (u *UserTokenService) Gets(ctx context.Context, accountID string) (result *UserTokensScheme, response *Response, err error) {
 
 	if len(accountID) == 0 {
@@ -44,10 +44,10 @@ func (u *UserTokenService) Gets(ctx context.Context, accountID string) (result *
 }
 
 type UserTokensScheme []struct {
-	ID         string    `json:"id"`
-	Label      string    `json:"label"`
-	CreatedAt  time.Time `json:"createdAt"`
-	LastAccess time.Time `json:"lastAccess"`
+	ID         string    `json:"id,omitempty"`
+	Label      string    `json:"label,omitempty"`
+	CreatedAt  time.Time `json:"createdAt,omitempty"`
+	LastAccess time.Time `json:"lastAccess,omitempty"`
 }
 
 // Deletes a specified API token by ID, this func needs the following parameters:
@@ -55,6 +55,7 @@ type UserTokensScheme []struct {
 // 2. accountID = The user account to manage (REQUIRED)
 // 3. tokenID = The ID of the API token
 // Atlassian Docs: https://developer.atlassian.com/cloud/admin/user-management/rest/api-group-users/#api-users-accountid-manage-api-tokens-tokenid-delete
+// Library Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/user/token#delete-api-token
 func (u *UserTokenService) Delete(ctx context.Context, accountID, tokenID string) (response *Response, err error) {
 
 	if len(accountID) == 0 {

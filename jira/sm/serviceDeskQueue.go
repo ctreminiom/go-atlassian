@@ -11,6 +11,7 @@ import (
 
 type ServiceDeskQueueService struct{ client *Client }
 
+// Docs: https://docs.go-atlassian.io/jira-service-management-cloud/request/service-desk/queue#get-queues
 func (s *ServiceDeskQueueService) Gets(ctx context.Context, serviceDeskID int, includeCount bool, start, limit int) (result *ServiceDeskQueuePageScheme, response *Response, err error) {
 
 	params := url.Values{}
@@ -43,6 +44,7 @@ func (s *ServiceDeskQueueService) Gets(ctx context.Context, serviceDeskID int, i
 	return
 }
 
+// Docs: https://docs.go-atlassian.io/jira-service-management-cloud/request/service-desk/queue#get-queue
 func (s *ServiceDeskQueueService) Get(ctx context.Context, serviceDeskID, queueID int, includeCount bool) (result *ServiceDeskQueueScheme, response *Response, err error) {
 
 	params := url.Values{}
@@ -77,6 +79,7 @@ func (s *ServiceDeskQueueService) Get(ctx context.Context, serviceDeskID, queueI
 	return
 }
 
+// Docs: https://docs.go-atlassian.io/jira-service-management-cloud/request/service-desk/queue#get-issues-in-queue
 func (s *ServiceDeskQueueService) Issues(ctx context.Context, serviceDeskID, queueID, start, limit int) (result *ServiceDeskIssueQueueScheme, response *Response, err error) {
 
 	params := url.Values{}

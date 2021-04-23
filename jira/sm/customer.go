@@ -16,6 +16,7 @@ type CustomerService struct{ client *Client }
 // instance by passing a JSON file including an email address and display name.
 // The display name does not need to be unique. The record's identifiers,
 // name and key, are automatically generated from the request details.
+// Docs: https://docs.go-atlassian.io/jira-service-management-cloud/customer#create-customer
 func (c *CustomerService) Create(ctx context.Context, email, displayName string) (result *CustomerScheme, response *Response, err error) {
 
 	if len(email) == 0 {
@@ -92,7 +93,8 @@ func isEmailValid(email string) bool {
 	return regex.MatchString(email)
 }
 
-func (c *CustomerService) Get(ctx context.Context, serviceDeskID int, query string, start, limit int) (result *CustomerPageScheme, response *Response, err error) {
+// Docs: https://docs.go-atlassian.io/jira-service-management-cloud/customer#get-customers
+func (c *CustomerService) Gets(ctx context.Context, serviceDeskID int, query string, start, limit int) (result *CustomerPageScheme, response *Response, err error) {
 
 	params := url.Values{}
 	params.Add("start", strconv.Itoa(start))
@@ -130,6 +132,7 @@ func (c *CustomerService) Get(ctx context.Context, serviceDeskID int, query stri
 	return
 }
 
+// Docs: https://docs.go-atlassian.io/jira-service-management-cloud/customer#add-customers
 func (c *CustomerService) Add(ctx context.Context, serviceDeskID int, accountIDs []string) (response *Response, err error) {
 
 	if len(accountIDs) == 0 {
@@ -159,6 +162,7 @@ func (c *CustomerService) Add(ctx context.Context, serviceDeskID int, accountIDs
 	return
 }
 
+// Docs: https://docs.go-atlassian.io/jira-service-management-cloud/customer#remove-customers
 func (c *CustomerService) Remove(ctx context.Context, serviceDeskID int, accountIDs []string) (response *Response, err error) {
 
 	if len(accountIDs) == 0 {

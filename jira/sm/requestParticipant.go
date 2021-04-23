@@ -11,6 +11,7 @@ import (
 
 type RequestParticipantService struct{ client *Client }
 
+// Docs: https://docs.go-atlassian.io/jira-service-management-cloud/request/participants#get-request-participants
 func (r *RequestParticipantService) Gets(ctx context.Context, issueKeyOrID string, start, limit int) (result *RequestParticipantPageScheme, response *Response, err error) {
 
 	if len(issueKeyOrID) == 0 {
@@ -43,6 +44,7 @@ func (r *RequestParticipantService) Gets(ctx context.Context, issueKeyOrID strin
 	return
 }
 
+// Docs: https://docs.go-atlassian.io/jira-service-management-cloud/request/participants#add-request-participants
 func (r *RequestParticipantService) Add(ctx context.Context, issueKeyOrID string, accountIDs []string) (result *RequestParticipantPageScheme, response *Response, err error) {
 
 	if len(issueKeyOrID) == 0 {
@@ -82,6 +84,7 @@ func (r *RequestParticipantService) Add(ctx context.Context, issueKeyOrID string
 	return
 }
 
+// Docs: https://docs.go-atlassian.io/jira-service-management-cloud/request/participants#remove-request-participants
 func (r *RequestParticipantService) Remove(ctx context.Context, issueKeyOrID string, accountIDs []string) (result *RequestParticipantPageScheme, response *Response, err error) {
 
 	if len(issueKeyOrID) == 0 {

@@ -1005,3 +1005,140 @@ func TestFieldConfigurationService_SchemesByProject(t *testing.T) {
 	}
 
 }
+
+func TestFieldConfigurationService_Assign(t *testing.T) {
+
+	testCases := []struct {
+		name                       string
+		fieldConfigurationSchemeID string
+		projectID                  string
+		mockFile                   string
+		wantHTTPMethod             string
+		endpoint                   string
+		context                    context.Context
+		wantHTTPCodeReturn         int
+		wantErr                    bool
+	}{
+		{
+			name:                       "AssignFieldConfigurationToProjectWhenTheParametersAreCorrect",
+			fieldConfigurationSchemeID: "1000",
+			projectID:                  "1001",
+			wantHTTPMethod:             http.MethodPut,
+			endpoint:                   "/rest/api/3/fieldconfigurationscheme/project",
+			context:                    context.Background(),
+			wantHTTPCodeReturn:         http.StatusNoContent,
+			wantErr:                    false,
+		},
+
+		{
+			name:                       "AssignFieldConfigurationToProjectWhenTheProjectIDIsNotProvided",
+			fieldConfigurationSchemeID: "1000",
+			projectID:                  "",
+			wantHTTPMethod:             http.MethodPut,
+			endpoint:                   "/rest/api/3/fieldconfigurationscheme/project",
+			context:                    context.Background(),
+			wantHTTPCodeReturn:         http.StatusNoContent,
+			wantErr:                    true,
+		},
+
+		{
+			name:                       "AssignFieldConfigurationToProjectWhenTheRequestMethodIsIncorrect",
+			fieldConfigurationSchemeID: "1000",
+			projectID:                  "1001",
+			wantHTTPMethod:             http.MethodHead,
+			endpoint:                   "/rest/api/3/fieldconfigurationscheme/project",
+			context:                    context.Background(),
+			wantHTTPCodeReturn:         http.StatusNoContent,
+			wantErr:                    true,
+		},
+
+		{
+			name:                       "AssignFieldConfigurationToProjectWhenTheStatusCodeIsIncorrect",
+			fieldConfigurationSchemeID: "1000",
+			projectID:                  "1001",
+			wantHTTPMethod:             http.MethodPut,
+			endpoint:                   "/rest/api/3/fieldconfigurationscheme/project",
+			context:                    context.Background(),
+			wantHTTPCodeReturn:         http.StatusBadRequest,
+			wantErr:                    true,
+		},
+
+		{
+			name:                       "AssignFieldConfigurationToProjectWhenTheContextIsNil",
+			fieldConfigurationSchemeID: "1000",
+			projectID:                  "1001",
+			wantHTTPMethod:             http.MethodPut,
+			endpoint:                   "/rest/api/3/fieldconfigurationscheme/project",
+			context:                    nil,
+			wantHTTPCodeReturn:         http.StatusNoContent,
+			wantErr:                    true,
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+
+			//Init a new HTTP mock server
+			mockOptions := mockServerOptions{
+				Endpoint:           testCase.endpoint,
+				MockFilePath:       testCase.mockFile,
+				MethodAccepted:     testCase.wantHTTPMethod,
+				ResponseCodeWanted: testCase.wantHTTPCodeReturn,
+			}
+
+			mockServer, err := startMockServer(&mockOptions)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			defer mockServer.Close()
+
+			//Init the library instance
+			mockClient, err := startMockClient(mockServer.URL)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			service := &FieldConfigurationService{client: mockClient}
+			gotResponse, err := service.Assign(testCase.context, testCase.fieldConfigurationSchemeID, testCase.projectID)
+
+			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+
+				assert.Error(t, err)
+
+				if gotResponse != nil {
+					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
+				}
+			} else {
+
+				assert.NoError(t, err)
+				assert.NotEqual(t, gotResponse, nil)
+
+				apiEndpoint, err := url.Parse(gotResponse.Endpoint)
+				if err != nil {
+					t.Fatal(err)
+				}
+
+				var endpointToAssert string
+
+				if apiEndpoint.Query().Encode() != "" {
+					endpointToAssert = fmt.Sprintf("%v?%v", apiEndpoint.Path, apiEndpoint.Query().Encode())
+				} else {
+					endpointToAssert = apiEndpoint.Path
+				}
+
+				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
+				assert.Equal(t, testCase.endpoint, endpointToAssert)
+
+				t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
+				assert.Equal(t, gotResponse.StatusCode, testCase.wantHTTPCodeReturn)
+			}
+
+		})
+	}
+
+}

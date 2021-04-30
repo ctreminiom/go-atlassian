@@ -56,7 +56,7 @@ type IssueFieldsScheme struct {
 	Updated                  string                    `json:"updated,omitempty"`
 	Labels                   []string                  `json:"labels,omitempty"`
 	Status                   *StatusScheme             `json:"status,omitempty"`
-	Description              *CommentNodeScheme        `json:"status,omitempty"`
+	Description              *CommentNodeScheme        `json:"description,omitempty"`
 	Comments                 []*IssueCommentPageScheme `json:"comments,omitempty"`
 	Subtasks                 *[]IssueScheme            `json:"subtasks,omitempty"`
 }

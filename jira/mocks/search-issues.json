@@ -233,7 +233,6 @@
             "issueId": "10002"
           }
         ],
-        "updated": 1,
         "timetracking": {
           "originalEstimate": "10m",
           "remainingEstimate": "3m",

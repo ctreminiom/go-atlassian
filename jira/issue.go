@@ -46,11 +46,19 @@ type IssueFieldsScheme struct {
 	Components               *[]ProjectComponentScheme `json:"components,omitempty"`
 	Creator                  *UserScheme               `json:"creator,omitempty"`
 	Reporter                 *UserScheme               `json:"reporter,omitempty"`
-	Statuscategorychangedate string                    `json:"statuscategorychangedate,omitempty"`
+	Resolution               *IssueResolutionScheme    `json:"resolution,omitempty"`
+	Resolutiondate           string                    `json:"resolutiondate,omitempty"`
+	Workratio                int                       `json:"workratio,omitempty"`
+	StatuscategoryChangeDate string                    `json:"statuscategorychangedate,omitempty"`
 	LastViewed               string                    `json:"lastViewed,omitempty"`
 	Summary                  string                    `json:"summary,omitempty"`
 	Created                  string                    `json:"created,omitempty"`
+	Updated                  string                    `json:"updated,omitempty"`
 	Labels                   []string                  `json:"labels,omitempty"`
+	Status                   *StatusScheme             `json:"status,omitempty"`
+	Description              *CommentNodeScheme        `json:"status,omitempty"`
+	Comments                 []*IssueCommentPageScheme `json:"comments,omitempty"`
+	Subtasks                 *[]IssueScheme            `json:"subtasks,omitempty"`
 }
 
 func (i *IssueScheme) MergeCustomFields(fields *CustomFields) (result map[string]interface{}, err error) {

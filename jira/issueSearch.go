@@ -27,18 +27,18 @@ type IssueTransitionsScheme struct {
 }
 
 type IssueTransitionScheme struct {
-	ID            string              `json:"id,omitempty"`
-	Name          string              `json:"name,omitempty"`
-	To            *TransitionToScheme `json:"to,omitempty"`
-	HasScreen     bool                `json:"hasScreen,omitempty"`
-	IsGlobal      bool                `json:"isGlobal,omitempty"`
-	IsInitial     bool                `json:"isInitial,omitempty"`
-	IsAvailable   bool                `json:"isAvailable,omitempty"`
-	IsConditional bool                `json:"isConditional,omitempty"`
-	IsLooped      bool                `json:"isLooped,omitempty"`
+	ID            string        `json:"id,omitempty"`
+	Name          string        `json:"name,omitempty"`
+	To            *StatusScheme `json:"to,omitempty"`
+	HasScreen     bool          `json:"hasScreen,omitempty"`
+	IsGlobal      bool          `json:"isGlobal,omitempty"`
+	IsInitial     bool          `json:"isInitial,omitempty"`
+	IsAvailable   bool          `json:"isAvailable,omitempty"`
+	IsConditional bool          `json:"isConditional,omitempty"`
+	IsLooped      bool          `json:"isLooped,omitempty"`
 }
 
-type TransitionToScheme struct {
+type StatusScheme struct {
 	Self           string                `json:"self,omitempty"`
 	Description    string                `json:"description,omitempty"`
 	IconURL        string                `json:"iconUrl,omitempty"`

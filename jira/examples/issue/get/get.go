@@ -22,7 +22,7 @@ func main() {
 
 	atlassian.Auth.SetBasicAuth(mail, token)
 
-	issue, response, err := atlassian.Issue.Get(context.Background(), "KP-12", nil, []string{"transitions"})
+	issue, response, err := atlassian.Issue.Get(context.Background(), "KP-2", nil, []string{"transitions"})
 	if err != nil {
 		if response != nil {
 			log.Println("Response HTTP Response", string(response.BodyAsBytes))
@@ -41,4 +41,12 @@ func main() {
 		log.Println(transition.Name, transition.ID, transition.To.ID, transition.HasScreen)
 	}
 
+	// Check if the issue contains sub-tasks
+	if issue.Fields.Subtasks != nil {
+
+		for _, subTask := range *issue.Fields.Subtasks {
+			log.Println("Sub-Task: ", subTask.Key, subTask.Fields.Summary)
+		}
+
+	}
 }

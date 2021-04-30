@@ -26,7 +26,7 @@ type FieldConfigScheme struct {
 	IsDefault   bool   `json:"isDefault,omitempty"`
 }
 
-// Returns a paginated list of all field configurations.
+// Gets Returns a paginated list of all field configurations.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration#get-all-field-configurations
 func (f *FieldConfigurationService) Gets(ctx context.Context, IDs []int, isDefault bool, startAt, maxResults int) (result *FieldConfigSearchScheme, response *Response, err error) {
 
@@ -77,7 +77,7 @@ type FieldConfigurationItemScheme struct {
 	Description string `json:"description,omitempty"`
 }
 
-// Returns a paginated list of all fields for a configuration.
+// Items Returns a paginated list of all fields for a configuration.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration#get-field-configuration-items
 func (f *FieldConfigurationService) Items(ctx context.Context, fieldConfigurationID, startAt, maxResults int) (result *FieldConfigurationItemPageScheme, response *Response, err error) {
 
@@ -120,7 +120,7 @@ type FieldConfigurationSchemeScheme struct {
 	Description string `json:"description,omitempty"`
 }
 
-// Returns a paginated list of field configuration schemes.
+// Schemes Returns a paginated list of field configuration schemes.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration#get-all-field-configuration-schemes
 func (f *FieldConfigurationService) Schemes(ctx context.Context, IDs []int, startAt, maxResults int) (result *FieldConfigurationSchemePageScheme, response *Response, err error) {
 
@@ -167,7 +167,7 @@ type FieldConfigurationIssueTypeItemScheme struct {
 	FieldConfigurationID       string `json:"fieldConfigurationId,omitempty"`
 }
 
-// Returns a paginated list of field configuration issue type items.
+// IssueTypeItems Returns a paginated list of field configuration issue type items.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration#get-field-configuration-issue-type-items
 func (f *FieldConfigurationService) IssueTypeItems(ctx context.Context, fieldConfigIDs []int, startAt, maxResults int) (result *FieldConfigurationIssueTypeItemPageScheme, response *Response, err error) {
 
@@ -212,7 +212,7 @@ type FieldConfigurationSchemeProjectScheme struct {
 	FieldConfigurationScheme *FieldConfigurationSchemeScheme `json:"fieldConfigurationScheme,omitempty"`
 }
 
-// Returns a paginated list of field configuration schemes and, for each scheme, a list of the projects that use it.
+// SchemesByProject Returns a paginated list of field configuration schemes and, for each scheme, a list of the projects that use it.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration#get-field-configuration-schemes-for-projects
 func (f *FieldConfigurationService) SchemesByProject(ctx context.Context, projectIDs []int, startAt, maxResults int) (result *FieldConfigurationSchemeProjectPageScheme, response *Response, err error) {
 
@@ -239,6 +239,40 @@ func (f *FieldConfigurationService) SchemesByProject(ctx context.Context, projec
 	result = new(FieldConfigurationSchemeProjectPageScheme)
 	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
+	}
+
+	return
+}
+
+// Assign Assigns a field configuration scheme to a project.
+// If the field configuration scheme ID is null, the operation assigns the default field configuration scheme.
+// Docs: N/A
+func (f *FieldConfigurationService) Assign(ctx context.Context, fieldConfigurationSchemeID, projectID string) (response *Response, err error) {
+
+	if len(projectID) == 0 {
+		return nil, fmt.Errorf("error!, please provide a vaild projectID value")
+	}
+
+	payload := struct {
+		SchemeID  string `json:"fieldConfigurationSchemeId,omitempty"`
+		ProjectID string `json:"projectId,omitempty"`
+	}{
+		SchemeID:  fieldConfigurationSchemeID,
+		ProjectID: projectID,
+	}
+
+	var endpoint = "rest/api/3/fieldconfigurationscheme/project"
+	request, err := f.client.newRequest(ctx, http.MethodPut, endpoint, &payload)
+	if err != nil {
+		return
+	}
+
+	request.Header.Set("Accept", "application/json")
+	request.Header.Set("Content-Type", "application/json")
+
+	response, err = f.client.Do(request)
+	if err != nil {
+		return
 	}
 
 	return

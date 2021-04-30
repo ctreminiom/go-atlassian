@@ -2006,10 +2006,47 @@ func TestIssueService_Get(t *testing.T) {
 
 func TestIssueService_Move(t *testing.T) {
 
+	var payload = &IssueScheme{
+		Fields: &IssueFieldsScheme{
+			Summary: "New summary test test",
+		},
+	}
+
+	var customFieldMockedWithFields = CustomFields{}
+
+	// Add a new custom field
+	err := customFieldMockedWithFields.Groups("customfield_10052", []string{"jira-administrators", "jira-administrators-system"})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	err = customFieldMockedWithFields.Number("customfield_10043", 1000.3232)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	var customFieldMockedWithOutFields = CustomFields{}
+
+	var operationMockedWithFields = UpdateOperations{}
+
+	err = operationMockedWithFields.AddArrayOperation("labels", map[string]string{
+		"triaged":   "remove",
+		"triaged-2": "remove",
+		"triaged-1": "remove",
+		"blocker":   "remove",
+	})
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	operationMockedWithOutFields := UpdateOperations{}
+
 	testCases := []struct {
 		name               string
 		issueKeyOrID       string
 		transitionID       string
+		options            *IssueMoveOptions
 		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string
@@ -2018,14 +2055,163 @@ func TestIssueService_Move(t *testing.T) {
 		wantErr            bool
 	}{
 		{
-			name:               "MoveIssueStatusWhenTheIssueKeyOrIDIsSet",
-			issueKeyOrID:       "DUMMY-3",
-			transitionID:       "10001",
-			wantHTTPMethod:     http.MethodPost,
+			name:           "MoveIssueStatusWhenTheTheCustomFieldsIsProvidedButNotOperations",
+			issueKeyOrID:   "DUMMY-3",
+			transitionID:   "10001",
+			wantHTTPMethod: http.MethodPost,
+			options: &IssueMoveOptions{
+				Fields:       payload,
+				CustomFields: &customFieldMockedWithFields,
+				Operations:   nil,
+			},
 			endpoint:           "/rest/api/3/issue/DUMMY-3/transitions",
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusNoContent,
 			wantErr:            false,
+		},
+
+		{
+			name:           "MoveIssueStatusWhenTheTheOperationsIsProvidedButNotCustomFields",
+			issueKeyOrID:   "DUMMY-3",
+			transitionID:   "10001",
+			wantHTTPMethod: http.MethodPost,
+			options: &IssueMoveOptions{
+				Fields:       payload,
+				CustomFields: nil,
+				Operations:   &operationMockedWithFields,
+			},
+			endpoint:           "/rest/api/3/issue/DUMMY-3/transitions",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            false,
+		},
+
+		{
+			name:           "MoveIssueStatusWhenTheTheOperationsIsProvidedButNotCustomFieldsAndContext",
+			issueKeyOrID:   "DUMMY-3",
+			transitionID:   "10001",
+			wantHTTPMethod: http.MethodPost,
+			options: &IssueMoveOptions{
+				Fields:       payload,
+				CustomFields: nil,
+				Operations:   &operationMockedWithFields,
+			},
+			endpoint:           "/rest/api/3/issue/DUMMY-3/transitions",
+			context:            nil,
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+
+		{
+			name:           "MoveIssueStatusWhenTheTheOperationsIsProvidedButNotCustomFieldsAndNotFieldsOperations",
+			issueKeyOrID:   "DUMMY-3",
+			transitionID:   "10001",
+			wantHTTPMethod: http.MethodPost,
+			options: &IssueMoveOptions{
+				Fields:       payload,
+				CustomFields: nil,
+				Operations:   &operationMockedWithOutFields,
+			},
+			endpoint:           "/rest/api/3/issue/DUMMY-3/transitions",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+
+		{
+			name:           "MoveIssueStatusWhenTheTheCustomFieldsIsProvidedButNotOperationsAndContext",
+			issueKeyOrID:   "DUMMY-3",
+			transitionID:   "10001",
+			wantHTTPMethod: http.MethodPost,
+			options: &IssueMoveOptions{
+				Fields:       payload,
+				CustomFields: &customFieldMockedWithFields,
+				Operations:   nil,
+			},
+			endpoint:           "/rest/api/3/issue/DUMMY-3/transitions",
+			context:            nil,
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+
+		{
+			name:           "MoveIssueStatusWhenTheTheCustomFieldsIsProvidedButWithNotFields",
+			issueKeyOrID:   "DUMMY-3",
+			transitionID:   "10001",
+			wantHTTPMethod: http.MethodPost,
+			options: &IssueMoveOptions{
+				Fields:       payload,
+				CustomFields: &customFieldMockedWithOutFields,
+				Operations:   nil,
+			},
+			endpoint:           "/rest/api/3/issue/DUMMY-3/transitions",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+
+		{
+			name:           "MoveIssueStatusWhenTheTheCustomFieldsAndOperationAreProvided",
+			issueKeyOrID:   "DUMMY-3",
+			transitionID:   "10001",
+			wantHTTPMethod: http.MethodPost,
+			options: &IssueMoveOptions{
+				Fields:       payload,
+				CustomFields: &customFieldMockedWithFields,
+				Operations:   &operationMockedWithFields,
+			},
+			endpoint:           "/rest/api/3/issue/DUMMY-3/transitions",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            false,
+		},
+
+		{
+			name:           "MoveIssueStatusWhenTheTheCustomFieldsAndOperationAreProvidedButNotContext",
+			issueKeyOrID:   "DUMMY-3",
+			transitionID:   "10001",
+			wantHTTPMethod: http.MethodPost,
+			options: &IssueMoveOptions{
+				Fields:       payload,
+				CustomFields: &customFieldMockedWithFields,
+				Operations:   &operationMockedWithFields,
+			},
+			endpoint:           "/rest/api/3/issue/DUMMY-3/transitions",
+			context:            nil,
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+
+		{
+			name:           "MoveIssueStatusWhenTheTheOperationAreProvidedButNotTheCustomFields",
+			issueKeyOrID:   "DUMMY-3",
+			transitionID:   "10001",
+			wantHTTPMethod: http.MethodPost,
+			options: &IssueMoveOptions{
+				Fields:       payload,
+				CustomFields: &customFieldMockedWithOutFields,
+				Operations:   &operationMockedWithFields,
+			},
+			endpoint:           "/rest/api/3/issue/DUMMY-3/transitions",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+
+		{
+			name:           "MoveIssueStatusWhenTheTheCustomFieldsAreProvidedButNotTheOperations",
+			issueKeyOrID:   "DUMMY-3",
+			transitionID:   "10001",
+			wantHTTPMethod: http.MethodPost,
+			options: &IssueMoveOptions{
+				Fields:       payload,
+				CustomFields: &customFieldMockedWithFields,
+				Operations:   &operationMockedWithOutFields,
+			},
+			endpoint:           "/rest/api/3/issue/DUMMY-3/transitions",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
 		},
 
 		{
@@ -2122,7 +2308,7 @@ func TestIssueService_Move(t *testing.T) {
 
 			i := &IssueService{client: mockClient}
 
-			gotResponse, err := i.Move(testCase.context, testCase.issueKeyOrID, testCase.transitionID)
+			gotResponse, err := i.Move(testCase.context, testCase.issueKeyOrID, testCase.transitionID, testCase.options)
 
 			if testCase.wantErr {
 

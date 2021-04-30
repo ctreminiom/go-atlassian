@@ -19,32 +19,16 @@ type IssueCommentPageScheme struct {
 }
 
 type IssueCommentScheme struct {
-	Self         string      `json:"self,omitempty"`
-	ID           string      `json:"id,omitempty"`
-	Author       *UserScheme `json:"author,omitempty"`
-	RenderedBody string      `json:"renderedBody,omitempty"`
-	Body         struct {
-		Version int    `json:"version,omitempty"`
-		Type    string `json:"type,omitempty"`
-		Content []struct {
-			Type    string `json:"type,omitempty"`
-			Content []struct {
-				Type string `json:"type,omitempty"`
-				Text string `json:"text,omitempty"`
-			} `json:"content,omitempty"`
-		} `json:"content,omitempty"`
-	} `json:"body,omitempty"`
-	JSDPublic    bool        `json:"jsdPublic,omitempty"`
-	UpdateAuthor *UserScheme `json:"updateAuthor,omitempty"`
-	Created      string      `json:"created,omitempty"`
-	Updated      string      `json:"updated,omitempty"`
-	Visibility   struct {
-		Type  string `json:"type,omitempty"`
-		Value string `json:"value,omitempty"`
-	} `json:"visibility,omitempty"`
-	Properties []struct {
-		Key string `json:"key,omitempty"`
-	} `json:"properties,omitempty"`
+	Self         string                   `json:"self,omitempty"`
+	ID           string                   `json:"id,omitempty"`
+	Author       *UserScheme              `json:"author,omitempty"`
+	RenderedBody string                   `json:"renderedBody,omitempty"`
+	Body         *CommentNodeScheme       `json:"body,omitempty"`
+	JSDPublic    bool                     `json:"jsdPublic,omitempty"`
+	UpdateAuthor *UserScheme              `json:"updateAuthor,omitempty"`
+	Created      string                   `json:"created,omitempty"`
+	Updated      string                   `json:"updated,omitempty"`
+	Visibility   *CommentVisibilityScheme `json:"visibility,omitempty"`
 }
 
 // Returns all comments for an issue.

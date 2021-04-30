@@ -68,6 +68,9 @@ func (f *FilterShareService) SetScope(ctx context.Context, scope string) (respon
 		return
 	}
 
+	request.Header.Set("Accept", "application/json")
+	request.Header.Set("Content-Type", "application/json")
+
 	response, err = f.client.Do(request)
 	if err != nil {
 		return

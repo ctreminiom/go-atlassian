@@ -46,11 +46,19 @@ type IssueFieldsScheme struct {
 	Components               *[]ProjectComponentScheme `json:"components,omitempty"`
 	Creator                  *UserScheme               `json:"creator,omitempty"`
 	Reporter                 *UserScheme               `json:"reporter,omitempty"`
-	Statuscategorychangedate string                    `json:"statuscategorychangedate,omitempty"`
+	Resolution               *IssueResolutionScheme    `json:"resolution,omitempty"`
+	Resolutiondate           string                    `json:"resolutiondate,omitempty"`
+	Workratio                int                       `json:"workratio,omitempty"`
+	StatuscategoryChangeDate string                    `json:"statuscategorychangedate,omitempty"`
 	LastViewed               string                    `json:"lastViewed,omitempty"`
 	Summary                  string                    `json:"summary,omitempty"`
 	Created                  string                    `json:"created,omitempty"`
+	Updated                  string                    `json:"updated,omitempty"`
 	Labels                   []string                  `json:"labels,omitempty"`
+	Status                   *StatusScheme             `json:"status,omitempty"`
+	Description              *CommentNodeScheme        `json:"description,omitempty"`
+	Comments                 []*IssueCommentPageScheme `json:"comments,omitempty"`
+	Subtasks                 *[]IssueScheme            `json:"subtasks,omitempty"`
 }
 
 func (i *IssueScheme) MergeCustomFields(fields *CustomFields) (result map[string]interface{}, err error) {
@@ -966,9 +974,15 @@ func (i *IssueService) Transitions(ctx context.Context, issueKeyOrID string) (re
 	return
 }
 
+type IssueMoveOptions struct {
+	Fields       *IssueScheme
+	CustomFields *CustomFields
+	Operations   *UpdateOperations
+}
+
 // Performs an issue transition and
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues#transition-issue
-func (i *IssueService) Move(ctx context.Context, issueKeyOrID, transitionID string) (response *Response, err error) {
+func (i *IssueService) Move(ctx context.Context, issueKeyOrID, transitionID string, options *IssueMoveOptions) (response *Response, err error) {
 
 	if len(issueKeyOrID) == 0 {
 		return nil, fmt.Errorf("error, please provide a valid issueKeyOrID string value")
@@ -978,21 +992,76 @@ func (i *IssueService) Move(ctx context.Context, issueKeyOrID, transitionID stri
 		return nil, fmt.Errorf("error, please provide a valid transitionID string value")
 	}
 
-	payload := struct {
-		Transition struct {
-			ID string `json:"id"`
-		} `json:"transition"`
-	}{
-		Transition: struct {
-			ID string `json:"id"`
-		}{ID: transitionID},
-	}
+	payloadWithTransition := make(map[string]interface{})
+	payloadWithTransition["transition"] = map[string]interface{}{"id": transitionID}
 
-	var endpoint = fmt.Sprintf("rest/api/3/issue/%v/transitions", issueKeyOrID)
+	var (
+		endpoint = fmt.Sprintf("rest/api/3/issue/%v/transitions", issueKeyOrID)
+		request  *http.Request
+	)
 
-	request, err := i.client.newRequest(ctx, http.MethodPost, endpoint, &payload)
-	if err != nil {
-		return
+	if options != nil && options.Fields != nil {
+
+		// Executed when customfields and operation are provided
+		if options.CustomFields != nil && options.Operations != nil {
+
+			payloadWithCustomFields, err := options.Fields.MergeCustomFields(options.CustomFields)
+			if err != nil {
+				return nil, err
+			}
+
+			payloadWithOperations, err := options.Fields.MergeOperations(options.Operations)
+			if err != nil {
+				return nil, err
+			}
+
+			//Merge the map[string]interface{} into one
+			_ = mergo.Map(&payloadWithCustomFields, &payloadWithOperations, mergo.WithOverride)
+			_ = mergo.Map(&payloadWithCustomFields, &payloadWithTransition, mergo.WithOverride)
+
+			request, err = i.client.newRequest(ctx, http.MethodPost, endpoint, payloadWithCustomFields)
+			if err != nil {
+				return nil, err
+			}
+
+		}
+
+		// Executed when customfields are provided but not the operations
+		if options.CustomFields != nil && options.Operations == nil {
+
+			payloadWithCustomFields, err := options.Fields.MergeCustomFields(options.CustomFields)
+			if err != nil {
+				return nil, err
+			}
+
+			_ = mergo.Map(&payloadWithCustomFields, &payloadWithTransition, mergo.WithOverride)
+			request, err = i.client.newRequest(ctx, http.MethodPost, endpoint, payloadWithCustomFields)
+			if err != nil {
+				return nil, err
+			}
+
+		}
+
+		// Executed when operations are provided but not the customfields
+		if options.CustomFields == nil && options.Operations != nil {
+
+			payloadWithOperations, err := options.Fields.MergeOperations(options.Operations)
+			if err != nil {
+				return nil, err
+			}
+
+			_ = mergo.Map(&payloadWithOperations, &payloadWithTransition, mergo.WithOverride)
+			request, err = i.client.newRequest(ctx, http.MethodPost, endpoint, payloadWithOperations)
+			if err != nil {
+				return nil, err
+			}
+		}
+
+	} else {
+		request, err = i.client.newRequest(ctx, http.MethodPost, endpoint, &payloadWithTransition)
+		if err != nil {
+			return
+		}
 	}
 
 	request.Header.Set("Accept", "application/json")

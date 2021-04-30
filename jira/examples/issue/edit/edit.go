@@ -24,7 +24,7 @@ func main() {
 
 	var payload = jira.IssueScheme{
 		Fields: &jira.IssueFieldsScheme{
-			Summary: "New summary test test",
+			//		Summary: "New summary test test",
 		},
 	}
 

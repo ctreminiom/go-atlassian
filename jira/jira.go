@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/ctreminiom/go-atlassian/jira/agile"
 	"github.com/ctreminiom/go-atlassian/jira/sm"
 	"io"
 	"io/ioutil"
@@ -34,6 +35,9 @@ type Client struct {
 
 	//Service Management Module
 	ServiceManagement *sm.Client
+
+	//Cloud Agile Module
+	Agile *agile.Client
 }
 
 const (
@@ -67,6 +71,13 @@ func New(httpClient *http.Client, site string) (client *Client, err error) {
 	}
 
 	client.ServiceManagement = serviceManagementClient
+
+	// Agile Module integration
+	agileClient, err := agile.New(httpClient, site)
+	if err != nil {
+		return nil, err
+	}
+	client.Agile = agileClient
 
 	client.Role = &ApplicationRoleService{client: client}
 	client.Audit = &AuditService{client: client}

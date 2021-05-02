@@ -14,9 +14,10 @@ import (
 )
 
 type Client struct {
-	HTTP *http.Client
-	Site *url.URL
-	Auth *AuthenticationService
+	HTTP   *http.Client
+	Site   *url.URL
+	Auth   *AuthenticationService
+	Sprint *SprintService
 }
 
 func New(httpClient *http.Client, site string) (client *Client, err error) {
@@ -37,6 +38,8 @@ func New(httpClient *http.Client, site string) (client *Client, err error) {
 	client = &Client{}
 	client.HTTP = httpClient
 	client.Site = siteAsURL
+	client.Auth = &AuthenticationService{client: client}
+	client.Sprint = &SprintService{client: client}
 
 	return
 }

@@ -1,0 +1,1423 @@
+{
+  "expand": "schema,names",
+  "startAt": 0,
+  "maxResults": 50,
+  "total": 6,
+  "issues": [
+    {
+      "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+      "id": "10018",
+      "self": "https://ctreminiom.atlassian.net/rest/agile/1.0/issue/10018",
+      "key": "KP-10",
+      "fields": {
+        "statuscategorychangedate": "2021-02-27T08:39:09.805+0000",
+        "issuetype": {
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/issuetype/10001",
+          "id": "10001",
+          "description": "Functionality or a feature expressed as a user goal.",
+          "iconUrl": "https://ctreminiom.atlassian.net/secure/viewavatar?size=medium&avatarId=10315&avatarType=issuetype",
+          "name": "Story",
+          "subtask": false,
+          "avatarId": 10315
+        },
+        "timespent": null,
+        "sprint": {
+          "id": 2,
+          "self": "https://ctreminiom.atlassian.net/rest/agile/1.0/sprint/2",
+          "state": "active",
+          "name": "Sprint XX-Patched",
+          "startDate": "2020-04-11T05:22:00.000Z",
+          "endDate": "2021-04-19T15:22:00.000Z",
+          "originBoardId": 4,
+          "goal": "Sprint XX goal-Updated"
+        },
+        "project": {
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/project/10000",
+          "id": "10000",
+          "key": "KP",
+          "name": "Kanban Project",
+          "projectTypeKey": "software",
+          "simplified": false,
+          "avatarUrls": {
+            "48x48": "https://ctreminiom.atlassian.net/secure/projectavatar?pid=10000&avatarId=10419",
+            "24x24": "https://ctreminiom.atlassian.net/secure/projectavatar?size=small&s=small&pid=10000&avatarId=10419",
+            "16x16": "https://ctreminiom.atlassian.net/secure/projectavatar?size=xsmall&s=xsmall&pid=10000&avatarId=10419",
+            "32x32": "https://ctreminiom.atlassian.net/secure/projectavatar?size=medium&s=medium&pid=10000&avatarId=10419"
+          }
+        },
+        "customfield_10032": null,
+        "customfield_10033": null,
+        "fixVersions": [],
+        "customfield_10034": null,
+        "aggregatetimespent": null,
+        "resolution": null,
+        "customfield_10035": null,
+        "customfield_10036": null,
+        "customfield_10037": null,
+        "customfield_10027": null,
+        "customfield_10028": null,
+        "customfield_10029": null,
+        "resolutiondate": null,
+        "workratio": -1,
+        "watches": {
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/issue/KP-10/watchers",
+          "watchCount": 1,
+          "isWatching": true
+        },
+        "issuerestriction": {
+          "issuerestrictions": {},
+          "shouldDisplay": false
+        },
+        "lastViewed": null,
+        "created": "2021-02-27T08:39:09.575+0000",
+        "customfield_10020": [
+          {
+            "id": 2,
+            "name": "Sprint XX-Patched",
+            "state": "active",
+            "boardId": 4,
+            "goal": "Sprint XX goal-Updated",
+            "startDate": "2020-04-11T05:22:00.000Z",
+            "endDate": "2021-04-19T15:22:00.000Z"
+          }
+        ],
+        "customfield_10021": null,
+        "epic": null,
+        "customfield_10022": null,
+        "customfield_10023": null,
+        "priority": {
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/priority/3",
+          "iconUrl": "https://ctreminiom.atlassian.net/images/icons/priorities/medium.svg",
+          "name": "Medium",
+          "id": "3"
+        },
+        "customfield_10024": null,
+        "customfield_10025": null,
+        "labels": [],
+        "customfield_10026": [],
+        "customfield_10016": null,
+        "customfield_10017": null,
+        "customfield_10018": {
+          "hasEpicLinkFieldDependency": false,
+          "showField": false,
+          "nonEditableReason": {
+            "reason": "PLUGIN_LICENSE_ERROR",
+            "message": "The Parent Link is only available to Jira Premium users."
+          }
+        },
+        "customfield_10019": "0|i0002g:",
+        "aggregatetimeoriginalestimate": null,
+        "timeestimate": null,
+        "versions": [],
+        "issuelinks": [],
+        "assignee": null,
+        "updated": "2021-05-01T04:19:22.365+0100",
+        "status": {
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/status/10000",
+          "description": "",
+          "iconUrl": "https://ctreminiom.atlassian.net/",
+          "name": "Backlog",
+          "id": "10000",
+          "statusCategory": {
+            "self": "https://ctreminiom.atlassian.net/rest/api/2/statuscategory/2",
+            "id": 2,
+            "key": "new",
+            "colorName": "blue-gray",
+            "name": "To Do"
+          }
+        },
+        "components": [],
+        "customfield_10050": null,
+        "timeoriginalestimate": null,
+        "customfield_10051": null,
+        "customfield_10052": [
+          {
+            "name": "jira-administrators",
+            "self": "https://ctreminiom.atlassian.net/rest/api/2/group?groupname=jira-administrators"
+          },
+          {
+            "name": "jira-administrators-system",
+            "self": "https://ctreminiom.atlassian.net/rest/api/2/group?groupname=jira-administrators-system"
+          }
+        ],
+        "customfield_10053": null,
+        "description": null,
+        "customfield_10010": null,
+        "customfield_10054": null,
+        "customfield_10055": null,
+        "customfield_10056": null,
+        "customfield_10057": null,
+        "customfield_10014": null,
+        "customfield_10015": null,
+        "timetracking": {},
+        "customfield_10005": null,
+        "customfield_10049": null,
+        "customfield_10006": null,
+        "customfield_10007": null,
+        "security": null,
+        "customfield_10008": null,
+        "customfield_10009": null,
+        "attachment": [],
+        "aggregatetimeestimate": null,
+        "flagged": false,
+        "summary": "New summary test",
+        "creator": {
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/user?accountId=5b86be50b8e3cb5895860d6d",
+          "accountId": "5b86be50b8e3cb5895860d6d",
+          "emailAddress": "ctreminiom079@gmail.com",
+          "avatarUrls": {
+            "48x48": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+            "24x24": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+            "16x16": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+            "32x32": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png"
+          },
+          "displayName": "Carlos Treminio",
+          "active": true,
+          "timeZone": "America/Guatemala",
+          "accountType": "atlassian"
+        },
+        "subtasks": [],
+        "customfield_10040": null,
+        "customfield_10041": null,
+        "customfield_10042": null,
+        "reporter": {
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/user?accountId=5b86be50b8e3cb5895860d6d",
+          "accountId": "5b86be50b8e3cb5895860d6d",
+          "emailAddress": "ctreminiom079@gmail.com",
+          "avatarUrls": {
+            "48x48": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+            "24x24": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+            "16x16": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+            "32x32": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png"
+          },
+          "displayName": "Carlos Treminio",
+          "active": true,
+          "timeZone": "America/Guatemala",
+          "accountType": "atlassian"
+        },
+        "customfield_10043": 1000.323,
+        "customfield_10000": "{}",
+        "aggregateprogress": {
+          "progress": 0,
+          "total": 0
+        },
+        "customfield_10044": null,
+        "customfield_10045": null,
+        "customfield_10001": null,
+        "customfield_10046": null,
+        "customfield_10002": null,
+        "customfield_10047": null,
+        "customfield_10003": null,
+        "customfield_10004": null,
+        "customfield_10048": null,
+        "customfield_10038": null,
+        "customfield_10039": null,
+        "environment": null,
+        "duedate": null,
+        "progress": {
+          "progress": 0,
+          "total": 0
+        },
+        "votes": {
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/issue/KP-10/votes",
+          "votes": 0,
+          "hasVoted": false
+        },
+        "comment": {
+          "comments": [],
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/issue/10018/comment",
+          "maxResults": 0,
+          "total": 0,
+          "startAt": 0
+        },
+        "worklog": {
+          "startAt": 0,
+          "maxResults": 20,
+          "total": 0,
+          "worklogs": []
+        }
+      }
+    },
+    {
+      "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+      "id": "10019",
+      "self": "https://ctreminiom.atlassian.net/rest/agile/1.0/issue/10019",
+      "key": "KP-11",
+      "fields": {
+        "statuscategorychangedate": "2021-02-27T08:39:10.017+0000",
+        "issuetype": {
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/issuetype/10001",
+          "id": "10001",
+          "description": "Functionality or a feature expressed as a user goal.",
+          "iconUrl": "https://ctreminiom.atlassian.net/secure/viewavatar?size=medium&avatarId=10315&avatarType=issuetype",
+          "name": "Story",
+          "subtask": false,
+          "avatarId": 10315
+        },
+        "timespent": null,
+        "sprint": {
+          "id": 2,
+          "self": "https://ctreminiom.atlassian.net/rest/agile/1.0/sprint/2",
+          "state": "active",
+          "name": "Sprint XX-Patched",
+          "startDate": "2020-04-11T05:22:00.000Z",
+          "endDate": "2021-04-19T15:22:00.000Z",
+          "originBoardId": 4,
+          "goal": "Sprint XX goal-Updated"
+        },
+        "project": {
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/project/10000",
+          "id": "10000",
+          "key": "KP",
+          "name": "Kanban Project",
+          "projectTypeKey": "software",
+          "simplified": false,
+          "avatarUrls": {
+            "48x48": "https://ctreminiom.atlassian.net/secure/projectavatar?pid=10000&avatarId=10419",
+            "24x24": "https://ctreminiom.atlassian.net/secure/projectavatar?size=small&s=small&pid=10000&avatarId=10419",
+            "16x16": "https://ctreminiom.atlassian.net/secure/projectavatar?size=xsmall&s=xsmall&pid=10000&avatarId=10419",
+            "32x32": "https://ctreminiom.atlassian.net/secure/projectavatar?size=medium&s=medium&pid=10000&avatarId=10419"
+          }
+        },
+        "customfield_10032": null,
+        "customfield_10033": null,
+        "fixVersions": [],
+        "customfield_10034": null,
+        "aggregatetimespent": null,
+        "resolution": null,
+        "customfield_10035": null,
+        "customfield_10036": null,
+        "customfield_10037": null,
+        "customfield_10027": null,
+        "customfield_10028": null,
+        "customfield_10029": null,
+        "resolutiondate": null,
+        "workratio": -1,
+        "issuerestriction": {
+          "issuerestrictions": {},
+          "shouldDisplay": false
+        },
+        "lastViewed": null,
+        "watches": {
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/issue/KP-11/watchers",
+          "watchCount": 1,
+          "isWatching": true
+        },
+        "created": "2021-02-27T08:39:09.836+0000",
+        "customfield_10020": [
+          {
+            "id": 2,
+            "name": "Sprint XX-Patched",
+            "state": "active",
+            "boardId": 4,
+            "goal": "Sprint XX goal-Updated",
+            "startDate": "2020-04-11T05:22:00.000Z",
+            "endDate": "2021-04-19T15:22:00.000Z"
+          }
+        ],
+        "customfield_10021": null,
+        "epic": null,
+        "customfield_10022": null,
+        "customfield_10023": null,
+        "priority": {
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/priority/3",
+          "iconUrl": "https://ctreminiom.atlassian.net/images/icons/priorities/medium.svg",
+          "name": "Medium",
+          "id": "3"
+        },
+        "customfield_10024": null,
+        "customfield_10025": null,
+        "labels": [],
+        "customfield_10026": [],
+        "customfield_10016": null,
+        "customfield_10017": null,
+        "customfield_10018": {
+          "hasEpicLinkFieldDependency": false,
+          "showField": false,
+          "nonEditableReason": {
+            "reason": "PLUGIN_LICENSE_ERROR",
+            "message": "The Parent Link is only available to Jira Premium users."
+          }
+        },
+        "customfield_10019": "0|i0002g:i",
+        "timeestimate": null,
+        "aggregatetimeoriginalestimate": null,
+        "versions": [],
+        "issuelinks": [],
+        "assignee": null,
+        "updated": "2021-05-01T04:19:24.109+0100",
+        "status": {
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/status/10000",
+          "description": "",
+          "iconUrl": "https://ctreminiom.atlassian.net/",
+          "name": "Backlog",
+          "id": "10000",
+          "statusCategory": {
+            "self": "https://ctreminiom.atlassian.net/rest/api/2/statuscategory/2",
+            "id": 2,
+            "key": "new",
+            "colorName": "blue-gray",
+            "name": "To Do"
+          }
+        },
+        "components": [],
+        "customfield_10050": null,
+        "timeoriginalestimate": null,
+        "customfield_10051": null,
+        "customfield_10052": [
+          {
+            "name": "jira-administrators",
+            "self": "https://ctreminiom.atlassian.net/rest/api/2/group?groupname=jira-administrators"
+          },
+          {
+            "name": "jira-administrators-system",
+            "self": "https://ctreminiom.atlassian.net/rest/api/2/group?groupname=jira-administrators-system"
+          }
+        ],
+        "customfield_10053": null,
+        "description": null,
+        "customfield_10054": null,
+        "customfield_10010": null,
+        "customfield_10055": null,
+        "customfield_10056": null,
+        "customfield_10057": null,
+        "customfield_10014": null,
+        "timetracking": {},
+        "customfield_10015": null,
+        "customfield_10005": null,
+        "customfield_10049": null,
+        "customfield_10006": null,
+        "customfield_10007": null,
+        "security": null,
+        "customfield_10008": null,
+        "customfield_10009": null,
+        "aggregatetimeestimate": null,
+        "attachment": [],
+        "flagged": false,
+        "summary": "New summary test",
+        "creator": {
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/user?accountId=5b86be50b8e3cb5895860d6d",
+          "accountId": "5b86be50b8e3cb5895860d6d",
+          "emailAddress": "ctreminiom079@gmail.com",
+          "avatarUrls": {
+            "48x48": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+            "24x24": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+            "16x16": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+            "32x32": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png"
+          },
+          "displayName": "Carlos Treminio",
+          "active": true,
+          "timeZone": "America/Guatemala",
+          "accountType": "atlassian"
+        },
+        "subtasks": [],
+        "customfield_10040": null,
+        "customfield_10041": null,
+        "customfield_10042": null,
+        "customfield_10043": 1000.323,
+        "reporter": {
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/user?accountId=5b86be50b8e3cb5895860d6d",
+          "accountId": "5b86be50b8e3cb5895860d6d",
+          "emailAddress": "ctreminiom079@gmail.com",
+          "avatarUrls": {
+            "48x48": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+            "24x24": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+            "16x16": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+            "32x32": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png"
+          },
+          "displayName": "Carlos Treminio",
+          "active": true,
+          "timeZone": "America/Guatemala",
+          "accountType": "atlassian"
+        },
+        "customfield_10044": null,
+        "customfield_10000": "{}",
+        "aggregateprogress": {
+          "progress": 0,
+          "total": 0
+        },
+        "customfield_10001": null,
+        "customfield_10045": null,
+        "customfield_10046": null,
+        "customfield_10002": null,
+        "customfield_10003": null,
+        "customfield_10047": null,
+        "customfield_10004": null,
+        "customfield_10048": null,
+        "customfield_10038": null,
+        "customfield_10039": null,
+        "environment": null,
+        "duedate": null,
+        "progress": {
+          "progress": 0,
+          "total": 0
+        },
+        "comment": {
+          "comments": [],
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/issue/10019/comment",
+          "maxResults": 0,
+          "total": 0,
+          "startAt": 0
+        },
+        "votes": {
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/issue/KP-11/votes",
+          "votes": 0,
+          "hasVoted": false
+        },
+        "worklog": {
+          "startAt": 0,
+          "maxResults": 20,
+          "total": 0,
+          "worklogs": []
+        }
+      }
+    },
+    {
+      "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+      "id": "10020",
+      "self": "https://ctreminiom.atlassian.net/rest/agile/1.0/issue/10020",
+      "key": "KP-12",
+      "fields": {
+        "statuscategorychangedate": "2021-02-27T08:39:10.223+0000",
+        "issuetype": {
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/issuetype/10001",
+          "id": "10001",
+          "description": "Functionality or a feature expressed as a user goal.",
+          "iconUrl": "https://ctreminiom.atlassian.net/secure/viewavatar?size=medium&avatarId=10315&avatarType=issuetype",
+          "name": "Story",
+          "subtask": false,
+          "avatarId": 10315
+        },
+        "timespent": null,
+        "sprint": {
+          "id": 2,
+          "self": "https://ctreminiom.atlassian.net/rest/agile/1.0/sprint/2",
+          "state": "active",
+          "name": "Sprint XX-Patched",
+          "startDate": "2020-04-11T05:22:00.000Z",
+          "endDate": "2021-04-19T15:22:00.000Z",
+          "originBoardId": 4,
+          "goal": "Sprint XX goal-Updated"
+        },
+        "project": {
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/project/10000",
+          "id": "10000",
+          "key": "KP",
+          "name": "Kanban Project",
+          "projectTypeKey": "software",
+          "simplified": false,
+          "avatarUrls": {
+            "48x48": "https://ctreminiom.atlassian.net/secure/projectavatar?pid=10000&avatarId=10419",
+            "24x24": "https://ctreminiom.atlassian.net/secure/projectavatar?size=small&s=small&pid=10000&avatarId=10419",
+            "16x16": "https://ctreminiom.atlassian.net/secure/projectavatar?size=xsmall&s=xsmall&pid=10000&avatarId=10419",
+            "32x32": "https://ctreminiom.atlassian.net/secure/projectavatar?size=medium&s=medium&pid=10000&avatarId=10419"
+          }
+        },
+        "customfield_10032": null,
+        "customfield_10033": null,
+        "fixVersions": [],
+        "aggregatetimespent": null,
+        "customfield_10034": null,
+        "resolution": null,
+        "customfield_10035": null,
+        "customfield_10036": null,
+        "customfield_10037": null,
+        "customfield_10027": null,
+        "customfield_10028": null,
+        "customfield_10029": null,
+        "resolutiondate": null,
+        "workratio": -1,
+        "issuerestriction": {
+          "issuerestrictions": {},
+          "shouldDisplay": false
+        },
+        "lastViewed": "2021-03-04T07:28:01.774+0000",
+        "watches": {
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/issue/KP-12/watchers",
+          "watchCount": 1,
+          "isWatching": true
+        },
+        "created": "2021-02-27T08:39:10.046+0000",
+        "customfield_10020": [
+          {
+            "id": 2,
+            "name": "Sprint XX-Patched",
+            "state": "active",
+            "boardId": 4,
+            "goal": "Sprint XX goal-Updated",
+            "startDate": "2020-04-11T05:22:00.000Z",
+            "endDate": "2021-04-19T15:22:00.000Z"
+          }
+        ],
+        "customfield_10021": null,
+        "epic": null,
+        "customfield_10022": null,
+        "priority": {
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/priority/3",
+          "iconUrl": "https://ctreminiom.atlassian.net/images/icons/priorities/medium.svg",
+          "name": "Medium",
+          "id": "3"
+        },
+        "customfield_10023": null,
+        "customfield_10024": null,
+        "customfield_10025": null,
+        "labels": [],
+        "customfield_10026": [],
+        "customfield_10016": null,
+        "customfield_10017": null,
+        "customfield_10018": {
+          "hasEpicLinkFieldDependency": false,
+          "showField": false,
+          "nonEditableReason": {
+            "reason": "PLUGIN_LICENSE_ERROR",
+            "message": "The Parent Link is only available to Jira Premium users."
+          }
+        },
+        "customfield_10019": "0|i0002g:r",
+        "timeestimate": null,
+        "aggregatetimeoriginalestimate": null,
+        "versions": [],
+        "issuelinks": [],
+        "assignee": null,
+        "updated": "2021-05-01T04:19:25.626+0100",
+        "status": {
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/status/10000",
+          "description": "",
+          "iconUrl": "https://ctreminiom.atlassian.net/",
+          "name": "Backlog",
+          "id": "10000",
+          "statusCategory": {
+            "self": "https://ctreminiom.atlassian.net/rest/api/2/statuscategory/2",
+            "id": 2,
+            "key": "new",
+            "colorName": "blue-gray",
+            "name": "To Do"
+          }
+        },
+        "components": [
+          {
+            "self": "https://ctreminiom.atlassian.net/rest/api/2/component/10005",
+            "id": "10005",
+            "name": "Component 1"
+          },
+          {
+            "self": "https://ctreminiom.atlassian.net/rest/api/2/component/10003",
+            "id": "10003",
+            "name": "Component Name",
+            "description": "Component Description"
+          }
+        ],
+        "customfield_10050": null,
+        "customfield_10051": null,
+        "timeoriginalestimate": null,
+        "customfield_10052": [
+          {
+            "name": "jira-administrators",
+            "self": "https://ctreminiom.atlassian.net/rest/api/2/group?groupname=jira-administrators"
+          },
+          {
+            "name": "jira-administrators-system",
+            "self": "https://ctreminiom.atlassian.net/rest/api/2/group?groupname=jira-administrators-system"
+          }
+        ],
+        "description": null,
+        "customfield_10053": null,
+        "customfield_10054": null,
+        "customfield_10010": null,
+        "customfield_10055": null,
+        "customfield_10056": null,
+        "customfield_10057": null,
+        "customfield_10014": null,
+        "customfield_10015": null,
+        "timetracking": {},
+        "customfield_10005": null,
+        "customfield_10049": null,
+        "customfield_10006": null,
+        "security": null,
+        "customfield_10007": null,
+        "customfield_10008": null,
+        "customfield_10009": null,
+        "attachment": [],
+        "aggregatetimeestimate": null,
+        "flagged": false,
+        "summary": "New summary test",
+        "creator": {
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/user?accountId=5b86be50b8e3cb5895860d6d",
+          "accountId": "5b86be50b8e3cb5895860d6d",
+          "emailAddress": "ctreminiom079@gmail.com",
+          "avatarUrls": {
+            "48x48": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+            "24x24": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+            "16x16": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+            "32x32": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png"
+          },
+          "displayName": "Carlos Treminio",
+          "active": true,
+          "timeZone": "America/Guatemala",
+          "accountType": "atlassian"
+        },
+        "subtasks": [],
+        "customfield_10040": null,
+        "customfield_10041": null,
+        "customfield_10042": null,
+        "reporter": {
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/user?accountId=5b86be50b8e3cb5895860d6d",
+          "accountId": "5b86be50b8e3cb5895860d6d",
+          "emailAddress": "ctreminiom079@gmail.com",
+          "avatarUrls": {
+            "48x48": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+            "24x24": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+            "16x16": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+            "32x32": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png"
+          },
+          "displayName": "Carlos Treminio",
+          "active": true,
+          "timeZone": "America/Guatemala",
+          "accountType": "atlassian"
+        },
+        "customfield_10043": 1000.323,
+        "customfield_10044": null,
+        "customfield_10000": "{}",
+        "aggregateprogress": {
+          "progress": 0,
+          "total": 0
+        },
+        "customfield_10045": null,
+        "customfield_10001": null,
+        "customfield_10046": null,
+        "customfield_10002": null,
+        "customfield_10047": null,
+        "customfield_10003": null,
+        "customfield_10048": null,
+        "customfield_10004": null,
+        "customfield_10038": null,
+        "customfield_10039": null,
+        "environment": null,
+        "duedate": null,
+        "progress": {
+          "progress": 0,
+          "total": 0
+        },
+        "votes": {
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/issue/KP-12/votes",
+          "votes": 0,
+          "hasVoted": false
+        },
+        "comment": {
+          "comments": [],
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/issue/10020/comment",
+          "maxResults": 0,
+          "total": 0,
+          "startAt": 0
+        },
+        "worklog": {
+          "startAt": 0,
+          "maxResults": 20,
+          "total": 0,
+          "worklogs": []
+        }
+      }
+    },
+    {
+      "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+      "id": "10017",
+      "self": "https://ctreminiom.atlassian.net/rest/agile/1.0/issue/10017",
+      "key": "KP-9",
+      "fields": {
+        "statuscategorychangedate": "2021-02-27T08:38:51.299+0000",
+        "issuetype": {
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/issuetype/10002",
+          "id": "10002",
+          "description": "A small, distinct piece of work.",
+          "iconUrl": "https://ctreminiom.atlassian.net/secure/viewavatar?size=medium&avatarId=10318&avatarType=issuetype",
+          "name": "Task",
+          "subtask": false,
+          "avatarId": 10318
+        },
+        "timespent": null,
+        "sprint": {
+          "id": 2,
+          "self": "https://ctreminiom.atlassian.net/rest/agile/1.0/sprint/2",
+          "state": "active",
+          "name": "Sprint XX-Patched",
+          "startDate": "2020-04-11T05:22:00.000Z",
+          "endDate": "2021-04-19T15:22:00.000Z",
+          "originBoardId": 4,
+          "goal": "Sprint XX goal-Updated"
+        },
+        "project": {
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/project/10000",
+          "id": "10000",
+          "key": "KP",
+          "name": "Kanban Project",
+          "projectTypeKey": "software",
+          "simplified": false,
+          "avatarUrls": {
+            "48x48": "https://ctreminiom.atlassian.net/secure/projectavatar?pid=10000&avatarId=10419",
+            "24x24": "https://ctreminiom.atlassian.net/secure/projectavatar?size=small&s=small&pid=10000&avatarId=10419",
+            "16x16": "https://ctreminiom.atlassian.net/secure/projectavatar?size=xsmall&s=xsmall&pid=10000&avatarId=10419",
+            "32x32": "https://ctreminiom.atlassian.net/secure/projectavatar?size=medium&s=medium&pid=10000&avatarId=10419"
+          }
+        },
+        "customfield_10032": null,
+        "fixVersions": [],
+        "customfield_10033": null,
+        "aggregatetimespent": null,
+        "customfield_10034": null,
+        "resolution": null,
+        "customfield_10035": null,
+        "customfield_10037": null,
+        "customfield_10027": null,
+        "customfield_10028": null,
+        "customfield_10029": null,
+        "resolutiondate": null,
+        "workratio": -1,
+        "lastViewed": null,
+        "watches": {
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/issue/KP-9/watchers",
+          "watchCount": 1,
+          "isWatching": true
+        },
+        "issuerestriction": {
+          "issuerestrictions": {},
+          "shouldDisplay": false
+        },
+        "created": "2021-02-27T08:38:51.059+0000",
+        "customfield_10020": [
+          {
+            "id": 2,
+            "name": "Sprint XX-Patched",
+            "state": "active",
+            "boardId": 4,
+            "goal": "Sprint XX goal-Updated",
+            "startDate": "2020-04-11T05:22:00.000Z",
+            "endDate": "2021-04-19T15:22:00.000Z"
+          }
+        ],
+        "customfield_10021": null,
+        "epic": null,
+        "customfield_10022": null,
+        "priority": {
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/priority/3",
+          "iconUrl": "https://ctreminiom.atlassian.net/images/icons/priorities/medium.svg",
+          "name": "Medium",
+          "id": "3"
+        },
+        "customfield_10023": null,
+        "customfield_10024": null,
+        "customfield_10025": null,
+        "labels": [],
+        "customfield_10026": [],
+        "customfield_10016": null,
+        "customfield_10017": null,
+        "customfield_10018": {
+          "hasEpicLinkFieldDependency": false,
+          "showField": false,
+          "nonEditableReason": {
+            "reason": "PLUGIN_LICENSE_ERROR",
+            "message": "The Parent Link is only available to Jira Premium users."
+          }
+        },
+        "customfield_10019": "0|i0002h:",
+        "timeestimate": null,
+        "aggregatetimeoriginalestimate": null,
+        "versions": [],
+        "issuelinks": [],
+        "assignee": null,
+        "updated": "2021-05-01T04:19:20.407+0100",
+        "status": {
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/status/10000",
+          "description": "",
+          "iconUrl": "https://ctreminiom.atlassian.net/",
+          "name": "Backlog",
+          "id": "10000",
+          "statusCategory": {
+            "self": "https://ctreminiom.atlassian.net/rest/api/2/statuscategory/2",
+            "id": 2,
+            "key": "new",
+            "colorName": "blue-gray",
+            "name": "To Do"
+          }
+        },
+        "components": [],
+        "customfield_10050": null,
+        "customfield_10051": null,
+        "timeoriginalestimate": null,
+        "customfield_10052": [
+          {
+            "name": "jira-administrators",
+            "self": "https://ctreminiom.atlassian.net/rest/api/2/group?groupname=jira-administrators"
+          },
+          {
+            "name": "jira-administrators-system",
+            "self": "https://ctreminiom.atlassian.net/rest/api/2/group?groupname=jira-administrators-system"
+          }
+        ],
+        "customfield_10053": null,
+        "description": null,
+        "customfield_10054": null,
+        "customfield_10010": null,
+        "customfield_10055": null,
+        "customfield_10056": null,
+        "customfield_10057": null,
+        "customfield_10014": null,
+        "customfield_10015": null,
+        "timetracking": {},
+        "customfield_10005": null,
+        "customfield_10049": null,
+        "customfield_10006": null,
+        "security": null,
+        "customfield_10007": null,
+        "customfield_10008": null,
+        "attachment": [],
+        "aggregatetimeestimate": null,
+        "customfield_10009": null,
+        "flagged": false,
+        "summary": "New summary test",
+        "creator": {
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/user?accountId=5b86be50b8e3cb5895860d6d",
+          "accountId": "5b86be50b8e3cb5895860d6d",
+          "emailAddress": "ctreminiom079@gmail.com",
+          "avatarUrls": {
+            "48x48": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+            "24x24": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+            "16x16": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+            "32x32": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png"
+          },
+          "displayName": "Carlos Treminio",
+          "active": true,
+          "timeZone": "America/Guatemala",
+          "accountType": "atlassian"
+        },
+        "subtasks": [],
+        "customfield_10040": null,
+        "customfield_10041": null,
+        "customfield_10042": null,
+        "customfield_10043": 1000.323,
+        "reporter": {
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/user?accountId=5b86be50b8e3cb5895860d6d",
+          "accountId": "5b86be50b8e3cb5895860d6d",
+          "emailAddress": "ctreminiom079@gmail.com",
+          "avatarUrls": {
+            "48x48": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+            "24x24": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+            "16x16": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+            "32x32": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png"
+          },
+          "displayName": "Carlos Treminio",
+          "active": true,
+          "timeZone": "America/Guatemala",
+          "accountType": "atlassian"
+        },
+        "customfield_10044": null,
+        "aggregateprogress": {
+          "progress": 0,
+          "total": 0
+        },
+        "customfield_10000": "{}",
+        "customfield_10045": null,
+        "customfield_10001": null,
+        "customfield_10002": null,
+        "customfield_10046": null,
+        "customfield_10003": null,
+        "customfield_10047": null,
+        "customfield_10004": null,
+        "customfield_10048": null,
+        "customfield_10038": null,
+        "customfield_10039": null,
+        "environment": null,
+        "duedate": null,
+        "progress": {
+          "progress": 0,
+          "total": 0
+        },
+        "comment": {
+          "comments": [],
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/issue/10017/comment",
+          "maxResults": 0,
+          "total": 0,
+          "startAt": 0
+        },
+        "votes": {
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/issue/KP-9/votes",
+          "votes": 0,
+          "hasVoted": false
+        },
+        "worklog": {
+          "startAt": 0,
+          "maxResults": 20,
+          "total": 0,
+          "worklogs": []
+        }
+      }
+    },
+    {
+      "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+      "id": "10016",
+      "self": "https://ctreminiom.atlassian.net/rest/agile/1.0/issue/10016",
+      "key": "KP-8",
+      "fields": {
+        "statuscategorychangedate": "2021-02-27T08:38:51.027+0000",
+        "issuetype": {
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/issuetype/10001",
+          "id": "10001",
+          "description": "Functionality or a feature expressed as a user goal.",
+          "iconUrl": "https://ctreminiom.atlassian.net/secure/viewavatar?size=medium&avatarId=10315&avatarType=issuetype",
+          "name": "Story",
+          "subtask": false,
+          "avatarId": 10315
+        },
+        "timespent": null,
+        "sprint": {
+          "id": 2,
+          "self": "https://ctreminiom.atlassian.net/rest/agile/1.0/sprint/2",
+          "state": "active",
+          "name": "Sprint XX-Patched",
+          "startDate": "2020-04-11T05:22:00.000Z",
+          "endDate": "2021-04-19T15:22:00.000Z",
+          "originBoardId": 4,
+          "goal": "Sprint XX goal-Updated"
+        },
+        "project": {
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/project/10000",
+          "id": "10000",
+          "key": "KP",
+          "name": "Kanban Project",
+          "projectTypeKey": "software",
+          "simplified": false,
+          "avatarUrls": {
+            "48x48": "https://ctreminiom.atlassian.net/secure/projectavatar?pid=10000&avatarId=10419",
+            "24x24": "https://ctreminiom.atlassian.net/secure/projectavatar?size=small&s=small&pid=10000&avatarId=10419",
+            "16x16": "https://ctreminiom.atlassian.net/secure/projectavatar?size=xsmall&s=xsmall&pid=10000&avatarId=10419",
+            "32x32": "https://ctreminiom.atlassian.net/secure/projectavatar?size=medium&s=medium&pid=10000&avatarId=10419"
+          }
+        },
+        "customfield_10032": null,
+        "fixVersions": [],
+        "customfield_10033": null,
+        "customfield_10034": null,
+        "aggregatetimespent": null,
+        "resolution": null,
+        "customfield_10035": null,
+        "customfield_10036": null,
+        "customfield_10037": null,
+        "customfield_10027": null,
+        "customfield_10028": null,
+        "customfield_10029": null,
+        "resolutiondate": null,
+        "workratio": -1,
+        "issuerestriction": {
+          "issuerestrictions": {},
+          "shouldDisplay": false
+        },
+        "lastViewed": null,
+        "watches": {
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/issue/KP-8/watchers",
+          "watchCount": 1,
+          "isWatching": true
+        },
+        "created": "2021-02-27T08:38:50.714+0000",
+        "customfield_10020": [
+          {
+            "id": 2,
+            "name": "Sprint XX-Patched",
+            "state": "active",
+            "boardId": 4,
+            "goal": "Sprint XX goal-Updated",
+            "startDate": "2020-04-11T05:22:00.000Z",
+            "endDate": "2021-04-19T15:22:00.000Z"
+          }
+        ],
+        "customfield_10021": null,
+        "epic": null,
+        "customfield_10022": null,
+        "customfield_10023": null,
+        "priority": {
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/priority/3",
+          "iconUrl": "https://ctreminiom.atlassian.net/images/icons/priorities/medium.svg",
+          "name": "Medium",
+          "id": "3"
+        },
+        "customfield_10024": null,
+        "customfield_10025": null,
+        "labels": [],
+        "customfield_10026": [],
+        "customfield_10016": null,
+        "customfield_10017": null,
+        "customfield_10018": {
+          "hasEpicLinkFieldDependency": false,
+          "showField": false,
+          "nonEditableReason": {
+            "reason": "PLUGIN_LICENSE_ERROR",
+            "message": "The Parent Link is only available to Jira Premium users."
+          }
+        },
+        "customfield_10019": "0|i0002j:",
+        "timeestimate": null,
+        "aggregatetimeoriginalestimate": null,
+        "versions": [],
+        "issuelinks": [],
+        "assignee": null,
+        "updated": "2021-05-01T04:19:15.628+0100",
+        "status": {
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/status/10000",
+          "description": "",
+          "iconUrl": "https://ctreminiom.atlassian.net/",
+          "name": "Backlog",
+          "id": "10000",
+          "statusCategory": {
+            "self": "https://ctreminiom.atlassian.net/rest/api/2/statuscategory/2",
+            "id": 2,
+            "key": "new",
+            "colorName": "blue-gray",
+            "name": "To Do"
+          }
+        },
+        "components": [],
+        "customfield_10050": null,
+        "customfield_10051": null,
+        "timeoriginalestimate": null,
+        "customfield_10052": [
+          {
+            "name": "jira-administrators",
+            "self": "https://ctreminiom.atlassian.net/rest/api/2/group?groupname=jira-administrators"
+          },
+          {
+            "name": "jira-administrators-system",
+            "self": "https://ctreminiom.atlassian.net/rest/api/2/group?groupname=jira-administrators-system"
+          }
+        ],
+        "customfield_10053": null,
+        "description": null,
+        "customfield_10054": null,
+        "customfield_10010": null,
+        "customfield_10055": null,
+        "customfield_10056": null,
+        "customfield_10057": null,
+        "customfield_10014": null,
+        "customfield_10015": null,
+        "timetracking": {},
+        "customfield_10005": null,
+        "customfield_10049": null,
+        "customfield_10006": null,
+        "customfield_10007": null,
+        "security": null,
+        "customfield_10008": null,
+        "aggregatetimeestimate": null,
+        "attachment": [],
+        "customfield_10009": null,
+        "flagged": false,
+        "summary": "New summary test",
+        "creator": {
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/user?accountId=5b86be50b8e3cb5895860d6d",
+          "accountId": "5b86be50b8e3cb5895860d6d",
+          "emailAddress": "ctreminiom079@gmail.com",
+          "avatarUrls": {
+            "48x48": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+            "24x24": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+            "16x16": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+            "32x32": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png"
+          },
+          "displayName": "Carlos Treminio",
+          "active": true,
+          "timeZone": "America/Guatemala",
+          "accountType": "atlassian"
+        },
+        "subtasks": [],
+        "customfield_10040": null,
+        "customfield_10041": null,
+        "customfield_10042": null,
+        "customfield_10043": 1000.323,
+        "reporter": {
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/user?accountId=5b86be50b8e3cb5895860d6d",
+          "accountId": "5b86be50b8e3cb5895860d6d",
+          "emailAddress": "ctreminiom079@gmail.com",
+          "avatarUrls": {
+            "48x48": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+            "24x24": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+            "16x16": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+            "32x32": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png"
+          },
+          "displayName": "Carlos Treminio",
+          "active": true,
+          "timeZone": "America/Guatemala",
+          "accountType": "atlassian"
+        },
+        "aggregateprogress": {
+          "progress": 0,
+          "total": 0
+        },
+        "customfield_10044": null,
+        "customfield_10000": "{}",
+        "customfield_10001": null,
+        "customfield_10045": null,
+        "customfield_10002": null,
+        "customfield_10046": null,
+        "customfield_10003": null,
+        "customfield_10047": null,
+        "customfield_10048": null,
+        "customfield_10004": null,
+        "customfield_10038": null,
+        "customfield_10039": null,
+        "environment": null,
+        "duedate": null,
+        "progress": {
+          "progress": 0,
+          "total": 0
+        },
+        "comment": {
+          "comments": [],
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/issue/10016/comment",
+          "maxResults": 0,
+          "total": 0,
+          "startAt": 0
+        },
+        "votes": {
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/issue/KP-8/votes",
+          "votes": 0,
+          "hasVoted": false
+        },
+        "worklog": {
+          "startAt": 0,
+          "maxResults": 20,
+          "total": 0,
+          "worklogs": []
+        }
+      }
+    },
+    {
+      "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+      "id": "10012",
+      "self": "https://ctreminiom.atlassian.net/rest/agile/1.0/issue/10012",
+      "key": "KP-5",
+      "fields": {
+        "statuscategorychangedate": "2021-02-24T05:46:17.755+0000",
+        "issuetype": {
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/issuetype/10001",
+          "id": "10001",
+          "description": "Functionality or a feature expressed as a user goal.",
+          "iconUrl": "https://ctreminiom.atlassian.net/secure/viewavatar?size=medium&avatarId=10315&avatarType=issuetype",
+          "name": "Story",
+          "subtask": false,
+          "avatarId": 10315
+        },
+        "timespent": null,
+        "sprint": {
+          "id": 2,
+          "self": "https://ctreminiom.atlassian.net/rest/agile/1.0/sprint/2",
+          "state": "active",
+          "name": "Sprint XX-Patched",
+          "startDate": "2020-04-11T05:22:00.000Z",
+          "endDate": "2021-04-19T15:22:00.000Z",
+          "originBoardId": 4,
+          "goal": "Sprint XX goal-Updated"
+        },
+        "project": {
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/project/10000",
+          "id": "10000",
+          "key": "KP",
+          "name": "Kanban Project",
+          "projectTypeKey": "software",
+          "simplified": false,
+          "avatarUrls": {
+            "48x48": "https://ctreminiom.atlassian.net/secure/projectavatar?pid=10000&avatarId=10419",
+            "24x24": "https://ctreminiom.atlassian.net/secure/projectavatar?size=small&s=small&pid=10000&avatarId=10419",
+            "16x16": "https://ctreminiom.atlassian.net/secure/projectavatar?size=xsmall&s=xsmall&pid=10000&avatarId=10419",
+            "32x32": "https://ctreminiom.atlassian.net/secure/projectavatar?size=medium&s=medium&pid=10000&avatarId=10419"
+          }
+        },
+        "customfield_10032": null,
+        "fixVersions": [],
+        "customfield_10033": null,
+        "customfield_10034": null,
+        "aggregatetimespent": null,
+        "resolution": null,
+        "customfield_10035": null,
+        "customfield_10036": null,
+        "customfield_10037": null,
+        "customfield_10027": null,
+        "customfield_10028": null,
+        "customfield_10029": null,
+        "resolutiondate": null,
+        "workratio": -1,
+        "issuerestriction": {
+          "issuerestrictions": {},
+          "shouldDisplay": false
+        },
+        "lastViewed": null,
+        "watches": {
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/issue/KP-5/watchers",
+          "watchCount": 1,
+          "isWatching": true
+        },
+        "created": "2021-02-24T05:46:17.423+0000",
+        "customfield_10020": [
+          {
+            "id": 2,
+            "name": "Sprint XX-Patched",
+            "state": "active",
+            "boardId": 4,
+            "goal": "Sprint XX goal-Updated",
+            "startDate": "2020-04-11T05:22:00.000Z",
+            "endDate": "2021-04-19T15:22:00.000Z"
+          }
+        ],
+        "customfield_10021": null,
+        "epic": null,
+        "customfield_10022": null,
+        "priority": {
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/priority/3",
+          "iconUrl": "https://ctreminiom.atlassian.net/images/icons/priorities/medium.svg",
+          "name": "Medium",
+          "id": "3"
+        },
+        "customfield_10023": null,
+        "customfield_10024": null,
+        "customfield_10025": null,
+        "labels": [],
+        "customfield_10026": [],
+        "customfield_10016": null,
+        "customfield_10017": null,
+        "customfield_10018": {
+          "hasEpicLinkFieldDependency": false,
+          "showField": false,
+          "nonEditableReason": {
+            "reason": "PLUGIN_LICENSE_ERROR",
+            "message": "The Parent Link is only available to Jira Premium users."
+          }
+        },
+        "customfield_10019": "0|i0002n:",
+        "aggregatetimeoriginalestimate": null,
+        "timeestimate": null,
+        "versions": [],
+        "issuelinks": [],
+        "assignee": null,
+        "updated": "2021-05-01T04:19:11.583+0100",
+        "status": {
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/status/10000",
+          "description": "",
+          "iconUrl": "https://ctreminiom.atlassian.net/",
+          "name": "Backlog",
+          "id": "10000",
+          "statusCategory": {
+            "self": "https://ctreminiom.atlassian.net/rest/api/2/statuscategory/2",
+            "id": 2,
+            "key": "new",
+            "colorName": "blue-gray",
+            "name": "To Do"
+          }
+        },
+        "components": [],
+        "customfield_10050": null,
+        "customfield_10051": null,
+        "timeoriginalestimate": null,
+        "customfield_10052": [
+          {
+            "name": "jira-administrators",
+            "self": "https://ctreminiom.atlassian.net/rest/api/2/group?groupname=jira-administrators"
+          },
+          {
+            "name": "jira-administrators-system",
+            "self": "https://ctreminiom.atlassian.net/rest/api/2/group?groupname=jira-administrators-system"
+          }
+        ],
+        "description": null,
+        "customfield_10053": null,
+        "customfield_10054": null,
+        "customfield_10010": null,
+        "customfield_10055": null,
+        "customfield_10056": null,
+        "customfield_10057": null,
+        "customfield_10014": null,
+        "timetracking": {},
+        "customfield_10015": null,
+        "customfield_10005": null,
+        "customfield_10049": null,
+        "customfield_10006": null,
+        "customfield_10007": null,
+        "security": null,
+        "customfield_10008": null,
+        "customfield_10009": null,
+        "attachment": [],
+        "aggregatetimeestimate": null,
+        "flagged": false,
+        "summary": "New summary test",
+        "creator": {
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/user?accountId=5b86be50b8e3cb5895860d6d",
+          "accountId": "5b86be50b8e3cb5895860d6d",
+          "emailAddress": "ctreminiom079@gmail.com",
+          "avatarUrls": {
+            "48x48": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+            "24x24": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+            "16x16": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+            "32x32": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png"
+          },
+          "displayName": "Carlos Treminio",
+          "active": true,
+          "timeZone": "America/Guatemala",
+          "accountType": "atlassian"
+        },
+        "subtasks": [],
+        "customfield_10040": null,
+        "customfield_10041": null,
+        "customfield_10042": null,
+        "reporter": {
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/user?accountId=5b86be50b8e3cb5895860d6d",
+          "accountId": "5b86be50b8e3cb5895860d6d",
+          "emailAddress": "ctreminiom079@gmail.com",
+          "avatarUrls": {
+            "48x48": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+            "24x24": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+            "16x16": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+            "32x32": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png"
+          },
+          "displayName": "Carlos Treminio",
+          "active": true,
+          "timeZone": "America/Guatemala",
+          "accountType": "atlassian"
+        },
+        "customfield_10043": 1000.323,
+        "customfield_10044": null,
+        "customfield_10000": "{}",
+        "aggregateprogress": {
+          "progress": 0,
+          "total": 0
+        },
+        "customfield_10045": null,
+        "customfield_10001": null,
+        "customfield_10046": null,
+        "customfield_10002": null,
+        "customfield_10003": null,
+        "customfield_10047": null,
+        "customfield_10004": null,
+        "customfield_10048": null,
+        "customfield_10038": null,
+        "customfield_10039": null,
+        "environment": null,
+        "duedate": null,
+        "progress": {
+          "progress": 0,
+          "total": 0
+        },
+        "comment": {
+          "comments": [],
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/issue/10012/comment",
+          "maxResults": 0,
+          "total": 0,
+          "startAt": 0
+        },
+        "votes": {
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/issue/KP-5/votes",
+          "votes": 0,
+          "hasVoted": false
+        },
+        "worklog": {
+          "startAt": 0,
+          "maxResults": 20,
+          "total": 0,
+          "worklogs": []
+        }
+      }
+    }
+  ]
+}

@@ -17,6 +17,10 @@ func (a *AuthenticationService) SetBasicAuth(mail, token string) {
 		a.client.ServiceManagement.Auth.SetBasicAuth(mail, token)
 	}
 
+	if a.client.Agile != nil {
+		a.client.Agile.Auth.SetBasicAuth(mail, token)
+	}
+
 	a.mail = mail
 	a.token = token
 

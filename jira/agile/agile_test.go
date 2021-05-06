@@ -89,6 +89,9 @@ func TestNew(t *testing.T) {
 		t.Fatal(err)
 	}
 
+	mockClient.Auth.SetBasicAuth("test", "test")
+	mockClient.Auth.SetUserAgent("aaa")
+
 	mockClient2, _ := New(nil, " https://zhidao.baidu.com/special/view?id=49105a24626975510000&preview=1")
 
 	type args struct {

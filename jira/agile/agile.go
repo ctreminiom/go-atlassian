@@ -50,10 +50,7 @@ func (c *Client) newRequest(ctx context.Context, method, urlAsString string, pay
 		return nil, errors.New("the context param is nil, please provide a valid one")
 	}
 
-	relativePath, err := url.Parse(urlAsString)
-	if err != nil {
-		return
-	}
+	relativePath, _ := url.Parse(urlAsString)
 
 	relativePath.Path = strings.TrimLeft(relativePath.Path, "/")
 	endpointPath := c.Site.ResolveReference(relativePath)
@@ -61,9 +58,7 @@ func (c *Client) newRequest(ctx context.Context, method, urlAsString string, pay
 	var payloadBuffer io.ReadWriter
 	if payload != nil {
 		payloadBuffer = new(bytes.Buffer)
-		if err = json.NewEncoder(payloadBuffer).Encode(payload); err != nil {
-			return
-		}
+		_ = json.NewEncoder(payloadBuffer).Encode(payload)
 	}
 
 	request, err = http.NewRequestWithContext(ctx, method, endpointPath.String(), payloadBuffer)
@@ -116,10 +111,7 @@ func newResponse(http *http.Response, endpoint string) (response *Response, err 
 
 	var httpResponseAsBytes []byte
 	if http.ContentLength != 0 {
-		httpResponseAsBytes, err = ioutil.ReadAll(http.Body)
-		if err != nil {
-			return
-		}
+		httpResponseAsBytes, _ = ioutil.ReadAll(http.Body)
 	}
 
 	newResponse := Response{
@@ -142,10 +134,7 @@ func checkResponse(http *http.Response, endpoint string) (response *Response, er
 
 	var httpResponseAsBytes []byte
 	if http.ContentLength != 0 {
-		httpResponseAsBytes, err = ioutil.ReadAll(http.Body)
-		if err != nil {
-			return
-		}
+		httpResponseAsBytes, _ = ioutil.ReadAll(http.Body)
 	}
 
 	newErrorResponse := Response{

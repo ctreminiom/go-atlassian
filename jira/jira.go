@@ -65,18 +65,12 @@ func New(httpClient *http.Client, site string) (client *Client, err error) {
 	client.Site = siteAsURL
 
 	//Service Management module integration
-	serviceManagementClient, err := sm.New(httpClient, site)
-	if err != nil {
-		return nil, err
-	}
+	serviceManagementClient, _ := sm.New(httpClient, site)
 
 	client.ServiceManagement = serviceManagementClient
 
 	// Agile Module integration
-	agileClient, err := agile.New(httpClient, site)
-	if err != nil {
-		return nil, err
-	}
+	agileClient, _ := agile.New(httpClient, site)
 	client.Agile = agileClient
 
 	client.Role = &ApplicationRoleService{client: client}
@@ -189,9 +183,7 @@ func (c *Client) newRequest(ctx context.Context, method, urlAsString string, pay
 	var payloadBuffer io.ReadWriter
 	if payload != nil {
 		payloadBuffer = new(bytes.Buffer)
-		if err = json.NewEncoder(payloadBuffer).Encode(payload); err != nil {
-			return
-		}
+		_ = json.NewEncoder(payloadBuffer).Encode(payload)
 	}
 
 	request, err = http.NewRequestWithContext(ctx, method, endpointPath.String(), payloadBuffer)
@@ -245,9 +237,6 @@ func newResponse(http *http.Response, endpoint string) (response *Response, err 
 	var httpResponseAsBytes []byte
 	if http.ContentLength != 0 {
 		httpResponseAsBytes, err = ioutil.ReadAll(http.Body)
-		if err != nil {
-			return
-		}
 	}
 
 	newResponse := Response{
@@ -271,9 +260,6 @@ func checkResponse(http *http.Response, endpoint string) (response *Response, er
 	var httpResponseAsBytes []byte
 	if http.ContentLength != 0 {
 		httpResponseAsBytes, err = ioutil.ReadAll(http.Body)
-		if err != nil {
-			return
-		}
 	}
 
 	newErrorResponse := Response{

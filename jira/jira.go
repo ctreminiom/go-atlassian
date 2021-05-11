@@ -236,7 +236,7 @@ func newResponse(http *http.Response, endpoint string) (response *Response, err 
 
 	var httpResponseAsBytes []byte
 	if http.ContentLength != 0 {
-		httpResponseAsBytes, err = ioutil.ReadAll(http.Body)
+		httpResponseAsBytes, _ = ioutil.ReadAll(http.Body)
 	}
 
 	newResponse := Response{
@@ -259,7 +259,7 @@ func checkResponse(http *http.Response, endpoint string) (response *Response, er
 
 	var httpResponseAsBytes []byte
 	if http.ContentLength != 0 {
-		httpResponseAsBytes, err = ioutil.ReadAll(http.Body)
+		httpResponseAsBytes, _ = ioutil.ReadAll(http.Body)
 	}
 
 	newErrorResponse := Response{

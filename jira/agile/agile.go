@@ -19,6 +19,7 @@ type Client struct {
 	Auth   *AuthenticationService
 	Sprint *SprintService
 	Board  *BoardService
+	Epic   *EpicService
 }
 
 func New(httpClient *http.Client, site string) (client *Client, err error) {
@@ -42,6 +43,7 @@ func New(httpClient *http.Client, site string) (client *Client, err error) {
 	client.Auth = &AuthenticationService{client: client}
 	client.Sprint = &SprintService{client: client}
 	client.Board = &BoardService{client: client}
+	client.Epic = &EpicService{client: client}
 
 	return
 }

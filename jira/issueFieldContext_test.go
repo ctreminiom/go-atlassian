@@ -1268,6 +1268,210 @@ func TestFieldContextService_IssueTypesContext(t *testing.T) {
 
 }
 
+func TestFieldContextService_Projects(t *testing.T) {
+
+	testCases := []struct {
+		name                string
+		fieldID             string
+		contextIDs          []int
+		startAt, maxResults int
+		mockFile            string
+		wantHTTPMethod      string
+		endpoint            string
+		context             context.Context
+		wantHTTPCodeReturn  int
+		wantErr             bool
+	}{
+		{
+			name:               "GetProjectContextWhenTheParametersAreCorrect",
+			fieldID:            "customfield_10002",
+			contextIDs:         []int{1001, 1002},
+			startAt:            0,
+			maxResults:         50,
+			mockFile:           "./mocks/get-issue-field-context-project-mapping.json",
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/rest/api/3/field/customfield_10002/context/projectmapping?contextId=1001&contextId=1002&maxResults=50&startAt=0",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            false,
+		},
+
+		{
+			name:               "GetProjectContextWhenTheContextIDsAreNotSet",
+			fieldID:            "customfield_10002",
+			contextIDs:         nil,
+			startAt:            0,
+			maxResults:         50,
+			mockFile:           "./mocks/get-issue-field-context-project-mapping.json",
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/rest/api/3/field/customfield_10002/context/projectmapping?maxResults=50&startAt=0",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            false,
+		},
+
+		{
+			name:               "GetProjectContextWhenTheFieldIDIsNotSet",
+			fieldID:            "",
+			contextIDs:         []int{1001, 1002},
+			startAt:            0,
+			maxResults:         50,
+			mockFile:           "./mocks/get-issue-field-context-project-mapping.json",
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/rest/api/3/field/customfield_10002/context/projectmapping?contextId=1001&contextId=1002&maxResults=50&startAt=0",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+
+		{
+			name:               "GetProjectContextWhenTheRequestMethodIsIncorrect",
+			fieldID:            "customfield_10002",
+			contextIDs:         []int{1001, 1002},
+			startAt:            0,
+			maxResults:         50,
+			mockFile:           "./mocks/get-issue-field-context-project-mapping.json",
+			wantHTTPMethod:     http.MethodPut,
+			endpoint:           "/rest/api/3/field/customfield_10002/context/projectmapping?contextId=1001&contextId=1002&maxResults=50&startAt=0",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+
+		{
+			name:               "GetProjectContextWhenTheStatusCodeIsIncorrect",
+			fieldID:            "customfield_10002",
+			contextIDs:         []int{1001, 1002},
+			startAt:            0,
+			maxResults:         50,
+			mockFile:           "./mocks/get-issue-field-context-project-mapping.json",
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/rest/api/3/field/customfield_10002/context/projectmapping?contextId=1001&contextId=1002&maxResults=50&startAt=0",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusBadRequest,
+			wantErr:            true,
+		},
+		{
+			name:               "GetProjectContextWhenTheEndpointIsEmpty",
+			fieldID:            "customfield_10002",
+			contextIDs:         []int{1001, 1002},
+			startAt:            0,
+			maxResults:         50,
+			mockFile:           "./mocks/get-issue-field-context-project-mapping.json",
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+
+		{
+			name:               "GetProjectContextWhenTheContextIsNil",
+			fieldID:            "customfield_10002",
+			contextIDs:         []int{1001, 1002},
+			startAt:            0,
+			maxResults:         50,
+			mockFile:           "./mocks/get-issue-field-context-project-mapping.json",
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/rest/api/3/field/customfield_10002/context/projectmapping?contextId=1001&contextId=1002&maxResults=50&startAt=0",
+			context:            nil,
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+
+		{
+			name:               "GetProjectContextWhenResponseBodyIsEmpty",
+			fieldID:            "customfield_10002",
+			contextIDs:         []int{1001, 1002},
+			startAt:            0,
+			maxResults:         50,
+			mockFile:           "./mocks/empty_json.json",
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/rest/api/3/field/customfield_10002/context/projectmapping?contextId=1001&contextId=1002&maxResults=50&startAt=0",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+
+			//Init a new HTTP mock server
+			mockOptions := mockServerOptions{
+				Endpoint:           testCase.endpoint,
+				MockFilePath:       testCase.mockFile,
+				MethodAccepted:     testCase.wantHTTPMethod,
+				ResponseCodeWanted: testCase.wantHTTPCodeReturn,
+			}
+
+			mockServer, err := startMockServer(&mockOptions)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			defer mockServer.Close()
+
+			//Init the library instance
+			mockClient, err := startMockClient(mockServer.URL)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			service := &FieldContextService{client: mockClient}
+			gotResult, gotResponse, err := service.ProjectsContext(testCase.context, testCase.fieldID, testCase.contextIDs,
+				testCase.startAt, testCase.maxResults)
+
+			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+
+				assert.Error(t, err)
+
+				if gotResponse != nil {
+					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
+				}
+			} else {
+
+				assert.NoError(t, err)
+				assert.NotEqual(t, gotResponse, nil)
+				assert.NotEqual(t, gotResult, nil)
+
+				apiEndpoint, err := url.Parse(gotResponse.Endpoint)
+				if err != nil {
+					t.Fatal(err)
+				}
+
+				var endpointToAssert string
+
+				if apiEndpoint.Query().Encode() != "" {
+					endpointToAssert = fmt.Sprintf("%v?%v", apiEndpoint.Path, apiEndpoint.Query().Encode())
+				} else {
+					endpointToAssert = apiEndpoint.Path
+				}
+
+				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
+				assert.Equal(t, testCase.endpoint, endpointToAssert)
+
+				for _, contextData := range gotResult.Values {
+
+					t.Log("------------------------------")
+					t.Logf("IsGlobalContext Type: %v", contextData.IsGlobalContext)
+					t.Logf("Context ID : %v", contextData.ContextID)
+					t.Logf("ProjectID Value: %v", contextData.ProjectID)
+					t.Log("------------------------------ \n")
+
+				}
+
+			}
+
+		})
+	}
+
+}
+
 func TestFieldContextService_Link(t *testing.T) {
 
 	testCases := []struct {

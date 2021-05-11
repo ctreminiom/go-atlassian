@@ -1,0 +1,20 @@
+{
+  "maxResults": 50,
+  "startAt": 0,
+  "total": 3,
+  "isLast": true,
+  "values": [
+    {
+      "contextId": "10138",
+      "isAnyIssueType": true
+    },
+    {
+      "contextId": "10179",
+      "issueTypeId": "10004"
+    },
+    {
+      "contextId": "10180",
+      "issueTypeId": "10004"
+    }
+  ]
+}

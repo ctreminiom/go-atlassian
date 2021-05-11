@@ -18,6 +18,7 @@ type Client struct {
 	Site   *url.URL
 	Auth   *AuthenticationService
 	Sprint *SprintService
+	Board  *BoardService
 }
 
 func New(httpClient *http.Client, site string) (client *Client, err error) {
@@ -40,6 +41,7 @@ func New(httpClient *http.Client, site string) (client *Client, err error) {
 	client.Site = siteAsURL
 	client.Auth = &AuthenticationService{client: client}
 	client.Sprint = &SprintService{client: client}
+	client.Board = &BoardService{client: client}
 
 	return
 }

@@ -1,0 +1,1471 @@
+{
+  "expand": "schema,names",
+  "startAt": 0,
+  "maxResults": 50,
+  "total": 12,
+  "issues": [
+    {
+      "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+      "id": "10010",
+      "self": "https://ctreminiom.atlassian.net/rest/agile/1.0/issue/10010",
+      "key": "KP-3",
+      "changelog": {
+        "startAt": 0,
+        "maxResults": 6,
+        "total": 6,
+        "histories": [
+          {
+            "id": "10166",
+            "author": {
+              "self": "https://ctreminiom.atlassian.net/rest/api/2/user?accountId=5b86be50b8e3cb5895860d6d",
+              "accountId": "5b86be50b8e3cb5895860d6d",
+              "emailAddress": "ctreminiom079@gmail.com",
+              "avatarUrls": {
+                "48x48": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "24x24": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "16x16": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "32x32": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png"
+              },
+              "displayName": "Carlos Treminio",
+              "active": true,
+              "timeZone": "America/Guatemala",
+              "accountType": "atlassian"
+            },
+            "created": "2021-05-08T07:06:07.289+0100",
+            "items": [
+              {
+                "field": "status",
+                "fieldtype": "jira",
+                "fieldId": "status",
+                "from": "10000",
+                "fromString": "Backlog",
+                "to": "10001",
+                "toString": "Selected for Development"
+              }
+            ]
+          },
+          {
+            "id": "10158",
+            "author": {
+              "self": "https://ctreminiom.atlassian.net/rest/api/2/user?accountId=5b86be50b8e3cb5895860d6d",
+              "accountId": "5b86be50b8e3cb5895860d6d",
+              "emailAddress": "ctreminiom079@gmail.com",
+              "avatarUrls": {
+                "48x48": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "24x24": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "16x16": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "32x32": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png"
+              },
+              "displayName": "Carlos Treminio",
+              "active": true,
+              "timeZone": "America/Guatemala",
+              "accountType": "atlassian"
+            },
+            "created": "2021-05-01T04:40:20.378+0100",
+            "items": [
+              {
+                "field": "Fix Version",
+                "fieldtype": "jira",
+                "fieldId": "fixVersions",
+                "from": null,
+                "fromString": null,
+                "to": "10000",
+                "toString": "Version 00"
+              }
+            ]
+          },
+          {
+            "id": "10156",
+            "author": {
+              "self": "https://ctreminiom.atlassian.net/rest/api/2/user?accountId=5b86be50b8e3cb5895860d6d",
+              "accountId": "5b86be50b8e3cb5895860d6d",
+              "emailAddress": "ctreminiom079@gmail.com",
+              "avatarUrls": {
+                "48x48": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "24x24": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "16x16": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "32x32": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png"
+              },
+              "displayName": "Carlos Treminio",
+              "active": true,
+              "timeZone": "America/Guatemala",
+              "accountType": "atlassian"
+            },
+            "created": "2021-05-01T04:35:31.027+0100",
+            "items": [
+              {
+                "field": "Rank",
+                "fieldtype": "custom",
+                "fieldId": "customfield_10019",
+                "from": "",
+                "fromString": "",
+                "to": "",
+                "toString": "Ranked higher"
+              }
+            ]
+          },
+          {
+            "id": "10154",
+            "author": {
+              "self": "https://ctreminiom.atlassian.net/rest/api/2/user?accountId=5b86be50b8e3cb5895860d6d",
+              "accountId": "5b86be50b8e3cb5895860d6d",
+              "emailAddress": "ctreminiom079@gmail.com",
+              "avatarUrls": {
+                "48x48": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "24x24": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "16x16": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "32x32": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png"
+              },
+              "displayName": "Carlos Treminio",
+              "active": true,
+              "timeZone": "America/Guatemala",
+              "accountType": "atlassian"
+            },
+            "created": "2021-05-01T04:35:30.923+0100",
+            "items": [
+              {
+                "field": "Sprint",
+                "fieldtype": "custom",
+                "fieldId": "customfield_10020",
+                "from": "",
+                "fromString": "",
+                "to": "3",
+                "toString": "KP Sprint 2"
+              }
+            ]
+          },
+          {
+            "id": "10153",
+            "author": {
+              "self": "https://ctreminiom.atlassian.net/rest/api/2/user?accountId=5b86be50b8e3cb5895860d6d",
+              "accountId": "5b86be50b8e3cb5895860d6d",
+              "emailAddress": "ctreminiom079@gmail.com",
+              "avatarUrls": {
+                "48x48": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "24x24": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "16x16": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "32x32": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png"
+              },
+              "displayName": "Carlos Treminio",
+              "active": true,
+              "timeZone": "America/Guatemala",
+              "accountType": "atlassian"
+            },
+            "created": "2021-05-01T04:35:30.656+0100",
+            "items": [
+              {
+                "field": "Sprint",
+                "fieldtype": "custom",
+                "fieldId": "customfield_10020",
+                "from": "1",
+                "fromString": "KP Sprint 1",
+                "to": "",
+                "toString": ""
+              }
+            ]
+          },
+          {
+            "id": "10130",
+            "author": {
+              "self": "https://ctreminiom.atlassian.net/rest/api/2/user?accountId=5b86be50b8e3cb5895860d6d",
+              "accountId": "5b86be50b8e3cb5895860d6d",
+              "emailAddress": "ctreminiom079@gmail.com",
+              "avatarUrls": {
+                "48x48": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "24x24": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "16x16": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "32x32": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png"
+              },
+              "displayName": "Carlos Treminio",
+              "active": true,
+              "timeZone": "America/Guatemala",
+              "accountType": "atlassian"
+            },
+            "created": "2021-04-30T05:26:49.728+0100",
+            "items": [
+              {
+                "field": "Sprint",
+                "fieldtype": "custom",
+                "fieldId": "customfield_10020",
+                "from": "",
+                "fromString": "",
+                "to": "1",
+                "toString": "KP Sprint 1"
+              }
+            ]
+          }
+        ]
+      },
+      "fields": {
+        "summary": "New summary test",
+        "issuetype": {
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/issuetype/10001",
+          "id": "10001",
+          "description": "Functionality or a feature expressed as a user goal.",
+          "iconUrl": "https://ctreminiom.atlassian.net/secure/viewavatar?size=medium&avatarId=10315&avatarType=issuetype",
+          "name": "Story",
+          "subtask": false,
+          "avatarId": 10315
+        },
+        "status": {
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/status/10001",
+          "description": "",
+          "iconUrl": "https://ctreminiom.atlassian.net/",
+          "name": "Selected for Development",
+          "id": "10001",
+          "statusCategory": {
+            "self": "https://ctreminiom.atlassian.net/rest/api/2/statuscategory/2",
+            "id": 2,
+            "key": "new",
+            "colorName": "blue-gray",
+            "name": "To Do"
+          }
+        }
+      }
+    },
+    {
+      "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+      "id": "10011",
+      "self": "https://ctreminiom.atlassian.net/rest/agile/1.0/issue/10011",
+      "key": "KP-4",
+      "changelog": {
+        "startAt": 0,
+        "maxResults": 4,
+        "total": 4,
+        "histories": [
+          {
+            "id": "10157",
+            "author": {
+              "self": "https://ctreminiom.atlassian.net/rest/api/2/user?accountId=5b86be50b8e3cb5895860d6d",
+              "accountId": "5b86be50b8e3cb5895860d6d",
+              "emailAddress": "ctreminiom079@gmail.com",
+              "avatarUrls": {
+                "48x48": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "24x24": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "16x16": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "32x32": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png"
+              },
+              "displayName": "Carlos Treminio",
+              "active": true,
+              "timeZone": "America/Guatemala",
+              "accountType": "atlassian"
+            },
+            "created": "2021-05-01T04:35:31.124+0100",
+            "items": [
+              {
+                "field": "Rank",
+                "fieldtype": "custom",
+                "fieldId": "customfield_10019",
+                "from": "",
+                "fromString": "",
+                "to": "",
+                "toString": "Ranked higher"
+              }
+            ]
+          },
+          {
+            "id": "10155",
+            "author": {
+              "self": "https://ctreminiom.atlassian.net/rest/api/2/user?accountId=5b86be50b8e3cb5895860d6d",
+              "accountId": "5b86be50b8e3cb5895860d6d",
+              "emailAddress": "ctreminiom079@gmail.com",
+              "avatarUrls": {
+                "48x48": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "24x24": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "16x16": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "32x32": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png"
+              },
+              "displayName": "Carlos Treminio",
+              "active": true,
+              "timeZone": "America/Guatemala",
+              "accountType": "atlassian"
+            },
+            "created": "2021-05-01T04:35:30.924+0100",
+            "items": [
+              {
+                "field": "Sprint",
+                "fieldtype": "custom",
+                "fieldId": "customfield_10020",
+                "from": "",
+                "fromString": "",
+                "to": "3",
+                "toString": "KP Sprint 2"
+              }
+            ]
+          },
+          {
+            "id": "10152",
+            "author": {
+              "self": "https://ctreminiom.atlassian.net/rest/api/2/user?accountId=5b86be50b8e3cb5895860d6d",
+              "accountId": "5b86be50b8e3cb5895860d6d",
+              "emailAddress": "ctreminiom079@gmail.com",
+              "avatarUrls": {
+                "48x48": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "24x24": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "16x16": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "32x32": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png"
+              },
+              "displayName": "Carlos Treminio",
+              "active": true,
+              "timeZone": "America/Guatemala",
+              "accountType": "atlassian"
+            },
+            "created": "2021-05-01T04:35:30.640+0100",
+            "items": [
+              {
+                "field": "Sprint",
+                "fieldtype": "custom",
+                "fieldId": "customfield_10020",
+                "from": "1",
+                "fromString": "KP Sprint 1",
+                "to": "",
+                "toString": ""
+              }
+            ]
+          },
+          {
+            "id": "10131",
+            "author": {
+              "self": "https://ctreminiom.atlassian.net/rest/api/2/user?accountId=5b86be50b8e3cb5895860d6d",
+              "accountId": "5b86be50b8e3cb5895860d6d",
+              "emailAddress": "ctreminiom079@gmail.com",
+              "avatarUrls": {
+                "48x48": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "24x24": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "16x16": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "32x32": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png"
+              },
+              "displayName": "Carlos Treminio",
+              "active": true,
+              "timeZone": "America/Guatemala",
+              "accountType": "atlassian"
+            },
+            "created": "2021-04-30T05:26:50.927+0100",
+            "items": [
+              {
+                "field": "Sprint",
+                "fieldtype": "custom",
+                "fieldId": "customfield_10020",
+                "from": "",
+                "fromString": "",
+                "to": "1",
+                "toString": "KP Sprint 1"
+              }
+            ]
+          }
+        ]
+      },
+      "fields": {
+        "summary": "New summary test",
+        "issuetype": {
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/issuetype/10001",
+          "id": "10001",
+          "description": "Functionality or a feature expressed as a user goal.",
+          "iconUrl": "https://ctreminiom.atlassian.net/secure/viewavatar?size=medium&avatarId=10315&avatarType=issuetype",
+          "name": "Story",
+          "subtask": false,
+          "avatarId": 10315
+        },
+        "status": {
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/status/10000",
+          "description": "",
+          "iconUrl": "https://ctreminiom.atlassian.net/",
+          "name": "Backlog",
+          "id": "10000",
+          "statusCategory": {
+            "self": "https://ctreminiom.atlassian.net/rest/api/2/statuscategory/2",
+            "id": 2,
+            "key": "new",
+            "colorName": "blue-gray",
+            "name": "To Do"
+          }
+        }
+      }
+    },
+    {
+      "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+      "id": "10025",
+      "self": "https://ctreminiom.atlassian.net/rest/agile/1.0/issue/10025",
+      "key": "KP-13",
+      "changelog": {
+        "startAt": 0,
+        "maxResults": 1,
+        "total": 1,
+        "histories": [
+          {
+            "id": "10125",
+            "author": {
+              "self": "https://ctreminiom.atlassian.net/rest/api/2/user?accountId=5b86be50b8e3cb5895860d6d",
+              "accountId": "5b86be50b8e3cb5895860d6d",
+              "emailAddress": "ctreminiom079@gmail.com",
+              "avatarUrls": {
+                "48x48": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "24x24": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "16x16": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "32x32": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png"
+              },
+              "displayName": "Carlos Treminio",
+              "active": true,
+              "timeZone": "America/Guatemala",
+              "accountType": "atlassian"
+            },
+            "created": "2021-04-30T04:19:04.294+0100",
+            "items": [
+              {
+                "field": "Parent",
+                "fieldtype": "jira",
+                "from": null,
+                "fromString": null,
+                "to": "10009",
+                "toString": "KP-2"
+              }
+            ]
+          }
+        ]
+      },
+      "fields": {
+        "summary": "SubTask #1",
+        "issuetype": {
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/issuetype/10003",
+          "id": "10003",
+          "description": "A small piece of work that's part of a larger task.",
+          "iconUrl": "https://ctreminiom.atlassian.net/secure/viewavatar?size=medium&avatarId=10316&avatarType=issuetype",
+          "name": "Sub-task",
+          "subtask": true,
+          "avatarId": 10316
+        },
+        "status": {
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/status/10000",
+          "description": "",
+          "iconUrl": "https://ctreminiom.atlassian.net/",
+          "name": "Backlog",
+          "id": "10000",
+          "statusCategory": {
+            "self": "https://ctreminiom.atlassian.net/rest/api/2/statuscategory/2",
+            "id": 2,
+            "key": "new",
+            "colorName": "blue-gray",
+            "name": "To Do"
+          }
+        }
+      }
+    },
+    {
+      "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+      "id": "10026",
+      "self": "https://ctreminiom.atlassian.net/rest/agile/1.0/issue/10026",
+      "key": "KP-14",
+      "changelog": {
+        "startAt": 0,
+        "maxResults": 1,
+        "total": 1,
+        "histories": [
+          {
+            "id": "10127",
+            "author": {
+              "self": "https://ctreminiom.atlassian.net/rest/api/2/user?accountId=5b86be50b8e3cb5895860d6d",
+              "accountId": "5b86be50b8e3cb5895860d6d",
+              "emailAddress": "ctreminiom079@gmail.com",
+              "avatarUrls": {
+                "48x48": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "24x24": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "16x16": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "32x32": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png"
+              },
+              "displayName": "Carlos Treminio",
+              "active": true,
+              "timeZone": "America/Guatemala",
+              "accountType": "atlassian"
+            },
+            "created": "2021-04-30T04:19:06.221+0100",
+            "items": [
+              {
+                "field": "Parent",
+                "fieldtype": "jira",
+                "from": null,
+                "fromString": null,
+                "to": "10009",
+                "toString": "KP-2"
+              }
+            ]
+          }
+        ]
+      },
+      "fields": {
+        "summary": "SubTask #2",
+        "issuetype": {
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/issuetype/10003",
+          "id": "10003",
+          "description": "A small piece of work that's part of a larger task.",
+          "iconUrl": "https://ctreminiom.atlassian.net/secure/viewavatar?size=medium&avatarId=10316&avatarType=issuetype",
+          "name": "Sub-task",
+          "subtask": true,
+          "avatarId": 10316
+        },
+        "status": {
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/status/10000",
+          "description": "",
+          "iconUrl": "https://ctreminiom.atlassian.net/",
+          "name": "Backlog",
+          "id": "10000",
+          "statusCategory": {
+            "self": "https://ctreminiom.atlassian.net/rest/api/2/statuscategory/2",
+            "id": 2,
+            "key": "new",
+            "colorName": "blue-gray",
+            "name": "To Do"
+          }
+        }
+      }
+    },
+    {
+      "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+      "id": "10027",
+      "self": "https://ctreminiom.atlassian.net/rest/agile/1.0/issue/10027",
+      "key": "KP-15",
+      "changelog": {
+        "startAt": 0,
+        "maxResults": 1,
+        "total": 1,
+        "histories": [
+          {
+            "id": "10129",
+            "author": {
+              "self": "https://ctreminiom.atlassian.net/rest/api/2/user?accountId=5b86be50b8e3cb5895860d6d",
+              "accountId": "5b86be50b8e3cb5895860d6d",
+              "emailAddress": "ctreminiom079@gmail.com",
+              "avatarUrls": {
+                "48x48": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "24x24": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "16x16": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "32x32": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png"
+              },
+              "displayName": "Carlos Treminio",
+              "active": true,
+              "timeZone": "America/Guatemala",
+              "accountType": "atlassian"
+            },
+            "created": "2021-04-30T04:19:08.129+0100",
+            "items": [
+              {
+                "field": "Parent",
+                "fieldtype": "jira",
+                "from": null,
+                "fromString": null,
+                "to": "10009",
+                "toString": "KP-2"
+              }
+            ]
+          }
+        ]
+      },
+      "fields": {
+        "summary": "SubTask #3",
+        "issuetype": {
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/issuetype/10003",
+          "id": "10003",
+          "description": "A small piece of work that's part of a larger task.",
+          "iconUrl": "https://ctreminiom.atlassian.net/secure/viewavatar?size=medium&avatarId=10316&avatarType=issuetype",
+          "name": "Sub-task",
+          "subtask": true,
+          "avatarId": 10316
+        },
+        "status": {
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/status/10000",
+          "description": "",
+          "iconUrl": "https://ctreminiom.atlassian.net/",
+          "name": "Backlog",
+          "id": "10000",
+          "statusCategory": {
+            "self": "https://ctreminiom.atlassian.net/rest/api/2/statuscategory/2",
+            "id": 2,
+            "key": "new",
+            "colorName": "blue-gray",
+            "name": "To Do"
+          }
+        }
+      }
+    },
+    {
+      "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+      "id": "10018",
+      "self": "https://ctreminiom.atlassian.net/rest/agile/1.0/issue/10018",
+      "key": "KP-10",
+      "changelog": {
+        "startAt": 0,
+        "maxResults": 4,
+        "total": 4,
+        "histories": [
+          {
+            "id": "10150",
+            "author": {
+              "self": "https://ctreminiom.atlassian.net/rest/api/2/user?accountId=5b86be50b8e3cb5895860d6d",
+              "accountId": "5b86be50b8e3cb5895860d6d",
+              "emailAddress": "ctreminiom079@gmail.com",
+              "avatarUrls": {
+                "48x48": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "24x24": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "16x16": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "32x32": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png"
+              },
+              "displayName": "Carlos Treminio",
+              "active": true,
+              "timeZone": "America/Guatemala",
+              "accountType": "atlassian"
+            },
+            "created": "2021-05-01T04:34:38.942+0100",
+            "items": [
+              {
+                "field": "Sprint",
+                "fieldtype": "custom",
+                "fieldId": "customfield_10020",
+                "from": "",
+                "fromString": "",
+                "to": "3",
+                "toString": "KP Sprint 2"
+              }
+            ]
+          },
+          {
+            "id": "10147",
+            "author": {
+              "self": "https://ctreminiom.atlassian.net/rest/api/2/user?accountId=5b86be50b8e3cb5895860d6d",
+              "accountId": "5b86be50b8e3cb5895860d6d",
+              "emailAddress": "ctreminiom079@gmail.com",
+              "avatarUrls": {
+                "48x48": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "24x24": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "16x16": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "32x32": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png"
+              },
+              "displayName": "Carlos Treminio",
+              "active": true,
+              "timeZone": "America/Guatemala",
+              "accountType": "atlassian"
+            },
+            "created": "2021-05-01T04:34:10.591+0100",
+            "items": [
+              {
+                "field": "Sprint",
+                "fieldtype": "custom",
+                "fieldId": "customfield_10020",
+                "from": "2",
+                "fromString": "Sprint XX-Patched",
+                "to": "",
+                "toString": ""
+              }
+            ]
+          },
+          {
+            "id": "10139",
+            "author": {
+              "self": "https://ctreminiom.atlassian.net/rest/api/2/user?accountId=5b86be50b8e3cb5895860d6d",
+              "accountId": "5b86be50b8e3cb5895860d6d",
+              "emailAddress": "ctreminiom079@gmail.com",
+              "avatarUrls": {
+                "48x48": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "24x24": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "16x16": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "32x32": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png"
+              },
+              "displayName": "Carlos Treminio",
+              "active": true,
+              "timeZone": "America/Guatemala",
+              "accountType": "atlassian"
+            },
+            "created": "2021-05-01T04:19:22.368+0100",
+            "items": [
+              {
+                "field": "Rank",
+                "fieldtype": "custom",
+                "fieldId": "customfield_10019",
+                "from": "",
+                "fromString": "",
+                "to": "",
+                "toString": "Ranked higher"
+              }
+            ]
+          },
+          {
+            "id": "10138",
+            "author": {
+              "self": "https://ctreminiom.atlassian.net/rest/api/2/user?accountId=5b86be50b8e3cb5895860d6d",
+              "accountId": "5b86be50b8e3cb5895860d6d",
+              "emailAddress": "ctreminiom079@gmail.com",
+              "avatarUrls": {
+                "48x48": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "24x24": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "16x16": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "32x32": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png"
+              },
+              "displayName": "Carlos Treminio",
+              "active": true,
+              "timeZone": "America/Guatemala",
+              "accountType": "atlassian"
+            },
+            "created": "2021-05-01T04:19:22.229+0100",
+            "items": [
+              {
+                "field": "Sprint",
+                "fieldtype": "custom",
+                "fieldId": "customfield_10020",
+                "from": "",
+                "fromString": "",
+                "to": "2",
+                "toString": "Sprint XX-Patched"
+              }
+            ]
+          }
+        ]
+      },
+      "fields": {
+        "summary": "New summary test",
+        "issuetype": {
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/issuetype/10001",
+          "id": "10001",
+          "description": "Functionality or a feature expressed as a user goal.",
+          "iconUrl": "https://ctreminiom.atlassian.net/secure/viewavatar?size=medium&avatarId=10315&avatarType=issuetype",
+          "name": "Story",
+          "subtask": false,
+          "avatarId": 10315
+        },
+        "status": {
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/status/10000",
+          "description": "",
+          "iconUrl": "https://ctreminiom.atlassian.net/",
+          "name": "Backlog",
+          "id": "10000",
+          "statusCategory": {
+            "self": "https://ctreminiom.atlassian.net/rest/api/2/statuscategory/2",
+            "id": 2,
+            "key": "new",
+            "colorName": "blue-gray",
+            "name": "To Do"
+          }
+        }
+      }
+    },
+    {
+      "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+      "id": "10019",
+      "self": "https://ctreminiom.atlassian.net/rest/agile/1.0/issue/10019",
+      "key": "KP-11",
+      "changelog": {
+        "startAt": 0,
+        "maxResults": 4,
+        "total": 4,
+        "histories": [
+          {
+            "id": "10151",
+            "author": {
+              "self": "https://ctreminiom.atlassian.net/rest/api/2/user?accountId=5b86be50b8e3cb5895860d6d",
+              "accountId": "5b86be50b8e3cb5895860d6d",
+              "emailAddress": "ctreminiom079@gmail.com",
+              "avatarUrls": {
+                "48x48": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "24x24": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "16x16": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "32x32": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png"
+              },
+              "displayName": "Carlos Treminio",
+              "active": true,
+              "timeZone": "America/Guatemala",
+              "accountType": "atlassian"
+            },
+            "created": "2021-05-01T04:34:40.233+0100",
+            "items": [
+              {
+                "field": "Sprint",
+                "fieldtype": "custom",
+                "fieldId": "customfield_10020",
+                "from": "",
+                "fromString": "",
+                "to": "3",
+                "toString": "KP Sprint 2"
+              }
+            ]
+          },
+          {
+            "id": "10146",
+            "author": {
+              "self": "https://ctreminiom.atlassian.net/rest/api/2/user?accountId=5b86be50b8e3cb5895860d6d",
+              "accountId": "5b86be50b8e3cb5895860d6d",
+              "emailAddress": "ctreminiom079@gmail.com",
+              "avatarUrls": {
+                "48x48": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "24x24": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "16x16": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "32x32": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png"
+              },
+              "displayName": "Carlos Treminio",
+              "active": true,
+              "timeZone": "America/Guatemala",
+              "accountType": "atlassian"
+            },
+            "created": "2021-05-01T04:34:10.568+0100",
+            "items": [
+              {
+                "field": "Sprint",
+                "fieldtype": "custom",
+                "fieldId": "customfield_10020",
+                "from": "2",
+                "fromString": "Sprint XX-Patched",
+                "to": "",
+                "toString": ""
+              }
+            ]
+          },
+          {
+            "id": "10141",
+            "author": {
+              "self": "https://ctreminiom.atlassian.net/rest/api/2/user?accountId=5b86be50b8e3cb5895860d6d",
+              "accountId": "5b86be50b8e3cb5895860d6d",
+              "emailAddress": "ctreminiom079@gmail.com",
+              "avatarUrls": {
+                "48x48": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "24x24": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "16x16": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "32x32": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png"
+              },
+              "displayName": "Carlos Treminio",
+              "active": true,
+              "timeZone": "America/Guatemala",
+              "accountType": "atlassian"
+            },
+            "created": "2021-05-01T04:19:24.113+0100",
+            "items": [
+              {
+                "field": "Rank",
+                "fieldtype": "custom",
+                "fieldId": "customfield_10019",
+                "from": "",
+                "fromString": "",
+                "to": "",
+                "toString": "Ranked higher"
+              }
+            ]
+          },
+          {
+            "id": "10140",
+            "author": {
+              "self": "https://ctreminiom.atlassian.net/rest/api/2/user?accountId=5b86be50b8e3cb5895860d6d",
+              "accountId": "5b86be50b8e3cb5895860d6d",
+              "emailAddress": "ctreminiom079@gmail.com",
+              "avatarUrls": {
+                "48x48": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "24x24": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "16x16": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "32x32": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png"
+              },
+              "displayName": "Carlos Treminio",
+              "active": true,
+              "timeZone": "America/Guatemala",
+              "accountType": "atlassian"
+            },
+            "created": "2021-05-01T04:19:24.002+0100",
+            "items": [
+              {
+                "field": "Sprint",
+                "fieldtype": "custom",
+                "fieldId": "customfield_10020",
+                "from": "",
+                "fromString": "",
+                "to": "2",
+                "toString": "Sprint XX-Patched"
+              }
+            ]
+          }
+        ]
+      },
+      "fields": {
+        "summary": "New summary test",
+        "issuetype": {
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/issuetype/10001",
+          "id": "10001",
+          "description": "Functionality or a feature expressed as a user goal.",
+          "iconUrl": "https://ctreminiom.atlassian.net/secure/viewavatar?size=medium&avatarId=10315&avatarType=issuetype",
+          "name": "Story",
+          "subtask": false,
+          "avatarId": 10315
+        },
+        "status": {
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/status/10000",
+          "description": "",
+          "iconUrl": "https://ctreminiom.atlassian.net/",
+          "name": "Backlog",
+          "id": "10000",
+          "statusCategory": {
+            "self": "https://ctreminiom.atlassian.net/rest/api/2/statuscategory/2",
+            "id": 2,
+            "key": "new",
+            "colorName": "blue-gray",
+            "name": "To Do"
+          }
+        }
+      }
+    },
+    {
+      "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+      "id": "10020",
+      "self": "https://ctreminiom.atlassian.net/rest/agile/1.0/issue/10020",
+      "key": "KP-12",
+      "changelog": {
+        "startAt": 0,
+        "maxResults": 4,
+        "total": 4,
+        "histories": [
+          {
+            "id": "10149",
+            "author": {
+              "self": "https://ctreminiom.atlassian.net/rest/api/2/user?accountId=5b86be50b8e3cb5895860d6d",
+              "accountId": "5b86be50b8e3cb5895860d6d",
+              "emailAddress": "ctreminiom079@gmail.com",
+              "avatarUrls": {
+                "48x48": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "24x24": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "16x16": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "32x32": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png"
+              },
+              "displayName": "Carlos Treminio",
+              "active": true,
+              "timeZone": "America/Guatemala",
+              "accountType": "atlassian"
+            },
+            "created": "2021-05-01T04:34:10.666+0100",
+            "items": [
+              {
+                "field": "Sprint",
+                "fieldtype": "custom",
+                "fieldId": "customfield_10020",
+                "from": "2",
+                "fromString": "Sprint XX-Patched",
+                "to": "",
+                "toString": ""
+              }
+            ]
+          },
+          {
+            "id": "10143",
+            "author": {
+              "self": "https://ctreminiom.atlassian.net/rest/api/2/user?accountId=5b86be50b8e3cb5895860d6d",
+              "accountId": "5b86be50b8e3cb5895860d6d",
+              "emailAddress": "ctreminiom079@gmail.com",
+              "avatarUrls": {
+                "48x48": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "24x24": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "16x16": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "32x32": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png"
+              },
+              "displayName": "Carlos Treminio",
+              "active": true,
+              "timeZone": "America/Guatemala",
+              "accountType": "atlassian"
+            },
+            "created": "2021-05-01T04:19:25.631+0100",
+            "items": [
+              {
+                "field": "Rank",
+                "fieldtype": "custom",
+                "fieldId": "customfield_10019",
+                "from": "",
+                "fromString": "",
+                "to": "",
+                "toString": "Ranked higher"
+              }
+            ]
+          },
+          {
+            "id": "10142",
+            "author": {
+              "self": "https://ctreminiom.atlassian.net/rest/api/2/user?accountId=5b86be50b8e3cb5895860d6d",
+              "accountId": "5b86be50b8e3cb5895860d6d",
+              "emailAddress": "ctreminiom079@gmail.com",
+              "avatarUrls": {
+                "48x48": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "24x24": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "16x16": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "32x32": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png"
+              },
+              "displayName": "Carlos Treminio",
+              "active": true,
+              "timeZone": "America/Guatemala",
+              "accountType": "atlassian"
+            },
+            "created": "2021-05-01T04:19:25.537+0100",
+            "items": [
+              {
+                "field": "Sprint",
+                "fieldtype": "custom",
+                "fieldId": "customfield_10020",
+                "from": "",
+                "fromString": "",
+                "to": "2",
+                "toString": "Sprint XX-Patched"
+              }
+            ]
+          },
+          {
+            "id": "10092",
+            "author": {
+              "self": "https://ctreminiom.atlassian.net/rest/api/2/user?accountId=5b86be50b8e3cb5895860d6d",
+              "accountId": "5b86be50b8e3cb5895860d6d",
+              "emailAddress": "ctreminiom079@gmail.com",
+              "avatarUrls": {
+                "48x48": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "24x24": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "16x16": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "32x32": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png"
+              },
+              "displayName": "Carlos Treminio",
+              "active": true,
+              "timeZone": "America/Guatemala",
+              "accountType": "atlassian"
+            },
+            "created": "2021-03-04T07:28:09.117+0000",
+            "items": [
+              {
+                "field": "Component",
+                "fieldtype": "jira",
+                "fieldId": "components",
+                "from": null,
+                "fromString": null,
+                "to": "10005",
+                "toString": "Component 1"
+              },
+              {
+                "field": "Component",
+                "fieldtype": "jira",
+                "fieldId": "components",
+                "from": null,
+                "fromString": null,
+                "to": "10003",
+                "toString": "Component Name"
+              }
+            ]
+          }
+        ]
+      },
+      "fields": {
+        "summary": "New summary test",
+        "issuetype": {
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/issuetype/10001",
+          "id": "10001",
+          "description": "Functionality or a feature expressed as a user goal.",
+          "iconUrl": "https://ctreminiom.atlassian.net/secure/viewavatar?size=medium&avatarId=10315&avatarType=issuetype",
+          "name": "Story",
+          "subtask": false,
+          "avatarId": 10315
+        },
+        "status": {
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/status/10000",
+          "description": "",
+          "iconUrl": "https://ctreminiom.atlassian.net/",
+          "name": "Backlog",
+          "id": "10000",
+          "statusCategory": {
+            "self": "https://ctreminiom.atlassian.net/rest/api/2/statuscategory/2",
+            "id": 2,
+            "key": "new",
+            "colorName": "blue-gray",
+            "name": "To Do"
+          }
+        }
+      }
+    },
+    {
+      "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+      "id": "10017",
+      "self": "https://ctreminiom.atlassian.net/rest/agile/1.0/issue/10017",
+      "key": "KP-9",
+      "changelog": {
+        "startAt": 0,
+        "maxResults": 3,
+        "total": 3,
+        "histories": [
+          {
+            "id": "10144",
+            "author": {
+              "self": "https://ctreminiom.atlassian.net/rest/api/2/user?accountId=5b86be50b8e3cb5895860d6d",
+              "accountId": "5b86be50b8e3cb5895860d6d",
+              "emailAddress": "ctreminiom079@gmail.com",
+              "avatarUrls": {
+                "48x48": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "24x24": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "16x16": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "32x32": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png"
+              },
+              "displayName": "Carlos Treminio",
+              "active": true,
+              "timeZone": "America/Guatemala",
+              "accountType": "atlassian"
+            },
+            "created": "2021-05-01T04:34:10.524+0100",
+            "items": [
+              {
+                "field": "Sprint",
+                "fieldtype": "custom",
+                "fieldId": "customfield_10020",
+                "from": "2",
+                "fromString": "Sprint XX-Patched",
+                "to": "",
+                "toString": ""
+              }
+            ]
+          },
+          {
+            "id": "10137",
+            "author": {
+              "self": "https://ctreminiom.atlassian.net/rest/api/2/user?accountId=5b86be50b8e3cb5895860d6d",
+              "accountId": "5b86be50b8e3cb5895860d6d",
+              "emailAddress": "ctreminiom079@gmail.com",
+              "avatarUrls": {
+                "48x48": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "24x24": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "16x16": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "32x32": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png"
+              },
+              "displayName": "Carlos Treminio",
+              "active": true,
+              "timeZone": "America/Guatemala",
+              "accountType": "atlassian"
+            },
+            "created": "2021-05-01T04:19:20.411+0100",
+            "items": [
+              {
+                "field": "Rank",
+                "fieldtype": "custom",
+                "fieldId": "customfield_10019",
+                "from": "",
+                "fromString": "",
+                "to": "",
+                "toString": "Ranked higher"
+              }
+            ]
+          },
+          {
+            "id": "10136",
+            "author": {
+              "self": "https://ctreminiom.atlassian.net/rest/api/2/user?accountId=5b86be50b8e3cb5895860d6d",
+              "accountId": "5b86be50b8e3cb5895860d6d",
+              "emailAddress": "ctreminiom079@gmail.com",
+              "avatarUrls": {
+                "48x48": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "24x24": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "16x16": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "32x32": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png"
+              },
+              "displayName": "Carlos Treminio",
+              "active": true,
+              "timeZone": "America/Guatemala",
+              "accountType": "atlassian"
+            },
+            "created": "2021-05-01T04:19:20.281+0100",
+            "items": [
+              {
+                "field": "Sprint",
+                "fieldtype": "custom",
+                "fieldId": "customfield_10020",
+                "from": "",
+                "fromString": "",
+                "to": "2",
+                "toString": "Sprint XX-Patched"
+              }
+            ]
+          }
+        ]
+      },
+      "fields": {
+        "summary": "New summary test",
+        "issuetype": {
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/issuetype/10002",
+          "id": "10002",
+          "description": "A small, distinct piece of work.",
+          "iconUrl": "https://ctreminiom.atlassian.net/secure/viewavatar?size=medium&avatarId=10318&avatarType=issuetype",
+          "name": "Task",
+          "subtask": false,
+          "avatarId": 10318
+        },
+        "status": {
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/status/10000",
+          "description": "",
+          "iconUrl": "https://ctreminiom.atlassian.net/",
+          "name": "Backlog",
+          "id": "10000",
+          "statusCategory": {
+            "self": "https://ctreminiom.atlassian.net/rest/api/2/statuscategory/2",
+            "id": 2,
+            "key": "new",
+            "colorName": "blue-gray",
+            "name": "To Do"
+          }
+        }
+      }
+    },
+    {
+      "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+      "id": "10016",
+      "self": "https://ctreminiom.atlassian.net/rest/agile/1.0/issue/10016",
+      "key": "KP-8",
+      "changelog": {
+        "startAt": 0,
+        "maxResults": 3,
+        "total": 3,
+        "histories": [
+          {
+            "id": "10148",
+            "author": {
+              "self": "https://ctreminiom.atlassian.net/rest/api/2/user?accountId=5b86be50b8e3cb5895860d6d",
+              "accountId": "5b86be50b8e3cb5895860d6d",
+              "emailAddress": "ctreminiom079@gmail.com",
+              "avatarUrls": {
+                "48x48": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "24x24": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "16x16": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "32x32": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png"
+              },
+              "displayName": "Carlos Treminio",
+              "active": true,
+              "timeZone": "America/Guatemala",
+              "accountType": "atlassian"
+            },
+            "created": "2021-05-01T04:34:10.593+0100",
+            "items": [
+              {
+                "field": "Sprint",
+                "fieldtype": "custom",
+                "fieldId": "customfield_10020",
+                "from": "2",
+                "fromString": "Sprint XX-Patched",
+                "to": "",
+                "toString": ""
+              }
+            ]
+          },
+          {
+            "id": "10135",
+            "author": {
+              "self": "https://ctreminiom.atlassian.net/rest/api/2/user?accountId=5b86be50b8e3cb5895860d6d",
+              "accountId": "5b86be50b8e3cb5895860d6d",
+              "emailAddress": "ctreminiom079@gmail.com",
+              "avatarUrls": {
+                "48x48": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "24x24": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "16x16": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "32x32": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png"
+              },
+              "displayName": "Carlos Treminio",
+              "active": true,
+              "timeZone": "America/Guatemala",
+              "accountType": "atlassian"
+            },
+            "created": "2021-05-01T04:19:15.631+0100",
+            "items": [
+              {
+                "field": "Rank",
+                "fieldtype": "custom",
+                "fieldId": "customfield_10019",
+                "from": "",
+                "fromString": "",
+                "to": "",
+                "toString": "Ranked higher"
+              }
+            ]
+          },
+          {
+            "id": "10134",
+            "author": {
+              "self": "https://ctreminiom.atlassian.net/rest/api/2/user?accountId=5b86be50b8e3cb5895860d6d",
+              "accountId": "5b86be50b8e3cb5895860d6d",
+              "emailAddress": "ctreminiom079@gmail.com",
+              "avatarUrls": {
+                "48x48": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "24x24": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "16x16": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "32x32": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png"
+              },
+              "displayName": "Carlos Treminio",
+              "active": true,
+              "timeZone": "America/Guatemala",
+              "accountType": "atlassian"
+            },
+            "created": "2021-05-01T04:19:15.512+0100",
+            "items": [
+              {
+                "field": "Sprint",
+                "fieldtype": "custom",
+                "fieldId": "customfield_10020",
+                "from": "",
+                "fromString": "",
+                "to": "2",
+                "toString": "Sprint XX-Patched"
+              }
+            ]
+          }
+        ]
+      },
+      "fields": {
+        "summary": "New summary test",
+        "issuetype": {
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/issuetype/10001",
+          "id": "10001",
+          "description": "Functionality or a feature expressed as a user goal.",
+          "iconUrl": "https://ctreminiom.atlassian.net/secure/viewavatar?size=medium&avatarId=10315&avatarType=issuetype",
+          "name": "Story",
+          "subtask": false,
+          "avatarId": 10315
+        },
+        "status": {
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/status/10000",
+          "description": "",
+          "iconUrl": "https://ctreminiom.atlassian.net/",
+          "name": "Backlog",
+          "id": "10000",
+          "statusCategory": {
+            "self": "https://ctreminiom.atlassian.net/rest/api/2/statuscategory/2",
+            "id": 2,
+            "key": "new",
+            "colorName": "blue-gray",
+            "name": "To Do"
+          }
+        }
+      }
+    },
+    {
+      "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+      "id": "10012",
+      "self": "https://ctreminiom.atlassian.net/rest/agile/1.0/issue/10012",
+      "key": "KP-5",
+      "changelog": {
+        "startAt": 0,
+        "maxResults": 2,
+        "total": 2,
+        "histories": [
+          {
+            "id": "10145",
+            "author": {
+              "self": "https://ctreminiom.atlassian.net/rest/api/2/user?accountId=5b86be50b8e3cb5895860d6d",
+              "accountId": "5b86be50b8e3cb5895860d6d",
+              "emailAddress": "ctreminiom079@gmail.com",
+              "avatarUrls": {
+                "48x48": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "24x24": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "16x16": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "32x32": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png"
+              },
+              "displayName": "Carlos Treminio",
+              "active": true,
+              "timeZone": "America/Guatemala",
+              "accountType": "atlassian"
+            },
+            "created": "2021-05-01T04:34:10.555+0100",
+            "items": [
+              {
+                "field": "Sprint",
+                "fieldtype": "custom",
+                "fieldId": "customfield_10020",
+                "from": "2",
+                "fromString": "Sprint XX-Patched",
+                "to": "",
+                "toString": ""
+              }
+            ]
+          },
+          {
+            "id": "10133",
+            "author": {
+              "self": "https://ctreminiom.atlassian.net/rest/api/2/user?accountId=5b86be50b8e3cb5895860d6d",
+              "accountId": "5b86be50b8e3cb5895860d6d",
+              "emailAddress": "ctreminiom079@gmail.com",
+              "avatarUrls": {
+                "48x48": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "24x24": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "16x16": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                "32x32": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png"
+              },
+              "displayName": "Carlos Treminio",
+              "active": true,
+              "timeZone": "America/Guatemala",
+              "accountType": "atlassian"
+            },
+            "created": "2021-05-01T04:19:11.587+0100",
+            "items": [
+              {
+                "field": "Sprint",
+                "fieldtype": "custom",
+                "fieldId": "customfield_10020",
+                "from": "",
+                "fromString": "",
+                "to": "2",
+                "toString": "Sprint XX-Patched"
+              }
+            ]
+          }
+        ]
+      },
+      "fields": {
+        "summary": "New summary test",
+        "issuetype": {
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/issuetype/10001",
+          "id": "10001",
+          "description": "Functionality or a feature expressed as a user goal.",
+          "iconUrl": "https://ctreminiom.atlassian.net/secure/viewavatar?size=medium&avatarId=10315&avatarType=issuetype",
+          "name": "Story",
+          "subtask": false,
+          "avatarId": 10315
+        },
+        "status": {
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/status/10000",
+          "description": "",
+          "iconUrl": "https://ctreminiom.atlassian.net/",
+          "name": "Backlog",
+          "id": "10000",
+          "statusCategory": {
+            "self": "https://ctreminiom.atlassian.net/rest/api/2/statuscategory/2",
+            "id": 2,
+            "key": "new",
+            "colorName": "blue-gray",
+            "name": "To Do"
+          }
+        }
+      }
+    },
+    {
+      "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+      "id": "10032",
+      "self": "https://ctreminiom.atlassian.net/rest/agile/1.0/issue/10032",
+      "key": "KP-19",
+      "changelog": {
+        "startAt": 0,
+        "maxResults": 0,
+        "total": 0,
+        "histories": []
+      },
+      "fields": {
+        "summary": "Test",
+        "issuetype": {
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/issuetype/10001",
+          "id": "10001",
+          "description": "Functionality or a feature expressed as a user goal.",
+          "iconUrl": "https://ctreminiom.atlassian.net/secure/viewavatar?size=medium&avatarId=10315&avatarType=issuetype",
+          "name": "Story",
+          "subtask": false,
+          "avatarId": 10315
+        },
+        "status": {
+          "self": "https://ctreminiom.atlassian.net/rest/api/2/status/10000",
+          "description": "",
+          "iconUrl": "https://ctreminiom.atlassian.net/",
+          "name": "Backlog",
+          "id": "10000",
+          "statusCategory": {
+            "self": "https://ctreminiom.atlassian.net/rest/api/2/statuscategory/2",
+            "id": 2,
+            "key": "new",
+            "colorName": "blue-gray",
+            "name": "To Do"
+          }
+        }
+      }
+    }
+  ]
+}

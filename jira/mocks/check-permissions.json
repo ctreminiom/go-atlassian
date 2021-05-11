@@ -1,0 +1,14 @@
+{
+  "projectPermissions": [
+    {
+      "permission": "EDIT_ISSUES",
+      "issues": [],
+      "projects": [
+        10000
+      ]
+    }
+  ],
+  "globalPermissions": [
+    "ADMINISTER"
+  ]
+}

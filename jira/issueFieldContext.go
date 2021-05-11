@@ -221,6 +221,117 @@ func (f *FieldContextService) SetDefaultValue(ctx context.Context, fieldID strin
 	return
 }
 
+type IssueTypeToContextMappingPageScheme struct {
+	MaxResults int                                     `json:"maxResults,omitempty"`
+	StartAt    int                                     `json:"startAt,omitempty"`
+	Total      int                                     `json:"total,omitempty"`
+	IsLast     bool                                    `json:"isLast,omitempty"`
+	Values     []*IssueTypeToContextMappingValueScheme `json:"values"`
+}
+
+type IssueTypeToContextMappingValueScheme struct {
+	ContextID      string `json:"contextId"`
+	IsAnyIssueType bool   `json:"isAnyIssueType,omitempty"`
+	IssueTypeID    string `json:"issueTypeId,omitempty"`
+}
+
+// IssueTypesContext returns a paginated list of context to issue type mappings for a custom field.
+// Mappings are returned for all contexts or a list of contexts.
+// Mappings are ordered first by context ID and then by issue type ID.
+// Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-custom-field-contexts/#api-rest-api-3-field-fieldid-context-issuetypemapping-get
+// Docs: N/A
+func (f *FieldContextService) IssueTypesContext(ctx context.Context, fieldID string, contextIDs []int, startAt, maxResults int) (result *IssueTypeToContextMappingPageScheme, response *Response, err error) {
+
+	if len(fieldID) == 0 {
+		return nil, nil, fmt.Errorf("error, please provide a valid fieldID value")
+	}
+
+	params := url.Values{}
+	params.Add("startAt", strconv.Itoa(startAt))
+	params.Add("maxResults", strconv.Itoa(maxResults))
+
+	for _, contextID := range contextIDs {
+		params.Add("contextId", strconv.Itoa(contextID))
+	}
+
+	var endpoint = fmt.Sprintf("/rest/api/3/field/%v/context/issuetypemapping?%v", fieldID, params.Encode())
+	request, err := f.client.newRequest(ctx, http.MethodGet, endpoint, nil)
+	if err != nil {
+		return
+	}
+
+	request.Header.Set("Accept", "application/json")
+
+	response, err = f.client.Do(request)
+	if err != nil {
+		return
+	}
+
+	result = new(IssueTypeToContextMappingPageScheme)
+	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
+		return
+	}
+
+	return
+}
+
+type CustomFieldContextProjectMappingPageScheme struct {
+	Self       string                                         `json:"self,omitempty"`
+	NextPage   string                                         `json:"nextPage,omitempty"`
+	MaxResults int                                            `json:"maxResults,omitempty"`
+	StartAt    int                                            `json:"startAt,omitempty"`
+	Total      int                                            `json:"total,omitempty"`
+	IsLast     bool                                           `json:"isLast,omitempty"`
+	Values     []*CustomFieldContextProjectMappingValueScheme `json:"values,omitempty"`
+}
+
+type CustomFieldContextProjectMappingValueScheme struct {
+	ContextID       string `json:"contextId,omitempty"`
+	ProjectID       string `json:"projectId,omitempty"`
+	IsGlobalContext bool   `json:"isGlobalContext,omitempty"`
+}
+
+// ProjectsContext returns a paginated list of context to project mappings for a custom field.
+// The result can be filtered by contextId,
+// or otherwise all mappings are returned.
+// Invalid IDs are ignored.
+// Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-custom-field-contexts/#api-rest-api-3-field-fieldid-context-projectmapping-get
+// Docs: N/A
+func (f *FieldContextService) ProjectsContext(ctx context.Context, fieldID string, contextIDs []int, startAt, maxResults int) (result *CustomFieldContextProjectMappingPageScheme, response *Response, err error) {
+
+	if len(fieldID) == 0 {
+		return nil, nil, fmt.Errorf("error, please provide a valid fieldID value")
+	}
+
+	params := url.Values{}
+	params.Add("startAt", strconv.Itoa(startAt))
+	params.Add("maxResults", strconv.Itoa(maxResults))
+
+	for _, contextID := range contextIDs {
+		params.Add("contextId", strconv.Itoa(contextID))
+	}
+
+	var endpoint = fmt.Sprintf("/rest/api/3/field/%v/context/projectmapping?%v", fieldID, params.Encode())
+	request, err := f.client.newRequest(ctx, http.MethodGet, endpoint, nil)
+	if err != nil {
+		return
+	}
+
+	request.Header.Set("Accept", "application/json")
+
+	response, err = f.client.Do(request)
+	if err != nil {
+		return
+	}
+
+	result = new(CustomFieldContextProjectMappingPageScheme)
+	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
+		return
+	}
+
+	return
+}
+
 // Updates a custom field context
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields/context#update-custom-field-context
 func (f *FieldContextService) Update(ctx context.Context, fieldID string, contextID int, name, description string) (response *Response, err error) {

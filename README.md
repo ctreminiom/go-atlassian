@@ -37,6 +37,7 @@ go-atlassian is a Go module that enables the interaction with the Atlassian Clou
 - Add Jira Field into Screen.
 - Get or Cancel Jira Async Task(s).
 - CRUD Jira Users and Search users.
+- Check the user permissions
 
 ### 🛬 Jira Service Management Cloud
 - CRUD JSM Customer(s).

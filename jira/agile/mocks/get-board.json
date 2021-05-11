@@ -1,0 +1,15 @@
+{
+  "id": 4,
+  "self": "https://ctreminiom.atlassian.net/rest/agile/1.0/board/4",
+  "name": "KP - Scrum",
+  "type": "scrum",
+  "location": {
+    "projectId": 10000,
+    "displayName": "Kanban Project (KP)",
+    "projectName": "Kanban Project",
+    "projectKey": "KP",
+    "projectTypeKey": "software",
+    "avatarURI": "/secure/projectavatar?size=small&s=small&pid=10000&avatarId=10419",
+    "name": "Kanban Project (KP)"
+  }
+}

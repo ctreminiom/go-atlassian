@@ -1,0 +1,18 @@
+{
+  "maxResults": 50,
+  "startAt": 0,
+  "isLast": true,
+  "values": [
+    {
+      "id": 10029,
+      "key": "KP-16",
+      "self": "https://ctreminiom.atlassian.net/rest/agile/1.0/epic/10029",
+      "name": "Epic 1",
+      "summary": "Epic 1",
+      "color": {
+        "key": "color_14"
+      },
+      "done": false
+    }
+  ]
+}

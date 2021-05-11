@@ -1,0 +1,14 @@
+{
+  "maxResults": 50,
+  "startAt": 0,
+  "isLast": true,
+  "values": [
+    {
+      "id": 4,
+      "self": "https://ctreminiom.atlassian.net/rest/agile/1.0/sprint/4",
+      "state": "future",
+      "name": "KP Sprint 3",
+      "originBoardId": 4
+    }
+  ]
+}

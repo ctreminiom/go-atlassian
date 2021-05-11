@@ -1,14 +1,17 @@
 <p align="center"><img width="600" src="./jira/mocks/go-atlassian-logo.svg" alt="Go-Atlassian logo"></p>
 
 <p align="center">
+    <a href="https://github.com/ctreminiom/go-atlassian/releases/latest"><img src="https://img.shields.io/github/v/release/ctreminiom/go-atlassian"></a>
     <a href="https://pkg.go.dev/github.com/ctreminiom/go-atlassian"><img src="https://pkg.go.dev/badge/github.com/ctreminiom/go-atlassian?utm_source=godoc"></a>
     <a href="https://goreportcard.com/report/github.com/ctreminiom/go-atlassian"><img src="https://goreportcard.com/badge/ctreminiom/go-atlassian"></a>
-<a href="https://app.fossa.com/projects/git%2Bgithub.com%2Fctreminiom%2Fgo-atlassian?ref=badge_shield" alt="FOSSA Status"><img src="https://app.fossa.com/api/projects/git%2Bgithub.com%2Fctreminiom%2Fgo-atlassian.svg?type=shield"/></a>
+    <a href="https://app.fossa.com/projects/git%2Bgithub.com%2Fctreminiom%2Fgo-atlassian?ref=badge_shield" alt="FOSSA Status"><img src="https://app.fossa.com/api/projects/git%2Bgithub.com%2Fctreminiom%2Fgo-atlassian.svg?type=shield"/></a>
     <a href="https://codecov.io/gh/ctreminiom/go-atlassian"><img src="https://codecov.io/gh/ctreminiom/go-atlassian/branch/main/graph/badge.svg?token=G0KPNMTIRV"></a>
     <a href="https://www.codacy.com/gh/ctreminiom/go-atlassian/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ctreminiom/go-atlassian&amp;utm_campaign=Badge_Grade"><img src="https://app.codacy.com/project/badge/Grade/fe5c1b3c9fd64f84989ae51c42803456"/></a>
     <a href="https://github.com/ctreminiom/go-atlassian/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg"></a>
     <a href="https://github.com/ctreminiom/go-atlassian/actions?query=workflow%3ATesting"><img src="https://img.shields.io/github/workflow/status/ctreminiom/go-atlassian/Testing?label=%F0%9F%A7%AA%20tests&style=flat&color=75C46B"></a>
     <a href="https://docs.go-atlassian.io/"><img src="https://img.shields.io/badge/%F0%9F%92%A1%20go-documentation-00ACD7.svg?style=flat"></a>
+     <a href="https://bestpractices.coreinfrastructure.org/projects/4861"><img src="https://bestpractices.coreinfrastructure.org/projects/4861/badge"></a> 
+    <a href="https://discord.gg/yqaQFYHS"><img src="https://img.shields.io/discord/838149936101064724.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2"alt="chat on Discord"></a>
 </p>
 
 go-atlassian is a Go module that enables the interaction with the Atlassian Cloud Services.
@@ -58,12 +61,30 @@ go-atlassian is a Go module that enables the interaction with the Atlassian Clou
 - In Development 🔨
 
 ### 🚠 Jira Agile Cloud
-- In Development 🔨
+- Get the board backlogs issues.
+- Get the board configuration (Filter, Admin, Columns, etc).
+- Create a new Jira Board.
+- Extract the Epics associated with a board ID.
+- Get the boards are linked to the same filter ID.
+- Get a board by ID.
+- Get the board issues.
+- Get the board issues linked to the Epic.
+- Get the board issues are not linked to any Epic.
+- Move the backlogs issues to the board (Kanban Backlog must be enabled).
+- Get the projects associated to a board.
+- Get the sprints linked to a board.
+- Get the versions associated to the board.
+- Get the Epic Metadata.
+- Get the issues associated to the Epic Key.
+- Create/Close/Delete/Get Sprints.
+- Get the Sprint issues.
+- Start a sprint.
+- Path/Update sprint. (Name, Start/End Date, etc.)
 
 ##  🔰 Installation
 Make sure you have Go installed (download). Version `1.13` or higher is required.
 ```sh
-## Jira Software Cloud / Service Management
+## Jira Software Cloud / Service Management Cloud / Jira Agile Cloud
 $ go get -u -v github.com/ctreminiom/go-atlassian/jira/
 
 ## Atlassian Cloud Admin

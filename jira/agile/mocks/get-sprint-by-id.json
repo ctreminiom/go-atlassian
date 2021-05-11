@@ -1,0 +1,10 @@
+{
+  "id": 1,
+  "self": "https://ctreminiom.atlassian.net/rest/agile/1.0/sprint/1",
+  "state": "active",
+  "name": "KP Sprint 1",
+  "startDate": "2021-04-30T04:29:38.642Z",
+  "endDate": "2021-05-14T04:29:00.000Z",
+  "originBoardId": 4,
+  "goal": ""
+}

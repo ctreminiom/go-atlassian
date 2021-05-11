@@ -1,4 +1,50 @@
 
+<a name="v1.2.0"></a>
+## [v1.2.0](https://github.com/ctreminiom/go-atlassian/compare/v1.1.5...v1.2.0)
+
+> 2021-05-11
+
+### :art: Improve structure / format of the code.
+
+* Added more Tags on the IssueScheme struct.
+
+### :bug: Bug Fixes
+
+* Fixed the error: SA4006: this value of `err` is never used (staticcheck)
+* Fixed the Lint error: structtag: struct field Description repeats json tag "status" also at issue.go:58 (govet)
+* Closes [#19](https://github.com/ctreminiom/go-atlassian/issues/19)
+* Closes [#9](https://github.com/ctreminiom/go-atlassian/issues/9)
+
+### :memo: Add or update documentation.
+
+* README.md updated
+* Updated the README.md adding more badgets.
+* Updated the CHANGELOG.md
+
+### :sparkles: Features
+
+* Added the Check method under the permission.go service
+* Added the ProjectContext method under the issueFieldContext.go service.
+* Added the IssueTypesContext method under the issueFieldContext.go service.
+* closes [#40](https://github.com/ctreminiom/go-atlassian/issues/40)
+* closes [#38](https://github.com/ctreminiom/go-atlassian/issues/38), closes [#39](https://github.com/ctreminiom/go-atlassian/issues/39)
+* Added the SprintService under the Agile Module
+* Added the first Jira Cloud Agile Integration
+* Enable the ability to Assign Field Configuration Scheme to a Jira Project, closes [#20](https://github.com/ctreminiom/go-atlassian/issues/20)
+
+### :white_check_mark: Ad/Update Test Cases
+
+* Increased the code coverage on the Jira on the Jira module
+* Increased the code coverage on the AgileService on the Atlassian Agile module
+
+### Pull Requests
+
+* Merge pull request [#42](https://github.com/ctreminiom/go-atlassian/issues/42) from ctreminiom/dev
+* Merge pull request [#37](https://github.com/ctreminiom/go-atlassian/issues/37) from ctreminiom/dependabot/add-v2-config-file
+* Merge pull request [#41](https://github.com/ctreminiom/go-atlassian/issues/41) from ctreminiom/feature/jira-agile
+* Merge pull request [#31](https://github.com/ctreminiom/go-atlassian/issues/31) from ctreminiom/dev
+
+
 <a name="v1.1.5"></a>
 ## [v1.1.5](https://github.com/ctreminiom/go-atlassian/compare/v1.1.4...v1.1.5)
 

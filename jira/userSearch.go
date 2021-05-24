@@ -81,7 +81,7 @@ func (u *UserSearchService) Do(ctx context.Context, accountID, query string, sta
 	}
 
 	if len(query) != 0 {
-		params.Add("query", accountID)
+		params.Add("query", query)
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/user/search?%v", params.Encode())

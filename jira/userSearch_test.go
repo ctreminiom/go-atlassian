@@ -205,7 +205,7 @@ func TestUserSearchService_Do(t *testing.T) {
 			maxResults:         50,
 			mockFile:           "./mocks/search-users.json",
 			wantHTTPMethod:     http.MethodGet,
-			endpoint:           "/rest/api/3/user/search?accountId=594b47b5-c774-4d51-9ee8-b604013e9d9a&maxResults=50&query=594b47b5-c774-4d51-9ee8-b604013e9d9a&startAt=0",
+			endpoint:           "/rest/api/3/user/search?accountId=594b47b5-c774-4d51-9ee8-b604013e9d9a&maxResults=50&query=charlie&startAt=0",
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusOK,
 			wantErr:            false,

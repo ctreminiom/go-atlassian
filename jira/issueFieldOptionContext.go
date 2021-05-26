@@ -29,7 +29,7 @@ type CustomFieldContextOptionPageScheme struct {
 type CustomFieldContextOptionScheme struct {
 	ID       string `json:"id,omitempty"`
 	Value    string `json:"value,omitempty"`
-	Disabled bool   `json:"disabled,omitempty"`
+	Disabled bool   `json:"disabled"`
 	OptionID string `json:"optionId,omitempty"`
 }
 

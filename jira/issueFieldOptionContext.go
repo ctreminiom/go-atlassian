@@ -181,3 +181,43 @@ func (f *FieldOptionContextService) Delete(ctx context.Context, fieldID string, 
 
 	return
 }
+
+type OrderFieldOptionPayloadScheme struct {
+	After string `json:"after,omitempty"`
+	Position             string   `json:"position,omitempty"`
+	CustomFieldOptionIds []string `json:"customFieldOptionIds,omitempty"`
+}
+
+// Order changes the order of custom field options or cascading options in a context.
+// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-custom-field-options/#api-rest-api-3-field-fieldid-context-contextid-option-move-put
+func (f *FieldOptionContextService) Order(ctx context.Context, fieldID string, contextID int, payload *OrderFieldOptionPayloadScheme) (response *Response, err error) {
+
+	if fieldID == "" {
+		return nil, fmt.Errorf("error, fieldID value is nil, please provide a valid fieldID value")
+	}
+
+	if contextID == 0 {
+		return nil, fmt.Errorf("error, fieldID value is nil, please provide a valid contextID value")
+	}
+
+	if payload == nil {
+		return nil, fmt.Errorf("error, payload value is nil, please provide a pointer of OrderFieldOptionPayloadScheme struct")
+	}
+
+	var endpoint = fmt.Sprintf("/rest/api/3/field/%v/context/%v/option/move", fieldID, contextID)
+
+	request, err := f.client.newRequest(ctx, http.MethodPut, endpoint, payload)
+	if err != nil {
+		return
+	}
+
+	request.Header.Set("Accept", "application/json")
+	request.Header.Set("Content-Type", "application/json")
+
+	response, err = f.client.Do(request)
+	if err != nil {
+		return
+	}
+
+	return
+}

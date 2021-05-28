@@ -66,10 +66,6 @@ type PermissionScopeItemScheme struct {
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/permissions/scheme#get-permission-scheme
 func (p *PermissionSchemeService) Get(ctx context.Context, permissionSchemeID int) (result *PermissionSchemeScheme, response *Response, err error) {
 
-	if permissionSchemeID == 0 {
-		return nil, nil, fmt.Errorf("error!, please provide a valid permissionSchemeID value")
-	}
-
 	var endpoint = fmt.Sprintf("rest/api/3/permissionscheme/%v", permissionSchemeID)
 
 	request, err := p.client.newRequest(ctx, http.MethodGet, endpoint, nil)

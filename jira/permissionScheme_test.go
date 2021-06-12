@@ -300,16 +300,6 @@ func TestPermissionSchemeService_Delete(t *testing.T) {
 		},
 
 		{
-			name:               "DeletePermissionSchemeWhenThePermissionSchemeIDIsNotProvided",
-			permissionSchemeID: 0,
-			wantHTTPMethod:     http.MethodDelete,
-			endpoint:           "/rest/api/3/permissionscheme/1000",
-			context:            context.Background(),
-			wantHTTPCodeReturn: http.StatusNoContent,
-			wantErr:            true,
-		},
-
-		{
 			name:               "DeletePermissionSchemeWhenTheEndpointIsIncorrect",
 			permissionSchemeID: 1000,
 			wantHTTPMethod:     http.MethodDelete,
@@ -434,17 +424,6 @@ func TestPermissionSchemeService_Get(t *testing.T) {
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusOK,
 			wantErr:            false,
-		},
-
-		{
-			name:               "GetPermissionSchemeWhenThePermissionSchemeIDIsNotProvided",
-			permissionSchemeID: 0,
-			wantHTTPMethod:     http.MethodGet,
-			endpoint:           "/rest/api/3/permissionscheme/1000",
-			mockFile:           "./mocks/get-permission-scheme.json",
-			context:            context.Background(),
-			wantHTTPCodeReturn: http.StatusOK,
-			wantErr:            true,
 		},
 
 		{
@@ -727,31 +706,6 @@ func TestPermissionSchemeService_Update(t *testing.T) {
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusOK,
 			wantErr:            false,
-		},
-
-		{
-			name:     "UpdatePermissionSchemeWhenThePermissionSchemeIDIsNotProvided",
-			schemeID: 0,
-			payload: &PermissionSchemeScheme{
-				Name:        "EF Permission Scheme - UPDATED",
-				Description: "EF Permission Scheme description - UPDATED",
-
-				Permissions: []*PermissionGrantScheme{
-					{
-						Permission: "CLOSE_ISSUES",
-						Holder: &PermissionGrantHolderScheme{
-							Parameter: "jira-administrators-system",
-							Type:      "group",
-						},
-					},
-				},
-			},
-			mockFile:           "./mocks/get-permission-scheme.json",
-			wantHTTPMethod:     http.MethodPut,
-			endpoint:           "/rest/api/3/permissionscheme/1000",
-			context:            context.Background(),
-			wantHTTPCodeReturn: http.StatusOK,
-			wantErr:            true,
 		},
 
 		{

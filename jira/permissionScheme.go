@@ -92,10 +92,6 @@ func (p *PermissionSchemeService) Get(ctx context.Context, permissionSchemeID in
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/permissions/scheme#delete-permission-scheme
 func (p *PermissionSchemeService) Delete(ctx context.Context, permissionSchemeID int) (response *Response, err error) {
 
-	if permissionSchemeID == 0 {
-		return nil, fmt.Errorf("error!, please provide a valid permissionSchemeID value")
-	}
-
 	var endpoint = fmt.Sprintf("rest/api/3/permissionscheme/%v", permissionSchemeID)
 
 	request, err := p.client.newRequest(ctx, http.MethodDelete, endpoint, nil)
@@ -150,10 +146,6 @@ func (p *PermissionSchemeService) Create(ctx context.Context, payload *Permissio
 // 3. Sending an empty list will remove all permission grants from the permission scheme.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/permissions/scheme#update-permission-scheme
 func (p *PermissionSchemeService) Update(ctx context.Context, schemeID int, payload *PermissionSchemeScheme) (result *PermissionSchemeScheme, response *Response, err error) {
-
-	if schemeID == 0 {
-		return nil, nil, fmt.Errorf("error, please provide a valid schemeID value")
-	}
 
 	if payload == nil {
 		return nil, nil, fmt.Errorf("error, please provide a payload pointer")

@@ -32,6 +32,7 @@ type Client struct {
 	Server     *ServerService
 	Task       *TaskService
 	User       *UserService
+	MySelf     *MySelfService
 
 	//Service Management Module
 	ServiceManagement *sm.Client
@@ -162,6 +163,8 @@ func New(httpClient *http.Client, site string) (client *Client, err error) {
 		client: client,
 		Search: &UserSearchService{client: client},
 	}
+
+	client.MySelf = &MySelfService{client: client}
 
 	return
 }

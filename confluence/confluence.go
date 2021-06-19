@@ -47,20 +47,16 @@ func New(httpClient *http.Client, site string) (client *Client, err error) {
 
 func (c *Client) newRequest(ctx context.Context, method, apiEndpoint string, payload io.Reader) (request *http.Request, err error) {
 
-	if ctx == nil {
-		return nil, errors.New("the context param is nil, please provide a valid one")
-	}
-
 	relativePath, err := url.Parse(apiEndpoint)
 	if err != nil {
-		return
+		return nil, fmt.Errorf(urlParsedError, err.Error())
 	}
 
-	endpoint := c.Site.ResolveReference(relativePath).String()
+	var endpoint = c.Site.ResolveReference(relativePath).String()
 
 	request, err = http.NewRequestWithContext(ctx, method, endpoint, payload)
 	if err != nil {
-		return
+		return nil, fmt.Errorf(requestCreationError, err.Error())
 	}
 
 	if c.Auth.basicAuthProvided {
@@ -142,4 +138,6 @@ type ApiErrorResponseScheme struct {
 
 var (
 	requestFailedError = "request failed. Please analyze the request body for more details. Status Code: %d"
+	requestCreationError = "request creation failed: %v"
+	urlParsedError = "URL parsing failed: %v"
 )

@@ -30,7 +30,7 @@ func main() {
 		Trigger:  "",
 		OrderBy:  "",
 		//Status:      []string{"any", "any"},
-		Expand: []string{"childTypes.all", "metadata.labels"},
+		Expand: []string{"childTypes.all", "operations"},
 		//PostingDay:  time.Now(),
 	}
 
@@ -65,6 +65,13 @@ func main() {
 
 			for _, result := range content.Metadata.Labels.Results {
 				log.Println(result)
+			}
+		}
+
+		if content.Operations != nil {
+			log.Println("- Operations -")
+			for _, operation := range content.Operations {
+				log.Println(operation)
 			}
 		}
 

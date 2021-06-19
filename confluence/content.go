@@ -40,15 +40,21 @@ type LinkScheme struct {
 }
 
 type ContentScheme struct {
-	ID         string            `json:"id,omitempty"`
-	Type       string            `json:"type,omitempty"`
-	Status     string            `json:"status,omitempty"`
-	Title      string            `json:"title,omitempty"`
-	Expandable *ExpandableScheme `json:"_expandable,omitempty"`
-	Links      *LinkScheme       `json:"_links,omitempty"`
-	ChildTypes *ChildTypesScheme `json:"childTypes,omitempty"`
-	Space      *SpaceScheme      `json:"space,omitempty"`
-	Metadata   *MetadataScheme   `json:"metadata,omitempty"`
+	ID         string             `json:"id,omitempty"`
+	Type       string             `json:"type,omitempty"`
+	Status     string             `json:"status,omitempty"`
+	Title      string             `json:"title,omitempty"`
+	Expandable *ExpandableScheme  `json:"_expandable,omitempty"`
+	Links      *LinkScheme        `json:"_links,omitempty"`
+	ChildTypes *ChildTypesScheme  `json:"childTypes,omitempty"`
+	Space      *SpaceScheme       `json:"space,omitempty"`
+	Metadata   *MetadataScheme    `json:"metadata,omitempty"`
+	Operations []*OperationScheme `json:"operations,omitempty"`
+}
+
+type OperationScheme struct {
+	Operation  string `json:"operation,omitempty"`
+	TargetType string `json:"targetType,omitempty"`
 }
 
 type MetadataScheme struct {

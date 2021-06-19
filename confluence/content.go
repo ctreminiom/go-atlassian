@@ -39,20 +39,30 @@ type LinkScheme struct {
 }
 
 type ContentScheme struct {
-	ID         string            `json:"id"`
+	ID         string            `json:"id,omitempty"`
+	Type       string            `json:"type,omitempty"`
+	Status     string            `json:"status,omitempty"`
+	Title      string            `json:"title,omitempty"`
+	Expandable *ExpandableScheme `json:"_expandable,omitempty"`
+	Links      *LinkScheme       `json:"_links,omitempty"`
+	ChildTypes *ChildTypesScheme `json:"childTypes,omitempty"`
+	Space      *SpaceScheme      `json:"space,omitempty"`
+}
+
+type SpaceScheme struct {
+	ID         int               `json:"id"`
+	Key        string            `json:"key"`
+	Name       string            `json:"name"`
 	Type       string            `json:"type"`
 	Status     string            `json:"status"`
-	Title      string            `json:"title"`
 	Expandable *ExpandableScheme `json:"_expandable"`
 	Links      *LinkScheme       `json:"_links"`
-
-	ChildTypes *ChildTypesScheme `json:"childTypes"`
 }
 
 type ChildTypesScheme struct {
 	Attachment *ChildTypeScheme `json:"attachment,omitempty"`
-	Comment *ChildTypeScheme `json:"comment,omitempty"`
-	Page *ChildTypeScheme `json:"page,omitempty"`
+	Comment    *ChildTypeScheme `json:"comment,omitempty"`
+	Page       *ChildTypeScheme `json:"page,omitempty"`
 }
 
 type ChildTypeScheme struct {
@@ -76,6 +86,14 @@ type ExpandableScheme struct {
 	SchedulePublishDate string `json:"schedulePublishDate"`
 	Children            string `json:"children"`
 	Ancestors           string `json:"ancestors"`
+	Settings            string `json:"settings"`
+	LookAndFeel         string `json:"lookAndFeel"`
+	Identifiers         string `json:"identifiers"`
+	Permissions         string `json:"permissions"`
+	Icon                string `json:"icon"`
+	Description         string `json:"description"`
+	Theme               string `json:"theme"`
+	Homepage            string `json:"homepage"`
 }
 
 func (c *ContentService) Get(ctx context.Context, options *GetContentOptionsScheme, startAt, maxResults int) (result *ContentPageScheme, response *ResponseScheme, err error) {

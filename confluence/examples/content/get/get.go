@@ -25,12 +25,12 @@ func main() {
 
 	options := &confluence.GetContentOptionsScheme{
 		//ContextType: "page",
-		SpaceKey:    "",
-		Title:       "",
-		Trigger:     "",
-		OrderBy:     "",
+		SpaceKey: "",
+		Title:    "",
+		Trigger:  "",
+		OrderBy:  "",
 		//Status:      []string{"any", "any"},
-		//Expand:      []string{"childTypes.all", "space"},
+		Expand: []string{"childTypes.all", "space"},
 		//PostingDay:  time.Now(),
 	}
 
@@ -47,6 +47,20 @@ func main() {
 	log.Println("Status Code:", response.Code)
 
 	for _, content := range page.Results {
-		log.Println(content)
+
+		//Content ChildTypes
+		if content.ChildTypes != nil {
+			log.Println("- Content ChildTypes -")
+			log.Println(content.ChildTypes.Attachment.Links.Self)
+			log.Println(content.ChildTypes.Comment.Links.Self)
+			log.Println(content.ChildTypes.Page.Links.Self)
+		}
+
+		if content.Space != nil {
+			log.Println("- Space -")
+			log.Println(content.Space)
+		}
+
+		log.Println("--------------------------------------")
 	}
 }

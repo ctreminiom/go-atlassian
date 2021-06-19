@@ -17,7 +17,7 @@ type Client struct {
 	HTTP *http.Client
 	Site *url.URL
 
-	Auth *AuthenticationService
+	Auth    *AuthenticationService
 	Content *ContentService
 }
 
@@ -80,6 +80,20 @@ func (c *Client) Call(request *http.Request, structure interface{}) (result *Res
 	return transformTheHTTPResponse(response, structure)
 }
 
+func transformStructToReader(structure interface{}) (reader io.Reader, err error) {
+
+	if structure == nil {
+		return nil, structureNotParsedError
+	}
+
+	structureAsBodyBytes, err := json.Marshal(structure)
+	if err != nil {
+		return nil, err
+	}
+
+	return bytes.NewReader(structureAsBodyBytes), nil
+}
+
 func transformTheHTTPResponse(response *http.Response, structure interface{}) (result *ResponseScheme, err error) {
 
 	if response == nil {
@@ -132,12 +146,26 @@ type ResponseScheme struct {
 }
 
 type ApiErrorResponseScheme struct {
-	StatusCode int    `json:"statusCode"`
-	Message    string `json:"message"`
+	StatusCode int                         `json:"statusCode"`
+	Message    string                      `json:"message"`
+	Data       *ApiErrorResponseDataScheme `json:"data"`
+}
+
+type ApiErrorResponseDataScheme struct {
+	Authorized bool `json:"authorized"`
+	Valid      bool `json:"valid"`
+	Errors     []struct {
+		Message struct {
+			Key  string        `json:"key"`
+			Args []interface{} `json:"args"`
+		} `json:"message"`
+	} `json:"errors"`
+	Successful bool `json:"successful"`
 }
 
 var (
-	requestFailedError = "request failed. Please analyze the request body for more details. Status Code: %d"
-	requestCreationError = "request creation failed: %v"
-	urlParsedError = "URL parsing failed: %v"
+	requestFailedError      = "request failed. Please analyze the request body for more details. Status Code: %d"
+	requestCreationError    = "request creation failed: %v"
+	urlParsedError          = "URL parsing failed: %v"
+	structureNotParsedError = errors.New("failed to parse the interface pointer, please provide a valid one")
 )

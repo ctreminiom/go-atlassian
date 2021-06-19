@@ -2,6 +2,7 @@ package confluence
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -50,6 +51,21 @@ type ContentScheme struct {
 	Space      *SpaceScheme       `json:"space,omitempty"`
 	Metadata   *MetadataScheme    `json:"metadata,omitempty"`
 	Operations []*OperationScheme `json:"operations,omitempty"`
+	Body       *BodyScheme        `json:"body,omitempty"`
+}
+
+type BodyScheme struct {
+	View                *BodyNodeScheme `json:"view"`
+	ExportView          *BodyNodeScheme `json:"export_view"`
+	StyledView          *BodyNodeScheme `json:"styled_view"`
+	Storage             *BodyNodeScheme `json:"storage"`
+	Editor2             *BodyNodeScheme `json:"editor2"`
+	AnonymousExportView *BodyNodeScheme `json:"anonymous_export_view"`
+}
+
+type BodyNodeScheme struct {
+	Value          string `json:"value,omitempty"`
+	Representation string `json:"representation,omitempty"`
 }
 
 type OperationScheme struct {
@@ -124,6 +140,7 @@ type ExpandableScheme struct {
 	Homepage            string `json:"homepage"`
 }
 
+// Get returns all content in a Confluence instance.
 func (c *ContentService) Get(ctx context.Context, options *GetContentOptionsScheme, startAt, maxResults int) (result *ContentPageScheme, response *ResponseScheme, err error) {
 
 	query := url.Values{}
@@ -182,3 +199,40 @@ func (c *ContentService) Get(ctx context.Context, options *GetContentOptionsSche
 
 	return
 }
+
+// Create creates a new piece of content or publishes an existing draft
+// To publish a draft, add the id and status properties to the body of the request.
+// Set the id to the ID of the draft and set the status to 'current'.
+// When the request is sent, a new piece of content will be created and the metadata from the draft will be transferred into it.
+func (c *ContentService) Create(ctx context.Context, payload *ContentScheme) (result *ContentScheme, response *ResponseScheme, err error) {
+
+	if payload == nil {
+		return nil, nil, noContentProvidedError
+	}
+
+	payloadAsReader, err := transformStructToReader(&payload)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	var endpoint = "/wiki/rest/api/content"
+
+	request, err := c.client.newRequest(ctx, http.MethodPost, endpoint, payloadAsReader)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	request.Header.Set("Accept", "application/json")
+	request.Header.Set("Content-Type", "application/json")
+
+	response, err = c.client.Call(request, &result)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return
+}
+
+var (
+	noContentProvidedError = errors.New("failed to parse the *ContentScheme pointer, please provide a valid one")
+)

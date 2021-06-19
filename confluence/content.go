@@ -36,6 +36,7 @@ type LinkScheme struct {
 	Tinyui  string `json:"tinyui,omitempty"`
 	Editui  string `json:"editui,omitempty"`
 	Webui   string `json:"webui,omitempty"`
+	Next    string `json:"next"`
 }
 
 type ContentScheme struct {
@@ -47,6 +48,27 @@ type ContentScheme struct {
 	Links      *LinkScheme       `json:"_links,omitempty"`
 	ChildTypes *ChildTypesScheme `json:"childTypes,omitempty"`
 	Space      *SpaceScheme      `json:"space,omitempty"`
+	Metadata   *MetadataScheme   `json:"metadata,omitempty"`
+}
+
+type MetadataScheme struct {
+	Labels     *LabelsScheme     `json:"labels"`
+	Expandable *ExpandableScheme `json:"_expandable,omitempty"`
+}
+
+type LabelsScheme struct {
+	Results []*LabelValueScheme `json:"results,omitempty"`
+	Start   int                 `json:"start,omitempty"`
+	Limit   int                 `json:"limit,omitempty"`
+	Size    int                 `json:"size,omitempty"`
+	Links   *LinkScheme         `json:"_links,omitempty"`
+}
+
+type LabelValueScheme struct {
+	Prefix string `json:"prefix,omitempty"`
+	Name   string `json:"name,omitempty"`
+	ID     string `json:"id,omitempty"`
+	Label  string `json:"label,omitempty"`
 }
 
 type SpaceScheme struct {

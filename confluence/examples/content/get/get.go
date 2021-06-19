@@ -30,7 +30,7 @@ func main() {
 		Trigger:  "",
 		OrderBy:  "",
 		//Status:      []string{"any", "any"},
-		Expand: []string{"childTypes.all", "space"},
+		Expand: []string{"childTypes.all", "metadata.labels"},
 		//PostingDay:  time.Now(),
 	}
 
@@ -48,7 +48,6 @@ func main() {
 
 	for _, content := range page.Results {
 
-		//Content ChildTypes
 		if content.ChildTypes != nil {
 			log.Println("- Content ChildTypes -")
 			log.Println(content.ChildTypes.Attachment.Links.Self)
@@ -59,6 +58,14 @@ func main() {
 		if content.Space != nil {
 			log.Println("- Space -")
 			log.Println(content.Space)
+		}
+
+		if content.Metadata != nil  && content.Metadata.Labels != nil {
+			log.Println("- Content Labels -")
+
+			for _, result := range content.Metadata.Labels.Results {
+				log.Println(result)
+			}
 		}
 
 		log.Println("--------------------------------------")

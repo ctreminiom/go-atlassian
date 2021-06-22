@@ -206,11 +206,7 @@ func (c *ContentService) Get(ctx context.Context, options *GetContentOptionsSche
 // When the request is sent, a new piece of content will be created and the metadata from the draft will be transferred into it.
 func (c *ContentService) Create(ctx context.Context, payload *ContentScheme) (result *ContentScheme, response *ResponseScheme, err error) {
 
-	if payload == nil {
-		return nil, nil, noContentProvidedError
-	}
-
-	payloadAsReader, err := transformStructToReader(&payload)
+	payloadAsReader, err := transformStructToReader(payload)
 	if err != nil {
 		return nil, nil, err
 	}

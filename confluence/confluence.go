@@ -10,6 +10,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"reflect"
 	"strings"
 )
 
@@ -71,18 +72,13 @@ func (c *Client) newRequest(ctx context.Context, method, apiEndpoint string, pay
 }
 
 func (c *Client) Call(request *http.Request, structure interface{}) (result *ResponseScheme, err error) {
-
-	response, err := c.HTTP.Do(request)
-	if err != nil {
-		return
-	}
-
+	response, _ := c.HTTP.Do(request)
 	return transformTheHTTPResponse(response, structure)
 }
 
 func transformStructToReader(structure interface{}) (reader io.Reader, err error) {
 
-	if structure == nil {
+	if structure == nil || reflect.ValueOf(structure).IsNil() {
 		return nil, structureNotParsedError
 	}
 
@@ -105,6 +101,26 @@ func transformTheHTTPResponse(response *http.Response, structure interface{}) (r
 	responseTransformed.Endpoint = response.Request.URL.String()
 	responseTransformed.Method = response.Request.Method
 
+	var wasSuccess = response.StatusCode >= 200 && response.StatusCode < 300
+	if !wasSuccess {
+
+		if response.StatusCode == http.StatusBadRequest {
+
+			responseAsBytes, err := ioutil.ReadAll(response.Body)
+			if err != nil {
+				return responseTransformed, err
+			}
+
+			var apiError ApiErrorResponseScheme
+			if err = json.Unmarshal(responseAsBytes, &apiError); err != nil {
+				return responseTransformed, err
+			}
+
+			responseTransformed.API = &apiError
+			return responseTransformed, fmt.Errorf(requestFailedError, response.StatusCode)
+		}
+	}
+
 	responseAsBytes, err := ioutil.ReadAll(response.Body)
 	if err != nil {
 		return responseTransformed, err
@@ -114,24 +130,7 @@ func transformTheHTTPResponse(response *http.Response, structure interface{}) (r
 		return nil, err
 	}
 
-	_, err = responseTransformed.Bytes.Write(responseAsBytes)
-	if err != nil {
-		return responseTransformed, err
-	}
-
-	var wasSuccess = response.StatusCode >= 200 && response.StatusCode < 300
-	if !wasSuccess {
-
-		if response.StatusCode == http.StatusBadRequest {
-			var apiError ApiErrorResponseScheme
-			if err = json.Unmarshal(responseAsBytes, &apiError); err != nil {
-				return responseTransformed, err
-			}
-			return responseTransformed, fmt.Errorf(requestFailedError, response.StatusCode)
-		}
-
-		return responseTransformed, fmt.Errorf(requestFailedError, response.StatusCode)
-	}
+	responseTransformed.Bytes.Write(responseAsBytes)
 
 	return responseTransformed, nil
 }

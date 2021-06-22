@@ -1,0 +1,284 @@
+{
+  "results": [
+    {
+      "id": "196695",
+      "type": "page",
+      "status": "current",
+      "title": "DUMMY",
+      "operations": [
+        {
+          "operation": "read",
+          "targetType": "page"
+        },
+        {
+          "operation": "update",
+          "targetType": "page"
+        },
+        {
+          "operation": "delete",
+          "targetType": "page"
+        },
+        {
+          "operation": "restrict_content",
+          "targetType": "page"
+        },
+        {
+          "operation": "clear_permissions",
+          "targetType": "page"
+        },
+        {
+          "operation": "archive",
+          "targetType": "page"
+        },
+        {
+          "operation": "create",
+          "targetType": "attachment"
+        },
+        {
+          "operation": "create",
+          "targetType": "comment"
+        },
+        {
+          "operation": "create",
+          "targetType": "page"
+        }
+      ],
+      "macroRenderedOutput": {},
+      "extensions": {
+        "position": 902
+      },
+      "_expandable": {
+        "childTypes": "",
+        "container": "/rest/api/space/DUMMY",
+        "metadata": "",
+        "schedulePublishDate": "",
+        "children": "/rest/api/content/196695/child",
+        "restrictions": "/rest/api/content/196695/restriction/byOperation",
+        "history": "/rest/api/content/196695/history",
+        "ancestors": "",
+        "body": "",
+        "version": "",
+        "descendants": "/rest/api/content/196695/descendant",
+        "space": "/rest/api/space/DUMMY"
+      },
+      "_links": {
+        "self": "https://ctreminiom.atlassian.net/wiki/rest/api/content/196695",
+        "tinyui": "/x/VwAD",
+        "editui": "/pages/resumedraft.action?draftId=196695",
+        "webui": "/spaces/DUMMY/overview"
+      }
+    },
+    {
+      "id": "64290817",
+      "type": "page",
+      "status": "current",
+      "title": "TEST",
+      "operations": [
+        {
+          "operation": "read",
+          "targetType": "page"
+        },
+        {
+          "operation": "update",
+          "targetType": "page"
+        },
+        {
+          "operation": "delete",
+          "targetType": "page"
+        },
+        {
+          "operation": "restrict_content",
+          "targetType": "page"
+        },
+        {
+          "operation": "clear_permissions",
+          "targetType": "page"
+        },
+        {
+          "operation": "archive",
+          "targetType": "page"
+        },
+        {
+          "operation": "create",
+          "targetType": "attachment"
+        },
+        {
+          "operation": "create",
+          "targetType": "comment"
+        },
+        {
+          "operation": "create",
+          "targetType": "page"
+        }
+      ],
+      "macroRenderedOutput": {},
+      "extensions": {
+        "position": 346
+      },
+      "_expandable": {
+        "childTypes": "",
+        "container": "/rest/api/space/DUMMY",
+        "metadata": "",
+        "schedulePublishDate": "",
+        "children": "/rest/api/content/64290817/child",
+        "restrictions": "/rest/api/content/64290817/restriction/byOperation",
+        "history": "/rest/api/content/64290817/history",
+        "ancestors": "",
+        "body": "",
+        "version": "",
+        "descendants": "/rest/api/content/64290817/descendant",
+        "space": "/rest/api/space/DUMMY"
+      },
+      "_links": {
+        "self": "https://ctreminiom.atlassian.net/wiki/rest/api/content/64290817",
+        "tinyui": "/x/AQDVAw",
+        "editui": "/pages/resumedraft.action?draftId=64290817",
+        "webui": "/spaces/DUMMY/pages/64290817/TEST"
+      }
+    },
+    {
+      "id": "64290828",
+      "type": "page",
+      "status": "current",
+      "title": "Confluence Page Title",
+      "operations": [
+        {
+          "operation": "read",
+          "targetType": "page"
+        },
+        {
+          "operation": "update",
+          "targetType": "page"
+        },
+        {
+          "operation": "delete",
+          "targetType": "page"
+        },
+        {
+          "operation": "restrict_content",
+          "targetType": "page"
+        },
+        {
+          "operation": "clear_permissions",
+          "targetType": "page"
+        },
+        {
+          "operation": "archive",
+          "targetType": "page"
+        },
+        {
+          "operation": "create",
+          "targetType": "attachment"
+        },
+        {
+          "operation": "create",
+          "targetType": "comment"
+        },
+        {
+          "operation": "create",
+          "targetType": "page"
+        }
+      ],
+      "macroRenderedOutput": {},
+      "extensions": {
+        "position": 1196
+      },
+      "_expandable": {
+        "childTypes": "",
+        "container": "/rest/api/space/DUMMY",
+        "metadata": "",
+        "schedulePublishDate": "",
+        "children": "/rest/api/content/64290828/child",
+        "restrictions": "/rest/api/content/64290828/restriction/byOperation",
+        "history": "/rest/api/content/64290828/history",
+        "ancestors": "",
+        "body": "",
+        "version": "",
+        "descendants": "/rest/api/content/64290828/descendant",
+        "space": "/rest/api/space/DUMMY"
+      },
+      "_links": {
+        "self": "https://ctreminiom.atlassian.net/wiki/rest/api/content/64290828",
+        "tinyui": "/x/DADVAw",
+        "editui": "/pages/resumedraft.action?draftId=64290828",
+        "webui": "/spaces/DUMMY/pages/64290828/Confluence+Page+Title"
+      }
+    },
+    {
+      "id": "65798145",
+      "type": "page",
+      "status": "current",
+      "title": "new page",
+      "operations": [
+        {
+          "operation": "read",
+          "targetType": "page"
+        },
+        {
+          "operation": "update",
+          "targetType": "page"
+        },
+        {
+          "operation": "delete",
+          "targetType": "page"
+        },
+        {
+          "operation": "restrict_content",
+          "targetType": "page"
+        },
+        {
+          "operation": "clear_permissions",
+          "targetType": "page"
+        },
+        {
+          "operation": "archive",
+          "targetType": "page"
+        },
+        {
+          "operation": "create",
+          "targetType": "attachment"
+        },
+        {
+          "operation": "create",
+          "targetType": "comment"
+        },
+        {
+          "operation": "create",
+          "targetType": "page"
+        }
+      ],
+      "macroRenderedOutput": {},
+      "extensions": {
+        "position": 1097
+      },
+      "_expandable": {
+        "childTypes": "",
+        "container": "/rest/api/space/DUMMY",
+        "metadata": "",
+        "schedulePublishDate": "",
+        "children": "/rest/api/content/65798145/child",
+        "restrictions": "/rest/api/content/65798145/restriction/byOperation",
+        "history": "/rest/api/content/65798145/history",
+        "ancestors": "",
+        "body": "",
+        "version": "",
+        "descendants": "/rest/api/content/65798145/descendant",
+        "space": "/rest/api/space/DUMMY"
+      },
+      "_links": {
+        "self": "https://ctreminiom.atlassian.net/wiki/rest/api/content/65798145",
+        "tinyui": "/x/AQDsAw",
+        "editui": "/pages/resumedraft.action?draftId=65798145",
+        "webui": "/spaces/DUMMY/pages/65798145/new+page"
+      }
+    }
+  ],
+  "start": 0,
+  "limit": 25,
+  "size": 4,
+  "_links": {
+    "base": "https://ctreminiom.atlassian.net/wiki",
+    "context": "/wiki",
+    "self": "https://ctreminiom.atlassian.net/wiki/rest/api/content?expand=operations"
+  }
+}

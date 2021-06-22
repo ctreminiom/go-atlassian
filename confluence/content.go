@@ -139,8 +139,8 @@ type ExpandableScheme struct {
 	Homepage            string `json:"homepage"`
 }
 
-// Get returns all content in a Confluence instance.
-func (c *ContentService) Get(ctx context.Context, options *GetContentOptionsScheme, startAt, maxResults int) (result *ContentPageScheme, response *ResponseScheme, err error) {
+// Gets returns all content in a Confluence instance.
+func (c *ContentService) Gets(ctx context.Context, options *GetContentOptionsScheme, startAt, maxResults int) (result *ContentPageScheme, response *ResponseScheme, err error) {
 
 	query := url.Values{}
 	query.Add("start", strconv.Itoa(startAt))

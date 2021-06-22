@@ -186,7 +186,7 @@ func TestContentService_Create(t *testing.T) {
 
 }
 
-func TestContentService_Get(t *testing.T) {
+func TestContentService_Gets(t *testing.T) {
 
 	testCases := []struct {
 		name                string
@@ -200,7 +200,7 @@ func TestContentService_Get(t *testing.T) {
 		wantErr             bool
 	}{
 		{
-			name: "GetContentWhenTheAllOptionsAreProvided",
+			name: "GetsContentWhenTheAllOptionsAreProvided",
 			options: &GetContentOptionsScheme{
 				ContextType: "page",
 				SpaceKey:    "DUMMY",
@@ -222,7 +222,7 @@ func TestContentService_Get(t *testing.T) {
 		},
 
 		{
-			name: "GetContentWhenTheContextIsNotSet",
+			name: "GetsContentWhenTheContextIsNotSet",
 			options: &GetContentOptionsScheme{
 				ContextType: "page",
 				SpaceKey:    "DUMMY",
@@ -244,7 +244,7 @@ func TestContentService_Get(t *testing.T) {
 		},
 
 		{
-			name: "GetContentWhenTheRequestMethodIsIncorrect",
+			name: "GetsContentWhenTheRequestMethodIsIncorrect",
 			options: &GetContentOptionsScheme{
 				ContextType: "page",
 				SpaceKey:    "DUMMY",
@@ -266,7 +266,7 @@ func TestContentService_Get(t *testing.T) {
 		},
 
 		{
-			name: "GetContentWhenTheResponseStatusIsIncorrect",
+			name: "GetsContentWhenTheResponseStatusIsIncorrect",
 			options: &GetContentOptionsScheme{
 				ContextType: "page",
 				SpaceKey:    "DUMMY",
@@ -288,7 +288,7 @@ func TestContentService_Get(t *testing.T) {
 		},
 
 		{
-			name: "GetContentWhenTheResponseBodyIsEmpty",
+			name: "GetsContentWhenTheResponseBodyIsEmpty",
 			options: &GetContentOptionsScheme{
 				ContextType: "page",
 				SpaceKey:    "DUMMY",
@@ -339,7 +339,7 @@ func TestContentService_Get(t *testing.T) {
 
 			service := &ContentService{client: mockClient}
 
-			gotResult, gotResponse, err := service.Get(
+			gotResult, gotResponse, err := service.Gets(
 				testCase.context,
 				testCase.options,
 				testCase.startAt,

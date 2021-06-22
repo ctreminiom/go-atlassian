@@ -34,7 +34,7 @@ func main() {
 		//PostingDay:  time.Now(),
 	}
 
-	page, response, err := instance.Content.Get(context.Background(), options, 0, 50)
+	page, response, err := instance.Content.Gets(context.Background(), options, 0, 50)
 	if err != nil {
 
 		if response != nil {

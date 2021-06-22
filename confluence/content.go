@@ -2,7 +2,6 @@ package confluence
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -228,7 +227,3 @@ func (c *ContentService) Create(ctx context.Context, payload *ContentScheme) (re
 
 	return
 }
-
-var (
-	noContentProvidedError = errors.New("failed to parse the *ContentScheme pointer, please provide a valid one")
-)

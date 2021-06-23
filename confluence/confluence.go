@@ -119,6 +119,7 @@ func transformTheHTTPResponse(response *http.Response, structure interface{}) (r
 			responseTransformed.API = &apiError
 			return responseTransformed, fmt.Errorf(requestFailedError, response.StatusCode)
 		}
+		return responseTransformed, fmt.Errorf(requestFailedError, response.StatusCode)
 	}
 
 	responseAsBytes, err := ioutil.ReadAll(response.Body)
@@ -127,7 +128,7 @@ func transformTheHTTPResponse(response *http.Response, structure interface{}) (r
 	}
 
 	if err = json.Unmarshal(responseAsBytes, &structure); err != nil {
-		return nil, err
+		return responseTransformed, err
 	}
 
 	responseTransformed.Bytes.Write(responseAsBytes)

@@ -227,3 +227,47 @@ func (c *ContentService) Create(ctx context.Context, payload *ContentScheme) (re
 
 	return
 }
+
+// Search returns the list of content that matches a Confluence Query Language (CQL) query
+func (c *ContentService) Search(ctx context.Context, cql, cqlContext string, expand []string, cursor string, maxResults int) (result *ContentPageScheme, response *ResponseScheme, err error) {
+
+	if cql == "" {
+		return nil, nil, notCqlProvidedError
+	}
+
+	query := url.Values{}
+	query.Add("limit", strconv.Itoa(maxResults))
+	query.Add("cql", cql)
+
+	if cursor != "" {
+		query.Add("cursor", cursor)
+	}
+
+	if cqlContext != "" {
+		query.Add("cqlcontext", cqlContext)
+	}
+
+	if len(expand) != 0 {
+		query.Add("expand", strings.Join(expand, ","))
+	}
+
+	var endpoint = fmt.Sprintf("/wiki/rest/api/search?%v", query.Encode())
+
+	request, err := c.client.newRequest(ctx, http.MethodGet, endpoint, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	request.Header.Set("Accept", "application/json")
+
+	response, err = c.client.Call(request, &result)
+	if err != nil {
+		return nil, response, err
+	}
+
+	return
+}
+
+var (
+	notCqlProvidedError = fmt.Errorf("error, cql parameter is required, please provide a valid value")
+)

@@ -43,10 +43,9 @@ func TestContentService_Create(t *testing.T) {
 			wantErr:            false,
 		},
 
-
 		{
-			name: "CreateContentWhenThePayloadIsNotProvided",
-			payload: nil,
+			name:               "CreateContentWhenThePayloadIsNotProvided",
+			payload:            nil,
 			mockFile:           "./mocks/create-content.json",
 			wantHTTPMethod:     http.MethodPost,
 			endpoint:           "/wiki/rest/api/content",
@@ -345,6 +344,180 @@ func TestContentService_Gets(t *testing.T) {
 				testCase.startAt,
 				testCase.maxResults,
 			)
+
+			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+
+				assert.Error(t, err)
+			} else {
+
+				assert.NoError(t, err)
+				assert.NotEqual(t, gotResponse, nil)
+				assert.NotEqual(t, gotResult, nil)
+
+				apiEndpoint, err := url.Parse(gotResponse.Endpoint)
+				if err != nil {
+					t.Fatal(err)
+				}
+
+				var endpointToAssert string
+
+				if apiEndpoint.Query().Encode() != "" {
+					endpointToAssert = fmt.Sprintf("%v?%v", apiEndpoint.Path, apiEndpoint.Query().Encode())
+				} else {
+					endpointToAssert = apiEndpoint.Path
+				}
+
+				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
+				assert.Equal(t, testCase.endpoint, endpointToAssert)
+			}
+
+		})
+
+	}
+
+}
+
+func TestContentService_Search(t *testing.T) {
+
+	testCases := []struct {
+		name               string
+		cql, cqlContext    string
+		expand             []string
+		cursor             string
+		maxResults         int
+		mockFile           string
+		wantHTTPMethod     string
+		endpoint           string
+		context            context.Context
+		wantHTTPCodeReturn int
+		wantErr            bool
+	}{
+		{
+			name:               "SearchContentsWhenTheParametersAreCorrect",
+			cql:                "type=page",
+			cqlContext:         "DUMMY",
+			expand:             []string{"space", "metadata.labels"},
+			cursor:             "ca470fa51eb0",
+			maxResults:         50,
+			mockFile:           "./mocks/get-contents.json",
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/wiki/rest/api/search?cql=type%3Dpage&cqlcontext=DUMMY&cursor=ca470fa51eb0&expand=space%2Cmetadata.labels&limit=50",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            false,
+		},
+
+		{
+			name:               "SearchContentsWhenTheCQLIsNotProvided",
+			cql:                "",
+			cqlContext:         "DUMMY",
+			expand:             []string{"space", "metadata.labels"},
+			cursor:             "ca470fa51eb0",
+			maxResults:         50,
+			mockFile:           "./mocks/get-contents.json",
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/wiki/rest/api/search?cql=type%3Dpage&cqlcontext=DUMMY&cursor=ca470fa51eb0&expand=space%2Cmetadata.labels&limit=50",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+
+		{
+			name:               "SearchContentsWhenTheContextIsNil",
+			cql:                "type=page",
+			cqlContext:         "DUMMY",
+			expand:             []string{"space", "metadata.labels"},
+			cursor:             "ca470fa51eb0",
+			maxResults:         50,
+			mockFile:           "./mocks/get-contents.json",
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/wiki/rest/api/search?cql=type%3Dpage&cqlcontext=DUMMY&cursor=ca470fa51eb0&expand=space%2Cmetadata.labels&limit=50",
+			context:            nil,
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+
+		{
+			name:               "SearchContentsWhenTheRequestMethodIsIncorrect",
+			cql:                "type=page",
+			cqlContext:         "DUMMY",
+			expand:             []string{"space", "metadata.labels"},
+			cursor:             "ca470fa51eb0",
+			maxResults:         50,
+			mockFile:           "./mocks/get-contents.json",
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/wiki/rest/api/search?cql=type%3Dpage&cqlcontext=DUMMY&cursor=ca470fa51eb0&expand=space%2Cmetadata.labels&limit=50",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+
+		{
+			name:               "SearchContentsWhenTheStatusCodeIsIncorrect",
+			cql:                "type=page",
+			cqlContext:         "DUMMY",
+			expand:             []string{"space", "metadata.labels"},
+			cursor:             "ca470fa51eb0",
+			maxResults:         50,
+			mockFile:           "./mocks/get-contents.json",
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/wiki/rest/api/search?cql=type%3Dpage&cqlcontext=DUMMY&cursor=ca470fa51eb0&expand=space%2Cmetadata.labels&limit=50",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusBadRequest,
+			wantErr:            true,
+		},
+
+		{
+			name:               "SearchContentsWhenTheRequestBodyIsEmpty",
+			cql:                "type=page",
+			cqlContext:         "DUMMY",
+			expand:             []string{"space", "metadata.labels"},
+			cursor:             "ca470fa51eb0",
+			maxResults:         50,
+			mockFile:           "./mocks/empty-json.json",
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/wiki/rest/api/search?cql=type%3Dpage&cqlcontext=DUMMY&cursor=ca470fa51eb0&expand=space%2Cmetadata.labels&limit=50",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+	}
+
+	for _, testCase := range testCases {
+
+		testCase := testCase
+		t.Run(testCase.name, func(t *testing.T) {
+			t.Parallel()
+
+			//Init a new HTTP mock server
+			mockOptions := mockServerOptions{
+				Endpoint:           testCase.endpoint,
+				MockFilePath:       testCase.mockFile,
+				MethodAccepted:     testCase.wantHTTPMethod,
+				ResponseCodeWanted: testCase.wantHTTPCodeReturn,
+			}
+
+			mockServer, err := startMockServer(&mockOptions)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			defer mockServer.Close()
+
+			//Init the library instance
+			mockClient, err := startMockClient(mockServer.URL)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			service := &ContentService{client: mockClient}
+
+			gotResult, gotResponse, err := service.Search(testCase.context, testCase.cql, testCase.cqlContext,
+				testCase.expand, testCase.cursor, testCase.maxResults)
 
 			if testCase.wantErr {
 

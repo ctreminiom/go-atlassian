@@ -193,7 +193,7 @@ func (c *ContentService) Gets(ctx context.Context, options *GetContentOptionsSch
 
 	response, err = c.client.Call(request, &result)
 	if err != nil {
-		return nil, nil, err
+		return nil, response, err
 	}
 
 	return
@@ -222,7 +222,7 @@ func (c *ContentService) Create(ctx context.Context, payload *ContentScheme) (re
 
 	response, err = c.client.Call(request, &result)
 	if err != nil {
-		return nil, nil, err
+		return nil, response, err
 	}
 
 	return
@@ -268,6 +268,48 @@ func (c *ContentService) Search(ctx context.Context, cql, cqlContext string, exp
 	return
 }
 
+// Get returns a single piece of content, like a page or a blog post.
+// By default, the following objects are expanded: space, history, version.
+func (c *ContentService) Get(ctx context.Context, contentID string, expand []string, version int) (result *ContentScheme, response *ResponseScheme, err error) {
+
+	if len(contentID) == 0 {
+		return nil, nil, notContentIDError
+	}
+
+	query := url.Values{}
+
+	if len(expand) != 0 {
+		query.Add("expand", strings.Join(expand, ","))
+	}
+
+	if version != 0 {
+		query.Add("version", strconv.Itoa(version))
+	}
+
+	var endpoint strings.Builder
+	endpoint.WriteString(fmt.Sprintf("/wiki/rest/api/content/%v", contentID))
+
+	if query.Encode() != "" {
+		endpoint.WriteString(fmt.Sprintf("?%v", query.Encode()))
+	}
+
+	request, err := c.client.newRequest(ctx, http.MethodGet, endpoint.String(), nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	request.Header.Set("Accept", "application/json")
+
+	response, err = c.client.Call(request, &result)
+	if err != nil {
+		return nil, response, err
+	}
+
+	return
+}
+
+
 var (
 	notCqlProvidedError = fmt.Errorf("error, cql parameter is required, please provide a valid value")
+	notContentIDError = fmt.Errorf("error, the content ID is required, please provide a valid value")
 )

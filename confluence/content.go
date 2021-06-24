@@ -344,6 +344,43 @@ func (c *ContentService) Update(ctx context.Context, contentID string, payload *
 	return
 }
 
+// Delete moves a piece of content to the space's trash or purges it from the trash,
+// depending on the content's type and status:
+// If the content's type is page or blogpost and its status is current, it will be trashed.
+// If the content's type is page or blogpost and its status is trashed, the content will be purged from the trash and deleted permanently.
+// === Note, you must also set the status query parameter to trashed in your request. ===
+// If the content's type is comment or attachment, it will be deleted permanently without being trashed.
+func (c *ContentService) Delete(ctx context.Context, contentID, status string) (response *ResponseScheme, err error) {
+
+	if len(contentID) == 0 {
+		return nil,  notContentIDError
+	}
+
+	query := url.Values{}
+	if status != "" {
+		query.Add("status", status)
+	}
+
+	var endpoint strings.Builder
+	endpoint.WriteString(fmt.Sprintf("/wiki/rest/api/content/%v", contentID))
+
+	if query.Encode() != "" {
+		endpoint.WriteString(fmt.Sprintf("?%v", query.Encode()))
+	}
+
+	request, err := c.client.newRequest(ctx, http.MethodDelete, endpoint.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	response, err = c.client.Call(request, nil)
+	if err != nil {
+		return response, err
+	}
+
+	return
+}
+
 var (
 	notCqlProvidedError = fmt.Errorf("error, cql parameter is required, please provide a valid value")
 	notContentIDError   = fmt.Errorf("error, the content ID is required, please provide a valid value")

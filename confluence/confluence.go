@@ -127,8 +127,10 @@ func transformTheHTTPResponse(response *http.Response, structure interface{}) (r
 		return responseTransformed, err
 	}
 
-	if err = json.Unmarshal(responseAsBytes, &structure); err != nil {
-		return responseTransformed, err
+	if structure != nil {
+		if err = json.Unmarshal(responseAsBytes, &structure); err != nil {
+			return responseTransformed, err
+		}
 	}
 
 	responseTransformed.Bytes.Write(responseAsBytes)

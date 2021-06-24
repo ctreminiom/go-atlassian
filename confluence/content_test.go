@@ -558,16 +558,16 @@ func TestContentService_Search(t *testing.T) {
 func TestContentService_Get(t *testing.T) {
 
 	testCases := []struct {
-		name                string
-		contentID string
-		expand []string
-		version int
-		mockFile            string
-		wantHTTPMethod      string
-		endpoint            string
-		context             context.Context
-		wantHTTPCodeReturn  int
-		wantErr             bool
+		name               string
+		contentID          string
+		expand             []string
+		version            int
+		mockFile           string
+		wantHTTPMethod     string
+		endpoint           string
+		context            context.Context
+		wantHTTPCodeReturn int
+		wantErr            bool
 	}{
 		{
 			name:               "GetContentWhenTheParametersAreCorrect",
@@ -715,3 +715,233 @@ func TestContentService_Get(t *testing.T) {
 
 }
 
+func TestContentService_Update(t *testing.T) {
+
+	testCases := []struct {
+		name               string
+		contentID          string
+		payload            *ContentScheme
+		mockFile           string
+		wantHTTPMethod     string
+		endpoint           string
+		context            context.Context
+		wantHTTPCodeReturn int
+		wantErr            bool
+	}{
+		{
+			name:      "UpdateContentWhenTheParametersAreCorrect",
+			contentID: "2939332",
+			payload: &ContentScheme{
+				Type:  "page", // Valid values: page, blogpost, comment
+				Title: "Confluence Page Title",
+				Space: &SpaceScheme{Key: "DUMMY"},
+				Body: &BodyScheme{
+					Storage: &BodyNodeScheme{
+						Value:          "<p>This is <br/> a new page</p>",
+						Representation: "storage",
+					},
+				},
+				Version: &VersionScheme{Number: 2},
+			},
+			mockFile:           "./mocks/get-content.json",
+			wantHTTPMethod:     http.MethodPut,
+			endpoint:           "/wiki/rest/api/content/2939332",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            false,
+		},
+
+		{
+			name:      "UpdateContentWhenTheContentIDIsNotProvided",
+			contentID: "",
+			payload: &ContentScheme{
+				Type:  "page", // Valid values: page, blogpost, comment
+				Title: "Confluence Page Title",
+				Space: &SpaceScheme{Key: "DUMMY"},
+				Body: &BodyScheme{
+					Storage: &BodyNodeScheme{
+						Value:          "<p>This is <br/> a new page</p>",
+						Representation: "storage",
+					},
+				},
+				Version: &VersionScheme{Number: 2},
+			},
+			mockFile:           "./mocks/get-content.json",
+			wantHTTPMethod:     http.MethodPut,
+			endpoint:           "/wiki/rest/api/content/2939332",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+
+		{
+			name:               "UpdateContentWhenThePayloadIsNotProvided",
+			contentID:          "2939332",
+			payload:            nil,
+			mockFile:           "./mocks/get-content.json",
+			wantHTTPMethod:     http.MethodPut,
+			endpoint:           "/wiki/rest/api/content/2939332",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+
+		{
+			name:      "UpdateContentWhenTheContentIsNotProvided",
+			contentID: "2939332",
+			payload: &ContentScheme{
+				Type:  "page", // Valid values: page, blogpost, comment
+				Title: "Confluence Page Title",
+				Space: &SpaceScheme{Key: "DUMMY"},
+				Body: &BodyScheme{
+					Storage: &BodyNodeScheme{
+						Value:          "<p>This is <br/> a new page</p>",
+						Representation: "storage",
+					},
+				},
+				Version: &VersionScheme{Number: 2},
+			},
+			mockFile:           "./mocks/get-content.json",
+			wantHTTPMethod:     http.MethodPut,
+			endpoint:           "/wiki/rest/api/content/2939332",
+			context:            nil,
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+
+		{
+			name:      "UpdateContentWhenTheRequestMethodIsIncorrect",
+			contentID: "2939332",
+			payload: &ContentScheme{
+				Type:  "page", // Valid values: page, blogpost, comment
+				Title: "Confluence Page Title",
+				Space: &SpaceScheme{Key: "DUMMY"},
+				Body: &BodyScheme{
+					Storage: &BodyNodeScheme{
+						Value:          "<p>This is <br/> a new page</p>",
+						Representation: "storage",
+					},
+				},
+				Version: &VersionScheme{Number: 2},
+			},
+			mockFile:           "./mocks/get-content.json",
+			wantHTTPMethod:     http.MethodHead,
+			endpoint:           "/wiki/rest/api/content/2939332",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+
+		{
+			name:      "UpdateContentWhenTheStatusCodeIsIncorrect",
+			contentID: "2939332",
+			payload: &ContentScheme{
+				Type:  "page", // Valid values: page, blogpost, comment
+				Title: "Confluence Page Title",
+				Space: &SpaceScheme{Key: "DUMMY"},
+				Body: &BodyScheme{
+					Storage: &BodyNodeScheme{
+						Value:          "<p>This is <br/> a new page</p>",
+						Representation: "storage",
+					},
+				},
+				Version: &VersionScheme{Number: 2},
+			},
+			mockFile:           "./mocks/get-content.json",
+			wantHTTPMethod:     http.MethodPut,
+			endpoint:           "/wiki/rest/api/content/2939332",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusBadRequest,
+			wantErr:            true,
+		},
+
+		{
+			name:      "UpdateContentWhenTheResponseBodyIsEmpty",
+			contentID: "2939332",
+			payload: &ContentScheme{
+				Type:  "page", // Valid values: page, blogpost, comment
+				Title: "Confluence Page Title",
+				Space: &SpaceScheme{Key: "DUMMY"},
+				Body: &BodyScheme{
+					Storage: &BodyNodeScheme{
+						Value:          "<p>This is <br/> a new page</p>",
+						Representation: "storage",
+					},
+				},
+				Version: &VersionScheme{Number: 2},
+			},
+			mockFile:           "./mocks/empty-json.json",
+			wantHTTPMethod:     http.MethodPut,
+			endpoint:           "/wiki/rest/api/content/2939332",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+	}
+
+	for _, testCase := range testCases {
+
+		testCase := testCase
+		t.Run(testCase.name, func(t *testing.T) {
+			t.Parallel()
+
+			//Init a new HTTP mock server
+			mockOptions := mockServerOptions{
+				Endpoint:           testCase.endpoint,
+				MockFilePath:       testCase.mockFile,
+				MethodAccepted:     testCase.wantHTTPMethod,
+				ResponseCodeWanted: testCase.wantHTTPCodeReturn,
+			}
+
+			mockServer, err := startMockServer(&mockOptions)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			defer mockServer.Close()
+
+			//Init the library instance
+			mockClient, err := startMockClient(mockServer.URL)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			service := &ContentService{client: mockClient}
+
+			gotResult, gotResponse, err := service.Update(testCase.context, testCase.contentID, testCase.payload)
+
+			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+
+				assert.Error(t, err)
+			} else {
+
+				assert.NoError(t, err)
+				assert.NotEqual(t, gotResponse, nil)
+				assert.NotEqual(t, gotResult, nil)
+
+				apiEndpoint, err := url.Parse(gotResponse.Endpoint)
+				if err != nil {
+					t.Fatal(err)
+				}
+
+				var endpointToAssert string
+
+				if apiEndpoint.Query().Encode() != "" {
+					endpointToAssert = fmt.Sprintf("%v?%v", apiEndpoint.Path, apiEndpoint.Query().Encode())
+				} else {
+					endpointToAssert = apiEndpoint.Path
+				}
+
+				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
+				assert.Equal(t, testCase.endpoint, endpointToAssert)
+			}
+
+		})
+
+	}
+
+}

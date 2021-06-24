@@ -51,6 +51,11 @@ type ContentScheme struct {
 	Metadata   *MetadataScheme    `json:"metadata,omitempty"`
 	Operations []*OperationScheme `json:"operations,omitempty"`
 	Body       *BodyScheme        `json:"body,omitempty"`
+	Version    *VersionScheme     `json:"version,omitempty"`
+}
+
+type VersionScheme struct {
+	Number int `json:"number,omitempty"`
 }
 
 type BodyScheme struct {
@@ -308,8 +313,38 @@ func (c *ContentService) Get(ctx context.Context, contentID string, expand []str
 	return
 }
 
+// Update updates a piece of content.
+// Use this method to update the title or body of a piece of content, change the status, change the parent page, and more.
+func (c *ContentService) Update(ctx context.Context, contentID string, payload *ContentScheme) (result *ContentScheme, response *ResponseScheme, err error) {
+
+	if len(contentID) == 0 {
+		return nil, nil, notContentIDError
+	}
+
+	payloadAsReader, err := transformStructToReader(payload)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	var endpoint = fmt.Sprintf("/wiki/rest/api/content/%v", contentID)
+
+	request, err := c.client.newRequest(ctx, http.MethodPut, endpoint, payloadAsReader)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	request.Header.Set("Accept", "application/json")
+	request.Header.Set("Content-Type", "application/json")
+
+	response, err = c.client.Call(request, &result)
+	if err != nil {
+		return nil, response, err
+	}
+
+	return
+}
 
 var (
 	notCqlProvidedError = fmt.Errorf("error, cql parameter is required, please provide a valid value")
-	notContentIDError = fmt.Errorf("error, the content ID is required, please provide a valid value")
+	notContentIDError   = fmt.Errorf("error, the content ID is required, please provide a valid value")
 )

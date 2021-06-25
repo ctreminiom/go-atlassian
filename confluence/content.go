@@ -55,7 +55,24 @@ type ContentScheme struct {
 }
 
 type VersionScheme struct {
-	Number int `json:"number,omitempty"`
+	By            *UserScheme                 `json:"by,omitempty"`
+	Number        int                         `json:"number,omitempty"`
+	When          string                      `json:"when,omitempty"`
+	FriendlyWhen  string                      `json:"friendlyWhen,omitempty"`
+	Message       string                      `json:"message,omitempty"`
+	MinorEdit     bool                        `json:"minorEdit,omitempty"`
+	Content       *ContentScheme              `json:"content,omitempty"`
+	Collaborators *VersionCollaboratorsScheme `json:"collaborators,omitempty"`
+	Expandable    struct {
+		Content       string `json:"content"`
+		Collaborators string `json:"collaborators"`
+	} `json:"_expandable"`
+	ContentTypeModified bool `json:"contentTypeModified"`
+}
+
+type VersionCollaboratorsScheme struct {
+	Users    []*UserScheme `json:"users,omitempty"`
+	UserKeys []string      `json:"userKeys,omitempty"`
 }
 
 type BodyScheme struct {
@@ -142,6 +159,10 @@ type ExpandableScheme struct {
 	Description         string `json:"description"`
 	Theme               string `json:"theme"`
 	Homepage            string `json:"homepage"`
+	LastUpdated         string `json:"lastUpdated"`
+	PreviousVersion     string `json:"previousVersion"`
+	Contributors        string `json:"contributors"`
+	NextVersion         string `json:"nextVersion"`
 }
 
 // Gets returns all content in a Confluence instance.
@@ -353,7 +374,7 @@ func (c *ContentService) Update(ctx context.Context, contentID string, payload *
 func (c *ContentService) Delete(ctx context.Context, contentID, status string) (response *ResponseScheme, err error) {
 
 	if len(contentID) == 0 {
-		return nil,  notContentIDError
+		return nil, notContentIDError
 	}
 
 	query := url.Values{}
@@ -376,6 +397,98 @@ func (c *ContentService) Delete(ctx context.Context, contentID, status string) (
 	response, err = c.client.Call(request, nil)
 	if err != nil {
 		return response, err
+	}
+
+	return
+}
+
+type ContentHistoryScheme struct {
+	Latest          bool                              `json:"latest,omitempty"`
+	CreatedBy       *UserScheme                       `json:"createdBy,omitempty"`
+	CreatedDate     string                            `json:"createdDate,omitempty"`
+	LastUpdated     *VersionScheme                    `json:"lastUpdated,omitempty"`
+	PreviousVersion *VersionScheme                    `json:"previousVersion,omitempty"`
+	Contributors    *ContentHistoryContributorsScheme `json:"contributors,omitempty"`
+	NextVersion     *VersionScheme                    `json:"nextVersion,omitempty"`
+	Expandable      *ExpandableScheme                 `json:"_expandable,omitempty"`
+	Links           *LinkScheme                       `json:"_links,omitempty"`
+}
+
+type ContentHistoryContributorsScheme struct {
+	Publishers *VersionCollaboratorsScheme `json:"publishers,omitempty"`
+}
+
+type UserScheme struct {
+	Type           string                `json:"type,omitempty"`
+	Username       string                `json:"username,omitempty"`
+	UserKey        string                `json:"userKey,omitempty"`
+	AccountID      string                `json:"accountId,omitempty"`
+	AccountType    string                `json:"accountType,omitempty"`
+	Email          string                `json:"email,omitempty"`
+	PublicName     string                `json:"publicName,omitempty"`
+	ProfilePicture *ProfilePictureScheme `json:"profilePicture,omitempty"`
+	DisplayName    string                `json:"displayName,omitempty"`
+	Operations     []*OperationScheme    `json:"operations,omitempty"`
+	Details        *UserDetailScheme     `json:"details,omitempty"`
+	PersonalSpace  *SpaceScheme          `json:"personalSpace,omitempty"`
+	Expandable     *ExpandableScheme     `json:"_expandable,omitempty"`
+	Links          *LinkScheme           `json:"_links,omitempty"`
+}
+
+type ProfilePictureScheme struct {
+	Path      string `json:"path,omitempty"`
+	Width     int    `json:"width,omitempty"`
+	Height    int    `json:"height,omitempty"`
+	IsDefault bool   `json:"isDefault,omitempty"`
+}
+
+type UserDetailScheme struct {
+	Business *UserBusinessDetailScheme `json:"business,omitempty"`
+	Personal *UserPersonalDetailScheme `json:"personal,omitempty"`
+}
+
+type UserBusinessDetailScheme struct {
+	Position   string `json:"position,omitempty"`
+	Department string `json:"department,omitempty"`
+	Location   string `json:"location,omitempty"`
+}
+
+type UserPersonalDetailScheme struct {
+	Phone   string `json:"phone,omitempty"`
+	Im      string `json:"im,omitempty"`
+	Website string `json:"website,omitempty"`
+	Email   string `json:"email,omitempty"`
+}
+
+// History returns the most recent update for a piece of content.
+func (c *ContentService) History(ctx context.Context, contentID string, expand []string) (result *ContentHistoryScheme, response *ResponseScheme, err error) {
+
+	if len(contentID) == 0 {
+		return nil, nil, notContentIDError
+	}
+
+	query := url.Values{}
+	if len(expand) != 0 {
+		query.Add("expand", strings.Join(expand, ","))
+	}
+
+	var endpoint strings.Builder
+	endpoint.WriteString(fmt.Sprintf("/wiki/rest/api/content/%v/history", contentID))
+
+	if query.Encode() != "" {
+		endpoint.WriteString(fmt.Sprintf("?%v", query.Encode()))
+	}
+
+	request, err := c.client.newRequest(ctx, http.MethodGet, endpoint.String(), nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	request.Header.Set("Accept", "application/json")
+
+	response, err = c.client.Call(request, &result)
+	if err != nil {
+		return nil, response, err
 	}
 
 	return

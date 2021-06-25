@@ -1097,3 +1097,169 @@ func TestContentService_Delete(t *testing.T) {
 	}
 
 }
+
+func TestContentService_History(t *testing.T) {
+
+	testCases := []struct {
+		name               string
+		contentID          string
+		expand             []string
+		mockFile           string
+		wantHTTPMethod     string
+		endpoint           string
+		context            context.Context
+		wantHTTPCodeReturn int
+		wantErr            bool
+	}{
+		{
+			name:               "GetContentHistoryWhenTheParametersAreCorrect",
+			contentID:          "339sa9as9s",
+			expand:             []string{"nextVersion", "lastVersion"},
+			mockFile:           "./mocks/get-content-history.json",
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/wiki/rest/api/content/339sa9as9s/history?expand=nextVersion%2ClastVersion",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            false,
+		},
+
+		{
+			name:               "GetContentHistoryWhenTheContextIsNotProvided",
+			contentID:          "339sa9as9s",
+			expand:             []string{"nextVersion", "lastVersion"},
+			mockFile:           "./mocks/get-content-history.json",
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/wiki/rest/api/content/339sa9as9s/history?expand=nextVersion%2ClastVersion",
+			context:            nil,
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+
+		{
+			name:               "GetContentHistoryWhenTheContentIDIsNotProvided",
+			contentID:          "",
+			expand:             []string{"nextVersion", "lastVersion"},
+			mockFile:           "./mocks/get-content-history.json",
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/wiki/rest/api/content/339sa9as9s/history?expand=nextVersion%2ClastVersion",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+
+		{
+			name:               "GetContentHistoryWhenTheExpandsAreNotProvided",
+			contentID:          "339sa9as9s",
+			expand:             nil,
+			mockFile:           "./mocks/get-content-history.json",
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/wiki/rest/api/content/339sa9as9s/history",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            false,
+		},
+
+		{
+			name:               "GetContentHistoryWhenTheRequestMethodIsIncorrect",
+			contentID:          "339sa9as9s",
+			expand:             []string{"nextVersion", "lastVersion"},
+			mockFile:           "./mocks/get-content-history.json",
+			wantHTTPMethod:     http.MethodPut,
+			endpoint:           "/wiki/rest/api/content/339sa9as9s/history?expand=nextVersion%2ClastVersion",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+
+		{
+			name:               "GetContentHistoryWhenTheStatusCodeIsIncorrect",
+			contentID:          "339sa9as9s",
+			expand:             []string{"nextVersion", "lastVersion"},
+			mockFile:           "./mocks/get-content-history.json",
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/wiki/rest/api/content/339sa9as9s/history?expand=nextVersion%2ClastVersion",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusBadRequest,
+			wantErr:            true,
+		},
+
+		{
+			name:               "GetContentHistoryWhenTheResponseBodyIsEmpty",
+			contentID:          "339sa9as9s",
+			expand:             []string{"nextVersion", "lastVersion"},
+			mockFile:           "./mocks/empty-json.json",
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/wiki/rest/api/content/339sa9as9s/history?expand=nextVersion%2ClastVersion",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+	}
+
+	for _, testCase := range testCases {
+
+		testCase := testCase
+		t.Run(testCase.name, func(t *testing.T) {
+			t.Parallel()
+
+			//Init a new HTTP mock server
+			mockOptions := mockServerOptions{
+				Endpoint:           testCase.endpoint,
+				MockFilePath:       testCase.mockFile,
+				MethodAccepted:     testCase.wantHTTPMethod,
+				ResponseCodeWanted: testCase.wantHTTPCodeReturn,
+			}
+
+			mockServer, err := startMockServer(&mockOptions)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			defer mockServer.Close()
+
+			//Init the library instance
+			mockClient, err := startMockClient(mockServer.URL)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			service := &ContentService{client: mockClient}
+
+			gotResult, gotResponse, err := service.History(testCase.context, testCase.contentID, testCase.expand)
+
+			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+
+				assert.Error(t, err)
+			} else {
+
+				assert.NoError(t, err)
+				assert.NotEqual(t, gotResponse, nil)
+				assert.NotEqual(t, gotResult, nil)
+
+				apiEndpoint, err := url.Parse(gotResponse.Endpoint)
+				if err != nil {
+					t.Fatal(err)
+				}
+
+				var endpointToAssert string
+
+				if apiEndpoint.Query().Encode() != "" {
+					endpointToAssert = fmt.Sprintf("%v?%v", apiEndpoint.Path, apiEndpoint.Query().Encode())
+				} else {
+					endpointToAssert = apiEndpoint.Path
+				}
+
+				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
+				assert.Equal(t, testCase.endpoint, endpointToAssert)
+			}
+
+		})
+
+	}
+
+}
+

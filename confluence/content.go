@@ -12,6 +12,7 @@ import (
 
 type ContentService struct {
 	client *Client
+	Attachment *ContentAttachmentService
 }
 
 type GetContentOptionsScheme struct {
@@ -36,6 +37,7 @@ type LinkScheme struct {
 	Tinyui  string `json:"tinyui,omitempty"`
 	Editui  string `json:"editui,omitempty"`
 	Webui   string `json:"webui,omitempty"`
+	Download string `json:"download,omitempty"`
 	Next    string `json:"next"`
 }
 
@@ -52,6 +54,15 @@ type ContentScheme struct {
 	Operations []*OperationScheme `json:"operations,omitempty"`
 	Body       *BodyScheme        `json:"body,omitempty"`
 	Version    *VersionScheme     `json:"version,omitempty"`
+	Extensions *ContentExtensionScheme `json:"extensions,omitempty"`
+}
+
+type ContentExtensionScheme struct {
+	MediaType            string `json:"mediaType,omitempty"`
+	FileSize             int    `json:"fileSize,omitempty"`
+	Comment              string `json:"comment,omitempty"`
+	MediaTypeDescription string `json:"mediaTypeDescription,omitempty"`
+	FileID               string `json:"fileId,omitempty"`
 }
 
 type VersionScheme struct {
@@ -97,6 +108,7 @@ type OperationScheme struct {
 type MetadataScheme struct {
 	Labels     *LabelsScheme     `json:"labels"`
 	Expandable *ExpandableScheme `json:"_expandable,omitempty"`
+	MediaType string `json:"mediaType,omitempty"`
 }
 
 type LabelsScheme struct {

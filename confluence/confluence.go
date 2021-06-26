@@ -41,7 +41,11 @@ func New(httpClient *http.Client, site string) (client *Client, err error) {
 	client.HTTP = httpClient
 	client.Site = siteAsURL
 	client.Auth = &AuthenticationService{client: client}
-	client.Content = &ContentService{client: client}
+
+	client.Content = &ContentService{
+		client: client,
+		Attachment: &ContentAttachmentService{client: client},
+	}
 
 	return
 }

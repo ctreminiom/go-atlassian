@@ -110,7 +110,7 @@ func (c *ContentAttachmentService) CreateOrUpdate(ctx context.Context, attachmen
 		return nil, nil, err
 	}
 
-	attachmentWriter.WriteField("minorEdit", "true")
+	_ = attachmentWriter.WriteField("minorEdit", "true")
 	attachmentWriter.Close()
 
 	request, err := c.client.newRequest(ctx, http.MethodPut, endpoint.String(), body)

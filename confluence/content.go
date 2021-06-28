@@ -14,6 +14,7 @@ type ContentService struct {
 	client *Client
 	Attachment *ContentAttachmentService
 	ChildrenDescendant *ContentChildrenDescendantService
+	Comment *ContentCommentService
 }
 
 type GetContentOptionsScheme struct {

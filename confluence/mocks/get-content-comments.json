@@ -1,0 +1,90 @@
+{
+  "results": [
+    {
+      "id": "80412678",
+      "type": "comment",
+      "status": "current",
+      "title": "Re: AAA",
+      "childTypes": {
+        "comment": {
+          "value": false,
+          "_links": {
+            "self": "https://ctreminiom.atlassian.net/wiki/rest/api/content/80412678/child/comment"
+          }
+        }
+      },
+      "macroRenderedOutput": {},
+      "extensions": {
+        "location": "footer",
+        "_expandable": {
+          "resolution": ""
+        }
+      },
+      "_expandable": {
+        "container": "/rest/api/content/76513281",
+        "metadata": "",
+        "operations": "",
+        "schedulePublishDate": "",
+        "children": "/rest/api/content/80412678/child",
+        "restrictions": "/rest/api/content/80412678/restriction/byOperation",
+        "history": "/rest/api/content/80412678/history",
+        "ancestors": "",
+        "body": "",
+        "version": "",
+        "descendants": "/rest/api/content/80412678/descendant",
+        "space": "/rest/api/space/DUMMY"
+      },
+      "_links": {
+        "webui": "/spaces/DUMMY/pages/76513281/AAA?focusedCommentId=80412678#comment-80412678",
+        "self": "https://ctreminiom.atlassian.net/wiki/rest/api/content/80412678"
+      }
+    },
+    {
+      "id": "80412685",
+      "type": "comment",
+      "status": "current",
+      "title": "Re: AAA",
+      "childTypes": {
+        "comment": {
+          "value": false,
+          "_links": {
+            "self": "https://ctreminiom.atlassian.net/wiki/rest/api/content/80412685/child/comment"
+          }
+        }
+      },
+      "macroRenderedOutput": {},
+      "extensions": {
+        "location": "footer",
+        "_expandable": {
+          "resolution": ""
+        }
+      },
+      "_expandable": {
+        "container": "/rest/api/content/76513281",
+        "metadata": "",
+        "operations": "",
+        "schedulePublishDate": "",
+        "children": "/rest/api/content/80412685/child",
+        "restrictions": "/rest/api/content/80412685/restriction/byOperation",
+        "history": "/rest/api/content/80412685/history",
+        "ancestors": "",
+        "body": "",
+        "version": "",
+        "descendants": "/rest/api/content/80412685/descendant",
+        "space": "/rest/api/space/DUMMY"
+      },
+      "_links": {
+        "webui": "/spaces/DUMMY/pages/76513281/AAA?focusedCommentId=80412685#comment-80412685",
+        "self": "https://ctreminiom.atlassian.net/wiki/rest/api/content/80412685"
+      }
+    }
+  ],
+  "start": 0,
+  "limit": 50,
+  "size": 2,
+  "_links": {
+    "base": "https://ctreminiom.atlassian.net/wiki",
+    "context": "/wiki",
+    "self": "https://ctreminiom.atlassian.net/wiki/rest/api/content/76513281/child/comment?expand=childTypes.all"
+  }
+}

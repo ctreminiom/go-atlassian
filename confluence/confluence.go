@@ -45,6 +45,7 @@ func New(httpClient *http.Client, site string) (client *Client, err error) {
 	client.Content = &ContentService{
 		client: client,
 		Attachment: &ContentAttachmentService{client: client},
+		ChildrenDescendant: &ContentChildrenDescendantService{client: client},
 	}
 
 	return

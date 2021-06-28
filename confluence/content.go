@@ -13,6 +13,7 @@ import (
 type ContentService struct {
 	client *Client
 	Attachment *ContentAttachmentService
+	ChildrenDescendant *ContentChildrenDescendantService
 }
 
 type GetContentOptionsScheme struct {

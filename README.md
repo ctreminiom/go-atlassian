@@ -144,12 +144,15 @@ func main() {
 }
 ````
 
-## 🛸 JetBrains OS licenses
+## 🧳 JetBrains OS licenses
 `go-atlassian` had been being developed with GoLand under the **free JetBrains Open Source license(s)** granted by JetBrains s.r.o., hence I would like to express my thanks here.
-<img src="./static/jetbrains-logo.svg?sanitize=true">
+<a href="https://www.jetbrains.com/?from=go-atlassian" target="_blank"><img src="./static/jetbrains-logo.svg" width="350" align="middle"/></a>
+
+## 🪐 GitBook Host
+`go-atlassian` documentation is hosted using the GitBook non-profit / open-source plan so hence I would like to express my thanks here.
+<a target="_blank"><img src="./static/gitbook-logo.svg" width="350" align="middle"/></a>
 
 ## ⭐️ Project assistance
-
 If you want to say **thank you** or/and support active development of `go-atlassian`:
 
 - Add a [GitHub Star](https://github.com/ctreminiom/go-atlassian) to the project.

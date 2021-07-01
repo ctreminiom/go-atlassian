@@ -90,6 +90,9 @@ $ go get -u -v github.com/ctreminiom/go-atlassian/jira/
 
 ## Atlassian Cloud Admin
 $ go get -u -v github.com/ctreminiom/go-atlassian/admin/
+
+## Jira Confluence Cloud
+$ go get -u -v github.com/ctreminiom/go-atlassian/confluence/
 ```
 
 ## 📓 Documentation
@@ -149,8 +152,6 @@ func main() {
 
 <img src="./static/jetbrains-logo.svg">
 
-<a href="https://www.jetbrains.com/?from=go-atlassian" target="_blank"><img src="./static/jetbrains-logo.svg" width="150" align="middle"/></a>
-
 ## 🪐 GitBook Host
 `go-atlassian` documentation is hosted using the GitBook non-profit / open-source plan so hence I would like to express my thanks here.
 
@@ -175,11 +176,6 @@ but focused on Cloud solutions.
 ```sh
 go test -v ./...
 ```
-
-## 💳 Credits
-In addition to all the contributors we would like to thank these vendors:
-- **Atlassian** for developing such a powerful ecosystem.
-- **Gitbook** for provided full features for open-source projects
 
 ## 📝 License
 Copyright © 2021 [Carlos Treminio](https://github.com/ctreminiom).

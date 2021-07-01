@@ -1,0 +1,34 @@
+{
+  "id": "64290828",
+  "type": "page",
+  "status": "current",
+  "title": "Confluence Page Title",
+  "macroRenderedOutput": {},
+  "extensions": {
+    "position": 1196
+  },
+  "_expandable": {
+    "container": "/rest/api/space/DUMMY",
+    "metadata": "",
+    "restrictions": "/rest/api/content/64290828/restriction/byOperation",
+    "history": "/rest/api/content/64290828/history",
+    "body": "",
+    "version": "",
+    "descendants": "/rest/api/content/64290828/descendant",
+    "space": "/rest/api/space/DUMMY",
+    "childTypes": "",
+    "operations": "",
+    "schedulePublishDate": "",
+    "children": "/rest/api/content/64290828/child",
+    "ancestors": ""
+  },
+  "_links": {
+    "editui": "/pages/resumedraft.action?draftId=64290828",
+    "webui": "/spaces/DUMMY/pages/64290828/Confluence+Page+Title",
+    "context": "/wiki",
+    "self": "https://ctreminiom.atlassian.net/wiki/rest/api/content/64290828",
+    "tinyui": "/x/DADVAw",
+    "collection": "/rest/api/content",
+    "base": "https://ctreminiom.atlassian.net/wiki"
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "results": [
+    {
+      "id": 80838666,
+      "key": "DS",
+      "name": "Destination Sapce",
+      "type": "global",
+      "status": "current",
+      "_expandable": {
+        "settings": "/rest/api/space/DS/settings",
+        "metadata": "",
+        "operations": "",
+        "lookAndFeel": "/rest/api/settings/lookandfeel?spaceKey=DS",
+        "identifiers": "",
+        "permissions": "",
+        "icon": "",
+        "description": "",
+        "theme": "/rest/api/space/DS/theme",
+        "history": "",
+        "homepage": "/rest/api/content/80838723"
+      },
+      "_links": {
+        "webui": "/spaces/DS",
+        "self": "https://ctreminiom.atlassian.net/wiki/rest/api/space/DS"
+      }
+    },
+    {
+      "id": 196613,
+      "key": "DUMMY",
+      "name": "DUMMY",
+      "type": "global",
+      "status": "current",
+      "_expandable": {
+        "settings": "/rest/api/space/DUMMY/settings",
+        "metadata": "",
+        "operations": "",
+        "lookAndFeel": "/rest/api/settings/lookandfeel?spaceKey=DUMMY",
+        "identifiers": "",
+        "permissions": "",
+        "icon": "",
+        "description": "",
+        "theme": "/rest/api/space/DUMMY/theme",
+        "history": "",
+        "homepage": "/rest/api/content/196695"
+      },
+      "_links": {
+        "webui": "/spaces/DUMMY",
+        "self": "https://ctreminiom.atlassian.net/wiki/rest/api/space/DUMMY"
+      }
+    }
+  ],
+  "start": 0,
+  "limit": 25,
+  "size": 2,
+  "_links": {
+    "base": "https://ctreminiom.atlassian.net/wiki",
+    "context": "/wiki",
+    "self": "https://ctreminiom.atlassian.net/wiki/rest/api/space"
+  }
+}

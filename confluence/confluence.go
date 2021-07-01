@@ -20,6 +20,7 @@ type Client struct {
 
 	Auth    *AuthenticationService
 	Content *ContentService
+	Space *SpaceService
 }
 
 func New(httpClient *http.Client, site string) (client *Client, err error) {
@@ -50,6 +51,7 @@ func New(httpClient *http.Client, site string) (client *Client, err error) {
 		Permission: &ContentPermissionService{client: client},
 	}
 
+	client.Space = &SpaceService{client: client}
 	return
 }
 

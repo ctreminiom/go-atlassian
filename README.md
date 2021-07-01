@@ -18,7 +18,7 @@ go-atlassian is a Go module that enables the interaction with the Atlassian Clou
 
 ## ✨ Features
 
-### 🛫 Jira Software Cloud
+### 🏷 Jira Software Cloud
 - CRUD Application Roles, Dashboards, Filters, Groups, Issues.
 - Search Issues using the JQL query.
 - Add attachments into JIRA issues, and transition issues.
@@ -59,7 +59,7 @@ go-atlassian is a Go module that enables the interaction with the Atlassian Clou
 - Get SCIM Schema(s).
 
 ### 🛰️ Confluence Cloud
-- In Development 🔨
+- CRUD Contents and Spaces
 
 ### 🚠 Jira Agile Cloud
 - Get the board backlogs issues.
@@ -91,7 +91,7 @@ $ go get -u -v github.com/ctreminiom/go-atlassian/jira/
 ## Atlassian Cloud Admin
 $ go get -u -v github.com/ctreminiom/go-atlassian/admin/
 
-## Jira Confluence Cloud
+## Confluence Cloud
 $ go get -u -v github.com/ctreminiom/go-atlassian/confluence/
 ```
 

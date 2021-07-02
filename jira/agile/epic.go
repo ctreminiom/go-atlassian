@@ -2,11 +2,11 @@ package agile
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/url"
 	"strconv"
+	"strings"
 )
 
 type EpicService struct{ client *Client }
@@ -27,9 +27,7 @@ type EpicColorScheme struct {
 // Get returns the epic for a given epic ID.
 // This epic will only be returned if the user has permission to view it.
 // Note: This operation does not work for epics in next-gen projects.
-// Atlassian Docs: https://developer.atlassian.com/cloud/jira/software/rest/api-group-epic/#api-agile-1-0-epic-epicidorkey-get
-// Library Docs: N/A
-func (e *EpicService) Get(ctx context.Context, epicIDOrKey string) (result *EpicScheme, response *Response, err error) {
+func (e *EpicService) Get(ctx context.Context, epicIDOrKey string) (result *EpicScheme, response *ResponseScheme, err error) {
 
 	if len(epicIDOrKey) == 0 {
 		return nil, nil, fmt.Errorf("error!, please provide a valid epicIDOrKey value")
@@ -44,14 +42,9 @@ func (e *EpicService) Get(ctx context.Context, epicIDOrKey string) (result *Epic
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = e.client.Do(request)
+	response, err = e.client.Call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(EpicScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return
+		return nil, response, err
 	}
 
 	return
@@ -64,7 +57,8 @@ func (e *EpicService) Get(ctx context.Context, epicIDOrKey string) (result *Epic
 // By default, the returned issues are ordered by rank.
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/software/rest/api-group-epic/#api-agile-1-0-epic-epicidorkey-issue-get
 // Library Docs: N/A
-func (e *EpicService) Issues(ctx context.Context, epicIDOrKey string, startAt, maxResults int, opts *IssueOptionScheme) (result *BoardIssuePageScheme, response *Response, err error) {
+func (e *EpicService) Issues(ctx context.Context, epicIDOrKey string, startAt, maxResults int,
+	opts *IssueOptionScheme) (result *BoardIssuePageScheme, response *ResponseScheme, err error) {
 
 	if len(epicIDOrKey) == 0 {
 		return nil, nil, fmt.Errorf("error!, please provide a valid epicIDOrKey value")
@@ -86,33 +80,12 @@ func (e *EpicService) Issues(ctx context.Context, epicIDOrKey string, startAt, m
 			params.Add("jql", opts.JQL)
 		}
 
-		var expand string
-		for index, value := range opts.Expand {
-
-			if index == 0 {
-				expand = value
-				continue
-			}
-
-			expand += "," + value
+		if len(opts.Expand) != 0 {
+			params.Add("expand", strings.Join(opts.Expand, ","))
 		}
 
-		if len(expand) != 0 {
-			params.Add("expand", expand)
-		}
-
-		var fieldFormatted string
-		for index, value := range opts.Fields {
-
-			if index == 0 {
-				fieldFormatted = value
-				continue
-			}
-			fieldFormatted += "," + value
-		}
-
-		if len(fieldFormatted) != 0 {
-			params.Add("fields", fieldFormatted)
+		if len(opts.Fields) != 0 {
+			params.Add("fields", strings.Join(opts.Fields, ","))
 		}
 
 	}
@@ -126,14 +99,9 @@ func (e *EpicService) Issues(ctx context.Context, epicIDOrKey string, startAt, m
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = e.client.Do(request)
+	response, err = e.client.Call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(BoardIssuePageScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return
+		return nil, response, err
 	}
 
 	return

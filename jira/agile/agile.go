@@ -10,6 +10,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"reflect"
 	"strings"
 )
 
@@ -48,26 +49,18 @@ func New(httpClient *http.Client, site string) (client *Client, err error) {
 	return
 }
 
-func (c *Client) newRequest(ctx context.Context, method, urlAsString string, payload interface{}) (request *http.Request, err error) {
+func (c *Client) newRequest(ctx context.Context, method, apiEndpoint string, payload io.Reader) (request *http.Request, err error) {
 
-	if ctx == nil {
-		return nil, errors.New("the context param is nil, please provide a valid one")
-	}
-
-	relativePath, _ := url.Parse(urlAsString)
-
-	relativePath.Path = strings.TrimLeft(relativePath.Path, "/")
-	endpointPath := c.Site.ResolveReference(relativePath)
-
-	var payloadBuffer io.ReadWriter
-	if payload != nil {
-		payloadBuffer = new(bytes.Buffer)
-		_ = json.NewEncoder(payloadBuffer).Encode(payload)
-	}
-
-	request, err = http.NewRequestWithContext(ctx, method, endpointPath.String(), payloadBuffer)
+	relativePath, err := url.Parse(apiEndpoint)
 	if err != nil {
-		return
+		return nil, fmt.Errorf(urlParsedError, err.Error())
+	}
+
+	var endpoint = c.Site.ResolveReference(relativePath).String()
+
+	request, err = http.NewRequestWithContext(ctx, method, endpoint, payload)
+	if err != nil {
+		return nil, fmt.Errorf(requestCreationError, err.Error())
 	}
 
 	if c.Auth.basicAuthProvided {
@@ -81,73 +74,69 @@ func (c *Client) newRequest(ctx context.Context, method, urlAsString string, pay
 	return
 }
 
-func (c *Client) Do(request *http.Request) (response *Response, err error) {
+func (c *Client) Call(request *http.Request, structure interface{}) (result *ResponseScheme, err error) {
+	response, _ := c.HTTP.Do(request)
+	return transformTheHTTPResponse(response, structure)
+}
 
-	httpResponse, err := c.HTTP.Do(request)
+func transformStructToReader(structure interface{}) (reader io.Reader, err error) {
+
+	if structure == nil || reflect.ValueOf(structure).IsNil() {
+		return nil, structureNotParsedError
+	}
+
+	structureAsBodyBytes, err := json.Marshal(structure)
 	if err != nil {
-		return
+		return nil, err
 	}
 
-	response, err = checkResponse(httpResponse, request.URL.String())
+	return bytes.NewReader(structureAsBodyBytes), nil
+}
+
+func transformTheHTTPResponse(response *http.Response, structure interface{}) (result *ResponseScheme, err error) {
+
+	if response == nil {
+		return nil, errors.New("validation failed, please provide a http.Response pointer")
+	}
+
+	responseTransformed := &ResponseScheme{}
+	responseTransformed.Code = response.StatusCode
+	responseTransformed.Endpoint = response.Request.URL.String()
+	responseTransformed.Method = response.Request.Method
+
+	var wasSuccess = response.StatusCode >= 200 && response.StatusCode < 300
+	if !wasSuccess {
+
+		return responseTransformed, fmt.Errorf(requestFailedError, response.StatusCode)
+	}
+
+	responseAsBytes, err := ioutil.ReadAll(response.Body)
 	if err != nil {
-		return
+		return responseTransformed, err
 	}
 
-	response, err = newResponse(httpResponse, request.URL.String())
-	if err != nil {
-		return
+	if structure != nil {
+		if err = json.Unmarshal(responseAsBytes, &structure); err != nil {
+			return responseTransformed, err
+		}
 	}
 
-	return
+	responseTransformed.Bytes.Write(responseAsBytes)
+
+	return responseTransformed, nil
 }
 
-type Response struct {
-	StatusCode  int
-	Endpoint    string
-	Headers     map[string][]string
-	BodyAsBytes []byte
-	Method      string
+type ResponseScheme struct {
+	Code     int
+	Endpoint string
+	Method   string
+	Bytes    bytes.Buffer
+	Headers  map[string][]string
 }
 
-func newResponse(http *http.Response, endpoint string) (response *Response, err error) {
-
-	var statusCode = http.StatusCode
-
-	var httpResponseAsBytes []byte
-	if http.ContentLength != 0 {
-		httpResponseAsBytes, _ = ioutil.ReadAll(http.Body)
-	}
-
-	newResponse := Response{
-		StatusCode:  statusCode,
-		Headers:     http.Header,
-		BodyAsBytes: httpResponseAsBytes,
-		Endpoint:    endpoint,
-		Method:      http.Request.Method,
-	}
-
-	return &newResponse, nil
-}
-
-func checkResponse(http *http.Response, endpoint string) (response *Response, err error) {
-
-	var statusCode = http.StatusCode
-	if 200 <= statusCode && statusCode <= 299 {
-		return
-	}
-
-	var httpResponseAsBytes []byte
-	if http.ContentLength != 0 {
-		httpResponseAsBytes, _ = ioutil.ReadAll(http.Body)
-	}
-
-	newErrorResponse := Response{
-		StatusCode:  statusCode,
-		Headers:     http.Header,
-		BodyAsBytes: httpResponseAsBytes,
-		Endpoint:    endpoint,
-		Method:      http.Request.Method,
-	}
-
-	return &newErrorResponse, fmt.Errorf("request failed. Please analyze the request body for more details. Status Code: %d", statusCode)
-}
+var (
+	requestCreationError    = "request creation failed: %v"
+	urlParsedError          = "URL parsing failed: %v"
+	requestFailedError      = "request failed. Please analyze the request body for more details. Status Code: %d"
+	structureNotParsedError = errors.New("failed to parse the interface pointer, please provide a valid one")
+)

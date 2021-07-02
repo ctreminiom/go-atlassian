@@ -27,18 +27,18 @@ func main() {
 	epicsPage, response, err := atlassian.Agile.Board.Epics(context.Background(), 4, 0, 50, false)
 	if err != nil {
 		if response != nil {
-			log.Println("Response HTTP Response", string(response.BodyAsBytes))
+			log.Println("Response HTTP Response", response.Bytes.String())
 		}
 		log.Fatal(err)
 	}
 
-	log.Println("Response HTTP Code", response.StatusCode)
+	log.Println("Response HTTP Code", response.Code)
 	log.Println("HTTP Endpoint Used", response.Endpoint)
 
 	for _, epic := range epicsPage.Values {
 		log.Println(epic)
 	}
 
-	fmt.Println(string(response.BodyAsBytes))
+	fmt.Println(response.Bytes.String())
 
 }

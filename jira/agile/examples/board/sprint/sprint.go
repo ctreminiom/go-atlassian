@@ -34,17 +34,17 @@ func main() {
 	sprints, response, err := atlassian.Agile.Board.Sprints(context.Background(), boardID, startAt, maxResult, states)
 	if err != nil {
 		if response != nil {
-			log.Println("Response HTTP Response", string(response.BodyAsBytes))
+			log.Println("Response HTTP Response", response.Bytes.String())
 		}
 		log.Fatal(err)
 	}
 
-	log.Println("Response HTTP Code", response.StatusCode)
+	log.Println("Response HTTP Code", response.Code)
 	log.Println("HTTP Endpoint Used", response.Endpoint)
 
 	for _, sprint := range sprints.Values {
 		log.Println(sprint)
 	}
 
-	fmt.Println(string(response.BodyAsBytes))
+	fmt.Println(response.Bytes.String())
 }

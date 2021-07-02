@@ -36,12 +36,12 @@ func main() {
 	issues, response, err := atlassian.Agile.Sprint.Issues(context.Background(), 2, options, 0, 50)
 	if err != nil {
 		if response != nil {
-			log.Println("Response HTTP Response", string(response.BodyAsBytes))
+			log.Println("Response HTTP Response", response.Bytes.String())
 		}
 		log.Fatal(err)
 	}
 
-	log.Println("Response HTTP Code", response.StatusCode)
+	log.Println("Response HTTP Code", response.Code)
 	log.Println("HTTP Endpoint Used", response.Endpoint)
 
 	log.Println(issues.Total)
@@ -55,7 +55,7 @@ func main() {
 
 	//If you want to extract the field metadata
 	var searchPage jira.IssueSearchScheme
-	if err = json.Unmarshal(response.BodyAsBytes, &searchPage); err != nil {
+	if err = json.Unmarshal(response.Bytes.Bytes(), &searchPage); err != nil {
 		log.Fatal(err)
 	}
 
@@ -63,6 +63,6 @@ func main() {
 		log.Println(issue.Key, issue.Fields.Summary, issue.Fields.IssueType.Name)
 	}
 
-	fmt.Println(string(response.BodyAsBytes))
+	fmt.Println(response.Bytes.String())
 
 }

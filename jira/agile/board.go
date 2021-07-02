@@ -2,11 +2,11 @@ package agile
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/url"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -16,8 +16,7 @@ type BoardService struct{ client *Client }
 // This board will only be returned if the user has permission to view it.
 // Admins without the view permission will see the board as a private one,
 // so will see only a subset of the board's data (board location for instance).
-// Docs: N/A
-func (b *BoardService) Get(ctx context.Context, boardID int) (result *BoardScheme, response *Response, err error) {
+func (b *BoardService) Get(ctx context.Context, boardID int) (result *BoardScheme, response *ResponseScheme, err error) {
 
 	if boardID == 0 {
 		return nil, nil, fmt.Errorf("error!, please provide a valid boardID value")
@@ -32,14 +31,9 @@ func (b *BoardService) Get(ctx context.Context, boardID int) (result *BoardSchem
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = b.client.Do(request)
+	response, err = b.client.Call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(BoardScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return
+		return nil, response, err
 	}
 
 	return
@@ -59,15 +53,16 @@ type BoardPayloadLocationScheme struct {
 
 // Create creates a new board. Board name, type and filter ID is required.
 // Docs: N/A
-func (b *BoardService) Create(ctx context.Context, payload *BoardPayloadScheme) (result *BoardScheme, response *Response, err error) {
+func (b *BoardService) Create(ctx context.Context, payload *BoardPayloadScheme) (result *BoardScheme, response *ResponseScheme, err error) {
 
-	if payload == nil {
-		return nil, nil, fmt.Errorf("error!, please provide a valid BoardPayloadScheme pointer")
+	payloadAsReader, err := transformStructToReader(payload)
+	if err != nil {
+		return nil, nil, err
 	}
 
 	var endpoint = "/rest/agile/1.0/board"
 
-	request, err := b.client.newRequest(ctx, http.MethodPost, endpoint, &payload)
+	request, err := b.client.newRequest(ctx, http.MethodPost, endpoint, payloadAsReader)
 	if err != nil {
 		return
 	}
@@ -75,14 +70,9 @@ func (b *BoardService) Create(ctx context.Context, payload *BoardPayloadScheme) 
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Content-Type", "application/json")
 
-	response, err = b.client.Do(request)
+	response, err = b.client.Call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(BoardScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return
+		return nil, response, err
 	}
 
 	return
@@ -99,7 +89,7 @@ type BoardPageScheme struct {
 // This method can be executed by users without a valid software license in order
 // to find which boards are using a particular filter.
 // Docs: N/A
-func (b *BoardService) Filter(ctx context.Context, filterID, startAt, maxResults int) (result *BoardPageScheme, response *Response, err error) {
+func (b *BoardService) Filter(ctx context.Context, filterID, startAt, maxResults int) (result *BoardPageScheme, response *ResponseScheme, err error) {
 
 	if filterID == 0 {
 		return nil, nil, fmt.Errorf("error!, please provide a valid filterID value")
@@ -118,14 +108,9 @@ func (b *BoardService) Filter(ctx context.Context, filterID, startAt, maxResults
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = b.client.Do(request)
+	response, err = b.client.Call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(BoardPageScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return
+		return nil, response, err
 	}
 
 	return
@@ -156,7 +141,7 @@ type BoardLocationScheme struct {
 // Issues returned from this resource include Agile fields, like sprint, closedSprints, flagged, and epic.
 // By default, the returned issues are ordered by rank.
 // Docs: N/A
-func (b *BoardService) Backlog(ctx context.Context, boardID, startAt, maxResults int, opts *IssueOptionScheme) (result *BoardIssuePageScheme, response *Response, err error) {
+func (b *BoardService) Backlog(ctx context.Context, boardID, startAt, maxResults int, opts *IssueOptionScheme) (result *BoardIssuePageScheme, response *ResponseScheme, err error) {
 
 	if boardID == 0 {
 		return nil, nil, fmt.Errorf("error!, please provide a valid boardID value")
@@ -178,33 +163,12 @@ func (b *BoardService) Backlog(ctx context.Context, boardID, startAt, maxResults
 			params.Add("jql", opts.JQL)
 		}
 
-		var expand string
-		for index, value := range opts.Expand {
-
-			if index == 0 {
-				expand = value
-				continue
-			}
-
-			expand += "," + value
+		if len(opts.Expand) != 0 {
+			params.Add("expand", strings.Join(opts.Expand, ","))
 		}
 
-		if len(expand) != 0 {
-			params.Add("expand", expand)
-		}
-
-		var fieldFormatted string
-		for index, value := range opts.Fields {
-
-			if index == 0 {
-				fieldFormatted = value
-				continue
-			}
-			fieldFormatted += "," + value
-		}
-
-		if len(fieldFormatted) != 0 {
-			params.Add("fields", fieldFormatted)
+		if len(opts.Fields) != 0 {
+			params.Add("fields", strings.Join(opts.Fields, ","))
 		}
 
 	}
@@ -218,14 +182,9 @@ func (b *BoardService) Backlog(ctx context.Context, boardID, startAt, maxResults
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = b.client.Do(request)
+	response, err = b.client.Call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(BoardIssuePageScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return
+		return nil, response, err
 	}
 
 	return
@@ -246,7 +205,7 @@ type BoardIssuePageScheme struct {
 
 // Configuration get the board configuration.
 // Docs: N/A
-func (b *BoardService) Configuration(ctx context.Context, boardID int) (result *BoardConfigurationScheme, response *Response, err error) {
+func (b *BoardService) Configuration(ctx context.Context, boardID int) (result *BoardConfigurationScheme, response *ResponseScheme, err error) {
 
 	if boardID == 0 {
 		return nil, nil, fmt.Errorf("error!, please provide a valid boardID value")
@@ -261,14 +220,9 @@ func (b *BoardService) Configuration(ctx context.Context, boardID int) (result *
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = b.client.Do(request)
+	response, err = b.client.Call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(BoardConfigurationScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return
+		return nil, response, err
 	}
 
 	return
@@ -323,7 +277,7 @@ type BoardColumnStatusScheme struct {
 // Epics returns all epics from the board, for the given board ID.
 // This only includes epics that the user has permission to view.
 // Note, if the user does not have permission to view the board, no epics will be returned at all.
-func (b *BoardService) Epics(ctx context.Context, boardID, startAt, maxResults int, done bool) (result *BoardEpicPageScheme, response *Response, err error) {
+func (b *BoardService) Epics(ctx context.Context, boardID, startAt, maxResults int, done bool) (result *BoardEpicPageScheme, response *ResponseScheme, err error) {
 
 	if boardID == 0 {
 		return nil, nil, fmt.Errorf("error!, please provide a valid boardID value")
@@ -348,14 +302,9 @@ func (b *BoardService) Epics(ctx context.Context, boardID, startAt, maxResults i
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = b.client.Do(request)
+	response, err = b.client.Call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(BoardEpicPageScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return
+		return nil, response, err
 	}
 
 	return
@@ -385,7 +334,8 @@ type BoardEpicScheme struct {
 // Issues returned from this resource include Agile fields, like sprint, closedSprints, flagged, and epic.
 // By default, the returned issues are ordered by rank.
 // Docs: N/A
-func (b *BoardService) IssuesWithoutEpic(ctx context.Context, boardID, startAt, maxResults int, opts *IssueOptionScheme) (result *BoardIssuePageScheme, response *Response, err error) {
+func (b *BoardService) IssuesWithoutEpic(ctx context.Context, boardID, startAt, maxResults int, opts *IssueOptionScheme) (
+	result *BoardIssuePageScheme, response *ResponseScheme, err error) {
 
 	if boardID == 0 {
 		return nil, nil, fmt.Errorf("error!, please provide a valid boardID value")
@@ -445,14 +395,9 @@ func (b *BoardService) IssuesWithoutEpic(ctx context.Context, boardID, startAt, 
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = b.client.Do(request)
+	response, err = b.client.Call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(BoardIssuePageScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return
+		return nil, response, err
 	}
 
 	return
@@ -462,7 +407,8 @@ func (b *BoardService) IssuesWithoutEpic(ctx context.Context, boardID, startAt, 
 // This only includes issues that the user has permission to view.
 // Issues returned from this resource include Agile fields, like sprint, closedSprints,
 // flagged, and epic. By default, the returned issues are ordered by rank.
-func (b *BoardService) IssuesByEpic(ctx context.Context, boardID, epicID, startAt, maxResults int, opts *IssueOptionScheme) (result *BoardIssuePageScheme, response *Response, err error) {
+func (b *BoardService) IssuesByEpic(ctx context.Context, boardID, epicID, startAt, maxResults int, opts *IssueOptionScheme) (
+	result *BoardIssuePageScheme, response *ResponseScheme, err error) {
 
 	if boardID == 0 {
 		return nil, nil, fmt.Errorf("error!, please provide a valid boardID value")
@@ -486,33 +432,12 @@ func (b *BoardService) IssuesByEpic(ctx context.Context, boardID, epicID, startA
 			params.Add("jql", opts.JQL)
 		}
 
-		var expand string
-		for index, value := range opts.Expand {
-
-			if index == 0 {
-				expand = value
-				continue
-			}
-
-			expand += "," + value
+		if len(opts.Expand) != 0 {
+			params.Add("expand", strings.Join(opts.Expand, ","))
 		}
 
-		if len(expand) != 0 {
-			params.Add("expand", expand)
-		}
-
-		var fieldFormatted string
-		for index, value := range opts.Fields {
-
-			if index == 0 {
-				fieldFormatted = value
-				continue
-			}
-			fieldFormatted += "," + value
-		}
-
-		if len(fieldFormatted) != 0 {
-			params.Add("fields", fieldFormatted)
+		if len(opts.Fields) != 0 {
+			params.Add("fields", strings.Join(opts.Fields, ","))
 		}
 
 	}
@@ -526,14 +451,9 @@ func (b *BoardService) IssuesByEpic(ctx context.Context, boardID, epicID, startA
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = b.client.Do(request)
+	response, err = b.client.Call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(BoardIssuePageScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return
+		return nil, response, err
 	}
 
 	return
@@ -547,7 +467,8 @@ func (b *BoardService) IssuesByEpic(ctx context.Context, boardID, epicID, startA
 // Issues returned from this resource include Agile fields, like sprint, closedSprints, flagged, and epic.
 // By default, the returned issues are ordered by rank.
 // Docs: N/A
-func (b *BoardService) Issues(ctx context.Context, boardID, startAt, maxResults int, opts *IssueOptionScheme) (result *BoardIssuePageScheme, response *Response, err error) {
+func (b *BoardService) Issues(ctx context.Context, boardID, startAt, maxResults int, opts *IssueOptionScheme) (
+	result *BoardIssuePageScheme, response *ResponseScheme, err error) {
 
 	if boardID == 0 {
 		return nil, nil, fmt.Errorf("error!, please provide a valid boardID value")
@@ -567,33 +488,12 @@ func (b *BoardService) Issues(ctx context.Context, boardID, startAt, maxResults 
 			params.Add("jql", opts.JQL)
 		}
 
-		var expand string
-		for index, value := range opts.Expand {
-
-			if index == 0 {
-				expand = value
-				continue
-			}
-
-			expand += "," + value
+		if len(opts.Expand) != 0 {
+			params.Add("expand", strings.Join(opts.Expand, ","))
 		}
 
-		if len(expand) != 0 {
-			params.Add("expand", expand)
-		}
-
-		var fieldFormatted string
-		for index, value := range opts.Fields {
-
-			if index == 0 {
-				fieldFormatted = value
-				continue
-			}
-			fieldFormatted += "," + value
-		}
-
-		if len(fieldFormatted) != 0 {
-			params.Add("fields", fieldFormatted)
+		if len(opts.Fields) != 0 {
+			params.Add("fields", strings.Join(opts.Fields, ","))
 		}
 
 	}
@@ -607,14 +507,9 @@ func (b *BoardService) Issues(ctx context.Context, boardID, startAt, maxResults 
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = b.client.Do(request)
+	response, err = b.client.Call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(BoardIssuePageScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return
+		return nil, response, err
 	}
 
 	return
@@ -633,28 +528,29 @@ type BoardMovementPayloadScheme struct {
 // At most 50 issues may be moved at once.
 // Docs: N/A
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/software/rest/api-group-board/#api-agile-1-0-board-boardid-issue-post
-func (b *BoardService) Move(ctx context.Context, boardID int, payload *BoardMovementPayloadScheme) (response *Response, err error) {
+func (b *BoardService) Move(ctx context.Context, boardID int, payload *BoardMovementPayloadScheme) (response *ResponseScheme, err error) {
 
 	if boardID == 0 {
 		return nil, fmt.Errorf("error!, please provide a valid boardID value")
 	}
 
-	if payload == nil {
-		return nil, fmt.Errorf("error!, please provide a valid BoardMovementPayloadScheme pointer")
+	payloadAsReader, err := transformStructToReader(payload)
+	if err != nil {
+		return nil, err
 	}
 
 	var endpoint = fmt.Sprintf("/rest/agile/1.0/board/%v/issue", boardID)
 
-	request, err := b.client.newRequest(ctx, http.MethodPost, endpoint, payload)
+	request, err := b.client.newRequest(ctx, http.MethodPost, endpoint, payloadAsReader)
 	if err != nil {
 		return
 	}
 
 	request.Header.Set("Content-Type", "application/json")
 
-	response, err = b.client.Do(request)
+	response, err = b.client.Call(request, nil)
 	if err != nil {
-		return
+		return response, err
 	}
 
 	return
@@ -696,7 +592,8 @@ type BoardProjectInsightScheme struct {
 // Returned projects are ordered by the name.
 // Docs: N/A
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/software/rest/api-group-board/#api-agile-1-0-board-boardid-project-get
-func (b *BoardService) Projects(ctx context.Context, boardID, startAt, maxResults int) (result *BoardProjectPageScheme, response *Response, err error) {
+func (b *BoardService) Projects(ctx context.Context, boardID, startAt, maxResults int) (
+	result *BoardProjectPageScheme, response *ResponseScheme, err error) {
 
 	if boardID == 0 {
 		return nil, nil, fmt.Errorf("error!, please provide a valid boardID value")
@@ -715,14 +612,9 @@ func (b *BoardService) Projects(ctx context.Context, boardID, startAt, maxResult
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = b.client.Do(request)
+	response, err = b.client.Call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(BoardProjectPageScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return
+		return nil, response, err
 	}
 
 	return
@@ -752,7 +644,8 @@ type BoardSprintScheme struct {
 // This only includes sprints that the user has permission to view.
 // Docs: N/A
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/software/rest/api-group-board/#api-agile-1-0-board-boardid-sprint-get
-func (b *BoardService) Sprints(ctx context.Context, boardID, startAt, maxResults int, states []string) (result *BoardSprintPageScheme, response *Response, err error) {
+func (b *BoardService) Sprints(ctx context.Context, boardID, startAt, maxResults int, states []string) (
+	result *BoardSprintPageScheme, response *ResponseScheme, err error) {
 
 	if boardID == 0 {
 		return nil, nil, fmt.Errorf("error!, please provide a valid boardID value")
@@ -761,21 +654,7 @@ func (b *BoardService) Sprints(ctx context.Context, boardID, startAt, maxResults
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
 	params.Add("maxResults", strconv.Itoa(maxResults))
-
-	var statesAsString string
-	for index, state := range states {
-
-		if index == 0 {
-			statesAsString = state
-			continue
-		}
-
-		statesAsString += "," + state
-	}
-
-	if len(statesAsString) != 0 {
-		params.Add("state", statesAsString)
-	}
+	params.Add("state", strings.Join(states, ","))
 
 	var endpoint = fmt.Sprintf("/rest/agile/1.0/board/%v/sprint?%v", boardID, params.Encode())
 
@@ -786,14 +665,9 @@ func (b *BoardService) Sprints(ctx context.Context, boardID, startAt, maxResults
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = b.client.Do(request)
+	response, err = b.client.Call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(BoardSprintPageScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return
+		return nil, response, err
 	}
 
 	return
@@ -802,7 +676,8 @@ func (b *BoardService) Sprints(ctx context.Context, boardID, startAt, maxResults
 // IssuesBySprint get all issues you have access to that belong to the sprint from the board.
 // Issue returned from this resource contains additional fields like: sprint, closedSprints, flagged and epic.
 // Issues are returned ordered by rank. JQL order has higher priority than default rank.
-func (b *BoardService) IssuesBySprint(ctx context.Context, boardID, sprintID, startAt, maxResults int, opts *IssueOptionScheme) (result *BoardIssuePageScheme, response *Response, err error) {
+func (b *BoardService) IssuesBySprint(ctx context.Context, boardID, sprintID, startAt, maxResults int,
+	opts *IssueOptionScheme) (result *BoardIssuePageScheme, response *ResponseScheme, err error) {
 
 	if boardID == 0 {
 		return nil, nil, fmt.Errorf("error!, please provide a valid boardID value")
@@ -826,35 +701,13 @@ func (b *BoardService) IssuesBySprint(ctx context.Context, boardID, sprintID, st
 			params.Add("jql", opts.JQL)
 		}
 
-		var expand string
-		for index, value := range opts.Expand {
-
-			if index == 0 {
-				expand = value
-				continue
-			}
-
-			expand += "," + value
+		if len(opts.Expand) != 0 {
+			params.Add("expand", strings.Join(opts.Expand, ","))
 		}
 
-		if len(expand) != 0 {
-			params.Add("expand", expand)
+		if len(opts.Fields) != 0 {
+			params.Add("fields", strings.Join(opts.Fields, ","))
 		}
-
-		var fieldFormatted string
-		for index, value := range opts.Fields {
-
-			if index == 0 {
-				fieldFormatted = value
-				continue
-			}
-			fieldFormatted += "," + value
-		}
-
-		if len(fieldFormatted) != 0 {
-			params.Add("fields", fieldFormatted)
-		}
-
 	}
 
 	var endpoint = fmt.Sprintf("/rest/agile/1.0/board/%v/sprint/%v/issue?%v", boardID, sprintID, params.Encode())
@@ -866,14 +719,9 @@ func (b *BoardService) IssuesBySprint(ctx context.Context, boardID, sprintID, st
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = b.client.Do(request)
+	response, err = b.client.Call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(BoardIssuePageScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return
+		return nil, response, err
 	}
 
 	return
@@ -903,7 +751,8 @@ type BoardVersionScheme struct {
 // Returned versions are ordered by the name of the project from which they belong and then by sequence defined by user.
 // Docs: N/A
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/software/rest/api-group-board/#api-agile-1-0-board-boardid-version-get
-func (b *BoardService) Versions(ctx context.Context, boardID, startAt, maxResults int, released bool) (result *BoardVersionPageScheme, response *Response, err error) {
+func (b *BoardService) Versions(ctx context.Context, boardID, startAt, maxResults int, released bool) (
+	result *BoardVersionPageScheme, response *ResponseScheme, err error) {
 
 	if boardID == 0 {
 		return nil, nil, fmt.Errorf("error!, please provide a valid boardID value")
@@ -928,14 +777,9 @@ func (b *BoardService) Versions(ctx context.Context, boardID, startAt, maxResult
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = b.client.Do(request)
+	response, err = b.client.Call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(BoardVersionPageScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return
+		return nil, response, err
 	}
 
 	return

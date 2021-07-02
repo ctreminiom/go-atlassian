@@ -34,17 +34,17 @@ func main() {
 	versionsPage, response, err := atlassian.Agile.Board.Versions(context.Background(), boardID, startAt, maxResults, released)
 	if err != nil {
 		if response != nil {
-			log.Println("Response HTTP Response", string(response.BodyAsBytes))
+			log.Println("Response HTTP Response", response.Bytes.String())
 		}
 		log.Fatal(err)
 	}
 
-	log.Println("Response HTTP Code", response.StatusCode)
+	log.Println("Response HTTP Code", response.Code)
 	log.Println("HTTP Endpoint Used", response.Endpoint)
 
 	for _, version := range versionsPage.Values {
 		log.Println(version)
 	}
 
-	fmt.Println(string(response.BodyAsBytes))
+	fmt.Println(response.Bytes.String())
 }

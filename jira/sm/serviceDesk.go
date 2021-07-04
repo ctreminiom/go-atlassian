@@ -153,7 +153,6 @@ type ServiceDeskScheme struct {
 }
 
 var (
-	notAttachmentIDError = fmt.Errorf("error, the attachment ID is required, please provide a valid value")
-	notFileNameError     = fmt.Errorf("error, the fileName is required, please provide a valid value")
-	notReaderError       = fmt.Errorf("error, the io.Reader cannot be nil, please provide a valid value")
+	notFileNameError = fmt.Errorf("error, the fileName is required, please provide a valid value")
+	notReaderError   = fmt.Errorf("error, the io.Reader cannot be nil, please provide a valid value")
 )

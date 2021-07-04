@@ -2,11 +2,11 @@ package sm
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/url"
 	"strconv"
+	"strings"
 )
 
 type RequestService struct {
@@ -31,60 +31,49 @@ type RequestGetOptionsScheme struct {
 	Expand            []string
 }
 
-// This method returns all customer requests for the user executing the query.
+// Gets returns all customer requests for the user executing the query.
 // The returned customer requests are ordered chronologically by the latest activity on each request. For example, the latest status transition or comment.
 // Docs: https://docs.go-atlassian.io/jira-service-management-cloud/request#get-customer-requests
-func (r *RequestService) Gets(ctx context.Context, opts *RequestGetOptionsScheme, start, limit int) (result *CustomerRequestsScheme, response *Response, err error) {
+func (r *RequestService) Gets(ctx context.Context, options *RequestGetOptionsScheme, start, limit int) (
+	result *CustomerRequestsScheme, response *ResponseScheme, err error) {
 
 	params := url.Values{}
 	params.Add("start", strconv.Itoa(start))
 	params.Add("limit", strconv.Itoa(limit))
 
-	if opts != nil {
+	if options != nil {
 
-		if len(opts.SearchTerm) != 0 {
-			params.Add("searchTerm", opts.SearchTerm)
+		if len(options.SearchTerm) != 0 {
+			params.Add("searchTerm", options.SearchTerm)
 		}
 
-		for _, requestOwner := range opts.RequestOwnerships {
+		for _, requestOwner := range options.RequestOwnerships {
 			params.Add("requestOwnership", requestOwner)
 		}
 
-		if len(opts.RequestStatus) != 0 {
-			params.Add("requestStatus", opts.RequestStatus)
+		if len(options.RequestStatus) != 0 {
+			params.Add("requestStatus", options.RequestStatus)
 		}
 
-		if len(opts.ApprovalStatus) != 0 {
-			params.Add("approvalStatus", opts.ApprovalStatus)
+		if len(options.ApprovalStatus) != 0 {
+			params.Add("approvalStatus", options.ApprovalStatus)
 		}
 
-		if opts.OrganizationId != 0 {
-			params.Add("organizationId", strconv.Itoa(opts.OrganizationId))
+		if options.OrganizationId != 0 {
+			params.Add("organizationId", strconv.Itoa(options.OrganizationId))
 		}
 
-		if opts.ServiceDeskID != 0 {
-			params.Add("serviceDeskId", strconv.Itoa(opts.ServiceDeskID))
+		if options.ServiceDeskID != 0 {
+			params.Add("serviceDeskId", strconv.Itoa(options.ServiceDeskID))
 		}
 
-		if opts.RequestTypeID != 0 {
-			params.Add("requestTypeId", strconv.Itoa(opts.RequestTypeID))
+		if options.RequestTypeID != 0 {
+			params.Add("requestTypeId", strconv.Itoa(options.RequestTypeID))
 		}
 
-		var expand string
-		for index, value := range opts.Expand {
-
-			if index == 0 {
-				expand = value
-				continue
-			}
-
-			expand += "," + value
+		if len(options.Expand) != 0 {
+			params.Add("expand", strings.Join(options.Expand, ","))
 		}
-
-		if len(expand) != 0 {
-			params.Add("expand", expand)
-		}
-
 	}
 
 	var endpoint = fmt.Sprintf("rest/servicedeskapi/request?%v", params.Encode())
@@ -96,79 +85,56 @@ func (r *RequestService) Gets(ctx context.Context, opts *RequestGetOptionsScheme
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = r.client.Do(request)
+	response, err = r.client.Call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(CustomerRequestsScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
 	return
 }
 
-// This method returns a customer request.
+// Get returns a customer request.
 // Docs: https://docs.go-atlassian.io/jira-service-management-cloud/request#get-customer-request-by-id-or-key
-func (r *RequestService) Get(ctx context.Context, issueKeyOrID string, expands []string) (result *CustomerRequestScheme, response *Response, err error) {
+func (r *RequestService) Get(ctx context.Context, issueKeyOrID string, expand []string) (result *CustomerRequestScheme,
+	response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {
-		return nil, nil, fmt.Errorf("error, please provide a valid issueKeyOrID value")
+		return nil, nil, notIssueError
 	}
 
 	params := url.Values{}
-
-	if len(expands) != 0 {
-
-		var expand string
-		for index, value := range expands {
-
-			if index == 0 {
-				expand = value
-				continue
-			}
-
-			expand += "," + value
-		}
-
-		if len(expand) != 0 {
-			params.Add("expand", expand)
-		}
+	if len(expand) != 0 {
+		params.Add("expand", strings.Join(expand, ","))
 	}
 
-	var endpoint string
-	if len(params.Encode()) != 0 {
-		endpoint = fmt.Sprintf("rest/servicedeskapi/request/%v?%v", issueKeyOrID, params.Encode())
-	} else {
-		endpoint = fmt.Sprintf("rest/servicedeskapi/request/%v", issueKeyOrID)
+	var endpoint strings.Builder
+	endpoint.WriteString(fmt.Sprintf("rest/servicedeskapi/request/%v", issueKeyOrID))
+
+	if params.Encode() != "" {
+		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
-	request, err := r.client.newRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := r.client.newRequest(ctx, http.MethodGet, endpoint.String(), nil)
 	if err != nil {
 		return
 	}
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = r.client.Do(request)
+	response, err = r.client.Call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(CustomerRequestScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
 	return
 }
 
+// Subscribe subscribes the user to receiving notifications from a customer request.
 // Docs: https://docs.go-atlassian.io/jira-service-management-cloud/request#subscribe
-func (r *RequestService) Subscribe(ctx context.Context, issueKeyOrID string) (response *Response, err error) {
+func (r *RequestService) Subscribe(ctx context.Context, issueKeyOrID string) (response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {
-		return nil, fmt.Errorf("error, please provide a valid issueKeyOrID value")
+		return nil, notIssueError
 	}
 
 	var endpoint = fmt.Sprintf("rest/servicedeskapi/request/%v/notification", issueKeyOrID)
@@ -178,7 +144,7 @@ func (r *RequestService) Subscribe(ctx context.Context, issueKeyOrID string) (re
 		return
 	}
 
-	response, err = r.client.Do(request)
+	response, err = r.client.Call(request, nil)
 	if err != nil {
 		return
 	}
@@ -186,11 +152,12 @@ func (r *RequestService) Subscribe(ctx context.Context, issueKeyOrID string) (re
 	return
 }
 
+// Unsubscribe unsubscribes the user from notifications from a customer request.
 // Docs: https://docs.go-atlassian.io/jira-service-management-cloud/request#unsubscribe
-func (r *RequestService) Unsubscribe(ctx context.Context, issueKeyOrID string) (response *Response, err error) {
+func (r *RequestService) Unsubscribe(ctx context.Context, issueKeyOrID string) (response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {
-		return nil, fmt.Errorf("error, please provide a valid issueKeyOrID value")
+		return nil, notIssueError
 	}
 
 	var endpoint = fmt.Sprintf("rest/servicedeskapi/request/%v/notification", issueKeyOrID)
@@ -200,7 +167,7 @@ func (r *RequestService) Unsubscribe(ctx context.Context, issueKeyOrID string) (
 		return
 	}
 
-	response, err = r.client.Do(request)
+	response, err = r.client.Call(request, nil)
 	if err != nil {
 		return
 	}
@@ -208,11 +175,14 @@ func (r *RequestService) Unsubscribe(ctx context.Context, issueKeyOrID string) (
 	return
 }
 
+// Transitions returns a list of transitions, the workflow processes that moves a customer request from one status to another,
+// that the user can perform on a request.
 // Docs: https://docs.go-atlassian.io/jira-service-management-cloud/request#get-customer-transitions
-func (r *RequestService) Transitions(ctx context.Context, issueKeyOrID string, start, limit int) (result *CustomerRequestTransitionsScheme, response *Response, err error) {
+func (r *RequestService) Transitions(ctx context.Context, issueKeyOrID string, start, limit int) (
+	result *CustomerRequestTransitionPageScheme, response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {
-		return nil, nil, fmt.Errorf("error, please provide a valid issueKeyOrID value")
+		return nil, nil, notIssueError
 	}
 
 	params := url.Values{}
@@ -228,28 +198,26 @@ func (r *RequestService) Transitions(ctx context.Context, issueKeyOrID string, s
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = r.client.Do(request)
+	response, err = r.client.Call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(CustomerRequestTransitionsScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
 	return
 }
 
+// Transition performs a customer transition for a given request and transition.
+// An optional comment can be included to provide a reason for the transition.
 // Docs: https://docs.go-atlassian.io/jira-service-management-cloud/request#perform-customer-transition
-func (r *RequestService) Transition(ctx context.Context, issueKeyOrID, transitionID, comment string) (response *Response, err error) {
+func (r *RequestService) Transition(ctx context.Context, issueKeyOrID, transitionID, comment string) (
+	response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {
-		return nil, fmt.Errorf("error, please provide a valid issueKeyOrID value")
+		return nil, notIssueError
 	}
 
 	if len(transitionID) == 0 {
-		return nil, fmt.Errorf("error, please provide a valid transitionID value")
+		return nil, notTransitionIDError
 	}
 
 	payload := struct {
@@ -266,16 +234,17 @@ func (r *RequestService) Transition(ctx context.Context, issueKeyOrID, transitio
 		},
 	}
 
+	payloadAsReader, _ := transformStructToReader(&payload)
 	var endpoint = fmt.Sprintf("rest/servicedeskapi/request/%v/transition", issueKeyOrID)
 
-	request, err := r.client.newRequest(ctx, http.MethodPost, endpoint, &payload)
+	request, err := r.client.newRequest(ctx, http.MethodPost, endpoint, payloadAsReader)
 	if err != nil {
 		return
 	}
 
 	request.Header.Set("Content-Type", "application/json")
 
-	response, err = r.client.Do(request)
+	response, err = r.client.Call(request, nil)
 	if err != nil {
 		return
 	}
@@ -283,169 +252,116 @@ func (r *RequestService) Transition(ctx context.Context, issueKeyOrID, transitio
 	return
 }
 
-type CustomerRequestTransitionsScheme struct {
-	Size       int  `json:"size"`
-	Start      int  `json:"start"`
-	Limit      int  `json:"limit"`
-	IsLastPage bool `json:"isLastPage"`
-	Values     []struct {
-		ID   string `json:"id"`
-		Name string `json:"name"`
-	} `json:"values"`
-	Expands []string `json:"_expands"`
-	Links   struct {
-		Self    string `json:"self"`
-		Base    string `json:"base"`
-		Context string `json:"context"`
-		Next    string `json:"next"`
-		Prev    string `json:"prev"`
-	} `json:"_links"`
+type CustomerRequestTransitionPageScheme struct {
+	Size       int                                      `json:"size,omitempty"`
+	Start      int                                      `json:"start,omitempty"`
+	Limit      int                                      `json:"limit,omitempty"`
+	IsLastPage bool                                     `json:"isLastPage,omitempty"`
+	Values     []*CustomerRequestTransitionScheme       `json:"values,omitempty"`
+	Expands    []string                                 `json:"_expands,omitempty"`
+	Links      *CustomerRequestTransitionPageLinkScheme `json:"_links,omitempty"`
+}
+
+type CustomerRequestTransitionScheme struct {
+	ID   string `json:"id,omitempty"`
+	Name string `json:"name,omitempty"`
+}
+
+type CustomerRequestTransitionPageLinkScheme struct {
+	Self    string `json:"self,omitempty"`
+	Base    string `json:"base,omitempty"`
+	Context string `json:"context,omitempty"`
+	Next    string `json:"next,omitempty"`
+	Prev    string `json:"prev,omitempty"`
 }
 
 type CustomerRequestsScheme struct {
-	Size       int                      `json:"size"`
-	Start      int                      `json:"start"`
-	Limit      int                      `json:"limit"`
-	IsLastPage bool                     `json:"isLastPage"`
-	Values     []*CustomerRequestScheme `json:"values"`
-	Expands    []string                 `json:"_expands"`
-	Links      struct {
-		Self    string `json:"self"`
-		Base    string `json:"base"`
-		Context string `json:"context"`
-		Next    string `json:"next"`
-		Prev    string `json:"prev"`
-	} `json:"_links"`
+	Size       int                          `json:"size,omitempty"`
+	Start      int                          `json:"start,omitempty"`
+	Limit      int                          `json:"limit,omitempty"`
+	IsLastPage bool                         `json:"isLastPage,omitempty"`
+	Values     []*CustomerRequestScheme     `json:"values,omitempty"`
+	Expands    []string                     `json:"_expands,omitempty"`
+	Links      *CustomerRequestsLinksScheme `json:"_links,omitempty"`
+}
+
+type CustomerRequestsLinksScheme struct {
+	Self    string `json:"self"`
+	Base    string `json:"base"`
+	Context string `json:"context"`
+	Next    string `json:"next"`
+	Prev    string `json:"prev"`
+}
+
+type CustomerRequestTypeScheme struct {
+	ID            string   `json:"id"`
+	Name          string   `json:"name"`
+	Description   string   `json:"description"`
+	HelpText      string   `json:"helpText"`
+	IssueTypeID   string   `json:"issueTypeId"`
+	ServiceDeskID string   `json:"serviceDeskId"`
+	GroupIds      []string `json:"groupIds"`
+}
+
+type CustomerRequestServiceDeskScheme struct {
+	ID          string `json:"id"`
+	ProjectID   string `json:"projectId"`
+	ProjectName string `json:"projectName"`
+	ProjectKey  string `json:"projectKey"`
+}
+
+type CustomerRequestDateScheme struct {
+	Iso8601     string `json:"iso8601"`
+	Jira        string `json:"jira"`
+	Friendly    string `json:"friendly"`
+	EpochMillis int    `json:"epochMillis"`
+}
+
+type CustomerRequestReporterScheme struct {
+	AccountID    string `json:"accountId"`
+	Name         string `json:"name"`
+	Key          string `json:"key"`
+	EmailAddress string `json:"emailAddress"`
+	DisplayName  string `json:"displayName"`
+	Active       bool   `json:"active"`
+	TimeZone     string `json:"timeZone"`
+}
+
+type CustomerRequestRequestFieldValueScheme struct {
+	FieldID string `json:"fieldId"`
+	Label   string `json:"label"`
+}
+
+type CustomerRequestCurrentStatusScheme struct {
+	Status         string `json:"status"`
+	StatusCategory string `json:"statusCategory"`
+	StatusDate     struct {
+	} `json:"statusDate"`
+}
+
+type CustomerRequestLinksScheme struct {
+	Self     string `json:"self"`
+	JiraRest string `json:"jiraRest"`
+	Web      string `json:"web"`
+	Agent    string `json:"agent"`
 }
 
 type CustomerRequestScheme struct {
-	IssueID       string `json:"issueId"`
-	IssueKey      string `json:"issueKey"`
-	RequestTypeID string `json:"requestTypeId"`
-	RequestType   struct {
-		ID            string   `json:"id"`
-		Name          string   `json:"name"`
-		Description   string   `json:"description"`
-		HelpText      string   `json:"helpText"`
-		IssueTypeID   string   `json:"issueTypeId"`
-		ServiceDeskID string   `json:"serviceDeskId"`
-		GroupIds      []string `json:"groupIds"`
-		Icon          struct {
-		} `json:"icon"`
-		Fields struct {
-		} `json:"fields"`
-		Expands []string `json:"_expands"`
-		Links   struct {
-		} `json:"_links"`
-	} `json:"requestType"`
-	ServiceDeskID string `json:"serviceDeskId"`
-	ServiceDesk   struct {
-		ID          string `json:"id"`
-		ProjectID   string `json:"projectId"`
-		ProjectName string `json:"projectName"`
-		ProjectKey  string `json:"projectKey"`
-		Links       struct {
-		} `json:"_links"`
-	} `json:"serviceDesk"`
-	CreatedDate struct {
-		Iso8601     string `json:"iso8601"`
-		Jira        string `json:"jira"`
-		Friendly    string `json:"friendly"`
-		EpochMillis int    `json:"epochMillis"`
-	} `json:"createdDate"`
-	Reporter struct {
-		AccountID    string `json:"accountId"`
-		Name         string `json:"name"`
-		Key          string `json:"key"`
-		EmailAddress string `json:"emailAddress"`
-		DisplayName  string `json:"displayName"`
-		Active       bool   `json:"active"`
-		TimeZone     string `json:"timeZone"`
-		Links        struct {
-		} `json:"_links"`
-	} `json:"reporter"`
-	RequestFieldValues []struct {
-		FieldID       string `json:"fieldId"`
-		Label         string `json:"label"`
-		RenderedValue struct {
-		} `json:"renderedValue"`
-	} `json:"requestFieldValues"`
-	CurrentStatus struct {
-		Status         string `json:"status"`
-		StatusCategory string `json:"statusCategory"`
-		StatusDate     struct {
-		} `json:"statusDate"`
-	} `json:"currentStatus"`
-	Status struct {
-		Size       int  `json:"size"`
-		Start      int  `json:"start"`
-		Limit      int  `json:"limit"`
-		IsLastPage bool `json:"isLastPage"`
-		Values     []struct {
-		} `json:"values"`
-		Expands []string `json:"_expands"`
-		Links   struct {
-		} `json:"_links"`
-	} `json:"status"`
-	Participants struct {
-		Size       int  `json:"size"`
-		Start      int  `json:"start"`
-		Limit      int  `json:"limit"`
-		IsLastPage bool `json:"isLastPage"`
-		Values     []struct {
-		} `json:"values"`
-		Expands []string `json:"_expands"`
-		Links   struct {
-		} `json:"_links"`
-	} `json:"participants"`
-	SLA struct {
-		Size       int  `json:"size"`
-		Start      int  `json:"start"`
-		Limit      int  `json:"limit"`
-		IsLastPage bool `json:"isLastPage"`
-		Values     []struct {
-		} `json:"values"`
-		Expands []string `json:"_expands"`
-		Links   struct {
-		} `json:"_links"`
-	} `json:"sla"`
-	Attachments struct {
-		Size       int  `json:"size"`
-		Start      int  `json:"start"`
-		Limit      int  `json:"limit"`
-		IsLastPage bool `json:"isLastPage"`
-		Values     []struct {
-		} `json:"values"`
-		Expands []string `json:"_expands"`
-		Links   struct {
-		} `json:"_links"`
-	} `json:"attachments"`
-	Comments struct {
-		Size       int  `json:"size"`
-		Start      int  `json:"start"`
-		Limit      int  `json:"limit"`
-		IsLastPage bool `json:"isLastPage"`
-		Values     []struct {
-		} `json:"values"`
-		Expands []string `json:"_expands"`
-		Links   struct {
-		} `json:"_links"`
-	} `json:"comments"`
-	Actions struct {
-		AddAttachment struct {
-		} `json:"addAttachment"`
-		AddComment struct {
-		} `json:"addComment"`
-		AddParticipant struct {
-		} `json:"addParticipant"`
-		RemoveParticipant struct {
-		} `json:"removeParticipant"`
-	} `json:"actions"`
-	Expands []string `json:"_expands"`
-	Links   struct {
-		Self     string `json:"self"`
-		JiraRest string `json:"jiraRest"`
-		Web      string `json:"web"`
-		Agent    string `json:"agent"`
-	} `json:"_links"`
+	IssueID            string                                    `json:"issueId,omitempty"`
+	IssueKey           string                                    `json:"issueKey,omitempty"`
+	RequestTypeID      string                                    `json:"requestTypeId,omitempty"`
+	RequestType        *CustomerRequestTypeScheme                `json:"requestType,omitempty"`
+	ServiceDeskID      string                                    `json:"serviceDeskId,omitempty"`
+	ServiceDesk        *CustomerRequestServiceDeskScheme         `json:"serviceDesk,omitempty"`
+	CreatedDate        *CustomerRequestDateScheme                `json:"createdDate,omitempty"`
+	Reporter           *CustomerRequestReporterScheme            `json:"reporter,omitempty"`
+	RequestFieldValues []*CustomerRequestRequestFieldValueScheme `json:"requestFieldValues,omitempty"`
+	CurrentStatus      *CustomerRequestCurrentStatusScheme       `json:"currentStatus,omitempty"`
+	Expands            []string                                  `json:"_expands,omitempty"`
+	Links              *CustomerRequestLinksScheme               `json:"_links,omitempty"`
 }
+
+var (
+	notIssueError        = fmt.Errorf("error, please provide a valid issueKeyOrID value")
+	notTransitionIDError = fmt.Errorf("error, please provide a valid transitionID value")
+)

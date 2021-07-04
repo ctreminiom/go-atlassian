@@ -68,6 +68,19 @@ func TestCustomerService_Create(t *testing.T) {
 			wantHTTPCodeReturn: http.StatusCreated,
 			wantErr:            true,
 		},
+
+		{
+			name:               "CreateCustomerWhenTheEmailIsToShort",
+			email:              "exa",
+			displayName:        "Example",
+			mockFile:           "./mocks/create-customer.json",
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/servicedeskapi/customer",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusCreated,
+			wantErr:            true,
+		},
+
 		{
 			name:               "CreateCustomerWhenTheRequestMethodIsIncorrect",
 			email:              "example@gmail.com",
@@ -164,7 +177,7 @@ func TestCustomerService_Create(t *testing.T) {
 				assert.Error(t, err)
 
 				if gotResponse != nil {
-					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
+					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
 				}
 			} else {
 
@@ -180,8 +193,8 @@ func TestCustomerService_Create(t *testing.T) {
 				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, apiEndpoint.Path)
 				assert.Equal(t, testCase.endpoint, apiEndpoint.Path)
 
-				t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
-				assert.Equal(t, gotResponse.StatusCode, testCase.wantHTTPCodeReturn)
+				t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
+				assert.Equal(t, gotResponse.Code, testCase.wantHTTPCodeReturn)
 
 				t.Log("--------------------------")
 				t.Logf("Customer Name: %v", gotResult.Name)
@@ -389,7 +402,7 @@ func TestCustomerService_Get(t *testing.T) {
 				assert.Error(t, err)
 
 				if gotResponse != nil {
-					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
+					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
 				}
 			} else {
 
@@ -413,8 +426,8 @@ func TestCustomerService_Get(t *testing.T) {
 				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
 				assert.Equal(t, testCase.endpoint, endpointToAssert)
 
-				t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
-				assert.Equal(t, gotResponse.StatusCode, testCase.wantHTTPCodeReturn)
+				t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
+				assert.Equal(t, gotResponse.Code, testCase.wantHTTPCodeReturn)
 
 				for _, customer := range gotResult.Values {
 
@@ -567,7 +580,7 @@ func TestCustomerService_Add(t *testing.T) {
 				assert.Error(t, err)
 
 				if gotResponse != nil {
-					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
+					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
 				}
 			} else {
 
@@ -590,8 +603,8 @@ func TestCustomerService_Add(t *testing.T) {
 				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
 				assert.Equal(t, testCase.endpoint, endpointToAssert)
 
-				t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
-				assert.Equal(t, gotResponse.StatusCode, testCase.wantHTTPCodeReturn)
+				t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
+				assert.Equal(t, gotResponse.Code, testCase.wantHTTPCodeReturn)
 
 			}
 
@@ -744,7 +757,7 @@ func TestCustomerService_Remove(t *testing.T) {
 				assert.Error(t, err)
 
 				if gotResponse != nil {
-					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
+					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
 				}
 			} else {
 
@@ -767,8 +780,8 @@ func TestCustomerService_Remove(t *testing.T) {
 				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
 				assert.Equal(t, testCase.endpoint, endpointToAssert)
 
-				t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
-				assert.Equal(t, gotResponse.StatusCode, testCase.wantHTTPCodeReturn)
+				t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
+				assert.Equal(t, gotResponse.Code, testCase.wantHTTPCodeReturn)
 
 			}
 

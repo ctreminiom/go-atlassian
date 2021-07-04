@@ -176,7 +176,7 @@ func TestRequestAttachmentService_Create(t *testing.T) {
 				assert.Error(t, err)
 
 				if gotResponse != nil {
-					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
+					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
 				}
 			} else {
 
@@ -200,8 +200,8 @@ func TestRequestAttachmentService_Create(t *testing.T) {
 				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
 				assert.Equal(t, testCase.endpoint, endpointToAssert)
 
-				t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
-				assert.Equal(t, gotResponse.StatusCode, testCase.wantHTTPCodeReturn)
+				t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
+				assert.Equal(t, gotResponse.Code, testCase.wantHTTPCodeReturn)
 
 				t.Log(gotResult)
 			}
@@ -350,7 +350,7 @@ func TestRequestAttachmentService_Gets(t *testing.T) {
 				assert.Error(t, err)
 
 				if gotResponse != nil {
-					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
+					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
 				}
 			} else {
 
@@ -374,8 +374,8 @@ func TestRequestAttachmentService_Gets(t *testing.T) {
 				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
 				assert.Equal(t, testCase.endpoint, endpointToAssert)
 
-				t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
-				assert.Equal(t, gotResponse.StatusCode, testCase.wantHTTPCodeReturn)
+				t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
+				assert.Equal(t, gotResponse.Code, testCase.wantHTTPCodeReturn)
 
 				for _, file := range gotResult.Values {
 					t.Log(file.Filename, file.Size, file.Author.EmailAddress, file.MimeType, file.Created.Iso8601)

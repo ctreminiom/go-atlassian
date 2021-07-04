@@ -2,7 +2,6 @@ package sm
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -11,10 +10,11 @@ import (
 
 type RequestTypeService struct{ client *Client }
 
-// This method returns all customer request types used in the Jira Service Management instance,
+// Search returns all customer request types used in the Jira Service Management instance,
 // optionally filtered by a query string.
 // Docs: https://docs.go-atlassian.io/jira-service-management-cloud/request/types#get-all-request-types
-func (r *RequestTypeService) Search(ctx context.Context, query string, start, limit int) (result *RequestTypePageScheme, response *Response, err error) {
+func (r *RequestTypeService) Search(ctx context.Context, query string, start, limit int) (result *RequestTypePageScheme,
+	response *ResponseScheme, err error) {
 
 	params := url.Values{}
 	params.Add("start", strconv.Itoa(start))
@@ -39,24 +39,22 @@ func (r *RequestTypeService) Search(ctx context.Context, query string, start, li
 	*/
 	request.Header.Set("X-ExperimentalApi", "opt-in")
 
-	response, err = r.client.Do(request)
+	response, err = r.client.Call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(RequestTypePageScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
 	return
 }
 
+// Gets returns all customer request types from a service desk.
+// There are two parameters for filtering the returned list:
 // Docs: https://docs.go-atlassian.io/jira-service-management-cloud/request/types#get-request-types
-func (r *RequestTypeService) Gets(ctx context.Context, serviceDeskID, groupID, start, limit int) (result *ProjectRequestTypePageScheme, response *Response, err error) {
+func (r *RequestTypeService) Gets(ctx context.Context, serviceDeskID, groupID, start, limit int) (
+	result *ProjectRequestTypePageScheme, response *ResponseScheme, err error) {
 
 	if serviceDeskID == 0 {
-		return nil, nil, fmt.Errorf("error, please provide a valid serviceDeskID value")
+		return nil, nil, notServiceDeskError
 	}
 
 	params := url.Values{}
@@ -76,13 +74,8 @@ func (r *RequestTypeService) Gets(ctx context.Context, serviceDeskID, groupID, s
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = r.client.Do(request)
+	response, err = r.client.Call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(ProjectRequestTypePageScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
@@ -90,25 +83,29 @@ func (r *RequestTypeService) Gets(ctx context.Context, serviceDeskID, groupID, s
 }
 
 type ProjectRequestTypePageScheme struct {
-	Expands    []string `json:"_expands"`
-	Size       int      `json:"size"`
-	Start      int      `json:"start"`
-	Limit      int      `json:"limit"`
-	IsLastPage bool     `json:"isLastPage"`
-	Links      struct {
-		Base    string `json:"base"`
-		Context string `json:"context"`
-		Next    string `json:"next"`
-		Prev    string `json:"prev"`
-	} `json:"_links"`
-	Values []*RequestTypeScheme `json:"values"`
+	Expands    []string                          `json:"_expands"`
+	Size       int                               `json:"size"`
+	Start      int                               `json:"start"`
+	Limit      int                               `json:"limit"`
+	IsLastPage bool                              `json:"isLastPage"`
+	Values     []*RequestTypeScheme              `json:"values"`
+	Links      *ProjectRequestTypePageLinkScheme `json:"_links"`
 }
 
+type ProjectRequestTypePageLinkScheme struct {
+	Base    string `json:"base"`
+	Context string `json:"context"`
+	Next    string `json:"next"`
+	Prev    string `json:"prev"`
+}
+
+// Create enables a customer request type to be added to a service desk based on an issue type.
 // Docs: https://docs.go-atlassian.io/jira-service-management-cloud/request/types#create-request-type
-func (r *RequestTypeService) Create(ctx context.Context, serviceDeskID int, issueTypeID, name, description, helpText string) (result *RequestTypeScheme, response *Response, err error) {
+func (r *RequestTypeService) Create(ctx context.Context, serviceDeskID int, issueTypeID, name, description,
+	helpText string) (result *RequestTypeScheme, response *ResponseScheme, err error) {
 
 	if serviceDeskID == 0 {
-		return nil, nil, fmt.Errorf("error, please provide a valid serviceDeskID value")
+		return nil, nil, notServiceDeskError
 	}
 
 	payload := struct {
@@ -123,9 +120,10 @@ func (r *RequestTypeService) Create(ctx context.Context, serviceDeskID int, issu
 		Description: description,
 	}
 
+	payloadAsReader, _ := transformStructToReader(&payload)
 	var endpoint = fmt.Sprintf("rest/servicedeskapi/servicedesk/%v/requesttype", serviceDeskID)
 
-	request, err := r.client.newRequest(ctx, http.MethodPost, endpoint, &payload)
+	request, err := r.client.newRequest(ctx, http.MethodPost, endpoint, payloadAsReader)
 	if err != nil {
 		return
 	}
@@ -139,28 +137,25 @@ func (r *RequestTypeService) Create(ctx context.Context, serviceDeskID int, issu
 	*/
 	request.Header.Set("X-ExperimentalApi", "opt-in")
 
-	response, err = r.client.Do(request)
+	response, err = r.client.Call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(RequestTypeScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
 	return
 }
 
+// Get returns a customer request type from a service desk.
 // Docs: https://docs.go-atlassian.io/jira-service-management-cloud/request/types#get-request-type-by-id
-func (r *RequestTypeService) Get(ctx context.Context, serviceDeskID, requestTypeID int) (result *RequestTypeScheme, response *Response, err error) {
+func (r *RequestTypeService) Get(ctx context.Context, serviceDeskID, requestTypeID int) (result *RequestTypeScheme,
+	response *ResponseScheme, err error) {
 
 	if serviceDeskID == 0 {
-		return nil, nil, fmt.Errorf("error, please provide a valid serviceDeskID value")
+		return nil, nil, notServiceDeskError
 	}
 
 	if requestTypeID == 0 {
-		return nil, nil, fmt.Errorf("error, please provide a valid requestTypeID value")
+		return nil, nil, notRequestTypeError
 	}
 
 	var endpoint = fmt.Sprintf("rest/servicedeskapi/servicedesk/%v/requesttype/%v", serviceDeskID, requestTypeID)
@@ -172,28 +167,24 @@ func (r *RequestTypeService) Get(ctx context.Context, serviceDeskID, requestType
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = r.client.Do(request)
+	response, err = r.client.Call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(RequestTypeScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
 	return
 }
 
+// Delete deletes a customer request type from a service desk, and removes it from all customer requests.
 // Docs: https://docs.go-atlassian.io/jira-service-management-cloud/request/types#delete-request-type
-func (r *RequestTypeService) Delete(ctx context.Context, serviceDeskID, requestTypeID int) (response *Response, err error) {
+func (r *RequestTypeService) Delete(ctx context.Context, serviceDeskID, requestTypeID int) (response *ResponseScheme, err error) {
 
 	if serviceDeskID == 0 {
-		return nil, fmt.Errorf("error, please provide a valid serviceDeskID value")
+		return nil, notServiceDeskError
 	}
 
 	if requestTypeID == 0 {
-		return nil, fmt.Errorf("error, please provide a valid requestTypeID value")
+		return nil, notRequestTypeError
 	}
 
 	var endpoint = fmt.Sprintf("rest/servicedeskapi/servicedesk/%v/requesttype/%v", serviceDeskID, requestTypeID)
@@ -211,7 +202,7 @@ func (r *RequestTypeService) Delete(ctx context.Context, serviceDeskID, requestT
 	*/
 	request.Header.Set("X-ExperimentalApi", "opt-in")
 
-	response, err = r.client.Do(request)
+	response, err = r.client.Call(request, nil)
 	if err != nil {
 		return
 	}
@@ -219,15 +210,17 @@ func (r *RequestTypeService) Delete(ctx context.Context, serviceDeskID, requestT
 	return
 }
 
+// Fields returns the fields for a service desk's customer request type.
 // Docs: https://docs.go-atlassian.io/jira-service-management-cloud/request/types#get-request-type-fields
-func (r *RequestTypeService) Fields(ctx context.Context, serviceDeskID, requestTypeID int) (result *RequestTypeFieldsScheme, response *Response, err error) {
+func (r *RequestTypeService) Fields(ctx context.Context, serviceDeskID, requestTypeID int) (
+	result *RequestTypeFieldsScheme, response *ResponseScheme, err error) {
 
 	if serviceDeskID == 0 {
-		return nil, nil, fmt.Errorf("error, please provide a valid serviceDeskID value")
+		return nil, nil, notServiceDeskError
 	}
 
 	if requestTypeID == 0 {
-		return nil, nil, fmt.Errorf("error, please provide a valid requestTypeID value")
+		return nil, nil, notRequestTypeError
 	}
 
 	var endpoint = fmt.Sprintf("rest/servicedeskapi/servicedesk/%v/requesttype/%v/field", serviceDeskID, requestTypeID)
@@ -239,13 +232,8 @@ func (r *RequestTypeService) Fields(ctx context.Context, serviceDeskID, requestT
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = r.client.Do(request)
+	response, err = r.client.Call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(RequestTypeFieldsScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
@@ -253,19 +241,21 @@ func (r *RequestTypeService) Fields(ctx context.Context, serviceDeskID, requestT
 }
 
 type RequestTypePageScheme struct {
-	Size       int                  `json:"size"`
-	Start      int                  `json:"start"`
-	Limit      int                  `json:"limit"`
-	IsLastPage bool                 `json:"isLastPage"`
-	Values     []*RequestTypeScheme `json:"values"`
-	Expands    []string             `json:"_expands"`
-	Links      struct {
-		Self    string `json:"self"`
-		Base    string `json:"base"`
-		Context string `json:"context"`
-		Next    string `json:"next"`
-		Prev    string `json:"prev"`
-	} `json:"_links"`
+	Size       int                        `json:"size"`
+	Start      int                        `json:"start"`
+	Limit      int                        `json:"limit"`
+	IsLastPage bool                       `json:"isLastPage"`
+	Values     []*RequestTypeScheme       `json:"values"`
+	Expands    []string                   `json:"_expands"`
+	Links      *RequestTypePageLinkScheme `json:"_links"`
+}
+
+type RequestTypePageLinkScheme struct {
+	Self    string `json:"self"`
+	Base    string `json:"base"`
+	Context string `json:"context"`
+	Next    string `json:"next"`
+	Prev    string `json:"prev"`
 }
 
 type RequestTypeScheme struct {
@@ -276,14 +266,7 @@ type RequestTypeScheme struct {
 	IssueTypeID   string   `json:"issueTypeId"`
 	ServiceDeskID string   `json:"serviceDeskId"`
 	GroupIds      []string `json:"groupIds"`
-	Icon          struct {
-		ID    string `json:"id"`
-		Links struct {
-		} `json:"_links"`
-	} `json:"icon"`
-	Fields struct {
-		RequestTypeFields []struct {
-		} `json:"requestTypeFields"`
+	Fields        struct {
 		CanRaiseOnBehalfOf        bool `json:"canRaiseOnBehalfOf"`
 		CanAddRequestParticipants bool `json:"canAddRequestParticipants"`
 	} `json:"fields"`
@@ -323,3 +306,8 @@ type RequestTypeFieldsScheme struct {
 	CanRaiseOnBehalfOf        bool `json:"canRaiseOnBehalfOf"`
 	CanAddRequestParticipants bool `json:"canAddRequestParticipants"`
 }
+
+var (
+	notServiceDeskError = fmt.Errorf("error, please provide a valid serviceDeskID value")
+	notRequestTypeError = fmt.Errorf("error, please provide a valid requestTypeID value")
+)

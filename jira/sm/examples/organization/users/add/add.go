@@ -31,12 +31,12 @@ func main() {
 	response, err := atlassian.ServiceManagement.Organization.Add(context.Background(), organizationID, accountIDs)
 	if err != nil {
 		if response != nil {
-			log.Println("Response HTTP Response", string(response.BodyAsBytes))
+			log.Println("Response HTTP Response", response.Bytes.String())
 			log.Println("HTTP Endpoint Used", response.Endpoint)
 		}
 		log.Fatal(err)
 	}
 
-	log.Println("Response HTTP Code", response.StatusCode)
+	log.Println("Response HTTP Code", response.Code)
 	log.Println("HTTP Endpoint Used", response.Endpoint)
 }

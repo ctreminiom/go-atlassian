@@ -2,18 +2,19 @@ package sm
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/http"
 )
 
 type RequestFeedbackService struct{ client *Client }
 
+// Get retrieves a feedback of a request using it's requestKey or requestId
 // Docs: https://docs.go-atlassian.io/jira-service-management-cloud/request/feedback#get-feedback
-func (r *RequestFeedbackService) Get(ctx context.Context, requestIDOrKey string) (result *CustomerFeedbackScheme, response *Response, err error) {
+func (r *RequestFeedbackService) Get(ctx context.Context, requestIDOrKey string) (result *CustomerFeedbackScheme,
+	response *ResponseScheme, err error) {
 
 	if len(requestIDOrKey) == 0 {
-		return nil, nil, fmt.Errorf("error, please provide a valid requestIDOrKey value")
+		return nil, nil, notRequestIDOrKeyError
 	}
 
 	var endpoint = fmt.Sprintf("rest/servicedeskapi/request/%v/feedback", requestIDOrKey)
@@ -26,24 +27,21 @@ func (r *RequestFeedbackService) Get(ctx context.Context, requestIDOrKey string)
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("X-ExperimentalApi", "opt-in")
 
-	response, err = r.client.Do(request)
+	response, err = r.client.Call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(CustomerFeedbackScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
 	return
 }
 
+// Post adds a feedback on an request using it's requestKey or requestId
 // Docs: https://docs.go-atlassian.io/jira-service-management-cloud/request/feedback#post-feedback
-func (r *RequestFeedbackService) Post(ctx context.Context, requestIDOrKey string, rating int, comment string) (result *CustomerFeedbackScheme, response *Response, err error) {
+func (r *RequestFeedbackService) Post(ctx context.Context, requestIDOrKey string, rating int, comment string) (
+	result *CustomerFeedbackScheme, response *ResponseScheme, err error) {
 
 	if len(requestIDOrKey) == 0 {
-		return nil, nil, fmt.Errorf("error, please provide a valid requestIDOrKey value")
+		return nil, nil, notRequestIDOrKeyError
 	}
 
 	payload := struct {
@@ -62,9 +60,10 @@ func (r *RequestFeedbackService) Post(ctx context.Context, requestIDOrKey string
 		Type: "csat",
 	}
 
+	payloadAsReader, _ := transformStructToReader(&payload)
 	var endpoint = fmt.Sprintf("rest/servicedeskapi/request/%v/feedback", requestIDOrKey)
 
-	request, err := r.client.newRequest(ctx, http.MethodPost, endpoint, &payload)
+	request, err := r.client.newRequest(ctx, http.MethodPost, endpoint, payloadAsReader)
 	if err != nil {
 		return
 	}
@@ -73,24 +72,20 @@ func (r *RequestFeedbackService) Post(ctx context.Context, requestIDOrKey string
 	request.Header.Set("Content-Type", "application/json")
 	request.Header.Set("X-ExperimentalApi", "opt-in")
 
-	response, err = r.client.Do(request)
+	response, err = r.client.Call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(CustomerFeedbackScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
 	return
 }
 
+// Delete deletes the feedback of request using it's requestKey or requestId
 // Docs: https://docs.go-atlassian.io/jira-service-management-cloud/request/feedback#delete-feedback
-func (r *RequestFeedbackService) Delete(ctx context.Context, requestIDOrKey string) (response *Response, err error) {
+func (r *RequestFeedbackService) Delete(ctx context.Context, requestIDOrKey string) (response *ResponseScheme, err error) {
 
 	if len(requestIDOrKey) == 0 {
-		return nil, fmt.Errorf("error, please provide a valid requestIDOrKey value")
+		return nil, notRequestIDOrKeyError
 	}
 
 	var endpoint = fmt.Sprintf("rest/servicedeskapi/request/%v/feedback", requestIDOrKey)
@@ -103,7 +98,7 @@ func (r *RequestFeedbackService) Delete(ctx context.Context, requestIDOrKey stri
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("X-ExperimentalApi", "opt-in")
 
-	response, err = r.client.Do(request)
+	response, err = r.client.Call(request, nil)
 	if err != nil {
 		return
 	}
@@ -112,9 +107,15 @@ func (r *RequestFeedbackService) Delete(ctx context.Context, requestIDOrKey stri
 }
 
 type CustomerFeedbackScheme struct {
-	Type    string `json:"type"`
-	Rating  int    `json:"rating"`
-	Comment struct {
-		Body string `json:"body"`
-	} `json:"comment"`
+	Type    string                         `json:"type,omitempty"`
+	Rating  int                            `json:"rating,omitempty"`
+	Comment *CustomerFeedbackCommentScheme `json:"comment,omitempty"`
 }
+
+type CustomerFeedbackCommentScheme struct {
+	Body string `json:"body,omitempty"`
+}
+
+var (
+	notRequestIDOrKeyError = fmt.Errorf("error, please provide a valid requestIDOrKey value")
+)

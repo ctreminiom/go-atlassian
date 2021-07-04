@@ -107,7 +107,7 @@ func TestRequestFeedbackService_Delete(t *testing.T) {
 				assert.Error(t, err)
 
 				if gotResponse != nil {
-					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
+					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
 				}
 			} else {
 
@@ -130,8 +130,8 @@ func TestRequestFeedbackService_Delete(t *testing.T) {
 				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
 				assert.Equal(t, testCase.endpoint, endpointToAssert)
 
-				t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
-				assert.Equal(t, gotResponse.StatusCode, testCase.wantHTTPCodeReturn)
+				t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
+				assert.Equal(t, gotResponse.Code, testCase.wantHTTPCodeReturn)
 
 			}
 
@@ -253,7 +253,7 @@ func TestRequestFeedbackService_Get(t *testing.T) {
 				assert.Error(t, err)
 
 				if gotResponse != nil {
-					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
+					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
 				}
 			} else {
 
@@ -277,8 +277,8 @@ func TestRequestFeedbackService_Get(t *testing.T) {
 				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
 				assert.Equal(t, testCase.endpoint, endpointToAssert)
 
-				t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
-				assert.Equal(t, gotResponse.StatusCode, testCase.wantHTTPCodeReturn)
+				t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
+				assert.Equal(t, gotResponse.Code, testCase.wantHTTPCodeReturn)
 
 				t.Logf("Customer Feedback Rating: %v", gotResult.Rating)
 				t.Logf("Customer Feddback Comment: %v", gotResult.Comment.Body)
@@ -442,7 +442,7 @@ func TestRequestFeedbackService_Post(t *testing.T) {
 				assert.Error(t, err)
 
 				if gotResponse != nil {
-					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
+					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
 				}
 			} else {
 
@@ -466,8 +466,8 @@ func TestRequestFeedbackService_Post(t *testing.T) {
 				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
 				assert.Equal(t, testCase.endpoint, endpointToAssert)
 
-				t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
-				assert.Equal(t, gotResponse.StatusCode, testCase.wantHTTPCodeReturn)
+				t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
+				assert.Equal(t, gotResponse.Code, testCase.wantHTTPCodeReturn)
 
 				t.Logf("Customer Feedback Rating: %v", gotResult.Rating)
 				t.Logf("Customer Feddback Comment: %v", gotResult.Comment.Body)

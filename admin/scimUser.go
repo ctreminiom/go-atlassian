@@ -2,11 +2,11 @@ package admin
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/url"
 	"strconv"
+	"strings"
 )
 
 type SCIMUserService struct{ client *Client }
@@ -16,64 +16,38 @@ type SCIMUserService struct{ client *Client }
 // A user account can only be created if it has an email address on a verified domain.
 // If a managed Atlassian account already exists on the Atlassian platform for the specified email address,
 // the user in your identity provider is linked to the user in your Atlassian organization.
-// --- This func needs the following parameters: ---
-// 1. ctx = it's the context.context value
-// 2. directoryId = Directory Id (REQUIRED)
-// 3. payload = The information of the new user to create (REQUIRED)
-// 4. attributes = Resource attributes to be included in response
-// 5. excludedAttributes = Resource attributes to be excluded from response
 // Atlassian Docs: https://developer.atlassian.com/cloud/admin/user-provisioning/rest/api-group-users/#api-scim-directory-directoryid-users-post
 // Library Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/scim/users#create-a-user
-func (s *SCIMUserService) Create(ctx context.Context, directoryID string, payload *SCIMUserScheme, attributes, excludedAttributes []string) (result *SCIMUserScheme, response *Response, err error) {
+func (s *SCIMUserService) Create(ctx context.Context, directoryID string, payload *SCIMUserScheme, attributes,
+	excludedAttributes []string) (result *SCIMUserScheme, response *ResponseScheme, err error) {
 
 	if len(directoryID) == 0 {
-		return nil, nil, fmt.Errorf("error!, please provide a valid directoryID value")
+		return nil, nil, notDirectoryError
 	}
 
-	if payload == nil {
-		return nil, nil, fmt.Errorf("error!, please provide a valid SCIMUserScheme pointer value")
+	payloadAsReader, err := transformStructToReader(payload)
+	if err != nil {
+		return nil, nil, err
 	}
 
 	params := url.Values{}
 
-	var attributesAsString string
-	for pos, attribute := range attributes {
-
-		if pos == 0 {
-			attributesAsString = attribute
-			continue
-		}
-
-		attributesAsString += "," + attribute
+	if len(attributes) != 0 {
+		params.Add("attributes", strings.Join(attributes, ","))
 	}
 
-	if len(attributesAsString) != 0 {
-		params.Add("attributes", attributesAsString)
+	if len(excludedAttributes) != 0 {
+		params.Add("excludedAttributes", strings.Join(excludedAttributes, ","))
 	}
 
-	var excludedAttributesAsString string
-	for pos, attribute := range excludedAttributes {
+	var endpoint strings.Builder
+	endpoint.WriteString(fmt.Sprintf("/scim/directory/%v/Users", directoryID))
 
-		if pos == 0 {
-			excludedAttributesAsString = attribute
-			continue
-		}
-
-		excludedAttributesAsString += "," + attribute
+	if params.Encode() != "" {
+		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
-	if len(excludedAttributesAsString) != 0 {
-		params.Add("excludedAttributes", excludedAttributesAsString)
-	}
-
-	var endpoint string
-	if len(params.Encode()) != 0 {
-		endpoint = fmt.Sprintf("/scim/directory/%v/Users?%v", directoryID, params.Encode())
-	} else {
-		endpoint = fmt.Sprintf("/scim/directory/%v/Users", directoryID)
-	}
-
-	request, err := s.client.newRequest(ctx, http.MethodPost, endpoint, payload)
+	request, err := s.client.newRequest(ctx, http.MethodPost, endpoint.String(), payloadAsReader)
 	if err != nil {
 		return
 	}
@@ -81,13 +55,8 @@ func (s *SCIMUserService) Create(ctx context.Context, directoryID string, payloa
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Content-Type", "application/scim+json")
 
-	response, err = s.client.Do(request)
+	response, err = s.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(SCIMUserScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
@@ -165,19 +134,14 @@ type SCIMUserGetsOptionsScheme struct {
 	Filter             string
 }
 
-// Get users from the specified directory
-// --- This func needs the following parameters: ---
-// 1. ctx = it's the context.context value
-// 2. directoryId = Directory Id (REQUIRED)
-// 3. opts = More Filtering queries
-// 4. startIndex = A 1-based index of the first query result.
-// 5. count = Desired maximum number of query results in the list response page.
+// Gets get users from the specified directory
 // Atlassian Docs: https://developer.atlassian.com/cloud/admin/user-provisioning/rest/api-group-users/#api-scim-directory-directoryid-users-get
 // Library Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/scim/users#get-users
-func (s *SCIMUserService) Gets(ctx context.Context, directoryID string, opts *SCIMUserGetsOptionsScheme, startIndex, count int) (result *SCIMUserPageScheme, response *Response, err error) {
+func (s *SCIMUserService) Gets(ctx context.Context, directoryID string, opts *SCIMUserGetsOptionsScheme, startIndex,
+	count int) (result *SCIMUserPageScheme, response *ResponseScheme, err error) {
 
 	if len(directoryID) == 0 {
-		return nil, nil, fmt.Errorf("error!, please provide a valid directoryID value")
+		return nil, nil, notDirectoryError
 	}
 
 	params := url.Values{}
@@ -186,40 +150,17 @@ func (s *SCIMUserService) Gets(ctx context.Context, directoryID string, opts *SC
 
 	if opts != nil {
 
-		var attributesAsString string
-		for pos, attribute := range opts.Attributes {
-
-			if pos == 0 {
-				attributesAsString = attribute
-				continue
-			}
-
-			attributesAsString += "," + attribute
+		if len(opts.Attributes) != 0 {
+			params.Add("attributes", strings.Join(opts.Attributes, ","))
 		}
 
-		if len(attributesAsString) != 0 {
-			params.Add("attributes", attributesAsString)
-		}
-
-		var excludedAttributesAsString string
-		for pos, attribute := range opts.ExcludedAttributes {
-
-			if pos == 0 {
-				excludedAttributesAsString = attribute
-				continue
-			}
-
-			excludedAttributesAsString += "," + attribute
-		}
-
-		if len(excludedAttributesAsString) != 0 {
-			params.Add("excludedAttributes", excludedAttributesAsString)
+		if len(opts.ExcludedAttributes) != 0 {
+			params.Add("excludedAttributes", strings.Join(opts.ExcludedAttributes, ","))
 		}
 
 		if len(opts.Filter) != 0 {
 			params.Add("filter", opts.Filter)
 		}
-
 	}
 
 	var endpoint = fmt.Sprintf("/scim/directory/%v/Users?%v", directoryID, params.Encode())
@@ -231,13 +172,8 @@ func (s *SCIMUserService) Gets(ctx context.Context, directoryID string, opts *SC
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = s.client.Do(request)
+	response, err = s.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(SCIMUserPageScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
@@ -253,77 +189,44 @@ type SCIMUserPageScheme struct {
 }
 
 // Get a user from a directory by userId.
-// --- This func needs the following parameters: ---
-// 1. ctx = it's the context.context value
-// 2. directoryId = Directory Id (REQUIRED)
-// 3. userId = The user ID
-// 4. attributes = Resource attributes to be included in response
-// 5. excludedAttributes = Resource attributes to be excluded from response
 // Atlassian Docs: https://developer.atlassian.com/cloud/admin/user-provisioning/rest/api-group-users/#api-scim-directory-directoryid-users-userid-get
 // Library Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/scim/users#get-a-user-by-id
-func (s *SCIMUserService) Get(ctx context.Context, directoryID, userID string, attributes, excludedAttributes []string) (result *SCIMUserScheme, response *Response, err error) {
+func (s *SCIMUserService) Get(ctx context.Context, directoryID, userID string, attributes, excludedAttributes []string) (
+	result *SCIMUserScheme, response *ResponseScheme, err error) {
 
 	if len(directoryID) == 0 {
-		return nil, nil, fmt.Errorf("error!, please provide a valid directoryID value")
+		return nil, nil, notDirectoryError
 	}
 
 	if len(userID) == 0 {
-		return nil, nil, fmt.Errorf("error!, please provide a valid userID value")
+		return nil, nil, notUserError
 	}
 
 	params := url.Values{}
-
-	var attributesAsString string
-	for pos, attribute := range attributes {
-
-		if pos == 0 {
-			attributesAsString = attribute
-			continue
-		}
-
-		attributesAsString += "," + attribute
+	if len(attributes) != 0 {
+		params.Add("attributes", strings.Join(attributes, ","))
 	}
 
-	if len(attributesAsString) != 0 {
-		params.Add("attributes", attributesAsString)
+	if len(excludedAttributes) != 0 {
+		params.Add("excludedAttributes", strings.Join(excludedAttributes, ","))
 	}
 
-	var excludedAttributesAsString string
-	for pos, attribute := range excludedAttributes {
+	var endpoint strings.Builder
+	endpoint.WriteString(fmt.Sprintf("/scim/directory/%v/Users/%v", directoryID, userID))
 
-		if pos == 0 {
-			excludedAttributesAsString = attribute
-			continue
-		}
-
-		excludedAttributesAsString += "," + attribute
+	if params.Encode() != "" {
+		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
-	if len(excludedAttributesAsString) != 0 {
-		params.Add("excludedAttributes", excludedAttributesAsString)
-	}
-
-	var endpoint string
-	if len(params.Encode()) != 0 {
-		endpoint = fmt.Sprintf("/scim/directory/%v/Users/%v?%v", directoryID, userID, params.Encode())
-	} else {
-		endpoint = fmt.Sprintf("/scim/directory/%v/Users/%v", directoryID, userID)
-	}
-
-	request, err := s.client.newRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := s.client.newRequest(ctx, http.MethodGet, endpoint.String(), nil)
 	if err != nil {
 		return
 	}
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = s.client.Do(request)
+	response, err = s.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(SCIMUserScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
@@ -333,20 +236,16 @@ func (s *SCIMUserService) Get(ctx context.Context, directoryID, userID string, a
 // Deactivate a user by userId.
 // The user is not available for future requests until activated again.
 // Any future operation for the deactivated user returns the 404 (resource not found) error.
-// --- This func needs the following parameters: ---
-// 1. ctx = it's the context.context value
-// 2. directoryId = Directory Id (REQUIRED)
-// 3. userId = The user ID (REQUIRED)
 // Atlassian Docs: https://developer.atlassian.com/cloud/admin/user-provisioning/rest/api-group-users/#api-scim-directory-directoryid-users-userid-delete
 // Library Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/scim/users#deactivate-a-user
-func (s *SCIMUserService) Deactivate(ctx context.Context, directoryID, userID string) (response *Response, err error) {
+func (s *SCIMUserService) Deactivate(ctx context.Context, directoryID, userID string) (response *ResponseScheme, err error) {
 
 	if len(directoryID) == 0 {
-		return nil, fmt.Errorf("error!, please provide a valid directoryID value")
+		return nil, notDirectoryError
 	}
 
 	if len(userID) == 0 {
-		return nil, fmt.Errorf("error!, please provide a valid userID value")
+		return nil, notUserError
 	}
 
 	var endpoint = fmt.Sprintf("/scim/directory/%v/Users/%v", directoryID, userID)
@@ -356,7 +255,7 @@ func (s *SCIMUserService) Deactivate(ctx context.Context, directoryID, userID st
 		return
 	}
 
-	response, err = s.client.Do(request)
+	response, err = s.client.call(request, nil)
 	if err != nil {
 		return
 	}
@@ -364,71 +263,44 @@ func (s *SCIMUserService) Deactivate(ctx context.Context, directoryID, userID st
 	return
 }
 
-// This operation updates a user's information in a directory by userId via PATCH.
+// Path updates a user's information in a directory by userId via PATCH.
 // Refer to GET /ServiceProviderConfig for details on the supported operations.
-// --- This func needs the following parameters: ---
-// 1. ctx = it's the context.context value
-// 2. directoryId = Directory Id (REQUIRED)
-// 3. userId = The user ID (REQUIRED)
-// 4. payload = the user update payload (REQUIRED)
-// 5. attributes = Resource attributes to be included in response.
-// 6. excludedAttributes = Resource attributes to be excluded from response.
 // Atlassian Docs: https://developer.atlassian.com/cloud/admin/user-provisioning/rest/api-group-users/#api-scim-directory-directoryid-users-userid-patch
 // Library Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/scim/users#update-user-by-id-patch
-func (s *SCIMUserService) Path(ctx context.Context, directoryID, userID string, payload *SCIMUserToPathScheme, attributes, excludedAttributes []string) (result *SCIMUserScheme, response *Response, err error) {
+func (s *SCIMUserService) Path(ctx context.Context, directoryID, userID string, payload *SCIMUserToPathScheme, attributes,
+	excludedAttributes []string) (result *SCIMUserScheme, response *ResponseScheme, err error) {
 
 	if len(directoryID) == 0 {
 		return nil, nil, fmt.Errorf("error!, please provide a valid directoryID value")
 	}
 
 	if len(userID) == 0 {
-		return nil, nil, fmt.Errorf("error!, please provide a valid userID value")
-	}
-
-	if payload == nil {
-		return nil, nil, fmt.Errorf("error!, please provide a valid SCIMUserToPathScheme pointer value")
+		return nil, nil, notUserError
 	}
 
 	params := url.Values{}
 
-	var attributesAsString string
-	for pos, attribute := range attributes {
-
-		if pos == 0 {
-			attributesAsString = attribute
-			continue
-		}
-
-		attributesAsString += "," + attribute
+	if len(attributes) != 0 {
+		params.Add("attributes", strings.Join(attributes, ","))
 	}
 
-	if len(attributesAsString) != 0 {
-		params.Add("attributes", attributesAsString)
+	if len(excludedAttributes) != 0 {
+		params.Add("excludedAttributes", strings.Join(excludedAttributes, ","))
 	}
 
-	var excludedAttributesAsString string
-	for pos, attribute := range excludedAttributes {
+	var endpoint strings.Builder
+	endpoint.WriteString(fmt.Sprintf("/scim/directory/%v/Users/%v", directoryID, userID))
 
-		if pos == 0 {
-			excludedAttributesAsString = attribute
-			continue
-		}
-
-		excludedAttributesAsString += "," + attribute
+	if params.Encode() != "" {
+		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
-	if len(excludedAttributesAsString) != 0 {
-		params.Add("excludedAttributes", excludedAttributesAsString)
+	payloadAsReader, err := transformStructToReader(payload)
+	if err != nil {
+		return nil, nil, err
 	}
 
-	var endpoint string
-	if len(params.Encode()) != 0 {
-		endpoint = fmt.Sprintf("/scim/directory/%v/Users/%v?%v", directoryID, userID, params.Encode())
-	} else {
-		endpoint = fmt.Sprintf("/scim/directory/%v/Users/%v", directoryID, userID)
-	}
-
-	request, err := s.client.newRequest(ctx, http.MethodPatch, endpoint, payload)
+	request, err := s.client.newRequest(ctx, http.MethodPatch, endpoint.String(), payloadAsReader)
 	if err != nil {
 		return
 	}
@@ -436,13 +308,8 @@ func (s *SCIMUserService) Path(ctx context.Context, directoryID, userID string, 
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Content-Type", "application/scim+json")
 
-	response, err = s.client.Do(request)
+	response, err = s.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(SCIMUserScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
@@ -559,72 +426,44 @@ type SCIMUserToPathOperationScheme struct {
 	Value interface{} `json:"value,omitempty"`
 }
 
-// Updates a user's information in a directory by userId via user attributes.
+// Update updates a user's information in a directory by userId via user attributes.
 // User information is replaced attribute-by-attribute, with the exception of immutable and read-only attributes.
 // Existing values of unspecified attributes are cleaned.
-// --- This func needs the following parameters: ---
-// 1. ctx = it's the context.context value
-// 2. directoryId = Directory Id (REQUIRED)
-// 3. userId = The user ID (REQUIRED)
-// 4. payload = the user update payload (REQUIRED)
-// 5. attributes = Resource attributes to be included in response.
-// 6. excludedAttributes = Resource attributes to be excluded from response.
 // Atlassian Docs: https://developer.atlassian.com/cloud/admin/user-provisioning/rest/api-group-users/#api-scim-directory-directoryid-users-userid-put
 // Library Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/scim/users#update-user-via-user-attributes
-func (s *SCIMUserService) Update(ctx context.Context, directoryID, userID string, payload *SCIMUserScheme, attributes, excludedAttributes []string) (result *SCIMUserScheme, response *Response, err error) {
+func (s *SCIMUserService) Update(ctx context.Context, directoryID, userID string, payload *SCIMUserScheme, attributes,
+	excludedAttributes []string) (result *SCIMUserScheme, response *ResponseScheme, err error) {
 
 	if len(directoryID) == 0 {
-		return nil, nil, fmt.Errorf("error!, please provide a valid directoryID value")
+		return nil, nil, notDirectoryError
 	}
 
 	if len(userID) == 0 {
-		return nil, nil, fmt.Errorf("error!, please provide a valid userID value")
-	}
-
-	if payload == nil {
-		return nil, nil, fmt.Errorf("error!, please provide a valid SCIMUserToPathScheme pointer value")
+		return nil, nil, notUserError
 	}
 
 	params := url.Values{}
-
-	var attributesAsString string
-	for pos, attribute := range attributes {
-
-		if pos == 0 {
-			attributesAsString = attribute
-			continue
-		}
-
-		attributesAsString += "," + attribute
+	if len(attributes) != 0 {
+		params.Add("", strings.Join(attributes, ","))
 	}
 
-	if len(attributesAsString) != 0 {
-		params.Add("attributes", attributesAsString)
+	if len(excludedAttributes) != 0 {
+		params.Add("excludedAttributes", strings.Join(excludedAttributes, ","))
 	}
 
-	var excludedAttributesAsString string
-	for pos, attribute := range excludedAttributes {
+	var endpoint strings.Builder
+	endpoint.WriteString(fmt.Sprintf("/scim/directory/%v/Users/%v", directoryID, userID))
 
-		if pos == 0 {
-			excludedAttributesAsString = attribute
-			continue
-		}
-
-		excludedAttributesAsString += "," + attribute
+	if params.Encode() != "" {
+		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
-	if len(excludedAttributesAsString) != 0 {
-		params.Add("excludedAttributes", excludedAttributesAsString)
+	payloadAsReader, err := transformStructToReader(payload)
+	if err != nil {
+		return nil, nil, err
 	}
 
-	var endpoint string
-	if len(params.Encode()) != 0 {
-		endpoint = fmt.Sprintf("/scim/directory/%v/Users/%v?%v", directoryID, userID, params.Encode())
-	} else {
-		endpoint = fmt.Sprintf("/scim/directory/%v/Users/%v", directoryID, userID)
-	}
-
-	request, err := s.client.newRequest(ctx, http.MethodPut, endpoint, payload)
+	request, err := s.client.newRequest(ctx, http.MethodPut, endpoint.String(), payloadAsReader)
 	if err != nil {
 		return
 	}
@@ -632,15 +471,14 @@ func (s *SCIMUserService) Update(ctx context.Context, directoryID, userID string
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Content-Type", "application/scim+json")
 
-	response, err = s.client.Do(request)
+	response, err = s.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(SCIMUserScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
 	return
 }
+
+var (
+	notUserError = fmt.Errorf("error!, please provide a valid userID value")
+)

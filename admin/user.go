@@ -2,10 +2,10 @@ package admin
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/url"
+	"strings"
 )
 
 type UserService struct {
@@ -13,71 +13,50 @@ type UserService struct {
 	Token  *UserTokenService
 }
 
-// Returns the set of permissions you have for managing the specified Atlassian account, this func needs the following parameters:
-// 1. ctx = it's the context.context value
-// 2. accountID = The user account to manage (REQUIRED)
-// 3. privileges = the expanded privileges
+// Permissions returns the set of permissions you have for managing the specified Atlassian account, this func needs the following parameters:
 // Atlassian Docs: https://developer.atlassian.com/cloud/admin/user-management/rest/api-group-users/#api-users-account-id-manage-get
 // Library Example: https://docs.go-atlassian.io/atlassian-admin-cloud/user#get-user-management-permissions
-func (u *UserService) Permissions(ctx context.Context, accountID string, privileges []string) (result *UserPermissionScheme, response *Response, err error) {
+func (u *UserService) Permissions(ctx context.Context, accountID string, privileges []string) (result *UserPermissionScheme,
+	response *ResponseScheme, err error) {
 
 	if len(accountID) == 0 {
-		return nil, nil, fmt.Errorf("error!, please provide a valid accountID value")
+		return nil, nil, notAccountError
 	}
 
 	params := url.Values{}
-
-	var privilegesAsString string
-	for index, value := range privileges {
-
-		if index == 0 {
-			privilegesAsString = value
-			continue
-		}
-
-		privilegesAsString += "," + value
+	if len(privileges) != 0 {
+		params.Add("privileges", strings.Join(privileges, ","))
 	}
 
-	if len(privilegesAsString) != 0 {
-		params.Add("privileges", privilegesAsString)
+	var endpoint strings.Builder
+	endpoint.WriteString(fmt.Sprintf("/users/%v/manage", accountID))
+
+	if params.Encode() != "" {
+		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
-	var endpoint string
-	if len(params.Encode()) != 0 {
-		endpoint = fmt.Sprintf("/users/%v/manage?%v", accountID, params.Encode())
-	} else {
-		endpoint = fmt.Sprintf("/users/%v/manage", accountID)
-	}
-
-	request, err := u.client.newRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := u.client.newRequest(ctx, http.MethodGet, endpoint.String(), nil)
 	if err != nil {
 		return
 	}
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = u.client.Do(request)
+	response, err = u.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(UserPermissionScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
 	return
 }
 
-// Returns information about a single Atlassian account by ID, this func needs the following parameters:
-// 1. ctx = it's the context.context value
-// 2. accountID = The user account to manage (REQUIRED)
+// Get returns information about a single Atlassian account by ID, this func needs the following parameters:
 // Atlassian Docs: https://developer.atlassian.com/cloud/admin/user-management/rest/api-group-users/#api-users-account-id-manage-profile-get
 // Library Example: https://docs.go-atlassian.io/atlassian-admin-cloud/user#get-profile
-func (u *UserService) Get(ctx context.Context, accountID string) (result *UserScheme, response *Response, err error) {
+func (u *UserService) Get(ctx context.Context, accountID string) (result *UserScheme, response *ResponseScheme, err error) {
 
 	if len(accountID) == 0 {
-		return nil, nil, fmt.Errorf("error!, please provide a valid accountID value")
+		return nil, nil, notAccountError
 	}
 
 	var endpoint = fmt.Sprintf("/users/%v/manage/profile", accountID)
@@ -89,13 +68,8 @@ func (u *UserService) Get(ctx context.Context, accountID string) (result *UserSc
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = u.client.Do(request)
+	response, err = u.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(UserScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
@@ -243,21 +217,19 @@ type UserPermissionScheme struct {
 	} `json:"session.read"`
 }
 
-// Updates fields in a user account. The profile.write privilege details which fields you can change
-// This func needs the following parameters:
-// 1. ctx = it's the context.context value
-// 2. accountID = The user account to manage (REQUIRED)
-// 3. payload = the fields you want to update (REQUIRED)
+// Update updates fields in a user account. The profile.write privilege details which fields you can change
 // Atlassian Docs: https://developer.atlassian.com/cloud/admin/user-management/rest/api-group-users/#api-users-account-id-manage-profile-patch
 // Library Example: https://docs.go-atlassian.io/atlassian-admin-cloud/user#update-profile
-func (u *UserService) Update(ctx context.Context, accountID string, payload map[string]interface{}) (result *UserScheme, response *Response, err error) {
+func (u *UserService) Update(ctx context.Context, accountID string, payload map[string]interface{}) (
+	result *UserScheme, response *ResponseScheme, err error) {
 
 	if len(accountID) == 0 {
-		return nil, nil, fmt.Errorf("error!, please provide a valid accountID value")
+		return nil, nil, notAccountError
 	}
 
-	if payload == nil {
-		return nil, nil, fmt.Errorf("error!, please provide a valid payload map value")
+	payloadAsReader, err := transformStructToReader(payload)
+	if err != nil {
+		return nil, nil, err
 	}
 
 	if len(payload) == 0 {
@@ -266,7 +238,7 @@ func (u *UserService) Update(ctx context.Context, accountID string, payload map[
 
 	var endpoint = fmt.Sprintf("/users/%v/manage/profile", accountID)
 
-	request, err := u.client.newRequest(ctx, http.MethodPatch, endpoint, payload)
+	request, err := u.client.newRequest(ctx, http.MethodPatch, endpoint, payloadAsReader)
 	if err != nil {
 		return
 	}
@@ -274,33 +246,24 @@ func (u *UserService) Update(ctx context.Context, accountID string, payload map[
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Content-Type", "application/json")
 
-	response, err = u.client.Do(request)
+	response, err = u.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(UserScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
 	return
 }
 
-// Disables the specified user account.
+// Disable disables the specified user account.
 // The permission to make use of this resource is exposed by the lifecycle.enablement privilege
 // You can optionally set a message associated with the block that will be shown to the user on attempted authentication.
 // If none is supplied, a default message will be used.
-// This func needs the following parameters:
-// 1. ctx = it's the context.context value
-// 2. accountID = The user account to manage (REQUIRED)
-// 3. message = the notification message to use
 // Atlassian Docs: https://developer.atlassian.com/cloud/admin/user-management/rest/api-group-users/#api-users-account-id-manage-lifecycle-disable-post
 // Library Example: https://docs.go-atlassian.io/atlassian-admin-cloud/user#disable-a-user
-func (u *UserService) Disable(ctx context.Context, accountID, message string) (response *Response, err error) {
+func (u *UserService) Disable(ctx context.Context, accountID, message string) (response *ResponseScheme, err error) {
 
 	if len(accountID) == 0 {
-		return nil, fmt.Errorf("error!, please provide a valid accountID value")
+		return nil, notAccountError
 	}
 
 	var (
@@ -312,9 +275,12 @@ func (u *UserService) Disable(ctx context.Context, accountID, message string) (r
 
 		payload := struct {
 			Message string `json:"message"`
-		}{Message: message}
+		}{
+			Message: message,
+		}
 
-		request, err = u.client.newRequest(ctx, http.MethodPost, endpoint, payload)
+		payloadAsReader, _ := transformStructToReader(&payload)
+		request, err = u.client.newRequest(ctx, http.MethodPost, endpoint, payloadAsReader)
 		if err != nil {
 			return
 		}
@@ -331,7 +297,7 @@ func (u *UserService) Disable(ctx context.Context, accountID, message string) (r
 		request.Header.Set("Accept", "application/json")
 	}
 
-	response, err = u.client.Do(request)
+	response, err = u.client.call(request, nil)
 	if err != nil {
 		return
 	}
@@ -339,17 +305,15 @@ func (u *UserService) Disable(ctx context.Context, accountID, message string) (r
 	return
 }
 
-// Enables the specified user account.
+// Enable enables the specified user account.
 // The permission to make use of this resource is exposed by the lifecycle.enablement privilege.
 // This func needs the following parameters:
-// 1. ctx = it's the context.context value
-// 2. accountID = The user account to manage (REQUIRED)
 // Atlassian Docs: https://developer.atlassian.com/cloud/admin/user-management/rest/api-group-users/#api-users-account-id-manage-lifecycle-enable-post
 // Library Example: https://docs.go-atlassian.io/atlassian-admin-cloud/user#enable-a-user
-func (u *UserService) Enable(ctx context.Context, accountID string) (response *Response, err error) {
+func (u *UserService) Enable(ctx context.Context, accountID string) (response *ResponseScheme, err error) {
 
 	if len(accountID) == 0 {
-		return nil, fmt.Errorf("error!, please provide a valid accountID value")
+		return nil, notAccountError
 	}
 
 	var endpoint = fmt.Sprintf("/users/%v/manage/lifecycle/enable", accountID)
@@ -359,10 +323,14 @@ func (u *UserService) Enable(ctx context.Context, accountID string) (response *R
 		return
 	}
 
-	response, err = u.client.Do(request)
+	response, err = u.client.call(request, nil)
 	if err != nil {
 		return
 	}
 
 	return
 }
+
+var (
+	notAccountError = fmt.Errorf("error!, please provide a valid accountID value")
+)

@@ -40,12 +40,12 @@ func main() {
 		events, response, err := cloudAdmin.Organization.Events(context.Background(), organizationID, opts, cursor)
 		if err != nil {
 			if response != nil {
-				log.Println("Response HTTP Response", string(response.BodyAsBytes))
+				log.Println("Response HTTP Response", response.Bytes.String())
 			}
 			log.Fatal(err)
 		}
 
-		log.Println("Response HTTP Code", response.StatusCode)
+		log.Println("Response HTTP Code", response.Code)
 		log.Println("HTTP Endpoint Used", response.Endpoint)
 		eventChunks = append(eventChunks, events)
 

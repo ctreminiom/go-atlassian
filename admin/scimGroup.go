@@ -2,7 +2,6 @@ package admin
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -11,11 +10,16 @@ import (
 
 type SCIMGroupService struct{ client *Client }
 
+// Gets gets groups from a directory.
+// Filtering is supported with a single exact match (eq) against the displayName attribute.
+// Pagination is supported. Sorting is not supported.
 // Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/scim/groups#get-groups
-func (g *SCIMGroupService) Gets(ctx context.Context, directoryID, filter string, startAt, maxResults int) (result *ScimGroupPageScheme, response *Response, err error) {
+// Official Docs: https://developer.atlassian.com/cloud/admin/user-provisioning/rest/api-group-groups/#api-scim-directory-directoryid-groups-get
+func (g *SCIMGroupService) Gets(ctx context.Context, directoryID, filter string, startAt, maxResults int) (
+	result *ScimGroupPageScheme, response *ResponseScheme, err error) {
 
 	if directoryID == "" {
-		return nil, nil, fmt.Errorf("error!, please provide a valid directoryID value")
+		return nil, nil, notDirectoryError
 	}
 
 	params := url.Values{}
@@ -35,28 +39,26 @@ func (g *SCIMGroupService) Gets(ctx context.Context, directoryID, filter string,
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = g.client.Do(request)
+	response, err = g.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(ScimGroupPageScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
 	return
 }
 
+// Get a group from a directory by group ID.
 // Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/scim/groups#get-a-group-by-id
-func (g *SCIMGroupService) Get(ctx context.Context, directoryID, groupID string) (result *ScimGroupScheme, response *Response, err error) {
+// Official Docs: https://developer.atlassian.com/cloud/admin/user-provisioning/rest/api-group-groups/#api-scim-directory-directoryid-groups-id-get
+func (g *SCIMGroupService) Get(ctx context.Context, directoryID, groupID string) (result *ScimGroupScheme,
+	response *ResponseScheme, err error) {
 
 	if directoryID == "" {
-		return nil, nil, fmt.Errorf("error!, please provide a valid directoryID value")
+		return nil, nil, notDirectoryError
 	}
 
 	if groupID == "" {
-		return nil, nil, fmt.Errorf("error!, please provide a valid groupID value")
+		return nil, nil, notGroupError
 	}
 
 	var endpoint = fmt.Sprintf("/scim/directory/%v/Groups/%v", directoryID, groupID)
@@ -68,32 +70,30 @@ func (g *SCIMGroupService) Get(ctx context.Context, directoryID, groupID string)
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = g.client.Do(request)
+	response, err = g.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(ScimGroupScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
 	return
 }
 
+// Update a group in a directory by group ID.
 // Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/scim/groups#update-a-group-by-id
-func (g *SCIMGroupService) Update(ctx context.Context, directoryID, groupID string, newGroupName string) (result *ScimGroupScheme, response *Response, err error) {
+// Official Docs: https://developer.atlassian.com/cloud/admin/user-provisioning/rest/api-group-groups/#api-scim-directory-directoryid-groups-id-put
+func (g *SCIMGroupService) Update(ctx context.Context, directoryID, groupID string, newGroupName string) (result *ScimGroupScheme,
+	response *ResponseScheme, err error) {
 
 	if directoryID == "" {
-		return nil, nil, fmt.Errorf("error!, please provide a valid directoryID value")
+		return nil, nil, notDirectoryError
 	}
 
 	if groupID == "" {
-		return nil, nil, fmt.Errorf("error!, please provide a valid groupID value")
+		return nil, nil, notGroupError
 	}
 
 	if newGroupName == "" {
-		return nil, nil, fmt.Errorf("error!, please provide a valid newGroupName value")
+		return nil, nil, notGroupNameError
 	}
 
 	var endpoint = fmt.Sprintf("/scim/directory/%v/Groups/%v", directoryID, groupID)
@@ -104,7 +104,8 @@ func (g *SCIMGroupService) Update(ctx context.Context, directoryID, groupID stri
 		DisplayName: newGroupName,
 	}
 
-	request, err := g.client.newRequest(ctx, http.MethodPut, endpoint, payload)
+	payloadAsReader, _ := transformStructToReader(&payload)
+	request, err := g.client.newRequest(ctx, http.MethodPut, endpoint, payloadAsReader)
 	if err != nil {
 		return
 	}
@@ -112,28 +113,26 @@ func (g *SCIMGroupService) Update(ctx context.Context, directoryID, groupID stri
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Content-Type", "application/scim+json")
 
-	response, err = g.client.Do(request)
+	response, err = g.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(ScimGroupScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
 	return
 }
 
+// Delete a group from a directory.
+// An attempt to delete a non-existent group fails with a 404 (Resource Not found) error.
 // Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/scim/groups#delete-a-group-by-id
-func (g *SCIMGroupService) Delete(ctx context.Context, directoryID, groupID string) (response *Response, err error) {
+// Official Docs: https://developer.atlassian.com/cloud/admin/user-provisioning/rest/api-group-groups/#api-scim-directory-directoryid-groups-id-delete
+func (g *SCIMGroupService) Delete(ctx context.Context, directoryID, groupID string) (response *ResponseScheme, err error) {
 
 	if directoryID == "" {
-		return nil, fmt.Errorf("error!, please provide a valid directoryID value")
+		return nil, notDirectoryError
 	}
 
 	if groupID == "" {
-		return nil, fmt.Errorf("error!, please provide a valid groupID value")
+		return nil, notGroupError
 	}
 
 	var endpoint = fmt.Sprintf("/scim/directory/%v/Groups/%v", directoryID, groupID)
@@ -143,7 +142,7 @@ func (g *SCIMGroupService) Delete(ctx context.Context, directoryID, groupID stri
 		return
 	}
 
-	response, err = g.client.Do(request)
+	response, err = g.client.call(request, nil)
 	if err != nil {
 		return
 	}
@@ -151,15 +150,18 @@ func (g *SCIMGroupService) Delete(ctx context.Context, directoryID, groupID stri
 	return
 }
 
+// Create a group in a directory. An attempt to create a group with an existing name fails with a 409 (Conflict) error.
 // Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/scim/groups#create-a-group
-func (g *SCIMGroupService) Create(ctx context.Context, directoryID, groupName string) (result *ScimGroupScheme, response *Response, err error) {
+// Official Docs: https://developer.atlassian.com/cloud/admin/user-provisioning/rest/api-group-groups/#api-scim-directory-directoryid-groups-post
+func (g *SCIMGroupService) Create(ctx context.Context, directoryID, groupName string) (result *ScimGroupScheme,
+	response *ResponseScheme, err error) {
 
 	if directoryID == "" {
-		return nil, nil, fmt.Errorf("error!, please provide a valid directoryID value")
+		return nil, nil, notDirectoryError
 	}
 
 	if groupName == "" {
-		return nil, nil, fmt.Errorf("error!, please provide a valid groupName value")
+		return nil, nil, notGroupNameError
 	}
 
 	payload := struct {
@@ -168,9 +170,11 @@ func (g *SCIMGroupService) Create(ctx context.Context, directoryID, groupName st
 		DisplayName: groupName,
 	}
 
+	payloadAsReader, _ := transformStructToReader(&payload)
+
 	var endpoint = fmt.Sprintf("/scim/directory/%v/Groups", directoryID)
 
-	request, err := g.client.newRequest(ctx, http.MethodPost, endpoint, payload)
+	request, err := g.client.newRequest(ctx, http.MethodPost, endpoint, payloadAsReader)
 	if err != nil {
 		return
 	}
@@ -178,32 +182,32 @@ func (g *SCIMGroupService) Create(ctx context.Context, directoryID, groupName st
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Content-Type", "application/scim+json")
 
-	response, err = g.client.Do(request)
+	response, err = g.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(ScimGroupScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
 	return
 }
 
+// Path update a group's information in a directory by groupId via PATCH.
+// You can use this API to manage group membership.
 // Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/scim/groups#update-a-group-by-id-patch
-func (g *SCIMGroupService) Path(ctx context.Context, directoryID, groupID string, payload *SCIMGroupPathScheme) (result *ScimGroupScheme, response *Response, err error) {
+// Official Docs: https://developer.atlassian.com/cloud/admin/user-provisioning/rest/api-group-groups/#api-scim-directory-directoryid-groups-id-patch
+func (g *SCIMGroupService) Path(ctx context.Context, directoryID, groupID string, payload *SCIMGroupPathScheme) (
+	result *ScimGroupScheme, response *ResponseScheme, err error) {
 
 	if directoryID == "" {
-		return nil, nil, fmt.Errorf("error!, please provide a valid directoryID value")
+		return nil, nil, notDirectoryError
 	}
 
 	if groupID == "" {
-		return nil, nil, fmt.Errorf("error!, please provide a valid groupID value")
+		return nil, nil, notGroupError
 	}
 
-	if payload == nil {
-		return nil, nil, fmt.Errorf("erro!, please provide a SCIMGroupPathScheme pointer")
+	payloadAsReader, err := transformStructToReader(payload)
+	if err != nil {
+		return nil, nil, err
 	}
 
 	if len(payload.Operations) == 0 {
@@ -212,7 +216,7 @@ func (g *SCIMGroupService) Path(ctx context.Context, directoryID, groupID string
 
 	var endpoint = fmt.Sprintf("/scim/directory/%v/Groups/%v", directoryID, groupID)
 
-	request, err := g.client.newRequest(ctx, http.MethodPatch, endpoint, payload)
+	request, err := g.client.newRequest(ctx, http.MethodPatch, endpoint, payloadAsReader)
 	if err != nil {
 		return
 	}
@@ -220,13 +224,8 @@ func (g *SCIMGroupService) Path(ctx context.Context, directoryID, groupID string
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Content-Type", "application/scim+json")
 
-	response, err = g.client.Do(request)
+	response, err = g.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(ScimGroupScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
@@ -279,3 +278,9 @@ type ScimMetadata struct {
 	LastModified string `json:"lastModified,omitempty"`
 	Created      string `json:"created,omitempty"`
 }
+
+var (
+	notDirectoryError = fmt.Errorf("error!, please provide a valid directoryID value")
+	notGroupError     = fmt.Errorf("error!, please provide a valid groupID value")
+	notGroupNameError = fmt.Errorf("error!, please provide a valid group name value")
+)

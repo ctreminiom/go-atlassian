@@ -126,12 +126,12 @@ func main() {
 	userUpdated, response, err := cloudAdmin.SCIM.User.Path(context.Background(), directoryID, userID, payload, nil, nil)
 	if err != nil {
 		if response != nil {
-			log.Println("Response HTTP Response", string(response.BodyAsBytes))
+			log.Println("Response HTTP Response", response.Bytes.String())
 		}
 		log.Fatal(err)
 	}
 
-	log.Println("Response HTTP Code", response.StatusCode)
+	log.Println("Response HTTP Code", response.Code)
 	log.Println("HTTP Endpoint Used", response.Endpoint)
 	log.Println(userUpdated.DisplayName)
 	log.Println(userUpdated.Active)

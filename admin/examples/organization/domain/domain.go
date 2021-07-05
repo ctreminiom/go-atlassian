@@ -28,12 +28,12 @@ func main() {
 	domain, response, err := cloudAdmin.Organization.Domain(context.Background(), organizationID, domainID)
 	if err != nil {
 		if response != nil {
-			log.Println("Response HTTP Response", string(response.BodyAsBytes))
+			log.Println("Response HTTP Response", response.Bytes.String())
 		}
 		log.Fatal(err)
 	}
 
-	log.Println("Response HTTP Code", response.StatusCode)
+	log.Println("Response HTTP Code", response.Code)
 	log.Println("HTTP Endpoint Used", response.Endpoint)
 	log.Println(domain.Data.Attributes.Name, domain.Data.Attributes.Claim.Status)
 }

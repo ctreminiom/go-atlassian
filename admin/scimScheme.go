@@ -2,7 +2,6 @@ package admin
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"time"
@@ -10,15 +9,14 @@ import (
 
 type SCIMSchemeService struct{ client *Client }
 
-// Get all SCIM features metadata. Filtering, pagination and sorting are not supported.
-// --- This func needs the following parameters: ---
-// 1. ctx = it's the context.context value (REQUIRED)
+// Gets all SCIM features metadata. Filtering, pagination and sorting are not supported.
 // Atlassian Docs: https://developer.atlassian.com/cloud/admin/user-provisioning/rest/api-group-schemas/#api-scim-directory-directoryid-schemas-get
 // Library Docs: N/A
-func (s *SCIMSchemeService) Gets(ctx context.Context, directoryID string) (result *SCIMSchemasScheme, response *Response, err error) {
+func (s *SCIMSchemeService) Gets(ctx context.Context, directoryID string) (result *SCIMSchemasScheme,
+	response *ResponseScheme, err error) {
 
 	if len(directoryID) == 0 {
-		return nil, nil, fmt.Errorf("error!, please provide a valid directoryID value")
+		return nil, nil, notDirectoryError
 	}
 
 	var endpoint = fmt.Sprintf("/scim/directory/%v/Schemas", directoryID)
@@ -30,13 +28,8 @@ func (s *SCIMSchemeService) Gets(ctx context.Context, directoryID string) (resul
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = s.client.Do(request)
+	response, err = s.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(SCIMSchemasScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
@@ -89,15 +82,14 @@ type SubAttributeScheme struct {
 	Uniqueness  string `json:"uniqueness,omitempty"`
 }
 
-// Get the group schemas from the SCIM provider. Filtering, pagination and sorting are not supported.
-// --- This func needs the following parameters: ---
-// 1. ctx = it's the context.context value (REQUIRED)
+// Group get the group schemas from the SCIM provider. Filtering, pagination and sorting are not supported.
 // Atlassian Docs: https://developer.atlassian.com/cloud/admin/user-provisioning/rest/api-group-schemas/#api-scim-directory-directoryid-schemas-urn-ietf-params-scim-schemas-core-2-0-group-get
 // Library Docs: N/A
-func (s *SCIMSchemeService) Group(ctx context.Context, directoryID string) (result *SCIMSchemaScheme, response *Response, err error) {
+func (s *SCIMSchemeService) Group(ctx context.Context, directoryID string) (result *SCIMSchemaScheme,
+	response *ResponseScheme, err error) {
 
 	if len(directoryID) == 0 {
-		return nil, nil, fmt.Errorf("error!, please provide a valid directoryID value")
+		return nil, nil, notDirectoryError
 	}
 
 	var endpoint = fmt.Sprintf("/scim/directory/%v/Schemas/urn:ietf:params:scim:schemas:core:2.0:Group", directoryID)
@@ -109,28 +101,22 @@ func (s *SCIMSchemeService) Group(ctx context.Context, directoryID string) (resu
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = s.client.Do(request)
+	response, err = s.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(SCIMSchemaScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
 	return
 }
 
-// Get the user schemas from the SCIM provider. Filtering, pagination and sorting are not supported.
-// --- This func needs the following parameters: ---
-// 1. ctx = it's the context.context value (REQUIRED)
+// User get the user schemas from the SCIM provider. Filtering, pagination and sorting are not supported.
 // Atlassian Docs: https://developer.atlassian.com/cloud/admin/user-provisioning/rest/api-group-schemas/#api-scim-directory-directoryid-schemas-urn-ietf-params-scim-schemas-core-2-0-user-get
 // Library Docs: N/A
-func (s *SCIMSchemeService) User(ctx context.Context, directoryID string) (result *SCIMSchemaScheme, response *Response, err error) {
+func (s *SCIMSchemeService) User(ctx context.Context, directoryID string) (result *SCIMSchemaScheme,
+	response *ResponseScheme, err error) {
 
 	if len(directoryID) == 0 {
-		return nil, nil, fmt.Errorf("error!, please provide a valid directoryID value")
+		return nil, nil, notDirectoryError
 	}
 
 	var endpoint = fmt.Sprintf("/scim/directory/%v/Schemas/urn:ietf:params:scim:schemas:core:2.0:User", directoryID)
@@ -142,28 +128,23 @@ func (s *SCIMSchemeService) User(ctx context.Context, directoryID string) (resul
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = s.client.Do(request)
+	response, err = s.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(SCIMSchemaScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
 	return
 }
 
-// Get the user enterprise extension schemas from the SCIM provider. Filtering, pagination and sorting are not supported.
-// --- This func needs the following parameters: ---
-// 1. ctx = it's the context.context value (REQUIRED)
+// Enterprise get the user enterprise extension schemas from the SCIM provider.
+// Filtering, pagination and sorting are not supported.
 // Atlassian Docs: https://developer.atlassian.com/cloud/admin/user-provisioning/rest/api-group-schemas/#api-scim-directory-directoryid-schemas-urn-ietf-params-scim-schemas-extension-enterprise-2-0-user-get
 // Library Docs: N/A
-func (s *SCIMSchemeService) Enterprise(ctx context.Context, directoryID string) (result *SCIMSchemaScheme, response *Response, err error) {
+func (s *SCIMSchemeService) Enterprise(ctx context.Context, directoryID string) (result *SCIMSchemaScheme,
+	response *ResponseScheme, err error) {
 
 	if len(directoryID) == 0 {
-		return nil, nil, fmt.Errorf("error!, please provide a valid directoryID value")
+		return nil, nil, notDirectoryError
 	}
 
 	var endpoint = fmt.Sprintf("/scim/directory/%v/Schemas/urn:ietf:params:scim:schemas:extension:enterprise:2.0:User", directoryID)
@@ -175,13 +156,8 @@ func (s *SCIMSchemeService) Enterprise(ctx context.Context, directoryID string) 
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = s.client.Do(request)
+	response, err = s.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(SCIMSchemaScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
@@ -196,16 +172,16 @@ type SCIMSchemaScheme struct {
 	Meta        *ResourceMetaScheme `json:"meta,omitempty"`
 }
 
-// Get metadata about the supported SCIM features.
-// This is a service provider configuration endpoint providing supported SCIM features. Filtering, pagination and sorting are not supported.
-// --- This func needs the following parameters: ---
-// 1. ctx = it's the context.context value (REQUIRED)
+// Feature get metadata about the supported SCIM features.
+// This is a service provider configuration endpoint providing supported SCIM features.
+// Filtering, pagination and sorting are not supported.
 // Atlassian Docs: https://developer.atlassian.com/cloud/admin/user-provisioning/rest/api-group-schemas/#api-scim-directory-directoryid-serviceproviderconfig-get
 // Library Docs: N/A
-func (s *SCIMSchemeService) Feature(ctx context.Context, directoryID string) (result *ServiceProviderConfigScheme, response *Response, err error) {
+func (s *SCIMSchemeService) Feature(ctx context.Context, directoryID string) (result *ServiceProviderConfigScheme,
+	response *ResponseScheme, err error) {
 
 	if len(directoryID) == 0 {
-		return nil, nil, fmt.Errorf("error!, please provide a valid directoryID value")
+		return nil, nil, notDirectoryError
 	}
 
 	var endpoint = fmt.Sprintf("/scim/directory/%v/ServiceProviderConfig", directoryID)
@@ -217,13 +193,8 @@ func (s *SCIMSchemeService) Feature(ctx context.Context, directoryID string) (re
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = s.client.Do(request)
+	response, err = s.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(ServiceProviderConfigScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 

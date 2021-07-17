@@ -43,7 +43,21 @@ type NewProjectCreatedScheme struct {
 }
 
 const (
-	ProjectTemplateBusinessContentManagement = "com.atlassian.jira-core-project-templates:jira-core-simplified-content-management"
+	BusinessContentManagement    = "com.atlassian.jira-core-project-templates:jira-core-simplified-content-management"
+	BusinessDocumentApproval     = "com.atlassian.jira-core-project-templates:jira-core-simplified-document-approval"
+	BusinessLeadTracking         = "com.atlassian.jira-core-project-templates:jira-core-simplified-lead-tracking"
+	BusinessProcessControl       = "com.atlassian.jira-core-project-templates:jira-core-simplified-process-control"
+	BusinessProcurement          = "com.atlassian.jira-core-project-templates:jira-core-simplified-procurement"
+	BusinessProjectManagement    = "com.atlassian.jira-core-project-templates:jira-core-simplified-project-management"
+	BusinessRecruitment          = "com.atlassian.jira-core-project-templates:jira-core-simplified-recruitment"
+	BusinessTaskTracking         = "com.atlassian.jira-core-project-templates:jira-core-simplified-task-tracking"
+	ITSMServiceDesk              = "com.atlassian.servicedesk:simplified-it-service-desk"
+	ITSMInternalServiceDesk      = "com.atlassian.servicedesk:simplified-internal-service-desk"
+	ITSMExternalServiceDesk      = "com.atlassian.servicedesk:simplified-external-service-desk"
+	SoftwareTeamManagedKanban    = "com.pyxis.greenhopper.jira:gh-simplified-agility-kanban"
+	SoftwareTeamManagedScrum     = "com.pyxis.greenhopper.jira:gh-simplified-agility-scrum"
+	SoftwareCompanyManagedKanban = "com.pyxis.greenhopper.jira:gh-simplified-kanban-classic"
+	SoftwareCompanyManagedScrum  = "com.pyxis.greenhopper.jira:gh-simplified-scrum-classic"
 )
 
 // Create creates a project based on a project type template, as shown in the following table:

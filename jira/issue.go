@@ -24,6 +24,7 @@ type IssueService struct {
 	Watchers   *WatcherService
 	Label      *LabelService
 	Search     *IssueSearchService
+	Worklog    *IssueWorklogService
 }
 
 type IssueScheme struct {

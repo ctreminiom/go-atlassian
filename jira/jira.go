@@ -132,6 +132,7 @@ func New(httpClient *http.Client, site string) (client *Client, err error) {
 		Votes:    &VoteService{client: client},
 		Watchers: &WatcherService{client: client},
 		Label:    &LabelService{client: client},
+		Worklog: &IssueWorklogService{client: client},
 	}
 
 	client.Permission = &PermissionService{
@@ -226,6 +227,16 @@ func transformTheHTTPResponse(response *http.Response, structure interface{}) (r
 
 	var wasSuccess = response.StatusCode >= 200 && response.StatusCode < 300
 	if !wasSuccess {
+
+		if response.ContentLength != 0 {
+
+			responseAsBytes, err := ioutil.ReadAll(response.Body)
+			if err != nil {
+				return responseTransformed, err
+			}
+
+			responseTransformed.Bytes.Write(responseAsBytes)
+		}
 
 		return responseTransformed, fmt.Errorf(requestFailedError, response.StatusCode)
 	}

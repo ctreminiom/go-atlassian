@@ -1,0 +1,53 @@
+{
+  "self": "<string>",
+  "author": {
+    "self": "<string>",
+    "name": "<string>",
+    "key": "<string>",
+    "accountId": "<string>",
+    "emailAddress": "<string>",
+    "avatarUrls": {
+      "16x16": "<string>",
+      "24x24": "<string>",
+      "32x32": "<string>",
+      "48x48": "<string>"
+    },
+    "displayName": "<string>",
+    "active": true,
+    "timeZone": "<string>",
+    "accountType": "<string>"
+  },
+  "updateAuthor": {
+    "self": "<string>",
+    "name": "<string>",
+    "key": "<string>",
+    "accountId": "<string>",
+    "emailAddress": "<string>",
+    "avatarUrls": {
+      "16x16": "<string>",
+      "24x24": "<string>",
+      "32x32": "<string>",
+      "48x48": "<string>"
+    },
+    "displayName": "<string>",
+    "active": true,
+    "timeZone": "<string>",
+    "accountType": "<string>"
+  },
+  "created": "<string>",
+  "updated": "<string>",
+  "visibility": {
+    "type": "group",
+    "value": "<string>"
+  },
+  "started": "<string>",
+  "timeSpent": "<string>",
+  "timeSpentSeconds": 192,
+  "id": "<string>",
+  "issueId": "<string>",
+  "properties": [
+    {
+      "key": "<string>"
+    }
+  ]
+}

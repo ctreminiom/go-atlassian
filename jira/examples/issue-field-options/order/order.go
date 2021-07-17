@@ -31,13 +31,9 @@ func main() {
 	log.Println("Getting the field context options")
 	options, response, err := atlassian.Issue.Field.Context.Option.Gets(context.Background(), fieldID, contextID, nil, 0, 50)
 	if err != nil {
-		if response != nil {
-			log.Println("Response HTTP Response", string(response.BodyAsBytes))
-		}
-		return
+		log.Fatal(err)
 	}
 
-	log.Println("Response HTTP Code", response.StatusCode)
 	log.Println("HTTP Endpoint Used", response.Endpoint)
 
 	var (
@@ -68,13 +64,11 @@ func main() {
 	response, err = atlassian.Issue.Field.Context.Option.Order(context.Background(), fieldID, contextID, payload)
 	if err != nil {
 		if response != nil {
-			log.Println("Response HTTP Code", response.StatusCode)
 			log.Println("HTTP Endpoint Used", response.Endpoint)
 			log.Fatal(err)
 		}
 		return
 	}
 
-	log.Println("Response HTTP Code", response.StatusCode)
 	log.Println("HTTP Endpoint Used", response.Endpoint)
 }

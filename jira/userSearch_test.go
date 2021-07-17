@@ -168,7 +168,7 @@ func TestUserSearchService_Projects(t *testing.T) {
 				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
 				assert.Equal(t, testCase.endpoint, endpointToAssert)
 
-				for pos, user := range *gotResult {
+				for pos, user := range gotResult {
 
 					t.Log("------------------------------")
 					t.Logf("User Display Name #%v: %v", pos+1, user.DisplayName)
@@ -322,7 +322,7 @@ func TestUserSearchService_Do(t *testing.T) {
 				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
 				assert.Equal(t, testCase.endpoint, endpointToAssert)
 
-				for pos, user := range *gotResult {
+				for pos, user := range gotResult {
 
 					t.Log("------------------------------")
 					t.Logf("User Display Name #%v: %v", pos+1, user.DisplayName)

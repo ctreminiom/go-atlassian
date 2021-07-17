@@ -116,7 +116,7 @@ func TestIssueTypeSchemeService_AddIssueTypes(t *testing.T) {
 
 			i := &IssueTypeSchemeService{client: mockClient}
 
-			gotResponse, err := i.AddIssueTypes(testCase.context, testCase.issueTypeSchemeID, testCase.issueTypeIDs)
+			gotResponse, err := i.Append(testCase.context, testCase.issueTypeSchemeID, testCase.issueTypeIDs)
 
 			if testCase.wantErr {
 
@@ -1271,7 +1271,7 @@ func TestIssueTypeSchemeService_RemoveIssueType(t *testing.T) {
 
 			i := &IssueTypeSchemeService{client: mockClient}
 
-			gotResponse, err := i.RemoveIssueType(testCase.context, testCase.issueTypeSchemeID, testCase.issueTypeID)
+			gotResponse, err := i.Remove(testCase.context, testCase.issueTypeSchemeID, testCase.issueTypeID)
 
 			if testCase.wantErr {
 

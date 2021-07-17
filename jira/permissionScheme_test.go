@@ -408,6 +408,7 @@ func TestPermissionSchemeService_Get(t *testing.T) {
 	testCases := []struct {
 		name               string
 		permissionSchemeID int
+		expand []string
 		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string
@@ -419,9 +420,10 @@ func TestPermissionSchemeService_Get(t *testing.T) {
 			name:               "GetPermissionSchemeWhenTheParametersAreCorrect",
 			permissionSchemeID: 1000,
 			wantHTTPMethod:     http.MethodGet,
-			endpoint:           "/rest/api/3/permissionscheme/1000",
+			endpoint:           "/rest/api/3/permissionscheme/1000?expand=all",
 			mockFile:           "./mocks/get-permission-scheme.json",
 			context:            context.Background(),
+			expand: []string{"all"},
 			wantHTTPCodeReturn: http.StatusOK,
 			wantErr:            false,
 		},
@@ -509,7 +511,7 @@ func TestPermissionSchemeService_Get(t *testing.T) {
 
 			i := &PermissionSchemeService{client: mockClient}
 
-			gotResult, gotResponse, err := i.Get(testCase.context, testCase.permissionSchemeID)
+			gotResult, gotResponse, err := i.Get(testCase.context, testCase.permissionSchemeID, testCase.expand)
 
 			if testCase.wantErr {
 

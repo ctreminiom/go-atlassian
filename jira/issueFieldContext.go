@@ -2,7 +2,6 @@ package jira
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -38,12 +37,14 @@ type FieldContextScheme struct {
 	IssueTypeIds    []string `json:"issueTypeIds,omitempty"`
 }
 
-// Returns a paginated list of contexts for a custom field. Contexts can be returned as follows:
+// Gets returns a paginated list of contexts for a custom field. Contexts can be returned as follows:
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields/context#get-custom-field-contexts
-func (f *FieldContextService) Gets(ctx context.Context, fieldID string, opts *FieldContextOptionsScheme, startAt, maxResults int) (result *CustomFieldContextPageScheme, response *Response, err error) {
+// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-custom-field-contexts/#api-rest-api-3-field-fieldid-context-get
+func (f *FieldContextService) Gets(ctx context.Context, fieldID string, opts *FieldContextOptionsScheme, startAt, maxResults int) (
+	result *CustomFieldContextPageScheme, response *ResponseScheme, err error) {
 
 	if fieldID == "" {
-		return nil, nil, fmt.Errorf("error, fieldID value is nil, please provide a valid fieldID value")
+		return nil, nil, notFieldIDError
 	}
 
 	params := url.Values{}
@@ -67,6 +68,7 @@ func (f *FieldContextService) Gets(ctx context.Context, fieldID string, opts *Fi
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/field/%v/context?%v", fieldID, params.Encode())
+
 	request, err := f.client.newRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
 		return
@@ -74,14 +76,9 @@ func (f *FieldContextService) Gets(ctx context.Context, fieldID string, opts *Fi
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = f.client.Do(request)
+	response, err = f.client.call(request, &result)
 	if err != nil {
 		return
-	}
-
-	result = new(CustomFieldContextPageScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
 
 	return
@@ -94,20 +91,24 @@ type FieldContextPayloadScheme struct {
 	Description  string `json:"description,omitempty"`
 }
 
-// Creates a custom field context.
+// Create creates a custom field context.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields/context#create-custom-field-context
-func (f *FieldContextService) Create(ctx context.Context, fieldID string, payload *FieldContextPayloadScheme) (result *FieldContextScheme, response *Response, err error) {
-
-	if payload == nil {
-		return nil, nil, fmt.Errorf("error, payload value is nil, please provide a valid FieldContextPayloadScheme pointer")
-	}
+// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-custom-field-contexts/#api-rest-api-3-field-fieldid-context-post
+func (f *FieldContextService) Create(ctx context.Context, fieldID string, payload *FieldContextPayloadScheme) (
+	result *FieldContextScheme, response *ResponseScheme, err error) {
 
 	if fieldID == "" {
-		return nil, nil, fmt.Errorf("error, fieldID value is nil, please provide a valid fieldID value")
+		return nil, nil, notFieldIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/field/%v/context", fieldID)
-	request, err := f.client.newRequest(ctx, http.MethodPost, endpoint, &payload)
+
+	payloadAsReader, err := transformStructToReader(payload)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	request, err := f.client.newRequest(ctx, http.MethodPost, endpoint, payloadAsReader)
 	if err != nil {
 		return
 	}
@@ -115,14 +116,9 @@ func (f *FieldContextService) Create(ctx context.Context, fieldID string, payloa
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Content-Type", "application/json")
 
-	response, err = f.client.Do(request)
+	response, err = f.client.call(request, &result)
 	if err != nil {
 		return
-	}
-
-	result = new(FieldContextScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
 
 	return
@@ -144,14 +140,16 @@ type CustomFieldDefaultValueScheme struct {
 	Type              string   `json:"type,omitempty"`
 }
 
-// Returns a paginated list of defaults for a custom field.
+// GetDefaultValues returns a paginated list of defaults for a custom field.
 // The results can be filtered by contextId, otherwise all values are returned.
 // If no defaults are set for a context, nothing is returned.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields/context#get-custom-field-contexts-default-values
-func (f *FieldContextService) GetDefaultValues(ctx context.Context, fieldID string, contextIDs []int, startAt, maxResults int) (result *CustomFieldDefaultValuePageScheme, response *Response, err error) {
+// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-custom-field-contexts/#api-rest-api-3-field-fieldid-context-defaultvalue-get
+func (f *FieldContextService) GetDefaultValues(ctx context.Context, fieldID string, contextIDs []int, startAt, maxResults int) (
+	result *CustomFieldDefaultValuePageScheme, response *ResponseScheme, err error) {
 
 	if len(fieldID) == 0 {
-		return nil, nil, fmt.Errorf("error, please provide a valid fieldID value")
+		return nil, nil, notFieldIDError
 	}
 
 	params := url.Values{}
@@ -163,6 +161,7 @@ func (f *FieldContextService) GetDefaultValues(ctx context.Context, fieldID stri
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/field/%v/context/defaultValue?%s", fieldID, params.Encode())
+
 	request, err := f.client.newRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
 		return
@@ -170,13 +169,8 @@ func (f *FieldContextService) GetDefaultValues(ctx context.Context, fieldID stri
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = f.client.Do(request)
+	response, err = f.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(CustomFieldDefaultValuePageScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
@@ -187,25 +181,29 @@ type FieldContextDefaultPayloadScheme struct {
 	DefaultValues []*CustomFieldDefaultValueScheme `json:"defaultValues,omitempty"`
 }
 
-// Sets default for contexts of a custom field.
+// SetDefaultValue sets default for contexts of a custom field.
 // Default are defined using these objects:
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields/context#set-custom-field-contexts-default-values
-func (f *FieldContextService) SetDefaultValue(ctx context.Context, fieldID string, payload *FieldContextDefaultPayloadScheme) (response *Response, err error) {
+// Official Docs; https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-custom-field-contexts/#api-rest-api-3-field-fieldid-context-defaultvalue-put
+func (f *FieldContextService) SetDefaultValue(ctx context.Context, fieldID string, payload *FieldContextDefaultPayloadScheme) (
+	response *ResponseScheme, err error) {
 
 	if len(fieldID) == 0 {
-		return nil, fmt.Errorf("error, please provide a valid fieldID value")
+		return nil, notFieldIDError
 	}
 
-	if payload == nil {
-		return nil, fmt.Errorf("error, please provide a valid slice of DefaultValueScheme pointers")
+	payloadAsReader, err := transformStructToReader(payload)
+	if err != nil {
+		return nil, err
 	}
 
 	if len(payload.DefaultValues) == 0 {
-		return nil, fmt.Errorf("error, please provide a valid Custom Field Context default value")
+		return nil, notFieldContextDefaultError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/field/%v/context/defaultValue", fieldID)
-	request, err := f.client.newRequest(ctx, http.MethodPut, endpoint, payload)
+
+	request, err := f.client.newRequest(ctx, http.MethodPut, endpoint, payloadAsReader)
 	if err != nil {
 		return
 	}
@@ -213,7 +211,7 @@ func (f *FieldContextService) SetDefaultValue(ctx context.Context, fieldID strin
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Content-Type", "application/json")
 
-	response, err = f.client.Do(request)
+	response, err = f.client.call(request, nil)
 	if err != nil {
 		return
 	}
@@ -239,11 +237,12 @@ type IssueTypeToContextMappingValueScheme struct {
 // Mappings are returned for all contexts or a list of contexts.
 // Mappings are ordered first by context ID and then by issue type ID.
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-custom-field-contexts/#api-rest-api-3-field-fieldid-context-issuetypemapping-get
-// Docs: N/A
-func (f *FieldContextService) IssueTypesContext(ctx context.Context, fieldID string, contextIDs []int, startAt, maxResults int) (result *IssueTypeToContextMappingPageScheme, response *Response, err error) {
+// Docs: TODO Issue 51
+func (f *FieldContextService) IssueTypesContext(ctx context.Context, fieldID string, contextIDs []int, startAt, maxResults int) (
+	result *IssueTypeToContextMappingPageScheme, response *ResponseScheme, err error) {
 
 	if len(fieldID) == 0 {
-		return nil, nil, fmt.Errorf("error, please provide a valid fieldID value")
+		return nil, nil, notFieldIDError
 	}
 
 	params := url.Values{}
@@ -255,6 +254,7 @@ func (f *FieldContextService) IssueTypesContext(ctx context.Context, fieldID str
 	}
 
 	var endpoint = fmt.Sprintf("/rest/api/3/field/%v/context/issuetypemapping?%v", fieldID, params.Encode())
+
 	request, err := f.client.newRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
 		return
@@ -262,13 +262,8 @@ func (f *FieldContextService) IssueTypesContext(ctx context.Context, fieldID str
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = f.client.Do(request)
+	response, err = f.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(IssueTypeToContextMappingPageScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
@@ -296,11 +291,12 @@ type CustomFieldContextProjectMappingValueScheme struct {
 // or otherwise all mappings are returned.
 // Invalid IDs are ignored.
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-custom-field-contexts/#api-rest-api-3-field-fieldid-context-projectmapping-get
-// Docs: N/A
-func (f *FieldContextService) ProjectsContext(ctx context.Context, fieldID string, contextIDs []int, startAt, maxResults int) (result *CustomFieldContextProjectMappingPageScheme, response *Response, err error) {
+// Docs: TODO Issue 52
+func (f *FieldContextService) ProjectsContext(ctx context.Context, fieldID string, contextIDs []int, startAt, maxResults int) (
+	result *CustomFieldContextProjectMappingPageScheme, response *ResponseScheme, err error) {
 
 	if len(fieldID) == 0 {
-		return nil, nil, fmt.Errorf("error, please provide a valid fieldID value")
+		return nil, nil, notFieldIDError
 	}
 
 	params := url.Values{}
@@ -312,6 +308,7 @@ func (f *FieldContextService) ProjectsContext(ctx context.Context, fieldID strin
 	}
 
 	var endpoint = fmt.Sprintf("/rest/api/3/field/%v/context/projectmapping?%v", fieldID, params.Encode())
+
 	request, err := f.client.newRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
 		return
@@ -319,29 +316,26 @@ func (f *FieldContextService) ProjectsContext(ctx context.Context, fieldID strin
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = f.client.Do(request)
+	response, err = f.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(CustomFieldContextProjectMappingPageScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
 	return
 }
 
-// Updates a custom field context
+// Update updates a custom field context
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields/context#update-custom-field-context
-func (f *FieldContextService) Update(ctx context.Context, fieldID string, contextID int, name, description string) (response *Response, err error) {
+// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-custom-field-contexts/#api-rest-api-3-field-fieldid-context-contextid-put
+func (f *FieldContextService) Update(ctx context.Context, fieldID string, contextID int, name, description string) (
+	response *ResponseScheme, err error) {
 
 	if len(fieldID) == 0 {
-		return nil, fmt.Errorf("error, please provide a valid fieldID value")
+		return nil, notFieldIDError
 	}
 
 	if contextID == 0 {
-		return nil, fmt.Errorf("error, please provide a valid contextID value")
+		return nil, notContextIDError
 	}
 
 	payload := struct {
@@ -352,9 +346,10 @@ func (f *FieldContextService) Update(ctx context.Context, fieldID string, contex
 		Description: description,
 	}
 
+	payloadAsReader, _ := transformStructToReader(&payload)
 	var endpoint = fmt.Sprintf("rest/api/3/field/%v/context/%v", fieldID, contextID)
 
-	request, err := f.client.newRequest(ctx, http.MethodPut, endpoint, payload)
+	request, err := f.client.newRequest(ctx, http.MethodPut, endpoint, payloadAsReader)
 	if err != nil {
 		return
 	}
@@ -362,7 +357,7 @@ func (f *FieldContextService) Update(ctx context.Context, fieldID string, contex
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Content-Type", "application/json")
 
-	response, err = f.client.Do(request)
+	response, err = f.client.call(request, nil)
 	if err != nil {
 		return
 	}
@@ -370,16 +365,17 @@ func (f *FieldContextService) Update(ctx context.Context, fieldID string, contex
 	return
 }
 
-// Deletes a custom field context.
+// Delete deletes a custom field context.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields/context#delete-custom-field-context
-func (f *FieldContextService) Delete(ctx context.Context, fieldID string, contextID int) (response *Response, err error) {
+// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-custom-field-contexts/#api-rest-api-3-field-fieldid-context-contextid-delete
+func (f *FieldContextService) Delete(ctx context.Context, fieldID string, contextID int) (response *ResponseScheme, err error) {
 
 	if len(fieldID) == 0 {
-		return nil, fmt.Errorf("error, please provide a valid fieldID value")
+		return nil, notFieldIDError
 	}
 
 	if contextID == 0 {
-		return nil, fmt.Errorf("error, please provide a valid contextID value")
+		return nil, notContextIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/field/%v/context/%v", fieldID, contextID)
@@ -391,7 +387,7 @@ func (f *FieldContextService) Delete(ctx context.Context, fieldID string, contex
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = f.client.Do(request)
+	response, err = f.client.call(request, nil)
 	if err != nil {
 		return
 	}
@@ -399,25 +395,30 @@ func (f *FieldContextService) Delete(ctx context.Context, fieldID string, contex
 	return
 }
 
-//Add issue types
+// AddIssueTypes adds issue types to a custom field context, appending the issue types to the issue types list.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields/context#add-issue-types-to-context
-func (f *FieldContextService) AddIssueTypes(ctx context.Context, fieldID string, contextID int, issueTypesIDs []string) (response *Response, err error) {
+// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-custom-field-contexts/#api-rest-api-3-field-fieldid-context-contextid-issuetype-put
+func (f *FieldContextService) AddIssueTypes(ctx context.Context, fieldID string, contextID int, issueTypesIDs []string) (
+	response *ResponseScheme, err error) {
 
 	if len(fieldID) == 0 {
-		return nil, fmt.Errorf("error, please provide a valid fieldID value")
+		return nil, notFieldIDError
 	}
 
 	if len(issueTypesIDs) == 0 {
-		return nil, fmt.Errorf("error, please provide a valid issueTypesIDs value")
+		return nil, notIssueTypesError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/field/%v/context/%v/issuetype", fieldID, contextID)
 
 	payload := struct {
 		IssueTypeIds []string `json:"issueTypeIds"`
-	}{IssueTypeIds: issueTypesIDs}
+	}{
+		IssueTypeIds: issueTypesIDs,
+	}
 
-	request, err := f.client.newRequest(ctx, http.MethodPut, endpoint, &payload)
+	payloadAsReader, _ := transformStructToReader(&payload)
+	request, err := f.client.newRequest(ctx, http.MethodPut, endpoint, payloadAsReader)
 	if err != nil {
 		return
 	}
@@ -425,7 +426,7 @@ func (f *FieldContextService) AddIssueTypes(ctx context.Context, fieldID string,
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Content-Type", "application/json")
 
-	response, err = f.client.Do(request)
+	response, err = f.client.call(request, nil)
 	if err != nil {
 		return
 	}
@@ -433,26 +434,32 @@ func (f *FieldContextService) AddIssueTypes(ctx context.Context, fieldID string,
 	return
 }
 
-// Removes issue types from a custom field context.
+// RemoveIssueTypes removes issue types from a custom field context.
 // A custom field context without any issue types applies to all issue types.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields/context#remove-issue-types-from-context
-func (f *FieldContextService) RemoveIssueTypes(ctx context.Context, fieldID string, contextID int, issueTypesIDs []string) (response *Response, err error) {
+// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-custom-field-contexts/#api-rest-api-3-field-fieldid-context-contextid-issuetype-remove-post
+func (f *FieldContextService) RemoveIssueTypes(ctx context.Context, fieldID string, contextID int, issueTypesIDs []string) (
+	response *ResponseScheme, err error) {
 
 	if len(fieldID) == 0 {
-		return nil, fmt.Errorf("error, please provide a valid fieldID value")
+		return nil, notFieldIDError
 	}
 
 	if len(issueTypesIDs) == 0 {
-		return nil, fmt.Errorf("error, please provide a valid issueTypesIDs value")
+		return nil, notIssueTypesError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/field/%v/context/%v/issuetype/remove", fieldID, contextID)
 
 	payload := struct {
 		IssueTypeIds []string `json:"issueTypeIds"`
-	}{IssueTypeIds: issueTypesIDs}
+	}{
+		IssueTypeIds: issueTypesIDs,
+	}
 
-	request, err := f.client.newRequest(ctx, http.MethodPost, endpoint, &payload)
+	payloadAsReader, _ := transformStructToReader(&payload)
+
+	request, err := f.client.newRequest(ctx, http.MethodPost, endpoint, payloadAsReader)
 	if err != nil {
 		return
 	}
@@ -460,7 +467,7 @@ func (f *FieldContextService) RemoveIssueTypes(ctx context.Context, fieldID stri
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Content-Type", "application/json")
 
-	response, err = f.client.Do(request)
+	response, err = f.client.call(request, nil)
 	if err != nil {
 		return
 	}
@@ -468,26 +475,32 @@ func (f *FieldContextService) RemoveIssueTypes(ctx context.Context, fieldID stri
 	return
 }
 
-// Assigns a custom field context to projects.
+// Link assigns a custom field context to projects.
 // If any project in the request is assigned to any context of the custom field, the operation fails.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields/context#assign-custom-field-context-to-projects
-func (f *FieldContextService) Link(ctx context.Context, fieldID string, contextID int, projectIDs []string) (response *Response, err error) {
+// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-custom-field-contexts/#api-rest-api-3-field-fieldid-context-contextid-project-put
+func (f *FieldContextService) Link(ctx context.Context, fieldID string, contextID int, projectIDs []string) (
+	response *ResponseScheme, err error) {
 
 	if len(fieldID) == 0 {
-		return nil, fmt.Errorf("error, please provide a valid fieldID value")
+		return nil, notFieldIDError
 	}
 
 	if len(projectIDs) == 0 {
-		return nil, fmt.Errorf("error, please provide a valid projectIDs value")
+		return nil, notProjectsError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/field/%v/context/%v/project", fieldID, contextID)
 
 	payload := struct {
 		ProjectIds []string `json:"projectIds"`
-	}{ProjectIds: projectIDs}
+	}{
+		ProjectIds: projectIDs,
+	}
 
-	request, err := f.client.newRequest(ctx, http.MethodPut, endpoint, &payload)
+	payloadAsReader, _ := transformStructToReader(&payload)
+
+	request, err := f.client.newRequest(ctx, http.MethodPut, endpoint, payloadAsReader)
 	if err != nil {
 		return
 	}
@@ -495,7 +508,7 @@ func (f *FieldContextService) Link(ctx context.Context, fieldID string, contextI
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Content-Type", "application/json")
 
-	response, err = f.client.Do(request)
+	response, err = f.client.call(request, nil)
 	if err != nil {
 		return
 	}
@@ -503,27 +516,32 @@ func (f *FieldContextService) Link(ctx context.Context, fieldID string, contextI
 	return
 }
 
-// Removes a custom field context from projects.
+// UnLink removes a custom field context from projects.
 // A custom field context without any projects applies to all projects.
 // Removing all projects from a custom field context would result in it applying to all projects.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields/context#remove-custom-field-context-from-projects
-func (f *FieldContextService) UnLink(ctx context.Context, fieldID string, contextID int, projectIDs []string) (response *Response, err error) {
+// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-custom-field-contexts/#api-rest-api-3-field-fieldid-context-contextid-project-remove-post
+func (f *FieldContextService) UnLink(ctx context.Context, fieldID string, contextID int, projectIDs []string) (response *ResponseScheme, err error) {
 
 	if len(fieldID) == 0 {
-		return nil, fmt.Errorf("error, please provide a valid fieldID value")
+		return nil, notFieldIDError
 	}
 
 	if len(projectIDs) == 0 {
-		return nil, fmt.Errorf("error, please provide a valid projectIDs value")
+		return nil, notProjectIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/field/%v/context/%v/project/remove", fieldID, contextID)
 
 	payload := struct {
 		ProjectIds []string `json:"projectIds"`
-	}{ProjectIds: projectIDs}
+	}{
+		ProjectIds: projectIDs,
+	}
 
-	request, err := f.client.newRequest(ctx, http.MethodPost, endpoint, &payload)
+	payloadAsReader, _ := transformStructToReader(&payload)
+
+	request, err := f.client.newRequest(ctx, http.MethodPost, endpoint, payloadAsReader)
 	if err != nil {
 		return
 	}
@@ -531,10 +549,18 @@ func (f *FieldContextService) UnLink(ctx context.Context, fieldID string, contex
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Content-Type", "application/json")
 
-	response, err = f.client.Do(request)
+	response, err = f.client.call(request, nil)
 	if err != nil {
 		return
 	}
 
 	return
 }
+
+var (
+	notFieldIDError             = fmt.Errorf("error, fieldID value is nil, please provide a valid fieldID value")
+	notFieldContextDefaultError = fmt.Errorf("error, please provide a valid Custom Field Context default value")
+	notContextIDError           = fmt.Errorf("error, please provide a valid contextID value")
+	notIssueTypesError          = fmt.Errorf("error, please provide a valid issueTypesIDs value")
+	notProjectsError            = fmt.Errorf("error, please provide a valid projectIDs value")
+)

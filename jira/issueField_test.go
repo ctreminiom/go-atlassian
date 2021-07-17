@@ -160,7 +160,7 @@ func TestFieldService_Create(t *testing.T) {
 				assert.Error(t, err)
 
 				if gotResponse != nil {
-					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
+					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
 				}
 			} else {
 
@@ -184,8 +184,8 @@ func TestFieldService_Create(t *testing.T) {
 				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
 				assert.Equal(t, testCase.endpoint, endpointToAssert)
 
-				t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
-				assert.Equal(t, gotResponse.StatusCode, testCase.wantHTTPCodeReturn)
+				t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
+				assert.Equal(t, gotResponse.Code, testCase.wantHTTPCodeReturn)
 			}
 
 		})
@@ -297,7 +297,7 @@ func TestFieldService_Gets(t *testing.T) {
 				assert.Error(t, err)
 
 				if gotResponse != nil {
-					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
+					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
 				}
 			} else {
 
@@ -321,8 +321,8 @@ func TestFieldService_Gets(t *testing.T) {
 				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
 				assert.Equal(t, testCase.endpoint, endpointToAssert)
 
-				t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
-				assert.Equal(t, gotResponse.StatusCode, testCase.wantHTTPCodeReturn)
+				t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
+				assert.Equal(t, gotResponse.Code, testCase.wantHTTPCodeReturn)
 			}
 
 		})
@@ -347,6 +347,8 @@ func TestFieldService_Search(t *testing.T) {
 			name: "SearchFieldsWhenTheOptionsAreCorrect",
 			options: &FieldSearchOptionsScheme{
 				Types:   []string{"custom"},
+				IDs:     []string{"111", "12223"},
+				Query:   "query-sample",
 				OrderBy: "lastUsed",
 				Expand:  []string{"screensCount", "lastUsed"},
 			},
@@ -354,7 +356,7 @@ func TestFieldService_Search(t *testing.T) {
 			maxResults:         50,
 			mockFile:           "./mocks/search-fields.json",
 			wantHTTPMethod:     http.MethodGet,
-			endpoint:           "/rest/api/3/field/search?expand=screensCount%2ClastUsed&maxResults=50&orderBy=lastUsed&startAt=0&type=custom",
+			endpoint:           "/rest/api/3/field/search?expand=screensCount%2ClastUsed&id=111%2C12223&maxResults=50&orderBy=lastUsed&query=query-sample&startAt=0&type=custom",
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusOK,
 			wantErr:            false,
@@ -474,7 +476,7 @@ func TestFieldService_Search(t *testing.T) {
 				assert.Error(t, err)
 
 				if gotResponse != nil {
-					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
+					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
 				}
 			} else {
 
@@ -498,8 +500,8 @@ func TestFieldService_Search(t *testing.T) {
 				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
 				assert.Equal(t, testCase.endpoint, endpointToAssert)
 
-				t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
-				assert.Equal(t, gotResponse.StatusCode, testCase.wantHTTPCodeReturn)
+				t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
+				assert.Equal(t, gotResponse.Code, testCase.wantHTTPCodeReturn)
 			}
 
 		})

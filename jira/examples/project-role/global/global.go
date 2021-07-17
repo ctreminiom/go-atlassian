@@ -33,16 +33,12 @@ func main() {
 
 	roles, response, err := atlassian.Project.Role.Global(context.Background())
 	if err != nil {
-		if response != nil {
-			log.Println("Response HTTP Response", string(response.BodyAsBytes))
-		}
 		log.Fatal(err)
 	}
 
-	log.Println("Response HTTP Code", response.StatusCode)
 	log.Println("HTTP Endpoint Used", response.Endpoint)
 
-	for _, role := range *roles {
+	for _, role := range roles {
 		log.Println(role)
 	}
 }

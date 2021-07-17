@@ -31,14 +31,10 @@ func main() {
 
 	atlassian.Auth.SetBasicAuth(mail, token)
 
-	response, err := atlassian.Issue.Type.Scheme.RemoveIssueType(context.Background(), 10182, 10003)
+	response, err := atlassian.Issue.Type.Scheme.Remove(context.Background(), 10182, 10003)
 	if err != nil {
-		if response != nil {
-			log.Println("Response HTTP Response", string(response.BodyAsBytes))
-		}
 		log.Fatal(err)
 	}
 
-	log.Println("Response HTTP Code", response.StatusCode)
 	log.Println("HTTP Endpoint Used", response.Endpoint)
 }

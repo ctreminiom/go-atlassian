@@ -194,31 +194,6 @@ func TestProjectService_Create(t *testing.T) {
 		},
 
 		{
-			name: "ArchiveProjectWhenThePayloadRequiredParamEmpty",
-			payload: &ProjectPayloadScheme{
-				NotificationScheme:  10021,
-				Description:         "Example Project description",
-				LeadAccountID:       "396c4bf1-361b-4754-ae47-91fe6aabbc40",
-				URL:                 "https://www.example.com",
-				ProjectTemplateKey:  "com.atlassian.jira-core-project-templates:jira-core-simplified-process-control",
-				AvatarID:            10200,
-				IssueSecurityScheme: 10001,
-				Name:                "Project Example",
-				PermissionScheme:    10011,
-				AssigneeType:        "PROJECT_LEAD",
-				ProjectTypeKey:      "business",
-				Key:                 "",
-				CategoryID:          10120,
-			},
-			mockFile:           "./mocks/create-project.json",
-			wantHTTPMethod:     http.MethodPost,
-			endpoint:           "/rest/api/3/project",
-			context:            context.Background(),
-			wantHTTPCodeReturn: http.StatusCreated,
-			wantErr:            true,
-		},
-
-		{
 			name: "ArchiveProjectWhenTheEndpointIsIncorrect",
 			payload: &ProjectPayloadScheme{
 				NotificationScheme:  10021,

@@ -32,13 +32,9 @@ func main() {
 
 	contexts, response, err := atlassian.Issue.Field.Context.Gets(context.Background(), fieldID, &options, 0, 50)
 	if err != nil {
-		if response != nil {
-			log.Println("Response HTTP Response", string(response.BodyAsBytes))
-		}
-		return
+		log.Fatal(err)
 	}
 
-	log.Println("Response HTTP Code", response.StatusCode)
 	log.Println("HTTP Endpoint Used", response.Endpoint)
 
 	log.Println(contexts)

@@ -2,7 +2,6 @@ package jira
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/http"
 )
@@ -18,9 +17,10 @@ type PriorityScheme struct {
 	ID          string `json:"id,omitempty"`
 }
 
-// Returns the list of all issue priorities.
+// Gets returns the list of all issue priorities.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/priorities#get-priorities
-func (p *PriorityService) Gets(ctx context.Context) (result *[]PriorityScheme, response *Response, err error) {
+// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-priorities/#api-rest-api-3-priority-get
+func (p *PriorityService) Gets(ctx context.Context) (result []*PriorityScheme, response *ResponseScheme, err error) {
 
 	var endpoint = "rest/api/3/priority"
 	request, err := p.client.newRequest(ctx, http.MethodGet, endpoint, nil)
@@ -29,25 +29,22 @@ func (p *PriorityService) Gets(ctx context.Context) (result *[]PriorityScheme, r
 	}
 	request.Header.Set("Accept", "application/json")
 
-	response, err = p.client.Do(request)
+	response, err = p.client.call(request, &result)
 	if err != nil {
 		return
-	}
-
-	result = new([]PriorityScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
 
 	return
 }
 
-// Returns an issue priority.
+// Get returns an issue priority.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/priorities#get-priority
-func (p *PriorityService) Get(ctx context.Context, priorityID string) (result *PriorityScheme, response *Response, err error) {
+// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-priorities/#api-rest-api-3-priority-id-get
+func (p *PriorityService) Get(ctx context.Context, priorityID string) (result *PriorityScheme, response *ResponseScheme,
+	err error) {
 
 	if len(priorityID) == 0 {
-		return nil, nil, fmt.Errorf("error, please provide a valid priorityID value")
+		return nil, nil, notPriorityIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/priority/%v", priorityID)
@@ -55,17 +52,17 @@ func (p *PriorityService) Get(ctx context.Context, priorityID string) (result *P
 	if err != nil {
 		return
 	}
+
 	request.Header.Set("Accept", "application/json")
 
-	response, err = p.client.Do(request)
+	response, err = p.client.call(request, &result)
 	if err != nil {
 		return
 	}
 
-	result = new(PriorityScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
-	}
-
 	return
 }
+
+var (
+	notPriorityIDError = fmt.Errorf("error, please provide a valid priorityID value")
+)

@@ -27,27 +27,184 @@ func main() {
 	commentBody.Version = 1
 	commentBody.Type = "doc"
 
-	commentBody.AppendNode(&jira.CommentNodeScheme{
-		Type: "paragraph",
+	//Create the Tables Headers
+	tableHeaders := &jira.CommentNodeScheme{
+		Type: "tableRow",
 		Content: []*jira.CommentNodeScheme{
+
 			{
-				Type: "text",
-				Text: "Carlos Test",
-			},
-			{
-				Type: "emoji",
-				Attrs: map[string]interface{}{
-					"shortName": ":grin",
-					"id":        "1f601",
-					"text":      "😁",
+				Type: "tableHeader",
+				Content: []*jira.CommentNodeScheme{
+					{
+						Type: "paragraph",
+						Content: []*jira.CommentNodeScheme{
+							{
+								Type: "text",
+								Text: "Header 1",
+								Marks: []*jira.MarkScheme{
+									{
+										Type: "strong",
+									},
+								},
+							},
+						},
+					},
 				},
 			},
+
 			{
-				Type: "text",
-				Text: " ",
+				Type: "tableHeader",
+				Content: []*jira.CommentNodeScheme{
+					{
+						Type: "paragraph",
+						Content: []*jira.CommentNodeScheme{
+							{
+								Type: "text",
+								Text: "Header 2",
+								Marks: []*jira.MarkScheme{
+									{
+										Type: "strong",
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+
+			{
+				Type: "tableHeader",
+				Content: []*jira.CommentNodeScheme{
+					{
+						Type: "paragraph",
+						Content: []*jira.CommentNodeScheme{
+							{
+								Type: "text",
+								Text: "Header 3",
+								Marks: []*jira.MarkScheme{
+									{
+										Type: "strong",
+									},
+								},
+							},
+						},
+					},
+				},
 			},
 		},
+	}
+
+	row1 := &jira.CommentNodeScheme{
+		Type: "tableRow",
+		Content: []*jira.CommentNodeScheme{
+			{
+				Type: "tableCell",
+				Content: []*jira.CommentNodeScheme{
+					{
+						Type: "paragraph",
+						Content: []*jira.CommentNodeScheme{
+							{Type: "text", Text: "Row 00"},
+						},
+					},
+				},
+			},
+
+			{
+				Type: "tableCell",
+				Content: []*jira.CommentNodeScheme{
+					{
+						Type: "paragraph",
+						Content: []*jira.CommentNodeScheme{
+							{Type: "text", Text: "Row 01"},
+						},
+					},
+				},
+			},
+
+			{
+				Type: "tableCell",
+				Content: []*jira.CommentNodeScheme{
+					{
+						Type: "paragraph",
+						Content: []*jira.CommentNodeScheme{
+							{Type: "text", Text: "Row 02"},
+						},
+					},
+				},
+			},
+		},
+	}
+
+	row2 := &jira.CommentNodeScheme{
+		Type: "tableRow",
+		Content: []*jira.CommentNodeScheme{
+			{
+				Type: "tableCell",
+				Content: []*jira.CommentNodeScheme{
+					{
+						Type: "paragraph",
+						Content: []*jira.CommentNodeScheme{
+							{Type: "text", Text: "Row 10"},
+						},
+					},
+				},
+			},
+
+			{
+				Type: "tableCell",
+				Content: []*jira.CommentNodeScheme{
+					{
+						Type: "paragraph",
+						Content: []*jira.CommentNodeScheme{
+							{Type: "text", Text: "Row 11"},
+						},
+					},
+				},
+			},
+
+			{
+				Type: "tableCell",
+				Content: []*jira.CommentNodeScheme{
+					{
+						Type: "paragraph",
+						Content: []*jira.CommentNodeScheme{
+							{Type: "text", Text: "Row 12"},
+						},
+					},
+				},
+			},
+		},
+	}
+
+	commentBody.AppendNode(&jira.CommentNodeScheme{
+		Type:    "table",
+		Attrs:   map[string]interface{}{"isNumberColumnEnabled": false, "layout": "default"},
+		Content: []*jira.CommentNodeScheme{tableHeaders, row1, row2},
 	})
+
+	/*
+		commentBody.AppendNode(&jira.CommentNodeScheme{
+			Type: "paragraph",
+			Content: []*jira.CommentNodeScheme{
+				{
+					Type: "text",
+					Text: "Carlos Test",
+				},
+				{
+					Type: "emoji",
+					Attrs: map[string]interface{}{
+						"shortName": ":grin",
+						"id":        "1f601",
+						"text":      "😁",
+					},
+				},
+				{
+					Type: "text",
+					Text: " ",
+				},
+			},
+		})
+	*/
 
 	payload := &jira.CommentPayloadScheme{
 		Visibility: &jira.CommentVisibilityScheme{
@@ -59,14 +216,9 @@ func main() {
 
 	newComment, response, err := atlassian.Issue.Comment.Add(context.Background(), "KP-2", payload, nil)
 	if err != nil {
-		if response != nil {
-			log.Println("Response HTTP Response", string(response.BodyAsBytes))
-		}
 		log.Fatal(err)
 	}
 
-	log.Println("Response HTTP Code", response.StatusCode)
 	log.Println("HTTP Endpoint Used", response.Endpoint)
-
 	log.Println(newComment.ID)
 }

@@ -33,6 +33,17 @@ func TestIssueTypeService_Alternatives(t *testing.T) {
 		},
 
 		{
+			name:               "GetIssueTypeAlternativesWhenTheIssueTypeIDIsNotProvided",
+			issueTypeID:        "",
+			mockFile:           "./mocks/get-issue-types.json",
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/rest/api/3/issuetype/10000/alternatives",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+
+		{
 			name:               "GetIssueTypeAlternativesWhenTheIssueTypeIDIsIncorrect",
 			issueTypeID:        "10001",
 			mockFile:           "./mocks/get-issue-types.json",
@@ -177,20 +188,6 @@ func TestIssueTypeService_Create(t *testing.T) {
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusCreated,
 			wantErr:            false,
-		},
-
-		{
-			name: "CreateIssueTypeWhenPayloadParametersAreMissing",
-			payload: &IssueTypePayloadScheme{
-				Description: "Risk description",
-				Type:        "standard",
-			},
-			wantHTTPMethod:     http.MethodPost,
-			mockFile:           "./mocks/get-issue-type.json",
-			endpoint:           "/rest/api/3/issuetype",
-			context:            context.Background(),
-			wantHTTPCodeReturn: http.StatusCreated,
-			wantErr:            true,
 		},
 
 		{
@@ -348,6 +345,16 @@ func TestIssueTypeService_Delete(t *testing.T) {
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusNoContent,
 			wantErr:            false,
+		},
+
+		{
+			name:               "DeleteIssueTypeWhenTheIssueTypeIDIsNotProvided",
+			issueTypeID:        "",
+			wantHTTPMethod:     http.MethodDelete,
+			endpoint:           "/rest/api/3/issuetype/10000",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
 		},
 
 		{
@@ -612,6 +619,17 @@ func TestIssueTypeService_Get(t *testing.T) {
 		},
 
 		{
+			name:               "GetIssueTypeWhenTheIssueTypeIDIsNotProvided",
+			issueTypeID:        "",
+			mockFile:           "./mocks/get-issue-type.json",
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/rest/api/3/issuetype/10000",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+
+		{
 			name:               "GetIssueTypeWhenTheIssueTypeIDIsIncorrect",
 			issueTypeID:        "10001",
 			mockFile:           "./mocks/get-issue-type.json",
@@ -756,6 +774,22 @@ func TestIssueTypeService_Update(t *testing.T) {
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusOK,
 			wantErr:            false,
+		},
+
+		{
+			name:        "CreateIssueTypeWhenTheIssueTypeIDIsNotProvided",
+			issueTypeID: "",
+			payload: &IssueTypePayloadScheme{
+				Name:        "Risk",
+				Description: "Risk description",
+				Type:        "standard",
+			},
+			wantHTTPMethod:     http.MethodPut,
+			mockFile:           "./mocks/get-issue-type.json",
+			endpoint:           "/rest/api/3/issuetype/10001",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
 		},
 
 		{

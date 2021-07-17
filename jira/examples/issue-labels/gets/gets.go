@@ -33,13 +33,9 @@ func main() {
 
 	labels, response, err := atlassian.Issue.Label.Gets(context.Background(), 0, 50)
 	if err != nil {
-		if response != nil {
-			log.Println("Response HTTP Response", string(response.BodyAsBytes))
-		}
 		log.Fatal(err)
 	}
 
-	log.Println("Response HTTP Code", response.StatusCode)
 	log.Println("HTTP Endpoint Used", response.Endpoint)
 
 	for _, label := range labels.Values {

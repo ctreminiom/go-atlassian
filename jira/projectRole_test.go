@@ -13,8 +13,7 @@ func TestProjectRoleService_Create(t *testing.T) {
 
 	testCases := []struct {
 		name                   string
-		projectRoleName        string
-		projectRoleDescription string
+		payload *ProjectRolePayloadScheme
 		mockFile               string
 		wantHTTPMethod         string
 		endpoint               string
@@ -24,8 +23,10 @@ func TestProjectRoleService_Create(t *testing.T) {
 	}{
 		{
 			name:                   "GetProjectRoleWhenTheParamsAreCorrect",
-			projectRoleName:        "ISOs",
-			projectRoleDescription: "lorem",
+			payload: &ProjectRolePayloadScheme{
+				Name:        "ISOs",
+				Description: "lorem",
+			},
 			mockFile:               "./mocks/get-project-role.json",
 			wantHTTPMethod:         http.MethodPost,
 			endpoint:               "/rest/api/3/role",
@@ -35,9 +36,8 @@ func TestProjectRoleService_Create(t *testing.T) {
 		},
 
 		{
-			name:                   "GetProjectRoleWhenTheNameIsEmpty",
-			projectRoleName:        "",
-			projectRoleDescription: "lorem",
+			name:                   "GetProjectRoleWhenThePayloadIsNotProvided",
+			payload: nil,
 			mockFile:               "./mocks/get-project-role.json",
 			wantHTTPMethod:         http.MethodPost,
 			endpoint:               "/rest/api/3/role",
@@ -48,8 +48,10 @@ func TestProjectRoleService_Create(t *testing.T) {
 
 		{
 			name:                   "GetProjectRoleWhenTheRequestMethodIsIncorrect",
-			projectRoleName:        "ISOs",
-			projectRoleDescription: "lorem",
+			payload: &ProjectRolePayloadScheme{
+				Name:        "ISOs",
+				Description: "lorem",
+			},
 			mockFile:               "./mocks/get-project-role.json",
 			wantHTTPMethod:         http.MethodDelete,
 			endpoint:               "/rest/api/3/role",
@@ -60,8 +62,10 @@ func TestProjectRoleService_Create(t *testing.T) {
 
 		{
 			name:                   "GetProjectRoleWhenTheStatusCodeIsIncorrect",
-			projectRoleName:        "ISOs",
-			projectRoleDescription: "lorem",
+			payload: &ProjectRolePayloadScheme{
+				Name:        "ISOs",
+				Description: "lorem",
+			},
 			mockFile:               "./mocks/get-project-role.json",
 			wantHTTPMethod:         http.MethodPost,
 			endpoint:               "/rest/api/3/role",
@@ -72,8 +76,10 @@ func TestProjectRoleService_Create(t *testing.T) {
 
 		{
 			name:                   "GetProjectRoleWhenTheContextIsNil",
-			projectRoleName:        "ISOs",
-			projectRoleDescription: "lorem",
+			payload: &ProjectRolePayloadScheme{
+				Name:        "ISOs",
+				Description: "lorem",
+			},
 			mockFile:               "./mocks/get-project-role.json",
 			wantHTTPMethod:         http.MethodPost,
 			endpoint:               "/rest/api/3/role",
@@ -84,8 +90,10 @@ func TestProjectRoleService_Create(t *testing.T) {
 
 		{
 			name:                   "GetProjectRoleWhenTheEndpointIsIncorrect",
-			projectRoleName:        "ISOs",
-			projectRoleDescription: "lorem",
+			payload: &ProjectRolePayloadScheme{
+				Name:        "ISOs",
+				Description: "lorem",
+			},
 			mockFile:               "./mocks/get-project-role.json",
 			wantHTTPMethod:         http.MethodPost,
 			endpoint:               "/rest/api/2/role",
@@ -96,8 +104,10 @@ func TestProjectRoleService_Create(t *testing.T) {
 
 		{
 			name:                   "GetProjectRoleWhenTheResponseBodyHasADifferentFormat",
-			projectRoleName:        "ISOs",
-			projectRoleDescription: "lorem",
+			payload: &ProjectRolePayloadScheme{
+				Name:        "ISOs",
+				Description: "lorem",
+			},
 			mockFile:               "./mocks/empty_json.json",
 			wantHTTPMethod:         http.MethodPost,
 			endpoint:               "/rest/api/3/role",
@@ -134,7 +144,7 @@ func TestProjectRoleService_Create(t *testing.T) {
 
 			i := &ProjectRoleService{client: mockClient}
 
-			gotResult, gotResponse, err := i.Create(testCase.context, testCase.projectRoleName, testCase.projectRoleDescription)
+			gotResult, gotResponse, err := i.Create(testCase.context, testCase.payload)
 
 			if testCase.wantErr {
 
@@ -325,7 +335,7 @@ func TestProjectRoleService_Details(t *testing.T) {
 				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
 				assert.Equal(t, testCase.endpoint, endpointToAssert)
 
-				for _, role := range *gotResult {
+				for _, role := range gotResult {
 
 					t.Log("------------------------------------------")
 					t.Logf("Role Name: %v", role.Name)
@@ -822,7 +832,7 @@ func TestProjectRoleService_Global(t *testing.T) {
 				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
 				assert.Equal(t, testCase.endpoint, endpointToAssert)
 
-				for _, role := range *gotResult {
+				for _, role := range gotResult {
 
 					t.Log("------------------------------------------")
 					t.Logf("Role Name: %v", role.Name)

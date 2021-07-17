@@ -24,13 +24,10 @@ func main() {
 
 	settings, response, err := atlassian.Issue.Attachment.Settings(context.Background())
 	if err != nil {
-		if response != nil {
-			log.Println("Response HTTP Response", string(response.BodyAsBytes))
-		}
+		log.Fatal(err)
 		return
 	}
 
-	log.Println("Response HTTP Code", response.StatusCode)
 	log.Println("HTTP Endpoint Used", response.Endpoint)
 	log.Println("settings", settings.Enabled, settings.UploadLimit)
 }

@@ -453,7 +453,7 @@ func TestScreenTabService_Gets(t *testing.T) {
 				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
 				assert.Equal(t, testCase.endpoint, endpointToAssert)
 
-				for _, tab := range *gotResult {
+				for _, tab := range gotResult {
 					t.Log("------------------------------")
 					t.Logf("Screen Tab Name: %v", tab.Name)
 					t.Logf("Screen Tab ID: %v", tab.ID)

@@ -24,16 +24,12 @@ func main() {
 
 	permissions, response, err := atlassian.Filter.Share.Gets(context.Background(), 1)
 	if err != nil {
-		if response != nil {
-			log.Println("Response HTTP Response", string(response.BodyAsBytes))
-		}
 		log.Fatal(err)
 	}
 
-	log.Println("Response HTTP Code", response.StatusCode)
 	log.Println("HTTP Endpoint Used", response.Endpoint)
 
-	for index, permission := range *permissions {
+	for index, permission := range permissions {
 		log.Println(index, permission.Type, permission.Type)
 	}
 }

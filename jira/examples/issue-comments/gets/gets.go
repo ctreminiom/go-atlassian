@@ -24,14 +24,9 @@ func main() {
 
 	comments, response, err := atlassian.Issue.Comment.Gets(context.Background(), "KP-2", "", nil, 0, 50)
 	if err != nil {
-		if response != nil {
-			log.Println("Response HTTP Response", string(response.BodyAsBytes))
-			log.Println(response.StatusCode)
-		}
 		log.Fatal(err)
 	}
 
-	log.Println("Response HTTP Code", response.StatusCode)
 	log.Println("HTTP Endpoint Used", response.Endpoint)
 
 	for _, comment := range comments.Comments {

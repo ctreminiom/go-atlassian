@@ -2,11 +2,11 @@ package jira
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/url"
 	"strconv"
+	"strings"
 )
 
 type FieldService struct {
@@ -52,25 +52,23 @@ type IssueFieldSchemaScheme struct {
 	CustomID int    `json:"customId,omitempty"`
 }
 
-// Returns system and custom issue fields according to the following rules:
+// Gets returns system and custom issue fields according to the following rules:
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields#get-fields
-func (f *FieldService) Gets(ctx context.Context) (result *[]IssueFieldScheme, response *Response, err error) {
+// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-fields/#api-rest-api-3-field-get
+func (f *FieldService) Gets(ctx context.Context) (result []*IssueFieldScheme, response *ResponseScheme, err error) {
 
 	var endpoint = "rest/api/3/field"
+
 	request, err := f.client.newRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
 		return
 	}
-	request.Header.Set("Content-Type", "application/json")
 
-	response, err = f.client.Do(request)
+	request.Header.Set("Accept", "application/json")
+
+	response, err = f.client.call(request, &result)
 	if err != nil {
 		return
-	}
-
-	result = new([]IssueFieldScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
 
 	return
@@ -83,24 +81,20 @@ type CustomFieldScheme struct {
 	SearcherKey string `json:"searcherKey,omitempty"`
 }
 
-func (c *CustomFieldScheme) Format() {
-	//Append the atlassian plugin name convention
-	c.FieldType = fmt.Sprintf("com.atlassian.jira.plugin.system.customfieldtypes:%v", c.FieldType)
-	c.SearcherKey = fmt.Sprintf("com.atlassian.jira.plugin.system.customfieldtypes:%v", c.SearcherKey)
-}
-
-// Creates a custom field.
+// Create creates a custom field.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields#create-custom-field
-func (f *FieldService) Create(ctx context.Context, payload *CustomFieldScheme) (result *IssueFieldScheme, response *Response, err error) {
-
-	if payload == nil {
-		return nil, nil, fmt.Errorf("error, payload value is nil, please provide a valid CustomFieldScheme pointer")
-	}
-
-	payload.Format()
+// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-fields/#api-rest-api-3-field-post
+func (f *FieldService) Create(ctx context.Context, payload *CustomFieldScheme) (result *IssueFieldScheme,
+	response *ResponseScheme, err error) {
 
 	var endpoint = "rest/api/3/field"
-	request, err := f.client.newRequest(ctx, http.MethodPost, endpoint, &payload)
+
+	payloadAsReader, err := transformStructToReader(payload)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	request, err := f.client.newRequest(ctx, http.MethodPost, endpoint, payloadAsReader)
 	if err != nil {
 		return
 	}
@@ -108,14 +102,9 @@ func (f *FieldService) Create(ctx context.Context, payload *CustomFieldScheme) (
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Content-Type", "application/json")
 
-	response, err = f.client.Do(request)
+	response, err = f.client.call(request, &result)
 	if err != nil {
 		return
-	}
-
-	result = new(IssueFieldScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
 
 	return
@@ -129,7 +118,7 @@ type FieldSearchOptionsScheme struct {
 	Expand  []string
 }
 
-type FieldSearchScheme struct {
+type FieldSearchPageScheme struct {
 	MaxResults int                 `json:"maxResults,omitempty"`
 	StartAt    int                 `json:"startAt,omitempty"`
 	Total      int                 `json:"total,omitempty"`
@@ -137,57 +126,42 @@ type FieldSearchScheme struct {
 	Values     []*IssueFieldScheme `json:"values,omitempty"`
 }
 
-// Returns a paginated list of fields for Classic Jira projects.
+// Search returns a paginated list of fields for Classic Jira projects.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields#get-fields-paginated
-func (f *FieldService) Search(ctx context.Context, opts *FieldSearchOptionsScheme, startAt, maxResults int) (result *FieldSearchScheme, response *Response, err error) {
-
-	if opts == nil {
-		return nil, nil, fmt.Errorf("error, opts value is nil, please provide a valid FieldSearchOptionsScheme pointer")
-	}
+// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-fields/#api-rest-api-3-field-search-get
+// NOTE: Experimental Endpoint
+func (f *FieldService) Search(ctx context.Context, options *FieldSearchOptionsScheme, startAt, maxResults int) (
+	result *FieldSearchPageScheme, response *ResponseScheme, err error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
 	params.Add("maxResults", strconv.Itoa(maxResults))
 
-	var expand string
-	for index, value := range opts.Expand {
+	if options != nil {
 
-		if index == 0 {
-			expand = value
-			continue
+		if len(options.Expand) != 0 {
+			params.Add("expand", strings.Join(options.Expand, ","))
 		}
 
-		expand += "," + value
-	}
-
-	if len(expand) != 0 {
-		params.Add("expand", expand)
-	}
-
-	var fieldTypes string
-	for index, value := range opts.Types {
-
-		if index == 0 {
-			fieldTypes = value
-			continue
+		if len(options.Types) != 0 {
+			params.Add("type", strings.Join(options.Types, ","))
 		}
 
-		fieldTypes += "," + value
-	}
+		if len(options.IDs) != 0 {
+			params.Add("id", strings.Join(options.IDs, ","))
+		}
 
-	if len(fieldTypes) != 0 {
-		params.Add("type", fieldTypes)
-	}
+		if len(options.OrderBy) != 0 {
+			params.Add("orderBy", options.OrderBy)
+		}
 
-	if opts.Query != "" {
-		params.Add("orderBy", opts.Query)
-	}
-
-	if opts.OrderBy != "" {
-		params.Add("orderBy", opts.OrderBy)
+		if len(options.Query) != 0 {
+			params.Add("query", options.Query)
+		}
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/field/search?%v", params.Encode())
+
 	request, err := f.client.newRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
 		return
@@ -195,14 +169,9 @@ func (f *FieldService) Search(ctx context.Context, opts *FieldSearchOptionsSchem
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = f.client.Do(request)
+	response, err = f.client.call(request, &result)
 	if err != nil {
 		return
-	}
-
-	result = new(FieldSearchScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
 
 	return

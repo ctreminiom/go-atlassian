@@ -492,7 +492,7 @@ func TestFieldOptionContextService_Delete(t *testing.T) {
 				assert.Error(t, err)
 
 				if gotResponse != nil {
-					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
+					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
 				}
 			} else {
 
@@ -712,7 +712,7 @@ func TestFieldOptionContextService_Gets(t *testing.T) {
 				assert.Error(t, err)
 
 				if gotResponse != nil {
-					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
+					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
 				}
 			} else {
 
@@ -1246,7 +1246,7 @@ func TestFieldOptionContextService_Order(t *testing.T) {
 				assert.Error(t, err)
 
 				if gotResponse != nil {
-					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
+					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
 				}
 			} else {
 

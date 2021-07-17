@@ -1113,6 +1113,18 @@ func TestIssueService_Create(t *testing.T) {
 		},
 
 		{
+			name:               "CreateIssueWhenTheCustomFieldsAndPayloadAreNotProvided",
+			payload:            nil,
+			customFields:       nil,
+			mockFile:           "./mocks/create-issue.json",
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/api/3/issue",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusCreated,
+			wantErr:            true,
+		},
+
+		{
 			name: "CreateIssueWhenTheCustomFieldsAreProvidedButNotContainsFields",
 			payload: &IssueScheme{
 				Fields: &IssueFieldsScheme{
@@ -2825,20 +2837,6 @@ func TestIssueService_Update(t *testing.T) {
 		},
 
 		{
-			name:               "EditIssueWhenThePayloadIsNotProvided",
-			issueKeyOrID:       "DUMMY-3",
-			notify:             true,
-			payload:            nil,
-			operations:         &operationMockedWithFields,
-			customFields:       &customFieldMockedWithFields,
-			wantHTTPMethod:     http.MethodPut,
-			endpoint:           "/rest/api/3/issue/DUMMY-3",
-			context:            context.Background(),
-			wantHTTPCodeReturn: http.StatusNoContent,
-			wantErr:            true,
-		},
-
-		{
 			name:         "EditIssueWhenTheIssueKeyOrIDIsNotProvided",
 			issueKeyOrID: "",
 			notify:       true,
@@ -2872,6 +2870,20 @@ func TestIssueService_Update(t *testing.T) {
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusNoContent,
 			wantErr:            false,
+		},
+
+		{
+			name:               "EditIssueWhenTheCustomFields,OperationAndPayloadAreNotProvided",
+			issueKeyOrID:       "DUMMY-3",
+			notify:             true,
+			payload:            nil,
+			operations:         nil,
+			customFields:       nil,
+			wantHTTPMethod:     http.MethodPut,
+			endpoint:           "/rest/api/3/issue/DUMMY-3",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
 		},
 
 		{

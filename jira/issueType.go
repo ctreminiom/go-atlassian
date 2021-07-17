@@ -2,9 +2,7 @@ package jira
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
-	"gopkg.in/go-playground/validator.v9"
 	"net/http"
 )
 
@@ -32,9 +30,10 @@ type IssueTypeScopeScheme struct {
 	Project *ProjectScheme `json:"project,omitempty"`
 }
 
-// Returns all issue types.
+// Gets returns all issue types.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/type#get-all-issue-types-for-user
-func (i *IssueTypeService) Gets(ctx context.Context) (result *[]IssueTypeScheme, response *Response, err error) {
+// Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-types/#api-rest-api-3-issuetype-get
+func (i *IssueTypeService) Gets(ctx context.Context) (result []*IssueTypeScheme, response *ResponseScheme, err error) {
 
 	var endpoint = "rest/api/3/issuetype"
 
@@ -42,43 +41,39 @@ func (i *IssueTypeService) Gets(ctx context.Context) (result *[]IssueTypeScheme,
 	if err != nil {
 		return
 	}
+
 	request.Header.Set("Accept", "application/json")
 
-	response, err = i.client.Do(request)
+	response, err = i.client.call(request, &result)
 	if err != nil {
 		return
-	}
-
-	result = new([]IssueTypeScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
 
 	return
 }
 
 type IssueTypePayloadScheme struct {
-	Name        string `json:"name,omitempty" validate:"required"`
-	Description string `json:"description,omitempty"`
-	Type        string `json:"type,omitempty" validate:"required,oneof=subtask standard"`
+	Name           string `json:"name,omitempty"`
+	Description    string `json:"description,omitempty"`
+	Type           string `json:"type,omitempty"`
+	HierarchyLevel int    `json:"hierarchyLevel,omitempty"`
+	AvatarID       int    `json:"avatarId,omitempty"`
 }
 
-// Creates an issue type and adds it to the default issue type scheme.
+// Create creates an issue type and adds it to the default issue type scheme.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/type#create-issue-type
-func (i *IssueTypeService) Create(ctx context.Context, payload *IssueTypePayloadScheme) (result *IssueTypeScheme, response *Response, err error) {
+// Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-types/#api-rest-api-3-issuetype-post
+func (i *IssueTypeService) Create(ctx context.Context, payload *IssueTypePayloadScheme) (result *IssueTypeScheme,
+	response *ResponseScheme, err error) {
 
-	if payload == nil {
-		return nil, nil, fmt.Errorf("error, payload value is nil, please provide a valid IssueTypePayloadScheme pointer")
-	}
-
-	validate := validator.New()
-	if err = validate.Struct(payload); err != nil {
-		return nil, nil, fmt.Errorf("error: issuetype type payload invalid: %v", err.Error())
+	payloadAsReader, err := transformStructToReader(payload)
+	if err != nil {
+		return nil, nil, err
 	}
 
 	var endpoint = "rest/api/3/issuetype"
 
-	request, err := i.client.newRequest(ctx, http.MethodPost, endpoint, &payload)
+	request, err := i.client.newRequest(ctx, http.MethodPost, endpoint, payloadAsReader)
 	if err != nil {
 		return
 	}
@@ -86,22 +81,23 @@ func (i *IssueTypeService) Create(ctx context.Context, payload *IssueTypePayload
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Content-Type", "application/json")
 
-	response, err = i.client.Do(request)
+	response, err = i.client.call(request, &result)
 	if err != nil {
 		return
-	}
-
-	result = new(IssueTypeScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
 
 	return
 }
 
-// Returns an issue type.
+// Get returns an issue type.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/type#get-issue-type
-func (i *IssueTypeService) Get(ctx context.Context, issueTypeID string) (result *IssueTypeScheme, response *Response, err error) {
+// Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-types/#api-rest-api-3-issuetype-id-get
+func (i *IssueTypeService) Get(ctx context.Context, issueTypeID string) (result *IssueTypeScheme, response *ResponseScheme,
+	err error) {
+
+	if len(issueTypeID) == 0 {
+		return nil, nil, notIssueTypeIDError
+	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/issuetype/%v", issueTypeID)
 
@@ -109,57 +105,60 @@ func (i *IssueTypeService) Get(ctx context.Context, issueTypeID string) (result 
 	if err != nil {
 		return
 	}
+
 	request.Header.Set("Accept", "application/json")
 
-	response, err = i.client.Do(request)
+	response, err = i.client.call(request, &result)
 	if err != nil {
 		return
 	}
 
-	result = new(IssueTypeScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
-
-	}
 	return
 }
 
-// Updates the issue type.
+// Update updates the issue type.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/type#update-issue-type
-func (i *IssueTypeService) Update(ctx context.Context, issueTypeID string, payload *IssueTypePayloadScheme) (result *IssueTypeScheme, response *Response, err error) {
+// Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-types/#api-rest-api-3-issuetype-id-put
+func (i *IssueTypeService) Update(ctx context.Context, issueTypeID string, payload *IssueTypePayloadScheme) (
+	result *IssueTypeScheme, response *ResponseScheme, err error) {
 
-	if payload == nil {
-		return nil, nil, fmt.Errorf("error, payload value is nil, please provide a valid IssueTypePayloadScheme pointer")
+	if len(issueTypeID) == 0 {
+		return nil, nil, notIssueTypeIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/issuetype/%v", issueTypeID)
 
-	request, err := i.client.newRequest(ctx, http.MethodPut, endpoint, &payload)
+	payloadAsReader, err := transformStructToReader(payload)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	request, err := i.client.newRequest(ctx, http.MethodPut, endpoint, payloadAsReader)
 	if err != nil {
 		return
 	}
+
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Content-Type", "application/json")
 
-	response, err = i.client.Do(request)
+	response, err = i.client.call(request, &result)
 	if err != nil {
 		return
-	}
-
-	result = new(IssueTypeScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
-
 	}
 
 	return
 }
 
-// Deletes the issue type.
+// Delete deletes the issue type.
 // If the issue type is in use, all uses are updated with the alternative issue type (alternativeIssueTypeId).
 // A list of alternative issue types are obtained from the Get alternative issue types resource.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/type#delete-issue-type
-func (i *IssueTypeService) Delete(ctx context.Context, issueTypeID string) (response *Response, err error) {
+// Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-types/#api-rest-api-3-issuetype-id-delete
+func (i *IssueTypeService) Delete(ctx context.Context, issueTypeID string) (response *ResponseScheme, err error) {
+
+	if len(issueTypeID) == 0 {
+		return nil, notIssueTypeIDError
+	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/issuetype/%v", issueTypeID)
 
@@ -168,7 +167,7 @@ func (i *IssueTypeService) Delete(ctx context.Context, issueTypeID string) (resp
 		return
 	}
 
-	response, err = i.client.Do(request)
+	response, err = i.client.call(request, nil)
 	if err != nil {
 		return
 	}
@@ -176,10 +175,16 @@ func (i *IssueTypeService) Delete(ctx context.Context, issueTypeID string) (resp
 	return
 }
 
-// Returns a list of issue types that can be used to replace the issue type.
+// Alternatives returns a list of issue types that can be used to replace the issue type.
 // The alternative issue types are those assigned to the same workflow scheme, field configuration scheme, and screen scheme.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/type#get-alternative-issue-types
-func (i *IssueTypeService) Alternatives(ctx context.Context, issueTypeID string) (result *[]IssueTypeScheme, response *Response, err error) {
+// Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-types/#api-rest-api-3-issuetype-id-alternatives-get
+func (i *IssueTypeService) Alternatives(ctx context.Context, issueTypeID string) (result []*IssueTypeScheme,
+	response *ResponseScheme, err error) {
+
+	if len(issueTypeID) == 0 {
+		return nil, nil, notIssueTypeIDError
+	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/issuetype/%v/alternatives", issueTypeID)
 
@@ -190,15 +195,14 @@ func (i *IssueTypeService) Alternatives(ctx context.Context, issueTypeID string)
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = i.client.Do(request)
+	response, err = i.client.call(request, &result)
 	if err != nil {
 		return
 	}
 
-	result = new([]IssueTypeScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
-	}
-
 	return
 }
+
+var (
+	notIssueTypeIDError = fmt.Errorf("error, please provide a valid issue type ID")
+)

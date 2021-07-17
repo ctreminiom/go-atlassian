@@ -30,13 +30,10 @@ func main() {
 
 	fields, response, err := atlassian.Issue.Field.Search(context.Background(), &options, 0, 50)
 	if err != nil {
-		if response != nil {
-			log.Println("Response HTTP Response", string(response.BodyAsBytes))
-		}
+		log.Fatal(err)
 		return
 	}
 
-	log.Println("Response HTTP Code", response.StatusCode)
 	log.Println("HTTP Endpoint Used", response.Endpoint)
 	log.Println(fields.IsLast, fields.Total, fields.MaxResults, fields.StartAt)
 

@@ -2,20 +2,22 @@ package jira
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/url"
+	"strings"
 )
 
 type ProjectRoleActorService struct{ client *Client }
 
-// Adds actors to a project role for the project.
+// Add adds actors to a project role for the project.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/projects/roles/actors#add-actors-to-project-role
-func (p *ProjectRoleActorService) Add(ctx context.Context, projectKeyOrID string, projectRoleID int, accountIDs, groups []string) (result *ProjectRoleScheme, response *Response, err error) {
+// Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-role-actors/#api-rest-api-3-project-projectidorkey-role-id-post
+func (p *ProjectRoleActorService) Add(ctx context.Context, projectKeyOrID string, projectRoleID int, accountIDs, groups []string) (
+	result *ProjectRoleScheme, response *ResponseScheme, err error) {
 
 	if len(projectKeyOrID) == 0 {
-		return nil, nil, fmt.Errorf("error, please provide a valid projectKeyOrID value")
+		return nil, nil, notProjectIDError
 	}
 
 	payload := struct {
@@ -28,7 +30,9 @@ func (p *ProjectRoleActorService) Add(ctx context.Context, projectKeyOrID string
 
 	var endpoint = fmt.Sprintf("rest/api/3/project/%v/role/%v", projectKeyOrID, projectRoleID)
 
-	request, err := p.client.newRequest(ctx, http.MethodPost, endpoint, &payload)
+	payloadAsReader, _ := transformStructToReader(&payload)
+
+	request, err := p.client.newRequest(ctx, http.MethodPost, endpoint, payloadAsReader)
 	if err != nil {
 		return
 	}
@@ -36,25 +40,22 @@ func (p *ProjectRoleActorService) Add(ctx context.Context, projectKeyOrID string
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Content-Type", "application/json")
 
-	response, err = p.client.Do(request)
+	response, err = p.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(ProjectRoleScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
 	return
 }
 
-// Deletes actors from a project role for the project.
+// Delete deletes actors from a project role for the project.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/projects/roles/actors#delete-actors-from-project-role
-func (p *ProjectRoleActorService) Delete(ctx context.Context, projectKeyOrID string, projectRoleID int, accountID, group string) (response *Response, err error) {
+// Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-role-actors/#api-rest-api-3-project-projectidorkey-role-id-delete
+func (p *ProjectRoleActorService) Delete(ctx context.Context, projectKeyOrID string, projectRoleID int, accountID, group string) (
+	response *ResponseScheme, err error) {
 
 	if len(projectKeyOrID) == 0 {
-		return nil, fmt.Errorf("error, please provide a valid projectKeyOrID value")
+		return nil, notProjectIDError
 	}
 
 	params := url.Values{}
@@ -62,19 +63,23 @@ func (p *ProjectRoleActorService) Delete(ctx context.Context, projectKeyOrID str
 	if len(accountID) != 0 {
 		params.Add("user", accountID)
 	}
-
 	if len(group) != 0 {
 		params.Add("group", group)
 	}
 
-	var endpoint = fmt.Sprintf("rest/api/3/project/%v/role/%v?%v", projectKeyOrID, projectRoleID, params.Encode())
+	var endpoint strings.Builder
+	endpoint.WriteString(fmt.Sprintf("rest/api/3/project/%v/role/%v", projectKeyOrID, projectRoleID))
 
-	request, err := p.client.newRequest(ctx, http.MethodDelete, endpoint, nil)
+	if params.Encode() != "" {
+		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
+	}
+
+	request, err := p.client.newRequest(ctx, http.MethodDelete, endpoint.String(), nil)
 	if err != nil {
 		return
 	}
 
-	response, err = p.client.Do(request)
+	response, err = p.client.call(request, nil)
 	if err != nil {
 		return
 	}

@@ -2,7 +2,6 @@ package jira
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -26,12 +25,13 @@ type GroupUserPageScheme struct {
 	EndIndex   int           `json:"end-index,omitempty"`
 }
 
-// Creates a group.
+// Create creates a group.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/groups#create-group
-func (g *GroupService) Create(ctx context.Context, groupName string) (result *GroupScheme, response *Response, err error) {
+// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-groups/#api-rest-api-3-group-post
+func (g *GroupService) Create(ctx context.Context, groupName string) (result *GroupScheme, response *ResponseScheme, err error) {
 
 	if len(groupName) == 0 {
-		return nil, nil, fmt.Errorf("error, please provide a valid groupName value")
+		return nil, nil, notGroupNameError
 	}
 
 	payload := struct {
@@ -40,8 +40,10 @@ func (g *GroupService) Create(ctx context.Context, groupName string) (result *Gr
 		Name: groupName,
 	}
 
+	payloadAsReader, _ := transformStructToReader(&payload)
+
 	var endpoint = "rest/api/3/group"
-	request, err := g.client.newRequest(ctx, http.MethodPost, endpoint, &payload)
+	request, err := g.client.newRequest(ctx, http.MethodPost, endpoint, payloadAsReader)
 	if err != nil {
 		return
 	}
@@ -49,25 +51,21 @@ func (g *GroupService) Create(ctx context.Context, groupName string) (result *Gr
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Content-Type", "application/json")
 
-	response, err = g.client.Do(request)
+	response, err = g.client.call(request, &result)
 	if err != nil {
 		return
-	}
-
-	result = new(GroupScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
 
 	return
 }
 
-// Deletes a group.
+// Delete deletes a group.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/groups#remove-group
-func (g *GroupService) Delete(ctx context.Context, groupName string) (response *Response, err error) {
+// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-groups/#api-rest-api-3-group-delete
+func (g *GroupService) Delete(ctx context.Context, groupName string) (response *ResponseScheme, err error) {
 
 	if len(groupName) == 0 {
-		return nil, fmt.Errorf("error, please provide a valid groupName value")
+		return nil, notGroupNameError
 	}
 
 	params := url.Values{}
@@ -79,7 +77,7 @@ func (g *GroupService) Delete(ctx context.Context, groupName string) (response *
 		return
 	}
 
-	response, err = g.client.Do(request)
+	response, err = g.client.call(request, nil)
 	if err != nil {
 		return
 	}
@@ -103,26 +101,26 @@ type GroupBulkOptionsScheme struct {
 	GroupNames []string
 }
 
-// Returns a paginated list of groups.
+// Bulk returns a paginated list of groups.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/groups#bulk-groups
-func (g *GroupService) Bulk(ctx context.Context, options *GroupBulkOptionsScheme, startAt, maxResults int) (result *BulkGroupScheme, response *Response, err error) {
-
-	if options == nil {
-		return nil, nil, fmt.Errorf("error, options value is nil, please provide a valid GroupBulkOptionsScheme pointer")
-	}
+// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-groups/#api-rest-api-3-group-bulk-get
+// NOTE: Experimental Endpoint
+func (g *GroupService) Bulk(ctx context.Context, options *GroupBulkOptionsScheme, startAt, maxResults int) (
+	result *BulkGroupScheme, response *ResponseScheme, err error) {
 
 	params := url.Values{}
-
-	for _, groupID := range options.GroupIDs {
-		params.Add("groupId", groupID)
-	}
-
-	for _, groupName := range options.GroupNames {
-		params.Add("groupName", groupName)
-	}
-
 	params.Add("startAt", strconv.Itoa(startAt))
 	params.Add("maxResults", strconv.Itoa(maxResults))
+
+	if options != nil {
+		for _, groupID := range options.GroupIDs {
+			params.Add("groupId", groupID)
+		}
+
+		for _, groupName := range options.GroupNames {
+			params.Add("groupName", groupName)
+		}
+	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/group/bulk?%v", params.Encode())
 
@@ -131,53 +129,44 @@ func (g *GroupService) Bulk(ctx context.Context, options *GroupBulkOptionsScheme
 		return
 	}
 
-	response, err = g.client.Do(request)
+	response, err = g.client.call(request, &result)
 	if err != nil {
 		return
-	}
-
-	result = new(BulkGroupScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
 
 	return
 }
 
 type GroupMemberPageScheme struct {
-	Self       string               `json:"self,omitempty"`
-	NextPage   string               `json:"nextPage,omitempty"`
-	MaxResults int                  `json:"maxResults,omitempty"`
-	StartAt    int                  `json:"startAt,omitempty"`
-	Total      int                  `json:"total,omitempty"`
-	IsLast     bool                 `json:"isLast,omitempty"`
-	Values     []*GroupMemberScheme `json:"values,omitempty"`
+	Self       string                   `json:"self,omitempty"`
+	NextPage   string                   `json:"nextPage,omitempty"`
+	MaxResults int                      `json:"maxResults,omitempty"`
+	StartAt    int                      `json:"startAt,omitempty"`
+	Total      int                      `json:"total,omitempty"`
+	IsLast     bool                     `json:"isLast,omitempty"`
+	Values     []*GroupUserDetailScheme `json:"values,omitempty"`
 }
 
-type GroupMemberScheme struct {
+type GroupUserDetailScheme struct {
 	Self         string `json:"self"`
 	Name         string `json:"name"`
 	Key          string `json:"key"`
 	AccountID    string `json:"accountId"`
 	EmailAddress string `json:"emailAddress"`
-	AvatarUrls   struct {
-		One6X16   string `json:"16x16"`
-		Two4X24   string `json:"24x24"`
-		Three2X32 string `json:"32x32"`
-		Four8X48  string `json:"48x48"`
-	} `json:"avatarUrls"`
-	DisplayName string `json:"displayName"`
-	Active      bool   `json:"active"`
-	TimeZone    string `json:"timeZone"`
-	AccountType string `json:"accountType"`
+	DisplayName  string `json:"displayName"`
+	Active       bool   `json:"active"`
+	TimeZone     string `json:"timeZone"`
+	AccountType  string `json:"accountType"`
 }
 
-// Returns a paginated list of all users in a group.
+// Members returns a paginated list of all users in a group.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/groups#get-users-from-groups
-func (g *GroupService) Members(ctx context.Context, groupName string, inactive bool, startAt, maxResults int) (result *GroupMemberPageScheme, response *Response, err error) {
+// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-groups/#api-rest-api-3-group-member-get
+func (g *GroupService) Members(ctx context.Context, groupName string, inactive bool, startAt, maxResults int) (
+	result *GroupMemberPageScheme, response *ResponseScheme, err error) {
 
 	if len(groupName) == 0 {
-		return nil, nil, fmt.Errorf("error, please provide a valid groupName value")
+		return nil, nil, notGroupNameError
 	}
 
 	params := url.Values{}
@@ -196,40 +185,41 @@ func (g *GroupService) Members(ctx context.Context, groupName string, inactive b
 		return
 	}
 
-	response, err = g.client.Do(request)
+	response, err = g.client.call(request, &result)
 	if err != nil {
 		return
-	}
-
-	result = new(GroupMemberPageScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
 
 	return
 }
 
-// Adds a user to a group.
+// Add adds a user to a group.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/groups#add-user-to-group
-func (g *GroupService) Add(ctx context.Context, groupName, accountID string) (result *GroupScheme, response *Response, err error) {
+// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-groups/#api-rest-api-3-group-user-post
+func (g *GroupService) Add(ctx context.Context, groupName, accountID string) (result *GroupScheme,
+	response *ResponseScheme, err error) {
 
 	if len(groupName) == 0 {
-		return nil, nil, fmt.Errorf("error, please provide a valid groupName value")
+		return nil, nil, notGroupNameError
 	}
 
 	if len(accountID) == 0 {
-		return nil, nil, fmt.Errorf("error, please provide a valid accountID value")
+		return nil, nil, notAccountIDError
 	}
 
 	payload := struct {
 		AccountID string `json:"accountId"`
-	}{AccountID: accountID}
+	}{
+		AccountID: accountID,
+	}
+
+	payloadAsReader, _ := transformStructToReader(&payload)
 
 	params := url.Values{}
 	params.Add("groupname", groupName)
 	var endpoint = fmt.Sprintf("rest/api/3/group/user?%v", params.Encode())
 
-	request, err := g.client.newRequest(ctx, http.MethodPost, endpoint, &payload)
+	request, err := g.client.newRequest(ctx, http.MethodPost, endpoint, payloadAsReader)
 	if err != nil {
 		return
 	}
@@ -237,29 +227,25 @@ func (g *GroupService) Add(ctx context.Context, groupName, accountID string) (re
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Content-Type", "application/json")
 
-	response, err = g.client.Do(request)
+	response, err = g.client.call(request, &result)
 	if err != nil {
 		return
-	}
-
-	result = new(GroupScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
 
 	return
 }
 
-// Removes a user from a group.
-// https://docs.go-atlassian.io/jira-software-cloud/groups#remove-user-from-group
-func (g *GroupService) Remove(ctx context.Context, groupName, accountID string) (response *Response, err error) {
+// Remove removes a user from a group.
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/groups#remove-user-from-group
+// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-groups/#api-rest-api-3-group-user-delete
+func (g *GroupService) Remove(ctx context.Context, groupName, accountID string) (response *ResponseScheme, err error) {
 
 	if len(groupName) == 0 {
-		return nil, fmt.Errorf("error, please provide a valid groupName value")
+		return nil, notGroupNameError
 	}
 
 	if len(accountID) == 0 {
-		return nil, fmt.Errorf("error, please provide a valid accountID value")
+		return nil, notAccountIDError
 	}
 
 	params := url.Values{}
@@ -272,10 +258,15 @@ func (g *GroupService) Remove(ctx context.Context, groupName, accountID string) 
 		return
 	}
 
-	response, err = g.client.Do(request)
+	response, err = g.client.call(request, nil)
 	if err != nil {
 		return
 	}
 
 	return
 }
+
+var (
+	notGroupNameError = fmt.Errorf("error, please provide a valid groupName value")
+	notAccountIDError = fmt.Errorf("error, please provide a valid accountID value")
+)

@@ -49,13 +49,9 @@ func main() {
 	permissionScheme, response, err := atlassian.Permission.Scheme.Update(context.Background(), 10004, payload)
 
 	if err != nil {
-		if response != nil {
-			log.Println("Response HTTP Response", string(response.BodyAsBytes))
-		}
 		log.Fatal(err)
 	}
 
-	log.Println("Response HTTP Code", response.StatusCode)
 	log.Println("HTTP Endpoint Used", response.Endpoint)
 
 	log.Println(permissionScheme.Name)

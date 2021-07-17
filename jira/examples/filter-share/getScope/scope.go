@@ -25,12 +25,12 @@ func main() {
 	scope, response, err := atlassian.Filter.Share.Scope(context.Background())
 	if err != nil {
 		if response != nil {
-			log.Println("Response HTTP Response", string(response.BodyAsBytes))
+			log.Println("Response HTTP Response", response.Bytes.String())
 		}
 		return
 	}
 
-	log.Println("Response HTTP Code", response.StatusCode)
+	log.Println("Response HTTP Code", response.Code)
 	log.Println("HTTP Endpoint Used", response.Endpoint)
 	log.Println("Scope", scope)
 }

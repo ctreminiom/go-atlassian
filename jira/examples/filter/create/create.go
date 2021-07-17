@@ -24,7 +24,7 @@ func main() {
 
 	atlassian.Auth.SetBasicAuth(mail, token)
 
-	newFilterBody := jira.FilterBodyScheme{
+	newFilterBody := jira.FilterPayloadScheme{
 		Name:        fmt.Sprintf("Filter #%v", uuid.New().String()),
 		Description: "Filter's description",
 		JQL:         "issuetype = Bug",
@@ -47,13 +47,9 @@ func main() {
 
 	filter, response, err := atlassian.Filter.Create(context.Background(), &newFilterBody)
 	if err != nil {
-		if response != nil {
-			log.Println("Response HTTP Response", string(response.BodyAsBytes))
-		}
 		log.Fatal(err)
 	}
 
-	log.Println("Response HTTP Code", response.StatusCode)
 	log.Println("HTTP Endpoint Used", response.Endpoint)
 	log.Printf("The filter has been created: %v - %v", filter.ID, filter.Name)
 

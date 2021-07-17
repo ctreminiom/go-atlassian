@@ -2,12 +2,11 @@ package jira
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
-	"gopkg.in/go-playground/validator.v9"
 	"net/http"
 	"net/url"
 	"strconv"
+	"strings"
 )
 
 type ProjectService struct {
@@ -22,19 +21,19 @@ type ProjectService struct {
 }
 
 type ProjectPayloadScheme struct {
-	NotificationScheme  int    `json:"notificationScheme" validate:"required"`
+	NotificationScheme  int    `json:"notificationScheme"`
 	Description         string `json:"description"`
-	LeadAccountID       string `json:"leadAccountId" validate:"required"`
+	LeadAccountID       string `json:"leadAccountId"`
 	URL                 string `json:"url"`
-	ProjectTemplateKey  string `json:"projectTemplateKey" validate:"required"`
-	AvatarID            int    `json:"avatarId" validate:"required"`
-	IssueSecurityScheme int    `json:"issueSecurityScheme" validate:"required"`
-	Name                string `json:"name" validate:"required"`
-	PermissionScheme    int    `json:"permissionScheme" validate:"required"`
-	AssigneeType        string `json:"assigneeType" validate:"required"`
-	ProjectTypeKey      string `json:"projectTypeKey" validate:"required"`
-	Key                 string `json:"key" validate:"required"`
-	CategoryID          int    `json:"categoryId" validate:"required"`
+	ProjectTemplateKey  string `json:"projectTemplateKey"`
+	AvatarID            int    `json:"avatarId"`
+	IssueSecurityScheme int    `json:"issueSecurityScheme"`
+	Name                string `json:"name"`
+	PermissionScheme    int    `json:"permissionScheme"`
+	AssigneeType        string `json:"assigneeType"`
+	ProjectTypeKey      string `json:"projectTypeKey"`
+	Key                 string `json:"key"`
+	CategoryID          int    `json:"categoryId"`
 }
 
 type NewProjectCreatedScheme struct {
@@ -43,22 +42,24 @@ type NewProjectCreatedScheme struct {
 	Key  string `json:"key"`
 }
 
-// Creates a project based on a project type template, as shown in the following table:
+const (
+	ProjectTemplateBusinessContentManagement = "com.atlassian.jira-core-project-templates:jira-core-simplified-content-management"
+)
+
+// Create creates a project based on a project type template, as shown in the following table:
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-projects/#api-rest-api-3-project-post
-func (p *ProjectService) Create(ctx context.Context, payload *ProjectPayloadScheme) (result *NewProjectCreatedScheme, response *Response, err error) {
-
-	if payload == nil {
-		return nil, nil, fmt.Errorf("error, please provide a ProjectPayloadScheme pointer")
-	}
-
-	validate := validator.New()
-	if err = validate.Struct(payload); err != nil {
-		return
-	}
+// Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-projects/#api-rest-api-3-project-post
+func (p *ProjectService) Create(ctx context.Context, payload *ProjectPayloadScheme) (result *NewProjectCreatedScheme,
+	response *ResponseScheme, err error) {
 
 	var endpoint = "rest/api/3/project"
 
-	request, err := p.client.newRequest(ctx, http.MethodPost, endpoint, &payload)
+	payloadAsReader, err := transformStructToReader(payload)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	request, err := p.client.newRequest(ctx, http.MethodPost, endpoint, payloadAsReader)
 	if err != nil {
 		return
 	}
@@ -66,13 +67,8 @@ func (p *ProjectService) Create(ctx context.Context, payload *ProjectPayloadSche
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Content-Type", "application/json")
 
-	response, err = p.client.Do(request)
+	response, err = p.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(NewProjectCreatedScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
@@ -98,49 +94,40 @@ type ProjectSearchOptionsScheme struct {
 	Expand         []string
 }
 
-// Returns a paginated list of projects visible to the user.
+// Search returns a paginated list of projects visible to the user.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-projects/#api-rest-api-3-project-search-get
-func (p *ProjectService) Search(ctx context.Context, opts *ProjectSearchOptionsScheme, startAt, maxResults int) (result *ProjectSearchScheme, response *Response, err error) {
+// Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-projects/#api-rest-api-3-project-search-get
+func (p *ProjectService) Search(ctx context.Context, options *ProjectSearchOptionsScheme, startAt, maxResults int) (
+	result *ProjectSearchScheme, response *ResponseScheme, err error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
 	params.Add("maxResults", strconv.Itoa(maxResults))
 
-	if opts != nil {
+	if options != nil {
 
-		var expand string
-		for index, value := range opts.Expand {
-
-			if index == 0 {
-				expand = value
-				continue
-			}
-
-			expand += "," + value
+		if len(options.Expand) != 0 {
+			params.Add("expand", strings.Join(options.Expand, ","))
 		}
 
-		if len(expand) != 0 {
-			params.Add("expand", expand)
+		if len(options.OrderBy) != 0 {
+			params.Add("orderBy", options.OrderBy)
 		}
 
-		if len(opts.OrderBy) != 0 {
-			params.Add("orderBy", opts.OrderBy)
+		if len(options.Query) != 0 {
+			params.Add("query", options.Query)
 		}
 
-		if len(opts.Query) != 0 {
-			params.Add("query", opts.Query)
+		if len(options.ProjectKeyType) != 0 {
+			params.Add("typeKey", options.ProjectKeyType)
 		}
 
-		if len(opts.ProjectKeyType) != 0 {
-			params.Add("typeKey", opts.ProjectKeyType)
+		if options.CategoryID != 0 {
+			params.Add("categoryId", strconv.Itoa(options.CategoryID))
 		}
 
-		if opts.CategoryID != 0 {
-			params.Add("categoryId", strconv.Itoa(opts.CategoryID))
-		}
-
-		if len(opts.Action) != 0 {
-			params.Add("action", opts.Action)
+		if len(options.Action) != 0 {
+			params.Add("action", options.Action)
 		}
 	}
 
@@ -150,15 +137,11 @@ func (p *ProjectService) Search(ctx context.Context, opts *ProjectSearchOptionsS
 	if err != nil {
 		return
 	}
+
 	request.Header.Set("Accept", "application/json")
 
-	response, err = p.client.Do(request)
+	response, err = p.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(ProjectSearchScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
@@ -218,50 +201,37 @@ type ProjectRolesScheme struct {
 	Administrators               string `json:"Administrators,omitempty"`
 }
 
-// Returns the project details for a project.
+// Get returns the project details for a project.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-projects/#api-rest-api-3-project-projectidorkey-get
-func (p *ProjectService) Get(ctx context.Context, projectKeyOrID string, expands []string) (result *ProjectScheme, response *Response, err error) {
+// Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-projects/#api-rest-api-3-project-projectidorkey-get
+func (p *ProjectService) Get(ctx context.Context, projectKeyOrID string, expand []string) (result *ProjectScheme,
+	response *ResponseScheme, err error) {
 
 	if len(projectKeyOrID) == 0 {
-		return nil, nil, fmt.Errorf("error, please provide a projectKeyOrID value")
+		return nil, nil, notProjectIDError
 	}
 
 	params := url.Values{}
-	var expand string
-	for index, value := range expands {
-
-		if index == 0 {
-			expand = value
-			continue
-		}
-
-		expand += "," + value
-	}
-
 	if len(expand) != 0 {
-		params.Add("expand", expand)
+		params.Add("expand", strings.Join(expand, ","))
 	}
 
-	var endpoint string
-	if len(params.Encode()) != 0 {
-		endpoint = fmt.Sprintf("rest/api/3/project/%v?%v", projectKeyOrID, params.Encode())
-	} else {
-		endpoint = fmt.Sprintf("rest/api/3/project/%v", projectKeyOrID)
+	var endpoint strings.Builder
+	endpoint.WriteString(fmt.Sprintf("rest/api/3/project/%v", projectKeyOrID))
+
+	if params.Encode() != "" {
+		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
-	request, err := p.client.newRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := p.client.newRequest(ctx, http.MethodGet, endpoint.String(), nil)
 	if err != nil {
 		return
 	}
+
 	request.Header.Set("Accept", "application/json")
 
-	response, err = p.client.Do(request)
+	response, err = p.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(ProjectScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
@@ -284,46 +254,46 @@ type ProjectUpdateScheme struct {
 	CategoryID          int    `json:"categoryId,omitempty"`
 }
 
-// Updates the project details of a project.
+// Update updates the project details of a project.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-projects/#api-rest-api-3-project-projectidorkey-put
-func (p *ProjectService) Update(ctx context.Context, projectKeyOrID string, payload *ProjectUpdateScheme) (result *ProjectScheme, response *Response, err error) {
+// Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-projects/#api-rest-api-3-project-projectidorkey-put
+func (p *ProjectService) Update(ctx context.Context, projectKeyOrID string, payload *ProjectUpdateScheme) (result *ProjectScheme,
+	response *ResponseScheme, err error) {
 
 	if len(projectKeyOrID) == 0 {
-		return nil, nil, fmt.Errorf("erro!, please provide a valid projectKeyOrID value")
-	}
-
-	if payload == nil {
-		return nil, nil, fmt.Errorf("error, please provide a valid ProjectUpdateScheme pointer")
+		return nil, nil, notProjectIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/project/%v", projectKeyOrID)
 
-	request, err := p.client.newRequest(ctx, http.MethodPut, endpoint, &payload)
+	payloadAsReader, err := transformStructToReader(payload)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	request, err := p.client.newRequest(ctx, http.MethodPut, endpoint, payloadAsReader)
 	if err != nil {
 		return
 	}
+
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Content-Type", "application/json")
 
-	response, err = p.client.Do(request)
+	response, err = p.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(ProjectScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
 	return
 }
 
-// Deletes a project.
-// https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-projects/#api-rest-api-3-project-projectidorkey-delete
-func (p *ProjectService) Delete(ctx context.Context, projectKeyOrID string, enableUndo bool) (response *Response, err error) {
+// Delete deletes a project.
+// Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-projects/#api-rest-api-3-project-projectidorkey-delete
+func (p *ProjectService) Delete(ctx context.Context, projectKeyOrID string, enableUndo bool) (response *ResponseScheme,
+	err error) {
 
 	if len(projectKeyOrID) == 0 {
-		return nil, fmt.Errorf("erro!, please provide a valid projectKeyOrID value")
+		return nil, notProjectIDError
 	}
 
 	params := url.Values{}
@@ -331,19 +301,19 @@ func (p *ProjectService) Delete(ctx context.Context, projectKeyOrID string, enab
 		params.Add("enableUndo", "true")
 	}
 
-	var endpoint string
-	if len(params.Encode()) != 0 {
-		endpoint = fmt.Sprintf("rest/api/3/project/%v?%v", projectKeyOrID, params.Encode())
-	} else {
-		endpoint = fmt.Sprintf("rest/api/3/project/%v", projectKeyOrID)
+	var endpoint strings.Builder
+	endpoint.WriteString(fmt.Sprintf("rest/api/3/project/%v", projectKeyOrID))
+
+	if params.Encode() != "" {
+		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
-	request, err := p.client.newRequest(ctx, http.MethodDelete, endpoint, nil)
+	request, err := p.client.newRequest(ctx, http.MethodDelete, endpoint.String(), nil)
 	if err != nil {
 		return
 	}
 
-	response, err = p.client.Do(request)
+	response, err = p.client.call(request, nil)
 	if err != nil {
 		return
 	}
@@ -351,14 +321,15 @@ func (p *ProjectService) Delete(ctx context.Context, projectKeyOrID string, enab
 	return
 }
 
-// Deletes a project asynchronously.
+// DeleteAsynchronously deletes a project asynchronously.
 // 1. transactional, that is, if part of the delete fails the project is not deleted.
 // 2. asynchronous. Follow the location link in the response to determine the status of the task and use Get task to obtain subsequent updates.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-projects/#api-rest-api-3-project-projectidorkey-delete-post
-func (p *ProjectService) DeleteAsynchronously(ctx context.Context, projectKeyOrID string) (result *TaskScheme, response *Response, err error) {
+func (p *ProjectService) DeleteAsynchronously(ctx context.Context, projectKeyOrID string) (result *TaskScheme,
+	response *ResponseScheme, err error) {
 
 	if len(projectKeyOrID) == 0 {
-		return nil, nil, fmt.Errorf("erro!, please provide a valid projectKeyOrID value")
+		return nil, nil, notProjectIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/project/%v/delete", projectKeyOrID)
@@ -368,27 +339,22 @@ func (p *ProjectService) DeleteAsynchronously(ctx context.Context, projectKeyOrI
 		return
 	}
 
-	response, err = p.client.Do(request)
+	response, err = p.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(TaskScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
 	return
 }
 
-// Archives a project. Archived projects cannot be deleted.
+// Archive archives a project. Archived projects cannot be deleted.
 // To delete an archived project, restore the project and then delete it.
 // To restore a project, use the Jira UI.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-projects/#api-rest-api-3-project-projectidorkey-archive-post
-func (p *ProjectService) Archive(ctx context.Context, projectKeyOrID string) (response *Response, err error) {
+func (p *ProjectService) Archive(ctx context.Context, projectKeyOrID string) (response *ResponseScheme, err error) {
 
 	if len(projectKeyOrID) == 0 {
-		return nil, fmt.Errorf("erro!, please provide a valid projectKeyOrID value")
+		return nil, notProjectIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/project/%v/archive", projectKeyOrID)
@@ -398,7 +364,7 @@ func (p *ProjectService) Archive(ctx context.Context, projectKeyOrID string) (re
 		return
 	}
 
-	response, err = p.client.Do(request)
+	response, err = p.client.call(request, nil)
 	if err != nil {
 		return
 	}
@@ -406,12 +372,13 @@ func (p *ProjectService) Archive(ctx context.Context, projectKeyOrID string) (re
 	return
 }
 
-// Restores a project from the Jira recycle bin.
+// Restore restores a project from the Jira recycle bin.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-projects/#api-rest-api-3-project-projectidorkey-restore-post
-func (p *ProjectService) Restore(ctx context.Context, projectKeyOrID string) (result *ProjectScheme, response *Response, err error) {
+func (p *ProjectService) Restore(ctx context.Context, projectKeyOrID string) (result *ProjectScheme,
+	response *ResponseScheme, err error) {
 
 	if len(projectKeyOrID) == 0 {
-		return nil, nil, fmt.Errorf("erro!, please provide a valid projectKeyOrID value")
+		return nil, nil, notProjectIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/project/%v/restore", projectKeyOrID)
@@ -421,13 +388,8 @@ func (p *ProjectService) Restore(ctx context.Context, projectKeyOrID string) (re
 		return
 	}
 
-	response, err = p.client.Do(request)
+	response, err = p.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(ProjectScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
@@ -451,13 +413,14 @@ type ProjectStatusDetailsScheme struct {
 	StatusCategory *StatusCategoryScheme `json:"statusCategory,omitempty"`
 }
 
-// Returns the valid statuses for a project.
+// Statuses returns the valid statuses for a project.
 // The statuses are grouped by issue type, as each project has a set of valid issue types and each issue type has a set of valid statuses.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-projects/#api-rest-api-3-project-projectidorkey-statuses-get
-func (p *ProjectService) Statuses(ctx context.Context, projectKeyOrID string) (result *[]ProjectStatusPageScheme, response *Response, err error) {
+func (p *ProjectService) Statuses(ctx context.Context, projectKeyOrID string) (result []*ProjectStatusPageScheme,
+	response *ResponseScheme, err error) {
 
 	if len(projectKeyOrID) == 0 {
-		return nil, nil, fmt.Errorf("erro!, please provide a valid projectKeyOrID value")
+		return nil, nil, notProjectIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/project/%v/statuses", projectKeyOrID)
@@ -467,13 +430,8 @@ func (p *ProjectService) Statuses(ctx context.Context, projectKeyOrID string) (r
 		return
 	}
 
-	response, err = p.client.Do(request)
+	response, err = p.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new([]ProjectStatusPageScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
@@ -495,12 +453,13 @@ type ProjectIssueTypeHierarchyScheme struct {
 	} `json:"hierarchy"`
 }
 
-// Get the issue type hierarchy for a next-gen project.
+// Hierarchy get the issue type hierarchy for a next-gen project.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-projects/#api-rest-api-3-project-projectid-hierarchy-get
-func (p *ProjectService) Hierarchy(ctx context.Context, projectKeyOrID string) (result *ProjectIssueTypeHierarchyScheme, response *Response, err error) {
+func (p *ProjectService) Hierarchy(ctx context.Context, projectKeyOrID string) (result *ProjectIssueTypeHierarchyScheme,
+	response *ResponseScheme, err error) {
 
 	if len(projectKeyOrID) == 0 {
-		return nil, nil, fmt.Errorf("erro!, please provide a valid projectKeyOrID value")
+		return nil, nil, notProjectIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/project/%v/hierarchy", projectKeyOrID)
@@ -510,13 +469,8 @@ func (p *ProjectService) Hierarchy(ctx context.Context, projectKeyOrID string) (
 		return
 	}
 
-	response, err = p.client.Do(request)
+	response, err = p.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(ProjectIssueTypeHierarchyScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
@@ -557,51 +511,34 @@ type EventNotificationScheme struct {
 	User             *UserScheme        `json:"user,omitempty"`
 }
 
-// Search a notification scheme associated with the project.
+// NotificationScheme search a notification scheme associated with the project.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-projects/#api-rest-api-3-project-projectkeyorid-notificationscheme-get
-func (p *ProjectService) NotificationScheme(ctx context.Context, projectKeyOrID string, expands []string) (result *NotificationSchemeScheme, response *Response, err error) {
+func (p *ProjectService) NotificationScheme(ctx context.Context, projectKeyOrID string, expand []string) (
+	result *NotificationSchemeScheme, response *ResponseScheme, err error) {
 
 	if len(projectKeyOrID) == 0 {
-		return nil, nil, fmt.Errorf("erro!, please provide a valid projectKeyOrID value")
+		return nil, nil, notProjectIDError
 	}
 
 	params := url.Values{}
-	var expand string
-
-	for index, value := range expands {
-
-		if index == 0 {
-			expand = value
-			continue
-		}
-
-		expand += "," + value
-	}
-
 	if len(expand) != 0 {
-		params.Add("expand", expand)
+		params.Add("expand", strings.Join(expand, ","))
 	}
 
-	var endpoint string
+	var endpoint strings.Builder
+	endpoint.WriteString(fmt.Sprintf("rest/api/3/project/%v/notificationscheme", projectKeyOrID))
 
-	if len(params.Encode()) != 0 {
-		endpoint = fmt.Sprintf("rest/api/3/project/%v/notificationscheme?%v", projectKeyOrID, params.Encode())
-	} else {
-		endpoint = fmt.Sprintf("rest/api/3/project/%v/notificationscheme", projectKeyOrID)
+	if params.Encode() != "" {
+		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
-	request, err := p.client.newRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := p.client.newRequest(ctx, http.MethodGet, endpoint.String(), nil)
 	if err != nil {
 		return
 	}
 
-	response, err = p.client.Do(request)
+	response, err = p.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(NotificationSchemeScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 

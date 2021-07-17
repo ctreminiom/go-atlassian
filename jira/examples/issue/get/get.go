@@ -24,14 +24,9 @@ func main() {
 
 	issue, response, err := atlassian.Issue.Get(context.Background(), "KP-2", nil, []string{"transitions"})
 	if err != nil {
-		if response != nil {
-			log.Println("Response HTTP Response", string(response.BodyAsBytes))
-			log.Println(response.StatusCode)
-		}
 		log.Fatal(err)
 	}
 
-	log.Println("Response HTTP Code", response.StatusCode)
 	log.Println("HTTP Endpoint Used", response.Endpoint)
 
 	log.Println(issue.Key)
@@ -44,7 +39,7 @@ func main() {
 	// Check if the issue contains sub-tasks
 	if issue.Fields.Subtasks != nil {
 
-		for _, subTask := range *issue.Fields.Subtasks {
+		for _, subTask := range issue.Fields.Subtasks {
 			log.Println("Sub-Task: ", subTask.Key, subTask.Fields.Summary)
 		}
 

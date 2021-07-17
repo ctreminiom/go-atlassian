@@ -31,16 +31,15 @@ func main() {
 
 	atlassian.Auth.SetBasicAuth(mail, token)
 
-	var permissionSchemeID = 10001
-	permissionScheme, response, err := atlassian.Permission.Scheme.Get(context.Background(), permissionSchemeID)
+	var (
+		permissionSchemeID = 10001
+		expand = []string{"field", "group", "permissions", "projectRole", "user"}
+	)
+	permissionScheme, response, err := atlassian.Permission.Scheme.Get(context.Background(), permissionSchemeID, expand)
 	if err != nil {
-		if response != nil {
-			log.Println("Response HTTP Response", string(response.BodyAsBytes))
-		}
 		log.Fatal(err)
 	}
 
-	log.Println("Response HTTP Code", response.StatusCode)
 	log.Println("HTTP Endpoint Used", response.Endpoint)
 	log.Println(permissionScheme)
 }

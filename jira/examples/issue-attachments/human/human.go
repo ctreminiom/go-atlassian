@@ -24,13 +24,10 @@ func main() {
 
 	humanMetadata, response, err := atlassian.Issue.Attachment.Human(context.Background(), "attachmentID")
 	if err != nil {
-		if response != nil {
-			log.Println("Response HTTP Response", string(response.BodyAsBytes))
-		}
+		log.Fatal(err)
 		return
 	}
 
-	log.Println("Response HTTP Code", response.StatusCode)
 	log.Println("HTTP Endpoint Used", response.Endpoint)
 	log.Println(humanMetadata)
 }

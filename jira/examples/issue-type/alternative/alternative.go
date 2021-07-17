@@ -33,16 +33,12 @@ func main() {
 
 	issueTypes, response, err := atlassian.Issue.Type.Alternatives(context.Background(), "")
 	if err != nil {
-		if response != nil {
-			log.Println("Response HTTP Response", string(response.BodyAsBytes))
-		}
 		log.Fatal(err)
 	}
 
-	log.Println("Response HTTP Code", response.StatusCode)
 	log.Println("HTTP Endpoint Used", response.Endpoint)
 
-	for _, issueType := range *issueTypes {
+	for _, issueType := range issueTypes {
 		log.Println(issueType)
 	}
 }

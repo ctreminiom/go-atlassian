@@ -33,13 +33,9 @@ func main() {
 
 	watchers, response, err := atlassian.Issue.Watchers.Gets(context.Background(), "KP-2")
 	if err != nil {
-		if response != nil {
-			log.Println("Response HTTP Response", string(response.BodyAsBytes))
-		}
 		log.Fatal(err)
 	}
 
-	log.Println("Response HTTP Code", response.StatusCode)
 	log.Println("HTTP Endpoint Used", response.Endpoint)
 
 	log.Println(watchers.IsWatching, watchers.WatchCount)

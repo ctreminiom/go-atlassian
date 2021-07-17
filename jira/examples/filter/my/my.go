@@ -24,17 +24,14 @@ func main() {
 
 	myFilters, response, err := atlassian.Filter.My(context.Background(), false, []string{"sharedUsers", "subscriptions"})
 	if err != nil {
-		if response != nil {
-			log.Println("Response HTTP Response", string(response.BodyAsBytes))
-		}
 		log.Fatal(err)
 	}
 
-	log.Println("Response HTTP Code", response.StatusCode)
+	log.Println("Response HTTP Code", response.Code)
 	log.Println("HTTP Endpoint Used", response.Endpoint)
-	log.Println("my filters", len(*myFilters))
+	log.Println("my filters", len(myFilters))
 
-	for _, filter := range *myFilters {
+	for _, filter := range myFilters {
 		log.Println(filter.ID)
 
 		for _, shareUser := range filter.ShareUsers.Items {

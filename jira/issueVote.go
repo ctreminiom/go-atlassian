@@ -2,7 +2,6 @@ package jira
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/http"
 )
@@ -16,9 +15,15 @@ type IssueVoteScheme struct {
 	Voters   []*UserScheme `json:"voters,omitempty"`
 }
 
-// Returns details about the votes on an issue.
+// Gets returns details about the votes on an issue.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/vote#get-votes
-func (v *VoteService) Gets(ctx context.Context, issueKeyOrID string) (result *IssueVoteScheme, response *Response, err error) {
+// Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-votes/#api-rest-api-3-issue-issueidorkey-votes-get
+func (v *VoteService) Gets(ctx context.Context, issueKeyOrID string) (result *IssueVoteScheme, response *ResponseScheme,
+	err error) {
+
+	if len(issueKeyOrID) == 0 {
+		return nil, nil, notIssueKeyOrIDError
+	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/issue/%v/votes", issueKeyOrID)
 
@@ -26,27 +31,24 @@ func (v *VoteService) Gets(ctx context.Context, issueKeyOrID string) (result *Is
 	if err != nil {
 		return
 	}
+
 	request.Header.Set("Content-Type", "application/json")
 
-	response, err = v.client.Do(request)
+	response, err = v.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(IssueVoteScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
 	return
 }
 
-// Adds the user's vote to an issue. This is the equivalent of the user clicking Vote on an issue in Jira.
+// Add adds the user's vote to an issue. This is the equivalent of the user clicking Vote on an issue in Jira.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/vote#add-vote
-func (v *VoteService) Add(ctx context.Context, issueKeyOrID string) (response *Response, err error) {
+// Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-votes/#api-rest-api-3-issue-issueidorkey-votes-post
+func (v *VoteService) Add(ctx context.Context, issueKeyOrID string) (response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {
-		return nil, fmt.Errorf("error, please provide a issueKeyOrID value")
+		return nil, notIssueKeyOrIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/issue/%v/votes", issueKeyOrID)
@@ -55,9 +57,10 @@ func (v *VoteService) Add(ctx context.Context, issueKeyOrID string) (response *R
 	if err != nil {
 		return
 	}
-	request.Header.Set("Content-Type", "application/json")
 
-	response, err = v.client.Do(request)
+	request.Header.Set("Accept", "application/json")
+
+	response, err = v.client.call(request, nil)
 	if err != nil {
 		return
 	}
@@ -65,12 +68,13 @@ func (v *VoteService) Add(ctx context.Context, issueKeyOrID string) (response *R
 	return
 }
 
-// Deletes a user's vote from an issue. This is the equivalent of the user clicking Unvote on an issue in Jira.
+// Delete deletes a user's vote from an issue. This is the equivalent of the user clicking Unvote on an issue in Jira.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/vote#delete-vote
-func (v *VoteService) Delete(ctx context.Context, issueKeyOrID string) (response *Response, err error) {
+// Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-votes/#api-rest-api-3-issue-issueidorkey-votes-delete
+func (v *VoteService) Delete(ctx context.Context, issueKeyOrID string) (response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {
-		return nil, fmt.Errorf("error, please provide a issueKeyOrID value")
+		return nil, notIssueKeyOrIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/issue/%v/votes", issueKeyOrID)
@@ -79,9 +83,8 @@ func (v *VoteService) Delete(ctx context.Context, issueKeyOrID string) (response
 	if err != nil {
 		return
 	}
-	request.Header.Set("Content-Type", "application/json")
 
-	response, err = v.client.Do(request)
+	response, err = v.client.call(request, nil)
 	if err != nil {
 		return
 	}

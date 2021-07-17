@@ -3,25 +3,24 @@ package jira
 import (
 	"bytes"
 	"context"
-	"encoding/json"
 	"fmt"
 	"io"
 	"mime/multipart"
 	"net/http"
-	"os"
-	"path/filepath"
 )
 
 type AttachmentService struct{ client *Client }
 
 type AttachmentSettingScheme struct {
-	Enabled     bool `json:"enabled"`
-	UploadLimit int  `json:"uploadLimit"`
+	Enabled     bool `json:"enabled,omitempty"`
+	UploadLimit int  `json:"uploadLimit,omitempty"`
 }
 
-// Returns the attachment settings, that is, whether attachments are enabled and the maximum attachment size allowed.
+// Settings returns the attachment settings, that is, whether attachments are enabled and the maximum attachment size allowed.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/attachments#get-jira-attachment-settings
-func (a *AttachmentService) Settings(ctx context.Context) (result *AttachmentSettingScheme, response *Response, err error) {
+// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-attachments/#api-rest-api-3-attachment-meta-get
+func (a *AttachmentService) Settings(ctx context.Context) (result *AttachmentSettingScheme,
+	response *ResponseScheme, err error) {
 
 	var endpoint = "rest/api/3/attachment/meta"
 	request, err := a.client.newRequest(ctx, http.MethodGet, endpoint, nil)
@@ -31,13 +30,8 @@ func (a *AttachmentService) Settings(ctx context.Context) (result *AttachmentSet
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = a.client.Do(request)
+	response, err = a.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(AttachmentSettingScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
@@ -45,23 +39,25 @@ func (a *AttachmentService) Settings(ctx context.Context) (result *AttachmentSet
 }
 
 type AttachmentMetadataScheme struct {
-	ID        int        `json:"id"`
-	Self      string     `json:"self"`
-	Filename  string     `json:"filename"`
-	Author    UserScheme `json:"author"`
-	Created   string     `json:"created"`
-	Size      int        `json:"size"`
-	MimeType  string     `json:"mimeType"`
-	Content   string     `json:"content"`
-	Thumbnail string     `json:"thumbnail"`
+	ID        int         `json:"id,omitempty"`
+	Self      string      `json:"self,omitempty"`
+	Filename  string      `json:"filename,omitempty"`
+	Author    *UserScheme `json:"author,omitempty"`
+	Created   string      `json:"created,omitempty"`
+	Size      int         `json:"size,omitempty"`
+	MimeType  string      `json:"mimeType,omitempty"`
+	Content   string      `json:"content,omitempty"`
+	Thumbnail string      `json:"thumbnail,omitempty"`
 }
 
-// Returns the metadata for an attachment. Note that the attachment itself is not returned.
+// Metadata returns the metadata for an attachment. Note that the attachment itself is not returned.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/attachments#get-attachment-metadata
-func (a *AttachmentService) Metadata(ctx context.Context, attachmentID string) (result *AttachmentMetadataScheme, response *Response, err error) {
+// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-attachments/#api-rest-api-3-attachment-id-get
+func (a *AttachmentService) Metadata(ctx context.Context, attachmentID string) (result *AttachmentMetadataScheme,
+	response *ResponseScheme, err error) {
 
 	if len(attachmentID) == 0 {
-		return nil, nil, fmt.Errorf("error, please provide a valid attachmentID value")
+		return nil, nil, notAttachmentIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/attachment/%v", attachmentID)
@@ -72,25 +68,21 @@ func (a *AttachmentService) Metadata(ctx context.Context, attachmentID string) (
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = a.client.Do(request)
+	response, err = a.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(AttachmentMetadataScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
 	return
 }
 
-// Deletes an attachment from an issue.
+// Delete deletes an attachment from an issue.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/attachments#delete-attachment
-func (a *AttachmentService) Delete(ctx context.Context, attachmentID string) (response *Response, err error) {
+// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-attachments/#api-rest-api-3-attachment-id-delete
+func (a *AttachmentService) Delete(ctx context.Context, attachmentID string) (response *ResponseScheme, err error) {
 
 	if len(attachmentID) == 0 {
-		return nil, fmt.Errorf("error, please provide a valid attachmentID value")
+		return nil, notAttachmentIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/attachment/%v", attachmentID)
@@ -99,7 +91,7 @@ func (a *AttachmentService) Delete(ctx context.Context, attachmentID string) (re
 		return
 	}
 
-	response, err = a.client.Do(request)
+	response, err = a.client.call(request, nil)
 	if err != nil {
 		return
 	}
@@ -108,27 +100,32 @@ func (a *AttachmentService) Delete(ctx context.Context, attachmentID string) (re
 }
 
 type AttachmentHumanMetadataScheme struct {
-	ID      int    `json:"id"`
-	Name    string `json:"name"`
-	Entries []struct {
-		Path      string `json:"path"`
-		Index     int    `json:"index"`
-		Size      string `json:"size"`
-		MediaType string `json:"mediaType"`
-		Label     string `json:"label"`
-	} `json:"entries"`
-	TotalEntryCount int    `json:"totalEntryCount"`
-	MediaType       string `json:"mediaType"`
+	ID              int                                   `json:"id,omitempty"`
+	Name            string                                `json:"name,omitempty"`
+	Entries         []*AttachmentHumanMetadataEntryScheme `json:"entries,omitempty"`
+	TotalEntryCount int                                   `json:"totalEntryCount,omitempty"`
+	MediaType       string                                `json:"mediaType,omitempty"`
 }
 
-// Returns the metadata for the contents of an attachment, if it is an archive, and metadata for the attachment itself.
+type AttachmentHumanMetadataEntryScheme struct {
+	Path      string `json:"path,omitempty"`
+	Index     int    `json:"index,omitempty"`
+	Size      string `json:"size,omitempty"`
+	MediaType string `json:"mediaType,omitempty"`
+	Label     string `json:"label,omitempty"`
+}
+
+// Human returns the metadata for the contents of an attachment, if it is an archive, and metadata for the attachment itself.
 // For example, if the attachment is a ZIP archive, then information about the files in the archive is returned and metadata for the ZIP archive.
 // Currently, only the ZIP archive format is supported.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/attachments#get-all-metadata-for-an-expanded-attachment
-func (a *AttachmentService) Human(ctx context.Context, attachmentID string) (result *AttachmentHumanMetadataScheme, response *Response, err error) {
+// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-attachments/#api-rest-api-3-attachment-id-expand-human-get
+// NOTE: Experimental Endpoint
+func (a *AttachmentService) Human(ctx context.Context, attachmentID string) (result *AttachmentHumanMetadataScheme,
+	response *ResponseScheme, err error) {
 
 	if len(attachmentID) == 0 {
-		return nil, nil, fmt.Errorf("error, please provide a valid attachmentID value")
+		return nil, nil, notAttachmentIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/attachment/%v/expand/human", attachmentID)
@@ -139,13 +136,8 @@ func (a *AttachmentService) Human(ctx context.Context, attachmentID string) (res
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = a.client.Do(request)
+	response, err = a.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(AttachmentHumanMetadataScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
@@ -153,76 +145,70 @@ func (a *AttachmentService) Human(ctx context.Context, attachmentID string) (res
 }
 
 type AttachmentScheme struct {
-	Self      string     `json:"self"`
-	ID        string     `json:"id,omitempty"`
-	Filename  string     `json:"filename"`
-	Author    UserScheme `json:"author"`
-	Created   string     `json:"created"`
-	Size      int        `json:"size"`
-	MimeType  string     `json:"mimeType"`
-	Content   string     `json:"content"`
-	Thumbnail string     `json:"thumbnail,omitempty"`
+	Self      string      `json:"self,omitempty"`
+	ID        string      `json:"id,omitempty"`
+	Filename  string      `json:"filename,omitempty"`
+	Author    *UserScheme `json:"author,omitempty"`
+	Created   string      `json:"created,omitempty"`
+	Size      int         `json:"size,omitempty"`
+	MimeType  string      `json:"mimeType,omitempty"`
+	Content   string      `json:"content,omitempty"`
+	Thumbnail string      `json:"thumbnail,omitempty"`
 }
 
-// Adds one or more attachments to an issue. Attachments are posted as multipart/form-data (RFC 1867).
+// Add adds one attachment to an issue. Attachments are posted as multipart/form-data (RFC 1867).
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/attachments#add-attachment
-func (a *AttachmentService) Add(issueKeyOrID string, path string) (result *[]AttachmentScheme, response *Response, err error) {
+// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-attachments/#api-rest-api-3-issue-issueidorkey-attachments-post
+func (a *AttachmentService) Add(ctx context.Context, issueKeyOrID, fileName string, file io.Reader) (result []*AttachmentScheme, response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {
-		return nil, nil, fmt.Errorf("error, please provide a valid issueKeyOrID value")
+		return nil, nil, notIssueKeyOrIDError
 	}
 
-	if len(path) == 0 {
-		return nil, nil, fmt.Errorf("error, please provide a valid path value")
+	if len(fileName) == 0 {
+		return nil, nil, notFileNameError
 	}
 
-	if !filepath.IsAbs(path) {
-		return nil, nil, fmt.Errorf("the path provided is not an absolute path, please provide a valid one")
+	if file == nil {
+		return nil, nil, notReaderError
 	}
 
-	payload := &bytes.Buffer{}
-	writer := multipart.NewWriter(payload)
+	var (
+		endpoint         = fmt.Sprintf("rest/api/3/issue/%v/attachments", issueKeyOrID)
+		body             = &bytes.Buffer{}
+		attachmentWriter = multipart.NewWriter(body)
+	)
 
-	file, err := os.Open(path)
+	// create the attachment form row
+	part, _ := attachmentWriter.CreateFormFile("file", fileName)
+
+	// add the attachment metadata
+	_, err = io.Copy(part, file)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	attachmentWriter.Close()
+
+	request, err := a.client.newRequest(ctx, http.MethodPost, endpoint, body)
 	if err != nil {
 		return
 	}
-	defer file.Close()
 
-	filePart, err := writer.CreateFormFile("file", filepath.Base(path))
-	if err != nil {
-		return
-	}
-
-	_, err = io.Copy(filePart, file)
-	if err != nil {
-		return
-	}
-
-	if err = writer.Close(); err != nil {
-		return
-	}
-
-	var endpoint = fmt.Sprintf("%vrest/api/3/issue/%v/attachments", a.client.Site.String(), issueKeyOrID)
-	request, err := http.NewRequest(http.MethodPost, endpoint, payload)
-	if err != nil {
-		return
-	}
-	request.SetBasicAuth(a.client.Auth.mail, a.client.Auth.token)
-
-	request.Header.Add("Content-Type", writer.FormDataContentType())
+	request.Header.Add("Content-Type", attachmentWriter.FormDataContentType())
 	request.Header.Add("Accept", "application/json")
 	request.Header.Set("X-Atlassian-Token", "no-check")
 
-	response, err = a.client.Do(request)
+	response, err = a.client.call(request, &result)
 	if err != nil {
 		return
-	}
-
-	result = new([]AttachmentScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
 
 	return
 }
+
+var (
+	notAttachmentIDError = fmt.Errorf("error, please provide a valid attachmentID value")
+	notFileNameError     = fmt.Errorf("error, the fileName is required, please provide a valid value")
+	notReaderError       = fmt.Errorf("error, the io.Reader cannot be nil, please provide a valid value")
+)

@@ -25,13 +25,9 @@ func main() {
 
 	defaultValues, response, err := atlassian.Issue.Field.Context.GetDefaultValues(context.Background(), fieldID, nil, 0, 50)
 	if err != nil {
-		if response != nil {
-			log.Println("Response HTTP Response", string(response.BodyAsBytes))
-		}
 		return
 	}
 
-	log.Println("Response HTTP Code", response.StatusCode)
 	log.Println("HTTP Endpoint Used", response.Endpoint)
 
 	for _, value := range defaultValues.Values {

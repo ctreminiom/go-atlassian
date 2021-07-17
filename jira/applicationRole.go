@@ -29,7 +29,7 @@ type ApplicationRoleScheme struct {
 // Gets returns all application roles
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/application-roles#get-all-application-roles
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-application-roles/#api-rest-api-3-applicationrole-get
-func (a *ApplicationRoleService) Gets(ctx context.Context) (result *[]ApplicationRoleScheme, response *ResponseScheme, err error) {
+func (a *ApplicationRoleService) Gets(ctx context.Context) (result []*ApplicationRoleScheme, response *ResponseScheme, err error) {
 
 	var endpoint = "rest/api/3/applicationrole"
 

@@ -20,7 +20,8 @@ type PermissionScheme struct {
 }
 
 // Gets Returns all permissions
-func (p *PermissionService) Gets(ctx context.Context) (result []*PermissionScheme, response *Response, err error) {
+// Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permissions/#api-rest-api-3-permissions-get
+func (p *PermissionService) Gets(ctx context.Context) (result []*PermissionScheme, response *ResponseScheme, err error) {
 
 	var endpoint = "rest/api/3/permissions"
 
@@ -30,13 +31,13 @@ func (p *PermissionService) Gets(ctx context.Context) (result []*PermissionSchem
 	}
 	request.Header.Set("Accept", "application/json")
 
-	response, err = p.client.Do(request)
+	response, err = p.client.call(request, nil)
 	if err != nil {
 		return
 	}
 
 	jsonMap := make(map[string]interface{})
-	err = json.Unmarshal(response.BodyAsBytes, &jsonMap)
+	err = json.Unmarshal(response.Bytes.Bytes(), &jsonMap)
 	if err != nil {
 		return
 	}
@@ -82,10 +83,12 @@ type PermissionGrantsScheme struct {
 // Check search the permissions linked to an accountID, then check if the user permissions.
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permissions/#api-rest-api-3-permissions-check-post
 // Docs: N/A
-func (p *PermissionService) Check(ctx context.Context, payload *PermissionCheckPayload) (result *PermissionGrantsScheme, response *Response, err error) {
+func (p *PermissionService) Check(ctx context.Context, payload *PermissionCheckPayload) (result *PermissionGrantsScheme,
+	response *ResponseScheme, err error) {
 
-	if payload == nil {
-		return nil, nil, fmt.Errorf("error!, please provide a valid PermissionCheckPayload pointer")
+	payloadAsReader, err := transformStructToReader(payload)
+	if err != nil {
+		return nil, nil, err
 	}
 
 	if len(payload.ProjectPermissions) == 0 {
@@ -94,7 +97,7 @@ func (p *PermissionService) Check(ctx context.Context, payload *PermissionCheckP
 
 	var endpoint = "/rest/api/3/permissions/check"
 
-	request, err := p.client.newRequest(ctx, http.MethodPost, endpoint, payload)
+	request, err := p.client.newRequest(ctx, http.MethodPost, endpoint, payloadAsReader)
 	if err != nil {
 		return
 	}
@@ -102,13 +105,8 @@ func (p *PermissionService) Check(ctx context.Context, payload *PermissionCheckP
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Content-Type", "application/json")
 
-	response, err = p.client.Do(request)
+	response, err = p.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(PermissionGrantsScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 

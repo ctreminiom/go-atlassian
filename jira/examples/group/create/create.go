@@ -24,13 +24,9 @@ func main() {
 
 	group, response, err := atlassian.Group.Create(context.Background(), "jira-users-2")
 	if err != nil {
-		if response != nil {
-			log.Println("Response HTTP Response", string(response.BodyAsBytes))
-		}
-		return
+		log.Fatal(err)
 	}
 
-	log.Println("Response HTTP Code", response.StatusCode)
 	log.Println("HTTP Endpoint Used", response.Endpoint)
 	log.Println("Group created", group.Name)
 }

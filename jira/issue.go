@@ -7,6 +7,7 @@ import (
 	"github.com/imdario/mergo"
 	"net/http"
 	"net/url"
+	"strings"
 	"time"
 )
 
@@ -43,7 +44,7 @@ type IssueFieldsScheme struct {
 	Project                  *ProjectScheme            `json:"project,omitempty"`
 	FixVersions              []*ProjectVersionScheme   `json:"fixVersions,omitempty"`
 	Priority                 *PriorityScheme           `json:"priority,omitempty"`
-	Components               *[]ProjectComponentScheme `json:"components,omitempty"`
+	Components               []*ProjectComponentScheme `json:"components,omitempty"`
 	Creator                  *UserScheme               `json:"creator,omitempty"`
 	Reporter                 *UserScheme               `json:"reporter,omitempty"`
 	Resolution               *IssueResolutionScheme    `json:"resolution,omitempty"`
@@ -58,7 +59,7 @@ type IssueFieldsScheme struct {
 	Status                   *StatusScheme             `json:"status,omitempty"`
 	Description              *CommentNodeScheme        `json:"description,omitempty"`
 	Comments                 []*IssueCommentPageScheme `json:"comments,omitempty"`
-	Subtasks                 *[]IssueScheme            `json:"subtasks,omitempty"`
+	Subtasks                 []*IssueScheme            `json:"subtasks,omitempty"`
 }
 
 func (i *IssueScheme) MergeCustomFields(fields *CustomFields) (result map[string]interface{}, err error) {
@@ -458,8 +459,10 @@ func (c *CustomFields) Cascading(customFieldID, parent, child string) (err error
 }
 
 // Creates an issue or, where the option to create subtasks is enabled in Jira, a subtask.
-// https://docs.go-atlassian.io/jira-software-cloud/issues#create-issue
-func (i *IssueService) Create(ctx context.Context, payload *IssueScheme, customFields *CustomFields) (result *IssueResponseScheme, response *Response, err error) {
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues#create-issue
+// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-post
+func (i *IssueService) Create(ctx context.Context, payload *IssueScheme, customFields *CustomFields) (
+	result *IssueResponseScheme, response *ResponseScheme, err error) {
 
 	var (
 		endpoint = "rest/api/3/issue"
@@ -473,13 +476,20 @@ func (i *IssueService) Create(ctx context.Context, payload *IssueScheme, customF
 			return nil, nil, err
 		}
 
-		request, err = i.client.newRequest(ctx, http.MethodPost, endpoint, payloadWithCustomFields)
+		payloadAsReader, _ := transformStructToReader(&payloadWithCustomFields)
+
+		request, err = i.client.newRequest(ctx, http.MethodPost, endpoint, payloadAsReader)
 		if err != nil {
 			return nil, nil, err
 		}
 	} else {
 
-		request, err = i.client.newRequest(ctx, http.MethodPost, endpoint, payload)
+		payloadAsReader, err := transformStructToReader(payload)
+		if err != nil {
+			return nil, nil, err
+		}
+
+		request, err = i.client.newRequest(ctx, http.MethodPost, endpoint, payloadAsReader)
 		if err != nil {
 			return nil, nil, err
 		}
@@ -488,13 +498,8 @@ func (i *IssueService) Create(ctx context.Context, payload *IssueScheme, customF
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Content-Type", "application/json")
 
-	response, err = i.client.Do(request)
+	response, err = i.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(IssueResponseScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
@@ -502,18 +507,9 @@ func (i *IssueService) Create(ctx context.Context, payload *IssueScheme, customF
 }
 
 type IssueResponseScheme struct {
-	ID         string `json:"id"`
-	Key        string `json:"key"`
-	Self       string `json:"self"`
-	Transition struct {
-		Status          int `json:"status"`
-		ErrorCollection struct {
-			ErrorMessages []string `json:"errorMessages"`
-			Errors        struct {
-			} `json:"errors"`
-			Status int `json:"status"`
-		} `json:"errorCollection"`
-	} `json:"transition"`
+	ID   string `json:"id,omitempty"`
+	Key  string `json:"key,omitempty"`
+	Self string `json:"self,omitempty"`
 }
 
 type IssueBulkScheme struct {
@@ -523,7 +519,9 @@ type IssueBulkScheme struct {
 
 // Creates issues and, where the option to create subtasks is enabled in Jira, subtasks.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues#bulk-create-issue
-func (i *IssueService) Creates(ctx context.Context, payload []*IssueBulkScheme) (result *IssueBulkResponseScheme, response *Response, err error) {
+// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-bulk-post
+func (i *IssueService) Creates(ctx context.Context, payload []*IssueBulkScheme) (result *IssueBulkResponseScheme,
+	response *ResponseScheme, err error) {
 
 	if len(payload) == 0 {
 		return nil, nil, fmt.Errorf("error, please provide a valid []*IssueBulkScheme slice of pointers")
@@ -548,9 +546,11 @@ func (i *IssueService) Creates(ctx context.Context, payload []*IssueBulkScheme) 
 	var issueUpdatesNode = map[string]interface{}{}
 	issueUpdatesNode["issueUpdates"] = issuePayloadsNodeAsList
 
+	payloadAsReader, _ := transformStructToReader(&issueUpdatesNode)
+
 	var endpoint = "rest/api/3/issue/bulk"
 
-	request, err := i.client.newRequest(ctx, http.MethodPost, endpoint, issueUpdatesNode)
+	request, err := i.client.newRequest(ctx, http.MethodPost, endpoint, payloadAsReader)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -558,13 +558,8 @@ func (i *IssueService) Creates(ctx context.Context, payload []*IssueBulkScheme) 
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Content-Type", "application/json")
 
-	response, err = i.client.Do(request)
+	response, err = i.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(IssueBulkResponseScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
@@ -572,91 +567,61 @@ func (i *IssueService) Creates(ctx context.Context, payload []*IssueBulkScheme) 
 }
 
 type BulkIssueScheme struct {
-	Issues []IssueScheme `json:"issues"`
+	Issues []*IssueScheme `json:"issues,omitempty"`
 }
 
 type IssueBulkResponseScheme struct {
 	Issues []struct {
-		ID         string `json:"id"`
-		Key        string `json:"key"`
-		Self       string `json:"self"`
-		Transition struct {
-			Status          int `json:"status"`
-			ErrorCollection struct {
-			} `json:"errorCollection"`
-		} `json:"transition"`
-	} `json:"issues"`
-	Errors []struct {
-		Status        int `json:"status"`
-		ElementErrors struct {
-			ErrorMessages []string `json:"errorMessages"`
-			Errors        struct {
-			} `json:"errors"`
-			Status int `json:"status"`
-		} `json:"elementErrors"`
-		FailedElementNumber int `json:"failedElementNumber"`
-	} `json:"errors"`
+		ID   string `json:"id,omitempty"`
+		Key  string `json:"key,omitempty"`
+		Self string `json:"self,omitempty"`
+	} `json:"issues,omitempty"`
+	Errors []*IssueBulkResponseErrorScheme `json:"errors,omitempty"`
+}
+
+type IssueBulkResponseErrorScheme struct {
+	Status        int `json:"status"`
+	ElementErrors struct {
+		ErrorMessages []string `json:"errorMessages"`
+		Status        int      `json:"status"`
+	} `json:"elementErrors"`
+	FailedElementNumber int `json:"failedElementNumber"`
 }
 
 // Returns the details for an issue.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues#get-issue
-func (i *IssueService) Get(ctx context.Context, issueKeyOrID string, fields []string, expands []string) (result *IssueScheme, response *Response, err error) {
+// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-get
+func (i *IssueService) Get(ctx context.Context, issueKeyOrID string, fields []string, expand []string) (result *IssueScheme,
+	response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {
-		return nil, nil, fmt.Errorf("error, please provide a valid issueKeyOrID value")
+		return nil, nil, notIssueKeyOrIDError
 	}
 
 	params := url.Values{}
 
-	var expand string
-	for index, value := range expands {
-
-		if index == 0 {
-			expand = value
-			continue
-		}
-
-		expand += "," + value
-	}
-
 	if len(expand) != 0 {
-		params.Add("expand", expand)
+		params.Add("expand", strings.Join(expand, ","))
 	}
 
-	var fieldsNames string
-	for index, value := range fields {
-
-		if index == 0 {
-			fieldsNames = value
-			continue
-		}
-
-		fieldsNames += "," + value
+	if len(fields) != 0 {
+		params.Add("fields", strings.Join(fields, ","))
 	}
 
-	if len(fieldsNames) != 0 {
-		params.Add("fields", fieldsNames)
-	}
+	var endpointBuffer strings.Builder
+	endpointBuffer.WriteString(fmt.Sprintf("rest/api/3/issue/%v", issueKeyOrID))
 
-	var endpoint string
 	if params.Encode() != "" {
-		endpoint = fmt.Sprintf("rest/api/3/issue/%v?%v", issueKeyOrID, params.Encode())
-	} else {
-		endpoint = fmt.Sprintf("rest/api/3/issue/%v", issueKeyOrID)
+		endpointBuffer.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
-	request, err := i.client.newRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.client.newRequest(ctx, http.MethodGet, endpointBuffer.String(), nil)
 	if err != nil {
 		return
 	}
 
-	response, err = i.client.Do(request)
+	response, err = i.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(IssueScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
@@ -722,16 +687,13 @@ func (u *UpdateOperations) AddStringOperation(customFieldID, operation, value st
 	return
 }
 
-// Edits an issue.
+// Update edits an issue.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues#edit-issue
-func (i *IssueService) Update(ctx context.Context, issueKeyOrID string, notify bool, payload *IssueScheme, customFields *CustomFields, operations *UpdateOperations) (response *Response, err error) {
+// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-put
+func (i *IssueService) Update(ctx context.Context, issueKeyOrID string, notify bool, payload *IssueScheme, customFields *CustomFields, operations *UpdateOperations) (response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {
-		return nil, fmt.Errorf("error, please provide a valid issueKeyOrID value")
-	}
-
-	if payload == nil {
-		return nil, fmt.Errorf("error, please provide a valid *IssueScheme pointer")
+		return nil, notIssueKeyOrIDError
 	}
 
 	params := url.Values{}
@@ -739,11 +701,11 @@ func (i *IssueService) Update(ctx context.Context, issueKeyOrID string, notify b
 		params.Add("notifyUsers", "false")
 	}
 
-	var endpoint string
+	var endpoint strings.Builder
+	endpoint.WriteString(fmt.Sprintf("rest/api/3/issue/%v", issueKeyOrID))
+
 	if params.Encode() != "" {
-		endpoint = fmt.Sprintf("rest/api/3/issue/%v?%v", issueKeyOrID, params.Encode())
-	} else {
-		endpoint = fmt.Sprintf("rest/api/3/issue/%v", issueKeyOrID)
+		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
 	var request *http.Request
@@ -751,11 +713,15 @@ func (i *IssueService) Update(ctx context.Context, issueKeyOrID string, notify b
 	// Executed when customfields or operation are not provided
 	if customFields == nil && operations == nil {
 
-		request, err = i.client.newRequest(ctx, http.MethodPut, endpoint, payload)
+		payloadAsReader, err := transformStructToReader(payload)
 		if err != nil {
 			return nil, err
 		}
 
+		request, err = i.client.newRequest(ctx, http.MethodPut, endpoint.String(), payloadAsReader)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	// Executed when customfields and operation are provided
@@ -774,7 +740,9 @@ func (i *IssueService) Update(ctx context.Context, issueKeyOrID string, notify b
 		//Merge the map[string]interface{} into one
 		_ = mergo.Map(&payloadWithCustomFields, &payloadWithOperations, mergo.WithOverride)
 
-		request, err = i.client.newRequest(ctx, http.MethodPut, endpoint, payloadWithCustomFields)
+		payloadAsReader, _ := transformStructToReader(&payloadWithCustomFields)
+
+		request, err = i.client.newRequest(ctx, http.MethodPut, endpoint.String(), payloadAsReader)
 		if err != nil {
 			return nil, err
 		}
@@ -789,7 +757,8 @@ func (i *IssueService) Update(ctx context.Context, issueKeyOrID string, notify b
 			return nil, err
 		}
 
-		request, err = i.client.newRequest(ctx, http.MethodPut, endpoint, payloadWithCustomFields)
+		payloadAsReader, _ := transformStructToReader(&payloadWithCustomFields)
+		request, err = i.client.newRequest(ctx, http.MethodPut, endpoint.String(), payloadAsReader)
 		if err != nil {
 			return nil, err
 		}
@@ -804,7 +773,8 @@ func (i *IssueService) Update(ctx context.Context, issueKeyOrID string, notify b
 			return nil, err
 		}
 
-		request, err = i.client.newRequest(ctx, http.MethodPut, endpoint, payloadWithOperations)
+		payloadAsReader, _ := transformStructToReader(&payloadWithOperations)
+		request, err = i.client.newRequest(ctx, http.MethodPut, endpoint.String(), payloadAsReader)
 		if err != nil {
 			return nil, err
 		}
@@ -813,7 +783,7 @@ func (i *IssueService) Update(ctx context.Context, issueKeyOrID string, notify b
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Content-Type", "application/json")
 
-	response, err = i.client.Do(request)
+	response, err = i.client.call(request, nil)
 	if err != nil {
 		return
 	}
@@ -823,10 +793,10 @@ func (i *IssueService) Update(ctx context.Context, issueKeyOrID string, notify b
 
 // Deletes an issue.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues#delete-issue
-func (i *IssueService) Delete(ctx context.Context, issueKeyOrID string) (response *Response, err error) {
+func (i *IssueService) Delete(ctx context.Context, issueKeyOrID string) (response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {
-		return nil, fmt.Errorf("error, please provide a valid issueKeyOrID value")
+		return nil, notIssueKeyOrIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/issue/%v", issueKeyOrID)
@@ -835,7 +805,7 @@ func (i *IssueService) Delete(ctx context.Context, issueKeyOrID string) (respons
 		return
 	}
 
-	response, err = i.client.Do(request)
+	response, err = i.client.call(request, nil)
 	if err != nil {
 		return
 	}
@@ -850,19 +820,23 @@ func (i *IssueService) Delete(ctx context.Context, issueKeyOrID string) (respons
 //  1. "-1", the issue is assigned to the default assignee for the project.
 //  2. null, the issue is set to unassigned.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues#assign-issue
-func (i *IssueService) Assign(ctx context.Context, issueKeyOrID, accountID string) (response *Response, err error) {
+func (i *IssueService) Assign(ctx context.Context, issueKeyOrID, accountID string) (response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {
-		return nil, fmt.Errorf("error, please provide a valid issueKeyOrID value")
+		return nil, notIssueKeyOrIDError
 	}
 
 	payload := struct {
 		AccountID string `json:"accountId"`
-	}{AccountID: accountID}
+	}{
+		AccountID: accountID,
+	}
+
+	payloadAsReader, _ := transformStructToReader(&payload)
 
 	var endpoint = fmt.Sprintf("/rest/api/3/issue/%v/assignee", issueKeyOrID)
 
-	request, err := i.client.newRequest(ctx, http.MethodPut, endpoint, &payload)
+	request, err := i.client.newRequest(ctx, http.MethodPut, endpoint, payloadAsReader)
 	if err != nil {
 		return
 	}
@@ -870,7 +844,7 @@ func (i *IssueService) Assign(ctx context.Context, issueKeyOrID, accountID strin
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Content-Type", "application/json")
 
-	response, err = i.client.Do(request)
+	response, err = i.client.call(request, nil)
 	if err != nil {
 		return
 	}
@@ -913,20 +887,24 @@ type IssueNotifyGroupScheme struct {
 	Name string `json:"name,omitempty"`
 }
 
-// Creates an email notification for an issue and adds it to the mail queue.
+// Notify creates an email notification for an issue and adds it to the mail queue.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues#send-notification-for-issue
-func (i *IssueService) Notify(ctx context.Context, issueKeyOrID string, options *IssueNotifyOptionsScheme) (response *Response, err error) {
+// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-notify-post
+func (i *IssueService) Notify(ctx context.Context, issueKeyOrID string, options *IssueNotifyOptionsScheme) (
+	response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {
-		return nil, fmt.Errorf("error, please provide a valid issueKeyOrID string value")
+		return nil, notIssueSchemeError
 	}
 
-	if options == nil {
-		return nil, fmt.Errorf("error, please provide a valid *IssueNotifyOptionsScheme pointer")
+	payloadAsReader, err := transformStructToReader(options)
+	if err != nil {
+		return nil, err
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/issue/%v/notify", issueKeyOrID)
-	request, err := i.client.newRequest(ctx, http.MethodPost, endpoint, &options)
+
+	request, err := i.client.newRequest(ctx, http.MethodPost, endpoint, payloadAsReader)
 	if err != nil {
 		return
 	}
@@ -934,7 +912,7 @@ func (i *IssueService) Notify(ctx context.Context, issueKeyOrID string, options 
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Content-Type", "application/json")
 
-	response, err = i.client.Do(request)
+	response, err = i.client.call(request, nil)
 	if err != nil {
 		return
 	}
@@ -942,14 +920,16 @@ func (i *IssueService) Notify(ctx context.Context, issueKeyOrID string, options 
 	return
 }
 
-// Returns either all transitions or a transition that can be performed by the user on an issue, based on the issue's status.
+// Transitions returns either all transitions or a transition that can be performed by the user on an issue, based on the issue's status.
 // Note, if a request is made for a transition that does not exist or cannot be performed on the issue,
 // given its status, the response will return any empty transitions list.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues#get-transitions
-func (i *IssueService) Transitions(ctx context.Context, issueKeyOrID string) (result *IssueTransitionsScheme, response *Response, err error) {
+// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-transitions-get
+func (i *IssueService) Transitions(ctx context.Context, issueKeyOrID string) (result *IssueTransitionsScheme,
+	response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {
-		return nil, nil, fmt.Errorf("error, please provide a valid issueKeyOrID string value")
+		return nil, nil, notIssueSchemeError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/issue/%v/transitions", issueKeyOrID)
@@ -961,13 +941,8 @@ func (i *IssueService) Transitions(ctx context.Context, issueKeyOrID string) (re
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = i.client.Do(request)
+	response, err = i.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(IssueTransitionsScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
@@ -982,14 +957,15 @@ type IssueMoveOptions struct {
 
 // Performs an issue transition and
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues#transition-issue
-func (i *IssueService) Move(ctx context.Context, issueKeyOrID, transitionID string, options *IssueMoveOptions) (response *Response, err error) {
+func (i *IssueService) Move(ctx context.Context, issueKeyOrID, transitionID string, options *IssueMoveOptions) (
+	response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {
-		return nil, fmt.Errorf("error, please provide a valid issueKeyOrID string value")
+		return nil, notIssueKeyOrIDError
 	}
 
 	if len(transitionID) == 0 {
-		return nil, fmt.Errorf("error, please provide a valid transitionID string value")
+		return nil, notTransitionIDError
 	}
 
 	payloadWithTransition := make(map[string]interface{})
@@ -1019,7 +995,8 @@ func (i *IssueService) Move(ctx context.Context, issueKeyOrID, transitionID stri
 			_ = mergo.Map(&payloadWithCustomFields, &payloadWithOperations, mergo.WithOverride)
 			_ = mergo.Map(&payloadWithCustomFields, &payloadWithTransition, mergo.WithOverride)
 
-			request, err = i.client.newRequest(ctx, http.MethodPost, endpoint, payloadWithCustomFields)
+			payloadAsReader, _ := transformStructToReader(&payloadWithCustomFields)
+			request, err = i.client.newRequest(ctx, http.MethodPost, endpoint, payloadAsReader)
 			if err != nil {
 				return nil, err
 			}
@@ -1035,7 +1012,8 @@ func (i *IssueService) Move(ctx context.Context, issueKeyOrID, transitionID stri
 			}
 
 			_ = mergo.Map(&payloadWithCustomFields, &payloadWithTransition, mergo.WithOverride)
-			request, err = i.client.newRequest(ctx, http.MethodPost, endpoint, payloadWithCustomFields)
+			payloadAsReader, _ := transformStructToReader(&payloadWithCustomFields)
+			request, err = i.client.newRequest(ctx, http.MethodPost, endpoint, payloadAsReader)
 			if err != nil {
 				return nil, err
 			}
@@ -1051,14 +1029,16 @@ func (i *IssueService) Move(ctx context.Context, issueKeyOrID, transitionID stri
 			}
 
 			_ = mergo.Map(&payloadWithOperations, &payloadWithTransition, mergo.WithOverride)
-			request, err = i.client.newRequest(ctx, http.MethodPost, endpoint, payloadWithOperations)
+			payloadAsReader, _ := transformStructToReader(&payloadWithOperations)
+			request, err = i.client.newRequest(ctx, http.MethodPost, endpoint, payloadAsReader)
 			if err != nil {
 				return nil, err
 			}
 		}
 
 	} else {
-		request, err = i.client.newRequest(ctx, http.MethodPost, endpoint, &payloadWithTransition)
+		payloadAsReader, _ := transformStructToReader(&payloadWithTransition)
+		request, err = i.client.newRequest(ctx, http.MethodPost, endpoint, payloadAsReader)
 		if err != nil {
 			return
 		}
@@ -1067,10 +1047,16 @@ func (i *IssueService) Move(ctx context.Context, issueKeyOrID, transitionID stri
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Content-Type", "application/json")
 
-	response, err = i.client.Do(request)
+	response, err = i.client.call(request, nil)
 	if err != nil {
 		return
 	}
 
 	return
 }
+
+var (
+	notIssueKeyOrIDError = fmt.Errorf("error, please provide a valid issueKeyOrID value")
+	notIssueSchemeError  = fmt.Errorf("error, please provide a valid *IssueScheme pointer")
+	notTransitionIDError = fmt.Errorf("error, please provide a valid transitionID string value")
+)

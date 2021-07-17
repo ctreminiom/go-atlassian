@@ -33,11 +33,9 @@ func main() {
 
 	count, response, err := atlassian.Project.Component.Count(context.Background(), "10005")
 	if err != nil {
-		if response != nil {
-			log.Println("Response HTTP Response", string(response.BodyAsBytes))
-		}
 		log.Fatal(err)
 	}
 
 	log.Println(count)
+	log.Println(response.Endpoint)
 }

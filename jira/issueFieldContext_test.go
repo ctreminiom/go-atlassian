@@ -241,7 +241,7 @@ func TestFieldContextService_Create(t *testing.T) {
 				assert.Error(t, err)
 
 				if gotResponse != nil {
-					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
+					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
 				}
 			} else {
 
@@ -514,7 +514,7 @@ func TestFieldContextService_Gets(t *testing.T) {
 				assert.Error(t, err)
 
 				if gotResponse != nil {
-					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
+					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
 				}
 			} else {
 
@@ -678,7 +678,7 @@ func TestFieldContextService_AddIssueTypes(t *testing.T) {
 				assert.Error(t, err)
 
 				if gotResponse != nil {
-					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
+					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
 				}
 			} else {
 
@@ -831,7 +831,7 @@ func TestFieldContextService_Delete(t *testing.T) {
 				assert.Error(t, err)
 
 				if gotResponse != nil {
-					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
+					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
 				}
 			} else {
 
@@ -1023,7 +1023,7 @@ func TestFieldContextService_GetDefaultValues(t *testing.T) {
 				assert.Error(t, err)
 
 				if gotResponse != nil {
-					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
+					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
 				}
 			} else {
 
@@ -1227,7 +1227,7 @@ func TestFieldContextService_IssueTypesContext(t *testing.T) {
 				assert.Error(t, err)
 
 				if gotResponse != nil {
-					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
+					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
 				}
 			} else {
 
@@ -1431,7 +1431,7 @@ func TestFieldContextService_Projects(t *testing.T) {
 				assert.Error(t, err)
 
 				if gotResponse != nil {
-					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
+					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
 				}
 			} else {
 
@@ -1607,7 +1607,7 @@ func TestFieldContextService_Link(t *testing.T) {
 				assert.Error(t, err)
 
 				if gotResponse != nil {
-					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
+					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
 				}
 			} else {
 
@@ -1770,7 +1770,7 @@ func TestFieldContextService_RemoveIssueTypes(t *testing.T) {
 				assert.Error(t, err)
 
 				if gotResponse != nil {
-					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
+					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
 				}
 			} else {
 
@@ -1946,7 +1946,7 @@ func TestFieldContextService_SetDefaultValue(t *testing.T) {
 				assert.Error(t, err)
 
 				if gotResponse != nil {
-					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
+					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
 				}
 			} else {
 
@@ -2110,7 +2110,7 @@ func TestFieldContextService_UnLink(t *testing.T) {
 				assert.Error(t, err)
 
 				if gotResponse != nil {
-					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
+					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
 				}
 			} else {
 
@@ -2280,7 +2280,7 @@ func TestFieldContextService_Update(t *testing.T) {
 				assert.Error(t, err)
 
 				if gotResponse != nil {
-					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
+					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
 				}
 			} else {
 

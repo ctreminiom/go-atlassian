@@ -22,15 +22,11 @@ func main() {
 
 	atlassian.Auth.SetBasicAuth(mail, token)
 
-	filter, response, err := atlassian.Filter.Get(context.Background(), 1, []string{})
+	filter, response, err := atlassian.Filter.Get(context.Background(), 1, nil)
 	if err != nil {
-		if response != nil {
-			log.Println("Response HTTP Response", string(response.BodyAsBytes))
-		}
-		return
+		log.Fatal(err)
 	}
 
-	log.Println("Response HTTP Code", response.StatusCode)
 	log.Println("HTTP Endpoint Used", response.Endpoint)
 	log.Println("Get Filter result", filter.Name, filter.Name)
 }

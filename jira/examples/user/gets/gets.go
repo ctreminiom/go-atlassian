@@ -38,16 +38,12 @@ func main() {
 
 	users, response, err := atlassian.User.Gets(context.Background(), startAt, maxResults)
 	if err != nil {
-		if response != nil {
-			log.Println("Response HTTP Response", string(response.BodyAsBytes))
-		}
 		log.Fatal(err)
 	}
 
-	log.Println("Response HTTP Code", response.StatusCode)
 	log.Println("HTTP Endpoint Used", response.Endpoint)
 
-	for _, user := range *users {
+	for _, user := range users {
 		log.Println(user)
 	}
 

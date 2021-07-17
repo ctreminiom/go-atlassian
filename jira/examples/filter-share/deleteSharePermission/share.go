@@ -24,12 +24,9 @@ func main() {
 
 	response, err := atlassian.Filter.Share.Delete(context.Background(), 11111, 11111)
 	if err != nil {
-		if response != nil {
-			log.Println("Response HTTP Response", string(response.BodyAsBytes))
-		}
+		log.Fatal(err)
 		return
 	}
 
-	log.Println("Response HTTP Code", response.StatusCode)
 	log.Println("HTTP Endpoint Used", response.Endpoint)
 }

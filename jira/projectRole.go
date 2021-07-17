@@ -15,12 +15,14 @@ type ProjectRoleService struct {
 	Actor  *ProjectRoleActorService
 }
 
-// Returns a list of project roles for the project returning the name and self URL for each role.
+// Gets returns a list of project roles for the project returning the name and self URL for each role.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/projects/roles#get-project-roles-for-project
-func (p *ProjectRoleService) Gets(ctx context.Context, projectKeyOrID string) (result *map[string]int, response *Response, err error) {
+// Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-roles/#api-rest-api-3-project-projectidorkey-role-get
+func (p *ProjectRoleService) Gets(ctx context.Context, projectKeyOrID string) (result *map[string]int, response *ResponseScheme,
+	err error) {
 
 	if len(projectKeyOrID) == 0 {
-		return nil, nil, fmt.Errorf("error, please provide a valid projectKeyOrID value")
+		return nil, nil, notProjectIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/project/%v/role", projectKeyOrID)
@@ -29,9 +31,10 @@ func (p *ProjectRoleService) Gets(ctx context.Context, projectKeyOrID string) (r
 	if err != nil {
 		return
 	}
+
 	request.Header.Set("Accept", "application/json")
 
-	response, err = p.client.Do(request)
+	response, err = p.client.call(request, nil)
 	if err != nil {
 		return
 	}
@@ -41,7 +44,7 @@ func (p *ProjectRoleService) Gets(ctx context.Context, projectKeyOrID string) (r
 		resultAsObject map[string]interface{}
 	)
 
-	if err = json.Unmarshal(response.BodyAsBytes, &resultAsObject); err != nil {
+	if err = json.Unmarshal(response.Bytes.Bytes(), &resultAsObject); err != nil {
 		return
 	}
 
@@ -52,9 +55,12 @@ func (p *ProjectRoleService) Gets(ctx context.Context, projectKeyOrID string) (r
 			return nil, response, err
 		}
 
-		urlPart := strings.Split(urlParsed.Path, "/")
+		var (
+			urlPart            = strings.Split(urlParsed.Path, "/")
+			urlPartLastElement = urlPart[len(urlPart)-1]
+		)
 
-		projectRoleIDAsInt, err := strconv.Atoi(urlPart[len(urlPart)-1])
+		projectRoleIDAsInt, err := strconv.Atoi(urlPartLastElement)
 		if err != nil {
 			return nil, response, err
 		}
@@ -93,12 +99,14 @@ type RoleActorScheme struct {
 	ActorGroup *GroupScheme `json:"actorGroup,omitempty"`
 }
 
-// Returns a project role's details and actors associated with the project.
+// Get returns a project role's details and actors associated with the project.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/projects/roles#get-project-role-for-project
-func (p *ProjectRoleService) Get(ctx context.Context, projectKeyOrID string, roleID int) (result *ProjectRoleScheme, response *Response, err error) {
+// Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-roles/#api-rest-api-3-project-projectidorkey-role-id-get
+func (p *ProjectRoleService) Get(ctx context.Context, projectKeyOrID string, roleID int) (result *ProjectRoleScheme,
+	response *ResponseScheme, err error) {
 
 	if len(projectKeyOrID) == 0 {
-		return nil, nil, fmt.Errorf("error, please provide a valid projectKeyOrID value")
+		return nil, nil, notProjectIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/project/%v/role/%v", projectKeyOrID, roleID)
@@ -107,15 +115,11 @@ func (p *ProjectRoleService) Get(ctx context.Context, projectKeyOrID string, rol
 	if err != nil {
 		return
 	}
+
 	request.Header.Set("Accept", "application/json")
 
-	response, err = p.client.Do(request)
+	response, err = p.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(ProjectRoleScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
@@ -134,12 +138,14 @@ type ProjectRoleDetailScheme struct {
 	Default          bool                           `json:"default,omitempty"`
 }
 
-// Returns all project roles and the details for each role.
+// Details returns all project roles and the details for each role.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/projects/roles#get-project-role-details
-func (p *ProjectRoleService) Details(ctx context.Context, projectKeyOrID string) (result *[]ProjectRoleDetailScheme, response *Response, err error) {
+// Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-roles/#api-rest-api-3-project-projectidorkey-roledetails-get
+func (p *ProjectRoleService) Details(ctx context.Context, projectKeyOrID string) (result []*ProjectRoleDetailScheme,
+	response *ResponseScheme, err error) {
 
 	if len(projectKeyOrID) == 0 {
-		return nil, nil, fmt.Errorf("error, please provide a valid projectKeyOrID value")
+		return nil, nil, notProjectIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/project/%v/roledetails", projectKeyOrID)
@@ -148,24 +154,21 @@ func (p *ProjectRoleService) Details(ctx context.Context, projectKeyOrID string)
 	if err != nil {
 		return
 	}
+
 	request.Header.Set("Accept", "application/json")
 
-	response, err = p.client.Do(request)
+	response, err = p.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new([]ProjectRoleDetailScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
 	return
 }
 
-// Gets a list of all project roles, complete with project role details and default actors.
+// Global gets a list of all project roles, complete with project role details and default actors.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/projects/roles#get-all-project-roles
-func (p *ProjectRoleService) Global(ctx context.Context) (result *[]ProjectRoleScheme, response *Response, err error) {
+// Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-roles/#api-rest-api-3-role-get
+func (p *ProjectRoleService) Global(ctx context.Context) (result []*ProjectRoleScheme, response *ResponseScheme, err error) {
 
 	var endpoint = "rest/api/3/role"
 
@@ -173,40 +176,36 @@ func (p *ProjectRoleService) Global(ctx context.Context) (result *[]ProjectRoleS
 	if err != nil {
 		return
 	}
+
 	request.Header.Set("Accept", "application/json")
 
-	response, err = p.client.Do(request)
+	response, err = p.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new([]ProjectRoleScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
 	return
 }
 
-// Creates a new project role with no default actors.
+type ProjectRolePayloadScheme struct {
+	Name        string `json:"name,omitempty"`
+	Description string `json:"description,omitempty"`
+}
+
+// Create creates a new project role with no default actors.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/projects/roles#create-project-role
-func (p *ProjectRoleService) Create(ctx context.Context, name, description string) (result *ProjectRoleScheme, response *Response, err error) {
-
-	if len(name) == 0 {
-		return nil, nil, fmt.Errorf("error, please provide a valid projectKeyOrID value")
-	}
-
-	payload := struct {
-		Name        string `json:"name,omitempty"`
-		Description string `json:"description,omitempty"`
-	}{
-		Name:        name,
-		Description: description,
-	}
+// Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-roles/#api-rest-api-3-role-post
+func (p *ProjectRoleService) Create(ctx context.Context, payload *ProjectRolePayloadScheme) (result *ProjectRoleScheme,
+	response *ResponseScheme, err error) {
 
 	var endpoint = "rest/api/3/role"
 
-	request, err := p.client.newRequest(ctx, http.MethodPost, endpoint, &payload)
+	payloadAsReader, err := transformStructToReader(payload)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	request, err := p.client.newRequest(ctx, http.MethodPost, endpoint, payloadAsReader)
 	if err != nil {
 		return
 	}
@@ -214,13 +213,8 @@ func (p *ProjectRoleService) Create(ctx context.Context, name, description strin
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Content-Type", "application/json")
 
-	response, err = p.client.Do(request)
+	response, err = p.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(ProjectRoleScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 

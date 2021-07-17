@@ -33,13 +33,9 @@ func main() {
 
 	issueTypeScreenSchemes, response, err := atlassian.Issue.Type.ScreenScheme.Projects(context.Background(), []int{10001}, 0, 50)
 	if err != nil {
-		if response != nil {
-			log.Println("Response HTTP Response", string(response.BodyAsBytes))
-		}
 		log.Fatal(err)
 	}
 
-	log.Println("Response HTTP Code", response.StatusCode)
 	log.Println("HTTP Endpoint Used", response.Endpoint)
 
 	for _, issueTypeScreenScheme := range issueTypeScreenSchemes.Values {

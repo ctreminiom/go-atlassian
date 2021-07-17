@@ -453,43 +453,6 @@ func TestIssueTypeScreenSchemeService_Create(t *testing.T) {
 		},
 
 		{
-			name: "CreateIssueTypeSchemeWhenTheIssueTypeScreenSchemePayloadSchemeNameIsNotSet",
-			payload: &IssueTypeScreenSchemePayloadScheme{
-				Name: "",
-				IssueTypeMappings: []*IssueTypeScreenSchemeMappingPayloadScheme{
-					{
-						IssueTypeID:    "default",
-						ScreenSchemeID: "10000",
-					},
-					{
-						IssueTypeID:    "10004", // Bug
-						ScreenSchemeID: "10002",
-					},
-				},
-			},
-			mockFile:           "./mocks/create-issue-type-screen-scheme.json",
-			wantHTTPMethod:     http.MethodPost,
-			endpoint:           "/rest/api/3/issuetypescreenscheme",
-			context:            context.Background(),
-			wantHTTPCodeReturn: http.StatusCreated,
-			wantErr:            true,
-		},
-
-		{
-			name: "CreateIssueTypeSchemeWhenTheIssueTypeScreenSchemePayloadSchemeIssueTypeMappingsIsNotSet",
-			payload: &IssueTypeScreenSchemePayloadScheme{
-				Name:              "Scrum issue type screen scheme",
-				IssueTypeMappings: nil,
-			},
-			mockFile:           "./mocks/create-issue-type-screen-scheme.json",
-			wantHTTPMethod:     http.MethodPost,
-			endpoint:           "/rest/api/3/issuetypescreenscheme",
-			context:            context.Background(),
-			wantHTTPCodeReturn: http.StatusCreated,
-			wantErr:            true,
-		},
-
-		{
 			name: "CreateIssueTypeSchemeWhenTheEndpointIsIncorrect",
 			payload: &IssueTypeScreenSchemePayloadScheme{
 				Name: "Scrum issue type screen scheme",

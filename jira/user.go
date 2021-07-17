@@ -2,12 +2,11 @@ package jira
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
-	"gopkg.in/go-playground/validator.v9"
 	"net/http"
 	"net/url"
 	"strconv"
+	"strings"
 )
 
 type UserService struct {
@@ -59,49 +58,42 @@ type UserGroupsScheme struct {
 	MaxResults int                `json:"max-results,omitempty"`
 }
 
-// Returns a user.
+// Get returns a user
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/users#get-user
-func (u *UserService) Get(ctx context.Context, accountID string, expands []string) (result *UserScheme, response *Response, err error) {
+// Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-users/#api-rest-api-3-user-get
+func (u *UserService) Get(ctx context.Context, accountID string, expand []string) (result *UserScheme,
+	response *ResponseScheme, err error) {
 
 	if len(accountID) == 0 {
-		return nil, nil, fmt.Errorf("error, please provide a valid accountID value")
+		return nil, nil, notAccountIDError
 	}
 
 	params := url.Values{}
 
-	var expand string
-	for index, value := range expands {
-
-		if index == 0 {
-			expand = value
-			continue
-		}
-
-		expand += "," + value
-	}
-
 	if len(expand) != 0 {
-		params.Add("expand", expand)
+		params.Add("expand", strings.Join(expand, ","))
 	}
 
-	params.Add("accountId", accountID)
+	if len(accountID) != 0 {
+		params.Add("accountId", accountID)
+	}
 
-	var endpoint = fmt.Sprintf("rest/api/3/user?%v", params.Encode())
+	var endpoint strings.Builder
+	endpoint.WriteString("/rest/api/3/user")
 
-	request, err := u.client.newRequest(ctx, http.MethodGet, endpoint, nil)
+	if params.Encode() != "" {
+		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
+	}
+
+	request, err := u.client.newRequest(ctx, http.MethodGet, endpoint.String(), nil)
 	if err != nil {
 		return
 	}
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = u.client.Do(request)
+	response, err = u.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(UserScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
@@ -110,12 +102,12 @@ func (u *UserService) Get(ctx context.Context, accountID string, expands []strin
 
 type UserPayloadScheme struct {
 	Password     string `json:"password,omitempty"`
-	EmailAddress string `json:"emailAddress" validate:"required"`
-	DisplayName  string `json:"displayName" validate:"required"`
+	EmailAddress string `json:"emailAddress,omitempty"`
+	DisplayName  string `json:"displayName,omitempty"`
 	Notification bool   `json:"notification,omitempty"`
 }
 
-// Creates a user. This resource is retained for legacy compatibility.
+// Create creates a user. This resource is retained for legacy compatibility.
 // As soon as a more suitable alternative is available this resource will be deprecated.
 // The option is provided to set or generate a password for the user.
 // When using the option to generate a password, by omitting password from the request, include "notification": "true" to ensure the user is
@@ -123,21 +115,18 @@ type UserPayloadScheme struct {
 // This email includes a link for the user to set their password. If the notification isn't sent for a generated password,
 // the user will need to be sent a reset password request from Jira.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/users#create-user
-func (u *UserService) Create(ctx context.Context, payload *UserPayloadScheme) (result *UserScheme, response *Response, err error) {
-
-	if payload == nil {
-		return nil, nil, fmt.Errorf("error, please provide a valid UserPayloadScheme pointer")
-	}
-
-	validate := validator.New()
-	if err = validate.Struct(payload); err != nil {
-		err = fmt.Errorf("error: issuetype type payload invalid: %v", err.Error())
-		return
-	}
+// Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-users/#api-rest-api-3-user-post
+func (u *UserService) Create(ctx context.Context, payload *UserPayloadScheme) (result *UserScheme, response *ResponseScheme,
+	err error) {
 
 	var endpoint = "rest/api/3/user"
 
-	request, err := u.client.newRequest(ctx, http.MethodPost, endpoint, &payload)
+	payloadAsReader, err := transformStructToReader(payload)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	request, err := u.client.newRequest(ctx, http.MethodPost, endpoint, payloadAsReader)
 	if err != nil {
 		return
 	}
@@ -145,25 +134,21 @@ func (u *UserService) Create(ctx context.Context, payload *UserPayloadScheme) (r
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Content-Type", "application/json")
 
-	response, err = u.client.Do(request)
+	response, err = u.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(UserScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
 	return
 }
 
-// Deletes a user.
+// Delete deletes a user.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/users#delete-user
-func (u *UserService) Delete(ctx context.Context, accountID string) (response *Response, err error) {
+// Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-users/#api-rest-api-3-user-delete
+func (u *UserService) Delete(ctx context.Context, accountID string) (response *ResponseScheme, err error) {
 
 	if len(accountID) == 0 {
-		return nil, fmt.Errorf("error, please provide a valid accountID value")
+		return nil, notAccountIDError
 	}
 
 	params := url.Values{}
@@ -175,7 +160,7 @@ func (u *UserService) Delete(ctx context.Context, accountID string) (response *R
 		return
 	}
 
-	response, err = u.client.Do(request)
+	response, err = u.client.call(request, nil)
 	if err != nil {
 		return
 	}
@@ -191,12 +176,14 @@ type UserSearchPageScheme struct {
 	Values     []*UserScheme `json:"values,omitempty"`
 }
 
-// Returns a paginated list of the users specified by one or more account IDs.
+// Find returns a paginated list of the users specified by one or more account IDs.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/users#bulk-get-users
-func (u *UserService) Find(ctx context.Context, accountIDs []string, startAt, maxResults int) (result *UserSearchPageScheme, response *Response, err error) {
+// Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-users/#api-rest-api-3-user-bulk-get
+func (u *UserService) Find(ctx context.Context, accountIDs []string, startAt, maxResults int) (result *UserSearchPageScheme,
+	response *ResponseScheme, err error) {
 
 	if len(accountIDs) == 0 {
-		return nil, nil, fmt.Errorf("error, please provide a valid accountIDs list")
+		return nil, nil, notAccountListError
 	}
 
 	params := url.Values{}
@@ -216,13 +203,8 @@ func (u *UserService) Find(ctx context.Context, accountIDs []string, startAt, ma
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = u.client.Do(request)
+	response, err = u.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(UserSearchPageScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
@@ -234,12 +216,14 @@ type UserGroupScheme struct {
 	Self string `json:"self,omitempty"`
 }
 
-// Returns the groups to which a user belongs.
+// Groups returns the groups to which a user belongs.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/users#get-user-groups
-func (u *UserService) Groups(ctx context.Context, accountID string) (result *[]UserGroupScheme, response *Response, err error) {
+// Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-users/#api-rest-api-3-user-groups-get
+func (u *UserService) Groups(ctx context.Context, accountID string) (result []*UserGroupScheme, response *ResponseScheme,
+	err error) {
 
 	if len(accountID) == 0 {
-		return nil, nil, fmt.Errorf("error, please provide a valid accountID value")
+		return nil, nil, notAccountListError
 	}
 
 	params := url.Values{}
@@ -254,22 +238,18 @@ func (u *UserService) Groups(ctx context.Context, accountID string) (result *[]U
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = u.client.Do(request)
+	response, err = u.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new([]UserGroupScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
 	return
 }
 
-// Returns a list of all (active and inactive) users.
+// Gets returns a list of all (active and inactive) users.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/users#get-all-users
-func (u *UserService) Gets(ctx context.Context, startAt, maxResults int) (result *[]UserScheme, response *Response, err error) {
+// Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-users/#api-rest-api-3-users-search-get
+func (u *UserService) Gets(ctx context.Context, startAt, maxResults int) (result []*UserScheme, response *ResponseScheme, err error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -284,15 +264,14 @@ func (u *UserService) Gets(ctx context.Context, startAt, maxResults int) (result
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = u.client.Do(request)
+	response, err = u.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new([]UserScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
 	return
 }
+
+var (
+	notAccountListError = fmt.Errorf("error, please provide a valid accountIDs list")
+)

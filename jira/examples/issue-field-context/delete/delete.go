@@ -29,12 +29,9 @@ func main() {
 
 	response, err := atlassian.Issue.Field.Context.Delete(context.Background(), customFieldID, contextID)
 	if err != nil {
-		if response != nil {
-			log.Println("Response HTTP Response", string(response.BodyAsBytes), response.StatusCode)
-		}
+		log.Fatal(err)
 		return
 	}
 
-	log.Println("Response HTTP Code", response.StatusCode)
 	log.Println("HTTP Endpoint Used", response.Endpoint)
 }

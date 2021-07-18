@@ -2,7 +2,6 @@ package sm
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -11,11 +10,13 @@ import (
 
 type RequestSLAService struct{ client *Client }
 
+// Gets  returns all the SLA records on a customer request.
+// A customer request can have zero or more SLAs. Each SLA can have recordings for zero or more "completed cycles" and zero or 1 "ongoing cycle".
 // Docs: https://docs.go-atlassian.io/jira-service-management-cloud/request/sla#get-sla-information
-func (r *RequestSLAService) Gets(ctx context.Context, issueKeyOrID string, start, limit int) (result *RequestSLAPageScheme, response *Response, err error) {
+func (r *RequestSLAService) Gets(ctx context.Context, issueKeyOrID string, start, limit int) (result *RequestSLAPageScheme, response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {
-		return nil, nil, fmt.Errorf("error, please provide a valid issueKeyOrID value")
+		return nil, nil, notIssueError
 	}
 
 	params := url.Values{}
@@ -31,24 +32,20 @@ func (r *RequestSLAService) Gets(ctx context.Context, issueKeyOrID string, start
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = r.client.Do(request)
+	response, err = r.client.Call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(RequestSLAPageScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
 	return
 }
 
+// Get returns the details for an SLA on a customer request.
 // Docs: https://docs.go-atlassian.io/jira-service-management-cloud/request/sla#get-sla-information-by-id
-func (r *RequestSLAService) Get(ctx context.Context, issueKeyOrID string, slaMetricID int) (result *RequestSLAScheme, response *Response, err error) {
+func (r *RequestSLAService) Get(ctx context.Context, issueKeyOrID string, slaMetricID int) (result *RequestSLAScheme, response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {
-		return nil, nil, fmt.Errorf("error, please provide a valid issueKeyOrID value")
+		return nil, nil, notIssueError
 	}
 
 	var endpoint = fmt.Sprintf("rest/servicedeskapi/request/%v/sla/%v", issueKeyOrID, slaMetricID)
@@ -60,13 +57,8 @@ func (r *RequestSLAService) Get(ctx context.Context, issueKeyOrID string, slaMet
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = r.client.Do(request)
+	response, err = r.client.Call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(RequestSLAScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
@@ -74,53 +66,36 @@ func (r *RequestSLAService) Get(ctx context.Context, issueKeyOrID string, slaMet
 }
 
 type RequestSLAPageScheme struct {
-	Size       int                 `json:"size"`
-	Start      int                 `json:"start"`
-	Limit      int                 `json:"limit"`
-	IsLastPage bool                `json:"isLastPage"`
-	Values     []*RequestSLAScheme `json:"values"`
-	Expands    []string            `json:"_expands"`
-	Links      struct {
-		Self    string `json:"self"`
-		Base    string `json:"base"`
-		Context string `json:"context"`
-		Next    string `json:"next"`
-		Prev    string `json:"prev"`
-	} `json:"_links"`
+	Size       int                       `json:"size,omitempty"`
+	Start      int                       `json:"start,omitempty"`
+	Limit      int                       `json:"limit,omitempty"`
+	IsLastPage bool                      `json:"isLastPage,omitempty"`
+	Values     []*RequestSLAScheme       `json:"values,omitempty"`
+	Expands    []string                  `json:"_expands,omitempty"`
+	Links      *RequestSLAPageLinkScheme `json:"_links,omitempty"`
+}
+
+type RequestSLAPageLinkScheme struct {
+	Self    string `json:"self,omitempty"`
+	Base    string `json:"base,omitempty"`
+	Context string `json:"context,omitempty"`
+	Next    string `json:"next,omitempty"`
+	Prev    string `json:"prev,omitempty"`
 }
 
 type RequestSLAScheme struct {
-	ID              string `json:"id"`
-	Name            string `json:"name"`
-	CompletedCycles []struct {
-		StartTime struct {
-		} `json:"startTime"`
-		StopTime struct {
-		} `json:"stopTime"`
-		Breached     bool `json:"breached"`
-		GoalDuration struct {
-		} `json:"goalDuration"`
-		ElapsedTime struct {
-		} `json:"elapsedTime"`
-		RemainingTime struct {
-		} `json:"remainingTime"`
-	} `json:"completedCycles"`
-	OngoingCycle struct {
-		StartTime struct {
-		} `json:"startTime"`
-		BreachTime struct {
-		} `json:"breachTime"`
-		Breached            bool `json:"breached"`
-		Paused              bool `json:"paused"`
-		WithinCalendarHours bool `json:"withinCalendarHours"`
-		GoalDuration        struct {
-		} `json:"goalDuration"`
-		ElapsedTime struct {
-		} `json:"elapsedTime"`
-		RemainingTime struct {
-		} `json:"remainingTime"`
-	} `json:"ongoingCycle"`
-	Links struct {
-		Self string `json:"self"`
-	} `json:"_links"`
+	ID           string                        `json:"id,omitempty"`
+	Name         string                        `json:"name,omitempty"`
+	OngoingCycle *RequestSLAOngoingCycleScheme `json:"ongoingCycle,omitempty"`
+	Links        *RequestSLALinkScheme         `json:"_links,omitempty"`
+}
+
+type RequestSLAOngoingCycleScheme struct {
+	Breached            bool `json:"breached,omitempty"`
+	Paused              bool `json:"paused,omitempty"`
+	WithinCalendarHours bool `json:"withinCalendarHours,omitempty"`
+}
+
+type RequestSLALinkScheme struct {
+	Self string `json:"self,omitempty"`
 }

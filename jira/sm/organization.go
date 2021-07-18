@@ -2,7 +2,6 @@ package sm
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -11,10 +10,11 @@ import (
 
 type OrganizationService struct{ client *Client }
 
-// This method returns a list of organizations in the Jira Service Management instance.
+// Gets returns a list of organizations in the Jira Service Management instance.
 // Use this method when you want to present a list of organizations or want to locate an organization by name.
 // Docs: https://docs.go-atlassian.io/jira-service-management-cloud/organization#get-organizations
-func (o *OrganizationService) Gets(ctx context.Context, accountID string, start, limit int) (result *OrganizationPageScheme, response *Response, err error) {
+func (o *OrganizationService) Gets(ctx context.Context, accountID string, start, limit int) (
+	result *OrganizationPageScheme, response *ResponseScheme, err error) {
 
 	params := url.Values{}
 	params.Add("start", strconv.Itoa(start))
@@ -33,24 +33,20 @@ func (o *OrganizationService) Gets(ctx context.Context, accountID string, start,
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = o.client.Do(request)
+	response, err = o.client.Call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(OrganizationPageScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
 	return
 }
 
-// This method returns details of an organization.
+// Get returns details of an organization.
 // Use this method to get organization details whenever your application component is passed an organization ID
 // but needs to display other organization details.
 // Docs: https://docs.go-atlassian.io/jira-service-management-cloud/organization#get-organization
-func (o *OrganizationService) Get(ctx context.Context, organizationID int) (result *OrganizationScheme, response *Response, err error) {
+func (o *OrganizationService) Get(ctx context.Context, organizationID int) (result *OrganizationScheme,
+	response *ResponseScheme, err error) {
 
 	var endpoint = fmt.Sprintf("rest/servicedeskapi/organization/%v", organizationID)
 
@@ -61,23 +57,18 @@ func (o *OrganizationService) Get(ctx context.Context, organizationID int) (resu
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = o.client.Do(request)
+	response, err = o.client.Call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(OrganizationScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
 	return
 }
 
-// This method deletes an organization.
+// Delete deletes an organization.
 // Note that the organization is deleted regardless of other associations it may have.
 // For example, associations with service desks.
-func (o *OrganizationService) Delete(ctx context.Context, organizationID int) (response *Response, err error) {
+func (o *OrganizationService) Delete(ctx context.Context, organizationID int) (response *ResponseScheme, err error) {
 
 	var endpoint = fmt.Sprintf("rest/servicedeskapi/organization/%v", organizationID)
 
@@ -86,7 +77,7 @@ func (o *OrganizationService) Delete(ctx context.Context, organizationID int) (r
 		return
 	}
 
-	response, err = o.client.Do(request)
+	response, err = o.client.Call(request, nil)
 	if err != nil {
 		return
 	}
@@ -94,9 +85,10 @@ func (o *OrganizationService) Delete(ctx context.Context, organizationID int) (r
 	return
 }
 
-// This method creates an organization by passing the name of the organization.
+// Create creates an organization by passing the name of the organization.
 // Docs: https://docs.go-atlassian.io/jira-service-management-cloud/organization#create-organization
-func (o *OrganizationService) Create(ctx context.Context, name string) (result *OrganizationScheme, response *Response, err error) {
+func (o *OrganizationService) Create(ctx context.Context, name string) (result *OrganizationScheme,
+	response *ResponseScheme, err error) {
 
 	if len(name) == 0 {
 		return nil, nil, fmt.Errorf("error, please provide a valid name value")
@@ -104,11 +96,15 @@ func (o *OrganizationService) Create(ctx context.Context, name string) (result *
 
 	payload := struct {
 		Name string `json:"name"`
-	}{Name: name}
+	}{
+		Name: name,
+	}
+
+	payloadAsReader, _ := transformStructToReader(&payload)
 
 	var endpoint = "rest/servicedeskapi/organization"
 
-	request, err := o.client.newRequest(ctx, http.MethodPost, endpoint, payload)
+	request, err := o.client.newRequest(ctx, http.MethodPost, endpoint, payloadAsReader)
 	if err != nil {
 		return
 	}
@@ -116,24 +112,20 @@ func (o *OrganizationService) Create(ctx context.Context, name string) (result *
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Content-Type", "application/json")
 
-	response, err = o.client.Do(request)
+	response, err = o.client.Call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(OrganizationScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
 	return
 }
 
-// This method returns all the users associated with an organization.
+// Users returns all the users associated with an organization.
 // Use this method where you want to provide a list of users for an
 // organization or determine if a user is associated with an organization.
 // Docs: https://docs.go-atlassian.io/jira-service-management-cloud/organization#get-users-in-organization
-func (o *OrganizationService) Users(ctx context.Context, organizationID, start, limit int) (result *OrganizationUsersPageScheme, response *Response, err error) {
+func (o *OrganizationService) Users(ctx context.Context, organizationID, start, limit int) (
+	result *OrganizationUsersPageScheme, response *ResponseScheme, err error) {
 
 	params := url.Values{}
 	params.Add("start", strconv.Itoa(start))
@@ -148,22 +140,17 @@ func (o *OrganizationService) Users(ctx context.Context, organizationID, start, 
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = o.client.Do(request)
+	response, err = o.client.Call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(OrganizationUsersPageScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
 	return
 }
 
-// This method adds users to an organization.
+// Add adds users to an organization.
 // Docs: https://docs.go-atlassian.io/jira-service-management-cloud/organization#add-users-to-organization
-func (o *OrganizationService) Add(ctx context.Context, organizationID int, accountIDs []string) (response *Response, err error) {
+func (o *OrganizationService) Add(ctx context.Context, organizationID int, accountIDs []string) (response *ResponseScheme, err error) {
 
 	if len(accountIDs) == 0 {
 		return nil, fmt.Errorf("error, please provide a valid accountIDs list of values")
@@ -171,18 +158,22 @@ func (o *OrganizationService) Add(ctx context.Context, organizationID int, accou
 
 	payload := struct {
 		AccountIds []string `json:"accountIds"`
-	}{AccountIds: accountIDs}
+	}{
+		AccountIds: accountIDs,
+	}
+
+	payloadAsReader, _ := transformStructToReader(&payload)
 
 	var endpoint = fmt.Sprintf("rest/servicedeskapi/organization/%v/user", organizationID)
 
-	request, err := o.client.newRequest(ctx, http.MethodPost, endpoint, payload)
+	request, err := o.client.newRequest(ctx, http.MethodPost, endpoint, payloadAsReader)
 	if err != nil {
 		return
 	}
 
 	request.Header.Set("Content-Type", "application/json")
 
-	response, err = o.client.Do(request)
+	response, err = o.client.Call(request, nil)
 	if err != nil {
 		return
 	}
@@ -190,9 +181,9 @@ func (o *OrganizationService) Add(ctx context.Context, organizationID int, accou
 	return
 }
 
-// This method removes users from an organization.
+// Remove removes users from an organization.
 // Docs: https://docs.go-atlassian.io/jira-service-management-cloud/organization#remove-users-from-organization
-func (o *OrganizationService) Remove(ctx context.Context, organizationID int, accountIDs []string) (response *Response, err error) {
+func (o *OrganizationService) Remove(ctx context.Context, organizationID int, accountIDs []string) (response *ResponseScheme, err error) {
 
 	if len(accountIDs) == 0 {
 		return nil, fmt.Errorf("error, please provide a valid accountIDs list of values")
@@ -200,18 +191,22 @@ func (o *OrganizationService) Remove(ctx context.Context, organizationID int, ac
 
 	payload := struct {
 		AccountIds []string `json:"accountIds"`
-	}{AccountIds: accountIDs}
+	}{
+		AccountIds: accountIDs,
+	}
+
+	payloadAsReader, _ := transformStructToReader(&payload)
 
 	var endpoint = fmt.Sprintf("rest/servicedeskapi/organization/%v/user", organizationID)
 
-	request, err := o.client.newRequest(ctx, http.MethodDelete, endpoint, payload)
+	request, err := o.client.newRequest(ctx, http.MethodDelete, endpoint, payloadAsReader)
 	if err != nil {
 		return
 	}
 
 	request.Header.Set("Content-Type", "application/json")
 
-	response, err = o.client.Do(request)
+	response, err = o.client.Call(request, nil)
 	if err != nil {
 		return
 	}
@@ -219,8 +214,9 @@ func (o *OrganizationService) Remove(ctx context.Context, organizationID int, ac
 	return
 }
 
-// This method returns a list of all organizations associated with a service desk.
-func (o *OrganizationService) Project(ctx context.Context, accountID string, serviceDeskPortalID, start, limit int) (result *OrganizationPageScheme, response *Response, err error) {
+// Project returns a list of all organizations associated with a service desk.
+func (o *OrganizationService) Project(ctx context.Context, accountID string, serviceDeskPortalID, start,
+	limit int) (result *OrganizationPageScheme, response *ResponseScheme, err error) {
 
 	params := url.Values{}
 	params.Add("start", strconv.Itoa(start))
@@ -239,39 +235,39 @@ func (o *OrganizationService) Project(ctx context.Context, accountID string, ser
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = o.client.Do(request)
+	response, err = o.client.Call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(OrganizationPageScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
 	return
 }
 
-// This method adds an organization to a service desk.
+// Associate adds an organization to a service desk.
 // If the organization ID is already associated with the service desk,
 // no change is made and the resource returns a 204 success code.
 // Docs: https://docs.go-atlassian.io/jira-service-management-cloud/organization#associate-organization
-func (o *OrganizationService) Associate(ctx context.Context, serviceDeskPortalID, organizationID int) (response *Response, err error) {
+func (o *OrganizationService) Associate(ctx context.Context, serviceDeskPortalID, organizationID int) (
+	response *ResponseScheme, err error) {
 
 	payload := struct {
 		OrganizationID int `json:"organizationId"`
-	}{OrganizationID: organizationID}
+	}{
+		OrganizationID: organizationID,
+	}
+
+	payloadAsReader, _ := transformStructToReader(&payload)
 
 	var endpoint = fmt.Sprintf("rest/servicedeskapi/servicedesk/%v/organization", serviceDeskPortalID)
 
-	request, err := o.client.newRequest(ctx, http.MethodPost, endpoint, payload)
+	request, err := o.client.newRequest(ctx, http.MethodPost, endpoint, payloadAsReader)
 	if err != nil {
 		return
 	}
 
 	request.Header.Set("Content-Type", "application/json")
 
-	response, err = o.client.Do(request)
+	response, err = o.client.Call(request, nil)
 	if err != nil {
 		return
 	}
@@ -279,26 +275,30 @@ func (o *OrganizationService) Associate(ctx context.Context, serviceDeskPortalID
 	return
 }
 
-// This method removes an organization from a service desk.
+// Detach removes an organization from a service desk.
 // If the organization ID does not match an organization associated with the service desk,
 // no change is made and the resource returns a 204 success code.
 // Docs: https://docs.go-atlassian.io/jira-service-management-cloud/organization#detach-organization
-func (o *OrganizationService) Detach(ctx context.Context, serviceDeskPortalID, organizationID int) (response *Response, err error) {
+func (o *OrganizationService) Detach(ctx context.Context, serviceDeskPortalID, organizationID int) (
+	response *ResponseScheme, err error) {
 
 	payload := struct {
 		OrganizationID int `json:"organizationId"`
-	}{OrganizationID: organizationID}
+	}{
+		OrganizationID: organizationID,
+	}
 
+	payloadAsReader, _ := transformStructToReader(&payload)
 	var endpoint = fmt.Sprintf("rest/servicedeskapi/servicedesk/%v/organization", serviceDeskPortalID)
 
-	request, err := o.client.newRequest(ctx, http.MethodDelete, endpoint, payload)
+	request, err := o.client.newRequest(ctx, http.MethodDelete, endpoint, payloadAsReader)
 	if err != nil {
 		return
 	}
 
 	request.Header.Set("Content-Type", "application/json")
 
-	response, err = o.client.Do(request)
+	response, err = o.client.Call(request, nil)
 	if err != nil {
 		return
 	}
@@ -306,51 +306,56 @@ func (o *OrganizationService) Detach(ctx context.Context, serviceDeskPortalID, o
 	return
 }
 
-//detach
 type OrganizationUsersPageScheme struct {
-	Size       int  `json:"size"`
-	Start      int  `json:"start"`
-	Limit      int  `json:"limit"`
-	IsLastPage bool `json:"isLastPage"`
-	Values     []struct {
-		AccountID    string `json:"accountId"`
-		Name         string `json:"name"`
-		Key          string `json:"key"`
-		EmailAddress string `json:"emailAddress"`
-		DisplayName  string `json:"displayName"`
-		Active       bool   `json:"active"`
-		TimeZone     string `json:"timeZone"`
-		Links        struct {
-			Self       string `json:"self"`
-			JiraRest   string `json:"jiraRest"`
-			AvatarUrls struct {
-			} `json:"avatarUrls"`
-		} `json:"_links"`
-	} `json:"values"`
-	Expands []string `json:"_expands"`
-	Links   struct {
-		Self    string `json:"self"`
-		Base    string `json:"base"`
-		Context string `json:"context"`
-		Next    string `json:"next"`
-		Prev    string `json:"prev"`
-	} `json:"_links"`
+	Size       int                              `json:"size"`
+	Start      int                              `json:"start"`
+	Limit      int                              `json:"limit"`
+	IsLastPage bool                             `json:"isLastPage"`
+	Values     []*OrganizationUserScheme        `json:"values"`
+	Expands    []string                         `json:"_expands"`
+	Links      *OrganizationUsersPageLinkScheme `json:"_links"`
+}
+
+type OrganizationUsersPageLinkScheme struct {
+	Self    string `json:"self"`
+	Base    string `json:"base"`
+	Context string `json:"context"`
+	Next    string `json:"next"`
+	Prev    string `json:"prev"`
+}
+
+type OrganizationUserScheme struct {
+	AccountID    string                      `json:"accountId"`
+	Name         string                      `json:"name"`
+	Key          string                      `json:"key"`
+	EmailAddress string                      `json:"emailAddress"`
+	DisplayName  string                      `json:"displayName"`
+	Active       bool                        `json:"active"`
+	TimeZone     string                      `json:"timeZone"`
+	Links        *OrganizationUserLinkScheme `json:"_links"`
+}
+
+type OrganizationUserLinkScheme struct {
+	Self     string `json:"self"`
+	JiraRest string `json:"jiraRest"`
 }
 
 type OrganizationPageScheme struct {
-	Size       int                   `json:"size"`
-	Start      int                   `json:"start"`
-	Limit      int                   `json:"limit"`
-	IsLastPage bool                  `json:"isLastPage"`
-	Values     []*OrganizationScheme `json:"values"`
-	Expands    []string              `json:"_expands"`
-	Links      struct {
-		Self    string `json:"self"`
-		Base    string `json:"base"`
-		Context string `json:"context"`
-		Next    string `json:"next"`
-		Prev    string `json:"prev"`
-	} `json:"_links"`
+	Size       int                         `json:"size"`
+	Start      int                         `json:"start"`
+	Limit      int                         `json:"limit"`
+	IsLastPage bool                        `json:"isLastPage"`
+	Values     []*OrganizationScheme       `json:"values"`
+	Expands    []string                    `json:"_expands"`
+	Links      *OrganizationPageLinkScheme `json:"_links"`
+}
+
+type OrganizationPageLinkScheme struct {
+	Self    string `json:"self"`
+	Base    string `json:"base"`
+	Context string `json:"context"`
+	Next    string `json:"next"`
+	Prev    string `json:"prev"`
 }
 
 type OrganizationScheme struct {

@@ -2,7 +2,6 @@ package jira
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -60,9 +59,10 @@ type AuditRecordGetOptions struct {
 	From, To time.Time
 }
 
-// Returns a list of audit records. The list can be filtered to include items:
+// Get returns a list of audit records. The list can be filtered to include items:
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/audit-records#get-audit-records
-func (a *AuditService) Get(ctx context.Context, options *AuditRecordGetOptions, offset, limit int) (result *AuditRecordPageScheme, response *Response, err error) {
+// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-audit-records/#api-rest-api-3-auditing-record-get
+func (a *AuditService) Get(ctx context.Context, options *AuditRecordGetOptions, offset, limit int) (result *AuditRecordPageScheme, response *ResponseScheme, err error) {
 
 	params := url.Values{}
 	params.Add("offset", strconv.Itoa(offset))
@@ -91,13 +91,8 @@ func (a *AuditService) Get(ctx context.Context, options *AuditRecordGetOptions, 
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = a.client.Do(request)
+	response, err = a.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(AuditRecordPageScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 

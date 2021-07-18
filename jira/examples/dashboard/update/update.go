@@ -23,30 +23,30 @@ func main() {
 	jiraCloud.Auth.SetBasicAuth(mail, token)
 	jiraCloud.Auth.SetUserAgent("curl/7.54.0")
 
-	var sharePermissions = []jira.SharePermissionScheme{
-		{
-			Type: "project",
-			Project: &jira.ProjectScheme{
-				ID: "10000",
+	var payload = &jira.DashboardPayloadScheme{
+		Name:             "Team Tracking #1111",
+		Description:      "",
+		SharePermissions: []*jira.SharePermissionScheme{
+			{
+				Type: "project",
+				Project: &jira.ProjectScheme{
+					ID: "10000",
+				},
+				Role:  nil,
+				Group: nil,
 			},
-			Role:  nil,
-			Group: nil,
-		},
-		{
-			Type:  "group",
-			Group: &jira.GroupScheme{Name: "jira-administrators"},
+			{
+				Type:  "group",
+				Group: &jira.GroupScheme{Name: "jira-administrators"},
+			},
 		},
 	}
 
-	dashboard, response, err := jiraCloud.Dashboard.Update(context.Background(), "10001", "Team Tracking #1111", "", &sharePermissions)
+	dashboard, response, err := jiraCloud.Dashboard.Update(context.Background(), "10001", payload)
 	if err != nil {
-		if response != nil {
-			log.Println("Response HTTP Response", string(response.BodyAsBytes))
-		}
 		log.Fatal(err)
 	}
 
-	log.Println("Response HTTP Code", response.StatusCode)
 	log.Println("HTTP Endpoint Used", response.Endpoint)
 
 	log.Printf("Dashboard Name: %v", dashboard.Name)

@@ -34,12 +34,8 @@ func main() {
 	var permissionSchemeID = 10004
 	response, err := atlassian.Permission.Scheme.Delete(context.Background(), permissionSchemeID)
 	if err != nil {
-		if response != nil {
-			log.Println("Response HTTP Response", string(response.BodyAsBytes))
-		}
 		log.Fatal(err)
 	}
 
-	log.Println("Response HTTP Code", response.StatusCode)
 	log.Println("HTTP Endpoint Used", response.Endpoint)
 }

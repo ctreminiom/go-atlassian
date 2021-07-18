@@ -41,25 +41,6 @@ func TestScreenSchemeService_Create(t *testing.T) {
 		},
 
 		{
-			name: "CreateScreenSchemeWhenAPayloadParamIsNotSet",
-			payload: &ScreenSchemePayloadScheme{
-				Screens: &ScreenTypesScheme{
-					Default: 10000,
-					View:    10000,
-					Edit:    10000,
-				},
-				Name:        "",
-				Description: "Screen Scheme Description",
-			},
-			mockFile:           "./mocks/create-screen-scheme.json",
-			wantHTTPMethod:     http.MethodPost,
-			endpoint:           "/rest/api/3/screenscheme",
-			context:            context.Background(),
-			wantHTTPCodeReturn: http.StatusCreated,
-			wantErr:            true,
-		},
-
-		{
 			name: "CreateScreenSchemeWhenTheContextIsNil",
 			payload: &ScreenSchemePayloadScheme{
 				Screens: &ScreenTypesScheme{

@@ -2,10 +2,10 @@ package jira
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/url"
+	"strings"
 )
 
 type PermissionGrantSchemeService struct{ client *Client }
@@ -33,21 +33,20 @@ type PermissionGrantPayloadScheme struct {
 	Permission string                       `json:"permission,omitempty"`
 }
 
-// Creates a permission grant in a permission scheme.
+// Create creates a permission grant in a permission scheme.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/permissions/scheme/grant#create-permission-grant
-func (p *PermissionGrantSchemeService) Create(ctx context.Context, schemeID int, payload *PermissionGrantPayloadScheme) (result *PermissionGrantScheme, response *Response, err error) {
+// Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permission-schemes/#api-rest-api-3-permissionscheme-schemeid-permission-post
+func (p *PermissionGrantSchemeService) Create(ctx context.Context, permissionSchemeID int, payload *PermissionGrantPayloadScheme) (
+	result *PermissionGrantScheme, response *ResponseScheme, err error) {
 
-	if schemeID == 0 {
-		return nil, nil, fmt.Errorf("error, please provide a schemeID value")
+	var endpoint = fmt.Sprintf("rest/api/3/permissionscheme/%v/permission", permissionSchemeID)
+
+	payloadAsReader, err := transformStructToReader(payload)
+	if err != nil {
+		return nil, nil, err
 	}
 
-	if payload == nil {
-		return nil, nil, fmt.Errorf("error, please provide a PermissionGrantPayloadScheme pointer")
-	}
-
-	var endpoint = fmt.Sprintf("rest/api/3/permissionscheme/%v/permission", schemeID)
-
-	request, err := p.client.newRequest(ctx, http.MethodPost, endpoint, &payload)
+	request, err := p.client.newRequest(ctx, http.MethodPost, endpoint, payloadAsReader)
 	if err != nil {
 		return
 	}
@@ -55,150 +54,122 @@ func (p *PermissionGrantSchemeService) Create(ctx context.Context, schemeID int,
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Content-Type", "application/json")
 
-	response, err = p.client.Do(request)
+	response, err = p.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(PermissionGrantScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
 	return
 }
 
-// Returns all permission grants for a permission scheme.
+// Gets returns all permission grants for a permission scheme.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/permissions/scheme/grant#get-permission-scheme-grants
-func (p *PermissionGrantSchemeService) Gets(ctx context.Context, permissionSchemeID int, expands []string) (result *PermissionSchemeGrantsScheme, response *Response, err error) {
+// Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permission-schemes/#api-rest-api-3-permissionscheme-schemeid-permission-get
+func (p *PermissionGrantSchemeService) Gets(ctx context.Context, permissionSchemeID int, expand []string) (
+	result *PermissionSchemeGrantsScheme, response *ResponseScheme, err error) {
 
 	if permissionSchemeID == 0 {
-		return nil, nil, fmt.Errorf("error, please provide a permissionSchemeID value")
+		return nil, nil, notPermissionSchemeIDError
 	}
 
 	params := url.Values{}
-	var expand string
-	for index, value := range expands {
-
-		if index == 0 {
-			expand = value
-			continue
-		}
-
-		expand += "," + value
-	}
-
 	if len(expand) != 0 {
-		params.Add("expand", expand)
+		params.Add("expand", strings.Join(expand, ","))
 	}
 
-	var endpoint string
-	if len(params.Encode()) != 0 {
-		endpoint = fmt.Sprintf("rest/api/3/permissionscheme/%v/permission?%v", permissionSchemeID, params.Encode())
-	} else {
-		endpoint = fmt.Sprintf("rest/api/3/permissionscheme/%v/permission", permissionSchemeID)
+	var endpoint strings.Builder
+	endpoint.WriteString(fmt.Sprintf("rest/api/3/permissionscheme/%v/permission", permissionSchemeID))
+
+	if params.Encode() != "" {
+		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
-	request, err := p.client.newRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := p.client.newRequest(ctx, http.MethodGet, endpoint.String(), nil)
 	if err != nil {
 		return
 	}
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = p.client.Do(request)
+	response, err = p.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(PermissionSchemeGrantsScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
 	return
 }
 
-// Returns a permission grant.
+// Get returns a permission grant.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/permissions/scheme/grant#get-permission-scheme-grant
-func (p *PermissionGrantSchemeService) Get(ctx context.Context, schemeID, permissionID int, expands []string) (result *PermissionGrantScheme, response *Response, err error) {
+// Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permission-schemes/#api-rest-api-3-permissionscheme-schemeid-permission-permissionid-get
+func (p *PermissionGrantSchemeService) Get(ctx context.Context, permissionSchemeID, permissionGrantID int, expand []string) (
+	result *PermissionGrantScheme, response *ResponseScheme, err error) {
 
-	if schemeID == 0 {
-		return nil, nil, fmt.Errorf("error, please provide a schemeID value")
+	if permissionSchemeID == 0 {
+		return nil, nil, notPermissionSchemeIDError
 	}
 
-	if permissionID == 0 {
-		return nil, nil, fmt.Errorf("error, please provide a permissionID value")
+	if permissionGrantID == 0 {
+		return nil, nil, notPermissionGrantIDError
 	}
 
 	params := url.Values{}
-
-	var expand string
-	for index, value := range expands {
-
-		if index == 0 {
-			expand = value
-			continue
-		}
-
-		expand += "," + value
-	}
-
 	if len(expand) != 0 {
-		params.Add("expand", expand)
+		params.Add("expand", strings.Join(expand, ","))
 	}
 
-	var endpoint string
+	var endpoint strings.Builder
+	endpoint.WriteString(fmt.Sprintf("rest/api/3/permissionscheme/%v/permission/%v", permissionSchemeID, permissionGrantID))
 
-	if len(params.Encode()) != 0 {
-		endpoint = fmt.Sprintf("rest/api/3/permissionscheme/%v/permission/%v?%v", schemeID, permissionID, params.Encode())
-	} else {
-		endpoint = fmt.Sprintf("rest/api/3/permissionscheme/%v/permission/%v", schemeID, permissionID)
+	if params.Encode() != "" {
+		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
-	request, err := p.client.newRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := p.client.newRequest(ctx, http.MethodGet, endpoint.String(), nil)
 	if err != nil {
 		return
 	}
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = p.client.Do(request)
+	response, err = p.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(PermissionGrantScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
 	return
 }
 
-// Deletes a permission grant from a permission scheme. See About permission schemes and grants for more details.
+// Delete deletes a permission grant from a permission scheme. See About permission schemes and grants for more details.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/permissions/scheme/grant#delete-permission-scheme-grant
-func (p *PermissionGrantSchemeService) Delete(ctx context.Context, schemeID, permissionID int) (response *Response, err error) {
+// Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permission-schemes/#api-rest-api-3-permissionscheme-schemeid-permission-permissionid-delete
+func (p *PermissionGrantSchemeService) Delete(ctx context.Context, permissionSchemeID, permissionGrantID int) (
+	response *ResponseScheme, err error) {
 
-	if schemeID == 0 {
-		return nil, fmt.Errorf("error, please provide a schemeID value")
+	if permissionSchemeID == 0 {
+		return nil, notPermissionSchemeIDError
 	}
 
-	if permissionID == 0 {
-		return nil, fmt.Errorf("error, please provide a permissionID value")
+	if permissionGrantID == 0 {
+		return nil, notPermissionGrantIDError
 	}
 
-	var endpoint = fmt.Sprintf("rest/api/3/permissionscheme/%v/permission/%v", schemeID, permissionID)
+	var endpoint = fmt.Sprintf("rest/api/3/permissionscheme/%v/permission/%v", permissionSchemeID, permissionGrantID)
 
 	request, err := p.client.newRequest(ctx, http.MethodDelete, endpoint, nil)
 	if err != nil {
 		return
 	}
 
-	response, err = p.client.Do(request)
+	response, err = p.client.call(request, nil)
 	if err != nil {
 		return
 	}
 
 	return
 }
+
+var (
+	notPermissionSchemeIDError = fmt.Errorf("error, please provide a permissionSchemeID value")
+	notPermissionGrantIDError  = fmt.Errorf("error, please provide a permissionGrantID value")
+)

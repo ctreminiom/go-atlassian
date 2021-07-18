@@ -2,11 +2,11 @@ package agile
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/url"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -15,8 +15,7 @@ type SprintService struct{ client *Client }
 // Get Returns the sprint for a given sprint ID.
 // The sprint will only be returned if the user can view the board that the sprint was created on,
 // or view at least one of the issues in the sprint.
-// Docs: N/A
-func (s *SprintService) Get(ctx context.Context, sprintID int) (result *SprintScheme, response *Response, err error) {
+func (s *SprintService) Get(ctx context.Context, sprintID int) (result *SprintScheme, response *ResponseScheme, err error) {
 
 	if sprintID == 0 {
 		return nil, nil, fmt.Errorf("error!, please provide a valid sprint ID")
@@ -31,15 +30,11 @@ func (s *SprintService) Get(ctx context.Context, sprintID int) (result *SprintSc
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = s.client.Do(request)
+	response, err = s.client.Call(request, &result)
 	if err != nil {
-		return
+		return nil, response, err
 	}
 
-	result = new(SprintScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return
-	}
 
 	return
 }
@@ -59,16 +54,17 @@ type SprintScheme struct {
 // Create creates a future sprint.
 // Sprint name and origin board id are required.
 // Start date, end date, and goal are optional.
-// Docs: N/A
-func (s *SprintService) Create(ctx context.Context, payload *SprintPayloadScheme) (result *SprintScheme, response *Response, err error) {
+func (s *SprintService) Create(ctx context.Context, payload *SprintPayloadScheme) (result *SprintScheme,
+	response *ResponseScheme, err error) {
 
-	if payload == nil {
-		return nil, nil, fmt.Errorf("error!, please provide a valid SprintPayloadScheme pointer")
+	payloadAsReader, err := transformStructToReader(payload)
+	if err != nil {
+		return nil, nil, err
 	}
 
 	var endpoint = "rest/agile/1.0/sprint"
 
-	request, err := s.client.newRequest(ctx, http.MethodPost, endpoint, &payload)
+	request, err := s.client.newRequest(ctx, http.MethodPost, endpoint, payloadAsReader)
 	if err != nil {
 		return
 	}
@@ -76,14 +72,9 @@ func (s *SprintService) Create(ctx context.Context, payload *SprintPayloadScheme
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Content-Type", "application/json")
 
-	response, err = s.client.Do(request)
+	response, err = s.client.Call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(SprintScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return
+		return nil, response, err
 	}
 
 	return
@@ -101,20 +92,21 @@ type SprintPayloadScheme struct {
 // Update Performs a full update of a sprint.
 // A full update means that the result will be exactly the same as the request body.
 // Any fields not present in the request JSON will be set to null.
-// Docs: N/A
-func (s *SprintService) Update(ctx context.Context, sprintID int, payload *SprintPayloadScheme) (result *SprintScheme, response *Response, err error) {
+func (s *SprintService) Update(ctx context.Context, sprintID int, payload *SprintPayloadScheme) (result *SprintScheme,
+	response *ResponseScheme, err error) {
 
 	if sprintID == 0 {
 		return nil, nil, fmt.Errorf("error!, please provide a valid sprint ID")
 	}
 
-	if payload == nil {
-		return nil, nil, fmt.Errorf("error!, please provide a valid SprintPayloadScheme pointer")
-	}
-
 	var endpoint = fmt.Sprintf("rest/agile/1.0/sprint/%v", sprintID)
 
-	request, err := s.client.newRequest(ctx, http.MethodPut, endpoint, &payload)
+	payloadAsReader, err := transformStructToReader(payload)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	request, err := s.client.newRequest(ctx, http.MethodPut, endpoint, payloadAsReader)
 	if err != nil {
 		return
 	}
@@ -122,14 +114,9 @@ func (s *SprintService) Update(ctx context.Context, sprintID int, payload *Sprin
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Content-Type", "application/json")
 
-	response, err = s.client.Do(request)
+	response, err = s.client.Call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(SprintScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return
+		return nil, response, err
 	}
 
 	return
@@ -137,20 +124,21 @@ func (s *SprintService) Update(ctx context.Context, sprintID int, payload *Sprin
 
 // Path Performs a partial update of a sprint.
 // A partial update means that fields not present in the request JSON will not be updated.
-// Docs: N/A
-func (s *SprintService) Path(ctx context.Context, sprintID int, payload *SprintPayloadScheme) (result *SprintScheme, response *Response, err error) {
+func (s *SprintService) Path(ctx context.Context, sprintID int, payload *SprintPayloadScheme) (result *SprintScheme,
+	response *ResponseScheme, err error) {
 
 	if sprintID == 0 {
 		return nil, nil, fmt.Errorf("error!, please provide a valid sprint ID")
 	}
 
-	if payload == nil {
-		return nil, nil, fmt.Errorf("error!, please provide a valid SprintPayloadScheme pointer")
-	}
-
 	var endpoint = fmt.Sprintf("rest/agile/1.0/sprint/%v", sprintID)
 
-	request, err := s.client.newRequest(ctx, http.MethodPost, endpoint, &payload)
+	payloadAsReader, err := transformStructToReader(payload)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	request, err := s.client.newRequest(ctx, http.MethodPost, endpoint, payloadAsReader)
 	if err != nil {
 		return
 	}
@@ -158,14 +146,9 @@ func (s *SprintService) Path(ctx context.Context, sprintID int, payload *SprintP
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Content-Type", "application/json")
 
-	response, err = s.client.Do(request)
+	response, err = s.client.Call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(SprintScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return
+		return nil, response, err
 	}
 
 	return
@@ -173,8 +156,7 @@ func (s *SprintService) Path(ctx context.Context, sprintID int, payload *SprintP
 
 // Delete deletes a sprint.
 // Once a sprint is deleted, all open issues in the sprint will be moved to the backlog.
-// Docs: N/A
-func (s *SprintService) Delete(ctx context.Context, sprintID int) (response *Response, err error) {
+func (s *SprintService) Delete(ctx context.Context, sprintID int) (response *ResponseScheme, err error) {
 
 	if sprintID == 0 {
 		return nil, fmt.Errorf("error!, please provide a valid sprint ID")
@@ -187,9 +169,9 @@ func (s *SprintService) Delete(ctx context.Context, sprintID int) (response *Res
 		return
 	}
 
-	response, err = s.client.Do(request)
+	response, err = s.client.Call(request, nil)
 	if err != nil {
-		return
+		return response, err
 	}
 
 	return
@@ -204,8 +186,8 @@ type IssueOptionScheme struct {
 // Issues returns all issues in a sprint, for a given sprint ID.
 // This only includes issues that the user has permission to view.
 // By default, the returned issues are ordered by rank.
-// Docs: N/A
-func (s *SprintService) Issues(ctx context.Context, sprintID int, opts *IssueOptionScheme, startAt, maxResults int) (result *SprintIssuePageScheme, response *Response, err error) {
+func (s *SprintService) Issues(ctx context.Context, sprintID int, opts *IssueOptionScheme, startAt, maxResults int) (
+	result *SprintIssuePageScheme, response *ResponseScheme, err error) {
 
 	if sprintID == 0 {
 		return nil, nil, fmt.Errorf("error!, please provide a valid sprint ID")
@@ -225,35 +207,13 @@ func (s *SprintService) Issues(ctx context.Context, sprintID int, opts *IssueOpt
 			params.Add("jql", opts.JQL)
 		}
 
-		var expand string
-		for index, value := range opts.Expand {
-
-			if index == 0 {
-				expand = value
-				continue
-			}
-
-			expand += "," + value
+		if len(opts.Expand) != 0 {
+			params.Add("expand", strings.Join(opts.Expand, ","))
 		}
 
-		if len(expand) != 0 {
-			params.Add("expand", expand)
+		if len(opts.Fields) != 0 {
+			params.Add("fields", strings.Join(opts.Fields, ","))
 		}
-
-		var fieldFormatted string
-		for index, value := range opts.Fields {
-
-			if index == 0 {
-				fieldFormatted = value
-				continue
-			}
-			fieldFormatted += "," + value
-		}
-
-		if len(fieldFormatted) != 0 {
-			params.Add("fields", fieldFormatted)
-		}
-
 	}
 
 	var endpoint = fmt.Sprintf("rest/agile/1.0/sprint/%v/issue?%v", sprintID, params.Encode())
@@ -263,14 +223,9 @@ func (s *SprintService) Issues(ctx context.Context, sprintID int, opts *IssueOpt
 		return
 	}
 
-	response, err = s.client.Do(request)
+	response, err = s.client.Call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(SprintIssuePageScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return
+		return nil, response, err
 	}
 
 	return
@@ -292,9 +247,7 @@ type SprintIssueScheme struct {
 }
 
 // Start initiate the Sprint
-// Docs: N/A
-
-func (s *SprintService) Start(ctx context.Context, sprintID int) (response *Response, err error) {
+func (s *SprintService) Start(ctx context.Context, sprintID int) (response *ResponseScheme, err error) {
 
 	if sprintID == 0 {
 		return nil, fmt.Errorf("error!, please provide a valid sprint ID")
@@ -304,9 +257,11 @@ func (s *SprintService) Start(ctx context.Context, sprintID int) (response *Resp
 		State: "Active",
 	}
 
+	payloadAsReader, _ := transformStructToReader(&payload)
+
 	var endpoint = fmt.Sprintf("rest/agile/1.0/sprint/%v", sprintID)
 
-	request, err := s.client.newRequest(ctx, http.MethodPost, endpoint, &payload)
+	request, err := s.client.newRequest(ctx, http.MethodPost, endpoint, payloadAsReader)
 	if err != nil {
 		return
 	}
@@ -314,17 +269,16 @@ func (s *SprintService) Start(ctx context.Context, sprintID int) (response *Resp
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Content-Type", "application/json")
 
-	response, err = s.client.Do(request)
+	response, err = s.client.Call(request, nil)
 	if err != nil {
-		return
+		return response, err
 	}
 
 	return
 }
 
 // Close closes the Sprint
-// Docs: N/A
-func (s *SprintService) Close(ctx context.Context, sprintID int) (response *Response, err error) {
+func (s *SprintService) Close(ctx context.Context, sprintID int) (response *ResponseScheme, err error) {
 
 	if sprintID == 0 {
 		return nil, fmt.Errorf("error!, please provide a valid sprint ID")
@@ -334,9 +288,11 @@ func (s *SprintService) Close(ctx context.Context, sprintID int) (response *Resp
 		State: "Closed",
 	}
 
+	payloadAsReader, _ := transformStructToReader(&payload)
+
 	var endpoint = fmt.Sprintf("rest/agile/1.0/sprint/%v", sprintID)
 
-	request, err := s.client.newRequest(ctx, http.MethodPost, endpoint, &payload)
+	request, err := s.client.newRequest(ctx, http.MethodPost, endpoint, payloadAsReader)
 	if err != nil {
 		return
 	}
@@ -344,9 +300,9 @@ func (s *SprintService) Close(ctx context.Context, sprintID int) (response *Resp
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Content-Type", "application/json")
 
-	response, err = s.client.Do(request)
+	response, err = s.client.Call(request, nil)
 	if err != nil {
-		return
+		return response, err
 	}
 
 	return

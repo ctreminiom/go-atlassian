@@ -2,22 +2,24 @@ package jira
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/url"
 	"strconv"
+	"strings"
 )
 
 type UserSearchService struct{ client *Client }
 
-// Returns a list of users who can be assigned issues in one or more projects.
+// Projects returns a list of users who can be assigned issues in one or more projects.
 // The list may be restricted to users whose attributes match a string.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/users/search#find-users-assignable-to-projects
-func (u *UserSearchService) Projects(ctx context.Context, accountID string, projectKeys []string, startAt, maxResults int) (result *[]UserScheme, response *Response, err error) {
+// Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-user-search/#api-rest-api-3-user-assignable-multiprojectsearch-get
+func (u *UserSearchService) Projects(ctx context.Context, accountID string, projectKeys []string, startAt, maxResults int) (
+	result []*UserScheme, response *ResponseScheme, err error) {
 
 	if len(projectKeys) == 0 {
-		return nil, nil, fmt.Errorf("error, please provide a valid projectKeys values")
+		return nil, nil, notProjectListError
 	}
 
 	params := url.Values{}
@@ -28,19 +30,8 @@ func (u *UserSearchService) Projects(ctx context.Context, accountID string, proj
 		params.Add("accountId", accountID)
 	}
 
-	var keys string
-	for index, value := range projectKeys {
-
-		if index == 0 {
-			keys = value
-			continue
-		}
-
-		keys += "," + value
-	}
-
-	if len(keys) != 0 {
-		params.Add("projectKeys", keys)
+	if len(projectKeys) != 0 {
+		params.Add("projectKeys", strings.Join(projectKeys, ","))
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/user/assignable/multiProjectSearch?%v", params.Encode())
@@ -52,25 +43,22 @@ func (u *UserSearchService) Projects(ctx context.Context, accountID string, proj
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = u.client.Do(request)
+	response, err = u.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new([]UserScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
 	return
 }
 
-// Returns a list of users that match the search string and property.
+// Do returns a list of users that match the search string and property.
 // This operation takes the users in the range defined by startAt and maxResults, up to the thousandth user,
 // and then returns only the users from that range that match the search string and property.
 // This means the operation usually returns fewer users than specified in maxResults
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/users/search#find-users
-func (u *UserSearchService) Do(ctx context.Context, accountID, query string, startAt, maxResults int) (result *[]UserScheme, response *Response, err error) {
+// Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-user-search/#api-rest-api-3-user-search-get
+func (u *UserSearchService) Do(ctx context.Context, accountID, query string, startAt, maxResults int) (result []*UserScheme,
+	response *ResponseScheme, err error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -93,15 +81,14 @@ func (u *UserSearchService) Do(ctx context.Context, accountID, query string, sta
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = u.client.Do(request)
+	response, err = u.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new([]UserScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
 	return
 }
+
+var (
+	notProjectListError = fmt.Errorf("error, please provide a valid projectKeys values")
+)

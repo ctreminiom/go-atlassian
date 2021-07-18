@@ -2,12 +2,11 @@ package jira
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/http"
 )
 
-// This service represents the Jira Cloud application roles
+// ApplicationRoleService represents the Jira Cloud application roles
 // Use it to get details of an application role or all application roles.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/application-roles
 type ApplicationRoleService struct{ client *Client }
@@ -27,12 +26,13 @@ type ApplicationRoleScheme struct {
 	Platform             bool     `json:"platform,omitempty"`
 }
 
-// Returns all application roles, this func needs the following parameters:
-// 1. ctx = it's the context.context value
+// Gets returns all application roles
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/application-roles#get-all-application-roles
-func (a *ApplicationRoleService) Gets(ctx context.Context) (result *[]ApplicationRoleScheme, response *Response, err error) {
+// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-application-roles/#api-rest-api-3-applicationrole-get
+func (a *ApplicationRoleService) Gets(ctx context.Context) (result []*ApplicationRoleScheme, response *ResponseScheme, err error) {
 
 	var endpoint = "rest/api/3/applicationrole"
+
 	request, err := a.client.newRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
 		return
@@ -40,27 +40,21 @@ func (a *ApplicationRoleService) Gets(ctx context.Context) (result *[]Applicatio
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = a.client.Do(request)
+	response, err = a.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new([]ApplicationRoleScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
 	return
 }
 
-// Returns an application role, this func needs the following parameters:
-// 1. ctx = it's the context.context value
-// 2. key = The key of the application role, use Gets() method to get the key for each application role.
+// Get returns an application role, this func needs the following parameters:
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/application-roles#get-application-role
-func (a *ApplicationRoleService) Get(ctx context.Context, key string) (result *ApplicationRoleScheme, response *Response, err error) {
+// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-application-roles/#api-rest-api-3-applicationrole-key-get
+func (a *ApplicationRoleService) Get(ctx context.Context, key string) (result *ApplicationRoleScheme, response *ResponseScheme, err error) {
 
-	if len(key) == 0 {
-		return nil, nil, fmt.Errorf("error, please provide a valid key application role value")
+	if key == "" {
+		return nil, nil, notApplicationRoleKeyError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/applicationrole/%v", key)
@@ -71,15 +65,14 @@ func (a *ApplicationRoleService) Get(ctx context.Context, key string) (result *A
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = a.client.Do(request)
+	response, err = a.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(ApplicationRoleScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
 	return
 }
+
+var (
+	notApplicationRoleKeyError = fmt.Errorf("error, please provide a valid key application role value")
+)

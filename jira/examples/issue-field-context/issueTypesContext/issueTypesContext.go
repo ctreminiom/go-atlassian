@@ -26,14 +26,10 @@ func main() {
 
 	mapping, response, err := atlassian.Issue.Field.Context.IssueTypesContext(context.Background(), fieldID, nil, 0, 50)
 	if err != nil {
-		if response != nil {
-			log.Println("Response HTTP Code", response.StatusCode)
-			log.Println("HTTP Endpoint Used", response.Endpoint)
-		}
+		log.Fatal(err)
 		return
 	}
 
-	log.Println("Response HTTP Code", response.StatusCode)
 	log.Println("HTTP Endpoint Used", response.Endpoint)
 	log.Println(mapping.Total)
 }

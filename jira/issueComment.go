@@ -2,11 +2,11 @@ package jira
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/url"
 	"strconv"
+	"strings"
 )
 
 type CommentService struct{ client *Client }
@@ -31,31 +31,22 @@ type IssueCommentScheme struct {
 	Visibility   *CommentVisibilityScheme `json:"visibility,omitempty"`
 }
 
-// Returns all comments for an issue.
+// Gets returns all comments for an issue.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/comments#get-comments
-func (c *CommentService) Gets(ctx context.Context, issueKeyOrID, orderBy string, expands []string, startAt, maxResults int) (result *IssueCommentPageScheme, response *Response, err error) {
+// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-comments/#api-rest-api-3-issue-issueidorkey-comment-get
+func (c *CommentService) Gets(ctx context.Context, issueKeyOrID, orderBy string, expand []string, startAt,
+	maxResults int) (result *IssueCommentPageScheme, response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {
-		return nil, nil, fmt.Errorf("error, please provide a valid issueKeyOrID value")
+		return nil, nil, notIssueKeyOrIDError
 	}
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
 	params.Add("maxResults", strconv.Itoa(maxResults))
 
-	var expand string
-	for index, value := range expands {
-
-		if index == 0 {
-			expand = value
-			continue
-		}
-
-		expand += "," + value
-	}
-
 	if len(expand) != 0 {
-		params.Add("expand", expand)
+		params.Add("expand", strings.Join(expand, ","))
 	}
 
 	if orderBy != "" {
@@ -68,31 +59,28 @@ func (c *CommentService) Gets(ctx context.Context, issueKeyOrID, orderBy string,
 		return
 	}
 
-	request.Header.Set("Content-Type", "application/json")
+	request.Header.Set("Accept", "application/json")
 
-	response, err = c.client.Do(request)
+	response, err = c.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(IssueCommentPageScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
 	return
 }
 
-// Returns a comment.
+// Get returns a comment.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/comments#get-comment
-func (c *CommentService) Get(ctx context.Context, issueKeyOrID, commentID string) (result *IssueCommentScheme, response *Response, err error) {
+// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-comments/#api-rest-api-3-comment-list-post
+func (c *CommentService) Get(ctx context.Context, issueKeyOrID, commentID string) (result *IssueCommentScheme,
+	response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {
-		return nil, nil, fmt.Errorf("error, please provide a valid issueKeyOrID value")
+		return nil, nil, notIssueKeyOrIDError
 	}
 
 	if len(commentID) == 0 {
-		return nil, nil, fmt.Errorf("error, please provide a valid commentID value")
+		return nil, nil, notCommentIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/issue/%v/comment/%v", issueKeyOrID, commentID)
@@ -104,29 +92,25 @@ func (c *CommentService) Get(ctx context.Context, issueKeyOrID, commentID string
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = c.client.Do(request)
+	response, err = c.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(IssueCommentScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
 	return
 }
 
-// Deletes a comment.
+// Delete deletes a comment.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/comments#delete-comment
-func (c *CommentService) Delete(ctx context.Context, issueKeyOrID, commentID string) (response *Response, err error) {
+// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-comments/#api-rest-api-3-issue-issueidorkey-comment-id-delete
+func (c *CommentService) Delete(ctx context.Context, issueKeyOrID, commentID string) (response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {
-		return nil, fmt.Errorf("error, please provide a valid issueKeyOrID value")
+		return nil, notIssueKeyOrIDError
 	}
 
 	if len(commentID) == 0 {
-		return nil, fmt.Errorf("error, please provide a valid commentID value")
+		return nil, notCommentIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/issue/%v/comment/%v", issueKeyOrID, commentID)
@@ -136,7 +120,7 @@ func (c *CommentService) Delete(ctx context.Context, issueKeyOrID, commentID str
 		return
 	}
 
-	response, err = c.client.Do(request)
+	response, err = c.client.call(request, nil)
 	if err != nil {
 		return
 	}
@@ -144,40 +128,34 @@ func (c *CommentService) Delete(ctx context.Context, issueKeyOrID, commentID str
 	return
 }
 
-func (c *CommentService) Add(ctx context.Context, issueKeyOrID string, payload *CommentPayloadScheme, expands []string) (result *IssueCommentScheme, response *Response, err error) {
+// Add adds a comment to an issue.
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/comments#add-comment
+// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-comments/#api-rest-api-3-issue-issueidorkey-comment-post
+func (c *CommentService) Add(ctx context.Context, issueKeyOrID string, payload *CommentPayloadScheme, expand []string) (
+	result *IssueCommentScheme, response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {
-		return nil, nil, fmt.Errorf("error, please provide a valid issueKeyOrID value")
-	}
-
-	if payload == nil {
-		return nil, nil, fmt.Errorf("error, please provide a valid CommentNodeScheme pointer")
+		return nil, nil, notIssueKeyOrIDError
 	}
 
 	params := url.Values{}
-	var expand string
-	for index, value := range expands {
-
-		if index == 0 {
-			expand = value
-			continue
-		}
-
-		expand += "," + value
-	}
-
 	if len(expand) != 0 {
-		params.Add("expand", expand)
+		params.Add("expand", strings.Join(expand, ","))
 	}
 
-	var endpoint string
-	if len(params.Encode()) != 0 {
-		endpoint = fmt.Sprintf("rest/api/3/issue/%v/comment?%v", issueKeyOrID, params.Encode())
-	} else {
-		endpoint = fmt.Sprintf("rest/api/3/issue/%v/comment", issueKeyOrID)
+	var endpoint strings.Builder
+	endpoint.WriteString(fmt.Sprintf("rest/api/3/issue/%v/comment", issueKeyOrID))
+
+	if params.Encode() != "" {
+		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
-	request, err := c.client.newRequest(ctx, http.MethodPost, endpoint, payload)
+	payloadAsReader, err := transformStructToReader(payload)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	request, err := c.client.newRequest(ctx, http.MethodPost, endpoint.String(), payloadAsReader)
 	if err != nil {
 		return
 	}
@@ -185,13 +163,8 @@ func (c *CommentService) Add(ctx context.Context, issueKeyOrID string, payload *
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Content-Type", "application/json")
 
-	response, err = c.client.Do(request)
+	response, err = c.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(IssueCommentScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
@@ -215,3 +188,7 @@ type MarkScheme struct {
 	Type  string                 `json:"type,omitempty"`
 	Attrs map[string]interface{} `json:"attrs,omitempty"`
 }
+
+var (
+	notCommentIDError = fmt.Errorf("error, please provide a valid commentID value")
+)

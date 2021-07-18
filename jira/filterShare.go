@@ -2,7 +2,6 @@ package jira
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"strings"
@@ -10,13 +9,14 @@ import (
 
 type FilterShareService struct{ client *Client }
 
-type shareFilterScopeScheme struct {
+type ShareFilterScopeScheme struct {
 	Scope string `json:"scope"`
 }
 
-// Returns the default sharing settings for new filters and dashboards for a user.
+// Scope returns the default sharing settings for new filters and dashboards for a user.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/filters/sharing#get-default-share-scope
-func (f *FilterShareService) Scope(ctx context.Context) (scope string, response *Response, err error) {
+// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-filter-sharing/#api-rest-api-3-filter-defaultsharescope-get
+func (f *FilterShareService) Scope(ctx context.Context) (result *ShareFilterScopeScheme, response *ResponseScheme, err error) {
 
 	var endpoint = "rest/api/3/filter/defaultShareScope"
 	request, err := f.client.newRequest(ctx, http.MethodGet, endpoint, nil)
@@ -24,24 +24,21 @@ func (f *FilterShareService) Scope(ctx context.Context) (scope string, response 
 		return
 	}
 
-	response, err = f.client.Do(request)
+	request.Header.Set("Accept", "application/json")
+
+	response, err = f.client.call(request, &response)
 	if err != nil {
 		return
 	}
 
-	result := new(shareFilterScopeScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return "", response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
-	}
-
-	scope = result.Scope
 	return
 }
 
-// Sets the default sharing for new filters and dashboards for a user.
+// SetScope sets the default sharing for new filters and dashboards for a user.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/filters/sharing#set-default-share-scope
+// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-filter-sharing/#api-rest-api-3-filter-defaultsharescope-put
 // Valid values: GLOBAL, AUTHENTICATED, PRIVATE
-func (f *FilterShareService) SetScope(ctx context.Context, scope string) (response *Response, err error) {
+func (f *FilterShareService) SetScope(ctx context.Context, scope string) (response *ResponseScheme, err error) {
 
 	//Valid the share filter scope
 	var (
@@ -62,8 +59,12 @@ func (f *FilterShareService) SetScope(ctx context.Context, scope string) (respon
 		return nil, fmt.Errorf("invalid scope, please provide one of the following: %v", validScopeValuesAsString)
 	}
 
+	payload := ShareFilterScopeScheme{Scope: scope}
+	payloadAsReader, _ := transformStructToReader(&payload)
+
 	var endpoint = "rest/api/3/filter/defaultShareScope"
-	request, err := f.client.newRequest(ctx, http.MethodPut, endpoint, shareFilterScopeScheme{Scope: scope})
+
+	request, err := f.client.newRequest(ctx, http.MethodPut, endpoint, payloadAsReader)
 	if err != nil {
 		return
 	}
@@ -71,7 +72,7 @@ func (f *FilterShareService) SetScope(ctx context.Context, scope string) (respon
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Content-Type", "application/json")
 
-	response, err = f.client.Do(request)
+	response, err = f.client.call(request, nil)
 	if err != nil {
 		return
 	}
@@ -79,32 +80,31 @@ func (f *FilterShareService) SetScope(ctx context.Context, scope string) (respon
 	return
 }
 
-// Returns the share permissions for a filter.
+// Gets returns the share permissions for a filter.
 // A filter can be shared with groups, projects, all logged-in users, or the public.
 // Sharing with all logged-in users or the public is known as a global share permission.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/filters/sharing#get-share-permissions
-func (f *FilterShareService) Gets(ctx context.Context, filterID int) (result *[]SharePermissionScheme, response *Response, err error) {
+// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-filter-sharing/#api-rest-api-3-filter-id-permission-get
+func (f *FilterShareService) Gets(ctx context.Context, filterID int) (result []*SharePermissionScheme, response *ResponseScheme, err error) {
 
 	var endpoint = fmt.Sprintf("rest/api/3/filter/%v/permission", filterID)
+
 	request, err := f.client.newRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
 		return
 	}
 
-	response, err = f.client.Do(request)
+	request.Header.Set("Accept", "application/json")
+
+	response, err = f.client.call(request, &result)
 	if err != nil {
 		return
-	}
-
-	result = new([]SharePermissionScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
 
 	return
 }
 
-type PermissionFilterBodyScheme struct {
+type PermissionFilterPayloadScheme struct {
 	Type          string `json:"type,omitempty"`
 	ProjectID     string `json:"projectId,omitempty"`
 	GroupName     string `json:"groupname,omitempty"`
@@ -115,14 +115,17 @@ type PermissionFilterBodyScheme struct {
 // If you add a global share permission (one for all logged-in users or the public)
 // it will overwrite all share permissions for the filter.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/filters/sharing#add-share-permission
-func (f *FilterShareService) Add(ctx context.Context, filterID int, payload *PermissionFilterBodyScheme) (result *[]SharePermissionScheme, response *Response, err error) {
+func (f *FilterShareService) Add(ctx context.Context, filterID int, payload *PermissionFilterPayloadScheme) (
+	result []*SharePermissionScheme, response *ResponseScheme, err error) {
 
-	if payload == nil {
-		return nil, nil, fmt.Errorf("error, payload value is nil, please provide a valid PermissionFilterBodyScheme pointer")
+	payloadAsReader, err := transformStructToReader(payload)
+	if err != nil {
+		return nil, nil, err
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/filter/%v/permission", filterID)
-	request, err := f.client.newRequest(ctx, http.MethodPost, endpoint, &payload)
+
+	request, err := f.client.newRequest(ctx, http.MethodPost, endpoint, payloadAsReader)
 	if err != nil {
 		return
 	}
@@ -130,24 +133,21 @@ func (f *FilterShareService) Add(ctx context.Context, filterID int, payload *Per
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Content-Type", "application/json")
 
-	response, err = f.client.Do(request)
+	response, err = f.client.call(request, &result)
 	if err != nil {
 		return
-	}
-
-	result = new([]SharePermissionScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
 
 	return
 }
 
-// Returns a share permission for a filter.
+// Get returns a share permission for a filter.
 // A filter can be shared with groups, projects, all logged-in users, or the public.
 // Sharing with all logged-in users or the public is known as a global share permission.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/filters/sharing#get-share-permission
-func (f *FilterShareService) Get(ctx context.Context, filterID, permissionID int) (result *SharePermissionScheme, response *Response, err error) {
+// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-filter-sharing/#api-rest-api-3-filter-id-permission-permissionid-get
+func (f *FilterShareService) Get(ctx context.Context, filterID, permissionID int) (result *SharePermissionScheme,
+	response *ResponseScheme, err error) {
 
 	var endpoint = fmt.Sprintf("rest/api/3/filter/%v/permission/%v", filterID, permissionID)
 	request, err := f.client.newRequest(ctx, http.MethodGet, endpoint, nil)
@@ -155,22 +155,18 @@ func (f *FilterShareService) Get(ctx context.Context, filterID, permissionID int
 		return
 	}
 
-	response, err = f.client.Do(request)
+	response, err = f.client.call(request, &result)
 	if err != nil {
 		return
-	}
-
-	result = new(SharePermissionScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
 
 	return
 }
 
-// Deletes a share permission from a filter.
+// Delete deletes a share permission from a filter.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/filters/sharing#delete-share-permission
-func (f *FilterShareService) Delete(ctx context.Context, filterID, permissionID int) (response *Response, err error) {
+// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-filter-sharing/#api-rest-api-3-filter-id-permission-permissionid-delete
+func (f *FilterShareService) Delete(ctx context.Context, filterID, permissionID int) (response *ResponseScheme, err error) {
 
 	var endpoint = fmt.Sprintf("rest/api/3/filter/%v/permission/%v", filterID, permissionID)
 	request, err := f.client.newRequest(ctx, http.MethodDelete, endpoint, nil)
@@ -178,7 +174,7 @@ func (f *FilterShareService) Delete(ctx context.Context, filterID, permissionID 
 		return
 	}
 
-	response, err = f.client.Do(request)
+	response, err = f.client.call(request, nil)
 	if err != nil {
 		return
 	}

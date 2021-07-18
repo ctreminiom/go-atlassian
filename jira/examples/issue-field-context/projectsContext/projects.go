@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"github.com/ctreminiom/go-atlassian/jira"
 	"log"
 	"os"
@@ -27,16 +26,10 @@ func main() {
 
 	mapping, response, err := atlassian.Issue.Field.Context.ProjectsContext(context.Background(), fieldID, nil, 0, 50)
 	if err != nil {
-		if response != nil {
-			log.Println("Response HTTP Code", response.StatusCode)
-			log.Println("HTTP Endpoint Used", response.Endpoint)
-		}
-		return
+		log.Fatal(err)
 	}
 
-	log.Println("Response HTTP Code", response.StatusCode)
 	log.Println("HTTP Endpoint Used", response.Endpoint)
 	log.Println(mapping.Total)
 
-	fmt.Println(string(response.BodyAsBytes))
 }

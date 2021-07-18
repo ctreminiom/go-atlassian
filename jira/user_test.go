@@ -49,38 +49,6 @@ func TestUserService_Create(t *testing.T) {
 		},
 
 		{
-			name: "CreateUserWhenTheEmailAddressIsNotSet",
-			payload: &UserPayloadScheme{
-				Password:     "password1234",
-				EmailAddress: "",
-				DisplayName:  "Example User",
-				Notification: true,
-			},
-			mockFile:           "./mocks/create-user.json",
-			wantHTTPMethod:     http.MethodPost,
-			endpoint:           "/rest/api/3/user",
-			context:            context.Background(),
-			wantHTTPCodeReturn: http.StatusCreated,
-			wantErr:            true,
-		},
-
-		{
-			name: "CreateUserWhenTheDisplayNameIsNotSet",
-			payload: &UserPayloadScheme{
-				Password:     "password1234",
-				EmailAddress: "example@example.com",
-				DisplayName:  "",
-				Notification: true,
-			},
-			mockFile:           "./mocks/create-user.json",
-			wantHTTPMethod:     http.MethodPost,
-			endpoint:           "/rest/api/3/user",
-			context:            context.Background(),
-			wantHTTPCodeReturn: http.StatusCreated,
-			wantErr:            true,
-		},
-
-		{
 			name: "CreateUserWhenTheRequestMethodIsIncorrect",
 			payload: &UserPayloadScheme{
 				Password:     "password1234",
@@ -850,7 +818,7 @@ func TestUserService_Gets(t *testing.T) {
 				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
 				assert.Equal(t, testCase.endpoint, endpointToAssert)
 
-				for _, user := range *gotResult {
+				for _, user := range gotResult {
 					t.Log("---------------")
 					t.Logf("User name %v", user.DisplayName)
 					t.Logf("User mail %v", user.EmailAddress)
@@ -1012,7 +980,7 @@ func TestUserService_Groups(t *testing.T) {
 				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
 				assert.Equal(t, testCase.endpoint, endpointToAssert)
 
-				for _, group := range *gotResult {
+				for _, group := range gotResult {
 					t.Log("---------------")
 					t.Logf("Group name %v", group.Name)
 					t.Logf("Group URL %v", group.Self)

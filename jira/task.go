@@ -2,7 +2,6 @@ package jira
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/http"
 )
@@ -24,16 +23,16 @@ type TaskScheme struct {
 	LastUpdate     int64  `json:"lastUpdate"`
 }
 
-// Returns the status of a long-running asynchronous task.
+// Get returns the status of a long-running asynchronous task.
 // When a task has finished, this operation returns the JSON blob applicable to the task.
 // See the documentation of the operation that created the task for details.
 // Task details are not permanently retained.
 // As of September 2019, details are retained for 14 days although this period may change without notice.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/tasks#get-task
-func (t *TaskService) Get(ctx context.Context, taskID string) (result *TaskScheme, response *Response, err error) {
+func (t *TaskService) Get(ctx context.Context, taskID string) (result *TaskScheme, response *ResponseScheme, err error) {
 
 	if len(taskID) == 0 {
-		return nil, nil, fmt.Errorf("error, please provide a valid taskID value")
+		return nil, nil, notTaskIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/task/%v", taskID)
@@ -45,25 +44,21 @@ func (t *TaskService) Get(ctx context.Context, taskID string) (result *TaskSchem
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = t.client.Do(request)
+	response, err = t.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(TaskScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
 	return
 }
 
-// Cancels a task.
-// Docs: https://app.gitbook.com/@ctreminiom/s/go-atlassian/jira-software-cloud/tasks#cancel-task
-func (t *TaskService) Cancel(ctx context.Context, taskID string) (response *Response, err error) {
+// Cancel cancels a task.
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/tasks#cancel-task
+// Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-tasks/#api-rest-api-3-task-taskid-cancel-post
+func (t *TaskService) Cancel(ctx context.Context, taskID string) (response *ResponseScheme, err error) {
 
 	if len(taskID) == 0 {
-		return nil, fmt.Errorf("error, please provide a valid taskID value")
+		return nil, notTaskIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/task/%v/cancel", taskID)
@@ -75,10 +70,14 @@ func (t *TaskService) Cancel(ctx context.Context, taskID string) (response *Resp
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = t.client.Do(request)
+	response, err = t.client.call(request, nil)
 	if err != nil {
 		return
 	}
 
 	return
 }
+
+var (
+	notTaskIDError = fmt.Errorf("error, please provide a valid taskID value")
+)

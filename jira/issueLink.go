@@ -2,7 +2,6 @@ package jira
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/http"
 )
@@ -44,14 +43,21 @@ type LinkTypeScheme struct {
 	Outward string `json:"outward,omitempty"`
 }
 
-// Creates a link between two issues. Use this operation to indicate a relationship between two issues
+// Create creates a link between two issues. Use this operation to indicate a relationship between two issues
 // and optionally add a comment to the from (outward) issue.
 // To use this resource the site must have Issue Linking enabled.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/link#create-issue-link
-func (i *IssueLinkService) Create(ctx context.Context, payload *LinkPayloadScheme) (response *Response, err error) {
+// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-links/#api-rest-api-3-issuelink-post
+func (i *IssueLinkService) Create(ctx context.Context, payload *LinkPayloadScheme) (response *ResponseScheme, err error) {
 
 	var endpoint = "rest/api/3/issueLink"
-	request, err := i.client.newRequest(ctx, http.MethodPost, endpoint, &payload)
+
+	payloadAsReader, err := transformStructToReader(payload)
+	if err != nil {
+		return nil, err
+	}
+
+	request, err := i.client.newRequest(ctx, http.MethodPost, endpoint, payloadAsReader)
 	if err != nil {
 		return
 	}
@@ -59,7 +65,7 @@ func (i *IssueLinkService) Create(ctx context.Context, payload *LinkPayloadSchem
 	request.Header.Set("Content-Type", "application/json")
 	request.Header.Set("Accept", "application/json")
 
-	response, err = i.client.Do(request)
+	response, err = i.client.call(request, nil)
 	if err != nil {
 		return
 	}
@@ -74,12 +80,14 @@ type IssueLinkScheme struct {
 	OutwardIssue *LinkedIssueScheme `json:"outwardIssue,omitempty"`
 }
 
-// Returns an issue link.
+// Get returns an issue link.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/link#get-issue-link
-func (i *IssueLinkService) Get(ctx context.Context, linkID string) (result *IssueLinkScheme, response *Response, err error) {
+// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-links/#api-rest-api-3-issuelink-linkid-get
+func (i *IssueLinkService) Get(ctx context.Context, linkID string) (result *IssueLinkScheme,
+	response *ResponseScheme, err error) {
 
 	if len(linkID) == 0 {
-		return nil, nil, fmt.Errorf("error!, please provide a valid linkID value")
+		return nil, nil, notLinkIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/issueLink/%v", linkID)
@@ -91,14 +99,9 @@ func (i *IssueLinkService) Get(ctx context.Context, linkID string) (result *Issu
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = i.client.Do(request)
+	response, err = i.client.call(request, &result)
 	if err != nil {
 		return
-	}
-
-	result = new(IssueLinkScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
 
 	return
@@ -114,12 +117,13 @@ type IssueLinkPageScheme struct {
 	} `json:"fields,omitempty"`
 }
 
-// Get the issue links ID's associated with a Jira Issue
+// Gets get the issue links ID's associated with a Jira Issue
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/link#get-issue-links
-func (i *IssueLinkService) Gets(ctx context.Context, issueKeyOrID string) (result *IssueLinkPageScheme, response *Response, err error) {
+func (i *IssueLinkService) Gets(ctx context.Context, issueKeyOrID string) (result *IssueLinkPageScheme,
+	response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {
-		return nil, nil, fmt.Errorf("error!, please provide a valid issueKeyOrID value")
+		return nil, nil, notIssueKeyOrIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/issue/%v?fields=issuelinks", issueKeyOrID)
@@ -131,25 +135,21 @@ func (i *IssueLinkService) Gets(ctx context.Context, issueKeyOrID string) (resul
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = i.client.Do(request)
+	response, err = i.client.call(request, &result)
 	if err != nil {
 		return
-	}
-
-	result = new(IssueLinkPageScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
 
 	return
 }
 
-// Deletes an issue link.
+// Delete deletes an issue link.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/link#delete-issue-link
-func (i *IssueLinkService) Delete(ctx context.Context, linkID string) (response *Response, err error) {
+// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-links/#api-rest-api-3-issuelink-linkid-delete
+func (i *IssueLinkService) Delete(ctx context.Context, linkID string) (response *ResponseScheme, err error) {
 
 	if len(linkID) == 0 {
-		return nil, fmt.Errorf("error!, please provide a valid linkID value")
+		return nil, notLinkIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/issueLink/%v", linkID)
@@ -159,10 +159,14 @@ func (i *IssueLinkService) Delete(ctx context.Context, linkID string) (response 
 		return
 	}
 
-	response, err = i.client.Do(request)
+	response, err = i.client.call(request, nil)
 	if err != nil {
 		return
 	}
 
 	return
 }
+
+var (
+	notLinkIDError = fmt.Errorf("error!, please provide a valid linkID value")
+)

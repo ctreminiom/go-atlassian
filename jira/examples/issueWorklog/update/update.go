@@ -7,7 +7,7 @@ import (
 	"os"
 )
 
-func main() {
+func main()  {
 
 	var (
 		host  = os.Getenv("HOST")
@@ -17,12 +17,12 @@ func main() {
 
 	atlassian, err := jira.New(nil, host)
 	if err != nil {
-		return
+		log.Fatal(err)
 	}
 
 	atlassian.Auth.SetBasicAuth(mail, token)
-	atlassian.Auth.SetUserAgent("curl/7.54.0")
 
+	// Comment worklog
 	commentBody := jira.CommentNodeScheme{}
 	commentBody.Version = 1
 	commentBody.Type = "doc"
@@ -49,6 +49,7 @@ func main() {
 							},
 						},
 					},
+
 				},
 			},
 
@@ -69,6 +70,7 @@ func main() {
 							},
 						},
 					},
+
 				},
 			},
 
@@ -89,9 +91,12 @@ func main() {
 							},
 						},
 					},
+
 				},
 			},
+
 		},
+
 	}
 
 	row1 := &jira.CommentNodeScheme{
@@ -132,7 +137,9 @@ func main() {
 					},
 				},
 			},
+
 		},
+
 	}
 
 	row2 := &jira.CommentNodeScheme{
@@ -173,57 +180,43 @@ func main() {
 					},
 				},
 			},
+
 		},
+
 	}
 
 	commentBody.AppendNode(&jira.CommentNodeScheme{
-		Type:    "table",
-		Attrs:   map[string]interface{}{"isNumberColumnEnabled": false, "layout": "default"},
+		Type: "table",
+		Attrs: map[string]interface{}{"isNumberColumnEnabled": false, "layout": "default"},
 		Content: []*jira.CommentNodeScheme{tableHeaders, row1, row2},
 	})
 
-	/*
-		commentBody.AppendNode(&jira.CommentNodeScheme{
-			Type: "paragraph",
-			Content: []*jira.CommentNodeScheme{
-				{
-					Type: "text",
-					Text: "Carlos Test",
+	var options = &jira.WorklogOptionsScheme{
+		Notify:               true,
+		AdjustEstimate:       "auto",
+		ReduceBy:             "3h",
+		//OverrideEditableFlag: true,
+		Expand:               []string{"expand", "properties"},
+		Payload:              &jira.WorklogPayloadScheme{
+			Comment:          &commentBody,
+			/*
+				Visibility:       &jira.IssueWorklogVisibilityScheme{
+					Type:  "group",
+					Value: "jira-users",
 				},
-				{
-					Type: "emoji",
-					Attrs: map[string]interface{}{
-						"shortName": ":grin",
-						"id":        "1f601",
-						"text":      "😁",
-					},
-				},
-				{
-					Type: "text",
-					Text: " ",
-				},
-			},
-		})
-	*/
-
-	payload := &jira.CommentPayloadScheme{
-		Visibility: &jira.CommentVisibilityScheme{
-			Type:  "role",
-			Value: "Administrators",
+			*/
+			Started:          "2021-07-16T07:01:10.774+0000",
+			TimeSpentSeconds: 12000,
 		},
-		Body: &commentBody,
 	}
 
-	newComment, response, err := atlassian.Issue.Comment.Add(context.Background(), "KP-2", payload, nil)
+	worklog, response, err := atlassian.Issue.Worklog.Update(context.Background(), "KP-1", "10000",options)
 	if err != nil {
-		if response != nil {
-			log.Println("Response HTTP Response", string(response.BodyAsBytes))
-		}
+		log.Println(response.Endpoint, response.Code)
 		log.Fatal(err)
 	}
 
-	log.Println("Response HTTP Code", response.StatusCode)
-	log.Println("HTTP Endpoint Used", response.Endpoint)
+	log.Println(response.Endpoint, response.Code)
+	log.Println(worklog.ID, worklog.IssueID)
 
-	log.Println(newComment.ID)
 }

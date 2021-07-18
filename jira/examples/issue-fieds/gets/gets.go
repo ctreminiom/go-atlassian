@@ -24,16 +24,13 @@ func main() {
 
 	fields, response, err := atlassian.Issue.Field.Gets(context.Background())
 	if err != nil {
-		if response != nil {
-			log.Println("Response HTTP Response", string(response.BodyAsBytes))
-		}
+		log.Fatal(err)
 		return
 	}
 
-	log.Println("Response HTTP Code", response.StatusCode)
 	log.Println("HTTP Endpoint Used", response.Endpoint)
 
-	for _, field := range *fields {
+	for _, field := range fields {
 		log.Println(field)
 	}
 

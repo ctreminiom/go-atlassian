@@ -2,11 +2,11 @@ package jira
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/url"
 	"strconv"
+	"strings"
 )
 
 type DashboardService struct{ client *Client }
@@ -22,15 +22,19 @@ type DashboardScheme struct {
 	ID               string                   `json:"id,omitempty"`
 	IsFavourite      bool                     `json:"isFavourite,omitempty"`
 	Name             string                   `json:"name,omitempty"`
+	Owner            *UserScheme              `json:"owner,omitempty"`
 	Popularity       int                      `json:"popularity,omitempty"`
+	Rank             int                      `json:"rank,omitempty"`
 	Self             string                   `json:"self,omitempty"`
 	SharePermissions []*SharePermissionScheme `json:"sharePermissions,omitempty"`
+	EditPermission   []*SharePermissionScheme `json:"editPermissions,omitempty"`
 	View             string                   `json:"view,omitempty"`
 }
 
-// Returns a list of dashboards owned by or shared with the user. The list may be filtered to include only favorite or owned dashboards.
+// Gets returns a list of dashboards owned by or shared with the user. The list may be filtered to include only favorite or owned dashboards.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/dashboards#get-all-dashboards
-func (d *DashboardService) Gets(ctx context.Context, startAt, maxResults int, filter string) (result *DashboardPageScheme, response *Response, err error) {
+// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-dashboards/#api-rest-api-3-dashboard-get
+func (d *DashboardService) Gets(ctx context.Context, startAt, maxResults int, filter string) (result *DashboardPageScheme, response *ResponseScheme, err error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -46,13 +50,8 @@ func (d *DashboardService) Gets(ctx context.Context, startAt, maxResults int, fi
 		return
 	}
 
-	response, err = d.client.Do(request)
+	response, err = d.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(DashboardPageScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
@@ -67,50 +66,26 @@ type SharePermissionScheme struct {
 	Group   *GroupScheme       `json:"group,omitempty"`
 }
 
-// Creates a dashboard.
+type DashboardPayloadScheme struct {
+	Name             string                   `json:"name,omitempty"`
+	Description      string                   `json:"description,omitempty"`
+	SharePermissions []*SharePermissionScheme `json:"sharePermissions,omitempty"`
+}
+
+// Create creates a dashboard.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/dashboards#create-dashboard
-func (d *DashboardService) Create(ctx context.Context, name, description string, permissions *[]SharePermissionScheme) (result *DashboardScheme, response *Response, err error) {
-
-	if len(name) == 0 {
-		return nil, nil, fmt.Errorf("error, please provide a valid Dashboard name")
-	}
-
-	if permissions == nil {
-		return nil, nil, fmt.Errorf("error, please provide the permission to user, this param is required by the Atlassian Documentation")
-	}
-
-	if len(*permissions) == 0 {
-		return nil, nil, fmt.Errorf("error, please provide the permission to user, this param is required by the Atlassian Documentation")
-	}
-
-	//Create the payload
-	var payload = map[string]interface{}{}
-	payload["name"] = name
-	payload["description"] = description
-
-	//For each share permission, append the object node
-	var sharePermissionsNode []map[string]interface{}
-	for _, permission := range *permissions {
-
-		//Convert the SharePermissionScheme struct to map[string]interface{}
-		sharePermissionSchemeAsBytes, err := json.Marshal(permission)
-		if err != nil {
-			return nil, nil, err
-		}
-
-		sharePermissionSchemeAsMap := make(map[string]interface{})
-		err = json.Unmarshal(sharePermissionSchemeAsBytes, &sharePermissionSchemeAsMap)
-		if err != nil {
-			return nil, nil, err
-		}
-
-		sharePermissionsNode = append(sharePermissionsNode, sharePermissionSchemeAsMap)
-	}
-	payload["sharePermissions"] = sharePermissionsNode
+// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-dashboards/#api-rest-api-3-dashboard-post
+// NOTE: Experimental Endpoint
+func (d *DashboardService) Create(ctx context.Context, payload *DashboardPayloadScheme) (result *DashboardScheme, response *ResponseScheme, err error) {
 
 	var endpoint = "rest/api/3/dashboard"
 
-	request, err := d.client.newRequest(ctx, http.MethodPost, endpoint, payload)
+	payloadAsReader, err := transformStructToReader(payload)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	request, err := d.client.newRequest(ctx, http.MethodPost, endpoint, payloadAsReader)
 	if err != nil {
 		return
 	}
@@ -118,13 +93,8 @@ func (d *DashboardService) Create(ctx context.Context, name, description string,
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Content-Type", "application/json")
 
-	response, err = d.client.Do(request)
+	response, err = d.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(DashboardScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
@@ -139,30 +109,21 @@ type DashboardSearchOptionsScheme struct {
 	Expand              []string
 }
 
-type DashboardSearchScheme struct {
-	Self       string `json:"self"`
-	MaxResults int    `json:"maxResults"`
-	StartAt    int    `json:"startAt"`
-	Total      int    `json:"total"`
-	IsLast     bool   `json:"isLast"`
-	Values     []struct {
-		Description      string                   `json:"description,omitempty"`
-		ID               string                   `json:"id"`
-		IsFavourite      bool                     `json:"isFavourite"`
-		Name             string                   `json:"name"`
-		Owner            *UserScheme              `json:"owner,omitempty"`
-		Popularity       int                      `json:"popularity"`
-		Self             string                   `json:"self"`
-		SharePermissions []*SharePermissionScheme `json:"sharePermissions"`
-		View             string                   `json:"view"`
-		Rank             int                      `json:"rank"`
-	} `json:"values"`
+type DashboardSearchPageScheme struct {
+	Self       string             `json:"self,omitempty"`
+	MaxResults int                `json:"maxResults,omitempty"`
+	StartAt    int                `json:"startAt,omitempty"`
+	Total      int                `json:"total,omitempty"`
+	IsLast     bool               `json:"isLast,omitempty"`
+	Values     []*DashboardScheme `json:"values,omitempty"`
 }
 
-// Returns a paginated list of dashboards.
+// Search returns a paginated list of dashboards.
 // This operation is similar to Get dashboards except that the results can be refined to include dashboards that have specific attributes.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/dashboards#search-for-dashboards
-func (d *DashboardService) Search(ctx context.Context, opts *DashboardSearchOptionsScheme, startAt, maxResults int) (result *DashboardSearchScheme, response *Response, err error) {
+// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-dashboards/#api-rest-api-3-dashboard-search-get
+func (d *DashboardService) Search(ctx context.Context, opts *DashboardSearchOptionsScheme, startAt, maxResults int) (
+	result *DashboardSearchPageScheme, response *ResponseScheme, err error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -186,19 +147,8 @@ func (d *DashboardService) Search(ctx context.Context, opts *DashboardSearchOpti
 			params.Add("orderBy", opts.OwnerAccountID)
 		}
 
-		var expand string
-		for index, value := range opts.Expand {
-
-			if index == 0 {
-				expand = value
-				continue
-			}
-
-			expand += "," + value
-		}
-
-		if len(expand) != 0 {
-			params.Add("expand", expand)
+		if len(opts.Expand) != 0 {
+			params.Add("expand", strings.Join(opts.Expand, ","))
 		}
 	}
 
@@ -210,28 +160,26 @@ func (d *DashboardService) Search(ctx context.Context, opts *DashboardSearchOpti
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = d.client.Do(request)
+	response, err = d.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(DashboardSearchScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
 	return
 }
 
-// Returns a dashboard.
+// Get returns a dashboard.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/dashboards#get-dashboard
-func (d *DashboardService) Get(ctx context.Context, dashboardID string) (result *DashboardScheme, response *Response, err error) {
+// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-dashboards/#api-rest-api-3-dashboard-id-get
+func (d *DashboardService) Get(ctx context.Context, dashboardID string) (result *DashboardScheme,
+	response *ResponseScheme, err error) {
 
 	if len(dashboardID) == 0 {
-		return nil, nil, fmt.Errorf("error, please provide a valid dashboardID value")
+		return nil, nil, notDashboardIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/dashboard/%v", dashboardID)
+
 	request, err := d.client.newRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
 		return
@@ -239,25 +187,22 @@ func (d *DashboardService) Get(ctx context.Context, dashboardID string) (result 
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = d.client.Do(request)
+	response, err = d.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(DashboardScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
 	return
 }
 
-// Deletes a dashboard.
+// Delete deletes a dashboard.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/dashboards#delete-dashboard
-func (d *DashboardService) Delete(ctx context.Context, dashboardID string) (response *Response, err error) {
+// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-dashboards/#api-rest-api-3-dashboard-id-delete
+// NOTE: Experimental Method
+func (d *DashboardService) Delete(ctx context.Context, dashboardID string) (response *ResponseScheme, err error) {
 
 	if len(dashboardID) == 0 {
-		return nil, fmt.Errorf("error, please provide a valid dashboardID value")
+		return nil, notDashboardIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/dashboard/%v", dashboardID)
@@ -268,7 +213,7 @@ func (d *DashboardService) Delete(ctx context.Context, dashboardID string) (resp
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = d.client.Do(request)
+	response, err = d.client.call(request, nil)
 	if err != nil {
 		return
 	}
@@ -276,54 +221,25 @@ func (d *DashboardService) Delete(ctx context.Context, dashboardID string) (resp
 	return
 }
 
-// Copies a dashboard.
+// Copy copies a dashboard.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/dashboards#copy-dashboard
-func (d *DashboardService) Copy(ctx context.Context, dashboardID, newDashboardName, newDashboardDescription string, permissions *[]SharePermissionScheme) (result *DashboardScheme, response *Response, err error) {
+// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-dashboards/#api-rest-api-3-dashboard-id-copy-post
+// Note: Experimental Method
+func (d *DashboardService) Copy(ctx context.Context, dashboardID string, payload *DashboardPayloadScheme) (
+	result *DashboardScheme, response *ResponseScheme, err error) {
 
 	if len(dashboardID) == 0 {
-		return nil, nil, fmt.Errorf("error, please provide a valid dashboardID value")
+		return nil, nil, notDashboardIDError
 	}
-
-	if len(newDashboardName) == 0 {
-		return nil, nil, fmt.Errorf("error, please provide a valid newDashboardName value")
-	}
-
-	if permissions == nil {
-		return nil, nil, fmt.Errorf("error, please provide the permission to user, this param is required by the Atlassian Documentation")
-	}
-
-	if len(*permissions) == 0 {
-		return nil, nil, fmt.Errorf("error, please provide the permission to user, this param is required by the Atlassian Documentation")
-	}
-
-	//Create the payload
-	var payload = map[string]interface{}{}
-	payload["name"] = newDashboardName
-	payload["description"] = newDashboardDescription
-
-	//For each share permission, append the object node
-	var sharePermissionsNode []map[string]interface{}
-	for _, permission := range *permissions {
-
-		//Convert the SharePermissionScheme struct to map[string]interface{}
-		sharePermissionSchemeAsBytes, err := json.Marshal(permission)
-		if err != nil {
-			return nil, nil, err
-		}
-
-		sharePermissionSchemeAsMap := make(map[string]interface{})
-		err = json.Unmarshal(sharePermissionSchemeAsBytes, &sharePermissionSchemeAsMap)
-		if err != nil {
-			return nil, nil, err
-		}
-
-		sharePermissionsNode = append(sharePermissionsNode, sharePermissionSchemeAsMap)
-	}
-	payload["sharePermissions"] = sharePermissionsNode
 
 	var endpoint = fmt.Sprintf("rest/api/3/dashboard/%v/copy", dashboardID)
 
-	request, err := d.client.newRequest(ctx, http.MethodPost, endpoint, payload)
+	payloadAsReader, err := transformStructToReader(payload)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	request, err := d.client.newRequest(ctx, http.MethodPost, endpoint, payloadAsReader)
 	if err != nil {
 		return
 	}
@@ -331,66 +247,33 @@ func (d *DashboardService) Copy(ctx context.Context, dashboardID, newDashboardNa
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Content-Type", "application/json")
 
-	response, err = d.client.Do(request)
+	response, err = d.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(DashboardScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
 	return
 }
 
-// Updates a dashboard
+// Update updates a dashboard
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/dashboards#update-dashboard
-func (d *DashboardService) Update(ctx context.Context, dashboardID, newDashboardName, newDashboardDescription string, permissions *[]SharePermissionScheme) (result *DashboardScheme, response *Response, err error) {
+// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-dashboards/#api-rest-api-3-dashboard-id-put
+// NOTE: Experimental Method
+func (d *DashboardService) Update(ctx context.Context, dashboardID string, payload *DashboardPayloadScheme) (result *DashboardScheme,
+	response *ResponseScheme, err error) {
 
 	if len(dashboardID) == 0 {
-		return nil, nil, fmt.Errorf("error, please provide a valid dashboardID value")
+		return nil, nil, notDashboardIDError
 	}
-
-	if permissions == nil {
-		return nil, nil, fmt.Errorf("error, please provide the permission to user, this param is required by the Atlassian Documentation")
-	}
-
-	if len(*permissions) == 0 {
-		return nil, nil, fmt.Errorf("error, please provide the permission to user, this param is required by the Atlassian Documentation")
-	}
-
-	//Create the payload
-	var payload = map[string]interface{}{}
-	payload["name"] = newDashboardName
-
-	if len(newDashboardDescription) != 0 {
-		payload["description"] = newDashboardDescription
-	}
-
-	//For each share permission, append the object node
-	var sharePermissionsNode []map[string]interface{}
-	for _, permission := range *permissions {
-
-		//Convert the SharePermissionScheme struct to map[string]interface{}
-		sharePermissionSchemeAsBytes, err := json.Marshal(permission)
-		if err != nil {
-			return nil, nil, err
-		}
-
-		sharePermissionSchemeAsMap := make(map[string]interface{})
-		err = json.Unmarshal(sharePermissionSchemeAsBytes, &sharePermissionSchemeAsMap)
-		if err != nil {
-			return nil, nil, err
-		}
-
-		sharePermissionsNode = append(sharePermissionsNode, sharePermissionSchemeAsMap)
-	}
-	payload["sharePermissions"] = sharePermissionsNode
 
 	var endpoint = fmt.Sprintf("rest/api/3/dashboard/%v", dashboardID)
 
-	request, err := d.client.newRequest(ctx, http.MethodPut, endpoint, payload)
+	payloadAsReader, err := transformStructToReader(payload)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	request, err := d.client.newRequest(ctx, http.MethodPut, endpoint, payloadAsReader)
 	if err != nil {
 		return
 	}
@@ -398,15 +281,14 @@ func (d *DashboardService) Update(ctx context.Context, dashboardID, newDashboard
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Content-Type", "application/json")
 
-	response, err = d.client.Do(request)
+	response, err = d.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(DashboardScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
 	return
 }
+
+var (
+	notDashboardIDError = fmt.Errorf("error, please provide a valid dashboardID value")
+)

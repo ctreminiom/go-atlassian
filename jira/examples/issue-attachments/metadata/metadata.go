@@ -24,13 +24,11 @@ func main() {
 
 	metadata, response, err := atlassian.Issue.Attachment.Metadata(context.Background(), "attachmentID")
 	if err != nil {
-		if response != nil {
-			log.Println("Response HTTP Response", string(response.BodyAsBytes))
-		}
+		log.Fatal(err)
 		return
 	}
 
-	log.Println("Response HTTP Code", response.StatusCode)
+	log.Println("Response HTTP Code", response.Code)
 	log.Println("HTTP Endpoint Used", response.Endpoint)
 	log.Println(metadata)
 	return

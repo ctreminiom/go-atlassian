@@ -2,11 +2,11 @@ package jira
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/url"
 	"strconv"
+	"strings"
 )
 
 type FilterService struct {
@@ -14,7 +14,7 @@ type FilterService struct {
 	Share  *FilterShareService
 }
 
-type FilterBodyScheme struct {
+type FilterPayloadScheme struct {
 	Name             string                   `json:"name,omitempty"`
 	Description      string                   `json:"description,omitempty"`
 	JQL              string                   `json:"jql,omitempty"`
@@ -22,16 +22,20 @@ type FilterBodyScheme struct {
 	SharePermissions []*SharePermissionScheme `json:"sharePermissions,omitempty"`
 }
 
-// Creates a filter. The filter is shared according to the default share scope. The filter is not selected as a favorite.
+// Create creates a filter. The filter is shared according to the default share scope.
+// The filter is not selected as a favorite.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/filters#create-filter
-func (f *FilterService) Create(ctx context.Context, payload *FilterBodyScheme) (result *FilterScheme, response *Response, err error) {
+// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-filters/#api-rest-api-3-filter-post
+func (f *FilterService) Create(ctx context.Context, payload *FilterPayloadScheme) (result *FilterScheme,
+	response *ResponseScheme, err error) {
 
-	if payload == nil {
-		return nil, nil, fmt.Errorf("error, payload value is nil, please provide a valid FilterBodyScheme pointer")
+	payloadAsReader, err := transformStructToReader(payload)
+	if err != nil {
+		return nil, nil, err
 	}
 
 	var endpoint = "rest/api/3/filter"
-	request, err := f.client.newRequest(ctx, http.MethodPost, endpoint, &payload)
+	request, err := f.client.newRequest(ctx, http.MethodPost, endpoint, payloadAsReader)
 	if err != nil {
 		return
 	}
@@ -39,22 +43,18 @@ func (f *FilterService) Create(ctx context.Context, payload *FilterBodyScheme) (
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Content-Type", "application/json")
 
-	response, err = f.client.Do(request)
+	response, err = f.client.call(request, &result)
 	if err != nil {
 		return
-	}
-
-	result = new(FilterScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
 
 	return
 }
 
-// Returns the visible favorite filters of the user.
+// Favorite returns the visible favorite filters of the user.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/filters#get-favorites
-func (f *FilterService) Favorite(ctx context.Context) (result *[]FilterScheme, response *Response, err error) {
+// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-filters/#api-rest-api-3-filter-favourite-get
+func (f *FilterService) Favorite(ctx context.Context) (result []*FilterScheme, response *ResponseScheme, err error) {
 
 	var endpoint = "rest/api/3/filter/favourite"
 
@@ -64,66 +64,47 @@ func (f *FilterService) Favorite(ctx context.Context) (result *[]FilterScheme, r
 	}
 	request.Header.Set("Accept", "application/json")
 
-	response, err = f.client.Do(request)
+	response, err = f.client.call(request, &result)
 	if err != nil {
 		return
-	}
-
-	result = new([]FilterScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
 
 	return
 }
 
-// Returns the filters owned by the user. If includeFavourites is true, the user's visible favorite filters are also returned.
+// My returns the filters owned by the user. If includeFavourites is true,
+// the user's visible favorite filters are also returned.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/filters#get-my-filters
-func (f *FilterService) My(ctx context.Context, favorites bool, expands []string) (result *[]FilterScheme, response *Response, err error) {
+// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-filters/#api-rest-api-3-filter-my-get
+func (f *FilterService) My(ctx context.Context, favorites bool, expand []string) (result []*FilterScheme, response *ResponseScheme, err error) {
 
 	params := url.Values{}
 
-	var expand string
-	for index, value := range expands {
-
-		if index == 0 {
-			expand = value
-			continue
-		}
-
-		expand += "," + value
-	}
-
 	if len(expand) != 0 {
-		params.Add("expand", expand)
+		params.Add("expand", strings.Join(expand, ","))
 	}
 
 	if favorites {
 		params.Add("includeFavourites", "true")
 	}
 
-	var endpoint string
+	var endpoint strings.Builder
+	endpoint.WriteString("rest/api/3/filter/my")
+
 	if params.Encode() != "" {
-		endpoint = fmt.Sprintf("rest/api/3/filter/my?%v", params.Encode())
-	} else {
-		endpoint = "rest/api/3/filter/my"
+		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
-	request, err := f.client.newRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := f.client.newRequest(ctx, http.MethodGet, endpoint.String(), nil)
 	if err != nil {
 		return
 	}
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = f.client.Do(request)
+	response, err = f.client.call(request, &result)
 	if err != nil {
 		return
-	}
-
-	result = new([]FilterScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
 
 	return
@@ -137,135 +118,109 @@ type FilterSearchOptionScheme struct {
 	Expand          []string
 }
 
-// Returns a paginated list of filters. Use this operation to get:
+// Search returns a paginated list of filters
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/filters#search-filters
-func (f *FilterService) Search(ctx context.Context, options *FilterSearchOptionScheme, startAt, maxResults int) (result *FilterPageScheme, response *Response, err error) {
-
-	if options == nil {
-		return nil, nil, fmt.Errorf("error, options value is nil, please provide a valid FilterSearchOptionScheme pointer")
-	}
+// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-filters/#api-rest-api-3-filter-search-get
+func (f *FilterService) Search(ctx context.Context, options *FilterSearchOptionScheme, startAt, maxResults int) (
+	result *FilterSearchPageScheme, response *ResponseScheme, err error) {
 
 	params := url.Values{}
-
-	if options.Name != "" {
-		params.Add("filterName", options.Name)
-	}
-
-	if options.AccountID != "" {
-		params.Add("accountId", options.AccountID)
-	}
-
-	if options.Group != "" {
-		params.Add("groupname", options.Group)
-	}
-
-	if options.ProjectID != 0 {
-		params.Add("projectId", strconv.Itoa(options.ProjectID))
-	}
-
-	for _, filterID := range options.IDs {
-		params.Add("id", strconv.Itoa(filterID))
-	}
-
-	if options.OrderBy != "" {
-		params.Add("orderBy", options.OrderBy)
-	}
-
-	var expand string
-	for index, value := range options.Expand {
-
-		if index == 0 {
-			expand = value
-			continue
-		}
-
-		expand += "," + value
-	}
-
-	if len(expand) != 0 {
-		params.Add("expand", expand)
-	}
-
 	params.Add("startAt", strconv.Itoa(startAt))
 	params.Add("maxResults", strconv.Itoa(maxResults))
 
-	var endpoint = fmt.Sprintf("rest/api/3/filter/search?%v", params.Encode())
-	request, err := f.client.newRequest(ctx, http.MethodGet, endpoint, nil)
-	if err != nil {
-		return
-	}
-	request.Header.Set("Accept", "application/json")
+	if options != nil {
 
-	response, err = f.client.Do(request)
-	if err != nil {
-		return
-	}
-
-	result = new(FilterPageScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
-	}
-
-	return
-}
-
-// Returns a filter.
-// Docs: https://docs.go-atlassian.io/jira-software-cloud/filters#get-filter
-func (f *FilterService) Get(ctx context.Context, filterID int, expands []string) (result *FilterScheme, response *Response, err error) {
-
-	params := url.Values{}
-
-	var expand string
-	for index, value := range expands {
-
-		if index == 0 {
-			expand = value
-			continue
+		if len(options.Expand) != 0 {
+			params.Add("expand", strings.Join(options.Expand, ","))
 		}
 
-		expand += "," + value
+		if options.Name != "" {
+			params.Add("filterName", options.Name)
+		}
+
+		if options.AccountID != "" {
+			params.Add("accountId", options.AccountID)
+		}
+
+		if options.Group != "" {
+			params.Add("groupname", options.Group)
+		}
+
+		if options.ProjectID != 0 {
+			params.Add("projectId", strconv.Itoa(options.ProjectID))
+		}
+
+		for _, filterID := range options.IDs {
+			params.Add("id", strconv.Itoa(filterID))
+		}
+
+		if options.OrderBy != "" {
+			params.Add("orderBy", options.OrderBy)
+		}
 	}
 
-	if len(expand) != 0 {
-		params.Add("expand", expand)
-	}
-
-	var endpoint string
-	if params.Encode() != "" {
-		endpoint = fmt.Sprintf("rest/api/3/filter/%v?%v", filterID, params.Encode())
-	} else {
-		endpoint = fmt.Sprintf("rest/api/3/filter/%v", filterID)
-	}
+	var endpoint = fmt.Sprintf("rest/api/3/filter/search?%v", params.Encode())
 
 	request, err := f.client.newRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
 		return
 	}
-	request.Header.Set("Content-Type", "application/json")
 
-	response, err = f.client.Do(request)
+	request.Header.Set("Accept", "application/json")
+
+	response, err = f.client.call(request, &result)
+	if err != nil {
+		return
+	}
+	return
+}
+
+// Get returns a filter.
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/filters#get-filter
+// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-filters/#api-rest-api-3-filter-id-get
+func (f *FilterService) Get(ctx context.Context, filterID int, expand []string) (result *FilterScheme,
+	response *ResponseScheme, err error) {
+
+	params := url.Values{}
+	if len(expand) != 0 {
+		params.Add("expand", strings.Join(expand, ","))
+	}
+
+	var endpointBuffer strings.Builder
+	endpointBuffer.WriteString(fmt.Sprintf("rest/api/3/filter/%v", filterID))
+
+	if params.Encode() != "" {
+		endpointBuffer.WriteString(fmt.Sprintf("?%v", params.Encode()))
+	}
+
+	request, err := f.client.newRequest(ctx, http.MethodGet, endpointBuffer.String(), nil)
 	if err != nil {
 		return
 	}
 
-	result = new(FilterScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
+	request.Header.Set("Accept", "application/json")
+
+	response, err = f.client.call(request, &result)
+	if err != nil {
+		return
 	}
 
 	return
 }
 
-// Updates a filter. Use this operation to update a filter's name, description, JQL, or sharing.
+// Update updates a filter. Use this operation to update a filter's name, description, JQL, or sharing.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/filters#update-filter
-func (f *FilterService) Update(ctx context.Context, filterID int, payload *FilterBodyScheme) (result *FilterScheme, response *Response, err error) {
-
-	if payload == nil {
-		return nil, nil, fmt.Errorf("error, payload value is nil, please provide a valid FilterBodyScheme pointer")
+// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-filters/#api-rest-api-3-filter-id-put
+func (f *FilterService) Update(ctx context.Context, filterID int, payload *FilterPayloadScheme) (result *FilterScheme,
+	response *ResponseScheme, err error) {
+	payloadAsReader, err := transformStructToReader(payload)
+	if err != nil {
+		return nil, nil, err
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/filter/%v", filterID)
-	request, err := f.client.newRequest(ctx, http.MethodPut, endpoint, &payload)
+
+	request, err := f.client.newRequest(ctx, http.MethodPut, endpoint, payloadAsReader)
 	if err != nil {
 		return
 	}
@@ -273,14 +228,9 @@ func (f *FilterService) Update(ctx context.Context, filterID int, payload *Filte
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Content-Type", "application/json")
 
-	response, err = f.client.Do(request)
+	response, err = f.client.call(request, &result)
 	if err != nil {
 		return
-	}
-
-	result = new(FilterScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
 
 	return
@@ -288,15 +238,17 @@ func (f *FilterService) Update(ctx context.Context, filterID int, payload *Filte
 
 // Delete a filter.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/filters#delete-filter
-func (f *FilterService) Delete(ctx context.Context, filterID int) (response *Response, err error) {
+// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-filters/#api-rest-api-3-filter-id-delete
+func (f *FilterService) Delete(ctx context.Context, filterID int) (response *ResponseScheme, err error) {
 
 	var endpoint = fmt.Sprintf("rest/api/3/filter/%v", filterID)
+
 	request, err := f.client.newRequest(ctx, http.MethodDelete, endpoint, nil)
 	if err != nil {
 		return
 	}
 
-	response, err = f.client.Do(request)
+	response, err = f.client.call(request, nil)
 	if err != nil {
 		return
 	}
@@ -305,12 +257,35 @@ func (f *FilterService) Delete(ctx context.Context, filterID int) (response *Res
 }
 
 type FilterPageScheme struct {
-	Self       string                  `json:"self,omitempty"`
-	MaxResults int                     `json:"maxResults,omitempty"`
-	StartAt    int                     `json:"startAt,omitempty"`
-	Total      int                     `json:"total,omitempty"`
-	IsLast     bool                    `json:"isLast,omitempty"`
-	Values     []*FilterPageNodeScheme `json:"values,omitempty"`
+	Self       string          `json:"self,omitempty"`
+	MaxResults int             `json:"maxResults,omitempty"`
+	StartAt    int             `json:"startAt,omitempty"`
+	Total      int             `json:"total,omitempty"`
+	IsLast     bool            `json:"isLast,omitempty"`
+	Values     []*FilterScheme `json:"values,omitempty"`
+}
+
+type FilterSearchPageScheme struct {
+	Self       string          `json:"self,omitempty"`
+	MaxResults int             `json:"maxResults,omitempty"`
+	StartAt    int             `json:"startAt,omitempty"`
+	Total      int             `json:"total,omitempty"`
+	IsLast     bool            `json:"isLast,omitempty"`
+	Values     []*FilterDetailScheme `json:"values,omitempty"`
+}
+
+type FilterDetailScheme struct {
+	Self             string                        `json:"self,omitempty"`
+	ID               string                        `json:"id,omitempty"`
+	Name             string                        `json:"name,omitempty"`
+	Owner            *UserScheme                   `json:"owner,omitempty"`
+	Jql              string                        `json:"jql,omitempty"`
+	ViewURL          string                        `json:"viewUrl,omitempty"`
+	SearchURL        string                        `json:"searchUrl,omitempty"`
+	Favourite        bool                          `json:"favourite,omitempty"`
+	FavouritedCount  int                           `json:"favouritedCount,omitempty"`
+	SharePermissions []*SharePermissionScheme      `json:"sharePermissions,omitempty"`
+	Subscriptions    []*FilterSubscriptionScheme `json:"subscriptions,omitempty"`
 }
 
 type FilterScheme struct {
@@ -326,21 +301,6 @@ type FilterScheme struct {
 	SharePermissions []*SharePermissionScheme      `json:"sharePermissions,omitempty"`
 	ShareUsers       *FilterUsersScheme            `json:"sharedUsers,omitempty"`
 	Subscriptions    *FilterSubscriptionPageScheme `json:"subscriptions,omitempty"`
-}
-
-type FilterPageNodeScheme struct {
-	Self             string                   `json:"self,omitempty"`
-	ID               string                   `json:"id,omitempty"`
-	Name             string                   `json:"name,omitempty"`
-	Owner            *UserScheme              `json:"owner,omitempty"`
-	Jql              string                   `json:"jql,omitempty"`
-	ViewURL          string                   `json:"viewUrl,omitempty"`
-	SearchURL        string                   `json:"searchUrl,omitempty"`
-	Favourite        bool                     `json:"favourite,omitempty"`
-	FavouritedCount  int                      `json:"favouritedCount,omitempty"`
-	SharePermissions []*SharePermissionScheme `json:"sharePermissions,omitempty"`
-	ShareUsers       *FilterUsersScheme       `json:"sharedUsers,omitempty"`
-	Subscriptions    *[]FilterUsersScheme     `json:"subscriptions,omitempty"`
 }
 
 type FilterSubscriptionPageScheme struct {

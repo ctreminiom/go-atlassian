@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"github.com/ctreminiom/go-atlassian/jira"
 	"log"
 	"os"
@@ -46,18 +45,13 @@ func main() {
 
 	grants, response, err := atlassian.Permission.Check(context.Background(), payload)
 	if err != nil {
-		if response != nil {
-			log.Println("Response HTTP Response", string(response.BodyAsBytes))
-		}
 		log.Fatal(err)
 	}
 
-	log.Println("Response HTTP Code", response.StatusCode)
 	log.Println("HTTP Endpoint Used", response.Endpoint)
 
 	for _, permission := range grants.ProjectPermissions {
 		log.Println(permission.Permission, permission.Issues)
 	}
 
-	fmt.Println(string(response.BodyAsBytes))
 }

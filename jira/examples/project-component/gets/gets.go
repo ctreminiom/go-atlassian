@@ -34,13 +34,11 @@ func main() {
 	var projectKey = "KP"
 	components, response, err := atlassian.Project.Component.Gets(context.Background(), projectKey)
 	if err != nil {
-		if response != nil {
-			log.Println("Response HTTP Response", string(response.BodyAsBytes))
-		}
 		log.Fatal(err)
 	}
 
-	for _, component := range *components {
+	log.Println(response.Endpoint)
+	for _, component := range components {
 		log.Println(component)
 	}
 }

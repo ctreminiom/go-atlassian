@@ -15,7 +15,7 @@ func TestFilterService_Create(t *testing.T) {
 	testCases := []struct {
 		name               string
 		mockFile           string
-		payload            *FilterBodyScheme
+		payload            *FilterPayloadScheme
 		wantHTTPMethod     string
 		endpoint           string
 		context            context.Context
@@ -24,7 +24,7 @@ func TestFilterService_Create(t *testing.T) {
 	}{
 		{
 			name: "CreateFilterWhenThePayloadIsCorrect",
-			payload: &FilterBodyScheme{
+			payload: &FilterPayloadScheme{
 				Name:        "Filter #a5fd86b9-4fef-44c1-8ce4-8d1a63e806e1",
 				Description: "Filter's description",
 				JQL:         "issuetype = Bug",
@@ -49,7 +49,7 @@ func TestFilterService_Create(t *testing.T) {
 		},
 		{
 			name: "CreateFilterWhenTheContextIsNil",
-			payload: &FilterBodyScheme{
+			payload: &FilterPayloadScheme{
 				Name:        "Filter #a5fd86b9-4fef-44c1-8ce4-8d1a63e806e1",
 				Description: "Filter's description",
 				JQL:         "issuetype = Bug",
@@ -64,7 +64,7 @@ func TestFilterService_Create(t *testing.T) {
 		},
 		{
 			name: "CreateFilterWhenTheResponseBodyLengthIsZero",
-			payload: &FilterBodyScheme{
+			payload: &FilterPayloadScheme{
 				Name:        "Filter #a5fd86b9-4fef-44c1-8ce4-8d1a63e806e1",
 				Description: "Filter's description",
 				JQL:         "issuetype = Bug",
@@ -79,7 +79,7 @@ func TestFilterService_Create(t *testing.T) {
 		},
 		{
 			name: "CreateFilterWhenTheResponseBodyHasADifferentFormat",
-			payload: &FilterBodyScheme{
+			payload: &FilterPayloadScheme{
 				Name:        "Filter #a5fd86b9-4fef-44c1-8ce4-8d1a63e806e1",
 				Description: "Filter's description",
 				JQL:         "issuetype = Bug",
@@ -94,7 +94,7 @@ func TestFilterService_Create(t *testing.T) {
 		},
 		{
 			name: "CreateFilterWhenTheStatusResponseCodeIsInvalid",
-			payload: &FilterBodyScheme{
+			payload: &FilterPayloadScheme{
 				Name:        "Filter #a5fd86b9-4fef-44c1-8ce4-8d1a63e806e1",
 				Description: "Filter's description",
 				JQL:         "issuetype = Bug",
@@ -109,7 +109,7 @@ func TestFilterService_Create(t *testing.T) {
 		},
 		{
 			name: "CreateFilterWhenTheRequestMethodIsInvalid",
-			payload: &FilterBodyScheme{
+			payload: &FilterPayloadScheme{
 				Name:        "Filter #a5fd86b9-4fef-44c1-8ce4-8d1a63e806e1",
 				Description: "Filter's description",
 				JQL:         "issuetype = Bug",
@@ -161,8 +161,8 @@ func TestFilterService_Create(t *testing.T) {
 				assert.Error(t, err)
 
 				if gotResponse != nil {
-					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
-					assert.Equal(t, testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
+					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
+					assert.Equal(t, testCase.wantHTTPCodeReturn, gotResponse.Code)
 				}
 			} else {
 
@@ -186,8 +186,8 @@ func TestFilterService_Create(t *testing.T) {
 				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
 				assert.Equal(t, testCase.endpoint, endpointToAssert)
 
-				t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
-				assert.Equal(t, gotResponse.StatusCode, testCase.wantHTTPCodeReturn)
+				t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
+				assert.Equal(t, gotResponse.Code, testCase.wantHTTPCodeReturn)
 
 			}
 
@@ -291,7 +291,7 @@ func TestFilterService_Delete(t *testing.T) {
 				assert.Error(t, err)
 
 				if gotResponse != nil {
-					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
+					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
 				}
 			} else {
 
@@ -314,8 +314,8 @@ func TestFilterService_Delete(t *testing.T) {
 				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
 				assert.Equal(t, testCase.endpoint, endpointToAssert)
 
-				t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
-				assert.Equal(t, gotResponse.StatusCode, testCase.wantHTTPCodeReturn)
+				t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
+				assert.Equal(t, gotResponse.Code, testCase.wantHTTPCodeReturn)
 			}
 
 		})
@@ -435,7 +435,7 @@ func TestFilterService_Favorite(t *testing.T) {
 				assert.Error(t, err)
 
 				if gotResponse != nil {
-					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
+					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
 				}
 			} else {
 
@@ -459,8 +459,8 @@ func TestFilterService_Favorite(t *testing.T) {
 				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
 				assert.Equal(t, testCase.endpoint, endpointToAssert)
 
-				t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
-				assert.Equal(t, gotResponse.StatusCode, testCase.wantHTTPCodeReturn)
+				t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
+				assert.Equal(t, gotResponse.Code, testCase.wantHTTPCodeReturn)
 			}
 
 		})
@@ -599,7 +599,7 @@ func TestFilterService_Get(t *testing.T) {
 				assert.Error(t, err)
 
 				if gotResponse != nil {
-					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
+					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
 				}
 			} else {
 
@@ -623,8 +623,8 @@ func TestFilterService_Get(t *testing.T) {
 				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
 				assert.Equal(t, testCase.endpoint, endpointToAssert)
 
-				t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
-				assert.Equal(t, gotResponse.StatusCode, testCase.wantHTTPCodeReturn)
+				t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
+				assert.Equal(t, gotResponse.Code, testCase.wantHTTPCodeReturn)
 
 				filterIDAsInt, err := strconv.Atoi(gotResult.ID)
 				if err != nil {
@@ -764,7 +764,7 @@ func TestFilterService_My(t *testing.T) {
 				assert.Error(t, err)
 
 				if gotResponse != nil {
-					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
+					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
 				}
 			} else {
 
@@ -788,8 +788,8 @@ func TestFilterService_My(t *testing.T) {
 				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
 				assert.Equal(t, testCase.endpoint, endpointToAssert)
 
-				t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
-				assert.Equal(t, gotResponse.StatusCode, testCase.wantHTTPCodeReturn)
+				t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
+				assert.Equal(t, gotResponse.Code, testCase.wantHTTPCodeReturn)
 			}
 
 		})
@@ -824,6 +824,7 @@ func TestFilterService_Search(t *testing.T) {
 			wantHTTPCodeReturn: http.StatusOK,
 			wantErr:            false,
 		},
+
 		{
 			name: "SearchFiltersWhenTheAccountIDIsSet",
 			options: &FilterSearchOptionScheme{
@@ -1028,7 +1029,7 @@ func TestFilterService_Search(t *testing.T) {
 				assert.Error(t, err)
 
 				if gotResponse != nil {
-					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
+					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
 				}
 			} else {
 
@@ -1052,8 +1053,8 @@ func TestFilterService_Search(t *testing.T) {
 				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
 				assert.Equal(t, testCase.endpoint, endpointToAssert)
 
-				t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
-				assert.Equal(t, gotResponse.StatusCode, testCase.wantHTTPCodeReturn)
+				t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
+				assert.Equal(t, gotResponse.Code, testCase.wantHTTPCodeReturn)
 			}
 
 		})
@@ -1065,7 +1066,7 @@ func TestFilterService_Update(t *testing.T) {
 	testCases := []struct {
 		name               string
 		filterID           int
-		payload            *FilterBodyScheme
+		payload            *FilterPayloadScheme
 		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string
@@ -1075,7 +1076,7 @@ func TestFilterService_Update(t *testing.T) {
 	}{
 		{
 			name: "UpdateFilterWhenTheIDIsCorrect",
-			payload: &FilterBodyScheme{
+			payload: &FilterPayloadScheme{
 				Name: "All Open Bugs",
 				JQL:  "type = Bug and resolution is empty",
 			},
@@ -1089,7 +1090,7 @@ func TestFilterService_Update(t *testing.T) {
 		},
 		{
 			name: "UpdateFilterWhenTheIDIsIncorrect",
-			payload: &FilterBodyScheme{
+			payload: &FilterPayloadScheme{
 				Name: "All Open Bugs",
 				JQL:  "type = Bug and resolution is empty",
 			},
@@ -1114,7 +1115,7 @@ func TestFilterService_Update(t *testing.T) {
 		},
 		{
 			name: "UpdateFilterWhenTheContextIsNil",
-			payload: &FilterBodyScheme{
+			payload: &FilterPayloadScheme{
 				Name: "All Open Bugs",
 				JQL:  "type = Bug and resolution is empty",
 			},
@@ -1128,7 +1129,7 @@ func TestFilterService_Update(t *testing.T) {
 		},
 		{
 			name: "UpdateFilterWhenTheRequestMethodIsIncorrect",
-			payload: &FilterBodyScheme{
+			payload: &FilterPayloadScheme{
 				Name: "All Open Bugs",
 				JQL:  "type = Bug and resolution is empty",
 			},
@@ -1142,7 +1143,7 @@ func TestFilterService_Update(t *testing.T) {
 		},
 		{
 			name: "UpdateFilterWhenTheStatusCodeIsIncorrect",
-			payload: &FilterBodyScheme{
+			payload: &FilterPayloadScheme{
 				Name: "All Open Bugs",
 				JQL:  "type = Bug and resolution is empty",
 			},
@@ -1156,7 +1157,7 @@ func TestFilterService_Update(t *testing.T) {
 		},
 		{
 			name: "UpdateFilterWhenTheResponseBodyLengthIsZero",
-			payload: &FilterBodyScheme{
+			payload: &FilterPayloadScheme{
 				Name: "All Open Bugs",
 				JQL:  "type = Bug and resolution is empty",
 			},
@@ -1170,7 +1171,7 @@ func TestFilterService_Update(t *testing.T) {
 		},
 		{
 			name: "UpdateFilterWhenTheResponseBodyHasADifferentFormat",
-			payload: &FilterBodyScheme{
+			payload: &FilterPayloadScheme{
 				Name: "All Open Bugs",
 				JQL:  "type = Bug and resolution is empty",
 			},
@@ -1220,7 +1221,7 @@ func TestFilterService_Update(t *testing.T) {
 				assert.Error(t, err)
 
 				if gotResponse != nil {
-					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
+					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
 				}
 			} else {
 
@@ -1244,8 +1245,8 @@ func TestFilterService_Update(t *testing.T) {
 				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
 				assert.Equal(t, testCase.endpoint, endpointToAssert)
 
-				t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
-				assert.Equal(t, gotResponse.StatusCode, testCase.wantHTTPCodeReturn)
+				t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
+				assert.Equal(t, gotResponse.Code, testCase.wantHTTPCodeReturn)
 			}
 
 		})

@@ -45,25 +45,19 @@ func main() {
 			}
 	*/
 
-	payload := jira.PermissionFilterBodyScheme{
+	payload := jira.PermissionFilterPayloadScheme{
 		Type:      "project",
 		ProjectID: "10000",
 	}
 
 	permissions, response, err := atlassian.Filter.Share.Add(context.Background(), 1001, &payload)
 	if err != nil {
-		if response != nil {
-			log.Println("Response HTTP Response", string(response.BodyAsBytes))
-			log.Println("Response HTTP Code", response.StatusCode)
-			log.Println("HTTP Endpoint Used", response.Endpoint)
-		}
 		return
 	}
 
-	log.Println("Response HTTP Code", response.StatusCode)
 	log.Println("HTTP Endpoint Used", response.Endpoint)
 
-	for index, permission := range *permissions {
+	for index, permission := range permissions {
 		log.Println(index, permission.ID, permission.Type)
 	}
 }

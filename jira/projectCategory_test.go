@@ -13,8 +13,7 @@ func TestProjectCategoryService_Create(t *testing.T) {
 
 	testCases := []struct {
 		name                string
-		projectCategoryName string
-		description         string
+		payload *ProjectCategoryPayloadScheme
 		mockFile            string
 		wantHTTPMethod      string
 		endpoint            string
@@ -24,8 +23,10 @@ func TestProjectCategoryService_Create(t *testing.T) {
 	}{
 		{
 			name:                "CreateProjectCategoryWhenTheParametersAreCorrect",
-			projectCategoryName: "CREATED",
-			description:         "Created Project Category",
+			payload: &ProjectCategoryPayloadScheme{
+				Name:        "CREATED",
+				Description: "Created Project Category",
+			},
 			mockFile:            "./mocks/get-project-category.json",
 			wantHTTPMethod:      http.MethodPost,
 			endpoint:            "/rest/api/3/projectCategory",
@@ -35,9 +36,8 @@ func TestProjectCategoryService_Create(t *testing.T) {
 		},
 
 		{
-			name:                "CreateProjectCategoryWhenTheNameIsEmpty",
-			projectCategoryName: "",
-			description:         "Created Project Category",
+			name:                "CreateProjectCategoryWhenThePayloadIsNotProvided",
+			payload: nil,
 			mockFile:            "./mocks/get-project-category.json",
 			wantHTTPMethod:      http.MethodPost,
 			endpoint:            "/rest/api/3/projectCategory",
@@ -48,8 +48,10 @@ func TestProjectCategoryService_Create(t *testing.T) {
 
 		{
 			name:                "CreateProjectCategoryWhenTheRequestMethodIsIncorrect",
-			projectCategoryName: "CREATED",
-			description:         "Created Project Category",
+			payload: &ProjectCategoryPayloadScheme{
+				Name:        "CREATED",
+				Description: "Created Project Category",
+			},
 			mockFile:            "./mocks/get-project-category.json",
 			wantHTTPMethod:      http.MethodDelete,
 			endpoint:            "/rest/api/3/projectCategory",
@@ -60,8 +62,10 @@ func TestProjectCategoryService_Create(t *testing.T) {
 
 		{
 			name:                "CreateProjectCategoryWhenTheStatusCodeIsIncorrect",
-			projectCategoryName: "CREATED",
-			description:         "Created Project Category",
+			payload: &ProjectCategoryPayloadScheme{
+				Name:        "CREATED",
+				Description: "Created Project Category",
+			},
 			mockFile:            "./mocks/get-project-category.json",
 			wantHTTPMethod:      http.MethodPost,
 			endpoint:            "/rest/api/3/projectCategory",
@@ -72,8 +76,10 @@ func TestProjectCategoryService_Create(t *testing.T) {
 
 		{
 			name:                "CreateProjectCategoryWhenTheContextIsNil",
-			projectCategoryName: "CREATED",
-			description:         "Created Project Category",
+			payload: &ProjectCategoryPayloadScheme{
+				Name:        "CREATED",
+				Description: "Created Project Category",
+			},
 			mockFile:            "./mocks/get-project-category.json",
 			wantHTTPMethod:      http.MethodPost,
 			endpoint:            "/rest/api/3/projectCategory",
@@ -84,8 +90,10 @@ func TestProjectCategoryService_Create(t *testing.T) {
 
 		{
 			name:                "CreateProjectCategoryWhenTheEndpointIsIncorrect",
-			projectCategoryName: "CREATED",
-			description:         "Created Project Category",
+			payload: &ProjectCategoryPayloadScheme{
+				Name:        "CREATED",
+				Description: "Created Project Category",
+			},
 			mockFile:            "./mocks/get-project-category.json",
 			wantHTTPMethod:      http.MethodPost,
 			endpoint:            "/rest/api/2/projectCategory",
@@ -96,8 +104,10 @@ func TestProjectCategoryService_Create(t *testing.T) {
 
 		{
 			name:                "CreateProjectCategoryWhenTheResponseBodyHasADifferentFormat",
-			projectCategoryName: "CREATED",
-			description:         "Created Project Category",
+			payload: &ProjectCategoryPayloadScheme{
+				Name:        "CREATED",
+				Description: "Created Project Category",
+			},
 			mockFile:            "./mocks/empty_json.json",
 			wantHTTPMethod:      http.MethodPost,
 			endpoint:            "/rest/api/3/projectCategory",
@@ -134,7 +144,7 @@ func TestProjectCategoryService_Create(t *testing.T) {
 
 			i := &ProjectCategoryService{client: mockClient}
 
-			gotResult, gotResponse, err := i.Create(testCase.context, testCase.projectCategoryName, testCase.description)
+			gotResult, gotResponse, err := i.Create(testCase.context, testCase.payload)
 
 			if testCase.wantErr {
 
@@ -560,8 +570,7 @@ func TestProjectCategoryService_Update(t *testing.T) {
 	testCases := []struct {
 		name                string
 		projectCategoryID   int
-		projectCategoryName string
-		description         string
+		payload *ProjectCategoryPayloadScheme
 		mockFile            string
 		wantHTTPMethod      string
 		endpoint            string
@@ -572,8 +581,10 @@ func TestProjectCategoryService_Update(t *testing.T) {
 		{
 			name:                "UpdateProjectCategoryWhenTheParametersAreCorrect",
 			projectCategoryID:   1000,
-			projectCategoryName: "UPDATED",
-			description:         "Updated Project Category",
+			payload: &ProjectCategoryPayloadScheme{
+				Name:        "UPDATED",
+				Description: "Updated Project Category",
+			},
 			mockFile:            "./mocks/get-project-category.json",
 			wantHTTPMethod:      http.MethodPut,
 			endpoint:            "/rest/api/3/projectCategory/1000",
@@ -583,10 +594,24 @@ func TestProjectCategoryService_Update(t *testing.T) {
 		},
 
 		{
+			name:                "UpdateProjectCategoryWhenThePayloadIsNotProvided",
+			projectCategoryID:   1000,
+			payload: nil,
+			mockFile:            "./mocks/get-project-category.json",
+			wantHTTPMethod:      http.MethodPut,
+			endpoint:            "/rest/api/3/projectCategory/1000",
+			context:             context.Background(),
+			wantHTTPCodeReturn:  http.StatusOK,
+			wantErr:             true,
+		},
+
+		{
 			name:                "UpdateProjectCategoryWhenTheContextIsNil",
 			projectCategoryID:   1000,
-			projectCategoryName: "UPDATED",
-			description:         "Updated Project Category",
+			payload: &ProjectCategoryPayloadScheme{
+				Name:        "UPDATED",
+				Description: "Updated Project Category",
+			},
 			mockFile:            "./mocks/get-project-category.json",
 			wantHTTPMethod:      http.MethodPut,
 			endpoint:            "/rest/api/3/projectCategory/1000",
@@ -598,8 +623,10 @@ func TestProjectCategoryService_Update(t *testing.T) {
 		{
 			name:                "UpdateProjectCategoryWhenTheRequestMethodIsIncorrect",
 			projectCategoryID:   1000,
-			projectCategoryName: "UPDATED",
-			description:         "Updated Project Category",
+			payload: &ProjectCategoryPayloadScheme{
+				Name:        "UPDATED",
+				Description: "Updated Project Category",
+			},
 			mockFile:            "./mocks/get-project-category.json",
 			wantHTTPMethod:      http.MethodPost,
 			endpoint:            "/rest/api/3/projectCategory/1000",
@@ -611,8 +638,10 @@ func TestProjectCategoryService_Update(t *testing.T) {
 		{
 			name:                "UpdateProjectCategoryWhenTheStatusCodeIsIncorrect",
 			projectCategoryID:   1000,
-			projectCategoryName: "UPDATED",
-			description:         "Updated Project Category",
+			payload: &ProjectCategoryPayloadScheme{
+				Name:        "UPDATED",
+				Description: "Updated Project Category",
+			},
 			mockFile:            "./mocks/get-project-category.json",
 			wantHTTPMethod:      http.MethodPut,
 			endpoint:            "/rest/api/3/projectCategory/1000",
@@ -624,8 +653,10 @@ func TestProjectCategoryService_Update(t *testing.T) {
 		{
 			name:                "UpdateProjectCategoryWhenTheResponseBodyHasADifferentFormat",
 			projectCategoryID:   1000,
-			projectCategoryName: "UPDATED",
-			description:         "Updated Project Category",
+			payload: &ProjectCategoryPayloadScheme{
+				Name:        "UPDATED",
+				Description: "Updated Project Category",
+			},
 			mockFile:            "./mocks/empty_json.json",
 			wantHTTPMethod:      http.MethodPut,
 			endpoint:            "/rest/api/3/projectCategory/1000",
@@ -662,9 +693,7 @@ func TestProjectCategoryService_Update(t *testing.T) {
 
 			i := &ProjectCategoryService{client: mockClient}
 
-			gotResult, gotResponse, err := i.Update(testCase.context, testCase.projectCategoryID,
-				testCase.projectCategoryName,
-				testCase.description)
+			gotResult, gotResponse, err := i.Update(testCase.context, testCase.projectCategoryID, testCase.payload)
 
 			if testCase.wantErr {
 

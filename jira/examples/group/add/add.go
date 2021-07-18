@@ -24,12 +24,8 @@ func main() {
 
 	_, response, err := atlassian.Group.Add(context.Background(), "groupName", "accountID")
 	if err != nil {
-		if response != nil {
-			log.Println("Response HTTP Response", string(response.BodyAsBytes))
-		}
 		return
 	}
 
-	log.Println("Response HTTP Code", response.StatusCode)
 	log.Println("HTTP Endpoint Used", response.Endpoint)
 }

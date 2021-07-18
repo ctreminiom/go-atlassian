@@ -2,9 +2,7 @@ package jira
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
-	"gopkg.in/go-playground/validator.v9"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -32,15 +30,17 @@ type ScreenSchemeScheme struct {
 
 type ScreenTypesScheme struct {
 	Create  int `json:"create,omitempty"`
-	Default int `json:"default" validate:"required"`
-	View    int `json:"view" validate:"required"`
-	Edit    int `json:"edit" validate:"required"`
+	Default int `json:"default,omitempty"`
+	View    int `json:"view,omitempty"`
+	Edit    int `json:"edit,omitempty"`
 }
 
-// Returns a paginated list of screen schemes.
+// Gets returns a paginated list of screen schemes.
 // Only screen schemes used in classic projects are returned.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/screens/schemes#get-screen-schemes
-func (s *ScreenSchemeService) Gets(ctx context.Context, screenSchemeIDs []int, startAt, maxResults int) (result *ScreenSchemePageScheme, response *Response, err error) {
+// Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screen-schemes/#api-rest-api-3-screenscheme-get
+func (s *ScreenSchemeService) Gets(ctx context.Context, screenSchemeIDs []int, startAt, maxResults int) (
+	result *ScreenSchemePageScheme, response *ResponseScheme, err error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -59,13 +59,8 @@ func (s *ScreenSchemeService) Gets(ctx context.Context, screenSchemeIDs []int, s
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = s.client.Do(request)
+	response, err = s.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(ScreenSchemePageScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
@@ -73,27 +68,25 @@ func (s *ScreenSchemeService) Gets(ctx context.Context, screenSchemeIDs []int, s
 }
 
 type ScreenSchemePayloadScheme struct {
-	Screens     *ScreenTypesScheme `json:"screens"`
-	Name        string             `json:"name" validate:"required"`
+	Screens     *ScreenTypesScheme `json:"screens,omitempty"`
+	Name        string             `json:"name,omitempty"`
 	Description string             `json:"description,omitempty"`
 }
 
-// Creates a screen scheme.
+// Create creates a screen scheme.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/screens/schemes#create-screen-scheme
-func (s *ScreenSchemeService) Create(ctx context.Context, payload *ScreenSchemePayloadScheme) (result *ScreenSchemeScheme, response *Response, err error) {
-
-	if payload == nil {
-		return nil, nil, fmt.Errorf("error, please provide a valid ScreenSchemePayloadScheme pointer")
-	}
-
-	validate := validator.New()
-	if err = validate.Struct(payload); err != nil {
-		return
-	}
+// Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screen-schemes/#api-rest-api-3-screenscheme-post
+func (s *ScreenSchemeService) Create(ctx context.Context, payload *ScreenSchemePayloadScheme) (result *ScreenSchemeScheme,
+	response *ResponseScheme, err error) {
 
 	var endpoint = "rest/api/3/screenscheme"
 
-	request, err := s.client.newRequest(ctx, http.MethodPost, endpoint, &payload)
+	payloadAsReader, err := transformStructToReader(payload)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	request, err := s.client.newRequest(ctx, http.MethodPost, endpoint, payloadAsReader)
 	if err != nil {
 		return
 	}
@@ -101,34 +94,32 @@ func (s *ScreenSchemeService) Create(ctx context.Context, payload *ScreenSchemeP
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Content-Type", "application/json")
 
-	response, err = s.client.Do(request)
+	response, err = s.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(ScreenSchemeScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
 	return
 }
 
-// Updates a screen scheme. Only screen schemes used in classic projects can be updated.
+// Update updates a screen scheme. Only screen schemes used in classic projects can be updated.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/screens/schemes#update-screen-scheme
-func (s *ScreenSchemeService) Update(ctx context.Context, screenSchemeID string, payload *ScreenSchemePayloadScheme) (response *Response, err error) {
+// Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screen-schemes/#api-rest-api-3-screenscheme-screenschemeid-put
+func (s *ScreenSchemeService) Update(ctx context.Context, screenSchemeID string, payload *ScreenSchemePayloadScheme) (
+	response *ResponseScheme, err error) {
 
 	if len(screenSchemeID) == 0 {
-		return nil, fmt.Errorf("error, please provide a valid screenSchemeID value")
-	}
-
-	if payload == nil {
-		return nil, fmt.Errorf("error, please provide a valid ScreenSchemeScheme pointer")
+		return nil, notScreenSchemeIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/screenscheme/%v", screenSchemeID)
 
-	request, err := s.client.newRequest(ctx, http.MethodPut, endpoint, &payload)
+	payloadAsReader, err := transformStructToReader(payload)
+	if err != nil {
+		return nil, err
+	}
+
+	request, err := s.client.newRequest(ctx, http.MethodPut, endpoint, payloadAsReader)
 	if err != nil {
 		return
 	}
@@ -136,7 +127,7 @@ func (s *ScreenSchemeService) Update(ctx context.Context, screenSchemeID string,
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Content-Type", "application/json")
 
-	response, err = s.client.Do(request)
+	response, err = s.client.call(request, nil)
 	if err != nil {
 		return
 	}
@@ -144,14 +135,15 @@ func (s *ScreenSchemeService) Update(ctx context.Context, screenSchemeID string,
 	return
 }
 
-// Deletes a screen scheme.
+// Delete deletes a screen scheme.
 // A screen scheme cannot be deleted if it is used in an issue type screen scheme.
 // Only screens schemes used in classic projects can be deleted.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/screens/schemes#delete-screen-scheme
-func (s *ScreenSchemeService) Delete(ctx context.Context, screenSchemeID string) (response *Response, err error) {
+// Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screen-schemes/#api-rest-api-3-screenscheme-screenschemeid-delete
+func (s *ScreenSchemeService) Delete(ctx context.Context, screenSchemeID string) (response *ResponseScheme, err error) {
 
 	if len(screenSchemeID) == 0 {
-		return nil, fmt.Errorf("error, please provide a valid screenSchemeID value")
+		return nil, notScreenSchemeIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/screenscheme/%v", screenSchemeID)
@@ -161,7 +153,7 @@ func (s *ScreenSchemeService) Delete(ctx context.Context, screenSchemeID string)
 		return
 	}
 
-	response, err = s.client.Do(request)
+	response, err = s.client.call(request, nil)
 	if err != nil {
 		return
 	}

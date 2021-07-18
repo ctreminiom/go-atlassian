@@ -261,7 +261,7 @@ func TestScreenService_Available(t *testing.T) {
 				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
 				assert.Equal(t, testCase.endpoint, endpointToAssert)
 
-				for _, field := range *gotResult {
+				for _, field := range gotResult {
 
 					t.Log("------------------------------")
 					t.Logf("Field Name: %v", field.Name)

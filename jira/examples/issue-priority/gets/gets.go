@@ -24,16 +24,12 @@ func main() {
 
 	priorities, response, err := atlassian.Issue.Priority.Gets(context.Background())
 	if err != nil {
-		if response != nil {
-			log.Println("Response HTTP Response", string(response.BodyAsBytes))
-		}
-		return
+		log.Fatal(err)
 	}
 
-	log.Println("Response HTTP Code", response.StatusCode)
 	log.Println("HTTP Endpoint Used", response.Endpoint)
 
-	for pos, priority := range *priorities {
+	for pos, priority := range priorities {
 		log.Println(pos, priority)
 	}
 }

@@ -35,13 +35,9 @@ func main() {
 
 	grants, response, err := atlassian.Permission.Scheme.Grant.Gets(context.Background(), permissionSchemeID, []string{"all"})
 	if err != nil {
-		if response != nil {
-			log.Println("Response HTTP Response", string(response.BodyAsBytes))
-		}
 		log.Fatal(err)
 	}
 
-	log.Println("Response HTTP Code", response.StatusCode)
 	log.Println("HTTP Endpoint Used", response.Endpoint)
 
 	for _, grant := range grants.Permissions {

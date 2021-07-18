@@ -75,6 +75,16 @@ func TestIssueLinkService_Create(t *testing.T) {
 		},
 
 		{
+			name:               "CreateIssueLinkWhenThePayloadIsNotProvided",
+			payload:            nil,
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/api/3/issueLink",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusCreated,
+			wantErr:            true,
+		},
+
+		{
 			name:               "CreateIssueLinkWhenTheEndpointIsIncorrect",
 			payload:            payloadMocked,
 			wantHTTPMethod:     http.MethodPost,

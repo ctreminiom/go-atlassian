@@ -32,13 +32,13 @@ func main() {
 	request, response, err := atlassian.ServiceManagement.Request.Get(context.Background(), issueKey, expand)
 	if err != nil {
 		if response != nil {
-			log.Println("Response HTTP Response", string(response.BodyAsBytes))
+			log.Println("Response HTTP Response", response.Bytes.String())
 			log.Println("HTTP Endpoint Used", response.Endpoint)
 		}
 		log.Fatal(err)
 	}
 
-	log.Println("Response HTTP Code", response.StatusCode)
+	log.Println("Response HTTP Code", response.Code)
 	log.Println("HTTP Endpoint Used", response.Endpoint)
 
 	dataAsJson, err := json.MarshalIndent(request, "", "\t")

@@ -2,82 +2,73 @@ package jira
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/url"
+	"strings"
 )
 
 type ProjectPermissionSchemeService struct{ client *Client }
 
-// Search the permission scheme associated with the project.
+// Get search the permission scheme associated with the project.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/projects/permission-schemes#get-assigned-permission-scheme
-func (p *ProjectPermissionSchemeService) Get(ctx context.Context, projectKeyOrID string, expands []string) (result *PermissionSchemeScheme, response *Response, err error) {
+// Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-permission-schemes/#api-rest-api-3-project-projectkeyorid-permissionscheme-get
+func (p *ProjectPermissionSchemeService) Get(ctx context.Context, projectKeyOrID string, expand []string) (
+	result *PermissionSchemeScheme, response *ResponseScheme, err error) {
 
 	if len(projectKeyOrID) == 0 {
-		return nil, nil, fmt.Errorf("error, please provide a valid projectKeyOrID value")
+		return nil, nil, notProjectIDError
 	}
 
 	params := url.Values{}
-
-	var expand string
-	for index, value := range expands {
-
-		if index == 0 {
-			expand = value
-			continue
-		}
-
-		expand += "," + value
-	}
-
 	if len(expand) != 0 {
-		params.Add("expand", expand)
+		params.Add("expand", strings.Join(expand, ","))
 	}
 
-	var endpoint string
+	var endpoint strings.Builder
+	endpoint.WriteString(fmt.Sprintf("rest/api/3/project/%v/permissionscheme", projectKeyOrID))
 
-	if len(params.Encode()) != 0 {
-		endpoint = fmt.Sprintf("rest/api/3/project/%v/permissionscheme?%v", projectKeyOrID, params.Encode())
-	} else {
-		endpoint = fmt.Sprintf("rest/api/3/project/%v/permissionscheme", projectKeyOrID)
+	if params.Encode() != "" {
+		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
-	request, err := p.client.newRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := p.client.newRequest(ctx, http.MethodGet, endpoint.String(), nil)
 	if err != nil {
 		return
 	}
+
 	request.Header.Set("Accept", "application/json")
 
-	response, err = p.client.Do(request)
+	response, err = p.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(PermissionSchemeScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
 	return
 }
 
-// Assigns a permission scheme with a project.
+// Assign assigns a permission scheme with a project.
 // See Managing project permissions for more information about permission schemes.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/projects/permission-schemes#assign-permission-scheme
-func (p *ProjectPermissionSchemeService) Assign(ctx context.Context, projectKeyOrID string, permissionSchemeID int) (result *PermissionSchemeScheme, response *Response, err error) {
+// Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-permission-schemes/#api-rest-api-3-project-projectkeyorid-permissionscheme-put
+func (p *ProjectPermissionSchemeService) Assign(ctx context.Context, projectKeyOrID string, permissionSchemeID int) (
+	result *PermissionSchemeScheme, response *ResponseScheme, err error) {
 
 	if len(projectKeyOrID) == 0 {
-		return nil, nil, fmt.Errorf("error, please provide a valid projectKeyOrID value")
+		return nil, nil, notProjectIDError
 	}
 
 	payload := struct {
 		ID int `json:"id"`
-	}{ID: permissionSchemeID}
+	}{
+		ID: permissionSchemeID,
+	}
+
+	payloadAsReader, _ := transformStructToReader(&payload)
 
 	var endpoint = fmt.Sprintf("rest/api/3/project/%v/permissionscheme", projectKeyOrID)
 
-	request, err := p.client.newRequest(ctx, http.MethodPut, endpoint, &payload)
+	request, err := p.client.newRequest(ctx, http.MethodPut, endpoint, payloadAsReader)
 	if err != nil {
 		return
 	}
@@ -85,13 +76,8 @@ func (p *ProjectPermissionSchemeService) Assign(ctx context.Context, projectKeyO
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Content-Type", "application/json")
 
-	response, err = p.client.Do(request)
+	response, err = p.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(PermissionSchemeScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
@@ -107,12 +93,14 @@ type ProjectIssueSecurityLevelsScheme struct {
 	} `json:"levels"`
 }
 
-// Returns all issue security levels for the project that the user has access to.
+// SecurityLevels returns all issue security levels for the project that the user has access to.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/projects/permission-schemes#get-project-issue-security-levels
-func (p *ProjectPermissionSchemeService) SecurityLevels(ctx context.Context, projectKeyOrID string) (result *ProjectIssueSecurityLevelsScheme, response *Response, err error) {
+// Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-permission-schemes/#api-rest-api-3-project-projectkeyorid-securitylevel-get
+func (p *ProjectPermissionSchemeService) SecurityLevels(ctx context.Context, projectKeyOrID string) (
+	result *ProjectIssueSecurityLevelsScheme, response *ResponseScheme, err error) {
 
 	if len(projectKeyOrID) == 0 {
-		return nil, nil, fmt.Errorf("error, please provide a valid projectKeyOrID value")
+		return nil, nil, notProjectIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/project/%v/securitylevel", projectKeyOrID)
@@ -121,15 +109,11 @@ func (p *ProjectPermissionSchemeService) SecurityLevels(ctx context.Context, pro
 	if err != nil {
 		return
 	}
+
 	request.Header.Set("Accept", "application/json")
 
-	response, err = p.client.Do(request)
+	response, err = p.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(ProjectIssueSecurityLevelsScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 

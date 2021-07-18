@@ -2,7 +2,6 @@ package jira
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -19,9 +18,11 @@ type IssueLabelsScheme struct {
 	Values     []string `json:"values"`
 }
 
-// Returns a paginated list of labels.
+// Gets returns a paginated list of labels.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/labels#get-all-labels
-func (l *LabelService) Gets(ctx context.Context, startAt, maxResults int) (result *IssueLabelsScheme, response *Response, err error) {
+// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-labels/#api-rest-api-3-label-get
+func (l *LabelService) Gets(ctx context.Context, startAt, maxResults int) (result *IssueLabelsScheme,
+	response *ResponseScheme, err error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -33,16 +34,12 @@ func (l *LabelService) Gets(ctx context.Context, startAt, maxResults int) (resul
 	if err != nil {
 		return
 	}
+
 	request.Header.Set("Accept", "application/json")
 
-	response, err = l.client.Do(request)
+	response, err = l.client.call(request, &result)
 	if err != nil {
 		return
-	}
-
-	result = new(IssueLabelsScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
 
 	return

@@ -38,13 +38,9 @@ func main() {
 
 	scheme, response, err := atlassian.Project.Permission.Assign(context.Background(), projectKeyOrID, permissionSchemeID)
 	if err != nil {
-		if response != nil {
-			log.Println("Response HTTP Response", string(response.BodyAsBytes))
-		}
 		log.Fatal(err)
 	}
 
-	log.Println("Response HTTP Code", response.StatusCode)
 	log.Println("HTTP Endpoint Used", response.Endpoint)
 	log.Println(scheme)
 }

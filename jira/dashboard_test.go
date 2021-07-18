@@ -172,7 +172,7 @@ func TestDashboardService_Gets(t *testing.T) {
 				assert.Error(t, err)
 
 				if gotResponse != nil {
-					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
+					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
 				}
 			} else {
 
@@ -188,8 +188,8 @@ func TestDashboardService_Gets(t *testing.T) {
 				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, fmt.Sprintf("%v?%v", apiEndpoint.Path, apiEndpoint.Query().Encode()))
 				assert.Equal(t, testCase.endpoint, fmt.Sprintf("%v?%v", apiEndpoint.Path, apiEndpoint.Query().Encode()))
 
-				t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
-				assert.Equal(t, gotResponse.StatusCode, testCase.wantHTTPCodeReturn)
+				t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
+				assert.Equal(t, gotResponse.Code, testCase.wantHTTPCodeReturn)
 			}
 
 		})
@@ -198,175 +198,172 @@ func TestDashboardService_Gets(t *testing.T) {
 
 func TestDashboardService_Copy(t *testing.T) {
 
-	var sharePermissionsMocked []SharePermissionScheme
-
-	projectPermission := &SharePermissionScheme{
-		Type: "project",
-		Project: &ProjectScheme{
-			ID: "10000",
-		},
-	}
-
-	groupPermission := &SharePermissionScheme{
-		Type:  "group",
-		Group: &GroupScheme{Name: "jira-administrators"},
-	}
-
-	sharePermissionsMocked = append(sharePermissionsMocked, *projectPermission, *groupPermission)
-
-	var sharePermissionsEmptyMocked []SharePermissionScheme
-
 	testCases := []struct {
-		name                    string
-		dashboardID             string
-		newDashboardName        string
-		newDashboardDescription string
-		permissions             *[]SharePermissionScheme
-		mockFile                string
-		wantHTTPMethod          string
-		endpoint                string
-		context                 context.Context
-		wantHTTPCodeReturn      int
-		wantErr                 bool
+		name               string
+		dashboardID        string
+		payload            *DashboardPayloadScheme
+		mockFile           string
+		wantHTTPMethod     string
+		endpoint           string
+		context            context.Context
+		wantHTTPCodeReturn int
+		wantErr            bool
 	}{
 		{
-			name:                    "CopyDashboardWhenTheParametersAreCorrect",
-			dashboardID:             "10001",
-			newDashboardName:        "New Dashboard name",
-			newDashboardDescription: "New Dashboard description",
-			permissions:             &sharePermissionsMocked,
-			mockFile:                "./mocks/get_dashboards.json",
-			wantHTTPMethod:          http.MethodPost,
-			endpoint:                "/rest/api/3/dashboard/10001/copy",
-			context:                 context.Background(),
-			wantHTTPCodeReturn:      http.StatusOK,
-			wantErr:                 false,
+			name:        "CopyDashboardWhenTheParametersAreCorrect",
+			dashboardID: "10001",
+			payload: &DashboardPayloadScheme{
+				Name:        "Team Tracking #2 copy",
+				Description: "Description sample",
+				SharePermissions: []*SharePermissionScheme{
+					{
+						Type: "project",
+						Project: &ProjectScheme{
+							ID: "10000",
+						},
+						Role:  nil,
+						Group: nil,
+					},
+					{
+						Type:  "group",
+						Group: &GroupScheme{Name: "jira-administrators"},
+					},
+				},
+			},
+			mockFile:           "./mocks/get_dashboards.json",
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/api/3/dashboard/10001/copy",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            false,
 		},
 
 		{
-			name:                    "CopyDashboardWhenThePermissionsAreNotSet",
-			dashboardID:             "10001",
-			newDashboardName:        "New Dashboard name",
-			newDashboardDescription: "New Dashboard description",
-			permissions:             &sharePermissionsEmptyMocked,
-			mockFile:                "./mocks/get_dashboards.json",
-			wantHTTPMethod:          http.MethodPost,
-			endpoint:                "/rest/api/3/dashboard/10001/copy",
-			context:                 context.Background(),
-			wantHTTPCodeReturn:      http.StatusOK,
-			wantErr:                 true,
+			name:        "CopyDashboardWhenTheDashboardIsNotProvided",
+			dashboardID: "",
+			payload: &DashboardPayloadScheme{
+				Name:        "Team Tracking #2 copy",
+				Description: "Description sample",
+				SharePermissions: []*SharePermissionScheme{
+					{
+						Type: "project",
+						Project: &ProjectScheme{
+							ID: "10000",
+						},
+						Role:  nil,
+						Group: nil,
+					},
+					{
+						Type:  "group",
+						Group: &GroupScheme{Name: "jira-administrators"},
+					},
+				},
+			},
+			mockFile:           "./mocks/get_dashboards.json",
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/api/3/dashboard/10001/copy",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
 		},
 
 		{
-			name:                    "CopyDashboardWhenTheDashboardIDIsNotSet",
-			dashboardID:             "",
-			newDashboardName:        "New Dashboard name",
-			newDashboardDescription: "New Dashboard description",
-			permissions:             &sharePermissionsMocked,
-			mockFile:                "./mocks/get_dashboards.json",
-			wantHTTPMethod:          http.MethodPost,
-			endpoint:                "/rest/api/3/dashboard/10001/copy",
-			context:                 context.Background(),
-			wantHTTPCodeReturn:      http.StatusOK,
-			wantErr:                 true,
+			name:        "CopyDashboardWhenThePayloadIsNotProvided",
+			dashboardID: "10001",
+			payload: nil,
+			mockFile:           "./mocks/get_dashboards.json",
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/api/3/dashboard/10001/copy",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
 		},
 
 		{
-			name:                    "CopyDashboardWhenTheNewDashboardNameIsNotSet",
-			dashboardID:             "10001",
-			newDashboardName:        "",
-			newDashboardDescription: "New Dashboard description",
-			permissions:             &sharePermissionsMocked,
-			mockFile:                "./mocks/get_dashboards.json",
-			wantHTTPMethod:          http.MethodPost,
-			endpoint:                "/rest/api/3/dashboard/10001/copy",
-			context:                 context.Background(),
-			wantHTTPCodeReturn:      http.StatusOK,
-			wantErr:                 true,
+			name:        "CopyDashboardWhenTheRequestMethodIsIncorrect",
+			dashboardID: "10001",
+			payload: &DashboardPayloadScheme{
+				Name:        "Team Tracking #2 copy",
+				Description: "Description sample",
+				SharePermissions: []*SharePermissionScheme{
+					{
+						Type: "project",
+						Project: &ProjectScheme{
+							ID: "10000",
+						},
+						Role:  nil,
+						Group: nil,
+					},
+					{
+						Type:  "group",
+						Group: &GroupScheme{Name: "jira-administrators"},
+					},
+				},
+			},
+			mockFile:           "./mocks/get_dashboards.json",
+			wantHTTPMethod:     http.MethodHead,
+			endpoint:           "/rest/api/3/dashboard/10001/copy",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
 		},
 
 		{
-			name:                    "CopyDashboardWhenThePermissionsAreNil",
-			dashboardID:             "10001",
-			newDashboardName:        "New Dashboard name",
-			newDashboardDescription: "New Dashboard description",
-			permissions:             nil,
-			mockFile:                "./mocks/get_dashboards.json",
-			wantHTTPMethod:          http.MethodPost,
-			endpoint:                "/rest/api/3/dashboard/10001/copy",
-			context:                 context.Background(),
-			wantHTTPCodeReturn:      http.StatusOK,
-			wantErr:                 true,
+			name:        "CopyDashboardWhenTheStatusCodeIsIncorrect",
+			dashboardID: "10001",
+			payload: &DashboardPayloadScheme{
+				Name:        "Team Tracking #2 copy",
+				Description: "Description sample",
+				SharePermissions: []*SharePermissionScheme{
+					{
+						Type: "project",
+						Project: &ProjectScheme{
+							ID: "10000",
+						},
+						Role:  nil,
+						Group: nil,
+					},
+					{
+						Type:  "group",
+						Group: &GroupScheme{Name: "jira-administrators"},
+					},
+				},
+			},
+			mockFile:           "./mocks/get_dashboards.json",
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/api/3/dashboard/10001/copy",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusBadRequest,
+			wantErr:            true,
 		},
 
 		{
-			name:                    "CopyDashboardWhenTheRequestMethodIsIncorrect",
-			dashboardID:             "10001",
-			newDashboardName:        "New Dashboard name",
-			newDashboardDescription: "New Dashboard description",
-			permissions:             &sharePermissionsMocked,
-			mockFile:                "./mocks/get_dashboards.json",
-			wantHTTPMethod:          http.MethodPut,
-			endpoint:                "/rest/api/3/dashboard/10001/copy",
-			context:                 context.Background(),
-			wantHTTPCodeReturn:      http.StatusOK,
-			wantErr:                 true,
-		},
-
-		{
-			name:                    "CopyDashboardWhenTheStatusCodeIsIncorrect",
-			dashboardID:             "10001",
-			newDashboardName:        "New Dashboard name",
-			newDashboardDescription: "New Dashboard description",
-			permissions:             &sharePermissionsMocked,
-			mockFile:                "./mocks/get_dashboards.json",
-			wantHTTPMethod:          http.MethodPost,
-			endpoint:                "/rest/api/3/dashboard/10001/copy",
-			context:                 context.Background(),
-			wantHTTPCodeReturn:      http.StatusBadRequest,
-			wantErr:                 true,
-		},
-
-		{
-			name:                    "CopyDashboardWhenTheContextIsNil",
-			dashboardID:             "10001",
-			newDashboardName:        "New Dashboard name",
-			newDashboardDescription: "New Dashboard description",
-			permissions:             &sharePermissionsMocked,
-			mockFile:                "./mocks/get_dashboards.json",
-			wantHTTPMethod:          http.MethodPost,
-			endpoint:                "/rest/api/3/dashboard/10001/copy",
-			context:                 nil,
-			wantHTTPCodeReturn:      http.StatusOK,
-			wantErr:                 true,
-		},
-
-		{
-			name:                    "CopyDashboardWhenTheEndpointIsEmpty",
-			dashboardID:             "10001",
-			newDashboardName:        "New Dashboard name",
-			newDashboardDescription: "New Dashboard description",
-			permissions:             &sharePermissionsMocked,
-			mockFile:                "./mocks/get_dashboards.json",
-			wantHTTPMethod:          http.MethodPost,
-			endpoint:                "",
-			context:                 context.Background(),
-			wantHTTPCodeReturn:      http.StatusOK,
-			wantErr:                 true,
-		},
-
-		{
-			name:                    "CopyDashboardWhenTheResponseBodyHasADifferentFormat",
-			dashboardID:             "10001",
-			newDashboardName:        "New Dashboard name",
-			newDashboardDescription: "New Dashboard description",
-			permissions:             &sharePermissionsMocked,
-			mockFile:                "./mocks/empty_json.json",
-			wantHTTPMethod:          http.MethodPost,
-			endpoint:                "/rest/api/3/dashboard/10001/copy",
-			context:                 context.Background(),
-			wantHTTPCodeReturn:      http.StatusOK,
-			wantErr:                 true,
+			name:        "CopyDashboardWhenTheContextIsNotProvided",
+			dashboardID: "10001",
+			payload: &DashboardPayloadScheme{
+				Name:        "Team Tracking #2 copy",
+				Description: "Description sample",
+				SharePermissions: []*SharePermissionScheme{
+					{
+						Type: "project",
+						Project: &ProjectScheme{
+							ID: "10000",
+						},
+						Role:  nil,
+						Group: nil,
+					},
+					{
+						Type:  "group",
+						Group: &GroupScheme{Name: "jira-administrators"},
+					},
+				},
+			},
+			mockFile:           "./mocks/get_dashboards.json",
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/api/3/dashboard/10001/copy",
+			context:            nil,
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
 		},
 	}
 
@@ -396,14 +393,7 @@ func TestDashboardService_Copy(t *testing.T) {
 			}
 
 			i := &DashboardService{client: mockClient}
-
-			gotResult, gotResponse, err := i.Copy(
-				testCase.context,
-				testCase.dashboardID,
-				testCase.newDashboardName,
-				testCase.newDashboardDescription,
-				testCase.permissions,
-			)
+			gotResult, gotResponse, err := i.Copy(testCase.context, testCase.dashboardID, testCase.payload)
 
 			if testCase.wantErr {
 
@@ -449,29 +439,9 @@ func TestDashboardService_Copy(t *testing.T) {
 
 func TestDashboardService_Create(t *testing.T) {
 
-	var sharePermissionsMocked []SharePermissionScheme
-
-	projectPermission := &SharePermissionScheme{
-		Type: "project",
-		Project: &ProjectScheme{
-			ID: "10000",
-		},
-	}
-
-	groupPermission := &SharePermissionScheme{
-		Type:  "group",
-		Group: &GroupScheme{Name: "jira-administrators"},
-	}
-
-	sharePermissionsMocked = append(sharePermissionsMocked, *projectPermission, *groupPermission)
-
-	var sharePermissionsEmptyMocked []SharePermissionScheme
-
 	testCases := []struct {
 		name               string
-		dashboardName      string
-		description        string
-		permissions        *[]SharePermissionScheme
+		payload            *DashboardPayloadScheme
 		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string
@@ -480,10 +450,25 @@ func TestDashboardService_Create(t *testing.T) {
 		wantErr            bool
 	}{
 		{
-			name:               "CreateDashboardWhenTheParametersAreCorrect",
-			dashboardName:      "Dashboard Bug",
-			description:        "description example",
-			permissions:        &sharePermissionsMocked,
+			name: "CreateDashboardWhenTheParametersAreCorrect",
+			payload: &DashboardPayloadScheme{
+				Name:        "Team Tracking 3",
+				Description: "description sample",
+				SharePermissions: []*SharePermissionScheme{
+					{
+						Type: "project",
+						Project: &ProjectScheme{
+							ID: "10000",
+						},
+						Role:  nil,
+						Group: nil,
+					},
+					{
+						Type:  "group",
+						Group: &GroupScheme{Name: "jira-administrators"},
+					},
+				},
+			},
 			mockFile:           "./mocks/create-dashboard.json",
 			wantHTTPMethod:     http.MethodPost,
 			endpoint:           "/rest/api/3/dashboard",
@@ -493,10 +478,8 @@ func TestDashboardService_Create(t *testing.T) {
 		},
 
 		{
-			name:               "CreateDashboardWhenTheDashboardIsNotSet",
-			dashboardName:      "",
-			description:        "description example",
-			permissions:        &sharePermissionsMocked,
+			name: "CreateDashboardWhenThePayloadIsNotProvided",
+			payload: nil,
 			mockFile:           "./mocks/create-dashboard.json",
 			wantHTTPMethod:     http.MethodPost,
 			endpoint:           "/rest/api/3/dashboard",
@@ -506,62 +489,25 @@ func TestDashboardService_Create(t *testing.T) {
 		},
 
 		{
-			name:               "CreateDashboardWhenThePermissionAreNotSet",
-			dashboardName:      "Dashboard Bug",
-			description:        "description example",
-			permissions:        &sharePermissionsEmptyMocked,
-			mockFile:           "./mocks/create-dashboard.json",
-			wantHTTPMethod:     http.MethodPost,
-			endpoint:           "/rest/api/3/dashboard",
-			context:            context.Background(),
-			wantHTTPCodeReturn: http.StatusOK,
-			wantErr:            true,
-		},
-
-		{
-			name:               "CreateDashboardWhenThePermissionIsNil",
-			dashboardName:      "Dashboard Bug",
-			description:        "description example",
-			permissions:        nil,
-			mockFile:           "./mocks/create-dashboard.json",
-			wantHTTPMethod:     http.MethodPost,
-			endpoint:           "/rest/api/3/dashboard",
-			context:            context.Background(),
-			wantHTTPCodeReturn: http.StatusOK,
-			wantErr:            true,
-		},
-
-		{
-			name:               "CreateDashboardWhenTheRequestMethodIsIncorrect",
-			dashboardName:      "Dashboard Bug",
-			description:        "description example",
-			permissions:        &sharePermissionsMocked,
-			mockFile:           "./mocks/create-dashboard.json",
-			wantHTTPMethod:     http.MethodDelete,
-			endpoint:           "/rest/api/3/dashboard",
-			context:            context.Background(),
-			wantHTTPCodeReturn: http.StatusOK,
-			wantErr:            true,
-		},
-
-		{
-			name:               "CreateDashboardWhenTheStatusCodeIsIncorrect",
-			dashboardName:      "Dashboard Bug",
-			description:        "description example",
-			permissions:        &sharePermissionsMocked,
-			mockFile:           "./mocks/create-dashboard.json",
-			wantHTTPMethod:     http.MethodPost,
-			endpoint:           "/rest/api/3/dashboard",
-			context:            context.Background(),
-			wantHTTPCodeReturn: http.StatusBadRequest,
-			wantErr:            true,
-		},
-
-		{
-			name:               "CreateDashboardWhenTheContextIsNil",
-			dashboardName:      "Dashboard Bug",
-			description:        "description example",
-			permissions:        &sharePermissionsMocked,
+			name: "CreateDashboardWhenTheContextIsNotProvided",
+			payload: &DashboardPayloadScheme{
+				Name:        "Team Tracking 3",
+				Description: "description sample",
+				SharePermissions: []*SharePermissionScheme{
+					{
+						Type: "project",
+						Project: &ProjectScheme{
+							ID: "10000",
+						},
+						Role:  nil,
+						Group: nil,
+					},
+					{
+						Type:  "group",
+						Group: &GroupScheme{Name: "jira-administrators"},
+					},
+				},
+			},
 			mockFile:           "./mocks/create-dashboard.json",
 			wantHTTPMethod:     http.MethodPost,
 			endpoint:           "/rest/api/3/dashboard",
@@ -571,28 +517,58 @@ func TestDashboardService_Create(t *testing.T) {
 		},
 
 		{
-			name:               "CreateDashboardWhenTheEndpointIsEmpty",
-			dashboardName:      "Dashboard Bug",
-			description:        "description example",
-			permissions:        &sharePermissionsMocked,
+			name: "CreateDashboardWhenTheRequestMethodIsIncorrect",
+			payload: &DashboardPayloadScheme{
+				Name:        "Team Tracking 3",
+				Description: "description sample",
+				SharePermissions: []*SharePermissionScheme{
+					{
+						Type: "project",
+						Project: &ProjectScheme{
+							ID: "10000",
+						},
+						Role:  nil,
+						Group: nil,
+					},
+					{
+						Type:  "group",
+						Group: &GroupScheme{Name: "jira-administrators"},
+					},
+				},
+			},
 			mockFile:           "./mocks/create-dashboard.json",
-			wantHTTPMethod:     http.MethodPost,
-			endpoint:           "",
+			wantHTTPMethod:     http.MethodHead,
+			endpoint:           "/rest/api/3/dashboard",
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusOK,
 			wantErr:            true,
 		},
 
 		{
-			name:               "CreateDashboardWhenTheResponseBodyHasADifferentFormat",
-			dashboardName:      "Dashboard Bug",
-			description:        "description example",
-			permissions:        &sharePermissionsMocked,
-			mockFile:           "./mocks/empty_json.json",
+			name: "CreateDashboardWhenTheStatusCodeIsIncorrect",
+			payload: &DashboardPayloadScheme{
+				Name:        "Team Tracking 3",
+				Description: "description sample",
+				SharePermissions: []*SharePermissionScheme{
+					{
+						Type: "project",
+						Project: &ProjectScheme{
+							ID: "10000",
+						},
+						Role:  nil,
+						Group: nil,
+					},
+					{
+						Type:  "group",
+						Group: &GroupScheme{Name: "jira-administrators"},
+					},
+				},
+			},
+			mockFile:           "./mocks/create-dashboard.json",
 			wantHTTPMethod:     http.MethodPost,
 			endpoint:           "/rest/api/3/dashboard",
 			context:            context.Background(),
-			wantHTTPCodeReturn: http.StatusOK,
+			wantHTTPCodeReturn: http.StatusBadRequest,
 			wantErr:            true,
 		},
 	}
@@ -624,12 +600,7 @@ func TestDashboardService_Create(t *testing.T) {
 
 			i := &DashboardService{client: mockClient}
 
-			gotResult, gotResponse, err := i.Create(
-				testCase.context,
-				testCase.dashboardName,
-				testCase.description,
-				testCase.permissions,
-			)
+			gotResult, gotResponse, err := i.Create(testCase.context, testCase.payload)
 
 			if testCase.wantErr {
 
@@ -986,6 +957,7 @@ func TestDashboardService_Search(t *testing.T) {
 		{
 			name: "SearchDashboardsWhenTheParametersAreCorrect",
 			opts: &DashboardSearchOptionsScheme{
+				OwnerAccountID: "as48ashashash4hsahashdahsd",
 				DashboardName:       "Bug",
 				GroupPermissionName: "administrators",
 				OrderBy:             "description",
@@ -995,7 +967,8 @@ func TestDashboardService_Search(t *testing.T) {
 			maxResults:         50,
 			mockFile:           "./mocks/search-dashboards.json",
 			wantHTTPMethod:     http.MethodGet,
-			endpoint:           "/rest/api/3/dashboard/search?dashboardName=&expand=description%2Cfavourite%2CsharePermissions&groupname=&maxResults=50&orderBy=&startAt=0",
+			endpoint:           "/rest/api/3/dashboard/search?accountId=as48ashashash4hsahashdahsd&dashboardName=as48as" +
+				"hashash4hsahashdahsd&expand=description%2Cfavourite%2CsharePermissions&groupname=as48ashashash4hsahashdahsd&maxResults=50&orderBy=as48ashashash4hsahashdahsd&startAt=0",
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusOK,
 			wantErr:            false,
@@ -1181,161 +1154,97 @@ func TestDashboardService_Search(t *testing.T) {
 
 func TestDashboardService_Update(t *testing.T) {
 
-	var sharePermissionsMocked []SharePermissionScheme
-
-	projectPermission := &SharePermissionScheme{
-		Type: "project",
-		Project: &ProjectScheme{
-			ID: "10000",
-		},
-	}
-
-	groupPermission := &SharePermissionScheme{
-		Type:  "group",
-		Group: &GroupScheme{Name: "jira-administrators"},
-	}
-
-	sharePermissionsMocked = append(sharePermissionsMocked, *projectPermission, *groupPermission)
-
-	var sharePermissionsEmptyMocked []SharePermissionScheme
-
 	testCases := []struct {
-		name                    string
-		dashboardID             string
-		newDashboardName        string
-		newDashboardDescription string
-		permissions             *[]SharePermissionScheme
-		mockFile                string
-		wantHTTPMethod          string
-		endpoint                string
-		context                 context.Context
-		wantHTTPCodeReturn      int
-		wantErr                 bool
+		name               string
+		dashboardID        string
+		payload            *DashboardPayloadScheme
+		mockFile           string
+		wantHTTPMethod     string
+		endpoint           string
+		context            context.Context
+		wantHTTPCodeReturn int
+		wantErr            bool
 	}{
 		{
-			name:                    "UpdateDashboardWhenTheParametersAreCorrect",
-			dashboardID:             "1001",
-			newDashboardName:        "name updated",
-			newDashboardDescription: "description updated",
-			permissions:             &sharePermissionsMocked,
-			mockFile:                "./mocks/update-dashboard.json",
-			wantHTTPMethod:          http.MethodPut,
-			endpoint:                "/rest/api/3/dashboard/1001",
-			context:                 context.Background(),
-			wantHTTPCodeReturn:      http.StatusOK,
-			wantErr:                 false,
+			name:        "UpdateDashboardWhenTheParametersAreCorrect",
+			dashboardID: "1001",
+			payload: &DashboardPayloadScheme{
+				Name: "new dashboard update name",
+			},
+			mockFile:           "./mocks/update-dashboard.json",
+			wantHTTPMethod:     http.MethodPut,
+			endpoint:           "/rest/api/3/dashboard/1001",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            false,
 		},
 
 		{
-			name:                    "UpdateDashboardWhenTheDashboardIDIsNotSet",
-			dashboardID:             "",
-			newDashboardName:        "name updated",
-			newDashboardDescription: "description updated",
-			permissions:             &sharePermissionsMocked,
-			mockFile:                "./mocks/update-dashboard.json",
-			wantHTTPMethod:          http.MethodPut,
-			endpoint:                "/rest/api/3/dashboard/1001",
-			context:                 context.Background(),
-			wantHTTPCodeReturn:      http.StatusOK,
-			wantErr:                 true,
+			name:        "UpdateDashboardWhenThePayloadIsNotProvided",
+			dashboardID: "1001",
+			payload: nil,
+			mockFile:           "./mocks/update-dashboard.json",
+			wantHTTPMethod:     http.MethodPut,
+			endpoint:           "/rest/api/3/dashboard/1001",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
 		},
 
 		{
-			name:                    "UpdateDashboardWhenThePermissionsAreEmpty",
-			dashboardID:             "1001",
-			newDashboardName:        "name updated",
-			newDashboardDescription: "description updated",
-			permissions:             &sharePermissionsEmptyMocked,
-			mockFile:                "./mocks/update-dashboard.json",
-			wantHTTPMethod:          http.MethodPut,
-			endpoint:                "/rest/api/3/dashboard/1001",
-			context:                 context.Background(),
-			wantHTTPCodeReturn:      http.StatusOK,
-			wantErr:                 true,
+			name:        "UpdateDashboardWhenTheDashboardIDIsNotProvided",
+			dashboardID: "",
+			payload: &DashboardPayloadScheme{
+				Name: "new dashboard update name",
+			},
+			mockFile:           "./mocks/update-dashboard.json",
+			wantHTTPMethod:     http.MethodPut,
+			endpoint:           "/rest/api/3/dashboard/1001",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
 		},
 
 		{
-			name:                    "UpdateDashboardWhenThePermissionsAreNil",
-			dashboardID:             "1001",
-			newDashboardName:        "name updated",
-			newDashboardDescription: "description updated",
-			permissions:             nil,
-			mockFile:                "./mocks/update-dashboard.json",
-			wantHTTPMethod:          http.MethodPut,
-			endpoint:                "/rest/api/3/dashboard/1001",
-			context:                 context.Background(),
-			wantHTTPCodeReturn:      http.StatusOK,
-			wantErr:                 true,
+			name:        "UpdateDashboardWhenTheContextIsNotProvided",
+			dashboardID: "1001",
+			payload: &DashboardPayloadScheme{
+				Name: "new dashboard update name",
+			},
+			mockFile:           "./mocks/update-dashboard.json",
+			wantHTTPMethod:     http.MethodPut,
+			endpoint:           "/rest/api/3/dashboard/1001",
+			context:            nil,
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
 		},
 
 		{
-			name:                    "UpdateDashboardWhenTheRequestMethodIsIncorrect",
-			dashboardID:             "1001",
-			newDashboardName:        "name updated",
-			newDashboardDescription: "description updated",
-			permissions:             &sharePermissionsMocked,
-			mockFile:                "./mocks/update-dashboard.json",
-			wantHTTPMethod:          http.MethodDelete,
-			endpoint:                "/rest/api/3/dashboard/1001",
-			context:                 context.Background(),
-			wantHTTPCodeReturn:      http.StatusOK,
-			wantErr:                 true,
+			name:        "UpdateDashboardWhenTheRequestMethodIsIncorrect",
+			dashboardID: "1001",
+			payload: &DashboardPayloadScheme{
+				Name: "new dashboard update name",
+			},
+			mockFile:           "./mocks/update-dashboard.json",
+			wantHTTPMethod:     http.MethodHead,
+			endpoint:           "/rest/api/3/dashboard/1001",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
 		},
 
 		{
-			name:                    "UpdateDashboardWhenTheStatusCodeIsIncorrect",
-			dashboardID:             "1001",
-			newDashboardName:        "name updated",
-			newDashboardDescription: "description updated",
-			permissions:             &sharePermissionsMocked,
-			mockFile:                "./mocks/update-dashboard.json",
-			wantHTTPMethod:          http.MethodPut,
-			endpoint:                "/rest/api/3/dashboard/1001",
-			context:                 context.Background(),
-			wantHTTPCodeReturn:      http.StatusBadRequest,
-			wantErr:                 true,
-		},
-
-		{
-			name:                    "UpdateDashboardWhenTheContextIsNil",
-			dashboardID:             "1001",
-			newDashboardName:        "name updated",
-			newDashboardDescription: "description updated",
-			permissions:             &sharePermissionsMocked,
-			mockFile:                "./mocks/update-dashboard.json",
-			wantHTTPMethod:          http.MethodPut,
-			endpoint:                "/rest/api/3/dashboard/1001",
-			context:                 nil,
-			wantHTTPCodeReturn:      http.StatusOK,
-			wantErr:                 true,
-		},
-
-		{
-			name:                    "UpdateDashboardWhenTheEndpointIsEmpty",
-			dashboardID:             "1001",
-			newDashboardName:        "name updated",
-			newDashboardDescription: "description updated",
-			permissions:             &sharePermissionsMocked,
-			mockFile:                "./mocks/update-dashboard.json",
-			wantHTTPMethod:          http.MethodPut,
-			endpoint:                "",
-			context:                 context.Background(),
-			wantHTTPCodeReturn:      http.StatusOK,
-			wantErr:                 true,
-		},
-
-		{
-			name:                    "UpdateDashboardWhenTheResponseBodyHasADifferentFormat",
-			dashboardID:             "1001",
-			newDashboardName:        "name updated",
-			newDashboardDescription: "description updated",
-			permissions:             &sharePermissionsMocked,
-			mockFile:                "./mocks/empty_json.json",
-			wantHTTPMethod:          http.MethodPut,
-			endpoint:                "/rest/api/3/dashboard/1001",
-			context:                 context.Background(),
-			wantHTTPCodeReturn:      http.StatusOK,
-			wantErr:                 true,
+			name:        "UpdateDashboardWhenTheStatusCodeIsIncorrect",
+			dashboardID: "1001",
+			payload: &DashboardPayloadScheme{
+				Name: "new dashboard update name",
+			},
+			mockFile:           "./mocks/update-dashboard.json",
+			wantHTTPMethod:     http.MethodPut,
+			endpoint:           "/rest/api/3/dashboard/1001",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusBadRequest,
+			wantErr:            true,
 		},
 	}
 
@@ -1366,13 +1275,7 @@ func TestDashboardService_Update(t *testing.T) {
 
 			i := &DashboardService{client: mockClient}
 
-			gotResult, gotResponse, err := i.Update(
-				testCase.context,
-				testCase.dashboardID,
-				testCase.newDashboardName,
-				testCase.newDashboardDescription,
-				testCase.permissions,
-			)
+			gotResult, gotResponse, err := i.Update(testCase.context, testCase.dashboardID, testCase.payload)
 
 			if testCase.wantErr {
 

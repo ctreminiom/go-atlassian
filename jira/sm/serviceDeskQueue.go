@@ -2,17 +2,19 @@ package sm
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/url"
 	"strconv"
+	"strings"
 )
 
 type ServiceDeskQueueService struct{ client *Client }
 
+// Gets returns the queues in a service desk
 // Docs: https://docs.go-atlassian.io/jira-service-management-cloud/request/service-desk/queue#get-queues
-func (s *ServiceDeskQueueService) Gets(ctx context.Context, serviceDeskID int, includeCount bool, start, limit int) (result *ServiceDeskQueuePageScheme, response *Response, err error) {
+func (s *ServiceDeskQueueService) Gets(ctx context.Context, serviceDeskID int, includeCount bool, start, limit int) (
+	result *ServiceDeskQueuePageScheme, response *ResponseScheme, err error) {
 
 	params := url.Values{}
 	params.Add("start", strconv.Itoa(start))
@@ -31,56 +33,50 @@ func (s *ServiceDeskQueueService) Gets(ctx context.Context, serviceDeskID int, i
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = s.client.Do(request)
+	response, err = s.client.Call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(ServiceDeskQueuePageScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
 	return
 }
 
+// Get returns a specific queues in a service desk.
 // Docs: https://docs.go-atlassian.io/jira-service-management-cloud/request/service-desk/queue#get-queue
-func (s *ServiceDeskQueueService) Get(ctx context.Context, serviceDeskID, queueID int, includeCount bool) (result *ServiceDeskQueueScheme, response *Response, err error) {
+func (s *ServiceDeskQueueService) Get(ctx context.Context, serviceDeskID, queueID int, includeCount bool) (
+	result *ServiceDeskQueueScheme, response *ResponseScheme, err error) {
 
 	params := url.Values{}
 	if includeCount {
 		params.Add("includeCount", "true")
 	}
 
-	var endpoint string
-	if len(params.Encode()) != 0 {
-		endpoint = fmt.Sprintf("rest/servicedeskapi/servicedesk/%v/queue/%v?%v", serviceDeskID, queueID, params.Encode())
-	} else {
-		endpoint = fmt.Sprintf("rest/servicedeskapi/servicedesk/%v/queue/%v", serviceDeskID, queueID)
+	var endpoint strings.Builder
+	endpoint.WriteString(fmt.Sprintf("rest/servicedeskapi/servicedesk/%v/queue/%v", serviceDeskID, queueID))
+
+	if params.Encode() != "" {
+		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
-	request, err := s.client.newRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := s.client.newRequest(ctx, http.MethodGet, endpoint.String(), nil)
 	if err != nil {
 		return
 	}
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = s.client.Do(request)
+	response, err = s.client.Call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(ServiceDeskQueueScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
 	return
 }
 
+// Issues returns the customer requests in a queue
 // Docs: https://docs.go-atlassian.io/jira-service-management-cloud/request/service-desk/queue#get-issues-in-queue
-func (s *ServiceDeskQueueService) Issues(ctx context.Context, serviceDeskID, queueID, start, limit int) (result *ServiceDeskIssueQueueScheme, response *Response, err error) {
+func (s *ServiceDeskQueueService) Issues(ctx context.Context, serviceDeskID, queueID, start, limit int) (
+	result *ServiceDeskIssueQueueScheme, response *ResponseScheme, err error) {
 
 	params := url.Values{}
 	params.Add("start", strconv.Itoa(start))
@@ -95,13 +91,8 @@ func (s *ServiceDeskQueueService) Issues(ctx context.Context, serviceDeskID, que
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = s.client.Do(request)
+	response, err = s.client.Call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(ServiceDeskIssueQueueScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
@@ -109,30 +100,32 @@ func (s *ServiceDeskQueueService) Issues(ctx context.Context, serviceDeskID, que
 }
 
 type ServiceDeskQueuePageScheme struct {
-	Size       int                       `json:"size"`
-	Start      int                       `json:"start"`
-	Limit      int                       `json:"limit"`
-	IsLastPage bool                      `json:"isLastPage"`
-	Values     []*ServiceDeskQueueScheme `json:"values"`
-	Expands    []string                  `json:"_expands"`
-	Links      struct {
-		Self    string `json:"self"`
-		Base    string `json:"base"`
-		Context string `json:"context"`
-		Next    string `json:"next"`
-		Prev    string `json:"prev"`
-	} `json:"_links"`
+	Size       int                             `json:"size,omitempty"`
+	Start      int                             `json:"start,omitempty"`
+	Limit      int                             `json:"limit,omitempty"`
+	IsLastPage bool                            `json:"isLastPage,omitempty"`
+	Values     []*ServiceDeskQueueScheme       `json:"values,omitempty"`
+	Expands    []string                        `json:"_expands,omitempty"`
+	Links      *ServiceDeskQueuePageLinkScheme `json:"_links,omitempty"`
+}
+
+type ServiceDeskQueuePageLinkScheme struct {
+	Self    string `json:"self,omitempty"`
+	Base    string `json:"base,omitempty"`
+	Context string `json:"context,omitempty"`
+	Next    string `json:"next,omitempty"`
+	Prev    string `json:"prev,omitempty"`
 }
 
 type ServiceDeskQueueScheme struct {
-	ID         string   `json:"id"`
-	Name       string   `json:"name"`
-	Jql        string   `json:"jql"`
-	Fields     []string `json:"fields"`
-	IssueCount int      `json:"issueCount"`
+	ID         string   `json:"id,omitempty"`
+	Name       string   `json:"name,omitempty"`
+	Jql        string   `json:"jql,omitempty"`
+	Fields     []string `json:"fields,omitempty"`
+	IssueCount int      `json:"issueCount,omitempty"`
 	Links      struct {
-		Self string `json:"self"`
-	} `json:"_links"`
+		Self string `json:"self,omitempty"`
+	} `json:"_links,omitempty"`
 }
 
 type ServiceDeskIssueQueueScheme struct {

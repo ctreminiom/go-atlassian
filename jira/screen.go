@@ -2,7 +2,6 @@ package jira
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -40,12 +39,14 @@ type ScreenWithTabScheme struct {
 	Tab         *ScreenTabScheme               `json:"tab,omitempty"`
 }
 
-// Returns a paginated list of the screens a field is used in.
+// Fields returns a paginated list of the screens a field is used in.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/screens#get-screens-for-a-field
-func (s *ScreenService) Fields(ctx context.Context, fieldID string, startAt, maxResults int) (result *ScreenFieldPageScheme, response *Response, err error) {
+// Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screens/#api-rest-api-3-field-fieldid-screens-get
+func (s *ScreenService) Fields(ctx context.Context, fieldID string, startAt, maxResults int) (result *ScreenFieldPageScheme,
+	response *ResponseScheme, err error) {
 
 	if len(fieldID) == 0 {
-		return nil, nil, fmt.Errorf("error, please provide a valid fieldID value ")
+		return nil, nil, notFieldIDError
 	}
 
 	params := url.Values{}
@@ -61,13 +62,8 @@ func (s *ScreenService) Fields(ctx context.Context, fieldID string, startAt, max
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = s.client.Do(request)
+	response, err = s.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(ScreenFieldPageScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
@@ -83,9 +79,11 @@ type ScreenSearchPageScheme struct {
 	Values     []*ScreenScheme `json:"values,omitempty"`
 }
 
-// Returns a paginated list of all screens or those specified by one or more screen IDs.
+// Gets returns a paginated list of all screens or those specified by one or more screen IDs.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/screens#get-screens
-func (s *ScreenService) Gets(ctx context.Context, screenIDs []int, startAt, maxResults int) (result *ScreenSearchPageScheme, response *Response, err error) {
+// Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screens/#api-rest-api-3-screens-get
+func (s *ScreenService) Gets(ctx context.Context, screenIDs []int, startAt, maxResults int) (result *ScreenSearchPageScheme,
+	response *ResponseScheme, err error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -104,25 +102,22 @@ func (s *ScreenService) Gets(ctx context.Context, screenIDs []int, startAt, maxR
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = s.client.Do(request)
+	response, err = s.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(ScreenSearchPageScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
 	return
 }
 
-// Creates a screen with a default field tab.
+// Create creates a screen with a default field tab.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/screens#create-screen
-func (s *ScreenService) Create(ctx context.Context, name, description string) (result *ScreenScheme, response *Response, err error) {
+// Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screens/#api-rest-api-3-screens-post
+func (s *ScreenService) Create(ctx context.Context, name, description string) (result *ScreenScheme,
+	response *ResponseScheme, err error) {
 
 	if len(name) == 0 {
-		return nil, nil, fmt.Errorf("error, please project a valid screen name value")
+		return nil, nil, notScreenNameError
 	}
 
 	payload := struct {
@@ -135,7 +130,8 @@ func (s *ScreenService) Create(ctx context.Context, name, description string) (r
 
 	var endpoint = "rest/api/3/screens"
 
-	request, err := s.client.newRequest(ctx, http.MethodPost, endpoint, &payload)
+	payloadAsReader, _ := transformStructToReader(&payload)
+	request, err := s.client.newRequest(ctx, http.MethodPost, endpoint, payloadAsReader)
 	if err != nil {
 		return
 	}
@@ -143,25 +139,21 @@ func (s *ScreenService) Create(ctx context.Context, name, description string) (r
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Content-Type", "application/json")
 
-	response, err = s.client.Do(request)
+	response, err = s.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(ScreenScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
 	return
 }
 
-// Adds a field to the default tab of the default screen.
+// AddToDefault adds a field to the default tab of the default screen.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/screens#add-field-to-default-screen
-func (s *ScreenService) AddToDefault(ctx context.Context, fieldID string) (response *Response, err error) {
+// Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screens/#api-rest-api-3-screens-addtodefault-fieldid-post
+func (s *ScreenService) AddToDefault(ctx context.Context, fieldID string) (response *ResponseScheme, err error) {
 
 	if len(fieldID) == 0 {
-		return nil, fmt.Errorf("error, please provide a valid fieldID value")
+		return nil, notFieldIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/screens/addToDefault/%v", fieldID)
@@ -173,7 +165,7 @@ func (s *ScreenService) AddToDefault(ctx context.Context, fieldID string) (respo
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = s.client.Do(request)
+	response, err = s.client.call(request, nil)
 	if err != nil {
 		return
 	}
@@ -181,9 +173,11 @@ func (s *ScreenService) AddToDefault(ctx context.Context, fieldID string) (respo
 	return
 }
 
-// Updates a screen. Only screens used in classic projects can be updated.
+// Update updates a screen. Only screens used in classic projects can be updated.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/screens#update-screen
-func (s *ScreenService) Update(ctx context.Context, screenID int, name, description string) (result *ScreenScheme, response *Response, err error) {
+// Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screens/#api-rest-api-3-screens-screenid-put
+func (s *ScreenService) Update(ctx context.Context, screenID int, name, description string) (result *ScreenScheme,
+	response *ResponseScheme, err error) {
 
 	payload := struct {
 		Name        string `json:"name,omitempty"`
@@ -195,7 +189,8 @@ func (s *ScreenService) Update(ctx context.Context, screenID int, name, descript
 
 	var endpoint = fmt.Sprintf("rest/api/3/screens/%v", screenID)
 
-	request, err := s.client.newRequest(ctx, http.MethodPut, endpoint, &payload)
+	payloadAsReader, _ := transformStructToReader(&payload)
+	request, err := s.client.newRequest(ctx, http.MethodPut, endpoint, payloadAsReader)
 	if err != nil {
 		return
 	}
@@ -203,24 +198,20 @@ func (s *ScreenService) Update(ctx context.Context, screenID int, name, descript
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Content-Type", "application/json")
 
-	response, err = s.client.Do(request)
+	response, err = s.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(ScreenScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
 	return
 }
 
-// Deletes a screen.
+// Delete deletes a screen.
 // A screen cannot be deleted if it is used in a screen scheme,
 // workflow, or workflow draft. Only screens used in classic projects can be deleted.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/screens#delete-screen
-func (s *ScreenService) Delete(ctx context.Context, screenID int) (response *Response, err error) {
+// Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screens/#api-rest-api-3-screens-screenid-delete
+func (s *ScreenService) Delete(ctx context.Context, screenID int) (response *ResponseScheme, err error) {
 
 	var endpoint = fmt.Sprintf("rest/api/3/screens/%v", screenID)
 
@@ -229,7 +220,7 @@ func (s *ScreenService) Delete(ctx context.Context, screenID int) (response *Res
 		return
 	}
 
-	response, err = s.client.Do(request)
+	response, err = s.client.call(request, nil)
 	if err != nil {
 		return
 	}
@@ -242,9 +233,11 @@ type AvailableScreenFieldScheme struct {
 	Name string `json:"name"`
 }
 
-// Returns the fields that can be added to a tab on a screen.
+// Available returns the fields that can be added to a tab on a screen.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/screens#get-available-screen-fields
-func (s *ScreenService) Available(ctx context.Context, screenID int) (result *[]AvailableScreenFieldScheme, response *Response, err error) {
+// Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screens/#api-rest-api-3-screens-screenid-availablefields-get
+func (s *ScreenService) Available(ctx context.Context, screenID int) (result []*AvailableScreenFieldScheme,
+	response *ResponseScheme, err error) {
 
 	var endpoint = fmt.Sprintf("rest/api/3/screens/%v/availableFields", screenID)
 
@@ -255,15 +248,14 @@ func (s *ScreenService) Available(ctx context.Context, screenID int) (result *[]
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = s.client.Do(request)
+	response, err = s.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new([]AvailableScreenFieldScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
 	return
 }
+
+var (
+	notScreenNameError = fmt.Errorf("error, please project a valid screen name value")
+)

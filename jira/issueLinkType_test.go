@@ -411,16 +411,6 @@ func TestIssueLinkTypeService_Gets(t *testing.T) {
 			wantErr:            true,
 		},
 		{
-			name:               "GetIssueLinksTypesWhenTheJSONIsEmpty",
-			mockFile:           "./mocks/empty_json.json",
-			wantHTTPCodeReturn: http.StatusOK,
-			wantHTTPMethod:     http.MethodGet,
-			endpoint:           "/rest/api/3/issueLinkType",
-			context:            context.Background(),
-			wantHTTPHeaders:    map[string]string{"Accept": "application/json"},
-			wantErr:            true,
-		},
-		{
 			name:               "GetIssueLinksTypesWhenTheJSONWhenTheEndpointProvidedIsInvalid",
 			mockFile:           "./mocks/empty_json.json",
 			wantHTTPCodeReturn: http.StatusOK,

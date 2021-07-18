@@ -2,7 +2,6 @@ package jira
 
 import (
 	"context"
-	"encoding/json"
 	"net/http"
 )
 
@@ -25,9 +24,10 @@ type ServerInformationScheme struct {
 	} `json:"healthChecks"`
 }
 
-// Returns information about the Jira instance.
+// Info returns information about the Jira instance.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/server#get-jira-instance-info
-func (s *ServerService) Info(ctx context.Context) (result *ServerInformationScheme, response *Response, err error) {
+// Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-server-info/#api-rest-api-3-serverinfo-get
+func (s *ServerService) Info(ctx context.Context) (result *ServerInformationScheme, response *ResponseScheme, err error) {
 
 	var endpoint = "rest/api/3/serverInfo"
 
@@ -38,13 +38,8 @@ func (s *ServerService) Info(ctx context.Context) (result *ServerInformationSche
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = s.client.Do(request)
+	response, err = s.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(ServerInformationScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 

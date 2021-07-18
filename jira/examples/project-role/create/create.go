@@ -31,15 +31,16 @@ func main() {
 
 	atlassian.Auth.SetBasicAuth(mail, token)
 
-	newRole, response, err := atlassian.Project.Role.Create(context.Background(), "Developers", "A project role that represents developers in a project")
+	var payload = &jira.ProjectRolePayloadScheme{
+		Name:        "Developers",
+		Description: "A project role that represents developers in a project",
+	}
+
+	newRole, response, err := atlassian.Project.Role.Create(context.Background(), payload)
 	if err != nil {
-		if response != nil {
-			log.Println("Response HTTP Response", string(response.BodyAsBytes))
-		}
 		log.Fatal(err)
 	}
 
-	log.Println("Response HTTP Code", response.StatusCode)
 	log.Println("HTTP Endpoint Used", response.Endpoint)
 	log.Println(newRole)
 }

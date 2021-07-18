@@ -463,7 +463,7 @@ func TestProjectTypeService_Gets(t *testing.T) {
 				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
 				assert.Equal(t, testCase.endpoint, endpointToAssert)
 
-				for _, projectType := range *gotResult {
+				for _, projectType := range gotResult {
 
 					t.Log("---------------------------------")
 					t.Logf("Project Type key: %v", projectType.Key)
@@ -610,7 +610,7 @@ func TestProjectTypeService_Licensed(t *testing.T) {
 				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
 				assert.Equal(t, testCase.endpoint, endpointToAssert)
 
-				for _, projectType := range *gotResult {
+				for _, projectType := range gotResult {
 
 					t.Log("---------------------------------")
 					t.Logf("Project Type key: %v", projectType.Key)

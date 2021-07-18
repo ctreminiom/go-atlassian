@@ -2,56 +2,41 @@ package jira
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/url"
+	"strings"
 )
 
 type MySelfService struct{ client *Client }
 
 // Details returns details for the current user.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-myself/#api-rest-api-3-myself-get
-func (m *MySelfService) Details(ctx context.Context, expands []string) (result *UserScheme, response *Response, err error) {
+// Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-myself/#api-rest-api-3-myself-get
+func (m *MySelfService) Details(ctx context.Context, expand []string) (result *UserScheme, response *ResponseScheme,
+	err error) {
 
 	params := url.Values{}
-
-	var expand string
-	for index, value := range expands {
-
-		if index == 0 {
-			expand = value
-			continue
-		}
-
-		expand += "," + value
-	}
-
 	if len(expand) != 0 {
-		params.Add("expand", expand)
+		params.Add("expand", strings.Join(expand, ","))
 	}
 
-	var endpoint string
+	var endpoint strings.Builder
+	endpoint.WriteString("rest/api/3/myself")
+
 	if params.Encode() != "" {
-		endpoint = fmt.Sprintf("rest/api/3/myself?%v", params.Encode())
-	} else {
-		endpoint = "rest/api/3/myself"
+		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
-	request, err := m.client.newRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := m.client.newRequest(ctx, http.MethodGet, endpoint.String(), nil)
 	if err != nil {
 		return
 	}
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = m.client.Do(request)
+	response, err = m.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(UserScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 

@@ -33,16 +33,12 @@ func main() {
 
 	statuses, response, err := atlassian.Project.Statuses(context.Background(), "KP")
 	if err != nil {
-		if response != nil {
-			log.Println("Response HTTP Response", string(response.BodyAsBytes))
-		}
 		log.Fatal(err)
 	}
 
-	log.Println("Response HTTP Code", response.StatusCode)
 	log.Println("HTTP Endpoint Used", response.Endpoint)
 
-	for _, status := range *statuses {
+	for _, status := range statuses {
 		log.Println(status)
 	}
 }

@@ -41,12 +41,12 @@ func main() {
 	issuesPage, response, err := atlassian.Agile.Board.IssuesWithoutEpic(context.Background(), boardID, startAt, maxResult, options)
 	if err != nil {
 		if response != nil {
-			log.Println("Response HTTP Response", string(response.BodyAsBytes))
+			log.Println("Response HTTP Response", response.Bytes.String())
 		}
 		log.Fatal(err)
 	}
 
-	log.Println("Response HTTP Code", response.StatusCode)
+	log.Println("Response HTTP Code", response.Code)
 	log.Println("HTTP Endpoint Used", response.Endpoint)
 
 	for _, issue := range issuesPage.Issues {
@@ -55,7 +55,7 @@ func main() {
 
 	//If you want to extract the field metadata
 	var searchPage jira.IssueSearchScheme
-	if err = json.Unmarshal(response.BodyAsBytes, &searchPage); err != nil {
+	if err = json.Unmarshal(response.Bytes.Bytes(), &searchPage); err != nil {
 		log.Fatal(err)
 	}
 

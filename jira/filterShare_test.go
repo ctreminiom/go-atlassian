@@ -13,7 +13,7 @@ func TestFilterShareService_Add(t *testing.T) {
 
 	testCases := []struct {
 		name               string
-		payload            *PermissionFilterBodyScheme
+		payload            *PermissionFilterPayloadScheme
 		mockFile           string
 		filterID           int
 		wantHTTPMethod     string
@@ -24,7 +24,7 @@ func TestFilterShareService_Add(t *testing.T) {
 	}{
 		{
 			name: "AddShareFilterPermissionWhenTheTypeIsAGroup",
-			payload: &PermissionFilterBodyScheme{
+			payload: &PermissionFilterPayloadScheme{
 				Type:      "group",
 				ProjectID: "jira-administrators",
 			},
@@ -49,7 +49,7 @@ func TestFilterShareService_Add(t *testing.T) {
 		},
 		{
 			name: "AddShareFilterPermissionWhenTheResponseBodyHasADifferentFormat",
-			payload: &PermissionFilterBodyScheme{
+			payload: &PermissionFilterPayloadScheme{
 				Type:      "group",
 				ProjectID: "jira-administrators",
 			},
@@ -63,7 +63,7 @@ func TestFilterShareService_Add(t *testing.T) {
 		},
 		{
 			name: "AddShareFilterPermissionWhenTheTypeIsAProject",
-			payload: &PermissionFilterBodyScheme{
+			payload: &PermissionFilterPayloadScheme{
 				Type:      "project",
 				ProjectID: "EX",
 			},
@@ -77,7 +77,7 @@ func TestFilterShareService_Add(t *testing.T) {
 		},
 		{
 			name: "AddShareFilterPermissionWhenTheTypeIsAProjectAndHasARole",
-			payload: &PermissionFilterBodyScheme{
+			payload: &PermissionFilterPayloadScheme{
 				Type:          "project",
 				ProjectID:     "EX",
 				ProjectRoleID: "10360",
@@ -92,7 +92,7 @@ func TestFilterShareService_Add(t *testing.T) {
 		},
 		{
 			name: "AddShareFilterPermissionWhenTheContextIsNil",
-			payload: &PermissionFilterBodyScheme{
+			payload: &PermissionFilterPayloadScheme{
 				Type:          "project",
 				ProjectID:     "EX",
 				ProjectRoleID: "10360",
@@ -107,7 +107,7 @@ func TestFilterShareService_Add(t *testing.T) {
 		},
 		{
 			name: "AddShareFilterPermissionWhenTheEndpointIsIncorrect",
-			payload: &PermissionFilterBodyScheme{
+			payload: &PermissionFilterPayloadScheme{
 				Type:          "project",
 				ProjectID:     "EX",
 				ProjectRoleID: "10360",
@@ -158,7 +158,7 @@ func TestFilterShareService_Add(t *testing.T) {
 				assert.Error(t, err)
 
 				if gotResponse != nil {
-					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
+					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
 				}
 			} else {
 
@@ -182,10 +182,10 @@ func TestFilterShareService_Add(t *testing.T) {
 				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
 				assert.Equal(t, testCase.endpoint, endpointToAssert)
 
-				t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
-				assert.Equal(t, gotResponse.StatusCode, testCase.wantHTTPCodeReturn)
+				t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
+				assert.Equal(t, gotResponse.Code, testCase.wantHTTPCodeReturn)
 
-				for _, filterPermission := range *gotResult {
+				for _, filterPermission := range gotResult {
 					t.Logf("Filter ID Wanted: %v, Filter ID Returned: %v", filterPermission.ID, testCase.filterID)
 
 					assert.Equal(t, filterPermission.ID, testCase.filterID)
@@ -277,7 +277,7 @@ func TestFilterShareService_Delete(t *testing.T) {
 				assert.Error(t, err)
 
 				if gotResponse != nil {
-					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
+					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
 				}
 			} else {
 
@@ -300,8 +300,8 @@ func TestFilterShareService_Delete(t *testing.T) {
 				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
 				assert.Equal(t, testCase.endpoint, endpointToAssert)
 
-				t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
-				assert.Equal(t, gotResponse.StatusCode, testCase.wantHTTPCodeReturn)
+				t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
+				assert.Equal(t, gotResponse.Code, testCase.wantHTTPCodeReturn)
 			}
 
 		})
@@ -425,7 +425,7 @@ func TestFilterShareService_Get(t *testing.T) {
 				assert.Error(t, err)
 
 				if gotResponse != nil {
-					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
+					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
 				}
 			} else {
 
@@ -449,8 +449,8 @@ func TestFilterShareService_Get(t *testing.T) {
 				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
 				assert.Equal(t, testCase.endpoint, endpointToAssert)
 
-				t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
-				assert.Equal(t, gotResponse.StatusCode, testCase.wantHTTPCodeReturn)
+				t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
+				assert.Equal(t, gotResponse.Code, testCase.wantHTTPCodeReturn)
 
 				t.Logf("HTTP Filter ID Wanted: %v, HTTP Filter ID Returned: %v", testCase.filterID, getResult.ID)
 
@@ -552,7 +552,7 @@ func TestFilterShareService_Gets(t *testing.T) {
 				assert.Error(t, err)
 
 				if gotResponse != nil {
-					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
+					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
 				}
 			} else {
 
@@ -576,10 +576,10 @@ func TestFilterShareService_Gets(t *testing.T) {
 				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
 				assert.Equal(t, testCase.endpoint, endpointToAssert)
 
-				t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
-				assert.Equal(t, gotResponse.StatusCode, testCase.wantHTTPCodeReturn)
+				t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
+				assert.Equal(t, gotResponse.Code, testCase.wantHTTPCodeReturn)
 
-				for index, sharePermission := range *getResult {
+				for index, sharePermission := range getResult {
 					t.Logf("Share Permission #%v, | ID: %v, Type: %v", index, sharePermission.ID, sharePermission.Type)
 				}
 			}
@@ -688,7 +688,7 @@ func TestFilterShareService_Scope(t *testing.T) {
 				assert.Error(t, err)
 
 				if gotResponse != nil {
-					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
+					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
 				}
 			} else {
 
@@ -712,11 +712,8 @@ func TestFilterShareService_Scope(t *testing.T) {
 				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
 				assert.Equal(t, testCase.endpoint, endpointToAssert)
 
-				t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
-				assert.Equal(t, gotResponse.StatusCode, testCase.wantHTTPCodeReturn)
-
-				t.Logf("HTTP Default Scope Wanted: %v, HTTP Default Scope Returned: %v", testCase.defaultScope, getResult)
-				assert.Equal(t, testCase.defaultScope, getResult)
+				t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
+				assert.Equal(t, gotResponse.Code, testCase.wantHTTPCodeReturn)
 			}
 
 		})
@@ -818,7 +815,7 @@ func TestFilterShareService_SetScope(t *testing.T) {
 				assert.Error(t, err)
 
 				if gotResponse != nil {
-					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
+					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
 				}
 			} else {
 
@@ -841,8 +838,8 @@ func TestFilterShareService_SetScope(t *testing.T) {
 				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
 				assert.Equal(t, testCase.endpoint, endpointToAssert)
 
-				t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
-				assert.Equal(t, gotResponse.StatusCode, testCase.wantHTTPCodeReturn)
+				t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
+				assert.Equal(t, gotResponse.Code, testCase.wantHTTPCodeReturn)
 			}
 		})
 	}

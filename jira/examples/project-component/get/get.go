@@ -33,11 +33,9 @@ func main() {
 
 	component, response, err := atlassian.Project.Component.Get(context.Background(), "10006")
 	if err != nil {
-		if response != nil {
-			log.Println("Response HTTP Response", string(response.BodyAsBytes))
-		}
 		log.Fatal(err)
 	}
 
 	log.Println(component)
+	log.Println(response.Endpoint)
 }

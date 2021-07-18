@@ -2,7 +2,6 @@ package jira
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -11,15 +10,15 @@ import (
 
 type FieldConfigurationService struct{ client *Client }
 
-type FieldConfigSearchScheme struct {
-	MaxResults int                  `json:"maxResults,omitempty"`
-	StartAt    int                  `json:"startAt,omitempty"`
-	Total      int                  `json:"total,omitempty"`
-	IsLast     bool                 `json:"isLast,omitempty"`
-	Values     []*FieldConfigScheme `json:"values,omitempty"`
+type FieldConfigurationPageScheme struct {
+	MaxResults int                         `json:"maxResults,omitempty"`
+	StartAt    int                         `json:"startAt,omitempty"`
+	Total      int                         `json:"total,omitempty"`
+	IsLast     bool                        `json:"isLast,omitempty"`
+	Values     []*FieldConfigurationScheme `json:"values,omitempty"`
 }
 
-type FieldConfigScheme struct {
+type FieldConfigurationScheme struct {
 	ID          int    `json:"id,omitempty"`
 	Name        string `json:"name,omitempty"`
 	Description string `json:"description,omitempty"`
@@ -28,7 +27,9 @@ type FieldConfigScheme struct {
 
 // Gets Returns a paginated list of all field configurations.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration#get-all-field-configurations
-func (f *FieldConfigurationService) Gets(ctx context.Context, IDs []int, isDefault bool, startAt, maxResults int) (result *FieldConfigSearchScheme, response *Response, err error) {
+// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-field-configurations/#api-rest-api-3-fieldconfiguration-get
+func (f *FieldConfigurationService) Gets(ctx context.Context, ids []int, isDefault bool, startAt, maxResults int) (
+	result *FieldConfigurationPageScheme, response *ResponseScheme, err error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -38,25 +39,21 @@ func (f *FieldConfigurationService) Gets(ctx context.Context, IDs []int, isDefau
 		params.Add("isDefault", "true")
 	}
 
-	for _, id := range IDs {
+	for _, id := range ids {
 		params.Add("id", strconv.Itoa(id))
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/fieldconfiguration?%v", params.Encode())
+
 	request, err := f.client.newRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
 		return
 	}
 	request.Header.Set("Accept", "application/json")
 
-	response, err = f.client.Do(request)
+	response, err = f.client.call(request, &result)
 	if err != nil {
 		return
-	}
-
-	result = new(FieldConfigSearchScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
 
 	return
@@ -79,13 +76,16 @@ type FieldConfigurationItemScheme struct {
 
 // Items Returns a paginated list of all fields for a configuration.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration#get-field-configuration-items
-func (f *FieldConfigurationService) Items(ctx context.Context, fieldConfigurationID, startAt, maxResults int) (result *FieldConfigurationItemPageScheme, response *Response, err error) {
+// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-field-configurations/#api-rest-api-3-fieldconfiguration-id-fields-get
+func (f *FieldConfigurationService) Items(ctx context.Context, fieldConfigurationID, startAt, maxResults int) (
+	result *FieldConfigurationItemPageScheme, response *ResponseScheme, err error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
 	params.Add("maxResults", strconv.Itoa(maxResults))
 
 	var endpoint = fmt.Sprintf("rest/api/3/fieldconfiguration/%v/fields?%v", fieldConfigurationID, params.Encode())
+
 	request, err := f.client.newRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
 		return
@@ -93,14 +93,9 @@ func (f *FieldConfigurationService) Items(ctx context.Context, fieldConfiguratio
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = f.client.Do(request)
+	response, err = f.client.call(request, &result)
 	if err != nil {
 		return
-	}
-
-	result = new(FieldConfigurationItemPageScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
 
 	return
@@ -122,7 +117,9 @@ type FieldConfigurationSchemeScheme struct {
 
 // Schemes Returns a paginated list of field configuration schemes.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration#get-all-field-configuration-schemes
-func (f *FieldConfigurationService) Schemes(ctx context.Context, IDs []int, startAt, maxResults int) (result *FieldConfigurationSchemePageScheme, response *Response, err error) {
+// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-field-configurations/#api-rest-api-3-fieldconfigurationscheme-get
+func (f *FieldConfigurationService) Schemes(ctx context.Context, IDs []int, startAt, maxResults int) (
+	result *FieldConfigurationSchemePageScheme, response *ResponseScheme, err error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -133,6 +130,7 @@ func (f *FieldConfigurationService) Schemes(ctx context.Context, IDs []int, star
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/fieldconfigurationscheme?%v", params.Encode())
+
 	request, err := f.client.newRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
 		return
@@ -140,14 +138,9 @@ func (f *FieldConfigurationService) Schemes(ctx context.Context, IDs []int, star
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = f.client.Do(request)
+	response, err = f.client.call(request, &result)
 	if err != nil {
 		return
-	}
-
-	result = new(FieldConfigurationSchemePageScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
 
 	return
@@ -169,7 +162,9 @@ type FieldConfigurationIssueTypeItemScheme struct {
 
 // IssueTypeItems Returns a paginated list of field configuration issue type items.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration#get-field-configuration-issue-type-items
-func (f *FieldConfigurationService) IssueTypeItems(ctx context.Context, fieldConfigIDs []int, startAt, maxResults int) (result *FieldConfigurationIssueTypeItemPageScheme, response *Response, err error) {
+// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-field-configurations/#api-rest-api-3-fieldconfigurationscheme-mapping-get
+func (f *FieldConfigurationService) IssueTypeItems(ctx context.Context, fieldConfigIDs []int, startAt, maxResults int) (
+	result *FieldConfigurationIssueTypeItemPageScheme, response *ResponseScheme, err error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -180,20 +175,16 @@ func (f *FieldConfigurationService) IssueTypeItems(ctx context.Context, fieldCon
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/fieldconfigurationscheme/mapping?%v", params.Encode())
+
 	request, err := f.client.newRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
 		return
 	}
 	request.Header.Set("Accept", "application/json")
 
-	response, err = f.client.Do(request)
+	response, err = f.client.call(request, &result)
 	if err != nil {
 		return
-	}
-
-	result = new(FieldConfigurationIssueTypeItemPageScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
 
 	return
@@ -214,7 +205,9 @@ type FieldConfigurationSchemeProjectScheme struct {
 
 // SchemesByProject Returns a paginated list of field configuration schemes and, for each scheme, a list of the projects that use it.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration#get-field-configuration-schemes-for-projects
-func (f *FieldConfigurationService) SchemesByProject(ctx context.Context, projectIDs []int, startAt, maxResults int) (result *FieldConfigurationSchemeProjectPageScheme, response *Response, err error) {
+// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-field-configurations/#api-rest-api-3-fieldconfigurationscheme-project-get
+func (f *FieldConfigurationService) SchemesByProject(ctx context.Context, projectIDs []int, startAt, maxResults int) (
+	result *FieldConfigurationSchemeProjectPageScheme, response *ResponseScheme, err error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -225,20 +218,17 @@ func (f *FieldConfigurationService) SchemesByProject(ctx context.Context, projec
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/fieldconfigurationscheme/project?%v", params.Encode())
+
 	request, err := f.client.newRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
 		return
 	}
+
 	request.Header.Set("Accept", "application/json")
 
-	response, err = f.client.Do(request)
+	response, err = f.client.call(request, &result)
 	if err != nil {
 		return
-	}
-
-	result = new(FieldConfigurationSchemeProjectPageScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
-		return nil, response, fmt.Errorf("unable to marshall the response body, error: %v", err.Error())
 	}
 
 	return
@@ -246,11 +236,12 @@ func (f *FieldConfigurationService) SchemesByProject(ctx context.Context, projec
 
 // Assign Assigns a field configuration scheme to a project.
 // If the field configuration scheme ID is null, the operation assigns the default field configuration scheme.
-// Docs: N/A
-func (f *FieldConfigurationService) Assign(ctx context.Context, fieldConfigurationSchemeID, projectID string) (response *Response, err error) {
+// Docs: TODO Issue 50
+// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-field-configurations/#api-rest-api-3-fieldconfigurationscheme-project-put
+func (f *FieldConfigurationService) Assign(ctx context.Context, fieldConfigurationSchemeID, projectID string) (response *ResponseScheme, err error) {
 
 	if len(projectID) == 0 {
-		return nil, fmt.Errorf("error!, please provide a vaild projectID value")
+		return nil, notProjectIDError
 	}
 
 	payload := struct {
@@ -261,8 +252,10 @@ func (f *FieldConfigurationService) Assign(ctx context.Context, fieldConfigurati
 		ProjectID: projectID,
 	}
 
+	payloadAsReader, _ := transformStructToReader(&payload)
 	var endpoint = "rest/api/3/fieldconfigurationscheme/project"
-	request, err := f.client.newRequest(ctx, http.MethodPut, endpoint, &payload)
+
+	request, err := f.client.newRequest(ctx, http.MethodPut, endpoint, payloadAsReader)
 	if err != nil {
 		return
 	}
@@ -270,10 +263,14 @@ func (f *FieldConfigurationService) Assign(ctx context.Context, fieldConfigurati
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Content-Type", "application/json")
 
-	response, err = f.client.Do(request)
+	response, err = f.client.call(request, nil)
 	if err != nil {
 		return
 	}
 
 	return
 }
+
+var (
+	notProjectIDError = fmt.Errorf("error!, please provide a vaild projectID value")
+)

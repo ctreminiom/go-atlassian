@@ -156,7 +156,7 @@ func TestRequestCommentService_Attachments(t *testing.T) {
 				assert.Error(t, err)
 
 				if gotResponse != nil {
-					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
+					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
 				}
 			} else {
 
@@ -180,8 +180,8 @@ func TestRequestCommentService_Attachments(t *testing.T) {
 				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
 				assert.Equal(t, testCase.endpoint, endpointToAssert)
 
-				t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
-				assert.Equal(t, gotResponse.StatusCode, testCase.wantHTTPCodeReturn)
+				t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
+				assert.Equal(t, gotResponse.Code, testCase.wantHTTPCodeReturn)
 
 				for _, attachment := range gotResult.Values {
 					t.Log(attachment.Filename, attachment.MimeType, attachment.Size)
@@ -346,7 +346,7 @@ func TestRequestCommentService_Create(t *testing.T) {
 				assert.Error(t, err)
 
 				if gotResponse != nil {
-					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
+					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
 				}
 			} else {
 
@@ -370,15 +370,13 @@ func TestRequestCommentService_Create(t *testing.T) {
 				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
 				assert.Equal(t, testCase.endpoint, endpointToAssert)
 
-				t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
-				assert.Equal(t, gotResponse.StatusCode, testCase.wantHTTPCodeReturn)
+				t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
+				assert.Equal(t, gotResponse.Code, testCase.wantHTTPCodeReturn)
 
 				t.Log("----------------------------------")
 				t.Logf("Comment, ID: %v", gotResult.ID)
 				t.Logf("Comment, Creator Name: %v", gotResult.Author.DisplayName)
 				t.Logf("Comment, Created Date: %v", gotResult.Created.Friendly)
-				t.Logf("Comment, # of attachments: %v", gotResult.Attachments.Size)
-				t.Logf("Comment, is public?: %v", gotResult.Public)
 				t.Log("----------------------------------")
 
 			}
@@ -529,7 +527,7 @@ func TestRequestCommentService_Get(t *testing.T) {
 				assert.Error(t, err)
 
 				if gotResponse != nil {
-					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
+					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
 				}
 			} else {
 
@@ -553,15 +551,13 @@ func TestRequestCommentService_Get(t *testing.T) {
 				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
 				assert.Equal(t, testCase.endpoint, endpointToAssert)
 
-				t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
-				assert.Equal(t, gotResponse.StatusCode, testCase.wantHTTPCodeReturn)
+				t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
+				assert.Equal(t, gotResponse.Code, testCase.wantHTTPCodeReturn)
 
 				t.Log("----------------------------------")
 				t.Logf("Comment, ID: %v", gotResult.ID)
 				t.Logf("Comment, Creator Name: %v", gotResult.Author.DisplayName)
 				t.Logf("Comment, Created Date: %v", gotResult.Created.Friendly)
-				t.Logf("Comment, # of attachments: %v", gotResult.Attachments.Size)
-				t.Logf("Comment, is public?: %v", gotResult.Public)
 				t.Log("----------------------------------")
 
 			}
@@ -596,6 +592,21 @@ func TestRequestCommentService_Gets(t *testing.T) {
 			mockFile:           "./mocks/get-comments-requests.json",
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/servicedeskapi/request/DUMMY-3/comment?expand=attachment%2CrenderedBody&limit=50&start=0",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            false,
+		},
+
+		{
+			name:               "GetCustomerCommentsWhenThePublicParamIsNotTrue",
+			issueKeyOrID:       "DUMMY-3",
+			public:             false,
+			expands:            []string{"attachment", "renderedBody"},
+			start:              0,
+			limit:              50,
+			mockFile:           "./mocks/get-comments-requests.json",
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/rest/servicedeskapi/request/DUMMY-3/comment?expand=attachment%2CrenderedBody&limit=50&public=false&start=0",
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusOK,
 			wantErr:            false,
@@ -728,7 +739,7 @@ func TestRequestCommentService_Gets(t *testing.T) {
 				assert.Error(t, err)
 
 				if gotResponse != nil {
-					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
+					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
 				}
 			} else {
 
@@ -752,8 +763,8 @@ func TestRequestCommentService_Gets(t *testing.T) {
 				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
 				assert.Equal(t, testCase.endpoint, endpointToAssert)
 
-				t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.StatusCode)
-				assert.Equal(t, gotResponse.StatusCode, testCase.wantHTTPCodeReturn)
+				t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
+				assert.Equal(t, gotResponse.Code, testCase.wantHTTPCodeReturn)
 
 				for _, comment := range gotResult.Values {
 
@@ -761,8 +772,6 @@ func TestRequestCommentService_Gets(t *testing.T) {
 					t.Logf("Comment, ID: %v", comment.ID)
 					t.Logf("Comment, Creator Name: %v", comment.Author.DisplayName)
 					t.Logf("Comment, Created Date: %v", comment.Created.Friendly)
-					t.Logf("Comment, # of attachments: %v", comment.Attachments.Size)
-					t.Logf("Comment, is public?: %v", comment.Public)
 					t.Log("----------------------------------")
 
 				}

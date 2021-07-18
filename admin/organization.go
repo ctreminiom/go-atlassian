@@ -2,11 +2,11 @@ package admin
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/url"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -15,49 +15,47 @@ type OrganizationService struct {
 	Policy *OrganizationPolicyService
 }
 
-// Returns a list of your organizations, this func needs the following parameters:
-// 1. ctx = it's the context.context value
-// 2. cursor = the next pagination result, The cursor is not a number that you can increment through predictably.
+// Gets returns a list of your organizations
 // Official Docs: https://developer.atlassian.com/cloud/admin/organization/rest/api-group-orgs/#api-orgs-get
 // Library Example: https://docs.go-atlassian.io/atlassian-admin-cloud/organization#get-organizations
-func (o *OrganizationService) Gets(ctx context.Context, cursor string) (result *OrganizationPageScheme, response *Response, err error) {
+func (o *OrganizationService) Gets(ctx context.Context, cursor string) (result *OrganizationPageScheme,
+	response *ResponseScheme, err error) {
 
-	var endpoint string
-	if len(cursor) != 0 {
-		endpoint = fmt.Sprintf("/admin/v1/orgs?cursor=%v", cursor)
-	} else {
-		endpoint = "/admin/v1/orgs"
+	params := url.Values{}
+	if cursor != "" {
+		params.Add("cursor", cursor)
 	}
 
-	request, err := o.client.newRequest(ctx, http.MethodGet, endpoint, nil)
+	var endpoint strings.Builder
+	endpoint.WriteString("/admin/v1/orgs")
+
+	if params.Encode() != "" {
+		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
+	}
+
+	request, err := o.client.newRequest(ctx, http.MethodGet, endpoint.String(), nil)
 	if err != nil {
 		return
 	}
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = o.client.Do(request)
+	response, err = o.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(OrganizationPageScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
 	return
 }
 
-// Returns information about a single organization by ID, this func needs the following parameters:
-// 1. ctx = it's the context.context value
-// 2. organizationID = ID of the organization to return (REQUIRED)
+// Get returns information about a single organization by ID
 // Official Docs: https://developer.atlassian.com/cloud/admin/organization/rest/api-group-orgs/#api-orgs-orgid-get
 // Library Example: https://docs.go-atlassian.io/atlassian-admin-cloud/organization#get-an-organization-by-id
-func (o *OrganizationService) Get(ctx context.Context, organizationID string) (result *OrganizationScheme, response *Response, err error) {
+func (o *OrganizationService) Get(ctx context.Context, organizationID string) (result *OrganizationScheme,
+	response *ResponseScheme, err error) {
 
 	if len(organizationID) == 0 {
-		return nil, nil, fmt.Errorf("error!, please provide a valid organizationID value")
+		return nil, nil, notOrganizationError
 	}
 
 	var endpoint = fmt.Sprintf("/admin/v1/orgs/%v", organizationID)
@@ -69,13 +67,8 @@ func (o *OrganizationService) Get(ctx context.Context, organizationID string) (r
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = o.client.Do(request)
+	response, err = o.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(OrganizationScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
@@ -124,39 +117,37 @@ type OrganizationScheme struct {
 	Data *OrganizationModelScheme `json:"data,omitempty"`
 }
 
-// Returns a list of users in an organization, this func needs the following parameters:
-// 1. ctx = it's the context.context value
-// 2. organizationID = ID of the organization to return (REQUIRED)
-// 3. cursor = the next pagination result, The cursor is not a number that you can increment through predictably.
+// Users returns a list of users in an organization
 // Official Docs: https://developer.atlassian.com/cloud/admin/organization/rest/api-group-orgs/#api-orgs-orgid-users-get
 // Library Example: https://docs.go-atlassian.io/atlassian-admin-cloud/organization#get-users-in-an-organization
-func (o *OrganizationService) Users(ctx context.Context, organizationID, cursor string) (result *OrganizationUserPageScheme, response *Response, err error) {
+func (o *OrganizationService) Users(ctx context.Context, organizationID, cursor string) (result *OrganizationUserPageScheme,
+	response *ResponseScheme, err error) {
 
 	if len(organizationID) == 0 {
-		return nil, nil, fmt.Errorf("error!, please provide a valid organizationID value")
+		return nil, nil, notOrganizationError
 	}
 
-	var endpoint string
-	if len(cursor) != 0 {
-		endpoint = fmt.Sprintf("/admin/v1/orgs/%v/users?cursor=%v", organizationID, cursor)
-	} else {
-		endpoint = fmt.Sprintf("/admin/v1/orgs/%v/users", organizationID)
+	params := url.Values{}
+	if cursor != "" {
+		params.Add("cursor", cursor)
 	}
 
-	request, err := o.client.newRequest(ctx, http.MethodGet, endpoint, nil)
+	var endpoint strings.Builder
+	endpoint.WriteString(fmt.Sprintf("/admin/v1/orgs/%v/users", organizationID))
+
+	if params.Encode() != "" {
+		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
+	}
+
+	request, err := o.client.newRequest(ctx, http.MethodGet, endpoint.String(), nil)
 	if err != nil {
 		return
 	}
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = o.client.Do(request)
+	response, err = o.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(OrganizationUserPageScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
@@ -191,39 +182,37 @@ type OrganizationUserProductScheme struct {
 	LastActive string `json:"last_active,omitempty"`
 }
 
-// Returns a list of domains in an organization one page at a time, this func needs the following parameters:
-// 1. ctx = it's the context.context value
-// 2. organizationID = ID of the organization to return (REQUIRED)
-// 3. cursor = the next pagination result, The cursor is not a number that you can increment through predictably.
+// Domains returns a list of domains in an organization one page at a time
 // Official Docs: https://developer.atlassian.com/cloud/admin/organization/rest/api-group-orgs/#api-orgs-orgid-domains-get
 // Library Example: https://docs.go-atlassian.io/atlassian-admin-cloud/organization#get-domains-in-an-organization
-func (o *OrganizationService) Domains(ctx context.Context, organizationID, cursor string) (result *OrganizationDomainPageScheme, response *Response, err error) {
+func (o *OrganizationService) Domains(ctx context.Context, organizationID, cursor string) (result *OrganizationDomainPageScheme,
+	response *ResponseScheme, err error) {
 
 	if len(organizationID) == 0 {
-		return nil, nil, fmt.Errorf("error!, please provide a valid organizationID value")
+		return nil, nil, notOrganizationError
 	}
 
-	var endpoint string
-	if len(cursor) != 0 {
-		endpoint = fmt.Sprintf("/admin/v1/orgs/%v/domains?cursor=%v", organizationID, cursor)
-	} else {
-		endpoint = fmt.Sprintf("/admin/v1/orgs/%v/domains", organizationID)
+	params := url.Values{}
+	if cursor != "" {
+		params.Add("cursor", cursor)
 	}
 
-	request, err := o.client.newRequest(ctx, http.MethodGet, endpoint, nil)
+	var endpoint strings.Builder
+	endpoint.WriteString(fmt.Sprintf("/admin/v1/orgs/%v/domains", organizationID))
+
+	if params.Encode() != "" {
+		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
+	}
+
+	request, err := o.client.newRequest(ctx, http.MethodGet, endpoint.String(), nil)
 	if err != nil {
 		return
 	}
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = o.client.Do(request)
+	response, err = o.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(OrganizationDomainPageScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
@@ -248,20 +237,18 @@ type OrganizationDomainModelScheme struct {
 	Links *LinkSelfModelScheme `json:"links,omitempty"`
 }
 
-// Returns information about a single verified domain by ID, this func needs the following parameters:
-// 1. ctx = it's the context.context value
-// 2. organizationID = ID of the organization to return (REQUIRED)
-// 3. domainID = ID of the domain to return (REQUIRED)
+// Domain returns information about a single verified domain by ID
 // Official Docs: https://developer.atlassian.com/cloud/admin/organization/rest/api-group-orgs/#api-orgs-orgid-domains-domainid-get
 // Library Example: https://docs.go-atlassian.io/atlassian-admin-cloud/organization#get-domain-by-id
-func (o *OrganizationService) Domain(ctx context.Context, organizationID, domainID string) (result *OrganizationDomainScheme, response *Response, err error) {
+func (o *OrganizationService) Domain(ctx context.Context, organizationID, domainID string) (result *OrganizationDomainScheme,
+	response *ResponseScheme, err error) {
 
 	if len(organizationID) == 0 {
-		return nil, nil, fmt.Errorf("error!, please provide a valid organizationID value")
+		return nil, nil, notOrganizationError
 	}
 
 	if len(domainID) == 0 {
-		return nil, nil, fmt.Errorf("error!, please provide a valid domainID value")
+		return nil, nil, notDomainError
 	}
 
 	var endpoint = fmt.Sprintf("/admin/v1/orgs/%v/domains/%v", organizationID, domainID)
@@ -273,13 +260,8 @@ func (o *OrganizationService) Domain(ctx context.Context, organizationID, domain
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = o.client.Do(request)
+	response, err = o.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(OrganizationDomainScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
@@ -310,38 +292,35 @@ type OrganizationEventOptScheme struct {
 	Action string    //A query filter that returns events of a specific action type.
 }
 
-// Returns an audit log of events from an organization one page at a time, this func needs the following parameters:
-// 1. ctx = it's the context.context value
-// 2. organizationID = ID of the organization to return (REQUIRED)
-// 3. opts = the Event options
-// 4. cursor = the next pagination result, The cursor is not a number that you can increment through predictably.
+// Events returns an audit log of events from an organization one page at a time
 // Atlassian Docs: https://developer.atlassian.com/cloud/admin/organization/rest/api-group-orgs/#api-orgs-orgid-events-get
 // Library Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/organization#get-an-audit-log-of-events
-func (o *OrganizationService) Events(ctx context.Context, organizationID string, opts *OrganizationEventOptScheme, cursor string) (result *OrganizationEventPageScheme, response *Response, err error) {
+func (o *OrganizationService) Events(ctx context.Context, organizationID string, options *OrganizationEventOptScheme,
+	cursor string) (result *OrganizationEventPageScheme, response *ResponseScheme, err error) {
 
 	if len(organizationID) == 0 {
-		return nil, nil, fmt.Errorf("error!, please provide a valid organizationID value")
+		return nil, nil, notOrganizationError
 	}
 
 	params := url.Values{}
-	if opts != nil {
+	if options != nil {
 
-		if !opts.To.IsZero() {
-			timeAsEpoch := int(opts.To.Unix())
+		if !options.To.IsZero() {
+			timeAsEpoch := int(options.To.Unix())
 			params.Add("to", strconv.Itoa(timeAsEpoch))
 		}
 
-		if !opts.From.IsZero() {
-			timeAsEpoch := int(opts.From.Unix())
+		if !options.From.IsZero() {
+			timeAsEpoch := int(options.From.Unix())
 			params.Add("from", strconv.Itoa(timeAsEpoch))
 		}
 
-		if len(opts.Q) != 0 {
-			params.Add("q", opts.Q)
+		if len(options.Q) != 0 {
+			params.Add("q", options.Q)
 		}
 
-		if len(opts.Action) != 0 {
-			params.Add("action", opts.Action)
+		if len(options.Action) != 0 {
+			params.Add("action", options.Action)
 		}
 
 	}
@@ -350,27 +329,22 @@ func (o *OrganizationService) Events(ctx context.Context, organizationID string,
 		params.Add("cursor", cursor)
 	}
 
-	var endpoint string
-	if len(params.Encode()) != 0 {
-		endpoint = fmt.Sprintf("/admin/v1/orgs/%v/events?%v", organizationID, params.Encode())
-	} else {
-		endpoint = fmt.Sprintf("/admin/v1/orgs/%v/events", organizationID)
+	var endpoint strings.Builder
+	endpoint.WriteString(fmt.Sprintf("/admin/v1/orgs/%v/events", organizationID))
+
+	if params.Encode() != "" {
+		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
-	request, err := o.client.newRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := o.client.newRequest(ctx, http.MethodGet, endpoint.String(), nil)
 	if err != nil {
 		return
 	}
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = o.client.Do(request)
+	response, err = o.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(OrganizationEventPageScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
@@ -422,19 +396,17 @@ type OrganizationEventLocationModel struct {
 	Geo string `json:"geo,omitempty"`
 }
 
-// Returns information about a single event by ID.
-// 1. ctx = it's the context.context value
-// 2. organizationID = ID of the organization to return (REQUIRED)
-// 3. eventID = ID of the event to return (REQUIRED)
+// Event returns information about a single event by ID.
 // Library Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/organization#get-an-event-by-id
-func (o *OrganizationService) Event(ctx context.Context, organizationID, eventID string) (result *OrganizationEventScheme, response *Response, err error) {
+func (o *OrganizationService) Event(ctx context.Context, organizationID, eventID string) (result *OrganizationEventScheme,
+	response *ResponseScheme, err error) {
 
 	if len(organizationID) == 0 {
-		return nil, nil, fmt.Errorf("error!, please provide a valid organizationID value")
+		return nil, nil, notOrganizationError
 	}
 
 	if len(eventID) == 0 {
-		return nil, nil, fmt.Errorf("error!, please provide a valid eventID value")
+		return nil, nil, notEventError
 	}
 
 	var endpoint = fmt.Sprintf("/admin/v1/orgs/%v/events/%v", organizationID, eventID)
@@ -446,13 +418,8 @@ func (o *OrganizationService) Event(ctx context.Context, organizationID, eventID
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = o.client.Do(request)
+	response, err = o.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(OrganizationEventScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
@@ -463,15 +430,14 @@ type OrganizationEventScheme struct {
 	Data *OrganizationEventModelScheme `json:"data,omitempty"`
 }
 
-// Returns information localized event actions
-// 1. ctx = it's the context.context value
-// 2. organizationID = ID of the organization to return (REQUIRED)
+// Actions returns information localized event actions
 // Official Docs: https://developer.atlassian.com/cloud/admin/organization/rest/api-group-orgs/#api-orgs-orgid-event-actions-get
 // Library Example: https://docs.go-atlassian.io/atlassian-admin-cloud/organization#get-list-of-event-actions
-func (o *OrganizationService) Actions(ctx context.Context, organizationID string) (result *OrganizationEventActionScheme, response *Response, err error) {
+func (o *OrganizationService) Actions(ctx context.Context, organizationID string) (result *OrganizationEventActionScheme,
+	response *ResponseScheme, err error) {
 
 	if len(organizationID) == 0 {
-		return nil, nil, fmt.Errorf("error!, please provide a valid organizationID value")
+		return nil, nil, notOrganizationError
 	}
 
 	var endpoint = fmt.Sprintf("/admin/v1/orgs/%v/event-actions", organizationID)
@@ -483,13 +449,8 @@ func (o *OrganizationService) Actions(ctx context.Context, organizationID string
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = o.client.Do(request)
+	response, err = o.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(OrganizationEventActionScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
@@ -510,3 +471,9 @@ type OrganizationEventActionModelAttributesScheme struct {
 	DisplayName      string `json:"displayName,omitempty"`
 	GroupDisplayName string `json:"groupDisplayName,omitempty"`
 }
+
+var (
+	notOrganizationError = fmt.Errorf("error!, please provide a valid organizationID value")
+	notDomainError       = fmt.Errorf("error!, please provide a valid domainID value")
+	notEventError        = fmt.Errorf("error!, please provide a valid eventID value")
+)

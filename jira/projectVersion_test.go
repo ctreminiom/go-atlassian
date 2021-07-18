@@ -241,6 +241,18 @@ func TestProjectVersionService_Get(t *testing.T) {
 		},
 
 		{
+			name:               "GetProjectVersionWhenTheVersionIDIsNotProvided",
+			versionID:          "",
+			expands:            []string{"operations", "issuesstatus"},
+			mockFile:           "./mocks/create-project-version.json",
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/rest/api/3/version/10001?expand=operations%2Cissuesstatus",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+
+		{
 			name:               "GetProjectVersionWhenTheExpandsIsNil",
 			versionID:          "10001",
 			expands:            nil,

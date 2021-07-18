@@ -2,7 +2,6 @@ package sm
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -12,12 +11,13 @@ import (
 
 type CustomerService struct{ client *Client }
 
-// This method adds a customer to the Jira Service Management
+// Create adds a customer to the Jira Service Management
 // instance by passing a JSON file including an email address and display name.
 // The display name does not need to be unique. The record's identifiers,
 // name and key, are automatically generated from the request details.
 // Docs: https://docs.go-atlassian.io/jira-service-management-cloud/customer#create-customer
-func (c *CustomerService) Create(ctx context.Context, email, displayName string) (result *CustomerScheme, response *Response, err error) {
+func (c *CustomerService) Create(ctx context.Context, email, displayName string) (result *CustomerScheme,
+	response *ResponseScheme, err error) {
 
 	if len(email) == 0 {
 		return nil, nil, fmt.Errorf("error, please provide a valid email value")
@@ -40,9 +40,11 @@ func (c *CustomerService) Create(ctx context.Context, email, displayName string)
 		Email:       email,
 	}
 
+	payloadAsReader, _ := transformStructToReader(&payload)
+
 	var endpoint = "rest/servicedeskapi/customer"
 
-	request, err := c.client.newRequest(ctx, http.MethodPost, endpoint, payload)
+	request, err := c.client.newRequest(ctx, http.MethodPost, endpoint, payloadAsReader)
 	if err != nil {
 		return
 	}
@@ -50,13 +52,8 @@ func (c *CustomerService) Create(ctx context.Context, email, displayName string)
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Content-Type", "application/json")
 
-	response, err = c.client.Do(request)
+	response, err = c.client.Call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(CustomerScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
@@ -87,14 +84,13 @@ func isEmailValid(email string) bool {
 	const emailRegexPattern = "^[a-zA-Z0-9.!#$%&'*+\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$"
 
 	var regex = regexp.MustCompile(emailRegexPattern)
-	if len(email) < 3 && len(email) > 254 {
-		return false
-	}
 	return regex.MatchString(email)
 }
 
+// Gets  returns a list of the customers on a service desk.
 // Docs: https://docs.go-atlassian.io/jira-service-management-cloud/customer#get-customers
-func (c *CustomerService) Gets(ctx context.Context, serviceDeskID int, query string, start, limit int) (result *CustomerPageScheme, response *Response, err error) {
+func (c *CustomerService) Gets(ctx context.Context, serviceDeskID int, query string, start, limit int) (result *CustomerPageScheme,
+	response *ResponseScheme, err error) {
 
 	params := url.Values{}
 	params.Add("start", strconv.Itoa(start))
@@ -119,21 +115,17 @@ func (c *CustomerService) Gets(ctx context.Context, serviceDeskID int, query str
 	*/
 	request.Header.Set("X-ExperimentalApi", "opt-in")
 
-	response, err = c.client.Do(request)
+	response, err = c.client.Call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(CustomerPageScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
 	return
 }
 
+// Add adds one or more customers to a service desk.
 // Docs: https://docs.go-atlassian.io/jira-service-management-cloud/customer#add-customers
-func (c *CustomerService) Add(ctx context.Context, serviceDeskID int, accountIDs []string) (response *Response, err error) {
+func (c *CustomerService) Add(ctx context.Context, serviceDeskID int, accountIDs []string) (response *ResponseScheme, err error) {
 
 	if len(accountIDs) == 0 {
 		return nil, fmt.Errorf("error, please provide a valid accountIDs slice value")
@@ -145,16 +137,18 @@ func (c *CustomerService) Add(ctx context.Context, serviceDeskID int, accountIDs
 		AccountIds: accountIDs,
 	}
 
+	payloadAsReader, _ := transformStructToReader(&payload)
+
 	var endpoint = fmt.Sprintf("rest/servicedeskapi/servicedesk/%v/customer", serviceDeskID)
 
-	request, err := c.client.newRequest(ctx, http.MethodPost, endpoint, &payload)
+	request, err := c.client.newRequest(ctx, http.MethodPost, endpoint, payloadAsReader)
 	if err != nil {
 		return
 	}
 
 	request.Header.Set("Content-Type", "application/json")
 
-	response, err = c.client.Do(request)
+	response, err = c.client.Call(request, nil)
 	if err != nil {
 		return
 	}
@@ -162,8 +156,9 @@ func (c *CustomerService) Add(ctx context.Context, serviceDeskID int, accountIDs
 	return
 }
 
+// Remove removes one or more customers from a service desk. The service desk must have closed access
 // Docs: https://docs.go-atlassian.io/jira-service-management-cloud/customer#remove-customers
-func (c *CustomerService) Remove(ctx context.Context, serviceDeskID int, accountIDs []string) (response *Response, err error) {
+func (c *CustomerService) Remove(ctx context.Context, serviceDeskID int, accountIDs []string) (response *ResponseScheme, err error) {
 
 	if len(accountIDs) == 0 {
 		return nil, fmt.Errorf("error, please provide a valid accountIDs slice value")
@@ -175,9 +170,11 @@ func (c *CustomerService) Remove(ctx context.Context, serviceDeskID int, account
 		AccountIds: accountIDs,
 	}
 
+	payloadAsReader, _ := transformStructToReader(&payload)
+
 	var endpoint = fmt.Sprintf("rest/servicedeskapi/servicedesk/%v/customer", serviceDeskID)
 
-	request, err := c.client.newRequest(ctx, http.MethodDelete, endpoint, &payload)
+	request, err := c.client.newRequest(ctx, http.MethodDelete, endpoint, payloadAsReader)
 	if err != nil {
 		return
 	}
@@ -190,7 +187,7 @@ func (c *CustomerService) Remove(ctx context.Context, serviceDeskID int, account
 	*/
 	request.Header.Set("X-ExperimentalApi", "opt-in")
 
-	response, err = c.client.Do(request)
+	response, err = c.client.Call(request, nil)
 	if err != nil {
 		return
 	}

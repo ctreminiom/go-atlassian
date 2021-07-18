@@ -44,14 +44,9 @@ func main() {
 
 	newIssue, response, err := atlassian.Issue.Create(context.Background(), &payload, &customFields)
 	if err != nil {
-		if response != nil {
-			log.Println("Response HTTP Response", string(response.BodyAsBytes))
-			log.Println(response.StatusCode)
-		}
 		log.Fatal(err)
 	}
 
-	log.Println("Response HTTP Code", response.StatusCode)
 	log.Println("HTTP Endpoint Used", response.Endpoint)
 
 	log.Printf("The new issue %v has been created with the ID %v", newIssue.Key, newIssue.ID)

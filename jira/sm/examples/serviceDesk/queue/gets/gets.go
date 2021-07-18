@@ -32,7 +32,7 @@ func main() {
 	queues, response, err := atlassian.ServiceManagement.ServiceDesk.Queue.Gets(context.Background(), serviceDeskID, includeCount, start, limit)
 	if err != nil {
 		if response != nil {
-			log.Println("Response HTTP Response", string(response.BodyAsBytes))
+			log.Println("Response HTTP Response", response.Bytes.String())
 			log.Println("HTTP Endpoint Used", response.Endpoint)
 		}
 		log.Fatal(err)

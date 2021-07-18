@@ -24,13 +24,9 @@ func main() {
 
 	issueLinks, response, err := atlassian.Issue.Link.Gets(context.Background(), "KP-1")
 	if err != nil {
-		if response != nil {
-			log.Println("Response HTTP Response", string(response.BodyAsBytes), response.StatusCode)
-		}
 		log.Fatal(err)
 	}
 
-	log.Println("Response HTTP Code", response.StatusCode)
 	log.Println("HTTP Endpoint Used", response.Endpoint)
 
 	for _, link := range issueLinks.Fields.IssueLinks {

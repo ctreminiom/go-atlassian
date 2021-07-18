@@ -2,16 +2,15 @@ package sm
 
 import (
 	"context"
-	"encoding/json"
 	"net/http"
 )
 
 type InfoService struct{ client *Client }
 
-// This method retrieves information about the Jira Service Management instance such as software version,
+// Get retrieves information about the Jira Service Management instance such as software version,
 // builds, and related links.
 // Docs: https://docs.go-atlassian.io/jira-service-management-cloud/info#get-info
-func (i *InfoService) Get(ctx context.Context) (result *InfoScheme, response *Response, err error) {
+func (i *InfoService) Get(ctx context.Context) (result *InfoScheme, response *ResponseScheme, err error) {
 
 	var endpoint = "rest/servicedeskapi/info"
 
@@ -22,13 +21,8 @@ func (i *InfoService) Get(ctx context.Context) (result *InfoScheme, response *Re
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = i.client.Do(request)
+	response, err = i.client.Call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(InfoScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
@@ -36,17 +30,21 @@ func (i *InfoService) Get(ctx context.Context) (result *InfoScheme, response *Re
 }
 
 type InfoScheme struct {
-	Version         string `json:"version"`
-	PlatformVersion string `json:"platformVersion"`
-	BuildDate       struct {
-		Iso8601     string `json:"iso8601"`
-		Jira        string `json:"jira"`
-		Friendly    string `json:"friendly"`
-		EpochMillis int64  `json:"epochMillis"`
-	} `json:"buildDate"`
-	BuildChangeSet   string `json:"buildChangeSet"`
-	IsLicensedForUse bool   `json:"isLicensedForUse"`
-	Links            struct {
-		Self string `json:"self"`
-	} `json:"_links"`
+	Version          string               `json:"version"`
+	PlatformVersion  string               `json:"platformVersion"`
+	BuildDate        *InfoBuildDataScheme `json:"buildDate"`
+	BuildChangeSet   string               `json:"buildChangeSet"`
+	IsLicensedForUse bool                 `json:"isLicensedForUse"`
+	Links            *InfoLinkScheme      `json:"_links"`
+}
+
+type InfoBuildDataScheme struct {
+	Iso8601     string `json:"iso8601"`
+	Jira        string `json:"jira"`
+	Friendly    string `json:"friendly"`
+	EpochMillis int64  `json:"epochMillis"`
+}
+
+type InfoLinkScheme struct {
+	Self string `json:"self"`
 }

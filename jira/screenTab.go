@@ -2,10 +2,10 @@ package jira
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/url"
+	"strings"
 )
 
 type ScreenTabService struct {
@@ -18,58 +18,59 @@ type ScreenTabScheme struct {
 	Name string `json:"name"`
 }
 
-// Returns the list of tabs for a screen.
+// Gets returns the list of tabs for a screen.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/screens/tabs#get-all-screen-tabs
-func (s *ScreenTabService) Gets(ctx context.Context, screenID int, projectKey string) (result *[]ScreenTabScheme, response *Response, err error) {
+// Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screen-tabs/#api-rest-api-3-screens-screenid-tabs-get
+func (s *ScreenTabService) Gets(ctx context.Context, screenID int, projectKey string) (result []*ScreenTabScheme,
+	response *ResponseScheme, err error) {
 
 	params := url.Values{}
-
 	if len(projectKey) != 0 {
 		params.Add("projectKey", projectKey)
 	}
 
-	var endpoint string
-	if len(params.Encode()) != 0 {
-		endpoint = fmt.Sprintf("rest/api/3/screens/%v/tabs?%v", screenID, params.Encode())
-	} else {
-		endpoint = fmt.Sprintf("rest/api/3/screens/%v/tabs", screenID)
+	var endpoint strings.Builder
+	endpoint.WriteString(fmt.Sprintf("rest/api/3/screens/%v/tabs", screenID))
+
+	if params.Encode() != "" {
+		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
-	request, err := s.client.newRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := s.client.newRequest(ctx, http.MethodGet, endpoint.String(), nil)
 	if err != nil {
 		return
 	}
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = s.client.Do(request)
+	response, err = s.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new([]ScreenTabScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
 	return
 }
 
-// Creates a tab for a screen.
+// Create creates a tab for a screen.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/screens/tabs#create-screen-tab
-func (s *ScreenTabService) Create(ctx context.Context, screenID int, tabName string) (result *ScreenTabScheme, response *Response, err error) {
+// Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screen-tabs/#api-rest-api-3-screens-screenid-tabs-post
+func (s *ScreenTabService) Create(ctx context.Context, screenID int, tabName string) (result *ScreenTabScheme,
+	response *ResponseScheme, err error) {
 
 	if len(tabName) == 0 {
-		return nil, nil, fmt.Errorf("error, please provide a valid tabName value")
+		return nil, nil, notTabNameError
 	}
 
 	payload := struct {
 		Name string `json:"name"`
-	}{Name: tabName}
+	}{
+		Name: tabName,
+	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/screens/%v/tabs", screenID)
 
-	request, err := s.client.newRequest(ctx, http.MethodPost, endpoint, &payload)
+	payloadAsReader, _ := transformStructToReader(&payload)
+	request, err := s.client.newRequest(ctx, http.MethodPost, endpoint, payloadAsReader)
 	if err != nil {
 		return
 	}
@@ -77,34 +78,34 @@ func (s *ScreenTabService) Create(ctx context.Context, screenID int, tabName str
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Content-Type", "application/json")
 
-	response, err = s.client.Do(request)
+	response, err = s.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(ScreenTabScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
 	return
 }
 
-// Updates the name of a screen tab.
+// Update updates the name of a screen tab.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/screens/tabs#update-screen-tab
-func (s *ScreenTabService) Update(ctx context.Context, screenID, tabID int, newTabName string) (result *ScreenTabScheme, response *Response, err error) {
+// Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screen-tabs/#api-rest-api-3-screens-screenid-tabs-tabid-put
+func (s *ScreenTabService) Update(ctx context.Context, screenID, tabID int, newTabName string) (result *ScreenTabScheme,
+	response *ResponseScheme, err error) {
 
 	if len(newTabName) == 0 {
-		return nil, nil, fmt.Errorf("error, please provide a valid newTabName value")
+		return nil, nil, notTabNameError
 	}
 
 	payload := struct {
 		Name string `json:"name"`
-	}{Name: newTabName}
+	}{
+		Name: newTabName,
+	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/screens/%v/tabs/%v", screenID, tabID)
 
-	request, err := s.client.newRequest(ctx, http.MethodPut, endpoint, &payload)
+	payloadAsReader, _ := transformStructToReader(&payload)
+	request, err := s.client.newRequest(ctx, http.MethodPut, endpoint, payloadAsReader)
 	if err != nil {
 		return
 	}
@@ -112,22 +113,18 @@ func (s *ScreenTabService) Update(ctx context.Context, screenID, tabID int, newT
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Content-Type", "application/json")
 
-	response, err = s.client.Do(request)
+	response, err = s.client.call(request, &result)
 	if err != nil {
-		return
-	}
-
-	result = new(ScreenTabScheme)
-	if err = json.Unmarshal(response.BodyAsBytes, &result); err != nil {
 		return
 	}
 
 	return
 }
 
-// Deletes a screen tab.
+// Delete deletes a screen tab.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/screens/tabs#delete-screen-tab
-func (s *ScreenTabService) Delete(ctx context.Context, screenID, tabID int) (response *Response, err error) {
+// Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screen-tabs/#api-rest-api-3-screens-screenid-tabs-tabid-delete
+func (s *ScreenTabService) Delete(ctx context.Context, screenID, tabID int) (response *ResponseScheme, err error) {
 
 	var endpoint = fmt.Sprintf("rest/api/3/screens/%v/tabs/%v", screenID, tabID)
 
@@ -136,7 +133,7 @@ func (s *ScreenTabService) Delete(ctx context.Context, screenID, tabID int) (res
 		return
 	}
 
-	response, err = s.client.Do(request)
+	response, err = s.client.call(request, nil)
 	if err != nil {
 		return
 	}
@@ -144,9 +141,10 @@ func (s *ScreenTabService) Delete(ctx context.Context, screenID, tabID int) (res
 	return
 }
 
-// Moves a screen tab.
+// Move moves a screen tab.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/screens/tabs#move-screen-tab
-func (s *ScreenTabService) Move(ctx context.Context, screenID, tabID, tabPosition int) (response *Response, err error) {
+// Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screen-tabs/#api-rest-api-3-screens-screenid-tabs-tabid-move-pos-post
+func (s *ScreenTabService) Move(ctx context.Context, screenID, tabID, tabPosition int) (response *ResponseScheme, err error) {
 
 	var endpoint = fmt.Sprintf("rest/api/3/screens/%v/tabs/%v/move/%v", screenID, tabID, tabPosition)
 
@@ -157,10 +155,14 @@ func (s *ScreenTabService) Move(ctx context.Context, screenID, tabID, tabPositio
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = s.client.Do(request)
+	response, err = s.client.call(request, nil)
 	if err != nil {
 		return
 	}
 
 	return
 }
+
+var (
+	notTabNameError = fmt.Errorf("error, please provide a valid tabName value")
+)

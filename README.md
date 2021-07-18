@@ -17,70 +17,19 @@
 go-atlassian is a Go module that enables the interaction with the Atlassian Cloud Services.
 
 ## ✨ Features
+- Supports Jira Software v3.0 API. **(88% mapped)**
+- Interacts with the Jira Agile entities such as: Epics, Board, Backlog, Ranks, etc **(100% mapped)**
+- Interacts with the Jira Service Management entities. **(100% mapped)**
+- Manages the Atlassian Admin Cloud organizations. **(100% mapped)**
+- Manages the Atlassian Admin SCIM workflow. **(100% mapped)**
+- Checks Confluence Cloud content permissions.
+- CRUD Confluence Cloud content (page, blogpost, comment, question).
+- Add attachment into Confluence Cloud contents.
+- Search contents and spaces.
+- 100% of code coverage
+- Every method has their corresponding example documented.
+- 3036 Unit Test Cases created and passed.
 
-### 🏷 Jira Software Cloud
-- CRUD Application Roles, Dashboards, Filters, Groups, Issues.
-- Search Issues using the JQL query.
-- Add attachments into JIRA issues, and transition issues.
-- Creation of issue(s) using the instance custom_fields.
-- Edit issues using the operation's method **(add,remove,replace).**
-- Assign issues and send custom mail notifications.
-- CRUD the Issue Field Configuration, Issue Type Screen Scheme, and Permission Scheme.
-- CRUD custom_fields contexts and options.
-- Link issues and create new issue link types.
-- Get the issue priorities and resolutions.
-- CRUD Screen Screens, Screens and Screen Tabs.
-- CRUD issue votes and watchers.
-- CRUD Jira Project(s), Project Categories, Project Components, Project Versions.
-- CRUD Project Roles and add/remove project actors(users).
-- Validate new Jira Project Name or Key.
-- Add Jira Field into Screen.
-- Get or Cancel Jira Async Task(s).
-- CRUD Jira Users and Search users.
-- Check the user permissions
-
-### 🛬 Jira Service Management Cloud
-- CRUD JSM Customer(s).
-- Search JSM Knowledgebase Articles.
-- CRUD JSM Organizations and manipulates the Organization's Users.
-- Get(s) and Answer Approval(s) and SLA(s).
-- CRUD JSM Feedback(s) and Participant(s).
-- Get(s) JSM Projects and Queues.
-- CRUD JSM Request Types.
-
-### 🛸 Atlassian Admin Cloud    
-- Get Organization(s), Verified Domain(s), Audit Log(s), and Event Actions.
-- CRUD Organization Polities.
-- Enable/Disable an Organization User.
-- Get/Update Organization User.
-- Get/Delete Organization User Token(s).
-- Create/Deactivate/Get(s)/Update/Path SCIM User(s).
-- Create/Get(s)/Update/Delete SCIM Group(s).
-- Get SCIM Schema(s).
-
-### 🛰️ Confluence Cloud
-- CRUD Contents and Spaces
-
-### 🚠 Jira Agile Cloud
-- Get the board backlogs issues.
-- Get the board configuration (Filter, Admin, Columns, etc).
-- Create a new Jira Board.
-- Extract the Epics associated with a board ID.
-- Get the boards are linked to the same filter ID.
-- Get a board by ID.
-- Get the board issues.
-- Get the board issues linked to the Epic.
-- Get the board issues are not linked to any Epic.
-- Move the backlogs issues to the board (Kanban Backlog must be enabled).
-- Get the projects associated to a board.
-- Get the sprints linked to a board.
-- Get the versions associated to the board.
-- Get the Epic Metadata.
-- Get the issues associated to the Epic Key.
-- Create/Close/Delete/Get Sprints.
-- Get the Sprint issues.
-- Start a sprint.
-- Path/Update sprint. (Name, Start/End Date, etc.)
 
 ##  🔰 Installation
 Make sure you have Go installed (download). Version `1.13` or higher is required.
@@ -128,13 +77,13 @@ func main() {
 	issue, response, err := atlassian.Issue.Get(context.Background(), "KP-12", nil, []string{"transitions"})
 	if err != nil {
 		if response != nil {
-			log.Println("Response HTTP Response", string(response.BodyAsBytes))
-			log.Println(response.StatusCode)
+			log.Println("Response HTTP Response", response.Bytes.String())
+			log.Println(response.Code)
 		}
 		log.Fatal(err)
 	}
 
-	log.Println("Response HTTP Code", response.StatusCode)
+	log.Println("Response HTTP Code", response.Code)
 	log.Println("HTTP Endpoint Used", response.Endpoint)
 
 	log.Println(issue.Key)

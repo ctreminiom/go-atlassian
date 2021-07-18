@@ -1,4 +1,74 @@
 
+<a name="v1.3.0"></a>
+## [v1.3.0](https://github.com/ctreminiom/go-atlassian/compare/v1.2.0...v1.3.0)
+
+> 2021-07-17
+
+### :bug: Bug Fixes
+
+* Removed the Zero validation
+* Enable default scheme
+* Removed the omitempty struct tag on the CustomFieldContextOptionScheme to enable the ability to enable pass the false value.
+* Fixed [#43](https://github.com/ctreminiom/go-atlassian/issues/43)
+
+### :memo: Add or update documentation.
+
+* Updated the README.md
+* Updated the README.md
+* Reduced the image size on the README.md
+* Reduced the image size on the README.md
+* Reduced the image size on the README.md
+* Updated the README.md
+*  Updated the README.md
+* Updated the README.md
+* CHANGELOG.md updated
+
+### :package: Dependencies
+
+* optimized the module dependencies decreasing the third party libraries needed.
+* updated the go.mod
+
+### :recycle: Code Refactoring
+
+* Refactor the Jira Software module
+* Refactor the Application Role and Audit modules
+* Refactor Jira Agile Module
+
+### :sparkles: Features
+
+* Added project templates as constant
+* Added the Issue worklog sub-module
+* Added the spaceService module
+* Added the ContentPermissionService service
+* Added the ContentCommentService service
+* Added the ContentChildrenDescendantService service
+*  Added attachment Create method
+* Added attachment Update/Create method
+* Added the content.Attachment.Gets
+* Added the content.History method
+* Added the content.Get
+* Added the content.Search
+* content.Create method added
+* Added Confluence service
+* added the MySelf endpoint, close [#26](https://github.com/ctreminiom/go-atlassian/issues/26)
+* Closes [#46](https://github.com/ctreminiom/go-atlassian/issues/46)
+
+### :white_check_mark: Ad/Update Test Cases
+
+* Unit Test Cases Added
+* Add Test Cases
+
+### Pull Requests
+
+* Merge pull request [#56](https://github.com/ctreminiom/go-atlassian/issues/56) from ctreminiom/dev
+* Merge pull request [#49](https://github.com/ctreminiom/go-atlassian/issues/49) from ctreminiom/feature/confluence-cloud
+* Merge pull request [#36](https://github.com/ctreminiom/go-atlassian/issues/36) from ctreminiom/dependabot/go_modules/github.com/stretchr/testify-1.7.0
+* Merge pull request [#48](https://github.com/ctreminiom/go-atlassian/issues/48) from ctreminiom/dev
+* Merge pull request [#47](https://github.com/ctreminiom/go-atlassian/issues/47) from ctreminiom/dev
+* Merge pull request [#45](https://github.com/ctreminiom/go-atlassian/issues/45) from ctreminiom/dev
+* Merge pull request [#44](https://github.com/ctreminiom/go-atlassian/issues/44) from ctreminiom/dev
+
+
 <a name="v1.2.0"></a>
 ## [v1.2.0](https://github.com/ctreminiom/go-atlassian/compare/v1.1.5...v1.2.0)
 
@@ -200,7 +270,7 @@
 
 
 <a name="v1.1.1"></a>
-## [v1.1.1](https://github.com/ctreminiom/go-atlassian/compare/v1.0.2...v1.1.1)
+## [v1.1.1](https://github.com/ctreminiom/go-atlassian/compare/v1.1.0...v1.1.1)
 
 > 2021-03-24
 
@@ -219,13 +289,6 @@
 
 * Merge pull request [#8](https://github.com/ctreminiom/go-atlassian/issues/8) from ctreminiom/feature-adf-comments
 * Merge pull request [#6](https://github.com/ctreminiom/go-atlassian/issues/6) from ctreminiom/feat/updated-readme.md
-* Merge pull request [#5](https://github.com/ctreminiom/go-atlassian/issues/5) from ctreminiom/feature/jira-service-management
-
-
-<a name="v1.0.2"></a>
-## [v1.0.2](https://github.com/ctreminiom/go-atlassian/compare/v1.1.0...v1.0.2)
-
-> 2021-03-23
 
 
 <a name="v1.1.0"></a>

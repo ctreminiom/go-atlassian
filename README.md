@@ -26,6 +26,7 @@ go-atlassian is a Go module that enables the interaction with the Atlassian Clou
 - CRUD Confluence Cloud content (page, blogpost, comment, question).
 - Add attachment into Confluence Cloud contents.
 - Search contents and spaces.
+- Support the Atlassian Document Format (ADF).  
 - 100% of code coverage
 - Every method has their corresponding example documented.
 - 3036 Unit Test Cases created and passed.

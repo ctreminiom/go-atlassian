@@ -1741,3 +1741,134 @@ func TestIssueTypeScreenSchemeService_Projects(t *testing.T) {
 	}
 
 }
+
+func TestIssueTypeScreenSchemeService_SchemesByProject(t *testing.T) {
+
+	testCases := []struct {
+		name                    string
+		issueTypeScreenSchemeID int
+		startAt                 int
+		maxResults              int
+		mockFile                string
+		wantHTTPMethod          string
+		endpoint                string
+		context                 context.Context
+		wantHTTPCodeReturn      int
+		wantErr                 bool
+	}{
+		{
+			name:                    "GetSchemesByProjectWhenTheParametersAreCorrect",
+			issueTypeScreenSchemeID: 1000,
+			startAt:                 0,
+			maxResults:              50,
+			mockFile:                "./mocks/get-issue-type-screen-schemes-by-project.json",
+			wantHTTPMethod:          http.MethodGet,
+			endpoint:                "/rest/api/3/issuetypescreenscheme/1000/project?maxResults=50&startAt=0",
+			context:                 context.Background(),
+			wantHTTPCodeReturn:      http.StatusOK,
+			wantErr:                 false,
+		},
+
+		{
+			name:                    "GetSchemesByProjectWhenTheRequestMethodIsIncorrect",
+			issueTypeScreenSchemeID: 1000,
+			startAt:                 0,
+			maxResults:              50,
+			mockFile:                "./mocks/get-issue-type-screen-schemes-by-project.json",
+			wantHTTPMethod:          http.MethodHead,
+			endpoint:                "/rest/api/3/issuetypescreenscheme/1000/project?maxResults=50&startAt=0",
+			context:                 context.Background(),
+			wantHTTPCodeReturn:      http.StatusOK,
+			wantErr:                 true,
+		},
+
+		{
+			name:                    "GetSchemesByProjectWhenTheStatusCodeIsIncorrect",
+			issueTypeScreenSchemeID: 1000,
+			startAt:                 0,
+			maxResults:              50,
+			mockFile:                "./mocks/get-issue-type-screen-schemes-by-project.json",
+			wantHTTPMethod:          http.MethodGet,
+			endpoint:                "/rest/api/3/issuetypescreenscheme/1000/project?maxResults=50&startAt=0",
+			context:                 context.Background(),
+			wantHTTPCodeReturn:      http.StatusBadRequest,
+			wantErr:                 true,
+		},
+
+		{
+			name:                    "GetSchemesByProjectWhenTheContextIsNotProvided",
+			issueTypeScreenSchemeID: 1000,
+			startAt:                 0,
+			maxResults:              50,
+			mockFile:                "./mocks/get-issue-type-screen-schemes-by-project.json",
+			wantHTTPMethod:          http.MethodGet,
+			endpoint:                "/rest/api/3/issuetypescreenscheme/1000/project?maxResults=50&startAt=0",
+			context:                 nil,
+			wantHTTPCodeReturn:      http.StatusOK,
+			wantErr:                 true,
+		},
+	}
+
+	for _, testCase := range testCases {
+
+		t.Run(testCase.name, func(t *testing.T) {
+
+			//Init a new HTTP mock server
+			mockOptions := mockServerOptions{
+				Endpoint:           testCase.endpoint,
+				MockFilePath:       testCase.mockFile,
+				MethodAccepted:     testCase.wantHTTPMethod,
+				ResponseCodeWanted: testCase.wantHTTPCodeReturn,
+			}
+
+			mockServer, err := startMockServer(&mockOptions)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			defer mockServer.Close()
+
+			//Init the library instance
+			mockClient, err := startMockClient(mockServer.URL)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			i := &IssueTypeScreenSchemeService{client: mockClient}
+
+			gotResult, gotResponse, err := i.SchemesByProject(testCase.context, testCase.issueTypeScreenSchemeID, testCase.startAt, testCase.maxResults)
+
+			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+
+				assert.Error(t, err)
+			} else {
+
+				assert.NoError(t, err)
+				assert.NotEqual(t, gotResponse, nil)
+				assert.NotEqual(t, gotResult, nil)
+
+				apiEndpoint, err := url.Parse(gotResponse.Endpoint)
+				if err != nil {
+					t.Fatal(err)
+				}
+
+				var endpointToAssert string
+
+				if apiEndpoint.Query().Encode() != "" {
+					endpointToAssert = fmt.Sprintf("%v?%v", apiEndpoint.Path, apiEndpoint.Query().Encode())
+				} else {
+					endpointToAssert = apiEndpoint.Path
+				}
+
+				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
+				assert.Equal(t, testCase.endpoint, endpointToAssert)
+			}
+		})
+
+	}
+
+}

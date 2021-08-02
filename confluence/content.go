@@ -16,6 +16,7 @@ type ContentService struct {
 	ChildrenDescendant *ContentChildrenDescendantService
 	Comment *ContentCommentService
 	Permission *ContentPermissionService
+	Label *ContentLabelService
 }
 
 type GetContentOptionsScheme struct {

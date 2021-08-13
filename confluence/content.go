@@ -11,12 +11,13 @@ import (
 )
 
 type ContentService struct {
-	client *Client
-	Attachment *ContentAttachmentService
+	client             *Client
+	Attachment         *ContentAttachmentService
 	ChildrenDescendant *ContentChildrenDescendantService
-	Comment *ContentCommentService
-	Permission *ContentPermissionService
-	Label *ContentLabelService
+	Comment            *ContentCommentService
+	Permission         *ContentPermissionService
+	Label              *ContentLabelService
+	Property           *ContentPropertyService
 }
 
 type GetContentOptionsScheme struct {
@@ -35,29 +36,29 @@ type ContentPageScheme struct {
 }
 
 type LinkScheme struct {
-	Base    string `json:"base,omitempty"`
-	Context string `json:"context,omitempty"`
-	Self    string `json:"self,omitempty"`
-	Tinyui  string `json:"tinyui,omitempty"`
-	Editui  string `json:"editui,omitempty"`
-	Webui   string `json:"webui,omitempty"`
+	Base     string `json:"base,omitempty"`
+	Context  string `json:"context,omitempty"`
+	Self     string `json:"self,omitempty"`
+	Tinyui   string `json:"tinyui,omitempty"`
+	Editui   string `json:"editui,omitempty"`
+	Webui    string `json:"webui,omitempty"`
 	Download string `json:"download,omitempty"`
-	Next    string `json:"next"`
+	Next     string `json:"next"`
 }
 
 type ContentScheme struct {
-	ID         string             `json:"id,omitempty"`
-	Type       string             `json:"type,omitempty"`
-	Status     string             `json:"status,omitempty"`
-	Title      string             `json:"title,omitempty"`
-	Expandable *ExpandableScheme  `json:"_expandable,omitempty"`
-	Links      *LinkScheme        `json:"_links,omitempty"`
-	ChildTypes *ChildTypesScheme  `json:"childTypes,omitempty"`
-	Space      *SpaceScheme       `json:"space,omitempty"`
-	Metadata   *MetadataScheme    `json:"metadata,omitempty"`
-	Operations []*OperationScheme `json:"operations,omitempty"`
-	Body       *BodyScheme        `json:"body,omitempty"`
-	Version    *VersionScheme     `json:"version,omitempty"`
+	ID         string                  `json:"id,omitempty"`
+	Type       string                  `json:"type,omitempty"`
+	Status     string                  `json:"status,omitempty"`
+	Title      string                  `json:"title,omitempty"`
+	Expandable *ExpandableScheme       `json:"_expandable,omitempty"`
+	Links      *LinkScheme             `json:"_links,omitempty"`
+	ChildTypes *ChildTypesScheme       `json:"childTypes,omitempty"`
+	Space      *SpaceScheme            `json:"space,omitempty"`
+	Metadata   *MetadataScheme         `json:"metadata,omitempty"`
+	Operations []*OperationScheme      `json:"operations,omitempty"`
+	Body       *BodyScheme             `json:"body,omitempty"`
+	Version    *VersionScheme          `json:"version,omitempty"`
 	Extensions *ContentExtensionScheme `json:"extensions,omitempty"`
 }
 
@@ -112,7 +113,7 @@ type OperationScheme struct {
 type MetadataScheme struct {
 	Labels     *LabelsScheme     `json:"labels"`
 	Expandable *ExpandableScheme `json:"_expandable,omitempty"`
-	MediaType string `json:"mediaType,omitempty"`
+	MediaType  string            `json:"mediaType,omitempty"`
 }
 
 type LabelsScheme struct {

@@ -50,6 +50,7 @@ func New(httpClient *http.Client, site string) (client *Client, err error) {
 		Comment:            &ContentCommentService{client: client},
 		Permission:         &ContentPermissionService{client: client},
 		Label:              &ContentLabelService{client: client},
+		Property:           &ContentPropertyService{client: client},
 	}
 
 	client.Space = &SpaceService{client: client}

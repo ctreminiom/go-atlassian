@@ -1,0 +1,25 @@
+{
+  "results": [
+    {
+      "id": "<string>",
+      "key": "<string>",
+      "value": "<string>",
+      "version": {
+        "when": "<string>",
+        "message": "<string>",
+        "number": 2154,
+        "minorEdit": true,
+        "contentTypeModified": true
+      },
+      "_links": {},
+      "_expandable": {
+        "content": "<string>",
+        "additionalProperties": "<string>"
+      }
+    }
+  ],
+  "start": 2154,
+  "limit": 2154,
+  "size": 2154,
+  "_links": {}
+}

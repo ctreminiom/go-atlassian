@@ -281,7 +281,8 @@ func (i *IssueTypeScreenSchemeService) Update(ctx context.Context, issueTypeScre
 // Delete deletes an issue type screen scheme.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/types/screen-scheme#delete-issue-type-screen-scheme
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-type-screen-schemes/#api-rest-api-3-issuetypescreenscheme-issuetypescreenschemeid-delete
-func (i *IssueTypeScreenSchemeService) Delete(ctx context.Context, issueTypeScreenSchemeID string) (response *ResponseScheme, err error) {
+func (i *IssueTypeScreenSchemeService) Delete(ctx context.Context, issueTypeScreenSchemeID string) (response *ResponseScheme,
+	err error) {
 
 	if len(issueTypeScreenSchemeID) == 0 {
 		return nil, notIssueTypeScreenSchemeIDError
@@ -379,8 +380,9 @@ func (i *IssueTypeScreenSchemeService) UpdateDefault(ctx context.Context, issueT
 
 // Remove removes issue type to screen scheme mappings from an issue type screen scheme.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/types/screen-scheme#remove-mappings-from-issue-type-screen-scheme
-// Atlassina Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-type-screen-schemes/#api-rest-api-3-issuetypescreenscheme-issuetypescreenschemeid-mapping-remove-post
-func (i *IssueTypeScreenSchemeService) Remove(ctx context.Context, issueTypeScreenSchemeID string, issueTypeIDs []string) (response *ResponseScheme, err error) {
+// Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-type-screen-schemes/#api-rest-api-3-issuetypescreenscheme-issuetypescreenschemeid-mapping-remove-post
+func (i *IssueTypeScreenSchemeService) Remove(ctx context.Context, issueTypeScreenSchemeID string, issueTypeIDs []string) (
+	response *ResponseScheme, err error) {
 
 	if len(issueTypeScreenSchemeID) == 0 {
 		return nil, notIssueTypeScreenSchemeIDError
@@ -413,6 +415,52 @@ func (i *IssueTypeScreenSchemeService) Remove(ctx context.Context, issueTypeScre
 	}
 
 	return
+}
+
+// SchemesByProject returns a paginated list of projects associated with an issue type screen scheme.
+// Docs: N/A
+// Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-type-screen-schemes/#api-rest-api-3-issuetypescreenscheme-issuetypescreenschemeid-project-get
+// NOTE: Experimental Method
+func (i *IssueTypeScreenSchemeService) SchemesByProject(ctx context.Context, issueTypeScreenSchemeID int, startAt,
+	maxResults int) (result *IssueTypeScreenSchemeByProjectPageScheme, response *ResponseScheme, err error) {
+
+	params := url.Values{}
+	params.Add("startAt", strconv.Itoa(startAt))
+	params.Add("maxResults", strconv.Itoa(maxResults))
+
+	var endpoint = fmt.Sprintf("rest/api/3/issuetypescreenscheme/%v/project?%v", issueTypeScreenSchemeID, params.Encode())
+
+	request, err := i.client.newRequest(ctx, http.MethodGet, endpoint, nil)
+	if err != nil {
+		return
+	}
+
+	request.Header.Set("Accept", "application/json")
+
+	response, err = i.client.call(request, &result)
+	if err != nil {
+		return
+	}
+
+	return
+}
+
+type IssueTypeScreenSchemeByProjectPageScheme struct {
+	MaxResults int                    `json:"maxResults,omitempty"`
+	StartAt    int                    `json:"startAt,omitempty"`
+	Total      int                    `json:"total,omitempty"`
+	IsLast     bool                   `json:"isLast,omitempty"`
+	Values     []*ProjectDetailScheme `json:"values,omitempty"`
+}
+
+type ProjectDetailScheme struct {
+	Self            string                 `json:"self,omitempty"`
+	ID              string                 `json:"id,omitempty"`
+	Key             string                 `json:"key,omitempty"`
+	Name            string                 `json:"name,omitempty"`
+	ProjectTypeKey  string                 `json:"projectTypeKey,omitempty"`
+	Simplified      bool                   `json:"simplified,omitempty"`
+	ProjectCategory *ProjectCategoryScheme `json:"projectCategory,omitempty"`
 }
 
 var (

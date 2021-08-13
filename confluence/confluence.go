@@ -20,7 +20,7 @@ type Client struct {
 
 	Auth    *AuthenticationService
 	Content *ContentService
-	Space *SpaceService
+	Space   *SpaceService
 }
 
 func New(httpClient *http.Client, site string) (client *Client, err error) {
@@ -44,11 +44,13 @@ func New(httpClient *http.Client, site string) (client *Client, err error) {
 	client.Auth = &AuthenticationService{client: client}
 
 	client.Content = &ContentService{
-		client: client,
-		Attachment: &ContentAttachmentService{client: client},
+		client:             client,
+		Attachment:         &ContentAttachmentService{client: client},
 		ChildrenDescendant: &ContentChildrenDescendantService{client: client},
-		Comment: &ContentCommentService{client: client},
-		Permission: &ContentPermissionService{client: client},
+		Comment:            &ContentCommentService{client: client},
+		Permission:         &ContentPermissionService{client: client},
+		Label:              &ContentLabelService{client: client},
+		Property:           &ContentPropertyService{client: client},
 	}
 
 	client.Space = &SpaceService{client: client}

@@ -11,13 +11,15 @@ import (
 
 type WorkflowService struct {
 	client *Client
+	Scheme *WorkflowSchemeService
 }
 
 // Gets returns a paginated list of published classic workflows.
 // When workflow names are specified, details of those workflows are returned.
 // Otherwise, all published classic workflows are returned.
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-workflows/#api-rest-api-3-workflow-search-get
-func (w *WorkflowService) Gets(ctx context.Context, workflowNames, expand []string, startAt, maxResults int) (result *WorkflowPageScheme, response *ResponseScheme, err error) {
+func (w *WorkflowService) Gets(ctx context.Context, workflowNames, expand []string, startAt, maxResults int) (result *WorkflowPageScheme,
+	response *ResponseScheme, err error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))

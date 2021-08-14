@@ -1,0 +1,43 @@
+{
+  "self": "<string>",
+  "nextPage": "<string>",
+  "maxResults": 51,
+  "startAt": 37,
+  "total": 29,
+  "isLast": true,
+  "values": [
+    {
+      "id": {
+        "name": "<string>",
+        "entityId": "<string>"
+      },
+      "description": "<string>",
+      "transitions": [
+        {
+          "id": "<string>",
+          "name": "<string>",
+          "description": "<string>",
+          "from": [
+            "<string>"
+          ],
+          "to": "<string>",
+          "type": "global",
+          "screen": {
+            "id": "<string>"
+          },
+          "rules": {}
+        }
+      ],
+      "statuses": [
+        {
+          "id": "<string>",
+          "name": "<string>",
+          "properties": {
+            "issueEditable": true
+          }
+        }
+      ],
+      "isDefault": true
+    }
+  ]
+}

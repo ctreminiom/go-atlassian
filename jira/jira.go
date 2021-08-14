@@ -34,6 +34,7 @@ type Client struct {
 	Task       *TaskService
 	User       *UserService
 	MySelf     *MySelfService
+	Workflow   *WorkflowService
 
 	//Service Management Module
 	ServiceManagement *sm.Client
@@ -132,7 +133,7 @@ func New(httpClient *http.Client, site string) (client *Client, err error) {
 		Votes:    &VoteService{client: client},
 		Watchers: &WatcherService{client: client},
 		Label:    &LabelService{client: client},
-		Worklog: &IssueWorklogService{client: client},
+		Worklog:  &IssueWorklogService{client: client},
 	}
 
 	client.Permission = &PermissionService{
@@ -166,6 +167,8 @@ func New(httpClient *http.Client, site string) (client *Client, err error) {
 	}
 
 	client.MySelf = &MySelfService{client: client}
+
+	client.Workflow = &WorkflowService{client: client}
 
 	return
 }

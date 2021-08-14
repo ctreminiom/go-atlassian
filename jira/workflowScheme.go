@@ -111,7 +111,7 @@ func (w *WorkflowSchemeService) Update(ctx context.Context, workflowSchemeID int
 		return nil, nil, err
 	}
 
-	request, err := w.client.newRequest(ctx, http.MethodPost, endpoint, payloadAsReader)
+	request, err := w.client.newRequest(ctx, http.MethodPut, endpoint, payloadAsReader)
 	if err != nil {
 		return
 	}

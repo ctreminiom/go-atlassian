@@ -44,7 +44,7 @@ func (w *WorkflowSchemeService) Create(ctx context.Context, payload *WorkflowSch
 
 	var endpoint = "/rest/api/3/workflowscheme"
 
-	payloadAsReader, err := transformStructToReader(&payload)
+	payloadAsReader, err := transformStructToReader(payload)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -106,7 +106,7 @@ func (w *WorkflowSchemeService) Update(ctx context.Context, workflowSchemeID int
 
 	var endpoint = fmt.Sprintf("/rest/api/3/workflowscheme/%v", workflowSchemeID)
 
-	payloadAsReader, err := transformStructToReader(&payload)
+	payloadAsReader, err := transformStructToReader(payload)
 	if err != nil {
 		return nil, nil, err
 	}

@@ -1,4 +1,4 @@
-<p align="center"><img width="600" src="./jira/mocks/go-atlassian-logo.svg" alt="Go-Atlassian logo"></p>
+<p align="center"><img width="600" src="https://user-images.githubusercontent.com/16035390/131232958-022b0382-e6bc-42db-97b6-82fbd190e19a.png"></p>
 
 <p align="center">
     <a href="https://github.com/ctreminiom/go-atlassian/releases/latest"><img src="https://img.shields.io/github/v/release/ctreminiom/go-atlassian"></a>

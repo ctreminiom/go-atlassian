@@ -1,0 +1,51 @@
+{
+  "id": 30,
+  "name": "<string>",
+  "description": "<string>",
+  "defaultWorkflow": "<string>",
+  "issueTypeMappings": {},
+  "originalDefaultWorkflow": "<string>",
+  "originalIssueTypeMappings": {},
+  "draft": true,
+  "lastModifiedUser": {
+    "self": "<string>",
+    "key": "<string>",
+    "accountId": "<string>",
+    "accountType": "atlassian",
+    "name": "<string>",
+    "emailAddress": "<string>",
+    "avatarUrls": {
+      "16x16": "<string>",
+      "24x24": "<string>",
+      "32x32": "<string>",
+      "48x48": "<string>"
+    },
+    "displayName": "<string>",
+    "active": true,
+    "timeZone": "<string>",
+    "locale": "<string>",
+    "groups": {
+      "size": 2154,
+      "items": [
+        {}
+      ],
+      "pagingCallback": {},
+      "callback": {},
+      "max-results": 2154
+    },
+    "applicationRoles": {
+      "size": 2154,
+      "items": [
+        {}
+      ],
+      "pagingCallback": {},
+      "callback": {},
+      "max-results": 2154
+    },
+    "expand": "<string>"
+  },
+  "lastModified": "<string>",
+  "self": "<string>",
+  "updateDraftIfNeeded": true,
+  "issueTypes": {}
+}

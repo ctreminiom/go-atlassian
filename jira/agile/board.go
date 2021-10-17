@@ -784,3 +784,27 @@ func (b *BoardService) Versions(ctx context.Context, boardID, startAt, maxResult
 
 	return
 }
+
+// Delete deletes the board. Admin without the view permission can still remove the board.
+// Docs: N/A
+// Atlassian Docs: https://developer.atlassian.com/cloud/jira/software/rest/api-group-board/#api-agile-1-0-board-boardid-delete
+func (b *BoardService) Delete(ctx context.Context, boardID int) (response *ResponseScheme, err error) {
+
+	if boardID == 0 {
+		return nil, fmt.Errorf("error!, please provide a valid boardID value")
+	}
+
+	var endpoint = fmt.Sprintf("/rest/agile/1.0/board/%v", boardID)
+
+	request, err := b.client.newRequest(ctx, http.MethodDelete, endpoint, nil)
+	if err != nil {
+		return
+	}
+
+	response, err = b.client.Call(request, nil)
+	if err != nil {
+		return
+	}
+
+	return
+}

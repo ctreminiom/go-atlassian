@@ -25,6 +25,7 @@ type IssueService struct {
 	Label      *LabelService
 	Search     *IssueSearchService
 	Worklog    *IssueWorklogService
+	Metadata   *IssueMetadataService
 }
 
 type IssueScheme struct {

@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
+	"net/url"
 	"reflect"
 	"testing"
 )
@@ -18,6 +19,20 @@ type mockServerOptions struct {
 	MethodAccepted     string
 	Headers            map[string]string
 	ResponseCodeWanted int
+}
+
+func extractEndpotintToAssert(endpoint string) (string, error) {
+
+	apiEndpoint, err := url.Parse(endpoint)
+	if err != nil {
+		return "", err
+	}
+
+	if apiEndpoint.Query().Encode() != "" {
+		return fmt.Sprintf("%v?%v", apiEndpoint.Path, apiEndpoint.Query().Encode()), nil
+	}
+
+	return apiEndpoint.Path, err
 }
 
 func startMockServer(opts *mockServerOptions) (*httptest.Server, error) {
@@ -299,7 +314,7 @@ func Test_transformTheHTTPResponse(t *testing.T) {
 		"mock-response": "./mocks/get-contents.json",
 		"method":        http.MethodGet,
 		"status":        http.StatusBadRequest,
-		"closed?": false,
+		"closed?":       false,
 	}
 
 	responseConfigurations["badRequestResponseWithNotResponseBody"] = map[string]interface{}{
@@ -307,7 +322,7 @@ func Test_transformTheHTTPResponse(t *testing.T) {
 		"mock-response": "",
 		"method":        http.MethodGet,
 		"status":        http.StatusBadRequest,
-		"closed?": true,
+		"closed?":       true,
 	}
 
 	responseConfigurations["OkRequestResponseWithNotResponseBody"] = map[string]interface{}{
@@ -315,7 +330,7 @@ func Test_transformTheHTTPResponse(t *testing.T) {
 		"mock-response": "./mocks/get-contents.json",
 		"method":        http.MethodGet,
 		"status":        http.StatusOK,
-		"closed?": true,
+		"closed?":       true,
 	}
 
 	for scenario, configuration := range responseConfigurations {

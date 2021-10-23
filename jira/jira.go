@@ -134,6 +134,7 @@ func New(httpClient *http.Client, site string) (client *Client, err error) {
 		Watchers: &WatcherService{client: client},
 		Label:    &LabelService{client: client},
 		Worklog:  &IssueWorklogService{client: client},
+		Metadata: &IssueMetadataService{client: client},
 	}
 
 	client.Permission = &PermissionService{

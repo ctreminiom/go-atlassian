@@ -4,14 +4,14 @@ import (
 	"context"
 	"github.com/stretchr/testify/assert"
 	"github.com/tidwall/gjson"
+	"io/ioutil"
 	"net/http"
-	"os"
 	"testing"
 )
 
 func Test_IssueMetadataService_Get_Success(t *testing.T) {
 
-	expectedJSONAsBytes, err := os.ReadFile("./mocks/get-issue-metadata.json")
+	expectedJSONAsBytes, err := ioutil.ReadFile("./mocks/get-issue-metadata.json")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -116,7 +116,7 @@ func Test_IssueMetadataService_Get_Success(t *testing.T) {
 
 func Test_IssueMetadataService_Get_Failed(t *testing.T) {
 
-	expectedJSONAsBytes, err := os.ReadFile("./mocks/get-issue-metadata.json")
+	expectedJSONAsBytes, err := ioutil.ReadFile("./mocks/get-issue-metadata.json")
 	if err != nil {
 		t.Fatal(err)
 	}

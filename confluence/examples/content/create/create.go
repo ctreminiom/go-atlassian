@@ -33,6 +33,11 @@ func main() {
 				Representation: "storage",
 			},
 		},
+		Ancestors: []*confluence.ContentScheme{
+			{
+				ID: "78643265",
+			},
+		},
 	}
 
 	newConfluence, response, err := instance.Content.Create(context.Background(), payload)

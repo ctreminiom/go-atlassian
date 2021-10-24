@@ -116,11 +116,6 @@ func Test_IssueMetadataService_Get_Success(t *testing.T) {
 
 func Test_IssueMetadataService_Get_Failed(t *testing.T) {
 
-	expectedJSONAsBytes, err := ioutil.ReadFile("./mocks/get-issue-metadata.json")
-	if err != nil {
-		t.Fatal(err)
-	}
-
 	testCases := []struct {
 		name                   string
 		overrideScreenSecurity bool
@@ -131,7 +126,6 @@ func Test_IssueMetadataService_Get_Failed(t *testing.T) {
 		endpoint               string
 		context                context.Context
 		wantHTTPCodeReturn     int
-		wantResult             gjson.Result
 		expectedErrorMessage   string
 	}{
 		{
@@ -144,7 +138,6 @@ func Test_IssueMetadataService_Get_Failed(t *testing.T) {
 			endpoint:               "/rest/api/3/issue/KP-19/editmeta?overrideEditableFlag=true&overrideScreenSecurity=true",
 			context:                context.Background(),
 			wantHTTPCodeReturn:     http.StatusOK,
-			wantResult:             gjson.ParseBytes(expectedJSONAsBytes),
 			expectedErrorMessage:   "request failed. Please analyze the request body for more details. Status Code: 405",
 		},
 
@@ -158,7 +151,6 @@ func Test_IssueMetadataService_Get_Failed(t *testing.T) {
 			endpoint:               "/rest/api/3/issue/KP-19/editmeta?overrideEditableFlag=true&overrideScreenSecurity=true",
 			context:                nil,
 			wantHTTPCodeReturn:     http.StatusOK,
-			wantResult:             gjson.ParseBytes(expectedJSONAsBytes),
 			expectedErrorMessage:   "request creation failed: net/http: nil Context",
 		},
 
@@ -172,7 +164,6 @@ func Test_IssueMetadataService_Get_Failed(t *testing.T) {
 			endpoint:               "/rest/api/3/issue/KP-19/editmeta?overrideEditableFlag=true&overrideScreenSecurity=true",
 			context:                context.Background(),
 			wantHTTPCodeReturn:     http.StatusOK,
-			wantResult:             gjson.ParseBytes(expectedJSONAsBytes),
 			expectedErrorMessage:   "error, please provide a valid issueKeyOrID value",
 		},
 	}
@@ -211,6 +202,165 @@ func Test_IssueMetadataService_Get_Failed(t *testing.T) {
 			)
 
 			assert.EqualError(t, err, testCase.expectedErrorMessage)
+		})
+	}
+}
+
+func Test_IssueMetadataService_Create_Success(t *testing.T) {
+
+	expectedJSONAsBytes, err := ioutil.ReadFile("./mocks/get-issue-create-metadata.json")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	testCases := []struct {
+		name               string
+		opts               *IssueMetadataCreateOptions
+		wantHTTPMethod     string
+		mockFile           string
+		endpoint           string
+		context            context.Context
+		wantHTTPCodeReturn int
+		wantResult         gjson.Result
+	}{
+		{
+			name: "when_the_parameters_are_correct",
+			opts: &IssueMetadataCreateOptions{
+				ProjectIDs:   []string{"11101"},
+				ProjectKeys:  []string{"KP"},
+				IssueTypeIDs: []string{"12"},
+			},
+			wantHTTPMethod:     http.MethodGet,
+			mockFile:           "./mocks/get-issue-create-metadata.json",
+			endpoint:           "/rest/api/3/issue/createmeta?issuetypeIds=12&projectIds=11101&projectKeys=KP",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantResult:         gjson.ParseBytes(expectedJSONAsBytes),
+		},
+	}
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+
+			//Init a new HTTP mock server
+			mockOptions := mockServerOptions{
+				Endpoint:           testCase.endpoint,
+				MockFilePath:       testCase.mockFile,
+				MethodAccepted:     testCase.wantHTTPMethod,
+				ResponseCodeWanted: testCase.wantHTTPCodeReturn,
+			}
+
+			mockServer, err := startMockServer(&mockOptions)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			defer mockServer.Close()
+
+			//Init the library instance
+			mockClient, err := startMockClient(mockServer.URL)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			service := &IssueMetadataService{client: mockClient}
+
+			gotResult, gotResponse, err := service.Create(
+				testCase.context,
+				testCase.opts,
+			)
+
+			assert.NoError(t, err)
+			assert.NotEqual(t, gotResponse, nil)
+			assert.NotEqual(t, gotResult, nil)
+			assert.Equal(t, testCase.wantResult, gotResult)
+
+			endpointToAssert, err := extractEndpotintToAssert(gotResponse.Endpoint)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			assert.Equal(t, testCase.endpoint, endpointToAssert)
+
+		})
+	}
+}
+
+func Test_IssueMetadataService_Create_Failed(t *testing.T) {
+
+	testCases := []struct {
+		name                 string
+		opts                 *IssueMetadataCreateOptions
+		wantHTTPMethod       string
+		mockFile             string
+		endpoint             string
+		context              context.Context
+		wantHTTPCodeReturn   int
+		wantResult           gjson.Result
+		expectedErrorMessage string
+	}{
+		{
+			name: "when_the_http_request_method_is_incorrect",
+			opts: &IssueMetadataCreateOptions{
+				ProjectIDs:   []string{"11101"},
+				ProjectKeys:  []string{"KP"},
+				IssueTypeIDs: []string{"12"},
+			},
+			wantHTTPMethod:       http.MethodPost,
+			mockFile:             "./mocks/get-issue-create-metadata.json",
+			endpoint:             "/rest/api/3/issue/createmeta?issuetypeIds=12&projectIds=11101&projectKeys=KP",
+			context:              context.Background(),
+			wantHTTPCodeReturn:   http.StatusOK,
+			expectedErrorMessage: "request failed. Please analyze the request body for more details. Status Code: 405",
+		},
+
+		{
+			name: "when_the_context_provided_is_nil",
+			opts: &IssueMetadataCreateOptions{
+				ProjectIDs:   []string{"11101"},
+				ProjectKeys:  []string{"KP"},
+				IssueTypeIDs: []string{"12"},
+			},
+			wantHTTPMethod:       http.MethodGet,
+			mockFile:             "./mocks/get-issue-create-metadata.json",
+			endpoint:             "/rest/api/3/issue/createmeta?issuetypeIds=12&projectIds=11101&projectKeys=KP",
+			context:              nil,
+			wantHTTPCodeReturn:   http.StatusOK,
+			expectedErrorMessage: "request creation failed: net/http: nil Context",
+		},
+	}
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+
+			//Init a new HTTP mock server
+			mockOptions := mockServerOptions{
+				Endpoint:           testCase.endpoint,
+				MockFilePath:       testCase.mockFile,
+				MethodAccepted:     testCase.wantHTTPMethod,
+				ResponseCodeWanted: testCase.wantHTTPCodeReturn,
+			}
+
+			mockServer, err := startMockServer(&mockOptions)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			defer mockServer.Close()
+
+			//Init the library instance
+			mockClient, err := startMockClient(mockServer.URL)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			service := &IssueMetadataService{client: mockClient}
+
+			_, _, err = service.Create(
+				testCase.context,
+				testCase.opts,
+			)
+
+			assert.EqualError(t, err, testCase.expectedErrorMessage)
+
 		})
 	}
 }

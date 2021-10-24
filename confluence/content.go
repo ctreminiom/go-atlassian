@@ -60,6 +60,7 @@ type ContentScheme struct {
 	Body       *BodyScheme             `json:"body,omitempty"`
 	Version    *VersionScheme          `json:"version,omitempty"`
 	Extensions *ContentExtensionScheme `json:"extensions,omitempty"`
+	Ancestors  []*ContentScheme        `json:"ancestors,omitempty"`
 }
 
 type ContentExtensionScheme struct {

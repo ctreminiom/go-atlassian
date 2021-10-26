@@ -7,5 +7,5 @@ require (
 	github.com/google/uuid v1.1.4
 	github.com/imdario/mergo v0.3.12
 	github.com/stretchr/testify v1.7.0
-	github.com/tidwall/gjson v1.10.1
+	github.com/tidwall/gjson v1.10.2
 )

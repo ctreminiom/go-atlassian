@@ -1659,6 +1659,7 @@ func TestIssueService_Delete(t *testing.T) {
 	testCases := []struct {
 		name               string
 		issueKeyOrID       string
+		deleteSubTasks     bool
 		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string
@@ -1671,6 +1672,17 @@ func TestIssueService_Delete(t *testing.T) {
 			issueKeyOrID:       "DUMMY-3",
 			wantHTTPMethod:     http.MethodDelete,
 			endpoint:           "/rest/api/3/issue/DUMMY-3",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            false,
+		},
+
+		{
+			name:               "DeleteIssueWhenTheSubTasksIsDeleted",
+			issueKeyOrID:       "DUMMY-3",
+			deleteSubTasks:     true,
+			wantHTTPMethod:     http.MethodDelete,
+			endpoint:           "/rest/api/3/issue/DUMMY-3?deleteSubtasks=true",
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusNoContent,
 			wantErr:            false,
@@ -1764,7 +1776,7 @@ func TestIssueService_Delete(t *testing.T) {
 
 			i := &IssueService{client: mockClient}
 
-			gotResponse, err := i.Delete(testCase.context, testCase.issueKeyOrID)
+			gotResponse, err := i.Delete(testCase.context, testCase.issueKeyOrID, testCase.deleteSubTasks)
 
 			if testCase.wantErr {
 

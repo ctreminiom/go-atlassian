@@ -22,7 +22,7 @@ func main() {
 
 	atlassian.Auth.SetBasicAuth(mail, token)
 
-	response, err := atlassian.Issue.Delete(context.Background(), "KP-6")
+	response, err := atlassian.Issue.Delete(context.Background(), "KP-6", false)
 	if err != nil {
 		log.Fatal(err)
 	}

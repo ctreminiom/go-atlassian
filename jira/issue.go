@@ -793,16 +793,27 @@ func (i *IssueService) Update(ctx context.Context, issueKeyOrID string, notify b
 	return
 }
 
-// Deletes an issue.
+// Delete deletes an issue.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues#delete-issue
-func (i *IssueService) Delete(ctx context.Context, issueKeyOrID string) (response *ResponseScheme, err error) {
+func (i *IssueService) Delete(ctx context.Context, issueKeyOrID string, deleteSubTasks bool) (response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {
 		return nil, notIssueKeyOrIDError
 	}
 
-	var endpoint = fmt.Sprintf("rest/api/3/issue/%v", issueKeyOrID)
-	request, err := i.client.newRequest(ctx, http.MethodDelete, endpoint, nil)
+	params := url.Values{}
+	if deleteSubTasks {
+		params.Add("deleteSubtasks", "true")
+	}
+
+	var endpoint strings.Builder
+	endpoint.WriteString(fmt.Sprintf("rest/api/3/issue/%v", issueKeyOrID))
+
+	if params.Encode() != "" {
+		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
+	}
+
+	request, err := i.client.newRequest(ctx, http.MethodDelete, endpoint.String(), nil)
 	if err != nil {
 		return
 	}

@@ -2,7 +2,7 @@ package main
 
 import (
 	"context"
-	"github.com/ctreminiom/go-atlassian/jira"
+	"github.com/ctreminiom/go-atlassian/jira/v3"
 	"log"
 	"os"
 )
@@ -15,7 +15,7 @@ func main() {
 		token = os.Getenv("TOKEN")
 	)
 
-	atlassian, err := jira.New(nil, host)
+	atlassian, err := v3.New(nil, host)
 	if err != nil {
 		return
 	}
@@ -24,9 +24,9 @@ func main() {
 	atlassian.Auth.SetUserAgent("curl/7.54.0")
 
 	var (
-		ctx                        = context.Background()
-		serviceDeskID, groupID int = 1, 0
-		start, limit           int = 0, 50
+		ctx                    = context.Background()
+		serviceDeskID, groupID = 1, 0
+		start, limit           = 0, 50
 	)
 
 	requestTypes, response, err := atlassian.ServiceManagement.RequestType.Gets(ctx, serviceDeskID, groupID, start, limit)

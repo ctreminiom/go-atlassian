@@ -3,8 +3,8 @@ package main
 import (
 	"context"
 	"encoding/json"
-	"github.com/ctreminiom/go-atlassian/jira"
 	"github.com/ctreminiom/go-atlassian/jira/agile"
+	"github.com/ctreminiom/go-atlassian/jira/v3"
 	"log"
 	"os"
 )
@@ -17,7 +17,7 @@ func main() {
 		token = os.Getenv("TOKEN")
 	)
 
-	atlassian, err := jira.New(nil, host)
+	atlassian, err := v3.New(nil, host)
 	if err != nil {
 		return
 	}
@@ -55,7 +55,7 @@ func main() {
 	}
 
 	//If you want to extract the field metadata
-	var searchPage jira.IssueSearchScheme
+	var searchPage v3.IssueSearchScheme
 	if err = json.Unmarshal(response.Bytes.Bytes(), &searchPage); err != nil {
 		log.Fatal(err)
 	}

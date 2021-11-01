@@ -2,8 +2,8 @@ package main
 
 import (
 	"context"
-	"github.com/ctreminiom/go-atlassian/jira"
 	"github.com/ctreminiom/go-atlassian/jira/agile"
+	"github.com/ctreminiom/go-atlassian/jira/v3"
 	"log"
 	"os"
 )
@@ -16,7 +16,7 @@ func main() {
 		token = os.Getenv("TOKEN")
 	)
 
-	atlassian, err := jira.New(nil, host)
+	atlassian, err := v3.New(nil, host)
 	if err != nil {
 		return
 	}
@@ -31,7 +31,7 @@ func main() {
 	sprint, response, err := atlassian.Agile.Sprint.Path(context.Background(), 2, payload)
 	if err != nil {
 		if response != nil {
-			log.Println("Response HTTP Response",response.Bytes.String())
+			log.Println("Response HTTP Response", response.Bytes.String())
 		}
 		log.Fatal(err)
 	}

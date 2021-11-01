@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/ctreminiom/go-atlassian/jira"
+	"github.com/ctreminiom/go-atlassian/jira/v3"
 	"log"
 	"os"
 )
@@ -16,7 +16,7 @@ func main() {
 		token = os.Getenv("TOKEN")
 	)
 
-	atlassian, err := jira.New(nil, host)
+	atlassian, err := v3.New(nil, host)
 	if err != nil {
 		return
 	}

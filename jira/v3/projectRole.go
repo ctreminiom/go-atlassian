@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	models "github.com/ctreminiom/go-atlassian/internal/infra/models/jira"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -96,7 +97,7 @@ type RoleActorScheme struct {
 	ActorUser   struct {
 		AccountID string `json:"accountId,omitempty"`
 	} `json:"actorUser,omitempty"`
-	ActorGroup *GroupScheme `json:"actorGroup,omitempty"`
+	ActorGroup *models.GroupScheme `json:"actorGroup,omitempty"`
 }
 
 // Get returns a project role's details and actors associated with the project.

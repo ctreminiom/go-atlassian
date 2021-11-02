@@ -3,6 +3,7 @@ package v3
 import (
 	"context"
 	"fmt"
+	models "github.com/ctreminiom/go-atlassian/internal/infra/models/jira"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -10,28 +11,13 @@ import (
 
 type GroupService struct{ client *Client }
 
-type GroupScheme struct {
-	Name   string               `json:"name,omitempty"`
-	Self   string               `json:"self,omitempty"`
-	Users  *GroupUserPageScheme `json:"users,omitempty"`
-	Expand string               `json:"expand,omitempty"`
-}
-
-type GroupUserPageScheme struct {
-	Size       int           `json:"size,omitempty"`
-	Items      []*UserScheme `json:"items,omitempty"`
-	MaxResults int           `json:"max-results,omitempty"`
-	StartIndex int           `json:"start-index,omitempty"`
-	EndIndex   int           `json:"end-index,omitempty"`
-}
-
 // Create creates a group.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/groups#create-group
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-groups/#api-rest-api-3-group-post
-func (g *GroupService) Create(ctx context.Context, groupName string) (result *GroupScheme, response *ResponseScheme, err error) {
+func (g *GroupService) Create(ctx context.Context, groupName string) (result *models.GroupScheme, response *ResponseScheme, err error) {
 
 	if len(groupName) == 0 {
-		return nil, nil, notGroupNameError
+		return nil, nil, models.ErrNoGroupNameError
 	}
 
 	payload := struct {
@@ -65,7 +51,7 @@ func (g *GroupService) Create(ctx context.Context, groupName string) (result *Gr
 func (g *GroupService) Delete(ctx context.Context, groupName string) (response *ResponseScheme, err error) {
 
 	if len(groupName) == 0 {
-		return nil, notGroupNameError
+		return nil, models.ErrNoGroupNameError
 	}
 
 	params := url.Values{}
@@ -85,17 +71,6 @@ func (g *GroupService) Delete(ctx context.Context, groupName string) (response *
 	return
 }
 
-type BulkGroupScheme struct {
-	MaxResults int  `json:"maxResults,omitempty"`
-	StartAt    int  `json:"startAt,omitempty"`
-	Total      int  `json:"total,omitempty"`
-	IsLast     bool `json:"isLast,omitempty"`
-	Values     []struct {
-		Name    string `json:"name,omitempty"`
-		GroupID string `json:"groupId,omitempty"`
-	} `json:"values,omitempty"`
-}
-
 type GroupBulkOptionsScheme struct {
 	GroupIDs   []string
 	GroupNames []string
@@ -106,7 +81,7 @@ type GroupBulkOptionsScheme struct {
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-groups/#api-rest-api-3-group-bulk-get
 // NOTE: Experimental Endpoint
 func (g *GroupService) Bulk(ctx context.Context, options *GroupBulkOptionsScheme, startAt, maxResults int) (
-	result *BulkGroupScheme, response *ResponseScheme, err error) {
+	result *models.BulkGroupScheme, response *ResponseScheme, err error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -137,36 +112,14 @@ func (g *GroupService) Bulk(ctx context.Context, options *GroupBulkOptionsScheme
 	return
 }
 
-type GroupMemberPageScheme struct {
-	Self       string                   `json:"self,omitempty"`
-	NextPage   string                   `json:"nextPage,omitempty"`
-	MaxResults int                      `json:"maxResults,omitempty"`
-	StartAt    int                      `json:"startAt,omitempty"`
-	Total      int                      `json:"total,omitempty"`
-	IsLast     bool                     `json:"isLast,omitempty"`
-	Values     []*GroupUserDetailScheme `json:"values,omitempty"`
-}
-
-type GroupUserDetailScheme struct {
-	Self         string `json:"self"`
-	Name         string `json:"name"`
-	Key          string `json:"key"`
-	AccountID    string `json:"accountId"`
-	EmailAddress string `json:"emailAddress"`
-	DisplayName  string `json:"displayName"`
-	Active       bool   `json:"active"`
-	TimeZone     string `json:"timeZone"`
-	AccountType  string `json:"accountType"`
-}
-
 // Members returns a paginated list of all users in a group.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/groups#get-users-from-groups
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-groups/#api-rest-api-3-group-member-get
 func (g *GroupService) Members(ctx context.Context, groupName string, inactive bool, startAt, maxResults int) (
-	result *GroupMemberPageScheme, response *ResponseScheme, err error) {
+	result *models.GroupMemberPageScheme, response *ResponseScheme, err error) {
 
 	if len(groupName) == 0 {
-		return nil, nil, notGroupNameError
+		return nil, nil, models.ErrNoGroupNameError
 	}
 
 	params := url.Values{}
@@ -196,15 +149,15 @@ func (g *GroupService) Members(ctx context.Context, groupName string, inactive b
 // Add adds a user to a group.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/groups#add-user-to-group
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-groups/#api-rest-api-3-group-user-post
-func (g *GroupService) Add(ctx context.Context, groupName, accountID string) (result *GroupScheme,
+func (g *GroupService) Add(ctx context.Context, groupName, accountID string) (result *models.GroupScheme,
 	response *ResponseScheme, err error) {
 
 	if len(groupName) == 0 {
-		return nil, nil, notGroupNameError
+		return nil, nil, models.ErrNoGroupNameError
 	}
 
 	if len(accountID) == 0 {
-		return nil, nil, notAccountIDError
+		return nil, nil, models.ErrNoGroupIDError
 	}
 
 	payload := struct {
@@ -241,11 +194,11 @@ func (g *GroupService) Add(ctx context.Context, groupName, accountID string) (re
 func (g *GroupService) Remove(ctx context.Context, groupName, accountID string) (response *ResponseScheme, err error) {
 
 	if len(groupName) == 0 {
-		return nil, notGroupNameError
+		return nil, models.ErrNoGroupNameError
 	}
 
 	if len(accountID) == 0 {
-		return nil, notAccountIDError
+		return nil, models.ErrNoGroupIDError
 	}
 
 	params := url.Values{}
@@ -265,8 +218,3 @@ func (g *GroupService) Remove(ctx context.Context, groupName, accountID string) 
 
 	return
 }
-
-var (
-	notGroupNameError = fmt.Errorf("error, please provide a valid groupName value")
-	notAccountIDError = fmt.Errorf("error, please provide a valid accountID value")
-)

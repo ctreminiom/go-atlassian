@@ -3,6 +3,7 @@ package v3
 import (
 	"context"
 	"fmt"
+	models "github.com/ctreminiom/go-atlassian/internal/infra/models/jira"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -514,15 +515,15 @@ type NotificationEventScheme struct {
 }
 
 type EventNotificationScheme struct {
-	Expand           string             `json:"expand,omitempty"`
-	ID               int                `json:"id,omitempty"`
-	NotificationType string             `json:"notificationType,omitempty"`
-	Parameter        string             `json:"parameter,omitempty"`
-	EmailAddress     string             `json:"emailAddress,omitempty"`
-	Group            *GroupScheme       `json:"group,omitempty"`
-	Field            *IssueFieldScheme  `json:"field,omitempty"`
-	ProjectRole      *ProjectRoleScheme `json:"projectRole,omitempty"`
-	User             *UserScheme        `json:"user,omitempty"`
+	Expand           string              `json:"expand,omitempty"`
+	ID               int                 `json:"id,omitempty"`
+	NotificationType string              `json:"notificationType,omitempty"`
+	Parameter        string              `json:"parameter,omitempty"`
+	EmailAddress     string              `json:"emailAddress,omitempty"`
+	Group            *models.GroupScheme `json:"group,omitempty"`
+	Field            *IssueFieldScheme   `json:"field,omitempty"`
+	ProjectRole      *ProjectRoleScheme  `json:"projectRole,omitempty"`
+	User             *UserScheme         `json:"user,omitempty"`
 }
 
 // NotificationScheme search a notification scheme associated with the project.

@@ -3,6 +3,7 @@ package v3
 import (
 	"context"
 	"fmt"
+	models "github.com/ctreminiom/go-atlassian/internal/infra/models/jira"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -65,7 +66,7 @@ func (u *UserService) Get(ctx context.Context, accountID string, expand []string
 	response *ResponseScheme, err error) {
 
 	if len(accountID) == 0 {
-		return nil, nil, notAccountIDError
+		return nil, nil, models.ErrNoApplicationRoleError
 	}
 
 	params := url.Values{}
@@ -148,7 +149,7 @@ func (u *UserService) Create(ctx context.Context, payload *UserPayloadScheme) (r
 func (u *UserService) Delete(ctx context.Context, accountID string) (response *ResponseScheme, err error) {
 
 	if len(accountID) == 0 {
-		return nil, notAccountIDError
+		return nil, models.ErrNoApplicationRoleError
 	}
 
 	params := url.Values{}

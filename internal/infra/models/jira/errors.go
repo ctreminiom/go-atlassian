@@ -5,6 +5,8 @@ import (
 )
 
 var (
-	ErrNoApplicationRoleError = errors.New("jira-cloud: no application role key set")
-	ErrNoDashboardIDError     = errors.New("jira-cloud: no dashboard id set")
+	ErrNoApplicationRoleError = errors.New("jira: no application role key set")
+	ErrNoDashboardIDError     = errors.New("jira: no dashboard id set")
+	ErrNoGroupNameError       = errors.New("jira: no group name set")
+	ErrNoGroupIDError         = errors.New("jira: no group name set")
 )

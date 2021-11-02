@@ -3,6 +3,7 @@ package v3
 import (
 	"context"
 	"fmt"
+	models "github.com/ctreminiom/go-atlassian/internal/infra/models/jira"
 	"net/http"
 	"net/url"
 )
@@ -92,7 +93,7 @@ func (w *WatcherService) Delete(ctx context.Context, issueKeyOrID, accountID str
 	}
 
 	if len(accountID) == 0 {
-		return nil, notAccountIDError
+		return nil, models.ErrNoGroupNameError
 	}
 
 	params := url.Values{}

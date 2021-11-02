@@ -9,6 +9,8 @@ import (
 	"net/http"
 )
 
+var notIssueKeyOrIDError error
+
 type AttachmentService struct{ client *Client }
 
 type AttachmentSettingScheme struct {

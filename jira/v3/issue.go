@@ -2,13 +2,12 @@ package v3
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
+	models "github.com/ctreminiom/go-atlassian/pkg/infra/models/jira"
 	"github.com/imdario/mergo"
 	"net/http"
 	"net/url"
 	"strings"
-	"time"
 )
 
 type IssueService struct {
@@ -28,442 +27,10 @@ type IssueService struct {
 	Metadata   *IssueMetadataService
 }
 
-type IssueScheme struct {
-	ID          string                   `json:"id,omitempty"`
-	Key         string                   `json:"key,omitempty"`
-	Self        string                   `json:"self,omitempty"`
-	Transitions []*IssueTransitionScheme `json:"transitions,omitempty"`
-	Changelog   *IssueChangelogScheme    `json:"changelog,omitempty"`
-	Fields      *IssueFieldsScheme       `json:"fields,omitempty"`
-}
-
-type IssueFieldsScheme struct {
-	IssueType                *IssueTypeScheme          `json:"issuetype,omitempty"`
-	IssueLinks               []*IssueLinkScheme        `json:"issuelinks,omitempty"`
-	Watcher                  *IssueWatcherScheme       `json:"watches,omitempty"`
-	Votes                    *IssueVoteScheme          `json:"votes,omitempty"`
-	Versions                 []*ProjectVersionScheme   `json:"versions,omitempty"`
-	Project                  *ProjectScheme            `json:"project,omitempty"`
-	FixVersions              []*ProjectVersionScheme   `json:"fixVersions,omitempty"`
-	Priority                 *PriorityScheme           `json:"priority,omitempty"`
-	Components               []*ProjectComponentScheme `json:"components,omitempty"`
-	Creator                  *UserScheme               `json:"creator,omitempty"`
-	Reporter                 *UserScheme               `json:"reporter,omitempty"`
-	Resolution               *IssueResolutionScheme    `json:"resolution,omitempty"`
-	Resolutiondate           string                    `json:"resolutiondate,omitempty"`
-	Workratio                int                       `json:"workratio,omitempty"`
-	StatuscategoryChangeDate string                    `json:"statuscategorychangedate,omitempty"`
-	LastViewed               string                    `json:"lastViewed,omitempty"`
-	Summary                  string                    `json:"summary,omitempty"`
-	Created                  string                    `json:"created,omitempty"`
-	Updated                  string                    `json:"updated,omitempty"`
-	Labels                   []string                  `json:"labels,omitempty"`
-	Status                   *StatusScheme             `json:"status,omitempty"`
-	Description              *CommentNodeScheme        `json:"description,omitempty"`
-	Comments                 []*IssueCommentPageScheme `json:"comments,omitempty"`
-	Subtasks                 []*IssueScheme            `json:"subtasks,omitempty"`
-}
-
-func (i *IssueScheme) MergeCustomFields(fields *CustomFields) (result map[string]interface{}, err error) {
-
-	if fields == nil {
-		return nil, fmt.Errorf("error, please provide a value *CustomFields pointer")
-	}
-
-	if len(fields.Fields) == 0 {
-		return nil, fmt.Errorf("error!, the Fields tag does not contains custom fields")
-	}
-
-	//Convert the IssueScheme struct to map[string]interface{}
-	issueSchemeAsBytes, _ := json.Marshal(i)
-
-	issueSchemeAsMap := make(map[string]interface{})
-	_ = json.Unmarshal(issueSchemeAsBytes, &issueSchemeAsMap)
-
-	//For each customField created, merge it into the eAsMap
-	for _, customField := range fields.Fields {
-		_ = mergo.Merge(&issueSchemeAsMap, customField, mergo.WithOverride)
-	}
-
-	return issueSchemeAsMap, nil
-}
-
-func (i *IssueScheme) MergeOperations(operations *UpdateOperations) (result map[string]interface{}, err error) {
-
-	if operations == nil {
-		return nil, fmt.Errorf("error, please provide a value *UpdateOperations pointer")
-	}
-
-	if len(operations.Fields) == 0 {
-		return nil, fmt.Errorf("error!, the Fields tag does not contains custom fields")
-	}
-
-	//Convert the IssueScheme struct to map[string]interface{}
-	issueSchemeAsBytes, _ := json.Marshal(i)
-
-	issueSchemeAsMap := make(map[string]interface{})
-	_ = json.Unmarshal(issueSchemeAsBytes, &issueSchemeAsMap)
-
-	//For each customField created, merge it into the eAsMap
-	for _, customField := range operations.Fields {
-		_ = mergo.Merge(&issueSchemeAsMap, customField, mergo.WithOverride)
-	}
-
-	return issueSchemeAsMap, nil
-}
-
-func (i *IssueScheme) ToMap() (result map[string]interface{}, err error) {
-
-	//Convert the IssueScheme struct to map[string]interface{}
-	issueSchemeAsBytes, _ := json.Marshal(i)
-
-	issueSchemeAsMap := make(map[string]interface{})
-	_ = json.Unmarshal(issueSchemeAsBytes, &issueSchemeAsMap)
-
-	return issueSchemeAsMap, err
-}
-
-type CustomFields struct{ Fields []map[string]interface{} }
-
-func (c *CustomFields) Groups(customFieldID string, groups []string) (err error) {
-
-	if len(customFieldID) == 0 {
-		return fmt.Errorf("error, please provide a valid customFieldID value")
-	}
-
-	if len(groups) == 0 {
-		return fmt.Errorf("error, please provide a valid groups value")
-	}
-
-	var groupsNode []map[string]interface{}
-	for _, group := range groups {
-
-		var groupNode = map[string]interface{}{}
-		groupNode["name"] = group
-
-		groupsNode = append(groupsNode, groupNode)
-	}
-
-	var fieldNode = map[string]interface{}{}
-	fieldNode[customFieldID] = groupsNode
-
-	var fieldsNode = map[string]interface{}{}
-	fieldsNode["fields"] = fieldNode
-
-	c.Fields = append(c.Fields, fieldsNode)
-	return
-}
-
-func (c *CustomFields) Group(customFieldID, group string) (err error) {
-
-	if len(customFieldID) == 0 {
-		return fmt.Errorf("error, please provide a valid customFieldID value")
-	}
-
-	if len(group) == 0 {
-		return fmt.Errorf("error, please provide a valid group value")
-	}
-
-	var groupNode = map[string]interface{}{}
-	groupNode["name"] = group
-
-	var fieldNode = map[string]interface{}{}
-	fieldNode[customFieldID] = groupNode
-
-	var fieldsNode = map[string]interface{}{}
-	fieldsNode["fields"] = fieldNode
-
-	c.Fields = append(c.Fields, fieldsNode)
-	return
-}
-
-func (c *CustomFields) URL(customFieldID, URL string) (err error) {
-
-	if len(customFieldID) == 0 {
-		return fmt.Errorf("error, please provide a valid customFieldID value")
-	}
-
-	if len(URL) == 0 {
-		return fmt.Errorf("error, please provide a valid URL value")
-	}
-
-	var urlNode = map[string]interface{}{}
-	urlNode[customFieldID] = URL
-
-	var fieldsNode = map[string]interface{}{}
-	fieldsNode["fields"] = urlNode
-
-	c.Fields = append(c.Fields, fieldsNode)
-	return
-}
-
-func (c *CustomFields) Text(customFieldID, textValue string) (err error) {
-
-	if len(customFieldID) == 0 {
-		return fmt.Errorf("error, please provide a valid customFieldID value")
-	}
-
-	if len(textValue) == 0 {
-		return fmt.Errorf("error, please provide a valid textValue value")
-	}
-
-	var urlNode = map[string]interface{}{}
-	urlNode[customFieldID] = textValue
-
-	var fieldsNode = map[string]interface{}{}
-	fieldsNode["fields"] = urlNode
-
-	c.Fields = append(c.Fields, fieldsNode)
-	return
-}
-
-func (c *CustomFields) DateTime(customFieldID string, dateValue time.Time) (err error) {
-
-	if len(customFieldID) == 0 {
-		return fmt.Errorf("error, please provide a valid customFieldID value")
-	}
-
-	if dateValue.IsZero() {
-		return fmt.Errorf("error, please provide a valid dateValue value")
-	}
-
-	var dateNode = map[string]interface{}{}
-	dateNode[customFieldID] = dateValue.Format(time.RFC3339)
-
-	var fieldsNode = map[string]interface{}{}
-	fieldsNode["fields"] = dateNode
-
-	c.Fields = append(c.Fields, fieldsNode)
-	return
-}
-
-func (c *CustomFields) Date(customFieldID string, dateTimeValue time.Time) (err error) {
-
-	if len(customFieldID) == 0 {
-		return fmt.Errorf("error, please provide a valid customFieldID value")
-	}
-
-	if dateTimeValue.IsZero() {
-		return fmt.Errorf("error, please provide a valid dateValue value")
-	}
-
-	var dateTimeNode = map[string]interface{}{}
-	dateTimeNode[customFieldID] = dateTimeValue.Format("2006-01-02")
-
-	var fieldsNode = map[string]interface{}{}
-	fieldsNode["fields"] = dateTimeNode
-
-	c.Fields = append(c.Fields, fieldsNode)
-	return
-}
-
-func (c *CustomFields) MultiSelect(customFieldID string, options []string) (err error) {
-
-	if len(customFieldID) == 0 {
-		return fmt.Errorf("error, please provide a valid customFieldID value")
-	}
-
-	if len(options) == 0 {
-		return fmt.Errorf("error, please provide a valid options value")
-	}
-
-	var groupsNode []map[string]interface{}
-	for _, group := range options {
-
-		var groupNode = map[string]interface{}{}
-		groupNode["value"] = group
-
-		groupsNode = append(groupsNode, groupNode)
-	}
-
-	var fieldNode = map[string]interface{}{}
-	fieldNode[customFieldID] = groupsNode
-
-	var fieldsNode = map[string]interface{}{}
-	fieldsNode["fields"] = fieldNode
-
-	c.Fields = append(c.Fields, fieldsNode)
-	return
-}
-
-func (c *CustomFields) Select(customFieldID string, option string) (err error) {
-
-	if len(customFieldID) == 0 {
-		return fmt.Errorf("error, please provide a valid customFieldID value")
-	}
-
-	if len(option) == 0 {
-		return fmt.Errorf("error, please provide a valid option value")
-	}
-
-	var selectNode = map[string]interface{}{}
-	selectNode["value"] = option
-
-	var fieldNode = map[string]interface{}{}
-	fieldNode[customFieldID] = selectNode
-
-	var fieldsNode = map[string]interface{}{}
-	fieldsNode["fields"] = fieldNode
-
-	c.Fields = append(c.Fields, fieldsNode)
-	return
-}
-
-func (c *CustomFields) RadioButton(customFieldID, button string) (err error) {
-
-	if len(customFieldID) == 0 {
-		return fmt.Errorf("error, please provide a valid customFieldID value")
-	}
-
-	if len(button) == 0 {
-		return fmt.Errorf("error, please provide a button option value")
-	}
-
-	var selectNode = map[string]interface{}{}
-	selectNode["value"] = button
-
-	var fieldNode = map[string]interface{}{}
-	fieldNode[customFieldID] = selectNode
-
-	var fieldsNode = map[string]interface{}{}
-	fieldsNode["fields"] = fieldNode
-
-	c.Fields = append(c.Fields, fieldsNode)
-	return
-}
-
-func (c *CustomFields) User(customFieldID string, accountID string) (err error) {
-
-	if len(customFieldID) == 0 {
-		return fmt.Errorf("error, please provide a valid customFieldID value")
-	}
-
-	if len(accountID) == 0 {
-		return fmt.Errorf("error, please provide a accountID option value")
-	}
-
-	var userNode = map[string]interface{}{}
-	userNode["accountId"] = accountID
-
-	var fieldNode = map[string]interface{}{}
-	fieldNode[customFieldID] = userNode
-
-	var fieldsNode = map[string]interface{}{}
-	fieldsNode["fields"] = fieldNode
-
-	c.Fields = append(c.Fields, fieldsNode)
-	return
-}
-
-func (c *CustomFields) Users(customFieldID string, accountIDs []string) (err error) {
-
-	if len(customFieldID) == 0 {
-		return fmt.Errorf("error, please provide a valid customFieldID value")
-	}
-
-	if len(accountIDs) == 0 {
-		return fmt.Errorf("error, please provide a accountIDs value")
-	}
-
-	var accountsNode []map[string]interface{}
-	for _, accountID := range accountIDs {
-
-		var groupNode = map[string]interface{}{}
-		groupNode["accountId"] = accountID
-
-		accountsNode = append(accountsNode, groupNode)
-	}
-
-	var fieldNode = map[string]interface{}{}
-	fieldNode[customFieldID] = accountsNode
-
-	var fieldsNode = map[string]interface{}{}
-	fieldsNode["fields"] = fieldNode
-
-	c.Fields = append(c.Fields, fieldsNode)
-	return
-}
-
-func (c *CustomFields) Number(customFieldID string, numberValue float64) (err error) {
-
-	if len(customFieldID) == 0 {
-		return fmt.Errorf("error, please provide a valid customFieldID value")
-	}
-
-	var urlNode = map[string]interface{}{}
-	urlNode[customFieldID] = numberValue
-
-	var fieldsNode = map[string]interface{}{}
-	fieldsNode["fields"] = urlNode
-
-	c.Fields = append(c.Fields, fieldsNode)
-	return
-}
-
-func (c *CustomFields) CheckBox(customFieldID string, options []string) (err error) {
-
-	if len(customFieldID) == 0 {
-		return fmt.Errorf("error, please provide a valid customFieldID value")
-	}
-
-	if len(options) == 0 {
-		return fmt.Errorf("error, please provide a valid options value")
-	}
-
-	var groupsNode []map[string]interface{}
-	for _, group := range options {
-
-		var groupNode = map[string]interface{}{}
-		groupNode["value"] = group
-
-		groupsNode = append(groupsNode, groupNode)
-	}
-
-	var fieldNode = map[string]interface{}{}
-	fieldNode[customFieldID] = groupsNode
-
-	var fieldsNode = map[string]interface{}{}
-	fieldsNode["fields"] = fieldNode
-
-	c.Fields = append(c.Fields, fieldsNode)
-	return
-}
-
-func (c *CustomFields) Cascading(customFieldID, parent, child string) (err error) {
-
-	if len(customFieldID) == 0 {
-		return fmt.Errorf("error, please provide a valid customFieldID value")
-	}
-
-	if len(parent) == 0 {
-		return fmt.Errorf("error, please provide a parent value")
-	}
-
-	if len(child) == 0 {
-		return fmt.Errorf("error, please provide a child value")
-	}
-
-	var childNode = map[string]interface{}{}
-	childNode["value"] = child
-
-	var parentNode = map[string]interface{}{}
-	parentNode["value"] = parent
-	parentNode["child"] = childNode
-
-	var fieldNode = map[string]interface{}{}
-	fieldNode[customFieldID] = parentNode
-
-	var fieldsNode = map[string]interface{}{}
-	fieldsNode["fields"] = fieldNode
-
-	c.Fields = append(c.Fields, fieldsNode)
-	return
-}
-
-// Creates an issue or, where the option to create subtasks is enabled in Jira, a subtask.
+// Create creates an issue or, where the option to create subtasks is enabled in Jira, a subtask.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues#create-issue
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-post
-func (i *IssueService) Create(ctx context.Context, payload *IssueScheme, customFields *CustomFields) (
+func (i *IssueService) Create(ctx context.Context, payload *models.IssueScheme, customFields *models.CustomFields) (
 	result *IssueResponseScheme, response *ResponseScheme, err error) {
 
 	var (
@@ -515,8 +82,8 @@ type IssueResponseScheme struct {
 }
 
 type IssueBulkScheme struct {
-	Payload      *IssueScheme
-	CustomFields *CustomFields
+	Payload      *models.IssueScheme
+	CustomFields *models.CustomFields
 }
 
 // Creates issues and, where the option to create subtasks is enabled in Jira, subtasks.
@@ -569,7 +136,7 @@ func (i *IssueService) Creates(ctx context.Context, payload []*IssueBulkScheme) 
 }
 
 type BulkIssueScheme struct {
-	Issues []*IssueScheme `json:"issues,omitempty"`
+	Issues []*models.IssueScheme `json:"issues,omitempty"`
 }
 
 type IssueBulkResponseScheme struct {
@@ -590,14 +157,14 @@ type IssueBulkResponseErrorScheme struct {
 	FailedElementNumber int `json:"failedElementNumber"`
 }
 
-// Returns the details for an issue.
+// Get returns the details for an issue.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues#get-issue
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-get
-func (i *IssueService) Get(ctx context.Context, issueKeyOrID string, fields []string, expand []string) (result *IssueScheme,
+func (i *IssueService) Get(ctx context.Context, issueKeyOrID string, fields []string, expand []string) (result *models.IssueScheme,
 	response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {
-		return nil, nil, notIssueKeyOrIDError
+		return nil, nil, models.ErrNoIssueKeyOrIDError
 	}
 
 	params := url.Values{}
@@ -630,72 +197,14 @@ func (i *IssueService) Get(ctx context.Context, issueKeyOrID string, fields []st
 	return
 }
 
-type UpdateOperations struct{ Fields []map[string]interface{} }
-
-func (u *UpdateOperations) AddArrayOperation(customFieldID string, mapping map[string]string) (err error) {
-
-	if len(customFieldID) == 0 {
-		return fmt.Errorf("error, please provide a valid customFieldID value")
-	}
-
-	var operations []map[string]interface{}
-	for value, operation := range mapping {
-
-		var operationNode = map[string]interface{}{}
-		operationNode[operation] = value
-
-		operations = append(operations, operationNode)
-	}
-
-	var fieldNode = map[string]interface{}{}
-	fieldNode[customFieldID] = operations
-
-	var updateNode = map[string]interface{}{}
-	updateNode["update"] = fieldNode
-
-	u.Fields = append(u.Fields, updateNode)
-	return
-}
-
-func (u *UpdateOperations) AddStringOperation(customFieldID, operation, value string) (err error) {
-
-	if len(customFieldID) == 0 {
-		return fmt.Errorf("error, please provide a valid customFieldID value")
-	}
-
-	if len(operation) == 0 {
-		return fmt.Errorf("error, please provide a valid operation value")
-	}
-
-	if len(value) == 0 {
-		return fmt.Errorf("error, please provide a valid value value")
-	}
-
-	var operations []map[string]interface{}
-
-	var operationNode = map[string]interface{}{}
-	operationNode[operation] = value
-
-	operations = append(operations, operationNode)
-
-	var fieldNode = map[string]interface{}{}
-	fieldNode[customFieldID] = operations
-
-	var updateNode = map[string]interface{}{}
-	updateNode["update"] = fieldNode
-
-	u.Fields = append(u.Fields, updateNode)
-
-	return
-}
-
 // Update edits an issue.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues#edit-issue
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-put
-func (i *IssueService) Update(ctx context.Context, issueKeyOrID string, notify bool, payload *IssueScheme, customFields *CustomFields, operations *UpdateOperations) (response *ResponseScheme, err error) {
+func (i *IssueService) Update(ctx context.Context, issueKeyOrID string, notify bool, payload *models.IssueScheme,
+	customFields *models.CustomFields, operations *models.UpdateOperations) (response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {
-		return nil, notIssueKeyOrIDError
+		return nil, models.ErrNoIssueKeyOrIDError
 	}
 
 	params := url.Values{}
@@ -798,7 +307,7 @@ func (i *IssueService) Update(ctx context.Context, issueKeyOrID string, notify b
 func (i *IssueService) Delete(ctx context.Context, issueKeyOrID string, deleteSubTasks bool) (response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {
-		return nil, notIssueKeyOrIDError
+		return nil, models.ErrNoIssueKeyOrIDError
 	}
 
 	params := url.Values{}
@@ -826,7 +335,7 @@ func (i *IssueService) Delete(ctx context.Context, issueKeyOrID string, deleteSu
 	return
 }
 
-// Assigns an issue to a user.
+// Assign assigns an issue to a user.
 // Use this operation when the calling user does not have the Edit Issues permission but has the
 // Assign issue permission for the project that the issue is in.
 // If accountId is set to:
@@ -836,7 +345,7 @@ func (i *IssueService) Delete(ctx context.Context, issueKeyOrID string, deleteSu
 func (i *IssueService) Assign(ctx context.Context, issueKeyOrID, accountID string) (response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {
-		return nil, notIssueKeyOrIDError
+		return nil, models.ErrNoIssueKeyOrIDError
 	}
 
 	payload := struct {
@@ -865,49 +374,14 @@ func (i *IssueService) Assign(ctx context.Context, issueKeyOrID, accountID strin
 	return
 }
 
-type IssueNotifyOptionsScheme struct {
-	HTMLBody string                     `json:"htmlBody,omitempty"`
-	Subject  string                     `json:"subject,omitempty"`
-	TextBody string                     `json:"textBody,omitempty"`
-	To       *IssueNotifyToScheme       `json:"to,omitempty"`
-	Restrict *IssueNotifyRestrictScheme `json:"restrict,omitempty"`
-}
-
-type IssueNotifyRestrictScheme struct {
-	Groups      []*IssueNotifyGroupScheme      `json:"groups,omitempty"`
-	Permissions []*IssueNotifyPermissionScheme `json:"permissions,omitempty"`
-}
-
-type IssueNotifyToScheme struct {
-	Reporter bool                      `json:"reporter,omitempty"`
-	Assignee bool                      `json:"assignee,omitempty"`
-	Watchers bool                      `json:"watchers,omitempty"`
-	Voters   bool                      `json:"voters,omitempty"`
-	Users    []*IssueNotifyUserScheme  `json:"users,omitempty"`
-	Groups   []*IssueNotifyGroupScheme `json:"groups,omitempty"`
-}
-
-type IssueNotifyPermissionScheme struct {
-	ID  string `json:"id,omitempty"`
-	Key string `json:"key,omitempty"`
-}
-
-type IssueNotifyUserScheme struct {
-	AccountID string `json:"accountId,omitempty"`
-}
-
-type IssueNotifyGroupScheme struct {
-	Name string `json:"name,omitempty"`
-}
-
 // Notify creates an email notification for an issue and adds it to the mail queue.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues#send-notification-for-issue
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-notify-post
-func (i *IssueService) Notify(ctx context.Context, issueKeyOrID string, options *IssueNotifyOptionsScheme) (
+func (i *IssueService) Notify(ctx context.Context, issueKeyOrID string, options *models.IssueNotifyOptionsScheme) (
 	response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {
-		return nil, notIssueSchemeError
+		return nil, models.ErrNoIssueKeyOrIDError
 	}
 
 	payloadAsReader, err := transformStructToReader(options)
@@ -942,7 +416,7 @@ func (i *IssueService) Transitions(ctx context.Context, issueKeyOrID string) (re
 	response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {
-		return nil, nil, notIssueSchemeError
+		return nil, nil, models.ErrNoIssueKeyOrIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/issue/%v/transitions", issueKeyOrID)
@@ -963,22 +437,22 @@ func (i *IssueService) Transitions(ctx context.Context, issueKeyOrID string) (re
 }
 
 type IssueMoveOptions struct {
-	Fields       *IssueScheme
-	CustomFields *CustomFields
-	Operations   *UpdateOperations
+	Fields       *models.IssueScheme
+	CustomFields *models.CustomFields
+	Operations   *models.UpdateOperations
 }
 
-// Performs an issue transition and
+// Move performs an issue transition and
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues#transition-issue
 func (i *IssueService) Move(ctx context.Context, issueKeyOrID, transitionID string, options *IssueMoveOptions) (
 	response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {
-		return nil, notIssueKeyOrIDError
+		return nil, models.ErrNoIssueKeyOrIDError
 	}
 
 	if len(transitionID) == 0 {
-		return nil, notTransitionIDError
+		return nil, models.ErrNoTransitionIDError
 	}
 
 	payloadWithTransition := make(map[string]interface{})
@@ -1067,9 +541,3 @@ func (i *IssueService) Move(ctx context.Context, issueKeyOrID, transitionID stri
 
 	return
 }
-
-var (
-	notIssueKeyOrIDError = fmt.Errorf("error, please provide a valid issueKeyOrID value")
-	notIssueSchemeError  = fmt.Errorf("error, please provide a valid *IssueScheme pointer")
-	notTransitionIDError = fmt.Errorf("error, please provide a valid transitionID string value")
-)

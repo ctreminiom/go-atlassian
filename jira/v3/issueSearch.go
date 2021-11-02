@@ -3,6 +3,7 @@ package v3
 import (
 	"context"
 	"fmt"
+	models "github.com/ctreminiom/go-atlassian/pkg/infra/models/jira"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -12,12 +13,12 @@ import (
 type IssueSearchService struct{ client *Client }
 
 type IssueSearchScheme struct {
-	Expand          string         `json:"expand"`
-	StartAt         int            `json:"startAt"`
-	MaxResults      int            `json:"maxResults"`
-	Total           int            `json:"total"`
-	Issues          []*IssueScheme `json:"issues"`
-	WarningMessages []string       `json:"warningMessages"`
+	Expand          string                `json:"expand"`
+	StartAt         int                   `json:"startAt"`
+	MaxResults      int                   `json:"maxResults"`
+	Total           int                   `json:"total"`
+	Issues          []*models.IssueScheme `json:"issues"`
+	WarningMessages []string              `json:"warningMessages"`
 }
 
 type IssueTransitionsScheme struct {

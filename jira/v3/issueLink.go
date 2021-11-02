@@ -3,6 +3,7 @@ package v3
 import (
 	"context"
 	"fmt"
+	models "github.com/ctreminiom/go-atlassian/pkg/infra/models/jira"
 	"net/http"
 )
 
@@ -29,10 +30,10 @@ type CommentVisibilityScheme struct {
 }
 
 type LinkedIssueScheme struct {
-	ID     string             `json:"id,omitempty"`
-	Key    string             `json:"key,omitempty"`
-	Self   string             `json:"self,omitempty"`
-	Fields *IssueFieldsScheme `json:"fields,omitempty"`
+	ID     string                    `json:"id,omitempty"`
+	Key    string                    `json:"key,omitempty"`
+	Self   string                    `json:"self,omitempty"`
+	Fields *models.IssueFieldsScheme `json:"fields,omitempty"`
 }
 
 type LinkTypeScheme struct {

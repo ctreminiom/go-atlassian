@@ -12,4 +12,7 @@ var (
 	ErrNoIssueKeyOrIDError    = errors.New("jira: no issue key/id set")
 	ErrNoIssueSchemeError     = errors.New("jira: no jira.IssueScheme set")
 	ErrNoTransitionIDError    = errors.New("jira: no transition id set")
+	ErrNoAttachmentIDError    = errors.New("jira: no attachment id set")
+	ErrNoAttachmentNameError  = errors.New("jira: no attachment filename set")
+	ErrNoReaderError          = errors.New("jira: no reader set")
 )

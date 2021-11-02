@@ -3,6 +3,7 @@ package v3
 import (
 	"context"
 	"fmt"
+	models "github.com/ctreminiom/go-atlassian/pkg/infra/models/jira"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/url"
@@ -13,15 +14,15 @@ func TestIssueLinkService_Create(t *testing.T) {
 
 	payloadMocked := &LinkPayloadScheme{
 
-		Comment: &CommentPayloadScheme{
+		Comment: &models.CommentPayloadScheme{
 
-			Body: &CommentNodeScheme{
+			Body: &models.CommentNodeScheme{
 				Version: 1,
 				Type:    "doc",
-				Content: []*CommentNodeScheme{
+				Content: []*models.CommentNodeScheme{
 					{
 						Type: "paragraph",
-						Content: []*CommentNodeScheme{
+						Content: []*models.CommentNodeScheme{
 							{
 								Type: "text",
 								Text: "Carlos Test",

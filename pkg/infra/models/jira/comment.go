@@ -18,6 +18,11 @@ type MarkScheme struct {
 	Attrs map[string]interface{} `json:"attrs,omitempty"`
 }
 
+type CommentPayloadScheme struct {
+	Visibility *CommentVisibilityScheme `json:"visibility,omitempty"`
+	Body       *CommentNodeScheme       `json:"body,omitempty"`
+}
+
 type IssueCommentPageScheme struct {
 	StartAt    int                   `json:"startAt,omitempty"`
 	MaxResults int                   `json:"maxResults,omitempty"`

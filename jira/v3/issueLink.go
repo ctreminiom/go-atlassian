@@ -13,15 +13,10 @@ type IssueLinkService struct {
 }
 
 type LinkPayloadScheme struct {
-	Comment      *CommentPayloadScheme `json:"comment,omitempty"`
-	InwardIssue  *LinkedIssueScheme    `json:"inwardIssue,omitempty"`
-	OutwardIssue *LinkedIssueScheme    `json:"outwardIssue,omitempty"`
-	Type         *LinkTypeScheme       `json:"type,omitempty"`
-}
-
-type CommentPayloadScheme struct {
-	Visibility *CommentVisibilityScheme `json:"visibility,omitempty"`
-	Body       *CommentNodeScheme       `json:"body,omitempty"`
+	Comment      *models.CommentPayloadScheme `json:"comment,omitempty"`
+	InwardIssue  *LinkedIssueScheme           `json:"inwardIssue,omitempty"`
+	OutwardIssue *LinkedIssueScheme           `json:"outwardIssue,omitempty"`
+	Type         *LinkTypeScheme              `json:"type,omitempty"`
 }
 
 type CommentVisibilityScheme struct {

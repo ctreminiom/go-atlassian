@@ -3,6 +3,7 @@ package v3
 import (
 	"context"
 	"fmt"
+	models "github.com/ctreminiom/go-atlassian/pkg/infra/models/jira"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -103,7 +104,7 @@ type WorklogOptionsScheme struct {
 }
 
 type WorklogPayloadScheme struct {
-	Comment          *CommentNodeScheme            `json:"comment,omitempty"`
+	Comment          *models.CommentNodeScheme     `json:"comment,omitempty"`
 	Visibility       *IssueWorklogVisibilityScheme `json:"visibility,omitempty"`
 	Started          string                        `json:"started,omitempty"`
 	TimeSpent        string                        `json:"timeSpent,omitempty"`

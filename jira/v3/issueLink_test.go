@@ -12,7 +12,7 @@ import (
 
 func TestIssueLinkService_Create(t *testing.T) {
 
-	payloadMocked := &LinkPayloadScheme{
+	payloadMocked := &models.LinkPayloadScheme{
 
 		Comment: &models.CommentPayloadScheme{
 
@@ -45,20 +45,20 @@ func TestIssueLinkService_Create(t *testing.T) {
 			},
 		},
 
-		InwardIssue: &LinkedIssueScheme{
+		InwardIssue: &models.LinkedIssueScheme{
 			Key: "KP-1",
 		},
-		OutwardIssue: &LinkedIssueScheme{
+		OutwardIssue: &models.LinkedIssueScheme{
 			Key: "KP-2",
 		},
-		Type: &LinkTypeScheme{
+		Type: &models.LinkTypeScheme{
 			Name: "Duplicate",
 		},
 	}
 
 	testCases := []struct {
 		name               string
-		payload            *LinkPayloadScheme
+		payload            *models.LinkPayloadScheme
 		wantHTTPMethod     string
 		endpoint           string
 		context            context.Context

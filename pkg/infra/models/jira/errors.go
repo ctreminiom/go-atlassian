@@ -22,4 +22,6 @@ var (
 	ErrNoIssueTypesError      = errors.New("jira: no issue types id's set")
 	ErrNoProjectsError        = errors.New("jira: no projects set")
 	ErrNoContextOptionIDError = errors.New("jira: no field context option id set")
+	ErrNoTypeIDError          = errors.New("jira: no link id set")
+	ErrNoLinkTypeIDError      = errors.New("jira: no link type id set")
 )

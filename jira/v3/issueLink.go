@@ -12,39 +12,12 @@ type IssueLinkService struct {
 	Type   *IssueLinkTypeService
 }
 
-type LinkPayloadScheme struct {
-	Comment      *models.CommentPayloadScheme `json:"comment,omitempty"`
-	InwardIssue  *LinkedIssueScheme           `json:"inwardIssue,omitempty"`
-	OutwardIssue *LinkedIssueScheme           `json:"outwardIssue,omitempty"`
-	Type         *LinkTypeScheme              `json:"type,omitempty"`
-}
-
-type CommentVisibilityScheme struct {
-	Type  string `json:"type,omitempty"`
-	Value string `json:"value,omitempty"`
-}
-
-type LinkedIssueScheme struct {
-	ID     string                    `json:"id,omitempty"`
-	Key    string                    `json:"key,omitempty"`
-	Self   string                    `json:"self,omitempty"`
-	Fields *models.IssueFieldsScheme `json:"fields,omitempty"`
-}
-
-type LinkTypeScheme struct {
-	Self    string `json:"self,omitempty"`
-	ID      string `json:"id,omitempty"`
-	Name    string `json:"name,omitempty"`
-	Inward  string `json:"inward,omitempty"`
-	Outward string `json:"outward,omitempty"`
-}
-
 // Create creates a link between two issues. Use this operation to indicate a relationship between two issues
 // and optionally add a comment to the from (outward) issue.
 // To use this resource the site must have Issue Linking enabled.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/link#create-issue-link
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-links/#api-rest-api-3-issuelink-post
-func (i *IssueLinkService) Create(ctx context.Context, payload *LinkPayloadScheme) (response *ResponseScheme, err error) {
+func (i *IssueLinkService) Create(ctx context.Context, payload *models.LinkPayloadScheme) (response *ResponseScheme, err error) {
 
 	var endpoint = "rest/api/3/issueLink"
 
@@ -69,21 +42,14 @@ func (i *IssueLinkService) Create(ctx context.Context, payload *LinkPayloadSchem
 	return
 }
 
-type IssueLinkScheme struct {
-	ID           string             `json:"id,omitempty"`
-	Type         *LinkTypeScheme    `json:"type,omitempty"`
-	InwardIssue  *LinkedIssueScheme `json:"inwardIssue,omitempty"`
-	OutwardIssue *LinkedIssueScheme `json:"outwardIssue,omitempty"`
-}
-
 // Get returns an issue link.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/link#get-issue-link
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-links/#api-rest-api-3-issuelink-linkid-get
-func (i *IssueLinkService) Get(ctx context.Context, linkID string) (result *IssueLinkScheme,
+func (i *IssueLinkService) Get(ctx context.Context, linkID string) (result *models.IssueLinkScheme,
 	response *ResponseScheme, err error) {
 
 	if len(linkID) == 0 {
-		return nil, nil, notLinkIDError
+		return nil, nil, models.ErrNoTypeIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/issueLink/%v", linkID)
@@ -103,23 +69,13 @@ func (i *IssueLinkService) Get(ctx context.Context, linkID string) (result *Issu
 	return
 }
 
-type IssueLinkPageScheme struct {
-	Expand string `json:"expand,omitempty"`
-	ID     string `json:"id,omitempty"`
-	Self   string `json:"self,omitempty"`
-	Key    string `json:"key,omitempty"`
-	Fields struct {
-		IssueLinks []*IssueLinkScheme `json:"issuelinks,omitempty"`
-	} `json:"fields,omitempty"`
-}
-
 // Gets get the issue links ID's associated with a Jira Issue
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/link#get-issue-links
-func (i *IssueLinkService) Gets(ctx context.Context, issueKeyOrID string) (result *IssueLinkPageScheme,
+func (i *IssueLinkService) Gets(ctx context.Context, issueKeyOrID string) (result *models.IssueLinkPageScheme,
 	response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {
-		return nil, nil, notIssueKeyOrIDError
+		return nil, nil, models.ErrNoIssueKeyOrIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/issue/%v?fields=issuelinks", issueKeyOrID)
@@ -145,7 +101,7 @@ func (i *IssueLinkService) Gets(ctx context.Context, issueKeyOrID string) (resul
 func (i *IssueLinkService) Delete(ctx context.Context, linkID string) (response *ResponseScheme, err error) {
 
 	if len(linkID) == 0 {
-		return nil, notLinkIDError
+		return nil, models.ErrNoTypeIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/issueLink/%v", linkID)
@@ -162,7 +118,3 @@ func (i *IssueLinkService) Delete(ctx context.Context, linkID string) (response 
 
 	return
 }
-
-var (
-	notLinkIDError = fmt.Errorf("error!, please provide a valid linkID value")
-)

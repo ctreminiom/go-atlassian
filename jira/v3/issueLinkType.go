@@ -3,27 +3,16 @@ package v3
 import (
 	"context"
 	"fmt"
+	models "github.com/ctreminiom/go-atlassian/pkg/infra/models/jira"
 	"net/http"
 )
 
 type IssueLinkTypeService struct{ client *Client }
 
-type IssueLinkTypeSearchScheme struct {
-	IssueLinkTypes []*LinkTypeScheme `json:"issueLinkTypes,omitempty"`
-}
-
-type IssueLinkTypeScheme struct {
-	ID      string `json:"id"`
-	Name    string `json:"name"`
-	Inward  string `json:"inward"`
-	Outward string `json:"outward"`
-	Self    string `json:"self"`
-}
-
 // Gets returns a list of all issue link types.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/link/types#get-issue-link-types
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-link-types/#api-rest-api-3-issuelinktype-get
-func (i *IssueLinkTypeService) Gets(ctx context.Context) (result *IssueLinkTypeSearchScheme, response *ResponseScheme,
+func (i *IssueLinkTypeService) Gets(ctx context.Context) (result *models.IssueLinkTypeSearchScheme, response *ResponseScheme,
 	err error) {
 
 	var endpoint = "rest/api/3/issueLinkType"
@@ -46,11 +35,11 @@ func (i *IssueLinkTypeService) Gets(ctx context.Context) (result *IssueLinkTypeS
 // Get returns an issue link type.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/link/types#get-issue-link-type
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-link-types/#api-rest-api-3-issuelinktype-issuelinktypeid-get
-func (i *IssueLinkTypeService) Get(ctx context.Context, issueLinkTypeID string) (result *LinkTypeScheme,
+func (i *IssueLinkTypeService) Get(ctx context.Context, issueLinkTypeID string) (result *models.LinkTypeScheme,
 	response *ResponseScheme, err error) {
 
 	if len(issueLinkTypeID) == 0 {
-		return nil, nil, notIssueLinkTypeIDError
+		return nil, nil, models.ErrNoLinkTypeIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/issueLinkType/%v", issueLinkTypeID)
@@ -75,7 +64,7 @@ func (i *IssueLinkTypeService) Get(ctx context.Context, issueLinkTypeID string) 
 // The issue link type consists of a name and descriptions for a link's inward and outward relationships.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/link/types#create-issue-link-type
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-link-types/#api-rest-api-3-issuelinktype-post
-func (i *IssueLinkTypeService) Create(ctx context.Context, payload *LinkTypeScheme) (result *LinkTypeScheme,
+func (i *IssueLinkTypeService) Create(ctx context.Context, payload *models.LinkTypeScheme) (result *models.LinkTypeScheme,
 	response *ResponseScheme, err error) {
 
 	var endpoint = "rest/api/3/issueLinkType"
@@ -104,11 +93,11 @@ func (i *IssueLinkTypeService) Create(ctx context.Context, payload *LinkTypeSche
 // Update updates an issue link type.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/link/types#update-issue-link-type
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-link-types/#api-rest-api-3-issuelinktype-issuelinktypeid-put
-func (i *IssueLinkTypeService) Update(ctx context.Context, issueLinkTypeID string, payload *LinkTypeScheme) (
-	result *LinkTypeScheme, response *ResponseScheme, err error) {
+func (i *IssueLinkTypeService) Update(ctx context.Context, issueLinkTypeID string, payload *models.LinkTypeScheme) (
+	result *models.LinkTypeScheme, response *ResponseScheme, err error) {
 
 	if len(issueLinkTypeID) == 0 {
-		return nil, nil, notIssueLinkTypeIDError
+		return nil, nil, models.ErrNoLinkTypeIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/issueLinkType/%v", issueLinkTypeID)
@@ -140,7 +129,7 @@ func (i *IssueLinkTypeService) Update(ctx context.Context, issueLinkTypeID strin
 func (i *IssueLinkTypeService) Delete(ctx context.Context, issueLinkTypeID string) (response *ResponseScheme, err error) {
 
 	if len(issueLinkTypeID) == 0 {
-		return nil, notIssueLinkTypeIDError
+		return nil, models.ErrNoLinkTypeIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/issueLinkType/%v", issueLinkTypeID)
@@ -157,7 +146,3 @@ func (i *IssueLinkTypeService) Delete(ctx context.Context, issueLinkTypeID strin
 
 	return
 }
-
-var (
-	notIssueLinkTypeIDError = fmt.Errorf("error!, please provide a valid issueLinkTypeID value")
-)

@@ -155,7 +155,7 @@ func (i *IssueTypeScreenSchemeService) Projects(ctx context.Context, projectIDs 
 	params.Add("maxResults", strconv.Itoa(maxResults))
 
 	if len(projectIDs) == 0 {
-		return nil, nil, notProjectsError
+		return nil, nil, models.ErrNoProjectsError
 	}
 
 	for _, id := range projectIDs {
@@ -390,7 +390,7 @@ func (i *IssueTypeScreenSchemeService) Remove(ctx context.Context, issueTypeScre
 	}
 
 	if len(issueTypeIDs) == 0 {
-		return nil, notIssueTypesError
+		return nil, models.ErrNoIssueTypesError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/issuetypescreenscheme/%v/mapping/remove", issueTypeScreenSchemeID)

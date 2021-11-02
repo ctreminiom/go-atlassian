@@ -3,6 +3,7 @@ package v3
 import (
 	"context"
 	"fmt"
+	models "github.com/ctreminiom/go-atlassian/pkg/infra/models/jira"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/url"
@@ -15,7 +16,7 @@ func TestFieldOptionContextService_Create(t *testing.T) {
 		name               string
 		fieldID            string
 		contextID          int
-		payload            *FieldContextOptionListScheme
+		payload            *models.FieldContextOptionListScheme
 		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string
@@ -27,8 +28,8 @@ func TestFieldOptionContextService_Create(t *testing.T) {
 			name:      "GetsFieldContextsWhenTheParametersAreCorrect",
 			fieldID:   "100001",
 			contextID: 01111,
-			payload: &FieldContextOptionListScheme{
-				Options: []*CustomFieldContextOptionScheme{
+			payload: &models.FieldContextOptionListScheme{
+				Options: []*models.CustomFieldContextOptionScheme{
 
 					// Single/Multiple Choice example
 					{
@@ -52,8 +53,8 @@ func TestFieldOptionContextService_Create(t *testing.T) {
 			name:      "GetsFieldContextsWhenTheContextIsNil",
 			fieldID:   "100001",
 			contextID: 01111,
-			payload: &FieldContextOptionListScheme{
-				Options: []*CustomFieldContextOptionScheme{
+			payload: &models.FieldContextOptionListScheme{
+				Options: []*models.CustomFieldContextOptionScheme{
 
 					// Single/Multiple Choice example
 					{
@@ -77,8 +78,8 @@ func TestFieldOptionContextService_Create(t *testing.T) {
 			name:      "GetsFieldContextsWhenTheFieldIDIncorrect",
 			fieldID:   "100002",
 			contextID: 01111,
-			payload: &FieldContextOptionListScheme{
-				Options: []*CustomFieldContextOptionScheme{
+			payload: &models.FieldContextOptionListScheme{
+				Options: []*models.CustomFieldContextOptionScheme{
 
 					// Single/Multiple Choice example
 					{
@@ -102,8 +103,8 @@ func TestFieldOptionContextService_Create(t *testing.T) {
 			name:      "GetsFieldContextsWhenTheContextIDIsIncorrect",
 			fieldID:   "100001",
 			contextID: 01110,
-			payload: &FieldContextOptionListScheme{
-				Options: []*CustomFieldContextOptionScheme{
+			payload: &models.FieldContextOptionListScheme{
+				Options: []*models.CustomFieldContextOptionScheme{
 
 					// Single/Multiple Choice example
 					{
@@ -127,8 +128,8 @@ func TestFieldOptionContextService_Create(t *testing.T) {
 			name:      "GetsFieldContextsWhenTheFieldIDIsEmpty",
 			fieldID:   "",
 			contextID: 01111,
-			payload: &FieldContextOptionListScheme{
-				Options: []*CustomFieldContextOptionScheme{
+			payload: &models.FieldContextOptionListScheme{
+				Options: []*models.CustomFieldContextOptionScheme{
 
 					// Single/Multiple Choice example
 					{
@@ -152,8 +153,8 @@ func TestFieldOptionContextService_Create(t *testing.T) {
 			name:      "GetsFieldContextsWhenTheEndpointIsIncorrect",
 			fieldID:   "100001",
 			contextID: 01111,
-			payload: &FieldContextOptionListScheme{
-				Options: []*CustomFieldContextOptionScheme{
+			payload: &models.FieldContextOptionListScheme{
+				Options: []*models.CustomFieldContextOptionScheme{
 
 					// Single/Multiple Choice example
 					{
@@ -190,8 +191,8 @@ func TestFieldOptionContextService_Create(t *testing.T) {
 			name:      "GetsFieldContextsWhenTheRequestMethodIsIncorrect",
 			fieldID:   "100001",
 			contextID: 01111,
-			payload: &FieldContextOptionListScheme{
-				Options: []*CustomFieldContextOptionScheme{
+			payload: &models.FieldContextOptionListScheme{
+				Options: []*models.CustomFieldContextOptionScheme{
 
 					// Single/Multiple Choice example
 					{
@@ -215,8 +216,8 @@ func TestFieldOptionContextService_Create(t *testing.T) {
 			name:      "GetsFieldContextsWhenTheStatusCodeIsIncorrect",
 			fieldID:   "100001",
 			contextID: 01111,
-			payload: &FieldContextOptionListScheme{
-				Options: []*CustomFieldContextOptionScheme{
+			payload: &models.FieldContextOptionListScheme{
+				Options: []*models.CustomFieldContextOptionScheme{
 
 					// Single/Multiple Choice example
 					{
@@ -240,8 +241,8 @@ func TestFieldOptionContextService_Create(t *testing.T) {
 			name:      "GetsFieldContextsWhenTheTheResponseBodyLengthIsZero",
 			fieldID:   "100001",
 			contextID: 01111,
-			payload: &FieldContextOptionListScheme{
-				Options: []*CustomFieldContextOptionScheme{
+			payload: &models.FieldContextOptionListScheme{
+				Options: []*models.CustomFieldContextOptionScheme{
 
 					// Single/Multiple Choice example
 					{
@@ -264,8 +265,8 @@ func TestFieldOptionContextService_Create(t *testing.T) {
 			name:      "GetsFieldContextsWhenTheResponseBodyHasADifferentFormat",
 			fieldID:   "100001",
 			contextID: 01111,
-			payload: &FieldContextOptionListScheme{
-				Options: []*CustomFieldContextOptionScheme{
+			payload: &models.FieldContextOptionListScheme{
+				Options: []*models.CustomFieldContextOptionScheme{
 
 					// Single/Multiple Choice example
 					{
@@ -748,7 +749,7 @@ func TestFieldOptionContextService_Update(t *testing.T) {
 		name               string
 		fieldID            string
 		contextID          int
-		payload            *FieldContextOptionListScheme
+		payload            *models.FieldContextOptionListScheme
 		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string
@@ -760,8 +761,8 @@ func TestFieldOptionContextService_Update(t *testing.T) {
 			name:      "UpdateFieldContextsWhenTheParametersAreCorrect",
 			fieldID:   "100001",
 			contextID: 01111,
-			payload: &FieldContextOptionListScheme{
-				Options: []*CustomFieldContextOptionScheme{
+			payload: &models.FieldContextOptionListScheme{
+				Options: []*models.CustomFieldContextOptionScheme{
 					{
 						ID:       "10064",
 						Value:    "Option 3 - Updated",
@@ -785,8 +786,8 @@ func TestFieldOptionContextService_Update(t *testing.T) {
 			name:      "UpdateFieldContextsWhenTheContextIDIsNil",
 			fieldID:   "100001",
 			contextID: 01111,
-			payload: &FieldContextOptionListScheme{
-				Options: []*CustomFieldContextOptionScheme{
+			payload: &models.FieldContextOptionListScheme{
+				Options: []*models.CustomFieldContextOptionScheme{
 					{
 						ID:       "10064",
 						Value:    "Option 3 - Updated",
@@ -810,8 +811,8 @@ func TestFieldOptionContextService_Update(t *testing.T) {
 			name:      "UpdateFieldContextsWhenTheFieldIDIncorrect",
 			fieldID:   "100002",
 			contextID: 01111,
-			payload: &FieldContextOptionListScheme{
-				Options: []*CustomFieldContextOptionScheme{
+			payload: &models.FieldContextOptionListScheme{
+				Options: []*models.CustomFieldContextOptionScheme{
 					{
 						ID:       "10064",
 						Value:    "Option 3 - Updated",
@@ -835,8 +836,8 @@ func TestFieldOptionContextService_Update(t *testing.T) {
 			name:      "UpdateFieldContextsWhenTheContextIDIsIncorrect",
 			fieldID:   "100001",
 			contextID: 01110,
-			payload: &FieldContextOptionListScheme{
-				Options: []*CustomFieldContextOptionScheme{
+			payload: &models.FieldContextOptionListScheme{
+				Options: []*models.CustomFieldContextOptionScheme{
 					{
 						ID:       "10064",
 						Value:    "Option 3 - Updated",
@@ -860,8 +861,8 @@ func TestFieldOptionContextService_Update(t *testing.T) {
 			name:      "UpdateFieldContextsWhenTheFieldIDIsEmpty",
 			fieldID:   "",
 			contextID: 01111,
-			payload: &FieldContextOptionListScheme{
-				Options: []*CustomFieldContextOptionScheme{
+			payload: &models.FieldContextOptionListScheme{
+				Options: []*models.CustomFieldContextOptionScheme{
 					{
 						ID:       "10064",
 						Value:    "Option 3 - Updated",
@@ -885,8 +886,8 @@ func TestFieldOptionContextService_Update(t *testing.T) {
 			name:      "UpdateFieldContextsWhenTheEndpointIsIncorrect",
 			fieldID:   "100001",
 			contextID: 01111,
-			payload: &FieldContextOptionListScheme{
-				Options: []*CustomFieldContextOptionScheme{
+			payload: &models.FieldContextOptionListScheme{
+				Options: []*models.CustomFieldContextOptionScheme{
 					{
 						ID:       "10064",
 						Value:    "Option 3 - Updated",
@@ -923,8 +924,8 @@ func TestFieldOptionContextService_Update(t *testing.T) {
 			name:      "UpdateFieldContextsWhenTheRequestMethodIsIncorrect",
 			fieldID:   "100001",
 			contextID: 01111,
-			payload: &FieldContextOptionListScheme{
-				Options: []*CustomFieldContextOptionScheme{
+			payload: &models.FieldContextOptionListScheme{
+				Options: []*models.CustomFieldContextOptionScheme{
 					{
 						ID:       "10064",
 						Value:    "Option 3 - Updated",
@@ -948,8 +949,8 @@ func TestFieldOptionContextService_Update(t *testing.T) {
 			name:      "UpdateFieldContextsWhenTheStatusCodeIsIncorrect",
 			fieldID:   "100001",
 			contextID: 01111,
-			payload: &FieldContextOptionListScheme{
-				Options: []*CustomFieldContextOptionScheme{
+			payload: &models.FieldContextOptionListScheme{
+				Options: []*models.CustomFieldContextOptionScheme{
 					{
 						ID:       "10064",
 						Value:    "Option 3 - Updated",
@@ -973,8 +974,8 @@ func TestFieldOptionContextService_Update(t *testing.T) {
 			name:      "UpdateFieldContextsWhenTheTheResponseBodyLengthIsZero",
 			fieldID:   "100001",
 			contextID: 01111,
-			payload: &FieldContextOptionListScheme{
-				Options: []*CustomFieldContextOptionScheme{
+			payload: &models.FieldContextOptionListScheme{
+				Options: []*models.CustomFieldContextOptionScheme{
 					{
 						ID:       "10064",
 						Value:    "Option 3 - Updated",
@@ -997,8 +998,8 @@ func TestFieldOptionContextService_Update(t *testing.T) {
 			name:      "UpdateFieldContextsWhenTheTheResponseBodyHasADifferentFormat",
 			fieldID:   "100001",
 			contextID: 01111,
-			payload: &FieldContextOptionListScheme{
-				Options: []*CustomFieldContextOptionScheme{
+			payload: &models.FieldContextOptionListScheme{
+				Options: []*models.CustomFieldContextOptionScheme{
 					{
 						ID:       "10064",
 						Value:    "Option 3 - Updated",

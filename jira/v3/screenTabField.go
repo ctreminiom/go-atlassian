@@ -3,6 +3,7 @@ package v3
 import (
 	"context"
 	"fmt"
+	models "github.com/ctreminiom/go-atlassian/pkg/infra/models/jira"
 	"net/http"
 )
 
@@ -43,7 +44,7 @@ func (s *ScreenTabFieldService) Add(ctx context.Context, screenID, tabID int, fi
 	response *ResponseScheme, err error) {
 
 	if len(fieldID) == 0 {
-		return nil, nil, notFieldIDError
+		return nil, nil, models.ErrNoFieldIDError
 	}
 
 	payload := struct {
@@ -78,7 +79,7 @@ func (s *ScreenTabFieldService) Remove(ctx context.Context, screenID, tabID int,
 	response *ResponseScheme, err error) {
 
 	if len(fieldID) == 0 {
-		return nil, notFieldIDError
+		return nil, models.ErrNoFieldIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/screens/%v/tabs/%v/fields/%v", screenID, tabID, fieldID)

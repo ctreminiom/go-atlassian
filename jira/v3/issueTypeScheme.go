@@ -332,7 +332,7 @@ func (i *IssueTypeSchemeService) Delete(ctx context.Context, issueTypeSchemeID i
 func (i *IssueTypeSchemeService) Append(ctx context.Context, issueTypeSchemeID int, issueTypeIDs []int) (response *ResponseScheme, err error) {
 
 	if len(issueTypeIDs) == 0 {
-		return nil, notIssueTypesError
+		return nil, models.ErrNoIssueTypesError
 	}
 
 	var issueTypesIDsAsStringSlice []string

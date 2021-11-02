@@ -3,6 +3,7 @@ package v3
 import (
 	"context"
 	"fmt"
+	models "github.com/ctreminiom/go-atlassian/pkg/infra/models/jira"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/url"
@@ -14,7 +15,7 @@ func TestFieldContextService_Create(t *testing.T) {
 	testCases := []struct {
 		name               string
 		fieldID            string
-		payload            *FieldContextPayloadScheme
+		payload            *models.FieldContextPayloadScheme
 		wantHTTPMethod     string
 		mockFile           string
 		endpoint           string
@@ -25,7 +26,7 @@ func TestFieldContextService_Create(t *testing.T) {
 		{
 			name:    "CreateFieldContextsWhenTheParametersAreCorrect",
 			fieldID: "100",
-			payload: &FieldContextPayloadScheme{
+			payload: &models.FieldContextPayloadScheme{
 				IssueTypeIDs: []int{10010},
 				ProjectIDs:   nil,
 				Name:         "Bug fields context",
@@ -42,7 +43,7 @@ func TestFieldContextService_Create(t *testing.T) {
 		{
 			name:    "CreateFieldContextsWhenTheFieldIsInEmpty",
 			fieldID: "",
-			payload: &FieldContextPayloadScheme{
+			payload: &models.FieldContextPayloadScheme{
 				IssueTypeIDs: []int{10010},
 				ProjectIDs:   nil,
 				Name:         "Bug fields context",
@@ -71,7 +72,7 @@ func TestFieldContextService_Create(t *testing.T) {
 		{
 			name:    "CreateFieldContextsWhenTheFieldIDIsIncorrect",
 			fieldID: "1001",
-			payload: &FieldContextPayloadScheme{
+			payload: &models.FieldContextPayloadScheme{
 				IssueTypeIDs: []int{10010},
 				ProjectIDs:   nil,
 				Name:         "Bug fields context",
@@ -88,7 +89,7 @@ func TestFieldContextService_Create(t *testing.T) {
 		{
 			name:    "CreateFieldContextsWhenTheFieldIDIsEmpty",
 			fieldID: "",
-			payload: &FieldContextPayloadScheme{
+			payload: &models.FieldContextPayloadScheme{
 				IssueTypeIDs: []int{10010},
 				ProjectIDs:   nil,
 				Name:         "Bug fields context",
@@ -105,7 +106,7 @@ func TestFieldContextService_Create(t *testing.T) {
 		{
 			name:    "CreateFieldContextsWhenTheContextIsNil",
 			fieldID: "100",
-			payload: &FieldContextPayloadScheme{
+			payload: &models.FieldContextPayloadScheme{
 				IssueTypeIDs: []int{10010},
 				ProjectIDs:   nil,
 				Name:         "Bug fields context",
@@ -122,7 +123,7 @@ func TestFieldContextService_Create(t *testing.T) {
 		{
 			name:    "CreateFieldContextsWhenTheProjectIDIsSet",
 			fieldID: "100",
-			payload: &FieldContextPayloadScheme{
+			payload: &models.FieldContextPayloadScheme{
 				IssueTypeIDs: []int{10010},
 				ProjectIDs:   []int{111111},
 				Name:         "Bug fields context",
@@ -139,7 +140,7 @@ func TestFieldContextService_Create(t *testing.T) {
 		{
 			name:    "CreateFieldContextsWhenTheRequestMethodIsIncorrect",
 			fieldID: "100",
-			payload: &FieldContextPayloadScheme{
+			payload: &models.FieldContextPayloadScheme{
 				IssueTypeIDs: []int{10010},
 				ProjectIDs:   nil,
 				Name:         "Bug fields context",
@@ -156,7 +157,7 @@ func TestFieldContextService_Create(t *testing.T) {
 		{
 			name:    "CreateFieldContextsWhenTheStatusCodeIsIncorrect",
 			fieldID: "100",
-			payload: &FieldContextPayloadScheme{
+			payload: &models.FieldContextPayloadScheme{
 				IssueTypeIDs: []int{10010},
 				ProjectIDs:   nil,
 				Name:         "Bug fields context",
@@ -173,7 +174,7 @@ func TestFieldContextService_Create(t *testing.T) {
 		{
 			name:    "CreateFieldContextsWhenTheResponseBodyHasADifferentFormat",
 			fieldID: "100",
-			payload: &FieldContextPayloadScheme{
+			payload: &models.FieldContextPayloadScheme{
 				IssueTypeIDs: []int{10010},
 				ProjectIDs:   nil,
 				Name:         "Bug fields context",
@@ -190,7 +191,7 @@ func TestFieldContextService_Create(t *testing.T) {
 		{
 			name:    "CreateFieldContextsWhenTheResponseBodyLengthIsZero",
 			fieldID: "100",
-			payload: &FieldContextPayloadScheme{
+			payload: &models.FieldContextPayloadScheme{
 				IssueTypeIDs: []int{10010},
 				ProjectIDs:   nil,
 				Name:         "Bug fields context",
@@ -277,7 +278,7 @@ func TestFieldContextService_Gets(t *testing.T) {
 	testCases := []struct {
 		name               string
 		fieldID            string
-		opts               *FieldContextOptionsScheme
+		opts               *models.FieldContextOptionsScheme
 		startAt            int
 		maxResult          int
 		mockFile           string
@@ -289,7 +290,7 @@ func TestFieldContextService_Gets(t *testing.T) {
 	}{
 		{
 			name: "GetsFieldContextsWhenTheParametersAreCorrect",
-			opts: &FieldContextOptionsScheme{
+			opts: &models.FieldContextOptionsScheme{
 				IsAnyIssueType:  true,
 				IsGlobalContext: true,
 				ContextID:       []int{10000},
@@ -307,7 +308,7 @@ func TestFieldContextService_Gets(t *testing.T) {
 
 		{
 			name: "GetsFieldContextsWhenTheFieldIDIsEmpty",
-			opts: &FieldContextOptionsScheme{
+			opts: &models.FieldContextOptionsScheme{
 				IsAnyIssueType:  true,
 				IsGlobalContext: true,
 				ContextID:       []int{10000},
@@ -325,7 +326,7 @@ func TestFieldContextService_Gets(t *testing.T) {
 
 		{
 			name: "GetsFieldContextsWhenTheParametersAreIncorrect",
-			opts: &FieldContextOptionsScheme{
+			opts: &models.FieldContextOptionsScheme{
 				IsAnyIssueType:  true,
 				IsGlobalContext: false,
 				ContextID:       []int{10000},
@@ -342,7 +343,7 @@ func TestFieldContextService_Gets(t *testing.T) {
 		},
 		{
 			name: "GetsFieldContextsWhenTheEndpointIsIncorrect",
-			opts: &FieldContextOptionsScheme{
+			opts: &models.FieldContextOptionsScheme{
 				IsAnyIssueType:  true,
 				IsGlobalContext: true,
 				ContextID:       []int{10000},
@@ -372,7 +373,7 @@ func TestFieldContextService_Gets(t *testing.T) {
 		},
 		{
 			name: "GetsFieldContextsWhenTheFieldIDIsIncorrect",
-			opts: &FieldContextOptionsScheme{
+			opts: &models.FieldContextOptionsScheme{
 				IsAnyIssueType:  true,
 				IsGlobalContext: true,
 				ContextID:       []int{10000},
@@ -389,7 +390,7 @@ func TestFieldContextService_Gets(t *testing.T) {
 		},
 		{
 			name: "GetsFieldContextsWhenTheContextIsNil",
-			opts: &FieldContextOptionsScheme{
+			opts: &models.FieldContextOptionsScheme{
 				IsAnyIssueType:  true,
 				IsGlobalContext: true,
 				ContextID:       []int{10000},
@@ -407,7 +408,7 @@ func TestFieldContextService_Gets(t *testing.T) {
 
 		{
 			name: "GetsFieldContextsWhenTheRequestMethodIsIncorrect",
-			opts: &FieldContextOptionsScheme{
+			opts: &models.FieldContextOptionsScheme{
 				IsAnyIssueType:  true,
 				IsGlobalContext: true,
 				ContextID:       []int{10000},
@@ -425,7 +426,7 @@ func TestFieldContextService_Gets(t *testing.T) {
 
 		{
 			name: "GetsFieldContextsWhenTheStatusCodeIsIncorrect",
-			opts: &FieldContextOptionsScheme{
+			opts: &models.FieldContextOptionsScheme{
 				IsAnyIssueType:  true,
 				IsGlobalContext: true,
 				ContextID:       []int{10000},
@@ -443,7 +444,7 @@ func TestFieldContextService_Gets(t *testing.T) {
 
 		{
 			name: "GetsFieldContextsWhenTheResponseBodyHasADifferentFormat",
-			opts: &FieldContextOptionsScheme{
+			opts: &models.FieldContextOptionsScheme{
 				IsAnyIssueType:  true,
 				IsGlobalContext: true,
 				ContextID:       []int{10000},
@@ -461,7 +462,7 @@ func TestFieldContextService_Gets(t *testing.T) {
 
 		{
 			name: "GetsFieldContextsWhenTheResponseBodyLengthIsZero",
-			opts: &FieldContextOptionsScheme{
+			opts: &models.FieldContextOptionsScheme{
 				IsAnyIssueType:  true,
 				IsGlobalContext: true,
 				ContextID:       []int{10000},
@@ -1801,8 +1802,8 @@ func TestFieldContextService_RemoveIssueTypes(t *testing.T) {
 
 func TestFieldContextService_SetDefaultValue(t *testing.T) {
 
-	var defaultValuesMockedWithValues = &FieldContextDefaultPayloadScheme{
-		DefaultValues: []*CustomFieldDefaultValueScheme{
+	var defaultValuesMockedWithValues = &models.FieldContextDefaultPayloadScheme{
+		DefaultValues: []*models.CustomFieldDefaultValueScheme{
 			{
 				ContextID: "10138",
 				OptionID:  "10022",
@@ -1811,12 +1812,12 @@ func TestFieldContextService_SetDefaultValue(t *testing.T) {
 		},
 	}
 
-	var defaultValuesMockedWithNotValues = &FieldContextDefaultPayloadScheme{}
+	var defaultValuesMockedWithNotValues = &models.FieldContextDefaultPayloadScheme{}
 
 	testCases := []struct {
 		name               string
 		fieldID            string
-		payload            *FieldContextDefaultPayloadScheme
+		payload            *models.FieldContextDefaultPayloadScheme
 		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string

@@ -47,7 +47,7 @@ func (s *ScreenService) Fields(ctx context.Context, fieldID string, startAt, max
 	response *ResponseScheme, err error) {
 
 	if len(fieldID) == 0 {
-		return nil, nil, notFieldIDError
+		return nil, nil, models.ErrNoFieldIDError
 	}
 
 	params := url.Values{}
@@ -154,7 +154,7 @@ func (s *ScreenService) Create(ctx context.Context, name, description string) (r
 func (s *ScreenService) AddToDefault(ctx context.Context, fieldID string) (response *ResponseScheme, err error) {
 
 	if len(fieldID) == 0 {
-		return nil, notFieldIDError
+		return nil, models.ErrNoFieldIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/screens/addToDefault/%v", fieldID)

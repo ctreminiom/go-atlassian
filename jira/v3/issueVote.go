@@ -3,26 +3,20 @@ package v3
 import (
 	"context"
 	"fmt"
+	models "github.com/ctreminiom/go-atlassian/pkg/infra/models/jira"
 	"net/http"
 )
 
 type VoteService struct{ client *Client }
 
-type IssueVoteScheme struct {
-	Self     string        `json:"self,omitempty"`
-	Votes    int           `json:"votes,omitempty"`
-	HasVoted bool          `json:"hasVoted,omitempty"`
-	Voters   []*UserScheme `json:"voters,omitempty"`
-}
-
 // Gets returns details about the votes on an issue.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/vote#get-votes
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-votes/#api-rest-api-3-issue-issueidorkey-votes-get
-func (v *VoteService) Gets(ctx context.Context, issueKeyOrID string) (result *IssueVoteScheme, response *ResponseScheme,
+func (v *VoteService) Gets(ctx context.Context, issueKeyOrID string) (result *models.IssueVoteScheme, response *ResponseScheme,
 	err error) {
 
 	if len(issueKeyOrID) == 0 {
-		return nil, nil, notIssueKeyOrIDError
+		return nil, nil, models.ErrNoIssueKeyOrIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/issue/%v/votes", issueKeyOrID)
@@ -48,7 +42,7 @@ func (v *VoteService) Gets(ctx context.Context, issueKeyOrID string) (result *Is
 func (v *VoteService) Add(ctx context.Context, issueKeyOrID string) (response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {
-		return nil, notIssueKeyOrIDError
+		return nil, models.ErrNoIssueKeyOrIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/issue/%v/votes", issueKeyOrID)
@@ -74,7 +68,7 @@ func (v *VoteService) Add(ctx context.Context, issueKeyOrID string) (response *R
 func (v *VoteService) Delete(ctx context.Context, issueKeyOrID string) (response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {
-		return nil, notIssueKeyOrIDError
+		return nil, models.ErrNoIssueKeyOrIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/issue/%v/votes", issueKeyOrID)

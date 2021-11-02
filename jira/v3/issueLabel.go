@@ -3,6 +3,7 @@ package v3
 import (
 	"context"
 	"fmt"
+	models "github.com/ctreminiom/go-atlassian/pkg/infra/models/jira"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -10,18 +11,10 @@ import (
 
 type LabelService struct{ client *Client }
 
-type IssueLabelsScheme struct {
-	MaxResults int      `json:"maxResults"`
-	StartAt    int      `json:"startAt"`
-	Total      int      `json:"total"`
-	IsLast     bool     `json:"isLast"`
-	Values     []string `json:"values"`
-}
-
 // Gets returns a paginated list of labels.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/labels#get-all-labels
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-labels/#api-rest-api-3-label-get
-func (l *LabelService) Gets(ctx context.Context, startAt, maxResults int) (result *IssueLabelsScheme,
+func (l *LabelService) Gets(ctx context.Context, startAt, maxResults int) (result *models.IssueLabelsScheme,
 	response *ResponseScheme, err error) {
 
 	params := url.Values{}

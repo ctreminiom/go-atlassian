@@ -3,6 +3,7 @@ package v3
 import (
 	"context"
 	"fmt"
+	models "github.com/ctreminiom/go-atlassian/pkg/infra/models/jira"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/url"
@@ -328,7 +329,7 @@ func TestIssueWorklogService_Add(t *testing.T) {
 		name               string
 		ctx                context.Context
 		issueKeyOrID       string
-		options            *WorklogOptionsScheme
+		options            *models.WorklogOptionsScheme
 		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string
@@ -340,14 +341,14 @@ func TestIssueWorklogService_Add(t *testing.T) {
 			ctx:          context.Background(),
 			issueKeyOrID: "KP-1",
 			mockFile:     "./mocks/get-issue-worklog.json",
-			options: &WorklogOptionsScheme{
+			options: &models.WorklogOptionsScheme{
 				Notify:               false,
 				AdjustEstimate:       "auto",
 				ReduceBy:             "3h",
 				OverrideEditableFlag: true,
 				NewEstimate:          "3h",
 				Expand:               []string{"expand", "properties"},
-				Payload: &WorklogPayloadScheme{
+				Payload: &models.WorklogPayloadScheme{
 					/*
 						Visibility:       &jira.IssueWorklogVisibilityScheme{
 							Type:  "group",
@@ -369,13 +370,13 @@ func TestIssueWorklogService_Add(t *testing.T) {
 			ctx:          context.Background(),
 			issueKeyOrID: "",
 			mockFile:     "./mocks/get-issue-worklog.json",
-			options: &WorklogOptionsScheme{
+			options: &models.WorklogOptionsScheme{
 				Notify:         true,
 				AdjustEstimate: "auto",
 				ReduceBy:       "3h",
 				//OverrideEditableFlag: true,
 				Expand: []string{"expand", "properties"},
-				Payload: &WorklogPayloadScheme{
+				Payload: &models.WorklogPayloadScheme{
 					/*
 						Visibility:       &jira.IssueWorklogVisibilityScheme{
 							Type:  "group",
@@ -397,13 +398,13 @@ func TestIssueWorklogService_Add(t *testing.T) {
 			ctx:          nil,
 			issueKeyOrID: "KP-1",
 			mockFile:     "./mocks/get-issue-worklog.json",
-			options: &WorklogOptionsScheme{
+			options: &models.WorklogOptionsScheme{
 				Notify:         true,
 				AdjustEstimate: "auto",
 				ReduceBy:       "3h",
 				//OverrideEditableFlag: true,
 				Expand: []string{"expand", "properties"},
-				Payload: &WorklogPayloadScheme{
+				Payload: &models.WorklogPayloadScheme{
 					/*
 						Visibility:       &jira.IssueWorklogVisibilityScheme{
 							Type:  "group",
@@ -425,7 +426,7 @@ func TestIssueWorklogService_Add(t *testing.T) {
 			ctx:          context.Background(),
 			issueKeyOrID: "KP-1",
 			mockFile:     "./mocks/get-issue-worklog.json",
-			options: &WorklogOptionsScheme{
+			options: &models.WorklogOptionsScheme{
 				Notify:         true,
 				AdjustEstimate: "auto",
 				ReduceBy:       "3h",
@@ -440,29 +441,17 @@ func TestIssueWorklogService_Add(t *testing.T) {
 		},
 
 		{
-			name:               "AddIssueWorklogWhenTheOptionsIsNotProvided",
-			ctx:                context.Background(),
-			issueKeyOrID:       "KP-1",
-			mockFile:           "./mocks/get-issue-worklog.json",
-			options:            nil,
-			wantHTTPMethod:     http.MethodPost,
-			endpoint:           "/rest/api/3/issue/KP-1/worklog?adjustEstimate=auto&expand=expand%2Cproperties&reduceBy=3h",
-			wantHTTPCodeReturn: http.StatusOK,
-			wantErr:            true,
-		},
-
-		{
 			name:         "AddIssueWorklogWhenTheRequestMethodIsIncorrect",
 			ctx:          context.Background(),
 			issueKeyOrID: "KP-1",
 			mockFile:     "./mocks/get-issue-worklog.json",
-			options: &WorklogOptionsScheme{
+			options: &models.WorklogOptionsScheme{
 				Notify:         true,
 				AdjustEstimate: "auto",
 				ReduceBy:       "3h",
 				//OverrideEditableFlag: true,
 				Expand: []string{"expand", "properties"},
-				Payload: &WorklogPayloadScheme{
+				Payload: &models.WorklogPayloadScheme{
 					/*
 						Visibility:       &jira.IssueWorklogVisibilityScheme{
 							Type:  "group",
@@ -484,13 +473,13 @@ func TestIssueWorklogService_Add(t *testing.T) {
 			ctx:          context.Background(),
 			issueKeyOrID: "KP-1",
 			mockFile:     "./mocks/get-issue-worklog.json",
-			options: &WorklogOptionsScheme{
+			options: &models.WorklogOptionsScheme{
 				Notify:         true,
 				AdjustEstimate: "auto",
 				ReduceBy:       "3h",
 				//OverrideEditableFlag: true,
 				Expand: []string{"expand", "properties"},
-				Payload: &WorklogPayloadScheme{
+				Payload: &models.WorklogPayloadScheme{
 					/*
 						Visibility:       &jira.IssueWorklogVisibilityScheme{
 							Type:  "group",
@@ -579,7 +568,7 @@ func TestIssueWorklogService_Update(t *testing.T) {
 		ctx                context.Context
 		issueKeyOrID       string
 		worklogID          string
-		options            *WorklogOptionsScheme
+		options            *models.WorklogOptionsScheme
 		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string
@@ -592,14 +581,14 @@ func TestIssueWorklogService_Update(t *testing.T) {
 			issueKeyOrID: "KP-1",
 			worklogID:    "10000",
 			mockFile:     "./mocks/get-issue-worklog.json",
-			options: &WorklogOptionsScheme{
+			options: &models.WorklogOptionsScheme{
 				Notify:               false,
 				AdjustEstimate:       "auto",
 				ReduceBy:             "3h",
 				OverrideEditableFlag: true,
 				NewEstimate:          "3h",
 				Expand:               []string{"expand", "properties"},
-				Payload: &WorklogPayloadScheme{
+				Payload: &models.WorklogPayloadScheme{
 					/*
 						Visibility:       &jira.IssueWorklogVisibilityScheme{
 							Type:  "group",
@@ -622,14 +611,14 @@ func TestIssueWorklogService_Update(t *testing.T) {
 			issueKeyOrID: "KP-1",
 			worklogID:    "10000",
 			mockFile:     "./mocks/get-issue-worklog.json",
-			options: &WorklogOptionsScheme{
+			options: &models.WorklogOptionsScheme{
 				Notify:               false,
 				AdjustEstimate:       "auto",
 				ReduceBy:             "3h",
 				OverrideEditableFlag: true,
 				NewEstimate:          "3h",
 				Expand:               []string{"expand", "properties"},
-				Payload: &WorklogPayloadScheme{
+				Payload: &models.WorklogPayloadScheme{
 					/*
 						Visibility:       &jira.IssueWorklogVisibilityScheme{
 							Type:  "group",
@@ -652,14 +641,14 @@ func TestIssueWorklogService_Update(t *testing.T) {
 			issueKeyOrID: "",
 			worklogID:    "10000",
 			mockFile:     "./mocks/get-issue-worklog.json",
-			options: &WorklogOptionsScheme{
+			options: &models.WorklogOptionsScheme{
 				Notify:               false,
 				AdjustEstimate:       "auto",
 				ReduceBy:             "3h",
 				OverrideEditableFlag: true,
 				NewEstimate:          "3h",
 				Expand:               []string{"expand", "properties"},
-				Payload: &WorklogPayloadScheme{
+				Payload: &models.WorklogPayloadScheme{
 					/*
 						Visibility:       &jira.IssueWorklogVisibilityScheme{
 							Type:  "group",
@@ -682,14 +671,14 @@ func TestIssueWorklogService_Update(t *testing.T) {
 			issueKeyOrID: "KP-1",
 			worklogID:    "",
 			mockFile:     "./mocks/get-issue-worklog.json",
-			options: &WorklogOptionsScheme{
+			options: &models.WorklogOptionsScheme{
 				Notify:               false,
 				AdjustEstimate:       "auto",
 				ReduceBy:             "3h",
 				OverrideEditableFlag: true,
 				NewEstimate:          "3h",
 				Expand:               []string{"expand", "properties"},
-				Payload: &WorklogPayloadScheme{
+				Payload: &models.WorklogPayloadScheme{
 					/*
 						Visibility:       &jira.IssueWorklogVisibilityScheme{
 							Type:  "group",
@@ -707,25 +696,12 @@ func TestIssueWorklogService_Update(t *testing.T) {
 		},
 
 		{
-			name:               "UpdateIssueWorklogWhenTheOptionsAreNotProvided",
-			ctx:                context.Background(),
-			issueKeyOrID:       "KP-1",
-			worklogID:          "10000",
-			mockFile:           "./mocks/get-issue-worklog.json",
-			options:            nil,
-			wantHTTPMethod:     http.MethodPut,
-			endpoint:           "/rest/api/3/issue/KP-1/worklog/10000?adjustEstimate=auto&expand=expand%2Cproperties&newEstimate=3h&notifyUsers=false&overrideEditableFlag=true&reduceBy=3h",
-			wantHTTPCodeReturn: http.StatusOK,
-			wantErr:            true,
-		},
-
-		{
 			name:         "UpdateIssueWorklogWhenThePayloadIsNotProvided",
 			ctx:          context.Background(),
 			issueKeyOrID: "KP-1",
 			worklogID:    "10000",
 			mockFile:     "./mocks/get-issue-worklog.json",
-			options: &WorklogOptionsScheme{
+			options: &models.WorklogOptionsScheme{
 				Notify:               false,
 				AdjustEstimate:       "auto",
 				ReduceBy:             "3h",
@@ -746,14 +722,14 @@ func TestIssueWorklogService_Update(t *testing.T) {
 			issueKeyOrID: "KP-1",
 			worklogID:    "10000",
 			mockFile:     "./mocks/get-issue-worklog.json",
-			options: &WorklogOptionsScheme{
+			options: &models.WorklogOptionsScheme{
 				Notify:               false,
 				AdjustEstimate:       "auto",
 				ReduceBy:             "3h",
 				OverrideEditableFlag: true,
 				NewEstimate:          "3h",
 				Expand:               []string{"expand", "properties"},
-				Payload: &WorklogPayloadScheme{
+				Payload: &models.WorklogPayloadScheme{
 					/*
 						Visibility:       &jira.IssueWorklogVisibilityScheme{
 							Type:  "group",
@@ -776,14 +752,14 @@ func TestIssueWorklogService_Update(t *testing.T) {
 			issueKeyOrID: "KP-1",
 			worklogID:    "10000",
 			mockFile:     "./mocks/get-issue-worklog.json",
-			options: &WorklogOptionsScheme{
+			options: &models.WorklogOptionsScheme{
 				Notify:               false,
 				AdjustEstimate:       "auto",
 				ReduceBy:             "3h",
 				OverrideEditableFlag: true,
 				NewEstimate:          "3h",
 				Expand:               []string{"expand", "properties"},
-				Payload: &WorklogPayloadScheme{
+				Payload: &models.WorklogPayloadScheme{
 					/*
 						Visibility:       &jira.IssueWorklogVisibilityScheme{
 							Type:  "group",
@@ -872,7 +848,7 @@ func TestIssueWorklogService_Delete(t *testing.T) {
 		ctx                context.Context
 		issueKeyOrID       string
 		worklogID          string
-		options            *WorklogOptionsScheme
+		options            *models.WorklogOptionsScheme
 		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string
@@ -885,14 +861,14 @@ func TestIssueWorklogService_Delete(t *testing.T) {
 			issueKeyOrID: "KP-1",
 			worklogID:    "10000",
 			mockFile:     "./mocks/get-issue-worklog.json",
-			options: &WorklogOptionsScheme{
+			options: &models.WorklogOptionsScheme{
 				Notify:               false,
 				AdjustEstimate:       "auto",
 				ReduceBy:             "3h",
 				OverrideEditableFlag: true,
 				NewEstimate:          "3h",
 				Expand:               []string{"expand", "properties"},
-				Payload: &WorklogPayloadScheme{
+				Payload: &models.WorklogPayloadScheme{
 					/*
 						Visibility:       &jira.IssueWorklogVisibilityScheme{
 							Type:  "group",
@@ -915,14 +891,14 @@ func TestIssueWorklogService_Delete(t *testing.T) {
 			issueKeyOrID: "KP-1",
 			worklogID:    "10000",
 			mockFile:     "./mocks/get-issue-worklog.json",
-			options: &WorklogOptionsScheme{
+			options: &models.WorklogOptionsScheme{
 				Notify:               false,
 				AdjustEstimate:       "auto",
 				ReduceBy:             "3h",
 				OverrideEditableFlag: true,
 				NewEstimate:          "3h",
 				Expand:               []string{"expand", "properties"},
-				Payload: &WorklogPayloadScheme{
+				Payload: &models.WorklogPayloadScheme{
 					/*
 						Visibility:       &jira.IssueWorklogVisibilityScheme{
 							Type:  "group",
@@ -945,14 +921,14 @@ func TestIssueWorklogService_Delete(t *testing.T) {
 			issueKeyOrID: "",
 			worklogID:    "10000",
 			mockFile:     "./mocks/get-issue-worklog.json",
-			options: &WorklogOptionsScheme{
+			options: &models.WorklogOptionsScheme{
 				Notify:               false,
 				AdjustEstimate:       "auto",
 				ReduceBy:             "3h",
 				OverrideEditableFlag: true,
 				NewEstimate:          "3h",
 				Expand:               []string{"expand", "properties"},
-				Payload: &WorklogPayloadScheme{
+				Payload: &models.WorklogPayloadScheme{
 					/*
 						Visibility:       &jira.IssueWorklogVisibilityScheme{
 							Type:  "group",
@@ -975,14 +951,14 @@ func TestIssueWorklogService_Delete(t *testing.T) {
 			issueKeyOrID: "KP-1",
 			worklogID:    "",
 			mockFile:     "./mocks/get-issue-worklog.json",
-			options: &WorklogOptionsScheme{
+			options: &models.WorklogOptionsScheme{
 				Notify:               false,
 				AdjustEstimate:       "auto",
 				ReduceBy:             "3h",
 				OverrideEditableFlag: true,
 				NewEstimate:          "3h",
 				Expand:               []string{"expand", "properties"},
-				Payload: &WorklogPayloadScheme{
+				Payload: &models.WorklogPayloadScheme{
 					/*
 						Visibility:       &jira.IssueWorklogVisibilityScheme{
 							Type:  "group",
@@ -1018,7 +994,7 @@ func TestIssueWorklogService_Delete(t *testing.T) {
 			issueKeyOrID: "KP-1",
 			worklogID:    "10000",
 			mockFile:     "./mocks/get-issue-worklog.json",
-			options: &WorklogOptionsScheme{
+			options: &models.WorklogOptionsScheme{
 				Notify:               false,
 				AdjustEstimate:       "auto",
 				ReduceBy:             "3h",
@@ -1038,14 +1014,14 @@ func TestIssueWorklogService_Delete(t *testing.T) {
 			issueKeyOrID: "KP-1",
 			worklogID:    "10000",
 			mockFile:     "./mocks/get-issue-worklog.json",
-			options: &WorklogOptionsScheme{
+			options: &models.WorklogOptionsScheme{
 				Notify:               false,
 				AdjustEstimate:       "auto",
 				ReduceBy:             "3h",
 				OverrideEditableFlag: true,
 				NewEstimate:          "3h",
 				Expand:               []string{"expand", "properties"},
-				Payload: &WorklogPayloadScheme{
+				Payload: &models.WorklogPayloadScheme{
 					/*
 						Visibility:       &jira.IssueWorklogVisibilityScheme{
 							Type:  "group",

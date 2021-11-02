@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/ctreminiom/go-atlassian/jira/agile"
 	"github.com/ctreminiom/go-atlassian/jira/v3"
+	models "github.com/ctreminiom/go-atlassian/pkg/infra/models/jira"
 	"log"
 	"os"
 )
@@ -55,7 +56,7 @@ func main() {
 	}
 
 	//If you want to extract the field metadata
-	var searchPage v3.IssueSearchScheme
+	var searchPage models.IssueSearchScheme
 	if err = json.Unmarshal(response.Bytes.Bytes(), &searchPage); err != nil {
 		log.Fatal(err)
 	}

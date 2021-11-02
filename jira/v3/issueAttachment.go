@@ -10,8 +10,6 @@ import (
 	"net/http"
 )
 
-var notIssueKeyOrIDError error
-
 type AttachmentService struct{ client *Client }
 
 // Settings returns the attachment settings, that is, whether attachments are enabled and the maximum attachment size allowed.

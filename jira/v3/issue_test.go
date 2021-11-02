@@ -742,9 +742,7 @@ func TestIssueScheme_MergeCustomFields(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	var customFieldMockedWithOutFields = models.CustomFields{
-		nil,
-	}
+	var customFieldMockedWithOutFields = models.CustomFields{}
 
 	testCases := []struct {
 		name         string

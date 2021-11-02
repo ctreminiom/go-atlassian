@@ -13,17 +13,16 @@ import (
 type IssueWorklogService struct{ client *Client }
 
 // Get returns a worklog.
-// Docs: N/A
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-worklogs/#api-rest-api-3-issue-issueidorkey-worklog-id-get
-func (w *IssueWorklogService) Get(ctx context.Context, issueKeyOrID, worklogID string, expand []string) (result *IssueWorklogScheme,
+func (w *IssueWorklogService) Get(ctx context.Context, issueKeyOrID, worklogID string, expand []string) (result *models.IssueWorklogScheme,
 	response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {
-		return nil, nil, notIssueKeyOrIDError
+		return nil, nil, models.ErrNoIssueKeyOrIDError
 	}
 
 	if len(worklogID) == 0 {
-		return nil, nil, notWorklogIDError
+		return nil, nil, models.ErrNoWorklogIDError
 	}
 
 	params := url.Values{}
@@ -55,13 +54,12 @@ func (w *IssueWorklogService) Get(ctx context.Context, issueKeyOrID, worklogID s
 
 // Issue returns worklogs for an issue, starting from the oldest worklog or from the worklog started
 // on or after a date and time.
-// Docs: N/A
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-worklogs/#api-rest-api-3-issue-issueidorkey-worklog-get
 func (w *IssueWorklogService) Issue(ctx context.Context, issueKeyOrID string, startAt, maxResults, after int,
-	expand []string) (result *IssueWorklogPageScheme, response *ResponseScheme, err error) {
+	expand []string) (result *models.IssueWorklogPageScheme, response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {
-		return nil, nil, notIssueKeyOrIDError
+		return nil, nil, models.ErrNoIssueKeyOrIDError
 	}
 
 	params := url.Values{}
@@ -93,40 +91,17 @@ func (w *IssueWorklogService) Issue(ctx context.Context, issueKeyOrID string, st
 	return
 }
 
-type WorklogOptionsScheme struct {
-	Notify               bool
-	AdjustEstimate       string
-	NewEstimate          string
-	ReduceBy             string
-	OverrideEditableFlag bool
-	Expand               []string
-	Payload              *WorklogPayloadScheme
-}
-
-type WorklogPayloadScheme struct {
-	Comment          *models.CommentNodeScheme     `json:"comment,omitempty"`
-	Visibility       *IssueWorklogVisibilityScheme `json:"visibility,omitempty"`
-	Started          string                        `json:"started,omitempty"`
-	TimeSpent        string                        `json:"timeSpent,omitempty"`
-	TimeSpentSeconds int                           `json:"timeSpentSeconds,omitempty"`
-}
-
 // Add adds a worklog to an issue.
 // Docs: N/A
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-worklogs/#api-rest-api-3-issue-issueidorkey-worklog-post
-func (w *IssueWorklogService) Add(ctx context.Context, issueKeyOrID string, options *WorklogOptionsScheme) (
-	result *IssueWorklogScheme, response *ResponseScheme, err error) {
+func (w *IssueWorklogService) Add(ctx context.Context, issueKeyOrID string, options *models.WorklogOptionsScheme) (
+	result *models.IssueWorklogScheme, response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {
-		return nil, nil, notIssueKeyOrIDError
-	}
-
-	if options == nil {
-		return nil, nil, notWorklogOptionError
+		return nil, nil, models.ErrNoIssueKeyOrIDError
 	}
 
 	params := url.Values{}
-
 	if !options.Notify {
 		params.Add("notifyUsers", "false")
 	}
@@ -180,21 +155,16 @@ func (w *IssueWorklogService) Add(ctx context.Context, issueKeyOrID string, opti
 }
 
 // Update updates a worklog.
-// Docs: N/A
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-worklogs/#api-rest-api-3-issue-issueidorkey-worklog-id-put
-func (w *IssueWorklogService) Update(ctx context.Context, issueKeyOrID, worklogID string, options *WorklogOptionsScheme) (
-	result *IssueWorklogScheme, response *ResponseScheme, err error) {
+func (w *IssueWorklogService) Update(ctx context.Context, issueKeyOrID, worklogID string, options *models.WorklogOptionsScheme) (
+	result *models.IssueWorklogScheme, response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {
-		return nil, nil, notIssueKeyOrIDError
+		return nil, nil, models.ErrNoIssueKeyOrIDError
 	}
 
 	if len(worklogID) == 0 {
-		return nil, nil, notWorklogIDError
-	}
-
-	if options == nil {
-		return nil, nil, notWorklogOptionError
+		return nil, nil, models.ErrNoWorklogIDError
 	}
 
 	params := url.Values{}
@@ -252,17 +222,16 @@ func (w *IssueWorklogService) Update(ctx context.Context, issueKeyOrID, worklogI
 }
 
 // Delete deletes a worklog from an issue.
-// Docs: N/A
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-worklogs/#api-rest-api-3-issue-issueidorkey-worklog-id-delete
-func (w *IssueWorklogService) Delete(ctx context.Context, issueKeyOrID, worklogID string, options *WorklogOptionsScheme) (
+func (w *IssueWorklogService) Delete(ctx context.Context, issueKeyOrID, worklogID string, options *models.WorklogOptionsScheme) (
 	response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {
-		return nil, notIssueKeyOrIDError
+		return nil, models.ErrNoIssueTypeIDError
 	}
 
 	if len(worklogID) == 0 {
-		return nil, notWorklogIDError
+		return nil, models.ErrNoWorklogIDError
 	}
 
 	params := url.Values{}
@@ -314,9 +283,8 @@ func (w *IssueWorklogService) Delete(ctx context.Context, issueKeyOrID, worklogI
 }
 
 // Deleted returns a list of IDs and delete timestamps for worklogs deleted after a date and time.
-// Docs: N/A
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-worklogs/#api-rest-api-3-worklog-deleted-get
-func (w *IssueWorklogService) Deleted(ctx context.Context, since int) (result *ChangedWorklogPageScheme, response *ResponseScheme,
+func (w *IssueWorklogService) Deleted(ctx context.Context, since int) (result *models.ChangedWorklogPageScheme, response *ResponseScheme,
 	err error) {
 
 	params := url.Values{}
@@ -347,13 +315,12 @@ func (w *IssueWorklogService) Deleted(ctx context.Context, since int) (result *C
 }
 
 // Gets returns worklog details for a list of worklog IDs.
-// Docs: N/A
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-worklogs/#api-rest-api-3-worklog-list-post
-func (w *IssueWorklogService) Gets(ctx context.Context, worklogIDs []int, expand []string) (result []*IssueWorklogScheme,
+func (w *IssueWorklogService) Gets(ctx context.Context, worklogIDs []int, expand []string) (result []*models.IssueWorklogScheme,
 	response *ResponseScheme, err error) {
 
 	if len(worklogIDs) == 0 {
-		return nil, nil, notWorklogsError
+		return nil, nil, models.ErrMpWorklogsError
 	}
 
 	params := url.Values{}
@@ -393,9 +360,8 @@ func (w *IssueWorklogService) Gets(ctx context.Context, worklogIDs []int, expand
 }
 
 // Updated returns a list of IDs and update timestamps for worklogs updated after a date and time.
-// Docs: N/A
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-worklogs/#api-rest-api-3-worklog-updated-get
-func (w *IssueWorklogService) Updated(ctx context.Context, since int, expand []string) (result *ChangedWorklogPageScheme,
+func (w *IssueWorklogService) Updated(ctx context.Context, since int, expand []string) (result *models.ChangedWorklogPageScheme,
 	response *ResponseScheme, err error) {
 
 	params := url.Values{}
@@ -428,54 +394,3 @@ func (w *IssueWorklogService) Updated(ctx context.Context, since int, expand []s
 
 	return
 }
-
-type ChangedWorklogPageScheme struct {
-	Since    int                     `json:"since,omitempty"`
-	Until    int                     `json:"until,omitempty"`
-	Self     string                  `json:"self,omitempty"`
-	NextPage string                  `json:"nextPage,omitempty"`
-	LastPage bool                    `json:"lastPage,omitempty"`
-	Values   []*ChangedWorklogScheme `json:"values,omitempty"`
-}
-
-type ChangedWorklogScheme struct {
-	WorklogID   int                             `json:"worklogId,omitempty"`
-	UpdatedTime int                             `json:"updatedTime,omitempty"`
-	Properties  []*ChangedWorklogPropertyScheme `json:"properties,omitempty"`
-}
-
-type ChangedWorklogPropertyScheme struct {
-	Key string `json:"key,omitempty"`
-}
-
-type IssueWorklogPageScheme struct {
-	StartAt    int                   `json:"startAt,omitempty"`
-	MaxResults int                   `json:"maxResults,omitempty"`
-	Total      int                   `json:"total,omitempty"`
-	Worklogs   []*IssueWorklogScheme `json:"worklogs,omitempty"`
-}
-
-type IssueWorklogScheme struct {
-	Self             string                        `json:"self,omitempty"`
-	Author           *models.UserDetailScheme      `json:"author,omitempty"`
-	UpdateAuthor     *models.UserDetailScheme      `json:"updateAuthor,omitempty"`
-	Created          string                        `json:"created,omitempty"`
-	Updated          string                        `json:"updated,omitempty"`
-	Visibility       *IssueWorklogVisibilityScheme `json:"visibility,omitempty"`
-	Started          string                        `json:"started,omitempty"`
-	TimeSpent        string                        `json:"timeSpent,omitempty"`
-	TimeSpentSeconds int                           `json:"timeSpentSeconds,omitempty"`
-	ID               string                        `json:"id,omitempty"`
-	IssueID          string                        `json:"issueId,omitempty"`
-}
-
-type IssueWorklogVisibilityScheme struct {
-	Type  string `json:"type,omitempty"`
-	Value string `json:"value,omitempty"`
-}
-
-var (
-	notWorklogIDError     = fmt.Errorf("error, please provide a valid issueKeyOrID value")
-	notWorklogOptionError = fmt.Errorf("error, please provide a valid CreateWorklogOptionsScheme pointer")
-	notWorklogsError      = fmt.Errorf("error, please provide a valid slice of worklogs id's")
-)

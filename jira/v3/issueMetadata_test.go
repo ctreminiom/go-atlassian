@@ -164,7 +164,7 @@ func Test_IssueMetadataService_Get_Failed(t *testing.T) {
 			endpoint:               "/rest/api/3/issue/KP-19/editmeta?overrideEditableFlag=true&overrideScreenSecurity=true",
 			context:                context.Background(),
 			wantHTTPCodeReturn:     http.StatusOK,
-			expectedErrorMessage:   "error, please provide a valid issueKeyOrID value",
+			expectedErrorMessage:   "jira: no issue key/id set",
 		},
 	}
 

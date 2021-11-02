@@ -80,7 +80,7 @@ func (c *CommentService) Get(ctx context.Context, issueKeyOrID, commentID string
 	}
 
 	if len(commentID) == 0 {
-		return nil, nil, notCommentIDError
+		return nil, nil, NotCommentIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/issue/%v/comment/%v", issueKeyOrID, commentID)
@@ -110,7 +110,7 @@ func (c *CommentService) Delete(ctx context.Context, issueKeyOrID, commentID str
 	}
 
 	if len(commentID) == 0 {
-		return nil, notCommentIDError
+		return nil, NotCommentIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/issue/%v/comment/%v", issueKeyOrID, commentID)
@@ -190,5 +190,5 @@ type MarkScheme struct {
 }
 
 var (
-	notCommentIDError = fmt.Errorf("error, please provide a valid commentID value")
+	NotCommentIDError = fmt.Errorf("error, please provide a valid commentID value")
 )

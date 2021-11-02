@@ -273,7 +273,7 @@ func (i *IssueTypeSchemeService) Update(ctx context.Context, issueTypeSchemeID i
 	response *ResponseScheme, err error) {
 
 	if issueTypeSchemeID == 0 {
-		return nil, notIssueTypeIDError
+		return nil, models.ErrNoIssueTypeIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/issuetypescheme/%v", issueTypeSchemeID)
@@ -306,7 +306,7 @@ func (i *IssueTypeSchemeService) Update(ctx context.Context, issueTypeSchemeID i
 func (i *IssueTypeSchemeService) Delete(ctx context.Context, issueTypeSchemeID int) (response *ResponseScheme, err error) {
 
 	if issueTypeSchemeID == 0 {
-		return nil, notIssueTypeIDError
+		return nil, models.ErrNoIssueTypeIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/issuetypescheme/%v", issueTypeSchemeID)

@@ -3,6 +3,7 @@ package v3
 import (
 	"context"
 	"fmt"
+	models "github.com/ctreminiom/go-atlassian/pkg/infra/models/jira"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/url"
@@ -167,7 +168,7 @@ func TestIssueTypeService_Create(t *testing.T) {
 
 	testCases := []struct {
 		name               string
-		payload            *IssueTypePayloadScheme
+		payload            *models.IssueTypePayloadScheme
 		wantHTTPMethod     string
 		mockFile           string
 		endpoint           string
@@ -177,7 +178,7 @@ func TestIssueTypeService_Create(t *testing.T) {
 	}{
 		{
 			name: "CreateIssueTypeWhenThePayloadIsCorrect",
-			payload: &IssueTypePayloadScheme{
+			payload: &models.IssueTypePayloadScheme{
 				Name:        "Risk",
 				Description: "Risk description",
 				Type:        "standard",
@@ -203,7 +204,7 @@ func TestIssueTypeService_Create(t *testing.T) {
 
 		{
 			name: "CreateIssueTypeWhenTheRequestMethodIsIncorrect",
-			payload: &IssueTypePayloadScheme{
+			payload: &models.IssueTypePayloadScheme{
 				Name:        "Risk",
 				Description: "Risk description",
 				Type:        "standard",
@@ -218,7 +219,7 @@ func TestIssueTypeService_Create(t *testing.T) {
 
 		{
 			name: "CreateIssueTypeWhenTheStatusCodeIsIncorrect",
-			payload: &IssueTypePayloadScheme{
+			payload: &models.IssueTypePayloadScheme{
 				Name:        "Risk",
 				Description: "Risk description",
 				Type:        "standard",
@@ -233,7 +234,7 @@ func TestIssueTypeService_Create(t *testing.T) {
 
 		{
 			name: "CreateIssueTypeWhenTheContextIsNil",
-			payload: &IssueTypePayloadScheme{
+			payload: &models.IssueTypePayloadScheme{
 				Name:        "Risk",
 				Description: "Risk description",
 				Type:        "standard",
@@ -248,7 +249,7 @@ func TestIssueTypeService_Create(t *testing.T) {
 
 		{
 			name: "CreateIssueTypeWhenTheResponseBodyHasADifferentFormat",
-			payload: &IssueTypePayloadScheme{
+			payload: &models.IssueTypePayloadScheme{
 				Name:        "Risk",
 				Description: "Risk description",
 				Type:        "standard",
@@ -752,7 +753,7 @@ func TestIssueTypeService_Update(t *testing.T) {
 	testCases := []struct {
 		name               string
 		issueTypeID        string
-		payload            *IssueTypePayloadScheme
+		payload            *models.IssueTypePayloadScheme
 		wantHTTPMethod     string
 		mockFile           string
 		endpoint           string
@@ -763,7 +764,7 @@ func TestIssueTypeService_Update(t *testing.T) {
 		{
 			name:        "CreateIssueTypeWhenThePayloadIsCorrect",
 			issueTypeID: "10001",
-			payload: &IssueTypePayloadScheme{
+			payload: &models.IssueTypePayloadScheme{
 				Name:        "Risk",
 				Description: "Risk description",
 				Type:        "standard",
@@ -779,7 +780,7 @@ func TestIssueTypeService_Update(t *testing.T) {
 		{
 			name:        "CreateIssueTypeWhenTheIssueTypeIDIsNotProvided",
 			issueTypeID: "",
-			payload: &IssueTypePayloadScheme{
+			payload: &models.IssueTypePayloadScheme{
 				Name:        "Risk",
 				Description: "Risk description",
 				Type:        "standard",
@@ -807,7 +808,7 @@ func TestIssueTypeService_Update(t *testing.T) {
 		{
 			name:        "CreateIssueTypeWhenTheRequestMethodIsIncorrect",
 			issueTypeID: "10001",
-			payload: &IssueTypePayloadScheme{
+			payload: &models.IssueTypePayloadScheme{
 				Name:        "Risk",
 				Description: "Risk description",
 				Type:        "standard",
@@ -823,7 +824,7 @@ func TestIssueTypeService_Update(t *testing.T) {
 		{
 			name:        "CreateIssueTypeWhenTheStatusCodeIsIncorrect",
 			issueTypeID: "10001",
-			payload: &IssueTypePayloadScheme{
+			payload: &models.IssueTypePayloadScheme{
 				Name:        "Risk",
 				Description: "Risk description",
 				Type:        "standard",
@@ -839,7 +840,7 @@ func TestIssueTypeService_Update(t *testing.T) {
 		{
 			name:        "CreateIssueTypeWhenTheContextIsNil",
 			issueTypeID: "10001",
-			payload: &IssueTypePayloadScheme{
+			payload: &models.IssueTypePayloadScheme{
 				Name:        "Risk",
 				Description: "Risk description",
 				Type:        "standard",
@@ -855,7 +856,7 @@ func TestIssueTypeService_Update(t *testing.T) {
 		{
 			name:        "CreateIssueTypeWhenTheResponseBodyHasADifferentFormat",
 			issueTypeID: "10001",
-			payload: &IssueTypePayloadScheme{
+			payload: &models.IssueTypePayloadScheme{
 				Name:        "Risk",
 				Description: "Risk description",
 				Type:        "standard",

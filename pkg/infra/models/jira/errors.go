@@ -27,4 +27,5 @@ var (
 	ErrNoPriorityIDError      = errors.New("jira: no priority id set")
 	ErrNoResolutionIDError    = errors.New("jira: no resolution id set")
 	ErrNoJQLError             = errors.New("jira: no sql set")
+	ErrNoIssueTypeIDError     = errors.New("jira: no issue type id set")
 )

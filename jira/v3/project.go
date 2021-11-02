@@ -181,7 +181,7 @@ type ProjectScheme struct {
 	UUID              string                    `json:"uuid,omitempty"`
 	Lead              *UserScheme               `json:"lead,omitempty"`
 	Components        []*ProjectComponentScheme `json:"components,omitempty"`
-	IssueTypes        []*IssueTypeScheme        `json:"issueTypes,omitempty"`
+	IssueTypes        []*models.IssueTypeScheme `json:"issueTypes,omitempty"`
 	Versions          []*ProjectVersionScheme   `json:"versions,omitempty"`
 	Roles             *ProjectRolesScheme       `json:"roles,omitempty"`
 	AvatarUrls        *AvatarURLScheme          `json:"avatarUrls,omitempty"`

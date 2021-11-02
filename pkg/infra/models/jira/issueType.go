@@ -17,3 +17,11 @@ type IssueTypeScopeScheme struct {
 	Type    string         `json:"type,omitempty"`
 	Project *ProjectScheme `json:"project,omitempty"`
 }
+
+type IssueTypePayloadScheme struct {
+	Name           string `json:"name,omitempty"`
+	Description    string `json:"description,omitempty"`
+	Type           string `json:"type,omitempty"`
+	HierarchyLevel int    `json:"hierarchyLevel,omitempty"`
+	AvatarID       int    `json:"avatarId,omitempty"`
+}

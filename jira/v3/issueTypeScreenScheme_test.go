@@ -3,6 +3,7 @@ package v3
 import (
 	"context"
 	"fmt"
+	models "github.com/ctreminiom/go-atlassian/pkg/infra/models/jira"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/url"
@@ -14,7 +15,7 @@ func TestIssueTypeScreenSchemeService_Append(t *testing.T) {
 	testCases := []struct {
 		name                    string
 		issueTypeScreenSchemeID string
-		payload                 *IssueTypeScreenSchemePayloadScheme
+		payload                 *models.IssueTypeScreenSchemePayloadScheme
 		mockFile                string
 		wantHTTPMethod          string
 		endpoint                string
@@ -25,8 +26,8 @@ func TestIssueTypeScreenSchemeService_Append(t *testing.T) {
 		{
 			name:                    "AppendMappingsToIssueTypeScreenSchemeWhenTheParametersAreCorrect",
 			issueTypeScreenSchemeID: "10000",
-			payload: &IssueTypeScreenSchemePayloadScheme{
-				IssueTypeMappings: []*IssueTypeScreenSchemeMappingPayloadScheme{
+			payload: &models.IssueTypeScreenSchemePayloadScheme{
+				IssueTypeMappings: []*models.IssueTypeScreenSchemeMappingPayloadScheme{
 					{
 						IssueTypeID:    "10000", // Epic Issue Type
 						ScreenSchemeID: "10002",
@@ -47,8 +48,8 @@ func TestIssueTypeScreenSchemeService_Append(t *testing.T) {
 		{
 			name:                    "AppendMappingsToIssueTypeScreenSchemeWhenTheIssueTypeScreenSchemeIDParamIsEmpty",
 			issueTypeScreenSchemeID: "",
-			payload: &IssueTypeScreenSchemePayloadScheme{
-				IssueTypeMappings: []*IssueTypeScreenSchemeMappingPayloadScheme{
+			payload: &models.IssueTypeScreenSchemePayloadScheme{
+				IssueTypeMappings: []*models.IssueTypeScreenSchemeMappingPayloadScheme{
 					{
 						IssueTypeID:    "10000", // Epic Issue Type
 						ScreenSchemeID: "10002",
@@ -80,8 +81,8 @@ func TestIssueTypeScreenSchemeService_Append(t *testing.T) {
 		{
 			name:                    "AppendMappingsToIssueTypeScreenSchemeWhenTheEndpointIsIncorrect",
 			issueTypeScreenSchemeID: "10000",
-			payload: &IssueTypeScreenSchemePayloadScheme{
-				IssueTypeMappings: []*IssueTypeScreenSchemeMappingPayloadScheme{
+			payload: &models.IssueTypeScreenSchemePayloadScheme{
+				IssueTypeMappings: []*models.IssueTypeScreenSchemeMappingPayloadScheme{
 					{
 						IssueTypeID:    "10000", // Epic Issue Type
 						ScreenSchemeID: "10002",
@@ -102,8 +103,8 @@ func TestIssueTypeScreenSchemeService_Append(t *testing.T) {
 		{
 			name:                    "AppendMappingsToIssueTypeScreenSchemeWhenTheRequestMethodIsIncorrect",
 			issueTypeScreenSchemeID: "10000",
-			payload: &IssueTypeScreenSchemePayloadScheme{
-				IssueTypeMappings: []*IssueTypeScreenSchemeMappingPayloadScheme{
+			payload: &models.IssueTypeScreenSchemePayloadScheme{
+				IssueTypeMappings: []*models.IssueTypeScreenSchemeMappingPayloadScheme{
 					{
 						IssueTypeID:    "10000", // Epic Issue Type
 						ScreenSchemeID: "10002",
@@ -124,8 +125,8 @@ func TestIssueTypeScreenSchemeService_Append(t *testing.T) {
 		{
 			name:                    "AppendMappingsToIssueTypeScreenSchemeWhenTheStatusCodeIsIncorrect",
 			issueTypeScreenSchemeID: "10000",
-			payload: &IssueTypeScreenSchemePayloadScheme{
-				IssueTypeMappings: []*IssueTypeScreenSchemeMappingPayloadScheme{
+			payload: &models.IssueTypeScreenSchemePayloadScheme{
+				IssueTypeMappings: []*models.IssueTypeScreenSchemeMappingPayloadScheme{
 					{
 						IssueTypeID:    "10000", // Epic Issue Type
 						ScreenSchemeID: "10002",
@@ -146,8 +147,8 @@ func TestIssueTypeScreenSchemeService_Append(t *testing.T) {
 		{
 			name:                    "AppendMappingsToIssueTypeScreenSchemeWhenTheContextIsNil",
 			issueTypeScreenSchemeID: "10000",
-			payload: &IssueTypeScreenSchemePayloadScheme{
-				IssueTypeMappings: []*IssueTypeScreenSchemeMappingPayloadScheme{
+			payload: &models.IssueTypeScreenSchemePayloadScheme{
+				IssueTypeMappings: []*models.IssueTypeScreenSchemeMappingPayloadScheme{
 					{
 						IssueTypeID:    "10000", // Epic Issue Type
 						ScreenSchemeID: "10002",
@@ -387,7 +388,7 @@ func TestIssueTypeScreenSchemeService_Create(t *testing.T) {
 
 	testCases := []struct {
 		name               string
-		payload            *IssueTypeScreenSchemePayloadScheme
+		payload            *models.IssueTypeScreenSchemePayloadScheme
 		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string
@@ -397,9 +398,9 @@ func TestIssueTypeScreenSchemeService_Create(t *testing.T) {
 	}{
 		{
 			name: "CreateIssueTypeSchemeWhenTheParametersAreCorrect",
-			payload: &IssueTypeScreenSchemePayloadScheme{
+			payload: &models.IssueTypeScreenSchemePayloadScheme{
 				Name: "Scrum issue type screen scheme",
-				IssueTypeMappings: []*IssueTypeScreenSchemeMappingPayloadScheme{
+				IssueTypeMappings: []*models.IssueTypeScreenSchemeMappingPayloadScheme{
 					{
 						IssueTypeID:    "default",
 						ScreenSchemeID: "10000",
@@ -420,9 +421,9 @@ func TestIssueTypeScreenSchemeService_Create(t *testing.T) {
 
 		{
 			name: "CreateIssueTypeSchemeWhenTheResponseBodyIsNotAStringValue",
-			payload: &IssueTypeScreenSchemePayloadScheme{
+			payload: &models.IssueTypeScreenSchemePayloadScheme{
 				Name: "Scrum issue type screen scheme",
-				IssueTypeMappings: []*IssueTypeScreenSchemeMappingPayloadScheme{
+				IssueTypeMappings: []*models.IssueTypeScreenSchemeMappingPayloadScheme{
 					{
 						IssueTypeID:    "default",
 						ScreenSchemeID: "10000",
@@ -454,9 +455,9 @@ func TestIssueTypeScreenSchemeService_Create(t *testing.T) {
 
 		{
 			name: "CreateIssueTypeSchemeWhenTheEndpointIsIncorrect",
-			payload: &IssueTypeScreenSchemePayloadScheme{
+			payload: &models.IssueTypeScreenSchemePayloadScheme{
 				Name: "Scrum issue type screen scheme",
-				IssueTypeMappings: []*IssueTypeScreenSchemeMappingPayloadScheme{
+				IssueTypeMappings: []*models.IssueTypeScreenSchemeMappingPayloadScheme{
 					{
 						IssueTypeID:    "default",
 						ScreenSchemeID: "10000",
@@ -477,9 +478,9 @@ func TestIssueTypeScreenSchemeService_Create(t *testing.T) {
 
 		{
 			name: "CreateIssueTypeSchemeWhenTheRequestMethodIsIncorrect",
-			payload: &IssueTypeScreenSchemePayloadScheme{
+			payload: &models.IssueTypeScreenSchemePayloadScheme{
 				Name: "Scrum issue type screen scheme",
-				IssueTypeMappings: []*IssueTypeScreenSchemeMappingPayloadScheme{
+				IssueTypeMappings: []*models.IssueTypeScreenSchemeMappingPayloadScheme{
 					{
 						IssueTypeID:    "default",
 						ScreenSchemeID: "10000",
@@ -500,9 +501,9 @@ func TestIssueTypeScreenSchemeService_Create(t *testing.T) {
 
 		{
 			name: "CreateIssueTypeSchemeWhenTheStatusCodeIsIncorrect",
-			payload: &IssueTypeScreenSchemePayloadScheme{
+			payload: &models.IssueTypeScreenSchemePayloadScheme{
 				Name: "Scrum issue type screen scheme",
-				IssueTypeMappings: []*IssueTypeScreenSchemeMappingPayloadScheme{
+				IssueTypeMappings: []*models.IssueTypeScreenSchemeMappingPayloadScheme{
 					{
 						IssueTypeID:    "default",
 						ScreenSchemeID: "10000",
@@ -523,9 +524,9 @@ func TestIssueTypeScreenSchemeService_Create(t *testing.T) {
 
 		{
 			name: "CreateIssueTypeSchemeWhenTheContextIsNil",
-			payload: &IssueTypeScreenSchemePayloadScheme{
+			payload: &models.IssueTypeScreenSchemePayloadScheme{
 				Name: "Scrum issue type screen scheme",
-				IssueTypeMappings: []*IssueTypeScreenSchemeMappingPayloadScheme{
+				IssueTypeMappings: []*models.IssueTypeScreenSchemeMappingPayloadScheme{
 					{
 						IssueTypeID:    "default",
 						ScreenSchemeID: "10000",
@@ -546,9 +547,9 @@ func TestIssueTypeScreenSchemeService_Create(t *testing.T) {
 
 		{
 			name: "CreateIssueTypeSchemeWhenTheResponseBodyHasADifferentFormat",
-			payload: &IssueTypeScreenSchemePayloadScheme{
+			payload: &models.IssueTypeScreenSchemePayloadScheme{
 				Name: "Scrum issue type screen scheme",
-				IssueTypeMappings: []*IssueTypeScreenSchemeMappingPayloadScheme{
+				IssueTypeMappings: []*models.IssueTypeScreenSchemeMappingPayloadScheme{
 					{
 						IssueTypeID:    "default",
 						ScreenSchemeID: "10000",

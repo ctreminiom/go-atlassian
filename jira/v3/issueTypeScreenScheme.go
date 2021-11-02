@@ -11,27 +11,11 @@ import (
 
 type IssueTypeScreenSchemeService struct{ client *Client }
 
-type IssueTypeScreenSchemePageScheme struct {
-	Self       string                         `json:"self,omitempty"`
-	NextPage   string                         `json:"nextPage,omitempty"`
-	MaxResults int                            `json:"maxResults,omitempty"`
-	StartAt    int                            `json:"startAt,omitempty"`
-	Total      int                            `json:"total,omitempty"`
-	IsLast     bool                           `json:"isLast,omitempty"`
-	Values     []*IssueTypeScreenSchemeScheme `json:"values,omitempty"`
-}
-
-type IssueTypeScreenSchemeScheme struct {
-	ID          string `json:"id,omitempty"`
-	Name        string `json:"name,omitempty"`
-	Description string `json:"description,omitempty"`
-}
-
 // Gets returns a paginated list of issue type screen schemes.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/types/screen-scheme#get-issue-type-screen-schemes
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-type-screen-schemes/#api-rest-api-3-issuetypescreenscheme-get
 func (i *IssueTypeScreenSchemeService) Gets(ctx context.Context, ids []int, startAt, maxResults int) (
-	result *IssueTypeScreenSchemePageScheme, response *ResponseScheme, err error) {
+	result *models.IssueTypeScreenSchemePageScheme, response *ResponseScheme, err error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -58,25 +42,11 @@ func (i *IssueTypeScreenSchemeService) Gets(ctx context.Context, ids []int, star
 	return
 }
 
-type IssueTypeScreenSchemePayloadScheme struct {
-	Name              string                                       `json:"name,omitempty"`
-	IssueTypeMappings []*IssueTypeScreenSchemeMappingPayloadScheme `json:"issueTypeMappings,omitempty"`
-}
-
-type IssueTypeScreenSchemeMappingPayloadScheme struct {
-	IssueTypeID    string `json:"issueTypeId,omitempty"`
-	ScreenSchemeID string `json:"screenSchemeId,omitempty"`
-}
-
-type IssueTypeScreenScreenCreatedScheme struct {
-	ID string `json:"id"`
-}
-
 // Create creates an issue type screen scheme.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/types/screen-scheme#create-issue-type-screen-scheme
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-type-screen-schemes/#api-rest-api-3-issuetypescreenscheme-post
-func (i *IssueTypeScreenSchemeService) Create(ctx context.Context, payload *IssueTypeScreenSchemePayloadScheme) (
-	result *IssueTypeScreenScreenCreatedScheme, response *ResponseScheme, err error) {
+func (i *IssueTypeScreenSchemeService) Create(ctx context.Context, payload *models.IssueTypeScreenSchemePayloadScheme) (
+	result *models.IssueTypeScreenScreenCreatedScheme, response *ResponseScheme, err error) {
 
 	payloadAsReader, err := transformStructToReader(payload)
 	if err != nil {
@@ -109,7 +79,7 @@ func (i *IssueTypeScreenSchemeService) Assign(ctx context.Context, issueTypeScre
 	response *ResponseScheme, err error) {
 
 	if len(issueTypeScreenSchemeID) == 0 {
-		return nil, notIssueTypeScreenSchemeIDError
+		return nil, models.ErrNoIssueTypeScreenSchemeIDError
 	}
 
 	if len(projectID) == 0 {
@@ -148,7 +118,7 @@ func (i *IssueTypeScreenSchemeService) Assign(ctx context.Context, issueTypeScre
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/types/screen-scheme#assign-issue-type-screen-scheme-to-project
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-type-screen-schemes/#api-rest-api-3-issuetypescreenscheme-project-get
 func (i *IssueTypeScreenSchemeService) Projects(ctx context.Context, projectIDs []int, startAt, maxResults int) (
-	result *IssueTypeProjectScreenSchemePageScheme, response *ResponseScheme, err error) {
+	result *models.IssueTypeProjectScreenSchemePageScheme, response *ResponseScheme, err error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -179,26 +149,11 @@ func (i *IssueTypeScreenSchemeService) Projects(ctx context.Context, projectIDs 
 	return
 }
 
-type IssueTypeProjectScreenSchemePageScheme struct {
-	Self       string                                 `json:"self,omitempty"`
-	NextPage   string                                 `json:"nextPage,omitempty"`
-	MaxResults int                                    `json:"maxResults,omitempty"`
-	StartAt    int                                    `json:"startAt,omitempty"`
-	Total      int                                    `json:"total,omitempty"`
-	IsLast     bool                                   `json:"isLast,omitempty"`
-	Values     []*IssueTypeScreenSchemesProjectScheme `json:"values,omitempty"`
-}
-
-type IssueTypeScreenSchemesProjectScheme struct {
-	IssueTypeScreenScheme *IssueTypeScreenSchemeScheme `json:"issueTypeScreenScheme,omitempty"`
-	ProjectIds            []string                     `json:"projectIds,omitempty"`
-}
-
 // Mapping returns a paginated list of issue type screen scheme items.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/types/screen-scheme#get-issue-type-screen-scheme-items
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-type-screen-schemes/#api-rest-api-3-issuetypescreenscheme-mapping-get
 func (i *IssueTypeScreenSchemeService) Mapping(ctx context.Context, issueTypeScreenSchemeIDs []int, startAt, maxResults int) (
-	result *IssueTypeScreenSchemeMappingScheme, response *ResponseScheme, err error) {
+	result *models.IssueTypeScreenSchemeMappingScheme, response *ResponseScheme, err error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -223,22 +178,6 @@ func (i *IssueTypeScreenSchemeService) Mapping(ctx context.Context, issueTypeScr
 	}
 
 	return
-}
-
-type IssueTypeScreenSchemeMappingScheme struct {
-	Self       string                             `json:"self,omitempty"`
-	NextPage   string                             `json:"nextPage,omitempty"`
-	MaxResults int                                `json:"maxResults,omitempty"`
-	StartAt    int                                `json:"startAt,omitempty"`
-	Total      int                                `json:"total,omitempty"`
-	IsLast     bool                               `json:"isLast,omitempty"`
-	Values     []*IssueTypeScreenSchemeItemScheme `json:"values,omitempty"`
-}
-
-type IssueTypeScreenSchemeItemScheme struct {
-	IssueTypeScreenSchemeID string `json:"issueTypeScreenSchemeId,omitempty"`
-	IssueTypeID             string `json:"issueTypeId,omitempty"`
-	ScreenSchemeID          string `json:"screenSchemeId,omitempty"`
 }
 
 // Update updates an issue type screen scheme.
@@ -286,7 +225,7 @@ func (i *IssueTypeScreenSchemeService) Delete(ctx context.Context, issueTypeScre
 	err error) {
 
 	if len(issueTypeScreenSchemeID) == 0 {
-		return nil, notIssueTypeScreenSchemeIDError
+		return nil, models.ErrNoIssueTypeScreenSchemeIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/issuetypescreenscheme/%v", issueTypeScreenSchemeID)
@@ -310,10 +249,10 @@ func (i *IssueTypeScreenSchemeService) Delete(ctx context.Context, issueTypeScre
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/types/screen-scheme#append-mappings-to-issue-type-screen-scheme
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-type-screen-schemes/#api-rest-api-3-issuetypescreenscheme-issuetypescreenschemeid-mapping-put
 func (i *IssueTypeScreenSchemeService) Append(ctx context.Context, issueTypeScreenSchemeID string,
-	payload *IssueTypeScreenSchemePayloadScheme) (response *ResponseScheme, err error) {
+	payload *models.IssueTypeScreenSchemePayloadScheme) (response *ResponseScheme, err error) {
 
 	if len(issueTypeScreenSchemeID) == 0 {
-		return nil, notIssueTypeScreenSchemeIDError
+		return nil, models.ErrNoIssueTypeScreenSchemeIDError
 	}
 
 	payloadAsReader, err := transformStructToReader(payload)
@@ -346,11 +285,11 @@ func (i *IssueTypeScreenSchemeService) UpdateDefault(ctx context.Context, issueT
 	response *ResponseScheme, err error) {
 
 	if len(issueTypeScreenSchemeID) == 0 {
-		return nil, notIssueTypeScreenSchemeIDError
+		return nil, models.ErrNoIssueTypeScreenSchemeIDError
 	}
 
 	if len(screenSchemeID) == 0 {
-		return nil, notScreenSchemeIDError
+		return nil, models.ErrNoScreenSchemeIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/issuetypescreenscheme/%v/mapping/default", issueTypeScreenSchemeID)
@@ -386,7 +325,7 @@ func (i *IssueTypeScreenSchemeService) Remove(ctx context.Context, issueTypeScre
 	response *ResponseScheme, err error) {
 
 	if len(issueTypeScreenSchemeID) == 0 {
-		return nil, notIssueTypeScreenSchemeIDError
+		return nil, models.ErrNoIssueTypeScreenSchemeIDError
 	}
 
 	if len(issueTypeIDs) == 0 {
@@ -421,9 +360,8 @@ func (i *IssueTypeScreenSchemeService) Remove(ctx context.Context, issueTypeScre
 // SchemesByProject returns a paginated list of projects associated with an issue type screen scheme.
 // Docs: N/A
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-type-screen-schemes/#api-rest-api-3-issuetypescreenscheme-issuetypescreenschemeid-project-get
-// NOTE: Experimental Method
 func (i *IssueTypeScreenSchemeService) SchemesByProject(ctx context.Context, issueTypeScreenSchemeID int, startAt,
-	maxResults int) (result *IssueTypeScreenSchemeByProjectPageScheme, response *ResponseScheme, err error) {
+	maxResults int) (result *models.IssueTypeScreenSchemeByProjectPageScheme, response *ResponseScheme, err error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -445,26 +383,3 @@ func (i *IssueTypeScreenSchemeService) SchemesByProject(ctx context.Context, iss
 
 	return
 }
-
-type IssueTypeScreenSchemeByProjectPageScheme struct {
-	MaxResults int                    `json:"maxResults,omitempty"`
-	StartAt    int                    `json:"startAt,omitempty"`
-	Total      int                    `json:"total,omitempty"`
-	IsLast     bool                   `json:"isLast,omitempty"`
-	Values     []*ProjectDetailScheme `json:"values,omitempty"`
-}
-
-type ProjectDetailScheme struct {
-	Self            string                 `json:"self,omitempty"`
-	ID              string                 `json:"id,omitempty"`
-	Key             string                 `json:"key,omitempty"`
-	Name            string                 `json:"name,omitempty"`
-	ProjectTypeKey  string                 `json:"projectTypeKey,omitempty"`
-	Simplified      bool                   `json:"simplified,omitempty"`
-	ProjectCategory *ProjectCategoryScheme `json:"projectCategory,omitempty"`
-}
-
-var (
-	notIssueTypeScreenSchemeIDError = fmt.Errorf("error, please provide a issueTypeScreenSchemeID value")
-	notScreenSchemeIDError          = fmt.Errorf("error, please provide a screenSchemeID value")
-)

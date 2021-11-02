@@ -3,6 +3,7 @@ package v3
 import (
 	"context"
 	"fmt"
+	models "github.com/ctreminiom/go-atlassian/pkg/infra/models/jira"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -109,7 +110,7 @@ func (s *ScreenSchemeService) Update(ctx context.Context, screenSchemeID string,
 	response *ResponseScheme, err error) {
 
 	if len(screenSchemeID) == 0 {
-		return nil, notScreenSchemeIDError
+		return nil, models.ErrNoScreenSchemeIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/screenscheme/%v", screenSchemeID)
@@ -143,7 +144,7 @@ func (s *ScreenSchemeService) Update(ctx context.Context, screenSchemeID string,
 func (s *ScreenSchemeService) Delete(ctx context.Context, screenSchemeID string) (response *ResponseScheme, err error) {
 
 	if len(screenSchemeID) == 0 {
-		return nil, notScreenSchemeIDError
+		return nil, models.ErrNoScreenSchemeIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/screenscheme/%v", screenSchemeID)

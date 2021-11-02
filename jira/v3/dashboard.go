@@ -3,6 +3,7 @@ package v3
 import (
 	"context"
 	"fmt"
+	models "github.com/ctreminiom/go-atlassian/internal/infra/models/jira"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -11,30 +12,11 @@ import (
 
 type DashboardService struct{ client *Client }
 
-type DashboardPageScheme struct {
-	StartAt    int                `json:"startAt,omitempty"`
-	MaxResults int                `json:"maxResults,omitempty"`
-	Total      int                `json:"total,omitempty"`
-	Dashboards []*DashboardScheme `json:"dashboards,omitempty"`
-}
-
-type DashboardScheme struct {
-	ID               string                   `json:"id,omitempty"`
-	IsFavourite      bool                     `json:"isFavourite,omitempty"`
-	Name             string                   `json:"name,omitempty"`
-	Owner            *UserScheme              `json:"owner,omitempty"`
-	Popularity       int                      `json:"popularity,omitempty"`
-	Rank             int                      `json:"rank,omitempty"`
-	Self             string                   `json:"self,omitempty"`
-	SharePermissions []*SharePermissionScheme `json:"sharePermissions,omitempty"`
-	EditPermission   []*SharePermissionScheme `json:"editPermissions,omitempty"`
-	View             string                   `json:"view,omitempty"`
-}
-
 // Gets returns a list of dashboards owned by or shared with the user. The list may be filtered to include only favorite or owned dashboards.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/dashboards#get-all-dashboards
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-dashboards/#api-rest-api-3-dashboard-get
-func (d *DashboardService) Gets(ctx context.Context, startAt, maxResults int, filter string) (result *DashboardPageScheme, response *ResponseScheme, err error) {
+func (d *DashboardService) Gets(ctx context.Context, startAt, maxResults int, filter string) (result *models.DashboardPageScheme,
+	response *ResponseScheme, err error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -58,25 +40,17 @@ func (d *DashboardService) Gets(ctx context.Context, startAt, maxResults int, fi
 	return
 }
 
-type SharePermissionScheme struct {
-	ID      int                `json:"id,omitempty"`
-	Type    string             `json:"type,omitempty"`
-	Project *ProjectScheme     `json:"project,omitempty"`
-	Role    *ProjectRoleScheme `json:"role,omitempty"`
-	Group   *GroupScheme       `json:"group,omitempty"`
-}
-
 type DashboardPayloadScheme struct {
-	Name             string                   `json:"name,omitempty"`
-	Description      string                   `json:"description,omitempty"`
-	SharePermissions []*SharePermissionScheme `json:"sharePermissions,omitempty"`
+	Name             string                          `json:"name,omitempty"`
+	Description      string                          `json:"description,omitempty"`
+	SharePermissions []*models.SharePermissionScheme `json:"sharePermissions,omitempty"`
 }
 
 // Create creates a dashboard.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/dashboards#create-dashboard
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-dashboards/#api-rest-api-3-dashboard-post
-// NOTE: Experimental Endpoint
-func (d *DashboardService) Create(ctx context.Context, payload *DashboardPayloadScheme) (result *DashboardScheme, response *ResponseScheme, err error) {
+func (d *DashboardService) Create(ctx context.Context, payload *DashboardPayloadScheme) (result *models.DashboardScheme,
+	response *ResponseScheme, err error) {
 
 	var endpoint = "rest/api/3/dashboard"
 
@@ -102,20 +76,9 @@ func (d *DashboardService) Create(ctx context.Context, payload *DashboardPayload
 }
 
 type DashboardSearchOptionsScheme struct {
-	DashboardName       string
-	OwnerAccountID      string
-	GroupPermissionName string
-	OrderBy             string
-	Expand              []string
-}
-
-type DashboardSearchPageScheme struct {
-	Self       string             `json:"self,omitempty"`
-	MaxResults int                `json:"maxResults,omitempty"`
-	StartAt    int                `json:"startAt,omitempty"`
-	Total      int                `json:"total,omitempty"`
-	IsLast     bool               `json:"isLast,omitempty"`
-	Values     []*DashboardScheme `json:"values,omitempty"`
+	DashboardName, OwnerAccountID string
+	GroupPermissionName, OrderBy  string
+	Expand                        []string
 }
 
 // Search returns a paginated list of dashboards.
@@ -123,7 +86,7 @@ type DashboardSearchPageScheme struct {
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/dashboards#search-for-dashboards
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-dashboards/#api-rest-api-3-dashboard-search-get
 func (d *DashboardService) Search(ctx context.Context, opts *DashboardSearchOptionsScheme, startAt, maxResults int) (
-	result *DashboardSearchPageScheme, response *ResponseScheme, err error) {
+	result *models.DashboardSearchPageScheme, response *ResponseScheme, err error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -171,11 +134,11 @@ func (d *DashboardService) Search(ctx context.Context, opts *DashboardSearchOpti
 // Get returns a dashboard.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/dashboards#get-dashboard
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-dashboards/#api-rest-api-3-dashboard-id-get
-func (d *DashboardService) Get(ctx context.Context, dashboardID string) (result *DashboardScheme,
+func (d *DashboardService) Get(ctx context.Context, dashboardID string) (result *models.DashboardScheme,
 	response *ResponseScheme, err error) {
 
 	if len(dashboardID) == 0 {
-		return nil, nil, notDashboardIDError
+		return nil, nil, models.ErrNoDashboardIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/dashboard/%v", dashboardID)
@@ -198,11 +161,10 @@ func (d *DashboardService) Get(ctx context.Context, dashboardID string) (result 
 // Delete deletes a dashboard.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/dashboards#delete-dashboard
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-dashboards/#api-rest-api-3-dashboard-id-delete
-// NOTE: Experimental Method
 func (d *DashboardService) Delete(ctx context.Context, dashboardID string) (response *ResponseScheme, err error) {
 
 	if len(dashboardID) == 0 {
-		return nil, notDashboardIDError
+		return nil, models.ErrNoDashboardIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/dashboard/%v", dashboardID)
@@ -224,12 +186,11 @@ func (d *DashboardService) Delete(ctx context.Context, dashboardID string) (resp
 // Copy copies a dashboard.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/dashboards#copy-dashboard
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-dashboards/#api-rest-api-3-dashboard-id-copy-post
-// Note: Experimental Method
 func (d *DashboardService) Copy(ctx context.Context, dashboardID string, payload *DashboardPayloadScheme) (
-	result *DashboardScheme, response *ResponseScheme, err error) {
+	result *models.DashboardScheme, response *ResponseScheme, err error) {
 
 	if len(dashboardID) == 0 {
-		return nil, nil, notDashboardIDError
+		return nil, nil, models.ErrNoDashboardIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/dashboard/%v/copy", dashboardID)
@@ -258,12 +219,11 @@ func (d *DashboardService) Copy(ctx context.Context, dashboardID string, payload
 // Update updates a dashboard
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/dashboards#update-dashboard
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-dashboards/#api-rest-api-3-dashboard-id-put
-// NOTE: Experimental Method
-func (d *DashboardService) Update(ctx context.Context, dashboardID string, payload *DashboardPayloadScheme) (result *DashboardScheme,
+func (d *DashboardService) Update(ctx context.Context, dashboardID string, payload *DashboardPayloadScheme) (result *models.DashboardScheme,
 	response *ResponseScheme, err error) {
 
 	if len(dashboardID) == 0 {
-		return nil, nil, notDashboardIDError
+		return nil, nil, models.ErrNoDashboardIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/dashboard/%v", dashboardID)
@@ -288,7 +248,3 @@ func (d *DashboardService) Update(ctx context.Context, dashboardID string, paylo
 
 	return
 }
-
-var (
-	notDashboardIDError = fmt.Errorf("error, please provide a valid dashboardID value")
-)

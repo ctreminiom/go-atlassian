@@ -3,6 +3,7 @@ package v3
 import (
 	"context"
 	"fmt"
+	models "github.com/ctreminiom/go-atlassian/pkg/infra/models/jira"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -528,7 +529,7 @@ func (f *FieldContextService) UnLink(ctx context.Context, fieldID string, contex
 	}
 
 	if len(projectIDs) == 0 {
-		return nil, notProjectIDError
+		return nil, models.ErrNoProjectIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/field/%v/context/%v/project/remove", fieldID, contextID)

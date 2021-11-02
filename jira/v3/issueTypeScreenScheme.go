@@ -3,6 +3,7 @@ package v3
 import (
 	"context"
 	"fmt"
+	models "github.com/ctreminiom/go-atlassian/pkg/infra/models/jira"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -112,7 +113,7 @@ func (i *IssueTypeScreenSchemeService) Assign(ctx context.Context, issueTypeScre
 	}
 
 	if len(projectID) == 0 {
-		return nil, notProjectIDError
+		return nil, models.ErrNoProjectIDError
 	}
 
 	payload := struct {

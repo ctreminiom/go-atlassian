@@ -3,6 +3,7 @@ package v3
 import (
 	"context"
 	"fmt"
+	models "github.com/ctreminiom/go-atlassian/pkg/infra/models/jira"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -65,7 +66,7 @@ func (p *ProjectVersionService) Gets(ctx context.Context, projectKeyOrID string,
 	maxResults int) (result *ProjectVersionPageScheme, response *ResponseScheme, err error) {
 
 	if len(projectKeyOrID) == 0 {
-		return nil, nil, notProjectIDError
+		return nil, nil, models.ErrNoProjectIDError
 	}
 
 	params := url.Values{}

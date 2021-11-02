@@ -223,7 +223,7 @@ func (p *ProjectService) Get(ctx context.Context, projectKeyOrID string, expand 
 	response *ResponseScheme, err error) {
 
 	if len(projectKeyOrID) == 0 {
-		return nil, nil, notProjectIDError
+		return nil, nil, models.ErrNoProjectIDError
 	}
 
 	params := url.Values{}
@@ -276,7 +276,7 @@ func (p *ProjectService) Update(ctx context.Context, projectKeyOrID string, payl
 	response *ResponseScheme, err error) {
 
 	if len(projectKeyOrID) == 0 {
-		return nil, nil, notProjectIDError
+		return nil, nil, models.ErrNoProjectIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/project/%v", projectKeyOrID)
@@ -308,7 +308,7 @@ func (p *ProjectService) Delete(ctx context.Context, projectKeyOrID string, enab
 	err error) {
 
 	if len(projectKeyOrID) == 0 {
-		return nil, notProjectIDError
+		return nil, models.ErrNoProjectIDError
 	}
 
 	params := url.Values{}
@@ -344,7 +344,7 @@ func (p *ProjectService) DeleteAsynchronously(ctx context.Context, projectKeyOrI
 	response *ResponseScheme, err error) {
 
 	if len(projectKeyOrID) == 0 {
-		return nil, nil, notProjectIDError
+		return nil, nil, models.ErrNoProjectIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/project/%v/delete", projectKeyOrID)
@@ -369,7 +369,7 @@ func (p *ProjectService) DeleteAsynchronously(ctx context.Context, projectKeyOrI
 func (p *ProjectService) Archive(ctx context.Context, projectKeyOrID string) (response *ResponseScheme, err error) {
 
 	if len(projectKeyOrID) == 0 {
-		return nil, notProjectIDError
+		return nil, models.ErrNoProjectIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/project/%v/archive", projectKeyOrID)
@@ -393,7 +393,7 @@ func (p *ProjectService) Restore(ctx context.Context, projectKeyOrID string) (re
 	response *ResponseScheme, err error) {
 
 	if len(projectKeyOrID) == 0 {
-		return nil, nil, notProjectIDError
+		return nil, nil, models.ErrNoProjectIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/project/%v/restore", projectKeyOrID)
@@ -435,7 +435,7 @@ func (p *ProjectService) Statuses(ctx context.Context, projectKeyOrID string) (r
 	response *ResponseScheme, err error) {
 
 	if len(projectKeyOrID) == 0 {
-		return nil, nil, notProjectIDError
+		return nil, nil, models.ErrNoProjectIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/project/%v/statuses", projectKeyOrID)
@@ -474,7 +474,7 @@ func (p *ProjectService) Hierarchy(ctx context.Context, projectKeyOrID string) (
 	response *ResponseScheme, err error) {
 
 	if len(projectKeyOrID) == 0 {
-		return nil, nil, notProjectIDError
+		return nil, nil, models.ErrNoProjectIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/project/%v/hierarchy", projectKeyOrID)
@@ -532,7 +532,7 @@ func (p *ProjectService) NotificationScheme(ctx context.Context, projectKeyOrID 
 	result *NotificationSchemeScheme, response *ResponseScheme, err error) {
 
 	if len(projectKeyOrID) == 0 {
-		return nil, nil, notProjectIDError
+		return nil, nil, models.ErrNoProjectIDError
 	}
 
 	params := url.Values{}

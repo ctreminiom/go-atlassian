@@ -23,7 +23,7 @@ func (p *ProjectRoleService) Gets(ctx context.Context, projectKeyOrID string) (r
 	err error) {
 
 	if len(projectKeyOrID) == 0 {
-		return nil, nil, notProjectIDError
+		return nil, nil, models.ErrNoProjectIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/project/%v/role", projectKeyOrID)
@@ -107,7 +107,7 @@ func (p *ProjectRoleService) Get(ctx context.Context, projectKeyOrID string, rol
 	response *ResponseScheme, err error) {
 
 	if len(projectKeyOrID) == 0 {
-		return nil, nil, notProjectIDError
+		return nil, nil, models.ErrNoProjectIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/project/%v/role/%v", projectKeyOrID, roleID)
@@ -146,7 +146,7 @@ func (p *ProjectRoleService) Details(ctx context.Context, projectKeyOrID string)
 	response *ResponseScheme, err error) {
 
 	if len(projectKeyOrID) == 0 {
-		return nil, nil, notProjectIDError
+		return nil, nil, models.ErrNoProjectIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/project/%v/roledetails", projectKeyOrID)

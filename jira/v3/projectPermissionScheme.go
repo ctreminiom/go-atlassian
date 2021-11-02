@@ -3,6 +3,7 @@ package v3
 import (
 	"context"
 	"fmt"
+	models "github.com/ctreminiom/go-atlassian/pkg/infra/models/jira"
 	"net/http"
 	"net/url"
 	"strings"
@@ -17,7 +18,7 @@ func (p *ProjectPermissionSchemeService) Get(ctx context.Context, projectKeyOrID
 	result *PermissionSchemeScheme, response *ResponseScheme, err error) {
 
 	if len(projectKeyOrID) == 0 {
-		return nil, nil, notProjectIDError
+		return nil, nil, models.ErrNoProjectIDError
 	}
 
 	params := url.Values{}
@@ -55,7 +56,7 @@ func (p *ProjectPermissionSchemeService) Assign(ctx context.Context, projectKeyO
 	result *PermissionSchemeScheme, response *ResponseScheme, err error) {
 
 	if len(projectKeyOrID) == 0 {
-		return nil, nil, notProjectIDError
+		return nil, nil, models.ErrNoProjectIDError
 	}
 
 	payload := struct {
@@ -100,7 +101,7 @@ func (p *ProjectPermissionSchemeService) SecurityLevels(ctx context.Context, pro
 	result *ProjectIssueSecurityLevelsScheme, response *ResponseScheme, err error) {
 
 	if len(projectKeyOrID) == 0 {
-		return nil, nil, notProjectIDError
+		return nil, nil, models.ErrNoProjectIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/project/%v/securitylevel", projectKeyOrID)

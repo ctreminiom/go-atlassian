@@ -3,6 +3,7 @@ package v3
 import (
 	"context"
 	"fmt"
+	models "github.com/ctreminiom/go-atlassian/pkg/infra/models/jira"
 	"net/http"
 )
 
@@ -71,7 +72,7 @@ func (p *ProjectComponentService) Gets(ctx context.Context, projectKeyOrID strin
 	response *ResponseScheme, err error) {
 
 	if len(projectKeyOrID) == 0 {
-		return nil, nil, notProjectIDError
+		return nil, nil, models.ErrNoProjectIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/project/%v/components", projectKeyOrID)

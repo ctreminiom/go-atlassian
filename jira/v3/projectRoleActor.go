@@ -3,6 +3,7 @@ package v3
 import (
 	"context"
 	"fmt"
+	models "github.com/ctreminiom/go-atlassian/pkg/infra/models/jira"
 	"net/http"
 	"net/url"
 	"strings"
@@ -17,7 +18,7 @@ func (p *ProjectRoleActorService) Add(ctx context.Context, projectKeyOrID string
 	result *ProjectRoleScheme, response *ResponseScheme, err error) {
 
 	if len(projectKeyOrID) == 0 {
-		return nil, nil, notProjectIDError
+		return nil, nil, models.ErrNoProjectIDError
 	}
 
 	payload := struct {
@@ -55,7 +56,7 @@ func (p *ProjectRoleActorService) Delete(ctx context.Context, projectKeyOrID str
 	response *ResponseScheme, err error) {
 
 	if len(projectKeyOrID) == 0 {
-		return nil, notProjectIDError
+		return nil, models.ErrNoProjectIDError
 	}
 
 	params := url.Values{}

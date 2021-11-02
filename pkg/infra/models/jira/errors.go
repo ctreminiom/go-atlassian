@@ -16,4 +16,5 @@ var (
 	ErrNoAttachmentNameError  = errors.New("jira: no attachment filename set")
 	ErrNoReaderError          = errors.New("jira: no reader set")
 	ErrNoCommentIDError       = errors.New("jira: no comment id set")
+	ErrNoProjectIDError       = errors.New("jira: no project id set")
 )

@@ -3,6 +3,7 @@ package v3
 import (
 	"context"
 	"fmt"
+	models "github.com/ctreminiom/go-atlassian/pkg/infra/models/jira"
 	"net/http"
 	"net/url"
 )
@@ -23,7 +24,7 @@ func (p *ProjectValidationService) Validate(ctx context.Context, projectKey stri
 	response *ResponseScheme, err error) {
 
 	if len(projectKey) == 0 {
-		return nil, nil, notProjectIDError
+		return nil, nil, models.ErrNoProjectIDError
 	}
 
 	params := url.Values{}
@@ -52,7 +53,7 @@ func (p *ProjectValidationService) Key(ctx context.Context, projectKey string) (
 	err error) {
 
 	if len(projectKey) == 0 {
-		return "", nil, notProjectIDError
+		return "", nil, models.ErrNoProjectIDError
 	}
 
 	params := url.Values{}

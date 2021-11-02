@@ -26,4 +26,5 @@ var (
 	ErrNoLinkTypeIDError      = errors.New("jira: no link type id set")
 	ErrNoPriorityIDError      = errors.New("jira: no priority id set")
 	ErrNoResolutionIDError    = errors.New("jira: no resolution id set")
+	ErrNoJQLError             = errors.New("jira: no sql set")
 )

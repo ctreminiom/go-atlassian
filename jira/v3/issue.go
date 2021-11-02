@@ -412,7 +412,7 @@ func (i *IssueService) Notify(ctx context.Context, issueKeyOrID string, options 
 // given its status, the response will return any empty transitions list.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues#get-transitions
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-transitions-get
-func (i *IssueService) Transitions(ctx context.Context, issueKeyOrID string) (result *IssueTransitionsScheme,
+func (i *IssueService) Transitions(ctx context.Context, issueKeyOrID string) (result *models.IssueTransitionsScheme,
 	response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {

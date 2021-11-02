@@ -12,98 +12,14 @@ import (
 
 type IssueSearchService struct{ client *Client }
 
-type IssueSearchScheme struct {
-	Expand          string                `json:"expand"`
-	StartAt         int                   `json:"startAt"`
-	MaxResults      int                   `json:"maxResults"`
-	Total           int                   `json:"total"`
-	Issues          []*models.IssueScheme `json:"issues"`
-	WarningMessages []string              `json:"warningMessages"`
-}
-
-type IssueTransitionsScheme struct {
-	Expand      string                   `json:"expand,omitempty"`
-	Transitions []*IssueTransitionScheme `json:"transitions,omitempty"`
-}
-
-type IssueTransitionScheme struct {
-	ID            string        `json:"id,omitempty"`
-	Name          string        `json:"name,omitempty"`
-	To            *StatusScheme `json:"to,omitempty"`
-	HasScreen     bool          `json:"hasScreen,omitempty"`
-	IsGlobal      bool          `json:"isGlobal,omitempty"`
-	IsInitial     bool          `json:"isInitial,omitempty"`
-	IsAvailable   bool          `json:"isAvailable,omitempty"`
-	IsConditional bool          `json:"isConditional,omitempty"`
-	IsLooped      bool          `json:"isLooped,omitempty"`
-}
-
-type StatusScheme struct {
-	Self           string                `json:"self,omitempty"`
-	Description    string                `json:"description,omitempty"`
-	IconURL        string                `json:"iconUrl,omitempty"`
-	Name           string                `json:"name,omitempty"`
-	ID             string                `json:"id,omitempty"`
-	StatusCategory *StatusCategoryScheme `json:"statusCategory,omitempty"`
-}
-
-type StatusCategoryScheme struct {
-	Self      string `json:"self,omitempty"`
-	ID        int    `json:"id,omitempty"`
-	Key       string `json:"key,omitempty"`
-	ColorName string `json:"colorName,omitempty"`
-	Name      string `json:"name,omitempty"`
-}
-
-type IssueChangelogScheme struct {
-	StartAt    int                            `json:"startAt"`
-	MaxResults int                            `json:"maxResults"`
-	Total      int                            `json:"total"`
-	Histories  []*IssueChangelogHistoryScheme `json:"histories"`
-}
-
-type IssueChangelogHistoryScheme struct {
-	ID string `json:"id"`
-
-	Author struct {
-		Self         string `json:"self"`
-		AccountID    string `json:"accountId"`
-		EmailAddress string `json:"emailAddress"`
-		AvatarUrls   struct {
-			Four8X48  string `json:"48x48"`
-			Two4X24   string `json:"24x24"`
-			One6X16   string `json:"16x16"`
-			Three2X32 string `json:"32x32"`
-		} `json:"avatarUrls"`
-		DisplayName string `json:"displayName"`
-		Active      bool   `json:"active"`
-		TimeZone    string `json:"timeZone"`
-		AccountType string `json:"accountType"`
-	} `json:"author"`
-
-	Created string `json:"created"`
-
-	Items []*IssueChangelogHistoryItemScheme `json:"items"`
-}
-
-type IssueChangelogHistoryItemScheme struct {
-	Field      string `json:"field"`
-	Fieldtype  string `json:"fieldtype"`
-	FieldID    string `json:"fieldId"`
-	From       string `json:"from"`
-	FromString string `json:"fromString"`
-	To         string `json:"to"`
-	ToString   string `json:"toString"`
-}
-
 // Get search issues using JQL query under the HTTP Method GET
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/search#search-for-issues-using-jql-get
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-search/#api-rest-api-3-search-get
 func (s *IssueSearchService) Get(ctx context.Context, jql string, fields, expands []string, startAt, maxResults int,
-	validate string) (result *IssueSearchScheme, response *ResponseScheme, err error) {
+	validate string) (result *models.IssueSearchScheme, response *ResponseScheme, err error) {
 
 	if len(jql) == 0 {
-		return nil, nil, notJQLError
+		return nil, nil, models.ErrNoJQLError
 	}
 
 	params := url.Values{}
@@ -143,7 +59,7 @@ func (s *IssueSearchService) Get(ctx context.Context, jql string, fields, expand
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/search#search-for-issues-using-jql-post
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-search/#api-rest-api-3-search-post
 func (s *IssueSearchService) Post(ctx context.Context, jql string, fields, expands []string, startAt, maxResults int,
-	validate string) (result *IssueSearchScheme, response *ResponseScheme, err error) {
+	validate string) (result *models.IssueSearchScheme, response *ResponseScheme, err error) {
 
 	payload := struct {
 		Expand        []string `json:"expand,omitempty"`
@@ -179,7 +95,3 @@ func (s *IssueSearchService) Post(ctx context.Context, jql string, fields, expan
 
 	return
 }
-
-var (
-	notJQLError = fmt.Errorf("error, please provide a valid JQL query")
-)

@@ -27,7 +27,7 @@ type FilterPayloadScheme struct {
 // The filter is not selected as a favorite.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/filters#create-filter
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-filters/#api-rest-api-3-filter-post
-func (f *FilterService) Create(ctx context.Context, payload *FilterPayloadScheme) (result *FilterScheme,
+func (f *FilterService) Create(ctx context.Context, payload *FilterPayloadScheme) (result *models.FilterScheme,
 	response *ResponseScheme, err error) {
 
 	payloadAsReader, err := transformStructToReader(payload)
@@ -55,7 +55,7 @@ func (f *FilterService) Create(ctx context.Context, payload *FilterPayloadScheme
 // Favorite returns the visible favorite filters of the user.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/filters#get-favorites
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-filters/#api-rest-api-3-filter-favourite-get
-func (f *FilterService) Favorite(ctx context.Context) (result []*FilterScheme, response *ResponseScheme, err error) {
+func (f *FilterService) Favorite(ctx context.Context) (result []*models.FilterScheme, response *ResponseScheme, err error) {
 
 	var endpoint = "rest/api/3/filter/favourite"
 
@@ -77,7 +77,7 @@ func (f *FilterService) Favorite(ctx context.Context) (result []*FilterScheme, r
 // the user's visible favorite filters are also returned.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/filters#get-my-filters
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-filters/#api-rest-api-3-filter-my-get
-func (f *FilterService) My(ctx context.Context, favorites bool, expand []string) (result []*FilterScheme, response *ResponseScheme, err error) {
+func (f *FilterService) My(ctx context.Context, favorites bool, expand []string) (result []*models.FilterScheme, response *ResponseScheme, err error) {
 
 	params := url.Values{}
 
@@ -123,7 +123,7 @@ type FilterSearchOptionScheme struct {
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/filters#search-filters
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-filters/#api-rest-api-3-filter-search-get
 func (f *FilterService) Search(ctx context.Context, options *FilterSearchOptionScheme, startAt, maxResults int) (
-	result *FilterSearchPageScheme, response *ResponseScheme, err error) {
+	result *models.FilterSearchPageScheme, response *ResponseScheme, err error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -179,7 +179,7 @@ func (f *FilterService) Search(ctx context.Context, options *FilterSearchOptionS
 // Get returns a filter.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/filters#get-filter
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-filters/#api-rest-api-3-filter-id-get
-func (f *FilterService) Get(ctx context.Context, filterID int, expand []string) (result *FilterScheme,
+func (f *FilterService) Get(ctx context.Context, filterID int, expand []string) (result *models.FilterScheme,
 	response *ResponseScheme, err error) {
 
 	params := url.Values{}
@@ -212,7 +212,7 @@ func (f *FilterService) Get(ctx context.Context, filterID int, expand []string) 
 // Update updates a filter. Use this operation to update a filter's name, description, JQL, or sharing.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/filters#update-filter
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-filters/#api-rest-api-3-filter-id-put
-func (f *FilterService) Update(ctx context.Context, filterID int, payload *FilterPayloadScheme) (result *FilterScheme,
+func (f *FilterService) Update(ctx context.Context, filterID int, payload *FilterPayloadScheme) (result *models.FilterScheme,
 	response *ResponseScheme, err error) {
 	payloadAsReader, err := transformStructToReader(payload)
 	if err != nil {
@@ -255,73 +255,4 @@ func (f *FilterService) Delete(ctx context.Context, filterID int) (response *Res
 	}
 
 	return
-}
-
-type FilterPageScheme struct {
-	Self       string          `json:"self,omitempty"`
-	MaxResults int             `json:"maxResults,omitempty"`
-	StartAt    int             `json:"startAt,omitempty"`
-	Total      int             `json:"total,omitempty"`
-	IsLast     bool            `json:"isLast,omitempty"`
-	Values     []*FilterScheme `json:"values,omitempty"`
-}
-
-type FilterSearchPageScheme struct {
-	Self       string                `json:"self,omitempty"`
-	MaxResults int                   `json:"maxResults,omitempty"`
-	StartAt    int                   `json:"startAt,omitempty"`
-	Total      int                   `json:"total,omitempty"`
-	IsLast     bool                  `json:"isLast,omitempty"`
-	Values     []*FilterDetailScheme `json:"values,omitempty"`
-}
-
-type FilterDetailScheme struct {
-	Self             string                          `json:"self,omitempty"`
-	ID               string                          `json:"id,omitempty"`
-	Name             string                          `json:"name,omitempty"`
-	Owner            *UserScheme                     `json:"owner,omitempty"`
-	Jql              string                          `json:"jql,omitempty"`
-	ViewURL          string                          `json:"viewUrl,omitempty"`
-	SearchURL        string                          `json:"searchUrl,omitempty"`
-	Favourite        bool                            `json:"favourite,omitempty"`
-	FavouritedCount  int                             `json:"favouritedCount,omitempty"`
-	SharePermissions []*models.SharePermissionScheme `json:"sharePermissions,omitempty"`
-	Subscriptions    []*FilterSubscriptionScheme     `json:"subscriptions,omitempty"`
-}
-
-type FilterScheme struct {
-	Self             string                          `json:"self,omitempty"`
-	ID               string                          `json:"id,omitempty"`
-	Name             string                          `json:"name,omitempty"`
-	Owner            *UserScheme                     `json:"owner,omitempty"`
-	Jql              string                          `json:"jql,omitempty"`
-	ViewURL          string                          `json:"viewUrl,omitempty"`
-	SearchURL        string                          `json:"searchUrl,omitempty"`
-	Favourite        bool                            `json:"favourite,omitempty"`
-	FavouritedCount  int                             `json:"favouritedCount,omitempty"`
-	SharePermissions []*models.SharePermissionScheme `json:"sharePermissions,omitempty"`
-	ShareUsers       *FilterUsersScheme              `json:"sharedUsers,omitempty"`
-	Subscriptions    *FilterSubscriptionPageScheme   `json:"subscriptions,omitempty"`
-}
-
-type FilterSubscriptionPageScheme struct {
-	Size       int                         `json:"size,omitempty"`
-	Items      []*FilterSubscriptionScheme `json:"items,omitempty"`
-	MaxResults int                         `json:"max-results,omitempty"`
-	StartIndex int                         `json:"start-index,omitempty"`
-	EndIndex   int                         `json:"end-index,omitempty"`
-}
-
-type FilterSubscriptionScheme struct {
-	ID    int          `json:"id,omitempty"`
-	User  *UserScheme  `json:"user,omitempty"`
-	Group *GroupScheme `json:"group,omitempty"`
-}
-
-type FilterUsersScheme struct {
-	Size       int           `json:"size,omitempty"`
-	Items      []*UserScheme `json:"items,omitempty"`
-	MaxResults int           `json:"max-results,omitempty"`
-	StartIndex int           `json:"start-index,omitempty"`
-	EndIndex   int           `json:"end-index,omitempty"`
 }

@@ -36,7 +36,7 @@ func (p *PriorityService) Get(ctx context.Context, priorityID string) (result *m
 	err error) {
 
 	if len(priorityID) == 0 {
-		return nil, nil, models.ErrPriorityIDError
+		return nil, nil, models.ErrNoPriorityIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/priority/%v", priorityID)

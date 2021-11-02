@@ -3,7 +3,7 @@ package v3
 import (
 	"context"
 	"fmt"
-	models "github.com/ctreminiom/go-atlassian/internal/infra/models/jira"
+	"github.com/ctreminiom/go-atlassian/pkg/infra/models/jira"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -14,10 +14,10 @@ type GroupService struct{ client *Client }
 // Create creates a group.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/groups#create-group
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-groups/#api-rest-api-3-group-post
-func (g *GroupService) Create(ctx context.Context, groupName string) (result *models.GroupScheme, response *ResponseScheme, err error) {
+func (g *GroupService) Create(ctx context.Context, groupName string) (result *jira.GroupScheme, response *ResponseScheme, err error) {
 
 	if len(groupName) == 0 {
-		return nil, nil, models.ErrNoGroupNameError
+		return nil, nil, jira.ErrNoGroupNameError
 	}
 
 	payload := struct {
@@ -51,7 +51,7 @@ func (g *GroupService) Create(ctx context.Context, groupName string) (result *mo
 func (g *GroupService) Delete(ctx context.Context, groupName string) (response *ResponseScheme, err error) {
 
 	if len(groupName) == 0 {
-		return nil, models.ErrNoGroupNameError
+		return nil, jira.ErrNoGroupNameError
 	}
 
 	params := url.Values{}
@@ -81,7 +81,7 @@ type GroupBulkOptionsScheme struct {
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-groups/#api-rest-api-3-group-bulk-get
 // NOTE: Experimental Endpoint
 func (g *GroupService) Bulk(ctx context.Context, options *GroupBulkOptionsScheme, startAt, maxResults int) (
-	result *models.BulkGroupScheme, response *ResponseScheme, err error) {
+	result *jira.BulkGroupScheme, response *ResponseScheme, err error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -116,10 +116,10 @@ func (g *GroupService) Bulk(ctx context.Context, options *GroupBulkOptionsScheme
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/groups#get-users-from-groups
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-groups/#api-rest-api-3-group-member-get
 func (g *GroupService) Members(ctx context.Context, groupName string, inactive bool, startAt, maxResults int) (
-	result *models.GroupMemberPageScheme, response *ResponseScheme, err error) {
+	result *jira.GroupMemberPageScheme, response *ResponseScheme, err error) {
 
 	if len(groupName) == 0 {
-		return nil, nil, models.ErrNoGroupNameError
+		return nil, nil, jira.ErrNoGroupNameError
 	}
 
 	params := url.Values{}
@@ -149,15 +149,15 @@ func (g *GroupService) Members(ctx context.Context, groupName string, inactive b
 // Add adds a user to a group.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/groups#add-user-to-group
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-groups/#api-rest-api-3-group-user-post
-func (g *GroupService) Add(ctx context.Context, groupName, accountID string) (result *models.GroupScheme,
+func (g *GroupService) Add(ctx context.Context, groupName, accountID string) (result *jira.GroupScheme,
 	response *ResponseScheme, err error) {
 
 	if len(groupName) == 0 {
-		return nil, nil, models.ErrNoGroupNameError
+		return nil, nil, jira.ErrNoGroupNameError
 	}
 
 	if len(accountID) == 0 {
-		return nil, nil, models.ErrNoGroupIDError
+		return nil, nil, jira.ErrNoGroupIDError
 	}
 
 	payload := struct {
@@ -194,11 +194,11 @@ func (g *GroupService) Add(ctx context.Context, groupName, accountID string) (re
 func (g *GroupService) Remove(ctx context.Context, groupName, accountID string) (response *ResponseScheme, err error) {
 
 	if len(groupName) == 0 {
-		return nil, models.ErrNoGroupNameError
+		return nil, jira.ErrNoGroupNameError
 	}
 
 	if len(accountID) == 0 {
-		return nil, models.ErrNoGroupIDError
+		return nil, jira.ErrNoGroupIDError
 	}
 
 	params := url.Values{}

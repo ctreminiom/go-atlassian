@@ -457,8 +457,8 @@ type IssueWorklogPageScheme struct {
 
 type IssueWorklogScheme struct {
 	Self             string                        `json:"self,omitempty"`
-	Author           *UserDetailScheme             `json:"author,omitempty"`
-	UpdateAuthor     *UserDetailScheme             `json:"updateAuthor,omitempty"`
+	Author           *models.UserDetailScheme      `json:"author,omitempty"`
+	UpdateAuthor     *models.UserDetailScheme      `json:"updateAuthor,omitempty"`
 	Created          string                        `json:"created,omitempty"`
 	Updated          string                        `json:"updated,omitempty"`
 	Visibility       *IssueWorklogVisibilityScheme `json:"visibility,omitempty"`

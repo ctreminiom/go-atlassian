@@ -30,4 +30,5 @@ var (
 	ErrNoIssueTypeIDError             = errors.New("jira: no issue type id set")
 	ErrNoIssueTypeScreenSchemeIDError = errors.New("jira: no issue type screen scheme id set")
 	ErrNoScreenSchemeIDError          = errors.New("jira: no screen scheme id set")
+	ErrNoAccountIDError               = errors.New("jira: no account id set")
 )

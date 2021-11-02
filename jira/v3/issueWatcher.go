@@ -10,32 +10,13 @@ import (
 
 type WatcherService struct{ client *Client }
 
-type IssueWatcherScheme struct {
-	Self       string              `json:"self,omitempty"`
-	IsWatching bool                `json:"isWatching,omitempty"`
-	WatchCount int                 `json:"watchCount,omitempty"`
-	Watchers   []*UserDetailScheme `json:"watchers,omitempty"`
-}
-
-type UserDetailScheme struct {
-	Self         string `json:"self,omitempty"`
-	Name         string `json:"name,omitempty"`
-	Key          string `json:"key,omitempty"`
-	AccountID    string `json:"accountId,omitempty"`
-	EmailAddress string `json:"emailAddress,omitempty"`
-	DisplayName  string `json:"displayName,omitempty"`
-	Active       bool   `json:"active,omitempty"`
-	TimeZone     string `json:"timeZone,omitempty"`
-	AccountType  string `json:"accountType,omitempty"`
-}
-
 // Gets returns the watchers for an issue.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/watcher#get-issue-watchers
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-watchers/#api-rest-api-3-issue-issueidorkey-watchers-get
-func (w *WatcherService) Gets(ctx context.Context, issueKeyOrID string) (result *IssueWatcherScheme, response *ResponseScheme, err error) {
+func (w *WatcherService) Gets(ctx context.Context, issueKeyOrID string) (result *models.IssueWatcherScheme, response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {
-		return nil, nil, notIssueKeyOrIDError
+		return nil, nil, models.ErrNoIssueTypeIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/issue/%v/watchers", issueKeyOrID)
@@ -62,7 +43,7 @@ func (w *WatcherService) Gets(ctx context.Context, issueKeyOrID string) (result 
 func (w *WatcherService) Add(ctx context.Context, issueKeyOrID string) (response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {
-		return nil, notIssueKeyOrIDError
+		return nil, models.ErrNoIssueTypeIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/issue/%v/watchers", issueKeyOrID)
@@ -89,11 +70,11 @@ func (w *WatcherService) Add(ctx context.Context, issueKeyOrID string) (response
 func (w *WatcherService) Delete(ctx context.Context, issueKeyOrID, accountID string) (response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {
-		return nil, notIssueKeyOrIDError
+		return nil, models.ErrNoIssueTypeIDError
 	}
 
 	if len(accountID) == 0 {
-		return nil, models.ErrNoGroupNameError
+		return nil, models.ErrNoAccountIDError
 	}
 
 	params := url.Values{}

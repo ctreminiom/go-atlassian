@@ -24,4 +24,5 @@ var (
 	ErrNoContextOptionIDError = errors.New("jira: no field context option id set")
 	ErrNoTypeIDError          = errors.New("jira: no link id set")
 	ErrNoLinkTypeIDError      = errors.New("jira: no link type id set")
+	ErrPriorityIDError        = errors.New("jira: no priority id set")
 )

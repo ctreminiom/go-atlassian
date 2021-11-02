@@ -3,6 +3,7 @@ package v3
 import (
 	"context"
 	"fmt"
+	models "github.com/ctreminiom/go-atlassian/pkg/infra/models/jira"
 	"github.com/google/go-querystring/query"
 	"github.com/tidwall/gjson"
 	"net/http"
@@ -15,12 +16,11 @@ type IssueMetadataService struct{ client *Client }
 // Get edit issue metadata returns the edit screen fields for an issue that are visible to and editable by the user.
 // Use the information to populate the requests in Edit issue.
 // Atlassian URL: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-editmeta-get
-// Docs: N/A
 func (i *IssueMetadataService) Get(ctx context.Context, issueKeyOrID string, overrideScreenSecurity, overrideEditableFlag bool) (
 	result gjson.Result, response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {
-		return gjson.Result{}, nil, notIssueKeyOrIDError
+		return gjson.Result{}, nil, models.ErrNoIssueKeyOrIDError
 	}
 
 	params := url.Values{}
@@ -65,7 +65,6 @@ type IssueMetadataCreateOptions struct {
 
 // Create returns details of projects, issue types within projects, and, when requested, the create screen fields for each issue type for the user.
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-createmeta-get
-// Docs: N/A
 func (i *IssueMetadataService) Create(ctx context.Context, opts *IssueMetadataCreateOptions) (result gjson.Result,
 	response *ResponseScheme, err error) {
 

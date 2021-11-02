@@ -3,6 +3,7 @@ package v3
 import (
 	"context"
 	"fmt"
+	models "github.com/ctreminiom/go-atlassian/pkg/infra/models/jira"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -15,47 +16,10 @@ type FieldService struct {
 	Context       *FieldContextService
 }
 
-type IssueFieldScheme struct {
-	ID            string                         `json:"id,omitempty"`
-	Key           string                         `json:"key,omitempty"`
-	Name          string                         `json:"name,omitempty"`
-	Custom        bool                           `json:"custom,omitempty"`
-	Orderable     bool                           `json:"orderable,omitempty"`
-	Navigable     bool                           `json:"navigable,omitempty"`
-	Searchable    bool                           `json:"searchable,omitempty"`
-	ClauseNames   []string                       `json:"clauseNames,omitempty"`
-	Scope         *TeamManagedProjectScopeScheme `json:"scope,omitempty"`
-	Schema        *IssueFieldSchemaScheme        `json:"schema,omitempty"`
-	Description   string                         `json:"description,omitempty"`
-	IsLocked      bool                           `json:"isLocked,omitempty"`
-	SearcherKey   string                         `json:"searcherKey,omitempty"`
-	ScreensCount  int                            `json:"screensCount,omitempty"`
-	ContextsCount int                            `json:"contextsCount,omitempty"`
-	LastUsed      *IssueFieldLastUsedScheme      `json:"lastUsed,omitempty"`
-}
-
-type IssueFieldLastUsedScheme struct {
-	Type  string `json:"type,omitempty"`
-	Value string `json:"value,omitempty"`
-}
-
-type TeamManagedProjectScopeScheme struct {
-	Type    string         `json:"type,omitempty"`
-	Project *ProjectScheme `json:"project,omitempty"`
-}
-
-type IssueFieldSchemaScheme struct {
-	Type     string `json:"type,omitempty"`
-	Items    string `json:"items,omitempty"`
-	System   string `json:"system,omitempty"`
-	Custom   string `json:"custom,omitempty"`
-	CustomID int    `json:"customId,omitempty"`
-}
-
 // Gets returns system and custom issue fields according to the following rules:
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields#get-fields
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-fields/#api-rest-api-3-field-get
-func (f *FieldService) Gets(ctx context.Context) (result []*IssueFieldScheme, response *ResponseScheme, err error) {
+func (f *FieldService) Gets(ctx context.Context) (result []*models.IssueFieldScheme, response *ResponseScheme, err error) {
 
 	var endpoint = "rest/api/3/field"
 
@@ -74,17 +38,10 @@ func (f *FieldService) Gets(ctx context.Context) (result []*IssueFieldScheme, re
 	return
 }
 
-type CustomFieldScheme struct {
-	Name        string `json:"name,omitempty"`
-	Description string `json:"description,omitempty"`
-	FieldType   string `json:"type,omitempty"`
-	SearcherKey string `json:"searcherKey,omitempty"`
-}
-
 // Create creates a custom field.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields#create-custom-field
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-fields/#api-rest-api-3-field-post
-func (f *FieldService) Create(ctx context.Context, payload *CustomFieldScheme) (result *IssueFieldScheme,
+func (f *FieldService) Create(ctx context.Context, payload *models.CustomFieldScheme) (result *models.IssueFieldScheme,
 	response *ResponseScheme, err error) {
 
 	var endpoint = "rest/api/3/field"
@@ -110,28 +67,12 @@ func (f *FieldService) Create(ctx context.Context, payload *CustomFieldScheme) (
 	return
 }
 
-type FieldSearchOptionsScheme struct {
-	Types   []string
-	IDs     []string
-	Query   string
-	OrderBy string
-	Expand  []string
-}
-
-type FieldSearchPageScheme struct {
-	MaxResults int                 `json:"maxResults,omitempty"`
-	StartAt    int                 `json:"startAt,omitempty"`
-	Total      int                 `json:"total,omitempty"`
-	IsLast     bool                `json:"isLast,omitempty"`
-	Values     []*IssueFieldScheme `json:"values,omitempty"`
-}
-
 // Search returns a paginated list of fields for Classic Jira projects.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields#get-fields-paginated
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-fields/#api-rest-api-3-field-search-get
 // NOTE: Experimental Endpoint
-func (f *FieldService) Search(ctx context.Context, options *FieldSearchOptionsScheme, startAt, maxResults int) (
-	result *FieldSearchPageScheme, response *ResponseScheme, err error) {
+func (f *FieldService) Search(ctx context.Context, options *models.FieldSearchOptionsScheme, startAt, maxResults int) (
+	result *models.FieldSearchPageScheme, response *ResponseScheme, err error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))

@@ -3,6 +3,7 @@ package v3
 import (
 	"context"
 	"fmt"
+	models "github.com/ctreminiom/go-atlassian/pkg/infra/models/jira"
 	"net/http"
 	"net/url"
 	"strings"
@@ -41,13 +42,13 @@ func (p *PermissionSchemeService) Gets(ctx context.Context) (result *PermissionS
 }
 
 type PermissionSchemeScheme struct {
-	Expand      string                         `json:"expand,omitempty"`
-	ID          int                            `json:"id,omitempty"`
-	Self        string                         `json:"self,omitempty"`
-	Name        string                         `json:"name,omitempty"`
-	Description string                         `json:"description,omitempty"`
-	Permissions []*PermissionGrantScheme       `json:"permissions,omitempty"`
-	Scope       *TeamManagedProjectScopeScheme `json:"scope,omitempty"`
+	Expand      string                                `json:"expand,omitempty"`
+	ID          int                                   `json:"id,omitempty"`
+	Self        string                                `json:"self,omitempty"`
+	Name        string                                `json:"name,omitempty"`
+	Description string                                `json:"description,omitempty"`
+	Permissions []*PermissionGrantScheme              `json:"permissions,omitempty"`
+	Scope       *models.TeamManagedProjectScopeScheme `json:"scope,omitempty"`
 }
 
 type PermissionScopeItemScheme struct {

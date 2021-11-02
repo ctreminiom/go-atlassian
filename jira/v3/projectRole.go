@@ -75,17 +75,17 @@ func (p *ProjectRoleService) Gets(ctx context.Context, projectKeyOrID string) (r
 }
 
 type ProjectRoleScheme struct {
-	Self             string                         `json:"self,omitempty"`
-	Name             string                         `json:"name,omitempty"`
-	ID               int                            `json:"id,omitempty"`
-	Description      string                         `json:"description,omitempty"`
-	Actors           []*RoleActorScheme             `json:"actors,omitempty"`
-	Scope            *TeamManagedProjectScopeScheme `json:"scope,omitempty"`
-	TranslatedName   string                         `json:"translatedName,omitempty"`
-	CurrentUserRole  bool                           `json:"currentUserRole,omitempty"`
-	Admin            bool                           `json:"admin,omitempty"`
-	RoleConfigurable bool                           `json:"roleConfigurable,omitempty"`
-	Default          bool                           `json:"default,omitempty"`
+	Self             string                                `json:"self,omitempty"`
+	Name             string                                `json:"name,omitempty"`
+	ID               int                                   `json:"id,omitempty"`
+	Description      string                                `json:"description,omitempty"`
+	Actors           []*RoleActorScheme                    `json:"actors,omitempty"`
+	Scope            *models.TeamManagedProjectScopeScheme `json:"scope,omitempty"`
+	TranslatedName   string                                `json:"translatedName,omitempty"`
+	CurrentUserRole  bool                                  `json:"currentUserRole,omitempty"`
+	Admin            bool                                  `json:"admin,omitempty"`
+	RoleConfigurable bool                                  `json:"roleConfigurable,omitempty"`
+	Default          bool                                  `json:"default,omitempty"`
 }
 
 type RoleActorScheme struct {
@@ -128,15 +128,15 @@ func (p *ProjectRoleService) Get(ctx context.Context, projectKeyOrID string, rol
 }
 
 type ProjectRoleDetailScheme struct {
-	Self             string                         `json:"self,omitempty"`
-	Name             string                         `json:"name,omitempty"`
-	ID               int                            `json:"id,omitempty"`
-	Description      string                         `json:"description,omitempty"`
-	Admin            bool                           `json:"admin,omitempty"`
-	Scope            *TeamManagedProjectScopeScheme `json:"scope,omitempty"`
-	RoleConfigurable bool                           `json:"roleConfigurable,omitempty"`
-	TranslatedName   string                         `json:"translatedName,omitempty"`
-	Default          bool                           `json:"default,omitempty"`
+	Self             string                                `json:"self,omitempty"`
+	Name             string                                `json:"name,omitempty"`
+	ID               int                                   `json:"id,omitempty"`
+	Description      string                                `json:"description,omitempty"`
+	Admin            bool                                  `json:"admin,omitempty"`
+	Scope            *models.TeamManagedProjectScopeScheme `json:"scope,omitempty"`
+	RoleConfigurable bool                                  `json:"roleConfigurable,omitempty"`
+	TranslatedName   string                                `json:"translatedName,omitempty"`
+	Default          bool                                  `json:"default,omitempty"`
 }
 
 // Details returns all project roles and the details for each role.

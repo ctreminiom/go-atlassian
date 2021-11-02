@@ -3,6 +3,7 @@ package v3
 import (
 	"context"
 	"fmt"
+	models "github.com/ctreminiom/go-atlassian/pkg/infra/models/jira"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/url"
@@ -13,7 +14,7 @@ func TestFieldService_Create(t *testing.T) {
 
 	testCases := []struct {
 		name               string
-		payload            *CustomFieldScheme
+		payload            *models.CustomFieldScheme
 		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string
@@ -23,7 +24,7 @@ func TestFieldService_Create(t *testing.T) {
 	}{
 		{
 			name: "CreateFieldWhenThePayloadIsCorrect",
-			payload: &CustomFieldScheme{
+			payload: &models.CustomFieldScheme{
 				Name:        "Alliance",
 				Description: "this is the alliance description field",
 				FieldType:   "cascadingselect",
@@ -38,7 +39,7 @@ func TestFieldService_Create(t *testing.T) {
 		},
 		{
 			name: "CreateFieldWhenTheEndpointIsIncorrect",
-			payload: &CustomFieldScheme{
+			payload: &models.CustomFieldScheme{
 				Name:        "Alliance",
 				Description: "this is the alliance description field",
 				FieldType:   "cascadingselect",
@@ -63,7 +64,7 @@ func TestFieldService_Create(t *testing.T) {
 		},
 		{
 			name: "CreateFieldWhenTheContextIsNil",
-			payload: &CustomFieldScheme{
+			payload: &models.CustomFieldScheme{
 				Name:        "Alliance",
 				Description: "this is the alliance description field",
 				FieldType:   "cascadingselect",
@@ -78,7 +79,7 @@ func TestFieldService_Create(t *testing.T) {
 		},
 		{
 			name: "CreateFieldWhenTheRequestMethodIsIncorrect",
-			payload: &CustomFieldScheme{
+			payload: &models.CustomFieldScheme{
 				Name:        "Alliance",
 				Description: "this is the alliance description field",
 				FieldType:   "cascadingselect",
@@ -93,7 +94,7 @@ func TestFieldService_Create(t *testing.T) {
 		},
 		{
 			name: "CreateFieldWhenTheStatusCodeIsIncorrect",
-			payload: &CustomFieldScheme{
+			payload: &models.CustomFieldScheme{
 				Name:        "Alliance",
 				Description: "this is the alliance description field",
 				FieldType:   "cascadingselect",
@@ -108,7 +109,7 @@ func TestFieldService_Create(t *testing.T) {
 		},
 		{
 			name: "CreateFieldWhenTheResponseBodyHasADifferentFormat",
-			payload: &CustomFieldScheme{
+			payload: &models.CustomFieldScheme{
 				Name:        "Alliance",
 				Description: "this is the alliance description field",
 				FieldType:   "cascadingselect",
@@ -333,7 +334,7 @@ func TestFieldService_Search(t *testing.T) {
 
 	testCases := []struct {
 		name               string
-		options            *FieldSearchOptionsScheme
+		options            *models.FieldSearchOptionsScheme
 		startAt            int
 		maxResults         int
 		mockFile           string
@@ -345,7 +346,7 @@ func TestFieldService_Search(t *testing.T) {
 	}{
 		{
 			name: "SearchFieldsWhenTheOptionsAreCorrect",
-			options: &FieldSearchOptionsScheme{
+			options: &models.FieldSearchOptionsScheme{
 				Types:   []string{"custom"},
 				IDs:     []string{"111", "12223"},
 				Query:   "query-sample",
@@ -375,7 +376,7 @@ func TestFieldService_Search(t *testing.T) {
 		},
 		{
 			name: "SearchFieldsWhenTheRequestMethodIsIncorrect",
-			options: &FieldSearchOptionsScheme{
+			options: &models.FieldSearchOptionsScheme{
 				Types:   []string{"custom"},
 				OrderBy: "lastUsed",
 				Expand:  []string{"screensCount", "lastUsed"},
@@ -391,7 +392,7 @@ func TestFieldService_Search(t *testing.T) {
 		},
 		{
 			name: "SearchFieldsWhenTheStatusCodeIsIncorrect",
-			options: &FieldSearchOptionsScheme{
+			options: &models.FieldSearchOptionsScheme{
 				Types:   []string{"custom"},
 				OrderBy: "lastUsed",
 				Expand:  []string{"screensCount", "lastUsed"},
@@ -407,7 +408,7 @@ func TestFieldService_Search(t *testing.T) {
 		},
 		{
 			name: "SearchFieldsWhenTheContextIsNil",
-			options: &FieldSearchOptionsScheme{
+			options: &models.FieldSearchOptionsScheme{
 				Types:   []string{"custom"},
 				OrderBy: "lastUsed",
 				Expand:  []string{"screensCount", "lastUsed"},
@@ -423,7 +424,7 @@ func TestFieldService_Search(t *testing.T) {
 		},
 		{
 			name: "SearchFieldsWhenTheResponseBodyHasADifferentFormat",
-			options: &FieldSearchOptionsScheme{
+			options: &models.FieldSearchOptionsScheme{
 				Types:   []string{"custom"},
 				OrderBy: "lastUsed",
 				Expand:  []string{"screensCount", "lastUsed"},

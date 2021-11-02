@@ -499,7 +499,7 @@ type NotificationSchemeScheme struct {
 	Name                     string                                  `json:"name,omitempty"`
 	Description              string                                  `json:"description,omitempty"`
 	NotificationSchemeEvents []*ProjectNotificationSchemeEventScheme `json:"notificationSchemeEvents,omitempty"`
-	Scope                    *TeamManagedProjectScopeScheme          `json:"scope,omitempty"`
+	Scope                    *models.TeamManagedProjectScopeScheme   `json:"scope,omitempty"`
 }
 
 type ProjectNotificationSchemeEventScheme struct {
@@ -515,15 +515,15 @@ type NotificationEventScheme struct {
 }
 
 type EventNotificationScheme struct {
-	Expand           string              `json:"expand,omitempty"`
-	ID               int                 `json:"id,omitempty"`
-	NotificationType string              `json:"notificationType,omitempty"`
-	Parameter        string              `json:"parameter,omitempty"`
-	EmailAddress     string              `json:"emailAddress,omitempty"`
-	Group            *models.GroupScheme `json:"group,omitempty"`
-	Field            *IssueFieldScheme   `json:"field,omitempty"`
-	ProjectRole      *ProjectRoleScheme  `json:"projectRole,omitempty"`
-	User             *UserScheme         `json:"user,omitempty"`
+	Expand           string                   `json:"expand,omitempty"`
+	ID               int                      `json:"id,omitempty"`
+	NotificationType string                   `json:"notificationType,omitempty"`
+	Parameter        string                   `json:"parameter,omitempty"`
+	EmailAddress     string                   `json:"emailAddress,omitempty"`
+	Group            *models.GroupScheme      `json:"group,omitempty"`
+	Field            *models.IssueFieldScheme `json:"field,omitempty"`
+	ProjectRole      *ProjectRoleScheme       `json:"projectRole,omitempty"`
+	User             *UserScheme              `json:"user,omitempty"`
 }
 
 // NotificationScheme search a notification scheme associated with the project.

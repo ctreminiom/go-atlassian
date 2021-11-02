@@ -3,6 +3,7 @@ package v3
 import (
 	"context"
 	"fmt"
+	models "github.com/ctreminiom/go-atlassian/pkg/infra/models/jira"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -15,10 +16,10 @@ type ScreenService struct {
 }
 
 type ScreenScheme struct {
-	ID          int                            `json:"id,omitempty"`
-	Name        string                         `json:"name,omitempty"`
-	Description string                         `json:"description,omitempty"`
-	Scope       *TeamManagedProjectScopeScheme `json:"scope,omitempty"`
+	ID          int                                   `json:"id,omitempty"`
+	Name        string                                `json:"name,omitempty"`
+	Description string                                `json:"description,omitempty"`
+	Scope       *models.TeamManagedProjectScopeScheme `json:"scope,omitempty"`
 }
 
 type ScreenFieldPageScheme struct {
@@ -32,11 +33,11 @@ type ScreenFieldPageScheme struct {
 }
 
 type ScreenWithTabScheme struct {
-	ID          int                            `json:"id,omitempty"`
-	Name        string                         `json:"name,omitempty"`
-	Description string                         `json:"description,omitempty"`
-	Scope       *TeamManagedProjectScopeScheme `json:"scope,omitempty"`
-	Tab         *ScreenTabScheme               `json:"tab,omitempty"`
+	ID          int                                   `json:"id,omitempty"`
+	Name        string                                `json:"name,omitempty"`
+	Description string                                `json:"description,omitempty"`
+	Scope       *models.TeamManagedProjectScopeScheme `json:"scope,omitempty"`
+	Tab         *ScreenTabScheme                      `json:"tab,omitempty"`
 }
 
 // Fields returns a paginated list of the screens a field is used in.

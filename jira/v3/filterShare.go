@@ -3,6 +3,7 @@ package v3
 import (
 	"context"
 	"fmt"
+	models "github.com/ctreminiom/go-atlassian/internal/infra/models/jira"
 	"net/http"
 	"strings"
 )
@@ -85,7 +86,7 @@ func (f *FilterShareService) SetScope(ctx context.Context, scope string) (respon
 // Sharing with all logged-in users or the public is known as a global share permission.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/filters/sharing#get-share-permissions
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-filter-sharing/#api-rest-api-3-filter-id-permission-get
-func (f *FilterShareService) Gets(ctx context.Context, filterID int) (result []*SharePermissionScheme, response *ResponseScheme, err error) {
+func (f *FilterShareService) Gets(ctx context.Context, filterID int) (result []*models.SharePermissionScheme, response *ResponseScheme, err error) {
 
 	var endpoint = fmt.Sprintf("rest/api/3/filter/%v/permission", filterID)
 
@@ -116,7 +117,7 @@ type PermissionFilterPayloadScheme struct {
 // it will overwrite all share permissions for the filter.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/filters/sharing#add-share-permission
 func (f *FilterShareService) Add(ctx context.Context, filterID int, payload *PermissionFilterPayloadScheme) (
-	result []*SharePermissionScheme, response *ResponseScheme, err error) {
+	result []*models.SharePermissionScheme, response *ResponseScheme, err error) {
 
 	payloadAsReader, err := transformStructToReader(payload)
 	if err != nil {
@@ -146,7 +147,7 @@ func (f *FilterShareService) Add(ctx context.Context, filterID int, payload *Per
 // Sharing with all logged-in users or the public is known as a global share permission.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/filters/sharing#get-share-permission
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-filter-sharing/#api-rest-api-3-filter-id-permission-permissionid-get
-func (f *FilterShareService) Get(ctx context.Context, filterID, permissionID int) (result *SharePermissionScheme,
+func (f *FilterShareService) Get(ctx context.Context, filterID, permissionID int) (result *models.SharePermissionScheme,
 	response *ResponseScheme, err error) {
 
 	var endpoint = fmt.Sprintf("rest/api/3/filter/%v/permission/%v", filterID, permissionID)

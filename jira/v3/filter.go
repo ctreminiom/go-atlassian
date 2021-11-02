@@ -3,6 +3,7 @@ package v3
 import (
 	"context"
 	"fmt"
+	models "github.com/ctreminiom/go-atlassian/internal/infra/models/jira"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -15,11 +16,11 @@ type FilterService struct {
 }
 
 type FilterPayloadScheme struct {
-	Name             string                   `json:"name,omitempty"`
-	Description      string                   `json:"description,omitempty"`
-	JQL              string                   `json:"jql,omitempty"`
-	Favorite         bool                     `json:"favourite,omitempty"`
-	SharePermissions []*SharePermissionScheme `json:"sharePermissions,omitempty"`
+	Name             string                          `json:"name,omitempty"`
+	Description      string                          `json:"description,omitempty"`
+	JQL              string                          `json:"jql,omitempty"`
+	Favorite         bool                            `json:"favourite,omitempty"`
+	SharePermissions []*models.SharePermissionScheme `json:"sharePermissions,omitempty"`
 }
 
 // Create creates a filter. The filter is shared according to the default share scope.
@@ -275,32 +276,32 @@ type FilterSearchPageScheme struct {
 }
 
 type FilterDetailScheme struct {
-	Self             string                      `json:"self,omitempty"`
-	ID               string                      `json:"id,omitempty"`
-	Name             string                      `json:"name,omitempty"`
-	Owner            *UserScheme                 `json:"owner,omitempty"`
-	Jql              string                      `json:"jql,omitempty"`
-	ViewURL          string                      `json:"viewUrl,omitempty"`
-	SearchURL        string                      `json:"searchUrl,omitempty"`
-	Favourite        bool                        `json:"favourite,omitempty"`
-	FavouritedCount  int                         `json:"favouritedCount,omitempty"`
-	SharePermissions []*SharePermissionScheme    `json:"sharePermissions,omitempty"`
-	Subscriptions    []*FilterSubscriptionScheme `json:"subscriptions,omitempty"`
+	Self             string                          `json:"self,omitempty"`
+	ID               string                          `json:"id,omitempty"`
+	Name             string                          `json:"name,omitempty"`
+	Owner            *UserScheme                     `json:"owner,omitempty"`
+	Jql              string                          `json:"jql,omitempty"`
+	ViewURL          string                          `json:"viewUrl,omitempty"`
+	SearchURL        string                          `json:"searchUrl,omitempty"`
+	Favourite        bool                            `json:"favourite,omitempty"`
+	FavouritedCount  int                             `json:"favouritedCount,omitempty"`
+	SharePermissions []*models.SharePermissionScheme `json:"sharePermissions,omitempty"`
+	Subscriptions    []*FilterSubscriptionScheme     `json:"subscriptions,omitempty"`
 }
 
 type FilterScheme struct {
-	Self             string                        `json:"self,omitempty"`
-	ID               string                        `json:"id,omitempty"`
-	Name             string                        `json:"name,omitempty"`
-	Owner            *UserScheme                   `json:"owner,omitempty"`
-	Jql              string                        `json:"jql,omitempty"`
-	ViewURL          string                        `json:"viewUrl,omitempty"`
-	SearchURL        string                        `json:"searchUrl,omitempty"`
-	Favourite        bool                          `json:"favourite,omitempty"`
-	FavouritedCount  int                           `json:"favouritedCount,omitempty"`
-	SharePermissions []*SharePermissionScheme      `json:"sharePermissions,omitempty"`
-	ShareUsers       *FilterUsersScheme            `json:"sharedUsers,omitempty"`
-	Subscriptions    *FilterSubscriptionPageScheme `json:"subscriptions,omitempty"`
+	Self             string                          `json:"self,omitempty"`
+	ID               string                          `json:"id,omitempty"`
+	Name             string                          `json:"name,omitempty"`
+	Owner            *UserScheme                     `json:"owner,omitempty"`
+	Jql              string                          `json:"jql,omitempty"`
+	ViewURL          string                          `json:"viewUrl,omitempty"`
+	SearchURL        string                          `json:"searchUrl,omitempty"`
+	Favourite        bool                            `json:"favourite,omitempty"`
+	FavouritedCount  int                             `json:"favouritedCount,omitempty"`
+	SharePermissions []*models.SharePermissionScheme `json:"sharePermissions,omitempty"`
+	ShareUsers       *FilterUsersScheme              `json:"sharedUsers,omitempty"`
+	Subscriptions    *FilterSubscriptionPageScheme   `json:"subscriptions,omitempty"`
 }
 
 type FilterSubscriptionPageScheme struct {

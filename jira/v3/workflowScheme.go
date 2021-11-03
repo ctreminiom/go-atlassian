@@ -14,7 +14,7 @@ type WorkflowSchemeService struct{ client *Client }
 
 // Gets returns a paginated list of all workflow schemes, not including draft workflow schemes.
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-workflow-schemes/#api-rest-api-3-workflowscheme-get
-func (w *WorkflowSchemeService) Gets(ctx context.Context, startAt, maxResults int) (result *WorkflowSchemePageScheme,
+func (w *WorkflowSchemeService) Gets(ctx context.Context, startAt, maxResults int) (result *models.WorkflowSchemePageScheme,
 	response *ResponseScheme, err error) {
 
 	params := url.Values{}
@@ -40,7 +40,7 @@ func (w *WorkflowSchemeService) Gets(ctx context.Context, startAt, maxResults in
 
 // Create creates a workflow scheme.
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-workflow-schemes/#api-rest-api-3-workflowscheme-post
-func (w *WorkflowSchemeService) Create(ctx context.Context, payload *WorkflowSchemePayloadScheme) (result *WorkflowSchemeScheme,
+func (w *WorkflowSchemeService) Create(ctx context.Context, payload *models.WorkflowSchemePayloadScheme) (result *models.WorkflowSchemeScheme,
 	response *ResponseScheme, err error) {
 
 	var endpoint = "/rest/api/3/workflowscheme"
@@ -68,7 +68,7 @@ func (w *WorkflowSchemeService) Create(ctx context.Context, payload *WorkflowSch
 
 // Get returns a workflow scheme.
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-workflow-schemes/#api-rest-api-3-workflowscheme-id-get
-func (w *WorkflowSchemeService) Get(ctx context.Context, workflowSchemeID int, isExits bool) (result *WorkflowSchemeScheme,
+func (w *WorkflowSchemeService) Get(ctx context.Context, workflowSchemeID int, isExits bool) (result *models.WorkflowSchemeScheme,
 	response *ResponseScheme, err error) {
 
 	var endpoint strings.Builder
@@ -102,7 +102,7 @@ func (w *WorkflowSchemeService) Get(ctx context.Context, workflowSchemeID int, i
 // and more. If the workflow scheme is active (that is, being used by at least one project),
 // then a draft workflow scheme is created or updated instead, provided that updateDraftIfNeeded is set to true.
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-workflow-schemes/#api-rest-api-3-workflowscheme-id-put
-func (w *WorkflowSchemeService) Update(ctx context.Context, workflowSchemeID int, payload *WorkflowSchemePayloadScheme) (result *WorkflowSchemeScheme,
+func (w *WorkflowSchemeService) Update(ctx context.Context, workflowSchemeID int, payload *models.WorkflowSchemePayloadScheme) (result *models.WorkflowSchemeScheme,
 	response *ResponseScheme, err error) {
 
 	var endpoint = fmt.Sprintf("/rest/api/3/workflowscheme/%v", workflowSchemeID)
@@ -146,33 +146,4 @@ func (w *WorkflowSchemeService) Delete(ctx context.Context, workflowSchemeID int
 	}
 
 	return
-}
-
-type WorkflowSchemePayloadScheme struct {
-	DefaultWorkflow   string      `json:"defaultWorkflow,omitempty"`
-	Name              string      `json:"name,omitempty"`
-	Description       string      `json:"description,omitempty"`
-	IssueTypeMappings interface{} `json:"issueTypeMappings,omitempty"`
-}
-
-type WorkflowSchemePageScheme struct {
-	Self       string                  `json:"self,omitempty"`
-	NextPage   string                  `json:"nextPage,omitempty"`
-	MaxResults int                     `json:"maxResults,omitempty"`
-	StartAt    int                     `json:"startAt,omitempty"`
-	Total      int                     `json:"total,omitempty"`
-	IsLast     bool                    `json:"isLast,omitempty"`
-	Values     []*WorkflowSchemeScheme `json:"values,omitempty"`
-}
-
-type WorkflowSchemeScheme struct {
-	ID                  int                `json:"id,omitempty"`
-	Name                string             `json:"name,omitempty"`
-	Description         string             `json:"description,omitempty"`
-	DefaultWorkflow     string             `json:"defaultWorkflow,omitempty"`
-	Draft               bool               `json:"draft,omitempty"`
-	LastModifiedUser    *models.UserScheme `json:"lastModifiedUser,omitempty"`
-	LastModified        string             `json:"lastModified,omitempty"`
-	Self                string             `json:"self,omitempty"`
-	UpdateDraftIfNeeded bool               `json:"updateDraftIfNeeded,omitempty"`
 }

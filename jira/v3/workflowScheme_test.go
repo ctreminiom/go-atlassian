@@ -3,6 +3,7 @@ package v3
 import (
 	"context"
 	"fmt"
+	models "github.com/ctreminiom/go-atlassian/pkg/infra/models/jira"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/url"
@@ -13,7 +14,7 @@ func TestWorkflowSchemeService_Create(t *testing.T) {
 
 	testCases := []struct {
 		name               string
-		payload            *WorkflowSchemePayloadScheme
+		payload            *models.WorkflowSchemePayloadScheme
 		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string
@@ -24,7 +25,7 @@ func TestWorkflowSchemeService_Create(t *testing.T) {
 		{
 			name:     "CreateWorkflowSchemeWhenTheParametersAreCorrect",
 			mockFile: "./mocks/get-worflow-scheme.json",
-			payload: &WorkflowSchemePayloadScheme{
+			payload: &models.WorkflowSchemePayloadScheme{
 				DefaultWorkflow: "jira",
 				Name:            "Example workflow scheme",
 				Description:     "The description of the example workflow scheme.",
@@ -54,7 +55,7 @@ func TestWorkflowSchemeService_Create(t *testing.T) {
 		{
 			name:     "CreateWorkflowSchemeWhenTheContextIsNotSet",
 			mockFile: "./mocks/get-worflow-scheme.json",
-			payload: &WorkflowSchemePayloadScheme{
+			payload: &models.WorkflowSchemePayloadScheme{
 				DefaultWorkflow: "jira",
 				Name:            "Example workflow scheme",
 				Description:     "The description of the example workflow scheme.",
@@ -73,7 +74,7 @@ func TestWorkflowSchemeService_Create(t *testing.T) {
 		{
 			name:     "CreateWorkflowSchemeWhenTheRequestMethodIsIncorrect",
 			mockFile: "./mocks/get-worflow-scheme.json",
-			payload: &WorkflowSchemePayloadScheme{
+			payload: &models.WorkflowSchemePayloadScheme{
 				DefaultWorkflow: "jira",
 				Name:            "Example workflow scheme",
 				Description:     "The description of the example workflow scheme.",
@@ -92,7 +93,7 @@ func TestWorkflowSchemeService_Create(t *testing.T) {
 		{
 			name:     "CreateWorkflowSchemeWhenTheStatusCodeIsIncorrect",
 			mockFile: "./mocks/get-worflow-scheme.json",
-			payload: &WorkflowSchemePayloadScheme{
+			payload: &models.WorkflowSchemePayloadScheme{
 				DefaultWorkflow: "jira",
 				Name:            "Example workflow scheme",
 				Description:     "The description of the example workflow scheme.",
@@ -316,7 +317,7 @@ func TestWorkflowSchemeService_Update(t *testing.T) {
 	testCases := []struct {
 		name               string
 		workflowSchemeID   int
-		payload            *WorkflowSchemePayloadScheme
+		payload            *models.WorkflowSchemePayloadScheme
 		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string
@@ -328,7 +329,7 @@ func TestWorkflowSchemeService_Update(t *testing.T) {
 			name:             "UpdateWorkflowSchemeWhenTheParametersAreCorrect",
 			workflowSchemeID: 1006,
 			mockFile:         "./mocks/get-worflow-scheme.json",
-			payload: &WorkflowSchemePayloadScheme{
+			payload: &models.WorkflowSchemePayloadScheme{
 				DefaultWorkflow: "jira",
 				Name:            "Example workflow scheme",
 				Description:     "The description of the example workflow scheme.",
@@ -348,7 +349,7 @@ func TestWorkflowSchemeService_Update(t *testing.T) {
 			name:             "UpdateWorkflowSchemeWhenTheContextIsNotSet",
 			workflowSchemeID: 1006,
 			mockFile:         "./mocks/get-worflow-scheme.json",
-			payload: &WorkflowSchemePayloadScheme{
+			payload: &models.WorkflowSchemePayloadScheme{
 				DefaultWorkflow: "jira",
 				Name:            "Example workflow scheme",
 				Description:     "The description of the example workflow scheme.",
@@ -368,7 +369,7 @@ func TestWorkflowSchemeService_Update(t *testing.T) {
 			name:             "UpdateWorkflowSchemeWhenTheResponseBodyIsEmpty",
 			workflowSchemeID: 1006,
 			mockFile:         "./mocks/empty_json.json",
-			payload: &WorkflowSchemePayloadScheme{
+			payload: &models.WorkflowSchemePayloadScheme{
 				DefaultWorkflow: "jira",
 				Name:            "Example workflow scheme",
 				Description:     "The description of the example workflow scheme.",
@@ -388,7 +389,7 @@ func TestWorkflowSchemeService_Update(t *testing.T) {
 			name:             "UpdateWorkflowSchemeWhenTheRequestMethodIsIncorrect",
 			workflowSchemeID: 1006,
 			mockFile:         "./mocks/get-worflow-scheme.json",
-			payload: &WorkflowSchemePayloadScheme{
+			payload: &models.WorkflowSchemePayloadScheme{
 				DefaultWorkflow: "jira",
 				Name:            "Example workflow scheme",
 				Description:     "The description of the example workflow scheme.",
@@ -408,7 +409,7 @@ func TestWorkflowSchemeService_Update(t *testing.T) {
 			name:             "UpdateWorkflowSchemeWhenTheStatusCodeIsIncorrect",
 			workflowSchemeID: 1006,
 			mockFile:         "./mocks/get-worflow-scheme.json",
-			payload: &WorkflowSchemePayloadScheme{
+			payload: &models.WorkflowSchemePayloadScheme{
 				DefaultWorkflow: "jira",
 				Name:            "Example workflow scheme",
 				Description:     "The description of the example workflow scheme.",

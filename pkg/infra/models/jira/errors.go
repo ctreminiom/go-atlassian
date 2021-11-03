@@ -42,4 +42,5 @@ var (
 	ErrNoScreenNameError              = errors.New("jira: no screen name set")
 	ErrNoScreenTabNameError           = errors.New("jira: no screen tab name set")
 	ErrNoAccountSliceError            = errors.New("jira: no account id's set")
+	ErrNoProjectKeySliceError         = errors.New("jira: no project key's set")
 )

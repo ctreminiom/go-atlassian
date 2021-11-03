@@ -20,7 +20,7 @@ func (u *UserSearchService) Projects(ctx context.Context, accountID string, proj
 	result []*models.UserScheme, response *ResponseScheme, err error) {
 
 	if len(projectKeys) == 0 {
-		return nil, nil, notProjectListError
+		return nil, nil, models.ErrNoProjectKeySliceError
 	}
 
 	params := url.Values{}
@@ -52,7 +52,7 @@ func (u *UserSearchService) Projects(ctx context.Context, accountID string, proj
 	return
 }
 
-// Do returns a list of users that match the search string and property.
+// Do return a list of users that match the search string and property.
 // This operation takes the users in the range defined by startAt and maxResults, up to the thousandth user,
 // and then returns only the users from that range that match the search string and property.
 // This means the operation usually returns fewer users than specified in maxResults
@@ -89,7 +89,3 @@ func (u *UserSearchService) Do(ctx context.Context, accountID, query string, sta
 
 	return
 }
-
-var (
-	notProjectListError = fmt.Errorf("error, please provide a valid projectKeys values")
-)

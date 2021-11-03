@@ -36,4 +36,5 @@ var (
 	ErrNoPermissionSchemeIDError      = errors.New("jira: no permission scheme id set")
 	ErrNoPermissionGrantIDError       = errors.New("jira: no permission grant id set")
 	ErrNoComponentIDError             = errors.New("jira: no component id set")
+	ErrProjectTypeKeyError            = errors.New("jira: no project type key set")
 )

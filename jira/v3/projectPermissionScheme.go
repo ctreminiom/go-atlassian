@@ -85,20 +85,11 @@ func (p *ProjectPermissionSchemeService) Assign(ctx context.Context, projectKeyO
 	return
 }
 
-type ProjectIssueSecurityLevelsScheme struct {
-	Levels []struct {
-		Self        string `json:"self"`
-		ID          string `json:"id"`
-		Description string `json:"description"`
-		Name        string `json:"name"`
-	} `json:"levels"`
-}
-
 // SecurityLevels returns all issue security levels for the project that the user has access to.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/projects/permission-schemes#get-project-issue-security-levels
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-permission-schemes/#api-rest-api-3-project-projectkeyorid-securitylevel-get
 func (p *ProjectPermissionSchemeService) SecurityLevels(ctx context.Context, projectKeyOrID string) (
-	result *ProjectIssueSecurityLevelsScheme, response *ResponseScheme, err error) {
+	result *models.IssueSecurityLevelsScheme, response *ResponseScheme, err error) {
 
 	if len(projectKeyOrID) == 0 {
 		return nil, nil, models.ErrNoProjectIDError

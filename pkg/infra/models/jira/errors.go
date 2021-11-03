@@ -39,4 +39,6 @@ var (
 	ErrProjectTypeKeyError            = errors.New("jira: no project type key set")
 	ErrNoProjectNameError             = errors.New("jira: no project name set")
 	ErrNoVersionIDError               = errors.New("jira: no version id set")
+	ErrNoScreenNameError              = errors.New("jira: no screen name set")
+	ErrNoScreenTabNameError           = errors.New("jira: no screen tab name set")
 )

@@ -15,35 +15,10 @@ type ScreenService struct {
 	Scheme *ScreenSchemeService
 }
 
-type ScreenScheme struct {
-	ID          int                                   `json:"id,omitempty"`
-	Name        string                                `json:"name,omitempty"`
-	Description string                                `json:"description,omitempty"`
-	Scope       *models.TeamManagedProjectScopeScheme `json:"scope,omitempty"`
-}
-
-type ScreenFieldPageScheme struct {
-	Self       string                 `json:"self,omitempty"`
-	NextPage   string                 `json:"nextPage,omitempty"`
-	MaxResults int                    `json:"maxResults,omitempty"`
-	StartAt    int                    `json:"startAt,omitempty"`
-	Total      int                    `json:"total,omitempty"`
-	IsLast     bool                   `json:"isLast,omitempty"`
-	Values     []*ScreenWithTabScheme `json:"values,omitempty"`
-}
-
-type ScreenWithTabScheme struct {
-	ID          int                                   `json:"id,omitempty"`
-	Name        string                                `json:"name,omitempty"`
-	Description string                                `json:"description,omitempty"`
-	Scope       *models.TeamManagedProjectScopeScheme `json:"scope,omitempty"`
-	Tab         *ScreenTabScheme                      `json:"tab,omitempty"`
-}
-
 // Fields returns a paginated list of the screens a field is used in.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/screens#get-screens-for-a-field
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screens/#api-rest-api-3-field-fieldid-screens-get
-func (s *ScreenService) Fields(ctx context.Context, fieldID string, startAt, maxResults int) (result *ScreenFieldPageScheme,
+func (s *ScreenService) Fields(ctx context.Context, fieldID string, startAt, maxResults int) (result *models.ScreenFieldPageScheme,
 	response *ResponseScheme, err error) {
 
 	if len(fieldID) == 0 {
@@ -71,19 +46,10 @@ func (s *ScreenService) Fields(ctx context.Context, fieldID string, startAt, max
 	return
 }
 
-type ScreenSearchPageScheme struct {
-	Self       string          `json:"self,omitempty"`
-	MaxResults int             `json:"maxResults,omitempty"`
-	StartAt    int             `json:"startAt,omitempty"`
-	Total      int             `json:"total,omitempty"`
-	IsLast     bool            `json:"isLast,omitempty"`
-	Values     []*ScreenScheme `json:"values,omitempty"`
-}
-
 // Gets returns a paginated list of all screens or those specified by one or more screen IDs.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/screens#get-screens
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screens/#api-rest-api-3-screens-get
-func (s *ScreenService) Gets(ctx context.Context, screenIDs []int, startAt, maxResults int) (result *ScreenSearchPageScheme,
+func (s *ScreenService) Gets(ctx context.Context, screenIDs []int, startAt, maxResults int) (result *models.ScreenSearchPageScheme,
 	response *ResponseScheme, err error) {
 
 	params := url.Values{}
@@ -114,11 +80,11 @@ func (s *ScreenService) Gets(ctx context.Context, screenIDs []int, startAt, maxR
 // Create creates a screen with a default field tab.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/screens#create-screen
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screens/#api-rest-api-3-screens-post
-func (s *ScreenService) Create(ctx context.Context, name, description string) (result *ScreenScheme,
+func (s *ScreenService) Create(ctx context.Context, name, description string) (result *models.ScreenScheme,
 	response *ResponseScheme, err error) {
 
 	if len(name) == 0 {
-		return nil, nil, notScreenNameError
+		return nil, nil, models.ErrNoScreenNameError
 	}
 
 	payload := struct {
@@ -177,7 +143,7 @@ func (s *ScreenService) AddToDefault(ctx context.Context, fieldID string) (respo
 // Update updates a screen. Only screens used in classic projects can be updated.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/screens#update-screen
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screens/#api-rest-api-3-screens-screenid-put
-func (s *ScreenService) Update(ctx context.Context, screenID int, name, description string) (result *ScreenScheme,
+func (s *ScreenService) Update(ctx context.Context, screenID int, name, description string) (result *models.ScreenScheme,
 	response *ResponseScheme, err error) {
 
 	payload := struct {
@@ -229,15 +195,10 @@ func (s *ScreenService) Delete(ctx context.Context, screenID int) (response *Res
 	return
 }
 
-type AvailableScreenFieldScheme struct {
-	ID   string `json:"id"`
-	Name string `json:"name"`
-}
-
 // Available returns the fields that can be added to a tab on a screen.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/screens#get-available-screen-fields
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screens/#api-rest-api-3-screens-screenid-availablefields-get
-func (s *ScreenService) Available(ctx context.Context, screenID int) (result []*AvailableScreenFieldScheme,
+func (s *ScreenService) Available(ctx context.Context, screenID int) (result []*models.AvailableScreenFieldScheme,
 	response *ResponseScheme, err error) {
 
 	var endpoint = fmt.Sprintf("rest/api/3/screens/%v/availableFields", screenID)
@@ -256,7 +217,3 @@ func (s *ScreenService) Available(ctx context.Context, screenID int) (result []*
 
 	return
 }
-
-var (
-	notScreenNameError = fmt.Errorf("error, please project a valid screen name value")
-)

@@ -9,15 +9,10 @@ import (
 
 type ScreenTabFieldService struct{ client *Client }
 
-type ScreenTabFieldScheme struct {
-	ID   string `json:"id,omitempty"`
-	Name string `json:"name,omitempty"`
-}
-
 // Gets returns all fields for a screen tab.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/screens/tabs/fields#get-all-screen-tab-fields
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screen-tab-fields/#api-rest-api-3-screens-screenid-tabs-tabid-fields-get
-func (s *ScreenTabFieldService) Gets(ctx context.Context, screenID, tabID int) (result []*ScreenTabFieldScheme,
+func (s *ScreenTabFieldService) Gets(ctx context.Context, screenID, tabID int) (result []*models.ScreenTabFieldScheme,
 	response *ResponseScheme, err error) {
 
 	var endpoint = fmt.Sprintf("rest/api/3/screens/%v/tabs/%v/fields", screenID, tabID)
@@ -40,7 +35,7 @@ func (s *ScreenTabFieldService) Gets(ctx context.Context, screenID, tabID int) (
 // Add adds a field to a screen tab.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/screens/tabs/fields#add-screen-tab-field
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screen-tab-fields/#api-rest-api-3-screens-screenid-tabs-tabid-fields-post
-func (s *ScreenTabFieldService) Add(ctx context.Context, screenID, tabID int, fieldID string) (result *ScreenTabFieldScheme,
+func (s *ScreenTabFieldService) Add(ctx context.Context, screenID, tabID int, fieldID string) (result *models.ScreenTabFieldScheme,
 	response *ResponseScheme, err error) {
 
 	if len(fieldID) == 0 {

@@ -43,3 +43,8 @@ type ScreenTabScheme struct {
 	ID   int    `json:"id"`
 	Name string `json:"name"`
 }
+
+type ScreenTabFieldScheme struct {
+	ID   string `json:"id,omitempty"`
+	Name string `json:"name,omitempty"`
+}

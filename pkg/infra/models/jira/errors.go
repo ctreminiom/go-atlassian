@@ -38,4 +38,5 @@ var (
 	ErrNoComponentIDError             = errors.New("jira: no component id set")
 	ErrProjectTypeKeyError            = errors.New("jira: no project type key set")
 	ErrNoProjectNameError             = errors.New("jira: no project name set")
+	ErrNoVersionIDError               = errors.New("jira: no version id set")
 )

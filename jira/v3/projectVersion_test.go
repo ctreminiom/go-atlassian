@@ -3,6 +3,7 @@ package v3
 import (
 	"context"
 	"fmt"
+	models "github.com/ctreminiom/go-atlassian/pkg/infra/models/jira"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/url"
@@ -13,7 +14,7 @@ func TestProjectVersionService_Create(t *testing.T) {
 
 	testCases := []struct {
 		name               string
-		payload            *ProjectVersionPayloadScheme
+		payload            *models.VersionPayloadScheme
 		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string
@@ -23,7 +24,7 @@ func TestProjectVersionService_Create(t *testing.T) {
 	}{
 		{
 			name: "CreateProjectVersionWhenTheParamsAreCorrect",
-			payload: &ProjectVersionPayloadScheme{
+			payload: &models.VersionPayloadScheme{
 				Archived:    false,
 				ReleaseDate: "6/Jul/2020",
 				Name:        "New Version 1",
@@ -52,7 +53,7 @@ func TestProjectVersionService_Create(t *testing.T) {
 
 		{
 			name: "CreateProjectVersionWhenTheRequestMethodIsIncorrect",
-			payload: &ProjectVersionPayloadScheme{
+			payload: &models.VersionPayloadScheme{
 				Archived:    false,
 				ReleaseDate: "6/Jul/2020",
 				Name:        "New Version 1",
@@ -70,7 +71,7 @@ func TestProjectVersionService_Create(t *testing.T) {
 
 		{
 			name: "CreateProjectVersionWhenTheStatusCodeIsIncorrect",
-			payload: &ProjectVersionPayloadScheme{
+			payload: &models.VersionPayloadScheme{
 				Archived:    false,
 				ReleaseDate: "6/Jul/2020",
 				Name:        "New Version 1",
@@ -88,7 +89,7 @@ func TestProjectVersionService_Create(t *testing.T) {
 
 		{
 			name: "CreateProjectVersionWhenTheEndpointIsIncorrect",
-			payload: &ProjectVersionPayloadScheme{
+			payload: &models.VersionPayloadScheme{
 				Archived:    false,
 				ReleaseDate: "6/Jul/2020",
 				Name:        "New Version 1",
@@ -106,7 +107,7 @@ func TestProjectVersionService_Create(t *testing.T) {
 
 		{
 			name: "CreateProjectVersionWhenTheContextIsNil",
-			payload: &ProjectVersionPayloadScheme{
+			payload: &models.VersionPayloadScheme{
 				Archived:    false,
 				ReleaseDate: "6/Jul/2020",
 				Name:        "New Version 1",
@@ -124,7 +125,7 @@ func TestProjectVersionService_Create(t *testing.T) {
 
 		{
 			name: "CreateProjectVersionWhenTheResponseBodyHasADifferentFormat",
-			payload: &ProjectVersionPayloadScheme{
+			payload: &models.VersionPayloadScheme{
 				Archived:    false,
 				ReleaseDate: "6/Jul/2020",
 				Name:        "New Version 1",
@@ -392,7 +393,7 @@ func TestProjectVersionService_Gets(t *testing.T) {
 	testCases := []struct {
 		name                string
 		projectKeyOrID      string
-		options             *ProjectVersionGetsOptions
+		options             *models.VersionGetsOptions
 		startAt, maxResults int
 		mockFile            string
 		wantHTTPMethod      string
@@ -404,7 +405,7 @@ func TestProjectVersionService_Gets(t *testing.T) {
 		{
 			name:           "GetProjectVersionsWhenTheParamsAreCorrect",
 			projectKeyOrID: "DUMMY",
-			options: &ProjectVersionGetsOptions{
+			options: &models.VersionGetsOptions{
 				OrderBy: "description",
 				Query:   "name",
 				Status:  "unreleased",
@@ -423,7 +424,7 @@ func TestProjectVersionService_Gets(t *testing.T) {
 		{
 			name:           "GetProjectVersionsWhenTheOptionsAreNotProvided",
 			projectKeyOrID: "DUMMY",
-			options: &ProjectVersionGetsOptions{
+			options: &models.VersionGetsOptions{
 				OrderBy: "",
 				Query:   "",
 				Status:  "",
@@ -456,7 +457,7 @@ func TestProjectVersionService_Gets(t *testing.T) {
 		{
 			name:           "GetProjectVersionsWhenTheRequestMethodIsIncorrect",
 			projectKeyOrID: "",
-			options: &ProjectVersionGetsOptions{
+			options: &models.VersionGetsOptions{
 				OrderBy: "description",
 				Query:   "name",
 				Status:  "unreleased",
@@ -475,7 +476,7 @@ func TestProjectVersionService_Gets(t *testing.T) {
 		{
 			name:           "GetProjectVersionsWhenTheStatusCodeIsIncorrect",
 			projectKeyOrID: "DUMMY",
-			options: &ProjectVersionGetsOptions{
+			options: &models.VersionGetsOptions{
 				OrderBy: "description",
 				Query:   "name",
 				Status:  "unreleased",
@@ -494,7 +495,7 @@ func TestProjectVersionService_Gets(t *testing.T) {
 		{
 			name:           "GetProjectVersionsWhenTheContextIsNil",
 			projectKeyOrID: "DUMMY",
-			options: &ProjectVersionGetsOptions{
+			options: &models.VersionGetsOptions{
 				OrderBy: "description",
 				Query:   "name",
 				Status:  "unreleased",
@@ -513,7 +514,7 @@ func TestProjectVersionService_Gets(t *testing.T) {
 		{
 			name:           "GetProjectVersionsWhenTheResponseBodyHasADifferentFormat",
 			projectKeyOrID: "DUMMY",
-			options: &ProjectVersionGetsOptions{
+			options: &models.VersionGetsOptions{
 				OrderBy: "description",
 				Query:   "name",
 				Status:  "unreleased",
@@ -532,7 +533,7 @@ func TestProjectVersionService_Gets(t *testing.T) {
 		{
 			name:           "GetProjectVersionsWhenTheEndpointIsIncorrect",
 			projectKeyOrID: "DUMMY",
-			options: &ProjectVersionGetsOptions{
+			options: &models.VersionGetsOptions{
 				OrderBy: "description",
 				Query:   "name",
 				Status:  "unreleased",
@@ -1098,7 +1099,7 @@ func TestProjectVersionService_Update(t *testing.T) {
 	testCases := []struct {
 		name               string
 		versionID          string
-		payload            *ProjectVersionPayloadScheme
+		payload            *models.VersionPayloadScheme
 		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string
@@ -1109,7 +1110,7 @@ func TestProjectVersionService_Update(t *testing.T) {
 		{
 			name:      "UpdateProjectVersionWhenTheParamsAreCorrect",
 			versionID: "1000",
-			payload: &ProjectVersionPayloadScheme{
+			payload: &models.VersionPayloadScheme{
 				Archived:    false,
 				ReleaseDate: "6/Jul/2020",
 			},
@@ -1124,7 +1125,7 @@ func TestProjectVersionService_Update(t *testing.T) {
 		{
 			name:      "UpdateProjectVersionWhenTheVersionIDIsIncorrect",
 			versionID: "",
-			payload: &ProjectVersionPayloadScheme{
+			payload: &models.VersionPayloadScheme{
 				Archived:    false,
 				ReleaseDate: "6/Jul/2020",
 			},
@@ -1151,7 +1152,7 @@ func TestProjectVersionService_Update(t *testing.T) {
 		{
 			name:      "UpdateProjectVersionWhenTheRequestMethodIsIncorrect",
 			versionID: "1000",
-			payload: &ProjectVersionPayloadScheme{
+			payload: &models.VersionPayloadScheme{
 				Archived:    false,
 				ReleaseDate: "6/Jul/2020",
 			},
@@ -1166,7 +1167,7 @@ func TestProjectVersionService_Update(t *testing.T) {
 		{
 			name:      "UpdateProjectVersionWhenTheStatusCodeIsIncorrect",
 			versionID: "1000",
-			payload: &ProjectVersionPayloadScheme{
+			payload: &models.VersionPayloadScheme{
 				Archived:    false,
 				ReleaseDate: "6/Jul/2020",
 			},
@@ -1181,7 +1182,7 @@ func TestProjectVersionService_Update(t *testing.T) {
 		{
 			name:      "UpdateProjectVersionWhenTheContextIsNil",
 			versionID: "1000",
-			payload: &ProjectVersionPayloadScheme{
+			payload: &models.VersionPayloadScheme{
 				Archived:    false,
 				ReleaseDate: "6/Jul/2020",
 			},
@@ -1196,7 +1197,7 @@ func TestProjectVersionService_Update(t *testing.T) {
 		{
 			name:      "UpdateProjectVersionWhenTheResponseBodyHasADifferentFormat",
 			versionID: "1000",
-			payload: &ProjectVersionPayloadScheme{
+			payload: &models.VersionPayloadScheme{
 				Archived:    false,
 				ReleaseDate: "6/Jul/2020",
 			},

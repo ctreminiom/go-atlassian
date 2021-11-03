@@ -3,25 +3,11 @@ package v3
 import (
 	"context"
 	"fmt"
+	models "github.com/ctreminiom/go-atlassian/pkg/infra/models/jira"
 	"net/http"
 )
 
 type TaskService struct{ client *Client }
-
-type TaskScheme struct {
-	Self           string `json:"self"`
-	ID             string `json:"id"`
-	Description    string `json:"description"`
-	Status         string `json:"status"`
-	Result         string `json:"result"`
-	SubmittedBy    int    `json:"submittedBy"`
-	Progress       int    `json:"progress"`
-	ElapsedRuntime int    `json:"elapsedRuntime"`
-	Submitted      int64  `json:"submitted"`
-	Started        int64  `json:"started"`
-	Finished       int64  `json:"finished"`
-	LastUpdate     int64  `json:"lastUpdate"`
-}
 
 // Get returns the status of a long-running asynchronous task.
 // When a task has finished, this operation returns the JSON blob applicable to the task.
@@ -29,7 +15,7 @@ type TaskScheme struct {
 // Task details are not permanently retained.
 // As of September 2019, details are retained for 14 days although this period may change without notice.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/tasks#get-task
-func (t *TaskService) Get(ctx context.Context, taskID string) (result *TaskScheme, response *ResponseScheme, err error) {
+func (t *TaskService) Get(ctx context.Context, taskID string) (result *models.TaskScheme, response *ResponseScheme, err error) {
 
 	if len(taskID) == 0 {
 		return nil, nil, notTaskIDError

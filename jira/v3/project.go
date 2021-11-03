@@ -212,7 +212,7 @@ func (p *ProjectService) Delete(ctx context.Context, projectKeyOrID string, enab
 // 1. transactional, that is, if part of to delete fails the project is not deleted.
 // 2. asynchronous. Follow the location link in the response to determine the status of the task and use Get task to obtain subsequent updates.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-projects/#api-rest-api-3-project-projectidorkey-delete-post
-func (p *ProjectService) DeleteAsynchronously(ctx context.Context, projectKeyOrID string) (result *TaskScheme,
+func (p *ProjectService) DeleteAsynchronously(ctx context.Context, projectKeyOrID string) (result *models.TaskScheme,
 	response *ResponseScheme, err error) {
 
 	if len(projectKeyOrID) == 0 {

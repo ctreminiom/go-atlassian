@@ -3,6 +3,7 @@ package v3
 import (
 	"context"
 	"fmt"
+	models "github.com/ctreminiom/go-atlassian/pkg/infra/models/jira"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/url"
@@ -178,7 +179,7 @@ func TestProjectComponentService_Create(t *testing.T) {
 
 	testCases := []struct {
 		name               string
-		payload            *ProjectComponentPayloadScheme
+		payload            *models.ComponentPayloadScheme
 		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string
@@ -188,7 +189,7 @@ func TestProjectComponentService_Create(t *testing.T) {
 	}{
 		{
 			name: "CreateProjectComponentWhenTheParametersAreCorrect",
-			payload: &ProjectComponentPayloadScheme{
+			payload: &models.ComponentPayloadScheme{
 				IsAssigneeTypeValid: true,
 				Name:                "Component 1",
 				Description:         "This is a Jira component",
@@ -217,7 +218,7 @@ func TestProjectComponentService_Create(t *testing.T) {
 
 		{
 			name: "CreateProjectComponentWhenTheRequestMethodIsIncorrect",
-			payload: &ProjectComponentPayloadScheme{
+			payload: &models.ComponentPayloadScheme{
 				IsAssigneeTypeValid: true,
 				Name:                "Component 1",
 				Description:         "This is a Jira component",
@@ -235,7 +236,7 @@ func TestProjectComponentService_Create(t *testing.T) {
 
 		{
 			name: "CreateProjectComponentWhenTheStatusCodeIsIncorrect",
-			payload: &ProjectComponentPayloadScheme{
+			payload: &models.ComponentPayloadScheme{
 				IsAssigneeTypeValid: true,
 				Name:                "Component 1",
 				Description:         "This is a Jira component",
@@ -253,7 +254,7 @@ func TestProjectComponentService_Create(t *testing.T) {
 
 		{
 			name: "CreateProjectComponentWhenTheContextIsNil",
-			payload: &ProjectComponentPayloadScheme{
+			payload: &models.ComponentPayloadScheme{
 				IsAssigneeTypeValid: true,
 				Name:                "Component 1",
 				Description:         "This is a Jira component",
@@ -271,7 +272,7 @@ func TestProjectComponentService_Create(t *testing.T) {
 
 		{
 			name: "CreateProjectComponentWhenTheEndpointIsIncorrect",
-			payload: &ProjectComponentPayloadScheme{
+			payload: &models.ComponentPayloadScheme{
 				IsAssigneeTypeValid: true,
 				Name:                "Component 1",
 				Description:         "This is a Jira component",
@@ -289,7 +290,7 @@ func TestProjectComponentService_Create(t *testing.T) {
 
 		{
 			name: "CreateProjectComponentWhenTheResponseBodyHasADifferentFormat",
-			payload: &ProjectComponentPayloadScheme{
+			payload: &models.ComponentPayloadScheme{
 				IsAssigneeTypeValid: true,
 				Name:                "Component 1",
 				Description:         "This is a Jira component",
@@ -792,7 +793,7 @@ func TestProjectComponentService_Update(t *testing.T) {
 	testCases := []struct {
 		name               string
 		componentID        string
-		payload            *ProjectComponentPayloadScheme
+		payload            *models.ComponentPayloadScheme
 		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string
@@ -803,7 +804,7 @@ func TestProjectComponentService_Update(t *testing.T) {
 		{
 			name:        "UpdateProjectComponentWhenTheParametersAreCorrect",
 			componentID: "1000",
-			payload: &ProjectComponentPayloadScheme{
+			payload: &models.ComponentPayloadScheme{
 				IsAssigneeTypeValid: true,
 				Name:                "Component 1",
 				Description:         "This is a Jira component",
@@ -822,7 +823,7 @@ func TestProjectComponentService_Update(t *testing.T) {
 		{
 			name:        "UpdateProjectComponentWhenTheComponentIDIsEmpty",
 			componentID: "",
-			payload: &ProjectComponentPayloadScheme{
+			payload: &models.ComponentPayloadScheme{
 				IsAssigneeTypeValid: true,
 				Name:                "Component 1",
 				Description:         "This is a Jira component",
@@ -853,7 +854,7 @@ func TestProjectComponentService_Update(t *testing.T) {
 		{
 			name:        "UpdateProjectComponentWhenTheRequestMethodIsIncorrect",
 			componentID: "1000",
-			payload: &ProjectComponentPayloadScheme{
+			payload: &models.ComponentPayloadScheme{
 				IsAssigneeTypeValid: true,
 				Name:                "Component 1",
 				Description:         "This is a Jira component",
@@ -872,7 +873,7 @@ func TestProjectComponentService_Update(t *testing.T) {
 		{
 			name:        "UpdateProjectComponentWhenTheStatusCodeIsIncorrect",
 			componentID: "1000",
-			payload: &ProjectComponentPayloadScheme{
+			payload: &models.ComponentPayloadScheme{
 				IsAssigneeTypeValid: true,
 				Name:                "Component 1",
 				Description:         "This is a Jira component",
@@ -891,7 +892,7 @@ func TestProjectComponentService_Update(t *testing.T) {
 		{
 			name:        "UpdateProjectComponentWhenTheContextIsNil",
 			componentID: "1000",
-			payload: &ProjectComponentPayloadScheme{
+			payload: &models.ComponentPayloadScheme{
 				IsAssigneeTypeValid: true,
 				Name:                "Component 1",
 				Description:         "This is a Jira component",
@@ -910,7 +911,7 @@ func TestProjectComponentService_Update(t *testing.T) {
 		{
 			name:        "UpdateProjectComponentWhenTheEndpointIsIncorrect",
 			componentID: "1000",
-			payload: &ProjectComponentPayloadScheme{
+			payload: &models.ComponentPayloadScheme{
 				IsAssigneeTypeValid: true,
 				Name:                "Component 1",
 				Description:         "This is a Jira component",
@@ -929,7 +930,7 @@ func TestProjectComponentService_Update(t *testing.T) {
 		{
 			name:        "UpdateProjectComponentWhenTheResponseBodyHasADifferentFormat",
 			componentID: "1000",
-			payload: &ProjectComponentPayloadScheme{
+			payload: &models.ComponentPayloadScheme{
 				IsAssigneeTypeValid: true,
 				Name:                "Component 1",
 				Description:         "This is a Jira component",

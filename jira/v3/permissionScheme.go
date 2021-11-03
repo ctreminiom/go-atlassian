@@ -52,13 +52,13 @@ type PermissionSchemeScheme struct {
 }
 
 type PermissionScopeItemScheme struct {
-	Self            string                 `json:"self,omitempty"`
-	ID              string                 `json:"id,omitempty"`
-	Key             string                 `json:"key,omitempty"`
-	Name            string                 `json:"name,omitempty"`
-	ProjectTypeKey  string                 `json:"projectTypeKey,omitempty"`
-	Simplified      bool                   `json:"simplified,omitempty"`
-	ProjectCategory *ProjectCategoryScheme `json:"projectCategory,omitempty"`
+	Self            string                        `json:"self,omitempty"`
+	ID              string                        `json:"id,omitempty"`
+	Key             string                        `json:"key,omitempty"`
+	Name            string                        `json:"name,omitempty"`
+	ProjectTypeKey  string                        `json:"projectTypeKey,omitempty"`
+	Simplified      bool                          `json:"simplified,omitempty"`
+	ProjectCategory *models.ProjectCategoryScheme `json:"projectCategory,omitempty"`
 }
 
 // Get returns a permission scheme.

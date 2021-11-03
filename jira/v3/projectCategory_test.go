@@ -3,6 +3,7 @@ package v3
 import (
 	"context"
 	"fmt"
+	models "github.com/ctreminiom/go-atlassian/pkg/infra/models/jira"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/url"
@@ -13,7 +14,7 @@ func TestProjectCategoryService_Create(t *testing.T) {
 
 	testCases := []struct {
 		name               string
-		payload            *ProjectCategoryPayloadScheme
+		payload            *models.ProjectCategoryPayloadScheme
 		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string
@@ -23,7 +24,7 @@ func TestProjectCategoryService_Create(t *testing.T) {
 	}{
 		{
 			name: "CreateProjectCategoryWhenTheParametersAreCorrect",
-			payload: &ProjectCategoryPayloadScheme{
+			payload: &models.ProjectCategoryPayloadScheme{
 				Name:        "CREATED",
 				Description: "Created Project Category",
 			},
@@ -48,7 +49,7 @@ func TestProjectCategoryService_Create(t *testing.T) {
 
 		{
 			name: "CreateProjectCategoryWhenTheRequestMethodIsIncorrect",
-			payload: &ProjectCategoryPayloadScheme{
+			payload: &models.ProjectCategoryPayloadScheme{
 				Name:        "CREATED",
 				Description: "Created Project Category",
 			},
@@ -62,7 +63,7 @@ func TestProjectCategoryService_Create(t *testing.T) {
 
 		{
 			name: "CreateProjectCategoryWhenTheStatusCodeIsIncorrect",
-			payload: &ProjectCategoryPayloadScheme{
+			payload: &models.ProjectCategoryPayloadScheme{
 				Name:        "CREATED",
 				Description: "Created Project Category",
 			},
@@ -76,7 +77,7 @@ func TestProjectCategoryService_Create(t *testing.T) {
 
 		{
 			name: "CreateProjectCategoryWhenTheContextIsNil",
-			payload: &ProjectCategoryPayloadScheme{
+			payload: &models.ProjectCategoryPayloadScheme{
 				Name:        "CREATED",
 				Description: "Created Project Category",
 			},
@@ -90,7 +91,7 @@ func TestProjectCategoryService_Create(t *testing.T) {
 
 		{
 			name: "CreateProjectCategoryWhenTheEndpointIsIncorrect",
-			payload: &ProjectCategoryPayloadScheme{
+			payload: &models.ProjectCategoryPayloadScheme{
 				Name:        "CREATED",
 				Description: "Created Project Category",
 			},
@@ -104,7 +105,7 @@ func TestProjectCategoryService_Create(t *testing.T) {
 
 		{
 			name: "CreateProjectCategoryWhenTheResponseBodyHasADifferentFormat",
-			payload: &ProjectCategoryPayloadScheme{
+			payload: &models.ProjectCategoryPayloadScheme{
 				Name:        "CREATED",
 				Description: "Created Project Category",
 			},
@@ -570,7 +571,7 @@ func TestProjectCategoryService_Update(t *testing.T) {
 	testCases := []struct {
 		name               string
 		projectCategoryID  int
-		payload            *ProjectCategoryPayloadScheme
+		payload            *models.ProjectCategoryPayloadScheme
 		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string
@@ -581,7 +582,7 @@ func TestProjectCategoryService_Update(t *testing.T) {
 		{
 			name:              "UpdateProjectCategoryWhenTheParametersAreCorrect",
 			projectCategoryID: 1000,
-			payload: &ProjectCategoryPayloadScheme{
+			payload: &models.ProjectCategoryPayloadScheme{
 				Name:        "UPDATED",
 				Description: "Updated Project Category",
 			},
@@ -608,7 +609,7 @@ func TestProjectCategoryService_Update(t *testing.T) {
 		{
 			name:              "UpdateProjectCategoryWhenTheContextIsNil",
 			projectCategoryID: 1000,
-			payload: &ProjectCategoryPayloadScheme{
+			payload: &models.ProjectCategoryPayloadScheme{
 				Name:        "UPDATED",
 				Description: "Updated Project Category",
 			},
@@ -623,7 +624,7 @@ func TestProjectCategoryService_Update(t *testing.T) {
 		{
 			name:              "UpdateProjectCategoryWhenTheRequestMethodIsIncorrect",
 			projectCategoryID: 1000,
-			payload: &ProjectCategoryPayloadScheme{
+			payload: &models.ProjectCategoryPayloadScheme{
 				Name:        "UPDATED",
 				Description: "Updated Project Category",
 			},
@@ -638,7 +639,7 @@ func TestProjectCategoryService_Update(t *testing.T) {
 		{
 			name:              "UpdateProjectCategoryWhenTheStatusCodeIsIncorrect",
 			projectCategoryID: 1000,
-			payload: &ProjectCategoryPayloadScheme{
+			payload: &models.ProjectCategoryPayloadScheme{
 				Name:        "UPDATED",
 				Description: "Updated Project Category",
 			},
@@ -653,7 +654,7 @@ func TestProjectCategoryService_Update(t *testing.T) {
 		{
 			name:              "UpdateProjectCategoryWhenTheResponseBodyHasADifferentFormat",
 			projectCategoryID: 1000,
-			payload: &ProjectCategoryPayloadScheme{
+			payload: &models.ProjectCategoryPayloadScheme{
 				Name:        "UPDATED",
 				Description: "Updated Project Category",
 			},

@@ -7,7 +7,7 @@ import (
 	"os"
 )
 
-func main()  {
+func main() {
 
 	var (
 		host  = os.Getenv("HOST")
@@ -24,12 +24,12 @@ func main()  {
 	instance.Auth.SetUserAgent("curl/7.54.0")
 
 	var (
-		contentID = "76513281"
-		contentType = "page"
-		expand = []string{"childTypes.all"}
+		contentID     = "76513281"
+		contentType   = "page"
+		expand        = []string{"childTypes.all"}
 		parentVersion = 0
-		starAt = 0
-		maxResult = 50
+		starAt        = 0
+		maxResult     = 50
 	)
 
 	contents, response, err := instance.Content.ChildrenDescendant.ChildrenByType(context.Background(), contentID, contentType,

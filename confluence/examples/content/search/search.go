@@ -8,7 +8,7 @@ import (
 	"os"
 )
 
-func main()  {
+func main() {
 
 	var (
 		host  = os.Getenv("HOST")
@@ -25,9 +25,9 @@ func main()  {
 	instance.Auth.SetUserAgent("curl/7.54.0")
 
 	var (
-		cql = "type=page"
+		cql        = "type=page"
 		cqlContext = ""
-		expand = []string{"childTypes.all", "metadata.labels"}
+		expand     = []string{"childTypes.all", "metadata.labels"}
 		maxResults = 50
 	)
 
@@ -43,7 +43,6 @@ func main()  {
 	log.Println("Endpoint:", response.Endpoint)
 	log.Println("Status Code:", response.Code)
 	log.Println(contentPage.Links.Next)
-
 
 	for _, content := range contentPage.Results {
 		log.Println(content.Title, content.ID)

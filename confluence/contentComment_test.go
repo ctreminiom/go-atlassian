@@ -13,8 +13,8 @@ func TestContentCommentService_Gets(t *testing.T) {
 
 	testCases := []struct {
 		name                string
-		contentID string
-		expand, location []string
+		contentID           string
+		expand, location    []string
 		startAt, maxResults int
 		mockFile            string
 		wantHTTPMethod      string

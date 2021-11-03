@@ -7,7 +7,7 @@ import (
 	"os"
 )
 
-func main()  {
+func main() {
 
 	var (
 		host  = os.Getenv("HOST")
@@ -25,7 +25,7 @@ func main()  {
 
 	var (
 		contentID = "76513281"
-		expand = []string{"page", "comments", "attachment"}
+		expand    = []string{"page", "comments", "attachment"}
 	)
 
 	contents, response, err := instance.Content.ChildrenDescendant.Children(context.Background(), contentID, expand, 0)
@@ -40,7 +40,6 @@ func main()  {
 
 	log.Println("Endpoint:", response.Endpoint)
 	log.Println("Status Code:", response.Code)
-
 
 	if contents.Attachment != nil {
 		for _, attachment := range contents.Attachment.Results {
@@ -59,7 +58,5 @@ func main()  {
 			log.Println(page.Type, page.Title)
 		}
 	}
-
-
 
 }

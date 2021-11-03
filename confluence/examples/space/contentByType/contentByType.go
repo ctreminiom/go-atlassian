@@ -8,7 +8,7 @@ import (
 	"os"
 )
 
-func main()  {
+func main() {
 
 	var (
 		host  = os.Getenv("HOST")
@@ -25,12 +25,12 @@ func main()  {
 	instance.Auth.SetUserAgent("curl/7.54.0")
 
 	var (
-		spaceKey = "DUMMY"
+		spaceKey    = "DUMMY"
 		contentType = "page"
-		depth = "all"
-		expand = []string{"operations"}
-		startAt = 0
-		maxResults = 50
+		depth       = "all"
+		expand      = []string{"operations"}
+		startAt     = 0
+		maxResults  = 50
 	)
 
 	contents, response, err := instance.Space.ContentByType(context.Background(), spaceKey, contentType, depth, expand, startAt, maxResults)
@@ -47,7 +47,6 @@ func main()  {
 
 	log.Println("Endpoint:", response.Endpoint)
 	log.Println("Status Code:", response.Code)
-
 
 	for _, content := range contents.Results {
 		log.Println(content.ID, content.Title)

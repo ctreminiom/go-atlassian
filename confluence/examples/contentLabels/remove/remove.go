@@ -7,7 +7,7 @@ import (
 	"os"
 )
 
-func main()  {
+func main() {
 
 	var (
 		host  = os.Getenv("HOST")
@@ -22,7 +22,6 @@ func main()  {
 
 	atlassian.Auth.SetBasicAuth(mail, token)
 	atlassian.Auth.SetUserAgent("curl/7.54.0")
-
 
 	response, err := atlassian.Content.Label.Remove(context.Background(), "80412692", "label-02")
 	if err != nil {

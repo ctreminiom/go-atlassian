@@ -7,7 +7,7 @@ import (
 	"os"
 )
 
-func main()  {
+func main() {
 
 	var (
 		host  = os.Getenv("HOST")
@@ -25,13 +25,13 @@ func main()  {
 
 	var (
 		contentID = "76513281"
-		options = &confluence.CopyOptionsScheme{
+		options   = &confluence.CopyOptionsScheme{
 			CopyAttachments:    true,
 			CopyPermissions:    true,
 			CopyProperties:     true,
 			CopyLabels:         true,
 			CopyCustomContents: true,
-			PageTitle: "new-page-copied-title",
+			PageTitle:          "new-page-copied-title",
 			Destination: &confluence.CopyPageDestinationScheme{
 				Type:  "parent_page",
 				Value: "64290817",
@@ -52,5 +52,5 @@ func main()  {
 	log.Println("Endpoint:", response.Endpoint)
 	log.Println("Status Code:", response.Code)
 	log.Println(content.Type, content.ID, content.Title)
-	
+
 }

@@ -292,7 +292,7 @@ func Test_transformTheHTTPResponse(t *testing.T) {
 		"mock-response": "./mocks/get-contents.json",
 		"method":        http.MethodGet,
 		"status":        http.StatusBadRequest,
-		"closed?": false,
+		"closed?":       false,
 	}
 
 	responseConfigurations["badRequestResponseWithNotResponseBody"] = map[string]interface{}{
@@ -300,7 +300,7 @@ func Test_transformTheHTTPResponse(t *testing.T) {
 		"mock-response": "",
 		"method":        http.MethodGet,
 		"status":        http.StatusBadRequest,
-		"closed?": true,
+		"closed?":       true,
 	}
 
 	responseConfigurations["OkRequestResponseWithNotResponseBody"] = map[string]interface{}{
@@ -308,7 +308,7 @@ func Test_transformTheHTTPResponse(t *testing.T) {
 		"mock-response": "./mocks/get-contents.json",
 		"method":        http.MethodGet,
 		"status":        http.StatusOK,
-		"closed?": true,
+		"closed?":       true,
 	}
 
 	for scenario, configuration := range responseConfigurations {

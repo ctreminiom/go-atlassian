@@ -8,7 +8,7 @@ import (
 	"os"
 )
 
-func main()  {
+func main() {
 
 	var (
 		host  = os.Getenv("HOST")
@@ -25,9 +25,9 @@ func main()  {
 	instance.Auth.SetUserAgent("curl/7.54.0")
 
 	var payload = &confluence.CreateSpaceScheme{
-		Key:              "DUM",
-		Name:             "Dum Confluence Space",
-		Description:      &confluence.CreateSpaceDescriptionScheme{
+		Key:  "DUM",
+		Name: "Dum Confluence Space",
+		Description: &confluence.CreateSpaceDescriptionScheme{
 			Plain: &confluence.CreateSpaceDescriptionPlainScheme{
 				Value:          "Confluence Space Description Sample",
 				Representation: "plain",

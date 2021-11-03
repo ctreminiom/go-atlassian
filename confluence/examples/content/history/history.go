@@ -7,7 +7,7 @@ import (
 	"os"
 )
 
-func main()  {
+func main() {
 
 	var (
 		host  = os.Getenv("HOST")
@@ -25,7 +25,7 @@ func main()  {
 
 	var (
 		contentID = "76513281"
-		expand = []string{"lastUpdated", "previousVersion"}
+		expand    = []string{"lastUpdated", "previousVersion"}
 	)
 
 	contentHistory, response, err := instance.Content.History(context.Background(), contentID, expand)

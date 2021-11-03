@@ -951,7 +951,7 @@ func TestContentService_Delete(t *testing.T) {
 	testCases := []struct {
 		name               string
 		contentID          string
-		status string
+		status             string
 		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string

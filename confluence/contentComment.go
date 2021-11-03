@@ -15,7 +15,7 @@ type ContentCommentService struct {
 
 // Gets returns the comments on a piece of content.
 func (c *ContentCommentService) Gets(ctx context.Context, contentID string, expand, location []string,
-	startAt, maxResults int) (result *ContentPageScheme, response *ResponseScheme, err error){
+	startAt, maxResults int) (result *ContentPageScheme, response *ResponseScheme, err error) {
 
 	if len(contentID) == 0 {
 		return nil, nil, notContentIDError

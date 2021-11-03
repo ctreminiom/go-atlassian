@@ -9,7 +9,7 @@ import (
 	"path/filepath"
 )
 
-func main()  {
+func main() {
 
 	var (
 		host  = os.Getenv("HOST")
@@ -24,7 +24,6 @@ func main()  {
 
 	instance.Auth.SetBasicAuth(mail, token)
 	instance.Auth.SetUserAgent("curl/7.54.0")
-
 
 	//filepath.Abs("jira/mocks/image.png")
 
@@ -44,7 +43,7 @@ func main()  {
 
 	var (
 		attachmentID = "76513281"
-		fileName = "mock.png"
+		fileName     = "mock.png"
 	)
 
 	attachmentsPage, response, err := instance.Content.Attachment.CreateOrUpdate(context.Background(), attachmentID, "", fileName, reader)

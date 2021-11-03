@@ -7,7 +7,7 @@ import (
 	"os"
 )
 
-func main()  {
+func main() {
 
 	var (
 		host  = os.Getenv("HOST")
@@ -25,7 +25,7 @@ func main()  {
 
 	var (
 		contentID = "80412692"
-		payload = []*confluence.ContentLabelPayloadScheme{
+		payload   = []*confluence.ContentLabelPayloadScheme{
 			{
 				Prefix: "global",
 				Name:   "label-02",

@@ -1,0 +1,209 @@
+{
+  "expand": "renderedFields,names,schema,operations,editmeta,changelog,versionedRepresentations,customfield_10010.requestTypePractice",
+  "id": "10032",
+  "self": "https://ctreminiom.atlassian.net/rest/api/2/issue/10032",
+  "key": "KP-19",
+  "fields": {
+    "statuscategorychangedate": "2021-05-08T07:04:25.943+0100",
+    "issuetype": {
+      "self": "https://ctreminiom.atlassian.net/rest/api/2/issuetype/10001",
+      "id": "10001",
+      "description": "Functionality or a feature expressed as a user goal.",
+      "iconUrl": "https://ctreminiom.atlassian.net/secure/viewavatar?size=medium&avatarId=10315&avatarType=issuetype",
+      "name": "Story",
+      "subtask": false,
+      "avatarId": 10315,
+      "hierarchyLevel": 0
+    },
+    "timespent": null,
+    "project": {
+      "self": "https://ctreminiom.atlassian.net/rest/api/2/project/10000",
+      "id": "10000",
+      "key": "KP",
+      "name": "Kanban Project",
+      "projectTypeKey": "software",
+      "simplified": false,
+      "avatarUrls": {
+        "48x48": "https://ctreminiom.atlassian.net/secure/projectavatar?pid=10000&avatarId=10419",
+        "24x24": "https://ctreminiom.atlassian.net/secure/projectavatar?size=small&s=small&pid=10000&avatarId=10419",
+        "16x16": "https://ctreminiom.atlassian.net/secure/projectavatar?size=xsmall&s=xsmall&pid=10000&avatarId=10419",
+        "32x32": "https://ctreminiom.atlassian.net/secure/projectavatar?size=medium&s=medium&pid=10000&avatarId=10419"
+      }
+    },
+    "customfield_10032": null,
+    "customfield_10033": null,
+    "fixVersions": [],
+    "customfield_10034": null,
+    "aggregatetimespent": null,
+    "resolution": null,
+    "customfield_10035": null,
+    "customfield_10036": null,
+    "customfield_10037": null,
+    "customfield_10027": null,
+    "customfield_10028": null,
+    "customfield_10029": null,
+    "resolutiondate": null,
+    "workratio": -1,
+    "issuerestriction": {
+      "issuerestrictions": {},
+      "shouldDisplay": false
+    },
+    "watches": {
+      "self": "https://ctreminiom.atlassian.net/rest/api/2/issue/KP-19/watchers",
+      "watchCount": 1,
+      "isWatching": true
+    },
+    "lastViewed": "2021-11-02T08:13:01.443+0000",
+    "created": "2021-05-08T07:04:25.376+0100",
+    "customfield_10020": null,
+    "customfield_10021": null,
+    "customfield_10022": null,
+    "priority": {
+      "self": "https://ctreminiom.atlassian.net/rest/api/2/priority/3",
+      "iconUrl": "https://ctreminiom.atlassian.net/images/icons/priorities/medium.svg",
+      "name": "Medium",
+      "id": "3"
+    },
+    "customfield_10023": null,
+    "customfield_10024": null,
+    "customfield_10025": null,
+    "customfield_10026": [],
+    "labels": [
+      "test"
+    ],
+    "customfield_10016": null,
+    "customfield_10017": null,
+    "customfield_10018": {
+      "hasEpicLinkFieldDependency": false,
+      "showField": false,
+      "nonEditableReason": {
+        "reason": "PLUGIN_LICENSE_ERROR",
+        "message": "The Parent Link is only available to Jira Premium users."
+      }
+    },
+    "customfield_10019": "0|i00073:",
+    "timeestimate": null,
+    "aggregatetimeoriginalestimate": null,
+    "versions": [],
+    "issuelinks": [],
+    "assignee": null,
+    "updated": "2021-11-01T05:46:39.703+0000",
+    "status": {
+      "self": "https://ctreminiom.atlassian.net/rest/api/2/status/10000",
+      "description": "",
+      "iconUrl": "https://ctreminiom.atlassian.net/",
+      "name": "Backlog",
+      "id": "10000",
+      "statusCategory": {
+        "self": "https://ctreminiom.atlassian.net/rest/api/2/statuscategory/2",
+        "id": 2,
+        "key": "new",
+        "colorName": "blue-gray",
+        "name": "To Do"
+      }
+    },
+    "components": [],
+    "customfield_10050": null,
+    "customfield_10051": null,
+    "timeoriginalestimate": null,
+    "customfield_10052": null,
+    "customfield_10053": null,
+    "description": "*Lorem Ipsum* es simplemente el texto de relleno de las imprentas y archivos de texto. Lorem Ipsum ha sido el texto de relleno estándar de las industrias desde el año 1500, cuando un impresor (N. del T. persona que se dedica a la imprenta) desconocido usó una galería de textos y los mezcló de tal manera que logró hacer un libro de textos especimen. No sólo sobrevivió 500 años, sino que tambien ingresó como texto de relleno en documentos electrónicos, quedando esencialmente igual al original. Fue popularizado en los 60s con la creación de las hojas \"Letraset\", las cuales contenian pasajes de Lorem Ipsum, y más recientemente con software de autoedición, como por ejemplo Aldus PageMaker, el cual incluye versiones de Lorem Ipsum.\n\n{panel:bgColor=#deebff}\n\nsadsadsad\n{panel}",
+    "customfield_10010": null,
+    "customfield_10054": null,
+    "customfield_10055": null,
+    "customfield_10057": null,
+    "customfield_10014": "KP-16",
+    "customfield_10015": null,
+    "timetracking": {},
+    "customfield_10049": null,
+    "customfield_10005": null,
+    "customfield_10006": null,
+    "security": null,
+    "customfield_10007": null,
+    "customfield_10008": null,
+    "customfield_10009": null,
+    "aggregatetimeestimate": null,
+    "attachment": [],
+    "summary": "Test",
+    "creator": {
+      "self": "https://ctreminiom.atlassian.net/rest/api/2/user?accountId=5b86be50b8e3cb5895860d6d",
+      "accountId": "5b86be50b8e3cb5895860d6d",
+      "emailAddress": "ctreminiom079@gmail.com",
+      "avatarUrls": {
+        "48x48": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+        "24x24": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+        "16x16": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+        "32x32": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png"
+      },
+      "displayName": "Carlos Treminio",
+      "active": true,
+      "timeZone": "America/Guatemala",
+      "accountType": "atlassian"
+    },
+    "subtasks": [],
+    "customfield_10040": null,
+    "customfield_10041": null,
+    "customfield_10042": null,
+    "customfield_10043": null,
+    "reporter": {
+      "self": "https://ctreminiom.atlassian.net/rest/api/2/user?accountId=5b86be50b8e3cb5895860d6d",
+      "accountId": "5b86be50b8e3cb5895860d6d",
+      "emailAddress": "ctreminiom079@gmail.com",
+      "avatarUrls": {
+        "48x48": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+        "24x24": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+        "16x16": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+        "32x32": "https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png"
+      },
+      "displayName": "Carlos Treminio",
+      "active": true,
+      "timeZone": "America/Guatemala",
+      "accountType": "atlassian"
+    },
+    "customfield_10044": null,
+    "aggregateprogress": {
+      "progress": 0,
+      "total": 0
+    },
+    "customfield_10000": "{}",
+    "customfield_10001": null,
+    "customfield_10045": null,
+    "customfield_10046": null,
+    "customfield_10002": null,
+    "customfield_10003": null,
+    "customfield_10047": null,
+    "customfield_10004": null,
+    "customfield_10048": null,
+    "customfield_10038": {
+      "self": "https://ctreminiom.atlassian.net/rest/api/2/customFieldOption/10022",
+      "value": "App 3",
+      "id": "10022"
+    },
+    "customfield_10039": null,
+    "environment": null,
+    "duedate": null,
+    "progress": {
+      "progress": 0,
+      "total": 0
+    },
+    "votes": {
+      "self": "https://ctreminiom.atlassian.net/rest/api/2/issue/KP-19/votes",
+      "votes": 0,
+      "hasVoted": false
+    },
+    "comment": {
+      "comments": [],
+      "self": "https://ctreminiom.atlassian.net/rest/api/2/issue/10032/comment",
+      "maxResults": 0,
+      "total": 0,
+      "startAt": 0
+    },
+    "worklog": {
+      "startAt": 0,
+      "maxResults": 20,
+      "total": 0,
+      "worklogs": []
+    }
+  }
+}

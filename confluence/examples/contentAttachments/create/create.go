@@ -9,7 +9,7 @@ import (
 	"path/filepath"
 )
 
-func main()  {
+func main() {
 
 	var (
 		host  = os.Getenv("HOST")
@@ -41,7 +41,7 @@ func main()  {
 
 	var (
 		attachmentID = "76513281"
-		fileName = "mock-00.png"
+		fileName     = "mock-00.png"
 	)
 
 	attachmentsPage, response, err := instance.Content.Attachment.Create(context.Background(), attachmentID, "", fileName, reader)

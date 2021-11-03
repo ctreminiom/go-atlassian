@@ -8,7 +8,7 @@ import (
 	"os"
 )
 
-func main()  {
+func main() {
 
 	var (
 		host  = os.Getenv("HOST")
@@ -26,15 +26,15 @@ func main()  {
 
 	var (
 		spaceKey = "DUMMY"
-		payload = &confluence.UpdateSpaceScheme{
-			Name:        "DUMMY Space - Updated",
+		payload  = &confluence.UpdateSpaceScheme{
+			Name: "DUMMY Space - Updated",
 			Description: &confluence.CreateSpaceDescriptionScheme{
 				Plain: &confluence.CreateSpaceDescriptionPlainScheme{
 					Value:          "Dummy Space - Description - Updated",
 					Representation: "plain",
 				},
 			},
-			Homepage:    &confluence.UpdateSpaceHomepageScheme{ID: "65798145"},
+			Homepage: &confluence.UpdateSpaceHomepageScheme{ID: "65798145"},
 		}
 	)
 

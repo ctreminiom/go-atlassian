@@ -32,5 +32,7 @@ var (
 	ErrNoScreenSchemeIDError          = errors.New("jira: no screen scheme id set")
 	ErrNoAccountIDError               = errors.New("jira: no account id set")
 	ErrNoWorklogIDError               = errors.New("jira: no worklog id set")
-	ErrMpWorklogsError                = errors.New("jira: no worklog's id set")
+	ErrNpWorklogsError                = errors.New("jira: no worklog's id set")
+	ErrNoPermissionSchemeIDError      = errors.New("jira: no permission scheme id set")
+	ErrNoPermissionGrantIDError       = errors.New("jira: no permission grant id set")
 )

@@ -3,6 +3,7 @@ package v3
 import (
 	"context"
 	"fmt"
+	models "github.com/ctreminiom/go-atlassian/pkg/infra/models/jira"
 	"net/http"
 	"net/url"
 	"strings"
@@ -10,34 +11,11 @@ import (
 
 type PermissionGrantSchemeService struct{ client *Client }
 
-type PermissionSchemeGrantsScheme struct {
-	Permissions []*PermissionGrantScheme `json:"permissions,omitempty"`
-	Expand      string                   `json:"expand,omitempty"`
-}
-
-type PermissionGrantScheme struct {
-	ID         int                          `json:"id,omitempty"`
-	Self       string                       `json:"self,omitempty"`
-	Holder     *PermissionGrantHolderScheme `json:"holder,omitempty"`
-	Permission string                       `json:"permission,omitempty"`
-}
-
-type PermissionGrantHolderScheme struct {
-	Type      string `json:"type,omitempty"`
-	Parameter string `json:"parameter,omitempty"`
-	Expand    string `json:"expand,omitempty"`
-}
-
-type PermissionGrantPayloadScheme struct {
-	Holder     *PermissionGrantHolderScheme `json:"holder,omitempty"`
-	Permission string                       `json:"permission,omitempty"`
-}
-
 // Create creates a permission grant in a permission scheme.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/permissions/scheme/grant#create-permission-grant
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permission-schemes/#api-rest-api-3-permissionscheme-schemeid-permission-post
-func (p *PermissionGrantSchemeService) Create(ctx context.Context, permissionSchemeID int, payload *PermissionGrantPayloadScheme) (
-	result *PermissionGrantScheme, response *ResponseScheme, err error) {
+func (p *PermissionGrantSchemeService) Create(ctx context.Context, permissionSchemeID int, payload *models.PermissionGrantPayloadScheme) (
+	result *models.PermissionGrantScheme, response *ResponseScheme, err error) {
 
 	var endpoint = fmt.Sprintf("rest/api/3/permissionscheme/%v/permission", permissionSchemeID)
 
@@ -66,10 +44,10 @@ func (p *PermissionGrantSchemeService) Create(ctx context.Context, permissionSch
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/permissions/scheme/grant#get-permission-scheme-grants
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permission-schemes/#api-rest-api-3-permissionscheme-schemeid-permission-get
 func (p *PermissionGrantSchemeService) Gets(ctx context.Context, permissionSchemeID int, expand []string) (
-	result *PermissionSchemeGrantsScheme, response *ResponseScheme, err error) {
+	result *models.PermissionSchemeGrantsScheme, response *ResponseScheme, err error) {
 
 	if permissionSchemeID == 0 {
-		return nil, nil, notPermissionSchemeIDError
+		return nil, nil, models.ErrNoPermissionSchemeIDError
 	}
 
 	params := url.Values{}
@@ -103,14 +81,14 @@ func (p *PermissionGrantSchemeService) Gets(ctx context.Context, permissionSchem
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/permissions/scheme/grant#get-permission-scheme-grant
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permission-schemes/#api-rest-api-3-permissionscheme-schemeid-permission-permissionid-get
 func (p *PermissionGrantSchemeService) Get(ctx context.Context, permissionSchemeID, permissionGrantID int, expand []string) (
-	result *PermissionGrantScheme, response *ResponseScheme, err error) {
+	result *models.PermissionGrantScheme, response *ResponseScheme, err error) {
 
 	if permissionSchemeID == 0 {
-		return nil, nil, notPermissionSchemeIDError
+		return nil, nil, models.ErrNoPermissionSchemeIDError
 	}
 
 	if permissionGrantID == 0 {
-		return nil, nil, notPermissionGrantIDError
+		return nil, nil, models.ErrNoPermissionGrantIDError
 	}
 
 	params := url.Values{}
@@ -147,11 +125,11 @@ func (p *PermissionGrantSchemeService) Delete(ctx context.Context, permissionSch
 	response *ResponseScheme, err error) {
 
 	if permissionSchemeID == 0 {
-		return nil, notPermissionSchemeIDError
+		return nil, models.ErrNoPermissionSchemeIDError
 	}
 
 	if permissionGrantID == 0 {
-		return nil, notPermissionGrantIDError
+		return nil, models.ErrNoPermissionGrantIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/permissionscheme/%v/permission/%v", permissionSchemeID, permissionGrantID)
@@ -168,8 +146,3 @@ func (p *PermissionGrantSchemeService) Delete(ctx context.Context, permissionSch
 
 	return
 }
-
-var (
-	notPermissionSchemeIDError = fmt.Errorf("error, please provide a permissionSchemeID value")
-	notPermissionGrantIDError  = fmt.Errorf("error, please provide a permissionGrantID value")
-)

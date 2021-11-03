@@ -320,7 +320,7 @@ func (w *IssueWorklogService) Gets(ctx context.Context, worklogIDs []int, expand
 	response *ResponseScheme, err error) {
 
 	if len(worklogIDs) == 0 {
-		return nil, nil, models.ErrMpWorklogsError
+		return nil, nil, models.ErrNpWorklogsError
 	}
 
 	params := url.Values{}

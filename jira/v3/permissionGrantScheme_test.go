@@ -3,6 +3,7 @@ package v3
 import (
 	"context"
 	"fmt"
+	models "github.com/ctreminiom/go-atlassian/pkg/infra/models/jira"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/url"
@@ -14,7 +15,7 @@ func TestPermissionGrantSchemeService_Create(t *testing.T) {
 	testCases := []struct {
 		name               string
 		schemeID           int
-		payload            *PermissionGrantPayloadScheme
+		payload            *models.PermissionGrantPayloadScheme
 		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string
@@ -25,8 +26,8 @@ func TestPermissionGrantSchemeService_Create(t *testing.T) {
 		{
 			name:     "CreatePermissionGrantWhenTheParametersAreCorrect",
 			schemeID: 1000,
-			payload: &PermissionGrantPayloadScheme{
-				Holder: &PermissionGrantHolderScheme{
+			payload: &models.PermissionGrantPayloadScheme{
+				Holder: &models.PermissionGrantHolderScheme{
 					Parameter: "scrum-masters",
 					Type:      "group",
 				},
@@ -43,8 +44,8 @@ func TestPermissionGrantSchemeService_Create(t *testing.T) {
 		{
 			name:     "CreatePermissionGrantWhenThePermissionSchemeIDIsNotProvided",
 			schemeID: 0,
-			payload: &PermissionGrantPayloadScheme{
-				Holder: &PermissionGrantHolderScheme{
+			payload: &models.PermissionGrantPayloadScheme{
+				Holder: &models.PermissionGrantHolderScheme{
 					Parameter: "scrum-masters",
 					Type:      "group",
 				},
@@ -73,8 +74,8 @@ func TestPermissionGrantSchemeService_Create(t *testing.T) {
 		{
 			name:     "CreatePermissionGrantWhenTheEndpointIsIncorrect",
 			schemeID: 1000,
-			payload: &PermissionGrantPayloadScheme{
-				Holder: &PermissionGrantHolderScheme{
+			payload: &models.PermissionGrantPayloadScheme{
+				Holder: &models.PermissionGrantHolderScheme{
 					Parameter: "scrum-masters",
 					Type:      "group",
 				},
@@ -91,8 +92,8 @@ func TestPermissionGrantSchemeService_Create(t *testing.T) {
 		{
 			name:     "CreatePermissionGrantWhenTheRequestMethodIsIncorrect",
 			schemeID: 1000,
-			payload: &PermissionGrantPayloadScheme{
-				Holder: &PermissionGrantHolderScheme{
+			payload: &models.PermissionGrantPayloadScheme{
+				Holder: &models.PermissionGrantHolderScheme{
 					Parameter: "scrum-masters",
 					Type:      "group",
 				},
@@ -109,8 +110,8 @@ func TestPermissionGrantSchemeService_Create(t *testing.T) {
 		{
 			name:     "CreatePermissionGrantWhenTheStatusCodeIsIncorrect",
 			schemeID: 1000,
-			payload: &PermissionGrantPayloadScheme{
-				Holder: &PermissionGrantHolderScheme{
+			payload: &models.PermissionGrantPayloadScheme{
+				Holder: &models.PermissionGrantHolderScheme{
 					Parameter: "scrum-masters",
 					Type:      "group",
 				},
@@ -127,8 +128,8 @@ func TestPermissionGrantSchemeService_Create(t *testing.T) {
 		{
 			name:     "CreatePermissionGrantWhenTheContextIsNil",
 			schemeID: 1000,
-			payload: &PermissionGrantPayloadScheme{
-				Holder: &PermissionGrantHolderScheme{
+			payload: &models.PermissionGrantPayloadScheme{
+				Holder: &models.PermissionGrantHolderScheme{
 					Parameter: "scrum-masters",
 					Type:      "group",
 				},
@@ -145,8 +146,8 @@ func TestPermissionGrantSchemeService_Create(t *testing.T) {
 		{
 			name:     "CreatePermissionGrantWhenTheResponseBodyHasADifferentFormat",
 			schemeID: 1000,
-			payload: &PermissionGrantPayloadScheme{
-				Holder: &PermissionGrantHolderScheme{
+			payload: &models.PermissionGrantPayloadScheme{
+				Holder: &models.PermissionGrantHolderScheme{
 					Parameter: "scrum-masters",
 					Type:      "group",
 				},

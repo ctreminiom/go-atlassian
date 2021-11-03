@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	models "github.com/ctreminiom/go-atlassian/pkg/infra/models/jira"
 	"net/http"
 )
 
@@ -12,16 +13,9 @@ type PermissionService struct {
 	Scheme *PermissionSchemeService
 }
 
-type PermissionScheme struct {
-	Key         string `json:"key,omitempty"`
-	Name        string `json:"name,omitempty"`
-	Type        string `json:"type,omitempty"`
-	Description string `json:"description,omitempty"`
-}
-
 // Gets Returns all permissions
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permissions/#api-rest-api-3-permissions-get
-func (p *PermissionService) Gets(ctx context.Context) (result []*PermissionScheme, response *ResponseScheme, err error) {
+func (p *PermissionService) Gets(ctx context.Context) (result []*models.PermissionScheme, response *ResponseScheme, err error) {
 
 	var endpoint = "rest/api/3/permissions"
 
@@ -46,7 +40,7 @@ func (p *PermissionService) Gets(ctx context.Context) (result []*PermissionSchem
 		data, ok := value.(map[string]interface{})
 
 		if ok {
-			result = append(result, &PermissionScheme{
+			result = append(result, &models.PermissionScheme{
 				Key:         key,
 				Name:        data["name"].(string),
 				Type:        data["type"].(string),
@@ -59,31 +53,10 @@ func (p *PermissionService) Gets(ctx context.Context) (result []*PermissionSchem
 	return
 }
 
-type PermissionCheckPayload struct {
-	GlobalPermissions  []string                        `json:"globalPermissions,omitempty"`
-	AccountID          string                          `json:"accountId,omitempty"`
-	ProjectPermissions []*BulkProjectPermissionsScheme `json:"projectPermissions,omitempty"`
-}
-
-type BulkProjectPermissionsScheme struct {
-	Issues      []int    `json:"issues"`
-	Projects    []int    `json:"projects"`
-	Permissions []string `json:"permissions"`
-}
-
-type PermissionGrantsScheme struct {
-	ProjectPermissions []struct {
-		Permission string `json:"permission,omitempty"`
-		Issues     []int  `json:"issues,omitempty"`
-		Projects   []int  `json:"projects,omitempty"`
-	} `json:"projectPermissions,omitempty"`
-	GlobalPermissions []string `json:"globalPermissions,omitempty"`
-}
-
 // Check search the permissions linked to an accountID, then check if the user permissions.
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permissions/#api-rest-api-3-permissions-check-post
 // Docs: N/A
-func (p *PermissionService) Check(ctx context.Context, payload *PermissionCheckPayload) (result *PermissionGrantsScheme,
+func (p *PermissionService) Check(ctx context.Context, payload *models.PermissionCheckPayload) (result *models.PermissionGrantsScheme,
 	response *ResponseScheme, err error) {
 
 	payloadAsReader, err := transformStructToReader(payload)

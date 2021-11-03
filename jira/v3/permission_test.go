@@ -3,6 +3,7 @@ package v3
 import (
 	"context"
 	"fmt"
+	models "github.com/ctreminiom/go-atlassian/pkg/infra/models/jira"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/url"
@@ -138,7 +139,7 @@ func TestPermissionService_Check(t *testing.T) {
 
 	testCases := []struct {
 		name               string
-		payload            *PermissionCheckPayload
+		payload            *models.PermissionCheckPayload
 		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string
@@ -148,10 +149,10 @@ func TestPermissionService_Check(t *testing.T) {
 	}{
 		{
 			name: "CheckPermissionsWhenTheParametersAreCorrect",
-			payload: &PermissionCheckPayload{
+			payload: &models.PermissionCheckPayload{
 				GlobalPermissions: []string{"ADMINISTER"},
 				AccountID:         "", //
-				ProjectPermissions: []*BulkProjectPermissionsScheme{
+				ProjectPermissions: []*models.BulkProjectPermissionsScheme{
 					{
 						Issues:      nil,
 						Projects:    []int{10000},
@@ -180,7 +181,7 @@ func TestPermissionService_Check(t *testing.T) {
 
 		{
 			name: "CheckPermissionsWhenTheProjectPermissionIsNotSet",
-			payload: &PermissionCheckPayload{
+			payload: &models.PermissionCheckPayload{
 				GlobalPermissions:  []string{"ADMINISTER"},
 				AccountID:          "", //
 				ProjectPermissions: nil,
@@ -195,10 +196,10 @@ func TestPermissionService_Check(t *testing.T) {
 
 		{
 			name: "CheckPermissionsWhenTheRequestMethodIsIncorrect",
-			payload: &PermissionCheckPayload{
+			payload: &models.PermissionCheckPayload{
 				GlobalPermissions: []string{"ADMINISTER"},
 				AccountID:         "", //
-				ProjectPermissions: []*BulkProjectPermissionsScheme{
+				ProjectPermissions: []*models.BulkProjectPermissionsScheme{
 					{
 						Issues:      nil,
 						Projects:    []int{10000},
@@ -216,10 +217,10 @@ func TestPermissionService_Check(t *testing.T) {
 
 		{
 			name: "CheckPermissionsWhenTheStatusCodeIsIncorrect",
-			payload: &PermissionCheckPayload{
+			payload: &models.PermissionCheckPayload{
 				GlobalPermissions: []string{"ADMINISTER"},
 				AccountID:         "", //
-				ProjectPermissions: []*BulkProjectPermissionsScheme{
+				ProjectPermissions: []*models.BulkProjectPermissionsScheme{
 					{
 						Issues:      nil,
 						Projects:    []int{10000},
@@ -237,10 +238,10 @@ func TestPermissionService_Check(t *testing.T) {
 
 		{
 			name: "CheckPermissionsWhenTheContextIsNil",
-			payload: &PermissionCheckPayload{
+			payload: &models.PermissionCheckPayload{
 				GlobalPermissions: []string{"ADMINISTER"},
 				AccountID:         "", //
-				ProjectPermissions: []*BulkProjectPermissionsScheme{
+				ProjectPermissions: []*models.BulkProjectPermissionsScheme{
 					{
 						Issues:      nil,
 						Projects:    []int{10000},
@@ -258,10 +259,10 @@ func TestPermissionService_Check(t *testing.T) {
 
 		{
 			name: "CheckPermissionsWhenTheResponseBodyIsEmpty",
-			payload: &PermissionCheckPayload{
+			payload: &models.PermissionCheckPayload{
 				GlobalPermissions: []string{"ADMINISTER"},
 				AccountID:         "", //
-				ProjectPermissions: []*BulkProjectPermissionsScheme{
+				ProjectPermissions: []*models.BulkProjectPermissionsScheme{
 					{
 						Issues:      nil,
 						Projects:    []int{10000},

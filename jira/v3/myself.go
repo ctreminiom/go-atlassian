@@ -3,6 +3,7 @@ package v3
 import (
 	"context"
 	"fmt"
+	models "github.com/ctreminiom/go-atlassian/pkg/infra/models/jira"
 	"net/http"
 	"net/url"
 	"strings"
@@ -13,7 +14,7 @@ type MySelfService struct{ client *Client }
 // Details returns details for the current user.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-myself/#api-rest-api-3-myself-get
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-myself/#api-rest-api-3-myself-get
-func (m *MySelfService) Details(ctx context.Context, expand []string) (result *UserScheme, response *ResponseScheme,
+func (m *MySelfService) Details(ctx context.Context, expand []string) (result *models.UserScheme, response *ResponseScheme,
 	err error) {
 
 	params := url.Values{}

@@ -47,7 +47,7 @@ type PermissionSchemeScheme struct {
 	Self        string                                `json:"self,omitempty"`
 	Name        string                                `json:"name,omitempty"`
 	Description string                                `json:"description,omitempty"`
-	Permissions []*PermissionGrantScheme              `json:"permissions,omitempty"`
+	Permissions []*models.PermissionGrantScheme       `json:"permissions,omitempty"`
 	Scope       *models.TeamManagedProjectScopeScheme `json:"scope,omitempty"`
 }
 

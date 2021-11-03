@@ -3,6 +3,7 @@ package v3
 import (
 	"context"
 	"fmt"
+	models "github.com/ctreminiom/go-atlassian/pkg/infra/models/jira"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/url"
@@ -27,17 +28,17 @@ func TestPermissionSchemeService_Create(t *testing.T) {
 				Name:        "EF Permission Scheme",
 				Description: "EF Permission Scheme description",
 
-				Permissions: []*PermissionGrantScheme{
+				Permissions: []*models.PermissionGrantScheme{
 					{
 						Permission: "ADMINISTER_PROJECTS",
-						Holder: &PermissionGrantHolderScheme{
+						Holder: &models.PermissionGrantHolderScheme{
 							Parameter: "jira-administrators-system",
 							Type:      "group",
 						},
 					},
 					{
 						Permission: "CLOSE_ISSUES",
-						Holder: &PermissionGrantHolderScheme{
+						Holder: &models.PermissionGrantHolderScheme{
 							Type: "assignee",
 						},
 					},
@@ -68,17 +69,17 @@ func TestPermissionSchemeService_Create(t *testing.T) {
 				Name:        "EF Permission Scheme",
 				Description: "EF Permission Scheme description",
 
-				Permissions: []*PermissionGrantScheme{
+				Permissions: []*models.PermissionGrantScheme{
 					{
 						Permission: "ADMINISTER_PROJECTS",
-						Holder: &PermissionGrantHolderScheme{
+						Holder: &models.PermissionGrantHolderScheme{
 							Parameter: "jira-administrators-system",
 							Type:      "group",
 						},
 					},
 					{
 						Permission: "CLOSE_ISSUES",
-						Holder: &PermissionGrantHolderScheme{
+						Holder: &models.PermissionGrantHolderScheme{
 							Type: "assignee",
 						},
 					},
@@ -98,17 +99,17 @@ func TestPermissionSchemeService_Create(t *testing.T) {
 				Name:        "EF Permission Scheme",
 				Description: "EF Permission Scheme description",
 
-				Permissions: []*PermissionGrantScheme{
+				Permissions: []*models.PermissionGrantScheme{
 					{
 						Permission: "ADMINISTER_PROJECTS",
-						Holder: &PermissionGrantHolderScheme{
+						Holder: &models.PermissionGrantHolderScheme{
 							Parameter: "jira-administrators-system",
 							Type:      "group",
 						},
 					},
 					{
 						Permission: "CLOSE_ISSUES",
-						Holder: &PermissionGrantHolderScheme{
+						Holder: &models.PermissionGrantHolderScheme{
 							Type: "assignee",
 						},
 					},
@@ -128,17 +129,17 @@ func TestPermissionSchemeService_Create(t *testing.T) {
 				Name:        "EF Permission Scheme",
 				Description: "EF Permission Scheme description",
 
-				Permissions: []*PermissionGrantScheme{
+				Permissions: []*models.PermissionGrantScheme{
 					{
 						Permission: "ADMINISTER_PROJECTS",
-						Holder: &PermissionGrantHolderScheme{
+						Holder: &models.PermissionGrantHolderScheme{
 							Parameter: "jira-administrators-system",
 							Type:      "group",
 						},
 					},
 					{
 						Permission: "CLOSE_ISSUES",
-						Holder: &PermissionGrantHolderScheme{
+						Holder: &models.PermissionGrantHolderScheme{
 							Type: "assignee",
 						},
 					},
@@ -158,17 +159,17 @@ func TestPermissionSchemeService_Create(t *testing.T) {
 				Name:        "EF Permission Scheme",
 				Description: "EF Permission Scheme description",
 
-				Permissions: []*PermissionGrantScheme{
+				Permissions: []*models.PermissionGrantScheme{
 					{
 						Permission: "ADMINISTER_PROJECTS",
-						Holder: &PermissionGrantHolderScheme{
+						Holder: &models.PermissionGrantHolderScheme{
 							Parameter: "jira-administrators-system",
 							Type:      "group",
 						},
 					},
 					{
 						Permission: "CLOSE_ISSUES",
-						Holder: &PermissionGrantHolderScheme{
+						Holder: &models.PermissionGrantHolderScheme{
 							Type: "assignee",
 						},
 					},
@@ -188,17 +189,17 @@ func TestPermissionSchemeService_Create(t *testing.T) {
 				Name:        "EF Permission Scheme",
 				Description: "EF Permission Scheme description",
 
-				Permissions: []*PermissionGrantScheme{
+				Permissions: []*models.PermissionGrantScheme{
 					{
 						Permission: "ADMINISTER_PROJECTS",
-						Holder: &PermissionGrantHolderScheme{
+						Holder: &models.PermissionGrantHolderScheme{
 							Parameter: "jira-administrators-system",
 							Type:      "group",
 						},
 					},
 					{
 						Permission: "CLOSE_ISSUES",
-						Holder: &PermissionGrantHolderScheme{
+						Holder: &models.PermissionGrantHolderScheme{
 							Type: "assignee",
 						},
 					},
@@ -692,10 +693,10 @@ func TestPermissionSchemeService_Update(t *testing.T) {
 				Name:        "EF Permission Scheme - UPDATED",
 				Description: "EF Permission Scheme description - UPDATED",
 
-				Permissions: []*PermissionGrantScheme{
+				Permissions: []*models.PermissionGrantScheme{
 					{
 						Permission: "CLOSE_ISSUES",
-						Holder: &PermissionGrantHolderScheme{
+						Holder: &models.PermissionGrantHolderScheme{
 							Parameter: "jira-administrators-system",
 							Type:      "group",
 						},
@@ -744,10 +745,10 @@ func TestPermissionSchemeService_Update(t *testing.T) {
 				Name:        "EF Permission Scheme - UPDATED",
 				Description: "EF Permission Scheme description - UPDATED",
 
-				Permissions: []*PermissionGrantScheme{
+				Permissions: []*models.PermissionGrantScheme{
 					{
 						Permission: "CLOSE_ISSUES",
-						Holder: &PermissionGrantHolderScheme{
+						Holder: &models.PermissionGrantHolderScheme{
 							Parameter: "jira-administrators-system",
 							Type:      "group",
 						},
@@ -769,10 +770,10 @@ func TestPermissionSchemeService_Update(t *testing.T) {
 				Name:        "EF Permission Scheme - UPDATED",
 				Description: "EF Permission Scheme description - UPDATED",
 
-				Permissions: []*PermissionGrantScheme{
+				Permissions: []*models.PermissionGrantScheme{
 					{
 						Permission: "CLOSE_ISSUES",
-						Holder: &PermissionGrantHolderScheme{
+						Holder: &models.PermissionGrantHolderScheme{
 							Parameter: "jira-administrators-system",
 							Type:      "group",
 						},
@@ -794,10 +795,10 @@ func TestPermissionSchemeService_Update(t *testing.T) {
 				Name:        "EF Permission Scheme - UPDATED",
 				Description: "EF Permission Scheme description - UPDATED",
 
-				Permissions: []*PermissionGrantScheme{
+				Permissions: []*models.PermissionGrantScheme{
 					{
 						Permission: "CLOSE_ISSUES",
-						Holder: &PermissionGrantHolderScheme{
+						Holder: &models.PermissionGrantHolderScheme{
 							Parameter: "jira-administrators-system",
 							Type:      "group",
 						},
@@ -820,10 +821,10 @@ func TestPermissionSchemeService_Update(t *testing.T) {
 				Name:        "EF Permission Scheme - UPDATED",
 				Description: "EF Permission Scheme description - UPDATED",
 
-				Permissions: []*PermissionGrantScheme{
+				Permissions: []*models.PermissionGrantScheme{
 					{
 						Permission: "CLOSE_ISSUES",
-						Holder: &PermissionGrantHolderScheme{
+						Holder: &models.PermissionGrantHolderScheme{
 							Parameter: "jira-administrators-system",
 							Type:      "group",
 						},
@@ -846,10 +847,10 @@ func TestPermissionSchemeService_Update(t *testing.T) {
 				Name:        "EF Permission Scheme - UPDATED",
 				Description: "EF Permission Scheme description - UPDATED",
 
-				Permissions: []*PermissionGrantScheme{
+				Permissions: []*models.PermissionGrantScheme{
 					{
 						Permission: "CLOSE_ISSUES",
-						Holder: &PermissionGrantHolderScheme{
+						Holder: &models.PermissionGrantHolderScheme{
 							Parameter: "jira-administrators-system",
 							Type:      "group",
 						},

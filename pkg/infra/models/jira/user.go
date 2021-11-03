@@ -37,3 +37,18 @@ type UserApplicationRoleItemsScheme struct {
 	HasUnlimitedSeats    bool     `json:"hasUnlimitedSeats,omitempty"`
 	Platform             bool     `json:"platform,omitempty"`
 }
+
+type UserPayloadScheme struct {
+	Password     string `json:"password,omitempty"`
+	EmailAddress string `json:"emailAddress,omitempty"`
+	DisplayName  string `json:"displayName,omitempty"`
+	Notification bool   `json:"notification,omitempty"`
+}
+
+type UserSearchPageScheme struct {
+	MaxResults int           `json:"maxResults,omitempty"`
+	StartAt    int           `json:"startAt,omitempty"`
+	Total      int           `json:"total,omitempty"`
+	IsLast     bool          `json:"isLast,omitempty"`
+	Values     []*UserScheme `json:"values,omitempty"`
+}

@@ -3,6 +3,7 @@ package v3
 import (
 	"context"
 	"fmt"
+	models "github.com/ctreminiom/go-atlassian/pkg/infra/models/jira"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -165,13 +166,13 @@ type WorkflowSchemePageScheme struct {
 }
 
 type WorkflowSchemeScheme struct {
-	ID                  int         `json:"id,omitempty"`
-	Name                string      `json:"name,omitempty"`
-	Description         string      `json:"description,omitempty"`
-	DefaultWorkflow     string      `json:"defaultWorkflow,omitempty"`
-	Draft               bool        `json:"draft,omitempty"`
-	LastModifiedUser    *UserScheme `json:"lastModifiedUser,omitempty"`
-	LastModified        string      `json:"lastModified,omitempty"`
-	Self                string      `json:"self,omitempty"`
-	UpdateDraftIfNeeded bool        `json:"updateDraftIfNeeded,omitempty"`
+	ID                  int                `json:"id,omitempty"`
+	Name                string             `json:"name,omitempty"`
+	Description         string             `json:"description,omitempty"`
+	DefaultWorkflow     string             `json:"defaultWorkflow,omitempty"`
+	Draft               bool               `json:"draft,omitempty"`
+	LastModifiedUser    *models.UserScheme `json:"lastModifiedUser,omitempty"`
+	LastModified        string             `json:"lastModified,omitempty"`
+	Self                string             `json:"self,omitempty"`
+	UpdateDraftIfNeeded bool               `json:"updateDraftIfNeeded,omitempty"`
 }

@@ -3,6 +3,7 @@ package v3
 import (
 	"context"
 	"fmt"
+	models "github.com/ctreminiom/go-atlassian/pkg/infra/models/jira"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/url"
@@ -13,7 +14,7 @@ func TestUserService_Create(t *testing.T) {
 
 	testCases := []struct {
 		name               string
-		payload            *UserPayloadScheme
+		payload            *models.UserPayloadScheme
 		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string
@@ -23,7 +24,7 @@ func TestUserService_Create(t *testing.T) {
 	}{
 		{
 			name: "CreateUserWhenTheParamsAreCorrect",
-			payload: &UserPayloadScheme{
+			payload: &models.UserPayloadScheme{
 				Password:     "password1234",
 				EmailAddress: "example@example.com",
 				DisplayName:  "Example User",
@@ -50,7 +51,7 @@ func TestUserService_Create(t *testing.T) {
 
 		{
 			name: "CreateUserWhenTheRequestMethodIsIncorrect",
-			payload: &UserPayloadScheme{
+			payload: &models.UserPayloadScheme{
 				Password:     "password1234",
 				EmailAddress: "example@example.com",
 				DisplayName:  "Example User",
@@ -66,7 +67,7 @@ func TestUserService_Create(t *testing.T) {
 
 		{
 			name: "CreateUserWhenTheStatusCodeIsIncorrect",
-			payload: &UserPayloadScheme{
+			payload: &models.UserPayloadScheme{
 				Password:     "password1234",
 				EmailAddress: "example@example.com",
 				DisplayName:  "Example User",
@@ -82,7 +83,7 @@ func TestUserService_Create(t *testing.T) {
 
 		{
 			name: "CreateUserWhenTheContextIsNil",
-			payload: &UserPayloadScheme{
+			payload: &models.UserPayloadScheme{
 				Password:     "password1234",
 				EmailAddress: "example@example.com",
 				DisplayName:  "Example User",
@@ -98,7 +99,7 @@ func TestUserService_Create(t *testing.T) {
 
 		{
 			name: "CreateUserWhenTheEndpointIsIncorrect",
-			payload: &UserPayloadScheme{
+			payload: &models.UserPayloadScheme{
 				Password:     "password1234",
 				EmailAddress: "example@example.com",
 				DisplayName:  "Example User",
@@ -114,7 +115,7 @@ func TestUserService_Create(t *testing.T) {
 
 		{
 			name: "CreateUserWhenTheResponseBodyHasADifferentFormat",
-			payload: &UserPayloadScheme{
+			payload: &models.UserPayloadScheme{
 				Password:     "password1234",
 				EmailAddress: "example@example.com",
 				DisplayName:  "Example User",

@@ -10,17 +10,10 @@ import (
 
 type ProjectValidationService struct{ client *Client }
 
-type ProjectValidationMessageScheme struct {
-	ErrorMessages []string `json:"errorMessages"`
-	Errors        struct {
-		ProjectKey string `json:"projectKey"`
-	} `json:"errors"`
-}
-
 // Validate validates a project key by confirming the key is a valid string and not in use.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/projects/validation#validate-project-key
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-key-and-name-validation/#api-rest-api-3-projectvalidate-key-get
-func (p *ProjectValidationService) Validate(ctx context.Context, projectKey string) (result *ProjectValidationMessageScheme,
+func (p *ProjectValidationService) Validate(ctx context.Context, projectKey string) (result *models.ProjectValidationMessageScheme,
 	response *ResponseScheme, err error) {
 
 	if len(projectKey) == 0 {
@@ -85,7 +78,7 @@ func (p *ProjectValidationService) Name(ctx context.Context, projectName string)
 	response *ResponseScheme, err error) {
 
 	if len(projectName) == 0 {
-		return "", nil, notProjectNameError
+		return "", nil, models.ErrNoProjectNameError
 	}
 
 	params := url.Values{}
@@ -107,7 +100,3 @@ func (p *ProjectValidationService) Name(ctx context.Context, projectName string)
 
 	return response.Bytes.String(), response, nil
 }
-
-var (
-	notProjectNameError = fmt.Errorf("error, please provide a valid projectName value")
-)

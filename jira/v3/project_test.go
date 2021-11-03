@@ -3,6 +3,7 @@ package v3
 import (
 	"context"
 	"fmt"
+	models "github.com/ctreminiom/go-atlassian/pkg/infra/models/jira"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/url"
@@ -149,7 +150,7 @@ func TestProjectService_Create(t *testing.T) {
 
 	testCases := []struct {
 		name               string
-		payload            *ProjectPayloadScheme
+		payload            *models.ProjectPayloadScheme
 		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string
@@ -159,7 +160,7 @@ func TestProjectService_Create(t *testing.T) {
 	}{
 		{
 			name: "ArchiveProjectWhenThePayloadIsCorrect",
-			payload: &ProjectPayloadScheme{
+			payload: &models.ProjectPayloadScheme{
 				NotificationScheme:  10021,
 				Description:         "Example Project description",
 				LeadAccountID:       "396c4bf1-361b-4754-ae47-91fe6aabbc40",
@@ -195,7 +196,7 @@ func TestProjectService_Create(t *testing.T) {
 
 		{
 			name: "ArchiveProjectWhenTheEndpointIsIncorrect",
-			payload: &ProjectPayloadScheme{
+			payload: &models.ProjectPayloadScheme{
 				NotificationScheme:  10021,
 				Description:         "Example Project description",
 				LeadAccountID:       "396c4bf1-361b-4754-ae47-91fe6aabbc40",
@@ -220,7 +221,7 @@ func TestProjectService_Create(t *testing.T) {
 
 		{
 			name: "ArchiveProjectWhenTheRequestMethodIsIncorrect",
-			payload: &ProjectPayloadScheme{
+			payload: &models.ProjectPayloadScheme{
 				NotificationScheme:  10021,
 				Description:         "Example Project description",
 				LeadAccountID:       "396c4bf1-361b-4754-ae47-91fe6aabbc40",
@@ -245,7 +246,7 @@ func TestProjectService_Create(t *testing.T) {
 
 		{
 			name: "ArchiveProjectWhenTheStatusCodeIsIncorrect",
-			payload: &ProjectPayloadScheme{
+			payload: &models.ProjectPayloadScheme{
 				NotificationScheme:  10021,
 				Description:         "Example Project description",
 				LeadAccountID:       "396c4bf1-361b-4754-ae47-91fe6aabbc40",
@@ -270,7 +271,7 @@ func TestProjectService_Create(t *testing.T) {
 
 		{
 			name: "ArchiveProjectWhenTheContextIsNil",
-			payload: &ProjectPayloadScheme{
+			payload: &models.ProjectPayloadScheme{
 				NotificationScheme:  10021,
 				Description:         "Example Project description",
 				LeadAccountID:       "396c4bf1-361b-4754-ae47-91fe6aabbc40",
@@ -295,7 +296,7 @@ func TestProjectService_Create(t *testing.T) {
 
 		{
 			name: "ArchiveProjectWhenTheResponseBodyHasADifferentFormat",
-			payload: &ProjectPayloadScheme{
+			payload: &models.ProjectPayloadScheme{
 				NotificationScheme:  10021,
 				Description:         "Example Project description",
 				LeadAccountID:       "396c4bf1-361b-4754-ae47-91fe6aabbc40",
@@ -1344,7 +1345,7 @@ func TestProjectService_Search(t *testing.T) {
 
 	testCases := []struct {
 		name               string
-		opts               *ProjectSearchOptionsScheme
+		opts               *models.ProjectSearchOptionsScheme
 		startAt            int
 		maxResults         int
 		mockFile           string
@@ -1356,7 +1357,7 @@ func TestProjectService_Search(t *testing.T) {
 	}{
 		{
 			name: "SearchProjectsWhenTheOptionsAreCorrect",
-			opts: &ProjectSearchOptionsScheme{
+			opts: &models.ProjectSearchOptionsScheme{
 				OrderBy:        "category",
 				Query:          "key",
 				Action:         "view",
@@ -1389,7 +1390,7 @@ func TestProjectService_Search(t *testing.T) {
 
 		{
 			name: "SearchProjectsWhenTheEndpointIsIncorrect",
-			opts: &ProjectSearchOptionsScheme{
+			opts: &models.ProjectSearchOptionsScheme{
 				OrderBy:        "category",
 				Query:          "key",
 				Action:         "view",
@@ -1409,7 +1410,7 @@ func TestProjectService_Search(t *testing.T) {
 
 		{
 			name: "SearchProjectsWhenTheRequestMethodIsIncorrect",
-			opts: &ProjectSearchOptionsScheme{
+			opts: &models.ProjectSearchOptionsScheme{
 				OrderBy:        "category",
 				Query:          "key",
 				Action:         "view",
@@ -1429,7 +1430,7 @@ func TestProjectService_Search(t *testing.T) {
 
 		{
 			name: "SearchProjectsWhenTheStatusCodeIsIncorrect",
-			opts: &ProjectSearchOptionsScheme{
+			opts: &models.ProjectSearchOptionsScheme{
 				OrderBy:        "category",
 				Query:          "key",
 				Action:         "view",
@@ -1449,7 +1450,7 @@ func TestProjectService_Search(t *testing.T) {
 
 		{
 			name: "SearchProjectsWhenTheContextIsNil",
-			opts: &ProjectSearchOptionsScheme{
+			opts: &models.ProjectSearchOptionsScheme{
 				OrderBy:        "category",
 				Query:          "key",
 				Action:         "view",
@@ -1469,7 +1470,7 @@ func TestProjectService_Search(t *testing.T) {
 
 		{
 			name: "SearchProjectsWhenTheTheResponseBodyHasADifferentFormat",
-			opts: &ProjectSearchOptionsScheme{
+			opts: &models.ProjectSearchOptionsScheme{
 				OrderBy:        "category",
 				Query:          "key",
 				Action:         "view",
@@ -1711,7 +1712,7 @@ func TestProjectService_Update(t *testing.T) {
 	testCases := []struct {
 		name               string
 		projectKeyOrID     string
-		payload            *ProjectUpdateScheme
+		payload            *models.ProjectUpdateScheme
 		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string
@@ -1722,7 +1723,7 @@ func TestProjectService_Update(t *testing.T) {
 		{
 			name:           "UpdateProjectWhenThePayloadIsCorrect",
 			projectKeyOrID: "DUMMY",
-			payload: &ProjectUpdateScheme{
+			payload: &models.ProjectUpdateScheme{
 				NotificationScheme: 10000,
 				Name:               "New project",
 				PermissionScheme:   10001,
@@ -1738,7 +1739,7 @@ func TestProjectService_Update(t *testing.T) {
 		{
 			name:           "UpdateProjectWhenTheProjectKeyOrIDIsNotProvided",
 			projectKeyOrID: "",
-			payload: &ProjectUpdateScheme{
+			payload: &models.ProjectUpdateScheme{
 				NotificationScheme: 10000,
 				Name:               "New project",
 				PermissionScheme:   10001,
@@ -1766,7 +1767,7 @@ func TestProjectService_Update(t *testing.T) {
 		{
 			name:           "UpdateProjectWhenTheEndpointIsIncorrect",
 			projectKeyOrID: "DUMMY",
-			payload: &ProjectUpdateScheme{
+			payload: &models.ProjectUpdateScheme{
 				NotificationScheme: 10000,
 				Name:               "New project",
 				PermissionScheme:   10001,
@@ -1782,7 +1783,7 @@ func TestProjectService_Update(t *testing.T) {
 		{
 			name:           "UpdateProjectWhenTheRequestMethodIsIncorrect",
 			projectKeyOrID: "DUMMY",
-			payload: &ProjectUpdateScheme{
+			payload: &models.ProjectUpdateScheme{
 				NotificationScheme: 10000,
 				Name:               "New project",
 				PermissionScheme:   10001,
@@ -1798,7 +1799,7 @@ func TestProjectService_Update(t *testing.T) {
 		{
 			name:           "UpdateProjectWhenTheStatusCodeIsIncorrect",
 			projectKeyOrID: "DUMMY",
-			payload: &ProjectUpdateScheme{
+			payload: &models.ProjectUpdateScheme{
 				NotificationScheme: 10000,
 				Name:               "New project",
 				PermissionScheme:   10001,
@@ -1814,7 +1815,7 @@ func TestProjectService_Update(t *testing.T) {
 		{
 			name:           "UpdateProjectWhenTheContextIsNil",
 			projectKeyOrID: "DUMMY",
-			payload: &ProjectUpdateScheme{
+			payload: &models.ProjectUpdateScheme{
 				NotificationScheme: 10000,
 				Name:               "New project",
 				PermissionScheme:   10001,
@@ -1830,7 +1831,7 @@ func TestProjectService_Update(t *testing.T) {
 		{
 			name:           "UpdateProjectWhenTheResponseBodyHasADifferentFormat",
 			projectKeyOrID: "DUMMY",
-			payload: &ProjectUpdateScheme{
+			payload: &models.ProjectUpdateScheme{
 				NotificationScheme: 10000,
 				Name:               "New project",
 				PermissionScheme:   10001,

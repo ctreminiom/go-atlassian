@@ -22,7 +22,7 @@ type UserScheme struct {
 	AccountType      string                      `json:"accountType,omitempty"`
 	Name             string                      `json:"name,omitempty"`
 	EmailAddress     string                      `json:"emailAddress,omitempty"`
-	AvatarUrls       *AvatarURLScheme            `json:"avatarUrls,omitempty"`
+	AvatarUrls       *models.AvatarURLScheme     `json:"avatarUrls,omitempty"`
 	DisplayName      string                      `json:"displayName,omitempty"`
 	Active           bool                        `json:"active,omitempty"`
 	TimeZone         string                      `json:"timeZone,omitempty"`

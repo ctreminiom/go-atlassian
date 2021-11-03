@@ -3,6 +3,7 @@ package v3
 import (
 	"context"
 	"fmt"
+	models "github.com/ctreminiom/go-atlassian/pkg/infra/models/jira"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/url"
@@ -13,7 +14,7 @@ func TestProjectRoleService_Create(t *testing.T) {
 
 	testCases := []struct {
 		name               string
-		payload            *ProjectRolePayloadScheme
+		payload            *models.ProjectRolePayloadScheme
 		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string
@@ -23,7 +24,7 @@ func TestProjectRoleService_Create(t *testing.T) {
 	}{
 		{
 			name: "GetProjectRoleWhenTheParamsAreCorrect",
-			payload: &ProjectRolePayloadScheme{
+			payload: &models.ProjectRolePayloadScheme{
 				Name:        "ISOs",
 				Description: "lorem",
 			},
@@ -48,7 +49,7 @@ func TestProjectRoleService_Create(t *testing.T) {
 
 		{
 			name: "GetProjectRoleWhenTheRequestMethodIsIncorrect",
-			payload: &ProjectRolePayloadScheme{
+			payload: &models.ProjectRolePayloadScheme{
 				Name:        "ISOs",
 				Description: "lorem",
 			},
@@ -62,7 +63,7 @@ func TestProjectRoleService_Create(t *testing.T) {
 
 		{
 			name: "GetProjectRoleWhenTheStatusCodeIsIncorrect",
-			payload: &ProjectRolePayloadScheme{
+			payload: &models.ProjectRolePayloadScheme{
 				Name:        "ISOs",
 				Description: "lorem",
 			},
@@ -76,7 +77,7 @@ func TestProjectRoleService_Create(t *testing.T) {
 
 		{
 			name: "GetProjectRoleWhenTheContextIsNil",
-			payload: &ProjectRolePayloadScheme{
+			payload: &models.ProjectRolePayloadScheme{
 				Name:        "ISOs",
 				Description: "lorem",
 			},
@@ -90,7 +91,7 @@ func TestProjectRoleService_Create(t *testing.T) {
 
 		{
 			name: "GetProjectRoleWhenTheEndpointIsIncorrect",
-			payload: &ProjectRolePayloadScheme{
+			payload: &models.ProjectRolePayloadScheme{
 				Name:        "ISOs",
 				Description: "lorem",
 			},
@@ -104,7 +105,7 @@ func TestProjectRoleService_Create(t *testing.T) {
 
 		{
 			name: "GetProjectRoleWhenTheResponseBodyHasADifferentFormat",
-			payload: &ProjectRolePayloadScheme{
+			payload: &models.ProjectRolePayloadScheme{
 				Name:        "ISOs",
 				Description: "lorem",
 			},

@@ -74,36 +74,10 @@ func (p *ProjectRoleService) Gets(ctx context.Context, projectKeyOrID string) (r
 	return
 }
 
-type ProjectRoleScheme struct {
-	Self             string                                `json:"self,omitempty"`
-	Name             string                                `json:"name,omitempty"`
-	ID               int                                   `json:"id,omitempty"`
-	Description      string                                `json:"description,omitempty"`
-	Actors           []*RoleActorScheme                    `json:"actors,omitempty"`
-	Scope            *models.TeamManagedProjectScopeScheme `json:"scope,omitempty"`
-	TranslatedName   string                                `json:"translatedName,omitempty"`
-	CurrentUserRole  bool                                  `json:"currentUserRole,omitempty"`
-	Admin            bool                                  `json:"admin,omitempty"`
-	RoleConfigurable bool                                  `json:"roleConfigurable,omitempty"`
-	Default          bool                                  `json:"default,omitempty"`
-}
-
-type RoleActorScheme struct {
-	ID          int    `json:"id,omitempty"`
-	DisplayName string `json:"displayName,omitempty"`
-	Type        string `json:"type,omitempty"`
-	Name        string `json:"name,omitempty"`
-	AvatarURL   string `json:"avatarUrl,omitempty"`
-	ActorUser   struct {
-		AccountID string `json:"accountId,omitempty"`
-	} `json:"actorUser,omitempty"`
-	ActorGroup *models.GroupScheme `json:"actorGroup,omitempty"`
-}
-
 // Get returns a project role's details and actors associated with the project.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/projects/roles#get-project-role-for-project
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-roles/#api-rest-api-3-project-projectidorkey-role-id-get
-func (p *ProjectRoleService) Get(ctx context.Context, projectKeyOrID string, roleID int) (result *ProjectRoleScheme,
+func (p *ProjectRoleService) Get(ctx context.Context, projectKeyOrID string, roleID int) (result *models.ProjectRoleScheme,
 	response *ResponseScheme, err error) {
 
 	if len(projectKeyOrID) == 0 {
@@ -127,22 +101,10 @@ func (p *ProjectRoleService) Get(ctx context.Context, projectKeyOrID string, rol
 	return
 }
 
-type ProjectRoleDetailScheme struct {
-	Self             string                                `json:"self,omitempty"`
-	Name             string                                `json:"name,omitempty"`
-	ID               int                                   `json:"id,omitempty"`
-	Description      string                                `json:"description,omitempty"`
-	Admin            bool                                  `json:"admin,omitempty"`
-	Scope            *models.TeamManagedProjectScopeScheme `json:"scope,omitempty"`
-	RoleConfigurable bool                                  `json:"roleConfigurable,omitempty"`
-	TranslatedName   string                                `json:"translatedName,omitempty"`
-	Default          bool                                  `json:"default,omitempty"`
-}
-
 // Details returns all project roles and the details for each role.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/projects/roles#get-project-role-details
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-roles/#api-rest-api-3-project-projectidorkey-roledetails-get
-func (p *ProjectRoleService) Details(ctx context.Context, projectKeyOrID string) (result []*ProjectRoleDetailScheme,
+func (p *ProjectRoleService) Details(ctx context.Context, projectKeyOrID string) (result []*models.ProjectRoleDetailScheme,
 	response *ResponseScheme, err error) {
 
 	if len(projectKeyOrID) == 0 {
@@ -169,7 +131,7 @@ func (p *ProjectRoleService) Details(ctx context.Context, projectKeyOrID string)
 // Global gets a list of all project roles, complete with project role details and default actors.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/projects/roles#get-all-project-roles
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-roles/#api-rest-api-3-role-get
-func (p *ProjectRoleService) Global(ctx context.Context) (result []*ProjectRoleScheme, response *ResponseScheme, err error) {
+func (p *ProjectRoleService) Global(ctx context.Context) (result []*models.ProjectRoleScheme, response *ResponseScheme, err error) {
 
 	var endpoint = "rest/api/3/role"
 
@@ -188,15 +150,10 @@ func (p *ProjectRoleService) Global(ctx context.Context) (result []*ProjectRoleS
 	return
 }
 
-type ProjectRolePayloadScheme struct {
-	Name        string `json:"name,omitempty"`
-	Description string `json:"description,omitempty"`
-}
-
 // Create creates a new project role with no default actors.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/projects/roles#create-project-role
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-roles/#api-rest-api-3-role-post
-func (p *ProjectRoleService) Create(ctx context.Context, payload *ProjectRolePayloadScheme) (result *ProjectRoleScheme,
+func (p *ProjectRoleService) Create(ctx context.Context, payload *models.ProjectRolePayloadScheme) (result *models.ProjectRoleScheme,
 	response *ResponseScheme, err error) {
 
 	var endpoint = "rest/api/3/role"

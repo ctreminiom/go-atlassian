@@ -15,7 +15,7 @@ type ProjectRoleActorService struct{ client *Client }
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/projects/roles/actors#add-actors-to-project-role
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-role-actors/#api-rest-api-3-project-projectidorkey-role-id-post
 func (p *ProjectRoleActorService) Add(ctx context.Context, projectKeyOrID string, projectRoleID int, accountIDs, groups []string) (
-	result *ProjectRoleScheme, response *ResponseScheme, err error) {
+	result *models.ProjectRoleScheme, response *ResponseScheme, err error) {
 
 	if len(projectKeyOrID) == 0 {
 		return nil, nil, models.ErrNoProjectIDError

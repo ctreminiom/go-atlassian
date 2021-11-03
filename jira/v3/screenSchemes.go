@@ -11,37 +11,12 @@ import (
 
 type ScreenSchemeService struct{ client *Client }
 
-type ScreenSchemePageScheme struct {
-	Self       string                `json:"self,omitempty"`
-	NextPage   string                `json:"nextPage,omitempty"`
-	MaxResults int                   `json:"maxResults,omitempty"`
-	StartAt    int                   `json:"startAt,omitempty"`
-	Total      int                   `json:"total,omitempty"`
-	IsLast     bool                  `json:"isLast,omitempty"`
-	Values     []*ScreenSchemeScheme `json:"values,omitempty"`
-}
-
-type ScreenSchemeScheme struct {
-	ID                     int                        `json:"id,omitempty"`
-	Name                   string                     `json:"name,omitempty"`
-	Description            string                     `json:"description,omitempty"`
-	Screens                *ScreenTypesScheme         `json:"screens,omitempty"`
-	IssueTypeScreenSchemes *IssueTypeSchemePageScheme `json:"issueTypeScreenSchemes,omitempty"`
-}
-
-type ScreenTypesScheme struct {
-	Create  int `json:"create,omitempty"`
-	Default int `json:"default,omitempty"`
-	View    int `json:"view,omitempty"`
-	Edit    int `json:"edit,omitempty"`
-}
-
 // Gets returns a paginated list of screen schemes.
 // Only screen schemes used in classic projects are returned.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/screens/schemes#get-screen-schemes
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screen-schemes/#api-rest-api-3-screenscheme-get
 func (s *ScreenSchemeService) Gets(ctx context.Context, screenSchemeIDs []int, startAt, maxResults int) (
-	result *ScreenSchemePageScheme, response *ResponseScheme, err error) {
+	result *models.ScreenSchemePageScheme, response *ResponseScheme, err error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -68,16 +43,10 @@ func (s *ScreenSchemeService) Gets(ctx context.Context, screenSchemeIDs []int, s
 	return
 }
 
-type ScreenSchemePayloadScheme struct {
-	Screens     *ScreenTypesScheme `json:"screens,omitempty"`
-	Name        string             `json:"name,omitempty"`
-	Description string             `json:"description,omitempty"`
-}
-
 // Create creates a screen scheme.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/screens/schemes#create-screen-scheme
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screen-schemes/#api-rest-api-3-screenscheme-post
-func (s *ScreenSchemeService) Create(ctx context.Context, payload *ScreenSchemePayloadScheme) (result *ScreenSchemeScheme,
+func (s *ScreenSchemeService) Create(ctx context.Context, payload *models.ScreenSchemePayloadScheme) (result *models.ScreenSchemeScheme,
 	response *ResponseScheme, err error) {
 
 	var endpoint = "rest/api/3/screenscheme"
@@ -106,7 +75,7 @@ func (s *ScreenSchemeService) Create(ctx context.Context, payload *ScreenSchemeP
 // Update updates a screen scheme. Only screen schemes used in classic projects can be updated.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/screens/schemes#update-screen-scheme
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screen-schemes/#api-rest-api-3-screenscheme-screenschemeid-put
-func (s *ScreenSchemeService) Update(ctx context.Context, screenSchemeID string, payload *ScreenSchemePayloadScheme) (
+func (s *ScreenSchemeService) Update(ctx context.Context, screenSchemeID string, payload *models.ScreenSchemePayloadScheme) (
 	response *ResponseScheme, err error) {
 
 	if len(screenSchemeID) == 0 {

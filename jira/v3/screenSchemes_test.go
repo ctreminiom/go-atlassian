@@ -3,6 +3,7 @@ package v3
 import (
 	"context"
 	"fmt"
+	models "github.com/ctreminiom/go-atlassian/pkg/infra/models/jira"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/url"
@@ -13,7 +14,7 @@ func TestScreenSchemeService_Create(t *testing.T) {
 
 	testCases := []struct {
 		name               string
-		payload            *ScreenSchemePayloadScheme
+		payload            *models.ScreenSchemePayloadScheme
 		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string
@@ -23,8 +24,8 @@ func TestScreenSchemeService_Create(t *testing.T) {
 	}{
 		{
 			name: "CreateScreenSchemeWhenTheParamsAreCorrect",
-			payload: &ScreenSchemePayloadScheme{
-				Screens: &ScreenTypesScheme{
+			payload: &models.ScreenSchemePayloadScheme{
+				Screens: &models.ScreenTypesScheme{
 					Default: 10000,
 					View:    10000,
 					Edit:    10000,
@@ -42,8 +43,8 @@ func TestScreenSchemeService_Create(t *testing.T) {
 
 		{
 			name: "CreateScreenSchemeWhenTheContextIsNil",
-			payload: &ScreenSchemePayloadScheme{
-				Screens: &ScreenTypesScheme{
+			payload: &models.ScreenSchemePayloadScheme{
+				Screens: &models.ScreenTypesScheme{
 					Default: 10000,
 					View:    10000,
 					Edit:    10000,
@@ -72,8 +73,8 @@ func TestScreenSchemeService_Create(t *testing.T) {
 
 		{
 			name: "CreateScreenSchemeWhenTheRequestMethodIsIncorrect",
-			payload: &ScreenSchemePayloadScheme{
-				Screens: &ScreenTypesScheme{
+			payload: &models.ScreenSchemePayloadScheme{
+				Screens: &models.ScreenTypesScheme{
 					Default: 10000,
 					View:    10000,
 					Edit:    10000,
@@ -91,8 +92,8 @@ func TestScreenSchemeService_Create(t *testing.T) {
 
 		{
 			name: "CreateScreenSchemeWhenTheStatusCodeIsIncorrect",
-			payload: &ScreenSchemePayloadScheme{
-				Screens: &ScreenTypesScheme{
+			payload: &models.ScreenSchemePayloadScheme{
+				Screens: &models.ScreenTypesScheme{
 					Default: 10000,
 					View:    10000,
 					Edit:    10000,
@@ -110,8 +111,8 @@ func TestScreenSchemeService_Create(t *testing.T) {
 
 		{
 			name: "CreateScreenSchemeWhenTheEndpointIsIncorrect",
-			payload: &ScreenSchemePayloadScheme{
-				Screens: &ScreenTypesScheme{
+			payload: &models.ScreenSchemePayloadScheme{
+				Screens: &models.ScreenTypesScheme{
 					Default: 10000,
 					View:    10000,
 					Edit:    10000,
@@ -129,8 +130,8 @@ func TestScreenSchemeService_Create(t *testing.T) {
 
 		{
 			name: "CreateScreenSchemeWhenTheResponseBodyHasADifferentFormat",
-			payload: &ScreenSchemePayloadScheme{
-				Screens: &ScreenTypesScheme{
+			payload: &models.ScreenSchemePayloadScheme{
+				Screens: &models.ScreenTypesScheme{
 					Default: 10000,
 					View:    10000,
 					Edit:    10000,
@@ -517,7 +518,7 @@ func TestScreenSchemeService_Update(t *testing.T) {
 	testCases := []struct {
 		name               string
 		screenSchemeID     string
-		payload            *ScreenSchemePayloadScheme
+		payload            *models.ScreenSchemePayloadScheme
 		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string
@@ -528,8 +529,8 @@ func TestScreenSchemeService_Update(t *testing.T) {
 		{
 			name:           "UpdateScreenSchemeWhenTheParamsAreCorrect",
 			screenSchemeID: "2001",
-			payload: &ScreenSchemePayloadScheme{
-				Screens: &ScreenTypesScheme{
+			payload: &models.ScreenSchemePayloadScheme{
+				Screens: &models.ScreenTypesScheme{
 					Default: 10000,
 					View:    10000,
 					Edit:    10000,
@@ -547,8 +548,8 @@ func TestScreenSchemeService_Update(t *testing.T) {
 		{
 			name:           "UpdateScreenSchemeWhenTheScreenSchemeIDIsEmpty",
 			screenSchemeID: "",
-			payload: &ScreenSchemePayloadScheme{
-				Screens: &ScreenTypesScheme{
+			payload: &models.ScreenSchemePayloadScheme{
+				Screens: &models.ScreenTypesScheme{
 					Default: 10000,
 					View:    10000,
 					Edit:    10000,
@@ -577,8 +578,8 @@ func TestScreenSchemeService_Update(t *testing.T) {
 		{
 			name:           "UpdateScreenSchemeWhenTheRequestMethodIsIncorrect",
 			screenSchemeID: "2001",
-			payload: &ScreenSchemePayloadScheme{
-				Screens: &ScreenTypesScheme{
+			payload: &models.ScreenSchemePayloadScheme{
+				Screens: &models.ScreenTypesScheme{
 					Default: 10000,
 					View:    10000,
 					Edit:    10000,
@@ -596,8 +597,8 @@ func TestScreenSchemeService_Update(t *testing.T) {
 		{
 			name:           "UpdateScreenSchemeWhenTheStatusCodeIsIncorrect",
 			screenSchemeID: "2001",
-			payload: &ScreenSchemePayloadScheme{
-				Screens: &ScreenTypesScheme{
+			payload: &models.ScreenSchemePayloadScheme{
+				Screens: &models.ScreenTypesScheme{
 					Default: 10000,
 					View:    10000,
 					Edit:    10000,
@@ -615,8 +616,8 @@ func TestScreenSchemeService_Update(t *testing.T) {
 		{
 			name:           "UpdateScreenSchemeWhenTheContextIsNil",
 			screenSchemeID: "2001",
-			payload: &ScreenSchemePayloadScheme{
-				Screens: &ScreenTypesScheme{
+			payload: &models.ScreenSchemePayloadScheme{
+				Screens: &models.ScreenTypesScheme{
 					Default: 10000,
 					View:    10000,
 					Edit:    10000,

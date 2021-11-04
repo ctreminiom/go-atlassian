@@ -8,7 +8,7 @@ import (
 	"os"
 )
 
-func main()  {
+func main() {
 
 	var (
 		host  = os.Getenv("HOST")
@@ -35,7 +35,7 @@ func main()  {
 			FavoriteUserKey: "",
 			Expand:          nil,
 		}
-		startAt = 0
+		startAt    = 0
 		maxResults = 25
 	)
 

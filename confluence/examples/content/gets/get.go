@@ -61,7 +61,7 @@ func main() {
 			log.Println(content.Space)
 		}
 
-		if content.Metadata != nil  && content.Metadata.Labels != nil {
+		if content.Metadata != nil && content.Metadata.Labels != nil {
 			log.Println("- Content Labels -")
 
 			for _, result := range content.Metadata.Labels.Results {

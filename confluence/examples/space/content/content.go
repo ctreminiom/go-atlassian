@@ -8,7 +8,7 @@ import (
 	"os"
 )
 
-func main()  {
+func main() {
 
 	var (
 		host  = os.Getenv("HOST")
@@ -25,10 +25,10 @@ func main()  {
 	instance.Auth.SetUserAgent("curl/7.54.0")
 
 	var (
-		spaceKey = "DUMMY"
-		depth = "all"
-		expand = []string{"operations"}
-		startAt = 0
+		spaceKey   = "DUMMY"
+		depth      = "all"
+		expand     = []string{"operations"}
+		startAt    = 0
 		maxResults = 50
 	)
 
@@ -46,7 +46,6 @@ func main()  {
 
 	log.Println("Endpoint:", response.Endpoint)
 	log.Println("Status Code:", response.Code)
-
 
 	log.Println(contents.Links)
 	log.Println(contents.Page)

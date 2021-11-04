@@ -7,7 +7,7 @@ import (
 	"os"
 )
 
-func main()  {
+func main() {
 
 	var (
 		host  = os.Getenv("HOST")
@@ -24,9 +24,9 @@ func main()  {
 	atlassian.Auth.SetUserAgent("curl/7.54.0")
 
 	var (
-		contentID = "80412692"
-		prefix = ""
-		startAt = 0
+		contentID  = "80412692"
+		prefix     = ""
+		startAt    = 0
 		maxResults = 50
 	)
 
@@ -36,7 +36,6 @@ func main()  {
 		log.Println(response.Bytes.String())
 		log.Fatal(err)
 	}
-
 
 	for _, label := range labels.Results {
 		log.Println(label)

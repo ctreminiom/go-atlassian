@@ -7,7 +7,7 @@ import (
 	"os"
 )
 
-func main()  {
+func main() {
 
 	var (
 		host  = os.Getenv("HOST")
@@ -45,7 +45,7 @@ func main()  {
 		log.Fatal(err)
 	}
 
-	log.Println("Endpoint:",	 response.Endpoint)
+	log.Println("Endpoint:", response.Endpoint)
 	log.Println("Status Code:", response.Code)
 	log.Println(content)
 }

@@ -11,8 +11,8 @@ type ContentPermissionService struct {
 }
 
 type CheckPermissionScheme struct {
-	Subject *PermissionSubjectScheme `json:"subject,omitempty"`
-	Operation string `json:"operation,omitempty"`
+	Subject   *PermissionSubjectScheme `json:"subject,omitempty"`
+	Operation string                   `json:"operation,omitempty"`
 }
 
 type PermissionSubjectScheme struct {
@@ -59,8 +59,8 @@ func (c *ContentPermissionService) Check(ctx context.Context, contentID string,
 }
 
 type PermissionCheckResponseScheme struct {
-	HasPermission bool `json:"hasPermission"`
-	Errors []*PermissionCheckMessageScheme `json:"errors,omitempty"`
+	HasPermission bool                            `json:"hasPermission"`
+	Errors        []*PermissionCheckMessageScheme `json:"errors,omitempty"`
 }
 
 type PermissionCheckMessageScheme struct {

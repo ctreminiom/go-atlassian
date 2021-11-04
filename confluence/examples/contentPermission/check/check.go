@@ -8,7 +8,7 @@ import (
 	"os"
 )
 
-func main()  {
+func main() {
 
 	var (
 		host  = os.Getenv("HOST")
@@ -26,8 +26,8 @@ func main()  {
 
 	var (
 		contentID = "76513281"
-		payload = &confluence.CheckPermissionScheme{
-			Subject:   &confluence.PermissionSubjectScheme{
+		payload   = &confluence.CheckPermissionScheme{
+			Subject: &confluence.PermissionSubjectScheme{
 				Type:       "user",
 				Identifier: "5b86be50b8e3cb5895860d6d",
 			},

@@ -1,0 +1,83 @@
+package v3
+
+import (
+	"context"
+	"fmt"
+	models "github.com/ctreminiom/go-atlassian/pkg/infra/models/jira"
+	"net/http"
+	"net/url"
+	"strconv"
+	"strings"
+)
+
+type WorkflowService struct {
+	client *Client
+	Scheme *WorkflowSchemeService
+}
+
+// Gets returns a paginated list of published classic workflows.
+// When workflow names are specified, details of those workflows are returned.
+// Otherwise, all published classic workflows are returned.
+// Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-workflows/#api-rest-api-3-workflow-search-get
+func (w *WorkflowService) Gets(ctx context.Context, workflowNames, expand []string, startAt, maxResults int) (result *models.WorkflowPageScheme,
+	response *ResponseScheme, err error) {
+
+	params := url.Values{}
+	params.Add("startAt", strconv.Itoa(startAt))
+	params.Add("maxResults", strconv.Itoa(maxResults))
+
+	for _, workflowName := range workflowNames {
+		params.Add("workflowName", workflowName)
+	}
+
+	if len(expand) != 0 {
+		params.Add("expand", strings.Join(expand, ","))
+	}
+
+	var endpoint = fmt.Sprintf("/rest/api/3/workflow/search?%v", params.Encode())
+
+	request, err := w.client.newRequest(ctx, http.MethodGet, endpoint, nil)
+	if err != nil {
+		return
+	}
+
+	request.Header.Set("Accept", "application/json")
+
+	response, err = w.client.call(request, &result)
+	if err != nil {
+		return
+	}
+
+	return
+}
+
+// Delete deletes a workflow.
+//
+// The workflow cannot be deleted if it is:
+//
+// an active workflow.
+// a system workflow.
+// associated with any workflow scheme.
+// associated with any draft workflow scheme.
+// Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-workflows/#api-rest-api-3-workflow-entityid-delete
+// NOTE: Experimental Method
+func (w *WorkflowService) Delete(ctx context.Context, workflowID string) (response *ResponseScheme, err error) {
+
+	if len(workflowID) == 0 {
+		return nil, models.ErrNoWorkflowIDError
+	}
+
+	var endpoint = fmt.Sprintf("/rest/api/3/workflow/%v", workflowID)
+
+	request, err := w.client.newRequest(ctx, http.MethodDelete, endpoint, nil)
+	if err != nil {
+		return
+	}
+
+	response, err = w.client.call(request, nil)
+	if err != nil {
+		return
+	}
+
+	return
+}

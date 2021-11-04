@@ -13,8 +13,8 @@ func TestContentPermissionService_Check(t *testing.T) {
 
 	testCases := []struct {
 		name               string
-		contentID string
-		payload *CheckPermissionScheme
+		contentID          string
+		payload            *CheckPermissionScheme
 		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string
@@ -23,10 +23,10 @@ func TestContentPermissionService_Check(t *testing.T) {
 		wantErr            bool
 	}{
 		{
-			name:               "CheckContentPermissionsWhenTheParametersAreCorrect",
-			contentID:          "847373747",
-			payload:            &CheckPermissionScheme{
-				Subject:   &PermissionSubjectScheme{
+			name:      "CheckContentPermissionsWhenTheParametersAreCorrect",
+			contentID: "847373747",
+			payload: &CheckPermissionScheme{
+				Subject: &PermissionSubjectScheme{
 					Type:       "user",
 					Identifier: "5b86be50b8e3cb5895860d6d",
 				},
@@ -41,10 +41,10 @@ func TestContentPermissionService_Check(t *testing.T) {
 		},
 
 		{
-			name:               "CheckContentPermissionsWhenTheContentIDIsNotProvided",
-			contentID:          "",
-			payload:            &CheckPermissionScheme{
-				Subject:   &PermissionSubjectScheme{
+			name:      "CheckContentPermissionsWhenTheContentIDIsNotProvided",
+			contentID: "",
+			payload: &CheckPermissionScheme{
+				Subject: &PermissionSubjectScheme{
 					Type:       "user",
 					Identifier: "5b86be50b8e3cb5895860d6d",
 				},
@@ -71,10 +71,10 @@ func TestContentPermissionService_Check(t *testing.T) {
 		},
 
 		{
-			name:               "CheckContentPermissionsWhenTheRequestMethodIsIncorrect",
-			contentID:          "847373747",
-			payload:            &CheckPermissionScheme{
-				Subject:   &PermissionSubjectScheme{
+			name:      "CheckContentPermissionsWhenTheRequestMethodIsIncorrect",
+			contentID: "847373747",
+			payload: &CheckPermissionScheme{
+				Subject: &PermissionSubjectScheme{
 					Type:       "user",
 					Identifier: "5b86be50b8e3cb5895860d6d",
 				},
@@ -89,10 +89,10 @@ func TestContentPermissionService_Check(t *testing.T) {
 		},
 
 		{
-			name:               "CheckContentPermissionsWhenTheStatusCodeIsIncorrect",
-			contentID:          "847373747",
-			payload:            &CheckPermissionScheme{
-				Subject:   &PermissionSubjectScheme{
+			name:      "CheckContentPermissionsWhenTheStatusCodeIsIncorrect",
+			contentID: "847373747",
+			payload: &CheckPermissionScheme{
+				Subject: &PermissionSubjectScheme{
 					Type:       "user",
 					Identifier: "5b86be50b8e3cb5895860d6d",
 				},
@@ -107,10 +107,10 @@ func TestContentPermissionService_Check(t *testing.T) {
 		},
 
 		{
-			name:               "CheckContentPermissionsWhenTheContextIsNotProvided",
-			contentID:          "847373747",
-			payload:            &CheckPermissionScheme{
-				Subject:   &PermissionSubjectScheme{
+			name:      "CheckContentPermissionsWhenTheContextIsNotProvided",
+			contentID: "847373747",
+			payload: &CheckPermissionScheme{
+				Subject: &PermissionSubjectScheme{
 					Type:       "user",
 					Identifier: "5b86be50b8e3cb5895860d6d",
 				},
@@ -125,10 +125,10 @@ func TestContentPermissionService_Check(t *testing.T) {
 		},
 
 		{
-			name:               "CheckContentPermissionsWhenTheResponseBodyIsEmpty",
-			contentID:          "847373747",
-			payload:            &CheckPermissionScheme{
-				Subject:   &PermissionSubjectScheme{
+			name:      "CheckContentPermissionsWhenTheResponseBodyIsEmpty",
+			contentID: "847373747",
+			payload: &CheckPermissionScheme{
+				Subject: &PermissionSubjectScheme{
 					Type:       "user",
 					Identifier: "5b86be50b8e3cb5895860d6d",
 				},

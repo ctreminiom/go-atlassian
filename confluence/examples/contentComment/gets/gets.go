@@ -8,7 +8,7 @@ import (
 	"os"
 )
 
-func main()  {
+func main() {
 
 	var (
 		host  = os.Getenv("HOST")
@@ -25,9 +25,9 @@ func main()  {
 	instance.Auth.SetUserAgent("curl/7.54.0")
 
 	var (
-		contentID = "76513281"
-		expand = []string{"childTypes.all"}
-		startAt = 0
+		contentID  = "76513281"
+		expand     = []string{"childTypes.all"}
+		startAt    = 0
 		maxResults = 50
 	)
 

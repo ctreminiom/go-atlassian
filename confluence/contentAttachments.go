@@ -17,14 +17,14 @@ type ContentAttachmentService struct {
 }
 
 type GetContentAttachmentsOptionsScheme struct {
-	Expand []string
-	FileName string
+	Expand    []string
+	FileName  string
 	MediaType string
 }
 
 // Gets returns the attachments for a piece of content.
 // By default, the following objects are expanded: metadata.
-func (c *ContentAttachmentService) Gets(ctx context.Context, contentID string, startAt, maxResults int, options *GetContentAttachmentsOptionsScheme) (result *ContentPageScheme, response *ResponseScheme, err error)  {
+func (c *ContentAttachmentService) Gets(ctx context.Context, contentID string, startAt, maxResults int, options *GetContentAttachmentsOptionsScheme) (result *ContentPageScheme, response *ResponseScheme, err error) {
 
 	if len(contentID) == 0 {
 		return nil, nil, notContentIDError
@@ -97,7 +97,7 @@ func (c *ContentAttachmentService) CreateOrUpdate(ctx context.Context, attachmen
 	}
 
 	var (
-		body = &bytes.Buffer{}
+		body             = &bytes.Buffer{}
 		attachmentWriter = multipart.NewWriter(body)
 	)
 
@@ -159,7 +159,7 @@ func (c *ContentAttachmentService) Create(ctx context.Context, attachmentID, sta
 	}
 
 	var (
-		body = &bytes.Buffer{}
+		body             = &bytes.Buffer{}
 		attachmentWriter = multipart.NewWriter(body)
 	)
 
@@ -193,6 +193,6 @@ func (c *ContentAttachmentService) Create(ctx context.Context, attachmentID, sta
 
 var (
 	notAttachmentIDError = fmt.Errorf("error, the attachment ID is required, please provide a valid value")
-	notFileNameError = fmt.Errorf("error, the fileName is required, please provide a valid value")
-	notReaderError = fmt.Errorf("error, the io.Reader cannot be nil, please provide a valid value")
+	notFileNameError     = fmt.Errorf("error, the fileName is required, please provide a valid value")
+	notReaderError       = fmt.Errorf("error, the io.Reader cannot be nil, please provide a valid value")
 )

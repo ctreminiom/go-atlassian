@@ -969,16 +969,16 @@ func TestSpaceService_Delete(t *testing.T) {
 func TestSpaceService_Content(t *testing.T) {
 
 	testCases := []struct {
-		name               string
-		spaceKey, depth string
-		expand []string
+		name                string
+		spaceKey, depth     string
+		expand              []string
 		startAt, maxResults int
-		mockFile           string
-		wantHTTPMethod     string
-		endpoint           string
-		context            context.Context
-		wantHTTPCodeReturn int
-		wantErr            bool
+		mockFile            string
+		wantHTTPMethod      string
+		endpoint            string
+		context             context.Context
+		wantHTTPCodeReturn  int
+		wantErr             bool
 	}{
 		{
 			name:               "GetSpaceContentWhenTheParametersAreCorrect",
@@ -1127,23 +1127,23 @@ func TestSpaceService_Content(t *testing.T) {
 func TestSpaceService_ContentByType(t *testing.T) {
 
 	testCases := []struct {
-		name               string
-		spaceKey, depth string
-		expand []string
-		contentType string
+		name                string
+		spaceKey, depth     string
+		expand              []string
+		contentType         string
 		startAt, maxResults int
-		mockFile           string
-		wantHTTPMethod     string
-		endpoint           string
-		context            context.Context
-		wantHTTPCodeReturn int
-		wantErr            bool
+		mockFile            string
+		wantHTTPMethod      string
+		endpoint            string
+		context             context.Context
+		wantHTTPCodeReturn  int
+		wantErr             bool
 	}{
 		{
 			name:               "GetSpaceContentByTypeWhenTheParametersAreCorrect",
 			spaceKey:           "DUMMY",
 			depth:              "all",
-			contentType: "page",
+			contentType:        "page",
 			expand:             []string{"operations", "restrictions"},
 			startAt:            0,
 			maxResults:         50,
@@ -1159,7 +1159,7 @@ func TestSpaceService_ContentByType(t *testing.T) {
 			name:               "GetSpaceContentByTypeWhenTheSpaceKeyIsNotProvided",
 			spaceKey:           "",
 			depth:              "all",
-			contentType: "page",
+			contentType:        "page",
 			expand:             []string{"operations", "restrictions"},
 			startAt:            0,
 			maxResults:         50,
@@ -1175,7 +1175,7 @@ func TestSpaceService_ContentByType(t *testing.T) {
 			name:               "GetSpaceContentByTypeWhenTheRequestMethodIsIncorrect",
 			spaceKey:           "DUMMY",
 			depth:              "all",
-			contentType: "page",
+			contentType:        "page",
 			expand:             []string{"operations", "restrictions"},
 			startAt:            0,
 			maxResults:         50,
@@ -1184,14 +1184,14 @@ func TestSpaceService_ContentByType(t *testing.T) {
 			endpoint:           "/wiki/rest/api/space/DUMMY/content/page?depth=all&expand=operations%2Crestrictions&limit=50&start=0",
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusOK,
-			wantErr:           true,
+			wantErr:            true,
 		},
 
 		{
 			name:               "GetSpaceContentByTypeWhenTheStatusCodeIsIncorrect",
 			spaceKey:           "DUMMY",
 			depth:              "all",
-			contentType: "page",
+			contentType:        "page",
 			expand:             []string{"operations", "restrictions"},
 			startAt:            0,
 			maxResults:         50,
@@ -1207,7 +1207,7 @@ func TestSpaceService_ContentByType(t *testing.T) {
 			name:               "GetSpaceContentByTypeWhenTheContextIsNotProvided",
 			spaceKey:           "DUMMY",
 			depth:              "all",
-			contentType: "page",
+			contentType:        "page",
 			expand:             []string{"operations", "restrictions"},
 			startAt:            0,
 			maxResults:         50,
@@ -1223,7 +1223,7 @@ func TestSpaceService_ContentByType(t *testing.T) {
 			name:               "GetSpaceContentByTypeWhenTheResponseBodyIsEmpty",
 			spaceKey:           "DUMMY",
 			depth:              "all",
-			contentType: "page",
+			contentType:        "page",
 			expand:             []string{"operations", "restrictions"},
 			startAt:            0,
 			maxResults:         50,

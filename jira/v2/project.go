@@ -104,6 +104,39 @@ func (p *ProjectService) Search(ctx context.Context, options *models.ProjectSear
 	return
 }
 
+// Gets returns all projects visible to the user.
+// Deprecated, use Get projects paginated that supports search and pagination.
+// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-projects/#api-rest-api-2-project-get
+// Note: available on the Data Center versions
+func (p *ProjectService) Gets(ctx context.Context, expand []string) (result []*models.ProjectScheme, response *ResponseScheme, err error) {
+
+	params := url.Values{}
+	if len(expand) != 0 {
+		params.Add("expand", strings.Join(expand, ","))
+	}
+
+	var endpoint strings.Builder
+	endpoint.WriteString("rest/api/2/project")
+
+	if params.Encode() != "" {
+		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
+	}
+
+	request, err := p.client.newRequest(ctx, http.MethodGet, endpoint.String(), nil)
+	if err != nil {
+		return
+	}
+
+	request.Header.Set("Accept", "application/json")
+
+	response, err = p.client.call(request, &result)
+	if err != nil {
+		return
+	}
+
+	return
+}
+
 // Get returns the project details for a project.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-projects/#api-rest-api-2-project-projectidorkey-get
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-projects/#api-rest-api-2-project-projectidorkey-get

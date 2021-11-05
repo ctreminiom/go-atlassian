@@ -1,0 +1,50 @@
+[
+  {
+    "self": "https://your-domain.atlassian.net/rest/api/2/project/EX",
+    "id": "10000",
+    "key": "EX",
+    "name": "Example",
+    "avatarUrls": {
+      "48x48": "https://your-domain.atlassian.net/secure/projectavatar?size=large&pid=10000",
+      "24x24": "https://your-domain.atlassian.net/secure/projectavatar?size=small&pid=10000",
+      "16x16": "https://your-domain.atlassian.net/secure/projectavatar?size=xsmall&pid=10000",
+      "32x32": "https://your-domain.atlassian.net/secure/projectavatar?size=medium&pid=10000"
+    },
+    "projectCategory": {
+      "self": "https://your-domain.atlassian.net/rest/api/2/projectCategory/10000",
+      "id": "10000",
+      "name": "FIRST",
+      "description": "First Project Category"
+    },
+    "simplified": false,
+    "style": "classic",
+    "insight": {
+      "totalIssueCount": 100,
+      "lastIssueUpdateTime": "2021-11-03T02:38:47.060+0000"
+    }
+  },
+  {
+    "self": "https://your-domain.atlassian.net/rest/api/2/project/ABC",
+    "id": "10001",
+    "key": "ABC",
+    "name": "Alphabetical",
+    "avatarUrls": {
+      "48x48": "https://your-domain.atlassian.net/secure/projectavatar?size=large&pid=10001",
+      "24x24": "https://your-domain.atlassian.net/secure/projectavatar?size=small&pid=10001",
+      "16x16": "https://your-domain.atlassian.net/secure/projectavatar?size=xsmall&pid=10001",
+      "32x32": "https://your-domain.atlassian.net/secure/projectavatar?size=medium&pid=10001"
+    },
+    "projectCategory": {
+      "self": "https://your-domain.atlassian.net/rest/api/2/projectCategory/10000",
+      "id": "10000",
+      "name": "FIRST",
+      "description": "First Project Category"
+    },
+    "simplified": false,
+    "style": "classic",
+    "insight": {
+      "totalIssueCount": 100,
+      "lastIssueUpdateTime": "2021-11-03T02:38:47.060+0000"
+    }
+  }
+]

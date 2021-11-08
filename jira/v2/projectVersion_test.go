@@ -373,6 +373,160 @@ func TestProjectVersionService_Get(t *testing.T) {
 func TestProjectVersionService_Gets(t *testing.T) {
 
 	testCases := []struct {
+		name               string
+		projectKeyOrID     string
+		mockFile           string
+		wantHTTPMethod     string
+		endpoint           string
+		context            context.Context
+		wantHTTPCodeReturn int
+		wantErr            bool
+	}{
+		{
+			name:               "GetProjectVersionsWhenTheParamsAreCorrect",
+			projectKeyOrID:     "10001",
+			mockFile:           "../mocks/get-project-versions.json",
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/rest/api/2/project/10001/versions",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            false,
+		},
+
+		{
+			name:               "GetProjectVersionsWhenTheProjectKeyIsNotProvided",
+			projectKeyOrID:     "",
+			mockFile:           "../mocks/get-project-versions.json",
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/rest/api/2/project/10001/versions",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+
+		{
+			name:               "GetProjectVersionsWhenTheExpandsIsNil",
+			projectKeyOrID:     "10001",
+			mockFile:           "../mocks/get-project-versions.json",
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/rest/api/2/project/10001/versions",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            false,
+		},
+
+		{
+			name:               "GetProjectVersionsWhenTheRequestMethodIsIncorrect",
+			projectKeyOrID:     "10001",
+			mockFile:           "../mocks/get-project-versions.json",
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/api/2/project/10001/versions",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+
+		{
+			name:               "GetProjectVersionsWhenTheStatusCodeIsIncorrect",
+			projectKeyOrID:     "10001",
+			mockFile:           "../mocks/get-project-versions.json",
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/rest/api/2/project/10001/versions",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusBadRequest,
+			wantErr:            true,
+		},
+
+		{
+			name:               "GetProjectVersionsWhenTheContextIsNil",
+			projectKeyOrID:     "10001",
+			mockFile:           "../mocks/get-project-versions.json",
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/rest/api/2/project/10001/versions",
+			context:            nil,
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+
+		{
+			name:               "GetProjectVersionsWhenTheResponseBodyHasADifferentFormat",
+			projectKeyOrID:     "10001",
+			mockFile:           "./mocks/empty_json.json",
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/rest/api/2/project/10001/versions",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+	}
+
+	for _, testCase := range testCases {
+
+		t.Run(testCase.name, func(t *testing.T) {
+
+			//Init a new HTTP mock server
+			mockOptions := mockServerOptions{
+				Endpoint:           testCase.endpoint,
+				MockFilePath:       testCase.mockFile,
+				MethodAccepted:     testCase.wantHTTPMethod,
+				ResponseCodeWanted: testCase.wantHTTPCodeReturn,
+			}
+
+			mockServer, err := startMockServer(&mockOptions)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			defer mockServer.Close()
+
+			//Init the library instance
+			mockClient, err := startMockClient(mockServer.URL)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			i := &ProjectVersionService{client: mockClient}
+
+			gotResult, gotResponse, err := i.Gets(testCase.context, testCase.projectKeyOrID)
+
+			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+
+				assert.Error(t, err)
+			} else {
+
+				assert.NoError(t, err)
+				assert.NotEqual(t, gotResponse, nil)
+				assert.NotEqual(t, gotResult, nil)
+
+				apiEndpoint, err := url.Parse(gotResponse.Endpoint)
+				if err != nil {
+					t.Fatal(err)
+				}
+
+				var endpointToAssert string
+
+				if apiEndpoint.Query().Encode() != "" {
+					endpointToAssert = fmt.Sprintf("%v?%v", apiEndpoint.Path, apiEndpoint.Query().Encode())
+				} else {
+					endpointToAssert = apiEndpoint.Path
+				}
+
+				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
+				assert.Equal(t, testCase.endpoint, endpointToAssert)
+			}
+		})
+
+	}
+
+}
+
+func TestProjectVersionService_Search(t *testing.T) {
+
+	testCases := []struct {
 		name                string
 		projectKeyOrID      string
 		options             *models.VersionGetsOptions
@@ -385,7 +539,7 @@ func TestProjectVersionService_Gets(t *testing.T) {
 		wantErr             bool
 	}{
 		{
-			name:           "GetProjectVersionsWhenTheParamsAreCorrect",
+			name:           "SearchProjectVersionsWhenTheParamsAreCorrect",
 			projectKeyOrID: "DUMMY",
 			options: &models.VersionGetsOptions{
 				OrderBy: "description",
@@ -404,7 +558,7 @@ func TestProjectVersionService_Gets(t *testing.T) {
 		},
 
 		{
-			name:           "GetProjectVersionsWhenTheOptionsAreNotProvided",
+			name:           "SearchProjectVersionsWhenTheOptionsAreNotProvided",
 			projectKeyOrID: "DUMMY",
 			options: &models.VersionGetsOptions{
 				OrderBy: "",
@@ -423,7 +577,7 @@ func TestProjectVersionService_Gets(t *testing.T) {
 		},
 
 		{
-			name:               "GetProjectVersionsWhenTheOptionsIsNil",
+			name:               "SearchProjectVersionsWhenTheOptionsIsNil",
 			projectKeyOrID:     "DUMMY",
 			options:            nil,
 			startAt:            0,
@@ -437,7 +591,7 @@ func TestProjectVersionService_Gets(t *testing.T) {
 		},
 
 		{
-			name:           "GetProjectVersionsWhenTheRequestMethodIsIncorrect",
+			name:           "SearchProjectVersionsWhenTheRequestMethodIsIncorrect",
 			projectKeyOrID: "",
 			options: &models.VersionGetsOptions{
 				OrderBy: "description",
@@ -456,7 +610,7 @@ func TestProjectVersionService_Gets(t *testing.T) {
 		},
 
 		{
-			name:           "GetProjectVersionsWhenTheStatusCodeIsIncorrect",
+			name:           "SearchProjectVersionsWhenTheStatusCodeIsIncorrect",
 			projectKeyOrID: "DUMMY",
 			options: &models.VersionGetsOptions{
 				OrderBy: "description",
@@ -475,7 +629,7 @@ func TestProjectVersionService_Gets(t *testing.T) {
 		},
 
 		{
-			name:           "GetProjectVersionsWhenTheContextIsNil",
+			name:           "SearchProjectVersionsWhenTheContextIsNil",
 			projectKeyOrID: "DUMMY",
 			options: &models.VersionGetsOptions{
 				OrderBy: "description",
@@ -494,7 +648,7 @@ func TestProjectVersionService_Gets(t *testing.T) {
 		},
 
 		{
-			name:           "GetProjectVersionsWhenTheResponseBodyHasADifferentFormat",
+			name:           "SearchProjectVersionsWhenTheResponseBodyHasADifferentFormat",
 			projectKeyOrID: "DUMMY",
 			options: &models.VersionGetsOptions{
 				OrderBy: "description",
@@ -540,7 +694,7 @@ func TestProjectVersionService_Gets(t *testing.T) {
 
 			i := &ProjectVersionService{client: mockClient}
 
-			gotResult, gotResponse, err := i.Gets(testCase.context, testCase.projectKeyOrID, testCase.options,
+			gotResult, gotResponse, err := i.Search(testCase.context, testCase.projectKeyOrID, testCase.options,
 				testCase.startAt, testCase.maxResults)
 
 			if testCase.wantErr {

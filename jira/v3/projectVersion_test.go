@@ -577,7 +577,7 @@ func TestProjectVersionService_Gets(t *testing.T) {
 
 			i := &ProjectVersionService{client: mockClient}
 
-			gotResult, gotResponse, err := i.Gets(testCase.context, testCase.projectKeyOrID, testCase.options,
+			gotResult, gotResponse, err := i.Search(testCase.context, testCase.projectKeyOrID, testCase.options,
 				testCase.startAt, testCase.maxResults)
 
 			if testCase.wantErr {

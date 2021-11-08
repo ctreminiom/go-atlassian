@@ -12,10 +12,10 @@ import (
 
 type ProjectVersionService struct{ client *Client }
 
-// Gets returns a paginated list of all versions in a project.
+// Search returns a paginated list of all versions in a project.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/projects/versions#get-project-versions-paginated
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-versions/#api-rest-api-3-project-projectidorkey-version-get
-func (p *ProjectVersionService) Gets(ctx context.Context, projectKeyOrID string, options *models.VersionGetsOptions, startAt,
+func (p *ProjectVersionService) Search(ctx context.Context, projectKeyOrID string, options *models.VersionGetsOptions, startAt,
 	maxResults int) (result *models.VersionPageScheme, response *ResponseScheme, err error) {
 
 	if len(projectKeyOrID) == 0 {

@@ -339,6 +339,209 @@ func TestBoardService_Create(t *testing.T) {
 
 }
 
+func TestBoardService_Gets(t *testing.T) {
+
+	testCases := []struct {
+		name                string
+		opts                *GetBoardsOptions
+		startAt, maxResults int
+		mockFile            string
+		wantHTTPMethod      string
+		endpoint            string
+		context             context.Context
+		wantHTTPCodeReturn  int
+		wantErr             bool
+	}{
+		{
+			name: "GetBoardsTheParametersAreCorrect",
+			opts: &GetBoardsOptions{
+				BoardType:               "scrum",
+				BoardName:               "board-name",
+				ProjectKeyOrID:          "CID",
+				AccountIDLocation:       "account-id-sample",
+				ProjectIDLocation:       "2345",
+				IncludePrivate:          true,
+				NegateLocationFiltering: true,
+				OrderBy:                 "name",
+				Expand:                  "permissions",
+				FilterID:                111234,
+			},
+			startAt:            0,
+			maxResults:         50,
+			mockFile:           "./mocks/get-boards-by-filter-id.json",
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/rest/agile/1.0/board?accountIdLocation=account-id-sample&expand=permissions&filterId=111234&includePrivate=true&maxResults=50&name=board-name&negateLocationFiltering=true&orderBy=name&projectKeyOrId=CID&projectLocation=2345&startAt=0&type=scrum",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            false,
+		},
+
+		{
+			name: "GetBoardByFilterWhenTheRequestMethodIsIncorrect",
+			opts: &GetBoardsOptions{
+				BoardType:               "scrum",
+				BoardName:               "board-name",
+				ProjectKeyOrID:          "CID",
+				AccountIDLocation:       "account-id-sample",
+				ProjectIDLocation:       "2345",
+				IncludePrivate:          true,
+				NegateLocationFiltering: true,
+				OrderBy:                 "name",
+				Expand:                  "permissions",
+				FilterID:                111234,
+			},
+			startAt:            0,
+			maxResults:         50,
+			mockFile:           "./mocks/get-board.json",
+			wantHTTPCodeReturn: http.StatusOK,
+			wantHTTPMethod:     http.MethodHead,
+			endpoint:           "/rest/agile/1.0/board?accountIdLocation=account-id-sample&expand=permissions&filterId=111234&includePrivate=true&maxResults=50&name=board-name&negateLocationFiltering=true&orderBy=name&projectKeyOrId=CID&projectLocation=2345&startAt=0&type=scrum",
+			context:            context.Background(),
+			wantErr:            true,
+		},
+
+		{
+			name: "GetBoardByFilterWhenTheContextIsNil",
+			opts: &GetBoardsOptions{
+				BoardType:               "scrum",
+				BoardName:               "board-name",
+				ProjectKeyOrID:          "CID",
+				AccountIDLocation:       "account-id-sample",
+				ProjectIDLocation:       "2345",
+				IncludePrivate:          true,
+				NegateLocationFiltering: true,
+				OrderBy:                 "name",
+				Expand:                  "permissions",
+				FilterID:                111234,
+			},
+			startAt:            0,
+			maxResults:         50,
+			mockFile:           "./mocks/get-board.json",
+			wantHTTPCodeReturn: http.StatusOK,
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/rest/agile/1.0/board?accountIdLocation=account-id-sample&expand=permissions&filterId=111234&includePrivate=true&maxResults=50&name=board-name&negateLocationFiltering=true&orderBy=name&projectKeyOrId=CID&projectLocation=2345&startAt=0&type=scrum",
+			context:            nil,
+			wantErr:            true,
+		},
+
+		{
+			name: "GetBoardByFilterWhenTheResponseStatusCodeIsIncorrect",
+			opts: &GetBoardsOptions{
+				BoardType:               "scrum",
+				BoardName:               "board-name",
+				ProjectKeyOrID:          "CID",
+				AccountIDLocation:       "account-id-sample",
+				ProjectIDLocation:       "2345",
+				IncludePrivate:          true,
+				NegateLocationFiltering: true,
+				OrderBy:                 "name",
+				Expand:                  "permissions",
+				FilterID:                111234,
+			},
+			startAt:            0,
+			maxResults:         50,
+			mockFile:           "./mocks/get-board.json",
+			wantHTTPCodeReturn: http.StatusBadGateway,
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/rest/agile/1.0/board?accountIdLocation=account-id-sample&expand=permissions&filterId=111234&includePrivate=true&maxResults=50&name=board-name&negateLocationFiltering=true&orderBy=name&projectKeyOrId=CID&projectLocation=2345&startAt=0&type=scrum",
+			context:            context.Background(),
+			wantErr:            true,
+		},
+
+		{
+			name: "GetBoardByFilterWhenTheResponseBodyIsEmpty",
+			opts: &GetBoardsOptions{
+				BoardType:               "scrum",
+				BoardName:               "board-name",
+				ProjectKeyOrID:          "CID",
+				AccountIDLocation:       "account-id-sample",
+				ProjectIDLocation:       "2345",
+				IncludePrivate:          true,
+				NegateLocationFiltering: true,
+				OrderBy:                 "name",
+				Expand:                  "permissions",
+				FilterID:                111234,
+			},
+			startAt:            0,
+			maxResults:         50,
+			mockFile:           "./mocks/empty-json.json",
+			wantHTTPCodeReturn: http.StatusOK,
+			wantHTTPMethod:     http.MethodGet,
+			endpoint:           "/rest/agile/1.0/board?accountIdLocation=account-id-sample&expand=permissions&filterId=111234&includePrivate=true&maxResults=50&name=board-name&negateLocationFiltering=true&orderBy=name&projectKeyOrId=CID&projectLocation=2345&startAt=0&type=scrum",
+			context:            context.Background(),
+			wantErr:            true,
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+
+			//Init a new HTTP mock server
+			mockOptions := mockServerOptions{
+				Endpoint:           testCase.endpoint,
+				MockFilePath:       testCase.mockFile,
+				MethodAccepted:     testCase.wantHTTPMethod,
+				ResponseCodeWanted: testCase.wantHTTPCodeReturn,
+			}
+
+			mockServer, err := startMockServer(&mockOptions)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			defer mockServer.Close()
+
+			//Init the library instance
+			mockClient, err := startMockClient(mockServer.URL)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			service := &BoardService{client: mockClient}
+			gotResult, gotResponse, err := service.Gets(testCase.context, testCase.opts,
+				testCase.startAt, testCase.maxResults)
+
+			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+
+				assert.Error(t, err)
+
+				if gotResponse != nil {
+					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
+				}
+			} else {
+
+				assert.NoError(t, err)
+				assert.NotEqual(t, gotResponse, nil)
+				assert.NotEqual(t, gotResult, nil)
+
+				apiEndpoint, err := url.Parse(gotResponse.Endpoint)
+				if err != nil {
+					t.Fatal(err)
+				}
+
+				var endpointToAssert string
+
+				if apiEndpoint.Query().Encode() != "" {
+					endpointToAssert = fmt.Sprintf("%v?%v", apiEndpoint.Path, apiEndpoint.Query().Encode())
+				} else {
+					endpointToAssert = apiEndpoint.Path
+				}
+
+				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
+				assert.Equal(t, testCase.endpoint, endpointToAssert)
+
+				t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
+				assert.Equal(t, gotResponse.Code, testCase.wantHTTPCodeReturn)
+			}
+		})
+	}
+
+}
+
 func TestBoardService_Filter(t *testing.T) {
 
 	testCases := []struct {

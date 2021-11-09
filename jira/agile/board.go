@@ -81,6 +81,7 @@ func (b *BoardService) Create(ctx context.Context, payload *BoardPayloadScheme) 
 type BoardPageScheme struct {
 	MaxResults int            `json:"maxResults"`
 	StartAt    int            `json:"startAt"`
+	Total      int            `json:"total"`
 	IsLast     bool           `json:"isLast"`
 	Values     []*BoardScheme `json:"values"`
 }
@@ -804,6 +805,87 @@ func (b *BoardService) Delete(ctx context.Context, boardID int) (response *Respo
 	response, err = b.client.Call(request, nil)
 	if err != nil {
 		return
+	}
+
+	return
+}
+
+type GetBoardsOptions struct {
+	BoardType               string
+	BoardName               string
+	ProjectKeyOrID          string
+	AccountIDLocation       string
+	ProjectIDLocation       string
+	IncludePrivate          bool
+	NegateLocationFiltering bool
+	OrderBy                 string
+	Expand                  string
+	FilterID                int
+}
+
+// Gets returns all boards. This only includes boards that the user has permission to view.
+// Docs: https://developer.atlassian.com/cloud/jira/software/rest/api-group-other-operations/#api-agile-1-0-board-get
+func (b *BoardService) Gets(ctx context.Context, opts *GetBoardsOptions, startAt, maxResults int) (result *BoardPageScheme, response *ResponseScheme, err error) {
+
+	params := url.Values{}
+	params.Add("startAt", strconv.Itoa(startAt))
+	params.Add("maxResults", strconv.Itoa(maxResults))
+
+	if opts != nil {
+
+		if opts.BoardType != "" {
+			params.Add("type", opts.BoardType)
+		}
+
+		if opts.BoardName != "" {
+			params.Add("name", opts.BoardName)
+		}
+
+		if opts.ProjectKeyOrID != "" {
+			params.Add("projectKeyOrId", opts.ProjectKeyOrID)
+		}
+
+		if opts.AccountIDLocation != "" {
+			params.Add("accountIdLocation", opts.AccountIDLocation)
+		}
+
+		if opts.ProjectIDLocation != "" {
+			params.Add("projectLocation", opts.ProjectIDLocation)
+		}
+
+		if opts.IncludePrivate {
+			params.Add("includePrivate", "true")
+		}
+
+		if opts.NegateLocationFiltering {
+			params.Add("negateLocationFiltering", "true")
+		}
+
+		if opts.OrderBy != "" {
+			params.Add("orderBy", opts.OrderBy)
+		}
+
+		if opts.Expand != "" {
+			params.Add("expand", opts.Expand)
+		}
+
+		if opts.FilterID != 0 {
+			params.Add("filterId", strconv.Itoa(opts.FilterID))
+		}
+	}
+
+	var endpoint = fmt.Sprintf("/rest/agile/1.0/board?%v", params.Encode())
+
+	request, err := b.client.newRequest(ctx, http.MethodGet, endpoint, nil)
+	if err != nil {
+		return
+	}
+
+	request.Header.Set("Accept", "application/json")
+
+	response, err = b.client.Call(request, &result)
+	if err != nil {
+		return nil, response, err
 	}
 
 	return

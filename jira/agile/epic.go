@@ -12,26 +12,13 @@ import (
 
 type EpicService struct{ client *Client }
 
-type EpicScheme struct {
-	ID      int              `json:"id,omitempty"`
-	Key     string           `json:"key,omitempty"`
-	Self    string           `json:"self,omitempty"`
-	Name    string           `json:"name,omitempty"`
-	Summary string           `json:"summary,omitempty"`
-	Color   *EpicColorScheme `json:"color,omitempty"`
-	Done    bool             `json:"done,omitempty"`
-}
-type EpicColorScheme struct {
-	Key string `json:"key,omitempty"`
-}
-
 // Get returns the epic for a given epic ID.
 // This epic will only be returned if the user has permission to view it.
 // Note: This operation does not work for epics in next-gen projects.
-func (e *EpicService) Get(ctx context.Context, epicIDOrKey string) (result *EpicScheme, response *ResponseScheme, err error) {
+func (e *EpicService) Get(ctx context.Context, epicIDOrKey string) (result *model.EpicScheme, response *ResponseScheme, err error) {
 
 	if len(epicIDOrKey) == 0 {
-		return nil, nil, fmt.Errorf("error!, please provide a valid epicIDOrKey value")
+		return nil, nil, model.ErrNoEpicIDError
 	}
 
 	var endpoint = fmt.Sprintf("/rest/agile/1.0/epic/%v", epicIDOrKey)
@@ -62,7 +49,7 @@ func (e *EpicService) Issues(ctx context.Context, epicIDOrKey string, startAt, m
 	opts *model.IssueOptionScheme) (result *model.BoardIssuePageScheme, response *ResponseScheme, err error) {
 
 	if len(epicIDOrKey) == 0 {
-		return nil, nil, fmt.Errorf("error!, please provide a valid epicIDOrKey value")
+		return nil, nil, model.ErrNoEpicIDError
 	}
 
 	params := url.Values{}

@@ -3,6 +3,7 @@ package agile
 import (
 	"context"
 	"fmt"
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models/agile"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/url"
@@ -153,7 +154,7 @@ func TestBoardService_Create(t *testing.T) {
 
 	testCases := []struct {
 		name               string
-		payload            *BoardPayloadScheme
+		payload            *model.BoardPayloadScheme
 		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string
@@ -163,13 +164,13 @@ func TestBoardService_Create(t *testing.T) {
 	}{
 		{
 			name: "CreateBoardWhenTheParametersAreCorrect",
-			payload: &BoardPayloadScheme{
+			payload: &model.BoardPayloadScheme{
 				Name:     "DUMMY Board Name",
 				Type:     "scrum", //scrum or kanban
 				FilterID: 10016,
 
 				// Omit the Location if you want to the board to yourself (location)
-				Location: &BoardPayloadLocationScheme{
+				Location: &model.BoardPayloadLocationScheme{
 					ProjectKeyOrID: "KP",
 					Type:           "project",
 				},
@@ -195,13 +196,13 @@ func TestBoardService_Create(t *testing.T) {
 
 		{
 			name: "CreateBoardWhenTheRequestMethodIsIncorrect",
-			payload: &BoardPayloadScheme{
+			payload: &model.BoardPayloadScheme{
 				Name:     "DUMMY Board Name",
 				Type:     "scrum", //scrum or kanban
 				FilterID: 10016,
 
 				// Omit the Location if you want to the board to yourself (location)
-				Location: &BoardPayloadLocationScheme{
+				Location: &model.BoardPayloadLocationScheme{
 					ProjectKeyOrID: "KP",
 					Type:           "project",
 				},
@@ -216,13 +217,13 @@ func TestBoardService_Create(t *testing.T) {
 
 		{
 			name: "CreateBoardWhenTheContextIsNil",
-			payload: &BoardPayloadScheme{
+			payload: &model.BoardPayloadScheme{
 				Name:     "DUMMY Board Name",
 				Type:     "scrum", //scrum or kanban
 				FilterID: 10016,
 
 				// Omit the Location if you want to the board to yourself (location)
-				Location: &BoardPayloadLocationScheme{
+				Location: &model.BoardPayloadLocationScheme{
 					ProjectKeyOrID: "KP",
 					Type:           "project",
 				},
@@ -237,13 +238,13 @@ func TestBoardService_Create(t *testing.T) {
 
 		{
 			name: "CreateBoardWhenTheResponseStatusCodeIsIncorrect",
-			payload: &BoardPayloadScheme{
+			payload: &model.BoardPayloadScheme{
 				Name:     "DUMMY Board Name",
 				Type:     "scrum", //scrum or kanban
 				FilterID: 10016,
 
 				// Omit the Location if you want to the board to yourself (location)
-				Location: &BoardPayloadLocationScheme{
+				Location: &model.BoardPayloadLocationScheme{
 					ProjectKeyOrID: "KP",
 					Type:           "project",
 				},
@@ -258,13 +259,13 @@ func TestBoardService_Create(t *testing.T) {
 
 		{
 			name: "CreateBoardWhenTheResponseBodyIsEmpty",
-			payload: &BoardPayloadScheme{
+			payload: &model.BoardPayloadScheme{
 				Name:     "DUMMY Board Name",
 				Type:     "scrum", //scrum or kanban
 				FilterID: 10016,
 
 				// Omit the Location if you want to the board to yourself (location)
-				Location: &BoardPayloadLocationScheme{
+				Location: &model.BoardPayloadLocationScheme{
 					ProjectKeyOrID: "KP",
 					Type:           "project",
 				},
@@ -343,7 +344,7 @@ func TestBoardService_Gets(t *testing.T) {
 
 	testCases := []struct {
 		name                string
-		opts                *GetBoardsOptions
+		opts                *model.GetBoardsOptions
 		startAt, maxResults int
 		mockFile            string
 		wantHTTPMethod      string
@@ -354,7 +355,7 @@ func TestBoardService_Gets(t *testing.T) {
 	}{
 		{
 			name: "GetBoardsTheParametersAreCorrect",
-			opts: &GetBoardsOptions{
+			opts: &model.GetBoardsOptions{
 				BoardType:               "scrum",
 				BoardName:               "board-name",
 				ProjectKeyOrID:          "CID",
@@ -378,7 +379,7 @@ func TestBoardService_Gets(t *testing.T) {
 
 		{
 			name: "GetBoardByFilterWhenTheRequestMethodIsIncorrect",
-			opts: &GetBoardsOptions{
+			opts: &model.GetBoardsOptions{
 				BoardType:               "scrum",
 				BoardName:               "board-name",
 				ProjectKeyOrID:          "CID",
@@ -402,7 +403,7 @@ func TestBoardService_Gets(t *testing.T) {
 
 		{
 			name: "GetBoardByFilterWhenTheContextIsNil",
-			opts: &GetBoardsOptions{
+			opts: &model.GetBoardsOptions{
 				BoardType:               "scrum",
 				BoardName:               "board-name",
 				ProjectKeyOrID:          "CID",
@@ -426,7 +427,7 @@ func TestBoardService_Gets(t *testing.T) {
 
 		{
 			name: "GetBoardByFilterWhenTheResponseStatusCodeIsIncorrect",
-			opts: &GetBoardsOptions{
+			opts: &model.GetBoardsOptions{
 				BoardType:               "scrum",
 				BoardName:               "board-name",
 				ProjectKeyOrID:          "CID",
@@ -450,7 +451,7 @@ func TestBoardService_Gets(t *testing.T) {
 
 		{
 			name: "GetBoardByFilterWhenTheResponseBodyIsEmpty",
-			opts: &GetBoardsOptions{
+			opts: &model.GetBoardsOptions{
 				BoardType:               "scrum",
 				BoardName:               "board-name",
 				ProjectKeyOrID:          "CID",
@@ -707,7 +708,7 @@ func TestBoardService_Backlog(t *testing.T) {
 	testCases := []struct {
 		name                         string
 		boardID, startAt, maxResults int
-		opts                         *IssueOptionScheme
+		opts                         *model.IssueOptionScheme
 		mockFile                     string
 		wantHTTPMethod               string
 		endpoint                     string
@@ -720,7 +721,7 @@ func TestBoardService_Backlog(t *testing.T) {
 			boardID:    100,
 			startAt:    0,
 			maxResults: 50,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
@@ -739,7 +740,7 @@ func TestBoardService_Backlog(t *testing.T) {
 			boardID:    100,
 			startAt:    0,
 			maxResults: 50,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
@@ -758,7 +759,7 @@ func TestBoardService_Backlog(t *testing.T) {
 			boardID:    100,
 			startAt:    0,
 			maxResults: 50,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: false,
 				Fields:        []string{"status", "issuetype", "summary"},
@@ -777,7 +778,7 @@ func TestBoardService_Backlog(t *testing.T) {
 			boardID:    0,
 			startAt:    0,
 			maxResults: 50,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
@@ -797,7 +798,7 @@ func TestBoardService_Backlog(t *testing.T) {
 			startAt:    0,
 			maxResults: 50,
 			mockFile:   "./mocks/get-board-backlog.json",
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
@@ -816,7 +817,7 @@ func TestBoardService_Backlog(t *testing.T) {
 			startAt:    0,
 			maxResults: 50,
 			mockFile:   "./mocks/get-board-backlog.json",
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
@@ -834,7 +835,7 @@ func TestBoardService_Backlog(t *testing.T) {
 			boardID:    100,
 			startAt:    0,
 			maxResults: 50,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
@@ -853,7 +854,7 @@ func TestBoardService_Backlog(t *testing.T) {
 			boardID:    100,
 			startAt:    0,
 			maxResults: 50,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
@@ -1257,7 +1258,7 @@ func TestBoardService_IssuesWithoutEpic(t *testing.T) {
 	testCases := []struct {
 		name                         string
 		boardID, startAt, maxResults int
-		opts                         *IssueOptionScheme
+		opts                         *model.IssueOptionScheme
 		mockFile                     string
 		wantHTTPMethod               string
 		endpoint                     string
@@ -1270,7 +1271,7 @@ func TestBoardService_IssuesWithoutEpic(t *testing.T) {
 			boardID:    100,
 			startAt:    0,
 			maxResults: 50,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
@@ -1289,7 +1290,7 @@ func TestBoardService_IssuesWithoutEpic(t *testing.T) {
 			boardID:    100,
 			startAt:    0,
 			maxResults: 50,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
@@ -1308,7 +1309,7 @@ func TestBoardService_IssuesWithoutEpic(t *testing.T) {
 			boardID:    100,
 			startAt:    0,
 			maxResults: 50,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: false,
 				Fields:        []string{"status", "issuetype", "summary"},
@@ -1328,7 +1329,7 @@ func TestBoardService_IssuesWithoutEpic(t *testing.T) {
 			boardID:    0,
 			startAt:    0,
 			maxResults: 50,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
@@ -1350,7 +1351,7 @@ func TestBoardService_IssuesWithoutEpic(t *testing.T) {
 			maxResults: 50,
 			mockFile:   "./mocks/get-board-issue-without-epic.json",
 
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
@@ -1370,7 +1371,7 @@ func TestBoardService_IssuesWithoutEpic(t *testing.T) {
 			maxResults: 50,
 			mockFile:   "./mocks/get-board-issue-without-epic.json",
 
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
@@ -1388,7 +1389,7 @@ func TestBoardService_IssuesWithoutEpic(t *testing.T) {
 			boardID:    100,
 			startAt:    0,
 			maxResults: 50,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
@@ -1408,7 +1409,7 @@ func TestBoardService_IssuesWithoutEpic(t *testing.T) {
 			boardID:    100,
 			startAt:    0,
 			maxResults: 50,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
@@ -1498,7 +1499,7 @@ func TestBoardService_IssuesByEpic(t *testing.T) {
 	testCases := []struct {
 		name                                 string
 		boardID, epicID, startAt, maxResults int
-		opts                                 *IssueOptionScheme
+		opts                                 *model.IssueOptionScheme
 		mockFile                             string
 		wantHTTPMethod                       string
 		endpoint                             string
@@ -1512,7 +1513,7 @@ func TestBoardService_IssuesByEpic(t *testing.T) {
 			epicID:     22,
 			startAt:    0,
 			maxResults: 50,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
@@ -1532,7 +1533,7 @@ func TestBoardService_IssuesByEpic(t *testing.T) {
 			epicID:     0,
 			startAt:    0,
 			maxResults: 50,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
@@ -1552,7 +1553,7 @@ func TestBoardService_IssuesByEpic(t *testing.T) {
 			epicID:     22,
 			startAt:    0,
 			maxResults: 50,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: false,
 				Fields:        []string{"status", "issuetype", "summary"},
@@ -1572,7 +1573,7 @@ func TestBoardService_IssuesByEpic(t *testing.T) {
 			epicID:     22,
 			startAt:    0,
 			maxResults: 50,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
@@ -1593,7 +1594,7 @@ func TestBoardService_IssuesByEpic(t *testing.T) {
 			startAt:    0,
 			maxResults: 50,
 			mockFile:   "./mocks/get-board-issue-by-epic.json",
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
@@ -1614,7 +1615,7 @@ func TestBoardService_IssuesByEpic(t *testing.T) {
 			startAt:    0,
 			maxResults: 50,
 			mockFile:   "./mocks/get-board-issue-by-epic.json",
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
@@ -1634,7 +1635,7 @@ func TestBoardService_IssuesByEpic(t *testing.T) {
 
 			startAt:    0,
 			maxResults: 50,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
@@ -1654,7 +1655,7 @@ func TestBoardService_IssuesByEpic(t *testing.T) {
 			epicID:     22,
 			startAt:    0,
 			maxResults: 50,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
@@ -1743,7 +1744,7 @@ func TestBoardService_Issues(t *testing.T) {
 	testCases := []struct {
 		name                         string
 		boardID, startAt, maxResults int
-		opts                         *IssueOptionScheme
+		opts                         *model.IssueOptionScheme
 		mockFile                     string
 		wantHTTPMethod               string
 		endpoint                     string
@@ -1756,7 +1757,7 @@ func TestBoardService_Issues(t *testing.T) {
 			boardID:    100,
 			startAt:    0,
 			maxResults: 50,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
@@ -1775,7 +1776,7 @@ func TestBoardService_Issues(t *testing.T) {
 			boardID:    100,
 			startAt:    0,
 			maxResults: 50,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: false,
 				Fields:        []string{"status", "issuetype", "summary"},
@@ -1794,7 +1795,7 @@ func TestBoardService_Issues(t *testing.T) {
 			boardID:    0,
 			startAt:    0,
 			maxResults: 50,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
@@ -1814,7 +1815,7 @@ func TestBoardService_Issues(t *testing.T) {
 			startAt:    0,
 			maxResults: 50,
 			mockFile:   "./mocks/get-board-issues.json",
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
@@ -1833,7 +1834,7 @@ func TestBoardService_Issues(t *testing.T) {
 			startAt:    0,
 			maxResults: 50,
 			mockFile:   "./mocks/get-board-issues.json",
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
@@ -1851,7 +1852,7 @@ func TestBoardService_Issues(t *testing.T) {
 			boardID:    100,
 			startAt:    0,
 			maxResults: 50,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
@@ -1870,7 +1871,7 @@ func TestBoardService_Issues(t *testing.T) {
 			boardID:    100,
 			startAt:    0,
 			maxResults: 50,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
@@ -2119,7 +2120,7 @@ func TestBoardService_IssuesBySprint(t *testing.T) {
 	testCases := []struct {
 		name                                  string
 		sprintID, epicID, startAt, maxResults int
-		opts                                  *IssueOptionScheme
+		opts                                  *model.IssueOptionScheme
 		mockFile                              string
 		wantHTTPMethod                        string
 		endpoint                              string
@@ -2133,7 +2134,7 @@ func TestBoardService_IssuesBySprint(t *testing.T) {
 			epicID:     22,
 			startAt:    0,
 			maxResults: 50,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
@@ -2153,7 +2154,7 @@ func TestBoardService_IssuesBySprint(t *testing.T) {
 			epicID:     0,
 			startAt:    0,
 			maxResults: 50,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
@@ -2173,7 +2174,7 @@ func TestBoardService_IssuesBySprint(t *testing.T) {
 			epicID:     100,
 			startAt:    0,
 			maxResults: 50,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
@@ -2193,7 +2194,7 @@ func TestBoardService_IssuesBySprint(t *testing.T) {
 			epicID:     22,
 			startAt:    0,
 			maxResults: 50,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: false,
 				Fields:        []string{"status", "issuetype", "summary"},
@@ -2213,7 +2214,7 @@ func TestBoardService_IssuesBySprint(t *testing.T) {
 			epicID:     22,
 			startAt:    0,
 			maxResults: 50,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
@@ -2234,7 +2235,7 @@ func TestBoardService_IssuesBySprint(t *testing.T) {
 			startAt:    0,
 			maxResults: 50,
 			mockFile:   "./mocks/get-board-issue-by-epic.json",
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
@@ -2255,7 +2256,7 @@ func TestBoardService_IssuesBySprint(t *testing.T) {
 			startAt:    0,
 			maxResults: 50,
 			mockFile:   "./mocks/get-board-issue-by-epic.json",
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
@@ -2275,7 +2276,7 @@ func TestBoardService_IssuesBySprint(t *testing.T) {
 
 			startAt:    0,
 			maxResults: 50,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
@@ -2295,7 +2296,7 @@ func TestBoardService_IssuesBySprint(t *testing.T) {
 			epicID:     22,
 			startAt:    0,
 			maxResults: 50,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
@@ -2565,7 +2566,7 @@ func TestBoardService_Move(t *testing.T) {
 	testCases := []struct {
 		name               string
 		boardID            int
-		payload            *BoardMovementPayloadScheme
+		payload            *model.BoardMovementPayloadScheme
 		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string
@@ -2576,7 +2577,7 @@ func TestBoardService_Move(t *testing.T) {
 		{
 			name:    "MoveBacklogIssueToBoardWhenTheParametersAreCorrect",
 			boardID: 100,
-			payload: &BoardMovementPayloadScheme{
+			payload: &model.BoardMovementPayloadScheme{
 				Issues:          []string{"KP-3"},
 				RankBeforeIssue: "",
 				RankAfterIssue:  "",
@@ -2602,7 +2603,7 @@ func TestBoardService_Move(t *testing.T) {
 		{
 			name:    "MoveBacklogIssueToBoardWhenTheBoardIDIsNotSet",
 			boardID: 0,
-			payload: &BoardMovementPayloadScheme{
+			payload: &model.BoardMovementPayloadScheme{
 				Issues:          []string{"KP-3"},
 				RankBeforeIssue: "",
 				RankAfterIssue:  "",
@@ -2617,7 +2618,7 @@ func TestBoardService_Move(t *testing.T) {
 		{
 			name:    "MoveBacklogIssueToBoardWhenTheContextIsNil",
 			boardID: 100,
-			payload: &BoardMovementPayloadScheme{
+			payload: &model.BoardMovementPayloadScheme{
 				Issues:          []string{"KP-3"},
 				RankBeforeIssue: "",
 				RankAfterIssue:  "",
@@ -2632,7 +2633,7 @@ func TestBoardService_Move(t *testing.T) {
 		{
 			name:    "MoveBacklogIssueToBoardWhenTheRequestMethodIsIncorrect",
 			boardID: 100,
-			payload: &BoardMovementPayloadScheme{
+			payload: &model.BoardMovementPayloadScheme{
 				Issues:          []string{"KP-3"},
 				RankBeforeIssue: "",
 				RankAfterIssue:  "",
@@ -2647,7 +2648,7 @@ func TestBoardService_Move(t *testing.T) {
 		{
 			name:    "MoveBacklogIssueToBoardWhenTheStatusCodeIsIncorrect",
 			boardID: 100,
-			payload: &BoardMovementPayloadScheme{
+			payload: &model.BoardMovementPayloadScheme{
 				Issues:          []string{"KP-3"},
 				RankBeforeIssue: "",
 				RankAfterIssue:  "",

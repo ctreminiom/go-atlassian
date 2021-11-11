@@ -3,6 +3,7 @@ package agile
 import (
 	"context"
 	"fmt"
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models/agile"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -58,7 +59,7 @@ func (e *EpicService) Get(ctx context.Context, epicIDOrKey string) (result *Epic
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/software/rest/api-group-epic/#api-agile-1-0-epic-epicidorkey-issue-get
 // Library Docs: N/A
 func (e *EpicService) Issues(ctx context.Context, epicIDOrKey string, startAt, maxResults int,
-	opts *IssueOptionScheme) (result *BoardIssuePageScheme, response *ResponseScheme, err error) {
+	opts *model.IssueOptionScheme) (result *model.BoardIssuePageScheme, response *ResponseScheme, err error) {
 
 	if len(epicIDOrKey) == 0 {
 		return nil, nil, fmt.Errorf("error!, please provide a valid epicIDOrKey value")

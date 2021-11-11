@@ -3,6 +3,7 @@ package agile
 import (
 	"context"
 	"fmt"
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models/agile"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/url"
@@ -1090,7 +1091,7 @@ func TestSprintService_Issues(t *testing.T) {
 	testCases := []struct {
 		name                string
 		sprintID            int
-		opts                *IssueOptionScheme
+		opts                *model.IssueOptionScheme
 		startAt, maxResults int
 		mockFile            string
 		wantHTTPMethod      string
@@ -1102,7 +1103,7 @@ func TestSprintService_Issues(t *testing.T) {
 		{
 			name:     "GetSprintIssuesWhenTheParametersAreCorrect",
 			sprintID: 1,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = DUMMY",
 				Fields:        []string{"summary", "status"},
 				Expand:        []string{"changelogs", "transitions"},
@@ -1121,7 +1122,7 @@ func TestSprintService_Issues(t *testing.T) {
 		{
 			name:     "GetSprintIssuesWhenTheSprintIDIsNotProvided",
 			sprintID: 0,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = DUMMY",
 				Fields:        []string{"summary", "status"},
 				Expand:        []string{"changelogs"},
@@ -1140,7 +1141,7 @@ func TestSprintService_Issues(t *testing.T) {
 		{
 			name:     "GetSprintIssuesWhenTheRequestMethodIsIncorrect",
 			sprintID: 1,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = DUMMY",
 				Fields:        []string{"summary", "status"},
 				Expand:        []string{"changelogs"},
@@ -1159,7 +1160,7 @@ func TestSprintService_Issues(t *testing.T) {
 		{
 			name:     "GetSprintIssuesWhenTheStatusCodeIsIncorrect",
 			sprintID: 1,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = DUMMY",
 				Fields:        []string{"summary", "status"},
 				Expand:        []string{"changelogs"},
@@ -1178,7 +1179,7 @@ func TestSprintService_Issues(t *testing.T) {
 		{
 			name:     "GetSprintIssuesWhenTheContextIsNil",
 			sprintID: 1,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = DUMMY",
 				Fields:        []string{"summary", "status"},
 				Expand:        []string{"changelogs"},
@@ -1197,7 +1198,7 @@ func TestSprintService_Issues(t *testing.T) {
 		{
 			name:     "GetSprintIssuesWhenTheResponseBodyIsEmpty",
 			sprintID: 1,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = DUMMY",
 				Fields:        []string{"summary", "status"},
 				Expand:        []string{"changelogs"},

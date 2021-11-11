@@ -3,6 +3,7 @@ package agile
 import (
 	"context"
 	"fmt"
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models/agile"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -34,7 +35,6 @@ func (s *SprintService) Get(ctx context.Context, sprintID int) (result *SprintSc
 	if err != nil {
 		return nil, response, err
 	}
-
 
 	return
 }
@@ -177,16 +177,10 @@ func (s *SprintService) Delete(ctx context.Context, sprintID int) (response *Res
 	return
 }
 
-type IssueOptionScheme struct {
-	JQL            string
-	ValidateQuery  bool
-	Fields, Expand []string
-}
-
 // Issues returns all issues in a sprint, for a given sprint ID.
 // This only includes issues that the user has permission to view.
 // By default, the returned issues are ordered by rank.
-func (s *SprintService) Issues(ctx context.Context, sprintID int, opts *IssueOptionScheme, startAt, maxResults int) (
+func (s *SprintService) Issues(ctx context.Context, sprintID int, opts *model.IssueOptionScheme, startAt, maxResults int) (
 	result *SprintIssuePageScheme, response *ResponseScheme, err error) {
 
 	if sprintID == 0 {

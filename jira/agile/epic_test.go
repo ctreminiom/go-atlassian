@@ -3,6 +3,7 @@ package agile
 import (
 	"context"
 	"fmt"
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models/agile"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/url"
@@ -155,7 +156,7 @@ func TestEpicService_Issues(t *testing.T) {
 		name                string
 		epicIDOrKey         string
 		startAt, maxResults int
-		opts                *IssueOptionScheme
+		opts                *model.IssueOptionScheme
 		mockFile            string
 		wantHTTPMethod      string
 		endpoint            string
@@ -168,7 +169,7 @@ func TestEpicService_Issues(t *testing.T) {
 			epicIDOrKey: "KP-16",
 			startAt:     0,
 			maxResults:  50,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
@@ -187,7 +188,7 @@ func TestEpicService_Issues(t *testing.T) {
 			epicIDOrKey: "",
 			startAt:     0,
 			maxResults:  50,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
@@ -206,7 +207,7 @@ func TestEpicService_Issues(t *testing.T) {
 			epicIDOrKey: "KP-16",
 			startAt:     0,
 			maxResults:  50,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
@@ -225,7 +226,7 @@ func TestEpicService_Issues(t *testing.T) {
 			epicIDOrKey: "KP-16",
 			startAt:     0,
 			maxResults:  50,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: false,
 				Fields:        []string{"status", "issuetype", "summary"},
@@ -246,7 +247,7 @@ func TestEpicService_Issues(t *testing.T) {
 
 			startAt:    0,
 			maxResults: 50,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
@@ -269,7 +270,7 @@ func TestEpicService_Issues(t *testing.T) {
 			maxResults: 50,
 			mockFile:   "./mocks/get-epic-issues.json",
 
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
@@ -290,7 +291,7 @@ func TestEpicService_Issues(t *testing.T) {
 			maxResults: 50,
 			mockFile:   "./mocks/get-epic-issues.json",
 
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
@@ -309,7 +310,7 @@ func TestEpicService_Issues(t *testing.T) {
 
 			startAt:    0,
 			maxResults: 50,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},

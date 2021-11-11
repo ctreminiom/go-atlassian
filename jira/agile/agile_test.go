@@ -3,6 +3,7 @@ package agile
 import (
 	"context"
 	"fmt"
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models/agile"
 	"github.com/stretchr/testify/assert"
 	"io"
 	"io/ioutil"
@@ -247,13 +248,13 @@ func Test_transformStructToReader(t *testing.T) {
 		{
 			name: "TransformStructToReaderWhenTheParametersAreCorrect",
 			args: args{
-				structure: &BoardPayloadScheme{
+				structure: &model.BoardPayloadScheme{
 					Name:     "DUMMY Board Name",
 					Type:     "scrum", //scrum or kanban
 					FilterID: 10016,
 
 					// Omit the Location if you want to the board to yourself (location)
-					Location: &BoardPayloadLocationScheme{
+					Location: &model.BoardPayloadLocationScheme{
 						ProjectKeyOrID: "KP",
 						Type:           "project",
 					},
@@ -292,7 +293,7 @@ func Test_transformTheHTTPResponse(t *testing.T) {
 		"mock-response": "./mocks/get-contents.json",
 		"method":        http.MethodGet,
 		"status":        http.StatusBadRequest,
-		"closed?": false,
+		"closed?":       false,
 	}
 
 	responseConfigurations["badRequestResponseWithNotResponseBody"] = map[string]interface{}{
@@ -300,7 +301,7 @@ func Test_transformTheHTTPResponse(t *testing.T) {
 		"mock-response": "",
 		"method":        http.MethodGet,
 		"status":        http.StatusBadRequest,
-		"closed?": true,
+		"closed?":       true,
 	}
 
 	responseConfigurations["OkRequestResponseWithNotResponseBody"] = map[string]interface{}{
@@ -308,7 +309,7 @@ func Test_transformTheHTTPResponse(t *testing.T) {
 		"mock-response": "./mocks/get-contents.json",
 		"method":        http.MethodGet,
 		"status":        http.StatusOK,
-		"closed?": true,
+		"closed?":       true,
 	}
 
 	for scenario, configuration := range responseConfigurations {

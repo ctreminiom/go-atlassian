@@ -290,7 +290,7 @@ func Test_transformTheHTTPResponse(t *testing.T) {
 	//Add the scenarios
 	responseConfigurations["badRequestResponseWithIncorrectFormat"] = map[string]interface{}{
 		"endpoint":      "/example",
-		"mock-response": "./mocks/get-contents.json",
+		"mock-response": "../mocks/get-contents.json",
 		"method":        http.MethodGet,
 		"status":        http.StatusBadRequest,
 		"closed?":       false,
@@ -306,7 +306,7 @@ func Test_transformTheHTTPResponse(t *testing.T) {
 
 	responseConfigurations["OkRequestResponseWithNotResponseBody"] = map[string]interface{}{
 		"endpoint":      "/",
-		"mock-response": "./mocks/get-contents.json",
+		"mock-response": "../mocks/get-contents.json",
 		"method":        http.MethodGet,
 		"status":        http.StatusOK,
 		"closed?":       true,

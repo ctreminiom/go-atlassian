@@ -155,7 +155,7 @@ func TestSprintService_Create(t *testing.T) {
 
 	testCases := []struct {
 		name               string
-		payload            *SprintPayloadScheme
+		payload            *model.SprintPayloadScheme
 		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string
@@ -165,7 +165,7 @@ func TestSprintService_Create(t *testing.T) {
 	}{
 		{
 			name: "CreateSprintWhenTheParametersAreCorrect",
-			payload: &SprintPayloadScheme{
+			payload: &model.SprintPayloadScheme{
 				Name:          "Sprint XX",
 				StartDate:     "2015-04-11T15:22:00.000+10:00",
 				EndDate:       "2015-04-20T01:22:00.000+10:00",
@@ -193,7 +193,7 @@ func TestSprintService_Create(t *testing.T) {
 
 		{
 			name: "CreateSprintWhenTheRequestMethodIsIncorrect",
-			payload: &SprintPayloadScheme{
+			payload: &model.SprintPayloadScheme{
 				Name:          "Sprint XX",
 				StartDate:     "2015-04-11T15:22:00.000+10:00",
 				EndDate:       "2015-04-20T01:22:00.000+10:00",
@@ -210,7 +210,7 @@ func TestSprintService_Create(t *testing.T) {
 
 		{
 			name: "CreateSprintWhenTheStatusCodeIsIncorrect",
-			payload: &SprintPayloadScheme{
+			payload: &model.SprintPayloadScheme{
 				Name:          "Sprint XX",
 				StartDate:     "2015-04-11T15:22:00.000+10:00",
 				EndDate:       "2015-04-20T01:22:00.000+10:00",
@@ -227,7 +227,7 @@ func TestSprintService_Create(t *testing.T) {
 
 		{
 			name: "CreateSprintWhenTheContextIsNil",
-			payload: &SprintPayloadScheme{
+			payload: &model.SprintPayloadScheme{
 				Name:          "Sprint XX",
 				StartDate:     "2015-04-11T15:22:00.000+10:00",
 				EndDate:       "2015-04-20T01:22:00.000+10:00",
@@ -244,7 +244,7 @@ func TestSprintService_Create(t *testing.T) {
 
 		{
 			name: "CreateSprintWhenTheResponseBodyIsEmpty",
-			payload: &SprintPayloadScheme{
+			payload: &model.SprintPayloadScheme{
 				Name:          "Sprint XX",
 				StartDate:     "2015-04-11T15:22:00.000+10:00",
 				EndDate:       "2015-04-20T01:22:00.000+10:00",
@@ -327,7 +327,7 @@ func TestSprintService_Update(t *testing.T) {
 	testCases := []struct {
 		name               string
 		sprintID           int
-		payload            *SprintPayloadScheme
+		payload            *model.SprintPayloadScheme
 		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string
@@ -338,7 +338,7 @@ func TestSprintService_Update(t *testing.T) {
 		{
 			name:     "UpdateSprintWhenTheParametersAreCorrect",
 			sprintID: 1,
-			payload: &SprintPayloadScheme{
+			payload: &model.SprintPayloadScheme{
 				Name:          "Sprint XX",
 				StartDate:     "2015-04-11T15:22:00.000+10:00",
 				EndDate:       "2015-04-20T01:22:00.000+10:00",
@@ -356,7 +356,7 @@ func TestSprintService_Update(t *testing.T) {
 		{
 			name:     "UpdateSprintWhenTheSprintIDIsZero",
 			sprintID: 0,
-			payload: &SprintPayloadScheme{
+			payload: &model.SprintPayloadScheme{
 				Name:          "Sprint XX",
 				StartDate:     "2015-04-11T15:22:00.000+10:00",
 				EndDate:       "2015-04-20T01:22:00.000+10:00",
@@ -386,7 +386,7 @@ func TestSprintService_Update(t *testing.T) {
 		{
 			name:     "UpdateSprintWhenTheRequestMethodIsIncorrect",
 			sprintID: 1,
-			payload: &SprintPayloadScheme{
+			payload: &model.SprintPayloadScheme{
 				Name:          "Sprint XX",
 				StartDate:     "2015-04-11T15:22:00.000+10:00",
 				EndDate:       "2015-04-20T01:22:00.000+10:00",
@@ -404,7 +404,7 @@ func TestSprintService_Update(t *testing.T) {
 		{
 			name:     "UpdateSprintWhenTheStatusCodeIsIncorrect",
 			sprintID: 1,
-			payload: &SprintPayloadScheme{
+			payload: &model.SprintPayloadScheme{
 				Name:          "Sprint XX",
 				StartDate:     "2015-04-11T15:22:00.000+10:00",
 				EndDate:       "2015-04-20T01:22:00.000+10:00",
@@ -422,7 +422,7 @@ func TestSprintService_Update(t *testing.T) {
 		{
 			name:     "UpdateSprintWhenTheContextIsNil",
 			sprintID: 1,
-			payload: &SprintPayloadScheme{
+			payload: &model.SprintPayloadScheme{
 				Name:          "Sprint XX",
 				StartDate:     "2015-04-11T15:22:00.000+10:00",
 				EndDate:       "2015-04-20T01:22:00.000+10:00",
@@ -440,7 +440,7 @@ func TestSprintService_Update(t *testing.T) {
 		{
 			name:     "UpdateSprintWhenTheResponseBodyIsEmpty",
 			sprintID: 1,
-			payload: &SprintPayloadScheme{
+			payload: &model.SprintPayloadScheme{
 				Name:          "Sprint XX",
 				StartDate:     "2015-04-11T15:22:00.000+10:00",
 				EndDate:       "2015-04-20T01:22:00.000+10:00",
@@ -523,7 +523,7 @@ func TestSprintService_Path(t *testing.T) {
 	testCases := []struct {
 		name               string
 		sprintID           int
-		payload            *SprintPayloadScheme
+		payload            *model.SprintPayloadScheme
 		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string
@@ -534,7 +534,7 @@ func TestSprintService_Path(t *testing.T) {
 		{
 			name:     "PathSprintWhenTheParametersAreCorrect",
 			sprintID: 1,
-			payload: &SprintPayloadScheme{
+			payload: &model.SprintPayloadScheme{
 				Name:          "Sprint XX",
 				StartDate:     "2015-04-11T15:22:00.000+10:00",
 				EndDate:       "2015-04-20T01:22:00.000+10:00",
@@ -552,7 +552,7 @@ func TestSprintService_Path(t *testing.T) {
 		{
 			name:     "PathSprintWhenTheSprintIDIsZero",
 			sprintID: 0,
-			payload: &SprintPayloadScheme{
+			payload: &model.SprintPayloadScheme{
 				Name:          "Sprint XX",
 				StartDate:     "2015-04-11T15:22:00.000+10:00",
 				EndDate:       "2015-04-20T01:22:00.000+10:00",
@@ -582,7 +582,7 @@ func TestSprintService_Path(t *testing.T) {
 		{
 			name:     "PathSprintWhenTheRequestMethodIsIncorrect",
 			sprintID: 1,
-			payload: &SprintPayloadScheme{
+			payload: &model.SprintPayloadScheme{
 				Name:          "Sprint XX",
 				StartDate:     "2015-04-11T15:22:00.000+10:00",
 				EndDate:       "2015-04-20T01:22:00.000+10:00",
@@ -600,7 +600,7 @@ func TestSprintService_Path(t *testing.T) {
 		{
 			name:     "PathSprintWhenTheStatusCodeIsIncorrect",
 			sprintID: 1,
-			payload: &SprintPayloadScheme{
+			payload: &model.SprintPayloadScheme{
 				Name:          "Sprint XX",
 				StartDate:     "2015-04-11T15:22:00.000+10:00",
 				EndDate:       "2015-04-20T01:22:00.000+10:00",
@@ -618,7 +618,7 @@ func TestSprintService_Path(t *testing.T) {
 		{
 			name:     "PathSprintWhenTheContextIsNil",
 			sprintID: 1,
-			payload: &SprintPayloadScheme{
+			payload: &model.SprintPayloadScheme{
 				Name:          "Sprint XX",
 				StartDate:     "2015-04-11T15:22:00.000+10:00",
 				EndDate:       "2015-04-20T01:22:00.000+10:00",
@@ -636,7 +636,7 @@ func TestSprintService_Path(t *testing.T) {
 		{
 			name:     "PathSprintWhenTheResponseBodyIsEmpty",
 			sprintID: 1,
-			payload: &SprintPayloadScheme{
+			payload: &model.SprintPayloadScheme{
 				Name:          "Sprint XX",
 				StartDate:     "2015-04-11T15:22:00.000+10:00",
 				EndDate:       "2015-04-20T01:22:00.000+10:00",

@@ -3,11 +3,11 @@ package agile
 import (
 	"context"
 	"fmt"
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models/agile"
 	"net/http"
 	"net/url"
 	"strconv"
 	"strings"
-	"time"
 )
 
 type SprintService struct{ client *Client }
@@ -15,10 +15,10 @@ type SprintService struct{ client *Client }
 // Get Returns the sprint for a given sprint ID.
 // The sprint will only be returned if the user can view the board that the sprint was created on,
 // or view at least one of the issues in the sprint.
-func (s *SprintService) Get(ctx context.Context, sprintID int) (result *SprintScheme, response *ResponseScheme, err error) {
+func (s *SprintService) Get(ctx context.Context, sprintID int) (result *model.SprintScheme, response *ResponseScheme, err error) {
 
 	if sprintID == 0 {
-		return nil, nil, fmt.Errorf("error!, please provide a valid sprint ID")
+		return nil, nil, model.ErrNoSprintIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/agile/1.0/sprint/%v", sprintID)
@@ -35,26 +35,13 @@ func (s *SprintService) Get(ctx context.Context, sprintID int) (result *SprintSc
 		return nil, response, err
 	}
 
-
 	return
-}
-
-type SprintScheme struct {
-	ID            int       `json:"id,omitempty"`
-	Self          string    `json:"self,omitempty"`
-	State         string    `json:"state,omitempty"`
-	Name          string    `json:"name,omitempty"`
-	StartDate     time.Time `json:"startDate,omitempty"`
-	EndDate       time.Time `json:"endDate,omitempty"`
-	CompleteDate  time.Time `json:"completeDate,omitempty"`
-	OriginBoardID int       `json:"originBoardId,omitempty"`
-	Goal          string    `json:"goal,omitempty"`
 }
 
 // Create creates a future sprint.
 // Sprint name and origin board id are required.
 // Start date, end date, and goal are optional.
-func (s *SprintService) Create(ctx context.Context, payload *SprintPayloadScheme) (result *SprintScheme,
+func (s *SprintService) Create(ctx context.Context, payload *model.SprintPayloadScheme) (result *model.SprintScheme,
 	response *ResponseScheme, err error) {
 
 	payloadAsReader, err := transformStructToReader(payload)
@@ -80,23 +67,14 @@ func (s *SprintService) Create(ctx context.Context, payload *SprintPayloadScheme
 	return
 }
 
-type SprintPayloadScheme struct {
-	Name          string `json:"name,omitempty"`
-	StartDate     string `json:"startDate,omitempty"`
-	EndDate       string `json:"endDate,omitempty"`
-	OriginBoardID int    `json:"originBoardId,omitempty"`
-	Goal          string `json:"goal,omitempty"`
-	State         string `json:"state,omitempty"`
-}
-
 // Update Performs a full update of a sprint.
 // A full update means that the result will be exactly the same as the request body.
 // Any fields not present in the request JSON will be set to null.
-func (s *SprintService) Update(ctx context.Context, sprintID int, payload *SprintPayloadScheme) (result *SprintScheme,
+func (s *SprintService) Update(ctx context.Context, sprintID int, payload *model.SprintPayloadScheme) (result *model.SprintScheme,
 	response *ResponseScheme, err error) {
 
 	if sprintID == 0 {
-		return nil, nil, fmt.Errorf("error!, please provide a valid sprint ID")
+		return nil, nil, model.ErrNoSprintIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/agile/1.0/sprint/%v", sprintID)
@@ -124,11 +102,11 @@ func (s *SprintService) Update(ctx context.Context, sprintID int, payload *Sprin
 
 // Path Performs a partial update of a sprint.
 // A partial update means that fields not present in the request JSON will not be updated.
-func (s *SprintService) Path(ctx context.Context, sprintID int, payload *SprintPayloadScheme) (result *SprintScheme,
+func (s *SprintService) Path(ctx context.Context, sprintID int, payload *model.SprintPayloadScheme) (result *model.SprintScheme,
 	response *ResponseScheme, err error) {
 
 	if sprintID == 0 {
-		return nil, nil, fmt.Errorf("error!, please provide a valid sprint ID")
+		return nil, nil, model.ErrNoSprintIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/agile/1.0/sprint/%v", sprintID)
@@ -159,7 +137,7 @@ func (s *SprintService) Path(ctx context.Context, sprintID int, payload *SprintP
 func (s *SprintService) Delete(ctx context.Context, sprintID int) (response *ResponseScheme, err error) {
 
 	if sprintID == 0 {
-		return nil, fmt.Errorf("error!, please provide a valid sprint ID")
+		return nil, model.ErrNoSprintIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/agile/1.0/sprint/%v", sprintID)
@@ -177,20 +155,14 @@ func (s *SprintService) Delete(ctx context.Context, sprintID int) (response *Res
 	return
 }
 
-type IssueOptionScheme struct {
-	JQL            string
-	ValidateQuery  bool
-	Fields, Expand []string
-}
-
 // Issues returns all issues in a sprint, for a given sprint ID.
 // This only includes issues that the user has permission to view.
 // By default, the returned issues are ordered by rank.
-func (s *SprintService) Issues(ctx context.Context, sprintID int, opts *IssueOptionScheme, startAt, maxResults int) (
-	result *SprintIssuePageScheme, response *ResponseScheme, err error) {
+func (s *SprintService) Issues(ctx context.Context, sprintID int, opts *model.IssueOptionScheme, startAt, maxResults int) (
+	result *model.SprintIssuePageScheme, response *ResponseScheme, err error) {
 
 	if sprintID == 0 {
-		return nil, nil, fmt.Errorf("error!, please provide a valid sprint ID")
+		return nil, nil, model.ErrNoSprintIDError
 	}
 
 	params := url.Values{}
@@ -231,29 +203,14 @@ func (s *SprintService) Issues(ctx context.Context, sprintID int, opts *IssueOpt
 	return
 }
 
-type SprintIssuePageScheme struct {
-	Expand     string               `json:"expand,omitempty"`
-	StartAt    int                  `json:"startAt,omitempty"`
-	MaxResults int                  `json:"maxResults,omitempty"`
-	Total      int                  `json:"total,omitempty"`
-	Issues     []*SprintIssueScheme `json:"issues,omitempty"`
-}
-
-type SprintIssueScheme struct {
-	Expand string `json:"expand,omitempty"`
-	ID     string `json:"id,omitempty"`
-	Self   string `json:"self,omitempty"`
-	Key    string `json:"key,omitempty"`
-}
-
 // Start initiate the Sprint
 func (s *SprintService) Start(ctx context.Context, sprintID int) (response *ResponseScheme, err error) {
 
 	if sprintID == 0 {
-		return nil, fmt.Errorf("error!, please provide a valid sprint ID")
+		return nil, model.ErrNoSprintIDError
 	}
 
-	payload := SprintPayloadScheme{
+	payload := model.SprintPayloadScheme{
 		State: "Active",
 	}
 
@@ -281,10 +238,10 @@ func (s *SprintService) Start(ctx context.Context, sprintID int) (response *Resp
 func (s *SprintService) Close(ctx context.Context, sprintID int) (response *ResponseScheme, err error) {
 
 	if sprintID == 0 {
-		return nil, fmt.Errorf("error!, please provide a valid sprint ID")
+		return nil, model.ErrNoSprintIDError
 	}
 
-	payload := SprintPayloadScheme{
+	payload := model.SprintPayloadScheme{
 		State: "Closed",
 	}
 

@@ -3,6 +3,7 @@ package agile
 import (
 	"context"
 	"fmt"
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models/agile"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/url"
@@ -24,7 +25,7 @@ func TestBoardService_Get(t *testing.T) {
 		{
 			name:               "GetBoardWhenTheParametersAreCorrect",
 			boardID:            1,
-			mockFile:           "./mocks/get-board.json",
+			mockFile:           "../mocks/get-board.json",
 			wantHTTPCodeReturn: http.StatusOK,
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/board/1",
@@ -35,7 +36,7 @@ func TestBoardService_Get(t *testing.T) {
 		{
 			name:               "GetBoardWhenTheBoardIsNotSet",
 			boardID:            0,
-			mockFile:           "./mocks/get-board.json",
+			mockFile:           "../mocks/get-board.json",
 			wantHTTPCodeReturn: http.StatusOK,
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/board/1",
@@ -46,7 +47,7 @@ func TestBoardService_Get(t *testing.T) {
 		{
 			name:               "GetBoardWhenTheRequestMethodIsIncorrect",
 			boardID:            1,
-			mockFile:           "./mocks/get-board.json",
+			mockFile:           "../mocks/get-board.json",
 			wantHTTPCodeReturn: http.StatusOK,
 			wantHTTPMethod:     http.MethodPost,
 			endpoint:           "/rest/agile/1.0/board/1",
@@ -57,7 +58,7 @@ func TestBoardService_Get(t *testing.T) {
 		{
 			name:               "GetBoardWhenTheContextIsNil",
 			boardID:            1,
-			mockFile:           "./mocks/get-board.json",
+			mockFile:           "../mocks/get-board.json",
 			wantHTTPCodeReturn: http.StatusOK,
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/board/1",
@@ -68,7 +69,7 @@ func TestBoardService_Get(t *testing.T) {
 		{
 			name:               "GetBoardWhenTheResponseStatusCodeIsIncorrect",
 			boardID:            1,
-			mockFile:           "./mocks/get-board.json",
+			mockFile:           "../mocks/get-board.json",
 			wantHTTPCodeReturn: http.StatusBadGateway,
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/board/1",
@@ -79,7 +80,7 @@ func TestBoardService_Get(t *testing.T) {
 		{
 			name:               "GetBoardWhenTheResponseBodyIsEmpty",
 			boardID:            1,
-			mockFile:           "./mocks/empty-json.json",
+			mockFile:           "../mocks/empty-json.json",
 			wantHTTPCodeReturn: http.StatusOK,
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/board/1",
@@ -153,7 +154,7 @@ func TestBoardService_Create(t *testing.T) {
 
 	testCases := []struct {
 		name               string
-		payload            *BoardPayloadScheme
+		payload            *model.BoardPayloadScheme
 		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string
@@ -163,18 +164,18 @@ func TestBoardService_Create(t *testing.T) {
 	}{
 		{
 			name: "CreateBoardWhenTheParametersAreCorrect",
-			payload: &BoardPayloadScheme{
+			payload: &model.BoardPayloadScheme{
 				Name:     "DUMMY Board Name",
 				Type:     "scrum", //scrum or kanban
 				FilterID: 10016,
 
 				// Omit the Location if you want to the board to yourself (location)
-				Location: &BoardPayloadLocationScheme{
+				Location: &model.BoardPayloadLocationScheme{
 					ProjectKeyOrID: "KP",
 					Type:           "project",
 				},
 			},
-			mockFile:           "./mocks/get-board.json",
+			mockFile:           "../mocks/get-board.json",
 			wantHTTPCodeReturn: http.StatusOK,
 			wantHTTPMethod:     http.MethodPost,
 			endpoint:           "/rest/agile/1.0/board",
@@ -185,7 +186,7 @@ func TestBoardService_Create(t *testing.T) {
 		{
 			name:               "CreateBoardWhenTheBoardIsNotSet",
 			payload:            nil,
-			mockFile:           "./mocks/get-board.json",
+			mockFile:           "../mocks/get-board.json",
 			wantHTTPCodeReturn: http.StatusOK,
 			wantHTTPMethod:     http.MethodPost,
 			endpoint:           "/rest/agile/1.0/board/1",
@@ -195,18 +196,18 @@ func TestBoardService_Create(t *testing.T) {
 
 		{
 			name: "CreateBoardWhenTheRequestMethodIsIncorrect",
-			payload: &BoardPayloadScheme{
+			payload: &model.BoardPayloadScheme{
 				Name:     "DUMMY Board Name",
 				Type:     "scrum", //scrum or kanban
 				FilterID: 10016,
 
 				// Omit the Location if you want to the board to yourself (location)
-				Location: &BoardPayloadLocationScheme{
+				Location: &model.BoardPayloadLocationScheme{
 					ProjectKeyOrID: "KP",
 					Type:           "project",
 				},
 			},
-			mockFile:           "./mocks/get-board.json",
+			mockFile:           "../mocks/get-board.json",
 			wantHTTPCodeReturn: http.StatusOK,
 			wantHTTPMethod:     http.MethodHead,
 			endpoint:           "/rest/agile/1.0/board",
@@ -216,18 +217,18 @@ func TestBoardService_Create(t *testing.T) {
 
 		{
 			name: "CreateBoardWhenTheContextIsNil",
-			payload: &BoardPayloadScheme{
+			payload: &model.BoardPayloadScheme{
 				Name:     "DUMMY Board Name",
 				Type:     "scrum", //scrum or kanban
 				FilterID: 10016,
 
 				// Omit the Location if you want to the board to yourself (location)
-				Location: &BoardPayloadLocationScheme{
+				Location: &model.BoardPayloadLocationScheme{
 					ProjectKeyOrID: "KP",
 					Type:           "project",
 				},
 			},
-			mockFile:           "./mocks/get-board.json",
+			mockFile:           "../mocks/get-board.json",
 			wantHTTPCodeReturn: http.StatusOK,
 			wantHTTPMethod:     http.MethodPost,
 			endpoint:           "/rest/agile/1.0/board",
@@ -237,18 +238,18 @@ func TestBoardService_Create(t *testing.T) {
 
 		{
 			name: "CreateBoardWhenTheResponseStatusCodeIsIncorrect",
-			payload: &BoardPayloadScheme{
+			payload: &model.BoardPayloadScheme{
 				Name:     "DUMMY Board Name",
 				Type:     "scrum", //scrum or kanban
 				FilterID: 10016,
 
 				// Omit the Location if you want to the board to yourself (location)
-				Location: &BoardPayloadLocationScheme{
+				Location: &model.BoardPayloadLocationScheme{
 					ProjectKeyOrID: "KP",
 					Type:           "project",
 				},
 			},
-			mockFile:           "./mocks/get-board.json",
+			mockFile:           "../mocks/get-board.json",
 			wantHTTPCodeReturn: http.StatusBadGateway,
 			wantHTTPMethod:     http.MethodPost,
 			endpoint:           "/rest/agile/1.0/board",
@@ -258,18 +259,18 @@ func TestBoardService_Create(t *testing.T) {
 
 		{
 			name: "CreateBoardWhenTheResponseBodyIsEmpty",
-			payload: &BoardPayloadScheme{
+			payload: &model.BoardPayloadScheme{
 				Name:     "DUMMY Board Name",
 				Type:     "scrum", //scrum or kanban
 				FilterID: 10016,
 
 				// Omit the Location if you want to the board to yourself (location)
-				Location: &BoardPayloadLocationScheme{
+				Location: &model.BoardPayloadLocationScheme{
 					ProjectKeyOrID: "KP",
 					Type:           "project",
 				},
 			},
-			mockFile:           "./mocks/empty-json.json",
+			mockFile:           "../mocks/empty-json.json",
 			wantHTTPCodeReturn: http.StatusOK,
 			wantHTTPMethod:     http.MethodPost,
 			endpoint:           "/rest/agile/1.0/board",
@@ -343,7 +344,7 @@ func TestBoardService_Gets(t *testing.T) {
 
 	testCases := []struct {
 		name                string
-		opts                *GetBoardsOptions
+		opts                *model.GetBoardsOptions
 		startAt, maxResults int
 		mockFile            string
 		wantHTTPMethod      string
@@ -354,7 +355,7 @@ func TestBoardService_Gets(t *testing.T) {
 	}{
 		{
 			name: "GetBoardsTheParametersAreCorrect",
-			opts: &GetBoardsOptions{
+			opts: &model.GetBoardsOptions{
 				BoardType:               "scrum",
 				BoardName:               "board-name",
 				ProjectKeyOrID:          "CID",
@@ -368,7 +369,7 @@ func TestBoardService_Gets(t *testing.T) {
 			},
 			startAt:            0,
 			maxResults:         50,
-			mockFile:           "./mocks/get-boards-by-filter-id.json",
+			mockFile:           "../mocks/get-boards-by-filter-id.json",
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/board?accountIdLocation=account-id-sample&expand=permissions&filterId=111234&includePrivate=true&maxResults=50&name=board-name&negateLocationFiltering=true&orderBy=name&projectKeyOrId=CID&projectLocation=2345&startAt=0&type=scrum",
 			context:            context.Background(),
@@ -378,7 +379,7 @@ func TestBoardService_Gets(t *testing.T) {
 
 		{
 			name: "GetBoardByFilterWhenTheRequestMethodIsIncorrect",
-			opts: &GetBoardsOptions{
+			opts: &model.GetBoardsOptions{
 				BoardType:               "scrum",
 				BoardName:               "board-name",
 				ProjectKeyOrID:          "CID",
@@ -392,7 +393,7 @@ func TestBoardService_Gets(t *testing.T) {
 			},
 			startAt:            0,
 			maxResults:         50,
-			mockFile:           "./mocks/get-board.json",
+			mockFile:           "../mocks/get-board.json",
 			wantHTTPCodeReturn: http.StatusOK,
 			wantHTTPMethod:     http.MethodHead,
 			endpoint:           "/rest/agile/1.0/board?accountIdLocation=account-id-sample&expand=permissions&filterId=111234&includePrivate=true&maxResults=50&name=board-name&negateLocationFiltering=true&orderBy=name&projectKeyOrId=CID&projectLocation=2345&startAt=0&type=scrum",
@@ -402,7 +403,7 @@ func TestBoardService_Gets(t *testing.T) {
 
 		{
 			name: "GetBoardByFilterWhenTheContextIsNil",
-			opts: &GetBoardsOptions{
+			opts: &model.GetBoardsOptions{
 				BoardType:               "scrum",
 				BoardName:               "board-name",
 				ProjectKeyOrID:          "CID",
@@ -416,7 +417,7 @@ func TestBoardService_Gets(t *testing.T) {
 			},
 			startAt:            0,
 			maxResults:         50,
-			mockFile:           "./mocks/get-board.json",
+			mockFile:           "../mocks/get-board.json",
 			wantHTTPCodeReturn: http.StatusOK,
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/board?accountIdLocation=account-id-sample&expand=permissions&filterId=111234&includePrivate=true&maxResults=50&name=board-name&negateLocationFiltering=true&orderBy=name&projectKeyOrId=CID&projectLocation=2345&startAt=0&type=scrum",
@@ -426,7 +427,7 @@ func TestBoardService_Gets(t *testing.T) {
 
 		{
 			name: "GetBoardByFilterWhenTheResponseStatusCodeIsIncorrect",
-			opts: &GetBoardsOptions{
+			opts: &model.GetBoardsOptions{
 				BoardType:               "scrum",
 				BoardName:               "board-name",
 				ProjectKeyOrID:          "CID",
@@ -440,7 +441,7 @@ func TestBoardService_Gets(t *testing.T) {
 			},
 			startAt:            0,
 			maxResults:         50,
-			mockFile:           "./mocks/get-board.json",
+			mockFile:           "../mocks/get-board.json",
 			wantHTTPCodeReturn: http.StatusBadGateway,
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/board?accountIdLocation=account-id-sample&expand=permissions&filterId=111234&includePrivate=true&maxResults=50&name=board-name&negateLocationFiltering=true&orderBy=name&projectKeyOrId=CID&projectLocation=2345&startAt=0&type=scrum",
@@ -450,7 +451,7 @@ func TestBoardService_Gets(t *testing.T) {
 
 		{
 			name: "GetBoardByFilterWhenTheResponseBodyIsEmpty",
-			opts: &GetBoardsOptions{
+			opts: &model.GetBoardsOptions{
 				BoardType:               "scrum",
 				BoardName:               "board-name",
 				ProjectKeyOrID:          "CID",
@@ -464,7 +465,7 @@ func TestBoardService_Gets(t *testing.T) {
 			},
 			startAt:            0,
 			maxResults:         50,
-			mockFile:           "./mocks/empty-json.json",
+			mockFile:           "../mocks/empty-json.json",
 			wantHTTPCodeReturn: http.StatusOK,
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/board?accountIdLocation=account-id-sample&expand=permissions&filterId=111234&includePrivate=true&maxResults=50&name=board-name&negateLocationFiltering=true&orderBy=name&projectKeyOrId=CID&projectLocation=2345&startAt=0&type=scrum",
@@ -559,7 +560,7 @@ func TestBoardService_Filter(t *testing.T) {
 			filterID:           100,
 			startAt:            0,
 			maxResults:         50,
-			mockFile:           "./mocks/get-boards-by-filter-id.json",
+			mockFile:           "../mocks/get-boards-by-filter-id.json",
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/board/filter/100?maxResults=50&startAt=0",
 			context:            context.Background(),
@@ -572,7 +573,7 @@ func TestBoardService_Filter(t *testing.T) {
 			filterID:           0,
 			startAt:            0,
 			maxResults:         50,
-			mockFile:           "./mocks/get-board.json",
+			mockFile:           "../mocks/get-board.json",
 			wantHTTPCodeReturn: http.StatusOK,
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/board/filter/100?maxResults=50&startAt=0",
@@ -585,7 +586,7 @@ func TestBoardService_Filter(t *testing.T) {
 			filterID:           100,
 			startAt:            0,
 			maxResults:         50,
-			mockFile:           "./mocks/get-board.json",
+			mockFile:           "../mocks/get-board.json",
 			wantHTTPCodeReturn: http.StatusOK,
 			wantHTTPMethod:     http.MethodHead,
 			endpoint:           "/rest/agile/1.0/board/filter/100?maxResults=50&startAt=0",
@@ -598,7 +599,7 @@ func TestBoardService_Filter(t *testing.T) {
 			filterID:           100,
 			startAt:            0,
 			maxResults:         50,
-			mockFile:           "./mocks/get-board.json",
+			mockFile:           "../mocks/get-board.json",
 			wantHTTPCodeReturn: http.StatusOK,
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/board/filter/100?maxResults=50&startAt=0",
@@ -611,7 +612,7 @@ func TestBoardService_Filter(t *testing.T) {
 			filterID:           100,
 			startAt:            0,
 			maxResults:         50,
-			mockFile:           "./mocks/get-board.json",
+			mockFile:           "../mocks/get-board.json",
 			wantHTTPCodeReturn: http.StatusBadGateway,
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/board/filter/100?maxResults=50&startAt=0",
@@ -624,7 +625,7 @@ func TestBoardService_Filter(t *testing.T) {
 			filterID:           100,
 			startAt:            0,
 			maxResults:         50,
-			mockFile:           "./mocks/empty-json.json",
+			mockFile:           "../mocks/empty-json.json",
 			wantHTTPCodeReturn: http.StatusOK,
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/board/filter/100?maxResults=50&startAt=0",
@@ -707,7 +708,7 @@ func TestBoardService_Backlog(t *testing.T) {
 	testCases := []struct {
 		name                         string
 		boardID, startAt, maxResults int
-		opts                         *IssueOptionScheme
+		opts                         *model.IssueOptionScheme
 		mockFile                     string
 		wantHTTPMethod               string
 		endpoint                     string
@@ -720,13 +721,13 @@ func TestBoardService_Backlog(t *testing.T) {
 			boardID:    100,
 			startAt:    0,
 			maxResults: 50,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
 				Expand:        []string{"changelog", "metadata"},
 			},
-			mockFile:           "./mocks/get-board-backlog.json",
+			mockFile:           "../mocks/get-board-backlog.json",
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/board/100/backlog?expand=changelog%2Cmetadata&fields=status%2Cissuetype%2Csummary&jql=project+%3D+KP&maxResults=50&startAt=0&validateQuery=true",
 			context:            context.Background(),
@@ -739,13 +740,13 @@ func TestBoardService_Backlog(t *testing.T) {
 			boardID:    100,
 			startAt:    0,
 			maxResults: 50,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
 				Expand:        []string{"changelog", "metadata"},
 			},
-			mockFile:           "./mocks/empty-json.json",
+			mockFile:           "../mocks/empty-json.json",
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/board/100/backlog?expand=changelog%2Cmetadata&fields=status%2Cissuetype%2Csummary&jql=project+%3D+KP&maxResults=50&startAt=0&validateQuery=true",
 			context:            context.Background(),
@@ -758,13 +759,13 @@ func TestBoardService_Backlog(t *testing.T) {
 			boardID:    100,
 			startAt:    0,
 			maxResults: 50,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: false,
 				Fields:        []string{"status", "issuetype", "summary"},
 				Expand:        []string{"changelog", "metadata"},
 			},
-			mockFile:           "./mocks/get-board-backlog.json",
+			mockFile:           "../mocks/get-board-backlog.json",
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/board/100/backlog?expand=changelog%2Cmetadata&fields=status%2Cissuetype%2Csummary&jql=project+%3D+KP&maxResults=50&startAt=0&validateQuery=false",
 			context:            context.Background(),
@@ -777,13 +778,13 @@ func TestBoardService_Backlog(t *testing.T) {
 			boardID:    0,
 			startAt:    0,
 			maxResults: 50,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
 				Expand:        []string{"changelog"},
 			},
-			mockFile:           "./mocks/get-board-backlog.json",
+			mockFile:           "../mocks/get-board-backlog.json",
 			wantHTTPCodeReturn: http.StatusOK,
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/board/100/backlog?expand=changelog%2Cmetadata&fields=status%2Cissuetype%2Csummary&jql=project+%3D+KP&maxResults=50&startAt=0&validateQuery=false",
@@ -796,8 +797,8 @@ func TestBoardService_Backlog(t *testing.T) {
 			boardID:    100,
 			startAt:    0,
 			maxResults: 50,
-			mockFile:   "./mocks/get-board-backlog.json",
-			opts: &IssueOptionScheme{
+			mockFile:   "../mocks/get-board-backlog.json",
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
@@ -815,8 +816,8 @@ func TestBoardService_Backlog(t *testing.T) {
 			boardID:    100,
 			startAt:    0,
 			maxResults: 50,
-			mockFile:   "./mocks/get-board-backlog.json",
-			opts: &IssueOptionScheme{
+			mockFile:   "../mocks/get-board-backlog.json",
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
@@ -834,13 +835,13 @@ func TestBoardService_Backlog(t *testing.T) {
 			boardID:    100,
 			startAt:    0,
 			maxResults: 50,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
 				Expand:        []string{"changelog", "metadata"},
 			},
-			mockFile:           "./mocks/get-board-backlog.json",
+			mockFile:           "../mocks/get-board-backlog.json",
 			wantHTTPCodeReturn: http.StatusBadGateway,
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/board/100/backlog?expand=changelog%2Cmetadata&fields=status%2Cissuetype%2Csummary&jql=project+%3D+KP&maxResults=50&startAt=0",
@@ -853,13 +854,13 @@ func TestBoardService_Backlog(t *testing.T) {
 			boardID:    100,
 			startAt:    0,
 			maxResults: 50,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
 				Expand:        []string{"changelog", "metadata"},
 			},
-			mockFile:           "./mocks/empty-json.json",
+			mockFile:           "../mocks/empty-json.json",
 			wantHTTPCodeReturn: http.StatusOK,
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/board/100/backlog?expand=changelog%2Cmetadata&fields=status%2Cissuetype%2Csummary&jql=project+%3D+KP&maxResults=50&startAt=0",
@@ -952,7 +953,7 @@ func TestBoardService_Configuration(t *testing.T) {
 		{
 			name:               "GetBoardConfigurationWhenTheParametersAreCorrect",
 			boardID:            1,
-			mockFile:           "./mocks/get-board-config.json",
+			mockFile:           "../mocks/get-board-config.json",
 			wantHTTPCodeReturn: http.StatusOK,
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/board/1/configuration",
@@ -963,7 +964,7 @@ func TestBoardService_Configuration(t *testing.T) {
 		{
 			name:               "GetBoardConfigurationWhenTheBoardIsNotSet",
 			boardID:            0,
-			mockFile:           "./mocks/get-board-config.json",
+			mockFile:           "../mocks/get-board-config.json",
 			wantHTTPCodeReturn: http.StatusOK,
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/board/1/configuration",
@@ -974,7 +975,7 @@ func TestBoardService_Configuration(t *testing.T) {
 		{
 			name:               "GetBoardConfigurationWhenTheRequestMethodIsIncorrect",
 			boardID:            1,
-			mockFile:           "./mocks/get-board-config.json",
+			mockFile:           "../mocks/get-board-config.json",
 			wantHTTPCodeReturn: http.StatusOK,
 			wantHTTPMethod:     http.MethodPost,
 			endpoint:           "/rest/agile/1.0/board/1/configuration",
@@ -985,7 +986,7 @@ func TestBoardService_Configuration(t *testing.T) {
 		{
 			name:               "GetBoardConfigurationWhenTheContextIsNil",
 			boardID:            1,
-			mockFile:           "./mocks/get-board-config.json",
+			mockFile:           "../mocks/get-board-config.json",
 			wantHTTPCodeReturn: http.StatusOK,
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/board/1/configuration",
@@ -996,7 +997,7 @@ func TestBoardService_Configuration(t *testing.T) {
 		{
 			name:               "GetBoardConfigurationWhenTheResponseStatusCodeIsIncorrect",
 			boardID:            1,
-			mockFile:           "./mocks/get-board-config.json",
+			mockFile:           "../mocks/get-board-config.json",
 			wantHTTPCodeReturn: http.StatusBadGateway,
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/board/1/configuration",
@@ -1007,7 +1008,7 @@ func TestBoardService_Configuration(t *testing.T) {
 		{
 			name:               "GetBoardConfigurationWhenTheResponseBodyIsEmpty",
 			boardID:            1,
-			mockFile:           "./mocks/empty-json.json",
+			mockFile:           "../mocks/empty-json.json",
 			wantHTTPCodeReturn: http.StatusOK,
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/board/1/configuration",
@@ -1095,7 +1096,7 @@ func TestBoardService_Epics(t *testing.T) {
 			boardID:            100,
 			startAt:            0,
 			maxResults:         50,
-			mockFile:           "./mocks/get-board-epics.json",
+			mockFile:           "../mocks/get-board-epics.json",
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/board/100/epic?done=false&maxResults=50&startAt=0",
 			context:            context.Background(),
@@ -1109,7 +1110,7 @@ func TestBoardService_Epics(t *testing.T) {
 			startAt:            0,
 			maxResults:         50,
 			done:               true,
-			mockFile:           "./mocks/get-board-epics.json",
+			mockFile:           "../mocks/get-board-epics.json",
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/board/100/epic?done=true&maxResults=50&startAt=0",
 			context:            context.Background(),
@@ -1122,7 +1123,7 @@ func TestBoardService_Epics(t *testing.T) {
 			boardID:            0,
 			startAt:            0,
 			maxResults:         50,
-			mockFile:           "./mocks/get-board-epics.json",
+			mockFile:           "../mocks/get-board-epics.json",
 			wantHTTPCodeReturn: http.StatusOK,
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/board/100/epic?done=false&maxResults=50&startAt=0",
@@ -1135,7 +1136,7 @@ func TestBoardService_Epics(t *testing.T) {
 			boardID:            100,
 			startAt:            0,
 			maxResults:         50,
-			mockFile:           "./mocks/get-board-epics.json",
+			mockFile:           "../mocks/get-board-epics.json",
 			wantHTTPCodeReturn: http.StatusOK,
 			wantHTTPMethod:     http.MethodHead,
 			endpoint:           "/rest/agile/1.0/board/100/epic?done=false&maxResults=50&startAt=0",
@@ -1148,7 +1149,7 @@ func TestBoardService_Epics(t *testing.T) {
 			boardID:            100,
 			startAt:            0,
 			maxResults:         50,
-			mockFile:           "./mocks/get-board-epics.json",
+			mockFile:           "../mocks/get-board-epics.json",
 			wantHTTPCodeReturn: http.StatusOK,
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/board/100/epic?done=false&maxResults=50&startAt=0",
@@ -1161,7 +1162,7 @@ func TestBoardService_Epics(t *testing.T) {
 			boardID:            100,
 			startAt:            0,
 			maxResults:         50,
-			mockFile:           "./mocks/get-board-epics.json",
+			mockFile:           "../mocks/get-board-epics.json",
 			wantHTTPCodeReturn: http.StatusBadGateway,
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/board/100/epic?done=false&maxResults=50&startAt=0",
@@ -1174,7 +1175,7 @@ func TestBoardService_Epics(t *testing.T) {
 			boardID:            100,
 			startAt:            0,
 			maxResults:         50,
-			mockFile:           "./mocks/empty-json.json",
+			mockFile:           "../mocks/empty-json.json",
 			wantHTTPCodeReturn: http.StatusOK,
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/board/100/epic?done=false&maxResults=50&startAt=0",
@@ -1257,7 +1258,7 @@ func TestBoardService_IssuesWithoutEpic(t *testing.T) {
 	testCases := []struct {
 		name                         string
 		boardID, startAt, maxResults int
-		opts                         *IssueOptionScheme
+		opts                         *model.IssueOptionScheme
 		mockFile                     string
 		wantHTTPMethod               string
 		endpoint                     string
@@ -1270,13 +1271,13 @@ func TestBoardService_IssuesWithoutEpic(t *testing.T) {
 			boardID:    100,
 			startAt:    0,
 			maxResults: 50,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
 				Expand:        []string{"changelog", "metadata"},
 			},
-			mockFile:           "./mocks/get-board-issue-without-epic.json",
+			mockFile:           "../mocks/get-board-issue-without-epic.json",
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/board/100/epic/none/issue?expand=changelog%2Cmetadata&fields=status%2Cissuetype%2Csummary&jql=project+%3D+KP&maxResults=50&startAt=0",
 			context:            context.Background(),
@@ -1289,13 +1290,13 @@ func TestBoardService_IssuesWithoutEpic(t *testing.T) {
 			boardID:    100,
 			startAt:    0,
 			maxResults: 50,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
 				Expand:        []string{"changelog", "metadata"},
 			},
-			mockFile:           "./mocks/empty-json.json",
+			mockFile:           "../mocks/empty-json.json",
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/board/100/epic/none/issue?expand=changelog%2Cmetadata&fields=status%2Cissuetype%2Csummary&jql=project+%3D+KP&maxResults=50&startAt=0",
 			context:            context.Background(),
@@ -1308,13 +1309,13 @@ func TestBoardService_IssuesWithoutEpic(t *testing.T) {
 			boardID:    100,
 			startAt:    0,
 			maxResults: 50,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: false,
 				Fields:        []string{"status", "issuetype", "summary"},
 				Expand:        []string{"changelog", "metadata"},
 			},
-			mockFile: "./mocks/get-board-issue-without-epic.json",
+			mockFile: "../mocks/get-board-issue-without-epic.json",
 
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/board/100/epic/none/issue?expand=changelog%2Cmetadata&fields=status%2Cissuetype%2Csummary&jql=project+%3D+KP&maxResults=50&startAt=0&validateQuery+=false",
@@ -1328,13 +1329,13 @@ func TestBoardService_IssuesWithoutEpic(t *testing.T) {
 			boardID:    0,
 			startAt:    0,
 			maxResults: 50,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
 				Expand:        []string{"changelog"},
 			},
-			mockFile: "./mocks/get-board-issue-without-epic.json",
+			mockFile: "../mocks/get-board-issue-without-epic.json",
 
 			wantHTTPCodeReturn: http.StatusOK,
 			wantHTTPMethod:     http.MethodGet,
@@ -1348,9 +1349,9 @@ func TestBoardService_IssuesWithoutEpic(t *testing.T) {
 			boardID:    100,
 			startAt:    0,
 			maxResults: 50,
-			mockFile:   "./mocks/get-board-issue-without-epic.json",
+			mockFile:   "../mocks/get-board-issue-without-epic.json",
 
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
@@ -1368,9 +1369,9 @@ func TestBoardService_IssuesWithoutEpic(t *testing.T) {
 			boardID:    100,
 			startAt:    0,
 			maxResults: 50,
-			mockFile:   "./mocks/get-board-issue-without-epic.json",
+			mockFile:   "../mocks/get-board-issue-without-epic.json",
 
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
@@ -1388,13 +1389,13 @@ func TestBoardService_IssuesWithoutEpic(t *testing.T) {
 			boardID:    100,
 			startAt:    0,
 			maxResults: 50,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
 				Expand:        []string{"changelog", "metadata"},
 			},
-			mockFile: "./mocks/get-board-issue-without-epic.json",
+			mockFile: "../mocks/get-board-issue-without-epic.json",
 
 			wantHTTPCodeReturn: http.StatusBadGateway,
 			wantHTTPMethod:     http.MethodGet,
@@ -1408,13 +1409,13 @@ func TestBoardService_IssuesWithoutEpic(t *testing.T) {
 			boardID:    100,
 			startAt:    0,
 			maxResults: 50,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
 				Expand:        []string{"changelog", "metadata"},
 			},
-			mockFile: "./mocks/get-board-issue-without-epic.json",
+			mockFile: "../mocks/get-board-issue-without-epic.json",
 
 			wantHTTPCodeReturn: http.StatusOK,
 			wantHTTPMethod:     http.MethodGet,
@@ -1498,7 +1499,7 @@ func TestBoardService_IssuesByEpic(t *testing.T) {
 	testCases := []struct {
 		name                                 string
 		boardID, epicID, startAt, maxResults int
-		opts                                 *IssueOptionScheme
+		opts                                 *model.IssueOptionScheme
 		mockFile                             string
 		wantHTTPMethod                       string
 		endpoint                             string
@@ -1512,13 +1513,13 @@ func TestBoardService_IssuesByEpic(t *testing.T) {
 			epicID:     22,
 			startAt:    0,
 			maxResults: 50,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
 				Expand:        []string{"changelog", "metadata"},
 			},
-			mockFile:           "./mocks/get-board-issue-by-epic.json",
+			mockFile:           "../mocks/get-board-issue-by-epic.json",
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/board/100/epic/22/issue?expand=changelog%2Cmetadata&fields=status%2Cissuetype%2Csummary&jql=project+%3D+KP&maxResults=50&startAt=0",
 			context:            context.Background(),
@@ -1532,13 +1533,13 @@ func TestBoardService_IssuesByEpic(t *testing.T) {
 			epicID:     0,
 			startAt:    0,
 			maxResults: 50,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
 				Expand:        []string{"changelog", "metadata"},
 			},
-			mockFile:           "./mocks/get-board-issue-by-epic.json",
+			mockFile:           "../mocks/get-board-issue-by-epic.json",
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/board/100/epic/22/issue?expand=changelog%2Cmetadata&fields=status%2Cissuetype%2Csummary&jql=project+%3D+KP&maxResults=50&startAt=0",
 			context:            context.Background(),
@@ -1552,13 +1553,13 @@ func TestBoardService_IssuesByEpic(t *testing.T) {
 			epicID:     22,
 			startAt:    0,
 			maxResults: 50,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: false,
 				Fields:        []string{"status", "issuetype", "summary"},
 				Expand:        []string{"changelog", "metadata"},
 			},
-			mockFile:           "./mocks/get-board-issue-by-epic.json",
+			mockFile:           "../mocks/get-board-issue-by-epic.json",
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/board/100/epic/22/issue?expand=changelog%2Cmetadata&fields=status%2Cissuetype%2Csummary&jql=project+%3D+KP&maxResults=50&startAt=0&validateQuery+=false",
 			context:            context.Background(),
@@ -1572,13 +1573,13 @@ func TestBoardService_IssuesByEpic(t *testing.T) {
 			epicID:     22,
 			startAt:    0,
 			maxResults: 50,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
 				Expand:        []string{"changelog"},
 			},
-			mockFile:           "./mocks/get-board-issue-by-epic.json",
+			mockFile:           "../mocks/get-board-issue-by-epic.json",
 			wantHTTPCodeReturn: http.StatusOK,
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/board/100/epic/22/issue?expand=changelog%2Cmetadata&fields=status%2Cissuetype%2Csummary&jql=project+%3D+KP&maxResults=50&startAt=0",
@@ -1592,8 +1593,8 @@ func TestBoardService_IssuesByEpic(t *testing.T) {
 			epicID:     22,
 			startAt:    0,
 			maxResults: 50,
-			mockFile:   "./mocks/get-board-issue-by-epic.json",
-			opts: &IssueOptionScheme{
+			mockFile:   "../mocks/get-board-issue-by-epic.json",
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
@@ -1613,8 +1614,8 @@ func TestBoardService_IssuesByEpic(t *testing.T) {
 
 			startAt:    0,
 			maxResults: 50,
-			mockFile:   "./mocks/get-board-issue-by-epic.json",
-			opts: &IssueOptionScheme{
+			mockFile:   "../mocks/get-board-issue-by-epic.json",
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
@@ -1634,13 +1635,13 @@ func TestBoardService_IssuesByEpic(t *testing.T) {
 
 			startAt:    0,
 			maxResults: 50,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
 				Expand:        []string{"changelog", "metadata"},
 			},
-			mockFile:           "./mocks/get-board-issue-by-epic.json",
+			mockFile:           "../mocks/get-board-issue-by-epic.json",
 			wantHTTPCodeReturn: http.StatusBadGateway,
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/board/100/epic/22/issue?expand=changelog%2Cmetadata&fields=status%2Cissuetype%2Csummary&jql=project+%3D+KP&maxResults=50&startAt=0",
@@ -1654,13 +1655,13 @@ func TestBoardService_IssuesByEpic(t *testing.T) {
 			epicID:     22,
 			startAt:    0,
 			maxResults: 50,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
 				Expand:        []string{"changelog", "metadata"},
 			},
-			mockFile:           "./mocks/empty-json.json",
+			mockFile:           "../mocks/empty-json.json",
 			wantHTTPCodeReturn: http.StatusOK,
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/board/100/epic/22/issue?expand=changelog%2Cmetadata&fields=status%2Cissuetype%2Csummary&jql=project+%3D+KP&maxResults=50&startAt=0",
@@ -1743,7 +1744,7 @@ func TestBoardService_Issues(t *testing.T) {
 	testCases := []struct {
 		name                         string
 		boardID, startAt, maxResults int
-		opts                         *IssueOptionScheme
+		opts                         *model.IssueOptionScheme
 		mockFile                     string
 		wantHTTPMethod               string
 		endpoint                     string
@@ -1756,13 +1757,13 @@ func TestBoardService_Issues(t *testing.T) {
 			boardID:    100,
 			startAt:    0,
 			maxResults: 50,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
 				Expand:        []string{"changelog", "metadata"},
 			},
-			mockFile:           "./mocks/get-board-issues.json",
+			mockFile:           "../mocks/get-board-issues.json",
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/board/100/issue?expand=changelog%2Cmetadata&fields=status%2Cissuetype%2Csummary&jql=project+%3D+KP&maxResults=50&startAt=0",
 			context:            context.Background(),
@@ -1775,13 +1776,13 @@ func TestBoardService_Issues(t *testing.T) {
 			boardID:    100,
 			startAt:    0,
 			maxResults: 50,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: false,
 				Fields:        []string{"status", "issuetype", "summary"},
 				Expand:        []string{"changelog", "metadata"},
 			},
-			mockFile:           "./mocks/get-board-issues.json",
+			mockFile:           "../mocks/get-board-issues.json",
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/board/100/issue?expand=changelog%2Cmetadata&fields=status%2Cissuetype%2Csummary&jql=project+%3D+KP&maxResults=50&startAt=0&validateQuery+=false",
 			context:            context.Background(),
@@ -1794,13 +1795,13 @@ func TestBoardService_Issues(t *testing.T) {
 			boardID:    0,
 			startAt:    0,
 			maxResults: 50,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
 				Expand:        []string{"changelog"},
 			},
-			mockFile:           "./mocks/get-board-issues.json",
+			mockFile:           "../mocks/get-board-issues.json",
 			wantHTTPCodeReturn: http.StatusOK,
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/board/100/issue?expand=changelog%2Cmetadata&fields=status%2Cissuetype%2Csummary&jql=project+%3D+KP&maxResults=50&startAt=0",
@@ -1813,8 +1814,8 @@ func TestBoardService_Issues(t *testing.T) {
 			boardID:    100,
 			startAt:    0,
 			maxResults: 50,
-			mockFile:   "./mocks/get-board-issues.json",
-			opts: &IssueOptionScheme{
+			mockFile:   "../mocks/get-board-issues.json",
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
@@ -1832,8 +1833,8 @@ func TestBoardService_Issues(t *testing.T) {
 			boardID:    100,
 			startAt:    0,
 			maxResults: 50,
-			mockFile:   "./mocks/get-board-issues.json",
-			opts: &IssueOptionScheme{
+			mockFile:   "../mocks/get-board-issues.json",
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
@@ -1851,13 +1852,13 @@ func TestBoardService_Issues(t *testing.T) {
 			boardID:    100,
 			startAt:    0,
 			maxResults: 50,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
 				Expand:        []string{"changelog", "metadata"},
 			},
-			mockFile:           "./mocks/get-board-issues.json",
+			mockFile:           "../mocks/get-board-issues.json",
 			wantHTTPCodeReturn: http.StatusBadGateway,
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/board/100/issue?expand=changelog%2Cmetadata&fields=status%2Cissuetype%2Csummary&jql=project+%3D+KP&maxResults=50&startAt=0",
@@ -1870,13 +1871,13 @@ func TestBoardService_Issues(t *testing.T) {
 			boardID:    100,
 			startAt:    0,
 			maxResults: 50,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
 				Expand:        []string{"changelog", "metadata"},
 			},
-			mockFile:           "./mocks/empty-json.json",
+			mockFile:           "../mocks/empty-json.json",
 			wantHTTPCodeReturn: http.StatusOK,
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/board/100/issue?expand=changelog%2Cmetadata&fields=status%2Cissuetype%2Csummary&jql=project+%3D+KP&maxResults=50&startAt=0",
@@ -1971,7 +1972,7 @@ func TestBoardService_Projects(t *testing.T) {
 			boardID:            100,
 			startAt:            0,
 			maxResults:         50,
-			mockFile:           "./mocks/get-board-projects.json",
+			mockFile:           "../mocks/get-board-projects.json",
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/board/100/project?maxResults=50&startAt=0",
 			context:            context.Background(),
@@ -1984,7 +1985,7 @@ func TestBoardService_Projects(t *testing.T) {
 			boardID:            0,
 			startAt:            0,
 			maxResults:         50,
-			mockFile:           "./mocks/get-board-projects.json",
+			mockFile:           "../mocks/get-board-projects.json",
 			wantHTTPCodeReturn: http.StatusOK,
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/board/100/project?maxResults=50&startAt=0",
@@ -1997,7 +1998,7 @@ func TestBoardService_Projects(t *testing.T) {
 			boardID:            100,
 			startAt:            0,
 			maxResults:         50,
-			mockFile:           "./mocks/get-board-projects.json",
+			mockFile:           "../mocks/get-board-projects.json",
 			wantHTTPCodeReturn: http.StatusOK,
 			wantHTTPMethod:     http.MethodHead,
 			endpoint:           "/rest/agile/1.0/board/100/project?maxResults=50&startAt=0",
@@ -2010,7 +2011,7 @@ func TestBoardService_Projects(t *testing.T) {
 			boardID:            100,
 			startAt:            0,
 			maxResults:         50,
-			mockFile:           "./mocks/get-board-projects.json",
+			mockFile:           "../mocks/get-board-projects.json",
 			wantHTTPCodeReturn: http.StatusOK,
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/board/100/project?maxResults=50&startAt=0",
@@ -2023,7 +2024,7 @@ func TestBoardService_Projects(t *testing.T) {
 			boardID:            100,
 			startAt:            0,
 			maxResults:         50,
-			mockFile:           "./mocks/get-board-projects.json",
+			mockFile:           "../mocks/get-board-projects.json",
 			wantHTTPCodeReturn: http.StatusBadGateway,
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/board/100/project?maxResults=50&startAt=0",
@@ -2036,7 +2037,7 @@ func TestBoardService_Projects(t *testing.T) {
 			boardID:            100,
 			startAt:            0,
 			maxResults:         50,
-			mockFile:           "./mocks/empty-json.json",
+			mockFile:           "../mocks/empty-json.json",
 			wantHTTPCodeReturn: http.StatusOK,
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/board/100/project?maxResults=50&startAt=0",
@@ -2119,7 +2120,7 @@ func TestBoardService_IssuesBySprint(t *testing.T) {
 	testCases := []struct {
 		name                                  string
 		sprintID, epicID, startAt, maxResults int
-		opts                                  *IssueOptionScheme
+		opts                                  *model.IssueOptionScheme
 		mockFile                              string
 		wantHTTPMethod                        string
 		endpoint                              string
@@ -2133,13 +2134,13 @@ func TestBoardService_IssuesBySprint(t *testing.T) {
 			epicID:     22,
 			startAt:    0,
 			maxResults: 50,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
 				Expand:        []string{"changelog", "metadata"},
 			},
-			mockFile:           "./mocks/get-board-issue-by-epic.json",
+			mockFile:           "../mocks/get-board-issue-by-epic.json",
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/board/100/sprint/22/issue?expand=changelog%2Cmetadata&fields=status%2Cissuetype%2Csummary&jql=project+%3D+KP&maxResults=50&startAt=0",
 			context:            context.Background(),
@@ -2153,13 +2154,13 @@ func TestBoardService_IssuesBySprint(t *testing.T) {
 			epicID:     0,
 			startAt:    0,
 			maxResults: 50,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
 				Expand:        []string{"changelog", "metadata"},
 			},
-			mockFile:           "./mocks/get-board-issue-by-epic.json",
+			mockFile:           "../mocks/get-board-issue-by-epic.json",
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/board/100/sprint/22/issue?expand=changelog%2Cmetadata&fields=status%2Cissuetype%2Csummary&jql=project+%3D+KP&maxResults=50&startAt=0",
 			context:            context.Background(),
@@ -2173,13 +2174,13 @@ func TestBoardService_IssuesBySprint(t *testing.T) {
 			epicID:     100,
 			startAt:    0,
 			maxResults: 50,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
 				Expand:        []string{"changelog", "metadata"},
 			},
-			mockFile:           "./mocks/get-board-issue-by-epic.json",
+			mockFile:           "../mocks/get-board-issue-by-epic.json",
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/board/100/sprint/22/issue?expand=changelog%2Cmetadata&fields=status%2Cissuetype%2Csummary&jql=project+%3D+KP&maxResults=50&startAt=0",
 			context:            context.Background(),
@@ -2193,13 +2194,13 @@ func TestBoardService_IssuesBySprint(t *testing.T) {
 			epicID:     22,
 			startAt:    0,
 			maxResults: 50,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: false,
 				Fields:        []string{"status", "issuetype", "summary"},
 				Expand:        []string{"changelog", "metadata"},
 			},
-			mockFile:           "./mocks/get-board-issue-by-epic.json",
+			mockFile:           "../mocks/get-board-issue-by-epic.json",
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/board/100/sprint/22/issue?expand=changelog%2Cmetadata&fields=status%2Cissuetype%2Csummary&jql=project+%3D+KP&maxResults=50&startAt=0&validateQuery+=false",
 			context:            context.Background(),
@@ -2213,13 +2214,13 @@ func TestBoardService_IssuesBySprint(t *testing.T) {
 			epicID:     22,
 			startAt:    0,
 			maxResults: 50,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
 				Expand:        []string{"changelog"},
 			},
-			mockFile:           "./mocks/get-board-issue-by-epic.json",
+			mockFile:           "../mocks/get-board-issue-by-epic.json",
 			wantHTTPCodeReturn: http.StatusOK,
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/board/100/sprint/22/issue?expand=changelog%2Cmetadata&fields=status%2Cissuetype%2Csummary&jql=project+%3D+KP&maxResults=50&startAt=0",
@@ -2233,8 +2234,8 @@ func TestBoardService_IssuesBySprint(t *testing.T) {
 			epicID:     22,
 			startAt:    0,
 			maxResults: 50,
-			mockFile:   "./mocks/get-board-issue-by-epic.json",
-			opts: &IssueOptionScheme{
+			mockFile:   "../mocks/get-board-issue-by-epic.json",
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
@@ -2254,8 +2255,8 @@ func TestBoardService_IssuesBySprint(t *testing.T) {
 
 			startAt:    0,
 			maxResults: 50,
-			mockFile:   "./mocks/get-board-issue-by-epic.json",
-			opts: &IssueOptionScheme{
+			mockFile:   "../mocks/get-board-issue-by-epic.json",
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
@@ -2275,13 +2276,13 @@ func TestBoardService_IssuesBySprint(t *testing.T) {
 
 			startAt:    0,
 			maxResults: 50,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
 				Expand:        []string{"changelog", "metadata"},
 			},
-			mockFile:           "./mocks/get-board-issue-by-epic.json",
+			mockFile:           "../mocks/get-board-issue-by-epic.json",
 			wantHTTPCodeReturn: http.StatusBadGateway,
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/board/100/sprint/22/issue?expand=changelog%2Cmetadata&fields=status%2Cissuetype%2Csummary&jql=project+%3D+KP&maxResults=50&startAt=0",
@@ -2295,13 +2296,13 @@ func TestBoardService_IssuesBySprint(t *testing.T) {
 			epicID:     22,
 			startAt:    0,
 			maxResults: 50,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
 				Expand:        []string{"changelog", "metadata"},
 			},
-			mockFile:           "./mocks/empty-json.json",
+			mockFile:           "../mocks/empty-json.json",
 			wantHTTPCodeReturn: http.StatusOK,
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/board/100/sprint/22/issue?expand=changelog%2Cmetadata&fields=status%2Cissuetype%2Csummary&jql=project+%3D+KP&maxResults=50&startAt=0",
@@ -2398,7 +2399,7 @@ func TestBoardService_Versions(t *testing.T) {
 			released:           true,
 			startAt:            0,
 			maxResults:         50,
-			mockFile:           "./mocks/get-board-versions.json",
+			mockFile:           "../mocks/get-board-versions.json",
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/board/100/version?maxResults=50&released=true&startAt=0",
 			context:            context.Background(),
@@ -2412,7 +2413,7 @@ func TestBoardService_Versions(t *testing.T) {
 			released:           true,
 			startAt:            0,
 			maxResults:         50,
-			mockFile:           "./mocks/get-board-versions.json",
+			mockFile:           "../mocks/get-board-versions.json",
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/board/100/version?maxResults=50&released=true&startAt=0",
 			context:            context.Background(),
@@ -2426,7 +2427,7 @@ func TestBoardService_Versions(t *testing.T) {
 			released:           false,
 			startAt:            0,
 			maxResults:         50,
-			mockFile:           "./mocks/get-board-versions.json",
+			mockFile:           "../mocks/get-board-versions.json",
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/board/100/version?maxResults=50&released=false&startAt=0",
 			context:            context.Background(),
@@ -2440,7 +2441,7 @@ func TestBoardService_Versions(t *testing.T) {
 			released:           true,
 			startAt:            0,
 			maxResults:         50,
-			mockFile:           "./mocks/get-board-versions.json",
+			mockFile:           "../mocks/get-board-versions.json",
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/board/100/version?maxResults=50&released=true&startAt=0",
 			context:            nil,
@@ -2454,7 +2455,7 @@ func TestBoardService_Versions(t *testing.T) {
 			released:           true,
 			startAt:            0,
 			maxResults:         50,
-			mockFile:           "./mocks/get-board-versions.json",
+			mockFile:           "../mocks/get-board-versions.json",
 			wantHTTPMethod:     http.MethodPut,
 			endpoint:           "/rest/agile/1.0/board/100/version?maxResults=50&released=true&startAt=0",
 			context:            context.Background(),
@@ -2468,7 +2469,7 @@ func TestBoardService_Versions(t *testing.T) {
 			released:           true,
 			startAt:            0,
 			maxResults:         50,
-			mockFile:           "./mocks/get-board-versions.json",
+			mockFile:           "../mocks/get-board-versions.json",
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/board/100/version?maxResults=50&released=true&startAt=0",
 			context:            context.Background(),
@@ -2482,7 +2483,7 @@ func TestBoardService_Versions(t *testing.T) {
 			released:           true,
 			startAt:            0,
 			maxResults:         50,
-			mockFile:           "./mocks/empty-json.json",
+			mockFile:           "../mocks/empty-json.json",
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/board/100/version?maxResults=50&released=true&startAt=0",
 			context:            context.Background(),
@@ -2565,7 +2566,7 @@ func TestBoardService_Move(t *testing.T) {
 	testCases := []struct {
 		name               string
 		boardID            int
-		payload            *BoardMovementPayloadScheme
+		payload            *model.BoardMovementPayloadScheme
 		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string
@@ -2576,7 +2577,7 @@ func TestBoardService_Move(t *testing.T) {
 		{
 			name:    "MoveBacklogIssueToBoardWhenTheParametersAreCorrect",
 			boardID: 100,
-			payload: &BoardMovementPayloadScheme{
+			payload: &model.BoardMovementPayloadScheme{
 				Issues:          []string{"KP-3"},
 				RankBeforeIssue: "",
 				RankAfterIssue:  "",
@@ -2602,7 +2603,7 @@ func TestBoardService_Move(t *testing.T) {
 		{
 			name:    "MoveBacklogIssueToBoardWhenTheBoardIDIsNotSet",
 			boardID: 0,
-			payload: &BoardMovementPayloadScheme{
+			payload: &model.BoardMovementPayloadScheme{
 				Issues:          []string{"KP-3"},
 				RankBeforeIssue: "",
 				RankAfterIssue:  "",
@@ -2617,7 +2618,7 @@ func TestBoardService_Move(t *testing.T) {
 		{
 			name:    "MoveBacklogIssueToBoardWhenTheContextIsNil",
 			boardID: 100,
-			payload: &BoardMovementPayloadScheme{
+			payload: &model.BoardMovementPayloadScheme{
 				Issues:          []string{"KP-3"},
 				RankBeforeIssue: "",
 				RankAfterIssue:  "",
@@ -2632,7 +2633,7 @@ func TestBoardService_Move(t *testing.T) {
 		{
 			name:    "MoveBacklogIssueToBoardWhenTheRequestMethodIsIncorrect",
 			boardID: 100,
-			payload: &BoardMovementPayloadScheme{
+			payload: &model.BoardMovementPayloadScheme{
 				Issues:          []string{"KP-3"},
 				RankBeforeIssue: "",
 				RankAfterIssue:  "",
@@ -2647,7 +2648,7 @@ func TestBoardService_Move(t *testing.T) {
 		{
 			name:    "MoveBacklogIssueToBoardWhenTheStatusCodeIsIncorrect",
 			boardID: 100,
-			payload: &BoardMovementPayloadScheme{
+			payload: &model.BoardMovementPayloadScheme{
 				Issues:          []string{"KP-3"},
 				RankBeforeIssue: "",
 				RankAfterIssue:  "",
@@ -2746,7 +2747,7 @@ func TestBoardService_Sprints(t *testing.T) {
 			states:             []string{"open", "closed"},
 			startAt:            0,
 			maxResults:         50,
-			mockFile:           "./mocks/get-board-sprints.json",
+			mockFile:           "../mocks/get-board-sprints.json",
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/board/100/sprint?maxResults=50&startAt=0&state=open%2Cclosed",
 			context:            context.Background(),
@@ -2760,7 +2761,7 @@ func TestBoardService_Sprints(t *testing.T) {
 			states:             []string{"open", "closed"},
 			startAt:            0,
 			maxResults:         50,
-			mockFile:           "./mocks/get-board-sprints.json",
+			mockFile:           "../mocks/get-board-sprints.json",
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/board/100/sprint?maxResults=50&startAt=0&state=open%2Cclosed",
 			context:            context.Background(),
@@ -2774,7 +2775,7 @@ func TestBoardService_Sprints(t *testing.T) {
 			states:         []string{"open", "closed"},
 			startAt:        0,
 			maxResults:     50,
-			mockFile:       "./mocks/get-board-sprints.json",
+			mockFile:       "../mocks/get-board-sprints.json",
 			wantHTTPMethod: http.MethodGet,
 			endpoint:       "/rest/agile/1.0/board/100/sprint?maxResults=50&startAt=0&state=open%2Cclosed",
 			context:        nil,
@@ -2787,7 +2788,7 @@ func TestBoardService_Sprints(t *testing.T) {
 			states:             []string{"open", "closed"},
 			startAt:            0,
 			maxResults:         50,
-			mockFile:           "./mocks/get-board-sprints.json",
+			mockFile:           "../mocks/get-board-sprints.json",
 			wantHTTPMethod:     http.MethodPost,
 			endpoint:           "/rest/agile/1.0/board/100/sprint?maxResults=50&startAt=0&state=open%2Cclosed",
 			context:            context.Background(),
@@ -2801,7 +2802,7 @@ func TestBoardService_Sprints(t *testing.T) {
 			states:             []string{"open", "closed"},
 			startAt:            0,
 			maxResults:         50,
-			mockFile:           "./mocks/get-board-sprints.json",
+			mockFile:           "../mocks/get-board-sprints.json",
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/board/100/sprint?maxResults=50&startAt=0&state=open%2Cclosed",
 			context:            context.Background(),
@@ -2815,7 +2816,7 @@ func TestBoardService_Sprints(t *testing.T) {
 			states:             []string{"open", "closed"},
 			startAt:            0,
 			maxResults:         50,
-			mockFile:           "./mocks/empty-json.json",
+			mockFile:           "../mocks/empty-json.json",
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/board/100/sprint?maxResults=50&startAt=0&state=open%2Cclosed",
 			context:            context.Background(),

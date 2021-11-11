@@ -3,6 +3,7 @@ package agile
 import (
 	"context"
 	"fmt"
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models/agile"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/url"
@@ -24,7 +25,7 @@ func TestSprintService_Get(t *testing.T) {
 		{
 			name:               "GetSprintWhenTheParametersAreCorrect",
 			sprintID:           1,
-			mockFile:           "./mocks/get-sprint-by-id.json",
+			mockFile:           "../mocks/get-sprint-by-id.json",
 			wantHTTPCodeReturn: http.StatusOK,
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/sprint/1",
@@ -35,7 +36,7 @@ func TestSprintService_Get(t *testing.T) {
 		{
 			name:               "GetSprintWhenTheSprintIDIsZero",
 			sprintID:           0,
-			mockFile:           "./mocks/get-sprint-by-id.json",
+			mockFile:           "../mocks/get-sprint-by-id.json",
 			wantHTTPCodeReturn: http.StatusOK,
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/sprint/1",
@@ -46,7 +47,7 @@ func TestSprintService_Get(t *testing.T) {
 		{
 			name:               "GetSprintWhenTheRequestMethodIsIncorrect",
 			sprintID:           1,
-			mockFile:           "./mocks/get-sprint-by-id.json",
+			mockFile:           "../mocks/get-sprint-by-id.json",
 			wantHTTPCodeReturn: http.StatusOK,
 			wantHTTPMethod:     http.MethodDelete,
 			endpoint:           "/rest/agile/1.0/sprint/1",
@@ -57,7 +58,7 @@ func TestSprintService_Get(t *testing.T) {
 		{
 			name:               "GetSprintWhenTheStatusCodeIsIncorrect",
 			sprintID:           1,
-			mockFile:           "./mocks/get-sprint-by-id.json",
+			mockFile:           "../mocks/get-sprint-by-id.json",
 			wantHTTPCodeReturn: http.StatusBadRequest,
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/sprint/1",
@@ -68,7 +69,7 @@ func TestSprintService_Get(t *testing.T) {
 		{
 			name:               "GetSprintWhenTheContextIsNil",
 			sprintID:           1,
-			mockFile:           "./mocks/get-sprint-by-id.json",
+			mockFile:           "../mocks/get-sprint-by-id.json",
 			wantHTTPCodeReturn: http.StatusOK,
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/sprint/1",
@@ -79,7 +80,7 @@ func TestSprintService_Get(t *testing.T) {
 		{
 			name:               "GetSprintWhenTheResponseBodyIsEmpty",
 			sprintID:           1,
-			mockFile:           "./mocks/empty-json.json",
+			mockFile:           "../mocks/empty-json.json",
 			wantHTTPCodeReturn: http.StatusOK,
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/sprint/1",
@@ -154,7 +155,7 @@ func TestSprintService_Create(t *testing.T) {
 
 	testCases := []struct {
 		name               string
-		payload            *SprintPayloadScheme
+		payload            *model.SprintPayloadScheme
 		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string
@@ -164,14 +165,14 @@ func TestSprintService_Create(t *testing.T) {
 	}{
 		{
 			name: "CreateSprintWhenTheParametersAreCorrect",
-			payload: &SprintPayloadScheme{
+			payload: &model.SprintPayloadScheme{
 				Name:          "Sprint XX",
 				StartDate:     "2015-04-11T15:22:00.000+10:00",
 				EndDate:       "2015-04-20T01:22:00.000+10:00",
 				OriginBoardID: 4,
 				Goal:          "Sprint XX goal",
 			},
-			mockFile:           "./mocks/get-sprint-by-id.json",
+			mockFile:           "../mocks/get-sprint-by-id.json",
 			wantHTTPCodeReturn: http.StatusOK,
 			wantHTTPMethod:     http.MethodPost,
 			endpoint:           "/rest/agile/1.0/sprint",
@@ -182,7 +183,7 @@ func TestSprintService_Create(t *testing.T) {
 		{
 			name:               "CreateSprintWhenThePayloadIsNotProvided",
 			payload:            nil,
-			mockFile:           "./mocks/get-sprint-by-id.json",
+			mockFile:           "../mocks/get-sprint-by-id.json",
 			wantHTTPCodeReturn: http.StatusOK,
 			wantHTTPMethod:     http.MethodPost,
 			endpoint:           "/rest/agile/1.0/sprint",
@@ -192,14 +193,14 @@ func TestSprintService_Create(t *testing.T) {
 
 		{
 			name: "CreateSprintWhenTheRequestMethodIsIncorrect",
-			payload: &SprintPayloadScheme{
+			payload: &model.SprintPayloadScheme{
 				Name:          "Sprint XX",
 				StartDate:     "2015-04-11T15:22:00.000+10:00",
 				EndDate:       "2015-04-20T01:22:00.000+10:00",
 				OriginBoardID: 4,
 				Goal:          "Sprint XX goal",
 			},
-			mockFile:           "./mocks/get-sprint-by-id.json",
+			mockFile:           "../mocks/get-sprint-by-id.json",
 			wantHTTPCodeReturn: http.StatusOK,
 			wantHTTPMethod:     http.MethodDelete,
 			endpoint:           "/rest/agile/1.0/sprint",
@@ -209,14 +210,14 @@ func TestSprintService_Create(t *testing.T) {
 
 		{
 			name: "CreateSprintWhenTheStatusCodeIsIncorrect",
-			payload: &SprintPayloadScheme{
+			payload: &model.SprintPayloadScheme{
 				Name:          "Sprint XX",
 				StartDate:     "2015-04-11T15:22:00.000+10:00",
 				EndDate:       "2015-04-20T01:22:00.000+10:00",
 				OriginBoardID: 4,
 				Goal:          "Sprint XX goal",
 			},
-			mockFile:           "./mocks/get-sprint-by-id.json",
+			mockFile:           "../mocks/get-sprint-by-id.json",
 			wantHTTPCodeReturn: http.StatusBadRequest,
 			wantHTTPMethod:     http.MethodPost,
 			endpoint:           "/rest/agile/1.0/sprint",
@@ -226,14 +227,14 @@ func TestSprintService_Create(t *testing.T) {
 
 		{
 			name: "CreateSprintWhenTheContextIsNil",
-			payload: &SprintPayloadScheme{
+			payload: &model.SprintPayloadScheme{
 				Name:          "Sprint XX",
 				StartDate:     "2015-04-11T15:22:00.000+10:00",
 				EndDate:       "2015-04-20T01:22:00.000+10:00",
 				OriginBoardID: 4,
 				Goal:          "Sprint XX goal",
 			},
-			mockFile:           "./mocks/get-sprint-by-id.json",
+			mockFile:           "../mocks/get-sprint-by-id.json",
 			wantHTTPCodeReturn: http.StatusOK,
 			wantHTTPMethod:     http.MethodPost,
 			endpoint:           "/rest/agile/1.0/sprint",
@@ -243,14 +244,14 @@ func TestSprintService_Create(t *testing.T) {
 
 		{
 			name: "CreateSprintWhenTheResponseBodyIsEmpty",
-			payload: &SprintPayloadScheme{
+			payload: &model.SprintPayloadScheme{
 				Name:          "Sprint XX",
 				StartDate:     "2015-04-11T15:22:00.000+10:00",
 				EndDate:       "2015-04-20T01:22:00.000+10:00",
 				OriginBoardID: 4,
 				Goal:          "Sprint XX goal",
 			},
-			mockFile:           "./mocks/empty-json.json",
+			mockFile:           "../mocks/empty-json.json",
 			wantHTTPCodeReturn: http.StatusOK,
 			wantHTTPMethod:     http.MethodPost,
 			endpoint:           "/rest/agile/1.0/sprint",
@@ -326,7 +327,7 @@ func TestSprintService_Update(t *testing.T) {
 	testCases := []struct {
 		name               string
 		sprintID           int
-		payload            *SprintPayloadScheme
+		payload            *model.SprintPayloadScheme
 		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string
@@ -337,14 +338,14 @@ func TestSprintService_Update(t *testing.T) {
 		{
 			name:     "UpdateSprintWhenTheParametersAreCorrect",
 			sprintID: 1,
-			payload: &SprintPayloadScheme{
+			payload: &model.SprintPayloadScheme{
 				Name:          "Sprint XX",
 				StartDate:     "2015-04-11T15:22:00.000+10:00",
 				EndDate:       "2015-04-20T01:22:00.000+10:00",
 				OriginBoardID: 4,
 				Goal:          "Sprint XX goal",
 			},
-			mockFile:           "./mocks/get-sprint-by-id.json",
+			mockFile:           "../mocks/get-sprint-by-id.json",
 			wantHTTPCodeReturn: http.StatusOK,
 			wantHTTPMethod:     http.MethodPut,
 			endpoint:           "/rest/agile/1.0/sprint/1",
@@ -355,14 +356,14 @@ func TestSprintService_Update(t *testing.T) {
 		{
 			name:     "UpdateSprintWhenTheSprintIDIsZero",
 			sprintID: 0,
-			payload: &SprintPayloadScheme{
+			payload: &model.SprintPayloadScheme{
 				Name:          "Sprint XX",
 				StartDate:     "2015-04-11T15:22:00.000+10:00",
 				EndDate:       "2015-04-20T01:22:00.000+10:00",
 				OriginBoardID: 4,
 				Goal:          "Sprint XX goal",
 			},
-			mockFile:           "./mocks/get-sprint-by-id.json",
+			mockFile:           "../mocks/get-sprint-by-id.json",
 			wantHTTPCodeReturn: http.StatusOK,
 			wantHTTPMethod:     http.MethodPut,
 			endpoint:           "/rest/agile/1.0/sprint/1",
@@ -374,7 +375,7 @@ func TestSprintService_Update(t *testing.T) {
 			name:               "UpdateSprintWhenThePayloadIsNotProvided",
 			sprintID:           1,
 			payload:            nil,
-			mockFile:           "./mocks/get-sprint-by-id.json",
+			mockFile:           "../mocks/get-sprint-by-id.json",
 			wantHTTPCodeReturn: http.StatusOK,
 			wantHTTPMethod:     http.MethodPut,
 			endpoint:           "/rest/agile/1.0/sprint/1",
@@ -385,14 +386,14 @@ func TestSprintService_Update(t *testing.T) {
 		{
 			name:     "UpdateSprintWhenTheRequestMethodIsIncorrect",
 			sprintID: 1,
-			payload: &SprintPayloadScheme{
+			payload: &model.SprintPayloadScheme{
 				Name:          "Sprint XX",
 				StartDate:     "2015-04-11T15:22:00.000+10:00",
 				EndDate:       "2015-04-20T01:22:00.000+10:00",
 				OriginBoardID: 4,
 				Goal:          "Sprint XX goal",
 			},
-			mockFile:           "./mocks/get-sprint-by-id.json",
+			mockFile:           "../mocks/get-sprint-by-id.json",
 			wantHTTPCodeReturn: http.StatusOK,
 			wantHTTPMethod:     http.MethodDelete,
 			endpoint:           "/rest/agile/1.0/sprint/1",
@@ -403,14 +404,14 @@ func TestSprintService_Update(t *testing.T) {
 		{
 			name:     "UpdateSprintWhenTheStatusCodeIsIncorrect",
 			sprintID: 1,
-			payload: &SprintPayloadScheme{
+			payload: &model.SprintPayloadScheme{
 				Name:          "Sprint XX",
 				StartDate:     "2015-04-11T15:22:00.000+10:00",
 				EndDate:       "2015-04-20T01:22:00.000+10:00",
 				OriginBoardID: 4,
 				Goal:          "Sprint XX goal",
 			},
-			mockFile:           "./mocks/get-sprint-by-id.json",
+			mockFile:           "../mocks/get-sprint-by-id.json",
 			wantHTTPCodeReturn: http.StatusBadRequest,
 			wantHTTPMethod:     http.MethodPut,
 			endpoint:           "/rest/agile/1.0/sprint/1",
@@ -421,14 +422,14 @@ func TestSprintService_Update(t *testing.T) {
 		{
 			name:     "UpdateSprintWhenTheContextIsNil",
 			sprintID: 1,
-			payload: &SprintPayloadScheme{
+			payload: &model.SprintPayloadScheme{
 				Name:          "Sprint XX",
 				StartDate:     "2015-04-11T15:22:00.000+10:00",
 				EndDate:       "2015-04-20T01:22:00.000+10:00",
 				OriginBoardID: 4,
 				Goal:          "Sprint XX goal",
 			},
-			mockFile:           "./mocks/get-sprint-by-id.json",
+			mockFile:           "../mocks/get-sprint-by-id.json",
 			wantHTTPCodeReturn: http.StatusOK,
 			wantHTTPMethod:     http.MethodPut,
 			endpoint:           "/rest/agile/1.0/sprint/1",
@@ -439,14 +440,14 @@ func TestSprintService_Update(t *testing.T) {
 		{
 			name:     "UpdateSprintWhenTheResponseBodyIsEmpty",
 			sprintID: 1,
-			payload: &SprintPayloadScheme{
+			payload: &model.SprintPayloadScheme{
 				Name:          "Sprint XX",
 				StartDate:     "2015-04-11T15:22:00.000+10:00",
 				EndDate:       "2015-04-20T01:22:00.000+10:00",
 				OriginBoardID: 4,
 				Goal:          "Sprint XX goal",
 			},
-			mockFile:           "./mocks/empty-json.json",
+			mockFile:           "../mocks/empty-json.json",
 			wantHTTPCodeReturn: http.StatusOK,
 			wantHTTPMethod:     http.MethodPut,
 			endpoint:           "/rest/agile/1.0/sprint/1",
@@ -522,7 +523,7 @@ func TestSprintService_Path(t *testing.T) {
 	testCases := []struct {
 		name               string
 		sprintID           int
-		payload            *SprintPayloadScheme
+		payload            *model.SprintPayloadScheme
 		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string
@@ -533,14 +534,14 @@ func TestSprintService_Path(t *testing.T) {
 		{
 			name:     "PathSprintWhenTheParametersAreCorrect",
 			sprintID: 1,
-			payload: &SprintPayloadScheme{
+			payload: &model.SprintPayloadScheme{
 				Name:          "Sprint XX",
 				StartDate:     "2015-04-11T15:22:00.000+10:00",
 				EndDate:       "2015-04-20T01:22:00.000+10:00",
 				OriginBoardID: 4,
 				Goal:          "Sprint XX goal",
 			},
-			mockFile:           "./mocks/get-sprint-by-id.json",
+			mockFile:           "../mocks/get-sprint-by-id.json",
 			wantHTTPCodeReturn: http.StatusOK,
 			wantHTTPMethod:     http.MethodPost,
 			endpoint:           "/rest/agile/1.0/sprint/1",
@@ -551,14 +552,14 @@ func TestSprintService_Path(t *testing.T) {
 		{
 			name:     "PathSprintWhenTheSprintIDIsZero",
 			sprintID: 0,
-			payload: &SprintPayloadScheme{
+			payload: &model.SprintPayloadScheme{
 				Name:          "Sprint XX",
 				StartDate:     "2015-04-11T15:22:00.000+10:00",
 				EndDate:       "2015-04-20T01:22:00.000+10:00",
 				OriginBoardID: 4,
 				Goal:          "Sprint XX goal",
 			},
-			mockFile:           "./mocks/get-sprint-by-id.json",
+			mockFile:           "../mocks/get-sprint-by-id.json",
 			wantHTTPCodeReturn: http.StatusOK,
 			wantHTTPMethod:     http.MethodPost,
 			endpoint:           "/rest/agile/1.0/sprint/1",
@@ -570,7 +571,7 @@ func TestSprintService_Path(t *testing.T) {
 			name:               "PathSprintWhenThePayloadIsNotProvided",
 			sprintID:           1,
 			payload:            nil,
-			mockFile:           "./mocks/get-sprint-by-id.json",
+			mockFile:           "../mocks/get-sprint-by-id.json",
 			wantHTTPCodeReturn: http.StatusOK,
 			wantHTTPMethod:     http.MethodPost,
 			endpoint:           "/rest/agile/1.0/sprint/1",
@@ -581,14 +582,14 @@ func TestSprintService_Path(t *testing.T) {
 		{
 			name:     "PathSprintWhenTheRequestMethodIsIncorrect",
 			sprintID: 1,
-			payload: &SprintPayloadScheme{
+			payload: &model.SprintPayloadScheme{
 				Name:          "Sprint XX",
 				StartDate:     "2015-04-11T15:22:00.000+10:00",
 				EndDate:       "2015-04-20T01:22:00.000+10:00",
 				OriginBoardID: 4,
 				Goal:          "Sprint XX goal",
 			},
-			mockFile:           "./mocks/get-sprint-by-id.json",
+			mockFile:           "../mocks/get-sprint-by-id.json",
 			wantHTTPCodeReturn: http.StatusOK,
 			wantHTTPMethod:     http.MethodDelete,
 			endpoint:           "/rest/agile/1.0/sprint/1",
@@ -599,14 +600,14 @@ func TestSprintService_Path(t *testing.T) {
 		{
 			name:     "PathSprintWhenTheStatusCodeIsIncorrect",
 			sprintID: 1,
-			payload: &SprintPayloadScheme{
+			payload: &model.SprintPayloadScheme{
 				Name:          "Sprint XX",
 				StartDate:     "2015-04-11T15:22:00.000+10:00",
 				EndDate:       "2015-04-20T01:22:00.000+10:00",
 				OriginBoardID: 4,
 				Goal:          "Sprint XX goal",
 			},
-			mockFile:           "./mocks/get-sprint-by-id.json",
+			mockFile:           "../mocks/get-sprint-by-id.json",
 			wantHTTPCodeReturn: http.StatusBadRequest,
 			wantHTTPMethod:     http.MethodPost,
 			endpoint:           "/rest/agile/1.0/sprint/1",
@@ -617,14 +618,14 @@ func TestSprintService_Path(t *testing.T) {
 		{
 			name:     "PathSprintWhenTheContextIsNil",
 			sprintID: 1,
-			payload: &SprintPayloadScheme{
+			payload: &model.SprintPayloadScheme{
 				Name:          "Sprint XX",
 				StartDate:     "2015-04-11T15:22:00.000+10:00",
 				EndDate:       "2015-04-20T01:22:00.000+10:00",
 				OriginBoardID: 4,
 				Goal:          "Sprint XX goal",
 			},
-			mockFile:           "./mocks/get-sprint-by-id.json",
+			mockFile:           "../mocks/get-sprint-by-id.json",
 			wantHTTPCodeReturn: http.StatusOK,
 			wantHTTPMethod:     http.MethodPost,
 			endpoint:           "/rest/agile/1.0/sprint/1",
@@ -635,14 +636,14 @@ func TestSprintService_Path(t *testing.T) {
 		{
 			name:     "PathSprintWhenTheResponseBodyIsEmpty",
 			sprintID: 1,
-			payload: &SprintPayloadScheme{
+			payload: &model.SprintPayloadScheme{
 				Name:          "Sprint XX",
 				StartDate:     "2015-04-11T15:22:00.000+10:00",
 				EndDate:       "2015-04-20T01:22:00.000+10:00",
 				OriginBoardID: 4,
 				Goal:          "Sprint XX goal",
 			},
-			mockFile:           "./mocks/empty-json.json",
+			mockFile:           "../mocks/empty-json.json",
 			wantHTTPCodeReturn: http.StatusOK,
 			wantHTTPMethod:     http.MethodPost,
 			endpoint:           "/rest/agile/1.0/sprint/1",
@@ -1090,7 +1091,7 @@ func TestSprintService_Issues(t *testing.T) {
 	testCases := []struct {
 		name                string
 		sprintID            int
-		opts                *IssueOptionScheme
+		opts                *model.IssueOptionScheme
 		startAt, maxResults int
 		mockFile            string
 		wantHTTPMethod      string
@@ -1102,7 +1103,7 @@ func TestSprintService_Issues(t *testing.T) {
 		{
 			name:     "GetSprintIssuesWhenTheParametersAreCorrect",
 			sprintID: 1,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = DUMMY",
 				Fields:        []string{"summary", "status"},
 				Expand:        []string{"changelogs", "transitions"},
@@ -1110,7 +1111,7 @@ func TestSprintService_Issues(t *testing.T) {
 			},
 			startAt:            0,
 			maxResults:         50,
-			mockFile:           "./mocks/get-sprint-issues.json",
+			mockFile:           "../mocks/get-sprint-issues.json",
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/sprint/1/issue?expand=changelogs%2Ctransitions&fields=summary%2Cstatus&jql=project+%3D+DUMMY&maxResults=50&startAt=0&validateQuery+=false",
 			context:            context.Background(),
@@ -1121,7 +1122,7 @@ func TestSprintService_Issues(t *testing.T) {
 		{
 			name:     "GetSprintIssuesWhenTheSprintIDIsNotProvided",
 			sprintID: 0,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = DUMMY",
 				Fields:        []string{"summary", "status"},
 				Expand:        []string{"changelogs"},
@@ -1129,7 +1130,7 @@ func TestSprintService_Issues(t *testing.T) {
 			},
 			startAt:            0,
 			maxResults:         50,
-			mockFile:           "./mocks/get-sprint-issues.json",
+			mockFile:           "../mocks/get-sprint-issues.json",
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/sprint/1/issue?expand=changelogs&fields=summary%2Cstatus&jql=project+%3D+DUMMY&maxResults=50&startAt=0&validateQuery+=false",
 			context:            context.Background(),
@@ -1140,7 +1141,7 @@ func TestSprintService_Issues(t *testing.T) {
 		{
 			name:     "GetSprintIssuesWhenTheRequestMethodIsIncorrect",
 			sprintID: 1,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = DUMMY",
 				Fields:        []string{"summary", "status"},
 				Expand:        []string{"changelogs"},
@@ -1148,7 +1149,7 @@ func TestSprintService_Issues(t *testing.T) {
 			},
 			startAt:            0,
 			maxResults:         50,
-			mockFile:           "./mocks/get-sprint-issues.json",
+			mockFile:           "../mocks/get-sprint-issues.json",
 			wantHTTPMethod:     http.MethodHead,
 			endpoint:           "/rest/agile/1.0/sprint/1/issue?expand=changelogs&fields=summary%2Cstatus&jql=project+%3D+DUMMY&maxResults=50&startAt=0&validateQuery+=false",
 			context:            context.Background(),
@@ -1159,7 +1160,7 @@ func TestSprintService_Issues(t *testing.T) {
 		{
 			name:     "GetSprintIssuesWhenTheStatusCodeIsIncorrect",
 			sprintID: 1,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = DUMMY",
 				Fields:        []string{"summary", "status"},
 				Expand:        []string{"changelogs"},
@@ -1167,7 +1168,7 @@ func TestSprintService_Issues(t *testing.T) {
 			},
 			startAt:            0,
 			maxResults:         50,
-			mockFile:           "./mocks/get-sprint-issues.json",
+			mockFile:           "../mocks/get-sprint-issues.json",
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/sprint/1/issue?expand=changelogs&fields=summary%2Cstatus&jql=project+%3D+DUMMY&maxResults=50&startAt=0&validateQuery+=false",
 			context:            context.Background(),
@@ -1178,7 +1179,7 @@ func TestSprintService_Issues(t *testing.T) {
 		{
 			name:     "GetSprintIssuesWhenTheContextIsNil",
 			sprintID: 1,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = DUMMY",
 				Fields:        []string{"summary", "status"},
 				Expand:        []string{"changelogs"},
@@ -1186,7 +1187,7 @@ func TestSprintService_Issues(t *testing.T) {
 			},
 			startAt:            0,
 			maxResults:         50,
-			mockFile:           "./mocks/get-sprint-issues.json",
+			mockFile:           "../mocks/get-sprint-issues.json",
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/sprint/1/issue?expand=changelogs&fields=summary%2Cstatus&jql=project+%3D+DUMMY&maxResults=50&startAt=0&validateQuery+=false",
 			context:            nil,
@@ -1197,7 +1198,7 @@ func TestSprintService_Issues(t *testing.T) {
 		{
 			name:     "GetSprintIssuesWhenTheResponseBodyIsEmpty",
 			sprintID: 1,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = DUMMY",
 				Fields:        []string{"summary", "status"},
 				Expand:        []string{"changelogs"},
@@ -1205,7 +1206,7 @@ func TestSprintService_Issues(t *testing.T) {
 			},
 			startAt:            0,
 			maxResults:         50,
-			mockFile:           "./mocks/empty-json.json",
+			mockFile:           "../mocks/empty-json.json",
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/sprint/1/issue?expand=changelogs&fields=summary%2Cstatus&jql=project+%3D+DUMMY&maxResults=50&startAt=0&validateQuery+=false",
 			context:            context.Background(),

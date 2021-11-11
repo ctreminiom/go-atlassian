@@ -3,6 +3,7 @@ package agile
 import (
 	"context"
 	"fmt"
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models/agile"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/url"
@@ -24,7 +25,7 @@ func TestEpicService_Get(t *testing.T) {
 		{
 			name:               "GetEpicWhenTheParametersAreCorrect",
 			epicIDOrKey:        "KP-16",
-			mockFile:           "./mocks/get-epic.json",
+			mockFile:           "../mocks/get-epic.json",
 			wantHTTPCodeReturn: http.StatusOK,
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/epic/KP-16",
@@ -35,7 +36,7 @@ func TestEpicService_Get(t *testing.T) {
 		{
 			name:               "GetEpicWhenTheEpicKeyOrIDIsNotSet",
 			epicIDOrKey:        "",
-			mockFile:           "./mocks/get-epic.json",
+			mockFile:           "../mocks/get-epic.json",
 			wantHTTPCodeReturn: http.StatusOK,
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/epic/KP-16",
@@ -46,7 +47,7 @@ func TestEpicService_Get(t *testing.T) {
 		{
 			name:               "GetEpicWhenTheRequestMethodIsIncorrect",
 			epicIDOrKey:        "KP-16",
-			mockFile:           "./mocks/get-epic.json",
+			mockFile:           "../mocks/get-epic.json",
 			wantHTTPCodeReturn: http.StatusOK,
 			wantHTTPMethod:     http.MethodPost,
 			endpoint:           "/rest/agile/1.0/epic/KP-16",
@@ -57,7 +58,7 @@ func TestEpicService_Get(t *testing.T) {
 		{
 			name:               "GetEpicWhenTheContextIsNil",
 			epicIDOrKey:        "KP-16",
-			mockFile:           "./mocks/get-epic.json",
+			mockFile:           "../mocks/get-epic.json",
 			wantHTTPCodeReturn: http.StatusOK,
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/epic/KP-16",
@@ -68,7 +69,7 @@ func TestEpicService_Get(t *testing.T) {
 		{
 			name:               "GetEpicWhenTheResponseStatusCodeIsIncorrect",
 			epicIDOrKey:        "KP-16",
-			mockFile:           "./mocks/get-epic.json",
+			mockFile:           "../mocks/get-epic.json",
 			wantHTTPCodeReturn: http.StatusBadGateway,
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/epic/KP-16",
@@ -79,7 +80,7 @@ func TestEpicService_Get(t *testing.T) {
 		{
 			name:               "GetEpicWhenTheResponseBodyIsEmpty",
 			epicIDOrKey:        "KP-16",
-			mockFile:           "./mocks/empty-json.json",
+			mockFile:           "../mocks/empty-json.json",
 			wantHTTPCodeReturn: http.StatusOK,
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/epic/KP-16",
@@ -155,7 +156,7 @@ func TestEpicService_Issues(t *testing.T) {
 		name                string
 		epicIDOrKey         string
 		startAt, maxResults int
-		opts                *IssueOptionScheme
+		opts                *model.IssueOptionScheme
 		mockFile            string
 		wantHTTPMethod      string
 		endpoint            string
@@ -168,13 +169,13 @@ func TestEpicService_Issues(t *testing.T) {
 			epicIDOrKey: "KP-16",
 			startAt:     0,
 			maxResults:  50,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
 				Expand:        []string{"changelog", "metadata"},
 			},
-			mockFile:           "./mocks/get-epic-issues.json",
+			mockFile:           "../mocks/get-epic-issues.json",
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/epic/KP-16/issue?expand=changelog%2Cmetadata&fields=status%2Cissuetype%2Csummary&jql=project+%3D+KP&maxResults=50&startAt=0&validateQuery=true",
 			context:            context.Background(),
@@ -187,13 +188,13 @@ func TestEpicService_Issues(t *testing.T) {
 			epicIDOrKey: "",
 			startAt:     0,
 			maxResults:  50,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
 				Expand:        []string{"changelog", "metadata"},
 			},
-			mockFile:           "./mocks/get-epic-issues.json",
+			mockFile:           "../mocks/get-epic-issues.json",
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/epic/KP-16/issue?expand=changelog%2Cmetadata&fields=status%2Cissuetype%2Csummary&jql=project+%3D+KP&maxResults=50&startAt=0&validateQuery=true",
 			context:            context.Background(),
@@ -206,13 +207,13 @@ func TestEpicService_Issues(t *testing.T) {
 			epicIDOrKey: "KP-16",
 			startAt:     0,
 			maxResults:  50,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
 				Expand:        []string{"changelog", "metadata"},
 			},
-			mockFile:           "./mocks/empty-json.json",
+			mockFile:           "../mocks/empty-json.json",
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/epic/KP-16/issue?expand=changelog%2Cmetadata&fields=status%2Cissuetype%2Csummary&jql=project+%3D+KP&maxResults=50&startAt=0&validateQuery=true",
 			context:            context.Background(),
@@ -225,13 +226,13 @@ func TestEpicService_Issues(t *testing.T) {
 			epicIDOrKey: "KP-16",
 			startAt:     0,
 			maxResults:  50,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: false,
 				Fields:        []string{"status", "issuetype", "summary"},
 				Expand:        []string{"changelog", "metadata"},
 			},
-			mockFile: "./mocks/get-epic-issues.json",
+			mockFile: "../mocks/get-epic-issues.json",
 
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/epic/KP-16/issue?expand=changelog%2Cmetadata&fields=status%2Cissuetype%2Csummary&jql=project+%3D+KP&maxResults=50&startAt=0&validateQuery=false",
@@ -246,13 +247,13 @@ func TestEpicService_Issues(t *testing.T) {
 
 			startAt:    0,
 			maxResults: 50,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
 				Expand:        []string{"changelog"},
 			},
-			mockFile: "./mocks/get-epic-issues.json",
+			mockFile: "../mocks/get-epic-issues.json",
 
 			wantHTTPCodeReturn: http.StatusOK,
 			wantHTTPMethod:     http.MethodGet,
@@ -267,9 +268,9 @@ func TestEpicService_Issues(t *testing.T) {
 
 			startAt:    0,
 			maxResults: 50,
-			mockFile:   "./mocks/get-epic-issues.json",
+			mockFile:   "../mocks/get-epic-issues.json",
 
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
@@ -288,9 +289,9 @@ func TestEpicService_Issues(t *testing.T) {
 
 			startAt:    0,
 			maxResults: 50,
-			mockFile:   "./mocks/get-epic-issues.json",
+			mockFile:   "../mocks/get-epic-issues.json",
 
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
@@ -309,13 +310,13 @@ func TestEpicService_Issues(t *testing.T) {
 
 			startAt:    0,
 			maxResults: 50,
-			opts: &IssueOptionScheme{
+			opts: &model.IssueOptionScheme{
 				JQL:           "project = KP",
 				ValidateQuery: true,
 				Fields:        []string{"status", "issuetype", "summary"},
 				Expand:        []string{"changelog", "metadata"},
 			},
-			mockFile: "./mocks/get-epic-issues.json",
+			mockFile: "../mocks/get-epic-issues.json",
 
 			wantHTTPCodeReturn: http.StatusBadGateway,
 			wantHTTPMethod:     http.MethodGet,

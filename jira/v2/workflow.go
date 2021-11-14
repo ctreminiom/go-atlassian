@@ -1,4 +1,4 @@
-package v3
+package v2
 
 import (
 	"context"
@@ -12,7 +12,6 @@ import (
 
 type WorkflowService struct {
 	client *Client
-	Scheme *WorkflowSchemeService
 }
 
 func (w *WorkflowService) Create(ctx context.Context, payload *models.WorkflowPayloadScheme) (result *models.WorkflowCreatedResponseScheme,
@@ -23,7 +22,7 @@ func (w *WorkflowService) Create(ctx context.Context, payload *models.WorkflowPa
 		return nil, nil, err
 	}
 
-	endpoint := "/rest/api/3/workflow"
+	endpoint := "/rest/api/2/workflow"
 	request, err := w.client.newRequest(ctx, http.MethodPost, endpoint, payloadAsReader)
 	if err != nil {
 		return
@@ -43,7 +42,6 @@ func (w *WorkflowService) Create(ctx context.Context, payload *models.WorkflowPa
 // Gets returns a paginated list of published classic workflows.
 // When workflow names are specified, details of those workflows are returned.
 // Otherwise, all published classic workflows are returned.
-// Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-workflows/#api-rest-api-3-workflow-search-get
 func (w *WorkflowService) Gets(ctx context.Context, workflowNames, expand []string, startAt, maxResults int) (result *models.WorkflowPageScheme,
 	response *ResponseScheme, err error) {
 
@@ -59,7 +57,7 @@ func (w *WorkflowService) Gets(ctx context.Context, workflowNames, expand []stri
 		params.Add("expand", strings.Join(expand, ","))
 	}
 
-	var endpoint = fmt.Sprintf("/rest/api/3/workflow/search?%v", params.Encode())
+	var endpoint = fmt.Sprintf("/rest/api/2/workflow/search?%v", params.Encode())
 
 	request, err := w.client.newRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
@@ -84,15 +82,13 @@ func (w *WorkflowService) Gets(ctx context.Context, workflowNames, expand []stri
 // a system workflow.
 // associated with any workflow scheme.
 // associated with any draft workflow scheme.
-// Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-workflows/#api-rest-api-3-workflow-entityid-delete
-// NOTE: Experimental Method
 func (w *WorkflowService) Delete(ctx context.Context, workflowID string) (response *ResponseScheme, err error) {
 
 	if len(workflowID) == 0 {
 		return nil, models.ErrNoWorkflowIDError
 	}
 
-	var endpoint = fmt.Sprintf("/rest/api/3/workflow/%v", workflowID)
+	var endpoint = fmt.Sprintf("/rest/api/2/workflow/%v", workflowID)
 
 	request, err := w.client.newRequest(ctx, http.MethodDelete, endpoint, nil)
 	if err != nil {

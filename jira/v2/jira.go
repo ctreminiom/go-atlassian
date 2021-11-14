@@ -31,6 +31,7 @@ type Client struct {
 	Task       *TaskService
 	User       *UserService
 	MySelf     *MySelfService
+	Workflow   *WorkflowService
 }
 
 const (
@@ -148,6 +149,7 @@ func New(httpClient *http.Client, site string) (client *Client, err error) {
 	}
 
 	client.MySelf = &MySelfService{client: client}
+	client.Workflow = &WorkflowService{client: client}
 	return
 }
 

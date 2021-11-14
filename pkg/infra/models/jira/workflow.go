@@ -57,3 +57,27 @@ type WorkflowStatusScheme struct {
 type WorkflowStatusPropertiesScheme struct {
 	IssueEditable bool `json:"issueEditable"`
 }
+
+type WorkflowCreatedResponseScheme struct {
+	Name     string `json:"name,omitempty"`
+	EntityID string `json:"entityId,omitempty"`
+}
+
+type WorkflowPayloadScheme struct {
+	Name        string                             `json:"name,omitempty"`
+	Description string                             `json:"description,omitempty"`
+	Statuses    []*WorkflowTransitionScreenScheme  `json:"statuses,omitempty"`
+	Transitions []*WorkflowTransitionPayloadScheme `json:"transitions,omitempty"`
+}
+
+type WorkflowTransitionPayloadScheme struct {
+	Name   string                                 `json:"name,omitempty"`
+	From   []string                               `json:"from,omitempty"`
+	To     string                                 `json:"to,omitempty"`
+	Type   string                                 `json:"type,omitempty"`
+	Screen *WorkflowTransitionScreenPayloadScheme `json:"screen,omitempty"`
+}
+
+type WorkflowTransitionScreenPayloadScheme struct {
+	ID string `json:"id"`
+}

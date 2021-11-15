@@ -94,3 +94,41 @@ func (e *EpicService) Issues(ctx context.Context, epicIDOrKey string, startAt, m
 
 	return
 }
+
+// Move moves issues to an epic, for a given epic id.
+// Issues can be only in a single epic at the same time.
+// That means that already assigned issues to an epic, will not be assigned to the previous epic anymore.
+// The user needs to have the edit issue permission for all issue they want to move and to the epic.
+// The maximum number of issues that can be moved in one operation is 50.
+// Docs: https://developer.atlassian.com/cloud/jira/software/rest/api-group-epic/#api-agile-1-0-epic-epicidorkey-issue-post
+func (e *EpicService) Move(ctx context.Context, epicIDOrKey string, issues []string) (response *ResponseScheme, err error) {
+
+	if len(epicIDOrKey) == 0 {
+		return nil, model.ErrNoEpicIDError
+	}
+
+	payload := struct {
+		Issues []string `json:"issues,omitempty"`
+	}{
+		Issues: issues,
+	}
+
+	var (
+		payloadAsReader, _ = transformStructToReader(&payload)
+		endpoint           = fmt.Sprintf("rest/agile/1.0/epic/%v/issue", epicIDOrKey)
+	)
+
+	request, err := e.client.newRequest(ctx, http.MethodPost, endpoint, payloadAsReader)
+	if err != nil {
+		return
+	}
+
+	request.Header.Set("Content-Type", "application/json")
+
+	response, err = e.client.Call(request, nil)
+	if err != nil {
+		return response, err
+	}
+
+	return
+}

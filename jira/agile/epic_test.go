@@ -394,3 +394,128 @@ func TestEpicService_Issues(t *testing.T) {
 	}
 
 }
+
+func TestEpicService_Move(t *testing.T) {
+
+	testCases := []struct {
+		name               string
+		epicIDOrKey        string
+		issues             []string
+		mockFile           string
+		wantHTTPMethod     string
+		endpoint           string
+		context            context.Context
+		wantHTTPCodeReturn int
+		wantErr            bool
+	}{
+		{
+			name:               "MoveIssuesToEpicWhenTheParametersAreCorrect",
+			epicIDOrKey:        "EPIC-1",
+			issues:             []string{"STORY-1"},
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/agile/1.0/epic/EPIC-1/issue",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            false,
+		},
+		{
+			name:               "MoveIssuesToEpicWhenTheEpicKeyIsNotProvided",
+			epicIDOrKey:        "",
+			issues:             []string{"STORY-1"},
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/agile/1.0/epic/EPIC-1/issue",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+
+		{
+			name:               "MoveIssuesToEpicWhenTheContextIsNotProvided",
+			epicIDOrKey:        "EPIC-1",
+			issues:             []string{"STORY-1"},
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/agile/1.0/epic/EPIC-1/issue",
+			context:            nil,
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+
+		{
+			name:               "MoveIssuesToEpicWhenTheRequestMethodIsIncorrect",
+			epicIDOrKey:        "EPIC-1",
+			issues:             []string{"STORY-1"},
+			wantHTTPMethod:     http.MethodPut,
+			endpoint:           "/rest/agile/1.0/epic/EPIC-1/issue",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+
+		{
+			name:               "MoveIssuesToEpicWhenTheResponseStatusCodeIsIncorrect",
+			epicIDOrKey:        "EPIC-1",
+			issues:             []string{"STORY-1"},
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/agile/1.0/epic/EPIC-1/issue",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusBadRequest,
+			wantErr:            true,
+		},
+	}
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+			//Init a new HTTP mock server
+			mockOptions := mockServerOptions{
+				Endpoint:           testCase.endpoint,
+				MockFilePath:       testCase.mockFile,
+				MethodAccepted:     testCase.wantHTTPMethod,
+				ResponseCodeWanted: testCase.wantHTTPCodeReturn,
+			}
+
+			mockServer, err := startMockServer(&mockOptions)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			defer mockServer.Close()
+
+			//Init the library instance
+			mockClient, err := startMockClient(mockServer.URL)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			service := &EpicService{client: mockClient}
+			gotResponse, err := service.Move(testCase.context, testCase.epicIDOrKey, testCase.issues)
+
+			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+
+				assert.Error(t, err)
+
+				if gotResponse != nil {
+					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
+				}
+
+			} else {
+
+				assert.NoError(t, err)
+				assert.NotEqual(t, gotResponse, nil)
+
+				apiEndpoint, err := url.Parse(gotResponse.Endpoint)
+				if err != nil {
+					t.Fatal(err)
+				}
+
+				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, apiEndpoint.Path)
+				assert.Equal(t, testCase.endpoint, apiEndpoint.Path)
+
+				t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
+				assert.Equal(t, gotResponse.Code, testCase.wantHTTPCodeReturn)
+			}
+		})
+	}
+}

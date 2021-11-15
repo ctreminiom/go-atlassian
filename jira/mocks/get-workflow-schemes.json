@@ -1,0 +1,30 @@
+{
+  "maxResults": 50,
+  "startAt": 0,
+  "total": 2,
+  "isLast": true,
+  "values": [
+    {
+      "id": 101010,
+      "name": "Example workflow scheme",
+      "description": "The description of the example workflow scheme.",
+      "defaultWorkflow": "jira",
+      "issueTypeMappings": {
+        "10000": "scrum workflow",
+        "10001": "builds workflow"
+      },
+      "self": "https://your-domain.atlassian.net/rest/api/2/workflowscheme/101010"
+    },
+    {
+      "id": 101011,
+      "name": "Another example workflow scheme",
+      "description": "The description of the another example workflow scheme.",
+      "defaultWorkflow": "jira",
+      "issueTypeMappings": {
+        "10000": "scrum workflow",
+        "10001": "builds workflow"
+      },
+      "self": "https://your-domain.atlassian.net/rest/api/2/workflowscheme/101011"
+    }
+  ]
+}

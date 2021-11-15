@@ -1,4 +1,4 @@
-package v3
+package v2
 
 import (
 	"context"
@@ -10,10 +10,12 @@ import (
 	"strings"
 )
 
-type WorkflowSchemeService struct{ client *Client }
+type WorkflowSchemeService struct {
+	client *Client
+}
 
 // Gets returns a paginated list of all workflow schemes, not including draft workflow schemes.
-// Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-workflow-schemes/#api-rest-api-3-workflowscheme-get
+// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-workflow-schemes/#api-rest-api-2-workflowscheme-get
 func (w *WorkflowSchemeService) Gets(ctx context.Context, startAt, maxResults int) (result *models.WorkflowSchemePageScheme,
 	response *ResponseScheme, err error) {
 
@@ -21,7 +23,7 @@ func (w *WorkflowSchemeService) Gets(ctx context.Context, startAt, maxResults in
 	params.Add("startAt", strconv.Itoa(startAt))
 	params.Add("maxResults", strconv.Itoa(maxResults))
 
-	var endpoint = fmt.Sprintf("/rest/api/3/workflowscheme?%v", params.Encode())
+	endpoint := fmt.Sprintf("rest/api/2/workflowscheme?%v", params.Encode())
 
 	request, err := w.client.newRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
@@ -39,17 +41,16 @@ func (w *WorkflowSchemeService) Gets(ctx context.Context, startAt, maxResults in
 }
 
 // Create creates a workflow scheme.
-// Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-workflow-schemes/#api-rest-api-3-workflowscheme-post
+// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-workflow-schemes/#api-rest-api-2-workflowscheme-post
 func (w *WorkflowSchemeService) Create(ctx context.Context, payload *models.WorkflowSchemePayloadScheme) (result *models.WorkflowSchemeScheme,
 	response *ResponseScheme, err error) {
-
-	var endpoint = "/rest/api/3/workflowscheme"
 
 	payloadAsReader, err := transformStructToReader(payload)
 	if err != nil {
 		return nil, nil, err
 	}
 
+	endpoint := "/rest/api/2/workflowscheme"
 	request, err := w.client.newRequest(ctx, http.MethodPost, endpoint, payloadAsReader)
 	if err != nil {
 		return
@@ -67,20 +68,20 @@ func (w *WorkflowSchemeService) Create(ctx context.Context, payload *models.Work
 }
 
 // Get returns a workflow scheme.
-// Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-workflow-schemes/#api-rest-api-3-workflowscheme-id-get
-func (w *WorkflowSchemeService) Get(ctx context.Context, workflowSchemeID int, isExits bool) (result *models.WorkflowSchemeScheme,
+// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-workflow-schemes/#api-rest-api-2-workflowscheme-id-get
+func (w *WorkflowSchemeService) Get(ctx context.Context, workflowSchemeID int, returnDraftIfExists bool) (result *models.WorkflowSchemeScheme,
 	response *ResponseScheme, err error) {
 
-	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("/rest/api/3/workflowscheme/%v", workflowSchemeID))
-
-	query := url.Values{}
-	if isExits {
-		query.Add("returnDraftIfExists", "true")
+	params := url.Values{}
+	if returnDraftIfExists {
+		params.Add("returnDraftIfExists", "true")
 	}
 
-	if query.Encode() != "" {
-		endpoint.WriteString(fmt.Sprintf("?%v", query.Encode()))
+	var endpoint strings.Builder
+	endpoint.WriteString(fmt.Sprintf("rest/api/2/workflowscheme/%v", workflowSchemeID))
+
+	if params.Encode() != "" {
+		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
 	request, err := w.client.newRequest(ctx, http.MethodGet, endpoint.String(), nil)
@@ -98,21 +99,22 @@ func (w *WorkflowSchemeService) Get(ctx context.Context, workflowSchemeID int, i
 	return
 }
 
-// Update updates a workflow scheme, including the name, default workflow, issue type to project mappings,
-// and more. If the workflow scheme is active (that is, being used by at least one project),
-// then a draft workflow scheme is created or updated instead, provided that updateDraftIfNeeded is set to true.
-// Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-workflow-schemes/#api-rest-api-3-workflowscheme-id-put
-func (w *WorkflowSchemeService) Update(ctx context.Context, workflowSchemeID int, payload *models.WorkflowSchemePayloadScheme) (result *models.WorkflowSchemeScheme,
-	response *ResponseScheme, err error) {
-
-	var endpoint = fmt.Sprintf("/rest/api/3/workflowscheme/%v", workflowSchemeID)
+// Update updates a workflow scheme, including the name, default workflow, issue type to project mappings, and more.
+// If the workflow scheme is active (that is, being used by at least one project), then a draft workflow scheme is
+// created or updated instead, provided that updateDraftIfNeeded is set to true.
+// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-workflow-schemes/#api-rest-api-2-workflowscheme-id-put
+func (w *WorkflowSchemeService) Update(ctx context.Context, workflowSchemeID int, payload *models.WorkflowSchemePayloadScheme) (
+	result *models.WorkflowSchemeScheme, response *ResponseScheme, err error) {
 
 	payloadAsReader, err := transformStructToReader(payload)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	request, err := w.client.newRequest(ctx, http.MethodPut, endpoint, payloadAsReader)
+	var endpoint strings.Builder
+	endpoint.WriteString(fmt.Sprintf("rest/api/2/workflowscheme/%v", workflowSchemeID))
+
+	request, err := w.client.newRequest(ctx, http.MethodPut, endpoint.String(), payloadAsReader)
 	if err != nil {
 		return
 	}
@@ -130,10 +132,10 @@ func (w *WorkflowSchemeService) Update(ctx context.Context, workflowSchemeID int
 
 // Delete deletes a workflow scheme.
 // Note that a workflow scheme cannot be deleted if it is active (that is, being used by at least one project).
-// Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-workflow-schemes/#api-rest-api-3-workflowscheme-id-delete
+// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-workflow-schemes/#api-rest-api-2-workflowscheme-id-delete
 func (w *WorkflowSchemeService) Delete(ctx context.Context, workflowSchemeID int) (response *ResponseScheme, err error) {
 
-	var endpoint = fmt.Sprintf("/rest/api/3/workflowscheme/%v", workflowSchemeID)
+	endpoint := fmt.Sprintf("rest/api/2/workflowscheme/%v", workflowSchemeID)
 
 	request, err := w.client.newRequest(ctx, http.MethodDelete, endpoint, nil)
 	if err != nil {
@@ -151,7 +153,7 @@ func (w *WorkflowSchemeService) Delete(ctx context.Context, workflowSchemeID int
 // Associations returns a list of the workflow schemes associated with a list of projects.
 // Each returned workflow scheme includes a list of the requested projects associated with it.
 // Any team-managed or non-existent projects in the request are ignored and no errors are returned.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-workflow-scheme-project-associations/#api-rest-api-3-workflowscheme-project-get
+// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-workflow-scheme-project-associations/#api-rest-api-2-workflowscheme-project-get
 func (w *WorkflowSchemeService) Associations(ctx context.Context, projectIDs []int) (result *models.WorkflowSchemeAssociationPageScheme,
 	response *ResponseScheme, err error) {
 
@@ -164,7 +166,7 @@ func (w *WorkflowSchemeService) Associations(ctx context.Context, projectIDs []i
 		params.Add("projectId", strconv.Itoa(projectID))
 	}
 
-	endpoint := fmt.Sprintf("rest/api/3/workflowscheme/project?%v", params.Encode())
+	endpoint := fmt.Sprintf("rest/api/2/workflowscheme/project?%v", params.Encode())
 
 	request, err := w.client.newRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
@@ -183,7 +185,7 @@ func (w *WorkflowSchemeService) Associations(ctx context.Context, projectIDs []i
 
 // Assign assigns a workflow scheme to a project.
 // This operation is performed only when there are no issues in the project.
-// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-workflow-scheme-project-associations/#api-rest-api-3-workflowscheme-project-put
+// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-workflow-scheme-project-associations/#api-rest-api-2-workflowscheme-project-put
 func (w *WorkflowSchemeService) Assign(ctx context.Context, workflowSchemeID, projectID string) (response *ResponseScheme, err error) {
 
 	if len(projectID) == 0 {
@@ -203,7 +205,7 @@ func (w *WorkflowSchemeService) Assign(ctx context.Context, workflowSchemeID, pr
 	}
 
 	payloadAsReader, _ := transformStructToReader(&payload)
-	endpoint := "rest/api/3/workflowscheme/project"
+	endpoint := "rest/api/2/workflowscheme/project"
 
 	request, err := w.client.newRequest(ctx, http.MethodPut, endpoint, payloadAsReader)
 	if err != nil {

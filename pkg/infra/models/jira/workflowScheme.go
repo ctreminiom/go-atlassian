@@ -28,3 +28,12 @@ type WorkflowSchemeScheme struct {
 	Self                string      `json:"self,omitempty"`
 	UpdateDraftIfNeeded bool        `json:"updateDraftIfNeeded,omitempty"`
 }
+
+type WorkflowSchemeAssociationPageScheme struct {
+	Values []*WorkflowSchemeAssociationsScheme `json:"values,omitempty"`
+}
+
+type WorkflowSchemeAssociationsScheme struct {
+	ProjectIds     []string              `json:"projectIds,omitempty"`
+	WorkflowScheme *WorkflowSchemeScheme `json:"workflowScheme,omitempty"`
+}

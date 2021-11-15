@@ -12,6 +12,7 @@ import (
 
 type WorkflowService struct {
 	client *Client
+	Scheme *WorkflowSchemeService
 }
 
 func (w *WorkflowService) Create(ctx context.Context, payload *models.WorkflowPayloadScheme) (result *models.WorkflowCreatedResponseScheme,

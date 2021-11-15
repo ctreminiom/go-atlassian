@@ -44,4 +44,5 @@ var (
 	ErrNoAccountSliceError            = errors.New("jira: no account id's set")
 	ErrNoProjectKeySliceError         = errors.New("jira: no project key's set")
 	ErrNoWorkflowIDError              = errors.New("jira: no workflow id set")
+	ErrNoWorkflowSchemeIDError        = errors.New("jira: no workflow scheme id set")
 )

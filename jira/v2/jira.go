@@ -149,7 +149,11 @@ func New(httpClient *http.Client, site string) (client *Client, err error) {
 	}
 
 	client.MySelf = &MySelfService{client: client}
-	client.Workflow = &WorkflowService{client: client}
+	client.Workflow = &WorkflowService{
+		client: client,
+		Scheme: &WorkflowSchemeService{client: client},
+	}
+
 	return
 }
 

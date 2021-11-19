@@ -1954,6 +1954,11 @@ func TestIssueService_Get_V2(t *testing.T) {
 				t.Logf("Create Returned Key: %v", gotResult.Key)
 				t.Logf("Create Returned ID: %v", gotResult.ID)
 				t.Logf("Create Returned Self: %v", gotResult.Self)
+
+				for _, comment := range gotResult.Fields.Comment.Comments {
+					t.Log(comment.ID, comment.Body)
+				}
+
 				t.Log("----------------------- \n")
 			}
 		})

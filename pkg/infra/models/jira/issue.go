@@ -75,30 +75,30 @@ func (i *IssueScheme) ToMap() (result map[string]interface{}, err error) {
 }
 
 type IssueFieldsScheme struct {
-	IssueType                *IssueTypeScheme          `json:"issuetype,omitempty"`
-	IssueLinks               []*IssueLinkScheme        `json:"issuelinks,omitempty"`
-	Watcher                  *IssueWatcherScheme       `json:"watches,omitempty"`
-	Votes                    *IssueVoteScheme          `json:"votes,omitempty"`
-	Versions                 []*VersionScheme          `json:"versions,omitempty"`
-	Project                  *ProjectScheme            `json:"project,omitempty"`
-	FixVersions              []*VersionScheme          `json:"fixVersions,omitempty"`
-	Priority                 *PriorityScheme           `json:"priority,omitempty"`
-	Components               []*ComponentScheme        `json:"components,omitempty"`
-	Creator                  *UserScheme               `json:"creator,omitempty"`
-	Reporter                 *UserScheme               `json:"reporter,omitempty"`
-	Resolution               *ResolutionScheme         `json:"resolution,omitempty"`
-	Resolutiondate           string                    `json:"resolutiondate,omitempty"`
-	Workratio                int                       `json:"workratio,omitempty"`
-	StatusCategoryChangeDate string                    `json:"statuscategorychangedate,omitempty"`
-	LastViewed               string                    `json:"lastViewed,omitempty"`
-	Summary                  string                    `json:"summary,omitempty"`
-	Created                  string                    `json:"created,omitempty"`
-	Updated                  string                    `json:"updated,omitempty"`
-	Labels                   []string                  `json:"labels,omitempty"`
-	Status                   *StatusScheme             `json:"status,omitempty"`
-	Description              *CommentNodeScheme        `json:"description,omitempty"`
-	Comments                 []*IssueCommentPageScheme `json:"comments,omitempty"`
-	Subtasks                 []*IssueScheme            `json:"subtasks,omitempty"`
+	IssueType                *IssueTypeScheme        `json:"issuetype,omitempty"`
+	IssueLinks               []*IssueLinkScheme      `json:"issuelinks,omitempty"`
+	Watcher                  *IssueWatcherScheme     `json:"watches,omitempty"`
+	Votes                    *IssueVoteScheme        `json:"votes,omitempty"`
+	Versions                 []*VersionScheme        `json:"versions,omitempty"`
+	Project                  *ProjectScheme          `json:"project,omitempty"`
+	FixVersions              []*VersionScheme        `json:"fixVersions,omitempty"`
+	Priority                 *PriorityScheme         `json:"priority,omitempty"`
+	Components               []*ComponentScheme      `json:"components,omitempty"`
+	Creator                  *UserScheme             `json:"creator,omitempty"`
+	Reporter                 *UserScheme             `json:"reporter,omitempty"`
+	Resolution               *ResolutionScheme       `json:"resolution,omitempty"`
+	Resolutiondate           string                  `json:"resolutiondate,omitempty"`
+	Workratio                int                     `json:"workratio,omitempty"`
+	StatusCategoryChangeDate string                  `json:"statuscategorychangedate,omitempty"`
+	LastViewed               string                  `json:"lastViewed,omitempty"`
+	Summary                  string                  `json:"summary,omitempty"`
+	Created                  string                  `json:"created,omitempty"`
+	Updated                  string                  `json:"updated,omitempty"`
+	Labels                   []string                `json:"labels,omitempty"`
+	Status                   *StatusScheme           `json:"status,omitempty"`
+	Description              *CommentNodeScheme      `json:"description,omitempty"`
+	Comment                  *IssueCommentPageScheme `json:"comment,omitempty"`
+	Subtasks                 []*IssueScheme          `json:"subtasks,omitempty"`
 }
 
 type IssueTransitionScheme struct {

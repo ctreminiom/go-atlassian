@@ -3,7 +3,7 @@ package v2
 import (
 	"context"
 	"fmt"
-	models "github.com/ctreminiom/go-atlassian/pkg/infra/models/jira"
+	models2 "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -15,7 +15,7 @@ type IssueTypeScreenSchemeService struct{ client *Client }
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/types/screen-scheme#get-issue-type-screen-schemes
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-issue-type-screen-schemes/#api-rest-api-2-issuetypescreenscheme-get
 func (i *IssueTypeScreenSchemeService) Gets(ctx context.Context, ids []int, startAt, maxResults int) (
-	result *models.IssueTypeScreenSchemePageScheme, response *ResponseScheme, err error) {
+	result *models2.IssueTypeScreenSchemePageScheme, response *ResponseScheme, err error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -45,8 +45,8 @@ func (i *IssueTypeScreenSchemeService) Gets(ctx context.Context, ids []int, star
 // Create creates an issue type screen scheme.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/types/screen-scheme#create-issue-type-screen-scheme
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-issue-type-screen-schemes/#api-rest-api-2-issuetypescreenscheme-post
-func (i *IssueTypeScreenSchemeService) Create(ctx context.Context, payload *models.IssueTypeScreenSchemePayloadScheme) (
-	result *models.IssueTypeScreenScreenCreatedScheme, response *ResponseScheme, err error) {
+func (i *IssueTypeScreenSchemeService) Create(ctx context.Context, payload *models2.IssueTypeScreenSchemePayloadScheme) (
+	result *models2.IssueTypeScreenScreenCreatedScheme, response *ResponseScheme, err error) {
 
 	payloadAsReader, err := transformStructToReader(payload)
 	if err != nil {
@@ -79,11 +79,11 @@ func (i *IssueTypeScreenSchemeService) Assign(ctx context.Context, issueTypeScre
 	response *ResponseScheme, err error) {
 
 	if len(issueTypeScreenSchemeID) == 0 {
-		return nil, models.ErrNoIssueTypeScreenSchemeIDError
+		return nil, models2.ErrNoIssueTypeScreenSchemeIDError
 	}
 
 	if len(projectID) == 0 {
-		return nil, models.ErrNoProjectIDError
+		return nil, models2.ErrNoProjectIDError
 	}
 
 	payload := struct {
@@ -118,14 +118,14 @@ func (i *IssueTypeScreenSchemeService) Assign(ctx context.Context, issueTypeScre
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/types/screen-scheme#assign-issue-type-screen-scheme-to-project
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-issue-type-screen-schemes/#api-rest-api-2-issuetypescreenscheme-project-get
 func (i *IssueTypeScreenSchemeService) Projects(ctx context.Context, projectIDs []int, startAt, maxResults int) (
-	result *models.IssueTypeProjectScreenSchemePageScheme, response *ResponseScheme, err error) {
+	result *models2.IssueTypeProjectScreenSchemePageScheme, response *ResponseScheme, err error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
 	params.Add("maxResults", strconv.Itoa(maxResults))
 
 	if len(projectIDs) == 0 {
-		return nil, nil, models.ErrNoProjectsError
+		return nil, nil, models2.ErrNoProjectsError
 	}
 
 	for _, id := range projectIDs {
@@ -153,7 +153,7 @@ func (i *IssueTypeScreenSchemeService) Projects(ctx context.Context, projectIDs 
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/types/screen-scheme#get-issue-type-screen-scheme-items
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-issue-type-screen-schemes/#api-rest-api-2-issuetypescreenscheme-mapping-get
 func (i *IssueTypeScreenSchemeService) Mapping(ctx context.Context, issueTypeScreenSchemeIDs []int, startAt, maxResults int) (
-	result *models.IssueTypeScreenSchemeMappingScheme, response *ResponseScheme, err error) {
+	result *models2.IssueTypeScreenSchemeMappingScheme, response *ResponseScheme, err error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -225,7 +225,7 @@ func (i *IssueTypeScreenSchemeService) Delete(ctx context.Context, issueTypeScre
 	err error) {
 
 	if len(issueTypeScreenSchemeID) == 0 {
-		return nil, models.ErrNoIssueTypeScreenSchemeIDError
+		return nil, models2.ErrNoIssueTypeScreenSchemeIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/2/issuetypescreenscheme/%v", issueTypeScreenSchemeID)
@@ -249,10 +249,10 @@ func (i *IssueTypeScreenSchemeService) Delete(ctx context.Context, issueTypeScre
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/types/screen-scheme#append-mappings-to-issue-type-screen-scheme
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-issue-type-screen-schemes/#api-rest-api-2-issuetypescreenscheme-issuetypescreenschemeid-mapping-put
 func (i *IssueTypeScreenSchemeService) Append(ctx context.Context, issueTypeScreenSchemeID string,
-	payload *models.IssueTypeScreenSchemePayloadScheme) (response *ResponseScheme, err error) {
+	payload *models2.IssueTypeScreenSchemePayloadScheme) (response *ResponseScheme, err error) {
 
 	if len(issueTypeScreenSchemeID) == 0 {
-		return nil, models.ErrNoIssueTypeScreenSchemeIDError
+		return nil, models2.ErrNoIssueTypeScreenSchemeIDError
 	}
 
 	payloadAsReader, err := transformStructToReader(payload)
@@ -285,11 +285,11 @@ func (i *IssueTypeScreenSchemeService) UpdateDefault(ctx context.Context, issueT
 	response *ResponseScheme, err error) {
 
 	if len(issueTypeScreenSchemeID) == 0 {
-		return nil, models.ErrNoIssueTypeScreenSchemeIDError
+		return nil, models2.ErrNoIssueTypeScreenSchemeIDError
 	}
 
 	if len(screenSchemeID) == 0 {
-		return nil, models.ErrNoScreenSchemeIDError
+		return nil, models2.ErrNoScreenSchemeIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/2/issuetypescreenscheme/%v/mapping/default", issueTypeScreenSchemeID)
@@ -325,11 +325,11 @@ func (i *IssueTypeScreenSchemeService) Remove(ctx context.Context, issueTypeScre
 	response *ResponseScheme, err error) {
 
 	if len(issueTypeScreenSchemeID) == 0 {
-		return nil, models.ErrNoIssueTypeScreenSchemeIDError
+		return nil, models2.ErrNoIssueTypeScreenSchemeIDError
 	}
 
 	if len(issueTypeIDs) == 0 {
-		return nil, models.ErrNoIssueTypesError
+		return nil, models2.ErrNoIssueTypesError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/2/issuetypescreenscheme/%v/mapping/remove", issueTypeScreenSchemeID)
@@ -361,7 +361,7 @@ func (i *IssueTypeScreenSchemeService) Remove(ctx context.Context, issueTypeScre
 // Docs: N/A
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-issue-type-screen-schemes/#api-rest-api-2-issuetypescreenscheme-issuetypescreenschemeid-project-get
 func (i *IssueTypeScreenSchemeService) SchemesByProject(ctx context.Context, issueTypeScreenSchemeID int, startAt,
-	maxResults int) (result *models.IssueTypeScreenSchemeByProjectPageScheme, response *ResponseScheme, err error) {
+	maxResults int) (result *models2.IssueTypeScreenSchemeByProjectPageScheme, response *ResponseScheme, err error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))

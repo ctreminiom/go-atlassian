@@ -3,7 +3,7 @@ package v2
 import (
 	"context"
 	"fmt"
-	"github.com/ctreminiom/go-atlassian/pkg/infra/models/jira"
+	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -15,7 +15,7 @@ type DashboardService struct{ client *Client }
 // Gets returns a list of dashboards owned by or shared with the user. The list may be filtered to include only favorite or owned dashboards.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/dashboards#get-all-dashboards
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-dashboards/#api-rest-api-2-dashboard-get
-func (d *DashboardService) Gets(ctx context.Context, startAt, maxResults int, filter string) (result *jira.DashboardPageScheme,
+func (d *DashboardService) Gets(ctx context.Context, startAt, maxResults int, filter string) (result *models.DashboardPageScheme,
 	response *ResponseScheme, err error) {
 
 	params := url.Values{}
@@ -41,15 +41,15 @@ func (d *DashboardService) Gets(ctx context.Context, startAt, maxResults int, fi
 }
 
 type DashboardPayloadScheme struct {
-	Name             string                        `json:"name,omitempty"`
-	Description      string                        `json:"description,omitempty"`
-	SharePermissions []*jira.SharePermissionScheme `json:"sharePermissions,omitempty"`
+	Name             string                          `json:"name,omitempty"`
+	Description      string                          `json:"description,omitempty"`
+	SharePermissions []*models.SharePermissionScheme `json:"sharePermissions,omitempty"`
 }
 
 // Create creates a dashboard.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/dashboards#create-dashboard
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-dashboards/#api-rest-api-2-dashboard-post
-func (d *DashboardService) Create(ctx context.Context, payload *DashboardPayloadScheme) (result *jira.DashboardScheme,
+func (d *DashboardService) Create(ctx context.Context, payload *DashboardPayloadScheme) (result *models.DashboardScheme,
 	response *ResponseScheme, err error) {
 
 	var endpoint = "rest/api/2/dashboard"
@@ -86,7 +86,7 @@ type DashboardSearchOptionsScheme struct {
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/dashboards#search-for-dashboards
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-dashboards/#api-rest-api-2-dashboard-search-get
 func (d *DashboardService) Search(ctx context.Context, opts *DashboardSearchOptionsScheme, startAt, maxResults int) (
-	result *jira.DashboardSearchPageScheme, response *ResponseScheme, err error) {
+	result *models.DashboardSearchPageScheme, response *ResponseScheme, err error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -134,11 +134,11 @@ func (d *DashboardService) Search(ctx context.Context, opts *DashboardSearchOpti
 // Get returns a dashboard.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/dashboards#get-dashboard
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-dashboards/#api-rest-api-2-dashboard-id-get
-func (d *DashboardService) Get(ctx context.Context, dashboardID string) (result *jira.DashboardScheme,
+func (d *DashboardService) Get(ctx context.Context, dashboardID string) (result *models.DashboardScheme,
 	response *ResponseScheme, err error) {
 
 	if len(dashboardID) == 0 {
-		return nil, nil, jira.ErrNoDashboardIDError
+		return nil, nil, models.ErrNoDashboardIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/2/dashboard/%v", dashboardID)
@@ -164,7 +164,7 @@ func (d *DashboardService) Get(ctx context.Context, dashboardID string) (result 
 func (d *DashboardService) Delete(ctx context.Context, dashboardID string) (response *ResponseScheme, err error) {
 
 	if len(dashboardID) == 0 {
-		return nil, jira.ErrNoDashboardIDError
+		return nil, models.ErrNoDashboardIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/2/dashboard/%v", dashboardID)
@@ -187,10 +187,10 @@ func (d *DashboardService) Delete(ctx context.Context, dashboardID string) (resp
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/dashboards#copy-dashboard
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-dashboards/#api-rest-api-2-dashboard-id-copy-post
 func (d *DashboardService) Copy(ctx context.Context, dashboardID string, payload *DashboardPayloadScheme) (
-	result *jira.DashboardScheme, response *ResponseScheme, err error) {
+	result *models.DashboardScheme, response *ResponseScheme, err error) {
 
 	if len(dashboardID) == 0 {
-		return nil, nil, jira.ErrNoDashboardIDError
+		return nil, nil, models.ErrNoDashboardIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/2/dashboard/%v/copy", dashboardID)
@@ -219,11 +219,11 @@ func (d *DashboardService) Copy(ctx context.Context, dashboardID string, payload
 // Update updates a dashboard
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/dashboards#update-dashboard
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-dashboards/#api-rest-api-2-dashboard-id-put
-func (d *DashboardService) Update(ctx context.Context, dashboardID string, payload *DashboardPayloadScheme) (result *jira.DashboardScheme,
+func (d *DashboardService) Update(ctx context.Context, dashboardID string, payload *DashboardPayloadScheme) (result *models.DashboardScheme,
 	response *ResponseScheme, err error) {
 
 	if len(dashboardID) == 0 {
-		return nil, nil, jira.ErrNoDashboardIDError
+		return nil, nil, models.ErrNoDashboardIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/2/dashboard/%v", dashboardID)

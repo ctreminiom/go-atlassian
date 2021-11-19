@@ -3,7 +3,7 @@ package v2
 import (
 	"context"
 	"fmt"
-	models "github.com/ctreminiom/go-atlassian/pkg/infra/models/jira"
+	models2 "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/url"
@@ -551,8 +551,8 @@ func TestCommentService_Get(t *testing.T) {
 
 func TestCommentService_Add(t *testing.T) {
 
-	payloadMocked := &models.CommentPayloadSchemeV2{
-		Visibility: &models.CommentVisibilityScheme{
+	payloadMocked := &models2.CommentPayloadSchemeV2{
+		Visibility: &models2.CommentVisibilityScheme{
 			Type:  "role",
 			Value: "Administrators",
 		},
@@ -562,7 +562,7 @@ func TestCommentService_Add(t *testing.T) {
 	testCases := []struct {
 		name               string
 		issueKeyOrID       string
-		body               *models.CommentPayloadSchemeV2
+		body               *models2.CommentPayloadSchemeV2
 		expands            []string
 		mockFile           string
 		wantHTTPMethod     string

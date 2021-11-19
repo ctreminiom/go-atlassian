@@ -3,7 +3,7 @@ package v3
 import (
 	"context"
 	"fmt"
-	models "github.com/ctreminiom/go-atlassian/pkg/infra/models/jira"
+	models2 "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"net/http"
 	"net/url"
 )
@@ -13,10 +13,10 @@ type WatcherService struct{ client *Client }
 // Gets returns the watchers for an issue.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/watcher#get-issue-watchers
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-watchers/#api-rest-api-3-issue-issueidorkey-watchers-get
-func (w *WatcherService) Gets(ctx context.Context, issueKeyOrID string) (result *models.IssueWatcherScheme, response *ResponseScheme, err error) {
+func (w *WatcherService) Gets(ctx context.Context, issueKeyOrID string) (result *models2.IssueWatcherScheme, response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {
-		return nil, nil, models.ErrNoIssueTypeIDError
+		return nil, nil, models2.ErrNoIssueTypeIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/issue/%v/watchers", issueKeyOrID)
@@ -43,7 +43,7 @@ func (w *WatcherService) Gets(ctx context.Context, issueKeyOrID string) (result 
 func (w *WatcherService) Add(ctx context.Context, issueKeyOrID string) (response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {
-		return nil, models.ErrNoIssueTypeIDError
+		return nil, models2.ErrNoIssueTypeIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/issue/%v/watchers", issueKeyOrID)
@@ -70,11 +70,11 @@ func (w *WatcherService) Add(ctx context.Context, issueKeyOrID string) (response
 func (w *WatcherService) Delete(ctx context.Context, issueKeyOrID, accountID string) (response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {
-		return nil, models.ErrNoIssueTypeIDError
+		return nil, models2.ErrNoIssueTypeIDError
 	}
 
 	if len(accountID) == 0 {
-		return nil, models.ErrNoAccountIDError
+		return nil, models2.ErrNoAccountIDError
 	}
 
 	params := url.Values{}

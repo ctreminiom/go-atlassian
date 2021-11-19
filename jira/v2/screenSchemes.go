@@ -3,7 +3,7 @@ package v2
 import (
 	"context"
 	"fmt"
-	models "github.com/ctreminiom/go-atlassian/pkg/infra/models/jira"
+	models2 "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -16,7 +16,7 @@ type ScreenSchemeService struct{ client *Client }
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/screens/schemes#get-screen-schemes
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-screen-schemes/#api-rest-api-2-screenscheme-get
 func (s *ScreenSchemeService) Gets(ctx context.Context, screenSchemeIDs []int, startAt, maxResults int) (
-	result *models.ScreenSchemePageScheme, response *ResponseScheme, err error) {
+	result *models2.ScreenSchemePageScheme, response *ResponseScheme, err error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -46,7 +46,7 @@ func (s *ScreenSchemeService) Gets(ctx context.Context, screenSchemeIDs []int, s
 // Create creates a screen scheme.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/screens/schemes#create-screen-scheme
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-screen-schemes/#api-rest-api-2-screenscheme-post
-func (s *ScreenSchemeService) Create(ctx context.Context, payload *models.ScreenSchemePayloadScheme) (result *models.ScreenSchemeScheme,
+func (s *ScreenSchemeService) Create(ctx context.Context, payload *models2.ScreenSchemePayloadScheme) (result *models2.ScreenSchemeScheme,
 	response *ResponseScheme, err error) {
 
 	var endpoint = "rest/api/2/screenscheme"
@@ -75,11 +75,11 @@ func (s *ScreenSchemeService) Create(ctx context.Context, payload *models.Screen
 // Update updates a screen scheme. Only screen schemes used in classic projects can be updated.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/screens/schemes#update-screen-scheme
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-screen-schemes/#api-rest-api-2-screenscheme-screenschemeid-put
-func (s *ScreenSchemeService) Update(ctx context.Context, screenSchemeID string, payload *models.ScreenSchemePayloadScheme) (
+func (s *ScreenSchemeService) Update(ctx context.Context, screenSchemeID string, payload *models2.ScreenSchemePayloadScheme) (
 	response *ResponseScheme, err error) {
 
 	if len(screenSchemeID) == 0 {
-		return nil, models.ErrNoScreenSchemeIDError
+		return nil, models2.ErrNoScreenSchemeIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/2/screenscheme/%v", screenSchemeID)
@@ -113,7 +113,7 @@ func (s *ScreenSchemeService) Update(ctx context.Context, screenSchemeID string,
 func (s *ScreenSchemeService) Delete(ctx context.Context, screenSchemeID string) (response *ResponseScheme, err error) {
 
 	if len(screenSchemeID) == 0 {
-		return nil, models.ErrNoScreenSchemeIDError
+		return nil, models2.ErrNoScreenSchemeIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/2/screenscheme/%v", screenSchemeID)

@@ -3,7 +3,7 @@ package v2
 import (
 	"context"
 	"fmt"
-	models "github.com/ctreminiom/go-atlassian/pkg/infra/models/jira"
+	models2 "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"net/http"
 )
 
@@ -17,7 +17,7 @@ type IssueLinkService struct {
 // To use this resource the site must have Issue Linking enabled.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/link#create-issue-link
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-issue-links/#api-rest-api-2-issuelink-post
-func (i *IssueLinkService) Create(ctx context.Context, payload *models.LinkPayloadScheme) (response *ResponseScheme, err error) {
+func (i *IssueLinkService) Create(ctx context.Context, payload *models2.LinkPayloadScheme) (response *ResponseScheme, err error) {
 
 	var endpoint = "rest/api/2/issueLink"
 
@@ -45,11 +45,11 @@ func (i *IssueLinkService) Create(ctx context.Context, payload *models.LinkPaylo
 // Get returns an issue link.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/link#get-issue-link
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-issue-links/#api-rest-api-2-issuelink-linkid-get
-func (i *IssueLinkService) Get(ctx context.Context, linkID string) (result *models.IssueLinkScheme,
+func (i *IssueLinkService) Get(ctx context.Context, linkID string) (result *models2.IssueLinkScheme,
 	response *ResponseScheme, err error) {
 
 	if len(linkID) == 0 {
-		return nil, nil, models.ErrNoTypeIDError
+		return nil, nil, models2.ErrNoTypeIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/2/issueLink/%v", linkID)
@@ -71,11 +71,11 @@ func (i *IssueLinkService) Get(ctx context.Context, linkID string) (result *mode
 
 // Gets get the issue links ID's associated with a Jira Issue
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/link#get-issue-links
-func (i *IssueLinkService) Gets(ctx context.Context, issueKeyOrID string) (result *models.IssueLinkPageScheme,
+func (i *IssueLinkService) Gets(ctx context.Context, issueKeyOrID string) (result *models2.IssueLinkPageScheme,
 	response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {
-		return nil, nil, models.ErrNoIssueKeyOrIDError
+		return nil, nil, models2.ErrNoIssueKeyOrIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/2/issue/%v?fields=issuelinks", issueKeyOrID)
@@ -101,7 +101,7 @@ func (i *IssueLinkService) Gets(ctx context.Context, issueKeyOrID string) (resul
 func (i *IssueLinkService) Delete(ctx context.Context, linkID string) (response *ResponseScheme, err error) {
 
 	if len(linkID) == 0 {
-		return nil, models.ErrNoTypeIDError
+		return nil, models2.ErrNoTypeIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/2/issueLink/%v", linkID)

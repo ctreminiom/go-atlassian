@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	models "github.com/ctreminiom/go-atlassian/pkg/infra/models/jira"
+	models2 "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -23,7 +23,7 @@ func (p *ProjectRoleService) Gets(ctx context.Context, projectKeyOrID string) (r
 	err error) {
 
 	if len(projectKeyOrID) == 0 {
-		return nil, nil, models.ErrNoProjectIDError
+		return nil, nil, models2.ErrNoProjectIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/2/project/%v/role", projectKeyOrID)
@@ -77,11 +77,11 @@ func (p *ProjectRoleService) Gets(ctx context.Context, projectKeyOrID string) (r
 // Get returns a project role's details and actors associated with the project.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/projects/roles#get-project-role-for-project
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-project-roles/#api-rest-api-2-project-projectidorkey-role-id-get
-func (p *ProjectRoleService) Get(ctx context.Context, projectKeyOrID string, roleID int) (result *models.ProjectRoleScheme,
+func (p *ProjectRoleService) Get(ctx context.Context, projectKeyOrID string, roleID int) (result *models2.ProjectRoleScheme,
 	response *ResponseScheme, err error) {
 
 	if len(projectKeyOrID) == 0 {
-		return nil, nil, models.ErrNoProjectIDError
+		return nil, nil, models2.ErrNoProjectIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/2/project/%v/role/%v", projectKeyOrID, roleID)
@@ -104,11 +104,11 @@ func (p *ProjectRoleService) Get(ctx context.Context, projectKeyOrID string, rol
 // Details returns all project roles and the details for each role.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/projects/roles#get-project-role-details
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-project-roles/#api-rest-api-2-project-projectidorkey-roledetails-get
-func (p *ProjectRoleService) Details(ctx context.Context, projectKeyOrID string) (result []*models.ProjectRoleDetailScheme,
+func (p *ProjectRoleService) Details(ctx context.Context, projectKeyOrID string) (result []*models2.ProjectRoleDetailScheme,
 	response *ResponseScheme, err error) {
 
 	if len(projectKeyOrID) == 0 {
-		return nil, nil, models.ErrNoProjectIDError
+		return nil, nil, models2.ErrNoProjectIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/2/project/%v/roledetails", projectKeyOrID)
@@ -131,7 +131,7 @@ func (p *ProjectRoleService) Details(ctx context.Context, projectKeyOrID string)
 // Global gets a list of all project roles, complete with project role details and default actors.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/projects/roles#get-all-project-roles
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-project-roles/#api-rest-api-2-role-get
-func (p *ProjectRoleService) Global(ctx context.Context) (result []*models.ProjectRoleScheme, response *ResponseScheme, err error) {
+func (p *ProjectRoleService) Global(ctx context.Context) (result []*models2.ProjectRoleScheme, response *ResponseScheme, err error) {
 
 	var endpoint = "rest/api/2/role"
 
@@ -153,7 +153,7 @@ func (p *ProjectRoleService) Global(ctx context.Context) (result []*models.Proje
 // Create creates a new project role with no default actors.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/projects/roles#create-project-role
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-project-roles/#api-rest-api-2-role-post
-func (p *ProjectRoleService) Create(ctx context.Context, payload *models.ProjectRolePayloadScheme) (result *models.ProjectRoleScheme,
+func (p *ProjectRoleService) Create(ctx context.Context, payload *models2.ProjectRolePayloadScheme) (result *models2.ProjectRoleScheme,
 	response *ResponseScheme, err error) {
 
 	var endpoint = "rest/api/2/role"

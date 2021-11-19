@@ -3,7 +3,7 @@ package v3
 import (
 	"context"
 	"fmt"
-	models "github.com/ctreminiom/go-atlassian/pkg/infra/models/jira"
+	models2 "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"net/http"
 	"net/url"
 	"strings"
@@ -18,7 +18,7 @@ func (p *ProjectPermissionSchemeService) Get(ctx context.Context, projectKeyOrID
 	result *PermissionSchemeScheme, response *ResponseScheme, err error) {
 
 	if len(projectKeyOrID) == 0 {
-		return nil, nil, models.ErrNoProjectIDError
+		return nil, nil, models2.ErrNoProjectIDError
 	}
 
 	params := url.Values{}
@@ -56,7 +56,7 @@ func (p *ProjectPermissionSchemeService) Assign(ctx context.Context, projectKeyO
 	result *PermissionSchemeScheme, response *ResponseScheme, err error) {
 
 	if len(projectKeyOrID) == 0 {
-		return nil, nil, models.ErrNoProjectIDError
+		return nil, nil, models2.ErrNoProjectIDError
 	}
 
 	payload := struct {
@@ -89,10 +89,10 @@ func (p *ProjectPermissionSchemeService) Assign(ctx context.Context, projectKeyO
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/projects/permission-schemes#get-project-issue-security-levels
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-permission-schemes/#api-rest-api-3-project-projectkeyorid-securitylevel-get
 func (p *ProjectPermissionSchemeService) SecurityLevels(ctx context.Context, projectKeyOrID string) (
-	result *models.IssueSecurityLevelsScheme, response *ResponseScheme, err error) {
+	result *models2.IssueSecurityLevelsScheme, response *ResponseScheme, err error) {
 
 	if len(projectKeyOrID) == 0 {
-		return nil, nil, models.ErrNoProjectIDError
+		return nil, nil, models2.ErrNoProjectIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/project/%v/securitylevel", projectKeyOrID)

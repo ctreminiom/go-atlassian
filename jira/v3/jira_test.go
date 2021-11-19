@@ -3,7 +3,7 @@ package v3
 import (
 	"context"
 	"fmt"
-	"github.com/ctreminiom/go-atlassian/pkg/infra/models/jira"
+	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/stretchr/testify/assert"
 	"io"
 	"io/ioutil"
@@ -266,10 +266,10 @@ func Test_transformStructToReader(t *testing.T) {
 				structure: &DashboardPayloadScheme{
 					Name:        "Team Tracking #2 copy",
 					Description: "Description sample",
-					SharePermissions: []*jira.SharePermissionScheme{
+					SharePermissions: []*models.SharePermissionScheme{
 						{
 							Type: "project",
-							Project: &jira.ProjectScheme{
+							Project: &models.ProjectScheme{
 								ID: "10000",
 							},
 							Role:  nil,
@@ -277,7 +277,7 @@ func Test_transformStructToReader(t *testing.T) {
 						},
 						{
 							Type:  "group",
-							Group: &jira.GroupScheme{Name: "jira-administrators"},
+							Group: &models.GroupScheme{Name: "jira-administrators"},
 						},
 					},
 				},

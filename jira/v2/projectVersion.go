@@ -3,7 +3,7 @@ package v2
 import (
 	"context"
 	"fmt"
-	models "github.com/ctreminiom/go-atlassian/pkg/infra/models/jira"
+	models2 "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -16,10 +16,10 @@ type ProjectVersionService struct{ client *Client }
 // The response is not paginated.
 // Use Get project versions paginated if you want to get the versions in a project with pagination.
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-project-versions/#api-rest-api-2-project-projectidorkey-versions-get
-func (p *ProjectVersionService) Gets(ctx context.Context, projectKeyOrID string) (result []*models.VersionScheme, response *ResponseScheme, err error) {
+func (p *ProjectVersionService) Gets(ctx context.Context, projectKeyOrID string) (result []*models2.VersionScheme, response *ResponseScheme, err error) {
 
 	if len(projectKeyOrID) == 0 {
-		return nil, nil, models.ErrNoProjectIDError
+		return nil, nil, models2.ErrNoProjectIDError
 	}
 
 	endpoint := fmt.Sprintf("rest/api/2/project/%v/versions", projectKeyOrID)
@@ -42,11 +42,11 @@ func (p *ProjectVersionService) Gets(ctx context.Context, projectKeyOrID string)
 // Search returns a paginated list of all versions in a project.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/projects/versions#get-project-versions-paginated
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-project-versions/#api-rest-api-2-project-projectidorkey-version-get
-func (p *ProjectVersionService) Search(ctx context.Context, projectKeyOrID string, options *models.VersionGetsOptions, startAt,
-	maxResults int) (result *models.VersionPageScheme, response *ResponseScheme, err error) {
+func (p *ProjectVersionService) Search(ctx context.Context, projectKeyOrID string, options *models2.VersionGetsOptions, startAt,
+	maxResults int) (result *models2.VersionPageScheme, response *ResponseScheme, err error) {
 
 	if len(projectKeyOrID) == 0 {
-		return nil, nil, models.ErrNoProjectIDError
+		return nil, nil, models2.ErrNoProjectIDError
 	}
 
 	params := url.Values{}
@@ -93,8 +93,8 @@ func (p *ProjectVersionService) Search(ctx context.Context, projectKeyOrID strin
 // Create creates a project version.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/projects/versions#create-version
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-project-versions/#api-rest-api-2-version-post
-func (p *ProjectVersionService) Create(ctx context.Context, payload *models.VersionPayloadScheme) (
-	result *models.VersionScheme, response *ResponseScheme, err error) {
+func (p *ProjectVersionService) Create(ctx context.Context, payload *models2.VersionPayloadScheme) (
+	result *models2.VersionScheme, response *ResponseScheme, err error) {
 
 	var endpoint = "rest/api/2/version"
 
@@ -122,11 +122,11 @@ func (p *ProjectVersionService) Create(ctx context.Context, payload *models.Vers
 // Get returns a project version.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/projects/versions#get-version
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-project-versions/#api-rest-api-2-version-id-get
-func (p *ProjectVersionService) Get(ctx context.Context, versionID string, expand []string) (result *models.VersionScheme,
+func (p *ProjectVersionService) Get(ctx context.Context, versionID string, expand []string) (result *models2.VersionScheme,
 	response *ResponseScheme, err error) {
 
 	if len(versionID) == 0 {
-		return nil, nil, models.ErrNoVersionIDError
+		return nil, nil, models2.ErrNoVersionIDError
 	}
 
 	params := url.Values{}
@@ -159,11 +159,11 @@ func (p *ProjectVersionService) Get(ctx context.Context, versionID string, expan
 // Update updates a project version.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/projects/versions#update-version
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-project-versions/#api-rest-api-2-version-id-put
-func (p *ProjectVersionService) Update(ctx context.Context, versionID string, payload *models.VersionPayloadScheme) (
-	result *models.VersionScheme, response *ResponseScheme, err error) {
+func (p *ProjectVersionService) Update(ctx context.Context, versionID string, payload *models2.VersionPayloadScheme) (
+	result *models2.VersionScheme, response *ResponseScheme, err error) {
 
 	if len(versionID) == 0 {
-		return nil, nil, models.ErrNoVersionIDError
+		return nil, nil, models2.ErrNoVersionIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/2/version/%v", versionID)
@@ -197,11 +197,11 @@ func (p *ProjectVersionService) Merge(ctx context.Context, versionID, versionMov
 	err error) {
 
 	if len(versionID) == 0 {
-		return nil, models.ErrNoVersionIDError
+		return nil, models2.ErrNoVersionIDError
 	}
 
 	if len(versionMoveIssuesTo) == 0 {
-		return nil, models.ErrNoVersionIDError
+		return nil, models2.ErrNoVersionIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/2/version/%v/mergeto/%v", versionID, versionMoveIssuesTo)
@@ -227,11 +227,11 @@ func (p *ProjectVersionService) Merge(ctx context.Context, versionID, versionMov
 // 2. Number of issues where a version custom field is set to the version.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/projects/versions#get-versions-related-issues-count
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-project-versions/#api-rest-api-2-version-id-relatedissuecounts-get
-func (p *ProjectVersionService) RelatedIssueCounts(ctx context.Context, versionID string) (result *models.VersionIssueCountsScheme,
+func (p *ProjectVersionService) RelatedIssueCounts(ctx context.Context, versionID string) (result *models2.VersionIssueCountsScheme,
 	response *ResponseScheme, err error) {
 
 	if len(versionID) == 0 {
-		return nil, nil, models.ErrNoVersionIDError
+		return nil, nil, models2.ErrNoVersionIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/2/version/%v/relatedIssueCounts", versionID)
@@ -255,10 +255,10 @@ func (p *ProjectVersionService) RelatedIssueCounts(ctx context.Context, versionI
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/projects/versions#get-versions-unresolved-issues-count
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-project-versions/#api-rest-api-2-version-id-unresolvedissuecount-get
 func (p *ProjectVersionService) UnresolvedIssueCount(ctx context.Context, versionID string) (
-	result *models.VersionUnresolvedIssuesCountScheme, response *ResponseScheme, err error) {
+	result *models2.VersionUnresolvedIssuesCountScheme, response *ResponseScheme, err error) {
 
 	if len(versionID) == 0 {
-		return nil, nil, models.ErrNoVersionIDError
+		return nil, nil, models2.ErrNoVersionIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/2/version/%v/unresolvedIssueCount", versionID)

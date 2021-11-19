@@ -3,7 +3,7 @@ package agile
 import (
 	"context"
 	"fmt"
-	model "github.com/ctreminiom/go-atlassian/pkg/infra/models/agile"
+	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -15,10 +15,10 @@ type SprintService struct{ client *Client }
 // Get Returns the sprint for a given sprint ID.
 // The sprint will only be returned if the user can view the board that the sprint was created on,
 // or view at least one of the issues in the sprint.
-func (s *SprintService) Get(ctx context.Context, sprintID int) (result *model.SprintScheme, response *ResponseScheme, err error) {
+func (s *SprintService) Get(ctx context.Context, sprintID int) (result *models.SprintScheme, response *ResponseScheme, err error) {
 
 	if sprintID == 0 {
-		return nil, nil, model.ErrNoSprintIDError
+		return nil, nil, models.ErrNoSprintIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/agile/1.0/sprint/%v", sprintID)
@@ -41,7 +41,7 @@ func (s *SprintService) Get(ctx context.Context, sprintID int) (result *model.Sp
 // Create creates a future sprint.
 // Sprint name and origin board id are required.
 // Start date, end date, and goal are optional.
-func (s *SprintService) Create(ctx context.Context, payload *model.SprintPayloadScheme) (result *model.SprintScheme,
+func (s *SprintService) Create(ctx context.Context, payload *models.SprintPayloadScheme) (result *models.SprintScheme,
 	response *ResponseScheme, err error) {
 
 	payloadAsReader, err := transformStructToReader(payload)
@@ -70,11 +70,11 @@ func (s *SprintService) Create(ctx context.Context, payload *model.SprintPayload
 // Update Performs a full update of a sprint.
 // A full update means that the result will be exactly the same as the request body.
 // Any fields not present in the request JSON will be set to null.
-func (s *SprintService) Update(ctx context.Context, sprintID int, payload *model.SprintPayloadScheme) (result *model.SprintScheme,
+func (s *SprintService) Update(ctx context.Context, sprintID int, payload *models.SprintPayloadScheme) (result *models.SprintScheme,
 	response *ResponseScheme, err error) {
 
 	if sprintID == 0 {
-		return nil, nil, model.ErrNoSprintIDError
+		return nil, nil, models.ErrNoSprintIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/agile/1.0/sprint/%v", sprintID)
@@ -102,11 +102,11 @@ func (s *SprintService) Update(ctx context.Context, sprintID int, payload *model
 
 // Path Performs a partial update of a sprint.
 // A partial update means that fields not present in the request JSON will not be updated.
-func (s *SprintService) Path(ctx context.Context, sprintID int, payload *model.SprintPayloadScheme) (result *model.SprintScheme,
+func (s *SprintService) Path(ctx context.Context, sprintID int, payload *models.SprintPayloadScheme) (result *models.SprintScheme,
 	response *ResponseScheme, err error) {
 
 	if sprintID == 0 {
-		return nil, nil, model.ErrNoSprintIDError
+		return nil, nil, models.ErrNoSprintIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/agile/1.0/sprint/%v", sprintID)
@@ -137,7 +137,7 @@ func (s *SprintService) Path(ctx context.Context, sprintID int, payload *model.S
 func (s *SprintService) Delete(ctx context.Context, sprintID int) (response *ResponseScheme, err error) {
 
 	if sprintID == 0 {
-		return nil, model.ErrNoSprintIDError
+		return nil, models.ErrNoSprintIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/agile/1.0/sprint/%v", sprintID)
@@ -158,11 +158,11 @@ func (s *SprintService) Delete(ctx context.Context, sprintID int) (response *Res
 // Issues returns all issues in a sprint, for a given sprint ID.
 // This only includes issues that the user has permission to view.
 // By default, the returned issues are ordered by rank.
-func (s *SprintService) Issues(ctx context.Context, sprintID int, opts *model.IssueOptionScheme, startAt, maxResults int) (
-	result *model.SprintIssuePageScheme, response *ResponseScheme, err error) {
+func (s *SprintService) Issues(ctx context.Context, sprintID int, opts *models.IssueOptionScheme, startAt, maxResults int) (
+	result *models.SprintIssuePageScheme, response *ResponseScheme, err error) {
 
 	if sprintID == 0 {
-		return nil, nil, model.ErrNoSprintIDError
+		return nil, nil, models.ErrNoSprintIDError
 	}
 
 	params := url.Values{}
@@ -207,10 +207,10 @@ func (s *SprintService) Issues(ctx context.Context, sprintID int, opts *model.Is
 func (s *SprintService) Start(ctx context.Context, sprintID int) (response *ResponseScheme, err error) {
 
 	if sprintID == 0 {
-		return nil, model.ErrNoSprintIDError
+		return nil, models.ErrNoSprintIDError
 	}
 
-	payload := model.SprintPayloadScheme{
+	payload := models.SprintPayloadScheme{
 		State: "Active",
 	}
 
@@ -238,10 +238,10 @@ func (s *SprintService) Start(ctx context.Context, sprintID int) (response *Resp
 func (s *SprintService) Close(ctx context.Context, sprintID int) (response *ResponseScheme, err error) {
 
 	if sprintID == 0 {
-		return nil, model.ErrNoSprintIDError
+		return nil, models.ErrNoSprintIDError
 	}
 
-	payload := model.SprintPayloadScheme{
+	payload := models.SprintPayloadScheme{
 		State: "Closed",
 	}
 

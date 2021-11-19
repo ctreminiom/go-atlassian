@@ -3,7 +3,7 @@ package v3
 import (
 	"context"
 	"fmt"
-	models "github.com/ctreminiom/go-atlassian/pkg/infra/models/jira"
+	models2 "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -21,10 +21,10 @@ type FieldOptionContextParams struct {
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields/context/option#get-custom-field-options
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-custom-field-options/#api-rest-api-3-field-fieldid-context-contextid-option-get
 func (f *FieldOptionContextService) Gets(ctx context.Context, fieldID string, contextID int, opts *FieldOptionContextParams,
-	startAt, maxResults int) (result *models.CustomFieldContextOptionPageScheme, response *ResponseScheme, err error) {
+	startAt, maxResults int) (result *models2.CustomFieldContextOptionPageScheme, response *ResponseScheme, err error) {
 
 	if len(fieldID) == 0 {
-		return nil, nil, models.ErrNoFieldIDError
+		return nil, nil, models2.ErrNoFieldIDError
 	}
 
 	params := url.Values{}
@@ -62,11 +62,11 @@ func (f *FieldOptionContextService) Gets(ctx context.Context, fieldID string, co
 // cascading options for a custom select field. The options are added to a context of the field.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields/context/option#create-custom-field-options
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-custom-field-options/#api-rest-api-3-field-fieldid-context-contextid-option-post
-func (f *FieldOptionContextService) Create(ctx context.Context, fieldID string, contextID int, payload *models.FieldContextOptionListScheme) (
-	result *models.FieldContextOptionListScheme, response *ResponseScheme, err error) {
+func (f *FieldOptionContextService) Create(ctx context.Context, fieldID string, contextID int, payload *models2.FieldContextOptionListScheme) (
+	result *models2.FieldContextOptionListScheme, response *ResponseScheme, err error) {
 
 	if fieldID == "" {
-		return nil, nil, models.ErrNoFieldIDError
+		return nil, nil, models2.ErrNoFieldIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/field/%v/context/%v/option", fieldID, contextID)
@@ -98,10 +98,10 @@ func (f *FieldOptionContextService) Create(ctx context.Context, fieldID string, 
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields/context/option#update-custom-field-options
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-custom-field-options/#api-rest-api-3-field-fieldid-context-contextid-option-put
 func (f *FieldOptionContextService) Update(ctx context.Context, fieldID string, contextID int,
-	payload *models.FieldContextOptionListScheme) (result *models.FieldContextOptionListScheme, response *ResponseScheme, err error) {
+	payload *models2.FieldContextOptionListScheme) (result *models2.FieldContextOptionListScheme, response *ResponseScheme, err error) {
 
 	if fieldID == "" {
-		return nil, nil, models.ErrNoFieldIDError
+		return nil, nil, models2.ErrNoFieldIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/field/%v/context/%v/option", fieldID, contextID)
@@ -134,15 +134,15 @@ func (f *FieldOptionContextService) Delete(ctx context.Context, fieldID string, 
 	response *ResponseScheme, err error) {
 
 	if fieldID == "" {
-		return nil, models.ErrNoFieldIDError
+		return nil, models2.ErrNoFieldIDError
 	}
 
 	if contextID == 0 {
-		return nil, models.ErrNoFieldContextIDError
+		return nil, models2.ErrNoFieldContextIDError
 	}
 
 	if optionID == 0 {
-		return nil, models.ErrNoContextOptionIDError
+		return nil, models2.ErrNoContextOptionIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/field/%v/context/%v/option/%v", fieldID, contextID, optionID)
@@ -172,11 +172,11 @@ func (f *FieldOptionContextService) Order(ctx context.Context, fieldID string, c
 	response *ResponseScheme, err error) {
 
 	if fieldID == "" {
-		return nil, models.ErrNoFieldIDError
+		return nil, models2.ErrNoFieldIDError
 	}
 
 	if contextID == 0 {
-		return nil, models.ErrNoFieldContextIDError
+		return nil, models2.ErrNoFieldContextIDError
 	}
 
 	var endpoint = fmt.Sprintf("/rest/api/3/field/%v/context/%v/option/move", fieldID, contextID)

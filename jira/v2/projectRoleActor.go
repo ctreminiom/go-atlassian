@@ -3,7 +3,7 @@ package v2
 import (
 	"context"
 	"fmt"
-	models "github.com/ctreminiom/go-atlassian/pkg/infra/models/jira"
+	models2 "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"net/http"
 	"net/url"
 	"strings"
@@ -15,10 +15,10 @@ type ProjectRoleActorService struct{ client *Client }
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/projects/roles/actors#add-actors-to-project-role
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-project-role-actors/#api-rest-api-2-project-projectidorkey-role-id-post
 func (p *ProjectRoleActorService) Add(ctx context.Context, projectKeyOrID string, projectRoleID int, accountIDs, groups []string) (
-	result *models.ProjectRoleScheme, response *ResponseScheme, err error) {
+	result *models2.ProjectRoleScheme, response *ResponseScheme, err error) {
 
 	if len(projectKeyOrID) == 0 {
-		return nil, nil, models.ErrNoProjectIDError
+		return nil, nil, models2.ErrNoProjectIDError
 	}
 
 	payload := struct {
@@ -56,7 +56,7 @@ func (p *ProjectRoleActorService) Delete(ctx context.Context, projectKeyOrID str
 	response *ResponseScheme, err error) {
 
 	if len(projectKeyOrID) == 0 {
-		return nil, models.ErrNoProjectIDError
+		return nil, models2.ErrNoProjectIDError
 	}
 
 	params := url.Values{}

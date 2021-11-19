@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	models "github.com/ctreminiom/go-atlassian/pkg/infra/models/jira"
+	models2 "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/stretchr/testify/assert"
 	"log"
 	"net/http"
@@ -58,7 +58,7 @@ func TestCustomFields_Cascading(t *testing.T) {
 
 		t.Run(testCase.name, func(t *testing.T) {
 
-			var customFields = models.CustomFields{}
+			var customFields = models2.CustomFields{}
 			err := customFields.Cascading(testCase.customFieldID, testCase.parent, testCase.child)
 
 			if testCase.wantErr {
@@ -108,7 +108,7 @@ func TestCustomFields_CheckBox(t *testing.T) {
 
 		t.Run(testCase.name, func(t *testing.T) {
 
-			var customFields = models.CustomFields{}
+			var customFields = models2.CustomFields{}
 			err := customFields.CheckBox(testCase.customFieldID, testCase.options)
 
 			if testCase.wantErr {
@@ -165,7 +165,7 @@ func TestCustomFields_Date(t *testing.T) {
 
 		t.Run(testCase.name, func(t *testing.T) {
 
-			var customFields = models.CustomFields{}
+			var customFields = models2.CustomFields{}
 			err := customFields.Date(testCase.customFieldID, testCase.dateValue)
 
 			if testCase.wantErr {
@@ -222,7 +222,7 @@ func TestCustomFields_DateTime(t *testing.T) {
 
 		t.Run(testCase.name, func(t *testing.T) {
 
-			var customFields = models.CustomFields{}
+			var customFields = models2.CustomFields{}
 			err := customFields.DateTime(testCase.customFieldID, testCase.dateValue)
 
 			if testCase.wantErr {
@@ -272,7 +272,7 @@ func TestCustomFields_Group(t *testing.T) {
 
 		t.Run(testCase.name, func(t *testing.T) {
 
-			var customFields = models.CustomFields{}
+			var customFields = models2.CustomFields{}
 			err := customFields.Group(testCase.customFieldID, testCase.group)
 
 			if testCase.wantErr {
@@ -322,7 +322,7 @@ func TestCustomFields_Groups(t *testing.T) {
 
 		t.Run(testCase.name, func(t *testing.T) {
 
-			var customFields = models.CustomFields{}
+			var customFields = models2.CustomFields{}
 			err := customFields.Groups(testCase.customFieldID, testCase.groups)
 
 			if testCase.wantErr {
@@ -372,7 +372,7 @@ func TestCustomFields_MultiSelect(t *testing.T) {
 
 		t.Run(testCase.name, func(t *testing.T) {
 
-			var customFields = models.CustomFields{}
+			var customFields = models2.CustomFields{}
 			err := customFields.MultiSelect(testCase.customFieldID, testCase.options)
 
 			if testCase.wantErr {
@@ -415,7 +415,7 @@ func TestCustomFields_Number(t *testing.T) {
 
 		t.Run(testCase.name, func(t *testing.T) {
 
-			var customFields = models.CustomFields{}
+			var customFields = models2.CustomFields{}
 			err := customFields.Number(testCase.customFieldID, testCase.numberValue)
 
 			if testCase.wantErr {
@@ -465,7 +465,7 @@ func TestCustomFields_RadioButton(t *testing.T) {
 
 		t.Run(testCase.name, func(t *testing.T) {
 
-			var customFields = models.CustomFields{}
+			var customFields = models2.CustomFields{}
 			err := customFields.RadioButton(testCase.customFieldID, testCase.button)
 
 			if testCase.wantErr {
@@ -514,7 +514,7 @@ func TestCustomFields_Select(t *testing.T) {
 
 		t.Run(testCase.name, func(t *testing.T) {
 
-			var customFields = models.CustomFields{}
+			var customFields = models2.CustomFields{}
 			err := customFields.Select(testCase.customFieldID, testCase.option)
 
 			if testCase.wantErr {
@@ -563,7 +563,7 @@ func TestCustomFields_Text(t *testing.T) {
 
 		t.Run(testCase.name, func(t *testing.T) {
 
-			var customFields = models.CustomFields{}
+			var customFields = models2.CustomFields{}
 			err := customFields.Text(testCase.customFieldID, testCase.textValue)
 
 			if testCase.wantErr {
@@ -612,7 +612,7 @@ func TestCustomFields_URL(t *testing.T) {
 
 		t.Run(testCase.name, func(t *testing.T) {
 
-			var customFields = models.CustomFields{}
+			var customFields = models2.CustomFields{}
 			err := customFields.URL(testCase.customFieldID, testCase.url)
 
 			if testCase.wantErr {
@@ -661,7 +661,7 @@ func TestCustomFields_User(t *testing.T) {
 
 		t.Run(testCase.name, func(t *testing.T) {
 
-			var customFields = models.CustomFields{}
+			var customFields = models2.CustomFields{}
 			err := customFields.User(testCase.customFieldID, testCase.accountID)
 
 			if testCase.wantErr {
@@ -711,7 +711,7 @@ func TestCustomFields_Users(t *testing.T) {
 
 		t.Run(testCase.name, func(t *testing.T) {
 
-			var customFields = models.CustomFields{}
+			var customFields = models2.CustomFields{}
 			err := customFields.Users(testCase.customFieldID, testCase.accountIDs)
 
 			if testCase.wantErr {
@@ -729,7 +729,7 @@ func TestCustomFields_Users(t *testing.T) {
 
 func TestIssueScheme_MergeCustomFields(t *testing.T) {
 
-	var customFieldMockedWithFields = models.CustomFields{}
+	var customFieldMockedWithFields = models2.CustomFields{}
 
 	// Add a new custom field
 	err := customFieldMockedWithFields.Groups("customfield_10052", []string{"jira-administrators", "jira-administrators-system"})
@@ -742,21 +742,21 @@ func TestIssueScheme_MergeCustomFields(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	var customFieldMockedWithOutFields = models.CustomFields{}
+	var customFieldMockedWithOutFields = models2.CustomFields{}
 
 	testCases := []struct {
 		name         string
-		fields       *models.CustomFields
-		issuePayload *models.IssueScheme
+		fields       *models2.CustomFields
+		issuePayload *models2.IssueScheme
 		wantErr      bool
 	}{
 		{
 			name: "MergeCustomFieldsWhenTheCustomFieldsAreValue",
-			issuePayload: &models.IssueScheme{
-				Fields: &models.IssueFieldsScheme{
+			issuePayload: &models2.IssueScheme{
+				Fields: &models2.IssueFieldsScheme{
 					Summary:   "New summary test",
-					Project:   &models.ProjectScheme{ID: "10000"},
-					IssueType: &models.IssueTypeScheme{Name: "Story"},
+					Project:   &models2.ProjectScheme{ID: "10000"},
+					IssueType: &models2.IssueTypeScheme{Name: "Story"},
 				},
 			},
 			fields:  &customFieldMockedWithFields,
@@ -765,11 +765,11 @@ func TestIssueScheme_MergeCustomFields(t *testing.T) {
 
 		{
 			name: "MergeCustomFieldsWhenTheCustomFieldsAreEmpty",
-			issuePayload: &models.IssueScheme{
-				Fields: &models.IssueFieldsScheme{
+			issuePayload: &models2.IssueScheme{
+				Fields: &models2.IssueFieldsScheme{
 					Summary:   "New summary test",
-					Project:   &models.ProjectScheme{ID: "10000"},
-					IssueType: &models.IssueTypeScheme{Name: "Story"},
+					Project:   &models2.ProjectScheme{ID: "10000"},
+					IssueType: &models2.IssueTypeScheme{Name: "Story"},
 				},
 			},
 			fields:  &customFieldMockedWithOutFields,
@@ -778,11 +778,11 @@ func TestIssueScheme_MergeCustomFields(t *testing.T) {
 
 		{
 			name: "MergeCustomFieldsWhenTheCustomFieldsIsNil",
-			issuePayload: &models.IssueScheme{
-				Fields: &models.IssueFieldsScheme{
+			issuePayload: &models2.IssueScheme{
+				Fields: &models2.IssueFieldsScheme{
 					Summary:   "New summary test",
-					Project:   &models.ProjectScheme{ID: "10000"},
-					IssueType: &models.IssueTypeScheme{Name: "Story"},
+					Project:   &models2.ProjectScheme{ID: "10000"},
+					IssueType: &models2.IssueTypeScheme{Name: "Story"},
 				},
 			},
 			fields:  nil,
@@ -817,7 +817,7 @@ func TestIssueScheme_MergeCustomFields(t *testing.T) {
 
 func TestIssueScheme_MergeOperations(t *testing.T) {
 
-	var operations = &models.UpdateOperations{}
+	var operations = &models2.UpdateOperations{}
 
 	err := operations.AddArrayOperation("labels", map[string]string{
 		"triaged":   "remove",
@@ -830,21 +830,21 @@ func TestIssueScheme_MergeOperations(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	var operationsWithOutFields = &models.UpdateOperations{}
+	var operationsWithOutFields = &models2.UpdateOperations{}
 
 	testCases := []struct {
 		name         string
-		operations   *models.UpdateOperations
-		issuePayload *models.IssueScheme
+		operations   *models2.UpdateOperations
+		issuePayload *models2.IssueScheme
 		wantErr      bool
 	}{
 		{
 			name: "MergeOperationsWhenTheOperationsAreCorrect",
-			issuePayload: &models.IssueScheme{
-				Fields: &models.IssueFieldsScheme{
+			issuePayload: &models2.IssueScheme{
+				Fields: &models2.IssueFieldsScheme{
 					Summary:   "New summary test",
-					Project:   &models.ProjectScheme{ID: "10000"},
-					IssueType: &models.IssueTypeScheme{Name: "Story"},
+					Project:   &models2.ProjectScheme{ID: "10000"},
+					IssueType: &models2.IssueTypeScheme{Name: "Story"},
 				},
 			},
 			operations: operations,
@@ -852,11 +852,11 @@ func TestIssueScheme_MergeOperations(t *testing.T) {
 		},
 		{
 			name: "MergeOperationsWhenTheOperationsAreNil",
-			issuePayload: &models.IssueScheme{
-				Fields: &models.IssueFieldsScheme{
+			issuePayload: &models2.IssueScheme{
+				Fields: &models2.IssueFieldsScheme{
 					Summary:   "New summary test",
-					Project:   &models.ProjectScheme{ID: "10000"},
-					IssueType: &models.IssueTypeScheme{Name: "Story"},
+					Project:   &models2.ProjectScheme{ID: "10000"},
+					IssueType: &models2.IssueTypeScheme{Name: "Story"},
 				},
 			},
 			operations: nil,
@@ -864,11 +864,11 @@ func TestIssueScheme_MergeOperations(t *testing.T) {
 		},
 		{
 			name: "MergeOperationsWhenTheOperationsDoNotHaveFields",
-			issuePayload: &models.IssueScheme{
-				Fields: &models.IssueFieldsScheme{
+			issuePayload: &models2.IssueScheme{
+				Fields: &models2.IssueFieldsScheme{
 					Summary:   "New summary test",
-					Project:   &models.ProjectScheme{ID: "10000"},
-					IssueType: &models.IssueTypeScheme{Name: "Story"},
+					Project:   &models2.ProjectScheme{ID: "10000"},
+					IssueType: &models2.IssueTypeScheme{Name: "Story"},
 				},
 			},
 			operations: operationsWithOutFields,
@@ -1067,7 +1067,7 @@ func TestIssueService_Assign(t *testing.T) {
 
 func TestIssueService_Create(t *testing.T) {
 
-	var customFieldMockedWithFields = models.CustomFields{}
+	var customFieldMockedWithFields = models2.CustomFields{}
 
 	// Add a new custom field
 	err := customFieldMockedWithFields.Groups("customfield_10052", []string{"jira-administrators", "jira-administrators-system"})
@@ -1080,12 +1080,12 @@ func TestIssueService_Create(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	var customFieldMockedWithOutFields = models.CustomFields{}
+	var customFieldMockedWithOutFields = models2.CustomFields{}
 
 	testCases := []struct {
 		name               string
-		payload            *models.IssueScheme
-		customFields       *models.CustomFields
+		payload            *models2.IssueScheme
+		customFields       *models2.CustomFields
 		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string
@@ -1095,11 +1095,11 @@ func TestIssueService_Create(t *testing.T) {
 	}{
 		{
 			name: "CreateIssueWhenTheCustomFieldsAreProvided",
-			payload: &models.IssueScheme{
-				Fields: &models.IssueFieldsScheme{
+			payload: &models2.IssueScheme{
+				Fields: &models2.IssueFieldsScheme{
 					Summary:   "New summary test",
-					Project:   &models.ProjectScheme{ID: "10000"},
-					IssueType: &models.IssueTypeScheme{Name: "Story"},
+					Project:   &models2.ProjectScheme{ID: "10000"},
+					IssueType: &models2.IssueTypeScheme{Name: "Story"},
 				},
 			},
 			customFields:       &customFieldMockedWithFields,
@@ -1125,11 +1125,11 @@ func TestIssueService_Create(t *testing.T) {
 
 		{
 			name: "CreateIssueWhenTheCustomFieldsAreProvidedButNotContainsFields",
-			payload: &models.IssueScheme{
-				Fields: &models.IssueFieldsScheme{
+			payload: &models2.IssueScheme{
+				Fields: &models2.IssueFieldsScheme{
 					Summary:   "New summary test",
-					Project:   &models.ProjectScheme{ID: "10000"},
-					IssueType: &models.IssueTypeScheme{Name: "Story"},
+					Project:   &models2.ProjectScheme{ID: "10000"},
+					IssueType: &models2.IssueTypeScheme{Name: "Story"},
 				},
 			},
 			customFields:       &customFieldMockedWithFields,
@@ -1143,11 +1143,11 @@ func TestIssueService_Create(t *testing.T) {
 
 		{
 			name: "CreateIssueWhenTheCustomFieldsAreNotProvided",
-			payload: &models.IssueScheme{
-				Fields: &models.IssueFieldsScheme{
+			payload: &models2.IssueScheme{
+				Fields: &models2.IssueFieldsScheme{
 					Summary:   "New summary test",
-					Project:   &models.ProjectScheme{ID: "10000"},
-					IssueType: &models.IssueTypeScheme{Name: "Story"},
+					Project:   &models2.ProjectScheme{ID: "10000"},
+					IssueType: &models2.IssueTypeScheme{Name: "Story"},
 				},
 			},
 			customFields:       &customFieldMockedWithOutFields,
@@ -1161,11 +1161,11 @@ func TestIssueService_Create(t *testing.T) {
 
 		{
 			name: "CreateIssueWhenTheCustomFieldsStructIsNil",
-			payload: &models.IssueScheme{
-				Fields: &models.IssueFieldsScheme{
+			payload: &models2.IssueScheme{
+				Fields: &models2.IssueFieldsScheme{
 					Summary:   "New summary test",
-					Project:   &models.ProjectScheme{ID: "10000"},
-					IssueType: &models.IssueTypeScheme{Name: "Story"},
+					Project:   &models2.ProjectScheme{ID: "10000"},
+					IssueType: &models2.IssueTypeScheme{Name: "Story"},
 				},
 			},
 			customFields:       nil,
@@ -1179,11 +1179,11 @@ func TestIssueService_Create(t *testing.T) {
 
 		{
 			name: "CreateIssueWhenTheRequestMethodIsIncorrect",
-			payload: &models.IssueScheme{
-				Fields: &models.IssueFieldsScheme{
+			payload: &models2.IssueScheme{
+				Fields: &models2.IssueFieldsScheme{
 					Summary:   "New summary test",
-					Project:   &models.ProjectScheme{ID: "10000"},
-					IssueType: &models.IssueTypeScheme{Name: "Story"},
+					Project:   &models2.ProjectScheme{ID: "10000"},
+					IssueType: &models2.IssueTypeScheme{Name: "Story"},
 				},
 			},
 			customFields:       &customFieldMockedWithFields,
@@ -1197,11 +1197,11 @@ func TestIssueService_Create(t *testing.T) {
 
 		{
 			name: "CreateIssueWhenTheStatusCodeIsIncorrect",
-			payload: &models.IssueScheme{
-				Fields: &models.IssueFieldsScheme{
+			payload: &models2.IssueScheme{
+				Fields: &models2.IssueFieldsScheme{
 					Summary:   "New summary test",
-					Project:   &models.ProjectScheme{ID: "10000"},
-					IssueType: &models.IssueTypeScheme{Name: "Story"},
+					Project:   &models2.ProjectScheme{ID: "10000"},
+					IssueType: &models2.IssueTypeScheme{Name: "Story"},
 				},
 			},
 			customFields:       &customFieldMockedWithFields,
@@ -1214,11 +1214,11 @@ func TestIssueService_Create(t *testing.T) {
 		},
 		{
 			name: "CreateIssueWhenTheEndpointIsIncorrect",
-			payload: &models.IssueScheme{
-				Fields: &models.IssueFieldsScheme{
+			payload: &models2.IssueScheme{
+				Fields: &models2.IssueFieldsScheme{
 					Summary:   "New summary test",
-					Project:   &models.ProjectScheme{ID: "10000"},
-					IssueType: &models.IssueTypeScheme{Name: "Story"},
+					Project:   &models2.ProjectScheme{ID: "10000"},
+					IssueType: &models2.IssueTypeScheme{Name: "Story"},
 				},
 			},
 			customFields:       &customFieldMockedWithFields,
@@ -1231,11 +1231,11 @@ func TestIssueService_Create(t *testing.T) {
 		},
 		{
 			name: "CreateIssueWhenTheContextIsNil",
-			payload: &models.IssueScheme{
-				Fields: &models.IssueFieldsScheme{
+			payload: &models2.IssueScheme{
+				Fields: &models2.IssueFieldsScheme{
 					Summary:   "New summary test",
-					Project:   &models.ProjectScheme{ID: "10000"},
-					IssueType: &models.IssueTypeScheme{Name: "Story"},
+					Project:   &models2.ProjectScheme{ID: "10000"},
+					IssueType: &models2.IssueTypeScheme{Name: "Story"},
 				},
 			},
 			customFields:       &customFieldMockedWithFields,
@@ -1249,11 +1249,11 @@ func TestIssueService_Create(t *testing.T) {
 
 		{
 			name: "CreateIssueWhenTheContextIsNilAndCustomFieldsAreNotProvided",
-			payload: &models.IssueScheme{
-				Fields: &models.IssueFieldsScheme{
+			payload: &models2.IssueScheme{
+				Fields: &models2.IssueFieldsScheme{
 					Summary:   "New summary test",
-					Project:   &models.ProjectScheme{ID: "10000"},
-					IssueType: &models.IssueTypeScheme{Name: "Story"},
+					Project:   &models2.ProjectScheme{ID: "10000"},
+					IssueType: &models2.IssueTypeScheme{Name: "Story"},
 				},
 			},
 			customFields:       nil,
@@ -1267,11 +1267,11 @@ func TestIssueService_Create(t *testing.T) {
 
 		{
 			name: "CreateIssueWhenTheTheResponseBodyHasADifferentFormat",
-			payload: &models.IssueScheme{
-				Fields: &models.IssueFieldsScheme{
+			payload: &models2.IssueScheme{
+				Fields: &models2.IssueFieldsScheme{
 					Summary:   "New summary test",
-					Project:   &models.ProjectScheme{ID: "10000"},
-					IssueType: &models.IssueTypeScheme{Name: "Story"},
+					Project:   &models2.ProjectScheme{ID: "10000"},
+					IssueType: &models2.IssueTypeScheme{Name: "Story"},
 				},
 			},
 			customFields:       &customFieldMockedWithFields,
@@ -1284,11 +1284,11 @@ func TestIssueService_Create(t *testing.T) {
 		},
 		{
 			name: "CreateIssueWhenTheResponseBodyLengthIsZero",
-			payload: &models.IssueScheme{
-				Fields: &models.IssueFieldsScheme{
+			payload: &models2.IssueScheme{
+				Fields: &models2.IssueFieldsScheme{
 					Summary:   "New summary test",
-					Project:   &models.ProjectScheme{ID: "10000"},
-					IssueType: &models.IssueTypeScheme{Name: "Story"},
+					Project:   &models2.ProjectScheme{ID: "10000"},
+					IssueType: &models2.IssueTypeScheme{Name: "Story"},
 				},
 			},
 			customFields:       &customFieldMockedWithFields,
@@ -1374,7 +1374,7 @@ func TestIssueService_Create(t *testing.T) {
 
 func TestIssueService_Creates(t *testing.T) {
 
-	var customFieldMockedWithFields = models.CustomFields{}
+	var customFieldMockedWithFields = models2.CustomFields{}
 
 	// Add a new custom field
 	err := customFieldMockedWithFields.Groups("customfield_10052", []string{"jira-administrators", "jira-administrators-system"})
@@ -1387,58 +1387,58 @@ func TestIssueService_Creates(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	var customFieldMockedWithOutFields = models.CustomFields{}
+	var customFieldMockedWithOutFields = models2.CustomFields{}
 
 	var newIssuePayloadMockWithCustomFields00 = IssueBulkScheme{
-		Payload: &models.IssueScheme{
-			Fields: &models.IssueFieldsScheme{
+		Payload: &models2.IssueScheme{
+			Fields: &models2.IssueFieldsScheme{
 				Summary:   "New summary test",
-				Project:   &models.ProjectScheme{ID: "10000"},
-				IssueType: &models.IssueTypeScheme{Name: "Story"},
+				Project:   &models2.ProjectScheme{ID: "10000"},
+				IssueType: &models2.IssueTypeScheme{Name: "Story"},
 			},
 		},
 		CustomFields: &customFieldMockedWithFields,
 	}
 
 	var newIssuePayloadMockWithCustomFields01 = IssueBulkScheme{
-		Payload: &models.IssueScheme{
-			Fields: &models.IssueFieldsScheme{
+		Payload: &models2.IssueScheme{
+			Fields: &models2.IssueFieldsScheme{
 				Summary:   "New summary test",
-				Project:   &models.ProjectScheme{ID: "10000"},
-				IssueType: &models.IssueTypeScheme{Name: "Story"},
+				Project:   &models2.ProjectScheme{ID: "10000"},
+				IssueType: &models2.IssueTypeScheme{Name: "Story"},
 			},
 		},
 		CustomFields: &customFieldMockedWithFields,
 	}
 
 	var newIssuePayloadMockWithCustomFieldsValueAsNil = IssueBulkScheme{
-		Payload: &models.IssueScheme{
-			Fields: &models.IssueFieldsScheme{
+		Payload: &models2.IssueScheme{
+			Fields: &models2.IssueFieldsScheme{
 				Summary:   "New summary test",
-				Project:   &models.ProjectScheme{ID: "10000"},
-				IssueType: &models.IssueTypeScheme{Name: "Story"},
+				Project:   &models2.ProjectScheme{ID: "10000"},
+				IssueType: &models2.IssueTypeScheme{Name: "Story"},
 			},
 		},
 		CustomFields: nil,
 	}
 
 	var newIssuePayloadMockWithOutCustomFields00 = IssueBulkScheme{
-		Payload: &models.IssueScheme{
-			Fields: &models.IssueFieldsScheme{
+		Payload: &models2.IssueScheme{
+			Fields: &models2.IssueFieldsScheme{
 				Summary:   "New summary test",
-				Project:   &models.ProjectScheme{ID: "10000"},
-				IssueType: &models.IssueTypeScheme{Name: "Story"},
+				Project:   &models2.ProjectScheme{ID: "10000"},
+				IssueType: &models2.IssueTypeScheme{Name: "Story"},
 			},
 		},
 		CustomFields: &customFieldMockedWithOutFields,
 	}
 
 	var newIssuePayloadMockWithOutCustomFields01 = IssueBulkScheme{
-		Payload: &models.IssueScheme{
-			Fields: &models.IssueFieldsScheme{
+		Payload: &models2.IssueScheme{
+			Fields: &models2.IssueFieldsScheme{
 				Summary:   "New summary test",
-				Project:   &models.ProjectScheme{ID: "10000"},
-				IssueType: &models.IssueTypeScheme{Name: "Story"},
+				Project:   &models2.ProjectScheme{ID: "10000"},
+				IssueType: &models2.IssueTypeScheme{Name: "Story"},
 			},
 		},
 		CustomFields: &customFieldMockedWithOutFields,
@@ -2029,13 +2029,13 @@ func TestIssueService_Get(t *testing.T) {
 
 func TestIssueService_Move(t *testing.T) {
 
-	var payload = &models.IssueScheme{
-		Fields: &models.IssueFieldsScheme{
+	var payload = &models2.IssueScheme{
+		Fields: &models2.IssueFieldsScheme{
 			Summary: "New summary test test",
 		},
 	}
 
-	var customFieldMockedWithFields = models.CustomFields{}
+	var customFieldMockedWithFields = models2.CustomFields{}
 
 	// Add a new custom field
 	err := customFieldMockedWithFields.Groups("customfield_10052", []string{"jira-administrators", "jira-administrators-system"})
@@ -2048,9 +2048,9 @@ func TestIssueService_Move(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	var customFieldMockedWithOutFields = models.CustomFields{}
+	var customFieldMockedWithOutFields = models2.CustomFields{}
 
-	var operationMockedWithFields = models.UpdateOperations{}
+	var operationMockedWithFields = models2.UpdateOperations{}
 
 	err = operationMockedWithFields.AddArrayOperation("labels", map[string]string{
 		"triaged":   "remove",
@@ -2063,7 +2063,7 @@ func TestIssueService_Move(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	operationMockedWithOutFields := models.UpdateOperations{}
+	operationMockedWithOutFields := models2.UpdateOperations{}
 
 	testCases := []struct {
 		name               string
@@ -2373,7 +2373,7 @@ func TestIssueService_Notify(t *testing.T) {
 	testCases := []struct {
 		name               string
 		issueKeyOrID       string
-		options            *models.IssueNotifyOptionsScheme
+		options            *models2.IssueNotifyOptionsScheme
 		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string
@@ -2384,10 +2384,10 @@ func TestIssueService_Notify(t *testing.T) {
 		{
 			name:         "SendMailNotificationWhenTheOptionsAreCorrect",
 			issueKeyOrID: "DUMMY-3",
-			options: &models.IssueNotifyOptionsScheme{
+			options: &models2.IssueNotifyOptionsScheme{
 				HTMLBody: "The <strong>latest</strong> test results for this ticket are now available.",
 				Subject:  "SUBJECT EMAIL EXAMPLE",
-				To: &models.IssueNotifyToScheme{
+				To: &models2.IssueNotifyToScheme{
 					Reporter: true,
 					Assignee: true,
 				},
@@ -2402,10 +2402,10 @@ func TestIssueService_Notify(t *testing.T) {
 		{
 			name:         "SendMailNotificationWhenTheIssueKeyOrIDIsNotSet",
 			issueKeyOrID: "",
-			options: &models.IssueNotifyOptionsScheme{
+			options: &models2.IssueNotifyOptionsScheme{
 				HTMLBody: "The <strong>latest</strong> test results for this ticket are now available.",
 				Subject:  "SUBJECT EMAIL EXAMPLE",
-				To: &models.IssueNotifyToScheme{
+				To: &models2.IssueNotifyToScheme{
 					Reporter: true,
 					Assignee: true,
 				},
@@ -2431,10 +2431,10 @@ func TestIssueService_Notify(t *testing.T) {
 		{
 			name:         "SendMailNotificationWhenTheRequestMethodIsIncorrect",
 			issueKeyOrID: "DUMMY-3",
-			options: &models.IssueNotifyOptionsScheme{
+			options: &models2.IssueNotifyOptionsScheme{
 				HTMLBody: "The <strong>latest</strong> test results for this ticket are now available.",
 				Subject:  "SUBJECT EMAIL EXAMPLE",
-				To: &models.IssueNotifyToScheme{
+				To: &models2.IssueNotifyToScheme{
 					Reporter: true,
 					Assignee: true,
 				},
@@ -2449,10 +2449,10 @@ func TestIssueService_Notify(t *testing.T) {
 		{
 			name:         "SendMailNotificationWhenTheStatusCodeIsIncorrect",
 			issueKeyOrID: "DUMMY-3",
-			options: &models.IssueNotifyOptionsScheme{
+			options: &models2.IssueNotifyOptionsScheme{
 				HTMLBody: "The <strong>latest</strong> test results for this ticket are now available.",
 				Subject:  "SUBJECT EMAIL EXAMPLE",
-				To: &models.IssueNotifyToScheme{
+				To: &models2.IssueNotifyToScheme{
 					Reporter: true,
 					Assignee: true,
 				},
@@ -2467,10 +2467,10 @@ func TestIssueService_Notify(t *testing.T) {
 		{
 			name:         "SendMailNotificationWhenTheContextIsNil",
 			issueKeyOrID: "DUMMY-3",
-			options: &models.IssueNotifyOptionsScheme{
+			options: &models2.IssueNotifyOptionsScheme{
 				HTMLBody: "The <strong>latest</strong> test results for this ticket are now available.",
 				Subject:  "SUBJECT EMAIL EXAMPLE",
-				To: &models.IssueNotifyToScheme{
+				To: &models2.IssueNotifyToScheme{
 					Reporter: true,
 					Assignee: true,
 				},
@@ -2485,10 +2485,10 @@ func TestIssueService_Notify(t *testing.T) {
 		{
 			name:         "SendMailNotificationWhenTheEndpointIsIncorrect",
 			issueKeyOrID: "DUMMY-3",
-			options: &models.IssueNotifyOptionsScheme{
+			options: &models2.IssueNotifyOptionsScheme{
 				HTMLBody: "The <strong>latest</strong> test results for this ticket are now available.",
 				Subject:  "SUBJECT EMAIL EXAMPLE",
-				To: &models.IssueNotifyToScheme{
+				To: &models2.IssueNotifyToScheme{
 					Reporter: true,
 					Assignee: true,
 				},
@@ -2731,7 +2731,7 @@ func TestIssueService_Transitions(t *testing.T) {
 
 func TestIssueService_Update(t *testing.T) {
 
-	var customFieldMockedWithFields = models.CustomFields{}
+	var customFieldMockedWithFields = models2.CustomFields{}
 
 	// Add a new custom field
 	err := customFieldMockedWithFields.Groups("customfield_10052", []string{"jira-administrators", "jira-administrators-system"})
@@ -2744,9 +2744,9 @@ func TestIssueService_Update(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	var customFieldMockedWithOutFields = models.CustomFields{}
+	var customFieldMockedWithOutFields = models2.CustomFields{}
 
-	var operationMockedWithFields = models.UpdateOperations{}
+	var operationMockedWithFields = models2.UpdateOperations{}
 
 	err = operationMockedWithFields.AddArrayOperation("labels", map[string]string{
 		"triaged":   "remove",
@@ -2759,15 +2759,15 @@ func TestIssueService_Update(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	var operationMockedWithOutFields = models.UpdateOperations{}
+	var operationMockedWithOutFields = models2.UpdateOperations{}
 
 	testCases := []struct {
 		name               string
 		issueKeyOrID       string
 		notify             bool
-		payload            *models.IssueScheme
-		customFields       *models.CustomFields
-		operations         *models.UpdateOperations
+		payload            *models2.IssueScheme
+		customFields       *models2.CustomFields
+		operations         *models2.UpdateOperations
 		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string
@@ -2779,8 +2779,8 @@ func TestIssueService_Update(t *testing.T) {
 			name:         "EditIssueWhenTheCustomFieldsAndOperationAreProvided",
 			issueKeyOrID: "DUMMY-3",
 			notify:       true,
-			payload: &models.IssueScheme{
-				Fields: &models.IssueFieldsScheme{
+			payload: &models2.IssueScheme{
+				Fields: &models2.IssueFieldsScheme{
 					Summary: "New summary test",
 				},
 			},
@@ -2797,8 +2797,8 @@ func TestIssueService_Update(t *testing.T) {
 			name:         "EditIssueWhenTheCustomFieldsAreProvided",
 			issueKeyOrID: "DUMMY-3",
 			notify:       true,
-			payload: &models.IssueScheme{
-				Fields: &models.IssueFieldsScheme{
+			payload: &models2.IssueScheme{
+				Fields: &models2.IssueFieldsScheme{
 					Summary: "New summary test",
 				},
 			},
@@ -2815,8 +2815,8 @@ func TestIssueService_Update(t *testing.T) {
 			name:         "EditIssueWhenTheOperationsAreProvided",
 			issueKeyOrID: "DUMMY-3",
 			notify:       true,
-			payload: &models.IssueScheme{
-				Fields: &models.IssueFieldsScheme{
+			payload: &models2.IssueScheme{
+				Fields: &models2.IssueFieldsScheme{
 					Summary: "New summary test",
 				},
 			},
@@ -2833,8 +2833,8 @@ func TestIssueService_Update(t *testing.T) {
 			name:         "EditIssueWhenTheNotificationIsDisabled",
 			issueKeyOrID: "DUMMY-3",
 			notify:       false,
-			payload: &models.IssueScheme{
-				Fields: &models.IssueFieldsScheme{
+			payload: &models2.IssueScheme{
+				Fields: &models2.IssueFieldsScheme{
 					Summary: "New summary test",
 				},
 			},
@@ -2851,8 +2851,8 @@ func TestIssueService_Update(t *testing.T) {
 			name:         "EditIssueWhenTheIssueKeyOrIDIsNotProvided",
 			issueKeyOrID: "",
 			notify:       true,
-			payload: &models.IssueScheme{
-				Fields: &models.IssueFieldsScheme{
+			payload: &models2.IssueScheme{
+				Fields: &models2.IssueFieldsScheme{
 					Summary: "New summary test",
 				},
 			},
@@ -2869,8 +2869,8 @@ func TestIssueService_Update(t *testing.T) {
 			name:         "EditIssueWhenTheCustomFieldsAndOperationAreNotProvided",
 			issueKeyOrID: "DUMMY-3",
 			notify:       true,
-			payload: &models.IssueScheme{
-				Fields: &models.IssueFieldsScheme{
+			payload: &models2.IssueScheme{
+				Fields: &models2.IssueFieldsScheme{
 					Summary: "New summary test",
 				},
 			},
@@ -2901,8 +2901,8 @@ func TestIssueService_Update(t *testing.T) {
 			name:         "EditIssueWhenTheCustomFields,OperationAndContextAreNotProvided",
 			issueKeyOrID: "DUMMY-3",
 			notify:       true,
-			payload: &models.IssueScheme{
-				Fields: &models.IssueFieldsScheme{
+			payload: &models2.IssueScheme{
+				Fields: &models2.IssueFieldsScheme{
 					Summary: "New summary test",
 				},
 			},
@@ -2919,8 +2919,8 @@ func TestIssueService_Update(t *testing.T) {
 			name:         "EditIssueWhenTheCustomFieldsAndOperationAndProvideButNoTheContext",
 			issueKeyOrID: "DUMMY-3",
 			notify:       true,
-			payload: &models.IssueScheme{
-				Fields: &models.IssueFieldsScheme{
+			payload: &models2.IssueScheme{
+				Fields: &models2.IssueFieldsScheme{
 					Summary: "New summary test",
 				},
 			},
@@ -2937,8 +2937,8 @@ func TestIssueService_Update(t *testing.T) {
 			name:         "EditIssueWhenTheCustomFieldsAndOperationAreProvidedButCustomfieldDoNotHaveFields",
 			issueKeyOrID: "DUMMY-3",
 			notify:       true,
-			payload: &models.IssueScheme{
-				Fields: &models.IssueFieldsScheme{
+			payload: &models2.IssueScheme{
+				Fields: &models2.IssueFieldsScheme{
 					Summary: "New summary test",
 				},
 			},
@@ -2955,8 +2955,8 @@ func TestIssueService_Update(t *testing.T) {
 			name:         "EditIssueWhenTheCustomFieldsAndOperationAreProvidedButOperationsDoNotHaveFields",
 			issueKeyOrID: "DUMMY-3",
 			notify:       true,
-			payload: &models.IssueScheme{
-				Fields: &models.IssueFieldsScheme{
+			payload: &models2.IssueScheme{
+				Fields: &models2.IssueFieldsScheme{
 					Summary: "New summary test",
 				},
 			},
@@ -2973,8 +2973,8 @@ func TestIssueService_Update(t *testing.T) {
 			name:         "EditIssueWhenTheCustomFieldsAreProvidedButCustomfieldDoNotHaveFields",
 			issueKeyOrID: "DUMMY-3",
 			notify:       true,
-			payload: &models.IssueScheme{
-				Fields: &models.IssueFieldsScheme{
+			payload: &models2.IssueScheme{
+				Fields: &models2.IssueFieldsScheme{
 					Summary: "New summary test",
 				},
 			},
@@ -2991,8 +2991,8 @@ func TestIssueService_Update(t *testing.T) {
 			name:         "EditIssueWhenTheOperationsAreProvidedButOperationsDoNotHaveFields",
 			issueKeyOrID: "DUMMY-3",
 			notify:       true,
-			payload: &models.IssueScheme{
-				Fields: &models.IssueFieldsScheme{
+			payload: &models2.IssueScheme{
+				Fields: &models2.IssueFieldsScheme{
 					Summary: "New summary test",
 				},
 			},
@@ -3009,8 +3009,8 @@ func TestIssueService_Update(t *testing.T) {
 			name:         "EditIssueWhenTheCustomFieldsAreProvidedButContextIsNil",
 			issueKeyOrID: "DUMMY-3",
 			notify:       true,
-			payload: &models.IssueScheme{
-				Fields: &models.IssueFieldsScheme{
+			payload: &models2.IssueScheme{
+				Fields: &models2.IssueFieldsScheme{
 					Summary: "New summary test",
 				},
 			},
@@ -3027,8 +3027,8 @@ func TestIssueService_Update(t *testing.T) {
 			name:         "EditIssueWhenTheOperationsAreProvidedButContextIsNil",
 			issueKeyOrID: "DUMMY-3",
 			notify:       true,
-			payload: &models.IssueScheme{
-				Fields: &models.IssueFieldsScheme{
+			payload: &models2.IssueScheme{
+				Fields: &models2.IssueFieldsScheme{
 					Summary: "New summary test",
 				},
 			},
@@ -3045,8 +3045,8 @@ func TestIssueService_Update(t *testing.T) {
 			name:         "EditIssueWhenTheRequestMethodIsIncorrect",
 			issueKeyOrID: "DUMMY-3",
 			notify:       true,
-			payload: &models.IssueScheme{
-				Fields: &models.IssueFieldsScheme{
+			payload: &models2.IssueScheme{
+				Fields: &models2.IssueFieldsScheme{
 					Summary: "New summary test",
 				},
 			},
@@ -3063,8 +3063,8 @@ func TestIssueService_Update(t *testing.T) {
 			name:         "EditIssueWhenTheStatusCodeIsIncorrect",
 			issueKeyOrID: "DUMMY-3",
 			notify:       true,
-			payload: &models.IssueScheme{
-				Fields: &models.IssueFieldsScheme{
+			payload: &models2.IssueScheme{
+				Fields: &models2.IssueFieldsScheme{
 					Summary: "New summary test",
 				},
 			},
@@ -3081,8 +3081,8 @@ func TestIssueService_Update(t *testing.T) {
 			name:         "EditIssueWhenTheEndpointIsEmpty",
 			issueKeyOrID: "DUMMY-3",
 			notify:       true,
-			payload: &models.IssueScheme{
-				Fields: &models.IssueFieldsScheme{
+			payload: &models2.IssueScheme{
+				Fields: &models2.IssueFieldsScheme{
 					Summary: "New summary test",
 				},
 			},
@@ -3204,7 +3204,7 @@ func TestUpdateOperations_AddArrayOperation(t *testing.T) {
 
 		t.Run(testCase.name, func(t *testing.T) {
 
-			var operations = models.UpdateOperations{}
+			var operations = models2.UpdateOperations{}
 			err := operations.AddArrayOperation(testCase.customFieldID, testCase.mapping)
 
 			if testCase.wantErr {
@@ -3264,7 +3264,7 @@ func TestUpdateOperations_AddStringOperation(t *testing.T) {
 
 		t.Run(testCase.name, func(t *testing.T) {
 
-			var operations = models.UpdateOperations{}
+			var operations = models2.UpdateOperations{}
 			err := operations.AddStringOperation(testCase.customFieldID, testCase.operation, testCase.value)
 
 			if testCase.wantErr {
@@ -3284,16 +3284,16 @@ func TestIssueScheme_ToMap(t *testing.T) {
 
 	testCases := []struct {
 		name    string
-		issue   *models.IssueScheme
+		issue   *models2.IssueScheme
 		wantErr bool
 	}{
 		{
 			name: "ConvertIssueStructToMapWhenTheParametersAreCorrect",
-			issue: &models.IssueScheme{
-				Fields: &models.IssueFieldsScheme{
+			issue: &models2.IssueScheme{
+				Fields: &models2.IssueFieldsScheme{
 					Summary:   "New summary test",
-					Project:   &models.ProjectScheme{ID: "10000"},
-					IssueType: &models.IssueTypeScheme{Name: "Story"},
+					Project:   &models2.ProjectScheme{ID: "10000"},
+					IssueType: &models2.IssueTypeScheme{Name: "Story"},
 				},
 			},
 			wantErr: false,
@@ -3307,11 +3307,11 @@ func TestIssueScheme_ToMap(t *testing.T) {
 
 		{
 			name: "ConvertIssueStructToMapWhenTheParametersAreCorrect",
-			issue: &models.IssueScheme{
-				Fields: &models.IssueFieldsScheme{
+			issue: &models2.IssueScheme{
+				Fields: &models2.IssueFieldsScheme{
 					Summary:   "New summary test",
-					Project:   &models.ProjectScheme{ID: "10000"},
-					IssueType: &models.IssueTypeScheme{Name: "Story"},
+					Project:   &models2.ProjectScheme{ID: "10000"},
+					IssueType: &models2.IssueTypeScheme{Name: "Story"},
 				},
 			},
 			wantErr: false,

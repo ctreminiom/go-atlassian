@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	models "github.com/ctreminiom/go-atlassian/pkg/infra/models/jira"
+	models2 "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"io"
 	"mime/multipart"
 	"net/http"
@@ -15,7 +15,7 @@ type AttachmentService struct{ client *Client }
 // Settings returns the attachment settings, that is, whether attachments are enabled and the maximum attachment size allowed.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/attachments#get-jira-attachment-settings
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-attachments/#api-rest-api-3-attachment-meta-get
-func (a *AttachmentService) Settings(ctx context.Context) (result *models.AttachmentSettingScheme,
+func (a *AttachmentService) Settings(ctx context.Context) (result *models2.AttachmentSettingScheme,
 	response *ResponseScheme, err error) {
 
 	var endpoint = "rest/api/3/attachment/meta"
@@ -37,11 +37,11 @@ func (a *AttachmentService) Settings(ctx context.Context) (result *models.Attach
 // Metadata returns the metadata for an attachment. Note that the attachment itself is not returned.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/attachments#get-attachment-metadata
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-attachments/#api-rest-api-3-attachment-id-get
-func (a *AttachmentService) Metadata(ctx context.Context, attachmentID string) (result *models.AttachmentMetadataScheme,
+func (a *AttachmentService) Metadata(ctx context.Context, attachmentID string) (result *models2.AttachmentMetadataScheme,
 	response *ResponseScheme, err error) {
 
 	if len(attachmentID) == 0 {
-		return nil, nil, models.ErrNoAttachmentIDError
+		return nil, nil, models2.ErrNoAttachmentIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/attachment/%v", attachmentID)
@@ -66,7 +66,7 @@ func (a *AttachmentService) Metadata(ctx context.Context, attachmentID string) (
 func (a *AttachmentService) Delete(ctx context.Context, attachmentID string) (response *ResponseScheme, err error) {
 
 	if len(attachmentID) == 0 {
-		return nil, models.ErrNoAttachmentIDError
+		return nil, models2.ErrNoAttachmentIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/attachment/%v", attachmentID)
@@ -89,11 +89,11 @@ func (a *AttachmentService) Delete(ctx context.Context, attachmentID string) (re
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/attachments#get-all-metadata-for-an-expanded-attachment
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-attachments/#api-rest-api-3-attachment-id-expand-human-get
 // NOTE: Experimental Endpoint
-func (a *AttachmentService) Human(ctx context.Context, attachmentID string) (result *models.AttachmentHumanMetadataScheme,
+func (a *AttachmentService) Human(ctx context.Context, attachmentID string) (result *models2.AttachmentHumanMetadataScheme,
 	response *ResponseScheme, err error) {
 
 	if len(attachmentID) == 0 {
-		return nil, nil, models.ErrNoAttachmentIDError
+		return nil, nil, models2.ErrNoAttachmentIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/attachment/%v/expand/human", attachmentID)
@@ -115,18 +115,18 @@ func (a *AttachmentService) Human(ctx context.Context, attachmentID string) (res
 // Add adds one attachment to an issue. Attachments are posted as multipart/form-data (RFC 1867).
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/attachments#add-attachment
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-attachments/#api-rest-api-3-issue-issueidorkey-attachments-post
-func (a *AttachmentService) Add(ctx context.Context, issueKeyOrID, fileName string, file io.Reader) (result []*models.AttachmentScheme, response *ResponseScheme, err error) {
+func (a *AttachmentService) Add(ctx context.Context, issueKeyOrID, fileName string, file io.Reader) (result []*models2.AttachmentScheme, response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {
-		return nil, nil, models.ErrNoIssueKeyOrIDError
+		return nil, nil, models2.ErrNoIssueKeyOrIDError
 	}
 
 	if len(fileName) == 0 {
-		return nil, nil, models.ErrNoAttachmentNameError
+		return nil, nil, models2.ErrNoAttachmentNameError
 	}
 
 	if file == nil {
-		return nil, nil, models.ErrNoReaderError
+		return nil, nil, models2.ErrNoReaderError
 	}
 
 	var (

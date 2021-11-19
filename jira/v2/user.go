@@ -3,7 +3,7 @@ package v2
 import (
 	"context"
 	"fmt"
-	models "github.com/ctreminiom/go-atlassian/pkg/infra/models/jira"
+	models2 "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -18,11 +18,11 @@ type UserService struct {
 // Get returns a user
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/users#get-user
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-users/#api-rest-api-2-user-get
-func (u *UserService) Get(ctx context.Context, accountID string, expand []string) (result *models.UserScheme,
+func (u *UserService) Get(ctx context.Context, accountID string, expand []string) (result *models2.UserScheme,
 	response *ResponseScheme, err error) {
 
 	if len(accountID) == 0 {
-		return nil, nil, models.ErrNoAccountIDError
+		return nil, nil, models2.ErrNoAccountIDError
 	}
 
 	params := url.Values{}
@@ -66,7 +66,7 @@ func (u *UserService) Get(ctx context.Context, accountID string, expand []string
 // the user will need to be sent a reset password request from Jira.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/users#create-user
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-users/#api-rest-api-2-user-post
-func (u *UserService) Create(ctx context.Context, payload *models.UserPayloadScheme) (result *models.UserScheme, response *ResponseScheme,
+func (u *UserService) Create(ctx context.Context, payload *models2.UserPayloadScheme) (result *models2.UserScheme, response *ResponseScheme,
 	err error) {
 
 	var endpoint = "rest/api/2/user"
@@ -98,7 +98,7 @@ func (u *UserService) Create(ctx context.Context, payload *models.UserPayloadSch
 func (u *UserService) Delete(ctx context.Context, accountID string) (response *ResponseScheme, err error) {
 
 	if len(accountID) == 0 {
-		return nil, models.ErrNoAccountIDError
+		return nil, models2.ErrNoAccountIDError
 	}
 
 	params := url.Values{}
@@ -121,11 +121,11 @@ func (u *UserService) Delete(ctx context.Context, accountID string) (response *R
 // Find returns a paginated list of the users specified by one or more account IDs.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/users#bulk-get-users
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-users/#api-rest-api-2-user-bulk-get
-func (u *UserService) Find(ctx context.Context, accountIDs []string, startAt, maxResults int) (result *models.UserSearchPageScheme,
+func (u *UserService) Find(ctx context.Context, accountIDs []string, startAt, maxResults int) (result *models2.UserSearchPageScheme,
 	response *ResponseScheme, err error) {
 
 	if len(accountIDs) == 0 {
-		return nil, nil, models.ErrNoAccountSliceError
+		return nil, nil, models2.ErrNoAccountSliceError
 	}
 
 	params := url.Values{}
@@ -156,11 +156,11 @@ func (u *UserService) Find(ctx context.Context, accountIDs []string, startAt, ma
 // Groups returns the groups to which a user belongs.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/users#get-user-groups
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-users/#api-rest-api-2-user-groups-get
-func (u *UserService) Groups(ctx context.Context, accountID string) (result []*models.UserGroupScheme, response *ResponseScheme,
+func (u *UserService) Groups(ctx context.Context, accountID string) (result []*models2.UserGroupScheme, response *ResponseScheme,
 	err error) {
 
 	if len(accountID) == 0 {
-		return nil, nil, models.ErrNoAccountIDError
+		return nil, nil, models2.ErrNoAccountIDError
 	}
 
 	params := url.Values{}
@@ -186,7 +186,7 @@ func (u *UserService) Groups(ctx context.Context, accountID string) (result []*m
 // Gets returns a list of all (active and inactive) users.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/users#get-all-users
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-users/#api-rest-api-2-users-search-get
-func (u *UserService) Gets(ctx context.Context, startAt, maxResults int) (result []*models.UserScheme, response *ResponseScheme, err error) {
+func (u *UserService) Gets(ctx context.Context, startAt, maxResults int) (result []*models2.UserScheme, response *ResponseScheme, err error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))

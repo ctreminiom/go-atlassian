@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	models "github.com/ctreminiom/go-atlassian/pkg/infra/models/jira"
+	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"net/http"
 )
 

@@ -3,7 +3,7 @@ package v2
 import (
 	"context"
 	"fmt"
-	models "github.com/ctreminiom/go-atlassian/pkg/infra/models/jira"
+	models2 "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"net/http"
 )
 
@@ -12,7 +12,7 @@ type ProjectCategoryService struct{ client *Client }
 // Gets returns all project categories.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/projects/categories#get-all-project-categories
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-project-categories/#api-rest-api-2-projectcategory-get
-func (p *ProjectCategoryService) Gets(ctx context.Context) (result []*models.ProjectCategoryScheme, response *ResponseScheme,
+func (p *ProjectCategoryService) Gets(ctx context.Context) (result []*models2.ProjectCategoryScheme, response *ResponseScheme,
 	err error) {
 
 	var endpoint = "rest/api/2/projectCategory"
@@ -35,7 +35,7 @@ func (p *ProjectCategoryService) Gets(ctx context.Context) (result []*models.Pro
 // Get returns a project category.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/projects/categories#get-project-category-by-id
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-project-categories/#api-rest-api-2-projectcategory-id-get
-func (p *ProjectCategoryService) Get(ctx context.Context, projectCategoryID int) (result *models.ProjectCategoryScheme,
+func (p *ProjectCategoryService) Get(ctx context.Context, projectCategoryID int) (result *models2.ProjectCategoryScheme,
 	response *ResponseScheme, err error) {
 
 	var endpoint = fmt.Sprintf("rest/api/2/projectCategory/%v", projectCategoryID)
@@ -58,7 +58,7 @@ func (p *ProjectCategoryService) Get(ctx context.Context, projectCategoryID int)
 // Create creates a project category.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/projects/categories#create-project-category
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-project-categories/#api-rest-api-2-projectcategory-post
-func (p *ProjectCategoryService) Create(ctx context.Context, payload *models.ProjectCategoryPayloadScheme) (result *models.ProjectCategoryScheme,
+func (p *ProjectCategoryService) Create(ctx context.Context, payload *models2.ProjectCategoryPayloadScheme) (result *models2.ProjectCategoryScheme,
 	response *ResponseScheme, err error) {
 
 	var endpoint = "rest/api/2/projectCategory"
@@ -87,8 +87,8 @@ func (p *ProjectCategoryService) Create(ctx context.Context, payload *models.Pro
 // Update updates a project category.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/projects/categories#update-project-category
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-project-categories/#api-rest-api-2-projectcategory-id-put
-func (p *ProjectCategoryService) Update(ctx context.Context, projectCategoryID int, payload *models.ProjectCategoryPayloadScheme) (
-	result *models.ProjectCategoryScheme, response *ResponseScheme, err error) {
+func (p *ProjectCategoryService) Update(ctx context.Context, projectCategoryID int, payload *models2.ProjectCategoryPayloadScheme) (
+	result *models2.ProjectCategoryScheme, response *ResponseScheme, err error) {
 
 	var endpoint = fmt.Sprintf("rest/api/2/projectCategory/%v", projectCategoryID)
 

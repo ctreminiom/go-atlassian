@@ -3,7 +3,7 @@ package v3
 import (
 	"context"
 	"fmt"
-	models "github.com/ctreminiom/go-atlassian/pkg/infra/models/jira"
+	models2 "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -16,10 +16,10 @@ type IssueSearchService struct{ client *Client }
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/search#search-for-issues-using-jql-get
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-search/#api-rest-api-3-search-get
 func (s *IssueSearchService) Get(ctx context.Context, jql string, fields, expands []string, startAt, maxResults int,
-	validate string) (result *models.IssueSearchScheme, response *ResponseScheme, err error) {
+	validate string) (result *models2.IssueSearchScheme, response *ResponseScheme, err error) {
 
 	if len(jql) == 0 {
-		return nil, nil, models.ErrNoJQLError
+		return nil, nil, models2.ErrNoJQLError
 	}
 
 	params := url.Values{}
@@ -59,7 +59,7 @@ func (s *IssueSearchService) Get(ctx context.Context, jql string, fields, expand
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/search#search-for-issues-using-jql-post
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-search/#api-rest-api-3-search-post
 func (s *IssueSearchService) Post(ctx context.Context, jql string, fields, expands []string, startAt, maxResults int,
-	validate string) (result *models.IssueSearchScheme, response *ResponseScheme, err error) {
+	validate string) (result *models2.IssueSearchScheme, response *ResponseScheme, err error) {
 
 	payload := struct {
 		Expand        []string `json:"expand,omitempty"`

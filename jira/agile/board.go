@@ -3,7 +3,7 @@ package agile
 import (
 	"context"
 	"fmt"
-	model "github.com/ctreminiom/go-atlassian/pkg/infra/models/agile"
+	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -16,10 +16,10 @@ type BoardService struct{ client *Client }
 // This board will only be returned if the user has permission to view it.
 // Admins without the view permission will see the board as a private one,
 // so will see only a subset of the board's data (board location for instance).
-func (b *BoardService) Get(ctx context.Context, boardID int) (result *model.BoardScheme, response *ResponseScheme, err error) {
+func (b *BoardService) Get(ctx context.Context, boardID int) (result *models.BoardScheme, response *ResponseScheme, err error) {
 
 	if boardID == 0 {
-		return nil, nil, model.ErrNoBoardIDError
+		return nil, nil, models.ErrNoBoardIDError
 	}
 
 	var endpoint = fmt.Sprintf("/rest/agile/1.0/board/%v", boardID)
@@ -41,7 +41,7 @@ func (b *BoardService) Get(ctx context.Context, boardID int) (result *model.Boar
 
 // Create creates a new board. Board name, type and filter ID is required.
 // Docs: N/A
-func (b *BoardService) Create(ctx context.Context, payload *model.BoardPayloadScheme) (result *model.BoardScheme, response *ResponseScheme, err error) {
+func (b *BoardService) Create(ctx context.Context, payload *models.BoardPayloadScheme) (result *models.BoardScheme, response *ResponseScheme, err error) {
 
 	payloadAsReader, err := transformStructToReader(payload)
 	if err != nil {
@@ -70,10 +70,10 @@ func (b *BoardService) Create(ctx context.Context, payload *model.BoardPayloadSc
 // This method can be executed by users without a valid software license in order
 // to find which boards are using a particular filter.
 // Docs: N/A
-func (b *BoardService) Filter(ctx context.Context, filterID, startAt, maxResults int) (result *model.BoardPageScheme, response *ResponseScheme, err error) {
+func (b *BoardService) Filter(ctx context.Context, filterID, startAt, maxResults int) (result *models.BoardPageScheme, response *ResponseScheme, err error) {
 
 	if filterID == 0 {
-		return nil, nil, model.ErrNoFilterIDError
+		return nil, nil, models.ErrNoFilterIDError
 	}
 
 	params := url.Values{}
@@ -104,10 +104,10 @@ func (b *BoardService) Filter(ctx context.Context, filterID, startAt, maxResults
 // Issues returned from this resource include Agile fields, like sprint, closedSprints, flagged, and epic.
 // By default, the returned issues are ordered by rank.
 // Docs: N/A
-func (b *BoardService) Backlog(ctx context.Context, boardID, startAt, maxResults int, opts *model.IssueOptionScheme) (result *model.BoardIssuePageScheme, response *ResponseScheme, err error) {
+func (b *BoardService) Backlog(ctx context.Context, boardID, startAt, maxResults int, opts *models.IssueOptionScheme) (result *models.BoardIssuePageScheme, response *ResponseScheme, err error) {
 
 	if boardID == 0 {
-		return nil, nil, model.ErrNoBoardIDError
+		return nil, nil, models.ErrNoBoardIDError
 	}
 
 	params := url.Values{}
@@ -155,10 +155,10 @@ func (b *BoardService) Backlog(ctx context.Context, boardID, startAt, maxResults
 
 // Configuration get the board configuration.
 // Docs: N/A
-func (b *BoardService) Configuration(ctx context.Context, boardID int) (result *model.BoardConfigurationScheme, response *ResponseScheme, err error) {
+func (b *BoardService) Configuration(ctx context.Context, boardID int) (result *models.BoardConfigurationScheme, response *ResponseScheme, err error) {
 
 	if boardID == 0 {
-		return nil, nil, model.ErrNoBoardIDError
+		return nil, nil, models.ErrNoBoardIDError
 	}
 
 	var endpoint = fmt.Sprintf("/rest/agile/1.0/board/%v/configuration", boardID)
@@ -181,10 +181,10 @@ func (b *BoardService) Configuration(ctx context.Context, boardID int) (result *
 // Epics returns all epics from the board, for the given board ID.
 // This only includes epics that the user has permission to view.
 // Note, if the user does not have permission to view the board, no epics will be returned at all.
-func (b *BoardService) Epics(ctx context.Context, boardID, startAt, maxResults int, done bool) (result *model.BoardEpicPageScheme, response *ResponseScheme, err error) {
+func (b *BoardService) Epics(ctx context.Context, boardID, startAt, maxResults int, done bool) (result *models.BoardEpicPageScheme, response *ResponseScheme, err error) {
 
 	if boardID == 0 {
-		return nil, nil, model.ErrNoBoardIDError
+		return nil, nil, models.ErrNoBoardIDError
 	}
 
 	params := url.Values{}
@@ -219,11 +219,11 @@ func (b *BoardService) Epics(ctx context.Context, boardID, startAt, maxResults i
 // Issues returned from this resource include Agile fields, like sprint, closedSprints, flagged, and epic.
 // By default, the returned issues are ordered by rank.
 // Docs: N/A
-func (b *BoardService) IssuesWithoutEpic(ctx context.Context, boardID, startAt, maxResults int, opts *model.IssueOptionScheme) (
-	result *model.BoardIssuePageScheme, response *ResponseScheme, err error) {
+func (b *BoardService) IssuesWithoutEpic(ctx context.Context, boardID, startAt, maxResults int, opts *models.IssueOptionScheme) (
+	result *models.BoardIssuePageScheme, response *ResponseScheme, err error) {
 
 	if boardID == 0 {
-		return nil, nil, model.ErrNoBoardIDError
+		return nil, nil, models.ErrNoBoardIDError
 	}
 
 	params := url.Values{}
@@ -292,15 +292,15 @@ func (b *BoardService) IssuesWithoutEpic(ctx context.Context, boardID, startAt, 
 // This only includes issues that the user has permission to view.
 // Issues returned from this resource include Agile fields, like sprint, closedSprints,
 // flagged, and epic. By default, the returned issues are ordered by rank.
-func (b *BoardService) IssuesByEpic(ctx context.Context, boardID, epicID, startAt, maxResults int, opts *model.IssueOptionScheme) (
-	result *model.BoardIssuePageScheme, response *ResponseScheme, err error) {
+func (b *BoardService) IssuesByEpic(ctx context.Context, boardID, epicID, startAt, maxResults int, opts *models.IssueOptionScheme) (
+	result *models.BoardIssuePageScheme, response *ResponseScheme, err error) {
 
 	if boardID == 0 {
-		return nil, nil, model.ErrNoBoardIDError
+		return nil, nil, models.ErrNoBoardIDError
 	}
 
 	if epicID == 0 {
-		return nil, nil, model.ErrNoEpicIDError
+		return nil, nil, models.ErrNoEpicIDError
 	}
 
 	params := url.Values{}
@@ -352,11 +352,11 @@ func (b *BoardService) IssuesByEpic(ctx context.Context, boardID, epicID, startA
 // Issues returned from this resource include Agile fields, like sprint, closedSprints, flagged, and epic.
 // By default, the returned issues are ordered by rank.
 // Docs: N/A
-func (b *BoardService) Issues(ctx context.Context, boardID, startAt, maxResults int, opts *model.IssueOptionScheme) (
-	result *model.BoardIssuePageScheme, response *ResponseScheme, err error) {
+func (b *BoardService) Issues(ctx context.Context, boardID, startAt, maxResults int, opts *models.IssueOptionScheme) (
+	result *models.BoardIssuePageScheme, response *ResponseScheme, err error) {
 
 	if boardID == 0 {
-		return nil, nil, model.ErrNoBoardIDError
+		return nil, nil, models.ErrNoBoardIDError
 	}
 
 	params := url.Values{}
@@ -406,10 +406,10 @@ func (b *BoardService) Issues(ctx context.Context, boardID, startAt, maxResults 
 // At most 50 issues may be moved at once.
 // Docs: N/A
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/software/rest/api-group-board/#api-agile-1-0-board-boardid-issue-post
-func (b *BoardService) Move(ctx context.Context, boardID int, payload *model.BoardMovementPayloadScheme) (response *ResponseScheme, err error) {
+func (b *BoardService) Move(ctx context.Context, boardID int, payload *models.BoardMovementPayloadScheme) (response *ResponseScheme, err error) {
 
 	if boardID == 0 {
-		return nil, model.ErrNoBoardIDError
+		return nil, models.ErrNoBoardIDError
 	}
 
 	payloadAsReader, err := transformStructToReader(payload)
@@ -440,10 +440,10 @@ func (b *BoardService) Move(ctx context.Context, boardID int, payload *model.Boa
 // Docs: N/A
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/software/rest/api-group-board/#api-agile-1-0-board-boardid-project-get
 func (b *BoardService) Projects(ctx context.Context, boardID, startAt, maxResults int) (
-	result *model.BoardProjectPageScheme, response *ResponseScheme, err error) {
+	result *models.BoardProjectPageScheme, response *ResponseScheme, err error) {
 
 	if boardID == 0 {
-		return nil, nil, model.ErrNoBoardIDError
+		return nil, nil, models.ErrNoBoardIDError
 	}
 
 	params := url.Values{}
@@ -472,10 +472,10 @@ func (b *BoardService) Projects(ctx context.Context, boardID, startAt, maxResult
 // Docs: N/A
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/software/rest/api-group-board/#api-agile-1-0-board-boardid-sprint-get
 func (b *BoardService) Sprints(ctx context.Context, boardID, startAt, maxResults int, states []string) (
-	result *model.BoardSprintPageScheme, response *ResponseScheme, err error) {
+	result *models.BoardSprintPageScheme, response *ResponseScheme, err error) {
 
 	if boardID == 0 {
-		return nil, nil, model.ErrNoBoardIDError
+		return nil, nil, models.ErrNoBoardIDError
 	}
 
 	params := url.Values{}
@@ -504,14 +504,14 @@ func (b *BoardService) Sprints(ctx context.Context, boardID, startAt, maxResults
 // Issue returned from this resource contains additional fields like: sprint, closedSprints, flagged and epic.
 // Issues are returned ordered by rank. JQL order has higher priority than default rank.
 func (b *BoardService) IssuesBySprint(ctx context.Context, boardID, sprintID, startAt, maxResults int,
-	opts *model.IssueOptionScheme) (result *model.BoardIssuePageScheme, response *ResponseScheme, err error) {
+	opts *models.IssueOptionScheme) (result *models.BoardIssuePageScheme, response *ResponseScheme, err error) {
 
 	if boardID == 0 {
-		return nil, nil, model.ErrNoBoardIDError
+		return nil, nil, models.ErrNoBoardIDError
 	}
 
 	if sprintID == 0 {
-		return nil, nil, model.ErrNoSprintIDError
+		return nil, nil, models.ErrNoSprintIDError
 	}
 
 	params := url.Values{}
@@ -561,10 +561,10 @@ func (b *BoardService) IssuesBySprint(ctx context.Context, boardID, sprintID, st
 // Docs: N/A
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/software/rest/api-group-board/#api-agile-1-0-board-boardid-version-get
 func (b *BoardService) Versions(ctx context.Context, boardID, startAt, maxResults int, released bool) (
-	result *model.BoardVersionPageScheme, response *ResponseScheme, err error) {
+	result *models.BoardVersionPageScheme, response *ResponseScheme, err error) {
 
 	if boardID == 0 {
-		return nil, nil, model.ErrNoBoardIDError
+		return nil, nil, models.ErrNoBoardIDError
 	}
 
 	params := url.Values{}
@@ -600,7 +600,7 @@ func (b *BoardService) Versions(ctx context.Context, boardID, startAt, maxResult
 func (b *BoardService) Delete(ctx context.Context, boardID int) (response *ResponseScheme, err error) {
 
 	if boardID == 0 {
-		return nil, model.ErrNoBoardIDError
+		return nil, models.ErrNoBoardIDError
 	}
 
 	var endpoint = fmt.Sprintf("/rest/agile/1.0/board/%v", boardID)
@@ -620,7 +620,7 @@ func (b *BoardService) Delete(ctx context.Context, boardID int) (response *Respo
 
 // Gets returns all boards. This only includes boards that the user has permission to view.
 // Docs: https://developer.atlassian.com/cloud/jira/software/rest/api-group-other-operations/#api-agile-1-0-board-get
-func (b *BoardService) Gets(ctx context.Context, opts *model.GetBoardsOptions, startAt, maxResults int) (result *model.BoardPageScheme, response *ResponseScheme, err error) {
+func (b *BoardService) Gets(ctx context.Context, opts *models.GetBoardsOptions, startAt, maxResults int) (result *models.BoardPageScheme, response *ResponseScheme, err error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))

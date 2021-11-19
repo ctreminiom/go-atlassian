@@ -3,7 +3,7 @@ package v2
 import (
 	"context"
 	"fmt"
-	models "github.com/ctreminiom/go-atlassian/pkg/infra/models/jira"
+	models2 "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"net/http"
 	"net/url"
 	"strings"
@@ -42,23 +42,23 @@ func (p *PermissionSchemeService) Gets(ctx context.Context) (result *PermissionS
 }
 
 type PermissionSchemeScheme struct {
-	Expand      string                                `json:"expand,omitempty"`
-	ID          int                                   `json:"id,omitempty"`
-	Self        string                                `json:"self,omitempty"`
-	Name        string                                `json:"name,omitempty"`
-	Description string                                `json:"description,omitempty"`
-	Permissions []*models.PermissionGrantScheme       `json:"permissions,omitempty"`
-	Scope       *models.TeamManagedProjectScopeScheme `json:"scope,omitempty"`
+	Expand      string                                 `json:"expand,omitempty"`
+	ID          int                                    `json:"id,omitempty"`
+	Self        string                                 `json:"self,omitempty"`
+	Name        string                                 `json:"name,omitempty"`
+	Description string                                 `json:"description,omitempty"`
+	Permissions []*models2.PermissionGrantScheme       `json:"permissions,omitempty"`
+	Scope       *models2.TeamManagedProjectScopeScheme `json:"scope,omitempty"`
 }
 
 type PermissionScopeItemScheme struct {
-	Self            string                        `json:"self,omitempty"`
-	ID              string                        `json:"id,omitempty"`
-	Key             string                        `json:"key,omitempty"`
-	Name            string                        `json:"name,omitempty"`
-	ProjectTypeKey  string                        `json:"projectTypeKey,omitempty"`
-	Simplified      bool                          `json:"simplified,omitempty"`
-	ProjectCategory *models.ProjectCategoryScheme `json:"projectCategory,omitempty"`
+	Self            string                         `json:"self,omitempty"`
+	ID              string                         `json:"id,omitempty"`
+	Key             string                         `json:"key,omitempty"`
+	Name            string                         `json:"name,omitempty"`
+	ProjectTypeKey  string                         `json:"projectTypeKey,omitempty"`
+	Simplified      bool                           `json:"simplified,omitempty"`
+	ProjectCategory *models2.ProjectCategoryScheme `json:"projectCategory,omitempty"`
 }
 
 // Get returns a permission scheme.

@@ -3,7 +3,7 @@ package v2
 import (
 	"context"
 	"fmt"
-	models "github.com/ctreminiom/go-atlassian/pkg/infra/models/jira"
+	models2 "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/url"
@@ -12,17 +12,17 @@ import (
 
 func TestIssueLinkService_Create(t *testing.T) {
 
-	payloadMocked := &models.LinkPayloadScheme{
+	payloadMocked := &models2.LinkPayloadScheme{
 
-		Comment: &models.CommentPayloadScheme{
+		Comment: &models2.CommentPayloadScheme{
 
-			Body: &models.CommentNodeScheme{
+			Body: &models2.CommentNodeScheme{
 				Version: 1,
 				Type:    "doc",
-				Content: []*models.CommentNodeScheme{
+				Content: []*models2.CommentNodeScheme{
 					{
 						Type: "paragraph",
-						Content: []*models.CommentNodeScheme{
+						Content: []*models2.CommentNodeScheme{
 							{
 								Type: "text",
 								Text: "Carlos Test",
@@ -45,20 +45,20 @@ func TestIssueLinkService_Create(t *testing.T) {
 			},
 		},
 
-		InwardIssue: &models.LinkedIssueScheme{
+		InwardIssue: &models2.LinkedIssueScheme{
 			Key: "KP-1",
 		},
-		OutwardIssue: &models.LinkedIssueScheme{
+		OutwardIssue: &models2.LinkedIssueScheme{
 			Key: "KP-2",
 		},
-		Type: &models.LinkTypeScheme{
+		Type: &models2.LinkTypeScheme{
 			Name: "Duplicate",
 		},
 	}
 
 	testCases := []struct {
 		name               string
-		payload            *models.LinkPayloadScheme
+		payload            *models2.LinkPayloadScheme
 		wantHTTPMethod     string
 		endpoint           string
 		context            context.Context

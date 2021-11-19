@@ -3,7 +3,7 @@ package v2
 import (
 	"context"
 	"fmt"
-	models "github.com/ctreminiom/go-atlassian/pkg/infra/models/jira"
+	models2 "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -16,7 +16,7 @@ type WorkflowSchemeService struct {
 
 // Gets returns a paginated list of all workflow schemes, not including draft workflow schemes.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-workflow-schemes/#api-rest-api-2-workflowscheme-get
-func (w *WorkflowSchemeService) Gets(ctx context.Context, startAt, maxResults int) (result *models.WorkflowSchemePageScheme,
+func (w *WorkflowSchemeService) Gets(ctx context.Context, startAt, maxResults int) (result *models2.WorkflowSchemePageScheme,
 	response *ResponseScheme, err error) {
 
 	params := url.Values{}
@@ -42,7 +42,7 @@ func (w *WorkflowSchemeService) Gets(ctx context.Context, startAt, maxResults in
 
 // Create creates a workflow scheme.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-workflow-schemes/#api-rest-api-2-workflowscheme-post
-func (w *WorkflowSchemeService) Create(ctx context.Context, payload *models.WorkflowSchemePayloadScheme) (result *models.WorkflowSchemeScheme,
+func (w *WorkflowSchemeService) Create(ctx context.Context, payload *models2.WorkflowSchemePayloadScheme) (result *models2.WorkflowSchemeScheme,
 	response *ResponseScheme, err error) {
 
 	payloadAsReader, err := transformStructToReader(payload)
@@ -69,7 +69,7 @@ func (w *WorkflowSchemeService) Create(ctx context.Context, payload *models.Work
 
 // Get returns a workflow scheme.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-workflow-schemes/#api-rest-api-2-workflowscheme-id-get
-func (w *WorkflowSchemeService) Get(ctx context.Context, workflowSchemeID int, returnDraftIfExists bool) (result *models.WorkflowSchemeScheme,
+func (w *WorkflowSchemeService) Get(ctx context.Context, workflowSchemeID int, returnDraftIfExists bool) (result *models2.WorkflowSchemeScheme,
 	response *ResponseScheme, err error) {
 
 	params := url.Values{}
@@ -103,8 +103,8 @@ func (w *WorkflowSchemeService) Get(ctx context.Context, workflowSchemeID int, r
 // If the workflow scheme is active (that is, being used by at least one project), then a draft workflow scheme is
 // created or updated instead, provided that updateDraftIfNeeded is set to true.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-workflow-schemes/#api-rest-api-2-workflowscheme-id-put
-func (w *WorkflowSchemeService) Update(ctx context.Context, workflowSchemeID int, payload *models.WorkflowSchemePayloadScheme) (
-	result *models.WorkflowSchemeScheme, response *ResponseScheme, err error) {
+func (w *WorkflowSchemeService) Update(ctx context.Context, workflowSchemeID int, payload *models2.WorkflowSchemePayloadScheme) (
+	result *models2.WorkflowSchemeScheme, response *ResponseScheme, err error) {
 
 	payloadAsReader, err := transformStructToReader(payload)
 	if err != nil {
@@ -154,11 +154,11 @@ func (w *WorkflowSchemeService) Delete(ctx context.Context, workflowSchemeID int
 // Each returned workflow scheme includes a list of the requested projects associated with it.
 // Any team-managed or non-existent projects in the request are ignored and no errors are returned.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-workflow-scheme-project-associations/#api-rest-api-2-workflowscheme-project-get
-func (w *WorkflowSchemeService) Associations(ctx context.Context, projectIDs []int) (result *models.WorkflowSchemeAssociationPageScheme,
+func (w *WorkflowSchemeService) Associations(ctx context.Context, projectIDs []int) (result *models2.WorkflowSchemeAssociationPageScheme,
 	response *ResponseScheme, err error) {
 
 	if len(projectIDs) == 0 {
-		return nil, nil, models.ErrNoProjectsError
+		return nil, nil, models2.ErrNoProjectsError
 	}
 
 	params := url.Values{}
@@ -189,11 +189,11 @@ func (w *WorkflowSchemeService) Associations(ctx context.Context, projectIDs []i
 func (w *WorkflowSchemeService) Assign(ctx context.Context, workflowSchemeID, projectID string) (response *ResponseScheme, err error) {
 
 	if len(projectID) == 0 {
-		return nil, models.ErrNoProjectIDError
+		return nil, models2.ErrNoProjectIDError
 	}
 
 	if len(workflowSchemeID) == 0 {
-		return nil, models.ErrNoWorkflowSchemeIDError
+		return nil, models2.ErrNoWorkflowSchemeIDError
 	}
 
 	payload := struct {

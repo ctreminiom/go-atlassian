@@ -3,7 +3,7 @@ package agile
 import (
 	"context"
 	"fmt"
-	model "github.com/ctreminiom/go-atlassian/pkg/infra/models/agile"
+	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -15,10 +15,10 @@ type EpicService struct{ client *Client }
 // Get returns the epic for a given epic ID.
 // This epic will only be returned if the user has permission to view it.
 // Note: This operation does not work for epics in next-gen projects.
-func (e *EpicService) Get(ctx context.Context, epicIDOrKey string) (result *model.EpicScheme, response *ResponseScheme, err error) {
+func (e *EpicService) Get(ctx context.Context, epicIDOrKey string) (result *models.EpicScheme, response *ResponseScheme, err error) {
 
 	if len(epicIDOrKey) == 0 {
-		return nil, nil, model.ErrNoEpicIDError
+		return nil, nil, models.ErrNoEpicIDError
 	}
 
 	var endpoint = fmt.Sprintf("/rest/agile/1.0/epic/%v", epicIDOrKey)
@@ -46,10 +46,10 @@ func (e *EpicService) Get(ctx context.Context, epicIDOrKey string) (result *mode
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/software/rest/api-group-epic/#api-agile-1-0-epic-epicidorkey-issue-get
 // Library Docs: N/A
 func (e *EpicService) Issues(ctx context.Context, epicIDOrKey string, startAt, maxResults int,
-	opts *model.IssueOptionScheme) (result *model.BoardIssuePageScheme, response *ResponseScheme, err error) {
+	opts *models.IssueOptionScheme) (result *models.BoardIssuePageScheme, response *ResponseScheme, err error) {
 
 	if len(epicIDOrKey) == 0 {
-		return nil, nil, model.ErrNoEpicIDError
+		return nil, nil, models.ErrNoEpicIDError
 	}
 
 	params := url.Values{}
@@ -104,7 +104,7 @@ func (e *EpicService) Issues(ctx context.Context, epicIDOrKey string, startAt, m
 func (e *EpicService) Move(ctx context.Context, epicIDOrKey string, issues []string) (response *ResponseScheme, err error) {
 
 	if len(epicIDOrKey) == 0 {
-		return nil, model.ErrNoEpicIDError
+		return nil, models.ErrNoEpicIDError
 	}
 
 	payload := struct {

@@ -2,7 +2,7 @@ package v2
 
 import (
 	"context"
-	models "github.com/ctreminiom/go-atlassian/pkg/infra/models/jira"
+	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"net/http"
 )
 

@@ -3,7 +3,7 @@ package v3
 import (
 	"context"
 	"fmt"
-	models "github.com/ctreminiom/go-atlassian/pkg/infra/models/jira"
+	models2 "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/imdario/mergo"
 	"net/http"
 	"net/url"
@@ -30,7 +30,7 @@ type IssueService struct {
 // Create creates an issue or, where the option to create subtasks is enabled in Jira, a subtask.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues#create-issue
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-post
-func (i *IssueService) Create(ctx context.Context, payload *models.IssueScheme, customFields *models.CustomFields) (
+func (i *IssueService) Create(ctx context.Context, payload *models2.IssueScheme, customFields *models2.CustomFields) (
 	result *IssueResponseScheme, response *ResponseScheme, err error) {
 
 	var (
@@ -82,8 +82,8 @@ type IssueResponseScheme struct {
 }
 
 type IssueBulkScheme struct {
-	Payload      *models.IssueScheme
-	CustomFields *models.CustomFields
+	Payload      *models2.IssueScheme
+	CustomFields *models2.CustomFields
 }
 
 // Creates issues and, where the option to create subtasks is enabled in Jira, subtasks.
@@ -136,7 +136,7 @@ func (i *IssueService) Creates(ctx context.Context, payload []*IssueBulkScheme) 
 }
 
 type BulkIssueScheme struct {
-	Issues []*models.IssueScheme `json:"issues,omitempty"`
+	Issues []*models2.IssueScheme `json:"issues,omitempty"`
 }
 
 type IssueBulkResponseScheme struct {
@@ -160,11 +160,11 @@ type IssueBulkResponseErrorScheme struct {
 // Get returns the details for an issue.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues#get-issue
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-get
-func (i *IssueService) Get(ctx context.Context, issueKeyOrID string, fields []string, expand []string) (result *models.IssueScheme,
+func (i *IssueService) Get(ctx context.Context, issueKeyOrID string, fields []string, expand []string) (result *models2.IssueScheme,
 	response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {
-		return nil, nil, models.ErrNoIssueKeyOrIDError
+		return nil, nil, models2.ErrNoIssueKeyOrIDError
 	}
 
 	params := url.Values{}
@@ -200,11 +200,11 @@ func (i *IssueService) Get(ctx context.Context, issueKeyOrID string, fields []st
 // Update edits an issue.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues#edit-issue
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-put
-func (i *IssueService) Update(ctx context.Context, issueKeyOrID string, notify bool, payload *models.IssueScheme,
-	customFields *models.CustomFields, operations *models.UpdateOperations) (response *ResponseScheme, err error) {
+func (i *IssueService) Update(ctx context.Context, issueKeyOrID string, notify bool, payload *models2.IssueScheme,
+	customFields *models2.CustomFields, operations *models2.UpdateOperations) (response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {
-		return nil, models.ErrNoIssueKeyOrIDError
+		return nil, models2.ErrNoIssueKeyOrIDError
 	}
 
 	params := url.Values{}
@@ -307,7 +307,7 @@ func (i *IssueService) Update(ctx context.Context, issueKeyOrID string, notify b
 func (i *IssueService) Delete(ctx context.Context, issueKeyOrID string, deleteSubTasks bool) (response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {
-		return nil, models.ErrNoIssueKeyOrIDError
+		return nil, models2.ErrNoIssueKeyOrIDError
 	}
 
 	params := url.Values{}
@@ -345,7 +345,7 @@ func (i *IssueService) Delete(ctx context.Context, issueKeyOrID string, deleteSu
 func (i *IssueService) Assign(ctx context.Context, issueKeyOrID, accountID string) (response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {
-		return nil, models.ErrNoIssueKeyOrIDError
+		return nil, models2.ErrNoIssueKeyOrIDError
 	}
 
 	payload := struct {
@@ -377,11 +377,11 @@ func (i *IssueService) Assign(ctx context.Context, issueKeyOrID, accountID strin
 // Notify creates an email notification for an issue and adds it to the mail queue.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues#send-notification-for-issue
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-notify-post
-func (i *IssueService) Notify(ctx context.Context, issueKeyOrID string, options *models.IssueNotifyOptionsScheme) (
+func (i *IssueService) Notify(ctx context.Context, issueKeyOrID string, options *models2.IssueNotifyOptionsScheme) (
 	response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {
-		return nil, models.ErrNoIssueKeyOrIDError
+		return nil, models2.ErrNoIssueKeyOrIDError
 	}
 
 	payloadAsReader, err := transformStructToReader(options)
@@ -412,11 +412,11 @@ func (i *IssueService) Notify(ctx context.Context, issueKeyOrID string, options 
 // given its status, the response will return any empty transitions list.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues#get-transitions
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-transitions-get
-func (i *IssueService) Transitions(ctx context.Context, issueKeyOrID string) (result *models.IssueTransitionsScheme,
+func (i *IssueService) Transitions(ctx context.Context, issueKeyOrID string) (result *models2.IssueTransitionsScheme,
 	response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {
-		return nil, nil, models.ErrNoIssueKeyOrIDError
+		return nil, nil, models2.ErrNoIssueKeyOrIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/issue/%v/transitions", issueKeyOrID)
@@ -437,9 +437,9 @@ func (i *IssueService) Transitions(ctx context.Context, issueKeyOrID string) (re
 }
 
 type IssueMoveOptions struct {
-	Fields       *models.IssueScheme
-	CustomFields *models.CustomFields
-	Operations   *models.UpdateOperations
+	Fields       *models2.IssueScheme
+	CustomFields *models2.CustomFields
+	Operations   *models2.UpdateOperations
 }
 
 // Move performs an issue transition and
@@ -448,11 +448,11 @@ func (i *IssueService) Move(ctx context.Context, issueKeyOrID, transitionID stri
 	response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {
-		return nil, models.ErrNoIssueKeyOrIDError
+		return nil, models2.ErrNoIssueKeyOrIDError
 	}
 
 	if len(transitionID) == 0 {
-		return nil, models.ErrNoTransitionIDError
+		return nil, models2.ErrNoTransitionIDError
 	}
 
 	payloadWithTransition := make(map[string]interface{})

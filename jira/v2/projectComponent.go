@@ -3,7 +3,7 @@ package v2
 import (
 	"context"
 	"fmt"
-	models "github.com/ctreminiom/go-atlassian/pkg/infra/models/jira"
+	models2 "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"net/http"
 )
 
@@ -13,8 +13,8 @@ type ProjectComponentService struct{ client *Client }
 // Use components to provide containers for issues within a project.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/projects/components#create-component
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-project-components/#api-rest-api-2-component-post
-func (p *ProjectComponentService) Create(ctx context.Context, payload *models.ComponentPayloadScheme) (
-	result *models.ComponentScheme, response *ResponseScheme, err error) {
+func (p *ProjectComponentService) Create(ctx context.Context, payload *models2.ComponentPayloadScheme) (
+	result *models2.ComponentScheme, response *ResponseScheme, err error) {
 
 	var endpoint = "rest/api/2/component"
 
@@ -43,11 +43,11 @@ func (p *ProjectComponentService) Create(ctx context.Context, payload *models.Co
 // See the Get project components paginated resource if you want to get a full list of components with pagination.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/projects/components#get-project-components-paginated
 // Atlassian Docs; https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-project-components/#api-rest-api-2-project-projectidorkey-components-get
-func (p *ProjectComponentService) Gets(ctx context.Context, projectKeyOrID string) (result []*models.ComponentScheme,
+func (p *ProjectComponentService) Gets(ctx context.Context, projectKeyOrID string) (result []*models2.ComponentScheme,
 	response *ResponseScheme, err error) {
 
 	if len(projectKeyOrID) == 0 {
-		return nil, nil, models.ErrNoProjectIDError
+		return nil, nil, models2.ErrNoProjectIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/2/project/%v/components", projectKeyOrID)
@@ -70,11 +70,11 @@ func (p *ProjectComponentService) Gets(ctx context.Context, projectKeyOrID strin
 // Count returns the counts of issues assigned to the component.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/projects/components#get-component-issues-count
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-project-components/#api-rest-api-2-component-id-relatedissuecounts-get
-func (p *ProjectComponentService) Count(ctx context.Context, componentID string) (result *models.ComponentCountScheme,
+func (p *ProjectComponentService) Count(ctx context.Context, componentID string) (result *models2.ComponentCountScheme,
 	response *ResponseScheme, err error) {
 
 	if len(componentID) == 0 {
-		return nil, nil, models.ErrNoComponentIDError
+		return nil, nil, models2.ErrNoComponentIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/2/component/%v/relatedIssueCounts", componentID)
@@ -100,7 +100,7 @@ func (p *ProjectComponentService) Count(ctx context.Context, componentID string)
 func (p *ProjectComponentService) Delete(ctx context.Context, componentID string) (response *ResponseScheme, err error) {
 
 	if len(componentID) == 0 {
-		return nil, models.ErrNoComponentIDError
+		return nil, models2.ErrNoComponentIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/2/component/%v", componentID)
@@ -123,11 +123,11 @@ func (p *ProjectComponentService) Delete(ctx context.Context, componentID string
 // If leadAccountId is an empty string ("") the component lead is removed.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/projects/components#update-component
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-project-components/#api-rest-api-2-component-id-put
-func (p *ProjectComponentService) Update(ctx context.Context, componentID string, payload *models.ComponentPayloadScheme) (
-	result *models.ComponentScheme, response *ResponseScheme, err error) {
+func (p *ProjectComponentService) Update(ctx context.Context, componentID string, payload *models2.ComponentPayloadScheme) (
+	result *models2.ComponentScheme, response *ResponseScheme, err error) {
 
 	if len(componentID) == 0 {
-		return nil, nil, models.ErrNoComponentIDError
+		return nil, nil, models2.ErrNoComponentIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/2/component/%v", componentID)
@@ -156,11 +156,11 @@ func (p *ProjectComponentService) Update(ctx context.Context, componentID string
 // Get returns a component.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/projects/components#get-component
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-project-components/#api-rest-api-2-component-id-get
-func (p *ProjectComponentService) Get(ctx context.Context, componentID string) (result *models.ComponentScheme,
+func (p *ProjectComponentService) Get(ctx context.Context, componentID string) (result *models2.ComponentScheme,
 	response *ResponseScheme, err error) {
 
 	if len(componentID) == 0 {
-		return nil, nil, models.ErrNoComponentIDError
+		return nil, nil, models2.ErrNoComponentIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/2/component/%v", componentID)

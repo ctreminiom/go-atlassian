@@ -226,6 +226,13 @@ func TestIssueSearchService_Get(t *testing.T) {
 
 				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
 				assert.Equal(t, testCase.endpoint, endpointToAssert)
+
+				for _, issue := range gotResult.Issues {
+
+					for _, comment := range issue.Fields.Comment.Comments {
+						t.Log(issue.Key, comment.ID, comment.Body)
+					}
+				}
 			}
 		})
 

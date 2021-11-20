@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"io"
 	"mime/multipart"
 	"net/http"
@@ -18,7 +19,7 @@ type ServiceDeskService struct {
 
 // Gets returns all the service desks in the Jira Service Management instance that the user has permission to access.
 // Docs: https://docs.go-atlassian.io/jira-service-management-cloud/request/service-desk#get-service-desks
-func (s *ServiceDeskService) Gets(ctx context.Context, start, limit int) (result *ServiceDeskPageScheme,
+func (s *ServiceDeskService) Gets(ctx context.Context, start, limit int) (result *model.ServiceDeskPageScheme,
 	response *ResponseScheme, err error) {
 
 	params := url.Values{}
@@ -46,7 +47,7 @@ func (s *ServiceDeskService) Gets(ctx context.Context, start, limit int) (result
 // Use this method to get service desk details whenever your application component is passed a service desk ID
 // but needs to display other service desk details.
 // Docs: https://docs.go-atlassian.io/jira-service-management-cloud/request/service-desk#get-service-desk-by-id
-func (s *ServiceDeskService) Get(ctx context.Context, serviceDeskID int) (result *ServiceDeskScheme,
+func (s *ServiceDeskService) Get(ctx context.Context, serviceDeskID int) (result *model.ServiceDeskScheme,
 	response *ResponseScheme, err error) {
 
 	var endpoint = fmt.Sprintf("rest/servicedeskapi/servicedesk/%v", serviceDeskID)
@@ -69,18 +70,18 @@ func (s *ServiceDeskService) Get(ctx context.Context, serviceDeskID int) (result
 // Attach one temporary attachments to a service desk
 // Docs: https://docs.go-atlassian.io/jira-service-management-cloud/request/service-desk#attach-temporary-file
 func (s *ServiceDeskService) Attach(ctx context.Context, serviceDeskID int, fileName string, file io.Reader) (
-	result *ServiceDeskTemporaryFileScheme, response *ResponseScheme, err error) {
+	result *model.ServiceDeskTemporaryFileScheme, response *ResponseScheme, err error) {
 
 	if serviceDeskID == 0 {
-		return nil, nil, notServiceDeskError
+		return nil, nil, model.ErrNoServiceDeskIDError
 	}
 
 	if len(fileName) == 0 {
-		return nil, nil, notFileNameError
+		return nil, nil, model.ErrNoFileNameError
 	}
 
 	if file == nil {
-		return nil, nil, notReaderError
+		return nil, nil, model.ErrNoFileReaderError
 	}
 
 	var (
@@ -117,42 +118,3 @@ func (s *ServiceDeskService) Attach(ctx context.Context, serviceDeskID int, file
 
 	return
 }
-
-type ServiceDeskTemporaryFileScheme struct {
-	TemporaryAttachments []struct {
-		TemporaryAttachmentID string `json:"temporaryAttachmentId,omitempty"`
-		FileName              string `json:"fileName,omitempty"`
-	} `json:"temporaryAttachments,omitempty"`
-}
-
-type ServiceDeskPageScheme struct {
-	Expands    []string                   `json:"_expands,omitempty"`
-	Size       int                        `json:"size,omitempty"`
-	Start      int                        `json:"start,omitempty"`
-	Limit      int                        `json:"limit,omitempty"`
-	IsLastPage bool                       `json:"isLastPage,omitempty"`
-	Links      *ServiceDeskPageLinkScheme `json:"_links,omitempty"`
-	Values     []*ServiceDeskScheme       `json:"values,omitempty"`
-}
-
-type ServiceDeskPageLinkScheme struct {
-	Base    string `json:"base,omitempty"`
-	Context string `json:"context,omitempty"`
-	Next    string `json:"next,omitempty"`
-	Prev    string `json:"prev,omitempty"`
-}
-
-type ServiceDeskScheme struct {
-	ID          string `json:"id,omitempty"`
-	ProjectID   string `json:"projectId,omitempty"`
-	ProjectName string `json:"projectName,omitempty"`
-	ProjectKey  string `json:"projectKey,omitempty"`
-	Links       struct {
-		Self string `json:"self,omitempty"`
-	} `json:"_links,omitempty"`
-}
-
-var (
-	notFileNameError = fmt.Errorf("error, the fileName is required, please provide a valid value")
-	notReaderError   = fmt.Errorf("error, the io.Reader cannot be nil, please provide a valid value")
-)

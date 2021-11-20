@@ -3,6 +3,7 @@ package sm
 import (
 	"context"
 	"fmt"
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"net/http"
 )
 
@@ -10,11 +11,11 @@ type RequestFeedbackService struct{ client *Client }
 
 // Get retrieves a feedback of a request using it's requestKey or requestId
 // Docs: https://docs.go-atlassian.io/jira-service-management-cloud/request/feedback#get-feedback
-func (r *RequestFeedbackService) Get(ctx context.Context, requestIDOrKey string) (result *CustomerFeedbackScheme,
+func (r *RequestFeedbackService) Get(ctx context.Context, requestIDOrKey string) (result *model.CustomerFeedbackScheme,
 	response *ResponseScheme, err error) {
 
 	if len(requestIDOrKey) == 0 {
-		return nil, nil, notRequestIDOrKeyError
+		return nil, nil, model.ErrNoIssueKeyOrIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/servicedeskapi/request/%v/feedback", requestIDOrKey)
@@ -35,13 +36,13 @@ func (r *RequestFeedbackService) Get(ctx context.Context, requestIDOrKey string)
 	return
 }
 
-// Post adds a feedback on an request using it's requestKey or requestId
+// Post adds a feedback on a request using its requestKey or requestId
 // Docs: https://docs.go-atlassian.io/jira-service-management-cloud/request/feedback#post-feedback
 func (r *RequestFeedbackService) Post(ctx context.Context, requestIDOrKey string, rating int, comment string) (
-	result *CustomerFeedbackScheme, response *ResponseScheme, err error) {
+	result *model.CustomerFeedbackScheme, response *ResponseScheme, err error) {
 
 	if len(requestIDOrKey) == 0 {
-		return nil, nil, notRequestIDOrKeyError
+		return nil, nil, model.ErrNoIssueKeyOrIDError
 	}
 
 	payload := struct {
@@ -80,12 +81,12 @@ func (r *RequestFeedbackService) Post(ctx context.Context, requestIDOrKey string
 	return
 }
 
-// Delete deletes the feedback of request using it's requestKey or requestId
+// Delete deletes the feedback of request using its requestKey or requestId
 // Docs: https://docs.go-atlassian.io/jira-service-management-cloud/request/feedback#delete-feedback
 func (r *RequestFeedbackService) Delete(ctx context.Context, requestIDOrKey string) (response *ResponseScheme, err error) {
 
 	if len(requestIDOrKey) == 0 {
-		return nil, notRequestIDOrKeyError
+		return nil, model.ErrNoIssueKeyOrIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/servicedeskapi/request/%v/feedback", requestIDOrKey)
@@ -105,17 +106,3 @@ func (r *RequestFeedbackService) Delete(ctx context.Context, requestIDOrKey stri
 
 	return
 }
-
-type CustomerFeedbackScheme struct {
-	Type    string                         `json:"type,omitempty"`
-	Rating  int                            `json:"rating,omitempty"`
-	Comment *CustomerFeedbackCommentScheme `json:"comment,omitempty"`
-}
-
-type CustomerFeedbackCommentScheme struct {
-	Body string `json:"body,omitempty"`
-}
-
-var (
-	notRequestIDOrKeyError = fmt.Errorf("error, please provide a valid requestIDOrKey value")
-)

@@ -3,6 +3,7 @@ package sm
 import (
 	"context"
 	"fmt"
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/stretchr/testify/assert"
 	"io"
 	"io/ioutil"
@@ -247,7 +248,7 @@ func Test_transformStructToReader(t *testing.T) {
 		{
 			name: "TransformStructToReaderWhenTheParametersAreCorrect",
 			args: args{
-				structure: &RequestSLAPageScheme{
+				structure: &model.RequestSLAPageScheme{
 					Size: 1,
 				},
 			},
@@ -256,7 +257,7 @@ func Test_transformStructToReader(t *testing.T) {
 		},
 
 		{
-			name: "TransformStructToReaderWhenTheStructureIsNil",
+			name:       "TransformStructToReaderWhenTheStructureIsNil",
 			wantReader: nil,
 			wantErr:    true,
 		},
@@ -290,7 +291,7 @@ func Test_transformTheHTTPResponse(t *testing.T) {
 		"mock-response": "./mocks/get-contents.json",
 		"method":        http.MethodGet,
 		"status":        http.StatusBadRequest,
-		"closed?": false,
+		"closed?":       false,
 	}
 
 	responseConfigurations["badRequestResponseWithNotResponseBody"] = map[string]interface{}{
@@ -298,7 +299,7 @@ func Test_transformTheHTTPResponse(t *testing.T) {
 		"mock-response": "",
 		"method":        http.MethodGet,
 		"status":        http.StatusBadRequest,
-		"closed?": true,
+		"closed?":       true,
 	}
 
 	responseConfigurations["OkRequestResponseWithNotResponseBody"] = map[string]interface{}{
@@ -306,7 +307,7 @@ func Test_transformTheHTTPResponse(t *testing.T) {
 		"mock-response": "./mocks/get-contents.json",
 		"method":        http.MethodGet,
 		"status":        http.StatusOK,
-		"closed?": true,
+		"closed?":       true,
 	}
 
 	for scenario, configuration := range responseConfigurations {

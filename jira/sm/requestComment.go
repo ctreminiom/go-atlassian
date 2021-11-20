@@ -3,6 +3,7 @@ package sm
 import (
 	"context"
 	"fmt"
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -16,10 +17,10 @@ type RequestCommentService struct{ client *Client }
 // the method simply returns an empty response.
 // Docs: https://docs.go-atlassian.io/jira-service-management-cloud/request/comments#get-request-comments
 func (r *RequestCommentService) Gets(ctx context.Context, issueKeyOrID string, public bool, expand []string, start,
-	limit int) (result *RequestCommentPageScheme, response *ResponseScheme, err error) {
+	limit int) (result *model.RequestCommentPageScheme, response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {
-		return nil, nil, notIssueError
+		return nil, nil, model.ErrNoIssueKeyOrIDError
 	}
 
 	params := url.Values{}
@@ -54,10 +55,10 @@ func (r *RequestCommentService) Gets(ctx context.Context, issueKeyOrID string, p
 // Get returns details of a customer request's comment.
 // Docs: https://docs.go-atlassian.io/jira-service-management-cloud/request/comments#get-request-comment-by-id
 func (r *RequestCommentService) Get(ctx context.Context, issueKeyOrID string, commentID int, expand []string) (
-	result *RequestCommentScheme, response *ResponseScheme, err error) {
+	result *model.RequestCommentScheme, response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {
-		return nil, nil, notIssueError
+		return nil, nil, model.ErrNoIssueKeyOrIDError
 	}
 
 	params := url.Values{}
@@ -90,14 +91,14 @@ func (r *RequestCommentService) Get(ctx context.Context, issueKeyOrID string, co
 // Create creates a public or private (internal) comment on a customer request, with the comment visibility set by public.
 // Docs: https://docs.go-atlassian.io/jira-service-management-cloud/request/comments#create-request-comment
 func (r *RequestCommentService) Create(ctx context.Context, issueKeyOrID, body string, public bool) (
-	result *RequestCommentScheme, response *ResponseScheme, err error) {
+	result *model.RequestCommentScheme, response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {
-		return nil, nil, notIssueError
+		return nil, nil, model.ErrNoIssueKeyOrIDError
 	}
 
 	if len(body) == 0 {
-		return nil, nil, notBodyMessageError
+		return nil, nil, model.ErrNoCommentBodyError
 	}
 
 	payload := struct {
@@ -130,10 +131,10 @@ func (r *RequestCommentService) Create(ctx context.Context, issueKeyOrID, body s
 // Attachments  returns the attachments referenced in a comment.
 // Docs: https://docs.go-atlassian.io/jira-service-management-cloud/request/comments#get-comment-attachments
 func (r *RequestCommentService) Attachments(ctx context.Context, issueKeyOrID string, commentID, start, limit int) (
-	result *RequestAttachmentPageScheme, response *ResponseScheme, err error) {
+	result *model.RequestAttachmentPageScheme, response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {
-		return nil, nil, notIssueError
+		return nil, nil, model.ErrNoIssueKeyOrIDError
 	}
 
 	params := url.Values{}
@@ -157,45 +158,3 @@ func (r *RequestCommentService) Attachments(ctx context.Context, issueKeyOrID st
 
 	return
 }
-
-type RequestCommentPageScheme struct {
-	Size       int                           `json:"size"`
-	Start      int                           `json:"start"`
-	Limit      int                           `json:"limit"`
-	IsLastPage bool                          `json:"isLastPage"`
-	Values     []*RequestCommentScheme       `json:"values"`
-	Expands    []string                      `json:"_expands"`
-	Links      *RequestCommentPageLinkScheme `json:"_links"`
-}
-
-type RequestCommentPageLinkScheme struct {
-	Self    string `json:"self"`
-	Base    string `json:"base"`
-	Context string `json:"context"`
-	Next    string `json:"next"`
-	Prev    string `json:"prev"`
-}
-
-type RequestCommentScheme struct {
-	ID           string                       `json:"id,omitempty"`
-	Body         string                       `json:"body,omitempty"`
-	RenderedBody *RequestCommentRenderScheme  `json:"renderedBody,omitempty"`
-	Author       *RequestAuthorScheme         `json:"author,omitempty"`
-	Created      *CustomerRequestDateScheme   `json:"created,omitempty"`
-	Attachments  *RequestAttachmentPageScheme `json:"attachments,omitempty"`
-	Expands      []string                     `json:"_expands,omitempty"`
-	Public       bool                         `json:"public,omitempty"`
-	Links        *RequestCommentLinkScheme    `json:"_links,omitempty"`
-}
-
-type RequestCommentLinkScheme struct {
-	Self string `json:"self"`
-}
-
-type RequestCommentRenderScheme struct {
-	HTML string `json:"html"`
-}
-
-var (
-	notBodyMessageError = fmt.Errorf("error, please provide a valid body value")
-)

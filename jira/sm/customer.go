@@ -3,9 +3,9 @@ package sm
 import (
 	"context"
 	"fmt"
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"net/http"
 	"net/url"
-	"regexp"
 	"strconv"
 )
 
@@ -16,20 +16,15 @@ type CustomerService struct{ client *Client }
 // The display name does not need to be unique. The record's identifiers,
 // name and key, are automatically generated from the request details.
 // Docs: https://docs.go-atlassian.io/jira-service-management-cloud/customer#create-customer
-func (c *CustomerService) Create(ctx context.Context, email, displayName string) (result *CustomerScheme,
+func (c *CustomerService) Create(ctx context.Context, email, displayName string) (result *model.CustomerScheme,
 	response *ResponseScheme, err error) {
 
 	if len(email) == 0 {
-		return nil, nil, fmt.Errorf("error, please provide a valid email value")
-	}
-
-	//Check the email
-	if !isEmailValid(email) {
-		return nil, nil, fmt.Errorf("error, the email (%v) is not valid mail", email)
+		return nil, nil, model.ErrNoCustomerMailError
 	}
 
 	if len(displayName) == 0 {
-		return nil, nil, fmt.Errorf("error, please provide a valid displayName value")
+		return nil, nil, model.ErrNoCustomerDisplayNameError
 	}
 
 	payload := struct {
@@ -40,9 +35,10 @@ func (c *CustomerService) Create(ctx context.Context, email, displayName string)
 		Email:       email,
 	}
 
-	payloadAsReader, _ := transformStructToReader(&payload)
-
-	var endpoint = "rest/servicedeskapi/customer"
+	var (
+		payloadAsReader, _ = transformStructToReader(&payload)
+		endpoint           = "rest/servicedeskapi/customer"
+	)
 
 	request, err := c.client.newRequest(ctx, http.MethodPost, endpoint, payloadAsReader)
 	if err != nil {
@@ -60,36 +56,9 @@ func (c *CustomerService) Create(ctx context.Context, email, displayName string)
 	return
 }
 
-type CustomerScheme struct {
-	AccountID    string `json:"accountId"`
-	Name         string `json:"name"`
-	Key          string `json:"key"`
-	EmailAddress string `json:"emailAddress"`
-	DisplayName  string `json:"displayName"`
-	Active       bool   `json:"active"`
-	TimeZone     string `json:"timeZone"`
-	Links        struct {
-		JiraRest   string `json:"jiraRest"`
-		AvatarUrls struct {
-			Four8X48  string `json:"48x48"`
-			Two4X24   string `json:"24x24"`
-			One6X16   string `json:"16x16"`
-			Three2X32 string `json:"32x32"`
-		} `json:"avatarUrls"`
-		Self string `json:"self"`
-	} `json:"_links"`
-}
-
-func isEmailValid(email string) bool {
-	const emailRegexPattern = "^[a-zA-Z0-9.!#$%&'*+\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$"
-
-	var regex = regexp.MustCompile(emailRegexPattern)
-	return regex.MatchString(email)
-}
-
 // Gets  returns a list of the customers on a service desk.
 // Docs: https://docs.go-atlassian.io/jira-service-management-cloud/customer#get-customers
-func (c *CustomerService) Gets(ctx context.Context, serviceDeskID int, query string, start, limit int) (result *CustomerPageScheme,
+func (c *CustomerService) Gets(ctx context.Context, serviceDeskID int, query string, start, limit int) (result *model.CustomerPageScheme,
 	response *ResponseScheme, err error) {
 
 	params := url.Values{}
@@ -128,7 +97,7 @@ func (c *CustomerService) Gets(ctx context.Context, serviceDeskID int, query str
 func (c *CustomerService) Add(ctx context.Context, serviceDeskID int, accountIDs []string) (response *ResponseScheme, err error) {
 
 	if len(accountIDs) == 0 {
-		return nil, fmt.Errorf("error, please provide a valid accountIDs slice value")
+		return nil, model.ErrNoAccountSliceError
 	}
 
 	payload := struct {
@@ -161,7 +130,7 @@ func (c *CustomerService) Add(ctx context.Context, serviceDeskID int, accountIDs
 func (c *CustomerService) Remove(ctx context.Context, serviceDeskID int, accountIDs []string) (response *ResponseScheme, err error) {
 
 	if len(accountIDs) == 0 {
-		return nil, fmt.Errorf("error, please provide a valid accountIDs slice value")
+		return nil, model.ErrNoAccountSliceError
 	}
 
 	payload := struct {
@@ -193,19 +162,4 @@ func (c *CustomerService) Remove(ctx context.Context, serviceDeskID int, account
 	}
 
 	return
-}
-
-type CustomerPageScheme struct {
-	Expands    []interface{} `json:"_expands"`
-	Size       int           `json:"size"`
-	Start      int           `json:"start"`
-	Limit      int           `json:"limit"`
-	IsLastPage bool          `json:"isLastPage"`
-	Links      struct {
-		Base    string `json:"base"`
-		Context string `json:"context"`
-		Next    string `json:"next"`
-		Prev    string `json:"prev"`
-	} `json:"_links"`
-	Values []*CustomerScheme `json:"values"`
 }

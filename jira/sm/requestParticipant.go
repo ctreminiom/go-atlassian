@@ -3,6 +3,7 @@ package sm
 import (
 	"context"
 	"fmt"
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -13,10 +14,10 @@ type RequestParticipantService struct{ client *Client }
 // Gets returns a list of all the participants on a customer request.
 // Docs: https://docs.go-atlassian.io/jira-service-management-cloud/request/participants#get-request-participants
 func (r *RequestParticipantService) Gets(ctx context.Context, issueKeyOrID string, start, limit int) (
-	result *RequestParticipantPageScheme, response *ResponseScheme, err error) {
+	result *model.RequestParticipantPageScheme, response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {
-		return nil, nil, notIssueError
+		return nil, nil, model.ErrNoIssueKeyOrIDError
 	}
 
 	params := url.Values{}
@@ -43,14 +44,14 @@ func (r *RequestParticipantService) Gets(ctx context.Context, issueKeyOrID strin
 // Add adds participants to a customer request.
 // Docs: https://docs.go-atlassian.io/jira-service-management-cloud/request/participants#add-request-participants
 func (r *RequestParticipantService) Add(ctx context.Context, issueKeyOrID string, accountIDs []string) (
-	result *RequestParticipantPageScheme, response *ResponseScheme, err error) {
+	result *model.RequestParticipantPageScheme, response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {
-		return nil, nil, notIssueError
+		return nil, nil, model.ErrNoIssueKeyOrIDError
 	}
 
 	if len(accountIDs) == 0 {
-		return nil, nil, notAccountsError
+		return nil, nil, model.ErrNoAccountSliceError
 	}
 
 	payload := struct {
@@ -82,14 +83,14 @@ func (r *RequestParticipantService) Add(ctx context.Context, issueKeyOrID string
 // Remove removes participants from a customer request.
 // Docs: https://docs.go-atlassian.io/jira-service-management-cloud/request/participants#remove-request-participants
 func (r *RequestParticipantService) Remove(ctx context.Context, issueKeyOrID string, accountIDs []string) (
-	result *RequestParticipantPageScheme, response *ResponseScheme, err error) {
+	result *model.RequestParticipantPageScheme, response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {
-		return nil, nil, notIssueError
+		return nil, nil, model.ErrNoIssueKeyOrIDError
 	}
 
 	if len(accountIDs) == 0 {
-		return nil, nil, notAccountsError
+		return nil, nil, model.ErrNoAccountSliceError
 	}
 
 	payload := struct {
@@ -116,41 +117,3 @@ func (r *RequestParticipantService) Remove(ctx context.Context, issueKeyOrID str
 
 	return
 }
-
-type RequestParticipantPageScheme struct {
-	Size       int                               `json:"size,omitempty"`
-	Start      int                               `json:"start,omitempty"`
-	Limit      int                               `json:"limit,omitempty"`
-	IsLastPage bool                              `json:"isLastPage,omitempty"`
-	Values     []*RequestParticipantScheme       `json:"values,omitempty"`
-	Expands    []string                          `json:"_expands,omitempty"`
-	Links      *RequestParticipantPageLinkScheme `json:"_links,omitempty"`
-}
-
-type RequestParticipantPageLinkScheme struct {
-	Self    string `json:"self,omitempty"`
-	Base    string `json:"base,omitempty"`
-	Context string `json:"context,omitempty"`
-	Next    string `json:"next,omitempty"`
-	Prev    string `json:"prev,omitempty"`
-}
-
-type RequestParticipantScheme struct {
-	AccountID    string                        `json:"accountId,omitempty"`
-	Name         string                        `json:"name,omitempty"`
-	Key          string                        `json:"key,omitempty"`
-	EmailAddress string                        `json:"emailAddress,omitempty"`
-	DisplayName  string                        `json:"displayName,omitempty"`
-	Active       bool                          `json:"active,omitempty"`
-	TimeZone     string                        `json:"timeZone,omitempty"`
-	Links        *RequestParticipantLinkScheme `json:"_links,omitempty"`
-}
-
-type RequestParticipantLinkScheme struct {
-	Self     string `json:"self,omitempty"`
-	JiraRest string `json:"jiraRest,omitempty"`
-}
-
-var (
-	notAccountsError = fmt.Errorf("error, please provide a valid accountIDs slice value")
-)

@@ -58,30 +58,6 @@ func TestCustomerService_Create(t *testing.T) {
 		},
 
 		{
-			name:               "CreateCustomerWhenTheEmailIsIncorrect",
-			email:              "examplegmail.com",
-			displayName:        "Example",
-			mockFile:           "./mocks/create-customer.json",
-			wantHTTPMethod:     http.MethodPost,
-			endpoint:           "/rest/servicedeskapi/customer",
-			context:            context.Background(),
-			wantHTTPCodeReturn: http.StatusCreated,
-			wantErr:            true,
-		},
-
-		{
-			name:               "CreateCustomerWhenTheEmailIsToShort",
-			email:              "exa",
-			displayName:        "Example",
-			mockFile:           "./mocks/create-customer.json",
-			wantHTTPMethod:     http.MethodPost,
-			endpoint:           "/rest/servicedeskapi/customer",
-			context:            context.Background(),
-			wantHTTPCodeReturn: http.StatusCreated,
-			wantErr:            true,
-		},
-
-		{
 			name:               "CreateCustomerWhenTheRequestMethodIsIncorrect",
 			email:              "example@gmail.com",
 			displayName:        "Example",
@@ -203,51 +179,6 @@ func TestCustomerService_Create(t *testing.T) {
 				t.Logf("Customer Key: %v", gotResult.Key)
 				t.Logf("Customer TimeZone: %v", gotResult.TimeZone)
 				t.Log("--------------------------")
-			}
-
-		})
-	}
-
-}
-
-func Test_isEmailValid(t *testing.T) {
-
-	testCases := []struct {
-		name    string
-		email   string
-		wantErr bool
-	}{
-		{
-			name:    "ValidateEmailWhenTheEmailIsCorrect",
-			email:   "example@gmail.com",
-			wantErr: false,
-		},
-		{
-			name:    "ValidateEmailWhenTheEmailDoesNotHaveFormat",
-			email:   "ex",
-			wantErr: true,
-		},
-		{
-			name:    "ValidateEmailWhenTheEmailIsIncorrect",
-			email:   "exampleeaasc",
-			wantErr: true,
-		},
-		{
-			name:    "ValidateEmailWhenTheEmailIsEmpty",
-			email:   "",
-			wantErr: true,
-		},
-	}
-
-	for _, testCase := range testCases {
-		t.Run(testCase.name, func(t *testing.T) {
-
-			isValid := isEmailValid(testCase.email)
-
-			if testCase.wantErr {
-				assert.Equal(t, false, isValid)
-			} else {
-				assert.Equal(t, true, isValid)
 			}
 
 		})

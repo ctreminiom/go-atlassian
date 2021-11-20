@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestKnowledgebaseService_Search(t *testing.T) {
+func TestKnowledgeBaseService_Search(t *testing.T) {
 
 	testCases := []struct {
 		name               string
@@ -159,7 +159,7 @@ func TestKnowledgebaseService_Search(t *testing.T) {
 				t.Fatal(err)
 			}
 
-			service := &KnowledgebaseService{client: mockClient}
+			service := &KnowledgeBaseService{client: mockClient}
 			gotResult, gotResponse, err := service.Search(testCase.context, testCase.query, testCase.highlight, testCase.start, testCase.limit)
 
 			if testCase.wantErr {
@@ -347,7 +347,7 @@ func TestKnowledgebaseService_Gets(t *testing.T) {
 				t.Fatal(err)
 			}
 
-			service := &KnowledgebaseService{client: mockClient}
+			service := &KnowledgeBaseService{client: mockClient}
 			gotResult, gotResponse, err := service.Gets(testCase.context, testCase.serviceDeskID, testCase.query, testCase.highlight, testCase.start, testCase.limit)
 
 			if testCase.wantErr {

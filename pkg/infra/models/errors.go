@@ -5,10 +5,21 @@ import (
 )
 
 var (
-	ErrNoBoardIDError                 = errors.New("agile: no board id set")
-	ErrNoFilterIDError                = errors.New("agile: no filter id set")
-	ErrNoEpicIDError                  = errors.New("agile: no epic id set")
-	ErrNoSprintIDError                = errors.New("agile: no sprint id set")
+	ErrNoCustomerMailError        = errors.New("sm: no customer mail set")
+	ErrNoCustomerDisplayNameError = errors.New("sm: no customer display name set")
+	ErrNoKBQueryError             = errors.New("sm: no knowledge base query set")
+	ErrNoOrganizationNameError    = errors.New("sm: no organization name set")
+	ErrNoCommentBodyError         = errors.New("sm/jira: no comment body set")
+	ErrNoServiceDeskIDError       = errors.New("sm: no service desk id set")
+	ErrNoRequestTypeIDError       = errors.New("sm: no request type id set")
+	ErrNoFileNameError            = errors.New("sm: no file name set")
+	ErrNoFileReaderError          = errors.New("sm: no io.Reader set")
+
+	ErrNoBoardIDError  = errors.New("agile: no board id set")
+	ErrNoFilterIDError = errors.New("agile: no filter id set")
+	ErrNoEpicIDError   = errors.New("agile: no epic id set")
+	ErrNoSprintIDError = errors.New("agile: no sprint id set")
+
 	ErrNoApplicationRoleError         = errors.New("jira: no application role key set")
 	ErrNoDashboardIDError             = errors.New("jira: no dashboard id set")
 	ErrNoGroupNameError               = errors.New("jira: no group name set")

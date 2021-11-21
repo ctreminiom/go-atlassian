@@ -3,21 +3,12 @@ package confluence
 import (
 	"context"
 	"fmt"
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"net/http"
 )
 
 type ContentPermissionService struct {
 	client *Client
-}
-
-type CheckPermissionScheme struct {
-	Subject   *PermissionSubjectScheme `json:"subject,omitempty"`
-	Operation string                   `json:"operation,omitempty"`
-}
-
-type PermissionSubjectScheme struct {
-	Type       string `json:"type"`
-	Identifier string `json:"identifier"`
 }
 
 // Check if a user or a group can perform an operation to the specified content.
@@ -29,10 +20,10 @@ type PermissionSubjectScheme struct {
 // 2. space permissions
 // 3. content restrictions
 func (c *ContentPermissionService) Check(ctx context.Context, contentID string,
-	payload *CheckPermissionScheme) (result *PermissionCheckResponseScheme, response *ResponseScheme, err error) {
+	payload *model.CheckPermissionScheme) (result *model.PermissionCheckResponseScheme, response *ResponseScheme, err error) {
 
 	if len(contentID) == 0 {
-		return nil, nil, notContentIDError
+		return nil, nil, model.ErrNoContentIDError
 	}
 
 	var endpoint = fmt.Sprintf("/wiki/rest/api/content/%v/permission/check", contentID)
@@ -56,15 +47,4 @@ func (c *ContentPermissionService) Check(ctx context.Context, contentID string,
 	}
 
 	return
-}
-
-type PermissionCheckResponseScheme struct {
-	HasPermission bool                            `json:"hasPermission"`
-	Errors        []*PermissionCheckMessageScheme `json:"errors,omitempty"`
-}
-
-type PermissionCheckMessageScheme struct {
-	Translation string `json:"translation"`
-	Args        []struct {
-	} `json:"args"`
 }

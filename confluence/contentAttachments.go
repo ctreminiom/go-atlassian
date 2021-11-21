@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"io"
 	"mime/multipart"
 	"net/http"
@@ -16,18 +17,13 @@ type ContentAttachmentService struct {
 	client *Client
 }
 
-type GetContentAttachmentsOptionsScheme struct {
-	Expand    []string
-	FileName  string
-	MediaType string
-}
-
 // Gets returns the attachments for a piece of content.
 // By default, the following objects are expanded: metadata.
-func (c *ContentAttachmentService) Gets(ctx context.Context, contentID string, startAt, maxResults int, options *GetContentAttachmentsOptionsScheme) (result *ContentPageScheme, response *ResponseScheme, err error) {
+func (c *ContentAttachmentService) Gets(ctx context.Context, contentID string, startAt, maxResults int,
+	options *model.GetContentAttachmentsOptionsScheme) (result *model.ContentPageScheme, response *ResponseScheme, err error) {
 
 	if len(contentID) == 0 {
-		return nil, nil, notContentIDError
+		return nil, nil, model.ErrNoContentIDError
 	}
 
 	query := url.Values{}
@@ -70,7 +66,8 @@ func (c *ContentAttachmentService) Gets(ctx context.Context, contentID string, s
 // CreateOrUpdate adds an attachment to a piece of content.
 // If the attachment already exists for the content,
 // then the attachment is updated (i.e. a new version of the attachment is created).
-func (c *ContentAttachmentService) CreateOrUpdate(ctx context.Context, attachmentID, status, fileName string, file io.Reader) (result *ContentPageScheme, response *ResponseScheme, err error) {
+func (c *ContentAttachmentService) CreateOrUpdate(ctx context.Context, attachmentID, status, fileName string, file io.Reader) (
+	result *model.ContentPageScheme, response *ResponseScheme, err error) {
 
 	if len(attachmentID) == 0 {
 		return nil, nil, notAttachmentIDError
@@ -132,7 +129,8 @@ func (c *ContentAttachmentService) CreateOrUpdate(ctx context.Context, attachmen
 // Create adds an attachment to a piece of content.
 // This method only adds a new attachment.
 // If you want to update an existing attachment, use Create or update attachments.
-func (c *ContentAttachmentService) Create(ctx context.Context, attachmentID, status, fileName string, file io.Reader) (result *ContentPageScheme, response *ResponseScheme, err error) {
+func (c *ContentAttachmentService) Create(ctx context.Context, attachmentID, status, fileName string, file io.Reader) (
+	result *model.ContentPageScheme, response *ResponseScheme, err error) {
 
 	if len(attachmentID) == 0 {
 		return nil, nil, notAttachmentIDError

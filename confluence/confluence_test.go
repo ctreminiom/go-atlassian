@@ -3,6 +3,7 @@ package confluence
 import (
 	"context"
 	"fmt"
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/stretchr/testify/assert"
 	"io"
 	"io/ioutil"
@@ -247,12 +248,12 @@ func Test_transformStructToReader(t *testing.T) {
 		{
 			name: "TransformStructToReaderWhenTheParametersAreCorrect",
 			args: args{
-				structure: &ContentScheme{
+				structure: &model.ContentScheme{
 					Type:  "page", // Valid values: page, blogpost, comment
 					Title: "Confluence Page Title",
-					Space: &SpaceScheme{Key: "DUMMY"},
-					Body: &BodyScheme{
-						Storage: &BodyNodeScheme{
+					Space: &model.SpaceScheme{Key: "DUMMY"},
+					Body: &model.BodyScheme{
+						Storage: &model.BodyNodeScheme{
 							Value:          "<p>This is <br/> a new page</p>",
 							Representation: "storage",
 						},

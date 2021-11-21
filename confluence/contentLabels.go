@@ -3,6 +3,7 @@ package confluence
 import (
 	"context"
 	"fmt"
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -15,11 +16,11 @@ type ContentLabelService struct {
 
 // Gets returns the labels on a piece of content.
 // Atlassian Docs: https://developer.atlassian.com/cloud/confluence/rest/api-group-content-labels/#api-wiki-rest-api-content-id-label-get
-func (c *ContentLabelService) Gets(ctx context.Context, contentID, prefix string, startAt, maxResults int) (result *ContentLabelPageScheme,
+func (c *ContentLabelService) Gets(ctx context.Context, contentID, prefix string, startAt, maxResults int) (result *model.ContentLabelPageScheme,
 	response *ResponseScheme, err error) {
 
 	if len(contentID) == 0 {
-		return nil, nil, notContentIDError
+		return nil, nil, model.ErrNoCQLError
 	}
 
 	query := url.Values{}
@@ -49,11 +50,11 @@ func (c *ContentLabelService) Gets(ctx context.Context, contentID, prefix string
 
 // Add adds labels to a piece of content. Does not modify the existing labels.
 // Atlassian Docs: https://developer.atlassian.com/cloud/confluence/rest/api-group-content-labels/#api-wiki-rest-api-content-id-label-post
-func (c *ContentLabelService) Add(ctx context.Context, contentID string, payload []*ContentLabelPayloadScheme, want400Response bool) (
-	result *ContentLabelPageScheme, response *ResponseScheme, err error) {
+func (c *ContentLabelService) Add(ctx context.Context, contentID string, payload []*model.ContentLabelPayloadScheme, want400Response bool) (
+	result *model.ContentLabelPageScheme, response *ResponseScheme, err error) {
 
 	if len(contentID) == 0 {
-		return nil, nil, notContentIDError
+		return nil, nil, model.ErrNoCQLError
 	}
 
 	payloadAsReader, err := transformStructToReader(payload)
@@ -94,11 +95,11 @@ func (c *ContentLabelService) Add(ctx context.Context, contentID string, payload
 func (c *ContentLabelService) Remove(ctx context.Context, contentID, labelName string) (response *ResponseScheme, err error) {
 
 	if len(contentID) == 0 {
-		return nil, notContentIDError
+		return nil, model.ErrNoCQLError
 	}
 
 	if len(labelName) == 0 {
-		return nil, notLabelNameError
+		return nil, model.ErrNoContentLabelError
 	}
 
 	var endpoint = fmt.Sprintf("/wiki/rest/api/content/%v/label/%v", contentID, labelName)
@@ -115,26 +116,3 @@ func (c *ContentLabelService) Remove(ctx context.Context, contentID, labelName s
 
 	return
 }
-
-type ContentLabelPayloadScheme struct {
-	Prefix string `json:"prefix"`
-	Name   string `json:"name"`
-}
-
-type ContentLabelPageScheme struct {
-	Results []*ContentLabelScheme `json:"results,omitempty"`
-	Start   int                   `json:"start,omitempty"`
-	Limit   int                   `json:"limit,omitempty"`
-	Size    int                   `json:"size,omitempty"`
-}
-
-type ContentLabelScheme struct {
-	Prefix string `json:"prefix,omitempty"`
-	Name   string `json:"name,omitempty"`
-	ID     string `json:"id,omitempty"`
-	Label  string `json:"label,omitempty"`
-}
-
-var (
-	notLabelNameError = fmt.Errorf("error!, please provide a label name")
-)

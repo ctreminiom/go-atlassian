@@ -15,6 +15,16 @@ var (
 	ErrNoFileNameError            = errors.New("sm: no file name set")
 	ErrNoFileReaderError          = errors.New("sm: no io.Reader set")
 
+	ErrNoContentIDError        = errors.New("confluence: no content id set")
+	ErrNoCQLError              = errors.New("confluence: no CQL query set")
+	ErrNoContentTypeError      = errors.New("confluence: no content type set")
+	ErrInvalidContentTypeError = errors.New("confluence: invalid content type: (page, comment, attachment)")
+	ValidContentTypes          = []string{"page", "comment", "attachment"}
+	ErrNoContentLabelError     = errors.New("confluence: no content label set")
+	ErrNoContentPropertyError  = errors.New("confluence: no content property set")
+	ErrNoSpaceNameError        = errors.New("confluence: no space name set")
+	ErrNoSpaceKeyError         = errors.New("confluence: no space key set")
+
 	ErrNoBoardIDError  = errors.New("agile: no board id set")
 	ErrNoFilterIDError = errors.New("agile: no filter id set")
 	ErrNoEpicIDError   = errors.New("agile: no epic id set")

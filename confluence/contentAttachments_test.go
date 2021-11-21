@@ -3,6 +3,7 @@ package confluence
 import (
 	"context"
 	"fmt"
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/stretchr/testify/assert"
 	"io"
 	"net/http"
@@ -18,7 +19,7 @@ func TestContentAttachmentService_Gets(t *testing.T) {
 		name                string
 		contentID           string
 		startAt, maxResults int
-		options             *GetContentAttachmentsOptionsScheme
+		options             *model.GetContentAttachmentsOptionsScheme
 		mockFile            string
 		wantHTTPMethod      string
 		endpoint            string
@@ -31,7 +32,7 @@ func TestContentAttachmentService_Gets(t *testing.T) {
 			contentID:  "5949392",
 			startAt:    0,
 			maxResults: 50,
-			options: &GetContentAttachmentsOptionsScheme{
+			options: &model.GetContentAttachmentsOptionsScheme{
 				Expand:    []string{"operations", "file"},
 				FileName:  "filename.png",
 				MediaType: ".png",
@@ -49,7 +50,7 @@ func TestContentAttachmentService_Gets(t *testing.T) {
 			contentID:  "",
 			startAt:    0,
 			maxResults: 50,
-			options: &GetContentAttachmentsOptionsScheme{
+			options: &model.GetContentAttachmentsOptionsScheme{
 				Expand:    []string{"operations", "file"},
 				FileName:  "filename.png",
 				MediaType: ".png",
@@ -67,7 +68,7 @@ func TestContentAttachmentService_Gets(t *testing.T) {
 			contentID:  "5949392",
 			startAt:    0,
 			maxResults: 50,
-			options: &GetContentAttachmentsOptionsScheme{
+			options: &model.GetContentAttachmentsOptionsScheme{
 				Expand:    []string{"operations", "file"},
 				FileName:  "filename.png",
 				MediaType: ".png",
@@ -85,7 +86,7 @@ func TestContentAttachmentService_Gets(t *testing.T) {
 			contentID:  "5949392",
 			startAt:    0,
 			maxResults: 50,
-			options: &GetContentAttachmentsOptionsScheme{
+			options: &model.GetContentAttachmentsOptionsScheme{
 				Expand:    []string{"operations", "file"},
 				FileName:  "filename.png",
 				MediaType: ".png",
@@ -117,7 +118,7 @@ func TestContentAttachmentService_Gets(t *testing.T) {
 			contentID:  "5949392",
 			startAt:    0,
 			maxResults: 50,
-			options: &GetContentAttachmentsOptionsScheme{
+			options: &model.GetContentAttachmentsOptionsScheme{
 				Expand:    []string{"operations", "file"},
 				FileName:  "filename.png",
 				MediaType: ".png",
@@ -135,7 +136,7 @@ func TestContentAttachmentService_Gets(t *testing.T) {
 			contentID:  "5949392",
 			startAt:    0,
 			maxResults: 50,
-			options: &GetContentAttachmentsOptionsScheme{
+			options: &model.GetContentAttachmentsOptionsScheme{
 				Expand:    []string{"operations", "file"},
 				FileName:  "filename.png",
 				MediaType: ".png",

@@ -3,6 +3,7 @@ package confluence
 import (
 	"context"
 	"fmt"
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -14,10 +15,10 @@ type ContentPropertyService struct{ client *Client }
 // Gets returns the properties for a piece of content.
 // Atlassian Docs: https://developer.atlassian.com/cloud/confluence/rest/api-group-content-properties/#api-wiki-rest-api-content-id-property-get
 func (c *ContentPropertyService) Gets(ctx context.Context, contentID string, expand []string, startAt, maxResults int) (
-	result *ContentPropertyPageScheme, response *ResponseScheme, err error) {
+	result *model.ContentPropertyPageScheme, response *ResponseScheme, err error) {
 
 	if len(contentID) == 0 {
-		return nil, nil, notContentIDError
+		return nil, nil, model.ErrNoContentIDError
 	}
 
 	query := url.Values{}
@@ -47,11 +48,11 @@ func (c *ContentPropertyService) Gets(ctx context.Context, contentID string, exp
 
 // Create creates a property for an existing piece of content.
 // Atlassian Docs: https://developer.atlassian.com/cloud/confluence/rest/api-group-content-properties/#api-wiki-rest-api-content-id-property-post
-func (c *ContentPropertyService) Create(ctx context.Context, contentID string, payload *ContentPropertyPayloadScheme) (
-	result *ContentPropertyScheme, response *ResponseScheme, err error) {
+func (c *ContentPropertyService) Create(ctx context.Context, contentID string, payload *model.ContentPropertyPayloadScheme) (
+	result *model.ContentPropertyScheme, response *ResponseScheme, err error) {
 
 	if len(contentID) == 0 {
-		return nil, nil, notContentIDError
+		return nil, nil, model.ErrNoContentIDError
 	}
 
 	payloadAsReader, err := transformStructToReader(payload)
@@ -79,15 +80,15 @@ func (c *ContentPropertyService) Create(ctx context.Context, contentID string, p
 
 // Get returns a content property for a piece of content.
 // Atlassian Docs: https://developer.atlassian.com/cloud/confluence/rest/api-group-content-properties/#api-wiki-rest-api-content-id-property-key-get
-func (c *ContentPropertyService) Get(ctx context.Context, contentID, key string) (result *ContentPropertyScheme,
+func (c *ContentPropertyService) Get(ctx context.Context, contentID, key string) (result *model.ContentPropertyScheme,
 	response *ResponseScheme, err error) {
 
 	if len(contentID) == 0 {
-		return nil, nil, notContentIDError
+		return nil, nil, model.ErrNoContentIDError
 	}
 
 	if len(key) == 0 {
-		return nil, nil, notPropertyKeyError
+		return nil, nil, model.ErrNoContentPropertyError
 	}
 
 	var endpoint = fmt.Sprintf("/wiki/rest/api/content/%v/property/%v", contentID, key)
@@ -112,11 +113,11 @@ func (c *ContentPropertyService) Get(ctx context.Context, contentID, key string)
 func (c *ContentPropertyService) Delete(ctx context.Context, contentID, key string) (response *ResponseScheme, err error) {
 
 	if len(contentID) == 0 {
-		return nil, notContentIDError
+		return nil, model.ErrNoContentIDError
 	}
 
 	if len(key) == 0 {
-		return nil, notPropertyKeyError
+		return nil, model.ErrNoContentPropertyError
 	}
 
 	var endpoint = fmt.Sprintf("/wiki/rest/api/content/%v/property/%v", contentID, key)
@@ -133,38 +134,3 @@ func (c *ContentPropertyService) Delete(ctx context.Context, contentID, key stri
 
 	return
 }
-
-type ContentPropertyPayloadScheme struct {
-	Key   string `json:"key"`
-	Value string `json:"value"`
-}
-
-type ContentPropertyPageScheme struct {
-	Results []*ContentPropertyScheme `json:"results,omitempty"`
-	Start   int                      `json:"start,omitempty"`
-	Limit   int                      `json:"limit,omitempty"`
-	Size    int                      `json:"size,omitempty"`
-}
-
-type ContentPropertyScheme struct {
-	ID         string                        `json:"id,omitempty"`
-	Key        string                        `json:"key,omitempty"`
-	Value      interface{}                   `json:"value,omitempty"`
-	Version    *ContentPropertyVersionScheme `json:"version,omitempty"`
-	Expandable struct {
-		Content              string `json:"content,omitempty"`
-		AdditionalProperties string `json:"additionalProperties,omitempty"`
-	} `json:"_expandable,omitempty"`
-}
-
-type ContentPropertyVersionScheme struct {
-	When                string `json:"when,omitempty"`
-	Message             string `json:"message,omitempty"`
-	Number              int    `json:"number,omitempty"`
-	MinorEdit           bool   `json:"minorEdit,omitempty"`
-	ContentTypeModified bool   `json:"contentTypeModified,omitempty"`
-}
-
-var (
-	notPropertyKeyError = fmt.Errorf("error!, please provide a valid property key")
-)

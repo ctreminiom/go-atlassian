@@ -3,6 +3,7 @@ package confluence
 import (
 	"context"
 	"fmt"
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/url"
@@ -14,7 +15,7 @@ func TestContentPermissionService_Check(t *testing.T) {
 	testCases := []struct {
 		name               string
 		contentID          string
-		payload            *CheckPermissionScheme
+		payload            *model.CheckPermissionScheme
 		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string
@@ -25,8 +26,8 @@ func TestContentPermissionService_Check(t *testing.T) {
 		{
 			name:      "CheckContentPermissionsWhenTheParametersAreCorrect",
 			contentID: "847373747",
-			payload: &CheckPermissionScheme{
-				Subject: &PermissionSubjectScheme{
+			payload: &model.CheckPermissionScheme{
+				Subject: &model.PermissionSubjectScheme{
 					Type:       "user",
 					Identifier: "5b86be50b8e3cb5895860d6d",
 				},
@@ -43,8 +44,8 @@ func TestContentPermissionService_Check(t *testing.T) {
 		{
 			name:      "CheckContentPermissionsWhenTheContentIDIsNotProvided",
 			contentID: "",
-			payload: &CheckPermissionScheme{
-				Subject: &PermissionSubjectScheme{
+			payload: &model.CheckPermissionScheme{
+				Subject: &model.PermissionSubjectScheme{
 					Type:       "user",
 					Identifier: "5b86be50b8e3cb5895860d6d",
 				},
@@ -73,8 +74,8 @@ func TestContentPermissionService_Check(t *testing.T) {
 		{
 			name:      "CheckContentPermissionsWhenTheRequestMethodIsIncorrect",
 			contentID: "847373747",
-			payload: &CheckPermissionScheme{
-				Subject: &PermissionSubjectScheme{
+			payload: &model.CheckPermissionScheme{
+				Subject: &model.PermissionSubjectScheme{
 					Type:       "user",
 					Identifier: "5b86be50b8e3cb5895860d6d",
 				},
@@ -91,8 +92,8 @@ func TestContentPermissionService_Check(t *testing.T) {
 		{
 			name:      "CheckContentPermissionsWhenTheStatusCodeIsIncorrect",
 			contentID: "847373747",
-			payload: &CheckPermissionScheme{
-				Subject: &PermissionSubjectScheme{
+			payload: &model.CheckPermissionScheme{
+				Subject: &model.PermissionSubjectScheme{
 					Type:       "user",
 					Identifier: "5b86be50b8e3cb5895860d6d",
 				},
@@ -109,8 +110,8 @@ func TestContentPermissionService_Check(t *testing.T) {
 		{
 			name:      "CheckContentPermissionsWhenTheContextIsNotProvided",
 			contentID: "847373747",
-			payload: &CheckPermissionScheme{
-				Subject: &PermissionSubjectScheme{
+			payload: &model.CheckPermissionScheme{
+				Subject: &model.PermissionSubjectScheme{
 					Type:       "user",
 					Identifier: "5b86be50b8e3cb5895860d6d",
 				},
@@ -127,8 +128,8 @@ func TestContentPermissionService_Check(t *testing.T) {
 		{
 			name:      "CheckContentPermissionsWhenTheResponseBodyIsEmpty",
 			contentID: "847373747",
-			payload: &CheckPermissionScheme{
-				Subject: &PermissionSubjectScheme{
+			payload: &model.CheckPermissionScheme{
+				Subject: &model.PermissionSubjectScheme{
 					Type:       "user",
 					Identifier: "5b86be50b8e3cb5895860d6d",
 				},

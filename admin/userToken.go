@@ -3,8 +3,8 @@ package admin
 import (
 	"context"
 	"fmt"
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"net/http"
-	"time"
 )
 
 type UserTokenService struct{ client *Client }
@@ -12,11 +12,11 @@ type UserTokenService struct{ client *Client }
 // Gets the API tokens owned by the specified user, this func needs the following parameters:
 // Atlassian Docs: https://developer.atlassian.com/cloud/admin/user-management/rest/api-group-users/#api-users-accountid-manage-api-tokens-get
 // Library Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/user/token#get-api-tokens
-func (u *UserTokenService) Gets(ctx context.Context, accountID string) (result *UserTokensScheme,
+func (u *UserTokenService) Gets(ctx context.Context, accountID string) (result *model.UserTokensScheme,
 	response *ResponseScheme, err error) {
 
 	if len(accountID) == 0 {
-		return nil, nil, notAccountError
+		return nil, nil, model.ErrNoAdminAccountIDError
 	}
 
 	var endpoint = fmt.Sprintf("/users/%v/manage/api-tokens", accountID)
@@ -36,24 +36,17 @@ func (u *UserTokenService) Gets(ctx context.Context, accountID string) (result *
 	return
 }
 
-type UserTokensScheme []struct {
-	ID         string    `json:"id,omitempty"`
-	Label      string    `json:"label,omitempty"`
-	CreatedAt  time.Time `json:"createdAt,omitempty"`
-	LastAccess time.Time `json:"lastAccess,omitempty"`
-}
-
 // Delete deletes a specified API token by ID, this func needs the following parameters:
 // Atlassian Docs: https://developer.atlassian.com/cloud/admin/user-management/rest/api-group-users/#api-users-accountid-manage-api-tokens-tokenid-delete
 // Library Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/user/token#delete-api-token
 func (u *UserTokenService) Delete(ctx context.Context, accountID, tokenID string) (response *ResponseScheme, err error) {
 
 	if len(accountID) == 0 {
-		return nil, notAccountError
+		return nil, model.ErrNoAdminAccountIDError
 	}
 
 	if len(tokenID) == 0 {
-		return nil, notTokenError
+		return nil, model.ErrNoAdminUserTokenError
 	}
 
 	var endpoint = fmt.Sprintf("/users/%v/manage/api-tokens/%v", accountID, tokenID)
@@ -72,7 +65,3 @@ func (u *UserTokenService) Delete(ctx context.Context, accountID, tokenID string
 
 	return
 }
-
-var (
-	notTokenError = fmt.Errorf("error!, please provide a valid tokenID value")
-)

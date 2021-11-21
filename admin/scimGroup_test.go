@@ -3,6 +3,7 @@ package admin
 import (
 	"context"
 	"fmt"
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/url"
@@ -958,13 +959,13 @@ func TestSCIMGroupService_Delete(t *testing.T) {
 
 func TestSCIMGroupService_Path(t *testing.T) {
 
-	payloadWithOperationsMocked := &SCIMGroupPathScheme{
+	payloadWithOperationsMocked := &model.SCIMGroupPathScheme{
 		Schemas: []string{"urn:ietf:params:scim:api:messages:2.0:PatchOp"},
-		Operations: []*SCIMGroupOperationScheme{
+		Operations: []*model.SCIMGroupOperationScheme{
 			{
 				Op:   "add",
 				Path: "members",
-				Value: []*SCIMGroupOperationValueScheme{
+				Value: []*model.SCIMGroupOperationValueScheme{
 					{
 						Value:   "635cdb2f-e72c-4122-bfd3-3aa",
 						Display: "Example Display Name",
@@ -974,7 +975,7 @@ func TestSCIMGroupService_Path(t *testing.T) {
 		},
 	}
 
-	payloadWithOutOperationsMocked := &SCIMGroupPathScheme{
+	payloadWithOutOperationsMocked := &model.SCIMGroupPathScheme{
 		Schemas: []string{"urn:ietf:params:scim:api:messages:2.0:PatchOp"},
 	}
 
@@ -982,7 +983,7 @@ func TestSCIMGroupService_Path(t *testing.T) {
 		name               string
 		directoryID        string
 		groupID            string
-		payload            *SCIMGroupPathScheme
+		payload            *model.SCIMGroupPathScheme
 		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string

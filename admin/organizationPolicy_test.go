@@ -3,6 +3,7 @@ package admin
 import (
 	"context"
 	"fmt"
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/url"
@@ -414,7 +415,7 @@ func TestOrganizationPolicyService_Create(t *testing.T) {
 	testCases := []struct {
 		name               string
 		organizationID     string
-		payload            *OrganizationPolicyData
+		payload            *model.OrganizationPolicyData
 		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string
@@ -426,9 +427,9 @@ func TestOrganizationPolicyService_Create(t *testing.T) {
 			name:           "CreateOrganizationPolicyWhenTheParametersAreCorrect",
 			mockFile:       "./mocks/get-organization-policy.json",
 			organizationID: "d094d850-d57e-483a-bd03-ca8855919267",
-			payload: &OrganizationPolicyData{
+			payload: &model.OrganizationPolicyData{
 				Type: "policy",
-				Attributes: &OrganizationPolicyAttributes{
+				Attributes: &model.OrganizationPolicyAttributes{
 					Type:   "data-residency", //ip-allowlist
 					Name:   "SCIMUserNameScheme of this Policy",
 					Status: "enabled", //disabled
@@ -445,9 +446,9 @@ func TestOrganizationPolicyService_Create(t *testing.T) {
 			name:           "CreateOrganizationPolicyWhenTheOrganizationIDIsNotSet",
 			mockFile:       "./mocks/get-organization-policy.json",
 			organizationID: "",
-			payload: &OrganizationPolicyData{
+			payload: &model.OrganizationPolicyData{
 				Type: "policy",
-				Attributes: &OrganizationPolicyAttributes{
+				Attributes: &model.OrganizationPolicyAttributes{
 					Type:   "data-residency", //ip-allowlist
 					Name:   "SCIMUserNameScheme of this Policy",
 					Status: "enabled", //disabled
@@ -476,9 +477,9 @@ func TestOrganizationPolicyService_Create(t *testing.T) {
 			name:           "CreateOrganizationPolicyWhenTheRequestMethodIsIncorrect",
 			mockFile:       "./mocks/get-organization-policy.json",
 			organizationID: "d094d850-d57e-483a-bd03-ca8855919267",
-			payload: &OrganizationPolicyData{
+			payload: &model.OrganizationPolicyData{
 				Type: "policy",
-				Attributes: &OrganizationPolicyAttributes{
+				Attributes: &model.OrganizationPolicyAttributes{
 					Type:   "data-residency", //ip-allowlist
 					Name:   "SCIMUserNameScheme of this Policy",
 					Status: "enabled", //disabled
@@ -495,9 +496,9 @@ func TestOrganizationPolicyService_Create(t *testing.T) {
 			name:           "CreateOrganizationPolicyWhenTheStatusCodeIsIncorrect",
 			mockFile:       "./mocks/get-organization-policy.json",
 			organizationID: "d094d850-d57e-483a-bd03-ca8855919267",
-			payload: &OrganizationPolicyData{
+			payload: &model.OrganizationPolicyData{
 				Type: "policy",
-				Attributes: &OrganizationPolicyAttributes{
+				Attributes: &model.OrganizationPolicyAttributes{
 					Type:   "data-residency", //ip-allowlist
 					Name:   "SCIMUserNameScheme of this Policy",
 					Status: "enabled", //disabled
@@ -514,9 +515,9 @@ func TestOrganizationPolicyService_Create(t *testing.T) {
 			name:           "CreateOrganizationPolicyWhenTheContextIsNil",
 			mockFile:       "./mocks/get-organization-policy.json",
 			organizationID: "d094d850-d57e-483a-bd03-ca8855919267",
-			payload: &OrganizationPolicyData{
+			payload: &model.OrganizationPolicyData{
 				Type: "policy",
-				Attributes: &OrganizationPolicyAttributes{
+				Attributes: &model.OrganizationPolicyAttributes{
 					Type:   "data-residency", //ip-allowlist
 					Name:   "SCIMUserNameScheme of this Policy",
 					Status: "enabled", //disabled
@@ -533,9 +534,9 @@ func TestOrganizationPolicyService_Create(t *testing.T) {
 			name:           "CreateOrganizationPolicyWhenTheEndpointIsEmpty",
 			mockFile:       "./mocks/get-organization-policy.json",
 			organizationID: "d094d850-d57e-483a-bd03-ca8855919267",
-			payload: &OrganizationPolicyData{
+			payload: &model.OrganizationPolicyData{
 				Type: "policy",
-				Attributes: &OrganizationPolicyAttributes{
+				Attributes: &model.OrganizationPolicyAttributes{
 					Type:   "data-residency", //ip-allowlist
 					Name:   "SCIMUserNameScheme of this Policy",
 					Status: "enabled", //disabled
@@ -552,9 +553,9 @@ func TestOrganizationPolicyService_Create(t *testing.T) {
 			name:           "CreateOrganizationPolicyWhenTheResponseBodyIsEmpty",
 			mockFile:       "./mocks/empty.json",
 			organizationID: "d094d850-d57e-483a-bd03-ca8855919267",
-			payload: &OrganizationPolicyData{
+			payload: &model.OrganizationPolicyData{
 				Type: "policy",
-				Attributes: &OrganizationPolicyAttributes{
+				Attributes: &model.OrganizationPolicyAttributes{
 					Type:   "data-residency", //ip-allowlist
 					Name:   "SCIMUserNameScheme of this Policy",
 					Status: "enabled", //disabled
@@ -571,9 +572,9 @@ func TestOrganizationPolicyService_Create(t *testing.T) {
 			name:           "CreateOrganizationPolicyWhenTheResponseBodyIsIncorrect",
 			mockFile:       "./mocks/get-organization-policies.json",
 			organizationID: "d094d850-d57e-483a-bd03-ca8855919267",
-			payload: &OrganizationPolicyData{
+			payload: &model.OrganizationPolicyData{
 				Type: "policy",
-				Attributes: &OrganizationPolicyAttributes{
+				Attributes: &model.OrganizationPolicyAttributes{
 					Type:   "data-residency", //ip-allowlist
 					Name:   "SCIMUserNameScheme of this Policy",
 					Status: "enabled", //disabled
@@ -665,7 +666,7 @@ func TestOrganizationPolicyService_Update(t *testing.T) {
 		name               string
 		organizationID     string
 		policyID           string
-		payload            *OrganizationPolicyData
+		payload            *model.OrganizationPolicyData
 		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string
@@ -678,9 +679,9 @@ func TestOrganizationPolicyService_Update(t *testing.T) {
 			mockFile:       "./mocks/get-organization-policy.json",
 			organizationID: "d094d850-d57e-483a-bd03-ca8855919267",
 			policyID:       "60f0f660-be3e-4d70-bd34-9c2858ec040f",
-			payload: &OrganizationPolicyData{
+			payload: &model.OrganizationPolicyData{
 				Type: "policy",
-				Attributes: &OrganizationPolicyAttributes{
+				Attributes: &model.OrganizationPolicyAttributes{
 					Type:   "data-residency", //ip-allowlist
 					Name:   "SCIMUserNameScheme of this Policy",
 					Status: "enabled", //disabled
@@ -698,9 +699,9 @@ func TestOrganizationPolicyService_Update(t *testing.T) {
 			mockFile:       "./mocks/get-organization-policy.json",
 			organizationID: "",
 			policyID:       "60f0f660-be3e-4d70-bd34-9c2858ec040f",
-			payload: &OrganizationPolicyData{
+			payload: &model.OrganizationPolicyData{
 				Type: "policy",
-				Attributes: &OrganizationPolicyAttributes{
+				Attributes: &model.OrganizationPolicyAttributes{
 					Type:   "data-residency", //ip-allowlist
 					Name:   "SCIMUserNameScheme of this Policy",
 					Status: "enabled", //disabled
@@ -718,9 +719,9 @@ func TestOrganizationPolicyService_Update(t *testing.T) {
 			mockFile:       "./mocks/get-organization-policy.json",
 			organizationID: "d094d850-d57e-483a-bd03-ca8855919267",
 			policyID:       "",
-			payload: &OrganizationPolicyData{
+			payload: &model.OrganizationPolicyData{
 				Type: "policy",
-				Attributes: &OrganizationPolicyAttributes{
+				Attributes: &model.OrganizationPolicyAttributes{
 					Type:   "data-residency", //ip-allowlist
 					Name:   "SCIMUserNameScheme of this Policy",
 					Status: "enabled", //disabled
@@ -751,9 +752,9 @@ func TestOrganizationPolicyService_Update(t *testing.T) {
 			mockFile:       "./mocks/get-organization-policy.json",
 			organizationID: "d094d850-d57e-483a-bd03-ca8855919267",
 			policyID:       "60f0f660-be3e-4d70-bd34-9c2858ec040f",
-			payload: &OrganizationPolicyData{
+			payload: &model.OrganizationPolicyData{
 				Type: "policy",
-				Attributes: &OrganizationPolicyAttributes{
+				Attributes: &model.OrganizationPolicyAttributes{
 					Type:   "data-residency", //ip-allowlist
 					Name:   "SCIMUserNameScheme of this Policy",
 					Status: "enabled", //disabled
@@ -771,9 +772,9 @@ func TestOrganizationPolicyService_Update(t *testing.T) {
 			mockFile:       "./mocks/get-organization-policy.json",
 			organizationID: "d094d850-d57e-483a-bd03-ca8855919267",
 			policyID:       "60f0f660-be3e-4d70-bd34-9c2858ec040f",
-			payload: &OrganizationPolicyData{
+			payload: &model.OrganizationPolicyData{
 				Type: "policy",
-				Attributes: &OrganizationPolicyAttributes{
+				Attributes: &model.OrganizationPolicyAttributes{
 					Type:   "data-residency", //ip-allowlist
 					Name:   "SCIMUserNameScheme of this Policy",
 					Status: "enabled", //disabled
@@ -791,9 +792,9 @@ func TestOrganizationPolicyService_Update(t *testing.T) {
 			mockFile:       "./mocks/get-organization-policy.json",
 			organizationID: "d094d850-d57e-483a-bd03-ca8855919267",
 			policyID:       "60f0f660-be3e-4d70-bd34-9c2858ec040f",
-			payload: &OrganizationPolicyData{
+			payload: &model.OrganizationPolicyData{
 				Type: "policy",
-				Attributes: &OrganizationPolicyAttributes{
+				Attributes: &model.OrganizationPolicyAttributes{
 					Type:   "data-residency", //ip-allowlist
 					Name:   "SCIMUserNameScheme of this Policy",
 					Status: "enabled", //disabled
@@ -811,9 +812,9 @@ func TestOrganizationPolicyService_Update(t *testing.T) {
 			mockFile:       "./mocks/get-organization-policy.json",
 			organizationID: "d094d850-d57e-483a-bd03-ca8855919267",
 			policyID:       "60f0f660-be3e-4d70-bd34-9c2858ec040f",
-			payload: &OrganizationPolicyData{
+			payload: &model.OrganizationPolicyData{
 				Type: "policy",
-				Attributes: &OrganizationPolicyAttributes{
+				Attributes: &model.OrganizationPolicyAttributes{
 					Type:   "data-residency", //ip-allowlist
 					Name:   "SCIMUserNameScheme of this Policy",
 					Status: "enabled", //disabled
@@ -831,9 +832,9 @@ func TestOrganizationPolicyService_Update(t *testing.T) {
 			mockFile:       "./mocks/empty.json",
 			organizationID: "d094d850-d57e-483a-bd03-ca8855919267",
 			policyID:       "60f0f660-be3e-4d70-bd34-9c2858ec040f",
-			payload: &OrganizationPolicyData{
+			payload: &model.OrganizationPolicyData{
 				Type: "policy",
-				Attributes: &OrganizationPolicyAttributes{
+				Attributes: &model.OrganizationPolicyAttributes{
 					Type:   "data-residency", //ip-allowlist
 					Name:   "SCIMUserNameScheme of this Policy",
 					Status: "enabled", //disabled
@@ -851,9 +852,9 @@ func TestOrganizationPolicyService_Update(t *testing.T) {
 			mockFile:       "./mocks/get-organization-policies.json",
 			organizationID: "d094d850-d57e-483a-bd03-ca8855919267",
 			policyID:       "60f0f660-be3e-4d70-bd34-9c2858ec040f",
-			payload: &OrganizationPolicyData{
+			payload: &model.OrganizationPolicyData{
 				Type: "policy",
-				Attributes: &OrganizationPolicyAttributes{
+				Attributes: &model.OrganizationPolicyAttributes{
 					Type:   "data-residency", //ip-allowlist
 					Name:   "SCIMUserNameScheme of this Policy",
 					Status: "enabled", //disabled

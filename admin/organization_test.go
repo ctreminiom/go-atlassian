@@ -3,6 +3,7 @@ package admin
 import (
 	"context"
 	"fmt"
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/url"
@@ -912,7 +913,7 @@ func TestOrganizationService_Events(t *testing.T) {
 	testCases := []struct {
 		name               string
 		organizationID     string
-		opts               *OrganizationEventOptScheme
+		opts               *model.OrganizationEventOptScheme
 		cursor             string
 		mockFile           string
 		wantHTTPMethod     string
@@ -925,7 +926,7 @@ func TestOrganizationService_Events(t *testing.T) {
 			name:           "GetOrganizationAuditEventsWhenTheParametersAreCorrect",
 			mockFile:       "./mocks/get-organization-audit-events.json",
 			organizationID: "d094d850-d57e-483a-bd03-ca8855919267",
-			opts: &OrganizationEventOptScheme{
+			opts: &model.OrganizationEventOptScheme{
 				Q:      "qq",
 				From:   fromMocked.Add(time.Duration(-24) * time.Hour),
 				To:     toMocked.Add(time.Duration(-1) * time.Hour),
@@ -943,7 +944,7 @@ func TestOrganizationService_Events(t *testing.T) {
 			name:           "GetOrganizationAuditEventsWhenTheResponseBodyIsEmpty",
 			mockFile:       "./mocks/empty.json",
 			organizationID: "d094d850-d57e-483a-bd03-ca8855919267",
-			opts: &OrganizationEventOptScheme{
+			opts: &model.OrganizationEventOptScheme{
 				Q:      "qq",
 				From:   fromMocked.Add(time.Duration(-24) * time.Hour),
 				To:     toMocked.Add(time.Duration(-1) * time.Hour),

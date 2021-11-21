@@ -3,6 +3,7 @@ package admin
 import (
 	"context"
 	"fmt"
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"net/http"
 	"net/url"
 	"strings"
@@ -16,11 +17,11 @@ type UserService struct {
 // Permissions returns the set of permissions you have for managing the specified Atlassian account, this func needs the following parameters:
 // Atlassian Docs: https://developer.atlassian.com/cloud/admin/user-management/rest/api-group-users/#api-users-account-id-manage-get
 // Library Example: https://docs.go-atlassian.io/atlassian-admin-cloud/user#get-user-management-permissions
-func (u *UserService) Permissions(ctx context.Context, accountID string, privileges []string) (result *UserPermissionScheme,
+func (u *UserService) Permissions(ctx context.Context, accountID string, privileges []string) (result *model.AdminUserPermissionScheme,
 	response *ResponseScheme, err error) {
 
 	if len(accountID) == 0 {
-		return nil, nil, notAccountError
+		return nil, nil, model.ErrNoAdminAccountIDError
 	}
 
 	params := url.Values{}
@@ -53,10 +54,10 @@ func (u *UserService) Permissions(ctx context.Context, accountID string, privile
 // Get returns information about a single Atlassian account by ID, this func needs the following parameters:
 // Atlassian Docs: https://developer.atlassian.com/cloud/admin/user-management/rest/api-group-users/#api-users-account-id-manage-profile-get
 // Library Example: https://docs.go-atlassian.io/atlassian-admin-cloud/user#get-profile
-func (u *UserService) Get(ctx context.Context, accountID string) (result *UserScheme, response *ResponseScheme, err error) {
+func (u *UserService) Get(ctx context.Context, accountID string) (result *model.AdminUserScheme, response *ResponseScheme, err error) {
 
 	if len(accountID) == 0 {
-		return nil, nil, notAccountError
+		return nil, nil, model.ErrNoAdminAccountIDError
 	}
 
 	var endpoint = fmt.Sprintf("/users/%v/manage/profile", accountID)
@@ -76,155 +77,14 @@ func (u *UserService) Get(ctx context.Context, accountID string) (result *UserSc
 	return
 }
 
-type UserScheme struct {
-	Account struct {
-		AccountID       string `json:"account_id"`
-		Name            string `json:"name"`
-		Nickname        string `json:"nickname"`
-		Zoneinfo        string `json:"zoneinfo"`
-		Locale          string `json:"locale"`
-		Email           string `json:"email"`
-		Picture         string `json:"picture"`
-		ExtendedProfile struct {
-			JobTitle string `json:"job_title"`
-			TeamType string `json:"team_type"`
-		} `json:"extended_profile"`
-		AccountType     string `json:"account_type"`
-		AccountStatus   string `json:"account_status"`
-		EmailVerified   bool   `json:"email_verified"`
-		PrivacySettings struct {
-			Name                        string `json:"name"`
-			Nickname                    string `json:"nickname"`
-			Picture                     string `json:"picture"`
-			ExtendedProfileJobTitle     string `json:"extended_profile.job_title"`
-			ExtendedProfileDepartment   string `json:"extended_profile.department"`
-			ExtendedProfileOrganization string `json:"extended_profile.organization"`
-			ExtendedProfileLocation     string `json:"extended_profile.location"`
-			ZoneInfo                    string `json:"zoneinfo"`
-			Email                       string `json:"email"`
-			ExtendedProfilePhoneNumber  string `json:"extended_profile.phone_number"`
-			ExtendedProfileTeamType     string `json:"extended_profile.team_type"`
-		} `json:"privacy_settings"`
-	} `json:"account"`
-}
-
-type UserPermissionScheme struct {
-	EmailSet struct {
-		Allowed bool `json:"allowed"`
-		Reason  struct {
-			Key string `json:"key"`
-		} `json:"reason"`
-	} `json:"email.set"`
-	LifecycleEnablement struct {
-		Allowed bool `json:"allowed"`
-		Reason  struct {
-			Key string `json:"key"`
-		} `json:"reason"`
-	} `json:"lifecycle.enablement"`
-	Profile struct {
-		Name struct {
-			Allowed bool `json:"allowed"`
-			Reason  struct {
-				Key string `json:"key"`
-			} `json:"reason"`
-		} `json:"name"`
-		Nickname struct {
-			Allowed bool `json:"allowed"`
-		} `json:"nickname"`
-		Zoneinfo struct {
-			Allowed bool `json:"allowed"`
-		} `json:"zoneinfo"`
-		Locale struct {
-			Allowed bool `json:"allowed"`
-		} `json:"locale"`
-		ExtendedProfilePhoneNumber struct {
-			Allowed bool `json:"allowed"`
-		} `json:"extended_profile.phone_number"`
-		ExtendedProfileJobTitle struct {
-			Allowed bool `json:"allowed"`
-		} `json:"extended_profile.job_title"`
-		ExtendedProfileOrganization struct {
-			Allowed bool `json:"allowed"`
-		} `json:"extended_profile.organization"`
-		ExtendedProfileDepartment struct {
-			Allowed bool `json:"allowed"`
-		} `json:"extended_profile.department"`
-		ExtendedProfileLocation struct {
-			Allowed bool `json:"allowed"`
-		} `json:"extended_profile.location"`
-		ExtendedProfileTeamType struct {
-			Allowed bool `json:"allowed"`
-		} `json:"extended_profile.team_type"`
-	} `json:"profile"`
-	ProfileWrite struct {
-		Name struct {
-			Allowed bool `json:"allowed"`
-			Reason  struct {
-				Key string `json:"key"`
-			} `json:"reason"`
-		} `json:"name"`
-		Nickname struct {
-			Allowed bool `json:"allowed"`
-		} `json:"nickname"`
-		Zoneinfo struct {
-			Allowed bool `json:"allowed"`
-		} `json:"zoneinfo"`
-		Locale struct {
-			Allowed bool `json:"allowed"`
-		} `json:"locale"`
-		ExtendedProfilePhoneNumber struct {
-			Allowed bool `json:"allowed"`
-		} `json:"extended_profile.phone_number"`
-		ExtendedProfileJobTitle struct {
-			Allowed bool `json:"allowed"`
-		} `json:"extended_profile.job_title"`
-		ExtendedProfileOrganization struct {
-			Allowed bool `json:"allowed"`
-		} `json:"extended_profile.organization"`
-		ExtendedProfileDepartment struct {
-			Allowed bool `json:"allowed"`
-		} `json:"extended_profile.department"`
-		ExtendedProfileLocation struct {
-			Allowed bool `json:"allowed"`
-		} `json:"extended_profile.location"`
-		ExtendedProfileTeamType struct {
-			Allowed bool `json:"allowed"`
-		} `json:"extended_profile.team_type"`
-	} `json:"profile.write"`
-	ProfileRead struct {
-		Allowed bool `json:"allowed"`
-	} `json:"profile.read"`
-	LinkedAccountsRead struct {
-		Allowed bool `json:"allowed"`
-	} `json:"linkedAccounts.read"`
-	APITokenRead struct {
-		Allowed bool `json:"allowed"`
-	} `json:"apiToken.read"`
-	APITokenDelete struct {
-		Allowed bool `json:"allowed"`
-	} `json:"apiToken.delete"`
-	Avatar struct {
-		Allowed bool `json:"allowed"`
-	} `json:"avatar"`
-	PrivacySet struct {
-		Allowed bool `json:"allowed"`
-		Reason  struct {
-			Key string `json:"key"`
-		} `json:"reason"`
-	} `json:"privacy.set"`
-	SessionRead struct {
-		Allowed bool `json:"allowed"`
-	} `json:"session.read"`
-}
-
 // Update updates fields in a user account. The profile.write privilege details which fields you can change
 // Atlassian Docs: https://developer.atlassian.com/cloud/admin/user-management/rest/api-group-users/#api-users-account-id-manage-profile-patch
 // Library Example: https://docs.go-atlassian.io/atlassian-admin-cloud/user#update-profile
 func (u *UserService) Update(ctx context.Context, accountID string, payload map[string]interface{}) (
-	result *UserScheme, response *ResponseScheme, err error) {
+	result *model.AdminUserScheme, response *ResponseScheme, err error) {
 
 	if len(accountID) == 0 {
-		return nil, nil, notAccountError
+		return nil, nil, model.ErrNoAdminAccountIDError
 	}
 
 	payloadAsReader, err := transformStructToReader(payload)
@@ -263,7 +123,7 @@ func (u *UserService) Update(ctx context.Context, accountID string, payload map[
 func (u *UserService) Disable(ctx context.Context, accountID, message string) (response *ResponseScheme, err error) {
 
 	if len(accountID) == 0 {
-		return nil, notAccountError
+		return nil, model.ErrNoAdminAccountIDError
 	}
 
 	var (
@@ -313,7 +173,7 @@ func (u *UserService) Disable(ctx context.Context, accountID, message string) (r
 func (u *UserService) Enable(ctx context.Context, accountID string) (response *ResponseScheme, err error) {
 
 	if len(accountID) == 0 {
-		return nil, notAccountError
+		return nil, model.ErrNoAdminAccountIDError
 	}
 
 	var endpoint = fmt.Sprintf("/users/%v/manage/lifecycle/enable", accountID)
@@ -330,7 +190,3 @@ func (u *UserService) Enable(ctx context.Context, accountID string) (response *R
 
 	return
 }
-
-var (
-	notAccountError = fmt.Errorf("error!, please provide a valid accountID value")
-)

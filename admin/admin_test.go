@@ -3,6 +3,7 @@ package admin
 import (
 	"context"
 	"fmt"
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/stretchr/testify/assert"
 	"io"
 	"io/ioutil"
@@ -258,16 +259,16 @@ func Test_transformStructToReader(t *testing.T) {
 		{
 			name: "TransformStructToReaderWhenTheParametersAreCorrect",
 			args: args{
-				structure: &SCIMUserScheme{
+				structure: &model.SCIMUserScheme{
 					UserName: "Example Username 3",
-					Emails: []*SCIMUserEmailScheme{
+					Emails: []*model.SCIMUserEmailScheme{
 						{
 							Value:   "example-2@go-atlassian.io",
 							Type:    "work",
 							Primary: true,
 						},
 					},
-					Name: &SCIMUserNameScheme{
+					Name: &model.SCIMUserNameScheme{
 						Formatted:       "Example Full Name with Last Name",
 						FamilyName:      "Example Family Name",
 						GivenName:       "Example Name",

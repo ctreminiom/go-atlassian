@@ -5,6 +5,17 @@ import (
 )
 
 var (
+	ErrNoAdminOrganizationError = errors.New("admin: no organization id set")
+	ErrNoAdminDomainIDError     = errors.New("admin: no domain id set")
+	ErrNoEventIDError           = errors.New("admin: no event id set")
+	ErrNoAdminPolicyError       = errors.New("admin: no organization policy id set")
+	ErrNoAdminDirectoryIDError  = errors.New("admin: no directory id set")
+	ErrNoAdminGroupIDError      = errors.New("admin: no group id set")
+	ErrNoAdminGroupNameError    = errors.New("admin: no group name set")
+	ErrNoAdminUserIDError       = errors.New("admin: no user id set")
+	ErrNoAdminAccountIDError    = errors.New("admin: no account id set")
+	ErrNoAdminUserTokenError    = errors.New("admin: no user token id set")
+
 	ErrNoCustomerMailError        = errors.New("sm: no customer mail set")
 	ErrNoCustomerDisplayNameError = errors.New("sm: no customer display name set")
 	ErrNoKBQueryError             = errors.New("sm: no knowledge base query set")

@@ -3,6 +3,7 @@ package admin
 import (
 	"context"
 	"fmt"
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/url"
@@ -14,7 +15,7 @@ func TestSCIMUserService_Create(t *testing.T) {
 	testCases := []struct {
 		name                           string
 		directoryID                    string
-		payload                        *SCIMUserScheme
+		payload                        *model.SCIMUserScheme
 		attributes, excludedAttributes []string
 		mockFile                       string
 		wantHTTPMethod                 string
@@ -26,16 +27,16 @@ func TestSCIMUserService_Create(t *testing.T) {
 		{
 			name:        "CreateSCIMUserWhenTheParametersAreCorrect",
 			directoryID: "651c2e11-afea-4475-a0c4-422b89683e0f",
-			payload: &SCIMUserScheme{
+			payload: &model.SCIMUserScheme{
 				UserName: "Example Username 2",
-				Emails: []*SCIMUserEmailScheme{
+				Emails: []*model.SCIMUserEmailScheme{
 					{
 						Value:   "example-2@go-atlassian.io",
 						Type:    "work",
 						Primary: true,
 					},
 				},
-				Name: &SCIMUserNameScheme{
+				Name: &model.SCIMUserNameScheme{
 					Formatted:       "Example Full Name with Last Name",
 					FamilyName:      "Example Family Name",
 					GivenName:       "Example Name",
@@ -63,16 +64,16 @@ func TestSCIMUserService_Create(t *testing.T) {
 		{
 			name:        "CreateSCIMUserWhenTheAttributesAndExcludedAttributesAreNotSet",
 			directoryID: "651c2e11-afea-4475-a0c4-422b89683e0f",
-			payload: &SCIMUserScheme{
+			payload: &model.SCIMUserScheme{
 				UserName: "Example Username 2",
-				Emails: []*SCIMUserEmailScheme{
+				Emails: []*model.SCIMUserEmailScheme{
 					{
 						Value:   "example-2@go-atlassian.io",
 						Type:    "work",
 						Primary: true,
 					},
 				},
-				Name: &SCIMUserNameScheme{
+				Name: &model.SCIMUserNameScheme{
 					Formatted:       "Example Full Name with Last Name",
 					FamilyName:      "Example Family Name",
 					GivenName:       "Example Name",
@@ -114,16 +115,16 @@ func TestSCIMUserService_Create(t *testing.T) {
 		{
 			name:        "CreateSCIMUserWhenTheDirectoryIDIsNotSet",
 			directoryID: "",
-			payload: &SCIMUserScheme{
+			payload: &model.SCIMUserScheme{
 				UserName: "Example Username 2",
-				Emails: []*SCIMUserEmailScheme{
+				Emails: []*model.SCIMUserEmailScheme{
 					{
 						Value:   "example-2@go-atlassian.io",
 						Type:    "work",
 						Primary: true,
 					},
 				},
-				Name: &SCIMUserNameScheme{
+				Name: &model.SCIMUserNameScheme{
 					Formatted:       "Example Full Name with Last Name",
 					FamilyName:      "Example Family Name",
 					GivenName:       "Example Name",
@@ -151,16 +152,16 @@ func TestSCIMUserService_Create(t *testing.T) {
 		{
 			name:        "CreateSCIMUserWhenTheRequestMethodIsIncorrect",
 			directoryID: "651c2e11-afea-4475-a0c4-422b89683e0f",
-			payload: &SCIMUserScheme{
+			payload: &model.SCIMUserScheme{
 				UserName: "Example Username 2",
-				Emails: []*SCIMUserEmailScheme{
+				Emails: []*model.SCIMUserEmailScheme{
 					{
 						Value:   "example-2@go-atlassian.io",
 						Type:    "work",
 						Primary: true,
 					},
 				},
-				Name: &SCIMUserNameScheme{
+				Name: &model.SCIMUserNameScheme{
 					Formatted:       "Example Full Name with Last Name",
 					FamilyName:      "Example Family Name",
 					GivenName:       "Example Name",
@@ -188,16 +189,16 @@ func TestSCIMUserService_Create(t *testing.T) {
 		{
 			name:        "CreateSCIMUserWhenTheStatusCodeIsIncorrect",
 			directoryID: "651c2e11-afea-4475-a0c4-422b89683e0f",
-			payload: &SCIMUserScheme{
+			payload: &model.SCIMUserScheme{
 				UserName: "Example Username 2",
-				Emails: []*SCIMUserEmailScheme{
+				Emails: []*model.SCIMUserEmailScheme{
 					{
 						Value:   "example-2@go-atlassian.io",
 						Type:    "work",
 						Primary: true,
 					},
 				},
-				Name: &SCIMUserNameScheme{
+				Name: &model.SCIMUserNameScheme{
 					Formatted:       "Example Full Name with Last Name",
 					FamilyName:      "Example Family Name",
 					GivenName:       "Example Name",
@@ -225,16 +226,16 @@ func TestSCIMUserService_Create(t *testing.T) {
 		{
 			name:        "CreateSCIMUserWhenTheContextIsNil",
 			directoryID: "651c2e11-afea-4475-a0c4-422b89683e0f",
-			payload: &SCIMUserScheme{
+			payload: &model.SCIMUserScheme{
 				UserName: "Example Username 2",
-				Emails: []*SCIMUserEmailScheme{
+				Emails: []*model.SCIMUserEmailScheme{
 					{
 						Value:   "example-2@go-atlassian.io",
 						Type:    "work",
 						Primary: true,
 					},
 				},
-				Name: &SCIMUserNameScheme{
+				Name: &model.SCIMUserNameScheme{
 					Formatted:       "Example Full Name with Last Name",
 					FamilyName:      "Example Family Name",
 					GivenName:       "Example Name",
@@ -262,16 +263,16 @@ func TestSCIMUserService_Create(t *testing.T) {
 		{
 			name:        "CreateSCIMUserWhenTheEndpointIsEmpty",
 			directoryID: "651c2e11-afea-4475-a0c4-422b89683e0f",
-			payload: &SCIMUserScheme{
+			payload: &model.SCIMUserScheme{
 				UserName: "Example Username 2",
-				Emails: []*SCIMUserEmailScheme{
+				Emails: []*model.SCIMUserEmailScheme{
 					{
 						Value:   "example-2@go-atlassian.io",
 						Type:    "work",
 						Primary: true,
 					},
 				},
-				Name: &SCIMUserNameScheme{
+				Name: &model.SCIMUserNameScheme{
 					Formatted:       "Example Full Name with Last Name",
 					FamilyName:      "Example Family Name",
 					GivenName:       "Example Name",
@@ -299,16 +300,16 @@ func TestSCIMUserService_Create(t *testing.T) {
 		{
 			name:        "CreateSCIMUserWhenTheResponseBodyIsEmpty",
 			directoryID: "651c2e11-afea-4475-a0c4-422b89683e0f",
-			payload: &SCIMUserScheme{
+			payload: &model.SCIMUserScheme{
 				UserName: "Example Username 2",
-				Emails: []*SCIMUserEmailScheme{
+				Emails: []*model.SCIMUserEmailScheme{
 					{
 						Value:   "example-2@go-atlassian.io",
 						Type:    "work",
 						Primary: true,
 					},
 				},
-				Name: &SCIMUserNameScheme{
+				Name: &model.SCIMUserNameScheme{
 					Formatted:       "Example Full Name with Last Name",
 					FamilyName:      "Example Family Name",
 					GivenName:       "Example Name",
@@ -420,7 +421,7 @@ func TestSCIMUserService_Gets(t *testing.T) {
 	testCases := []struct {
 		name               string
 		directoryID        string
-		opts               *SCIMUserGetsOptionsScheme
+		opts               *model.SCIMUserGetsOptionsScheme
 		startIndex         int
 		count              int
 		mockFile           string
@@ -433,7 +434,7 @@ func TestSCIMUserService_Gets(t *testing.T) {
 		{
 			name:        "CreateSCIMUserWhenTheParametersAreCorrect",
 			directoryID: "651c2e11-afea-4475-a0c4-422b89683e0f",
-			opts: &SCIMUserGetsOptionsScheme{
+			opts: &model.SCIMUserGetsOptionsScheme{
 				Attributes:         []string{"userName", "emails.value"},
 				ExcludedAttributes: []string{"timezone", "department"},
 				Filter:             "users",
@@ -451,7 +452,7 @@ func TestSCIMUserService_Gets(t *testing.T) {
 		{
 			name:        "CreateSCIMUserWhenTheDirectoryIDIsNotSet",
 			directoryID: "",
-			opts: &SCIMUserGetsOptionsScheme{
+			opts: &model.SCIMUserGetsOptionsScheme{
 				Attributes:         []string{"userName", "emails.value"},
 				ExcludedAttributes: []string{"timezone", "department"},
 				Filter:             "users",
@@ -483,7 +484,7 @@ func TestSCIMUserService_Gets(t *testing.T) {
 		{
 			name:        "CreateSCIMUserWhenTheRequestMethodIsIncorrect",
 			directoryID: "651c2e11-afea-4475-a0c4-422b89683e0f",
-			opts: &SCIMUserGetsOptionsScheme{
+			opts: &model.SCIMUserGetsOptionsScheme{
 				Attributes:         []string{"userName", "emails.value"},
 				ExcludedAttributes: []string{"timezone", "department"},
 				Filter:             "users",
@@ -501,7 +502,7 @@ func TestSCIMUserService_Gets(t *testing.T) {
 		{
 			name:        "CreateSCIMUserWhenTheStatusCodeIsIncorrect",
 			directoryID: "651c2e11-afea-4475-a0c4-422b89683e0f",
-			opts: &SCIMUserGetsOptionsScheme{
+			opts: &model.SCIMUserGetsOptionsScheme{
 				Attributes:         []string{"userName", "emails.value"},
 				ExcludedAttributes: []string{"timezone", "department"},
 				Filter:             "users",
@@ -519,7 +520,7 @@ func TestSCIMUserService_Gets(t *testing.T) {
 		{
 			name:        "CreateSCIMUserWhenTheContextIsNil",
 			directoryID: "651c2e11-afea-4475-a0c4-422b89683e0f",
-			opts: &SCIMUserGetsOptionsScheme{
+			opts: &model.SCIMUserGetsOptionsScheme{
 				Attributes:         []string{"userName", "emails.value"},
 				ExcludedAttributes: []string{"timezone", "department"},
 				Filter:             "users",
@@ -537,7 +538,7 @@ func TestSCIMUserService_Gets(t *testing.T) {
 		{
 			name:        "CreateSCIMUserWhenTheEndpointIsEmpty",
 			directoryID: "651c2e11-afea-4475-a0c4-422b89683e0f",
-			opts: &SCIMUserGetsOptionsScheme{
+			opts: &model.SCIMUserGetsOptionsScheme{
 				Attributes:         []string{"userName", "emails.value"},
 				ExcludedAttributes: []string{"timezone", "department"},
 				Filter:             "users",
@@ -555,7 +556,7 @@ func TestSCIMUserService_Gets(t *testing.T) {
 		{
 			name:        "CreateSCIMUserWhenTheResponseBodyIsEmpty",
 			directoryID: "651c2e11-afea-4475-a0c4-422b89683e0f",
-			opts: &SCIMUserGetsOptionsScheme{
+			opts: &model.SCIMUserGetsOptionsScheme{
 				Attributes:         []string{"userName", "emails.value"},
 				ExcludedAttributes: []string{"timezone", "department"},
 				Filter:             "users",
@@ -1048,7 +1049,7 @@ func TestSCIMUserService_Update(t *testing.T) {
 		name                           string
 		directoryID                    string
 		userID                         string
-		payload                        *SCIMUserScheme
+		payload                        *model.SCIMUserScheme
 		attributes, excludedAttributes []string
 		mockFile                       string
 		wantHTTPMethod                 string
@@ -1061,16 +1062,16 @@ func TestSCIMUserService_Update(t *testing.T) {
 			name:        "OverwriteSCIMUserWhenTheParametersAreCorrect",
 			directoryID: "651c2e11-afea-4475-a0c4-422b89683e0f",
 			userID:      "ef5ff80e-9ca6-449c-8cca-5b621085c6c9",
-			payload: &SCIMUserScheme{
+			payload: &model.SCIMUserScheme{
 				UserName: "Example Username 2",
-				Emails: []*SCIMUserEmailScheme{
+				Emails: []*model.SCIMUserEmailScheme{
 					{
 						Value:   "example-2@go-atlassian.io",
 						Type:    "work",
 						Primary: true,
 					},
 				},
-				Name: &SCIMUserNameScheme{
+				Name: &model.SCIMUserNameScheme{
 					Formatted:       "Example Full Name with Last Name",
 					FamilyName:      "Example Family Name",
 					GivenName:       "Example Name",
@@ -1099,16 +1100,16 @@ func TestSCIMUserService_Update(t *testing.T) {
 			name:        "OverwriteSCIMUserWhenTheUserIDIsNotSet",
 			directoryID: "651c2e11-afea-4475-a0c4-422b89683e0f",
 			userID:      "",
-			payload: &SCIMUserScheme{
+			payload: &model.SCIMUserScheme{
 				UserName: "Example Username 2",
-				Emails: []*SCIMUserEmailScheme{
+				Emails: []*model.SCIMUserEmailScheme{
 					{
 						Value:   "example-2@go-atlassian.io",
 						Type:    "work",
 						Primary: true,
 					},
 				},
-				Name: &SCIMUserNameScheme{
+				Name: &model.SCIMUserNameScheme{
 					Formatted:       "Example Full Name with Last Name",
 					FamilyName:      "Example Family Name",
 					GivenName:       "Example Name",
@@ -1137,16 +1138,16 @@ func TestSCIMUserService_Update(t *testing.T) {
 			name:        "OverwriteSCIMUserWhenTheAttributesAndExcludedAttributesAreNotSet",
 			directoryID: "651c2e11-afea-4475-a0c4-422b89683e0f",
 			userID:      "ef5ff80e-9ca6-449c-8cca-5b621085c6c9",
-			payload: &SCIMUserScheme{
+			payload: &model.SCIMUserScheme{
 				UserName: "Example Username 2",
-				Emails: []*SCIMUserEmailScheme{
+				Emails: []*model.SCIMUserEmailScheme{
 					{
 						Value:   "example-2@go-atlassian.io",
 						Type:    "work",
 						Primary: true,
 					},
 				},
-				Name: &SCIMUserNameScheme{
+				Name: &model.SCIMUserNameScheme{
 					Formatted:       "Example Full Name with Last Name",
 					FamilyName:      "Example Family Name",
 					GivenName:       "Example Name",
@@ -1191,16 +1192,16 @@ func TestSCIMUserService_Update(t *testing.T) {
 			name:        "OverwriteSCIMUserWhenTheDirectoryIDIsNotSet",
 			directoryID: "",
 			userID:      "ef5ff80e-9ca6-449c-8cca-5b621085c6c9",
-			payload: &SCIMUserScheme{
+			payload: &model.SCIMUserScheme{
 				UserName: "Example Username 2",
-				Emails: []*SCIMUserEmailScheme{
+				Emails: []*model.SCIMUserEmailScheme{
 					{
 						Value:   "example-2@go-atlassian.io",
 						Type:    "work",
 						Primary: true,
 					},
 				},
-				Name: &SCIMUserNameScheme{
+				Name: &model.SCIMUserNameScheme{
 					Formatted:       "Example Full Name with Last Name",
 					FamilyName:      "Example Family Name",
 					GivenName:       "Example Name",
@@ -1230,16 +1231,16 @@ func TestSCIMUserService_Update(t *testing.T) {
 			name:        "OverwriteSCIMUserWhenTheRequestMethodIsIncorrect",
 			directoryID: "651c2e11-afea-4475-a0c4-422b89683e0f",
 			userID:      "ef5ff80e-9ca6-449c-8cca-5b621085c6c9",
-			payload: &SCIMUserScheme{
+			payload: &model.SCIMUserScheme{
 				UserName: "Example Username 2",
-				Emails: []*SCIMUserEmailScheme{
+				Emails: []*model.SCIMUserEmailScheme{
 					{
 						Value:   "example-2@go-atlassian.io",
 						Type:    "work",
 						Primary: true,
 					},
 				},
-				Name: &SCIMUserNameScheme{
+				Name: &model.SCIMUserNameScheme{
 					Formatted:       "Example Full Name with Last Name",
 					FamilyName:      "Example Family Name",
 					GivenName:       "Example Name",
@@ -1269,16 +1270,16 @@ func TestSCIMUserService_Update(t *testing.T) {
 			name:        "OverwriteSCIMUserWhenTheStatusCodeIsIncorrect",
 			directoryID: "651c2e11-afea-4475-a0c4-422b89683e0f",
 			userID:      "ef5ff80e-9ca6-449c-8cca-5b621085c6c9",
-			payload: &SCIMUserScheme{
+			payload: &model.SCIMUserScheme{
 				UserName: "Example Username 2",
-				Emails: []*SCIMUserEmailScheme{
+				Emails: []*model.SCIMUserEmailScheme{
 					{
 						Value:   "example-2@go-atlassian.io",
 						Type:    "work",
 						Primary: true,
 					},
 				},
-				Name: &SCIMUserNameScheme{
+				Name: &model.SCIMUserNameScheme{
 					Formatted:       "Example Full Name with Last Name",
 					FamilyName:      "Example Family Name",
 					GivenName:       "Example Name",
@@ -1308,16 +1309,16 @@ func TestSCIMUserService_Update(t *testing.T) {
 			name:        "OverwriteSCIMUserWhenTheContextIsNil",
 			directoryID: "651c2e11-afea-4475-a0c4-422b89683e0f",
 			userID:      "ef5ff80e-9ca6-449c-8cca-5b621085c6c9",
-			payload: &SCIMUserScheme{
+			payload: &model.SCIMUserScheme{
 				UserName: "Example Username 2",
-				Emails: []*SCIMUserEmailScheme{
+				Emails: []*model.SCIMUserEmailScheme{
 					{
 						Value:   "example-2@go-atlassian.io",
 						Type:    "work",
 						Primary: true,
 					},
 				},
-				Name: &SCIMUserNameScheme{
+				Name: &model.SCIMUserNameScheme{
 					Formatted:       "Example Full Name with Last Name",
 					FamilyName:      "Example Family Name",
 					GivenName:       "Example Name",
@@ -1347,16 +1348,16 @@ func TestSCIMUserService_Update(t *testing.T) {
 			name:        "OverwriteSCIMUserWhenTheEndpointIsEmpty",
 			directoryID: "651c2e11-afea-4475-a0c4-422b89683e0f",
 			userID:      "ef5ff80e-9ca6-449c-8cca-5b621085c6c9",
-			payload: &SCIMUserScheme{
+			payload: &model.SCIMUserScheme{
 				UserName: "Example Username 2",
-				Emails: []*SCIMUserEmailScheme{
+				Emails: []*model.SCIMUserEmailScheme{
 					{
 						Value:   "example-2@go-atlassian.io",
 						Type:    "work",
 						Primary: true,
 					},
 				},
-				Name: &SCIMUserNameScheme{
+				Name: &model.SCIMUserNameScheme{
 					Formatted:       "Example Full Name with Last Name",
 					FamilyName:      "Example Family Name",
 					GivenName:       "Example Name",
@@ -1385,16 +1386,16 @@ func TestSCIMUserService_Update(t *testing.T) {
 			name:        "OverwriteSCIMUserWhenTheResponseBodyIsEmpty",
 			directoryID: "651c2e11-afea-4475-a0c4-422b89683e0f",
 			userID:      "ef5ff80e-9ca6-449c-8cca-5b621085c6c9",
-			payload: &SCIMUserScheme{
+			payload: &model.SCIMUserScheme{
 				UserName: "Example Username 2",
-				Emails: []*SCIMUserEmailScheme{
+				Emails: []*model.SCIMUserEmailScheme{
 					{
 						Value:   "example-2@go-atlassian.io",
 						Type:    "work",
 						Primary: true,
 					},
 				},
-				Name: &SCIMUserNameScheme{
+				Name: &model.SCIMUserNameScheme{
 					Formatted:       "Example Full Name with Last Name",
 					FamilyName:      "Example Family Name",
 					GivenName:       "Example Name",
@@ -1504,7 +1505,7 @@ func TestSCIMUserService_Update(t *testing.T) {
 
 func TestSCIMUserService_Path(t *testing.T) {
 
-	payload := &SCIMUserToPathScheme{
+	payload := &model.SCIMUserToPathScheme{
 		Schemas: []string{"urn:ietf:params:scim:api:messages:2.0:PatchOp"},
 	}
 
@@ -1520,7 +1521,7 @@ func TestSCIMUserService_Path(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if err := payload.AddComplexOperation("add", "emails", []*SCIMUserComplexOperationScheme{
+	if err := payload.AddComplexOperation("add", "emails", []*model.SCIMUserComplexOperationScheme{
 		{
 			Value:     "primary@go-atlassian.io",
 			ValueType: "work",
@@ -1539,7 +1540,7 @@ func TestSCIMUserService_Path(t *testing.T) {
 		name                           string
 		directoryID                    string
 		userID                         string
-		payload                        *SCIMUserToPathScheme
+		payload                        *model.SCIMUserToPathScheme
 		attributes, excludedAttributes []string
 		mockFile                       string
 		wantHTTPMethod                 string
@@ -1797,7 +1798,7 @@ func TestSCIMUserService_Path(t *testing.T) {
 func TestSCIMUserToPathScheme_AddBoolOperation(t *testing.T) {
 	type fields struct {
 		Schemas    []string
-		Operations []*SCIMUserToPathOperationScheme
+		Operations []*model.SCIMUserToPathOperationScheme
 	}
 	type args struct {
 		operation string
@@ -1840,7 +1841,7 @@ func TestSCIMUserToPathScheme_AddBoolOperation(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			s := &SCIMUserToPathScheme{
+			s := &model.SCIMUserToPathScheme{
 				Schemas:    tt.fields.Schemas,
 				Operations: tt.fields.Operations,
 			}
@@ -1854,12 +1855,12 @@ func TestSCIMUserToPathScheme_AddBoolOperation(t *testing.T) {
 func TestSCIMUserToPathScheme_AddComplexOperation(t *testing.T) {
 	type fields struct {
 		Schemas    []string
-		Operations []*SCIMUserToPathOperationScheme
+		Operations []*model.SCIMUserToPathOperationScheme
 	}
 	type args struct {
 		operation string
 		path      string
-		values    []*SCIMUserComplexOperationScheme
+		values    []*model.SCIMUserComplexOperationScheme
 	}
 	tests := []struct {
 		name    string
@@ -1876,7 +1877,7 @@ func TestSCIMUserToPathScheme_AddComplexOperation(t *testing.T) {
 			args: args{
 				operation: "replace",
 				path:      "emails",
-				values: []*SCIMUserComplexOperationScheme{
+				values: []*model.SCIMUserComplexOperationScheme{
 					{
 						Value:     "primary@go-atlassian.io",
 						ValueType: "work",
@@ -1901,7 +1902,7 @@ func TestSCIMUserToPathScheme_AddComplexOperation(t *testing.T) {
 			args: args{
 				operation: "",
 				path:      "emails",
-				values: []*SCIMUserComplexOperationScheme{
+				values: []*model.SCIMUserComplexOperationScheme{
 					{
 						Value:     "primary@go-atlassian.io",
 						ValueType: "work",
@@ -1926,7 +1927,7 @@ func TestSCIMUserToPathScheme_AddComplexOperation(t *testing.T) {
 			args: args{
 				operation: "replace",
 				path:      "",
-				values: []*SCIMUserComplexOperationScheme{
+				values: []*model.SCIMUserComplexOperationScheme{
 					{
 						Value:     "primary@go-atlassian.io",
 						ValueType: "work",
@@ -1965,14 +1966,14 @@ func TestSCIMUserToPathScheme_AddComplexOperation(t *testing.T) {
 			args: args{
 				operation: "replace",
 				path:      "emails",
-				values:    []*SCIMUserComplexOperationScheme{},
+				values:    []*model.SCIMUserComplexOperationScheme{},
 			},
 			wantErr: true,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			s := &SCIMUserToPathScheme{
+			s := &model.SCIMUserToPathScheme{
 				Schemas:    tt.fields.Schemas,
 				Operations: tt.fields.Operations,
 			}
@@ -1986,7 +1987,7 @@ func TestSCIMUserToPathScheme_AddComplexOperation(t *testing.T) {
 func TestSCIMUserToPathScheme_AddStringOperation(t *testing.T) {
 	type fields struct {
 		Schemas    []string
-		Operations []*SCIMUserToPathOperationScheme
+		Operations []*model.SCIMUserToPathOperationScheme
 	}
 	type args struct {
 		operation string
@@ -2057,7 +2058,7 @@ func TestSCIMUserToPathScheme_AddStringOperation(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			s := &SCIMUserToPathScheme{
+			s := &model.SCIMUserToPathScheme{
 				Schemas:    tt.fields.Schemas,
 				Operations: tt.fields.Operations,
 			}

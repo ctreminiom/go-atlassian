@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
-	"github.com/google/go-querystring/query"
 	"github.com/tidwall/gjson"
 	"net/http"
 	"net/url"
@@ -56,11 +55,11 @@ func (i *IssueMetadataService) Get(ctx context.Context, issueKeyOrID string, ove
 }
 
 type IssueMetadataCreateOptions struct {
-	ProjectIDs     []string `url:"projectIds,omitempty"`
-	ProjectKeys    []string `url:"projectKeys,omitempty"`
-	IssueTypeIDs   []string `url:"issuetypeIds,omitempty"`
-	IssueTypeNames []string `url:"issuetypeNames,omitempty"`
-	Expand         string   `url:"expand,omitempty"`
+	ProjectIDs     []string
+	ProjectKeys    []string
+	IssueTypeIDs   []string
+	IssueTypeNames []string
+	Expand         string
 }
 
 // Create returns details of projects, issue types within projects, and, when requested, the create screen fields for each issue type for the user.
@@ -68,10 +67,34 @@ type IssueMetadataCreateOptions struct {
 func (i *IssueMetadataService) Create(ctx context.Context, opts *IssueMetadataCreateOptions) (result gjson.Result,
 	response *ResponseScheme, err error) {
 
-	params, _ := query.Values(opts)
+	params := url.Values{}
+
+	for _, id := range opts.IssueTypeIDs {
+		params.Add("issuetypeIds", id)
+	}
+
+	for _, name := range opts.IssueTypeNames {
+		params.Add("issuetypeNames", name)
+	}
+
+	for _, id := range opts.ProjectIDs {
+		params.Add("projectIds", id)
+	}
+
+	for _, key := range opts.ProjectKeys {
+		params.Add("projectKeys", key)
+	}
+
+	if opts.Expand != "" {
+		params.Add("expand", opts.Expand)
+	}
+
 	var endpoint strings.Builder
 	endpoint.WriteString("rest/api/3/issue/createmeta")
-	endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
+
+	if params.Encode() != "" {
+		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
+	}
 
 	request, err := i.client.newRequest(ctx, http.MethodGet, endpoint.String(), nil)
 	if err != nil {

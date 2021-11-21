@@ -41,16 +41,11 @@ type BoardLocationScheme struct {
 }
 
 type BoardIssuePageScheme struct {
-	Expand     string `json:"expand"`
-	StartAt    int    `json:"startAt"`
-	MaxResults int    `json:"maxResults"`
-	Total      int    `json:"total"`
-	Issues     []struct {
-		Expand string `json:"expand"`
-		ID     string `json:"id"`
-		Self   string `json:"self"`
-		Key    string `json:"key"`
-	} `json:"issues"`
+	Expand     string           `json:"expand,omitempty"`
+	StartAt    int              `json:"startAt,omitempty"`
+	MaxResults int              `json:"maxResults,omitempty"`
+	Total      int              `json:"total,omitempty"`
+	Issues     []*IssueSchemeV2 `json:"issues,omitempty"`
 }
 
 type BoardConfigurationScheme struct {

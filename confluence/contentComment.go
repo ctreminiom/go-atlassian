@@ -3,6 +3,7 @@ package confluence
 import (
 	"context"
 	"fmt"
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -15,10 +16,10 @@ type ContentCommentService struct {
 
 // Gets returns the comments on a piece of content.
 func (c *ContentCommentService) Gets(ctx context.Context, contentID string, expand, location []string,
-	startAt, maxResults int) (result *ContentPageScheme, response *ResponseScheme, err error) {
+	startAt, maxResults int) (result *model.ContentPageScheme, response *ResponseScheme, err error) {
 
 	if len(contentID) == 0 {
-		return nil, nil, notContentIDError
+		return nil, nil, model.ErrNoContentIDError
 	}
 
 	query := url.Values{}

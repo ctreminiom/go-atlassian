@@ -3,6 +3,7 @@ package confluence
 import (
 	"context"
 	"fmt"
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/url"
@@ -14,7 +15,7 @@ func TestContentPropertyService_Create(t *testing.T) {
 	testCases := []struct {
 		name               string
 		contentID          string
-		payload            *ContentPropertyPayloadScheme
+		payload            *model.ContentPropertyPayloadScheme
 		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string
@@ -25,7 +26,7 @@ func TestContentPropertyService_Create(t *testing.T) {
 		{
 			name:      "CreateContentPropertyWhenTheParametersAreCorrect",
 			contentID: "9438383838383",
-			payload: &ContentPropertyPayloadScheme{
+			payload: &model.ContentPropertyPayloadScheme{
 				Key:   "key",
 				Value: "value",
 			},
@@ -40,7 +41,7 @@ func TestContentPropertyService_Create(t *testing.T) {
 		{
 			name:      "CreateContentPropertyWhenTheContentIDIsNotSet",
 			contentID: "",
-			payload: &ContentPropertyPayloadScheme{
+			payload: &model.ContentPropertyPayloadScheme{
 				Key:   "key",
 				Value: "value",
 			},
@@ -67,7 +68,7 @@ func TestContentPropertyService_Create(t *testing.T) {
 		{
 			name:      "CreateContentPropertyWhenTheContextIsNotSet",
 			contentID: "9438383838383",
-			payload: &ContentPropertyPayloadScheme{
+			payload: &model.ContentPropertyPayloadScheme{
 				Key:   "key",
 				Value: "value",
 			},
@@ -82,7 +83,7 @@ func TestContentPropertyService_Create(t *testing.T) {
 		{
 			name:      "CreateContentPropertyWhenTheParametersAreCorrect",
 			contentID: "9438383838383",
-			payload: &ContentPropertyPayloadScheme{
+			payload: &model.ContentPropertyPayloadScheme{
 				Key:   "key",
 				Value: "value",
 			},
@@ -97,7 +98,7 @@ func TestContentPropertyService_Create(t *testing.T) {
 		{
 			name:      "CreateContentPropertyWhenTheRequestMethodIsIncorrect",
 			contentID: "9438383838383",
-			payload: &ContentPropertyPayloadScheme{
+			payload: &model.ContentPropertyPayloadScheme{
 				Key:   "key",
 				Value: "value",
 			},
@@ -112,7 +113,7 @@ func TestContentPropertyService_Create(t *testing.T) {
 		{
 			name:      "CreateContentPropertyWhenTheStatusCodeIsIncorrect",
 			contentID: "9438383838383",
-			payload: &ContentPropertyPayloadScheme{
+			payload: &model.ContentPropertyPayloadScheme{
 				Key:   "key",
 				Value: "value",
 			},

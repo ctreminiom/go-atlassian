@@ -3,6 +3,7 @@ package confluence
 import (
 	"context"
 	"fmt"
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/url"
@@ -14,7 +15,7 @@ func TestContentService_Create(t *testing.T) {
 
 	testCases := []struct {
 		name               string
-		payload            *ContentScheme
+		payload            *model.ContentScheme
 		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string
@@ -24,12 +25,12 @@ func TestContentService_Create(t *testing.T) {
 	}{
 		{
 			name: "CreateContentWhenTheParametersAreCorrect",
-			payload: &ContentScheme{
+			payload: &model.ContentScheme{
 				Type:  "page", // Valid values: page, blogpost, comment
 				Title: "Confluence Page Title",
-				Space: &SpaceScheme{Key: "DUMMY"},
-				Body: &BodyScheme{
-					Storage: &BodyNodeScheme{
+				Space: &model.SpaceScheme{Key: "DUMMY"},
+				Body: &model.BodyScheme{
+					Storage: &model.BodyNodeScheme{
 						Value:          "<p>This is <br/> a new page</p>",
 						Representation: "storage",
 					},
@@ -56,12 +57,12 @@ func TestContentService_Create(t *testing.T) {
 
 		{
 			name: "CreateContentWhenTheRequestMethodIsIncorrect",
-			payload: &ContentScheme{
+			payload: &model.ContentScheme{
 				Type:  "page", // Valid values: page, blogpost, comment
 				Title: "Confluence Page Title",
-				Space: &SpaceScheme{Key: "DUMMY"},
-				Body: &BodyScheme{
-					Storage: &BodyNodeScheme{
+				Space: &model.SpaceScheme{Key: "DUMMY"},
+				Body: &model.BodyScheme{
+					Storage: &model.BodyNodeScheme{
 						Value:          "<p>This is <br/> a new page</p>",
 						Representation: "storage",
 					},
@@ -77,12 +78,12 @@ func TestContentService_Create(t *testing.T) {
 
 		{
 			name: "CreateContentWhenTheContextIsNotProvided",
-			payload: &ContentScheme{
+			payload: &model.ContentScheme{
 				Type:  "page", // Valid values: page, blogpost, comment
 				Title: "Confluence Page Title",
-				Space: &SpaceScheme{Key: "DUMMY"},
-				Body: &BodyScheme{
-					Storage: &BodyNodeScheme{
+				Space: &model.SpaceScheme{Key: "DUMMY"},
+				Body: &model.BodyScheme{
+					Storage: &model.BodyNodeScheme{
 						Value:          "<p>This is <br/> a new page</p>",
 						Representation: "storage",
 					},
@@ -98,12 +99,12 @@ func TestContentService_Create(t *testing.T) {
 
 		{
 			name: "CreateContentWhenTheRequestBodyIsEmpty",
-			payload: &ContentScheme{
+			payload: &model.ContentScheme{
 				Type:  "page", // Valid values: page, blogpost, comment
 				Title: "Confluence Page Title",
-				Space: &SpaceScheme{Key: "DUMMY"},
-				Body: &BodyScheme{
-					Storage: &BodyNodeScheme{
+				Space: &model.SpaceScheme{Key: "DUMMY"},
+				Body: &model.BodyScheme{
+					Storage: &model.BodyNodeScheme{
 						Value:          "<p>This is <br/> a new page</p>",
 						Representation: "storage",
 					},
@@ -189,7 +190,7 @@ func TestContentService_Gets(t *testing.T) {
 
 	testCases := []struct {
 		name                string
-		options             *GetContentOptionsScheme
+		options             *model.GetContentOptionsScheme
 		startAt, maxResults int
 		mockFile            string
 		wantHTTPMethod      string
@@ -200,7 +201,7 @@ func TestContentService_Gets(t *testing.T) {
 	}{
 		{
 			name: "GetsContentWhenTheAllOptionsAreProvided",
-			options: &GetContentOptionsScheme{
+			options: &model.GetContentOptionsScheme{
 				ContextType: "page",
 				SpaceKey:    "DUMMY",
 				Title:       "*page*",
@@ -222,7 +223,7 @@ func TestContentService_Gets(t *testing.T) {
 
 		{
 			name: "GetsContentWhenTheContextIsNotSet",
-			options: &GetContentOptionsScheme{
+			options: &model.GetContentOptionsScheme{
 				ContextType: "page",
 				SpaceKey:    "DUMMY",
 				Title:       "*page*",
@@ -244,7 +245,7 @@ func TestContentService_Gets(t *testing.T) {
 
 		{
 			name: "GetsContentWhenTheRequestMethodIsIncorrect",
-			options: &GetContentOptionsScheme{
+			options: &model.GetContentOptionsScheme{
 				ContextType: "page",
 				SpaceKey:    "DUMMY",
 				Title:       "*page*",
@@ -266,7 +267,7 @@ func TestContentService_Gets(t *testing.T) {
 
 		{
 			name: "GetsContentWhenTheResponseStatusIsIncorrect",
-			options: &GetContentOptionsScheme{
+			options: &model.GetContentOptionsScheme{
 				ContextType: "page",
 				SpaceKey:    "DUMMY",
 				Title:       "*page*",
@@ -288,7 +289,7 @@ func TestContentService_Gets(t *testing.T) {
 
 		{
 			name: "GetsContentWhenTheResponseBodyIsEmpty",
-			options: &GetContentOptionsScheme{
+			options: &model.GetContentOptionsScheme{
 				ContextType: "page",
 				SpaceKey:    "DUMMY",
 				Title:       "*page*",
@@ -720,7 +721,7 @@ func TestContentService_Update(t *testing.T) {
 	testCases := []struct {
 		name               string
 		contentID          string
-		payload            *ContentScheme
+		payload            *model.ContentScheme
 		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string
@@ -731,17 +732,17 @@ func TestContentService_Update(t *testing.T) {
 		{
 			name:      "UpdateContentWhenTheParametersAreCorrect",
 			contentID: "2939332",
-			payload: &ContentScheme{
+			payload: &model.ContentScheme{
 				Type:  "page", // Valid values: page, blogpost, comment
 				Title: "Confluence Page Title",
-				Space: &SpaceScheme{Key: "DUMMY"},
-				Body: &BodyScheme{
-					Storage: &BodyNodeScheme{
+				Space: &model.SpaceScheme{Key: "DUMMY"},
+				Body: &model.BodyScheme{
+					Storage: &model.BodyNodeScheme{
 						Value:          "<p>This is <br/> a new page</p>",
 						Representation: "storage",
 					},
 				},
-				Version: &VersionScheme{Number: 2},
+				Version: &model.ContentVersionScheme{Number: 2},
 			},
 			mockFile:           "./mocks/get-content.json",
 			wantHTTPMethod:     http.MethodPut,
@@ -754,17 +755,17 @@ func TestContentService_Update(t *testing.T) {
 		{
 			name:      "UpdateContentWhenTheContentIDIsNotProvided",
 			contentID: "",
-			payload: &ContentScheme{
+			payload: &model.ContentScheme{
 				Type:  "page", // Valid values: page, blogpost, comment
 				Title: "Confluence Page Title",
-				Space: &SpaceScheme{Key: "DUMMY"},
-				Body: &BodyScheme{
-					Storage: &BodyNodeScheme{
+				Space: &model.SpaceScheme{Key: "DUMMY"},
+				Body: &model.BodyScheme{
+					Storage: &model.BodyNodeScheme{
 						Value:          "<p>This is <br/> a new page</p>",
 						Representation: "storage",
 					},
 				},
-				Version: &VersionScheme{Number: 2},
+				Version: &model.ContentVersionScheme{Number: 2},
 			},
 			mockFile:           "./mocks/get-content.json",
 			wantHTTPMethod:     http.MethodPut,
@@ -789,17 +790,17 @@ func TestContentService_Update(t *testing.T) {
 		{
 			name:      "UpdateContentWhenTheContentIsNotProvided",
 			contentID: "2939332",
-			payload: &ContentScheme{
+			payload: &model.ContentScheme{
 				Type:  "page", // Valid values: page, blogpost, comment
 				Title: "Confluence Page Title",
-				Space: &SpaceScheme{Key: "DUMMY"},
-				Body: &BodyScheme{
-					Storage: &BodyNodeScheme{
+				Space: &model.SpaceScheme{Key: "DUMMY"},
+				Body: &model.BodyScheme{
+					Storage: &model.BodyNodeScheme{
 						Value:          "<p>This is <br/> a new page</p>",
 						Representation: "storage",
 					},
 				},
-				Version: &VersionScheme{Number: 2},
+				Version: &model.ContentVersionScheme{Number: 2},
 			},
 			mockFile:           "./mocks/get-content.json",
 			wantHTTPMethod:     http.MethodPut,
@@ -812,17 +813,17 @@ func TestContentService_Update(t *testing.T) {
 		{
 			name:      "UpdateContentWhenTheRequestMethodIsIncorrect",
 			contentID: "2939332",
-			payload: &ContentScheme{
+			payload: &model.ContentScheme{
 				Type:  "page", // Valid values: page, blogpost, comment
 				Title: "Confluence Page Title",
-				Space: &SpaceScheme{Key: "DUMMY"},
-				Body: &BodyScheme{
-					Storage: &BodyNodeScheme{
+				Space: &model.SpaceScheme{Key: "DUMMY"},
+				Body: &model.BodyScheme{
+					Storage: &model.BodyNodeScheme{
 						Value:          "<p>This is <br/> a new page</p>",
 						Representation: "storage",
 					},
 				},
-				Version: &VersionScheme{Number: 2},
+				Version: &model.ContentVersionScheme{Number: 2},
 			},
 			mockFile:           "./mocks/get-content.json",
 			wantHTTPMethod:     http.MethodHead,
@@ -835,17 +836,17 @@ func TestContentService_Update(t *testing.T) {
 		{
 			name:      "UpdateContentWhenTheStatusCodeIsIncorrect",
 			contentID: "2939332",
-			payload: &ContentScheme{
+			payload: &model.ContentScheme{
 				Type:  "page", // Valid values: page, blogpost, comment
 				Title: "Confluence Page Title",
-				Space: &SpaceScheme{Key: "DUMMY"},
-				Body: &BodyScheme{
-					Storage: &BodyNodeScheme{
+				Space: &model.SpaceScheme{Key: "DUMMY"},
+				Body: &model.BodyScheme{
+					Storage: &model.BodyNodeScheme{
 						Value:          "<p>This is <br/> a new page</p>",
 						Representation: "storage",
 					},
 				},
-				Version: &VersionScheme{Number: 2},
+				Version: &model.ContentVersionScheme{Number: 2},
 			},
 			mockFile:           "./mocks/get-content.json",
 			wantHTTPMethod:     http.MethodPut,
@@ -858,17 +859,17 @@ func TestContentService_Update(t *testing.T) {
 		{
 			name:      "UpdateContentWhenTheResponseBodyIsEmpty",
 			contentID: "2939332",
-			payload: &ContentScheme{
+			payload: &model.ContentScheme{
 				Type:  "page", // Valid values: page, blogpost, comment
 				Title: "Confluence Page Title",
-				Space: &SpaceScheme{Key: "DUMMY"},
-				Body: &BodyScheme{
-					Storage: &BodyNodeScheme{
+				Space: &model.SpaceScheme{Key: "DUMMY"},
+				Body: &model.BodyScheme{
+					Storage: &model.BodyNodeScheme{
 						Value:          "<p>This is <br/> a new page</p>",
 						Representation: "storage",
 					},
 				},
-				Version: &VersionScheme{Number: 2},
+				Version: &model.ContentVersionScheme{Number: 2},
 			},
 			mockFile:           "./mocks/empty-json.json",
 			wantHTTPMethod:     http.MethodPut,

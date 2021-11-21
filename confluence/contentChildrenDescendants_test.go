@@ -3,6 +3,7 @@ package confluence
 import (
 	"context"
 	"fmt"
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/url"
@@ -768,7 +769,7 @@ func TestContentChildrenDescendantService_CopyHierarchy(t *testing.T) {
 	testCases := []struct {
 		name               string
 		contentID          string
-		options            *CopyOptionsScheme
+		options            *model.CopyOptionsScheme
 		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string
@@ -779,14 +780,14 @@ func TestContentChildrenDescendantService_CopyHierarchy(t *testing.T) {
 		{
 			name:      "CopyContentHierarchyWhenTheParametersAreCorrect",
 			contentID: "44747372",
-			options: &CopyOptionsScheme{
+			options: &model.CopyOptionsScheme{
 				CopyAttachments:    true,
 				CopyPermissions:    true,
 				CopyProperties:     true,
 				CopyLabels:         true,
 				CopyCustomContents: true,
 				DestinationPageID:  "80412692",
-				TitleOptions: &CopyTitleOptionScheme{
+				TitleOptions: &model.CopyTitleOptionScheme{
 					Prefix: "copy-01-",
 				},
 			},
@@ -801,14 +802,14 @@ func TestContentChildrenDescendantService_CopyHierarchy(t *testing.T) {
 		{
 			name:      "CopyContentHierarchyWhenTheContentIDIsNotProvided",
 			contentID: "",
-			options: &CopyOptionsScheme{
+			options: &model.CopyOptionsScheme{
 				CopyAttachments:    true,
 				CopyPermissions:    true,
 				CopyProperties:     true,
 				CopyLabels:         true,
 				CopyCustomContents: true,
 				DestinationPageID:  "80412692",
-				TitleOptions: &CopyTitleOptionScheme{
+				TitleOptions: &model.CopyTitleOptionScheme{
 					Prefix: "copy-01-",
 				},
 			},
@@ -835,14 +836,14 @@ func TestContentChildrenDescendantService_CopyHierarchy(t *testing.T) {
 		{
 			name:      "CopyContentHierarchyWhenTheContextIsNotProvided",
 			contentID: "44747372",
-			options: &CopyOptionsScheme{
+			options: &model.CopyOptionsScheme{
 				CopyAttachments:    true,
 				CopyPermissions:    true,
 				CopyProperties:     true,
 				CopyLabels:         true,
 				CopyCustomContents: true,
 				DestinationPageID:  "80412692",
-				TitleOptions: &CopyTitleOptionScheme{
+				TitleOptions: &model.CopyTitleOptionScheme{
 					Prefix: "copy-01-",
 				},
 			},
@@ -857,14 +858,14 @@ func TestContentChildrenDescendantService_CopyHierarchy(t *testing.T) {
 		{
 			name:      "CopyContentHierarchyWhenTheRequestMethodIsIncorrect",
 			contentID: "44747372",
-			options: &CopyOptionsScheme{
+			options: &model.CopyOptionsScheme{
 				CopyAttachments:    true,
 				CopyPermissions:    true,
 				CopyProperties:     true,
 				CopyLabels:         true,
 				CopyCustomContents: true,
 				DestinationPageID:  "80412692",
-				TitleOptions: &CopyTitleOptionScheme{
+				TitleOptions: &model.CopyTitleOptionScheme{
 					Prefix: "copy-01-",
 				},
 			},
@@ -879,14 +880,14 @@ func TestContentChildrenDescendantService_CopyHierarchy(t *testing.T) {
 		{
 			name:      "CopyContentHierarchyWhenTheStatusCodeIsIncorrect",
 			contentID: "44747372",
-			options: &CopyOptionsScheme{
+			options: &model.CopyOptionsScheme{
 				CopyAttachments:    true,
 				CopyPermissions:    true,
 				CopyProperties:     true,
 				CopyLabels:         true,
 				CopyCustomContents: true,
 				DestinationPageID:  "80412692",
-				TitleOptions: &CopyTitleOptionScheme{
+				TitleOptions: &model.CopyTitleOptionScheme{
 					Prefix: "copy-01-",
 				},
 			},
@@ -901,14 +902,14 @@ func TestContentChildrenDescendantService_CopyHierarchy(t *testing.T) {
 		{
 			name:      "CopyContentHierarchyWhenTheResponseBodyIsEmpty",
 			contentID: "44747372",
-			options: &CopyOptionsScheme{
+			options: &model.CopyOptionsScheme{
 				CopyAttachments:    true,
 				CopyPermissions:    true,
 				CopyProperties:     true,
 				CopyLabels:         true,
 				CopyCustomContents: true,
 				DestinationPageID:  "80412692",
-				TitleOptions: &CopyTitleOptionScheme{
+				TitleOptions: &model.CopyTitleOptionScheme{
 					Prefix: "copy-01-",
 				},
 			},
@@ -994,7 +995,7 @@ func TestContentChildrenDescendantService_CopyPage(t *testing.T) {
 		name               string
 		contentID          string
 		expand             []string
-		options            *CopyOptionsScheme
+		options            *model.CopyOptionsScheme
 		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string
@@ -1006,14 +1007,14 @@ func TestContentChildrenDescendantService_CopyPage(t *testing.T) {
 			name:      "CopyPageWhenTheParametersAreCorrect",
 			contentID: "747366262",
 			expand:    []string{"childTypes.all", "container"},
-			options: &CopyOptionsScheme{
+			options: &model.CopyOptionsScheme{
 				CopyAttachments:    true,
 				CopyPermissions:    true,
 				CopyProperties:     true,
 				CopyLabels:         true,
 				CopyCustomContents: true,
 				PageTitle:          "new-page-copied-title",
-				Destination: &CopyPageDestinationScheme{
+				Destination: &model.CopyPageDestinationScheme{
 					Type:  "parent_page",
 					Value: "64290817",
 				},
@@ -1030,14 +1031,14 @@ func TestContentChildrenDescendantService_CopyPage(t *testing.T) {
 			name:      "CopyPageWhenTheContentIDIsNotProvided",
 			contentID: "",
 			expand:    []string{"childTypes.all", "container"},
-			options: &CopyOptionsScheme{
+			options: &model.CopyOptionsScheme{
 				CopyAttachments:    true,
 				CopyPermissions:    true,
 				CopyProperties:     true,
 				CopyLabels:         true,
 				CopyCustomContents: true,
 				PageTitle:          "new-page-copied-title",
-				Destination: &CopyPageDestinationScheme{
+				Destination: &model.CopyPageDestinationScheme{
 					Type:  "parent_page",
 					Value: "64290817",
 				},
@@ -1067,14 +1068,14 @@ func TestContentChildrenDescendantService_CopyPage(t *testing.T) {
 			name:      "CopyPageWhenTheRequestMethodIsIncorrect",
 			contentID: "747366262",
 			expand:    []string{"childTypes.all", "container"},
-			options: &CopyOptionsScheme{
+			options: &model.CopyOptionsScheme{
 				CopyAttachments:    true,
 				CopyPermissions:    true,
 				CopyProperties:     true,
 				CopyLabels:         true,
 				CopyCustomContents: true,
 				PageTitle:          "new-page-copied-title",
-				Destination: &CopyPageDestinationScheme{
+				Destination: &model.CopyPageDestinationScheme{
 					Type:  "parent_page",
 					Value: "64290817",
 				},
@@ -1091,14 +1092,14 @@ func TestContentChildrenDescendantService_CopyPage(t *testing.T) {
 			name:      "CopyPageWhenTheContextIsNotProvided",
 			contentID: "747366262",
 			expand:    []string{"childTypes.all", "container"},
-			options: &CopyOptionsScheme{
+			options: &model.CopyOptionsScheme{
 				CopyAttachments:    true,
 				CopyPermissions:    true,
 				CopyProperties:     true,
 				CopyLabels:         true,
 				CopyCustomContents: true,
 				PageTitle:          "new-page-copied-title",
-				Destination: &CopyPageDestinationScheme{
+				Destination: &model.CopyPageDestinationScheme{
 					Type:  "parent_page",
 					Value: "64290817",
 				},
@@ -1115,14 +1116,14 @@ func TestContentChildrenDescendantService_CopyPage(t *testing.T) {
 			name:      "CopyPageWhenTheStatusCodeIsIncorrect",
 			contentID: "747366262",
 			expand:    []string{"childTypes.all", "container"},
-			options: &CopyOptionsScheme{
+			options: &model.CopyOptionsScheme{
 				CopyAttachments:    true,
 				CopyPermissions:    true,
 				CopyProperties:     true,
 				CopyLabels:         true,
 				CopyCustomContents: true,
 				PageTitle:          "new-page-copied-title",
-				Destination: &CopyPageDestinationScheme{
+				Destination: &model.CopyPageDestinationScheme{
 					Type:  "parent_page",
 					Value: "64290817",
 				},
@@ -1139,14 +1140,14 @@ func TestContentChildrenDescendantService_CopyPage(t *testing.T) {
 			name:      "CopyPageWhenTheResponseBodyIsEmpty",
 			contentID: "747366262",
 			expand:    []string{"childTypes.all", "container"},
-			options: &CopyOptionsScheme{
+			options: &model.CopyOptionsScheme{
 				CopyAttachments:    true,
 				CopyPermissions:    true,
 				CopyProperties:     true,
 				CopyLabels:         true,
 				CopyCustomContents: true,
 				PageTitle:          "new-page-copied-title",
-				Destination: &CopyPageDestinationScheme{
+				Destination: &model.CopyPageDestinationScheme{
 					Type:  "parent_page",
 					Value: "64290817",
 				},

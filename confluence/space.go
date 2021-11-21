@@ -3,6 +3,7 @@ package confluence
 import (
 	"context"
 	"fmt"
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -13,32 +14,9 @@ type SpaceService struct {
 	client *Client
 }
 
-type SpacePageScheme struct {
-	Results []*SpaceScheme `json:"results,omitempty"`
-	Start   int            `json:"start"`
-	Limit   int            `json:"limit"`
-	Size    int            `json:"size"`
-	Links   struct {
-		Base    string `json:"base"`
-		Context string `json:"context"`
-		Self    string `json:"self"`
-	} `json:"_links"`
-}
-
-type GetSpacesOptionScheme struct {
-	SpaceKeys       []string
-	SpaceIDs        []int
-	SpaceType       string
-	Status          string
-	Labels          []string
-	Favorite        bool
-	FavoriteUserKey string
-	Expand          []string
-}
-
 // Gets returns all spaces. The returned spaces are ordered alphabetically in ascending order by space key.
-func (s *SpaceService) Gets(ctx context.Context, options *GetSpacesOptionScheme, startAt, maxResults int) (
-	result *SpacePageScheme, response *ResponseScheme, err error) {
+func (s *SpaceService) Gets(ctx context.Context, options *model.GetSpacesOptionScheme, startAt, maxResults int) (
+	result *model.SpacePageScheme, response *ResponseScheme, err error) {
 
 	query := url.Values{}
 	query.Add("start", strconv.Itoa(startAt))
@@ -99,63 +77,10 @@ func (s *SpaceService) Gets(ctx context.Context, options *GetSpacesOptionScheme,
 	return
 }
 
-type CreateSpaceScheme struct {
-	Key              string                        `json:"key,omitempty"`
-	Name             string                        `json:"name,omitempty"`
-	Description      *CreateSpaceDescriptionScheme `json:"description,omitempty"`
-	AnonymousAccess  bool                          `json:"anonymousAccess,omitempty"`
-	UnlicensedAccess bool                          `json:"unlicensedAccess,omitempty"`
-}
-
-type CreateSpaceDescriptionScheme struct {
-	Plain *CreateSpaceDescriptionPlainScheme `json:"plain"`
-}
-
-type CreateSpaceDescriptionPlainScheme struct {
-	Value          string `json:"value"`
-	Representation string `json:"representation"`
-}
-
-type SpacePermissionScheme struct {
-	Subject   *SubjectPermissionScheme   `json:"subject,omitempty"`
-	Operation *OperationPermissionScheme `json:"operation,omitempty"`
-}
-
-type OperationPermissionScheme struct {
-	Operation  string `json:"operation,omitempty"`
-	TargetType string `json:"targetType,omitempty"`
-}
-
-type SubjectPermissionScheme struct {
-	User       *UserPermissionScheme  `json:"user,omitempty"`
-	Group      *GroupPermissionScheme `json:"group,omitempty"`
-	Expandable struct {
-		User  string `json:"user,omitempty"`
-		Group string `json:"group,omitempty"`
-	} `json:"_expandable,omitempty"`
-}
-
-type UserPermissionScheme struct {
-	Results []*UserScheme `json:"results,omitempty"`
-	Size    int           `json:"size,omitempty"`
-}
-
-type GroupPermissionScheme struct {
-	Results []*GroupScheme `json:"results,omitempty"`
-	Size    int            `json:"size,omitempty"`
-}
-
-type GroupScheme struct {
-	Type  string      `json:"type,omitempty"`
-	Name  string      `json:"name,omitempty"`
-	ID    string      `json:"id,omitempty"`
-	Links *LinkScheme `json:"_links,omitempty"`
-}
-
 // Create creates a new space.
 // Note, currently you cannot set space labels when creating a space.
-func (s *SpaceService) Create(ctx context.Context, payload *CreateSpaceScheme, private bool) (
-	result *SpaceScheme, response *ResponseScheme, err error) {
+func (s *SpaceService) Create(ctx context.Context, payload *model.CreateSpaceScheme, private bool) (
+	result *model.SpaceScheme, response *ResponseScheme, err error) {
 
 	payloadAsReader, err := transformStructToReader(payload)
 	if err != nil {
@@ -163,11 +88,11 @@ func (s *SpaceService) Create(ctx context.Context, payload *CreateSpaceScheme, p
 	}
 
 	if len(payload.Name) == 0 {
-		return nil, nil, notSpaceNameProvidedError
+		return nil, nil, model.ErrNoSpaceNameError
 	}
 
 	if len(payload.Key) == 0 {
-		return nil, nil, notSpaceKeyProvidedError
+		return nil, nil, model.ErrNoSpaceKeyError
 	}
 
 	var endpoint strings.Builder
@@ -196,11 +121,11 @@ func (s *SpaceService) Create(ctx context.Context, payload *CreateSpaceScheme, p
 // Get returns a space.
 // This includes information like the name, description, and permissions,
 // but not the content in the space.
-func (s *SpaceService) Get(ctx context.Context, spaceKey string, expand []string) (result *SpaceScheme,
+func (s *SpaceService) Get(ctx context.Context, spaceKey string, expand []string) (result *model.SpaceScheme,
 	response *ResponseScheme, err error) {
 
 	if len(spaceKey) == 0 {
-		return nil, nil, notSpaceKeyProvidedError
+		return nil, nil, model.ErrNoSpaceKeyError
 	}
 
 	query := url.Values{}
@@ -230,22 +155,12 @@ func (s *SpaceService) Get(ctx context.Context, spaceKey string, expand []string
 	return
 }
 
-type UpdateSpaceScheme struct {
-	Name        string                        `json:"name,omitempty"`
-	Description *CreateSpaceDescriptionScheme `json:"description,omitempty"`
-	Homepage    *UpdateSpaceHomepageScheme    `json:"homepage,omitempty"`
-}
-
-type UpdateSpaceHomepageScheme struct {
-	ID string `json:"id"`
-}
-
 // Update updates the name, description, or homepage of a space.
-func (s *SpaceService) Update(ctx context.Context, spaceKey string, payload *UpdateSpaceScheme) (result *SpaceScheme,
+func (s *SpaceService) Update(ctx context.Context, spaceKey string, payload *model.UpdateSpaceScheme) (result *model.SpaceScheme,
 	response *ResponseScheme, err error) {
 
 	if len(spaceKey) == 0 {
-		return nil, nil, notSpaceKeyProvidedError
+		return nil, nil, model.ErrNoSpaceKeyError
 	}
 
 	payloadAsReader, err := transformStructToReader(payload)
@@ -275,10 +190,10 @@ func (s *SpaceService) Update(ctx context.Context, spaceKey string, payload *Upd
 // Note, the space will be deleted in a long running task.
 // Therefore, the space may not be deleted yet when this method has returned.
 // Clients should poll the status link that is returned in the response until the task completes.
-func (s *SpaceService) Delete(ctx context.Context, spaceKey string) (result *TaskScheme, response *ResponseScheme, err error) {
+func (s *SpaceService) Delete(ctx context.Context, spaceKey string) (result *model.ContentTaskScheme, response *ResponseScheme, err error) {
 
 	if len(spaceKey) == 0 {
-		return nil, nil, notSpaceKeyProvidedError
+		return nil, nil, model.ErrNoSpaceKeyError
 	}
 
 	var endpoint = fmt.Sprintf("/wiki/rest/api/space/%v", spaceKey)
@@ -300,10 +215,10 @@ func (s *SpaceService) Delete(ctx context.Context, spaceKey string) (result *Tas
 // The returned content is grouped by type (pages then blogposts),
 // then ordered by content ID in ascending order.
 func (s *SpaceService) Content(ctx context.Context, spaceKey, depth string, expand []string, startAt, maxResults int) (
-	result *ContentChildrenScheme, response *ResponseScheme, err error) {
+	result *model.ContentChildrenScheme, response *ResponseScheme, err error) {
 
 	if len(spaceKey) == 0 {
-		return nil, nil, notSpaceKeyProvidedError
+		return nil, nil, model.ErrNoSpaceKeyError
 	}
 
 	query := url.Values{}
@@ -336,10 +251,10 @@ func (s *SpaceService) Content(ctx context.Context, spaceKey, depth string, expa
 // ContentByType returns all content of a given type, in a space.
 // The returned content is ordered by content ID in ascending order.
 func (s *SpaceService) ContentByType(ctx context.Context, spaceKey, contentType, depth string, expand []string, startAt,
-	maxResults int) (result *ContentPageScheme, response *ResponseScheme, err error) {
+	maxResults int) (result *model.ContentPageScheme, response *ResponseScheme, err error) {
 
 	if len(spaceKey) == 0 {
-		return nil, nil, notSpaceKeyProvidedError
+		return nil, nil, model.ErrNoSpaceKeyError
 	}
 
 	query := url.Values{}
@@ -368,8 +283,3 @@ func (s *SpaceService) ContentByType(ctx context.Context, spaceKey, contentType,
 
 	return
 }
-
-var (
-	notSpaceNameProvidedError = fmt.Errorf("error, space name parameter is required, please provide a valid value")
-	notSpaceKeyProvidedError  = fmt.Errorf("error, space key parameter is required, please provide a valid value")
-)

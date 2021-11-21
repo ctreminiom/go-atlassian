@@ -3,6 +3,7 @@ package confluence
 import (
 	"context"
 	"fmt"
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/url"
@@ -13,7 +14,7 @@ func TestSpaceService_Gets(t *testing.T) {
 
 	testCases := []struct {
 		name                string
-		options             *GetSpacesOptionScheme
+		options             *model.GetSpacesOptionScheme
 		startAt, maxResults int
 		mockFile            string
 		wantHTTPMethod      string
@@ -24,7 +25,7 @@ func TestSpaceService_Gets(t *testing.T) {
 	}{
 		{
 			name: "GetSpacesWhenTheParametersAreCorrect",
-			options: &GetSpacesOptionScheme{
+			options: &model.GetSpacesOptionScheme{
 				SpaceKeys:       []string{"DUMMY", "TEST"},
 				SpaceIDs:        []int{1111, 2222, 3333},
 				SpaceType:       "global",
@@ -46,7 +47,7 @@ func TestSpaceService_Gets(t *testing.T) {
 
 		{
 			name: "GetSpacesWhenTheContextIsNotProvided",
-			options: &GetSpacesOptionScheme{
+			options: &model.GetSpacesOptionScheme{
 				SpaceKeys:       []string{"DUMMY", "TEST"},
 				SpaceIDs:        []int{1111, 2222, 3333},
 				SpaceType:       "global",
@@ -68,7 +69,7 @@ func TestSpaceService_Gets(t *testing.T) {
 
 		{
 			name: "GetSpacesWhenTheRequestMethodIsIncorrect",
-			options: &GetSpacesOptionScheme{
+			options: &model.GetSpacesOptionScheme{
 				SpaceKeys:       []string{"DUMMY", "TEST"},
 				SpaceIDs:        []int{1111, 2222, 3333},
 				SpaceType:       "global",
@@ -90,7 +91,7 @@ func TestSpaceService_Gets(t *testing.T) {
 
 		{
 			name: "GetSpacesWhenTheStatusCodeIsIncorrect",
-			options: &GetSpacesOptionScheme{
+			options: &model.GetSpacesOptionScheme{
 				SpaceKeys:       []string{"DUMMY", "TEST"},
 				SpaceIDs:        []int{1111, 2222, 3333},
 				SpaceType:       "global",
@@ -112,7 +113,7 @@ func TestSpaceService_Gets(t *testing.T) {
 
 		{
 			name: "GetSpacesWhenTheResponseBodyIsEmpty",
-			options: &GetSpacesOptionScheme{
+			options: &model.GetSpacesOptionScheme{
 				SpaceKeys:       []string{"DUMMY", "TEST"},
 				SpaceIDs:        []int{1111, 2222, 3333},
 				SpaceType:       "global",
@@ -209,7 +210,7 @@ func TestSpaceService_Create(t *testing.T) {
 
 	testCases := []struct {
 		name               string
-		payload            *CreateSpaceScheme
+		payload            *model.CreateSpaceScheme
 		private            bool
 		mockFile           string
 		wantHTTPMethod     string
@@ -220,11 +221,11 @@ func TestSpaceService_Create(t *testing.T) {
 	}{
 		{
 			name: "CreateSpaceWhenTheParametersAreCorrect",
-			payload: &CreateSpaceScheme{
+			payload: &model.CreateSpaceScheme{
 				Key:  "DUM",
 				Name: "Dum Confluence Space",
-				Description: &CreateSpaceDescriptionScheme{
-					Plain: &CreateSpaceDescriptionPlainScheme{
+				Description: &model.CreateSpaceDescriptionScheme{
+					Plain: &model.CreateSpaceDescriptionPlainScheme{
 						Value:          "Confluence Space Description Sample",
 						Representation: "plain",
 					},
@@ -243,11 +244,11 @@ func TestSpaceService_Create(t *testing.T) {
 
 		{
 			name: "CreateSpaceWhenTheSpaceKeyIsNotProvided",
-			payload: &CreateSpaceScheme{
+			payload: &model.CreateSpaceScheme{
 				Key:  "",
 				Name: "Dum Confluence Space",
-				Description: &CreateSpaceDescriptionScheme{
-					Plain: &CreateSpaceDescriptionPlainScheme{
+				Description: &model.CreateSpaceDescriptionScheme{
+					Plain: &model.CreateSpaceDescriptionPlainScheme{
 						Value:          "Confluence Space Description Sample",
 						Representation: "plain",
 					},
@@ -266,11 +267,11 @@ func TestSpaceService_Create(t *testing.T) {
 
 		{
 			name: "CreateSpaceWhenTheSpaceNameIsNotProvided",
-			payload: &CreateSpaceScheme{
+			payload: &model.CreateSpaceScheme{
 				Key:  "DUM",
 				Name: "",
-				Description: &CreateSpaceDescriptionScheme{
-					Plain: &CreateSpaceDescriptionPlainScheme{
+				Description: &model.CreateSpaceDescriptionScheme{
+					Plain: &model.CreateSpaceDescriptionPlainScheme{
 						Value:          "Confluence Space Description Sample",
 						Representation: "plain",
 					},
@@ -301,11 +302,11 @@ func TestSpaceService_Create(t *testing.T) {
 
 		{
 			name: "CreateSpaceWhenTheContextIsNotProvided",
-			payload: &CreateSpaceScheme{
+			payload: &model.CreateSpaceScheme{
 				Key:  "DUM",
 				Name: "Dum Confluence Space",
-				Description: &CreateSpaceDescriptionScheme{
-					Plain: &CreateSpaceDescriptionPlainScheme{
+				Description: &model.CreateSpaceDescriptionScheme{
+					Plain: &model.CreateSpaceDescriptionPlainScheme{
 						Value:          "Confluence Space Description Sample",
 						Representation: "plain",
 					},
@@ -324,11 +325,11 @@ func TestSpaceService_Create(t *testing.T) {
 
 		{
 			name: "CreateSpaceWhenTheRequestMethodIsIncorrect",
-			payload: &CreateSpaceScheme{
+			payload: &model.CreateSpaceScheme{
 				Key:  "DUM",
 				Name: "Dum Confluence Space",
-				Description: &CreateSpaceDescriptionScheme{
-					Plain: &CreateSpaceDescriptionPlainScheme{
+				Description: &model.CreateSpaceDescriptionScheme{
+					Plain: &model.CreateSpaceDescriptionPlainScheme{
 						Value:          "Confluence Space Description Sample",
 						Representation: "plain",
 					},
@@ -347,11 +348,11 @@ func TestSpaceService_Create(t *testing.T) {
 
 		{
 			name: "CreateSpaceWhenTheStatusCodeIsIncorrect",
-			payload: &CreateSpaceScheme{
+			payload: &model.CreateSpaceScheme{
 				Key:  "DUM",
 				Name: "Dum Confluence Space",
-				Description: &CreateSpaceDescriptionScheme{
-					Plain: &CreateSpaceDescriptionPlainScheme{
+				Description: &model.CreateSpaceDescriptionScheme{
+					Plain: &model.CreateSpaceDescriptionPlainScheme{
 						Value:          "Confluence Space Description Sample",
 						Representation: "plain",
 					},
@@ -370,11 +371,11 @@ func TestSpaceService_Create(t *testing.T) {
 
 		{
 			name: "CreateSpaceWhenTheSpaceRequestedIsPrivate",
-			payload: &CreateSpaceScheme{
+			payload: &model.CreateSpaceScheme{
 				Key:  "DUM",
 				Name: "Dum Confluence Space",
-				Description: &CreateSpaceDescriptionScheme{
-					Plain: &CreateSpaceDescriptionPlainScheme{
+				Description: &model.CreateSpaceDescriptionScheme{
+					Plain: &model.CreateSpaceDescriptionPlainScheme{
 						Value:          "Confluence Space Description Sample",
 						Representation: "plain",
 					},
@@ -617,7 +618,7 @@ func TestSpaceService_Update(t *testing.T) {
 	testCases := []struct {
 		name               string
 		spaceKey           string
-		payload            *UpdateSpaceScheme
+		payload            *model.UpdateSpaceScheme
 		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string
@@ -628,15 +629,15 @@ func TestSpaceService_Update(t *testing.T) {
 		{
 			name:     "UpdateSpaceWhenTheParametersAreCorrect",
 			spaceKey: "DUMMY",
-			payload: &UpdateSpaceScheme{
+			payload: &model.UpdateSpaceScheme{
 				Name: "DUMMY Space - Updated",
-				Description: &CreateSpaceDescriptionScheme{
-					Plain: &CreateSpaceDescriptionPlainScheme{
+				Description: &model.CreateSpaceDescriptionScheme{
+					Plain: &model.CreateSpaceDescriptionPlainScheme{
 						Value:          "Dummy Space - Description - Updated",
 						Representation: "plain",
 					},
 				},
-				Homepage: &UpdateSpaceHomepageScheme{ID: "65798145"},
+				Homepage: &model.UpdateSpaceHomepageScheme{ID: "65798145"},
 			},
 			mockFile:           "./mocks/get-space.json",
 			wantHTTPMethod:     http.MethodPut,
@@ -649,15 +650,15 @@ func TestSpaceService_Update(t *testing.T) {
 		{
 			name:     "UpdateSpaceWhenTheSpaceKeyIsNotProvided",
 			spaceKey: "",
-			payload: &UpdateSpaceScheme{
+			payload: &model.UpdateSpaceScheme{
 				Name: "DUMMY Space - Updated",
-				Description: &CreateSpaceDescriptionScheme{
-					Plain: &CreateSpaceDescriptionPlainScheme{
+				Description: &model.CreateSpaceDescriptionScheme{
+					Plain: &model.CreateSpaceDescriptionPlainScheme{
 						Value:          "Dummy Space - Description - Updated",
 						Representation: "plain",
 					},
 				},
-				Homepage: &UpdateSpaceHomepageScheme{ID: "65798145"},
+				Homepage: &model.UpdateSpaceHomepageScheme{ID: "65798145"},
 			},
 			mockFile:           "./mocks/get-space.json",
 			wantHTTPMethod:     http.MethodPut,
@@ -682,15 +683,15 @@ func TestSpaceService_Update(t *testing.T) {
 		{
 			name:     "UpdateSpaceWhenTheContextIsNotProvided",
 			spaceKey: "DUMMY",
-			payload: &UpdateSpaceScheme{
+			payload: &model.UpdateSpaceScheme{
 				Name: "DUMMY Space - Updated",
-				Description: &CreateSpaceDescriptionScheme{
-					Plain: &CreateSpaceDescriptionPlainScheme{
+				Description: &model.CreateSpaceDescriptionScheme{
+					Plain: &model.CreateSpaceDescriptionPlainScheme{
 						Value:          "Dummy Space - Description - Updated",
 						Representation: "plain",
 					},
 				},
-				Homepage: &UpdateSpaceHomepageScheme{ID: "65798145"},
+				Homepage: &model.UpdateSpaceHomepageScheme{ID: "65798145"},
 			},
 			mockFile:           "./mocks/get-space.json",
 			wantHTTPMethod:     http.MethodPut,
@@ -703,15 +704,15 @@ func TestSpaceService_Update(t *testing.T) {
 		{
 			name:     "UpdateSpaceWhenTheRequestMethodIsIncorrect",
 			spaceKey: "DUMMY",
-			payload: &UpdateSpaceScheme{
+			payload: &model.UpdateSpaceScheme{
 				Name: "DUMMY Space - Updated",
-				Description: &CreateSpaceDescriptionScheme{
-					Plain: &CreateSpaceDescriptionPlainScheme{
+				Description: &model.CreateSpaceDescriptionScheme{
+					Plain: &model.CreateSpaceDescriptionPlainScheme{
 						Value:          "Dummy Space - Description - Updated",
 						Representation: "plain",
 					},
 				},
-				Homepage: &UpdateSpaceHomepageScheme{ID: "65798145"},
+				Homepage: &model.UpdateSpaceHomepageScheme{ID: "65798145"},
 			},
 			mockFile:           "./mocks/get-space.json",
 			wantHTTPMethod:     http.MethodGet,
@@ -724,15 +725,15 @@ func TestSpaceService_Update(t *testing.T) {
 		{
 			name:     "UpdateSpaceWhenTheStatusCodeIsIncorrect",
 			spaceKey: "DUMMY",
-			payload: &UpdateSpaceScheme{
+			payload: &model.UpdateSpaceScheme{
 				Name: "DUMMY Space - Updated",
-				Description: &CreateSpaceDescriptionScheme{
-					Plain: &CreateSpaceDescriptionPlainScheme{
+				Description: &model.CreateSpaceDescriptionScheme{
+					Plain: &model.CreateSpaceDescriptionPlainScheme{
 						Value:          "Dummy Space - Description - Updated",
 						Representation: "plain",
 					},
 				},
-				Homepage: &UpdateSpaceHomepageScheme{ID: "65798145"},
+				Homepage: &model.UpdateSpaceHomepageScheme{ID: "65798145"},
 			},
 			mockFile:           "./mocks/get-space.json",
 			wantHTTPMethod:     http.MethodPut,
@@ -745,15 +746,15 @@ func TestSpaceService_Update(t *testing.T) {
 		{
 			name:     "UpdateSpaceWhenTheResponseBodyIsEmpty",
 			spaceKey: "DUMMY",
-			payload: &UpdateSpaceScheme{
+			payload: &model.UpdateSpaceScheme{
 				Name: "DUMMY Space - Updated",
-				Description: &CreateSpaceDescriptionScheme{
-					Plain: &CreateSpaceDescriptionPlainScheme{
+				Description: &model.CreateSpaceDescriptionScheme{
+					Plain: &model.CreateSpaceDescriptionPlainScheme{
 						Value:          "Dummy Space - Description - Updated",
 						Representation: "plain",
 					},
 				},
-				Homepage: &UpdateSpaceHomepageScheme{ID: "65798145"},
+				Homepage: &model.UpdateSpaceHomepageScheme{ID: "65798145"},
 			},
 			mockFile:           "./mocks/empty-json.json",
 			wantHTTPMethod:     http.MethodPut,

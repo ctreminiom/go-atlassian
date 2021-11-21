@@ -3,6 +3,7 @@ package confluence
 import (
 	"context"
 	"fmt"
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/url"
@@ -14,7 +15,7 @@ func TestContentLabelService_Add(t *testing.T) {
 	testCases := []struct {
 		name               string
 		contentID          string
-		payload            []*ContentLabelPayloadScheme
+		payload            []*model.ContentLabelPayloadScheme
 		want400Response    bool
 		mockFile           string
 		wantHTTPMethod     string
@@ -26,7 +27,7 @@ func TestContentLabelService_Add(t *testing.T) {
 		{
 			name:      "AddContentLabelWhenTheParametersAreCorrect",
 			contentID: "48483737372",
-			payload: []*ContentLabelPayloadScheme{
+			payload: []*model.ContentLabelPayloadScheme{
 				{
 					Prefix: "global",
 					Name:   "label-02",
@@ -44,7 +45,7 @@ func TestContentLabelService_Add(t *testing.T) {
 		{
 			name:      "AddContentLabelWhenTheContentIDIsNotProvided",
 			contentID: "",
-			payload: []*ContentLabelPayloadScheme{
+			payload: []*model.ContentLabelPayloadScheme{
 				{
 					Prefix: "global",
 					Name:   "label-02",
@@ -62,7 +63,7 @@ func TestContentLabelService_Add(t *testing.T) {
 		{
 			name:      "AddContentLabelWhenTheContextIsNotProvided",
 			contentID: "48483737372",
-			payload: []*ContentLabelPayloadScheme{
+			payload: []*model.ContentLabelPayloadScheme{
 				{
 					Prefix: "global",
 					Name:   "label-02",
@@ -93,7 +94,7 @@ func TestContentLabelService_Add(t *testing.T) {
 		{
 			name:      "AddContentLabelWhenTheStatusCodeIsIncorrect",
 			contentID: "48483737372",
-			payload: []*ContentLabelPayloadScheme{
+			payload: []*model.ContentLabelPayloadScheme{
 				{
 					Prefix: "global",
 					Name:   "label-02",
@@ -111,7 +112,7 @@ func TestContentLabelService_Add(t *testing.T) {
 		{
 			name:      "AddContentLabelWhenTheResponseBodyIsEmpty",
 			contentID: "48483737372",
-			payload: []*ContentLabelPayloadScheme{
+			payload: []*model.ContentLabelPayloadScheme{
 				{
 					Prefix: "global",
 					Name:   "label-02",

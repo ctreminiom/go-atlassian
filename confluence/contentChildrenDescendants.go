@@ -3,6 +3,7 @@ package confluence
 import (
 	"context"
 	"fmt"
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -21,10 +22,10 @@ type ContentChildrenDescendantService struct {
 // attachment: child content is comment
 // comment: child content is attachment
 func (c *ContentChildrenDescendantService) Children(ctx context.Context, contentID string, expand []string,
-	parentVersion int) (result *ContentChildrenScheme, response *ResponseScheme, err error) {
+	parentVersion int) (result *model.ContentChildrenScheme, response *ResponseScheme, err error) {
 
 	if len(contentID) == 0 {
-		return nil, nil, notContentIDError
+		return nil, nil, model.ErrNoContentIDError
 	}
 
 	query := url.Values{}
@@ -58,28 +59,21 @@ func (c *ContentChildrenDescendantService) Children(ctx context.Context, content
 	return
 }
 
-type ContentChildrenScheme struct {
-	Attachment *ContentPageScheme `json:"attachment,omitempty"`
-	Comments   *ContentPageScheme `json:"comment,omitempty"`
-	Page       *ContentPageScheme `json:"page,omitempty"`
-	Links      *LinkScheme        `json:"_links,omitempty"`
-}
-
 // ChildrenByType returns all children of a given type, for a piece of content.
 // A piece of content has different types of child content
 func (c *ContentChildrenDescendantService) ChildrenByType(ctx context.Context, contentID, contentType string,
-	parentVersion int, expand []string, startAt, maxResults int) (result *ContentPageScheme, response *ResponseScheme, err error) {
+	parentVersion int, expand []string, startAt, maxResults int) (result *model.ContentPageScheme, response *ResponseScheme, err error) {
 
 	if len(contentID) == 0 {
-		return nil, nil, notContentIDError
+		return nil, nil, model.ErrNoContentIDError
 	}
 
 	if len(contentType) == 0 {
-		return nil, nil, notContentTypeError
+		return nil, nil, model.ErrNoContentTypeError
 	}
 
 	var hasValidValue bool
-	for _, value := range validContentTypes {
+	for _, value := range model.ValidContentTypes {
 
 		if value == contentType {
 			hasValidValue = true
@@ -88,7 +82,7 @@ func (c *ContentChildrenDescendantService) ChildrenByType(ctx context.Context, c
 	}
 
 	if !hasValidValue {
-		return nil, nil, invalidContentTypeError
+		return nil, nil, model.ErrInvalidContentTypeError
 	}
 
 	query := url.Values{}
@@ -124,10 +118,10 @@ func (c *ContentChildrenDescendantService) ChildrenByType(ctx context.Context, c
 // This is similar to Get content children, except that this method returns child pages at all levels,
 // rather than just the direct child pages.
 func (c *ContentChildrenDescendantService) Descendants(ctx context.Context, contentID string, expand []string,
-) (result *ContentChildrenScheme, response *ResponseScheme, err error) {
+) (result *model.ContentChildrenScheme, response *ResponseScheme, err error) {
 
 	if len(contentID) == 0 {
-		return nil, nil, notContentIDError
+		return nil, nil, model.ErrNoContentIDError
 	}
 
 	query := url.Values{}
@@ -161,18 +155,18 @@ func (c *ContentChildrenDescendantService) Descendants(ctx context.Context, cont
 // This is similar to Get content children by type,
 // except that this method returns child pages at all levels, rather than just the direct child pages.
 func (c *ContentChildrenDescendantService) DescendantsByType(ctx context.Context, contentID, contentType,
-	depth string, expand []string, startAt, maxResults int) (result *ContentPageScheme, response *ResponseScheme, err error) {
+	depth string, expand []string, startAt, maxResults int) (result *model.ContentPageScheme, response *ResponseScheme, err error) {
 
 	if len(contentID) == 0 {
-		return nil, nil, notContentIDError
+		return nil, nil, model.ErrNoContentIDError
 	}
 
 	if len(contentType) == 0 {
-		return nil, nil, notContentTypeError
+		return nil, nil, model.ErrNoContentTypeError
 	}
 
 	var hasValidValue bool
-	for _, value := range validContentTypes {
+	for _, value := range model.ValidContentTypes {
 
 		if value == contentType {
 			hasValidValue = true
@@ -181,7 +175,7 @@ func (c *ContentChildrenDescendantService) DescendantsByType(ctx context.Context
 	}
 
 	if !hasValidValue {
-		return nil, nil, invalidContentTypeError
+		return nil, nil, model.ErrInvalidContentTypeError
 	}
 
 	query := url.Values{}
@@ -213,44 +207,6 @@ func (c *ContentChildrenDescendantService) DescendantsByType(ctx context.Context
 	return
 }
 
-type CopyOptionsScheme struct {
-	CopyAttachments    bool                       `json:"copyAttachments,omitempty"`
-	CopyPermissions    bool                       `json:"copyPermissions,omitempty"`
-	CopyProperties     bool                       `json:"copyProperties,omitempty"`
-	CopyLabels         bool                       `json:"copyLabels,omitempty"`
-	CopyCustomContents bool                       `json:"copyCustomContents,omitempty"`
-	DestinationPageID  string                     `json:"destinationPageId,omitempty"`
-	TitleOptions       *CopyTitleOptionScheme     `json:"titleOptions,omitempty"`
-	Destination        *CopyPageDestinationScheme `json:"destination,omitempty"`
-	PageTitle          string                     `json:"pageTitle,omitempty"`
-	Body               *CopyPageBodyScheme        `json:"body,omitempty"`
-}
-
-type CopyTitleOptionScheme struct {
-	Prefix  string `json:"prefix,omitempty"`
-	Replace string `json:"replace,omitempty"`
-	Search  string `json:"search,omitempty"`
-}
-
-type CopyPageDestinationScheme struct {
-	Type  string `json:"type,omitempty"`
-	Value string `json:"value,omitempty"`
-}
-
-type CopyPageBodyScheme struct {
-	Storage *BodyNodeScheme `json:"storage"`
-	Editor2 *BodyNodeScheme `json:"editor2"`
-}
-
-type TaskScheme struct {
-	ID    string          `json:"id,omitempty"`
-	Links *TaskLinkScheme `json:"links,omitempty"`
-}
-
-type TaskLinkScheme struct {
-	Status string `json:"status"`
-}
-
 // CopyHierarchy copy page hierarchy allows the copying of an entire hierarchy of pages and their associated properties,
 // permissions and attachments. The id path parameter refers to the content id of the page to copy,
 // and the new parent of this copied page is defined using the destinationPageId in the request body.
@@ -258,10 +214,10 @@ type TaskLinkScheme struct {
 // for example, search and replace can be used in conjunction to rewrite the copied page titles.
 // RESPONSE =  Use the /longtask/ REST API to get the copy task status.
 func (c *ContentChildrenDescendantService) CopyHierarchy(ctx context.Context, contentID string,
-	options *CopyOptionsScheme) (result *TaskScheme, response *ResponseScheme, err error) {
+	options *model.CopyOptionsScheme) (result *model.TaskScheme, response *ResponseScheme, err error) {
 
 	if len(contentID) == 0 {
-		return nil, nil, notContentIDError
+		return nil, nil, model.ErrNoContentIDError
 	}
 
 	payloadAsReader, err := transformStructToReader(options)
@@ -294,10 +250,10 @@ func (c *ContentChildrenDescendantService) CopyHierarchy(ctx context.Context, co
 // 3. existing_page: page will be copied and replace the specified page
 // By default, the following objects are expanded: space, history, version.
 func (c *ContentChildrenDescendantService) CopyPage(ctx context.Context, contentID string, expand []string,
-	options *CopyOptionsScheme) (result *ContentScheme, response *ResponseScheme, err error) {
+	options *model.CopyOptionsScheme) (result *model.ContentScheme, response *ResponseScheme, err error) {
 
 	if len(contentID) == 0 {
-		return nil, nil, notContentIDError
+		return nil, nil, model.ErrNoContentIDError
 	}
 
 	query := url.Values{}
@@ -332,11 +288,3 @@ func (c *ContentChildrenDescendantService) CopyPage(ctx context.Context, content
 
 	return
 }
-
-var (
-	notContentTypeError     = fmt.Errorf("error, the content type is required, please provide a valid value")
-	invalidContentTypeError = fmt.Errorf("error, the content type provided is not valid, please provide one of "+
-		"the following options: %v", strings.Join(validContentTypes, ","))
-
-	validContentTypes = []string{"page", "comment", "attachment"}
-)

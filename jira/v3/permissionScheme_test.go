@@ -14,7 +14,7 @@ func TestPermissionSchemeService_Create(t *testing.T) {
 
 	testCases := []struct {
 		name               string
-		payload            *PermissionSchemeScheme
+		payload            *models.PermissionSchemeScheme
 		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string
@@ -24,7 +24,7 @@ func TestPermissionSchemeService_Create(t *testing.T) {
 	}{
 		{
 			name: "CreatePermissionSchemeWhenTheParametersAreCorrect",
-			payload: &PermissionSchemeScheme{
+			payload: &models.PermissionSchemeScheme{
 				Name:        "EF Permission Scheme",
 				Description: "EF Permission Scheme description",
 
@@ -65,7 +65,7 @@ func TestPermissionSchemeService_Create(t *testing.T) {
 
 		{
 			name: "CreatePermissionSchemeWhenTheEndpointIsIncorrect",
-			payload: &PermissionSchemeScheme{
+			payload: &models.PermissionSchemeScheme{
 				Name:        "EF Permission Scheme",
 				Description: "EF Permission Scheme description",
 
@@ -95,7 +95,7 @@ func TestPermissionSchemeService_Create(t *testing.T) {
 
 		{
 			name: "CreatePermissionSchemeWhenTheRequestMethodIsIncorrect",
-			payload: &PermissionSchemeScheme{
+			payload: &models.PermissionSchemeScheme{
 				Name:        "EF Permission Scheme",
 				Description: "EF Permission Scheme description",
 
@@ -125,7 +125,7 @@ func TestPermissionSchemeService_Create(t *testing.T) {
 
 		{
 			name: "CreatePermissionSchemeWhenTheStatusCodeIsIncorrect",
-			payload: &PermissionSchemeScheme{
+			payload: &models.PermissionSchemeScheme{
 				Name:        "EF Permission Scheme",
 				Description: "EF Permission Scheme description",
 
@@ -155,7 +155,7 @@ func TestPermissionSchemeService_Create(t *testing.T) {
 
 		{
 			name: "CreatePermissionSchemeWhenTheContextIsNil",
-			payload: &PermissionSchemeScheme{
+			payload: &models.PermissionSchemeScheme{
 				Name:        "EF Permission Scheme",
 				Description: "EF Permission Scheme description",
 
@@ -185,7 +185,7 @@ func TestPermissionSchemeService_Create(t *testing.T) {
 
 		{
 			name: "CreatePermissionSchemeWhenTheResponseBodyHasADifferentFormat",
-			payload: &PermissionSchemeScheme{
+			payload: &models.PermissionSchemeScheme{
 				Name:        "EF Permission Scheme",
 				Description: "EF Permission Scheme description",
 
@@ -678,7 +678,7 @@ func TestPermissionSchemeService_Update(t *testing.T) {
 	testCases := []struct {
 		name               string
 		schemeID           int
-		payload            *PermissionSchemeScheme
+		payload            *models.PermissionSchemeScheme
 		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string
@@ -689,7 +689,7 @@ func TestPermissionSchemeService_Update(t *testing.T) {
 		{
 			name:     "UpdatePermissionSchemeWhenTheParametersAreCorrect",
 			schemeID: 1000,
-			payload: &PermissionSchemeScheme{
+			payload: &models.PermissionSchemeScheme{
 				Name:        "EF Permission Scheme - UPDATED",
 				Description: "EF Permission Scheme description - UPDATED",
 
@@ -726,7 +726,7 @@ func TestPermissionSchemeService_Update(t *testing.T) {
 		{
 			name:     "UpdatePermissionSchemeWhenThePermissionGrantsIsNil",
 			schemeID: 1000,
-			payload: &PermissionSchemeScheme{
+			payload: &models.PermissionSchemeScheme{
 				Name:        "EF Permission Scheme - UPDATED",
 				Description: "EF Permission Scheme description - UPDATED",
 			},
@@ -741,7 +741,7 @@ func TestPermissionSchemeService_Update(t *testing.T) {
 		{
 			name:     "CreatePermissionSchemeWhenTheEndpointIsIncorrect",
 			schemeID: 1000,
-			payload: &PermissionSchemeScheme{
+			payload: &models.PermissionSchemeScheme{
 				Name:        "EF Permission Scheme - UPDATED",
 				Description: "EF Permission Scheme description - UPDATED",
 
@@ -766,7 +766,7 @@ func TestPermissionSchemeService_Update(t *testing.T) {
 		{
 			name:     "CreatePermissionSchemeWhenTheRequestMethodIsIncorrect",
 			schemeID: 1000,
-			payload: &PermissionSchemeScheme{
+			payload: &models.PermissionSchemeScheme{
 				Name:        "EF Permission Scheme - UPDATED",
 				Description: "EF Permission Scheme description - UPDATED",
 
@@ -791,7 +791,7 @@ func TestPermissionSchemeService_Update(t *testing.T) {
 		{
 			name:     "CreatePermissionSchemeWhenTheStatusCodeIsIncorrect",
 			schemeID: 1000,
-			payload: &PermissionSchemeScheme{
+			payload: &models.PermissionSchemeScheme{
 				Name:        "EF Permission Scheme - UPDATED",
 				Description: "EF Permission Scheme description - UPDATED",
 
@@ -817,7 +817,7 @@ func TestPermissionSchemeService_Update(t *testing.T) {
 			name:     "CreatePermissionSchemeWhenTheContextIsNil",
 			schemeID: 1000,
 
-			payload: &PermissionSchemeScheme{
+			payload: &models.PermissionSchemeScheme{
 				Name:        "EF Permission Scheme - UPDATED",
 				Description: "EF Permission Scheme description - UPDATED",
 
@@ -843,7 +843,7 @@ func TestPermissionSchemeService_Update(t *testing.T) {
 			name:     "CreatePermissionSchemeWhenTheResponseBodyHasADifferentFormat",
 			schemeID: 1000,
 
-			payload: &PermissionSchemeScheme{
+			payload: &models.PermissionSchemeScheme{
 				Name:        "EF Permission Scheme - UPDATED",
 				Description: "EF Permission Scheme description - UPDATED",
 

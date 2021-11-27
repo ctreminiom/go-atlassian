@@ -164,3 +164,18 @@ type IssueNotifyUserScheme struct {
 type IssueNotifyGroupScheme struct {
 	Name string `json:"name,omitempty"`
 }
+
+type IssueBulkSchemeV3 struct {
+	Payload      *IssueScheme
+	CustomFields *CustomFields
+}
+
+type BulkIssueSchemeV3 struct {
+	Issues []*IssueScheme `json:"issues,omitempty"`
+}
+
+type IssueMoveOptionsV3 struct {
+	Fields       *IssueScheme
+	CustomFields *CustomFields
+	Operations   *UpdateOperations
+}

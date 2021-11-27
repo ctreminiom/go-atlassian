@@ -40,16 +40,10 @@ func (d *DashboardService) Gets(ctx context.Context, startAt, maxResults int, fi
 	return
 }
 
-type DashboardPayloadScheme struct {
-	Name             string                          `json:"name,omitempty"`
-	Description      string                          `json:"description,omitempty"`
-	SharePermissions []*models.SharePermissionScheme `json:"sharePermissions,omitempty"`
-}
-
 // Create creates a dashboard.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/dashboards#create-dashboard
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-dashboards/#api-rest-api-3-dashboard-post
-func (d *DashboardService) Create(ctx context.Context, payload *DashboardPayloadScheme) (result *models.DashboardScheme,
+func (d *DashboardService) Create(ctx context.Context, payload *models.DashboardPayloadScheme) (result *models.DashboardScheme,
 	response *ResponseScheme, err error) {
 
 	var endpoint = "rest/api/3/dashboard"
@@ -75,17 +69,11 @@ func (d *DashboardService) Create(ctx context.Context, payload *DashboardPayload
 	return
 }
 
-type DashboardSearchOptionsScheme struct {
-	DashboardName, OwnerAccountID string
-	GroupPermissionName, OrderBy  string
-	Expand                        []string
-}
-
 // Search returns a paginated list of dashboards.
 // This operation is similar to Get dashboards except that the results can be refined to include dashboards that have specific attributes.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/dashboards#search-for-dashboards
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-dashboards/#api-rest-api-3-dashboard-search-get
-func (d *DashboardService) Search(ctx context.Context, opts *DashboardSearchOptionsScheme, startAt, maxResults int) (
+func (d *DashboardService) Search(ctx context.Context, opts *models.DashboardSearchOptionsScheme, startAt, maxResults int) (
 	result *models.DashboardSearchPageScheme, response *ResponseScheme, err error) {
 
 	params := url.Values{}
@@ -186,7 +174,7 @@ func (d *DashboardService) Delete(ctx context.Context, dashboardID string) (resp
 // Copy copies a dashboard.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/dashboards#copy-dashboard
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-dashboards/#api-rest-api-3-dashboard-id-copy-post
-func (d *DashboardService) Copy(ctx context.Context, dashboardID string, payload *DashboardPayloadScheme) (
+func (d *DashboardService) Copy(ctx context.Context, dashboardID string, payload *models.DashboardPayloadScheme) (
 	result *models.DashboardScheme, response *ResponseScheme, err error) {
 
 	if len(dashboardID) == 0 {
@@ -219,7 +207,7 @@ func (d *DashboardService) Copy(ctx context.Context, dashboardID string, payload
 // Update updates a dashboard
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/dashboards#update-dashboard
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-dashboards/#api-rest-api-3-dashboard-id-put
-func (d *DashboardService) Update(ctx context.Context, dashboardID string, payload *DashboardPayloadScheme) (result *models.DashboardScheme,
+func (d *DashboardService) Update(ctx context.Context, dashboardID string, payload *models.DashboardPayloadScheme) (result *models.DashboardScheme,
 	response *ResponseScheme, err error) {
 
 	if len(dashboardID) == 0 {

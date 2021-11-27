@@ -202,7 +202,7 @@ func TestDashboardService_Copy(t *testing.T) {
 	testCases := []struct {
 		name               string
 		dashboardID        string
-		payload            *DashboardPayloadScheme
+		payload            *models.DashboardPayloadScheme
 		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string
@@ -213,7 +213,7 @@ func TestDashboardService_Copy(t *testing.T) {
 		{
 			name:        "CopyDashboardWhenTheParametersAreCorrect",
 			dashboardID: "10001",
-			payload: &DashboardPayloadScheme{
+			payload: &models.DashboardPayloadScheme{
 				Name:        "Team Tracking #2 copy",
 				Description: "Description sample",
 				SharePermissions: []*models.SharePermissionScheme{
@@ -242,7 +242,7 @@ func TestDashboardService_Copy(t *testing.T) {
 		{
 			name:        "CopyDashboardWhenTheDashboardIsNotProvided",
 			dashboardID: "",
-			payload: &DashboardPayloadScheme{
+			payload: &models.DashboardPayloadScheme{
 				Name:        "Team Tracking #2 copy",
 				Description: "Description sample",
 				SharePermissions: []*models.SharePermissionScheme{
@@ -283,7 +283,7 @@ func TestDashboardService_Copy(t *testing.T) {
 		{
 			name:        "CopyDashboardWhenTheRequestMethodIsIncorrect",
 			dashboardID: "10001",
-			payload: &DashboardPayloadScheme{
+			payload: &models.DashboardPayloadScheme{
 				Name:        "Team Tracking #2 copy",
 				Description: "Description sample",
 				SharePermissions: []*models.SharePermissionScheme{
@@ -312,7 +312,7 @@ func TestDashboardService_Copy(t *testing.T) {
 		{
 			name:        "CopyDashboardWhenTheStatusCodeIsIncorrect",
 			dashboardID: "10001",
-			payload: &DashboardPayloadScheme{
+			payload: &models.DashboardPayloadScheme{
 				Name:        "Team Tracking #2 copy",
 				Description: "Description sample",
 				SharePermissions: []*models.SharePermissionScheme{
@@ -341,7 +341,7 @@ func TestDashboardService_Copy(t *testing.T) {
 		{
 			name:        "CopyDashboardWhenTheContextIsNotProvided",
 			dashboardID: "10001",
-			payload: &DashboardPayloadScheme{
+			payload: &models.DashboardPayloadScheme{
 				Name:        "Team Tracking #2 copy",
 				Description: "Description sample",
 				SharePermissions: []*models.SharePermissionScheme{
@@ -442,7 +442,7 @@ func TestDashboardService_Create(t *testing.T) {
 
 	testCases := []struct {
 		name               string
-		payload            *DashboardPayloadScheme
+		payload            *models.DashboardPayloadScheme
 		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string
@@ -452,7 +452,7 @@ func TestDashboardService_Create(t *testing.T) {
 	}{
 		{
 			name: "CreateDashboardWhenTheParametersAreCorrect",
-			payload: &DashboardPayloadScheme{
+			payload: &models.DashboardPayloadScheme{
 				Name:        "Team Tracking 3",
 				Description: "description sample",
 				SharePermissions: []*models.SharePermissionScheme{
@@ -491,7 +491,7 @@ func TestDashboardService_Create(t *testing.T) {
 
 		{
 			name: "CreateDashboardWhenTheContextIsNotProvided",
-			payload: &DashboardPayloadScheme{
+			payload: &models.DashboardPayloadScheme{
 				Name:        "Team Tracking 3",
 				Description: "description sample",
 				SharePermissions: []*models.SharePermissionScheme{
@@ -519,7 +519,7 @@ func TestDashboardService_Create(t *testing.T) {
 
 		{
 			name: "CreateDashboardWhenTheRequestMethodIsIncorrect",
-			payload: &DashboardPayloadScheme{
+			payload: &models.DashboardPayloadScheme{
 				Name:        "Team Tracking 3",
 				Description: "description sample",
 				SharePermissions: []*models.SharePermissionScheme{
@@ -547,7 +547,7 @@ func TestDashboardService_Create(t *testing.T) {
 
 		{
 			name: "CreateDashboardWhenTheStatusCodeIsIncorrect",
-			payload: &DashboardPayloadScheme{
+			payload: &models.DashboardPayloadScheme{
 				Name:        "Team Tracking 3",
 				Description: "description sample",
 				SharePermissions: []*models.SharePermissionScheme{
@@ -946,7 +946,7 @@ func TestDashboardService_Search(t *testing.T) {
 
 	testCases := []struct {
 		name                string
-		opts                *DashboardSearchOptionsScheme
+		opts                *models.DashboardSearchOptionsScheme
 		startAt, maxResults int
 		mockFile            string
 		wantHTTPMethod      string
@@ -957,7 +957,7 @@ func TestDashboardService_Search(t *testing.T) {
 	}{
 		{
 			name: "SearchDashboardsWhenTheParametersAreCorrect",
-			opts: &DashboardSearchOptionsScheme{
+			opts: &models.DashboardSearchOptionsScheme{
 				OwnerAccountID:      "as48ashashash4hsahashdahsd",
 				DashboardName:       "Bug",
 				GroupPermissionName: "administrators",
@@ -990,7 +990,7 @@ func TestDashboardService_Search(t *testing.T) {
 
 		{
 			name: "SearchDashboardsWhenTheRequestMethodIsIncorrect",
-			opts: &DashboardSearchOptionsScheme{
+			opts: &models.DashboardSearchOptionsScheme{
 				DashboardName:       "Bug",
 				GroupPermissionName: "administrators",
 				OrderBy:             "description",
@@ -1008,7 +1008,7 @@ func TestDashboardService_Search(t *testing.T) {
 
 		{
 			name: "SearchDashboardsWhenTheStatusCodeIsIncorrect",
-			opts: &DashboardSearchOptionsScheme{
+			opts: &models.DashboardSearchOptionsScheme{
 				DashboardName:       "Bug",
 				GroupPermissionName: "administrators",
 				OrderBy:             "description",
@@ -1026,7 +1026,7 @@ func TestDashboardService_Search(t *testing.T) {
 
 		{
 			name: "SearchDashboardsWhenTheContextIsNil",
-			opts: &DashboardSearchOptionsScheme{
+			opts: &models.DashboardSearchOptionsScheme{
 				DashboardName:       "Bug",
 				GroupPermissionName: "administrators",
 				OrderBy:             "description",
@@ -1044,7 +1044,7 @@ func TestDashboardService_Search(t *testing.T) {
 
 		{
 			name: "SearchDashboardsWhenTheEndpointIsEmpty",
-			opts: &DashboardSearchOptionsScheme{
+			opts: &models.DashboardSearchOptionsScheme{
 				DashboardName:       "Bug",
 				GroupPermissionName: "administrators",
 				OrderBy:             "description",
@@ -1062,7 +1062,7 @@ func TestDashboardService_Search(t *testing.T) {
 
 		{
 			name: "SearchDashboardsWhenTheResponseBodyHasADifferentFormat",
-			opts: &DashboardSearchOptionsScheme{
+			opts: &models.DashboardSearchOptionsScheme{
 				DashboardName:       "Bug",
 				GroupPermissionName: "administrators",
 				OrderBy:             "description",
@@ -1158,7 +1158,7 @@ func TestDashboardService_Update(t *testing.T) {
 	testCases := []struct {
 		name               string
 		dashboardID        string
-		payload            *DashboardPayloadScheme
+		payload            *models.DashboardPayloadScheme
 		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string
@@ -1169,7 +1169,7 @@ func TestDashboardService_Update(t *testing.T) {
 		{
 			name:        "UpdateDashboardWhenTheParametersAreCorrect",
 			dashboardID: "1001",
-			payload: &DashboardPayloadScheme{
+			payload: &models.DashboardPayloadScheme{
 				Name: "new dashboard update name",
 			},
 			mockFile:           "./mocks/update-dashboard.json",
@@ -1195,7 +1195,7 @@ func TestDashboardService_Update(t *testing.T) {
 		{
 			name:        "UpdateDashboardWhenTheDashboardIDIsNotProvided",
 			dashboardID: "",
-			payload: &DashboardPayloadScheme{
+			payload: &models.DashboardPayloadScheme{
 				Name: "new dashboard update name",
 			},
 			mockFile:           "./mocks/update-dashboard.json",
@@ -1209,7 +1209,7 @@ func TestDashboardService_Update(t *testing.T) {
 		{
 			name:        "UpdateDashboardWhenTheContextIsNotProvided",
 			dashboardID: "1001",
-			payload: &DashboardPayloadScheme{
+			payload: &models.DashboardPayloadScheme{
 				Name: "new dashboard update name",
 			},
 			mockFile:           "./mocks/update-dashboard.json",
@@ -1223,7 +1223,7 @@ func TestDashboardService_Update(t *testing.T) {
 		{
 			name:        "UpdateDashboardWhenTheRequestMethodIsIncorrect",
 			dashboardID: "1001",
-			payload: &DashboardPayloadScheme{
+			payload: &models.DashboardPayloadScheme{
 				Name: "new dashboard update name",
 			},
 			mockFile:           "./mocks/update-dashboard.json",
@@ -1237,7 +1237,7 @@ func TestDashboardService_Update(t *testing.T) {
 		{
 			name:        "UpdateDashboardWhenTheStatusCodeIsIncorrect",
 			dashboardID: "1001",
-			payload: &DashboardPayloadScheme{
+			payload: &models.DashboardPayloadScheme{
 				Name: "new dashboard update name",
 			},
 			mockFile:           "./mocks/update-dashboard.json",

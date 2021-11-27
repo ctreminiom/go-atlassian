@@ -7,20 +7,15 @@ import (
 	"net/http"
 	"net/url"
 	"strconv"
-	"time"
 )
 
 type AuditService struct{ client *Client }
 
-type AuditRecordGetOptions struct {
-	Filter   string
-	From, To time.Time
-}
-
 // Get returns a list of audit records. The list can be filtered to include items:
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/audit-records#get-audit-records
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-audit-records/#api-rest-api-3-auditing-record-get
-func (a *AuditService) Get(ctx context.Context, options *AuditRecordGetOptions, offset, limit int) (result *models.AuditRecordPageScheme, response *ResponseScheme, err error) {
+func (a *AuditService) Get(ctx context.Context, options *models.AuditRecordGetOptions, offset, limit int) (
+	result *models.AuditRecordPageScheme, response *ResponseScheme, err error) {
 
 	params := url.Values{}
 	params.Add("offset", strconv.Itoa(offset))

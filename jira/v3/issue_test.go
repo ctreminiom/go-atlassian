@@ -1389,7 +1389,7 @@ func TestIssueService_Creates(t *testing.T) {
 
 	var customFieldMockedWithOutFields = models2.CustomFields{}
 
-	var newIssuePayloadMockWithCustomFields00 = IssueBulkScheme{
+	var newIssuePayloadMockWithCustomFields00 = models2.IssueBulkSchemeV3{
 		Payload: &models2.IssueScheme{
 			Fields: &models2.IssueFieldsScheme{
 				Summary:   "New summary test",
@@ -1400,7 +1400,7 @@ func TestIssueService_Creates(t *testing.T) {
 		CustomFields: &customFieldMockedWithFields,
 	}
 
-	var newIssuePayloadMockWithCustomFields01 = IssueBulkScheme{
+	var newIssuePayloadMockWithCustomFields01 = models2.IssueBulkSchemeV3{
 		Payload: &models2.IssueScheme{
 			Fields: &models2.IssueFieldsScheme{
 				Summary:   "New summary test",
@@ -1411,7 +1411,7 @@ func TestIssueService_Creates(t *testing.T) {
 		CustomFields: &customFieldMockedWithFields,
 	}
 
-	var newIssuePayloadMockWithCustomFieldsValueAsNil = IssueBulkScheme{
+	var newIssuePayloadMockWithCustomFieldsValueAsNil = models2.IssueBulkSchemeV3{
 		Payload: &models2.IssueScheme{
 			Fields: &models2.IssueFieldsScheme{
 				Summary:   "New summary test",
@@ -1422,7 +1422,7 @@ func TestIssueService_Creates(t *testing.T) {
 		CustomFields: nil,
 	}
 
-	var newIssuePayloadMockWithOutCustomFields00 = IssueBulkScheme{
+	var newIssuePayloadMockWithOutCustomFields00 = models2.IssueBulkSchemeV3{
 		Payload: &models2.IssueScheme{
 			Fields: &models2.IssueFieldsScheme{
 				Summary:   "New summary test",
@@ -1433,7 +1433,7 @@ func TestIssueService_Creates(t *testing.T) {
 		CustomFields: &customFieldMockedWithOutFields,
 	}
 
-	var newIssuePayloadMockWithOutCustomFields01 = IssueBulkScheme{
+	var newIssuePayloadMockWithOutCustomFields01 = models2.IssueBulkSchemeV3{
 		Payload: &models2.IssueScheme{
 			Fields: &models2.IssueFieldsScheme{
 				Summary:   "New summary test",
@@ -1444,19 +1444,19 @@ func TestIssueService_Creates(t *testing.T) {
 		CustomFields: &customFieldMockedWithOutFields,
 	}
 
-	var newIssuePayloadMockWithPayloadIsNil = IssueBulkScheme{
+	var newIssuePayloadMockWithPayloadIsNil = models2.IssueBulkSchemeV3{
 		Payload:      nil,
 		CustomFields: &customFieldMockedWithOutFields,
 	}
 
-	var payloadMockWithCorrectPayloads []*IssueBulkScheme
+	var payloadMockWithCorrectPayloads []*models2.IssueBulkSchemeV3
 	payloadMockWithCorrectPayloads = append(
 		payloadMockWithCorrectPayloads,
 		&newIssuePayloadMockWithCustomFields00,
 		&newIssuePayloadMockWithCustomFields01,
 	)
 
-	var payloadMockWithIncorrectPayloads []*IssueBulkScheme
+	var payloadMockWithIncorrectPayloads []*models2.IssueBulkSchemeV3
 	payloadMockWithIncorrectPayloads = append(
 		payloadMockWithIncorrectPayloads,
 		&newIssuePayloadMockWithOutCustomFields00,
@@ -1465,7 +1465,7 @@ func TestIssueService_Creates(t *testing.T) {
 		&newIssuePayloadMockWithCustomFieldsValueAsNil,
 	)
 
-	var payloadMockWithNilPayloads []*IssueBulkScheme
+	var payloadMockWithNilPayloads []*models2.IssueBulkSchemeV3
 	payloadMockWithNilPayloads = append(payloadMockWithNilPayloads,
 		&newIssuePayloadMockWithCustomFields00,
 		&newIssuePayloadMockWithPayloadIsNil,
@@ -1473,7 +1473,7 @@ func TestIssueService_Creates(t *testing.T) {
 
 	testCases := []struct {
 		name               string
-		payload            []*IssueBulkScheme
+		payload            []*models2.IssueBulkSchemeV3
 		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string
@@ -2069,7 +2069,7 @@ func TestIssueService_Move(t *testing.T) {
 		name               string
 		issueKeyOrID       string
 		transitionID       string
-		options            *IssueMoveOptions
+		options            *models2.IssueMoveOptionsV3
 		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string
@@ -2082,7 +2082,7 @@ func TestIssueService_Move(t *testing.T) {
 			issueKeyOrID:   "DUMMY-3",
 			transitionID:   "10001",
 			wantHTTPMethod: http.MethodPost,
-			options: &IssueMoveOptions{
+			options: &models2.IssueMoveOptionsV3{
 				Fields:       payload,
 				CustomFields: &customFieldMockedWithFields,
 				Operations:   nil,
@@ -2098,7 +2098,7 @@ func TestIssueService_Move(t *testing.T) {
 			issueKeyOrID:   "DUMMY-3",
 			transitionID:   "10001",
 			wantHTTPMethod: http.MethodPost,
-			options: &IssueMoveOptions{
+			options: &models2.IssueMoveOptionsV3{
 				Fields:       payload,
 				CustomFields: nil,
 				Operations:   &operationMockedWithFields,
@@ -2114,7 +2114,7 @@ func TestIssueService_Move(t *testing.T) {
 			issueKeyOrID:   "DUMMY-3",
 			transitionID:   "10001",
 			wantHTTPMethod: http.MethodPost,
-			options: &IssueMoveOptions{
+			options: &models2.IssueMoveOptionsV3{
 				Fields:       payload,
 				CustomFields: nil,
 				Operations:   &operationMockedWithFields,
@@ -2130,7 +2130,7 @@ func TestIssueService_Move(t *testing.T) {
 			issueKeyOrID:   "DUMMY-3",
 			transitionID:   "10001",
 			wantHTTPMethod: http.MethodPost,
-			options: &IssueMoveOptions{
+			options: &models2.IssueMoveOptionsV3{
 				Fields:       payload,
 				CustomFields: nil,
 				Operations:   &operationMockedWithOutFields,
@@ -2146,7 +2146,7 @@ func TestIssueService_Move(t *testing.T) {
 			issueKeyOrID:   "DUMMY-3",
 			transitionID:   "10001",
 			wantHTTPMethod: http.MethodPost,
-			options: &IssueMoveOptions{
+			options: &models2.IssueMoveOptionsV3{
 				Fields:       payload,
 				CustomFields: &customFieldMockedWithFields,
 				Operations:   nil,
@@ -2162,7 +2162,7 @@ func TestIssueService_Move(t *testing.T) {
 			issueKeyOrID:   "DUMMY-3",
 			transitionID:   "10001",
 			wantHTTPMethod: http.MethodPost,
-			options: &IssueMoveOptions{
+			options: &models2.IssueMoveOptionsV3{
 				Fields:       payload,
 				CustomFields: &customFieldMockedWithOutFields,
 				Operations:   nil,
@@ -2178,7 +2178,7 @@ func TestIssueService_Move(t *testing.T) {
 			issueKeyOrID:   "DUMMY-3",
 			transitionID:   "10001",
 			wantHTTPMethod: http.MethodPost,
-			options: &IssueMoveOptions{
+			options: &models2.IssueMoveOptionsV3{
 				Fields:       payload,
 				CustomFields: &customFieldMockedWithFields,
 				Operations:   &operationMockedWithFields,
@@ -2194,7 +2194,7 @@ func TestIssueService_Move(t *testing.T) {
 			issueKeyOrID:   "DUMMY-3",
 			transitionID:   "10001",
 			wantHTTPMethod: http.MethodPost,
-			options: &IssueMoveOptions{
+			options: &models2.IssueMoveOptionsV3{
 				Fields:       payload,
 				CustomFields: &customFieldMockedWithFields,
 				Operations:   &operationMockedWithFields,
@@ -2210,7 +2210,7 @@ func TestIssueService_Move(t *testing.T) {
 			issueKeyOrID:   "DUMMY-3",
 			transitionID:   "10001",
 			wantHTTPMethod: http.MethodPost,
-			options: &IssueMoveOptions{
+			options: &models2.IssueMoveOptionsV3{
 				Fields:       payload,
 				CustomFields: &customFieldMockedWithOutFields,
 				Operations:   &operationMockedWithFields,
@@ -2226,7 +2226,7 @@ func TestIssueService_Move(t *testing.T) {
 			issueKeyOrID:   "DUMMY-3",
 			transitionID:   "10001",
 			wantHTTPMethod: http.MethodPost,
-			options: &IssueMoveOptions{
+			options: &models2.IssueMoveOptionsV3{
 				Fields:       payload,
 				CustomFields: &customFieldMockedWithFields,
 				Operations:   &operationMockedWithOutFields,

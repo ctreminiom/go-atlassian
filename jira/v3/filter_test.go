@@ -3,6 +3,7 @@ package v3
 import (
 	"context"
 	"fmt"
+	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/url"
@@ -15,7 +16,7 @@ func TestFilterService_Create(t *testing.T) {
 	testCases := []struct {
 		name               string
 		mockFile           string
-		payload            *FilterPayloadScheme
+		payload            *models.FilterPayloadScheme
 		wantHTTPMethod     string
 		endpoint           string
 		context            context.Context
@@ -24,7 +25,7 @@ func TestFilterService_Create(t *testing.T) {
 	}{
 		{
 			name: "CreateFilterWhenThePayloadIsCorrect",
-			payload: &FilterPayloadScheme{
+			payload: &models.FilterPayloadScheme{
 				Name:        "Filter #a5fd86b9-4fef-44c1-8ce4-8d1a63e806e1",
 				Description: "Filter's description",
 				JQL:         "issuetype = Bug",
@@ -49,7 +50,7 @@ func TestFilterService_Create(t *testing.T) {
 		},
 		{
 			name: "CreateFilterWhenTheContextIsNil",
-			payload: &FilterPayloadScheme{
+			payload: &models.FilterPayloadScheme{
 				Name:        "Filter #a5fd86b9-4fef-44c1-8ce4-8d1a63e806e1",
 				Description: "Filter's description",
 				JQL:         "issuetype = Bug",
@@ -64,7 +65,7 @@ func TestFilterService_Create(t *testing.T) {
 		},
 		{
 			name: "CreateFilterWhenTheResponseBodyLengthIsZero",
-			payload: &FilterPayloadScheme{
+			payload: &models.FilterPayloadScheme{
 				Name:        "Filter #a5fd86b9-4fef-44c1-8ce4-8d1a63e806e1",
 				Description: "Filter's description",
 				JQL:         "issuetype = Bug",
@@ -79,7 +80,7 @@ func TestFilterService_Create(t *testing.T) {
 		},
 		{
 			name: "CreateFilterWhenTheResponseBodyHasADifferentFormat",
-			payload: &FilterPayloadScheme{
+			payload: &models.FilterPayloadScheme{
 				Name:        "Filter #a5fd86b9-4fef-44c1-8ce4-8d1a63e806e1",
 				Description: "Filter's description",
 				JQL:         "issuetype = Bug",
@@ -94,7 +95,7 @@ func TestFilterService_Create(t *testing.T) {
 		},
 		{
 			name: "CreateFilterWhenTheStatusResponseCodeIsInvalid",
-			payload: &FilterPayloadScheme{
+			payload: &models.FilterPayloadScheme{
 				Name:        "Filter #a5fd86b9-4fef-44c1-8ce4-8d1a63e806e1",
 				Description: "Filter's description",
 				JQL:         "issuetype = Bug",
@@ -109,7 +110,7 @@ func TestFilterService_Create(t *testing.T) {
 		},
 		{
 			name: "CreateFilterWhenTheRequestMethodIsInvalid",
-			payload: &FilterPayloadScheme{
+			payload: &models.FilterPayloadScheme{
 				Name:        "Filter #a5fd86b9-4fef-44c1-8ce4-8d1a63e806e1",
 				Description: "Filter's description",
 				JQL:         "issuetype = Bug",
@@ -800,7 +801,7 @@ func TestFilterService_Search(t *testing.T) {
 
 	testCases := []struct {
 		name               string
-		options            *FilterSearchOptionScheme
+		options            *models.FilterSearchOptionScheme
 		startAt            int
 		maxResults         int
 		mockFile           string
@@ -812,7 +813,7 @@ func TestFilterService_Search(t *testing.T) {
 	}{
 		{
 			name: "SearchFiltersWhenTheFilterNameIsSet",
-			options: &FilterSearchOptionScheme{
+			options: &models.FilterSearchOptionScheme{
 				Name: "Lists all open bugs",
 			},
 			startAt:            0,
@@ -827,7 +828,7 @@ func TestFilterService_Search(t *testing.T) {
 
 		{
 			name: "SearchFiltersWhenTheAccountIDIsSet",
-			options: &FilterSearchOptionScheme{
+			options: &models.FilterSearchOptionScheme{
 				AccountID: "XXXXXXXXXXXXXXXXXXXX",
 			},
 			startAt:            0,
@@ -841,7 +842,7 @@ func TestFilterService_Search(t *testing.T) {
 		},
 		{
 			name: "SearchFiltersWhenTheGroupIsSet",
-			options: &FilterSearchOptionScheme{
+			options: &models.FilterSearchOptionScheme{
 				Group: "jira-users",
 			},
 			startAt:            0,
@@ -855,7 +856,7 @@ func TestFilterService_Search(t *testing.T) {
 		},
 		{
 			name: "SearchFiltersWhenTheProjectIDIsSet",
-			options: &FilterSearchOptionScheme{
+			options: &models.FilterSearchOptionScheme{
 				ProjectID: 111,
 			},
 			startAt:            0,
@@ -869,7 +870,7 @@ func TestFilterService_Search(t *testing.T) {
 		},
 		{
 			name: "SearchFiltersWhenTheFiltersIDsIsSet",
-			options: &FilterSearchOptionScheme{
+			options: &models.FilterSearchOptionScheme{
 				IDs: []int{1, 2, 3, 4},
 			},
 			startAt:            0,
@@ -883,7 +884,7 @@ func TestFilterService_Search(t *testing.T) {
 		},
 		{
 			name: "SearchFiltersWhenTheOrderIsSet",
-			options: &FilterSearchOptionScheme{
+			options: &models.FilterSearchOptionScheme{
 				OrderBy: "name",
 			},
 			startAt:            0,
@@ -897,7 +898,7 @@ func TestFilterService_Search(t *testing.T) {
 		},
 		{
 			name: "SearchFiltersWhenTheExpandIsSet",
-			options: &FilterSearchOptionScheme{
+			options: &models.FilterSearchOptionScheme{
 				Expand: []string{"description", "favorite", "jql", "owner", "viewUrl"},
 			},
 			startAt:            0,
@@ -923,7 +924,7 @@ func TestFilterService_Search(t *testing.T) {
 		},
 		{
 			name: "SearchFiltersWhenTheContextIsNil",
-			options: &FilterSearchOptionScheme{
+			options: &models.FilterSearchOptionScheme{
 				Group: "jira-users",
 			},
 			startAt:            0,
@@ -937,7 +938,7 @@ func TestFilterService_Search(t *testing.T) {
 		},
 		{
 			name: "SearchFiltersWhenTheRequestMethodIsIncorrect",
-			options: &FilterSearchOptionScheme{
+			options: &models.FilterSearchOptionScheme{
 				Group: "jira-users",
 			},
 			startAt:            0,
@@ -951,7 +952,7 @@ func TestFilterService_Search(t *testing.T) {
 		},
 		{
 			name: "SearchFiltersWhenTheStatusCodeIsIncorrect",
-			options: &FilterSearchOptionScheme{
+			options: &models.FilterSearchOptionScheme{
 				Group: "jira-users",
 			},
 			startAt:            0,
@@ -965,7 +966,7 @@ func TestFilterService_Search(t *testing.T) {
 		},
 		{
 			name: "SearchFiltersWhenTheResponseBodyLengthIsZero",
-			options: &FilterSearchOptionScheme{
+			options: &models.FilterSearchOptionScheme{
 				Group: "jira-users",
 			},
 			startAt:            0,
@@ -979,7 +980,7 @@ func TestFilterService_Search(t *testing.T) {
 		},
 		{
 			name: "SearchFiltersWhenTheResponseBodyHasADifferentFormat",
-			options: &FilterSearchOptionScheme{
+			options: &models.FilterSearchOptionScheme{
 				Group: "jira-users",
 			},
 			startAt:            0,
@@ -1066,7 +1067,7 @@ func TestFilterService_Update(t *testing.T) {
 	testCases := []struct {
 		name               string
 		filterID           int
-		payload            *FilterPayloadScheme
+		payload            *models.FilterPayloadScheme
 		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string
@@ -1076,7 +1077,7 @@ func TestFilterService_Update(t *testing.T) {
 	}{
 		{
 			name: "UpdateFilterWhenTheIDIsCorrect",
-			payload: &FilterPayloadScheme{
+			payload: &models.FilterPayloadScheme{
 				Name: "All Open Bugs",
 				JQL:  "type = Bug and resolution is empty",
 			},
@@ -1090,7 +1091,7 @@ func TestFilterService_Update(t *testing.T) {
 		},
 		{
 			name: "UpdateFilterWhenTheIDIsIncorrect",
-			payload: &FilterPayloadScheme{
+			payload: &models.FilterPayloadScheme{
 				Name: "All Open Bugs",
 				JQL:  "type = Bug and resolution is empty",
 			},
@@ -1115,7 +1116,7 @@ func TestFilterService_Update(t *testing.T) {
 		},
 		{
 			name: "UpdateFilterWhenTheContextIsNil",
-			payload: &FilterPayloadScheme{
+			payload: &models.FilterPayloadScheme{
 				Name: "All Open Bugs",
 				JQL:  "type = Bug and resolution is empty",
 			},
@@ -1129,7 +1130,7 @@ func TestFilterService_Update(t *testing.T) {
 		},
 		{
 			name: "UpdateFilterWhenTheRequestMethodIsIncorrect",
-			payload: &FilterPayloadScheme{
+			payload: &models.FilterPayloadScheme{
 				Name: "All Open Bugs",
 				JQL:  "type = Bug and resolution is empty",
 			},
@@ -1143,7 +1144,7 @@ func TestFilterService_Update(t *testing.T) {
 		},
 		{
 			name: "UpdateFilterWhenTheStatusCodeIsIncorrect",
-			payload: &FilterPayloadScheme{
+			payload: &models.FilterPayloadScheme{
 				Name: "All Open Bugs",
 				JQL:  "type = Bug and resolution is empty",
 			},
@@ -1157,7 +1158,7 @@ func TestFilterService_Update(t *testing.T) {
 		},
 		{
 			name: "UpdateFilterWhenTheResponseBodyLengthIsZero",
-			payload: &FilterPayloadScheme{
+			payload: &models.FilterPayloadScheme{
 				Name: "All Open Bugs",
 				JQL:  "type = Bug and resolution is empty",
 			},
@@ -1171,7 +1172,7 @@ func TestFilterService_Update(t *testing.T) {
 		},
 		{
 			name: "UpdateFilterWhenTheResponseBodyHasADifferentFormat",
-			payload: &FilterPayloadScheme{
+			payload: &models.FilterPayloadScheme{
 				Name: "All Open Bugs",
 				JQL:  "type = Bug and resolution is empty",
 			},

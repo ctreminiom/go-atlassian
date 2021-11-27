@@ -3,7 +3,7 @@ package v3
 import (
 	"context"
 	"fmt"
-	models2 "github.com/ctreminiom/go-atlassian/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"net/http"
 	"net/url"
 	"strings"
@@ -14,14 +14,10 @@ type PermissionSchemeService struct {
 	Grant  *PermissionGrantSchemeService
 }
 
-type PermissionSchemePageScheme struct {
-	PermissionSchemes []*PermissionSchemeScheme `json:"permissionSchemes,omitempty"`
-}
-
 // Gets returns all permission schemes.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/permissions/scheme#get-all-permission-schemes
 // Atlassian Docs; https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permission-schemes/#api-rest-api-3-permissionscheme-get
-func (p *PermissionSchemeService) Gets(ctx context.Context) (result *PermissionSchemePageScheme, response *ResponseScheme,
+func (p *PermissionSchemeService) Gets(ctx context.Context) (result *models.PermissionSchemePageScheme, response *ResponseScheme,
 	err error) {
 
 	var endpoint = "rest/api/3/permissionscheme"
@@ -41,31 +37,11 @@ func (p *PermissionSchemeService) Gets(ctx context.Context) (result *PermissionS
 	return
 }
 
-type PermissionSchemeScheme struct {
-	Expand      string                                 `json:"expand,omitempty"`
-	ID          int                                    `json:"id,omitempty"`
-	Self        string                                 `json:"self,omitempty"`
-	Name        string                                 `json:"name,omitempty"`
-	Description string                                 `json:"description,omitempty"`
-	Permissions []*models2.PermissionGrantScheme       `json:"permissions,omitempty"`
-	Scope       *models2.TeamManagedProjectScopeScheme `json:"scope,omitempty"`
-}
-
-type PermissionScopeItemScheme struct {
-	Self            string                         `json:"self,omitempty"`
-	ID              string                         `json:"id,omitempty"`
-	Key             string                         `json:"key,omitempty"`
-	Name            string                         `json:"name,omitempty"`
-	ProjectTypeKey  string                         `json:"projectTypeKey,omitempty"`
-	Simplified      bool                           `json:"simplified,omitempty"`
-	ProjectCategory *models2.ProjectCategoryScheme `json:"projectCategory,omitempty"`
-}
-
 // Get returns a permission scheme.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/permissions/scheme#get-permission-scheme
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permission-schemes/#api-rest-api-3-permissionscheme-schemeid-get
 func (p *PermissionSchemeService) Get(ctx context.Context, permissionSchemeID int, expand []string) (
-	result *PermissionSchemeScheme, response *ResponseScheme, err error) {
+	result *models.PermissionSchemeScheme, response *ResponseScheme, err error) {
 
 	params := url.Values{}
 	if len(expand) != 0 {
@@ -118,7 +94,7 @@ func (p *PermissionSchemeService) Delete(ctx context.Context, permissionSchemeID
 // You can create a permission scheme with or without defining a set of permission grants.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/permissions/scheme#create-permission-scheme
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permission-schemes/#api-rest-api-3-permissionscheme-post
-func (p *PermissionSchemeService) Create(ctx context.Context, payload *PermissionSchemeScheme) (result *PermissionSchemeScheme,
+func (p *PermissionSchemeService) Create(ctx context.Context, payload *models.PermissionSchemeScheme) (result *models.PermissionSchemeScheme,
 	response *ResponseScheme, err error) {
 
 	var endpoint = "rest/api/3/permissionscheme"
@@ -151,8 +127,8 @@ func (p *PermissionSchemeService) Create(ctx context.Context, payload *Permissio
 // 3. Sending an empty list will remove all permission grants from the permission scheme.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/permissions/scheme#update-permission-scheme
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permission-schemes/#api-rest-api-3-permissionscheme-schemeid-put
-func (p *PermissionSchemeService) Update(ctx context.Context, schemeID int, payload *PermissionSchemeScheme) (
-	result *PermissionSchemeScheme, response *ResponseScheme, err error) {
+func (p *PermissionSchemeService) Update(ctx context.Context, schemeID int, payload *models.PermissionSchemeScheme) (
+	result *models.PermissionSchemeScheme, response *ResponseScheme, err error) {
 
 	var endpoint = fmt.Sprintf("rest/api/3/permissionscheme/%v", schemeID)
 

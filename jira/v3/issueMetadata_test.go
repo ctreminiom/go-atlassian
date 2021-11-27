@@ -2,6 +2,7 @@ package v3
 
 import (
 	"context"
+	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/stretchr/testify/assert"
 	"github.com/tidwall/gjson"
 	"io/ioutil"
@@ -215,7 +216,7 @@ func Test_IssueMetadataService_Create_Success(t *testing.T) {
 
 	testCases := []struct {
 		name               string
-		opts               *IssueMetadataCreateOptions
+		opts               *models.IssueMetadataCreateOptions
 		wantHTTPMethod     string
 		mockFile           string
 		endpoint           string
@@ -225,7 +226,7 @@ func Test_IssueMetadataService_Create_Success(t *testing.T) {
 	}{
 		{
 			name: "when_the_parameters_are_correct",
-			opts: &IssueMetadataCreateOptions{
+			opts: &models.IssueMetadataCreateOptions{
 				ProjectIDs:     []string{"11101"},
 				ProjectKeys:    []string{"KP"},
 				IssueTypeIDs:   []string{"12"},
@@ -291,7 +292,7 @@ func Test_IssueMetadataService_Create_Failed(t *testing.T) {
 
 	testCases := []struct {
 		name                 string
-		opts                 *IssueMetadataCreateOptions
+		opts                 *models.IssueMetadataCreateOptions
 		wantHTTPMethod       string
 		mockFile             string
 		endpoint             string
@@ -302,7 +303,7 @@ func Test_IssueMetadataService_Create_Failed(t *testing.T) {
 	}{
 		{
 			name: "when_the_http_request_method_is_incorrect",
-			opts: &IssueMetadataCreateOptions{
+			opts: &models.IssueMetadataCreateOptions{
 				ProjectIDs:   []string{"11101"},
 				ProjectKeys:  []string{"KP"},
 				IssueTypeIDs: []string{"12"},
@@ -317,7 +318,7 @@ func Test_IssueMetadataService_Create_Failed(t *testing.T) {
 
 		{
 			name: "when_the_context_provided_is_nil",
-			opts: &IssueMetadataCreateOptions{
+			opts: &models.IssueMetadataCreateOptions{
 				ProjectIDs:   []string{"11101"},
 				ProjectKeys:  []string{"KP"},
 				IssueTypeIDs: []string{"12"},

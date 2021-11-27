@@ -263,7 +263,7 @@ func Test_transformStructToReader(t *testing.T) {
 		{
 			name: "TransformStructToReaderWhenTheParametersAreCorrect",
 			args: args{
-				structure: &DashboardPayloadScheme{
+				structure: &models.DashboardPayloadScheme{
 					Name:        "Team Tracking #2 copy",
 					Description: "Description sample",
 					SharePermissions: []*models.SharePermissionScheme{

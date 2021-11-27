@@ -3,6 +3,7 @@ package v3
 import (
 	"context"
 	"fmt"
+	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/url"
@@ -21,7 +22,7 @@ func TestAuditService_Get(t *testing.T) {
 
 	testCases := []struct {
 		name               string
-		options            *AuditRecordGetOptions
+		options            *models.AuditRecordGetOptions
 		offset, limit      int
 		mockFile           string
 		wantHTTPMethod     string
@@ -32,7 +33,7 @@ func TestAuditService_Get(t *testing.T) {
 	}{
 		{
 			name: "GetAuditRecordsWhenTheOptionsAreSet",
-			options: &AuditRecordGetOptions{
+			options: &models.AuditRecordGetOptions{
 				Filter: "",
 				From:   mockDateTimeAsTime.AddDate(0, -1, 0),
 				To:     mockDateTimeAsTime,
@@ -49,7 +50,7 @@ func TestAuditService_Get(t *testing.T) {
 
 		{
 			name: "GetAuditRecordsWhenTheOptionFilterIsSet",
-			options: &AuditRecordGetOptions{
+			options: &models.AuditRecordGetOptions{
 				Filter: "Workflow",
 				From:   mockDateTimeAsTime.AddDate(0, -1, 0),
 				To:     mockDateTimeAsTime,
@@ -79,7 +80,7 @@ func TestAuditService_Get(t *testing.T) {
 
 		{
 			name: "GetAuditRecordsWhenTheRequestMethodIsIncorrect",
-			options: &AuditRecordGetOptions{
+			options: &models.AuditRecordGetOptions{
 				Filter: "",
 				From:   mockDateTimeAsTime.AddDate(0, -1, 0),
 				To:     mockDateTimeAsTime,
@@ -96,7 +97,7 @@ func TestAuditService_Get(t *testing.T) {
 
 		{
 			name: "GetAuditRecordsWhenTheStatusCodeIsIncorrect",
-			options: &AuditRecordGetOptions{
+			options: &models.AuditRecordGetOptions{
 				Filter: "",
 				From:   mockDateTimeAsTime.AddDate(0, -1, 0),
 				To:     mockDateTimeAsTime,
@@ -113,7 +114,7 @@ func TestAuditService_Get(t *testing.T) {
 
 		{
 			name: "GetAuditRecordsWhenTheContextIsNil",
-			options: &AuditRecordGetOptions{
+			options: &models.AuditRecordGetOptions{
 				Filter: "",
 				From:   mockDateTimeAsTime.AddDate(0, -1, 0),
 				To:     mockDateTimeAsTime,
@@ -130,7 +131,7 @@ func TestAuditService_Get(t *testing.T) {
 
 		{
 			name: "GetAuditRecordsWhenTheEndpointIsIncorrect",
-			options: &AuditRecordGetOptions{
+			options: &models.AuditRecordGetOptions{
 				Filter: "",
 				From:   mockDateTimeAsTime.AddDate(0, -1, 0),
 				To:     mockDateTimeAsTime,
@@ -147,7 +148,7 @@ func TestAuditService_Get(t *testing.T) {
 
 		{
 			name: "GetAuditRecordsWhenTheResponseBodyHasADifferentFormat",
-			options: &AuditRecordGetOptions{
+			options: &models.AuditRecordGetOptions{
 				Filter: "",
 				From:   mockDateTimeAsTime.AddDate(0, -1, 0),
 				To:     mockDateTimeAsTime,

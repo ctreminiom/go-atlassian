@@ -3,7 +3,7 @@ package v3
 import (
 	"context"
 	"fmt"
-	models2 "github.com/ctreminiom/go-atlassian/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -24,7 +24,7 @@ type ProjectService struct {
 // Create creates a project based on a project type template, as shown in the following table:
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-projects/#api-rest-api-3-project-post
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-projects/#api-rest-api-3-project-post
-func (p *ProjectService) Create(ctx context.Context, payload *models2.ProjectPayloadScheme) (result *models2.NewProjectCreatedScheme,
+func (p *ProjectService) Create(ctx context.Context, payload *models.ProjectPayloadScheme) (result *models.NewProjectCreatedScheme,
 	response *ResponseScheme, err error) {
 
 	var endpoint = "rest/api/3/project"
@@ -53,8 +53,8 @@ func (p *ProjectService) Create(ctx context.Context, payload *models2.ProjectPay
 // Search returns a paginated list of projects visible to the user.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-projects/#api-rest-api-3-project-search-get
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-projects/#api-rest-api-3-project-search-get
-func (p *ProjectService) Search(ctx context.Context, options *models2.ProjectSearchOptionsScheme, startAt, maxResults int) (
-	result *models2.ProjectSearchScheme, response *ResponseScheme, err error) {
+func (p *ProjectService) Search(ctx context.Context, options *models.ProjectSearchOptionsScheme, startAt, maxResults int) (
+	result *models.ProjectSearchScheme, response *ResponseScheme, err error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -107,11 +107,11 @@ func (p *ProjectService) Search(ctx context.Context, options *models2.ProjectSea
 // Get returns the project details for a project.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-projects/#api-rest-api-3-project-projectidorkey-get
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-projects/#api-rest-api-3-project-projectidorkey-get
-func (p *ProjectService) Get(ctx context.Context, projectKeyOrID string, expand []string) (result *models2.ProjectScheme,
+func (p *ProjectService) Get(ctx context.Context, projectKeyOrID string, expand []string) (result *models.ProjectScheme,
 	response *ResponseScheme, err error) {
 
 	if len(projectKeyOrID) == 0 {
-		return nil, nil, models2.ErrNoProjectIDError
+		return nil, nil, models.ErrNoProjectIDError
 	}
 
 	params := url.Values{}
@@ -144,11 +144,11 @@ func (p *ProjectService) Get(ctx context.Context, projectKeyOrID string, expand 
 // Update updates the project details of a project.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-projects/#api-rest-api-3-project-projectidorkey-put
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-projects/#api-rest-api-3-project-projectidorkey-put
-func (p *ProjectService) Update(ctx context.Context, projectKeyOrID string, payload *models2.ProjectUpdateScheme) (result *models2.ProjectScheme,
+func (p *ProjectService) Update(ctx context.Context, projectKeyOrID string, payload *models.ProjectUpdateScheme) (result *models.ProjectScheme,
 	response *ResponseScheme, err error) {
 
 	if len(projectKeyOrID) == 0 {
-		return nil, nil, models2.ErrNoProjectIDError
+		return nil, nil, models.ErrNoProjectIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/project/%v", projectKeyOrID)
@@ -180,7 +180,7 @@ func (p *ProjectService) Delete(ctx context.Context, projectKeyOrID string, enab
 	err error) {
 
 	if len(projectKeyOrID) == 0 {
-		return nil, models2.ErrNoProjectIDError
+		return nil, models.ErrNoProjectIDError
 	}
 
 	params := url.Values{}
@@ -212,11 +212,11 @@ func (p *ProjectService) Delete(ctx context.Context, projectKeyOrID string, enab
 // 1. transactional, that is, if part of to delete fails the project is not deleted.
 // 2. asynchronous. Follow the location link in the response to determine the status of the task and use Get task to obtain subsequent updates.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-projects/#api-rest-api-3-project-projectidorkey-delete-post
-func (p *ProjectService) DeleteAsynchronously(ctx context.Context, projectKeyOrID string) (result *models2.TaskScheme,
+func (p *ProjectService) DeleteAsynchronously(ctx context.Context, projectKeyOrID string) (result *models.TaskScheme,
 	response *ResponseScheme, err error) {
 
 	if len(projectKeyOrID) == 0 {
-		return nil, nil, models2.ErrNoProjectIDError
+		return nil, nil, models.ErrNoProjectIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/project/%v/delete", projectKeyOrID)
@@ -241,7 +241,7 @@ func (p *ProjectService) DeleteAsynchronously(ctx context.Context, projectKeyOrI
 func (p *ProjectService) Archive(ctx context.Context, projectKeyOrID string) (response *ResponseScheme, err error) {
 
 	if len(projectKeyOrID) == 0 {
-		return nil, models2.ErrNoProjectIDError
+		return nil, models.ErrNoProjectIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/project/%v/archive", projectKeyOrID)
@@ -261,11 +261,11 @@ func (p *ProjectService) Archive(ctx context.Context, projectKeyOrID string) (re
 
 // Restore restores a project from the Jira recycle bin.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-projects/#api-rest-api-3-project-projectidorkey-restore-post
-func (p *ProjectService) Restore(ctx context.Context, projectKeyOrID string) (result *models2.ProjectScheme,
+func (p *ProjectService) Restore(ctx context.Context, projectKeyOrID string) (result *models.ProjectScheme,
 	response *ResponseScheme, err error) {
 
 	if len(projectKeyOrID) == 0 {
-		return nil, nil, models2.ErrNoProjectIDError
+		return nil, nil, models.ErrNoProjectIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/project/%v/restore", projectKeyOrID)
@@ -286,11 +286,11 @@ func (p *ProjectService) Restore(ctx context.Context, projectKeyOrID string) (re
 // Statuses returns the valid statuses for a project.
 // The statuses are grouped by issue type, as each project has a set of valid issue types and each issue type has a set of valid statuses.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-projects/#api-rest-api-3-project-projectidorkey-statuses-get
-func (p *ProjectService) Statuses(ctx context.Context, projectKeyOrID string) (result []*models2.ProjectStatusPageScheme,
+func (p *ProjectService) Statuses(ctx context.Context, projectKeyOrID string) (result []*models.ProjectStatusPageScheme,
 	response *ResponseScheme, err error) {
 
 	if len(projectKeyOrID) == 0 {
-		return nil, nil, models2.ErrNoProjectIDError
+		return nil, nil, models.ErrNoProjectIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/project/%v/statuses", projectKeyOrID)
@@ -310,11 +310,11 @@ func (p *ProjectService) Statuses(ctx context.Context, projectKeyOrID string) (r
 
 // Hierarchy get the issue type hierarchy for a next-gen project.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-projects/#api-rest-api-3-project-projectid-hierarchy-get
-func (p *ProjectService) Hierarchy(ctx context.Context, projectKeyOrID string) (result *models2.ProjectHierarchyScheme,
+func (p *ProjectService) Hierarchy(ctx context.Context, projectKeyOrID string) (result *models.ProjectHierarchyScheme,
 	response *ResponseScheme, err error) {
 
 	if len(projectKeyOrID) == 0 {
-		return nil, nil, models2.ErrNoProjectIDError
+		return nil, nil, models.ErrNoProjectIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/project/%v/hierarchy", projectKeyOrID)
@@ -335,10 +335,10 @@ func (p *ProjectService) Hierarchy(ctx context.Context, projectKeyOrID string) (
 // NotificationScheme search a notification scheme associated with the project.
 // Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-projects/#api-rest-api-3-project-projectkeyorid-notificationscheme-get
 func (p *ProjectService) NotificationScheme(ctx context.Context, projectKeyOrID string, expand []string) (
-	result *models2.NotificationSchemeScheme, response *ResponseScheme, err error) {
+	result *models.NotificationSchemeScheme, response *ResponseScheme, err error) {
 
 	if len(projectKeyOrID) == 0 {
-		return nil, nil, models2.ErrNoProjectIDError
+		return nil, nil, models.ErrNoProjectIDError
 	}
 
 	params := url.Values{}

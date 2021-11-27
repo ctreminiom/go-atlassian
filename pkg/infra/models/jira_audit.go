@@ -1,5 +1,7 @@
 package models
 
+import "time"
+
 type AuditRecordPageScheme struct {
 	Offset  int                  `json:"offset,omitempty"`
 	Limit   int                  `json:"limit,omitempty"`
@@ -41,4 +43,10 @@ type AuditRecordAssociatedItemScheme struct {
 	TypeName   string `json:"typeName,omitempty"`
 	ParentID   string `json:"parentId,omitempty"`
 	ParentName string `json:"parentName,omitempty"`
+}
+
+type AuditRecordGetOptions struct {
+	Filter string
+	From   time.Time
+	To     time.Time
 }

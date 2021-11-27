@@ -3,7 +3,7 @@ package v2
 import (
 	"context"
 	"fmt"
-	models2 "github.com/ctreminiom/go-atlassian/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -17,10 +17,10 @@ type UserSearchService struct{ client *Client }
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/users/search#find-users-assignable-to-projects
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-user-search/#api-rest-api-2-user-assignable-multiprojectsearch-get
 func (u *UserSearchService) Projects(ctx context.Context, accountID string, projectKeys []string, startAt, maxResults int) (
-	result []*models2.UserScheme, response *ResponseScheme, err error) {
+	result []*models.UserScheme, response *ResponseScheme, err error) {
 
 	if len(projectKeys) == 0 {
-		return nil, nil, models2.ErrNoProjectKeySliceError
+		return nil, nil, models.ErrNoProjectKeySliceError
 	}
 
 	params := url.Values{}
@@ -58,7 +58,7 @@ func (u *UserSearchService) Projects(ctx context.Context, accountID string, proj
 // This means the operation usually returns fewer users than specified in maxResults
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/users/search#find-users
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-user-search/#api-rest-api-2-user-search-get
-func (u *UserSearchService) Do(ctx context.Context, accountID, query string, startAt, maxResults int) (result []*models2.UserScheme,
+func (u *UserSearchService) Do(ctx context.Context, accountID, query string, startAt, maxResults int) (result []*models.UserScheme,
 	response *ResponseScheme, err error) {
 
 	params := url.Values{}

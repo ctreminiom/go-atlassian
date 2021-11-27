@@ -3,7 +3,7 @@ package v3
 import (
 	"context"
 	"fmt"
-	models2 "github.com/ctreminiom/go-atlassian/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"net/http"
 	"net/url"
 )
@@ -13,11 +13,11 @@ type ProjectValidationService struct{ client *Client }
 // Validate validates a project key by confirming the key is a valid string and not in use.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/projects/validation#validate-project-key
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-key-and-name-validation/#api-rest-api-3-projectvalidate-key-get
-func (p *ProjectValidationService) Validate(ctx context.Context, projectKey string) (result *models2.ProjectValidationMessageScheme,
+func (p *ProjectValidationService) Validate(ctx context.Context, projectKey string) (result *models.ProjectValidationMessageScheme,
 	response *ResponseScheme, err error) {
 
 	if len(projectKey) == 0 {
-		return nil, nil, models2.ErrNoProjectIDError
+		return nil, nil, models.ErrNoProjectIDError
 	}
 
 	params := url.Values{}
@@ -46,7 +46,7 @@ func (p *ProjectValidationService) Key(ctx context.Context, projectKey string) (
 	err error) {
 
 	if len(projectKey) == 0 {
-		return "", nil, models2.ErrNoProjectIDError
+		return "", nil, models.ErrNoProjectIDError
 	}
 
 	params := url.Values{}
@@ -78,7 +78,7 @@ func (p *ProjectValidationService) Name(ctx context.Context, projectName string)
 	response *ResponseScheme, err error) {
 
 	if len(projectName) == 0 {
-		return "", nil, models2.ErrNoProjectNameError
+		return "", nil, models.ErrNoProjectNameError
 	}
 
 	params := url.Values{}

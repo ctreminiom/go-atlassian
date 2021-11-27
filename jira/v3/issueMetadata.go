@@ -54,17 +54,9 @@ func (i *IssueMetadataService) Get(ctx context.Context, issueKeyOrID string, ove
 	return gjson.ParseBytes(response.Bytes.Bytes()), response, nil
 }
 
-type IssueMetadataCreateOptions struct {
-	ProjectIDs     []string
-	ProjectKeys    []string
-	IssueTypeIDs   []string
-	IssueTypeNames []string
-	Expand         string
-}
-
 // Create returns details of projects, issue types within projects, and, when requested, the create screen fields for each issue type for the user.
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-createmeta-get
-func (i *IssueMetadataService) Create(ctx context.Context, opts *IssueMetadataCreateOptions) (result gjson.Result,
+func (i *IssueMetadataService) Create(ctx context.Context, opts *models.IssueMetadataCreateOptions) (result gjson.Result,
 	response *ResponseScheme, err error) {
 
 	params := url.Values{}

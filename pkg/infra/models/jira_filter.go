@@ -68,3 +68,32 @@ type FilterUsersScheme struct {
 	StartIndex int           `json:"start-index,omitempty"`
 	EndIndex   int           `json:"end-index,omitempty"`
 }
+
+type FilterPayloadScheme struct {
+	Name             string                   `json:"name,omitempty"`
+	Description      string                   `json:"description,omitempty"`
+	JQL              string                   `json:"jql,omitempty"`
+	Favorite         bool                     `json:"favourite,omitempty"`
+	SharePermissions []*SharePermissionScheme `json:"sharePermissions,omitempty"`
+}
+
+type FilterSearchOptionScheme struct {
+	Name      string
+	AccountID string
+	Group     string
+	OrderBy   string
+	ProjectID int
+	IDs       []int
+	Expand    []string
+}
+
+type ShareFilterScopeScheme struct {
+	Scope string `json:"scope"`
+}
+
+type PermissionFilterPayloadScheme struct {
+	Type          string `json:"type,omitempty"`
+	ProjectID     string `json:"projectId,omitempty"`
+	GroupName     string `json:"groupname,omitempty"`
+	ProjectRoleID string `json:"projectRoleId,omitempty"`
+}

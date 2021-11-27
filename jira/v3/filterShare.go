@@ -10,14 +10,10 @@ import (
 
 type FilterShareService struct{ client *Client }
 
-type ShareFilterScopeScheme struct {
-	Scope string `json:"scope"`
-}
-
 // Scope returns the default sharing settings for new filters and dashboards for a user.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/filters/sharing#get-default-share-scope
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-filter-sharing/#api-rest-api-3-filter-defaultsharescope-get
-func (f *FilterShareService) Scope(ctx context.Context) (result *ShareFilterScopeScheme, response *ResponseScheme, err error) {
+func (f *FilterShareService) Scope(ctx context.Context) (result *models.ShareFilterScopeScheme, response *ResponseScheme, err error) {
 
 	var endpoint = "rest/api/3/filter/defaultShareScope"
 	request, err := f.client.newRequest(ctx, http.MethodGet, endpoint, nil)
@@ -60,7 +56,7 @@ func (f *FilterShareService) SetScope(ctx context.Context, scope string) (respon
 		return nil, fmt.Errorf("invalid scope, please provide one of the following: %v", validScopeValuesAsString)
 	}
 
-	payload := ShareFilterScopeScheme{Scope: scope}
+	payload := models.ShareFilterScopeScheme{Scope: scope}
 	payloadAsReader, _ := transformStructToReader(&payload)
 
 	var endpoint = "rest/api/3/filter/defaultShareScope"
@@ -105,18 +101,11 @@ func (f *FilterShareService) Gets(ctx context.Context, filterID int) (result []*
 	return
 }
 
-type PermissionFilterPayloadScheme struct {
-	Type          string `json:"type,omitempty"`
-	ProjectID     string `json:"projectId,omitempty"`
-	GroupName     string `json:"groupname,omitempty"`
-	ProjectRoleID string `json:"projectRoleId,omitempty"`
-}
-
 // Add a share permissions to a filter.
 // If you add a global share permission (one for all logged-in users or the public)
 // it will overwrite all share permissions for the filter.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/filters/sharing#add-share-permission
-func (f *FilterShareService) Add(ctx context.Context, filterID int, payload *PermissionFilterPayloadScheme) (
+func (f *FilterShareService) Add(ctx context.Context, filterID int, payload *models.PermissionFilterPayloadScheme) (
 	result []*models.SharePermissionScheme, response *ResponseScheme, err error) {
 
 	payloadAsReader, err := transformStructToReader(payload)

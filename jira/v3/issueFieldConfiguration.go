@@ -3,7 +3,7 @@ package v3
 import (
 	"context"
 	"fmt"
-	models2 "github.com/ctreminiom/go-atlassian/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -15,7 +15,7 @@ type FieldConfigurationService struct{ client *Client }
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration#get-all-field-configurations
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-field-configurations/#api-rest-api-3-fieldconfiguration-get
 func (f *FieldConfigurationService) Gets(ctx context.Context, ids []int, isDefault bool, startAt, maxResults int) (
-	result *models2.FieldConfigurationPageScheme, response *ResponseScheme, err error) {
+	result *models.FieldConfigurationPageScheme, response *ResponseScheme, err error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -49,7 +49,7 @@ func (f *FieldConfigurationService) Gets(ctx context.Context, ids []int, isDefau
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration#get-field-configuration-items
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-field-configurations/#api-rest-api-3-fieldconfiguration-id-fields-get
 func (f *FieldConfigurationService) Items(ctx context.Context, fieldConfigurationID, startAt, maxResults int) (
-	result *models2.FieldConfigurationItemPageScheme, response *ResponseScheme, err error) {
+	result *models.FieldConfigurationItemPageScheme, response *ResponseScheme, err error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -76,7 +76,7 @@ func (f *FieldConfigurationService) Items(ctx context.Context, fieldConfiguratio
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration#get-all-field-configuration-schemes
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-field-configurations/#api-rest-api-3-fieldconfigurationscheme-get
 func (f *FieldConfigurationService) Schemes(ctx context.Context, IDs []int, startAt, maxResults int) (
-	result *models2.FieldConfigurationSchemePageScheme, response *ResponseScheme, err error) {
+	result *models.FieldConfigurationSchemePageScheme, response *ResponseScheme, err error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -107,7 +107,7 @@ func (f *FieldConfigurationService) Schemes(ctx context.Context, IDs []int, star
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration#get-field-configuration-issue-type-items
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-field-configurations/#api-rest-api-3-fieldconfigurationscheme-mapping-get
 func (f *FieldConfigurationService) IssueTypeItems(ctx context.Context, fieldConfigIDs []int, startAt, maxResults int) (
-	result *models2.FieldConfigurationIssueTypeItemPageScheme, response *ResponseScheme, err error) {
+	result *models.FieldConfigurationIssueTypeItemPageScheme, response *ResponseScheme, err error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -137,7 +137,7 @@ func (f *FieldConfigurationService) IssueTypeItems(ctx context.Context, fieldCon
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration#get-field-configuration-schemes-for-projects
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-field-configurations/#api-rest-api-3-fieldconfigurationscheme-project-get
 func (f *FieldConfigurationService) SchemesByProject(ctx context.Context, projectIDs []int, startAt, maxResults int) (
-	result *models2.FieldConfigurationSchemeProjectPageScheme, response *ResponseScheme, err error) {
+	result *models.FieldConfigurationSchemeProjectPageScheme, response *ResponseScheme, err error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -170,7 +170,7 @@ func (f *FieldConfigurationService) SchemesByProject(ctx context.Context, projec
 func (f *FieldConfigurationService) Assign(ctx context.Context, fieldConfigurationSchemeID, projectID string) (response *ResponseScheme, err error) {
 
 	if len(projectID) == 0 {
-		return nil, models2.ErrNoProjectIDError
+		return nil, models.ErrNoProjectIDError
 	}
 
 	payload := struct {

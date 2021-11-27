@@ -3,7 +3,7 @@ package v3
 import (
 	"context"
 	"fmt"
-	models2 "github.com/ctreminiom/go-atlassian/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -15,7 +15,7 @@ type WorkflowService struct {
 	Scheme *WorkflowSchemeService
 }
 
-func (w *WorkflowService) Create(ctx context.Context, payload *models2.WorkflowPayloadScheme) (result *models2.WorkflowCreatedResponseScheme,
+func (w *WorkflowService) Create(ctx context.Context, payload *models.WorkflowPayloadScheme) (result *models.WorkflowCreatedResponseScheme,
 	response *ResponseScheme, err error) {
 
 	payloadAsReader, err := transformStructToReader(payload)
@@ -44,7 +44,7 @@ func (w *WorkflowService) Create(ctx context.Context, payload *models2.WorkflowP
 // When workflow names are specified, details of those workflows are returned.
 // Otherwise, all published classic workflows are returned.
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-workflows/#api-rest-api-3-workflow-search-get
-func (w *WorkflowService) Gets(ctx context.Context, workflowNames, expand []string, startAt, maxResults int) (result *models2.WorkflowPageScheme,
+func (w *WorkflowService) Gets(ctx context.Context, workflowNames, expand []string, startAt, maxResults int) (result *models.WorkflowPageScheme,
 	response *ResponseScheme, err error) {
 
 	params := url.Values{}
@@ -89,7 +89,7 @@ func (w *WorkflowService) Gets(ctx context.Context, workflowNames, expand []stri
 func (w *WorkflowService) Delete(ctx context.Context, workflowID string) (response *ResponseScheme, err error) {
 
 	if len(workflowID) == 0 {
-		return nil, models2.ErrNoWorkflowIDError
+		return nil, models.ErrNoWorkflowIDError
 	}
 
 	var endpoint = fmt.Sprintf("/rest/api/3/workflow/%v", workflowID)

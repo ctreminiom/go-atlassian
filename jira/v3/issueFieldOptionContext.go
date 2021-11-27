@@ -3,7 +3,7 @@ package v3
 import (
 	"context"
 	"fmt"
-	models2 "github.com/ctreminiom/go-atlassian/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -11,20 +11,15 @@ import (
 
 type FieldOptionContextService struct{ client *Client }
 
-type FieldOptionContextParams struct {
-	OptionID    int
-	OnlyOptions bool
-}
-
 // Gets returns a paginated list of all custom field option for a context.
 // Options are returned first then cascading options, in the order they display in Jira.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields/context/option#get-custom-field-options
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-custom-field-options/#api-rest-api-3-field-fieldid-context-contextid-option-get
-func (f *FieldOptionContextService) Gets(ctx context.Context, fieldID string, contextID int, opts *FieldOptionContextParams,
-	startAt, maxResults int) (result *models2.CustomFieldContextOptionPageScheme, response *ResponseScheme, err error) {
+func (f *FieldOptionContextService) Gets(ctx context.Context, fieldID string, contextID int, opts *models.FieldOptionContextParams,
+	startAt, maxResults int) (result *models.CustomFieldContextOptionPageScheme, response *ResponseScheme, err error) {
 
 	if len(fieldID) == 0 {
-		return nil, nil, models2.ErrNoFieldIDError
+		return nil, nil, models.ErrNoFieldIDError
 	}
 
 	params := url.Values{}
@@ -62,11 +57,11 @@ func (f *FieldOptionContextService) Gets(ctx context.Context, fieldID string, co
 // cascading options for a custom select field. The options are added to a context of the field.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields/context/option#create-custom-field-options
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-custom-field-options/#api-rest-api-3-field-fieldid-context-contextid-option-post
-func (f *FieldOptionContextService) Create(ctx context.Context, fieldID string, contextID int, payload *models2.FieldContextOptionListScheme) (
-	result *models2.FieldContextOptionListScheme, response *ResponseScheme, err error) {
+func (f *FieldOptionContextService) Create(ctx context.Context, fieldID string, contextID int, payload *models.FieldContextOptionListScheme) (
+	result *models.FieldContextOptionListScheme, response *ResponseScheme, err error) {
 
 	if fieldID == "" {
-		return nil, nil, models2.ErrNoFieldIDError
+		return nil, nil, models.ErrNoFieldIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/field/%v/context/%v/option", fieldID, contextID)
@@ -98,10 +93,10 @@ func (f *FieldOptionContextService) Create(ctx context.Context, fieldID string, 
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields/context/option#update-custom-field-options
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-custom-field-options/#api-rest-api-3-field-fieldid-context-contextid-option-put
 func (f *FieldOptionContextService) Update(ctx context.Context, fieldID string, contextID int,
-	payload *models2.FieldContextOptionListScheme) (result *models2.FieldContextOptionListScheme, response *ResponseScheme, err error) {
+	payload *models.FieldContextOptionListScheme) (result *models.FieldContextOptionListScheme, response *ResponseScheme, err error) {
 
 	if fieldID == "" {
-		return nil, nil, models2.ErrNoFieldIDError
+		return nil, nil, models.ErrNoFieldIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/field/%v/context/%v/option", fieldID, contextID)
@@ -134,15 +129,15 @@ func (f *FieldOptionContextService) Delete(ctx context.Context, fieldID string, 
 	response *ResponseScheme, err error) {
 
 	if fieldID == "" {
-		return nil, models2.ErrNoFieldIDError
+		return nil, models.ErrNoFieldIDError
 	}
 
 	if contextID == 0 {
-		return nil, models2.ErrNoFieldContextIDError
+		return nil, models.ErrNoFieldContextIDError
 	}
 
 	if optionID == 0 {
-		return nil, models2.ErrNoContextOptionIDError
+		return nil, models.ErrNoContextOptionIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/field/%v/context/%v/option/%v", fieldID, contextID, optionID)
@@ -160,23 +155,17 @@ func (f *FieldOptionContextService) Delete(ctx context.Context, fieldID string, 
 	return
 }
 
-type OrderFieldOptionPayloadScheme struct {
-	After                string   `json:"after,omitempty"`
-	Position             string   `json:"position,omitempty"`
-	CustomFieldOptionIds []string `json:"customFieldOptionIds,omitempty"`
-}
-
 // Order changes the order of custom field options or cascading options in a context.
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-custom-field-options/#api-rest-api-3-field-fieldid-context-contextid-option-move-put
-func (f *FieldOptionContextService) Order(ctx context.Context, fieldID string, contextID int, payload *OrderFieldOptionPayloadScheme) (
+func (f *FieldOptionContextService) Order(ctx context.Context, fieldID string, contextID int, payload *models.OrderFieldOptionPayloadScheme) (
 	response *ResponseScheme, err error) {
 
 	if fieldID == "" {
-		return nil, models2.ErrNoFieldIDError
+		return nil, models.ErrNoFieldIDError
 	}
 
 	if contextID == 0 {
-		return nil, models2.ErrNoFieldContextIDError
+		return nil, models.ErrNoFieldContextIDError
 	}
 
 	var endpoint = fmt.Sprintf("/rest/api/3/field/%v/context/%v/option/move", fieldID, contextID)

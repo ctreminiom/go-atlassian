@@ -3,6 +3,7 @@ package v3
 import (
 	"context"
 	"fmt"
+	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/url"
@@ -329,7 +330,7 @@ func TestIssueTypeSchemeService_Create(t *testing.T) {
 
 	testCases := []struct {
 		name               string
-		payload            *IssueTypeSchemePayloadScheme
+		payload            *models.IssueTypeSchemePayloadScheme
 		wantHTTPMethod     string
 		mockFile           string
 		endpoint           string
@@ -339,7 +340,7 @@ func TestIssueTypeSchemeService_Create(t *testing.T) {
 	}{
 		{
 			name: "CreateIssueTypeSchemeWhenThePayloadIsCorrect",
-			payload: &IssueTypeSchemePayloadScheme{
+			payload: &models.IssueTypeSchemePayloadScheme{
 				DefaultIssueTypeID: "1000",
 				IssueTypeIds:       []string{"1000", "1001", "1002"},
 				Name:               "Default Issue Type Scheme",
@@ -355,7 +356,7 @@ func TestIssueTypeSchemeService_Create(t *testing.T) {
 
 		{
 			name: "CreateIssueTypeSchemeWhenTheDefaultIssueTypeIDIsEmpty",
-			payload: &IssueTypeSchemePayloadScheme{
+			payload: &models.IssueTypeSchemePayloadScheme{
 				DefaultIssueTypeID: "",
 				IssueTypeIds:       []string{"1000", "1001", "1002"},
 				Name:               "Default Issue Type Scheme",
@@ -371,7 +372,7 @@ func TestIssueTypeSchemeService_Create(t *testing.T) {
 
 		{
 			name: "CreateIssueTypeSchemeWhenTheDefaultIssueTypeIDParamIsIncorrect",
-			payload: &IssueTypeSchemePayloadScheme{
+			payload: &models.IssueTypeSchemePayloadScheme{
 				DefaultIssueTypeID: "10055",
 				IssueTypeIds:       []string{"1000", "1001", "1002"},
 				Name:               "Default Issue Type Scheme",
@@ -398,7 +399,7 @@ func TestIssueTypeSchemeService_Create(t *testing.T) {
 
 		{
 			name: "CreateIssueTypeSchemeWhenTheEndpointIsIncorrect",
-			payload: &IssueTypeSchemePayloadScheme{
+			payload: &models.IssueTypeSchemePayloadScheme{
 				DefaultIssueTypeID: "1000",
 				IssueTypeIds:       []string{"1000", "1001", "1002"},
 				Name:               "Default Issue Type Scheme",
@@ -414,7 +415,7 @@ func TestIssueTypeSchemeService_Create(t *testing.T) {
 
 		{
 			name: "CreateIssueTypeSchemeWhenTheRequestMethodIsIncorrect",
-			payload: &IssueTypeSchemePayloadScheme{
+			payload: &models.IssueTypeSchemePayloadScheme{
 				DefaultIssueTypeID: "1000",
 				IssueTypeIds:       []string{"1000", "1001", "1002"},
 				Name:               "Default Issue Type Scheme",
@@ -430,7 +431,7 @@ func TestIssueTypeSchemeService_Create(t *testing.T) {
 
 		{
 			name: "CreateIssueTypeSchemeWhenTheStatusCodeIsIncorrect",
-			payload: &IssueTypeSchemePayloadScheme{
+			payload: &models.IssueTypeSchemePayloadScheme{
 				DefaultIssueTypeID: "1000",
 				IssueTypeIds:       []string{"1000", "1001", "1002"},
 				Name:               "Default Issue Type Scheme",
@@ -446,7 +447,7 @@ func TestIssueTypeSchemeService_Create(t *testing.T) {
 
 		{
 			name: "CreateIssueTypeSchemeWhenTheContextIsNil",
-			payload: &IssueTypeSchemePayloadScheme{
+			payload: &models.IssueTypeSchemePayloadScheme{
 				DefaultIssueTypeID: "1000",
 				IssueTypeIds:       []string{"1000", "1001", "1002"},
 				Name:               "Default Issue Type Scheme",
@@ -462,7 +463,7 @@ func TestIssueTypeSchemeService_Create(t *testing.T) {
 
 		{
 			name: "CreateIssueTypeSchemeWhenTheResponseBodyHasADifferentFormat",
-			payload: &IssueTypeSchemePayloadScheme{
+			payload: &models.IssueTypeSchemePayloadScheme{
 				DefaultIssueTypeID: "1000",
 				IssueTypeIds:       []string{"1000", "1001", "1002"},
 				Name:               "Default Issue Type Scheme",
@@ -1312,7 +1313,7 @@ func TestIssueTypeSchemeService_Update(t *testing.T) {
 	testCases := []struct {
 		name               string
 		issueTypeSchemeID  int
-		payload            *IssueTypeSchemePayloadScheme
+		payload            *models.IssueTypeSchemePayloadScheme
 		wantHTTPMethod     string
 		mockFile           string
 		endpoint           string
@@ -1323,7 +1324,7 @@ func TestIssueTypeSchemeService_Update(t *testing.T) {
 		{
 			name:              "UpdateIssueTypeSchemeWhenThePayloadIsCorrect",
 			issueTypeSchemeID: 12,
-			payload: &IssueTypeSchemePayloadScheme{
+			payload: &models.IssueTypeSchemePayloadScheme{
 				DefaultIssueTypeID: "1000",
 				IssueTypeIds:       []string{"1000", "1001", "1002"},
 				Name:               "Default Issue Type Scheme",
@@ -1339,7 +1340,7 @@ func TestIssueTypeSchemeService_Update(t *testing.T) {
 		{
 			name:              "UpdateIssueTypeSchemeWhenTheContextIsNil",
 			issueTypeSchemeID: 12,
-			payload: &IssueTypeSchemePayloadScheme{
+			payload: &models.IssueTypeSchemePayloadScheme{
 				DefaultIssueTypeID: "1000",
 				IssueTypeIds:       []string{"1000", "1001", "1002"},
 				Name:               "Default Issue Type Scheme",
@@ -1355,7 +1356,7 @@ func TestIssueTypeSchemeService_Update(t *testing.T) {
 		{
 			name:              "UpdateIssueTypeSchemeWhenTheIssueTypeSchemeIDIsNotProvided",
 			issueTypeSchemeID: 0,
-			payload: &IssueTypeSchemePayloadScheme{
+			payload: &models.IssueTypeSchemePayloadScheme{
 				DefaultIssueTypeID: "1000",
 				IssueTypeIds:       []string{"1000", "1001", "1002"},
 				Name:               "Default Issue Type Scheme",
@@ -1382,7 +1383,7 @@ func TestIssueTypeSchemeService_Update(t *testing.T) {
 		{
 			name:              "UpdateIssueTypeSchemeWhenTheRequestMethodIsIncorrect",
 			issueTypeSchemeID: 12,
-			payload: &IssueTypeSchemePayloadScheme{
+			payload: &models.IssueTypeSchemePayloadScheme{
 				DefaultIssueTypeID: "1000",
 				IssueTypeIds:       []string{"1000", "1001", "1002"},
 				Name:               "Default Issue Type Scheme",
@@ -1398,7 +1399,7 @@ func TestIssueTypeSchemeService_Update(t *testing.T) {
 		{
 			name:              "UpdateIssueTypeSchemeWhenTheStatusCodeIsIncorrect",
 			issueTypeSchemeID: 12,
-			payload: &IssueTypeSchemePayloadScheme{
+			payload: &models.IssueTypeSchemePayloadScheme{
 				DefaultIssueTypeID: "1000",
 				IssueTypeIds:       []string{"1000", "1001", "1002"},
 				Name:               "Default Issue Type Scheme",

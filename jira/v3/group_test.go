@@ -3,6 +3,7 @@ package v3
 import (
 	"context"
 	"fmt"
+	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/url"
@@ -168,7 +169,7 @@ func TestGroupService_Bulk(t *testing.T) {
 
 	testCases := []struct {
 		name               string
-		options            *GroupBulkOptionsScheme
+		options            *models.GroupBulkOptionsScheme
 		startAt            int
 		maxResults         int
 		mockFile           string
@@ -180,7 +181,7 @@ func TestGroupService_Bulk(t *testing.T) {
 	}{
 		{
 			name: "BulkGroupsWhenTheGroupIDHasValues",
-			options: &GroupBulkOptionsScheme{
+			options: &models.GroupBulkOptionsScheme{
 				GroupNames: []string{"dog-developers", "jira-users"},
 			},
 			mockFile:           "./mocks/bulk-groups.json",
@@ -192,7 +193,7 @@ func TestGroupService_Bulk(t *testing.T) {
 		},
 		{
 			name: "BulkGroupsWhenTheGroupNameHasValues",
-			options: &GroupBulkOptionsScheme{
+			options: &models.GroupBulkOptionsScheme{
 				GroupIDs: []string{"5b10ac8d82e05b22cc7d4ef5", "5b10ac8d82e05b22cc4jas21409"},
 			},
 			mockFile:           "./mocks/bulk-groups.json",
@@ -214,7 +215,7 @@ func TestGroupService_Bulk(t *testing.T) {
 		},
 		{
 			name: "BulkGroupsWhenTheRequestMethodIsIncorrect",
-			options: &GroupBulkOptionsScheme{
+			options: &models.GroupBulkOptionsScheme{
 				GroupNames: []string{"dog-developers", "jira-users"},
 			},
 			mockFile:           "./mocks/bulk-groups.json",
@@ -226,7 +227,7 @@ func TestGroupService_Bulk(t *testing.T) {
 		},
 		{
 			name: "BulkGroupsWhenTheStatusCodeIsIncorrect",
-			options: &GroupBulkOptionsScheme{
+			options: &models.GroupBulkOptionsScheme{
 				GroupNames: []string{"dog-developers", "jira-users"},
 			},
 			mockFile:           "./mocks/bulk-groups.json",
@@ -238,7 +239,7 @@ func TestGroupService_Bulk(t *testing.T) {
 		},
 		{
 			name: "BulkGroupsWhenTheContextIsNil",
-			options: &GroupBulkOptionsScheme{
+			options: &models.GroupBulkOptionsScheme{
 				GroupNames: []string{"dog-developers", "jira-users"},
 			},
 			mockFile:           "./mocks/bulk-groups.json",
@@ -250,7 +251,7 @@ func TestGroupService_Bulk(t *testing.T) {
 		},
 		{
 			name: "BulkGroupsWhenTheResponseBodyLengthIsZero",
-			options: &GroupBulkOptionsScheme{
+			options: &models.GroupBulkOptionsScheme{
 				GroupNames: []string{"dog-developers", "jira-users"},
 			},
 			mockFile:           "",
@@ -262,7 +263,7 @@ func TestGroupService_Bulk(t *testing.T) {
 		},
 		{
 			name: "BulkGroupsWhenTheResponseBodyHasADifferentFormat",
-			options: &GroupBulkOptionsScheme{
+			options: &models.GroupBulkOptionsScheme{
 				GroupNames: []string{"dog-developers", "jira-users"},
 			},
 			mockFile:           "./mocks/empty_json.json",

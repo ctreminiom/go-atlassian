@@ -3,7 +3,7 @@ package v2
 import (
 	"context"
 	"fmt"
-	models2 "github.com/ctreminiom/go-atlassian/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -14,15 +14,15 @@ type IssueWorklogService struct{ client *Client }
 
 // Get returns a worklog.
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-issue-worklogs/#api-rest-api-2-issue-issueidorkey-worklog-id-get
-func (w *IssueWorklogService) Get(ctx context.Context, issueKeyOrID, worklogID string, expand []string) (result *models2.IssueWorklogScheme,
+func (w *IssueWorklogService) Get(ctx context.Context, issueKeyOrID, worklogID string, expand []string) (result *models.IssueWorklogScheme,
 	response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {
-		return nil, nil, models2.ErrNoIssueKeyOrIDError
+		return nil, nil, models.ErrNoIssueKeyOrIDError
 	}
 
 	if len(worklogID) == 0 {
-		return nil, nil, models2.ErrNoWorklogIDError
+		return nil, nil, models.ErrNoWorklogIDError
 	}
 
 	params := url.Values{}
@@ -56,10 +56,10 @@ func (w *IssueWorklogService) Get(ctx context.Context, issueKeyOrID, worklogID s
 // on or after a date and time.
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-issue-worklogs/#api-rest-api-2-issue-issueidorkey-worklog-get
 func (w *IssueWorklogService) Issue(ctx context.Context, issueKeyOrID string, startAt, maxResults, after int,
-	expand []string) (result *models2.IssueWorklogPageScheme, response *ResponseScheme, err error) {
+	expand []string) (result *models.IssueWorklogPageScheme, response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {
-		return nil, nil, models2.ErrNoIssueKeyOrIDError
+		return nil, nil, models.ErrNoIssueKeyOrIDError
 	}
 
 	params := url.Values{}
@@ -94,11 +94,11 @@ func (w *IssueWorklogService) Issue(ctx context.Context, issueKeyOrID string, st
 // Add adds a worklog to an issue.
 // Docs: N/A
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-issue-worklogs/#api-rest-api-2-issue-issueidorkey-worklog-post
-func (w *IssueWorklogService) Add(ctx context.Context, issueKeyOrID string, options *models2.WorklogOptionsScheme) (
-	result *models2.IssueWorklogScheme, response *ResponseScheme, err error) {
+func (w *IssueWorklogService) Add(ctx context.Context, issueKeyOrID string, options *models.WorklogOptionsScheme) (
+	result *models.IssueWorklogScheme, response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {
-		return nil, nil, models2.ErrNoIssueKeyOrIDError
+		return nil, nil, models.ErrNoIssueKeyOrIDError
 	}
 
 	params := url.Values{}
@@ -156,15 +156,15 @@ func (w *IssueWorklogService) Add(ctx context.Context, issueKeyOrID string, opti
 
 // Update updates a worklog.
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-issue-worklogs/#api-rest-api-2-issue-issueidorkey-worklog-id-put
-func (w *IssueWorklogService) Update(ctx context.Context, issueKeyOrID, worklogID string, options *models2.WorklogOptionsScheme) (
-	result *models2.IssueWorklogScheme, response *ResponseScheme, err error) {
+func (w *IssueWorklogService) Update(ctx context.Context, issueKeyOrID, worklogID string, options *models.WorklogOptionsScheme) (
+	result *models.IssueWorklogScheme, response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {
-		return nil, nil, models2.ErrNoIssueKeyOrIDError
+		return nil, nil, models.ErrNoIssueKeyOrIDError
 	}
 
 	if len(worklogID) == 0 {
-		return nil, nil, models2.ErrNoWorklogIDError
+		return nil, nil, models.ErrNoWorklogIDError
 	}
 
 	params := url.Values{}
@@ -223,15 +223,15 @@ func (w *IssueWorklogService) Update(ctx context.Context, issueKeyOrID, worklogI
 
 // Delete deletes a worklog from an issue.
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-issue-worklogs/#api-rest-api-2-issue-issueidorkey-worklog-id-delete
-func (w *IssueWorklogService) Delete(ctx context.Context, issueKeyOrID, worklogID string, options *models2.WorklogOptionsScheme) (
+func (w *IssueWorklogService) Delete(ctx context.Context, issueKeyOrID, worklogID string, options *models.WorklogOptionsScheme) (
 	response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {
-		return nil, models2.ErrNoIssueTypeIDError
+		return nil, models.ErrNoIssueTypeIDError
 	}
 
 	if len(worklogID) == 0 {
-		return nil, models2.ErrNoWorklogIDError
+		return nil, models.ErrNoWorklogIDError
 	}
 
 	params := url.Values{}
@@ -284,7 +284,7 @@ func (w *IssueWorklogService) Delete(ctx context.Context, issueKeyOrID, worklogI
 
 // Deleted returns a list of IDs and delete timestamps for worklogs deleted after a date and time.
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-issue-worklogs/#api-rest-api-2-worklog-deleted-get
-func (w *IssueWorklogService) Deleted(ctx context.Context, since int) (result *models2.ChangedWorklogPageScheme, response *ResponseScheme,
+func (w *IssueWorklogService) Deleted(ctx context.Context, since int) (result *models.ChangedWorklogPageScheme, response *ResponseScheme,
 	err error) {
 
 	params := url.Values{}
@@ -316,11 +316,11 @@ func (w *IssueWorklogService) Deleted(ctx context.Context, since int) (result *m
 
 // Gets returns worklog details for a list of worklog IDs.
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-issue-worklogs/#api-rest-api-2-worklog-list-post
-func (w *IssueWorklogService) Gets(ctx context.Context, worklogIDs []int, expand []string) (result []*models2.IssueWorklogScheme,
+func (w *IssueWorklogService) Gets(ctx context.Context, worklogIDs []int, expand []string) (result []*models.IssueWorklogScheme,
 	response *ResponseScheme, err error) {
 
 	if len(worklogIDs) == 0 {
-		return nil, nil, models2.ErrNpWorklogsError
+		return nil, nil, models.ErrNpWorklogsError
 	}
 
 	params := url.Values{}
@@ -361,7 +361,7 @@ func (w *IssueWorklogService) Gets(ctx context.Context, worklogIDs []int, expand
 
 // Updated returns a list of IDs and update timestamps for worklogs updated after a date and time.
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-issue-worklogs/#api-rest-api-2-worklog-updated-get
-func (w *IssueWorklogService) Updated(ctx context.Context, since int, expand []string) (result *models2.ChangedWorklogPageScheme,
+func (w *IssueWorklogService) Updated(ctx context.Context, since int, expand []string) (result *models.ChangedWorklogPageScheme,
 	response *ResponseScheme, err error) {
 
 	params := url.Values{}

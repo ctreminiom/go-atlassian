@@ -528,7 +528,7 @@ func TestFieldOptionContextService_Gets(t *testing.T) {
 		name               string
 		FieldID            string
 		ContextID          int
-		opts               *FieldOptionContextParams
+		opts               *models.FieldOptionContextParams
 		startAt            int
 		maxResult          int
 		mockFile           string
@@ -542,7 +542,7 @@ func TestFieldOptionContextService_Gets(t *testing.T) {
 			name:      "GetsFieldContextsWhenTheParametersAreCorrect",
 			FieldID:   "100001",
 			ContextID: 10001,
-			opts: &FieldOptionContextParams{
+			opts: &models.FieldOptionContextParams{
 				OptionID:    1000,
 				OnlyOptions: true,
 			},
@@ -572,7 +572,7 @@ func TestFieldOptionContextService_Gets(t *testing.T) {
 			name:      "GetsFieldContextsWhenTheEndpointIsIncorrect",
 			FieldID:   "100001",
 			ContextID: 10001,
-			opts: &FieldOptionContextParams{
+			opts: &models.FieldOptionContextParams{
 				OptionID:    1000,
 				OnlyOptions: true,
 			},
@@ -590,7 +590,7 @@ func TestFieldOptionContextService_Gets(t *testing.T) {
 			name:      "GetsFieldContextsWhenTheContextIsNil",
 			FieldID:   "100001",
 			ContextID: 10001,
-			opts: &FieldOptionContextParams{
+			opts: &models.FieldOptionContextParams{
 				OptionID:    1000,
 				OnlyOptions: true,
 			},
@@ -608,7 +608,7 @@ func TestFieldOptionContextService_Gets(t *testing.T) {
 			name:      "GetsFieldContextsWhenTheRequestMethodIsIncorrect",
 			FieldID:   "100001",
 			ContextID: 10001,
-			opts: &FieldOptionContextParams{
+			opts: &models.FieldOptionContextParams{
 				OptionID:    1000,
 				OnlyOptions: true,
 			},
@@ -626,7 +626,7 @@ func TestFieldOptionContextService_Gets(t *testing.T) {
 			name:      "GetsFieldContextsWhenTheStatusCodeIsIncorrect",
 			FieldID:   "100001",
 			ContextID: 10001,
-			opts: &FieldOptionContextParams{
+			opts: &models.FieldOptionContextParams{
 				OptionID:    1000,
 				OnlyOptions: true,
 			},
@@ -644,7 +644,7 @@ func TestFieldOptionContextService_Gets(t *testing.T) {
 			name:      "GetsFieldContextsWhenTheResponseBodyHasADifferentFormat",
 			FieldID:   "100001",
 			ContextID: 10001,
-			opts: &FieldOptionContextParams{
+			opts: &models.FieldOptionContextParams{
 				OptionID:    1000,
 				OnlyOptions: true,
 			},
@@ -662,7 +662,7 @@ func TestFieldOptionContextService_Gets(t *testing.T) {
 			name:      "GetsFieldContextsWhenTheResponseBodyLengthIsZero",
 			FieldID:   "100001",
 			ContextID: 10001,
-			opts: &FieldOptionContextParams{
+			opts: &models.FieldOptionContextParams{
 				OptionID:    1000,
 				OnlyOptions: true,
 			},
@@ -1088,7 +1088,7 @@ func TestFieldOptionContextService_Order(t *testing.T) {
 		name               string
 		fieldID            string
 		contextID          int
-		payload            *OrderFieldOptionPayloadScheme
+		payload            *models.OrderFieldOptionPayloadScheme
 		wantHTTPMethod     string
 		endpoint           string
 		context            context.Context
@@ -1099,7 +1099,7 @@ func TestFieldOptionContextService_Order(t *testing.T) {
 			name:      "OrderFieldContextsWhenTheParametersAreCorrect",
 			fieldID:   "0001",
 			contextID: 100,
-			payload: &OrderFieldOptionPayloadScheme{
+			payload: &models.OrderFieldOptionPayloadScheme{
 				Position:             "Last",
 				CustomFieldOptionIds: []string{"111"},
 			},
@@ -1125,7 +1125,7 @@ func TestFieldOptionContextService_Order(t *testing.T) {
 			name:      "OrderFieldContextsWhenTheContextIDIsNotProvided",
 			fieldID:   "0001",
 			contextID: 0,
-			payload: &OrderFieldOptionPayloadScheme{
+			payload: &models.OrderFieldOptionPayloadScheme{
 				Position:             "Last",
 				CustomFieldOptionIds: []string{"111"},
 			},
@@ -1140,7 +1140,7 @@ func TestFieldOptionContextService_Order(t *testing.T) {
 			name:      "OrderFieldContextsWhenTheFieldIDIsEmpty",
 			fieldID:   "",
 			contextID: 100,
-			payload: &OrderFieldOptionPayloadScheme{
+			payload: &models.OrderFieldOptionPayloadScheme{
 				Position:             "Last",
 				CustomFieldOptionIds: []string{"111"},
 			},
@@ -1155,7 +1155,7 @@ func TestFieldOptionContextService_Order(t *testing.T) {
 			name:      "OrderFieldContextsWhenTheContextIsNil",
 			fieldID:   "0001",
 			contextID: 100,
-			payload: &OrderFieldOptionPayloadScheme{
+			payload: &models.OrderFieldOptionPayloadScheme{
 				Position:             "Last",
 				CustomFieldOptionIds: []string{"111"},
 			},
@@ -1170,7 +1170,7 @@ func TestFieldOptionContextService_Order(t *testing.T) {
 			name:      "OrderFieldContextsWhenTheRequestMethodIsIncorrect",
 			fieldID:   "0001",
 			contextID: 100,
-			payload: &OrderFieldOptionPayloadScheme{
+			payload: &models.OrderFieldOptionPayloadScheme{
 				Position:             "Last",
 				CustomFieldOptionIds: []string{"111"},
 			},
@@ -1185,7 +1185,7 @@ func TestFieldOptionContextService_Order(t *testing.T) {
 			name:      "OrderFieldContextsWhenTheEndpointIsIncorrect",
 			fieldID:   "0001",
 			contextID: 100,
-			payload: &OrderFieldOptionPayloadScheme{
+			payload: &models.OrderFieldOptionPayloadScheme{
 				Position:             "Last",
 				CustomFieldOptionIds: []string{"111"},
 			},
@@ -1200,7 +1200,7 @@ func TestFieldOptionContextService_Order(t *testing.T) {
 			name:      "OrderFieldContextsWhenTheStatusCodeIsIncorrect",
 			fieldID:   "0001",
 			contextID: 100,
-			payload: &OrderFieldOptionPayloadScheme{
+			payload: &models.OrderFieldOptionPayloadScheme{
 				Position:             "Last",
 				CustomFieldOptionIds: []string{"111"},
 			},

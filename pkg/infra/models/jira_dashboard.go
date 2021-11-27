@@ -36,3 +36,17 @@ type DashboardSearchPageScheme struct {
 	IsLast     bool               `json:"isLast,omitempty"`
 	Values     []*DashboardScheme `json:"values,omitempty"`
 }
+
+type DashboardPayloadScheme struct {
+	Name             string                   `json:"name,omitempty"`
+	Description      string                   `json:"description,omitempty"`
+	SharePermissions []*SharePermissionScheme `json:"sharePermissions,omitempty"`
+}
+
+type DashboardSearchOptionsScheme struct {
+	DashboardName       string
+	OwnerAccountID      string
+	GroupPermissionName string
+	OrderBy             string
+	Expand              []string
+}

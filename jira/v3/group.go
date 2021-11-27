@@ -71,16 +71,11 @@ func (g *GroupService) Delete(ctx context.Context, groupName string) (response *
 	return
 }
 
-type GroupBulkOptionsScheme struct {
-	GroupIDs   []string
-	GroupNames []string
-}
-
 // Bulk returns a paginated list of groups.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/groups#bulk-groups
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-groups/#api-rest-api-3-group-bulk-get
 // NOTE: Experimental Endpoint
-func (g *GroupService) Bulk(ctx context.Context, options *GroupBulkOptionsScheme, startAt, maxResults int) (
+func (g *GroupService) Bulk(ctx context.Context, options *models.GroupBulkOptionsScheme, startAt, maxResults int) (
 	result *models.BulkGroupScheme, response *ResponseScheme, err error) {
 
 	params := url.Values{}

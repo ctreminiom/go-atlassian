@@ -3,6 +3,7 @@ package v2
 import (
 	"context"
 	"fmt"
+	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/url"
@@ -13,7 +14,7 @@ func TestFilterShareService_Add_V2(t *testing.T) {
 
 	testCases := []struct {
 		name               string
-		payload            *PermissionFilterPayloadScheme
+		payload            *models.PermissionFilterPayloadScheme
 		mockFile           string
 		filterID           int
 		wantHTTPMethod     string
@@ -24,7 +25,7 @@ func TestFilterShareService_Add_V2(t *testing.T) {
 	}{
 		{
 			name: "AddShareFilterPermissionWhenTheTypeIsAGroup",
-			payload: &PermissionFilterPayloadScheme{
+			payload: &models.PermissionFilterPayloadScheme{
 				Type:      "group",
 				ProjectID: "jira-administrators",
 			},
@@ -49,7 +50,7 @@ func TestFilterShareService_Add_V2(t *testing.T) {
 		},
 		{
 			name: "AddShareFilterPermissionWhenTheResponseBodyHasADifferentFormat",
-			payload: &PermissionFilterPayloadScheme{
+			payload: &models.PermissionFilterPayloadScheme{
 				Type:      "group",
 				ProjectID: "jira-administrators",
 			},
@@ -63,7 +64,7 @@ func TestFilterShareService_Add_V2(t *testing.T) {
 		},
 		{
 			name: "AddShareFilterPermissionWhenTheTypeIsAProject",
-			payload: &PermissionFilterPayloadScheme{
+			payload: &models.PermissionFilterPayloadScheme{
 				Type:      "project",
 				ProjectID: "EX",
 			},
@@ -77,7 +78,7 @@ func TestFilterShareService_Add_V2(t *testing.T) {
 		},
 		{
 			name: "AddShareFilterPermissionWhenTheTypeIsAProjectAndHasARole",
-			payload: &PermissionFilterPayloadScheme{
+			payload: &models.PermissionFilterPayloadScheme{
 				Type:          "project",
 				ProjectID:     "EX",
 				ProjectRoleID: "10260",
@@ -92,7 +93,7 @@ func TestFilterShareService_Add_V2(t *testing.T) {
 		},
 		{
 			name: "AddShareFilterPermissionWhenTheContextIsNil",
-			payload: &PermissionFilterPayloadScheme{
+			payload: &models.PermissionFilterPayloadScheme{
 				Type:          "project",
 				ProjectID:     "EX",
 				ProjectRoleID: "10260",
@@ -107,7 +108,7 @@ func TestFilterShareService_Add_V2(t *testing.T) {
 		},
 		{
 			name: "AddShareFilterPermissionWhenTheEndpointIsIncorrect",
-			payload: &PermissionFilterPayloadScheme{
+			payload: &models.PermissionFilterPayloadScheme{
 				Type:          "project",
 				ProjectID:     "EX",
 				ProjectRoleID: "10260",

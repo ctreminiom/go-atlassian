@@ -3,7 +3,7 @@ package v2
 import (
 	"context"
 	"fmt"
-	models2 "github.com/ctreminiom/go-atlassian/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -17,11 +17,11 @@ type FieldContextService struct {
 // Gets returns a paginated list of contexts for a custom field. Contexts can be returned as follows:
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields/context#get-custom-field-contexts
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-issue-custom-field-contexts/#api-rest-api-2-field-fieldid-context-get
-func (f *FieldContextService) Gets(ctx context.Context, fieldID string, opts *models2.FieldContextOptionsScheme, startAt, maxResults int) (
-	result *models2.CustomFieldContextPageScheme, response *ResponseScheme, err error) {
+func (f *FieldContextService) Gets(ctx context.Context, fieldID string, opts *models.FieldContextOptionsScheme, startAt, maxResults int) (
+	result *models.CustomFieldContextPageScheme, response *ResponseScheme, err error) {
 
 	if fieldID == "" {
-		return nil, nil, models2.ErrNoFieldIDError
+		return nil, nil, models.ErrNoFieldIDError
 	}
 
 	params := url.Values{}
@@ -64,11 +64,11 @@ func (f *FieldContextService) Gets(ctx context.Context, fieldID string, opts *mo
 // Create creates a custom field context.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields/context#create-custom-field-context
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-issue-custom-field-contexts/#api-rest-api-2-field-fieldid-context-post
-func (f *FieldContextService) Create(ctx context.Context, fieldID string, payload *models2.FieldContextPayloadScheme) (
-	result *models2.FieldContextScheme, response *ResponseScheme, err error) {
+func (f *FieldContextService) Create(ctx context.Context, fieldID string, payload *models.FieldContextPayloadScheme) (
+	result *models.FieldContextScheme, response *ResponseScheme, err error) {
 
 	if fieldID == "" {
-		return nil, nil, models2.ErrNoFieldIDError
+		return nil, nil, models.ErrNoFieldIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/2/field/%v/context", fieldID)
@@ -100,10 +100,10 @@ func (f *FieldContextService) Create(ctx context.Context, fieldID string, payloa
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields/context#get-custom-field-contexts-default-values
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-issue-custom-field-contexts/#api-rest-api-2-field-fieldid-context-defaultvalue-get
 func (f *FieldContextService) GetDefaultValues(ctx context.Context, fieldID string, contextIDs []int, startAt, maxResults int) (
-	result *models2.CustomFieldDefaultValuePageScheme, response *ResponseScheme, err error) {
+	result *models.CustomFieldDefaultValuePageScheme, response *ResponseScheme, err error) {
 
 	if len(fieldID) == 0 {
-		return nil, nil, models2.ErrNoFieldIDError
+		return nil, nil, models.ErrNoFieldIDError
 	}
 
 	params := url.Values{}
@@ -135,11 +135,11 @@ func (f *FieldContextService) GetDefaultValues(ctx context.Context, fieldID stri
 // Default are defined using these objects:
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields/context#set-custom-field-contexts-default-values
 // Official Docs; https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-issue-custom-field-contexts/#api-rest-api-2-field-fieldid-context-defaultvalue-put
-func (f *FieldContextService) SetDefaultValue(ctx context.Context, fieldID string, payload *models2.FieldContextDefaultPayloadScheme) (
+func (f *FieldContextService) SetDefaultValue(ctx context.Context, fieldID string, payload *models.FieldContextDefaultPayloadScheme) (
 	response *ResponseScheme, err error) {
 
 	if len(fieldID) == 0 {
-		return nil, models2.ErrNoFieldIDError
+		return nil, models.ErrNoFieldIDError
 	}
 
 	payloadAsReader, err := transformStructToReader(payload)
@@ -148,7 +148,7 @@ func (f *FieldContextService) SetDefaultValue(ctx context.Context, fieldID strin
 	}
 
 	if len(payload.DefaultValues) == 0 {
-		return nil, models2.ErrNoFieldContextIDError
+		return nil, models.ErrNoFieldContextIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/2/field/%v/context/defaultValue", fieldID)
@@ -175,10 +175,10 @@ func (f *FieldContextService) SetDefaultValue(ctx context.Context, fieldID strin
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-issue-custom-field-contexts/#api-rest-api-2-field-fieldid-context-issuetypemapping-get
 // Docs: TODO Issue 51
 func (f *FieldContextService) IssueTypesContext(ctx context.Context, fieldID string, contextIDs []int, startAt, maxResults int) (
-	result *models2.IssueTypeToContextMappingPageScheme, response *ResponseScheme, err error) {
+	result *models.IssueTypeToContextMappingPageScheme, response *ResponseScheme, err error) {
 
 	if len(fieldID) == 0 {
-		return nil, nil, models2.ErrNoFieldIDError
+		return nil, nil, models.ErrNoFieldIDError
 	}
 
 	params := url.Values{}
@@ -213,10 +213,10 @@ func (f *FieldContextService) IssueTypesContext(ctx context.Context, fieldID str
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-issue-custom-field-contexts/#api-rest-api-2-field-fieldid-context-projectmapping-get
 // Docs: TODO Issue 52
 func (f *FieldContextService) ProjectsContext(ctx context.Context, fieldID string, contextIDs []int, startAt, maxResults int) (
-	result *models2.CustomFieldContextProjectMappingPageScheme, response *ResponseScheme, err error) {
+	result *models.CustomFieldContextProjectMappingPageScheme, response *ResponseScheme, err error) {
 
 	if len(fieldID) == 0 {
-		return nil, nil, models2.ErrNoFieldIDError
+		return nil, nil, models.ErrNoFieldIDError
 	}
 
 	params := url.Values{}
@@ -251,11 +251,11 @@ func (f *FieldContextService) Update(ctx context.Context, fieldID string, contex
 	response *ResponseScheme, err error) {
 
 	if len(fieldID) == 0 {
-		return nil, models2.ErrNoFieldIDError
+		return nil, models.ErrNoFieldIDError
 	}
 
 	if contextID == 0 {
-		return nil, models2.ErrNoFieldContextIDError
+		return nil, models.ErrNoFieldContextIDError
 	}
 
 	payload := struct {
@@ -291,11 +291,11 @@ func (f *FieldContextService) Update(ctx context.Context, fieldID string, contex
 func (f *FieldContextService) Delete(ctx context.Context, fieldID string, contextID int) (response *ResponseScheme, err error) {
 
 	if len(fieldID) == 0 {
-		return nil, models2.ErrNoFieldIDError
+		return nil, models.ErrNoFieldIDError
 	}
 
 	if contextID == 0 {
-		return nil, models2.ErrNoFieldContextIDError
+		return nil, models.ErrNoFieldContextIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/2/field/%v/context/%v", fieldID, contextID)
@@ -322,11 +322,11 @@ func (f *FieldContextService) AddIssueTypes(ctx context.Context, fieldID string,
 	response *ResponseScheme, err error) {
 
 	if len(fieldID) == 0 {
-		return nil, models2.ErrNoFieldIDError
+		return nil, models.ErrNoFieldIDError
 	}
 
 	if len(issueTypesIDs) == 0 {
-		return nil, models2.ErrNoIssueTypesError
+		return nil, models.ErrNoIssueTypesError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/2/field/%v/context/%v/issuetype", fieldID, contextID)
@@ -362,11 +362,11 @@ func (f *FieldContextService) RemoveIssueTypes(ctx context.Context, fieldID stri
 	response *ResponseScheme, err error) {
 
 	if len(fieldID) == 0 {
-		return nil, models2.ErrNoFieldIDError
+		return nil, models.ErrNoFieldIDError
 	}
 
 	if len(issueTypesIDs) == 0 {
-		return nil, models2.ErrNoIssueTypesError
+		return nil, models.ErrNoIssueTypesError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/2/field/%v/context/%v/issuetype/remove", fieldID, contextID)
@@ -403,11 +403,11 @@ func (f *FieldContextService) Link(ctx context.Context, fieldID string, contextI
 	response *ResponseScheme, err error) {
 
 	if len(fieldID) == 0 {
-		return nil, models2.ErrNoFieldIDError
+		return nil, models.ErrNoFieldIDError
 	}
 
 	if len(projectIDs) == 0 {
-		return nil, models2.ErrNoIssueTypesError
+		return nil, models.ErrNoIssueTypesError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/2/field/%v/context/%v/project", fieldID, contextID)
@@ -445,11 +445,11 @@ func (f *FieldContextService) UnLink(ctx context.Context, fieldID string, contex
 	err error) {
 
 	if len(fieldID) == 0 {
-		return nil, models2.ErrNoFieldIDError
+		return nil, models.ErrNoFieldIDError
 	}
 
 	if len(projectIDs) == 0 {
-		return nil, models2.ErrNoProjectIDError
+		return nil, models.ErrNoProjectIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/2/field/%v/context/%v/project/remove", fieldID, contextID)

@@ -3,7 +3,7 @@ package v2
 import (
 	"context"
 	"fmt"
-	models2 "github.com/ctreminiom/go-atlassian/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -16,10 +16,10 @@ type CommentService struct{ client *Client }
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/comments#get-comments
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-issue-comments/#api-rest-api-2-issue-issueidorkey-comment-get
 func (c *CommentService) Gets(ctx context.Context, issueKeyOrID, orderBy string, expand []string, startAt,
-	maxResults int) (result *models2.IssueCommentPageSchemeV2, response *ResponseScheme, err error) {
+	maxResults int) (result *models.IssueCommentPageSchemeV2, response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {
-		return nil, nil, models2.ErrNoIssueKeyOrIDError
+		return nil, nil, models.ErrNoIssueKeyOrIDError
 	}
 
 	params := url.Values{}
@@ -53,15 +53,15 @@ func (c *CommentService) Gets(ctx context.Context, issueKeyOrID, orderBy string,
 // Get returns a comment.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/comments#get-comment
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-issue-comments/#api-rest-api-2-comment-list-post
-func (c *CommentService) Get(ctx context.Context, issueKeyOrID, commentID string) (result *models2.IssueCommentSchemeV2,
+func (c *CommentService) Get(ctx context.Context, issueKeyOrID, commentID string) (result *models.IssueCommentSchemeV2,
 	response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {
-		return nil, nil, models2.ErrNoIssueKeyOrIDError
+		return nil, nil, models.ErrNoIssueKeyOrIDError
 	}
 
 	if len(commentID) == 0 {
-		return nil, nil, models2.ErrNoCommentIDError
+		return nil, nil, models.ErrNoCommentIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/2/issue/%v/comment/%v", issueKeyOrID, commentID)
@@ -87,11 +87,11 @@ func (c *CommentService) Get(ctx context.Context, issueKeyOrID, commentID string
 func (c *CommentService) Delete(ctx context.Context, issueKeyOrID, commentID string) (response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {
-		return nil, models2.ErrNoIssueKeyOrIDError
+		return nil, models.ErrNoIssueKeyOrIDError
 	}
 
 	if len(commentID) == 0 {
-		return nil, models2.ErrNoCommentIDError
+		return nil, models.ErrNoCommentIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/2/issue/%v/comment/%v", issueKeyOrID, commentID)
@@ -112,11 +112,11 @@ func (c *CommentService) Delete(ctx context.Context, issueKeyOrID, commentID str
 // Add adds a comment to an issue.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/comments#add-comment
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-issue-comments/#api-rest-api-2-issue-issueidorkey-comment-post
-func (c *CommentService) Add(ctx context.Context, issueKeyOrID string, payload *models2.CommentPayloadSchemeV2, expand []string) (
-	result *models2.IssueCommentSchemeV2, response *ResponseScheme, err error) {
+func (c *CommentService) Add(ctx context.Context, issueKeyOrID string, payload *models.CommentPayloadSchemeV2, expand []string) (
+	result *models.IssueCommentSchemeV2, response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {
-		return nil, nil, models2.ErrNoIssueKeyOrIDError
+		return nil, nil, models.ErrNoIssueKeyOrIDError
 	}
 
 	params := url.Values{}

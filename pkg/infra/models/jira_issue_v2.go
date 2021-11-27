@@ -100,3 +100,42 @@ type IssueFieldsSchemeV2 struct {
 	Comment                  *IssueCommentPageSchemeV2 `json:"comment,omitempty"`
 	Subtasks                 []*IssueScheme            `json:"subtasks,omitempty"`
 }
+
+type IssueResponseScheme struct {
+	ID   string `json:"id,omitempty"`
+	Key  string `json:"key,omitempty"`
+	Self string `json:"self,omitempty"`
+}
+
+type IssueBulkSchemeV2 struct {
+	Payload      *IssueSchemeV2
+	CustomFields *CustomFields
+}
+
+type BulkIssueSchemeV2 struct {
+	Issues []*IssueSchemeV2 `json:"issues,omitempty"`
+}
+
+type IssueBulkResponseScheme struct {
+	Issues []struct {
+		ID   string `json:"id,omitempty"`
+		Key  string `json:"key,omitempty"`
+		Self string `json:"self,omitempty"`
+	} `json:"issues,omitempty"`
+	Errors []*IssueBulkResponseErrorScheme `json:"errors,omitempty"`
+}
+
+type IssueBulkResponseErrorScheme struct {
+	Status        int `json:"status"`
+	ElementErrors struct {
+		ErrorMessages []string `json:"errorMessages"`
+		Status        int      `json:"status"`
+	} `json:"elementErrors"`
+	FailedElementNumber int `json:"failedElementNumber"`
+}
+
+type IssueMoveOptionsV2 struct {
+	Fields       *IssueSchemeV2
+	CustomFields *CustomFields
+	Operations   *UpdateOperations
+}

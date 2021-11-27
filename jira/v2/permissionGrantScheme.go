@@ -3,7 +3,7 @@ package v2
 import (
 	"context"
 	"fmt"
-	models2 "github.com/ctreminiom/go-atlassian/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"net/http"
 	"net/url"
 	"strings"
@@ -14,8 +14,8 @@ type PermissionGrantSchemeService struct{ client *Client }
 // Create creates a permission grant in a permission scheme.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/permissions/scheme/grant#create-permission-grant
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-permission-schemes/#api-rest-api-2-permissionscheme-schemeid-permission-post
-func (p *PermissionGrantSchemeService) Create(ctx context.Context, permissionSchemeID int, payload *models2.PermissionGrantPayloadScheme) (
-	result *models2.PermissionGrantScheme, response *ResponseScheme, err error) {
+func (p *PermissionGrantSchemeService) Create(ctx context.Context, permissionSchemeID int, payload *models.PermissionGrantPayloadScheme) (
+	result *models.PermissionGrantScheme, response *ResponseScheme, err error) {
 
 	var endpoint = fmt.Sprintf("rest/api/2/permissionscheme/%v/permission", permissionSchemeID)
 
@@ -44,10 +44,10 @@ func (p *PermissionGrantSchemeService) Create(ctx context.Context, permissionSch
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/permissions/scheme/grant#get-permission-scheme-grants
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-permission-schemes/#api-rest-api-2-permissionscheme-schemeid-permission-get
 func (p *PermissionGrantSchemeService) Gets(ctx context.Context, permissionSchemeID int, expand []string) (
-	result *models2.PermissionSchemeGrantsScheme, response *ResponseScheme, err error) {
+	result *models.PermissionSchemeGrantsScheme, response *ResponseScheme, err error) {
 
 	if permissionSchemeID == 0 {
-		return nil, nil, models2.ErrNoPermissionSchemeIDError
+		return nil, nil, models.ErrNoPermissionSchemeIDError
 	}
 
 	params := url.Values{}
@@ -81,14 +81,14 @@ func (p *PermissionGrantSchemeService) Gets(ctx context.Context, permissionSchem
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/permissions/scheme/grant#get-permission-scheme-grant
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-permission-schemes/#api-rest-api-2-permissionscheme-schemeid-permission-permissionid-get
 func (p *PermissionGrantSchemeService) Get(ctx context.Context, permissionSchemeID, permissionGrantID int, expand []string) (
-	result *models2.PermissionGrantScheme, response *ResponseScheme, err error) {
+	result *models.PermissionGrantScheme, response *ResponseScheme, err error) {
 
 	if permissionSchemeID == 0 {
-		return nil, nil, models2.ErrNoPermissionSchemeIDError
+		return nil, nil, models.ErrNoPermissionSchemeIDError
 	}
 
 	if permissionGrantID == 0 {
-		return nil, nil, models2.ErrNoPermissionGrantIDError
+		return nil, nil, models.ErrNoPermissionGrantIDError
 	}
 
 	params := url.Values{}
@@ -125,11 +125,11 @@ func (p *PermissionGrantSchemeService) Delete(ctx context.Context, permissionSch
 	response *ResponseScheme, err error) {
 
 	if permissionSchemeID == 0 {
-		return nil, models2.ErrNoPermissionSchemeIDError
+		return nil, models.ErrNoPermissionSchemeIDError
 	}
 
 	if permissionGrantID == 0 {
-		return nil, models2.ErrNoPermissionGrantIDError
+		return nil, models.ErrNoPermissionGrantIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/2/permissionscheme/%v/permission/%v", permissionSchemeID, permissionGrantID)

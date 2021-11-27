@@ -20,3 +20,14 @@ type CustomFieldContextOptionScheme struct {
 type FieldContextOptionListScheme struct {
 	Options []*CustomFieldContextOptionScheme `json:"options,omitempty"`
 }
+
+type FieldOptionContextParams struct {
+	OptionID    int
+	OnlyOptions bool
+}
+
+type OrderFieldOptionPayloadScheme struct {
+	After                string   `json:"after,omitempty"`
+	Position             string   `json:"position,omitempty"`
+	CustomFieldOptionIds []string `json:"customFieldOptionIds,omitempty"`
+}

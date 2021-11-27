@@ -3,7 +3,7 @@ package v2
 import (
 	"context"
 	"fmt"
-	models2 "github.com/ctreminiom/go-atlassian/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"net/http"
 	"net/url"
 	"strings"
@@ -17,7 +17,7 @@ type ScreenTabService struct {
 // Gets returns the list of tabs for a screen.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/screens/tabs#get-all-screen-tabs
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-screen-tabs/#api-rest-api-2-screens-screenid-tabs-get
-func (s *ScreenTabService) Gets(ctx context.Context, screenID int, projectKey string) (result []*models2.ScreenTabScheme,
+func (s *ScreenTabService) Gets(ctx context.Context, screenID int, projectKey string) (result []*models.ScreenTabScheme,
 	response *ResponseScheme, err error) {
 
 	params := url.Values{}
@@ -50,11 +50,11 @@ func (s *ScreenTabService) Gets(ctx context.Context, screenID int, projectKey st
 // Create creates a tab for a screen.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/screens/tabs#create-screen-tab
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-screen-tabs/#api-rest-api-2-screens-screenid-tabs-post
-func (s *ScreenTabService) Create(ctx context.Context, screenID int, tabName string) (result *models2.ScreenTabScheme,
+func (s *ScreenTabService) Create(ctx context.Context, screenID int, tabName string) (result *models.ScreenTabScheme,
 	response *ResponseScheme, err error) {
 
 	if len(tabName) == 0 {
-		return nil, nil, models2.ErrNoScreenTabNameError
+		return nil, nil, models.ErrNoScreenTabNameError
 	}
 
 	payload := struct {
@@ -85,11 +85,11 @@ func (s *ScreenTabService) Create(ctx context.Context, screenID int, tabName str
 // Update updates the name of a screen tab.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/screens/tabs#update-screen-tab
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-screen-tabs/#api-rest-api-2-screens-screenid-tabs-tabid-put
-func (s *ScreenTabService) Update(ctx context.Context, screenID, tabID int, newTabName string) (result *models2.ScreenTabScheme,
+func (s *ScreenTabService) Update(ctx context.Context, screenID, tabID int, newTabName string) (result *models.ScreenTabScheme,
 	response *ResponseScheme, err error) {
 
 	if len(newTabName) == 0 {
-		return nil, nil, models2.ErrNoScreenTabNameError
+		return nil, nil, models.ErrNoScreenTabNameError
 	}
 
 	payload := struct {

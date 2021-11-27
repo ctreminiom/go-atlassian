@@ -47,7 +47,6 @@ func (p *PermissionService) Gets(ctx context.Context) (result []*models.Permissi
 				Description: data["description"].(string),
 			})
 		}
-
 	}
 
 	return

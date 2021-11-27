@@ -58,3 +58,8 @@ type GroupUserDetailScheme struct {
 	TimeZone     string `json:"timeZone"`
 	AccountType  string `json:"accountType"`
 }
+
+type GroupBulkOptionsScheme struct {
+	GroupIDs   []string
+	GroupNames []string
+}

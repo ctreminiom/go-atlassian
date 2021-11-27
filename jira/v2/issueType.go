@@ -3,7 +3,7 @@ package v2
 import (
 	"context"
 	"fmt"
-	models2 "github.com/ctreminiom/go-atlassian/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"net/http"
 )
 
@@ -16,7 +16,7 @@ type IssueTypeService struct {
 // Gets returns all issue types.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/type#get-all-issue-types-for-user
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-issue-types/#api-rest-api-2-issuetype-get
-func (i *IssueTypeService) Gets(ctx context.Context) (result []*models2.IssueTypeScheme, response *ResponseScheme, err error) {
+func (i *IssueTypeService) Gets(ctx context.Context) (result []*models.IssueTypeScheme, response *ResponseScheme, err error) {
 
 	var endpoint = "rest/api/2/issuetype"
 
@@ -38,7 +38,7 @@ func (i *IssueTypeService) Gets(ctx context.Context) (result []*models2.IssueTyp
 // Create creates an issue type and adds it to the default issue type scheme.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/type#create-issue-type
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-issue-types/#api-rest-api-2-issuetype-post
-func (i *IssueTypeService) Create(ctx context.Context, payload *models2.IssueTypePayloadScheme) (result *models2.IssueTypeScheme,
+func (i *IssueTypeService) Create(ctx context.Context, payload *models.IssueTypePayloadScheme) (result *models.IssueTypeScheme,
 	response *ResponseScheme, err error) {
 
 	payloadAsReader, err := transformStructToReader(payload)
@@ -67,11 +67,11 @@ func (i *IssueTypeService) Create(ctx context.Context, payload *models2.IssueTyp
 // Get returns an issue type.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/type#get-issue-type
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-issue-types/#api-rest-api-2-issuetype-id-get
-func (i *IssueTypeService) Get(ctx context.Context, issueTypeID string) (result *models2.IssueTypeScheme, response *ResponseScheme,
+func (i *IssueTypeService) Get(ctx context.Context, issueTypeID string) (result *models.IssueTypeScheme, response *ResponseScheme,
 	err error) {
 
 	if len(issueTypeID) == 0 {
-		return nil, nil, models2.ErrNoIssueTypeIDError
+		return nil, nil, models.ErrNoIssueTypeIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/2/issuetype/%v", issueTypeID)
@@ -94,11 +94,11 @@ func (i *IssueTypeService) Get(ctx context.Context, issueTypeID string) (result 
 // Update updates the issue type.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/type#update-issue-type
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-issue-types/#api-rest-api-2-issuetype-id-put
-func (i *IssueTypeService) Update(ctx context.Context, issueTypeID string, payload *models2.IssueTypePayloadScheme) (
-	result *models2.IssueTypeScheme, response *ResponseScheme, err error) {
+func (i *IssueTypeService) Update(ctx context.Context, issueTypeID string, payload *models.IssueTypePayloadScheme) (
+	result *models.IssueTypeScheme, response *ResponseScheme, err error) {
 
 	if len(issueTypeID) == 0 {
-		return nil, nil, models2.ErrNoIssueTypeIDError
+		return nil, nil, models.ErrNoIssueTypeIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/2/issuetype/%v", issueTypeID)
@@ -132,7 +132,7 @@ func (i *IssueTypeService) Update(ctx context.Context, issueTypeID string, paylo
 func (i *IssueTypeService) Delete(ctx context.Context, issueTypeID string) (response *ResponseScheme, err error) {
 
 	if len(issueTypeID) == 0 {
-		return nil, models2.ErrNoIssueTypeIDError
+		return nil, models.ErrNoIssueTypeIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/2/issuetype/%v", issueTypeID)
@@ -154,11 +154,11 @@ func (i *IssueTypeService) Delete(ctx context.Context, issueTypeID string) (resp
 // The alternative issue types are those assigned to the same workflow scheme, field configuration scheme, and screen scheme.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/type#get-alternative-issue-types
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-issue-types/#api-rest-api-2-issuetype-id-alternatives-get
-func (i *IssueTypeService) Alternatives(ctx context.Context, issueTypeID string) (result []*models2.IssueTypeScheme,
+func (i *IssueTypeService) Alternatives(ctx context.Context, issueTypeID string) (result []*models.IssueTypeScheme,
 	response *ResponseScheme, err error) {
 
 	if len(issueTypeID) == 0 {
-		return nil, nil, models2.ErrNoIssueTypeIDError
+		return nil, nil, models.ErrNoIssueTypeIDError
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/2/issuetype/%v/alternatives", issueTypeID)

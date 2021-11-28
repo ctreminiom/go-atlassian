@@ -94,8 +94,8 @@ func (w *IssueWorklogService) Issue(ctx context.Context, issueKeyOrID string, st
 // Add adds a worklog to an issue.
 // Docs: N/A
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-issue-worklogs/#api-rest-api-2-issue-issueidorkey-worklog-post
-func (w *IssueWorklogService) Add(ctx context.Context, issueKeyOrID string, options *models.WorklogOptionsScheme) (
-	result *models.IssueWorklogScheme, response *ResponseScheme, err error) {
+func (w *IssueWorklogService) Add(ctx context.Context, issueKeyOrID string, payload *models.WorklogPayloadSchemeV2,
+	options *models.WorklogOptionsScheme) (result *models.IssueWorklogScheme, response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {
 		return nil, nil, models.ErrNoIssueKeyOrIDError
@@ -126,7 +126,7 @@ func (w *IssueWorklogService) Add(ctx context.Context, issueKeyOrID string, opti
 		params.Add("overrideEditableFlag", "true")
 	}
 
-	payloadAsReader, err := transformStructToReader(options.Payload)
+	payloadAsReader, err := transformStructToReader(payload)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -156,8 +156,8 @@ func (w *IssueWorklogService) Add(ctx context.Context, issueKeyOrID string, opti
 
 // Update updates a worklog.
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-issue-worklogs/#api-rest-api-2-issue-issueidorkey-worklog-id-put
-func (w *IssueWorklogService) Update(ctx context.Context, issueKeyOrID, worklogID string, options *models.WorklogOptionsScheme) (
-	result *models.IssueWorklogScheme, response *ResponseScheme, err error) {
+func (w *IssueWorklogService) Update(ctx context.Context, issueKeyOrID, worklogID string, payload *models.WorklogPayloadSchemeV2,
+	options *models.WorklogOptionsScheme) (result *models.IssueWorklogScheme, response *ResponseScheme, err error) {
 
 	if len(issueKeyOrID) == 0 {
 		return nil, nil, models.ErrNoIssueKeyOrIDError
@@ -193,7 +193,7 @@ func (w *IssueWorklogService) Update(ctx context.Context, issueKeyOrID, worklogI
 		params.Add("overrideEditableFlag", "true")
 	}
 
-	payloadAsReader, err := transformStructToReader(options.Payload)
+	payloadAsReader, err := transformStructToReader(payload)
 	if err != nil {
 		return nil, nil, err
 	}

@@ -329,6 +329,7 @@ func TestIssueWorklogService_Add(t *testing.T) {
 		name               string
 		ctx                context.Context
 		issueKeyOrID       string
+		payload            *models.WorklogPayloadSchemeV3
 		options            *models.WorklogOptionsScheme
 		mockFile           string
 		wantHTTPMethod     string
@@ -348,16 +349,16 @@ func TestIssueWorklogService_Add(t *testing.T) {
 				OverrideEditableFlag: true,
 				NewEstimate:          "3h",
 				Expand:               []string{"expand", "properties"},
-				Payload: &models.WorklogPayloadScheme{
-					/*
-						Visibility:       &jira.IssueWorklogVisibilityScheme{
-							Type:  "group",
-							Value: "jira-users",
-						},
-					*/
-					Started:          "2021-07-16T07:01:10.774+0000",
-					TimeSpentSeconds: 12000,
-				},
+			},
+			payload: &models.WorklogPayloadSchemeV3{
+				/*
+					Visibility:       &jira.IssueWorklogVisibilityScheme{
+						Type:  "group",
+						Value: "jira-users",
+					},
+				*/
+				Started:          "2021-07-16T07:01:10.774+0000",
+				TimeSpentSeconds: 12000,
 			},
 			wantHTTPMethod:     http.MethodPost,
 			endpoint:           "/rest/api/3/issue/KP-1/worklog?adjustEstimate=auto&expand=expand%2Cproperties&newEstimate=3h&notifyUsers=false&overrideEditableFlag=true&reduceBy=3h",
@@ -376,16 +377,16 @@ func TestIssueWorklogService_Add(t *testing.T) {
 				ReduceBy:       "3h",
 				//OverrideEditableFlag: true,
 				Expand: []string{"expand", "properties"},
-				Payload: &models.WorklogPayloadScheme{
-					/*
-						Visibility:       &jira.IssueWorklogVisibilityScheme{
-							Type:  "group",
-							Value: "jira-users",
-						},
-					*/
-					Started:          "2021-07-16T07:01:10.774+0000",
-					TimeSpentSeconds: 12000,
-				},
+			},
+			payload: &models.WorklogPayloadSchemeV3{
+				/*
+					Visibility:       &jira.IssueWorklogVisibilityScheme{
+						Type:  "group",
+						Value: "jira-users",
+					},
+				*/
+				Started:          "2021-07-16T07:01:10.774+0000",
+				TimeSpentSeconds: 12000,
 			},
 			wantHTTPMethod:     http.MethodPost,
 			endpoint:           "/rest/api/3/issue/KP-1/worklog?adjustEstimate=auto&expand=expand%2Cproperties&reduceBy=3h",
@@ -404,16 +405,16 @@ func TestIssueWorklogService_Add(t *testing.T) {
 				ReduceBy:       "3h",
 				//OverrideEditableFlag: true,
 				Expand: []string{"expand", "properties"},
-				Payload: &models.WorklogPayloadScheme{
-					/*
-						Visibility:       &jira.IssueWorklogVisibilityScheme{
-							Type:  "group",
-							Value: "jira-users",
-						},
-					*/
-					Started:          "2021-07-16T07:01:10.774+0000",
-					TimeSpentSeconds: 12000,
-				},
+			},
+			payload: &models.WorklogPayloadSchemeV3{
+				/*
+					Visibility:       &jira.IssueWorklogVisibilityScheme{
+						Type:  "group",
+						Value: "jira-users",
+					},
+				*/
+				Started:          "2021-07-16T07:01:10.774+0000",
+				TimeSpentSeconds: 12000,
 			},
 			wantHTTPMethod:     http.MethodPost,
 			endpoint:           "/rest/api/3/issue/KP-1/worklog?adjustEstimate=auto&expand=expand%2Cproperties&reduceBy=3h",
@@ -431,9 +432,9 @@ func TestIssueWorklogService_Add(t *testing.T) {
 				AdjustEstimate: "auto",
 				ReduceBy:       "3h",
 				//OverrideEditableFlag: true,
-				Expand:  []string{"expand", "properties"},
-				Payload: nil,
+				Expand: []string{"expand", "properties"},
 			},
+			payload:            nil,
 			wantHTTPMethod:     http.MethodPost,
 			endpoint:           "/rest/api/3/issue/KP-1/worklog?adjustEstimate=auto&expand=expand%2Cproperties&reduceBy=3h",
 			wantHTTPCodeReturn: http.StatusOK,
@@ -451,16 +452,16 @@ func TestIssueWorklogService_Add(t *testing.T) {
 				ReduceBy:       "3h",
 				//OverrideEditableFlag: true,
 				Expand: []string{"expand", "properties"},
-				Payload: &models.WorklogPayloadScheme{
-					/*
-						Visibility:       &jira.IssueWorklogVisibilityScheme{
-							Type:  "group",
-							Value: "jira-users",
-						},
-					*/
-					Started:          "2021-07-16T07:01:10.774+0000",
-					TimeSpentSeconds: 12000,
-				},
+			},
+			payload: &models.WorklogPayloadSchemeV3{
+				/*
+					Visibility:       &jira.IssueWorklogVisibilityScheme{
+						Type:  "group",
+						Value: "jira-users",
+					},
+				*/
+				Started:          "2021-07-16T07:01:10.774+0000",
+				TimeSpentSeconds: 12000,
 			},
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/api/3/issue/KP-1/worklog?adjustEstimate=auto&expand=expand%2Cproperties&reduceBy=3h",
@@ -479,16 +480,16 @@ func TestIssueWorklogService_Add(t *testing.T) {
 				ReduceBy:       "3h",
 				//OverrideEditableFlag: true,
 				Expand: []string{"expand", "properties"},
-				Payload: &models.WorklogPayloadScheme{
-					/*
-						Visibility:       &jira.IssueWorklogVisibilityScheme{
-							Type:  "group",
-							Value: "jira-users",
-						},
-					*/
-					Started:          "2021-07-16T07:01:10.774+0000",
-					TimeSpentSeconds: 12000,
-				},
+			},
+			payload: &models.WorklogPayloadSchemeV3{
+				/*
+					Visibility:       &jira.IssueWorklogVisibilityScheme{
+						Type:  "group",
+						Value: "jira-users",
+					},
+				*/
+				Started:          "2021-07-16T07:01:10.774+0000",
+				TimeSpentSeconds: 12000,
 			},
 			wantHTTPMethod:     http.MethodPost,
 			endpoint:           "/rest/api/3/issue/KP-1/worklog?adjustEstimate=auto&expand=expand%2Cproperties&reduceBy=3h",
@@ -524,7 +525,7 @@ func TestIssueWorklogService_Add(t *testing.T) {
 
 			i := &IssueWorklogService{client: mockClient}
 
-			gotResult, gotResponse, err := i.Add(testCase.ctx, testCase.issueKeyOrID, testCase.options)
+			gotResult, gotResponse, err := i.Add(testCase.ctx, testCase.issueKeyOrID, testCase.payload, testCase.options)
 
 			if testCase.wantErr {
 
@@ -568,6 +569,7 @@ func TestIssueWorklogService_Update(t *testing.T) {
 		ctx                context.Context
 		issueKeyOrID       string
 		worklogID          string
+		payload            *models.WorklogPayloadSchemeV3
 		options            *models.WorklogOptionsScheme
 		mockFile           string
 		wantHTTPMethod     string
@@ -588,16 +590,16 @@ func TestIssueWorklogService_Update(t *testing.T) {
 				OverrideEditableFlag: true,
 				NewEstimate:          "3h",
 				Expand:               []string{"expand", "properties"},
-				Payload: &models.WorklogPayloadScheme{
-					/*
-						Visibility:       &jira.IssueWorklogVisibilityScheme{
-							Type:  "group",
-							Value: "jira-users",
-						},
-					*/
-					Started:          "2021-07-16T07:01:10.774+0000",
-					TimeSpentSeconds: 12000,
-				},
+			},
+			payload: &models.WorklogPayloadSchemeV3{
+				/*
+					Visibility:       &jira.IssueWorklogVisibilityScheme{
+						Type:  "group",
+						Value: "jira-users",
+					},
+				*/
+				Started:          "2021-07-16T07:01:10.774+0000",
+				TimeSpentSeconds: 12000,
 			},
 			wantHTTPMethod:     http.MethodPut,
 			endpoint:           "/rest/api/3/issue/KP-1/worklog/10000?adjustEstimate=auto&expand=expand%2Cproperties&newEstimate=3h&notifyUsers=false&overrideEditableFlag=true&reduceBy=3h",
@@ -618,16 +620,16 @@ func TestIssueWorklogService_Update(t *testing.T) {
 				OverrideEditableFlag: true,
 				NewEstimate:          "3h",
 				Expand:               []string{"expand", "properties"},
-				Payload: &models.WorklogPayloadScheme{
-					/*
-						Visibility:       &jira.IssueWorklogVisibilityScheme{
-							Type:  "group",
-							Value: "jira-users",
-						},
-					*/
-					Started:          "2021-07-16T07:01:10.774+0000",
-					TimeSpentSeconds: 12000,
-				},
+			},
+			payload: &models.WorklogPayloadSchemeV3{
+				/*
+					Visibility:       &jira.IssueWorklogVisibilityScheme{
+						Type:  "group",
+						Value: "jira-users",
+					},
+				*/
+				Started:          "2021-07-16T07:01:10.774+0000",
+				TimeSpentSeconds: 12000,
 			},
 			wantHTTPMethod:     http.MethodPut,
 			endpoint:           "/rest/api/3/issue/KP-1/worklog/10000?adjustEstimate=auto&expand=expand%2Cproperties&newEstimate=3h&notifyUsers=false&overrideEditableFlag=true&reduceBy=3h",
@@ -648,16 +650,16 @@ func TestIssueWorklogService_Update(t *testing.T) {
 				OverrideEditableFlag: true,
 				NewEstimate:          "3h",
 				Expand:               []string{"expand", "properties"},
-				Payload: &models.WorklogPayloadScheme{
-					/*
-						Visibility:       &jira.IssueWorklogVisibilityScheme{
-							Type:  "group",
-							Value: "jira-users",
-						},
-					*/
-					Started:          "2021-07-16T07:01:10.774+0000",
-					TimeSpentSeconds: 12000,
-				},
+			},
+			payload: &models.WorklogPayloadSchemeV3{
+				/*
+					Visibility:       &jira.IssueWorklogVisibilityScheme{
+						Type:  "group",
+						Value: "jira-users",
+					},
+				*/
+				Started:          "2021-07-16T07:01:10.774+0000",
+				TimeSpentSeconds: 12000,
 			},
 			wantHTTPMethod:     http.MethodPut,
 			endpoint:           "/rest/api/3/issue/KP-1/worklog/10000?adjustEstimate=auto&expand=expand%2Cproperties&newEstimate=3h&notifyUsers=false&overrideEditableFlag=true&reduceBy=3h",
@@ -678,16 +680,16 @@ func TestIssueWorklogService_Update(t *testing.T) {
 				OverrideEditableFlag: true,
 				NewEstimate:          "3h",
 				Expand:               []string{"expand", "properties"},
-				Payload: &models.WorklogPayloadScheme{
-					/*
-						Visibility:       &jira.IssueWorklogVisibilityScheme{
-							Type:  "group",
-							Value: "jira-users",
-						},
-					*/
-					Started:          "2021-07-16T07:01:10.774+0000",
-					TimeSpentSeconds: 12000,
-				},
+			},
+			payload: &models.WorklogPayloadSchemeV3{
+				/*
+					Visibility:       &jira.IssueWorklogVisibilityScheme{
+						Type:  "group",
+						Value: "jira-users",
+					},
+				*/
+				Started:          "2021-07-16T07:01:10.774+0000",
+				TimeSpentSeconds: 12000,
 			},
 			wantHTTPMethod:     http.MethodPut,
 			endpoint:           "/rest/api/3/issue/KP-1/worklog/10000?adjustEstimate=auto&expand=expand%2Cproperties&newEstimate=3h&notifyUsers=false&overrideEditableFlag=true&reduceBy=3h",
@@ -708,8 +710,8 @@ func TestIssueWorklogService_Update(t *testing.T) {
 				OverrideEditableFlag: true,
 				NewEstimate:          "3h",
 				Expand:               []string{"expand", "properties"},
-				Payload:              nil,
 			},
+			payload:            nil,
 			wantHTTPMethod:     http.MethodPut,
 			endpoint:           "/rest/api/3/issue/KP-1/worklog/10000?adjustEstimate=auto&expand=expand%2Cproperties&newEstimate=3h&notifyUsers=false&overrideEditableFlag=true&reduceBy=3h",
 			wantHTTPCodeReturn: http.StatusOK,
@@ -729,16 +731,16 @@ func TestIssueWorklogService_Update(t *testing.T) {
 				OverrideEditableFlag: true,
 				NewEstimate:          "3h",
 				Expand:               []string{"expand", "properties"},
-				Payload: &models.WorklogPayloadScheme{
-					/*
-						Visibility:       &jira.IssueWorklogVisibilityScheme{
-							Type:  "group",
-							Value: "jira-users",
-						},
-					*/
-					Started:          "2021-07-16T07:01:10.774+0000",
-					TimeSpentSeconds: 12000,
-				},
+			},
+			payload: &models.WorklogPayloadSchemeV3{
+				/*
+					Visibility:       &jira.IssueWorklogVisibilityScheme{
+						Type:  "group",
+						Value: "jira-users",
+					},
+				*/
+				Started:          "2021-07-16T07:01:10.774+0000",
+				TimeSpentSeconds: 12000,
 			},
 			wantHTTPMethod:     http.MethodDelete,
 			endpoint:           "/rest/api/3/issue/KP-1/worklog/10000?adjustEstimate=auto&expand=expand%2Cproperties&newEstimate=3h&notifyUsers=false&overrideEditableFlag=true&reduceBy=3h",
@@ -759,16 +761,16 @@ func TestIssueWorklogService_Update(t *testing.T) {
 				OverrideEditableFlag: true,
 				NewEstimate:          "3h",
 				Expand:               []string{"expand", "properties"},
-				Payload: &models.WorklogPayloadScheme{
-					/*
-						Visibility:       &jira.IssueWorklogVisibilityScheme{
-							Type:  "group",
-							Value: "jira-users",
-						},
-					*/
-					Started:          "2021-07-16T07:01:10.774+0000",
-					TimeSpentSeconds: 12000,
-				},
+			},
+			payload: &models.WorklogPayloadSchemeV3{
+				/*
+					Visibility:       &jira.IssueWorklogVisibilityScheme{
+						Type:  "group",
+						Value: "jira-users",
+					},
+				*/
+				Started:          "2021-07-16T07:01:10.774+0000",
+				TimeSpentSeconds: 12000,
 			},
 			wantHTTPMethod:     http.MethodPut,
 			endpoint:           "/rest/api/3/issue/KP-1/worklog/10000?adjustEstimate=auto&expand=expand%2Cproperties&newEstimate=3h&notifyUsers=false&overrideEditableFlag=true&reduceBy=3h",
@@ -804,7 +806,7 @@ func TestIssueWorklogService_Update(t *testing.T) {
 
 			i := &IssueWorklogService{client: mockClient}
 
-			gotResult, gotResponse, err := i.Update(testCase.ctx, testCase.issueKeyOrID, testCase.worklogID, testCase.options)
+			gotResult, gotResponse, err := i.Update(testCase.ctx, testCase.issueKeyOrID, testCase.worklogID, testCase.payload, testCase.options)
 
 			if testCase.wantErr {
 
@@ -868,16 +870,6 @@ func TestIssueWorklogService_Delete(t *testing.T) {
 				OverrideEditableFlag: true,
 				NewEstimate:          "3h",
 				Expand:               []string{"expand", "properties"},
-				Payload: &models.WorklogPayloadScheme{
-					/*
-						Visibility:       &jira.IssueWorklogVisibilityScheme{
-							Type:  "group",
-							Value: "jira-users",
-						},
-					*/
-					Started:          "2021-07-16T07:01:10.774+0000",
-					TimeSpentSeconds: 12000,
-				},
 			},
 			wantHTTPMethod:     http.MethodDelete,
 			endpoint:           "/rest/api/3/issue/KP-1/worklog/10000?adjustEstimate=auto&expand=expand%2Cproperties&newEstimate=3h&notifyUsers=false&overrideEditableFlag=true&reduceBy=3h",
@@ -898,16 +890,6 @@ func TestIssueWorklogService_Delete(t *testing.T) {
 				OverrideEditableFlag: true,
 				NewEstimate:          "3h",
 				Expand:               []string{"expand", "properties"},
-				Payload: &models.WorklogPayloadScheme{
-					/*
-						Visibility:       &jira.IssueWorklogVisibilityScheme{
-							Type:  "group",
-							Value: "jira-users",
-						},
-					*/
-					Started:          "2021-07-16T07:01:10.774+0000",
-					TimeSpentSeconds: 12000,
-				},
 			},
 			wantHTTPMethod:     http.MethodDelete,
 			endpoint:           "/rest/api/3/issue/KP-1/worklog/10000?adjustEstimate=auto&expand=expand%2Cproperties&newEstimate=3h&notifyUsers=false&overrideEditableFlag=true&reduceBy=3h",
@@ -928,16 +910,6 @@ func TestIssueWorklogService_Delete(t *testing.T) {
 				OverrideEditableFlag: true,
 				NewEstimate:          "3h",
 				Expand:               []string{"expand", "properties"},
-				Payload: &models.WorklogPayloadScheme{
-					/*
-						Visibility:       &jira.IssueWorklogVisibilityScheme{
-							Type:  "group",
-							Value: "jira-users",
-						},
-					*/
-					Started:          "2021-07-16T07:01:10.774+0000",
-					TimeSpentSeconds: 12000,
-				},
 			},
 			wantHTTPMethod:     http.MethodDelete,
 			endpoint:           "/rest/api/3/issue/KP-1/worklog/10000?adjustEstimate=auto&expand=expand%2Cproperties&newEstimate=3h&notifyUsers=false&overrideEditableFlag=true&reduceBy=3h",
@@ -958,16 +930,6 @@ func TestIssueWorklogService_Delete(t *testing.T) {
 				OverrideEditableFlag: true,
 				NewEstimate:          "3h",
 				Expand:               []string{"expand", "properties"},
-				Payload: &models.WorklogPayloadScheme{
-					/*
-						Visibility:       &jira.IssueWorklogVisibilityScheme{
-							Type:  "group",
-							Value: "jira-users",
-						},
-					*/
-					Started:          "2021-07-16T07:01:10.774+0000",
-					TimeSpentSeconds: 12000,
-				},
 			},
 			wantHTTPMethod:     http.MethodDelete,
 			endpoint:           "/rest/api/3/issue/KP-1/worklog/10000?adjustEstimate=auto&expand=expand%2Cproperties&newEstimate=3h&notifyUsers=false&overrideEditableFlag=true&reduceBy=3h",
@@ -1021,16 +983,6 @@ func TestIssueWorklogService_Delete(t *testing.T) {
 				OverrideEditableFlag: true,
 				NewEstimate:          "3h",
 				Expand:               []string{"expand", "properties"},
-				Payload: &models.WorklogPayloadScheme{
-					/*
-						Visibility:       &jira.IssueWorklogVisibilityScheme{
-							Type:  "group",
-							Value: "jira-users",
-						},
-					*/
-					Started:          "2021-07-16T07:01:10.774+0000",
-					TimeSpentSeconds: 12000,
-				},
 			},
 			wantHTTPMethod:     http.MethodDelete,
 			endpoint:           "/rest/api/3/issue/KP-1/worklog/10000?adjustEstimate=auto&expand=expand%2Cproperties&newEstimate=3h&notifyUsers=false&overrideEditableFlag=true&reduceBy=3h",

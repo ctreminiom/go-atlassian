@@ -7,11 +7,18 @@ type WorklogOptionsScheme struct {
 	ReduceBy             string
 	OverrideEditableFlag bool
 	Expand               []string
-	Payload              *WorklogPayloadScheme
 }
 
-type WorklogPayloadScheme struct {
+type WorklogPayloadSchemeV3 struct {
 	Comment          *CommentNodeScheme            `json:"comment,omitempty"`
+	Visibility       *IssueWorklogVisibilityScheme `json:"visibility,omitempty"`
+	Started          string                        `json:"started,omitempty"`
+	TimeSpent        string                        `json:"timeSpent,omitempty"`
+	TimeSpentSeconds int                           `json:"timeSpentSeconds,omitempty"`
+}
+
+type WorklogPayloadSchemeV2 struct {
+	Comment          *CommentPayloadSchemeV2       `json:"comment,omitempty"`
 	Visibility       *IssueWorklogVisibilityScheme `json:"visibility,omitempty"`
 	Started          string                        `json:"started,omitempty"`
 	TimeSpent        string                        `json:"timeSpent,omitempty"`

@@ -335,9 +335,9 @@ func TestServiceDeskService_Attach(t *testing.T) {
 
 	testCases := []struct {
 		name               string
-		serviceDeskID int
-		fileName string
-		file io.Reader
+		serviceDeskID      int
+		fileName           string
+		file               io.Reader
 		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string
@@ -461,10 +461,6 @@ func TestServiceDeskService_Attach(t *testing.T) {
 			wantHTTPCodeReturn: http.StatusOK,
 			wantErr:            true,
 		},
-
-
-
-
 	}
 
 	for _, testCase := range testCases {
@@ -536,4 +532,3 @@ func TestServiceDeskService_Attach(t *testing.T) {
 	}
 
 }
-

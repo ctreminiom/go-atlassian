@@ -12,39 +12,10 @@ import (
 
 func TestIssueLinkService_Create(t *testing.T) {
 
-	payloadMocked := &models2.LinkPayloadScheme{
-
-		Comment: &models2.CommentPayloadScheme{
-
-			Body: &models2.CommentNodeScheme{
-				Version: 1,
-				Type:    "doc",
-				Content: []*models2.CommentNodeScheme{
-					{
-						Type: "paragraph",
-						Content: []*models2.CommentNodeScheme{
-							{
-								Type: "text",
-								Text: "Carlos Test",
-							},
-							{
-								Type: "emoji",
-								Attrs: map[string]interface{}{
-									"shortName": ":grin",
-									"id":        "1f601",
-									"text":      "😁",
-								},
-							},
-							{
-								Type: "text",
-								Text: " ",
-							},
-						},
-					},
-				},
-			},
+	payloadMocked := &models2.LinkPayloadSchemeV2{
+		Comment: &models2.CommentPayloadSchemeV2{
+			Body: "test",
 		},
-
 		InwardIssue: &models2.LinkedIssueScheme{
 			Key: "KP-1",
 		},
@@ -58,7 +29,7 @@ func TestIssueLinkService_Create(t *testing.T) {
 
 	testCases := []struct {
 		name               string
-		payload            *models2.LinkPayloadScheme
+		payload            *models2.LinkPayloadSchemeV2
 		wantHTTPMethod     string
 		endpoint           string
 		context            context.Context

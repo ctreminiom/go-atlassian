@@ -12,7 +12,7 @@ import (
 
 func TestIssueLinkService_Create(t *testing.T) {
 
-	payloadMocked := &models2.LinkPayloadScheme{
+	payloadMocked := &models2.LinkPayloadSchemeV3{
 
 		Comment: &models2.CommentPayloadScheme{
 
@@ -58,7 +58,7 @@ func TestIssueLinkService_Create(t *testing.T) {
 
 	testCases := []struct {
 		name               string
-		payload            *models2.LinkPayloadScheme
+		payload            *models2.LinkPayloadSchemeV3
 		wantHTTPMethod     string
 		endpoint           string
 		context            context.Context

@@ -22,11 +22,18 @@ type LinkedIssueScheme struct {
 	Fields *IssueFieldsScheme `json:"fields,omitempty"`
 }
 
-type LinkPayloadScheme struct {
+type LinkPayloadSchemeV3 struct {
 	Comment      *CommentPayloadScheme `json:"comment,omitempty"`
 	InwardIssue  *LinkedIssueScheme    `json:"inwardIssue,omitempty"`
 	OutwardIssue *LinkedIssueScheme    `json:"outwardIssue,omitempty"`
 	Type         *LinkTypeScheme       `json:"type,omitempty"`
+}
+
+type LinkPayloadSchemeV2 struct {
+	Comment      *CommentPayloadSchemeV2 `json:"comment,omitempty"`
+	InwardIssue  *LinkedIssueScheme      `json:"inwardIssue,omitempty"`
+	OutwardIssue *LinkedIssueScheme      `json:"outwardIssue,omitempty"`
+	Type         *LinkTypeScheme         `json:"type,omitempty"`
 }
 
 type IssueLinkPageScheme struct {

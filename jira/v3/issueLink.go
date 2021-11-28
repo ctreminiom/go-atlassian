@@ -17,7 +17,7 @@ type IssueLinkService struct {
 // To use this resource the site must have Issue Linking enabled.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/link#create-issue-link
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-links/#api-rest-api-3-issuelink-post
-func (i *IssueLinkService) Create(ctx context.Context, payload *models.LinkPayloadScheme) (response *ResponseScheme, err error) {
+func (i *IssueLinkService) Create(ctx context.Context, payload *models.LinkPayloadSchemeV3) (response *ResponseScheme, err error) {
 
 	var endpoint = "rest/api/3/issueLink"
 

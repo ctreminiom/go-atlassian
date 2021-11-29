@@ -14,7 +14,6 @@ type DashboardService struct{ client *Client }
 
 // Gets returns a list of dashboards owned by or shared with the user. The list may be filtered to include only favorite or owned dashboards.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/dashboards#get-all-dashboards
-// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-dashboards/#api-rest-api-2-dashboard-get
 func (d *DashboardService) Gets(ctx context.Context, startAt, maxResults int, filter string) (result *models.DashboardPageScheme,
 	response *ResponseScheme, err error) {
 
@@ -42,7 +41,6 @@ func (d *DashboardService) Gets(ctx context.Context, startAt, maxResults int, fi
 
 // Create creates a dashboard.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/dashboards#create-dashboard
-// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-dashboards/#api-rest-api-2-dashboard-post
 func (d *DashboardService) Create(ctx context.Context, payload *models.DashboardPayloadScheme) (result *models.DashboardScheme,
 	response *ResponseScheme, err error) {
 
@@ -72,7 +70,6 @@ func (d *DashboardService) Create(ctx context.Context, payload *models.Dashboard
 // Search returns a paginated list of dashboards.
 // This operation is similar to Get dashboards except that the results can be refined to include dashboards that have specific attributes.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/dashboards#search-for-dashboards
-// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-dashboards/#api-rest-api-2-dashboard-search-get
 func (d *DashboardService) Search(ctx context.Context, opts *models.DashboardSearchOptionsScheme, startAt, maxResults int) (
 	result *models.DashboardSearchPageScheme, response *ResponseScheme, err error) {
 
@@ -121,7 +118,6 @@ func (d *DashboardService) Search(ctx context.Context, opts *models.DashboardSea
 
 // Get returns a dashboard.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/dashboards#get-dashboard
-// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-dashboards/#api-rest-api-2-dashboard-id-get
 func (d *DashboardService) Get(ctx context.Context, dashboardID string) (result *models.DashboardScheme,
 	response *ResponseScheme, err error) {
 
@@ -148,7 +144,6 @@ func (d *DashboardService) Get(ctx context.Context, dashboardID string) (result 
 
 // Delete deletes a dashboard.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/dashboards#delete-dashboard
-// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-dashboards/#api-rest-api-2-dashboard-id-delete
 func (d *DashboardService) Delete(ctx context.Context, dashboardID string) (response *ResponseScheme, err error) {
 
 	if len(dashboardID) == 0 {
@@ -173,7 +168,6 @@ func (d *DashboardService) Delete(ctx context.Context, dashboardID string) (resp
 
 // Copy copies a dashboard.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/dashboards#copy-dashboard
-// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-dashboards/#api-rest-api-2-dashboard-id-copy-post
 func (d *DashboardService) Copy(ctx context.Context, dashboardID string, payload *models.DashboardPayloadScheme) (
 	result *models.DashboardScheme, response *ResponseScheme, err error) {
 
@@ -206,7 +200,6 @@ func (d *DashboardService) Copy(ctx context.Context, dashboardID string, payload
 
 // Update updates a dashboard
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/dashboards#update-dashboard
-// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-dashboards/#api-rest-api-2-dashboard-id-put
 func (d *DashboardService) Update(ctx context.Context, dashboardID string, payload *models.DashboardPayloadScheme) (result *models.DashboardScheme,
 	response *ResponseScheme, err error) {
 

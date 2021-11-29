@@ -18,7 +18,6 @@ type FilterService struct {
 // Create creates a filter. The filter is shared according to the default share scope.
 // The filter is not selected as a favorite.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/filters#create-filter
-// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-filters/#api-rest-api-2-filter-post
 func (f *FilterService) Create(ctx context.Context, payload *models.FilterPayloadScheme) (result *models.FilterScheme,
 	response *ResponseScheme, err error) {
 
@@ -46,7 +45,6 @@ func (f *FilterService) Create(ctx context.Context, payload *models.FilterPayloa
 
 // Favorite returns the visible favorite filters of the user.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/filters#get-favorites
-// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-filters/#api-rest-api-2-filter-favourite-get
 func (f *FilterService) Favorite(ctx context.Context) (result []*models.FilterScheme, response *ResponseScheme, err error) {
 
 	var endpoint = "rest/api/2/filter/favourite"
@@ -68,7 +66,6 @@ func (f *FilterService) Favorite(ctx context.Context) (result []*models.FilterSc
 // My returns the filters owned by the user. If includeFavourites is true,
 // the user's visible favorite filters are also returned.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/filters#get-my-filters
-// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-filters/#api-rest-api-2-filter-my-get
 func (f *FilterService) My(ctx context.Context, favorites bool, expand []string) (result []*models.FilterScheme, response *ResponseScheme, err error) {
 
 	params := url.Values{}
@@ -105,7 +102,6 @@ func (f *FilterService) My(ctx context.Context, favorites bool, expand []string)
 
 // Search returns a paginated list of filters
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/filters#search-filters
-// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-filters/#api-rest-api-2-filter-search-get
 func (f *FilterService) Search(ctx context.Context, options *models.FilterSearchOptionScheme, startAt, maxResults int) (
 	result *models.FilterSearchPageScheme, response *ResponseScheme, err error) {
 
@@ -162,7 +158,6 @@ func (f *FilterService) Search(ctx context.Context, options *models.FilterSearch
 
 // Get returns a filter.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/filters#get-filter
-// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-filters/#api-rest-api-2-filter-id-get
 func (f *FilterService) Get(ctx context.Context, filterID int, expand []string) (result *models.FilterScheme,
 	response *ResponseScheme, err error) {
 
@@ -195,7 +190,6 @@ func (f *FilterService) Get(ctx context.Context, filterID int, expand []string) 
 
 // Update updates a filter. Use this operation to update a filter's name, description, JQL, or sharing.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/filters#update-filter
-// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-filters/#api-rest-api-2-filter-id-put
 func (f *FilterService) Update(ctx context.Context, filterID int, payload *models.FilterPayloadScheme) (result *models.FilterScheme,
 	response *ResponseScheme, err error) {
 	payloadAsReader, err := transformStructToReader(payload)
@@ -223,7 +217,6 @@ func (f *FilterService) Update(ctx context.Context, filterID int, payload *model
 
 // Delete a filter.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/filters#delete-filter
-// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-filters/#api-rest-api-2-filter-id-delete
 func (f *FilterService) Delete(ctx context.Context, filterID int) (response *ResponseScheme, err error) {
 
 	var endpoint = fmt.Sprintf("rest/api/2/filter/%v", filterID)

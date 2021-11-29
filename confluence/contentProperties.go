@@ -13,7 +13,7 @@ import (
 type ContentPropertyService struct{ client *Client }
 
 // Gets returns the properties for a piece of content.
-// Atlassian Docs: https://developer.atlassian.com/cloud/confluence/rest/api-group-content-properties/#api-wiki-rest-api-content-id-property-get
+// Docs: https://docs.go-atlassian.io/confluence-cloud/content/properties#get-content-properties
 func (c *ContentPropertyService) Gets(ctx context.Context, contentID string, expand []string, startAt, maxResults int) (
 	result *model.ContentPropertyPageScheme, response *ResponseScheme, err error) {
 
@@ -47,7 +47,7 @@ func (c *ContentPropertyService) Gets(ctx context.Context, contentID string, exp
 }
 
 // Create creates a property for an existing piece of content.
-// Atlassian Docs: https://developer.atlassian.com/cloud/confluence/rest/api-group-content-properties/#api-wiki-rest-api-content-id-property-post
+// Docs: https://docs.go-atlassian.io/confluence-cloud/content/properties#create-content-property
 func (c *ContentPropertyService) Create(ctx context.Context, contentID string, payload *model.ContentPropertyPayloadScheme) (
 	result *model.ContentPropertyScheme, response *ResponseScheme, err error) {
 
@@ -79,7 +79,7 @@ func (c *ContentPropertyService) Create(ctx context.Context, contentID string, p
 }
 
 // Get returns a content property for a piece of content.
-// Atlassian Docs: https://developer.atlassian.com/cloud/confluence/rest/api-group-content-properties/#api-wiki-rest-api-content-id-property-key-get
+// Docs: https://docs.go-atlassian.io/confluence-cloud/content/properties#get-content-property
 func (c *ContentPropertyService) Get(ctx context.Context, contentID, key string) (result *model.ContentPropertyScheme,
 	response *ResponseScheme, err error) {
 
@@ -109,7 +109,7 @@ func (c *ContentPropertyService) Get(ctx context.Context, contentID, key string)
 }
 
 // Delete deletes a content property.
-// Atlassian Docs: https://developer.atlassian.com/cloud/confluence/rest/api-group-content-properties/#api-wiki-rest-api-content-id-property-key-delete
+// Docs: https://docs.go-atlassian.io/confluence-cloud/content/properties#delete-content-property
 func (c *ContentPropertyService) Delete(ctx context.Context, contentID, key string) (response *ResponseScheme, err error) {
 
 	if len(contentID) == 0 {

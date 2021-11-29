@@ -10,52 +10,40 @@
     <a href="https://github.com/ctreminiom/go-atlassian/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg"></a>
     <a href="https://github.com/ctreminiom/go-atlassian/actions?query=workflow%3ATesting"><img src="https://img.shields.io/github/workflow/status/ctreminiom/go-atlassian/Testing?label=%F0%9F%A7%AA%20tests&style=flat&color=75C46B"></a>
     <a href="https://docs.go-atlassian.io/"><img src="https://img.shields.io/badge/%F0%9F%92%A1%20go-documentation-00ACD7.svg?style=flat"></a>
-     <a href="https://bestpractices.coreinfrastructure.org/projects/4861"><img src="https://bestpractices.coreinfrastructure.org/projects/4861/badge"></a> 
-    <a href="https://discord.gg/yqaQFYHS"><img src="https://img.shields.io/discord/838149936101064724.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2"alt="chat on Discord"></a>
+    <a href="https://bestpractices.coreinfrastructure.org/projects/4861"><img src="https://bestpractices.coreinfrastructure.org/projects/4861/badge"></a> 
 </p>
 
-go-atlassian is a Go module that enables the interaction with the Atlassian Cloud Services.
+go-atlassian is a Go module that enables the interaction with the Atlassian Cloud Services. It provides the Go implementation for operating the Atlassian Cloud platform.
 
 ## ✨ Features
-- Supports Jira Software v3.0 API. **(88% mapped)**
-- Interacts with the Jira Agile entities such as: Epics, Board, Backlog, Ranks, etc **(100% mapped)**
-- Interacts with the Jira Service Management entities. **(100% mapped)**
-- Manages the Atlassian Admin Cloud organizations. **(100% mapped)**
-- Manages the Atlassian Admin SCIM workflow. **(100% mapped)**
+- Supports Jira Software V2/V3 endpoints.
+- Support the Jira Agile endpoints
+- Interacts with the Jira Service Management entities.
+- Manages the Atlassian Admin Cloud organizations.
+- Manages the Atlassian Admin SCIM workflow.
 - Checks Confluence Cloud content permissions.
 - CRUD Confluence Cloud content (page, blogpost, comment, question).
 - Add attachment into Confluence Cloud contents.
 - Search contents and spaces.
 - Support the Atlassian Document Format (ADF).  
-- 100% of code coverage
 - Every method has their corresponding example documented.
-- 3036 Unit Test Cases created and passed.
-
 
 ##  🔰 Installation
 Make sure you have Go installed (download). Version `1.13` or higher is required.
 ```sh
-## Jira Software Cloud / Service Management Cloud / Jira Agile Cloud
-$ go get -u -v github.com/ctreminiom/go-atlassian/jira/
-
-## Atlassian Cloud Admin
-$ go get -u -v github.com/ctreminiom/go-atlassian/admin/
-
-## Confluence Cloud
-$ go get -u -v github.com/ctreminiom/go-atlassian/confluence/
+$ go get -u -v github.com/ctreminiom/go-atlassian
 ```
 
 ## 📓 Documentation
 Documentation is hosted live at https://docs.go-atlassian.io/
 
-## 📝 Usage
-More examples in `jira/examples` `admin/examples` `jira/sm/examples` directories. Here's a short example of how to get a Jira Issue:
+## 📝 Using the library
 ````go
 package main
 
 import (
 	"context"
-	"github.com/ctreminiom/go-atlassian/jira"
+	"github.com/ctreminiom/go-atlassian/jira/v2"
 	"log"
 	"os"
 )
@@ -68,23 +56,18 @@ func main() {
 		token = os.Getenv("TOKEN")
 	)
 
-	atlassian, err := jira.New(nil, host)
+	atlassian, err := v2.New(nil, host)
 	if err != nil {
 		return
 	}
 
 	atlassian.Auth.SetBasicAuth(mail, token)
 
-	issue, response, err := atlassian.Issue.Get(context.Background(), "KP-12", nil, []string{"transitions"})
+	issue, response, err := atlassian.Issue.Get(context.Background(), "KP-2", nil, []string{"transitions"})
 	if err != nil {
-		if response != nil {
-			log.Println("Response HTTP Response", response.Bytes.String())
-			log.Println(response.Code)
-		}
 		log.Fatal(err)
 	}
 
-	log.Println("Response HTTP Code", response.Code)
 	log.Println("HTTP Endpoint Used", response.Endpoint)
 
 	log.Println(issue.Key)
@@ -94,29 +77,22 @@ func main() {
 		log.Println(transition.Name, transition.ID, transition.To.ID, transition.HasScreen)
 	}
 
+	// Check if the issue contains sub-tasks
+	if issue.Fields.Subtasks != nil {
+		for _, subTask := range issue.Fields.Subtasks {
+			log.Println("Sub-Task: ", subTask.Key, subTask.Fields.Summary)
+		}
+	}
 }
 ````
-
-## 🧳 JetBrains OS licenses
-`go-atlassian` had been being developed with GoLand under the **free JetBrains Open Source license(s)** granted by JetBrains s.r.o., hence I would like to express my thanks here.
-
-<img src="./static/jetbrains-logo.svg">
-
-## 🪐 GitBook Host
-`go-atlassian` documentation is hosted using the GitBook non-profit / open-source plan so hence I would like to express my thanks here.
-
-<img src="./static/gitbook-logo.svg">
 
 ## ⭐️ Project assistance
 If you want to say **thank you** or/and support active development of `go-atlassian`:
 
 - Add a [GitHub Star](https://github.com/ctreminiom/go-atlassian) to the project.
 - Write interesting articles about project on [Dev.to](https://dev.to/), [Medium](https://medium.com/) or personal blog.
-- Support the project by donating a cup of coffee.
 - Contributions, issues and feature requests are welcome!
 -  Feel free to check [issues page](https://github.com/ctreminiom/go-atlassian/issues).
-    
-[![Buy Me A Coffee](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/ctreminiom)
 
 ## 💡 Inspiration
 The project was created with the purpose to provide a unique point to provide an interface for interacting with Atlassian products. This module is highly inspired by the Go library https://github.com/andygrunwald/go-jira
@@ -132,3 +108,12 @@ Copyright © 2021 [Carlos Treminio](https://github.com/ctreminiom).
 This project is [MIT](https://opensource.org/licenses/MIT) licensed.
 
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fctreminiom%2Fgo-atlassian.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fctreminiom%2Fgo-atlassian?ref=badge_large)
+
+## 🌐 Credits
+In addition to all the contributors we would like to thank to these companies:
+-   [Atlassian](https://www.atlassian.com/)  for providing us Atlassian Admin/Jira/Confluence Standard licenses.
+-   [JetBrains](https://www.jetbrains.com/)  for providing us with free licenses of  [GoLand](https://www.jetbrains.com/pycharm/)
+-   [GitBook](https://www.gitbook.com/)  for providing us non-profit / open-source plan so hence I would like to express my thanks here.
+
+<img src="./static/jetbrains-logo.svg">
+<img src="./static/gitbook-logo.svg">

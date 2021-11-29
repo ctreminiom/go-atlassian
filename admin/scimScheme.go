@@ -10,8 +10,7 @@ import (
 type SCIMSchemeService struct{ client *Client }
 
 // Gets all SCIM features metadata. Filtering, pagination and sorting are not supported.
-// Atlassian Docs: https://developer.atlassian.com/cloud/admin/user-provisioning/rest/api-group-schemas/#api-scim-directory-directoryid-schemas-get
-// Library Docs: N/A
+// Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/scim/schemes#get-all-schemas
 func (s *SCIMSchemeService) Gets(ctx context.Context, directoryID string) (result *model.SCIMSchemasScheme,
 	response *ResponseScheme, err error) {
 
@@ -37,8 +36,7 @@ func (s *SCIMSchemeService) Gets(ctx context.Context, directoryID string) (resul
 }
 
 // Group get the group schemas from the SCIM provider. Filtering, pagination and sorting are not supported.
-// Atlassian Docs: https://developer.atlassian.com/cloud/admin/user-provisioning/rest/api-group-schemas/#api-scim-directory-directoryid-schemas-urn-ietf-params-scim-schemas-core-2-0-group-get
-// Library Docs: N/A
+// Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/scim/schemes#get-group-schemas
 func (s *SCIMSchemeService) Group(ctx context.Context, directoryID string) (result *model.SCIMSchemaScheme,
 	response *ResponseScheme, err error) {
 
@@ -64,8 +62,7 @@ func (s *SCIMSchemeService) Group(ctx context.Context, directoryID string) (resu
 }
 
 // User get the user schemas from the SCIM provider. Filtering, pagination and sorting are not supported.
-// Atlassian Docs: https://developer.atlassian.com/cloud/admin/user-provisioning/rest/api-group-schemas/#api-scim-directory-directoryid-schemas-urn-ietf-params-scim-schemas-core-2-0-user-get
-// Library Docs: N/A
+// Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/scim/schemes#get-user-schemas
 func (s *SCIMSchemeService) User(ctx context.Context, directoryID string) (result *model.SCIMSchemaScheme,
 	response *ResponseScheme, err error) {
 
@@ -92,8 +89,7 @@ func (s *SCIMSchemeService) User(ctx context.Context, directoryID string) (resul
 
 // Enterprise get the user enterprise extension schemas from the SCIM provider.
 // Filtering, pagination and sorting are not supported.
-// Atlassian Docs: https://developer.atlassian.com/cloud/admin/user-provisioning/rest/api-group-schemas/#api-scim-directory-directoryid-schemas-urn-ietf-params-scim-schemas-extension-enterprise-2-0-user-get
-// Library Docs: N/A
+// Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/scim/schemes#get-user-enterprise-extension-schemas
 func (s *SCIMSchemeService) Enterprise(ctx context.Context, directoryID string) (result *model.SCIMSchemaScheme,
 	response *ResponseScheme, err error) {
 
@@ -121,8 +117,7 @@ func (s *SCIMSchemeService) Enterprise(ctx context.Context, directoryID string) 
 // Feature get metadata about the supported SCIM features.
 // This is a service provider configuration endpoint providing supported SCIM features.
 // Filtering, pagination and sorting are not supported.
-// Atlassian Docs: https://developer.atlassian.com/cloud/admin/user-provisioning/rest/api-group-schemas/#api-scim-directory-directoryid-serviceproviderconfig-get
-// Library Docs: N/A
+// Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/scim/schemes#get-feature-metadata
 func (s *SCIMSchemeService) Feature(ctx context.Context, directoryID string) (result *model.ServiceProviderConfigScheme,
 	response *ResponseScheme, err error) {
 

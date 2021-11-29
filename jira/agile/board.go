@@ -16,6 +16,7 @@ type BoardService struct{ client *Client }
 // This board will only be returned if the user has permission to view it.
 // Admins without the view permission will see the board as a private one,
 // so will see only a subset of the board's data (board location for instance).
+// Docs: https://docs.go-atlassian.io/jira-agile/boards#get-board
 func (b *BoardService) Get(ctx context.Context, boardID int) (result *models.BoardScheme, response *ResponseScheme, err error) {
 
 	if boardID == 0 {
@@ -40,7 +41,7 @@ func (b *BoardService) Get(ctx context.Context, boardID int) (result *models.Boa
 }
 
 // Create creates a new board. Board name, type and filter ID is required.
-// Docs: N/A
+// Docs: https://docs.go-atlassian.io/jira-agile/boards#create-board
 func (b *BoardService) Create(ctx context.Context, payload *models.BoardPayloadScheme) (result *models.BoardScheme, response *ResponseScheme, err error) {
 
 	payloadAsReader, err := transformStructToReader(payload)
@@ -69,7 +70,7 @@ func (b *BoardService) Create(ctx context.Context, payload *models.BoardPayloadS
 // Filter returns any boards which use the provided filter id.
 // This method can be executed by users without a valid software license in order
 // to find which boards are using a particular filter.
-// Docs: N/A
+// Docs: https://docs.go-atlassian.io/jira-agile/boards#get-board-by-filter-id
 func (b *BoardService) Filter(ctx context.Context, filterID, startAt, maxResults int) (result *models.BoardPageScheme, response *ResponseScheme, err error) {
 
 	if filterID == 0 {
@@ -103,7 +104,7 @@ func (b *BoardService) Filter(ctx context.Context, filterID, startAt, maxResults
 // Note, if the user does not have permission to view the board, no issues will be returned at all.
 // Issues returned from this resource include Agile fields, like sprint, closedSprints, flagged, and epic.
 // By default, the returned issues are ordered by rank.
-// Docs: N/A
+// Docs: https://docs.go-atlassian.io/jira-agile/boards#get-issues-for-backlog
 func (b *BoardService) Backlog(ctx context.Context, boardID, startAt, maxResults int, opts *models.IssueOptionScheme) (result *models.BoardIssuePageScheme, response *ResponseScheme, err error) {
 
 	if boardID == 0 {
@@ -154,7 +155,7 @@ func (b *BoardService) Backlog(ctx context.Context, boardID, startAt, maxResults
 }
 
 // Configuration get the board configuration.
-// Docs: N/A
+// Docs: https://docs.go-atlassian.io/jira-agile/boards#get-configuration
 func (b *BoardService) Configuration(ctx context.Context, boardID int) (result *models.BoardConfigurationScheme, response *ResponseScheme, err error) {
 
 	if boardID == 0 {
@@ -181,6 +182,7 @@ func (b *BoardService) Configuration(ctx context.Context, boardID int) (result *
 // Epics returns all epics from the board, for the given board ID.
 // This only includes epics that the user has permission to view.
 // Note, if the user does not have permission to view the board, no epics will be returned at all.
+// Docs: https://docs.go-atlassian.io/jira-agile/boards#get-epics
 func (b *BoardService) Epics(ctx context.Context, boardID, startAt, maxResults int, done bool) (result *models.BoardEpicPageScheme, response *ResponseScheme, err error) {
 
 	if boardID == 0 {
@@ -218,7 +220,7 @@ func (b *BoardService) Epics(ctx context.Context, boardID, startAt, maxResults i
 // This only includes issues that the user has permission to view.
 // Issues returned from this resource include Agile fields, like sprint, closedSprints, flagged, and epic.
 // By default, the returned issues are ordered by rank.
-// Docs: N/A
+// Docs: https://docs.go-atlassian.io/jira-agile/boards#get-issues-without-epic-for-board
 func (b *BoardService) IssuesWithoutEpic(ctx context.Context, boardID, startAt, maxResults int, opts *models.IssueOptionScheme) (
 	result *models.BoardIssuePageScheme, response *ResponseScheme, err error) {
 
@@ -292,6 +294,7 @@ func (b *BoardService) IssuesWithoutEpic(ctx context.Context, boardID, startAt, 
 // This only includes issues that the user has permission to view.
 // Issues returned from this resource include Agile fields, like sprint, closedSprints,
 // flagged, and epic. By default, the returned issues are ordered by rank.
+// Docs: https://docs.go-atlassian.io/jira-agile/boards#get-board-issues-for-epic
 func (b *BoardService) IssuesByEpic(ctx context.Context, boardID, epicID, startAt, maxResults int, opts *models.IssueOptionScheme) (
 	result *models.BoardIssuePageScheme, response *ResponseScheme, err error) {
 
@@ -351,7 +354,7 @@ func (b *BoardService) IssuesByEpic(ctx context.Context, boardID, epicID, startA
 // no issues will be returned at all.
 // Issues returned from this resource include Agile fields, like sprint, closedSprints, flagged, and epic.
 // By default, the returned issues are ordered by rank.
-// Docs: N/A
+// Docs: https://docs.go-atlassian.io/jira-agile/boards#get-issues-for-board
 func (b *BoardService) Issues(ctx context.Context, boardID, startAt, maxResults int, opts *models.IssueOptionScheme) (
 	result *models.BoardIssuePageScheme, response *ResponseScheme, err error) {
 
@@ -404,8 +407,7 @@ func (b *BoardService) Issues(ctx context.Context, boardID, startAt, maxResults 
 // This operation either moves an issue(s) onto a board from the backlog (by adding it to the issueList for the board)
 // Or transitions the issue(s) to the first column for a kanban board with backlog.
 // At most 50 issues may be moved at once.
-// Docs: N/A
-// Atlassian Docs: https://developer.atlassian.com/cloud/jira/software/rest/api-group-board/#api-agile-1-0-board-boardid-issue-post
+// Docs: https://docs.go-atlassian.io/jira-agile/boards#move-issues-to-backlog-for-board
 func (b *BoardService) Move(ctx context.Context, boardID int, payload *models.BoardMovementPayloadScheme) (response *ResponseScheme, err error) {
 
 	if boardID == 0 {
@@ -437,8 +439,7 @@ func (b *BoardService) Move(ctx context.Context, boardID int, payload *models.Bo
 // Projects returns all projects that are associated with the board, for the given board ID.
 // If the user does not have permission to view the board, no projects will be returned at all.
 // Returned projects are ordered by the name.
-// Docs: N/A
-// Atlassian Docs: https://developer.atlassian.com/cloud/jira/software/rest/api-group-board/#api-agile-1-0-board-boardid-project-get
+// Docs: https://docs.go-atlassian.io/jira-agile/boards#get-projects
 func (b *BoardService) Projects(ctx context.Context, boardID, startAt, maxResults int) (
 	result *models.BoardProjectPageScheme, response *ResponseScheme, err error) {
 
@@ -469,8 +470,7 @@ func (b *BoardService) Projects(ctx context.Context, boardID, startAt, maxResult
 
 // Sprints returns all sprints from a board, for a given board ID.
 // This only includes sprints that the user has permission to view.
-// Docs: N/A
-// Atlassian Docs: https://developer.atlassian.com/cloud/jira/software/rest/api-group-board/#api-agile-1-0-board-boardid-sprint-get
+// Docs: https://docs.go-atlassian.io/jira-agile/boards#get-all-sprints
 func (b *BoardService) Sprints(ctx context.Context, boardID, startAt, maxResults int, states []string) (
 	result *models.BoardSprintPageScheme, response *ResponseScheme, err error) {
 
@@ -503,6 +503,7 @@ func (b *BoardService) Sprints(ctx context.Context, boardID, startAt, maxResults
 // IssuesBySprint get all issues you have access to that belong to the sprint from the board.
 // Issue returned from this resource contains additional fields like: sprint, closedSprints, flagged and epic.
 // Issues are returned ordered by rank. JQL order has higher priority than default rank.
+// Docs: https://docs.go-atlassian.io/jira-agile/boards#get-board-issues-for-sprint
 func (b *BoardService) IssuesBySprint(ctx context.Context, boardID, sprintID, startAt, maxResults int,
 	opts *models.IssueOptionScheme) (result *models.BoardIssuePageScheme, response *ResponseScheme, err error) {
 
@@ -558,8 +559,7 @@ func (b *BoardService) IssuesBySprint(ctx context.Context, boardID, sprintID, st
 // This only includes versions that the user has permission to view.
 // Note, if the user does not have permission to view the board, no versions will be returned at all.
 // Returned versions are ordered by the name of the project from which they belong and then by sequence defined by user.
-// Docs: N/A
-// Atlassian Docs: https://developer.atlassian.com/cloud/jira/software/rest/api-group-board/#api-agile-1-0-board-boardid-version-get
+// Docs: https://docs.go-atlassian.io/jira-agile/boards#get-all-versions
 func (b *BoardService) Versions(ctx context.Context, boardID, startAt, maxResults int, released bool) (
 	result *models.BoardVersionPageScheme, response *ResponseScheme, err error) {
 

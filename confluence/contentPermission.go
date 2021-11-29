@@ -19,6 +19,7 @@ type ContentPermissionService struct {
 // 1. site permissions
 // 2. space permissions
 // 3. content restrictions
+// Docs: https://docs.go-atlassian.io/confluence-cloud/content/permissions#check-content-permissions
 func (c *ContentPermissionService) Check(ctx context.Context, contentID string,
 	payload *model.CheckPermissionScheme) (result *model.PermissionCheckResponseScheme, response *ResponseScheme, err error) {
 

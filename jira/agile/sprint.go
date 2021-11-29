@@ -15,6 +15,7 @@ type SprintService struct{ client *Client }
 // Get Returns the sprint for a given sprint ID.
 // The sprint will only be returned if the user can view the board that the sprint was created on,
 // or view at least one of the issues in the sprint.
+// Docs: https://docs.go-atlassian.io/jira-agile/sprints#get-sprint
 func (s *SprintService) Get(ctx context.Context, sprintID int) (result *models.SprintScheme, response *ResponseScheme, err error) {
 
 	if sprintID == 0 {
@@ -41,6 +42,7 @@ func (s *SprintService) Get(ctx context.Context, sprintID int) (result *models.S
 // Create creates a future sprint.
 // Sprint name and origin board id are required.
 // Start date, end date, and goal are optional.
+// Docs: https://docs.go-atlassian.io/jira-agile/sprints#create-print
 func (s *SprintService) Create(ctx context.Context, payload *models.SprintPayloadScheme) (result *models.SprintScheme,
 	response *ResponseScheme, err error) {
 
@@ -70,6 +72,7 @@ func (s *SprintService) Create(ctx context.Context, payload *models.SprintPayloa
 // Update Performs a full update of a sprint.
 // A full update means that the result will be exactly the same as the request body.
 // Any fields not present in the request JSON will be set to null.
+// Docs: https://docs.go-atlassian.io/jira-agile/sprints#update-sprint
 func (s *SprintService) Update(ctx context.Context, sprintID int, payload *models.SprintPayloadScheme) (result *models.SprintScheme,
 	response *ResponseScheme, err error) {
 
@@ -102,6 +105,7 @@ func (s *SprintService) Update(ctx context.Context, sprintID int, payload *model
 
 // Path Performs a partial update of a sprint.
 // A partial update means that fields not present in the request JSON will not be updated.
+// Docs: https://docs.go-atlassian.io/jira-agile/sprints#partially-update-sprint
 func (s *SprintService) Path(ctx context.Context, sprintID int, payload *models.SprintPayloadScheme) (result *models.SprintScheme,
 	response *ResponseScheme, err error) {
 
@@ -158,6 +162,7 @@ func (s *SprintService) Delete(ctx context.Context, sprintID int) (response *Res
 // Issues returns all issues in a sprint, for a given sprint ID.
 // This only includes issues that the user has permission to view.
 // By default, the returned issues are ordered by rank.
+// Docs: https://docs.go-atlassian.io/jira-agile/sprints#get-issues-for-sprint
 func (s *SprintService) Issues(ctx context.Context, sprintID int, opts *models.IssueOptionScheme, startAt, maxResults int) (
 	result *models.SprintIssuePageScheme, response *ResponseScheme, err error) {
 
@@ -204,6 +209,7 @@ func (s *SprintService) Issues(ctx context.Context, sprintID int, opts *models.I
 }
 
 // Start initiate the Sprint
+// Docs: https://docs.go-atlassian.io/jira-agile/sprints#start-sprint
 func (s *SprintService) Start(ctx context.Context, sprintID int) (response *ResponseScheme, err error) {
 
 	if sprintID == 0 {
@@ -235,6 +241,7 @@ func (s *SprintService) Start(ctx context.Context, sprintID int) (response *Resp
 }
 
 // Close closes the Sprint
+// Docs: https://docs.go-atlassian.io/jira-agile/sprints#close-sprint
 func (s *SprintService) Close(ctx context.Context, sprintID int) (response *ResponseScheme, err error) {
 
 	if sprintID == 0 {

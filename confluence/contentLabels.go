@@ -15,7 +15,7 @@ type ContentLabelService struct {
 }
 
 // Gets returns the labels on a piece of content.
-// Atlassian Docs: https://developer.atlassian.com/cloud/confluence/rest/api-group-content-labels/#api-wiki-rest-api-content-id-label-get
+// Docs: https://docs.go-atlassian.io/confluence-cloud/content/labels#get-labels-for-content
 func (c *ContentLabelService) Gets(ctx context.Context, contentID, prefix string, startAt, maxResults int) (result *model.ContentLabelPageScheme,
 	response *ResponseScheme, err error) {
 
@@ -49,7 +49,7 @@ func (c *ContentLabelService) Gets(ctx context.Context, contentID, prefix string
 }
 
 // Add adds labels to a piece of content. Does not modify the existing labels.
-// Atlassian Docs: https://developer.atlassian.com/cloud/confluence/rest/api-group-content-labels/#api-wiki-rest-api-content-id-label-post
+// Docs: https://docs.go-atlassian.io/confluence-cloud/content/labels#add-labels-to-content
 func (c *ContentLabelService) Add(ctx context.Context, contentID string, payload []*model.ContentLabelPayloadScheme, want400Response bool) (
 	result *model.ContentLabelPageScheme, response *ResponseScheme, err error) {
 
@@ -91,7 +91,7 @@ func (c *ContentLabelService) Add(ctx context.Context, contentID string, payload
 }
 
 // Remove removes a label from a piece of content
-// Atlassian Docs: https://developer.atlassian.com/cloud/confluence/rest/api-group-content-labels/#api-wiki-rest-api-content-id-label-label-delete
+// Docs: https://docs.go-atlassian.io/confluence-cloud/content/labels#remove-label-from-content
 func (c *ContentLabelService) Remove(ctx context.Context, contentID, labelName string) (response *ResponseScheme, err error) {
 
 	if len(contentID) == 0 {

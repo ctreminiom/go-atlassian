@@ -15,6 +15,7 @@ type EpicService struct{ client *Client }
 // Get returns the epic for a given epic ID.
 // This epic will only be returned if the user has permission to view it.
 // Note: This operation does not work for epics in next-gen projects.
+// Docs: https://docs.go-atlassian.io/jira-agile/epics#get-epic
 func (e *EpicService) Get(ctx context.Context, epicIDOrKey string) (result *models.EpicScheme, response *ResponseScheme, err error) {
 
 	if len(epicIDOrKey) == 0 {
@@ -43,8 +44,7 @@ func (e *EpicService) Get(ctx context.Context, epicIDOrKey string) (result *mode
 // Issues returned from this resource include Agile fields, like sprint, closedSprints,
 // flagged, and epic.
 // By default, the returned issues are ordered by rank.
-// Atlassian Docs: https://developer.atlassian.com/cloud/jira/software/rest/api-group-epic/#api-agile-1-0-epic-epicidorkey-issue-get
-// Library Docs: N/A
+// Docs: https://docs.go-atlassian.io/jira-agile/epics#get-issues-for-epic
 func (e *EpicService) Issues(ctx context.Context, epicIDOrKey string, startAt, maxResults int,
 	opts *models.IssueOptionScheme) (result *models.BoardIssuePageScheme, response *ResponseScheme, err error) {
 
@@ -100,7 +100,6 @@ func (e *EpicService) Issues(ctx context.Context, epicIDOrKey string, startAt, m
 // That means that already assigned issues to an epic, will not be assigned to the previous epic anymore.
 // The user needs to have the edit issue permission for all issue they want to move and to the epic.
 // The maximum number of issues that can be moved in one operation is 50.
-// Docs: https://developer.atlassian.com/cloud/jira/software/rest/api-group-epic/#api-agile-1-0-epic-epicidorkey-issue-post
 func (e *EpicService) Move(ctx context.Context, epicIDOrKey string, issues []string) (response *ResponseScheme, err error) {
 
 	if len(epicIDOrKey) == 0 {

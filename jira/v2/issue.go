@@ -29,7 +29,6 @@ type IssueService struct {
 
 // Create creates an issue or, where the option to create subtasks is enabled in Jira, a subtask.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues#create-issue
-// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-issues/#api-rest-api-2-issue-post
 func (i *IssueService) Create(ctx context.Context, payload *models.IssueSchemeV2, customFields *models.CustomFields) (
 	result *models.IssueResponseScheme, response *ResponseScheme, err error) {
 
@@ -77,7 +76,6 @@ func (i *IssueService) Create(ctx context.Context, payload *models.IssueSchemeV2
 
 // Creates issues and, where the option to create subtasks is enabled in Jira, subtasks.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues#bulk-create-issue
-// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-issues/#api-rest-api-2-issue-bulk-post
 func (i *IssueService) Creates(ctx context.Context, payload []*models.IssueBulkSchemeV2) (result *models.IssueBulkResponseScheme,
 	response *ResponseScheme, err error) {
 
@@ -126,7 +124,6 @@ func (i *IssueService) Creates(ctx context.Context, payload []*models.IssueBulkS
 
 // Get returns the details for an issue.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues#get-issue
-// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-issues/#api-rest-api-2-issue-issueidorkey-get
 func (i *IssueService) Get(ctx context.Context, issueKeyOrID string, fields []string, expand []string) (result *models.IssueSchemeV2,
 	response *ResponseScheme, err error) {
 
@@ -166,7 +163,6 @@ func (i *IssueService) Get(ctx context.Context, issueKeyOrID string, fields []st
 
 // Update edits an issue.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues#edit-issue
-// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-issues/#api-rest-api-2-issue-issueidorkey-put
 func (i *IssueService) Update(ctx context.Context, issueKeyOrID string, notify bool, payload *models.IssueSchemeV2,
 	customFields *models.CustomFields, operations *models.UpdateOperations) (response *ResponseScheme, err error) {
 
@@ -343,7 +339,6 @@ func (i *IssueService) Assign(ctx context.Context, issueKeyOrID, accountID strin
 
 // Notify creates an email notification for an issue and adds it to the mail queue.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues#send-notification-for-issue
-// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-issues/#api-rest-api-2-issue-issueidorkey-notify-post
 func (i *IssueService) Notify(ctx context.Context, issueKeyOrID string, options *models.IssueNotifyOptionsScheme) (
 	response *ResponseScheme, err error) {
 
@@ -378,7 +373,6 @@ func (i *IssueService) Notify(ctx context.Context, issueKeyOrID string, options 
 // Note, if a request is made for a transition that does not exist or cannot be performed on the issue,
 // given its status, the response will return any empty transitions list.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues#get-transitions
-// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-issues/#api-rest-api-2-issue-issueidorkey-transitions-get
 func (i *IssueService) Transitions(ctx context.Context, issueKeyOrID string) (result *models.IssueTransitionsScheme,
 	response *ResponseScheme, err error) {
 

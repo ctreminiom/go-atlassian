@@ -14,8 +14,7 @@ type OrganizationPolicyService struct {
 }
 
 // Gets returns information about org policies
-// Atlassian Docs: Docs: https://developer.atlassian.com/cloud/admin/organization/rest/api-group-orgs/#api-orgs-orgid-policies-get
-// Library Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/organization/policy#get-list-of-policies
+// Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/organization/policy#get-list-of-policies
 func (o *OrganizationPolicyService) Gets(ctx context.Context, organizationID, policyType, cursor string) (
 	result *model.OrganizationPolicyPageScheme, response *ResponseScheme, err error) {
 
@@ -56,8 +55,7 @@ func (o *OrganizationPolicyService) Gets(ctx context.Context, organizationID, po
 }
 
 // Get information about a single policy by ID
-// Official Docs: https://developer.atlassian.com/cloud/admin/organization/rest/api-group-orgs/#api-orgs-orgid-policies-policyid-get
-// Example Library: https://docs.go-atlassian.io/atlassian-admin-cloud/organization/policy#get-a-policy-by-id
+// Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/organization/policy#get-a-policy-by-id
 func (o *OrganizationPolicyService) Get(ctx context.Context, organizationID, policyID string) (
 	result *model.OrganizationPolicyScheme, response *ResponseScheme, err error) {
 
@@ -87,8 +85,7 @@ func (o *OrganizationPolicyService) Get(ctx context.Context, organizationID, pol
 }
 
 // Create a policy for an org
-// Official Docs: https://developer.atlassian.com/cloud/admin/organization/rest/api-group-orgs/#api-orgs-orgid-policies-post
-// Library Example: https://docs.go-atlassian.io/atlassian-admin-cloud/organization/policy#create-a-policy
+// Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/organization/policy#create-a-policy
 func (o *OrganizationPolicyService) Create(ctx context.Context, organizationID string, payload *model.OrganizationPolicyData) (
 	result *model.OrganizationPolicyScheme, response *ResponseScheme, err error) {
 
@@ -120,8 +117,7 @@ func (o *OrganizationPolicyService) Create(ctx context.Context, organizationID s
 }
 
 // Update a policy for an org
-// Official Docs: https://developer.atlassian.com/cloud/admin/organization/rest/api-group-orgs/#api-orgs-orgid-policies-policyid-put
-// Library Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/organization/policy#update-a-policy
+// Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/organization/policy#update-a-policy
 func (o *OrganizationPolicyService) Update(ctx context.Context, organizationID, policyID string,
 	payload *model.OrganizationPolicyData) (result *model.OrganizationPolicyScheme, response *ResponseScheme, err error) {
 
@@ -157,8 +153,7 @@ func (o *OrganizationPolicyService) Update(ctx context.Context, organizationID, 
 }
 
 // Delete a policy for an org
-// Official Docs: https://developer.atlassian.com/cloud/admin/organization/rest/api-group-orgs/#api-orgs-orgid-policies-policyid-delete
-// Library Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/organization/policy#delete-a-policy
+// Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/organization/policy#delete-a-policy
 func (o *OrganizationPolicyService) Delete(ctx context.Context, organizationID, policyID string) (
 	response *ResponseScheme, err error) {
 

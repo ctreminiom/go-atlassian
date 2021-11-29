@@ -15,7 +15,6 @@ type SCIMGroupService struct{ client *Client }
 // Filtering is supported with a single exact match (eq) against the displayName attribute.
 // Pagination is supported. Sorting is not supported.
 // Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/scim/groups#get-groups
-// Official Docs: https://developer.atlassian.com/cloud/admin/user-provisioning/rest/api-group-groups/#api-scim-directory-directoryid-groups-get
 func (g *SCIMGroupService) Gets(ctx context.Context, directoryID, filter string, startAt, maxResults int) (
 	result *model.ScimGroupPageScheme, response *ResponseScheme, err error) {
 
@@ -50,7 +49,6 @@ func (g *SCIMGroupService) Gets(ctx context.Context, directoryID, filter string,
 
 // Get a group from a directory by group ID.
 // Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/scim/groups#get-a-group-by-id
-// Official Docs: https://developer.atlassian.com/cloud/admin/user-provisioning/rest/api-group-groups/#api-scim-directory-directoryid-groups-id-get
 func (g *SCIMGroupService) Get(ctx context.Context, directoryID, groupID string) (result *model.ScimGroupScheme,
 	response *ResponseScheme, err error) {
 
@@ -81,7 +79,6 @@ func (g *SCIMGroupService) Get(ctx context.Context, directoryID, groupID string)
 
 // Update a group in a directory by group ID.
 // Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/scim/groups#update-a-group-by-id
-// Official Docs: https://developer.atlassian.com/cloud/admin/user-provisioning/rest/api-group-groups/#api-scim-directory-directoryid-groups-id-put
 func (g *SCIMGroupService) Update(ctx context.Context, directoryID, groupID string, newGroupName string) (result *model.ScimGroupScheme,
 	response *ResponseScheme, err error) {
 
@@ -125,7 +122,6 @@ func (g *SCIMGroupService) Update(ctx context.Context, directoryID, groupID stri
 // Delete a group from a directory.
 // An attempt to delete a non-existent group fails with a 404 (Resource Not found) error.
 // Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/scim/groups#delete-a-group-by-id
-// Official Docs: https://developer.atlassian.com/cloud/admin/user-provisioning/rest/api-group-groups/#api-scim-directory-directoryid-groups-id-delete
 func (g *SCIMGroupService) Delete(ctx context.Context, directoryID, groupID string) (response *ResponseScheme, err error) {
 
 	if directoryID == "" {
@@ -153,7 +149,6 @@ func (g *SCIMGroupService) Delete(ctx context.Context, directoryID, groupID stri
 
 // Create a group in a directory. An attempt to create a group with an existing name fails with a 409 (Conflict) error.
 // Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/scim/groups#create-a-group
-// Official Docs: https://developer.atlassian.com/cloud/admin/user-provisioning/rest/api-group-groups/#api-scim-directory-directoryid-groups-post
 func (g *SCIMGroupService) Create(ctx context.Context, directoryID, groupName string) (result *model.ScimGroupScheme,
 	response *ResponseScheme, err error) {
 
@@ -194,7 +189,6 @@ func (g *SCIMGroupService) Create(ctx context.Context, directoryID, groupName st
 // Path update a group's information in a directory by groupId via PATCH.
 // You can use this API to manage group membership.
 // Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/scim/groups#update-a-group-by-id-patch
-// Official Docs: https://developer.atlassian.com/cloud/admin/user-provisioning/rest/api-group-groups/#api-scim-directory-directoryid-groups-id-patch
 func (g *SCIMGroupService) Path(ctx context.Context, directoryID, groupID string, payload *model.SCIMGroupPathScheme) (
 	result *model.ScimGroupScheme, response *ResponseScheme, err error) {
 

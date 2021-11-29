@@ -15,8 +15,7 @@ type UserService struct {
 }
 
 // Permissions returns the set of permissions you have for managing the specified Atlassian account, this func needs the following parameters:
-// Atlassian Docs: https://developer.atlassian.com/cloud/admin/user-management/rest/api-group-users/#api-users-account-id-manage-get
-// Library Example: https://docs.go-atlassian.io/atlassian-admin-cloud/user#get-user-management-permissions
+// Example: https://docs.go-atlassian.io/atlassian-admin-cloud/user#get-user-management-permissions
 func (u *UserService) Permissions(ctx context.Context, accountID string, privileges []string) (result *model.AdminUserPermissionScheme,
 	response *ResponseScheme, err error) {
 
@@ -52,8 +51,7 @@ func (u *UserService) Permissions(ctx context.Context, accountID string, privile
 }
 
 // Get returns information about a single Atlassian account by ID, this func needs the following parameters:
-// Atlassian Docs: https://developer.atlassian.com/cloud/admin/user-management/rest/api-group-users/#api-users-account-id-manage-profile-get
-// Library Example: https://docs.go-atlassian.io/atlassian-admin-cloud/user#get-profile
+// Example: https://docs.go-atlassian.io/atlassian-admin-cloud/user#get-profile
 func (u *UserService) Get(ctx context.Context, accountID string) (result *model.AdminUserScheme, response *ResponseScheme, err error) {
 
 	if len(accountID) == 0 {
@@ -78,8 +76,7 @@ func (u *UserService) Get(ctx context.Context, accountID string) (result *model.
 }
 
 // Update updates fields in a user account. The profile.write privilege details which fields you can change
-// Atlassian Docs: https://developer.atlassian.com/cloud/admin/user-management/rest/api-group-users/#api-users-account-id-manage-profile-patch
-// Library Example: https://docs.go-atlassian.io/atlassian-admin-cloud/user#update-profile
+// Example: https://docs.go-atlassian.io/atlassian-admin-cloud/user#update-profile
 func (u *UserService) Update(ctx context.Context, accountID string, payload map[string]interface{}) (
 	result *model.AdminUserScheme, response *ResponseScheme, err error) {
 
@@ -118,8 +115,7 @@ func (u *UserService) Update(ctx context.Context, accountID string, payload map[
 // The permission to make use of this resource is exposed by the lifecycle.enablement privilege
 // You can optionally set a message associated with the block that will be shown to the user on attempted authentication.
 // If none is supplied, a default message will be used.
-// Atlassian Docs: https://developer.atlassian.com/cloud/admin/user-management/rest/api-group-users/#api-users-account-id-manage-lifecycle-disable-post
-// Library Example: https://docs.go-atlassian.io/atlassian-admin-cloud/user#disable-a-user
+// Example: https://docs.go-atlassian.io/atlassian-admin-cloud/user#disable-a-user
 func (u *UserService) Disable(ctx context.Context, accountID, message string) (response *ResponseScheme, err error) {
 
 	if len(accountID) == 0 {
@@ -168,8 +164,7 @@ func (u *UserService) Disable(ctx context.Context, accountID, message string) (r
 // Enable enables the specified user account.
 // The permission to make use of this resource is exposed by the lifecycle.enablement privilege.
 // This func needs the following parameters:
-// Atlassian Docs: https://developer.atlassian.com/cloud/admin/user-management/rest/api-group-users/#api-users-account-id-manage-lifecycle-enable-post
-// Library Example: https://docs.go-atlassian.io/atlassian-admin-cloud/user#enable-a-user
+// Example: https://docs.go-atlassian.io/atlassian-admin-cloud/user#enable-a-user
 func (u *UserService) Enable(ctx context.Context, accountID string) (response *ResponseScheme, err error) {
 
 	if len(accountID) == 0 {

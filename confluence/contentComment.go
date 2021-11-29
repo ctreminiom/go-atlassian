@@ -15,6 +15,7 @@ type ContentCommentService struct {
 }
 
 // Gets returns the comments on a piece of content.
+// Docs: https://docs.go-atlassian.io/confluence-cloud/content/comments#get-content-comments
 func (c *ContentCommentService) Gets(ctx context.Context, contentID string, expand, location []string,
 	startAt, maxResults int) (result *model.ContentPageScheme, response *ResponseScheme, err error) {
 

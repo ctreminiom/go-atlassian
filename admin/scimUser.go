@@ -17,8 +17,7 @@ type SCIMUserService struct{ client *Client }
 // A user account can only be created if it has an email address on a verified domain.
 // If a managed Atlassian account already exists on the Atlassian platform for the specified email address,
 // the user in your identity provider is linked to the user in your Atlassian organization.
-// Atlassian Docs: https://developer.atlassian.com/cloud/admin/user-provisioning/rest/api-group-users/#api-scim-directory-directoryid-users-post
-// Library Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/scim/users#create-a-user
+// Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/scim/users#create-a-user
 func (s *SCIMUserService) Create(ctx context.Context, directoryID string, payload *model.SCIMUserScheme, attributes,
 	excludedAttributes []string) (result *model.SCIMUserScheme, response *ResponseScheme, err error) {
 
@@ -65,8 +64,7 @@ func (s *SCIMUserService) Create(ctx context.Context, directoryID string, payloa
 }
 
 // Gets get users from the specified directory
-// Atlassian Docs: https://developer.atlassian.com/cloud/admin/user-provisioning/rest/api-group-users/#api-scim-directory-directoryid-users-get
-// Library Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/scim/users#get-users
+// Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/scim/users#get-users
 func (s *SCIMUserService) Gets(ctx context.Context, directoryID string, opts *model.SCIMUserGetsOptionsScheme, startIndex,
 	count int) (result *model.SCIMUserPageScheme, response *ResponseScheme, err error) {
 
@@ -111,8 +109,7 @@ func (s *SCIMUserService) Gets(ctx context.Context, directoryID string, opts *mo
 }
 
 // Get a user from a directory by userId.
-// Atlassian Docs: https://developer.atlassian.com/cloud/admin/user-provisioning/rest/api-group-users/#api-scim-directory-directoryid-users-userid-get
-// Library Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/scim/users#get-a-user-by-id
+// Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/scim/users#get-a-user-by-id
 func (s *SCIMUserService) Get(ctx context.Context, directoryID, userID string, attributes, excludedAttributes []string) (
 	result *model.SCIMUserScheme, response *ResponseScheme, err error) {
 
@@ -158,8 +155,7 @@ func (s *SCIMUserService) Get(ctx context.Context, directoryID, userID string, a
 // Deactivate a user by userId.
 // The user is not available for future requests until activated again.
 // Any future operation for the deactivated user returns the 404 (resource not found) error.
-// Atlassian Docs: https://developer.atlassian.com/cloud/admin/user-provisioning/rest/api-group-users/#api-scim-directory-directoryid-users-userid-delete
-// Library Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/scim/users#deactivate-a-user
+// Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/scim/users#deactivate-a-user
 func (s *SCIMUserService) Deactivate(ctx context.Context, directoryID, userID string) (response *ResponseScheme, err error) {
 
 	if len(directoryID) == 0 {
@@ -187,8 +183,7 @@ func (s *SCIMUserService) Deactivate(ctx context.Context, directoryID, userID st
 
 // Path updates a user's information in a directory by userId via PATCH.
 // Refer to GET /ServiceProviderConfig for details on the supported operations.
-// Atlassian Docs: https://developer.atlassian.com/cloud/admin/user-provisioning/rest/api-group-users/#api-scim-directory-directoryid-users-userid-patch
-// Library Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/scim/users#update-user-by-id-patch
+// Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/scim/users#update-user-by-id-patch
 func (s *SCIMUserService) Path(ctx context.Context, directoryID, userID string, payload *model.SCIMUserToPathScheme, attributes,
 	excludedAttributes []string) (result *model.SCIMUserScheme, response *ResponseScheme, err error) {
 
@@ -241,8 +236,7 @@ func (s *SCIMUserService) Path(ctx context.Context, directoryID, userID string, 
 // Update updates a user's information in a directory by userId via user attributes.
 // User information is replaced attribute-by-attribute, with the exception of immutable and read-only attributes.
 // Existing values of unspecified attributes are cleaned.
-// Atlassian Docs: https://developer.atlassian.com/cloud/admin/user-provisioning/rest/api-group-users/#api-scim-directory-directoryid-users-userid-put
-// Library Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/scim/users#update-user-via-user-attributes
+// Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/scim/users#update-user-via-user-attributes
 func (s *SCIMUserService) Update(ctx context.Context, directoryID, userID string, payload *model.SCIMUserScheme, attributes,
 	excludedAttributes []string) (result *model.SCIMUserScheme, response *ResponseScheme, err error) {
 

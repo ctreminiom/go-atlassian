@@ -16,8 +16,7 @@ type OrganizationService struct {
 }
 
 // Gets returns a list of your organizations
-// Official Docs: https://developer.atlassian.com/cloud/admin/organization/rest/api-group-orgs/#api-orgs-get
-// Library Example: https://docs.go-atlassian.io/atlassian-admin-cloud/organization#get-organizations
+// Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/organization#get-organizations
 func (o *OrganizationService) Gets(ctx context.Context, cursor string) (result *model.AdminOrganizationPageScheme,
 	response *ResponseScheme, err error) {
 
@@ -49,8 +48,7 @@ func (o *OrganizationService) Gets(ctx context.Context, cursor string) (result *
 }
 
 // Get returns information about a single organization by ID
-// Official Docs: https://developer.atlassian.com/cloud/admin/organization/rest/api-group-orgs/#api-orgs-orgid-get
-// Library Example: https://docs.go-atlassian.io/atlassian-admin-cloud/organization#get-an-organization-by-id
+// Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/organization#get-an-organization-by-id
 func (o *OrganizationService) Get(ctx context.Context, organizationID string) (result *model.AdminOrganizationScheme,
 	response *ResponseScheme, err error) {
 
@@ -76,8 +74,7 @@ func (o *OrganizationService) Get(ctx context.Context, organizationID string) (r
 }
 
 // Users returns a list of users in an organization
-// Official Docs: https://developer.atlassian.com/cloud/admin/organization/rest/api-group-orgs/#api-orgs-orgid-users-get
-// Library Example: https://docs.go-atlassian.io/atlassian-admin-cloud/organization#get-users-in-an-organization
+// Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/organization#get-users-in-an-organization
 func (o *OrganizationService) Users(ctx context.Context, organizationID, cursor string) (result *model.OrganizationUserPageScheme,
 	response *ResponseScheme, err error) {
 
@@ -113,8 +110,7 @@ func (o *OrganizationService) Users(ctx context.Context, organizationID, cursor 
 }
 
 // Domains returns a list of domains in an organization one page at a time
-// Official Docs: https://developer.atlassian.com/cloud/admin/organization/rest/api-group-orgs/#api-orgs-orgid-domains-get
-// Library Example: https://docs.go-atlassian.io/atlassian-admin-cloud/organization#get-domains-in-an-organization
+// Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/organization#get-domains-in-an-organization
 func (o *OrganizationService) Domains(ctx context.Context, organizationID, cursor string) (result *model.OrganizationDomainPageScheme,
 	response *ResponseScheme, err error) {
 
@@ -150,8 +146,7 @@ func (o *OrganizationService) Domains(ctx context.Context, organizationID, curso
 }
 
 // Domain returns information about a single verified domain by ID
-// Official Docs: https://developer.atlassian.com/cloud/admin/organization/rest/api-group-orgs/#api-orgs-orgid-domains-domainid-get
-// Library Example: https://docs.go-atlassian.io/atlassian-admin-cloud/organization#get-domain-by-id
+// Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/organization#get-domain-by-id
 func (o *OrganizationService) Domain(ctx context.Context, organizationID, domainID string) (result *model.OrganizationDomainScheme,
 	response *ResponseScheme, err error) {
 
@@ -181,8 +176,7 @@ func (o *OrganizationService) Domain(ctx context.Context, organizationID, domain
 }
 
 // Events returns an audit log of events from an organization one page at a time
-// Atlassian Docs: https://developer.atlassian.com/cloud/admin/organization/rest/api-group-orgs/#api-orgs-orgid-events-get
-// Library Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/organization#get-an-audit-log-of-events
+// Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/organization#get-an-audit-log-of-events
 func (o *OrganizationService) Events(ctx context.Context, organizationID string, options *model.OrganizationEventOptScheme,
 	cursor string) (result *model.OrganizationEventPageScheme, response *ResponseScheme, err error) {
 
@@ -240,7 +234,7 @@ func (o *OrganizationService) Events(ctx context.Context, organizationID string,
 }
 
 // Event returns information about a single event by ID.
-// Library Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/organization#get-an-event-by-id
+// Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/organization#get-an-event-by-id
 func (o *OrganizationService) Event(ctx context.Context, organizationID, eventID string) (result *model.OrganizationEventScheme,
 	response *ResponseScheme, err error) {
 
@@ -270,8 +264,7 @@ func (o *OrganizationService) Event(ctx context.Context, organizationID, eventID
 }
 
 // Actions returns information localized event actions
-// Official Docs: https://developer.atlassian.com/cloud/admin/organization/rest/api-group-orgs/#api-orgs-orgid-event-actions-get
-// Library Example: https://docs.go-atlassian.io/atlassian-admin-cloud/organization#get-list-of-event-actions
+// Docs: https://docs.go-atlassian.io/atlassian-admin-cloud/organization#get-list-of-event-actions
 func (o *OrganizationService) Actions(ctx context.Context, organizationID string) (result *model.OrganizationEventActionScheme,
 	response *ResponseScheme, err error) {
 

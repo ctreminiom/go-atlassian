@@ -15,6 +15,7 @@ type SpaceService struct {
 }
 
 // Gets returns all spaces. The returned spaces are ordered alphabetically in ascending order by space key.
+// Docs: https://docs.go-atlassian.io/confluence-cloud/space#get-spaces
 func (s *SpaceService) Gets(ctx context.Context, options *model.GetSpacesOptionScheme, startAt, maxResults int) (
 	result *model.SpacePageScheme, response *ResponseScheme, err error) {
 
@@ -79,6 +80,7 @@ func (s *SpaceService) Gets(ctx context.Context, options *model.GetSpacesOptionS
 
 // Create creates a new space.
 // Note, currently you cannot set space labels when creating a space.
+// Docs: https://docs.go-atlassian.io/confluence-cloud/space#create-space
 func (s *SpaceService) Create(ctx context.Context, payload *model.CreateSpaceScheme, private bool) (
 	result *model.SpaceScheme, response *ResponseScheme, err error) {
 
@@ -121,6 +123,7 @@ func (s *SpaceService) Create(ctx context.Context, payload *model.CreateSpaceSch
 // Get returns a space.
 // This includes information like the name, description, and permissions,
 // but not the content in the space.
+// Docs: https://docs.go-atlassian.io/confluence-cloud/space#get-space
 func (s *SpaceService) Get(ctx context.Context, spaceKey string, expand []string) (result *model.SpaceScheme,
 	response *ResponseScheme, err error) {
 
@@ -156,6 +159,7 @@ func (s *SpaceService) Get(ctx context.Context, spaceKey string, expand []string
 }
 
 // Update updates the name, description, or homepage of a space.
+// Docs: https://docs.go-atlassian.io/confluence-cloud/space#update-space
 func (s *SpaceService) Update(ctx context.Context, spaceKey string, payload *model.UpdateSpaceScheme) (result *model.SpaceScheme,
 	response *ResponseScheme, err error) {
 
@@ -190,6 +194,7 @@ func (s *SpaceService) Update(ctx context.Context, spaceKey string, payload *mod
 // Note, the space will be deleted in a long running task.
 // Therefore, the space may not be deleted yet when this method has returned.
 // Clients should poll the status link that is returned in the response until the task completes.
+// Docs: https://docs.go-atlassian.io/confluence-cloud/space#delete-space
 func (s *SpaceService) Delete(ctx context.Context, spaceKey string) (result *model.ContentTaskScheme, response *ResponseScheme, err error) {
 
 	if len(spaceKey) == 0 {
@@ -214,6 +219,7 @@ func (s *SpaceService) Delete(ctx context.Context, spaceKey string) (result *mod
 // Content returns all content in a space.
 // The returned content is grouped by type (pages then blogposts),
 // then ordered by content ID in ascending order.
+// Docs: https://docs.go-atlassian.io/confluence-cloud/space#get-content-for-space
 func (s *SpaceService) Content(ctx context.Context, spaceKey, depth string, expand []string, startAt, maxResults int) (
 	result *model.ContentChildrenScheme, response *ResponseScheme, err error) {
 
@@ -250,6 +256,7 @@ func (s *SpaceService) Content(ctx context.Context, spaceKey, depth string, expa
 
 // ContentByType returns all content of a given type, in a space.
 // The returned content is ordered by content ID in ascending order.
+// Docs: https://docs.go-atlassian.io/confluence-cloud/space#get-content-by-type-for-space
 func (s *SpaceService) ContentByType(ctx context.Context, spaceKey, contentType, depth string, expand []string, startAt,
 	maxResults int) (result *model.ContentPageScheme, response *ResponseScheme, err error) {
 

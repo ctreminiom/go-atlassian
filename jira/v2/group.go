@@ -13,7 +13,6 @@ type GroupService struct{ client *Client }
 
 // Create creates a group.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/groups#create-group
-// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-groups/#api-rest-api-2-group-post
 func (g *GroupService) Create(ctx context.Context, groupName string) (result *models.GroupScheme, response *ResponseScheme, err error) {
 
 	if len(groupName) == 0 {
@@ -47,7 +46,6 @@ func (g *GroupService) Create(ctx context.Context, groupName string) (result *mo
 
 // Delete deletes a group.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/groups#remove-group
-// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-groups/#api-rest-api-2-group-delete
 func (g *GroupService) Delete(ctx context.Context, groupName string) (response *ResponseScheme, err error) {
 
 	if len(groupName) == 0 {
@@ -73,7 +71,6 @@ func (g *GroupService) Delete(ctx context.Context, groupName string) (response *
 
 // Bulk returns a paginated list of groups.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/groups#bulk-groups
-// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-groups/#api-rest-api-2-group-bulk-get
 // NOTE: Experimental Endpoint
 func (g *GroupService) Bulk(ctx context.Context, options *models.GroupBulkOptionsScheme, startAt, maxResults int) (
 	result *models.BulkGroupScheme, response *ResponseScheme, err error) {
@@ -109,7 +106,6 @@ func (g *GroupService) Bulk(ctx context.Context, options *models.GroupBulkOption
 
 // Members returns a paginated list of all users in a group.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/groups#get-users-from-groups
-// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-groups/#api-rest-api-2-group-member-get
 func (g *GroupService) Members(ctx context.Context, groupName string, inactive bool, startAt, maxResults int) (
 	result *models.GroupMemberPageScheme, response *ResponseScheme, err error) {
 
@@ -143,7 +139,6 @@ func (g *GroupService) Members(ctx context.Context, groupName string, inactive b
 
 // Add adds a user to a group.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/groups#add-user-to-group
-// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-groups/#api-rest-api-2-group-user-post
 func (g *GroupService) Add(ctx context.Context, groupName, accountID string) (result *models.GroupScheme,
 	response *ResponseScheme, err error) {
 
@@ -185,7 +180,6 @@ func (g *GroupService) Add(ctx context.Context, groupName, accountID string) (re
 
 // Remove removes a user from a group.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/groups#remove-user-from-group
-// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-groups/#api-rest-api-2-group-user-delete
 func (g *GroupService) Remove(ctx context.Context, groupName, accountID string) (response *ResponseScheme, err error) {
 
 	if len(groupName) == 0 {

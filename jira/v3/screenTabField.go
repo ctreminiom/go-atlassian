@@ -112,11 +112,7 @@ func (s *ScreenTabFieldService) Move(ctx context.Context, screenID, tabID int, f
 		Position: position,
 	}
 
-	payloadAsReader, err := transformStructToReader(&payload)
-	if err != nil {
-		return nil, err
-	}
-
+	payloadAsReader, _ := transformStructToReader(&payload)
 	var endpoint = fmt.Sprintf("rest/api/3/screens/%v/tabs/%v/fields/%v/move", screenID, tabID, fieldID)
 
 	request, err := s.client.newRequest(ctx, http.MethodPost, endpoint, payloadAsReader)

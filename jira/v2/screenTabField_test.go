@@ -450,3 +450,167 @@ func TestScreenTabFieldService_Remove(t *testing.T) {
 	}
 
 }
+
+func TestScreenTabFieldService_Move(t *testing.T) {
+
+	testCases := []struct {
+		name               string
+		screenID           int
+		tabID              int
+		fieldID            string
+		after              string
+		position           string
+		mockFile           string
+		wantHTTPMethod     string
+		endpoint           string
+		context            context.Context
+		wantHTTPCodeReturn int
+		wantErr            bool
+	}{
+		{
+			name:               "MoveFieldFromScreenTabWhenTheParamsAreCorrect",
+			screenID:           10001,
+			tabID:              12,
+			fieldID:            "1000",
+			after:              "",
+			position:           "First",
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/api/2/screens/10001/tabs/12/fields/1000/move",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            false,
+		},
+
+		{
+			name:               "MoveFieldFromScreenTabWhenTheScreenIDIsNotProvided",
+			screenID:           0,
+			tabID:              12,
+			fieldID:            "1000",
+			after:              "",
+			position:           "First",
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/api/2/screens/10001/tabs/12/fields/1000/move",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+
+		{
+			name:               "MoveFieldFromScreenTabWhenTheFieldIDIsNotProvided",
+			screenID:           10001,
+			tabID:              12,
+			fieldID:            "",
+			after:              "",
+			position:           "First",
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/api/2/screens/10001/tabs/12/fields/1000/move",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+
+		{
+			name:               "MoveFieldFromScreenTabWhenTheRequestMethodIsIncorrect",
+			screenID:           10001,
+			tabID:              12,
+			fieldID:            "1000",
+			after:              "",
+			position:           "First",
+			wantHTTPMethod:     http.MethodHead,
+			endpoint:           "/rest/api/2/screens/10001/tabs/12/fields/1000/move",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+
+		{
+			name:               "MoveFieldFromScreenTabWhenTheStatusCodeIsIncorrect",
+			screenID:           10001,
+			tabID:              12,
+			fieldID:            "1000",
+			after:              "",
+			position:           "First",
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/api/2/screens/10001/tabs/12/fields/1000/move",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusBadRequest,
+			wantErr:            true,
+		},
+
+		{
+			name:               "MoveFieldFromScreenTabWhenTheContextIsNotProvided",
+			screenID:           10001,
+			tabID:              12,
+			fieldID:            "1000",
+			after:              "",
+			position:           "First",
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/api/2/screens/10001/tabs/12/fields/1000/move",
+			context:            nil,
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+		},
+	}
+
+	for _, testCase := range testCases {
+
+		t.Run(testCase.name, func(t *testing.T) {
+
+			//Init a new HTTP mock server
+			mockOptions := mockServerOptions{
+				Endpoint:           testCase.endpoint,
+				MockFilePath:       testCase.mockFile,
+				MethodAccepted:     testCase.wantHTTPMethod,
+				ResponseCodeWanted: testCase.wantHTTPCodeReturn,
+			}
+
+			mockServer, err := startMockServer(&mockOptions)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			defer mockServer.Close()
+
+			//Init the library instance
+			mockClient, err := startMockClient(mockServer.URL)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			i := &ScreenTabFieldService{client: mockClient}
+
+			gotResponse, err := i.Move(testCase.context, testCase.screenID, testCase.tabID, testCase.fieldID, testCase.after, testCase.position)
+
+			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+
+				assert.Error(t, err)
+			} else {
+
+				assert.NoError(t, err)
+				assert.NotEqual(t, gotResponse, nil)
+
+				apiEndpoint, err := url.Parse(gotResponse.Endpoint)
+				if err != nil {
+					t.Fatal(err)
+				}
+
+				var endpointToAssert string
+
+				if apiEndpoint.Query().Encode() != "" {
+					endpointToAssert = fmt.Sprintf("%v?%v", apiEndpoint.Path, apiEndpoint.Query().Encode())
+				} else {
+					endpointToAssert = apiEndpoint.Path
+				}
+
+				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
+				assert.Equal(t, testCase.endpoint, endpointToAssert)
+			}
+		})
+
+	}
+
+}

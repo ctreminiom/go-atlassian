@@ -91,3 +91,42 @@ func (s *ScreenTabFieldService) Remove(ctx context.Context, screenID, tabID int,
 
 	return
 }
+
+// Move moves a screen tab field.
+func (s *ScreenTabFieldService) Move(ctx context.Context, screenID, tabID int, fieldID, after, position string) (response *ResponseScheme,
+	err error) {
+
+	if screenID == 0 {
+		return nil, models.ErrNoScreenIDError
+	}
+
+	if len(fieldID) == 0 {
+		return nil, models.ErrNoFieldIDError
+	}
+
+	payload := struct {
+		After    string `json:"after,omitempty"`
+		Position string `json:"position,omitempty"`
+	}{
+		After:    after,
+		Position: position,
+	}
+
+	payloadAsReader, _ := transformStructToReader(&payload)
+	var endpoint = fmt.Sprintf("rest/api/3/screens/%v/tabs/%v/fields/%v/move", screenID, tabID, fieldID)
+
+	request, err := s.client.newRequest(ctx, http.MethodPost, endpoint, payloadAsReader)
+	if err != nil {
+		return
+	}
+
+	request.Header.Set("Accept", "application/json")
+	request.Header.Set("Content-Type", "application/json")
+
+	response, err = s.client.call(request, nil)
+	if err != nil {
+		return
+	}
+
+	return
+}

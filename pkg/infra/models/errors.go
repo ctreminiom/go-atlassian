@@ -81,4 +81,6 @@ var (
 	ErrNoProjectKeySliceError         = errors.New("jira: no project key's set")
 	ErrNoWorkflowIDError              = errors.New("jira: no workflow id set")
 	ErrNoWorkflowSchemeIDError        = errors.New("jira: no workflow scheme id set")
+	ErrNoScreenIDError                = errors.New("jira: no screen id set")
+	ErrNoScreenTabIDError             = errors.New("jira: no screen tab id set")
 )

@@ -84,4 +84,5 @@ var (
 	ErrNoScreenIDError                = errors.New("jira: no screen id set")
 	ErrNoScreenTabIDError             = errors.New("jira: no screen tab id set")
 	ErrNoFieldConfigurationNameError  = errors.New("jira: no field configuration name set")
+	ErrNoFieldConfigurationIDError    = errors.New("jira: no field configuration id set")
 )

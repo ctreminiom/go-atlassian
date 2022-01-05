@@ -82,6 +82,46 @@ func (f *FieldConfigurationService) Create(ctx context.Context, name, descriptio
 	return
 }
 
+// Update updates a field configuration. The name and the description provided in the request override the existing values.
+// This operation can only update configurations used in company-managed (classic) projects.
+// EXPERIMENTAL
+func (f *FieldConfigurationService) Update(ctx context.Context, fieldConfigurationID int, name, description string) (response *ResponseScheme, err error) {
+
+	if fieldConfigurationID == 0 {
+		return nil, models.ErrNoFieldConfigurationIDError
+	}
+
+	if name == "" {
+		return nil, models.ErrNoFieldConfigurationNameError
+	}
+
+	payload := struct {
+		Name        string `json:"name"`
+		Description string `json:"description,omitempty"`
+	}{
+		Name:        name,
+		Description: description,
+	}
+
+	payloadAsReader, _ := transformStructToReader(&payload)
+	endpoint := fmt.Sprintf("rest/api/2/fieldconfiguration/%v", fieldConfigurationID)
+
+	request, err := f.client.newRequest(ctx, http.MethodPut, endpoint, payloadAsReader)
+	if err != nil {
+		return
+	}
+
+	request.Header.Set("Accept", "application/json")
+	request.Header.Set("Content-Type", "application/json")
+
+	response, err = f.client.call(request, nil)
+	if err != nil {
+		return
+	}
+
+	return
+}
+
 // Items Returns a paginated list of all fields for a configuration.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration#get-field-configuration-items
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-issue-field-configurations/#api-rest-api-2-fieldconfiguration-id-fields-get

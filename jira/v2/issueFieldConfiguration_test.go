@@ -1290,3 +1290,151 @@ func TestFieldConfigurationService_Create(t *testing.T) {
 		})
 	}
 }
+
+func TestFieldConfigurationService_Update(t *testing.T) {
+
+	testCases := []struct {
+		name                          string
+		fieldConfigurationID          int
+		fieldConfigurationName        string
+		fieldConfigurationDescription string
+		mockFile                      string
+		wantHTTPMethod                string
+		endpoint                      string
+		context                       context.Context
+		wantHTTPCodeReturn            int
+		wantErr                       bool
+		expectedError                 string
+	}{
+		{
+			name:                          "UpdateFieldConfigurationWhenTheParametersAreCorrect",
+			fieldConfigurationID:          1000,
+			fieldConfigurationName:        "Field Configuration Name Sample",
+			fieldConfigurationDescription: "Field Configuration Name Description",
+			wantHTTPMethod:                http.MethodPut,
+			endpoint:                      "/rest/api/2/fieldconfiguration/1000",
+			context:                       context.Background(),
+			wantHTTPCodeReturn:            http.StatusNoContent,
+			wantErr:                       false,
+		},
+
+		{
+			name:                          "UpdateFieldConfigurationWhenTheFieldConfigurationIDIsNotSet",
+			fieldConfigurationID:          0,
+			fieldConfigurationName:        "Field Configuration Name Sample",
+			fieldConfigurationDescription: "Field Configuration Name Description",
+			wantHTTPMethod:                http.MethodPut,
+			endpoint:                      "/rest/api/2/fieldconfiguration/1000",
+			context:                       context.Background(),
+			wantHTTPCodeReturn:            http.StatusNoContent,
+			wantErr:                       true,
+			expectedError:                 "jira: no field configuration id set",
+		},
+
+		{
+			name:                          "UpdateFieldConfigurationWhenTheFieldConfigurationNameIsNotSet",
+			fieldConfigurationID:          1000,
+			fieldConfigurationName:        "",
+			fieldConfigurationDescription: "Field Configuration Name Description",
+			wantHTTPMethod:                http.MethodPut,
+			endpoint:                      "/rest/api/2/fieldconfiguration/1000",
+			context:                       context.Background(),
+			wantHTTPCodeReturn:            http.StatusNoContent,
+			wantErr:                       true,
+			expectedError:                 "jira: no field configuration name set",
+		},
+
+		{
+			name:                          "UpdateFieldConfigurationWhenTheRequestMethodIsIncorrect",
+			fieldConfigurationID:          1000,
+			fieldConfigurationName:        "Field Configuration Name Sample",
+			fieldConfigurationDescription: "Field Configuration Name Description",
+			mockFile:                      "../v3/mocks/get-field-configuration.json",
+			wantHTTPMethod:                http.MethodHead,
+			context:                       context.Background(),
+			wantHTTPCodeReturn:            http.StatusNoContent,
+			wantErr:                       true,
+			expectedError:                 "request failed. Please analyze the request body for more details. Status Code: 405",
+		},
+
+		{
+			name:                          "UpdateFieldConfigurationWhenTheContextIsNotProvided",
+			fieldConfigurationID:          1000,
+			fieldConfigurationName:        "Field Configuration Name Sample",
+			fieldConfigurationDescription: "Field Configuration Name Description",
+			wantHTTPMethod:                http.MethodPut,
+			endpoint:                      "/rest/api/2/fieldconfiguration/1000",
+			context:                       nil,
+			wantHTTPCodeReturn:            http.StatusNoContent,
+			wantErr:                       true,
+			expectedError:                 "request creation failed: net/http: nil Context",
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+
+			//Init a new HTTP mock server
+			mockOptions := mockServerOptions{
+				Endpoint:           testCase.endpoint,
+				MockFilePath:       testCase.mockFile,
+				MethodAccepted:     testCase.wantHTTPMethod,
+				ResponseCodeWanted: testCase.wantHTTPCodeReturn,
+			}
+
+			mockServer, err := startMockServer(&mockOptions)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			defer mockServer.Close()
+
+			//Init the library instance
+			mockClient, err := startMockClient(mockServer.URL)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			service := &FieldConfigurationService{client: mockClient}
+			gotResponse, err := service.Update(testCase.context, testCase.fieldConfigurationID, testCase.fieldConfigurationName, testCase.fieldConfigurationDescription)
+
+			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+
+				assert.EqualError(t, err, testCase.expectedError)
+
+				if gotResponse != nil {
+					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
+				}
+
+			} else {
+
+				assert.NoError(t, err)
+				assert.NotEqual(t, gotResponse, nil)
+
+				apiEndpoint, err := url.Parse(gotResponse.Endpoint)
+				if err != nil {
+					t.Fatal(err)
+				}
+
+				var endpointToAssert string
+
+				if apiEndpoint.Query().Encode() != "" {
+					endpointToAssert = fmt.Sprintf("%v?%v", apiEndpoint.Path, apiEndpoint.Query().Encode())
+				} else {
+					endpointToAssert = apiEndpoint.Path
+				}
+
+				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
+				assert.Equal(t, testCase.endpoint, endpointToAssert)
+
+				t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
+				assert.Equal(t, gotResponse.Code, testCase.wantHTTPCodeReturn)
+			}
+
+		})
+	}
+}

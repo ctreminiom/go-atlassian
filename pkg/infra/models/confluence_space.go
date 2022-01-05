@@ -1,13 +1,27 @@
 package models
 
 type SpaceScheme struct {
-	ID         int               `json:"id"`
-	Key        string            `json:"key"`
-	Name       string            `json:"name"`
-	Type       string            `json:"type"`
-	Status     string            `json:"status"`
-	Expandable *ExpandableScheme `json:"_expandable"`
-	Links      *LinkScheme       `json:"_links"`
+	ID          int                      `json:"id,omitempty"`
+	Key         string                   `json:"key,omitempty"`
+	Name        string                   `json:"name,omitempty"`
+	Type        string                   `json:"type,omitempty"`
+	Status      string                   `json:"status,omitempty"`
+	HomePage    *ContentScheme           `json:"homepage,omitempty"`
+	Operations  *[]SpaceOperationScheme  `json:"operations,omitempty"`
+	Permissions []*SpacePermissionScheme `json:"permissions,omitempty"`
+	History     *SpaceHistoryScheme      `json:"history,omitempty"`
+	Expandable  *ExpandableScheme        `json:"_expandable,omitempty"`
+	Links       *LinkScheme              `json:"_links,omitempty"`
+}
+
+type SpaceHistoryScheme struct {
+	CreatedDate string             `json:"createdDate,omitempty"`
+	CreatedBy   *ContentUserScheme `json:"createdBy,omitempty"`
+}
+
+type SpaceOperationScheme struct {
+	Operation  string `json:"operation,omitempty"`
+	TargetType string `json:"targetType,omitempty"`
 }
 
 type SpacePageScheme struct {
@@ -51,8 +65,10 @@ type CreateSpaceDescriptionPlainScheme struct {
 }
 
 type SpacePermissionScheme struct {
-	Subject   *SubjectPermissionScheme   `json:"subject,omitempty"`
-	Operation *OperationPermissionScheme `json:"operation,omitempty"`
+	Subject          *SubjectPermissionScheme   `json:"subject,omitempty"`
+	Operation        *OperationPermissionScheme `json:"operation,omitempty"`
+	AnonymousAccess  bool                       `json:"anonymousAccess,omitempty"`
+	UnlicensedAccess bool                       `json:"unlicensedAccess,omitempty"`
 }
 
 type OperationPermissionScheme struct {
@@ -61,12 +77,8 @@ type OperationPermissionScheme struct {
 }
 
 type SubjectPermissionScheme struct {
-	User       *UserPermissionScheme  `json:"user,omitempty"`
-	Group      *GroupPermissionScheme `json:"group,omitempty"`
-	Expandable struct {
-		User  string `json:"user,omitempty"`
-		Group string `json:"group,omitempty"`
-	} `json:"_expandable,omitempty"`
+	User  *UserPermissionScheme  `json:"user,omitempty"`
+	Group *GroupPermissionScheme `json:"group,omitempty"`
 }
 
 type UserPermissionScheme struct {

@@ -9,7 +9,10 @@ import (
 	"strconv"
 )
 
-type FieldConfigurationService struct{ client *Client }
+type FieldConfigurationService struct {
+	client *Client
+	Item   *FieldConfigurationItemService
+}
 
 // Gets Returns a paginated list of all field configurations.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration#get-all-field-configurations
@@ -140,67 +143,6 @@ func (f *FieldConfigurationService) Delete(ctx context.Context, fieldConfigurati
 	}
 
 	request.Header.Set("Accept", "application/json")
-
-	response, err = f.client.call(request, nil)
-	if err != nil {
-		return
-	}
-
-	return
-}
-
-// Items Returns a paginated list of all fields for a configuration.
-// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration#get-field-configuration-items
-// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-issue-field-configurations/#api-rest-api-2-fieldconfiguration-id-fields-get
-func (f *FieldConfigurationService) Items(ctx context.Context, fieldConfigurationID, startAt, maxResults int) (
-	result *models.FieldConfigurationItemPageScheme, response *ResponseScheme, err error) {
-
-	params := url.Values{}
-	params.Add("startAt", strconv.Itoa(startAt))
-	params.Add("maxResults", strconv.Itoa(maxResults))
-
-	var endpoint = fmt.Sprintf("rest/api/2/fieldconfiguration/%v/fields?%v", fieldConfigurationID, params.Encode())
-
-	request, err := f.client.newRequest(ctx, http.MethodGet, endpoint, nil)
-	if err != nil {
-		return
-	}
-
-	request.Header.Set("Accept", "application/json")
-
-	response, err = f.client.call(request, &result)
-	if err != nil {
-		return
-	}
-
-	return
-}
-
-// UpdateItems updates fields in a field configuration. The properties of the field configuration fields provided
-// override the existing values.
-// This operation can only update field configurations used in company-managed (classic) projects.
-// EXPERIMENTAL
-func (f *FieldConfigurationService) UpdateItems(ctx context.Context, fieldConfigurationID int, payload *models.UpdateFieldConfigurationItemPayloadScheme) (
-	response *ResponseScheme, err error) {
-
-	if fieldConfigurationID == 0 {
-		return nil, models.ErrNoFieldConfigurationIDError
-	}
-
-	payloadAsReader, err := transformStructToReader(payload)
-	if err != nil {
-		return nil, err
-	}
-
-	endpoint := fmt.Sprintf("rest/api/2/fieldconfiguration/%v/fields", fieldConfigurationID)
-
-	request, err := f.client.newRequest(ctx, http.MethodPut, endpoint, payloadAsReader)
-	if err != nil {
-		return
-	}
-
-	request.Header.Set("Accept", "application/json")
-	request.Header.Set("Content-Type", "application/json")
 
 	response, err = f.client.call(request, nil)
 	if err != nil {

@@ -412,193 +412,6 @@ func TestFieldConfigurationService_IssueTypeItems(t *testing.T) {
 
 }
 
-func TestFieldConfigurationService_Items(t *testing.T) {
-
-	testCases := []struct {
-		name               string
-		fieldConfigID      int
-		startAt            int
-		maxResult          int
-		mockFile           string
-		wantHTTPMethod     string
-		endpoint           string
-		context            context.Context
-		wantHTTPCodeReturn int
-		wantErr            bool
-	}{
-		{
-			name:               "GetsFieldConfigurationsItemsWhenTheParametersAreCorrect",
-			fieldConfigID:      10000,
-			startAt:            0,
-			maxResult:          50,
-			mockFile:           "./mocks/get-field-configuration-items.json",
-			wantHTTPMethod:     http.MethodGet,
-			endpoint:           "/rest/api/3/fieldconfiguration/10000/fields?maxResults=50&startAt=0",
-			context:            context.Background(),
-			wantHTTPCodeReturn: http.StatusOK,
-			wantErr:            false,
-		},
-		{
-			name:               "GetsFieldConfigurationsItemsWhenTheParametersAreIncorrect",
-			fieldConfigID:      10001,
-			startAt:            0,
-			maxResult:          50,
-			mockFile:           "./mocks/get-field-configuration-items.json",
-			wantHTTPMethod:     http.MethodGet,
-			endpoint:           "/rest/api/3/fieldconfiguration/10000/fields?maxResults=50&startAt=0",
-			context:            context.Background(),
-			wantHTTPCodeReturn: http.StatusOK,
-			wantErr:            true,
-		},
-
-		{
-			name:               "GetsFieldConfigurationsItemsWhenTheEndpointIsIncorrect",
-			fieldConfigID:      10000,
-			startAt:            0,
-			maxResult:          50,
-			mockFile:           "./mocks/get-field-configuration-items.json",
-			wantHTTPMethod:     http.MethodGet,
-			endpoint:           "/rest/api/3/fieldconfigurations/10000/fields?maxResults=50&startAt=0",
-			context:            context.Background(),
-			wantHTTPCodeReturn: http.StatusOK,
-			wantErr:            true,
-		},
-
-		{
-			name:               "GetsFieldConfigurationsItemsWhenTheContextIsNil",
-			fieldConfigID:      10000,
-			startAt:            0,
-			maxResult:          50,
-			mockFile:           "./mocks/get-field-configuration-items.json",
-			wantHTTPMethod:     http.MethodGet,
-			endpoint:           "/rest/api/3/fieldconfiguration/10000/fields?maxResults=50&startAt=0",
-			context:            nil,
-			wantHTTPCodeReturn: http.StatusOK,
-			wantErr:            true,
-		},
-
-		{
-			name:               "GetsFieldConfigurationsItemsWhenTheRequestMethodIsIncorrect",
-			fieldConfigID:      10000,
-			startAt:            0,
-			maxResult:          50,
-			mockFile:           "./mocks/get-field-configuration-items.json",
-			wantHTTPMethod:     http.MethodPost,
-			endpoint:           "/rest/api/3/fieldconfiguration/10000/fields?maxResults=50&startAt=0",
-			context:            context.Background(),
-			wantHTTPCodeReturn: http.StatusOK,
-			wantErr:            true,
-		},
-
-		{
-			name:               "GetsFieldConfigurationsItemsWhenTheStatusCodeIsIncorrect",
-			fieldConfigID:      10000,
-			startAt:            0,
-			maxResult:          50,
-			mockFile:           "./mocks/get-field-configuration-items.json",
-			wantHTTPMethod:     http.MethodGet,
-			endpoint:           "/rest/api/3/fieldconfiguration/10000/fields?maxResults=50&startAt=0",
-			context:            context.Background(),
-			wantHTTPCodeReturn: http.StatusBadRequest,
-			wantErr:            true,
-		},
-
-		{
-			name:               "GetsFieldConfigurationsItemsWhenTheResponseBodyLengthIsZero",
-			fieldConfigID:      10000,
-			startAt:            0,
-			maxResult:          50,
-			mockFile:           "",
-			wantHTTPMethod:     http.MethodGet,
-			endpoint:           "/rest/api/3/fieldconfiguration/10000/fields?maxResults=50&startAt=0",
-			context:            context.Background(),
-			wantHTTPCodeReturn: http.StatusOK,
-			wantErr:            true,
-		},
-
-		{
-			name:               "GetsFieldConfigurationsItemsWhenTheResponseBodyHasADifferentFormat",
-			fieldConfigID:      10000,
-			startAt:            0,
-			maxResult:          50,
-			mockFile:           "./mocks/empty_json.json",
-			wantHTTPMethod:     http.MethodGet,
-			endpoint:           "/rest/api/3/fieldconfiguration/10000/fields?maxResults=50&startAt=0",
-			context:            context.Background(),
-			wantHTTPCodeReturn: http.StatusOK,
-			wantErr:            true,
-		},
-	}
-
-	for _, testCase := range testCases {
-		t.Run(testCase.name, func(t *testing.T) {
-
-			//Init a new HTTP mock server
-			mockOptions := mockServerOptions{
-				Endpoint:           testCase.endpoint,
-				MockFilePath:       testCase.mockFile,
-				MethodAccepted:     testCase.wantHTTPMethod,
-				ResponseCodeWanted: testCase.wantHTTPCodeReturn,
-			}
-
-			mockServer, err := startMockServer(&mockOptions)
-			if err != nil {
-				t.Fatal(err)
-			}
-
-			defer mockServer.Close()
-
-			//Init the library instance
-			mockClient, err := startMockClient(mockServer.URL)
-			if err != nil {
-				t.Fatal(err)
-			}
-
-			service := &FieldConfigurationService{client: mockClient}
-			getResult, gotResponse, err := service.Items(testCase.context, testCase.fieldConfigID, testCase.startAt, testCase.maxResult)
-
-			if testCase.wantErr {
-
-				if err != nil {
-					t.Logf("error returned: %v", err.Error())
-				}
-
-				assert.Error(t, err)
-
-				if gotResponse != nil {
-					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
-				}
-			} else {
-
-				assert.NoError(t, err)
-				assert.NotEqual(t, gotResponse, nil)
-				assert.NotEqual(t, getResult, nil)
-
-				apiEndpoint, err := url.Parse(gotResponse.Endpoint)
-				if err != nil {
-					t.Fatal(err)
-				}
-
-				var endpointToAssert string
-
-				if apiEndpoint.Query().Encode() != "" {
-					endpointToAssert = fmt.Sprintf("%v?%v", apiEndpoint.Path, apiEndpoint.Query().Encode())
-				} else {
-					endpointToAssert = apiEndpoint.Path
-				}
-
-				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
-				assert.Equal(t, testCase.endpoint, endpointToAssert)
-
-				t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
-				assert.Equal(t, gotResponse.Code, testCase.wantHTTPCodeReturn)
-			}
-
-		})
-	}
-
-}
-
 func TestFieldConfigurationService_Schemes(t *testing.T) {
 
 	testCases := []struct {
@@ -1141,4 +954,424 @@ func TestFieldConfigurationService_Assign(t *testing.T) {
 		})
 	}
 
+}
+
+func TestFieldConfigurationService_Create(t *testing.T) {
+
+	testCases := []struct {
+		name                          string
+		fieldConfigurationName        string
+		fieldConfigurationDescription string
+		mockFile                      string
+		wantHTTPMethod                string
+		endpoint                      string
+		context                       context.Context
+		wantHTTPCodeReturn            int
+		wantErr                       bool
+		expectedError                 string
+	}{
+		{
+			name:                          "CreateFieldConfigurationWhenTheParametersAreCorrect",
+			fieldConfigurationName:        "Field Configuration Name Sample",
+			fieldConfigurationDescription: "Field Configuration Name Description",
+			mockFile:                      "./mocks/get-field-configuration.json",
+			wantHTTPMethod:                http.MethodPost,
+			endpoint:                      "/rest/api/3/fieldconfiguration",
+			context:                       context.Background(),
+			wantHTTPCodeReturn:            http.StatusOK,
+			wantErr:                       false,
+		},
+
+		{
+			name:                          "CreateFieldConfigurationWhenTheFieldConfigurationNameIsNotSet",
+			fieldConfigurationName:        "",
+			fieldConfigurationDescription: "Field Configuration Name Description",
+			mockFile:                      "./mocks/get-field-configuration.json",
+			wantHTTPMethod:                http.MethodPost,
+			endpoint:                      "/rest/api/3/fieldconfiguration",
+			context:                       context.Background(),
+			wantHTTPCodeReturn:            http.StatusOK,
+			wantErr:                       true,
+			expectedError:                 "jira: no field configuration name set",
+		},
+
+		{
+			name:                          "CreateFieldConfigurationWhenTheRequestMethodIsIncorrect",
+			fieldConfigurationName:        "Field Configuration Name Sample",
+			fieldConfigurationDescription: "Field Configuration Name Description",
+			mockFile:                      "./mocks/get-field-configuration.json",
+			wantHTTPMethod:                http.MethodHead,
+			endpoint:                      "/rest/api/3/fieldconfiguration",
+			context:                       context.Background(),
+			wantHTTPCodeReturn:            http.StatusOK,
+			wantErr:                       true,
+			expectedError:                 "request failed. Please analyze the request body for more details. Status Code: 405",
+		},
+
+		{
+			name:                          "CreateFieldConfigurationWhenTheContextIsNotProvided",
+			fieldConfigurationName:        "Field Configuration Name Sample",
+			fieldConfigurationDescription: "Field Configuration Name Description",
+			mockFile:                      "./mocks/get-field-configuration.json",
+			wantHTTPMethod:                http.MethodPost,
+			endpoint:                      "/rest/api/3/fieldconfiguration",
+			context:                       nil,
+			wantHTTPCodeReturn:            http.StatusOK,
+			wantErr:                       true,
+			expectedError:                 "request creation failed: net/http: nil Context",
+		},
+
+		{
+			name:                          "CreateFieldConfigurationWhenTheResponseBodyIsEmpty",
+			fieldConfigurationName:        "Field Configuration Name Sample",
+			fieldConfigurationDescription: "Field Configuration Name Description",
+			mockFile:                      "./mocks/empty_json.json",
+			wantHTTPMethod:                http.MethodPost,
+			endpoint:                      "/rest/api/3/fieldconfiguration",
+			context:                       context.Background(),
+			wantHTTPCodeReturn:            http.StatusOK,
+			wantErr:                       true,
+			expectedError:                 "unexpected end of JSON input",
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+
+			//Init a new HTTP mock server
+			mockOptions := mockServerOptions{
+				Endpoint:           testCase.endpoint,
+				MockFilePath:       testCase.mockFile,
+				MethodAccepted:     testCase.wantHTTPMethod,
+				ResponseCodeWanted: testCase.wantHTTPCodeReturn,
+			}
+
+			mockServer, err := startMockServer(&mockOptions)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			defer mockServer.Close()
+
+			//Init the library instance
+			mockClient, err := startMockClient(mockServer.URL)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			service := &FieldConfigurationService{client: mockClient}
+			getResult, gotResponse, err := service.Create(testCase.context, testCase.fieldConfigurationName, testCase.fieldConfigurationDescription)
+
+			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+
+				assert.EqualError(t, err, testCase.expectedError)
+
+				if gotResponse != nil {
+					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
+				}
+
+			} else {
+
+				assert.NoError(t, err)
+				assert.NotEqual(t, gotResponse, nil)
+				assert.NotEqual(t, getResult, nil)
+
+				apiEndpoint, err := url.Parse(gotResponse.Endpoint)
+				if err != nil {
+					t.Fatal(err)
+				}
+
+				var endpointToAssert string
+
+				if apiEndpoint.Query().Encode() != "" {
+					endpointToAssert = fmt.Sprintf("%v?%v", apiEndpoint.Path, apiEndpoint.Query().Encode())
+				} else {
+					endpointToAssert = apiEndpoint.Path
+				}
+
+				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
+				assert.Equal(t, testCase.endpoint, endpointToAssert)
+
+				t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
+				assert.Equal(t, gotResponse.Code, testCase.wantHTTPCodeReturn)
+			}
+
+		})
+	}
+}
+
+func TestFieldConfigurationService_Update(t *testing.T) {
+
+	testCases := []struct {
+		name                          string
+		fieldConfigurationID          int
+		fieldConfigurationName        string
+		fieldConfigurationDescription string
+		mockFile                      string
+		wantHTTPMethod                string
+		endpoint                      string
+		context                       context.Context
+		wantHTTPCodeReturn            int
+		wantErr                       bool
+		expectedError                 string
+	}{
+		{
+			name:                          "UpdateFieldConfigurationWhenTheParametersAreCorrect",
+			fieldConfigurationID:          1000,
+			fieldConfigurationName:        "Field Configuration Name Sample",
+			fieldConfigurationDescription: "Field Configuration Name Description",
+			wantHTTPMethod:                http.MethodPut,
+			endpoint:                      "/rest/api/3/fieldconfiguration/1000",
+			context:                       context.Background(),
+			wantHTTPCodeReturn:            http.StatusNoContent,
+			wantErr:                       false,
+		},
+
+		{
+			name:                          "UpdateFieldConfigurationWhenTheFieldConfigurationIDIsNotSet",
+			fieldConfigurationID:          0,
+			fieldConfigurationName:        "Field Configuration Name Sample",
+			fieldConfigurationDescription: "Field Configuration Name Description",
+			wantHTTPMethod:                http.MethodPut,
+			endpoint:                      "/rest/api/3/fieldconfiguration/1000",
+			context:                       context.Background(),
+			wantHTTPCodeReturn:            http.StatusNoContent,
+			wantErr:                       true,
+			expectedError:                 "jira: no field configuration id set",
+		},
+
+		{
+			name:                          "UpdateFieldConfigurationWhenTheFieldConfigurationNameIsNotSet",
+			fieldConfigurationID:          1000,
+			fieldConfigurationName:        "",
+			fieldConfigurationDescription: "Field Configuration Name Description",
+			wantHTTPMethod:                http.MethodPut,
+			endpoint:                      "/rest/api/3/fieldconfiguration/1000",
+			context:                       context.Background(),
+			wantHTTPCodeReturn:            http.StatusNoContent,
+			wantErr:                       true,
+			expectedError:                 "jira: no field configuration name set",
+		},
+
+		{
+			name:                          "UpdateFieldConfigurationWhenTheRequestMethodIsIncorrect",
+			fieldConfigurationID:          1000,
+			fieldConfigurationName:        "Field Configuration Name Sample",
+			fieldConfigurationDescription: "Field Configuration Name Description",
+			mockFile:                      "./mocks/get-field-configuration.json",
+			wantHTTPMethod:                http.MethodHead,
+			context:                       context.Background(),
+			wantHTTPCodeReturn:            http.StatusNoContent,
+			wantErr:                       true,
+			expectedError:                 "request failed. Please analyze the request body for more details. Status Code: 405",
+		},
+
+		{
+			name:                          "UpdateFieldConfigurationWhenTheContextIsNotProvided",
+			fieldConfigurationID:          1000,
+			fieldConfigurationName:        "Field Configuration Name Sample",
+			fieldConfigurationDescription: "Field Configuration Name Description",
+			wantHTTPMethod:                http.MethodPut,
+			endpoint:                      "/rest/api/3/fieldconfiguration/1000",
+			context:                       nil,
+			wantHTTPCodeReturn:            http.StatusNoContent,
+			wantErr:                       true,
+			expectedError:                 "request creation failed: net/http: nil Context",
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+
+			//Init a new HTTP mock server
+			mockOptions := mockServerOptions{
+				Endpoint:           testCase.endpoint,
+				MockFilePath:       testCase.mockFile,
+				MethodAccepted:     testCase.wantHTTPMethod,
+				ResponseCodeWanted: testCase.wantHTTPCodeReturn,
+			}
+
+			mockServer, err := startMockServer(&mockOptions)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			defer mockServer.Close()
+
+			//Init the library instance
+			mockClient, err := startMockClient(mockServer.URL)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			service := &FieldConfigurationService{client: mockClient}
+			gotResponse, err := service.Update(testCase.context, testCase.fieldConfigurationID, testCase.fieldConfigurationName, testCase.fieldConfigurationDescription)
+
+			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+
+				assert.EqualError(t, err, testCase.expectedError)
+
+				if gotResponse != nil {
+					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
+				}
+
+			} else {
+
+				assert.NoError(t, err)
+				assert.NotEqual(t, gotResponse, nil)
+
+				apiEndpoint, err := url.Parse(gotResponse.Endpoint)
+				if err != nil {
+					t.Fatal(err)
+				}
+
+				var endpointToAssert string
+
+				if apiEndpoint.Query().Encode() != "" {
+					endpointToAssert = fmt.Sprintf("%v?%v", apiEndpoint.Path, apiEndpoint.Query().Encode())
+				} else {
+					endpointToAssert = apiEndpoint.Path
+				}
+
+				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
+				assert.Equal(t, testCase.endpoint, endpointToAssert)
+
+				t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
+				assert.Equal(t, gotResponse.Code, testCase.wantHTTPCodeReturn)
+			}
+
+		})
+	}
+}
+
+func TestFieldConfigurationService_Delete(t *testing.T) {
+
+	testCases := []struct {
+		name                 string
+		fieldConfigurationID int
+		mockFile             string
+		wantHTTPMethod       string
+		endpoint             string
+		context              context.Context
+		wantHTTPCodeReturn   int
+		wantErr              bool
+		expectedError        string
+	}{
+		{
+			name:                 "DeleteFieldConfigurationWhenTheParametersAreCorrect",
+			fieldConfigurationID: 1000,
+			wantHTTPMethod:       http.MethodDelete,
+			endpoint:             "/rest/api/3/fieldconfiguration/1000",
+			context:              context.Background(),
+			wantHTTPCodeReturn:   http.StatusNoContent,
+			wantErr:              false,
+		},
+
+		{
+			name:                 "DeleteFieldConfigurationWhenTheFieldConfigurationIDIsNotSet",
+			fieldConfigurationID: 0,
+			wantHTTPMethod:       http.MethodDelete,
+			endpoint:             "/rest/api/3/fieldconfiguration/1000",
+			context:              context.Background(),
+			wantHTTPCodeReturn:   http.StatusNoContent,
+			wantErr:              true,
+			expectedError:        "jira: no field configuration id set",
+		},
+
+		{
+			name:                 "DeleteFieldConfigurationWhenTheRequestMethodIsIncorrect",
+			fieldConfigurationID: 1000,
+			wantHTTPMethod:       http.MethodHead,
+			context:              context.Background(),
+			wantHTTPCodeReturn:   http.StatusNoContent,
+			wantErr:              true,
+			expectedError:        "request failed. Please analyze the request body for more details. Status Code: 405",
+		},
+
+		{
+			name:                 "DeleteFieldConfigurationWhenTheContextIsNotProvided",
+			fieldConfigurationID: 1000,
+			wantHTTPMethod:       http.MethodDelete,
+			endpoint:             "/rest/api/3/fieldconfiguration/1000",
+			context:              nil,
+			wantHTTPCodeReturn:   http.StatusNoContent,
+			wantErr:              true,
+			expectedError:        "request creation failed: net/http: nil Context",
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+
+			//Init a new HTTP mock server
+			mockOptions := mockServerOptions{
+				Endpoint:           testCase.endpoint,
+				MockFilePath:       testCase.mockFile,
+				MethodAccepted:     testCase.wantHTTPMethod,
+				ResponseCodeWanted: testCase.wantHTTPCodeReturn,
+			}
+
+			mockServer, err := startMockServer(&mockOptions)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			defer mockServer.Close()
+
+			//Init the library instance
+			mockClient, err := startMockClient(mockServer.URL)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			service := &FieldConfigurationService{client: mockClient}
+			gotResponse, err := service.Delete(testCase.context, testCase.fieldConfigurationID)
+
+			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+
+				assert.EqualError(t, err, testCase.expectedError)
+
+				if gotResponse != nil {
+					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
+				}
+
+			} else {
+
+				assert.NoError(t, err)
+				assert.NotEqual(t, gotResponse, nil)
+
+				apiEndpoint, err := url.Parse(gotResponse.Endpoint)
+				if err != nil {
+					t.Fatal(err)
+				}
+
+				var endpointToAssert string
+
+				if apiEndpoint.Query().Encode() != "" {
+					endpointToAssert = fmt.Sprintf("%v?%v", apiEndpoint.Path, apiEndpoint.Query().Encode())
+				} else {
+					endpointToAssert = apiEndpoint.Path
+				}
+
+				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
+				assert.Equal(t, testCase.endpoint, endpointToAssert)
+
+				t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
+				assert.Equal(t, gotResponse.Code, testCase.wantHTTPCodeReturn)
+			}
+
+		})
+	}
 }

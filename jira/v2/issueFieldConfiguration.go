@@ -122,6 +122,32 @@ func (f *FieldConfigurationService) Update(ctx context.Context, fieldConfigurati
 	return
 }
 
+// Delete deletes a field configuration.
+// This operation can only delete configurations used in company-managed (classic) projects.
+// EXPERIMENTAL
+func (f *FieldConfigurationService) Delete(ctx context.Context, fieldConfigurationID int) (response *ResponseScheme, err error) {
+
+	if fieldConfigurationID == 0 {
+		return nil, models.ErrNoFieldConfigurationIDError
+	}
+
+	endpoint := fmt.Sprintf("rest/api/2/fieldconfiguration/%v", fieldConfigurationID)
+
+	request, err := f.client.newRequest(ctx, http.MethodDelete, endpoint, nil)
+	if err != nil {
+		return
+	}
+
+	request.Header.Set("Accept", "application/json")
+
+	response, err = f.client.call(request, nil)
+	if err != nil {
+		return
+	}
+
+	return
+}
+
 // Items Returns a paginated list of all fields for a configuration.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration#get-field-configuration-items
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-issue-field-configurations/#api-rest-api-2-fieldconfiguration-id-fields-get

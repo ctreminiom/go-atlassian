@@ -23,11 +23,16 @@ type FieldConfigurationItemPageScheme struct {
 	Values     []*FieldConfigurationItemScheme `json:"values,omitempty"`
 }
 
+type UpdateFieldConfigurationItemPayloadScheme struct {
+	FieldConfigurationItems []*FieldConfigurationItemScheme `json:"fieldConfigurationItems"`
+}
+
 type FieldConfigurationItemScheme struct {
 	ID          string `json:"id,omitempty"`
 	IsHidden    bool   `json:"isHidden,omitempty"`
 	IsRequired  bool   `json:"isRequired,omitempty"`
 	Description string `json:"description,omitempty"`
+	Renderer    string `json:"renderer,omitempty"`
 }
 
 type FieldConfigurationSchemePageScheme struct {

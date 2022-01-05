@@ -85,7 +85,8 @@ func (f *FieldConfigurationService) Create(ctx context.Context, name, descriptio
 // Update updates a field configuration. The name and the description provided in the request override the existing values.
 // This operation can only update configurations used in company-managed (classic) projects.
 // EXPERIMENTAL
-func (f *FieldConfigurationService) Update(ctx context.Context, fieldConfigurationID int, name, description string) (response *ResponseScheme, err error) {
+func (f *FieldConfigurationService) Update(ctx context.Context, fieldConfigurationID int, name, description string) (
+	response *ResponseScheme, err error) {
 
 	if fieldConfigurationID == 0 {
 		return nil, models.ErrNoFieldConfigurationIDError
@@ -168,6 +169,40 @@ func (f *FieldConfigurationService) Items(ctx context.Context, fieldConfiguratio
 	request.Header.Set("Accept", "application/json")
 
 	response, err = f.client.call(request, &result)
+	if err != nil {
+		return
+	}
+
+	return
+}
+
+// UpdateItems updates fields in a field configuration. The properties of the field configuration fields provided
+// override the existing values.
+// This operation can only update field configurations used in company-managed (classic) projects.
+// EXPERIMENTAL
+func (f *FieldConfigurationService) UpdateItems(ctx context.Context, fieldConfigurationID int, payload *models.UpdateFieldConfigurationItemPayloadScheme) (
+	response *ResponseScheme, err error) {
+
+	if fieldConfigurationID == 0 {
+		return nil, models.ErrNoFieldConfigurationIDError
+	}
+
+	payloadAsReader, err := transformStructToReader(payload)
+	if err != nil {
+		return nil, err
+	}
+
+	endpoint := fmt.Sprintf("rest/api/2/fieldconfiguration/%v/fields", fieldConfigurationID)
+
+	request, err := f.client.newRequest(ctx, http.MethodPut, endpoint, payloadAsReader)
+	if err != nil {
+		return
+	}
+
+	request.Header.Set("Accept", "application/json")
+	request.Header.Set("Content-Type", "application/json")
+
+	response, err = f.client.call(request, nil)
 	if err != nil {
 		return
 	}

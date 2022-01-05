@@ -83,4 +83,5 @@ var (
 	ErrNoWorkflowSchemeIDError        = errors.New("jira: no workflow scheme id set")
 	ErrNoScreenIDError                = errors.New("jira: no screen id set")
 	ErrNoScreenTabIDError             = errors.New("jira: no screen tab id set")
+	ErrNoFieldConfigurationNameError  = errors.New("jira: no field configuration name set")
 )

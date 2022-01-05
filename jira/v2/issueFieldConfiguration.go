@@ -45,6 +45,43 @@ func (f *FieldConfigurationService) Gets(ctx context.Context, ids []int, isDefau
 	return
 }
 
+// Create creates a field configuration. The field configuration is created with the same field properties as the
+// default configuration, with all the fields being optional.
+// This operation can only create configurations for use in company-managed (classic) projects.
+// EXPERIMENTAL
+func (f *FieldConfigurationService) Create(ctx context.Context, name, description string) (result *models.FieldConfigurationScheme,
+	response *ResponseScheme, err error) {
+
+	if name == "" {
+		return nil, nil, models.ErrNoFieldConfigurationNameError
+	}
+
+	payload := struct {
+		Name        string `json:"name"`
+		Description string `json:"description,omitempty"`
+	}{
+		Name:        name,
+		Description: description,
+	}
+	payloadAsReader, _ := transformStructToReader(&payload)
+	endpoint := "rest/api/2/fieldconfiguration"
+
+	request, err := f.client.newRequest(ctx, http.MethodPost, endpoint, payloadAsReader)
+	if err != nil {
+		return
+	}
+
+	request.Header.Set("Accept", "application/json")
+	request.Header.Set("Content-Type", "application/json")
+
+	response, err = f.client.call(request, &result)
+	if err != nil {
+		return
+	}
+
+	return
+}
+
 // Items Returns a paginated list of all fields for a configuration.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration#get-field-configuration-items
 // Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-issue-field-configurations/#api-rest-api-2-fieldconfiguration-id-fields-get

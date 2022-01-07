@@ -12,8 +12,7 @@ import (
 type FieldConfigurationItemService struct{ client *Client }
 
 // Gets Returns a paginated list of all fields for a configuration.
-// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration#get-field-configuration-items
-// Official Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-issue-field-configurations/#api-rest-api-2-fieldconfiguration-id-fields-get
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration/items#get-field-configuration-items
 func (f *FieldConfigurationItemService) Gets(ctx context.Context, fieldConfigurationID, startAt, maxResults int) (
 	result *models.FieldConfigurationItemPageScheme, response *ResponseScheme, err error) {
 
@@ -46,6 +45,7 @@ func (f *FieldConfigurationItemService) Gets(ctx context.Context, fieldConfigura
 // override the existing values.
 // This operation can only update field configurations used in company-managed (classic) projects.
 // EXPERIMENTAL
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration/items#update-field-configuration-items
 func (f *FieldConfigurationItemService) Update(ctx context.Context, fieldConfigurationID int, payload *models.UpdateFieldConfigurationItemPayloadScheme) (
 	response *ResponseScheme, err error) {
 

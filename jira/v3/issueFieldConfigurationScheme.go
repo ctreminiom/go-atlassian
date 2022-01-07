@@ -283,7 +283,7 @@ func (f *FieldConfigurationSchemeService) Unlink(ctx context.Context, schemeID i
 	payloadAsReader, _ := transformStructToReader(&payload)
 	endpoint := fmt.Sprintf("rest/api/3/fieldconfigurationscheme/%v/mapping/delete", schemeID)
 
-	request, err := f.client.newRequest(ctx, http.MethodPut, endpoint, payloadAsReader)
+	request, err := f.client.newRequest(ctx, http.MethodPost, endpoint, payloadAsReader)
 	if err != nil {
 		return
 	}

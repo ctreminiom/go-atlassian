@@ -1,4 +1,192 @@
 
+<a name="v1.4.2"></a>
+## [v1.4.2](https://github.com/ctreminiom/go-atlassian/compare/v1.3.1...v1.4.2)
+
+> 2022-01-07
+
+### :bug: Bug Fixes
+
+* Fixed the Field Config Scheme Unlink HTTP method
+* Fixed the Field Config Scheme Unlink HTTP method
+
+### :memo: Add or update documentation.
+
+* Updated the method documentation url's.
+
+### :sparkles: Features
+
+* Added the Field Configuration Scheme service
+* Mapped the Jira.Field.Configuration.Items.Update endpoint
+* Mapped the Jira.Field.Configuration.Delete endpoint
+* Mapped the Jira.Field.Configuration.Update endpoint
+* Mapped the Jira.Field.Configuration.Create endpoint
+* Added the Move screen tab field method
+
+### Pull Requests
+
+* Merge pull request [#95](https://github.com/ctreminiom/go-atlassian/issues/95) from ctreminiom/dev-1
+* Merge pull request [#93](https://github.com/ctreminiom/go-atlassian/issues/93) from ctreminiom/dependabot/go_modules/github.com/tidwall/gjson-1.12.1
+* Merge pull request [#94](https://github.com/ctreminiom/go-atlassian/issues/94) from ctreminiom/feature/field-screen-tab-move
+
+
+<a name="v1.3.1"></a>
+## [v1.3.1](https://github.com/ctreminiom/go-atlassian/compare/v1.4.0...v1.3.1)
+
+> 2021-11-28
+
+
+<a name="v1.4.0"></a>
+## [v1.4.0](https://github.com/ctreminiom/go-atlassian/compare/v1.4.1...v1.4.0)
+
+> 2021-11-28
+
+
+<a name="v1.4.1"></a>
+## [v1.4.1](https://github.com/ctreminiom/go-atlassian/compare/v2.0.0...v1.4.1)
+
+> 2021-11-28
+
+
+<a name="v2.0.0"></a>
+## [v2.0.0](https://github.com/ctreminiom/go-atlassian/compare/v1.3.0...v2.0.0)
+
+> 2021-11-28
+
+### :art: Improve structure / format of the code.
+
+* Moved the jira-worklog structs to the common model package
+* Moved the jira-watcher struts to the common model package
+* Moved the jira-vote struts to the common model package
+* Moved the jira-type-screen-schemes struts to the common model package
+* Moved the jira-types struts to the common model package
+* Moved the jira-search struts to the common model package
+* Moved the jira-resolutions struts to the common model package
+* Moved the jira-priorities struts to the common model package
+* Moved the jira-link-types struts to the common model package
+* Moved the jira-labels struts to the common model package
+* Moved the jira-field-context-options struts to the common model package
+* Moved the jira-field-configuration struts to the common model package
+* Moved the jira-fields struts to the common model package
+* Moved the jira-comments struts to the common model package
+* Moved the jira-attachments struts to the common model package
+* Moved the jira-issue struts to the common model package
+* Moved the models to /pkg
+* Moved the jira-group struts to the common model package
+* Moved the jira-filter struts to the common model package
+* Moved the jira-dashboard struts to the common model package
+* Moved the jira-dashboard struts to the common model package
+* Moved the jira-audit struts to the common model package
+* Moved the Application Role models
+* Separated the Jira modules by version
+
+### :bug: Bug Fixes
+
+* Fixed the jira_work_log.go v2 payload format
+* Fixed the issueLink.go v2 payload format
+* Fixed the issue comment field parsing on the jira v2/3
+* Fixed the jira.v2.Issue.Search.* methods
+* Fixed the linter problems
+
+### :memo: Add or update documentation.
+
+* Updated README.md
+* Added the docs.go-atlassian links on the Jira Cloud module
+* Added the docs.go-atlassian links on the Admin Cloud module
+* Added the docs.go-atlassian links on the Confluence module
+* Added the docs.go-atlassian links on the Agile module
+* Documented the WorkflowSchemeService under the jira/examples folder
+* Documented the WorkflowService under the jira/examples folder
+* Documented the Content Properties methods under the confluence/examples/contentProperties folder.
+* Documented the Content Properties methods under the confluence/examples/contentProperties folder.
+* Added more examples under the jira/examples/ directory
+* Updated the README.md
+* Updated the README.md
+
+### :package: Dependencies
+
+* Removed the go-querystring library
+* Updated go.mod
+* Moved the mock .json files to the common folder/
+* Updated go.mod
+
+### :recycle: Code Refactoring
+
+* Standardize the Jira v3
+* Standardize the Jira v2/v3
+* Refactor the model names by application.
+* Agile SprintService refactored
+* EpicService refactored
+* BoardService refactored
+
+### :sparkles: Features
+
+* Added the workflow scheme service.
+* Added the jira workflow service
+* Added the v2.Project.Version.Gets method
+* Added the v3.Project.Version.Gets method
+* Added the v2.Project.Gets() method
+* Added the jira version 2 implementation
+* Enabled to ability to delete an issue with a sub-tasks
+* Added the Ancestor field on the ContentScheme
+* Added the ability to get the issue create metadata
+* Added the ability to get the issue metadata
+* Added the ability to delete boards
+* Added the WorkflowSchemeService under the Jira module
+* Added the WorkflowService under the Jira module
+* Added the Content Property Confluence module under the contentService.
+* Added the ContentLabelService
+* Added the SchemesByProject method under the issueTypeScreenScheme.go sub-module, closes [#58](https://github.com/ctreminiom/go-atlassian/issues/58)
+
+### :white_check_mark: Ad/Update Test Cases
+
+* Added the Workflow.Create test cases
+* Added the Unit Test Cases under the WorkflowSchemeService with a 100% of code coverage.
+* Added the Unit Test Cases under the WorkflowService with a 100% of code coverage.
+* Added the Unit Test Cases under the contentProperties_test.go with a 100% of code coverage.
+
+### :zap: Performance Improvements
+
+* Added the agile.board.gets() method
+* Renamed the v3.Project.Version.Gets method
+
+### Construction_worker
+
+* Added the .codecov.yml
+
+### Pull Requests
+
+* Merge pull request [#91](https://github.com/ctreminiom/go-atlassian/issues/91) from ctreminiom/feature/documentation
+* Merge pull request [#90](https://github.com/ctreminiom/go-atlassian/issues/90) from ctreminiom/bug/issue-link-v2
+* Merge pull request [#89](https://github.com/ctreminiom/go-atlassian/issues/89) from ctreminiom/bug/issue-link-v2
+* Merge pull request [#88](https://github.com/ctreminiom/go-atlassian/issues/88) from ctreminiom/bug/jira-dashboard
+* Merge pull request [#87](https://github.com/ctreminiom/go-atlassian/issues/87) from ctreminiom/dependabot/go_modules/github.com/tidwall/gjson-1.12.0
+* Merge pull request [#86](https://github.com/ctreminiom/go-atlassian/issues/86) from ctreminiom/feature/struct-refactor
+* Merge pull request [#85](https://github.com/ctreminiom/go-atlassian/issues/85) from ctreminiom/feature/custom-fields-get
+* Merge pull request [#84](https://github.com/ctreminiom/go-atlassian/issues/84) from ctreminiom/feature/admin-refactor
+* Merge pull request [#83](https://github.com/ctreminiom/go-atlassian/issues/83) from ctreminiom/feature/confluence-models
+* Merge pull request [#82](https://github.com/ctreminiom/go-atlassian/issues/82) from ctreminiom/feature/sm-models-migration
+* Merge pull request [#81](https://github.com/ctreminiom/go-atlassian/issues/81) from ctreminiom/feature/jira-fields-mapping
+* Merge pull request [#80](https://github.com/ctreminiom/go-atlassian/issues/80) from ctreminiom/feature/agile-epics
+* Merge pull request [#79](https://github.com/ctreminiom/go-atlassian/issues/79) from ctreminiom/feature/workflow-scheme
+* Merge pull request [#78](https://github.com/ctreminiom/go-atlassian/issues/78) from ctreminiom/feature/jira-workflow
+* Merge pull request [#77](https://github.com/ctreminiom/go-atlassian/issues/77) from ctreminiom/feature/agile-refactor
+* Merge pull request [#76](https://github.com/ctreminiom/go-atlassian/issues/76) from ctreminiom/feature/search-issues-v2
+* Merge pull request [#75](https://github.com/ctreminiom/go-atlassian/issues/75) from ctreminiom/feature/get-all-boards
+* Merge pull request [#74](https://github.com/ctreminiom/go-atlassian/issues/74) from ctreminiom/feature/project-versions
+* Merge pull request [#73](https://github.com/ctreminiom/go-atlassian/issues/73) from ctreminiom/feature/v2-get-all-projects
+* Merge pull request [#71](https://github.com/ctreminiom/go-atlassian/issues/71) from ctreminiom/dependabot/go_modules/github.com/tidwall/gjson-1.11.0
+* Merge pull request [#72](https://github.com/ctreminiom/go-atlassian/issues/72) from ctreminiom/feature/version-segmentation
+* Merge pull request [#70](https://github.com/ctreminiom/go-atlassian/issues/70) from ctreminiom/feature/delete-with-sub-tasks
+* Merge pull request [#67](https://github.com/ctreminiom/go-atlassian/issues/67) from ctreminiom/dependabot/go_modules/github.com/tidwall/gjson-1.10.2
+* Merge pull request [#66](https://github.com/ctreminiom/go-atlassian/issues/66) from ctreminiom/feature/62
+* Merge pull request [#65](https://github.com/ctreminiom/go-atlassian/issues/65) from ctreminiom/feature/64
+* Merge pull request [#63](https://github.com/ctreminiom/go-atlassian/issues/63) from ctreminiom/feature/18
+* Merge pull request [#61](https://github.com/ctreminiom/go-atlassian/issues/61) from ctreminiom/feature/board-delete
+* Merge pull request [#60](https://github.com/ctreminiom/go-atlassian/issues/60) from ctreminiom/dev
+* Merge pull request [#59](https://github.com/ctreminiom/go-atlassian/issues/59) from ctreminiom/dev
+* Merge pull request [#57](https://github.com/ctreminiom/go-atlassian/issues/57) from ctreminiom/dependabot/go_modules/github.com/imdario/mergo-0.3.12
+
+
 <a name="v1.3.0"></a>
 ## [v1.3.0](https://github.com/ctreminiom/go-atlassian/compare/v1.2.0...v1.3.0)
 

@@ -18,14 +18,15 @@ type ContentPageScheme struct {
 }
 
 type LinkScheme struct {
-	Base     string `json:"base,omitempty"`
-	Context  string `json:"context,omitempty"`
-	Self     string `json:"self,omitempty"`
-	Tinyui   string `json:"tinyui,omitempty"`
-	Editui   string `json:"editui,omitempty"`
-	Webui    string `json:"webui,omitempty"`
-	Download string `json:"download,omitempty"`
-	Next     string `json:"next"`
+	Base       string `json:"base,omitempty"`
+	Context    string `json:"context,omitempty"`
+	Self       string `json:"self,omitempty"`
+	Tinyui     string `json:"tinyui,omitempty"`
+	Editui     string `json:"editui,omitempty"`
+	Webui      string `json:"webui,omitempty"`
+	Download   string `json:"download,omitempty"`
+	Next       string `json:"next"`
+	Collection string `json:"collection"`
 }
 
 type ContentScheme struct {

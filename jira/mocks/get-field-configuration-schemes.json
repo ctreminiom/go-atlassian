@@ -1,0 +1,23 @@
+{
+  "maxResults": 10,
+  "startAt": 0,
+  "total": 3,
+  "isLast": true,
+  "values": [
+    {
+      "id": "10000",
+      "name": "Field Configuration Scheme for Bugs",
+      "description": "This field configuration scheme is for bugs only."
+    },
+    {
+      "id": "10001",
+      "name": "Field Configuration Scheme for software related projects",
+      "description": "We can use this one for software projects."
+    },
+    {
+      "id": "10002",
+      "name": "Field Configuration Scheme for Epics",
+      "description": "Use this one for Epic issue type."
+    }
+  ]
+}

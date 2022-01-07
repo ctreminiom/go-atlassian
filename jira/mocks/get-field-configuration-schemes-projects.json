@@ -1,0 +1,26 @@
+{
+  "maxResults": 50,
+  "startAt": 0,
+  "total": 5,
+  "isLast": true,
+  "values": [
+    {
+      "projectIds": [
+        "10",
+        "11"
+      ]
+    },
+    {
+      "fieldConfigurationScheme": {
+        "id": "10002",
+        "name": "Field Configuration Scheme for software related projects",
+        "description": "We can use this one for software projects."
+      },
+      "projectIds": [
+        "12",
+        "13",
+        "14"
+      ]
+    }
+  ]
+}

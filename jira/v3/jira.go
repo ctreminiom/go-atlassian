@@ -94,6 +94,7 @@ func New(httpClient *http.Client, site string) (client *Client, err error) {
 			Configuration: &FieldConfigurationService{
 				client: client,
 				Item:   &FieldConfigurationItemService{client: client},
+				Scheme: &FieldConfigurationSchemeService{client: client},
 			},
 
 			Context: &FieldContextService{

@@ -65,7 +65,7 @@ type CreateSpaceDescriptionPlainScheme struct {
 }
 
 type SpacePermissionScheme struct {
-	Subject          *SubjectPermissionScheme   `json:"subject,omitempty"`
+	Subject          *SubjectPermissionScheme   `json:"subjects,omitempty"`
 	Operation        *OperationPermissionScheme `json:"operation,omitempty"`
 	AnonymousAccess  bool                       `json:"anonymousAccess,omitempty"`
 	UnlicensedAccess bool                       `json:"unlicensedAccess,omitempty"`

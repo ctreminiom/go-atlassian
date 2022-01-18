@@ -51,6 +51,12 @@ func New(httpClient *http.Client, site string) (client *Client, err error) {
 		Permission:         &ContentPermissionService{client: client},
 		Label:              &ContentLabelService{client: client},
 		Property:           &ContentPropertyService{client: client},
+		Restriction: &ContentRestrictionService{
+			client: client,
+			Operation: &ContentRestrictionOperationService{
+				client: client,
+				Group:  &ContentRestrictionOperationGroupService{client: client},
+			}},
 	}
 
 	client.Space = &SpaceService{client: client}

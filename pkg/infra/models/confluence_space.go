@@ -82,8 +82,8 @@ type SubjectPermissionScheme struct {
 }
 
 type UserPermissionScheme struct {
-	Results []*UserScheme `json:"results,omitempty"`
-	Size    int           `json:"size,omitempty"`
+	Results []*ContentUserScheme `json:"results,omitempty"`
+	Size    int                  `json:"size,omitempty"`
 }
 
 type GroupPermissionScheme struct {

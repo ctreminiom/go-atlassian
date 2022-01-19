@@ -3,10 +3,12 @@ package models
 import "time"
 
 type GetContentOptionsScheme struct {
-	ContextType, SpaceKey   string
-	Title, Trigger, OrderBy string
-	Status, Expand          []string
-	PostingDay              time.Time
+	ContextType, SpaceKey string
+	Title                 string
+	Trigger               string
+	OrderBy               string
+	Status, Expand        []string
+	PostingDay            time.Time
 }
 
 type ContentPageScheme struct {

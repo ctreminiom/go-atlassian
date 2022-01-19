@@ -18,6 +18,7 @@ type ContentService struct {
 	Permission         *ContentPermissionService
 	Label              *ContentLabelService
 	Property           *ContentPropertyService
+	Restriction        *ContentRestrictionService
 }
 
 // Gets returns all content in a Confluence instance.

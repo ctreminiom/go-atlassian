@@ -1,0 +1,161 @@
+{
+  "results": [
+    {
+      "operation": "administer",
+      "restrictions": {
+        "user": {
+          "results": [
+            {
+              "type": "known"
+            }
+          ],
+          "start": 2154,
+          "limit": 2154,
+          "size": 2154,
+          "_links": {}
+        },
+        "group": {
+          "results": [
+            {
+              "type": "group",
+              "name": "<string>"
+            }
+          ],
+          "start": 2154,
+          "limit": 2154,
+          "size": 2154
+        },
+        "_expandable": {
+          "user": "<string>",
+          "group": "<string>"
+        }
+      },
+      "content": {
+        "id": "<string>",
+        "type": "<string>",
+        "status": "<string>",
+        "title": "<string>",
+        "space": {
+          "key": "<string>",
+          "name": "<string>",
+          "type": "<string>",
+          "status": "<string>",
+          "_expandable": {},
+          "_links": {}
+        },
+        "history": {
+          "latest": true
+        },
+        "version": {
+          "when": "<string>",
+          "number": 57,
+          "minorEdit": true
+        },
+        "ancestors": [],
+        "operations": [
+          {
+            "operation": "administer",
+            "targetType": "<string>"
+          }
+        ],
+        "children": {},
+        "childTypes": {},
+        "descendants": {},
+        "container": {},
+        "body": {
+          "view": {
+            "value": "<string>",
+            "representation": "view"
+          },
+          "export_view": {
+            "value": "<string>",
+            "representation": "view"
+          },
+          "styled_view": {
+            "value": "<string>",
+            "representation": "view"
+          },
+          "storage": {
+            "value": "<string>",
+            "representation": "view"
+          },
+          "wiki": {
+            "value": "<string>",
+            "representation": "view"
+          },
+          "editor": {
+            "value": "<string>",
+            "representation": "view"
+          },
+          "editor2": {
+            "value": "<string>",
+            "representation": "view"
+          },
+          "anonymous_export_view": {
+            "value": "<string>",
+            "representation": "view"
+          },
+          "atlas_doc_format": {
+            "value": "<string>",
+            "representation": "view"
+          },
+          "dynamic": {
+            "value": "<string>",
+            "representation": "view"
+          },
+          "_expandable": {
+            "editor": "<string>",
+            "view": "<string>",
+            "export_view": "<string>",
+            "styled_view": "<string>",
+            "storage": "<string>",
+            "editor2": "<string>",
+            "anonymous_export_view": "<string>",
+            "atlas_doc_format": "<string>",
+            "wiki": "<string>",
+            "dynamic": "<string>",
+            "raw": "<string>"
+          }
+        },
+        "restrictions": {
+          "_expandable": {
+            "read": "<string>",
+            "update": "<string>"
+          },
+          "_links": {}
+        },
+        "metadata": {},
+        "macroRenderedOutput": {},
+        "extensions": {},
+        "_expandable": {
+          "childTypes": "<string>",
+          "container": "<string>",
+          "metadata": "<string>",
+          "operations": "<string>",
+          "children": "<string>",
+          "restrictions": "<string>",
+          "history": "<string>",
+          "ancestors": "<string>",
+          "body": "<string>",
+          "version": "<string>",
+          "descendants": "<string>",
+          "space": "<string>",
+          "extensions": "<string>",
+          "schedulePublishDate": "<string>",
+          "macroRenderedOutput": "<string>"
+        },
+        "_links": {}
+      },
+      "_expandable": {
+        "restrictions": "<string>",
+        "content": "<string>"
+      },
+      "_links": {}
+    }
+  ],
+  "start": 2154,
+  "limit": 2154,
+  "size": 2154,
+  "restrictionsHash": "<string>",
+  "_links": {}
+}

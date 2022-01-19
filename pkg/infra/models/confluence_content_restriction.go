@@ -25,6 +25,10 @@ type ContentRestrictionDetailScheme struct {
 	Group *GroupPermissionScheme `json:"group,omitempty"`
 }
 
+type ContentRestrictionUpdatePayloadScheme struct {
+	Results []*ContentRestrictionUpdateScheme `json:"results,omitempty"`
+}
+
 type ContentRestrictionUpdateScheme struct {
 	Operation    string                                     `json:"operation,omitempty"`
 	Restrictions *ContentRestrictionRestrictionUpdateScheme `json:"restrictions,omitempty"`

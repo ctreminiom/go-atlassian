@@ -49,7 +49,7 @@ func (c *ContentRestrictionService) Gets(ctx context.Context, contentID string, 
 }
 
 // Add adds restrictions to a piece of content. Note, this does not change any existing restrictions on the content.
-func (c *ContentRestrictionService) Add(ctx context.Context, contentID string, payload *models.ContentRestrictionUpdateScheme,
+func (c *ContentRestrictionService) Add(ctx context.Context, contentID string, payload *models.ContentRestrictionUpdatePayloadScheme,
 	expand []string) (result *models.ContentRestrictionPageScheme, response *ResponseScheme, err error) {
 
 	if len(contentID) == 0 {

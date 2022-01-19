@@ -173,7 +173,7 @@ func TestContentRestrictionService_Add(t *testing.T) {
 	testCases := []struct {
 		name               string
 		contentID          string
-		payload            *models.ContentRestrictionUpdateScheme
+		payload            *models.ContentRestrictionUpdatePayloadScheme
 		expand             []string
 		mockFile           string
 		wantHTTPMethod     string
@@ -186,13 +186,17 @@ func TestContentRestrictionService_Add(t *testing.T) {
 		{
 			name:      "when the parameters are correct",
 			contentID: "233838383",
-			payload: &models.ContentRestrictionUpdateScheme{
-				Operation: "administer",
-				Restrictions: &models.ContentRestrictionRestrictionUpdateScheme{
-					Group: []*models.SpaceGroupScheme{
-						{
-							Type: "group",
-							Name: "confluence-users",
+			payload: &models.ContentRestrictionUpdatePayloadScheme{
+				Results: []*models.ContentRestrictionUpdateScheme{
+					{
+						Operation: "administer",
+						Restrictions: &models.ContentRestrictionRestrictionUpdateScheme{
+							Group: []*models.SpaceGroupScheme{
+								{
+									Type: "group",
+									Name: "confluence-users",
+								},
+							},
 						},
 					},
 				},
@@ -222,13 +226,17 @@ func TestContentRestrictionService_Add(t *testing.T) {
 		{
 			name:      "when the content id is not provided",
 			contentID: "",
-			payload: &models.ContentRestrictionUpdateScheme{
-				Operation: "administer",
-				Restrictions: &models.ContentRestrictionRestrictionUpdateScheme{
-					Group: []*models.SpaceGroupScheme{
-						{
-							Type: "group",
-							Name: "confluence-users",
+			payload: &models.ContentRestrictionUpdatePayloadScheme{
+				Results: []*models.ContentRestrictionUpdateScheme{
+					{
+						Operation: "administer",
+						Restrictions: &models.ContentRestrictionRestrictionUpdateScheme{
+							Group: []*models.SpaceGroupScheme{
+								{
+									Type: "group",
+									Name: "confluence-users",
+								},
+							},
 						},
 					},
 				},
@@ -246,13 +254,17 @@ func TestContentRestrictionService_Add(t *testing.T) {
 		{
 			name:      "when the context is not provided",
 			contentID: "233838383",
-			payload: &models.ContentRestrictionUpdateScheme{
-				Operation: "administer",
-				Restrictions: &models.ContentRestrictionRestrictionUpdateScheme{
-					Group: []*models.SpaceGroupScheme{
-						{
-							Type: "group",
-							Name: "confluence-users",
+			payload: &models.ContentRestrictionUpdatePayloadScheme{
+				Results: []*models.ContentRestrictionUpdateScheme{
+					{
+						Operation: "administer",
+						Restrictions: &models.ContentRestrictionRestrictionUpdateScheme{
+							Group: []*models.SpaceGroupScheme{
+								{
+									Type: "group",
+									Name: "confluence-users",
+								},
+							},
 						},
 					},
 				},
@@ -270,13 +282,17 @@ func TestContentRestrictionService_Add(t *testing.T) {
 		{
 			name:      "when the response status is not correct",
 			contentID: "233838383",
-			payload: &models.ContentRestrictionUpdateScheme{
-				Operation: "administer",
-				Restrictions: &models.ContentRestrictionRestrictionUpdateScheme{
-					Group: []*models.SpaceGroupScheme{
-						{
-							Type: "group",
-							Name: "confluence-users",
+			payload: &models.ContentRestrictionUpdatePayloadScheme{
+				Results: []*models.ContentRestrictionUpdateScheme{
+					{
+						Operation: "administer",
+						Restrictions: &models.ContentRestrictionRestrictionUpdateScheme{
+							Group: []*models.SpaceGroupScheme{
+								{
+									Type: "group",
+									Name: "confluence-users",
+								},
+							},
 						},
 					},
 				},
@@ -294,13 +310,17 @@ func TestContentRestrictionService_Add(t *testing.T) {
 		{
 			name:      "when the response body is not empty",
 			contentID: "233838383",
-			payload: &models.ContentRestrictionUpdateScheme{
-				Operation: "administer",
-				Restrictions: &models.ContentRestrictionRestrictionUpdateScheme{
-					Group: []*models.SpaceGroupScheme{
-						{
-							Type: "group",
-							Name: "confluence-users",
+			payload: &models.ContentRestrictionUpdatePayloadScheme{
+				Results: []*models.ContentRestrictionUpdateScheme{
+					{
+						Operation: "administer",
+						Restrictions: &models.ContentRestrictionRestrictionUpdateScheme{
+							Group: []*models.SpaceGroupScheme{
+								{
+									Type: "group",
+									Name: "confluence-users",
+								},
+							},
 						},
 					},
 				},

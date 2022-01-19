@@ -13,6 +13,7 @@ import (
 type ContentRestrictionOperationService struct {
 	client *Client
 	Group  *ContentRestrictionOperationGroupService
+	User   *ContentRestrictionOperationUserService
 }
 
 // Gets returns restrictions on a piece of content by operation.

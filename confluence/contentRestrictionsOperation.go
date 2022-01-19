@@ -18,6 +18,7 @@ type ContentRestrictionOperationService struct {
 // Gets returns restrictions on a piece of content by operation.
 // This method is similar to Get restrictions except that the operations are properties
 // of the return object, rather than items in a results array.
+// Docs: https://docs.go-atlassian.io/confluence-cloud/content/restrictions/operations#get-restrictions-by-operation
 func (c *ContentRestrictionOperationService) Gets(ctx context.Context, contentID string, expand []string) (
 	result *models.ContentRestrictionByOperationScheme, response *ResponseScheme, err error) {
 
@@ -53,6 +54,7 @@ func (c *ContentRestrictionOperationService) Gets(ctx context.Context, contentID
 }
 
 // Get returns the restrictions on a piece of content for a given operation (read or update).
+// Docs: https://docs.go-atlassian.io/confluence-cloud/content/restrictions/operations#get-restrictions-for-operation
 func (c *ContentRestrictionOperationService) Get(ctx context.Context, contentID, operationKey string, expand []string,
 	startAt, maxResults int) (result *models.ContentRestrictionScheme, response *ResponseScheme, err error) {
 

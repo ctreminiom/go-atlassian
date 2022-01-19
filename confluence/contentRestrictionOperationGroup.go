@@ -14,6 +14,7 @@ type ContentRestrictionOperationGroupService struct{ client *Client }
 // Get returns whether the specified content restriction applies to a group
 // Note that a response of true does not guarantee that the group can view the page,
 // as it does not account for account-inherited restrictions, space permissions, or even product access.
+// Docs: https://docs.go-atlassian.io/confluence-cloud/content/restrictions/operations/group#get-content-restriction-status-for-group
 func (c *ContentRestrictionOperationGroupService) Get(ctx context.Context, contentID, operationKey, groupNameOrID string) (response *ResponseScheme, err error) {
 
 	if len(contentID) == 0 {
@@ -55,6 +56,7 @@ func (c *ContentRestrictionOperationGroupService) Get(ctx context.Context, conte
 }
 
 // Add adds a group to a content restriction. That is, grant read or update permission to the group for a piece of content.
+// Docs: https://docs.go-atlassian.io/confluence-cloud/content/restrictions/operations/group#add-group-to-content-restriction
 func (c *ContentRestrictionOperationGroupService) Add(ctx context.Context, contentID, operationKey, groupNameOrID string) (response *ResponseScheme, err error) {
 
 	if len(contentID) == 0 {
@@ -96,6 +98,7 @@ func (c *ContentRestrictionOperationGroupService) Add(ctx context.Context, conte
 }
 
 // Remove removes a group from a content restriction. That is, remove read or update permission for the group for a piece of content.
+// Docs: https://docs.go-atlassian.io/confluence-cloud/content/restrictions/operations/group#remove-group-from-content-restriction
 func (c *ContentRestrictionOperationGroupService) Remove(ctx context.Context, contentID, operationKey, groupNameOrID string) (response *ResponseScheme, err error) {
 
 	if len(contentID) == 0 {

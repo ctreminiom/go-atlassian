@@ -16,6 +16,7 @@ type ContentRestrictionService struct {
 }
 
 // Gets returns the restrictions on a piece of content.
+// Docs: https://docs.go-atlassian.io/confluence-cloud/content/restrictions#get-restrictions
 func (c *ContentRestrictionService) Gets(ctx context.Context, contentID string, expand []string, startAt, maxResults int) (
 	result *models.ContentRestrictionPageScheme, response *ResponseScheme, err error) {
 
@@ -49,6 +50,7 @@ func (c *ContentRestrictionService) Gets(ctx context.Context, contentID string, 
 }
 
 // Add adds restrictions to a piece of content. Note, this does not change any existing restrictions on the content.
+// Docs: https://docs.go-atlassian.io/confluence-cloud/content/restrictions#add-restrictions
 func (c *ContentRestrictionService) Add(ctx context.Context, contentID string, payload *models.ContentRestrictionUpdatePayloadScheme,
 	expand []string) (result *models.ContentRestrictionPageScheme, response *ResponseScheme, err error) {
 
@@ -90,6 +92,7 @@ func (c *ContentRestrictionService) Add(ctx context.Context, contentID string, p
 }
 
 // Delete removes all restrictions (read and update) on a piece of content.
+// Docs: https://docs.go-atlassian.io/confluence-cloud/content/restrictions#delete-restrictions
 func (c *ContentRestrictionService) Delete(ctx context.Context, contentID string, expand []string) (
 	result *models.ContentRestrictionPageScheme, response *ResponseScheme, err error) {
 
@@ -125,6 +128,7 @@ func (c *ContentRestrictionService) Delete(ctx context.Context, contentID string
 }
 
 // Update updates restrictions for a piece of content. This removes the existing restrictions and replaces them with the restrictions in the request.
+// Docs: https://docs.go-atlassian.io/confluence-cloud/content/restrictions#update-restrictions
 func (c *ContentRestrictionService) Update(ctx context.Context, contentID string, payload *models.ContentRestrictionUpdatePayloadScheme,
 	expand []string) (result *models.ContentRestrictionPageScheme, response *ResponseScheme, err error) {
 

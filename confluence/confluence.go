@@ -134,6 +134,8 @@ func transformTheHTTPResponse(response *http.Response, structure interface{}) (r
 			}
 
 			responseTransformed.API = &apiError
+			responseTransformed.Bytes.Write(responseAsBytes)
+
 			return responseTransformed, fmt.Errorf(requestFailedError, response.StatusCode)
 		}
 		return responseTransformed, fmt.Errorf(requestFailedError, response.StatusCode)

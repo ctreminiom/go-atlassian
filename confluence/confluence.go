@@ -56,6 +56,7 @@ func New(httpClient *http.Client, site string) (client *Client, err error) {
 			Operation: &ContentRestrictionOperationService{
 				client: client,
 				Group:  &ContentRestrictionOperationGroupService{client: client},
+				User:   &ContentRestrictionOperationUserService{client: client},
 			}},
 	}
 

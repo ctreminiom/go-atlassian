@@ -125,7 +125,7 @@ func (c *ContentRestrictionService) Delete(ctx context.Context, contentID string
 }
 
 // Update updates restrictions for a piece of content. This removes the existing restrictions and replaces them with the restrictions in the request.
-func (c *ContentRestrictionService) Update(ctx context.Context, contentID string, payload *models.ContentRestrictionUpdateScheme,
+func (c *ContentRestrictionService) Update(ctx context.Context, contentID string, payload *models.ContentRestrictionUpdatePayloadScheme,
 	expand []string) (result *models.ContentRestrictionPageScheme, response *ResponseScheme, err error) {
 
 	if len(contentID) == 0 {

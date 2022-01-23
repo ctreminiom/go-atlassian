@@ -21,6 +21,7 @@ type Client struct {
 	Auth    *AuthenticationService
 	Content *ContentService
 	Space   *SpaceService
+	Label   *LabelService
 }
 
 func New(httpClient *http.Client, site string) (client *Client, err error) {
@@ -58,9 +59,11 @@ func New(httpClient *http.Client, site string) (client *Client, err error) {
 				Group:  &ContentRestrictionOperationGroupService{client: client},
 				User:   &ContentRestrictionOperationUserService{client: client},
 			}},
+		Version: &ContentVersionService{client: client},
 	}
 
 	client.Space = &SpaceService{client: client}
+	client.Label = &LabelService{client: client}
 	return
 }
 

@@ -19,6 +19,7 @@ type ContentService struct {
 	Label              *ContentLabelService
 	Property           *ContentPropertyService
 	Restriction        *ContentRestrictionService
+	Version            *ContentVersionService
 }
 
 // Gets returns all content in a Confluence instance.

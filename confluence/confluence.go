@@ -58,6 +58,7 @@ func New(httpClient *http.Client, site string) (client *Client, err error) {
 				Group:  &ContentRestrictionOperationGroupService{client: client},
 				User:   &ContentRestrictionOperationUserService{client: client},
 			}},
+		Version: &ContentVersionService{client: client},
 	}
 
 	client.Space = &SpaceService{client: client}

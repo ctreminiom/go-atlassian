@@ -12,6 +12,7 @@ import (
 type LabelService struct{ client *Client }
 
 // Get returns label information and a list of contents associated with the label.
+// Docs: https://docs.go-atlassian.io/confluence-cloud/label#get-label-information
 func (l *LabelService) Get(ctx context.Context, labelName, labelType string, start, limit int) (result *models.LabelDetailsScheme,
 	response *ResponseScheme, err error) {
 

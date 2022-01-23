@@ -13,6 +13,7 @@ import (
 type ContentVersionService struct{ client *Client }
 
 // Gets returns the versions for a piece of content in descending order.
+// Docs: https://docs.go-atlassian.io/confluence-cloud/content/versions#get-content-versions
 func (c *ContentVersionService) Gets(ctx context.Context, contentID string, expand []string, start, limit int) (
 	result *models.ContentVersionPageScheme, response *ResponseScheme, err error) {
 
@@ -46,6 +47,7 @@ func (c *ContentVersionService) Gets(ctx context.Context, contentID string, expa
 }
 
 // Get returns a version for a piece of content.
+// Docs: https://docs.go-atlassian.io/confluence-cloud/content/versions#get-content-version
 func (c *ContentVersionService) Get(ctx context.Context, contentID string, versionNumber int, expand []string) (
 	result *models.ContentVersionScheme, response *ResponseScheme, err error) {
 
@@ -79,6 +81,7 @@ func (c *ContentVersionService) Get(ctx context.Context, contentID string, versi
 
 // Restore restores a historical version to be the latest version.
 // That is, a new version is created with the content of the historical version.
+// Docs: https://docs.go-atlassian.io/confluence-cloud/content/versions#restore-content-version
 func (c *ContentVersionService) Restore(ctx context.Context, contentID string, payload *models.ContentRestorePayloadScheme,
 	expand []string) (result *models.ContentVersionScheme, response *ResponseScheme, err error) {
 
@@ -122,6 +125,7 @@ func (c *ContentVersionService) Restore(ctx context.Context, contentID string, p
 // Delete deletes a historical version.
 // This does not delete the changes made to the content in that version, rather the changes for the deleted version
 // are rolled up into the next version. Note, you cannot delete the current version.
+// Docs: https://docs.go-atlassian.io/confluence-cloud/content/versions#delete-content-version
 func (c *ContentVersionService) Delete(ctx context.Context, contentID string, versionNumber int) (response *ResponseScheme, err error) {
 
 	if len(contentID) == 0 {

@@ -44,9 +44,7 @@ Then import the package into your project as you normally would. You can import 
 
 Now you're ready to Go.
 
-## Usage
-
-### Creating A Client
+### 🧳 Creating A Client
 
 Before using the **go-atlassian** package, you need to have an Atlassian API key. If you do
 not have a key yet, you can sign up [here](https://support.atlassian.com/atlassian-account/docs/manage-api-tokens-for-your-atlassian-account/).
@@ -89,7 +87,7 @@ if err != nil {
 instance.Auth.SetBasicAuth("YOUR_CLIENT_MAIL", "YOUR_APP_ACCESS_TOKEN")
 ```
 
-### Services
+### 🗺️ Services
 
 The client contains a distinct service for working with each of the Atlassian API's
 endpoints. Each service has a set of service functions that make specific API
@@ -98,7 +96,7 @@ calls to their respective endpoint.
 To start communicating with the **go-atlassian**, choose a service and call its service
 function. Take the Jira service for example.
 
-To get the issue with the transitions, use the Issue service function.
+To get the issue with the transitions, use the **Issue** service function.
 ```go  
 ctx := context.Background()
 issueKey := "KP-2"
@@ -116,7 +114,7 @@ for _, transition := range issue.Transitions {
 }
 ```
 
-To search issue using a JQL query, use the Issue.Search service function.
+To search issues using a JQL query, use the **Issue.Search** service function.
 ```go  
 var (
 	jql    = "order by created DESC"
@@ -137,7 +135,7 @@ The rest of the service functions work much the same way; they are concise and
 behave as you would expect. The [documentation](https://docs.go-atlassian.io/)
 contains several examples on how to use each service function.
 
-## Contributions
+## ✍️ Contributions
 
 If you would like to contribute to this project, please adhere to the following
 guidelines.
@@ -164,11 +162,11 @@ This project is [MIT](https://opensource.org/licenses/MIT) licensed.
 
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fctreminiom%2Fgo-atlassian.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fctreminiom%2Fgo-atlassian?ref=badge_large)
 
-## Special Thanks
+## 🤝 Special Thanks
 In addition to all the contributors we would like to thanks to these companies:
 -   [Atlassian](https://www.atlassian.com/)  for providing us Atlassian Admin/Jira/Confluence Standard licenses.
 -   [JetBrains](https://www.jetbrains.com/)  for providing us with free licenses of  [GoLand](https://www.jetbrains.com/pycharm/)
 -   [GitBook](https://www.gitbook.com/)  for providing us non-profit / open-source plan so hence I would like to express my thanks here.
 
-<img src="./static/jetbrains-logo.svg">
-<img src="./static/gitbook-logo.svg">
+<img align="right" src="./static/jetbrains-logo.svg">
+<img align="left" src="./static/gitbook-logo.svg">

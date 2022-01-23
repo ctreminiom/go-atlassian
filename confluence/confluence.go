@@ -21,6 +21,7 @@ type Client struct {
 	Auth    *AuthenticationService
 	Content *ContentService
 	Space   *SpaceService
+	Label   *LabelService
 }
 
 func New(httpClient *http.Client, site string) (client *Client, err error) {
@@ -62,6 +63,7 @@ func New(httpClient *http.Client, site string) (client *Client, err error) {
 	}
 
 	client.Space = &SpaceService{client: client}
+	client.Label = &LabelService{client: client}
 	return
 }
 

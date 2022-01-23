@@ -37,6 +37,7 @@ var (
 	ErrNoSpaceKeyError              = errors.New("confluence: no space key set")
 	ErrNoContentRestrictionKeyError = errors.New("confluence: no content restriction operation key set")
 	ErrNoConfluenceGroupError       = errors.New("confluence: no group id or name set")
+	ErrNoLabelNameError             = errors.New("confluence: no label name set")
 
 	ErrNoBoardIDError  = errors.New("agile: no board id set")
 	ErrNoFilterIDError = errors.New("agile: no filter id set")

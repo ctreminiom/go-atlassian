@@ -147,6 +147,7 @@ func New(httpClient *http.Client, site string) (client *Client, err error) {
 
 		Type:    &ProjectTypeService{client: client},
 		Version: &ProjectVersionService{client: client},
+		Feature: &ProjectFeatureService{client: client},
 	}
 
 	client.User = &UserService{

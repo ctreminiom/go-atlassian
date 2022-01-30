@@ -19,6 +19,7 @@ type ProjectService struct {
 	Role       *ProjectRoleService
 	Type       *ProjectTypeService
 	Version    *ProjectVersionService
+	Feature    *ProjectFeatureService
 }
 
 // Create creates a project based on a project type template, as shown in the following table:

@@ -139,7 +139,7 @@ func (c *ContentService) Search(ctx context.Context, cql, cqlContext string, exp
 		query.Add("expand", strings.Join(expand, ","))
 	}
 
-	var endpoint = fmt.Sprintf("/wiki/rest/api/search?%v", query.Encode())
+	var endpoint = fmt.Sprintf("/wiki/rest/api/content/search?%v", query.Encode())
 
 	request, err := c.client.newRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {

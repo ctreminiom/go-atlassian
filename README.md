@@ -11,6 +11,7 @@
     <a href="https://github.com/ctreminiom/go-atlassian/actions?query=workflow%3ATesting"><img src="https://img.shields.io/github/workflow/status/ctreminiom/go-atlassian/Testing?label=%F0%9F%A7%AA%20tests&style=flat&color=75C46B"></a>
     <a href="https://docs.go-atlassian.io/"><img src="https://img.shields.io/badge/%F0%9F%92%A1%20go-documentation-00ACD7.svg?style=flat"></a>
     <a href="https://bestpractices.coreinfrastructure.org/projects/4861"><img src="https://bestpractices.coreinfrastructure.org/projects/4861/badge"></a> 
+    <a href="https://github.com/avelino/awesome-go#third-party-apis"><img src="https://awesome.re/mentioned-badge-flat.svg"></a> 
 </p>
 
 Communicate with the [Atlassian API's](https://developer.atlassian.com/cloud/) quickly and easily

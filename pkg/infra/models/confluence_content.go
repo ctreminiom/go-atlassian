@@ -46,6 +46,7 @@ type ContentScheme struct {
 	Version    *ContentVersionScheme   `json:"version,omitempty"`
 	Extensions *ContentExtensionScheme `json:"extensions,omitempty"`
 	Ancestors  []*ContentScheme        `json:"ancestors,omitempty"`
+	History    *ContentHistoryScheme   `json:"history,omitempty"`
 }
 
 type ContentExtensionScheme struct {
@@ -141,10 +142,10 @@ type ContentHistoryScheme struct {
 	Latest          bool                              `json:"latest,omitempty"`
 	CreatedBy       *ContentUserScheme                `json:"createdBy,omitempty"`
 	CreatedDate     string                            `json:"createdDate,omitempty"`
-	LastUpdated     *VersionScheme                    `json:"lastUpdated,omitempty"`
-	PreviousVersion *VersionScheme                    `json:"previousVersion,omitempty"`
+	LastUpdated     *ContentVersionScheme             `json:"lastUpdated,omitempty"`
+	PreviousVersion *ContentVersionScheme             `json:"previousVersion,omitempty"`
 	Contributors    *ContentHistoryContributorsScheme `json:"contributors,omitempty"`
-	NextVersion     *VersionScheme                    `json:"nextVersion,omitempty"`
+	NextVersion     *ContentVersionScheme             `json:"nextVersion,omitempty"`
 	Expandable      *ExpandableScheme                 `json:"_expandable,omitempty"`
 	Links           *LinkScheme                       `json:"_links,omitempty"`
 }

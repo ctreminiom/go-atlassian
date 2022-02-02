@@ -1,0 +1,340 @@
+{
+  "results": [
+    {
+      "content": {
+        "id": "<string>",
+        "type": "<string>",
+        "status": "<string>",
+        "title": "<string>",
+        "space": {
+          "key": "<string>",
+          "name": "<string>",
+          "type": "<string>",
+          "status": "<string>",
+          "_expandable": {},
+          "_links": {}
+        },
+        "history": {
+          "latest": true
+        },
+        "version": {
+          "when": "<string>",
+          "number": 57,
+          "minorEdit": true
+        },
+        "ancestors": [],
+        "operations": [
+          {
+            "operation": "administer",
+            "targetType": "<string>"
+          }
+        ],
+        "children": {},
+        "childTypes": {},
+        "descendants": {},
+        "container": {},
+        "body": {
+          "view": {
+            "value": "<string>",
+            "representation": "view"
+          },
+          "export_view": {
+            "value": "<string>",
+            "representation": "view"
+          },
+          "styled_view": {
+            "value": "<string>",
+            "representation": "view"
+          },
+          "storage": {
+            "value": "<string>",
+            "representation": "view"
+          },
+          "wiki": {
+            "value": "<string>",
+            "representation": "view"
+          },
+          "editor": {
+            "value": "<string>",
+            "representation": "view"
+          },
+          "editor2": {
+            "value": "<string>",
+            "representation": "view"
+          },
+          "anonymous_export_view": {
+            "value": "<string>",
+            "representation": "view"
+          },
+          "atlas_doc_format": {
+            "value": "<string>",
+            "representation": "view"
+          },
+          "dynamic": {
+            "value": "<string>",
+            "representation": "view"
+          },
+          "_expandable": {
+            "editor": "<string>",
+            "view": "<string>",
+            "export_view": "<string>",
+            "styled_view": "<string>",
+            "storage": "<string>",
+            "editor2": "<string>",
+            "anonymous_export_view": "<string>",
+            "atlas_doc_format": "<string>",
+            "wiki": "<string>",
+            "dynamic": "<string>",
+            "raw": "<string>"
+          }
+        },
+        "restrictions": {
+          "read": {
+            "operation": "administer",
+            "_expandable": {},
+            "_links": {}
+          },
+          "update": {
+            "operation": "administer",
+            "_expandable": {},
+            "_links": {}
+          },
+          "_expandable": {
+            "read": "<string>",
+            "update": "<string>"
+          },
+          "_links": {}
+        },
+        "metadata": {},
+        "macroRenderedOutput": {},
+        "extensions": {},
+        "_expandable": {
+          "childTypes": "<string>",
+          "container": "<string>",
+          "metadata": "<string>",
+          "operations": "<string>",
+          "children": "<string>",
+          "restrictions": "<string>",
+          "history": "<string>",
+          "ancestors": "<string>",
+          "body": "<string>",
+          "version": "<string>",
+          "descendants": "<string>",
+          "space": "<string>",
+          "extensions": "<string>",
+          "schedulePublishDate": "<string>",
+          "macroRenderedOutput": "<string>"
+        },
+        "_links": {}
+      },
+      "user": {
+        "type": "known",
+        "username": "<string>",
+        "userKey": "<string>",
+        "accountId": "<string>",
+        "accountType": "atlassian",
+        "email": "<string>",
+        "publicName": "<string>",
+        "profilePicture": {
+          "path": "<string>",
+          "width": 2154,
+          "height": 2154,
+          "isDefault": true
+        },
+        "displayName": "<string>",
+        "timeZone": "<string>",
+        "isExternalCollaborator": true,
+        "externalCollaborator": true,
+        "operations": [
+          {
+            "operation": "administer",
+            "targetType": "<string>"
+          }
+        ],
+        "details": {},
+        "personalSpace": {
+          "key": "<string>",
+          "name": "<string>",
+          "type": "<string>",
+          "status": "<string>",
+          "_expandable": {},
+          "_links": {}
+        },
+        "_expandable": {
+          "operations": "<string>",
+          "details": "<string>",
+          "personalSpace": "<string>"
+        },
+        "_links": {}
+      },
+      "space": {
+        "id": 2154,
+        "key": "<string>",
+        "name": "<string>",
+        "icon": {
+          "path": "<string>",
+          "width": 2154,
+          "height": 2154,
+          "isDefault": true
+        },
+        "description": {
+          "plain": {
+            "value": "<string>",
+            "representation": "plain",
+            "embeddedContent": [
+              {}
+            ]
+          },
+          "view": {
+            "value": "<string>",
+            "representation": "plain",
+            "embeddedContent": [
+              {}
+            ]
+          },
+          "_expandable": {
+            "view": "<string>",
+            "plain": "<string>"
+          }
+        },
+        "homepage": {
+          "type": "<string>",
+          "status": "<string>"
+        },
+        "type": "<string>",
+        "metadata": {
+          "labels": {
+            "results": [
+              {
+                "prefix": "<string>",
+                "name": "<string>",
+                "id": "<string>",
+                "label": "<string>"
+              }
+            ],
+            "size": 2154
+          },
+          "_expandable": {}
+        },
+        "operations": [
+          {
+            "operation": "administer",
+            "targetType": "<string>"
+          }
+        ],
+        "permissions": [
+          {
+            "operation": {
+              "operation": "administer",
+              "targetType": "<string>"
+            },
+            "anonymousAccess": true,
+            "unlicensedAccess": true
+          }
+        ],
+        "status": "<string>",
+        "settings": {
+          "routeOverrideEnabled": true,
+          "_links": {}
+        },
+        "theme": {
+          "themeKey": "<string>"
+        },
+        "lookAndFeel": {
+          "headings": {
+            "color": "<string>"
+          },
+          "links": {
+            "color": "<string>"
+          },
+          "menus": {
+            "hoverOrFocus": {
+              "backgroundColor": "<string>"
+            },
+            "color": "<string>"
+          },
+          "header": {
+            "backgroundColor": "<string>",
+            "button": {
+              "backgroundColor": "<string>",
+              "color": "<string>"
+            },
+            "primaryNavigation": {
+              "color": "<string>",
+              "hoverOrFocus": {
+                "backgroundColor": "<string>",
+                "color": "<string>"
+              }
+            },
+            "secondaryNavigation": {
+              "color": "<string>",
+              "hoverOrFocus": {
+                "backgroundColor": "<string>",
+                "color": "<string>"
+              }
+            },
+            "search": {
+              "backgroundColor": "<string>",
+              "color": "<string>"
+            }
+          },
+          "content": {},
+          "bordersAndDividers": {
+            "color": "<string>"
+          }
+        },
+        "history": {
+          "createdDate": "<string>",
+          "createdBy": {
+            "type": "known"
+          }
+        },
+        "_expandable": {
+          "settings": "<string>",
+          "metadata": "<string>",
+          "operations": "<string>",
+          "lookAndFeel": "<string>",
+          "permissions": "<string>",
+          "icon": "<string>",
+          "description": "<string>",
+          "theme": "<string>",
+          "history": "<string>",
+          "homepage": "<string>",
+          "identifiers": "<string>"
+        },
+        "_links": {}
+      },
+      "title": "<string>",
+      "excerpt": "<string>",
+      "url": "<string>",
+      "resultParentContainer": {
+        "title": "<string>",
+        "displayUrl": "<string>"
+      },
+      "resultGlobalContainer": {
+        "title": "<string>",
+        "displayUrl": "<string>"
+      },
+      "breadcrumbs": [
+        {
+          "label": "<string>",
+          "url": "<string>",
+          "separator": "<string>"
+        }
+      ],
+      "entityType": "<string>",
+      "iconCssClass": "<string>",
+      "lastModified": "<string>",
+      "friendlyLastModified": "<string>",
+      "score": 2154
+    }
+  ],
+  "start": 2154,
+  "limit": 2154,
+  "size": 2154,
+  "totalSize": 2154,
+  "cqlQuery": "<string>",
+  "searchDuration": 2154,
+  "archivedResultCount": 2154,
+  "_links": {}
+}

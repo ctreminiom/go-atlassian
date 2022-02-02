@@ -15,7 +15,7 @@ type SearchContentOptions struct {
 }
 
 type SearchPageScheme struct {
-	Result              []*SearchResultScheme `json:"results,omitempty"`
+	Results             []*SearchResultScheme `json:"results,omitempty"`
 	Start               int                   `json:"start,omitempty"`
 	Limit               int                   `json:"limit,omitempty"`
 	Size                int                   `json:"size,omitempty"`
@@ -35,11 +35,11 @@ type SearchResultScheme struct {
 	ResultParentContainer *ContainerSummaryScheme   `json:"resultParentContainer,omitempty"`
 	ResultGlobalContainer *ContainerSummaryScheme   `json:"resultGlobalContainer,omitempty"`
 	Breadcrumbs           []*SearchBreadcrumbScheme `json:"breadcrumbs,omitempty"`
-	EntityType            string                    `json:"entityType"`
-	IconCSSClass          string                    `json:"iconCssClass"`
-	LastModified          string                    `json:"lastModified"`
-	FriendlyLastModified  string                    `json:"friendlyLastModified"`
-	Score                 int                       `json:"score"`
+	EntityType            string                    `json:"entityType,omitempty"`
+	IconCSSClass          string                    `json:"iconCssClass,omitempty"`
+	LastModified          string                    `json:"lastModified,omitempty"`
+	FriendlyLastModified  string                    `json:"friendlyLastModified,omitempty"`
+	Score                 float64                   `json:"score,omitempty"`
 }
 
 type ContainerSummaryScheme struct {

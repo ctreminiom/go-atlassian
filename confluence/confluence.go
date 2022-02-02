@@ -22,6 +22,7 @@ type Client struct {
 	Content *ContentService
 	Space   *SpaceService
 	Label   *LabelService
+	Search  *SearchService
 }
 
 func New(httpClient *http.Client, site string) (client *Client, err error) {
@@ -64,6 +65,7 @@ func New(httpClient *http.Client, site string) (client *Client, err error) {
 
 	client.Space = &SpaceService{client: client}
 	client.Label = &LabelService{client: client}
+	client.Search = &SearchService{client: client}
 	return
 }
 

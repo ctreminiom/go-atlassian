@@ -15,14 +15,22 @@ type SearchContentOptions struct {
 }
 
 type SearchPageScheme struct {
-	Results             []*SearchResultScheme `json:"results,omitempty"`
-	Start               int                   `json:"start,omitempty"`
-	Limit               int                   `json:"limit,omitempty"`
-	Size                int                   `json:"size,omitempty"`
-	TotalSize           int                   `json:"totalSize,omitempty"`
-	CqlQuery            string                `json:"cqlQuery,omitempty"`
-	SearchDuration      int                   `json:"searchDuration,omitempty"`
-	ArchivedResultCount int                   `json:"archivedResultCount,omitempty"`
+	Results             []*SearchResultScheme  `json:"results,omitempty"`
+	Start               int                    `json:"start,omitempty"`
+	Limit               int                    `json:"limit,omitempty"`
+	Size                int                    `json:"size,omitempty"`
+	TotalSize           int                    `json:"totalSize,omitempty"`
+	CqlQuery            string                 `json:"cqlQuery,omitempty"`
+	SearchDuration      int                    `json:"searchDuration,omitempty"`
+	ArchivedResultCount int                    `json:"archivedResultCount,omitempty"`
+	Links               *SearchPageLinksScheme `json:"_links,omitempty"`
+}
+
+type SearchPageLinksScheme struct {
+	Base    string `json:"base,omitempty"`
+	Context string `json:"context,omitempty"`
+	Next    string `json:"next,omitempty"`
+	Self    string `json:"self,omitempty"`
 }
 
 type SearchResultScheme struct {

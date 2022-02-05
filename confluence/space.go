@@ -26,7 +26,10 @@ func (s *SpaceService) Gets(ctx context.Context, options *model.GetSpacesOptionS
 	if options != nil {
 
 		if len(options.SpaceKeys) != 0 {
-			query.Add("spaceKey", strings.Join(options.SpaceKeys, ","))
+
+			for _, key := range options.SpaceKeys {
+				query.Add("spaceKey", key)
+			}
 		}
 
 		if len(options.SpaceIDs) != 0 {

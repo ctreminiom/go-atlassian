@@ -483,6 +483,18 @@ func Test_ProjectPropertyService_Delete(t *testing.T) {
 		},
 
 		{
+			name:               "when the response code is incorrect",
+			projectKeyOrID:     "DUMMY",
+			propertyKey:        "property-key-sample",
+			wantHTTPMethod:     http.MethodDelete,
+			endpoint:           "/rest/api/2/project/DUMMY/properties/property-key-sample",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusBadRequest,
+			wantErr:            true,
+			expectedError:      "request failed. Please analyze the request body for more details. Status Code: 400",
+		},
+
+		{
 			name:               "when the property key is not provided",
 			projectKeyOrID:     "DUMMY",
 			propertyKey:        "",

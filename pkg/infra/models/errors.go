@@ -56,6 +56,7 @@ var (
 	ErrNoReaderError                       = errors.New("jira: no reader set")
 	ErrNoCommentIDError                    = errors.New("jira: no comment id set")
 	ErrNoProjectIDError                    = errors.New("jira: no project id set")
+	ErrNoPropertyKeyError                  = errors.New("jira: no property key set")
 	ErrNoProjectFeatureKeyError            = errors.New("jira: no project feature key set")
 	ErrNoFieldIDError                      = errors.New("jira: no field id set")
 	ErrNoFieldContextIDError               = errors.New("jira: no field context id set")

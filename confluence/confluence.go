@@ -63,7 +63,11 @@ func New(httpClient *http.Client, site string) (client *Client, err error) {
 		Version: &ContentVersionService{client: client},
 	}
 
-	client.Space = &SpaceService{client: client}
+	client.Space = &SpaceService{
+		client:     client,
+		Permission: &SpacePermissionService{client: client},
+	}
+
 	client.Label = &LabelService{client: client}
 	client.Search = &SearchService{client: client}
 	return

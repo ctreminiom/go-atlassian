@@ -304,3 +304,28 @@ func (c *ContentService) History(ctx context.Context, contentID string, expand [
 
 	return
 }
+
+// Archive archives a list of pages. The pages to be archived are specified as a list of content IDs.
+// This API accepts the archival request and returns a task ID. The archival process happens asynchronously.
+// Use the /longtask/ REST API to get the copy task status.
+func (c *ContentService) Archive(ctx context.Context, payload *model.ContentArchivePayloadScheme) (response *ResponseScheme, err error) {
+
+	payloadAsReader, err := transformStructToReader(payload)
+	if err != nil {
+		return nil, err
+	}
+
+	endpoint := "/wiki/rest/api/content/archive"
+
+	request, err := c.client.newRequest(ctx, http.MethodPost, endpoint, payloadAsReader)
+	if err != nil {
+		return nil, err
+	}
+
+	response, err = c.client.Call(request, nil)
+	if err != nil {
+		return response, err
+	}
+
+	return
+}

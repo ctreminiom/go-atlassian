@@ -195,3 +195,11 @@ type UserPersonalDetailScheme struct {
 	Website string `json:"website,omitempty"`
 	Email   string `json:"email,omitempty"`
 }
+
+type ContentArchivePayloadScheme struct {
+	Pages []*ContentArchiveIDPayloadScheme `json:"pages,omitempty"`
+}
+
+type ContentArchiveIDPayloadScheme struct {
+	ID int `json:"id,omitempty"`
+}

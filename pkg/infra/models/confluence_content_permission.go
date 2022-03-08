@@ -6,8 +6,8 @@ type CheckPermissionScheme struct {
 }
 
 type PermissionSubjectScheme struct {
-	Type       string `json:"type"`
-	Identifier string `json:"identifier"`
+	Identifier string `json:"identifier,omitempty"`
+	Type       string `json:"type,omitempty"`
 }
 
 type PermissionCheckResponseScheme struct {

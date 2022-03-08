@@ -19,6 +19,7 @@ type SpaceOperationPayloadScheme struct {
 type SpacePermissionOperationScheme struct {
 	Operation string `json:"operation,omitempty"`
 	Target    string `json:"target,omitempty"`
+	Key       string `json:"key,omitempty"`
 }
 
 type SpacePermissionV2Scheme struct {

@@ -39,6 +39,7 @@ func TestContentService_Archive(t *testing.T) {
 					},
 				}},
 			wantHTTPMethod:     http.MethodPost,
+			mockFile:           "./mocks/archive-content.json",
 			endpoint:           "/wiki/rest/api/content/archive",
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusOK,
@@ -46,9 +47,33 @@ func TestContentService_Archive(t *testing.T) {
 		},
 
 		{
+			name: "when the response body is empty",
+			payload: &model.ContentArchivePayloadScheme{
+				Pages: []*model.ContentArchiveIDPayloadScheme{
+					{
+						ID: 1001,
+					},
+					{
+						ID: 1001,
+					},
+					{
+						ID: 1001,
+					},
+				}},
+			wantHTTPMethod:     http.MethodPost,
+			mockFile:           "./mocks/empty-json.json",
+			endpoint:           "/wiki/rest/api/content/archive",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+			expectedError:      "unexpected end of JSON input",
+		},
+
+		{
 			name:               "when the payload is not provided",
 			payload:            nil,
 			wantHTTPMethod:     http.MethodPost,
+			mockFile:           "./mocks/archive-content.json",
 			endpoint:           "/wiki/rest/api/content/archive",
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusOK,
@@ -126,7 +151,7 @@ func TestContentService_Archive(t *testing.T) {
 
 			implementation := &ContentService{client: mockClient}
 
-			gotResponse, err := implementation.Archive(testCase.context, testCase.payload)
+			gotResult, gotResponse, err := implementation.Archive(testCase.context, testCase.payload)
 
 			if testCase.wantErr {
 
@@ -144,6 +169,7 @@ func TestContentService_Archive(t *testing.T) {
 
 				assert.NoError(t, err)
 				assert.NotEqual(t, gotResponse, nil)
+				assert.NotEqual(t, gotResult, nil)
 
 				apiEndpoint, err := url.Parse(gotResponse.Endpoint)
 				if err != nil {

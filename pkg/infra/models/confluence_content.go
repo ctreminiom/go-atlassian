@@ -203,3 +203,10 @@ type ContentArchivePayloadScheme struct {
 type ContentArchiveIDPayloadScheme struct {
 	ID int `json:"id,omitempty"`
 }
+
+type ContentArchiveResultScheme struct {
+	ID    string `json:"id"`
+	Links struct {
+		Status string `json:"status"`
+	} `json:"links"`
+}

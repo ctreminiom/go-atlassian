@@ -11,7 +11,8 @@ import (
 )
 
 type SpaceService struct {
-	client *Client
+	client     *Client
+	Permission *SpacePermissionService
 }
 
 // Gets returns all spaces. The returned spaces are ordered alphabetically in ascending order by space key.

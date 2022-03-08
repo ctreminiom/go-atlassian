@@ -18,11 +18,12 @@ type Client struct {
 	HTTP *http.Client
 	Site *url.URL
 
-	Auth    *AuthenticationService
-	Content *ContentService
-	Space   *SpaceService
-	Label   *LabelService
-	Search  *SearchService
+	Auth     *AuthenticationService
+	Content  *ContentService
+	Space    *SpaceService
+	Label    *LabelService
+	Search   *SearchService
+	LongTask *LongTaskService
 }
 
 func New(httpClient *http.Client, site string) (client *Client, err error) {
@@ -70,6 +71,7 @@ func New(httpClient *http.Client, site string) (client *Client, err error) {
 
 	client.Label = &LabelService{client: client}
 	client.Search = &SearchService{client: client}
+	client.LongTask = &LongTaskService{client: client}
 	return
 }
 

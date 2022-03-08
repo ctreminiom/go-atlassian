@@ -10,6 +10,7 @@ import (
 type SpacePermissionService struct{ client *Client }
 
 // Add adds new permission to space. If the permission to be added is a group permission, the group can be identified by its group name or group id.
+// Docs: https://docs.go-atlassian.io/confluence-cloud/space/permissions#add-new-permission-to-space
 func (s *SpacePermissionService) Add(ctx context.Context, spaceKey string, payload *models.SpacePermissionPayloadScheme) (
 	result *models.SpacePermissionV2Scheme, response *ResponseScheme, err error) {
 
@@ -42,6 +43,7 @@ func (s *SpacePermissionService) Add(ctx context.Context, spaceKey string, paylo
 
 // Bulk adds new custom content permission to space.
 // If the permission to be added is a group permission, the group can be identified by its group name or group id.
+// Docs: https://docs.go-atlassian.io/confluence-cloud/space/permissions#add-new-custom-content-permission-to-space
 func (s *SpacePermissionService) Bulk(ctx context.Context, spaceKey string, payload *models.SpacePermissionArrayPayloadScheme) (response *ResponseScheme, err error) {
 
 	if len(spaceKey) == 0 {
@@ -73,6 +75,7 @@ func (s *SpacePermissionService) Bulk(ctx context.Context, spaceKey string, payl
 
 // Remove removes a space permission.
 // Note that removing Read Space permission for a user or group will remove all the space permissions for that user or group.
+// Docs: https://docs.go-atlassian.io/confluence-cloud/space/permissions#remove-a-space-permission
 func (s *SpacePermissionService) Remove(ctx context.Context, spaceKey string, permissionId int) (response *ResponseScheme, err error) {
 
 	if len(spaceKey) == 0 {

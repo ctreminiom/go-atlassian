@@ -13,6 +13,7 @@ type LongTaskService struct{ client *Client }
 
 // Gets returns information about all active long-running tasks (e.g. space export),
 // such as how long each task has been running and the percentage of each task that has completed.
+// Docs: https://docs.go-atlassian.io/confluence-cloud/long-task#get-long-running-tasks
 func (l *LongTaskService) Gets(ctx context.Context, start, limit int) (result *models.LongTaskPageScheme,
 	response *ResponseScheme, err error) {
 
@@ -39,6 +40,7 @@ func (l *LongTaskService) Gets(ctx context.Context, start, limit int) (result *m
 
 // Get returns information about an active long-running task (e.g. space export), such as how long it has been running
 //and the percentage of the task that has completed.
+// Docs: https://docs.go-atlassian.io/confluence-cloud/long-task#get-long-running-task
 func (l *LongTaskService) Get(ctx context.Context, taskID string) (result *models.LongTaskScheme, response *ResponseScheme,
 	err error) {
 

@@ -101,6 +101,7 @@ func (c *Client) newRequest(ctx context.Context, method, apiEndpoint string, pay
 }
 
 func (c *Client) Call(request *http.Request, structure interface{}) (result *ResponseScheme, err error) {
+	request.URL.Path = strings.Replace(request.URL.Path, "/wiki", "/", 1)
 	response, _ := c.HTTP.Do(request)
 	return transformTheHTTPResponse(response, structure)
 }

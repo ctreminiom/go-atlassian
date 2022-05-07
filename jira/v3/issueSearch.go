@@ -97,6 +97,7 @@ func (s *IssueSearchService) Post(ctx context.Context, jql string, fields, expan
 }
 
 // Checks checks whether one or more issues would be returned by one or more JQL queries.
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/search#check-issues-against-jql
 func (s *IssueSearchService) Checks(ctx context.Context, payload *models.IssueSearchCheckPayloadScheme) (result *models.IssueMatchesPageScheme,
 	response *ResponseScheme, err error) {
 

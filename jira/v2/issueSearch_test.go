@@ -3,6 +3,7 @@ package v2
 import (
 	"context"
 	"fmt"
+	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/url"
@@ -419,6 +420,159 @@ func TestIssueSearchService_Post(t *testing.T) {
 				}
 
 				assert.Error(t, err)
+			} else {
+
+				assert.NoError(t, err)
+				assert.NotEqual(t, gotResponse, nil)
+				assert.NotEqual(t, gotResult, nil)
+
+				apiEndpoint, err := url.Parse(gotResponse.Endpoint)
+				if err != nil {
+					t.Fatal(err)
+				}
+
+				var endpointToAssert string
+
+				if apiEndpoint.Query().Encode() != "" {
+					endpointToAssert = fmt.Sprintf("%v?%v", apiEndpoint.Path, apiEndpoint.Query().Encode())
+				} else {
+					endpointToAssert = apiEndpoint.Path
+				}
+
+				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
+				assert.Equal(t, testCase.endpoint, endpointToAssert)
+			}
+		})
+
+	}
+
+}
+
+func TestIssueSearchService_Checks(t *testing.T) {
+
+	testCases := []struct {
+		name               string
+		payload            *models.IssueSearchCheckPayloadScheme
+		mockFile           string
+		wantHTTPMethod     string
+		endpoint           string
+		context            context.Context
+		wantHTTPCodeReturn int
+		wantErr            bool
+		expectedError      string
+	}{
+		{
+			name: "when the parameters are correct",
+			payload: &models.IssueSearchCheckPayloadScheme{
+				IssueIds: []int{1, 2, 3, 4},
+				JQLs:     []string{"project = DUMMY"},
+			},
+			mockFile:           "../mocks/jira-issue-search-check.json",
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/api/2/jql/match",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            false,
+		},
+
+		{
+			name:               "when the payload is not provided",
+			payload:            nil,
+			mockFile:           "../mocks/jira-issue-search-check.json",
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/api/2/jql/match",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+			expectedError:      "failed to parse the interface pointer, please provide a valid one",
+		},
+
+		{
+			name: "when the context is not provided",
+			payload: &models.IssueSearchCheckPayloadScheme{
+				IssueIds: []int{1, 2, 3, 4},
+				JQLs:     []string{"project = DUMMY"},
+			},
+			mockFile:           "../mocks/jira-issue-search-check.json",
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/api/2/jql/match",
+			context:            nil,
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+			expectedError:      "request creation failed: net/http: nil Context",
+		},
+
+		{
+			name: "when the response is invalid",
+			payload: &models.IssueSearchCheckPayloadScheme{
+				IssueIds: []int{1, 2, 3, 4},
+				JQLs:     []string{"project = DUMMY"},
+			},
+			mockFile:           "../mocks/jira-issue-search-check.json",
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/api/2/jql/match",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusBadRequest,
+			wantErr:            true,
+			expectedError:      "request failed. Please analyze the request body for more details. Status Code: 400",
+		},
+
+		{
+			name: "when the response body is empty",
+			payload: &models.IssueSearchCheckPayloadScheme{
+				IssueIds: []int{1, 2, 3, 4},
+				JQLs:     []string{"project = DUMMY"},
+			},
+			mockFile:           "../mocks/empty-json.json",
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/api/2/jql/match",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+			expectedError:      "unexpected end of JSON input",
+		},
+	}
+
+	for _, testCase := range testCases {
+
+		t.Run(testCase.name, func(t *testing.T) {
+
+			//Init a new HTTP mock server
+			mockOptions := mockServerOptions{
+				Endpoint:           testCase.endpoint,
+				MockFilePath:       testCase.mockFile,
+				MethodAccepted:     testCase.wantHTTPMethod,
+				ResponseCodeWanted: testCase.wantHTTPCodeReturn,
+			}
+
+			mockServer, err := startMockServer(&mockOptions)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			defer mockServer.Close()
+
+			//Init the library instance
+			mockClient, err := startMockClient(mockServer.URL)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			i := &IssueSearchService{client: mockClient}
+
+			gotResult, gotResponse, err := i.Checks(testCase.context, testCase.payload)
+
+			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+
+				assert.EqualError(t, err, testCase.expectedError)
+
+				if gotResponse != nil {
+					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
+				}
 			} else {
 
 				assert.NoError(t, err)

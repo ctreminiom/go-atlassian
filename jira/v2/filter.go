@@ -235,6 +235,7 @@ func (f *FilterService) Delete(ctx context.Context, filterID int) (response *Res
 }
 
 // Change changes the owner of the filter.
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/filters#change-filter-owner
 func (f *FilterService) Change(ctx context.Context, filterID int, accountID string) (response *ResponseScheme, err error) {
 
 	if filterID == 0 {

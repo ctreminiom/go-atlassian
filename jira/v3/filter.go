@@ -240,3 +240,40 @@ func (f *FilterService) Delete(ctx context.Context, filterID int) (response *Res
 
 	return
 }
+
+// Change changes the owner of the filter.
+// Docs: https://docs.go-atlassian.io/jira-software-cloud/filters#change-filter-owner
+func (f *FilterService) Change(ctx context.Context, filterID int, accountID string) (response *ResponseScheme, err error) {
+
+	if filterID == 0 {
+		return nil, models.ErrNoFilterIDError
+	}
+
+	if accountID == "" {
+		return nil, models.ErrNoAccountIDError
+	}
+
+	payload := struct {
+		AccountID string `json:"accountId"`
+	}{
+		AccountID: accountID,
+	}
+
+	payloadAsReader, _ := transformStructToReader(&payload)
+	endpoint := fmt.Sprintf("rest/api/3/filter/%v/owner", filterID)
+
+	request, err := f.client.newRequest(ctx, http.MethodPut, endpoint, payloadAsReader)
+	if err != nil {
+		return
+	}
+
+	request.Header.Set("Accept", "application/json")
+	request.Header.Set("Content-Type", "application/json")
+
+	response, err = f.client.call(request, nil)
+	if err != nil {
+		return
+	}
+
+	return
+}

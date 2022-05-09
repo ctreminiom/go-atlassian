@@ -1253,3 +1253,144 @@ func TestFilterService_Update(t *testing.T) {
 		})
 	}
 }
+
+func TestFilterService_Change(t *testing.T) {
+
+	testCases := []struct {
+		name               string
+		filterID           int
+		accountID          string
+		mockFile           string
+		wantHTTPMethod     string
+		endpoint           string
+		context            context.Context
+		wantHTTPCodeReturn int
+		wantErr            bool
+		expectedError      string
+	}{
+		{
+			name:               "when the parameters are correct",
+			filterID:           102222,
+			accountID:          "b91d9257-0a87-410d-9dbd-2d2b3878fbe4",
+			wantHTTPMethod:     http.MethodPut,
+			endpoint:           "/rest/api/3/filter/102222/owner",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            false,
+		},
+
+		{
+			name:               "when the response code is invalid",
+			filterID:           102222,
+			accountID:          "b91d9257-0a87-410d-9dbd-2d2b3878fbe4",
+			wantHTTPMethod:     http.MethodPut,
+			endpoint:           "/rest/api/3/filter/102222/owner",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusBadRequest,
+			wantErr:            true,
+			expectedError:      "request failed. Please analyze the request body for more details. Status Code: 400",
+		},
+
+		{
+			name:               "when the context is not provided",
+			filterID:           102222,
+			accountID:          "b91d9257-0a87-410d-9dbd-2d2b3878fbe4",
+			wantHTTPMethod:     http.MethodPut,
+			endpoint:           "/rest/api/3/filter/102222/owner",
+			context:            nil,
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+			expectedError:      "request creation failed: net/http: nil Context",
+		},
+
+		{
+			name:               "when the account id is not provided",
+			filterID:           102222,
+			accountID:          "",
+			wantHTTPMethod:     http.MethodPut,
+			endpoint:           "/rest/api/3/filter/102222/owner",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+			expectedError:      "jira: no account id set",
+		},
+
+		{
+			name:               "when the filter id is not provided",
+			filterID:           0,
+			accountID:          "b91d9257-0a87-410d-9dbd-2d2b3878fbe4",
+			wantHTTPMethod:     http.MethodPut,
+			endpoint:           "/rest/api/3/filter/102222/owner",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusNoContent,
+			wantErr:            true,
+			expectedError:      "agile: no filter id set",
+		},
+	}
+
+	for _, testCase := range testCases {
+
+		t.Run(testCase.name, func(t *testing.T) {
+
+			//Init a new HTTP mock server
+			mockOptions := mockServerOptions{
+				Endpoint:           testCase.endpoint,
+				MockFilePath:       testCase.mockFile,
+				MethodAccepted:     testCase.wantHTTPMethod,
+				ResponseCodeWanted: testCase.wantHTTPCodeReturn,
+			}
+
+			mockServer, err := startMockServer(&mockOptions)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			defer mockServer.Close()
+
+			//Init the library instance
+			mockClient, err := startMockClient(mockServer.URL)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			i := &FilterService{client: mockClient}
+
+			gotResponse, err := i.Change(testCase.context, testCase.filterID, testCase.accountID)
+
+			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+
+				assert.EqualError(t, err, testCase.expectedError)
+
+				if gotResponse != nil {
+					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
+				}
+			} else {
+
+				assert.NoError(t, err)
+				assert.NotEqual(t, gotResponse, nil)
+
+				apiEndpoint, err := url.Parse(gotResponse.Endpoint)
+				if err != nil {
+					t.Fatal(err)
+				}
+
+				var endpointToAssert string
+
+				if apiEndpoint.Query().Encode() != "" {
+					endpointToAssert = fmt.Sprintf("%v?%v", apiEndpoint.Path, apiEndpoint.Query().Encode())
+				} else {
+					endpointToAssert = apiEndpoint.Path
+				}
+
+				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
+				assert.Equal(t, testCase.endpoint, endpointToAssert)
+			}
+		})
+
+	}
+
+}

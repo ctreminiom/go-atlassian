@@ -113,7 +113,7 @@ func TestBoardService_Get(t *testing.T) {
 				t.Fatal(err)
 			}
 
-			service := &BoardService{client: mockClient}
+			service := &BoardServiceImplementation{client: mockClient}
 			gotResult, gotResponse, err := service.Get(testCase.context, testCase.boardID)
 
 			if testCase.wantErr {

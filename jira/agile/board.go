@@ -3,23 +3,22 @@ package agile
 import (
 	"context"
 	"fmt"
-	"github.com/ctreminiom/go-atlassian/internal/signatures/jira/agile"
 	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"net/http"
 )
 
-func NewBoardService(client *Client) agile.BoardService {
-	return &BoardService{client: client}
+func NewBoardService(client *Client) BoardService {
+	return &BoardServiceImplementation{client: client}
 }
 
-type BoardService struct{ client *Client }
+type BoardServiceImplementation struct{ client *Client }
 
 // Get returns the board for the given board ID.
 // This board will only be returned if the user has permission to view it.
 // Admins without the view permission will see the board as a private one,
 // so will see only a subset of the board's data (board location for instance).
 // Docs: https://docs.go-atlassian.io/jira-agile/boards#get-board
-func (b *BoardService) Get(ctx context.Context, boardID int) (*models.BoardScheme, *models.ResponseScheme, error) {
+func (b *BoardServiceImplementation) Get(ctx context.Context, boardID int) (*models.BoardScheme, *models.ResponseScheme, error) {
 
 	if boardID == 0 {
 		return nil, nil, models.ErrNoBoardIDError

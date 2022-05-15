@@ -6,6 +6,12 @@ import (
 )
 
 type BoardService interface {
+
+	// Get returns the board for the given board ID.
+	// This board will only be returned if the user has permission to view it.
+	// Admins without the view permission will see the board as a private one,
+	// so will see only a subset of the board's data (board location for instance).
+	// Docs: https://docs.go-atlassian.io/jira-agile/boards#get-board
 	Get(ctx context.Context, boardId int) (
 		*models.BoardScheme, *models.ResponseScheme, error)
 

@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/ctreminiom/go-atlassian/internal/signatures/jira/agile"
 	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"io"
 	"io/ioutil"
@@ -21,7 +20,7 @@ type Client struct {
 	Site   *url.URL
 	Auth   *AuthenticationService
 	Sprint *SprintService
-	Board  agile.BoardService
+	Board  BoardService
 	Epic   *EpicService
 }
 

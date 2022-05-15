@@ -6,6 +6,8 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/ctreminiom/go-atlassian/internal/signatures/jira/agile"
+	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -19,7 +21,7 @@ type Client struct {
 	Site   *url.URL
 	Auth   *AuthenticationService
 	Sprint *SprintService
-	Board  *BoardService
+	Board  agile.BoardService
 	Epic   *EpicService
 }
 
@@ -43,9 +45,9 @@ func New(httpClient *http.Client, site string) (client *Client, err error) {
 	client.Site = siteAsURL
 	client.Auth = &AuthenticationService{client: client}
 	client.Sprint = &SprintService{client: client}
-	client.Board = &BoardService{client: client}
+	//client.Board = &BoardService{client: client}
 	client.Epic = &EpicService{client: client}
-
+	client.Board = NewBoardService(client)
 	return
 }
 
@@ -74,7 +76,7 @@ func (c *Client) newRequest(ctx context.Context, method, apiEndpoint string, pay
 	return
 }
 
-func (c *Client) Call(request *http.Request, structure interface{}) (result *ResponseScheme, err error) {
+func (c *Client) Call(request *http.Request, structure interface{}) (result *models.ResponseScheme, err error) {
 	response, _ := c.HTTP.Do(request)
 	return transformTheHTTPResponse(response, structure)
 }
@@ -93,13 +95,13 @@ func transformStructToReader(structure interface{}) (reader io.Reader, err error
 	return bytes.NewReader(structureAsBodyBytes), nil
 }
 
-func transformTheHTTPResponse(response *http.Response, structure interface{}) (result *ResponseScheme, err error) {
+func transformTheHTTPResponse(response *http.Response, structure interface{}) (result *models.ResponseScheme, err error) {
 
 	if response == nil {
 		return nil, errors.New("validation failed, please provide a http.Response pointer")
 	}
 
-	responseTransformed := &ResponseScheme{}
+	responseTransformed := &models.ResponseScheme{}
 	responseTransformed.Code = response.StatusCode
 	responseTransformed.Endpoint = response.Request.URL.String()
 	responseTransformed.Method = response.Request.Method

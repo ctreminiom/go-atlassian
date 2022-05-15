@@ -350,7 +350,7 @@ func Test_transformTheHTTPResponse(t *testing.T) {
 	tests := []struct {
 		name       string
 		args       args
-		wantResult *ResponseScheme
+		wantResult *model.ResponseScheme
 		wantErr    bool
 	}{
 		{

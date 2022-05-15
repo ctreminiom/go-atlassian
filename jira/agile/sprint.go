@@ -1,16 +1,9 @@
 package agile
 
-import (
-	"context"
-	"fmt"
-	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
-	"net/http"
-	"net/url"
-	"strconv"
-	"strings"
-)
-
 type SprintService struct{ client *Client }
+
+/*
+
 
 // Get Returns the sprint for a given sprint ID.
 // The sprint will only be returned if the user can view the board that the sprint was created on,
@@ -271,3 +264,5 @@ func (s *SprintService) Close(ctx context.Context, sprintID int) (response *Resp
 
 	return
 }
+
+*/

@@ -1,16 +1,8 @@
 package agile
 
-import (
-	"context"
-	"fmt"
-	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
-	"net/http"
-	"net/url"
-	"strconv"
-	"strings"
-)
-
 type EpicService struct{ client *Client }
+
+/*
 
 // Get returns the epic for a given epic ID.
 // This epic will only be returned if the user has permission to view it.
@@ -131,3 +123,5 @@ func (e *EpicService) Move(ctx context.Context, epicIDOrKey string, issues []str
 
 	return
 }
+
+*/

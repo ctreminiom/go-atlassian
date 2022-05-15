@@ -1,14 +1,6 @@
 package agile
 
-import (
-	"context"
-	"fmt"
-	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
-	"github.com/stretchr/testify/assert"
-	"net/http"
-	"net/url"
-	"testing"
-)
+/*
 
 func TestSprintService_Get(t *testing.T) {
 
@@ -1284,3 +1276,5 @@ func TestSprintService_Issues(t *testing.T) {
 	}
 
 }
+
+*/

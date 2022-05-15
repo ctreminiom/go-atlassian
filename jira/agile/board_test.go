@@ -2,8 +2,8 @@ package agile
 
 import (
 	"context"
-	"fmt"
-	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
+	//"fmt"
+	//model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/url"
@@ -149,6 +149,9 @@ func TestBoardService_Get(t *testing.T) {
 	}
 
 }
+
+/*
+
 
 func TestBoardService_Create(t *testing.T) {
 
@@ -3014,3 +3017,5 @@ func TestBoardService_Delete(t *testing.T) {
 		})
 	}
 }
+
+*/

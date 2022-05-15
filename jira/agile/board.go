@@ -3,12 +3,14 @@ package agile
 import (
 	"context"
 	"fmt"
+	"github.com/ctreminiom/go-atlassian/internal/signatures/jira/agile"
 	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"net/http"
-	"net/url"
-	"strconv"
-	"strings"
 )
+
+func NewBoardService(client *Client) agile.BoardService {
+	return &BoardService{client: client}
+}
 
 type BoardService struct{ client *Client }
 
@@ -17,28 +19,31 @@ type BoardService struct{ client *Client }
 // Admins without the view permission will see the board as a private one,
 // so will see only a subset of the board's data (board location for instance).
 // Docs: https://docs.go-atlassian.io/jira-agile/boards#get-board
-func (b *BoardService) Get(ctx context.Context, boardID int) (result *models.BoardScheme, response *ResponseScheme, err error) {
+func (b *BoardService) Get(ctx context.Context, boardID int) (*models.BoardScheme, *models.ResponseScheme, error) {
 
 	if boardID == 0 {
 		return nil, nil, models.ErrNoBoardIDError
 	}
 
-	var endpoint = fmt.Sprintf("/rest/agile/1.0/board/%v", boardID)
+	endpoint := fmt.Sprintf("/rest/agile/1.0/board/%v", boardID)
 
 	request, err := b.client.newRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
-		return
+		return nil, nil, err
 	}
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = b.client.Call(request, &result)
+	result := &models.BoardScheme{}
+	response, err := b.client.Call(request, &result)
 	if err != nil {
 		return nil, response, err
 	}
 
-	return
+	return result, response, nil
 }
+
+/*
 
 // Create creates a new board. Board name, type and filter ID is required.
 // Docs: https://docs.go-atlassian.io/jira-agile/boards#create-board
@@ -685,3 +690,4 @@ func (b *BoardService) Gets(ctx context.Context, opts *models.GetBoardsOptions, 
 
 	return
 }
+*/

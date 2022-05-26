@@ -58,9 +58,10 @@ func (e EpicService) Issues(ctx context.Context, epic string, startAt, maxResult
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
 	params.Add("maxResults", strconv.Itoa(maxResults))
-	params.Add("validateQuery", fmt.Sprintf("%t", opts.ValidateQuery))
 
 	if opts != nil {
+
+		params.Add("validateQuery", fmt.Sprintf("%t", opts.ValidateQuery))
 
 		if len(opts.JQL) != 0 {
 			params.Add("jql", opts.JQL)

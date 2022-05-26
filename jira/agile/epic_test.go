@@ -113,7 +113,7 @@ func TestEpicService_Get(t *testing.T) {
 				t.Fatal(err)
 			}
 
-			service := &EpicService{client: mockClient}
+			service := &EpicService{c: mockClient, version: "1.0"}
 			gotResult, gotResponse, err := service.Get(testCase.context, testCase.epicIDOrKey)
 
 			if testCase.wantErr {
@@ -350,7 +350,7 @@ func TestEpicService_Issues(t *testing.T) {
 				t.Fatal(err)
 			}
 
-			service := &EpicService{client: mockClient}
+			service := &EpicService{c: mockClient, version: "1.0"}
 			gotResult, gotResponse, err := service.Issues(testCase.context, testCase.epicIDOrKey,
 				testCase.startAt, testCase.maxResults, testCase.opts)
 
@@ -485,7 +485,7 @@ func TestEpicService_Move(t *testing.T) {
 				t.Fatal(err)
 			}
 
-			service := &EpicService{client: mockClient}
+			service := &EpicService{c: mockClient, version: "1.0"}
 			gotResponse, err := service.Move(testCase.context, testCase.epicIDOrKey, testCase.issues)
 
 			if testCase.wantErr {

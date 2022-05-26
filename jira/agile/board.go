@@ -11,7 +11,7 @@ import (
 	"strings"
 )
 
-func NewBoardService(client *Client, version string) (agile.Board, error) {
+func newBoardService(client *Client, version string) (agile.Board, error) {
 
 	if version == "" {
 		return nil, model.ErrNoVersionProvided

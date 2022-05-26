@@ -3,66 +3,64 @@ package agile
 import (
 	"context"
 	"fmt"
-	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/service/agile"
 	"net/http"
 	"net/url"
 	"strconv"
 	"strings"
 )
 
-type EpicService struct{ client *Client }
+func newEpicService(client *Client, version string) (agile.Epic, error) {
 
-// Get returns the epic for a given epic ID.
-// This epic will only be returned if the user has permission to view it.
-// Note: This operation does not work for epics in next-gen projects.
-// Docs: https://docs.go-atlassian.io/jira-agile/epics#get-epic
-func (e *EpicService) Get(ctx context.Context, epicIDOrKey string) (result *models.EpicScheme, response *models.ResponseScheme, err error) {
-
-	if len(epicIDOrKey) == 0 {
-		return nil, nil, models.ErrNoEpicIDError
+	if version == "" {
+		return nil, model.ErrNoVersionProvided
 	}
 
-	var endpoint = fmt.Sprintf("/rest/agile/1.0/epic/%v", epicIDOrKey)
+	return &EpicService{client, version}, nil
+}
 
-	request, err := e.client.newRequest(ctx, http.MethodGet, endpoint, nil)
+type EpicService struct {
+	c       *Client
+	version string
+}
+
+func (e EpicService) Get(ctx context.Context, epic string) (*model.EpicScheme, *model.ResponseScheme, error) {
+
+	if epic == "" {
+		return nil, nil, model.ErrNoEpicIDError
+	}
+
+	endpoint := fmt.Sprintf("/rest/agile/%v/epic/%v", e.version, epic)
+
+	request, err := e.c.newRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
-		return
+		return nil, nil, err
 	}
 
 	request.Header.Set("Accept", "application/json")
+	var epics model.EpicScheme
 
-	response, err = e.client.call(request, &result)
+	response, err := e.c.call(request, &epics)
 	if err != nil {
 		return nil, response, err
 	}
 
-	return
+	return &epics, response, nil
 }
 
-// Issues returns all issues that belong to the epic, for the given epic ID.
-// This only includes issues that the user has permission to view.
-// Issues returned from this resource include Agile fields, like sprint, closedSprints,
-// flagged, and epic.
-// By default, the returned issues are ordered by rank.
-// Docs: https://docs.go-atlassian.io/jira-agile/epics#get-issues-for-epic
-func (e *EpicService) Issues(ctx context.Context, epicIDOrKey string, startAt, maxResults int,
-	opts *models.IssueOptionScheme) (result *models.BoardIssuePageScheme, response *models.ResponseScheme, err error) {
+func (e EpicService) Issues(ctx context.Context, epic string, startAt, maxResults int, opts *model.IssueOptionScheme) (*model.BoardIssuePageScheme, *model.ResponseScheme, error) {
 
-	if len(epicIDOrKey) == 0 {
-		return nil, nil, models.ErrNoEpicIDError
+	if epic == "" {
+		return nil, nil, model.ErrNoEpicIDError
 	}
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
 	params.Add("maxResults", strconv.Itoa(maxResults))
+	params.Add("validateQuery", fmt.Sprintf("%t", opts.ValidateQuery))
 
 	if opts != nil {
-
-		if !opts.ValidateQuery {
-			params.Add("validateQuery", "false")
-		} else {
-			params.Add("validateQuery", "true")
-		}
 
 		if len(opts.JQL) != 0 {
 			params.Add("jql", opts.JQL)
@@ -75,59 +73,50 @@ func (e *EpicService) Issues(ctx context.Context, epicIDOrKey string, startAt, m
 		if len(opts.Fields) != 0 {
 			params.Add("fields", strings.Join(opts.Fields, ","))
 		}
-
 	}
 
-	var endpoint = fmt.Sprintf("/rest/agile/1.0/epic/%v/issue?%v", epicIDOrKey, params.Encode())
+	endpoint := fmt.Sprintf("/rest/agile/%v/epic/%v/issue?%v", e.version, epic, params.Encode())
 
-	request, err := e.client.newRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := e.c.newRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
-		return
+		return nil, nil, err
 	}
 
 	request.Header.Set("Accept", "application/json")
+	var issues model.BoardIssuePageScheme
 
-	response, err = e.client.call(request, &result)
+	response, err := e.c.call(request, &issues)
 	if err != nil {
 		return nil, response, err
 	}
 
-	return
+	return &issues, response, nil
 }
 
-// Move moves issues to an epic, for a given epic id.
-// Issues can be only in a single epic at the same time.
-// That means that already assigned issues to an epic, will not be assigned to the previous epic anymore.
-// The user needs to have the edit issue permission for all issue they want to move and to the epic.
-// The maximum number of issues that can be moved in one operation is 50.
-func (e *EpicService) Move(ctx context.Context, epicIDOrKey string, issues []string) (response *models.ResponseScheme, err error) {
+func (e EpicService) Move(ctx context.Context, epic string, issues []string) (*model.ResponseScheme, error) {
 
-	if len(epicIDOrKey) == 0 {
-		return nil, models.ErrNoEpicIDError
+	if epic == "" {
+		return nil, model.ErrNoEpicIDError
 	}
 
-	payload := struct {
-		Issues []string `json:"issues,omitempty"`
-	}{
-		Issues: issues,
-	}
-
-	var (
-		payloadAsReader, _ = transformStructToReader(&payload)
-		endpoint           = fmt.Sprintf("rest/agile/1.0/epic/%v/issue", epicIDOrKey)
-	)
-
-	request, err := e.client.newRequest(ctx, http.MethodPost, endpoint, payloadAsReader)
+	reader, err := e.c.transformStructToReader(map[string]interface{}{"issues": issues})
 	if err != nil {
-		return
+		return nil, err
+	}
+
+	endpoint := fmt.Sprintf("rest/agile/%v/epic/%v/issue", e.version, epic)
+
+	request, err := e.c.newRequest(ctx, http.MethodPost, endpoint, reader)
+	if err != nil {
+		return nil, err
 	}
 
 	request.Header.Set("Content-Type", "application/json")
 
-	response, err = e.client.call(request, nil)
+	response, err := e.c.call(request, nil)
 	if err != nil {
 		return response, err
 	}
 
-	return
+	return response, nil
 }

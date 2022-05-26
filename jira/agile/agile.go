@@ -24,6 +24,7 @@ type Client struct {
 	Board   *BoardService
 	Epic    *EpicService
 	BoardV2 agile.Board
+	EpicV2  agile.Epic
 }
 
 func New(httpClient *http.Client, site string) (client *Client, err error) {
@@ -41,21 +42,26 @@ func New(httpClient *http.Client, site string) (client *Client, err error) {
 		return
 	}
 
-	client = &Client{}
-	client.HTTP = httpClient
-	client.Site = siteAsURL
-	client.Auth = &AuthenticationService{client: client}
-	client.Sprint = &SprintService{client: client}
-	client.Board = &BoardService{c: client, version: "1.0"}
-	client.Epic = &EpicService{client: client}
-
-	boardService, err := NewBoardService(client, "1.0")
+	boardHandler, err := newBoardService(client, "1.0")
 	if err != nil {
 		return nil, err
 	}
 
-	client.BoardV2 = boardService
-	return
+	epicHandler, err := newEpicService(client, "1.0")
+	if err != nil {
+		return nil, err
+	}
+
+	return &Client{
+		HTTP:    httpClient,
+		Site:    siteAsURL,
+		Auth:    &AuthenticationService{client: client},
+		Sprint:  &SprintService{client: client},
+		Board:   &BoardService{c: client, version: "1.0"},
+		Epic:    &EpicService{c: client, version: "1.0"},
+		BoardV2: boardHandler,
+		EpicV2:  epicHandler,
+	}, nil
 }
 
 func (c *Client) newRequest(ctx context.Context, method, apiEndpoint string, payload io.Reader) (request *http.Request, err error) {

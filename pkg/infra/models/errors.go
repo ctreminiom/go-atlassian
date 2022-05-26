@@ -92,4 +92,6 @@ var (
 	ErrNoFieldConfigurationIDError         = errors.New("jira: no field configuration id set")
 	ErrNoFieldConfigurationSchemeNameError = errors.New("jira: no field configuration scheme name set")
 	ErrNoFieldConfigurationSchemeIDError   = errors.New("jira: no field configuration scheme id set")
+
+	ErrNoVersionProvided = errors.New("client: no module version set")
 )

@@ -113,7 +113,7 @@ func TestBoardService_Get(t *testing.T) {
 				t.Fatal(err)
 			}
 
-			service := &BoardService{client: mockClient}
+			service := &BoardService{c: mockClient, version: "1.0"}
 			gotResult, gotResponse, err := service.Get(testCase.context, testCase.boardID)
 
 			if testCase.wantErr {
@@ -303,7 +303,7 @@ func TestBoardService_Create(t *testing.T) {
 				t.Fatal(err)
 			}
 
-			service := &BoardService{client: mockClient}
+			service := &BoardService{c: mockClient, version: "1.0"}
 			gotResult, gotResponse, err := service.Create(testCase.context, testCase.payload)
 
 			if testCase.wantErr {
@@ -498,7 +498,7 @@ func TestBoardService_Gets(t *testing.T) {
 				t.Fatal(err)
 			}
 
-			service := &BoardService{client: mockClient}
+			service := &BoardService{c: mockClient, version: "1.0"}
 			gotResult, gotResponse, err := service.Gets(testCase.context, testCase.opts,
 				testCase.startAt, testCase.maxResults)
 
@@ -658,7 +658,7 @@ func TestBoardService_Filter(t *testing.T) {
 				t.Fatal(err)
 			}
 
-			service := &BoardService{client: mockClient}
+			service := &BoardService{c: mockClient, version: "1.0"}
 			gotResult, gotResponse, err := service.Filter(testCase.context, testCase.filterID,
 				testCase.startAt, testCase.maxResults)
 
@@ -893,7 +893,7 @@ func TestBoardService_Backlog(t *testing.T) {
 				t.Fatal(err)
 			}
 
-			service := &BoardService{client: mockClient}
+			service := &BoardService{c: mockClient, version: "1.0"}
 			gotResult, gotResponse, err := service.Backlog(testCase.context, testCase.boardID,
 				testCase.startAt, testCase.maxResults, testCase.opts)
 
@@ -1041,7 +1041,7 @@ func TestBoardService_Configuration(t *testing.T) {
 				t.Fatal(err)
 			}
 
-			service := &BoardService{client: mockClient}
+			service := &BoardService{c: mockClient, version: "1.0"}
 			gotResult, gotResponse, err := service.Configuration(testCase.context, testCase.boardID)
 
 			if testCase.wantErr {
@@ -1208,7 +1208,7 @@ func TestBoardService_Epics(t *testing.T) {
 				t.Fatal(err)
 			}
 
-			service := &BoardService{client: mockClient}
+			service := &BoardService{c: mockClient, version: "1.0"}
 			gotResult, gotResponse, err := service.Epics(testCase.context, testCase.boardID,
 				testCase.startAt, testCase.maxResults, testCase.done)
 
@@ -1302,26 +1302,6 @@ func TestBoardService_IssuesWithoutEpic(t *testing.T) {
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusOK,
 			wantErr:            true,
-		},
-
-		{
-			name:       "GetBoardIssuesWithoutEpicWhenTheValidateQueryOptionIsNotEnabled",
-			boardID:    100,
-			startAt:    0,
-			maxResults: 50,
-			opts: &model.IssueOptionScheme{
-				JQL:           "project = KP",
-				ValidateQuery: false,
-				Fields:        []string{"status", "issuetype", "summary"},
-				Expand:        []string{"changelog", "metadata"},
-			},
-			mockFile: "../mocks/get-board-issue-without-epic.json",
-
-			wantHTTPMethod:     http.MethodGet,
-			endpoint:           "/rest/agile/1.0/board/100/epic/none/issue?expand=changelog%2Cmetadata&fields=status%2Cissuetype%2Csummary&jql=project+%3D+KP&maxResults=50&startAt=0&validateQuery+=false",
-			context:            context.Background(),
-			wantHTTPCodeReturn: http.StatusOK,
-			wantErr:            false,
 		},
 
 		{
@@ -1449,7 +1429,7 @@ func TestBoardService_IssuesWithoutEpic(t *testing.T) {
 				t.Fatal(err)
 			}
 
-			service := &BoardService{client: mockClient}
+			service := &BoardService{c: mockClient, version: "1.0"}
 			gotResult, gotResponse, err := service.IssuesWithoutEpic(testCase.context, testCase.boardID,
 				testCase.startAt, testCase.maxResults, testCase.opts)
 
@@ -1694,7 +1674,7 @@ func TestBoardService_IssuesByEpic(t *testing.T) {
 				t.Fatal(err)
 			}
 
-			service := &BoardService{client: mockClient}
+			service := &BoardService{c: mockClient, version: "1.0"}
 			gotResult, gotResponse, err := service.IssuesByEpic(testCase.context, testCase.boardID, testCase.epicID,
 				testCase.startAt, testCase.maxResults, testCase.opts)
 
@@ -1766,25 +1746,6 @@ func TestBoardService_Issues(t *testing.T) {
 			mockFile:           "../mocks/get-board-issues.json",
 			wantHTTPMethod:     http.MethodGet,
 			endpoint:           "/rest/agile/1.0/board/100/issue?expand=changelog%2Cmetadata&fields=status%2Cissuetype%2Csummary&jql=project+%3D+KP&maxResults=50&startAt=0",
-			context:            context.Background(),
-			wantHTTPCodeReturn: http.StatusOK,
-			wantErr:            false,
-		},
-
-		{
-			name:       "GetBoardIssuesWhenTheValidateQueryOptionIsNotEnabled",
-			boardID:    100,
-			startAt:    0,
-			maxResults: 50,
-			opts: &model.IssueOptionScheme{
-				JQL:           "project = KP",
-				ValidateQuery: false,
-				Fields:        []string{"status", "issuetype", "summary"},
-				Expand:        []string{"changelog", "metadata"},
-			},
-			mockFile:           "../mocks/get-board-issues.json",
-			wantHTTPMethod:     http.MethodGet,
-			endpoint:           "/rest/agile/1.0/board/100/issue?expand=changelog%2Cmetadata&fields=status%2Cissuetype%2Csummary&jql=project+%3D+KP&maxResults=50&startAt=0&validateQuery+=false",
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusOK,
 			wantErr:            false,
@@ -1910,7 +1871,7 @@ func TestBoardService_Issues(t *testing.T) {
 				t.Fatal(err)
 			}
 
-			service := &BoardService{client: mockClient}
+			service := &BoardService{c: mockClient, version: "1.0"}
 			gotResult, gotResponse, err := service.Issues(testCase.context, testCase.boardID,
 				testCase.startAt, testCase.maxResults, testCase.opts)
 
@@ -2070,7 +2031,7 @@ func TestBoardService_Projects(t *testing.T) {
 				t.Fatal(err)
 			}
 
-			service := &BoardService{client: mockClient}
+			service := &BoardService{c: mockClient, version: "1.0"}
 			gotResult, gotResponse, err := service.Projects(testCase.context, testCase.boardID,
 				testCase.startAt, testCase.maxResults)
 
@@ -2335,7 +2296,7 @@ func TestBoardService_IssuesBySprint(t *testing.T) {
 				t.Fatal(err)
 			}
 
-			service := &BoardService{client: mockClient}
+			service := &BoardService{c: mockClient, version: "1.0"}
 			gotResult, gotResponse, err := service.IssuesBySprint(testCase.context, testCase.sprintID, testCase.epicID,
 				testCase.startAt, testCase.maxResults, testCase.opts)
 
@@ -2516,7 +2477,7 @@ func TestBoardService_Versions(t *testing.T) {
 				t.Fatal(err)
 			}
 
-			service := &BoardService{client: mockClient}
+			service := &BoardService{c: mockClient, version: "1.0"}
 			gotResult, gotResponse, err := service.Versions(testCase.context, testCase.boardID,
 				testCase.startAt, testCase.maxResults, testCase.released)
 
@@ -2685,7 +2646,7 @@ func TestBoardService_Move(t *testing.T) {
 				t.Fatal(err)
 			}
 
-			service := &BoardService{client: mockClient}
+			service := &BoardService{c: mockClient, version: "1.0"}
 			gotResponse, err := service.Move(testCase.context, testCase.boardID, testCase.payload)
 
 			if testCase.wantErr {
@@ -2849,7 +2810,7 @@ func TestBoardService_Sprints(t *testing.T) {
 				t.Fatal(err)
 			}
 
-			service := &BoardService{client: mockClient}
+			service := &BoardService{c: mockClient, version: "1.0"}
 			gotResult, gotResponse, err := service.Sprints(testCase.context, testCase.boardID,
 				testCase.startAt, testCase.maxResults, testCase.states)
 
@@ -2971,7 +2932,7 @@ func TestBoardService_Delete(t *testing.T) {
 				t.Fatal(err)
 			}
 
-			service := &BoardService{client: mockClient}
+			service := &BoardService{c: mockClient, version: "1.0"}
 
 			gotResponse, err := service.Delete(testCase.context, testCase.boardID)
 

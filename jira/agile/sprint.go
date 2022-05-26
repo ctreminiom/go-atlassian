@@ -16,7 +16,7 @@ type SprintService struct{ client *Client }
 // The sprint will only be returned if the user can view the board that the sprint was created on,
 // or view at least one of the issues in the sprint.
 // Docs: https://docs.go-atlassian.io/jira-agile/sprints#get-sprint
-func (s *SprintService) Get(ctx context.Context, sprintID int) (result *models.SprintScheme, response *ResponseScheme, err error) {
+func (s *SprintService) Get(ctx context.Context, sprintID int) (result *models.SprintScheme, response *models.ResponseScheme, err error) {
 
 	if sprintID == 0 {
 		return nil, nil, models.ErrNoSprintIDError
@@ -31,7 +31,7 @@ func (s *SprintService) Get(ctx context.Context, sprintID int) (result *models.S
 
 	request.Header.Set("Accept", "application/json")
 
-	response, err = s.client.Call(request, &result)
+	response, err = s.client.call(request, &result)
 	if err != nil {
 		return nil, response, err
 	}
@@ -44,7 +44,7 @@ func (s *SprintService) Get(ctx context.Context, sprintID int) (result *models.S
 // Start date, end date, and goal are optional.
 // Docs: https://docs.go-atlassian.io/jira-agile/sprints#create-print
 func (s *SprintService) Create(ctx context.Context, payload *models.SprintPayloadScheme) (result *models.SprintScheme,
-	response *ResponseScheme, err error) {
+	response *models.ResponseScheme, err error) {
 
 	payloadAsReader, err := transformStructToReader(payload)
 	if err != nil {
@@ -61,7 +61,7 @@ func (s *SprintService) Create(ctx context.Context, payload *models.SprintPayloa
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Content-Type", "application/json")
 
-	response, err = s.client.Call(request, &result)
+	response, err = s.client.call(request, &result)
 	if err != nil {
 		return nil, response, err
 	}
@@ -74,7 +74,7 @@ func (s *SprintService) Create(ctx context.Context, payload *models.SprintPayloa
 // Any fields not present in the request JSON will be set to null.
 // Docs: https://docs.go-atlassian.io/jira-agile/sprints#update-sprint
 func (s *SprintService) Update(ctx context.Context, sprintID int, payload *models.SprintPayloadScheme) (result *models.SprintScheme,
-	response *ResponseScheme, err error) {
+	response *models.ResponseScheme, err error) {
 
 	if sprintID == 0 {
 		return nil, nil, models.ErrNoSprintIDError
@@ -95,7 +95,7 @@ func (s *SprintService) Update(ctx context.Context, sprintID int, payload *model
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Content-Type", "application/json")
 
-	response, err = s.client.Call(request, &result)
+	response, err = s.client.call(request, &result)
 	if err != nil {
 		return nil, response, err
 	}
@@ -107,7 +107,7 @@ func (s *SprintService) Update(ctx context.Context, sprintID int, payload *model
 // A partial update means that fields not present in the request JSON will not be updated.
 // Docs: https://docs.go-atlassian.io/jira-agile/sprints#partially-update-sprint
 func (s *SprintService) Path(ctx context.Context, sprintID int, payload *models.SprintPayloadScheme) (result *models.SprintScheme,
-	response *ResponseScheme, err error) {
+	response *models.ResponseScheme, err error) {
 
 	if sprintID == 0 {
 		return nil, nil, models.ErrNoSprintIDError
@@ -128,7 +128,7 @@ func (s *SprintService) Path(ctx context.Context, sprintID int, payload *models.
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Content-Type", "application/json")
 
-	response, err = s.client.Call(request, &result)
+	response, err = s.client.call(request, &result)
 	if err != nil {
 		return nil, response, err
 	}
@@ -138,7 +138,7 @@ func (s *SprintService) Path(ctx context.Context, sprintID int, payload *models.
 
 // Delete deletes a sprint.
 // Once a sprint is deleted, all open issues in the sprint will be moved to the backlog.
-func (s *SprintService) Delete(ctx context.Context, sprintID int) (response *ResponseScheme, err error) {
+func (s *SprintService) Delete(ctx context.Context, sprintID int) (response *models.ResponseScheme, err error) {
 
 	if sprintID == 0 {
 		return nil, models.ErrNoSprintIDError
@@ -151,7 +151,7 @@ func (s *SprintService) Delete(ctx context.Context, sprintID int) (response *Res
 		return
 	}
 
-	response, err = s.client.Call(request, nil)
+	response, err = s.client.call(request, nil)
 	if err != nil {
 		return response, err
 	}
@@ -164,7 +164,7 @@ func (s *SprintService) Delete(ctx context.Context, sprintID int) (response *Res
 // By default, the returned issues are ordered by rank.
 // Docs: https://docs.go-atlassian.io/jira-agile/sprints#get-issues-for-sprint
 func (s *SprintService) Issues(ctx context.Context, sprintID int, opts *models.IssueOptionScheme, startAt, maxResults int) (
-	result *models.SprintIssuePageScheme, response *ResponseScheme, err error) {
+	result *models.SprintIssuePageScheme, response *models.ResponseScheme, err error) {
 
 	if sprintID == 0 {
 		return nil, nil, models.ErrNoSprintIDError
@@ -200,7 +200,7 @@ func (s *SprintService) Issues(ctx context.Context, sprintID int, opts *models.I
 		return
 	}
 
-	response, err = s.client.Call(request, &result)
+	response, err = s.client.call(request, &result)
 	if err != nil {
 		return nil, response, err
 	}
@@ -210,7 +210,7 @@ func (s *SprintService) Issues(ctx context.Context, sprintID int, opts *models.I
 
 // Start initiate the Sprint
 // Docs: https://docs.go-atlassian.io/jira-agile/sprints#start-sprint
-func (s *SprintService) Start(ctx context.Context, sprintID int) (response *ResponseScheme, err error) {
+func (s *SprintService) Start(ctx context.Context, sprintID int) (response *models.ResponseScheme, err error) {
 
 	if sprintID == 0 {
 		return nil, models.ErrNoSprintIDError
@@ -232,7 +232,7 @@ func (s *SprintService) Start(ctx context.Context, sprintID int) (response *Resp
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Content-Type", "application/json")
 
-	response, err = s.client.Call(request, nil)
+	response, err = s.client.call(request, nil)
 	if err != nil {
 		return response, err
 	}
@@ -242,7 +242,7 @@ func (s *SprintService) Start(ctx context.Context, sprintID int) (response *Resp
 
 // Close closes the Sprint
 // Docs: https://docs.go-atlassian.io/jira-agile/sprints#close-sprint
-func (s *SprintService) Close(ctx context.Context, sprintID int) (response *ResponseScheme, err error) {
+func (s *SprintService) Close(ctx context.Context, sprintID int) (response *models.ResponseScheme, err error) {
 
 	if sprintID == 0 {
 		return nil, models.ErrNoSprintIDError
@@ -264,7 +264,7 @@ func (s *SprintService) Close(ctx context.Context, sprintID int) (response *Resp
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Content-Type", "application/json")
 
-	response, err = s.client.Call(request, nil)
+	response, err = s.client.call(request, nil)
 	if err != nil {
 		return response, err
 	}

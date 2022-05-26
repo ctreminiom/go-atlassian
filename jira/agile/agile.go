@@ -6,6 +6,8 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/service/agile"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -15,12 +17,13 @@ import (
 )
 
 type Client struct {
-	HTTP   *http.Client
-	Site   *url.URL
-	Auth   *AuthenticationService
-	Sprint *SprintService
-	Board  *BoardService
-	Epic   *EpicService
+	HTTP    *http.Client
+	Site    *url.URL
+	Auth    *AuthenticationService
+	Sprint  *SprintService
+	Board   *BoardService
+	Epic    *EpicService
+	BoardV2 agile.Board
 }
 
 func New(httpClient *http.Client, site string) (client *Client, err error) {
@@ -43,9 +46,15 @@ func New(httpClient *http.Client, site string) (client *Client, err error) {
 	client.Site = siteAsURL
 	client.Auth = &AuthenticationService{client: client}
 	client.Sprint = &SprintService{client: client}
-	client.Board = &BoardService{client: client}
+	client.Board = &BoardService{c: client, version: "1.0"}
 	client.Epic = &EpicService{client: client}
 
+	boardService, err := NewBoardService(client, "1.0")
+	if err != nil {
+		return nil, err
+	}
+
+	client.BoardV2 = boardService
 	return
 }
 
@@ -74,9 +83,62 @@ func (c *Client) newRequest(ctx context.Context, method, apiEndpoint string, pay
 	return
 }
 
-func (c *Client) Call(request *http.Request, structure interface{}) (result *ResponseScheme, err error) {
-	response, _ := c.HTTP.Do(request)
-	return transformTheHTTPResponse(response, structure)
+func (c *Client) call(request *http.Request, structure interface{}) (result *models.ResponseScheme, err error) {
+
+	response, err := c.HTTP.Do(request)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return c.transformTheHTTPResponse(response, structure)
+}
+
+func (c *Client) transformTheHTTPResponse(response *http.Response, structure interface{}) (result *models.ResponseScheme, err error) {
+
+	if response == nil {
+		return nil, errors.New("validation failed, please provide a http.Response pointer")
+	}
+
+	responseTransformed := &models.ResponseScheme{}
+	responseTransformed.Code = response.StatusCode
+	responseTransformed.Endpoint = response.Request.URL.String()
+	responseTransformed.Method = response.Request.Method
+
+	var wasSuccess = response.StatusCode >= 200 && response.StatusCode < 300
+	if !wasSuccess {
+
+		return responseTransformed, fmt.Errorf(requestFailedError, response.StatusCode)
+	}
+
+	responseAsBytes, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		return responseTransformed, err
+	}
+
+	if structure != nil {
+		if err = json.Unmarshal(responseAsBytes, &structure); err != nil {
+			return responseTransformed, err
+		}
+	}
+
+	responseTransformed.Bytes.Write(responseAsBytes)
+
+	return responseTransformed, nil
+}
+
+func (c *Client) transformStructToReader(structure interface{}) (reader io.Reader, err error) {
+
+	if structure == nil || reflect.ValueOf(structure).IsNil() {
+		return nil, structureNotParsedError
+	}
+
+	structureAsBodyBytes, err := json.Marshal(structure)
+	if err != nil {
+		return nil, err
+	}
+
+	return bytes.NewReader(structureAsBodyBytes), nil
 }
 
 func transformStructToReader(structure interface{}) (reader io.Reader, err error) {

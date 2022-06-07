@@ -88,8 +88,6 @@ func (b BoardService) Filter(ctx context.Context, filterId, startAt, maxResults 
 		return nil, nil, err
 	}
 
-	request.Header.Set("Accept", "application/json")
-
 	var page model.BoardPageScheme
 	response, err := b.c.Call(request, &page)
 	if err != nil {
@@ -137,8 +135,6 @@ func (b BoardService) Backlog(ctx context.Context, boardId, startAt, maxResults 
 		return nil, nil, err
 	}
 
-	request.Header.Set("Accept", "application/json")
-
 	var issues model.BoardIssuePageScheme
 	response, err := b.c.Call(request, &issues)
 	if err != nil {
@@ -160,8 +156,6 @@ func (b BoardService) Configuration(ctx context.Context, boardId int) (*model.Bo
 	if err != nil {
 		return nil, nil, err
 	}
-
-	request.Header.Set("Accept", "application/json")
 
 	var configuration model.BoardConfigurationScheme
 	response, err := b.c.Call(request, &configuration)
@@ -189,8 +183,6 @@ func (b BoardService) Epics(ctx context.Context, boardId, startAt, maxResults in
 	if err != nil {
 		return nil, nil, err
 	}
-
-	request.Header.Set("Accept", "application/json")
 
 	var epics model.BoardEpicPageScheme
 	response, err := b.c.Call(request, &epics)
@@ -236,8 +228,6 @@ func (b BoardService) IssuesWithoutEpic(ctx context.Context, boardId, startAt, m
 	if err != nil {
 		return nil, nil, err
 	}
-
-	request.Header.Set("Accept", "application/json")
 
 	var issues model.BoardIssuePageScheme
 	response, err := b.c.Call(request, &issues)
@@ -288,8 +278,6 @@ func (b BoardService) IssuesByEpic(ctx context.Context, boardId, epicId, startAt
 		return nil, nil, err
 	}
 
-	request.Header.Set("Accept", "application/json")
-
 	var issues model.BoardIssuePageScheme
 	response, err := b.c.Call(request, &issues)
 	if err != nil {
@@ -335,8 +323,6 @@ func (b BoardService) Issues(ctx context.Context, boardId, startAt, maxResults i
 	if err != nil {
 		return nil, nil, err
 	}
-
-	request.Header.Set("Accept", "application/json")
 
 	var issues model.BoardIssuePageScheme
 	response, err := b.c.Call(request, &issues)
@@ -472,8 +458,6 @@ func (b BoardService) IssuesBySprint(ctx context.Context, boardId, sprintId, sta
 		return nil, nil, err
 	}
 
-	request.Header.Set("Accept", "application/json")
-
 	var issues model.BoardIssuePageScheme
 	response, err := b.c.Call(request, &issues)
 	if err != nil {
@@ -588,8 +572,6 @@ func (b BoardService) Gets(ctx context.Context, opts *model.GetBoardsOptions, st
 	if err != nil {
 		return nil, nil, err
 	}
-
-	request.Header.Set("Accept", "application/json")
 
 	var boards model.BoardPageScheme
 	response, err := b.c.Call(request, &boards)

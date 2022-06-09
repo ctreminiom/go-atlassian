@@ -47,6 +47,63 @@ func (c *CreateCustomerRequestPayloadScheme) MergeFields(fields *CustomerRequest
 
 type CustomerRequestFields struct{ Fields []map[string]interface{} }
 
+func (c *CustomerRequestFields) Attachments(attachments []string) error {
+
+	if len(attachments) == 0 {
+		return fmt.Errorf("error, please provide a valid attachments values")
+	}
+
+	var fieldNode = map[string]interface{}{}
+	fieldNode["attachments"] = attachments
+
+	var fieldsNode = map[string]interface{}{}
+	fieldsNode["requestFieldValues"] = fieldNode
+
+	c.Fields = append(c.Fields, fieldsNode)
+	return nil
+}
+
+func (c *CustomerRequestFields) Labels(labels []string) error {
+
+	if len(labels) == 0 {
+		return fmt.Errorf("error, please provide a valid labels values")
+	}
+
+	var fieldNode = map[string]interface{}{}
+	fieldNode["labels"] = labels
+
+	var fieldsNode = map[string]interface{}{}
+	fieldsNode["requestFieldValues"] = fieldNode
+
+	c.Fields = append(c.Fields, fieldsNode)
+	return nil
+}
+
+func (c *CustomerRequestFields) Components(components []string) error {
+
+	if len(components) == 0 {
+		return fmt.Errorf("error, please provide a valid components values")
+	}
+
+	var componentNode []map[string]interface{}
+	for _, component := range components {
+
+		var groupNode = map[string]interface{}{}
+		groupNode["name"] = component
+
+		componentNode = append(componentNode, groupNode)
+	}
+
+	var fieldNode = map[string]interface{}{}
+	fieldNode["components"] = componentNode
+
+	var fieldsNode = map[string]interface{}{}
+	fieldsNode["requestFieldValues"] = fieldNode
+
+	c.Fields = append(c.Fields, fieldsNode)
+	return nil
+}
+
 func (c *CustomerRequestFields) Groups(customFieldID string, groups []string) (err error) {
 
 	if len(customFieldID) == 0 {

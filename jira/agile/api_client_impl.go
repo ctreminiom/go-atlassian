@@ -8,6 +8,7 @@ import (
 	"github.com/ctreminiom/go-atlassian/jira/agile/internal"
 	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service/agile"
+	"github.com/ctreminiom/go-atlassian/service/common"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -46,10 +47,11 @@ func NewV2(httpClient *http.Client, site string) (*ClientV2, error) {
 }
 
 type ClientV2 struct {
-	HTTP  *http.Client
-	Site  *url.URL
-	Board agile.Board
-	Epic  agile.Epic
+	HTTP           *http.Client
+	Site           *url.URL
+	Authentication common.Authentication
+	Board          agile.Board
+	Epic           agile.Epic
 }
 
 func (c ClientV2) NewJsonRequest(ctx context.Context, method, apiEndpoint string, payload io.Reader) (*http.Request, error) {
@@ -87,6 +89,14 @@ func (c ClientV2) NewRequest(ctx context.Context, method, apiEndpoint string, pa
 	}
 
 	request.Header.Set("Accept", "application/json")
+
+	if c.Authentication.HasBasicAuth() {
+		request.SetBasicAuth(c.Authentication.GetBasicAuth())
+	}
+
+	if c.Authentication.HasUserAgent() {
+		request.Header.Set("User-Agent", c.Authentication.GetUserAgent())
+	}
 
 	return request, nil
 }

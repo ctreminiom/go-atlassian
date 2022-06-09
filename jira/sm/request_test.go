@@ -25,6 +25,8 @@ func TestRequestService_Create(t *testing.T) {
 		t.Fatal(err)
 	}
 
+	var customFieldMockedWithoutFields = model.CustomerRequestFields{}
+
 	testCases := []struct {
 		name               string
 		payload            *model.CreateCustomerRequestPayloadScheme
@@ -50,6 +52,22 @@ func TestRequestService_Create(t *testing.T) {
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusOK,
 			wantErr:            false,
+		},
+
+		{
+			name: "CreateCustomerRequestWhenTheFieldsDoNotContainValues",
+			payload: &model.CreateCustomerRequestPayloadScheme{
+				RequestParticipants: []string{"sample-uuid", "sample-uuid"},
+				ServiceDeskID:       "300202",
+				RequestTypeID:       "211991",
+			},
+			fields:             &customFieldMockedWithoutFields,
+			mockFile:           "./mocks/get-customer-request.json",
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/servicedeskapi/request",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
 		},
 
 		{

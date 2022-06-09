@@ -3,11 +3,176 @@ package sm
 import (
 	"context"
 	"fmt"
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/url"
 	"testing"
 )
+
+func TestRequestService_Create(t *testing.T) {
+
+	var customFieldMockedWithFields = model.CustomerRequestFields{}
+
+	// Add a new custom field
+	err := customFieldMockedWithFields.Text("summary", "Request JSD help via REST")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	err = customFieldMockedWithFields.Text("description", "I need a new *mouse* for my Mac")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	testCases := []struct {
+		name               string
+		payload            *model.CreateCustomerRequestPayloadScheme
+		fields             *model.CustomerRequestFields
+		mockFile           string
+		wantHTTPMethod     string
+		endpoint           string
+		context            context.Context
+		wantHTTPCodeReturn int
+		wantErr            bool
+	}{
+		{
+			name: "CreateCustomerRequestWhenTheParametersAreCorrect",
+			payload: &model.CreateCustomerRequestPayloadScheme{
+				RequestParticipants: []string{"sample-uuid", "sample-uuid"},
+				ServiceDeskID:       "300202",
+				RequestTypeID:       "211991",
+			},
+			fields:             &customFieldMockedWithFields,
+			mockFile:           "./mocks/get-customer-request.json",
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/servicedeskapi/request",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            false,
+		},
+
+		{
+			name: "CreateCustomerRequestWhenTheResponseIsEmpty",
+			payload: &model.CreateCustomerRequestPayloadScheme{
+				RequestParticipants: []string{"sample-uuid", "sample-uuid"},
+				ServiceDeskID:       "300202",
+				RequestTypeID:       "211991",
+			},
+			fields:             &customFieldMockedWithFields,
+			mockFile:           "./mocks/empty_json.json",
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/servicedeskapi/request",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+
+		{
+			name: "CreateCustomerRequestWhenTheContextIsNotProvided",
+			payload: &model.CreateCustomerRequestPayloadScheme{
+				RequestParticipants: []string{"sample-uuid", "sample-uuid"},
+				ServiceDeskID:       "300202",
+				RequestTypeID:       "211991",
+			},
+			fields:             &customFieldMockedWithFields,
+			mockFile:           "./mocks/get-customer-request.json",
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/servicedeskapi/request",
+			context:            nil,
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+
+		{
+			name: "CreateCustomerRequestWhenTheFieldsAreNotProvided",
+			payload: &model.CreateCustomerRequestPayloadScheme{
+				RequestParticipants: []string{"sample-uuid", "sample-uuid"},
+				ServiceDeskID:       "300202",
+				RequestTypeID:       "211991",
+			},
+			fields:             nil,
+			mockFile:           "./mocks/get-customer-request.json",
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/servicedeskapi/request",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+
+			//Init a new HTTP mock server
+			mockOptions := mockServerOptions{
+				Endpoint:           testCase.endpoint,
+				MockFilePath:       testCase.mockFile,
+				MethodAccepted:     testCase.wantHTTPMethod,
+				ResponseCodeWanted: testCase.wantHTTPCodeReturn,
+			}
+
+			mockServer, err := startMockServer(&mockOptions)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			defer mockServer.Close()
+
+			//Init the library instance
+			mockClient, err := startMockClient(mockServer.URL)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			service := &RequestService{client: mockClient}
+			gotResult, gotResponse, err := service.Create(testCase.context, testCase.payload, testCase.fields)
+
+			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+				assert.Error(t, err)
+
+				if gotResponse != nil {
+					t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
+				}
+			} else {
+
+				assert.NoError(t, err)
+				assert.NotEqual(t, gotResponse, nil)
+				assert.NotEqual(t, gotResult, nil)
+
+				apiEndpoint, err := url.Parse(gotResponse.Endpoint)
+				if err != nil {
+					t.Fatal(err)
+				}
+
+				var endpointToAssert string
+
+				if apiEndpoint.Query().Encode() != "" {
+					endpointToAssert = fmt.Sprintf("%v?%v", apiEndpoint.Path, apiEndpoint.Query().Encode())
+				} else {
+					endpointToAssert = apiEndpoint.Path
+				}
+
+				t.Logf("HTTP Endpoint Wanted: %v, HTTP Endpoint Returned: %v", testCase.endpoint, endpointToAssert)
+				assert.Equal(t, testCase.endpoint, endpointToAssert)
+
+				t.Logf("HTTP Code Wanted: %v, HTTP Code Returned: %v", testCase.wantHTTPCodeReturn, gotResponse.Code)
+				assert.Equal(t, gotResponse.Code, testCase.wantHTTPCodeReturn)
+
+				t.Log("-------------------------------------------")
+				t.Logf("Custom Request Issue Key: %v", gotResult.IssueKey)
+				t.Logf("Custom Request Type Name: %v", gotResult.RequestType)
+				t.Log("-------------------------------------------")
+			}
+
+		})
+	}
+
+}
 
 func TestRequestService_Gets(t *testing.T) {
 

@@ -25,6 +25,7 @@ var (
 	ErrNoRequestTypeIDError       = errors.New("sm: no request type id set")
 	ErrNoFileNameError            = errors.New("sm: no file name set")
 	ErrNoFileReaderError          = errors.New("sm: no io.Reader set")
+	ErrNoCustomRequestFieldsError = errors.New("sm: no customer request fields set")
 
 	ErrNoContentIDError             = errors.New("confluence: no content id set")
 	ErrNoCQLError                   = errors.New("confluence: no CQL query set")

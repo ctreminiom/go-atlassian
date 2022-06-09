@@ -32,6 +32,44 @@ type RequestGetOptionsScheme struct {
 	Expand            []string
 }
 
+// Create creates a customer request in a service desk.
+// The JSON request must include the service desk and customer request type, as well as any fields that are required for
+// the request type.
+// Docs: https://docs.go-atlassian.io/jira-service-management/request#create-customer-request
+func (r *RequestService) Create(ctx context.Context, payload *model.CreateCustomerRequestPayloadScheme, fields *model.CustomerRequestFields) (
+	result *model.CustomerRequestScheme, response *ResponseScheme, err error) {
+
+	if fields == nil {
+		return nil, nil, model.ErrNoCustomRequestFieldsError
+	}
+
+	payloadWithCustomFields, err := payload.MergeFields(fields)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	reader, err := transformStructToReader(&payloadWithCustomFields)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	endpoint := "rest/servicedeskapi/request"
+	request, err := r.client.newRequest(ctx, http.MethodPost, endpoint, reader)
+	if err != nil {
+		return
+	}
+
+	request.Header.Set("Accept", "application/json")
+	request.Header.Set("Content-Type", "application/json")
+
+	response, err = r.client.Call(request, &result)
+	if err != nil {
+		return
+	}
+
+	return
+}
+
 // Gets returns all customer requests for the user executing the query.
 // The returned customer requests are ordered chronologically by the latest activity on each request. For example, the latest status transition or comment.
 // Docs: https://docs.go-atlassian.io/jira-service-management-cloud/request#get-customer-requests

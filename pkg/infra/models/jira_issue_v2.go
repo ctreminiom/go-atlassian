@@ -86,6 +86,7 @@ type IssueFieldsSchemeV2 struct {
 	Components               []*ComponentScheme        `json:"components,omitempty"`
 	Creator                  *UserScheme               `json:"creator,omitempty"`
 	Reporter                 *UserScheme               `json:"reporter,omitempty"`
+	Assignee                 *UserScheme               `json:"assignee,omitempty"`
 	Resolution               *ResolutionScheme         `json:"resolution,omitempty"`
 	Resolutiondate           string                    `json:"resolutiondate,omitempty"`
 	Workratio                int                       `json:"workratio,omitempty"`
@@ -99,6 +100,7 @@ type IssueFieldsSchemeV2 struct {
 	Description              string                    `json:"description,omitempty"`
 	Comment                  *IssueCommentPageSchemeV2 `json:"comment,omitempty"`
 	Subtasks                 []*IssueScheme            `json:"subtasks,omitempty"`
+	Security                 *SecurityScheme           `json:"security,omitempty"`
 }
 
 type IssueResponseScheme struct {

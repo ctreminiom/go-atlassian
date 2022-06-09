@@ -100,6 +100,7 @@ type IssueFieldsSchemeV2 struct {
 	Description              string                    `json:"description,omitempty"`
 	Comment                  *IssueCommentPageSchemeV2 `json:"comment,omitempty"`
 	Subtasks                 []*IssueScheme            `json:"subtasks,omitempty"`
+	Security                 *SecurityScheme           `json:"security,omitempty"`
 }
 
 type IssueResponseScheme struct {

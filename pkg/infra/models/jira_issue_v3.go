@@ -100,6 +100,7 @@ type IssueFieldsScheme struct {
 	Description              *CommentNodeScheme      `json:"description,omitempty"`
 	Comment                  *IssueCommentPageScheme `json:"comment,omitempty"`
 	Subtasks                 []*IssueScheme          `json:"subtasks,omitempty"`
+	Security                 *SecurityScheme         `json:"security,omitempty"`
 }
 
 type IssueTransitionScheme struct {

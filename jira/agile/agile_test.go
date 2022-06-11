@@ -409,3 +409,192 @@ func Test_transformTheHTTPResponse(t *testing.T) {
 		})
 	}
 }
+
+func TestClient_transformStructToReader(t *testing.T) {
+	type args struct {
+		structure interface{}
+	}
+	tests := []struct {
+		name       string
+		args       args
+		wantReader io.Reader
+		wantErr    bool
+	}{
+
+		{
+			name: "TransformStructToReaderWhenTheStructIsNotSerialize",
+			args: args{
+				structure: make(chan int),
+			},
+			wantReader: nil,
+			wantErr:    true,
+		},
+
+		{
+			name: "TransformStructToReaderWhenTheParametersAreCorrect",
+			args: args{
+				structure: &model.BoardPayloadScheme{
+					Name:     "DUMMY Board Name",
+					Type:     "scrum", //scrum or kanban
+					FilterID: 10016,
+
+					// Omit the Location if you want to the board to yourself (location)
+					Location: &model.BoardPayloadLocationScheme{
+						ProjectKeyOrID: "KP",
+						Type:           "project",
+					},
+				},
+			},
+			wantReader: nil,
+			wantErr:    false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+
+			c := &Client{}
+			gotReader, err := c.transformStructToReader(tt.args.structure)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("transformStructToReader() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+
+			tt.wantReader = gotReader
+			if !reflect.DeepEqual(gotReader, tt.wantReader) {
+				t.Errorf("transformStructToReader() gotReader = %v, want %v", gotReader, tt.wantReader)
+			}
+		})
+	}
+}
+
+func TestClient_transformTheHTTPResponse(t *testing.T) {
+
+	var (
+		responseScenarios      = make(map[string]*http.Response)
+		responseConfigurations = make(map[string]map[string]interface{})
+	)
+
+	//Add the scenarios
+	responseConfigurations["badRequestResponseWithIncorrectFormat"] = map[string]interface{}{
+		"endpoint":      "/example",
+		"mock-response": "../mocks/get-contents.json",
+		"method":        http.MethodGet,
+		"status":        http.StatusBadRequest,
+		"closed?":       false,
+	}
+
+	responseConfigurations["badRequestResponseWithNotResponseBody"] = map[string]interface{}{
+		"endpoint":      "/example",
+		"mock-response": "",
+		"method":        http.MethodGet,
+		"status":        http.StatusBadRequest,
+		"closed?":       true,
+	}
+
+	responseConfigurations["OkRequestResponseWithNotResponseBody"] = map[string]interface{}{
+		"endpoint":      "/",
+		"mock-response": "../mocks/get-contents.json",
+		"method":        http.MethodGet,
+		"status":        http.StatusOK,
+		"closed?":       true,
+	}
+
+	for scenario, configuration := range responseConfigurations {
+
+		mockOptions := mockServerOptions{
+			Endpoint:           configuration["endpoint"].(string),
+			MockFilePath:       configuration["mock-response"].(string),
+			MethodAccepted:     configuration["method"].(string),
+			ResponseCodeWanted: configuration["status"].(int),
+		}
+
+		mockServer, err := startMockServer(&mockOptions)
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		mockRequest, err := http.NewRequest(http.MethodGet, mockServer.URL, nil)
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		mockResponse, err := http.DefaultClient.Do(mockRequest)
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		if configuration["closed?"].(bool) {
+			mockResponse.Body.Close()
+		}
+
+		responseScenarios[scenario] = mockResponse
+	}
+
+	type args struct {
+		response  *http.Response
+		structure interface{}
+	}
+	tests := []struct {
+		name       string
+		args       args
+		wantResult *model.ResponseScheme
+		wantErr    bool
+	}{
+		{
+			name: "TransformHTTPResponseWhenResponseIsNil",
+			args: args{
+				response:  nil,
+				structure: nil,
+			},
+			wantResult: nil,
+			wantErr:    true,
+		},
+
+		{
+			name: "TransformHTTPResponseWhenResponseReturnsABadRequestAndIncorrectFormat",
+			args: args{
+				response:  responseScenarios["badRequestResponseWithIncorrectFormat"],
+				structure: nil,
+			},
+			wantResult: nil,
+			wantErr:    true,
+		},
+
+		{
+			name: "TransformHTTPResponseWhenResponseReturnsABadRequestAndWithNotResponseBody",
+			args: args{
+				response:  responseScenarios["badRequestResponseWithNotResponseBody"],
+				structure: nil,
+			},
+			wantResult: nil,
+			wantErr:    true,
+		},
+
+		{
+			name: "TransformHTTPResponseWhenResponseReturnsAOkRequestAndWithNotResponseBody",
+			args: args{
+				response:  responseScenarios["OkRequestResponseWithNotResponseBody"],
+				structure: nil,
+			},
+			wantResult: nil,
+			wantErr:    true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+
+			c := &Client{}
+			gotResult, err := c.transformTheHTTPResponse(tt.args.response, tt.args.structure)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("transformTheHTTPResponse() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+
+			tt.wantResult = gotResult
+
+			if !reflect.DeepEqual(gotResult, tt.wantResult) {
+				t.Errorf("transformTheHTTPResponse() gotResult = %v, want %v", gotResult, tt.wantResult)
+			}
+		})
+	}
+}

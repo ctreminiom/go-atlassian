@@ -71,6 +71,14 @@ func (c ClientV2) NewJsonRequest(ctx context.Context, method, apiEndpoint string
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Content-Type", "application/json")
 
+	if c.Authentication.HasBasicAuth() {
+		request.SetBasicAuth(c.Authentication.GetBasicAuth())
+	}
+
+	if c.Authentication.HasUserAgent() {
+		request.Header.Set("User-Agent", c.Authentication.GetUserAgent())
+	}
+
 	return request, nil
 }
 

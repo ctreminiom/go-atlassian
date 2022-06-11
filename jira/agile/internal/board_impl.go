@@ -346,12 +346,10 @@ func (b BoardService) Move(ctx context.Context, boardId int, payload *model.Boar
 
 	endpoint := fmt.Sprintf("/rest/agile/%v/board/%v/issue", b.version, boardId)
 
-	request, err := b.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := b.c.NewJsonRequest(ctx, http.MethodPost, endpoint, reader)
 	if err != nil {
 		return nil, err
 	}
-
-	request.Header.Set("Content-Type", "application/json")
 
 	response, err := b.c.Call(request, nil)
 	if err != nil {
@@ -377,8 +375,6 @@ func (b BoardService) Projects(ctx context.Context, boardId, startAt, maxResults
 	if err != nil {
 		return nil, nil, err
 	}
-
-	request.Header.Set("Accept", "application/json")
 
 	var projects model.BoardProjectPageScheme
 	response, err := b.c.Call(request, &projects)
@@ -406,8 +402,6 @@ func (b BoardService) Sprints(ctx context.Context, boardId, startAt, maxResults 
 	if err != nil {
 		return nil, nil, err
 	}
-
-	request.Header.Set("Accept", "application/json")
 
 	var sprints model.BoardSprintPageScheme
 	response, err := b.c.Call(request, &sprints)
@@ -467,9 +461,9 @@ func (b BoardService) IssuesBySprint(ctx context.Context, boardId, sprintId, sta
 	return &issues, response, nil
 }
 
-func (b BoardService) Versions(ctx context.Context, boardID, startAt, maxResults int, released bool) (*model.BoardVersionPageScheme, *model.ResponseScheme, error) {
+func (b BoardService) Versions(ctx context.Context, boardId, startAt, maxResults int, released bool) (*model.BoardVersionPageScheme, *model.ResponseScheme, error) {
 
-	if boardID == 0 {
+	if boardId == 0 {
 		return nil, nil, model.ErrNoBoardIDError
 	}
 
@@ -478,14 +472,12 @@ func (b BoardService) Versions(ctx context.Context, boardID, startAt, maxResults
 	params.Add("maxResults", strconv.Itoa(maxResults))
 	params.Add("released", fmt.Sprintf("%t", released))
 
-	endpoint := fmt.Sprintf("/rest/agile/%v/board/%v/version?%v", b.version, boardID, params.Encode())
+	endpoint := fmt.Sprintf("/rest/agile/%v/board/%v/version?%v", b.version, boardId, params.Encode())
 
 	request, err := b.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
 		return nil, nil, err
 	}
-
-	request.Header.Set("Accept", "application/json")
 
 	var versions model.BoardVersionPageScheme
 	response, err := b.c.Call(request, &versions)

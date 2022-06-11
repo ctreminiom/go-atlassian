@@ -2045,193 +2045,704 @@ func Test_BoardService_IssuesWithoutEpic(t *testing.T) {
 	}
 }
 
-func TestBoardService_Move(t *testing.T) {
+func Test_BoardService_Move(t *testing.T) {
+
 	type fields struct {
-		c       service.Client
-		version string
+		c service.Client
 	}
+
 	type args struct {
 		ctx     context.Context
 		boardId int
 		payload *model.BoardMovementPayloadScheme
 	}
-	tests := []struct {
+
+	testCases := []struct {
 		name    string
 		fields  fields
 		args    args
-		want    *model.ResponseScheme
+		on      func(*fields)
 		wantErr bool
+		Err     error
 	}{
-		// TODO: Add test cases.
+		{
+			name: "when the parameters are correct",
+			args: args{
+				ctx:     context.Background(),
+				boardId: 1000,
+				payload: &model.BoardMovementPayloadScheme{
+					Issues:            []string{"PR-1", "10001", "PR-3"},
+					RankBeforeIssue:   "PR-4",
+					RankCustomFieldID: 10521,
+				},
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewClient(t)
+
+				client.On("TransformStructToReader",
+					&model.BoardMovementPayloadScheme{
+						Issues:            []string{"PR-1", "10001", "PR-3"},
+						RankBeforeIssue:   "PR-4",
+						RankCustomFieldID: 10521,
+					}).Return(bytes.NewReader([]byte{}), nil)
+
+				client.On("NewJsonRequest",
+					context.Background(),
+					http.MethodPost,
+					"/rest/agile/1.0/board/1000/issue",
+					bytes.NewReader([]byte{})).
+					Return(&http.Request{}, nil)
+
+				client.On("Call",
+					&http.Request{},
+					nil).
+					Return(&model.ResponseScheme{}, nil)
+
+				fields.c = client
+			},
+		},
+
+		{
+			name: "when the http call cannot be executed",
+			args: args{
+				ctx:     context.Background(),
+				boardId: 1000,
+				payload: &model.BoardMovementPayloadScheme{
+					Issues:            []string{"PR-1", "10001", "PR-3"},
+					RankBeforeIssue:   "PR-4",
+					RankCustomFieldID: 10521,
+				},
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewClient(t)
+
+				client.On("TransformStructToReader",
+					&model.BoardMovementPayloadScheme{
+						Issues:            []string{"PR-1", "10001", "PR-3"},
+						RankBeforeIssue:   "PR-4",
+						RankCustomFieldID: 10521,
+					}).Return(bytes.NewReader([]byte{}), nil)
+
+				client.On("NewJsonRequest",
+					context.Background(),
+					http.MethodPost,
+					"/rest/agile/1.0/board/1000/issue",
+					bytes.NewReader([]byte{})).
+					Return(&http.Request{}, nil)
+
+				client.On("Call",
+					&http.Request{},
+					nil).
+					Return(&model.ResponseScheme{}, errors.New("client: no http response found"))
+
+				fields.c = client
+			},
+			Err:     errors.New("client: no http response found"),
+			wantErr: true,
+		},
+
+		{
+			name: "when the request cannot be created",
+			args: args{
+				ctx:     context.Background(),
+				boardId: 1000,
+				payload: &model.BoardMovementPayloadScheme{
+					Issues:            []string{"PR-1", "10001", "PR-3"},
+					RankBeforeIssue:   "PR-4",
+					RankCustomFieldID: 10521,
+				},
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewClient(t)
+
+				client.On("TransformStructToReader",
+					&model.BoardMovementPayloadScheme{
+						Issues:            []string{"PR-1", "10001", "PR-3"},
+						RankBeforeIssue:   "PR-4",
+						RankCustomFieldID: 10521,
+					}).Return(bytes.NewReader([]byte{}), nil)
+
+				client.On("NewJsonRequest",
+					context.Background(),
+					http.MethodPost,
+					"/rest/agile/1.0/board/1000/issue",
+					bytes.NewReader([]byte{})).
+					Return(&http.Request{}, errors.New("client: no http request created"))
+
+				fields.c = client
+			},
+			Err:     errors.New("client: no http request created"),
+			wantErr: true,
+		},
+
+		{
+			name: "when the board id is not provided",
+			args: args{
+				ctx:     context.Background(),
+				boardId: 0,
+				payload: &model.BoardMovementPayloadScheme{
+					Issues:            []string{"PR-1", "10001", "PR-3"},
+					RankBeforeIssue:   "PR-4",
+					RankCustomFieldID: 10521,
+				},
+			},
+			on: func(fields *fields) {
+				fields.c = mocks.NewClient(t)
+			},
+			Err:     model.ErrNoBoardIDError,
+			wantErr: true,
+		},
 	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			b := BoardService{
-				c:       tt.fields.c,
-				version: tt.fields.version,
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+
+			if testCase.on != nil {
+				testCase.on(&testCase.fields)
 			}
-			got, err := b.Move(tt.args.ctx, tt.args.boardId, tt.args.payload)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("Move() error = %v, wantErr %v", err, tt.wantErr)
-				return
-			}
-			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("Move() got = %v, want %v", got, tt.want)
+
+			service, err := NewBoardService(testCase.fields.c, "1.0")
+			assert.NoError(t, err)
+
+			gotResponse, err := service.Move(testCase.args.ctx, testCase.args.boardId, testCase.args.payload)
+
+			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+
+				assert.EqualError(t, err, testCase.Err.Error())
+
+			} else {
+
+				assert.NoError(t, err)
+				assert.NotEqual(t, gotResponse, nil)
 			}
 		})
 	}
 }
 
-func TestBoardService_Projects(t *testing.T) {
+func Test_BoardService_Projects(t *testing.T) {
+
 	type fields struct {
-		c       service.Client
-		version string
+		c service.Client
 	}
+
 	type args struct {
-		ctx        context.Context
-		boardId    int
-		startAt    int
-		maxResults int
+		ctx                          context.Context
+		boardId, startAt, maxResults int
 	}
-	tests := []struct {
+
+	testCases := []struct {
 		name    string
 		fields  fields
 		args    args
-		want    *model.BoardProjectPageScheme
-		want1   *model.ResponseScheme
+		on      func(*fields)
 		wantErr bool
+		Err     error
 	}{
-		// TODO: Add test cases.
+		{
+			name: "when the parameters are correct",
+			args: args{
+				ctx:        context.Background(),
+				boardId:    1000,
+				startAt:    0,
+				maxResults: 50,
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewClient(t)
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodGet,
+					"/rest/agile/1.0/board/1000/project?maxResults=50&startAt=0",
+					nil).
+					Return(&http.Request{}, nil)
+
+				client.On("Call",
+					&http.Request{},
+					&model.BoardProjectPageScheme{}).
+					Return(&model.ResponseScheme{}, nil)
+
+				fields.c = client
+			},
+		},
+
+		{
+			name: "when the http call cannot be executed",
+			args: args{
+				ctx:        context.Background(),
+				boardId:    1000,
+				startAt:    0,
+				maxResults: 50,
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewClient(t)
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodGet,
+					"/rest/agile/1.0/board/1000/project?maxResults=50&startAt=0",
+					nil).
+					Return(&http.Request{}, nil)
+
+				client.On("Call",
+					&http.Request{},
+					&model.BoardProjectPageScheme{}).
+					Return(&model.ResponseScheme{}, errors.New("client: no http response found"))
+
+				fields.c = client
+			},
+			Err:     errors.New("client: no http response found"),
+			wantErr: true,
+		},
+
+		{
+			name: "when the request cannot be created",
+			args: args{
+				ctx:        context.Background(),
+				boardId:    1000,
+				startAt:    0,
+				maxResults: 50,
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewClient(t)
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodGet,
+					"/rest/agile/1.0/board/1000/project?maxResults=50&startAt=0",
+					nil).
+					Return(&http.Request{}, errors.New("client: no http request created"))
+
+				fields.c = client
+			},
+			Err:     errors.New("client: no http request created"),
+			wantErr: true,
+		},
+
+		{
+			name: "when the board id is not provided",
+			args: args{
+				ctx:        context.Background(),
+				startAt:    0,
+				maxResults: 50,
+			},
+			on: func(fields *fields) {
+				fields.c = mocks.NewClient(t)
+			},
+			Err:     model.ErrNoBoardIDError,
+			wantErr: true,
+		},
 	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			b := BoardService{
-				c:       tt.fields.c,
-				version: tt.fields.version,
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+
+			if testCase.on != nil {
+				testCase.on(&testCase.fields)
 			}
-			got, got1, err := b.Projects(tt.args.ctx, tt.args.boardId, tt.args.startAt, tt.args.maxResults)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("Projects() error = %v, wantErr %v", err, tt.wantErr)
-				return
-			}
-			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("Projects() got = %v, want %v", got, tt.want)
-			}
-			if !reflect.DeepEqual(got1, tt.want1) {
-				t.Errorf("Projects() got1 = %v, want %v", got1, tt.want1)
+
+			service, err := NewBoardService(testCase.fields.c, "1.0")
+			assert.NoError(t, err)
+
+			gotResult, gotResponse, err := service.Projects(testCase.args.ctx, testCase.args.boardId, testCase.args.startAt,
+				testCase.args.maxResults)
+
+			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+
+				assert.EqualError(t, err, testCase.Err.Error())
+
+			} else {
+
+				assert.NoError(t, err)
+				assert.NotEqual(t, gotResponse, nil)
+				assert.NotEqual(t, gotResult, nil)
 			}
 		})
 	}
 }
 
-func TestBoardService_Sprints(t *testing.T) {
+func Test_BoardService_Sprints(t *testing.T) {
+
 	type fields struct {
-		c       service.Client
-		version string
+		c service.Client
 	}
+
 	type args struct {
-		ctx        context.Context
-		boardId    int
-		startAt    int
-		maxResults int
-		states     []string
+		ctx                          context.Context
+		boardId, startAt, maxResults int
+		states                       []string
 	}
-	tests := []struct {
+
+	testCases := []struct {
 		name    string
 		fields  fields
 		args    args
-		want    *model.BoardSprintPageScheme
-		want1   *model.ResponseScheme
+		on      func(*fields)
 		wantErr bool
+		Err     error
 	}{
-		// TODO: Add test cases.
+		{
+			name: "when the parameters are correct",
+			args: args{
+				ctx:        context.Background(),
+				boardId:    1000,
+				startAt:    0,
+				maxResults: 50,
+				states:     []string{"active"},
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewClient(t)
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodGet,
+					"/rest/agile/1.0/board/1000/sprint?maxResults=50&startAt=0&state=active",
+					nil).
+					Return(&http.Request{}, nil)
+
+				client.On("Call",
+					&http.Request{},
+					&model.BoardSprintPageScheme{}).
+					Return(&model.ResponseScheme{}, nil)
+
+				fields.c = client
+			},
+		},
+
+		{
+			name: "when the http call cannot be executed",
+			args: args{
+				ctx:        context.Background(),
+				boardId:    1000,
+				startAt:    0,
+				maxResults: 50,
+				states:     []string{"active"},
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewClient(t)
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodGet,
+					"/rest/agile/1.0/board/1000/sprint?maxResults=50&startAt=0&state=active",
+					nil).
+					Return(&http.Request{}, nil)
+
+				client.On("Call",
+					&http.Request{},
+					&model.BoardSprintPageScheme{}).
+					Return(&model.ResponseScheme{}, errors.New("client: no http response found"))
+
+				fields.c = client
+			},
+			Err:     errors.New("client: no http response found"),
+			wantErr: true,
+		},
+
+		{
+			name: "when the request cannot be created",
+			args: args{
+				ctx:        context.Background(),
+				boardId:    1000,
+				startAt:    0,
+				maxResults: 50,
+				states:     []string{"active"},
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewClient(t)
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodGet,
+					"/rest/agile/1.0/board/1000/sprint?maxResults=50&startAt=0&state=active",
+					nil).
+					Return(&http.Request{}, errors.New("client: no http request created"))
+
+				fields.c = client
+			},
+			Err:     errors.New("client: no http request created"),
+			wantErr: true,
+		},
+
+		{
+			name: "when the board id is not provided",
+			args: args{
+				ctx:        context.Background(),
+				startAt:    0,
+				maxResults: 50,
+			},
+			on: func(fields *fields) {
+				fields.c = mocks.NewClient(t)
+			},
+			Err:     model.ErrNoBoardIDError,
+			wantErr: true,
+		},
 	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			b := BoardService{
-				c:       tt.fields.c,
-				version: tt.fields.version,
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+
+			if testCase.on != nil {
+				testCase.on(&testCase.fields)
 			}
-			got, got1, err := b.Sprints(tt.args.ctx, tt.args.boardId, tt.args.startAt, tt.args.maxResults, tt.args.states)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("Sprints() error = %v, wantErr %v", err, tt.wantErr)
-				return
-			}
-			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("Sprints() got = %v, want %v", got, tt.want)
-			}
-			if !reflect.DeepEqual(got1, tt.want1) {
-				t.Errorf("Sprints() got1 = %v, want %v", got1, tt.want1)
+
+			service, err := NewBoardService(testCase.fields.c, "1.0")
+			assert.NoError(t, err)
+
+			gotResult, gotResponse, err := service.Sprints(testCase.args.ctx, testCase.args.boardId, testCase.args.startAt,
+				testCase.args.maxResults, testCase.args.states)
+
+			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+
+				assert.EqualError(t, err, testCase.Err.Error())
+
+			} else {
+
+				assert.NoError(t, err)
+				assert.NotEqual(t, gotResponse, nil)
+				assert.NotEqual(t, gotResult, nil)
 			}
 		})
 	}
 }
 
-func TestBoardService_Versions(t *testing.T) {
+func Test_BoardService_Versions(t *testing.T) {
+
 	type fields struct {
-		c       service.Client
-		version string
+		c service.Client
 	}
+
 	type args struct {
-		ctx        context.Context
-		boardID    int
-		startAt    int
-		maxResults int
-		released   bool
+		ctx                          context.Context
+		boardId, startAt, maxResults int
+		released                     bool
 	}
-	tests := []struct {
+
+	testCases := []struct {
 		name    string
 		fields  fields
 		args    args
-		want    *model.BoardVersionPageScheme
-		want1   *model.ResponseScheme
+		on      func(*fields)
 		wantErr bool
+		Err     error
 	}{
-		// TODO: Add test cases.
+		{
+			name: "when the parameters are correct",
+			args: args{
+				ctx:        context.Background(),
+				boardId:    1000,
+				startAt:    0,
+				maxResults: 50,
+				released:   true,
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewClient(t)
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodGet,
+					"/rest/agile/1.0/board/1000/version?maxResults=50&released=true&startAt=0",
+					nil).
+					Return(&http.Request{}, nil)
+
+				client.On("Call",
+					&http.Request{},
+					&model.BoardVersionPageScheme{}).
+					Return(&model.ResponseScheme{}, nil)
+
+				fields.c = client
+			},
+		},
+
+		{
+			name: "when the versions are not released",
+			args: args{
+				ctx:        context.Background(),
+				boardId:    1000,
+				startAt:    0,
+				maxResults: 50,
+				released:   false,
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewClient(t)
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodGet,
+					"/rest/agile/1.0/board/1000/version?maxResults=50&released=false&startAt=0",
+					nil).
+					Return(&http.Request{}, nil)
+
+				client.On("Call",
+					&http.Request{},
+					&model.BoardVersionPageScheme{}).
+					Return(&model.ResponseScheme{}, nil)
+
+				fields.c = client
+			},
+		},
+
+		{
+			name: "when the http call cannot be executed",
+			args: args{
+				ctx:        context.Background(),
+				boardId:    1000,
+				startAt:    0,
+				maxResults: 50,
+				released:   true,
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewClient(t)
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodGet,
+					"/rest/agile/1.0/board/1000/version?maxResults=50&released=true&startAt=0",
+					nil).
+					Return(&http.Request{}, nil)
+
+				client.On("Call",
+					&http.Request{},
+					&model.BoardVersionPageScheme{}).
+					Return(&model.ResponseScheme{}, errors.New("client: no http response found"))
+
+				fields.c = client
+			},
+			Err:     errors.New("client: no http response found"),
+			wantErr: true,
+		},
+
+		{
+			name: "when the request cannot be created",
+			args: args{
+				ctx:        context.Background(),
+				boardId:    1000,
+				startAt:    0,
+				maxResults: 50,
+				released:   true,
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewClient(t)
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodGet,
+					"/rest/agile/1.0/board/1000/version?maxResults=50&released=true&startAt=0",
+					nil).
+					Return(&http.Request{}, errors.New("client: no http request created"))
+
+				fields.c = client
+			},
+			Err:     errors.New("client: no http request created"),
+			wantErr: true,
+		},
+
+		{
+			name: "when the board id is not provided",
+			args: args{
+				ctx:        context.Background(),
+				startAt:    0,
+				maxResults: 50,
+			},
+			on: func(fields *fields) {
+				fields.c = mocks.NewClient(t)
+			},
+			Err:     model.ErrNoBoardIDError,
+			wantErr: true,
+		},
 	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			b := BoardService{
-				c:       tt.fields.c,
-				version: tt.fields.version,
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+
+			if testCase.on != nil {
+				testCase.on(&testCase.fields)
 			}
-			got, got1, err := b.Versions(tt.args.ctx, tt.args.boardID, tt.args.startAt, tt.args.maxResults, tt.args.released)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("Versions() error = %v, wantErr %v", err, tt.wantErr)
-				return
-			}
-			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("Versions() got = %v, want %v", got, tt.want)
-			}
-			if !reflect.DeepEqual(got1, tt.want1) {
-				t.Errorf("Versions() got1 = %v, want %v", got1, tt.want1)
+
+			service, err := NewBoardService(testCase.fields.c, "1.0")
+			assert.NoError(t, err)
+
+			gotResult, gotResponse, err := service.Versions(testCase.args.ctx, testCase.args.boardId, testCase.args.startAt,
+				testCase.args.maxResults, testCase.args.released)
+
+			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+
+				assert.EqualError(t, err, testCase.Err.Error())
+
+			} else {
+
+				assert.NoError(t, err)
+				assert.NotEqual(t, gotResponse, nil)
+				assert.NotEqual(t, gotResult, nil)
 			}
 		})
 	}
 }
 
 func TestNewBoardService(t *testing.T) {
+
 	type args struct {
 		client  service.Client
 		version string
 	}
-	tests := []struct {
+
+	testCases := []struct {
 		name    string
 		args    args
 		want    agile.Board
 		wantErr bool
 	}{
-		// TODO: Add test cases.
+		{
+			name: "when the agile version is not provided",
+			args: args{
+				client:  mocks.NewClient(t),
+				version: "",
+			},
+			want:    nil,
+			wantErr: true,
+		},
 	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			got, err := NewBoardService(tt.args.client, tt.args.version)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("NewBoardService() error = %v, wantErr %v", err, tt.wantErr)
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+
+			got, err := NewBoardService(testCase.args.client, testCase.args.version)
+
+			if (err != nil) != testCase.wantErr {
+				t.Errorf("NewBoardService() error = %v, wantErr %v", err, testCase.wantErr)
 				return
 			}
-			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("NewBoardService() got = %v, want %v", got, tt.want)
+
+			if !reflect.DeepEqual(got, testCase.want) {
+				t.Errorf("NewBoardService() got = %v, want %v", got, testCase.want)
 			}
 		})
 	}

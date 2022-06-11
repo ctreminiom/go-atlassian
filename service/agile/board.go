@@ -102,7 +102,7 @@ type Board interface {
 	// Note, if the user does not have permission to view the board, no versions will be returned at all.
 	// Returned versions are ordered by the name of the project from which they belong and then by sequence defined by user.
 	// Docs: https://docs.go-atlassian.io/jira-agile/boards#get-all-versions
-	Versions(ctx context.Context, boardID, startAt, maxResults int, released bool) (*model.BoardVersionPageScheme,
+	Versions(ctx context.Context, boardId, startAt, maxResults int, released bool) (*model.BoardVersionPageScheme,
 		*model.ResponseScheme, error)
 
 	// Delete deletes the board. Admin without the view permission can still remove the board.

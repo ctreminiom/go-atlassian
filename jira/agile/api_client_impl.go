@@ -43,6 +43,13 @@ func NewV2(httpClient *http.Client, site string) (*ClientV2, error) {
 
 	client.Board = board
 
+	epic, err := internal.NewEpicService(client, "1.0")
+	if err != nil {
+		return nil, err
+	}
+
+	client.Epic = epic
+
 	return client, nil
 }
 

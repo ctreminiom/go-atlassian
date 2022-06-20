@@ -26,6 +26,7 @@ type SharePermissionScheme struct {
 	Project *ProjectScheme     `json:"project,omitempty"`
 	Role    *ProjectRoleScheme `json:"role,omitempty"`
 	Group   *GroupScheme       `json:"group,omitempty"`
+	User    *UserDetailScheme  `json:"user,omitempty"`
 }
 
 type DashboardSearchPageScheme struct {

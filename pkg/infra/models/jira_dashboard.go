@@ -41,6 +41,7 @@ type DashboardPayloadScheme struct {
 	Name             string                   `json:"name,omitempty"`
 	Description      string                   `json:"description,omitempty"`
 	SharePermissions []*SharePermissionScheme `json:"sharePermissions,omitempty"`
+	EditPermissions  []*SharePermissionScheme `json:"editPermissions,omitempty"`
 }
 
 type DashboardSearchOptionsScheme struct {

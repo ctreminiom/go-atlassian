@@ -773,7 +773,7 @@ func TestIssueTypeScreenSchemeService_Gets(t *testing.T) {
 
 	testCases := []struct {
 		name               string
-		ids                []int
+		options            *models.IssueTypeScreenSchemeParamsScheme
 		startAt            int
 		maxResults         int
 		mockFile           string
@@ -784,47 +784,49 @@ func TestIssueTypeScreenSchemeService_Gets(t *testing.T) {
 		wantErr            bool
 	}{
 		{
-			name:               "GetIssueTypeSchemesWhenTheParametersAreCorrect",
-			ids:                []int{1000, 1001, 1002},
+			name: "GetIssueTypeSchemesWhenTheParametersAreCorrect",
+			options: &models.IssueTypeScreenSchemeParamsScheme{
+				IDs:         []int{1000, 1001, 1002},
+				QueryString: "DUMMY",
+				OrderBy:     "id",
+				Expand:      []string{"projects"},
+			},
 			startAt:            0,
 			maxResults:         50,
 			mockFile:           "../v3/mocks/get-issue-type-screen-schemes.json",
 			wantHTTPMethod:     http.MethodGet,
-			endpoint:           "/rest/api/2/issuetypescreenscheme?id=1000&id=1001&id=1002&maxResults=50&startAt=0",
+			endpoint:           "/rest/api/2/issuetypescreenscheme?=id&expand=projects&id=1000&id=1001&id=1002&maxResults=50&queryString=DUMMY&startAt=0",
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusOK,
 			wantErr:            false,
 		},
 
 		{
-			name:               "GetIssueTypeSchemesWhenTheIdsAreNotSet",
-			ids:                nil,
+			name: "GetIssueTypeSchemesWhenTheEndpointIsIncorrect",
+			options: &models.IssueTypeScreenSchemeParamsScheme{
+				IDs:         []int{1000, 1001, 1002},
+				QueryString: "DUMMY",
+				OrderBy:     "id",
+				Expand:      []string{"projects"},
+			},
 			startAt:            0,
 			maxResults:         50,
 			mockFile:           "../v3/mocks/get-issue-type-screen-schemes.json",
 			wantHTTPMethod:     http.MethodGet,
-			endpoint:           "/rest/api/2/issuetypescreenscheme?maxResults=50&startAt=0",
-			context:            context.Background(),
-			wantHTTPCodeReturn: http.StatusOK,
-			wantErr:            false,
-		},
-
-		{
-			name:               "GetIssueTypeSchemesWhenTheEndpointIsIncorrect",
-			ids:                []int{1000, 1001, 1002},
-			startAt:            0,
-			maxResults:         50,
-			mockFile:           "../v3/mocks/get-issue-type-screen-schemes.json",
-			wantHTTPMethod:     http.MethodGet,
-			endpoint:           "/rest/api/2/issuetypescreenschemes?id=1000&id=1001&id=1002&maxResults=50&startAt=0",
+			endpoint:           "/rest/api/2/issuetypescreesnschemes?id=1000&id=1001&id=1002&maxResults=50&startAt=0",
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusOK,
 			wantErr:            true,
 		},
 
 		{
-			name:               "GetIssueTypeSchemesWhenTheRequestMethodIsIncorrect",
-			ids:                []int{1000, 1001, 1002},
+			name: "GetIssueTypeSchemesWhenTheRequestMethodIsIncorrect",
+			options: &models.IssueTypeScreenSchemeParamsScheme{
+				IDs:         []int{1000, 1001, 1002},
+				QueryString: "DUMMY",
+				OrderBy:     "id",
+				Expand:      []string{"projects"},
+			},
 			startAt:            0,
 			maxResults:         50,
 			mockFile:           "../v3/mocks/get-issue-type-screen-schemes.json",
@@ -836,8 +838,13 @@ func TestIssueTypeScreenSchemeService_Gets(t *testing.T) {
 		},
 
 		{
-			name:               "GetIssueTypeSchemesWhenTheStatusCodeIsIncorrect",
-			ids:                []int{1000, 1001, 1002},
+			name: "GetIssueTypeSchemesWhenTheStatusCodeIsIncorrect",
+			options: &models.IssueTypeScreenSchemeParamsScheme{
+				IDs:         []int{1000, 1001, 1002},
+				QueryString: "DUMMY",
+				OrderBy:     "id",
+				Expand:      []string{"projects"},
+			},
 			startAt:            0,
 			maxResults:         50,
 			mockFile:           "../v3/mocks/get-issue-type-screen-schemes.json",
@@ -849,8 +856,13 @@ func TestIssueTypeScreenSchemeService_Gets(t *testing.T) {
 		},
 
 		{
-			name:               "GetIssueTypeSchemesWhenTheContextIsNil",
-			ids:                []int{1000, 1001, 1002},
+			name: "GetIssueTypeSchemesWhenTheContextIsNil",
+			options: &models.IssueTypeScreenSchemeParamsScheme{
+				IDs:         []int{1000, 1001, 1002},
+				QueryString: "DUMMY",
+				OrderBy:     "id",
+				Expand:      []string{"projects"},
+			},
 			startAt:            0,
 			maxResults:         50,
 			mockFile:           "../v3/mocks/get-issue-type-screen-schemes.json",
@@ -862,8 +874,13 @@ func TestIssueTypeScreenSchemeService_Gets(t *testing.T) {
 		},
 
 		{
-			name:               "GetIssueTypeSchemesWhenTheResponseBodyHasADifferentFormat",
-			ids:                []int{1000, 1001, 1002},
+			name: "GetIssueTypeSchemesWhenTheResponseBodyHasADifferentFormat",
+			options: &models.IssueTypeScreenSchemeParamsScheme{
+				IDs:         []int{1000, 1001, 1002},
+				QueryString: "DUMMY",
+				OrderBy:     "id",
+				Expand:      []string{"projects"},
+			},
 			startAt:            0,
 			maxResults:         50,
 			mockFile:           "../v3/mocks/empty_json.json",
@@ -902,7 +919,7 @@ func TestIssueTypeScreenSchemeService_Gets(t *testing.T) {
 
 			i := &IssueTypeScreenSchemeService{client: mockClient}
 
-			gotResult, gotResponse, err := i.Gets(testCase.context, testCase.ids, testCase.startAt, testCase.maxResults)
+			gotResult, gotResponse, err := i.Gets(testCase.context, testCase.options, testCase.startAt, testCase.maxResults)
 
 			if testCase.wantErr {
 

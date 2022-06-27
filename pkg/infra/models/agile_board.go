@@ -203,7 +203,8 @@ type GetBoardsOptions struct {
 }
 
 type IssueOptionScheme struct {
-	JQL            string
-	ValidateQuery  bool
-	Fields, Expand []string
+	JQL           string
+	ValidateQuery bool
+	Fields        []string
+	Expand        []string
 }

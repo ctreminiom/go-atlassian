@@ -32,9 +32,10 @@ func NewV2(httpClient *http.Client, site string) (*ClientV2, error) {
 		return nil, err
 	}
 
-	client := &ClientV2{}
-	client.HTTP = httpClient
-	client.Site = siteAsURL
+	client := &ClientV2{
+		HTTP: httpClient,
+		Site: siteAsURL,
+	}
 
 	board, err := internal.NewBoardService(client, "1.0")
 	if err != nil {

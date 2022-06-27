@@ -50,3 +50,7 @@ type PermissionGrantPayloadScheme struct {
 	Holder     *PermissionGrantHolderScheme `json:"holder,omitempty"`
 	Permission string                       `json:"permission,omitempty"`
 }
+
+type PermittedProjectsScheme struct {
+	Projects []*ProjectIdentifierScheme `json:"projects,omitempty"`
+}

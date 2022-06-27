@@ -156,3 +156,8 @@ type ProjectHierarchyIssueTypeScheme struct {
 	Name     string `json:"name,omitempty"`
 	AvatarID int    `json:"avatarId,omitempty"`
 }
+
+type ProjectIdentifierScheme struct {
+	ID  int    `json:"id,omitempty"`
+	Key string `json:"key,omitempty"`
+}

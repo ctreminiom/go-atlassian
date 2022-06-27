@@ -1,5 +1,12 @@
 package models
 
+type IssueTypeScreenSchemeParamsScheme struct {
+	IDs         []int
+	QueryString string
+	OrderBy     string
+	Expand      []string
+}
+
 type IssueTypeScreenSchemePageScheme struct {
 	Self       string                         `json:"self,omitempty"`
 	NextPage   string                         `json:"nextPage,omitempty"`
@@ -21,9 +28,10 @@ type IssueTypeScreenSchemeMappingPayloadScheme struct {
 }
 
 type IssueTypeScreenSchemeScheme struct {
-	ID          string `json:"id,omitempty"`
-	Name        string `json:"name,omitempty"`
-	Description string `json:"description,omitempty"`
+	ID          string               `json:"id,omitempty"`
+	Name        string               `json:"name,omitempty"`
+	Description string               `json:"description,omitempty"`
+	Projects    *ProjectSearchScheme `json:"projects,omitempty"`
 }
 
 type IssueTypeScreenScreenCreatedScheme struct {

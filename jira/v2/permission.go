@@ -84,3 +84,35 @@ func (p *PermissionService) Check(ctx context.Context, payload *models.Permissio
 
 	return
 }
+
+// Projects returns all the projects where the user is granted a list of project permissions.
+func (p *PermissionService) Projects(ctx context.Context, permissions []string) (result *models.PermittedProjectsScheme, response *ResponseScheme, err error) {
+
+	payload := struct {
+		Permissions []string `json:"permissions,omitempty"`
+	}{
+		Permissions: permissions,
+	}
+
+	payloadAsReader, err := transformStructToReader(&payload)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	var endpoint = "/rest/api/2/permissions/project"
+
+	request, err := p.client.newRequest(ctx, http.MethodPost, endpoint, payloadAsReader)
+	if err != nil {
+		return
+	}
+
+	request.Header.Set("Accept", "application/json")
+	request.Header.Set("Content-Type", "application/json")
+
+	response, err = p.client.call(request, &result)
+	if err != nil {
+		return
+	}
+
+	return
+}

@@ -1,6 +1,6 @@
 package models
 
-type IssueTypeScreenSchemeParamsScheme struct {
+type ScreenSchemeParamsScheme struct {
 	IDs         []int
 	QueryString string
 	OrderBy     string

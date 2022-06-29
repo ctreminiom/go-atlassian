@@ -15,7 +15,7 @@ type IssueTypeScreenSchemeService struct{ client *Client }
 // Gets returns a paginated list of issue type screen schemes.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/types/screen-scheme#get-issue-type-screen-schemes
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-type-screen-schemes/#api-rest-api-3-issuetypescreenscheme-get
-func (i *IssueTypeScreenSchemeService) Gets(ctx context.Context, options *models.IssueTypeScreenSchemeParamsScheme, startAt, maxResults int) (
+func (i *IssueTypeScreenSchemeService) Gets(ctx context.Context, options *models.ScreenSchemeParamsScheme, startAt, maxResults int) (
 	result *models.IssueTypeScreenSchemePageScheme, response *ResponseScheme, err error) {
 
 	params := url.Values{}

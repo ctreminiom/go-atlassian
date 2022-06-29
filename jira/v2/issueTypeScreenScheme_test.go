@@ -773,7 +773,7 @@ func TestIssueTypeScreenSchemeService_Gets(t *testing.T) {
 
 	testCases := []struct {
 		name               string
-		options            *models.IssueTypeScreenSchemeParamsScheme
+		options            *models.ScreenSchemeParamsScheme
 		startAt            int
 		maxResults         int
 		mockFile           string
@@ -785,7 +785,7 @@ func TestIssueTypeScreenSchemeService_Gets(t *testing.T) {
 	}{
 		{
 			name: "GetIssueTypeSchemesWhenTheParametersAreCorrect",
-			options: &models.IssueTypeScreenSchemeParamsScheme{
+			options: &models.ScreenSchemeParamsScheme{
 				IDs:         []int{1000, 1001, 1002},
 				QueryString: "DUMMY",
 				OrderBy:     "id",
@@ -803,7 +803,7 @@ func TestIssueTypeScreenSchemeService_Gets(t *testing.T) {
 
 		{
 			name: "GetIssueTypeSchemesWhenTheEndpointIsIncorrect",
-			options: &models.IssueTypeScreenSchemeParamsScheme{
+			options: &models.ScreenSchemeParamsScheme{
 				IDs:         []int{1000, 1001, 1002},
 				QueryString: "DUMMY",
 				OrderBy:     "id",
@@ -821,7 +821,7 @@ func TestIssueTypeScreenSchemeService_Gets(t *testing.T) {
 
 		{
 			name: "GetIssueTypeSchemesWhenTheRequestMethodIsIncorrect",
-			options: &models.IssueTypeScreenSchemeParamsScheme{
+			options: &models.ScreenSchemeParamsScheme{
 				IDs:         []int{1000, 1001, 1002},
 				QueryString: "DUMMY",
 				OrderBy:     "id",
@@ -839,7 +839,7 @@ func TestIssueTypeScreenSchemeService_Gets(t *testing.T) {
 
 		{
 			name: "GetIssueTypeSchemesWhenTheStatusCodeIsIncorrect",
-			options: &models.IssueTypeScreenSchemeParamsScheme{
+			options: &models.ScreenSchemeParamsScheme{
 				IDs:         []int{1000, 1001, 1002},
 				QueryString: "DUMMY",
 				OrderBy:     "id",
@@ -857,7 +857,7 @@ func TestIssueTypeScreenSchemeService_Gets(t *testing.T) {
 
 		{
 			name: "GetIssueTypeSchemesWhenTheContextIsNil",
-			options: &models.IssueTypeScreenSchemeParamsScheme{
+			options: &models.ScreenSchemeParamsScheme{
 				IDs:         []int{1000, 1001, 1002},
 				QueryString: "DUMMY",
 				OrderBy:     "id",
@@ -875,7 +875,7 @@ func TestIssueTypeScreenSchemeService_Gets(t *testing.T) {
 
 		{
 			name: "GetIssueTypeSchemesWhenTheResponseBodyHasADifferentFormat",
-			options: &models.IssueTypeScreenSchemeParamsScheme{
+			options: &models.ScreenSchemeParamsScheme{
 				IDs:         []int{1000, 1001, 1002},
 				QueryString: "DUMMY",
 				OrderBy:     "id",

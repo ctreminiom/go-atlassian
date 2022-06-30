@@ -37,19 +37,25 @@ func NewV2(httpClient *http.Client, site string) (*ClientV2, error) {
 		Site: siteAsURL,
 	}
 
-	board, err := internal.NewBoardService(client, "1.0")
+	boardService, err := internal.NewBoardService(client, "1.0")
 	if err != nil {
 		return nil, err
 	}
 
-	client.Board = board
-
-	epic, err := internal.NewEpicService(client, "1.0")
+	epicService, err := internal.NewEpicService(client, "1.0")
 	if err != nil {
 		return nil, err
 	}
 
-	client.Epic = epic
+	sprintService, err := internal.NewSprintService(client, "1.0")
+	if err != nil {
+		return nil, err
+	}
+
+	client.Board = boardService
+	client.Epic = epicService
+	client.Sprint = sprintService
+	client.Authentication = internal.NewAuthenticationService(client)
 
 	return client, nil
 }
@@ -60,6 +66,7 @@ type ClientV2 struct {
 	Authentication common.Authentication
 	Board          agile.Board
 	Epic           agile.Epic
+	Sprint         agile.Sprint
 }
 
 func (c ClientV2) NewJsonRequest(ctx context.Context, method, apiEndpoint string, payload io.Reader) (*http.Request, error) {
@@ -132,7 +139,6 @@ func (c ClientV2) Call(request *http.Request, structure interface{}) (*models.Re
 
 	var wasSuccess = response.StatusCode >= 200 && response.StatusCode < 300
 	if !wasSuccess {
-
 		return responseTransformed, errors.New("TODO")
 	}
 

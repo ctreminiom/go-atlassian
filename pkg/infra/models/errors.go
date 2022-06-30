@@ -95,4 +95,6 @@ var (
 	ErrNoFieldConfigurationSchemeIDError   = errors.New("jira: no field configuration scheme id set")
 
 	ErrNoVersionProvided = errors.New("client: no module version set")
+
+	ErrInvalidStatusCodeError = errors.New("client: invalid http response status, please refer the response.body for more details")
 )

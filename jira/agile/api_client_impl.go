@@ -60,8 +60,12 @@ func New(httpClient *http.Client, site string) (*Client, error) {
 	return client, nil
 }
 
+type HttpClient interface {
+	Do(request *http.Request) (*http.Response, error)
+}
+
 type Client struct {
-	HTTP           *http.Client
+	HTTP           HttpClient
 	Site           *url.URL
 	Authentication common.Authentication
 	Board          agile.Board
@@ -132,14 +136,15 @@ func (c *Client) Call(request *http.Request, structure interface{}) (*models.Res
 		return nil, err
 	}
 
-	responseTransformed := &models.ResponseScheme{}
-	responseTransformed.Code = response.StatusCode
-	responseTransformed.Endpoint = response.Request.URL.String()
-	responseTransformed.Method = response.Request.Method
+	responseTransformed := &models.ResponseScheme{
+		Response: response,
+		Code:     response.StatusCode,
+		Endpoint: response.Request.URL.String(),
+		Method:   response.Request.Method,
+	}
 
-	var wasSuccess = response.StatusCode >= 200 && response.StatusCode < 300
-	if !wasSuccess {
-		return responseTransformed, errors.New("TODO")
+	if !(response.StatusCode >= 200 && response.StatusCode < 300) {
+		return responseTransformed, models.ErrInvalidStatusCodeError
 	}
 
 	responseAsBytes, err := ioutil.ReadAll(response.Body)
@@ -153,7 +158,10 @@ func (c *Client) Call(request *http.Request, structure interface{}) (*models.Res
 		}
 	}
 
-	responseTransformed.Bytes.Write(responseAsBytes)
+	_, err = responseTransformed.Bytes.Write(responseAsBytes)
+	if err != nil {
+		return nil, err
+	}
 
 	return responseTransformed, nil
 }

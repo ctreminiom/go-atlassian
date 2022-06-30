@@ -34,6 +34,28 @@ func TestFieldService_Delete(t *testing.T) {
 		},
 
 		{
+			name:               "when the status code is incorrect",
+			fieldId:            "10001",
+			mockFile:           "../v3/mocks/task.json",
+			wantHTTPMethod:     http.MethodDelete,
+			endpoint:           "/rest/api/3/field/10001",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusBadRequest,
+			wantErr:            true,
+		},
+
+		{
+			name:               "when the context is not provided",
+			fieldId:            "10001",
+			mockFile:           "../v3/mocks/task.json",
+			wantHTTPMethod:     http.MethodDelete,
+			endpoint:           "/rest/api/3/field/10001",
+			context:            nil,
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+
+		{
 			name:               "when the field id is not provided",
 			fieldId:            "",
 			mockFile:           "../v3/mocks/task.json",

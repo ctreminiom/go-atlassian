@@ -1,7 +1,6 @@
 package internal
 
 import (
-	"fmt"
 	"github.com/ctreminiom/go-atlassian/jira/agile/internal/mocks"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/common"
@@ -178,78 +177,6 @@ func TestAuthenticationService_HasUserAgent(t *testing.T) {
 			if got := a.HasUserAgent(); got != testCase.want {
 				t.Errorf("HasUserAgent() = %v, want %v", got, testCase.want)
 			}
-		})
-	}
-}
-
-func TestAuthenticationService_SetBasicAuth(t *testing.T) {
-	type fields struct {
-		c                 service.Client
-		basicAuthProvided bool
-		mail              string
-		token             string
-		userAgentProvided bool
-		agent             string
-	}
-	type args struct {
-		mail  string
-		token string
-	}
-	tests := []struct {
-		name   string
-		fields fields
-		args   args
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			a := &AuthenticationService{
-				c:                 tt.fields.c,
-				basicAuthProvided: tt.fields.basicAuthProvided,
-				mail:              tt.fields.mail,
-				token:             tt.fields.token,
-				userAgentProvided: tt.fields.userAgentProvided,
-				agent:             tt.fields.agent,
-			}
-
-			fmt.Println(a)
-		})
-	}
-}
-
-func TestAuthenticationService_SetUserAgent(t *testing.T) {
-	type fields struct {
-		c                 service.Client
-		basicAuthProvided bool
-		mail              string
-		token             string
-		userAgentProvided bool
-		agent             string
-	}
-	type args struct {
-		agent string
-	}
-	tests := []struct {
-		name   string
-		fields fields
-		args   args
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			a := &AuthenticationService{
-				c:                 tt.fields.c,
-				basicAuthProvided: tt.fields.basicAuthProvided,
-				mail:              tt.fields.mail,
-				token:             tt.fields.token,
-				userAgentProvided: tt.fields.userAgentProvided,
-				agent:             tt.fields.agent,
-			}
-
-			fmt.Println(a)
-
 		})
 	}
 }

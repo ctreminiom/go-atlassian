@@ -128,7 +128,7 @@ func (s SprintService) Delete(ctx context.Context, sprintId int) (*model.Respons
 
 	endpoint := fmt.Sprintf("rest/agile/%v/sprint/%v", s.version, sprintId)
 
-	request, err := s.c.NewJsonRequest(ctx, http.MethodDelete, endpoint, nil)
+	request, err := s.c.NewRequest(ctx, http.MethodDelete, endpoint, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -173,7 +173,7 @@ func (s SprintService) Issues(ctx context.Context, sprintId int, opts *model.Iss
 
 	endpoint := fmt.Sprintf("rest/agile/%v/sprint/%v/issue?%v", s.version, sprintId, params.Encode())
 
-	request, err := s.c.NewJsonRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := s.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
 		return nil, nil, err
 	}

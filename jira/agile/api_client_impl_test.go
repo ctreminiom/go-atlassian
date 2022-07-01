@@ -10,6 +10,7 @@ import (
 	"github.com/ctreminiom/go-atlassian/service/common"
 	"github.com/stretchr/testify/assert"
 	"io"
+	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strings"
@@ -20,7 +21,7 @@ func TestClient_Call(t *testing.T) {
 
 	expectedResponse := &http.Response{
 		StatusCode: http.StatusOK,
-		Body:       io.NopCloser(strings.NewReader("Hello, world!")),
+		Body:       ioutil.NopCloser(strings.NewReader("Hello, world!")),
 		Request: &http.Request{
 			Method: http.MethodGet,
 			URL:    &url.URL{},
@@ -207,7 +208,7 @@ func TestClient_TransformTheHTTPResponse(t *testing.T) {
 
 	expectedResponse := &http.Response{
 		StatusCode: http.StatusOK,
-		Body:       io.NopCloser(strings.NewReader(expectedJsonResponse)),
+		Body:       ioutil.NopCloser(strings.NewReader(expectedJsonResponse)),
 		Request: &http.Request{
 			Method: http.MethodGet,
 			URL:    &url.URL{},

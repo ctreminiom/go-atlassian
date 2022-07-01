@@ -17,7 +17,7 @@ import (
 	"strings"
 )
 
-func New(httpClient *http.Client, site string) (*Client, error) {
+func New(httpClient HttpClient, site string) (*Client, error) {
 
 	if httpClient == nil {
 		httpClient = http.DefaultClient
@@ -195,14 +195,17 @@ func (c *Client) TransformTheHTTPResponse(response *http.Response, structure int
 	}
 
 	responseTransformed.Bytes.Write(responseAsBytes)
-
 	return responseTransformed, nil
 }
 
 func (c *Client) TransformStructToReader(structure interface{}) (io.Reader, error) {
 
-	if structure == nil || reflect.ValueOf(structure).IsNil() {
-		return nil, errors.New("structureNotParsedError")
+	if structure == nil {
+		return nil, models.ErrNilPayloadError
+	}
+
+	if reflect.ValueOf(structure).Type().Kind() == reflect.Struct {
+		return nil, models.ErrNonPayloadPointerError
 	}
 
 	structureAsBodyBytes, err := json.Marshal(structure)

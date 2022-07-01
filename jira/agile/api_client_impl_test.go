@@ -2,6 +2,7 @@ package agile
 
 import (
 	"bytes"
+	"encoding/json"
 	"errors"
 	"github.com/ctreminiom/go-atlassian/jira/agile/internal/mocks"
 	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
@@ -120,16 +121,263 @@ func TestClient_Call(t *testing.T) {
 				assert.NoError(t, err)
 				assert.Equal(t, got, testCase.want)
 			}
+		})
+	}
+}
 
-			/*
+func TestNew(t *testing.T) {
 
-				if (err != nil) != testCase.wantErr {
-					assert.EqualError(t, err, testCase.Err.Error())
-					t.Errorf("Call() error = %v, wantErr %v", err, testCase.wantErr)
-					return
+	mockClient, err := New(http.DefaultClient, "https://ctreminiom.atlassian.net")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	mockClient.Authentication.SetBasicAuth("test", "test")
+	mockClient.Authentication.SetUserAgent("aaa")
+
+	mockClient2, _ := New(nil, " https://zhidao.baidu.com/special/view?id=sd&preview=1")
+
+	type args struct {
+		httpClient HttpClient
+		site       string
+	}
+
+	testCases := []struct {
+		name    string
+		args    args
+		on      func(*args)
+		want    *Client
+		wantErr bool
+		Err     error
+	}{
+		{
+			name: "when the parameters are correct",
+			args: args{
+				httpClient: http.DefaultClient,
+				site:       "https://ctreminiom.atlassian.net",
+			},
+			want:    mockClient,
+			wantErr: false,
+		},
+
+		{
+			name: "when the site url is not valid",
+			args: args{
+				httpClient: http.DefaultClient,
+				site:       " https://zhidao.baidu.com/special/view?id=sd&preview=1",
+			},
+			want:    mockClient2,
+			wantErr: true,
+			Err:     errors.New("parse \" https://zhidao.baidu.com/special/view?id=sd&preview=1/\": first path segment in URL cannot contain colon"),
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+
+			gotClient, err := New(testCase.args.httpClient, testCase.args.site)
+
+			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
 				}
-			*/
 
+				assert.Error(t, err)
+				assert.EqualError(t, err, testCase.Err.Error())
+
+			} else {
+				assert.NoError(t, err)
+				assert.NotEqual(t, gotClient, nil)
+			}
+
+		})
+	}
+}
+
+func TestClient_TransformTheHTTPResponse(t *testing.T) {
+
+	expectedJsonResponse := `
+	{
+	  "id": 4,
+	  "self": "https://ctreminiom.atlassian.net/rest/agile/1.0/board/4",
+	  "name": "KP - Scrum",
+	  "type": "scrum"
+	}`
+
+	expectedResponse := &http.Response{
+		StatusCode: http.StatusOK,
+		Body:       io.NopCloser(strings.NewReader(expectedJsonResponse)),
+		Request: &http.Request{
+			Method: http.MethodGet,
+			URL:    &url.URL{},
+		},
+	}
+
+	type fields struct {
+		HTTP           HttpClient
+		Site           *url.URL
+		Authentication common.Authentication
+		Board          agile.Board
+		Epic           agile.Epic
+		Sprint         agile.Sprint
+	}
+
+	type args struct {
+		response  *http.Response
+		structure interface{}
+	}
+
+	testCases := []struct {
+		name    string
+		fields  fields
+		args    args
+		want    *models.ResponseScheme
+		wantErr bool
+		Err     error
+	}{
+		{
+			name:   "when the parameters are correct",
+			fields: fields{},
+			args: args{
+				response:  expectedResponse,
+				structure: models.BoardScheme{},
+			},
+			want: &models.ResponseScheme{
+				Response: expectedResponse,
+				Code:     http.StatusOK,
+				Method:   http.MethodGet,
+				Bytes:    *bytes.NewBufferString(expectedJsonResponse),
+			},
+			wantErr: false,
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+			c := &Client{
+				HTTP:           testCase.fields.HTTP,
+				Site:           testCase.fields.Site,
+				Authentication: testCase.fields.Authentication,
+				Board:          testCase.fields.Board,
+				Epic:           testCase.fields.Epic,
+				Sprint:         testCase.fields.Sprint,
+			}
+
+			got, err := c.TransformTheHTTPResponse(testCase.args.response, testCase.args.structure)
+
+			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+
+				assert.Error(t, err)
+				assert.EqualError(t, err, testCase.Err.Error())
+
+			} else {
+				assert.NoError(t, err)
+				assert.NotEqual(t, got, nil)
+			}
+		})
+	}
+}
+
+func TestClient_TransformStructToReader(t *testing.T) {
+
+	expectedBytes, err := json.Marshal(&models.BoardScheme{
+		Name: "Board Sample",
+		Type: "Scrum",
+	})
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	type fields struct {
+		HTTP           HttpClient
+		Site           *url.URL
+		Authentication common.Authentication
+		Board          agile.Board
+		Epic           agile.Epic
+		Sprint         agile.Sprint
+	}
+
+	type args struct {
+		structure interface{}
+	}
+
+	testCases := []struct {
+		name    string
+		fields  fields
+		args    args
+		want    io.Reader
+		wantErr bool
+		Err     error
+	}{
+		{
+			name: "when the parameters are correct",
+			args: args{
+				structure: &models.BoardScheme{
+					Name: "Board Sample",
+					Type: "Scrum",
+				},
+			},
+			want:    bytes.NewReader(expectedBytes),
+			wantErr: false,
+		},
+
+		{
+			name: "when the payload provided is not a pointer",
+			args: args{
+				structure: models.BoardScheme{
+					Name: "Board Sample",
+					Type: "Scrum",
+				},
+			},
+			want:    bytes.NewReader(expectedBytes),
+			wantErr: true,
+			Err:     models.ErrNonPayloadPointerError,
+		},
+
+		{
+			name: "when the payload is not provided",
+			args: args{
+				structure: nil,
+			},
+			want:    bytes.NewReader(expectedBytes),
+			wantErr: true,
+			Err:     models.ErrNilPayloadError,
+		},
+	}
+
+	for _, testCase := range testCases {
+
+		t.Run(testCase.name, func(t *testing.T) {
+			c := &Client{
+				HTTP:           testCase.fields.HTTP,
+				Site:           testCase.fields.Site,
+				Authentication: testCase.fields.Authentication,
+				Board:          testCase.fields.Board,
+				Epic:           testCase.fields.Epic,
+				Sprint:         testCase.fields.Sprint,
+			}
+
+			got, err := c.TransformStructToReader(testCase.args.structure)
+
+			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+
+				assert.Error(t, err)
+				assert.EqualError(t, err, testCase.Err.Error())
+
+			} else {
+				assert.NoError(t, err)
+				assert.NotEqual(t, got, nil)
+			}
 		})
 	}
 }

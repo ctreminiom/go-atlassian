@@ -53,13 +53,6 @@ type PermissionGrantPayloadScheme struct {
 	Permission string                       `json:"permission,omitempty"`
 }
 
-type ProjectPermissionPayloadScheme struct {
-	Permissions []string `json:"permissions,omitempty"`
-}
-
 type PermittedProjectsScheme struct {
-	Projects []struct {
-		ID  int    `json:"id,omitempty"`
-		Key string `json:"key,omitempty"`
-	} `json:"projects,omitempty"`
+	Projects []*ProjectIdentifierScheme `json:"projects,omitempty"`
 }

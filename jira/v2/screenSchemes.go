@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"net/url"
 	"strconv"
+	"strings"
 )
 
 type ScreenSchemeService struct{ client *Client }
@@ -15,15 +16,30 @@ type ScreenSchemeService struct{ client *Client }
 // Only screen schemes used in classic projects are returned.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/screens/schemes#get-screen-schemes
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-screen-schemes/#api-rest-api-2-screenscheme-get
-func (s *ScreenSchemeService) Gets(ctx context.Context, screenSchemeIDs []int, startAt, maxResults int) (
+func (s *ScreenSchemeService) Gets(ctx context.Context, options *models.ScreenSchemeParamsScheme, startAt, maxResults int) (
 	result *models.ScreenSchemePageScheme, response *ResponseScheme, err error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
 	params.Add("maxResults", strconv.Itoa(maxResults))
 
-	for _, schemeScheme := range screenSchemeIDs {
-		params.Add("id", strconv.Itoa(schemeScheme))
+	if options != nil {
+
+		for _, id := range options.IDs {
+			params.Add("id", strconv.Itoa(id))
+		}
+
+		if options.QueryString != "" {
+			params.Add("queryString", options.QueryString)
+		}
+
+		if options.OrderBy != "orderBy" {
+			params.Add("", options.OrderBy)
+		}
+
+		if len(options.Expand) != 0 {
+			params.Add("expand", strings.Join(options.Expand, ","))
+		}
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/2/screenscheme?%v", params.Encode())

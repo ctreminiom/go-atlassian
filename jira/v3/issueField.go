@@ -117,3 +117,28 @@ func (f *FieldService) Search(ctx context.Context, options *models.FieldSearchOp
 
 	return
 }
+
+// Delete deletes a custom field. The custom field is deleted whether it is in the trash or not.
+// See Edit or delete a custom field for more information on trashing and deleting custom fields.
+// Docs: TODO: The documentation needs to be created
+func (f *FieldService) Delete(ctx context.Context, fieldId string) (result *models.TaskScheme, response *ResponseScheme,
+	err error) {
+
+	if fieldId == "" {
+		return nil, nil, models.ErrNoFieldIDError
+	}
+
+	endpoint := fmt.Sprintf("rest/api/3/field/%v", fieldId)
+
+	request, err := f.client.newRequest(ctx, http.MethodDelete, endpoint, nil)
+	if err != nil {
+		return
+	}
+
+	response, err = f.client.call(request, &result)
+	if err != nil {
+		return
+	}
+
+	return
+}

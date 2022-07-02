@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"net/url"
 	"strconv"
+	"strings"
 )
 
 type IssueTypeScreenSchemeService struct{ client *Client }
@@ -14,15 +15,30 @@ type IssueTypeScreenSchemeService struct{ client *Client }
 // Gets returns a paginated list of issue type screen schemes.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/types/screen-scheme#get-issue-type-screen-schemes
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-type-screen-schemes/#api-rest-api-3-issuetypescreenscheme-get
-func (i *IssueTypeScreenSchemeService) Gets(ctx context.Context, ids []int, startAt, maxResults int) (
+func (i *IssueTypeScreenSchemeService) Gets(ctx context.Context, options *models.ScreenSchemeParamsScheme, startAt, maxResults int) (
 	result *models.IssueTypeScreenSchemePageScheme, response *ResponseScheme, err error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
 	params.Add("maxResults", strconv.Itoa(maxResults))
 
-	for _, id := range ids {
-		params.Add("id", strconv.Itoa(id))
+	if options != nil {
+
+		for _, id := range options.IDs {
+			params.Add("id", strconv.Itoa(id))
+		}
+
+		if options.QueryString != "" {
+			params.Add("queryString", options.QueryString)
+		}
+
+		if options.OrderBy != "orderBy" {
+			params.Add("", options.OrderBy)
+		}
+
+		if len(options.Expand) != 0 {
+			params.Add("expand", strings.Join(options.Expand, ","))
+		}
 	}
 
 	var endpoint = fmt.Sprintf("rest/api/3/issuetypescreenscheme?%v", params.Encode())

@@ -347,7 +347,7 @@ func TestPermissionService_Projects(t *testing.T) {
 
 	testCases := []struct {
 		name               string
-		permissionKeys     []string
+		permissions        []string
 		mockFile           string
 		wantHTTPMethod     string
 		endpoint           string
@@ -357,13 +357,51 @@ func TestPermissionService_Projects(t *testing.T) {
 	}{
 		{
 			name:               "when the parameters are correct",
-			permissionKeys:     []string{"CREATE_ISSUES", "EDIT_ISSUES"},
 			wantHTTPMethod:     http.MethodPost,
 			endpoint:           "/rest/api/2/permissions/project",
-			mockFile:           "../v3/mocks/project-permission.json",
+			mockFile:           "../mocks/get-permission-projects.json",
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusOK,
 			wantErr:            false,
+		},
+		{
+			name:               "When the request method is incorrect",
+			wantHTTPMethod:     http.MethodDelete,
+			endpoint:           "/rest/api/2/permissions/project",
+			mockFile:           "../mocks/get-permission-projects.json",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+
+		{
+			name:               "when the response status is incorrect",
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/api/2/permissions/project",
+			mockFile:           "../mocks/get-permission-projects.json",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusBadRequest,
+			wantErr:            true,
+		},
+
+		{
+			name:               "when the context provided is nil",
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/api/2/permissions/project",
+			mockFile:           "../mocks/get-permission-projects.json",
+			context:            nil,
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
+		},
+
+		{
+			name:               "when the response body is empty",
+			wantHTTPMethod:     http.MethodPost,
+			endpoint:           "/rest/api/2/permissions/project",
+			mockFile:           "../v3/mocks/empty_json.json",
+			context:            context.Background(),
+			wantHTTPCodeReturn: http.StatusOK,
+			wantErr:            true,
 		},
 	}
 
@@ -394,7 +432,7 @@ func TestPermissionService_Projects(t *testing.T) {
 
 			i := &PermissionService{client: mockClient}
 
-			gotResult, gotResponse, err := i.Projects(testCase.context, testCase.permissionKeys)
+			gotResult, gotResponse, err := i.Projects(testCase.context, testCase.permissions)
 
 			if testCase.wantErr {
 

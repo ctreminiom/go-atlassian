@@ -85,13 +85,16 @@ func (p *PermissionService) Check(ctx context.Context, payload *models.Permissio
 	return
 }
 
-func (p *PermissionService) Projects(ctx context.Context, permissionKeys []string) (result *models.PermittedProjectsScheme, response *ResponseScheme, err error) {
+// Projects returns all the projects where the user is granted a list of project permissions.
+func (p *PermissionService) Projects(ctx context.Context, permissions []string) (result *models.PermittedProjectsScheme, response *ResponseScheme, err error) {
 
-	payload := &models.ProjectPermissionPayloadScheme{
-		Permissions: permissionKeys,
+	payload := struct {
+		Permissions []string `json:"permissions,omitempty"`
+	}{
+		Permissions: permissions,
 	}
 
-	payloadAsReader, err := transformStructToReader(payload)
+	payloadAsReader, err := transformStructToReader(&payload)
 	if err != nil {
 		return nil, nil, err
 	}

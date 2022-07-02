@@ -331,7 +331,7 @@ func TestScreenSchemeService_Gets(t *testing.T) {
 
 	testCases := []struct {
 		name                string
-		screenSchemeIDs     []int
+		options             *models.ScreenSchemeParamsScheme
 		startAt, maxResults int
 		mockFile            string
 		wantHTTPMethod      string
@@ -341,78 +341,108 @@ func TestScreenSchemeService_Gets(t *testing.T) {
 		wantErr             bool
 	}{
 		{
-			name:               "GetScreenSchemesWhenTheParamsAreCorrect",
-			screenSchemeIDs:    []int{1000, 1001, 1002, 1002},
+			name: "GetScreenSchemesWhenTheParamsAreCorrect",
+			options: &models.ScreenSchemeParamsScheme{
+				IDs:         []int{1000, 1001, 1002, 1002},
+				QueryString: "query-string",
+				OrderBy:     "name",
+				Expand:      []string{"issueTypeScreenSchemes"},
+			},
 			startAt:            0,
 			maxResults:         50,
 			mockFile:           "../v3/mocks/get-screen-schemes.json",
 			wantHTTPMethod:     http.MethodGet,
-			endpoint:           "/rest/api/2/screenscheme?id=1000&id=1001&id=1002&id=1002&maxResults=50&startAt=0",
+			endpoint:           "/rest/api/2/screenscheme?=name&expand=issueTypeScreenSchemes&id=1000&id=1001&id=1002&id=1002&maxResults=50&queryString=query-string&startAt=0",
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusOK,
 			wantErr:            false,
 		},
 
 		{
-			name:               "GetScreenSchemesWhenTheScreenSchemeIDsIsNil",
-			screenSchemeIDs:    nil,
+			name: "GetScreenSchemesWhenTheScreenSchemeIDsIsNil",
+			options: &models.ScreenSchemeParamsScheme{
+				IDs:         []int{1000, 1001, 1002, 1002},
+				QueryString: "query-string",
+				OrderBy:     "name",
+				Expand:      []string{"issueTypeScreenSchemes"},
+			},
 			startAt:            0,
 			maxResults:         50,
 			mockFile:           "../v3/mocks/get-screen-schemes.json",
 			wantHTTPMethod:     http.MethodGet,
-			endpoint:           "/rest/api/2/screenscheme?maxResults=50&startAt=0",
+			endpoint:           "/rest/api/2/screenscheme?=name&expand=issueTypeScreenSchemes&id=1000&id=1001&id=1002&id=1002&maxResults=50&queryString=query-string&startAt=0",
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusOK,
 			wantErr:            false,
 		},
 
 		{
-			name:               "GetScreenSchemesWhenTheContextIsNil",
-			screenSchemeIDs:    []int{1000, 1001, 1002, 1002},
+			name: "GetScreenSchemesWhenTheContextIsNil",
+			options: &models.ScreenSchemeParamsScheme{
+				IDs:         []int{1000, 1001, 1002, 1002},
+				QueryString: "query-string",
+				OrderBy:     "name",
+				Expand:      []string{"issueTypeScreenSchemes"},
+			},
 			startAt:            0,
 			maxResults:         50,
 			mockFile:           "../v3/mocks/get-screen-schemes.json",
 			wantHTTPMethod:     http.MethodGet,
-			endpoint:           "/rest/api/2/screenscheme?id=1000&id=1001&id=1002&id=1002&maxResults=50&startAt=0",
+			endpoint:           "/rest/api/2/screenscheme?=name&expand=issueTypeScreenSchemes&id=1000&id=1001&id=1002&id=1002&maxResults=50&queryString=query-string&startAt=0",
 			context:            nil,
 			wantHTTPCodeReturn: http.StatusOK,
 			wantErr:            true,
 		},
 
 		{
-			name:               "GetScreenSchemesWhenTheRequestMethodIsIncorrect",
-			screenSchemeIDs:    []int{1000, 1001, 1002, 1002},
+			name: "GetScreenSchemesWhenTheRequestMethodIsIncorrect",
+			options: &models.ScreenSchemeParamsScheme{
+				IDs:         []int{1000, 1001, 1002, 1002},
+				QueryString: "query-string",
+				OrderBy:     "name",
+				Expand:      []string{"issueTypeScreenSchemes"},
+			},
 			startAt:            0,
 			maxResults:         50,
 			mockFile:           "../v3/mocks/get-screen-schemes.json",
 			wantHTTPMethod:     http.MethodPost,
-			endpoint:           "/rest/api/2/screenscheme?id=1000&id=1001&id=1002&id=1002&maxResults=50&startAt=0",
+			endpoint:           "/rest/api/2/screenscheme?=name&expand=issueTypeScreenSchemes&id=1000&id=1001&id=1002&id=1002&maxResults=50&queryString=query-string&startAt=0",
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusOK,
 			wantErr:            true,
 		},
 
 		{
-			name:               "GetScreenSchemesWhenTheStatusCodeIsIncorrect",
-			screenSchemeIDs:    []int{1000, 1001, 1002, 1002},
+			name: "GetScreenSchemesWhenTheStatusCodeIsIncorrect",
+			options: &models.ScreenSchemeParamsScheme{
+				IDs:         []int{1000, 1001, 1002, 1002},
+				QueryString: "query-string",
+				OrderBy:     "name",
+				Expand:      []string{"issueTypeScreenSchemes"},
+			},
 			startAt:            0,
 			maxResults:         50,
 			mockFile:           "../v3/mocks/get-screen-schemes.json",
 			wantHTTPMethod:     http.MethodGet,
-			endpoint:           "/rest/api/2/screenscheme?id=1000&id=1001&id=1002&id=1002&maxResults=50&startAt=0",
+			endpoint:           "/rest/api/2/screenscheme?=name&expand=issueTypeScreenSchemes&id=1000&id=1001&id=1002&id=1002&maxResults=50&queryString=query-string&startAt=0",
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusBadRequest,
 			wantErr:            true,
 		},
 
 		{
-			name:               "GetScreenSchemesWhenTheResponseBodyHasADifferentFormat",
-			screenSchemeIDs:    []int{1000, 1001, 1002, 1002},
+			name: "GetScreenSchemesWhenTheResponseBodyHasADifferentFormat",
+			options: &models.ScreenSchemeParamsScheme{
+				IDs:         []int{1000, 1001, 1002, 1002},
+				QueryString: "query-string",
+				OrderBy:     "name",
+				Expand:      []string{"issueTypeScreenSchemes"},
+			},
 			startAt:            0,
 			maxResults:         50,
 			mockFile:           "../v3/mocks/empty_json.json",
 			wantHTTPMethod:     http.MethodGet,
-			endpoint:           "/rest/api/2/screenscheme?id=1000&id=1001&id=1002&id=1002&maxResults=50&startAt=0",
+			endpoint:           "/rest/api/2/screenscheme?=name&expand=issueTypeScreenSchemes&id=1000&id=1001&id=1002&id=1002&maxResults=50&queryString=query-string&startAt=0",
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusOK,
 			wantErr:            true,
@@ -446,7 +476,7 @@ func TestScreenSchemeService_Gets(t *testing.T) {
 
 			i := &ScreenSchemeService{client: mockClient}
 
-			gotResult, gotResponse, err := i.Gets(testCase.context, testCase.screenSchemeIDs, testCase.startAt,
+			gotResult, gotResponse, err := i.Gets(testCase.context, testCase.options, testCase.startAt,
 				testCase.maxResults)
 
 			if testCase.wantErr {

@@ -29,7 +29,7 @@ func TestClient_Call(t *testing.T) {
 	}
 
 	type fields struct {
-		HTTP           HttpClient
+		HTTP           common.HttpClient
 		Site           *url.URL
 		Authentication common.Authentication
 		Board          agile.Board
@@ -139,7 +139,7 @@ func TestNew(t *testing.T) {
 	mockClient2, _ := New(nil, " https://zhidao.baidu.com/special/view?id=sd&preview=1")
 
 	type args struct {
-		httpClient HttpClient
+		httpClient common.HttpClient
 		site       string
 	}
 
@@ -216,7 +216,7 @@ func TestClient_TransformTheHTTPResponse(t *testing.T) {
 	}
 
 	type fields struct {
-		HTTP           HttpClient
+		HTTP           common.HttpClient
 		Site           *url.URL
 		Authentication common.Authentication
 		Board          agile.Board
@@ -296,7 +296,7 @@ func TestClient_TransformStructToReader(t *testing.T) {
 	}
 
 	type fields struct {
-		HTTP           HttpClient
+		HTTP           common.HttpClient
 		Site           *url.URL
 		Authentication common.Authentication
 		Board          agile.Board

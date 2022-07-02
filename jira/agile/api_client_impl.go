@@ -17,7 +17,7 @@ import (
 	"strings"
 )
 
-func New(httpClient HttpClient, site string) (*Client, error) {
+func New(httpClient common.HttpClient, site string) (*Client, error) {
 
 	if httpClient == nil {
 		httpClient = http.DefaultClient
@@ -60,12 +60,8 @@ func New(httpClient HttpClient, site string) (*Client, error) {
 	return client, nil
 }
 
-type HttpClient interface {
-	Do(request *http.Request) (*http.Response, error)
-}
-
 type Client struct {
-	HTTP           HttpClient
+	HTTP           common.HttpClient
 	Site           *url.URL
 	Authentication common.Authentication
 	Board          agile.Board

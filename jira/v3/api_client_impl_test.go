@@ -245,6 +245,17 @@ func TestClient_TransformTheHTTPResponse(t *testing.T) {
 			},
 			wantErr: false,
 		},
+
+		{
+			name:   "when the payload is not provided",
+			fields: fields{},
+			args: args{
+				response:  nil,
+				structure: models.BoardScheme{},
+			},
+			wantErr: true,
+			Err:     errors.New("validation failed, please provide a http.Response pointer"),
+		},
 	}
 
 	for _, testCase := range testCases {

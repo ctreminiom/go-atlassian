@@ -28,6 +28,15 @@ func TestClient_Call(t *testing.T) {
 		},
 	}
 
+	nonExpectedResponse := &http.Response{
+		StatusCode: http.StatusBadRequest,
+		Body:       ioutil.NopCloser(strings.NewReader("Hello, world!")),
+		Request: &http.Request{
+			Method: http.MethodGet,
+			URL:    &url.URL{},
+		},
+	}
+
 	type fields struct {
 		HTTP           common.HttpClient
 		Site           *url.URL
@@ -73,6 +82,31 @@ func TestClient_Call(t *testing.T) {
 				Bytes:    *bytes.NewBufferString("Hello, world!"),
 			},
 			wantErr: false,
+		},
+
+		{
+			name: "when the response status is not valid",
+			on: func(fields *fields) {
+
+				client := mocks.NewHttpClient(t)
+
+				client.On("Do", (*http.Request)(nil)).
+					Return(nonExpectedResponse, nil)
+
+				fields.HTTP = client
+			},
+			args: args{
+				request:   nil,
+				structure: nil,
+			},
+			want: &models.ResponseScheme{
+				Response: nonExpectedResponse,
+				Code:     http.StatusBadRequest,
+				Method:   http.MethodGet,
+				Bytes:    *bytes.NewBufferString("Hello, world!"),
+			},
+			wantErr: true,
+			Err:     models.ErrInvalidStatusCodeError,
 		},
 
 		{

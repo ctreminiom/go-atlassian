@@ -44,19 +44,33 @@ func (w *WorkflowService) Create(ctx context.Context, payload *models.WorkflowPa
 // When workflow names are specified, details of those workflows are returned.
 // Otherwise, all published classic workflows are returned.
 // Atlassian Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-workflows/#api-rest-api-3-workflow-search-get
-func (w *WorkflowService) Gets(ctx context.Context, workflowNames, expand []string, startAt, maxResults int) (result *models.WorkflowPageScheme,
+func (w *WorkflowService) Gets(ctx context.Context, options *models.WorkflowSearchOptions, startAt, maxResults int) (result *models.WorkflowPageScheme,
 	response *ResponseScheme, err error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
 	params.Add("maxResults", strconv.Itoa(maxResults))
 
-	for _, workflowName := range workflowNames {
-		params.Add("workflowName", workflowName)
-	}
+	if options != nil {
 
-	if len(expand) != 0 {
-		params.Add("expand", strings.Join(expand, ","))
+		for _, name := range options.WorkflowNames {
+			params.Add("workflowName", name)
+		}
+
+		if options.QueryString != "" {
+			params.Add("queryString", options.QueryString)
+		}
+
+		if options.OrderBy != "" {
+			params.Add("orderBy", options.OrderBy)
+		}
+
+		params.Add("isActive", fmt.Sprintf("%T", options.IsActive))
+
+		if len(options.Expand) != 0 {
+			params.Add("expand", strings.Join(options.Expand, ","))
+		}
+
 	}
 
 	var endpoint = fmt.Sprintf("/rest/api/3/workflow/search?%v", params.Encode())

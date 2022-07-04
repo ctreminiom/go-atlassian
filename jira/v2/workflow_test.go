@@ -139,109 +139,124 @@ func TestWorkflowService_Delete(t *testing.T) {
 func TestWorkflowService_Gets(t *testing.T) {
 
 	testCases := []struct {
-		name                  string
-		startAt, maxResults   int
-		mockFile              string
-		workflowNames, expand []string
-		wantHTTPMethod        string
-		endpoint              string
-		context               context.Context
-		wantHTTPCodeReturn    int
-		wantErr               bool
+		name                string
+		startAt, maxResults int
+		mockFile            string
+		options             *models.WorkflowSearchOptions
+		wantHTTPMethod      string
+		endpoint            string
+		context             context.Context
+		wantHTTPCodeReturn  int
+		wantErr             bool
 	}{
 		{
-			name:               "GetsWorkflowsWheTheParametersAreCorrect",
-			startAt:            0,
-			maxResults:         50,
-			mockFile:           "../v3/mocks/get-workflows.json",
-			workflowNames:      []string{"workflow name 1", "workflow name 2"},
-			expand:             []string{"transitions", "transitions.rules", "default"},
+			name:       "GetsWorkflowsWheTheParametersAreCorrect",
+			startAt:    0,
+			maxResults: 50,
+			mockFile:   "../v3/mocks/get-workflows.json",
+			options: &models.WorkflowSearchOptions{
+				QueryString:   "name",
+				WorkflowNames: []string{"workflow name 1", "workflow name 2"},
+				OrderBy:       "name",
+				IsActive:      true,
+				Expand:        []string{"transitions", "transitions.rules", "default"},
+			},
 			wantHTTPMethod:     http.MethodGet,
-			endpoint:           "/rest/api/2/workflow/search?expand=transitions%2Ctransitions.rules%2Cdefault&maxResults=50&startAt=0&workflowName=workflow+name+1&workflowName=workflow+name+2",
+			endpoint:           "/rest/api/2/workflow/search?expand=transitions%2Ctransitions.rules%2Cdefault&isActive=bool&maxResults=50&orderBy=name&queryString=name&startAt=0&workflowName=workflow+name+1&workflowName=workflow+name+2",
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusOK,
 			wantErr:            false,
 		},
 
 		{
-			name:               "GetsWorkflowsWheTheContextIsNotSet",
-			startAt:            0,
-			maxResults:         50,
-			mockFile:           "../v3/mocks/get-workflows.json",
-			workflowNames:      []string{"workflow name 1", "workflow name 2"},
-			expand:             []string{"transitions", "transitions.rules", "default"},
+			name:       "GetsWorkflowsWheTheContextIsNotSet",
+			startAt:    0,
+			maxResults: 50,
+			mockFile:   "../v3/mocks/get-workflows.json",
+			options: &models.WorkflowSearchOptions{
+				QueryString:   "name",
+				WorkflowNames: []string{"workflow name 1", "workflow name 2"},
+				OrderBy:       "name",
+				IsActive:      true,
+				Expand:        []string{"transitions", "transitions.rules", "default"},
+			},
 			wantHTTPMethod:     http.MethodGet,
-			endpoint:           "/rest/api/2/workflow/search?expand=transitions%2Ctransitions.rules%2Cdefault&maxResults=50&startAt=0&workflowName=workflow+name+1&workflowName=workflow+name+2",
-			context:            nil,
+			endpoint:           "/rest/api/2/workflow/search?expand=transitions%2Ctransitions.rules%2Cdefault&isActive=bool&maxResults=50&orderBy=name&queryString=name&startAt=0&workflowName=workflow+name+1&workflowName=workflow+name+2",
 			wantHTTPCodeReturn: http.StatusOK,
 			wantErr:            true,
 		},
 
 		{
-			name:               "GetsWorkflowsWheTheRequestMethodIsIncorrect",
-			startAt:            0,
-			maxResults:         50,
-			mockFile:           "../v3/mocks/get-workflows.json",
-			workflowNames:      []string{"workflow name 1", "workflow name 2"},
-			expand:             []string{"transitions", "transitions.rules", "default"},
+			name:       "GetsWorkflowsWheTheRequestMethodIsIncorrect",
+			startAt:    0,
+			maxResults: 50,
+			mockFile:   "../v3/mocks/get-workflows.json",
+			options: &models.WorkflowSearchOptions{
+				QueryString:   "name",
+				WorkflowNames: []string{"workflow name 1", "workflow name 2"},
+				OrderBy:       "name",
+				IsActive:      true,
+				Expand:        []string{"transitions", "transitions.rules", "default"},
+			},
 			wantHTTPMethod:     http.MethodHead,
-			endpoint:           "/rest/api/2/workflow/search?expand=transitions%2Ctransitions.rules%2Cdefault&maxResults=50&startAt=0&workflowName=workflow+name+1&workflowName=workflow+name+2",
+			endpoint:           "/rest/api/2/workflow/search?expand=transitions%2Ctransitions.rules%2Cdefault&isActive=bool&maxResults=50&orderBy=name&queryString=name&startAt=0&workflowName=workflow+name+1&workflowName=workflow+name+2",
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusOK,
 			wantErr:            true,
 		},
 
 		{
-			name:               "GetsWorkflowsWheTheStatusCodeIsIncorrect",
-			startAt:            0,
-			maxResults:         50,
-			mockFile:           "../v3/mocks/get-workflows.json",
-			workflowNames:      []string{"workflow name 1", "workflow name 2"},
-			expand:             []string{"transitions", "transitions.rules", "default"},
+			name:       "GetsWorkflowsWheTheStatusCodeIsIncorrect",
+			startAt:    0,
+			maxResults: 50,
+			mockFile:   "../v3/mocks/get-workflows.json",
+			options: &models.WorkflowSearchOptions{
+				QueryString:   "name",
+				WorkflowNames: []string{"workflow name 1", "workflow name 2"},
+				OrderBy:       "name",
+				IsActive:      true,
+				Expand:        []string{"transitions", "transitions.rules", "default"},
+			},
 			wantHTTPMethod:     http.MethodGet,
-			endpoint:           "/rest/api/2/workflow/search?expand=transitions%2Ctransitions.rules%2Cdefault&maxResults=50&startAt=0&workflowName=workflow+name+1&workflowName=workflow+name+2",
+			endpoint:           "/rest/api/2/workflow/search?expand=transitions%2Ctransitions.rules%2Cdefault&isActive=bool&maxResults=50&orderBy=name&queryString=name&startAt=0&workflowName=workflow+name+1&workflowName=workflow+name+2",
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusBadRequest,
 			wantErr:            true,
 		},
 
 		{
-			name:               "GetsWorkflowsWheTheExpandsAreNotSet",
-			startAt:            0,
-			maxResults:         50,
-			mockFile:           "../v3/mocks/get-workflows.json",
-			workflowNames:      []string{"workflow name 1", "workflow name 2"},
-			expand:             nil,
+			name:       "GetsWorkflowsWheTheExpandsAreNotSet",
+			startAt:    0,
+			maxResults: 50,
+			mockFile:   "../v3/mocks/get-workflows.json",
+			options: &models.WorkflowSearchOptions{
+				QueryString:   "name",
+				WorkflowNames: []string{"workflow name 1", "workflow name 2"},
+				OrderBy:       "name",
+				IsActive:      true,
+				Expand:        []string{"transitions", "transitions.rules", "default"},
+			},
 			wantHTTPMethod:     http.MethodGet,
-			endpoint:           "/rest/api/2/workflow/search?maxResults=50&startAt=0&workflowName=workflow+name+1&workflowName=workflow+name+2",
+			endpoint:           "/rest/api/2/workflow/search?expand=transitions%2Ctransitions.rules%2Cdefault&isActive=bool&maxResults=50&orderBy=name&queryString=name&startAt=0&workflowName=workflow+name+1&workflowName=workflow+name+2",
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusOK,
 			wantErr:            false,
 		},
 
 		{
-			name:               "GetsWorkflowsWheTheWorkflowNamesAreNotSet",
-			startAt:            0,
-			maxResults:         50,
-			mockFile:           "../v3/mocks/get-workflows.json",
-			workflowNames:      nil,
-			expand:             []string{"transitions", "transitions.rules", "default"},
+			name:       "GetsWorkflowsWheTheResponseBodyIsEmpty",
+			startAt:    0,
+			maxResults: 50,
+			mockFile:   "../v3/mocks/empty_json.json",
+			options: &models.WorkflowSearchOptions{
+				QueryString:   "name",
+				WorkflowNames: []string{"workflow name 1", "workflow name 2"},
+				OrderBy:       "name",
+				IsActive:      true,
+				Expand:        []string{"transitions", "transitions.rules", "default"},
+			},
 			wantHTTPMethod:     http.MethodGet,
-			endpoint:           "/rest/api/2/workflow/search?expand=transitions%2Ctransitions.rules%2Cdefault&maxResults=50&startAt=0",
-			context:            context.Background(),
-			wantHTTPCodeReturn: http.StatusOK,
-			wantErr:            false,
-		},
-
-		{
-			name:               "GetsWorkflowsWheTheResponseBodyIsEmpty",
-			startAt:            0,
-			maxResults:         50,
-			mockFile:           "../v3/mocks/empty_json.json",
-			workflowNames:      []string{"workflow name 1", "workflow name 2"},
-			expand:             []string{"transitions", "transitions.rules", "default"},
-			wantHTTPMethod:     http.MethodGet,
-			endpoint:           "/rest/api/2/workflow/search?expand=transitions%2Ctransitions.rules%2Cdefault&maxResults=50&startAt=0&workflowName=workflow+name+1&workflowName=workflow+name+2",
+			endpoint:           "/rest/api/2/workflow/search?expand=transitions%2Ctransitions.rules%2Cdefault&isActive=bool&maxResults=50&orderBy=name&queryString=name&startAt=0&workflowName=workflow+name+1&workflowName=workflow+name+2",
 			context:            context.Background(),
 			wantHTTPCodeReturn: http.StatusOK,
 			wantErr:            true,
@@ -275,9 +290,7 @@ func TestWorkflowService_Gets(t *testing.T) {
 
 			i := &WorkflowService{client: mockClient}
 
-			gotResult, gotResponse, err := i.Gets(testCase.context, testCase.workflowNames, testCase.expand,
-				testCase.startAt,
-				testCase.maxResults)
+			gotResult, gotResponse, err := i.Gets(testCase.context, testCase.options, testCase.startAt, testCase.maxResults)
 
 			if testCase.wantErr {
 

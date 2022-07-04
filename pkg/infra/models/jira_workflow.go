@@ -1,5 +1,13 @@
 package models
 
+type WorkflowSearchOptions struct {
+	QueryString   string
+	WorkflowNames []string
+	OrderBy       string
+	IsActive      bool
+	Expand        []string
+}
+
 type WorkflowPageScheme struct {
 	Self       string            `json:"self,omitempty"`
 	NextPage   string            `json:"nextPage,omitempty"`

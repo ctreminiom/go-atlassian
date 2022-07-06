@@ -47,7 +47,12 @@ func NewV2(httpClient common.HttpClient, site string) (*ClientV2, error) {
 		return nil, err
 	}
 
-	filterService, err := internal.NewFilterService(client, "2")
+	filterShareService, err := internal.NewFilterShareService(client, "2")
+	if err != nil {
+		return nil, err
+	}
+
+	filterService, err := internal.NewFilterService(client, "2", filterShareService)
 	if err != nil {
 		return nil, err
 	}

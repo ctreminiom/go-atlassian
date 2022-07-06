@@ -6,6 +6,7 @@ import (
 	"errors"
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
+	"github.com/ctreminiom/go-atlassian/service/jira"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
 	"github.com/stretchr/testify/assert"
 	"net/http"
@@ -17,6 +18,7 @@ func TestFilterService_Create(t *testing.T) {
 	type fields struct {
 		c       service.Client
 		version string
+		share   jira.FilterShare
 	}
 
 	type args struct {
@@ -155,7 +157,7 @@ func TestFilterService_Create(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			applicationService, err := NewFilterService(testCase.fields.c, testCase.fields.version)
+			applicationService, err := NewFilterService(testCase.fields.c, testCase.fields.version, testCase.fields.share)
 			assert.NoError(t, err)
 
 			gotResult, gotResponse, err := applicationService.Create(testCase.args.ctx, testCase.args.payload)
@@ -184,6 +186,7 @@ func TestFilterService_Favorite(t *testing.T) {
 	type fields struct {
 		c       service.Client
 		version string
+		share   jira.FilterShare
 	}
 
 	type args struct {
@@ -284,7 +287,7 @@ func TestFilterService_Favorite(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			applicationService, err := NewFilterService(testCase.fields.c, testCase.fields.version)
+			applicationService, err := NewFilterService(testCase.fields.c, testCase.fields.version, testCase.fields.share)
 			assert.NoError(t, err)
 
 			gotResult, gotResponse, err := applicationService.Favorite(testCase.args.ctx)
@@ -313,6 +316,7 @@ func TestFilterService_My(t *testing.T) {
 	type fields struct {
 		c       service.Client
 		version string
+		share   jira.FilterShare
 	}
 
 	type args struct {
@@ -421,7 +425,7 @@ func TestFilterService_My(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			applicationService, err := NewFilterService(testCase.fields.c, testCase.fields.version)
+			applicationService, err := NewFilterService(testCase.fields.c, testCase.fields.version, testCase.fields.share)
 			assert.NoError(t, err)
 
 			gotResult, gotResponse, err := applicationService.My(testCase.args.ctx, testCase.args.favorites, testCase.args.expand)
@@ -450,6 +454,7 @@ func TestFilterService_Search(t *testing.T) {
 	type fields struct {
 		c       service.Client
 		version string
+		share   jira.FilterShare
 	}
 
 	type args struct {
@@ -586,7 +591,7 @@ func TestFilterService_Search(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			applicationService, err := NewFilterService(testCase.fields.c, testCase.fields.version)
+			applicationService, err := NewFilterService(testCase.fields.c, testCase.fields.version, testCase.fields.share)
 			assert.NoError(t, err)
 
 			gotResult, gotResponse, err := applicationService.Search(testCase.args.ctx, testCase.args.options,
@@ -616,6 +621,7 @@ func TestFilterService_Get(t *testing.T) {
 	type fields struct {
 		c       service.Client
 		version string
+		share   jira.FilterShare
 	}
 
 	type args struct {
@@ -724,7 +730,7 @@ func TestFilterService_Get(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			applicationService, err := NewFilterService(testCase.fields.c, testCase.fields.version)
+			applicationService, err := NewFilterService(testCase.fields.c, testCase.fields.version, testCase.fields.share)
 			assert.NoError(t, err)
 
 			gotResult, gotResponse, err := applicationService.Get(testCase.args.ctx, testCase.args.filterId, testCase.args.expand)
@@ -753,6 +759,7 @@ func TestFilterService_Update(t *testing.T) {
 	type fields struct {
 		c       service.Client
 		version string
+		share   jira.FilterShare
 	}
 
 	type args struct {
@@ -894,7 +901,7 @@ func TestFilterService_Update(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			applicationService, err := NewFilterService(testCase.fields.c, testCase.fields.version)
+			applicationService, err := NewFilterService(testCase.fields.c, testCase.fields.version, testCase.fields.share)
 			assert.NoError(t, err)
 
 			gotResult, gotResponse, err := applicationService.Update(testCase.args.ctx, testCase.args.filterId, testCase.args.payload)
@@ -923,6 +930,7 @@ func TestFilterService_Delete(t *testing.T) {
 	type fields struct {
 		c       service.Client
 		version string
+		share   jira.FilterShare
 	}
 
 	type args struct {
@@ -1027,7 +1035,7 @@ func TestFilterService_Delete(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			applicationService, err := NewFilterService(testCase.fields.c, testCase.fields.version)
+			applicationService, err := NewFilterService(testCase.fields.c, testCase.fields.version, testCase.fields.share)
 			assert.NoError(t, err)
 
 			gotResponse, err := applicationService.Delete(testCase.args.ctx, testCase.args.filterId)
@@ -1055,6 +1063,7 @@ func TestFilterService_Change(t *testing.T) {
 	type fields struct {
 		c       service.Client
 		version string
+		share   jira.FilterShare
 	}
 
 	type args struct {
@@ -1181,7 +1190,7 @@ func TestFilterService_Change(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			applicationService, err := NewFilterService(testCase.fields.c, testCase.fields.version)
+			applicationService, err := NewFilterService(testCase.fields.c, testCase.fields.version, testCase.fields.share)
 			assert.NoError(t, err)
 
 			gotResponse, err := applicationService.Change(testCase.args.ctx, testCase.args.filterId, testCase.args.accountId)

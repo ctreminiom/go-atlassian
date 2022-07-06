@@ -12,7 +12,7 @@ import (
 	"strings"
 )
 
-func NewFilterService(client service.Client, version string, share jira.FilterShare) (jira.Filter, error) {
+func NewFilterService(client service.Client, version string, share jira.FilterShare) (*FilterService, error) {
 
 	if version == "" {
 		return nil, model.ErrNoVersionProvided

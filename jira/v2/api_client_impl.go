@@ -71,7 +71,7 @@ type ClientV2 struct {
 	Authentication common.Authentication
 	Role           jira.ApplicationRole
 	Dashboard      jira.Dashboard
-	Filter         jira.Filter
+	Filter         *internal.FilterService
 }
 
 func (c *ClientV2) NewJsonRequest(ctx context.Context, method, apiEndpoint string, payload io.Reader) (*http.Request, error) {

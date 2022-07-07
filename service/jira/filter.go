@@ -5,6 +5,7 @@ import (
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 )
 
+// Filter is an interface that defines the methods available from Jira Filter API.
 type Filter interface {
 
 	// Create creates a filter. The filter is shared according to the default share scope.

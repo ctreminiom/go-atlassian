@@ -19,7 +19,7 @@ func NewFilterService(client service.Client, version string, share jira.FilterSh
 	}
 
 	return &FilterService{
-		internalClient: &applicationClient{c: client, version: version},
+		internalClient: &internalFilterServiceImpl{c: client, version: version},
 		Share:          share,
 	}, nil
 }
@@ -62,27 +62,27 @@ func (f *FilterService) Change(ctx context.Context, filterId int, accountId stri
 	return f.internalClient.Change(ctx, filterId, accountId)
 }
 
-type applicationClient struct {
+type internalFilterServiceImpl struct {
 	c       service.Client
 	version string
 }
 
-func (a *applicationClient) Create(ctx context.Context, payload *model.FilterPayloadScheme) (*model.FilterScheme, *model.ResponseScheme, error) {
+func (i *internalFilterServiceImpl) Create(ctx context.Context, payload *model.FilterPayloadScheme) (*model.FilterScheme, *model.ResponseScheme, error) {
 
-	reader, err := a.c.TransformStructToReader(payload)
+	reader, err := i.c.TransformStructToReader(payload)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/filter", a.version)
+	endpoint := fmt.Sprintf("rest/api/%v/filter", i.version)
 
-	request, err := a.c.NewJsonRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := i.c.NewJsonRequest(ctx, http.MethodPost, endpoint, reader)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	filter := new(model.FilterScheme)
-	response, err := a.c.Call(request, filter)
+	response, err := i.c.Call(request, filter)
 	if err != nil {
 		return nil, response, err
 	}
@@ -90,16 +90,16 @@ func (a *applicationClient) Create(ctx context.Context, payload *model.FilterPay
 	return filter, response, nil
 }
 
-func (a *applicationClient) Favorite(ctx context.Context) ([]*model.FilterScheme, *model.ResponseScheme, error) {
-	endpoint := fmt.Sprintf("rest/api/%v/filter/favourite", a.version)
+func (i *internalFilterServiceImpl) Favorite(ctx context.Context) ([]*model.FilterScheme, *model.ResponseScheme, error) {
+	endpoint := fmt.Sprintf("rest/api/%v/filter/favourite", i.version)
 
-	request, err := a.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	var filters []*model.FilterScheme
-	response, err := a.c.Call(request, filters)
+	response, err := i.c.Call(request, filters)
 	if err != nil {
 		return nil, response, err
 	}
@@ -107,7 +107,7 @@ func (a *applicationClient) Favorite(ctx context.Context) ([]*model.FilterScheme
 	return filters, response, nil
 }
 
-func (a *applicationClient) My(ctx context.Context, favorites bool, expand []string) ([]*model.FilterScheme, *model.ResponseScheme, error) {
+func (i *internalFilterServiceImpl) My(ctx context.Context, favorites bool, expand []string) ([]*model.FilterScheme, *model.ResponseScheme, error) {
 	params := url.Values{}
 	params.Add("includeFavourites", fmt.Sprintf("%v", favorites))
 
@@ -115,15 +115,15 @@ func (a *applicationClient) My(ctx context.Context, favorites bool, expand []str
 		params.Add("expand", strings.Join(expand, ","))
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/filter/my?%v", a.version, params.Encode())
+	endpoint := fmt.Sprintf("rest/api/%v/filter/my?%v", i.version, params.Encode())
 
-	request, err := a.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	var filters []*model.FilterScheme
-	response, err := a.c.Call(request, filters)
+	response, err := i.c.Call(request, filters)
 	if err != nil {
 		return nil, response, err
 	}
@@ -131,7 +131,7 @@ func (a *applicationClient) My(ctx context.Context, favorites bool, expand []str
 	return filters, response, nil
 }
 
-func (a *applicationClient) Search(ctx context.Context, options *model.FilterSearchOptionScheme, startAt, maxResults int) (*model.FilterSearchPageScheme, *model.ResponseScheme, error) {
+func (i *internalFilterServiceImpl) Search(ctx context.Context, options *model.FilterSearchOptionScheme, startAt, maxResults int) (*model.FilterSearchPageScheme, *model.ResponseScheme, error) {
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
 	params.Add("maxResults", strconv.Itoa(maxResults))
@@ -167,15 +167,15 @@ func (a *applicationClient) Search(ctx context.Context, options *model.FilterSea
 		}
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/filter/search?%v", a.version, params.Encode())
+	endpoint := fmt.Sprintf("rest/api/%v/filter/search?%v", i.version, params.Encode())
 
-	request, err := a.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	page := new(model.FilterSearchPageScheme)
-	response, err := a.c.Call(request, page)
+	response, err := i.c.Call(request, page)
 	if err != nil {
 		return nil, response, err
 	}
@@ -183,13 +183,13 @@ func (a *applicationClient) Search(ctx context.Context, options *model.FilterSea
 	return page, response, nil
 }
 
-func (a *applicationClient) Get(ctx context.Context, filterId int, expand []string) (*model.FilterScheme, *model.ResponseScheme, error) {
+func (i *internalFilterServiceImpl) Get(ctx context.Context, filterId int, expand []string) (*model.FilterScheme, *model.ResponseScheme, error) {
 	if filterId == 0 {
 		return nil, nil, model.ErrNoFilterIDError
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("rest/api/%v/filter/%v", a.version, filterId))
+	endpoint.WriteString(fmt.Sprintf("rest/api/%v/filter/%v", i.version, filterId))
 
 	params := url.Values{}
 	if len(expand) != 0 {
@@ -200,13 +200,13 @@ func (a *applicationClient) Get(ctx context.Context, filterId int, expand []stri
 		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
-	request, err := a.c.NewRequest(ctx, http.MethodGet, endpoint.String(), nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	filter := new(model.FilterScheme)
-	response, err := a.c.Call(request, filter)
+	response, err := i.c.Call(request, filter)
 	if err != nil {
 		return nil, response, err
 	}
@@ -214,26 +214,26 @@ func (a *applicationClient) Get(ctx context.Context, filterId int, expand []stri
 	return filter, response, nil
 }
 
-func (a *applicationClient) Update(ctx context.Context, filterId int, payload *model.FilterPayloadScheme) (*model.FilterScheme, *model.ResponseScheme, error) {
+func (i *internalFilterServiceImpl) Update(ctx context.Context, filterId int, payload *model.FilterPayloadScheme) (*model.FilterScheme, *model.ResponseScheme, error) {
 
 	if filterId == 0 {
 		return nil, nil, model.ErrNoFieldIDError
 	}
 
-	reader, err := a.c.TransformStructToReader(payload)
+	reader, err := i.c.TransformStructToReader(payload)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/filter/%v", a.version, filterId)
+	endpoint := fmt.Sprintf("rest/api/%v/filter/%v", i.version, filterId)
 
-	request, err := a.c.NewJsonRequest(ctx, http.MethodPut, endpoint, reader)
+	request, err := i.c.NewJsonRequest(ctx, http.MethodPut, endpoint, reader)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	filter := new(model.FilterScheme)
-	response, err := a.c.Call(request, filter)
+	response, err := i.c.Call(request, filter)
 	if err != nil {
 		return nil, response, err
 	}
@@ -241,27 +241,27 @@ func (a *applicationClient) Update(ctx context.Context, filterId int, payload *m
 	return filter, response, nil
 }
 
-func (a *applicationClient) Delete(ctx context.Context, filterId int) (*model.ResponseScheme, error) {
+func (i *internalFilterServiceImpl) Delete(ctx context.Context, filterId int) (*model.ResponseScheme, error) {
 	if filterId == 0 {
 		return nil, model.ErrNoFilterIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/filter/%v", a.version, filterId)
+	endpoint := fmt.Sprintf("rest/api/%v/filter/%v", i.version, filterId)
 
-	request, err := a.c.NewRequest(ctx, http.MethodDelete, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, nil)
 	if err != nil {
 		return nil, err
 	}
 
-	response, err := a.c.Call(request, nil)
+	response, err := i.c.Call(request, nil)
 	if err != nil {
 		return response, err
 	}
 
-	return a.c.Call(request, nil)
+	return i.c.Call(request, nil)
 }
 
-func (a *applicationClient) Change(ctx context.Context, filterId int, accountId string) (*model.ResponseScheme, error) {
+func (i *internalFilterServiceImpl) Change(ctx context.Context, filterId int, accountId string) (*model.ResponseScheme, error) {
 	if filterId == 0 {
 		return nil, model.ErrNoFilterIDError
 	}
@@ -276,17 +276,17 @@ func (a *applicationClient) Change(ctx context.Context, filterId int, accountId 
 		AccountID: accountId,
 	}
 
-	reader, err := a.c.TransformStructToReader(payload)
+	reader, err := i.c.TransformStructToReader(payload)
 	if err != nil {
 		return nil, err
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/filter/%v/owner", a.version, filterId)
+	endpoint := fmt.Sprintf("rest/api/%v/filter/%v/owner", i.version, filterId)
 
-	request, err := a.c.NewJsonRequest(ctx, http.MethodPut, endpoint, reader)
+	request, err := i.c.NewJsonRequest(ctx, http.MethodPut, endpoint, reader)
 	if err != nil {
 		return nil, err
 	}
 
-	return a.c.Call(request, nil)
+	return i.c.Call(request, nil)
 }

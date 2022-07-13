@@ -62,11 +62,17 @@ func NewV2(httpClient common.HttpClient, site string) (*ClientV2, error) {
 		return nil, err
 	}
 
+	issueService, _, err := internal.NewIssueService(client, "2")
+	if err != nil {
+		return nil, err
+	}
+
 	client.Authentication = internal.NewAuthenticationService(client)
 	client.Role = applicationRoleService
 	client.Dashboard = dashboardService
 	client.Filter = filterService
 	client.Group = groupService
+	client.Issue = issueService
 
 	return client, nil
 }
@@ -79,6 +85,7 @@ type ClientV2 struct {
 	Dashboard      jira.Dashboard
 	Filter         *internal.FilterService
 	Group          *internal.GroupService
+	Issue          *internal.IssueRichTextService
 }
 
 func (c *ClientV2) NewJsonRequest(ctx context.Context, method, apiEndpoint string, payload io.Reader) (*http.Request, error) {

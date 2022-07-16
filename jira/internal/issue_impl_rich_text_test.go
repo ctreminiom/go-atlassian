@@ -12,7 +12,7 @@ import (
 	"testing"
 )
 
-func Test_internalIssueADFServiceImpl_Delete(t *testing.T) {
+func Test_internalRichTextServiceImpl_Delete(t *testing.T) {
 
 	type fields struct {
 		c       service.Client
@@ -34,8 +34,8 @@ func Test_internalIssueADFServiceImpl_Delete(t *testing.T) {
 		Err     error
 	}{
 		{
-			name:   "when the api version is v3",
-			fields: fields{version: "3"},
+			name:   "when the api version is v2",
+			fields: fields{version: "2"},
 			args: args{
 				ctx:            context.TODO(),
 				issueKeyOrId:   "DUMMY-1",
@@ -48,7 +48,7 @@ func Test_internalIssueADFServiceImpl_Delete(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
-					"rest/api/3/issue/DUMMY-1?deleteSubtasks=true",
+					"rest/api/2/issue/DUMMY-1?deleteSubtasks=true",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -63,7 +63,7 @@ func Test_internalIssueADFServiceImpl_Delete(t *testing.T) {
 
 		{
 			name:   "when the issue issue key or id is not provided",
-			fields: fields{version: "3"},
+			fields: fields{version: "2"},
 			args: args{
 				ctx:            context.TODO(),
 				issueKeyOrId:   "",
@@ -78,7 +78,7 @@ func Test_internalIssueADFServiceImpl_Delete(t *testing.T) {
 
 		{
 			name:   "when the request method cannot be created",
-			fields: fields{version: "3"},
+			fields: fields{version: "2"},
 			args: args{
 				ctx:            context.TODO(),
 				issueKeyOrId:   "DUMMY-1",
@@ -91,7 +91,7 @@ func Test_internalIssueADFServiceImpl_Delete(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
-					"rest/api/3/issue/DUMMY-1?deleteSubtasks=true",
+					"rest/api/2/issue/DUMMY-1?deleteSubtasks=true",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -109,7 +109,7 @@ func Test_internalIssueADFServiceImpl_Delete(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			_, issueService, err := NewIssueService(testCase.fields.c, testCase.fields.version)
+			issueService, _, err := NewIssueService(testCase.fields.c, testCase.fields.version, nil)
 			assert.NoError(t, err)
 
 			gotResponse, err := issueService.Delete(testCase.args.ctx, testCase.args.issueKeyOrId, testCase.args.deleteSubTasks)
@@ -132,7 +132,7 @@ func Test_internalIssueADFServiceImpl_Delete(t *testing.T) {
 	}
 }
 
-func Test_internalIssueADFServiceImpl_Assign(t *testing.T) {
+func Test_internalRichTextServiceImpl_Assign(t *testing.T) {
 
 	type fields struct {
 		c       service.Client
@@ -153,8 +153,8 @@ func Test_internalIssueADFServiceImpl_Assign(t *testing.T) {
 		Err     error
 	}{
 		{
-			name:   "when the api version is v3",
-			fields: fields{version: "3"},
+			name:   "when the api version is v2",
+			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.TODO(),
 				issueKeyOrId: "DUMMY-1",
@@ -173,7 +173,7 @@ func Test_internalIssueADFServiceImpl_Assign(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
-					"/rest/api/3/issue/DUMMY-1/assignee",
+					"/rest/api/2/issue/DUMMY-1/assignee",
 					bytes.NewReader([]byte{})).
 					Return(&http.Request{}, nil)
 
@@ -188,7 +188,7 @@ func Test_internalIssueADFServiceImpl_Assign(t *testing.T) {
 
 		{
 			name:   "when the issue issue key or id is not provided",
-			fields: fields{version: "3"},
+			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.TODO(),
 				issueKeyOrId: "",
@@ -203,7 +203,7 @@ func Test_internalIssueADFServiceImpl_Assign(t *testing.T) {
 
 		{
 			name:   "when the account id is not provided",
-			fields: fields{version: "3"},
+			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.TODO(),
 				issueKeyOrId: "DUMMY-1",
@@ -218,7 +218,7 @@ func Test_internalIssueADFServiceImpl_Assign(t *testing.T) {
 
 		{
 			name:   "when the request method cannot be created",
-			fields: fields{version: "3"},
+			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.TODO(),
 				issueKeyOrId: "DUMMY-1",
@@ -237,7 +237,7 @@ func Test_internalIssueADFServiceImpl_Assign(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
-					"/rest/api/3/issue/DUMMY-1/assignee",
+					"/rest/api/2/issue/DUMMY-1/assignee",
 					bytes.NewReader([]byte{})).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -255,7 +255,7 @@ func Test_internalIssueADFServiceImpl_Assign(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			_, issueService, err := NewIssueService(testCase.fields.c, testCase.fields.version)
+			issueService, _, err := NewIssueService(testCase.fields.c, testCase.fields.version, nil)
 			assert.NoError(t, err)
 
 			gotResponse, err := issueService.Assign(testCase.args.ctx, testCase.args.issueKeyOrId, testCase.args.accountId)
@@ -278,7 +278,7 @@ func Test_internalIssueADFServiceImpl_Assign(t *testing.T) {
 	}
 }
 
-func Test_internalIssueADFServiceImpl_Notify(t *testing.T) {
+func Test_internalRichTextServiceImpl_Notify(t *testing.T) {
 
 	type fields struct {
 		c       service.Client
@@ -300,8 +300,8 @@ func Test_internalIssueADFServiceImpl_Notify(t *testing.T) {
 		Err     error
 	}{
 		{
-			name:   "when the api version is v3",
-			fields: fields{version: "3"},
+			name:   "when the api version is v2",
+			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.TODO(),
 				issueKeyOrId: "DUMMY-1",
@@ -332,7 +332,7 @@ func Test_internalIssueADFServiceImpl_Notify(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
-					"rest/api/3/issue/DUMMY-1/notify",
+					"rest/api/2/issue/DUMMY-1/notify",
 					bytes.NewReader([]byte{})).
 					Return(&http.Request{}, nil)
 
@@ -347,7 +347,7 @@ func Test_internalIssueADFServiceImpl_Notify(t *testing.T) {
 
 		{
 			name:   "when the issue issue key or id is not provided",
-			fields: fields{version: "3"},
+			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.TODO(),
 				issueKeyOrId: "",
@@ -361,7 +361,7 @@ func Test_internalIssueADFServiceImpl_Notify(t *testing.T) {
 
 		{
 			name:   "when the request method cannot be created",
-			fields: fields{version: "3"},
+			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.TODO(),
 				issueKeyOrId: "DUMMY-1",
@@ -392,7 +392,7 @@ func Test_internalIssueADFServiceImpl_Notify(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
-					"rest/api/3/issue/DUMMY-1/notify",
+					"rest/api/2/issue/DUMMY-1/notify",
 					bytes.NewReader([]byte{})).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -410,7 +410,7 @@ func Test_internalIssueADFServiceImpl_Notify(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			_, issueService, err := NewIssueService(testCase.fields.c, testCase.fields.version)
+			issueService, _, err := NewIssueService(testCase.fields.c, testCase.fields.version, nil)
 			assert.NoError(t, err)
 
 			gotResponse, err := issueService.Notify(testCase.args.ctx, testCase.args.issueKeyOrId, testCase.args.options)
@@ -433,7 +433,7 @@ func Test_internalIssueADFServiceImpl_Notify(t *testing.T) {
 	}
 }
 
-func Test_internalIssueADFServiceImpl_Transitions(t *testing.T) {
+func Test_internalRichTextServiceImpl_Transitions(t *testing.T) {
 
 	type fields struct {
 		c       service.Client
@@ -454,8 +454,8 @@ func Test_internalIssueADFServiceImpl_Transitions(t *testing.T) {
 		Err     error
 	}{
 		{
-			name:   "when the api version is v3",
-			fields: fields{version: "3"},
+			name:   "when the api version is v2",
+			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.TODO(),
 				issueKeyOrId: "DUMMY-1",
@@ -467,7 +467,7 @@ func Test_internalIssueADFServiceImpl_Transitions(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"rest/api/3/issue/DUMMY-1/transitions",
+					"rest/api/2/issue/DUMMY-1/transitions",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -482,7 +482,7 @@ func Test_internalIssueADFServiceImpl_Transitions(t *testing.T) {
 
 		{
 			name:   "when the issue issue key or id is not provided",
-			fields: fields{version: "3"},
+			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.TODO(),
 				issueKeyOrId: "",
@@ -496,7 +496,7 @@ func Test_internalIssueADFServiceImpl_Transitions(t *testing.T) {
 
 		{
 			name:   "when the request method cannot be created",
-			fields: fields{version: "3"},
+			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.TODO(),
 				issueKeyOrId: "DUMMY-1",
@@ -508,7 +508,7 @@ func Test_internalIssueADFServiceImpl_Transitions(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"rest/api/3/issue/DUMMY-1/transitions",
+					"rest/api/2/issue/DUMMY-1/transitions",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -526,7 +526,7 @@ func Test_internalIssueADFServiceImpl_Transitions(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			_, issueService, err := NewIssueService(testCase.fields.c, testCase.fields.version)
+			issueService, _, err := NewIssueService(testCase.fields.c, testCase.fields.version, nil)
 			assert.NoError(t, err)
 
 			gotResult, gotResponse, err := issueService.Transitions(testCase.args.ctx, testCase.args.issueKeyOrId)
@@ -550,7 +550,7 @@ func Test_internalIssueADFServiceImpl_Transitions(t *testing.T) {
 	}
 }
 
-func Test_internalIssueADFServiceImpl_Create(t *testing.T) {
+func Test_internalRichTextServiceImpl_Create(t *testing.T) {
 
 	customFields := &model.CustomFields{}
 
@@ -572,7 +572,7 @@ func Test_internalIssueADFServiceImpl_Create(t *testing.T) {
 
 	type args struct {
 		ctx          context.Context
-		payload      *model.IssueScheme
+		payload      *model.IssueSchemeV2
 		customFields *model.CustomFields
 	}
 
@@ -585,12 +585,12 @@ func Test_internalIssueADFServiceImpl_Create(t *testing.T) {
 		Err     error
 	}{
 		{
-			name:   "when the api version is v3",
-			fields: fields{version: "3"},
+			name:   "when the api version is v2",
+			fields: fields{version: "2"},
 			args: args{
 				ctx: context.TODO(),
-				payload: &model.IssueScheme{
-					Fields: &model.IssueFieldsScheme{
+				payload: &model.IssueSchemeV2{
+					Fields: &model.IssueFieldsSchemeV2{
 						Summary:   "New summary test",
 						Project:   &model.ProjectScheme{ID: "10000"},
 						IssueType: &model.IssueTypeScheme{Name: "Story"},
@@ -614,7 +614,7 @@ func Test_internalIssueADFServiceImpl_Create(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
-					"rest/api/3/issue",
+					"rest/api/2/issue",
 					bytes.NewReader([]byte{})).
 					Return(&http.Request{}, nil)
 
@@ -629,11 +629,11 @@ func Test_internalIssueADFServiceImpl_Create(t *testing.T) {
 
 		{
 			name:   "when the customfield are not provided",
-			fields: fields{version: "3"},
+			fields: fields{version: "2"},
 			args: args{
 				ctx: context.TODO(),
-				payload: &model.IssueScheme{
-					Fields: &model.IssueFieldsScheme{
+				payload: &model.IssueSchemeV2{
+					Fields: &model.IssueFieldsSchemeV2{
 						Summary:   "New summary test",
 						Project:   &model.ProjectScheme{ID: "10000"},
 						IssueType: &model.IssueTypeScheme{Name: "Story"},
@@ -646,7 +646,7 @@ func Test_internalIssueADFServiceImpl_Create(t *testing.T) {
 				client := mocks.NewClient(t)
 
 				client.On("TransformStructToReader",
-					&model.IssueScheme{Fields: &model.IssueFieldsScheme{
+					&model.IssueSchemeV2{Fields: &model.IssueFieldsSchemeV2{
 						Summary:   "New summary test",
 						Project:   &model.ProjectScheme{ID: "10000"},
 						IssueType: &model.IssueTypeScheme{Name: "Story"},
@@ -656,7 +656,7 @@ func Test_internalIssueADFServiceImpl_Create(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
-					"rest/api/3/issue",
+					"rest/api/2/issue",
 					bytes.NewReader([]byte{})).
 					Return(&http.Request{}, nil)
 
@@ -671,11 +671,11 @@ func Test_internalIssueADFServiceImpl_Create(t *testing.T) {
 
 		{
 			name:   "when the http request cannot be created",
-			fields: fields{version: "3"},
+			fields: fields{version: "2"},
 			args: args{
 				ctx: context.TODO(),
-				payload: &model.IssueScheme{
-					Fields: &model.IssueFieldsScheme{
+				payload: &model.IssueSchemeV2{
+					Fields: &model.IssueFieldsSchemeV2{
 						Summary:   "New summary test",
 						Project:   &model.ProjectScheme{ID: "10000"},
 						IssueType: &model.IssueTypeScheme{Name: "Story"},
@@ -699,7 +699,7 @@ func Test_internalIssueADFServiceImpl_Create(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
-					"rest/api/3/issue",
+					"rest/api/2/issue",
 					bytes.NewReader([]byte{})).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -717,7 +717,7 @@ func Test_internalIssueADFServiceImpl_Create(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			_, issueService, err := NewIssueService(testCase.fields.c, testCase.fields.version)
+			issueService, _, err := NewIssueService(testCase.fields.c, testCase.fields.version, nil)
 			assert.NoError(t, err)
 
 			gotResult, gotResponse, err := issueService.Create(testCase.args.ctx, testCase.args.payload, testCase.args.customFields)
@@ -741,7 +741,7 @@ func Test_internalIssueADFServiceImpl_Create(t *testing.T) {
 	}
 }
 
-func Test_internalIssueADFServiceImpl_Creates(t *testing.T) {
+func Test_internalRichTextServiceImpl_Creates(t *testing.T) {
 
 	customFields := &model.CustomFields{}
 
@@ -763,7 +763,7 @@ func Test_internalIssueADFServiceImpl_Creates(t *testing.T) {
 
 	type args struct {
 		ctx     context.Context
-		payload []*model.IssueBulkSchemeV3
+		payload []*model.IssueBulkSchemeV2
 	}
 
 	testCases := []struct {
@@ -775,14 +775,14 @@ func Test_internalIssueADFServiceImpl_Creates(t *testing.T) {
 		Err     error
 	}{
 		{
-			name:   "when the api version is v3",
-			fields: fields{version: "3"},
+			name:   "when the api version is v2",
+			fields: fields{version: "2"},
 			args: args{
 				ctx: context.TODO(),
-				payload: []*model.IssueBulkSchemeV3{
+				payload: []*model.IssueBulkSchemeV2{
 					{
-						Payload: &model.IssueScheme{
-							Fields: &model.IssueFieldsScheme{
+						Payload: &model.IssueSchemeV2{
+							Fields: &model.IssueFieldsSchemeV2{
 								Summary:   "New summary test",
 								Project:   &model.ProjectScheme{ID: "10000"},
 								IssueType: &model.IssueTypeScheme{Name: "Story"},
@@ -797,8 +797,8 @@ func Test_internalIssueADFServiceImpl_Creates(t *testing.T) {
 					},
 
 					{
-						Payload: &model.IssueScheme{
-							Fields: &model.IssueFieldsScheme{
+						Payload: &model.IssueSchemeV2{
+							Fields: &model.IssueFieldsSchemeV2{
 								Summary:   "New summary test #2",
 								Project:   &model.ProjectScheme{ID: "10000"},
 								IssueType: &model.IssueTypeScheme{Name: "Story"},
@@ -832,7 +832,7 @@ func Test_internalIssueADFServiceImpl_Creates(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
-					"rest/api/3/issue/bulk",
+					"rest/api/2/issue/bulk",
 					bytes.NewReader([]byte{})).
 					Return(&http.Request{}, nil)
 
@@ -847,7 +847,7 @@ func Test_internalIssueADFServiceImpl_Creates(t *testing.T) {
 
 		{
 			name:   "when the payload is not provided",
-			fields: fields{version: "3"},
+			fields: fields{version: "2"},
 			args: args{
 				ctx:     context.TODO(),
 				payload: nil,
@@ -861,13 +861,13 @@ func Test_internalIssueADFServiceImpl_Creates(t *testing.T) {
 
 		{
 			name:   "when the http request cannot be created",
-			fields: fields{version: "3"},
+			fields: fields{version: "2"},
 			args: args{
 				ctx: context.TODO(),
-				payload: []*model.IssueBulkSchemeV3{
+				payload: []*model.IssueBulkSchemeV2{
 					{
-						Payload: &model.IssueScheme{
-							Fields: &model.IssueFieldsScheme{
+						Payload: &model.IssueSchemeV2{
+							Fields: &model.IssueFieldsSchemeV2{
 								Summary:   "New summary test",
 								Project:   &model.ProjectScheme{ID: "10000"},
 								IssueType: &model.IssueTypeScheme{Name: "Story"},
@@ -882,8 +882,8 @@ func Test_internalIssueADFServiceImpl_Creates(t *testing.T) {
 					},
 
 					{
-						Payload: &model.IssueScheme{
-							Fields: &model.IssueFieldsScheme{
+						Payload: &model.IssueSchemeV2{
+							Fields: &model.IssueFieldsSchemeV2{
 								Summary:   "New summary test #2",
 								Project:   &model.ProjectScheme{ID: "10000"},
 								IssueType: &model.IssueTypeScheme{Name: "Story"},
@@ -917,7 +917,7 @@ func Test_internalIssueADFServiceImpl_Creates(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
-					"rest/api/3/issue/bulk",
+					"rest/api/2/issue/bulk",
 					bytes.NewReader([]byte{})).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -935,7 +935,7 @@ func Test_internalIssueADFServiceImpl_Creates(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			_, issueService, err := NewIssueService(testCase.fields.c, testCase.fields.version)
+			issueService, _, err := NewIssueService(testCase.fields.c, testCase.fields.version, nil)
 			assert.NoError(t, err)
 
 			gotResult, gotResponse, err := issueService.Creates(testCase.args.ctx, testCase.args.payload)
@@ -959,7 +959,7 @@ func Test_internalIssueADFServiceImpl_Creates(t *testing.T) {
 	}
 }
 
-func Test_internalIssueADFServiceImpl_Get(t *testing.T) {
+func Test_internalRichTextServiceImpl_Get(t *testing.T) {
 
 	customFields := &model.CustomFields{}
 
@@ -994,8 +994,8 @@ func Test_internalIssueADFServiceImpl_Get(t *testing.T) {
 		Err     error
 	}{
 		{
-			name:   "when the api version is v3",
-			fields: fields{version: "3"},
+			name:   "when the api version is v2",
+			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.TODO(),
 				issueKeyOrId: "DUMMY-1",
@@ -1009,13 +1009,13 @@ func Test_internalIssueADFServiceImpl_Get(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"rest/api/3/issue/DUMMY-1?expand=operations%2Cchangelogts&fields=summary%2Cstatus",
+					"rest/api/2/issue/DUMMY-1?expand=operations%2Cchangelogts&fields=summary%2Cstatus",
 					nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
 					&http.Request{},
-					&model.IssueScheme{}).
+					&model.IssueSchemeV2{}).
 					Return(&model.ResponseScheme{}, nil)
 
 				fields.c = client
@@ -1023,8 +1023,8 @@ func Test_internalIssueADFServiceImpl_Get(t *testing.T) {
 		},
 
 		{
-			name:   "when the api version is v3",
-			fields: fields{version: "3"},
+			name:   "when the issue key or id is not provided",
+			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.TODO(),
 				issueKeyOrId: "",
@@ -1040,7 +1040,7 @@ func Test_internalIssueADFServiceImpl_Get(t *testing.T) {
 
 		{
 			name:   "when the http request cannot be created",
-			fields: fields{version: "3"},
+			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.TODO(),
 				issueKeyOrId: "DUMMY-1",
@@ -1054,7 +1054,7 @@ func Test_internalIssueADFServiceImpl_Get(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"rest/api/3/issue/DUMMY-1?expand=operations%2Cchangelogts&fields=summary%2Cstatus",
+					"rest/api/2/issue/DUMMY-1?expand=operations%2Cchangelogts&fields=summary%2Cstatus",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -1072,7 +1072,7 @@ func Test_internalIssueADFServiceImpl_Get(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			_, issueService, err := NewIssueService(testCase.fields.c, testCase.fields.version)
+			issueService, _, err := NewIssueService(testCase.fields.c, testCase.fields.version, nil)
 			assert.NoError(t, err)
 
 			gotResult, gotResponse, err := issueService.Get(testCase.args.ctx, testCase.args.issueKeyOrId, testCase.args.fields,
@@ -1097,7 +1097,7 @@ func Test_internalIssueADFServiceImpl_Get(t *testing.T) {
 	}
 }
 
-func Test_internalIssueADFServiceImpl_Move(t *testing.T) {
+func Test_internalRichTextServiceImpl_Move(t *testing.T) {
 
 	customFields := &model.CustomFields{}
 
@@ -1127,7 +1127,7 @@ func Test_internalIssueADFServiceImpl_Move(t *testing.T) {
 	type args struct {
 		ctx                        context.Context
 		issueKeyOrId, transitionId string
-		options                    *model.IssueMoveOptionsV3
+		options                    *model.IssueMoveOptionsV2
 	}
 
 	testCases := []struct {
@@ -1139,15 +1139,15 @@ func Test_internalIssueADFServiceImpl_Move(t *testing.T) {
 		Err     error
 	}{
 		{
-			name:   "when the api version is v3",
-			fields: fields{version: "3"},
+			name:   "when the api version is v2",
+			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.TODO(),
 				issueKeyOrId: "DUMMY-1",
 				transitionId: "10001",
-				options: &model.IssueMoveOptionsV3{
-					Fields: &model.IssueScheme{
-						Fields: &model.IssueFieldsScheme{
+				options: &model.IssueMoveOptionsV2{
+					Fields: &model.IssueSchemeV2{
+						Fields: &model.IssueFieldsSchemeV2{
 							Summary:   "New summary test",
 							Project:   &model.ProjectScheme{ID: "10000"},
 							IssueType: &model.IssueTypeScheme{Name: "Story"},
@@ -1177,7 +1177,7 @@ func Test_internalIssueADFServiceImpl_Move(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
-					"rest/api/3/issue/DUMMY-1/transitions",
+					"rest/api/2/issue/DUMMY-1/transitions",
 					bytes.NewReader([]byte{})).
 					Return(&http.Request{}, nil)
 
@@ -1192,14 +1192,14 @@ func Test_internalIssueADFServiceImpl_Move(t *testing.T) {
 
 		{
 			name:   "when the operations are not provided",
-			fields: fields{version: "3"},
+			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.TODO(),
 				issueKeyOrId: "DUMMY-1",
 				transitionId: "10001",
-				options: &model.IssueMoveOptionsV3{
-					Fields: &model.IssueScheme{
-						Fields: &model.IssueFieldsScheme{
+				options: &model.IssueMoveOptionsV2{
+					Fields: &model.IssueSchemeV2{
+						Fields: &model.IssueFieldsSchemeV2{
 							Summary:   "New summary test",
 							Project:   &model.ProjectScheme{ID: "10000"},
 							IssueType: &model.IssueTypeScheme{Name: "Story"},
@@ -1227,7 +1227,7 @@ func Test_internalIssueADFServiceImpl_Move(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
-					"rest/api/3/issue/DUMMY-1/transitions",
+					"rest/api/2/issue/DUMMY-1/transitions",
 					bytes.NewReader([]byte{})).
 					Return(&http.Request{}, nil)
 
@@ -1242,14 +1242,14 @@ func Test_internalIssueADFServiceImpl_Move(t *testing.T) {
 
 		{
 			name:   "when the custom fields are not provided",
-			fields: fields{version: "3"},
+			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.TODO(),
 				issueKeyOrId: "DUMMY-1",
 				transitionId: "10001",
-				options: &model.IssueMoveOptionsV3{
-					Fields: &model.IssueScheme{
-						Fields: &model.IssueFieldsScheme{
+				options: &model.IssueMoveOptionsV2{
+					Fields: &model.IssueSchemeV2{
+						Fields: &model.IssueFieldsSchemeV2{
 							Summary:   "New summary test",
 							Project:   &model.ProjectScheme{ID: "10000"},
 							IssueType: &model.IssueTypeScheme{Name: "Story"},
@@ -1277,7 +1277,7 @@ func Test_internalIssueADFServiceImpl_Move(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
-					"rest/api/3/issue/DUMMY-1/transitions",
+					"rest/api/2/issue/DUMMY-1/transitions",
 					bytes.NewReader([]byte{})).
 					Return(&http.Request{}, nil)
 
@@ -1292,7 +1292,7 @@ func Test_internalIssueADFServiceImpl_Move(t *testing.T) {
 
 		{
 			name:   "when the the issue comment options are not provided",
-			fields: fields{version: "3"},
+			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.TODO(),
 				issueKeyOrId: "DUMMY-1",
@@ -1311,7 +1311,7 @@ func Test_internalIssueADFServiceImpl_Move(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
-					"rest/api/3/issue/DUMMY-1/transitions",
+					"rest/api/2/issue/DUMMY-1/transitions",
 					bytes.NewReader([]byte{})).
 					Return(&http.Request{}, nil)
 
@@ -1326,14 +1326,14 @@ func Test_internalIssueADFServiceImpl_Move(t *testing.T) {
 
 		{
 			name:   "when the issue key is not provided",
-			fields: fields{version: "3"},
+			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.TODO(),
 				issueKeyOrId: "",
 				transitionId: "10001",
-				options: &model.IssueMoveOptionsV3{
-					Fields: &model.IssueScheme{
-						Fields: &model.IssueFieldsScheme{
+				options: &model.IssueMoveOptionsV2{
+					Fields: &model.IssueSchemeV2{
+						Fields: &model.IssueFieldsSchemeV2{
 							Summary:   "New summary test",
 							Project:   &model.ProjectScheme{ID: "10000"},
 							IssueType: &model.IssueTypeScheme{Name: "Story"},
@@ -1352,14 +1352,14 @@ func Test_internalIssueADFServiceImpl_Move(t *testing.T) {
 
 		{
 			name:   "when the transition id is not provided",
-			fields: fields{version: "3"},
+			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.TODO(),
 				issueKeyOrId: "DUMMY-1",
 				transitionId: "",
-				options: &model.IssueMoveOptionsV3{
-					Fields: &model.IssueScheme{
-						Fields: &model.IssueFieldsScheme{
+				options: &model.IssueMoveOptionsV2{
+					Fields: &model.IssueSchemeV2{
+						Fields: &model.IssueFieldsSchemeV2{
 							Summary:   "New summary test",
 							Project:   &model.ProjectScheme{ID: "10000"},
 							IssueType: &model.IssueTypeScheme{Name: "Story"},
@@ -1378,14 +1378,14 @@ func Test_internalIssueADFServiceImpl_Move(t *testing.T) {
 
 		{
 			name:   "when the http request cannot be created",
-			fields: fields{version: "3"},
+			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.TODO(),
 				issueKeyOrId: "DUMMY-1",
 				transitionId: "10001",
-				options: &model.IssueMoveOptionsV3{
-					Fields: &model.IssueScheme{
-						Fields: &model.IssueFieldsScheme{
+				options: &model.IssueMoveOptionsV2{
+					Fields: &model.IssueSchemeV2{
+						Fields: &model.IssueFieldsSchemeV2{
 							Summary:   "New summary test",
 							Project:   &model.ProjectScheme{ID: "10000"},
 							IssueType: &model.IssueTypeScheme{Name: "Story"},
@@ -1415,7 +1415,7 @@ func Test_internalIssueADFServiceImpl_Move(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
-					"rest/api/3/issue/DUMMY-1/transitions",
+					"rest/api/2/issue/DUMMY-1/transitions",
 					bytes.NewReader([]byte{})).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -1433,7 +1433,7 @@ func Test_internalIssueADFServiceImpl_Move(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			_, issueService, err := NewIssueService(testCase.fields.c, testCase.fields.version)
+			issueService, _, err := NewIssueService(testCase.fields.c, testCase.fields.version, nil)
 			assert.NoError(t, err)
 
 			gotResponse, err := issueService.Move(testCase.args.ctx, testCase.args.issueKeyOrId, testCase.args.transitionId,
@@ -1457,7 +1457,7 @@ func Test_internalIssueADFServiceImpl_Move(t *testing.T) {
 	}
 }
 
-func Test_internalIssueADFServiceImpl_Update(t *testing.T) {
+func Test_internalRichTextServiceImpl_Update(t *testing.T) {
 
 	customFields := &model.CustomFields{}
 
@@ -1488,7 +1488,7 @@ func Test_internalIssueADFServiceImpl_Update(t *testing.T) {
 		ctx          context.Context
 		issueKeyOrId string
 		notify       bool
-		payload      *model.IssueScheme
+		payload      *model.IssueSchemeV2
 		customFields *model.CustomFields
 		operations   *model.UpdateOperations
 	}
@@ -1502,14 +1502,14 @@ func Test_internalIssueADFServiceImpl_Update(t *testing.T) {
 		Err     error
 	}{
 		{
-			name:   "when the api version is v3",
-			fields: fields{version: "3"},
+			name:   "when the api version is v2",
+			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.TODO(),
 				issueKeyOrId: "DUMMY-1",
 				notify:       true,
-				payload: &model.IssueScheme{
-					Fields: &model.IssueFieldsScheme{
+				payload: &model.IssueSchemeV2{
+					Fields: &model.IssueFieldsSchemeV2{
 						Summary: "New summary test",
 					},
 				},
@@ -1533,7 +1533,7 @@ func Test_internalIssueADFServiceImpl_Update(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
-					"rest/api/3/issue/DUMMY-1?notifyUsers=true",
+					"rest/api/2/issue/DUMMY-1?notifyUsers=true",
 					bytes.NewReader([]byte{})).
 					Return(&http.Request{}, nil)
 
@@ -1548,13 +1548,13 @@ func Test_internalIssueADFServiceImpl_Update(t *testing.T) {
 
 		{
 			name:   "when the issue key or id is not provided",
-			fields: fields{version: "3"},
+			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.TODO(),
 				issueKeyOrId: "",
 				notify:       true,
-				payload: &model.IssueScheme{
-					Fields: &model.IssueFieldsScheme{
+				payload: &model.IssueSchemeV2{
+					Fields: &model.IssueFieldsSchemeV2{
 						Summary: "New summary test",
 					},
 				},
@@ -1570,13 +1570,13 @@ func Test_internalIssueADFServiceImpl_Update(t *testing.T) {
 
 		{
 			name:   "when the http request cannot be created",
-			fields: fields{version: "3"},
+			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.TODO(),
 				issueKeyOrId: "DUMMY-1",
 				notify:       true,
-				payload: &model.IssueScheme{
-					Fields: &model.IssueFieldsScheme{
+				payload: &model.IssueSchemeV2{
+					Fields: &model.IssueFieldsSchemeV2{
 						Summary: "New summary test",
 					},
 				},
@@ -1600,7 +1600,7 @@ func Test_internalIssueADFServiceImpl_Update(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
-					"rest/api/3/issue/DUMMY-1?notifyUsers=true",
+					"rest/api/2/issue/DUMMY-1?notifyUsers=true",
 					bytes.NewReader([]byte{})).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -1612,13 +1612,13 @@ func Test_internalIssueADFServiceImpl_Update(t *testing.T) {
 
 		{
 			name:   "when the operations are not provided",
-			fields: fields{version: "3"},
+			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.TODO(),
 				issueKeyOrId: "DUMMY-1",
 				notify:       true,
-				payload: &model.IssueScheme{
-					Fields: &model.IssueFieldsScheme{
+				payload: &model.IssueSchemeV2{
+					Fields: &model.IssueFieldsSchemeV2{
 						Summary: "New summary test",
 					},
 				},
@@ -1640,7 +1640,7 @@ func Test_internalIssueADFServiceImpl_Update(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
-					"rest/api/3/issue/DUMMY-1?notifyUsers=true",
+					"rest/api/2/issue/DUMMY-1?notifyUsers=true",
 					bytes.NewReader([]byte{})).
 					Return(&http.Request{}, nil)
 
@@ -1655,13 +1655,13 @@ func Test_internalIssueADFServiceImpl_Update(t *testing.T) {
 
 		{
 			name:   "when the custom fields are not provided",
-			fields: fields{version: "3"},
+			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.TODO(),
 				issueKeyOrId: "DUMMY-1",
 				notify:       true,
-				payload: &model.IssueScheme{
-					Fields: &model.IssueFieldsScheme{
+				payload: &model.IssueSchemeV2{
+					Fields: &model.IssueFieldsSchemeV2{
 						Summary: "New summary test",
 					},
 				},
@@ -1683,7 +1683,7 @@ func Test_internalIssueADFServiceImpl_Update(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
-					"rest/api/3/issue/DUMMY-1?notifyUsers=true",
+					"rest/api/2/issue/DUMMY-1?notifyUsers=true",
 					bytes.NewReader([]byte{})).
 					Return(&http.Request{}, nil)
 
@@ -1698,13 +1698,13 @@ func Test_internalIssueADFServiceImpl_Update(t *testing.T) {
 
 		{
 			name:   "when the operations are customfields are not provided",
-			fields: fields{version: "3"},
+			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.TODO(),
 				issueKeyOrId: "DUMMY-1",
 				notify:       true,
-				payload: &model.IssueScheme{
-					Fields: &model.IssueFieldsScheme{
+				payload: &model.IssueSchemeV2{
+					Fields: &model.IssueFieldsSchemeV2{
 						Summary: "New summary test",
 					},
 				},
@@ -1716,8 +1716,8 @@ func Test_internalIssueADFServiceImpl_Update(t *testing.T) {
 				client := mocks.NewClient(t)
 
 				client.On("TransformStructToReader",
-					&model.IssueScheme{
-						Fields: &model.IssueFieldsScheme{
+					&model.IssueSchemeV2{
+						Fields: &model.IssueFieldsSchemeV2{
 							Summary: "New summary test",
 						},
 					}).
@@ -1726,7 +1726,7 @@ func Test_internalIssueADFServiceImpl_Update(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
-					"rest/api/3/issue/DUMMY-1?notifyUsers=true",
+					"rest/api/2/issue/DUMMY-1?notifyUsers=true",
 					bytes.NewReader([]byte{})).
 					Return(&http.Request{}, nil)
 
@@ -1747,7 +1747,7 @@ func Test_internalIssueADFServiceImpl_Update(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			_, issueService, err := NewIssueService(testCase.fields.c, testCase.fields.version)
+			issueService, _, err := NewIssueService(testCase.fields.c, testCase.fields.version, nil)
 			assert.NoError(t, err)
 
 			gotResponse, err := issueService.Update(testCase.args.ctx, testCase.args.issueKeyOrId, testCase.args.notify,

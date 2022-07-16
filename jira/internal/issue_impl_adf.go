@@ -14,68 +14,69 @@ import (
 	"strings"
 )
 
-type IssueRichTextService struct {
-	internalClient jira.IssueRichTextConnector
+type IssueADFService struct {
+	internalClient jira.IssueADFMethodsConnector
+	Attachment     jira.Attachment
 }
 
-func (i IssueRichTextService) Delete(ctx context.Context, issueKeyOrId string, deleteSubTasks bool) (*model.ResponseScheme, error) {
+func (i *IssueADFService) Delete(ctx context.Context, issueKeyOrId string, deleteSubTasks bool) (*model.ResponseScheme, error) {
 	return i.internalClient.Delete(ctx, issueKeyOrId, deleteSubTasks)
 }
 
-func (i IssueRichTextService) Assign(ctx context.Context, issueKeyOrId, accountId string) (*model.ResponseScheme, error) {
+func (i *IssueADFService) Assign(ctx context.Context, issueKeyOrId, accountId string) (*model.ResponseScheme, error) {
 	return i.internalClient.Assign(ctx, issueKeyOrId, accountId)
 }
 
-func (i IssueRichTextService) Notify(ctx context.Context, issueKeyOrId string, options *model.IssueNotifyOptionsScheme) (*model.ResponseScheme, error) {
+func (i *IssueADFService) Notify(ctx context.Context, issueKeyOrId string, options *model.IssueNotifyOptionsScheme) (*model.ResponseScheme, error) {
 	return i.internalClient.Notify(ctx, issueKeyOrId, options)
 }
 
-func (i IssueRichTextService) Transitions(ctx context.Context, issueKeyOrId string) (*model.IssueTransitionsScheme, *model.ResponseScheme, error) {
+func (i *IssueADFService) Transitions(ctx context.Context, issueKeyOrId string) (*model.IssueTransitionsScheme, *model.ResponseScheme, error) {
 	return i.internalClient.Transitions(ctx, issueKeyOrId)
 }
 
-func (i IssueRichTextService) Create(ctx context.Context, payload *model.IssueSchemeV2, customFields *model.CustomFields) (*model.IssueResponseScheme, *model.ResponseScheme, error) {
+func (i *IssueADFService) Create(ctx context.Context, payload *model.IssueScheme, customFields *model.CustomFields) (*model.IssueResponseScheme, *model.ResponseScheme, error) {
 	return i.internalClient.Create(ctx, payload, customFields)
 }
 
-func (i IssueRichTextService) Creates(ctx context.Context, payload []*model.IssueBulkSchemeV2) (*model.IssueBulkResponseScheme, *model.ResponseScheme, error) {
+func (i *IssueADFService) Creates(ctx context.Context, payload []*model.IssueBulkSchemeV3) (*model.IssueBulkResponseScheme, *model.ResponseScheme, error) {
 	return i.internalClient.Creates(ctx, payload)
 }
 
-func (i IssueRichTextService) Get(ctx context.Context, issueKeyOrId string, fields, expand []string) (*model.IssueSchemeV2, *model.ResponseScheme, error) {
+func (i *IssueADFService) Get(ctx context.Context, issueKeyOrId string, fields, expand []string) (*model.IssueScheme, *model.ResponseScheme, error) {
 	return i.internalClient.Get(ctx, issueKeyOrId, fields, expand)
 }
 
-func (i IssueRichTextService) Update(ctx context.Context, issueKeyOrId string, notify bool, payload *model.IssueSchemeV2, customFields *model.CustomFields, operations *model.UpdateOperations) (*model.ResponseScheme, error) {
+func (i *IssueADFService) Update(ctx context.Context, issueKeyOrId string, notify bool, payload *model.IssueScheme, customFields *model.CustomFields, operations *model.UpdateOperations) (*model.ResponseScheme, error) {
 	return i.internalClient.Update(ctx, issueKeyOrId, notify, payload, customFields, operations)
 }
 
-func (i IssueRichTextService) Move(ctx context.Context, issueKeyOrId, transitionId string, options *model.IssueMoveOptionsV2) (*model.ResponseScheme, error) {
+func (i *IssueADFService) Move(ctx context.Context, issueKeyOrId, transitionId string, options *model.IssueMoveOptionsV3) (*model.ResponseScheme, error) {
 	return i.internalClient.Move(ctx, issueKeyOrId, transitionId, options)
 }
 
-type internalRichTextServiceImpl struct {
+type internalIssueADFServiceImpl struct {
 	c       service.Client
 	version string
 }
 
-func (i *internalRichTextServiceImpl) Delete(ctx context.Context, issueKeyOrId string, deleteSubTasks bool) (*model.ResponseScheme, error) {
+func (i *internalIssueADFServiceImpl) Delete(ctx context.Context, issueKeyOrId string, deleteSubTasks bool) (*model.ResponseScheme, error) {
 	return deleteIssue(ctx, i.c, i.version, issueKeyOrId, deleteSubTasks)
 }
 
-func (i *internalRichTextServiceImpl) Assign(ctx context.Context, issueKeyOrId, accountId string) (*model.ResponseScheme, error) {
+func (i *internalIssueADFServiceImpl) Assign(ctx context.Context, issueKeyOrId, accountId string) (*model.ResponseScheme, error) {
 	return assignIssue(ctx, i.c, i.version, issueKeyOrId, accountId)
 }
 
-func (i *internalRichTextServiceImpl) Notify(ctx context.Context, issueKeyOrId string, options *model.IssueNotifyOptionsScheme) (*model.ResponseScheme, error) {
+func (i *internalIssueADFServiceImpl) Notify(ctx context.Context, issueKeyOrId string, options *model.IssueNotifyOptionsScheme) (*model.ResponseScheme, error) {
 	return sendNotification(ctx, i.c, i.version, issueKeyOrId, options)
 }
 
-func (i *internalRichTextServiceImpl) Transitions(ctx context.Context, issueKeyOrId string) (*model.IssueTransitionsScheme, *model.ResponseScheme, error) {
+func (i *internalIssueADFServiceImpl) Transitions(ctx context.Context, issueKeyOrId string) (*model.IssueTransitionsScheme, *model.ResponseScheme, error) {
 	return getTransitions(ctx, i.c, i.version, issueKeyOrId)
 }
 
-func (i *internalRichTextServiceImpl) Create(ctx context.Context, payload *model.IssueSchemeV2, customFields *model.CustomFields) (*model.IssueResponseScheme, *model.ResponseScheme, error) {
+func (i *internalIssueADFServiceImpl) Create(ctx context.Context, payload *model.IssueScheme, customFields *model.CustomFields) (*model.IssueResponseScheme, *model.ResponseScheme, error) {
 
 	var reader io.Reader
 	var err error
@@ -116,7 +117,7 @@ func (i *internalRichTextServiceImpl) Create(ctx context.Context, payload *model
 	return issue, response, nil
 }
 
-func (i *internalRichTextServiceImpl) Creates(ctx context.Context, payload []*model.IssueBulkSchemeV2) (*model.IssueBulkResponseScheme, *model.ResponseScheme, error) {
+func (i *internalIssueADFServiceImpl) Creates(ctx context.Context, payload []*model.IssueBulkSchemeV3) (*model.IssueBulkResponseScheme, *model.ResponseScheme, error) {
 
 	if len(payload) == 0 {
 		return nil, nil, errors.New("error, please provide a valid []*IssueBulkScheme slice of pointers")
@@ -162,7 +163,7 @@ func (i *internalRichTextServiceImpl) Creates(ctx context.Context, payload []*mo
 	return issues, response, nil
 }
 
-func (i *internalRichTextServiceImpl) Get(ctx context.Context, issueKeyOrId string, fields, expand []string) (*model.IssueSchemeV2, *model.ResponseScheme, error) {
+func (i *internalIssueADFServiceImpl) Get(ctx context.Context, issueKeyOrId string, fields, expand []string) (*model.IssueScheme, *model.ResponseScheme, error) {
 
 	if issueKeyOrId == "" {
 		return nil, nil, model.ErrNoIssueKeyOrIDError
@@ -190,7 +191,7 @@ func (i *internalRichTextServiceImpl) Get(ctx context.Context, issueKeyOrId stri
 		return nil, nil, err
 	}
 
-	issue := new(model.IssueSchemeV2)
+	issue := new(model.IssueScheme)
 	response, err := i.c.Call(request, issue)
 	if err != nil {
 		return nil, response, err
@@ -199,7 +200,7 @@ func (i *internalRichTextServiceImpl) Get(ctx context.Context, issueKeyOrId stri
 	return issue, response, nil
 }
 
-func (i *internalRichTextServiceImpl) Update(ctx context.Context, issueKeyOrId string, notify bool, payload *model.IssueSchemeV2, customFields *model.CustomFields, operations *model.UpdateOperations) (*model.ResponseScheme, error) {
+func (i *internalIssueADFServiceImpl) Update(ctx context.Context, issueKeyOrId string, notify bool, payload *model.IssueScheme, customFields *model.CustomFields, operations *model.UpdateOperations) (*model.ResponseScheme, error) {
 
 	if issueKeyOrId == "" {
 		return nil, model.ErrNoIssueKeyOrIDError
@@ -280,7 +281,7 @@ func (i *internalRichTextServiceImpl) Update(ctx context.Context, issueKeyOrId s
 	return i.c.Call(request, nil)
 }
 
-func (i *internalRichTextServiceImpl) Move(ctx context.Context, issueKeyOrId, transitionId string, options *model.IssueMoveOptionsV2) (*model.ResponseScheme, error) {
+func (i *internalIssueADFServiceImpl) Move(ctx context.Context, issueKeyOrId, transitionId string, options *model.IssueMoveOptionsV3) (*model.ResponseScheme, error) {
 
 	if issueKeyOrId == "" {
 		return nil, model.ErrNoIssueKeyOrIDError

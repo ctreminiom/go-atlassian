@@ -5,11 +5,16 @@ import (
 	"fmt"
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
+	"github.com/ctreminiom/go-atlassian/service/jira"
 	"net/http"
 	"net/url"
 )
 
-func NewIssueService(client service.Client, version string) (*IssueRichTextService, *IssueADFService, error) {
+type IssueServices struct {
+	Attachment jira.Attachment
+}
+
+func NewIssueService(client service.Client, version string, services *IssueServices) (*IssueRichTextService, *IssueADFService, error) {
 
 	if version == "" {
 		return nil, nil, model.ErrNoVersionProvided
@@ -27,6 +32,15 @@ func NewIssueService(client service.Client, version string) (*IssueRichTextServi
 			c:       client,
 			version: version,
 		},
+	}
+
+	if services != nil {
+
+		if services.Attachment != nil {
+			adfService.Attachment = services.Attachment
+			richTextService.Attachment = services.Attachment
+		}
+
 	}
 
 	return richTextService, adfService, nil

@@ -69,33 +69,8 @@ type Client struct {
 	Sprint         agile.Sprint
 }
 
-func (c *Client) NewFormRequest(ctx context.Context, method, apiEndpoint string, payload io.Reader) (*http.Request, error) {
-
-	relativePath, err := url.Parse(apiEndpoint)
-	if err != nil {
-		return nil, err
-	}
-
-	var endpoint = c.Site.ResolveReference(relativePath).String()
-
-	request, err := http.NewRequestWithContext(ctx, method, endpoint, payload)
-	if err != nil {
-		return nil, err
-	}
-
-	request.Header.Add("Content-Type", "multipart/form-data")
-	request.Header.Add("Accept", "application/json")
-	request.Header.Set("X-Atlassian-Token", "no-check")
-
-	if c.Authentication.HasBasicAuth() {
-		request.SetBasicAuth(c.Authentication.GetBasicAuth())
-	}
-
-	if c.Authentication.HasUserAgent() {
-		request.Header.Set("User-Agent", c.Authentication.GetUserAgent())
-	}
-
-	return request, nil
+func (c *Client) NewFormRequest(ctx context.Context, method, apiEndpoint, contentType string, payload io.Reader) (*http.Request, error) {
+	return nil, nil
 }
 
 func (c *Client) NewRequest(ctx context.Context, method, apiEndpoint string, payload io.Reader) (*http.Request, error) {

@@ -58,7 +58,7 @@ func (s SprintService) Create(ctx context.Context, payload *model.SprintPayloadS
 
 	endpoint := fmt.Sprintf("rest/agile/%v/sprint", s.version)
 
-	request, err := s.c.NewJsonRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := s.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -82,7 +82,7 @@ func (s SprintService) Update(ctx context.Context, sprintId int, payload *model.
 
 	endpoint := fmt.Sprintf("rest/agile/%v/sprint/%v", s.version, sprintId)
 
-	request, err := s.c.NewJsonRequest(ctx, http.MethodPut, endpoint, reader)
+	request, err := s.c.NewRequest(ctx, http.MethodPut, endpoint, reader)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -106,7 +106,7 @@ func (s SprintService) Path(ctx context.Context, sprintId int, payload *model.Sp
 
 	endpoint := fmt.Sprintf("rest/agile/%v/sprint/%v", s.version, sprintId)
 
-	request, err := s.c.NewJsonRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := s.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -204,7 +204,7 @@ func (s SprintService) Start(ctx context.Context, sprintId int) (*model.Response
 
 	endpoint := fmt.Sprintf("rest/agile/%v/sprint/%v", s.version, sprintId)
 
-	request, err := s.c.NewJsonRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := s.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
 	if err != nil {
 		return nil, err
 	}
@@ -234,7 +234,7 @@ func (s SprintService) Close(ctx context.Context, sprintId int) (*model.Response
 
 	endpoint := fmt.Sprintf("rest/agile/%v/sprint/%v", s.version, sprintId)
 
-	request, err := s.c.NewJsonRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := s.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
 	if err != nil {
 		return nil, err
 	}

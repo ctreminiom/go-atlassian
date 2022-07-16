@@ -49,7 +49,7 @@ func Test_internalGroupServiceImpl_Create(t *testing.T) {
 					}{Name: "jira-users"}).
 					Return(bytes.NewReader([]byte{}), nil)
 
-				client.On("NewJsonRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/group",
@@ -82,7 +82,7 @@ func Test_internalGroupServiceImpl_Create(t *testing.T) {
 					}{Name: "jira-users"}).
 					Return(bytes.NewReader([]byte{}), nil)
 
-				client.On("NewJsonRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/3/group",
@@ -129,7 +129,7 @@ func Test_internalGroupServiceImpl_Create(t *testing.T) {
 					}{Name: "jira-users"}).
 					Return(bytes.NewReader([]byte{}), nil)
 
-				client.On("NewJsonRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/3/group",
@@ -515,7 +515,7 @@ func Test_internalGroupServiceImpl_Add(t *testing.T) {
 					}{AccountID: "account-id-sample"}).
 					Return(bytes.NewReader([]byte{}), nil)
 
-				client.On("NewJsonRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/group/user?groupname=jira-users",
@@ -549,7 +549,7 @@ func Test_internalGroupServiceImpl_Add(t *testing.T) {
 					}{AccountID: "account-id-sample"}).
 					Return(bytes.NewReader([]byte{}), nil)
 
-				client.On("NewJsonRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/3/group/user?groupname=jira-users",
@@ -612,7 +612,7 @@ func Test_internalGroupServiceImpl_Add(t *testing.T) {
 					}{AccountID: "account-id-sample"}).
 					Return(bytes.NewReader([]byte{}), nil)
 
-				client.On("NewJsonRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/3/group/user?groupname=jira-users",

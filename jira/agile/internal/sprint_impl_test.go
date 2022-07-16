@@ -4,9 +4,9 @@ import (
 	"bytes"
 	"context"
 	"errors"
-	"github.com/ctreminiom/go-atlassian/jira/agile/internal/mocks"
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
+	"github.com/ctreminiom/go-atlassian/service/mocks"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"testing"
@@ -196,7 +196,7 @@ func Test_SprintService_Create(t *testing.T) {
 					}).
 					Return(bytes.NewReader([]byte{}), nil)
 
-				client.On("NewJsonRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/agile/1.0/sprint",
@@ -236,7 +236,7 @@ func Test_SprintService_Create(t *testing.T) {
 					}).
 					Return(bytes.NewReader([]byte{}), nil)
 
-				client.On("NewJsonRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/agile/1.0/sprint",
@@ -278,7 +278,7 @@ func Test_SprintService_Create(t *testing.T) {
 					}).
 					Return(bytes.NewReader([]byte{}), nil)
 
-				client.On("NewJsonRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/agile/1.0/sprint",
@@ -388,7 +388,7 @@ func Test_SprintService_Update(t *testing.T) {
 					}).
 					Return(bytes.NewReader([]byte{}), nil)
 
-				client.On("NewJsonRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/agile/1.0/sprint/1001",
@@ -429,7 +429,7 @@ func Test_SprintService_Update(t *testing.T) {
 					}).
 					Return(bytes.NewReader([]byte{}), nil)
 
-				client.On("NewJsonRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/agile/1.0/sprint/1001",
@@ -472,7 +472,7 @@ func Test_SprintService_Update(t *testing.T) {
 					}).
 					Return(bytes.NewReader([]byte{}), nil)
 
-				client.On("NewJsonRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/agile/1.0/sprint/1001",
@@ -583,7 +583,7 @@ func Test_SprintService_Path(t *testing.T) {
 					}).
 					Return(bytes.NewReader([]byte{}), nil)
 
-				client.On("NewJsonRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/agile/1.0/sprint/1001",
@@ -624,7 +624,7 @@ func Test_SprintService_Path(t *testing.T) {
 					}).
 					Return(bytes.NewReader([]byte{}), nil)
 
-				client.On("NewJsonRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/agile/1.0/sprint/1001",
@@ -667,7 +667,7 @@ func Test_SprintService_Path(t *testing.T) {
 					}).
 					Return(bytes.NewReader([]byte{}), nil)
 
-				client.On("NewJsonRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/agile/1.0/sprint/1001",
@@ -1075,7 +1075,7 @@ func Test_SprintService_Start(t *testing.T) {
 					}).
 					Return(bytes.NewReader([]byte{}), nil)
 
-				client.On("NewJsonRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/agile/1.0/sprint/1001",
@@ -1119,7 +1119,7 @@ func Test_SprintService_Start(t *testing.T) {
 					}).
 					Return(bytes.NewReader([]byte{}), nil)
 
-				client.On("NewJsonRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/agile/1.0/sprint/1001",
@@ -1153,7 +1153,7 @@ func Test_SprintService_Start(t *testing.T) {
 					}).
 					Return(bytes.NewReader([]byte{}), nil)
 
-				client.On("NewJsonRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/agile/1.0/sprint/1001",
@@ -1232,7 +1232,7 @@ func Test_SprintService_Close(t *testing.T) {
 					}).
 					Return(bytes.NewReader([]byte{}), nil)
 
-				client.On("NewJsonRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/agile/1.0/sprint/1001",
@@ -1276,7 +1276,7 @@ func Test_SprintService_Close(t *testing.T) {
 					}).
 					Return(bytes.NewReader([]byte{}), nil)
 
-				client.On("NewJsonRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/agile/1.0/sprint/1001",
@@ -1310,7 +1310,7 @@ func Test_SprintService_Close(t *testing.T) {
 					}).
 					Return(bytes.NewReader([]byte{}), nil)
 
-				client.On("NewJsonRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/agile/1.0/sprint/1001",

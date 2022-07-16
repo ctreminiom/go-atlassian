@@ -49,7 +49,7 @@ func TestFilterService_Create(t *testing.T) {
 					&model.FilterPayloadScheme{}).
 					Return(bytes.NewReader([]byte{}), nil)
 
-				client.On("NewJsonRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/filter",
@@ -81,7 +81,7 @@ func TestFilterService_Create(t *testing.T) {
 					&model.FilterPayloadScheme{}).
 					Return(bytes.NewReader([]byte{}), nil)
 
-				client.On("NewJsonRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/3/filter",
@@ -135,7 +135,7 @@ func TestFilterService_Create(t *testing.T) {
 					&model.FilterPayloadScheme{}).
 					Return(bytes.NewReader([]byte{}), nil)
 
-				client.On("NewJsonRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/filter",
@@ -792,7 +792,7 @@ func TestFilterService_Update(t *testing.T) {
 					&model.FilterPayloadScheme{}).
 					Return(bytes.NewReader([]byte{}), nil)
 
-				client.On("NewJsonRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/2/filter/10001",
@@ -825,7 +825,7 @@ func TestFilterService_Update(t *testing.T) {
 					&model.FilterPayloadScheme{}).
 					Return(bytes.NewReader([]byte{}), nil)
 
-				client.On("NewJsonRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/3/filter/10001",
@@ -880,7 +880,7 @@ func TestFilterService_Update(t *testing.T) {
 					&model.FilterPayloadScheme{}).
 					Return(bytes.NewReader([]byte{}), nil)
 
-				client.On("NewJsonRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/2/filter/10001",
@@ -1098,7 +1098,7 @@ func TestFilterService_Change(t *testing.T) {
 					}{AccountID: "account-id-sample"}).
 					Return(bytes.NewReader([]byte{}), nil)
 
-				client.On("NewJsonRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/2/filter/10001/owner",
@@ -1133,7 +1133,7 @@ func TestFilterService_Change(t *testing.T) {
 					}{AccountID: "account-id-sample"}).
 					Return(bytes.NewReader([]byte{}), nil)
 
-				client.On("NewJsonRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/3/filter/10001/owner",
@@ -1168,7 +1168,7 @@ func TestFilterService_Change(t *testing.T) {
 					}{AccountID: "account-id-sample"}).
 					Return(bytes.NewReader([]byte{}), nil)
 
-				client.On("NewJsonRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/2/filter/10001/owner",

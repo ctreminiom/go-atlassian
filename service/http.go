@@ -9,7 +9,7 @@ import (
 
 type Client interface {
 	NewRequest(ctx context.Context, method, apiEndpoint string, payload io.Reader) (*http.Request, error)
-	NewJsonRequest(ctx context.Context, method, apiEndpoint string, payload io.Reader) (*http.Request, error)
+	NewFormRequest(ctx context.Context, method, apiEndpoint string, payload io.Reader) (*http.Request, error)
 	Call(request *http.Request, structure interface{}) (*models.ResponseScheme, error)
 	TransformTheHTTPResponse(response *http.Response, structure interface{}) (*models.ResponseScheme, error)
 	TransformStructToReader(structure interface{}) (io.Reader, error)

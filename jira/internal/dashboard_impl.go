@@ -61,7 +61,7 @@ func (d DashboardService) Create(ctx context.Context, payload *model.DashboardPa
 
 	endpoint := fmt.Sprintf("rest/api/%v/dashboard", d.version)
 
-	request, err := d.c.NewJsonRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := d.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -176,7 +176,7 @@ func (d DashboardService) Copy(ctx context.Context, dashboardId string, payload 
 
 	endpoint := fmt.Sprintf("rest/api/%v/dashboard/%v/copy", d.version, dashboardId)
 
-	request, err := d.c.NewJsonRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := d.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -202,7 +202,7 @@ func (d DashboardService) Update(ctx context.Context, dashboardId string, payloa
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/dashboard/%v", d.version, dashboardId)
-	request, err := d.c.NewJsonRequest(ctx, http.MethodPut, endpoint, reader)
+	request, err := d.c.NewRequest(ctx, http.MethodPut, endpoint, reader)
 	if err != nil {
 		return nil, nil, err
 	}

@@ -50,7 +50,7 @@ func (f FilterShareService) SetScope(ctx context.Context, scope string) (*model.
 
 	endpoint := fmt.Sprintf("rest/api/%v/filter/defaultShareScope", f.version)
 
-	request, err := f.c.NewJsonRequest(ctx, http.MethodPut, endpoint, reader)
+	request, err := f.c.NewRequest(ctx, http.MethodPut, endpoint, reader)
 	if err != nil {
 		return nil, err
 	}
@@ -93,7 +93,7 @@ func (f FilterShareService) Add(ctx context.Context, filterId int, payload *mode
 
 	endpoint := fmt.Sprintf("rest/api/%v/filter/%v/permission", f.version, filterId)
 
-	request, err := f.c.NewJsonRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := f.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
 	if err != nil {
 		return nil, nil, err
 	}

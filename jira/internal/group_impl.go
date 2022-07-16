@@ -74,7 +74,7 @@ func (i *internalGroupServiceImpl) Create(ctx context.Context, groupName string)
 
 	endpoint := fmt.Sprintf("rest/api/%v/group", i.version)
 
-	request, err := i.c.NewJsonRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -193,7 +193,7 @@ func (i internalGroupServiceImpl) Add(ctx context.Context, groupName, accountId 
 	params.Add("groupname", groupName)
 	endpoint := fmt.Sprintf("rest/api/%v/group/user?%v", i.version, params.Encode())
 
-	request, err := i.c.NewJsonRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
 	if err != nil {
 		return nil, nil, err
 	}

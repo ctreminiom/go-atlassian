@@ -1,9 +1,9 @@
 package internal
 
 import (
-	"github.com/ctreminiom/go-atlassian/jira/agile/internal/mocks"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/common"
+	"github.com/ctreminiom/go-atlassian/service/mocks"
 	"reflect"
 	"testing"
 )

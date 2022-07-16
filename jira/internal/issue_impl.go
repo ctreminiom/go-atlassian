@@ -74,7 +74,7 @@ func assignIssue(ctx context.Context, client service.Client, version, issueKeyOr
 
 	endpoint := fmt.Sprintf("/rest/api/%v/issue/%v/assignee", version, issueKeyOrId)
 
-	request, err := client.NewJsonRequest(ctx, http.MethodPut, endpoint, reader)
+	request, err := client.NewRequest(ctx, http.MethodPut, endpoint, reader)
 	if err != nil {
 		return nil, err
 	}
@@ -96,7 +96,7 @@ func sendNotification(ctx context.Context, client service.Client, version, issue
 
 	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/notify", version, issueKeyOrId)
 
-	request, err := client.NewJsonRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := client.NewRequest(ctx, http.MethodPost, endpoint, reader)
 	if err != nil {
 		return nil, err
 	}

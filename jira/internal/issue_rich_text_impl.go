@@ -102,7 +102,7 @@ func (i *internalRichTextServiceImpl) Create(ctx context.Context, payload *model
 
 	endpoint := fmt.Sprintf("rest/api/%v/issue", i.version)
 
-	request, err := i.c.NewJsonRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -148,7 +148,7 @@ func (i *internalRichTextServiceImpl) Creates(ctx context.Context, payload []*mo
 
 	endpoint := fmt.Sprintf("rest/api/%v/issue/bulk", i.version)
 
-	request, err := i.c.NewJsonRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -272,7 +272,7 @@ func (i *internalRichTextServiceImpl) Update(ctx context.Context, issueKeyOrId s
 		}
 	}
 
-	request, err := i.c.NewJsonRequest(ctx, http.MethodPut, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, reader)
 	if err != nil {
 		return nil, err
 	}
@@ -369,7 +369,7 @@ func (i *internalRichTextServiceImpl) Move(ctx context.Context, issueKeyOrId, tr
 
 	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/transitions", i.version, issueKeyOrId)
 
-	request, err := i.c.NewJsonRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
 	if err != nil {
 		return nil, err
 	}

@@ -69,7 +69,7 @@ type Client struct {
 	Sprint         agile.Sprint
 }
 
-func (c *Client) NewJsonRequest(ctx context.Context, method, apiEndpoint string, payload io.Reader) (*http.Request, error) {
+func (c *Client) NewFormRequest(ctx context.Context, method, apiEndpoint string, payload io.Reader) (*http.Request, error) {
 
 	relativePath, err := url.Parse(apiEndpoint)
 	if err != nil {
@@ -83,8 +83,9 @@ func (c *Client) NewJsonRequest(ctx context.Context, method, apiEndpoint string,
 		return nil, err
 	}
 
-	request.Header.Set("Accept", "application/json")
-	request.Header.Set("Content-Type", "application/json")
+	request.Header.Add("Content-Type", "multipart/form-data")
+	request.Header.Add("Accept", "application/json")
+	request.Header.Set("X-Atlassian-Token", "no-check")
 
 	if c.Authentication.HasBasicAuth() {
 		request.SetBasicAuth(c.Authentication.GetBasicAuth())
@@ -112,6 +113,10 @@ func (c *Client) NewRequest(ctx context.Context, method, apiEndpoint string, pay
 	}
 
 	request.Header.Set("Accept", "application/json")
+
+	if payload != nil {
+		request.Header.Set("Content-Type", "application/json")
+	}
 
 	if c.Authentication.HasBasicAuth() {
 		request.SetBasicAuth(c.Authentication.GetBasicAuth())

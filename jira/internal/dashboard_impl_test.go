@@ -51,7 +51,7 @@ func TestDashboardService_Copy(t *testing.T) {
 					&model.DashboardPayloadScheme{}).
 					Return(bytes.NewReader([]byte{}), nil)
 
-				client.On("NewJsonRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/dashboard/10001/copy",
@@ -84,7 +84,7 @@ func TestDashboardService_Copy(t *testing.T) {
 					&model.DashboardPayloadScheme{}).
 					Return(bytes.NewReader([]byte{}), nil)
 
-				client.On("NewJsonRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/3/dashboard/10001/copy",
@@ -154,7 +154,7 @@ func TestDashboardService_Copy(t *testing.T) {
 					&model.DashboardPayloadScheme{}).
 					Return(bytes.NewReader([]byte{}), nil)
 
-				client.On("NewJsonRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/dashboard/10001/copy",
@@ -236,7 +236,7 @@ func TestDashboardService_Update(t *testing.T) {
 					&model.DashboardPayloadScheme{}).
 					Return(bytes.NewReader([]byte{}), nil)
 
-				client.On("NewJsonRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/2/dashboard/10001",
@@ -269,7 +269,7 @@ func TestDashboardService_Update(t *testing.T) {
 					&model.DashboardPayloadScheme{}).
 					Return(bytes.NewReader([]byte{}), nil)
 
-				client.On("NewJsonRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/3/dashboard/10001",
@@ -339,7 +339,7 @@ func TestDashboardService_Update(t *testing.T) {
 					&model.DashboardPayloadScheme{}).
 					Return(bytes.NewReader([]byte{}), nil)
 
-				client.On("NewJsonRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/2/dashboard/10001",
@@ -556,7 +556,7 @@ func TestDashboardService_Create(t *testing.T) {
 					&model.DashboardPayloadScheme{}).
 					Return(bytes.NewReader([]byte{}), nil)
 
-				client.On("NewJsonRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/dashboard",
@@ -588,7 +588,7 @@ func TestDashboardService_Create(t *testing.T) {
 					&model.DashboardPayloadScheme{}).
 					Return(bytes.NewReader([]byte{}), nil)
 
-				client.On("NewJsonRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/3/dashboard",
@@ -641,7 +641,7 @@ func TestDashboardService_Create(t *testing.T) {
 					&model.DashboardPayloadScheme{}).
 					Return(bytes.NewReader([]byte{}), nil)
 
-				client.On("NewJsonRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/dashboard",

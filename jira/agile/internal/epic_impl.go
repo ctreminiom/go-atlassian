@@ -104,7 +104,7 @@ func (e EpicService) Move(ctx context.Context, epicIdOrKey string, issues []stri
 
 	endpoint := fmt.Sprintf("/rest/agile/%v/epic/%v/issue", e.version, epicIdOrKey)
 
-	request, err := e.c.NewJsonRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := e.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
 	if err != nil {
 		return nil, err
 	}

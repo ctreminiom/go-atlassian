@@ -4,10 +4,10 @@ import (
 	"bytes"
 	"context"
 	"errors"
-	"github.com/ctreminiom/go-atlassian/jira/agile/internal/mocks"
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/agile"
+	"github.com/ctreminiom/go-atlassian/service/mocks"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"reflect"
@@ -196,7 +196,7 @@ func Test_BoardService_Create(t *testing.T) {
 					}).
 					Return(bytes.NewReader([]byte{}), nil)
 
-				client.On("NewJsonRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"/rest/agile/1.0/board",
@@ -234,7 +234,7 @@ func Test_BoardService_Create(t *testing.T) {
 					}).
 					Return(bytes.NewReader([]byte{}), nil)
 
-				client.On("NewJsonRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"/rest/agile/1.0/board",
@@ -274,7 +274,7 @@ func Test_BoardService_Create(t *testing.T) {
 					}).
 					Return(bytes.NewReader([]byte{}), nil)
 
-				client.On("NewJsonRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"/rest/agile/1.0/board",
@@ -2087,7 +2087,7 @@ func Test_BoardService_Move(t *testing.T) {
 						RankCustomFieldID: 10521,
 					}).Return(bytes.NewReader([]byte{}), nil)
 
-				client.On("NewJsonRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"/rest/agile/1.0/board/1000/issue",
@@ -2125,7 +2125,7 @@ func Test_BoardService_Move(t *testing.T) {
 						RankCustomFieldID: 10521,
 					}).Return(bytes.NewReader([]byte{}), nil)
 
-				client.On("NewJsonRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"/rest/agile/1.0/board/1000/issue",
@@ -2165,7 +2165,7 @@ func Test_BoardService_Move(t *testing.T) {
 						RankCustomFieldID: 10521,
 					}).Return(bytes.NewReader([]byte{}), nil)
 
-				client.On("NewJsonRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"/rest/agile/1.0/board/1000/issue",

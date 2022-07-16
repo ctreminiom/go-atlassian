@@ -1,18 +1,21 @@
 package internal
 
 import (
-	"bytes"
 	"context"
 	"errors"
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
+	"io"
 	"net/http"
+	"os"
+	"path/filepath"
 	"testing"
 )
 
-func TestFilterShareService_Scope(t *testing.T) {
+func Test_internalIssueAttachmentServiceImpl_Settings(t *testing.T) {
 
 	type fields struct {
 		c       service.Client
@@ -35,7 +38,7 @@ func TestFilterShareService_Scope(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx: context.Background(),
+				ctx: context.TODO(),
 			},
 			on: func(fields *fields) {
 
@@ -44,16 +47,17 @@ func TestFilterShareService_Scope(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"rest/api/2/filter/defaultShareScope",
+					"rest/api/2/attachment/meta",
 					nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
 					&http.Request{},
-					&model.ShareFilterScopeScheme{}).
+					&model.AttachmentSettingScheme{}).
 					Return(&model.ResponseScheme{}, nil)
 
 				fields.c = client
+
 			},
 		},
 
@@ -61,7 +65,7 @@ func TestFilterShareService_Scope(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.Background(),
+				ctx: context.TODO(),
 			},
 			on: func(fields *fields) {
 
@@ -70,16 +74,17 @@ func TestFilterShareService_Scope(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"rest/api/3/filter/defaultShareScope",
+					"rest/api/3/attachment/meta",
 					nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
 					&http.Request{},
-					&model.ShareFilterScopeScheme{}).
+					&model.AttachmentSettingScheme{}).
 					Return(&model.ResponseScheme{}, nil)
 
 				fields.c = client
+
 			},
 		},
 
@@ -87,7 +92,7 @@ func TestFilterShareService_Scope(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "2"},
 			args: args{
-				ctx: context.Background(),
+				ctx: context.TODO(),
 			},
 			on: func(fields *fields) {
 
@@ -96,16 +101,18 @@ func TestFilterShareService_Scope(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"rest/api/2/filter/defaultShareScope",
+					"rest/api/2/attachment/meta",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
+
 			},
 			wantErr: true,
 			Err:     errors.New("error, unable to create the http request"),
 		},
 	}
+
 	for _, testCase := range testCases {
 		t.Run(testCase.name, func(t *testing.T) {
 
@@ -113,10 +120,10 @@ func TestFilterShareService_Scope(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			shareService, err := NewFilterShareService(testCase.fields.c, testCase.fields.version)
+			attachmentService, err := NewIssueAttachmentService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := shareService.Scope(testCase.args.ctx)
+			gotResult, gotResponse, err := attachmentService.Settings(testCase.args.ctx)
 
 			if testCase.wantErr {
 
@@ -137,7 +144,7 @@ func TestFilterShareService_Scope(t *testing.T) {
 	}
 }
 
-func TestFilterShareService_SetScope(t *testing.T) {
+func Test_internalIssueAttachmentServiceImpl_Metadata(t *testing.T) {
 
 	type fields struct {
 		c       service.Client
@@ -145,8 +152,8 @@ func TestFilterShareService_SetScope(t *testing.T) {
 	}
 
 	type args struct {
-		ctx   context.Context
-		scope string
+		ctx          context.Context
+		attachmentId string
 	}
 
 	testCases := []struct {
@@ -161,27 +168,23 @@ func TestFilterShareService_SetScope(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:   context.Background(),
-				scope: "PRIVATE",
+				ctx:          context.TODO(),
+				attachmentId: "1110",
 			},
 			on: func(fields *fields) {
 
 				client := mocks.NewClient(t)
 
-				client.On("TransformStructToReader",
-					&model.ShareFilterScopeScheme{Scope: "PRIVATE"}).
-					Return(bytes.NewReader([]byte{}), nil)
-
 				client.On("NewRequest",
 					context.Background(),
-					http.MethodPut,
-					"rest/api/2/filter/defaultShareScope",
-					bytes.NewReader([]byte{})).
+					http.MethodGet,
+					"rest/api/2/attachment/1110",
+					nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
 					&http.Request{},
-					nil).
+					&model.AttachmentMetadataScheme{}).
 					Return(&model.ResponseScheme{}, nil)
 
 				fields.c = client
@@ -192,116 +195,8 @@ func TestFilterShareService_SetScope(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:   context.Background(),
-				scope: "PRIVATE",
-			},
-			on: func(fields *fields) {
-
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&model.ShareFilterScopeScheme{Scope: "PRIVATE"}).
-					Return(bytes.NewReader([]byte{}), nil)
-
-				client.On("NewRequest",
-					context.Background(),
-					http.MethodPut,
-					"rest/api/3/filter/defaultShareScope",
-					bytes.NewReader([]byte{})).
-					Return(&http.Request{}, nil)
-
-				client.On("Call",
-					&http.Request{},
-					nil).
-					Return(&model.ResponseScheme{}, nil)
-
-				fields.c = client
-			},
-		},
-
-		{
-			name:   "when the http request cannot be created",
-			fields: fields{version: "2"},
-			args: args{
-				ctx:   context.Background(),
-				scope: "PRIVATE",
-			},
-			on: func(fields *fields) {
-
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&model.ShareFilterScopeScheme{Scope: "PRIVATE"}).
-					Return(bytes.NewReader([]byte{}), nil)
-
-				client.On("NewRequest",
-					context.Background(),
-					http.MethodPut,
-					"rest/api/2/filter/defaultShareScope",
-					bytes.NewReader([]byte{})).
-					Return(&http.Request{}, errors.New("error, unable to create the http request"))
-
-				fields.c = client
-			},
-			wantErr: true,
-			Err:     errors.New("error, unable to create the http request"),
-		},
-	}
-	for _, testCase := range testCases {
-		t.Run(testCase.name, func(t *testing.T) {
-
-			if testCase.on != nil {
-				testCase.on(&testCase.fields)
-			}
-
-			shareService, err := NewFilterShareService(testCase.fields.c, testCase.fields.version)
-			assert.NoError(t, err)
-
-			gotResponse, err := shareService.SetScope(testCase.args.ctx, testCase.args.scope)
-
-			if testCase.wantErr {
-
-				if err != nil {
-					t.Logf("error returned: %v", err.Error())
-				}
-
-				assert.EqualError(t, err, testCase.Err.Error())
-
-			} else {
-
-				assert.NoError(t, err)
-				assert.NotEqual(t, gotResponse, nil)
-			}
-		})
-	}
-}
-
-func TestFilterShareService_Gets(t *testing.T) {
-
-	type fields struct {
-		c       service.Client
-		version string
-	}
-
-	type args struct {
-		ctx      context.Context
-		filterId int
-	}
-
-	testCases := []struct {
-		name    string
-		fields  fields
-		args    args
-		on      func(*fields)
-		wantErr bool
-		Err     error
-	}{
-		{
-			name:   "when the api version is v2",
-			fields: fields{version: "2"},
-			args: args{
-				ctx:      context.Background(),
-				filterId: 10001,
+				ctx:          context.TODO(),
+				attachmentId: "1110",
 			},
 			on: func(fields *fields) {
 
@@ -310,66 +205,40 @@ func TestFilterShareService_Gets(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"rest/api/2/filter/10001/permission",
+					"rest/api/3/attachment/1110",
 					nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
 					&http.Request{},
-					[]*model.SharePermissionScheme(nil)).
+					&model.AttachmentMetadataScheme{}).
 					Return(&model.ResponseScheme{}, nil)
 
 				fields.c = client
+
 			},
 		},
 
 		{
-			name:   "when the api version is v3",
-			fields: fields{version: "3"},
-			args: args{
-				ctx:      context.Background(),
-				filterId: 10001,
-			},
-			on: func(fields *fields) {
-
-				client := mocks.NewClient(t)
-
-				client.On("NewRequest",
-					context.Background(),
-					http.MethodGet,
-					"rest/api/3/filter/10001/permission",
-					nil).
-					Return(&http.Request{}, nil)
-
-				client.On("Call",
-					&http.Request{},
-					[]*model.SharePermissionScheme(nil)).
-					Return(&model.ResponseScheme{}, nil)
-
-				fields.c = client
-			},
-		},
-
-		{
-			name:   "when the fieldId is not provied",
+			name:   "when the attachment id is not provided",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:      context.Background(),
-				filterId: 0,
+				ctx:          context.TODO(),
+				attachmentId: "",
 			},
 			on: func(fields *fields) {
 				fields.c = mocks.NewClient(t)
 			},
 			wantErr: true,
-			Err:     model.ErrNoFilterIDError,
+			Err:     model.ErrNoAttachmentIDError,
 		},
 
 		{
 			name:   "when the http request cannot be created",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:      context.Background(),
-				filterId: 10001,
+				ctx:          context.TODO(),
+				attachmentId: "1110",
 			},
 			on: func(fields *fields) {
 
@@ -378,15 +247,18 @@ func TestFilterShareService_Gets(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"rest/api/2/filter/10001/permission",
+					"rest/api/2/attachment/1110",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+
 				fields.c = client
+
 			},
 			wantErr: true,
 			Err:     errors.New("error, unable to create the http request"),
 		},
 	}
+
 	for _, testCase := range testCases {
 		t.Run(testCase.name, func(t *testing.T) {
 
@@ -394,10 +266,10 @@ func TestFilterShareService_Gets(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			shareService, err := NewFilterShareService(testCase.fields.c, testCase.fields.version)
+			attachmentService, err := NewIssueAttachmentService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := shareService.Gets(testCase.args.ctx, testCase.args.filterId)
+			gotResult, gotResponse, err := attachmentService.Metadata(testCase.args.ctx, testCase.args.attachmentId)
 
 			if testCase.wantErr {
 
@@ -418,7 +290,7 @@ func TestFilterShareService_Gets(t *testing.T) {
 	}
 }
 
-func TestFilterShareService_Add(t *testing.T) {
+func Test_internalIssueAttachmentServiceImpl_Human(t *testing.T) {
 
 	type fields struct {
 		c       service.Client
@@ -426,9 +298,8 @@ func TestFilterShareService_Add(t *testing.T) {
 	}
 
 	type args struct {
-		ctx      context.Context
-		filterId int
-		payload  *model.PermissionFilterPayloadScheme
+		ctx          context.Context
+		attachmentId string
 	}
 
 	testCases := []struct {
@@ -443,31 +314,23 @@ func TestFilterShareService_Add(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:      context.Background(),
-				filterId: 10001,
-				payload: &model.PermissionFilterPayloadScheme{
-					Type:      "group",
-					GroupName: "jira-administrators",
-				},
+				ctx:          context.TODO(),
+				attachmentId: "1110",
 			},
 			on: func(fields *fields) {
 
 				client := mocks.NewClient(t)
 
-				client.On("TransformStructToReader",
-					&model.PermissionFilterPayloadScheme{Type: "group", GroupName: "jira-administrators"}).
-					Return(bytes.NewReader([]byte{}), nil)
-
 				client.On("NewRequest",
 					context.Background(),
-					http.MethodPost,
-					"rest/api/2/filter/10001/permission",
-					bytes.NewReader([]byte{})).
+					http.MethodGet,
+					"rest/api/2/attachment/1110/expand/human",
+					nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
 					&http.Request{},
-					[]*model.SharePermissionScheme(nil)).
+					&model.AttachmentHumanMetadataScheme{}).
 					Return(&model.ResponseScheme{}, nil)
 
 				fields.c = client
@@ -478,109 +341,70 @@ func TestFilterShareService_Add(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:      context.Background(),
-				filterId: 10001,
-				payload: &model.PermissionFilterPayloadScheme{
-					Type:      "group",
-					GroupName: "jira-administrators",
-				},
+				ctx:          context.TODO(),
+				attachmentId: "1110",
 			},
 			on: func(fields *fields) {
 
 				client := mocks.NewClient(t)
 
-				client.On("TransformStructToReader",
-					&model.PermissionFilterPayloadScheme{Type: "group", GroupName: "jira-administrators"}).
-					Return(bytes.NewReader([]byte{}), nil)
-
 				client.On("NewRequest",
 					context.Background(),
-					http.MethodPost,
-					"rest/api/3/filter/10001/permission",
-					bytes.NewReader([]byte{})).
+					http.MethodGet,
+					"rest/api/3/attachment/1110/expand/human",
+					nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
 					&http.Request{},
-					[]*model.SharePermissionScheme(nil)).
+					&model.AttachmentHumanMetadataScheme{}).
 					Return(&model.ResponseScheme{}, nil)
 
 				fields.c = client
+
 			},
 		},
 
 		{
-			name:   "when the fieldId is not provided",
+			name:   "when the attachment id is not provided",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:      context.Background(),
-				filterId: 0,
-				payload: &model.PermissionFilterPayloadScheme{
-					Type:      "group",
-					GroupName: "jira-administrators",
-				},
+				ctx:          context.TODO(),
+				attachmentId: "",
 			},
 			on: func(fields *fields) {
 				fields.c = mocks.NewClient(t)
 			},
 			wantErr: true,
-			Err:     model.ErrNoFilterIDError,
-		},
-
-		{
-			name:   "when the payload id not provided",
-			fields: fields{version: "2"},
-			args: args{
-				ctx:      context.Background(),
-				filterId: 10001,
-				payload:  nil,
-			},
-			on: func(fields *fields) {
-
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					(*model.PermissionFilterPayloadScheme)(nil)).
-					Return(bytes.NewReader([]byte{}), model.ErrNilPayloadError)
-
-				fields.c = client
-			},
-			wantErr: true,
-			Err:     model.ErrNilPayloadError,
+			Err:     model.ErrNoAttachmentIDError,
 		},
 
 		{
 			name:   "when the http request cannot be created",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:      context.Background(),
-				filterId: 10001,
-				payload: &model.PermissionFilterPayloadScheme{
-					Type:      "group",
-					GroupName: "jira-administrators",
-				},
+				ctx:          context.TODO(),
+				attachmentId: "1110",
 			},
 			on: func(fields *fields) {
 
 				client := mocks.NewClient(t)
 
-				client.On("TransformStructToReader",
-					&model.PermissionFilterPayloadScheme{Type: "group", GroupName: "jira-administrators"}).
-					Return(bytes.NewReader([]byte{}), nil)
-
 				client.On("NewRequest",
 					context.Background(),
-					http.MethodPost,
-					"rest/api/2/filter/10001/permission",
-					bytes.NewReader([]byte{})).
+					http.MethodGet,
+					"rest/api/2/attachment/1110/expand/human",
+					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
+
 			},
 			wantErr: true,
 			Err:     errors.New("error, unable to create the http request"),
 		},
 	}
+
 	for _, testCase := range testCases {
 		t.Run(testCase.name, func(t *testing.T) {
 
@@ -588,10 +412,10 @@ func TestFilterShareService_Add(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			shareService, err := NewFilterShareService(testCase.fields.c, testCase.fields.version)
+			attachmentService, err := NewIssueAttachmentService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := shareService.Add(testCase.args.ctx, testCase.args.filterId, testCase.args.payload)
+			gotResult, gotResponse, err := attachmentService.Human(testCase.args.ctx, testCase.args.attachmentId)
 
 			if testCase.wantErr {
 
@@ -612,7 +436,162 @@ func TestFilterShareService_Add(t *testing.T) {
 	}
 }
 
-func TestFilterShareService_Get(t *testing.T) {
+func Test_internalIssueAttachmentServiceImpl_Delete(t *testing.T) {
+
+	type fields struct {
+		c       service.Client
+		version string
+	}
+
+	type args struct {
+		ctx          context.Context
+		attachmentId string
+	}
+
+	testCases := []struct {
+		name    string
+		fields  fields
+		args    args
+		on      func(*fields)
+		wantErr bool
+		Err     error
+	}{
+		{
+			name:   "when the api version is v2",
+			fields: fields{version: "2"},
+			args: args{
+				ctx:          context.TODO(),
+				attachmentId: "1110",
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewClient(t)
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodDelete,
+					"rest/api/2/attachment/1110",
+					nil).
+					Return(&http.Request{}, nil)
+
+				client.On("Call",
+					&http.Request{},
+					nil).
+					Return(&model.ResponseScheme{}, nil)
+
+				fields.c = client
+			},
+		},
+
+		{
+			name:   "when the api version is v3",
+			fields: fields{version: "3"},
+			args: args{
+				ctx:          context.TODO(),
+				attachmentId: "1110",
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewClient(t)
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodDelete,
+					"rest/api/3/attachment/1110",
+					nil).
+					Return(&http.Request{}, nil)
+
+				client.On("Call",
+					&http.Request{},
+					nil).
+					Return(&model.ResponseScheme{}, nil)
+
+				fields.c = client
+
+			},
+		},
+
+		{
+			name:   "when the attachment id is not provided",
+			fields: fields{version: "2"},
+			args: args{
+				ctx:          context.TODO(),
+				attachmentId: "",
+			},
+			on: func(fields *fields) {
+				fields.c = mocks.NewClient(t)
+			},
+			wantErr: true,
+			Err:     model.ErrNoAttachmentIDError,
+		},
+
+		{
+			name:   "when the http request cannot be created",
+			fields: fields{version: "2"},
+			args: args{
+				ctx:          context.TODO(),
+				attachmentId: "1110",
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewClient(t)
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodDelete,
+					"rest/api/2/attachment/1110",
+					nil).
+					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+
+				fields.c = client
+
+			},
+			wantErr: true,
+			Err:     errors.New("error, unable to create the http request"),
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+
+			if testCase.on != nil {
+				testCase.on(&testCase.fields)
+			}
+
+			attachmentService, err := NewIssueAttachmentService(testCase.fields.c, testCase.fields.version)
+			assert.NoError(t, err)
+
+			gotResponse, err := attachmentService.Delete(testCase.args.ctx, testCase.args.attachmentId)
+
+			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+
+				assert.EqualError(t, err, testCase.Err.Error())
+
+			} else {
+
+				assert.NoError(t, err)
+				assert.NotEqual(t, gotResponse, nil)
+			}
+
+		})
+	}
+}
+
+func Test_internalIssueAttachmentServiceImpl_Add(t *testing.T) {
+
+	absolutePathMocked, err := filepath.Abs("../../LICENSE")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	fileMocked, err := os.Open(absolutePathMocked)
+	if err != nil {
+		t.Fatal(err)
+	}
 
 	type fields struct {
 		c       service.Client
@@ -621,7 +600,8 @@ func TestFilterShareService_Get(t *testing.T) {
 
 	type args struct {
 		ctx                    context.Context
-		filterId, permissionId int
+		issueKeyOrId, fileName string
+		file                   io.Reader
 	}
 
 	testCases := []struct {
@@ -636,24 +616,25 @@ func TestFilterShareService_Get(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:          context.Background(),
-				filterId:     10001,
-				permissionId: 20,
+				ctx:          context.TODO(),
+				issueKeyOrId: "DUMMY-1",
+				fileName:     "LICENSE",
+				file:         fileMocked,
 			},
 			on: func(fields *fields) {
 
 				client := mocks.NewClient(t)
 
-				client.On("NewRequest",
+				client.On("NewFormRequest",
 					context.Background(),
-					http.MethodGet,
-					"rest/api/2/filter/10001/permission/20",
-					nil).
+					http.MethodPost,
+					"rest/api/2/issue/DUMMY-1/attachments",
+					mock.Anything).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
 					&http.Request{},
-					&model.SharePermissionScheme{}).
+					[]*model.AttachmentScheme(nil)).
 					Return(&model.ResponseScheme{}, nil)
 
 				fields.c = client
@@ -664,24 +645,25 @@ func TestFilterShareService_Get(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.Background(),
-				filterId:     10001,
-				permissionId: 20,
+				ctx:          context.TODO(),
+				issueKeyOrId: "DUMMY-1",
+				fileName:     "LICENSE",
+				file:         fileMocked,
 			},
 			on: func(fields *fields) {
 
 				client := mocks.NewClient(t)
 
-				client.On("NewRequest",
+				client.On("NewFormRequest",
 					context.Background(),
-					http.MethodGet,
-					"rest/api/3/filter/10001/permission/20",
-					nil).
+					http.MethodPost,
+					"rest/api/3/issue/DUMMY-1/attachments",
+					mock.Anything).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
 					&http.Request{},
-					&model.SharePermissionScheme{}).
+					[]*model.AttachmentScheme(nil)).
 					Return(&model.ResponseScheme{}, nil)
 
 				fields.c = client
@@ -689,60 +671,71 @@ func TestFilterShareService_Get(t *testing.T) {
 		},
 
 		{
-			name:   "when the filterId is not provided",
+			name:   "when the issue key or id is not provided",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:          context.Background(),
-				filterId:     0,
-				permissionId: 20,
-			},
-			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
+				ctx:          context.TODO(),
+				issueKeyOrId: "",
+				fileName:     "LICENSE",
+				file:         fileMocked,
 			},
 			wantErr: true,
-			Err:     model.ErrNoFilterIDError,
+			Err:     model.ErrNoIssueKeyOrIDError,
 		},
 
 		{
-			name:   "when the permissionId is not provided",
+			name:   "when the file name is not provided",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:          context.Background(),
-				filterId:     10001,
-				permissionId: 0,
-			},
-			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
+				ctx:          context.TODO(),
+				issueKeyOrId: "DUMMY-1",
+				fileName:     "",
+				file:         fileMocked,
 			},
 			wantErr: true,
-			Err:     model.ErrNoPermissionGrantIDError,
+			Err:     model.ErrNoAttachmentNameError,
+		},
+
+		{
+			name:   "when the field reader is not provided",
+			fields: fields{version: "2"},
+			args: args{
+				ctx:          context.TODO(),
+				issueKeyOrId: "DUMMY-1",
+				fileName:     "LICENSE",
+				file:         nil,
+			},
+			wantErr: true,
+			Err:     model.ErrNoReaderError,
 		},
 
 		{
 			name:   "when the http request cannot be created",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:          context.Background(),
-				filterId:     10001,
-				permissionId: 20,
+				ctx:          context.TODO(),
+				issueKeyOrId: "DUMMY-1",
+				fileName:     "LICENSE",
+				file:         fileMocked,
 			},
 			on: func(fields *fields) {
 
 				client := mocks.NewClient(t)
 
-				client.On("NewRequest",
+				client.On("NewFormRequest",
 					context.Background(),
-					http.MethodGet,
-					"rest/api/2/filter/10001/permission/20",
-					nil).
-					Return(&http.Request{}, errors.New("error, unable to creat the http request"))
+					http.MethodPost,
+					"rest/api/2/issue/DUMMY-1/attachments",
+					mock.Anything).
+					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
 			},
 			wantErr: true,
-			Err:     errors.New("error, unable to creat the http request"),
+			Err:     errors.New("error, unable to create the http request"),
 		},
 	}
+
 	for _, testCase := range testCases {
 		t.Run(testCase.name, func(t *testing.T) {
 
@@ -750,10 +743,11 @@ func TestFilterShareService_Get(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			shareService, err := NewFilterShareService(testCase.fields.c, testCase.fields.version)
+			attachmentService, err := NewIssueAttachmentService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := shareService.Get(testCase.args.ctx, testCase.args.filterId, testCase.args.permissionId)
+			gotResult, gotResponse, err := attachmentService.Add(testCase.args.ctx, testCase.args.issueKeyOrId,
+				testCase.args.fileName, testCase.args.file)
 
 			if testCase.wantErr {
 
@@ -770,166 +764,6 @@ func TestFilterShareService_Get(t *testing.T) {
 				assert.NotEqual(t, gotResult, nil)
 			}
 
-		})
-	}
-}
-
-func TestFilterShareService_Delete(t *testing.T) {
-
-	type fields struct {
-		c       service.Client
-		version string
-	}
-
-	type args struct {
-		ctx                    context.Context
-		filterId, permissionId int
-	}
-
-	testCases := []struct {
-		name    string
-		fields  fields
-		args    args
-		on      func(*fields)
-		wantErr bool
-		Err     error
-	}{
-		{
-			name:   "when the api version is v2",
-			fields: fields{version: "2"},
-			args: args{
-				ctx:          context.Background(),
-				filterId:     10001,
-				permissionId: 20,
-			},
-			on: func(fields *fields) {
-
-				client := mocks.NewClient(t)
-
-				client.On("NewRequest",
-					context.Background(),
-					http.MethodDelete,
-					"rest/api/2/filter/10001/permission/20",
-					nil).
-					Return(&http.Request{}, nil)
-
-				client.On("Call",
-					&http.Request{},
-					nil).
-					Return(&model.ResponseScheme{}, nil)
-
-				fields.c = client
-			},
-		},
-
-		{
-			name:   "when the api version is v3",
-			fields: fields{version: "3"},
-			args: args{
-				ctx:          context.Background(),
-				filterId:     10001,
-				permissionId: 20,
-			},
-			on: func(fields *fields) {
-
-				client := mocks.NewClient(t)
-
-				client.On("NewRequest",
-					context.Background(),
-					http.MethodDelete,
-					"rest/api/3/filter/10001/permission/20",
-					nil).
-					Return(&http.Request{}, nil)
-
-				client.On("Call",
-					&http.Request{},
-					nil).
-					Return(&model.ResponseScheme{}, nil)
-
-				fields.c = client
-			},
-		},
-
-		{
-			name:   "when the filterId is not provided",
-			fields: fields{version: "2"},
-			args: args{
-				ctx:          context.Background(),
-				filterId:     0,
-				permissionId: 20,
-			},
-			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
-			},
-			wantErr: true,
-			Err:     model.ErrNoFilterIDError,
-		},
-
-		{
-			name:   "when the permissionId is not provided",
-			fields: fields{version: "2"},
-			args: args{
-				ctx:          context.Background(),
-				filterId:     10001,
-				permissionId: 0,
-			},
-			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
-			},
-			wantErr: true,
-			Err:     model.ErrNoPermissionGrantIDError,
-		},
-
-		{
-			name:   "when the http request cannot be created",
-			fields: fields{version: "2"},
-			args: args{
-				ctx:          context.Background(),
-				filterId:     10001,
-				permissionId: 20,
-			},
-			on: func(fields *fields) {
-
-				client := mocks.NewClient(t)
-
-				client.On("NewRequest",
-					context.Background(),
-					http.MethodDelete,
-					"rest/api/2/filter/10001/permission/20",
-					nil).
-					Return(&http.Request{}, errors.New("error, unable to creat the http request"))
-
-				fields.c = client
-			},
-			wantErr: true,
-			Err:     errors.New("error, unable to creat the http request"),
-		},
-	}
-	for _, testCase := range testCases {
-		t.Run(testCase.name, func(t *testing.T) {
-
-			if testCase.on != nil {
-				testCase.on(&testCase.fields)
-			}
-
-			shareService, err := NewFilterShareService(testCase.fields.c, testCase.fields.version)
-			assert.NoError(t, err)
-
-			gotResponse, err := shareService.Delete(testCase.args.ctx, testCase.args.filterId, testCase.args.permissionId)
-
-			if testCase.wantErr {
-
-				if err != nil {
-					t.Logf("error returned: %v", err.Error())
-				}
-
-				assert.EqualError(t, err, testCase.Err.Error())
-
-			} else {
-
-				assert.NoError(t, err)
-				assert.NotEqual(t, gotResponse, nil)
-			}
 		})
 	}
 }

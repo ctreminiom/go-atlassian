@@ -57,7 +57,7 @@ func (b BoardService) Create(ctx context.Context, payload *model.BoardPayloadSch
 
 	endpoint := fmt.Sprintf("/rest/agile/%v/board", b.version)
 
-	request, err := b.c.NewJsonRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := b.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -346,7 +346,7 @@ func (b BoardService) Move(ctx context.Context, boardId int, payload *model.Boar
 
 	endpoint := fmt.Sprintf("/rest/agile/%v/board/%v/issue", b.version, boardId)
 
-	request, err := b.c.NewJsonRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := b.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
 	if err != nil {
 		return nil, err
 	}

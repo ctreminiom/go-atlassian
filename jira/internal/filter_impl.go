@@ -76,7 +76,7 @@ func (i *internalFilterServiceImpl) Create(ctx context.Context, payload *model.F
 
 	endpoint := fmt.Sprintf("rest/api/%v/filter", i.version)
 
-	request, err := i.c.NewJsonRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -227,7 +227,7 @@ func (i *internalFilterServiceImpl) Update(ctx context.Context, filterId int, pa
 
 	endpoint := fmt.Sprintf("rest/api/%v/filter/%v", i.version, filterId)
 
-	request, err := i.c.NewJsonRequest(ctx, http.MethodPut, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, reader)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -283,7 +283,7 @@ func (i *internalFilterServiceImpl) Change(ctx context.Context, filterId int, ac
 
 	endpoint := fmt.Sprintf("rest/api/%v/filter/%v/owner", i.version, filterId)
 
-	request, err := i.c.NewJsonRequest(ctx, http.MethodPut, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, reader)
 	if err != nil {
 		return nil, err
 	}

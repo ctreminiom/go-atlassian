@@ -170,7 +170,7 @@ func Test_internalRichTextServiceImpl_Assign(t *testing.T) {
 					}{AccountID: "account-id-sample"}).
 					Return(bytes.NewReader([]byte{}), nil)
 
-				client.On("NewJsonRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"/rest/api/2/issue/DUMMY-1/assignee",
@@ -234,7 +234,7 @@ func Test_internalRichTextServiceImpl_Assign(t *testing.T) {
 					}{AccountID: "account-id-sample"}).
 					Return(bytes.NewReader([]byte{}), nil)
 
-				client.On("NewJsonRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"/rest/api/2/issue/DUMMY-1/assignee",
@@ -329,7 +329,7 @@ func Test_internalRichTextServiceImpl_Notify(t *testing.T) {
 					}).
 					Return(bytes.NewReader([]byte{}), nil)
 
-				client.On("NewJsonRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/issue/DUMMY-1/notify",
@@ -389,7 +389,7 @@ func Test_internalRichTextServiceImpl_Notify(t *testing.T) {
 					}).
 					Return(bytes.NewReader([]byte{}), nil)
 
-				client.On("NewJsonRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/issue/DUMMY-1/notify",
@@ -611,7 +611,7 @@ func Test_internalRichTextServiceImpl_Create(t *testing.T) {
 							"summary":           "New summary test"}}).
 					Return(bytes.NewReader([]byte{}), nil)
 
-				client.On("NewJsonRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/issue",
@@ -653,7 +653,7 @@ func Test_internalRichTextServiceImpl_Create(t *testing.T) {
 					}}).
 					Return(bytes.NewReader([]byte{}), nil)
 
-				client.On("NewJsonRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/issue",
@@ -696,7 +696,7 @@ func Test_internalRichTextServiceImpl_Create(t *testing.T) {
 							"summary":           "New summary test"}}).
 					Return(bytes.NewReader([]byte{}), nil)
 
-				client.On("NewJsonRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/issue",
@@ -829,7 +829,7 @@ func Test_internalRichTextServiceImpl_Creates(t *testing.T) {
 							"summary":           "New summary test #2"}}}}).
 					Return(bytes.NewReader([]byte{}), nil)
 
-				client.On("NewJsonRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/issue/bulk",
@@ -914,7 +914,7 @@ func Test_internalRichTextServiceImpl_Creates(t *testing.T) {
 							"summary":           "New summary test #2"}}}}).
 					Return(bytes.NewReader([]byte{}), nil)
 
-				client.On("NewJsonRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/issue/bulk",
@@ -1174,7 +1174,7 @@ func Test_internalRichTextServiceImpl_Move(t *testing.T) {
 							"labels": []map[string]interface{}{{"remove": "triaged"}}}}).
 					Return(bytes.NewReader([]byte{}), nil)
 
-				client.On("NewJsonRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/issue/DUMMY-1/transitions",
@@ -1224,7 +1224,7 @@ func Test_internalRichTextServiceImpl_Move(t *testing.T) {
 						"transition": map[string]interface{}{"id": "10001"}}).
 					Return(bytes.NewReader([]byte{}), nil)
 
-				client.On("NewJsonRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/issue/DUMMY-1/transitions",
@@ -1274,7 +1274,7 @@ func Test_internalRichTextServiceImpl_Move(t *testing.T) {
 							"labels": []map[string]interface{}{{"remove": "triaged"}}}}).
 					Return(bytes.NewReader([]byte{}), nil)
 
-				client.On("NewJsonRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/issue/DUMMY-1/transitions",
@@ -1308,7 +1308,7 @@ func Test_internalRichTextServiceImpl_Move(t *testing.T) {
 						"transition": map[string]interface{}{"id": "10001"}}).
 					Return(bytes.NewReader([]byte{}), nil)
 
-				client.On("NewJsonRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/issue/DUMMY-1/transitions",
@@ -1412,7 +1412,7 @@ func Test_internalRichTextServiceImpl_Move(t *testing.T) {
 							"labels": []map[string]interface{}{{"remove": "triaged"}}}}).
 					Return(bytes.NewReader([]byte{}), nil)
 
-				client.On("NewJsonRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/issue/DUMMY-1/transitions",
@@ -1530,7 +1530,7 @@ func Test_internalRichTextServiceImpl_Update(t *testing.T) {
 							"labels": []map[string]interface{}{{"remove": "triaged"}}}}).
 					Return(bytes.NewReader([]byte{}), nil)
 
-				client.On("NewJsonRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/2/issue/DUMMY-1?notifyUsers=true",
@@ -1597,7 +1597,7 @@ func Test_internalRichTextServiceImpl_Update(t *testing.T) {
 							"labels": []map[string]interface{}{{"remove": "triaged"}}}}).
 					Return(bytes.NewReader([]byte{}), nil)
 
-				client.On("NewJsonRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/2/issue/DUMMY-1?notifyUsers=true",
@@ -1637,7 +1637,7 @@ func Test_internalRichTextServiceImpl_Update(t *testing.T) {
 							"summary":           "New summary test"}}).
 					Return(bytes.NewReader([]byte{}), nil)
 
-				client.On("NewJsonRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/2/issue/DUMMY-1?notifyUsers=true",
@@ -1680,7 +1680,7 @@ func Test_internalRichTextServiceImpl_Update(t *testing.T) {
 							"labels": []map[string]interface{}{{"remove": "triaged"}}}}).
 					Return(bytes.NewReader([]byte{}), nil)
 
-				client.On("NewJsonRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/2/issue/DUMMY-1?notifyUsers=true",
@@ -1723,7 +1723,7 @@ func Test_internalRichTextServiceImpl_Update(t *testing.T) {
 					}).
 					Return(bytes.NewReader([]byte{}), nil)
 
-				client.On("NewJsonRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/2/issue/DUMMY-1?notifyUsers=true",

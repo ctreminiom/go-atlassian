@@ -41,8 +41,8 @@ func (_m *Client) Call(request *http.Request, structure interface{}) (*models.Re
 	return r0, r1
 }
 
-// NewJsonRequest provides a mock function with given fields: ctx, method, apiEndpoint, payload
-func (_m *Client) NewJsonRequest(ctx context.Context, method string, apiEndpoint string, payload io.Reader) (*http.Request, error) {
+// NewFormRequest provides a mock function with given fields: ctx, method, apiEndpoint, payload
+func (_m *Client) NewFormRequest(ctx context.Context, method string, apiEndpoint string, payload io.Reader) (*http.Request, error) {
 	ret := _m.Called(ctx, method, apiEndpoint, payload)
 
 	var r0 *http.Request

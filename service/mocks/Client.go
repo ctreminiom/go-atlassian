@@ -41,13 +41,13 @@ func (_m *Client) Call(request *http.Request, structure interface{}) (*models.Re
 	return r0, r1
 }
 
-// NewFormRequest provides a mock function with given fields: ctx, method, apiEndpoint, payload
-func (_m *Client) NewFormRequest(ctx context.Context, method string, apiEndpoint string, payload io.Reader) (*http.Request, error) {
-	ret := _m.Called(ctx, method, apiEndpoint, payload)
+// NewFormRequest provides a mock function with given fields: ctx, method, apiEndpoint, contentType, payload
+func (_m *Client) NewFormRequest(ctx context.Context, method string, apiEndpoint string, contentType string, payload io.Reader) (*http.Request, error) {
+	ret := _m.Called(ctx, method, apiEndpoint, contentType, payload)
 
 	var r0 *http.Request
-	if rf, ok := ret.Get(0).(func(context.Context, string, string, io.Reader) *http.Request); ok {
-		r0 = rf(ctx, method, apiEndpoint, payload)
+	if rf, ok := ret.Get(0).(func(context.Context, string, string, string, io.Reader) *http.Request); ok {
+		r0 = rf(ctx, method, apiEndpoint, contentType, payload)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*http.Request)
@@ -55,8 +55,8 @@ func (_m *Client) NewFormRequest(ctx context.Context, method string, apiEndpoint
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(context.Context, string, string, io.Reader) error); ok {
-		r1 = rf(ctx, method, apiEndpoint, payload)
+	if rf, ok := ret.Get(1).(func(context.Context, string, string, string, io.Reader) error); ok {
+		r1 = rf(ctx, method, apiEndpoint, contentType, payload)
 	} else {
 		r1 = ret.Error(1)
 	}

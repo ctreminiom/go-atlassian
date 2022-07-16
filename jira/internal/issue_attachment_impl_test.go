@@ -629,6 +629,7 @@ func Test_internalIssueAttachmentServiceImpl_Add(t *testing.T) {
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/issue/DUMMY-1/attachments",
+					mock.Anything,
 					mock.Anything).
 					Return(&http.Request{}, nil)
 
@@ -658,6 +659,7 @@ func Test_internalIssueAttachmentServiceImpl_Add(t *testing.T) {
 					context.Background(),
 					http.MethodPost,
 					"rest/api/3/issue/DUMMY-1/attachments",
+					mock.Anything,
 					mock.Anything).
 					Return(&http.Request{}, nil)
 
@@ -726,6 +728,7 @@ func Test_internalIssueAttachmentServiceImpl_Add(t *testing.T) {
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/issue/DUMMY-1/attachments",
+					mock.Anything,
 					mock.Anything).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 

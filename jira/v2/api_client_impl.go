@@ -97,7 +97,7 @@ type ClientV2 struct {
 	Issue          *internal.IssueRichTextService
 }
 
-func (c *ClientV2) NewFormRequest(ctx context.Context, method, apiEndpoint string, payload io.Reader) (*http.Request, error) {
+func (c *ClientV2) NewFormRequest(ctx context.Context, method, apiEndpoint, contentType string, payload io.Reader) (*http.Request, error) {
 
 	relativePath, err := url.Parse(apiEndpoint)
 	if err != nil {
@@ -111,7 +111,7 @@ func (c *ClientV2) NewFormRequest(ctx context.Context, method, apiEndpoint strin
 		return nil, err
 	}
 
-	request.Header.Add("Content-Type", "multipart/form-data")
+	request.Header.Add("Content-Type", contentType)
 	request.Header.Add("Accept", "application/json")
 	request.Header.Set("X-Atlassian-Token", "no-check")
 

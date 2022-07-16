@@ -161,7 +161,7 @@ func (i *internalIssueAttachmentServiceImpl) Add(ctx context.Context, issueKeyOr
 
 	defer writer.Close()
 
-	request, err := i.c.NewFormRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := i.c.NewFormRequest(ctx, http.MethodPost, endpoint, writer.FormDataContentType(), reader)
 	if err != nil {
 		return nil, nil, err
 	}

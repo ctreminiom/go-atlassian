@@ -72,9 +72,15 @@ func NewV2(httpClient common.HttpClient, site string) (*ClientV2, error) {
 		return nil, err
 	}
 
+	issueFieldService, err := internal.NewIssueFieldService(client, "2")
+	if err != nil {
+		return nil, err
+	}
+
 	issueServices := &internal.IssueServices{
 		Attachment:      issueAttachmentService,
 		CommentRichText: commentService,
+		Field:           issueFieldService,
 	}
 
 	issueService, _, err := internal.NewIssueService(client, "2", issueServices)

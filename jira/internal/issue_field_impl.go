@@ -58,7 +58,7 @@ func (i *internalIssueFieldServiceImpl) Gets(ctx context.Context) ([]*model.Issu
 	}
 
 	var fields []*model.IssueFieldScheme
-	response, err := i.c.Call(request, fields)
+	response, err := i.c.Call(request, &fields)
 	if err != nil {
 		return nil, response, err
 	}

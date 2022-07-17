@@ -17,6 +17,7 @@ import (
 type IssueRichTextService struct {
 	internalClient jira.IssueRichTextConnector
 	Attachment     jira.Attachment
+	Comment        jira.RichTextComment
 }
 
 func (i IssueRichTextService) Delete(ctx context.Context, issueKeyOrId string, deleteSubTasks bool) (*model.ResponseScheme, error) {

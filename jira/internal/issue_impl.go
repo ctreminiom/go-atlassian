@@ -11,7 +11,9 @@ import (
 )
 
 type IssueServices struct {
-	Attachment jira.Attachment
+	Attachment      jira.Attachment
+	CommentRichText jira.RichTextComment
+	CommentADF      jira.AdfComment
 }
 
 func NewIssueService(client service.Client, version string, services *IssueServices) (*IssueRichTextService, *IssueADFService, error) {
@@ -41,6 +43,13 @@ func NewIssueService(client service.Client, version string, services *IssueServi
 			richTextService.Attachment = services.Attachment
 		}
 
+		if services.CommentADF != nil {
+			adfService.Comment = services.CommentADF
+		}
+
+		if services.CommentRichText != nil {
+			richTextService.Comment = services.CommentRichText
+		}
 	}
 
 	return richTextService, adfService, nil

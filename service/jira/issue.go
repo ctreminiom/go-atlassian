@@ -5,7 +5,7 @@ import (
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 )
 
-type IssueCommonConnector interface {
+type SharedIssue interface {
 
 	// Delete deletes an issue.
 	// An issue cannot be deleted if it has one or more subtasks.
@@ -40,8 +40,8 @@ type IssueCommonConnector interface {
 	// The parameters are documented on this [page](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-transitions-get)
 }
 
-type IssueRichTextConnector interface {
-	IssueCommonConnector
+type RichTextIssue interface {
+	SharedIssue
 
 	// Create creates an issue or, where the option to create subtasks is enabled in Jira, a subtask.
 	// POST /rest/api/2/issue
@@ -78,8 +78,8 @@ type IssueRichTextConnector interface {
 	Move(ctx context.Context, issueKeyOrId, transitionId string, options *model.IssueMoveOptionsV2) (*model.ResponseScheme, error)
 }
 
-type IssueADFMethodsConnector interface {
-	IssueCommonConnector
+type AdfIssue interface {
+	SharedIssue
 
 	// Create creates an issue or, where the option to create subtasks is enabled in Jira, a subtask.
 	// POST /rest/api/3/issue

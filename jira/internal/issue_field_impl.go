@@ -12,7 +12,7 @@ import (
 	"strings"
 )
 
-func NewIssueFieldService(client service.Client, version string) (*IssueFieldService, error) {
+func NewIssueFieldService(client service.Client, version string, configuration jira.FieldConfiguration) (*IssueFieldService, error) {
 
 	if version == "" {
 		return nil, model.ErrNoVersionProvided
@@ -20,11 +20,13 @@ func NewIssueFieldService(client service.Client, version string) (*IssueFieldSer
 
 	return &IssueFieldService{
 		internalClient: &internalIssueFieldServiceImpl{c: client, version: version},
+		Configuration:  configuration,
 	}, nil
 }
 
 type IssueFieldService struct {
 	internalClient jira.Field
+	Configuration  jira.FieldConfiguration
 }
 
 func (i *IssueFieldService) Gets(ctx context.Context) ([]*model.IssueFieldScheme, *model.ResponseScheme, error) {

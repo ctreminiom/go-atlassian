@@ -15,7 +15,7 @@ import (
 )
 
 type IssueADFService struct {
-	internalClient jira.IssueADFMethodsConnector
+	internalClient jira.AdfIssue
 	Attachment     jira.Attachment
 	Comment        jira.AdfComment
 	Field          jira.Field

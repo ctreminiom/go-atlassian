@@ -32,3 +32,18 @@ type FieldConfiguration interface {
 	// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration#delete-field-configuration
 	Delete(ctx context.Context, id int) (*model.ResponseScheme, error)
 }
+
+type FieldConfigurationItem interface {
+
+	// Gets Returns a paginated list of all fields for a configuration.
+	// GET /rest/api/3/fieldconfiguration/{id}/fields
+	// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration/items#get-field-configuration-items
+	Gets(ctx context.Context, id, startAt, maxResults int) (*model.FieldConfigurationItemPageScheme, *model.ResponseScheme, error)
+
+	// Update updates fields in a field configuration. The properties of the field configuration fields provided
+	// override the existing values.
+	// This operation can only update field configurations used in company-managed (classic) projects.
+	// PUT /rest/api/3/fieldconfiguration/{id}/fields
+	// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration/items#update-field-configuration-items
+	Update(ctx context.Context, id int, payload *model.UpdateFieldConfigurationItemPayloadScheme) (*model.ResponseScheme, error)
+}

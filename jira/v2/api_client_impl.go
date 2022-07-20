@@ -72,7 +72,12 @@ func NewV2(httpClient common.HttpClient, site string) (*ClientV2, error) {
 		return nil, err
 	}
 
-	fieldConfigService, err := internal.NewIssueFieldConfigurationService(client, "2")
+	fieldConfigurationItemService, err := internal.NewIssueFieldConfigurationItemService(client, "2")
+	if err != nil {
+		return nil, err
+	}
+
+	fieldConfigService, err := internal.NewIssueFieldConfigurationService(client, "2", fieldConfigurationItemService)
 	if err != nil {
 		return nil, err
 	}

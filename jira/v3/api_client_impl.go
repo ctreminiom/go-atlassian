@@ -98,7 +98,7 @@ func NewV2(httpClient common.HttpClient, site string) (*ClientV2, error) {
 		return nil, err
 	}
 
-	client.Authentication = internal.NewAuthenticationService(client)
+	client.Auth = internal.NewAuthenticationService(client)
 	client.Role = applicationRoleService
 	client.Dashboard = dashboardService
 	client.Filter = filterService
@@ -109,14 +109,14 @@ func NewV2(httpClient common.HttpClient, site string) (*ClientV2, error) {
 }
 
 type ClientV2 struct {
-	HTTP           common.HttpClient
-	Site           *url.URL
-	Authentication common.Authentication
-	Role           jira.ApplicationRole
-	Dashboard      jira.Dashboard
-	Filter         *internal.FilterService
-	Group          *internal.GroupService
-	Issue          *internal.IssueADFService
+	HTTP      common.HttpClient
+	Site      *url.URL
+	Auth      common.Authentication
+	Role      jira.ApplicationRole
+	Dashboard jira.Dashboard
+	Filter    *internal.FilterService
+	Group     *internal.GroupService
+	Issue     *internal.IssueADFService
 }
 
 func (c *ClientV2) NewFormRequest(ctx context.Context, method, apiEndpoint, contentType string, payload io.Reader) (*http.Request, error) {
@@ -137,12 +137,12 @@ func (c *ClientV2) NewFormRequest(ctx context.Context, method, apiEndpoint, cont
 	request.Header.Add("Accept", "application/json")
 	request.Header.Set("X-Atlassian-Token", "no-check")
 
-	if c.Authentication.HasBasicAuth() {
-		request.SetBasicAuth(c.Authentication.GetBasicAuth())
+	if c.Auth.HasBasicAuth() {
+		request.SetBasicAuth(c.Auth.GetBasicAuth())
 	}
 
-	if c.Authentication.HasUserAgent() {
-		request.Header.Set("User-Agent", c.Authentication.GetUserAgent())
+	if c.Auth.HasUserAgent() {
+		request.Header.Set("User-Agent", c.Auth.GetUserAgent())
 	}
 
 	return request, nil
@@ -168,12 +168,12 @@ func (c *ClientV2) NewRequest(ctx context.Context, method, apiEndpoint string, p
 		request.Header.Set("Content-Type", "application/json")
 	}
 
-	if c.Authentication.HasBasicAuth() {
-		request.SetBasicAuth(c.Authentication.GetBasicAuth())
+	if c.Auth.HasBasicAuth() {
+		request.SetBasicAuth(c.Auth.GetBasicAuth())
 	}
 
-	if c.Authentication.HasUserAgent() {
-		request.Header.Set("User-Agent", c.Authentication.GetUserAgent())
+	if c.Auth.HasUserAgent() {
+		request.Header.Set("User-Agent", c.Auth.GetUserAgent())
 	}
 
 	return request, nil

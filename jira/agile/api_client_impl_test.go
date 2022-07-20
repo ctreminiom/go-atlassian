@@ -134,12 +134,12 @@ func TestClient_Call(t *testing.T) {
 			}
 
 			c := &Client{
-				HTTP:           testCase.fields.HTTP,
-				Site:           testCase.fields.Site,
-				Authentication: testCase.fields.Authentication,
-				Board:          testCase.fields.Board,
-				Epic:           testCase.fields.Epic,
-				Sprint:         testCase.fields.Sprint,
+				HTTP:   testCase.fields.HTTP,
+				Site:   testCase.fields.Site,
+				Auth:   testCase.fields.Authentication,
+				Board:  testCase.fields.Board,
+				Epic:   testCase.fields.Epic,
+				Sprint: testCase.fields.Sprint,
 			}
 
 			got, err := c.Call(testCase.args.request, testCase.args.structure)
@@ -167,8 +167,8 @@ func TestNew(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	mockClient.Authentication.SetBasicAuth("test", "test")
-	mockClient.Authentication.SetUserAgent("aaa")
+	mockClient.Auth.SetBasicAuth("test", "test")
+	mockClient.Auth.SetUserAgent("aaa")
 
 	mockClient2, _ := New(nil, " https://zhidao.baidu.com/special/view?id=sd&preview=1")
 
@@ -291,12 +291,12 @@ func TestClient_TransformTheHTTPResponse(t *testing.T) {
 	for _, testCase := range testCases {
 		t.Run(testCase.name, func(t *testing.T) {
 			c := &Client{
-				HTTP:           testCase.fields.HTTP,
-				Site:           testCase.fields.Site,
-				Authentication: testCase.fields.Authentication,
-				Board:          testCase.fields.Board,
-				Epic:           testCase.fields.Epic,
-				Sprint:         testCase.fields.Sprint,
+				HTTP:   testCase.fields.HTTP,
+				Site:   testCase.fields.Site,
+				Auth:   testCase.fields.Authentication,
+				Board:  testCase.fields.Board,
+				Epic:   testCase.fields.Epic,
+				Sprint: testCase.fields.Sprint,
 			}
 
 			got, err := c.TransformTheHTTPResponse(testCase.args.response, testCase.args.structure)
@@ -390,12 +390,12 @@ func TestClient_TransformStructToReader(t *testing.T) {
 
 		t.Run(testCase.name, func(t *testing.T) {
 			c := &Client{
-				HTTP:           testCase.fields.HTTP,
-				Site:           testCase.fields.Site,
-				Authentication: testCase.fields.Authentication,
-				Board:          testCase.fields.Board,
-				Epic:           testCase.fields.Epic,
-				Sprint:         testCase.fields.Sprint,
+				HTTP:   testCase.fields.HTTP,
+				Site:   testCase.fields.Site,
+				Auth:   testCase.fields.Authentication,
+				Board:  testCase.fields.Board,
+				Epic:   testCase.fields.Epic,
+				Sprint: testCase.fields.Sprint,
 			}
 
 			got, err := c.TransformStructToReader(testCase.args.structure)

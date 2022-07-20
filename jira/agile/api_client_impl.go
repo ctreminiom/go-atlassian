@@ -55,18 +55,18 @@ func New(httpClient common.HttpClient, site string) (*Client, error) {
 	client.Board = boardService
 	client.Epic = epicService
 	client.Sprint = sprintService
-	client.Authentication = internal.NewAuthenticationService(client)
+	client.Auth = internal.NewAuthenticationService(client)
 
 	return client, nil
 }
 
 type Client struct {
-	HTTP           common.HttpClient
-	Site           *url.URL
-	Authentication common.Authentication
-	Board          agile.Board
-	Epic           agile.Epic
-	Sprint         agile.Sprint
+	HTTP   common.HttpClient
+	Site   *url.URL
+	Auth   common.Authentication
+	Board  agile.Board
+	Epic   agile.Epic
+	Sprint agile.Sprint
 }
 
 func (c *Client) NewFormRequest(ctx context.Context, method, apiEndpoint, contentType string, payload io.Reader) (*http.Request, error) {
@@ -93,12 +93,12 @@ func (c *Client) NewRequest(ctx context.Context, method, apiEndpoint string, pay
 		request.Header.Set("Content-Type", "application/json")
 	}
 
-	if c.Authentication.HasBasicAuth() {
-		request.SetBasicAuth(c.Authentication.GetBasicAuth())
+	if c.Auth.HasBasicAuth() {
+		request.SetBasicAuth(c.Auth.GetBasicAuth())
 	}
 
-	if c.Authentication.HasUserAgent() {
-		request.Header.Set("User-Agent", c.Authentication.GetUserAgent())
+	if c.Auth.HasUserAgent() {
+		request.Header.Set("User-Agent", c.Auth.GetUserAgent())
 	}
 
 	return request, nil

@@ -132,9 +132,9 @@ func TestClient_Call(t *testing.T) {
 			}
 
 			c := &ClientV2{
-				HTTP:           testCase.fields.HTTP,
-				Site:           testCase.fields.Site,
-				Authentication: testCase.fields.Authentication,
+				HTTP: testCase.fields.HTTP,
+				Site: testCase.fields.Site,
+				Auth: testCase.fields.Authentication,
 			}
 
 			got, err := c.Call(testCase.args.request, testCase.args.structure)
@@ -162,8 +162,8 @@ func TestNewV2(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	mockClient.Authentication.SetBasicAuth("test", "test")
-	mockClient.Authentication.SetUserAgent("aaa")
+	mockClient.Auth.SetBasicAuth("test", "test")
+	mockClient.Auth.SetUserAgent("aaa")
 
 	mockClient2, _ := NewV2(nil, " https://zhidao.baidu.com/special/view?id=sd&preview=1")
 
@@ -295,9 +295,9 @@ func TestClient_TransformTheHTTPResponse(t *testing.T) {
 	for _, testCase := range testCases {
 		t.Run(testCase.name, func(t *testing.T) {
 			c := &ClientV2{
-				HTTP:           testCase.fields.HTTP,
-				Site:           testCase.fields.Site,
-				Authentication: testCase.fields.Authentication,
+				HTTP: testCase.fields.HTTP,
+				Site: testCase.fields.Site,
+				Auth: testCase.fields.Authentication,
 			}
 
 			got, err := c.TransformTheHTTPResponse(testCase.args.response, testCase.args.structure)
@@ -389,9 +389,9 @@ func TestClient_TransformStructToReader(t *testing.T) {
 
 		t.Run(testCase.name, func(t *testing.T) {
 			c := &ClientV2{
-				HTTP:           testCase.fields.HTTP,
-				Site:           testCase.fields.Site,
-				Authentication: testCase.fields.Authentication,
+				HTTP: testCase.fields.HTTP,
+				Site: testCase.fields.Site,
+				Auth: testCase.fields.Authentication,
 			}
 
 			got, err := c.TransformStructToReader(testCase.args.structure)

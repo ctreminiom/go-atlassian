@@ -18,7 +18,7 @@ type IssueADFService struct {
 	internalClient jira.AdfIssue
 	Attachment     jira.Attachment
 	Comment        jira.AdfComment
-	Field          jira.Field
+	Field          *IssueFieldService
 }
 
 func (i *IssueADFService) Delete(ctx context.Context, issueKeyOrId string, deleteSubTasks bool) (*model.ResponseScheme, error) {

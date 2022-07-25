@@ -18,7 +18,7 @@ type IssueRichTextService struct {
 	internalClient jira.RichTextIssue
 	Attachment     jira.Attachment
 	Comment        jira.RichTextComment
-	Field          jira.Field
+	Field          *IssueFieldService
 }
 
 func (i IssueRichTextService) Delete(ctx context.Context, issueKeyOrId string, deleteSubTasks bool) (*model.ResponseScheme, error) {

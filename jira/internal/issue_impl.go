@@ -14,7 +14,7 @@ type IssueServices struct {
 	Attachment      jira.Attachment
 	CommentRichText jira.RichTextComment
 	CommentADF      jira.AdfComment
-	Field           jira.Field
+	Field           *IssueFieldService
 }
 
 func NewIssueService(client service.Client, version string, services *IssueServices) (*IssueRichTextService, *IssueADFService, error) {

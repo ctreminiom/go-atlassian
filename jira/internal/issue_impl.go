@@ -15,6 +15,7 @@ type IssueServices struct {
 	CommentRichText jira.RichTextComment
 	CommentADF      jira.AdfComment
 	Field           *IssueFieldService
+	Label           *LabelService
 }
 
 func NewIssueService(client service.Client, version string, services *IssueServices) (*IssueRichTextService, *IssueADFService, error) {
@@ -42,10 +43,12 @@ func NewIssueService(client service.Client, version string, services *IssueServi
 		adfService.Attachment = services.Attachment
 		adfService.Comment = services.CommentADF
 		adfService.Field = services.Field
+		adfService.Label = services.Label
 
 		richTextService.Comment = services.CommentRichText
 		richTextService.Attachment = services.Attachment
 		richTextService.Field = services.Field
+		richTextService.Label = services.Label
 	}
 
 	return richTextService, adfService, nil

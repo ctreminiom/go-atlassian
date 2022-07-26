@@ -102,18 +102,19 @@ func NewV2(httpClient common.HttpClient, site string) (*ClientV2, error) {
 		return nil, err
 	}
 
-	issueServices := &internal.IssueServices{
-		Attachment: issueAttachmentService,
-		CommentADF: commentService,
-		Field:      issueFieldService,
-	}
-
-	_, issueService, err := internal.NewIssueService(client, "3", issueServices)
+	label, err := internal.NewLabelService(client, "2")
 	if err != nil {
 		return nil, err
 	}
 
-	label, err := internal.NewLabelService(client, "2")
+	issueServices := &internal.IssueServices{
+		Attachment: issueAttachmentService,
+		CommentADF: commentService,
+		Field:      issueFieldService,
+		Label:      label,
+	}
+
+	_, issueService, err := internal.NewIssueService(client, "3", issueServices)
 	if err != nil {
 		return nil, err
 	}
@@ -124,7 +125,6 @@ func NewV2(httpClient common.HttpClient, site string) (*ClientV2, error) {
 	client.Filter = filterService
 	client.Group = groupService
 	client.Issue = issueService
-	client.Label = label
 
 	return client, nil
 }
@@ -138,7 +138,6 @@ type ClientV2 struct {
 	Filter    *internal.FilterService
 	Group     *internal.GroupService
 	Issue     *internal.IssueADFService
-	Label     *internal.LabelService
 }
 
 func (c *ClientV2) NewFormRequest(ctx context.Context, method, apiEndpoint, contentType string, payload io.Reader) (*http.Request, error) {

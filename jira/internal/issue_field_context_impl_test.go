@@ -163,7 +163,7 @@ func Test_internalIssueFieldContextServiceImpl_Gets(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			fieldConfigService, err := NewIssueFieldContextService(testCase.fields.c, testCase.fields.version)
+			fieldConfigService, err := NewIssueFieldContextService(testCase.fields.c, testCase.fields.version, nil)
 			assert.NoError(t, err)
 
 			gotResult, gotResponse, err := fieldConfigService.Gets(testCase.args.ctx, testCase.args.fieldId, testCase.args.options,
@@ -364,7 +364,7 @@ func Test_internalIssueFieldContextServiceImpl_Create(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			fieldConfigService, err := NewIssueFieldContextService(testCase.fields.c, testCase.fields.version)
+			fieldConfigService, err := NewIssueFieldContextService(testCase.fields.c, testCase.fields.version, nil)
 			assert.NoError(t, err)
 
 			gotResult, gotResponse, err := fieldConfigService.Create(testCase.args.ctx, testCase.args.fieldId, testCase.args.payload)
@@ -525,7 +525,7 @@ func Test_internalIssueFieldContextServiceImpl_GetDefaultValues(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			fieldConfigService, err := NewIssueFieldContextService(testCase.fields.c, testCase.fields.version)
+			fieldConfigService, err := NewIssueFieldContextService(testCase.fields.c, testCase.fields.version, nil)
 			assert.NoError(t, err)
 
 			gotResult, gotResponse, err := fieldConfigService.GetDefaultValues(testCase.args.ctx, testCase.args.fieldId, testCase.args.contextIds,
@@ -738,7 +738,7 @@ func Test_internalIssueFieldContextServiceImpl_SetDefaultValue(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			fieldConfigService, err := NewIssueFieldContextService(testCase.fields.c, testCase.fields.version)
+			fieldConfigService, err := NewIssueFieldContextService(testCase.fields.c, testCase.fields.version, nil)
 			assert.NoError(t, err)
 
 			gotResponse, err := fieldConfigService.SetDefaultValue(testCase.args.ctx, testCase.args.fieldId, testCase.args.payload)
@@ -893,7 +893,7 @@ func Test_internalIssueFieldContextServiceImpl_IssueTypesContext(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			fieldConfigService, err := NewIssueFieldContextService(testCase.fields.c, testCase.fields.version)
+			fieldConfigService, err := NewIssueFieldContextService(testCase.fields.c, testCase.fields.version, nil)
 			assert.NoError(t, err)
 
 			gotResult, gotResponse, err := fieldConfigService.IssueTypesContext(testCase.args.ctx, testCase.args.fieldId, testCase.args.contextIds,
@@ -1050,7 +1050,7 @@ func Test_internalIssueFieldContextServiceImpl_ProjectsContext(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			fieldConfigService, err := NewIssueFieldContextService(testCase.fields.c, testCase.fields.version)
+			fieldConfigService, err := NewIssueFieldContextService(testCase.fields.c, testCase.fields.version, nil)
 			assert.NoError(t, err)
 
 			gotResult, gotResponse, err := fieldConfigService.ProjectsContext(testCase.args.ctx, testCase.args.fieldId, testCase.args.contextIds,
@@ -1237,7 +1237,7 @@ func Test_internalIssueFieldContextServiceImpl_Update(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			fieldConfigService, err := NewIssueFieldContextService(testCase.fields.c, testCase.fields.version)
+			fieldConfigService, err := NewIssueFieldContextService(testCase.fields.c, testCase.fields.version, nil)
 			assert.NoError(t, err)
 
 			gotResponse, err := fieldConfigService.Update(testCase.args.ctx, testCase.args.fieldId, testCase.args.contextId,
@@ -1386,7 +1386,7 @@ func Test_internalIssueFieldContextServiceImpl_Delete(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			fieldConfigService, err := NewIssueFieldContextService(testCase.fields.c, testCase.fields.version)
+			fieldConfigService, err := NewIssueFieldContextService(testCase.fields.c, testCase.fields.version, nil)
 			assert.NoError(t, err)
 
 			gotResponse, err := fieldConfigService.Delete(testCase.args.ctx, testCase.args.fieldId, testCase.args.contextId)
@@ -1559,7 +1559,7 @@ func Test_internalIssueFieldContextServiceImpl_AddIssueTypes(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			fieldConfigService, err := NewIssueFieldContextService(testCase.fields.c, testCase.fields.version)
+			fieldConfigService, err := NewIssueFieldContextService(testCase.fields.c, testCase.fields.version, nil)
 			assert.NoError(t, err)
 
 			gotResponse, err := fieldConfigService.AddIssueTypes(testCase.args.ctx, testCase.args.fieldId, testCase.args.contextId,
@@ -1733,7 +1733,7 @@ func Test_internalIssueFieldContextServiceImpl_RemoveIssueTypes(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			fieldConfigService, err := NewIssueFieldContextService(testCase.fields.c, testCase.fields.version)
+			fieldConfigService, err := NewIssueFieldContextService(testCase.fields.c, testCase.fields.version, nil)
 			assert.NoError(t, err)
 
 			gotResponse, err := fieldConfigService.RemoveIssueTypes(testCase.args.ctx, testCase.args.fieldId, testCase.args.contextId,
@@ -1907,7 +1907,7 @@ func Test_internalIssueFieldContextServiceImpl_Link(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			fieldConfigService, err := NewIssueFieldContextService(testCase.fields.c, testCase.fields.version)
+			fieldConfigService, err := NewIssueFieldContextService(testCase.fields.c, testCase.fields.version, nil)
 			assert.NoError(t, err)
 
 			gotResponse, err := fieldConfigService.Link(testCase.args.ctx, testCase.args.fieldId, testCase.args.contextId,
@@ -2081,7 +2081,7 @@ func Test_internalIssueFieldContextServiceImpl_UnLink(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			fieldConfigService, err := NewIssueFieldContextService(testCase.fields.c, testCase.fields.version)
+			fieldConfigService, err := NewIssueFieldContextService(testCase.fields.c, testCase.fields.version, nil)
 			assert.NoError(t, err)
 
 			gotResponse, err := fieldConfigService.UnLink(testCase.args.ctx, testCase.args.fieldId, testCase.args.contextId,

@@ -113,3 +113,16 @@ type FieldContext interface {
 	*/
 	UnLink(ctx context.Context, fieldId string, contextId int, projectIds []string) (*model.ResponseScheme, error)
 }
+
+// FieldContextOptionConnector is the interface that wraps the Jira field context options
+//
+// It contains the methods required to manipulate the field options associated with a field context
+// and represents custom issue field select list options created in Jira or using the REST API.
+// Use it to retrieve, create, update, order, and delete custom field options.
+type FieldContextOptionConnector interface {
+	Gets(ctx context.Context, fieldId string, contextId int, options *model.FieldOptionContextParams, startAt, maxResults int) (*model.CustomFieldContextOptionPageScheme, *model.ResponseScheme, error)
+	Create(ctx context.Context, fieldId string, contextId int, payload *model.FieldContextOptionListScheme) (*model.FieldContextOptionListScheme, *model.ResponseScheme, error)
+	Update(ctx context.Context, fieldId string, contextId int, payload *model.FieldContextOptionListScheme) (*model.FieldContextOptionListScheme, *model.ResponseScheme, error)
+	Delete(ctx context.Context, fieldId string, contextId, optionId int) (*model.ResponseScheme, error)
+	Order(ctx context.Context, fieldId string, contextId int, payload *model.OrderFieldOptionPayloadScheme) (*model.ResponseScheme, error)
+}

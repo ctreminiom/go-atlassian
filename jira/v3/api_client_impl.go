@@ -87,7 +87,12 @@ func NewV2(httpClient common.HttpClient, site string) (*ClientV2, error) {
 		return nil, err
 	}
 
-	fieldContextService, err := internal.NewIssueFieldContextService(client, "3")
+	optionService, err := internal.NewIssueFieldContextOptionService(client, "3")
+	if err != nil {
+		return nil, err
+	}
+
+	fieldContextService, err := internal.NewIssueFieldContextService(client, "3", optionService)
 	if err != nil {
 		return nil, err
 	}

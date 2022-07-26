@@ -13,7 +13,7 @@ import (
 )
 
 type CommentADFService struct {
-	internalClient jira.AdfComment
+	internalClient jira.CommentADFConnector
 }
 
 func (i *CommentADFService) Delete(ctx context.Context, issueKeyOrId, commentId string) (*model.ResponseScheme, error) {

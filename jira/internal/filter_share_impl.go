@@ -9,7 +9,7 @@ import (
 	"net/http"
 )
 
-func NewFilterShareService(client service.Client, version string) (jira.FilterShare, error) {
+func NewFilterShareService(client service.Client, version string) (jira.FilterSharingConnector, error) {
 
 	if version == "" {
 		return nil, model.ErrNoVersionProvided

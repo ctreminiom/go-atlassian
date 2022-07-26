@@ -18,7 +18,7 @@ func TestFilterService_Create(t *testing.T) {
 	type fields struct {
 		c       service.Client
 		version string
-		share   jira.FilterShare
+		share   jira.FilterSharingConnector
 	}
 
 	type args struct {
@@ -186,7 +186,7 @@ func TestFilterService_Favorite(t *testing.T) {
 	type fields struct {
 		c       service.Client
 		version string
-		share   jira.FilterShare
+		share   jira.FilterSharingConnector
 	}
 
 	type args struct {
@@ -316,7 +316,7 @@ func TestFilterService_My(t *testing.T) {
 	type fields struct {
 		c       service.Client
 		version string
-		share   jira.FilterShare
+		share   jira.FilterSharingConnector
 	}
 
 	type args struct {
@@ -454,7 +454,7 @@ func TestFilterService_Search(t *testing.T) {
 	type fields struct {
 		c       service.Client
 		version string
-		share   jira.FilterShare
+		share   jira.FilterSharingConnector
 	}
 
 	type args struct {
@@ -621,7 +621,7 @@ func TestFilterService_Get(t *testing.T) {
 	type fields struct {
 		c       service.Client
 		version string
-		share   jira.FilterShare
+		share   jira.FilterSharingConnector
 	}
 
 	type args struct {
@@ -759,7 +759,7 @@ func TestFilterService_Update(t *testing.T) {
 	type fields struct {
 		c       service.Client
 		version string
-		share   jira.FilterShare
+		share   jira.FilterSharingConnector
 	}
 
 	type args struct {
@@ -930,7 +930,7 @@ func TestFilterService_Delete(t *testing.T) {
 	type fields struct {
 		c       service.Client
 		version string
-		share   jira.FilterShare
+		share   jira.FilterSharingConnector
 	}
 
 	type args struct {
@@ -1063,7 +1063,7 @@ func TestFilterService_Change(t *testing.T) {
 	type fields struct {
 		c       service.Client
 		version string
-		share   jira.FilterShare
+		share   jira.FilterSharingConnector
 	}
 
 	type args struct {

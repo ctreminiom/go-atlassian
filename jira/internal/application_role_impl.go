@@ -9,7 +9,7 @@ import (
 	"net/http"
 )
 
-func NewApplicationRoleService(client service.Client, version string) (jira.ApplicationRole, error) {
+func NewApplicationRoleService(client service.Client, version string) (jira.AppRoleConnector, error) {
 
 	if version == "" {
 		return nil, model.ErrNoVersionProvided

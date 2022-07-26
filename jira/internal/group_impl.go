@@ -23,7 +23,7 @@ func NewGroupService(client service.Client, version string) (*GroupService, erro
 }
 
 type GroupService struct {
-	internalClient jira.Group
+	internalClient jira.GroupConnector
 }
 
 func (g *GroupService) Delete(ctx context.Context, groupName string) (*model.ResponseScheme, error) {

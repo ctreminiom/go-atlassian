@@ -1180,7 +1180,7 @@ func TestNewDashboardService(t *testing.T) {
 	tests := []struct {
 		name    string
 		args    args
-		want    jira.Dashboard
+		want    jira.DashboardConnector
 		wantErr bool
 	}{
 		// TODO: Add test cases.

@@ -23,7 +23,7 @@ func NewIssueFieldConfigurationItemService(client service.Client, version string
 }
 
 type IssueFieldConfigItemService struct {
-	internalClient jira.FieldConfigurationItem
+	internalClient jira.FieldConfigItemConnector
 }
 
 func (i *IssueFieldConfigItemService) Gets(ctx context.Context, id, startAt, maxResults int) (*model.FieldConfigurationItemPageScheme, *model.ResponseScheme, error) {

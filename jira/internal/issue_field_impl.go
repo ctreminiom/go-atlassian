@@ -26,7 +26,7 @@ func NewIssueFieldService(client service.Client, version string, configuration *
 }
 
 type IssueFieldService struct {
-	internalClient jira.Field
+	internalClient jira.FieldConnector
 	Configuration  *IssueFieldConfigService
 	Context        *IssueFieldContextService
 }

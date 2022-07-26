@@ -15,9 +15,9 @@ import (
 )
 
 type IssueRichTextService struct {
-	internalClient jira.RichTextIssue
-	Attachment     jira.Attachment
-	Comment        jira.RichTextComment
+	internalClient jira.IssueRichTextConnector
+	Attachment     jira.AttachmentConnector
+	Comment        jira.CommentRichTextConnector
 	Field          *IssueFieldService
 	Label          *LabelService
 }

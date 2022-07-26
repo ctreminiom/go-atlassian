@@ -13,7 +13,7 @@ import (
 )
 
 type CommentRichTextService struct {
-	internalClient jira.RichTextComment
+	internalClient jira.CommentRichTextConnector
 }
 
 func (i *CommentRichTextService) Delete(ctx context.Context, issueKeyOrId, commentId string) (*model.ResponseScheme, error) {

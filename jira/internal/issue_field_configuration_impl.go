@@ -11,8 +11,8 @@ import (
 	"strconv"
 )
 
-func NewIssueFieldConfigurationService(client service.Client, version string, item jira.FieldConfigurationItem,
-	scheme jira.FieldConfigurationScheme) (*IssueFieldConfigService, error) {
+func NewIssueFieldConfigurationService(client service.Client, version string, item jira.FieldConfigItemConnector,
+	scheme jira.FieldConfigSchemeConnector) (*IssueFieldConfigService, error) {
 
 	if version == "" {
 		return nil, model.ErrNoVersionProvided
@@ -26,9 +26,9 @@ func NewIssueFieldConfigurationService(client service.Client, version string, it
 }
 
 type IssueFieldConfigService struct {
-	internalClient jira.FieldConfiguration
-	Item           jira.FieldConfigurationItem
-	Scheme         jira.FieldConfigurationScheme
+	internalClient jira.FieldConfigConnector
+	Item           jira.FieldConfigItemConnector
+	Scheme         jira.FieldConfigSchemeConnector
 }
 
 func (i *IssueFieldConfigService) Gets(ctx context.Context, ids []int, isDefault bool, startAt, maxResults int) (*model.FieldConfigurationPageScheme, *model.ResponseScheme, error) {

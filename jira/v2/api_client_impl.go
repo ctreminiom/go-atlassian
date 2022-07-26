@@ -133,8 +133,8 @@ type ClientV2 struct {
 	HTTP      common.HttpClient
 	Site      *url.URL
 	Auth      common.Authentication
-	Role      jira.ApplicationRole
-	Dashboard jira.Dashboard
+	Role      jira.AppRoleConnector
+	Dashboard jira.DashboardConnector
 	Filter    *internal.FilterService
 	Group     *internal.GroupService
 	Issue     *internal.IssueRichTextService

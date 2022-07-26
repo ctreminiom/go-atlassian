@@ -12,7 +12,7 @@ import (
 	"strings"
 )
 
-func NewDashboardService(client service.Client, version string) (jira.Dashboard, error) {
+func NewDashboardService(client service.Client, version string) (jira.DashboardConnector, error) {
 
 	if version == "" {
 		return nil, model.ErrNoVersionProvided

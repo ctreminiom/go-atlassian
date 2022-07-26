@@ -11,9 +11,9 @@ import (
 )
 
 type IssueServices struct {
-	Attachment      jira.Attachment
-	CommentRichText jira.RichTextComment
-	CommentADF      jira.AdfComment
+	Attachment      jira.AttachmentConnector
+	CommentRichText jira.CommentRichTextConnector
+	CommentADF      jira.CommentADFConnector
 	Field           *IssueFieldService
 	Label           *LabelService
 }

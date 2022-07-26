@@ -12,7 +12,7 @@ import (
 	"strings"
 )
 
-func NewFilterService(client service.Client, version string, share jira.FilterShare) (*FilterService, error) {
+func NewFilterService(client service.Client, version string, share jira.FilterSharingConnector) (*FilterService, error) {
 
 	if version == "" {
 		return nil, model.ErrNoVersionProvided
@@ -25,8 +25,8 @@ func NewFilterService(client service.Client, version string, share jira.FilterSh
 }
 
 type FilterService struct {
-	internalClient jira.Filter
-	Share          jira.FilterShare
+	internalClient jira.FilterConnector
+	Share          jira.FilterSharingConnector
 }
 
 func (f *FilterService) Create(ctx context.Context, payload *model.FilterPayloadScheme) (*model.FilterScheme, *model.ResponseScheme, error) {

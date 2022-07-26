@@ -24,7 +24,7 @@ func NewIssueAttachmentService(client service.Client, version string) (*IssueAtt
 }
 
 type IssueAttachmentService struct {
-	internalClient jira.Attachment
+	internalClient jira.AttachmentConnector
 }
 
 func (i *IssueAttachmentService) Settings(ctx context.Context) (*model.AttachmentSettingScheme, *model.ResponseScheme, error) {

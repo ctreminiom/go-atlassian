@@ -41,7 +41,7 @@ func TestClient_Call(t *testing.T) {
 		HTTP            common.HttpClient
 		Site            *url.URL
 		Authentication  common.Authentication
-		ApplicationRole jira.ApplicationRole
+		ApplicationRole jira.AppRoleConnector
 	}
 
 	type args struct {
@@ -248,7 +248,7 @@ func TestClient_TransformTheHTTPResponse(t *testing.T) {
 		HTTP            common.HttpClient
 		Site            *url.URL
 		Authentication  common.Authentication
-		ApplicationRole jira.ApplicationRole
+		ApplicationRole jira.AppRoleConnector
 	}
 
 	type args struct {
@@ -334,7 +334,7 @@ func TestClient_TransformStructToReader(t *testing.T) {
 		HTTP            common.HttpClient
 		Site            *url.URL
 		Authentication  common.Authentication
-		ApplicationRole jira.ApplicationRole
+		ApplicationRole jira.AppRoleConnector
 	}
 
 	type args struct {

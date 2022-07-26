@@ -122,7 +122,7 @@ func Test_internalIssueFieldServiceImpl_Gets(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			fieldService, err := NewIssueFieldService(testCase.fields.c, testCase.fields.version, nil)
+			fieldService, err := NewIssueFieldService(testCase.fields.c, testCase.fields.version, nil, nil)
 			assert.NoError(t, err)
 
 			gotResult, gotResponse, err := fieldService.Gets(testCase.args.ctx)
@@ -322,7 +322,7 @@ func Test_internalIssueFieldServiceImpl_Create(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			fieldService, err := NewIssueFieldService(testCase.fields.c, testCase.fields.version, nil)
+			fieldService, err := NewIssueFieldService(testCase.fields.c, testCase.fields.version, nil, nil)
 			assert.NoError(t, err)
 
 			gotResult, gotResponse, err := fieldService.Create(testCase.args.ctx, testCase.args.payload)
@@ -508,7 +508,7 @@ func Test_internalIssueFieldServiceImpl_Search(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			fieldService, err := NewIssueFieldService(testCase.fields.c, testCase.fields.version, nil)
+			fieldService, err := NewIssueFieldService(testCase.fields.c, testCase.fields.version, nil, nil)
 			assert.NoError(t, err)
 
 			gotResult, gotResponse, err := fieldService.Search(testCase.args.ctx, testCase.args.options,
@@ -657,7 +657,7 @@ func Test_internalIssueFieldServiceImpl_Delete(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			fieldService, err := NewIssueFieldService(testCase.fields.c, testCase.fields.version, nil)
+			fieldService, err := NewIssueFieldService(testCase.fields.c, testCase.fields.version, nil, nil)
 			assert.NoError(t, err)
 
 			gotResult, gotResponse, err := fieldService.Delete(testCase.args.ctx, testCase.args.fieldId)

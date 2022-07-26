@@ -26,50 +26,22 @@ type IssueFieldContextOptionService struct {
 	internalClient jira.FieldContextOptionConnector
 }
 
-// Gets returns a paginated list of all custom field option for a context.
-//
-// Options are returned first then cascading options, in the order they display in Jira.
-// GET /rest/api/3/field/{fieldId}/context/{contextId}/option
-// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields/context/option#get-custom-field-options
 func (i *IssueFieldContextOptionService) Gets(ctx context.Context, fieldId string, contextId int, options *model.FieldOptionContextParams, startAt, maxResults int) (*model.CustomFieldContextOptionPageScheme, *model.ResponseScheme, error) {
 	return i.internalClient.Gets(ctx, fieldId, contextId, options, startAt, maxResults)
 }
 
-// Create creates options and, where the custom select field is of the type Select List (cascading), cascading options for a custom select field.
-// The options are added to a context of the field.
-//
-// The maximum number of options that can be created per request is 1000 and each field can have a maximum of 10000 options.
-// POST /rest/api/3/field/{fieldId}/context/{contextId}/option
-// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields/context/option#create-custom-field-options
 func (i *IssueFieldContextOptionService) Create(ctx context.Context, fieldId string, contextId int, payload *model.FieldContextOptionListScheme) (*model.FieldContextOptionListScheme, *model.ResponseScheme, error) {
 	return i.internalClient.Create(ctx, fieldId, contextId, payload)
 }
 
-/*
-Update updates the options of a custom field.
-
-If any of the options are not found, no options are updated.
-Options where the values in the request match the current values aren't updated and aren't reported in the response.
-PUT /rest/api/3/field/{fieldId}/context/{contextId}/option
-Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields/context/option#update-custom-field-options
-*/
 func (i *IssueFieldContextOptionService) Update(ctx context.Context, fieldId string, contextId int, payload *model.FieldContextOptionListScheme) (*model.FieldContextOptionListScheme, *model.ResponseScheme, error) {
 	return i.internalClient.Update(ctx, fieldId, contextId, payload)
 }
 
-// Delete deletes a custom field option.
-//
-// Options with cascading options cannot be deleted without deleting the cascading options first.
-// DELETE /rest/api/3/field/{fieldId}/context/{contextId}/option/{optionId}
-// Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/fields/context/option#delete-custom-field-options
 func (i *IssueFieldContextOptionService) Delete(ctx context.Context, fieldId string, contextId, optionId int) (*model.ResponseScheme, error) {
 	return i.internalClient.Delete(ctx, fieldId, contextId, optionId)
 }
 
-// Order changes the order of custom field options or cascading options in a context.
-//
-// PUT /rest/api/3/field/{fieldId}/context/{contextId}/option/move
-// Docs: TODO: The documentation needs to be created, raise a ticket here: https://github.com/ctreminiom/go-atlassian/issues
 func (i *IssueFieldContextOptionService) Order(ctx context.Context, fieldId string, contextId int, payload *model.OrderFieldOptionPayloadScheme) (*model.ResponseScheme, error) {
 	return i.internalClient.Order(ctx, fieldId, contextId, payload)
 }

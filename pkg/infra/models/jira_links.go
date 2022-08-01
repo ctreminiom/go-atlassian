@@ -16,10 +16,36 @@ type LinkTypeScheme struct {
 }
 
 type LinkedIssueScheme struct {
-	ID     string             `json:"id,omitempty"`
-	Key    string             `json:"key,omitempty"`
-	Self   string             `json:"self,omitempty"`
-	Fields *IssueFieldsScheme `json:"fields,omitempty"`
+	ID     string                 `json:"id,omitempty"`
+	Key    string                 `json:"key,omitempty"`
+	Self   string                 `json:"self,omitempty"`
+	Fields *IssueLinkFieldsScheme `json:"fields,omitempty"`
+}
+
+type IssueLinkFieldsScheme struct {
+	IssueType                *IssueTypeScheme    `json:"issuetype,omitempty"`
+	IssueLinks               []*IssueLinkScheme  `json:"issuelinks,omitempty"`
+	Watcher                  *IssueWatcherScheme `json:"watches,omitempty"`
+	Votes                    *IssueVoteScheme    `json:"votes,omitempty"`
+	Versions                 []*VersionScheme    `json:"versions,omitempty"`
+	Project                  *ProjectScheme      `json:"project,omitempty"`
+	FixVersions              []*VersionScheme    `json:"fixVersions,omitempty"`
+	Priority                 *PriorityScheme     `json:"priority,omitempty"`
+	Components               []*ComponentScheme  `json:"components,omitempty"`
+	Creator                  *UserScheme         `json:"creator,omitempty"`
+	Reporter                 *UserScheme         `json:"reporter,omitempty"`
+	Assignee                 *UserScheme         `json:"assignee,omitempty"`
+	Resolution               *ResolutionScheme   `json:"resolution,omitempty"`
+	Resolutiondate           string              `json:"resolutiondate,omitempty"`
+	Workratio                int                 `json:"workratio,omitempty"`
+	StatusCategoryChangeDate string              `json:"statuscategorychangedate,omitempty"`
+	LastViewed               string              `json:"lastViewed,omitempty"`
+	Summary                  string              `json:"summary,omitempty"`
+	Created                  string              `json:"created,omitempty"`
+	Updated                  string              `json:"updated,omitempty"`
+	Labels                   []string            `json:"labels,omitempty"`
+	Status                   *StatusScheme       `json:"status,omitempty"`
+	Security                 *SecurityScheme     `json:"security,omitempty"`
 }
 
 type LinkPayloadSchemeV3 struct {
@@ -37,13 +63,15 @@ type LinkPayloadSchemeV2 struct {
 }
 
 type IssueLinkPageScheme struct {
-	Expand string `json:"expand,omitempty"`
-	ID     string `json:"id,omitempty"`
-	Self   string `json:"self,omitempty"`
-	Key    string `json:"key,omitempty"`
-	Fields struct {
-		IssueLinks []*IssueLinkScheme `json:"issuelinks,omitempty"`
-	} `json:"fields,omitempty"`
+	Expand string                `json:"expand,omitempty"`
+	ID     string                `json:"id,omitempty"`
+	Self   string                `json:"self,omitempty"`
+	Key    string                `json:"key,omitempty"`
+	Fields *IssueLinkFieldScheme `json:"fields,omitempty"`
+}
+
+type IssueLinkFieldScheme struct {
+	IssueLinks []*IssueLinkScheme `json:"issuelinks,omitempty"`
 }
 
 type IssueLinkTypeSearchScheme struct {
@@ -51,9 +79,9 @@ type IssueLinkTypeSearchScheme struct {
 }
 
 type IssueLinkTypeScheme struct {
-	ID      string `json:"id"`
-	Name    string `json:"name"`
-	Inward  string `json:"inward"`
-	Outward string `json:"outward"`
-	Self    string `json:"self"`
+	ID      string `json:"id,omitempty"`
+	Name    string `json:"name,omitempty"`
+	Inward  string `json:"inward,omitempty"`
+	Outward string `json:"outward,omitempty"`
+	Self    string `json:"self,omitempty"`
 }

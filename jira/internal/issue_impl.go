@@ -11,11 +11,13 @@ import (
 )
 
 type IssueServices struct {
-	Attachment      jira.AttachmentConnector
-	CommentRichText jira.CommentRichTextConnector
-	CommentADF      jira.CommentADFConnector
-	Field           *IssueFieldService
-	Label           *LabelService
+	Attachment jira.AttachmentConnector
+	CommentRT  jira.CommentRichTextConnector
+	CommentADF jira.CommentADFConnector
+	Field      *IssueFieldService
+	Label      *LabelService
+	LinkRT     *LinkRichTextService
+	LinkADF    *LinkADFService
 }
 
 func NewIssueService(client service.Client, version string, services *IssueServices) (*IssueRichTextService, *IssueADFService, error) {
@@ -44,11 +46,13 @@ func NewIssueService(client service.Client, version string, services *IssueServi
 		adfService.Comment = services.CommentADF
 		adfService.Field = services.Field
 		adfService.Label = services.Label
+		adfService.Link = services.LinkADF
 
-		richTextService.Comment = services.CommentRichText
+		richTextService.Comment = services.CommentRT
 		richTextService.Attachment = services.Attachment
 		richTextService.Field = services.Field
 		richTextService.Label = services.Label
+		richTextService.Link = services.LinkRT
 	}
 
 	return richTextService, adfService, nil

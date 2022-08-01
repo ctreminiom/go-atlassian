@@ -20,6 +20,7 @@ type IssueRichTextService struct {
 	Comment        jira.CommentRichTextConnector
 	Field          *IssueFieldService
 	Label          *LabelService
+	Link           *LinkRichTextService
 }
 
 func (i IssueRichTextService) Delete(ctx context.Context, issueKeyOrId string, deleteSubTasks bool) (*model.ResponseScheme, error) {

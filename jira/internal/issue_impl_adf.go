@@ -20,6 +20,7 @@ type IssueADFService struct {
 	Comment        jira.CommentADFConnector
 	Field          *IssueFieldService
 	Label          *LabelService
+	Link           *LinkADFService
 }
 
 func (i *IssueADFService) Delete(ctx context.Context, issueKeyOrId string, deleteSubTasks bool) (*model.ResponseScheme, error) {

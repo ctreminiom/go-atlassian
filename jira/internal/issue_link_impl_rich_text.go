@@ -11,6 +11,7 @@ import (
 
 type LinkRichTextService struct {
 	internalClient jira.LinkRichTextConnector
+	Type           *LinkTypeService
 }
 
 type internalLinkRichTextServiceImpl struct {

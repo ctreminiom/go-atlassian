@@ -5,7 +5,7 @@ import (
 	"github.com/ctreminiom/go-atlassian/service"
 )
 
-func NewLinkService(client service.Client, version string) (*LinkADFService, *LinkRichTextService, error) {
+func NewLinkService(client service.Client, version string, type_ *LinkTypeService) (*LinkADFService, *LinkRichTextService, error) {
 
 	if version == "" {
 		return nil, nil, model.ErrNoVersionProvided
@@ -16,6 +16,7 @@ func NewLinkService(client service.Client, version string) (*LinkADFService, *Li
 			c:       client,
 			version: version,
 		},
+		Type: type_,
 	}
 
 	richTextService := &LinkRichTextService{
@@ -23,6 +24,7 @@ func NewLinkService(client service.Client, version string) (*LinkADFService, *Li
 			c:       client,
 			version: version,
 		},
+		Type: type_,
 	}
 
 	return adfService, richTextService, nil

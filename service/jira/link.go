@@ -48,3 +48,37 @@ type LinkAdfIssueConnector interface {
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/link#create-issue-link
 	Create(ctx context.Context, payload *model.LinkPayloadSchemeV3) (*model.ResponseScheme, error)
 }
+
+// LinkTypeConnector is an interface that defines the methods available from Issue Link Type  API.
+// Use it to get, create, update, and delete link issue types as well as get lists of all link issue types.
+type LinkTypeConnector interface {
+
+	// Gets returns a list of all issue link types.
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/issues/link/types#get-issue-link-types
+	Gets(ctx context.Context) (*model.IssueLinkTypeSearchScheme, *model.ResponseScheme, error)
+
+	// Get returns an issue link type.
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/issues/link/types#get-issue-link-type
+	Get(ctx context.Context, issueLinkTypeId string) (*model.LinkTypeScheme, *model.ResponseScheme, error)
+
+	// Create creates an issue link type.
+	//
+	// Use this operation to create descriptions of the reasons why issues are linked.
+	//
+	// The issue link type consists of a name and descriptions for a link's inward and outward relationships.
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/issues/link/types#create-issue-link-type
+	Create(ctx context.Context, payload *model.LinkTypeScheme) (*model.LinkTypeScheme, *model.ResponseScheme, error)
+
+	// Update updates an issue link type.
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/issues/link/types#update-issue-link-type
+	Update(ctx context.Context, issueLinkTypeId string, payload *model.LinkTypeScheme) (*model.LinkTypeScheme, *model.ResponseScheme, error)
+
+	// Delete deletes an issue link type.
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/issues/link/types#delete-issue-link-type
+	Delete(ctx context.Context, issueLinkTypeId string) (*model.ResponseScheme, error)
+}

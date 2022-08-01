@@ -12,7 +12,7 @@ import (
 	"testing"
 )
 
-func Test_internalLinkRichTextServiceImpl_Get(t *testing.T) {
+func Test_internalLinkTypeImpl_Gets(t *testing.T) {
 
 	type fields struct {
 		c       service.Client
@@ -20,8 +20,7 @@ func Test_internalLinkRichTextServiceImpl_Get(t *testing.T) {
 	}
 
 	type args struct {
-		ctx    context.Context
-		linkId string
+		ctx context.Context
 	}
 
 	testCases := []struct {
@@ -36,8 +35,7 @@ func Test_internalLinkRichTextServiceImpl_Get(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:    context.TODO(),
-				linkId: "10002",
+				ctx: context.TODO(),
 			},
 			on: func(fields *fields) {
 
@@ -46,13 +44,13 @@ func Test_internalLinkRichTextServiceImpl_Get(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"rest/api/3/issueLink/10002",
+					"rest/api/3/issueLinkType",
 					nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
 					&http.Request{},
-					&model.IssueLinkScheme{}).
+					&model.IssueLinkTypeSearchScheme{}).
 					Return(&model.ResponseScheme{}, nil)
 
 				fields.c = client
@@ -65,8 +63,7 @@ func Test_internalLinkRichTextServiceImpl_Get(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:    context.TODO(),
-				linkId: "10002",
+				ctx: context.TODO(),
 			},
 			on: func(fields *fields) {
 
@@ -75,13 +72,13 @@ func Test_internalLinkRichTextServiceImpl_Get(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"rest/api/2/issueLink/10002",
+					"rest/api/2/issueLinkType",
 					nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
 					&http.Request{},
-					&model.IssueLinkScheme{}).
+					&model.IssueLinkTypeSearchScheme{}).
 					Return(&model.ResponseScheme{}, nil)
 
 				fields.c = client
@@ -94,8 +91,7 @@ func Test_internalLinkRichTextServiceImpl_Get(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:    context.TODO(),
-				linkId: "10002",
+				ctx: context.TODO(),
 			},
 			on: func(fields *fields) {
 
@@ -104,7 +100,7 @@ func Test_internalLinkRichTextServiceImpl_Get(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"rest/api/3/issueLink/10002",
+					"rest/api/3/issueLinkType",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -122,10 +118,10 @@ func Test_internalLinkRichTextServiceImpl_Get(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			_, linkService, err := NewLinkService(testCase.fields.c, testCase.fields.version, nil)
+			linkTypeService, err := NewLinkTypeService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := linkService.Get(testCase.args.ctx, testCase.args.linkId)
+			gotResult, gotResponse, err := linkTypeService.Gets(testCase.args.ctx)
 
 			if testCase.wantErr {
 
@@ -146,7 +142,7 @@ func Test_internalLinkRichTextServiceImpl_Get(t *testing.T) {
 	}
 }
 
-func Test_internalLinkRichTextServiceImpl_Gets(t *testing.T) {
+func Test_internalLinkTypeImpl_Get(t *testing.T) {
 
 	type fields struct {
 		c       service.Client
@@ -154,8 +150,8 @@ func Test_internalLinkRichTextServiceImpl_Gets(t *testing.T) {
 	}
 
 	type args struct {
-		ctx          context.Context
-		issueKeyOrId string
+		ctx             context.Context
+		issueLinkTypeId string
 	}
 
 	testCases := []struct {
@@ -170,8 +166,8 @@ func Test_internalLinkRichTextServiceImpl_Gets(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
-				issueKeyOrId: "DUMMY-4",
+				ctx:             context.TODO(),
+				issueLinkTypeId: "1002",
 			},
 			on: func(fields *fields) {
 
@@ -180,13 +176,13 @@ func Test_internalLinkRichTextServiceImpl_Gets(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"rest/api/3/issue/DUMMY-4?fields=issuelinks",
+					"rest/api/3/issueLinkType/1002",
 					nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
 					&http.Request{},
-					&model.IssueLinkPageScheme{}).
+					&model.LinkTypeScheme{}).
 					Return(&model.ResponseScheme{}, nil)
 
 				fields.c = client
@@ -199,8 +195,8 @@ func Test_internalLinkRichTextServiceImpl_Gets(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:          context.TODO(),
-				issueKeyOrId: "DUMMY-4",
+				ctx:             context.TODO(),
+				issueLinkTypeId: "1002",
 			},
 			on: func(fields *fields) {
 
@@ -209,13 +205,13 @@ func Test_internalLinkRichTextServiceImpl_Gets(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"rest/api/2/issue/DUMMY-4?fields=issuelinks",
+					"rest/api/2/issueLinkType/1002",
 					nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
 					&http.Request{},
-					&model.IssueLinkPageScheme{}).
+					&model.LinkTypeScheme{}).
 					Return(&model.ResponseScheme{}, nil)
 
 				fields.c = client
@@ -225,22 +221,22 @@ func Test_internalLinkRichTextServiceImpl_Gets(t *testing.T) {
 		},
 
 		{
-			name:   "when the issue key is not provided",
+			name:   "when the issue link type id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
-				issueKeyOrId: "",
+				ctx:             context.TODO(),
+				issueLinkTypeId: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoIssueKeyOrIDError,
+			Err:     model.ErrNoLinkTypeIDError,
 		},
 
 		{
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
-				issueKeyOrId: "DUMMY-4",
+				ctx:             context.TODO(),
+				issueLinkTypeId: "1002",
 			},
 			on: func(fields *fields) {
 
@@ -249,7 +245,7 @@ func Test_internalLinkRichTextServiceImpl_Gets(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"rest/api/3/issue/DUMMY-4?fields=issuelinks",
+					"rest/api/3/issueLinkType/1002",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -267,10 +263,10 @@ func Test_internalLinkRichTextServiceImpl_Gets(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			_, linkService, err := NewLinkService(testCase.fields.c, testCase.fields.version, nil)
+			linkTypeService, err := NewLinkTypeService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := linkService.Gets(testCase.args.ctx, testCase.args.issueKeyOrId)
+			gotResult, gotResponse, err := linkTypeService.Get(testCase.args.ctx, testCase.args.issueLinkTypeId)
 
 			if testCase.wantErr {
 
@@ -291,7 +287,13 @@ func Test_internalLinkRichTextServiceImpl_Gets(t *testing.T) {
 	}
 }
 
-func Test_internalLinkRichTextServiceImpl_Delete(t *testing.T) {
+func Test_internalLinkTypeImpl_Update(t *testing.T) {
+
+	payloadMocked := &model.LinkTypeScheme{
+		Inward:  "Clone/Duplicated by",
+		Name:    "Clone/Duplicate",
+		Outward: "Clone/Duplicates",
+	}
 
 	type fields struct {
 		c       service.Client
@@ -299,8 +301,9 @@ func Test_internalLinkRichTextServiceImpl_Delete(t *testing.T) {
 	}
 
 	type args struct {
-		ctx    context.Context
-		linkId string
+		ctx             context.Context
+		issueLinkTypeId string
+		payload         *model.LinkTypeScheme
 	}
 
 	testCases := []struct {
@@ -315,23 +318,28 @@ func Test_internalLinkRichTextServiceImpl_Delete(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:    context.TODO(),
-				linkId: "10002",
+				ctx:             context.TODO(),
+				issueLinkTypeId: "1002",
+				payload:         payloadMocked,
 			},
 			on: func(fields *fields) {
 
 				client := mocks.NewClient(t)
 
+				client.On("TransformStructToReader",
+					payloadMocked).
+					Return(bytes.NewReader([]byte{}), nil)
+
 				client.On("NewRequest",
 					context.Background(),
-					http.MethodDelete,
-					"rest/api/3/issueLink/10002",
-					nil).
+					http.MethodPut,
+					"rest/api/3/issueLinkType/1002",
+					bytes.NewReader([]byte{})).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
 					&http.Request{},
-					nil).
+					&model.LinkTypeScheme{}).
 					Return(&model.ResponseScheme{}, nil)
 
 				fields.c = client
@@ -344,23 +352,28 @@ func Test_internalLinkRichTextServiceImpl_Delete(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:    context.TODO(),
-				linkId: "10002",
+				ctx:             context.TODO(),
+				issueLinkTypeId: "1002",
+				payload:         payloadMocked,
 			},
 			on: func(fields *fields) {
 
 				client := mocks.NewClient(t)
 
+				client.On("TransformStructToReader",
+					payloadMocked).
+					Return(bytes.NewReader([]byte{}), nil)
+
 				client.On("NewRequest",
 					context.Background(),
-					http.MethodDelete,
-					"rest/api/2/issueLink/10002",
-					nil).
+					http.MethodPut,
+					"rest/api/2/issueLinkType/1002",
+					bytes.NewReader([]byte{})).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
 					&http.Request{},
-					nil).
+					&model.LinkTypeScheme{}).
 					Return(&model.ResponseScheme{}, nil)
 
 				fields.c = client
@@ -373,18 +386,23 @@ func Test_internalLinkRichTextServiceImpl_Delete(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:    context.TODO(),
-				linkId: "10002",
+				ctx:             context.TODO(),
+				issueLinkTypeId: "1002",
+				payload:         payloadMocked,
 			},
 			on: func(fields *fields) {
 
 				client := mocks.NewClient(t)
 
+				client.On("TransformStructToReader",
+					payloadMocked).
+					Return(bytes.NewReader([]byte{}), nil)
+
 				client.On("NewRequest",
 					context.Background(),
-					http.MethodDelete,
-					"rest/api/3/issueLink/10002",
-					nil).
+					http.MethodPut,
+					"rest/api/3/issueLinkType/1002",
+					bytes.NewReader([]byte{})).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -401,10 +419,10 @@ func Test_internalLinkRichTextServiceImpl_Delete(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			_, linkService, err := NewLinkService(testCase.fields.c, testCase.fields.version, nil)
+			linkTypeService, err := NewLinkTypeService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResponse, err := linkService.Delete(testCase.args.ctx, testCase.args.linkId)
+			gotResult, gotResponse, err := linkTypeService.Update(testCase.args.ctx, testCase.args.issueLinkTypeId, testCase.args.payload)
 
 			if testCase.wantErr {
 
@@ -418,27 +436,19 @@ func Test_internalLinkRichTextServiceImpl_Delete(t *testing.T) {
 
 				assert.NoError(t, err)
 				assert.NotEqual(t, gotResponse, nil)
+				assert.NotEqual(t, gotResult, nil)
 			}
 
 		})
 	}
 }
 
-func Test_internalLinkRichTextServiceImpl_Create(t *testing.T) {
+func Test_internalLinkTypeImpl_Create(t *testing.T) {
 
-	payloadMocked := &model.LinkPayloadSchemeV2{
-		InwardIssue: &model.LinkedIssueScheme{
-			Key: "KP-1",
-		},
-		OutwardIssue: &model.LinkedIssueScheme{
-			Key: "KP-2",
-		},
-		Type: &model.LinkTypeScheme{
-			Name: "Duplicate",
-		},
-		Comment: &model.CommentPayloadSchemeV2{
-			Body: "test comment",
-		},
+	payloadMocked := &model.LinkTypeScheme{
+		Inward:  "Clone/Duplicated by",
+		Name:    "Clone/Duplicate",
+		Outward: "Clone/Duplicates",
 	}
 
 	type fields struct {
@@ -448,7 +458,7 @@ func Test_internalLinkRichTextServiceImpl_Create(t *testing.T) {
 
 	type args struct {
 		ctx     context.Context
-		payload *model.LinkPayloadSchemeV2
+		payload *model.LinkTypeScheme
 	}
 
 	testCases := []struct {
@@ -477,13 +487,13 @@ func Test_internalLinkRichTextServiceImpl_Create(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
-					"rest/api/3/issueLink",
+					"rest/api/3/issueLinkType",
 					bytes.NewReader([]byte{})).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
 					&http.Request{},
-					nil).
+					&model.LinkTypeScheme{}).
 					Return(&model.ResponseScheme{}, nil)
 
 				fields.c = client
@@ -510,13 +520,13 @@ func Test_internalLinkRichTextServiceImpl_Create(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
-					"rest/api/2/issueLink",
+					"rest/api/2/issueLinkType",
 					bytes.NewReader([]byte{})).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
 					&http.Request{},
-					nil).
+					&model.LinkTypeScheme{}).
 					Return(&model.ResponseScheme{}, nil)
 
 				fields.c = client
@@ -543,7 +553,7 @@ func Test_internalLinkRichTextServiceImpl_Create(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
-					"rest/api/3/issueLink",
+					"rest/api/3/issueLinkType",
 					bytes.NewReader([]byte{})).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -561,10 +571,155 @@ func Test_internalLinkRichTextServiceImpl_Create(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			_, linkService, err := NewLinkService(testCase.fields.c, testCase.fields.version, nil)
+			linkTypeService, err := NewLinkTypeService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResponse, err := linkService.Create(testCase.args.ctx, testCase.args.payload)
+			gotResult, gotResponse, err := linkTypeService.Create(testCase.args.ctx, testCase.args.payload)
+
+			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+
+				assert.EqualError(t, err, testCase.Err.Error())
+
+			} else {
+
+				assert.NoError(t, err)
+				assert.NotEqual(t, gotResponse, nil)
+				assert.NotEqual(t, gotResult, nil)
+			}
+
+		})
+	}
+}
+
+func Test_internalLinkTypeImpl_Delete(t *testing.T) {
+
+	type fields struct {
+		c       service.Client
+		version string
+	}
+
+	type args struct {
+		ctx             context.Context
+		issueLinkTypeId string
+	}
+
+	testCases := []struct {
+		name    string
+		fields  fields
+		args    args
+		on      func(*fields)
+		wantErr bool
+		Err     error
+	}{
+		{
+			name:   "when the api version is v3",
+			fields: fields{version: "3"},
+			args: args{
+				ctx:             context.TODO(),
+				issueLinkTypeId: "1002",
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewClient(t)
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodDelete,
+					"rest/api/3/issueLinkType/1002",
+					nil).
+					Return(&http.Request{}, nil)
+
+				client.On("Call",
+					&http.Request{},
+					nil).
+					Return(&model.ResponseScheme{}, nil)
+
+				fields.c = client
+			},
+			wantErr: false,
+			Err:     nil,
+		},
+
+		{
+			name:   "when the api version is v2",
+			fields: fields{version: "2"},
+			args: args{
+				ctx:             context.TODO(),
+				issueLinkTypeId: "1002",
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewClient(t)
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodDelete,
+					"rest/api/2/issueLinkType/1002",
+					nil).
+					Return(&http.Request{}, nil)
+
+				client.On("Call",
+					&http.Request{},
+					nil).
+					Return(&model.ResponseScheme{}, nil)
+
+				fields.c = client
+			},
+			wantErr: false,
+			Err:     nil,
+		},
+
+		{
+			name:   "when the issue link type id is not provided",
+			fields: fields{version: "3"},
+			args: args{
+				ctx:             context.TODO(),
+				issueLinkTypeId: "",
+			},
+			wantErr: true,
+			Err:     model.ErrNoLinkTypeIDError,
+		},
+
+		{
+			name:   "when the http request cannot be created",
+			fields: fields{version: "3"},
+			args: args{
+				ctx:             context.TODO(),
+				issueLinkTypeId: "1002",
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewClient(t)
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodDelete,
+					"rest/api/3/issueLinkType/1002",
+					nil).
+					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+
+				fields.c = client
+			},
+			wantErr: true,
+			Err:     errors.New("error, unable to create the http request"),
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+
+			if testCase.on != nil {
+				testCase.on(&testCase.fields)
+			}
+
+			linkTypeService, err := NewLinkTypeService(testCase.fields.c, testCase.fields.version)
+			assert.NoError(t, err)
+
+			gotResponse, err := linkTypeService.Delete(testCase.args.ctx, testCase.args.issueLinkTypeId)
 
 			if testCase.wantErr {
 

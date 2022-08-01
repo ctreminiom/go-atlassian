@@ -107,7 +107,12 @@ func NewV2(httpClient common.HttpClient, site string) (*ClientV2, error) {
 		return nil, err
 	}
 
-	_, link, err := internal.NewLinkService(client, "2")
+	linkType, err := internal.NewLinkTypeService(client, "2")
+	if err != nil {
+		return nil, err
+	}
+
+	_, link, err := internal.NewLinkService(client, "2", linkType)
 	if err != nil {
 		return nil, err
 	}

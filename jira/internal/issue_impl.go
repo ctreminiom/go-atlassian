@@ -24,6 +24,8 @@ type IssueServices struct {
 
 	SearchRT  *SearchRichTextService
 	SearchADF *SearchADFService
+
+	Type *TypeService
 }
 
 func NewIssueService(client service.Client, version string, services *IssueServices) (*IssueRichTextService, *IssueADFService, error) {
@@ -57,6 +59,7 @@ func NewIssueService(client service.Client, version string, services *IssueServi
 		adfService.Priority = services.Priority
 		adfService.Resolution = services.Resolution
 		adfService.Search = services.SearchADF
+		adfService.Type = services.Type
 
 		richTextService.Comment = services.CommentRT
 		richTextService.Attachment = services.Attachment
@@ -67,7 +70,7 @@ func NewIssueService(client service.Client, version string, services *IssueServi
 		richTextService.Priority = services.Priority
 		richTextService.Resolution = services.Resolution
 		richTextService.Search = services.SearchRT
-
+		richTextService.Type = services.Type
 	}
 
 	return richTextService, adfService, nil

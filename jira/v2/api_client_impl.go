@@ -137,6 +137,11 @@ func NewV2(httpClient common.HttpClient, site string) (*ClientV2, error) {
 		return nil, err
 	}
 
+	type_, err := internal.NewTypeService(client, "2")
+	if err != nil {
+		return nil, err
+	}
+
 	issueServices := &internal.IssueServices{
 		Attachment: issueAttachmentService,
 		CommentRT:  commentService,
@@ -147,6 +152,7 @@ func NewV2(httpClient common.HttpClient, site string) (*ClientV2, error) {
 		Priority:   priority,
 		Resolution: resolution,
 		SearchRT:   search,
+		Type:       type_,
 	}
 
 	issueService, _, err := internal.NewIssueService(client, "2", issueServices)

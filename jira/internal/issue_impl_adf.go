@@ -25,6 +25,7 @@ type IssueADFService struct {
 	Priority       *PriorityService
 	Resolution     *ResolutionService
 	Search         *SearchADFService
+	Type           *TypeService
 }
 
 func (i *IssueADFService) Delete(ctx context.Context, issueKeyOrId string, deleteSubTasks bool) (*model.ResponseScheme, error) {

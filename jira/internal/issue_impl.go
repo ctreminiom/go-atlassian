@@ -21,6 +21,9 @@ type IssueServices struct {
 	Metadata   *MetadataService
 	Priority   *PriorityService
 	Resolution *ResolutionService
+
+	SearchRT  *SearchRichTextService
+	SearchADF *SearchADFService
 }
 
 func NewIssueService(client service.Client, version string, services *IssueServices) (*IssueRichTextService, *IssueADFService, error) {
@@ -53,6 +56,7 @@ func NewIssueService(client service.Client, version string, services *IssueServi
 		adfService.Metadata = services.Metadata
 		adfService.Priority = services.Priority
 		adfService.Resolution = services.Resolution
+		adfService.Search = services.SearchADF
 
 		richTextService.Comment = services.CommentRT
 		richTextService.Attachment = services.Attachment
@@ -62,6 +66,8 @@ func NewIssueService(client service.Client, version string, services *IssueServi
 		richTextService.Metadata = services.Metadata
 		richTextService.Priority = services.Priority
 		richTextService.Resolution = services.Resolution
+		richTextService.Search = services.SearchRT
+
 	}
 
 	return richTextService, adfService, nil

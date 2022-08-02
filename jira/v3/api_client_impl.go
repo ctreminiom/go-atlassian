@@ -122,6 +122,11 @@ func NewV2(httpClient common.HttpClient, site string) (*ClientV2, error) {
 		return nil, err
 	}
 
+	priority, err := internal.NewPriorityService(client, "3")
+	if err != nil {
+		return nil, err
+	}
+
 	issueServices := &internal.IssueServices{
 		Attachment: issueAttachmentService,
 		CommentADF: commentService,
@@ -129,6 +134,7 @@ func NewV2(httpClient common.HttpClient, site string) (*ClientV2, error) {
 		Label:      label,
 		LinkADF:    link,
 		Metadata:   metadata,
+		Priority:   priority,
 	}
 
 	_, issueService, err := internal.NewIssueService(client, "3", issueServices)

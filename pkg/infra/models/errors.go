@@ -94,6 +94,7 @@ var (
 	ErrNoFieldConfigurationSchemeNameError = errors.New("jira: no field configuration scheme name set")
 	ErrNoFieldConfigurationSchemeIDError   = errors.New("jira: no field configuration scheme id set")
 	ErrNoVersionProvided                   = errors.New("client: no module version set")
+	ErrNoIssueTypeSchemeIDError            = errors.New("jira: no issue type scheme id set")
 
 	ErrInvalidStatusCodeError = errors.New("client: invalid http response status, please refer the response.body for more details")
 	ErrNilPayloadError        = errors.New("client: please provide the necessary payload struct")

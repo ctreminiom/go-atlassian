@@ -119,7 +119,7 @@ func Test_internalTypeImpl_Gets(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			newService, err := NewTypeService(testCase.fields.c, testCase.fields.version)
+			newService, err := NewTypeService(testCase.fields.c, testCase.fields.version, nil)
 			assert.NoError(t, err)
 
 			gotResult, gotResponse, err := newService.Gets(testCase.args.ctx)
@@ -263,7 +263,7 @@ func Test_internalTypeImpl_Get(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			newService, err := NewTypeService(testCase.fields.c, testCase.fields.version)
+			newService, err := NewTypeService(testCase.fields.c, testCase.fields.version, nil)
 			assert.NoError(t, err)
 
 			gotResult, gotResponse, err := newService.Get(testCase.args.ctx, testCase.args.issueTypeId)
@@ -397,7 +397,7 @@ func Test_internalTypeImpl_Alternatives(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			newService, err := NewTypeService(testCase.fields.c, testCase.fields.version)
+			newService, err := NewTypeService(testCase.fields.c, testCase.fields.version, nil)
 			assert.NoError(t, err)
 
 			gotResult, gotResponse, err := newService.Alternatives(testCase.args.ctx, testCase.args.issueTypeId)
@@ -549,7 +549,7 @@ func Test_internalTypeImpl_Create(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			newService, err := NewTypeService(testCase.fields.c, testCase.fields.version)
+			newService, err := NewTypeService(testCase.fields.c, testCase.fields.version, nil)
 			assert.NoError(t, err)
 
 			gotResult, gotResponse, err := newService.Create(testCase.args.ctx, testCase.args.payload)
@@ -705,7 +705,7 @@ func Test_internalTypeImpl_Update(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			newService, err := NewTypeService(testCase.fields.c, testCase.fields.version)
+			newService, err := NewTypeService(testCase.fields.c, testCase.fields.version, nil)
 			assert.NoError(t, err)
 
 			gotResult, gotResponse, err := newService.Update(testCase.args.ctx, testCase.args.issueTypeId, testCase.args.payload)
@@ -849,7 +849,7 @@ func Test_internalTypeImpl_Delete(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			newService, err := NewTypeService(testCase.fields.c, testCase.fields.version)
+			newService, err := NewTypeService(testCase.fields.c, testCase.fields.version, nil)
 			assert.NoError(t, err)
 
 			gotResponse, err := newService.Delete(testCase.args.ctx, testCase.args.issueTypeId)

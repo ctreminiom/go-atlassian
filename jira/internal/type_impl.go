@@ -9,7 +9,7 @@ import (
 	"net/http"
 )
 
-func NewTypeService(client service.Client, version string) (*TypeService, error) {
+func NewTypeService(client service.Client, version string, scheme *TypeSchemeService) (*TypeService, error) {
 
 	if version == "" {
 		return nil, model.ErrNoVersionProvided
@@ -17,11 +17,13 @@ func NewTypeService(client service.Client, version string) (*TypeService, error)
 
 	return &TypeService{
 		internalClient: &internalTypeImpl{c: client, version: version},
+		Scheme:         scheme,
 	}, nil
 }
 
 type TypeService struct {
 	internalClient jira.TypeConnector
+	Scheme         *TypeSchemeService
 }
 
 func (t *TypeService) Gets(ctx context.Context) ([]*model.IssueTypeScheme, *model.ResponseScheme, error) {

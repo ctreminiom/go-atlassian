@@ -137,7 +137,12 @@ func NewV2(httpClient common.HttpClient, site string) (*ClientV2, error) {
 		return nil, err
 	}
 
-	type_, err := internal.NewTypeService(client, "2")
+	typeScheme, err := internal.NewTypeSchemeService(client, "2")
+	if err != nil {
+		return nil, err
+	}
+
+	type_, err := internal.NewTypeService(client, "2", typeScheme)
 	if err != nil {
 		return nil, err
 	}

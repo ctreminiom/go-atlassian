@@ -23,6 +23,7 @@ type IssueADFService struct {
 	Link           *LinkADFService
 	Metadata       *MetadataService
 	Priority       *PriorityService
+	Resolution     *ResolutionService
 }
 
 func (i *IssueADFService) Delete(ctx context.Context, issueKeyOrId string, deleteSubTasks bool) (*model.ResponseScheme, error) {

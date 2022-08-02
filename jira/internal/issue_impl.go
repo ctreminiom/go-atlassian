@@ -60,8 +60,8 @@ func NewIssueService(client service.Client, version string, services *IssueServi
 		richTextService.Label = services.Label
 		richTextService.Link = services.LinkRT
 		richTextService.Metadata = services.Metadata
-		adfService.Priority = services.Priority
-		adfService.Resolution = services.Resolution
+		richTextService.Priority = services.Priority
+		richTextService.Resolution = services.Resolution
 	}
 
 	return richTextService, adfService, nil

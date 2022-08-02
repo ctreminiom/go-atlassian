@@ -21,6 +21,7 @@ type IssueRichTextService struct {
 	Field          *IssueFieldService
 	Label          *LabelService
 	Link           *LinkRichTextService
+	Metadata       *MetadataService
 }
 
 func (i IssueRichTextService) Delete(ctx context.Context, issueKeyOrId string, deleteSubTasks bool) (*model.ResponseScheme, error) {

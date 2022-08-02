@@ -18,6 +18,7 @@ type IssueServices struct {
 	Label      *LabelService
 	LinkRT     *LinkRichTextService
 	LinkADF    *LinkADFService
+	Metadata   *MetadataService
 }
 
 func NewIssueService(client service.Client, version string, services *IssueServices) (*IssueRichTextService, *IssueADFService, error) {
@@ -47,12 +48,14 @@ func NewIssueService(client service.Client, version string, services *IssueServi
 		adfService.Field = services.Field
 		adfService.Label = services.Label
 		adfService.Link = services.LinkADF
+		adfService.Metadata = services.Metadata
 
 		richTextService.Comment = services.CommentRT
 		richTextService.Attachment = services.Attachment
 		richTextService.Field = services.Field
 		richTextService.Label = services.Label
 		richTextService.Link = services.LinkRT
+		richTextService.Metadata = services.Metadata
 	}
 
 	return richTextService, adfService, nil

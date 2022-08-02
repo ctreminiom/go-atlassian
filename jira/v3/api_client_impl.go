@@ -117,12 +117,18 @@ func NewV2(httpClient common.HttpClient, site string) (*ClientV2, error) {
 		return nil, err
 	}
 
+	metadata, err := internal.NewMetadataService(client, "3")
+	if err != nil {
+		return nil, err
+	}
+
 	issueServices := &internal.IssueServices{
 		Attachment: issueAttachmentService,
 		CommentADF: commentService,
 		Field:      issueFieldService,
 		Label:      label,
 		LinkADF:    link,
+		Metadata:   metadata,
 	}
 
 	_, issueService, err := internal.NewIssueService(client, "3", issueServices)

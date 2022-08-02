@@ -132,6 +132,11 @@ func NewV2(httpClient common.HttpClient, site string) (*ClientV2, error) {
 		return nil, err
 	}
 
+	search, _, err := internal.NewSearchService(client, "3")
+	if err != nil {
+		return nil, err
+	}
+
 	issueServices := &internal.IssueServices{
 		Attachment: issueAttachmentService,
 		CommentADF: commentService,
@@ -141,6 +146,7 @@ func NewV2(httpClient common.HttpClient, site string) (*ClientV2, error) {
 		Metadata:   metadata,
 		Priority:   priority,
 		Resolution: resolution,
+		SearchADF:  search,
 	}
 
 	_, issueService, err := internal.NewIssueService(client, "3", issueServices)

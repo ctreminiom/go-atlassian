@@ -33,7 +33,7 @@ func (a ApplicationRoleService) Gets(ctx context.Context) ([]*model.ApplicationR
 	}
 
 	var roles []*model.ApplicationRoleScheme
-	response, err := a.c.Call(request, roles)
+	response, err := a.c.Call(request, &roles)
 	if err != nil {
 		return nil, nil, err
 	}

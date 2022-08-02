@@ -7,6 +7,7 @@ import (
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 	"net/http"
 	"testing"
 )
@@ -215,7 +216,7 @@ func TestApplicationRoleService_Gets(t *testing.T) {
 
 				client.On("Call",
 					&http.Request{},
-					[]*model.ApplicationRoleScheme(nil)).
+					mock.Anything).
 					Return(&model.ResponseScheme{}, nil)
 
 				fields.c = client
@@ -242,7 +243,7 @@ func TestApplicationRoleService_Gets(t *testing.T) {
 
 				client.On("Call",
 					&http.Request{},
-					[]*model.ApplicationRoleScheme(nil)).
+					mock.Anything).
 					Return(&model.ResponseScheme{}, nil)
 
 				fields.c = client
@@ -292,7 +293,7 @@ func TestApplicationRoleService_Gets(t *testing.T) {
 
 				client.On("Call",
 					&http.Request{},
-					[]*model.ApplicationRoleScheme(nil)).
+					mock.Anything).
 					Return(&model.ResponseScheme{}, errors.New("error, unable to execute the http call"))
 
 				fields.c = client
@@ -320,7 +321,7 @@ func TestApplicationRoleService_Gets(t *testing.T) {
 
 				client.On("Call",
 					&http.Request{},
-					[]*model.ApplicationRoleScheme(nil)).
+					mock.Anything).
 					Return(&model.ResponseScheme{}, nil)
 
 				fields.c = client

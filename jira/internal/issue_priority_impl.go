@@ -53,7 +53,7 @@ func (i *internalPriorityImpl) Gets(ctx context.Context) ([]*model.PrioritySchem
 	}
 
 	var priorities []*model.PriorityScheme
-	response, err := i.c.Call(request, priorities)
+	response, err := i.c.Call(request, &priorities)
 	if err != nil {
 		return nil, response, err
 	}

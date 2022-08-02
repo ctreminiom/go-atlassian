@@ -7,6 +7,7 @@ import (
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 	"net/http"
 	"testing"
 )
@@ -49,7 +50,7 @@ func Test_internalPriorityImpl_Gets(t *testing.T) {
 
 				client.On("Call",
 					&http.Request{},
-					[]*model.PriorityScheme(nil)).
+					mock.Anything).
 					Return(&model.ResponseScheme{}, nil)
 
 				fields.c = client
@@ -77,7 +78,7 @@ func Test_internalPriorityImpl_Gets(t *testing.T) {
 
 				client.On("Call",
 					&http.Request{},
-					[]*model.PriorityScheme(nil)).
+					mock.Anything).
 					Return(&model.ResponseScheme{}, nil)
 
 				fields.c = client

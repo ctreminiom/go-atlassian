@@ -58,7 +58,7 @@ func (i *internalResolutionImpl) Gets(ctx context.Context) ([]*model.ResolutionS
 	}
 
 	var resolutions []*model.ResolutionScheme
-	response, err := i.c.Call(request, resolutions)
+	response, err := i.c.Call(request, &resolutions)
 	if err != nil {
 		return nil, response, err
 	}

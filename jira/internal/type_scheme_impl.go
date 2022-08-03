@@ -26,38 +26,98 @@ type TypeSchemeService struct {
 	internalClient jira.TypeSchemeConnector
 }
 
+// Gets returns a paginated list of issue type schemes.
+//
+// GET /rest/api/{2-3}/issuetypescheme
+//
+// https://docs.go-atlassian.io/jira-software-cloud/issues/types/scheme#get-all-issue-type-schemes
 func (t *TypeSchemeService) Gets(ctx context.Context, issueTypeSchemeIds []int, startAt, maxResults int) (*model.IssueTypeSchemePageScheme, *model.ResponseScheme, error) {
 	return t.internalClient.Gets(ctx, issueTypeSchemeIds, startAt, maxResults)
 }
 
+// Create creates an issue type scheme.
+//
+// POST /rest/api/{2-3}/issuetypescheme
+//
+// https://docs.go-atlassian.io/jira-software-cloud/issues/types/scheme#create-issue-type-scheme
 func (t *TypeSchemeService) Create(ctx context.Context, payload *model.IssueTypeSchemePayloadScheme) (*model.NewIssueTypeSchemeScheme, *model.ResponseScheme, error) {
 	return t.internalClient.Create(ctx, payload)
 }
 
+// Items returns a paginated list of issue type scheme items.
+//
+// GET /rest/api/{2-3}/issuetypescheme/mapping
+//
+// https://docs.go-atlassian.io/jira-software-cloud/issues/types/scheme#get-issue-type-scheme-items
 func (t *TypeSchemeService) Items(ctx context.Context, issueTypeSchemeIds []int, startAt, maxResults int) (*model.IssueTypeSchemeItemPageScheme, *model.ResponseScheme, error) {
 	return t.internalClient.Items(ctx, issueTypeSchemeIds, startAt, maxResults)
 }
 
+// Projects returns a paginated list of issue type schemes and, for each issue type scheme, a list of the projects that use it.
+//
+// GET /rest/api/{2-3}/issuetypescheme/project
+//
+// https://docs.go-atlassian.io/jira-software-cloud/issues/types/scheme#get-issue-type-schemes-for-projects
 func (t *TypeSchemeService) Projects(ctx context.Context, projectIds []int, startAt, maxResults int) (*model.ProjectIssueTypeSchemePageScheme, *model.ResponseScheme, error) {
 	return t.internalClient.Projects(ctx, projectIds, startAt, maxResults)
 }
 
+// Assign assigns an issue type scheme to a project.
+//
+// PUT /rest/api/{2-3}/issuetypescheme/project
+//
+// https://docs.go-atlassian.io/jira-software-cloud/issues/types/scheme#assign-issue-type-scheme-to-project
 func (t *TypeSchemeService) Assign(ctx context.Context, issueTypeSchemeId, projectId string) (*model.ResponseScheme, error) {
 	return t.internalClient.Assign(ctx, issueTypeSchemeId, projectId)
 }
 
+// Update updates an issue type scheme.
+//
+// PUT /rest/api/{2-3}/issuetypescheme/{issueTypeSchemeId}
+//
+// https://docs.go-atlassian.io/jira-software-cloud/issues/types/scheme#update-issue-type-scheme
 func (t *TypeSchemeService) Update(ctx context.Context, issueTypeSchemeId int, payload *model.IssueTypeSchemePayloadScheme) (*model.ResponseScheme, error) {
 	return t.internalClient.Update(ctx, issueTypeSchemeId, payload)
 }
 
+// Delete deletes an issue type scheme.
+//
+// 1.Only issue type schemes used in classic projects can be deleted.
+//
+// 2.Any projects assigned to the scheme are reassigned to the default issue type scheme.
+//
+// DELETE /rest/api/{2-3}/issuetypescheme/{issueTypeSchemeId}
+//
+// https://docs.go-atlassian.io/jira-software-cloud/issues/types/scheme#delete-issue-type-scheme
 func (t *TypeSchemeService) Delete(ctx context.Context, issueTypeSchemeId int) (*model.ResponseScheme, error) {
 	return t.internalClient.Delete(ctx, issueTypeSchemeId)
 }
 
+// Append adds issue types to an issue type scheme.
+//
+// 1.The added issue types are appended to the issue types list.
+//
+// 2.If any of the issue types exist in the issue type scheme, the operation fails and no issue types are added.
+//
+// PUT /rest/api/{2-3}/issuetypescheme/{issueTypeSchemeId}/issuetype
+//
+// https://docs.go-atlassian.io/jira-software-cloud/issues/types/scheme#add-issue-types-to-issue-type-scheme
 func (t *TypeSchemeService) Append(ctx context.Context, issueTypeSchemeId int, issueTypeIds []int) (*model.ResponseScheme, error) {
 	return t.internalClient.Append(ctx, issueTypeSchemeId, issueTypeIds)
 }
 
+// Remove removes an issue type from an issue type scheme, this operation cannot remove:
+//
+// 1.any issue type used by issues.
+//
+// 2.any issue types from the default issue type scheme.
+//
+// 3.the last standard issue type from an issue type scheme.
+//
+// DELETE /rest/api/{2-3}/issuetypescheme/{issueTypeSchemeId}/issuetype/{issueTypeId}
+//
+//
+// https://docs.go-atlassian.io/jira-software-cloud/issues/types/scheme#remove-issue-type-from-issue-type-scheme
 func (t *TypeSchemeService) Remove(ctx context.Context, issueTypeSchemeId, issueTypeId int) (*model.ResponseScheme, error) {
 	return t.internalClient.Remove(ctx, issueTypeSchemeId, issueTypeId)
 }

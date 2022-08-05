@@ -26,6 +26,7 @@ type IssueServices struct {
 	SearchADF *SearchADFService
 
 	Type *TypeService
+	Vote *VoteService
 }
 
 func NewIssueService(client service.Client, version string, services *IssueServices) (*IssueRichTextService, *IssueADFService, error) {

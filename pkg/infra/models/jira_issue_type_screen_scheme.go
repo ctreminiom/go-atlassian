@@ -24,6 +24,7 @@ type IssueTypeScreenSchemePayloadScheme struct {
 
 type IssueTypeScreenSchemeMappingPayloadScheme struct {
 	IssueTypeID    string `json:"issueTypeId,omitempty"`
+	Description    string `json:"description,omitempty"`
 	ScreenSchemeID string `json:"screenSchemeId,omitempty"`
 }
 

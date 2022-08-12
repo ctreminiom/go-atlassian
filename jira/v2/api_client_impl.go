@@ -157,6 +157,11 @@ func NewV2(httpClient common.HttpClient, site string) (*ClientV2, error) {
 		return nil, err
 	}
 
+	watcher, err := internal.NewWatcherService(client, "2")
+	if err != nil {
+		return nil, err
+	}
+
 	issueServices := &internal.IssueServices{
 		Attachment: issueAttachmentService,
 		CommentRT:  commentService,
@@ -169,6 +174,7 @@ func NewV2(httpClient common.HttpClient, site string) (*ClientV2, error) {
 		SearchRT:   search,
 		Type:       type_,
 		Vote:       vote,
+		Watcher:    watcher,
 	}
 
 	issueService, _, err := internal.NewIssueService(client, "2", issueServices)

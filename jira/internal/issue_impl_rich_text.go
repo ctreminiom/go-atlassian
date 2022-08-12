@@ -27,6 +27,7 @@ type IssueRichTextService struct {
 	Search         *SearchRichTextService
 	Type           *TypeService
 	Vote           *VoteService
+	Watcher        *WatcherService
 }
 
 func (i IssueRichTextService) Delete(ctx context.Context, issueKeyOrId string, deleteSubTasks bool) (*model.ResponseScheme, error) {

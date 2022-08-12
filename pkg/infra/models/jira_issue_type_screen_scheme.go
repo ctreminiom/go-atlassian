@@ -19,6 +19,7 @@ type IssueTypeScreenSchemePageScheme struct {
 
 type IssueTypeScreenSchemePayloadScheme struct {
 	Name              string                                       `json:"name,omitempty"`
+	Description       string                                       `json:"description,omitempty"`
 	IssueTypeMappings []*IssueTypeScreenSchemeMappingPayloadScheme `json:"issueTypeMappings,omitempty"`
 }
 

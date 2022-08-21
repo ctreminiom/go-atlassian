@@ -15,7 +15,7 @@ import (
 )
 
 type IssueADFService struct {
-	internalClient jira.AdfIssue
+	internalClient jira.IssueADFConnector
 	Attachment     jira.AttachmentConnector
 	Comment        jira.CommentADFConnector
 	Field          *IssueFieldService
@@ -28,6 +28,7 @@ type IssueADFService struct {
 	Type           *TypeService
 	Vote           *VoteService
 	Watcher        *WatcherService
+	Worklog        *WorklogADFService
 }
 
 func (i *IssueADFService) Delete(ctx context.Context, issueKeyOrId string, deleteSubTasks bool) (*model.ResponseScheme, error) {

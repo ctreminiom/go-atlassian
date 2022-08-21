@@ -162,6 +162,11 @@ func NewV2(httpClient common.HttpClient, site string) (*ClientV2, error) {
 		return nil, err
 	}
 
+	worklog, err := internal.NewWorklogADFService(client, "3")
+	if err != nil {
+		return nil, err
+	}
+
 	issueServices := &internal.IssueServices{
 		Attachment: issueAttachmentService,
 		CommentADF: commentService,
@@ -175,6 +180,7 @@ func NewV2(httpClient common.HttpClient, site string) (*ClientV2, error) {
 		Type:       type_,
 		Vote:       vote,
 		Watcher:    watcher,
+		WorklogAdf: worklog,
 	}
 
 	_, issueService, err := internal.NewIssueService(client, "3", issueServices)

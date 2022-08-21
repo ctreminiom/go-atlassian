@@ -113,7 +113,7 @@ type IssueRichTextConnector interface {
 	Move(ctx context.Context, issueKeyOrId, transitionId string, options *model.IssueMoveOptionsV2) (*model.ResponseScheme, error)
 }
 
-type AdfIssue interface {
+type IssueADFConnector interface {
 	IssueSharedConnector
 
 	// Create creates an issue or, where the option to create subtasks is enabled in Jira, a subtask.

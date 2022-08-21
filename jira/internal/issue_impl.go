@@ -11,21 +11,23 @@ import (
 )
 
 type IssueServices struct {
-	Attachment jira.AttachmentConnector
-	CommentRT  jira.CommentRichTextConnector
-	CommentADF jira.CommentADFConnector
-	Field      *IssueFieldService
-	Label      *LabelService
-	LinkRT     *LinkRichTextService
-	LinkADF    *LinkADFService
-	Metadata   *MetadataService
-	Priority   *PriorityService
-	Resolution *ResolutionService
-	SearchRT   *SearchRichTextService
-	SearchADF  *SearchADFService
-	Type       *TypeService
-	Vote       *VoteService
-	Watcher    *WatcherService
+	Attachment      jira.AttachmentConnector
+	CommentRT       jira.CommentRichTextConnector
+	CommentADF      jira.CommentADFConnector
+	Field           *IssueFieldService
+	Label           *LabelService
+	LinkRT          *LinkRichTextService
+	LinkADF         *LinkADFService
+	Metadata        *MetadataService
+	Priority        *PriorityService
+	Resolution      *ResolutionService
+	SearchRT        *SearchRichTextService
+	SearchADF       *SearchADFService
+	Type            *TypeService
+	Vote            *VoteService
+	Watcher         *WatcherService
+	WorklogAdf      *WorklogADFService
+	WorklogRichText *WorklogRichTextService
 }
 
 func NewIssueService(client service.Client, version string, services *IssueServices) (*IssueRichTextService, *IssueADFService, error) {
@@ -62,6 +64,7 @@ func NewIssueService(client service.Client, version string, services *IssueServi
 		adfService.Type = services.Type
 		adfService.Vote = services.Vote
 		adfService.Watcher = services.Watcher
+		adfService.Worklog = services.WorklogAdf
 
 		richTextService.Comment = services.CommentRT
 		richTextService.Attachment = services.Attachment
@@ -75,6 +78,7 @@ func NewIssueService(client service.Client, version string, services *IssueServi
 		richTextService.Type = services.Type
 		richTextService.Vote = services.Vote
 		richTextService.Watcher = services.Watcher
+		richTextService.Worklog = services.WorklogRichText
 
 	}
 

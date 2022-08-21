@@ -183,6 +183,12 @@ func NewV2(httpClient common.HttpClient, site string) (*ClientV2, error) {
 		WorklogAdf: worklog,
 	}
 
+	mySelf, err := internal.NewMySelfService(client, "3")
+	if err != nil {
+		return nil, err
+	}
+	client.MySelf = mySelf
+
 	_, issueService, err := internal.NewIssueService(client, "3", issueServices)
 	if err != nil {
 		return nil, err
@@ -207,6 +213,7 @@ type ClientV2 struct {
 	Filter    *internal.FilterService
 	Group     *internal.GroupService
 	Issue     *internal.IssueADFService
+	MySelf    *internal.MySelfService
 }
 
 func (c *ClientV2) NewFormRequest(ctx context.Context, method, apiEndpoint, contentType string, payload io.Reader) (*http.Request, error) {

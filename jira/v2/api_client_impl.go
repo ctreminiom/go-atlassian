@@ -192,8 +192,14 @@ func NewV2(httpClient common.HttpClient, site string) (*ClientV2, error) {
 	if err != nil {
 		return nil, err
 	}
-	client.MySelf = mySelf
 
+	permission, err := internal.NewPermissionService(client, "2")
+	if err != nil {
+		return nil, err
+	}
+
+	client.Permission = permission
+	client.MySelf = mySelf
 	client.Auth = internal.NewAuthenticationService(client)
 	client.Role = applicationRoleService
 	client.Dashboard = dashboardService
@@ -205,15 +211,16 @@ func NewV2(httpClient common.HttpClient, site string) (*ClientV2, error) {
 }
 
 type ClientV2 struct {
-	HTTP      common.HttpClient
-	Site      *url.URL
-	Auth      common.Authentication
-	Role      jira.AppRoleConnector
-	Dashboard jira.DashboardConnector
-	Filter    *internal.FilterService
-	Group     *internal.GroupService
-	Issue     *internal.IssueRichTextService
-	MySelf    *internal.MySelfService
+	HTTP       common.HttpClient
+	Site       *url.URL
+	Auth       common.Authentication
+	Role       jira.AppRoleConnector
+	Dashboard  jira.DashboardConnector
+	Filter     *internal.FilterService
+	Group      *internal.GroupService
+	Issue      *internal.IssueRichTextService
+	MySelf     *internal.MySelfService
+	Permission *internal.PermissionService
 }
 
 func (c *ClientV2) NewFormRequest(ctx context.Context, method, apiEndpoint, contentType string, payload io.Reader) (*http.Request, error) {

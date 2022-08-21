@@ -11,7 +11,7 @@ import (
 	"strings"
 )
 
-func NewPermissionSchemeService(client service.Client, version string) (*PermissionSchemeService, error) {
+func NewPermissionSchemeService(client service.Client, version string, grant *PermissionSchemeGrantService) (*PermissionSchemeService, error) {
 
 	if version == "" {
 		return nil, model.ErrNoVersionProvided
@@ -19,11 +19,13 @@ func NewPermissionSchemeService(client service.Client, version string) (*Permiss
 
 	return &PermissionSchemeService{
 		internalClient: &internalPermissionSchemeImpl{c: client, version: version},
+		Grant:          grant,
 	}, nil
 }
 
 type PermissionSchemeService struct {
 	internalClient jira.PermissionSchemeConnector
+	Grant          *PermissionSchemeGrantService
 }
 
 // Gets returns all permission schemes.

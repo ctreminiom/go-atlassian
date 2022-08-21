@@ -75,3 +75,34 @@ type PermissionSchemeConnector interface {
 	// https://docs.go-atlassian.io/jira-software-cloud/permissions/scheme#update-permission-scheme
 	Update(ctx context.Context, permissionSchemeId int, payload *model.PermissionSchemeScheme) (*model.PermissionSchemeScheme, *model.ResponseScheme, error)
 }
+
+type PermissionSchemeGrantConnector interface {
+
+	// Create creates a permission grant in a permission scheme.
+	//
+	// POST /rest/api/3/permissionscheme/{schemeId}/permission
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/permissions/scheme/grant#create-permission-grant
+	Create(ctx context.Context, permissionSchemeId int, payload *model.PermissionGrantPayloadScheme) (*model.PermissionGrantScheme, *model.ResponseScheme, error)
+
+	// Gets returns all permission grants for a permission scheme.
+	//
+	// GET /rest/api/3/permissionscheme/{schemeId}/permission
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/permissions/scheme/grant#get-permission-scheme-grants
+	Gets(ctx context.Context, permissionSchemeId int, expand []string) (*model.PermissionSchemeGrantsScheme, *model.ResponseScheme, error)
+
+	// Get returns a permission grant.
+	//
+	// GET /rest/api/3/permissionscheme/{schemeId}/permission/{permissionId}
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/permissions/scheme/grant#get-permission-scheme-grant
+	Get(ctx context.Context, permissionSchemeId, permissionGrantId int, expand []string) (*model.PermissionGrantScheme, *model.ResponseScheme, error)
+
+	// Delete deletes a permission grant from a permission scheme. See About permission schemes and grants for more details.
+	//
+	// DELETE /rest/api/3/permissionscheme/{schemeId}/permission/{permissionId}
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/permissions/scheme/grant#delete-permission-scheme-grant
+	Delete(ctx context.Context, permissionSchemeId, permissionGrantId int) (*model.ResponseScheme, error)
+}

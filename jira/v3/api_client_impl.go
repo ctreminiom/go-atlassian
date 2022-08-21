@@ -188,7 +188,12 @@ func NewV2(httpClient common.HttpClient, site string) (*ClientV2, error) {
 		return nil, err
 	}
 
-	permissionScheme, err := internal.NewPermissionSchemeService(client, "3")
+	permissionSchemeGrant, err := internal.NewPermissionSchemeGrantService(client, "3")
+	if err != nil {
+		return nil, err
+	}
+
+	permissionScheme, err := internal.NewPermissionSchemeService(client, "3", permissionSchemeGrant)
 	if err != nil {
 		return nil, err
 	}

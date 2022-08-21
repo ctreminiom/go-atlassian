@@ -174,7 +174,7 @@ func Test_internalPermissionImpl_Gets(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			newService, err := NewPermissionService(testCase.fields.c, testCase.fields.version)
+			newService, err := NewPermissionService(testCase.fields.c, testCase.fields.version, nil)
 			assert.NoError(t, err)
 
 			gotResult, gotResponse, err := newService.Gets(testCase.args.ctx)
@@ -332,7 +332,7 @@ func Test_internalPermissionImpl_Checks(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			newService, err := NewPermissionService(testCase.fields.c, testCase.fields.version)
+			newService, err := NewPermissionService(testCase.fields.c, testCase.fields.version, nil)
 			assert.NoError(t, err)
 
 			gotResult, gotResponse, err := newService.Check(testCase.args.ctx, testCase.args.payload)
@@ -482,7 +482,7 @@ func Test_internalPermissionImpl_Projects(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			newService, err := NewPermissionService(testCase.fields.c, testCase.fields.version)
+			newService, err := NewPermissionService(testCase.fields.c, testCase.fields.version, nil)
 			assert.NoError(t, err)
 
 			gotResult, gotResponse, err := newService.Projects(testCase.args.ctx, testCase.args.permissions)

@@ -10,7 +10,7 @@ import (
 	"net/http"
 )
 
-func NewPermissionService(client service.Client, version string) (*PermissionService, error) {
+func NewPermissionService(client service.Client, version string, scheme *PermissionSchemeService) (*PermissionService, error) {
 
 	if version == "" {
 		return nil, model.ErrNoVersionProvided
@@ -18,11 +18,13 @@ func NewPermissionService(client service.Client, version string) (*PermissionSer
 
 	return &PermissionService{
 		internalClient: &internalPermissionImpl{c: client, version: version},
+		Scheme:         scheme,
 	}, nil
 }
 
 type PermissionService struct {
 	internalClient jira.PermissionConnector
+	Scheme         *PermissionSchemeService
 }
 
 // Gets returns all permissions, including: global permissions, project permissions and global permissions added by plugins.

@@ -8,9 +8,38 @@ import (
 	"io"
 	"mime/multipart"
 	"net/http"
+	"net/url"
+	"strings"
 )
 
 type AttachmentService struct{ client *Client }
+
+// Download returns the contents of an attachment. A Range header can be set to define a range of bytes within the attachment to download.
+// Docs: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-attachments/#api-rest-api-3-attachment-content-id-get
+func (a *AttachmentService) Download(ctx context.Context, attachmentId string, redirect bool) (response *ResponseScheme, err error) {
+
+	if attachmentId == "" {
+		return nil, models.ErrNoAttachmentIDError
+	}
+
+	var endpoint strings.Builder
+	endpoint.WriteString(fmt.Sprintf("rest/api/2/attachment/content/%v", attachmentId))
+
+	if !redirect {
+
+		params := url.Values{}
+		params.Add("redirect", "false") //default: true
+
+		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
+	}
+
+	request, err := a.client.newRequest(ctx, http.MethodGet, endpoint.String(), nil)
+	if err != nil {
+		return
+	}
+
+	return a.client.call(request, nil)
+}
 
 // Settings returns the attachment settings, that is, whether attachments are enabled and the maximum attachment size allowed.
 // Docs: https://docs.go-atlassian.io/jira-software-cloud/issues/attachments#get-jira-attachment-settings

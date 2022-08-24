@@ -208,6 +208,11 @@ func NewV2(httpClient common.HttpClient, site string) (*ClientV2, error) {
 		return nil, err
 	}
 
+	project, err := internal.NewProjectService(client, "2", nil)
+	if err != nil {
+		return nil, err
+	}
+
 	client.Permission = permission
 	client.MySelf = mySelf
 	client.Auth = internal.NewAuthenticationService(client)
@@ -216,6 +221,7 @@ func NewV2(httpClient common.HttpClient, site string) (*ClientV2, error) {
 	client.Filter = filterService
 	client.Group = groupService
 	client.Issue = issueService
+	client.Project = project
 
 	return client, nil
 }
@@ -231,6 +237,7 @@ type ClientV2 struct {
 	Issue      *internal.IssueRichTextService
 	MySelf     *internal.MySelfService
 	Permission *internal.PermissionService
+	Project    *internal.ProjectService
 }
 
 func (c *ClientV2) NewFormRequest(ctx context.Context, method, apiEndpoint, contentType string, payload io.Reader) (*http.Request, error) {

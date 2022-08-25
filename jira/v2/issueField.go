@@ -142,3 +142,53 @@ func (f *FieldService) Delete(ctx context.Context, fieldId string) (result *mode
 
 	return
 }
+
+// Trash moves a custom field to trash
+func (f *FieldService) Trash(ctx context.Context, fieldId string) (response *ResponseScheme, err error) {
+
+	if fieldId == "" {
+		return nil, models.ErrNoFieldIDError
+	}
+
+	endpoint := fmt.Sprintf("rest/api/2/field/%v/trash", fieldId)
+
+	request, err := f.client.newRequest(ctx, http.MethodPost, endpoint, nil)
+	if err != nil {
+		return
+	}
+
+	request.Header.Set("Accept", "application/json")
+	request.Header.Set("Content-Type", "application/json")
+
+	response, err = f.client.call(request, nil)
+	if err != nil {
+		return
+	}
+
+	return
+}
+
+// Restore restores a custom field from trash.
+func (f *FieldService) Restore(ctx context.Context, fieldId string) (response *ResponseScheme, err error) {
+
+	if fieldId == "" {
+		return nil, models.ErrNoFieldIDError
+	}
+
+	endpoint := fmt.Sprintf("rest/api/2/field/%v/restore", fieldId)
+
+	request, err := f.client.newRequest(ctx, http.MethodPost, endpoint, nil)
+	if err != nil {
+		return
+	}
+
+	request.Header.Set("Accept", "application/json")
+	request.Header.Set("Content-Type", "application/json")
+
+	response, err = f.client.call(request, nil)
+	if err != nil {
+		return
+	}
+
+	return
+}

@@ -129,3 +129,50 @@ type ProjectCategoryConnector interface {
 	// https://docs.go-atlassian.io/jira-software-cloud/projects/categories#delete-project-category
 	Delete(ctx context.Context, categoryId int) (*model.ResponseScheme, error)
 }
+
+type ProjectComponentConnector interface {
+
+	// Create creates a component. Use components to provide containers for issues within a project.
+	//
+	// POST /rest/api/{2-3}/component
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/projects/components#create-component
+	Create(ctx context.Context, payload *model.ComponentPayloadScheme) (*model.ComponentScheme, *model.ResponseScheme, error)
+
+	// Gets returns all components in a project.
+	//
+	// GET /rest/api/{2-3}/project/{projectIdOrKey}/components
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/projects/components#get-project-components
+	Gets(ctx context.Context, projectIdOrKey string) ([]*model.ComponentScheme, *model.ResponseScheme, error)
+
+	// Count returns the counts of issues assigned to the component.
+	//
+	// GET /rest/api/{2-3}/component/{id}/relatedIssueCounts
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/projects/components#get-component-issues-count
+	Count(ctx context.Context, componentId string) (*model.ComponentCountScheme, *model.ResponseScheme, error)
+
+	// Delete deletes a component.
+	//
+	// DELETE /rest/api/{2-3}/component/{id}
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/projects/components#delete-component
+	Delete(ctx context.Context, componentId string) (*model.ResponseScheme, error)
+
+	// Update updates a component.
+	//
+	// Any fields included in the request are overwritten
+	//
+	// PUT /rest/api/{2-3}/component/{id}
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/projects/components#update-component
+	Update(ctx context.Context, componentId string, payload *model.ComponentPayloadScheme) (*model.ComponentScheme, *model.ResponseScheme, error)
+
+	// Get returns a component.
+	//
+	// GET /rest/api/{2-3}/component/{id}
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/projects/components#get-component
+	Get(ctx context.Context, componentId string) (*model.ComponentScheme, *model.ResponseScheme, error)
+}

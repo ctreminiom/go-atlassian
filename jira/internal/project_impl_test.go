@@ -151,7 +151,7 @@ func Test_internalProjectImpl_Create(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			newService, err := NewProjectService(testCase.fields.c, testCase.fields.version, nil)
+			newService, err := NewProjectService(testCase.fields.c, testCase.fields.version, &ProjectChildServices{})
 			assert.NoError(t, err)
 
 			gotResult, gotResponse, err := newService.Create(testCase.args.ctx, testCase.args.payload)
@@ -313,7 +313,7 @@ func Test_internalProjectImpl_Search(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			newService, err := NewProjectService(testCase.fields.c, testCase.fields.version, nil)
+			newService, err := NewProjectService(testCase.fields.c, testCase.fields.version, &ProjectChildServices{})
 			assert.NoError(t, err)
 
 			gotResult, gotResponse, err := newService.Search(testCase.args.ctx, testCase.args.options, testCase.args.startAt,
@@ -452,7 +452,7 @@ func Test_internalProjectImpl_Get(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			newService, err := NewProjectService(testCase.fields.c, testCase.fields.version, nil)
+			newService, err := NewProjectService(testCase.fields.c, testCase.fields.version, &ProjectChildServices{})
 			assert.NoError(t, err)
 
 			gotResult, gotResponse, err := newService.Get(testCase.args.ctx, testCase.args.projectKeyOrId, testCase.args.expand)
@@ -627,7 +627,7 @@ func Test_internalProjectImpl_Update(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			newService, err := NewProjectService(testCase.fields.c, testCase.fields.version, nil)
+			newService, err := NewProjectService(testCase.fields.c, testCase.fields.version, &ProjectChildServices{})
 			assert.NoError(t, err)
 
 			gotResult, gotResponse, err := newService.Update(testCase.args.ctx, testCase.args.projectKeyOrId, testCase.args.payload)
@@ -775,7 +775,7 @@ func Test_internalProjectImpl_Delete(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			newService, err := NewProjectService(testCase.fields.c, testCase.fields.version, nil)
+			newService, err := NewProjectService(testCase.fields.c, testCase.fields.version, &ProjectChildServices{})
 			assert.NoError(t, err)
 
 			gotResponse, err := newService.Delete(testCase.args.ctx, testCase.args.projectKeyOrId, testCase.args.enableUndo)
@@ -918,7 +918,7 @@ func Test_internalProjectImpl_DeleteAsynchronously(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			newService, err := NewProjectService(testCase.fields.c, testCase.fields.version, nil)
+			newService, err := NewProjectService(testCase.fields.c, testCase.fields.version, &ProjectChildServices{})
 			assert.NoError(t, err)
 
 			gotResult, gotResponse, err := newService.DeleteAsynchronously(testCase.args.ctx, testCase.args.projectKeyOrId)
@@ -1062,7 +1062,7 @@ func Test_internalProjectImpl_Archive(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			newService, err := NewProjectService(testCase.fields.c, testCase.fields.version, nil)
+			newService, err := NewProjectService(testCase.fields.c, testCase.fields.version, &ProjectChildServices{})
 			assert.NoError(t, err)
 
 			gotResponse, err := newService.Archive(testCase.args.ctx, testCase.args.projectKeyOrId)
@@ -1205,7 +1205,7 @@ func Test_internalProjectImpl_Restore(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			newService, err := NewProjectService(testCase.fields.c, testCase.fields.version, nil)
+			newService, err := NewProjectService(testCase.fields.c, testCase.fields.version, &ProjectChildServices{})
 			assert.NoError(t, err)
 
 			gotResult, gotResponse, err := newService.Restore(testCase.args.ctx, testCase.args.projectKeyOrId)
@@ -1349,7 +1349,7 @@ func Test_internalProjectImpl_Statuses(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			newService, err := NewProjectService(testCase.fields.c, testCase.fields.version, nil)
+			newService, err := NewProjectService(testCase.fields.c, testCase.fields.version, &ProjectChildServices{})
 			assert.NoError(t, err)
 
 			gotResult, gotResponse, err := newService.Statuses(testCase.args.ctx, testCase.args.projectKeyOrId)
@@ -1487,7 +1487,7 @@ func Test_internalProjectImpl_NotificationScheme(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			newService, err := NewProjectService(testCase.fields.c, testCase.fields.version, nil)
+			newService, err := NewProjectService(testCase.fields.c, testCase.fields.version, &ProjectChildServices{})
 			assert.NoError(t, err)
 
 			gotResult, gotResponse, err := newService.NotificationScheme(testCase.args.ctx, testCase.args.projectKeyOrId, testCase.args.expand)

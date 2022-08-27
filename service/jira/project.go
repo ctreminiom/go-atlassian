@@ -176,3 +176,20 @@ type ProjectComponentConnector interface {
 	// https://docs.go-atlassian.io/jira-software-cloud/projects/components#get-component
 	Get(ctx context.Context, componentId string) (*model.ComponentScheme, *model.ResponseScheme, error)
 }
+
+type ProjectFeatureConnector interface {
+
+	// Gets returns the list of features for a project.
+	//
+	// GET /rest/api/{2-3}/project/{projectIdOrKey}/features
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/projects/features#get-project-features
+	Gets(ctx context.Context, projectKeyOrId string) (*model.ProjectFeaturesScheme, *model.ResponseScheme, error)
+
+	// Set sets the state of a project feature.
+	//
+	// PUT /rest/api/{2-3}/project/{projectIdOrKey}/features/{featureKey}
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/projects/features#set-project-feature-state
+	Set(ctx context.Context, projectKeyOrId, featureKey, state string) (*model.ProjectFeaturesScheme, *model.ResponseScheme, error)
+}

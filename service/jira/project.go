@@ -91,3 +91,41 @@ type ProjectConnector interface {
 	// https://docs.go-atlassian.io/jira-software-cloud/projects#get-project-notification-scheme
 	NotificationScheme(ctx context.Context, projectKeyOrId string, expand []string) (*model.NotificationSchemeScheme, *model.ResponseScheme, error)
 }
+
+type ProjectCategoryConnector interface {
+
+	// Gets returns all project categories.
+	//
+	// GET /rest/api/{2-3}/projectCategory
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/projects/categories#get-all-project-categories
+	Gets(ctx context.Context) ([]*model.ProjectCategoryScheme, *model.ResponseScheme, error)
+
+	// Get returns a project category.
+	//
+	// GET /rest/api/{2-3}/projectCategory/{id}
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/projects/categories#get-project-category-by-id
+	Get(ctx context.Context, categoryId int) (*model.ProjectCategoryScheme, *model.ResponseScheme, error)
+
+	// Create creates a project category.
+	//
+	// POST /rest/api/{2-3}/projectCategory
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/projects/categories#create-project-category
+	Create(ctx context.Context, payload *model.ProjectCategoryPayloadScheme) (*model.ProjectCategoryScheme, *model.ResponseScheme, error)
+
+	// Update updates a project category.
+	//
+	// PUT /rest/api/{2-3}/projectCategory/{id}
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/projects/categories#update-project-category
+	Update(ctx context.Context, categoryId int, payload *model.ProjectCategoryPayloadScheme) (*model.ProjectCategoryScheme, *model.ResponseScheme, error)
+
+	// Delete deletes a project category.
+	//
+	// DELETE /rest/api/{2-3}/projectCategory/{id}
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/projects/categories#delete-project-category
+	Delete(ctx context.Context, categoryId int) (*model.ResponseScheme, error)
+}

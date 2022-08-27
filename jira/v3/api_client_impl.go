@@ -208,7 +208,16 @@ func NewV2(httpClient common.HttpClient, site string) (*ClientV2, error) {
 		return nil, err
 	}
 
-	project, err := internal.NewProjectService(client, "3", nil)
+	projectCategory, err := internal.NewProjectCategoryService(client, "3")
+	if err != nil {
+		return nil, err
+	}
+
+	projectSubService := &internal.ProjectChildServices{
+		Category: projectCategory,
+	}
+
+	project, err := internal.NewProjectService(client, "3", projectSubService)
 	if err != nil {
 		return nil, err
 	}

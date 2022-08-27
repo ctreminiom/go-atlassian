@@ -13,6 +13,7 @@ import (
 )
 
 type ProjectChildServices struct {
+	Category *ProjectCategoryService
 }
 
 func NewProjectService(client service.Client, version string, subServices *ProjectChildServices) (*ProjectService, error) {
@@ -23,11 +24,13 @@ func NewProjectService(client service.Client, version string, subServices *Proje
 
 	return &ProjectService{
 		internalClient: &internalProjectImpl{c: client, version: version},
+		Category:       subServices.Category,
 	}, nil
 }
 
 type ProjectService struct {
 	internalClient jira.ProjectConnector
+	Category       *ProjectCategoryService
 }
 
 // Create creates a project based on a project type template

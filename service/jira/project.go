@@ -193,3 +193,27 @@ type ProjectFeatureConnector interface {
 	// https://docs.go-atlassian.io/jira-software-cloud/projects/features#set-project-feature-state
 	Set(ctx context.Context, projectKeyOrId, featureKey, state string) (*model.ProjectFeaturesScheme, *model.ResponseScheme, error)
 }
+
+type ProjectPermissionSchemeConnector interface {
+
+	// Get search the permission scheme associated with the project.
+	//
+	// GET /rest/api/{2-3}/project/{projectKeyOrId}/permissionscheme
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/projects/permission-schemes#get-assigned-permission-scheme
+	Get(ctx context.Context, projectKeyOrId string, expand []string) (*model.PermissionSchemeScheme, *model.ResponseScheme, error)
+
+	// Assign assigns a permission scheme with a project.
+	//
+	// See Managing project permissions for more information about permission schemes.
+	//
+	// PUT /rest/api/{2-3}/project/{projectKeyOrId}/permissionscheme
+	Assign(ctx context.Context, projectKeyOrId string, permissionSchemeId int) (*model.PermissionSchemeScheme, *model.ResponseScheme, error)
+
+	// SecurityLevels returns all issue security levels for the project that the user has access to.
+	//
+	// GET /rest/api/{2-3}/project/{projectKeyOrId}/securitylevel
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/projects/permission-schemes#get-project-issue-security-levels
+	SecurityLevels(ctx context.Context, projectKeyOrId string) (*model.IssueSecurityLevelsScheme, *model.ResponseScheme, error)
+}

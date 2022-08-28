@@ -217,3 +217,40 @@ type ProjectPermissionSchemeConnector interface {
 	// https://docs.go-atlassian.io/jira-software-cloud/projects/permission-schemes#get-project-issue-security-levels
 	SecurityLevels(ctx context.Context, projectKeyOrId string) (*model.IssueSecurityLevelsScheme, *model.ResponseScheme, error)
 }
+
+type ProjectPropertyConnector interface {
+
+	// Gets returns all project property keys for the project.
+	//
+	// GET /rest/api/3/project/{projectIdOrKey}/properties
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/projects/properties#get-project-properties-keys
+	Gets(ctx context.Context, projectKeyOrId string) (*model.ProjectPropertyPageScheme, *model.ResponseScheme, error)
+
+	// Get returns the value of a project property.
+	//
+	// GET /rest/api/3/project/{projectIdOrKey}/properties/{propertyKey}
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/projects/properties#get-project-property
+	Get(ctx context.Context, projectKeyOrId, propertyKey string) (*model.EntityPropertyScheme, *model.ResponseScheme, error)
+
+	// Set sets the value of the project property.
+	//
+	// You can use project properties to store custom data against the project.
+	//
+	// The value of the request body must be a valid, non-empty JSON blob.
+	//
+	// The maximum length is 32768 characters.
+	//
+	// PUT /rest/api/3/project/{projectIdOrKey}/properties/{propertyKey}
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/projects/properties#set-project-property
+	Set(ctx context.Context, projectKeyOrId, propertyKey string, payload interface{}) (*model.ResponseScheme, error)
+
+	// Delete deletes the property from a project.
+	//
+	// DELETE /rest/api/3/project/{projectIdOrKey}/properties/{propertyKey}
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/projects/properties#delete-project-property
+	Delete(ctx context.Context, projectKeyOrId, propertyKey string) (*model.ResponseScheme, error)
+}

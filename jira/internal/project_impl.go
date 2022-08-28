@@ -17,6 +17,7 @@ type ProjectChildServices struct {
 	Component  *ProjectComponentService
 	Feature    *ProjectFeatureService
 	Permission *ProjectPermissionSchemeService
+	Property   *ProjectPropertyService
 }
 
 func NewProjectService(client service.Client, version string, subServices *ProjectChildServices) (*ProjectService, error) {
@@ -31,6 +32,7 @@ func NewProjectService(client service.Client, version string, subServices *Proje
 		Component:      subServices.Component,
 		Feature:        subServices.Feature,
 		Permission:     subServices.Permission,
+		Property:       subServices.Property,
 	}, nil
 }
 
@@ -40,6 +42,7 @@ type ProjectService struct {
 	Component      *ProjectComponentService
 	Feature        *ProjectFeatureService
 	Permission     *ProjectPermissionSchemeService
+	Property       *ProjectPropertyService
 }
 
 // Create creates a project based on a project type template

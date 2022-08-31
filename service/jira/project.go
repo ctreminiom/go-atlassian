@@ -222,14 +222,14 @@ type ProjectPropertyConnector interface {
 
 	// Gets returns all project property keys for the project.
 	//
-	// GET /rest/api/3/project/{projectIdOrKey}/properties
+	// GET /rest/api/{2-3}/project/{projectIdOrKey}/properties
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/projects/properties#get-project-properties-keys
 	Gets(ctx context.Context, projectKeyOrId string) (*model.ProjectPropertyPageScheme, *model.ResponseScheme, error)
 
 	// Get returns the value of a project property.
 	//
-	// GET /rest/api/3/project/{projectIdOrKey}/properties/{propertyKey}
+	// GET /rest/api/{2-3}/project/{projectIdOrKey}/properties/{propertyKey}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/projects/properties#get-project-property
 	Get(ctx context.Context, projectKeyOrId, propertyKey string) (*model.EntityPropertyScheme, *model.ResponseScheme, error)
@@ -242,15 +242,70 @@ type ProjectPropertyConnector interface {
 	//
 	// The maximum length is 32768 characters.
 	//
-	// PUT /rest/api/3/project/{projectIdOrKey}/properties/{propertyKey}
+	// PUT /rest/api/{2-3}/project/{projectIdOrKey}/properties/{propertyKey}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/projects/properties#set-project-property
 	Set(ctx context.Context, projectKeyOrId, propertyKey string, payload interface{}) (*model.ResponseScheme, error)
 
 	// Delete deletes the property from a project.
 	//
-	// DELETE /rest/api/3/project/{projectIdOrKey}/properties/{propertyKey}
+	// DELETE /rest/api/{2-3}/project/{projectIdOrKey}/properties/{propertyKey}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/projects/properties#delete-project-property
 	Delete(ctx context.Context, projectKeyOrId, propertyKey string) (*model.ResponseScheme, error)
+}
+
+type ProjectRoleConnector interface {
+
+	// Gets returns a list of project roles for the project returning the name and self URL for each role.
+	//
+	// GET /rest/api/{2-3}/project/{projectIdOrKey}/role
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/projects/roles#get-project-roles-for-project
+	Gets(ctx context.Context, projectKeyOrId string) (*map[string]int, *model.ResponseScheme, error)
+
+	// Get returns a project role's details and actors associated with the project.
+	//
+	// GET /rest/api/{2-3}/project/{projectIdOrKey}/role/{id}
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/projects/roles#get-project-role-for-project
+	Get(ctx context.Context, projectKeyOrId string, roleId int) (*model.ProjectRoleScheme, *model.ResponseScheme, error)
+
+	// Details returns all project roles and the details for each role.
+	//
+	// GET /rest/api/{2-3}/project/{projectIdOrKey}/roledetails
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/projects/roles#get-project-role-details
+	Details(ctx context.Context, projectKeyOrId string) ([]*model.ProjectRoleDetailScheme, *model.ResponseScheme, error)
+
+	// Global gets a list of all project roles, complete with project role details and default actors.
+	//
+	// GET /rest/api/{2-3}/role
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/projects/roles#get-all-project-roles
+	Global(ctx context.Context) ([]*model.ProjectRoleScheme, *model.ResponseScheme, error)
+
+	// Create creates a new project role with no default actors.
+	//
+	// POST /rest/api/{2-3}/role
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/projects/roles#create-project-role
+	Create(ctx context.Context, payload *model.ProjectRolePayloadScheme) (*model.ProjectRoleScheme, *model.ResponseScheme, error)
+}
+
+type ProjectRoleActorConnector interface {
+
+	// Add adds actors to a project role for the project.
+	//
+	// POST /rest/api/{2-3}/project/{projectIdOrKey}/role/{id}
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/projects/roles/actors#add-actors-to-project-role
+	Add(ctx context.Context, projectKeyOrId string, roleId int, accountIds, groups []string) (*model.ProjectRoleScheme, *model.ResponseScheme, error)
+
+	// Delete deletes actors from a project role for the project.
+	//
+	// DELETE /rest/api/{2-3}/project/{projectIdOrKey}/role/{id}
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/projects/roles/actors#delete-actors-from-project-role
+	Delete(ctx context.Context, projectKeyOrId string, roleId int, accountId, group string) (*model.ResponseScheme, error)
 }

@@ -309,3 +309,34 @@ type ProjectRoleActorConnector interface {
 	// https://docs.go-atlassian.io/jira-software-cloud/projects/roles/actors#delete-actors-from-project-role
 	Delete(ctx context.Context, projectKeyOrId string, roleId int, accountId, group string) (*model.ResponseScheme, error)
 }
+
+type ProjectTypeConnector interface {
+
+	// Gets returns all project types, whether the instance has a valid license for each type.
+	//
+	// GET /rest/api/{2-3}/project/type
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/projects/types#get-all-project-types
+	Gets(ctx context.Context) ([]*model.ProjectTypeScheme, *model.ResponseScheme, error)
+
+	// Licensed returns all project types with a valid license.
+	//
+	// GET /rest/api/{2-3}/project/type/accessible
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/projects/types#get-licensed-project-types
+	Licensed(ctx context.Context) ([]*model.ProjectTypeScheme, *model.ResponseScheme, error)
+
+	// Get returns a project type
+	//
+	// GET /rest/api/{2-3}/project/type/{projectTypeKey}
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/projects/types#get-project-type-by-key
+	Get(ctx context.Context, projectTypeKey string) (*model.ProjectTypeScheme, *model.ResponseScheme, error)
+
+	// Accessible returns a project type if it is accessible to the user.
+	//
+	// GET /rest/api/{2-3}/project/type/{projectTypeKey}/accessible
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/projects/types#get-accessible-project-type-by-key
+	Accessible(ctx context.Context, projectTypeKey string) (*model.ProjectTypeScheme, *model.ResponseScheme, error)
+}

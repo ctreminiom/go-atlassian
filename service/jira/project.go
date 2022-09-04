@@ -340,3 +340,35 @@ type ProjectTypeConnector interface {
 	// https://docs.go-atlassian.io/jira-software-cloud/projects/types#get-accessible-project-type-by-key
 	Accessible(ctx context.Context, projectTypeKey string) (*model.ProjectTypeScheme, *model.ResponseScheme, error)
 }
+
+type ProjectValidatorConnector interface {
+
+	// Validate validates a project key by confirming the key is a valid string and not in use.
+	//
+	// GET /rest/api/{2-3}/projectvalidate/key
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/projects/validation#validate-project-key
+	Validate(ctx context.Context, key string) (*model.ProjectValidationMessageScheme, *model.ResponseScheme, error)
+
+	// Key validates a project key and, if the key is invalid or in use,
+	//
+	// generates a valid random string for the project key.
+	//
+	// GET /rest/api/{2-3}/projectvalidate/validProjectKey
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/projects/validation#get-valid-project-key
+	Key(ctx context.Context, key string) (string, *model.ResponseScheme, error)
+
+	// Name checks that a project name isn't in use.
+	//
+	// If the name isn't in use, the passed string is returned.
+	//
+	// If the name is in use, this operation attempts to generate a valid project name based on the one supplied,
+	//
+	// usually by adding a sequence number. If a valid project name cannot be generated, a 404 response is returned.
+	//
+	// GET /rest/api/{2-3}/projectvalidate/validProjectName
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/projects/validation#get-valid-project-name
+	Name(ctx context.Context, name string) (string, *model.ResponseScheme, error)
+}

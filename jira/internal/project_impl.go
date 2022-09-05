@@ -21,6 +21,7 @@ type ProjectChildServices struct {
 	Role       *ProjectRoleService
 	Type       *ProjectTypeService
 	Validator  *ProjectValidatorService
+	Version    *ProjectVersionService
 }
 
 func NewProjectService(client service.Client, version string, subServices *ProjectChildServices) (*ProjectService, error) {
@@ -39,6 +40,7 @@ func NewProjectService(client service.Client, version string, subServices *Proje
 		Role:           subServices.Role,
 		Type:           subServices.Type,
 		Validator:      subServices.Validator,
+		Version:        subServices.Version,
 	}, nil
 }
 
@@ -52,6 +54,7 @@ type ProjectService struct {
 	Role           *ProjectRoleService
 	Type           *ProjectTypeService
 	Validator      *ProjectValidatorService
+	Version        *ProjectVersionService
 }
 
 // Create creates a project based on a project type template

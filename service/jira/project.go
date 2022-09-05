@@ -372,3 +372,74 @@ type ProjectValidatorConnector interface {
 	// https://docs.go-atlassian.io/jira-software-cloud/projects/validation#get-valid-project-name
 	Name(ctx context.Context, name string) (string, *model.ResponseScheme, error)
 }
+
+type ProjectVersionConnector interface {
+
+	// Gets returns all versions in a project.
+	//
+	// The response is not paginated.
+	//
+	// Use Search() if you want to get the versions in a project with pagination.
+	//
+	// GET /rest/api/{2-3}/project/{projectIdOrKey}/versions
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/projects/versions#get-project-versions
+	Gets(ctx context.Context, projectKeyOrId string) ([]*model.VersionScheme, *model.ResponseScheme, error)
+
+	// Search returns a paginated list of all versions in a project.
+	//
+	// GET /rest/api/{2-3}/project/{projectIdOrKey}/version
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/projects/versions#get-project-versions-paginated
+	Search(ctx context.Context, projectKeyOrId string, options *model.VersionGetsOptions, startAt, maxResults int) (*model.VersionPageScheme, *model.ResponseScheme, error)
+
+	// Create creates a project version.
+	//
+	// POST /rest/api/{2-3}/version
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/projects/versions#create-version
+	Create(ctx context.Context, payload *model.VersionPayloadScheme) (*model.VersionScheme, *model.ResponseScheme, error)
+
+	// Get returns a project version.
+	//
+	// GET /rest/api/{2-3}/version/{id}
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/projects/versions#get-version
+	Get(ctx context.Context, versionId string, expand []string) (*model.VersionScheme, *model.ResponseScheme, error)
+
+	// Update updates a project version.
+	//
+	// PUT /rest/api/{2-3}/version/{id}
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/projects/versions#update-version
+	Update(ctx context.Context, versionId string, payload *model.VersionPayloadScheme) (*model.VersionScheme, *model.ResponseScheme, error)
+
+	// Merge merges two project versions.
+	//
+	// The merge is completed by deleting the version specified in id and replacing any occurrences of
+	//
+	// its ID in fixVersion with the version ID specified in moveIssuesTo.
+	//
+	// PUT /rest/api/{2-3}/version/{id}/mergeto/{moveIssuesTo}
+	Merge(ctx context.Context, versionId, versionMoveIssuesTo string) (*model.ResponseScheme, error)
+
+	// RelatedIssueCounts returns the following counts for a version:
+	//
+	// 1. Number of issues where the fixVersion is set to the version.
+	//
+	// 2. Number of issues where the affectedVersion is set to the version.
+	//
+	// 3. Number of issues where a version custom field is set to the version.
+	//
+	// GET /rest/api/{2-3}/version/{id}/relatedIssueCounts
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/projects/versions#get-versions-related-issues-count
+	RelatedIssueCounts(ctx context.Context, versionId string) (*model.VersionIssueCountsScheme, *model.ResponseScheme, error)
+
+	// UnresolvedIssueCount returns counts of the issues and unresolved issues for the project version.
+	//
+	// GET /rest/api/{2-3}/version/{id}/unresolvedIssueCount
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/projects/versions#get-versions-unresolved-issues-count
+	UnresolvedIssueCount(ctx context.Context, versionId string) (*model.VersionUnresolvedIssuesCountScheme, *model.ResponseScheme, error)
+}

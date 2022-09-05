@@ -253,6 +253,11 @@ func NewV2(httpClient common.HttpClient, site string) (*ClientV2, error) {
 		return nil, err
 	}
 
+	projectVersion, err := internal.NewProjectVersionService(client, "3")
+	if err != nil {
+		return nil, err
+	}
+
 	projectSubService := &internal.ProjectChildServices{
 		Category:   projectCategory,
 		Component:  projectComponent,
@@ -262,6 +267,7 @@ func NewV2(httpClient common.HttpClient, site string) (*ClientV2, error) {
 		Role:       projectRole,
 		Type:       projectType,
 		Validator:  projectValidator,
+		Version:    projectVersion,
 	}
 
 	project, err := internal.NewProjectService(client, "3", projectSubService)

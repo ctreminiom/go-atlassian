@@ -142,12 +142,12 @@ func NewV2(httpClient common.HttpClient, site string) (*ClientV2, error) {
 		return nil, err
 	}
 
-	screenScheme, err := internal.NewTypeScreenSchemeService(client, "3")
+	issueTypeScreenScheme, err := internal.NewTypeScreenSchemeService(client, "3")
 	if err != nil {
 		return nil, err
 	}
 
-	type_, err := internal.NewTypeService(client, "3", typeScheme, screenScheme)
+	type_, err := internal.NewTypeService(client, "3", typeScheme, issueTypeScreenScheme)
 	if err != nil {
 		return nil, err
 	}
@@ -275,6 +275,26 @@ func NewV2(httpClient common.HttpClient, site string) (*ClientV2, error) {
 		return nil, err
 	}
 
+	screenFieldTabField, err := internal.NewScreenTabFieldService(client, "3")
+	if err != nil {
+		return nil, err
+	}
+
+	screenTab, err := internal.NewScreenTabService(client, "3", screenFieldTabField)
+	if err != nil {
+		return nil, err
+	}
+
+	screenScheme, err := internal.NewScreenSchemeService(client, "3")
+	if err != nil {
+		return nil, err
+	}
+
+	screen, err := internal.NewScreenService(client, "3", screenScheme, screenTab)
+	if err != nil {
+		return nil, err
+	}
+
 	client.Permission = permission
 	client.MySelf = mySelf
 	client.Auth = internal.NewAuthenticationService(client)
@@ -284,6 +304,7 @@ func NewV2(httpClient common.HttpClient, site string) (*ClientV2, error) {
 	client.Group = groupService
 	client.Issue = issueService
 	client.Project = project
+	client.Screen = screen
 
 	return client, nil
 }
@@ -300,6 +321,7 @@ type ClientV2 struct {
 	MySelf     *internal.MySelfService
 	Permission *internal.PermissionService
 	Project    *internal.ProjectService
+	Screen     *internal.ScreenService
 }
 
 func (c *ClientV2) NewFormRequest(ctx context.Context, method, apiEndpoint, contentType string, payload io.Reader) (*http.Request, error) {

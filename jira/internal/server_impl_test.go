@@ -19,8 +19,7 @@ func Test_internalServerServiceImpl_Info(t *testing.T) {
 	}
 
 	type args struct {
-		ctx                 context.Context
-		startAt, maxResults int
+		ctx context.Context
 	}
 
 	testCases := []struct {

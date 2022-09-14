@@ -305,6 +305,26 @@ func NewV2(httpClient common.HttpClient, site string) (*ClientV2, error) {
 		return nil, err
 	}
 
+	userSearch, err := internal.NewUserSearchService(client, "2")
+	if err != nil {
+		return nil, err
+	}
+
+	user, err := internal.NewUserService(client, "2", userSearch)
+	if err != nil {
+		return nil, err
+	}
+
+	workflowScheme, err := internal.NewWorkflowSchemeService(client, "2")
+	if err != nil {
+		return nil, err
+	}
+
+	workflow, err := internal.NewWorkflowService(client, "2", workflowScheme)
+	if err != nil {
+		return nil, err
+	}
+
 	client.Permission = permission
 	client.MySelf = mySelf
 	client.Auth = internal.NewAuthenticationService(client)
@@ -317,6 +337,8 @@ func NewV2(httpClient common.HttpClient, site string) (*ClientV2, error) {
 	client.Screen = screen
 	client.Server = server
 	client.Task = task
+	client.User = user
+	client.Workflow = workflow
 
 	return client, nil
 }
@@ -336,6 +358,8 @@ type ClientV2 struct {
 	Screen     *internal.ScreenService
 	Task       *internal.TaskService
 	Server     *internal.ServerService
+	User       *internal.UserService
+	Workflow   *internal.WorkflowService
 }
 
 func (c *ClientV2) NewFormRequest(ctx context.Context, method, apiEndpoint, contentType string, payload io.Reader) (*http.Request, error) {

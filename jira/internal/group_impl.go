@@ -26,26 +26,56 @@ type GroupService struct {
 	internalClient jira.GroupConnector
 }
 
+// Delete deletes a group.
+//
+// DELETE /rest/api/{2-3}/group
+//
+// https://docs.go-atlassian.io/jira-software-cloud/groups#remove-group
 func (g *GroupService) Delete(ctx context.Context, groupName string) (*model.ResponseScheme, error) {
 	return g.internalClient.Delete(ctx, groupName)
 }
 
+// Bulk returns a paginated list of groups.
+//
+// GET /rest/api/{2-3}/group/bulk
+//
+// https://docs.go-atlassian.io/jira-software-cloud/groups#bulk-groups
 func (g *GroupService) Bulk(ctx context.Context, options *model.GroupBulkOptionsScheme, startAt, maxResults int) (*model.BulkGroupScheme, *model.ResponseScheme, error) {
 	return g.internalClient.Bulk(ctx, options, startAt, maxResults)
 }
 
+// Members returns a paginated list of all users in a group.
+//
+// GET /rest/api/{2-3}/group/member
+//
+// https://docs.go-atlassian.io/jira-software-cloud/groups#get-users-from-groups
 func (g *GroupService) Members(ctx context.Context, groupName string, inactive bool, startAt, maxResults int) (*model.GroupMemberPageScheme, *model.ResponseScheme, error) {
 	return g.internalClient.Members(ctx, groupName, inactive, startAt, maxResults)
 }
 
+// Add adds a user to a group.
+//
+// POST /rest/api/{2-3}/group/user
+//
+// https://docs.go-atlassian.io/jira-software-cloud/groups#add-user-to-group
 func (g *GroupService) Add(ctx context.Context, groupName, accountId string) (*model.GroupScheme, *model.ResponseScheme, error) {
 	return g.internalClient.Add(ctx, groupName, accountId)
 }
 
+// Remove removes a user from a group.
+//
+// DELETE /rest/api/{2-3}/group/user
+//
+// https://docs.go-atlassian.io/jira-software-cloud/groups#remove-user-from-group
 func (g *GroupService) Remove(ctx context.Context, groupName, accountId string) (*model.ResponseScheme, error) {
 	return g.internalClient.Remove(ctx, groupName, accountId)
 }
 
+// Create creates a group.
+//
+// POST /rest/api/{2-3}/group
+//
+// https://docs.go-atlassian.io/jira-software-cloud/groups#create-group
 func (g *GroupService) Create(ctx context.Context, groupName string) (*model.GroupScheme, *model.ResponseScheme, error) {
 	return g.internalClient.Create(ctx, groupName)
 }
@@ -107,7 +137,7 @@ func (i *internalGroupServiceImpl) Delete(ctx context.Context, groupName string)
 	return i.c.Call(request, nil)
 }
 
-func (i internalGroupServiceImpl) Bulk(ctx context.Context, options *model.GroupBulkOptionsScheme, startAt, maxResults int) (*model.BulkGroupScheme, *model.ResponseScheme, error) {
+func (i *internalGroupServiceImpl) Bulk(ctx context.Context, options *model.GroupBulkOptionsScheme, startAt, maxResults int) (*model.BulkGroupScheme, *model.ResponseScheme, error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -140,7 +170,7 @@ func (i internalGroupServiceImpl) Bulk(ctx context.Context, options *model.Group
 	return page, response, nil
 }
 
-func (i internalGroupServiceImpl) Members(ctx context.Context, groupName string, inactive bool, startAt, maxResults int) (*model.GroupMemberPageScheme, *model.ResponseScheme, error) {
+func (i *internalGroupServiceImpl) Members(ctx context.Context, groupName string, inactive bool, startAt, maxResults int) (*model.GroupMemberPageScheme, *model.ResponseScheme, error) {
 
 	if groupName == "" {
 		return nil, nil, model.ErrNoGroupNameError
@@ -168,7 +198,7 @@ func (i internalGroupServiceImpl) Members(ctx context.Context, groupName string,
 	return page, response, nil
 }
 
-func (i internalGroupServiceImpl) Add(ctx context.Context, groupName, accountId string) (*model.GroupScheme, *model.ResponseScheme, error) {
+func (i *internalGroupServiceImpl) Add(ctx context.Context, groupName, accountId string) (*model.GroupScheme, *model.ResponseScheme, error) {
 
 	if groupName == "" {
 		return nil, nil, model.ErrNoGroupNameError
@@ -207,7 +237,7 @@ func (i internalGroupServiceImpl) Add(ctx context.Context, groupName, accountId 
 	return group, response, nil
 }
 
-func (i internalGroupServiceImpl) Remove(ctx context.Context, groupName, accountId string) (*model.ResponseScheme, error) {
+func (i *internalGroupServiceImpl) Remove(ctx context.Context, groupName, accountId string) (*model.ResponseScheme, error) {
 
 	if groupName == "" {
 		return nil, model.ErrNoGroupNameError

@@ -16,14 +16,29 @@ type SearchADFService struct {
 	internalClient jira.SearchADFConnector
 }
 
+// Checks checks whether one or more issues would be returned by one or more JQL queries.
+//
+// POST /rest/api/{2-3}/jql/match
+//
+// https://docs.go-atlassian.io/jira-software-cloud/issues/search#check-issues-against-jql
 func (s *SearchADFService) Checks(ctx context.Context, payload *model.IssueSearchCheckPayloadScheme) (*model.IssueMatchesPageScheme, *model.ResponseScheme, error) {
 	return s.internalClient.Checks(ctx, payload)
 }
 
+// Get search issues using JQL query under the HTTP Method GET
+//
+// GET /rest/api/3/search
+//
+// https://docs.go-atlassian.io/jira-software-cloud/issues/search#search-for-issues-using-jql-get
 func (s *SearchADFService) Get(ctx context.Context, jql string, fields, expands []string, startAt, maxResults int, validate string) (*model.IssueSearchScheme, *model.ResponseScheme, error) {
 	return s.internalClient.Get(ctx, jql, fields, expands, startAt, maxResults, validate)
 }
 
+// Post search issues using JQL query under the HTTP Method POST
+//
+// POST /rest/api/3/search
+//
+// https://docs.go-atlassian.io/jira-software-cloud/issues/search#search-for-issues-using-jql-get
 func (s *SearchADFService) Post(ctx context.Context, jql string, fields, expands []string, startAt, maxResults int, validate string) (*model.IssueSearchScheme, *model.ResponseScheme, error) {
 	return s.internalClient.Post(ctx, jql, fields, expands, startAt, maxResults, validate)
 }

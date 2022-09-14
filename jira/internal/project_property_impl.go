@@ -26,7 +26,7 @@ type ProjectPropertyService struct {
 
 // Gets returns all project property keys for the project.
 //
-// GET /rest/api/3/project/{projectIdOrKey}/properties
+// GET /rest/api/{2-3}/project/{projectIdOrKey}/properties
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/properties#get-project-properties-keys
 func (p *ProjectPropertyService) Gets(ctx context.Context, projectKeyOrId string) (*model.ProjectPropertyPageScheme, *model.ResponseScheme, error) {
@@ -35,7 +35,7 @@ func (p *ProjectPropertyService) Gets(ctx context.Context, projectKeyOrId string
 
 // Get returns the value of a project property.
 //
-// GET /rest/api/3/project/{projectIdOrKey}/properties/{propertyKey}
+// GET /rest/api/{2-3}/project/{projectIdOrKey}/properties/{propertyKey}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/properties#get-project-property
 func (p *ProjectPropertyService) Get(ctx context.Context, projectKeyOrId, propertyKey string) (*model.EntityPropertyScheme, *model.ResponseScheme, error) {
@@ -50,7 +50,7 @@ func (p *ProjectPropertyService) Get(ctx context.Context, projectKeyOrId, proper
 //
 // The maximum length is 32768 characters.
 //
-// PUT /rest/api/3/project/{projectIdOrKey}/properties/{propertyKey}
+// PUT /rest/api/{2-3}/project/{projectIdOrKey}/properties/{propertyKey}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/properties#set-project-property
 func (p *ProjectPropertyService) Set(ctx context.Context, projectKeyOrId, propertyKey string, payload interface{}) (*model.ResponseScheme, error) {
@@ -59,7 +59,7 @@ func (p *ProjectPropertyService) Set(ctx context.Context, projectKeyOrId, proper
 
 // Delete deletes the property from a project.
 //
-// DELETE /rest/api/3/project/{projectIdOrKey}/properties/{propertyKey}
+// DELETE /rest/api/{2-3}/project/{projectIdOrKey}/properties/{propertyKey}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/properties#delete-project-property
 func (p *ProjectPropertyService) Delete(ctx context.Context, projectKeyOrId, propertyKey string) (*model.ResponseScheme, error) {

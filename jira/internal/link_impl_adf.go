@@ -21,6 +21,8 @@ type internalLinkADFServiceImpl struct {
 
 // Get returns an issue link.
 //
+// GET /rest/api/{2-3}/issueLink/{linkId}
+//
 // https://docs.go-atlassian.io/jira-software-cloud/issues/link#get-issue-link
 func (l *LinkADFService) Get(ctx context.Context, linkId string) (*model.IssueLinkScheme, *model.ResponseScheme, error) {
 	return l.internalClient.Get(ctx, linkId)
@@ -34,6 +36,8 @@ func (l *LinkADFService) Gets(ctx context.Context, issueKeyOrId string) (*model.
 }
 
 // Delete deletes an issue link.
+//
+// DELETE /rest/api/{2-3}/issueLink/{linkId}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/link#delete-issue-link
 func (l *LinkADFService) Delete(ctx context.Context, linkId string) (*model.ResponseScheme, error) {

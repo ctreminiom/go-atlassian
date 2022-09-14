@@ -12,21 +12,96 @@ import (
 	"strings"
 )
 
-func NewDashboardService(client service.Client, version string) (jira.DashboardConnector, error) {
+func NewDashboardService(client service.Client, version string) (*DashboardService, error) {
 
 	if version == "" {
 		return nil, model.ErrNoVersionProvided
 	}
 
-	return &DashboardService{client, version}, nil
+	return &DashboardService{
+		internalClient: &internalDashboardImpl{c: client, version: version},
+	}, nil
 }
 
 type DashboardService struct {
+	internalClient jira.DashboardConnector
+}
+
+// Gets returns a list of dashboards owned by or shared with the user.
+//
+// The list may be filtered to include only favorite or owned dashboards.
+//
+// GET /rest/api/{3-2}/dashboard
+//
+// https://docs.go-atlassian.io/jira-software-cloud/dashboards#get-all-dashboards
+func (d *DashboardService) Gets(ctx context.Context, startAt, maxResults int, filter string) (*model.DashboardPageScheme, *model.ResponseScheme, error) {
+	return d.internalClient.Gets(ctx, startAt, maxResults, filter)
+}
+
+// Create creates a dashboard.
+//
+// POST /rest/api/{3-2}/dashboard
+//
+// https://docs.go-atlassian.io/jira-software-cloud/dashboards#create-dashboard
+func (d *DashboardService) Create(ctx context.Context, payload *model.DashboardPayloadScheme) (*model.DashboardScheme, *model.ResponseScheme, error) {
+	return d.internalClient.Create(ctx, payload)
+}
+
+// Search returns a paginated list of dashboards.
+//
+// This operation is similar to Get dashboards except that the results can be refined to include dashboards that have specific attributes.
+//
+// GET /rest/api/{2-3}/dashboard/search
+//
+// https://docs.go-atlassian.io/jira-software-cloud/dashboards#search-for-dashboards
+func (d *DashboardService) Search(ctx context.Context, options *model.DashboardSearchOptionsScheme, startAt, maxResults int) (*model.DashboardSearchPageScheme, *model.ResponseScheme, error) {
+	return d.internalClient.Search(ctx, options, startAt, maxResults)
+}
+
+// Get returns a dashboard.
+//
+// GET /rest/api/{2-3}/dashboard/{id}
+//
+// https://docs.go-atlassian.io/jira-software-cloud/dashboards#get-dashboard
+func (d *DashboardService) Get(ctx context.Context, dashboardId string) (*model.DashboardScheme, *model.ResponseScheme, error) {
+	return d.internalClient.Get(ctx, dashboardId)
+}
+
+// Delete deletes a dashboard.
+//
+// DELETE /rest/api/{2-3}/dashboard/{id}
+//
+// https://docs.go-atlassian.io/jira-software-cloud/dashboards#delete-dashboard
+func (d *DashboardService) Delete(ctx context.Context, dashboardId string) (*model.ResponseScheme, error) {
+	return d.internalClient.Delete(ctx, dashboardId)
+}
+
+// Copy copies a dashboard.
+//
+// Any values provided in the dashboard parameter replace those in the copied dashboard.
+//
+// POST /rest/api/{2-3}/dashboard/{id}/copy
+//
+// https://docs.go-atlassian.io/jira-software-cloud/dashboards#copy-dashboard
+func (d *DashboardService) Copy(ctx context.Context, dashboardId string, payload *model.DashboardPayloadScheme) (*model.DashboardScheme, *model.ResponseScheme, error) {
+	return d.internalClient.Copy(ctx, dashboardId, payload)
+}
+
+// Update updates a dashboard
+//
+// PUT /rest/api/{2-3}/dashboard/{id}
+//
+// https://docs.go-atlassian.io/jira-software-cloud/dashboards#update-dashboard
+func (d *DashboardService) Update(ctx context.Context, dashboardId string, payload *model.DashboardPayloadScheme) (*model.DashboardScheme, *model.ResponseScheme, error) {
+	return d.internalClient.Update(ctx, dashboardId, payload)
+}
+
+type internalDashboardImpl struct {
 	c       service.Client
 	version string
 }
 
-func (d DashboardService) Gets(ctx context.Context, startAt, maxResults int, filter string) (*model.DashboardPageScheme, *model.ResponseScheme, error) {
+func (i *internalDashboardImpl) Gets(ctx context.Context, startAt, maxResults int, filter string) (*model.DashboardPageScheme, *model.ResponseScheme, error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -36,15 +111,15 @@ func (d DashboardService) Gets(ctx context.Context, startAt, maxResults int, fil
 		params.Add("filter", filter)
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/dashboard?%v", d.version, params.Encode())
+	endpoint := fmt.Sprintf("rest/api/%v/dashboard?%v", i.version, params.Encode())
 
-	request, err := d.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	page := new(model.DashboardPageScheme)
-	response, err := d.c.Call(request, page)
+	response, err := i.c.Call(request, page)
 	if err != nil {
 		return nil, response, err
 	}
@@ -52,22 +127,22 @@ func (d DashboardService) Gets(ctx context.Context, startAt, maxResults int, fil
 	return page, response, nil
 }
 
-func (d DashboardService) Create(ctx context.Context, payload *model.DashboardPayloadScheme) (*model.DashboardScheme, *model.ResponseScheme, error) {
+func (i *internalDashboardImpl) Create(ctx context.Context, payload *model.DashboardPayloadScheme) (*model.DashboardScheme, *model.ResponseScheme, error) {
 
-	reader, err := d.c.TransformStructToReader(payload)
+	reader, err := i.c.TransformStructToReader(payload)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/dashboard", d.version)
+	endpoint := fmt.Sprintf("rest/api/%v/dashboard", i.version)
 
-	request, err := d.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	dashboard := new(model.DashboardScheme)
-	response, err := d.c.Call(request, dashboard)
+	response, err := i.c.Call(request, dashboard)
 	if err != nil {
 		return nil, response, err
 	}
@@ -75,7 +150,7 @@ func (d DashboardService) Create(ctx context.Context, payload *model.DashboardPa
 	return dashboard, response, nil
 }
 
-func (d DashboardService) Search(ctx context.Context, options *model.DashboardSearchOptionsScheme, startAt, maxResults int) (*model.DashboardSearchPageScheme, *model.ResponseScheme, error) {
+func (i *internalDashboardImpl) Search(ctx context.Context, options *model.DashboardSearchOptionsScheme, startAt, maxResults int) (*model.DashboardSearchPageScheme, *model.ResponseScheme, error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -104,15 +179,15 @@ func (d DashboardService) Search(ctx context.Context, options *model.DashboardSe
 		}
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/dashboard/search?%s", d.version, params.Encode())
+	endpoint := fmt.Sprintf("rest/api/%v/dashboard/search?%s", i.version, params.Encode())
 
-	request, err := d.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	page := new(model.DashboardSearchPageScheme)
-	response, err := d.c.Call(request, page)
+	response, err := i.c.Call(request, page)
 	if err != nil {
 		return nil, response, err
 	}
@@ -120,21 +195,21 @@ func (d DashboardService) Search(ctx context.Context, options *model.DashboardSe
 	return page, response, nil
 }
 
-func (d DashboardService) Get(ctx context.Context, dashboardId string) (*model.DashboardScheme, *model.ResponseScheme, error) {
+func (i *internalDashboardImpl) Get(ctx context.Context, dashboardId string) (*model.DashboardScheme, *model.ResponseScheme, error) {
 
 	if dashboardId == "" {
 		return nil, nil, model.ErrNoDashboardIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/dashboard/%v", d.version, dashboardId)
+	endpoint := fmt.Sprintf("rest/api/%v/dashboard/%v", i.version, dashboardId)
 
-	request, err := d.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	dashboard := new(model.DashboardScheme)
-	response, err := d.c.Call(request, dashboard)
+	response, err := i.c.Call(request, dashboard)
 	if err != nil {
 		return nil, response, err
 	}
@@ -142,20 +217,20 @@ func (d DashboardService) Get(ctx context.Context, dashboardId string) (*model.D
 	return dashboard, response, nil
 }
 
-func (d DashboardService) Delete(ctx context.Context, dashboardId string) (*model.ResponseScheme, error) {
+func (i *internalDashboardImpl) Delete(ctx context.Context, dashboardId string) (*model.ResponseScheme, error) {
 
 	if dashboardId == "" {
 		return nil, model.ErrNoDashboardIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/dashboard/%v", d.version, dashboardId)
+	endpoint := fmt.Sprintf("rest/api/%v/dashboard/%v", i.version, dashboardId)
 
-	request, err := d.c.NewRequest(ctx, http.MethodDelete, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, nil)
 	if err != nil {
 		return nil, err
 	}
 
-	response, err := d.c.Call(request, nil)
+	response, err := i.c.Call(request, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -163,26 +238,26 @@ func (d DashboardService) Delete(ctx context.Context, dashboardId string) (*mode
 	return response, nil
 }
 
-func (d DashboardService) Copy(ctx context.Context, dashboardId string, payload *model.DashboardPayloadScheme) (*model.DashboardScheme, *model.ResponseScheme, error) {
+func (i *internalDashboardImpl) Copy(ctx context.Context, dashboardId string, payload *model.DashboardPayloadScheme) (*model.DashboardScheme, *model.ResponseScheme, error) {
 
 	if dashboardId == "" {
 		return nil, nil, model.ErrNoDashboardIDError
 	}
 
-	reader, err := d.c.TransformStructToReader(payload)
+	reader, err := i.c.TransformStructToReader(payload)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/dashboard/%v/copy", d.version, dashboardId)
+	endpoint := fmt.Sprintf("rest/api/%v/dashboard/%v/copy", i.version, dashboardId)
 
-	request, err := d.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	dashboard := new(model.DashboardScheme)
-	response, err := d.c.Call(request, dashboard)
+	response, err := i.c.Call(request, dashboard)
 	if err != nil {
 		return nil, response, err
 	}
@@ -190,25 +265,26 @@ func (d DashboardService) Copy(ctx context.Context, dashboardId string, payload 
 	return dashboard, response, nil
 }
 
-func (d DashboardService) Update(ctx context.Context, dashboardId string, payload *model.DashboardPayloadScheme) (*model.DashboardScheme, *model.ResponseScheme, error) {
+func (i *internalDashboardImpl) Update(ctx context.Context, dashboardId string, payload *model.DashboardPayloadScheme) (*model.DashboardScheme, *model.ResponseScheme, error) {
 
 	if dashboardId == "" {
 		return nil, nil, model.ErrNoDashboardIDError
 	}
 
-	reader, err := d.c.TransformStructToReader(payload)
+	reader, err := i.c.TransformStructToReader(payload)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/dashboard/%v", d.version, dashboardId)
-	request, err := d.c.NewRequest(ctx, http.MethodPut, endpoint, reader)
+	endpoint := fmt.Sprintf("rest/api/%v/dashboard/%v", i.version, dashboardId)
+
+	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, reader)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	dashboard := new(model.DashboardScheme)
-	response, err := d.c.Call(request, dashboard)
+	response, err := i.c.Call(request, dashboard)
 	if err != nil {
 		return nil, response, err
 	}

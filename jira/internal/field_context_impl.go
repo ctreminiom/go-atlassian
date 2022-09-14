@@ -25,7 +25,7 @@ func NewIssueFieldContextService(client service.Client, version string, option *
 
 type IssueFieldContextService struct {
 	internalClient jira.FieldContextConnector
-	Option         jira.FieldContextOptionConnector
+	Option         *IssueFieldContextOptionService
 }
 
 // Gets returns a paginated list of contexts for a custom field. Contexts can be returned as follows:

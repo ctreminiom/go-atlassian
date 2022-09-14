@@ -21,6 +21,8 @@ type internalLinkRichTextServiceImpl struct {
 
 // Get returns an issue link.
 //
+// GET /rest/api/{2-3}/issueLink/{linkId}
+//
 // https://docs.go-atlassian.io/jira-software-cloud/issues/link#get-issue-link
 func (l *LinkRichTextService) Get(ctx context.Context, linkId string) (*model.IssueLinkScheme, *model.ResponseScheme, error) {
 	return l.internalClient.Get(ctx, linkId)
@@ -34,6 +36,8 @@ func (l *LinkRichTextService) Gets(ctx context.Context, issueKeyOrId string) (*m
 }
 
 // Delete deletes an issue link.
+//
+// DELETE /rest/api/{2-3}/issueLink/{linkId}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/link#delete-issue-link
 func (l *LinkRichTextService) Delete(ctx context.Context, linkId string) (*model.ResponseScheme, error) {

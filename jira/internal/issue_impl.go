@@ -5,15 +5,14 @@ import (
 	"fmt"
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
-	"github.com/ctreminiom/go-atlassian/service/jira"
 	"net/http"
 	"net/url"
 )
 
 type IssueServices struct {
-	Attachment      jira.AttachmentConnector
-	CommentRT       jira.CommentRichTextConnector
-	CommentADF      jira.CommentADFConnector
+	Attachment      *IssueAttachmentService
+	CommentRT       *CommentRichTextService
+	CommentADF      *CommentADFService
 	Field           *IssueFieldService
 	Label           *LabelService
 	LinkRT          *LinkRichTextService

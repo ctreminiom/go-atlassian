@@ -11,8 +11,8 @@ import (
 	"strconv"
 )
 
-func NewIssueFieldConfigurationService(client service.Client, version string, item jira.FieldConfigItemConnector,
-	scheme jira.FieldConfigSchemeConnector) (*IssueFieldConfigService, error) {
+func NewIssueFieldConfigurationService(client service.Client, version string, item *IssueFieldConfigItemService,
+	scheme *IssueFieldConfigSchemeService) (*IssueFieldConfigService, error) {
 
 	if version == "" {
 		return nil, model.ErrNoVersionProvided
@@ -27,22 +27,49 @@ func NewIssueFieldConfigurationService(client service.Client, version string, it
 
 type IssueFieldConfigService struct {
 	internalClient jira.FieldConfigConnector
-	Item           jira.FieldConfigItemConnector
-	Scheme         jira.FieldConfigSchemeConnector
+	Item           *IssueFieldConfigItemService
+	Scheme         *IssueFieldConfigSchemeService
 }
 
+// Gets Returns a paginated list of all field configurations.
+//
+// GET /rest/api/{2-3}/fieldconfiguration
+//
+// https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration#get-all-field-configurations
 func (i *IssueFieldConfigService) Gets(ctx context.Context, ids []int, isDefault bool, startAt, maxResults int) (*model.FieldConfigurationPageScheme, *model.ResponseScheme, error) {
 	return i.internalClient.Gets(ctx, ids, isDefault, startAt, maxResults)
 }
 
+// Create creates a field configuration. The field configuration is created with the same field properties as the
+// default configuration, with all the fields being optional.
+//
+// This operation can only create configurations for use in company-managed (classic) projects.
+//
+// POST /rest/api/{2-3}/fieldconfiguration
+//
+// https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration#create-field-configuration
 func (i *IssueFieldConfigService) Create(ctx context.Context, name, description string) (*model.FieldConfigurationScheme, *model.ResponseScheme, error) {
 	return i.internalClient.Create(ctx, name, description)
 }
 
+// Update updates a field configuration. The name and the description provided in the request override the existing values.
+//
+// This operation can only update configurations used in company-managed (classic) projects.
+//
+// PUT /rest/api/{2-3}/fieldconfiguration/{id}
+//
+// https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration#update-field-configuration
 func (i *IssueFieldConfigService) Update(ctx context.Context, id int, name, description string) (*model.ResponseScheme, error) {
 	return i.internalClient.Update(ctx, id, name, description)
 }
 
+// Delete deletes a field configuration.
+//
+// This operation can only delete configurations used in company-managed (classic) projects.
+//
+// DELETE /rest/api/{2-3}/fieldconfiguration/{id}
+//
+// https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration#delete-field-configuration
 func (i *IssueFieldConfigService) Delete(ctx context.Context, id int) (*model.ResponseScheme, error) {
 	return i.internalClient.Delete(ctx, id)
 }

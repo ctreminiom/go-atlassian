@@ -116,7 +116,6 @@ func (t *TypeSchemeService) Append(ctx context.Context, issueTypeSchemeId int, i
 //
 // DELETE /rest/api/{2-3}/issuetypescheme/{issueTypeSchemeId}/issuetype/{issueTypeId}
 //
-//
 // https://docs.go-atlassian.io/jira-software-cloud/issues/types/scheme#remove-issue-type-from-issue-type-scheme
 func (t *TypeSchemeService) Remove(ctx context.Context, issueTypeSchemeId, issueTypeId int) (*model.ResponseScheme, error) {
 	return t.internalClient.Remove(ctx, issueTypeSchemeId, issueTypeId)

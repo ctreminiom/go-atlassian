@@ -28,7 +28,7 @@ type VoteService struct {
 //
 // This operation requires allowing users to vote on issues option to be ON
 //
-// GET /rest/api/3/issue/{issueIdOrKey}/votes
+// GET /rest/api/{2-3}/issue/{issueIdOrKey}/votes
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/vote#get-votes
 func (v *VoteService) Gets(ctx context.Context, issueKeyOrId string) (*model.IssueVoteScheme, *model.ResponseScheme, error) {
@@ -39,7 +39,7 @@ func (v *VoteService) Gets(ctx context.Context, issueKeyOrId string) (*model.Iss
 //
 // This operation requires the Allow users to vote on issues option to be ON.
 //
-// POST /rest/api/3/issue/{issueIdOrKey}/votes
+// POST /rest/api/{2-3}/issue/{issueIdOrKey}/votes
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/vote#add-vote
 func (v *VoteService) Add(ctx context.Context, issueKeyOrId string) (*model.ResponseScheme, error) {
@@ -50,7 +50,7 @@ func (v *VoteService) Add(ctx context.Context, issueKeyOrId string) (*model.Resp
 //
 // This operation requires the Allow users to vote on issues option to be ON.
 //
-// DELETE /rest/api/3/issue/{issueIdOrKey}/votes
+// DELETE /rest/api/{2-3}/issue/{issueIdOrKey}/votes
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/vote#delete-vote
 func (v *VoteService) Delete(ctx context.Context, issueKeyOrId string) (*model.ResponseScheme, error) {

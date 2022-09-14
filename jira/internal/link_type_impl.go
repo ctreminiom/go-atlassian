@@ -26,12 +26,17 @@ type LinkTypeService struct {
 
 // Gets returns a list of all issue link types.
 //
+// GET /rest/api/{2-3}/issueLinkType
+//
 // https://docs.go-atlassian.io/jira-software-cloud/issues/link/types#get-issue-link-types
 func (l *LinkTypeService) Gets(ctx context.Context) (*model.IssueLinkTypeSearchScheme, *model.ResponseScheme, error) {
 	return l.internalClient.Gets(ctx)
 }
 
 // Get returns an issue link type.
+//
+//
+// GET /rest/api/{2-3}/issueLinkType/{issueLinkTypeId}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/link/types#get-issue-link-type
 func (l *LinkTypeService) Get(ctx context.Context, issueLinkTypeId string) (*model.LinkTypeScheme, *model.ResponseScheme, error) {
@@ -44,6 +49,8 @@ func (l *LinkTypeService) Get(ctx context.Context, issueLinkTypeId string) (*mod
 //
 // The issue link type consists of a name and descriptions for a link's inward and outward relationships.
 //
+// POST /rest/api/{2-3}/issueLinkType
+//
 // https://docs.go-atlassian.io/jira-software-cloud/issues/link/types#create-issue-link-type
 func (l *LinkTypeService) Create(ctx context.Context, payload *model.LinkTypeScheme) (*model.LinkTypeScheme, *model.ResponseScheme, error) {
 	return l.internalClient.Create(ctx, payload)
@@ -51,12 +58,16 @@ func (l *LinkTypeService) Create(ctx context.Context, payload *model.LinkTypeSch
 
 // Update updates an issue link type.
 //
+// PUT /rest/api/{2-3}/issueLinkType/{issueLinkTypeId}
+//
 // https://docs.go-atlassian.io/jira-software-cloud/issues/link/types#update-issue-link-type
 func (l *LinkTypeService) Update(ctx context.Context, issueLinkTypeId string, payload *model.LinkTypeScheme) (*model.LinkTypeScheme, *model.ResponseScheme, error) {
 	return l.internalClient.Update(ctx, issueLinkTypeId, payload)
 }
 
 // Delete deletes an issue link type.
+//
+// DELETE /rest/api/{2-3}/issueLinkType/{issueLinkTypeId}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/link/types#delete-issue-link-type
 func (l *LinkTypeService) Delete(ctx context.Context, issueLinkTypeId string) (*model.ResponseScheme, error) {

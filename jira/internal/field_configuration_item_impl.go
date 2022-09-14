@@ -26,10 +26,23 @@ type IssueFieldConfigItemService struct {
 	internalClient jira.FieldConfigItemConnector
 }
 
+// Gets Returns a paginated list of all fields for a configuration.
+//
+// GET /rest/api/{2-3}/fieldconfiguration/{id}/fields
+//
+// https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration/items#get-field-configuration-items
 func (i *IssueFieldConfigItemService) Gets(ctx context.Context, id, startAt, maxResults int) (*model.FieldConfigurationItemPageScheme, *model.ResponseScheme, error) {
 	return i.internalClient.Gets(ctx, id, startAt, maxResults)
 }
 
+// Update updates fields in a field configuration. The properties of the field configuration fields provided
+// override the existing values.
+//
+// 1. This operation can only update field configurations used in company-managed (classic) projects.
+//
+// PUT /rest/api/{2-3}/fieldconfiguration/{id}/fields
+//
+// https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration/items#update-field-configuration-items
 func (i *IssueFieldConfigItemService) Update(ctx context.Context, id int, payload *model.UpdateFieldConfigurationItemPayloadScheme) (*model.ResponseScheme, error) {
 	return i.internalClient.Update(ctx, id, payload)
 }

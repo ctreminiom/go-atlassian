@@ -16,20 +16,40 @@ type CommentADFService struct {
 	internalClient jira.CommentADFConnector
 }
 
-func (i *CommentADFService) Delete(ctx context.Context, issueKeyOrId, commentId string) (*model.ResponseScheme, error) {
-	return i.internalClient.Delete(ctx, issueKeyOrId, commentId)
+// Delete deletes a comment.
+//
+// DELETE /rest/api/{2-3}/issue/{issueIdOrKey}/comment/{id}
+//
+// https://docs.go-atlassian.io/jira-software-cloud/issues/comments#delete-comment
+func (c *CommentADFService) Delete(ctx context.Context, issueKeyOrId, commentId string) (*model.ResponseScheme, error) {
+	return c.internalClient.Delete(ctx, issueKeyOrId, commentId)
 }
 
-func (i *CommentADFService) Gets(ctx context.Context, issueKeyOrId, orderBy string, expand []string, startAt, maxResults int) (*model.IssueCommentPageScheme, *model.ResponseScheme, error) {
-	return i.internalClient.Gets(ctx, issueKeyOrId, orderBy, expand, startAt, maxResults)
+// Gets returns all comments for an issue.
+//
+// GET /rest/api/{2-3}/issue/{issueIdOrKey}/comment
+//
+// https://docs.go-atlassian.io/jira-software-cloud/issues/comments#get-comments
+func (c *CommentADFService) Gets(ctx context.Context, issueKeyOrId, orderBy string, expand []string, startAt, maxResults int) (*model.IssueCommentPageScheme, *model.ResponseScheme, error) {
+	return c.internalClient.Gets(ctx, issueKeyOrId, orderBy, expand, startAt, maxResults)
 }
 
-func (i *CommentADFService) Get(ctx context.Context, issueKeyOrId, commentId string) (*model.IssueCommentScheme, *model.ResponseScheme, error) {
-	return i.internalClient.Get(ctx, issueKeyOrId, commentId)
+// Get returns a comment.
+//
+// GET /rest/api/{2-3}/issue/{issueIdOrKey}/comment/{id}
+//
+// TODO: The documentation needs to be created, raise a ticket here: https://github.com/ctreminiom/go-atlassian/issues
+func (c *CommentADFService) Get(ctx context.Context, issueKeyOrId, commentId string) (*model.IssueCommentScheme, *model.ResponseScheme, error) {
+	return c.internalClient.Get(ctx, issueKeyOrId, commentId)
 }
 
-func (i *CommentADFService) Add(ctx context.Context, issueKeyOrId string, payload *model.CommentPayloadScheme, expand []string) (*model.IssueCommentScheme, *model.ResponseScheme, error) {
-	return i.internalClient.Add(ctx, issueKeyOrId, payload, expand)
+// Add adds a comment to an issue.
+//
+// POST /rest/api/{2-3}/issue/{issueIdOrKey}/comment
+//
+// https://docs.go-atlassian.io/jira-software-cloud/issues/comments#add-comment
+func (c *CommentADFService) Add(ctx context.Context, issueKeyOrId string, payload *model.CommentPayloadScheme, expand []string) (*model.IssueCommentScheme, *model.ResponseScheme, error) {
+	return c.internalClient.Add(ctx, issueKeyOrId, payload, expand)
 }
 
 type internalAdfCommentImpl struct {

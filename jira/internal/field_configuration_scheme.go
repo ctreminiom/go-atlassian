@@ -26,38 +26,105 @@ type IssueFieldConfigSchemeService struct {
 	internalClient jira.FieldConfigSchemeConnector
 }
 
+// Gets returns a paginated list of field configuration schemes.
+//
+// Only field configuration schemes used in classic projects are returned.
+//
+// GET /rest/api/{2-3}/fieldconfigurationscheme
+//
+// https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration/schemes#get-field-configuration-schemes
 func (i *IssueFieldConfigSchemeService) Gets(ctx context.Context, ids []int, startAt, maxResults int) (*model.FieldConfigurationSchemePageScheme, *model.ResponseScheme, error) {
 	return i.internalClient.Gets(ctx, ids, startAt, maxResults)
 }
 
+// Create creates a field configuration scheme.
+//
+// This operation can only create field configuration schemes used in company-managed (classic) projects.
+//
+// POST /rest/api/{2-3}/fieldconfigurationscheme
+//
+// https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration/schemes#create-field-configuration-scheme
 func (i *IssueFieldConfigSchemeService) Create(ctx context.Context, name, description string) (*model.FieldConfigurationSchemeScheme, *model.ResponseScheme, error) {
 	return i.internalClient.Create(ctx, name, description)
 }
 
+// Mapping returns a paginated list of field configuration issue type items.
+//
+// Only items used in classic projects are returned.
+//
+// GET /rest/api/{2-3}/fieldconfigurationscheme/mapping
+//
+// https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration/schemes#get-field-configuration-scheme-mapping
 func (i *IssueFieldConfigSchemeService) Mapping(ctx context.Context, fieldConfigIds []int, startAt, maxResults int) (*model.FieldConfigurationIssueTypeItemPageScheme, *model.ResponseScheme, error) {
 	return i.internalClient.Mapping(ctx, fieldConfigIds, startAt, maxResults)
 }
 
+// Project returns a paginated list of field configuration schemes and, for each scheme, a list of the projects that use it.
+//
+// 1. The list is sorted by field configuration scheme ID. The first item contains the list of project IDs assigned to the default field configuration scheme.
+//
+// 2. Only field configuration schemes used in classic projects are returned.\
+//
+// GET /rest/api/{2-3}/fieldconfigurationscheme/project
+//
+// https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration/schemes#get-field-configuration-schemes-by-project
 func (i *IssueFieldConfigSchemeService) Project(ctx context.Context, projectIds []int, startAt, maxResults int) (*model.FieldConfigurationSchemeProjectPageScheme, *model.ResponseScheme, error) {
 	return i.internalClient.Project(ctx, projectIds, startAt, maxResults)
 }
 
+// Assign assigns a field configuration scheme to a project. If the field configuration scheme ID is null,
+//
+// the operation assigns the default field configuration scheme.
+//
+// Field configuration schemes can only be assigned to classic projects.
+//
+// PUT /rest/api/{2-3}/fieldconfigurationscheme/project
+//
+// https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration/schemes#assign-field-configuration-scheme
 func (i *IssueFieldConfigSchemeService) Assign(ctx context.Context, payload *model.FieldConfigurationSchemeAssignPayload) (*model.ResponseScheme, error) {
 	return i.internalClient.Assign(ctx, payload)
 }
 
+// Update updates a field configuration scheme.
+//
+// This operation can only update field configuration schemes used in company-managed (classic) projects.
+//
+// PUT /rest/api/{2-3}/fieldconfigurationscheme/{id}
+//
+// https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration/schemes#update-field-configuration-scheme
 func (i *IssueFieldConfigSchemeService) Update(ctx context.Context, schemeId int, name, description string) (*model.ResponseScheme, error) {
 	return i.internalClient.Update(ctx, schemeId, name, description)
 }
 
+// Delete deletes a field configuration scheme.
+//
+// This operation can only delete field configuration schemes used in company-managed (classic) projects.
+//
+// DELETE /rest/api/{2-3}/fieldconfigurationscheme/{id}
+//
+// https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration/schemes#delete-field-configuration-scheme
 func (i *IssueFieldConfigSchemeService) Delete(ctx context.Context, schemeId int) (*model.ResponseScheme, error) {
 	return i.internalClient.Delete(ctx, schemeId)
 }
 
+// Link assigns issue types to field configurations on field configuration scheme.
+//
+// This operation can only modify field configuration schemes used in company-managed (classic) projects.
+//
+// PUT /rest/api/{2-3}/fieldconfigurationscheme/{id}/mapping
+//
+// https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration/schemes#assign-issue-types-to-field-configuration
 func (i *IssueFieldConfigSchemeService) Link(ctx context.Context, schemeId int, payload *model.FieldConfigurationToIssueTypeMappingPayloadScheme) (*model.ResponseScheme, error) {
 	return i.internalClient.Link(ctx, schemeId, payload)
 }
 
+// Unlink removes issue types from the field configuration scheme.
+//
+// This operation can only modify field configuration schemes used in company-managed (classic) projects.
+//
+// POST /rest/api/{2-3}/fieldconfigurationscheme/{id}/mapping/delete
+//
+// https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration/schemes#remove-issue-types-to-field-configuration
 func (i *IssueFieldConfigSchemeService) Unlink(ctx context.Context, schemeId int, issueTypeIDs []string) (*model.ResponseScheme, error) {
 	return i.internalClient.Unlink(ctx, schemeId, issueTypeIDs)
 }

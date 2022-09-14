@@ -28,6 +28,7 @@ type DashboardConnector interface {
 	// This operation is similar to Get dashboards except that the results can be refined to include dashboards that have specific attributes.
 	//
 	// GET /rest/api/{2-3}/dashboard/search
+	//
 	// https://docs.go-atlassian.io/jira-software-cloud/dashboards#search-for-dashboards
 	Search(ctx context.Context, options *model.DashboardSearchOptionsScheme, startAt, maxResults int) (*model.DashboardSearchPageScheme, *model.ResponseScheme, error)
 

@@ -9,6 +9,8 @@ type LinkSharedConnector interface {
 
 	// Get returns an issue link.
 	//
+	// GET /rest/api/{2-3}/issueLink/{linkId}
+	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/link#get-issue-link
 	Get(ctx context.Context, linkId string) (*model.IssueLinkScheme, *model.ResponseScheme, error)
 
@@ -18,6 +20,8 @@ type LinkSharedConnector interface {
 	Gets(ctx context.Context, issueKeyOrId string) (*model.IssueLinkPageScheme, *model.ResponseScheme, error)
 
 	// Delete deletes an issue link.
+	//
+	// DELETE /rest/api/{2-3}/issueLink/{linkId}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/link#delete-issue-link
 	Delete(ctx context.Context, linkId string) (*model.ResponseScheme, error)
@@ -55,10 +59,15 @@ type LinkTypeConnector interface {
 
 	// Gets returns a list of all issue link types.
 	//
+	// GET /rest/api/{2-3}/issueLinkType
+	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/link/types#get-issue-link-types
 	Gets(ctx context.Context) (*model.IssueLinkTypeSearchScheme, *model.ResponseScheme, error)
 
 	// Get returns an issue link type.
+	//
+	//
+	// GET /rest/api/{2-3}/issueLinkType/{issueLinkTypeId}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/link/types#get-issue-link-type
 	Get(ctx context.Context, issueLinkTypeId string) (*model.LinkTypeScheme, *model.ResponseScheme, error)
@@ -69,15 +78,21 @@ type LinkTypeConnector interface {
 	//
 	// The issue link type consists of a name and descriptions for a link's inward and outward relationships.
 	//
+	// POST /rest/api/{2-3}/issueLinkType
+	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/link/types#create-issue-link-type
 	Create(ctx context.Context, payload *model.LinkTypeScheme) (*model.LinkTypeScheme, *model.ResponseScheme, error)
 
 	// Update updates an issue link type.
 	//
+	// PUT /rest/api/{2-3}/issueLinkType/{issueLinkTypeId}
+	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/link/types#update-issue-link-type
 	Update(ctx context.Context, issueLinkTypeId string, payload *model.LinkTypeScheme) (*model.LinkTypeScheme, *model.ResponseScheme, error)
 
 	// Delete deletes an issue link type.
+	//
+	// DELETE /rest/api/{2-3}/issueLinkType/{issueLinkTypeId}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/link/types#delete-issue-link-type
 	Delete(ctx context.Context, issueLinkTypeId string) (*model.ResponseScheme, error)

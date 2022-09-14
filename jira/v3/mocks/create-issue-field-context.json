@@ -1,9 +1,0 @@
-{
-  "id": "10025",
-  "name": "Bug fields context",
-  "description": "A context used to define the custom field options for bugs.",
-  "projectIds": [],
-  "issueTypeIds": [
-    "10010"
-  ]
-}

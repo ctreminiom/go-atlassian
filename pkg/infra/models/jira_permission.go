@@ -20,12 +20,14 @@ type BulkProjectPermissionsScheme struct {
 }
 
 type PermissionGrantsScheme struct {
-	ProjectPermissions []struct {
-		Permission string `json:"permission,omitempty"`
-		Issues     []int  `json:"issues,omitempty"`
-		Projects   []int  `json:"projects,omitempty"`
-	} `json:"projectPermissions,omitempty"`
-	GlobalPermissions []string `json:"globalPermissions,omitempty"`
+	ProjectPermissions []*ProjectPermissionGrantsScheme `json:"projectPermissions,omitempty"`
+	GlobalPermissions  []string                         `json:"globalPermissions,omitempty"`
+}
+
+type ProjectPermissionGrantsScheme struct {
+	Permission string `json:"permission,omitempty"`
+	Issues     []int  `json:"issues,omitempty"`
+	Projects   []int  `json:"projects,omitempty"`
 }
 
 type PermissionSchemeGrantsScheme struct {

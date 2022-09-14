@@ -1,6 +1,0 @@
-{
-  "id": 10000,
-  "self": "https://your-domain.atlassian.net/rest/api/3/permissionscheme/10000",
-  "name": "Example permission scheme",
-  "description": "description"
-}

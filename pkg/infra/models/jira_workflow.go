@@ -1,11 +1,11 @@
 package models
 
 type WorkflowSearchOptions struct {
-	QueryString   string
-	WorkflowNames []string
-	OrderBy       string
-	IsActive      bool
-	Expand        []string
+	WorkflowName []string
+	Expand       []string
+	QueryString  string
+	OrderBy      string
+	IsActive     bool
 }
 
 type WorkflowPageScheme struct {

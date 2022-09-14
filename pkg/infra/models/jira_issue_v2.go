@@ -75,6 +75,7 @@ func (i *IssueSchemeV2) ToMap() (result map[string]interface{}, err error) {
 }
 
 type IssueFieldsSchemeV2 struct {
+	Parent                   *ParentScheme             `json:"parent,omitempty"`
 	IssueType                *IssueTypeScheme          `json:"issuetype,omitempty"`
 	IssueLinks               []*IssueLinkScheme        `json:"issuelinks,omitempty"`
 	Watcher                  *IssueWatcherScheme       `json:"watches,omitempty"`
@@ -101,6 +102,18 @@ type IssueFieldsSchemeV2 struct {
 	Comment                  *IssueCommentPageSchemeV2 `json:"comment,omitempty"`
 	Subtasks                 []*IssueScheme            `json:"subtasks,omitempty"`
 	Security                 *SecurityScheme           `json:"security,omitempty"`
+}
+
+type ParentScheme struct {
+	ID     string              `json:"id,omitempty"`
+	Key    string              `json:"key,omitempty"`
+	Self   string              `json:"self,omitempty"`
+	Fields *ParentFieldsScheme `json:"fields,omitempty"`
+}
+
+type ParentFieldsScheme struct {
+	Summary string        `json:"summary,omitempty"`
+	Status  *StatusScheme `json:"status,omitempty"`
 }
 
 type IssueResponseScheme struct {

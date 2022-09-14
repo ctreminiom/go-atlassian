@@ -1,7 +1,0 @@
-{
-  "id": "1000",
-  "name": "Duplicate",
-  "inward": "Duplicated by",
-  "outward": "Duplicates",
-  "self": "https://your-domain.atlassian.net/rest/api/3/issueLinkType/1000"
-}

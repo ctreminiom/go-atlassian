@@ -1,8 +1,0 @@
-{
-  "keys": [
-    {
-      "self": "https://your-domain.atlassian.net/rest/api/3/issue/EX-2/properties/issue.support",
-      "key": "issue.support"
-    }
-  ]
-}

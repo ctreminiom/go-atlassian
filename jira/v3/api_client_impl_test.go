@@ -131,7 +131,7 @@ func TestClient_Call(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			c := &ClientV2{
+			c := &Client{
 				HTTP: testCase.fields.HTTP,
 				Site: testCase.fields.Site,
 				Auth: testCase.fields.Authentication,
@@ -155,9 +155,9 @@ func TestClient_Call(t *testing.T) {
 	}
 }
 
-func TestNewV2(t *testing.T) {
+func TestNew(t *testing.T) {
 
-	mockClient, err := NewV2(http.DefaultClient, "https://ctreminiom.atlassian.net")
+	mockClient, err := New(http.DefaultClient, "https://ctreminiom.atlassian.net")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -165,7 +165,7 @@ func TestNewV2(t *testing.T) {
 	mockClient.Auth.SetBasicAuth("test", "test")
 	mockClient.Auth.SetUserAgent("aaa")
 
-	mockClient2, _ := NewV2(nil, " https://zhidao.baidu.com/special/view?id=sd&preview=1")
+	mockClient2, _ := New(nil, " https://zhidao.baidu.com/special/view?id=sd&preview=1")
 
 	type args struct {
 		httpClient common.HttpClient
@@ -176,7 +176,7 @@ func TestNewV2(t *testing.T) {
 		name    string
 		args    args
 		on      func(*args)
-		want    *ClientV2
+		want    *Client
 		wantErr bool
 		Err     error
 	}{
@@ -205,7 +205,7 @@ func TestNewV2(t *testing.T) {
 	for _, testCase := range testCases {
 		t.Run(testCase.name, func(t *testing.T) {
 
-			gotClient, err := NewV2(testCase.args.httpClient, testCase.args.site)
+			gotClient, err := New(testCase.args.httpClient, testCase.args.site)
 
 			if testCase.wantErr {
 
@@ -294,7 +294,7 @@ func TestClient_TransformTheHTTPResponse(t *testing.T) {
 
 	for _, testCase := range testCases {
 		t.Run(testCase.name, func(t *testing.T) {
-			c := &ClientV2{
+			c := &Client{
 				HTTP: testCase.fields.HTTP,
 				Site: testCase.fields.Site,
 				Auth: testCase.fields.Authentication,
@@ -388,7 +388,7 @@ func TestClient_TransformStructToReader(t *testing.T) {
 	for _, testCase := range testCases {
 
 		t.Run(testCase.name, func(t *testing.T) {
-			c := &ClientV2{
+			c := &Client{
 				HTTP: testCase.fields.HTTP,
 				Site: testCase.fields.Site,
 				Auth: testCase.fields.Authentication,

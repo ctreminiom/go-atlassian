@@ -147,7 +147,7 @@ func Test_internalWorkflowImpl_Gets(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			newService, err := NewWorkflowService(testCase.fields.c, testCase.fields.version, nil)
+			newService, err := NewWorkflowService(testCase.fields.c, testCase.fields.version, nil, nil)
 			assert.NoError(t, err)
 
 			gotResult, gotResponse, err := newService.Gets(testCase.args.ctx, testCase.args.options, testCase.args.startAt,
@@ -292,7 +292,7 @@ func Test_internalWorkflowImpl_Delete(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			newService, err := NewWorkflowService(testCase.fields.c, testCase.fields.version, nil)
+			newService, err := NewWorkflowService(testCase.fields.c, testCase.fields.version, nil, nil)
 			assert.NoError(t, err)
 
 			gotResponse, err := newService.Delete(testCase.args.ctx, testCase.args.workflowId)
@@ -459,7 +459,7 @@ func Test_internalWorkflowImpl_Create(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			newService, err := NewWorkflowService(testCase.fields.c, testCase.fields.version, nil)
+			newService, err := NewWorkflowService(testCase.fields.c, testCase.fields.version, nil, nil)
 			assert.NoError(t, err)
 
 			gotResult, gotResponse, err := newService.Create(testCase.args.ctx, testCase.args.payload)

@@ -63,6 +63,8 @@ var (
 	ErrNoPropertyKeyError                  = errors.New("jira: no property key set")
 	ErrNoProjectFeatureKeyError            = errors.New("jira: no project feature key set")
 	ErrNoFieldIDError                      = errors.New("jira: no field id set")
+	ErrNoWorkflowStatusesError             = errors.New("jira: no workflow statuses set")
+	ErrNoWorkflowScopeError                = errors.New("jira: no workflow scope set")
 	ErrNoFieldContextIDError               = errors.New("jira: no field context id set")
 	ErrNoIssueTypesError                   = errors.New("jira: no issue types id's set")
 	ErrNoProjectsError                     = errors.New("jira: no projects set")

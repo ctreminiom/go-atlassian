@@ -42,6 +42,39 @@ type FieldConnector interface {
 	// See Edit or delete a custom field for more information on trashing and deleting custom fields.
 	//
 	// DELETE /rest/api/{2-3}/field/{id}
-	// TODO: The documentation for the method Field.Delete() needs to be created!
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/issues/fields#delete-field
 	Delete(ctx context.Context, fieldId string) (*model.TaskScheme, *model.ResponseScheme, error)
+}
+
+type FieldTrashConnector interface {
+
+	// Search returns a paginated list of fields in the trash.
+	//
+	// The list may be restricted to field whose field name or description partially match a string.
+	//
+	// Only custom fields can be queried, type must be set to custom.
+	//
+	// GET /rest/api/{2-3}/field/search/trashed
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/issues/fields/trash#search-fields-in-trash
+	Search(ctx context.Context, options *model.FieldSearchOptionsScheme, startAt, maxResults int) (*model.FieldSearchPageScheme, *model.ResponseScheme, error)
+
+	// Move moves a custom field to trash.
+	//
+	// See Edit or delete a custom field for more information on trashing and deleting custom fields.
+	//
+	// POST /rest/api/{2-3}/field/{id}/trash
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/issues/fields/trash#move-field-to-trash
+	Move(ctx context.Context, id string) (*model.ResponseScheme, error)
+
+	// Restore restores a custom field from trash.
+	//
+	// See Edit or delete a custom field for more information on trashing and deleting custom fields.
+	//
+	// POST /rest/api/{2-3}/field/{id}/restore
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/issues/fields/trash#move-field-to-trash
+	Restore(ctx context.Context, id string) (*model.ResponseScheme, error)
 }

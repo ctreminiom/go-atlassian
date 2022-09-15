@@ -46,4 +46,13 @@ type AttachmentConnector interface {
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/attachments#add-attachment
 	Add(ctx context.Context, issueKeyOrId, fileName string, file io.Reader) ([]*model.AttachmentScheme, *model.ResponseScheme, error)
+
+	// Download returns the contents of an attachment. A Range header can be set to define a range of bytes within the attachment to download.
+	//
+	// See the HTTP Range header standard for details.
+	//
+	// GET /rest/api/{2-3}/attachment/content/{id}
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/issues/attachments#download-attachment
+	Download(ctx context.Context, attachmentID string, redirect bool) (*model.ResponseScheme, error)
 }

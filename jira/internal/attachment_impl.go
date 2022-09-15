@@ -10,6 +10,8 @@ import (
 	"io"
 	"mime/multipart"
 	"net/http"
+	"net/url"
+	"strings"
 )
 
 func NewIssueAttachmentService(client service.Client, version string) (*IssueAttachmentService, error) {
@@ -76,9 +78,45 @@ func (i *IssueAttachmentService) Add(ctx context.Context, issueKeyOrId, fileName
 	return i.internalClient.Add(ctx, issueKeyOrId, fileName, file)
 }
 
+// Download returns the contents of an attachment. A Range header can be set to define a range of bytes within the attachment to download.
+//
+// See the HTTP Range header standard for details.
+//
+// GET /rest/api/{2-3}/attachment/content/{id}
+//
+// https://docs.go-atlassian.io/jira-software-cloud/issues/attachments#download-attachment
+func (i *IssueAttachmentService) Download(ctx context.Context, attachmentID string, redirect bool) (*model.ResponseScheme, error) {
+	return i.internalClient.Download(ctx, attachmentID, redirect)
+}
+
 type internalIssueAttachmentServiceImpl struct {
 	c       service.Client
 	version string
+}
+
+func (i *internalIssueAttachmentServiceImpl) Download(ctx context.Context, attachmentID string, redirect bool) (*model.ResponseScheme, error) {
+
+	if attachmentID == "" {
+		return nil, model.ErrNoAttachmentIDError
+	}
+
+	var endpoint strings.Builder
+	endpoint.WriteString(fmt.Sprintf("rest/api/%v/attachment/content/%v", i.version, attachmentID))
+
+	if !redirect {
+
+		params := url.Values{}
+		params.Add("redirect", "false") //default: true
+
+		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
+	}
+
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return i.c.Call(request, nil)
 }
 
 func (i *internalIssueAttachmentServiceImpl) Settings(ctx context.Context) (*model.AttachmentSettingScheme, *model.ResponseScheme, error) {

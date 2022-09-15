@@ -113,3 +113,45 @@ type WorkflowSchemeConnector interface {
 	// https://docs.go-atlassian.io/jira-software-cloud/workflow/scheme#get-workflow-schemes-associations
 	Assign(ctx context.Context, schemeId, projectId string) (*model.ResponseScheme, error)
 }
+
+// WorkflowStatusConnector represents the workflows statuses.
+//
+// Use it to search, get, create, delete, and change statuses.
+type WorkflowStatusConnector interface {
+
+	// Gets returns a list of the statuses specified by one or more status IDs.
+	//
+	// GET /rest/api/{2-3}/statuses
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/workflow/status#gets-workflow-statuses
+	Gets(ctx context.Context, ids, expand []string) ([]*model.WorkflowStatusDetailScheme, *model.ResponseScheme, error)
+
+	// Update updates statuses by ID.
+	//
+	// PUT /rest/api/{2-3}/statuses
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/workflow/status#update-workflow-statuses
+	Update(ctx context.Context, payload *model.WorkflowStatusPayloadScheme) (*model.ResponseScheme, error)
+
+	// Create creates statuses for a global or project scope.
+	//
+	// POST /rest/api/{2-3}/statuses
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/workflow/status#create-workflow-statuses
+	Create(ctx context.Context, payload *model.WorkflowStatusPayloadScheme) ([]*model.WorkflowStatusDetailScheme, *model.ResponseScheme, error)
+
+	// Delete deletes statuses by ID.
+	//
+	// DELETE /rest/api/{2-3}/statuses
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/workflow/status#delete-workflow-statuses
+	Delete(ctx context.Context, ids []string) (*model.ResponseScheme, error)
+
+	// Search returns a paginated list of statuses that match a search on name or project.
+	//
+	// GET /rest/api/{2-3}/statuses/search
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/workflow/status#search-workflow-statuses
+	Search(ctx context.Context, options *model.WorkflowStatusSearchParams, startAt, maxResults int) (*model.WorkflowStatusDetailPageScheme,
+		*model.ResponseScheme, error)
+}

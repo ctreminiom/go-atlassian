@@ -12,7 +12,7 @@ import (
 	"strings"
 )
 
-func NewWorkflowService(client service.Client, version string, scheme *WorkflowSchemeService) (*WorkflowService, error) {
+func NewWorkflowService(client service.Client, version string, scheme *WorkflowSchemeService, status *WorkflowStatusService) (*WorkflowService, error) {
 
 	if version == "" {
 		return nil, model.ErrNoVersionProvided
@@ -21,12 +21,14 @@ func NewWorkflowService(client service.Client, version string, scheme *WorkflowS
 	return &WorkflowService{
 		internalClient: &internalWorkflowImpl{c: client, version: version},
 		Scheme:         scheme,
+		Status:         status,
 	}, nil
 }
 
 type WorkflowService struct {
 	internalClient jira.WorkflowConnector
 	Scheme         *WorkflowSchemeService
+	Status         *WorkflowStatusService
 }
 
 // Create creates a workflow.

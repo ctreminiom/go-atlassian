@@ -12,7 +12,8 @@ import (
 	"strings"
 )
 
-func NewIssueFieldService(client service.Client, version string, configuration *IssueFieldConfigService, context *IssueFieldContextService) (*IssueFieldService, error) {
+func NewIssueFieldService(client service.Client, version string, configuration *IssueFieldConfigService, context *IssueFieldContextService,
+	trash *IssueFieldTrashService) (*IssueFieldService, error) {
 
 	if version == "" {
 		return nil, model.ErrNoVersionProvided
@@ -22,6 +23,7 @@ func NewIssueFieldService(client service.Client, version string, configuration *
 		internalClient: &internalIssueFieldServiceImpl{c: client, version: version},
 		Configuration:  configuration,
 		Context:        context,
+		Trash:          trash,
 	}, nil
 }
 
@@ -29,6 +31,7 @@ type IssueFieldService struct {
 	internalClient jira.FieldConnector
 	Configuration  *IssueFieldConfigService
 	Context        *IssueFieldContextService
+	Trash          *IssueFieldTrashService
 }
 
 // Gets returns system and custom issue fields according to the following rules:
@@ -73,7 +76,7 @@ func (i *IssueFieldService) Search(ctx context.Context, options *model.FieldSear
 //
 // DELETE /rest/api/{2-3}/field/{id}
 //
-// TODO: The documentation for the method Field.Delete() needs to be created!
+// https://docs.go-atlassian.io/jira-software-cloud/issues/fields#delete-field
 func (i *IssueFieldService) Delete(ctx context.Context, fieldId string) (*model.TaskScheme, *model.ResponseScheme, error) {
 	return i.internalClient.Delete(ctx, fieldId)
 }

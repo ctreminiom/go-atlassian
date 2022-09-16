@@ -8,7 +8,6 @@ import (
 	"github.com/ctreminiom/go-atlassian/jira/internal"
 	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service/common"
-	"github.com/ctreminiom/go-atlassian/service/jira"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -355,10 +354,10 @@ func New(httpClient common.HttpClient, site string) (*Client, error) {
 
 type Client struct {
 	HTTP       common.HttpClient
-	Site       *url.URL
 	Auth       common.Authentication
-	Role       jira.AppRoleConnector
-	Dashboard  jira.DashboardConnector
+	Site       *url.URL
+	Role       *internal.ApplicationRoleService
+	Dashboard  *internal.DashboardService
 	Filter     *internal.FilterService
 	Group      *internal.GroupService
 	Issue      *internal.IssueRichTextService
@@ -447,24 +446,26 @@ func (c *Client) Call(request *http.Request, structure interface{}) (*models.Res
 		Method:   response.Request.Method,
 	}
 
-	if !(response.StatusCode >= 200 && response.StatusCode < 300) {
-		return responseTransformed, models.ErrInvalidStatusCodeError
-	}
-
-	responseAsBytes, err := ioutil.ReadAll(response.Body)
-	if err != nil {
-		return responseTransformed, err
-	}
-
-	if structure != nil {
-		if err = json.Unmarshal(responseAsBytes, &structure); err != nil {
+	if response.ContentLength != 0 {
+		responseAsBytes, err := ioutil.ReadAll(response.Body)
+		if err != nil {
 			return responseTransformed, err
+		}
+
+		if structure != nil {
+			if err = json.Unmarshal(responseAsBytes, &structure); err != nil {
+				return responseTransformed, err
+			}
+		}
+
+		_, err = responseTransformed.Bytes.Write(responseAsBytes)
+		if err != nil {
+			return nil, err
 		}
 	}
 
-	_, err = responseTransformed.Bytes.Write(responseAsBytes)
-	if err != nil {
-		return nil, err
+	if !(response.StatusCode >= 200 && response.StatusCode < 300) {
+		return responseTransformed, models.ErrInvalidStatusCodeError
 	}
 
 	return responseTransformed, nil

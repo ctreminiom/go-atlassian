@@ -454,17 +454,17 @@ func (c *Client) TransformTheHTTPResponse(response *http.Response, structure int
 		return responseTransformed, err
 	}
 
-	if structure != nil {
-		if err = json.Unmarshal(responseAsBytes, &structure); err != nil {
-			return responseTransformed, err
-		}
-	}
-
 	responseTransformed.Bytes.Write(responseAsBytes)
 
 	var wasSuccess = response.StatusCode >= 200 && response.StatusCode < 300
 	if !wasSuccess {
 		return responseTransformed, models.ErrInvalidStatusCodeError
+	}
+
+	if structure != nil {
+		if err = json.Unmarshal(responseAsBytes, &structure); err != nil {
+			return responseTransformed, err
+		}
 	}
 
 	return responseTransformed, nil

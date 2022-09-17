@@ -12,68 +12,288 @@ import (
 	"strings"
 )
 
-func NewBoardService(client service.Client, version string) (agile.Board, error) {
+func NewBoardService(client service.Client, version string) (*BoardService, error) {
 
 	if version == "" {
 		return nil, model.ErrNoVersionProvided
 	}
 
-	return &BoardService{client, version}, nil
+	return &BoardService{
+		internalClient: &internalBoardImpl{c: client, version: version},
+	}, nil
 }
 
 type BoardService struct {
+	internalClient agile.BoardConnector
+}
+
+// Get returns the board for the given board ID.
+// This board will only be returned if the user has permission to view it.
+//
+//
+// Admins without the view permission will see the board as a private one,
+//
+// so will see only a subset of the board's data (board location for instance).
+//
+// GET /rest/agile/1.0/board/{boardId}
+//
+// https://docs.go-atlassian.io/jira-agile/boards#get-board
+func (b *BoardService) Get(ctx context.Context, boardID int) (*model.BoardScheme, *model.ResponseScheme, error) {
+	return b.internalClient.Get(ctx, boardID)
+}
+
+// Create creates a new board. Board name, type and filter ID is required.
+//
+// POST /rest/agile/1.0/board
+//
+// Docs: https://docs.go-atlassian.io/jira-agile/boards#create-board
+func (b *BoardService) Create(ctx context.Context, payload *model.BoardPayloadScheme) (*model.BoardScheme, *model.ResponseScheme, error) {
+	return b.internalClient.Create(ctx, payload)
+}
+
+// Filter returns any boards which use the provided filter id.
+//
+// This method can be executed by users without a valid software license in order
+//
+// to find which boards are using a particular filter.
+//
+// GET /rest/agile/1.0/board/filter/{filterId}
+//
+// https://docs.go-atlassian.io/jira-agile/boards#get-board-by-filter-id
+func (b *BoardService) Filter(ctx context.Context, filterID, startAt, maxResults int) (*model.BoardPageScheme, *model.ResponseScheme, error) {
+	return b.internalClient.Filter(ctx, filterID, startAt, maxResults)
+}
+
+// Backlog returns all issues from the board's backlog, for the given board ID.
+//
+// This only includes issues that the user has permission to view.
+//
+// The backlog contains incomplete issues that are not assigned to any future or active sprint.
+//
+// Note, if the user does not have permission to view the board, no issues will be returned at all.
+//
+// Issues returned from this resource include Agile fields, like sprint, closedSprints, flagged, and epic.
+//
+// By default, the returned issues are ordered by rank.
+//
+// GET /rest/agile/1.0/board/{boardId}/backlog
+//
+// https://docs.go-atlassian.io/jira-agile/boards#get-issues-for-backlog
+func (b *BoardService) Backlog(ctx context.Context, boardID int, opts *model.IssueOptionScheme, startAt, maxResults int) (*model.BoardIssuePageScheme, *model.ResponseScheme, error) {
+	return b.internalClient.Backlog(ctx, boardID, opts, startAt, maxResults)
+}
+
+// Configuration get the board configuration.
+//
+// GET /rest/agile/1.0/board/{boardId}/configuration
+//
+// https://docs.go-atlassian.io/jira-agile/boards#get-configuration
+func (b *BoardService) Configuration(ctx context.Context, boardID int) (*model.BoardConfigurationScheme, *model.ResponseScheme, error) {
+	return b.internalClient.Configuration(ctx, boardID)
+}
+
+// Epics returns all epics from the board, for the given board ID.
+//
+// This only includes epics that the user has permission to view.
+//
+// Note, if the user does not have permission to view the board, no epics will be returned at all.
+//
+// GET /rest/agile/1.0/board/{boardId}/epic
+//
+// https://docs.go-atlassian.io/jira-agile/boards#get-epics
+func (b *BoardService) Epics(ctx context.Context, boardID, startAt, maxResults int, done bool) (*model.BoardEpicPageScheme, *model.ResponseScheme, error) {
+	return b.internalClient.Epics(ctx, boardID, startAt, maxResults, done)
+}
+
+// IssuesWithoutEpic returns all issues that do not belong to any epic on a board, for a given board ID.
+//
+// This only includes issues that the user has permission to view.
+//
+// Issues returned from this resource include Agile fields, like sprint, closedSprints, flagged, and epic.
+//
+// By default, the returned issues are ordered by rank.
+//
+// GET /rest/agile/1.0/board/{boardId}/epic/none/issue
+//
+// Docs: https://docs.go-atlassian.io/jira-agile/boards#get-issues-without-epic-for-board
+func (b *BoardService) IssuesWithoutEpic(ctx context.Context, boardID int, opts *model.IssueOptionScheme, startAt, maxResults int) (*model.BoardIssuePageScheme, *model.ResponseScheme, error) {
+	return b.internalClient.IssuesWithoutEpic(ctx, boardID, opts, startAt, maxResults)
+}
+
+// IssuesByEpic returns all issues that belong to an epic on the board, for the given epic ID and the board ID.
+//
+// This only includes issues that the user has permission to view.
+//
+// Issues returned from this resource include Agile fields, like sprint, closedSprints,
+//
+// flagged, and epic. By default, the returned issues are ordered by rank.
+//
+// GET /rest/agile/1.0/board/{boardId}/epic/none/issue
+//
+// https://docs.go-atlassian.io/jira-agile/boards#get-board-issues-for-epic
+func (b *BoardService) IssuesByEpic(ctx context.Context, boardID, epicID int, opts *model.IssueOptionScheme, startAt, maxResults int) (*model.BoardIssuePageScheme, *model.ResponseScheme, error) {
+	return b.internalClient.IssuesByEpic(ctx, boardID, epicID, opts, startAt, maxResults)
+}
+
+// Issues returns all issues from a board, for a given board ID.
+//
+// This only includes issues that the user has permission to view.
+//
+// An issue belongs to the board if its status is mapped to the board's column.
+//
+// Epic issues do not belong to the scrum boards. Note, if the user does not have permission to view the board,
+//
+// no issues will be returned at all.
+//
+// Issues returned from this resource include Agile fields, like sprint, closedSprints, flagged, and epic.
+//
+// By default, the returned issues are ordered by rank.
+//
+// GET /rest/agile/1.0/board/{boardId}/issue
+//
+// https://docs.go-atlassian.io/jira-agile/boards#get-issues-for-board
+func (b *BoardService) Issues(ctx context.Context, boardID int, opts *model.IssueOptionScheme, startAt, maxResults int) (*model.BoardIssuePageScheme, *model.ResponseScheme, error) {
+	return b.internalClient.Issues(ctx, boardID, opts, startAt, maxResults)
+}
+
+// Move issues from the backlog to the board (if they are already in the backlog of that board).
+//
+// This operation either moves an issue(s) onto a board from the backlog (by adding it to the issueList for the board)
+//
+// Or transitions the issue(s) to the first column for a kanban board with backlog.
+//
+// At most 50 issues may be moved at once.
+//
+// POST /rest/agile/1.0/board/{boardId}/issue
+//
+// https://docs.go-atlassian.io/jira-agile/boards#move-issues-to-backlog-for-board
+func (b *BoardService) Move(ctx context.Context, boardID int, payload *model.BoardMovementPayloadScheme) (*model.ResponseScheme, error) {
+	return b.internalClient.Move(ctx, boardID, payload)
+}
+
+// Projects returns all projects that are associated with the board, for the given board ID.
+//
+// If the user does not have permission to view the board, no projects will be returned at all.
+//
+// Returned projects are ordered by the name.
+//
+// GET /rest/agile/1.0/board/{boardId}/project
+//
+// https://docs.go-atlassian.io/jira-agile/boards#get-projects
+func (b *BoardService) Projects(ctx context.Context, boardID, startAt, maxResults int) (*model.BoardProjectPageScheme, *model.ResponseScheme, error) {
+	return b.internalClient.Projects(ctx, boardID, startAt, maxResults)
+}
+
+// Sprints returns all sprints from a board, for a given board ID.
+//
+// This only includes sprints that the user has permission to view.
+//
+// GET /rest/agile/1.0/board/{boardId}/sprint
+//
+// https://docs.go-atlassian.io/jira-agile/boards#get-all-sprints
+func (b *BoardService) Sprints(ctx context.Context, boardID, startAt, maxResults int, states []string) (*model.BoardSprintPageScheme, *model.ResponseScheme, error) {
+	return b.internalClient.Sprints(ctx, boardID, startAt, maxResults, states)
+}
+
+// IssuesBySprint get all issues you have access to that belong to the sprint from the board.
+//
+// Issue returned from this resource contains additional fields like: sprint, closedSprints, flagged and epic.
+//
+// Issues are returned ordered by rank. JQL order has higher priority than default rank.
+//
+// GET /rest/agile/1.0/board/{boardId}/sprint/{sprintId}/issue
+//
+// https://docs.go-atlassian.io/jira-agile/boards#get-board-issues-for-sprint
+func (b *BoardService) IssuesBySprint(ctx context.Context, boardID, sprintID int, opts *model.IssueOptionScheme, startAt, maxResults int) (*model.BoardIssuePageScheme, *model.ResponseScheme, error) {
+	return b.internalClient.IssuesBySprint(ctx, boardID, sprintID, opts, startAt, maxResults)
+}
+
+// Versions returns all versions from a board, for a given board ID.
+//
+// This only includes versions that the user has permission to view.
+//
+// Note, if the user does not have permission to view the board, no versions will be returned at all.
+//
+// Returned versions are ordered by the name of the project from which they belong and then by sequence defined by user.
+//
+// GET /rest/agile/1.0/board/{boardId}/sprint/{sprintId}/issue
+//
+// https://docs.go-atlassian.io/jira-agile/boards#get-all-versions
+func (b *BoardService) Versions(ctx context.Context, boardID, startAt, maxResults int, released bool) (*model.BoardVersionPageScheme, *model.ResponseScheme, error) {
+	return b.internalClient.Versions(ctx, boardID, startAt, maxResults, released)
+}
+
+// Delete deletes the board. Admin without the view permission can still remove the board.
+//
+// DELETE /rest/agile/1.0/board/{boardId}
+//
+// https://docs.go-atlassian.io/jira-agile/boards#delete-board
+func (b *BoardService) Delete(ctx context.Context, boardID int) (*model.ResponseScheme, error) {
+	return b.internalClient.Delete(ctx, boardID)
+}
+
+// Gets returns all boards. This only includes boards that the user has permission to view.
+//
+// GET /rest/agile/1.0/board
+//
+// https://docs.go-atlassian.io/jira-agile/boards#get-boards
+func (b *BoardService) Gets(ctx context.Context, opts *model.GetBoardsOptions, startAt, maxResults int) (*model.BoardPageScheme, *model.ResponseScheme, error) {
+	return b.internalClient.Gets(ctx, opts, startAt, maxResults)
+}
+
+type internalBoardImpl struct {
 	c       service.Client
 	version string
 }
 
-func (b BoardService) Get(ctx context.Context, boardId int) (*model.BoardScheme, *model.ResponseScheme, error) {
+func (i *internalBoardImpl) Get(ctx context.Context, boardID int) (*model.BoardScheme, *model.ResponseScheme, error) {
 
-	if boardId == 0 {
+	if boardID == 0 {
 		return nil, nil, model.ErrNoBoardIDError
 	}
 
-	endpoint := fmt.Sprintf("/rest/agile/%v/board/%v", b.version, boardId)
+	endpoint := fmt.Sprintf("rest/agile/%v/board/%v", i.version, boardID)
 
-	request, err := b.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	var boards model.BoardScheme
-	response, err := b.c.Call(request, &boards)
+	boards := new(model.BoardScheme)
+	response, err := i.c.Call(request, boards)
 	if err != nil {
 		return nil, response, err
 	}
 
-	return &boards, response, nil
+	return boards, response, nil
 }
 
-func (b BoardService) Create(ctx context.Context, payload *model.BoardPayloadScheme) (*model.BoardScheme, *model.ResponseScheme, error) {
+func (i *internalBoardImpl) Create(ctx context.Context, payload *model.BoardPayloadScheme) (*model.BoardScheme, *model.ResponseScheme, error) {
 
-	reader, err := b.c.TransformStructToReader(payload)
+	reader, err := i.c.TransformStructToReader(payload)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	endpoint := fmt.Sprintf("/rest/agile/%v/board", b.version)
+	endpoint := fmt.Sprintf("rest/agile/%v/board", i.version)
 
-	request, err := b.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	var board model.BoardScheme
-	response, err := b.c.Call(request, &board)
+	board := new(model.BoardScheme)
+	response, err := i.c.Call(request, board)
 	if err != nil {
 		return nil, response, err
 	}
 
-	return &board, response, nil
+	return board, response, nil
 }
 
-func (b BoardService) Filter(ctx context.Context, filterId, startAt, maxResults int) (*model.BoardPageScheme, *model.ResponseScheme, error) {
+func (i *internalBoardImpl) Filter(ctx context.Context, filterID, startAt, maxResults int) (*model.BoardPageScheme, *model.ResponseScheme, error) {
 
-	if filterId == 0 {
+	if filterID == 0 {
 		return nil, nil, model.ErrNoFilterIDError
 	}
 
@@ -81,25 +301,25 @@ func (b BoardService) Filter(ctx context.Context, filterId, startAt, maxResults 
 	params.Add("startAt", strconv.Itoa(startAt))
 	params.Add("maxResults", strconv.Itoa(maxResults))
 
-	endpoint := fmt.Sprintf("/rest/agile/%v/board/filter/%v?%v", b.version, filterId, params.Encode())
+	endpoint := fmt.Sprintf("rest/agile/%v/board/filter/%v?%v", i.version, filterID, params.Encode())
 
-	request, err := b.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	var page model.BoardPageScheme
-	response, err := b.c.Call(request, &page)
+	page := new(model.BoardPageScheme)
+	response, err := i.c.Call(request, page)
 	if err != nil {
 		return nil, response, err
 	}
 
-	return &page, response, nil
+	return page, response, nil
 }
 
-func (b BoardService) Backlog(ctx context.Context, boardId, startAt, maxResults int, opts *model.IssueOptionScheme) (*model.BoardIssuePageScheme, *model.ResponseScheme, error) {
+func (i *internalBoardImpl) Backlog(ctx context.Context, boardID int, opts *model.IssueOptionScheme, startAt, maxResults int) (*model.BoardIssuePageScheme, *model.ResponseScheme, error) {
 
-	if boardId == 0 {
+	if boardID == 0 {
 		return nil, nil, model.ErrNoBoardIDError
 	}
 
@@ -109,13 +329,9 @@ func (b BoardService) Backlog(ctx context.Context, boardId, startAt, maxResults 
 
 	if opts != nil {
 
-		if !opts.ValidateQuery {
-			params.Add("validateQuery", "false")
-		} else {
-			params.Add("validateQuery", "true")
-		}
+		params.Add("validateQuery", fmt.Sprintf("%v", opts.ValidateQuery))
 
-		if len(opts.JQL) != 0 {
+		if opts.JQL != "" {
 			params.Add("jql", opts.JQL)
 		}
 
@@ -128,47 +344,47 @@ func (b BoardService) Backlog(ctx context.Context, boardId, startAt, maxResults 
 		}
 	}
 
-	endpoint := fmt.Sprintf("/rest/agile/%v/board/%v/backlog?%v", b.version, boardId, params.Encode())
+	endpoint := fmt.Sprintf("rest/agile/%v/board/%v/backlog?%v", i.version, boardID, params.Encode())
 
-	request, err := b.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	var issues model.BoardIssuePageScheme
-	response, err := b.c.Call(request, &issues)
+	issues := new(model.BoardIssuePageScheme)
+	response, err := i.c.Call(request, issues)
 	if err != nil {
 		return nil, response, err
 	}
 
-	return &issues, response, nil
+	return issues, response, nil
 }
 
-func (b BoardService) Configuration(ctx context.Context, boardId int) (*model.BoardConfigurationScheme, *model.ResponseScheme, error) {
+func (i *internalBoardImpl) Configuration(ctx context.Context, boardID int) (*model.BoardConfigurationScheme, *model.ResponseScheme, error) {
 
-	if boardId == 0 {
+	if boardID == 0 {
 		return nil, nil, model.ErrNoBoardIDError
 	}
 
-	endpoint := fmt.Sprintf("/rest/agile/%v/board/%v/configuration", b.version, boardId)
+	endpoint := fmt.Sprintf("rest/agile/%v/board/%v/configuration", i.version, boardID)
 
-	request, err := b.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	var configuration model.BoardConfigurationScheme
-	response, err := b.c.Call(request, &configuration)
+	configuration := new(model.BoardConfigurationScheme)
+	response, err := i.c.Call(request, configuration)
 	if err != nil {
 		return nil, response, err
 	}
 
-	return &configuration, response, nil
+	return configuration, response, nil
 }
 
-func (b BoardService) Epics(ctx context.Context, boardId, startAt, maxResults int, done bool) (*model.BoardEpicPageScheme, *model.ResponseScheme, error) {
+func (i *internalBoardImpl) Epics(ctx context.Context, boardID, startAt, maxResults int, done bool) (*model.BoardEpicPageScheme, *model.ResponseScheme, error) {
 
-	if boardId == 0 {
+	if boardID == 0 {
 		return nil, nil, model.ErrNoBoardIDError
 	}
 
@@ -177,25 +393,25 @@ func (b BoardService) Epics(ctx context.Context, boardId, startAt, maxResults in
 	params.Add("maxResults", strconv.Itoa(maxResults))
 	params.Add("done", fmt.Sprintf("%t", done))
 
-	endpoint := fmt.Sprintf("/rest/agile/%v/board/%v/epic?%v", b.version, boardId, params.Encode())
+	endpoint := fmt.Sprintf("rest/agile/%v/board/%v/epic?%v", i.version, boardID, params.Encode())
 
-	request, err := b.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	var epics model.BoardEpicPageScheme
-	response, err := b.c.Call(request, &epics)
+	epics := new(model.BoardEpicPageScheme)
+	response, err := i.c.Call(request, epics)
 	if err != nil {
 		return nil, response, err
 	}
 
-	return &epics, response, nil
+	return epics, response, nil
 }
 
-func (b BoardService) IssuesWithoutEpic(ctx context.Context, boardId, startAt, maxResults int, opts *model.IssueOptionScheme) (*model.BoardIssuePageScheme, *model.ResponseScheme, error) {
+func (i *internalBoardImpl) IssuesWithoutEpic(ctx context.Context, boardID int, opts *model.IssueOptionScheme, startAt, maxResults int) (*model.BoardIssuePageScheme, *model.ResponseScheme, error) {
 
-	if boardId == 0 {
+	if boardID == 0 {
 		return nil, nil, model.ErrNoBoardIDError
 	}
 
@@ -222,29 +438,29 @@ func (b BoardService) IssuesWithoutEpic(ctx context.Context, boardId, startAt, m
 		}
 	}
 
-	endpoint := fmt.Sprintf("/rest/agile/%v/board/%v/epic/none/issue?%v", b.version, boardId, params.Encode())
+	endpoint := fmt.Sprintf("rest/agile/%v/board/%v/epic/none/issue?%v", i.version, boardID, params.Encode())
 
-	request, err := b.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	var issues model.BoardIssuePageScheme
-	response, err := b.c.Call(request, &issues)
+	page := new(model.BoardIssuePageScheme)
+	response, err := i.c.Call(request, page)
 	if err != nil {
 		return nil, response, err
 	}
 
-	return &issues, response, nil
+	return page, response, nil
 }
 
-func (b BoardService) IssuesByEpic(ctx context.Context, boardId, epicId, startAt, maxResults int, opts *model.IssueOptionScheme) (*model.BoardIssuePageScheme, *model.ResponseScheme, error) {
+func (i *internalBoardImpl) IssuesByEpic(ctx context.Context, boardID, epicID int, opts *model.IssueOptionScheme, startAt, maxResults int) (*model.BoardIssuePageScheme, *model.ResponseScheme, error) {
 
-	if boardId == 0 {
+	if boardID == 0 {
 		return nil, nil, model.ErrNoBoardIDError
 	}
 
-	if epicId == 0 {
+	if epicID == 0 {
 		return nil, nil, model.ErrNoEpicIDError
 	}
 
@@ -255,7 +471,7 @@ func (b BoardService) IssuesByEpic(ctx context.Context, boardId, epicId, startAt
 	if opts != nil {
 
 		if !opts.ValidateQuery {
-			params.Add("validateQuery ", "false")
+			params.Add("validateQuery", "false")
 		}
 
 		if len(opts.JQL) != 0 {
@@ -271,25 +487,25 @@ func (b BoardService) IssuesByEpic(ctx context.Context, boardId, epicId, startAt
 		}
 	}
 
-	endpoint := fmt.Sprintf("/rest/agile/%v/board/%v/epic/%v/issue?%v", b.version, boardId, epicId, params.Encode())
+	endpoint := fmt.Sprintf("rest/agile/%v/board/%v/epic/%v/issue?%v", i.version, boardID, epicID, params.Encode())
 
-	request, err := b.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	var issues model.BoardIssuePageScheme
-	response, err := b.c.Call(request, &issues)
+	page := new(model.BoardIssuePageScheme)
+	response, err := i.c.Call(request, page)
 	if err != nil {
 		return nil, response, err
 	}
 
-	return &issues, response, nil
+	return page, response, nil
 }
 
-func (b BoardService) Issues(ctx context.Context, boardId, startAt, maxResults int, opts *model.IssueOptionScheme) (*model.BoardIssuePageScheme, *model.ResponseScheme, error) {
+func (i *internalBoardImpl) Issues(ctx context.Context, boardID int, opts *model.IssueOptionScheme, startAt, maxResults int) (*model.BoardIssuePageScheme, *model.ResponseScheme, error) {
 
-	if boardId == 0 {
+	if boardID == 0 {
 		return nil, nil, model.ErrNoBoardIDError
 	}
 
@@ -317,41 +533,41 @@ func (b BoardService) Issues(ctx context.Context, boardId, startAt, maxResults i
 
 	}
 
-	endpoint := fmt.Sprintf("/rest/agile/%v/board/%v/issue?%v", b.version, boardId, params.Encode())
+	endpoint := fmt.Sprintf("rest/agile/%v/board/%v/issue?%v", i.version, boardID, params.Encode())
 
-	request, err := b.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	var issues model.BoardIssuePageScheme
-	response, err := b.c.Call(request, &issues)
+	page := new(model.BoardIssuePageScheme)
+	response, err := i.c.Call(request, page)
 	if err != nil {
 		return nil, response, err
 	}
 
-	return &issues, response, nil
+	return page, response, nil
 }
 
-func (b BoardService) Move(ctx context.Context, boardId int, payload *model.BoardMovementPayloadScheme) (*model.ResponseScheme, error) {
+func (i *internalBoardImpl) Move(ctx context.Context, boardID int, payload *model.BoardMovementPayloadScheme) (*model.ResponseScheme, error) {
 
-	if boardId == 0 {
+	if boardID == 0 {
 		return nil, model.ErrNoBoardIDError
 	}
 
-	reader, err := b.c.TransformStructToReader(payload)
+	reader, err := i.c.TransformStructToReader(payload)
 	if err != nil {
 		return nil, err
 	}
 
-	endpoint := fmt.Sprintf("/rest/agile/%v/board/%v/issue", b.version, boardId)
+	endpoint := fmt.Sprintf("rest/agile/%v/board/%v/issue", i.version, boardID)
 
-	request, err := b.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
 	if err != nil {
 		return nil, err
 	}
 
-	response, err := b.c.Call(request, nil)
+	response, err := i.c.Call(request, nil)
 	if err != nil {
 		return response, err
 	}
@@ -359,9 +575,9 @@ func (b BoardService) Move(ctx context.Context, boardId int, payload *model.Boar
 	return response, nil
 }
 
-func (b BoardService) Projects(ctx context.Context, boardId, startAt, maxResults int) (*model.BoardProjectPageScheme, *model.ResponseScheme, error) {
+func (i *internalBoardImpl) Projects(ctx context.Context, boardID, startAt, maxResults int) (*model.BoardProjectPageScheme, *model.ResponseScheme, error) {
 
-	if boardId == 0 {
+	if boardID == 0 {
 		return nil, nil, model.ErrNoBoardIDError
 	}
 
@@ -369,25 +585,25 @@ func (b BoardService) Projects(ctx context.Context, boardId, startAt, maxResults
 	params.Add("startAt", strconv.Itoa(startAt))
 	params.Add("maxResults", strconv.Itoa(maxResults))
 
-	endpoint := fmt.Sprintf("/rest/agile/%v/board/%v/project?%v", b.version, boardId, params.Encode())
+	endpoint := fmt.Sprintf("rest/agile/%v/board/%v/project?%v", i.version, boardID, params.Encode())
 
-	request, err := b.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	var projects model.BoardProjectPageScheme
-	response, err := b.c.Call(request, &projects)
+	page := new(model.BoardProjectPageScheme)
+	response, err := i.c.Call(request, page)
 	if err != nil {
 		return nil, response, err
 	}
 
-	return &projects, response, nil
+	return page, response, nil
 }
 
-func (b BoardService) Sprints(ctx context.Context, boardId, startAt, maxResults int, states []string) (*model.BoardSprintPageScheme, *model.ResponseScheme, error) {
+func (i *internalBoardImpl) Sprints(ctx context.Context, boardID, startAt, maxResults int, states []string) (*model.BoardSprintPageScheme, *model.ResponseScheme, error) {
 
-	if boardId == 0 {
+	if boardID == 0 {
 		return nil, nil, model.ErrNoBoardIDError
 	}
 
@@ -396,29 +612,29 @@ func (b BoardService) Sprints(ctx context.Context, boardId, startAt, maxResults 
 	params.Add("maxResults", strconv.Itoa(maxResults))
 	params.Add("state", strings.Join(states, ","))
 
-	endpoint := fmt.Sprintf("/rest/agile/%v/board/%v/sprint?%v", b.version, boardId, params.Encode())
+	endpoint := fmt.Sprintf("rest/agile/%v/board/%v/sprint?%v", i.version, boardID, params.Encode())
 
-	request, err := b.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	var sprints model.BoardSprintPageScheme
-	response, err := b.c.Call(request, &sprints)
+	page := new(model.BoardSprintPageScheme)
+	response, err := i.c.Call(request, page)
 	if err != nil {
 		return nil, response, err
 	}
 
-	return &sprints, response, nil
+	return page, response, nil
 }
 
-func (b BoardService) IssuesBySprint(ctx context.Context, boardId, sprintId, startAt, maxResults int, opts *model.IssueOptionScheme) (*model.BoardIssuePageScheme, *model.ResponseScheme, error) {
+func (i *internalBoardImpl) IssuesBySprint(ctx context.Context, boardID, sprintID int, opts *model.IssueOptionScheme, startAt, maxResults int) (*model.BoardIssuePageScheme, *model.ResponseScheme, error) {
 
-	if boardId == 0 {
+	if boardID == 0 {
 		return nil, nil, model.ErrNoBoardIDError
 	}
 
-	if sprintId == 0 {
+	if sprintID == 0 {
 		return nil, nil, model.ErrNoSprintIDError
 	}
 
@@ -429,7 +645,7 @@ func (b BoardService) IssuesBySprint(ctx context.Context, boardId, sprintId, sta
 	if opts != nil {
 
 		if !opts.ValidateQuery {
-			params.Add("validateQuery ", "false")
+			params.Add("validateQuery", "false")
 		}
 
 		if len(opts.JQL) != 0 {
@@ -445,25 +661,25 @@ func (b BoardService) IssuesBySprint(ctx context.Context, boardId, sprintId, sta
 		}
 	}
 
-	endpoint := fmt.Sprintf("/rest/agile/%v/board/%v/sprint/%v/issue?%v", b.version, boardId, sprintId, params.Encode())
+	endpoint := fmt.Sprintf("rest/agile/%v/board/%v/sprint/%v/issue?%v", i.version, boardID, sprintID, params.Encode())
 
-	request, err := b.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	var issues model.BoardIssuePageScheme
-	response, err := b.c.Call(request, &issues)
+	page := new(model.BoardIssuePageScheme)
+	response, err := i.c.Call(request, page)
 	if err != nil {
 		return nil, response, err
 	}
 
-	return &issues, response, nil
+	return page, response, nil
 }
 
-func (b BoardService) Versions(ctx context.Context, boardId, startAt, maxResults int, released bool) (*model.BoardVersionPageScheme, *model.ResponseScheme, error) {
+func (i *internalBoardImpl) Versions(ctx context.Context, boardID, startAt, maxResults int, released bool) (*model.BoardVersionPageScheme, *model.ResponseScheme, error) {
 
-	if boardId == 0 {
+	if boardID == 0 {
 		return nil, nil, model.ErrNoBoardIDError
 	}
 
@@ -472,36 +688,36 @@ func (b BoardService) Versions(ctx context.Context, boardId, startAt, maxResults
 	params.Add("maxResults", strconv.Itoa(maxResults))
 	params.Add("released", fmt.Sprintf("%t", released))
 
-	endpoint := fmt.Sprintf("/rest/agile/%v/board/%v/version?%v", b.version, boardId, params.Encode())
+	endpoint := fmt.Sprintf("rest/agile/%v/board/%v/version?%v", i.version, boardID, params.Encode())
 
-	request, err := b.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	var versions model.BoardVersionPageScheme
-	response, err := b.c.Call(request, &versions)
+	page := new(model.BoardVersionPageScheme)
+	response, err := i.c.Call(request, page)
 	if err != nil {
 		return nil, response, err
 	}
 
-	return &versions, response, nil
+	return page, response, nil
 }
 
-func (b BoardService) Delete(ctx context.Context, boardId int) (*model.ResponseScheme, error) {
+func (i *internalBoardImpl) Delete(ctx context.Context, boardID int) (*model.ResponseScheme, error) {
 
-	if boardId == 0 {
+	if boardID == 0 {
 		return nil, model.ErrNoBoardIDError
 	}
 
-	endpoint := fmt.Sprintf("/rest/agile/%v/board/%v", b.version, boardId)
+	endpoint := fmt.Sprintf("rest/agile/%v/board/%v", i.version, boardID)
 
-	request, err := b.c.NewRequest(ctx, http.MethodDelete, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, nil)
 	if err != nil {
 		return nil, err
 	}
 
-	response, err := b.c.Call(request, nil)
+	response, err := i.c.Call(request, nil)
 	if err != nil {
 		return response, err
 	}
@@ -509,7 +725,7 @@ func (b BoardService) Delete(ctx context.Context, boardId int) (*model.ResponseS
 	return response, nil
 }
 
-func (b BoardService) Gets(ctx context.Context, opts *model.GetBoardsOptions, startAt, maxResults int) (*model.BoardPageScheme, *model.ResponseScheme, error) {
+func (i *internalBoardImpl) Gets(ctx context.Context, opts *model.GetBoardsOptions, startAt, maxResults int) (*model.BoardPageScheme, *model.ResponseScheme, error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -558,18 +774,18 @@ func (b BoardService) Gets(ctx context.Context, opts *model.GetBoardsOptions, st
 		}
 	}
 
-	endpoint := fmt.Sprintf("/rest/agile/%v/board?%v", b.version, params.Encode())
+	endpoint := fmt.Sprintf("rest/agile/%v/board?%v", i.version, params.Encode())
 
-	request, err := b.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	var boards model.BoardPageScheme
-	response, err := b.c.Call(request, &boards)
+	page := new(model.BoardPageScheme)
+	response, err := i.c.Call(request, page)
 	if err != nil {
 		return nil, response, err
 	}
 
-	return &boards, response, nil
+	return page, response, nil
 }

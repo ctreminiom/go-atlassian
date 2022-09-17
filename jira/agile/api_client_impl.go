@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"errors"
 	"github.com/ctreminiom/go-atlassian/jira/agile/internal"
 	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service/agile"
@@ -64,7 +63,7 @@ type Client struct {
 	HTTP   common.HttpClient
 	Site   *url.URL
 	Auth   common.Authentication
-	Board  agile.Board
+	Board  *internal.BoardService
 	Epic   agile.Epic
 	Sprint agile.Sprint
 }
@@ -107,10 +106,14 @@ func (c *Client) NewRequest(ctx context.Context, method, apiEndpoint string, pay
 func (c *Client) Call(request *http.Request, structure interface{}) (*models.ResponseScheme, error) {
 
 	response, err := c.HTTP.Do(request)
-
 	if err != nil {
 		return nil, err
 	}
+
+	return c.TransformTheHTTPResponse(response, structure)
+}
+
+func (c *Client) TransformTheHTTPResponse(response *http.Response, structure interface{}) (*models.ResponseScheme, error) {
 
 	responseTransformed := &models.ResponseScheme{
 		Response: response,
@@ -119,58 +122,24 @@ func (c *Client) Call(request *http.Request, structure interface{}) (*models.Res
 		Method:   response.Request.Method,
 	}
 
-	if !(response.StatusCode >= 200 && response.StatusCode < 300) {
-		return responseTransformed, models.ErrInvalidStatusCodeError
-	}
-
 	responseAsBytes, err := ioutil.ReadAll(response.Body)
 	if err != nil {
 		return responseTransformed, err
-	}
-
-	if structure != nil {
-		if err = json.Unmarshal(responseAsBytes, &structure); err != nil {
-			return responseTransformed, err
-		}
-	}
-
-	_, err = responseTransformed.Bytes.Write(responseAsBytes)
-	if err != nil {
-		return nil, err
-	}
-
-	return responseTransformed, nil
-}
-
-func (c *Client) TransformTheHTTPResponse(response *http.Response, structure interface{}) (*models.ResponseScheme, error) {
-
-	if response == nil {
-		return nil, errors.New("validation failed, please provide a http.Response pointer")
-	}
-
-	responseTransformed := &models.ResponseScheme{}
-	responseTransformed.Code = response.StatusCode
-	responseTransformed.Endpoint = response.Request.URL.String()
-	responseTransformed.Method = response.Request.Method
-
-	var wasSuccess = response.StatusCode >= 200 && response.StatusCode < 300
-	if !wasSuccess {
-
-		return responseTransformed, errors.New("TODO")
-	}
-
-	responseAsBytes, err := ioutil.ReadAll(response.Body)
-	if err != nil {
-		return responseTransformed, err
-	}
-
-	if structure != nil {
-		if err = json.Unmarshal(responseAsBytes, &structure); err != nil {
-			return responseTransformed, err
-		}
 	}
 
 	responseTransformed.Bytes.Write(responseAsBytes)
+
+	var wasSuccess = response.StatusCode >= 200 && response.StatusCode < 300
+	if !wasSuccess {
+		return responseTransformed, models.ErrInvalidStatusCodeError
+	}
+
+	if structure != nil {
+		if err = json.Unmarshal(responseAsBytes, &structure); err != nil {
+			return responseTransformed, err
+		}
+	}
+
 	return responseTransformed, nil
 }
 

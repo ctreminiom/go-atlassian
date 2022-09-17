@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"github.com/ctreminiom/go-atlassian/jira/agile/internal"
 	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service/agile"
 	"github.com/ctreminiom/go-atlassian/service/common"
@@ -41,7 +42,7 @@ func TestClient_Call(t *testing.T) {
 		HTTP           common.HttpClient
 		Site           *url.URL
 		Authentication common.Authentication
-		Board          agile.Board
+		Board          *internal.BoardService
 		Epic           agile.Epic
 		Sprint         agile.Sprint
 	}
@@ -253,7 +254,7 @@ func TestClient_TransformTheHTTPResponse(t *testing.T) {
 		HTTP           common.HttpClient
 		Site           *url.URL
 		Authentication common.Authentication
-		Board          agile.Board
+		Board          *internal.BoardService
 		Epic           agile.Epic
 		Sprint         agile.Sprint
 	}
@@ -321,7 +322,7 @@ func TestClient_TransformTheHTTPResponse(t *testing.T) {
 func TestClient_TransformStructToReader(t *testing.T) {
 
 	expectedBytes, err := json.Marshal(&models.BoardScheme{
-		Name: "Board Sample",
+		Name: "BoardConnector Sample",
 		Type: "Scrum",
 	})
 
@@ -333,7 +334,7 @@ func TestClient_TransformStructToReader(t *testing.T) {
 		HTTP           common.HttpClient
 		Site           *url.URL
 		Authentication common.Authentication
-		Board          agile.Board
+		Board          *internal.BoardService
 		Epic           agile.Epic
 		Sprint         agile.Sprint
 	}
@@ -354,7 +355,7 @@ func TestClient_TransformStructToReader(t *testing.T) {
 			name: "when the parameters are correct",
 			args: args{
 				structure: &models.BoardScheme{
-					Name: "Board Sample",
+					Name: "BoardConnector Sample",
 					Type: "Scrum",
 				},
 			},
@@ -366,7 +367,7 @@ func TestClient_TransformStructToReader(t *testing.T) {
 			name: "when the payload provided is not a pointer",
 			args: args{
 				structure: models.BoardScheme{
-					Name: "Board Sample",
+					Name: "BoardConnector Sample",
 					Type: "Scrum",
 				},
 			},

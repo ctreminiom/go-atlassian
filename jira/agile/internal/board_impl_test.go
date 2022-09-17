@@ -6,11 +6,9 @@ import (
 	"errors"
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
-	"github.com/ctreminiom/go-atlassian/service/agile"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
 	"github.com/stretchr/testify/assert"
 	"net/http"
-	"reflect"
 	"testing"
 )
 
@@ -46,7 +44,7 @@ func Test_BoardService_Get(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"/rest/agile/1.0/board/1",
+					"rest/agile/1.0/board/1",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -72,7 +70,7 @@ func Test_BoardService_Get(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"/rest/agile/1.0/board/1",
+					"rest/agile/1.0/board/1",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -100,7 +98,7 @@ func Test_BoardService_Get(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"/rest/agile/1.0/board/1",
+					"rest/agile/1.0/board/1",
 					nil).
 					Return(&http.Request{}, errors.New("unable to create the http request"))
 
@@ -179,7 +177,7 @@ func Test_BoardService_Create(t *testing.T) {
 			args: args{
 				ctx: context.Background(),
 				payload: &model.BoardPayloadScheme{
-					Name:     "Board Name Sample",
+					Name:     "BoardConnector Name Sample",
 					Type:     "scrum",
 					FilterID: 1002,
 				},
@@ -190,7 +188,7 @@ func Test_BoardService_Create(t *testing.T) {
 
 				client.On("TransformStructToReader",
 					&model.BoardPayloadScheme{
-						Name:     "Board Name Sample",
+						Name:     "BoardConnector Name Sample",
 						Type:     "scrum",
 						FilterID: 1002,
 					}).
@@ -199,7 +197,7 @@ func Test_BoardService_Create(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
-					"/rest/agile/1.0/board",
+					"rest/agile/1.0/board",
 					bytes.NewReader([]byte{})).
 					Return(&http.Request{}, nil)
 
@@ -217,7 +215,7 @@ func Test_BoardService_Create(t *testing.T) {
 			args: args{
 				ctx: context.Background(),
 				payload: &model.BoardPayloadScheme{
-					Name:     "Board Name Sample",
+					Name:     "BoardConnector Name Sample",
 					Type:     "scrum",
 					FilterID: 1002,
 				},
@@ -228,7 +226,7 @@ func Test_BoardService_Create(t *testing.T) {
 
 				client.On("TransformStructToReader",
 					&model.BoardPayloadScheme{
-						Name:     "Board Name Sample",
+						Name:     "BoardConnector Name Sample",
 						Type:     "scrum",
 						FilterID: 1002,
 					}).
@@ -237,7 +235,7 @@ func Test_BoardService_Create(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
-					"/rest/agile/1.0/board",
+					"rest/agile/1.0/board",
 					bytes.NewReader([]byte{})).
 					Return(&http.Request{}, nil)
 
@@ -257,7 +255,7 @@ func Test_BoardService_Create(t *testing.T) {
 			args: args{
 				ctx: context.Background(),
 				payload: &model.BoardPayloadScheme{
-					Name:     "Board Name Sample",
+					Name:     "BoardConnector Name Sample",
 					Type:     "scrum",
 					FilterID: 1002,
 				},
@@ -268,7 +266,7 @@ func Test_BoardService_Create(t *testing.T) {
 
 				client.On("TransformStructToReader",
 					&model.BoardPayloadScheme{
-						Name:     "Board Name Sample",
+						Name:     "BoardConnector Name Sample",
 						Type:     "scrum",
 						FilterID: 1002,
 					}).
@@ -277,7 +275,7 @@ func Test_BoardService_Create(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
-					"/rest/agile/1.0/board",
+					"rest/agile/1.0/board",
 					bytes.NewReader([]byte{})).
 					Return(&http.Request{}, errors.New("unable to create the http request"))
 
@@ -381,7 +379,7 @@ func Test_BoardService_Backlog(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"/rest/agile/1.0/board/1001/backlog?expand=changelogs+&fields=status%2Cdescription&jql=project+%3D+ACA&maxResults=50&startAt=0&validateQuery=true",
+					"rest/agile/1.0/board/1001/backlog?expand=changelogs+&fields=status%2Cdescription&jql=project+%3D+ACA&maxResults=50&startAt=0&validateQuery=true",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -415,7 +413,7 @@ func Test_BoardService_Backlog(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"/rest/agile/1.0/board/1001/backlog?expand=changelogs+&fields=status%2Cdescription&jql=project+%3D+ACA&maxResults=50&startAt=0&validateQuery=true",
+					"rest/agile/1.0/board/1001/backlog?expand=changelogs+&fields=status%2Cdescription&jql=project+%3D+ACA&maxResults=50&startAt=0&validateQuery=true",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -451,7 +449,7 @@ func Test_BoardService_Backlog(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"/rest/agile/1.0/board/1001/backlog?expand=changelogs+&fields=status%2Cdescription&jql=project+%3D+ACA&maxResults=50&startAt=0&validateQuery=true",
+					"rest/agile/1.0/board/1001/backlog?expand=changelogs+&fields=status%2Cdescription&jql=project+%3D+ACA&maxResults=50&startAt=0&validateQuery=true",
 					nil).
 					Return(&http.Request{}, errors.New("client: no http request created"))
 
@@ -492,8 +490,8 @@ func Test_BoardService_Backlog(t *testing.T) {
 			service, err := NewBoardService(testCase.fields.c, "1.0")
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := service.Backlog(testCase.args.ctx, testCase.args.boardId, testCase.args.startAt,
-				testCase.args.maxResults, testCase.args.opts)
+			gotResult, gotResponse, err := service.Backlog(testCase.args.ctx, testCase.args.boardId, testCase.args.opts, testCase.args.startAt,
+				testCase.args.maxResults)
 
 			if testCase.wantErr {
 
@@ -544,7 +542,7 @@ func Test_BoardService_Configuration(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"/rest/agile/1.0/board/1001/configuration",
+					"rest/agile/1.0/board/1001/configuration",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -570,7 +568,7 @@ func Test_BoardService_Configuration(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"/rest/agile/1.0/board/1001/configuration",
+					"rest/agile/1.0/board/1001/configuration",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -598,7 +596,7 @@ func Test_BoardService_Configuration(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"/rest/agile/1.0/board/1001/configuration",
+					"rest/agile/1.0/board/1001/configuration",
 					nil).
 					Return(&http.Request{}, errors.New("client: no http request created"))
 
@@ -689,7 +687,7 @@ func Test_BoardService_Epics(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"/rest/agile/1.0/board/1001/epic?done=false&maxResults=50&startAt=0",
+					"rest/agile/1.0/board/1001/epic?done=false&maxResults=50&startAt=0",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -718,7 +716,7 @@ func Test_BoardService_Epics(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"/rest/agile/1.0/board/1001/epic?done=false&maxResults=50&startAt=0",
+					"rest/agile/1.0/board/1001/epic?done=false&maxResults=50&startAt=0",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -749,7 +747,7 @@ func Test_BoardService_Epics(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"/rest/agile/1.0/board/1001/epic?done=false&maxResults=50&startAt=0",
+					"rest/agile/1.0/board/1001/epic?done=false&maxResults=50&startAt=0",
 					nil).
 					Return(&http.Request{}, errors.New("client: no http request created"))
 
@@ -835,7 +833,7 @@ func Test_BoardService_Delete(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
-					"/rest/agile/1.0/board/1001",
+					"rest/agile/1.0/board/1001",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -861,7 +859,7 @@ func Test_BoardService_Delete(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
-					"/rest/agile/1.0/board/1001",
+					"rest/agile/1.0/board/1001",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -889,7 +887,7 @@ func Test_BoardService_Delete(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
-					"/rest/agile/1.0/board/1001",
+					"rest/agile/1.0/board/1001",
 					nil).
 					Return(&http.Request{}, errors.New("client: no http request created"))
 
@@ -977,7 +975,7 @@ func Test_BoardService_Filter(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"/rest/agile/1.0/board/filter/1001?maxResults=50&startAt=0",
+					"rest/agile/1.0/board/filter/1001?maxResults=50&startAt=0",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -1005,7 +1003,7 @@ func Test_BoardService_Filter(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"/rest/agile/1.0/board/filter/1001?maxResults=50&startAt=0",
+					"rest/agile/1.0/board/filter/1001?maxResults=50&startAt=0",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -1035,7 +1033,7 @@ func Test_BoardService_Filter(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"/rest/agile/1.0/board/filter/1001?maxResults=50&startAt=0",
+					"rest/agile/1.0/board/filter/1001?maxResults=50&startAt=0",
 					nil).
 					Return(&http.Request{}, errors.New("client: no http request created"))
 
@@ -1124,7 +1122,7 @@ func Test_BoardService_Gets(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"/rest/agile/1.0/board?maxResults=50&startAt=0",
+					"rest/agile/1.0/board?maxResults=50&startAt=0",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -1163,7 +1161,7 @@ func Test_BoardService_Gets(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"/rest/agile/1.0/board?accountIdLocation=uuid-sample&expand=issues&filterId=100&includePrivate=true&"+
+					"rest/agile/1.0/board?accountIdLocation=uuid-sample&expand=issues&filterId=100&includePrivate=true&"+
 						"maxResults=50&name=Sample+Name&negateLocationFiltering=true&orderBy=issues&projectKeyOrId=DUMMY&proj"+
 						"ectLocation=uuid-sample&startAt=0&type=scrum",
 					nil).
@@ -1192,7 +1190,7 @@ func Test_BoardService_Gets(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"/rest/agile/1.0/board?maxResults=50&startAt=0",
+					"rest/agile/1.0/board?maxResults=50&startAt=0",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -1221,7 +1219,7 @@ func Test_BoardService_Gets(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"/rest/agile/1.0/board?maxResults=50&startAt=0",
+					"rest/agile/1.0/board?maxResults=50&startAt=0",
 					nil).
 					Return(&http.Request{}, errors.New("client: no http request created"))
 
@@ -1300,7 +1298,7 @@ func Test_BoardService_Issues(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"/rest/agile/1.0/board/1000/issue?maxResults=50&startAt=0",
+					"rest/agile/1.0/board/1000/issue?maxResults=50&startAt=0",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -1334,7 +1332,7 @@ func Test_BoardService_Issues(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"/rest/agile/1.0/board/1000/issue?expand=orders&fields=fields&jql=project+%3D+DUMMY&maxResults=50&startAt=0",
+					"rest/agile/1.0/board/1000/issue?expand=orders&fields=fields&jql=project+%3D+DUMMY&maxResults=50&startAt=0",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -1362,7 +1360,7 @@ func Test_BoardService_Issues(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"/rest/agile/1.0/board/1000/issue?maxResults=50&startAt=0",
+					"rest/agile/1.0/board/1000/issue?maxResults=50&startAt=0",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -1392,7 +1390,7 @@ func Test_BoardService_Issues(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"/rest/agile/1.0/board/1000/issue?maxResults=50&startAt=0",
+					"rest/agile/1.0/board/1000/issue?maxResults=50&startAt=0",
 					nil).
 					Return(&http.Request{}, errors.New("client: no http request created"))
 
@@ -1427,8 +1425,8 @@ func Test_BoardService_Issues(t *testing.T) {
 			service, err := NewBoardService(testCase.fields.c, "1.0")
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := service.Issues(testCase.args.ctx, testCase.args.boardId, testCase.args.startAt,
-				testCase.args.maxResults, testCase.args.opts)
+			gotResult, gotResponse, err := service.Issues(testCase.args.ctx, testCase.args.boardId, testCase.args.opts,
+				testCase.args.startAt, testCase.args.maxResults)
 
 			if testCase.wantErr {
 
@@ -1487,7 +1485,7 @@ func Test_BoardService_IssuesByEpic(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"/rest/agile/1.0/board/1000/epic/102/issue?maxResults=50&startAt=0",
+					"rest/agile/1.0/board/1000/epic/102/issue?maxResults=50&startAt=0",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -1522,7 +1520,7 @@ func Test_BoardService_IssuesByEpic(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"/rest/agile/1.0/board/1000/epic/102/issue?expand=orders&fields=fields&jql=project+%3D+DUMMY&maxResults=50&startAt=0",
+					"rest/agile/1.0/board/1000/epic/102/issue?expand=orders&fields=fields&jql=project+%3D+DUMMY&maxResults=50&startAt=0",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -1551,7 +1549,7 @@ func Test_BoardService_IssuesByEpic(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"/rest/agile/1.0/board/1000/epic/102/issue?maxResults=50&startAt=0",
+					"rest/agile/1.0/board/1000/epic/102/issue?maxResults=50&startAt=0",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -1582,7 +1580,7 @@ func Test_BoardService_IssuesByEpic(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"/rest/agile/1.0/board/1000/epic/102/issue?maxResults=50&startAt=0",
+					"rest/agile/1.0/board/1000/epic/102/issue?maxResults=50&startAt=0",
 					nil).
 					Return(&http.Request{}, errors.New("client: no http request created"))
 
@@ -1633,8 +1631,7 @@ func Test_BoardService_IssuesByEpic(t *testing.T) {
 			assert.NoError(t, err)
 
 			gotResult, gotResponse, err := service.IssuesByEpic(testCase.args.ctx, testCase.args.boardId, testCase.args.epicId,
-				testCase.args.startAt,
-				testCase.args.maxResults, testCase.args.opts)
+				testCase.args.opts, testCase.args.startAt, testCase.args.maxResults)
 
 			if testCase.wantErr {
 
@@ -1693,7 +1690,7 @@ func Test_BoardService_IssuesBySprint(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"/rest/agile/1.0/board/1000/sprint/102/issue?maxResults=50&startAt=0",
+					"rest/agile/1.0/board/1000/sprint/102/issue?maxResults=50&startAt=0",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -1728,7 +1725,7 @@ func Test_BoardService_IssuesBySprint(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"/rest/agile/1.0/board/1000/sprint/102/issue?expand=orders&fields=fields&jql=project+%3D+DUMMY&maxResults=50&startAt=0&validateQuery+=false",
+					"rest/agile/1.0/board/1000/sprint/102/issue?expand=orders&fields=fields&jql=project+%3D+DUMMY&maxResults=50&startAt=0&validateQuery=false",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -1757,7 +1754,7 @@ func Test_BoardService_IssuesBySprint(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"/rest/agile/1.0/board/1000/sprint/102/issue?maxResults=50&startAt=0",
+					"rest/agile/1.0/board/1000/sprint/102/issue?maxResults=50&startAt=0",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -1788,7 +1785,7 @@ func Test_BoardService_IssuesBySprint(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"/rest/agile/1.0/board/1000/sprint/102/issue?maxResults=50&startAt=0",
+					"rest/agile/1.0/board/1000/sprint/102/issue?maxResults=50&startAt=0",
 					nil).
 					Return(&http.Request{}, errors.New("client: no http request created"))
 
@@ -1839,8 +1836,7 @@ func Test_BoardService_IssuesBySprint(t *testing.T) {
 			assert.NoError(t, err)
 
 			gotResult, gotResponse, err := service.IssuesBySprint(testCase.args.ctx, testCase.args.boardId, testCase.args.sprintId,
-				testCase.args.startAt,
-				testCase.args.maxResults, testCase.args.opts)
+				testCase.args.opts, testCase.args.startAt, testCase.args.maxResults)
 
 			if testCase.wantErr {
 
@@ -1897,7 +1893,7 @@ func Test_BoardService_IssuesWithoutEpic(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"/rest/agile/1.0/board/1000/epic/none/issue?maxResults=50&startAt=0",
+					"rest/agile/1.0/board/1000/epic/none/issue?maxResults=50&startAt=0",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -1931,7 +1927,7 @@ func Test_BoardService_IssuesWithoutEpic(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"/rest/agile/1.0/board/1000/epic/none/issue?expand=orders&fields=fields&jql=project+%3D+DUMMY&maxResults=50&startAt=0&validateQuery=false",
+					"rest/agile/1.0/board/1000/epic/none/issue?expand=orders&fields=fields&jql=project+%3D+DUMMY&maxResults=50&startAt=0&validateQuery=false",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -1959,7 +1955,7 @@ func Test_BoardService_IssuesWithoutEpic(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"/rest/agile/1.0/board/1000/epic/none/issue?maxResults=50&startAt=0",
+					"rest/agile/1.0/board/1000/epic/none/issue?maxResults=50&startAt=0",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -1989,7 +1985,7 @@ func Test_BoardService_IssuesWithoutEpic(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"/rest/agile/1.0/board/1000/epic/none/issue?maxResults=50&startAt=0",
+					"rest/agile/1.0/board/1000/epic/none/issue?maxResults=50&startAt=0",
 					nil).
 					Return(&http.Request{}, errors.New("client: no http request created"))
 
@@ -2024,8 +2020,8 @@ func Test_BoardService_IssuesWithoutEpic(t *testing.T) {
 			service, err := NewBoardService(testCase.fields.c, "1.0")
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := service.IssuesWithoutEpic(testCase.args.ctx, testCase.args.boardId, testCase.args.startAt,
-				testCase.args.maxResults, testCase.args.opts)
+			gotResult, gotResponse, err := service.IssuesWithoutEpic(testCase.args.ctx, testCase.args.boardId, testCase.args.opts,
+				testCase.args.startAt, testCase.args.maxResults)
 
 			if testCase.wantErr {
 
@@ -2090,7 +2086,7 @@ func Test_BoardService_Move(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
-					"/rest/agile/1.0/board/1000/issue",
+					"rest/agile/1.0/board/1000/issue",
 					bytes.NewReader([]byte{})).
 					Return(&http.Request{}, nil)
 
@@ -2128,7 +2124,7 @@ func Test_BoardService_Move(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
-					"/rest/agile/1.0/board/1000/issue",
+					"rest/agile/1.0/board/1000/issue",
 					bytes.NewReader([]byte{})).
 					Return(&http.Request{}, nil)
 
@@ -2168,7 +2164,7 @@ func Test_BoardService_Move(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
-					"/rest/agile/1.0/board/1000/issue",
+					"rest/agile/1.0/board/1000/issue",
 					bytes.NewReader([]byte{})).
 					Return(&http.Request{}, errors.New("client: no http request created"))
 
@@ -2260,7 +2256,7 @@ func Test_BoardService_Projects(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"/rest/agile/1.0/board/1000/project?maxResults=50&startAt=0",
+					"rest/agile/1.0/board/1000/project?maxResults=50&startAt=0",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -2288,7 +2284,7 @@ func Test_BoardService_Projects(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"/rest/agile/1.0/board/1000/project?maxResults=50&startAt=0",
+					"rest/agile/1.0/board/1000/project?maxResults=50&startAt=0",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -2318,7 +2314,7 @@ func Test_BoardService_Projects(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"/rest/agile/1.0/board/1000/project?maxResults=50&startAt=0",
+					"rest/agile/1.0/board/1000/project?maxResults=50&startAt=0",
 					nil).
 					Return(&http.Request{}, errors.New("client: no http request created"))
 
@@ -2410,7 +2406,7 @@ func Test_BoardService_Sprints(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"/rest/agile/1.0/board/1000/sprint?maxResults=50&startAt=0&state=active",
+					"rest/agile/1.0/board/1000/sprint?maxResults=50&startAt=0&state=active",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -2439,7 +2435,7 @@ func Test_BoardService_Sprints(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"/rest/agile/1.0/board/1000/sprint?maxResults=50&startAt=0&state=active",
+					"rest/agile/1.0/board/1000/sprint?maxResults=50&startAt=0&state=active",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -2470,7 +2466,7 @@ func Test_BoardService_Sprints(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"/rest/agile/1.0/board/1000/sprint?maxResults=50&startAt=0&state=active",
+					"rest/agile/1.0/board/1000/sprint?maxResults=50&startAt=0&state=active",
 					nil).
 					Return(&http.Request{}, errors.New("client: no http request created"))
 
@@ -2562,7 +2558,7 @@ func Test_BoardService_Versions(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"/rest/agile/1.0/board/1000/version?maxResults=50&released=true&startAt=0",
+					"rest/agile/1.0/board/1000/version?maxResults=50&released=true&startAt=0",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -2591,7 +2587,7 @@ func Test_BoardService_Versions(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"/rest/agile/1.0/board/1000/version?maxResults=50&released=false&startAt=0",
+					"rest/agile/1.0/board/1000/version?maxResults=50&released=false&startAt=0",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -2620,7 +2616,7 @@ func Test_BoardService_Versions(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"/rest/agile/1.0/board/1000/version?maxResults=50&released=true&startAt=0",
+					"rest/agile/1.0/board/1000/version?maxResults=50&released=true&startAt=0",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -2651,7 +2647,7 @@ func Test_BoardService_Versions(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"/rest/agile/1.0/board/1000/version?maxResults=50&released=true&startAt=0",
+					"rest/agile/1.0/board/1000/version?maxResults=50&released=true&startAt=0",
 					nil).
 					Return(&http.Request{}, errors.New("client: no http request created"))
 
@@ -2702,47 +2698,6 @@ func Test_BoardService_Versions(t *testing.T) {
 				assert.NoError(t, err)
 				assert.NotEqual(t, gotResponse, nil)
 				assert.NotEqual(t, gotResult, nil)
-			}
-		})
-	}
-}
-
-func TestNewBoardService(t *testing.T) {
-
-	type args struct {
-		client  service.Client
-		version string
-	}
-
-	testCases := []struct {
-		name    string
-		args    args
-		want    agile.Board
-		wantErr bool
-	}{
-		{
-			name: "when the agile version is not provided",
-			args: args{
-				client:  mocks.NewClient(t),
-				version: "",
-			},
-			want:    nil,
-			wantErr: true,
-		},
-	}
-
-	for _, testCase := range testCases {
-		t.Run(testCase.name, func(t *testing.T) {
-
-			got, err := NewBoardService(testCase.args.client, testCase.args.version)
-
-			if (err != nil) != testCase.wantErr {
-				t.Errorf("NewBoardService() error = %v, wantErr %v", err, testCase.wantErr)
-				return
-			}
-
-			if !reflect.DeepEqual(got, testCase.want) {
-				t.Errorf("NewBoardService() got = %v, want %v", got, testCase.want)
 			}
 		})
 	}

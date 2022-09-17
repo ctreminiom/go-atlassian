@@ -6,11 +6,9 @@ import (
 	"errors"
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
-	"github.com/ctreminiom/go-atlassian/service/agile"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
 	"github.com/stretchr/testify/assert"
 	"net/http"
-	"reflect"
 	"testing"
 )
 
@@ -46,7 +44,7 @@ func Test_EpicService_Get(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"/rest/agile/1.0/epic/EPIC-1",
+					"rest/agile/1.0/epic/EPIC-1",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -72,7 +70,7 @@ func Test_EpicService_Get(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"/rest/agile/1.0/epic/EPIC-1",
+					"rest/agile/1.0/epic/EPIC-1",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -100,7 +98,7 @@ func Test_EpicService_Get(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"/rest/agile/1.0/epic/EPIC-1",
+					"rest/agile/1.0/epic/EPIC-1",
 					nil).
 					Return(&http.Request{}, errors.New("unable to create the http request"))
 
@@ -198,7 +196,7 @@ func Test_EpicService_Issues(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"/rest/agile/1.0/epic/EPIC-1/issue?expand=changelogs&fields=status%2Csummary&jql=project+%3D+EPIC&maxResults=50&startAt=10&validateQuery=true",
+					"rest/agile/1.0/epic/EPIC-1/issue?expand=changelogs&fields=status%2Csummary&jql=project+%3D+EPIC&maxResults=50&startAt=10&validateQuery=true",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -232,7 +230,7 @@ func Test_EpicService_Issues(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"/rest/agile/1.0/epic/EPIC-1/issue?expand=changelogs&fields=status%2Csummary&jql=project+%3D+EPIC&maxResults=50&startAt=10&validateQuery=true",
+					"rest/agile/1.0/epic/EPIC-1/issue?expand=changelogs&fields=status%2Csummary&jql=project+%3D+EPIC&maxResults=50&startAt=10&validateQuery=true",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -268,7 +266,7 @@ func Test_EpicService_Issues(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"/rest/agile/1.0/epic/EPIC-1/issue?expand=changelogs&fields=status%2Csummary&jql=project+%3D+EPIC&maxResults=50&startAt=10&validateQuery=true",
+					"rest/agile/1.0/epic/EPIC-1/issue?expand=changelogs&fields=status%2Csummary&jql=project+%3D+EPIC&maxResults=50&startAt=10&validateQuery=true",
 					nil).
 					Return(&http.Request{}, errors.New("unable to create the http request"))
 
@@ -303,8 +301,8 @@ func Test_EpicService_Issues(t *testing.T) {
 			service, err := NewEpicService(testCase.fields.c, "1.0")
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := service.Issues(testCase.args.ctx, testCase.args.epicIdOrKey, testCase.args.startAt,
-				testCase.args.maxResults, testCase.args.opts)
+			gotResult, gotResponse, err := service.Issues(testCase.args.ctx, testCase.args.epicIdOrKey, testCase.args.opts,
+				testCase.args.startAt, testCase.args.maxResults)
 
 			if testCase.wantErr {
 
@@ -362,7 +360,7 @@ func Test_EpicService_Move(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
-					"/rest/agile/1.0/epic/EPIC-1/issue",
+					"rest/agile/1.0/epic/EPIC-1/issue",
 					bytes.NewReader([]byte{})).
 					Return(&http.Request{}, nil)
 
@@ -393,7 +391,7 @@ func Test_EpicService_Move(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
-					"/rest/agile/1.0/epic/EPIC-1/issue",
+					"rest/agile/1.0/epic/EPIC-1/issue",
 					bytes.NewReader([]byte{})).
 					Return(&http.Request{}, nil)
 
@@ -426,7 +424,7 @@ func Test_EpicService_Move(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
-					"/rest/agile/1.0/epic/EPIC-1/issue",
+					"rest/agile/1.0/epic/EPIC-1/issue",
 					bytes.NewReader([]byte{})).
 					Return(&http.Request{}, errors.New("unable to create the http request"))
 
@@ -475,47 +473,6 @@ func Test_EpicService_Move(t *testing.T) {
 
 				assert.NoError(t, err)
 				assert.NotEqual(t, gotResponse, nil)
-			}
-		})
-	}
-}
-
-func TestNewEpicService(t *testing.T) {
-
-	type args struct {
-		client  service.Client
-		version string
-	}
-
-	testCases := []struct {
-		name    string
-		args    args
-		want    agile.Epic
-		wantErr bool
-	}{
-		{
-			name: "when the agile version is not provided",
-			args: args{
-				client:  mocks.NewClient(t),
-				version: "",
-			},
-			want:    nil,
-			wantErr: true,
-		},
-	}
-
-	for _, testCase := range testCases {
-		t.Run(testCase.name, func(t *testing.T) {
-
-			got, err := NewEpicService(testCase.args.client, testCase.args.version)
-
-			if (err != nil) != testCase.wantErr {
-				t.Errorf("NewBoardService() error = %v, wantErr %v", err, testCase.wantErr)
-				return
-			}
-
-			if !reflect.DeepEqual(got, testCase.want) {
-				t.Errorf("NewBoardService() got = %v, want %v", got, testCase.want)
 			}
 		})
 	}

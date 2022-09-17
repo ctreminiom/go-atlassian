@@ -64,7 +64,7 @@ type Client struct {
 	Site   *url.URL
 	Auth   common.Authentication
 	Board  *internal.BoardService
-	Epic   agile.Epic
+	Epic   *internal.EpicService
 	Sprint agile.Sprint
 }
 

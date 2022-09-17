@@ -43,7 +43,7 @@ func TestClient_Call(t *testing.T) {
 		Site           *url.URL
 		Authentication common.Authentication
 		Board          *internal.BoardService
-		Epic           agile.Epic
+		Epic           *internal.EpicService
 		Sprint         agile.Sprint
 	}
 
@@ -255,7 +255,7 @@ func TestClient_TransformTheHTTPResponse(t *testing.T) {
 		Site           *url.URL
 		Authentication common.Authentication
 		Board          *internal.BoardService
-		Epic           agile.Epic
+		Epic           *internal.EpicService
 		Sprint         agile.Sprint
 	}
 
@@ -335,7 +335,7 @@ func TestClient_TransformStructToReader(t *testing.T) {
 		Site           *url.URL
 		Authentication common.Authentication
 		Board          *internal.BoardService
-		Epic           agile.Epic
+		Epic           *internal.EpicService
 		Sprint         agile.Sprint
 	}
 

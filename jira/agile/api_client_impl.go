@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"github.com/ctreminiom/go-atlassian/jira/agile/internal"
 	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/service/agile"
 	"github.com/ctreminiom/go-atlassian/service/common"
 	"io"
 	"io/ioutil"
@@ -65,7 +64,7 @@ type Client struct {
 	Auth   common.Authentication
 	Board  *internal.BoardService
 	Epic   *internal.EpicService
-	Sprint agile.Sprint
+	Sprint *internal.SprintService
 }
 
 func (c *Client) NewFormRequest(ctx context.Context, method, apiEndpoint, contentType string, payload io.Reader) (*http.Request, error) {

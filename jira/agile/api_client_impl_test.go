@@ -6,7 +6,6 @@ import (
 	"errors"
 	"github.com/ctreminiom/go-atlassian/jira/agile/internal"
 	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/service/agile"
 	"github.com/ctreminiom/go-atlassian/service/common"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
 	"github.com/stretchr/testify/assert"
@@ -44,7 +43,7 @@ func TestClient_Call(t *testing.T) {
 		Authentication common.Authentication
 		Board          *internal.BoardService
 		Epic           *internal.EpicService
-		Sprint         agile.Sprint
+		Sprint         *internal.SprintService
 	}
 
 	type args struct {
@@ -256,7 +255,7 @@ func TestClient_TransformTheHTTPResponse(t *testing.T) {
 		Authentication common.Authentication
 		Board          *internal.BoardService
 		Epic           *internal.EpicService
-		Sprint         agile.Sprint
+		Sprint         *internal.SprintService
 	}
 
 	type args struct {
@@ -336,7 +335,7 @@ func TestClient_TransformStructToReader(t *testing.T) {
 		Authentication common.Authentication
 		Board          *internal.BoardService
 		Epic           *internal.EpicService
-		Sprint         agile.Sprint
+		Sprint         *internal.SprintService
 	}
 
 	type args struct {

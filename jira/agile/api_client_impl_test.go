@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"github.com/ctreminiom/go-atlassian/jira/agile/internal"
 	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/service/agile"
 	"github.com/ctreminiom/go-atlassian/service/common"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
 	"github.com/stretchr/testify/assert"
@@ -41,9 +41,9 @@ func TestClient_Call(t *testing.T) {
 		HTTP           common.HttpClient
 		Site           *url.URL
 		Authentication common.Authentication
-		Board          agile.Board
-		Epic           agile.Epic
-		Sprint         agile.Sprint
+		Board          *internal.BoardService
+		Epic           *internal.EpicService
+		Sprint         *internal.SprintService
 	}
 
 	type args struct {
@@ -253,9 +253,9 @@ func TestClient_TransformTheHTTPResponse(t *testing.T) {
 		HTTP           common.HttpClient
 		Site           *url.URL
 		Authentication common.Authentication
-		Board          agile.Board
-		Epic           agile.Epic
-		Sprint         agile.Sprint
+		Board          *internal.BoardService
+		Epic           *internal.EpicService
+		Sprint         *internal.SprintService
 	}
 
 	type args struct {
@@ -321,7 +321,7 @@ func TestClient_TransformTheHTTPResponse(t *testing.T) {
 func TestClient_TransformStructToReader(t *testing.T) {
 
 	expectedBytes, err := json.Marshal(&models.BoardScheme{
-		Name: "Board Sample",
+		Name: "BoardConnector Sample",
 		Type: "Scrum",
 	})
 
@@ -333,9 +333,9 @@ func TestClient_TransformStructToReader(t *testing.T) {
 		HTTP           common.HttpClient
 		Site           *url.URL
 		Authentication common.Authentication
-		Board          agile.Board
-		Epic           agile.Epic
-		Sprint         agile.Sprint
+		Board          *internal.BoardService
+		Epic           *internal.EpicService
+		Sprint         *internal.SprintService
 	}
 
 	type args struct {
@@ -354,7 +354,7 @@ func TestClient_TransformStructToReader(t *testing.T) {
 			name: "when the parameters are correct",
 			args: args{
 				structure: &models.BoardScheme{
-					Name: "Board Sample",
+					Name: "BoardConnector Sample",
 					Type: "Scrum",
 				},
 			},
@@ -366,7 +366,7 @@ func TestClient_TransformStructToReader(t *testing.T) {
 			name: "when the payload provided is not a pointer",
 			args: args{
 				structure: models.BoardScheme{
-					Name: "Board Sample",
+					Name: "BoardConnector Sample",
 					Type: "Scrum",
 				},
 			},

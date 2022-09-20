@@ -13,6 +13,13 @@ import (
 )
 
 type ServiceRequestSubServices struct {
+	Approval    *ApprovalService
+	Attachment  *AttachmentService
+	Comment     *CommentService
+	Participant *ParticipantService
+	SLA         *ServiceLevelAgreementService
+	Feedback    *FeedbackService
+	Type        *TypeService
 }
 
 func NewRequestService(client service.Client, version string, subServices *ServiceRequestSubServices) (*RequestService, error) {
@@ -21,13 +28,33 @@ func NewRequestService(client service.Client, version string, subServices *Servi
 		return nil, model.ErrNoVersionProvided
 	}
 
-	return &RequestService{
+	requestService := &RequestService{
 		internalClient: &internalServiceRequestImpl{c: client, version: version},
-	}, nil
+	}
+
+	if subServices != nil {
+		requestService.Approval = subServices.Approval
+		requestService.Attachment = subServices.Attachment
+		requestService.Comment = subServices.Comment
+		requestService.Participant = subServices.Participant
+		requestService.SLA = subServices.SLA
+		requestService.Feedback = subServices.Feedback
+		requestService.Type = subServices.Type
+
+	}
+
+	return requestService, nil
 }
 
 type RequestService struct {
 	internalClient sm.RequestConnector
+	Approval       *ApprovalService
+	Attachment     *AttachmentService
+	Comment        *CommentService
+	Participant    *ParticipantService
+	SLA            *ServiceLevelAgreementService
+	Feedback       *FeedbackService
+	Type           *TypeService
 }
 
 // Create creates a customer request in a service desk.

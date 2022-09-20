@@ -294,7 +294,7 @@ func Test_internalServiceRequestImpl_Transitions(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			smService, err := NewRequestService(testCase.fields.c, "latest", nil)
+			smService, err := NewRequestService(testCase.fields.c, "latest", &ServiceRequestSubServices{})
 			assert.NoError(t, err)
 
 			gotResult, gotResponse, err := smService.Transitions(testCase.args.ctx, testCase.args.issueKeyOrID, testCase.args.start,

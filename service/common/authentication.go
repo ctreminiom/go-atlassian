@@ -8,4 +8,7 @@ type Authentication interface {
 	SetUserAgent(agent string)
 	GetUserAgent() string
 	HasUserAgent() bool
+
+	SetExperimentalFlag()
+	HasSetExperimentalFlag() bool
 }

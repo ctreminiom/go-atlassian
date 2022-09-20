@@ -1,14 +1,10 @@
 package models
 
-type RequestGetOptionsScheme struct {
-	SearchTerm        string
-	RequestOwnerships []string
-	RequestStatus     string
-	ApprovalStatus    string
-	OrganizationId    int
-	ServiceDeskID     int
-	RequestTypeID     int
-	Expand            []string
+type ServiceRequestOptionScheme struct {
+	ApprovalStatus, RequestStatus, SearchTerm string
+	OrganizationID, ServiceDeskID             int
+	RequestTypeID                             int
+	Expand, RequestOwnerships                 []string
 }
 
 type CustomerRequestTransitionPageScheme struct {
@@ -34,7 +30,7 @@ type CustomerRequestTransitionPageLinkScheme struct {
 	Prev    string `json:"prev,omitempty"`
 }
 
-type CustomerRequestsScheme struct {
+type CustomerRequestPageScheme struct {
 	Size       int                          `json:"size,omitempty"`
 	Start      int                          `json:"start,omitempty"`
 	Limit      int                          `json:"limit,omitempty"`

@@ -20,12 +20,15 @@ var (
 	ErrNoCustomerDisplayNameError = errors.New("sm: no customer display name set")
 	ErrNoKBQueryError             = errors.New("sm: no knowledge base query set")
 	ErrNoOrganizationNameError    = errors.New("sm: no organization name set")
+	ErrNoOrganizationIDError      = errors.New("sm: no organization id set")
 	ErrNoCommentBodyError         = errors.New("sm/jira: no comment body set")
 	ErrNoServiceDeskIDError       = errors.New("sm: no service desk id set")
+	ErrNoQueueIDError             = errors.New("sm: no service desk queue id set")
 	ErrNoRequestTypeIDError       = errors.New("sm: no request type id set")
 	ErrNoFileNameError            = errors.New("sm: no file name set")
 	ErrNoFileReaderError          = errors.New("sm: no io.Reader set")
 	ErrNoCustomRequestFieldsError = errors.New("sm: no customer request fields set")
+	ErrNoSLAMetricIDError         = errors.New("sm: no sla metric id set")
 
 	ErrNoContentIDError             = errors.New("confluence: no content id set")
 	ErrNoCQLError                   = errors.New("confluence: no CQL query set")
@@ -101,6 +104,7 @@ var (
 	ErrNoVersionProvided                   = errors.New("client: no module version set")
 	ErrNoIssueTypeSchemeIDError            = errors.New("jira: no issue type scheme id set")
 	ErrNoTaskIDError                       = errors.New("atlassian: no task id set")
+	ErrNoApprovalIDError                   = errors.New("jira: no approval id set")
 
 	ErrInvalidStatusCodeError = errors.New("client: invalid http response status, please refer the response.body for more details")
 	ErrNilPayloadError        = errors.New("client: please provide the necessary payload struct")

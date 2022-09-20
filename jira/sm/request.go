@@ -74,7 +74,7 @@ func (r *RequestService) Create(ctx context.Context, payload *model.CreateCustom
 // The returned customer requests are ordered chronologically by the latest activity on each request. For example, the latest status transition or comment.
 // Docs: https://docs.go-atlassian.io/jira-service-management-cloud/request#get-customer-requests
 func (r *RequestService) Gets(ctx context.Context, options *RequestGetOptionsScheme, start, limit int) (
-	result *model.CustomerRequestsScheme, response *ResponseScheme, err error) {
+	result *model.CustomerRequestPageScheme, response *ResponseScheme, err error) {
 
 	params := url.Values{}
 	params.Add("start", strconv.Itoa(start))

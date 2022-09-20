@@ -19,6 +19,12 @@ type AuthenticationService struct {
 	agent             string
 }
 
+func (a *AuthenticationService) SetExperimentalFlag() {}
+
+func (a *AuthenticationService) HasSetExperimentalFlag() bool {
+	return false
+}
+
 func (a *AuthenticationService) SetBasicAuth(mail, token string) {
 	a.mail = mail
 	a.token = token

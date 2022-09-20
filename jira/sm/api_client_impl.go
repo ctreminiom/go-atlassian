@@ -186,6 +186,10 @@ func (c *ClientV2) NewRequest(ctx context.Context, method, apiEndpoint string, p
 		request.Header.Set("Content-Type", "application/json")
 	}
 
+	if c.Auth.HasSetExperimentalFlag() {
+		request.Header.Set("X-ExperimentalApi", "opt-in")
+	}
+
 	if c.Auth.HasBasicAuth() {
 		request.SetBasicAuth(c.Auth.GetBasicAuth())
 	}

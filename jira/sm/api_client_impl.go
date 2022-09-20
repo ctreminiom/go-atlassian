@@ -35,6 +35,8 @@ func NewV2(httpClient common.HttpClient, site string) (*ClientV2, error) {
 		Site: siteAsURL,
 	}
 
+	client.Auth = internal.NewAuthenticationService(client)
+
 	customerService, err := internal.NewCustomerService(client, "latest")
 	if err != nil {
 		return nil, err

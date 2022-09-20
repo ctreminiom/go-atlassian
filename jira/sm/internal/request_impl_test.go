@@ -912,8 +912,14 @@ func Test_internalServiceRequestImpl_Create(t *testing.T) {
 		"serviceDeskId": "29990"}
 
 	fieldsMocked := &model.CustomerRequestFields{}
-	fieldsMocked.Text("summary", "Request JSD help via REST")
-	fieldsMocked.Text("description", "I need a new *mouse* for my Mac")
+
+	if err := fieldsMocked.Text("summary", "Request JSD help via REST"); err != nil {
+		t.Fatal(err)
+	}
+
+	if err := fieldsMocked.Text("description", "I need a new *mouse* for my Mac"); err != nil {
+		t.Fatal(err)
+	}
 
 	type fields struct {
 		c service.Client

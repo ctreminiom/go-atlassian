@@ -102,6 +102,7 @@ type IssueFieldsScheme struct {
 	Comment                  *IssueCommentPageScheme `json:"comment,omitempty"`
 	Subtasks                 []*IssueScheme          `json:"subtasks,omitempty"`
 	Security                 *SecurityScheme         `json:"security,omitempty"`
+	Attachment               []*AttachmentScheme     `json:"attachment,omitempty"`
 }
 
 type IssueTransitionScheme struct {

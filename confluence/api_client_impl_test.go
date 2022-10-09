@@ -131,7 +131,7 @@ func TestClient_Call(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			c := &ClientV2{
+			c := &Client{
 				HTTP: testCase.fields.HTTP,
 				Site: testCase.fields.Site,
 				Auth: testCase.fields.Authentication,
@@ -205,7 +205,7 @@ func TestNewV2(t *testing.T) {
 	for _, testCase := range testCases {
 		t.Run(testCase.name, func(t *testing.T) {
 
-			gotClient, err := NewV2(testCase.args.httpClient, testCase.args.site)
+			gotClient, err := New(testCase.args.httpClient, testCase.args.site)
 
 			if testCase.wantErr {
 
@@ -282,7 +282,7 @@ func TestClient_TransformTheHTTPResponse(t *testing.T) {
 
 	for _, testCase := range testCases {
 		t.Run(testCase.name, func(t *testing.T) {
-			c := &ClientV2{
+			c := &Client{
 				HTTP: testCase.fields.HTTP,
 				Site: testCase.fields.Site,
 				Auth: testCase.fields.Authentication,
@@ -375,7 +375,7 @@ func TestClient_TransformStructToReader(t *testing.T) {
 	for _, testCase := range testCases {
 
 		t.Run(testCase.name, func(t *testing.T) {
-			c := &ClientV2{
+			c := &Client{
 				HTTP: testCase.fields.HTTP,
 				Site: testCase.fields.Site,
 				Auth: testCase.fields.Authentication,
@@ -497,7 +497,7 @@ func TestClient_NewRequest(t *testing.T) {
 	}
 	for _, testCase := range testCases {
 		t.Run(testCase.name, func(t *testing.T) {
-			c := &ClientV2{
+			c := &Client{
 				HTTP: testCase.fields.HTTP,
 				Auth: testCase.fields.Auth,
 				Site: testCase.fields.Site,

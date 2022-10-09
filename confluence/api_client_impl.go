@@ -15,7 +15,7 @@ import (
 	"strings"
 )
 
-func NewV2(httpClient common.HttpClient, site string) (*ClientV2, error) {
+func New(httpClient common.HttpClient, site string) (*Client, error) {
 
 	if httpClient == nil {
 		httpClient = http.DefaultClient
@@ -30,7 +30,7 @@ func NewV2(httpClient common.HttpClient, site string) (*ClientV2, error) {
 		return nil, err
 	}
 
-	client := &ClientV2{
+	client := &Client{
 		HTTP: httpClient,
 		Site: siteAsURL,
 	}
@@ -59,7 +59,7 @@ func NewV2(httpClient common.HttpClient, site string) (*ClientV2, error) {
 	return client, nil
 }
 
-type ClientV2 struct {
+type Client struct {
 	HTTP     common.HttpClient
 	Site     *url.URL
 	Auth     common.Authentication
@@ -70,11 +70,11 @@ type ClientV2 struct {
 	LongTask *internal.TaskService
 }
 
-func (c *ClientV2) NewFormRequest(ctx context.Context, method, apiEndpoint, contentType string, payload io.Reader) (*http.Request, error) {
+func (c *Client) NewFormRequest(ctx context.Context, method, apiEndpoint, contentType string, payload io.Reader) (*http.Request, error) {
 	return nil, nil
 }
 
-func (c *ClientV2) NewRequest(ctx context.Context, method, apiEndpoint string, payload io.Reader) (*http.Request, error) {
+func (c *Client) NewRequest(ctx context.Context, method, apiEndpoint string, payload io.Reader) (*http.Request, error) {
 
 	relativePath, err := url.Parse(apiEndpoint)
 	if err != nil {
@@ -105,7 +105,7 @@ func (c *ClientV2) NewRequest(ctx context.Context, method, apiEndpoint string, p
 	return request, nil
 }
 
-func (c *ClientV2) Call(request *http.Request, structure interface{}) (*models.ResponseScheme, error) {
+func (c *Client) Call(request *http.Request, structure interface{}) (*models.ResponseScheme, error) {
 
 	response, err := c.HTTP.Do(request)
 	if err != nil {
@@ -115,7 +115,7 @@ func (c *ClientV2) Call(request *http.Request, structure interface{}) (*models.R
 	return c.TransformTheHTTPResponse(response, structure)
 }
 
-func (c *ClientV2) TransformTheHTTPResponse(response *http.Response, structure interface{}) (*models.ResponseScheme, error) {
+func (c *Client) TransformTheHTTPResponse(response *http.Response, structure interface{}) (*models.ResponseScheme, error) {
 
 	responseTransformed := &models.ResponseScheme{
 		Response: response,
@@ -145,7 +145,7 @@ func (c *ClientV2) TransformTheHTTPResponse(response *http.Response, structure i
 	return responseTransformed, nil
 }
 
-func (c *ClientV2) TransformStructToReader(structure interface{}) (io.Reader, error) {
+func (c *Client) TransformStructToReader(structure interface{}) (io.Reader, error) {
 
 	if structure == nil {
 		return nil, models.ErrNilPayloadError

@@ -1,4 +1,0 @@
-{
-  "statusCode": 400,
-  "message": "org.codehaus.jackson.map.JsonMappingException: Instantiation of [simple type, class com.atlassian.confluence.api.model.content.id.ContentId] value failed: Can't parse as a ContentId: <string> (through reference chain: com.atlassian.confluence.api.model.content.Content[\"ancestors\"]->com.atlassian.confluence.api.model.content.Content[\"id\"])"
-}

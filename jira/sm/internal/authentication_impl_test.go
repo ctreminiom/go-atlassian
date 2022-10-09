@@ -209,3 +209,125 @@ func TestNewAuthenticationService(t *testing.T) {
 		})
 	}
 }
+
+func TestAuthenticationService_SetUserAgent(t *testing.T) {
+
+	type fields struct {
+		c                 service.Client
+		basicAuthProvided bool
+		mail              string
+		token             string
+		userAgentProvided bool
+		agent             string
+	}
+	type args struct {
+		agent string
+	}
+	testCases := []struct {
+		name   string
+		fields fields
+		args   args
+	}{
+		{
+			name: "when the parameters are correct",
+			args: args{agent: "mozilla-9"},
+		},
+	}
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+
+			a := &AuthenticationService{
+				c:                 testCase.fields.c,
+				basicAuthProvided: testCase.fields.basicAuthProvided,
+				mail:              testCase.fields.mail,
+				token:             testCase.fields.token,
+				userAgentProvided: testCase.fields.userAgentProvided,
+				agent:             testCase.fields.agent,
+			}
+
+			a.SetUserAgent(testCase.args.agent)
+		})
+	}
+}
+
+func TestAuthenticationService_SetBasicAuth(t *testing.T) {
+
+	type fields struct {
+		c                 service.Client
+		basicAuthProvided bool
+		mail              string
+		token             string
+		userAgentProvided bool
+		agent             string
+	}
+	type args struct {
+		mail  string
+		token string
+	}
+	testCases := []struct {
+		name   string
+		fields fields
+		args   args
+	}{
+		{
+			name: "when the parameters are correct",
+			args: args{
+				mail:  "example@example.com",
+				token: "token-sample",
+			},
+		},
+	}
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+			a := &AuthenticationService{
+				c:                 testCase.fields.c,
+				basicAuthProvided: testCase.fields.basicAuthProvided,
+				mail:              testCase.fields.mail,
+				token:             testCase.fields.token,
+				userAgentProvided: testCase.fields.userAgentProvided,
+				agent:             testCase.fields.agent,
+			}
+
+			a.SetBasicAuth(testCase.args.mail, testCase.args.token)
+		})
+	}
+}
+
+func TestAuthenticationService_HasSetExperimentalFlag(t *testing.T) {
+
+	type fields struct {
+		c                 service.Client
+		basicAuthProvided bool
+		mail              string
+		token             string
+		userAgentProvided bool
+		agent             string
+	}
+	testCases := []struct {
+		name   string
+		fields fields
+		want   bool
+	}{
+
+		{
+			name:   "when the parameters are correct",
+			fields: fields{},
+			want:   false,
+		},
+	}
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+			a := &AuthenticationService{
+				c:                 testCase.fields.c,
+				basicAuthProvided: testCase.fields.basicAuthProvided,
+				mail:              testCase.fields.mail,
+				token:             testCase.fields.token,
+				userAgentProvided: testCase.fields.userAgentProvided,
+				agent:             testCase.fields.agent,
+			}
+			if got := a.HasSetExperimentalFlag(); got != testCase.want {
+				t.Errorf("HasSetExperimentalFlag() = %v, want %v", got, testCase.want)
+			}
+		})
+	}
+}

@@ -333,6 +333,11 @@ func New(httpClient common.HttpClient, site string) (*Client, error) {
 		return nil, err
 	}
 
+	jql, err := internal.NewJQLService(client, "3")
+	if err != nil {
+		return nil, err
+	}
+
 	client.Permission = permission
 	client.MySelf = mySelf
 	client.Auth = internal.NewAuthenticationService(client)
@@ -347,6 +352,7 @@ func New(httpClient common.HttpClient, site string) (*Client, error) {
 	client.Server = server
 	client.User = user
 	client.Workflow = workflow
+	client.JQL = jql
 
 	return client, nil
 }
@@ -368,6 +374,7 @@ type Client struct {
 	Server     *internal.ServerService
 	User       *internal.UserService
 	Workflow   *internal.WorkflowService
+	JQL        *internal.JQLService
 }
 
 func (c *Client) NewFormRequest(ctx context.Context, method, apiEndpoint, contentType string, payload io.Reader) (*http.Request, error) {

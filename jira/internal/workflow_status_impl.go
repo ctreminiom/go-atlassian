@@ -72,6 +72,11 @@ func (w *WorkflowStatusService) Search(ctx context.Context, options *model.Workf
 	return w.internalClient.Search(ctx, options, startAt, maxResults)
 }
 
+// Bulk returns a list of all statuses associated with active workflows.
+//
+// GET /rest/api/{2-3}/status
+//
+// https://docs.go-atlassian.io/jira-software-cloud/workflow/status#bulk-workflow-statuses
 func (w *WorkflowStatusService) Bulk(ctx context.Context) ([]*model.StatusDetailScheme, *model.ResponseScheme, error) {
 	return w.internalClient.Bulk(ctx)
 }

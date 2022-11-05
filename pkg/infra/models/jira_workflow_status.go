@@ -53,10 +53,11 @@ type WorkflowStatusSearchParams struct {
 }
 
 type StatusDetailScheme struct {
-	Self           string                `json:"self,omitempty"`
-	Description    string                `json:"description,omitempty"`
-	IconURL        string                `json:"iconUrl,omitempty"`
-	Name           string                `json:"name,omitempty"`
-	ID             string                `json:"id,omitempty"`
-	StatusCategory *StatusCategoryScheme `json:"statusCategory,omitempty"`
+	Self           string                     `json:"self,omitempty"`
+	Description    string                     `json:"description,omitempty"`
+	IconURL        string                     `json:"iconUrl,omitempty"`
+	Name           string                     `json:"name,omitempty"`
+	ID             string                     `json:"id,omitempty"`
+	StatusCategory *StatusCategoryScheme      `json:"statusCategory,omitempty"`
+	Scope          *WorkflowStatusScopeScheme `json:"scope,omitempty"`
 }

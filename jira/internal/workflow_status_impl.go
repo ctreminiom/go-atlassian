@@ -72,9 +72,31 @@ func (w *WorkflowStatusService) Search(ctx context.Context, options *model.Workf
 	return w.internalClient.Search(ctx, options, startAt, maxResults)
 }
 
+func (w *WorkflowStatusService) Bulk(ctx context.Context) ([]*model.StatusDetailScheme, *model.ResponseScheme, error) {
+	return w.internalClient.Bulk(ctx)
+}
+
 type internalWorkflowStatusImpl struct {
 	c       service.Client
 	version string
+}
+
+func (i *internalWorkflowStatusImpl) Bulk(ctx context.Context) ([]*model.StatusDetailScheme, *model.ResponseScheme, error) {
+
+	endpoint := fmt.Sprintf("/rest/api/%v/status", i.version)
+
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	var statuses []*model.StatusDetailScheme
+	response, err := i.c.Call(request, &statuses)
+	if err != nil {
+		return nil, response, err
+	}
+
+	return statuses, response, nil
 }
 
 func (i *internalWorkflowStatusImpl) Gets(ctx context.Context, ids, expand []string) ([]*model.WorkflowStatusDetailScheme, *model.ResponseScheme, error) {

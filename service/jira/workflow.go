@@ -154,4 +154,11 @@ type WorkflowStatusConnector interface {
 	// https://docs.go-atlassian.io/jira-software-cloud/workflow/status#search-workflow-statuses
 	Search(ctx context.Context, options *model.WorkflowStatusSearchParams, startAt, maxResults int) (*model.WorkflowStatusDetailPageScheme,
 		*model.ResponseScheme, error)
+
+	// Bulk returns a list of all statuses associated with active workflows.
+	//
+	// GET /rest/api/{2-3}/status
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/workflow/status#bulk-workflow-statuses
+	Bulk(ctx context.Context) ([]*model.StatusDetailScheme, *model.ResponseScheme, error)
 }

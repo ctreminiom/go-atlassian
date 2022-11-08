@@ -119,9 +119,43 @@ func (s *SprintService) Close(ctx context.Context, sprintID int) (*model.Respons
 	return s.internalClient.Close(ctx, sprintID)
 }
 
+// Move moves issues to a sprint, for a given sprint ID.
+//
+// Issues can only be moved to open or active sprints.
+//
+// The maximum number of issues that can be moved in one operation is 50.
+//
+// POST /rest/agile/1.0/sprint/{sprintId}/issue
+//
+// https://docs.go-atlassian.io/jira-agile/sprints#move-issues-to-sprint
+func (s *SprintService) Move(ctx context.Context, sprintID int, payload *model.SprintMovePayloadScheme) (*model.ResponseScheme, error) {
+	return s.internalClient.Move(ctx, sprintID, payload)
+}
+
 type internalSprintImpl struct {
 	c       service.Client
 	version string
+}
+
+func (i *internalSprintImpl) Move(ctx context.Context, sprintID int, payload *model.SprintMovePayloadScheme) (*model.ResponseScheme, error) {
+
+	if sprintID == 0 {
+		return nil, model.ErrNoSprintIDError
+	}
+
+	reader, err := i.c.TransformStructToReader(payload)
+	if err != nil {
+		return nil, err
+	}
+
+	endpoint := fmt.Sprintf("/rest/agile/%v/sprint/%v/issue", i.version, sprintID)
+
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	if err != nil {
+		return nil, err
+	}
+
+	return i.c.Call(request, nil)
 }
 
 func (i *internalSprintImpl) Get(ctx context.Context, sprintID int) (*model.SprintScheme, *model.ResponseScheme, error) {

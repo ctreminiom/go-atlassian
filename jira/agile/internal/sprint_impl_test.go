@@ -1353,3 +1353,165 @@ func Test_SprintService_Close(t *testing.T) {
 		})
 	}
 }
+
+func Test_SprintService_Move(t *testing.T) {
+
+	payloadMocked := &model.SprintMovePayloadScheme{
+		Issues:            []string{"DUMMY-1", "DUMMY-2"},
+		RankBeforeIssue:   "DUMMY-4",
+		RankAfterIssue:    "DUMMY-12",
+		RankCustomFieldId: 10521,
+	}
+
+	type fields struct {
+		c service.Client
+	}
+
+	type args struct {
+		ctx      context.Context
+		sprintId int
+		payload  *model.SprintMovePayloadScheme
+	}
+
+	testCases := []struct {
+		name    string
+		fields  fields
+		args    args
+		on      func(*fields)
+		wantErr bool
+		Err     error
+	}{
+		{
+			name: "when the parameters are correct",
+			args: args{
+				ctx:      context.Background(),
+				sprintId: 1001,
+				payload:  payloadMocked,
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewClient(t)
+
+				client.On("TransformStructToReader",
+					payloadMocked).
+					Return(bytes.NewReader([]byte{}), nil)
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodPost,
+					"/rest/agile/1.0/sprint/1001/issue",
+					bytes.NewReader([]byte{})).
+					Return(&http.Request{}, nil)
+
+				client.On("Call",
+					&http.Request{},
+					nil).
+					Return(&model.ResponseScheme{}, nil)
+
+				fields.c = client
+			},
+		},
+
+		{
+			name: "when the sprintId is not provided",
+			args: args{
+				ctx: context.Background(),
+			},
+			on: func(fields *fields) {
+				fields.c = mocks.NewClient(t)
+			},
+			Err:     model.ErrNoSprintIDError,
+			wantErr: true,
+		},
+
+		{
+			name: "when the api cannot be executed",
+			args: args{
+				ctx:      context.Background(),
+				sprintId: 1001,
+				payload:  payloadMocked,
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewClient(t)
+
+				client.On("TransformStructToReader",
+					payloadMocked).
+					Return(bytes.NewReader([]byte{}), nil)
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodPost,
+					"/rest/agile/1.0/sprint/1001/issue",
+					bytes.NewReader([]byte{})).
+					Return(&http.Request{}, nil)
+
+				client.On("Call",
+					&http.Request{},
+					nil).
+					Return(&model.ResponseScheme{}, errors.New("error, unable to execute the http call"))
+
+				fields.c = client
+			},
+			Err:     errors.New("error, unable to execute the http call"),
+			wantErr: true,
+		},
+
+		{
+			name: "when the request cannot be created",
+			args: args{
+				ctx:      context.Background(),
+				sprintId: 1001,
+				payload:  payloadMocked,
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewClient(t)
+
+				client.On("TransformStructToReader",
+					payloadMocked).
+					Return(bytes.NewReader([]byte{}), nil)
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodPost,
+					"/rest/agile/1.0/sprint/1001/issue",
+					bytes.NewReader([]byte{})).
+					Return(&http.Request{}, errors.New("unable to create the http request"))
+
+				fields.c = client
+			},
+			Err:     errors.New("unable to create the http request"),
+			wantErr: true,
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+
+			if testCase.on != nil {
+				testCase.on(&testCase.fields)
+			}
+
+			sprintService, err := NewSprintService(testCase.fields.c, "1.0")
+			assert.NoError(t, err)
+
+			gotResponse, err := sprintService.Move(testCase.args.ctx, testCase.args.sprintId, testCase.args.payload)
+
+			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+
+				assert.EqualError(t, err, testCase.Err.Error())
+
+			} else {
+
+				assert.NoError(t, err)
+				assert.NotEqual(t, gotResponse, nil)
+			}
+
+		})
+	}
+}

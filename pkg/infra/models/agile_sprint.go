@@ -37,3 +37,10 @@ type SprintIssueScheme struct {
 	Self   string `json:"self,omitempty"`
 	Key    string `json:"key,omitempty"`
 }
+
+type SprintMovePayloadScheme struct {
+	Issues            []string `json:"issues,omitempty"`
+	RankBeforeIssue   string   `json:"rankBeforeIssue,omitempty"`
+	RankAfterIssue    string   `json:"rankAfterIssue,omitempty"`
+	RankCustomFieldId int      `json:"rankCustomFieldId,omitempty"`
+}

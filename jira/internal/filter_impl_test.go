@@ -1093,7 +1093,7 @@ func TestFilterService_Change(t *testing.T) {
 				client := mocks.NewClient(t)
 
 				client.On("TransformStructToReader",
-					struct {
+					&struct {
 						AccountID string "json:\"accountId\""
 					}{AccountID: "account-id-sample"}).
 					Return(bytes.NewReader([]byte{}), nil)
@@ -1128,7 +1128,7 @@ func TestFilterService_Change(t *testing.T) {
 				client := mocks.NewClient(t)
 
 				client.On("TransformStructToReader",
-					struct {
+					&struct {
 						AccountID string "json:\"accountId\""
 					}{AccountID: "account-id-sample"}).
 					Return(bytes.NewReader([]byte{}), nil)
@@ -1163,7 +1163,7 @@ func TestFilterService_Change(t *testing.T) {
 				client := mocks.NewClient(t)
 
 				client.On("TransformStructToReader",
-					struct {
+					&struct {
 						AccountID string "json:\"accountId\""
 					}{AccountID: "account-id-sample"}).
 					Return(bytes.NewReader([]byte{}), nil)

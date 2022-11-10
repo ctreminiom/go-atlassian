@@ -75,6 +75,7 @@ type FilterPayloadScheme struct {
 	JQL              string                   `json:"jql,omitempty"`
 	Favorite         bool                     `json:"favourite,omitempty"`
 	SharePermissions []*SharePermissionScheme `json:"sharePermissions,omitempty"`
+	EditPermissions  []*SharePermissionScheme `json:"editPermissions,omitempty"`
 }
 
 type FilterSearchOptionScheme struct {

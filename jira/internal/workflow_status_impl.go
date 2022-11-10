@@ -81,9 +81,48 @@ func (w *WorkflowStatusService) Bulk(ctx context.Context) ([]*model.StatusDetail
 	return w.internalClient.Bulk(ctx)
 }
 
+// Get returns a status.
+//
+// The status must be associated with an active workflow to be returned.
+//
+// If a name is used on more than one status, only the status found first is returned.
+//
+// Therefore, identifying the status by its ID may be preferable.
+//
+// This operation can be accessed anonymously.
+//
+// GET /rest/api/{2-3}/status/{idOrName}
+//
+// https://docs.go-atlassian.io/jira-software-cloud/workflow/status#get-workflow-status
+func (w *WorkflowStatusService) Get(ctx context.Context, idOrName string) (*model.StatusDetailScheme, *model.ResponseScheme, error) {
+	return w.internalClient.Get(ctx, idOrName)
+}
+
 type internalWorkflowStatusImpl struct {
 	c       service.Client
 	version string
+}
+
+func (i *internalWorkflowStatusImpl) Get(ctx context.Context, idOrName string) (*model.StatusDetailScheme, *model.ResponseScheme, error) {
+
+	if idOrName == "" {
+		return nil, nil, model.ErrNoWorkflowStatusNameOrIdError
+	}
+
+	endpoint := fmt.Sprintf("/rest/api/%v/status/%v", i.version, idOrName)
+
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	workflowStatus := new(model.StatusDetailScheme)
+	response, err := i.c.Call(request, workflowStatus)
+	if err != nil {
+		return nil, response, err
+	}
+
+	return workflowStatus, response, nil
 }
 
 func (i *internalWorkflowStatusImpl) Bulk(ctx context.Context) ([]*model.StatusDetailScheme, *model.ResponseScheme, error) {

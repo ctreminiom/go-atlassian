@@ -67,6 +67,7 @@ var (
 	ErrNoFieldIDError                      = errors.New("jira: no field id set")
 	ErrNoWorkflowStatusesError             = errors.New("jira: no workflow statuses set")
 	ErrNoWorkflowScopeError                = errors.New("jira: no workflow scope set")
+	ErrNoWorkflowStatusNameOrIdError       = errors.New("jira: no workflow status name or id set")
 	ErrNoFieldContextIDError               = errors.New("jira: no field context id set")
 	ErrNoIssueTypesError                   = errors.New("jira: no issue types id's set")
 	ErrNoProjectsError                     = errors.New("jira: no projects set")

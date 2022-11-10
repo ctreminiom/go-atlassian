@@ -161,4 +161,19 @@ type WorkflowStatusConnector interface {
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/workflow/status#bulk-workflow-statuses
 	Bulk(ctx context.Context) ([]*model.StatusDetailScheme, *model.ResponseScheme, error)
+
+	// Get returns a status.
+	//
+	// The status must be associated with an active workflow to be returned.
+	//
+	// If a name is used on more than one status, only the status found first is returned.
+	//
+	// Therefore, identifying the status by its ID may be preferable.
+	//
+	// This operation can be accessed anonymously.
+	//
+	// GET /rest/api/{2-3}/status/{idOrName}
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/workflow/status#get-workflow-status
+	Get(ctx context.Context, idOrName string) (*model.StatusDetailScheme, *model.ResponseScheme, error)
 }

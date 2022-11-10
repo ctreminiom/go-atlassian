@@ -82,4 +82,15 @@ type SprintConnector interface {
 	//
 	// https://docs.go-atlassian.io/jira-agile/sprints#close-sprint
 	Close(ctx context.Context, sprintID int) (*models.ResponseScheme, error)
+
+	// Move moves issues to a sprint, for a given sprint ID.
+	//
+	// Issues can only be moved to open or active sprints.
+	//
+	// The maximum number of issues that can be moved in one operation is 50.
+	//
+	// POST /rest/agile/1.0/sprint/{sprintId}/issue
+	//
+	// https://docs.go-atlassian.io/jira-agile/sprints#move-issues-to-sprint
+	Move(ctx context.Context, sprintID int, payload *models.SprintMovePayloadScheme) (*models.ResponseScheme, error)
 }

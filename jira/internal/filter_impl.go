@@ -276,7 +276,7 @@ func (i *internalFilterServiceImpl) Change(ctx context.Context, filterId int, ac
 		AccountID: accountId,
 	}
 
-	reader, err := i.c.TransformStructToReader(payload)
+	reader, err := i.c.TransformStructToReader(&payload)
 	if err != nil {
 		return nil, err
 	}

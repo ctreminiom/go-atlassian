@@ -225,6 +225,131 @@ func TestNewV2(t *testing.T) {
 	}
 }
 
+func TestClient_NewFormRequest(t *testing.T) {
+
+	authMocked := internal.NewAuthenticationService(nil)
+	authMocked.SetBasicAuth("mail", "token")
+	authMocked.SetUserAgent("firefox")
+
+	siteAsURL, err := url.Parse("https://ctreminiom.atlassian.net")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	requestMocked, err := http.NewRequestWithContext(context.TODO(),
+		http.MethodGet,
+		"https://ctreminiom.atlassian.net/rest/2/issue/attachment",
+		bytes.NewReader([]byte("Hello World")),
+	)
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	requestMocked.Header.Add("Content-Type", "form-type-sample")
+	requestMocked.Header.Add("Accept", "application/json")
+	requestMocked.Header.Set("X-Atlassian-Token", "no-check")
+
+	type fields struct {
+		HTTP common.HttpClient
+		Auth common.Authentication
+		Site *url.URL
+	}
+
+	type args struct {
+		ctx         context.Context
+		method      string
+		apiEndpoint string
+		contentType string
+		payload     io.Reader
+	}
+
+	testCases := []struct {
+		name    string
+		fields  fields
+		args    args
+		want    *http.Request
+		wantErr bool
+	}{
+		{
+			name: "when the parameters are correct",
+			fields: fields{
+				HTTP: http.DefaultClient,
+				Auth: authMocked,
+				Site: siteAsURL,
+			},
+			args: args{
+				ctx:         context.TODO(),
+				method:      http.MethodGet,
+				apiEndpoint: "rest/2/issue/attachment",
+				contentType: "form-type-sample",
+				payload:     bytes.NewReader([]byte("Hello World")),
+			},
+			want:    requestMocked,
+			wantErr: false,
+		},
+
+		{
+			name: "when the url cannot be parsed",
+			fields: fields{
+				HTTP: http.DefaultClient,
+				Auth: internal.NewAuthenticationService(nil),
+				Site: siteAsURL,
+			},
+			args: args{
+				ctx:         context.TODO(),
+				method:      http.MethodGet,
+				apiEndpoint: " https://zhidao.baidu.com/special/view?id=49105a24626975510000&preview=1",
+				contentType: "form-type-sample",
+				payload:     bytes.NewReader([]byte("Hello World")),
+			},
+			want:    nil,
+			wantErr: true,
+		},
+
+		{
+			name: "when the request cannot be created",
+			fields: fields{
+				HTTP: http.DefaultClient,
+				Auth: internal.NewAuthenticationService(nil),
+				Site: siteAsURL,
+			},
+			args: args{
+				ctx:         nil,
+				method:      http.MethodGet,
+				apiEndpoint: "rest/2/issue/attachment",
+				contentType: "form-type-sample",
+				payload:     bytes.NewReader([]byte("Hello World")),
+			},
+			want:    requestMocked,
+			wantErr: true,
+		},
+	}
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+			c := &Client{
+				HTTP: testCase.fields.HTTP,
+				Auth: testCase.fields.Auth,
+				Site: testCase.fields.Site,
+			}
+
+			got, err := c.NewFormRequest(testCase.args.ctx, testCase.args.method, testCase.args.apiEndpoint, testCase.args.contentType, testCase.args.payload)
+
+			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+
+				assert.Error(t, err)
+			} else {
+				assert.NoError(t, err)
+				assert.NotEqual(t, got, nil)
+			}
+		})
+	}
+}
+
 func TestClient_TransformTheHTTPResponse(t *testing.T) {
 
 	expectedJsonResponse := `

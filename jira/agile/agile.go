@@ -75,7 +75,10 @@ func (c *Client) newRequest(ctx context.Context, method, apiEndpoint string, pay
 }
 
 func (c *Client) Call(request *http.Request, structure interface{}) (result *ResponseScheme, err error) {
-	response, _ := c.HTTP.Do(request)
+	response, err := c.HTTP.Do(request)
+	if err != nil {
+		return nil, err
+	}
 	return transformTheHTTPResponse(response, structure)
 }
 

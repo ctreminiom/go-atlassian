@@ -17,12 +17,12 @@ jobs:
     name: lint
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v3
         with:
           # Required: the version of golangci-lint is required and must be specified without patch version: we always use the latest patch version.
-          version: v1.38
+          version: v1.38.0
           # Optional: working directory, useful for monorepos
           # working-directory: somedir
 
@@ -33,4 +33,4 @@ jobs:
           # only-new-issues: true
 
           # Optional: if set to true then the action will use pre-installed Go
-          skip-go-installation: true
+          #skip-go-installation: true

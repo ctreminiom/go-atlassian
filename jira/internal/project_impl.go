@@ -201,6 +201,18 @@ func (i *internalProjectImpl) Search(ctx context.Context, options *model.Project
 			params.Add("expand", strings.Join(options.Expand, ","))
 		}
 
+		if len(options.IDs) != 0 {
+			for _, id := range options.IDs {
+				params.Add("id", strconv.Itoa(id))
+			}
+		}
+
+		if len(options.Keys) != 0 {
+			for _, key := range options.Keys {
+				params.Add("keys", key)
+			}
+		}
+
 		if len(options.OrderBy) != 0 {
 			params.Add("orderBy", options.OrderBy)
 		}
@@ -209,8 +221,8 @@ func (i *internalProjectImpl) Search(ctx context.Context, options *model.Project
 			params.Add("query", options.Query)
 		}
 
-		if len(options.ProjectKeyType) != 0 {
-			params.Add("typeKey", options.ProjectKeyType)
+		if len(options.TypeKeys) != 0 {
+			params.Add("typeKey", strings.Join(options.TypeKeys, ","))
 		}
 
 		if options.CategoryID != 0 {
@@ -219,6 +231,14 @@ func (i *internalProjectImpl) Search(ctx context.Context, options *model.Project
 
 		if len(options.Action) != 0 {
 			params.Add("action", options.Action)
+		}
+
+		if len(options.Status) != 0 {
+			params.Add("status", strings.Join(options.Status, ","))
+		}
+
+		if len(options.Properties) != 0 {
+			params.Add("properties", strings.Join(options.Properties, ","))
 		}
 	}
 

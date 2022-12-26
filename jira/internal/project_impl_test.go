@@ -177,6 +177,20 @@ func Test_internalProjectImpl_Create(t *testing.T) {
 
 func Test_internalProjectImpl_Search(t *testing.T) {
 
+	mockedParams := &model.ProjectSearchOptionsScheme{
+		OrderBy:       "category",
+		IDs:           []int{10000, 10001},
+		Keys:          []string{"PA", "PB"},
+		Query:         "ADM",
+		TypeKeys:      []string{"business", "service_desk"},
+		CategoryID:    48882,
+		Action:        "view",
+		Status:        []string{"live", "archived"},
+		Expand:        []string{"description"},
+		Properties:    []string{"data.is.completed?"},
+		PropertyQuery: "[thepropertykey].something.nested=1",
+	}
+
 	type fields struct {
 		c       service.Client
 		version string
@@ -200,15 +214,8 @@ func Test_internalProjectImpl_Search(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
-				options: &model.ProjectSearchOptionsScheme{
-					OrderBy:        "category",
-					Query:          "dummy project",
-					Action:         "view",
-					ProjectKeyType: "[thepropertykey].something.nested=1",
-					CategoryID:     400,
-					Expand:         []string{"description", "projectKeys"},
-				},
+				ctx:        context.TODO(),
+				options:    mockedParams,
 				startAt:    0,
 				maxResults: 50,
 			},
@@ -219,7 +226,7 @@ func Test_internalProjectImpl_Search(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"rest/api/3/project/search?action=view&categoryId=400&expand=description%2CprojectKeys&maxResults=50&orderBy=category&query=dummy+project&startAt=0&typeKey=%5Bthepropertykey%5D.something.nested%3D1",
+					"rest/api/3/project/search?action=view&categoryId=48882&expand=description&id=10000&id=10001&keys=PA&keys=PB&maxResults=50&orderBy=category&properties=data.is.completed%3F&query=ADM&startAt=0&status=live%2Carchived&typeKey=business%2Cservice_desk",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -238,15 +245,8 @@ func Test_internalProjectImpl_Search(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx: context.TODO(),
-				options: &model.ProjectSearchOptionsScheme{
-					OrderBy:        "category",
-					Query:          "dummy project",
-					Action:         "view",
-					ProjectKeyType: "[thepropertykey].something.nested=1",
-					CategoryID:     400,
-					Expand:         []string{"description", "projectKeys"},
-				},
+				ctx:        context.TODO(),
+				options:    mockedParams,
 				startAt:    0,
 				maxResults: 50,
 			},
@@ -257,7 +257,7 @@ func Test_internalProjectImpl_Search(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"rest/api/2/project/search?action=view&categoryId=400&expand=description%2CprojectKeys&maxResults=50&orderBy=category&query=dummy+project&startAt=0&typeKey=%5Bthepropertykey%5D.something.nested%3D1",
+					"rest/api/2/project/search?action=view&categoryId=48882&expand=description&id=10000&id=10001&keys=PA&keys=PB&maxResults=50&orderBy=category&properties=data.is.completed%3F&query=ADM&startAt=0&status=live%2Carchived&typeKey=business%2Cservice_desk",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -276,15 +276,8 @@ func Test_internalProjectImpl_Search(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
-				options: &model.ProjectSearchOptionsScheme{
-					OrderBy:        "category",
-					Query:          "dummy project",
-					Action:         "view",
-					ProjectKeyType: "[thepropertykey].something.nested=1",
-					CategoryID:     400,
-					Expand:         []string{"description", "projectKeys"},
-				},
+				ctx:        context.TODO(),
+				options:    mockedParams,
 				startAt:    0,
 				maxResults: 50,
 			},
@@ -295,7 +288,7 @@ func Test_internalProjectImpl_Search(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"rest/api/3/project/search?action=view&categoryId=400&expand=description%2CprojectKeys&maxResults=50&orderBy=category&query=dummy+project&startAt=0&typeKey=%5Bthepropertykey%5D.something.nested%3D1",
+					"rest/api/3/project/search?action=view&categoryId=48882&expand=description&id=10000&id=10001&keys=PA&keys=PB&maxResults=50&orderBy=category&properties=data.is.completed%3F&query=ADM&startAt=0&status=live%2Carchived&typeKey=business%2Cservice_desk",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 

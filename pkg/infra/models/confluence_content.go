@@ -58,12 +58,12 @@ type ContentExtensionScheme struct {
 }
 
 type BodyScheme struct {
-	View                *BodyNodeScheme `json:"view"`
-	ExportView          *BodyNodeScheme `json:"export_view"`
-	StyledView          *BodyNodeScheme `json:"styled_view"`
-	Storage             *BodyNodeScheme `json:"storage"`
-	Editor2             *BodyNodeScheme `json:"editor2"`
-	AnonymousExportView *BodyNodeScheme `json:"anonymous_export_view"`
+	View                *BodyNodeScheme `json:"view,omitempty"`
+	ExportView          *BodyNodeScheme `json:"export_view,omitempty"`
+	StyledView          *BodyNodeScheme `json:"styled_view,omitempty"`
+	Storage             *BodyNodeScheme `json:"storage,omitempty"`
+	Editor2             *BodyNodeScheme `json:"editor2,omitempty"`
+	AnonymousExportView *BodyNodeScheme `json:"anonymous_export_view,omitempty"`
 }
 
 type BodyNodeScheme struct {

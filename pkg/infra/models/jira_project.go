@@ -41,12 +41,51 @@ type NewProjectCreatedScheme struct {
 }
 
 type ProjectSearchOptionsScheme struct {
-	OrderBy        string
-	Query          string
-	Action         string
-	ProjectKeyType string
-	CategoryID     int
-	Expand         []string
+	OrderBy string
+
+	// The project IDs to filter the results by.
+	// To include multiple IDs, provide an ampersand-separated list.
+	IDs []int
+
+	// The project keys to filter the results by.
+	// To include multiple keys, provide an ampersand-separated list.
+	Keys []string
+
+	// Filter the results using a literal string.
+	// Projects with a matching key or name are returned (case-insensitive).
+	Query string
+
+	// Orders results by the project type.
+	// This parameter accepts a comma-separated list.
+	// Valid values are business, service_desk, and software.
+	TypeKeys []string
+
+	// The ID of the project's category.
+	// A complete list of category IDs is found using the Get all project categories operation.
+	CategoryID int
+
+	Action string
+
+	// EXPERIMENTAL. Filter results by project status:
+	// 1. live: Search live projects.
+	// 2. archived: Search archived projects.
+	// 3. deleted: Search deleted projects, those in the recycle bin.
+	Status []string
+
+	// Use expand to include additional information in the response.
+	// This parameter accepts a comma-separated list.
+	Expand []string
+
+	// EXPERIMENTAL. A list of project properties to return for the project.
+	// This parameter accepts a comma-separated list.
+	Properties []string
+
+	// EXPERIMENTAL. A query string used to search properties.
+	// The query string cannot be specified using a JSON object.
+	// For example, to search for the value of nested from {"something":{"nested":1,"other":2}}
+	// use [thepropertykey].something.nested=1.
+	// Note that thepropertykey is only returned when included in properties.
+	PropertyQuery string
 }
 
 type ProjectSearchScheme struct {

@@ -52,3 +52,10 @@ type UserSearchPageScheme struct {
 	IsLast     bool          `json:"isLast,omitempty"`
 	Values     []*UserScheme `json:"values,omitempty"`
 }
+
+type UserPermissionCheckParamsScheme struct {
+	Query      string
+	AccountID  string
+	IssueKey   string
+	ProjectKey string
+}

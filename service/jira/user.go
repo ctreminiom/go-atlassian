@@ -88,4 +88,17 @@ type UserSearchConnector interface {
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/users/search#find-users
 	Do(ctx context.Context, accountId, query string, startAt, maxResults int) ([]*model.UserScheme, *model.ResponseScheme, error)
+
+	// Check returns a list of users who fulfill these criteria:
+	//
+	// 1. their user attributes match a search string.
+	// 2. they have a set of permissions for a project or issue.
+	//
+	//
+	// If no search string is provided, a list of all users with the permissions is returned.
+	//
+	// GET /rest/api/{2-3}/user/permission/search
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/users/search#find-users-with-permissions
+	Check(ctx context.Context, permission string, options *model.UserPermissionCheckParamsScheme, startAt, maxResults int) ([]*model.UserScheme, *model.ResponseScheme, error)
 }

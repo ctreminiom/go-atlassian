@@ -40,12 +40,11 @@ func (u *UserSearchService) Projects(ctx context.Context, accountId string, proj
 
 // Do return a list of users that match the search string and property.
 //
-//
 // This operation takes the users in the range defined by startAt and maxResults, up to the thousandth user,
 //
 // and then returns only the users from that range that match the search string and property.
 //
-// This means the operation usually returns fewer users than specified in maxResults
+// # This means the operation usually returns fewer users than specified in maxResults
 //
 // GET /rest/api/{2-3}/user/search
 //
@@ -54,9 +53,68 @@ func (u *UserSearchService) Do(ctx context.Context, accountId, query string, sta
 	return u.internalClient.Do(ctx, accountId, query, startAt, maxResults)
 }
 
+// Check returns a list of users who fulfill these criteria:
+//
+// 1. their user attributes match a search string.
+// 2. they have a set of permissions for a project or issue.
+//
+// If no search string is provided, a list of all users with the permissions is returned.
+//
+// GET /rest/api/{2-3}/user/permission/search
+//
+// https://docs.go-atlassian.io/jira-software-cloud/users/search#find-users-with-permissions
+func (u *UserSearchService) Check(ctx context.Context, permission string, options *model.UserPermissionCheckParamsScheme, startAt, maxResults int) ([]*model.UserScheme, *model.ResponseScheme, error) {
+	return u.internalClient.Check(ctx, permission, options, startAt, maxResults)
+}
+
 type internalUserSearchImpl struct {
 	c       service.Client
 	version string
+}
+
+func (i *internalUserSearchImpl) Check(ctx context.Context, permission string, options *model.UserPermissionCheckParamsScheme, startAt, maxResults int) ([]*model.UserScheme, *model.ResponseScheme, error) {
+
+	if permission == "" {
+		return nil, nil, model.ErrNoPermissionGrantIDError
+	}
+
+	params := url.Values{}
+	params.Add("startAt", strconv.Itoa(startAt))
+	params.Add("maxResults", strconv.Itoa(maxResults))
+
+	if options != nil {
+
+		if options.Query != "" {
+			params.Add("query", options.Query)
+		}
+
+		if options.AccountID != "" {
+			params.Add("accountId", options.AccountID)
+		}
+
+		if options.IssueKey != "" {
+			params.Add("issueKey", options.IssueKey)
+		}
+
+		if options.ProjectKey != "" {
+			params.Add("projectKey", options.ProjectKey)
+		}
+	}
+
+	endpoint := fmt.Sprintf("rest/api/%v/user/permission/search?%v", i.version, params.Encode())
+
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	var users []*model.UserScheme
+	response, err := i.c.Call(request, &users)
+	if err != nil {
+		return nil, response, err
+	}
+
+	return users, response, nil
 }
 
 func (i *internalUserSearchImpl) Projects(ctx context.Context, accountId string, projectKeys []string, startAt, maxResults int) ([]*model.UserScheme, *model.ResponseScheme, error) {

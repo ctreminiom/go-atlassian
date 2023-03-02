@@ -314,3 +314,178 @@ func Test_internalUserSearchImpl_Do(t *testing.T) {
 		})
 	}
 }
+
+func Test_internalUserSearchImpl_Check(t *testing.T) {
+
+	type fields struct {
+		c       service.Client
+		version string
+	}
+
+	type args struct {
+		ctx                 context.Context
+		permission          string
+		options             *model.UserPermissionCheckParamsScheme
+		startAt, maxResults int
+	}
+
+	testCases := []struct {
+		name    string
+		fields  fields
+		args    args
+		on      func(*fields)
+		wantErr bool
+		Err     error
+	}{
+		{
+			name:   "when the api version is v3",
+			fields: fields{version: "3"},
+			args: args{
+				ctx:        context.TODO(),
+				permission: "CREATE_ISSUES",
+				options: &model.UserPermissionCheckParamsScheme{
+					Query:      "project A",
+					AccountID:  "uuid-sample",
+					IssueKey:   "DFUMM-1",
+					ProjectKey: "DUMMY",
+				},
+				startAt:    100,
+				maxResults: 50,
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewClient(t)
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodGet,
+					"rest/api/3/user/permission/search?accountId=uuid-sample&issueKey=DFUMM-1&maxResults=50&projectKey=DUMMY&query=project+A&startAt=100",
+					nil).
+					Return(&http.Request{}, nil)
+
+				client.On("Call",
+					&http.Request{},
+					mock.Anything).
+					Return(&model.ResponseScheme{}, nil)
+
+				fields.c = client
+			},
+			wantErr: false,
+			Err:     nil,
+		},
+
+		{
+			name:   "when the permission grant is not provided",
+			fields: fields{version: "3"},
+			args: args{
+				ctx: context.TODO(),
+			},
+			on: func(fields *fields) {
+				client := mocks.NewClient(t)
+				fields.c = client
+			},
+			wantErr: true,
+			Err:     model.ErrNoPermissionGrantIDError,
+		},
+
+		{
+			name:   "when the api version is v2",
+			fields: fields{version: "2"},
+			args: args{
+				ctx:        context.TODO(),
+				permission: "CREATE_ISSUES",
+				options: &model.UserPermissionCheckParamsScheme{
+					Query:      "project A",
+					AccountID:  "uuid-sample",
+					IssueKey:   "DFUMM-1",
+					ProjectKey: "DUMMY",
+				},
+				startAt:    100,
+				maxResults: 50,
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewClient(t)
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodGet,
+					"rest/api/2/user/permission/search?accountId=uuid-sample&issueKey=DFUMM-1&maxResults=50&projectKey=DUMMY&query=project+A&startAt=100",
+					nil).
+					Return(&http.Request{}, nil)
+
+				client.On("Call",
+					&http.Request{},
+					mock.Anything).
+					Return(&model.ResponseScheme{}, nil)
+
+				fields.c = client
+			},
+			wantErr: false,
+			Err:     nil,
+		},
+
+		{
+			name:   "when the http request cannot be created",
+			fields: fields{version: "3"},
+			args: args{
+				ctx:        context.TODO(),
+				permission: "CREATE_ISSUES",
+				options: &model.UserPermissionCheckParamsScheme{
+					Query:      "project A",
+					AccountID:  "uuid-sample",
+					IssueKey:   "DFUMM-1",
+					ProjectKey: "DUMMY",
+				},
+				startAt:    100,
+				maxResults: 50,
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewClient(t)
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodGet,
+					"rest/api/3/user/permission/search?accountId=uuid-sample&issueKey=DFUMM-1&maxResults=50&projectKey=DUMMY&query=project+A&startAt=100",
+					nil).
+					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+
+				fields.c = client
+			},
+			wantErr: true,
+			Err:     errors.New("error, unable to create the http request"),
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+
+			if testCase.on != nil {
+				testCase.on(&testCase.fields)
+			}
+
+			newService, err := NewUserSearchService(testCase.fields.c, testCase.fields.version)
+			assert.NoError(t, err)
+
+			gotResult, gotResponse, err := newService.Check(testCase.args.ctx, testCase.args.permission, testCase.args.options,
+				testCase.args.startAt, testCase.args.maxResults)
+
+			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+
+				assert.EqualError(t, err, testCase.Err.Error())
+
+			} else {
+
+				assert.NoError(t, err)
+				assert.NotEqual(t, gotResponse, nil)
+				assert.NotEqual(t, gotResult, nil)
+			}
+
+		})
+	}
+}

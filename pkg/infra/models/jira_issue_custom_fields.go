@@ -5,16 +5,16 @@ import (
 	"github.com/perimeterx/marshmallow"
 )
 
-func ParseMultiSelectField(buffer bytes.Buffer, customField string) ([]*CustomFieldContextOptionScheme, bool, error) {
+func ParseMultiSelectField(buffer bytes.Buffer, customField string) ([]*CustomFieldContextOptionScheme, error) {
 
 	raw, err := marshmallow.Unmarshal(buffer.Bytes(), &struct{}{})
 	if err != nil {
-		return nil, false, ErrNoCustomFieldUnmarshalError
+		return nil, ErrNoCustomFieldUnmarshalError
 	}
 
 	fields, containsFields := raw["fields"]
 	if !containsFields {
-		return nil, false, ErrNoFieldInformationError
+		return nil, ErrNoFieldInformationError
 	}
 
 	customFields := fields.(map[string]interface{})
@@ -44,24 +44,24 @@ func ParseMultiSelectField(buffer bytes.Buffer, customField string) ([]*CustomFi
 		}
 
 	case nil:
-		return nil, false, nil
+		return nil, nil
 	default:
-		return nil, false, ErrNoMultiSelectTypeError
+		return nil, ErrNoMultiSelectTypeError
 	}
 
-	return records, true, nil
+	return records, nil
 }
 
-func ParseMultiGroupPickerField(buffer bytes.Buffer, customField string) ([]*GroupDetailScheme, bool, error) {
+func ParseMultiGroupPickerField(buffer bytes.Buffer, customField string) ([]*GroupDetailScheme, error) {
 
 	raw, err := marshmallow.Unmarshal(buffer.Bytes(), &struct{}{})
 	if err != nil {
-		return nil, false, ErrNoCustomFieldUnmarshalError
+		return nil, ErrNoCustomFieldUnmarshalError
 	}
 
 	fields, containsFields := raw["fields"]
 	if !containsFields {
-		return nil, false, ErrNoFieldInformationError
+		return nil, ErrNoFieldInformationError
 	}
 
 	customFields := fields.(map[string]interface{})
@@ -82,24 +82,24 @@ func ParseMultiGroupPickerField(buffer bytes.Buffer, customField string) ([]*Gro
 		}
 
 	case nil:
-		return nil, false, nil
+		return nil, nil
 	default:
-		return nil, false, ErrNoMultiSelectTypeError
+		return nil, ErrNoMultiSelectTypeError
 	}
 
-	return groups, true, nil
+	return groups, nil
 }
 
-func ParseMultiUserPickerField(buffer bytes.Buffer, customField string) ([]*UserDetailScheme, bool, error) {
+func ParseMultiUserPickerField(buffer bytes.Buffer, customField string) ([]*UserDetailScheme, error) {
 
 	raw, err := marshmallow.Unmarshal(buffer.Bytes(), &struct{}{})
 	if err != nil {
-		return nil, false, ErrNoCustomFieldUnmarshalError
+		return nil, ErrNoCustomFieldUnmarshalError
 	}
 
 	fields, containsFields := raw["fields"]
 	if !containsFields {
-		return nil, false, ErrNoFieldInformationError
+		return nil, ErrNoFieldInformationError
 	}
 
 	customFields := fields.(map[string]interface{})
@@ -128,24 +128,24 @@ func ParseMultiUserPickerField(buffer bytes.Buffer, customField string) ([]*User
 		}
 
 	case nil:
-		return nil, false, nil
+		return nil, nil
 	default:
-		return nil, false, ErrNoMultiSelectTypeError
+		return nil, ErrNoMultiSelectTypeError
 	}
 
-	return users, true, nil
+	return users, nil
 }
 
-func ParseCascadingSelectField(buffer bytes.Buffer, customField string) (*CascadingSelectScheme, bool, error) {
+func ParseCascadingSelectField(buffer bytes.Buffer, customField string) (*CascadingSelectScheme, error) {
 
 	raw, err := marshmallow.Unmarshal(buffer.Bytes(), &struct{}{})
 	if err != nil {
-		return nil, false, ErrNoCustomFieldUnmarshalError
+		return nil, ErrNoCustomFieldUnmarshalError
 	}
 
 	fields, containsFields := raw["fields"]
 	if !containsFields {
-		return nil, false, ErrNoFieldInformationError
+		return nil, ErrNoFieldInformationError
 	}
 
 	customFields := fields.(map[string]interface{})
@@ -166,10 +166,10 @@ func ParseCascadingSelectField(buffer bytes.Buffer, customField string) (*Cascad
 		}
 
 	case nil:
-		return nil, false, nil
+		return nil, nil
 	default:
-		return nil, false, ErrNoMultiSelectTypeError
+		return nil, ErrNoMultiSelectTypeError
 	}
 
-	return cascading, false, nil
+	return cascading, nil
 }

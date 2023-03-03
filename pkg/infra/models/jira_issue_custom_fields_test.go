@@ -160,7 +160,7 @@ func TestParseMultiSelectField(t *testing.T) {
 	}
 	for _, testCase := range testCases {
 		t.Run(testCase.name, func(t *testing.T) {
-			got, got1, err := ParseMultiSelectField(testCase.args.buffer, testCase.args.customField)
+			got, err := ParseMultiSelectField(testCase.args.buffer, testCase.args.customField)
 			if (err != nil) != testCase.wantErr {
 				t.Errorf("ParseMultiSelectField() error = %v, wantErr %v", err, testCase.wantErr)
 				return
@@ -168,10 +168,6 @@ func TestParseMultiSelectField(t *testing.T) {
 			if !reflect.DeepEqual(got, testCase.want) {
 				t.Errorf("ParseMultiSelectField() got = %v, want %v", got, testCase.want)
 			}
-			if got1 != testCase.want1 {
-				t.Errorf("ParseMultiSelectField() got1 = %v, want %v", got1, testCase.want1)
-			}
-
 			if !reflect.DeepEqual(err, testCase.Err) {
 				t.Errorf("ParseMultiSelectField() got = (%v), want (%v)", err, testCase.Err)
 			}
@@ -322,16 +318,13 @@ func TestParseMultiGroupPickerField(t *testing.T) {
 	}
 	for _, testCase := range testCases {
 		t.Run(testCase.name, func(t *testing.T) {
-			got, got1, err := ParseMultiGroupPickerField(testCase.args.buffer, testCase.args.customField)
+			got, err := ParseMultiGroupPickerField(testCase.args.buffer, testCase.args.customField)
 			if (err != nil) != testCase.wantErr {
 				t.Errorf("ParseMultiSelectField() error = %v, wantErr %v", err, testCase.wantErr)
 				return
 			}
 			if !reflect.DeepEqual(got, testCase.want) {
 				t.Errorf("ParseMultiSelectField() got = %v, want %v", got, testCase.want)
-			}
-			if got1 != testCase.want1 {
-				t.Errorf("ParseMultiSelectField() got1 = %v, want %v", got1, testCase.want1)
 			}
 
 			if !reflect.DeepEqual(err, testCase.Err) {
@@ -551,7 +544,7 @@ func TestParseMultiUserPickerField(t *testing.T) {
 	}
 	for _, testCase := range testCases {
 		t.Run(testCase.name, func(t *testing.T) {
-			got, got1, err := ParseMultiUserPickerField(testCase.args.buffer, testCase.args.customField)
+			got, err := ParseMultiUserPickerField(testCase.args.buffer, testCase.args.customField)
 			if (err != nil) != testCase.wantErr {
 				t.Errorf("ParseMultiSelectField() error = %v, wantErr %v", err, testCase.wantErr)
 				return
@@ -559,10 +552,6 @@ func TestParseMultiUserPickerField(t *testing.T) {
 			if !reflect.DeepEqual(got, testCase.want) {
 				t.Errorf("ParseMultiSelectField() got = %v, want %v", got, testCase.want)
 			}
-			if got1 != testCase.want1 {
-				t.Errorf("ParseMultiSelectField() got1 = %v, want %v", got1, testCase.want1)
-			}
-
 			if !reflect.DeepEqual(err, testCase.Err) {
 				t.Errorf("ParseMultiSelectField() got = (%v), want (%v)", err, testCase.Err)
 			}
@@ -707,16 +696,13 @@ func TestParseCascadingSelectField(t *testing.T) {
 	}
 	for _, testCase := range testCases {
 		t.Run(testCase.name, func(t *testing.T) {
-			got, got1, err := ParseCascadingSelectField(testCase.args.buffer, testCase.args.customField)
+			got, err := ParseCascadingSelectField(testCase.args.buffer, testCase.args.customField)
 			if (err != nil) != testCase.wantErr {
 				t.Errorf("ParseMultiSelectField() error = %v, wantErr %v", err, testCase.wantErr)
 				return
 			}
 			if !reflect.DeepEqual(got, testCase.want) {
 				t.Errorf("ParseMultiSelectField() got = %v, want %v", got, testCase.want)
-			}
-			if got1 != testCase.want1 {
-				t.Errorf("ParseMultiSelectField() got1 = %v, want %v", got1, testCase.want1)
 			}
 
 			if !reflect.DeepEqual(err, testCase.Err) {

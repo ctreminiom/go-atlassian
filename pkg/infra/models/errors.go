@@ -108,4 +108,7 @@ var (
 	ErrInvalidStatusCodeError              = errors.New("client: invalid http response status, please refer the response.body for more details")
 	ErrNilPayloadError                     = errors.New("client: please provide the necessary payload struct")
 	ErrNonPayloadPointerError              = errors.New("client: please provide a valid payload struct pointer (&)")
+	ErrNoFieldInformationError             = errors.New("custom-field: please provide a buffer with a valid fields object")
+	ErrNoCustomFieldUnmarshalError         = errors.New("custom-field: no valid json provided")
+	ErrNoMultiSelectTypeError              = errors.New("custom-field: no multiselect type found")
 )

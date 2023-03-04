@@ -76,3 +76,13 @@ type VersionUnresolvedIssuesCountScheme struct {
 	IssuesUnresolvedCount int    `json:"issuesUnresolvedCount"`
 	IssuesCount           int    `json:"issuesCount"`
 }
+
+type VersionDetailScheme struct {
+	Self        string `json:"self,omitempty"`
+	ID          string `json:"id,omitempty"`
+	Description string `json:"description,omitempty"`
+	Name        string `json:"name,omitempty"`
+	Archived    bool   `json:"archived,omitempty"`
+	Released    bool   `json:"released,omitempty"`
+	ReleaseDate string `json:"releaseDate,omitempty"`
+}

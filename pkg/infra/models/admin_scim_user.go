@@ -140,6 +140,10 @@ func (s *SCIMUserToPathScheme) AddComplexOperation(operation, path string, value
 		return ErrNoSCIMComplexValueError
 	}
 
+	if len(values) == 0 {
+		return ErrNoSCIMComplexValueError
+	}
+
 	s.Operations = append(s.Operations, &SCIMUserToPathOperationScheme{
 		Op:    operation,
 		Path:  path,

@@ -15,12 +15,8 @@ type CreateCustomerRequestPayloadScheme struct {
 
 func (c *CreateCustomerRequestPayloadScheme) MergeFields(fields *CustomerRequestFields) (map[string]interface{}, error) {
 
-	if fields == nil {
-		return nil, fmt.Errorf("error, please provide a value *CustomFields pointer")
-	}
-
-	if len(fields.Fields) == 0 {
-		return nil, fmt.Errorf("error!, the Fields tag does not contains custom fields")
+	if fields == nil || len(fields.Fields) == 0 {
+		return nil, ErrNoCustomFieldError
 	}
 
 	//Convert the IssueScheme struct to map[string]interface{}

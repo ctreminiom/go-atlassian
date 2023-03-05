@@ -2,7 +2,6 @@ package models
 
 import (
 	"bytes"
-	"fmt"
 	"github.com/perimeterx/marshmallow"
 )
 
@@ -350,9 +349,6 @@ func ParseSprintCustomField(buffer bytes.Buffer, customField string) ([]*SprintD
 			if wasFound {
 				record.CompleteDate = completeDate
 			}
-
-			fmt.Print(record)
-
 			records = append(records, record)
 		}
 

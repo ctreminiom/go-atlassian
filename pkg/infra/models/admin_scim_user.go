@@ -136,7 +136,7 @@ func (s *SCIMUserToPathScheme) AddComplexOperation(operation, path string, value
 		return ErrNoSCIMPathError
 	}
 
-	if values == nil || len(values) == 0 {
+	if values == nil {
 		return ErrNoSCIMComplexValueError
 	}
 

@@ -8,8 +8,10 @@ import (
 func TestIssueScheme_MergeCustomFields(t *testing.T) {
 
 	var customFields = &CustomFields{}
-	customFields.Number("customfield_10043", 1000.3232)
-
+	err := customFields.Number("customfield_10043", 1000.3232)
+	if err != nil {
+		t.Error(err)
+	}
 	type fields struct {
 		ID          string
 		Key         string
@@ -97,7 +99,10 @@ func TestIssueScheme_MergeCustomFields(t *testing.T) {
 func TestIssueScheme_MergeOperations(t *testing.T) {
 
 	var operations = &UpdateOperations{}
-	operations.AddArrayOperation("labels", map[string]string{"triaged": "remove"})
+	err := operations.AddArrayOperation("labels", map[string]string{"triaged": "remove"})
+	if err != nil {
+		t.Error(err)
+	}
 
 	type fields struct {
 		ID          string

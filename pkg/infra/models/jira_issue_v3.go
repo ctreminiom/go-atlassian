@@ -2,7 +2,6 @@ package models
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/imdario/mergo"
 )
 
@@ -15,63 +14,74 @@ type IssueScheme struct {
 	Fields      *IssueFieldsScheme       `json:"fields,omitempty"`
 }
 
-func (i *IssueScheme) MergeCustomFields(fields *CustomFields) (result map[string]interface{}, err error) {
+func (i *IssueScheme) MergeCustomFields(fields *CustomFields) (map[string]interface{}, error) {
 
-	if fields == nil {
-		return nil, fmt.Errorf("error, please provide a value *CustomFields pointer")
-	}
-
-	if len(fields.Fields) == 0 {
-		return nil, fmt.Errorf("error!, the Fields tag does not contains custom fields")
+	if fields == nil || len(fields.Fields) == 0 {
+		return nil, ErrNoCustomFieldError
 	}
 
 	//Convert the IssueScheme struct to map[string]interface{}
-	issueSchemeAsBytes, _ := json.Marshal(i)
+	issueSchemeAsBytes, err := json.Marshal(i)
+	if err != nil {
+		return nil, err
+	}
 
 	issueSchemeAsMap := make(map[string]interface{})
-	_ = json.Unmarshal(issueSchemeAsBytes, &issueSchemeAsMap)
+	if err := json.Unmarshal(issueSchemeAsBytes, &issueSchemeAsMap); err != nil {
+		return nil, err
+	}
 
 	//For each customField created, merge it into the eAsMap
 	for _, customField := range fields.Fields {
-		_ = mergo.Merge(&issueSchemeAsMap, customField, mergo.WithOverride)
+		if err := mergo.Merge(&issueSchemeAsMap, customField, mergo.WithOverride); err != nil {
+			return nil, err
+		}
 	}
 
 	return issueSchemeAsMap, nil
 }
 
-func (i *IssueScheme) MergeOperations(operations *UpdateOperations) (result map[string]interface{}, err error) {
+func (i *IssueScheme) MergeOperations(operations *UpdateOperations) (map[string]interface{}, error) {
 
-	if operations == nil {
-		return nil, fmt.Errorf("error, please provide a value *UpdateOperations pointer")
-	}
-
-	if len(operations.Fields) == 0 {
-		return nil, fmt.Errorf("error!, the Fields tag does not contains custom fields")
+	if operations == nil || len(operations.Fields) == 0 {
+		return nil, ErrNoOperatorError
 	}
 
 	//Convert the IssueScheme struct to map[string]interface{}
-	issueSchemeAsBytes, _ := json.Marshal(i)
+	issueSchemeAsBytes, err := json.Marshal(i)
+	if err != nil {
+		return nil, err
+	}
 
 	issueSchemeAsMap := make(map[string]interface{})
-	_ = json.Unmarshal(issueSchemeAsBytes, &issueSchemeAsMap)
+	if err := json.Unmarshal(issueSchemeAsBytes, &issueSchemeAsMap); err != nil {
+		return nil, err
+	}
 
 	//For each customField created, merge it into the eAsMap
 	for _, customField := range operations.Fields {
-		_ = mergo.Merge(&issueSchemeAsMap, customField, mergo.WithOverride)
+		if err := mergo.Merge(&issueSchemeAsMap, customField, mergo.WithOverride); err != nil {
+			return nil, err
+		}
 	}
 
 	return issueSchemeAsMap, nil
 }
 
-func (i *IssueScheme) ToMap() (result map[string]interface{}, err error) {
+func (i *IssueScheme) ToMap() (map[string]interface{}, error) {
 
 	//Convert the IssueScheme struct to map[string]interface{}
-	issueSchemeAsBytes, _ := json.Marshal(i)
+	issueSchemeAsBytes, err := json.Marshal(i)
+	if err != nil {
+		return nil, err
+	}
 
 	issueSchemeAsMap := make(map[string]interface{})
-	_ = json.Unmarshal(issueSchemeAsBytes, &issueSchemeAsMap)
+	if err := json.Unmarshal(issueSchemeAsBytes, &issueSchemeAsMap); err != nil {
+		return nil, err
+	}
 
-	return issueSchemeAsMap, err
+	return issueSchemeAsMap, nil
 }
 
 type IssueFieldsScheme struct {

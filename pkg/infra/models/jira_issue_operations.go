@@ -1,13 +1,11 @@
 package models
 
-import "fmt"
-
 type UpdateOperations struct{ Fields []map[string]interface{} }
 
-func (u *UpdateOperations) AddArrayOperation(customFieldID string, mapping map[string]string) (err error) {
+func (u *UpdateOperations) AddArrayOperation(customFieldID string, mapping map[string]string) error {
 
 	if len(customFieldID) == 0 {
-		return fmt.Errorf("error, please provide a valid customFieldID value")
+		return ErrNoFieldIDError
 	}
 
 	var operations []map[string]interface{}
@@ -26,25 +24,24 @@ func (u *UpdateOperations) AddArrayOperation(customFieldID string, mapping map[s
 	updateNode["update"] = fieldNode
 
 	u.Fields = append(u.Fields, updateNode)
-	return
+	return nil
 }
 
-func (u *UpdateOperations) AddStringOperation(customFieldID, operation, value string) (err error) {
+func (u *UpdateOperations) AddStringOperation(customFieldID, operation, value string) error {
 
 	if len(customFieldID) == 0 {
-		return fmt.Errorf("error, please provide a valid customFieldID value")
+		return ErrNoFieldIDError
 	}
 
 	if len(operation) == 0 {
-		return fmt.Errorf("error, please provide a valid operation value")
+		return ErrNoEditOperatorError
 	}
 
 	if len(value) == 0 {
-		return fmt.Errorf("error, please provide a valid value value")
+		return ErrNoEditValueError
 	}
 
 	var operations []map[string]interface{}
-
 	var operationNode = map[string]interface{}{}
 	operationNode[operation] = value
 
@@ -58,5 +55,5 @@ func (u *UpdateOperations) AddStringOperation(customFieldID, operation, value st
 
 	u.Fields = append(u.Fields, updateNode)
 
-	return
+	return nil
 }

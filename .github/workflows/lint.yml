@@ -3,11 +3,7 @@ on:
   push:
     tags:
       - v*
-    branches:
-      - master
-      - main
-      - feature/*
-      - bug/*
+    branches: [ main, dev, feature/* ]
   pull_request:
 permissions:
   contents: read
@@ -16,7 +12,7 @@ permissions:
 jobs:
   golangci:
 
-    max-parallel: 3
+    max-parallel: 2
     matrix:
       go-version: [ 1.16, 1.17 ]
       os: [ ubuntu-latest, macos-latest, windows-latest ]

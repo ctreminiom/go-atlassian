@@ -233,7 +233,7 @@ func ParseUserPickerCustomField(buffer bytes.Buffer, customField string) (*UserD
 	}
 
 	customFields := fields.(map[string]interface{})
-	user := &UserDetailScheme{}
+	var user *UserDetailScheme
 
 	switch option := customFields[customField].(type) {
 	case map[string]interface{}:

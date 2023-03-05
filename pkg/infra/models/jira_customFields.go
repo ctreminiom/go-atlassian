@@ -1,20 +1,19 @@
 package models
 
 import (
-	"fmt"
 	"time"
 )
 
 type CustomFields struct{ Fields []map[string]interface{} }
 
-func (c *CustomFields) Groups(customFieldID string, groups []string) (err error) {
+func (c *CustomFields) Groups(customFieldID string, groups []string) error {
 
 	if len(customFieldID) == 0 {
-		return fmt.Errorf("error, please provide a valid customFieldID value")
+		return ErrNoFieldIDError
 	}
 
 	if len(groups) == 0 {
-		return fmt.Errorf("error, please provide a valid groups value")
+		return ErrNoGroupsNameError
 	}
 
 	var groupsNode []map[string]interface{}
@@ -33,17 +32,17 @@ func (c *CustomFields) Groups(customFieldID string, groups []string) (err error)
 	fieldsNode["fields"] = fieldNode
 
 	c.Fields = append(c.Fields, fieldsNode)
-	return
+	return nil
 }
 
-func (c *CustomFields) Group(customFieldID, group string) (err error) {
+func (c *CustomFields) Group(customFieldID, group string) error {
 
 	if len(customFieldID) == 0 {
-		return fmt.Errorf("error, please provide a valid customFieldID value")
+		return ErrNoFieldIDError
 	}
 
 	if len(group) == 0 {
-		return fmt.Errorf("error, please provide a valid group value")
+		return ErrNoGroupNameError
 	}
 
 	var groupNode = map[string]interface{}{}
@@ -56,17 +55,17 @@ func (c *CustomFields) Group(customFieldID, group string) (err error) {
 	fieldsNode["fields"] = fieldNode
 
 	c.Fields = append(c.Fields, fieldsNode)
-	return
+	return nil
 }
 
-func (c *CustomFields) URL(customFieldID, URL string) (err error) {
+func (c *CustomFields) URL(customFieldID, URL string) error {
 
 	if len(customFieldID) == 0 {
-		return fmt.Errorf("error, please provide a valid customFieldID value")
+		return ErrNoFieldIDError
 	}
 
 	if len(URL) == 0 {
-		return fmt.Errorf("error, please provide a valid URL value")
+		return ErrNoUrlTypeError
 	}
 
 	var urlNode = map[string]interface{}{}
@@ -76,17 +75,17 @@ func (c *CustomFields) URL(customFieldID, URL string) (err error) {
 	fieldsNode["fields"] = urlNode
 
 	c.Fields = append(c.Fields, fieldsNode)
-	return
+	return nil
 }
 
-func (c *CustomFields) Text(customFieldID, textValue string) (err error) {
+func (c *CustomFields) Text(customFieldID, textValue string) error {
 
 	if len(customFieldID) == 0 {
-		return fmt.Errorf("error, please provide a valid customFieldID value")
+		return ErrNoFieldIDError
 	}
 
 	if len(textValue) == 0 {
-		return fmt.Errorf("error, please provide a valid textValue value")
+		return ErrNoTextTypeError
 	}
 
 	var urlNode = map[string]interface{}{}
@@ -96,17 +95,17 @@ func (c *CustomFields) Text(customFieldID, textValue string) (err error) {
 	fieldsNode["fields"] = urlNode
 
 	c.Fields = append(c.Fields, fieldsNode)
-	return
+	return nil
 }
 
-func (c *CustomFields) DateTime(customFieldID string, dateValue time.Time) (err error) {
+func (c *CustomFields) DateTime(customFieldID string, dateValue time.Time) error {
 
 	if len(customFieldID) == 0 {
-		return fmt.Errorf("error, please provide a valid customFieldID value")
+		return ErrNoFieldIDError
 	}
 
 	if dateValue.IsZero() {
-		return fmt.Errorf("error, please provide a valid dateValue value")
+		return ErrNoDateTimeTypeError
 	}
 
 	var dateNode = map[string]interface{}{}
@@ -116,17 +115,17 @@ func (c *CustomFields) DateTime(customFieldID string, dateValue time.Time) (err 
 	fieldsNode["fields"] = dateNode
 
 	c.Fields = append(c.Fields, fieldsNode)
-	return
+	return nil
 }
 
 func (c *CustomFields) Date(customFieldID string, dateTimeValue time.Time) (err error) {
 
 	if len(customFieldID) == 0 {
-		return fmt.Errorf("error, please provide a valid customFieldID value")
+		return ErrNoFieldIDError
 	}
 
 	if dateTimeValue.IsZero() {
-		return fmt.Errorf("error, please provide a valid dateValue value")
+		return ErrNoDateTypeError
 	}
 
 	var dateTimeNode = map[string]interface{}{}
@@ -139,14 +138,14 @@ func (c *CustomFields) Date(customFieldID string, dateTimeValue time.Time) (err 
 	return
 }
 
-func (c *CustomFields) MultiSelect(customFieldID string, options []string) (err error) {
+func (c *CustomFields) MultiSelect(customFieldID string, options []string) error {
 
 	if len(customFieldID) == 0 {
-		return fmt.Errorf("error, please provide a valid customFieldID value")
+		return ErrNoFieldIDError
 	}
 
 	if len(options) == 0 {
-		return fmt.Errorf("error, please provide a valid options value")
+		return ErrNoMultiSelectTypeError
 	}
 
 	var groupsNode []map[string]interface{}
@@ -165,17 +164,17 @@ func (c *CustomFields) MultiSelect(customFieldID string, options []string) (err 
 	fieldsNode["fields"] = fieldNode
 
 	c.Fields = append(c.Fields, fieldsNode)
-	return
+	return nil
 }
 
-func (c *CustomFields) Select(customFieldID string, option string) (err error) {
+func (c *CustomFields) Select(customFieldID string, option string) error {
 
 	if len(customFieldID) == 0 {
-		return fmt.Errorf("error, please provide a valid customFieldID value")
+		return ErrNoFieldIDError
 	}
 
 	if len(option) == 0 {
-		return fmt.Errorf("error, please provide a valid option value")
+		return ErrNoSelectTypeError
 	}
 
 	var selectNode = map[string]interface{}{}
@@ -188,17 +187,17 @@ func (c *CustomFields) Select(customFieldID string, option string) (err error) {
 	fieldsNode["fields"] = fieldNode
 
 	c.Fields = append(c.Fields, fieldsNode)
-	return
+	return nil
 }
 
-func (c *CustomFields) RadioButton(customFieldID, button string) (err error) {
+func (c *CustomFields) RadioButton(customFieldID, button string) error {
 
 	if len(customFieldID) == 0 {
-		return fmt.Errorf("error, please provide a valid customFieldID value")
+		return ErrNoFieldIDError
 	}
 
 	if len(button) == 0 {
-		return fmt.Errorf("error, please provide a button option value")
+		return ErrNoButtonTypeError
 	}
 
 	var selectNode = map[string]interface{}{}
@@ -211,17 +210,17 @@ func (c *CustomFields) RadioButton(customFieldID, button string) (err error) {
 	fieldsNode["fields"] = fieldNode
 
 	c.Fields = append(c.Fields, fieldsNode)
-	return
+	return nil
 }
 
-func (c *CustomFields) User(customFieldID string, accountID string) (err error) {
+func (c *CustomFields) User(customFieldID string, accountID string) error {
 
 	if len(customFieldID) == 0 {
-		return fmt.Errorf("error, please provide a valid customFieldID value")
+		return ErrNoFieldIDError
 	}
 
 	if len(accountID) == 0 {
-		return fmt.Errorf("error, please provide a accountID option value")
+		return ErrNoUserTypeError
 	}
 
 	var userNode = map[string]interface{}{}
@@ -234,17 +233,17 @@ func (c *CustomFields) User(customFieldID string, accountID string) (err error) 
 	fieldsNode["fields"] = fieldNode
 
 	c.Fields = append(c.Fields, fieldsNode)
-	return
+	return nil
 }
 
-func (c *CustomFields) Users(customFieldID string, accountIDs []string) (err error) {
+func (c *CustomFields) Users(customFieldID string, accountIDs []string) error {
 
 	if len(customFieldID) == 0 {
-		return fmt.Errorf("error, please provide a valid customFieldID value")
+		return ErrNoFieldIDError
 	}
 
 	if len(accountIDs) == 0 {
-		return fmt.Errorf("error, please provide a accountIDs value")
+		return ErrNoMultiUserTypeError
 	}
 
 	var accountsNode []map[string]interface{}
@@ -263,13 +262,13 @@ func (c *CustomFields) Users(customFieldID string, accountIDs []string) (err err
 	fieldsNode["fields"] = fieldNode
 
 	c.Fields = append(c.Fields, fieldsNode)
-	return
+	return nil
 }
 
-func (c *CustomFields) Number(customFieldID string, numberValue float64) (err error) {
+func (c *CustomFields) Number(customFieldID string, numberValue float64) error {
 
 	if len(customFieldID) == 0 {
-		return fmt.Errorf("error, please provide a valid customFieldID value")
+		return ErrNoFieldIDError
 	}
 
 	var urlNode = map[string]interface{}{}
@@ -279,17 +278,17 @@ func (c *CustomFields) Number(customFieldID string, numberValue float64) (err er
 	fieldsNode["fields"] = urlNode
 
 	c.Fields = append(c.Fields, fieldsNode)
-	return
+	return nil
 }
 
-func (c *CustomFields) CheckBox(customFieldID string, options []string) (err error) {
+func (c *CustomFields) CheckBox(customFieldID string, options []string) error {
 
 	if len(customFieldID) == 0 {
-		return fmt.Errorf("error, please provide a valid customFieldID value")
+		return ErrNoFieldIDError
 	}
 
 	if len(options) == 0 {
-		return fmt.Errorf("error, please provide a valid options value")
+		return ErrNoCheckBoxTypeError
 	}
 
 	var groupsNode []map[string]interface{}
@@ -308,21 +307,21 @@ func (c *CustomFields) CheckBox(customFieldID string, options []string) (err err
 	fieldsNode["fields"] = fieldNode
 
 	c.Fields = append(c.Fields, fieldsNode)
-	return
+	return nil
 }
 
-func (c *CustomFields) Cascading(customFieldID, parent, child string) (err error) {
+func (c *CustomFields) Cascading(customFieldID, parent, child string) error {
 
 	if len(customFieldID) == 0 {
-		return fmt.Errorf("error, please provide a valid customFieldID value")
+		return ErrNoFieldIDError
 	}
 
-	if len(parent) == 0 {
-		return fmt.Errorf("error, please provide a parent value")
+	if parent == "" {
+		return ErrNoCascadingParentError
 	}
 
-	if len(child) == 0 {
-		return fmt.Errorf("error, please provide a child value")
+	if child == "" {
+		return ErrNoCascadingChildError
 	}
 
 	var childNode = map[string]interface{}{}
@@ -339,5 +338,5 @@ func (c *CustomFields) Cascading(customFieldID, parent, child string) (err error
 	fieldsNode["fields"] = fieldNode
 
 	c.Fields = append(c.Fields, fieldsNode)
-	return
+	return nil
 }

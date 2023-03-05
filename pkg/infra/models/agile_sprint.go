@@ -44,3 +44,14 @@ type SprintMovePayloadScheme struct {
 	RankAfterIssue    string   `json:"rankAfterIssue,omitempty"`
 	RankCustomFieldId int      `json:"rankCustomFieldId,omitempty"`
 }
+
+type SprintDetailScheme struct {
+	ID            int    `json:"id,omitempty"`
+	State         string `json:"state,omitempty"`
+	Name          string `json:"name,omitempty"`
+	StartDate     string `json:"startDate,omitempty"`
+	EndDate       string `json:"endDate,omitempty"`
+	CompleteDate  string `json:"completeDate,omitempty"`
+	OriginBoardID int    `json:"originBoardId,omitempty"`
+	Goal          string `json:"goal,omitempty"`
+}

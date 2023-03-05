@@ -27,14 +27,17 @@ type GroupUserPageScheme struct {
 }
 
 type BulkGroupScheme struct {
-	MaxResults int  `json:"maxResults,omitempty"`
-	StartAt    int  `json:"startAt,omitempty"`
-	Total      int  `json:"total,omitempty"`
-	IsLast     bool `json:"isLast,omitempty"`
-	Values     []struct {
-		Name    string `json:"name,omitempty"`
-		GroupID string `json:"groupId,omitempty"`
-	} `json:"values,omitempty"`
+	MaxResults int                  `json:"maxResults,omitempty"`
+	StartAt    int                  `json:"startAt,omitempty"`
+	Total      int                  `json:"total,omitempty"`
+	IsLast     bool                 `json:"isLast,omitempty"`
+	Values     []*GroupDetailScheme `json:"values,omitempty"`
+}
+
+type GroupDetailScheme struct {
+	Self    string `json:"self,omitempty"`
+	Name    string `json:"name,omitempty"`
+	GroupID string `json:"groupId,omitempty"`
 }
 
 type GroupMemberPageScheme struct {

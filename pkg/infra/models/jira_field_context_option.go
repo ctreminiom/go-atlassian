@@ -31,3 +31,16 @@ type OrderFieldOptionPayloadScheme struct {
 	Position             string   `json:"position,omitempty"`
 	CustomFieldOptionIds []string `json:"customFieldOptionIds,omitempty"`
 }
+
+type CascadingSelectScheme struct {
+	Self  string                      `json:"self,omitempty"`
+	Value string                      `json:"value,omitempty"`
+	Id    string                      `json:"id,omitempty"`
+	Child *CascadingSelectChildScheme `json:"child,omitempty"`
+}
+
+type CascadingSelectChildScheme struct {
+	Self  string `json:"self,omitempty"`
+	Value string `json:"value,omitempty"`
+	Id    string `json:"id,omitempty"`
+}

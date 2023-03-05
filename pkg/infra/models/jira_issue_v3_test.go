@@ -187,3 +187,63 @@ func TestIssueScheme_MergeOperations(t *testing.T) {
 		})
 	}
 }
+
+func TestIssueScheme_ToMap(t *testing.T) {
+	type fields struct {
+		ID          string
+		Key         string
+		Self        string
+		Transitions []*IssueTransitionScheme
+		Changelog   *IssueChangelogScheme
+		Fields      *IssueFieldsScheme
+	}
+	testCases := []struct {
+		name    string
+		fields  fields
+		want    map[string]interface{}
+		wantErr bool
+		Err     error
+	}{
+		{
+			name: "when the parameters are correct",
+			fields: fields{
+				Key: "DUMMY-1",
+				Fields: &IssueFieldsScheme{
+					Summary: "Test",
+				},
+			},
+			want: map[string]interface{}{
+				"key": "DUMMY-1",
+				"fields": map[string]interface{}{
+					"summary": "Test",
+				},
+			},
+			wantErr: false,
+		},
+	}
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+			i := &IssueScheme{
+				ID:          testCase.fields.ID,
+				Key:         testCase.fields.Key,
+				Self:        testCase.fields.Self,
+				Transitions: testCase.fields.Transitions,
+				Changelog:   testCase.fields.Changelog,
+				Fields:      testCase.fields.Fields,
+			}
+			got, err := i.ToMap()
+
+			if (err != nil) != testCase.wantErr {
+				t.Errorf("ToMap() error = %v, wantErr %v", err, testCase.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, testCase.want) {
+				t.Errorf("ToMap() got = %v, want %v", got, testCase.want)
+			}
+
+			if !reflect.DeepEqual(err, testCase.Err) {
+				t.Errorf("ToMap() got = (%v), want (%v)", err, testCase.Err)
+			}
+		})
+	}
+}

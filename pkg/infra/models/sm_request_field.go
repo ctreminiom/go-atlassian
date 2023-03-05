@@ -32,7 +32,6 @@ func (c *CreateCustomerRequestPayloadScheme) MergeFields(fields *CustomerRequest
 
 	//For each customField created, merge it into the eAsMap
 	for _, field := range fields.Fields {
-
 		if err := mergo.Merge(&issueSchemeAsMap, field, mergo.WithOverride); err != nil {
 			return nil, err
 		}

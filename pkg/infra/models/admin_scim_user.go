@@ -1,7 +1,5 @@
 package models
 
-import "fmt"
-
 type SCIMUserScheme struct {
 	ID                string                        `json:"id"`
 	ExternalID        string                        `json:"externalId"`
@@ -86,37 +84,18 @@ type SCIMUserToPathScheme struct {
 	Operations []*SCIMUserToPathOperationScheme `json:"operations,omitempty"`
 }
 
-func (s *SCIMUserToPathScheme) AddStringOperation(operation, path, value string) (err error) {
+func (s *SCIMUserToPathScheme) AddStringOperation(operation, path, value string) error {
 
-	if len(operation) == 0 {
-		return fmt.Errorf("error!, please provide a valid operation value, you can check the availables values calling the user schemas")
+	if operation == "" {
+		return ErrNoSCIMOperationError
 	}
 
-	if len(path) == 0 {
-		return fmt.Errorf("error!, please provide a valid path value")
+	if path == "" {
+		return ErrNoSCIMPathError
 	}
 
-	if len(value) == 0 {
-		return fmt.Errorf("error!, please provide a valid value value")
-	}
-
-	s.Operations = append(s.Operations, &SCIMUserToPathOperationScheme{
-		Op:    operation,
-		Path:  path,
-		Value: value,
-	})
-
-	return
-}
-
-func (s *SCIMUserToPathScheme) AddBoolOperation(operation, path string, value bool) (err error) {
-
-	if len(operation) == 0 {
-		return fmt.Errorf("error!, please provide a valid operation value, you can check the availables values calling the user schemas")
-	}
-
-	if len(path) == 0 {
-		return fmt.Errorf("error!, please provide a valid path value")
+	if value == "" {
+		return ErrNoSCIMValueError
 	}
 
 	s.Operations = append(s.Operations, &SCIMUserToPathOperationScheme{
@@ -125,25 +104,40 @@ func (s *SCIMUserToPathScheme) AddBoolOperation(operation, path string, value bo
 		Value: value,
 	})
 
-	return
+	return nil
 }
 
-func (s *SCIMUserToPathScheme) AddComplexOperation(operation, path string, values []*SCIMUserComplexOperationScheme) (err error) {
+func (s *SCIMUserToPathScheme) AddBoolOperation(operation, path string, value bool) error {
 
-	if len(operation) == 0 {
-		return fmt.Errorf("error!, please provide a valid operation value, you can check the availables values calling the user schemas")
+	if operation == "" {
+		return ErrNoSCIMOperationError
 	}
 
-	if len(path) == 0 {
-		return fmt.Errorf("error!, please provide a valid path value")
+	if path == "" {
+		return ErrNoSCIMPathError
 	}
 
-	if values == nil {
-		return fmt.Errorf("error!, please provide a valid SCIMUserComplexOperationScheme slice pointer")
+	s.Operations = append(s.Operations, &SCIMUserToPathOperationScheme{
+		Op:    operation,
+		Path:  path,
+		Value: value,
+	})
+
+	return nil
+}
+
+func (s *SCIMUserToPathScheme) AddComplexOperation(operation, path string, values []*SCIMUserComplexOperationScheme) error {
+
+	if operation == "" {
+		return ErrNoSCIMOperationError
 	}
 
-	if len(values) == 0 {
-		return fmt.Errorf("error!, the values variable must contains SCIMUserComplexOperationScheme nodes")
+	if path == "" {
+		return ErrNoSCIMPathError
+	}
+
+	if values == nil || len(values) == 0 {
+		return ErrNoSCIMComplexValueError
 	}
 
 	s.Operations = append(s.Operations, &SCIMUserToPathOperationScheme{
@@ -152,7 +146,7 @@ func (s *SCIMUserToPathScheme) AddComplexOperation(operation, path string, value
 		Value: values,
 	})
 
-	return
+	return nil
 }
 
 type SCIMUserComplexOperationScheme struct {

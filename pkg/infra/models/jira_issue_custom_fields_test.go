@@ -1060,6 +1060,7 @@ func TestParseUserPickerCustomField(t *testing.T) {
     "customfield_10045": {
       "self": "https://ctreminiom.atlassian.net/rest/api/3/user?accountId=5e5f6acefc1fca0af44135f8",
       "accountId": "5e5f6acefc1fca0af44135f8",
+	  "emailAddress": "example@example.com",
       "avatarUrls": {
         "48x48": "https://secure.gravatar.com/avatar/6c20a29c5ab36b3cbc121782edaadfc9?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FEN-4.png",
         "24x24": "https://secure.gravatar.com/avatar/6c20a29c5ab36b3cbc121782edaadfc9?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FEN-4.png",
@@ -1136,7 +1137,7 @@ func TestParseUserPickerCustomField(t *testing.T) {
 			want: &UserDetailScheme{
 				Self:         "https://ctreminiom.atlassian.net/rest/api/3/user?accountId=5e5f6acefc1fca0af44135f8",
 				AccountID:    "5e5f6acefc1fca0af44135f8",
-				EmailAddress: "",
+				EmailAddress: "example@example.com",
 				DisplayName:  "Eduardo Navarro",
 				Active:       true,
 				TimeZone:     "Europe/London",
@@ -1471,7 +1472,8 @@ func TestParseSprintCustomField(t *testing.T) {
         "boardId": 4,
         "goal": "",
         "startDate": "2023-03-04T02:03:16.273Z",
-        "endDate": "2023-03-17T02:03:00.000Z"
+        "endDate": "2023-03-17T02:03:00.000Z",
+		"completeDate": "2023-03-04T02:03:16.273Z"
       }
     ]
 	}
@@ -1539,6 +1541,7 @@ func TestParseSprintCustomField(t *testing.T) {
 					State:         "active",
 					Name:          "KP Sprint 3",
 					StartDate:     "2023-03-04T02:03:16.273Z",
+					CompleteDate:  "2023-03-04T02:03:16.273Z",
 					EndDate:       "2023-03-17T02:03:00.000Z",
 					OriginBoardID: 4,
 					Goal:          "",

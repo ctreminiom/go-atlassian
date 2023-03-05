@@ -5,6 +5,10 @@ import (
 )
 
 var (
+	ErrNoSCIMComplexValueError             = errors.New("admin: no scim complex value set")
+	ErrNoSCIMValueError                    = errors.New("admin: no scim value set")
+	ErrNoSCIMPathError                     = errors.New("admin: no scim path set")
+	ErrNoSCIMOperationError                = errors.New("admin: no scim operation value set")
 	ErrNoAdminOrganizationError            = errors.New("admin: no organization id set")
 	ErrNoAdminDomainIDError                = errors.New("admin: no domain id set")
 	ErrNoEventIDError                      = errors.New("admin: no event id set")

@@ -149,7 +149,7 @@ func ParseCascadingSelectCustomField(buffer bytes.Buffer, customField string) (*
 	}
 
 	customFields := fields.(map[string]interface{})
-	cascading := &CascadingSelectScheme{}
+	var cascading *CascadingSelectScheme
 
 	switch option := customFields[customField].(type) {
 	case map[string]interface{}:
@@ -233,7 +233,7 @@ func ParseUserPickerCustomField(buffer bytes.Buffer, customField string) (*UserD
 	}
 
 	customFields := fields.(map[string]interface{})
-	user := &UserDetailScheme{}
+	var user *UserDetailScheme
 
 	switch option := customFields[customField].(type) {
 	case map[string]interface{}:
@@ -272,19 +272,20 @@ func ParseFloatCustomField(buffer bytes.Buffer, customField string) (float64, er
 	if !containsFields {
 		return 0, ErrNoFieldInformationError
 	}
-
+	var number float64
 	customFields := fields.(map[string]interface{})
+
 	switch value := customFields[customField].(type) {
 
 	case float64:
-		return value, nil
+		number = value
 	case nil:
 		return 0, nil
 	default:
 		return 0, ErrNoMultiSelectTypeError
 	}
 
-	return 0, err
+	return number, err
 }
 
 func ParseLabelCustomField(buffer bytes.Buffer, customField string) ([]string, error) {
@@ -374,7 +375,7 @@ func ParseSelectCustomField(buffer bytes.Buffer, customField string) (*CustomFie
 	}
 
 	customFields := fields.(map[string]interface{})
-	cascading := &CustomFieldContextOptionScheme{}
+	var cascading *CustomFieldContextOptionScheme
 
 	switch option := customFields[customField].(type) {
 	case map[string]interface{}:

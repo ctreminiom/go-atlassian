@@ -35,6 +35,11 @@ func New(httpClient common.HttpClient, site string) (*Client, error) {
 		Site: siteAsURL,
 	}
 
+	auditRecordService, err := internal.NewAuditRecordService(client, "2")
+	if err != nil {
+		return nil, err
+	}
+
 	applicationRoleService, err := internal.NewApplicationRoleService(client, "2")
 	if err != nil {
 		return nil, err
@@ -338,6 +343,7 @@ func New(httpClient common.HttpClient, site string) (*Client, error) {
 		return nil, err
 	}
 
+	client.Audit = auditRecordService
 	client.Permission = permission
 	client.MySelf = mySelf
 	client.Auth = internal.NewAuthenticationService(client)
@@ -362,6 +368,7 @@ type Client struct {
 	Auth       common.Authentication
 	Site       *url.URL
 	Role       *internal.ApplicationRoleService
+	Audit      *internal.AuditRecordService
 	Dashboard  *internal.DashboardService
 	Filter     *internal.FilterService
 	Group      *internal.GroupService

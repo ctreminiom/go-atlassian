@@ -359,7 +359,7 @@ func Test_internalUserSearchImpl_Check(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"rest/api/3/user/permission/search?accountId=uuid-sample&issueKey=DFUMM-1&maxResults=50&projectKey=DUMMY&query=project+A&startAt=100",
+					"rest/api/3/user/permission/search?accountId=uuid-sample&issueKey=DFUMM-1&maxResults=50&permission=CREATE_ISSUES&projectKey=DUMMY&query=project+A&startAt=100",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -410,7 +410,7 @@ func Test_internalUserSearchImpl_Check(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"rest/api/2/user/permission/search?accountId=uuid-sample&issueKey=DFUMM-1&maxResults=50&projectKey=DUMMY&query=project+A&startAt=100",
+					"rest/api/2/user/permission/search?accountId=uuid-sample&issueKey=DFUMM-1&maxResults=50&permission=CREATE_ISSUES&projectKey=DUMMY&query=project+A&startAt=100",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -447,7 +447,7 @@ func Test_internalUserSearchImpl_Check(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"rest/api/3/user/permission/search?accountId=uuid-sample&issueKey=DFUMM-1&maxResults=50&projectKey=DUMMY&query=project+A&startAt=100",
+					"rest/api/3/user/permission/search?accountId=uuid-sample&issueKey=DFUMM-1&maxResults=50&permission=CREATE_ISSUES&projectKey=DUMMY&query=project+A&startAt=100",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 

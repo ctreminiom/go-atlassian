@@ -15,7 +15,7 @@ jobs:
     strategy:
       max-parallel: 6
       matrix:
-        go: [1.18, 1.19, 1.20]
+        go: [1.18, 1.19, 1.20.x]
         os: [ubuntu-latest, macos-latest, windows-latest]
     name: lint
     runs-on: ${{ matrix.os }}
@@ -28,7 +28,7 @@ jobs:
         uses: golangci/golangci-lint-action@v3
         with:
           # Required: the version of golangci-lint is required and must be specified without patch version: we always use the latest patch version.
-          version: v1.49
+          version: v1.51.2
           # Optional: working directory, useful for monorepos
           # working-directory: somedir
 

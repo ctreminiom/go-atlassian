@@ -40,8 +40,8 @@ func Test_internalAuditRecordImpl_Get(t *testing.T) {
 				ctx: context.Background(),
 				options: &model.AuditRecordGetOptions{
 					Filter: "summary",
-					From:   time.Now().AddDate(0, -2, 0),
-					To:     time.Now().AddDate(0, -1, 0),
+					From:   time.Date(2015, 11, 17, 20, 34, 58, 651387237, time.UTC),
+					To:     time.Date(2019, 11, 17, 20, 34, 58, 651387237, time.UTC),
 				},
 				offSet: 2000,
 				limit:  1000,
@@ -53,7 +53,7 @@ func Test_internalAuditRecordImpl_Get(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"rest/api/2/auditing/record?=summary&from=2023-01-07&limit=1000&offset=2000&to=2023-02-07",
+					"rest/api/2/auditing/record?=summary&from=2015-11-17&limit=1000&offset=2000&to=2019-11-17",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -72,8 +72,8 @@ func Test_internalAuditRecordImpl_Get(t *testing.T) {
 				ctx: context.Background(),
 				options: &model.AuditRecordGetOptions{
 					Filter: "summary",
-					From:   time.Now().AddDate(0, -2, 0),
-					To:     time.Now().AddDate(0, -1, 0),
+					From:   time.Date(2015, 11, 17, 20, 34, 58, 651387237, time.UTC),
+					To:     time.Date(2019, 11, 17, 20, 34, 58, 651387237, time.UTC),
 				},
 				offSet: 2000,
 				limit:  1000,
@@ -85,7 +85,7 @@ func Test_internalAuditRecordImpl_Get(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"rest/api/3/auditing/record?=summary&from=2023-01-07&limit=1000&offset=2000&to=2023-02-07",
+					"rest/api/3/auditing/record?=summary&from=2015-11-17&limit=1000&offset=2000&to=2019-11-17",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -105,8 +105,8 @@ func Test_internalAuditRecordImpl_Get(t *testing.T) {
 				ctx: context.Background(),
 				options: &model.AuditRecordGetOptions{
 					Filter: "summary",
-					From:   time.Now().AddDate(0, -2, 0),
-					To:     time.Now().AddDate(0, -1, 0),
+					From:   time.Date(2015, 11, 17, 20, 34, 58, 651387237, time.UTC),
+					To:     time.Date(2019, 11, 17, 20, 34, 58, 651387237, time.UTC),
 				},
 				offSet: 2000,
 				limit:  1000,
@@ -117,7 +117,7 @@ func Test_internalAuditRecordImpl_Get(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"rest/api/2/auditing/record?=summary&from=2023-01-07&limit=1000&offset=2000&to=2023-02-07",
+					"rest/api/2/auditing/record?=summary&from=2015-11-17&limit=1000&offset=2000&to=2019-11-17",
 					nil).
 					Return(&http.Request{}, errors.New("unable to create the http request"))
 
@@ -134,8 +134,8 @@ func Test_internalAuditRecordImpl_Get(t *testing.T) {
 				ctx: context.Background(),
 				options: &model.AuditRecordGetOptions{
 					Filter: "summary",
-					From:   time.Now().AddDate(0, -2, 0),
-					To:     time.Now().AddDate(0, -1, 0),
+					From:   time.Date(2015, 11, 17, 20, 34, 58, 651387237, time.UTC),
+					To:     time.Date(2019, 11, 17, 20, 34, 58, 651387237, time.UTC),
 				},
 				offSet: 2000,
 				limit:  1000,
@@ -146,7 +146,7 @@ func Test_internalAuditRecordImpl_Get(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"rest/api/2/auditing/record?=summary&from=2023-01-07&limit=1000&offset=2000&to=2023-02-07",
+					"rest/api/2/auditing/record?=summary&from=2015-11-17&limit=1000&offset=2000&to=2019-11-17",
 					nil).
 					Return(&http.Request{}, nil)
 

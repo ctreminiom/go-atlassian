@@ -6,11 +6,9 @@ import (
 	"errors"
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
-	"github.com/ctreminiom/go-atlassian/service/jira"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
 	"github.com/stretchr/testify/assert"
 	"net/http"
-	"reflect"
 	"testing"
 )
 
@@ -1173,27 +1171,53 @@ func TestDashboardService_Delete(t *testing.T) {
 }
 
 func TestNewDashboardService(t *testing.T) {
+
 	type args struct {
 		client  service.Client
 		version string
 	}
-	tests := []struct {
+
+	testCases := []struct {
 		name    string
 		args    args
-		want    jira.DashboardConnector
 		wantErr bool
+		err     error
 	}{
-		// TODO: Add test cases.
+		{
+			name: "when the parameters are correct",
+			args: args{
+				client:  nil,
+				version: "3",
+			},
+			wantErr: false,
+		},
+
+		{
+			name: "when the version is not provided",
+			args: args{
+				client:  nil,
+				version: "",
+			},
+			wantErr: true,
+			err:     model.ErrNoVersionProvided,
+		},
 	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			got, err := NewDashboardService(tt.args.client, tt.args.version)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("NewDashboardService() error = %v, wantErr %v", err, tt.wantErr)
-				return
-			}
-			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("NewDashboardService() got = %v, want %v", got, tt.want)
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+			got, err := NewDashboardService(testCase.args.client, testCase.args.version)
+
+			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+
+				assert.EqualError(t, err, testCase.err.Error())
+
+			} else {
+
+				assert.NoError(t, err)
+				assert.NotEqual(t, got, nil)
 			}
 		})
 	}

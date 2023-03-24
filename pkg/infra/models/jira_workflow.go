@@ -53,17 +53,18 @@ type WorkflowTransitionRulesScheme struct {
 }
 
 type WorkflowTransitionRuleScheme struct {
-	Type string `json:"type"`
+	Type          string      `json:"type,omitempty"`
+	Configuration interface{} `json:"configuration,omitempty"`
 }
 
 type WorkflowStatusScheme struct {
-	ID         string                          `json:"id"`
-	Name       string                          `json:"name"`
-	Properties *WorkflowStatusPropertiesScheme `json:"properties"`
+	ID         string                          `json:"id,omitempty"`
+	Name       string                          `json:"name,omitempty"`
+	Properties *WorkflowStatusPropertiesScheme `json:"properties,omitempty"`
 }
 
 type WorkflowStatusPropertiesScheme struct {
-	IssueEditable bool `json:"issueEditable"`
+	IssueEditable bool `json:"issueEditable,omitempty"`
 }
 
 type WorkflowCreatedResponseScheme struct {
@@ -79,13 +80,28 @@ type WorkflowPayloadScheme struct {
 }
 
 type WorkflowTransitionPayloadScheme struct {
-	Name   string                                 `json:"name,omitempty"`
-	From   []string                               `json:"from,omitempty"`
-	To     string                                 `json:"to,omitempty"`
-	Type   string                                 `json:"type,omitempty"`
-	Screen *WorkflowTransitionScreenPayloadScheme `json:"screen,omitempty"`
+	Name        string                                 `json:"name,omitempty"`
+	Description string                                 `json:"description,omitempty"`
+	From        []string                               `json:"from,omitempty"`
+	To          string                                 `json:"to,omitempty"`
+	Type        string                                 `json:"type,omitempty"`
+	Rules       *WorkflowTransitionRulePayloadScheme   `json:"rules,omitempty"`
+	Screen      *WorkflowTransitionScreenPayloadScheme `json:"screen,omitempty"`
+	Properties  string                                 `json:"properties,omitempty"`
 }
 
 type WorkflowTransitionScreenPayloadScheme struct {
 	ID string `json:"id"`
+}
+
+type WorkflowTransitionRulePayloadScheme struct {
+	Conditions    *WorkflowConditionScheme        `json:"conditions,omitempty"`
+	PostFunctions []*WorkflowTransitionRuleScheme `json:"postFunctions,omitempty"`
+	Validators    []*WorkflowTransitionRuleScheme `json:"validators,omitempty"`
+}
+
+type WorkflowConditionScheme struct {
+	Conditions []*WorkflowConditionScheme `json:"conditions,omitempty"`
+	Operator   string                     `json:"operator,omitempty"`
+	Type       string                     `json:"type,omitempty"`
 }

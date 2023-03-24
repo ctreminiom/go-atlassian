@@ -43,7 +43,8 @@ type WorkflowTransitionScheme struct {
 }
 
 type WorkflowTransitionScreenScheme struct {
-	ID string `json:"id,omitempty"`
+	ID         string      `json:"id,omitempty"`
+	Properties interface{} `json:"properties,omitempty"`
 }
 
 type WorkflowTransitionRulesScheme struct {
@@ -87,7 +88,7 @@ type WorkflowTransitionPayloadScheme struct {
 	Type        string                                 `json:"type,omitempty"`
 	Rules       *WorkflowTransitionRulePayloadScheme   `json:"rules,omitempty"`
 	Screen      *WorkflowTransitionScreenPayloadScheme `json:"screen,omitempty"`
-	Properties  string                                 `json:"properties,omitempty"`
+	Properties  interface{}                            `json:"properties,omitempty"`
 }
 
 type WorkflowTransitionScreenPayloadScheme struct {

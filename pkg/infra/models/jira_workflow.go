@@ -102,7 +102,8 @@ type WorkflowTransitionRulePayloadScheme struct {
 }
 
 type WorkflowConditionScheme struct {
-	Conditions []*WorkflowConditionScheme `json:"conditions,omitempty"`
-	Operator   string                     `json:"operator,omitempty"`
-	Type       string                     `json:"type,omitempty"`
+	Conditions    []*WorkflowConditionScheme `json:"conditions,omitempty"`
+	Configuration interface{}                `json:"configuration,omitempty"`
+	Operator      string                     `json:"operator,omitempty"`
+	Type          string                     `json:"type,omitempty"`
 }

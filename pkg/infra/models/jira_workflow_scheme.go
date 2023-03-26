@@ -1,10 +1,11 @@
 package models
 
 type WorkflowSchemePayloadScheme struct {
-	DefaultWorkflow   string      `json:"defaultWorkflow,omitempty"`
-	Name              string      `json:"name,omitempty"`
-	Description       string      `json:"description,omitempty"`
-	IssueTypeMappings interface{} `json:"issueTypeMappings,omitempty"`
+	DefaultWorkflow     string      `json:"defaultWorkflow,omitempty"`
+	Name                string      `json:"name,omitempty"`
+	Description         string      `json:"description,omitempty"`
+	IssueTypeMappings   interface{} `json:"issueTypeMappings,omitempty"`
+	UpdateDraftIfNeeded bool        `json:"updateDraftIfNeeded,omitempty"`
 }
 
 type WorkflowSchemePageScheme struct {

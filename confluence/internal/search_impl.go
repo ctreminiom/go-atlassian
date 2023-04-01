@@ -99,6 +99,12 @@ func (i *internalSearchImpl) Content(ctx context.Context, cql string, options *m
 		if options.SitePermissionTypeFilter != "" {
 			query.Add("sitePermissionTypeFilter", options.SitePermissionTypeFilter)
 		}
+
+		if len(options.Expand) > 0 {
+			for _, value := range options.Expand {
+				query.Add("expand", value)
+			}
+		}
 	}
 
 	endpoint := fmt.Sprintf("wiki/rest/api/search?%v", query.Encode())

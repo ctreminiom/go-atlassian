@@ -57,7 +57,7 @@ func Test_internalSearchImpl_Content(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"wiki/rest/api/search?cql=type%3Dpage&cqlcontext=spaceKey&cursor=raNDoMsTRiNg&excerpt=indexed&excludeCurrentSpaces=true&includeArchivedSpaces=true&limit=20&next=true&prev=true&sitePermissionTypeFilter=externalCollaborator&start=10",
+					"wiki/rest/api/search?cql=type%3Dpage&cqlcontext=spaceKey&cursor=raNDoMsTRiNg&excerpt=indexed&excludeCurrentSpaces=true&expand=space&includeArchivedSpaces=true&limit=20&next=true&prev=true&sitePermissionTypeFilter=externalCollaborator&start=10",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -97,7 +97,7 @@ func Test_internalSearchImpl_Content(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"wiki/rest/api/search?cql=type%3Dpage&cqlcontext=spaceKey&cursor=raNDoMsTRiNg&excerpt=indexed&excludeCurrentSpaces=true&includeArchivedSpaces=true&limit=20&next=true&prev=true&sitePermissionTypeFilter=externalCollaborator&start=10",
+					"wiki/rest/api/search?cql=type%3Dpage&cqlcontext=spaceKey&cursor=raNDoMsTRiNg&excerpt=indexed&excludeCurrentSpaces=true&expand=space&includeArchivedSpaces=true&limit=20&next=true&prev=true&sitePermissionTypeFilter=externalCollaborator&start=10",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 

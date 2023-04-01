@@ -34,6 +34,13 @@ type PageBodyScheme struct {
 	AtlasDocFormat *PageBodyRepresentationScheme `json:"atlas_doc_format,omitempty"`
 }
 
+type PageCreatePayloadScheme struct {
+	SpaceID int                           `json:"spaceId,omitempty"`
+	Status  string                        `json:"status,omitempty"`
+	Title   string                        `json:"title,omitempty"`
+	Body    *PageBodyRepresentationScheme `json:"body,omitempty"`
+}
+
 type PageBodyRepresentationScheme struct {
 	Representation string `json:"representation,omitempty"`
 	Value          string `json:"value,omitempty"`

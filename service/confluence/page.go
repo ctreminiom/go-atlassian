@@ -58,7 +58,7 @@ type PageConnector interface {
 	// POST /wiki/api/v2/pages
 	//
 	// https://docs.go-atlassian.io/confluence-cloud/v2/page#create-page
-	Create(ctx context.Context, spaceId int, status, title string, payload *models.PageBodyRepresentationScheme) (*models.PageScheme, *models.ResponseScheme, error)
+	Create(ctx context.Context, payload *models.PageCreatePayloadScheme) (*models.PageScheme, *models.ResponseScheme, error)
 
 	// Update updates a page by id.
 	//

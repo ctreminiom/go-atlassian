@@ -269,7 +269,7 @@ func (i *internalPageImpl) Update(ctx context.Context, pageId int, payload *mode
 	}
 
 	page := new(model.PageScheme)
-	response, err := i.c.Call(request, &page)
+	response, err := i.c.Call(request, page)
 	if err != nil {
 		return nil, response, err
 	}

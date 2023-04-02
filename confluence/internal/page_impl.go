@@ -261,7 +261,7 @@ func (i *internalPageImpl) Update(ctx context.Context, pageId int, payload *mode
 		return nil, nil, err
 	}
 
-	endpoint := fmt.Sprintf("wiki/api/v2/pages/%v", payload)
+	endpoint := fmt.Sprintf("wiki/api/v2/pages/%v", pageId)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, reader)
 	if err != nil {

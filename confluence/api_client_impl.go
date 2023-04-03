@@ -55,19 +55,21 @@ func New(httpClient common.HttpClient, site string) (*Client, error) {
 	client.Label = internal.NewLabelService(client)
 	client.Search = internal.NewSearchService(client)
 	client.LongTask = internal.NewTaskService(client)
+	client.Analytics = internal.NewAnalyticsService(client)
 
 	return client, nil
 }
 
 type Client struct {
-	HTTP     common.HttpClient
-	Site     *url.URL
-	Auth     common.Authentication
-	Content  *internal.ContentService
-	Space    *internal.SpaceService
-	Label    *internal.LabelService
-	Search   *internal.SearchService
-	LongTask *internal.TaskService
+	HTTP      common.HttpClient
+	Site      *url.URL
+	Auth      common.Authentication
+	Content   *internal.ContentService
+	Space     *internal.SpaceService
+	Label     *internal.LabelService
+	Search    *internal.SearchService
+	LongTask  *internal.TaskService
+	Analytics *internal.AnalyticsService
 }
 
 func (c *Client) NewFormRequest(ctx context.Context, method, apiEndpoint, contentType string, payload io.Reader) (*http.Request, error) {

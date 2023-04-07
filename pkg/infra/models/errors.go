@@ -60,6 +60,8 @@ var (
 	ErrNoGroupIDError                      = errors.New("jira: no group name set")
 	ErrNoGroupsNameError                   = errors.New("jira: no groups names set")
 	ErrNoIssueKeyOrIDError                 = errors.New("jira: no issue key/id set")
+	ErrNoRemoteLinkIDError                 = errors.New("jira: no remote link id set")
+	ErrNoRemoteLinkGlobalIDError           = errors.New("jira: no global remote link id set")
 	ErrNoIssueSchemeError                  = errors.New("jira: no jira.IssueScheme set")
 	ErrNoTransitionIDError                 = errors.New("jira: no transition id set")
 	ErrNoAttachmentIDError                 = errors.New("jira: no attachment id set")

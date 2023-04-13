@@ -149,7 +149,7 @@ func (i *internalRemoteLinkImpl) Get(ctx context.Context, issueKeyOrId, linkId s
 	}
 
 	remoteLink := new(model.RemoteLinkScheme)
-	response, err := i.c.Call(request, &remoteLink)
+	response, err := i.c.Call(request, remoteLink)
 	if err != nil {
 		return nil, response, err
 	}
@@ -176,7 +176,7 @@ func (i *internalRemoteLinkImpl) Create(ctx context.Context, issueKeyOrId string
 	}
 
 	identify := new(model.RemoteLinkIdentify)
-	response, err := i.c.Call(request, &identify)
+	response, err := i.c.Call(request, identify)
 	if err != nil {
 		return nil, response, err
 	}

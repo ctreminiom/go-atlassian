@@ -124,6 +124,8 @@ func (i *internalSpaceV2Impl) Get(ctx context.Context, spaceID int, descriptionF
 	if descriptionFormat != "" {
 		query := url.Values{}
 		query.Add("description-format", descriptionFormat)
+
+		endpoint.WriteString(fmt.Sprintf("?%v", query.Encode()))
 	}
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), nil)

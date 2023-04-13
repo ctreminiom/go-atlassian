@@ -5,6 +5,29 @@ import (
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 )
 
+type SpaceV2Connector interface {
+
+	// Bulk returns all spaces.
+	//
+	// The results will be sorted by id ascending.
+	//
+	// The number of results is limited by the limit parameter and additional results (if available)
+	//
+	// will be available through the next URL present in the Link response header.
+	//
+	// GET /wiki/api/v2/spaces
+	//
+	// https://docs.go-atlassian.io/confluence-cloud/v2/space#get-spaces
+	Bulk(ctx context.Context, options *model.GetSpacesOptionSchemeV2, cursor string, limit int) (*model.SpaceChunkV2Scheme, *model.ResponseScheme, error)
+
+	// Get returns a specific space.
+	//
+	// GET /wiki/api/v2/spaces/{id}
+	//
+	// https://docs.go-atlassian.io/confluence-cloud/v2/space#get-space-by-id
+	Get(ctx context.Context, spaceID int, descriptionFormat string) (*model.SpaceSchemeV2, *model.ResponseScheme, error)
+}
+
 type SpaceConnector interface {
 
 	// Gets returns all spaces.

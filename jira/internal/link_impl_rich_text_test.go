@@ -122,7 +122,7 @@ func Test_internalLinkRichTextServiceImpl_Get(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			_, linkService, err := NewLinkService(testCase.fields.c, testCase.fields.version, nil)
+			_, linkService, err := NewLinkService(testCase.fields.c, testCase.fields.version, nil, nil)
 			assert.NoError(t, err)
 
 			gotResult, gotResponse, err := linkService.Get(testCase.args.ctx, testCase.args.linkId)
@@ -267,7 +267,7 @@ func Test_internalLinkRichTextServiceImpl_Gets(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			_, linkService, err := NewLinkService(testCase.fields.c, testCase.fields.version, nil)
+			_, linkService, err := NewLinkService(testCase.fields.c, testCase.fields.version, nil, nil)
 			assert.NoError(t, err)
 
 			gotResult, gotResponse, err := linkService.Gets(testCase.args.ctx, testCase.args.issueKeyOrId)
@@ -401,7 +401,7 @@ func Test_internalLinkRichTextServiceImpl_Delete(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			_, linkService, err := NewLinkService(testCase.fields.c, testCase.fields.version, nil)
+			_, linkService, err := NewLinkService(testCase.fields.c, testCase.fields.version, nil, nil)
 			assert.NoError(t, err)
 
 			gotResponse, err := linkService.Delete(testCase.args.ctx, testCase.args.linkId)
@@ -561,7 +561,7 @@ func Test_internalLinkRichTextServiceImpl_Create(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			_, linkService, err := NewLinkService(testCase.fields.c, testCase.fields.version, nil)
+			_, linkService, err := NewLinkService(testCase.fields.c, testCase.fields.version, nil, nil)
 			assert.NoError(t, err)
 
 			gotResponse, err := linkService.Create(testCase.args.ctx, testCase.args.payload)

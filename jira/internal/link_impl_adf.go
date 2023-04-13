@@ -12,6 +12,7 @@ import (
 type LinkADFService struct {
 	internalClient jira.LinkAdfIssueConnector
 	Type           *LinkTypeService
+	Remote         *RemoteLinkService
 }
 
 type internalLinkADFServiceImpl struct {

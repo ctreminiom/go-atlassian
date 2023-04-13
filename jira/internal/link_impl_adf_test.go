@@ -122,7 +122,7 @@ func Test_internalLinkADFServiceImpl_Get(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			linkService, _, err := NewLinkService(testCase.fields.c, testCase.fields.version, nil)
+			linkService, _, err := NewLinkService(testCase.fields.c, testCase.fields.version, nil, nil)
 			assert.NoError(t, err)
 
 			gotResult, gotResponse, err := linkService.Get(testCase.args.ctx, testCase.args.linkId)
@@ -267,7 +267,7 @@ func Test_internalLinkADFServiceImpl_Gets(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			linkService, _, err := NewLinkService(testCase.fields.c, testCase.fields.version, nil)
+			linkService, _, err := NewLinkService(testCase.fields.c, testCase.fields.version, nil, nil)
 			assert.NoError(t, err)
 
 			gotResult, gotResponse, err := linkService.Gets(testCase.args.ctx, testCase.args.issueKeyOrId)
@@ -401,7 +401,7 @@ func Test_internalLinkADFServiceImpl_Delete(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			linkService, _, err := NewLinkService(testCase.fields.c, testCase.fields.version, nil)
+			linkService, _, err := NewLinkService(testCase.fields.c, testCase.fields.version, nil, nil)
 			assert.NoError(t, err)
 
 			gotResponse, err := linkService.Delete(testCase.args.ctx, testCase.args.linkId)
@@ -583,7 +583,7 @@ func Test_internalLinkADFServiceImpl_Create(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			linkService, _, err := NewLinkService(testCase.fields.c, testCase.fields.version, nil)
+			linkService, _, err := NewLinkService(testCase.fields.c, testCase.fields.version, nil, nil)
 			assert.NoError(t, err)
 
 			gotResponse, err := linkService.Create(testCase.args.ctx, testCase.args.payload)

@@ -41,7 +41,7 @@ func Test_NewLinkService(t *testing.T) {
 	}
 	for _, testCase := range testCases {
 		t.Run(testCase.name, func(t *testing.T) {
-			got, got1, err := NewLinkService(testCase.args.client, testCase.args.version, nil)
+			got, got1, err := NewLinkService(testCase.args.client, testCase.args.version, nil, nil)
 
 			if testCase.wantErr {
 

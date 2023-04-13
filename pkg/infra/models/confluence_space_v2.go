@@ -1,8 +1,10 @@
 package models
 
 type SpaceChunkV2Scheme struct {
-	Results []*SpaceSchemeV2       `json:"results,omitempty"`
-	Links   *SpacePageLinkSchemeV2 `json:"_links,omitempty"`
+	Results []*SpaceSchemeV2 `json:"results,omitempty"`
+	Links   struct {
+		Next string `json:"next"`
+	} `json:"_links"`
 }
 
 type SpacePageLinkSchemeV2 struct {
@@ -21,7 +23,7 @@ type GetSpacesOptionSchemeV2 struct {
 }
 
 type SpaceSchemeV2 struct {
-	Id          string                    `json:"id,omitempty"`
+	ID          string                    `json:"id,omitempty"`
 	Key         string                    `json:"key,omitempty"`
 	Name        string                    `json:"name,omitempty"`
 	Type        string                    `json:"type,omitempty"`

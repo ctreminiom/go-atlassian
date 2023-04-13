@@ -120,7 +120,12 @@ func New(httpClient common.HttpClient, site string) (*Client, error) {
 		return nil, err
 	}
 
-	link, _, err := internal.NewLinkService(client, "3", linkType)
+	remoteLink, err := internal.NewRemoteLinkService(client, "3")
+	if err != nil {
+		return nil, err
+	}
+
+	link, _, err := internal.NewLinkService(client, "3", linkType, remoteLink)
 	if err != nil {
 		return nil, err
 	}

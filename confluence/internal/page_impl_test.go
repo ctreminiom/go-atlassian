@@ -22,7 +22,7 @@ func Test_internalPageImpl_Get(t *testing.T) {
 
 	type args struct {
 		ctx     context.Context
-		pageId  int
+		pageID  int
 		format  string
 		draft   bool
 		version int
@@ -40,7 +40,7 @@ func Test_internalPageImpl_Get(t *testing.T) {
 			name: "when the parameters are correct",
 			args: args{
 				ctx:     context.TODO(),
-				pageId:  200001,
+				pageID:  200001,
 				format:  "atlas_doc_format",
 				draft:   true,
 				version: 2,
@@ -69,7 +69,7 @@ func Test_internalPageImpl_Get(t *testing.T) {
 			name: "when the http request cannot be created",
 			args: args{
 				ctx:     context.TODO(),
-				pageId:  200001,
+				pageID:  200001,
 				format:  "atlas_doc_format",
 				draft:   true,
 				version: 2,
@@ -111,7 +111,7 @@ func Test_internalPageImpl_Get(t *testing.T) {
 
 			newService := NewPageService(testCase.fields.c)
 
-			gotResult, gotResponse, err := newService.Get(testCase.args.ctx, testCase.args.pageId, testCase.args.format,
+			gotResult, gotResponse, err := newService.Get(testCase.args.ctx, testCase.args.pageID, testCase.args.format,
 				testCase.args.draft, testCase.args.version)
 
 			if testCase.wantErr {
@@ -242,7 +242,7 @@ func Test_internalPageImpl_GetsByLabel(t *testing.T) {
 
 	type args struct {
 		ctx     context.Context
-		labelId int
+		labelID int
 		sort    string
 		cursor  string
 		limit   int
@@ -260,7 +260,7 @@ func Test_internalPageImpl_GetsByLabel(t *testing.T) {
 			name: "when the parameters are correct",
 			args: args{
 				ctx:     context.TODO(),
-				labelId: 20001,
+				labelID: 20001,
 				sort:    "test-label",
 				cursor:  "cursor-sample",
 				limit:   200,
@@ -298,7 +298,7 @@ func Test_internalPageImpl_GetsByLabel(t *testing.T) {
 			name: "when the http request cannot be created",
 			args: args{
 				ctx:     context.TODO(),
-				labelId: 20001,
+				labelID: 20001,
 				sort:    "test-label",
 				cursor:  "cursor-sample",
 				limit:   200,
@@ -331,7 +331,7 @@ func Test_internalPageImpl_GetsByLabel(t *testing.T) {
 
 			newService := NewPageService(testCase.fields.c)
 
-			gotResult, gotResponse, err := newService.GetsByLabel(testCase.args.ctx, testCase.args.labelId,
+			gotResult, gotResponse, err := newService.GetsByLabel(testCase.args.ctx, testCase.args.labelID,
 				testCase.args.sort, testCase.args.cursor, testCase.args.limit)
 
 			if testCase.wantErr {
@@ -360,7 +360,7 @@ func Test_internalPageImpl_GetsBySpace(t *testing.T) {
 
 	type args struct {
 		ctx     context.Context
-		spaceId int
+		spaceID int
 		cursor  string
 		limit   int
 	}
@@ -377,7 +377,7 @@ func Test_internalPageImpl_GetsBySpace(t *testing.T) {
 			name: "when the parameters are correct",
 			args: args{
 				ctx:     context.TODO(),
-				spaceId: 20001,
+				spaceID: 20001,
 				cursor:  "cursor-sample",
 				limit:   200,
 			},
@@ -414,7 +414,7 @@ func Test_internalPageImpl_GetsBySpace(t *testing.T) {
 			name: "when the http request cannot be created",
 			args: args{
 				ctx:     context.TODO(),
-				spaceId: 20001,
+				spaceID: 20001,
 				cursor:  "cursor-sample",
 				limit:   200,
 			},
@@ -445,7 +445,7 @@ func Test_internalPageImpl_GetsBySpace(t *testing.T) {
 
 			newService := NewPageService(testCase.fields.c)
 
-			gotResult, gotResponse, err := newService.GetsBySpace(testCase.args.ctx, testCase.args.spaceId,
+			gotResult, gotResponse, err := newService.GetsBySpace(testCase.args.ctx, testCase.args.spaceID,
 				testCase.args.cursor, testCase.args.limit)
 
 			if testCase.wantErr {
@@ -474,7 +474,7 @@ func Test_internalPageImpl_Delete(t *testing.T) {
 
 	type args struct {
 		ctx    context.Context
-		pageId int
+		pageID int
 	}
 
 	testCases := []struct {
@@ -489,7 +489,7 @@ func Test_internalPageImpl_Delete(t *testing.T) {
 			name: "when the parameters are correct",
 			args: args{
 				ctx:    context.TODO(),
-				pageId: 200001,
+				pageID: 200001,
 			},
 			on: func(fields *fields) {
 
@@ -515,7 +515,7 @@ func Test_internalPageImpl_Delete(t *testing.T) {
 			name: "when the http request cannot be created",
 			args: args{
 				ctx:    context.TODO(),
-				pageId: 200001,
+				pageID: 200001,
 			},
 			on: func(fields *fields) {
 
@@ -554,7 +554,7 @@ func Test_internalPageImpl_Delete(t *testing.T) {
 
 			newService := NewPageService(testCase.fields.c)
 
-			gotResponse, err := newService.Delete(testCase.args.ctx, testCase.args.pageId)
+			gotResponse, err := newService.Delete(testCase.args.ctx, testCase.args.pageID)
 
 			if testCase.wantErr {
 
@@ -782,7 +782,7 @@ func Test_internalPageImpl_Update(t *testing.T) {
 
 	type args struct {
 		ctx     context.Context
-		pageId  int
+		pageID  int
 		payload *model.PageUpdatePayloadScheme
 	}
 
@@ -798,7 +798,7 @@ func Test_internalPageImpl_Update(t *testing.T) {
 			name: "when the parameters are correct",
 			args: args{
 				ctx:     context.TODO(),
-				pageId:  215646235,
+				pageID:  215646235,
 				payload: mockedPayload,
 			},
 			on: func(fields *fields) {
@@ -829,7 +829,7 @@ func Test_internalPageImpl_Update(t *testing.T) {
 			name: "when the http request cannot be created",
 			args: args{
 				ctx:     context.TODO(),
-				pageId:  215646235,
+				pageID:  215646235,
 				payload: mockedPayload,
 			},
 			on: func(fields *fields) {
@@ -867,7 +867,7 @@ func Test_internalPageImpl_Update(t *testing.T) {
 			name: "when the payload is not provided",
 			args: args{
 				ctx:    context.TODO(),
-				pageId: 215646235,
+				pageID: 215646235,
 			},
 			on: func(fields *fields) {
 
@@ -894,7 +894,7 @@ func Test_internalPageImpl_Update(t *testing.T) {
 
 			newService := NewPageService(testCase.fields.c)
 
-			gotResult, gotResponse, err := newService.Update(testCase.args.ctx, testCase.args.pageId, testCase.args.payload)
+			gotResult, gotResponse, err := newService.Update(testCase.args.ctx, testCase.args.pageID, testCase.args.payload)
 
 			if testCase.wantErr {
 

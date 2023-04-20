@@ -14,7 +14,7 @@ type PageConnector interface {
 	// GET /wiki/api/v2/pages/{id}
 	//
 	// https://docs.go-atlassian.io/confluence-cloud/v2/page#get-page-by-id
-	Get(ctx context.Context, pageId int, format string, draft bool, version int) (*models.PageScheme, *models.ResponseScheme, error)
+	Get(ctx context.Context, pageID int, format string, draft bool, version int) (*models.PageScheme, *models.ResponseScheme, error)
 
 	// Bulk returns all pages.
 	//
@@ -36,7 +36,7 @@ type PageConnector interface {
 	// GET /wiki/api/v2/labels/{id}/pages
 	//
 	// https://docs.go-atlassian.io/confluence-cloud/v2/page#get-pages-for-label
-	GetsByLabel(ctx context.Context, labelId int, sort, cursor string, limit int) (*models.PageChunkScheme, *models.ResponseScheme, error)
+	GetsByLabel(ctx context.Context, labelID int, sort, cursor string, limit int) (*models.PageChunkScheme, *models.ResponseScheme, error)
 
 	// GetsBySpace returns all pages in a space.
 	//
@@ -47,7 +47,7 @@ type PageConnector interface {
 	// GET /wiki/api/v2/spaces/{id}/pages
 	//
 	// https://docs.go-atlassian.io/confluence-cloud/v2/page#get-pages-in-space
-	GetsBySpace(ctx context.Context, spaceId int, cursor string, limit int) (*models.PageChunkScheme, *models.ResponseScheme, error)
+	GetsBySpace(ctx context.Context, spaceID int, cursor string, limit int) (*models.PageChunkScheme, *models.ResponseScheme, error)
 
 	// Create creates a page in the space.
 	//
@@ -65,12 +65,12 @@ type PageConnector interface {
 	// PUT /wiki/api/v2/pages/{id}
 	//
 	// https://docs.go-atlassian.io/confluence-cloud/v2/page#update-page
-	Update(ctx context.Context, pageId int, payload *models.PageUpdatePayloadScheme) (*models.PageScheme, *models.ResponseScheme, error)
+	Update(ctx context.Context, pageID int, payload *models.PageUpdatePayloadScheme) (*models.PageScheme, *models.ResponseScheme, error)
 
 	// Delete deletes a page by id.
 	//
 	// DELETE /wiki/api/v2/pages/{id}
 	//
 	// https://docs.go-atlassian.io/confluence-cloud/v2/page#delete-page
-	Delete(ctx context.Context, pageId int) (*models.ResponseScheme, error)
+	Delete(ctx context.Context, pageID int) (*models.ResponseScheme, error)
 }

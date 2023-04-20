@@ -56,7 +56,7 @@ func Test_internalSpaceImpl_Gets(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"wiki/rest/api/space?expand=operations&favorite=true&favouriteUserKey=DUMMY&label=label-09%2Clabel-02&limit=50&spaceId=1111&spaceId=2222&spaceId=3333&spaceKey=DUMMY&spaceKey=TEST&start=0&status=archived&type=global",
+					"wiki/rest/api/space?expand=operations&favorite=true&favouriteUserKey=DUMMY&label=label-09%2Clabel-02&limit=50&spaceID=1111&spaceID=2222&spaceID=3333&spaceKey=DUMMY&spaceKey=TEST&start=0&status=archived&type=global",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -94,7 +94,7 @@ func Test_internalSpaceImpl_Gets(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"wiki/rest/api/space?expand=operations&favorite=true&favouriteUserKey=DUMMY&label=label-09%2Clabel-02&limit=50&spaceId=1111&spaceId=2222&spaceId=3333&spaceKey=DUMMY&spaceKey=TEST&start=0&status=archived&type=global",
+					"wiki/rest/api/space?expand=operations&favorite=true&favouriteUserKey=DUMMY&label=label-09%2Clabel-02&limit=50&spaceID=1111&spaceID=2222&spaceID=3333&spaceKey=DUMMY&spaceKey=TEST&start=0&status=archived&type=global",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 

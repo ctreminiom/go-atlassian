@@ -11,6 +11,7 @@ import (
 	"strconv"
 )
 
+// NewPageService returns a new Confluence V2 Page service
 func NewPageService(client service.Client) *PageService {
 	return &PageService{
 		internalClient: &internalPageImpl{c: client},
@@ -26,8 +27,8 @@ type PageService struct {
 // GET /wiki/api/v2/pages/{id}
 //
 // https://docs.go-atlassian.io/confluence-cloud/v2/page#get-page-by-id
-func (p *PageService) Get(ctx context.Context, pageId int, format string, draft bool, version int) (*model.PageScheme, *model.ResponseScheme, error) {
-	return p.internalClient.Get(ctx, pageId, format, draft, version)
+func (p *PageService) Get(ctx context.Context, pageID int, format string, draft bool, version int) (*model.PageScheme, *model.ResponseScheme, error) {
+	return p.internalClient.Get(ctx, pageID, format, draft, version)
 }
 
 // Bulk returns all pages.
@@ -52,8 +53,8 @@ func (p *PageService) Bulk(ctx context.Context, cursor string, limit int) (*mode
 // GET /wiki/api/v2/labels/{id}/pages
 //
 // https://docs.go-atlassian.io/confluence-cloud/v2/page#get-pages-for-label
-func (p *PageService) GetsByLabel(ctx context.Context, labelId int, sort, cursor string, limit int) (*model.PageChunkScheme, *model.ResponseScheme, error) {
-	return p.internalClient.GetsByLabel(ctx, labelId, sort, cursor, limit)
+func (p *PageService) GetsByLabel(ctx context.Context, labelID int, sort, cursor string, limit int) (*model.PageChunkScheme, *model.ResponseScheme, error) {
+	return p.internalClient.GetsByLabel(ctx, labelID, sort, cursor, limit)
 }
 
 // GetsBySpace returns all pages in a space.
@@ -65,8 +66,8 @@ func (p *PageService) GetsByLabel(ctx context.Context, labelId int, sort, cursor
 // GET /wiki/api/v2/spaces/{id}/pages
 //
 // https://docs.go-atlassian.io/confluence-cloud/v2/page#get-pages-in-space
-func (p *PageService) GetsBySpace(ctx context.Context, spaceId int, cursor string, limit int) (*model.PageChunkScheme, *model.ResponseScheme, error) {
-	return p.internalClient.GetsBySpace(ctx, spaceId, cursor, limit)
+func (p *PageService) GetsBySpace(ctx context.Context, spaceID int, cursor string, limit int) (*model.PageChunkScheme, *model.ResponseScheme, error) {
+	return p.internalClient.GetsBySpace(ctx, spaceID, cursor, limit)
 }
 
 // Create creates a page in the space.
@@ -87,8 +88,8 @@ func (p *PageService) Create(ctx context.Context, payload *model.PageCreatePaylo
 // PUT /wiki/api/v2/pages/{id}
 //
 // https://docs.go-atlassian.io/confluence-cloud/v2/page#update-page
-func (p *PageService) Update(ctx context.Context, pageId int, payload *model.PageUpdatePayloadScheme) (*model.PageScheme, *model.ResponseScheme, error) {
-	return p.internalClient.Update(ctx, pageId, payload)
+func (p *PageService) Update(ctx context.Context, pageID int, payload *model.PageUpdatePayloadScheme) (*model.PageScheme, *model.ResponseScheme, error) {
+	return p.internalClient.Update(ctx, pageID, payload)
 }
 
 // Delete deletes a page by id.
@@ -96,17 +97,17 @@ func (p *PageService) Update(ctx context.Context, pageId int, payload *model.Pag
 // DELETE /wiki/api/v2/pages/{id}
 //
 // https://docs.go-atlassian.io/confluence-cloud/v2/page#delete-page
-func (p *PageService) Delete(ctx context.Context, pageId int) (*model.ResponseScheme, error) {
-	return p.internalClient.Delete(ctx, pageId)
+func (p *PageService) Delete(ctx context.Context, pageID int) (*model.ResponseScheme, error) {
+	return p.internalClient.Delete(ctx, pageID)
 }
 
 type internalPageImpl struct {
 	c service.Client
 }
 
-func (i *internalPageImpl) Get(ctx context.Context, pageId int, format string, draft bool, version int) (*model.PageScheme, *model.ResponseScheme, error) {
+func (i *internalPageImpl) Get(ctx context.Context, pageID int, format string, draft bool, version int) (*model.PageScheme, *model.ResponseScheme, error) {
 
-	if pageId == 0 {
+	if pageID == 0 {
 		return nil, nil, model.ErrNoPageIDError
 	}
 
@@ -124,7 +125,7 @@ func (i *internalPageImpl) Get(ctx context.Context, pageId int, format string, d
 		query.Add("version", strconv.Itoa(version))
 	}
 
-	endpoint := fmt.Sprintf("wiki/api/v2/pages/%v?%v", pageId, query.Encode())
+	endpoint := fmt.Sprintf("wiki/api/v2/pages/%v?%v", pageID, query.Encode())
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
@@ -165,9 +166,9 @@ func (i *internalPageImpl) Bulk(ctx context.Context, cursor string, limit int) (
 	return chunk, response, nil
 }
 
-func (i *internalPageImpl) GetsByLabel(ctx context.Context, labelId int, sort, cursor string, limit int) (*model.PageChunkScheme, *model.ResponseScheme, error) {
+func (i *internalPageImpl) GetsByLabel(ctx context.Context, labelID int, sort, cursor string, limit int) (*model.PageChunkScheme, *model.ResponseScheme, error) {
 
-	if labelId == 0 {
+	if labelID == 0 {
 		return nil, nil, model.ErrNoLabelIDError
 	}
 
@@ -182,7 +183,7 @@ func (i *internalPageImpl) GetsByLabel(ctx context.Context, labelId int, sort, c
 		query.Add("sort", sort)
 	}
 
-	endpoint := fmt.Sprintf("wiki/api/v2/labels/%v/pages?%v", labelId, query.Encode())
+	endpoint := fmt.Sprintf("wiki/api/v2/labels/%v/pages?%v", labelID, query.Encode())
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
@@ -198,9 +199,9 @@ func (i *internalPageImpl) GetsByLabel(ctx context.Context, labelId int, sort, c
 	return chunk, response, nil
 }
 
-func (i *internalPageImpl) GetsBySpace(ctx context.Context, spaceId int, cursor string, limit int) (*model.PageChunkScheme, *model.ResponseScheme, error) {
+func (i *internalPageImpl) GetsBySpace(ctx context.Context, spaceID int, cursor string, limit int) (*model.PageChunkScheme, *model.ResponseScheme, error) {
 
-	if spaceId == 0 {
+	if spaceID == 0 {
 		return nil, nil, model.ErrNoSpaceIDError
 	}
 
@@ -211,7 +212,7 @@ func (i *internalPageImpl) GetsBySpace(ctx context.Context, spaceId int, cursor 
 		query.Add("cursor", cursor)
 	}
 
-	endpoint := fmt.Sprintf("wiki/api/v2/spaces/%v/pages?%v", spaceId, query.Encode())
+	endpoint := fmt.Sprintf("wiki/api/v2/spaces/%v/pages?%v", spaceID, query.Encode())
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
@@ -250,9 +251,9 @@ func (i *internalPageImpl) Create(ctx context.Context, payload *model.PageCreate
 	return page, response, nil
 }
 
-func (i *internalPageImpl) Update(ctx context.Context, pageId int, payload *model.PageUpdatePayloadScheme) (*model.PageScheme, *model.ResponseScheme, error) {
+func (i *internalPageImpl) Update(ctx context.Context, pageID int, payload *model.PageUpdatePayloadScheme) (*model.PageScheme, *model.ResponseScheme, error) {
 
-	if pageId == 0 {
+	if pageID == 0 {
 		return nil, nil, model.ErrNoPageIDError
 	}
 
@@ -261,7 +262,7 @@ func (i *internalPageImpl) Update(ctx context.Context, pageId int, payload *mode
 		return nil, nil, err
 	}
 
-	endpoint := fmt.Sprintf("wiki/api/v2/pages/%v", pageId)
+	endpoint := fmt.Sprintf("wiki/api/v2/pages/%v", pageID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, reader)
 	if err != nil {
@@ -277,13 +278,13 @@ func (i *internalPageImpl) Update(ctx context.Context, pageId int, payload *mode
 	return page, response, nil
 }
 
-func (i *internalPageImpl) Delete(ctx context.Context, pageId int) (*model.ResponseScheme, error) {
+func (i *internalPageImpl) Delete(ctx context.Context, pageID int) (*model.ResponseScheme, error) {
 
-	if pageId == 0 {
+	if pageID == 0 {
 		return nil, model.ErrNoPageIDError
 	}
 
-	endpoint := fmt.Sprintf("wiki/api/v2/pages/%v", pageId)
+	endpoint := fmt.Sprintf("wiki/api/v2/pages/%v", pageID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, nil)
 	if err != nil {

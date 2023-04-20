@@ -126,7 +126,7 @@ func (i *internalSpaceImpl) Gets(ctx context.Context, options *model.GetSpacesOp
 		if len(options.SpaceIDs) != 0 {
 
 			for _, id := range options.SpaceIDs {
-				query.Add("spaceId", strconv.Itoa(id))
+				query.Add("spaceID", strconv.Itoa(id))
 			}
 		}
 

@@ -7,7 +7,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"net/url"
 	"reflect"
@@ -120,7 +119,7 @@ func transformTheHTTPResponse(response *http.Response, structure interface{}) (r
 		return responseTransformed, fmt.Errorf(requestFailedError, response.StatusCode)
 	}
 
-	responseAsBytes, err := ioutil.ReadAll(response.Body)
+	responseAsBytes, err := io.ReadAll(response.Body)
 	if err != nil {
 		return responseTransformed, err
 	}

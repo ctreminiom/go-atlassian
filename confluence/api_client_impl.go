@@ -8,7 +8,6 @@ import (
 	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service/common"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"net/url"
 	"reflect"
@@ -151,7 +150,7 @@ func (c *Client) TransformTheHTTPResponse(response *http.Response, structure int
 		Method:   response.Request.Method,
 	}
 
-	responseAsBytes, err := ioutil.ReadAll(response.Body)
+	responseAsBytes, err := io.ReadAll(response.Body)
 	if err != nil {
 		return responseTransformed, err
 	}

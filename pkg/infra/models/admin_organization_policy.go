@@ -3,21 +3,23 @@ package models
 import "time"
 
 type OrganizationPolicyPageScheme struct {
-	Data  []*OrganizationPolicyData `json:"data"`
-	Links *LinkPageModelScheme      `json:"links"`
+	Data  []*OrganizationPolicyData `json:"data,omitempty"`
+	Links *LinkPageModelScheme      `json:"links,omitempty"`
 	Meta  struct {
-		Next     string `json:"next"`
-		PageSize int    `json:"page_size"`
-	} `json:"meta"`
+		Next     string `json:"next,omitempty"`
+		PageSize int    `json:"page_size,omitempty"`
+	} `json:"meta,omitempty"`
 }
 
 type OrganizationPolicyScheme struct {
-	Data OrganizationPolicyData `json:"data"`
+	Data OrganizationPolicyData `json:"data,omitempty"`
 }
+
 type OrganizationPolicyResource struct {
 	ID                string `json:"id,omitempty"`
 	ApplicationStatus string `json:"applicationStatus,omitempty"`
 }
+
 type OrganizationPolicyAttributes struct {
 	Type      string                        `json:"type,omitempty"`
 	Name      string                        `json:"name,omitempty"`
@@ -26,6 +28,7 @@ type OrganizationPolicyAttributes struct {
 	CreatedAt time.Time                     `json:"createdAt,omitempty"`
 	UpdatedAt time.Time                     `json:"updatedAt,omitempty"`
 }
+
 type OrganizationPolicyData struct {
 	ID         string                        `json:"id,omitempty"`
 	Type       string                        `json:"type,omitempty"`

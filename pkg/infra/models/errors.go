@@ -52,6 +52,8 @@ var (
 	ErrNoLabelNameError                    = errors.New("confluence: no label name set")
 	ErrNoBoardIDError                      = errors.New("agile: no board id set")
 	ErrNoFilterIDError                     = errors.New("agile: no filter id set")
+	ErrNoNotificationSchemeIDError         = errors.New("jira: no notification scheme id set")
+	ErrNoNotificationIDError               = errors.New("jira: no notification id set")
 	ErrNoEpicIDError                       = errors.New("agile: no epic id set")
 	ErrNoSprintIDError                     = errors.New("agile: no sprint id set")
 	ErrNoApplicationRoleError              = errors.New("jira: no application role key set")

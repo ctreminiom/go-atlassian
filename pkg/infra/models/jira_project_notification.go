@@ -8,6 +8,7 @@ type NotificationSchemeScheme struct {
 	Description              string                                  `json:"description,omitempty"`
 	NotificationSchemeEvents []*ProjectNotificationSchemeEventScheme `json:"notificationSchemeEvents,omitempty"`
 	Scope                    *TeamManagedProjectScopeScheme          `json:"scope,omitempty"`
+	Projects                 []int                                   `json:"projects,omitempty"`
 }
 
 type ProjectNotificationSchemeEventScheme struct {

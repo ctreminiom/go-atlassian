@@ -270,6 +270,11 @@ func New(httpClient common.HttpClient, site string) (*Client, error) {
 		return nil, err
 	}
 
+	projectNotificationScheme, err := internal.NewNotificationSchemeService(client, "3")
+	if err != nil {
+		return nil, err
+	}
+
 	projectSubService := &internal.ProjectChildServices{
 		Category:   projectCategory,
 		Component:  projectComponent,
@@ -363,29 +368,31 @@ func New(httpClient common.HttpClient, site string) (*Client, error) {
 	client.User = user
 	client.Workflow = workflow
 	client.JQL = jql
+	client.NotificationScheme = projectNotificationScheme
 
 	return client, nil
 }
 
 type Client struct {
-	HTTP       common.HttpClient
-	Auth       common.Authentication
-	Site       *url.URL
-	Audit      *internal.AuditRecordService
-	Role       *internal.ApplicationRoleService
-	Dashboard  *internal.DashboardService
-	Filter     *internal.FilterService
-	Group      *internal.GroupService
-	Issue      *internal.IssueADFService
-	MySelf     *internal.MySelfService
-	Permission *internal.PermissionService
-	Project    *internal.ProjectService
-	Screen     *internal.ScreenService
-	Task       *internal.TaskService
-	Server     *internal.ServerService
-	User       *internal.UserService
-	Workflow   *internal.WorkflowService
-	JQL        *internal.JQLService
+	HTTP               common.HttpClient
+	Auth               common.Authentication
+	Site               *url.URL
+	Audit              *internal.AuditRecordService
+	Role               *internal.ApplicationRoleService
+	Dashboard          *internal.DashboardService
+	Filter             *internal.FilterService
+	Group              *internal.GroupService
+	Issue              *internal.IssueADFService
+	MySelf             *internal.MySelfService
+	Permission         *internal.PermissionService
+	Project            *internal.ProjectService
+	Screen             *internal.ScreenService
+	Task               *internal.TaskService
+	Server             *internal.ServerService
+	User               *internal.UserService
+	Workflow           *internal.WorkflowService
+	JQL                *internal.JQLService
+	NotificationScheme *internal.NotificationSchemeService
 }
 
 func (c *Client) NewFormRequest(ctx context.Context, method, apiEndpoint, contentType string, payload io.Reader) (*http.Request, error) {

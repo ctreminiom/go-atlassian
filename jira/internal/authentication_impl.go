@@ -20,10 +20,11 @@ type AuthenticationService struct {
 }
 
 func (a *AuthenticationService) SetBearerToken(token string) {
+	a.token = token
 }
 
 func (a *AuthenticationService) GetBearerToken() string {
-	return ""
+	return a.token
 }
 
 func (a *AuthenticationService) SetExperimentalFlag() {

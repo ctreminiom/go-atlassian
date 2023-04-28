@@ -11,4 +11,7 @@ type Authentication interface {
 
 	SetExperimentalFlag()
 	HasSetExperimentalFlag() bool
+
+	SetBearerToken(token string)
+	GetBearerToken() string
 }

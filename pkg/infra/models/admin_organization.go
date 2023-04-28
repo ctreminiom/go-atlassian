@@ -78,16 +78,20 @@ type OrganizationDomainPageScheme struct {
 }
 
 type OrganizationDomainModelScheme struct {
-	ID         string `json:"id,omitempty"`
-	Type       string `json:"type,omitempty"`
-	Attributes struct {
-		Name  string `json:"name,omitempty"`
-		Claim struct {
-			Type   string `json:"type,omitempty"`
-			Status string `json:"status,omitempty"`
-		} `json:"claim,omitempty"`
-	} `json:"attributes,omitempty"`
-	Links *LinkSelfModelScheme `json:"links,omitempty"`
+	ID         string                                   `json:"id,omitempty"`
+	Type       string                                   `json:"type,omitempty"`
+	Attributes *OrganizationDomainModelAttributesScheme `json:"attributes,omitempty"`
+	Links      *LinkSelfModelScheme                     `json:"links,omitempty"`
+}
+
+type OrganizationDomainModelAttributesScheme struct {
+	Name  string                                       `json:"name,omitempty"`
+	Claim *OrganizationDomainModelAttributeClaimScheme `json:"claim,omitempty"`
+}
+
+type OrganizationDomainModelAttributeClaimScheme struct {
+	Type   string `json:"type,omitempty"`
+	Status string `json:"status,omitempty"`
 }
 
 type OrganizationDomainScheme struct {

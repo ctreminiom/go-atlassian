@@ -21,6 +21,14 @@ type AuthenticationService struct {
 	experimentalProvided bool
 }
 
+func (a *AuthenticationService) SetBearerToken(token string) {
+	a.token = token
+}
+
+func (a *AuthenticationService) GetBearerToken() string {
+	return a.token
+}
+
 func (a *AuthenticationService) SetExperimentalFlag() {
 	a.experimentalProvided = true
 }

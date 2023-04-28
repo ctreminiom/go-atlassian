@@ -13,16 +13,15 @@ import (
 )
 
 type ProjectChildServices struct {
-	Category     *ProjectCategoryService
-	Component    *ProjectComponentService
-	Feature      *ProjectFeatureService
-	Permission   *ProjectPermissionSchemeService
-	Notification *NotificationSchemeService
-	Property     *ProjectPropertyService
-	Role         *ProjectRoleService
-	Type         *ProjectTypeService
-	Validator    *ProjectValidatorService
-	Version      *ProjectVersionService
+	Category   *ProjectCategoryService
+	Component  *ProjectComponentService
+	Feature    *ProjectFeatureService
+	Permission *ProjectPermissionSchemeService
+	Property   *ProjectPropertyService
+	Role       *ProjectRoleService
+	Type       *ProjectTypeService
+	Validator  *ProjectValidatorService
+	Version    *ProjectVersionService
 }
 
 func NewProjectService(client service.Client, version string, subServices *ProjectChildServices) (*ProjectService, error) {
@@ -42,7 +41,6 @@ func NewProjectService(client service.Client, version string, subServices *Proje
 		Type:           subServices.Type,
 		Validator:      subServices.Validator,
 		Version:        subServices.Version,
-		Notification:   subServices.Notification,
 	}, nil
 }
 
@@ -57,7 +55,6 @@ type ProjectService struct {
 	Type           *ProjectTypeService
 	Validator      *ProjectValidatorService
 	Version        *ProjectVersionService
-	Notification   *NotificationSchemeService
 }
 
 // Create creates a project based on a project type template

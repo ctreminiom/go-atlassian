@@ -270,16 +270,22 @@ func New(httpClient common.HttpClient, site string) (*Client, error) {
 		return nil, err
 	}
 
+	projectNotificationScheme, err := internal.NewNotificationSchemeService(client, "3")
+	if err != nil {
+		return nil, err
+	}
+
 	projectSubService := &internal.ProjectChildServices{
-		Category:   projectCategory,
-		Component:  projectComponent,
-		Feature:    projectFeature,
-		Permission: projectPermission,
-		Property:   projectProperties,
-		Role:       projectRole,
-		Type:       projectType,
-		Validator:  projectValidator,
-		Version:    projectVersion,
+		Category:     projectCategory,
+		Component:    projectComponent,
+		Feature:      projectFeature,
+		Permission:   projectPermission,
+		Property:     projectProperties,
+		Role:         projectRole,
+		Type:         projectType,
+		Validator:    projectValidator,
+		Version:      projectVersion,
+		Notification: projectNotificationScheme,
 	}
 
 	project, err := internal.NewProjectService(client, "3", projectSubService)

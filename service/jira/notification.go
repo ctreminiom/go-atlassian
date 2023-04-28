@@ -15,7 +15,7 @@ type NotificationSchemeConnector interface {
 	// GET /rest/api/{2-3}/notificationscheme
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/projects/notification-schemes#get-notification-schemes
-	Search(ctx context.Context, options *models.NotificationSchemeSearchOptions, startAt, maxResult int) (*models.NotificationSchemePageScheme, *models.ResponseScheme, error)
+	Search(ctx context.Context, options *models.NotificationSchemeSearchOptions, startAt, maxResults int) (*models.NotificationSchemePageScheme, *models.ResponseScheme, error)
 
 	// Create creates a notification scheme with notifications. You can create up to 1000 notifications per request.
 	//
@@ -37,7 +37,7 @@ type NotificationSchemeConnector interface {
 	// The mappings are ordered by projectId.
 	//
 	// GET /rest/api/{2-3}/notificationscheme/project
-	Projects(ctx context.Context, schemeIDs, projectIDs []string, startAt, maxResult int) (*models.NotificationSchemeProjectPageScheme, *models.ResponseScheme, error)
+	Projects(ctx context.Context, schemeIDs, projectIDs []string, startAt, maxResults int) (*models.NotificationSchemeProjectPageScheme, *models.ResponseScheme, error)
 
 	// Get returns a notification scheme, including the list of events and the recipients who will
 	//

@@ -14,7 +14,7 @@ type UserTokenConnector interface {
 	// GET /users/{account_id}/manage/api-tokens
 	//
 	// https://docs.go-atlassian.io/atlassian-admin-cloud/user/token#get-api-tokens
-	Gets(ctx context.Context, accountID string) (*model.UserTokensScheme, *model.ResponseScheme, error)
+	Gets(ctx context.Context, accountID string) ([]*model.UserTokensScheme, *model.ResponseScheme, error)
 
 	// Delete deletes a specified API token by ID.
 	//

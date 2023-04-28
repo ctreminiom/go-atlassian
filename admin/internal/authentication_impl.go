@@ -17,24 +17,20 @@ type AuthenticationService struct {
 
 	userAgentProvided bool
 	agent             string
-
-	experimentalProvided bool
 }
 
 func (a *AuthenticationService) SetBearerToken(token string) {
-	return
+	a.token = token
 }
 
 func (a *AuthenticationService) GetBearerToken() string {
-	return ""
+	return a.token
 }
 
-func (a *AuthenticationService) SetExperimentalFlag() {
-	a.experimentalProvided = true
-}
+func (a *AuthenticationService) SetExperimentalFlag() {}
 
 func (a *AuthenticationService) HasSetExperimentalFlag() bool {
-	return a.experimentalProvided
+	return false
 }
 
 func (a *AuthenticationService) SetBasicAuth(mail, token string) {

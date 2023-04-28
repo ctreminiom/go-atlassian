@@ -1,8 +1,7 @@
-package admin
+package internal
 
 type SCIMService struct {
-	client *Client
 	User   *SCIMUserService
 	Group  *SCIMGroupService
-	Scheme *SCIMSchemeService
+	Schema *SCIMSchemaService
 }

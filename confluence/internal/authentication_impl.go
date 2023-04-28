@@ -19,6 +19,14 @@ type AuthenticationService struct {
 	agent             string
 }
 
+func (a *AuthenticationService) SetBearerToken(token string) {
+	return
+}
+
+func (a *AuthenticationService) GetBearerToken() string {
+	return ""
+}
+
 func (a *AuthenticationService) SetExperimentalFlag() {}
 
 func (a *AuthenticationService) HasSetExperimentalFlag() bool {

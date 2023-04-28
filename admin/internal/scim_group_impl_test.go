@@ -1,0 +1,819 @@
+package internal
+
+import (
+	"bytes"
+	"context"
+	"errors"
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/service"
+	"github.com/ctreminiom/go-atlassian/service/mocks"
+	"github.com/stretchr/testify/assert"
+	"net/http"
+	"testing"
+)
+
+func Test_internalSCIMGroupImpl_Gets(t *testing.T) {
+
+	type fields struct {
+		c service.Client
+	}
+
+	type args struct {
+		ctx                 context.Context
+		directoryID, filter string
+		startAt, maxResults int
+	}
+
+	testCases := []struct {
+		name    string
+		fields  fields
+		args    args
+		on      func(*fields)
+		wantErr bool
+		Err     error
+	}{
+		{
+			name: "when the parameters are correct",
+			args: args{
+				ctx:         context.TODO(),
+				directoryID: "direction-id-sample",
+				filter:      "filter-sample",
+				startAt:     50,
+				maxResults:  50,
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewClient(t)
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodGet,
+					"scim/directory/direction-id-sample/Groups?count=50&filter=filter-sample&startIndex=50",
+					nil).
+					Return(&http.Request{}, nil)
+
+				client.On("Call",
+					&http.Request{},
+					&model.ScimGroupPageScheme{}).
+					Return(&model.ResponseScheme{}, nil)
+
+				fields.c = client
+
+			},
+		},
+
+		{
+			name: "when the directory id is not provided",
+			args: args{
+				ctx:         context.TODO(),
+				directoryID: "",
+			},
+			wantErr: true,
+			Err:     model.ErrNoAdminDirectoryIDError,
+		},
+
+		{
+			name: "when the http request cannot be created",
+			args: args{
+				ctx:         context.TODO(),
+				directoryID: "direction-id-sample",
+				filter:      "filter-sample",
+				startAt:     50,
+				maxResults:  50,
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewClient(t)
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodGet,
+					"scim/directory/direction-id-sample/Groups?count=50&filter=filter-sample&startIndex=50",
+					nil).
+					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+
+				fields.c = client
+
+			},
+			wantErr: true,
+			Err:     errors.New("error, unable to create the http request"),
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+
+			if testCase.on != nil {
+				testCase.on(&testCase.fields)
+			}
+
+			service := NewSCIMGroupService(testCase.fields.c)
+
+			gotResult, gotResponse, err := service.Gets(testCase.args.ctx, testCase.args.directoryID,
+				testCase.args.filter, testCase.args.startAt, testCase.args.maxResults)
+
+			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+
+				assert.EqualError(t, err, testCase.Err.Error())
+
+			} else {
+
+				assert.NoError(t, err)
+				assert.NotEqual(t, gotResponse, nil)
+				assert.NotEqual(t, gotResult, nil)
+			}
+
+		})
+	}
+}
+
+func Test_internalSCIMGroupImpl_Get(t *testing.T) {
+
+	type fields struct {
+		c service.Client
+	}
+
+	type args struct {
+		ctx                  context.Context
+		directoryID, groupID string
+	}
+
+	testCases := []struct {
+		name    string
+		fields  fields
+		args    args
+		on      func(*fields)
+		wantErr bool
+		Err     error
+	}{
+		{
+			name: "when the parameters are correct",
+			args: args{
+				ctx:         context.TODO(),
+				directoryID: "direction-id-sample",
+				groupID:     "group-id-sample",
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewClient(t)
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodGet,
+					"scim/directory/direction-id-sample/Groups/group-id-sample",
+					nil).
+					Return(&http.Request{}, nil)
+
+				client.On("Call",
+					&http.Request{},
+					&model.ScimGroupScheme{}).
+					Return(&model.ResponseScheme{}, nil)
+
+				fields.c = client
+
+			},
+		},
+
+		{
+			name: "when the directory id is not provided",
+			args: args{
+				ctx:         context.TODO(),
+				directoryID: "",
+			},
+			wantErr: true,
+			Err:     model.ErrNoAdminDirectoryIDError,
+		},
+
+		{
+			name: "when the group id is not provided",
+			args: args{
+				ctx:         context.TODO(),
+				directoryID: "directory-id-sample",
+			},
+			wantErr: true,
+			Err:     model.ErrNoAdminGroupIDError,
+		},
+
+		{
+			name: "when the http request cannot be created",
+			args: args{
+				ctx:         context.TODO(),
+				directoryID: "direction-id-sample",
+				groupID:     "group-id-sample",
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewClient(t)
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodGet,
+					"scim/directory/direction-id-sample/Groups/group-id-sample",
+					nil).
+					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+
+				fields.c = client
+
+			},
+			wantErr: true,
+			Err:     errors.New("error, unable to create the http request"),
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+
+			if testCase.on != nil {
+				testCase.on(&testCase.fields)
+			}
+
+			service := NewSCIMGroupService(testCase.fields.c)
+
+			gotResult, gotResponse, err := service.Get(testCase.args.ctx, testCase.args.directoryID,
+				testCase.args.groupID)
+
+			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+
+				assert.EqualError(t, err, testCase.Err.Error())
+
+			} else {
+
+				assert.NoError(t, err)
+				assert.NotEqual(t, gotResponse, nil)
+				assert.NotEqual(t, gotResult, nil)
+			}
+
+		})
+	}
+}
+
+func Test_internalSCIMGroupImpl_Delete(t *testing.T) {
+
+	type fields struct {
+		c service.Client
+	}
+
+	type args struct {
+		ctx                  context.Context
+		directoryID, groupID string
+	}
+
+	testCases := []struct {
+		name    string
+		fields  fields
+		args    args
+		on      func(*fields)
+		wantErr bool
+		Err     error
+	}{
+		{
+			name: "when the parameters are correct",
+			args: args{
+				ctx:         context.TODO(),
+				directoryID: "direction-id-sample",
+				groupID:     "group-id-sample",
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewClient(t)
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodDelete,
+					"scim/directory/direction-id-sample/Groups/group-id-sample",
+					nil).
+					Return(&http.Request{}, nil)
+
+				client.On("Call",
+					&http.Request{},
+					nil).
+					Return(&model.ResponseScheme{}, nil)
+
+				fields.c = client
+
+			},
+		},
+
+		{
+			name: "when the directory id is not provided",
+			args: args{
+				ctx:         context.TODO(),
+				directoryID: "",
+			},
+			wantErr: true,
+			Err:     model.ErrNoAdminDirectoryIDError,
+		},
+
+		{
+			name: "when the group id is not provided",
+			args: args{
+				ctx:         context.TODO(),
+				directoryID: "directory-id-sample",
+			},
+			wantErr: true,
+			Err:     model.ErrNoAdminGroupIDError,
+		},
+
+		{
+			name: "when the http request cannot be created",
+			args: args{
+				ctx:         context.TODO(),
+				directoryID: "direction-id-sample",
+				groupID:     "group-id-sample",
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewClient(t)
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodDelete,
+					"scim/directory/direction-id-sample/Groups/group-id-sample",
+					nil).
+					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+
+				fields.c = client
+
+			},
+			wantErr: true,
+			Err:     errors.New("error, unable to create the http request"),
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+
+			if testCase.on != nil {
+				testCase.on(&testCase.fields)
+			}
+
+			service := NewSCIMGroupService(testCase.fields.c)
+
+			gotResponse, err := service.Delete(testCase.args.ctx, testCase.args.directoryID,
+				testCase.args.groupID)
+
+			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+
+				assert.EqualError(t, err, testCase.Err.Error())
+
+			} else {
+
+				assert.NoError(t, err)
+				assert.NotEqual(t, gotResponse, nil)
+			}
+
+		})
+	}
+}
+
+func Test_internalSCIMGroupImpl_Create(t *testing.T) {
+
+	payloadMocked := &struct {
+		DisplayName string `json:"displayName"`
+	}{
+		DisplayName: "group-name-sample",
+	}
+
+	type fields struct {
+		c service.Client
+	}
+
+	type args struct {
+		ctx                    context.Context
+		directoryID, groupName string
+	}
+
+	testCases := []struct {
+		name    string
+		fields  fields
+		args    args
+		on      func(*fields)
+		wantErr bool
+		Err     error
+	}{
+		{
+			name: "when the parameters are correct",
+			args: args{
+				ctx:         context.TODO(),
+				directoryID: "direction-id-sample",
+				groupName:   "group-name-sample",
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewClient(t)
+
+				client.On("TransformStructToReader",
+					payloadMocked).
+					Return(bytes.NewReader([]byte{}), nil)
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodPost,
+					"scim/directory/direction-id-sample/Groups",
+					bytes.NewReader([]byte{})).
+					Return(&http.Request{}, nil)
+
+				client.On("Call",
+					&http.Request{},
+					&model.ScimGroupScheme{}).
+					Return(&model.ResponseScheme{}, nil)
+
+				fields.c = client
+
+			},
+		},
+
+		{
+			name: "when the directory id is not provided",
+			args: args{
+				ctx:         context.TODO(),
+				directoryID: "",
+			},
+			wantErr: true,
+			Err:     model.ErrNoAdminDirectoryIDError,
+		},
+
+		{
+			name: "when the group name is not provided",
+			args: args{
+				ctx:         context.TODO(),
+				directoryID: "directory-id-sample",
+			},
+			wantErr: true,
+			Err:     model.ErrNoAdminGroupNameError,
+		},
+
+		{
+			name: "when the http request cannot be created",
+			args: args{
+				ctx:         context.TODO(),
+				directoryID: "direction-id-sample",
+				groupName:   "group-name-sample",
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewClient(t)
+
+				client.On("TransformStructToReader",
+					payloadMocked).
+					Return(bytes.NewReader([]byte{}), nil)
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodPost,
+					"scim/directory/direction-id-sample/Groups",
+					bytes.NewReader([]byte{})).
+					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+
+				fields.c = client
+
+			},
+			wantErr: true,
+			Err:     errors.New("error, unable to create the http request"),
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+
+			if testCase.on != nil {
+				testCase.on(&testCase.fields)
+			}
+
+			service := NewSCIMGroupService(testCase.fields.c)
+
+			gotResult, gotResponse, err := service.Create(testCase.args.ctx, testCase.args.directoryID,
+				testCase.args.groupName)
+
+			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+
+				assert.EqualError(t, err, testCase.Err.Error())
+
+			} else {
+
+				assert.NoError(t, err)
+				assert.NotEqual(t, gotResponse, nil)
+				assert.NotEqual(t, gotResult, nil)
+			}
+
+		})
+	}
+}
+
+func Test_internalSCIMGroupImpl_Update(t *testing.T) {
+
+	payloadMocked := &struct {
+		DisplayName string `json:"displayName"`
+	}{
+		DisplayName: "group-name-sample",
+	}
+
+	type fields struct {
+		c service.Client
+	}
+
+	type args struct {
+		ctx                                context.Context
+		directoryID, groupID, newGroupName string
+	}
+
+	testCases := []struct {
+		name    string
+		fields  fields
+		args    args
+		on      func(*fields)
+		wantErr bool
+		Err     error
+	}{
+		{
+			name: "when the parameters are correct",
+			args: args{
+				ctx:          context.TODO(),
+				directoryID:  "direction-id-sample",
+				groupID:      "group-id-sample",
+				newGroupName: "group-name-sample",
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewClient(t)
+
+				client.On("TransformStructToReader",
+					payloadMocked).
+					Return(bytes.NewReader([]byte{}), nil)
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodPut,
+					"scim/directory/direction-id-sample/Groups/group-id-sample",
+					bytes.NewReader([]byte{})).
+					Return(&http.Request{}, nil)
+
+				client.On("Call",
+					&http.Request{},
+					&model.ScimGroupScheme{}).
+					Return(&model.ResponseScheme{}, nil)
+
+				fields.c = client
+
+			},
+		},
+
+		{
+			name: "when the directory id is not provided",
+			args: args{
+				ctx:         context.TODO(),
+				directoryID: "",
+			},
+			wantErr: true,
+			Err:     model.ErrNoAdminDirectoryIDError,
+		},
+
+		{
+			name: "when the group id is not provided",
+			args: args{
+				ctx:         context.TODO(),
+				directoryID: "directory-id-sample",
+			},
+			wantErr: true,
+			Err:     model.ErrNoAdminGroupIDError,
+		},
+
+		{
+			name: "when the group name is not provided",
+			args: args{
+				ctx:         context.TODO(),
+				directoryID: "directory-id-sample",
+				groupID:     "group-id-sample",
+			},
+			wantErr: true,
+			Err:     model.ErrNoAdminGroupNameError,
+		},
+
+		{
+			name: "when the http request cannot be created",
+			args: args{
+				ctx:          context.TODO(),
+				directoryID:  "direction-id-sample",
+				groupID:      "group-id-sample",
+				newGroupName: "group-name-sample",
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewClient(t)
+
+				client.On("TransformStructToReader",
+					payloadMocked).
+					Return(bytes.NewReader([]byte{}), nil)
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodPut,
+					"scim/directory/direction-id-sample/Groups/group-id-sample",
+					bytes.NewReader([]byte{})).
+					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+
+				fields.c = client
+
+			},
+			wantErr: true,
+			Err:     errors.New("error, unable to create the http request"),
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+
+			if testCase.on != nil {
+				testCase.on(&testCase.fields)
+			}
+
+			service := NewSCIMGroupService(testCase.fields.c)
+
+			gotResult, gotResponse, err := service.Update(testCase.args.ctx, testCase.args.directoryID,
+				testCase.args.groupID, testCase.args.newGroupName)
+
+			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+
+				assert.EqualError(t, err, testCase.Err.Error())
+
+			} else {
+
+				assert.NoError(t, err)
+				assert.NotEqual(t, gotResponse, nil)
+				assert.NotEqual(t, gotResult, nil)
+			}
+
+		})
+	}
+}
+
+func Test_internalSCIMGroupImpl_Path(t *testing.T) {
+
+	payloadMocked := &model.SCIMGroupPathScheme{
+		Schemas: []string{"urn:ietf:params:scim:api:messages:2.0:PatchOp"},
+		Operations: []*model.SCIMGroupOperationScheme{
+			{
+				Op:   "add",
+				Path: "members",
+				Value: []*model.SCIMGroupOperationValueScheme{
+					{
+						Value:   "account-id-sample",
+						Display: "Example Display Name",
+					},
+				},
+			},
+		},
+	}
+
+	type fields struct {
+		c service.Client
+	}
+
+	type args struct {
+		ctx                  context.Context
+		directoryID, groupID string
+		payload              *model.SCIMGroupPathScheme
+	}
+
+	testCases := []struct {
+		name    string
+		fields  fields
+		args    args
+		on      func(*fields)
+		wantErr bool
+		Err     error
+	}{
+		{
+			name: "when the parameters are correct",
+			args: args{
+				ctx:         context.TODO(),
+				directoryID: "direction-id-sample",
+				groupID:     "group-id-sample",
+				payload:     payloadMocked,
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewClient(t)
+
+				client.On("TransformStructToReader",
+					payloadMocked).
+					Return(bytes.NewReader([]byte{}), nil)
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodPatch,
+					"scim/directory/direction-id-sample/Groups/group-id-sample",
+					bytes.NewReader([]byte{})).
+					Return(&http.Request{}, nil)
+
+				client.On("Call",
+					&http.Request{},
+					&model.ScimGroupScheme{}).
+					Return(&model.ResponseScheme{}, nil)
+
+				fields.c = client
+
+			},
+		},
+
+		{
+			name: "when the directory id is not provided",
+			args: args{
+				ctx:         context.TODO(),
+				directoryID: "",
+			},
+			wantErr: true,
+			Err:     model.ErrNoAdminDirectoryIDError,
+		},
+
+		{
+			name: "when the group id is not provided",
+			args: args{
+				ctx:         context.TODO(),
+				directoryID: "directory-id-sample",
+			},
+			wantErr: true,
+			Err:     model.ErrNoAdminGroupIDError,
+		},
+
+		{
+			name: "when the http request cannot be created",
+			args: args{
+				ctx:         context.TODO(),
+				directoryID: "direction-id-sample",
+				groupID:     "group-id-sample",
+				payload:     payloadMocked,
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewClient(t)
+
+				client.On("TransformStructToReader",
+					payloadMocked).
+					Return(bytes.NewReader([]byte{}), nil)
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodPatch,
+					"scim/directory/direction-id-sample/Groups/group-id-sample",
+					bytes.NewReader([]byte{})).
+					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+
+				fields.c = client
+
+			},
+			wantErr: true,
+			Err:     errors.New("error, unable to create the http request"),
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+
+			if testCase.on != nil {
+				testCase.on(&testCase.fields)
+			}
+
+			service := NewSCIMGroupService(testCase.fields.c)
+
+			gotResult, gotResponse, err := service.Path(testCase.args.ctx, testCase.args.directoryID,
+				testCase.args.groupID, testCase.args.payload)
+
+			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+
+				assert.EqualError(t, err, testCase.Err.Error())
+
+			} else {
+
+				assert.NoError(t, err)
+				assert.NotEqual(t, gotResponse, nil)
+				assert.NotEqual(t, gotResult, nil)
+			}
+
+		})
+	}
+}

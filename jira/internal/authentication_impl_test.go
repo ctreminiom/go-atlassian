@@ -4,6 +4,7 @@ import (
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/common"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
+	"github.com/stretchr/testify/assert"
 	"reflect"
 	"testing"
 )
@@ -328,6 +329,126 @@ func TestAuthenticationService_HasSetExperimentalFlag(t *testing.T) {
 			if got := a.HasSetExperimentalFlag(); got != testCase.want {
 				t.Errorf("HasSetExperimentalFlag() = %v, want %v", got, testCase.want)
 			}
+		})
+	}
+}
+
+func TestAuthenticationService_GetBearerToken(t *testing.T) {
+	type fields struct {
+		c                 service.Client
+		basicAuthProvided bool
+		mail              string
+		token             string
+		userAgentProvided bool
+		agent             string
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		want   string
+	}{
+		{
+			name: "when the parameters are correct",
+			fields: fields{
+				c:     mocks.NewClient(t),
+				token: "token-sample",
+			},
+			want: "token-sample",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			a := &AuthenticationService{
+				c:                 tt.fields.c,
+				basicAuthProvided: tt.fields.basicAuthProvided,
+				mail:              tt.fields.mail,
+				token:             tt.fields.token,
+				userAgentProvided: tt.fields.userAgentProvided,
+				agent:             tt.fields.agent,
+			}
+			assert.Equalf(t, tt.want, a.GetBearerToken(), "GetBearerToken()")
+		})
+	}
+}
+
+func TestAuthenticationService_SetBearerToken(t *testing.T) {
+	type fields struct {
+		c                 service.Client
+		basicAuthProvided bool
+		mail              string
+		token             string
+		userAgentProvided bool
+		agent             string
+	}
+	type args struct {
+		token string
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		args   args
+	}{
+		{
+			name: "when the parameters are correct",
+			fields: fields{
+				token: "token-sample",
+			},
+			args: args{
+				token: "token-sample",
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			a := &AuthenticationService{
+				c:                 tt.fields.c,
+				basicAuthProvided: tt.fields.basicAuthProvided,
+				mail:              tt.fields.mail,
+				token:             tt.fields.token,
+				userAgentProvided: tt.fields.userAgentProvided,
+				agent:             tt.fields.agent,
+			}
+			a.SetBearerToken(tt.args.token)
+		})
+	}
+}
+
+func TestAuthenticationService_SetExperimentalFlag(t *testing.T) {
+	type fields struct {
+		c                 service.Client
+		basicAuthProvided bool
+		mail              string
+		token             string
+		userAgentProvided bool
+		agent             string
+	}
+	tests := []struct {
+		name   string
+		fields fields
+	}{
+		{
+			name: "when the parameters are correct",
+			fields: fields{
+				c:                 nil,
+				basicAuthProvided: false,
+				mail:              "",
+				token:             "",
+				userAgentProvided: false,
+				agent:             "",
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			a := &AuthenticationService{
+				c:                 tt.fields.c,
+				basicAuthProvided: tt.fields.basicAuthProvided,
+				mail:              tt.fields.mail,
+				token:             tt.fields.token,
+				userAgentProvided: tt.fields.userAgentProvided,
+				agent:             tt.fields.agent,
+			}
+			a.SetExperimentalFlag()
 		})
 	}
 }

@@ -20,7 +20,6 @@ type AuthenticationService struct {
 }
 
 func (a *AuthenticationService) SetBearerToken(token string) {
-	return
 }
 
 func (a *AuthenticationService) GetBearerToken() string {

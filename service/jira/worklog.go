@@ -7,33 +7,6 @@ import (
 
 type WorklogSharedConnector interface {
 
-	// Gets returns worklog details for a list of worklog IDs.
-	//
-	// The returned list of worklogs is limited to 1000 items.
-	//
-	// POST /rest/api/{2-3}/worklog/list
-	//
-	// https://docs.go-atlassian.io/jira-software-cloud/issues/worklogs#get-worklogs
-	Gets(ctx context.Context, worklogIds []int, expand []string) ([]*model.IssueWorklogScheme, *model.ResponseScheme, error)
-
-	// Get returns a worklog.
-	//
-	// Time tracking must be enabled in Jira, otherwise this operation returns an error.
-	//
-	// GET /rest/api/{2-3}/issue/{issueIdOrKey}/worklog/{id}
-	//
-	// https://docs.go-atlassian.io/jira-software-cloud/issues/worklogs#get-worklog
-	Get(ctx context.Context, issueKeyOrId, worklogId string, expand []string) (*model.IssueWorklogScheme, *model.ResponseScheme, error)
-
-	// Issue returns worklogs for an issue, starting from the oldest worklog or from the worklog started on or after a date and time.
-	//
-	// Time tracking must be enabled in Jira, otherwise this operation returns an error.
-	//
-	// GET /rest/api/{2-3}/issue/{issueIdOrKey}/worklog
-	//
-	// https://docs.go-atlassian.io/jira-software-cloud/issues/worklogs#get-issue-worklogs
-	Issue(ctx context.Context, issueKeyOrId string, startAt, maxResults, after int, expand []string) (*model.IssueWorklogPageScheme, *model.ResponseScheme, error)
-
 	// Delete deletes a worklog from an issue.
 	//
 	// Time tracking must be enabled in Jira, otherwise this operation returns an error.
@@ -75,6 +48,33 @@ type WorklogSharedConnector interface {
 type WorklogRichTextConnector interface {
 	WorklogSharedConnector
 
+	// Gets returns worklog details for a list of worklog IDs.
+	//
+	// The returned list of worklogs is limited to 1000 items.
+	//
+	// POST /rest/api/{2-3}/worklog/list
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/issues/worklogs#get-worklogs
+	Gets(ctx context.Context, worklogIds []int, expand []string) ([]*model.IssueWorklogRichTextScheme, *model.ResponseScheme, error)
+
+	// Get returns a worklog.
+	//
+	// Time tracking must be enabled in Jira, otherwise this operation returns an error.
+	//
+	// GET /rest/api/{2-3}/issue/{issueIdOrKey}/worklog/{id}
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/issues/worklogs#get-worklog
+	Get(ctx context.Context, issueKeyOrId, worklogId string, expand []string) (*model.IssueWorklogRichTextScheme, *model.ResponseScheme, error)
+
+	// Issue returns worklogs for an issue, starting from the oldest worklog or from the worklog started on or after a date and time.
+	//
+	// Time tracking must be enabled in Jira, otherwise this operation returns an error.
+	//
+	// GET /rest/api/{2-3}/issue/{issueIdOrKey}/worklog
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/issues/worklogs#get-issue-worklogs
+	Issue(ctx context.Context, issueKeyOrId string, startAt, maxResults, after int, expand []string) (*model.IssueWorklogRichTextPageScheme, *model.ResponseScheme, error)
+
 	// Add adds a worklog to an issue.
 	//
 	// Time tracking must be enabled in Jira, otherwise this operation returns an error.
@@ -82,7 +82,7 @@ type WorklogRichTextConnector interface {
 	// POST /rest/api/2/issue/{issueIdOrKey}/worklog
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/worklogs#add-worklog
-	Add(ctx context.Context, issueKeyOrID string, payload *model.WorklogPayloadSchemeV2, options *model.WorklogOptionsScheme) (*model.IssueWorklogScheme,
+	Add(ctx context.Context, issueKeyOrID string, payload *model.WorklogRichTextPayloadScheme, options *model.WorklogOptionsScheme) (*model.IssueWorklogRichTextScheme,
 		*model.ResponseScheme, error)
 
 	// Update updates a worklog.
@@ -92,12 +92,39 @@ type WorklogRichTextConnector interface {
 	// PUT /rest/api/2/issue/{issueIdOrKey}/worklog/{id}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/worklogs#update-worklog
-	Update(ctx context.Context, issueKeyOrId, worklogId string, payload *model.WorklogPayloadSchemeV2, options *model.WorklogOptionsScheme) (
-		*model.IssueWorklogScheme, *model.ResponseScheme, error)
+	Update(ctx context.Context, issueKeyOrId, worklogId string, payload *model.WorklogRichTextPayloadScheme, options *model.WorklogOptionsScheme) (
+		*model.IssueWorklogRichTextScheme, *model.ResponseScheme, error)
 }
 
 type WorklogADFConnector interface {
 	WorklogSharedConnector
+
+	// Gets returns worklog details for a list of worklog IDs.
+	//
+	// The returned list of worklogs is limited to 1000 items.
+	//
+	// POST /rest/api/{2-3}/worklog/list
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/issues/worklogs#get-worklogs
+	Gets(ctx context.Context, worklogIds []int, expand []string) ([]*model.IssueWorklogADFScheme, *model.ResponseScheme, error)
+
+	// Get returns a worklog.
+	//
+	// Time tracking must be enabled in Jira, otherwise this operation returns an error.
+	//
+	// GET /rest/api/{2-3}/issue/{issueIdOrKey}/worklog/{id}
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/issues/worklogs#get-worklog
+	Get(ctx context.Context, issueKeyOrId, worklogId string, expand []string) (*model.IssueWorklogADFScheme, *model.ResponseScheme, error)
+
+	// Issue returns worklogs for an issue, starting from the oldest worklog or from the worklog started on or after a date and time.
+	//
+	// Time tracking must be enabled in Jira, otherwise this operation returns an error.
+	//
+	// GET /rest/api/{2-3}/issue/{issueIdOrKey}/worklog
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/issues/worklogs#get-issue-worklogs
+	Issue(ctx context.Context, issueKeyOrId string, startAt, maxResults, after int, expand []string) (*model.IssueWorklogADFPageScheme, *model.ResponseScheme, error)
 
 	// Add adds a worklog to an issue.
 	//
@@ -106,7 +133,7 @@ type WorklogADFConnector interface {
 	// POST /rest/api/3/issue/{issueIdOrKey}/worklog
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/worklogs#add-worklog
-	Add(ctx context.Context, issueKeyOrID string, payload *model.WorklogPayloadSchemeV3, options *model.WorklogOptionsScheme) (*model.IssueWorklogScheme,
+	Add(ctx context.Context, issueKeyOrID string, payload *model.WorklogADFPayloadScheme, options *model.WorklogOptionsScheme) (*model.IssueWorklogADFScheme,
 		*model.ResponseScheme, error)
 
 	// Update updates a worklog.
@@ -116,6 +143,6 @@ type WorklogADFConnector interface {
 	// PUT /rest/api/3/issue/{issueIdOrKey}/worklog/{id}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/worklogs#update-worklog
-	Update(ctx context.Context, issueKeyOrId, worklogId string, payload *model.WorklogPayloadSchemeV3, options *model.WorklogOptionsScheme) (
-		*model.IssueWorklogScheme, *model.ResponseScheme, error)
+	Update(ctx context.Context, issueKeyOrId, worklogId string, payload *model.WorklogADFPayloadScheme, options *model.WorklogOptionsScheme) (
+		*model.IssueWorklogADFScheme, *model.ResponseScheme, error)
 }

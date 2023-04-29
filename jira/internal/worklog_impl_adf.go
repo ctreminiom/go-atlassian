@@ -34,7 +34,7 @@ type WorklogADFService struct {
 // POST /rest/api/{2-3}/worklog/list
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/worklogs#get-worklogs
-func (w *WorklogADFService) Gets(ctx context.Context, worklogIds []int, expand []string) ([]*model.IssueWorklogScheme, *model.ResponseScheme, error) {
+func (w *WorklogADFService) Gets(ctx context.Context, worklogIds []int, expand []string) ([]*model.IssueWorklogADFScheme, *model.ResponseScheme, error) {
 	return w.internalClient.Gets(ctx, worklogIds, expand)
 }
 
@@ -45,7 +45,7 @@ func (w *WorklogADFService) Gets(ctx context.Context, worklogIds []int, expand [
 // GET /rest/api/{2-3}/issue/{issueIdOrKey}/worklog/{id}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/worklogs#get-worklog
-func (w *WorklogADFService) Get(ctx context.Context, issueKeyOrId, worklogId string, expand []string) (*model.IssueWorklogScheme, *model.ResponseScheme, error) {
+func (w *WorklogADFService) Get(ctx context.Context, issueKeyOrId, worklogId string, expand []string) (*model.IssueWorklogADFScheme, *model.ResponseScheme, error) {
 	return w.internalClient.Get(ctx, issueKeyOrId, worklogId, expand)
 }
 
@@ -56,7 +56,7 @@ func (w *WorklogADFService) Get(ctx context.Context, issueKeyOrId, worklogId str
 // GET /rest/api/{2-3}/issue/{issueIdOrKey}/worklog
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/worklogs#get-issue-worklogs
-func (w *WorklogADFService) Issue(ctx context.Context, issueKeyOrId string, startAt, maxResults, after int, expand []string) (*model.IssueWorklogPageScheme, *model.ResponseScheme, error) {
+func (w *WorklogADFService) Issue(ctx context.Context, issueKeyOrId string, startAt, maxResults, after int, expand []string) (*model.IssueWorklogADFPageScheme, *model.ResponseScheme, error) {
 	return w.internalClient.Issue(ctx, issueKeyOrId, startAt, maxResults, after, expand)
 }
 
@@ -110,7 +110,7 @@ func (w *WorklogADFService) Updated(ctx context.Context, since int, expand []str
 // POST /rest/api/3/issue/{issueIdOrKey}/worklog
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/worklogs#add-worklog
-func (w *WorklogADFService) Add(ctx context.Context, issueKeyOrID string, payload *model.WorklogPayloadSchemeV3, options *model.WorklogOptionsScheme) (*model.IssueWorklogScheme, *model.ResponseScheme, error) {
+func (w *WorklogADFService) Add(ctx context.Context, issueKeyOrID string, payload *model.WorklogADFPayloadScheme, options *model.WorklogOptionsScheme) (*model.IssueWorklogADFScheme, *model.ResponseScheme, error) {
 	return w.internalClient.Add(ctx, issueKeyOrID, payload, options)
 }
 
@@ -121,7 +121,7 @@ func (w *WorklogADFService) Add(ctx context.Context, issueKeyOrID string, payloa
 // PUT /rest/api/3/issue/{issueIdOrKey}/worklog/{id}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/worklogs#update-worklog
-func (w *WorklogADFService) Update(ctx context.Context, issueKeyOrId, worklogId string, payload *model.WorklogPayloadSchemeV3, options *model.WorklogOptionsScheme) (*model.IssueWorklogScheme, *model.ResponseScheme, error) {
+func (w *WorklogADFService) Update(ctx context.Context, issueKeyOrId, worklogId string, payload *model.WorklogADFPayloadScheme, options *model.WorklogOptionsScheme) (*model.IssueWorklogADFScheme, *model.ResponseScheme, error) {
 	return w.internalClient.Update(ctx, issueKeyOrId, worklogId, payload, options)
 }
 
@@ -130,7 +130,7 @@ type internalWorklogAdfImpl struct {
 	version string
 }
 
-func (i *internalWorklogAdfImpl) Gets(ctx context.Context, worklogIds []int, expand []string) ([]*model.IssueWorklogScheme, *model.ResponseScheme, error) {
+func (i *internalWorklogAdfImpl) Gets(ctx context.Context, worklogIds []int, expand []string) ([]*model.IssueWorklogADFScheme, *model.ResponseScheme, error) {
 
 	if len(worklogIds) == 0 {
 		return nil, nil, model.ErrNpWorklogsError
@@ -164,7 +164,7 @@ func (i *internalWorklogAdfImpl) Gets(ctx context.Context, worklogIds []int, exp
 		return nil, nil, err
 	}
 
-	var worklogs []*model.IssueWorklogScheme
+	var worklogs []*model.IssueWorklogADFScheme
 	response, err := i.c.Call(request, &worklogs)
 	if err != nil {
 		return nil, response, err
@@ -173,7 +173,7 @@ func (i *internalWorklogAdfImpl) Gets(ctx context.Context, worklogIds []int, exp
 	return worklogs, response, nil
 }
 
-func (i *internalWorklogAdfImpl) Get(ctx context.Context, issueKeyOrId, worklogId string, expand []string) (*model.IssueWorklogScheme, *model.ResponseScheme, error) {
+func (i *internalWorklogAdfImpl) Get(ctx context.Context, issueKeyOrId, worklogId string, expand []string) (*model.IssueWorklogADFScheme, *model.ResponseScheme, error) {
 
 	if issueKeyOrId == "" {
 		return nil, nil, model.ErrNoIssueKeyOrIDError
@@ -200,7 +200,7 @@ func (i *internalWorklogAdfImpl) Get(ctx context.Context, issueKeyOrId, worklogI
 		return nil, nil, err
 	}
 
-	worklog := new(model.IssueWorklogScheme)
+	worklog := new(model.IssueWorklogADFScheme)
 	response, err := i.c.Call(request, worklog)
 	if err != nil {
 		return nil, response, err
@@ -209,7 +209,7 @@ func (i *internalWorklogAdfImpl) Get(ctx context.Context, issueKeyOrId, worklogI
 	return worklog, response, nil
 }
 
-func (i *internalWorklogAdfImpl) Issue(ctx context.Context, issueKeyOrId string, startAt, maxResults, after int, expand []string) (*model.IssueWorklogPageScheme, *model.ResponseScheme, error) {
+func (i *internalWorklogAdfImpl) Issue(ctx context.Context, issueKeyOrId string, startAt, maxResults, after int, expand []string) (*model.IssueWorklogADFPageScheme, *model.ResponseScheme, error) {
 
 	if issueKeyOrId == "" {
 		return nil, nil, model.ErrNoIssueKeyOrIDError
@@ -234,7 +234,7 @@ func (i *internalWorklogAdfImpl) Issue(ctx context.Context, issueKeyOrId string,
 		return nil, nil, err
 	}
 
-	worklogs := new(model.IssueWorklogPageScheme)
+	worklogs := new(model.IssueWorklogADFPageScheme)
 	response, err := i.c.Call(request, worklogs)
 	if err != nil {
 		return nil, response, err
@@ -349,7 +349,7 @@ func (i *internalWorklogAdfImpl) Updated(ctx context.Context, since int, expand 
 	return worklogs, response, nil
 }
 
-func (i *internalWorklogAdfImpl) Add(ctx context.Context, issueKeyOrID string, payload *model.WorklogPayloadSchemeV3, options *model.WorklogOptionsScheme) (*model.IssueWorklogScheme, *model.ResponseScheme, error) {
+func (i *internalWorklogAdfImpl) Add(ctx context.Context, issueKeyOrID string, payload *model.WorklogADFPayloadScheme, options *model.WorklogOptionsScheme) (*model.IssueWorklogADFScheme, *model.ResponseScheme, error) {
 
 	if issueKeyOrID == "" {
 		return nil, nil, model.ErrNoIssueKeyOrIDError
@@ -394,7 +394,7 @@ func (i *internalWorklogAdfImpl) Add(ctx context.Context, issueKeyOrID string, p
 		return nil, nil, err
 	}
 
-	worklog := new(model.IssueWorklogScheme)
+	worklog := new(model.IssueWorklogADFScheme)
 	response, err := i.c.Call(request, worklog)
 	if err != nil {
 		return nil, response, err
@@ -403,7 +403,7 @@ func (i *internalWorklogAdfImpl) Add(ctx context.Context, issueKeyOrID string, p
 	return worklog, response, nil
 }
 
-func (i *internalWorklogAdfImpl) Update(ctx context.Context, issueKeyOrId, worklogId string, payload *model.WorklogPayloadSchemeV3, options *model.WorklogOptionsScheme) (*model.IssueWorklogScheme, *model.ResponseScheme, error) {
+func (i *internalWorklogAdfImpl) Update(ctx context.Context, issueKeyOrId, worklogId string, payload *model.WorklogADFPayloadScheme, options *model.WorklogOptionsScheme) (*model.IssueWorklogADFScheme, *model.ResponseScheme, error) {
 
 	if issueKeyOrId == "" {
 		return nil, nil, model.ErrNoIssueKeyOrIDError
@@ -452,7 +452,7 @@ func (i *internalWorklogAdfImpl) Update(ctx context.Context, issueKeyOrId, workl
 		return nil, nil, err
 	}
 
-	worklog := new(model.IssueWorklogScheme)
+	worklog := new(model.IssueWorklogADFScheme)
 	response, err := i.c.Call(request, worklog)
 	if err != nil {
 		return nil, response, err

@@ -34,7 +34,7 @@ type WorklogRichTextService struct {
 // POST /rest/api/{2-3}/worklog/list
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/worklogs#get-worklogs
-func (w *WorklogRichTextService) Gets(ctx context.Context, worklogIds []int, expand []string) ([]*model.IssueWorklogScheme, *model.ResponseScheme, error) {
+func (w *WorklogRichTextService) Gets(ctx context.Context, worklogIds []int, expand []string) ([]*model.IssueWorklogRichTextScheme, *model.ResponseScheme, error) {
 	return w.internalClient.Gets(ctx, worklogIds, expand)
 }
 
@@ -45,7 +45,7 @@ func (w *WorklogRichTextService) Gets(ctx context.Context, worklogIds []int, exp
 // GET /rest/api/{2-3}/issue/{issueIdOrKey}/worklog/{id}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/worklogs#get-worklog
-func (w *WorklogRichTextService) Get(ctx context.Context, issueKeyOrId, worklogId string, expand []string) (*model.IssueWorklogScheme, *model.ResponseScheme, error) {
+func (w *WorklogRichTextService) Get(ctx context.Context, issueKeyOrId, worklogId string, expand []string) (*model.IssueWorklogRichTextScheme, *model.ResponseScheme, error) {
 	return w.internalClient.Get(ctx, issueKeyOrId, worklogId, expand)
 }
 
@@ -56,7 +56,7 @@ func (w *WorklogRichTextService) Get(ctx context.Context, issueKeyOrId, worklogI
 // GET /rest/api/{2-3}/issue/{issueIdOrKey}/worklog
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/worklogs#get-issue-worklogs
-func (w *WorklogRichTextService) Issue(ctx context.Context, issueKeyOrId string, startAt, maxResults, after int, expand []string) (*model.IssueWorklogPageScheme, *model.ResponseScheme, error) {
+func (w *WorklogRichTextService) Issue(ctx context.Context, issueKeyOrId string, startAt, maxResults, after int, expand []string) (*model.IssueWorklogRichTextPageScheme, *model.ResponseScheme, error) {
 	return w.internalClient.Issue(ctx, issueKeyOrId, startAt, maxResults, after, expand)
 }
 
@@ -110,7 +110,7 @@ func (w *WorklogRichTextService) Updated(ctx context.Context, since int, expand 
 // POST /rest/api/2/issue/{issueIdOrKey}/worklog
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/worklogs#add-worklog
-func (w *WorklogRichTextService) Add(ctx context.Context, issueKeyOrID string, payload *model.WorklogPayloadSchemeV2, options *model.WorklogOptionsScheme) (*model.IssueWorklogScheme, *model.ResponseScheme, error) {
+func (w *WorklogRichTextService) Add(ctx context.Context, issueKeyOrID string, payload *model.WorklogRichTextPayloadScheme, options *model.WorklogOptionsScheme) (*model.IssueWorklogRichTextScheme, *model.ResponseScheme, error) {
 	return w.internalClient.Add(ctx, issueKeyOrID, payload, options)
 }
 
@@ -121,7 +121,7 @@ func (w *WorklogRichTextService) Add(ctx context.Context, issueKeyOrID string, p
 // PUT /rest/api/2/issue/{issueIdOrKey}/worklog/{id}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/worklogs#update-worklog
-func (w *WorklogRichTextService) Update(ctx context.Context, issueKeyOrId, worklogId string, payload *model.WorklogPayloadSchemeV2, options *model.WorklogOptionsScheme) (*model.IssueWorklogScheme, *model.ResponseScheme, error) {
+func (w *WorklogRichTextService) Update(ctx context.Context, issueKeyOrId, worklogId string, payload *model.WorklogRichTextPayloadScheme, options *model.WorklogOptionsScheme) (*model.IssueWorklogRichTextScheme, *model.ResponseScheme, error) {
 	return w.internalClient.Update(ctx, issueKeyOrId, worklogId, payload, options)
 }
 
@@ -130,7 +130,7 @@ type internalWorklogRichTextImpl struct {
 	version string
 }
 
-func (i *internalWorklogRichTextImpl) Gets(ctx context.Context, worklogIds []int, expand []string) ([]*model.IssueWorklogScheme, *model.ResponseScheme, error) {
+func (i *internalWorklogRichTextImpl) Gets(ctx context.Context, worklogIds []int, expand []string) ([]*model.IssueWorklogRichTextScheme, *model.ResponseScheme, error) {
 
 	if len(worklogIds) == 0 {
 		return nil, nil, model.ErrNpWorklogsError
@@ -164,7 +164,7 @@ func (i *internalWorklogRichTextImpl) Gets(ctx context.Context, worklogIds []int
 		return nil, nil, err
 	}
 
-	var worklogs []*model.IssueWorklogScheme
+	var worklogs []*model.IssueWorklogRichTextScheme
 	response, err := i.c.Call(request, &worklogs)
 	if err != nil {
 		return nil, response, err
@@ -173,7 +173,7 @@ func (i *internalWorklogRichTextImpl) Gets(ctx context.Context, worklogIds []int
 	return worklogs, response, nil
 }
 
-func (i *internalWorklogRichTextImpl) Get(ctx context.Context, issueKeyOrId, worklogId string, expand []string) (*model.IssueWorklogScheme, *model.ResponseScheme, error) {
+func (i *internalWorklogRichTextImpl) Get(ctx context.Context, issueKeyOrId, worklogId string, expand []string) (*model.IssueWorklogRichTextScheme, *model.ResponseScheme, error) {
 
 	if issueKeyOrId == "" {
 		return nil, nil, model.ErrNoIssueKeyOrIDError
@@ -200,7 +200,7 @@ func (i *internalWorklogRichTextImpl) Get(ctx context.Context, issueKeyOrId, wor
 		return nil, nil, err
 	}
 
-	worklog := new(model.IssueWorklogScheme)
+	worklog := new(model.IssueWorklogRichTextScheme)
 	response, err := i.c.Call(request, worklog)
 	if err != nil {
 		return nil, response, err
@@ -209,7 +209,7 @@ func (i *internalWorklogRichTextImpl) Get(ctx context.Context, issueKeyOrId, wor
 	return worklog, response, nil
 }
 
-func (i *internalWorklogRichTextImpl) Issue(ctx context.Context, issueKeyOrId string, startAt, maxResults, after int, expand []string) (*model.IssueWorklogPageScheme, *model.ResponseScheme, error) {
+func (i *internalWorklogRichTextImpl) Issue(ctx context.Context, issueKeyOrId string, startAt, maxResults, after int, expand []string) (*model.IssueWorklogRichTextPageScheme, *model.ResponseScheme, error) {
 
 	if issueKeyOrId == "" {
 		return nil, nil, model.ErrNoIssueKeyOrIDError
@@ -234,7 +234,7 @@ func (i *internalWorklogRichTextImpl) Issue(ctx context.Context, issueKeyOrId st
 		return nil, nil, err
 	}
 
-	worklogs := new(model.IssueWorklogPageScheme)
+	worklogs := new(model.IssueWorklogRichTextPageScheme)
 	response, err := i.c.Call(request, worklogs)
 	if err != nil {
 		return nil, response, err
@@ -349,7 +349,7 @@ func (i *internalWorklogRichTextImpl) Updated(ctx context.Context, since int, ex
 	return worklogs, response, nil
 }
 
-func (i *internalWorklogRichTextImpl) Add(ctx context.Context, issueKeyOrID string, payload *model.WorklogPayloadSchemeV2, options *model.WorklogOptionsScheme) (*model.IssueWorklogScheme, *model.ResponseScheme, error) {
+func (i *internalWorklogRichTextImpl) Add(ctx context.Context, issueKeyOrID string, payload *model.WorklogRichTextPayloadScheme, options *model.WorklogOptionsScheme) (*model.IssueWorklogRichTextScheme, *model.ResponseScheme, error) {
 
 	if issueKeyOrID == "" {
 		return nil, nil, model.ErrNoIssueKeyOrIDError
@@ -394,7 +394,7 @@ func (i *internalWorklogRichTextImpl) Add(ctx context.Context, issueKeyOrID stri
 		return nil, nil, err
 	}
 
-	worklog := new(model.IssueWorklogScheme)
+	worklog := new(model.IssueWorklogRichTextScheme)
 	response, err := i.c.Call(request, worklog)
 	if err != nil {
 		return nil, response, err
@@ -403,7 +403,7 @@ func (i *internalWorklogRichTextImpl) Add(ctx context.Context, issueKeyOrID stri
 	return worklog, response, nil
 }
 
-func (i *internalWorklogRichTextImpl) Update(ctx context.Context, issueKeyOrId, worklogId string, payload *model.WorklogPayloadSchemeV2, options *model.WorklogOptionsScheme) (*model.IssueWorklogScheme, *model.ResponseScheme, error) {
+func (i *internalWorklogRichTextImpl) Update(ctx context.Context, issueKeyOrId, worklogId string, payload *model.WorklogRichTextPayloadScheme, options *model.WorklogOptionsScheme) (*model.IssueWorklogRichTextScheme, *model.ResponseScheme, error) {
 
 	if issueKeyOrId == "" {
 		return nil, nil, model.ErrNoIssueKeyOrIDError
@@ -452,7 +452,7 @@ func (i *internalWorklogRichTextImpl) Update(ctx context.Context, issueKeyOrId, 
 		return nil, nil, err
 	}
 
-	worklog := new(model.IssueWorklogScheme)
+	worklog := new(model.IssueWorklogRichTextScheme)
 	response, err := i.c.Call(request, worklog)
 	if err != nil {
 		return nil, response, err

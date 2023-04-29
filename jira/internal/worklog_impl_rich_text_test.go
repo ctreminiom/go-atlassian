@@ -220,7 +220,7 @@ func Test_internalWorklogRichTextImpl_Get(t *testing.T) {
 
 				client.On("Call",
 					&http.Request{},
-					&model.IssueWorklogScheme{}).
+					&model.IssueWorklogRichTextScheme{}).
 					Return(&model.ResponseScheme{}, nil)
 
 				fields.c = client
@@ -251,7 +251,7 @@ func Test_internalWorklogRichTextImpl_Get(t *testing.T) {
 
 				client.On("Call",
 					&http.Request{},
-					&model.IssueWorklogScheme{}).
+					&model.IssueWorklogRichTextScheme{}).
 					Return(&model.ResponseScheme{}, nil)
 
 				fields.c = client
@@ -385,7 +385,7 @@ func Test_internalWorklogRichTextImpl_Issue(t *testing.T) {
 
 				client.On("Call",
 					&http.Request{},
-					&model.IssueWorklogPageScheme{}).
+					&model.IssueWorklogRichTextPageScheme{}).
 					Return(&model.ResponseScheme{}, nil)
 
 				fields.c = client
@@ -418,7 +418,7 @@ func Test_internalWorklogRichTextImpl_Issue(t *testing.T) {
 
 				client.On("Call",
 					&http.Request{},
-					&model.IssueWorklogPageScheme{}).
+					&model.IssueWorklogRichTextPageScheme{}).
 					Return(&model.ResponseScheme{}, nil)
 
 				fields.c = client
@@ -977,7 +977,7 @@ func Test_internalWorklogRichTextImpl_Updated(t *testing.T) {
 
 func Test_internalWorklogRichTextImpl_Add(t *testing.T) {
 
-	payloadMocked := &model.WorklogPayloadSchemeV2{
+	payloadMocked := &model.WorklogRichTextPayloadScheme{
 		Comment: &model.CommentPayloadSchemeV2{
 			Body: "Hello!!",
 		},
@@ -998,7 +998,7 @@ func Test_internalWorklogRichTextImpl_Add(t *testing.T) {
 	type args struct {
 		ctx          context.Context
 		issueKeyOrID string
-		payload      *model.WorklogPayloadSchemeV2
+		payload      *model.WorklogRichTextPayloadScheme
 		options      *model.WorklogOptionsScheme
 	}
 
@@ -1043,7 +1043,7 @@ func Test_internalWorklogRichTextImpl_Add(t *testing.T) {
 
 				client.On("Call",
 					&http.Request{},
-					&model.IssueWorklogScheme{}).
+					&model.IssueWorklogRichTextScheme{}).
 					Return(&model.ResponseScheme{}, nil)
 
 				fields.c = client
@@ -1085,7 +1085,7 @@ func Test_internalWorklogRichTextImpl_Add(t *testing.T) {
 
 				client.On("Call",
 					&http.Request{},
-					&model.IssueWorklogScheme{}).
+					&model.IssueWorklogRichTextScheme{}).
 					Return(&model.ResponseScheme{}, nil)
 
 				fields.c = client
@@ -1107,7 +1107,7 @@ func Test_internalWorklogRichTextImpl_Add(t *testing.T) {
 				client := mocks.NewClient(t)
 
 				client.On("TransformStructToReader",
-					(*model.WorklogPayloadSchemeV2)(nil)).
+					(*model.WorklogRichTextPayloadScheme)(nil)).
 					Return(bytes.NewReader([]byte{}), model.ErrNonPayloadPointerError)
 
 				fields.c = client
@@ -1188,7 +1188,7 @@ func Test_internalWorklogRichTextImpl_Add(t *testing.T) {
 
 func Test_internalWorklogRichTextImpl_Update(t *testing.T) {
 
-	payloadMocked := &model.WorklogPayloadSchemeV2{
+	payloadMocked := &model.WorklogRichTextPayloadScheme{
 		Comment: nil,
 		Visibility: &model.IssueWorklogVisibilityScheme{
 			Type:  "group",
@@ -1207,7 +1207,7 @@ func Test_internalWorklogRichTextImpl_Update(t *testing.T) {
 	type args struct {
 		ctx                     context.Context
 		issueKeyOrID, worklogId string
-		payload                 *model.WorklogPayloadSchemeV2
+		payload                 *model.WorklogRichTextPayloadScheme
 		options                 *model.WorklogOptionsScheme
 	}
 
@@ -1253,7 +1253,7 @@ func Test_internalWorklogRichTextImpl_Update(t *testing.T) {
 
 				client.On("Call",
 					&http.Request{},
-					&model.IssueWorklogScheme{}).
+					&model.IssueWorklogRichTextScheme{}).
 					Return(&model.ResponseScheme{}, nil)
 
 				fields.c = client
@@ -1296,7 +1296,7 @@ func Test_internalWorklogRichTextImpl_Update(t *testing.T) {
 
 				client.On("Call",
 					&http.Request{},
-					&model.IssueWorklogScheme{}).
+					&model.IssueWorklogRichTextScheme{}).
 					Return(&model.ResponseScheme{}, nil)
 
 				fields.c = client
@@ -1340,7 +1340,7 @@ func Test_internalWorklogRichTextImpl_Update(t *testing.T) {
 				client := mocks.NewClient(t)
 
 				client.On("TransformStructToReader",
-					(*model.WorklogPayloadSchemeV2)(nil)).
+					(*model.WorklogRichTextPayloadScheme)(nil)).
 					Return(bytes.NewReader([]byte{}), model.ErrNonPayloadPointerError)
 
 				fields.c = client

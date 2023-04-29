@@ -9,7 +9,7 @@ type WorklogOptionsScheme struct {
 	Expand               []string
 }
 
-type WorklogPayloadSchemeV3 struct {
+type WorklogADFPayloadScheme struct {
 	Comment          *CommentNodeScheme            `json:"comment,omitempty"`
 	Visibility       *IssueWorklogVisibilityScheme `json:"visibility,omitempty"`
 	Started          string                        `json:"started,omitempty"`
@@ -17,7 +17,7 @@ type WorklogPayloadSchemeV3 struct {
 	TimeSpentSeconds int                           `json:"timeSpentSeconds,omitempty"`
 }
 
-type WorklogPayloadSchemeV2 struct {
+type WorklogRichTextPayloadScheme struct {
 	Comment          *CommentPayloadSchemeV2       `json:"comment,omitempty"`
 	Visibility       *IssueWorklogVisibilityScheme `json:"visibility,omitempty"`
 	Started          string                        `json:"started,omitempty"`
@@ -44,18 +44,31 @@ type ChangedWorklogPropertyScheme struct {
 	Key string `json:"key,omitempty"`
 }
 
-type IssueWorklogPageScheme struct {
-	StartAt    int                   `json:"startAt,omitempty"`
-	MaxResults int                   `json:"maxResults,omitempty"`
-	Total      int                   `json:"total,omitempty"`
-	Worklogs   []*IssueWorklogScheme `json:"worklogs,omitempty"`
+type IssueWorklogRichTextPageScheme struct {
+	StartAt    int                           `json:"startAt,omitempty"`
+	MaxResults int                           `json:"maxResults,omitempty"`
+	Total      int                           `json:"total,omitempty"`
+	Worklogs   []*IssueWorklogRichTextScheme `json:"worklogs,omitempty"`
 }
 
-type IssueWorklogScheme struct {
+type IssueWorklogADFPageScheme struct {
+	StartAt    int                      `json:"startAt,omitempty"`
+	MaxResults int                      `json:"maxResults,omitempty"`
+	Total      int                      `json:"total,omitempty"`
+	Worklogs   []*IssueWorklogADFScheme `json:"worklogs,omitempty"`
+}
+
+type IssueWorklogVisibilityScheme struct {
+	Type       string `json:"type,omitempty"`
+	Value      string `json:"value,omitempty"`
+	Identifier string `json:"identifier,omitempty"`
+}
+
+type IssueWorklogRichTextScheme struct {
 	Self             string                        `json:"self,omitempty"`
 	Author           *UserDetailScheme             `json:"author,omitempty"`
 	UpdateAuthor     *UserDetailScheme             `json:"updateAuthor,omitempty"`
-	Created          string                        `json:"created,omitempty"`
+	Comment          string                        `json:"comment,omitempty"`
 	Updated          string                        `json:"updated,omitempty"`
 	Visibility       *IssueWorklogVisibilityScheme `json:"visibility,omitempty"`
 	Started          string                        `json:"started,omitempty"`
@@ -65,7 +78,16 @@ type IssueWorklogScheme struct {
 	IssueID          string                        `json:"issueId,omitempty"`
 }
 
-type IssueWorklogVisibilityScheme struct {
-	Type  string `json:"type,omitempty"`
-	Value string `json:"value,omitempty"`
+type IssueWorklogADFScheme struct {
+	Self             string                        `json:"self,omitempty"`
+	Author           *UserDetailScheme             `json:"author,omitempty"`
+	UpdateAuthor     *UserDetailScheme             `json:"updateAuthor,omitempty"`
+	Comment          *CommentNodeScheme            `json:"comment,omitempty"`
+	Updated          string                        `json:"updated,omitempty"`
+	Visibility       *IssueWorklogVisibilityScheme `json:"visibility,omitempty"`
+	Started          string                        `json:"started,omitempty"`
+	TimeSpent        string                        `json:"timeSpent,omitempty"`
+	TimeSpentSeconds int                           `json:"timeSpentSeconds,omitempty"`
+	ID               string                        `json:"id,omitempty"`
+	IssueID          string                        `json:"issueId,omitempty"`
 }

@@ -220,7 +220,7 @@ func Test_internalWorklogAdfImpl_Get(t *testing.T) {
 
 				client.On("Call",
 					&http.Request{},
-					&model.IssueWorklogScheme{}).
+					&model.IssueWorklogADFScheme{}).
 					Return(&model.ResponseScheme{}, nil)
 
 				fields.c = client
@@ -251,7 +251,7 @@ func Test_internalWorklogAdfImpl_Get(t *testing.T) {
 
 				client.On("Call",
 					&http.Request{},
-					&model.IssueWorklogScheme{}).
+					&model.IssueWorklogADFScheme{}).
 					Return(&model.ResponseScheme{}, nil)
 
 				fields.c = client
@@ -385,7 +385,7 @@ func Test_internalWorklogAdfImpl_Issue(t *testing.T) {
 
 				client.On("Call",
 					&http.Request{},
-					&model.IssueWorklogPageScheme{}).
+					&model.IssueWorklogADFPageScheme{}).
 					Return(&model.ResponseScheme{}, nil)
 
 				fields.c = client
@@ -418,7 +418,7 @@ func Test_internalWorklogAdfImpl_Issue(t *testing.T) {
 
 				client.On("Call",
 					&http.Request{},
-					&model.IssueWorklogPageScheme{}).
+					&model.IssueWorklogADFPageScheme{}).
 					Return(&model.ResponseScheme{}, nil)
 
 				fields.c = client
@@ -992,7 +992,7 @@ func Test_internalWorklogAdfImpl_Add(t *testing.T) {
 		},
 	})
 
-	payloadMocked := &model.WorklogPayloadSchemeV3{
+	payloadMocked := &model.WorklogADFPayloadScheme{
 		Comment: worklogCommentMocked,
 		Visibility: &model.IssueWorklogVisibilityScheme{
 			Type:  "group",
@@ -1011,7 +1011,7 @@ func Test_internalWorklogAdfImpl_Add(t *testing.T) {
 	type args struct {
 		ctx          context.Context
 		issueKeyOrID string
-		payload      *model.WorklogPayloadSchemeV3
+		payload      *model.WorklogADFPayloadScheme
 		options      *model.WorklogOptionsScheme
 	}
 
@@ -1056,7 +1056,7 @@ func Test_internalWorklogAdfImpl_Add(t *testing.T) {
 
 				client.On("Call",
 					&http.Request{},
-					&model.IssueWorklogScheme{}).
+					&model.IssueWorklogADFScheme{}).
 					Return(&model.ResponseScheme{}, nil)
 
 				fields.c = client
@@ -1098,7 +1098,7 @@ func Test_internalWorklogAdfImpl_Add(t *testing.T) {
 
 				client.On("Call",
 					&http.Request{},
-					&model.IssueWorklogScheme{}).
+					&model.IssueWorklogADFScheme{}).
 					Return(&model.ResponseScheme{}, nil)
 
 				fields.c = client
@@ -1120,7 +1120,7 @@ func Test_internalWorklogAdfImpl_Add(t *testing.T) {
 				client := mocks.NewClient(t)
 
 				client.On("TransformStructToReader",
-					(*model.WorklogPayloadSchemeV3)(nil)).
+					(*model.WorklogADFPayloadScheme)(nil)).
 					Return(bytes.NewReader([]byte{}), model.ErrNonPayloadPointerError)
 
 				fields.c = client
@@ -1216,7 +1216,7 @@ func Test_internalWorklogAdfImpl_Update(t *testing.T) {
 		},
 	})
 
-	payloadMocked := &model.WorklogPayloadSchemeV3{
+	payloadMocked := &model.WorklogADFPayloadScheme{
 		Comment: worklogCommentMocked,
 		Visibility: &model.IssueWorklogVisibilityScheme{
 			Type:  "group",
@@ -1235,7 +1235,7 @@ func Test_internalWorklogAdfImpl_Update(t *testing.T) {
 	type args struct {
 		ctx                     context.Context
 		issueKeyOrID, worklogId string
-		payload                 *model.WorklogPayloadSchemeV3
+		payload                 *model.WorklogADFPayloadScheme
 		options                 *model.WorklogOptionsScheme
 	}
 
@@ -1281,7 +1281,7 @@ func Test_internalWorklogAdfImpl_Update(t *testing.T) {
 
 				client.On("Call",
 					&http.Request{},
-					&model.IssueWorklogScheme{}).
+					&model.IssueWorklogADFScheme{}).
 					Return(&model.ResponseScheme{}, nil)
 
 				fields.c = client
@@ -1324,7 +1324,7 @@ func Test_internalWorklogAdfImpl_Update(t *testing.T) {
 
 				client.On("Call",
 					&http.Request{},
-					&model.IssueWorklogScheme{}).
+					&model.IssueWorklogADFScheme{}).
 					Return(&model.ResponseScheme{}, nil)
 
 				fields.c = client
@@ -1368,7 +1368,7 @@ func Test_internalWorklogAdfImpl_Update(t *testing.T) {
 				client := mocks.NewClient(t)
 
 				client.On("TransformStructToReader",
-					(*model.WorklogPayloadSchemeV3)(nil)).
+					(*model.WorklogADFPayloadScheme)(nil)).
 					Return(bytes.NewReader([]byte{}), model.ErrNonPayloadPointerError)
 
 				fields.c = client

@@ -125,8 +125,7 @@ func Test_internalWorkflowSchemeImpl_Gets(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			newService, err := NewWorkflowSchemeService(testCase.fields.c, testCase.fields.version)
-			assert.NoError(t, err)
+			newService := NewWorkflowSchemeService(testCase.fields.c, testCase.fields.version, nil)
 
 			gotResult, gotResponse, err := newService.Gets(testCase.args.ctx, testCase.args.startAt, testCase.args.maxResults)
 
@@ -273,8 +272,7 @@ func Test_internalWorkflowSchemeImpl_Get(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			newService, err := NewWorkflowSchemeService(testCase.fields.c, testCase.fields.version)
-			assert.NoError(t, err)
+			newService := NewWorkflowSchemeService(testCase.fields.c, testCase.fields.version, nil)
 
 			gotResult, gotResponse, err := newService.Get(testCase.args.ctx, testCase.args.schemeId, testCase.args.returnDraftIfExists)
 
@@ -417,8 +415,7 @@ func Test_internalWorkflowSchemeImpl_Delete(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			newService, err := NewWorkflowSchemeService(testCase.fields.c, testCase.fields.version)
-			assert.NoError(t, err)
+			newService := NewWorkflowSchemeService(testCase.fields.c, testCase.fields.version, nil)
 
 			gotResponse, err := newService.Delete(testCase.args.ctx, testCase.args.schemeId)
 
@@ -560,8 +557,7 @@ func Test_internalWorkflowSchemeImpl_Associations(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			newService, err := NewWorkflowSchemeService(testCase.fields.c, testCase.fields.version)
-			assert.NoError(t, err)
+			newService := NewWorkflowSchemeService(testCase.fields.c, testCase.fields.version, nil)
 
 			gotResult, gotResponse, err := newService.Associations(testCase.args.ctx, testCase.args.projectIds)
 
@@ -735,8 +731,7 @@ func Test_internalWorkflowSchemeImpl_Assign(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			newService, err := NewWorkflowSchemeService(testCase.fields.c, testCase.fields.version)
-			assert.NoError(t, err)
+			newService := NewWorkflowSchemeService(testCase.fields.c, testCase.fields.version, nil)
 
 			gotResponse, err := newService.Assign(testCase.args.ctx, testCase.args.schemeId, testCase.args.projectId)
 
@@ -903,8 +898,7 @@ func Test_internalWorkflowSchemeImpl_Update(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			newService, err := NewWorkflowSchemeService(testCase.fields.c, testCase.fields.version)
-			assert.NoError(t, err)
+			newService := NewWorkflowSchemeService(testCase.fields.c, testCase.fields.version, nil)
 
 			gotResult, gotResponse, err := newService.Update(testCase.args.ctx, testCase.args.schemeId, testCase.args.payload)
 
@@ -1059,8 +1053,7 @@ func Test_internalWorkflowSchemeImpl_Create(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			newService, err := NewWorkflowSchemeService(testCase.fields.c, testCase.fields.version)
-			assert.NoError(t, err)
+			newService := NewWorkflowSchemeService(testCase.fields.c, testCase.fields.version, nil)
 
 			gotResult, gotResponse, err := newService.Create(testCase.args.ctx, testCase.args.payload)
 
@@ -1117,21 +1110,8 @@ func Test_NewWorkflowSchemeService(t *testing.T) {
 	}
 	for _, testCase := range testCases {
 		t.Run(testCase.name, func(t *testing.T) {
-			got, err := NewWorkflowSchemeService(testCase.args.client, testCase.args.version)
-
-			if testCase.wantErr {
-
-				if err != nil {
-					t.Logf("error returned: %v", err.Error())
-				}
-
-				assert.EqualError(t, err, testCase.err.Error())
-
-			} else {
-
-				assert.NoError(t, err)
-				assert.NotEqual(t, got, nil)
-			}
+			got := NewWorkflowSchemeService(testCase.args.client, testCase.args.version, nil)
+			assert.NotEqual(t, got, nil)
 		})
 	}
 }

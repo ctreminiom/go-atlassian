@@ -114,6 +114,56 @@ type WorkflowSchemeConnector interface {
 	Assign(ctx context.Context, schemeId, projectId string) (*model.ResponseScheme, error)
 }
 
+// WorkflowSchemeIssueTypeConnector represents the workflows scheme issue type endpoints.
+//
+// Use it to search, get, create, delete, and change workflow issue types.
+type WorkflowSchemeIssueTypeConnector interface {
+
+	// Get returns the issue type-workflow mapping for an issue type in a workflow scheme.
+	//
+	// GET /rest/api/{2-3}/workflowscheme/{id}/issuetype/{issueType}
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/workflow/scheme/issue-type#get-workflow-for-issue-type-in-workflow-scheme
+	Get(ctx context.Context, schemeID int, issueTypeID string, returnDraft bool) (*model.IssueTypeWorkflowMappingScheme, *model.ResponseScheme, error)
+
+	// Set sets the workflow for an issue type in a workflow scheme.
+	//
+	// Note that active workflow schemes cannot be edited.
+	//
+	// If the workflow scheme is active, set updateDraftIfNeeded to true in the request body and a draft workflow scheme
+	//
+	// is created or updated with the new issue type-workflow mapping.
+	//
+	// The draft workflow scheme can be published in Jira.
+	//
+	// PUT /rest/api/{2-3}/workflowscheme/{id}/issuetype/{issueType}
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/workflow/scheme/issue-type#set-workflow-for-issue-type-in-workflow-scheme
+	Set(ctx context.Context, schemeID int, issueTypeID string, payload *model.IssueTypeWorkflowPayloadScheme) (*model.WorkflowSchemeScheme, *model.ResponseScheme, error)
+
+	// Delete deletes the issue type-workflow mapping for an issue type in a workflow scheme.
+	//
+	// Note that active workflow schemes cannot be edited.
+	//
+	// If the workflow scheme is active, set updateDraftIfNeeded to true and a draft workflow scheme is created or
+	//
+	// updated with the issue type-workflow mapping deleted.
+	//
+	// The draft workflow scheme can be published in Jira.
+	//
+	// DELETE /rest/api/{2-3}/workflowscheme/{id}/issuetype/{issueType}
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/workflow/scheme/issue-type#delete-workflow-for-issue-type-in-workflow-scheme
+	Delete(ctx context.Context, schemeID int, issueTypeID string, updateDraft bool) (*model.WorkflowSchemeScheme, *model.ResponseScheme, error)
+
+	// Mapping returns the workflow-issue type mappings for a workflow scheme.
+	//
+	// GET /rest/api/{2-3}/workflowscheme/{id}/workflow
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/workflow/scheme/issue-type#get-issue-types-for-workflows-in-workflow-scheme
+	Mapping(ctx context.Context, schemeID int, workflowName string, returnDraft bool) ([]*model.IssueTypesWorkflowMappingScheme, *model.ResponseScheme, error)
+}
+
 // WorkflowStatusConnector represents the workflows statuses.
 //
 // Use it to search, get, create, delete, and change statuses.

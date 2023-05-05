@@ -207,7 +207,7 @@ func (i *internalWorkflowSchemeIssueTypeImpl) Mapping(ctx context.Context, schem
 	}
 
 	var mapping []*model.IssueTypesWorkflowMappingScheme
-	response, err := i.c.Call(request, mapping)
+	response, err := i.c.Call(request, &mapping)
 	if err != nil {
 		return nil, response, err
 	}

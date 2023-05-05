@@ -332,10 +332,10 @@ func New(httpClient common.HttpClient, site string) (*Client, error) {
 		return nil, err
 	}
 
-	workflowScheme, err := internal.NewWorkflowSchemeService(client, "3")
-	if err != nil {
-		return nil, err
-	}
+	workflowScheme := internal.NewWorkflowSchemeService(
+		client,
+		"3",
+		internal.NewWorkflowSchemeIssueTypeService(client, "3"))
 
 	workflowStatus, err := internal.NewWorkflowStatusService(client, "3")
 	if err != nil {

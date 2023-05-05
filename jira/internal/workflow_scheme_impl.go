@@ -12,19 +12,17 @@ import (
 	"strings"
 )
 
-func NewWorkflowSchemeService(client service.Client, version string) (*WorkflowSchemeService, error) {
-
-	if version == "" {
-		return nil, model.ErrNoVersionProvided
-	}
+func NewWorkflowSchemeService(client service.Client, version string, issueType *WorkflowSchemeIssueTypeService) *WorkflowSchemeService {
 
 	return &WorkflowSchemeService{
 		internalClient: &internalWorkflowSchemeImpl{c: client, version: version},
-	}, nil
+		IssueType:      issueType,
+	}
 }
 
 type WorkflowSchemeService struct {
 	internalClient jira.WorkflowSchemeConnector
+	IssueType      *WorkflowSchemeIssueTypeService
 }
 
 // Gets returns a paginated list of all workflow schemes, not including draft workflow schemes.

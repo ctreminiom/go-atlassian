@@ -49,7 +49,11 @@ func New(httpClient common.HttpClient) (*Client, error) {
 		Schema: internal.NewSCIMSchemaService(client),
 	}
 
-	client.Organization = internal.NewOrganizationService(client, internal.NewOrganizationPolicyService(client))
+	client.Organization = internal.NewOrganizationService(
+		client,
+		internal.NewOrganizationPolicyService(client),
+		internal.NewOrganizationDirectoryService(client))
+
 	client.User = internal.NewUserService(client, internal.NewUserTokenService(client))
 
 	return client, nil

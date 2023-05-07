@@ -183,3 +183,24 @@ type OrganizationEventActionModelAttributesScheme struct {
 	DisplayName      string `json:"displayName,omitempty"`
 	GroupDisplayName string `json:"groupDisplayName,omitempty"`
 }
+
+type UserProductAccessScheme struct {
+	Data *UserProductAccessDataScheme `json:"data,omitempty"`
+}
+
+type UserProductAccessDataScheme struct {
+	ProductAccess []*UserProductLastActiveScheme `json:"product_access,omitempty"`
+	AddedToOrg    string                         `json:"added_to_org,omitempty"`
+}
+
+type UserProductLastActiveScheme struct {
+	Id         string `json:"id,omitempty"`
+	Key        string `json:"key,omitempty"`
+	Name       string `json:"name,omitempty"`
+	Url        string `json:"url,omitempty"`
+	LastActive string `json:"last_active,omitempty"`
+}
+
+type GenericActionSuccessScheme struct {
+	Message string `json:"message,omitempty"`
+}

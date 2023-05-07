@@ -190,7 +190,7 @@ type UserProductAccessScheme struct {
 
 type UserProductAccessDataScheme struct {
 	ProductAccess []*UserProductLastActiveScheme `json:"product_access,omitempty"`
-	AddedToOrg    time.Time                      `json:"added_to_org,omitempty"`
+	AddedToOrg    string                         `json:"added_to_org,omitempty"`
 }
 
 type UserProductLastActiveScheme struct {

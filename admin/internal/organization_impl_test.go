@@ -90,7 +90,7 @@ func Test_internalOrganizationImpl_Gets(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			service := NewOrganizationService(testCase.fields.c, nil)
+			service := NewOrganizationService(testCase.fields.c, nil, nil)
 
 			gotResult, gotResponse, err := service.Gets(testCase.args.ctx, testCase.args.cursor)
 
@@ -201,7 +201,7 @@ func Test_internalOrganizationImpl_Get(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			service := NewOrganizationService(testCase.fields.c, nil)
+			service := NewOrganizationService(testCase.fields.c, nil, nil)
 
 			gotResult, gotResponse, err := service.Get(testCase.args.ctx, testCase.args.organizationID)
 
@@ -314,7 +314,7 @@ func Test_internalOrganizationImpl_Users(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			service := NewOrganizationService(testCase.fields.c, nil)
+			service := NewOrganizationService(testCase.fields.c, nil, nil)
 
 			gotResult, gotResponse, err := service.Users(testCase.args.ctx, testCase.args.organizationID, testCase.args.cursor)
 
@@ -427,7 +427,7 @@ func Test_internalOrganizationImpl_Domains(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			service := NewOrganizationService(testCase.fields.c, nil)
+			service := NewOrganizationService(testCase.fields.c, nil, nil)
 
 			gotResult, gotResponse, err := service.Domains(testCase.args.ctx, testCase.args.organizationID, testCase.args.cursor)
 
@@ -550,7 +550,7 @@ func Test_internalOrganizationImpl_Domain(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			service := NewOrganizationService(testCase.fields.c, nil)
+			service := NewOrganizationService(testCase.fields.c, nil, nil)
 
 			gotResult, gotResponse, err := service.Domain(testCase.args.ctx, testCase.args.organizationID, testCase.args.domainID)
 
@@ -687,7 +687,7 @@ func Test_internalOrganizationImpl_Events(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			service := NewOrganizationService(testCase.fields.c, nil)
+			service := NewOrganizationService(testCase.fields.c, nil, nil)
 
 			gotResult, gotResponse, err := service.Events(testCase.args.ctx, testCase.args.organizationID,
 				testCase.args.options, testCase.args.cursor)
@@ -811,7 +811,7 @@ func Test_internalOrganizationImpl_Event(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			service := NewOrganizationService(testCase.fields.c, nil)
+			service := NewOrganizationService(testCase.fields.c, nil, nil)
 
 			gotResult, gotResponse, err := service.Event(testCase.args.ctx, testCase.args.organizationID, testCase.args.eventID)
 
@@ -912,7 +912,7 @@ func Test_internalOrganizationImpl_Actions(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			service := NewOrganizationService(testCase.fields.c, nil)
+			service := NewOrganizationService(testCase.fields.c, nil, nil)
 
 			gotResult, gotResponse, err := service.Actions(testCase.args.ctx, testCase.args.organizationID)
 

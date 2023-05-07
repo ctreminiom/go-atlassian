@@ -12,13 +12,14 @@ import (
 	"strings"
 )
 
-func NewOrganizationService(client service.Client, policy *OrganizationPolicyService) *OrganizationService {
-	return &OrganizationService{internalClient: &internalOrganizationImpl{c: client}, Policy: policy}
+func NewOrganizationService(client service.Client, policy *OrganizationPolicyService, directory *OrganizationDirectoryService) *OrganizationService {
+	return &OrganizationService{internalClient: &internalOrganizationImpl{c: client}, Policy: policy, Directory: directory}
 }
 
 type OrganizationService struct {
 	internalClient admin.OrganizationConnector
 	Policy         *OrganizationPolicyService
+	Directory      *OrganizationDirectoryService
 }
 
 // Gets returns a list of your organizations (based on your API key).

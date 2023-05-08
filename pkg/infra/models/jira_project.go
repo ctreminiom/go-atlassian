@@ -19,19 +19,19 @@ const (
 )
 
 type ProjectPayloadScheme struct {
-	NotificationScheme  int    `json:"notificationScheme"`
-	Description         string `json:"description"`
-	LeadAccountID       string `json:"leadAccountId"`
-	URL                 string `json:"url"`
-	ProjectTemplateKey  string `json:"projectTemplateKey"`
-	AvatarID            int    `json:"avatarId"`
-	IssueSecurityScheme int    `json:"issueSecurityScheme"`
-	Name                string `json:"name"`
-	PermissionScheme    int    `json:"permissionScheme"`
-	AssigneeType        string `json:"assigneeType"`
-	ProjectTypeKey      string `json:"projectTypeKey"`
-	Key                 string `json:"key"`
-	CategoryID          int    `json:"categoryId"`
+	NotificationScheme  int    `json:"notificationScheme,omitempty"`
+	Description         string `json:"description,omitempty"`
+	LeadAccountID       string `json:"leadAccountId,omitempty"`
+	URL                 string `json:"url,omitempty"`
+	ProjectTemplateKey  string `json:"projectTemplateKey,omitempty"`
+	AvatarID            int    `json:"avatarId,omitempty"`
+	IssueSecurityScheme int    `json:"issueSecurityScheme,omitempty"`
+	Name                string `json:"name,omitempty"`
+	PermissionScheme    int    `json:"permissionScheme,omitempty"`
+	AssigneeType        string `json:"assigneeType,omitempty"`
+	ProjectTypeKey      string `json:"projectTypeKey,omitempty"`
+	Key                 string `json:"key,omitempty"`
+	CategoryID          int    `json:"categoryId,omitempty"`
 }
 
 type NewProjectCreatedScheme struct {

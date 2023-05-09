@@ -19,7 +19,7 @@ type ScreenConnector interface {
 	// GET /rest/api/{2-3}/screens
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/screens#get-screens
-	Gets(ctx context.Context, screenIds []int, startAt, maxResults int) (*model.ScreenSearchPageScheme, *model.ResponseScheme, error)
+	Gets(ctx context.Context, options *model.ScreenParamsScheme, startAt, maxResults int) (*model.ScreenSearchPageScheme, *model.ResponseScheme, error)
 
 	// Create creates a screen with a default field tab
 	//

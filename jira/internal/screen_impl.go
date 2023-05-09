@@ -44,8 +44,8 @@ func (s *ScreenService) Fields(ctx context.Context, fieldId string, startAt, max
 // GET /rest/api/{2-3}/screens
 //
 // https://docs.go-atlassian.io/jira-software-cloud/screens#get-screens
-func (s *ScreenService) Gets(ctx context.Context, screenIds []int, startAt, maxResults int) (*model.ScreenSearchPageScheme, *model.ResponseScheme, error) {
-	return s.internalClient.Gets(ctx, screenIds, startAt, maxResults)
+func (s *ScreenService) Gets(ctx context.Context, options *model.ScreenParamsScheme, startAt, maxResults int) (*model.ScreenSearchPageScheme, *model.ResponseScheme, error) {
+	return s.internalClient.Gets(ctx, options, startAt, maxResults)
 }
 
 // Create creates a screen with a default field tab
@@ -127,14 +127,29 @@ func (i *internalScreenImpl) Fields(ctx context.Context, fieldId string, startAt
 	return page, response, nil
 }
 
-func (i *internalScreenImpl) Gets(ctx context.Context, screenIds []int, startAt, maxResults int) (*model.ScreenSearchPageScheme, *model.ResponseScheme, error) {
+func (i *internalScreenImpl) Gets(ctx context.Context, options *model.ScreenParamsScheme, startAt, maxResults int) (*model.ScreenSearchPageScheme, *model.ResponseScheme, error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
 	params.Add("maxResults", strconv.Itoa(maxResults))
 
-	for _, screenID := range screenIds {
-		params.Add("id", strconv.Itoa(screenID))
+	if options != nil {
+
+		for _, id := range options.IDs {
+			params.Add("id", strconv.Itoa(id))
+		}
+
+		if options.QueryString != "" {
+			params.Add("queryString", options.QueryString)
+		}
+
+		for _, scope := range options.Scope {
+			params.Add("scope", scope)
+		}
+
+		if options.OrderBy != "" {
+			params.Add("orderBy", options.OrderBy)
+		}
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/screens?%v", i.version, params.Encode())

@@ -174,7 +174,7 @@ func Test_internalScreenImpl_Gets(t *testing.T) {
 
 	type args struct {
 		ctx                 context.Context
-		screenIds           []int
+		options             *model.ScreenParamsScheme
 		startAt, maxResults int
 	}
 
@@ -190,8 +190,13 @@ func Test_internalScreenImpl_Gets(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:        context.TODO(),
-				screenIds:  []int{10012, 10002},
+				ctx: context.TODO(),
+				options: &model.ScreenParamsScheme{
+					IDs:         []int{10002, 10002},
+					QueryString: "Default DUMMY Screen",
+					Scope:       []string{"GLOBAL", "TEMPLATE", "PROJECT"},
+					OrderBy:     "name",
+				},
 				startAt:    100,
 				maxResults: 50,
 			},
@@ -202,7 +207,7 @@ func Test_internalScreenImpl_Gets(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"rest/api/3/screens?id=10012&id=10002&maxResults=50&startAt=100",
+					"rest/api/3/screens?id=10002&id=10002&maxResults=50&orderBy=name&queryString=Default+DUMMY+Screen&scope=GLOBAL&scope=TEMPLATE&scope=PROJECT&startAt=100",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -221,8 +226,13 @@ func Test_internalScreenImpl_Gets(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:        context.TODO(),
-				screenIds:  []int{10012, 10002},
+				ctx: context.TODO(),
+				options: &model.ScreenParamsScheme{
+					IDs:         []int{10002, 10002},
+					QueryString: "Default DUMMY Screen",
+					Scope:       []string{"GLOBAL", "TEMPLATE", "PROJECT"},
+					OrderBy:     "name",
+				},
 				startAt:    100,
 				maxResults: 50,
 			},
@@ -233,7 +243,7 @@ func Test_internalScreenImpl_Gets(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"rest/api/2/screens?id=10012&id=10002&maxResults=50&startAt=100",
+					"rest/api/2/screens?id=10002&id=10002&maxResults=50&orderBy=name&queryString=Default+DUMMY+Screen&scope=GLOBAL&scope=TEMPLATE&scope=PROJECT&startAt=100",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -252,8 +262,13 @@ func Test_internalScreenImpl_Gets(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:        context.TODO(),
-				screenIds:  []int{10012, 10002},
+				ctx: context.TODO(),
+				options: &model.ScreenParamsScheme{
+					IDs:         []int{10002, 10002},
+					QueryString: "Default DUMMY Screen",
+					Scope:       []string{"GLOBAL", "TEMPLATE", "PROJECT"},
+					OrderBy:     "name",
+				},
 				startAt:    100,
 				maxResults: 50,
 			},
@@ -264,7 +279,7 @@ func Test_internalScreenImpl_Gets(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"rest/api/3/screens?id=10012&id=10002&maxResults=50&startAt=100",
+					"rest/api/3/screens?id=10002&id=10002&maxResults=50&orderBy=name&queryString=Default+DUMMY+Screen&scope=GLOBAL&scope=TEMPLATE&scope=PROJECT&startAt=100",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -285,7 +300,7 @@ func Test_internalScreenImpl_Gets(t *testing.T) {
 			resolutionService, err := NewScreenService(testCase.fields.c, testCase.fields.version, nil, nil)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := resolutionService.Gets(testCase.args.ctx, testCase.args.screenIds, testCase.args.startAt,
+			gotResult, gotResponse, err := resolutionService.Gets(testCase.args.ctx, testCase.args.options, testCase.args.startAt,
 				testCase.args.maxResults)
 
 			if testCase.wantErr {

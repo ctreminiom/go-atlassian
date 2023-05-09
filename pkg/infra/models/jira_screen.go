@@ -1,5 +1,22 @@
 package models
 
+type ScreenParamsScheme struct {
+
+	// The list of screen IDs
+	IDs []int
+
+	// String used to perform a case-insensitive partial match with screen name.
+	QueryString string
+
+	// The scope filter string. To filter by multiple scope,
+	Scope []string
+
+	// Order the results by a field:
+	// 1. id Sorts by screen ID.
+	// 2. name Sorts by screen name.
+	OrderBy string
+}
+
 type ScreenScheme struct {
 	ID          int                            `json:"id,omitempty"`
 	Name        string                         `json:"name,omitempty"`

@@ -52,18 +52,20 @@ func New(httpClient common.HttpClient, site string) (*Client, error) {
 	client.Board = boardService
 	client.Epic = epicService
 	client.Sprint = sprintService
+	client.Backlog = internal.NewBoardBacklogService(client, "1.0")
 	client.Auth = internal.NewAuthenticationService(client)
 
 	return client, nil
 }
 
 type Client struct {
-	HTTP   common.HttpClient
-	Site   *url.URL
-	Auth   common.Authentication
-	Board  *internal.BoardService
-	Epic   *internal.EpicService
-	Sprint *internal.SprintService
+	HTTP    common.HttpClient
+	Site    *url.URL
+	Auth    common.Authentication
+	Board   *internal.BoardService
+	Backlog *internal.BoardBacklogService
+	Epic    *internal.EpicService
+	Sprint  *internal.SprintService
 }
 
 func (c *Client) NewFormRequest(ctx context.Context, method, apiEndpoint, contentType string, payload io.Reader) (*http.Request, error) {

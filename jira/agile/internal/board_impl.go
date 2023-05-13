@@ -30,7 +30,6 @@ type BoardService struct {
 // Get returns the board for the given board ID.
 // This board will only be returned if the user has permission to view it.
 //
-//
 // Admins without the view permission will see the board as a private one,
 //
 // so will see only a subset of the board's data (board location for instance).
@@ -53,7 +52,7 @@ func (b *BoardService) Create(ctx context.Context, payload *model.BoardPayloadSc
 
 // Filter returns any boards which use the provided filter id.
 //
-// This method can be executed by users without a valid software license in order
+// # This method can be executed by users without a valid software license in order
 //
 // to find which boards are using a particular filter.
 //

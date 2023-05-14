@@ -1,7 +1,7 @@
 package models
 
 type AttachmentScheme struct {
-	ID                   string                   `json:"id,omitempty"`
+	ID                   int                      `json:"id,omitempty"`
 	Status               string                   `json:"status,omitempty"`
 	Title                string                   `json:"title,omitempty"`
 	PageID               string                   `json:"pageId,omitempty"`

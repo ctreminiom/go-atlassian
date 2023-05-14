@@ -1,18 +1,19 @@
 package models
 
 type AttachmentScheme struct {
-	ID                   int                      `json:"id,omitempty"`
-	Status               string                   `json:"status,omitempty"`
-	Title                string                   `json:"title,omitempty"`
-	PageID               string                   `json:"pageId,omitempty"`
+	ID                   string                   `json:"id,omitempty"`
 	BlogPostID           string                   `json:"blogPostId,omitempty"`
 	CustomContentID      string                   `json:"customContentId,omitempty"`
-	MediaType            string                   `json:"mediaType,omitempty"`
-	MediaTypeDescription string                   `json:"mediaTypeDescription,omitempty"`
 	Comment              string                   `json:"comment,omitempty"`
-	FileSize             int                      `json:"fileSize,omitempty"`
+	MediaTypeDescription string                   `json:"mediaTypeDescription,omitempty"`
 	WebuiLink            string                   `json:"webuiLink,omitempty"`
 	DownloadLink         string                   `json:"downloadLink,omitempty"`
+	Title                string                   `json:"title,omitempty"`
+	Status               string                   `json:"status,omitempty"`
+	FileSize             int                      `json:"fileSize,omitempty"`
+	MediaType            string                   `json:"mediaType,omitempty"`
+	PageID               int                      `json:"pageId,omitempty"`
+	FileID               string                   `json:"fileId,omitempty"`
 	Version              *AttachmentVersionScheme `json:"version,omitempty"`
 }
 

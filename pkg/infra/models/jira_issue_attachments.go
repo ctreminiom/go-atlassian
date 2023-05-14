@@ -5,7 +5,7 @@ type AttachmentSettingScheme struct {
 	UploadLimit int  `json:"uploadLimit,omitempty"`
 }
 
-type AttachmentScheme struct {
+type IssueAttachmentScheme struct {
 	Self      string      `json:"self,omitempty"`
 	ID        string      `json:"id,omitempty"`
 	Filename  string      `json:"filename,omitempty"`
@@ -17,7 +17,7 @@ type AttachmentScheme struct {
 	Thumbnail string      `json:"thumbnail,omitempty"`
 }
 
-type AttachmentMetadataScheme struct {
+type IssueAttachmentMetadataScheme struct {
 	ID        int         `json:"id,omitempty"`
 	Self      string      `json:"self,omitempty"`
 	Filename  string      `json:"filename,omitempty"`
@@ -29,15 +29,15 @@ type AttachmentMetadataScheme struct {
 	Thumbnail string      `json:"thumbnail,omitempty"`
 }
 
-type AttachmentHumanMetadataScheme struct {
-	ID              int                                   `json:"id,omitempty"`
-	Name            string                                `json:"name,omitempty"`
-	Entries         []*AttachmentHumanMetadataEntryScheme `json:"entries,omitempty"`
-	TotalEntryCount int                                   `json:"totalEntryCount,omitempty"`
-	MediaType       string                                `json:"mediaType,omitempty"`
+type IssueAttachmentHumanMetadataScheme struct {
+	ID              int                                        `json:"id,omitempty"`
+	Name            string                                     `json:"name,omitempty"`
+	Entries         []*IssueAttachmentHumanMetadataEntryScheme `json:"entries,omitempty"`
+	TotalEntryCount int                                        `json:"totalEntryCount,omitempty"`
+	MediaType       string                                     `json:"mediaType,omitempty"`
 }
 
-type AttachmentHumanMetadataEntryScheme struct {
+type IssueAttachmentHumanMetadataEntryScheme struct {
 	Path      string `json:"path,omitempty"`
 	Index     int    `json:"index,omitempty"`
 	Size      string `json:"size,omitempty"`

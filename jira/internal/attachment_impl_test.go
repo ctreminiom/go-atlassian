@@ -184,7 +184,7 @@ func Test_internalIssueAttachmentServiceImpl_Metadata(t *testing.T) {
 
 				client.On("Call",
 					&http.Request{},
-					&model.AttachmentMetadataScheme{}).
+					&model.IssueAttachmentMetadataScheme{}).
 					Return(&model.ResponseScheme{}, nil)
 
 				fields.c = client
@@ -211,7 +211,7 @@ func Test_internalIssueAttachmentServiceImpl_Metadata(t *testing.T) {
 
 				client.On("Call",
 					&http.Request{},
-					&model.AttachmentMetadataScheme{}).
+					&model.IssueAttachmentMetadataScheme{}).
 					Return(&model.ResponseScheme{}, nil)
 
 				fields.c = client
@@ -330,7 +330,7 @@ func Test_internalIssueAttachmentServiceImpl_Human(t *testing.T) {
 
 				client.On("Call",
 					&http.Request{},
-					&model.AttachmentHumanMetadataScheme{}).
+					&model.IssueAttachmentHumanMetadataScheme{}).
 					Return(&model.ResponseScheme{}, nil)
 
 				fields.c = client
@@ -357,7 +357,7 @@ func Test_internalIssueAttachmentServiceImpl_Human(t *testing.T) {
 
 				client.On("Call",
 					&http.Request{},
-					&model.AttachmentHumanMetadataScheme{}).
+					&model.IssueAttachmentHumanMetadataScheme{}).
 					Return(&model.ResponseScheme{}, nil)
 
 				fields.c = client

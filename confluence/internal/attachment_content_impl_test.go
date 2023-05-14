@@ -118,7 +118,7 @@ func Test_internalContentAttachmentImpl_Gets(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			attachmentService := NewAttachmentService(testCase.fields.c)
+			attachmentService := NewContentAttachmentService(testCase.fields.c)
 
 			gotResult, gotResponse, err := attachmentService.Gets(testCase.args.ctx, testCase.args.contentID, testCase.args.startAt,
 				testCase.args.maxResults, testCase.args.options)
@@ -269,7 +269,7 @@ func Test_internalContentAttachmentImpl_CreateOrUpdate(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			attachmentService := NewAttachmentService(testCase.fields.c)
+			attachmentService := NewContentAttachmentService(testCase.fields.c)
 
 			gotResult, gotResponse, err := attachmentService.CreateOrUpdate(testCase.args.ctx, testCase.args.attachmentID,
 				testCase.args.status, testCase.args.fileName, testCase.args.file)
@@ -420,7 +420,7 @@ func Test_internalContentAttachmentImpl_Create(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			attachmentService := NewAttachmentService(testCase.fields.c)
+			attachmentService := NewContentAttachmentService(testCase.fields.c)
 
 			gotResult, gotResponse, err := attachmentService.Create(testCase.args.ctx, testCase.args.attachmentID,
 				testCase.args.status, testCase.args.fileName, testCase.args.file)

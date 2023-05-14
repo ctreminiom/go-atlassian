@@ -43,7 +43,7 @@ func (i *IssueAttachmentService) Settings(ctx context.Context) (*model.Attachmen
 // GET /rest/api/{2-3}/attachment/{id}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/attachments#get-attachment-metadata
-func (i *IssueAttachmentService) Metadata(ctx context.Context, attachmentId string) (*model.AttachmentMetadataScheme, *model.ResponseScheme, error) {
+func (i *IssueAttachmentService) Metadata(ctx context.Context, attachmentId string) (*model.IssueAttachmentMetadataScheme, *model.ResponseScheme, error) {
 	return i.internalClient.Metadata(ctx, attachmentId)
 }
 
@@ -62,10 +62,10 @@ func (i *IssueAttachmentService) Delete(ctx context.Context, attachmentId string
 //
 // GET /rest/api/{2-3}/attachment/{id}/expand/human
 //
-// Experimental Endpoint
+// # Experimental Endpoint
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/attachments#get-all-metadata-for-an-expanded-attachment
-func (i *IssueAttachmentService) Human(ctx context.Context, attachmentId string) (*model.AttachmentHumanMetadataScheme, *model.ResponseScheme, error) {
+func (i *IssueAttachmentService) Human(ctx context.Context, attachmentId string) (*model.IssueAttachmentHumanMetadataScheme, *model.ResponseScheme, error) {
 	return i.internalClient.Human(ctx, attachmentId)
 }
 
@@ -137,7 +137,7 @@ func (i *internalIssueAttachmentServiceImpl) Settings(ctx context.Context) (*mod
 	return settings, response, nil
 }
 
-func (i *internalIssueAttachmentServiceImpl) Metadata(ctx context.Context, attachmentId string) (*model.AttachmentMetadataScheme, *model.ResponseScheme, error) {
+func (i *internalIssueAttachmentServiceImpl) Metadata(ctx context.Context, attachmentId string) (*model.IssueAttachmentMetadataScheme, *model.ResponseScheme, error) {
 
 	if attachmentId == "" {
 		return nil, nil, model.ErrNoAttachmentIDError
@@ -150,7 +150,7 @@ func (i *internalIssueAttachmentServiceImpl) Metadata(ctx context.Context, attac
 		return nil, nil, err
 	}
 
-	metadata := new(model.AttachmentMetadataScheme)
+	metadata := new(model.IssueAttachmentMetadataScheme)
 	response, err := i.c.Call(request, metadata)
 	if err != nil {
 		return nil, response, err
@@ -175,7 +175,7 @@ func (i *internalIssueAttachmentServiceImpl) Delete(ctx context.Context, attachm
 	return i.c.Call(request, nil)
 }
 
-func (i *internalIssueAttachmentServiceImpl) Human(ctx context.Context, attachmentId string) (*model.AttachmentHumanMetadataScheme, *model.ResponseScheme, error) {
+func (i *internalIssueAttachmentServiceImpl) Human(ctx context.Context, attachmentId string) (*model.IssueAttachmentHumanMetadataScheme, *model.ResponseScheme, error) {
 
 	if attachmentId == "" {
 		return nil, nil, model.ErrNoAttachmentIDError
@@ -188,7 +188,7 @@ func (i *internalIssueAttachmentServiceImpl) Human(ctx context.Context, attachme
 		return nil, nil, err
 	}
 
-	metadata := new(model.AttachmentHumanMetadataScheme)
+	metadata := new(model.IssueAttachmentHumanMetadataScheme)
 	response, err := i.c.Call(request, metadata)
 	if err != nil {
 		return nil, response, err

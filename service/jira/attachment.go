@@ -20,7 +20,7 @@ type AttachmentConnector interface {
 	// GET /rest/api/{2-3}/attachment/{id}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/attachments#get-attachment-metadata
-	Metadata(ctx context.Context, attachmentId string) (*model.AttachmentMetadataScheme, *model.ResponseScheme, error)
+	Metadata(ctx context.Context, attachmentId string) (*model.IssueAttachmentMetadataScheme, *model.ResponseScheme, error)
 
 	// Delete deletes an attachment from an issue.
 	//
@@ -38,7 +38,7 @@ type AttachmentConnector interface {
 	// Experimental Endpoint
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/attachments#get-all-metadata-for-an-expanded-attachment
-	Human(ctx context.Context, attachmentId string) (*model.AttachmentHumanMetadataScheme, *model.ResponseScheme, error)
+	Human(ctx context.Context, attachmentId string) (*model.IssueAttachmentHumanMetadataScheme, *model.ResponseScheme, error)
 
 	// Add adds one attachment to an issue. Attachments are posted as multipart/form-data (RFC 1867).
 	//

@@ -41,6 +41,9 @@ var (
 	ErrNoLabelIDError                      = errors.New("confluence: no label id set")
 	ErrNoCQLError                          = errors.New("confluence: no CQL query set")
 	ErrNoContentTypeError                  = errors.New("confluence: no content type set")
+	ErrNoEntityIDError                     = errors.New("confluence: no entity id set")
+	ValidEntityValues                      = []string{"blogposts", "custom-content", "labels", "pages"}
+	ErrNoEntityValue                       = errors.New("confluence: no valid entity id set")
 	ErrInvalidContentTypeError             = errors.New("confluence: invalid content type: (page, comment, attachment)")
 	ValidContentTypes                      = []string{"page", "comment", "attachment"}
 	ErrNoContentLabelError                 = errors.New("confluence: no content label set")

@@ -37,16 +37,18 @@ func New(httpClient common.HttpClient, site string) (*Client, error) {
 	client.Auth = internal.NewAuthenticationService(client)
 	client.Page = internal.NewPageService(client)
 	client.Space = internal.NewSpaceV2Service(client)
+	client.Attachment = internal.NewAttachmentService(client)
 
 	return client, nil
 }
 
 type Client struct {
-	HTTP  common.HttpClient
-	Site  *url.URL
-	Auth  common.Authentication
-	Page  *internal.PageService
-	Space *internal.SpaceV2Service
+	HTTP       common.HttpClient
+	Site       *url.URL
+	Auth       common.Authentication
+	Page       *internal.PageService
+	Space      *internal.SpaceV2Service
+	Attachment *internal.AttachmentService
 }
 
 func (c *Client) NewFormRequest(ctx context.Context, method, apiEndpoint, contentType string, payload io.Reader) (*http.Request, error) {

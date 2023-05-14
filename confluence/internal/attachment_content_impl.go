@@ -15,14 +15,14 @@ import (
 	"strings"
 )
 
-func NewAttachmentService(client service.Client) *AttachmentService {
+func NewContentAttachmentService(client service.Client) *ContentAttachmentService {
 
-	return &AttachmentService{
+	return &ContentAttachmentService{
 		internalClient: &internalContentAttachmentImpl{c: client},
 	}
 }
 
-type AttachmentService struct {
+type ContentAttachmentService struct {
 	internalClient confluence.ContentAttachmentConnector
 }
 
@@ -33,7 +33,7 @@ type AttachmentService struct {
 // GET /wiki/rest/api/content/{id}/child/attachment
 //
 // https://docs.go-atlassian.io/confluence-cloud/content/attachments#get-attachments
-func (a *AttachmentService) Gets(ctx context.Context, contentID string, startAt, maxResults int, options *model.GetContentAttachmentsOptionsScheme) (*model.ContentPageScheme, *model.ResponseScheme, error) {
+func (a *ContentAttachmentService) Gets(ctx context.Context, contentID string, startAt, maxResults int, options *model.GetContentAttachmentsOptionsScheme) (*model.ContentPageScheme, *model.ResponseScheme, error) {
 	return a.internalClient.Gets(ctx, contentID, startAt, maxResults, options)
 }
 
@@ -46,7 +46,7 @@ func (a *AttachmentService) Gets(ctx context.Context, contentID string, startAt,
 // PUT /wiki/rest/api/content/{id}/child/attachment
 //
 // https://docs.go-atlassian.io/confluence-cloud/content/attachments#create-or-update-attachment
-func (a *AttachmentService) CreateOrUpdate(ctx context.Context, attachmentID, status, fileName string, file io.Reader) (*model.ContentPageScheme, *model.ResponseScheme, error) {
+func (a *ContentAttachmentService) CreateOrUpdate(ctx context.Context, attachmentID, status, fileName string, file io.Reader) (*model.ContentPageScheme, *model.ResponseScheme, error) {
 	return a.internalClient.CreateOrUpdate(ctx, attachmentID, status, fileName, file)
 }
 
@@ -59,7 +59,7 @@ func (a *AttachmentService) CreateOrUpdate(ctx context.Context, attachmentID, st
 // POST /wiki/rest/api/content/{id}/child/attachment
 //
 // https://docs.go-atlassian.io/confluence-cloud/content/attachments#create-attachment
-func (a *AttachmentService) Create(ctx context.Context, attachmentID, status, fileName string, file io.Reader) (*model.ContentPageScheme, *model.ResponseScheme, error) {
+func (a *ContentAttachmentService) Create(ctx context.Context, attachmentID, status, fileName string, file io.Reader) (*model.ContentPageScheme, *model.ResponseScheme, error) {
 	return a.internalClient.Create(ctx, attachmentID, status, fileName, file)
 }
 

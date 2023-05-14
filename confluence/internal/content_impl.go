@@ -13,7 +13,7 @@ import (
 )
 
 type ContentSubServices struct {
-	Attachment         *AttachmentService
+	Attachment         *ContentAttachmentService
 	ChildrenDescendant *ChildrenDescandantsService
 	Comment            *CommentService
 	Permission         *PermissionService
@@ -40,7 +40,7 @@ func NewContentService(client service.Client, subServices *ContentSubServices) *
 
 type ContentService struct {
 	internalClient     confluence.ContentConnector
-	Attachment         *AttachmentService
+	Attachment         *ContentAttachmentService
 	ChildrenDescendant *ChildrenDescandantsService
 	Comment            *CommentService
 	Permission         *PermissionService

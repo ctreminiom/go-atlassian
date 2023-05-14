@@ -35,7 +35,7 @@ func New(httpClient common.HttpClient, site string) (*Client, error) {
 	}
 
 	contentSubServices := &internal.ContentSubServices{
-		Attachment:         internal.NewAttachmentService(client),
+		Attachment:         internal.NewContentAttachmentService(client),
 		ChildrenDescendant: internal.NewChildrenDescandantsService(client),
 		Comment:            internal.NewCommentService(client),
 		Permission:         internal.NewPermissionService(client),

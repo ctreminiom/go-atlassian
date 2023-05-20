@@ -356,6 +356,7 @@ func New(httpClient common.HttpClient, site string) (*Client, error) {
 	client.Permission = permission
 	client.MySelf = mySelf
 	client.Auth = internal.NewAuthenticationService(client)
+	client.Banner = internal.NewAnnouncementBannerService(client, "2")
 	client.Role = applicationRoleService
 	client.Dashboard = dashboardService
 	client.Filter = filterService
@@ -378,6 +379,7 @@ type Client struct {
 	Auth               common.Authentication
 	Site               *url.URL
 	Role               *internal.ApplicationRoleService
+	Banner             *internal.AnnouncementBannerService
 	Audit              *internal.AuditRecordService
 	Dashboard          *internal.DashboardService
 	Filter             *internal.FilterService

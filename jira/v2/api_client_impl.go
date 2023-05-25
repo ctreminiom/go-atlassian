@@ -370,6 +370,7 @@ func New(httpClient common.HttpClient, site string) (*Client, error) {
 	client.Workflow = workflow
 	client.JQL = jql
 	client.NotificationScheme = projectNotificationScheme
+	client.Team = internal.NewTeamService(client)
 
 	return client, nil
 }
@@ -395,6 +396,7 @@ type Client struct {
 	Workflow           *internal.WorkflowService
 	JQL                *internal.JQLService
 	NotificationScheme *internal.NotificationSchemeService
+	Team               *internal.TeamService
 }
 
 func (c *Client) NewFormRequest(ctx context.Context, method, apiEndpoint, contentType string, payload io.Reader) (*http.Request, error) {

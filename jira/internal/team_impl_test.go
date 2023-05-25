@@ -19,8 +19,7 @@ func Test_internalTeamServiceImpl_Gets(t *testing.T) {
 	}{MaxResults: 1000}
 
 	type fields struct {
-		c       service.Client
-		version string
+		c service.Client
 	}
 
 	type args struct {
@@ -170,8 +169,7 @@ func Test_internalTeamServiceImpl_Create(t *testing.T) {
 	}
 
 	type fields struct {
-		c       service.Client
-		version string
+		c service.Client
 	}
 
 	type args struct {

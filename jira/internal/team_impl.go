@@ -46,8 +46,7 @@ func (t *TeamService) Create(ctx context.Context, payload *model.JiraTeamCreateP
 }
 
 type internalTeamServiceImpl struct {
-	c       service.Client
-	version string
+	c service.Client
 }
 
 func (i *internalTeamServiceImpl) Gets(ctx context.Context, maxResults int) (*model.JiraTeamPageScheme, *model.ResponseScheme, error) {

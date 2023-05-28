@@ -30,6 +30,6 @@ type BoardBacklogConnector interface {
 	//
 	// POST /rest/agile/1.0/backlog/{boardId}/issue
 	//
-	// https://docs.go-atlassian.io/jira-agile/boards/backlog#move-issues-to-backlog
+	// https://docs.go-atlassian.io/jira-agile/boards/backlog#move-issues-to-a-board-backlog
 	MoveTo(ctx context.Context, boardID int, payload *models.BoardBacklogPayloadScheme) (*models.ResponseScheme, error)
 }

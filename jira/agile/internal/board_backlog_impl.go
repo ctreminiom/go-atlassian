@@ -43,7 +43,7 @@ func (b *BoardBacklogService) Move(ctx context.Context, issues []string) (*model
 //
 // POST /rest/agile/1.0/backlog/{boardId}/issue
 //
-// https://docs.go-atlassian.io/jira-agile/boards/backlog#move-issues-to-backlog
+// https://docs.go-atlassian.io/jira-agile/boards/backlog#move-issues-to-a-board-backlog
 func (b *BoardBacklogService) MoveTo(ctx context.Context, boardID int, payload *model.BoardBacklogPayloadScheme) (*model.ResponseScheme, error) {
 	return b.internalClient.MoveTo(ctx, boardID, payload)
 }

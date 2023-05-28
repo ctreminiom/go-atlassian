@@ -12,9 +12,9 @@ type TeamConnector interface {
 	//
 	// Teams in Advanced Roadmaps are different from the teams found in the rest of Jira Software Cloud.
 	//
-	// In Advanced Roadmaps, they act as a label applied to issues that designates which team will eventually
+	// In Advanced Roadmaps, they act as a label applied to issues that designates which team will eventually.
 	//
-	// pick up the work on your timeline. By adding the Team field to your Jira issues,
+	// pick up the work on your timeline. By adding the Team field to your Jira issues.
 	//
 	// you can save this value back to your Jira issues, which makes sprint planning easier.
 	//

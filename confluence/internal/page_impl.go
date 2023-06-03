@@ -70,6 +70,19 @@ func (p *PageService) GetsBySpace(ctx context.Context, spaceID int, cursor strin
 	return p.internalClient.GetsBySpace(ctx, spaceID, cursor, limit)
 }
 
+// GetsByParent returns all children of a page.
+//
+// The number of results is limited by the limit parameter and additional results (if available)
+//
+// will be available through the next cursor
+//
+// GET /wiki/api/v2/pages/{id}/children
+//
+// https://docs.go-atlassian.io/confluence-cloud/v2/page#get-children
+func (p *PageService) GetsByParent(ctx context.Context, pageID int, cursor string, limit int) (*model.PageChunkScheme, *model.ResponseScheme, error) {
+	return p.internalClient.GetsByParent(ctx, pageID, cursor, limit)
+}
+
 // Create creates a page in the space.
 //
 // Pages are created as published by default unless specified as a draft in the status field.
@@ -213,6 +226,35 @@ func (i *internalPageImpl) GetsBySpace(ctx context.Context, spaceID int, cursor 
 	}
 
 	endpoint := fmt.Sprintf("wiki/api/v2/spaces/%v/pages?%v", spaceID, query.Encode())
+
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	chunk := new(model.PageChunkScheme)
+	response, err := i.c.Call(request, chunk)
+	if err != nil {
+		return nil, response, err
+	}
+
+	return chunk, response, nil
+}
+
+func (i *internalPageImpl) GetsByParent(ctx context.Context, parentID int, cursor string, limit int) (*model.PageChunkScheme, *model.ResponseScheme, error) {
+
+	if parentID == 0 {
+		return nil, nil, model.ErrNoPageIDError
+	}
+
+	query := url.Values{}
+	query.Add("limit", strconv.Itoa(limit))
+
+	if cursor != "" {
+		query.Add("cursor", cursor)
+	}
+
+	endpoint := fmt.Sprintf("wiki/api/v2/pages/%v/children?%v", parentID, query.Encode())
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {

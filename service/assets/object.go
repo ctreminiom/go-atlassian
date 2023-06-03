@@ -43,4 +43,9 @@ type ObjectAssetConnector interface {
 	//
 	// POST /jsm/assets/workspace/{workspaceId}/v1/object/create
 	Create(ctx context.Context, workspaceID string, payload *models.ObjectAssetPayloadScheme) (*models.ObjectAssetScheme, *models.ResponseScheme, error)
+
+	// Relation returns the relation between Jira issues and Assets objects
+	//
+	// GET /jsm/assets/workspace/{workspaceId}/v1/objectconnectedtickets/{objectId}/tickets
+	Relation(ctx context.Context, workspaceID, objectID string) (*models.TicketScheme, *models.ResponseScheme, error)
 }

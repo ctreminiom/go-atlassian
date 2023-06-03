@@ -1,6 +1,6 @@
 package models
 
-type IconAssetScheme struct {
+type IconScheme struct {
 	ID    string `json:"id,omitempty"`
 	Name  string `json:"name,omitempty"`
 	URL16 string `json:"url16,omitempty"`

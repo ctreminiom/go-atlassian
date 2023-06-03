@@ -12,5 +12,5 @@ type AQLAssetConnector interface {
 	// Filter retrieves a list of objects based on an AQL. Note that the preferred endpoint is /aql.
 	//
 	// POST /jsm/assets/workspace/{workspaceId}/v1/object/navlist/aql
-	Filter(ctx context.Context, workspaceID string, payload *models.AQLAssetSearchParamsScheme) (*models.ObjectAssetPageScheme, *models.ResponseScheme, error)
+	Filter(ctx context.Context, workspaceID string, payload *models.AQLSearchParamsScheme) (*models.ObjectPageScheme, *models.ResponseScheme, error)
 }

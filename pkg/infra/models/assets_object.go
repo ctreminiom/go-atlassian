@@ -1,6 +1,6 @@
 package models
 
-type ObjectAssetReferenceTypeInfoScheme struct {
+type ObjectReferenceTypeInfoScheme struct {
 	ReferenceTypes            []*TypeAssetReferenceScheme `json:"referenceTypes,omitempty"`
 	ObjectType                *ObjectAssetTypeScheme      `json:"objectType,omitempty"`
 	NumberOfReferencedObjects int                         `json:"numberOfReferencedObjects,omitempty"`
@@ -19,7 +19,7 @@ type TypeAssetReferenceScheme struct {
 	ObjectSchemaID string `json:"objectSchemaId,omitempty"`
 }
 
-type ObjectAssetHistoryScheme struct {
+type ObjectHistoryScheme struct {
 	Actor             *ObjectAssetHistoryActorScheme `json:"actor,omitempty"`
 	Id                int                            `json:"id,omitempty"`
 	AffectedAttribute string                         `json:"affectedAttribute,omitempty"`
@@ -43,7 +43,7 @@ type ObjectAssetHistoryActorScheme struct {
 	Self            string `json:"self,omitempty"`
 }
 
-type ObjectAssetPayloadScheme struct {
+type ObjectPayloadScheme struct {
 	ObjectTypeID string                               `json:"objectTypeId,omitempty"`
 	AvatarUUID   string                               `json:"avatarUUID,omitempty"`
 	HasAvatar    bool                                 `json:"hasAvatar,omitempty"`
@@ -59,20 +59,20 @@ type ObjectAssetPayloadAttributeValueScheme struct {
 	Value string `json:"value,omitempty"`
 }
 
-type ObjectAssetScheme struct {
-	WorkspaceId string                        `json:"workspaceId,omitempty"`
-	GlobalId    string                        `json:"globalId,omitempty"`
-	Id          string                        `json:"id,omitempty"`
-	Label       string                        `json:"label,omitempty"`
-	ObjectKey   string                        `json:"objectKey,omitempty"`
-	Avatar      *ObjectAssetAvatarScheme      `json:"avatar,omitempty"`
-	ObjectType  *ObjectAssetTypeScheme        `json:"objectType,omitempty"`
-	Created     string                        `json:"created,omitempty"`
-	Updated     string                        `json:"updated,omitempty"`
-	HasAvatar   bool                          `json:"hasAvatar,omitempty"`
-	Timestamp   int                           `json:"timestamp,omitempty"`
-	Attributes  []*ObjectAssetAttributeScheme `json:"attributes"`
-	Links       *ObjectAssetLinksScheme       `json:"_links,omitempty"`
+type ObjectScheme struct {
+	WorkspaceId string                   `json:"workspaceId,omitempty"`
+	GlobalId    string                   `json:"globalId,omitempty"`
+	Id          string                   `json:"id,omitempty"`
+	Label       string                   `json:"label,omitempty"`
+	ObjectKey   string                   `json:"objectKey,omitempty"`
+	Avatar      *ObjectAssetAvatarScheme `json:"avatar,omitempty"`
+	ObjectType  *ObjectAssetTypeScheme   `json:"objectType,omitempty"`
+	Created     string                   `json:"created,omitempty"`
+	Updated     string                   `json:"updated,omitempty"`
+	HasAvatar   bool                     `json:"hasAvatar,omitempty"`
+	Timestamp   int                      `json:"timestamp,omitempty"`
+	Attributes  []*ObjectAttributeScheme `json:"attributes"`
+	Links       *ObjectAssetLinksScheme  `json:"_links,omitempty"`
 }
 
 type ObjectAssetAvatarScheme struct {
@@ -89,37 +89,37 @@ type ObjectAssetAvatarScheme struct {
 }
 
 type ObjectAssetTypeScheme struct {
-	WorkspaceId               string           `json:"workspaceId,omitempty"`
-	GlobalId                  string           `json:"globalId,omitempty"`
-	Id                        string           `json:"id,omitempty"`
-	Name                      string           `json:"name,omitempty"`
-	Description               string           `json:"description,omitempty"`
-	Icon                      *IconAssetScheme `json:"icon,omitempty"`
-	Position                  int              `json:"position,omitempty"`
-	Created                   string           `json:"created,omitempty"`
-	Updated                   string           `json:"updated,omitempty"`
-	ObjectCount               int              `json:"objectCount,omitempty"`
-	ParentObjectTypeId        int              `json:"parentObjectTypeId,omitempty"`
-	ObjectSchemaId            string           `json:"objectSchemaId,omitempty"`
-	Inherited                 bool             `json:"inherited,omitempty"`
-	AbstractObjectType        bool             `json:"abstractObjectType,omitempty"`
-	ParentObjectTypeInherited bool             `json:"parentObjectTypeInherited,omitempty"`
+	WorkspaceId               string      `json:"workspaceId,omitempty"`
+	GlobalId                  string      `json:"globalId,omitempty"`
+	Id                        string      `json:"id,omitempty"`
+	Name                      string      `json:"name,omitempty"`
+	Description               string      `json:"description,omitempty"`
+	Icon                      *IconScheme `json:"icon,omitempty"`
+	Position                  int         `json:"position,omitempty"`
+	Created                   string      `json:"created,omitempty"`
+	Updated                   string      `json:"updated,omitempty"`
+	ObjectCount               int         `json:"objectCount,omitempty"`
+	ParentObjectTypeId        int         `json:"parentObjectTypeId,omitempty"`
+	ObjectSchemaId            string      `json:"objectSchemaId,omitempty"`
+	Inherited                 bool        `json:"inherited,omitempty"`
+	AbstractObjectType        bool        `json:"abstractObjectType,omitempty"`
+	ParentObjectTypeInherited bool        `json:"parentObjectTypeInherited,omitempty"`
 }
 
 type ObjectAssetLinksScheme struct {
 	Self string `json:"self,omitempty"`
 }
 
-type ObjectAssetAttributeScheme struct {
+type ObjectAttributeScheme struct {
 	WorkspaceId           string                                 `json:"workspaceId,omitempty"`
 	GlobalId              string                                 `json:"globalId,omitempty"`
 	Id                    string                                 `json:"id,omitempty"`
-	ObjectTypeAttribute   *ObjectTypeAssetAttributeScheme        `json:"objectTypeAttribute,omitempty"`
+	ObjectTypeAttribute   *ObjectTypeAttributeScheme             `json:"objectTypeAttribute,omitempty"`
 	ObjectTypeAttributeId int                                    `json:"objectTypeAttributeId,omitempty"`
 	ObjectAttributeValues []*ObjectTypeAssetAttributeValueScheme `json:"objectAttributeValues,omitempty"`
 }
 
-type ObjectTypeAssetAttributeScheme struct {
+type ObjectTypeAttributeScheme struct {
 	WorkspaceId             string                                       `json:"workspaceId,omitempty"`
 	GlobalId                string                                       `json:"globalId,omitempty"`
 	Id                      string                                       `json:"id,omitempty"`

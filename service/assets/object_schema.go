@@ -5,9 +5,9 @@ import (
 	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
 )
 
-// ObjectSchemeConnector represents the Assets object schemes.
+// ObjectSchemaConnector represents the Assets object schemes.
 // Use it to search, get, create, delete, and change schemes.
-type ObjectSchemeConnector interface {
+type ObjectSchemaConnector interface {
 
 	// List returns all the object schemes available on Assets
 	//
@@ -40,7 +40,7 @@ type ObjectSchemeConnector interface {
 	//
 	// GET /jsm/assets/workspace/{workspaceId}/v1/objectschema/{id}/attributes
 	Attributes(ctx context.Context, workspaceID, objectSchemaID string, options *models.ObjectSchemaAttributesParamsScheme) (
-		[]*models.ObjectTypeAssetAttributeScheme, *models.ResponseScheme, error)
+		[]*models.ObjectTypeAttributeScheme, *models.ResponseScheme, error)
 
 	// ObjectTypes returns all object types for this object schema
 	//

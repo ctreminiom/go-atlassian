@@ -18,5 +18,5 @@ type IconAssetConnector interface {
 	//
 	// GET /jsm/assets/workspace/{workspaceId}/v1/icon/global
 	//
-	Global(ctx context.Context, workspaceID string) (*[]models.IconAssetScheme, *models.ResponseScheme, error)
+	Global(ctx context.Context, workspaceID string) ([]*models.IconAssetScheme, *models.ResponseScheme, error)
 }

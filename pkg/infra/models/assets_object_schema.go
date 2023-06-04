@@ -41,5 +41,5 @@ type ObjectSchemaAttributesParamsScheme struct {
 }
 
 type ObjectSchemaTypePageScheme struct {
-	Entries []*ObjectAssetTypeScheme `json:"entries,omitempty"`
+	Entries []*ObjectTypeScheme `json:"entries,omitempty"`
 }

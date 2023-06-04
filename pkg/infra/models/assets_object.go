@@ -1,13 +1,13 @@
 package models
 
 type ObjectReferenceTypeInfoScheme struct {
-	ReferenceTypes            []*TypeAssetReferenceScheme `json:"referenceTypes,omitempty"`
-	ObjectType                *ObjectAssetTypeScheme      `json:"objectType,omitempty"`
-	NumberOfReferencedObjects int                         `json:"numberOfReferencedObjects,omitempty"`
-	OpenIssuesExists          bool                        `json:"openIssuesExists,omitempty"`
+	ReferenceTypes            []*TypeReferenceScheme `json:"referenceTypes,omitempty"`
+	ObjectType                *ObjectTypeScheme      `json:"objectType,omitempty"`
+	NumberOfReferencedObjects int                    `json:"numberOfReferencedObjects,omitempty"`
+	OpenIssuesExists          bool                   `json:"openIssuesExists,omitempty"`
 }
 
-type TypeAssetReferenceScheme struct {
+type TypeReferenceScheme struct {
 	WorkspaceID    string `json:"workspaceId,omitempty"`
 	GlobalID       string `json:"globalId,omitempty"`
 	ID             string `json:"id,omitempty"`
@@ -20,17 +20,17 @@ type TypeAssetReferenceScheme struct {
 }
 
 type ObjectHistoryScheme struct {
-	Actor             *ObjectAssetHistoryActorScheme `json:"actor,omitempty"`
-	Id                int                            `json:"id,omitempty"`
-	AffectedAttribute string                         `json:"affectedAttribute,omitempty"`
-	OldValue          string                         `json:"oldValue,omitempty"`
-	NewValue          string                         `json:"newValue,omitempty"`
-	Type              int                            `json:"type,omitempty"`
-	Created           string                         `json:"created,omitempty"`
-	ObjectId          int                            `json:"objectId,omitempty"`
+	Actor             *ObjectHistoryActorScheme `json:"actor,omitempty"`
+	Id                int                       `json:"id,omitempty"`
+	AffectedAttribute string                    `json:"affectedAttribute,omitempty"`
+	OldValue          string                    `json:"oldValue,omitempty"`
+	NewValue          string                    `json:"newValue,omitempty"`
+	Type              int                       `json:"type,omitempty"`
+	Created           string                    `json:"created,omitempty"`
+	ObjectId          int                       `json:"objectId,omitempty"`
 }
 
-type ObjectAssetHistoryActorScheme struct {
+type ObjectHistoryActorScheme struct {
 	AvatarUrl       string `json:"avatarUrl,omitempty"`
 	DisplayName     string `json:"displayName,omitempty"`
 	Name            string `json:"name,omitempty"`
@@ -44,18 +44,18 @@ type ObjectAssetHistoryActorScheme struct {
 }
 
 type ObjectPayloadScheme struct {
-	ObjectTypeID string                               `json:"objectTypeId,omitempty"`
-	AvatarUUID   string                               `json:"avatarUUID,omitempty"`
-	HasAvatar    bool                                 `json:"hasAvatar,omitempty"`
-	Attributes   []*ObjectAssetPayloadAttributeScheme `json:"attributes,omitempty"`
+	ObjectTypeID string                          `json:"objectTypeId,omitempty"`
+	AvatarUUID   string                          `json:"avatarUUID,omitempty"`
+	HasAvatar    bool                            `json:"hasAvatar,omitempty"`
+	Attributes   []*ObjectPayloadAttributeScheme `json:"attributes,omitempty"`
 }
 
-type ObjectAssetPayloadAttributeScheme struct {
-	ObjectTypeAttributeID string                                    `json:"objectTypeAttributeId,omitempty"`
-	ObjectAttributeValues []*ObjectAssetPayloadAttributeValueScheme `json:"objectAttributeValues,omitempty"`
+type ObjectPayloadAttributeScheme struct {
+	ObjectTypeAttributeID string                               `json:"objectTypeAttributeId,omitempty"`
+	ObjectAttributeValues []*ObjectPayloadAttributeValueScheme `json:"objectAttributeValues,omitempty"`
 }
 
-type ObjectAssetPayloadAttributeValueScheme struct {
+type ObjectPayloadAttributeValueScheme struct {
 	Value string `json:"value,omitempty"`
 }
 
@@ -65,17 +65,17 @@ type ObjectScheme struct {
 	Id          string                   `json:"id,omitempty"`
 	Label       string                   `json:"label,omitempty"`
 	ObjectKey   string                   `json:"objectKey,omitempty"`
-	Avatar      *ObjectAssetAvatarScheme `json:"avatar,omitempty"`
-	ObjectType  *ObjectAssetTypeScheme   `json:"objectType,omitempty"`
+	Avatar      *ObjectAvatarScheme      `json:"avatar,omitempty"`
+	ObjectType  *ObjectTypeScheme        `json:"objectType,omitempty"`
 	Created     string                   `json:"created,omitempty"`
 	Updated     string                   `json:"updated,omitempty"`
 	HasAvatar   bool                     `json:"hasAvatar,omitempty"`
 	Timestamp   int                      `json:"timestamp,omitempty"`
 	Attributes  []*ObjectAttributeScheme `json:"attributes"`
-	Links       *ObjectAssetLinksScheme  `json:"_links,omitempty"`
+	Links       *ObjectLinksScheme       `json:"_links,omitempty"`
 }
 
-type ObjectAssetAvatarScheme struct {
+type ObjectAvatarScheme struct {
 	WorkspaceId string `json:"workspaceId,omitempty"`
 	GlobalId    string `json:"globalId,omitempty"`
 	Id          string `json:"id,omitempty"`
@@ -88,25 +88,7 @@ type ObjectAssetAvatarScheme struct {
 	ObjectId    string `json:"objectId,omitempty"`
 }
 
-type ObjectAssetTypeScheme struct {
-	WorkspaceId               string      `json:"workspaceId,omitempty"`
-	GlobalId                  string      `json:"globalId,omitempty"`
-	Id                        string      `json:"id,omitempty"`
-	Name                      string      `json:"name,omitempty"`
-	Description               string      `json:"description,omitempty"`
-	Icon                      *IconScheme `json:"icon,omitempty"`
-	Position                  int         `json:"position,omitempty"`
-	Created                   string      `json:"created,omitempty"`
-	Updated                   string      `json:"updated,omitempty"`
-	ObjectCount               int         `json:"objectCount,omitempty"`
-	ParentObjectTypeId        int         `json:"parentObjectTypeId,omitempty"`
-	ObjectSchemaId            string      `json:"objectSchemaId,omitempty"`
-	Inherited                 bool        `json:"inherited,omitempty"`
-	AbstractObjectType        bool        `json:"abstractObjectType,omitempty"`
-	ParentObjectTypeInherited bool        `json:"parentObjectTypeInherited,omitempty"`
-}
-
-type ObjectAssetLinksScheme struct {
+type ObjectLinksScheme struct {
 	Self string `json:"self,omitempty"`
 }
 
@@ -123,7 +105,7 @@ type ObjectTypeAttributeScheme struct {
 	WorkspaceId             string                                       `json:"workspaceId,omitempty"`
 	GlobalId                string                                       `json:"globalId,omitempty"`
 	Id                      string                                       `json:"id,omitempty"`
-	ObjectType              *ObjectAssetTypeScheme                       `json:"objectType,omitempty"`
+	ObjectType              *ObjectTypeScheme                            `json:"objectType,omitempty"`
 	Name                    string                                       `json:"name,omitempty"`
 	Label                   bool                                         `json:"label,omitempty"`
 	Type                    int                                          `json:"type,omitempty"`
@@ -134,7 +116,7 @@ type ObjectTypeAttributeScheme struct {
 	AdditionalValue         string                                       `json:"additionalValue,omitempty"`
 	ReferenceType           *ObjectTypeAssetAttributeReferenceTypeScheme `json:"referenceType,omitempty"`
 	ReferenceObjectTypeId   int                                          `json:"referenceObjectTypeId,omitempty"`
-	ReferenceObjectType     *ObjectAssetTypeScheme                       `json:"referenceObjectType,omitempty"`
+	ReferenceObjectType     *ObjectTypeScheme                            `json:"referenceObjectType,omitempty"`
 	Editable                bool                                         `json:"editable,omitempty"`
 	System                  bool                                         `json:"system,omitempty"`
 	Indexed                 bool                                         `json:"indexed,omitempty"`

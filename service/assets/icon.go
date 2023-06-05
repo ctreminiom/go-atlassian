@@ -5,9 +5,9 @@ import (
 	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
 )
 
-// IconAssetConnector represents the assets icons endpoints.
+// IconConnector represents the assets icons endpoints.
 // Use it to search and get asset icons.
-type IconAssetConnector interface {
+type IconConnector interface {
 
 	// Get loads a single asset icon by id.
 	//
@@ -17,6 +17,5 @@ type IconAssetConnector interface {
 	// Global returns all global icons i.e. icons not associated with a particular object schema.
 	//
 	// GET /jsm/assets/workspace/{workspaceId}/v1/icon/global
-	//
 	Global(ctx context.Context, workspaceID string) ([]*models.IconScheme, *models.ResponseScheme, error)
 }

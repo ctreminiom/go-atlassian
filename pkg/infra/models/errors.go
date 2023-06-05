@@ -145,4 +145,6 @@ var (
 	ErrNoAttachmentIdsError                = errors.New("sm: no attachment id's set")
 	ErrNoLabelsError                       = errors.New("sm: no label names set")
 	ErrNoComponentsError                   = errors.New("sm: no components set")
+	ErrNoWorkspaceIDError                  = errors.New("assets: no workspace id set")
+	ErrNoIconIDError                       = errors.New("assets: no icon id set")
 )

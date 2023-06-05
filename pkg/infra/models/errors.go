@@ -131,6 +131,7 @@ var (
 	ErrNoFieldInformationError             = errors.New("custom-field: please provide a buffer with a valid fields object")
 	ErrNoCustomFieldUnmarshalError         = errors.New("custom-field: no valid json provided")
 	ErrNoMultiSelectTypeError              = errors.New("custom-field: no multiselect type found")
+	ErrNoAssetTypeError                    = errors.New("custom-field: no asset type found")
 	ErrNoUrlTypeError                      = errors.New("custom-field: no url type set")
 	ErrNoTextTypeError                     = errors.New("custom-field: no text type set")
 	ErrNoDateTimeTypeError                 = errors.New("custom-field: no date-time type set")

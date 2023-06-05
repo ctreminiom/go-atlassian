@@ -27,7 +27,7 @@ func New(httpClient common.HttpClient) (*Client, error) {
 		httpClient = http.DefaultClient
 	}
 
-	siteAsURL, err := url.Parse("")
+	siteAsURL, err := url.Parse("https://api.atlassian.com")
 	if err != nil {
 		return nil, err
 	}

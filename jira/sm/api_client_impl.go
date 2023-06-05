@@ -121,6 +121,13 @@ func New(httpClient common.HttpClient, site string) (*Client, error) {
 		return nil, err
 	}
 	client.ServiceDesk = serviceDeskService
+
+	workSpaceService, err := internal.NewWorkSpaceService(client, "latest")
+	if err != nil {
+		return nil, err
+	}
+	client.WorkSpace = workSpaceService
+
 	return client, nil
 }
 
@@ -134,6 +141,7 @@ type Client struct {
 	Organization  *internal.OrganizationService
 	Request       *internal.RequestService
 	ServiceDesk   *internal.ServiceDeskService
+	WorkSpace     *internal.WorkSpaceService
 }
 
 func (c *Client) NewFormRequest(ctx context.Context, method, apiEndpoint, contentType string, payload io.Reader) (*http.Request, error) {

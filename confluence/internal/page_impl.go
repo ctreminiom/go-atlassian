@@ -78,7 +78,7 @@ func (p *PageService) GetsBySpace(ctx context.Context, spaceID int, cursor strin
 //
 // GET /wiki/api/v2/pages/{id}/children
 //
-// https://docs.go-atlassian.io/confluence-cloud/v2/page#get-children
+// https://docs.go-atlassian.io/confluence-cloud/v2/page#get-pages-by-parent
 func (p *PageService) GetsByParent(ctx context.Context, pageID int, cursor string, limit int) (*model.PageChunkScheme, *model.ResponseScheme, error) {
 	return p.internalClient.GetsByParent(ctx, pageID, cursor, limit)
 }

@@ -545,8 +545,40 @@ func Test_internalPageImpl_GetsByParent(t *testing.T) {
 
 				fields.c = client
 			},
+
 			wantErr: true,
 			Err:     errors.New("error, unable to create the http request"),
+		},
+
+		{
+			name: "when the call fails",
+			args: args{
+				ctx:      context.TODO(),
+				parentID: 20001,
+				cursor:   "cursor-sample",
+				limit:    200,
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewClient(t)
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodGet,
+					"wiki/api/v2/pages/20001/children?cursor=cursor-sample&limit=200",
+					nil).
+					Return(&http.Request{}, nil)
+
+				client.On("Call",
+					&http.Request{},
+					&model.PageChunkScheme{}).
+					Return(&model.ResponseScheme{}, errors.New("error, request failed"))
+
+				fields.c = client
+			},
+
+			wantErr: true,
+			Err:     errors.New("error, request failed"),
 		},
 	}
 

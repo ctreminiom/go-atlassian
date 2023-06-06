@@ -210,3 +210,7 @@ type ContentArchiveResultScheme struct {
 		Status string `json:"status"`
 	} `json:"links"`
 }
+
+type ContentMoveScheme struct {
+	ID string `json:"pageId"`
+}

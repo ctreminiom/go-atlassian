@@ -148,4 +148,5 @@ var (
 	ErrNoComponentsError                   = errors.New("sm: no components set")
 	ErrNoWorkspaceIDError                  = errors.New("assets: no workspace id set")
 	ErrNoIconIDError                       = errors.New("assets: no icon id set")
+	ErrNoObjectIDError                     = errors.New("assets: no object id set")
 )

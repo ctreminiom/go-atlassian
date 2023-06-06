@@ -5,9 +5,9 @@ import (
 	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
 )
 
-// ObjectAssetConnector represents the Assets objects.
+// ObjectConnector represents the Assets objects.
 // Use it to search, get, create, delete, and change objects.
-type ObjectAssetConnector interface {
+type ObjectConnector interface {
 
 	// Get loads one object.
 	//
@@ -47,5 +47,5 @@ type ObjectAssetConnector interface {
 	// Relation returns the relation between Jira issues and Assets objects
 	//
 	// GET /jsm/assets/workspace/{workspaceId}/v1/objectconnectedtickets/{objectId}/tickets
-	Relation(ctx context.Context, workspaceID, objectID string) (*models.TicketScheme, *models.ResponseScheme, error)
+	Relation(ctx context.Context, workspaceID, objectID string) (*models.TicketPageScheme, *models.ResponseScheme, error)
 }

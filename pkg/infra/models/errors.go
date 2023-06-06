@@ -38,6 +38,10 @@ var (
 	ErrNoContentIDError                    = errors.New("confluence: no content id set")
 	ErrNoPageIDError                       = errors.New("confluence: no page id set")
 	ErrNoSpaceIDError                      = errors.New("confluence: no space id set")
+	ErrNoTargetIDError                     = errors.New("confluence: no target id set")
+	ErrNoPositionError                     = errors.New("confluence: no position set")
+	ErrInvalidPositionError                = errors.New("confluence: invalid position: (before, after, append)")
+	ValidPositions                         = map[string]bool{"before": true, "after": true, "append": true}
 	ErrNoLabelIDError                      = errors.New("confluence: no label id set")
 	ErrNoCQLError                          = errors.New("confluence: no CQL query set")
 	ErrNoContentTypeError                  = errors.New("confluence: no content type set")

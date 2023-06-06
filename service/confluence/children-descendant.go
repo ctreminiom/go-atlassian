@@ -26,6 +26,25 @@ type ChildrenDescendantConnector interface {
 	// https://docs.go-atlassian.io/confluence-cloud/content/children-descendants#get-content-children
 	Children(ctx context.Context, contentID string, expand []string, parentVersion int) (*model.ContentChildrenScheme, *model.ResponseScheme, error)
 
+	// Move moves a page from its current location in the hierarchy to another.
+	//
+	// Position describes in the hierarchy the page should be moved to in
+	// relationship to targetID.
+	//
+	// before: page will be a sibling of target but show up just before target in
+	// the list of children
+	//
+	// after: page will be a sibling of target but show up just after target in the
+	// list of children
+	//
+	// append: page will be a child of the target and be appended to targets list of
+	// children
+	//
+	// PUT /wiki/rest/api/content/{pageId}/move/{position}/{targetId}
+	//
+	// https://docs.go-atlassian.io/confluence-cloud/content/children-descendants#move
+	Move(ctx context.Context, pageID string, position string, targetID string) (*model.ContentMoveScheme, *model.ResponseScheme, error)
+
 	// ChildrenByType returns all children of a given type, for a piece of content.
 	//
 	// A piece of content has different types of child content

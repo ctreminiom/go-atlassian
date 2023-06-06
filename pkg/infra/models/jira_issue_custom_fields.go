@@ -2,6 +2,7 @@ package models
 
 import (
 	"bytes"
+
 	"github.com/perimeterx/marshmallow"
 )
 
@@ -259,6 +260,33 @@ func ParseUserPickerCustomField(buffer bytes.Buffer, customField string) (*UserD
 	}
 
 	return user, nil
+}
+
+func ParseStringCustomField(buffer bytes.Buffer, customField string) (string, error) {
+
+	raw, err := marshmallow.Unmarshal(buffer.Bytes(), &struct{}{})
+	if err != nil {
+		return "", ErrNoCustomFieldUnmarshalError
+	}
+
+	fields, containsFields := raw["fields"]
+	if !containsFields {
+		return "", ErrNoFieldInformationError
+	}
+
+	var text string
+	customFields := fields.(map[string]interface{})
+
+	switch value := customFields[customField].(type) {
+	case string:
+		text = value
+	case nil:
+		return "", nil
+	default:
+		return "", ErrNoMultiSelectTypeError
+	}
+
+	return text, err
 }
 
 func ParseFloatCustomField(buffer bytes.Buffer, customField string) (float64, error) {

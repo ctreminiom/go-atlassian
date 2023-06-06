@@ -67,7 +67,7 @@ func (c *ChildrenDescandantsService) Move(ctx context.Context, pageID string, po
 
 // ChildrenByType returns all children of a given type, for a piece of content.
 //
-// # A piece of content has different types of child content
+// A piece of content has different types of child content
 //
 // GET /wiki/rest/api/content/{id}/child/{type}
 //

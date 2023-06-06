@@ -28,7 +28,7 @@ type ChildrenDescendantConnector interface {
 
 	// Move moves a page from its current location in the hierarchy to another.
 	//
-	// Position describes in the hierarchy the page should be moved to in
+	// Position describes where in the hierarchy the page should be moved to in
 	// relationship to targetID.
 	//
 	// before: page will be a sibling of target but show up just before target in

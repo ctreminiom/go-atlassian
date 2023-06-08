@@ -151,4 +151,5 @@ var (
 	ErrNoObjectIDError                     = errors.New("assets: no object id set")
 	ErrNoObjectSchemaIDError               = errors.New("assets: no object schema id set")
 	ErrNoObjectTypeIDError                 = errors.New("assets: no object type id set")
+	ErrNoObjectTypeAttributeIDError        = errors.New("assets: no object type attribute id set")
 )

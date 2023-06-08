@@ -14,14 +14,15 @@ import (
 )
 
 type Client struct {
-	HTTP         common.HttpClient
-	Site         *url.URL
-	Auth         common.Authentication
-	AQL          *internal.AQLService
-	Icon         *internal.IconService
-	Object       *internal.ObjectService
-	ObjectSchema *internal.ObjectSchemaService
-	ObjectType   *internal.ObjectTypeService
+	HTTP                common.HttpClient
+	Site                *url.URL
+	Auth                common.Authentication
+	AQL                 *internal.AQLService
+	Icon                *internal.IconService
+	Object              *internal.ObjectService
+	ObjectSchema        *internal.ObjectSchemaService
+	ObjectType          *internal.ObjectTypeService
+	ObjectTypeAttribute *internal.ObjectTypeAttributeService
 }
 
 func New(httpClient common.HttpClient) (*Client, error) {
@@ -48,6 +49,7 @@ func New(httpClient common.HttpClient) (*Client, error) {
 	client.Object = internal.NewObjectService(client)
 	client.ObjectSchema = internal.NewObjectSchemaService(client)
 	client.ObjectType = internal.NewObjectTypeService(client)
+	client.ObjectTypeAttribute = internal.NewObjectTypeAttributeService(client)
 
 	return client, nil
 }

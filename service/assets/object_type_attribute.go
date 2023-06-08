@@ -18,11 +18,11 @@ type ObjectTypeAttributeConnector interface {
 	// Update updates an existing object type attribute
 	//
 	// PUT /jsm/assets/workspace/{workspaceId}/v1/objecttypeattribute/{objectTypeId}/{id}
-	Update(ctx context.Context, workspaceID, objectTypeAttributeID string, payload *models.ObjectTypeAttributeScheme) (
+	Update(ctx context.Context, workspaceID, objectTypeID, attributeID string, payload *models.ObjectTypeAttributeScheme) (
 		*models.ObjectTypeAttributeScheme, *models.ResponseScheme, error)
 
 	// Delete deletes an existing object type attribute
 	//
 	// DELETE /jsm/assets/workspace/{workspaceId}/v1/objecttypeattribute/{id}
-	Delete(ctx context.Context, workspaceID, objectTypeAttributeID string) (*models.ResponseScheme, error)
+	Delete(ctx context.Context, workspaceID, attributeID string) (*models.ResponseScheme, error)
 }

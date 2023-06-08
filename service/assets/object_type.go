@@ -40,6 +40,6 @@ type ObjectTypeConnector interface {
 	// Position changes the position of this object type
 	//
 	// POST /jsm/assets/workspace/{workspaceId}/v1/objecttype/{id}/position
-	Position(ctx context.Context, workspaceID, objectTypeID, toObjectTypeId string, position int) (*models.ObjectTypeScheme,
-		*models.ResponseScheme, error)
+	Position(ctx context.Context, workspaceID, objectTypeID string, payload *models.ObjectTypePositionPayloadScheme) (
+		*models.ObjectTypeScheme, *models.ResponseScheme, error)
 }

@@ -21,6 +21,7 @@ type Client struct {
 	Icon         *internal.IconService
 	Object       *internal.ObjectService
 	ObjectSchema *internal.ObjectSchemaService
+	ObjectType   *internal.ObjectTypeService
 }
 
 func New(httpClient common.HttpClient) (*Client, error) {
@@ -46,6 +47,7 @@ func New(httpClient common.HttpClient) (*Client, error) {
 	client.Icon = internal.NewIconService(client)
 	client.Object = internal.NewObjectService(client)
 	client.ObjectSchema = internal.NewObjectSchemaService(client)
+	client.ObjectType = internal.NewObjectTypeService(client)
 
 	return client, nil
 }

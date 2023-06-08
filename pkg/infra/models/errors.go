@@ -150,4 +150,5 @@ var (
 	ErrNoIconIDError                       = errors.New("assets: no icon id set")
 	ErrNoObjectIDError                     = errors.New("assets: no object id set")
 	ErrNoObjectSchemaIDError               = errors.New("assets: no object schema id set")
+	ErrNoObjectTypeIDError                 = errors.New("assets: no object type id set")
 )

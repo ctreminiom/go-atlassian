@@ -1,5 +1,10 @@
 package models
 
+type ObjectTypePositionPayloadScheme struct {
+	ToObjectTypeId string `json:"toObjectTypeId,omitempty"`
+	Position       int    `json:"position,omitempty"`
+}
+
 type ObjectTypeScheme struct {
 	WorkspaceId               string      `json:"workspaceId,omitempty"`
 	GlobalId                  string      `json:"globalId,omitempty"`

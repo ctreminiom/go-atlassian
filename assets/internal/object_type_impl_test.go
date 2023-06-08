@@ -8,6 +8,7 @@ import (
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 	"net/http"
 	"testing"
 )
@@ -302,7 +303,7 @@ func Test_internalObjectTypeImpl_Attributes(t *testing.T) {
 
 				client.On("Call",
 					&http.Request{},
-					[]*model.ObjectTypeAttributeScheme(nil)).
+					mock.Anything).
 					Return(&model.ResponseScheme{}, nil)
 
 				fields.c = client

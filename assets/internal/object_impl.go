@@ -177,7 +177,7 @@ func (i *internalObjectImpl) Attributes(ctx context.Context, workspaceID, object
 	}
 
 	var attributes []*model.ObjectAttributeScheme
-	response, err := i.c.Call(request, attributes)
+	response, err := i.c.Call(request, &attributes)
 	if err != nil {
 		return nil, response, err
 	}
@@ -212,7 +212,7 @@ func (i *internalObjectImpl) History(ctx context.Context, workspaceID, objectID 
 	}
 
 	var history []*model.ObjectHistoryScheme
-	response, err := i.c.Call(request, history)
+	response, err := i.c.Call(request, &history)
 	if err != nil {
 		return nil, response, err
 	}
@@ -238,7 +238,7 @@ func (i *internalObjectImpl) References(ctx context.Context, workspaceID, object
 	}
 
 	var references []*model.ObjectReferenceTypeInfoScheme
-	response, err := i.c.Call(request, references)
+	response, err := i.c.Call(request, &references)
 	if err != nil {
 		return nil, response, err
 	}

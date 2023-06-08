@@ -8,6 +8,7 @@ import (
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 	"net/http"
 	"testing"
 )
@@ -290,7 +291,7 @@ func Test_internalObjectImpl_Attributes(t *testing.T) {
 
 				client.On("Call",
 					&http.Request{},
-					[]*model.ObjectAttributeScheme(nil)).
+					mock.Anything).
 					Return(&model.ResponseScheme{}, nil)
 
 				fields.c = client
@@ -412,7 +413,7 @@ func Test_internalObjectImpl_History(t *testing.T) {
 
 				client.On("Call",
 					&http.Request{},
-					[]*model.ObjectHistoryScheme(nil)).
+					mock.Anything).
 					Return(&model.ResponseScheme{}, nil)
 
 				fields.c = client
@@ -534,7 +535,7 @@ func Test_internalObjectImpl_References(t *testing.T) {
 
 				client.On("Call",
 					&http.Request{},
-					[]*model.ObjectReferenceTypeInfoScheme(nil)).
+					mock.Anything).
 					Return(&model.ResponseScheme{}, nil)
 
 				fields.c = client

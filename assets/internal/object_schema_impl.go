@@ -250,7 +250,7 @@ func (i *internalObjectSchemaImpl) Attributes(ctx context.Context, workspaceID, 
 	}
 
 	var attributes []*model.ObjectTypeAttributeScheme
-	response, err := i.c.Call(request, attributes)
+	response, err := i.c.Call(request, &attributes)
 	if err != nil {
 		return nil, response, err
 	}

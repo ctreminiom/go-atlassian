@@ -78,7 +78,7 @@ func (i *internalIconImpl) Global(ctx context.Context, workspaceID string) ([]*m
 	}
 
 	var icons []*model.IconScheme
-	response, err := i.c.Call(request, icons)
+	response, err := i.c.Call(request, &icons)
 	if err != nil {
 		return nil, response, err
 	}

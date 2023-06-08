@@ -23,6 +23,8 @@ type IconService struct {
 // Get loads a single asset icon by id.
 //
 // GET /jsm/assets/workspace/{workspaceId}/v1/icon/{id}
+//
+// https://docs.go-atlassian.io/jira-assets/icons#get-icon
 func (i *IconService) Get(ctx context.Context, workspaceID, iconID string) (*model.IconScheme, *model.ResponseScheme, error) {
 	return i.internalClient.Get(ctx, workspaceID, iconID)
 }
@@ -30,6 +32,8 @@ func (i *IconService) Get(ctx context.Context, workspaceID, iconID string) (*mod
 // Global returns all global icons i.e. icons not associated with a particular object schema.
 //
 // GET /jsm/assets/workspace/{workspaceId}/v1/icon/global
+//
+// https://docs.go-atlassian.io/jira-assets/icons#get-global-icons
 func (i *IconService) Global(ctx context.Context, workspaceID string) ([]*model.IconScheme, *model.ResponseScheme, error) {
 	return i.internalClient.Global(ctx, workspaceID)
 }

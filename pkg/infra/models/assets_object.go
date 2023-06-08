@@ -97,7 +97,7 @@ type ObjectAttributeScheme struct {
 	GlobalId              string                                 `json:"globalId,omitempty"`
 	Id                    string                                 `json:"id,omitempty"`
 	ObjectTypeAttribute   *ObjectTypeAttributeScheme             `json:"objectTypeAttribute,omitempty"`
-	ObjectTypeAttributeId int                                    `json:"objectTypeAttributeId,omitempty"`
+	ObjectTypeAttributeId string                                 `json:"objectTypeAttributeId,omitempty"`
 	ObjectAttributeValues []*ObjectTypeAssetAttributeValueScheme `json:"objectAttributeValues,omitempty"`
 }
 

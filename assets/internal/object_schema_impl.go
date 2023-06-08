@@ -22,9 +22,11 @@ type ObjectSchemaService struct {
 	internalClient assets.ObjectSchemaConnector
 }
 
-// List returns all the object schemes available on Assets
+// List returns all the object schemas available on Assets
 //
 // GET /jsm/assets/workspace/{workspaceId}/v1/objectschema/list
+//
+// https://docs.go-atlassian.io/jira-assets/object/schema#get-object-schema-list
 func (o *ObjectSchemaService) List(ctx context.Context, workspaceID string) (*model.ObjectSchemaPageScheme, *model.ResponseScheme, error) {
 	return o.internalClient.List(ctx, workspaceID)
 }
@@ -32,13 +34,17 @@ func (o *ObjectSchemaService) List(ctx context.Context, workspaceID string) (*mo
 // Create creates a new object schema
 //
 // POST /jsm/assets/workspace/{workspaceId}/v1/objectschema/create
+//
+// https://docs.go-atlassian.io/jira-assets/object/schema#create-object-schema
 func (o *ObjectSchemaService) Create(ctx context.Context, workspaceID string, payload *model.ObjectSchemaPayloadScheme) (*model.ObjectSchemaScheme, *model.ResponseScheme, error) {
 	return o.internalClient.Create(ctx, workspaceID, payload)
 }
 
-// Get returns an object scheme by ID
+// Get returns an object schema by ID
 //
 // GET /jsm/assets/workspace/{workspaceId}/v1/objectschema/{id}
+//
+// https://docs.go-atlassian.io/jira-assets/object/schema#get-object-schema
 func (o *ObjectSchemaService) Get(ctx context.Context, workspaceID, objectSchemaID string) (*model.ObjectSchemaScheme, *model.ResponseScheme, error) {
 	return o.internalClient.Get(ctx, workspaceID, objectSchemaID)
 }
@@ -46,6 +52,8 @@ func (o *ObjectSchemaService) Get(ctx context.Context, workspaceID, objectSchema
 // Update updates an object schema
 //
 // PUT /jsm/assets/workspace/{workspaceId}/v1/objectschema/{id}
+//
+// https://docs.go-atlassian.io/jira-assets/object/schema#update-object-schema
 func (o *ObjectSchemaService) Update(ctx context.Context, workspaceID, objectSchemaID string, payload *model.ObjectSchemaPayloadScheme) (*model.ObjectSchemaScheme, *model.ResponseScheme, error) {
 	return o.internalClient.Update(ctx, workspaceID, objectSchemaID, payload)
 }
@@ -53,6 +61,8 @@ func (o *ObjectSchemaService) Update(ctx context.Context, workspaceID, objectSch
 // Delete deletes a schema
 //
 // DELETE /jsm/assets/workspace/{workspaceId}/v1/objectschema/{id}
+//
+// https://docs.go-atlassian.io/jira-assets/object/schema#delete-object-schema
 func (o *ObjectSchemaService) Delete(ctx context.Context, workspaceID, objectSchemaID string) (*model.ObjectSchemaScheme, *model.ResponseScheme, error) {
 	return o.internalClient.Delete(ctx, workspaceID, objectSchemaID)
 }
@@ -60,6 +70,8 @@ func (o *ObjectSchemaService) Delete(ctx context.Context, workspaceID, objectSch
 // Attributes finds all object type attributes for this object schema
 //
 // GET /jsm/assets/workspace/{workspaceId}/v1/objectschema/{id}/attributes
+//
+// https://docs.go-atlassian.io/jira-assets/object/schema#get-object-schema-attributes
 func (o *ObjectSchemaService) Attributes(ctx context.Context, workspaceID, objectSchemaID string, options *model.ObjectSchemaAttributesParamsScheme) ([]*model.ObjectTypeAttributeScheme, *model.ResponseScheme, error) {
 	return o.internalClient.Attributes(ctx, workspaceID, objectSchemaID, options)
 }
@@ -67,6 +79,8 @@ func (o *ObjectSchemaService) Attributes(ctx context.Context, workspaceID, objec
 // ObjectTypes returns all object types for this object schema
 //
 // GET /jsm/assets/workspace/{workspaceId}/v1/objectschema/{id}/objecttypes
+//
+// https://docs.go-atlassian.io/jira-assets/object/schema#get-object-schema-types
 func (o *ObjectSchemaService) ObjectTypes(ctx context.Context, workspaceID, objectSchemaID string, excludeAbstract bool) ([]*model.ObjectTypeScheme, *model.ResponseScheme, error) {
 	return o.internalClient.ObjectTypes(ctx, workspaceID, objectSchemaID, excludeAbstract)
 }

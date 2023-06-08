@@ -67,7 +67,7 @@ func (o *ObjectSchemaService) Attributes(ctx context.Context, workspaceID, objec
 // ObjectTypes returns all object types for this object schema
 //
 // GET /jsm/assets/workspace/{workspaceId}/v1/objectschema/{id}/objecttypes
-func (o *ObjectSchemaService) ObjectTypes(ctx context.Context, workspaceID, objectSchemaID string, excludeAbstract bool) (*model.ObjectSchemaTypePageScheme, *model.ResponseScheme, error) {
+func (o *ObjectSchemaService) ObjectTypes(ctx context.Context, workspaceID, objectSchemaID string, excludeAbstract bool) ([]*model.ObjectTypeScheme, *model.ResponseScheme, error) {
 	return o.internalClient.ObjectTypes(ctx, workspaceID, objectSchemaID, excludeAbstract)
 }
 
@@ -258,7 +258,7 @@ func (i *internalObjectSchemaImpl) Attributes(ctx context.Context, workspaceID, 
 	return attributes, response, nil
 }
 
-func (i *internalObjectSchemaImpl) ObjectTypes(ctx context.Context, workspaceID, objectSchemaID string, excludeAbstract bool) (*model.ObjectSchemaTypePageScheme, *model.ResponseScheme, error) {
+func (i *internalObjectSchemaImpl) ObjectTypes(ctx context.Context, workspaceID, objectSchemaID string, excludeAbstract bool) ([]*model.ObjectTypeScheme, *model.ResponseScheme, error) {
 
 	if workspaceID == "" {
 		return nil, nil, model.ErrNoWorkspaceIDError
@@ -283,11 +283,11 @@ func (i *internalObjectSchemaImpl) ObjectTypes(ctx context.Context, workspaceID,
 		return nil, nil, err
 	}
 
-	page := new(model.ObjectSchemaTypePageScheme)
-	response, err := i.c.Call(request, page)
+	var objectTypes []*model.ObjectTypeScheme
+	response, err := i.c.Call(request, &objectTypes)
 	if err != nil {
 		return nil, response, err
 	}
 
-	return page, response, nil
+	return objectTypes, response, nil
 }

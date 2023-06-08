@@ -562,7 +562,7 @@ func Test_internalObjectSchemaImpl_ObjectTypes(t *testing.T) {
 
 				client.On("Call",
 					&http.Request{},
-					&model.ObjectSchemaTypePageScheme{}).
+					mock.Anything).
 					Return(&model.ResponseScheme{}, nil)
 
 				fields.c = client

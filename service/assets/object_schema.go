@@ -46,5 +46,5 @@ type ObjectSchemaConnector interface {
 	//
 	// GET /jsm/assets/workspace/{workspaceId}/v1/objectschema/{id}/objecttypes
 	ObjectTypes(ctx context.Context, workspaceID, objectSchemaID string, excludeAbstract bool) (
-		*models.ObjectSchemaTypePageScheme, *models.ResponseScheme, error)
+		[]*models.ObjectTypeScheme, *models.ResponseScheme, error)
 }

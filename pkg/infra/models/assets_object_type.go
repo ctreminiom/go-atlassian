@@ -16,7 +16,7 @@ type ObjectTypeScheme struct {
 	Created                   string      `json:"created,omitempty"`
 	Updated                   string      `json:"updated,omitempty"`
 	ObjectCount               int         `json:"objectCount,omitempty"`
-	ParentObjectTypeId        int         `json:"parentObjectTypeId,omitempty"`
+	ParentObjectTypeId        string      `json:"parentObjectTypeId,omitempty"`
 	ObjectSchemaId            string      `json:"objectSchemaId,omitempty"`
 	Inherited                 bool        `json:"inherited,omitempty"`
 	AbstractObjectType        bool        `json:"abstractObjectType,omitempty"`

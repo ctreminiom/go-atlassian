@@ -115,7 +115,7 @@ type ObjectTypeAttributeScheme struct {
 	TypeValueMulti          []string                                     `json:"typeValueMulti,omitempty"`
 	AdditionalValue         string                                       `json:"additionalValue,omitempty"`
 	ReferenceType           *ObjectTypeAssetAttributeReferenceTypeScheme `json:"referenceType,omitempty"`
-	ReferenceObjectTypeId   int                                          `json:"referenceObjectTypeId,omitempty"`
+	ReferenceObjectTypeId   string                                       `json:"referenceObjectTypeId,omitempty"`
 	ReferenceObjectType     *ObjectTypeScheme                            `json:"referenceObjectType,omitempty"`
 	Editable                bool                                         `json:"editable,omitempty"`
 	System                  bool                                         `json:"system,omitempty"`

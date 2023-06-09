@@ -20,7 +20,7 @@ type ObjectTypeAttributesScheme struct {
 type ObjectPageScheme struct {
 	ObjectEntries         []*ObjectScheme              `json:"objectEntries"`
 	ObjectTypeAttributes  []*ObjectTypeAttributeScheme `json:"objectTypeAttributes"`
-	ObjectTypeId          int                          `json:"objectTypeId"`
+	ObjectTypeID          string                       `json:"objectTypeId"`
 	ObjectTypeIsInherited bool                         `json:"objectTypeIsInherited"`
 	AbstractObjectType    bool                         `json:"abstractObjectType"`
 	TotalFilterCount      int                          `json:"totalFilterCount"`

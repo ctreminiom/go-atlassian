@@ -25,6 +25,8 @@ type ObjectTypeService struct {
 // Get finds an object type by id
 //
 // GET /jsm/assets/workspace/{workspaceId}/v1/objecttype/{id}
+//
+// https://docs.go-atlassian.io/jira-assets/object/type#get-object-type
 func (o *ObjectTypeService) Get(ctx context.Context, workspaceID, objectTypeID string) (*model.ObjectTypeScheme, *model.ResponseScheme, error) {
 	return o.internalClient.Get(ctx, workspaceID, objectTypeID)
 }
@@ -32,6 +34,8 @@ func (o *ObjectTypeService) Get(ctx context.Context, workspaceID, objectTypeID s
 // Update updates an existing object type
 //
 // PUT /jsm/assets/workspace/{workspaceId}/v1/objecttype/{id}
+//
+// https://docs.go-atlassian.io/jira-assets/object/type#update-object-type
 func (o *ObjectTypeService) Update(ctx context.Context, workspaceID, objectTypeID string, payload *model.ObjectTypePayloadScheme) (*model.ObjectTypeScheme, *model.ResponseScheme, error) {
 	return o.internalClient.Update(ctx, workspaceID, objectTypeID, payload)
 }
@@ -39,6 +43,8 @@ func (o *ObjectTypeService) Update(ctx context.Context, workspaceID, objectTypeI
 // Create creates a new object type
 //
 // POST /jsm/assets/workspace/{workspaceId}/v1/objecttype/create
+//
+// https://docs.go-atlassian.io/jira-assets/object/type#create-object-type
 func (o *ObjectTypeService) Create(ctx context.Context, workspaceID string, payload *model.ObjectTypePayloadScheme) (*model.ObjectTypeScheme, *model.ResponseScheme, error) {
 	return o.internalClient.Create(ctx, workspaceID, payload)
 }
@@ -46,6 +52,8 @@ func (o *ObjectTypeService) Create(ctx context.Context, workspaceID string, payl
 // Delete deletes an object type
 //
 // DELETE /jsm/assets/workspace/{workspaceId}/v1/objecttype/{id}
+//
+// https://docs.go-atlassian.io/jira-assets/object/type#delete-object-type
 func (o *ObjectTypeService) Delete(ctx context.Context, workspaceID, objectTypeID string) (*model.ObjectTypeScheme, *model.ResponseScheme, error) {
 	return o.internalClient.Delete(ctx, workspaceID, objectTypeID)
 }
@@ -53,6 +61,8 @@ func (o *ObjectTypeService) Delete(ctx context.Context, workspaceID, objectTypeI
 // Attributes finds all attributes for this object type
 //
 // GET /jsm/assets/workspace/{workspaceId}/v1/objecttype/{id}/attributes
+//
+// https://docs.go-atlassian.io/jira-assets/object/type#get-object-type-attributes
 func (o *ObjectTypeService) Attributes(ctx context.Context, workspaceID, objectTypeID string, options *model.ObjectTypeAttributesParamsScheme) ([]*model.ObjectTypeAttributeScheme, *model.ResponseScheme, error) {
 	return o.internalClient.Attributes(ctx, workspaceID, objectTypeID, options)
 }
@@ -60,6 +70,8 @@ func (o *ObjectTypeService) Attributes(ctx context.Context, workspaceID, objectT
 // Position changes the position of this object type
 //
 // POST /jsm/assets/workspace/{workspaceId}/v1/objecttype/{id}/position
+//
+// https://docs.go-atlassian.io/jira-assets/object/type#update-object-type-position
 func (o *ObjectTypeService) Position(ctx context.Context, workspaceID, objectTypeID string, payload *model.ObjectTypePositionPayloadScheme) (*model.ObjectTypeScheme, *model.ResponseScheme, error) {
 	return o.internalClient.Position(ctx, workspaceID, objectTypeID, payload)
 }

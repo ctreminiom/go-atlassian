@@ -23,6 +23,8 @@ type ObjectTypeAttributeService struct {
 // Create creates a new attribute on the given object type
 //
 // POST /jsm/assets/workspace/{workspaceId}/v1/objecttypeattribute/{objectTypeId}
+//
+// https://docs.go-atlassian.io/jira-assets/object/type/attribute#create-object-type-attribute
 func (o *ObjectTypeAttributeService) Create(ctx context.Context, workspaceID, objectTypeID string, payload *model.ObjectTypeAttributeScheme) (*model.ObjectTypeAttributeScheme, *model.ResponseScheme, error) {
 	return o.internalClient.Create(ctx, workspaceID, objectTypeID, payload)
 }
@@ -30,6 +32,8 @@ func (o *ObjectTypeAttributeService) Create(ctx context.Context, workspaceID, ob
 // Update updates an existing object type attribute
 //
 // PUT /jsm/assets/workspace/{workspaceId}/v1/objecttypeattribute/{objectTypeId}/{id}
+//
+// https://docs.go-atlassian.io/jira-assets/object/type/attribute#update-object-type-attribute
 func (o *ObjectTypeAttributeService) Update(ctx context.Context, workspaceID, objectTypeID, attributeID string, payload *model.ObjectTypeAttributeScheme) (*model.ObjectTypeAttributeScheme, *model.ResponseScheme, error) {
 	return o.internalClient.Update(ctx, workspaceID, objectTypeID, attributeID, payload)
 }
@@ -37,6 +41,8 @@ func (o *ObjectTypeAttributeService) Update(ctx context.Context, workspaceID, ob
 // Delete deletes an existing object type attribute
 //
 // DELETE /jsm/assets/workspace/{workspaceId}/v1/objecttypeattribute/{id}
+//
+// https://docs.go-atlassian.io/jira-assets/object/type/attribute#delete-object-type-attribute
 func (o *ObjectTypeAttributeService) Delete(ctx context.Context, workspaceID, attributeID string) (*model.ResponseScheme, error) {
 	return o.internalClient.Delete(ctx, workspaceID, attributeID)
 }

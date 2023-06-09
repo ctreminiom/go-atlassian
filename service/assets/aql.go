@@ -12,5 +12,7 @@ type AQLAssetConnector interface {
 	// Filter retrieves a list of objects based on an AQL. Note that the preferred endpoint is /aql.
 	//
 	// POST /jsm/assets/workspace/{workspaceId}/v1/object/navlist/aql
+	//
+	// https://docs.go-atlassian.io/jira-assets/aql#filter-objects
 	Filter(ctx context.Context, workspaceID string, payload *models.AQLSearchParamsScheme) (*models.ObjectPageScheme, *models.ResponseScheme, error)
 }

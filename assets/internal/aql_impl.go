@@ -23,6 +23,8 @@ type AQLService struct {
 // Filter retrieves a list of objects based on an AQL. Note that the preferred endpoint is /aql.
 //
 // POST /jsm/assets/workspace/{workspaceId}/v1/object/navlist/aql
+//
+// https://docs.go-atlassian.io/jira-assets/aql#filter-objects
 func (a *AQLService) Filter(ctx context.Context, workspaceID string, payload *model.AQLSearchParamsScheme) (*model.ObjectPageScheme, *model.ResponseScheme, error) {
 	return a.internalClient.Filter(ctx, workspaceID, payload)
 }

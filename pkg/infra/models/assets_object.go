@@ -21,7 +21,7 @@ type TypeReferenceScheme struct {
 
 type ObjectHistoryScheme struct {
 	Actor             *ObjectHistoryActorScheme `json:"actor,omitempty"`
-	Id                int                       `json:"id,omitempty"`
+	ID                string                    `json:"id,omitempty"`
 	AffectedAttribute string                    `json:"affectedAttribute,omitempty"`
 	OldValue          string                    `json:"oldValue,omitempty"`
 	NewValue          string                    `json:"newValue,omitempty"`
@@ -62,7 +62,7 @@ type ObjectPayloadAttributeValueScheme struct {
 type ObjectScheme struct {
 	WorkspaceId string                   `json:"workspaceId,omitempty"`
 	GlobalId    string                   `json:"globalId,omitempty"`
-	Id          string                   `json:"id,omitempty"`
+	ID          string                   `json:"id,omitempty"`
 	Label       string                   `json:"label,omitempty"`
 	ObjectKey   string                   `json:"objectKey,omitempty"`
 	Avatar      *ObjectAvatarScheme      `json:"avatar,omitempty"`
@@ -78,7 +78,7 @@ type ObjectScheme struct {
 type ObjectAvatarScheme struct {
 	WorkspaceId string `json:"workspaceId,omitempty"`
 	GlobalId    string `json:"globalId,omitempty"`
-	Id          string `json:"id,omitempty"`
+	ID          string `json:"id,omitempty"`
 	AvatarUUID  string `json:"avatarUUID,omitempty"`
 	Url16       string `json:"url16,omitempty"`
 	Url48       string `json:"url48,omitempty"`
@@ -95,7 +95,7 @@ type ObjectLinksScheme struct {
 type ObjectAttributeScheme struct {
 	WorkspaceId           string                                 `json:"workspaceId,omitempty"`
 	GlobalId              string                                 `json:"globalId,omitempty"`
-	Id                    string                                 `json:"id,omitempty"`
+	ID                    string                                 `json:"id,omitempty"`
 	ObjectTypeAttribute   *ObjectTypeAttributeScheme             `json:"objectTypeAttribute,omitempty"`
 	ObjectTypeAttributeId string                                 `json:"objectTypeAttributeId,omitempty"`
 	ObjectAttributeValues []*ObjectTypeAssetAttributeValueScheme `json:"objectAttributeValues,omitempty"`
@@ -104,7 +104,7 @@ type ObjectAttributeScheme struct {
 type ObjectTypeAttributeScheme struct {
 	WorkspaceId             string                                       `json:"workspaceId,omitempty"`
 	GlobalId                string                                       `json:"globalId,omitempty"`
-	Id                      string                                       `json:"id,omitempty"`
+	ID                      string                                       `json:"id,omitempty"`
 	ObjectType              *ObjectTypeScheme                            `json:"objectType,omitempty"`
 	Name                    string                                       `json:"name,omitempty"`
 	Label                   bool                                         `json:"label,omitempty"`
@@ -138,7 +138,7 @@ type ObjectTypeAttributeScheme struct {
 }
 
 type ObjectTypeAssetAttributeDefaultTypeScheme struct {
-	Id   int    `json:"id,omitempty"`
+	ID   int    `json:"id,omitempty"`
 	Name string `json:"name,omitempty"`
 }
 
@@ -163,7 +163,7 @@ type ObjectTypeAssetAttributeValueGroupScheme struct {
 }
 
 type ObjectTypeAssetAttributeStatusScheme struct {
-	Id       string `json:"id,omitempty"`
+	ID       string `json:"id,omitempty"`
 	Name     string `json:"name,omitempty"`
 	Category int    `json:"category,omitempty"`
 }

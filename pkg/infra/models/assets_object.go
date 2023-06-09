@@ -27,7 +27,7 @@ type ObjectHistoryScheme struct {
 	NewValue          string                    `json:"newValue,omitempty"`
 	Type              int                       `json:"type,omitempty"`
 	Created           string                    `json:"created,omitempty"`
-	ObjectId          int                       `json:"objectId,omitempty"`
+	ObjectID          string                    `json:"objectId,omitempty"`
 }
 
 type ObjectHistoryActorScheme struct {

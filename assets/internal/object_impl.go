@@ -25,6 +25,8 @@ type ObjectService struct {
 // Get loads one object.
 //
 // GET /jsm/assets/workspace/{workspaceId}/v1/object/{id}
+//
+// https://docs.go-atlassian.io/jira-assets/object#get-object-by-id
 func (o *ObjectService) Get(ctx context.Context, workspaceID, objectID string) (*model.ObjectScheme, *model.ResponseScheme, error) {
 	return o.internalClient.Get(ctx, workspaceID, objectID)
 }
@@ -32,6 +34,8 @@ func (o *ObjectService) Get(ctx context.Context, workspaceID, objectID string) (
 // Update updates an existing object in Assets.
 //
 // PUT /jsm/assets/workspace/{workspaceId}/v1/object/{id}
+//
+// https://docs.go-atlassian.io/jira-assets/object#update-object-by-id
 func (o *ObjectService) Update(ctx context.Context, workspaceID, objectID string, payload *model.ObjectPayloadScheme) (*model.ObjectScheme, *model.ResponseScheme, error) {
 	return o.internalClient.Update(ctx, workspaceID, objectID, payload)
 }
@@ -39,6 +43,8 @@ func (o *ObjectService) Update(ctx context.Context, workspaceID, objectID string
 // Delete deletes the referenced object
 //
 // DELETE /jsm/assets/workspace/{workspaceId}/v1/object/{id}
+//
+// https://docs.go-atlassian.io/jira-assets/object#delete-object-by-id
 func (o *ObjectService) Delete(ctx context.Context, workspaceID, objectID string) (*model.ResponseScheme, error) {
 	return o.internalClient.Delete(ctx, workspaceID, objectID)
 }
@@ -46,6 +52,8 @@ func (o *ObjectService) Delete(ctx context.Context, workspaceID, objectID string
 // Attributes list all attributes for the given object.
 //
 // GET /jsm/assets/workspace/{workspaceId}/v1/object/{id}/attributes
+//
+// https://docs.go-atlassian.io/jira-assets/object#get-object-attributes
 func (o *ObjectService) Attributes(ctx context.Context, workspaceID, objectID string) ([]*model.ObjectAttributeScheme, *model.ResponseScheme, error) {
 	return o.internalClient.Attributes(ctx, workspaceID, objectID)
 }
@@ -53,6 +61,8 @@ func (o *ObjectService) Attributes(ctx context.Context, workspaceID, objectID st
 // History retrieves the history entries for this object.
 //
 // GET /jsm/assets/workspace/{workspaceId}/v1/object/{id}/history
+//
+// https://docs.go-atlassian.io/jira-assets/object#get-object-changelogs
 func (o *ObjectService) History(ctx context.Context, workspaceID, objectID string, ascOrder bool) ([]*model.ObjectHistoryScheme, *model.ResponseScheme, error) {
 	return o.internalClient.History(ctx, workspaceID, objectID, ascOrder)
 }
@@ -60,6 +70,8 @@ func (o *ObjectService) History(ctx context.Context, workspaceID, objectID strin
 // References finds all references for an object.
 //
 // GET /jsm/assets/workspace/{workspaceId}/v1/object/{id}/referenceinfo
+//
+// https://docs.go-atlassian.io/jira-assets/object#get-object-references
 func (o *ObjectService) References(ctx context.Context, workspaceID, objectID string) ([]*model.ObjectReferenceTypeInfoScheme, *model.ResponseScheme, error) {
 	return o.internalClient.References(ctx, workspaceID, objectID)
 }
@@ -67,6 +79,8 @@ func (o *ObjectService) References(ctx context.Context, workspaceID, objectID st
 // Create creates a new object in Assets.
 //
 // POST /jsm/assets/workspace/{workspaceId}/v1/object/create
+//
+// https://docs.go-atlassian.io/jira-assets/object#create-object
 func (o *ObjectService) Create(ctx context.Context, workspaceID string, payload *model.ObjectPayloadScheme) (*model.ObjectScheme, *model.ResponseScheme, error) {
 	return o.internalClient.Create(ctx, workspaceID, payload)
 }
@@ -74,6 +88,8 @@ func (o *ObjectService) Create(ctx context.Context, workspaceID string, payload 
 // Relation returns the relation between Jira issues and Assets objects
 //
 // GET /jsm/assets/workspace/{workspaceId}/v1/objectconnectedtickets/{objectId}/tickets
+//
+// https://docs.go-atlassian.io/jira-assets/object#get-object-tickets
 func (o *ObjectService) Relation(ctx context.Context, workspaceID, objectID string) (*model.TicketPageScheme, *model.ResponseScheme, error) {
 	return o.internalClient.Relation(ctx, workspaceID, objectID)
 }

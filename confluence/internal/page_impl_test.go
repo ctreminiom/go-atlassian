@@ -139,9 +139,10 @@ func Test_internalPageImpl_Bulk(t *testing.T) {
 	}
 
 	type args struct {
-		ctx    context.Context
-		cursor string
-		limit  int
+		ctx     context.Context
+		cursor  string
+		limit   int
+		pageIDs []int
 	}
 
 	testCases := []struct {
@@ -167,6 +168,34 @@ func Test_internalPageImpl_Bulk(t *testing.T) {
 					context.Background(),
 					http.MethodGet,
 					"wiki/api/v2/pages?cursor=cursor-sample&limit=200",
+					nil).
+					Return(&http.Request{}, nil)
+
+				client.On("Call",
+					&http.Request{},
+					&model.PageChunkScheme{}).
+					Return(&model.ResponseScheme{}, nil)
+
+				fields.c = client
+			},
+		},
+
+		{
+			name: "when the page ids are included",
+			args: args{
+				ctx:     context.TODO(),
+				cursor:  "cursor-sample",
+				limit:   200,
+				pageIDs: []int{1, 2, 3, 4, 5, 6},
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewClient(t)
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodGet,
+					"wiki/api/v2/pages?cursor=cursor-sample&id=1%2C2%2C3%2C4%2C5%2C6&limit=200",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -214,7 +243,7 @@ func Test_internalPageImpl_Bulk(t *testing.T) {
 
 			newService := NewPageService(testCase.fields.c)
 
-			gotResult, gotResponse, err := newService.Bulk(testCase.args.ctx, testCase.args.cursor, testCase.args.limit)
+			gotResult, gotResponse, err := newService.Bulk(testCase.args.ctx, testCase.args.cursor, testCase.args.limit, testCase.args.pageIDs...)
 
 			if testCase.wantErr {
 

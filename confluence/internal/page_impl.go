@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"net/url"
 	"strconv"
+	"strings"
 )
 
 // NewPageService returns a new Confluence V2 Page service
@@ -40,8 +41,8 @@ func (p *PageService) Get(ctx context.Context, pageID int, format string, draft 
 // GET /wiki/api/v2/pages
 //
 // https://docs.go-atlassian.io/confluence-cloud/v2/page#get-pages
-func (p *PageService) Bulk(ctx context.Context, cursor string, limit int) (*model.PageChunkScheme, *model.ResponseScheme, error) {
-	return p.internalClient.Bulk(ctx, cursor, limit)
+func (p *PageService) Bulk(ctx context.Context, cursor string, limit int, pageIDs ...int) (*model.PageChunkScheme, *model.ResponseScheme, error) {
+	return p.internalClient.Bulk(ctx, cursor, limit, pageIDs...)
 }
 
 // GetsByLabel returns the pages of specified label.
@@ -141,10 +142,17 @@ func (i *internalPageImpl) Get(ctx context.Context, pageID int, format string, d
 	return page, response, nil
 }
 
-func (i *internalPageImpl) Bulk(ctx context.Context, cursor string, limit int) (*model.PageChunkScheme, *model.ResponseScheme, error) {
+func (i *internalPageImpl) Bulk(ctx context.Context, cursor string, limit int, pageIDs ...int) (*model.PageChunkScheme, *model.ResponseScheme, error) {
 
 	query := url.Values{}
 	query.Add("limit", strconv.Itoa(limit))
+	if len(pageIDs) > 0 {
+		ids := make([]string, 0, len(pageIDs))
+		for _, id := range pageIDs {
+			ids = append(ids, strconv.Itoa(id))
+		}
+		query.Add("id", strings.Join(ids, ","))
+	}
 
 	if cursor != "" {
 		query.Add("cursor", cursor)

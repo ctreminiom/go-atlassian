@@ -25,7 +25,7 @@ type PageConnector interface {
 	// GET /wiki/api/v2/pages
 	//
 	// https://docs.go-atlassian.io/confluence-cloud/v2/page#get-pages
-	Bulk(ctx context.Context, cursor string, limit int) (*models.PageChunkScheme, *models.ResponseScheme, error)
+	Bulk(ctx context.Context, cursor string, limit int, pageIDs... int) (*models.PageChunkScheme, *models.ResponseScheme, error)
 
 	// GetsByLabel returns the pages of specified label.
 	//

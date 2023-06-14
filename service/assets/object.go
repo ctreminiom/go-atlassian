@@ -70,5 +70,5 @@ type ObjectConnector interface {
 	// POST /jsm/assets/workspace/{workspaceId}/v1/object/aql
 	//
 	// https://docs.go-atlassian.io/jira-assets/objects#filter-objects
-	Filter(ctx context.Context, workspaceID string, payload *models.ObjectsAQLSearchParamsScheme) (*models.ObjectScheme, *models.ResponseScheme, error)
+	Filter(ctx context.Context, workspaceID, aql string, attributes bool, startAt, maxResults int) (*models.ObjectListScheme, *models.ResponseScheme, error)
 }

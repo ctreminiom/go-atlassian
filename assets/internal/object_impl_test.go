@@ -1025,3 +1025,144 @@ func Test_internalObjectImpl_Create(t *testing.T) {
 		})
 	}
 }
+
+func Test_internalObjectImpl_Filter(t *testing.T) {
+
+	payloadMocked := &struct {
+		Aql string "json:\"qlQuery\""
+	}{Aql: "objectType = Office AND Name LIKE SYD"}
+
+	type fields struct {
+		c service.Client
+	}
+
+	type args struct {
+		ctx                 context.Context
+		workspaceID, aql    string
+		attributes          bool
+		startAt, maxResults int
+	}
+
+	testCases := []struct {
+		name    string
+		fields  fields
+		args    args
+		on      func(*fields)
+		wantErr bool
+		Err     error
+	}{
+		{
+			name: "when the parameters are correct",
+			args: args{
+				ctx:         context.TODO(),
+				workspaceID: "workspace-uuid-sample",
+				aql:         "objectType = Office AND Name LIKE SYD",
+				attributes:  false,
+				startAt:     50,
+				maxResults:  50,
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewClient(t)
+
+				client.On("TransformStructToReader",
+					payloadMocked).
+					Return(bytes.NewReader([]byte{}), nil)
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodPost,
+					"jsm/assets/workspace/workspace-uuid-sample/v1/object/aql?includeAttributes=false&maxResults=50&startAt=50",
+					bytes.NewReader([]byte{})).
+					Return(&http.Request{}, nil)
+
+				client.On("Call",
+					&http.Request{},
+					&model.ObjectListScheme{}).
+					Return(&model.ResponseScheme{}, nil)
+
+				fields.c = client
+			},
+		},
+
+		{
+			name: "when the http request cannot be created",
+			args: args{
+				ctx:         context.TODO(),
+				workspaceID: "workspace-uuid-sample",
+				aql:         "objectType = Office AND Name LIKE SYD",
+				attributes:  false,
+				startAt:     50,
+				maxResults:  50,
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewClient(t)
+
+				client.On("TransformStructToReader",
+					payloadMocked).
+					Return(bytes.NewReader([]byte{}), nil)
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodPost,
+					"jsm/assets/workspace/workspace-uuid-sample/v1/object/aql?includeAttributes=false&maxResults=50&startAt=50",
+					bytes.NewReader([]byte{})).
+					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+
+				fields.c = client
+
+			},
+			wantErr: true,
+			Err:     errors.New("error, unable to create the http request"),
+		},
+
+		{
+			name: "when the workspace id is not provided",
+			args: args{
+				ctx: context.TODO(),
+			},
+			wantErr: true,
+			Err:     model.ErrNoWorkspaceIDError,
+		},
+
+		{
+			name: "when the aql query is not provided",
+			args: args{
+				ctx:         context.TODO(),
+				workspaceID: "workspace-uuid-sample",
+			},
+			wantErr: true,
+			Err:     model.ErrNoAqlQueryError,
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+
+			if testCase.on != nil {
+				testCase.on(&testCase.fields)
+			}
+
+			newService := NewObjectService(testCase.fields.c)
+
+			gotResult, gotResponse, err := newService.Filter(testCase.args.ctx, testCase.args.workspaceID, testCase.args.aql,
+				testCase.args.attributes, testCase.args.startAt, testCase.args.maxResults)
+
+			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+
+				assert.EqualError(t, err, testCase.Err.Error())
+			} else {
+
+				assert.NoError(t, err)
+				assert.NotEqual(t, gotResponse, nil)
+				assert.NotEqual(t, gotResult, nil)
+			}
+
+		})
+	}
+}

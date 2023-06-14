@@ -8,6 +8,7 @@ import (
 	"github.com/ctreminiom/go-atlassian/service/assets"
 	"net/http"
 	"net/url"
+	"strconv"
 	"strings"
 )
 
@@ -94,8 +95,60 @@ func (o *ObjectService) Relation(ctx context.Context, workspaceID, objectID stri
 	return o.internalClient.Relation(ctx, workspaceID, objectID)
 }
 
+// Filter fetch Objects by AQL.
+//
+// POST /jsm/assets/workspace/{workspaceId}/v1/object/aql
+//
+// https://docs.go-atlassian.io/jira-assets/objects#filter-objects
+func (o *ObjectService) Filter(ctx context.Context, workspaceID, aql string, attributes bool, startAt, maxResults int) (*model.ObjectListScheme, *model.ResponseScheme, error) {
+	return o.internalClient.Filter(ctx, workspaceID, aql, attributes, startAt, maxResults)
+}
+
 type internalObjectImpl struct {
 	c service.Client
+}
+
+func (i *internalObjectImpl) Filter(ctx context.Context, workspaceID, aql string, attributes bool, startAt, maxResults int) (*model.ObjectListScheme, *model.ResponseScheme, error) {
+
+	if workspaceID == "" {
+		return nil, nil, model.ErrNoWorkspaceIDError
+	}
+
+	if aql == "" {
+		return nil, nil, model.ErrNoAqlQueryError
+	}
+
+	payload := struct {
+		Aql string `json:"qlQuery"`
+	}{Aql: aql}
+
+	reader, err := i.c.TransformStructToReader(&payload)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	params := url.Values{}
+	params.Add("startAt", strconv.Itoa(startAt))
+	params.Add("maxResults", strconv.Itoa(maxResults))
+
+	if !attributes {
+		params.Add("includeAttributes", "false")
+	}
+
+	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/object/aql?%v", workspaceID, params.Encode())
+
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	list := new(model.ObjectListScheme)
+	response, err := i.c.Call(request, list)
+	if err != nil {
+		return nil, response, err
+	}
+
+	return list, response, nil
 }
 
 func (i *internalObjectImpl) Get(ctx context.Context, workspaceID, objectID string) (*model.ObjectScheme, *model.ResponseScheme, error) {

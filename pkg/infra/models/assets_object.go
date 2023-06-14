@@ -167,3 +167,23 @@ type ObjectTypeAssetAttributeStatusScheme struct {
 	Name     string `json:"name,omitempty"`
 	Category int    `json:"category,omitempty"`
 }
+
+type ObjectListScheme struct {
+	ObjectEntries         []*ObjectScheme              `json:"objectEntries,omitempty"`
+	ObjectTypeAttributes  []*ObjectTypeAttributeScheme `json:"objectTypeAttributes,omitempty"`
+	ObjectTypeId          int                          `json:"objectTypeId,omitempty"`
+	ObjectTypeIsInherited bool                         `json:"objectTypeIsInherited,omitempty"`
+	AbstractObjectType    bool                         `json:"abstractObjectType,omitempty"`
+	TotalFilterCount      int                          `json:"totalFilterCount,omitempty"`
+	StartIndex            int                          `json:"startIndex,omitempty"`
+	ToIndex               int                          `json:"toIndex,omitempty"`
+	PageObjectSize        int                          `json:"pageObjectSize,omitempty"`
+	PageNumber            int                          `json:"pageNumber,omitempty"`
+	OrderByTypeAttrId     int                          `json:"orderByTypeAttrId,omitempty"`
+	OrderWay              string                       `json:"orderWay,omitempty"`
+	QlQuery               string                       `json:"qlQuery,omitempty"`
+	QlQuerySearchResult   bool                         `json:"qlQuerySearchResult,omitempty"`
+	Iql                   string                       `json:"iql,omitempty"`
+	IqlSearchResult       bool                         `json:"iqlSearchResult,omitempty"`
+	ConversionPossible    bool                         `json:"conversionPossible,omitempty"`
+}

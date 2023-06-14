@@ -64,4 +64,11 @@ type ObjectConnector interface {
 	//
 	// https://docs.go-atlassian.io/jira-assets/object#get-object-tickets
 	Relation(ctx context.Context, workspaceID, objectID string) (*models.TicketPageScheme, *models.ResponseScheme, error)
+
+	// Filter fetch Objects by AQL.
+	//
+	// POST /jsm/assets/workspace/{workspaceId}/v1/object/aql
+	//
+	// https://docs.go-atlassian.io/jira-assets/objects#filter-objects
+	Filter(ctx context.Context, workspaceID string, payload *models.ObjectsAQLSearchParamsScheme) (*models.ObjectScheme, *models.ResponseScheme, error)
 }

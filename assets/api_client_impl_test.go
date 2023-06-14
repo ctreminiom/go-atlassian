@@ -29,8 +29,35 @@ func TestClient_Call(t *testing.T) {
 		},
 	}
 
-	nonExpectedResponse := &http.Response{
+	badRequestResponse := &http.Response{
 		StatusCode: http.StatusBadRequest,
+		Body:       ioutil.NopCloser(strings.NewReader("Hello, world!")),
+		Request: &http.Request{
+			Method: http.MethodGet,
+			URL:    &url.URL{},
+		},
+	}
+
+	internalServerResponse := &http.Response{
+		StatusCode: http.StatusInternalServerError,
+		Body:       ioutil.NopCloser(strings.NewReader("Hello, world!")),
+		Request: &http.Request{
+			Method: http.MethodGet,
+			URL:    &url.URL{},
+		},
+	}
+
+	notFoundResponse := &http.Response{
+		StatusCode: http.StatusNotFound,
+		Body:       ioutil.NopCloser(strings.NewReader("Hello, world!")),
+		Request: &http.Request{
+			Method: http.MethodGet,
+			URL:    &url.URL{},
+		},
+	}
+
+	noPermissionsResponse := &http.Response{
+		StatusCode: http.StatusUnauthorized,
 		Body:       ioutil.NopCloser(strings.NewReader("Hello, world!")),
 		Request: &http.Request{
 			Method: http.MethodGet,
@@ -83,13 +110,13 @@ func TestClient_Call(t *testing.T) {
 		},
 
 		{
-			name: "when the response status is not valid",
+			name: "when the response return a bad request",
 			on: func(fields *fields) {
 
 				client := mocks.NewHttpClient(t)
 
 				client.On("Do", (*http.Request)(nil)).
-					Return(nonExpectedResponse, nil)
+					Return(badRequestResponse, nil)
 
 				fields.HTTP = client
 			},
@@ -98,13 +125,88 @@ func TestClient_Call(t *testing.T) {
 				structure: nil,
 			},
 			want: &models.ResponseScheme{
-				Response: nonExpectedResponse,
+				Response: badRequestResponse,
 				Code:     http.StatusBadRequest,
 				Method:   http.MethodGet,
 				Bytes:    *bytes.NewBufferString("Hello, world!"),
 			},
 			wantErr: true,
-			Err:     models.ErrInvalidStatusCodeError,
+			Err:     models.ErrBadRequestError,
+		},
+
+		{
+			name: "when the response returns an internal service error",
+			on: func(fields *fields) {
+
+				client := mocks.NewHttpClient(t)
+
+				client.On("Do", (*http.Request)(nil)).
+					Return(internalServerResponse, nil)
+
+				fields.HTTP = client
+			},
+			args: args{
+				request:   nil,
+				structure: nil,
+			},
+			want: &models.ResponseScheme{
+				Response: internalServerResponse,
+				Code:     http.StatusInternalServerError,
+				Method:   http.MethodGet,
+				Bytes:    *bytes.NewBufferString("Hello, world!"),
+			},
+			wantErr: true,
+			Err:     models.ErrInternalError,
+		},
+
+		{
+			name: "when the response returns a not found",
+			on: func(fields *fields) {
+
+				client := mocks.NewHttpClient(t)
+
+				client.On("Do", (*http.Request)(nil)).
+					Return(notFoundResponse, nil)
+
+				fields.HTTP = client
+			},
+			args: args{
+				request:   nil,
+				structure: nil,
+			},
+			want: &models.ResponseScheme{
+				Response: notFoundResponse,
+				Code:     http.StatusNotFound,
+				Method:   http.MethodGet,
+				Bytes:    *bytes.NewBufferString("Hello, world!"),
+			},
+			wantErr: true,
+			Err:     models.ErrNotFound,
+		},
+
+		{
+			name: "when the response returns an insufficient permissions",
+			on: func(fields *fields) {
+
+				client := mocks.NewHttpClient(t)
+
+				client.On("Do", (*http.Request)(nil)).
+					Return(noPermissionsResponse, nil)
+
+				fields.HTTP = client
+			},
+			args: args{
+				request:   nil,
+				structure: nil,
+			},
+			want: &models.ResponseScheme{
+				Response: noPermissionsResponse,
+				Code:     http.StatusUnauthorized,
+				Method:   http.MethodGet,
+				Bytes:    *bytes.NewBufferString("Hello, world!"),
+			},
+			wantErr: true,
+			Err:     models.ErrUnauthorized,
 		},
 
 		{
@@ -571,6 +673,61 @@ func TestClient_NewRequest(t *testing.T) {
 				assert.NoError(t, err)
 				assert.NotEqual(t, got, nil)
 			}
+		})
+	}
+}
+
+func TestNew(t *testing.T) {
+
+	mockClient, err := New(http.DefaultClient)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	mockClient.Auth.SetBasicAuth("test", "test")
+	mockClient.Auth.SetUserAgent("aaa")
+
+	type args struct {
+		httpClient common.HttpClient
+	}
+
+	testCases := []struct {
+		name    string
+		args    args
+		on      func(*args)
+		want    *Client
+		wantErr bool
+		Err     error
+	}{
+		{
+			name: "when the parameters are correct",
+			args: args{
+				httpClient: http.DefaultClient,
+			},
+			want:    mockClient,
+			wantErr: false,
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+
+			gotClient, err := New(testCase.args.httpClient)
+
+			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+
+				assert.Error(t, err)
+				assert.EqualError(t, err, testCase.Err.Error())
+
+			} else {
+				assert.NoError(t, err)
+				assert.NotEqual(t, gotClient, nil)
+			}
+
 		})
 	}
 }

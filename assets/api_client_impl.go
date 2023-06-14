@@ -140,9 +140,27 @@ func (c *Client) TransformTheHTTPResponse(response *http.Response, structure int
 
 	responseTransformed.Bytes.Write(responseAsBytes)
 
-	var wasSuccess = response.StatusCode >= 200 && response.StatusCode < 300
+	wasSuccess := response.StatusCode >= 200 && response.StatusCode < 300
+
 	if !wasSuccess {
-		return responseTransformed, models.ErrInvalidStatusCodeError
+
+		switch response.StatusCode {
+
+		case http.StatusNotFound:
+			return responseTransformed, models.ErrNotFound
+
+		case http.StatusUnauthorized:
+			return responseTransformed, models.ErrUnauthorized
+
+		case http.StatusInternalServerError:
+			return responseTransformed, models.ErrInternalError
+
+		case http.StatusBadRequest:
+			return responseTransformed, models.ErrBadRequestError
+
+		default:
+			return responseTransformed, models.ErrInvalidStatusCodeError
+		}
 	}
 
 	if structure != nil {

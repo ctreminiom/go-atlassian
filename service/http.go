@@ -14,3 +14,8 @@ type Client interface {
 	TransformTheHTTPResponse(response *http.Response, structure interface{}) (*models.ResponseScheme, error)
 	TransformStructToReader(structure interface{}) (io.Reader, error)
 }
+
+type Connector interface {
+	NewRequest(ctx context.Context, method, urlStr, type_ string, body interface{}) (*http.Request, error)
+	Call(request *http.Request, structure interface{}) (*models.ResponseScheme, error)
+}

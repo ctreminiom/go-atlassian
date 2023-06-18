@@ -12,15 +12,11 @@ import (
 	"strings"
 )
 
-func NewSprintService(client service.Client, version string) (*SprintService, error) {
-
-	if version == "" {
-		return nil, model.ErrNoVersionProvided
-	}
+func NewSprintService(client service.Connector, version string) *SprintService {
 
 	return &SprintService{
 		internalClient: &internalSprintImpl{c: client, version: version},
-	}, nil
+	}
 }
 
 type SprintService struct {
@@ -133,7 +129,7 @@ func (s *SprintService) Move(ctx context.Context, sprintID int, payload *model.S
 }
 
 type internalSprintImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -143,19 +139,14 @@ func (i *internalSprintImpl) Move(ctx context.Context, sprintID int, payload *mo
 		return nil, model.ErrNoSprintIDError
 	}
 
-	reader, err := i.c.TransformStructToReader(payload)
+	url := fmt.Sprintf("/rest/agile/%v/sprint/%v/issue", i.version, sprintID)
+
+	req, err := i.c.NewRequest(ctx, http.MethodPost, url, "", payload)
 	if err != nil {
 		return nil, err
 	}
 
-	endpoint := fmt.Sprintf("/rest/agile/%v/sprint/%v/issue", i.version, sprintID)
-
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
-	if err != nil {
-		return nil, err
-	}
-
-	return i.c.Call(request, nil)
+	return i.c.Call(req, nil)
 }
 
 func (i *internalSprintImpl) Get(ctx context.Context, sprintID int) (*model.SprintScheme, *model.ResponseScheme, error) {
@@ -164,43 +155,38 @@ func (i *internalSprintImpl) Get(ctx context.Context, sprintID int) (*model.Spri
 		return nil, nil, model.ErrNoSprintIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/agile/%v/sprint/%v", i.version, sprintID)
+	url := fmt.Sprintf("rest/agile/%v/sprint/%v", i.version, sprintID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodGet, url, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	sprint := new(model.SprintScheme)
-	response, err := i.c.Call(request, sprint)
+	res, err := i.c.Call(req, sprint)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return sprint, response, nil
+	return sprint, res, nil
 }
 
 func (i *internalSprintImpl) Create(ctx context.Context, payload *model.SprintPayloadScheme) (*model.SprintScheme, *model.ResponseScheme, error) {
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
+	url := fmt.Sprintf("rest/agile/%v/sprint", i.version)
 
-	endpoint := fmt.Sprintf("rest/agile/%v/sprint", i.version)
-
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	req, err := i.c.NewRequest(ctx, http.MethodPost, url, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	sprint := new(model.SprintScheme)
-	response, err := i.c.Call(request, sprint)
+	res, err := i.c.Call(req, sprint)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return sprint, response, nil
+	return sprint, res, nil
 }
 
 func (i *internalSprintImpl) Update(ctx context.Context, sprintID int, payload *model.SprintPayloadScheme) (*model.SprintScheme, *model.ResponseScheme, error) {
@@ -209,25 +195,20 @@ func (i *internalSprintImpl) Update(ctx context.Context, sprintID int, payload *
 		return nil, nil, model.ErrNoSprintIDError
 	}
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
+	url := fmt.Sprintf("rest/agile/%v/sprint/%v", i.version, sprintID)
 
-	endpoint := fmt.Sprintf("rest/agile/%v/sprint/%v", i.version, sprintID)
-
-	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, reader)
+	req, err := i.c.NewRequest(ctx, http.MethodPut, url, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	sprint := new(model.SprintScheme)
-	response, err := i.c.Call(request, sprint)
+	res, err := i.c.Call(req, sprint)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return sprint, response, nil
+	return sprint, res, nil
 }
 
 func (i *internalSprintImpl) Path(ctx context.Context, sprintID int, payload *model.SprintPayloadScheme) (*model.SprintScheme, *model.ResponseScheme, error) {
@@ -236,25 +217,20 @@ func (i *internalSprintImpl) Path(ctx context.Context, sprintID int, payload *mo
 		return nil, nil, model.ErrNoSprintIDError
 	}
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
+	url := fmt.Sprintf("rest/agile/%v/sprint/%v", i.version, sprintID)
 
-	endpoint := fmt.Sprintf("rest/agile/%v/sprint/%v", i.version, sprintID)
-
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	req, err := i.c.NewRequest(ctx, http.MethodPost, url, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	sprint := new(model.SprintScheme)
-	response, err := i.c.Call(request, sprint)
+	res, err := i.c.Call(req, sprint)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return sprint, response, nil
+	return sprint, res, nil
 }
 
 func (i *internalSprintImpl) Delete(ctx context.Context, sprintID int) (*model.ResponseScheme, error) {
@@ -263,14 +239,14 @@ func (i *internalSprintImpl) Delete(ctx context.Context, sprintID int) (*model.R
 		return nil, model.ErrNoSprintIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/agile/%v/sprint/%v", i.version, sprintID)
+	url := fmt.Sprintf("rest/agile/%v/sprint/%v", i.version, sprintID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodDelete, url, "", nil)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.c.Call(request, nil)
+	return i.c.Call(req, nil)
 }
 
 func (i *internalSprintImpl) Issues(ctx context.Context, sprintID int, opts *model.IssueOptionScheme, startAt, maxResults int) (*model.SprintIssuePageScheme, *model.ResponseScheme, error) {
@@ -302,20 +278,20 @@ func (i *internalSprintImpl) Issues(ctx context.Context, sprintID int, opts *mod
 		}
 	}
 
-	endpoint := fmt.Sprintf("rest/agile/%v/sprint/%v/issue?%v", i.version, sprintID, params.Encode())
+	url := fmt.Sprintf("rest/agile/%v/sprint/%v/issue?%v", i.version, sprintID, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodGet, url, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	page := new(model.SprintIssuePageScheme)
-	response, err := i.c.Call(request, page)
+	res, err := i.c.Call(req, page)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return page, response, nil
+	return page, res, nil
 }
 
 func (i *internalSprintImpl) Start(ctx context.Context, sprintID int) (*model.ResponseScheme, error) {
@@ -324,23 +300,14 @@ func (i *internalSprintImpl) Start(ctx context.Context, sprintID int) (*model.Re
 		return nil, model.ErrNoSprintIDError
 	}
 
-	payload := model.SprintPayloadScheme{
-		State: "Active",
-	}
+	url := fmt.Sprintf("rest/agile/%v/sprint/%v", i.version, sprintID)
 
-	reader, err := i.c.TransformStructToReader(payload)
+	req, err := i.c.NewRequest(ctx, http.MethodPost, url, "", &model.SprintPayloadScheme{State: "Active"})
 	if err != nil {
 		return nil, err
 	}
 
-	endpoint := fmt.Sprintf("rest/agile/%v/sprint/%v", i.version, sprintID)
-
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
-	if err != nil {
-		return nil, err
-	}
-
-	return i.c.Call(request, nil)
+	return i.c.Call(req, nil)
 }
 
 func (i *internalSprintImpl) Close(ctx context.Context, sprintID int) (*model.ResponseScheme, error) {
@@ -349,21 +316,12 @@ func (i *internalSprintImpl) Close(ctx context.Context, sprintID int) (*model.Re
 		return nil, model.ErrNoSprintIDError
 	}
 
-	payload := model.SprintPayloadScheme{
-		State: "Closed",
-	}
+	url := fmt.Sprintf("rest/agile/%v/sprint/%v", i.version, sprintID)
 
-	reader, err := i.c.TransformStructToReader(payload)
+	req, err := i.c.NewRequest(ctx, http.MethodPost, url, "", &model.SprintPayloadScheme{State: "Closed"})
 	if err != nil {
 		return nil, err
 	}
 
-	endpoint := fmt.Sprintf("rest/agile/%v/sprint/%v", i.version, sprintID)
-
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
-	if err != nil {
-		return nil, err
-	}
-
-	return i.c.Call(request, nil)
+	return i.c.Call(req, nil)
 }

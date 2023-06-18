@@ -12,15 +12,11 @@ import (
 	"strings"
 )
 
-func NewEpicService(client service.Client, version string) (*EpicService, error) {
-
-	if version == "" {
-		return nil, model.ErrNoVersionProvided
-	}
+func NewEpicService(client service.Connector, version string) *EpicService {
 
 	return &EpicService{
 		internalClient: &internalEpicImpl{c: client, version: version},
-	}, nil
+	}
 }
 
 type EpicService struct {
@@ -72,7 +68,7 @@ func (e *EpicService) Move(ctx context.Context, epicIdOrKey string, issues []str
 }
 
 type internalEpicImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -82,20 +78,20 @@ func (i *internalEpicImpl) Get(ctx context.Context, epicIdOrKey string) (*model.
 		return nil, nil, model.ErrNoEpicIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/agile/%v/epic/%v", i.version, epicIdOrKey)
+	url := fmt.Sprintf("rest/agile/%v/epic/%v", i.version, epicIdOrKey)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodGet, url, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	epic := new(model.EpicScheme)
-	response, err := i.c.Call(request, epic)
+	res, err := i.c.Call(req, epic)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return epic, response, nil
+	return epic, res, nil
 }
 
 func (i *internalEpicImpl) Issues(ctx context.Context, epicIdOrKey string, opts *model.IssueOptionScheme, startAt, maxResults int) (*model.BoardIssuePageScheme, *model.ResponseScheme, error) {
@@ -125,20 +121,20 @@ func (i *internalEpicImpl) Issues(ctx context.Context, epicIdOrKey string, opts 
 		}
 	}
 
-	endpoint := fmt.Sprintf("rest/agile/%v/epic/%v/issue?%v", i.version, epicIdOrKey, params.Encode())
+	url := fmt.Sprintf("rest/agile/%v/epic/%v/issue?%v", i.version, epicIdOrKey, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodGet, url, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	page := new(model.BoardIssuePageScheme)
-	response, err := i.c.Call(request, page)
+	res, err := i.c.Call(req, page)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return page, response, nil
+	return page, res, nil
 }
 
 func (i *internalEpicImpl) Move(ctx context.Context, epicIdOrKey string, issues []string) (*model.ResponseScheme, error) {
@@ -147,17 +143,13 @@ func (i *internalEpicImpl) Move(ctx context.Context, epicIdOrKey string, issues 
 		return nil, model.ErrNoEpicIDError
 	}
 
-	reader, err := i.c.TransformStructToReader(map[string]interface{}{"issues": issues})
+	payload := map[string]interface{}{"issues": issues}
+	url := fmt.Sprintf("rest/agile/%v/epic/%v/issue", i.version, epicIdOrKey)
+
+	req, err := i.c.NewRequest(ctx, http.MethodPost, url, "", payload)
 	if err != nil {
 		return nil, err
 	}
 
-	endpoint := fmt.Sprintf("rest/agile/%v/epic/%v/issue", i.version, epicIdOrKey)
-
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
-	if err != nil {
-		return nil, err
-	}
-
-	return i.c.Call(request, nil)
+	return i.c.Call(req, nil)
 }

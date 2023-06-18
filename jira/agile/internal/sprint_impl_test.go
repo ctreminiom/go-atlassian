@@ -1,7 +1,6 @@
 package internal
 
 import (
-	"bytes"
 	"context"
 	"errors"
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
@@ -15,7 +14,7 @@ import (
 func Test_SprintService_Get(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -39,12 +38,13 @@ func Test_SprintService_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/agile/1.0/sprint/10001",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -65,12 +65,13 @@ func Test_SprintService_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/agile/1.0/sprint/10001",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -93,12 +94,13 @@ func Test_SprintService_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/agile/1.0/sprint/10001",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("unable to create the http request"))
 
@@ -115,7 +117,7 @@ func Test_SprintService_Get(t *testing.T) {
 				sprintId: 0,
 			},
 			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
+				fields.c = mocks.NewConnector(t)
 			},
 			Err:     model.ErrNoSprintIDError,
 			wantErr: true,
@@ -130,8 +132,7 @@ func Test_SprintService_Get(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			sprintService, err := NewSprintService(testCase.fields.c, "1.0")
-			assert.NoError(t, err)
+			sprintService := NewSprintService(testCase.fields.c, "1.0")
 
 			gotResult, gotResponse, err := sprintService.Get(testCase.args.ctx, testCase.args.sprintId)
 
@@ -155,8 +156,15 @@ func Test_SprintService_Get(t *testing.T) {
 
 func Test_SprintService_Create(t *testing.T) {
 
+	payloadMocked := &model.SprintPayloadScheme{
+		Name:          "Board Name Sample",
+		StartDate:     "2015-04-20T01:22:00.000+10:00",
+		EndDate:       "2015-04-11T15:22:00.000+10:00",
+		OriginBoardID: 5,
+	}
+
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -175,32 +183,19 @@ func Test_SprintService_Create(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx: context.Background(),
-				payload: &model.SprintPayloadScheme{
-					Name:          "Board Name Sample",
-					StartDate:     "2015-04-20T01:22:00.000+10:00",
-					EndDate:       "2015-04-11T15:22:00.000+10:00",
-					OriginBoardID: 5,
-				},
+				ctx:     context.Background(),
+				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&model.SprintPayloadScheme{
-						Name:          "Board Name Sample",
-						StartDate:     "2015-04-20T01:22:00.000+10:00",
-						EndDate:       "2015-04-11T15:22:00.000+10:00",
-						OriginBoardID: 5,
-					}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/agile/1.0/sprint",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -215,32 +210,19 @@ func Test_SprintService_Create(t *testing.T) {
 		{
 			name: "when the api cannot be executed",
 			args: args{
-				ctx: context.Background(),
-				payload: &model.SprintPayloadScheme{
-					Name:          "Board Name Sample",
-					StartDate:     "2015-04-20T01:22:00.000+10:00",
-					EndDate:       "2015-04-11T15:22:00.000+10:00",
-					OriginBoardID: 5,
-				},
+				ctx:     context.Background(),
+				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&model.SprintPayloadScheme{
-						Name:          "Board Name Sample",
-						StartDate:     "2015-04-20T01:22:00.000+10:00",
-						EndDate:       "2015-04-11T15:22:00.000+10:00",
-						OriginBoardID: 5,
-					}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/agile/1.0/sprint",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -257,57 +239,24 @@ func Test_SprintService_Create(t *testing.T) {
 		{
 			name: "when the request cannot be created",
 			args: args{
-				ctx: context.Background(),
-				payload: &model.SprintPayloadScheme{
-					Name:          "Board Name Sample",
-					StartDate:     "2015-04-20T01:22:00.000+10:00",
-					EndDate:       "2015-04-11T15:22:00.000+10:00",
-					OriginBoardID: 5,
-				},
+				ctx:     context.Background(),
+				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&model.SprintPayloadScheme{
-						Name:          "Board Name Sample",
-						StartDate:     "2015-04-20T01:22:00.000+10:00",
-						EndDate:       "2015-04-11T15:22:00.000+10:00",
-						OriginBoardID: 5,
-					}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/agile/1.0/sprint",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, errors.New("unable to create the http request"))
 
 				fields.c = client
 			},
 			Err:     errors.New("unable to create the http request"),
-			wantErr: true,
-		},
-
-		{
-			name: "when the payload is not provided",
-			args: args{
-				ctx:     context.Background(),
-				payload: nil,
-			},
-			on: func(fields *fields) {
-
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					(*model.SprintPayloadScheme)(nil)).
-					Return(nil, errors.New("client: no payload provided"))
-
-				fields.c = client
-			},
-			Err:     errors.New("client: no payload provided"),
 			wantErr: true,
 		},
 	}
@@ -319,8 +268,7 @@ func Test_SprintService_Create(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			sprintService, err := NewSprintService(testCase.fields.c, "1.0")
-			assert.NoError(t, err)
+			sprintService := NewSprintService(testCase.fields.c, "1.0")
 
 			gotResult, gotResponse, err := sprintService.Create(testCase.args.ctx, testCase.args.payload)
 
@@ -345,8 +293,15 @@ func Test_SprintService_Create(t *testing.T) {
 
 func Test_SprintService_Update(t *testing.T) {
 
+	payloadMocked := &model.SprintPayloadScheme{
+		Name:          "Board Name Sample",
+		StartDate:     "2015-04-20T01:22:00.000+10:00",
+		EndDate:       "2015-04-11T15:22:00.000+10:00",
+		OriginBoardID: 5,
+	}
+
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -368,31 +323,18 @@ func Test_SprintService_Update(t *testing.T) {
 			args: args{
 				ctx:      context.Background(),
 				sprintId: 1001,
-				payload: &model.SprintPayloadScheme{
-					Name:          "Board Name Sample",
-					StartDate:     "2015-04-20T01:22:00.000+10:00",
-					EndDate:       "2015-04-11T15:22:00.000+10:00",
-					OriginBoardID: 5,
-				},
+				payload:  payloadMocked,
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&model.SprintPayloadScheme{
-						Name:          "Board Name Sample",
-						StartDate:     "2015-04-20T01:22:00.000+10:00",
-						EndDate:       "2015-04-11T15:22:00.000+10:00",
-						OriginBoardID: 5,
-					}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/agile/1.0/sprint/1001",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -409,31 +351,18 @@ func Test_SprintService_Update(t *testing.T) {
 			args: args{
 				ctx:      context.Background(),
 				sprintId: 1001,
-				payload: &model.SprintPayloadScheme{
-					Name:          "Board Name Sample",
-					StartDate:     "2015-04-20T01:22:00.000+10:00",
-					EndDate:       "2015-04-11T15:22:00.000+10:00",
-					OriginBoardID: 5,
-				},
+				payload:  payloadMocked,
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&model.SprintPayloadScheme{
-						Name:          "Board Name Sample",
-						StartDate:     "2015-04-20T01:22:00.000+10:00",
-						EndDate:       "2015-04-11T15:22:00.000+10:00",
-						OriginBoardID: 5,
-					}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/agile/1.0/sprint/1001",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -452,57 +381,23 @@ func Test_SprintService_Update(t *testing.T) {
 			args: args{
 				ctx:      context.Background(),
 				sprintId: 1001,
-				payload: &model.SprintPayloadScheme{
-					Name:          "Board Name Sample",
-					StartDate:     "2015-04-20T01:22:00.000+10:00",
-					EndDate:       "2015-04-11T15:22:00.000+10:00",
-					OriginBoardID: 5,
-				},
+				payload:  payloadMocked,
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&model.SprintPayloadScheme{
-						Name:          "Board Name Sample",
-						StartDate:     "2015-04-20T01:22:00.000+10:00",
-						EndDate:       "2015-04-11T15:22:00.000+10:00",
-						OriginBoardID: 5,
-					}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/agile/1.0/sprint/1001",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, errors.New("unable to create the http request"))
 
 				fields.c = client
 			},
 			Err:     errors.New("unable to create the http request"),
-			wantErr: true,
-		},
-
-		{
-			name: "when the payload is not provided",
-			args: args{
-				ctx:      context.Background(),
-				sprintId: 1001,
-				payload:  nil,
-			},
-			on: func(fields *fields) {
-
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					(*model.SprintPayloadScheme)(nil)).
-					Return(nil, errors.New("client: no payload provided"))
-
-				fields.c = client
-			},
-			Err:     errors.New("client: no payload provided"),
 			wantErr: true,
 		},
 	}
@@ -514,8 +409,7 @@ func Test_SprintService_Update(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			sprintService, err := NewSprintService(testCase.fields.c, "1.0")
-			assert.NoError(t, err)
+			sprintService := NewSprintService(testCase.fields.c, "1.0")
 
 			gotResult, gotResponse, err := sprintService.Update(testCase.args.ctx, testCase.args.sprintId, testCase.args.payload)
 
@@ -540,8 +434,15 @@ func Test_SprintService_Update(t *testing.T) {
 
 func Test_SprintService_Path(t *testing.T) {
 
+	payloadMocked := &model.SprintPayloadScheme{
+		Name:          "Board Name Sample",
+		StartDate:     "2015-04-20T01:22:00.000+10:00",
+		EndDate:       "2015-04-11T15:22:00.000+10:00",
+		OriginBoardID: 5,
+	}
+
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -563,31 +464,18 @@ func Test_SprintService_Path(t *testing.T) {
 			args: args{
 				ctx:      context.Background(),
 				sprintId: 1001,
-				payload: &model.SprintPayloadScheme{
-					Name:          "Board Name Sample",
-					StartDate:     "2015-04-20T01:22:00.000+10:00",
-					EndDate:       "2015-04-11T15:22:00.000+10:00",
-					OriginBoardID: 5,
-				},
+				payload:  payloadMocked,
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&model.SprintPayloadScheme{
-						Name:          "Board Name Sample",
-						StartDate:     "2015-04-20T01:22:00.000+10:00",
-						EndDate:       "2015-04-11T15:22:00.000+10:00",
-						OriginBoardID: 5,
-					}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/agile/1.0/sprint/1001",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -604,31 +492,18 @@ func Test_SprintService_Path(t *testing.T) {
 			args: args{
 				ctx:      context.Background(),
 				sprintId: 1001,
-				payload: &model.SprintPayloadScheme{
-					Name:          "Board Name Sample",
-					StartDate:     "2015-04-20T01:22:00.000+10:00",
-					EndDate:       "2015-04-11T15:22:00.000+10:00",
-					OriginBoardID: 5,
-				},
+				payload:  payloadMocked,
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&model.SprintPayloadScheme{
-						Name:          "Board Name Sample",
-						StartDate:     "2015-04-20T01:22:00.000+10:00",
-						EndDate:       "2015-04-11T15:22:00.000+10:00",
-						OriginBoardID: 5,
-					}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/agile/1.0/sprint/1001",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -647,57 +522,23 @@ func Test_SprintService_Path(t *testing.T) {
 			args: args{
 				ctx:      context.Background(),
 				sprintId: 1001,
-				payload: &model.SprintPayloadScheme{
-					Name:          "Board Name Sample",
-					StartDate:     "2015-04-20T01:22:00.000+10:00",
-					EndDate:       "2015-04-11T15:22:00.000+10:00",
-					OriginBoardID: 5,
-				},
+				payload:  payloadMocked,
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&model.SprintPayloadScheme{
-						Name:          "Board Name Sample",
-						StartDate:     "2015-04-20T01:22:00.000+10:00",
-						EndDate:       "2015-04-11T15:22:00.000+10:00",
-						OriginBoardID: 5,
-					}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/agile/1.0/sprint/1001",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, errors.New("unable to create the http request"))
 
 				fields.c = client
 			},
 			Err:     errors.New("unable to create the http request"),
-			wantErr: true,
-		},
-
-		{
-			name: "when the payload is not provided",
-			args: args{
-				ctx:      context.Background(),
-				sprintId: 1001,
-				payload:  nil,
-			},
-			on: func(fields *fields) {
-
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					(*model.SprintPayloadScheme)(nil)).
-					Return(nil, errors.New("client: no payload provided"))
-
-				fields.c = client
-			},
-			Err:     errors.New("client: no payload provided"),
 			wantErr: true,
 		},
 	}
@@ -709,8 +550,7 @@ func Test_SprintService_Path(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			sprintService, err := NewSprintService(testCase.fields.c, "1.0")
-			assert.NoError(t, err)
+			sprintService := NewSprintService(testCase.fields.c, "1.0")
 
 			gotResult, gotResponse, err := sprintService.Path(testCase.args.ctx, testCase.args.sprintId, testCase.args.payload)
 
@@ -736,7 +576,7 @@ func Test_SprintService_Path(t *testing.T) {
 func Test_SprintService_Delete(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -760,12 +600,13 @@ func Test_SprintService_Delete(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/agile/1.0/sprint/1001",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -784,7 +625,7 @@ func Test_SprintService_Delete(t *testing.T) {
 				ctx: context.Background(),
 			},
 			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
+				fields.c = mocks.NewConnector(t)
 			},
 			Err:     model.ErrNoSprintIDError,
 			wantErr: true,
@@ -798,12 +639,13 @@ func Test_SprintService_Delete(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/agile/1.0/sprint/1001",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -826,12 +668,13 @@ func Test_SprintService_Delete(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/agile/1.0/sprint/1001",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("unable to create the http request"))
 
@@ -849,8 +692,7 @@ func Test_SprintService_Delete(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			sprintService, err := NewSprintService(testCase.fields.c, "1.0")
-			assert.NoError(t, err)
+			sprintService := NewSprintService(testCase.fields.c, "1.0")
 
 			gotResponse, err := sprintService.Delete(testCase.args.ctx, testCase.args.sprintId)
 
@@ -875,7 +717,7 @@ func Test_SprintService_Delete(t *testing.T) {
 func Test_SprintService_Issues(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -909,12 +751,13 @@ func Test_SprintService_Issues(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/agile/1.0/sprint/10001/issue?expand=changelog&fields=summary%2Cstatus&jql=project+%3D+ABC&maxResults=50&startAt=100",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -943,12 +786,13 @@ func Test_SprintService_Issues(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/agile/1.0/sprint/10001/issue?expand=changelog&fields=summary%2Cstatus&jql=project+%3D+ABC&maxResults=50&startAt=100",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -979,12 +823,13 @@ func Test_SprintService_Issues(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/agile/1.0/sprint/10001/issue?expand=changelog&fields=summary%2Cstatus&jql=project+%3D+ABC&maxResults=50&startAt=100",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("unable to create the http request"))
 
@@ -1001,7 +846,7 @@ func Test_SprintService_Issues(t *testing.T) {
 				sprintId: 0,
 			},
 			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
+				fields.c = mocks.NewConnector(t)
 			},
 			Err:     model.ErrNoSprintIDError,
 			wantErr: true,
@@ -1016,8 +861,7 @@ func Test_SprintService_Issues(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			sprintService, err := NewSprintService(testCase.fields.c, "1.0")
-			assert.NoError(t, err)
+			sprintService := NewSprintService(testCase.fields.c, "1.0")
 
 			gotResult, gotResponse, err := sprintService.Issues(testCase.args.ctx, testCase.args.sprintId, testCase.args.opts,
 				testCase.args.startAt, testCase.args.maxResults)
@@ -1043,7 +887,7 @@ func Test_SprintService_Issues(t *testing.T) {
 func Test_SprintService_Start(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -1067,19 +911,14 @@ func Test_SprintService_Start(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					model.SprintPayloadScheme{
-						State: "Active",
-					}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/agile/1.0/sprint/1001",
-					bytes.NewReader([]byte{})).
+					"",
+					&model.SprintPayloadScheme{State: "Active"}).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -1097,7 +936,7 @@ func Test_SprintService_Start(t *testing.T) {
 				ctx: context.Background(),
 			},
 			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
+				fields.c = mocks.NewConnector(t)
 			},
 			Err:     model.ErrNoSprintIDError,
 			wantErr: true,
@@ -1111,19 +950,14 @@ func Test_SprintService_Start(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					model.SprintPayloadScheme{
-						State: "Active",
-					}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/agile/1.0/sprint/1001",
-					bytes.NewReader([]byte{})).
+					"",
+					&model.SprintPayloadScheme{State: "Active"}).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -1145,19 +979,14 @@ func Test_SprintService_Start(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					model.SprintPayloadScheme{
-						State: "Active",
-					}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/agile/1.0/sprint/1001",
-					bytes.NewReader([]byte{})).
+					"",
+					&model.SprintPayloadScheme{State: "Active"}).
 					Return(&http.Request{}, errors.New("unable to create the http request"))
 
 				fields.c = client
@@ -1174,8 +1003,7 @@ func Test_SprintService_Start(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			sprintService, err := NewSprintService(testCase.fields.c, "1.0")
-			assert.NoError(t, err)
+			sprintService := NewSprintService(testCase.fields.c, "1.0")
 
 			gotResponse, err := sprintService.Start(testCase.args.ctx, testCase.args.sprintId)
 
@@ -1200,7 +1028,7 @@ func Test_SprintService_Start(t *testing.T) {
 func Test_SprintService_Close(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -1224,19 +1052,14 @@ func Test_SprintService_Close(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					model.SprintPayloadScheme{
-						State: "Closed",
-					}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/agile/1.0/sprint/1001",
-					bytes.NewReader([]byte{})).
+					"",
+					&model.SprintPayloadScheme{State: "Closed"}).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -1254,7 +1077,7 @@ func Test_SprintService_Close(t *testing.T) {
 				ctx: context.Background(),
 			},
 			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
+				fields.c = mocks.NewConnector(t)
 			},
 			Err:     model.ErrNoSprintIDError,
 			wantErr: true,
@@ -1268,19 +1091,14 @@ func Test_SprintService_Close(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					model.SprintPayloadScheme{
-						State: "Closed",
-					}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/agile/1.0/sprint/1001",
-					bytes.NewReader([]byte{})).
+					"",
+					&model.SprintPayloadScheme{State: "Closed"}).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -1302,19 +1120,14 @@ func Test_SprintService_Close(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					model.SprintPayloadScheme{
-						State: "Closed",
-					}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/agile/1.0/sprint/1001",
-					bytes.NewReader([]byte{})).
+					"",
+					&model.SprintPayloadScheme{State: "Closed"}).
 					Return(&http.Request{}, errors.New("unable to create the http request"))
 
 				fields.c = client
@@ -1331,8 +1144,7 @@ func Test_SprintService_Close(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			sprintService, err := NewSprintService(testCase.fields.c, "1.0")
-			assert.NoError(t, err)
+			sprintService := NewSprintService(testCase.fields.c, "1.0")
 
 			gotResponse, err := sprintService.Close(testCase.args.ctx, testCase.args.sprintId)
 
@@ -1364,7 +1176,7 @@ func Test_SprintService_Move(t *testing.T) {
 	}
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -1390,17 +1202,14 @@ func Test_SprintService_Move(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"/rest/agile/1.0/sprint/1001/issue",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -1418,7 +1227,7 @@ func Test_SprintService_Move(t *testing.T) {
 				ctx: context.Background(),
 			},
 			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
+				fields.c = mocks.NewConnector(t)
 			},
 			Err:     model.ErrNoSprintIDError,
 			wantErr: true,
@@ -1433,17 +1242,14 @@ func Test_SprintService_Move(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"/rest/agile/1.0/sprint/1001/issue",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -1466,17 +1272,14 @@ func Test_SprintService_Move(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"/rest/agile/1.0/sprint/1001/issue",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, errors.New("unable to create the http request"))
 
 				fields.c = client
@@ -1493,8 +1296,7 @@ func Test_SprintService_Move(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			sprintService, err := NewSprintService(testCase.fields.c, "1.0")
-			assert.NoError(t, err)
+			sprintService := NewSprintService(testCase.fields.c, "1.0")
 
 			gotResponse, err := sprintService.Move(testCase.args.ctx, testCase.args.sprintId, testCase.args.payload)
 
@@ -1511,7 +1313,6 @@ func Test_SprintService_Move(t *testing.T) {
 				assert.NoError(t, err)
 				assert.NotEqual(t, gotResponse, nil)
 			}
-
 		})
 	}
 }

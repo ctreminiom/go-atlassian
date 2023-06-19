@@ -158,6 +158,10 @@ func (c *Client) NewFormRequest(ctx context.Context, method, apiEndpoint, conten
 		request.SetBasicAuth(c.Auth.GetBasicAuth())
 	}
 
+	if c.Auth.GetBearerToken() != "" {
+		request.Header.Add("Authorization", fmt.Sprintf("Bearer %v", c.Auth.GetBearerToken()))
+	}
+	
 	if c.Auth.HasUserAgent() {
 		request.Header.Set("User-Agent", c.Auth.GetUserAgent())
 	}
@@ -191,6 +195,10 @@ func (c *Client) NewRequest(ctx context.Context, method, apiEndpoint string, pay
 
 	if c.Auth.HasBasicAuth() {
 		request.SetBasicAuth(c.Auth.GetBasicAuth())
+	}
+
+	if c.Auth.GetBearerToken() != "" {
+		request.Header.Add("Authorization", fmt.Sprintf("Bearer %v", c.Auth.GetBearerToken()))
 	}
 
 	if c.Auth.HasUserAgent() {

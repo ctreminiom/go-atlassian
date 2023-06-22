@@ -22,7 +22,7 @@ type ServiceRequestSubServices struct {
 	Type        *TypeService
 }
 
-func NewRequestService(client service.Client, version string, subServices *ServiceRequestSubServices) (*RequestService, error) {
+func NewRequestService(client service.Connector, version string, subServices *ServiceRequestSubServices) (*RequestService, error) {
 
 	if version == "" {
 		return nil, model.ErrNoVersionProvided
@@ -127,7 +127,7 @@ func (s *RequestService) Transition(ctx context.Context, issueKeyOrID, transitio
 }
 
 type internalServiceRequestImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -142,25 +142,20 @@ func (i *internalServiceRequestImpl) Create(ctx context.Context, payload *model.
 		return nil, nil, err
 	}
 
-	reader, err := i.c.TransformStructToReader(&payloadWithFields)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	endpoint := "rest/servicedeskapi/request"
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	req, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payloadWithFields)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	serviceRequest := new(model.CustomerRequestScheme)
-	response, err := i.c.Call(request, serviceRequest)
+	res, err := i.c.Call(req, serviceRequest)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return serviceRequest, response, nil
+	return serviceRequest, res, nil
 }
 
 func (i *internalServiceRequestImpl) Gets(ctx context.Context, options *model.ServiceRequestOptionScheme, start, limit int) (*model.CustomerRequestPageScheme, *model.ResponseScheme, error) {
@@ -206,18 +201,18 @@ func (i *internalServiceRequestImpl) Gets(ctx context.Context, options *model.Se
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/request?%v", params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	page := new(model.CustomerRequestPageScheme)
-	response, err := i.c.Call(request, page)
+	res, err := i.c.Call(req, page)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return page, response, nil
+	return page, res, nil
 }
 
 func (i *internalServiceRequestImpl) Get(ctx context.Context, issueKeyOrID string, expand []string) (*model.CustomerRequestScheme, *model.ResponseScheme, error) {
@@ -236,18 +231,18 @@ func (i *internalServiceRequestImpl) Get(ctx context.Context, issueKeyOrID strin
 		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), nil)
+	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	customerRequest := new(model.CustomerRequestScheme)
-	response, err := i.c.Call(request, customerRequest)
+	res, err := i.c.Call(req, customerRequest)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return customerRequest, response, nil
+	return customerRequest, res, nil
 }
 
 func (i *internalServiceRequestImpl) Subscribe(ctx context.Context, issueKeyOrID string) (*model.ResponseScheme, error) {
@@ -258,12 +253,12 @@ func (i *internalServiceRequestImpl) Subscribe(ctx context.Context, issueKeyOrID
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/request/%v/notification", issueKeyOrID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.c.Call(request, nil)
+	return i.c.Call(req, nil)
 }
 
 func (i *internalServiceRequestImpl) Unsubscribe(ctx context.Context, issueKeyOrID string) (*model.ResponseScheme, error) {
@@ -274,12 +269,12 @@ func (i *internalServiceRequestImpl) Unsubscribe(ctx context.Context, issueKeyOr
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/request/%v/notification", issueKeyOrID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.c.Call(request, nil)
+	return i.c.Call(req, nil)
 }
 
 func (i *internalServiceRequestImpl) Transitions(ctx context.Context, issueKeyOrID string, start, limit int) (*model.CustomerRequestTransitionPageScheme, *model.ResponseScheme, error) {
@@ -294,18 +289,18 @@ func (i *internalServiceRequestImpl) Transitions(ctx context.Context, issueKeyOr
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/request/%v/transition?%v", issueKeyOrID, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	page := new(model.CustomerRequestTransitionPageScheme)
-	response, err := i.c.Call(request, page)
+	res, err := i.c.Call(req, page)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return page, response, nil
+	return page, res, nil
 }
 
 func (i internalServiceRequestImpl) Transition(ctx context.Context, issueKeyOrID, transitionID, comment string) (*model.ResponseScheme, error) {
@@ -318,31 +313,18 @@ func (i internalServiceRequestImpl) Transition(ctx context.Context, issueKeyOrID
 		return nil, model.ErrNoTransitionIDError
 	}
 
-	payload := struct {
-		ID                string `json:"id"`
-		AdditionalComment struct {
-			Body string `json:"body,omitempty"`
-		} `json:"additionalComment,omitempty"`
-	}{
-		ID: transitionID,
-		AdditionalComment: struct {
-			Body string `json:"body,omitempty"`
-		}{
-			Body: comment,
-		},
-	}
+	payload := map[string]interface{}{"id": transitionID}
 
-	reader, err := i.c.TransformStructToReader(&payload)
-	if err != nil {
-		return nil, err
+	if comment != "" {
+		payload["additionalComment"] = map[string]interface{}{"body": comment}
 	}
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/request/%v/transition", issueKeyOrID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	req, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.c.Call(request, nil)
+	return i.c.Call(req, nil)
 }

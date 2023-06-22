@@ -29,17 +29,23 @@ func (c *CreateCustomerRequestPayloadScheme) MergeFields(fields *CustomerRequest
 		return nil, err
 	}
 
-	//For each customField created, merge it into the eAsMap
-	for _, field := range fields.Fields {
-		if err := mergo.Merge(&issueSchemeAsMap, field, mergo.WithOverride); err != nil {
-			return nil, err
-		}
+	// Create the requestFieldValues object with the custom fields
+	fieldsAsMap := make(map[string]interface{})
+	for key, value := range fields.Fields {
+		fieldsAsMap[key] = value
+	}
+
+	requestFieldValues := map[string]interface{}{"requestFieldValues": fieldsAsMap}
+
+	// Merge the requestFieldValues map struct with the service desk request struct information
+	if err := mergo.Merge(&issueSchemeAsMap, requestFieldValues, mergo.WithOverride); err != nil {
+		return nil, err
 	}
 
 	return issueSchemeAsMap, nil
 }
 
-type CustomerRequestFields struct{ Fields []map[string]interface{} }
+type CustomerRequestFields struct{ Fields map[string]interface{} }
 
 func (c *CustomerRequestFields) Attachments(attachments []string) error {
 
@@ -47,13 +53,7 @@ func (c *CustomerRequestFields) Attachments(attachments []string) error {
 		return ErrNoAttachmentIdsError
 	}
 
-	var fieldNode = map[string]interface{}{}
-	fieldNode["attachments"] = attachments
-
-	var fieldsNode = map[string]interface{}{}
-	fieldsNode["requestFieldValues"] = fieldNode
-
-	c.Fields = append(c.Fields, fieldsNode)
+	c.Fields["attachments"] = attachments
 	return nil
 }
 
@@ -63,13 +63,7 @@ func (c *CustomerRequestFields) Labels(labels []string) error {
 		return ErrNoLabelsError
 	}
 
-	var fieldNode = map[string]interface{}{}
-	fieldNode["labels"] = labels
-
-	var fieldsNode = map[string]interface{}{}
-	fieldsNode["requestFieldValues"] = fieldNode
-
-	c.Fields = append(c.Fields, fieldsNode)
+	c.Fields["labels"] = labels
 	return nil
 }
 
@@ -88,13 +82,7 @@ func (c *CustomerRequestFields) Components(components []string) error {
 		componentNode = append(componentNode, groupNode)
 	}
 
-	var fieldNode = map[string]interface{}{}
-	fieldNode["components"] = componentNode
-
-	var fieldsNode = map[string]interface{}{}
-	fieldsNode["requestFieldValues"] = fieldNode
-
-	c.Fields = append(c.Fields, fieldsNode)
+	c.Fields["components"] = componentNode
 	return nil
 }
 
@@ -120,10 +108,7 @@ func (c *CustomerRequestFields) Groups(customFieldID string, groups []string) er
 	var fieldNode = map[string]interface{}{}
 	fieldNode[customFieldID] = groupsNode
 
-	var fieldsNode = map[string]interface{}{}
-	fieldsNode["requestFieldValues"] = fieldNode
-
-	c.Fields = append(c.Fields, fieldsNode)
+	c.Fields["components"] = fieldNode
 	return nil
 }
 
@@ -140,13 +125,7 @@ func (c *CustomerRequestFields) Group(customFieldID, group string) error {
 	var groupNode = map[string]interface{}{}
 	groupNode["name"] = group
 
-	var fieldNode = map[string]interface{}{}
-	fieldNode[customFieldID] = groupNode
-
-	var fieldsNode = map[string]interface{}{}
-	fieldsNode["requestFieldValues"] = fieldNode
-
-	c.Fields = append(c.Fields, fieldsNode)
+	c.Fields[customFieldID] = groupNode
 	return nil
 }
 
@@ -160,13 +139,7 @@ func (c *CustomerRequestFields) URL(customFieldID, URL string) error {
 		return ErrNoUrlTypeError
 	}
 
-	var urlNode = map[string]interface{}{}
-	urlNode[customFieldID] = URL
-
-	var fieldsNode = map[string]interface{}{}
-	fieldsNode["requestFieldValues"] = urlNode
-
-	c.Fields = append(c.Fields, fieldsNode)
+	c.Fields[customFieldID] = URL
 	return nil
 }
 
@@ -180,13 +153,7 @@ func (c *CustomerRequestFields) Text(customFieldID, textValue string) error {
 		return ErrNoTextTypeError
 	}
 
-	var urlNode = map[string]interface{}{}
-	urlNode[customFieldID] = textValue
-
-	var fieldsNode = map[string]interface{}{}
-	fieldsNode["requestFieldValues"] = urlNode
-
-	c.Fields = append(c.Fields, fieldsNode)
+	c.Fields[customFieldID] = textValue
 	return nil
 }
 
@@ -200,13 +167,7 @@ func (c *CustomerRequestFields) DateTime(customFieldID string, dateValue time.Ti
 		return ErrNoDateTimeTypeError
 	}
 
-	var dateNode = map[string]interface{}{}
-	dateNode[customFieldID] = dateValue.Format(time.RFC3339)
-
-	var fieldsNode = map[string]interface{}{}
-	fieldsNode["requestFieldValues"] = dateNode
-
-	c.Fields = append(c.Fields, fieldsNode)
+	c.Fields[customFieldID] = dateValue.Format(time.RFC3339)
 	return nil
 }
 
@@ -220,13 +181,7 @@ func (c *CustomerRequestFields) Date(customFieldID string, dateTimeValue time.Ti
 		return ErrNoDateTypeError
 	}
 
-	var dateTimeNode = map[string]interface{}{}
-	dateTimeNode[customFieldID] = dateTimeValue.Format("2006-01-02")
-
-	var fieldsNode = map[string]interface{}{}
-	fieldsNode["requestFieldValues"] = dateTimeNode
-
-	c.Fields = append(c.Fields, fieldsNode)
+	c.Fields[customFieldID] = dateTimeValue.Format("2006-01-02")
 	return nil
 }
 
@@ -240,22 +195,16 @@ func (c *CustomerRequestFields) MultiSelect(customFieldID string, options []stri
 		return ErrNoMultiSelectTypeError
 	}
 
-	var groupsNode []map[string]interface{}
+	var multiSelectOptions []map[string]interface{}
 	for _, group := range options {
 
 		var groupNode = map[string]interface{}{}
 		groupNode["value"] = group
 
-		groupsNode = append(groupsNode, groupNode)
+		multiSelectOptions = append(multiSelectOptions, groupNode)
 	}
 
-	var fieldNode = map[string]interface{}{}
-	fieldNode[customFieldID] = groupsNode
-
-	var fieldsNode = map[string]interface{}{}
-	fieldsNode["requestFieldValues"] = fieldNode
-
-	c.Fields = append(c.Fields, fieldsNode)
+	c.Fields[customFieldID] = multiSelectOptions
 	return nil
 }
 
@@ -272,13 +221,7 @@ func (c *CustomerRequestFields) Select(customFieldID string, option string) erro
 	var selectNode = map[string]interface{}{}
 	selectNode["value"] = option
 
-	var fieldNode = map[string]interface{}{}
-	fieldNode[customFieldID] = selectNode
-
-	var fieldsNode = map[string]interface{}{}
-	fieldsNode["requestFieldValues"] = fieldNode
-
-	c.Fields = append(c.Fields, fieldsNode)
+	c.Fields[customFieldID] = selectNode
 	return nil
 }
 
@@ -295,13 +238,7 @@ func (c *CustomerRequestFields) RadioButton(customFieldID, button string) error 
 	var selectNode = map[string]interface{}{}
 	selectNode["value"] = button
 
-	var fieldNode = map[string]interface{}{}
-	fieldNode[customFieldID] = selectNode
-
-	var fieldsNode = map[string]interface{}{}
-	fieldsNode["requestFieldValues"] = fieldNode
-
-	c.Fields = append(c.Fields, fieldsNode)
+	c.Fields[customFieldID] = selectNode
 	return nil
 }
 
@@ -318,13 +255,7 @@ func (c *CustomerRequestFields) User(customFieldID string, accountID string) err
 	var userNode = map[string]interface{}{}
 	userNode["accountId"] = accountID
 
-	var fieldNode = map[string]interface{}{}
-	fieldNode[customFieldID] = userNode
-
-	var fieldsNode = map[string]interface{}{}
-	fieldsNode["requestFieldValues"] = fieldNode
-
-	c.Fields = append(c.Fields, fieldsNode)
+	c.Fields[customFieldID] = userNode
 	return nil
 }
 
@@ -347,13 +278,7 @@ func (c *CustomerRequestFields) Users(customFieldID string, accountIDs []string)
 		accountsNode = append(accountsNode, groupNode)
 	}
 
-	var fieldNode = map[string]interface{}{}
-	fieldNode[customFieldID] = accountsNode
-
-	var fieldsNode = map[string]interface{}{}
-	fieldsNode["requestFieldValues"] = fieldNode
-
-	c.Fields = append(c.Fields, fieldsNode)
+	c.Fields[customFieldID] = accountsNode
 	return nil
 }
 
@@ -363,13 +288,7 @@ func (c *CustomerRequestFields) Number(customFieldID string, numberValue float64
 		return ErrNoCustomFieldIDError
 	}
 
-	var urlNode = map[string]interface{}{}
-	urlNode[customFieldID] = numberValue
-
-	var fieldsNode = map[string]interface{}{}
-	fieldsNode["requestFieldValues"] = urlNode
-
-	c.Fields = append(c.Fields, fieldsNode)
+	c.Fields[customFieldID] = numberValue
 	return nil
 }
 
@@ -392,13 +311,7 @@ func (c *CustomerRequestFields) CheckBox(customFieldID string, options []string)
 		groupsNode = append(groupsNode, groupNode)
 	}
 
-	var fieldNode = map[string]interface{}{}
-	fieldNode[customFieldID] = groupsNode
-
-	var fieldsNode = map[string]interface{}{}
-	fieldsNode["requestFieldValues"] = fieldNode
-
-	c.Fields = append(c.Fields, fieldsNode)
+	c.Fields[customFieldID] = groupsNode
 	return nil
 }
 
@@ -423,12 +336,6 @@ func (c *CustomerRequestFields) Cascading(customFieldID, parent, child string) e
 	parentNode["value"] = parent
 	parentNode["child"] = childNode
 
-	var fieldNode = map[string]interface{}{}
-	fieldNode[customFieldID] = parentNode
-
-	var fieldsNode = map[string]interface{}{}
-	fieldsNode["requestFieldValues"] = fieldNode
-
-	c.Fields = append(c.Fields, fieldsNode)
+	c.Fields[customFieldID] = parentNode
 	return nil
 }

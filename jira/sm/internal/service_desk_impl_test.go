@@ -18,7 +18,7 @@ import (
 func Test_internalServiceDeskImpl_Gets(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -43,12 +43,13 @@ func Test_internalServiceDeskImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/servicedesk?limit=50&start=100",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -70,12 +71,13 @@ func Test_internalServiceDeskImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/servicedesk?limit=50&start=100",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -99,12 +101,13 @@ func Test_internalServiceDeskImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/servicedesk?limit=50&start=100",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("client: no http request created"))
 
@@ -148,7 +151,7 @@ func Test_internalServiceDeskImpl_Gets(t *testing.T) {
 func Test_internalServiceDeskImpl_Get(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -172,12 +175,13 @@ func Test_internalServiceDeskImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/servicedesk/10001",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -198,12 +202,13 @@ func Test_internalServiceDeskImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/servicedesk/10001",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -226,12 +231,13 @@ func Test_internalServiceDeskImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/servicedesk/10001",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("client: no http request created"))
 
@@ -294,7 +300,7 @@ func Test_internalServiceDeskImpl_Attach(t *testing.T) {
 	}
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -322,13 +328,13 @@ func Test_internalServiceDeskImpl_Attach(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
-				client.On("NewFormRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/servicedeskapi/servicedesk/10001/attachTemporaryFile",
-					mock.Anything,
+					mock.AnythingOfType("string"),
 					mock.Anything).
 					Return(&http.Request{}, nil)
 
@@ -351,13 +357,13 @@ func Test_internalServiceDeskImpl_Attach(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
-				client.On("NewFormRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/servicedeskapi/servicedesk/10001/attachTemporaryFile",
-					mock.Anything,
+					mock.AnythingOfType("string"),
 					mock.Anything).
 					Return(&http.Request{}, nil)
 
@@ -382,13 +388,13 @@ func Test_internalServiceDeskImpl_Attach(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
-				client.On("NewFormRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/servicedeskapi/servicedesk/10001/attachTemporaryFile",
-					mock.Anything,
+					mock.AnythingOfType("string"),
 					mock.Anything).
 					Return(&http.Request{}, errors.New("client: no http request created"))
 

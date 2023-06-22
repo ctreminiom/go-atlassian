@@ -951,7 +951,7 @@ func Test_internalServiceRequestImpl_Create(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if err := fieldsMocked.Date("duedate", time.Now()); err != nil {
+	if err := fieldsMocked.Date("duedate", time.Date(2020, 1, 2, 3, 4, 5, 0, time.UTC)); err != nil {
 		log.Fatal(err)
 	}
 
@@ -964,7 +964,7 @@ func Test_internalServiceRequestImpl_Create(t *testing.T) {
 			"components":         []map[string]interface{}{map[string]interface{}{"name": "Jira"}, map[string]interface{}{"name": "Intranet"}},
 			"customfield_320239": []map[string]interface{}{map[string]interface{}{"accountId": "account-id-sample"}},
 			"description":        "I need a new *mouse* for my Mac",
-			"duedate":            "2023-06-21",
+			"duedate":            "2020-01-02",
 			"labels":             []string{"label-00", "label-01"},
 			"priority":           map[string]interface{}{"value": "Major"},
 			"summary":            "Request JSD help via REST"},

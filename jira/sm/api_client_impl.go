@@ -97,8 +97,7 @@ func (c *Client) NewRequest(ctx context.Context, method, urlStr, type_ string, b
 
 	buf := new(bytes.Buffer)
 	if body != nil {
-		err := json.NewEncoder(buf).Encode(body)
-		if err != nil {
+		if err = json.NewEncoder(buf).Encode(body); err != nil {
 			return nil, err
 		}
 	}

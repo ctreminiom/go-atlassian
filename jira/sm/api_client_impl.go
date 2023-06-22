@@ -114,6 +114,7 @@ func (c *Client) NewRequest(ctx context.Context, method, urlStr, type_ string, b
 
 	if body != nil && type_ != "" {
 		req.Header.Set("Content-Type", type_)
+		req.Header.Set("X-Atlassian-Token", "no-check")
 	}
 
 	if c.Auth.HasBasicAuth() {

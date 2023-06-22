@@ -242,6 +242,7 @@ func TestClient_NewRequest(t *testing.T) {
 	authMocked := internal.NewAuthenticationService(nil)
 	authMocked.SetBasicAuth("mail", "token")
 	authMocked.SetUserAgent("firefox")
+	authMocked.SetExperimentalFlag()
 
 	siteAsURL, err := url.Parse("https://ctreminiom.atlassian.net")
 	if err != nil {
@@ -360,6 +361,7 @@ func TestClient_NewRequest(t *testing.T) {
 
 				assert.Error(t, err)
 			} else {
+
 				assert.NoError(t, err)
 				assert.NotEqual(t, got, nil)
 			}

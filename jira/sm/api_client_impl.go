@@ -120,6 +120,10 @@ func (c *Client) NewRequest(ctx context.Context, method, urlStr, type_ string, b
 		req.SetBasicAuth(c.Auth.GetBasicAuth())
 	}
 
+	if c.Auth.HasSetExperimentalFlag() {
+		req.Header.Set("X-ExperimentalApi", "opt-in")
+	}
+
 	if c.Auth.HasUserAgent() {
 		req.Header.Set("User-Agent", c.Auth.GetUserAgent())
 	}

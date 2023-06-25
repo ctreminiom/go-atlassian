@@ -16,5 +16,5 @@ type AQLAssetConnector interface {
 	// Deprecated. Please use Object.Filter() instead.
 	//
 	// https://docs.go-atlassian.io/jira-assets/aql#filter-objects
-	Filter(ctx context.Context, workspaceID string, payload *models.AQLSearchParamsScheme) (*models.ObjectListScheme, *models.ResponseScheme, error)
+	Filter(ctx context.Context, workspaceID string, parameters *models.AQLSearchParamsScheme) (*models.ObjectListScheme, *models.ResponseScheme, error)
 }

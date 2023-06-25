@@ -1,7 +1,6 @@
 package internal
 
 import (
-	"bytes"
 	"context"
 	"errors"
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
@@ -15,7 +14,7 @@ import (
 func Test_internalAQLImpl_Filter(t *testing.T) {
 
 	payloadMocked := &model.AQLSearchParamsScheme{
-		Query:                 "objectType = Office AND Name LIKE SYD",
+		Query:                 "Name LIKE Test",
 		Page:                  2,
 		ResultPerPage:         25,
 		IncludeAttributes:     true,
@@ -53,15 +52,11 @@ func Test_internalAQLImpl_Filter(t *testing.T) {
 
 				client := mocks.NewClient(t)
 
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
-
 				client.On("NewRequest",
 					context.Background(),
-					http.MethodPost,
-					"jsm/assets/workspace/workspace-uuid-sample/v1/aql/objects",
-					bytes.NewReader([]byte{})).
+					http.MethodGet,
+					"jsm/assets/workspace/workspace-uuid-sample/v1/aql/objects?includeAttributes=true&includeAttributesDeep=true&includeExtendedInfo=true&includeTypeAttributes=true&page=2&qlQuery=Name+LIKE+Test&resultPerPage=25",
+					nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -84,15 +79,11 @@ func Test_internalAQLImpl_Filter(t *testing.T) {
 
 				client := mocks.NewClient(t)
 
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
-
 				client.On("NewRequest",
 					context.Background(),
-					http.MethodPost,
-					"jsm/assets/workspace/workspace-uuid-sample/v1/aql/objects",
-					bytes.NewReader([]byte{})).
+					http.MethodGet,
+					"jsm/assets/workspace/workspace-uuid-sample/v1/aql/objects?includeAttributes=true&includeAttributesDeep=true&includeExtendedInfo=true&includeTypeAttributes=true&page=2&qlQuery=Name+LIKE+Test&resultPerPage=25",
+					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client

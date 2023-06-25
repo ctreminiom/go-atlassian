@@ -1,4 +1,4 @@
-package agile
+package assets
 
 import (
 	"bytes"

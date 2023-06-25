@@ -15,16 +15,13 @@ import (
 func Test_internalAQLImpl_Filter(t *testing.T) {
 
 	payloadMocked := &model.AQLSearchParamsScheme{
-		Query:               "query",
-		ObjectTypeID:        "",
-		Page:                0,
-		ResultsPerPage:      0,
-		OrderByTypeAttrID:   0,
-		Asc:                 0,
-		ObjectID:            "",
-		ObjectSchemaID:      "",
-		IncludeAttributes:   false,
-		AttributesToDisplay: nil,
+		Query:                 "objectType = Office AND Name LIKE SYD",
+		Page:                  2,
+		ResultPerPage:         25,
+		IncludeAttributes:     true,
+		IncludeAttributesDeep: true,
+		IncludeTypeAttributes: true,
+		IncludeExtendedInfo:   true,
 	}
 
 	type fields struct {
@@ -63,13 +60,13 @@ func Test_internalAQLImpl_Filter(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
-					"jsm/assets/workspace/workspace-uuid-sample/v1/object/navlist/aql",
+					"jsm/assets/workspace/workspace-uuid-sample/v1/aql/objects",
 					bytes.NewReader([]byte{})).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
 					&http.Request{},
-					&model.ObjectPageScheme{}).
+					&model.ObjectListScheme{}).
 					Return(&model.ResponseScheme{}, nil)
 
 				fields.c = client
@@ -94,7 +91,7 @@ func Test_internalAQLImpl_Filter(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
-					"jsm/assets/workspace/workspace-uuid-sample/v1/object/navlist/aql",
+					"jsm/assets/workspace/workspace-uuid-sample/v1/aql/objects",
 					bytes.NewReader([]byte{})).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 

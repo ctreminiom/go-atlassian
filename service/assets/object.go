@@ -71,4 +71,13 @@ type ObjectConnector interface {
 	//
 	// https://docs.go-atlassian.io/jira-assets/object#filter-objects
 	Filter(ctx context.Context, workspaceID, aql string, attributes bool, startAt, maxResults int) (*models.ObjectListResultScheme, *models.ResponseScheme, error)
+
+	// Search retrieve a list of objects based on an AQL.
+	//
+	// Note that the preferred endpoint is /aql
+	//
+	// POST /jsm/assets/workspace/{workspaceId}/v1/object/navlist/aql
+	//
+	// https://docs.go-atlassian.io/jira-assets/object#search-objects
+	Search(ctx context.Context, workspaceID string, payload *models.ObjectSearchParamsScheme) (*models.ObjectPageScheme, *models.ResponseScheme, error)
 }

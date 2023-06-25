@@ -104,8 +104,47 @@ func (o *ObjectService) Filter(ctx context.Context, workspaceID, aql string, att
 	return o.internalClient.Filter(ctx, workspaceID, aql, attributes, startAt, maxResults)
 }
 
+// Search retrieve a list of objects based on an AQL.
+//
+// Note that the preferred endpoint is /aql
+//
+// POST /jsm/assets/workspace/{workspaceId}/v1/object/navlist/aql
+//
+// https://docs.go-atlassian.io/jira-assets/object#search-objects
+func (o *ObjectService) Search(ctx context.Context, workspaceID string, payload *model.ObjectSearchParamsScheme) (*model.ObjectPageScheme, *model.ResponseScheme, error) {
+	return o.internalClient.Search(ctx, workspaceID, payload)
+}
+
 type internalObjectImpl struct {
 	c service.Client
+}
+
+func (i *internalObjectImpl) Search(ctx context.Context, workspaceID string, payload *model.ObjectSearchParamsScheme) (*model.ObjectPageScheme, *model.ResponseScheme, error) {
+
+	if workspaceID == "" {
+		return nil, nil, model.ErrNoWorkspaceIDError
+	}
+
+	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/object/navlist/aql", workspaceID)
+
+	reader, err := i.c.TransformStructToReader(payload)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	object := new(model.ObjectPageScheme)
+	response, err := i.c.Call(request, object)
+	if err != nil {
+		return nil, response, err
+	}
+
+	return object, response, nil
+
 }
 
 func (i *internalObjectImpl) Filter(ctx context.Context, workspaceID, aql string, attributes bool, startAt, maxResults int) (*model.ObjectListResultScheme, *model.ResponseScheme, error) {

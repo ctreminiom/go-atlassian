@@ -1166,3 +1166,134 @@ func Test_internalObjectImpl_Filter(t *testing.T) {
 		})
 	}
 }
+
+func Test_internalObjectImpl_Search(t *testing.T) {
+
+	payloadMocked := &model.ObjectSearchParamsScheme{
+		Query:             "objectType = Office AND Name LIKE SYD",
+		ObjectTypeID:      "23",
+		Page:              1,
+		ResultPerPage:     25,
+		ObjectSchemaID:    "6",
+		IncludeAttributes: false,
+		AttributesToDisplay: &model.AttributesToDisplayScheme{
+			AttributesToDisplayIds: []int{135, 144},
+		},
+	}
+
+	type fields struct {
+		c service.Client
+	}
+
+	type args struct {
+		ctx         context.Context
+		workspaceID string
+		payload     *model.ObjectSearchParamsScheme
+	}
+
+	testCases := []struct {
+		name    string
+		fields  fields
+		args    args
+		on      func(*fields)
+		wantErr bool
+		Err     error
+	}{
+		{
+			name: "when the parameters are correct",
+			args: args{
+				ctx:         context.TODO(),
+				workspaceID: "workspace-uuid-sample",
+				payload:     payloadMocked,
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewClient(t)
+
+				client.On("TransformStructToReader",
+					payloadMocked).
+					Return(bytes.NewReader([]byte{}), nil)
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodPost,
+					"jsm/assets/workspace/workspace-uuid-sample/v1/object/navlist/aql",
+					bytes.NewReader([]byte{})).
+					Return(&http.Request{}, nil)
+
+				client.On("Call",
+					&http.Request{},
+					&model.ObjectPageScheme{}).
+					Return(&model.ResponseScheme{}, nil)
+
+				fields.c = client
+			},
+		},
+
+		{
+			name: "when the http request cannot be created",
+			args: args{
+				ctx:         context.TODO(),
+				workspaceID: "workspace-uuid-sample",
+				payload:     payloadMocked,
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewClient(t)
+
+				client.On("TransformStructToReader",
+					payloadMocked).
+					Return(bytes.NewReader([]byte{}), nil)
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodPost,
+					"jsm/assets/workspace/workspace-uuid-sample/v1/object/navlist/aql",
+					bytes.NewReader([]byte{})).
+					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+
+				fields.c = client
+
+			},
+			wantErr: true,
+			Err:     errors.New("error, unable to create the http request"),
+		},
+
+		{
+			name: "when the workspace id is not provided",
+			args: args{
+				ctx: context.TODO(),
+			},
+			wantErr: true,
+			Err:     model.ErrNoWorkspaceIDError,
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+
+			if testCase.on != nil {
+				testCase.on(&testCase.fields)
+			}
+
+			objectService := NewObjectService(testCase.fields.c)
+
+			gotResult, gotResponse, err := objectService.Search(testCase.args.ctx, testCase.args.workspaceID, testCase.args.payload)
+
+			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+
+				assert.EqualError(t, err, testCase.Err.Error())
+			} else {
+
+				assert.NoError(t, err)
+				assert.NotEqual(t, gotResponse, nil)
+				assert.NotEqual(t, gotResult, nil)
+			}
+
+		})
+	}
+}

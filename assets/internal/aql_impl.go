@@ -20,14 +20,14 @@ type AQLService struct {
 	internalClient assets.AQLAssetConnector
 }
 
-// Filter retrieves a list of objects based on an AQL. Note that the preferred endpoint is /aql.
+// Filter search objects based on Assets Query Language (AQL)
 //
-// POST /jsm/assets/workspace/{workspaceId}/v1/object/navlist/aql
+// POST /jsm/assets/workspace/{workspaceId}/v1/aql/objects
+//
+// Deprecated. Please use Object.Filter() instead.
 //
 // https://docs.go-atlassian.io/jira-assets/aql#filter-objects
-//
-// Not supported: Use ObjectConnector.Filter instead.
-func (a *AQLService) Filter(ctx context.Context, workspaceID string, payload *model.AQLSearchParamsScheme) (*model.ObjectPageScheme, *model.ResponseScheme, error) {
+func (a *AQLService) Filter(ctx context.Context, workspaceID string, payload *model.AQLSearchParamsScheme) (*model.ObjectListScheme, *model.ResponseScheme, error) {
 	return a.internalClient.Filter(ctx, workspaceID, payload)
 }
 
@@ -35,13 +35,13 @@ type internalAQLImpl struct {
 	c service.Client
 }
 
-func (i *internalAQLImpl) Filter(ctx context.Context, workspaceID string, payload *model.AQLSearchParamsScheme) (*model.ObjectPageScheme, *model.ResponseScheme, error) {
+func (i *internalAQLImpl) Filter(ctx context.Context, workspaceID string, payload *model.AQLSearchParamsScheme) (*model.ObjectListScheme, *model.ResponseScheme, error) {
 
 	if workspaceID == "" {
 		return nil, nil, model.ErrNoWorkspaceIDError
 	}
 
-	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/object/navlist/aql", workspaceID)
+	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/aql/objects", workspaceID)
 
 	reader, err := i.c.TransformStructToReader(payload)
 	if err != nil {
@@ -53,7 +53,7 @@ func (i *internalAQLImpl) Filter(ctx context.Context, workspaceID string, payloa
 		return nil, nil, err
 	}
 
-	object := new(model.ObjectPageScheme)
+	object := new(model.ObjectListScheme)
 	response, err := i.c.Call(request, object)
 	if err != nil {
 		return nil, response, err

@@ -196,3 +196,56 @@ type ObjectListResultScheme struct {
 	Values               []*ObjectScheme              `json:"values,omitempty"`
 	ObjectTypeAttributes []*ObjectTypeAttributeScheme `json:"objectTypeAttributes,omitempty"`
 }
+
+type ObjectSearchParamsScheme struct {
+
+	// The AQL that will fetch the objects.
+	//
+	// The object type parameter will be appended implicitly to this AQL
+	Query string `json:"qlQuery,omitempty"`
+
+	// Required if qlQuery is not set.
+	//
+	// Deprecated. Use Query instead.
+	Iql          string `json:"iql,omitempty"`
+	ObjectTypeID string `json:"object_type_id,omitempty"`
+
+	// The requested page to be loaded for a paginated result.
+	//
+	// The default value is page = 1
+	Page int `json:"page,omitempty"`
+
+	// How many objects should be returned in the request.
+	//
+	// It is used with page attribute for pagination.
+	ResultPerPage int `json:"result_per_page,omitempty"`
+
+	// Which attribute should be used to order by.
+	//
+	// The preferred way is to use an order by in qlQuery and not pass this argument.
+	OrderByTypeAttributeID int `json:"order_by_type_attribute_id,omitempty"`
+
+	// Sort objects in ascending order or descending order based on the attribute identified by orderByTypeAttrId.
+	//
+	// 1 mean ascending all other values mean descending.
+	//
+	// The preferred way is to not supply the asc parameter and use an order by in qlQuery instead.
+	Asc int `json:"asc,omitempty"`
+
+	// Identifies an object that should be included in the result.
+	//
+	// The page will be calculated accordingly to include the object specified in the result set
+	ObjectID string `json:"object_id,omitempty"`
+
+	ObjectSchemaID string `json:"object_schema_id,omitempty"`
+
+	// Should attribute values be included in the response.
+	IncludeAttributes bool `json:"include_attributes,omitempty"`
+
+	// Identifies attributes to be displayed
+	AttributesToDisplay *AttributesToDisplayScheme `json:"attributes_to_display,omitempty"`
+}
+
+type AttributesToDisplayScheme struct {
+	AttributesToDisplayIds []int `json:"attributesToDisplayIds,omitempty"`
+}

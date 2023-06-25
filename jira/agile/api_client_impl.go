@@ -5,12 +5,11 @@ import (
 	"context"
 	"encoding/json"
 	"github.com/ctreminiom/go-atlassian/jira/agile/internal"
-	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service/common"
 	"io"
 	"net/http"
 	"net/url"
-	"reflect"
 	"strings"
 )
 
@@ -20,38 +19,27 @@ func New(httpClient common.HttpClient, site string) (*Client, error) {
 		httpClient = http.DefaultClient
 	}
 
+	if site == "" {
+		return nil, model.ErrNoSiteError
+	}
+
 	if !strings.HasSuffix(site, "/") {
 		site += "/"
 	}
 
-	siteAsURL, err := url.Parse(site)
+	u, err := url.Parse(site)
 	if err != nil {
 		return nil, err
 	}
 
 	client := &Client{
 		HTTP: httpClient,
-		Site: siteAsURL,
+		Site: u,
 	}
 
-	boardService, err := internal.NewBoardService(client, "1.0")
-	if err != nil {
-		return nil, err
-	}
-
-	epicService, err := internal.NewEpicService(client, "1.0")
-	if err != nil {
-		return nil, err
-	}
-
-	sprintService, err := internal.NewSprintService(client, "1.0")
-	if err != nil {
-		return nil, err
-	}
-
-	client.Board = boardService
-	client.Epic = epicService
-	client.Sprint = sprintService
+	client.Board = internal.NewBoardService(client, "1.0")
+	client.Epic = internal.NewEpicService(client, "1.0")
+	client.Sprint = internal.NewSprintService(client, "1.0")
 	client.Backlog = internal.NewBoardBacklogService(client, "1.0")
 	client.Auth = internal.NewAuthenticationService(client)
 
@@ -68,54 +56,62 @@ type Client struct {
 	Sprint  *internal.SprintService
 }
 
-func (c *Client) NewFormRequest(ctx context.Context, method, apiEndpoint, contentType string, payload io.Reader) (*http.Request, error) {
-	return nil, nil
-}
+func (c *Client) NewRequest(ctx context.Context, method, urlStr, type_ string, body interface{}) (*http.Request, error) {
 
-func (c *Client) NewRequest(ctx context.Context, method, apiEndpoint string, payload io.Reader) (*http.Request, error) {
-
-	relativePath, err := url.Parse(apiEndpoint)
+	rel, err := url.Parse(urlStr)
 	if err != nil {
 		return nil, err
 	}
 
-	var endpoint = c.Site.ResolveReference(relativePath).String()
+	u := c.Site.ResolveReference(rel)
 
-	request, err := http.NewRequestWithContext(ctx, method, endpoint, payload)
+	buf := new(bytes.Buffer)
+	if body != nil {
+		if err = json.NewEncoder(buf).Encode(body); err != nil {
+			return nil, err
+		}
+	}
+
+	req, err := http.NewRequestWithContext(ctx, method, u.String(), buf)
 	if err != nil {
 		return nil, err
 	}
+	req.Header.Set("Accept", "application/json")
 
-	request.Header.Set("Accept", "application/json")
+	if body != nil && type_ == "" {
+		req.Header.Set("Content-Type", "application/json")
+	}
 
-	if payload != nil {
-		request.Header.Set("Content-Type", "application/json")
+	if body != nil && type_ != "" {
+		req.Header.Set("Content-Type", type_)
 	}
 
 	if c.Auth.HasBasicAuth() {
-		request.SetBasicAuth(c.Auth.GetBasicAuth())
+		req.SetBasicAuth(c.Auth.GetBasicAuth())
 	}
 
 	if c.Auth.HasUserAgent() {
-		request.Header.Set("User-Agent", c.Auth.GetUserAgent())
+		req.Header.Set("User-Agent", c.Auth.GetUserAgent())
 	}
 
-	return request, nil
+	return req, nil
 }
 
-func (c *Client) Call(request *http.Request, structure interface{}) (*models.ResponseScheme, error) {
+func (c *Client) Call(request *http.Request, structure interface{}) (*model.ResponseScheme, error) {
 
 	response, err := c.HTTP.Do(request)
 	if err != nil {
 		return nil, err
 	}
 
-	return c.TransformTheHTTPResponse(response, structure)
+	return c.processResponse(response, structure)
 }
 
-func (c *Client) TransformTheHTTPResponse(response *http.Response, structure interface{}) (*models.ResponseScheme, error) {
+func (c *Client) processResponse(response *http.Response, structure interface{}) (*model.ResponseScheme, error) {
 
-	responseTransformed := &models.ResponseScheme{
+	defer response.Body.Close()
+
+	res := &model.ResponseScheme{
 		Response: response,
 		Code:     response.StatusCode,
 		Endpoint: response.Request.URL.String(),
@@ -124,39 +120,39 @@ func (c *Client) TransformTheHTTPResponse(response *http.Response, structure int
 
 	responseAsBytes, err := io.ReadAll(response.Body)
 	if err != nil {
-		return responseTransformed, err
+		return res, err
 	}
 
-	responseTransformed.Bytes.Write(responseAsBytes)
+	res.Bytes.Write(responseAsBytes)
 
-	var wasSuccess = response.StatusCode >= 200 && response.StatusCode < 300
+	wasSuccess := response.StatusCode >= 200 && response.StatusCode < 300
+
 	if !wasSuccess {
-		return responseTransformed, models.ErrInvalidStatusCodeError
+
+		switch response.StatusCode {
+
+		case http.StatusNotFound:
+			return res, model.ErrNotFound
+
+		case http.StatusUnauthorized:
+			return res, model.ErrUnauthorized
+
+		case http.StatusInternalServerError:
+			return res, model.ErrInternalError
+
+		case http.StatusBadRequest:
+			return res, model.ErrBadRequestError
+
+		default:
+			return res, model.ErrInvalidStatusCodeError
+		}
 	}
 
 	if structure != nil {
 		if err = json.Unmarshal(responseAsBytes, &structure); err != nil {
-			return responseTransformed, err
+			return res, err
 		}
 	}
 
-	return responseTransformed, nil
-}
-
-func (c *Client) TransformStructToReader(structure interface{}) (io.Reader, error) {
-
-	if structure == nil {
-		return nil, models.ErrNilPayloadError
-	}
-
-	if reflect.ValueOf(structure).Type().Kind() == reflect.Struct {
-		return nil, models.ErrNonPayloadPointerError
-	}
-
-	structureAsBodyBytes, err := json.Marshal(structure)
-	if err != nil {
-		return nil, err
-	}
-
-	return bytes.NewReader(structureAsBodyBytes), nil
+	return res, nil
 }

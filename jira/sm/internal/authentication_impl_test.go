@@ -12,7 +12,7 @@ import (
 func TestAuthenticationService_GetBasicAuth(t *testing.T) {
 
 	type fields struct {
-		c                 service.Client
+		c                 service.Connector
 		basicAuthProvided bool
 		mail              string
 		token             string
@@ -28,7 +28,7 @@ func TestAuthenticationService_GetBasicAuth(t *testing.T) {
 		{
 			name: "when the basic auth is already set",
 			fields: fields{
-				c:     mocks.NewClient(t),
+				c:     mocks.NewConnector(t),
 				mail:  "mail",
 				token: "token",
 			},
@@ -62,7 +62,7 @@ func TestAuthenticationService_GetBasicAuth(t *testing.T) {
 
 func TestAuthenticationService_GetUserAgent(t *testing.T) {
 	type fields struct {
-		c                 service.Client
+		c                 service.Connector
 		basicAuthProvided bool
 		mail              string
 		token             string
@@ -77,7 +77,7 @@ func TestAuthenticationService_GetUserAgent(t *testing.T) {
 		{
 			name: "when the user agent is already set",
 			fields: fields{
-				c:     mocks.NewClient(t),
+				c:     mocks.NewConnector(t),
 				agent: "firefox-09",
 			},
 			want: "firefox-09",
@@ -102,7 +102,7 @@ func TestAuthenticationService_GetUserAgent(t *testing.T) {
 
 func TestAuthenticationService_HasBasicAuth(t *testing.T) {
 	type fields struct {
-		c                 service.Client
+		c                 service.Connector
 		basicAuthProvided bool
 		mail              string
 		token             string
@@ -117,7 +117,7 @@ func TestAuthenticationService_HasBasicAuth(t *testing.T) {
 		{
 			name: "when the params are correct",
 			fields: fields{
-				c:                 mocks.NewClient(t),
+				c:                 mocks.NewConnector(t),
 				basicAuthProvided: true,
 			},
 			want: true,
@@ -143,7 +143,7 @@ func TestAuthenticationService_HasBasicAuth(t *testing.T) {
 
 func TestAuthenticationService_HasUserAgent(t *testing.T) {
 	type fields struct {
-		c                 service.Client
+		c                 service.Connector
 		basicAuthProvided bool
 		mail              string
 		token             string
@@ -184,10 +184,10 @@ func TestAuthenticationService_HasUserAgent(t *testing.T) {
 
 func TestNewAuthenticationService(t *testing.T) {
 
-	clientMocked := mocks.NewClient(t)
+	clientMocked := mocks.NewConnector(t)
 
 	type args struct {
-		client service.Client
+		client service.Connector
 	}
 	testCases := []struct {
 		name string
@@ -214,7 +214,7 @@ func TestNewAuthenticationService(t *testing.T) {
 func TestAuthenticationService_SetUserAgent(t *testing.T) {
 
 	type fields struct {
-		c                 service.Client
+		c                 service.Connector
 		basicAuthProvided bool
 		mail              string
 		token             string
@@ -254,7 +254,7 @@ func TestAuthenticationService_SetUserAgent(t *testing.T) {
 func TestAuthenticationService_SetBasicAuth(t *testing.T) {
 
 	type fields struct {
-		c                 service.Client
+		c                 service.Connector
 		basicAuthProvided bool
 		mail              string
 		token             string
@@ -297,7 +297,7 @@ func TestAuthenticationService_SetBasicAuth(t *testing.T) {
 func TestAuthenticationService_HasSetExperimentalFlag(t *testing.T) {
 
 	type fields struct {
-		c                 service.Client
+		c                 service.Connector
 		basicAuthProvided bool
 		mail              string
 		token             string
@@ -335,7 +335,7 @@ func TestAuthenticationService_HasSetExperimentalFlag(t *testing.T) {
 
 func TestAuthenticationService_GetBearerToken(t *testing.T) {
 	type fields struct {
-		c                 service.Client
+		c                 service.Connector
 		basicAuthProvided bool
 		mail              string
 		token             string
@@ -350,7 +350,7 @@ func TestAuthenticationService_GetBearerToken(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			fields: fields{
-				c:     mocks.NewClient(t),
+				c:     mocks.NewConnector(t),
 				token: "token-sample",
 			},
 			want: "token-sample",
@@ -373,7 +373,7 @@ func TestAuthenticationService_GetBearerToken(t *testing.T) {
 
 func TestAuthenticationService_SetBearerToken(t *testing.T) {
 	type fields struct {
-		c                 service.Client
+		c                 service.Connector
 		basicAuthProvided bool
 		mail              string
 		token             string
@@ -415,7 +415,7 @@ func TestAuthenticationService_SetBearerToken(t *testing.T) {
 
 func TestAuthenticationService_SetExperimentalFlag(t *testing.T) {
 	type fields struct {
-		c                 service.Client
+		c                 service.Connector
 		basicAuthProvided bool
 		mail              string
 		token             string

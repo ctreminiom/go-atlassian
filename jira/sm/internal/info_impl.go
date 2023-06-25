@@ -8,15 +8,11 @@ import (
 	"net/http"
 )
 
-func NewInfoService(client service.Client, version string) (*InfoService, error) {
-
-	if version == "" {
-		return nil, model.ErrNoVersionProvided
-	}
+func NewInfoService(client service.Connector, version string) *InfoService {
 
 	return &InfoService{
 		internalClient: &internalInfoImpl{c: client, version: version},
-	}, nil
+	}
 }
 
 type InfoService struct {
@@ -33,7 +29,7 @@ func (i *InfoService) Get(ctx context.Context) (*model.InfoScheme, *model.Respon
 }
 
 type internalInfoImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -41,16 +37,16 @@ func (i *internalInfoImpl) Get(ctx context.Context) (*model.InfoScheme, *model.R
 
 	endpoint := "rest/servicedeskapi/info"
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	info := new(model.InfoScheme)
-	response, err := i.c.Call(request, info)
+	res, err := i.c.Call(req, info)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return info, response, nil
+	return info, res, nil
 }

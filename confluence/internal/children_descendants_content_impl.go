@@ -44,6 +44,27 @@ func (c *ChildrenDescandantsService) Children(ctx context.Context, contentID str
 	return c.internalClient.Children(ctx, contentID, expand, parentVersion)
 }
 
+// Move moves a page from its current location in the hierarchy to another.
+//
+// Position describes where in the hierarchy the page should be moved to in
+// relationship to targetID.
+//
+// before: page will be a sibling of target but show up just before target in
+// the list of children
+//
+// after: page will be a sibling of target but show up just after target in the
+// list of children
+//
+// append: page will be a child of the target and be appended to targets list of
+// children
+//
+// PUT /wiki/rest/api/content/{pageId}/move/{position}/{targetId}
+//
+// https://docs.go-atlassian.io/confluence-cloud/content/children-descendants#move
+func (c *ChildrenDescandantsService) Move(ctx context.Context, pageID string, position string, targetID string) (*model.ContentMoveScheme, *model.ResponseScheme, error) {
+	return c.internalClient.Move(ctx, pageID, position, targetID)
+}
+
 // ChildrenByType returns all children of a given type, for a piece of content.
 //
 // A piece of content has different types of child content
@@ -160,6 +181,39 @@ func (i *internalChildrenDescandantsImpl) Children(ctx context.Context, contentI
 	}
 
 	return children, response, nil
+}
+
+func (i *internalChildrenDescandantsImpl) Move(ctx context.Context, pageID string, position string, targetID string) (*model.ContentMoveScheme, *model.ResponseScheme, error) {
+
+	if pageID == "" {
+		return nil, nil, model.ErrNoPageIDError
+	}
+	if position == "" {
+		return nil, nil, model.ErrNoPositionError
+	}
+	if targetID == "" {
+		return nil, nil, model.ErrNoTargetIDError
+	}
+	_, validPosition := model.ValidPositions[position]
+	if !validPosition {
+		return nil, nil, model.ErrInvalidPositionError
+	}
+
+	var endpoint strings.Builder
+	endpoint.WriteString(fmt.Sprintf("wiki/rest/api/content/%v/move/%s/%v", pageID, position, targetID))
+
+	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint.String(), nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	movement := new(model.ContentMoveScheme)
+	response, err := i.c.Call(request, movement)
+	if err != nil {
+		return nil, response, err
+	}
+
+	return movement, response, nil
 }
 
 func (i *internalChildrenDescandantsImpl) ChildrenByType(ctx context.Context, contentID, contentType string, parentVersion int, expand []string, startAt, maxResults int) (*model.ContentPageScheme, *model.ResponseScheme, error) {

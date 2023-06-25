@@ -11,15 +11,11 @@ import (
 	"strconv"
 )
 
-func NewServiceLevelAgreementService(client service.Client, version string) (*ServiceLevelAgreementService, error) {
-
-	if version == "" {
-		return nil, model.ErrNoVersionProvided
-	}
+func NewServiceLevelAgreementService(client service.Connector, version string) *ServiceLevelAgreementService {
 
 	return &ServiceLevelAgreementService{
 		internalClient: &internalServiceLevelAgreementImpl{c: client, version: version},
-	}, nil
+	}
 }
 
 type ServiceLevelAgreementService struct {
@@ -47,7 +43,7 @@ func (s *ServiceLevelAgreementService) Get(ctx context.Context, issueKeyOrID str
 }
 
 type internalServiceLevelAgreementImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -63,18 +59,18 @@ func (i *internalServiceLevelAgreementImpl) Gets(ctx context.Context, issueKeyOr
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/request/%v/sla?%v", issueKeyOrID, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	page := new(model.RequestSLAPageScheme)
-	response, err := i.c.Call(request, page)
+	res, err := i.c.Call(req, page)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return page, response, nil
+	return page, res, nil
 }
 
 func (i *internalServiceLevelAgreementImpl) Get(ctx context.Context, issueKeyOrID string, metricID int) (*model.RequestSLAScheme, *model.ResponseScheme, error) {
@@ -89,16 +85,16 @@ func (i *internalServiceLevelAgreementImpl) Get(ctx context.Context, issueKeyOrI
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/request/%v/sla/%v", issueKeyOrID, metricID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	sla := new(model.RequestSLAScheme)
-	response, err := i.c.Call(request, sla)
+	res, err := i.c.Call(req, sla)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return sla, response, nil
+	return sla, res, nil
 }

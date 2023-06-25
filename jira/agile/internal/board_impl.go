@@ -12,15 +12,11 @@ import (
 	"strings"
 )
 
-func NewBoardService(client service.Client, version string) (*BoardService, error) {
-
-	if version == "" {
-		return nil, model.ErrNoVersionProvided
-	}
+func NewBoardService(client service.Connector, version string) *BoardService {
 
 	return &BoardService{
 		internalClient: &internalBoardImpl{c: client, version: version},
-	}, nil
+	}
 }
 
 type BoardService struct {
@@ -241,7 +237,7 @@ func (b *BoardService) Gets(ctx context.Context, opts *model.GetBoardsOptions, s
 }
 
 type internalBoardImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -251,43 +247,38 @@ func (i *internalBoardImpl) Get(ctx context.Context, boardID int) (*model.BoardS
 		return nil, nil, model.ErrNoBoardIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/agile/%v/board/%v", i.version, boardID)
+	url := fmt.Sprintf("rest/agile/%v/board/%v", i.version, boardID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodGet, url, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	boards := new(model.BoardScheme)
-	response, err := i.c.Call(request, boards)
+	res, err := i.c.Call(req, boards)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return boards, response, nil
+	return boards, res, nil
 }
 
 func (i *internalBoardImpl) Create(ctx context.Context, payload *model.BoardPayloadScheme) (*model.BoardScheme, *model.ResponseScheme, error) {
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
+	url := fmt.Sprintf("rest/agile/%v/board", i.version)
 
-	endpoint := fmt.Sprintf("rest/agile/%v/board", i.version)
-
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	req, err := i.c.NewRequest(ctx, http.MethodPost, url, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	board := new(model.BoardScheme)
-	response, err := i.c.Call(request, board)
+	res, err := i.c.Call(req, board)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return board, response, nil
+	return board, res, nil
 }
 
 func (i *internalBoardImpl) Filter(ctx context.Context, filterID, startAt, maxResults int) (*model.BoardPageScheme, *model.ResponseScheme, error) {
@@ -300,20 +291,20 @@ func (i *internalBoardImpl) Filter(ctx context.Context, filterID, startAt, maxRe
 	params.Add("startAt", strconv.Itoa(startAt))
 	params.Add("maxResults", strconv.Itoa(maxResults))
 
-	endpoint := fmt.Sprintf("rest/agile/%v/board/filter/%v?%v", i.version, filterID, params.Encode())
+	url := fmt.Sprintf("rest/agile/%v/board/filter/%v?%v", i.version, filterID, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodGet, url, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	page := new(model.BoardPageScheme)
-	response, err := i.c.Call(request, page)
+	res, err := i.c.Call(req, page)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return page, response, nil
+	return page, res, nil
 }
 
 func (i *internalBoardImpl) Backlog(ctx context.Context, boardID int, opts *model.IssueOptionScheme, startAt, maxResults int) (*model.BoardIssuePageScheme, *model.ResponseScheme, error) {
@@ -343,20 +334,20 @@ func (i *internalBoardImpl) Backlog(ctx context.Context, boardID int, opts *mode
 		}
 	}
 
-	endpoint := fmt.Sprintf("rest/agile/%v/board/%v/backlog?%v", i.version, boardID, params.Encode())
+	url := fmt.Sprintf("rest/agile/%v/board/%v/backlog?%v", i.version, boardID, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodGet, url, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	issues := new(model.BoardIssuePageScheme)
-	response, err := i.c.Call(request, issues)
+	page := new(model.BoardIssuePageScheme)
+	res, err := i.c.Call(req, page)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return issues, response, nil
+	return page, res, nil
 }
 
 func (i *internalBoardImpl) Configuration(ctx context.Context, boardID int) (*model.BoardConfigurationScheme, *model.ResponseScheme, error) {
@@ -365,20 +356,20 @@ func (i *internalBoardImpl) Configuration(ctx context.Context, boardID int) (*mo
 		return nil, nil, model.ErrNoBoardIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/agile/%v/board/%v/configuration", i.version, boardID)
+	url := fmt.Sprintf("rest/agile/%v/board/%v/configuration", i.version, boardID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodGet, url, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	configuration := new(model.BoardConfigurationScheme)
-	response, err := i.c.Call(request, configuration)
+	conf := new(model.BoardConfigurationScheme)
+	res, err := i.c.Call(req, conf)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return configuration, response, nil
+	return conf, res, nil
 }
 
 func (i *internalBoardImpl) Epics(ctx context.Context, boardID, startAt, maxResults int, done bool) (*model.BoardEpicPageScheme, *model.ResponseScheme, error) {
@@ -392,20 +383,20 @@ func (i *internalBoardImpl) Epics(ctx context.Context, boardID, startAt, maxResu
 	params.Add("maxResults", strconv.Itoa(maxResults))
 	params.Add("done", fmt.Sprintf("%t", done))
 
-	endpoint := fmt.Sprintf("rest/agile/%v/board/%v/epic?%v", i.version, boardID, params.Encode())
+	url := fmt.Sprintf("rest/agile/%v/board/%v/epic?%v", i.version, boardID, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodGet, url, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	epics := new(model.BoardEpicPageScheme)
-	response, err := i.c.Call(request, epics)
+	page := new(model.BoardEpicPageScheme)
+	res, err := i.c.Call(req, page)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return epics, response, nil
+	return page, res, nil
 }
 
 func (i *internalBoardImpl) IssuesWithoutEpic(ctx context.Context, boardID int, opts *model.IssueOptionScheme, startAt, maxResults int) (*model.BoardIssuePageScheme, *model.ResponseScheme, error) {
@@ -437,20 +428,20 @@ func (i *internalBoardImpl) IssuesWithoutEpic(ctx context.Context, boardID int, 
 		}
 	}
 
-	endpoint := fmt.Sprintf("rest/agile/%v/board/%v/epic/none/issue?%v", i.version, boardID, params.Encode())
+	url := fmt.Sprintf("rest/agile/%v/board/%v/epic/none/issue?%v", i.version, boardID, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodGet, url, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	page := new(model.BoardIssuePageScheme)
-	response, err := i.c.Call(request, page)
+	res, err := i.c.Call(req, page)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return page, response, nil
+	return page, res, nil
 }
 
 func (i *internalBoardImpl) IssuesByEpic(ctx context.Context, boardID, epicID int, opts *model.IssueOptionScheme, startAt, maxResults int) (*model.BoardIssuePageScheme, *model.ResponseScheme, error) {
@@ -486,20 +477,20 @@ func (i *internalBoardImpl) IssuesByEpic(ctx context.Context, boardID, epicID in
 		}
 	}
 
-	endpoint := fmt.Sprintf("rest/agile/%v/board/%v/epic/%v/issue?%v", i.version, boardID, epicID, params.Encode())
+	url := fmt.Sprintf("rest/agile/%v/board/%v/epic/%v/issue?%v", i.version, boardID, epicID, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodGet, url, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	page := new(model.BoardIssuePageScheme)
-	response, err := i.c.Call(request, page)
+	res, err := i.c.Call(req, page)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return page, response, nil
+	return page, res, nil
 }
 
 func (i *internalBoardImpl) Issues(ctx context.Context, boardID int, opts *model.IssueOptionScheme, startAt, maxResults int) (*model.BoardIssuePageScheme, *model.ResponseScheme, error) {
@@ -532,20 +523,20 @@ func (i *internalBoardImpl) Issues(ctx context.Context, boardID int, opts *model
 
 	}
 
-	endpoint := fmt.Sprintf("rest/agile/%v/board/%v/issue?%v", i.version, boardID, params.Encode())
+	url := fmt.Sprintf("rest/agile/%v/board/%v/issue?%v", i.version, boardID, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodGet, url, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	page := new(model.BoardIssuePageScheme)
-	response, err := i.c.Call(request, page)
+	res, err := i.c.Call(req, page)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return page, response, nil
+	return page, res, nil
 }
 
 func (i *internalBoardImpl) Move(ctx context.Context, boardID int, payload *model.BoardMovementPayloadScheme) (*model.ResponseScheme, error) {
@@ -554,24 +545,14 @@ func (i *internalBoardImpl) Move(ctx context.Context, boardID int, payload *mode
 		return nil, model.ErrNoBoardIDError
 	}
 
-	reader, err := i.c.TransformStructToReader(payload)
+	url := fmt.Sprintf("rest/agile/%v/board/%v/issue", i.version, boardID)
+
+	req, err := i.c.NewRequest(ctx, http.MethodPost, url, "", payload)
 	if err != nil {
 		return nil, err
 	}
 
-	endpoint := fmt.Sprintf("rest/agile/%v/board/%v/issue", i.version, boardID)
-
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
-	if err != nil {
-		return nil, err
-	}
-
-	response, err := i.c.Call(request, nil)
-	if err != nil {
-		return response, err
-	}
-
-	return response, nil
+	return i.c.Call(req, nil)
 }
 
 func (i *internalBoardImpl) Projects(ctx context.Context, boardID, startAt, maxResults int) (*model.BoardProjectPageScheme, *model.ResponseScheme, error) {
@@ -584,20 +565,20 @@ func (i *internalBoardImpl) Projects(ctx context.Context, boardID, startAt, maxR
 	params.Add("startAt", strconv.Itoa(startAt))
 	params.Add("maxResults", strconv.Itoa(maxResults))
 
-	endpoint := fmt.Sprintf("rest/agile/%v/board/%v/project?%v", i.version, boardID, params.Encode())
+	url := fmt.Sprintf("rest/agile/%v/board/%v/project?%v", i.version, boardID, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodGet, url, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	page := new(model.BoardProjectPageScheme)
-	response, err := i.c.Call(request, page)
+	res, err := i.c.Call(req, page)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return page, response, nil
+	return page, res, nil
 }
 
 func (i *internalBoardImpl) Sprints(ctx context.Context, boardID, startAt, maxResults int, states []string) (*model.BoardSprintPageScheme, *model.ResponseScheme, error) {
@@ -611,20 +592,20 @@ func (i *internalBoardImpl) Sprints(ctx context.Context, boardID, startAt, maxRe
 	params.Add("maxResults", strconv.Itoa(maxResults))
 	params.Add("state", strings.Join(states, ","))
 
-	endpoint := fmt.Sprintf("rest/agile/%v/board/%v/sprint?%v", i.version, boardID, params.Encode())
+	url := fmt.Sprintf("rest/agile/%v/board/%v/sprint?%v", i.version, boardID, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodGet, url, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	page := new(model.BoardSprintPageScheme)
-	response, err := i.c.Call(request, page)
+	res, err := i.c.Call(req, page)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return page, response, nil
+	return page, res, nil
 }
 
 func (i *internalBoardImpl) IssuesBySprint(ctx context.Context, boardID, sprintID int, opts *model.IssueOptionScheme, startAt, maxResults int) (*model.BoardIssuePageScheme, *model.ResponseScheme, error) {
@@ -660,20 +641,20 @@ func (i *internalBoardImpl) IssuesBySprint(ctx context.Context, boardID, sprintI
 		}
 	}
 
-	endpoint := fmt.Sprintf("rest/agile/%v/board/%v/sprint/%v/issue?%v", i.version, boardID, sprintID, params.Encode())
+	url := fmt.Sprintf("rest/agile/%v/board/%v/sprint/%v/issue?%v", i.version, boardID, sprintID, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodGet, url, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	page := new(model.BoardIssuePageScheme)
-	response, err := i.c.Call(request, page)
+	res, err := i.c.Call(req, page)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return page, response, nil
+	return page, res, nil
 }
 
 func (i *internalBoardImpl) Versions(ctx context.Context, boardID, startAt, maxResults int, released bool) (*model.BoardVersionPageScheme, *model.ResponseScheme, error) {
@@ -687,20 +668,20 @@ func (i *internalBoardImpl) Versions(ctx context.Context, boardID, startAt, maxR
 	params.Add("maxResults", strconv.Itoa(maxResults))
 	params.Add("released", fmt.Sprintf("%t", released))
 
-	endpoint := fmt.Sprintf("rest/agile/%v/board/%v/version?%v", i.version, boardID, params.Encode())
+	url := fmt.Sprintf("rest/agile/%v/board/%v/version?%v", i.version, boardID, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodGet, url, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	page := new(model.BoardVersionPageScheme)
-	response, err := i.c.Call(request, page)
+	res, err := i.c.Call(req, page)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return page, response, nil
+	return page, res, nil
 }
 
 func (i *internalBoardImpl) Delete(ctx context.Context, boardID int) (*model.ResponseScheme, error) {
@@ -709,19 +690,14 @@ func (i *internalBoardImpl) Delete(ctx context.Context, boardID int) (*model.Res
 		return nil, model.ErrNoBoardIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/agile/%v/board/%v", i.version, boardID)
+	url := fmt.Sprintf("rest/agile/%v/board/%v", i.version, boardID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodDelete, url, "", nil)
 	if err != nil {
 		return nil, err
 	}
 
-	response, err := i.c.Call(request, nil)
-	if err != nil {
-		return response, err
-	}
-
-	return response, nil
+	return i.c.Call(request, nil)
 }
 
 func (i *internalBoardImpl) Gets(ctx context.Context, opts *model.GetBoardsOptions, startAt, maxResults int) (*model.BoardPageScheme, *model.ResponseScheme, error) {
@@ -773,18 +749,18 @@ func (i *internalBoardImpl) Gets(ctx context.Context, opts *model.GetBoardsOptio
 		}
 	}
 
-	endpoint := fmt.Sprintf("rest/agile/%v/board?%v", i.version, params.Encode())
+	url := fmt.Sprintf("rest/agile/%v/board?%v", i.version, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodGet, url, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	page := new(model.BoardPageScheme)
-	response, err := i.c.Call(request, page)
+	res, err := i.c.Call(req, page)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return page, response, nil
+	return page, res, nil
 }

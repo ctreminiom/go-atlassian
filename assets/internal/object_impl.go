@@ -100,7 +100,7 @@ func (o *ObjectService) Relation(ctx context.Context, workspaceID, objectID stri
 // POST /jsm/assets/workspace/{workspaceId}/v1/object/aql
 //
 // https://docs.go-atlassian.io/jira-assets/object#filter-objects
-func (o *ObjectService) Filter(ctx context.Context, workspaceID, aql string, attributes bool, startAt, maxResults int) (*model.ObjectListScheme, *model.ResponseScheme, error) {
+func (o *ObjectService) Filter(ctx context.Context, workspaceID, aql string, attributes bool, startAt, maxResults int) (*model.ObjectListResultScheme, *model.ResponseScheme, error) {
 	return o.internalClient.Filter(ctx, workspaceID, aql, attributes, startAt, maxResults)
 }
 
@@ -108,7 +108,7 @@ type internalObjectImpl struct {
 	c service.Client
 }
 
-func (i *internalObjectImpl) Filter(ctx context.Context, workspaceID, aql string, attributes bool, startAt, maxResults int) (*model.ObjectListScheme, *model.ResponseScheme, error) {
+func (i *internalObjectImpl) Filter(ctx context.Context, workspaceID, aql string, attributes bool, startAt, maxResults int) (*model.ObjectListResultScheme, *model.ResponseScheme, error) {
 
 	if workspaceID == "" {
 		return nil, nil, model.ErrNoWorkspaceIDError
@@ -142,7 +142,7 @@ func (i *internalObjectImpl) Filter(ctx context.Context, workspaceID, aql string
 		return nil, nil, err
 	}
 
-	list := new(model.ObjectListScheme)
+	list := new(model.ObjectListResultScheme)
 	response, err := i.c.Call(request, list)
 	if err != nil {
 		return nil, response, err

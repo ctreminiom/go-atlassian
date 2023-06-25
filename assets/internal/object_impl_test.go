@@ -1078,7 +1078,7 @@ func Test_internalObjectImpl_Filter(t *testing.T) {
 
 				client.On("Call",
 					&http.Request{},
-					&model.ObjectListScheme{}).
+					&model.ObjectListResultScheme{}).
 					Return(&model.ResponseScheme{}, nil)
 
 				fields.c = client

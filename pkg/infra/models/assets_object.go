@@ -187,3 +187,12 @@ type ObjectListScheme struct {
 	IqlSearchResult       bool                         `json:"iqlSearchResult,omitempty"`
 	ConversionPossible    bool                         `json:"conversionPossible,omitempty"`
 }
+
+type ObjectListResultScheme struct {
+	StartAt              int                          `json:"startAt,omitempty"`
+	MaxResults           int                          `json:"maxResults,omitempty"`
+	Total                int                          `json:"total,omitempty"`
+	IsLast               string                       `json:"isLast,omitempty"`
+	Values               []*ObjectScheme              `json:"values,omitempty"`
+	ObjectTypeAttributes []*ObjectTypeAttributeScheme `json:"objectTypeAttributes,omitempty"`
+}

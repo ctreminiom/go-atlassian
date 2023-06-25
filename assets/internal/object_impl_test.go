@@ -1223,7 +1223,7 @@ func Test_internalObjectImpl_Search(t *testing.T) {
 
 				client.On("Call",
 					&http.Request{},
-					&model.ObjectPageScheme{}).
+					&model.ObjectListScheme{}).
 					Return(&model.ResponseScheme{}, nil)
 
 				fields.c = client

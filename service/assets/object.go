@@ -79,5 +79,5 @@ type ObjectConnector interface {
 	// POST /jsm/assets/workspace/{workspaceId}/v1/object/navlist/aql
 	//
 	// https://docs.go-atlassian.io/jira-assets/object#search-objects
-	Search(ctx context.Context, workspaceID string, payload *models.ObjectSearchParamsScheme) (*models.ObjectPageScheme, *models.ResponseScheme, error)
+	Search(ctx context.Context, workspaceID string, payload *models.ObjectSearchParamsScheme) (*models.ObjectListScheme, *models.ResponseScheme, error)
 }

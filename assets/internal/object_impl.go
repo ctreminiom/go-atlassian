@@ -111,7 +111,7 @@ func (o *ObjectService) Filter(ctx context.Context, workspaceID, aql string, att
 // POST /jsm/assets/workspace/{workspaceId}/v1/object/navlist/aql
 //
 // https://docs.go-atlassian.io/jira-assets/object#search-objects
-func (o *ObjectService) Search(ctx context.Context, workspaceID string, payload *model.ObjectSearchParamsScheme) (*model.ObjectPageScheme, *model.ResponseScheme, error) {
+func (o *ObjectService) Search(ctx context.Context, workspaceID string, payload *model.ObjectSearchParamsScheme) (*model.ObjectListScheme, *model.ResponseScheme, error) {
 	return o.internalClient.Search(ctx, workspaceID, payload)
 }
 
@@ -119,7 +119,7 @@ type internalObjectImpl struct {
 	c service.Client
 }
 
-func (i *internalObjectImpl) Search(ctx context.Context, workspaceID string, payload *model.ObjectSearchParamsScheme) (*model.ObjectPageScheme, *model.ResponseScheme, error) {
+func (i *internalObjectImpl) Search(ctx context.Context, workspaceID string, payload *model.ObjectSearchParamsScheme) (*model.ObjectListScheme, *model.ResponseScheme, error) {
 
 	if workspaceID == "" {
 		return nil, nil, model.ErrNoWorkspaceIDError
@@ -137,7 +137,7 @@ func (i *internalObjectImpl) Search(ctx context.Context, workspaceID string, pay
 		return nil, nil, err
 	}
 
-	object := new(model.ObjectPageScheme)
+	object := new(model.ObjectListScheme)
 	response, err := i.c.Call(request, object)
 	if err != nil {
 		return nil, response, err

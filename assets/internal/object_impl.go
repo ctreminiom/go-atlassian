@@ -99,7 +99,7 @@ func (o *ObjectService) Relation(ctx context.Context, workspaceID, objectID stri
 //
 // POST /jsm/assets/workspace/{workspaceId}/v1/object/aql
 //
-// https://docs.go-atlassian.io/jira-assets/objects#filter-objects
+// https://docs.go-atlassian.io/jira-assets/object#filter-objects
 func (o *ObjectService) Filter(ctx context.Context, workspaceID, aql string, attributes bool, startAt, maxResults int) (*model.ObjectListScheme, *model.ResponseScheme, error) {
 	return o.internalClient.Filter(ctx, workspaceID, aql, attributes, startAt, maxResults)
 }

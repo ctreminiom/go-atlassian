@@ -3,7 +3,6 @@ package assets
 import (
 	"bytes"
 	"context"
-	"errors"
 	"github.com/ctreminiom/go-atlassian/assets/internal"
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service/common"
@@ -452,7 +451,7 @@ func TestClient_processResponse(t *testing.T) {
 
 func TestNew(t *testing.T) {
 
-	mockClient, err := New(http.DefaultClient, "https://ctreminiom.atlassian.net")
+	mockClient, err := New(http.DefaultClient)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -460,13 +459,8 @@ func TestNew(t *testing.T) {
 	mockClient.Auth.SetBasicAuth("test", "test")
 	mockClient.Auth.SetUserAgent("aaa")
 
-	invalidURLClientMocked, _ := New(nil, " https://zhidao.baidu.com/special/view?id=sd&preview=1")
-
-	noURLClientMocked, _ := New(nil, "")
-
 	type args struct {
 		httpClient common.HttpClient
-		site       string
 	}
 
 	testCases := []struct {
@@ -481,38 +475,16 @@ func TestNew(t *testing.T) {
 			name: "when the parameters are correct",
 			args: args{
 				httpClient: http.DefaultClient,
-				site:       "https://ctreminiom.atlassian.net",
 			},
 			want:    mockClient,
 			wantErr: false,
-		},
-
-		{
-			name: "when the site url are not provided",
-			args: args{
-				httpClient: http.DefaultClient,
-				site:       "",
-			},
-			want:    noURLClientMocked,
-			wantErr: true,
-			Err:     model.ErrNoSiteError,
-		},
-		{
-			name: "when the site url is not valid",
-			args: args{
-				httpClient: http.DefaultClient,
-				site:       " https://zhidao.baidu.com/special/view?id=sd&preview=1",
-			},
-			want:    invalidURLClientMocked,
-			wantErr: true,
-			Err:     errors.New("parse \" https://zhidao.baidu.com/special/view?id=sd&preview=1/\": first path segment in URL cannot contain colon"),
 		},
 	}
 
 	for _, testCase := range testCases {
 		t.Run(testCase.name, func(t *testing.T) {
 
-			gotClient, err := New(testCase.args.httpClient, testCase.args.site)
+			gotClient, err := New(testCase.args.httpClient)
 
 			if testCase.wantErr {
 

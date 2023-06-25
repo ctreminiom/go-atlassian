@@ -10,24 +10,17 @@ import (
 	"io"
 	"net/http"
 	"net/url"
-	"strings"
 )
 
-func New(httpClient common.HttpClient, site string) (*Client, error) {
+const DefaultAssetsSite = "https://api.atlassian.com/"
+
+func New(httpClient common.HttpClient) (*Client, error) {
 
 	if httpClient == nil {
 		httpClient = http.DefaultClient
 	}
 
-	if site == "" {
-		return nil, model.ErrNoSiteError
-	}
-
-	if !strings.HasSuffix(site, "/") {
-		site += "/"
-	}
-
-	u, err := url.Parse(site)
+	u, err := url.Parse(DefaultAssetsSite)
 	if err != nil {
 		return nil, err
 	}

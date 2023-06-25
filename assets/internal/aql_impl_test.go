@@ -24,7 +24,7 @@ func Test_internalAQLImpl_Filter(t *testing.T) {
 	}
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -50,12 +50,13 @@ func Test_internalAQLImpl_Filter(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"jsm/assets/workspace/workspace-uuid-sample/v1/aql/objects?includeAttributes=true&includeAttributesDeep=true&includeExtendedInfo=true&includeTypeAttributes=true&page=2&qlQuery=Name+LIKE+Test&resultPerPage=25",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -77,12 +78,13 @@ func Test_internalAQLImpl_Filter(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"jsm/assets/workspace/workspace-uuid-sample/v1/aql/objects?includeAttributes=true&includeAttributesDeep=true&includeExtendedInfo=true&includeTypeAttributes=true&page=2&qlQuery=Name+LIKE+Test&resultPerPage=25",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -110,9 +112,9 @@ func Test_internalAQLImpl_Filter(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			newService := NewAQLService(testCase.fields.c)
+			newAQLService := NewAQLService(testCase.fields.c)
 
-			gotResult, gotResponse, err := newService.Filter(testCase.args.ctx, testCase.args.workspaceID, testCase.args.payload)
+			gotResult, gotResponse, err := newAQLService.Filter(testCase.args.ctx, testCase.args.workspaceID, testCase.args.payload)
 
 			if testCase.wantErr {
 

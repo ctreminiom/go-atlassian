@@ -1,7 +1,6 @@
 package internal
 
 import (
-	"bytes"
 	"context"
 	"errors"
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
@@ -16,7 +15,7 @@ import (
 func Test_internalObjectImpl_Get(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -41,12 +40,13 @@ func Test_internalObjectImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"jsm/assets/workspace/workspace-uuid-sample/v1/object/1",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -68,12 +68,13 @@ func Test_internalObjectImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"jsm/assets/workspace/workspace-uuid-sample/v1/object/1",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -111,9 +112,9 @@ func Test_internalObjectImpl_Get(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			newService := NewObjectService(testCase.fields.c)
+			newObjectService := NewObjectService(testCase.fields.c)
 
-			gotResult, gotResponse, err := newService.Get(testCase.args.ctx, testCase.args.workspaceID, testCase.args.objectID)
+			gotResult, gotResponse, err := newObjectService.Get(testCase.args.ctx, testCase.args.workspaceID, testCase.args.objectID)
 
 			if testCase.wantErr {
 
@@ -136,7 +137,7 @@ func Test_internalObjectImpl_Get(t *testing.T) {
 func Test_internalObjectImpl_Delete(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -161,12 +162,13 @@ func Test_internalObjectImpl_Delete(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"jsm/assets/workspace/workspace-uuid-sample/v1/object/1",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -188,12 +190,13 @@ func Test_internalObjectImpl_Delete(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"jsm/assets/workspace/workspace-uuid-sample/v1/object/1",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -231,9 +234,9 @@ func Test_internalObjectImpl_Delete(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			newService := NewObjectService(testCase.fields.c)
+			newObjectService := NewObjectService(testCase.fields.c)
 
-			gotResponse, err := newService.Delete(testCase.args.ctx, testCase.args.workspaceID, testCase.args.objectID)
+			gotResponse, err := newObjectService.Delete(testCase.args.ctx, testCase.args.workspaceID, testCase.args.objectID)
 
 			if testCase.wantErr {
 
@@ -255,7 +258,7 @@ func Test_internalObjectImpl_Delete(t *testing.T) {
 func Test_internalObjectImpl_Attributes(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -280,12 +283,13 @@ func Test_internalObjectImpl_Attributes(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"jsm/assets/workspace/workspace-uuid-sample/v1/object/1/attributes",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -307,12 +311,13 @@ func Test_internalObjectImpl_Attributes(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"jsm/assets/workspace/workspace-uuid-sample/v1/object/1/attributes",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -350,9 +355,9 @@ func Test_internalObjectImpl_Attributes(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			newService := NewObjectService(testCase.fields.c)
+			newObjectService := NewObjectService(testCase.fields.c)
 
-			gotResult, gotResponse, err := newService.Attributes(testCase.args.ctx, testCase.args.workspaceID, testCase.args.objectID)
+			gotResult, gotResponse, err := newObjectService.Attributes(testCase.args.ctx, testCase.args.workspaceID, testCase.args.objectID)
 
 			if testCase.wantErr {
 
@@ -375,7 +380,7 @@ func Test_internalObjectImpl_Attributes(t *testing.T) {
 func Test_internalObjectImpl_History(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -402,12 +407,13 @@ func Test_internalObjectImpl_History(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"jsm/assets/workspace/workspace-uuid-sample/v1/object/1/history?asc=true",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -430,12 +436,13 @@ func Test_internalObjectImpl_History(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"jsm/assets/workspace/workspace-uuid-sample/v1/object/1/history?asc=true",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -473,9 +480,9 @@ func Test_internalObjectImpl_History(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			newService := NewObjectService(testCase.fields.c)
+			newObjectService := NewObjectService(testCase.fields.c)
 
-			gotResult, gotResponse, err := newService.History(testCase.args.ctx, testCase.args.workspaceID, testCase.args.objectID,
+			gotResult, gotResponse, err := newObjectService.History(testCase.args.ctx, testCase.args.workspaceID, testCase.args.objectID,
 				testCase.args.ascOrder)
 
 			if testCase.wantErr {
@@ -499,7 +506,7 @@ func Test_internalObjectImpl_History(t *testing.T) {
 func Test_internalObjectImpl_References(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -524,12 +531,13 @@ func Test_internalObjectImpl_References(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"jsm/assets/workspace/workspace-uuid-sample/v1/object/1/referenceinfo",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -551,12 +559,13 @@ func Test_internalObjectImpl_References(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"jsm/assets/workspace/workspace-uuid-sample/v1/object/1/referenceinfo",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -594,9 +603,9 @@ func Test_internalObjectImpl_References(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			newService := NewObjectService(testCase.fields.c)
+			newObjectService := NewObjectService(testCase.fields.c)
 
-			gotResult, gotResponse, err := newService.References(testCase.args.ctx, testCase.args.workspaceID, testCase.args.objectID)
+			gotResult, gotResponse, err := newObjectService.References(testCase.args.ctx, testCase.args.workspaceID, testCase.args.objectID)
 
 			if testCase.wantErr {
 
@@ -619,7 +628,7 @@ func Test_internalObjectImpl_References(t *testing.T) {
 func Test_internalObjectImpl_Relation(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -644,12 +653,13 @@ func Test_internalObjectImpl_Relation(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"jsm/assets/workspace/workspace-uuid-sample/v1/objectconnectedtickets/1/tickets",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -671,12 +681,13 @@ func Test_internalObjectImpl_Relation(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"jsm/assets/workspace/workspace-uuid-sample/v1/objectconnectedtickets/1/tickets",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -714,9 +725,9 @@ func Test_internalObjectImpl_Relation(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			newService := NewObjectService(testCase.fields.c)
+			newObjectService := NewObjectService(testCase.fields.c)
 
-			gotResult, gotResponse, err := newService.Relation(testCase.args.ctx, testCase.args.workspaceID, testCase.args.objectID)
+			gotResult, gotResponse, err := newObjectService.Relation(testCase.args.ctx, testCase.args.workspaceID, testCase.args.objectID)
 
 			if testCase.wantErr {
 
@@ -754,7 +765,7 @@ func Test_internalObjectImpl_Update(t *testing.T) {
 	}
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -782,17 +793,14 @@ func Test_internalObjectImpl_Update(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"jsm/assets/workspace/workspace-uuid-sample/v1/object/object-uuid-sample",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -814,17 +822,14 @@ func Test_internalObjectImpl_Update(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"jsm/assets/workspace/workspace-uuid-sample/v1/object/object-uuid-sample",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -861,9 +866,9 @@ func Test_internalObjectImpl_Update(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			newService := NewObjectService(testCase.fields.c)
+			newObjectService := NewObjectService(testCase.fields.c)
 
-			gotResult, gotResponse, err := newService.Update(testCase.args.ctx, testCase.args.workspaceID, testCase.args.objectID,
+			gotResult, gotResponse, err := newObjectService.Update(testCase.args.ctx, testCase.args.workspaceID, testCase.args.objectID,
 				testCase.args.payload)
 
 			if testCase.wantErr {
@@ -910,7 +915,7 @@ func Test_internalObjectImpl_Create(t *testing.T) {
 	}
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -936,17 +941,14 @@ func Test_internalObjectImpl_Create(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"jsm/assets/workspace/workspace-uuid-sample/v1/object/create",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -967,17 +969,14 @@ func Test_internalObjectImpl_Create(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"jsm/assets/workspace/workspace-uuid-sample/v1/object/create",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -1004,9 +1003,9 @@ func Test_internalObjectImpl_Create(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			newService := NewObjectService(testCase.fields.c)
+			newObjectService := NewObjectService(testCase.fields.c)
 
-			gotResult, gotResponse, err := newService.Create(testCase.args.ctx, testCase.args.workspaceID, testCase.args.payload)
+			gotResult, gotResponse, err := newObjectService.Create(testCase.args.ctx, testCase.args.workspaceID, testCase.args.payload)
 
 			if testCase.wantErr {
 
@@ -1028,12 +1027,8 @@ func Test_internalObjectImpl_Create(t *testing.T) {
 
 func Test_internalObjectImpl_Filter(t *testing.T) {
 
-	payloadMocked := &struct {
-		Aql string "json:\"qlQuery\""
-	}{Aql: "objectType = Office AND Name LIKE SYD"}
-
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -1063,17 +1058,14 @@ func Test_internalObjectImpl_Filter(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"jsm/assets/workspace/workspace-uuid-sample/v1/object/aql?includeAttributes=false&maxResults=50&startAt=50",
-					bytes.NewReader([]byte{})).
+					"",
+					map[string]interface{}{"qlQuery": "objectType = Office AND Name LIKE SYD"}).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -1097,17 +1089,14 @@ func Test_internalObjectImpl_Filter(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"jsm/assets/workspace/workspace-uuid-sample/v1/object/aql?includeAttributes=false&maxResults=50&startAt=50",
-					bytes.NewReader([]byte{})).
+					"",
+					map[string]interface{}{"qlQuery": "objectType = Office AND Name LIKE SYD"}).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -1144,9 +1133,9 @@ func Test_internalObjectImpl_Filter(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			newService := NewObjectService(testCase.fields.c)
+			newObjectService := NewObjectService(testCase.fields.c)
 
-			gotResult, gotResponse, err := newService.Filter(testCase.args.ctx, testCase.args.workspaceID, testCase.args.aql,
+			gotResult, gotResponse, err := newObjectService.Filter(testCase.args.ctx, testCase.args.workspaceID, testCase.args.aql,
 				testCase.args.attributes, testCase.args.startAt, testCase.args.maxResults)
 
 			if testCase.wantErr {
@@ -1182,7 +1171,7 @@ func Test_internalObjectImpl_Search(t *testing.T) {
 	}
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -1208,17 +1197,14 @@ func Test_internalObjectImpl_Search(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"jsm/assets/workspace/workspace-uuid-sample/v1/object/navlist/aql",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -1239,17 +1225,14 @@ func Test_internalObjectImpl_Search(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"jsm/assets/workspace/workspace-uuid-sample/v1/object/navlist/aql",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -1276,9 +1259,9 @@ func Test_internalObjectImpl_Search(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			objectService := NewObjectService(testCase.fields.c)
+			newObjectService := NewObjectService(testCase.fields.c)
 
-			gotResult, gotResponse, err := objectService.Search(testCase.args.ctx, testCase.args.workspaceID, testCase.args.payload)
+			gotResult, gotResponse, err := newObjectService.Search(testCase.args.ctx, testCase.args.workspaceID, testCase.args.payload)
 
 			if testCase.wantErr {
 

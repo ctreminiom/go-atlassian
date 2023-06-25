@@ -11,7 +11,7 @@ import (
 	"strings"
 )
 
-func NewObjectSchemaService(client service.Client) *ObjectSchemaService {
+func NewObjectSchemaService(client service.Connector) *ObjectSchemaService {
 
 	return &ObjectSchemaService{
 		internalClient: &internalObjectSchemaImpl{c: client},
@@ -86,7 +86,7 @@ func (o *ObjectSchemaService) ObjectTypes(ctx context.Context, workspaceID, obje
 }
 
 type internalObjectSchemaImpl struct {
-	c service.Client
+	c service.Connector
 }
 
 func (i *internalObjectSchemaImpl) List(ctx context.Context, workspaceID string) (*model.ObjectSchemaPageScheme, *model.ResponseScheme, error) {
@@ -97,18 +97,18 @@ func (i *internalObjectSchemaImpl) List(ctx context.Context, workspaceID string)
 
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/objectschema/list", workspaceID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	page := new(model.ObjectSchemaPageScheme)
-	response, err := i.c.Call(request, page)
+	res, err := i.c.Call(req, page)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return page, response, nil
+	return page, res, nil
 }
 
 func (i *internalObjectSchemaImpl) Create(ctx context.Context, workspaceID string, payload *model.ObjectSchemaPayloadScheme) (*model.ObjectSchemaScheme, *model.ResponseScheme, error) {
@@ -119,23 +119,18 @@ func (i *internalObjectSchemaImpl) Create(ctx context.Context, workspaceID strin
 
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/objectschema/create", workspaceID)
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	req, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	schema := new(model.ObjectSchemaScheme)
-	response, err := i.c.Call(request, schema)
+	res, err := i.c.Call(req, schema)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return schema, response, nil
+	return schema, res, nil
 }
 
 func (i *internalObjectSchemaImpl) Get(ctx context.Context, workspaceID, objectSchemaID string) (*model.ObjectSchemaScheme, *model.ResponseScheme, error) {
@@ -150,18 +145,18 @@ func (i *internalObjectSchemaImpl) Get(ctx context.Context, workspaceID, objectS
 
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/objectschema/%v", workspaceID, objectSchemaID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	schema := new(model.ObjectSchemaScheme)
-	response, err := i.c.Call(request, schema)
+	res, err := i.c.Call(req, schema)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return schema, response, nil
+	return schema, res, nil
 }
 
 func (i *internalObjectSchemaImpl) Update(ctx context.Context, workspaceID, objectSchemaID string, payload *model.ObjectSchemaPayloadScheme) (*model.ObjectSchemaScheme, *model.ResponseScheme, error) {
@@ -174,25 +169,20 @@ func (i *internalObjectSchemaImpl) Update(ctx context.Context, workspaceID, obje
 		return nil, nil, model.ErrNoObjectSchemaIDError
 	}
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/objectschema/%v", workspaceID, objectSchemaID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, reader)
+	req, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	schema := new(model.ObjectSchemaScheme)
-	response, err := i.c.Call(request, schema)
+	res, err := i.c.Call(req, schema)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return schema, response, nil
+	return schema, res, nil
 }
 
 func (i *internalObjectSchemaImpl) Delete(ctx context.Context, workspaceID, objectSchemaID string) (*model.ObjectSchemaScheme, *model.ResponseScheme, error) {
@@ -207,18 +197,18 @@ func (i *internalObjectSchemaImpl) Delete(ctx context.Context, workspaceID, obje
 
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/objectschema/%v", workspaceID, objectSchemaID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	schema := new(model.ObjectSchemaScheme)
-	response, err := i.c.Call(request, schema)
+	res, err := i.c.Call(req, schema)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return schema, response, nil
+	return schema, res, nil
 }
 
 func (i *internalObjectSchemaImpl) Attributes(ctx context.Context, workspaceID, objectSchemaID string, options *model.ObjectSchemaAttributesParamsScheme) ([]*model.ObjectTypeAttributeScheme, *model.ResponseScheme, error) {
@@ -258,18 +248,18 @@ func (i *internalObjectSchemaImpl) Attributes(ctx context.Context, workspaceID, 
 		endpoint.WriteString(fmt.Sprintf("?%v", query.Encode()))
 	}
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), nil)
+	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	var attributes []*model.ObjectTypeAttributeScheme
-	response, err := i.c.Call(request, &attributes)
+	res, err := i.c.Call(req, &attributes)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return attributes, response, nil
+	return attributes, res, nil
 }
 
 func (i *internalObjectSchemaImpl) ObjectTypes(ctx context.Context, workspaceID, objectSchemaID string, excludeAbstract bool) ([]*model.ObjectTypeScheme, *model.ResponseScheme, error) {
@@ -292,16 +282,16 @@ func (i *internalObjectSchemaImpl) ObjectTypes(ctx context.Context, workspaceID,
 		endpoint.WriteString(fmt.Sprintf("?%v", query.Encode()))
 	}
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), nil)
+	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	var objectTypes []*model.ObjectTypeScheme
-	response, err := i.c.Call(request, &objectTypes)
+	res, err := i.c.Call(req, &objectTypes)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return objectTypes, response, nil
+	return objectTypes, res, nil
 }

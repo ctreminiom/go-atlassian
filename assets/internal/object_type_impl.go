@@ -11,7 +11,7 @@ import (
 	"strings"
 )
 
-func NewObjectTypeService(client service.Client) *ObjectTypeService {
+func NewObjectTypeService(client service.Connector) *ObjectTypeService {
 
 	return &ObjectTypeService{
 		internalClient: &internalObjectTypeImpl{c: client},
@@ -77,7 +77,7 @@ func (o *ObjectTypeService) Position(ctx context.Context, workspaceID, objectTyp
 }
 
 type internalObjectTypeImpl struct {
-	c service.Client
+	c service.Connector
 }
 
 func (i *internalObjectTypeImpl) Get(ctx context.Context, workspaceID, objectTypeID string) (*model.ObjectTypeScheme, *model.ResponseScheme, error) {
@@ -92,18 +92,18 @@ func (i *internalObjectTypeImpl) Get(ctx context.Context, workspaceID, objectTyp
 
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/objecttype/%v", workspaceID, objectTypeID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	type_ := new(model.ObjectTypeScheme)
-	response, err := i.c.Call(request, type_)
+	objectType := new(model.ObjectTypeScheme)
+	res, err := i.c.Call(req, objectType)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return type_, response, nil
+	return objectType, res, nil
 }
 
 func (i *internalObjectTypeImpl) Update(ctx context.Context, workspaceID, objectTypeID string, payload *model.ObjectTypePayloadScheme) (*model.ObjectTypeScheme, *model.ResponseScheme, error) {
@@ -116,25 +116,20 @@ func (i *internalObjectTypeImpl) Update(ctx context.Context, workspaceID, object
 		return nil, nil, model.ErrNoObjectTypeIDError
 	}
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/objecttype/%v", workspaceID, objectTypeID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, reader)
+	req, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	type_ := new(model.ObjectTypeScheme)
-	response, err := i.c.Call(request, type_)
+	objectType := new(model.ObjectTypeScheme)
+	res, err := i.c.Call(req, objectType)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return type_, response, nil
+	return objectType, res, nil
 }
 
 func (i *internalObjectTypeImpl) Create(ctx context.Context, workspaceID string, payload *model.ObjectTypePayloadScheme) (*model.ObjectTypeScheme, *model.ResponseScheme, error) {
@@ -145,23 +140,18 @@ func (i *internalObjectTypeImpl) Create(ctx context.Context, workspaceID string,
 
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/objecttype/create", workspaceID)
 
-	reader, err := i.c.TransformStructToReader(payload)
+	req, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	objectType := new(model.ObjectTypeScheme)
+	res, err := i.c.Call(req, objectType)
 	if err != nil {
-		return nil, nil, err
+		return nil, res, err
 	}
 
-	type_ := new(model.ObjectTypeScheme)
-	response, err := i.c.Call(request, type_)
-	if err != nil {
-		return nil, response, err
-	}
-
-	return type_, response, nil
+	return objectType, res, nil
 }
 
 func (i *internalObjectTypeImpl) Delete(ctx context.Context, workspaceID, objectTypeID string) (*model.ObjectTypeScheme, *model.ResponseScheme, error) {
@@ -176,18 +166,18 @@ func (i *internalObjectTypeImpl) Delete(ctx context.Context, workspaceID, object
 
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/objecttype/%v", workspaceID, objectTypeID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	type_ := new(model.ObjectTypeScheme)
-	response, err := i.c.Call(request, type_)
+	objectType := new(model.ObjectTypeScheme)
+	res, err := i.c.Call(req, objectType)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return type_, response, nil
+	return objectType, res, nil
 }
 
 func (i *internalObjectTypeImpl) Attributes(ctx context.Context, workspaceID, objectTypeID string, options *model.ObjectTypeAttributesParamsScheme) ([]*model.ObjectTypeAttributeScheme, *model.ResponseScheme, error) {
@@ -239,18 +229,18 @@ func (i *internalObjectTypeImpl) Attributes(ctx context.Context, workspaceID, ob
 		endpoint.WriteString(fmt.Sprintf("?%v", query.Encode()))
 	}
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), nil)
+	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	var attributes []*model.ObjectTypeAttributeScheme
-	response, err := i.c.Call(request, &attributes)
+	res, err := i.c.Call(req, &attributes)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return attributes, response, nil
+	return attributes, res, nil
 }
 
 func (i *internalObjectTypeImpl) Position(ctx context.Context, workspaceID, objectTypeID string, payload *model.ObjectTypePositionPayloadScheme) (*model.ObjectTypeScheme, *model.ResponseScheme, error) {
@@ -265,21 +255,16 @@ func (i *internalObjectTypeImpl) Position(ctx context.Context, workspaceID, obje
 
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/objecttype/%v/position", workspaceID, objectTypeID)
 
-	reader, err := i.c.TransformStructToReader(payload)
+	req, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	objectType := new(model.ObjectTypeScheme)
+	res, err := i.c.Call(req, objectType)
 	if err != nil {
-		return nil, nil, err
+		return nil, res, err
 	}
 
-	type_ := new(model.ObjectTypeScheme)
-	response, err := i.c.Call(request, type_)
-	if err != nil {
-		return nil, response, err
-	}
-
-	return type_, response, nil
+	return objectType, res, nil
 }

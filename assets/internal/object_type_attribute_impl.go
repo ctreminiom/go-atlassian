@@ -9,7 +9,7 @@ import (
 	"net/http"
 )
 
-func NewObjectTypeAttributeService(client service.Client) *ObjectTypeAttributeService {
+func NewObjectTypeAttributeService(client service.Connector) *ObjectTypeAttributeService {
 
 	return &ObjectTypeAttributeService{
 		internalClient: &internalObjectTypeAttributeImpl{c: client},
@@ -48,7 +48,7 @@ func (o *ObjectTypeAttributeService) Delete(ctx context.Context, workspaceID, at
 }
 
 type internalObjectTypeAttributeImpl struct {
-	c service.Client
+	c service.Connector
 }
 
 func (i *internalObjectTypeAttributeImpl) Create(ctx context.Context, workspaceID, objectTypeID string, payload *model.ObjectTypeAttributeScheme) (*model.ObjectTypeAttributeScheme, *model.ResponseScheme, error) {
@@ -63,23 +63,18 @@ func (i *internalObjectTypeAttributeImpl) Create(ctx context.Context, workspaceI
 
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/objecttypeattribute/%v", workspaceID, objectTypeID)
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	req, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	attribute := new(model.ObjectTypeAttributeScheme)
-	response, err := i.c.Call(request, attribute)
+	res, err := i.c.Call(req, attribute)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return attribute, response, nil
+	return attribute, res, nil
 }
 
 func (i *internalObjectTypeAttributeImpl) Update(ctx context.Context, workspaceID, objectTypeID, attributeID string, payload *model.ObjectTypeAttributeScheme) (*model.ObjectTypeAttributeScheme, *model.ResponseScheme, error) {
@@ -98,23 +93,18 @@ func (i *internalObjectTypeAttributeImpl) Update(ctx context.Context, workspaceI
 
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/objecttypeattribute/%v/%v", workspaceID, objectTypeID, attributeID)
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, reader)
+	req, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	attribute := new(model.ObjectTypeAttributeScheme)
-	response, err := i.c.Call(request, attribute)
+	res, err := i.c.Call(req, attribute)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return attribute, response, nil
+	return attribute, res, nil
 }
 
 func (i *internalObjectTypeAttributeImpl) Delete(ctx context.Context, workspaceID, attributeID string) (*model.ResponseScheme, error) {
@@ -129,10 +119,10 @@ func (i *internalObjectTypeAttributeImpl) Delete(ctx context.Context, workspaceI
 
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/objecttypeattribute/%v", workspaceID, attributeID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.c.Call(request, nil)
+	return i.c.Call(req, nil)
 }

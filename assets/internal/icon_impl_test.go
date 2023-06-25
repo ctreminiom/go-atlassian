@@ -15,7 +15,7 @@ import (
 func Test_internalIconImpl_Get(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -40,12 +40,13 @@ func Test_internalIconImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"jsm/assets/workspace/workspace-uuid-sample/v1/icon/1",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -67,12 +68,13 @@ func Test_internalIconImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"jsm/assets/workspace/workspace-uuid-sample/v1/icon/1",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -135,7 +137,7 @@ func Test_internalIconImpl_Get(t *testing.T) {
 func Test_internalIconImpl_Global(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -159,12 +161,13 @@ func Test_internalIconImpl_Global(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"jsm/assets/workspace/workspace-uuid-sample/v1/icon/global",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -185,12 +188,13 @@ func Test_internalIconImpl_Global(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"jsm/assets/workspace/workspace-uuid-sample/v1/icon/global",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -218,9 +222,9 @@ func Test_internalIconImpl_Global(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			newService := NewIconService(testCase.fields.c)
+			newIconService := NewIconService(testCase.fields.c)
 
-			gotResult, gotResponse, err := newService.Global(testCase.args.ctx, testCase.args.workspaceID)
+			gotResult, gotResponse, err := newIconService.Global(testCase.args.ctx, testCase.args.workspaceID)
 
 			if testCase.wantErr {
 

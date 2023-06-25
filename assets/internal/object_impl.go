@@ -12,7 +12,7 @@ import (
 	"strings"
 )
 
-func NewObjectService(client service.Client) *ObjectService {
+func NewObjectService(client service.Connector) *ObjectService {
 
 	return &ObjectService{
 		internalClient: &internalObjectImpl{c: client},
@@ -116,7 +116,7 @@ func (o *ObjectService) Search(ctx context.Context, workspaceID string, payload 
 }
 
 type internalObjectImpl struct {
-	c service.Client
+	c service.Connector
 }
 
 func (i *internalObjectImpl) Search(ctx context.Context, workspaceID string, payload *model.ObjectSearchParamsScheme) (*model.ObjectListScheme, *model.ResponseScheme, error) {
@@ -127,23 +127,18 @@ func (i *internalObjectImpl) Search(ctx context.Context, workspaceID string, pay
 
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/object/navlist/aql", workspaceID)
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	req, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	object := new(model.ObjectListScheme)
-	response, err := i.c.Call(request, object)
+	res, err := i.c.Call(req, object)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return object, response, nil
+	return object, res, nil
 
 }
 
@@ -157,15 +152,6 @@ func (i *internalObjectImpl) Filter(ctx context.Context, workspaceID, aql string
 		return nil, nil, model.ErrNoAqlQueryError
 	}
 
-	payload := struct {
-		Aql string `json:"qlQuery"`
-	}{Aql: aql}
-
-	reader, err := i.c.TransformStructToReader(&payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
 	params.Add("maxResults", strconv.Itoa(maxResults))
@@ -176,18 +162,18 @@ func (i *internalObjectImpl) Filter(ctx context.Context, workspaceID, aql string
 
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/object/aql?%v", workspaceID, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	req, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", map[string]interface{}{"qlQuery": aql})
 	if err != nil {
 		return nil, nil, err
 	}
 
 	list := new(model.ObjectListResultScheme)
-	response, err := i.c.Call(request, list)
+	res, err := i.c.Call(req, list)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return list, response, nil
+	return list, res, nil
 }
 
 func (i *internalObjectImpl) Get(ctx context.Context, workspaceID, objectID string) (*model.ObjectScheme, *model.ResponseScheme, error) {
@@ -202,18 +188,18 @@ func (i *internalObjectImpl) Get(ctx context.Context, workspaceID, objectID stri
 
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/object/%v", workspaceID, objectID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	object := new(model.ObjectScheme)
-	response, err := i.c.Call(request, object)
+	res, err := i.c.Call(req, object)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return object, response, nil
+	return object, res, nil
 }
 
 func (i *internalObjectImpl) Update(ctx context.Context, workspaceID, objectID string, payload *model.ObjectPayloadScheme) (*model.ObjectScheme, *model.ResponseScheme, error) {
@@ -226,25 +212,20 @@ func (i *internalObjectImpl) Update(ctx context.Context, workspaceID, objectID s
 		return nil, nil, model.ErrNoObjectIDError
 	}
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/object/%v", workspaceID, objectID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, reader)
+	req, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	object := new(model.ObjectScheme)
-	response, err := i.c.Call(request, object)
+	res, err := i.c.Call(req, object)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return object, response, nil
+	return object, res, nil
 }
 
 func (i *internalObjectImpl) Delete(ctx context.Context, workspaceID, objectID string) (*model.ResponseScheme, error) {
@@ -259,12 +240,12 @@ func (i *internalObjectImpl) Delete(ctx context.Context, workspaceID, objectID s
 
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/object/%v", workspaceID, objectID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.c.Call(request, nil)
+	return i.c.Call(req, nil)
 }
 
 func (i *internalObjectImpl) Attributes(ctx context.Context, workspaceID, objectID string) ([]*model.ObjectAttributeScheme, *model.ResponseScheme, error) {
@@ -279,18 +260,18 @@ func (i *internalObjectImpl) Attributes(ctx context.Context, workspaceID, object
 
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/object/%v/attributes", workspaceID, objectID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	var attributes []*model.ObjectAttributeScheme
-	response, err := i.c.Call(request, &attributes)
+	res, err := i.c.Call(req, &attributes)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return attributes, response, nil
+	return attributes, res, nil
 }
 
 func (i *internalObjectImpl) History(ctx context.Context, workspaceID, objectID string, ascOrder bool) ([]*model.ObjectHistoryScheme, *model.ResponseScheme, error) {
@@ -314,18 +295,18 @@ func (i *internalObjectImpl) History(ctx context.Context, workspaceID, objectID 
 		endpoint.WriteString(fmt.Sprintf("?%v", query.Encode()))
 	}
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), nil)
+	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	var history []*model.ObjectHistoryScheme
-	response, err := i.c.Call(request, &history)
+	res, err := i.c.Call(req, &history)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return history, response, nil
+	return history, res, nil
 }
 
 func (i *internalObjectImpl) References(ctx context.Context, workspaceID, objectID string) ([]*model.ObjectReferenceTypeInfoScheme, *model.ResponseScheme, error) {
@@ -340,18 +321,18 @@ func (i *internalObjectImpl) References(ctx context.Context, workspaceID, object
 
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/object/%v/referenceinfo", workspaceID, objectID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	var references []*model.ObjectReferenceTypeInfoScheme
-	response, err := i.c.Call(request, &references)
+	res, err := i.c.Call(req, &references)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return references, response, nil
+	return references, res, nil
 }
 
 func (i *internalObjectImpl) Create(ctx context.Context, workspaceID string, payload *model.ObjectPayloadScheme) (*model.ObjectScheme, *model.ResponseScheme, error) {
@@ -360,25 +341,20 @@ func (i *internalObjectImpl) Create(ctx context.Context, workspaceID string, pay
 		return nil, nil, model.ErrNoWorkspaceIDError
 	}
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/object/create", workspaceID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	req, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	object := new(model.ObjectScheme)
-	response, err := i.c.Call(request, object)
+	res, err := i.c.Call(req, object)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return object, response, nil
+	return object, res, nil
 }
 
 func (i *internalObjectImpl) Relation(ctx context.Context, workspaceID, objectID string) (*model.TicketPageScheme, *model.ResponseScheme, error) {
@@ -393,16 +369,16 @@ func (i *internalObjectImpl) Relation(ctx context.Context, workspaceID, objectID
 
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/objectconnectedtickets/%v/tickets", workspaceID, objectID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	page := new(model.TicketPageScheme)
-	response, err := i.c.Call(request, page)
+	res, err := i.c.Call(req, page)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return page, response, nil
+	return page, res, nil
 }

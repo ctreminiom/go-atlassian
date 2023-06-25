@@ -12,7 +12,7 @@ import (
 	"strings"
 )
 
-func NewAQLService(client service.Client) *AQLService {
+func NewAQLService(client service.Connector) *AQLService {
 
 	return &AQLService{
 		internalClient: &internalAQLImpl{c: client},
@@ -35,7 +35,7 @@ func (a *AQLService) Filter(ctx context.Context, workspaceID string, parameters 
 }
 
 type internalAQLImpl struct {
-	c service.Client
+	c service.Connector
 }
 
 func (i *internalAQLImpl) Filter(ctx context.Context, workspaceID string, parameters *model.AQLSearchParamsScheme) (*model.ObjectListScheme, *model.ResponseScheme, error) {
@@ -63,16 +63,16 @@ func (i *internalAQLImpl) Filter(ctx context.Context, workspaceID string, parame
 		}
 	}
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), nil)
+	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	object := new(model.ObjectListScheme)
-	response, err := i.c.Call(request, object)
+	res, err := i.c.Call(req, object)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return object, response, nil
+	return object, res, nil
 }

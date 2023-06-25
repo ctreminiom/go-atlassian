@@ -9,7 +9,7 @@ import (
 	"net/http"
 )
 
-func NewIconService(client service.Client) *IconService {
+func NewIconService(client service.Connector) *IconService {
 
 	return &IconService{
 		internalClient: &internalIconImpl{c: client},
@@ -39,7 +39,7 @@ func (i *IconService) Global(ctx context.Context, workspaceID string) ([]*model.
 }
 
 type internalIconImpl struct {
-	c service.Client
+	c service.Connector
 }
 
 func (i *internalIconImpl) Get(ctx context.Context, workspaceID, iconID string) (*model.IconScheme, *model.ResponseScheme, error) {
@@ -54,18 +54,18 @@ func (i *internalIconImpl) Get(ctx context.Context, workspaceID, iconID string) 
 
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/icon/%v", workspaceID, iconID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	icon := new(model.IconScheme)
-	response, err := i.c.Call(request, icon)
+	res, err := i.c.Call(req, icon)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return icon, response, nil
+	return icon, res, nil
 }
 
 func (i *internalIconImpl) Global(ctx context.Context, workspaceID string) ([]*model.IconScheme, *model.ResponseScheme, error) {
@@ -76,16 +76,16 @@ func (i *internalIconImpl) Global(ctx context.Context, workspaceID string) ([]*m
 
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/icon/global", workspaceID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	var icons []*model.IconScheme
-	response, err := i.c.Call(request, &icons)
+	res, err := i.c.Call(req, &icons)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return icons, response, nil
+	return icons, res, nil
 }

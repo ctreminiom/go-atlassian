@@ -171,7 +171,7 @@ type ObjectTypeAssetAttributeStatusScheme struct {
 type ObjectListScheme struct {
 	ObjectEntries         []*ObjectScheme              `json:"objectEntries,omitempty"`
 	ObjectTypeAttributes  []*ObjectTypeAttributeScheme `json:"objectTypeAttributes,omitempty"`
-	ObjectTypeId          int                          `json:"objectTypeId,omitempty"`
+	ObjectTypeId          string                       `json:"objectTypeId,omitempty"`
 	ObjectTypeIsInherited bool                         `json:"objectTypeIsInherited,omitempty"`
 	AbstractObjectType    bool                         `json:"abstractObjectType,omitempty"`
 	TotalFilterCount      int                          `json:"totalFilterCount,omitempty"`

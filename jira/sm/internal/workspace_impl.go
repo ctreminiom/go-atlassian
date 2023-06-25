@@ -26,6 +26,8 @@ type WorkSpaceService struct {
 // These assets may include knowledge base articles, request types, request fields, customer portals, queues, etc.
 //
 // GET /rest/servicedeskapi/assets/workspace
+//
+// https://docs.go-atlassian.io/jira-service-management/workspaces#get-workspaces
 func (w *WorkSpaceService) Gets(ctx context.Context) (*model.WorkSpacePageScheme, *model.ResponseScheme, error) {
 	return w.internalClient.Gets(ctx)
 }

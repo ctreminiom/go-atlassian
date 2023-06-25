@@ -14,5 +14,7 @@ type WorkSpaceConnector interface {
 	// These assets may include knowledge base articles, request types, request fields, customer portals, queues, etc.
 	//
 	// GET /rest/servicedeskapi/assets/workspace
+	//
+	// https://docs.go-atlassian.io/jira-service-management/workspaces#get-workspaces
 	Gets(ctx context.Context) (*models.WorkSpacePageScheme, *models.ResponseScheme, error)
 }

@@ -192,7 +192,7 @@ type ObjectListResultScheme struct {
 	StartAt              int                          `json:"startAt,omitempty"`
 	MaxResults           int                          `json:"maxResults,omitempty"`
 	Total                int                          `json:"total,omitempty"`
-	IsLast               string                       `json:"isLast,omitempty"`
+	IsLast               bool                         `json:"isLast,omitempty"`
 	Values               []*ObjectScheme              `json:"values,omitempty"`
 	ObjectTypeAttributes []*ObjectTypeAttributeScheme `json:"objectTypeAttributes,omitempty"`
 }

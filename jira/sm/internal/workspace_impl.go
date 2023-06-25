@@ -8,15 +8,11 @@ import (
 	"net/http"
 )
 
-func NewWorkSpaceService(client service.Client, version string) (*WorkSpaceService, error) {
-
-	if version == "" {
-		return nil, model.ErrNoVersionProvided
-	}
+func NewWorkSpaceService(client service.Connector, version string) *WorkSpaceService {
 
 	return &WorkSpaceService{
 		internalClient: &internalWorkSpaceImpl{c: client, version: version},
-	}, nil
+	}
 }
 
 type WorkSpaceService struct {
@@ -35,7 +31,7 @@ func (w *WorkSpaceService) Gets(ctx context.Context) (*model.WorkSpacePageScheme
 }
 
 type internalWorkSpaceImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -43,17 +39,17 @@ func (i *internalWorkSpaceImpl) Gets(ctx context.Context) (*model.WorkSpacePageS
 
 	endpoint := "/rest/servicedeskapi/assets/workspace"
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	page := new(model.WorkSpacePageScheme)
-	response, err := i.c.Call(request, page)
+	res, err := i.c.Call(req, page)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return page, response, nil
+	return page, res, nil
 
 }

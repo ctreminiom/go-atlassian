@@ -44,6 +44,7 @@ func New(httpClient common.HttpClient, site string) (*Client, error) {
 	client.Info = internal.NewInfoService(client, defaultServiceManagementVersion)
 	client.Knowledgebase = internal.NewKnowledgebaseService(client, defaultServiceManagementVersion)
 	client.Organization = internal.NewOrganizationService(client, defaultServiceManagementVersion)
+	client.WorkSpace = internal.NewWorkSpaceService(client, defaultServiceManagementVersion)
 
 	requestSubServices := &internal.ServiceRequestSubServices{
 		Approval:    internal.NewApprovalService(client, defaultServiceManagementVersion),
@@ -70,13 +71,6 @@ func New(httpClient common.HttpClient, site string) (*Client, error) {
 		return nil, err
 	}
 	client.ServiceDesk = serviceDeskService
-
-
-	workSpaceService, err := internal.NewWorkSpaceService(client, "latest")
-	if err != nil {
-		return nil, err
-	}
-	client.WorkSpace = workSpaceService
 
 	return client, nil
 }

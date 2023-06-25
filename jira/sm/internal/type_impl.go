@@ -11,15 +11,11 @@ import (
 	"strconv"
 )
 
-func NewTypeService(client service.Client, version string) (*TypeService, error) {
-
-	if version == "" {
-		return nil, model.ErrNoVersionProvided
-	}
+func NewTypeService(client service.Connector, version string) *TypeService {
 
 	return &TypeService{
 		internalClient: &internalTypeImpl{c: client, version: version},
-	}, nil
+	}
 }
 
 type TypeService struct {
@@ -50,8 +46,8 @@ func (t *TypeService) Gets(ctx context.Context, serviceDeskID, groupID, start, l
 // POST /rest/servicedeskapi/servicedesk/{serviceDeskId}/requesttype
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request/types#create-request-type
-func (t *TypeService) Create(ctx context.Context, serviceDeskID int, issueTypeID, name, description, helpText string) (*model.RequestTypeScheme, *model.ResponseScheme, error) {
-	return t.internalClient.Create(ctx, serviceDeskID, issueTypeID, name, description, helpText)
+func (t *TypeService) Create(ctx context.Context, serviceDeskID int, payload *model.RequestTypePayloadScheme) (*model.RequestTypeScheme, *model.ResponseScheme, error) {
+	return t.internalClient.Create(ctx, serviceDeskID, payload)
 }
 
 // Get returns a customer request type from a service desk.
@@ -82,7 +78,7 @@ func (t *TypeService) Fields(ctx context.Context, serviceDeskID, requestTypeID i
 }
 
 type internalTypeImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -98,18 +94,18 @@ func (i *internalTypeImpl) Search(ctx context.Context, query string, start, limi
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/requesttype?%v", params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	page := new(model.RequestTypePageScheme)
-	response, err := i.c.Call(request, page)
+	res, err := i.c.Call(req, page)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return page, response, nil
+	return page, res, nil
 }
 
 func (i *internalTypeImpl) Gets(ctx context.Context, serviceDeskID, groupID, start, limit int) (*model.ProjectRequestTypePageScheme, *model.ResponseScheme, error) {
@@ -128,57 +124,40 @@ func (i *internalTypeImpl) Gets(ctx context.Context, serviceDeskID, groupID, sta
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/servicedesk/%v/requesttype?%v", serviceDeskID, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	page := new(model.ProjectRequestTypePageScheme)
-	response, err := i.c.Call(request, page)
+	res, err := i.c.Call(req, page)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return page, response, nil
+	return page, res, nil
 }
 
-func (i *internalTypeImpl) Create(ctx context.Context, serviceDeskID int, issueTypeID, name, description, helpText string) (*model.RequestTypeScheme, *model.ResponseScheme, error) {
+func (i *internalTypeImpl) Create(ctx context.Context, serviceDeskID int, payload *model.RequestTypePayloadScheme) (*model.RequestTypeScheme, *model.ResponseScheme, error) {
 
 	if serviceDeskID == 0 {
 		return nil, nil, model.ErrNoServiceDeskIDError
 	}
 
-	payload := struct {
-		IssueTypeID string `json:"issueTypeId,omitempty"`
-		HelpText    string `json:"helpText,omitempty"`
-		Name        string `json:"name,omitempty"`
-		Description string `json:"description,omitempty"`
-	}{
-		IssueTypeID: issueTypeID,
-		HelpText:    helpText,
-		Name:        name,
-		Description: description,
-	}
-
-	reader, err := i.c.TransformStructToReader(&payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	endpoint := fmt.Sprintf("rest/servicedeskapi/servicedesk/%v/requesttype", serviceDeskID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	req, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	type_ := new(model.RequestTypeScheme)
-	response, err := i.c.Call(request, type_)
+	res, err := i.c.Call(req, type_)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return type_, response, nil
+	return type_, res, nil
 }
 
 func (i *internalTypeImpl) Get(ctx context.Context, serviceDeskID, requestTypeID int) (*model.RequestTypeScheme, *model.ResponseScheme, error) {
@@ -193,18 +172,18 @@ func (i *internalTypeImpl) Get(ctx context.Context, serviceDeskID, requestTypeID
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/servicedesk/%v/requesttype/%v", serviceDeskID, requestTypeID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	type_ := new(model.RequestTypeScheme)
-	response, err := i.c.Call(request, type_)
+	res, err := i.c.Call(req, type_)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return type_, response, nil
+	return type_, res, nil
 }
 
 func (i *internalTypeImpl) Delete(ctx context.Context, serviceDeskID, requestTypeID int) (*model.ResponseScheme, error) {
@@ -219,12 +198,12 @@ func (i *internalTypeImpl) Delete(ctx context.Context, serviceDeskID, requestTyp
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/servicedesk/%v/requesttype/%v", serviceDeskID, requestTypeID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.c.Call(request, nil)
+	return i.c.Call(req, nil)
 }
 
 func (i *internalTypeImpl) Fields(ctx context.Context, serviceDeskID, requestTypeID int) (*model.RequestTypeFieldsScheme, *model.ResponseScheme, error) {
@@ -239,16 +218,16 @@ func (i *internalTypeImpl) Fields(ctx context.Context, serviceDeskID, requestTyp
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/servicedesk/%v/requesttype/%v/field", serviceDeskID, requestTypeID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	fields := new(model.RequestTypeFieldsScheme)
-	response, err := i.c.Call(request, fields)
+	res, err := i.c.Call(req, fields)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return fields, response, nil
+	return fields, res, nil
 }

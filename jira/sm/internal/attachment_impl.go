@@ -11,15 +11,11 @@ import (
 	"strconv"
 )
 
-func NewAttachmentService(client service.Client, version string) (*AttachmentService, error) {
-
-	if version == "" {
-		return nil, model.ErrNoVersionProvided
-	}
+func NewAttachmentService(client service.Connector, version string) *AttachmentService {
 
 	return &AttachmentService{
 		internalClient: &internalServiceRequestAttachmentImpl{c: client, version: version},
-	}, nil
+	}
 }
 
 type AttachmentService struct {
@@ -47,7 +43,7 @@ func (s *AttachmentService) Create(ctx context.Context, issueKeyOrID string, tem
 }
 
 type internalServiceRequestAttachmentImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -61,20 +57,20 @@ func (i *internalServiceRequestAttachmentImpl) Gets(ctx context.Context, issueKe
 	params.Add("start", strconv.Itoa(start))
 	params.Add("limit", strconv.Itoa(limit))
 
-	endpoint := fmt.Sprintf("rest/servicedeskapi/request/%v/attachment?%v", issueKeyOrID, params.Encode())
+	url := fmt.Sprintf("rest/servicedeskapi/request/%v/attachment?%v", issueKeyOrID, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodGet, url, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	page := new(model.RequestAttachmentPageScheme)
-	response, err := i.c.Call(request, page)
+	res, err := i.c.Call(req, page)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return page, response, nil
+	return page, res, nil
 }
 
 func (i *internalServiceRequestAttachmentImpl) Create(ctx context.Context, issueKeyOrID string, temporaryAttachmentIDs []string, public bool) (*model.RequestAttachmentCreationScheme, *model.ResponseScheme, error) {
@@ -87,31 +83,23 @@ func (i *internalServiceRequestAttachmentImpl) Create(ctx context.Context, issue
 		return nil, nil, model.ErrNoAttachmentIDError
 	}
 
-	payload := struct {
-		TemporaryAttachmentIds []string `json:"temporaryAttachmentIds,omitempty"`
-		Public                 bool     `json:"public,omitempty"`
-	}{
-		TemporaryAttachmentIds: temporaryAttachmentIDs,
-		Public:                 public,
+	payload := map[string]interface{}{
+		"temporaryAttachmentIds": temporaryAttachmentIDs,
+		"public":                 public,
 	}
 
-	reader, err := i.c.TransformStructToReader(&payload)
-	if err != nil {
-		return nil, nil, err
-	}
+	url := fmt.Sprintf("rest/servicedeskapi/request/%v/attachment", issueKeyOrID)
 
-	endpoint := fmt.Sprintf("rest/servicedeskapi/request/%v/attachment", issueKeyOrID)
-
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	req, err := i.c.NewRequest(ctx, http.MethodPost, url, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	attachment := new(model.RequestAttachmentCreationScheme)
-	response, err := i.c.Call(request, attachment)
+	res, err := i.c.Call(req, attachment)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return attachment, response, nil
+	return attachment, res, nil
 }

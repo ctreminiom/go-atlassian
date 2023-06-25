@@ -1,7 +1,6 @@
 package internal
 
 import (
-	"bytes"
 	"context"
 	"errors"
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
@@ -15,7 +14,7 @@ import (
 func Test_internalServiceRequestCommentImpl_Gets(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -46,12 +45,13 @@ func Test_internalServiceRequestCommentImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/request/DUMMY-2/comment?expand=attachment&limit=50&start=100",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -76,12 +76,13 @@ func Test_internalServiceRequestCommentImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/request/DUMMY-2/comment?expand=attachment&limit=50&start=100",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -108,12 +109,13 @@ func Test_internalServiceRequestCommentImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/request/DUMMY-2/comment?expand=attachment&limit=50&start=100",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("client: no http request created"))
 
@@ -129,7 +131,7 @@ func Test_internalServiceRequestCommentImpl_Gets(t *testing.T) {
 				ctx: context.Background(),
 			},
 			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
+				fields.c = mocks.NewConnector(t)
 			},
 			Err:     model.ErrNoIssueKeyOrIDError,
 			wantErr: true,
@@ -143,10 +145,9 @@ func Test_internalServiceRequestCommentImpl_Gets(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			smService, err := NewCommentService(testCase.fields.c, "latest")
-			assert.NoError(t, err)
+			commentService := NewCommentService(testCase.fields.c, "latest")
 
-			gotResult, gotResponse, err := smService.Gets(testCase.args.ctx, testCase.args.issueKeyOrID, testCase.args.public,
+			gotResult, gotResponse, err := commentService.Gets(testCase.args.ctx, testCase.args.issueKeyOrID, testCase.args.public,
 				testCase.args.expand, testCase.args.start,
 				testCase.args.limit)
 
@@ -171,7 +172,7 @@ func Test_internalServiceRequestCommentImpl_Gets(t *testing.T) {
 func Test_internalServiceRequestCommentImpl_Get(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -199,12 +200,13 @@ func Test_internalServiceRequestCommentImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/request/DUMMY-2/comment/10001?expand=attachment",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -227,12 +229,13 @@ func Test_internalServiceRequestCommentImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/request/DUMMY-2/comment/10001?expand=attachment",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -257,12 +260,13 @@ func Test_internalServiceRequestCommentImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/request/DUMMY-2/comment/10001?expand=attachment",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("client: no http request created"))
 
@@ -278,7 +282,7 @@ func Test_internalServiceRequestCommentImpl_Get(t *testing.T) {
 				ctx: context.Background(),
 			},
 			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
+				fields.c = mocks.NewConnector(t)
 			},
 			Err:     model.ErrNoIssueKeyOrIDError,
 			wantErr: true,
@@ -291,7 +295,7 @@ func Test_internalServiceRequestCommentImpl_Get(t *testing.T) {
 				issueKeyOrID: "DUMMY-2",
 			},
 			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
+				fields.c = mocks.NewConnector(t)
 			},
 			Err:     model.ErrNoCommentIDError,
 			wantErr: true,
@@ -305,10 +309,9 @@ func Test_internalServiceRequestCommentImpl_Get(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			smService, err := NewCommentService(testCase.fields.c, "latest")
-			assert.NoError(t, err)
+			commentService := NewCommentService(testCase.fields.c, "latest")
 
-			gotResult, gotResponse, err := smService.Get(testCase.args.ctx, testCase.args.issueKeyOrID, testCase.args.commentID,
+			gotResult, gotResponse, err := commentService.Get(testCase.args.ctx, testCase.args.issueKeyOrID, testCase.args.commentID,
 				testCase.args.expand)
 
 			if testCase.wantErr {
@@ -331,13 +334,8 @@ func Test_internalServiceRequestCommentImpl_Get(t *testing.T) {
 
 func Test_internalServiceRequestCommentImpl_Create(t *testing.T) {
 
-	payloadMocked := &struct {
-		Public bool   "json:\"public\""
-		Body   string "json:\"body\""
-	}{Public: true, Body: "*body sample*"}
-
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -364,17 +362,14 @@ func Test_internalServiceRequestCommentImpl_Create(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/servicedeskapi/request/DUMMY-2/comment",
-					bytes.NewReader([]byte{})).
+					"",
+					map[string]interface{}{"body": "*body sample*", "public": true}).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -396,17 +391,14 @@ func Test_internalServiceRequestCommentImpl_Create(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/servicedeskapi/request/DUMMY-2/comment",
-					bytes.NewReader([]byte{})).
+					"",
+					map[string]interface{}{"body": "*body sample*", "public": true}).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -430,17 +422,14 @@ func Test_internalServiceRequestCommentImpl_Create(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/servicedeskapi/request/DUMMY-2/comment",
-					bytes.NewReader([]byte{})).
+					"",
+					map[string]interface{}{"body": "*body sample*", "public": true}).
 					Return(&http.Request{}, errors.New("client: no http request created"))
 
 				fields.c = client
@@ -455,7 +444,7 @@ func Test_internalServiceRequestCommentImpl_Create(t *testing.T) {
 				ctx: context.Background(),
 			},
 			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
+				fields.c = mocks.NewConnector(t)
 			},
 			Err:     model.ErrNoIssueKeyOrIDError,
 			wantErr: true,
@@ -468,7 +457,7 @@ func Test_internalServiceRequestCommentImpl_Create(t *testing.T) {
 				issueKeyOrID: "DUMMY-2",
 			},
 			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
+				fields.c = mocks.NewConnector(t)
 			},
 			Err:     model.ErrNoCommentBodyError,
 			wantErr: true,
@@ -482,10 +471,9 @@ func Test_internalServiceRequestCommentImpl_Create(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			smService, err := NewCommentService(testCase.fields.c, "latest")
-			assert.NoError(t, err)
+			commentService := NewCommentService(testCase.fields.c, "latest")
 
-			gotResult, gotResponse, err := smService.Create(testCase.args.ctx, testCase.args.issueKeyOrID, testCase.args.body,
+			gotResult, gotResponse, err := commentService.Create(testCase.args.ctx, testCase.args.issueKeyOrID, testCase.args.body,
 				testCase.args.public)
 
 			if testCase.wantErr {
@@ -509,7 +497,7 @@ func Test_internalServiceRequestCommentImpl_Create(t *testing.T) {
 func Test_internalServiceRequestCommentImpl_Attachments(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -537,12 +525,13 @@ func Test_internalServiceRequestCommentImpl_Attachments(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/request/DUMMY-2/comment/10001/attachment?limit=50&start=100",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -566,12 +555,13 @@ func Test_internalServiceRequestCommentImpl_Attachments(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/request/DUMMY-2/comment/10001/attachment?limit=50&start=100",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -597,12 +587,13 @@ func Test_internalServiceRequestCommentImpl_Attachments(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/request/DUMMY-2/comment/10001/attachment?limit=50&start=100",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("client: no http request created"))
 
@@ -618,7 +609,7 @@ func Test_internalServiceRequestCommentImpl_Attachments(t *testing.T) {
 				ctx: context.Background(),
 			},
 			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
+				fields.c = mocks.NewConnector(t)
 			},
 			Err:     model.ErrNoIssueKeyOrIDError,
 			wantErr: true,
@@ -632,10 +623,9 @@ func Test_internalServiceRequestCommentImpl_Attachments(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			smService, err := NewCommentService(testCase.fields.c, "latest")
-			assert.NoError(t, err)
+			commentService := NewCommentService(testCase.fields.c, "latest")
 
-			gotResult, gotResponse, err := smService.Attachments(testCase.args.ctx, testCase.args.issueKeyOrID, testCase.args.commentID,
+			gotResult, gotResponse, err := commentService.Attachments(testCase.args.ctx, testCase.args.issueKeyOrID, testCase.args.commentID,
 				testCase.args.start, testCase.args.limit)
 
 			if testCase.wantErr {

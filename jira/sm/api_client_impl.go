@@ -5,14 +5,15 @@ import (
 	"context"
 	"encoding/json"
 	"github.com/ctreminiom/go-atlassian/jira/sm/internal"
-	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service/common"
 	"io"
 	"net/http"
 	"net/url"
-	"reflect"
 	"strings"
 )
+
+const defaultServiceManagementVersion = "latest"
 
 func New(httpClient common.HttpClient, site string) (*Client, error) {
 
@@ -20,114 +21,63 @@ func New(httpClient common.HttpClient, site string) (*Client, error) {
 		httpClient = http.DefaultClient
 	}
 
+	if site == "" {
+		return nil, model.ErrNoSiteError
+	}
+
 	if !strings.HasSuffix(site, "/") {
 		site += "/"
 	}
 
-	siteAsURL, err := url.Parse(site)
+	u, err := url.Parse(site)
 	if err != nil {
 		return nil, err
 	}
 
 	client := &Client{
 		HTTP: httpClient,
-		Site: siteAsURL,
+		Site: u,
 	}
 
 	client.Auth = internal.NewAuthenticationService(client)
+	client.Customer = internal.NewCustomerService(client, defaultServiceManagementVersion)
+	client.Info = internal.NewInfoService(client, defaultServiceManagementVersion)
+	client.Knowledgebase = internal.NewKnowledgebaseService(client, defaultServiceManagementVersion)
+	client.Organization = internal.NewOrganizationService(client, defaultServiceManagementVersion)
 
-	customerService, err := internal.NewCustomerService(client, "latest")
-	if err != nil {
-		return nil, err
-	}
-	client.Customer = customerService
-
-	infoService, err := internal.NewInfoService(client, "latest")
-	if err != nil {
-		return nil, err
-	}
-	client.Info = infoService
-
-	knowledgebaseService, err := internal.NewKnowledgebaseService(client, "latest")
-	if err != nil {
-		return nil, err
-	}
-	client.Knowledgebase = knowledgebaseService
-
-	organizationService, err := internal.NewOrganizationService(client, "latest")
-	if err != nil {
-		return nil, err
-	}
-	client.Organization = organizationService
-
-	commentService, err := internal.NewCommentService(client, "latest")
-	if err != nil {
-		return nil, err
+	requestSubServices := &internal.ServiceRequestSubServices{
+		Approval:    internal.NewApprovalService(client, defaultServiceManagementVersion),
+		Attachment:  internal.NewAttachmentService(client, defaultServiceManagementVersion),
+		Comment:     internal.NewCommentService(client, defaultServiceManagementVersion),
+		Participant: internal.NewParticipantService(client, defaultServiceManagementVersion),
+		SLA:         internal.NewServiceLevelAgreementService(client, defaultServiceManagementVersion),
+		Feedback:    internal.NewFeedbackService(client, defaultServiceManagementVersion),
+		Type:        internal.NewTypeService(client, defaultServiceManagementVersion),
 	}
 
-	attachmentService, err := internal.NewAttachmentService(client, "latest")
-	if err != nil {
-		return nil, err
-	}
-
-	approvalService, err := internal.NewApprovalService(client, "latest")
-	if err != nil {
-		return nil, err
-	}
-
-	participantService, err := internal.NewParticipantService(client, "latest")
-	if err != nil {
-		return nil, err
-	}
-
-	slaService, err := internal.NewServiceLevelAgreementService(client, "latest")
-	if err != nil {
-		return nil, err
-	}
-
-	feedbackService, err := internal.NewFeedbackService(client, "latest")
-	if err != nil {
-		return nil, err
-	}
-
-	requestTypeService, err := internal.NewTypeService(client, "latest")
-	if err != nil {
-		return nil, err
-	}
-
-	requestServices := &internal.ServiceRequestSubServices{
-		Approval:    approvalService,
-		Attachment:  attachmentService,
-		Comment:     commentService,
-		Participant: participantService,
-		SLA:         slaService,
-		Feedback:    feedbackService,
-		Type:        requestTypeService,
-	}
-
-	requestService, err := internal.NewRequestService(client, "latest", requestServices)
+	requestService, err := internal.NewRequestService(client, defaultServiceManagementVersion, requestSubServices)
 	if err != nil {
 		return nil, err
 	}
 	client.Request = requestService
 
-	queueService, err := internal.NewQueueService(client, "latest")
-	if err != nil {
-		return nil, err
-	}
+	serviceDeskService, err := internal.NewServiceDeskService(
+		client,
+		defaultServiceManagementVersion,
+		internal.NewQueueService(client, defaultServiceManagementVersion))
 
-	serviceDeskService, err := internal.NewServiceDeskService(client, "latest", queueService)
 	if err != nil {
 		return nil, err
 	}
 	client.ServiceDesk = serviceDeskService
+
 	return client, nil
 }
 
 type Client struct {
 	HTTP          common.HttpClient
-	Auth          common.Authentication
 	Site          *url.URL
+	Auth          common.Authentication
 	Customer      *internal.CustomerService
 	Info          *internal.InfoService
 	Knowledgebase *internal.KnowledgebaseService
@@ -136,83 +86,67 @@ type Client struct {
 	ServiceDesk   *internal.ServiceDeskService
 }
 
-func (c *Client) NewFormRequest(ctx context.Context, method, apiEndpoint, contentType string, payload io.Reader) (*http.Request, error) {
+func (c *Client) NewRequest(ctx context.Context, method, urlStr, type_ string, body interface{}) (*http.Request, error) {
 
-	relativePath, err := url.Parse(apiEndpoint)
+	rel, err := url.Parse(urlStr)
 	if err != nil {
 		return nil, err
 	}
 
-	var endpoint = c.Site.ResolveReference(relativePath).String()
+	u := c.Site.ResolveReference(rel)
 
-	request, err := http.NewRequestWithContext(ctx, method, endpoint, payload)
+	buf := new(bytes.Buffer)
+	if body != nil {
+		if err = json.NewEncoder(buf).Encode(body); err != nil {
+			return nil, err
+		}
+	}
+
+	req, err := http.NewRequestWithContext(ctx, method, u.String(), buf)
 	if err != nil {
 		return nil, err
 	}
+	req.Header.Set("Accept", "application/json")
 
-	request.Header.Add("Content-Type", contentType)
-	request.Header.Add("Accept", "application/json")
-	request.Header.Set("X-Atlassian-Token", "no-check")
+	if body != nil && type_ == "" {
+		req.Header.Set("Content-Type", "application/json")
+	}
+
+	if body != nil && type_ != "" {
+		req.Header.Set("Content-Type", type_)
+		req.Header.Set("X-Atlassian-Token", "no-check")
+	}
 
 	if c.Auth.HasBasicAuth() {
-		request.SetBasicAuth(c.Auth.GetBasicAuth())
-	}
-
-	if c.Auth.HasUserAgent() {
-		request.Header.Set("User-Agent", c.Auth.GetUserAgent())
-	}
-
-	return request, nil
-}
-
-func (c *Client) NewRequest(ctx context.Context, method, apiEndpoint string, payload io.Reader) (*http.Request, error) {
-
-	relativePath, err := url.Parse(apiEndpoint)
-	if err != nil {
-		return nil, err
-	}
-
-	var endpoint = c.Site.ResolveReference(relativePath).String()
-
-	request, err := http.NewRequestWithContext(ctx, method, endpoint, payload)
-	if err != nil {
-		return nil, err
-	}
-
-	request.Header.Set("Accept", "application/json")
-
-	if payload != nil {
-		request.Header.Set("Content-Type", "application/json")
+		req.SetBasicAuth(c.Auth.GetBasicAuth())
 	}
 
 	if c.Auth.HasSetExperimentalFlag() {
-		request.Header.Set("X-ExperimentalApi", "opt-in")
-	}
-
-	if c.Auth.HasBasicAuth() {
-		request.SetBasicAuth(c.Auth.GetBasicAuth())
+		req.Header.Set("X-ExperimentalApi", "opt-in")
 	}
 
 	if c.Auth.HasUserAgent() {
-		request.Header.Set("User-Agent", c.Auth.GetUserAgent())
+		req.Header.Set("User-Agent", c.Auth.GetUserAgent())
 	}
 
-	return request, nil
+	return req, nil
 }
 
-func (c *Client) Call(request *http.Request, structure interface{}) (*models.ResponseScheme, error) {
+func (c *Client) Call(request *http.Request, structure interface{}) (*model.ResponseScheme, error) {
 
 	response, err := c.HTTP.Do(request)
 	if err != nil {
 		return nil, err
 	}
 
-	return c.TransformTheHTTPResponse(response, structure)
+	return c.processResponse(response, structure)
 }
 
-func (c *Client) TransformTheHTTPResponse(response *http.Response, structure interface{}) (*models.ResponseScheme, error) {
+func (c *Client) processResponse(response *http.Response, structure interface{}) (*model.ResponseScheme, error) {
 
-	responseTransformed := &models.ResponseScheme{
+	defer response.Body.Close()
+
+	res := &model.ResponseScheme{
 		Response: response,
 		Code:     response.StatusCode,
 		Endpoint: response.Request.URL.String(),
@@ -221,39 +155,39 @@ func (c *Client) TransformTheHTTPResponse(response *http.Response, structure int
 
 	responseAsBytes, err := io.ReadAll(response.Body)
 	if err != nil {
-		return responseTransformed, err
+		return res, err
 	}
 
-	responseTransformed.Bytes.Write(responseAsBytes)
+	res.Bytes.Write(responseAsBytes)
 
-	var wasSuccess = response.StatusCode >= 200 && response.StatusCode < 300
+	wasSuccess := response.StatusCode >= 200 && response.StatusCode < 300
+
 	if !wasSuccess {
-		return responseTransformed, models.ErrInvalidStatusCodeError
+
+		switch response.StatusCode {
+
+		case http.StatusNotFound:
+			return res, model.ErrNotFound
+
+		case http.StatusUnauthorized:
+			return res, model.ErrUnauthorized
+
+		case http.StatusInternalServerError:
+			return res, model.ErrInternalError
+
+		case http.StatusBadRequest:
+			return res, model.ErrBadRequestError
+
+		default:
+			return res, model.ErrInvalidStatusCodeError
+		}
 	}
 
 	if structure != nil {
 		if err = json.Unmarshal(responseAsBytes, &structure); err != nil {
-			return responseTransformed, err
+			return res, err
 		}
 	}
 
-	return responseTransformed, nil
-}
-
-func (c *Client) TransformStructToReader(structure interface{}) (io.Reader, error) {
-
-	if structure == nil {
-		return nil, models.ErrNilPayloadError
-	}
-
-	if reflect.ValueOf(structure).Type().Kind() == reflect.Struct {
-		return nil, models.ErrNonPayloadPointerError
-	}
-
-	structureAsBodyBytes, err := json.Marshal(structure)
-	if err != nil {
-		return nil, err
-	}
-
-	return bytes.NewReader(structureAsBodyBytes), nil
+	return res, nil
 }

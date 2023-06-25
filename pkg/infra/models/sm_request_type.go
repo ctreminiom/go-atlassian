@@ -46,6 +46,13 @@ type RequestTypeScheme struct {
 	Expands       []string `json:"_expands,omitempty"`
 }
 
+type RequestTypePayloadScheme struct {
+	Description string `json:"description,omitempty"`
+	HelpText    string `json:"helpText,omitempty"`
+	IssueTypeId string `json:"issueTypeId,omitempty"`
+	Name        string `json:"name,omitempty"`
+}
+
 type RequestTypeFieldsScheme struct {
 	RequestTypeFields         []*RequestTypeFieldScheme `json:"requestTypeFields,omitempty"`
 	CanRaiseOnBehalfOf        bool                      `json:"canRaiseOnBehalfOf,omitempty"`

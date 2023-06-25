@@ -1,7 +1,6 @@
 package internal
 
 import (
-	"bytes"
 	"context"
 	"errors"
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
@@ -15,7 +14,7 @@ import (
 func Test_internalServiceRequestAttachmentImpl_Gets(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -42,12 +41,13 @@ func Test_internalServiceRequestAttachmentImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/request/DUMMY-2/attachment?limit=50&start=100",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -70,12 +70,13 @@ func Test_internalServiceRequestAttachmentImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/request/DUMMY-2/attachment?limit=50&start=100",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -100,12 +101,13 @@ func Test_internalServiceRequestAttachmentImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/request/DUMMY-2/attachment?limit=50&start=100",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("client: no http request created"))
 
@@ -121,7 +123,7 @@ func Test_internalServiceRequestAttachmentImpl_Gets(t *testing.T) {
 				ctx: context.Background(),
 			},
 			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
+				fields.c = mocks.NewConnector(t)
 			},
 			Err:     model.ErrNoIssueKeyOrIDError,
 			wantErr: true,
@@ -135,10 +137,9 @@ func Test_internalServiceRequestAttachmentImpl_Gets(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			smService, err := NewAttachmentService(testCase.fields.c, "latest")
-			assert.NoError(t, err)
+			attachmentService := NewAttachmentService(testCase.fields.c, "latest")
 
-			gotResult, gotResponse, err := smService.Gets(testCase.args.ctx, testCase.args.issueKeyOrID, testCase.args.start,
+			gotResult, gotResponse, err := attachmentService.Gets(testCase.args.ctx, testCase.args.issueKeyOrID, testCase.args.start,
 				testCase.args.limit)
 
 			if testCase.wantErr {
@@ -161,13 +162,8 @@ func Test_internalServiceRequestAttachmentImpl_Gets(t *testing.T) {
 
 func Test_internalServiceRequestAttachmentImpl_Create(t *testing.T) {
 
-	payloadMocked := &struct {
-		TemporaryAttachmentIds []string "json:\"temporaryAttachmentIds,omitempty\""
-		Public                 bool     "json:\"public,omitempty\""
-	}{TemporaryAttachmentIds: []string{"10001"}, Public: true}
-
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -195,17 +191,14 @@ func Test_internalServiceRequestAttachmentImpl_Create(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/servicedeskapi/request/DUMMY-2/attachment",
-					bytes.NewReader([]byte{})).
+					"",
+					map[string]interface{}{"public": true, "temporaryAttachmentIds": []string{"10001"}}).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -227,17 +220,14 @@ func Test_internalServiceRequestAttachmentImpl_Create(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/servicedeskapi/request/DUMMY-2/attachment",
-					bytes.NewReader([]byte{})).
+					"",
+					map[string]interface{}{"public": true, "temporaryAttachmentIds": []string{"10001"}}).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -261,17 +251,14 @@ func Test_internalServiceRequestAttachmentImpl_Create(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/servicedeskapi/request/DUMMY-2/attachment",
-					bytes.NewReader([]byte{})).
+					"",
+					map[string]interface{}{"public": true, "temporaryAttachmentIds": []string{"10001"}}).
 					Return(&http.Request{}, errors.New("client: no http request created"))
 
 				fields.c = client
@@ -286,7 +273,7 @@ func Test_internalServiceRequestAttachmentImpl_Create(t *testing.T) {
 				ctx: context.Background(),
 			},
 			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
+				fields.c = mocks.NewConnector(t)
 			},
 			Err:     model.ErrNoIssueKeyOrIDError,
 			wantErr: true,
@@ -300,10 +287,9 @@ func Test_internalServiceRequestAttachmentImpl_Create(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			smService, err := NewAttachmentService(testCase.fields.c, "latest")
-			assert.NoError(t, err)
+			attachmentService := NewAttachmentService(testCase.fields.c, "latest")
 
-			gotResult, gotResponse, err := smService.Create(testCase.args.ctx, testCase.args.issueKeyOrID,
+			gotResult, gotResponse, err := attachmentService.Create(testCase.args.ctx, testCase.args.issueKeyOrID,
 				testCase.args.temporaryAttachmentIDs, testCase.args.public)
 
 			if testCase.wantErr {

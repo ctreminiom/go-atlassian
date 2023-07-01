@@ -1,7 +1,6 @@
 package internal
 
 import (
-	"bytes"
 	"context"
 	"errors"
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
@@ -14,8 +13,23 @@ import (
 
 func TestDashboardService_Copy(t *testing.T) {
 
+	payloadMocked := &model.DashboardPayloadScheme{
+		Name:        "Auditors dashboard",
+		Description: "A dashboard to help auditors identify sample of issues to check.",
+		SharePermissions: []*model.SharePermissionScheme{
+			{
+				Type: "global",
+			},
+		},
+		EditPermissions: []*model.SharePermissionScheme{
+			{
+				Type: "global",
+			},
+		},
+	}
+
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -39,21 +53,18 @@ func TestDashboardService_Copy(t *testing.T) {
 			args: args{
 				ctx:         context.Background(),
 				dashboardId: "10001",
-				payload:     &model.DashboardPayloadScheme{},
+				payload:     payloadMocked,
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&model.DashboardPayloadScheme{}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/dashboard/10001/copy",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -72,21 +83,18 @@ func TestDashboardService_Copy(t *testing.T) {
 			args: args{
 				ctx:         context.Background(),
 				dashboardId: "10001",
-				payload:     &model.DashboardPayloadScheme{},
+				payload:     payloadMocked,
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&model.DashboardPayloadScheme{}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/3/dashboard/10001/copy",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -105,35 +113,13 @@ func TestDashboardService_Copy(t *testing.T) {
 			args: args{
 				ctx:         context.Background(),
 				dashboardId: "",
-				payload:     &model.DashboardPayloadScheme{},
+				payload:     payloadMocked,
 			},
 			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
+				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
 			Err:     model.ErrNoDashboardIDError,
-		},
-
-		{
-			name:   "when the payload is not provided",
-			fields: fields{version: "2"},
-			args: args{
-				ctx:         context.Background(),
-				dashboardId: "10001",
-				payload:     &model.DashboardPayloadScheme{},
-			},
-			on: func(fields *fields) {
-
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&model.DashboardPayloadScheme{}).
-					Return(bytes.NewReader([]byte{}), model.ErrNilPayloadError)
-				fields.c = client
-
-			},
-			wantErr: true,
-			Err:     model.ErrNilPayloadError,
 		},
 
 		{
@@ -142,21 +128,18 @@ func TestDashboardService_Copy(t *testing.T) {
 			args: args{
 				ctx:         context.Background(),
 				dashboardId: "10001",
-				payload:     &model.DashboardPayloadScheme{},
+				payload:     payloadMocked,
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&model.DashboardPayloadScheme{}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/dashboard/10001/copy",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -199,8 +182,23 @@ func TestDashboardService_Copy(t *testing.T) {
 
 func TestDashboardService_Update(t *testing.T) {
 
+	payloadMocked := &model.DashboardPayloadScheme{
+		Name:        "Auditors dashboard",
+		Description: "A dashboard to help auditors identify sample of issues to check.",
+		SharePermissions: []*model.SharePermissionScheme{
+			{
+				Type: "global",
+			},
+		},
+		EditPermissions: []*model.SharePermissionScheme{
+			{
+				Type: "global",
+			},
+		},
+	}
+
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -224,21 +222,18 @@ func TestDashboardService_Update(t *testing.T) {
 			args: args{
 				ctx:         context.Background(),
 				dashboardId: "10001",
-				payload:     &model.DashboardPayloadScheme{},
+				payload:     payloadMocked,
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&model.DashboardPayloadScheme{}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/2/dashboard/10001",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -257,21 +252,18 @@ func TestDashboardService_Update(t *testing.T) {
 			args: args{
 				ctx:         context.Background(),
 				dashboardId: "10001",
-				payload:     &model.DashboardPayloadScheme{},
+				payload:     payloadMocked,
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&model.DashboardPayloadScheme{}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/3/dashboard/10001",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -293,32 +285,10 @@ func TestDashboardService_Update(t *testing.T) {
 				payload:     &model.DashboardPayloadScheme{},
 			},
 			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
+				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
 			Err:     model.ErrNoDashboardIDError,
-		},
-
-		{
-			name:   "when the payload is not provided",
-			fields: fields{version: "2"},
-			args: args{
-				ctx:         context.Background(),
-				dashboardId: "10001",
-				payload:     &model.DashboardPayloadScheme{},
-			},
-			on: func(fields *fields) {
-
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&model.DashboardPayloadScheme{}).
-					Return(bytes.NewReader([]byte{}), model.ErrNilPayloadError)
-				fields.c = client
-
-			},
-			wantErr: true,
-			Err:     model.ErrNilPayloadError,
 		},
 
 		{
@@ -327,21 +297,18 @@ func TestDashboardService_Update(t *testing.T) {
 			args: args{
 				ctx:         context.Background(),
 				dashboardId: "10001",
-				payload:     &model.DashboardPayloadScheme{},
+				payload:     payloadMocked,
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&model.DashboardPayloadScheme{}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/2/dashboard/10001",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -385,7 +352,7 @@ func TestDashboardService_Update(t *testing.T) {
 func TestDashboardService_Gets(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -414,12 +381,13 @@ func TestDashboardService_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/dashboard?filter=favourite&maxResults=50&startAt=50",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -443,12 +411,13 @@ func TestDashboardService_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/dashboard?filter=favourite&maxResults=50&startAt=50",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -472,12 +441,13 @@ func TestDashboardService_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/dashboard?filter=favourite&maxResults=50&startAt=50",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -521,8 +491,23 @@ func TestDashboardService_Gets(t *testing.T) {
 
 func TestDashboardService_Create(t *testing.T) {
 
+	payloadMocked := &model.DashboardPayloadScheme{
+		Name:        "Auditors dashboard",
+		Description: "A dashboard to help auditors identify sample of issues to check.",
+		SharePermissions: []*model.SharePermissionScheme{
+			{
+				Type: "global",
+			},
+		},
+		EditPermissions: []*model.SharePermissionScheme{
+			{
+				Type: "global",
+			},
+		},
+	}
+
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -544,21 +529,18 @@ func TestDashboardService_Create(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:     context.Background(),
-				payload: &model.DashboardPayloadScheme{},
+				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&model.DashboardPayloadScheme{}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/dashboard",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -576,21 +558,18 @@ func TestDashboardService_Create(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:     context.Background(),
-				payload: &model.DashboardPayloadScheme{},
+				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&model.DashboardPayloadScheme{}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/3/dashboard",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -604,46 +583,22 @@ func TestDashboardService_Create(t *testing.T) {
 		},
 
 		{
-			name:   "when the payload is not provided",
-			fields: fields{version: "2"},
-			args: args{
-				ctx:     context.Background(),
-				payload: &model.DashboardPayloadScheme{},
-			},
-			on: func(fields *fields) {
-
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&model.DashboardPayloadScheme{}).
-					Return(bytes.NewReader([]byte{}), model.ErrNilPayloadError)
-				fields.c = client
-
-			},
-			wantErr: true,
-			Err:     model.ErrNilPayloadError,
-		},
-
-		{
 			name:   "when the http request cannot be created",
 			fields: fields{version: "2"},
 			args: args{
 				ctx:     context.Background(),
-				payload: &model.DashboardPayloadScheme{},
+				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&model.DashboardPayloadScheme{}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/dashboard",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -687,7 +642,7 @@ func TestDashboardService_Create(t *testing.T) {
 func TestDashboardService_Search(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -722,12 +677,13 @@ func TestDashboardService_Search(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/dashboard/search?accountId=owner-id&dashboardName=owner-id&expand=isWritable&groupname=owner-id&maxResults=0&orderBy=owner-id&startAt=0",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -758,12 +714,13 @@ func TestDashboardService_Search(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/dashboard/search?accountId=owner-id&dashboardName=owner-id&expand=isWritable&groupname=owner-id&maxResults=0&orderBy=owner-id&startAt=0",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -794,12 +751,13 @@ func TestDashboardService_Search(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/dashboard/search?accountId=owner-id&dashboardName=owner-id&expand=isWritable&groupname=owner-id&maxResults=0&orderBy=owner-id&startAt=0",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -826,12 +784,13 @@ func TestDashboardService_Search(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/dashboard/search?accountId=owner-id&dashboardName=owner-id&expand=isWritable&groupname=owner-id&maxResults=0&orderBy=owner-id&startAt=0",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -882,7 +841,7 @@ func TestDashboardService_Search(t *testing.T) {
 func TestDashboardService_Get(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -908,12 +867,13 @@ func TestDashboardService_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/dashboard/10001",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -936,12 +896,13 @@ func TestDashboardService_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/dashboard/10001",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -963,7 +924,7 @@ func TestDashboardService_Get(t *testing.T) {
 				dashboardId: "",
 			},
 			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
+				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
 			Err:     model.ErrNoDashboardIDError,
@@ -978,12 +939,13 @@ func TestDashboardService_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/dashboard/10001",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -1028,7 +990,7 @@ func TestDashboardService_Get(t *testing.T) {
 func TestDashboardService_Delete(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -1054,12 +1016,13 @@ func TestDashboardService_Delete(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/api/2/dashboard/10001",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -1082,12 +1045,13 @@ func TestDashboardService_Delete(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/api/3/dashboard/10001",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -1109,7 +1073,7 @@ func TestDashboardService_Delete(t *testing.T) {
 				dashboardId: "",
 			},
 			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
+				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
 			Err:     model.ErrNoDashboardIDError,
@@ -1124,12 +1088,13 @@ func TestDashboardService_Delete(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/api/2/dashboard/10001",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -1173,7 +1138,7 @@ func TestDashboardService_Delete(t *testing.T) {
 func TestNewDashboardService(t *testing.T) {
 
 	type args struct {
-		client  service.Client
+		client  service.Connector
 		version string
 	}
 

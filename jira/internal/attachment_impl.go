@@ -14,7 +14,7 @@ import (
 	"strings"
 )
 
-func NewIssueAttachmentService(client service.Client, version string) (*IssueAttachmentService, error) {
+func NewIssueAttachmentService(client service.Connector, version string) (*IssueAttachmentService, error) {
 
 	if version == "" {
 		return nil, model.ErrNoVersionProvided
@@ -90,7 +90,7 @@ func (i *IssueAttachmentService) Download(ctx context.Context, attachmentID stri
 }
 
 type internalIssueAttachmentServiceImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -111,7 +111,7 @@ func (i *internalIssueAttachmentServiceImpl) Download(ctx context.Context, attac
 		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -123,7 +123,7 @@ func (i *internalIssueAttachmentServiceImpl) Settings(ctx context.Context) (*mod
 
 	endpoint := fmt.Sprintf("rest/api/%v/attachment/meta", i.version)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -145,7 +145,7 @@ func (i *internalIssueAttachmentServiceImpl) Metadata(ctx context.Context, attac
 
 	endpoint := fmt.Sprintf("rest/api/%v/attachment/%v", i.version, attachmentId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -167,7 +167,7 @@ func (i *internalIssueAttachmentServiceImpl) Delete(ctx context.Context, attachm
 
 	endpoint := fmt.Sprintf("rest/api/%v/attachment/%v", i.version, attachmentId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -183,7 +183,7 @@ func (i *internalIssueAttachmentServiceImpl) Human(ctx context.Context, attachme
 
 	endpoint := fmt.Sprintf("rest/api/%v/attachment/%v/expand/human", i.version, attachmentId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -228,7 +228,7 @@ func (i *internalIssueAttachmentServiceImpl) Add(ctx context.Context, issueKeyOr
 
 	writer.Close()
 
-	request, err := i.c.NewFormRequest(ctx, http.MethodPost, endpoint, writer.FormDataContentType(), reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, writer.FormDataContentType(), reader)
 	if err != nil {
 		return nil, nil, err
 	}

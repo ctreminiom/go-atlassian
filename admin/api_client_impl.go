@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"fmt"
 	"github.com/ctreminiom/go-atlassian/admin/internal"
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service/common"
@@ -12,7 +13,7 @@ import (
 	"net/url"
 )
 
-const ApiEndpoint = "https://api.atlassian.com/"
+const defaultApiEndpoint = "https://api.atlassian.com/"
 
 func New(httpClient common.HttpClient) (*Client, error) {
 
@@ -20,7 +21,7 @@ func New(httpClient common.HttpClient) (*Client, error) {
 		httpClient = http.DefaultClient
 	}
 
-	u, err := url.Parse(ApiEndpoint)
+	u, err := url.Parse(defaultApiEndpoint)
 	if err != nil {
 		return nil, err
 	}
@@ -87,12 +88,8 @@ func (c *Client) NewRequest(ctx context.Context, method, urlStr, type_ string, b
 		req.Header.Set("Content-Type", type_)
 	}
 
-	if c.Auth.HasBasicAuth() {
-		req.SetBasicAuth(c.Auth.GetBasicAuth())
-	}
-
-	if c.Auth.HasSetExperimentalFlag() {
-		req.Header.Set("X-ExperimentalApi", "opt-in")
+	if c.Auth.GetBearerToken() != "" {
+		req.Header.Add("Authorization", fmt.Sprintf("Bearer %v", c.Auth.GetBearerToken()))
 	}
 
 	if c.Auth.HasUserAgent() {

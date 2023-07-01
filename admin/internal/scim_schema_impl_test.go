@@ -14,7 +14,7 @@ import (
 func Test_internalSCIMSchemaImpl_Gets(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -38,12 +38,13 @@ func Test_internalSCIMSchemaImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"scim/directory/direction-id-sample/Schemas",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -75,12 +76,13 @@ func Test_internalSCIMSchemaImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"scim/directory/direction-id-sample/Schemas",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -99,9 +101,9 @@ func Test_internalSCIMSchemaImpl_Gets(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			service := NewSCIMSchemaService(testCase.fields.c)
+			newSCIMSchemaService := NewSCIMSchemaService(testCase.fields.c)
 
-			gotResult, gotResponse, err := service.Gets(testCase.args.ctx, testCase.args.directoryID)
+			gotResult, gotResponse, err := newSCIMSchemaService.Gets(testCase.args.ctx, testCase.args.directoryID)
 
 			if testCase.wantErr {
 
@@ -125,7 +127,7 @@ func Test_internalSCIMSchemaImpl_Gets(t *testing.T) {
 func Test_internalSCIMSchemaImpl_Group(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -149,12 +151,13 @@ func Test_internalSCIMSchemaImpl_Group(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"scim/directory/direction-id-sample/Schemas/urn:ietf:params:scim:schemas:core:2.0:Group",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -186,12 +189,13 @@ func Test_internalSCIMSchemaImpl_Group(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"scim/directory/direction-id-sample/Schemas/urn:ietf:params:scim:schemas:core:2.0:Group",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -210,9 +214,9 @@ func Test_internalSCIMSchemaImpl_Group(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			service := NewSCIMSchemaService(testCase.fields.c)
+			newSCIMSchemaService := NewSCIMSchemaService(testCase.fields.c)
 
-			gotResult, gotResponse, err := service.Group(testCase.args.ctx, testCase.args.directoryID)
+			gotResult, gotResponse, err := newSCIMSchemaService.Group(testCase.args.ctx, testCase.args.directoryID)
 
 			if testCase.wantErr {
 
@@ -236,7 +240,7 @@ func Test_internalSCIMSchemaImpl_Group(t *testing.T) {
 func Test_internalSCIMSchemaImpl_User(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -260,12 +264,13 @@ func Test_internalSCIMSchemaImpl_User(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"scim/directory/direction-id-sample/Schemas/urn:ietf:params:scim:schemas:core:2.0:User",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -297,12 +302,13 @@ func Test_internalSCIMSchemaImpl_User(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"scim/directory/direction-id-sample/Schemas/urn:ietf:params:scim:schemas:core:2.0:User",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -321,9 +327,9 @@ func Test_internalSCIMSchemaImpl_User(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			service := NewSCIMSchemaService(testCase.fields.c)
+			newSCIMSchemaService := NewSCIMSchemaService(testCase.fields.c)
 
-			gotResult, gotResponse, err := service.User(testCase.args.ctx, testCase.args.directoryID)
+			gotResult, gotResponse, err := newSCIMSchemaService.User(testCase.args.ctx, testCase.args.directoryID)
 
 			if testCase.wantErr {
 
@@ -347,7 +353,7 @@ func Test_internalSCIMSchemaImpl_User(t *testing.T) {
 func Test_internalSCIMSchemaImpl_Enterprise(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -371,12 +377,13 @@ func Test_internalSCIMSchemaImpl_Enterprise(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"scim/directory/direction-id-sample/Schemas/urn:ietf:params:scim:schemas:extension:enterprise:2.0:User",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -408,12 +415,13 @@ func Test_internalSCIMSchemaImpl_Enterprise(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"scim/directory/direction-id-sample/Schemas/urn:ietf:params:scim:schemas:extension:enterprise:2.0:User",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -432,9 +440,9 @@ func Test_internalSCIMSchemaImpl_Enterprise(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			service := NewSCIMSchemaService(testCase.fields.c)
+			newSCIMSchemaService := NewSCIMSchemaService(testCase.fields.c)
 
-			gotResult, gotResponse, err := service.Enterprise(testCase.args.ctx, testCase.args.directoryID)
+			gotResult, gotResponse, err := newSCIMSchemaService.Enterprise(testCase.args.ctx, testCase.args.directoryID)
 
 			if testCase.wantErr {
 
@@ -458,7 +466,7 @@ func Test_internalSCIMSchemaImpl_Enterprise(t *testing.T) {
 func Test_internalSCIMSchemaImpl_Feature(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -482,12 +490,13 @@ func Test_internalSCIMSchemaImpl_Feature(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"scim/directory/direction-id-sample/ServiceProviderConfig",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -519,12 +528,13 @@ func Test_internalSCIMSchemaImpl_Feature(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"scim/directory/direction-id-sample/ServiceProviderConfig",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -543,9 +553,9 @@ func Test_internalSCIMSchemaImpl_Feature(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			service := NewSCIMSchemaService(testCase.fields.c)
+			newSCIMSchemaService := NewSCIMSchemaService(testCase.fields.c)
 
-			gotResult, gotResponse, err := service.Feature(testCase.args.ctx, testCase.args.directoryID)
+			gotResult, gotResponse, err := newSCIMSchemaService.Feature(testCase.args.ctx, testCase.args.directoryID)
 
 			if testCase.wantErr {
 

@@ -1,7 +1,6 @@
 package internal
 
 import (
-	"bytes"
 	"context"
 	"errors"
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
@@ -15,7 +14,7 @@ import (
 func Test_internalSCIMUserImpl_Gets(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -48,12 +47,13 @@ func Test_internalSCIMUserImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"scim/directory/direction-id-sample/Users?attributes=attributes&count=50&excludedAttributes=attributes&filter=users&startIndex=0",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -92,12 +92,13 @@ func Test_internalSCIMUserImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"scim/directory/direction-id-sample/Users?attributes=attributes&count=50&excludedAttributes=attributes&filter=users&startIndex=0",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -116,9 +117,9 @@ func Test_internalSCIMUserImpl_Gets(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			service := NewSCIMUserService(testCase.fields.c)
+			newSCIMUserService := NewSCIMUserService(testCase.fields.c)
 
-			gotResult, gotResponse, err := service.Gets(testCase.args.ctx, testCase.args.directoryID, testCase.args.opts, testCase.args.startIndex,
+			gotResult, gotResponse, err := newSCIMUserService.Gets(testCase.args.ctx, testCase.args.directoryID, testCase.args.opts, testCase.args.startIndex,
 				testCase.args.count)
 
 			if testCase.wantErr {
@@ -143,7 +144,7 @@ func Test_internalSCIMUserImpl_Gets(t *testing.T) {
 func Test_internalSCIMUserImpl_Get(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -171,12 +172,13 @@ func Test_internalSCIMUserImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"scim/directory/direction-id-sample/Users/user-id-uuid-sample?attributes=groups&excludedAttributes=roles",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -221,12 +223,13 @@ func Test_internalSCIMUserImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"scim/directory/direction-id-sample/Users/user-id-uuid-sample?attributes=groups&excludedAttributes=roles",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -245,9 +248,9 @@ func Test_internalSCIMUserImpl_Get(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			service := NewSCIMUserService(testCase.fields.c)
+			newSCIMUserService := NewSCIMUserService(testCase.fields.c)
 
-			gotResult, gotResponse, err := service.Get(testCase.args.ctx, testCase.args.directoryID, testCase.args.userID, testCase.args.attributes,
+			gotResult, gotResponse, err := newSCIMUserService.Get(testCase.args.ctx, testCase.args.directoryID, testCase.args.userID, testCase.args.attributes,
 				testCase.args.excludedAttributes)
 
 			if testCase.wantErr {
@@ -272,7 +275,7 @@ func Test_internalSCIMUserImpl_Get(t *testing.T) {
 func Test_internalSCIMUserImpl_Deactivate(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -297,12 +300,13 @@ func Test_internalSCIMUserImpl_Deactivate(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"scim/directory/direction-id-sample/Users/user-id-uuid-sample",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -345,12 +349,13 @@ func Test_internalSCIMUserImpl_Deactivate(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"scim/directory/direction-id-sample/Users/user-id-uuid-sample",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -369,9 +374,9 @@ func Test_internalSCIMUserImpl_Deactivate(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			service := NewSCIMUserService(testCase.fields.c)
+			newSCIMUserService := NewSCIMUserService(testCase.fields.c)
 
-			gotResponse, err := service.Deactivate(testCase.args.ctx, testCase.args.directoryID, testCase.args.userID)
+			gotResponse, err := newSCIMUserService.Deactivate(testCase.args.ctx, testCase.args.directoryID, testCase.args.userID)
 
 			if testCase.wantErr {
 
@@ -398,7 +403,7 @@ func Test_internalSCIMUserImpl_Path(t *testing.T) {
 	}
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -428,17 +433,14 @@ func Test_internalSCIMUserImpl_Path(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPatch,
 					"scim/directory/direction-id-sample/Users/user-id-uuid-sample?attributes=groups&excludedAttributes=roles",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -483,17 +485,14 @@ func Test_internalSCIMUserImpl_Path(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPatch,
 					"scim/directory/direction-id-sample/Users/user-id-uuid-sample?attributes=groups&excludedAttributes=roles",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -511,9 +510,9 @@ func Test_internalSCIMUserImpl_Path(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			service := NewSCIMUserService(testCase.fields.c)
+			newSCIMUserService := NewSCIMUserService(testCase.fields.c)
 
-			gotResult, gotResponse, err := service.Path(testCase.args.ctx, testCase.args.directoryID, testCase.args.userID,
+			gotResult, gotResponse, err := newSCIMUserService.Path(testCase.args.ctx, testCase.args.directoryID, testCase.args.userID,
 				testCase.args.payload, testCase.args.attributes, testCase.args.excludedAttributes)
 
 			if testCase.wantErr {
@@ -554,7 +553,7 @@ func Test_internalSCIMUserImpl_Update(t *testing.T) {
 	}
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -584,17 +583,14 @@ func Test_internalSCIMUserImpl_Update(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"scim/directory/direction-id-sample/Users/user-id-uuid-sample?attributes=groups&excludedAttributes=roles",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -639,17 +635,14 @@ func Test_internalSCIMUserImpl_Update(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"scim/directory/direction-id-sample/Users/user-id-uuid-sample?attributes=groups&excludedAttributes=roles",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -667,9 +660,9 @@ func Test_internalSCIMUserImpl_Update(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			service := NewSCIMUserService(testCase.fields.c)
+			newSCIMUserService := NewSCIMUserService(testCase.fields.c)
 
-			gotResult, gotResponse, err := service.Update(testCase.args.ctx, testCase.args.directoryID, testCase.args.userID,
+			gotResult, gotResponse, err := newSCIMUserService.Update(testCase.args.ctx, testCase.args.directoryID, testCase.args.userID,
 				testCase.args.payload, testCase.args.attributes, testCase.args.excludedAttributes)
 
 			if testCase.wantErr {
@@ -710,7 +703,7 @@ func Test_internalSCIMUserImpl_Create(t *testing.T) {
 	}
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -739,17 +732,14 @@ func Test_internalSCIMUserImpl_Create(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"scim/directory/direction-id-sample/Users?attributes=groups&excludedAttributes=roles",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -783,17 +773,14 @@ func Test_internalSCIMUserImpl_Create(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"scim/directory/direction-id-sample/Users?attributes=groups&excludedAttributes=roles",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -811,9 +798,9 @@ func Test_internalSCIMUserImpl_Create(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			service := NewSCIMUserService(testCase.fields.c)
+			newSCIMUserService := NewSCIMUserService(testCase.fields.c)
 
-			gotResult, gotResponse, err := service.Create(testCase.args.ctx, testCase.args.directoryID,
+			gotResult, gotResponse, err := newSCIMUserService.Create(testCase.args.ctx, testCase.args.directoryID,
 				testCase.args.payload, testCase.args.attributes, testCase.args.excludedAttributes)
 
 			if testCase.wantErr {

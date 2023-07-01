@@ -1,7 +1,6 @@
 package internal
 
 import (
-	"bytes"
 	"context"
 	"errors"
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
@@ -15,7 +14,7 @@ import (
 func Test_internalUserImpl_Permissions(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -41,12 +40,13 @@ func Test_internalUserImpl_Permissions(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"users/account-id-sample/manage?privileges=privileges-sample",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -79,12 +79,13 @@ func Test_internalUserImpl_Permissions(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"users/account-id-sample/manage?privileges=privileges-sample",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -103,9 +104,9 @@ func Test_internalUserImpl_Permissions(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			service := NewUserService(testCase.fields.c, nil)
+			newUserService := NewUserService(testCase.fields.c, nil)
 
-			gotResult, gotResponse, err := service.Permissions(testCase.args.ctx, testCase.args.accountID, testCase.args.privileges)
+			gotResult, gotResponse, err := newUserService.Permissions(testCase.args.ctx, testCase.args.accountID, testCase.args.privileges)
 
 			if testCase.wantErr {
 
@@ -129,7 +130,7 @@ func Test_internalUserImpl_Permissions(t *testing.T) {
 func Test_internalUserImpl_Get(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -153,12 +154,13 @@ func Test_internalUserImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"users/account-id-sample/manage/profile",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -190,12 +192,13 @@ func Test_internalUserImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"users/account-id-sample/manage/profile",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -214,9 +217,9 @@ func Test_internalUserImpl_Get(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			service := NewUserService(testCase.fields.c, nil)
+			newUserService := NewUserService(testCase.fields.c, nil)
 
-			gotResult, gotResponse, err := service.Get(testCase.args.ctx, testCase.args.accountID)
+			gotResult, gotResponse, err := newUserService.Get(testCase.args.ctx, testCase.args.accountID)
 
 			if testCase.wantErr {
 
@@ -240,7 +243,7 @@ func Test_internalUserImpl_Get(t *testing.T) {
 func Test_internalUserImpl_Enable(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -264,12 +267,13 @@ func Test_internalUserImpl_Enable(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"users/account-id-sample/manage/lifecycle/enable",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -301,12 +305,13 @@ func Test_internalUserImpl_Enable(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"users/account-id-sample/manage/lifecycle/enable",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -325,9 +330,9 @@ func Test_internalUserImpl_Enable(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			service := NewUserService(testCase.fields.c, nil)
+			newUserService := NewUserService(testCase.fields.c, nil)
 
-			gotResponse, err := service.Enable(testCase.args.ctx, testCase.args.accountID)
+			gotResponse, err := newUserService.Enable(testCase.args.ctx, testCase.args.accountID)
 
 			if testCase.wantErr {
 
@@ -349,12 +354,10 @@ func Test_internalUserImpl_Enable(t *testing.T) {
 
 func Test_internalUserImpl_Disable(t *testing.T) {
 
-	payloadMocked := &struct {
-		Message string "json:\"message\""
-	}{Message: "Your account has been disabled :("}
+	payloadMocked := map[string]interface{}{"message": "Your account has been disabled :("}
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -379,17 +382,14 @@ func Test_internalUserImpl_Disable(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"users/account-id-sample/manage/lifecycle/disable",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -421,17 +421,14 @@ func Test_internalUserImpl_Disable(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"users/account-id-sample/manage/lifecycle/disable",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -449,9 +446,9 @@ func Test_internalUserImpl_Disable(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			service := NewUserService(testCase.fields.c, nil)
+			newUserService := NewUserService(testCase.fields.c, nil)
 
-			gotResponse, err := service.Disable(testCase.args.ctx, testCase.args.accountID, testCase.args.message)
+			gotResponse, err := newUserService.Disable(testCase.args.ctx, testCase.args.accountID, testCase.args.message)
 
 			if testCase.wantErr {
 
@@ -475,11 +472,8 @@ func Test_internalUserImpl_Update(t *testing.T) {
 
 	payloadMocked := map[string]interface{}{"nickname": "marshmallow"}
 
-	var payload = make(map[string]interface{})
-	payload["nickname"] = "marshmallow"
-
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -501,21 +495,18 @@ func Test_internalUserImpl_Update(t *testing.T) {
 			args: args{
 				ctx:       context.TODO(),
 				accountID: "account-id-sample",
-				payload:   payload,
+				payload:   payloadMocked,
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPatch,
 					"users/account-id-sample/manage/profile",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -543,21 +534,18 @@ func Test_internalUserImpl_Update(t *testing.T) {
 			args: args{
 				ctx:       context.TODO(),
 				accountID: "account-id-sample",
-				payload:   payload,
+				payload:   payloadMocked,
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPatch,
 					"users/account-id-sample/manage/profile",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -575,9 +563,9 @@ func Test_internalUserImpl_Update(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			service := NewUserService(testCase.fields.c, nil)
+			newUserService := NewUserService(testCase.fields.c, nil)
 
-			gotResult, gotResponse, err := service.Update(testCase.args.ctx, testCase.args.accountID, testCase.args.payload)
+			gotResult, gotResponse, err := newUserService.Update(testCase.args.ctx, testCase.args.accountID, testCase.args.payload)
 
 			if testCase.wantErr {
 

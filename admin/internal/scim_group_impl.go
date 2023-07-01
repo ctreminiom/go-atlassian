@@ -11,7 +11,7 @@ import (
 	"strconv"
 )
 
-func NewSCIMGroupService(client service.Client) *SCIMGroupService {
+func NewSCIMGroupService(client service.Connector) *SCIMGroupService {
 	return &SCIMGroupService{internalClient: &internalSCIMGroupImpl{c: client}}
 }
 
@@ -86,7 +86,7 @@ func (s *SCIMGroupService) Path(ctx context.Context, directoryID, groupID string
 }
 
 type internalSCIMGroupImpl struct {
-	c service.Client
+	c service.Connector
 }
 
 func (i *internalSCIMGroupImpl) Gets(ctx context.Context, directoryID, filter string, startAt, maxResults int) (*model.ScimGroupPageScheme, *model.ResponseScheme, error) {
@@ -105,7 +105,7 @@ func (i *internalSCIMGroupImpl) Gets(ctx context.Context, directoryID, filter st
 
 	endpoint := fmt.Sprintf("scim/directory/%v/Groups?%v", directoryID, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -131,7 +131,7 @@ func (i *internalSCIMGroupImpl) Get(ctx context.Context, directoryID, groupID st
 
 	endpoint := fmt.Sprintf("scim/directory/%v/Groups/%v", directoryID, groupID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -161,18 +161,9 @@ func (i *internalSCIMGroupImpl) Update(ctx context.Context, directoryID, groupID
 
 	endpoint := fmt.Sprintf("scim/directory/%v/Groups/%v", directoryID, groupID)
 
-	payload := struct {
-		DisplayName string `json:"displayName"`
-	}{
-		DisplayName: newGroupName,
-	}
+	payload := map[string]interface{}{"displayName": newGroupName}
 
-	reader, err := i.c.TransformStructToReader(&payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -198,7 +189,7 @@ func (i *internalSCIMGroupImpl) Delete(ctx context.Context, directoryID, groupID
 
 	endpoint := fmt.Sprintf("scim/directory/%v/Groups/%v", directoryID, groupID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -216,20 +207,11 @@ func (i *internalSCIMGroupImpl) Create(ctx context.Context, directoryID, groupNa
 		return nil, nil, model.ErrNoAdminGroupNameError
 	}
 
-	payload := struct {
-		DisplayName string `json:"displayName"`
-	}{
-		DisplayName: groupName,
-	}
-
-	reader, err := i.c.TransformStructToReader(&payload)
-	if err != nil {
-		return nil, nil, err
-	}
+	payload := map[string]interface{}{"displayName": groupName}
 
 	endpoint := fmt.Sprintf("scim/directory/%v/Groups", directoryID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -253,14 +235,9 @@ func (i *internalSCIMGroupImpl) Path(ctx context.Context, directoryID, groupID s
 		return nil, nil, model.ErrNoAdminGroupIDError
 	}
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	endpoint := fmt.Sprintf("scim/directory/%v/Groups/%v", directoryID, groupID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPatch, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPatch, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}

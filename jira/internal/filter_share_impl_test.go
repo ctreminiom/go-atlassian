@@ -1,7 +1,6 @@
 package internal
 
 import (
-	"bytes"
 	"context"
 	"errors"
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
@@ -15,7 +14,7 @@ import (
 func TestFilterShareService_Scope(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -39,12 +38,13 @@ func TestFilterShareService_Scope(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/filter/defaultShareScope",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -65,12 +65,13 @@ func TestFilterShareService_Scope(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/filter/defaultShareScope",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -91,12 +92,13 @@ func TestFilterShareService_Scope(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/filter/defaultShareScope",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -140,7 +142,7 @@ func TestFilterShareService_Scope(t *testing.T) {
 func TestFilterShareService_SetScope(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -166,17 +168,14 @@ func TestFilterShareService_SetScope(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&model.ShareFilterScopeScheme{Scope: "PRIVATE"}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/2/filter/defaultShareScope",
-					bytes.NewReader([]byte{})).
+					"",
+					&model.ShareFilterScopeScheme{Scope: "PRIVATE"}).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -197,17 +196,14 @@ func TestFilterShareService_SetScope(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&model.ShareFilterScopeScheme{Scope: "PRIVATE"}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/3/filter/defaultShareScope",
-					bytes.NewReader([]byte{})).
+					"",
+					&model.ShareFilterScopeScheme{Scope: "PRIVATE"}).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -228,17 +224,14 @@ func TestFilterShareService_SetScope(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&model.ShareFilterScopeScheme{Scope: "PRIVATE"}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/2/filter/defaultShareScope",
-					bytes.NewReader([]byte{})).
+					"",
+					&model.ShareFilterScopeScheme{Scope: "PRIVATE"}).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -279,7 +272,7 @@ func TestFilterShareService_SetScope(t *testing.T) {
 func TestFilterShareService_Gets(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -305,12 +298,13 @@ func TestFilterShareService_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/filter/10001/permission",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -332,12 +326,13 @@ func TestFilterShareService_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/filter/10001/permission",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -358,7 +353,7 @@ func TestFilterShareService_Gets(t *testing.T) {
 				filterId: 0,
 			},
 			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
+				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
 			Err:     model.ErrNoFilterIDError,
@@ -373,12 +368,13 @@ func TestFilterShareService_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/filter/10001/permission",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 				fields.c = client
@@ -420,8 +416,13 @@ func TestFilterShareService_Gets(t *testing.T) {
 
 func TestFilterShareService_Add(t *testing.T) {
 
+	payloadMocked := &model.PermissionFilterPayloadScheme{
+		Type:      "group",
+		GroupName: "jira-administrators",
+	}
+
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -445,24 +446,18 @@ func TestFilterShareService_Add(t *testing.T) {
 			args: args{
 				ctx:      context.Background(),
 				filterId: 10001,
-				payload: &model.PermissionFilterPayloadScheme{
-					Type:      "group",
-					GroupName: "jira-administrators",
-				},
+				payload:  payloadMocked,
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&model.PermissionFilterPayloadScheme{Type: "group", GroupName: "jira-administrators"}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/filter/10001/permission",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -480,24 +475,18 @@ func TestFilterShareService_Add(t *testing.T) {
 			args: args{
 				ctx:      context.Background(),
 				filterId: 10001,
-				payload: &model.PermissionFilterPayloadScheme{
-					Type:      "group",
-					GroupName: "jira-administrators",
-				},
+				payload:  payloadMocked,
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&model.PermissionFilterPayloadScheme{Type: "group", GroupName: "jira-administrators"}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/3/filter/10001/permission",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -515,38 +504,13 @@ func TestFilterShareService_Add(t *testing.T) {
 			args: args{
 				ctx:      context.Background(),
 				filterId: 0,
-				payload: &model.PermissionFilterPayloadScheme{
-					Type:      "group",
-					GroupName: "jira-administrators",
-				},
+				payload:  payloadMocked,
 			},
 			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
+				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
 			Err:     model.ErrNoFilterIDError,
-		},
-
-		{
-			name:   "when the payload id not provided",
-			fields: fields{version: "2"},
-			args: args{
-				ctx:      context.Background(),
-				filterId: 10001,
-				payload:  nil,
-			},
-			on: func(fields *fields) {
-
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					(*model.PermissionFilterPayloadScheme)(nil)).
-					Return(bytes.NewReader([]byte{}), model.ErrNilPayloadError)
-
-				fields.c = client
-			},
-			wantErr: true,
-			Err:     model.ErrNilPayloadError,
 		},
 
 		{
@@ -555,24 +519,18 @@ func TestFilterShareService_Add(t *testing.T) {
 			args: args{
 				ctx:      context.Background(),
 				filterId: 10001,
-				payload: &model.PermissionFilterPayloadScheme{
-					Type:      "group",
-					GroupName: "jira-administrators",
-				},
+				payload:  payloadMocked,
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&model.PermissionFilterPayloadScheme{Type: "group", GroupName: "jira-administrators"}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/filter/10001/permission",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -615,7 +573,7 @@ func TestFilterShareService_Add(t *testing.T) {
 func TestFilterShareService_Get(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -642,12 +600,13 @@ func TestFilterShareService_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/filter/10001/permission/20",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -670,12 +629,13 @@ func TestFilterShareService_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/filter/10001/permission/20",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -697,7 +657,7 @@ func TestFilterShareService_Get(t *testing.T) {
 				permissionId: 20,
 			},
 			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
+				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
 			Err:     model.ErrNoFilterIDError,
@@ -712,7 +672,7 @@ func TestFilterShareService_Get(t *testing.T) {
 				permissionId: 0,
 			},
 			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
+				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
 			Err:     model.ErrNoPermissionGrantIDError,
@@ -728,12 +688,13 @@ func TestFilterShareService_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/filter/10001/permission/20",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to creat the http request"))
 
@@ -777,7 +738,7 @@ func TestFilterShareService_Get(t *testing.T) {
 func TestFilterShareService_Delete(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -804,12 +765,13 @@ func TestFilterShareService_Delete(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/api/2/filter/10001/permission/20",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -832,12 +794,13 @@ func TestFilterShareService_Delete(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/api/3/filter/10001/permission/20",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -859,7 +822,7 @@ func TestFilterShareService_Delete(t *testing.T) {
 				permissionId: 20,
 			},
 			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
+				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
 			Err:     model.ErrNoFilterIDError,
@@ -874,7 +837,7 @@ func TestFilterShareService_Delete(t *testing.T) {
 				permissionId: 0,
 			},
 			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
+				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
 			Err:     model.ErrNoPermissionGrantIDError,
@@ -890,12 +853,13 @@ func TestFilterShareService_Delete(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/api/2/filter/10001/permission/20",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to creat the http request"))
 
@@ -937,7 +901,7 @@ func TestFilterShareService_Delete(t *testing.T) {
 func Test_NewFilterShareService(t *testing.T) {
 
 	type args struct {
-		client  service.Client
+		client  service.Connector
 		version string
 	}
 

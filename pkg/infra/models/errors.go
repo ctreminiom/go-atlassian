@@ -71,7 +71,6 @@ var (
 	ErrNoIssueKeyOrIDError                 = errors.New("jira: no issue key/id set")
 	ErrNoRemoteLinkIDError                 = errors.New("jira: no remote link id set")
 	ErrNoRemoteLinkGlobalIDError           = errors.New("jira: no global remote link id set")
-	ErrNoIssueSchemeError                  = errors.New("jira: no jira.IssueScheme set")
 	ErrNoTransitionIDError                 = errors.New("jira: no transition id set")
 	ErrNoAttachmentIDError                 = errors.New("jira: no attachment id set")
 	ErrNoAttachmentNameError               = errors.New("jira: no attachment filename set")
@@ -156,4 +155,7 @@ var (
 	ErrNoAttachmentIdsError        = errors.New("sm: no attachment id's set")
 	ErrNoLabelsError               = errors.New("sm: no label names set")
 	ErrNoComponentsError           = errors.New("sm: no components set")
+
+	ErrNoCreateIssuesError = errors.New("jira: no issues payload set")
+	ErrNoIssueSchemeError  = errors.New("jira: no issue instance set")
 )

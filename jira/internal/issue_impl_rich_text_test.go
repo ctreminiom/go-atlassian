@@ -1,7 +1,6 @@
 package internal
 
 import (
-	"bytes"
 	"context"
 	"errors"
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
@@ -15,7 +14,7 @@ import (
 func Test_internalRichTextServiceImpl_Delete(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -43,12 +42,13 @@ func Test_internalRichTextServiceImpl_Delete(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/api/2/issue/DUMMY-1?deleteSubtasks=true",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -70,7 +70,7 @@ func Test_internalRichTextServiceImpl_Delete(t *testing.T) {
 				deleteSubTasks: true,
 			},
 			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
+				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
 			Err:     model.ErrNoIssueKeyOrIDError,
@@ -86,12 +86,13 @@ func Test_internalRichTextServiceImpl_Delete(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/api/2/issue/DUMMY-1?deleteSubtasks=true",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -135,7 +136,7 @@ func Test_internalRichTextServiceImpl_Delete(t *testing.T) {
 func Test_internalRichTextServiceImpl_Assign(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -153,7 +154,7 @@ func Test_internalRichTextServiceImpl_Assign(t *testing.T) {
 		Err     error
 	}{
 		{
-			name:   "when the api version is v2",
+			name:   "when the api version is v3",
 			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.TODO(),
@@ -162,19 +163,14 @@ func Test_internalRichTextServiceImpl_Assign(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&struct {
-						AccountID string "json:\"accountId\""
-					}{AccountID: "account-id-sample"}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"/rest/api/2/issue/DUMMY-1/assignee",
-					bytes.NewReader([]byte{})).
+					"",
+					map[string]interface{}{"accountId": "account-id-sample"}).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -195,7 +191,7 @@ func Test_internalRichTextServiceImpl_Assign(t *testing.T) {
 				accountId:    "account-id-sample",
 			},
 			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
+				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
 			Err:     model.ErrNoIssueKeyOrIDError,
@@ -210,7 +206,7 @@ func Test_internalRichTextServiceImpl_Assign(t *testing.T) {
 				accountId:    "",
 			},
 			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
+				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
 			Err:     model.ErrNoAccountIDError,
@@ -226,19 +222,14 @@ func Test_internalRichTextServiceImpl_Assign(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&struct {
-						AccountID string "json:\"accountId\""
-					}{AccountID: "account-id-sample"}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"/rest/api/2/issue/DUMMY-1/assignee",
-					bytes.NewReader([]byte{})).
+					"",
+					map[string]interface{}{"accountId": "account-id-sample"}).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -280,8 +271,17 @@ func Test_internalRichTextServiceImpl_Assign(t *testing.T) {
 
 func Test_internalRichTextServiceImpl_Notify(t *testing.T) {
 
+	optionsMocked := &model.IssueNotifyOptionsScheme{
+		HTMLBody: "The <strong>latest</strong> test results for this ticket are now available.",
+		Subject:  "SUBJECT EMAIL EXAMPLE",
+		To: &model.IssueNotifyToScheme{
+			Reporter: true,
+			Assignee: true,
+		},
+	}
+
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -305,35 +305,18 @@ func Test_internalRichTextServiceImpl_Notify(t *testing.T) {
 			args: args{
 				ctx:          context.TODO(),
 				issueKeyOrId: "DUMMY-1",
-				options: &model.IssueNotifyOptionsScheme{
-					HTMLBody: "The <strong>latest</strong> test results for this ticket are now available.",
-					Subject:  "SUBJECT EMAIL EXAMPLE",
-					To: &model.IssueNotifyToScheme{
-						Reporter: true,
-						Assignee: true,
-					},
-				},
+				options:      optionsMocked,
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&model.IssueNotifyOptionsScheme{
-						HTMLBody: "The <strong>latest</strong> test results for this ticket are now available.",
-						Subject:  "SUBJECT EMAIL EXAMPLE",
-						To: &model.IssueNotifyToScheme{
-							Reporter: true,
-							Assignee: true,
-						},
-					}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/issue/DUMMY-1/notify",
-					bytes.NewReader([]byte{})).
+					"",
+					optionsMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -353,7 +336,7 @@ func Test_internalRichTextServiceImpl_Notify(t *testing.T) {
 				issueKeyOrId: "",
 			},
 			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
+				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
 			Err:     model.ErrNoIssueKeyOrIDError,
@@ -365,35 +348,18 @@ func Test_internalRichTextServiceImpl_Notify(t *testing.T) {
 			args: args{
 				ctx:          context.TODO(),
 				issueKeyOrId: "DUMMY-1",
-				options: &model.IssueNotifyOptionsScheme{
-					HTMLBody: "The <strong>latest</strong> test results for this ticket are now available.",
-					Subject:  "SUBJECT EMAIL EXAMPLE",
-					To: &model.IssueNotifyToScheme{
-						Reporter: true,
-						Assignee: true,
-					},
-				},
+				options:      optionsMocked,
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&model.IssueNotifyOptionsScheme{
-						HTMLBody: "The <strong>latest</strong> test results for this ticket are now available.",
-						Subject:  "SUBJECT EMAIL EXAMPLE",
-						To: &model.IssueNotifyToScheme{
-							Reporter: true,
-							Assignee: true,
-						},
-					}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/issue/DUMMY-1/notify",
-					bytes.NewReader([]byte{})).
+					"",
+					optionsMocked).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -436,7 +402,7 @@ func Test_internalRichTextServiceImpl_Notify(t *testing.T) {
 func Test_internalRichTextServiceImpl_Transitions(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -462,12 +428,13 @@ func Test_internalRichTextServiceImpl_Transitions(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/issue/DUMMY-1/transitions",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -488,7 +455,7 @@ func Test_internalRichTextServiceImpl_Transitions(t *testing.T) {
 				issueKeyOrId: "",
 			},
 			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
+				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
 			Err:     model.ErrNoIssueKeyOrIDError,
@@ -503,12 +470,13 @@ func Test_internalRichTextServiceImpl_Transitions(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/issue/DUMMY-1/transitions",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -552,21 +520,38 @@ func Test_internalRichTextServiceImpl_Transitions(t *testing.T) {
 
 func Test_internalRichTextServiceImpl_Create(t *testing.T) {
 
-	customFields := &model.CustomFields{}
+	payloadMocked := &model.IssueSchemeV2{
+		Fields: &model.IssueFieldsSchemeV2{
+			Summary:   "New summary test",
+			Project:   &model.ProjectScheme{ID: "10000"},
+			IssueType: &model.IssueTypeScheme{Name: "Story"},
+		},
+	}
+
+	customFieldsMocked := &model.CustomFields{}
 
 	// Add a new custom field
-	err := customFields.Groups("customfield_10052", []string{"jira-administrators", "jira-administrators-system"})
+	err := customFieldsMocked.Groups("customfield_10052", []string{"jira-administrators", "jira-administrators-system"})
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	err = customFields.Number("customfield_10042", 1000.2222)
+	err = customFieldsMocked.Number("customfield_10042", 1000.2222)
 	if err != nil {
 		t.Fatal(err)
+	}
+
+	expectedPayloadWithCustomFields := map[string]interface{}{
+		"fields": map[string]interface{}{
+			"customfield_10042": 1000.2222,
+			"customfield_10052": []map[string]interface{}{map[string]interface{}{"name": "jira-administrators"}, map[string]interface{}{"name": "jira-administrators-system"}},
+			"issuetype":         map[string]interface{}{"name": "Story"},
+			"project":           map[string]interface{}{"id": "10000"},
+			"summary":           "New summary test"},
 	}
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -588,34 +573,20 @@ func Test_internalRichTextServiceImpl_Create(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx: context.TODO(),
-				payload: &model.IssueSchemeV2{
-					Fields: &model.IssueFieldsSchemeV2{
-						Summary:   "New summary test",
-						Project:   &model.ProjectScheme{ID: "10000"},
-						IssueType: &model.IssueTypeScheme{Name: "Story"},
-					},
-				},
-				customFields: customFields,
+				ctx:          context.TODO(),
+				payload:      payloadMocked,
+				customFields: customFieldsMocked,
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					map[string]interface{}{
-						"fields": map[string]interface{}{"customfield_10042": 1000.2222,
-							"customfield_10052": []map[string]interface{}{{"name": "jira-administrators"}, {"name": "jira-administrators-system"}},
-							"issuetype":         map[string]interface{}{"name": "Story"},
-							"project":           map[string]interface{}{"id": "10000"},
-							"summary":           "New summary test"}}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/issue",
-					bytes.NewReader([]byte{})).
+					"",
+					expectedPayloadWithCustomFields).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -631,33 +602,20 @@ func Test_internalRichTextServiceImpl_Create(t *testing.T) {
 			name:   "when the customfield are not provided",
 			fields: fields{version: "2"},
 			args: args{
-				ctx: context.TODO(),
-				payload: &model.IssueSchemeV2{
-					Fields: &model.IssueFieldsSchemeV2{
-						Summary:   "New summary test",
-						Project:   &model.ProjectScheme{ID: "10000"},
-						IssueType: &model.IssueTypeScheme{Name: "Story"},
-					},
-				},
+				ctx:          context.TODO(),
+				payload:      payloadMocked,
 				customFields: nil,
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&model.IssueSchemeV2{Fields: &model.IssueFieldsSchemeV2{
-						Summary:   "New summary test",
-						Project:   &model.ProjectScheme{ID: "10000"},
-						IssueType: &model.IssueTypeScheme{Name: "Story"},
-					}}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/issue",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -673,34 +631,20 @@ func Test_internalRichTextServiceImpl_Create(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "2"},
 			args: args{
-				ctx: context.TODO(),
-				payload: &model.IssueSchemeV2{
-					Fields: &model.IssueFieldsSchemeV2{
-						Summary:   "New summary test",
-						Project:   &model.ProjectScheme{ID: "10000"},
-						IssueType: &model.IssueTypeScheme{Name: "Story"},
-					},
-				},
-				customFields: customFields,
+				ctx:          context.TODO(),
+				payload:      payloadMocked,
+				customFields: customFieldsMocked,
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					map[string]interface{}{
-						"fields": map[string]interface{}{"customfield_10042": 1000.2222,
-							"customfield_10052": []map[string]interface{}{{"name": "jira-administrators"}, {"name": "jira-administrators-system"}},
-							"issuetype":         map[string]interface{}{"name": "Story"},
-							"project":           map[string]interface{}{"id": "10000"},
-							"summary":           "New summary test"}}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/issue",
-					bytes.NewReader([]byte{})).
+					"",
+					expectedPayloadWithCustomFields).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -743,21 +687,67 @@ func Test_internalRichTextServiceImpl_Create(t *testing.T) {
 
 func Test_internalRichTextServiceImpl_Creates(t *testing.T) {
 
-	customFields := &model.CustomFields{}
+	customFieldsMocked := &model.CustomFields{}
 
-	// Add a new custom field
-	err := customFields.Groups("customfield_10052", []string{"jira-administrators", "jira-administrators-system"})
+	err := customFieldsMocked.Groups("customfield_10052", []string{"jira-administrators", "jira-administrators-system"})
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	err = customFields.Number("customfield_10042", 1000.2222)
+	err = customFieldsMocked.Number("customfield_10042", 1000.2222)
 	if err != nil {
 		t.Fatal(err)
 	}
+
+	payloadMocked := []*model.IssueBulkSchemeV2{
+		{
+			Payload: &model.IssueSchemeV2{
+				Fields: &model.IssueFieldsSchemeV2{
+					Summary:   "New summary test",
+					Project:   &model.ProjectScheme{ID: "10000"},
+					IssueType: &model.IssueTypeScheme{Name: "Story"},
+				},
+			},
+			CustomFields: customFieldsMocked,
+		},
+
+		{
+			Payload:      nil,
+			CustomFields: nil,
+		},
+
+		{
+			Payload: &model.IssueSchemeV2{
+				Fields: &model.IssueFieldsSchemeV2{
+					Summary:   "New summary test #2",
+					Project:   &model.ProjectScheme{ID: "10000"},
+					IssueType: &model.IssueTypeScheme{Name: "Story"},
+				},
+			},
+			CustomFields: customFieldsMocked,
+		},
+	}
+
+	expectedBulkWithCustomFieldsPayload := map[string]interface{}{
+
+		"issueUpdates": []map[string]interface{}{map[string]interface{}{
+
+			"fields": map[string]interface{}{
+				"customfield_10042": 1000.2222,
+				"customfield_10052": []map[string]interface{}{map[string]interface{}{"name": "jira-administrators"}, map[string]interface{}{"name": "jira-administrators-system"}},
+				"issuetype":         map[string]interface{}{"name": "Story"},
+				"project":           map[string]interface{}{"id": "10000"},
+				"summary":           "New summary test"}}, map[string]interface{}{
+
+			"fields": map[string]interface{}{
+				"customfield_10042": 1000.2222,
+				"customfield_10052": []map[string]interface{}{map[string]interface{}{"name": "jira-administrators"}, map[string]interface{}{"name": "jira-administrators-system"}},
+				"issuetype":         map[string]interface{}{"name": "Story"},
+				"project":           map[string]interface{}{"id": "10000"},
+				"summary":           "New summary test #2"}}}}
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -778,62 +768,19 @@ func Test_internalRichTextServiceImpl_Creates(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx: context.TODO(),
-				payload: []*model.IssueBulkSchemeV2{
-					{
-						Payload: &model.IssueSchemeV2{
-							Fields: &model.IssueFieldsSchemeV2{
-								Summary:   "New summary test",
-								Project:   &model.ProjectScheme{ID: "10000"},
-								IssueType: &model.IssueTypeScheme{Name: "Story"},
-							},
-						},
-						CustomFields: customFields,
-					},
-
-					{
-						Payload:      nil,
-						CustomFields: nil,
-					},
-
-					{
-						Payload: &model.IssueSchemeV2{
-							Fields: &model.IssueFieldsSchemeV2{
-								Summary:   "New summary test #2",
-								Project:   &model.ProjectScheme{ID: "10000"},
-								IssueType: &model.IssueTypeScheme{Name: "Story"},
-							},
-						},
-						CustomFields: customFields,
-					},
-				},
+				ctx:     context.TODO(),
+				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&map[string]interface{}{"issueUpdates": []map[string]interface{}{{
-						"fields": map[string]interface{}{
-							"customfield_10042": 1000.2222,
-							"customfield_10052": []map[string]interface{}{{"name": "jira-administrators"}, {"name": "jira-administrators-system"}},
-							"issuetype":         map[string]interface{}{"name": "Story"},
-							"project":           map[string]interface{}{"id": "10000"},
-							"summary":           "New summary test"}},
-
-						{"fields": map[string]interface{}{
-							"customfield_10042": 1000.2222,
-							"customfield_10052": []map[string]interface{}{{"name": "jira-administrators"}, {"name": "jira-administrators-system"}},
-							"issuetype":         map[string]interface{}{"name": "Story"},
-							"project":           map[string]interface{}{"id": "10000"},
-							"summary":           "New summary test #2"}}}}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/issue/bulk",
-					bytes.NewReader([]byte{})).
+					"",
+					expectedBulkWithCustomFieldsPayload).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -853,72 +800,29 @@ func Test_internalRichTextServiceImpl_Creates(t *testing.T) {
 				payload: nil,
 			},
 			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
+				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
-			Err:     errors.New("error, please provide a valid []*IssueBulkScheme slice of pointers"),
+			Err:     model.ErrNoCreateIssuesError,
 		},
 
 		{
 			name:   "when the http request cannot be created",
 			fields: fields{version: "2"},
 			args: args{
-				ctx: context.TODO(),
-				payload: []*model.IssueBulkSchemeV2{
-					{
-						Payload: &model.IssueSchemeV2{
-							Fields: &model.IssueFieldsSchemeV2{
-								Summary:   "New summary test",
-								Project:   &model.ProjectScheme{ID: "10000"},
-								IssueType: &model.IssueTypeScheme{Name: "Story"},
-							},
-						},
-						CustomFields: customFields,
-					},
-
-					{
-						Payload:      nil,
-						CustomFields: nil,
-					},
-
-					{
-						Payload: &model.IssueSchemeV2{
-							Fields: &model.IssueFieldsSchemeV2{
-								Summary:   "New summary test #2",
-								Project:   &model.ProjectScheme{ID: "10000"},
-								IssueType: &model.IssueTypeScheme{Name: "Story"},
-							},
-						},
-						CustomFields: customFields,
-					},
-				},
+				ctx:     context.TODO(),
+				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&map[string]interface{}{"issueUpdates": []map[string]interface{}{{
-						"fields": map[string]interface{}{
-							"customfield_10042": 1000.2222,
-							"customfield_10052": []map[string]interface{}{{"name": "jira-administrators"}, {"name": "jira-administrators-system"}},
-							"issuetype":         map[string]interface{}{"name": "Story"},
-							"project":           map[string]interface{}{"id": "10000"},
-							"summary":           "New summary test"}},
-
-						{"fields": map[string]interface{}{
-							"customfield_10042": 1000.2222,
-							"customfield_10052": []map[string]interface{}{{"name": "jira-administrators"}, {"name": "jira-administrators-system"}},
-							"issuetype":         map[string]interface{}{"name": "Story"},
-							"project":           map[string]interface{}{"id": "10000"},
-							"summary":           "New summary test #2"}}}}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/issue/bulk",
-					bytes.NewReader([]byte{})).
+					"",
+					expectedBulkWithCustomFieldsPayload).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -975,7 +879,7 @@ func Test_internalRichTextServiceImpl_Get(t *testing.T) {
 	}
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -1004,12 +908,13 @@ func Test_internalRichTextServiceImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/issue/DUMMY-1?expand=operations%2Cchangelogts&fields=summary%2Cstatus",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -1032,7 +937,7 @@ func Test_internalRichTextServiceImpl_Get(t *testing.T) {
 				expand:       []string{"operations", "changelogts"},
 			},
 			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
+				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
 			Err:     model.ErrNoIssueKeyOrIDError,
@@ -1049,12 +954,13 @@ func Test_internalRichTextServiceImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/issue/DUMMY-1?expand=operations%2Cchangelogts&fields=summary%2Cstatus",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -1099,28 +1005,64 @@ func Test_internalRichTextServiceImpl_Get(t *testing.T) {
 
 func Test_internalRichTextServiceImpl_Move(t *testing.T) {
 
-	customFields := &model.CustomFields{}
+	customFieldsMocked := &model.CustomFields{}
 
-	err := customFields.Groups("customfield_10052", []string{"jira-administrators", "jira-administrators-system"})
+	err := customFieldsMocked.Groups("customfield_10052", []string{"jira-administrators", "jira-administrators-system"})
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	err = customFields.Number("customfield_10042", 1000.2222)
+	err = customFieldsMocked.Number("customfield_10042", 1000.2222)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	operations := &model.UpdateOperations{}
-	err = operations.AddArrayOperation("labels", map[string]string{
+	operationsMocked := &model.UpdateOperations{}
+	err = operationsMocked.AddArrayOperation("labels", map[string]string{
 		"triaged": "remove",
 	})
-	if err != nil {
-		t.Fatal(err)
-	}
+
+	expectedPayloadWithCustomFieldsAndOperations := map[string]interface{}{
+
+		"fields": map[string]interface{}{
+			"customfield_10042": 1000.2222,
+			"customfield_10052": []map[string]interface{}{map[string]interface{}{
+				"name": "jira-administrators"}, map[string]interface{}{
+				"name": "jira-administrators-system"}},
+
+			"issuetype": map[string]interface{}{"name": "Story"},
+			"project":   map[string]interface{}{"id": "10000"},
+			"summary":   "New summary test"},
+
+		"update": map[string]interface{}{
+			"labels": []map[string]interface{}{map[string]interface{}{
+				"remove": "triaged"}}}}
+
+	expectedPayloadWithCustomfields := map[string]interface{}{
+		"fields": map[string]interface{}{
+			"customfield_10042": 1000.2222,
+			"customfield_10052": []map[string]interface{}{map[string]interface{}{
+				"name": "jira-administrators"}, map[string]interface{}{
+				"name": "jira-administrators-system"}},
+
+			"issuetype": map[string]interface{}{"name": "Story"},
+			"project":   map[string]interface{}{"id": "10000"},
+			"summary":   "New summary test"}}
+
+	expectedPayloadWithOperations := map[string]interface{}{
+		"fields": map[string]interface{}{
+			"issuetype": map[string]interface{}{"name": "Story"},
+			"project":   map[string]interface{}{"id": "10000"},
+			"summary":   "New summary test"},
+
+		"update": map[string]interface{}{
+			"labels": []map[string]interface{}{map[string]interface{}{
+				"remove": "triaged"}}}}
+
+	expectedPayloadWithNoOptions := map[string]interface{}{"transition": map[string]interface{}{"id": "10001"}}
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -1139,7 +1081,7 @@ func Test_internalRichTextServiceImpl_Move(t *testing.T) {
 		Err     error
 	}{
 		{
-			name:   "when the api version is v2",
+			name:   "when the api version is v3",
 			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.TODO(),
@@ -1153,32 +1095,20 @@ func Test_internalRichTextServiceImpl_Move(t *testing.T) {
 							IssueType: &model.IssueTypeScheme{Name: "Story"},
 						},
 					},
-					CustomFields: customFields,
-					Operations:   operations,
+					CustomFields: customFieldsMocked,
+					Operations:   operationsMocked,
 				},
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&map[string]interface{}{
-						"fields": map[string]interface{}{
-							"customfield_10042": 1000.2222,
-							"customfield_10052": []map[string]interface{}{{"name": "jira-administrators"}, {"name": "jira-administrators-system"}},
-							"issuetype":         map[string]interface{}{"name": "Story"},
-							"project":           map[string]interface{}{"id": "10000"},
-							"summary":           "New summary test"},
-						"transition": map[string]interface{}{"id": "10001"},
-						"update": map[string]interface{}{
-							"labels": []map[string]interface{}{{"remove": "triaged"}}}}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/issue/DUMMY-1/transitions",
-					bytes.NewReader([]byte{})).
+					"",
+					expectedPayloadWithCustomFieldsAndOperations).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -1188,6 +1118,22 @@ func Test_internalRichTextServiceImpl_Move(t *testing.T) {
 
 				fields.c = client
 			},
+		},
+
+		{
+			name:   "when the options are provided and the fields are not provided",
+			fields: fields{version: "2"},
+			args: args{
+				ctx:          context.TODO(),
+				issueKeyOrId: "DUMMY-1",
+				transitionId: "10001",
+				options: &model.IssueMoveOptionsV2{
+					CustomFields: customFieldsMocked,
+					Operations:   operationsMocked,
+				},
+			},
+			wantErr: true,
+			Err:     model.ErrNoIssueSchemeError,
 		},
 
 		{
@@ -1205,30 +1151,20 @@ func Test_internalRichTextServiceImpl_Move(t *testing.T) {
 							IssueType: &model.IssueTypeScheme{Name: "Story"},
 						},
 					},
-					CustomFields: customFields,
+					CustomFields: customFieldsMocked,
 					Operations:   nil,
 				},
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&map[string]interface{}{
-						"fields": map[string]interface{}{
-							"customfield_10042": 1000.2222,
-							"customfield_10052": []map[string]interface{}{{"name": "jira-administrators"}, {"name": "jira-administrators-system"}},
-							"issuetype":         map[string]interface{}{"name": "Story"},
-							"project":           map[string]interface{}{"id": "10000"},
-							"summary":           "New summary test"},
-						"transition": map[string]interface{}{"id": "10001"}}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/issue/DUMMY-1/transitions",
-					bytes.NewReader([]byte{})).
+					"",
+					expectedPayloadWithCustomfields).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -1256,29 +1192,19 @@ func Test_internalRichTextServiceImpl_Move(t *testing.T) {
 						},
 					},
 					CustomFields: nil,
-					Operations:   operations,
+					Operations:   operationsMocked,
 				},
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&map[string]interface{}{
-						"fields": map[string]interface{}{
-							"issuetype": map[string]interface{}{"name": "Story"},
-							"project":   map[string]interface{}{"id": "10000"},
-							"summary":   "New summary test"},
-						"transition": map[string]interface{}{"id": "10001"},
-						"update": map[string]interface{}{
-							"labels": []map[string]interface{}{{"remove": "triaged"}}}}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/issue/DUMMY-1/transitions",
-					bytes.NewReader([]byte{})).
+					"",
+					expectedPayloadWithOperations).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -1301,18 +1227,14 @@ func Test_internalRichTextServiceImpl_Move(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&map[string]interface{}{
-						"transition": map[string]interface{}{"id": "10001"}}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/issue/DUMMY-1/transitions",
-					bytes.NewReader([]byte{})).
+					"",
+					expectedPayloadWithNoOptions).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -1339,12 +1261,12 @@ func Test_internalRichTextServiceImpl_Move(t *testing.T) {
 							IssueType: &model.IssueTypeScheme{Name: "Story"},
 						},
 					},
-					CustomFields: customFields,
-					Operations:   operations,
+					CustomFields: customFieldsMocked,
+					Operations:   operationsMocked,
 				},
 			},
 			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
+				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
 			Err:     model.ErrNoIssueKeyOrIDError,
@@ -1365,12 +1287,12 @@ func Test_internalRichTextServiceImpl_Move(t *testing.T) {
 							IssueType: &model.IssueTypeScheme{Name: "Story"},
 						},
 					},
-					CustomFields: customFields,
-					Operations:   operations,
+					CustomFields: customFieldsMocked,
+					Operations:   operationsMocked,
 				},
 			},
 			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
+				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
 			Err:     model.ErrNoTransitionIDError,
@@ -1391,32 +1313,20 @@ func Test_internalRichTextServiceImpl_Move(t *testing.T) {
 							IssueType: &model.IssueTypeScheme{Name: "Story"},
 						},
 					},
-					CustomFields: customFields,
-					Operations:   operations,
+					CustomFields: customFieldsMocked,
+					Operations:   operationsMocked,
 				},
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&map[string]interface{}{
-						"fields": map[string]interface{}{
-							"customfield_10042": 1000.2222,
-							"customfield_10052": []map[string]interface{}{{"name": "jira-administrators"}, {"name": "jira-administrators-system"}},
-							"issuetype":         map[string]interface{}{"name": "Story"},
-							"project":           map[string]interface{}{"id": "10000"},
-							"summary":           "New summary test"},
-						"transition": map[string]interface{}{"id": "10001"},
-						"update": map[string]interface{}{
-							"labels": []map[string]interface{}{{"remove": "triaged"}}}}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/issue/DUMMY-1/transitions",
-					bytes.NewReader([]byte{})).
+					"",
+					expectedPayloadWithCustomFieldsAndOperations).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -1459,14 +1369,14 @@ func Test_internalRichTextServiceImpl_Move(t *testing.T) {
 
 func Test_internalRichTextServiceImpl_Update(t *testing.T) {
 
-	customFields := &model.CustomFields{}
+	customFieldsMocked := &model.CustomFields{}
 
-	err := customFields.Groups("customfield_10052", []string{"jira-administrators", "jira-administrators-system"})
+	err := customFieldsMocked.Groups("customfield_10052", []string{"jira-administrators", "jira-administrators-system"})
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	err = customFields.Number("customfield_10042", 1000.2222)
+	err = customFieldsMocked.Number("customfield_10042", 1000.2222)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -1479,8 +1389,32 @@ func Test_internalRichTextServiceImpl_Update(t *testing.T) {
 		t.Fatal(err)
 	}
 
+	expectedPayloadWithCustomFieldsAndOperations := map[string]interface{}{
+		"fields": map[string]interface{}{
+			"customfield_10042": 1000.2222,
+			"customfield_10052": []map[string]interface{}{map[string]interface{}{
+				"name": "jira-administrators"}, map[string]interface{}{
+				"name": "jira-administrators-system"}}, "summary": "New summary test"},
+		"update": map[string]interface{}{
+			"labels": []map[string]interface{}{map[string]interface{}{
+				"remove": "triaged"}}}}
+
+	expectedPayloadWithCustomfields := map[string]interface{}{
+		"fields": map[string]interface{}{
+			"customfield_10042": 1000.2222,
+			"customfield_10052": []map[string]interface{}{map[string]interface{}{
+				"name": "jira-administrators"}, map[string]interface{}{
+				"name": "jira-administrators-system"}},
+			"summary": "New summary test"}}
+
+	expectedPayloadWithOperations := map[string]interface{}{
+		"fields": map[string]interface{}{
+			"summary": "New summary test"},
+		"update": map[string]interface{}{
+			"labels": []map[string]interface{}{map[string]interface{}{"remove": "triaged"}}}}
+
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -1502,7 +1436,7 @@ func Test_internalRichTextServiceImpl_Update(t *testing.T) {
 		Err     error
 	}{
 		{
-			name:   "when the api version is v2",
+			name:   "when the api version is v3",
 			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.TODO(),
@@ -1513,28 +1447,19 @@ func Test_internalRichTextServiceImpl_Update(t *testing.T) {
 						Summary: "New summary test",
 					},
 				},
-				customFields: customFields,
+				customFields: customFieldsMocked,
 				operations:   operations,
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&map[string]interface{}{
-						"fields": map[string]interface{}{
-							"customfield_10042": 1000.2222,
-							"customfield_10052": []map[string]interface{}{{"name": "jira-administrators"}, {"name": "jira-administrators-system"}},
-							"summary":           "New summary test"},
-						"update": map[string]interface{}{
-							"labels": []map[string]interface{}{{"remove": "triaged"}}}}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/2/issue/DUMMY-1?notifyUsers=true",
-					bytes.NewReader([]byte{})).
+					"",
+					expectedPayloadWithCustomFieldsAndOperations).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -1558,11 +1483,11 @@ func Test_internalRichTextServiceImpl_Update(t *testing.T) {
 						Summary: "New summary test",
 					},
 				},
-				customFields: customFields,
+				customFields: customFieldsMocked,
 				operations:   operations,
 			},
 			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
+				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
 			Err:     model.ErrNoIssueKeyOrIDError,
@@ -1580,28 +1505,19 @@ func Test_internalRichTextServiceImpl_Update(t *testing.T) {
 						Summary: "New summary test",
 					},
 				},
-				customFields: customFields,
+				customFields: customFieldsMocked,
 				operations:   operations,
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&map[string]interface{}{
-						"fields": map[string]interface{}{
-							"customfield_10042": 1000.2222,
-							"customfield_10052": []map[string]interface{}{{"name": "jira-administrators"}, {"name": "jira-administrators-system"}},
-							"summary":           "New summary test"},
-						"update": map[string]interface{}{
-							"labels": []map[string]interface{}{{"remove": "triaged"}}}}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/2/issue/DUMMY-1?notifyUsers=true",
-					bytes.NewReader([]byte{})).
+					"",
+					expectedPayloadWithCustomFieldsAndOperations).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -1622,26 +1538,19 @@ func Test_internalRichTextServiceImpl_Update(t *testing.T) {
 						Summary: "New summary test",
 					},
 				},
-				customFields: customFields,
+				customFields: customFieldsMocked,
 				operations:   nil,
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&map[string]interface{}{
-						"fields": map[string]interface{}{
-							"customfield_10042": 1000.2222,
-							"customfield_10052": []map[string]interface{}{{"name": "jira-administrators"}, {"name": "jira-administrators-system"}},
-							"summary":           "New summary test"}}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/2/issue/DUMMY-1?notifyUsers=true",
-					bytes.NewReader([]byte{})).
+					"",
+					expectedPayloadWithCustomfields).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -1670,21 +1579,14 @@ func Test_internalRichTextServiceImpl_Update(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&map[string]interface{}{
-						"fields": map[string]interface{}{
-							"summary": "New summary test"},
-						"update": map[string]interface{}{
-							"labels": []map[string]interface{}{{"remove": "triaged"}}}}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/2/issue/DUMMY-1?notifyUsers=true",
-					bytes.NewReader([]byte{})).
+					"",
+					expectedPayloadWithOperations).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -1713,21 +1615,18 @@ func Test_internalRichTextServiceImpl_Update(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&model.IssueSchemeV2{
-						Fields: &model.IssueFieldsSchemeV2{
-							Summary: "New summary test",
-						},
-					}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/2/issue/DUMMY-1?notifyUsers=true",
-					bytes.NewReader([]byte{})).
+					"",
+					&model.IssueSchemeV2{
+						Fields: &model.IssueFieldsSchemeV2{
+							Summary: "New summary test",
+						},
+					}).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",

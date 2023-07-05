@@ -1,7 +1,6 @@
 package internal
 
 import (
-	"bytes"
 	"context"
 	"errors"
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
@@ -15,7 +14,7 @@ import (
 func Test_internalIssueFieldConfigServiceImpl_Gets(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -46,12 +45,13 @@ func Test_internalIssueFieldConfigServiceImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/fieldconfiguration?id=10000&id=100001&isDefault=false&maxResults=50&startAt=50",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -79,12 +79,13 @@ func Test_internalIssueFieldConfigServiceImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/fieldconfiguration?id=10000&id=100001&isDefault=false&maxResults=50&startAt=50",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -112,12 +113,13 @@ func Test_internalIssueFieldConfigServiceImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/fieldconfiguration?id=10000&id=100001&isDefault=false&maxResults=50&startAt=50",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http created"))
 
@@ -163,8 +165,15 @@ func Test_internalIssueFieldConfigServiceImpl_Gets(t *testing.T) {
 
 func Test_internalIssueFieldConfigServiceImpl_Create(t *testing.T) {
 
+	payloadWithDescriptionMocked := map[string]interface{}{
+		"description": "description sample",
+		"name":        "DUMMY Field Configuration Scheme",
+	}
+
+	payloadMocked := map[string]interface{}{"name": "DUMMY Field Configuration Scheme"}
+
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -191,22 +200,14 @@ func Test_internalIssueFieldConfigServiceImpl_Create(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&struct {
-						Name        string "json:\"name\""
-						Description string "json:\"description,omitempty\""
-					}{
-						Name:        "DUMMY Field Configuration Scheme",
-						Description: "description sample"}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/3/fieldconfiguration",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadWithDescriptionMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -231,22 +232,46 @@ func Test_internalIssueFieldConfigServiceImpl_Create(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&struct {
-						Name        string "json:\"name\""
-						Description string "json:\"description,omitempty\""
-					}{
-						Name:        "DUMMY Field Configuration Scheme",
-						Description: "description sample"}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/fieldconfiguration",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadWithDescriptionMocked).
+					Return(&http.Request{}, nil)
+
+				client.On("Call",
+					&http.Request{},
+					&model.FieldConfigurationScheme{}).
+					Return(&model.ResponseScheme{}, nil)
+
+				fields.c = client
+
+			},
+			wantErr: false,
+			Err:     nil,
+		},
+
+		{
+			name:   "when the description is not provided",
+			fields: fields{version: "2"},
+			args: args{
+				ctx:         context.TODO(),
+				name:        "DUMMY Field Configuration Scheme",
+				description: "",
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewConnector(t)
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodPost,
+					"rest/api/2/fieldconfiguration",
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -283,22 +308,14 @@ func Test_internalIssueFieldConfigServiceImpl_Create(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&struct {
-						Name        string "json:\"name\""
-						Description string "json:\"description,omitempty\""
-					}{
-						Name:        "DUMMY Field Configuration Scheme",
-						Description: "description sample"}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/3/fieldconfiguration",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadWithDescriptionMocked).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -342,8 +359,15 @@ func Test_internalIssueFieldConfigServiceImpl_Create(t *testing.T) {
 
 func Test_internalIssueFieldConfigServiceImpl_Update(t *testing.T) {
 
+	payloadWithDescriptionMocked := map[string]interface{}{
+		"description": "description sample",
+		"name":        "DUMMY Field Configuration Scheme",
+	}
+
+	payloadMocked := map[string]interface{}{"name": "DUMMY Field Configuration Scheme"}
+
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -372,22 +396,14 @@ func Test_internalIssueFieldConfigServiceImpl_Update(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&struct {
-						Name        string "json:\"name\""
-						Description string "json:\"description,omitempty\""
-					}{
-						Name:        "DUMMY Field Configuration Scheme",
-						Description: "description sample"}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/3/fieldconfiguration/1001",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadWithDescriptionMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -413,22 +429,47 @@ func Test_internalIssueFieldConfigServiceImpl_Update(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&struct {
-						Name        string "json:\"name\""
-						Description string "json:\"description,omitempty\""
-					}{
-						Name:        "DUMMY Field Configuration Scheme",
-						Description: "description sample"}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/2/fieldconfiguration/1001",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadWithDescriptionMocked).
+					Return(&http.Request{}, nil)
+
+				client.On("Call",
+					&http.Request{},
+					nil).
+					Return(&model.ResponseScheme{}, nil)
+
+				fields.c = client
+
+			},
+			wantErr: false,
+			Err:     nil,
+		},
+
+		{
+			name:   "when the description is not provided",
+			fields: fields{version: "2"},
+			args: args{
+				ctx:         context.TODO(),
+				id:          1001,
+				name:        "DUMMY Field Configuration Scheme",
+				description: "",
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewConnector(t)
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodPut,
+					"rest/api/2/fieldconfiguration/1001",
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -480,22 +521,14 @@ func Test_internalIssueFieldConfigServiceImpl_Update(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&struct {
-						Name        string "json:\"name\""
-						Description string "json:\"description,omitempty\""
-					}{
-						Name:        "DUMMY Field Configuration Scheme",
-						Description: "description sample"}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/3/fieldconfiguration/1001",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadWithDescriptionMocked).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -540,7 +573,7 @@ func Test_internalIssueFieldConfigServiceImpl_Update(t *testing.T) {
 func Test_internalIssueFieldConfigServiceImpl_Delete(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -566,12 +599,13 @@ func Test_internalIssueFieldConfigServiceImpl_Delete(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/api/3/fieldconfiguration/1001",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -596,12 +630,13 @@ func Test_internalIssueFieldConfigServiceImpl_Delete(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/api/2/fieldconfiguration/1001",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -637,12 +672,13 @@ func Test_internalIssueFieldConfigServiceImpl_Delete(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/api/3/fieldconfiguration/1001",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -686,7 +722,7 @@ func Test_internalIssueFieldConfigServiceImpl_Delete(t *testing.T) {
 func TestNewIssueFieldConfigurationService(t *testing.T) {
 
 	type args struct {
-		client  service.Client
+		client  service.Connector
 		version string
 	}
 

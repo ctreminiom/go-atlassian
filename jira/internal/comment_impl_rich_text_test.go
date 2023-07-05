@@ -1,7 +1,6 @@
 package internal
 
 import (
-	"bytes"
 	"context"
 	"errors"
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
@@ -15,7 +14,7 @@ import (
 func Test_internalRichTextCommentImpl_Gets(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -49,12 +48,13 @@ func Test_internalRichTextCommentImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/issue/DUMMY-1/comment?expand=renderedBody&maxResults=50&orderBy=id&startAt=0",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -98,12 +98,13 @@ func Test_internalRichTextCommentImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/issue/DUMMY-1/comment?expand=renderedBody&maxResults=50&orderBy=id&startAt=0",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -150,7 +151,7 @@ func Test_internalRichTextCommentImpl_Gets(t *testing.T) {
 func Test_internalRichTextCommentImpl_Get(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -177,12 +178,13 @@ func Test_internalRichTextCommentImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/issue/DUMMY-1/comment/10001",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -230,12 +232,13 @@ func Test_internalRichTextCommentImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/issue/DUMMY-1/comment/10001",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -281,7 +284,7 @@ func Test_internalRichTextCommentImpl_Get(t *testing.T) {
 func Test_internalRichTextCommentImpl_Delete(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -308,12 +311,13 @@ func Test_internalRichTextCommentImpl_Delete(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/api/2/issue/DUMMY-1/comment/10001",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -361,12 +365,13 @@ func Test_internalRichTextCommentImpl_Delete(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/api/2/issue/DUMMY-1/comment/10001",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -419,7 +424,7 @@ func Test_internalRichTextCommentImpl_Add(t *testing.T) {
 	}
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -449,17 +454,14 @@ func Test_internalRichTextCommentImpl_Add(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/issue/DUMMY-1/comment?expand=body",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -488,29 +490,6 @@ func Test_internalRichTextCommentImpl_Add(t *testing.T) {
 		},
 
 		{
-			name:   "when the payload is not provided",
-			fields: fields{version: "2"},
-			args: args{
-				ctx:          context.TODO(),
-				issueKeyOrId: "DUMMY-1",
-				payload:      nil,
-				expand:       []string{"body"},
-			},
-			on: func(fields *fields) {
-
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					(*model.CommentPayloadSchemeV2)(nil)).
-					Return(bytes.NewReader([]byte{}), model.ErrNilPayloadError)
-				fields.c = client
-
-			},
-			wantErr: true,
-			Err:     model.ErrNilPayloadError,
-		},
-
-		{
 			name:   "when the http request cannot be created",
 			fields: fields{version: "2"},
 			args: args{
@@ -521,17 +500,14 @@ func Test_internalRichTextCommentImpl_Add(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/issue/DUMMY-1/comment?expand=body",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client

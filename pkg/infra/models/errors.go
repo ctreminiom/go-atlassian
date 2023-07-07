@@ -116,6 +116,7 @@ var (
 	ErrNoScreenTabNameError                = errors.New("jira: no screen tab name set")
 	ErrNoAccountSliceError                 = errors.New("jira: no account id's set")
 	ErrNoProjectKeySliceError              = errors.New("jira: no project key's set")
+	ErrNoProjectIDsError                   = errors.New("jira: no project id's set")
 	ErrNoWorkflowIDError                   = errors.New("jira: no workflow id set")
 	ErrNoWorkflowSchemeIDError             = errors.New("jira: no workflow scheme id set")
 	ErrNoScreenIDError                     = errors.New("jira: no screen id set")

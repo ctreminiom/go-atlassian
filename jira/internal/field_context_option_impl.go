@@ -78,7 +78,7 @@ func (i *IssueFieldContextOptionService) Delete(ctx context.Context, fieldId str
 //
 // PUT /rest/api/{2-3}/field/{fieldId}/context/{contextId}/option/move
 //
-// TODO: The documentation needs to be created, raise a ticket here: https://github.com/ctreminiom/go-atlassian/issues
+// https://docs.go-atlassian.io/jira-software-cloud/issues/fields/context/option#reorder-custom-field-options
 func (i *IssueFieldContextOptionService) Order(ctx context.Context, fieldId string, contextId int, payload *model.OrderFieldOptionPayloadScheme) (*model.ResponseScheme, error) {
 	return i.internalClient.Order(ctx, fieldId, contextId, payload)
 }

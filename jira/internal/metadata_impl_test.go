@@ -15,7 +15,7 @@ import (
 func Test_internalMetadataImpl_Get(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -46,12 +46,13 @@ func Test_internalMetadataImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/issue/DUMMY-4/editmeta?overrideEditableFlag=false&overrideScreenSecurity=true",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -77,12 +78,13 @@ func Test_internalMetadataImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/issue/DUMMY-4/editmeta?overrideEditableFlag=false&overrideScreenSecurity=true",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -122,12 +124,13 @@ func Test_internalMetadataImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/issue/DUMMY-4/editmeta?overrideEditableFlag=false&overrideScreenSecurity=true",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error"))
 
@@ -174,7 +177,7 @@ func Test_internalMetadataImpl_Get(t *testing.T) {
 func Test_internalMetadataImpl_Create(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -207,12 +210,13 @@ func Test_internalMetadataImpl_Create(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/issue/createmeta?expand=projects.issuetypes.fields&issuetypeIds=1&issuetypeIds=2&issuetypeNames=Story&issuetypeNames=Bug&projectIds=1002&projectKeys=DUMMY",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -242,12 +246,13 @@ func Test_internalMetadataImpl_Create(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/issue/createmeta?expand=projects.issuetypes.fields&issuetypeIds=1&issuetypeIds=2&issuetypeNames=Story&issuetypeNames=Bug&projectIds=1002&projectKeys=DUMMY",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -277,12 +282,13 @@ func Test_internalMetadataImpl_Create(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/issue/createmeta?expand=projects.issuetypes.fields&issuetypeIds=1&issuetypeIds=2&issuetypeNames=Story&issuetypeNames=Bug&projectIds=1002&projectKeys=DUMMY",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error"))
 
@@ -328,7 +334,7 @@ func Test_internalMetadataImpl_Create(t *testing.T) {
 func Test_NewMetadataService(t *testing.T) {
 
 	type args struct {
-		client  service.Client
+		client  service.Connector
 		version string
 	}
 

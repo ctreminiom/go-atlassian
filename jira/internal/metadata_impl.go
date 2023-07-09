@@ -11,7 +11,7 @@ import (
 	"net/url"
 )
 
-func NewMetadataService(client service.Client, version string) (*MetadataService, error) {
+func NewMetadataService(client service.Connector, version string) (*MetadataService, error) {
 
 	if version == "" {
 		return nil, model.ErrNoVersionProvided
@@ -49,7 +49,7 @@ func (m *MetadataService) Create(ctx context.Context, opts *model.IssueMetadataC
 }
 
 type internalMetadataImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -65,7 +65,7 @@ func (i *internalMetadataImpl) Get(ctx context.Context, issueKeyOrId string, ove
 
 	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/editmeta?%v", i.version, issueKeyOrId, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return gjson.Result{}, nil, err
 	}
@@ -104,7 +104,7 @@ func (i *internalMetadataImpl) Create(ctx context.Context, opts *model.IssueMeta
 
 	endpoint := fmt.Sprintf("rest/api/%v/issue/createmeta?%v", i.version, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return gjson.Result{}, nil, err
 	}

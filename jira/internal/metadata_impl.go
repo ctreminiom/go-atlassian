@@ -32,7 +32,7 @@ type MetadataService struct {
 //
 // GET /rest/api/{2-3}/issue/{issueIdOrKey}/editmeta
 //
-// TODO: the documentation needs to be created
+// https://docs.go-atlassian.io/jira-software-cloud/issues/metadata#get-edit-issue-metadata
 func (m *MetadataService) Get(ctx context.Context, issueKeyOrId string, overrideScreenSecurity, overrideEditableFlag bool) (gjson.Result, *model.ResponseScheme, error) {
 	return m.internalClient.Get(ctx, issueKeyOrId, overrideScreenSecurity, overrideEditableFlag)
 }
@@ -43,7 +43,7 @@ func (m *MetadataService) Get(ctx context.Context, issueKeyOrId string, override
 //
 // GET /rest/api/{2-3}/issue/createmeta
 //
-// TODO: the documentation needs to be created
+// https://docs.go-atlassian.io/jira-software-cloud/issues/metadata#get-create-issue-metadata
 func (m *MetadataService) Create(ctx context.Context, opts *model.IssueMetadataCreateOptions) (gjson.Result, *model.ResponseScheme, error) {
 	return m.internalClient.Create(ctx, opts)
 }

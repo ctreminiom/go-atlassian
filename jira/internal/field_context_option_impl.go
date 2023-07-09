@@ -11,7 +11,7 @@ import (
 	"strconv"
 )
 
-func NewIssueFieldContextOptionService(client service.Client, version string) (*IssueFieldContextOptionService, error) {
+func NewIssueFieldContextOptionService(client service.Connector, version string) (*IssueFieldContextOptionService, error) {
 
 	if version == "" {
 		return nil, model.ErrNoVersionProvided
@@ -84,7 +84,7 @@ func (i *IssueFieldContextOptionService) Order(ctx context.Context, fieldId stri
 }
 
 type internalIssueFieldContextOptionServiceImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -108,7 +108,7 @@ func (i *internalIssueFieldContextOptionServiceImpl) Gets(ctx context.Context, f
 
 	endpoint := fmt.Sprintf("rest/api/%v/field/%v/context/%v/option?%v", i.version, fieldId, contextId, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -128,14 +128,13 @@ func (i *internalIssueFieldContextOptionServiceImpl) Create(ctx context.Context,
 		return nil, nil, model.ErrNoFieldIDError
 	}
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
+	if contextId == 0 {
+		return nil, nil, model.ErrNoFieldContextIDError
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/field/%v/context/%v/option", i.version, fieldId, contextId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -155,14 +154,13 @@ func (i *internalIssueFieldContextOptionServiceImpl) Update(ctx context.Context,
 		return nil, nil, model.ErrNoFieldIDError
 	}
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
+	if contextId == 0 {
+		return nil, nil, model.ErrNoFieldContextIDError
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/field/%v/context/%v/option", i.version, fieldId, contextId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -192,7 +190,7 @@ func (i *internalIssueFieldContextOptionServiceImpl) Delete(ctx context.Context,
 
 	endpoint := fmt.Sprintf("rest/api/%v/field/%v/context/%v/option/%v", i.version, fieldId, contextId, optionId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -210,14 +208,9 @@ func (i *internalIssueFieldContextOptionServiceImpl) Order(ctx context.Context, 
 		return nil, model.ErrNoFieldContextIDError
 	}
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, err
-	}
-
 	endpoint := fmt.Sprintf("rest/api/%v/field/%v/context/%v/option/move", i.version, fieldId, contextId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
 		return nil, err
 	}

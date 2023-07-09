@@ -12,7 +12,7 @@ import (
 	"strings"
 )
 
-func NewIssueFieldTrashService(client service.Client, version string) (*IssueFieldTrashService, error) {
+func NewIssueFieldTrashService(client service.Connector, version string) (*IssueFieldTrashService, error) {
 
 	if version == "" {
 		return nil, model.ErrNoVersionProvided
@@ -63,7 +63,7 @@ func (i *IssueFieldTrashService) Restore(ctx context.Context, id string) (*model
 }
 
 type internalFieldTrashServiceImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -90,7 +90,7 @@ func (i *internalFieldTrashServiceImpl) Search(ctx context.Context, options *mod
 
 	endpoint := fmt.Sprintf("rest/api/%v/field/search/trashed?%v", i.version, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -112,7 +112,7 @@ func (i *internalFieldTrashServiceImpl) Move(ctx context.Context, id string) (*m
 
 	endpoint := fmt.Sprintf("rest/api/%v/field/%v/trash", i.version, id)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -128,7 +128,7 @@ func (i *internalFieldTrashServiceImpl) Restore(ctx context.Context, id string) 
 
 	endpoint := fmt.Sprintf("rest/api/%v/field/%v/restore", i.version, id)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}

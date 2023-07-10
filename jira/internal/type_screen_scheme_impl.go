@@ -129,7 +129,7 @@ func (t *TypeScreenSchemeService) Remove(ctx context.Context, issueTypeScreenSch
 //
 // GET /rest/api/{2-3}/issuetypescreenscheme/{issueTypeScreenSchemeId}/project
 //
-// Docs: TODO: the documentation needs to be created
+// https://docs.go-atlassian.io/jira-software-cloud/issues/types/screen-scheme#get-issue-type-screen-scheme-projects
 func (t *TypeScreenSchemeService) SchemesByProject(ctx context.Context, issueTypeScreenSchemeId, startAt, maxResults int) (*model.IssueTypeScreenSchemeByProjectPageScheme, *model.ResponseScheme, error) {
 	return t.internalClient.SchemesByProject(ctx, issueTypeScreenSchemeId, startAt, maxResults)
 }

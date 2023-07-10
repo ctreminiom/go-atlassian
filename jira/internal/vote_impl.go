@@ -9,7 +9,7 @@ import (
 	"net/http"
 )
 
-func NewVoteService(client service.Client, version string) (*VoteService, error) {
+func NewVoteService(client service.Connector, version string) (*VoteService, error) {
 
 	if version == "" {
 		return nil, model.ErrNoVersionProvided
@@ -26,7 +26,7 @@ type VoteService struct {
 
 // Gets returns details about the votes on an issue.
 //
-// This operation requires allowing users to vote on issues option to be ON
+// # This operation requires allowing users to vote on issues option to be ON
 //
 // GET /rest/api/{2-3}/issue/{issueIdOrKey}/votes
 //
@@ -58,7 +58,7 @@ func (v *VoteService) Delete(ctx context.Context, issueKeyOrId string) (*model.R
 }
 
 type internalVoteImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -70,7 +70,7 @@ func (i *internalVoteImpl) Gets(ctx context.Context, issueKeyOrId string) (*mode
 
 	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/votes", i.version, issueKeyOrId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -92,7 +92,7 @@ func (i *internalVoteImpl) Add(ctx context.Context, issueKeyOrId string) (*model
 
 	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/votes", i.version, issueKeyOrId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -108,7 +108,7 @@ func (i *internalVoteImpl) Delete(ctx context.Context, issueKeyOrId string) (*mo
 
 	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/votes", i.version, issueKeyOrId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}

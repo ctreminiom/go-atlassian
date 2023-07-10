@@ -12,7 +12,7 @@ import (
 	"strings"
 )
 
-func NewWorklogADFService(client service.Client, version string) (*WorklogADFService, error) {
+func NewWorklogADFService(client service.Connector, version string) (*WorklogADFService, error) {
 
 	if version == "" {
 		return nil, model.ErrNoVersionProvided
@@ -126,7 +126,7 @@ func (w *WorklogADFService) Update(ctx context.Context, issueKeyOrId, worklogId 
 }
 
 type internalWorklogAdfImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -148,18 +148,7 @@ func (i *internalWorklogAdfImpl) Gets(ctx context.Context, worklogIds []int, exp
 		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
-	payload := struct {
-		Ids []int `json:"ids"`
-	}{
-		Ids: worklogIds,
-	}
-
-	reader, err := i.c.TransformStructToReader(&payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint.String(), reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint.String(), "", map[string]interface{}{"ids": worklogIds})
 	if err != nil {
 		return nil, nil, err
 	}
@@ -195,7 +184,7 @@ func (i *internalWorklogAdfImpl) Get(ctx context.Context, issueKeyOrId, worklogI
 		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -229,7 +218,7 @@ func (i *internalWorklogAdfImpl) Issue(ctx context.Context, issueKeyOrId string,
 
 	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/worklog?%v", i.version, issueKeyOrId, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -281,7 +270,7 @@ func (i *internalWorklogAdfImpl) Delete(ctx context.Context, issueKeyOrId, workl
 		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint.String(), nil)
+	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint.String(), "", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -303,7 +292,7 @@ func (i *internalWorklogAdfImpl) Deleted(ctx context.Context, since int) (*model
 		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -335,7 +324,7 @@ func (i *internalWorklogAdfImpl) Updated(ctx context.Context, since int, expand 
 		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -384,12 +373,7 @@ func (i *internalWorklogAdfImpl) Add(ctx context.Context, issueKeyOrID string, p
 		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint.String(), reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint.String(), "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -442,12 +426,7 @@ func (i *internalWorklogAdfImpl) Update(ctx context.Context, issueKeyOrId, workl
 		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint.String(), reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint.String(), "", payload)
 	if err != nil {
 		return nil, nil, err
 	}

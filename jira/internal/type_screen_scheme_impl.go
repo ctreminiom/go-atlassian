@@ -12,7 +12,7 @@ import (
 	"strings"
 )
 
-func NewTypeScreenSchemeService(client service.Client, version string) (*TypeScreenSchemeService, error) {
+func NewTypeScreenSchemeService(client service.Connector, version string) (*TypeScreenSchemeService, error) {
 
 	if version == "" {
 		return nil, model.ErrNoVersionProvided
@@ -135,7 +135,7 @@ func (t *TypeScreenSchemeService) SchemesByProject(ctx context.Context, issueTyp
 }
 
 type internalTypeScreenSchemeImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -166,7 +166,7 @@ func (i *internalTypeScreenSchemeImpl) Gets(ctx context.Context, options *model.
 
 	endpoint := fmt.Sprintf("rest/api/%v/issuetypescreenscheme?%v", i.version, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -182,14 +182,9 @@ func (i *internalTypeScreenSchemeImpl) Gets(ctx context.Context, options *model.
 
 func (i *internalTypeScreenSchemeImpl) Create(ctx context.Context, payload *model.IssueTypeScreenSchemePayloadScheme) (*model.IssueTypeScreenScreenCreatedScheme, *model.ResponseScheme, error) {
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	endpoint := fmt.Sprintf("rest/api/%v/issuetypescreenscheme", i.version)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -213,22 +208,14 @@ func (i *internalTypeScreenSchemeImpl) Assign(ctx context.Context, issueTypeScre
 		return nil, model.ErrNoProjectIDError
 	}
 
-	payload := struct {
-		IssueTypeScreenSchemeID string `json:"issueTypeScreenSchemeId"`
-		ProjectID               string `json:"projectId"`
-	}{
-		IssueTypeScreenSchemeID: issueTypeScreenSchemeId,
-		ProjectID:               projectId,
-	}
-
-	reader, err := i.c.TransformStructToReader(&payload)
-	if err != nil {
-		return nil, err
+	payload := map[string]interface{}{
+		"issueTypeScreenSchemeId": issueTypeScreenSchemeId,
+		"projectId":               projectId,
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issuetypescreenscheme/project", i.version)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
 		return nil, err
 	}
@@ -248,7 +235,7 @@ func (i *internalTypeScreenSchemeImpl) Projects(ctx context.Context, projectIds 
 
 	endpoint := fmt.Sprintf("rest/api/%v/issuetypescreenscheme/project?%v", i.version, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -274,7 +261,7 @@ func (i *internalTypeScreenSchemeImpl) Mapping(ctx context.Context, issueTypeScr
 
 	endpoint := fmt.Sprintf("rest/api/%v/issuetypescreenscheme/mapping?%v", i.version, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -294,22 +281,15 @@ func (i *internalTypeScreenSchemeImpl) Update(ctx context.Context, issueTypeScre
 		return nil, model.ErrNoIssueTypeScreenSchemeIDError
 	}
 
-	payload := struct {
-		Name        string `json:"name,omitempty"`
-		Description string `json:"description,omitempty"`
-	}{
-		Name:        name,
-		Description: description,
-	}
+	payload := map[string]interface{}{"name": name}
 
-	reader, err := i.c.TransformStructToReader(&payload)
-	if err != nil {
-		return nil, err
+	if description != "" {
+		payload["description"] = description
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issuetypescreenscheme/%v", i.version, issueTypeScreenSchemeId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
 		return nil, err
 	}
@@ -325,7 +305,7 @@ func (i *internalTypeScreenSchemeImpl) Delete(ctx context.Context, issueTypeScre
 
 	endpoint := fmt.Sprintf("rest/api/%v/issuetypescreenscheme/%v", i.version, issueTypeScreenSchemeId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -339,14 +319,9 @@ func (i *internalTypeScreenSchemeImpl) Append(ctx context.Context, issueTypeScre
 		return nil, model.ErrNoIssueTypeScreenSchemeIDError
 	}
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, err
-	}
-
 	endpoint := fmt.Sprintf("rest/api/%v/issuetypescreenscheme/%v/mapping", i.version, issueTypeScreenSchemeId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
 		return nil, err
 	}
@@ -364,20 +339,9 @@ func (i *internalTypeScreenSchemeImpl) UpdateDefault(ctx context.Context, issueT
 		return nil, model.ErrNoScreenSchemeIDError
 	}
 
-	payload := struct {
-		ScreenSchemeID string `json:"screenSchemeId"`
-	}{
-		ScreenSchemeID: screenSchemeId,
-	}
-
-	reader, err := i.c.TransformStructToReader(&payload)
-	if err != nil {
-		return nil, err
-	}
-
 	endpoint := fmt.Sprintf("rest/api/%v/issuetypescreenscheme/%v/mapping/default", i.version, issueTypeScreenSchemeId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", map[string]interface{}{"screenSchemeId": screenSchemeId})
 	if err != nil {
 		return nil, err
 	}
@@ -387,23 +351,17 @@ func (i *internalTypeScreenSchemeImpl) UpdateDefault(ctx context.Context, issueT
 
 func (i *internalTypeScreenSchemeImpl) Remove(ctx context.Context, issueTypeScreenSchemeId string, issueTypeIds []string) (*model.ResponseScheme, error) {
 
-	if len(issueTypeScreenSchemeId) == 0 {
+	if issueTypeScreenSchemeId == "" {
 		return nil, model.ErrNoIssueTypeScreenSchemeIDError
 	}
-	payload := struct {
-		IssueTypeIds []string `json:"issueTypeIds"`
-	}{
-		IssueTypeIds: issueTypeIds,
-	}
 
-	reader, err := i.c.TransformStructToReader(&payload)
-	if err != nil {
-		return nil, err
+	if len(issueTypeIds) == 0 {
+		return nil, model.ErrNoIssueTypesError
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issuetypescreenscheme/%v/mapping/remove", i.version, issueTypeScreenSchemeId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", map[string]interface{}{"issueTypeIds": issueTypeIds})
 	if err != nil {
 		return nil, err
 	}
@@ -419,7 +377,7 @@ func (i *internalTypeScreenSchemeImpl) SchemesByProject(ctx context.Context, iss
 
 	endpoint := fmt.Sprintf("rest/api/%v/issuetypescreenscheme/%v/project?%v", i.version, issueTypeScreenSchemeId, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}

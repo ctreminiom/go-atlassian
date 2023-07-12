@@ -10,7 +10,7 @@ import (
 	"net/http"
 )
 
-func NewPermissionService(client service.Client, version string, scheme *PermissionSchemeService) (*PermissionService, error) {
+func NewPermissionService(client service.Connector, version string, scheme *PermissionSchemeService) (*PermissionService, error) {
 
 	if version == "" {
 		return nil, model.ErrNoVersionProvided
@@ -55,7 +55,7 @@ func (p *PermissionService) Projects(ctx context.Context, permissions []string) 
 }
 
 type internalPermissionImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -63,7 +63,7 @@ func (i *internalPermissionImpl) Gets(ctx context.Context) ([]*model.PermissionS
 
 	endpoint := fmt.Sprintf("rest/api/%v/permissions", i.version)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -98,14 +98,9 @@ func (i *internalPermissionImpl) Gets(ctx context.Context) ([]*model.PermissionS
 
 func (i *internalPermissionImpl) Check(ctx context.Context, payload *model.PermissionCheckPayload) (*model.PermissionGrantsScheme, *model.ResponseScheme, error) {
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	endpoint := fmt.Sprintf("rest/api/%v/permissions/check", i.version)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -121,20 +116,13 @@ func (i *internalPermissionImpl) Check(ctx context.Context, payload *model.Permi
 
 func (i *internalPermissionImpl) Projects(ctx context.Context, permissions []string) (*model.PermittedProjectsScheme, *model.ResponseScheme, error) {
 
-	payload := struct {
-		Permissions []string `json:"permissions,omitempty"`
-	}{
-		Permissions: permissions,
-	}
-
-	reader, err := i.c.TransformStructToReader(&payload)
-	if err != nil {
-		return nil, nil, err
+	if len(permissions) == 0 {
+		return nil, nil, model.ErrNoPermissionKeysError
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/permissions/project", i.version)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", map[string]interface{}{"permissions": permissions})
 	if err != nil {
 		return nil, nil, err
 	}

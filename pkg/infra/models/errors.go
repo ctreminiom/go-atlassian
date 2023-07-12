@@ -108,6 +108,7 @@ var (
 	ErrNpWorklogsError                     = errors.New("jira: no worklog's id set")
 	ErrNoPermissionSchemeIDError           = errors.New("jira: no permission scheme id set")
 	ErrNoPermissionGrantIDError            = errors.New("jira: no permission grant id set")
+	ErrNoPermissionKeysError               = errors.New("jira: no permission keys set")
 	ErrNoComponentIDError                  = errors.New("jira: no component id set")
 	ErrProjectTypeKeyError                 = errors.New("jira: no project type key set")
 	ErrNoProjectNameError                  = errors.New("jira: no project name set")

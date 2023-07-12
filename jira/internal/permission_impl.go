@@ -31,7 +31,7 @@ type PermissionService struct {
 //
 // GET /rest/api/{2-3}/permissions
 //
-// TODO: Add/Create documentation
+// https://docs.go-atlassian.io/jira-software-cloud/permissions#get-my-permissions
 func (p *PermissionService) Gets(ctx context.Context) ([]*model.PermissionScheme, *model.ResponseScheme, error) {
 	return p.internalClient.Gets(ctx)
 }
@@ -49,7 +49,7 @@ func (p *PermissionService) Check(ctx context.Context, payload *model.Permission
 //
 // POST /rest/api/{2-3}/permissions/project
 //
-// TODO: Add/Create documentation
+// https://docs.go-atlassian.io/jira-software-cloud/permissions#get-permitted-projects
 func (p *PermissionService) Projects(ctx context.Context, permissions []string) (*model.PermittedProjectsScheme, *model.ResponseScheme, error) {
 	return p.internalClient.Projects(ctx, permissions)
 }

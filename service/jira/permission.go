@@ -11,7 +11,7 @@ type PermissionConnector interface {
 	//
 	// GET /rest/api/{2-3}/permissions
 	//
-	// TODO: Add/Create documentation
+	// https://docs.go-atlassian.io/jira-software-cloud/permissions#get-my-permissions
 	Gets(ctx context.Context) ([]*model.PermissionScheme, *model.ResponseScheme, error)
 
 	// Check search the permissions linked to an accountID, then check if the user permissions.
@@ -25,7 +25,7 @@ type PermissionConnector interface {
 	//
 	// POST /rest/api/{2-3}/permissions/project
 	//
-	// TODO: Add/Create documentation
+	// https://docs.go-atlassian.io/jira-software-cloud/permissions#get-permitted-projects
 	Projects(ctx context.Context, permissions []string) (*model.PermittedProjectsScheme, *model.ResponseScheme, error)
 }
 

@@ -11,7 +11,7 @@ import (
 	"strings"
 )
 
-func NewPermissionSchemeService(client service.Client, version string, grant *PermissionSchemeGrantService) (*PermissionSchemeService, error) {
+func NewPermissionSchemeService(client service.Connector, version string, grant *PermissionSchemeGrantService) (*PermissionSchemeService, error) {
 
 	if version == "" {
 		return nil, model.ErrNoVersionProvided
@@ -83,7 +83,7 @@ func (p *PermissionSchemeService) Update(ctx context.Context, permissionSchemeId
 }
 
 type internalPermissionSchemeImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -91,7 +91,7 @@ func (i *internalPermissionSchemeImpl) Gets(ctx context.Context) (*model.Permiss
 
 	endpoint := fmt.Sprintf("rest/api/%v/permissionscheme", i.version)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -122,7 +122,7 @@ func (i *internalPermissionSchemeImpl) Get(ctx context.Context, permissionScheme
 		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -144,7 +144,7 @@ func (i *internalPermissionSchemeImpl) Delete(ctx context.Context, permissionSch
 
 	endpoint := fmt.Sprintf("rest/api/%v/permissionscheme/%v", i.version, permissionSchemeId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -154,14 +154,9 @@ func (i *internalPermissionSchemeImpl) Delete(ctx context.Context, permissionSch
 
 func (i *internalPermissionSchemeImpl) Create(ctx context.Context, payload *model.PermissionSchemeScheme) (*model.PermissionSchemeScheme, *model.ResponseScheme, error) {
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	endpoint := fmt.Sprintf("rest/api/%v/permissionscheme", i.version)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -181,14 +176,9 @@ func (i *internalPermissionSchemeImpl) Update(ctx context.Context, permissionSch
 		return nil, nil, model.ErrNoPermissionSchemeIDError
 	}
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	endpoint := fmt.Sprintf("rest/api/%v/permissionscheme/%v", i.version, permissionSchemeId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}

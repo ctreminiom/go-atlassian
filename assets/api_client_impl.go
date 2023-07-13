@@ -14,10 +14,14 @@ import (
 
 const DefaultAssetsSite = "https://api.atlassian.com/"
 
-func New(httpClient common.HttpClient) (*Client, error) {
+func New(httpClient common.HttpClient, site string) (*Client, error) {
 
 	if httpClient == nil {
 		httpClient = http.DefaultClient
+	}
+
+	if site == "" {
+		site = DefaultAssetsSite
 	}
 
 	u, err := url.Parse(DefaultAssetsSite)

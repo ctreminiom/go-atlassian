@@ -24,7 +24,7 @@ func New(httpClient common.HttpClient, site string) (*Client, error) {
 		site = DefaultAssetsSite
 	}
 
-	u, err := url.Parse(DefaultAssetsSite)
+	u, err := url.Parse(site)
 	if err != nil {
 		return nil, err
 	}

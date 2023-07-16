@@ -915,7 +915,7 @@ func Test_internalProjectComponentImpl_Delete(t *testing.T) {
 func Test_NewProjectComponentService(t *testing.T) {
 
 	type args struct {
-		client  service.Client
+		client  service.Connector
 		version string
 	}
 

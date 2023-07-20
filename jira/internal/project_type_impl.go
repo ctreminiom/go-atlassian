@@ -9,7 +9,7 @@ import (
 	"net/http"
 )
 
-func NewProjectTypeService(client service.Client, version string) (*ProjectTypeService, error) {
+func NewProjectTypeService(client service.Connector, version string) (*ProjectTypeService, error) {
 
 	if version == "" {
 		return nil, model.ErrNoVersionProvided
@@ -61,7 +61,7 @@ func (p *ProjectTypeService) Accessible(ctx context.Context, projectTypeKey stri
 }
 
 type internalProjectTypeImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -69,7 +69,7 @@ func (i *internalProjectTypeImpl) Gets(ctx context.Context) ([]*model.ProjectTyp
 
 	endpoint := fmt.Sprintf("rest/api/%v/project/type", i.version)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -87,7 +87,7 @@ func (i *internalProjectTypeImpl) Licensed(ctx context.Context) ([]*model.Projec
 
 	endpoint := fmt.Sprintf("rest/api/%v/project/type/accessible", i.version)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -109,7 +109,7 @@ func (i *internalProjectTypeImpl) Get(ctx context.Context, projectTypeKey string
 
 	endpoint := fmt.Sprintf("rest/api/%v/project/type/%v", i.version, projectTypeKey)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -131,7 +131,7 @@ func (i *internalProjectTypeImpl) Accessible(ctx context.Context, projectTypeKey
 
 	endpoint := fmt.Sprintf("rest/api/%v/project/type/%v/accessible", i.version, projectTypeKey)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}

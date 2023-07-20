@@ -11,7 +11,7 @@ import (
 	"strings"
 )
 
-func NewProjectRoleActorService(client service.Client, version string) (*ProjectRoleActorService, error) {
+func NewProjectRoleActorService(client service.Connector, version string) (*ProjectRoleActorService, error) {
 
 	if version == "" {
 		return nil, model.ErrNoVersionProvided
@@ -45,7 +45,7 @@ func (p *ProjectRoleActorService) Delete(ctx context.Context, projectKeyOrId str
 }
 
 type internalProjectRoleActorImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -59,22 +59,9 @@ func (i *internalProjectRoleActorImpl) Add(ctx context.Context, projectKeyOrId s
 		return nil, nil, model.ErrNoProjectRoleIDError
 	}
 
-	payload := struct {
-		Group []string `json:"group,omitempty"`
-		Users []string `json:"user,omitempty"`
-	}{
-		Group: groups,
-		Users: accountIds,
-	}
-
-	reader, err := i.c.TransformStructToReader(&payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	endpoint := fmt.Sprintf("rest/api/%v/project/%v/role/%v", i.version, projectKeyOrId, roleId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", map[string]interface{}{"group": groups, "user": accountIds})
 	if err != nil {
 		return nil, nil, err
 	}
@@ -115,7 +102,7 @@ func (i *internalProjectRoleActorImpl) Delete(ctx context.Context, projectKeyOrI
 		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint.String(), nil)
+	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint.String(), "", nil)
 	if err != nil {
 		return nil, err
 	}

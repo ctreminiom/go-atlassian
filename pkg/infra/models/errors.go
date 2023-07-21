@@ -82,6 +82,7 @@ var (
 	ErrNoProjectCategoryIDError            = errors.New("jira: no project category id set")
 	ErrNoPropertyKeyError                  = errors.New("jira: no property key set")
 	ErrNoProjectFeatureKeyError            = errors.New("jira: no project feature key set")
+	ErrNoProjectFeatureStateError          = errors.New("jira: no project state key set")
 	ErrNoFieldIDError                      = errors.New("jira: no field id set")
 	ErrNoEditOperatorError                 = errors.New("jira: no update operation set")
 	ErrNoOperatorError                     = errors.New("jira: no operation set")

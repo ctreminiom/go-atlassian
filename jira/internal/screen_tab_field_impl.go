@@ -9,7 +9,7 @@ import (
 	"net/http"
 )
 
-func NewScreenTabFieldService(client service.Client, version string) (*ScreenTabFieldService, error) {
+func NewScreenTabFieldService(client service.Connector, version string) (*ScreenTabFieldService, error) {
 
 	if version == "" {
 		return nil, model.ErrNoVersionProvided
@@ -63,7 +63,7 @@ func (s *ScreenTabFieldService) Move(ctx context.Context, screenId, tabId int, f
 }
 
 type internalScreenTabFieldImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -79,7 +79,7 @@ func (i *internalScreenTabFieldImpl) Gets(ctx context.Context, screenId, tabId i
 
 	endpoint := fmt.Sprintf("rest/api/%v/screens/%v/tabs/%v/fields", i.version, screenId, tabId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -107,20 +107,9 @@ func (i *internalScreenTabFieldImpl) Add(ctx context.Context, screenId, tabId in
 		return nil, nil, model.ErrNoFieldIDError
 	}
 
-	payload := struct {
-		FieldID string `json:"fieldId"`
-	}{
-		FieldID: fieldId,
-	}
-
-	reader, err := i.c.TransformStructToReader(&payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	endpoint := fmt.Sprintf("rest/api/%v/screens/%v/tabs/%v/fields", i.version, screenId, tabId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", map[string]interface{}{"fieldId": fieldId})
 	if err != nil {
 		return nil, nil, err
 	}
@@ -150,7 +139,7 @@ func (i *internalScreenTabFieldImpl) Remove(ctx context.Context, screenId, tabId
 
 	endpoint := fmt.Sprintf("rest/api/%v/screens/%v/tabs/%v/fields/%v", i.version, screenId, tabId, fieldId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -172,22 +161,9 @@ func (i *internalScreenTabFieldImpl) Move(ctx context.Context, screenId, tabId i
 		return nil, model.ErrNoFieldIDError
 	}
 
-	payload := struct {
-		After    string `json:"after,omitempty"`
-		Position string `json:"position,omitempty"`
-	}{
-		After:    after,
-		Position: position,
-	}
-
-	reader, err := i.c.TransformStructToReader(&payload)
-	if err != nil {
-		return nil, err
-	}
-
 	endpoint := fmt.Sprintf("rest/api/%v/screens/%v/tabs/%v/fields/%v/move", i.version, screenId, tabId, fieldId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", map[string]interface{}{"after": after, "position": position})
 	if err != nil {
 		return nil, err
 	}

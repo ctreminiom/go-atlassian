@@ -1,7 +1,6 @@
 package internal
 
 import (
-	"bytes"
 	"context"
 	"errors"
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
@@ -24,7 +23,7 @@ func Test_internalSearchADFImpl_Checks(t *testing.T) {
 	}
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -50,17 +49,13 @@ func Test_internalSearchADFImpl_Checks(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/3/jql/match",
-					bytes.NewReader([]byte{})).
+					"", payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -83,17 +78,13 @@ func Test_internalSearchADFImpl_Checks(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/jql/match",
-					bytes.NewReader([]byte{})).
+					"", payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -116,17 +107,13 @@ func Test_internalSearchADFImpl_Checks(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/3/jql/match",
-					bytes.NewReader([]byte{})).
+					"", payloadMocked).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -169,7 +156,7 @@ func Test_internalSearchADFImpl_Checks(t *testing.T) {
 
 func Test_internalSearchADFImpl_Post(t *testing.T) {
 
-	payloadMocked := &struct {
+	payloadMocked := struct {
 		Expand        []string "json:\"expand,omitempty\""
 		Jql           string   "json:\"jql,omitempty\""
 		MaxResults    int      "json:\"maxResults,omitempty\""
@@ -179,7 +166,7 @@ func Test_internalSearchADFImpl_Post(t *testing.T) {
 	}{Expand: []string{"operations"}, Jql: "project = FOO", MaxResults: 100, Fields: []string{"status", "summary"}, StartAt: 50, ValidateQuery: "strict"}
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -213,17 +200,13 @@ func Test_internalSearchADFImpl_Post(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/3/search",
-					bytes.NewReader([]byte{})).
+					"", payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -251,17 +234,13 @@ func Test_internalSearchADFImpl_Post(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/search",
-					bytes.NewReader([]byte{})).
+					"", payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -289,17 +268,13 @@ func Test_internalSearchADFImpl_Post(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/3/search",
-					bytes.NewReader([]byte{})).
+					"", payloadMocked).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -344,7 +319,7 @@ func Test_internalSearchADFImpl_Post(t *testing.T) {
 func Test_internalSearchADFImpl_Get(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -378,13 +353,13 @@ func Test_internalSearchADFImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/search?expand=operations&fields=status%2Csummary&jql=project+%3D+FOO&maxResults=100&startAt=50&validateQuery=strict",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -412,13 +387,13 @@ func Test_internalSearchADFImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/search?expand=operations&fields=status%2Csummary&jql=project+%3D+FOO&maxResults=100&startAt=50&validateQuery=strict",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -446,13 +421,13 @@ func Test_internalSearchADFImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/search?expand=operations&fields=status%2Csummary&jql=project+%3D+FOO&maxResults=100&startAt=50&validateQuery=strict",
-					nil).
+					"", nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client

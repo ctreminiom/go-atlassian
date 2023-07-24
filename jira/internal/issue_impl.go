@@ -29,7 +29,7 @@ type IssueServices struct {
 	WorklogRichText *WorklogRichTextService
 }
 
-func NewIssueService(client service.Client, version string, services *IssueServices) (*IssueRichTextService, *IssueADFService, error) {
+func NewIssueService(client service.Connector, version string, services *IssueServices) (*IssueRichTextService, *IssueADFService, error) {
 
 	if version == "" {
 		return nil, nil, model.ErrNoVersionProvided
@@ -84,7 +84,12 @@ func NewIssueService(client service.Client, version string, services *IssueServi
 	return richTextService, adfService, nil
 }
 
-func deleteIssue(ctx context.Context, client service.Client, version, issueKeyOrId string, deleteSubTasks bool) (*model.ResponseScheme, error) {
+// -------------------------------------------
+// These private functions are used on the Issue Services implementation, as that services is segmented in the ADF and Rich Text
+// format, in order to avoid duplication, those function are injected on the ADF/Rich Text implementations.
+// -------------------------------------------
+
+func deleteIssue(ctx context.Context, client service.Connector, version, issueKeyOrId string, deleteSubTasks bool) (*model.ResponseScheme, error) {
 
 	if issueKeyOrId == "" {
 		return nil, model.ErrNoIssueKeyOrIDError
@@ -95,7 +100,7 @@ func deleteIssue(ctx context.Context, client service.Client, version, issueKeyOr
 
 	endpoint := fmt.Sprintf("rest/api/%v/issue/%v?%v", version, issueKeyOrId, params.Encode())
 
-	request, err := client.NewRequest(ctx, http.MethodDelete, endpoint, nil)
+	request, err := client.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -103,30 +108,19 @@ func deleteIssue(ctx context.Context, client service.Client, version, issueKeyOr
 	return client.Call(request, nil)
 }
 
-func assignIssue(ctx context.Context, client service.Client, version, issueKeyOrId, accountId string) (*model.ResponseScheme, error) {
+func assignIssue(ctx context.Context, client service.Connector, version, issueKeyOrID, accountID string) (*model.ResponseScheme, error) {
 
-	if issueKeyOrId == "" {
+	if issueKeyOrID == "" {
 		return nil, model.ErrNoIssueKeyOrIDError
 	}
 
-	if accountId == "" {
+	if accountID == "" {
 		return nil, model.ErrNoAccountIDError
 	}
 
-	payload := struct {
-		AccountID string `json:"accountId"`
-	}{
-		AccountID: accountId,
-	}
+	endpoint := fmt.Sprintf("/rest/api/%v/issue/%v/assignee", version, issueKeyOrID)
 
-	reader, err := client.TransformStructToReader(&payload)
-	if err != nil {
-		return nil, err
-	}
-
-	endpoint := fmt.Sprintf("/rest/api/%v/issue/%v/assignee", version, issueKeyOrId)
-
-	request, err := client.NewRequest(ctx, http.MethodPut, endpoint, reader)
+	request, err := client.NewRequest(ctx, http.MethodPut, endpoint, "", map[string]interface{}{"accountId": accountID})
 	if err != nil {
 		return nil, err
 	}
@@ -134,21 +128,16 @@ func assignIssue(ctx context.Context, client service.Client, version, issueKeyOr
 	return client.Call(request, nil)
 }
 
-func sendNotification(ctx context.Context, client service.Client, version, issueKeyOrId string, options *model.IssueNotifyOptionsScheme) (
+func sendNotification(ctx context.Context, client service.Connector, version, issueKeyOrId string, options *model.IssueNotifyOptionsScheme) (
 	*model.ResponseScheme, error) {
 
 	if issueKeyOrId == "" {
 		return nil, model.ErrNoIssueKeyOrIDError
 	}
 
-	reader, err := client.TransformStructToReader(options)
-	if err != nil {
-		return nil, err
-	}
-
 	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/notify", version, issueKeyOrId)
 
-	request, err := client.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := client.NewRequest(ctx, http.MethodPost, endpoint, "", options)
 	if err != nil {
 		return nil, err
 	}
@@ -156,7 +145,7 @@ func sendNotification(ctx context.Context, client service.Client, version, issue
 	return client.Call(request, nil)
 }
 
-func getTransitions(ctx context.Context, client service.Client, version, issueKeyOrId string) (*model.IssueTransitionsScheme, *model.ResponseScheme, error) {
+func getTransitions(ctx context.Context, client service.Connector, version, issueKeyOrId string) (*model.IssueTransitionsScheme, *model.ResponseScheme, error) {
 
 	if issueKeyOrId == "" {
 		return nil, nil, model.ErrNoIssueKeyOrIDError
@@ -164,7 +153,7 @@ func getTransitions(ctx context.Context, client service.Client, version, issueKe
 
 	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/transitions", version, issueKeyOrId)
 
-	request, err := client.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := client.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}

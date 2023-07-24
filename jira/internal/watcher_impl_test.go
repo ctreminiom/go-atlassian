@@ -14,7 +14,7 @@ import (
 func Test_internalWatcherImpl_Gets(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -40,12 +40,13 @@ func Test_internalWatcherImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/issue/DUMMY-5/watchers",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -69,12 +70,13 @@ func Test_internalWatcherImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/issue/DUMMY-5/watchers",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -109,12 +111,13 @@ func Test_internalWatcherImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/issue/DUMMY-5/watchers",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -159,7 +162,7 @@ func Test_internalWatcherImpl_Gets(t *testing.T) {
 func Test_internalWatcherImpl_Add(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -185,12 +188,13 @@ func Test_internalWatcherImpl_Add(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/3/issue/DUMMY-5/watchers",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -214,12 +218,13 @@ func Test_internalWatcherImpl_Add(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/issue/DUMMY-5/watchers",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -254,12 +259,13 @@ func Test_internalWatcherImpl_Add(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/3/issue/DUMMY-5/watchers",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -303,7 +309,7 @@ func Test_internalWatcherImpl_Add(t *testing.T) {
 func Test_internalWatcherImpl_Delete(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -331,12 +337,13 @@ func Test_internalWatcherImpl_Delete(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/api/3/issue/DUMMY-5/watchers?accountId=dummy-account-id",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -361,12 +368,13 @@ func Test_internalWatcherImpl_Delete(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/api/2/issue/DUMMY-5/watchers?accountId=dummy-account-id",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -414,12 +422,13 @@ func Test_internalWatcherImpl_Delete(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/api/3/issue/DUMMY-5/watchers?accountId=dummy-account-id",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -463,7 +472,7 @@ func Test_internalWatcherImpl_Delete(t *testing.T) {
 func Test_NewWatcherService(t *testing.T) {
 
 	type args struct {
-		client  service.Client
+		client  service.Connector
 		version string
 	}
 

@@ -24,7 +24,7 @@ type ProjectChildServices struct {
 	Version    *ProjectVersionService
 }
 
-func NewProjectService(client service.Client, version string, subServices *ProjectChildServices) (*ProjectService, error) {
+func NewProjectService(client service.Connector, version string, subServices *ProjectChildServices) (*ProjectService, error) {
 
 	if version == "" {
 		return nil, model.ErrNoVersionProvided
@@ -162,20 +162,15 @@ func (p *ProjectService) NotificationScheme(ctx context.Context, projectKeyOrId 
 }
 
 type internalProjectImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
 func (i *internalProjectImpl) Create(ctx context.Context, payload *model.ProjectPayloadScheme) (*model.NewProjectCreatedScheme, *model.ResponseScheme, error) {
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	endpoint := fmt.Sprintf("rest/api/%v/project", i.version)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -244,7 +239,7 @@ func (i *internalProjectImpl) Search(ctx context.Context, options *model.Project
 
 	endpoint := fmt.Sprintf("rest/api/%v/project/search?%v", i.version, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -275,7 +270,7 @@ func (i *internalProjectImpl) Get(ctx context.Context, projectKeyOrId string, ex
 		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -295,14 +290,9 @@ func (i *internalProjectImpl) Update(ctx context.Context, projectKeyOrId string,
 		return nil, nil, model.ErrNoProjectIDOrKeyError
 	}
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	endpoint := fmt.Sprintf("rest/api/%v/project/%v", i.version, projectKeyOrId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -327,7 +317,7 @@ func (i *internalProjectImpl) Delete(ctx context.Context, projectKeyOrId string,
 
 	endpoint := fmt.Sprintf("rest/api/%v/project/%v?%v", i.version, projectKeyOrId, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -343,7 +333,7 @@ func (i *internalProjectImpl) DeleteAsynchronously(ctx context.Context, projectK
 
 	endpoint := fmt.Sprintf("rest/api/%v/project/%v/delete", i.version, projectKeyOrId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -365,7 +355,7 @@ func (i *internalProjectImpl) Archive(ctx context.Context, projectKeyOrId string
 
 	endpoint := fmt.Sprintf("rest/api/%v/project/%v/archive", i.version, projectKeyOrId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -381,7 +371,7 @@ func (i *internalProjectImpl) Restore(ctx context.Context, projectKeyOrId string
 
 	endpoint := fmt.Sprintf("rest/api/%v/project/%v/restore", i.version, projectKeyOrId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -403,7 +393,7 @@ func (i *internalProjectImpl) Statuses(ctx context.Context, projectKeyOrId strin
 
 	endpoint := fmt.Sprintf("rest/api/%v/project/%v/statuses", i.version, projectKeyOrId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -434,7 +424,7 @@ func (i *internalProjectImpl) NotificationScheme(ctx context.Context, projectKey
 		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
 		return nil, nil, err
 	}

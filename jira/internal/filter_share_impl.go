@@ -9,7 +9,7 @@ import (
 	"net/http"
 )
 
-func NewFilterShareService(client service.Client, version string) (*FilterShareService, error) {
+func NewFilterShareService(client service.Connector, version string) (*FilterShareService, error) {
 
 	if version == "" {
 		return nil, model.ErrNoVersionProvided
@@ -91,7 +91,7 @@ func (f *FilterShareService) Delete(ctx context.Context, filterId, permissionId 
 }
 
 type internalFilterShareImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -99,7 +99,7 @@ func (i *internalFilterShareImpl) Scope(ctx context.Context) (*model.ShareFilter
 
 	endpoint := fmt.Sprintf("rest/api/%v/filter/defaultShareScope", i.version)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -115,14 +115,9 @@ func (i *internalFilterShareImpl) Scope(ctx context.Context) (*model.ShareFilter
 
 func (i *internalFilterShareImpl) SetScope(ctx context.Context, scope string) (*model.ResponseScheme, error) {
 
-	reader, err := i.c.TransformStructToReader(&model.ShareFilterScopeScheme{Scope: scope})
-	if err != nil {
-		return nil, err
-	}
-
 	endpoint := fmt.Sprintf("rest/api/%v/filter/defaultShareScope", i.version)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", &model.ShareFilterScopeScheme{Scope: scope})
 	if err != nil {
 		return nil, err
 	}
@@ -138,7 +133,7 @@ func (i *internalFilterShareImpl) Gets(ctx context.Context, filterId int) ([]*mo
 
 	endpoint := fmt.Sprintf("rest/api/%v/filter/%v/permission", i.version, filterId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -158,14 +153,9 @@ func (i *internalFilterShareImpl) Add(ctx context.Context, filterId int, payload
 		return nil, nil, model.ErrNoFilterIDError
 	}
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	endpoint := fmt.Sprintf("rest/api/%v/filter/%v/permission", i.version, filterId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -191,7 +181,7 @@ func (i *internalFilterShareImpl) Get(ctx context.Context, filterId, permissionI
 
 	endpoint := fmt.Sprintf("rest/api/%v/filter/%v/permission/%v", i.version, filterId, permissionId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -217,7 +207,7 @@ func (i *internalFilterShareImpl) Delete(ctx context.Context, filterId, permissi
 
 	endpoint := fmt.Sprintf("rest/api/%v/filter/%v/permission/%v", i.version, filterId, permissionId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}

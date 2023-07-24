@@ -1,7 +1,6 @@
 package internal
 
 import (
-	"bytes"
 	"context"
 	"errors"
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
@@ -16,7 +15,7 @@ import (
 func Test_internalWorkflowSchemeIssueTypeImpl_Get(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -46,13 +45,13 @@ func Test_internalWorkflowSchemeIssueTypeImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/workflowscheme/10002/issuetype/4?returnDraftIfExists=true",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -98,13 +97,13 @@ func Test_internalWorkflowSchemeIssueTypeImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/workflowscheme/10002/issuetype/4?returnDraftIfExists=true",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -129,13 +128,13 @@ func Test_internalWorkflowSchemeIssueTypeImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/workflowscheme/10002/issuetype/4?returnDraftIfExists=true",
-					nil).
+					"", nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -179,7 +178,7 @@ func Test_internalWorkflowSchemeIssueTypeImpl_Get(t *testing.T) {
 func Test_internalWorkflowSchemeIssueTypeImpl_Mapping(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -209,13 +208,13 @@ func Test_internalWorkflowSchemeIssueTypeImpl_Mapping(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/workflowscheme/10002/workflow?returnDraftIfExists=true&workflowName=jira+workflow+",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -250,13 +249,13 @@ func Test_internalWorkflowSchemeIssueTypeImpl_Mapping(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/workflowscheme/10002/workflow?returnDraftIfExists=true&workflowName=jira+workflow+",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -281,13 +280,13 @@ func Test_internalWorkflowSchemeIssueTypeImpl_Mapping(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/workflowscheme/10002/workflow?returnDraftIfExists=true&workflowName=jira+workflow+",
-					nil).
+					"", nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -331,7 +330,7 @@ func Test_internalWorkflowSchemeIssueTypeImpl_Mapping(t *testing.T) {
 func Test_internalWorkflowSchemeIssueTypeImpl_Delete(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -361,13 +360,13 @@ func Test_internalWorkflowSchemeIssueTypeImpl_Delete(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/api/3/workflowscheme/10002/issuetype/4?updateDraftIfNeeded=true",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -413,13 +412,13 @@ func Test_internalWorkflowSchemeIssueTypeImpl_Delete(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/api/2/workflowscheme/10002/issuetype/4?updateDraftIfNeeded=true",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -444,13 +443,13 @@ func Test_internalWorkflowSchemeIssueTypeImpl_Delete(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/api/3/workflowscheme/10002/issuetype/4?updateDraftIfNeeded=true",
-					nil).
+					"", nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -500,7 +499,7 @@ func Test_internalWorkflowSchemeIssueTypeImpl_Set(t *testing.T) {
 	}
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -530,17 +529,13 @@ func Test_internalWorkflowSchemeIssueTypeImpl_Set(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/3/workflowscheme/10002/issuetype/4",
-					bytes.NewReader([]byte{})).
+					"", payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -586,17 +581,13 @@ func Test_internalWorkflowSchemeIssueTypeImpl_Set(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/2/workflowscheme/10002/issuetype/4",
-					bytes.NewReader([]byte{})).
+					"", payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -621,17 +612,13 @@ func Test_internalWorkflowSchemeIssueTypeImpl_Set(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/3/workflowscheme/10002/issuetype/4",
-					bytes.NewReader([]byte{})).
+					"", payloadMocked).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client

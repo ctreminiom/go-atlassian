@@ -14,7 +14,7 @@ import (
 func Test_internalLabelServiceImpl_Gets(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -41,12 +41,13 @@ func Test_internalLabelServiceImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/label?maxResults=50&startAt=50",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -71,12 +72,13 @@ func Test_internalLabelServiceImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/label?maxResults=50&startAt=50",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -101,12 +103,13 @@ func Test_internalLabelServiceImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/label?maxResults=50&startAt=50",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -151,7 +154,7 @@ func Test_internalLabelServiceImpl_Gets(t *testing.T) {
 func Test_NewLabelService(t *testing.T) {
 
 	type args struct {
-		client  service.Client
+		client  service.Connector
 		version string
 	}
 

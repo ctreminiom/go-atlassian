@@ -12,7 +12,7 @@ import (
 	"strings"
 )
 
-func NewWorkflowStatusService(client service.Client, version string) (*WorkflowStatusService, error) {
+func NewWorkflowStatusService(client service.Connector, version string) (*WorkflowStatusService, error) {
 
 	if version == "" {
 		return nil, model.ErrNoVersionProvided
@@ -99,7 +99,7 @@ func (w *WorkflowStatusService) Get(ctx context.Context, idOrName string) (*mode
 }
 
 type internalWorkflowStatusImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -111,7 +111,7 @@ func (i *internalWorkflowStatusImpl) Get(ctx context.Context, idOrName string) (
 
 	endpoint := fmt.Sprintf("/rest/api/%v/status/%v", i.version, idOrName)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -129,7 +129,7 @@ func (i *internalWorkflowStatusImpl) Bulk(ctx context.Context) ([]*model.StatusD
 
 	endpoint := fmt.Sprintf("/rest/api/%v/status", i.version)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -161,7 +161,7 @@ func (i *internalWorkflowStatusImpl) Gets(ctx context.Context, ids, expand []str
 		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -177,14 +177,9 @@ func (i *internalWorkflowStatusImpl) Gets(ctx context.Context, ids, expand []str
 
 func (i *internalWorkflowStatusImpl) Update(ctx context.Context, payload *model.WorkflowStatusPayloadScheme) (*model.ResponseScheme, error) {
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, err
-	}
-
 	endpoint := fmt.Sprintf("rest/api/%v/statuses", i.version)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
 		return nil, err
 	}
@@ -193,11 +188,6 @@ func (i *internalWorkflowStatusImpl) Update(ctx context.Context, payload *model.
 }
 
 func (i *internalWorkflowStatusImpl) Create(ctx context.Context, payload *model.WorkflowStatusPayloadScheme) ([]*model.WorkflowStatusDetailScheme, *model.ResponseScheme, error) {
-
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
 
 	if len(payload.Statuses) == 0 {
 		return nil, nil, model.ErrNoWorkflowStatusesError
@@ -209,7 +199,7 @@ func (i *internalWorkflowStatusImpl) Create(ctx context.Context, payload *model.
 
 	endpoint := fmt.Sprintf("rest/api/%v/statuses", i.version)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -236,7 +226,7 @@ func (i *internalWorkflowStatusImpl) Delete(ctx context.Context, ids []string) (
 
 	endpoint := fmt.Sprintf("rest/api/%v/statuses?%v", i.version, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -271,7 +261,7 @@ func (i *internalWorkflowStatusImpl) Search(ctx context.Context, options *model.
 
 	endpoint := fmt.Sprintf("rest/api/%v/statuses/search?%v", i.version, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}

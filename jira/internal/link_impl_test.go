@@ -10,7 +10,7 @@ import (
 func Test_NewLinkService(t *testing.T) {
 
 	type args struct {
-		client  service.Client
+		client  service.Connector
 		version string
 	}
 

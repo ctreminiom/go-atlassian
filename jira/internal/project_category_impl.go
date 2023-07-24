@@ -9,7 +9,7 @@ import (
 	"net/http"
 )
 
-func NewProjectCategoryService(client service.Client, version string) (*ProjectCategoryService, error) {
+func NewProjectCategoryService(client service.Connector, version string) (*ProjectCategoryService, error) {
 
 	if version == "" {
 		return nil, model.ErrNoVersionProvided
@@ -70,7 +70,7 @@ func (p *ProjectCategoryService) Delete(ctx context.Context, categoryId int) (*m
 }
 
 type internalProjectCategoryImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -78,7 +78,7 @@ func (i *internalProjectCategoryImpl) Gets(ctx context.Context) ([]*model.Projec
 
 	endpoint := fmt.Sprintf("rest/api/%v/projectCategory", i.version)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -100,7 +100,7 @@ func (i *internalProjectCategoryImpl) Get(ctx context.Context, categoryId int) (
 
 	endpoint := fmt.Sprintf("rest/api/%v/projectCategory/%v", i.version, categoryId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -116,14 +116,9 @@ func (i *internalProjectCategoryImpl) Get(ctx context.Context, categoryId int) (
 
 func (i *internalProjectCategoryImpl) Create(ctx context.Context, payload *model.ProjectCategoryPayloadScheme) (*model.ProjectCategoryScheme, *model.ResponseScheme, error) {
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	endpoint := fmt.Sprintf("rest/api/%v/projectCategory", i.version)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -143,14 +138,9 @@ func (i *internalProjectCategoryImpl) Update(ctx context.Context, categoryId int
 		return nil, nil, model.ErrNoProjectCategoryIDError
 	}
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	endpoint := fmt.Sprintf("rest/api/%v/projectCategory/%v", i.version, categoryId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -172,7 +162,7 @@ func (i *internalProjectCategoryImpl) Delete(ctx context.Context, categoryId int
 
 	endpoint := fmt.Sprintf("rest/api/%v/projectCategory/%v", i.version, categoryId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}

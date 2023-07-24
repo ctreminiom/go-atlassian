@@ -11,7 +11,7 @@ import (
 	"strconv"
 )
 
-func NewTypeSchemeService(client service.Client, version string) (*TypeSchemeService, error) {
+func NewTypeSchemeService(client service.Connector, version string) (*TypeSchemeService, error) {
 
 	if version == "" {
 		return nil, model.ErrNoVersionProvided
@@ -122,7 +122,7 @@ func (t *TypeSchemeService) Remove(ctx context.Context, issueTypeSchemeId, issue
 }
 
 type internalTypeSchemeImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -138,7 +138,7 @@ func (i *internalTypeSchemeImpl) Gets(ctx context.Context, issueTypeSchemeIds []
 
 	endpoint := fmt.Sprintf("rest/api/%v/issuetypescheme?%v", i.version, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -154,14 +154,9 @@ func (i *internalTypeSchemeImpl) Gets(ctx context.Context, issueTypeSchemeIds []
 
 func (i *internalTypeSchemeImpl) Create(ctx context.Context, payload *model.IssueTypeSchemePayloadScheme) (*model.NewIssueTypeSchemeScheme, *model.ResponseScheme, error) {
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	endpoint := fmt.Sprintf("rest/api/%v/issuetypescheme", i.version)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -187,7 +182,7 @@ func (i *internalTypeSchemeImpl) Items(ctx context.Context, issueTypeSchemeIds [
 
 	endpoint := fmt.Sprintf("rest/api/%v/issuetypescheme/mapping?%v", i.version, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -213,7 +208,7 @@ func (i *internalTypeSchemeImpl) Projects(ctx context.Context, projectIds []int,
 
 	endpoint := fmt.Sprintf("rest/api/%v/issuetypescheme/project?%v", i.version, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -237,22 +232,13 @@ func (i *internalTypeSchemeImpl) Assign(ctx context.Context, issueTypeSchemeId, 
 		return nil, model.ErrNoProjectIDError
 	}
 
-	payload := struct {
-		IssueTypeSchemeID string `json:"issueTypeSchemeId"`
-		ProjectID         string `json:"projectId"`
-	}{
-		IssueTypeSchemeID: issueTypeSchemeId,
-		ProjectID:         projectId,
-	}
-
-	reader, err := i.c.TransformStructToReader(&payload)
-	if err != nil {
-		return nil, err
-	}
+	payload := map[string]interface{}{
+		"issueTypeSchemeId": issueTypeSchemeId,
+		"projectId":         projectId}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issuetypescheme/project", i.version)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
 		return nil, err
 	}
@@ -266,14 +252,9 @@ func (i *internalTypeSchemeImpl) Update(ctx context.Context, issueTypeSchemeId i
 		return nil, model.ErrNoIssueTypeSchemeIDError
 	}
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, err
-	}
-
 	endpoint := fmt.Sprintf("rest/api/%v/issuetypescheme/%v", i.version, issueTypeSchemeId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
 		return nil, err
 	}
@@ -289,7 +270,7 @@ func (i *internalTypeSchemeImpl) Delete(ctx context.Context, issueTypeSchemeId i
 
 	endpoint := fmt.Sprintf("rest/api/%v/issuetypescheme/%v", i.version, issueTypeSchemeId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -308,20 +289,9 @@ func (i *internalTypeSchemeImpl) Append(ctx context.Context, issueTypeSchemeId i
 		ids = append(ids, strconv.Itoa(issueTypeID))
 	}
 
-	payload := struct {
-		IssueTypeIds []string `json:"issueTypeIds"`
-	}{
-		IssueTypeIds: ids,
-	}
-
-	reader, err := i.c.TransformStructToReader(&payload)
-	if err != nil {
-		return nil, err
-	}
-
 	endpoint := fmt.Sprintf("rest/api/%v/issuetypescheme/%v/issuetype", i.version, issueTypeSchemeId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", map[string]interface{}{"issueTypeIds": ids})
 	if err != nil {
 		return nil, err
 	}
@@ -341,7 +311,7 @@ func (i *internalTypeSchemeImpl) Remove(ctx context.Context, issueTypeSchemeId, 
 
 	endpoint := fmt.Sprintf("rest/api/%v/issuetypescheme/%v/issuetype/%v", i.version, issueTypeSchemeId, issueTypeId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}

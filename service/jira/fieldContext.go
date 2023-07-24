@@ -10,12 +10,12 @@ import (
 // FieldContextConnector is the interface that wraps the Jira field context
 //
 // It contains the methods required to manipulate the field context associated with a Jira field, you can use to:
-// 	1. get, create, update, and delete custom field contexts.
-// 	2. get context to issue types and projects mappings.
-//	3. get custom field contexts for projects and issue types.
-//	4. assign custom field contexts to projects.
-//	5. remove custom field contexts from projects.
-//	6. add issue types to custom field contexts.
+//  1. get, create, update, and delete custom field contexts.
+//  2. get context to issue types and projects mappings.
+//  3. get custom field contexts for projects and issue types.
+//  4. assign custom field contexts to projects.
+//  5. remove custom field contexts from projects.
+//  6. add issue types to custom field contexts.
 type FieldContextConnector interface {
 
 	// Gets returns a paginated list of contexts for a custom field. Contexts can be returned as follows:
@@ -183,6 +183,6 @@ type FieldContextOptionConnector interface {
 	//
 	// PUT /rest/api/{2-3}/field/{fieldId}/context/{contextId}/option/move
 	//
-	// TODO: The documentation needs to be created, raise a ticket here: https://github.com/ctreminiom/go-atlassian/issues
+	// https://docs.go-atlassian.io/jira-software-cloud/issues/fields/context/option#reorder-custom-field-options
 	Order(ctx context.Context, fieldId string, contextId int, payload *model.OrderFieldOptionPayloadScheme) (*model.ResponseScheme, error)
 }

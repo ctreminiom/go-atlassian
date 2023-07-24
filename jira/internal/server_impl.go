@@ -9,7 +9,7 @@ import (
 	"net/http"
 )
 
-func NewServerService(client service.Client, version string) (*ServerService, error) {
+func NewServerService(client service.Connector, version string) (*ServerService, error) {
 
 	if version == "" {
 		return nil, model.ErrNoVersionProvided
@@ -34,7 +34,7 @@ func (s *ServerService) Info(ctx context.Context) (*model.ServerInformationSchem
 }
 
 type internalServerServiceImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -42,7 +42,7 @@ func (i *internalServerServiceImpl) Info(ctx context.Context) (*model.ServerInfo
 
 	endpoint := fmt.Sprintf("rest/api/%v/serverInfo", i.version)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}

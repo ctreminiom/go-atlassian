@@ -647,7 +647,7 @@ func Test_internalIssueAttachmentServiceImpl_Add(t *testing.T) {
 
 				client.On("Call",
 					&http.Request{},
-					[]*model.AttachmentScheme(nil)).
+					[]*model.IssueAttachmentScheme(nil)).
 					Return(&model.ResponseScheme{}, nil)
 
 				fields.c = client
@@ -677,7 +677,7 @@ func Test_internalIssueAttachmentServiceImpl_Add(t *testing.T) {
 
 				client.On("Call",
 					&http.Request{},
-					[]*model.AttachmentScheme(nil)).
+					[]*model.IssueAttachmentScheme(nil)).
 					Return(&model.ResponseScheme{}, nil)
 
 				fields.c = client

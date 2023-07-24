@@ -74,7 +74,7 @@ func (i *IssueAttachmentService) Human(ctx context.Context, attachmentId string)
 // POST /rest/api/{2-3}/issue/{issueIdOrKey}/attachments
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/attachments#add-attachment
-func (i *IssueAttachmentService) Add(ctx context.Context, issueKeyOrId, fileName string, file io.Reader) ([]*model.AttachmentScheme, *model.ResponseScheme, error) {
+func (i *IssueAttachmentService) Add(ctx context.Context, issueKeyOrId, fileName string, file io.Reader) ([]*model.IssueAttachmentScheme, *model.ResponseScheme, error) {
 	return i.internalClient.Add(ctx, issueKeyOrId, fileName, file)
 }
 
@@ -197,7 +197,7 @@ func (i *internalIssueAttachmentServiceImpl) Human(ctx context.Context, attachme
 	return metadata, response, nil
 }
 
-func (i *internalIssueAttachmentServiceImpl) Add(ctx context.Context, issueKeyOrId, fileName string, file io.Reader) ([]*model.AttachmentScheme, *model.ResponseScheme, error) {
+func (i *internalIssueAttachmentServiceImpl) Add(ctx context.Context, issueKeyOrId, fileName string, file io.Reader) ([]*model.IssueAttachmentScheme, *model.ResponseScheme, error) {
 
 	if issueKeyOrId == "" {
 		return nil, nil, model.ErrNoIssueKeyOrIDError
@@ -233,7 +233,7 @@ func (i *internalIssueAttachmentServiceImpl) Add(ctx context.Context, issueKeyOr
 		return nil, nil, err
 	}
 
-	var attachments []*model.AttachmentScheme
+	var attachments []*model.IssueAttachmentScheme
 	response, err := i.c.Call(request, attachments)
 	if err != nil {
 		return nil, response, err

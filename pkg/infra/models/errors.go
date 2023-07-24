@@ -164,4 +164,6 @@ var (
 	ErrNoObjectTypeIDError                 = errors.New("assets: no object type id set")
 	ErrNoObjectTypeAttributeIDError        = errors.New("assets: no object type attribute id set")
 	ErrNoSiteError                         = errors.New("client: no atlassian site set")
+	ErrNoCreateIssuesError                 = errors.New("jira: no issues payload set")
+	ErrNoIssueSchemeError                  = errors.New("jira: no issue instance set")
 )

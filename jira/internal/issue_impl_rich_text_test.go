@@ -1021,6 +1021,9 @@ func Test_internalRichTextServiceImpl_Move(t *testing.T) {
 	err = operationsMocked.AddArrayOperation("labels", map[string]string{
 		"triaged": "remove",
 	})
+	if err != nil {
+		t.Fatal(err)
+	}
 
 	expectedPayloadWithCustomFieldsAndOperations := map[string]interface{}{
 

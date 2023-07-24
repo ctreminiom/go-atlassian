@@ -422,6 +422,12 @@ func (c *Client) NewRequest(ctx context.Context, method, urlStr, type_ string, b
 		}
 	}
 
+	// If the body interface is a *bytes.Buffer type
+	// it means the NewRequest() requires to handle the RFC 1867 ISO
+	if attachBuffer, ok := body.(*bytes.Buffer); ok {
+		buf = attachBuffer
+	}
+
 	req, err := http.NewRequestWithContext(ctx, method, u.String(), buf)
 	if err != nil {
 		return nil, err

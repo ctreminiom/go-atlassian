@@ -318,6 +318,24 @@ func TestClient_NewRequest(t *testing.T) {
 		},
 
 		{
+			name: "when the content type is provided",
+			fields: fields{
+				HTTP: http.DefaultClient,
+				Auth: authMocked,
+				Site: siteAsURL,
+			},
+			args: args{
+				ctx:    context.TODO(),
+				method: http.MethodGet,
+				urlStr: "rest/2/issue/attachment",
+				type_:  "type_sample",
+				body:   bytes.NewReader([]byte("Hello World")),
+			},
+			want:    requestMocked,
+			wantErr: false,
+		},
+
+		{
 			name: "when the request cannot be created",
 			fields: fields{
 				HTTP: http.DefaultClient,

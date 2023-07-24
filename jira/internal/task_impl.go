@@ -9,7 +9,7 @@ import (
 	"net/http"
 )
 
-func NewTaskService(client service.Client, version string) (*TaskService, error) {
+func NewTaskService(client service.Connector, version string) (*TaskService, error) {
 
 	if version == "" {
 		return nil, model.ErrNoVersionProvided
@@ -49,7 +49,7 @@ func (t *TaskService) Cancel(ctx context.Context, taskId string) (*model.Respons
 }
 
 type internalTaskServiceImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -61,7 +61,7 @@ func (i *internalTaskServiceImpl) Get(ctx context.Context, taskId string) (*mode
 
 	endpoint := fmt.Sprintf("rest/api/%v/task/%v", i.version, taskId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -82,7 +82,7 @@ func (i *internalTaskServiceImpl) Cancel(ctx context.Context, taskId string) (*m
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/task/%v/cancel", i.version, taskId)
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}

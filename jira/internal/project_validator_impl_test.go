@@ -14,7 +14,7 @@ import (
 func Test_internalProjectValidatorImpl_Validate(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -40,13 +40,13 @@ func Test_internalProjectValidatorImpl_Validate(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/projectvalidate/key?key=DUMMY",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -69,13 +69,13 @@ func Test_internalProjectValidatorImpl_Validate(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/projectvalidate/key?key=DUMMY",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -108,13 +108,13 @@ func Test_internalProjectValidatorImpl_Validate(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/projectvalidate/key?key=DUMMY",
-					nil).
+					"", nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -158,7 +158,7 @@ func Test_internalProjectValidatorImpl_Validate(t *testing.T) {
 func Test_internalProjectValidatorImpl_Key(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -184,13 +184,13 @@ func Test_internalProjectValidatorImpl_Key(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/projectvalidate/validProjectKey?key=DUMMY",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -213,13 +213,13 @@ func Test_internalProjectValidatorImpl_Key(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/projectvalidate/validProjectKey?key=DUMMY",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -252,13 +252,13 @@ func Test_internalProjectValidatorImpl_Key(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/projectvalidate/validProjectKey?key=DUMMY",
-					nil).
+					"", nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -302,7 +302,7 @@ func Test_internalProjectValidatorImpl_Key(t *testing.T) {
 func Test_internalProjectValidatorImpl_Name(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -328,13 +328,13 @@ func Test_internalProjectValidatorImpl_Name(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/projectvalidate/validProjectName?name=DUMMY+Project",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -357,13 +357,13 @@ func Test_internalProjectValidatorImpl_Name(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/projectvalidate/validProjectName?name=DUMMY+Project",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -396,13 +396,13 @@ func Test_internalProjectValidatorImpl_Name(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/projectvalidate/validProjectName?name=DUMMY+Project",
-					nil).
+					"", nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -446,7 +446,7 @@ func Test_internalProjectValidatorImpl_Name(t *testing.T) {
 func Test_NewProjectValidatorService(t *testing.T) {
 
 	type args struct {
-		client  service.Client
+		client  service.Connector
 		version string
 	}
 

@@ -1,7 +1,6 @@
 package internal
 
 import (
-	"bytes"
 	"context"
 	"errors"
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
@@ -15,7 +14,7 @@ import (
 func Test_internalTypeScreenSchemeImpl_Gets(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -49,13 +48,13 @@ func Test_internalTypeScreenSchemeImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/issuetypescreenscheme?=id&expand=expand&id=10001&id=10002&maxResults=100&queryString=query&startAt=50",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -85,13 +84,13 @@ func Test_internalTypeScreenSchemeImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/issuetypescreenscheme?=id&expand=expand&id=10001&id=10002&maxResults=100&queryString=query&startAt=50",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -121,13 +120,13 @@ func Test_internalTypeScreenSchemeImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/issuetypescreenscheme?=id&expand=expand&id=10001&id=10002&maxResults=100&queryString=query&startAt=50",
-					nil).
+					"", nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -172,7 +171,7 @@ func Test_internalTypeScreenSchemeImpl_Gets(t *testing.T) {
 func Test_internalTypeScreenSchemeImpl_Projects(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -201,13 +200,13 @@ func Test_internalTypeScreenSchemeImpl_Projects(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/issuetypescreenscheme/project?maxResults=100&projectId=29992&projectId=349383&startAt=50",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -232,13 +231,13 @@ func Test_internalTypeScreenSchemeImpl_Projects(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/issuetypescreenscheme/project?maxResults=100&projectId=29992&projectId=349383&startAt=50",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -263,13 +262,13 @@ func Test_internalTypeScreenSchemeImpl_Projects(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/issuetypescreenscheme/project?maxResults=100&projectId=29992&projectId=349383&startAt=50",
-					nil).
+					"", nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -314,7 +313,7 @@ func Test_internalTypeScreenSchemeImpl_Projects(t *testing.T) {
 func Test_internalTypeScreenSchemeImpl_Mapping(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -343,13 +342,13 @@ func Test_internalTypeScreenSchemeImpl_Mapping(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/issuetypescreenscheme/mapping?issueTypeScreenSchemeId=29992&issueTypeScreenSchemeId=349383&maxResults=100&startAt=50",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -374,13 +373,13 @@ func Test_internalTypeScreenSchemeImpl_Mapping(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/issuetypescreenscheme/mapping?issueTypeScreenSchemeId=29992&issueTypeScreenSchemeId=349383&maxResults=100&startAt=50",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -405,13 +404,13 @@ func Test_internalTypeScreenSchemeImpl_Mapping(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/issuetypescreenscheme/mapping?issueTypeScreenSchemeId=29992&issueTypeScreenSchemeId=349383&maxResults=100&startAt=50",
-					nil).
+					"", nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -456,7 +455,7 @@ func Test_internalTypeScreenSchemeImpl_Mapping(t *testing.T) {
 func Test_internalTypeScreenSchemeImpl_SchemesByProject(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -485,13 +484,13 @@ func Test_internalTypeScreenSchemeImpl_SchemesByProject(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/issuetypescreenscheme/29992/project?maxResults=100&startAt=50",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -516,13 +515,13 @@ func Test_internalTypeScreenSchemeImpl_SchemesByProject(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/issuetypescreenscheme/29992/project?maxResults=100&startAt=50",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -547,13 +546,13 @@ func Test_internalTypeScreenSchemeImpl_SchemesByProject(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/issuetypescreenscheme/29992/project?maxResults=100&startAt=50",
-					nil).
+					"", nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -597,13 +596,10 @@ func Test_internalTypeScreenSchemeImpl_SchemesByProject(t *testing.T) {
 
 func Test_internalTypeScreenSchemeImpl_Assign(t *testing.T) {
 
-	payloadMocked := &struct {
-		IssueTypeScreenSchemeID string "json:\"issueTypeScreenSchemeId\""
-		ProjectID               string "json:\"projectId\""
-	}{IssueTypeScreenSchemeID: "20001", ProjectID: "848483"}
+	payloadMocked := map[string]interface{}{"issueTypeScreenSchemeId": "20001", "projectId": "848483"}
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -630,17 +626,13 @@ func Test_internalTypeScreenSchemeImpl_Assign(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/3/issuetypescreenscheme/project",
-					bytes.NewReader([]byte{})).
+					"", payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -664,17 +656,13 @@ func Test_internalTypeScreenSchemeImpl_Assign(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/2/issuetypescreenscheme/project",
-					bytes.NewReader([]byte{})).
+					"", payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -689,6 +677,28 @@ func Test_internalTypeScreenSchemeImpl_Assign(t *testing.T) {
 		},
 
 		{
+			name:   "when the issue type screen scheme id is not provided",
+			fields: fields{version: "3"},
+			args: args{
+				ctx:                     context.TODO(),
+				issueTypeScreenSchemeId: "",
+			},
+			wantErr: true,
+			Err:     model.ErrNoIssueTypeScreenSchemeIDError,
+		},
+
+		{
+			name:   "when the project id is not provided",
+			fields: fields{version: "3"},
+			args: args{
+				ctx:                     context.TODO(),
+				issueTypeScreenSchemeId: "20001",
+			},
+			wantErr: true,
+			Err:     model.ErrNoProjectIDError,
+		},
+
+		{
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
@@ -698,17 +708,13 @@ func Test_internalTypeScreenSchemeImpl_Assign(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/3/issuetypescreenscheme/project",
-					bytes.NewReader([]byte{})).
+					"", payloadMocked).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -750,13 +756,10 @@ func Test_internalTypeScreenSchemeImpl_Assign(t *testing.T) {
 
 func Test_internalTypeScreenSchemeImpl_Update(t *testing.T) {
 
-	payloadMocked := &struct {
-		Name        string "json:\"name,omitempty\""
-		Description string "json:\"description,omitempty\""
-	}{Name: "New issue type scheme name", Description: "New issue type scheme description"}
+	payloadMocked := map[string]interface{}{"description": "New issue type scheme description", "name": "New issue type scheme name"}
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -774,6 +777,16 @@ func Test_internalTypeScreenSchemeImpl_Update(t *testing.T) {
 		Err     error
 	}{
 		{
+			name:   "when the issue type screen scheme id is not provided",
+			fields: fields{version: "3"},
+			args: args{
+				ctx:                     context.TODO(),
+				issueTypeScreenSchemeId: "",
+			},
+			wantErr: true,
+			Err:     model.ErrNoIssueTypeScreenSchemeIDError,
+		},
+		{
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
@@ -784,17 +797,13 @@ func Test_internalTypeScreenSchemeImpl_Update(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/3/issuetypescreenscheme/20001",
-					bytes.NewReader([]byte{})).
+					"", payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -819,17 +828,13 @@ func Test_internalTypeScreenSchemeImpl_Update(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/2/issuetypescreenscheme/20001",
-					bytes.NewReader([]byte{})).
+					"", payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -854,17 +859,13 @@ func Test_internalTypeScreenSchemeImpl_Update(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/3/issuetypescreenscheme/20001",
-					bytes.NewReader([]byte{})).
+					"", payloadMocked).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -908,7 +909,7 @@ func Test_internalTypeScreenSchemeImpl_Update(t *testing.T) {
 func Test_internalTypeScreenSchemeImpl_Delete(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -926,6 +927,16 @@ func Test_internalTypeScreenSchemeImpl_Delete(t *testing.T) {
 		Err     error
 	}{
 		{
+			name:   "when the issue type screen scheme id is not provided",
+			fields: fields{version: "3"},
+			args: args{
+				ctx:                     context.TODO(),
+				issueTypeScreenSchemeId: "",
+			},
+			wantErr: true,
+			Err:     model.ErrNoIssueTypeScreenSchemeIDError,
+		},
+		{
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
@@ -934,13 +945,13 @@ func Test_internalTypeScreenSchemeImpl_Delete(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/api/3/issuetypescreenscheme/20001",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -963,13 +974,13 @@ func Test_internalTypeScreenSchemeImpl_Delete(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/api/2/issuetypescreenscheme/20001",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -992,13 +1003,13 @@ func Test_internalTypeScreenSchemeImpl_Delete(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/api/3/issuetypescreenscheme/20001",
-					nil).
+					"", nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -1041,12 +1052,20 @@ func Test_internalTypeScreenSchemeImpl_Delete(t *testing.T) {
 func Test_internalTypeScreenSchemeImpl_Append(t *testing.T) {
 
 	payloadMocked := &model.IssueTypeScreenSchemePayloadScheme{
-		Name:              "",
-		IssueTypeMappings: nil,
+		IssueTypeMappings: []*model.IssueTypeScreenSchemeMappingPayloadScheme{
+			{
+				IssueTypeID:    "10000",
+				ScreenSchemeID: "10001",
+			},
+			{
+				IssueTypeID:    "10001",
+				ScreenSchemeID: "10002",
+			},
+		},
 	}
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -1065,6 +1084,16 @@ func Test_internalTypeScreenSchemeImpl_Append(t *testing.T) {
 		Err     error
 	}{
 		{
+			name:   "when the issue type screen scheme id is not provided",
+			fields: fields{version: "3"},
+			args: args{
+				ctx:                     context.TODO(),
+				issueTypeScreenSchemeId: "",
+			},
+			wantErr: true,
+			Err:     model.ErrNoIssueTypeScreenSchemeIDError,
+		},
+		{
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
@@ -1074,17 +1103,13 @@ func Test_internalTypeScreenSchemeImpl_Append(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/3/issuetypescreenscheme/20001/mapping",
-					bytes.NewReader([]byte{})).
+					"", payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -1108,17 +1133,13 @@ func Test_internalTypeScreenSchemeImpl_Append(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/2/issuetypescreenscheme/20001/mapping",
-					bytes.NewReader([]byte{})).
+					"", payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -1142,17 +1163,13 @@ func Test_internalTypeScreenSchemeImpl_Append(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/3/issuetypescreenscheme/20001/mapping",
-					bytes.NewReader([]byte{})).
+					"", payloadMocked).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -1195,12 +1212,10 @@ func Test_internalTypeScreenSchemeImpl_Append(t *testing.T) {
 
 func Test_internalTypeScreenSchemeImpl_UpdateDefault(t *testing.T) {
 
-	payloadMocked := &struct {
-		ScreenSchemeID string "json:\"screenSchemeId\""
-	}{ScreenSchemeID: "200202"}
+	payloadMocked := map[string]interface{}{"screenSchemeId": "200202"}
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -1218,6 +1233,26 @@ func Test_internalTypeScreenSchemeImpl_UpdateDefault(t *testing.T) {
 		Err     error
 	}{
 		{
+			name:   "when the issue type screen scheme id is not provided",
+			fields: fields{version: "3"},
+			args: args{
+				ctx:                     context.TODO(),
+				issueTypeScreenSchemeId: "",
+			},
+			wantErr: true,
+			Err:     model.ErrNoIssueTypeScreenSchemeIDError,
+		},
+		{
+			name:   "when the screen scheme id is not provided",
+			fields: fields{version: "3"},
+			args: args{
+				ctx:                     context.TODO(),
+				issueTypeScreenSchemeId: "20001",
+			},
+			wantErr: true,
+			Err:     model.ErrNoScreenSchemeIDError,
+		},
+		{
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
@@ -1227,17 +1262,13 @@ func Test_internalTypeScreenSchemeImpl_UpdateDefault(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/3/issuetypescreenscheme/20001/mapping/default",
-					bytes.NewReader([]byte{})).
+					"", payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -1261,17 +1292,13 @@ func Test_internalTypeScreenSchemeImpl_UpdateDefault(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/2/issuetypescreenscheme/20001/mapping/default",
-					bytes.NewReader([]byte{})).
+					"", payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -1295,17 +1322,13 @@ func Test_internalTypeScreenSchemeImpl_UpdateDefault(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/3/issuetypescreenscheme/20001/mapping/default",
-					bytes.NewReader([]byte{})).
+					"", payloadMocked).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -1348,12 +1371,10 @@ func Test_internalTypeScreenSchemeImpl_UpdateDefault(t *testing.T) {
 
 func Test_internalTypeScreenSchemeImpl_Remove(t *testing.T) {
 
-	payloadMocked := &struct {
-		IssueTypeIds []string "json:\"issueTypeIds\""
-	}{IssueTypeIds: []string{"9", "43"}}
+	payloadMocked := map[string]interface{}{"issueTypeIds": []string{"9", "43"}}
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -1372,6 +1393,26 @@ func Test_internalTypeScreenSchemeImpl_Remove(t *testing.T) {
 		Err     error
 	}{
 		{
+			name:   "when the issue type screen scheme id is not provided",
+			fields: fields{version: "3"},
+			args: args{
+				ctx:                     context.TODO(),
+				issueTypeScreenSchemeId: "",
+			},
+			wantErr: true,
+			Err:     model.ErrNoIssueTypeScreenSchemeIDError,
+		},
+		{
+			name:   "when the issue type id's are not provided",
+			fields: fields{version: "3"},
+			args: args{
+				ctx:                     context.TODO(),
+				issueTypeScreenSchemeId: "2201",
+			},
+			wantErr: true,
+			Err:     model.ErrNoIssueTypesError,
+		},
+		{
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
@@ -1381,17 +1422,13 @@ func Test_internalTypeScreenSchemeImpl_Remove(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/3/issuetypescreenscheme/20001/mapping/remove",
-					bytes.NewReader([]byte{})).
+					"", payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -1415,17 +1452,13 @@ func Test_internalTypeScreenSchemeImpl_Remove(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/issuetypescreenscheme/20001/mapping/remove",
-					bytes.NewReader([]byte{})).
+					"", payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -1449,17 +1482,13 @@ func Test_internalTypeScreenSchemeImpl_Remove(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/3/issuetypescreenscheme/20001/mapping/remove",
-					bytes.NewReader([]byte{})).
+					"", payloadMocked).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -1517,7 +1546,7 @@ func Test_internalTypeScreenSchemeImpl_Create(t *testing.T) {
 	}
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -1543,17 +1572,13 @@ func Test_internalTypeScreenSchemeImpl_Create(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/3/issuetypescreenscheme",
-					bytes.NewReader([]byte{})).
+					"", payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -1576,17 +1601,13 @@ func Test_internalTypeScreenSchemeImpl_Create(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/issuetypescreenscheme",
-					bytes.NewReader([]byte{})).
+					"", payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -1609,17 +1630,13 @@ func Test_internalTypeScreenSchemeImpl_Create(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/3/issuetypescreenscheme",
-					bytes.NewReader([]byte{})).
+					"", payloadMocked).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -1663,7 +1680,7 @@ func Test_internalTypeScreenSchemeImpl_Create(t *testing.T) {
 func Test_NewTypeScreenSchemeService(t *testing.T) {
 
 	type args struct {
-		client  service.Client
+		client  service.Connector
 		version string
 	}
 

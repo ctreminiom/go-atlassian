@@ -11,7 +11,7 @@ import (
 	"strconv"
 )
 
-func NewIssueFieldConfigurationService(client service.Client, version string, item *IssueFieldConfigItemService,
+func NewIssueFieldConfigurationService(client service.Connector, version string, item *IssueFieldConfigItemService,
 	scheme *IssueFieldConfigSchemeService) (*IssueFieldConfigService, error) {
 
 	if version == "" {
@@ -75,7 +75,7 @@ func (i *IssueFieldConfigService) Delete(ctx context.Context, id int) (*model.Re
 }
 
 type internalIssueFieldConfigServiceImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -92,7 +92,7 @@ func (i *internalIssueFieldConfigServiceImpl) Gets(ctx context.Context, ids []in
 
 	endpoint := fmt.Sprintf("rest/api/%v/fieldconfiguration?%v", i.version, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -112,22 +112,15 @@ func (i *internalIssueFieldConfigServiceImpl) Create(ctx context.Context, name, 
 		return nil, nil, model.ErrNoFieldConfigurationNameError
 	}
 
-	payload := struct {
-		Name        string `json:"name"`
-		Description string `json:"description,omitempty"`
-	}{
-		Name:        name,
-		Description: description,
-	}
-
-	reader, err := i.c.TransformStructToReader(&payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	endpoint := fmt.Sprintf("rest/api/%v/fieldconfiguration", i.version)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	payload := map[string]interface{}{"name": name}
+
+	if description != "" {
+		payload["description"] = description
+	}
+
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -151,22 +144,15 @@ func (i *internalIssueFieldConfigServiceImpl) Update(ctx context.Context, id int
 		return nil, model.ErrNoFieldConfigurationNameError
 	}
 
-	payload := struct {
-		Name        string `json:"name"`
-		Description string `json:"description,omitempty"`
-	}{
-		Name:        name,
-		Description: description,
-	}
+	payload := map[string]interface{}{"name": name}
 
-	reader, err := i.c.TransformStructToReader(&payload)
-	if err != nil {
-		return nil, err
+	if description != "" {
+		payload["description"] = description
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/fieldconfiguration/%v", i.version, id)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
 		return nil, err
 	}
@@ -182,7 +168,7 @@ func (i *internalIssueFieldConfigServiceImpl) Delete(ctx context.Context, id int
 
 	endpoint := fmt.Sprintf("rest/api/%v/fieldconfiguration/%v", i.version, id)
 
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}

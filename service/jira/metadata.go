@@ -14,7 +14,7 @@ type MetadataConnector interface {
 	//
 	// GET /rest/api/{2-3}/issue/{issueIdOrKey}/editmeta
 	//
-	// TODO: the documentation needs to be created
+	// https://docs.go-atlassian.io/jira-software-cloud/issues/metadata#get-edit-issue-metadata
 	Get(ctx context.Context, issueKeyOrId string, overrideScreenSecurity, overrideEditableFlag bool) (gjson.Result, *model.ResponseScheme, error)
 
 	// Create returns details of projects, issue types within projects, and, when requested,
@@ -23,6 +23,6 @@ type MetadataConnector interface {
 	//
 	// GET /rest/api/{2-3}/issue/createmeta
 	//
-	// TODO: the documentation needs to be created
+	// https://docs.go-atlassian.io/jira-software-cloud/issues/metadata#get-create-issue-metadata
 	Create(ctx context.Context, opts *model.IssueMetadataCreateOptions) (gjson.Result, *model.ResponseScheme, error)
 }

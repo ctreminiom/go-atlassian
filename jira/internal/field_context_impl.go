@@ -11,7 +11,7 @@ import (
 	"strconv"
 )
 
-func NewIssueFieldContextService(client service.Client, version string, option *IssueFieldContextOptionService) (*IssueFieldContextService, error) {
+func NewIssueFieldContextService(client service.Connector, version string, option *IssueFieldContextOptionService) (*IssueFieldContextService, error) {
 
 	if version == "" {
 		return nil, model.ErrNoVersionProvided
@@ -161,7 +161,7 @@ func (i *IssueFieldContextService) UnLink(ctx context.Context, fieldId string, c
 }
 
 type internalIssueFieldContextServiceImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -186,7 +186,7 @@ func (i *internalIssueFieldContextServiceImpl) Gets(ctx context.Context, fieldId
 
 	endpoint := fmt.Sprintf("rest/api/%v/field/%v/context?%v", i.version, fieldId, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -206,14 +206,9 @@ func (i *internalIssueFieldContextServiceImpl) Create(ctx context.Context, field
 		return nil, nil, model.ErrNoFieldIDError
 	}
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	endpoint := fmt.Sprintf("rest/api/%v/field/%v/context", i.version, fieldId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -243,7 +238,7 @@ func (i *internalIssueFieldContextServiceImpl) GetDefaultValues(ctx context.Cont
 
 	endpoint := fmt.Sprintf("rest/api/%v/field/%v/context/defaultValue?%s", i.version, fieldId, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -263,14 +258,9 @@ func (i *internalIssueFieldContextServiceImpl) SetDefaultValue(ctx context.Conte
 		return nil, model.ErrNoFieldIDError
 	}
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, err
-	}
-
 	endpoint := fmt.Sprintf("rest/api/%v/field/%v/context/defaultValue", i.version, fieldId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
 		return nil, err
 	}
@@ -294,7 +284,7 @@ func (i *internalIssueFieldContextServiceImpl) IssueTypesContext(ctx context.Con
 
 	endpoint := fmt.Sprintf("rest/api/%v/field/%v/context/issuetypemapping?%v", i.version, fieldId, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -324,7 +314,7 @@ func (i *internalIssueFieldContextServiceImpl) ProjectsContext(ctx context.Conte
 
 	endpoint := fmt.Sprintf("rest/api/%v/field/%v/context/projectmapping?%v", i.version, fieldId, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -348,22 +338,15 @@ func (i *internalIssueFieldContextServiceImpl) Update(ctx context.Context, field
 		return nil, model.ErrNoFieldContextIDError
 	}
 
-	payload := struct {
-		Name        string `json:"name,omitempty"`
-		Description string `json:"description,omitempty"`
-	}{
-		Name:        name,
-		Description: description,
-	}
+	payload := map[string]interface{}{"name": name}
 
-	reader, err := i.c.TransformStructToReader(&payload)
-	if err != nil {
-		return nil, err
+	if description != "" {
+		payload["description"] = description
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/field/%v/context/%v", i.version, fieldId, contextId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
 		return nil, err
 	}
@@ -383,7 +366,7 @@ func (i *internalIssueFieldContextServiceImpl) Delete(ctx context.Context, field
 
 	endpoint := fmt.Sprintf("rest/api/%v/field/%v/context/%v", i.version, fieldId, contextId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -401,20 +384,9 @@ func (i *internalIssueFieldContextServiceImpl) AddIssueTypes(ctx context.Context
 		return nil, model.ErrNoIssueTypesError
 	}
 
-	payload := struct {
-		IssueTypeIds []string `json:"issueTypeIds"`
-	}{
-		IssueTypeIds: issueTypesIds,
-	}
-
-	reader, err := i.c.TransformStructToReader(&payload)
-	if err != nil {
-		return nil, err
-	}
-
 	endpoint := fmt.Sprintf("rest/api/%v/field/%v/context/%v/issuetype", i.version, fieldId, contextId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", map[string]interface{}{"issueTypeIds": issueTypesIds})
 	if err != nil {
 		return nil, err
 	}
@@ -432,20 +404,9 @@ func (i *internalIssueFieldContextServiceImpl) RemoveIssueTypes(ctx context.Cont
 		return nil, model.ErrNoIssueTypesError
 	}
 
-	payload := struct {
-		IssueTypeIds []string `json:"issueTypeIds"`
-	}{
-		IssueTypeIds: issueTypesIds,
-	}
-
-	reader, err := i.c.TransformStructToReader(&payload)
-	if err != nil {
-		return nil, err
-	}
-
 	endpoint := fmt.Sprintf("rest/api/%v/field/%v/context/%v/issuetype/remove", i.version, fieldId, contextId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", map[string]interface{}{"issueTypeIds": issueTypesIds})
 	if err != nil {
 		return nil, err
 	}
@@ -459,24 +420,17 @@ func (i *internalIssueFieldContextServiceImpl) Link(ctx context.Context, fieldId
 		return nil, model.ErrNoFieldIDError
 	}
 
+	if contextId == 0 {
+		return nil, model.ErrNoFieldContextIDError
+	}
+
 	if len(projectIds) == 0 {
-		return nil, model.ErrNoIssueTypesError
-	}
-
-	payload := struct {
-		ProjectIds []string `json:"projectIds"`
-	}{
-		ProjectIds: projectIds,
-	}
-
-	reader, err := i.c.TransformStructToReader(&payload)
-	if err != nil {
-		return nil, err
+		return nil, model.ErrNoProjectIDsError
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/field/%v/context/%v/project", i.version, fieldId, contextId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", map[string]interface{}{"projectIds": projectIds})
 	if err != nil {
 		return nil, err
 	}
@@ -490,24 +444,17 @@ func (i *internalIssueFieldContextServiceImpl) UnLink(ctx context.Context, field
 		return nil, model.ErrNoFieldIDError
 	}
 
+	if contextId == 0 {
+		return nil, model.ErrNoFieldContextIDError
+	}
+
 	if len(projectIds) == 0 {
-		return nil, model.ErrNoIssueTypesError
-	}
-
-	payload := struct {
-		ProjectIds []string `json:"projectIds"`
-	}{
-		ProjectIds: projectIds,
-	}
-
-	reader, err := i.c.TransformStructToReader(&payload)
-	if err != nil {
-		return nil, err
+		return nil, model.ErrNoProjectIDsError
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/field/%v/context/%v/project/remove", i.version, fieldId, contextId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", map[string]interface{}{"projectIds": projectIds})
 	if err != nil {
 		return nil, err
 	}

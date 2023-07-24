@@ -9,7 +9,7 @@ import (
 	"net/http"
 )
 
-func NewTypeService(client service.Client, version string, scheme *TypeSchemeService, screenScheme *TypeScreenSchemeService) (
+func NewTypeService(client service.Connector, version string, scheme *TypeSchemeService, screenScheme *TypeScreenSchemeService) (
 	*TypeService, error) {
 
 	if version == "" {
@@ -89,7 +89,7 @@ func (t *TypeService) Alternatives(ctx context.Context, issueTypeId string) ([]*
 }
 
 type internalTypeImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -97,7 +97,7 @@ func (i *internalTypeImpl) Gets(ctx context.Context) ([]*model.IssueTypeScheme, 
 
 	endpoint := fmt.Sprintf("rest/api/%v/issuetype", i.version)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -113,14 +113,9 @@ func (i *internalTypeImpl) Gets(ctx context.Context) ([]*model.IssueTypeScheme, 
 
 func (i *internalTypeImpl) Create(ctx context.Context, payload *model.IssueTypePayloadScheme) (*model.IssueTypeScheme, *model.ResponseScheme, error) {
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	endpoint := fmt.Sprintf("rest/api/%v/issuetype", i.version)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -142,7 +137,7 @@ func (i *internalTypeImpl) Get(ctx context.Context, issueTypeId string) (*model.
 
 	endpoint := fmt.Sprintf("rest/api/%v/issuetype/%v", i.version, issueTypeId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -162,14 +157,9 @@ func (i *internalTypeImpl) Update(ctx context.Context, issueTypeId string, paylo
 		return nil, nil, model.ErrNoIssueTypeIDError
 	}
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	endpoint := fmt.Sprintf("rest/api/%v/issuetype/%v", i.version, issueTypeId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -191,7 +181,7 @@ func (i *internalTypeImpl) Delete(ctx context.Context, issueTypeId string) (*mod
 
 	endpoint := fmt.Sprintf("rest/api/%v/issuetype/%v", i.version, issueTypeId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -203,7 +193,7 @@ func (i *internalTypeImpl) Alternatives(ctx context.Context, issueTypeId string)
 
 	endpoint := fmt.Sprintf("rest/api/%v/issuetype/%v/alternatives", i.version, issueTypeId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}

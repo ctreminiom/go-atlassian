@@ -11,7 +11,7 @@ import (
 	"strings"
 )
 
-func NewPermissionSchemeGrantService(client service.Client, version string) (*PermissionSchemeGrantService, error) {
+func NewPermissionSchemeGrantService(client service.Connector, version string) (*PermissionSchemeGrantService, error) {
 
 	if version == "" {
 		return nil, model.ErrNoVersionProvided
@@ -63,7 +63,7 @@ func (p *PermissionSchemeGrantService) Delete(ctx context.Context, permissionSch
 }
 
 type internalPermissionSchemeGrantImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -73,14 +73,9 @@ func (i *internalPermissionSchemeGrantImpl) Create(ctx context.Context, permissi
 		return nil, nil, model.ErrNoPermissionSchemeIDError
 	}
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	endpoint := fmt.Sprintf("rest/api/%v/permissionscheme/%v/permission", i.version, permissionSchemeId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -111,7 +106,7 @@ func (i *internalPermissionSchemeGrantImpl) Gets(ctx context.Context, permission
 		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -146,7 +141,7 @@ func (i *internalPermissionSchemeGrantImpl) Get(ctx context.Context, permissionS
 		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -172,7 +167,7 @@ func (i *internalPermissionSchemeGrantImpl) Delete(ctx context.Context, permissi
 
 	endpoint := fmt.Sprintf("rest/api/%v/permissionscheme/%v/permission/%v", i.version, permissionSchemeId, permissionGrantId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}

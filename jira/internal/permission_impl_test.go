@@ -30,7 +30,7 @@ func Test_internalPermissionImpl_Gets(t *testing.T) {
 `)
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -54,12 +54,13 @@ func Test_internalPermissionImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/permissions",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -82,12 +83,13 @@ func Test_internalPermissionImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/permissions",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -110,12 +112,13 @@ func Test_internalPermissionImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/permissions",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -146,12 +149,13 @@ func Test_internalPermissionImpl_Gets(t *testing.T) {
 							}
 				`)
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/permissions",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -213,7 +217,7 @@ func Test_internalPermissionImpl_Checks(t *testing.T) {
 	}
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -239,17 +243,14 @@ func Test_internalPermissionImpl_Checks(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/3/permissions/check",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -272,17 +273,14 @@ func Test_internalPermissionImpl_Checks(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/permissions/check",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -305,17 +303,14 @@ func Test_internalPermissionImpl_Checks(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/3/permissions/check",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -358,12 +353,10 @@ func Test_internalPermissionImpl_Checks(t *testing.T) {
 
 func Test_internalPermissionImpl_Projects(t *testing.T) {
 
-	payloadMocked := &struct {
-		Permissions []string "json:\"permissions,omitempty\""
-	}{Permissions: []string{"EDIT_ISSUES", "CREATE_ISSUES"}}
+	payloadMocked := map[string]interface{}{"permissions": []string{"EDIT_ISSUES", "CREATE_ISSUES"}}
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -389,17 +382,14 @@ func Test_internalPermissionImpl_Projects(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/3/permissions/project",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -422,17 +412,14 @@ func Test_internalPermissionImpl_Projects(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/permissions/project",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -455,23 +442,30 @@ func Test_internalPermissionImpl_Projects(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/3/permissions/project",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
 			},
 			wantErr: true,
 			Err:     errors.New("error, unable to create the http request"),
+		},
+
+		{
+			name:   "when the permission keys are not provided",
+			fields: fields{version: "3"},
+			args: args{
+				ctx: context.TODO(),
+			},
+			wantErr: true,
+			Err:     model.ErrNoPermissionKeysError,
 		},
 	}
 
@@ -509,7 +503,7 @@ func Test_internalPermissionImpl_Projects(t *testing.T) {
 func Test_NewPermissionService(t *testing.T) {
 
 	type args struct {
-		client  service.Client
+		client  service.Connector
 		version string
 	}
 

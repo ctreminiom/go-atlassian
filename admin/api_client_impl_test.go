@@ -1,10 +1,9 @@
-package v2
+package admin
 
 import (
 	"bytes"
 	"context"
-	"errors"
-	"github.com/ctreminiom/go-atlassian/jira/internal"
+	"github.com/ctreminiom/go-atlassian/admin/internal"
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service/common"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
@@ -242,6 +241,7 @@ func TestClient_NewRequest(t *testing.T) {
 	authMocked := internal.NewAuthenticationService(nil)
 	authMocked.SetBasicAuth("mail", "token")
 	authMocked.SetUserAgent("firefox")
+	authMocked.SetExperimentalFlag()
 
 	siteAsURL, err := url.Parse("https://ctreminiom.atlassian.net")
 	if err != nil {
@@ -294,24 +294,6 @@ func TestClient_NewRequest(t *testing.T) {
 				method: http.MethodGet,
 				urlStr: "rest/2/issue/attachment",
 				type_:  "",
-				body:   bytes.NewReader([]byte("Hello World")),
-			},
-			want:    requestMocked,
-			wantErr: false,
-		},
-
-		{
-			name: "when the content type is provided",
-			fields: fields{
-				HTTP: http.DefaultClient,
-				Auth: authMocked,
-				Site: siteAsURL,
-			},
-			args: args{
-				ctx:    context.TODO(),
-				method: http.MethodGet,
-				urlStr: "rest/2/issue/attachment",
-				type_:  "type_sample",
 				body:   bytes.NewReader([]byte("Hello World")),
 			},
 			want:    requestMocked,
@@ -378,6 +360,7 @@ func TestClient_NewRequest(t *testing.T) {
 
 				assert.Error(t, err)
 			} else {
+
 				assert.NoError(t, err)
 				assert.NotEqual(t, got, nil)
 			}
@@ -470,17 +453,13 @@ func TestClient_processResponse(t *testing.T) {
 
 func TestNew(t *testing.T) {
 
-	mockClient, err := New(http.DefaultClient, "https://ctreminiom.atlassian.net")
+	mockClient, err := New(http.DefaultClient)
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	mockClient.Auth.SetBasicAuth("test", "test")
 	mockClient.Auth.SetUserAgent("aaa")
-
-	invalidURLClientMocked, _ := New(nil, " https://zhidao.baidu.com/special/view?id=sd&preview=1")
-
-	noURLClientMocked, _ := New(nil, "")
 
 	type args struct {
 		httpClient common.HttpClient
@@ -504,33 +483,12 @@ func TestNew(t *testing.T) {
 			want:    mockClient,
 			wantErr: false,
 		},
-
-		{
-			name: "when the site url are not provided",
-			args: args{
-				httpClient: http.DefaultClient,
-				site:       "",
-			},
-			want:    noURLClientMocked,
-			wantErr: true,
-			Err:     model.ErrNoSiteError,
-		},
-		{
-			name: "when the site url is not valid",
-			args: args{
-				httpClient: http.DefaultClient,
-				site:       " https://zhidao.baidu.com/special/view?id=sd&preview=1",
-			},
-			want:    invalidURLClientMocked,
-			wantErr: true,
-			Err:     errors.New("parse \" https://zhidao.baidu.com/special/view?id=sd&preview=1/\": first path segment in URL cannot contain colon"),
-		},
 	}
 
 	for _, testCase := range testCases {
 		t.Run(testCase.name, func(t *testing.T) {
 
-			gotClient, err := New(testCase.args.httpClient, testCase.args.site)
+			gotClient, err := New(testCase.args.httpClient)
 
 			if testCase.wantErr {
 

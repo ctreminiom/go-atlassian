@@ -11,7 +11,7 @@ import (
 	"strconv"
 )
 
-func NewLabelService(client service.Client, version string) (*LabelService, error) {
+func NewLabelService(client service.Connector, version string) (*LabelService, error) {
 
 	if version == "" {
 		return nil, model.ErrNoVersionProvided
@@ -36,7 +36,7 @@ func (i *LabelService) Gets(ctx context.Context, startAt, maxResults int) (*mode
 }
 
 type internalLabelServiceImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -48,7 +48,7 @@ func (i *internalLabelServiceImpl) Gets(ctx context.Context, startAt, maxResults
 
 	endpoint := fmt.Sprintf("rest/api/%v/label?%v", i.version, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}

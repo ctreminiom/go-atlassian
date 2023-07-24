@@ -12,7 +12,7 @@ import (
 	"strings"
 )
 
-func NewUserSearchService(client service.Client, version string) (*UserSearchService, error) {
+func NewUserSearchService(client service.Connector, version string) (*UserSearchService, error) {
 
 	if version == "" {
 		return nil, model.ErrNoVersionProvided
@@ -68,7 +68,7 @@ func (u *UserSearchService) Check(ctx context.Context, permission string, option
 }
 
 type internalUserSearchImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -104,7 +104,7 @@ func (i *internalUserSearchImpl) Check(ctx context.Context, permission string, o
 
 	endpoint := fmt.Sprintf("rest/api/%v/user/permission/search?%v", i.version, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -138,7 +138,7 @@ func (i *internalUserSearchImpl) Projects(ctx context.Context, accountId string,
 
 	endpoint := fmt.Sprintf("rest/api/%v/user/assignable/multiProjectSearch?%v", i.version, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -168,7 +168,7 @@ func (i *internalUserSearchImpl) Do(ctx context.Context, accountId, query string
 
 	endpoint := fmt.Sprintf("rest/api/%v/user/search?%v", i.version, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}

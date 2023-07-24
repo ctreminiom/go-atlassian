@@ -44,20 +44,15 @@ func (s *SearchRichTextService) Post(ctx context.Context, jql string, fields, ex
 }
 
 type internalSearchRichTextImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
 func (i *internalSearchRichTextImpl) Checks(ctx context.Context, payload *model.IssueSearchCheckPayloadScheme) (*model.IssueMatchesPageScheme, *model.ResponseScheme, error) {
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	endpoint := fmt.Sprintf("rest/api/%v/jql/match", i.version)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -96,7 +91,7 @@ func (i *internalSearchRichTextImpl) Get(ctx context.Context, jql string, fields
 
 	endpoint := fmt.Sprintf("rest/api/%v/search?%v", i.version, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -128,14 +123,9 @@ func (i *internalSearchRichTextImpl) Post(ctx context.Context, jql string, field
 		ValidateQuery: validate,
 	}
 
-	reader, err := i.c.TransformStructToReader(&payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	endpoint := fmt.Sprintf("rest/api/%v/search", i.version)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}

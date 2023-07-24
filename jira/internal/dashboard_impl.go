@@ -12,7 +12,7 @@ import (
 	"strings"
 )
 
-func NewDashboardService(client service.Client, version string) (*DashboardService, error) {
+func NewDashboardService(client service.Connector, version string) (*DashboardService, error) {
 
 	if version == "" {
 		return nil, model.ErrNoVersionProvided
@@ -97,7 +97,7 @@ func (d *DashboardService) Update(ctx context.Context, dashboardId string, paylo
 }
 
 type internalDashboardImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -113,7 +113,7 @@ func (i *internalDashboardImpl) Gets(ctx context.Context, startAt, maxResults in
 
 	endpoint := fmt.Sprintf("rest/api/%v/dashboard?%v", i.version, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -129,14 +129,9 @@ func (i *internalDashboardImpl) Gets(ctx context.Context, startAt, maxResults in
 
 func (i *internalDashboardImpl) Create(ctx context.Context, payload *model.DashboardPayloadScheme) (*model.DashboardScheme, *model.ResponseScheme, error) {
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	endpoint := fmt.Sprintf("rest/api/%v/dashboard", i.version)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -181,7 +176,7 @@ func (i *internalDashboardImpl) Search(ctx context.Context, options *model.Dashb
 
 	endpoint := fmt.Sprintf("rest/api/%v/dashboard/search?%s", i.version, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -203,7 +198,7 @@ func (i *internalDashboardImpl) Get(ctx context.Context, dashboardId string) (*m
 
 	endpoint := fmt.Sprintf("rest/api/%v/dashboard/%v", i.version, dashboardId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -225,17 +220,12 @@ func (i *internalDashboardImpl) Delete(ctx context.Context, dashboardId string) 
 
 	endpoint := fmt.Sprintf("rest/api/%v/dashboard/%v", i.version, dashboardId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}
 
-	response, err := i.c.Call(request, nil)
-	if err != nil {
-		return nil, err
-	}
-
-	return response, nil
+	return i.c.Call(request, nil)
 }
 
 func (i *internalDashboardImpl) Copy(ctx context.Context, dashboardId string, payload *model.DashboardPayloadScheme) (*model.DashboardScheme, *model.ResponseScheme, error) {
@@ -244,14 +234,9 @@ func (i *internalDashboardImpl) Copy(ctx context.Context, dashboardId string, pa
 		return nil, nil, model.ErrNoDashboardIDError
 	}
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	endpoint := fmt.Sprintf("rest/api/%v/dashboard/%v/copy", i.version, dashboardId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -271,14 +256,9 @@ func (i *internalDashboardImpl) Update(ctx context.Context, dashboardId string, 
 		return nil, nil, model.ErrNoDashboardIDError
 	}
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	endpoint := fmt.Sprintf("rest/api/%v/dashboard/%v", i.version, dashboardId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}

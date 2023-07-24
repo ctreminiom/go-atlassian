@@ -5,7 +5,7 @@ import (
 	"github.com/ctreminiom/go-atlassian/service"
 )
 
-func NewCommentService(client service.Client, version string) (*CommentADFService, *CommentRichTextService, error) {
+func NewCommentService(client service.Connector, version string) (*CommentADFService, *CommentRichTextService, error) {
 
 	if version == "" {
 		return nil, nil, model.ErrNoVersionProvided

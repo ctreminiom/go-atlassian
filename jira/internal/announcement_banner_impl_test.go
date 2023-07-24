@@ -1,7 +1,6 @@
 package internal
 
 import (
-	"bytes"
 	"context"
 	"errors"
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
@@ -15,7 +14,7 @@ import (
 func Test_internalAnnouncementBannerImpl_Get(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -38,12 +37,13 @@ func Test_internalAnnouncementBannerImpl_Get(t *testing.T) {
 			},
 			fields: fields{version: "2"},
 			on: func(fields *fields) {
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/announcementBanner",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -63,12 +63,13 @@ func Test_internalAnnouncementBannerImpl_Get(t *testing.T) {
 			},
 			fields: fields{version: "3"},
 			on: func(fields *fields) {
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/announcementBanner",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -88,12 +89,13 @@ func Test_internalAnnouncementBannerImpl_Get(t *testing.T) {
 				ctx: context.Background(),
 			},
 			on: func(fields *fields) {
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/announcementBanner",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("unable to create the http request"))
 
@@ -110,12 +112,13 @@ func Test_internalAnnouncementBannerImpl_Get(t *testing.T) {
 				ctx: context.Background(),
 			},
 			on: func(fields *fields) {
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/announcementBanner",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -170,7 +173,7 @@ func Test_internalAnnouncementBannerImpl_Update(t *testing.T) {
 	}
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -195,17 +198,14 @@ func Test_internalAnnouncementBannerImpl_Update(t *testing.T) {
 			},
 			fields: fields{version: "2"},
 			on: func(fields *fields) {
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/2/announcementBanner",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -225,17 +225,14 @@ func Test_internalAnnouncementBannerImpl_Update(t *testing.T) {
 			},
 			fields: fields{version: "3"},
 			on: func(fields *fields) {
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/3/announcementBanner",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -255,17 +252,14 @@ func Test_internalAnnouncementBannerImpl_Update(t *testing.T) {
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/2/announcementBanner",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, errors.New("unable to create the http request"))
 
 				fields.c = client
@@ -282,17 +276,14 @@ func Test_internalAnnouncementBannerImpl_Update(t *testing.T) {
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/2/announcementBanner",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",

@@ -1,7 +1,6 @@
 package internal
 
 import (
-	"bytes"
 	"context"
 	"errors"
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
@@ -16,7 +15,7 @@ import (
 func Test_internalIssueFieldServiceImpl_Gets(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -40,12 +39,13 @@ func Test_internalIssueFieldServiceImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/field",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -69,12 +69,13 @@ func Test_internalIssueFieldServiceImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/field",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -98,12 +99,13 @@ func Test_internalIssueFieldServiceImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/field",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -148,8 +150,15 @@ func Test_internalIssueFieldServiceImpl_Gets(t *testing.T) {
 
 func Test_internalIssueFieldServiceImpl_Create(t *testing.T) {
 
+	payloadMocked := &model.CustomFieldScheme{
+		Name:        "Alliance",
+		Description: "this is the alliance description field",
+		FieldType:   "cascadingselect",
+		SearcherKey: "cascadingselectsearcher",
+	}
+
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -170,32 +179,19 @@ func Test_internalIssueFieldServiceImpl_Create(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
-				payload: &model.CustomFieldScheme{
-					Name:        "Alliance",
-					Description: "this is the alliance description field",
-					FieldType:   "cascadingselect",
-					SearcherKey: "cascadingselectsearcher",
-				},
+				ctx:     context.TODO(),
+				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&model.CustomFieldScheme{
-						Name:        "Alliance",
-						Description: "this is the alliance description field",
-						FieldType:   "cascadingselect",
-						SearcherKey: "cascadingselectsearcher",
-					}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/3/field",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -214,32 +210,19 @@ func Test_internalIssueFieldServiceImpl_Create(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx: context.TODO(),
-				payload: &model.CustomFieldScheme{
-					Name:        "Alliance",
-					Description: "this is the alliance description field",
-					FieldType:   "cascadingselect",
-					SearcherKey: "cascadingselectsearcher",
-				},
+				ctx:     context.TODO(),
+				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&model.CustomFieldScheme{
-						Name:        "Alliance",
-						Description: "this is the alliance description field",
-						FieldType:   "cascadingselect",
-						SearcherKey: "cascadingselectsearcher",
-					}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/field",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -255,57 +238,22 @@ func Test_internalIssueFieldServiceImpl_Create(t *testing.T) {
 		},
 
 		{
-			name:   "when the payload is not provided",
-			fields: fields{version: "3"},
-			args: args{
-				ctx:     context.TODO(),
-				payload: nil,
-			},
-			on: func(fields *fields) {
-
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					(*model.CustomFieldScheme)(nil)).
-					Return(bytes.NewReader([]byte{}), model.ErrNilPayloadError)
-
-				fields.c = client
-
-			},
-			wantErr: true,
-			Err:     model.ErrNilPayloadError,
-		},
-
-		{
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
-				payload: &model.CustomFieldScheme{
-					Name:        "Alliance",
-					Description: "this is the alliance description field",
-					FieldType:   "cascadingselect",
-					SearcherKey: "cascadingselectsearcher",
-				},
+				ctx:     context.TODO(),
+				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&model.CustomFieldScheme{
-						Name:        "Alliance",
-						Description: "this is the alliance description field",
-						FieldType:   "cascadingselect",
-						SearcherKey: "cascadingselectsearcher",
-					}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/3/field",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -349,7 +297,7 @@ func Test_internalIssueFieldServiceImpl_Create(t *testing.T) {
 func Test_internalIssueFieldServiceImpl_Search(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -384,12 +332,13 @@ func Test_internalIssueFieldServiceImpl_Search(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/field/search?expand=screensCount%2ClastUsed&id=111%2C12222&maxResults=50&orderBy=lastUsed&query=query-sample&startAt=0&type=custom",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -422,12 +371,13 @@ func Test_internalIssueFieldServiceImpl_Search(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/field/search?expand=screensCount%2ClastUsed&id=111%2C12222&maxResults=50&orderBy=lastUsed&query=query-sample&startAt=0&type=custom",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -460,12 +410,13 @@ func Test_internalIssueFieldServiceImpl_Search(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/field/search?expand=screensCount%2ClastUsed&id=111%2C12222&maxResults=50&orderBy=lastUsed&query=query-sample&startAt=0&type=custom",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -484,12 +435,13 @@ func Test_internalIssueFieldServiceImpl_Search(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/field/search?maxResults=0&startAt=0",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -536,7 +488,7 @@ func Test_internalIssueFieldServiceImpl_Search(t *testing.T) {
 func Test_internalIssueFieldServiceImpl_Delete(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -562,12 +514,13 @@ func Test_internalIssueFieldServiceImpl_Delete(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/api/3/field/10005",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -592,12 +545,13 @@ func Test_internalIssueFieldServiceImpl_Delete(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/api/2/field/10005",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -633,12 +587,13 @@ func Test_internalIssueFieldServiceImpl_Delete(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/api/3/field/10005",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -684,7 +639,7 @@ func Test_internalIssueFieldServiceImpl_Delete(t *testing.T) {
 func Test_NewIssueFieldService(t *testing.T) {
 
 	type args struct {
-		client  service.Client
+		client  service.Connector
 		version string
 	}
 

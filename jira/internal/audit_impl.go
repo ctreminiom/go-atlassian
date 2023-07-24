@@ -12,7 +12,7 @@ import (
 	"strings"
 )
 
-func NewAuditRecordService(client service.Client, version string) (*AuditRecordService, error) {
+func NewAuditRecordService(client service.Connector, version string) (*AuditRecordService, error) {
 
 	if version == "" {
 		return nil, model.ErrNoVersionProvided
@@ -37,7 +37,7 @@ func (a *AuditRecordService) Get(ctx context.Context, options *model.AuditRecord
 }
 
 type internalAuditRecordImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -70,7 +70,7 @@ func (i *internalAuditRecordImpl) Get(ctx context.Context, options *model.AuditR
 		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
 		return nil, nil, err
 	}

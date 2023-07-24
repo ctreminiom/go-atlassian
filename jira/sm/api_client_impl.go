@@ -104,17 +104,25 @@ func (c *Client) NewRequest(ctx context.Context, method, urlStr, type_ string, b
 		}
 	}
 
+	// If the body interface is a *bytes.Buffer type
+	// it means the NewRequest() requires to handle the RFC 1867 ISO
+	if attachBuffer, ok := body.(*bytes.Buffer); ok {
+		buf = attachBuffer
+	}
+
 	req, err := http.NewRequestWithContext(ctx, method, u.String(), buf)
 	if err != nil {
 		return nil, err
 	}
+
 	req.Header.Set("Accept", "application/json")
 
-	if body != nil && type_ == "" {
+	if body != nil {
 		req.Header.Set("Content-Type", "application/json")
 	}
 
-	if body != nil && type_ != "" {
+	if type_ != "" {
+		// When the type_ is provided, it means the request needs to be created to handle files
 		req.Header.Set("Content-Type", type_)
 		req.Header.Set("X-Atlassian-Token", "no-check")
 	}

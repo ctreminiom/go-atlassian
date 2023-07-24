@@ -1,7 +1,6 @@
 package internal
 
 import (
-	"bytes"
 	"context"
 	"errors"
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
@@ -15,7 +14,7 @@ import (
 func Test_internalOrganizationPolicyImpl_Gets(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -41,12 +40,13 @@ func Test_internalOrganizationPolicyImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"admin/v1/orgs/organization-id-sample/policies?cursor=cursor-sample-uuid&type=policy-type-sample",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -80,12 +80,13 @@ func Test_internalOrganizationPolicyImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"admin/v1/orgs/organization-id-sample/policies?cursor=cursor-sample-uuid&type=policy-type-sample",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -104,9 +105,9 @@ func Test_internalOrganizationPolicyImpl_Gets(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			service := NewOrganizationPolicyService(testCase.fields.c)
+			newOrganizationPolicyService := NewOrganizationPolicyService(testCase.fields.c)
 
-			gotResult, gotResponse, err := service.Gets(testCase.args.ctx, testCase.args.organizationID,
+			gotResult, gotResponse, err := newOrganizationPolicyService.Gets(testCase.args.ctx, testCase.args.organizationID,
 				testCase.args.policyType, testCase.args.cursor)
 
 			if testCase.wantErr {
@@ -131,7 +132,7 @@ func Test_internalOrganizationPolicyImpl_Gets(t *testing.T) {
 func Test_internalOrganizationPolicyImpl_Get(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -156,12 +157,13 @@ func Test_internalOrganizationPolicyImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"admin/v1/orgs/organization-id-sample/policies/policy-id-sample",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -204,12 +206,13 @@ func Test_internalOrganizationPolicyImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"admin/v1/orgs/organization-id-sample/policies/policy-id-sample",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -228,9 +231,9 @@ func Test_internalOrganizationPolicyImpl_Get(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			service := NewOrganizationPolicyService(testCase.fields.c)
+			newOrganizationPolicyService := NewOrganizationPolicyService(testCase.fields.c)
 
-			gotResult, gotResponse, err := service.Get(testCase.args.ctx, testCase.args.organizationID,
+			gotResult, gotResponse, err := newOrganizationPolicyService.Get(testCase.args.ctx, testCase.args.organizationID,
 				testCase.args.policyID)
 
 			if testCase.wantErr {
@@ -264,7 +267,7 @@ func Test_internalOrganizationPolicyImpl_Create(t *testing.T) {
 	}
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -290,17 +293,14 @@ func Test_internalOrganizationPolicyImpl_Create(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"admin/v1/orgs/organization-id-sample/policies",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -332,17 +332,14 @@ func Test_internalOrganizationPolicyImpl_Create(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"admin/v1/orgs/organization-id-sample/policies",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -359,9 +356,9 @@ func Test_internalOrganizationPolicyImpl_Create(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			service := NewOrganizationPolicyService(testCase.fields.c)
+			newOrganizationPolicyService := NewOrganizationPolicyService(testCase.fields.c)
 
-			gotResult, gotResponse, err := service.Create(testCase.args.ctx, testCase.args.organizationID,
+			gotResult, gotResponse, err := newOrganizationPolicyService.Create(testCase.args.ctx, testCase.args.organizationID,
 				testCase.args.payload)
 
 			if testCase.wantErr {
@@ -395,7 +392,7 @@ func Test_internalOrganizationPolicyImpl_Update(t *testing.T) {
 	}
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -422,17 +419,14 @@ func Test_internalOrganizationPolicyImpl_Update(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"admin/v1/orgs/organization-id-sample/policies/policy-id-sample",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -475,17 +469,14 @@ func Test_internalOrganizationPolicyImpl_Update(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"admin/v1/orgs/organization-id-sample/policies/policy-id-sample",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -502,9 +493,9 @@ func Test_internalOrganizationPolicyImpl_Update(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			service := NewOrganizationPolicyService(testCase.fields.c)
+			newOrganizationPolicyService := NewOrganizationPolicyService(testCase.fields.c)
 
-			gotResult, gotResponse, err := service.Update(testCase.args.ctx, testCase.args.organizationID, testCase.args.policyID,
+			gotResult, gotResponse, err := newOrganizationPolicyService.Update(testCase.args.ctx, testCase.args.organizationID, testCase.args.policyID,
 				testCase.args.payload)
 
 			if testCase.wantErr {
@@ -529,7 +520,7 @@ func Test_internalOrganizationPolicyImpl_Update(t *testing.T) {
 func Test_internalOrganizationPolicyImpl_Delete(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -554,12 +545,13 @@ func Test_internalOrganizationPolicyImpl_Delete(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"admin/v1/orgs/organization-id-sample/policies/policy-id-sample",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -602,12 +594,13 @@ func Test_internalOrganizationPolicyImpl_Delete(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"admin/v1/orgs/organization-id-sample/policies/policy-id-sample",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -625,9 +618,9 @@ func Test_internalOrganizationPolicyImpl_Delete(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			service := NewOrganizationPolicyService(testCase.fields.c)
+			newOrganizationPolicyService := NewOrganizationPolicyService(testCase.fields.c)
 
-			gotResponse, err := service.Delete(testCase.args.ctx, testCase.args.organizationID, testCase.args.policyID)
+			gotResponse, err := newOrganizationPolicyService.Delete(testCase.args.ctx, testCase.args.organizationID, testCase.args.policyID)
 
 			if testCase.wantErr {
 

@@ -11,7 +11,7 @@ import (
 	"strings"
 )
 
-func NewWorkflowSchemeIssueTypeService(client service.Client, version string) *WorkflowSchemeIssueTypeService {
+func NewWorkflowSchemeIssueTypeService(client service.Connector, version string) *WorkflowSchemeIssueTypeService {
 
 	return &WorkflowSchemeIssueTypeService{
 		internalClient: &internalWorkflowSchemeIssueTypeImpl{c: client, version: version},
@@ -75,7 +75,7 @@ func (w *WorkflowSchemeIssueTypeService) Mapping(ctx context.Context, schemeID i
 }
 
 type internalWorkflowSchemeIssueTypeImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -99,7 +99,7 @@ func (i *internalWorkflowSchemeIssueTypeImpl) Get(ctx context.Context, schemeID 
 		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -123,14 +123,9 @@ func (i *internalWorkflowSchemeIssueTypeImpl) Set(ctx context.Context, schemeID 
 		return nil, nil, model.ErrNoIssueTypeIDError
 	}
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	endpoint := fmt.Sprintf("rest/api/%v/workflowscheme/%v/issuetype/%v", i.version, schemeID, issueTypeID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -164,7 +159,7 @@ func (i *internalWorkflowSchemeIssueTypeImpl) Delete(ctx context.Context, scheme
 		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint.String(), nil)
+	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint.String(), "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -201,7 +196,7 @@ func (i *internalWorkflowSchemeIssueTypeImpl) Mapping(ctx context.Context, schem
 		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
 		return nil, nil, err
 	}

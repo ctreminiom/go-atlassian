@@ -9,7 +9,7 @@ import (
 	"net/http"
 )
 
-func NewProjectPropertyService(client service.Client, version string) (*ProjectPropertyService, error) {
+func NewProjectPropertyService(client service.Connector, version string) (*ProjectPropertyService, error) {
 
 	if version == "" {
 		return nil, model.ErrNoVersionProvided
@@ -67,7 +67,7 @@ func (p *ProjectPropertyService) Delete(ctx context.Context, projectKeyOrId, pro
 }
 
 type internalProjectPropertyImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -79,7 +79,7 @@ func (i *internalProjectPropertyImpl) Gets(ctx context.Context, projectKeyOrId s
 
 	endpoint := fmt.Sprintf("rest/api/%v/project/%v/properties", i.version, projectKeyOrId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -105,7 +105,7 @@ func (i *internalProjectPropertyImpl) Get(ctx context.Context, projectKeyOrId, p
 
 	endpoint := fmt.Sprintf("rest/api/%v/project/%v/properties/%v", i.version, projectKeyOrId, propertyKey)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -129,14 +129,9 @@ func (i *internalProjectPropertyImpl) Set(ctx context.Context, projectKeyOrId, p
 		return nil, model.ErrNoPropertyKeyError
 	}
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, err
-	}
-
 	endpoint := fmt.Sprintf("rest/api/%v/project/%v/properties/%v", i.version, projectKeyOrId, propertyKey)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
 		return nil, err
 	}
@@ -156,7 +151,7 @@ func (i *internalProjectPropertyImpl) Delete(ctx context.Context, projectKeyOrId
 
 	endpoint := fmt.Sprintf("rest/api/%v/project/%v/properties/%v", i.version, projectKeyOrId, propertyKey)
 
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}

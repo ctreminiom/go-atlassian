@@ -1,7 +1,6 @@
 package internal
 
 import (
-	"bytes"
 	"context"
 	"errors"
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
@@ -15,7 +14,7 @@ import (
 func Test_internalIssueFieldConfigItemServiceImpl_Gets(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -43,12 +42,13 @@ func Test_internalIssueFieldConfigItemServiceImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/fieldconfiguration/10001/fields?maxResults=50&startAt=50",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -87,12 +87,13 @@ func Test_internalIssueFieldConfigItemServiceImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/fieldconfiguration/10001/fields?maxResults=50&startAt=50",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -119,12 +120,13 @@ func Test_internalIssueFieldConfigItemServiceImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/fieldconfiguration/10001/fields?maxResults=50&startAt=50",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http created"))
 
@@ -170,8 +172,29 @@ func Test_internalIssueFieldConfigItemServiceImpl_Gets(t *testing.T) {
 
 func Test_internalIssueFieldConfigItemServiceImpl_Update(t *testing.T) {
 
+	payloadMocked := &model.UpdateFieldConfigurationItemPayloadScheme{
+		FieldConfigurationItems: []*model.FieldConfigurationItemScheme{
+			{
+				ID:          "customfield_10012",
+				IsHidden:    false,
+				Description: "The new description of this item.",
+			},
+			{
+				ID:         "customfield_10011",
+				IsRequired: true,
+			},
+			{
+				ID:          "customfield_10010",
+				IsHidden:    false,
+				IsRequired:  false,
+				Description: "Another new description.",
+				Renderer:    "wiki-renderer",
+			},
+		},
+	}
+
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -193,61 +216,20 @@ func Test_internalIssueFieldConfigItemServiceImpl_Update(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
-				id:  10001,
-				payload: &model.UpdateFieldConfigurationItemPayloadScheme{
-					FieldConfigurationItems: []*model.FieldConfigurationItemScheme{
-						{
-							ID:          "customfield_10012",
-							IsHidden:    false,
-							Description: "The new description of this item.",
-						},
-						{
-							ID:         "customfield_10011",
-							IsRequired: true,
-						},
-						{
-							ID:          "customfield_10010",
-							IsHidden:    false,
-							IsRequired:  false,
-							Description: "Another new description.",
-							Renderer:    "wiki-renderer",
-						},
-					},
-				},
+				ctx:     context.TODO(),
+				id:      10001,
+				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&model.UpdateFieldConfigurationItemPayloadScheme{
-						FieldConfigurationItems: []*model.FieldConfigurationItemScheme{
-							{
-								ID:          "customfield_10012",
-								IsHidden:    false,
-								Description: "The new description of this item.",
-							},
-							{
-								ID:         "customfield_10011",
-								IsRequired: true,
-							},
-							{
-								ID:          "customfield_10010",
-								IsHidden:    false,
-								IsRequired:  false,
-								Description: "Another new description.",
-								Renderer:    "wiki-renderer",
-							},
-						},
-					}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/3/fieldconfiguration/10001/fields",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -276,61 +258,20 @@ func Test_internalIssueFieldConfigItemServiceImpl_Update(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx: context.TODO(),
-				id:  10001,
-				payload: &model.UpdateFieldConfigurationItemPayloadScheme{
-					FieldConfigurationItems: []*model.FieldConfigurationItemScheme{
-						{
-							ID:          "customfield_10012",
-							IsHidden:    false,
-							Description: "The new description of this item.",
-						},
-						{
-							ID:         "customfield_10011",
-							IsRequired: true,
-						},
-						{
-							ID:          "customfield_10010",
-							IsHidden:    false,
-							IsRequired:  false,
-							Description: "Another new description.",
-							Renderer:    "wiki-renderer",
-						},
-					},
-				},
+				ctx:     context.TODO(),
+				id:      10001,
+				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&model.UpdateFieldConfigurationItemPayloadScheme{
-						FieldConfigurationItems: []*model.FieldConfigurationItemScheme{
-							{
-								ID:          "customfield_10012",
-								IsHidden:    false,
-								Description: "The new description of this item.",
-							},
-							{
-								ID:         "customfield_10011",
-								IsRequired: true,
-							},
-							{
-								ID:          "customfield_10010",
-								IsHidden:    false,
-								IsRequired:  false,
-								Description: "Another new description.",
-								Renderer:    "wiki-renderer",
-							},
-						},
-					}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/2/fieldconfiguration/10001/fields",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -349,61 +290,20 @@ func Test_internalIssueFieldConfigItemServiceImpl_Update(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
-				id:  10001,
-				payload: &model.UpdateFieldConfigurationItemPayloadScheme{
-					FieldConfigurationItems: []*model.FieldConfigurationItemScheme{
-						{
-							ID:          "customfield_10012",
-							IsHidden:    false,
-							Description: "The new description of this item.",
-						},
-						{
-							ID:         "customfield_10011",
-							IsRequired: true,
-						},
-						{
-							ID:          "customfield_10010",
-							IsHidden:    false,
-							IsRequired:  false,
-							Description: "Another new description.",
-							Renderer:    "wiki-renderer",
-						},
-					},
-				},
+				ctx:     context.TODO(),
+				id:      10001,
+				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&model.UpdateFieldConfigurationItemPayloadScheme{
-						FieldConfigurationItems: []*model.FieldConfigurationItemScheme{
-							{
-								ID:          "customfield_10012",
-								IsHidden:    false,
-								Description: "The new description of this item.",
-							},
-							{
-								ID:         "customfield_10011",
-								IsRequired: true,
-							},
-							{
-								ID:          "customfield_10010",
-								IsHidden:    false,
-								IsRequired:  false,
-								Description: "Another new description.",
-								Renderer:    "wiki-renderer",
-							},
-						},
-					}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/3/fieldconfiguration/10001/fields",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, errors.New("error, unable to create the http created"))
 
 				fields.c = client
@@ -447,7 +347,7 @@ func Test_internalIssueFieldConfigItemServiceImpl_Update(t *testing.T) {
 func Test_NewIssueFieldConfigurationItemService(t *testing.T) {
 
 	type args struct {
-		client  service.Client
+		client  service.Connector
 		version string
 	}
 

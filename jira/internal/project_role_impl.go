@@ -13,7 +13,7 @@ import (
 	"strings"
 )
 
-func NewProjectRoleService(client service.Client, version string, actor *ProjectRoleActorService) (*ProjectRoleService, error) {
+func NewProjectRoleService(client service.Connector, version string, actor *ProjectRoleActorService) (*ProjectRoleService, error) {
 
 	if version == "" {
 		return nil, model.ErrNoVersionProvided
@@ -76,7 +76,7 @@ func (p *ProjectRoleService) Create(ctx context.Context, payload *model.ProjectR
 }
 
 type internalProjectRoleImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -88,7 +88,7 @@ func (i *internalProjectRoleImpl) Gets(ctx context.Context, projectKeyOrId strin
 
 	endpoint := fmt.Sprintf("rest/api/%v/project/%v/role", i.version, projectKeyOrId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -133,7 +133,7 @@ func (i *internalProjectRoleImpl) Get(ctx context.Context, projectKeyOrId string
 
 	endpoint := fmt.Sprintf("rest/api/%v/project/%v/role/%v", i.version, projectKeyOrId, roleId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -155,7 +155,7 @@ func (i *internalProjectRoleImpl) Details(ctx context.Context, projectKeyOrId st
 
 	endpoint := fmt.Sprintf("rest/api/%v/project/%v/roledetails", i.version, projectKeyOrId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -173,7 +173,7 @@ func (i *internalProjectRoleImpl) Global(ctx context.Context) ([]*model.ProjectR
 
 	endpoint := fmt.Sprintf("rest/api/%v/role", i.version)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -189,14 +189,9 @@ func (i *internalProjectRoleImpl) Global(ctx context.Context) ([]*model.ProjectR
 
 func (i *internalProjectRoleImpl) Create(ctx context.Context, payload *model.ProjectRolePayloadScheme) (*model.ProjectRoleScheme, *model.ResponseScheme, error) {
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	endpoint := fmt.Sprintf("rest/api/%v/role", i.version)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}

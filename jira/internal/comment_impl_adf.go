@@ -21,8 +21,8 @@ type CommentADFService struct {
 // DELETE /rest/api/{2-3}/issue/{issueIdOrKey}/comment/{id}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/comments#delete-comment
-func (c *CommentADFService) Delete(ctx context.Context, issueKeyOrId, commentId string) (*model.ResponseScheme, error) {
-	return c.internalClient.Delete(ctx, issueKeyOrId, commentId)
+func (c *CommentADFService) Delete(ctx context.Context, issueKeyOrID, commentID string) (*model.ResponseScheme, error) {
+	return c.internalClient.Delete(ctx, issueKeyOrID, commentID)
 }
 
 // Gets returns all comments for an issue.
@@ -30,17 +30,17 @@ func (c *CommentADFService) Delete(ctx context.Context, issueKeyOrId, commentId 
 // GET /rest/api/{2-3}/issue/{issueIdOrKey}/comment
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/comments#get-comments
-func (c *CommentADFService) Gets(ctx context.Context, issueKeyOrId, orderBy string, expand []string, startAt, maxResults int) (*model.IssueCommentPageScheme, *model.ResponseScheme, error) {
-	return c.internalClient.Gets(ctx, issueKeyOrId, orderBy, expand, startAt, maxResults)
+func (c *CommentADFService) Gets(ctx context.Context, issueKeyOrID, orderBy string, expand []string, startAt, maxResults int) (*model.IssueCommentPageScheme, *model.ResponseScheme, error) {
+	return c.internalClient.Gets(ctx, issueKeyOrID, orderBy, expand, startAt, maxResults)
 }
 
 // Get returns a comment.
 //
 // GET /rest/api/{2-3}/issue/{issueIdOrKey}/comment/{id}
 //
-// TODO: The documentation needs to be created, raise a ticket here: https://github.com/ctreminiom/go-atlassian/issues
-func (c *CommentADFService) Get(ctx context.Context, issueKeyOrId, commentId string) (*model.IssueCommentScheme, *model.ResponseScheme, error) {
-	return c.internalClient.Get(ctx, issueKeyOrId, commentId)
+// https://docs.go-atlassian.io/jira-software-cloud/issues/comments#get-comment
+func (c *CommentADFService) Get(ctx context.Context, issueKeyOrID, commentID string) (*model.IssueCommentScheme, *model.ResponseScheme, error) {
+	return c.internalClient.Get(ctx, issueKeyOrID, commentID)
 }
 
 // Add adds a comment to an issue.
@@ -48,28 +48,28 @@ func (c *CommentADFService) Get(ctx context.Context, issueKeyOrId, commentId str
 // POST /rest/api/{2-3}/issue/{issueIdOrKey}/comment
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/comments#add-comment
-func (c *CommentADFService) Add(ctx context.Context, issueKeyOrId string, payload *model.CommentPayloadScheme, expand []string) (*model.IssueCommentScheme, *model.ResponseScheme, error) {
-	return c.internalClient.Add(ctx, issueKeyOrId, payload, expand)
+func (c *CommentADFService) Add(ctx context.Context, issueKeyOrID string, payload *model.CommentPayloadScheme, expand []string) (*model.IssueCommentScheme, *model.ResponseScheme, error) {
+	return c.internalClient.Add(ctx, issueKeyOrID, payload, expand)
 }
 
 type internalAdfCommentImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
-func (i *internalAdfCommentImpl) Delete(ctx context.Context, issueKeyOrId, commentId string) (*model.ResponseScheme, error) {
+func (i *internalAdfCommentImpl) Delete(ctx context.Context, issueKeyOrID, commentID string) (*model.ResponseScheme, error) {
 
-	if issueKeyOrId == "" {
+	if issueKeyOrID == "" {
 		return nil, model.ErrNoIssueKeyOrIDError
 	}
 
-	if commentId == "" {
+	if commentID == "" {
 		return nil, model.ErrNoCommentIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/comment/%v", i.version, issueKeyOrId, commentId)
+	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/comment/%v", i.version, issueKeyOrID, commentID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -77,9 +77,9 @@ func (i *internalAdfCommentImpl) Delete(ctx context.Context, issueKeyOrId, comme
 	return i.c.Call(request, nil)
 }
 
-func (i *internalAdfCommentImpl) Gets(ctx context.Context, issueKeyOrId, orderBy string, expand []string, startAt, maxResults int) (*model.IssueCommentPageScheme, *model.ResponseScheme, error) {
+func (i *internalAdfCommentImpl) Gets(ctx context.Context, issueKeyOrID, orderBy string, expand []string, startAt, maxResults int) (*model.IssueCommentPageScheme, *model.ResponseScheme, error) {
 
-	if issueKeyOrId == "" {
+	if issueKeyOrID == "" {
 		return nil, nil, model.ErrNoIssueKeyOrIDError
 	}
 
@@ -95,9 +95,9 @@ func (i *internalAdfCommentImpl) Gets(ctx context.Context, issueKeyOrId, orderBy
 		params.Add("orderBy", orderBy)
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/comment?%v", i.version, issueKeyOrId, params.Encode())
+	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/comment?%v", i.version, issueKeyOrID, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -111,19 +111,19 @@ func (i *internalAdfCommentImpl) Gets(ctx context.Context, issueKeyOrId, orderBy
 	return comments, response, nil
 }
 
-func (i *internalAdfCommentImpl) Get(ctx context.Context, issueKeyOrId, commentId string) (*model.IssueCommentScheme, *model.ResponseScheme, error) {
+func (i *internalAdfCommentImpl) Get(ctx context.Context, issueKeyOrID, commentID string) (*model.IssueCommentScheme, *model.ResponseScheme, error) {
 
-	if issueKeyOrId == "" {
+	if issueKeyOrID == "" {
 		return nil, nil, model.ErrNoIssueKeyOrIDError
 	}
 
-	if commentId == "" {
+	if commentID == "" {
 		return nil, nil, model.ErrNoCommentIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/comment/%v", i.version, issueKeyOrId, commentId)
+	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/comment/%v", i.version, issueKeyOrID, commentID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -137,9 +137,9 @@ func (i *internalAdfCommentImpl) Get(ctx context.Context, issueKeyOrId, commentI
 	return comment, response, nil
 }
 
-func (i *internalAdfCommentImpl) Add(ctx context.Context, issueKeyOrId string, payload *model.CommentPayloadScheme, expand []string) (*model.IssueCommentScheme, *model.ResponseScheme, error) {
+func (i *internalAdfCommentImpl) Add(ctx context.Context, issueKeyOrID string, payload *model.CommentPayloadScheme, expand []string) (*model.IssueCommentScheme, *model.ResponseScheme, error) {
 
-	if issueKeyOrId == "" {
+	if issueKeyOrID == "" {
 		return nil, nil, model.ErrNoIssueKeyOrIDError
 	}
 
@@ -149,18 +149,13 @@ func (i *internalAdfCommentImpl) Add(ctx context.Context, issueKeyOrId string, p
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("rest/api/%v/issue/%v/comment", i.version, issueKeyOrId))
+	endpoint.WriteString(fmt.Sprintf("rest/api/%v/issue/%v/comment", i.version, issueKeyOrID))
 
 	if params.Encode() != "" {
 		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint.String(), reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint.String(), "", payload)
 	if err != nil {
 		return nil, nil, err
 	}

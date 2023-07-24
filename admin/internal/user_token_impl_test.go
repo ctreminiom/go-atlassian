@@ -15,7 +15,7 @@ import (
 func Test_internalUserTokenImpl_Gets(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -39,12 +39,13 @@ func Test_internalUserTokenImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"users/account-id-sample/manage/api-tokens",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -75,12 +76,13 @@ func Test_internalUserTokenImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"users/account-id-sample/manage/api-tokens",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -99,9 +101,9 @@ func Test_internalUserTokenImpl_Gets(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			service := NewUserTokenService(testCase.fields.c)
+			newUserTokenService := NewUserTokenService(testCase.fields.c)
 
-			gotResult, gotResponse, err := service.Gets(testCase.args.ctx, testCase.args.accountID)
+			gotResult, gotResponse, err := newUserTokenService.Gets(testCase.args.ctx, testCase.args.accountID)
 
 			if testCase.wantErr {
 
@@ -125,7 +127,7 @@ func Test_internalUserTokenImpl_Gets(t *testing.T) {
 func Test_internalUserTokenImpl_Delete(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -150,12 +152,13 @@ func Test_internalUserTokenImpl_Delete(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"users/account-id-sample/manage/api-tokens/token-id-sample",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -197,12 +200,13 @@ func Test_internalUserTokenImpl_Delete(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"users/account-id-sample/manage/api-tokens/token-id-sample",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -221,9 +225,9 @@ func Test_internalUserTokenImpl_Delete(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			service := NewUserTokenService(testCase.fields.c)
+			newUserTokenService := NewUserTokenService(testCase.fields.c)
 
-			gotResponse, err := service.Delete(testCase.args.ctx, testCase.args.accountID, testCase.args.tokenID)
+			gotResponse, err := newUserTokenService.Delete(testCase.args.ctx, testCase.args.accountID, testCase.args.tokenID)
 
 			if testCase.wantErr {
 

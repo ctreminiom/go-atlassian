@@ -10,9 +10,10 @@ import (
 	"io"
 	"net/http"
 	"net/url"
-	"reflect"
 	"strings"
 )
+
+const ApiVersion = "2"
 
 func New(httpClient common.HttpClient, site string) (*Client, error) {
 
@@ -20,161 +21,167 @@ func New(httpClient common.HttpClient, site string) (*Client, error) {
 		httpClient = http.DefaultClient
 	}
 
+	if site == "" {
+		return nil, models.ErrNoSiteError
+	}
+
 	if !strings.HasSuffix(site, "/") {
 		site += "/"
 	}
 
-	siteAsURL, err := url.Parse(site)
+	u, err := url.Parse(site)
 	if err != nil {
 		return nil, err
 	}
 
 	client := &Client{
 		HTTP: httpClient,
-		Site: siteAsURL,
+		Site: u,
 	}
 
-	auditRecordService, err := internal.NewAuditRecordService(client, "2")
+	client.Auth = internal.NewAuthenticationService(client)
+
+	auditRecordService, err := internal.NewAuditRecordService(client, ApiVersion)
 	if err != nil {
 		return nil, err
 	}
 
-	applicationRoleService, err := internal.NewApplicationRoleService(client, "2")
+	applicationRoleService, err := internal.NewApplicationRoleService(client, ApiVersion)
 	if err != nil {
 		return nil, err
 	}
 
-	dashboardService, err := internal.NewDashboardService(client, "2")
+	dashboardService, err := internal.NewDashboardService(client, ApiVersion)
 	if err != nil {
 		return nil, err
 	}
 
-	filterShareService, err := internal.NewFilterShareService(client, "2")
+	filterShareService, err := internal.NewFilterShareService(client, ApiVersion)
 	if err != nil {
 		return nil, err
 	}
 
-	filterService, err := internal.NewFilterService(client, "2", filterShareService)
+	filterService, err := internal.NewFilterService(client, ApiVersion, filterShareService)
 	if err != nil {
 		return nil, err
 	}
 
-	groupService, err := internal.NewGroupService(client, "2")
+	groupService, err := internal.NewGroupService(client, ApiVersion)
 	if err != nil {
 		return nil, err
 	}
 
-	issueAttachmentService, err := internal.NewIssueAttachmentService(client, "2")
+	issueAttachmentService, err := internal.NewIssueAttachmentService(client, ApiVersion)
 	if err != nil {
 		return nil, err
 	}
 
-	_, commentService, err := internal.NewCommentService(client, "2")
+	_, commentService, err := internal.NewCommentService(client, ApiVersion)
 	if err != nil {
 		return nil, err
 	}
 
-	fieldConfigurationItemService, err := internal.NewIssueFieldConfigurationItemService(client, "2")
+	fieldConfigurationItemService, err := internal.NewIssueFieldConfigurationItemService(client, ApiVersion)
 	if err != nil {
 		return nil, err
 	}
 
-	fieldConfigurationSchemeService, err := internal.NewIssueFieldConfigurationSchemeService(client, "2")
+	fieldConfigurationSchemeService, err := internal.NewIssueFieldConfigurationSchemeService(client, ApiVersion)
 	if err != nil {
 		return nil, err
 	}
 
-	fieldConfigService, err := internal.NewIssueFieldConfigurationService(client, "2", fieldConfigurationItemService, fieldConfigurationSchemeService)
+	fieldConfigService, err := internal.NewIssueFieldConfigurationService(client, ApiVersion, fieldConfigurationItemService, fieldConfigurationSchemeService)
 	if err != nil {
 		return nil, err
 	}
 
-	optionService, err := internal.NewIssueFieldContextOptionService(client, "2")
+	optionService, err := internal.NewIssueFieldContextOptionService(client, ApiVersion)
 	if err != nil {
 		return nil, err
 	}
 
-	fieldContextService, err := internal.NewIssueFieldContextService(client, "2", optionService)
+	fieldContextService, err := internal.NewIssueFieldContextService(client, ApiVersion, optionService)
 	if err != nil {
 		return nil, err
 	}
 
-	fieldTrashService, err := internal.NewIssueFieldTrashService(client, "2")
+	fieldTrashService, err := internal.NewIssueFieldTrashService(client, ApiVersion)
 	if err != nil {
 		return nil, err
 	}
 
-	issueFieldService, err := internal.NewIssueFieldService(client, "2", fieldConfigService, fieldContextService, fieldTrashService)
+	issueFieldService, err := internal.NewIssueFieldService(client, ApiVersion, fieldConfigService, fieldContextService, fieldTrashService)
 	if err != nil {
 		return nil, err
 	}
 
-	label, err := internal.NewLabelService(client, "2")
+	label, err := internal.NewLabelService(client, ApiVersion)
 	if err != nil {
 		return nil, err
 	}
 
-	linkType, err := internal.NewLinkTypeService(client, "2")
+	linkType, err := internal.NewLinkTypeService(client, ApiVersion)
 	if err != nil {
 		return nil, err
 	}
 
-	remoteLink, err := internal.NewRemoteLinkService(client, "2")
+	remoteLink, err := internal.NewRemoteLinkService(client, ApiVersion)
 	if err != nil {
 		return nil, err
 	}
 
-	_, link, err := internal.NewLinkService(client, "2", linkType, remoteLink)
+	_, link, err := internal.NewLinkService(client, ApiVersion, linkType, remoteLink)
 	if err != nil {
 		return nil, err
 	}
 
-	metadata, err := internal.NewMetadataService(client, "2")
+	metadata, err := internal.NewMetadataService(client, ApiVersion)
 	if err != nil {
 		return nil, err
 	}
 
-	priority, err := internal.NewPriorityService(client, "2")
+	priority, err := internal.NewPriorityService(client, ApiVersion)
 	if err != nil {
 		return nil, err
 	}
 
-	resolution, err := internal.NewResolutionService(client, "2")
+	resolution, err := internal.NewResolutionService(client, ApiVersion)
 	if err != nil {
 		return nil, err
 	}
 
-	_, search, err := internal.NewSearchService(client, "2")
+	_, search, err := internal.NewSearchService(client, ApiVersion)
 	if err != nil {
 		return nil, err
 	}
 
-	typeScheme, err := internal.NewTypeSchemeService(client, "2")
+	typeScheme, err := internal.NewTypeSchemeService(client, ApiVersion)
 	if err != nil {
 		return nil, err
 	}
 
-	issueTypeScreenScheme, err := internal.NewTypeScreenSchemeService(client, "2")
+	issueTypeScreenScheme, err := internal.NewTypeScreenSchemeService(client, ApiVersion)
 	if err != nil {
 		return nil, err
 	}
 
-	type_, err := internal.NewTypeService(client, "2", typeScheme, issueTypeScreenScheme)
+	type_, err := internal.NewTypeService(client, ApiVersion, typeScheme, issueTypeScreenScheme)
 	if err != nil {
 		return nil, err
 	}
 
-	vote, err := internal.NewVoteService(client, "2")
+	vote, err := internal.NewVoteService(client, ApiVersion)
 	if err != nil {
 		return nil, err
 	}
 
-	watcher, err := internal.NewWatcherService(client, "2")
+	watcher, err := internal.NewWatcherService(client, ApiVersion)
 	if err != nil {
 		return nil, err
 	}
 
-	worklog, err := internal.NewWorklogRichTextService(client, "2")
+	worklog, err := internal.NewWorklogRichTextService(client, ApiVersion)
 	if err != nil {
 		return nil, err
 	}
@@ -195,82 +202,82 @@ func New(httpClient common.HttpClient, site string) (*Client, error) {
 		WorklogRichText: worklog,
 	}
 
-	issueService, _, err := internal.NewIssueService(client, "2", issueServices)
+	issueService, _, err := internal.NewIssueService(client, ApiVersion, issueServices)
 	if err != nil {
 		return nil, err
 	}
 
-	mySelf, err := internal.NewMySelfService(client, "2")
+	mySelf, err := internal.NewMySelfService(client, ApiVersion)
 	if err != nil {
 		return nil, err
 	}
 
-	permissionSchemeGrant, err := internal.NewPermissionSchemeGrantService(client, "2")
+	permissionSchemeGrant, err := internal.NewPermissionSchemeGrantService(client, ApiVersion)
 	if err != nil {
 		return nil, err
 	}
 
-	permissionScheme, err := internal.NewPermissionSchemeService(client, "2", permissionSchemeGrant)
+	permissionScheme, err := internal.NewPermissionSchemeService(client, ApiVersion, permissionSchemeGrant)
 	if err != nil {
 		return nil, err
 	}
 
-	permission, err := internal.NewPermissionService(client, "2", permissionScheme)
+	permission, err := internal.NewPermissionService(client, ApiVersion, permissionScheme)
 	if err != nil {
 		return nil, err
 	}
 
-	projectCategory, err := internal.NewProjectCategoryService(client, "2")
+	projectCategory, err := internal.NewProjectCategoryService(client, ApiVersion)
 	if err != nil {
 		return nil, err
 	}
 
-	projectComponent, err := internal.NewProjectComponentService(client, "2")
+	projectComponent, err := internal.NewProjectComponentService(client, ApiVersion)
 	if err != nil {
 		return nil, err
 	}
 
-	projectFeature, err := internal.NewProjectFeatureService(client, "2")
+	projectFeature, err := internal.NewProjectFeatureService(client, ApiVersion)
 	if err != nil {
 		return nil, err
 	}
 
-	projectPermission, err := internal.NewProjectPermissionSchemeService(client, "2")
+	projectPermission, err := internal.NewProjectPermissionSchemeService(client, ApiVersion)
 	if err != nil {
 		return nil, err
 	}
 
-	projectProperties, err := internal.NewProjectPropertyService(client, "2")
+	projectProperties, err := internal.NewProjectPropertyService(client, ApiVersion)
 	if err != nil {
 		return nil, err
 	}
 
-	projectRoleActor, err := internal.NewProjectRoleActorService(client, "2")
+	projectRoleActor, err := internal.NewProjectRoleActorService(client, ApiVersion)
 	if err != nil {
 		return nil, err
 	}
 
-	projectRole, err := internal.NewProjectRoleService(client, "2", projectRoleActor)
+	projectRole, err := internal.NewProjectRoleService(client, ApiVersion, projectRoleActor)
 	if err != nil {
 		return nil, err
 	}
 
-	projectType, err := internal.NewProjectTypeService(client, "2")
+	projectType, err := internal.NewProjectTypeService(client, ApiVersion)
 	if err != nil {
 		return nil, err
 	}
 
-	projectValidator, err := internal.NewProjectValidatorService(client, "2")
+	projectValidator, err := internal.NewProjectValidatorService(client, ApiVersion)
 	if err != nil {
 		return nil, err
 	}
 
-	projectVersion, err := internal.NewProjectVersionService(client, "2")
+	projectVersion, err := internal.NewProjectVersionService(client, ApiVersion)
 	if err != nil {
 		return nil, err
 	}
 
-	projectNotificationScheme, err := internal.NewNotificationSchemeService(client, "2")
+	projectNotificationScheme, err := internal.NewNotificationSchemeService(client, ApiVersion)
 	if err != nil {
 		return nil, err
 	}
@@ -287,67 +294,67 @@ func New(httpClient common.HttpClient, site string) (*Client, error) {
 		Version:    projectVersion,
 	}
 
-	project, err := internal.NewProjectService(client, "2", projectSubService)
+	project, err := internal.NewProjectService(client, ApiVersion, projectSubService)
 	if err != nil {
 		return nil, err
 	}
 
-	screenFieldTabField, err := internal.NewScreenTabFieldService(client, "2")
+	screenFieldTabField, err := internal.NewScreenTabFieldService(client, ApiVersion)
 	if err != nil {
 		return nil, err
 	}
 
-	screenTab, err := internal.NewScreenTabService(client, "2", screenFieldTabField)
+	screenTab, err := internal.NewScreenTabService(client, ApiVersion, screenFieldTabField)
 	if err != nil {
 		return nil, err
 	}
 
-	screenScheme, err := internal.NewScreenSchemeService(client, "2")
+	screenScheme, err := internal.NewScreenSchemeService(client, ApiVersion)
 	if err != nil {
 		return nil, err
 	}
 
-	screen, err := internal.NewScreenService(client, "2", screenScheme, screenTab)
+	screen, err := internal.NewScreenService(client, ApiVersion, screenScheme, screenTab)
 	if err != nil {
 		return nil, err
 	}
 
-	task, err := internal.NewTaskService(client, "2")
+	task, err := internal.NewTaskService(client, ApiVersion)
 	if err != nil {
 		return nil, err
 	}
 
-	server, err := internal.NewServerService(client, "2")
+	server, err := internal.NewServerService(client, ApiVersion)
 	if err != nil {
 		return nil, err
 	}
 
-	userSearch, err := internal.NewUserSearchService(client, "2")
+	userSearch, err := internal.NewUserSearchService(client, ApiVersion)
 	if err != nil {
 		return nil, err
 	}
 
-	user, err := internal.NewUserService(client, "2", userSearch)
+	user, err := internal.NewUserService(client, ApiVersion, userSearch)
 	if err != nil {
 		return nil, err
 	}
 
 	workflowScheme := internal.NewWorkflowSchemeService(
 		client,
-		"2",
-		internal.NewWorkflowSchemeIssueTypeService(client, "2"))
+		ApiVersion,
+		internal.NewWorkflowSchemeIssueTypeService(client, ApiVersion))
 
-	workflowStatus, err := internal.NewWorkflowStatusService(client, "2")
+	workflowStatus, err := internal.NewWorkflowStatusService(client, ApiVersion)
 	if err != nil {
 		return nil, err
 	}
 
-	workflow, err := internal.NewWorkflowService(client, "2", workflowScheme, workflowStatus)
+	workflow, err := internal.NewWorkflowService(client, ApiVersion, workflowScheme, workflowStatus)
 	if err != nil {
 		return nil, err
 	}
 
-	jql, err := internal.NewJQLService(client, "2")
+	jql, err := internal.NewJQLService(client, ApiVersion)
 	if err != nil {
 		return nil, err
 	}
@@ -356,7 +363,7 @@ func New(httpClient common.HttpClient, site string) (*Client, error) {
 	client.Permission = permission
 	client.MySelf = mySelf
 	client.Auth = internal.NewAuthenticationService(client)
-	client.Banner = internal.NewAnnouncementBannerService(client, "2")
+	client.Banner = internal.NewAnnouncementBannerService(client, ApiVersion)
 	client.Role = applicationRoleService
 	client.Dashboard = dashboardService
 	client.Filter = filterService
@@ -399,66 +406,49 @@ type Client struct {
 	Team               *internal.TeamService
 }
 
-func (c *Client) NewFormRequest(ctx context.Context, method, apiEndpoint, contentType string, payload io.Reader) (*http.Request, error) {
+func (c *Client) NewRequest(ctx context.Context, method, urlStr, type_ string, body interface{}) (*http.Request, error) {
 
-	relativePath, err := url.Parse(apiEndpoint)
+	rel, err := url.Parse(urlStr)
 	if err != nil {
 		return nil, err
 	}
 
-	var endpoint = c.Site.ResolveReference(relativePath).String()
+	u := c.Site.ResolveReference(rel)
 
-	request, err := http.NewRequestWithContext(ctx, method, endpoint, payload)
+	buf := new(bytes.Buffer)
+	if body != nil {
+		if err = json.NewEncoder(buf).Encode(body); err != nil {
+			return nil, err
+		}
+	}
+
+	req, err := http.NewRequestWithContext(ctx, method, u.String(), buf)
 	if err != nil {
 		return nil, err
 	}
 
-	request.Header.Add("Content-Type", contentType)
-	request.Header.Add("Accept", "application/json")
-	request.Header.Set("X-Atlassian-Token", "no-check")
+	req.Header.Set("Accept", "application/json")
 
-	if c.Auth.HasBasicAuth() {
-		request.SetBasicAuth(c.Auth.GetBasicAuth())
+	if body != nil {
+		req.Header.Set("Content-Type", "application/json")
 	}
 
-	if c.Auth.HasUserAgent() {
-		request.Header.Set("User-Agent", c.Auth.GetUserAgent())
-	}
-
-	return request, nil
-}
-
-func (c *Client) NewRequest(ctx context.Context, method, apiEndpoint string, payload io.Reader) (*http.Request, error) {
-
-	relativePath, err := url.Parse(apiEndpoint)
-	if err != nil {
-		return nil, err
-	}
-
-	var endpoint = c.Site.ResolveReference(relativePath).String()
-
-	request, err := http.NewRequestWithContext(ctx, method, endpoint, payload)
-	if err != nil {
-		return nil, err
-	}
-
-	request.Header.Set("Accept", "application/json")
-
-	if payload != nil {
-		request.Header.Set("Content-Type", "application/json")
+	if type_ != "" {
+		// When the type_ is provided, it means the request needs to be created to handle files
+		req.Header.Set("Content-Type", type_)
+		req.Header.Set("X-Atlassian-Token", "no-check")
 	}
 
 	if c.Auth.HasBasicAuth() {
-		request.SetBasicAuth(c.Auth.GetBasicAuth())
+		req.SetBasicAuth(c.Auth.GetBasicAuth())
 	}
 
 	if c.Auth.HasUserAgent() {
-		request.Header.Set("User-Agent", c.Auth.GetUserAgent())
+		req.Header.Set("User-Agent", c.Auth.GetUserAgent())
 	}
 
-	return request, nil
+	return req, nil
 }
-
 func (c *Client) Call(request *http.Request, structure interface{}) (*models.ResponseScheme, error) {
 
 	response, err := c.HTTP.Do(request)
@@ -466,12 +456,14 @@ func (c *Client) Call(request *http.Request, structure interface{}) (*models.Res
 		return nil, err
 	}
 
-	return c.TransformTheHTTPResponse(response, structure)
+	return c.processResponse(response, structure)
 }
 
-func (c *Client) TransformTheHTTPResponse(response *http.Response, structure interface{}) (*models.ResponseScheme, error) {
+func (c *Client) processResponse(response *http.Response, structure interface{}) (*models.ResponseScheme, error) {
 
-	responseTransformed := &models.ResponseScheme{
+	defer response.Body.Close()
+
+	res := &models.ResponseScheme{
 		Response: response,
 		Code:     response.StatusCode,
 		Endpoint: response.Request.URL.String(),
@@ -480,39 +472,39 @@ func (c *Client) TransformTheHTTPResponse(response *http.Response, structure int
 
 	responseAsBytes, err := io.ReadAll(response.Body)
 	if err != nil {
-		return responseTransformed, err
+		return res, err
 	}
 
-	responseTransformed.Bytes.Write(responseAsBytes)
+	res.Bytes.Write(responseAsBytes)
 
-	var wasSuccess = response.StatusCode >= 200 && response.StatusCode < 300
+	wasSuccess := response.StatusCode >= 200 && response.StatusCode < 300
+
 	if !wasSuccess {
-		return responseTransformed, models.ErrInvalidStatusCodeError
+
+		switch response.StatusCode {
+
+		case http.StatusNotFound:
+			return res, models.ErrNotFound
+
+		case http.StatusUnauthorized:
+			return res, models.ErrUnauthorized
+
+		case http.StatusInternalServerError:
+			return res, models.ErrInternalError
+
+		case http.StatusBadRequest:
+			return res, models.ErrBadRequestError
+
+		default:
+			return res, models.ErrInvalidStatusCodeError
+		}
 	}
 
 	if structure != nil {
 		if err = json.Unmarshal(responseAsBytes, &structure); err != nil {
-			return responseTransformed, err
+			return res, err
 		}
 	}
 
-	return responseTransformed, nil
-}
-
-func (c *Client) TransformStructToReader(structure interface{}) (io.Reader, error) {
-
-	if structure == nil {
-		return nil, models.ErrNilPayloadError
-	}
-
-	if reflect.ValueOf(structure).Type().Kind() == reflect.Struct {
-		return nil, models.ErrNonPayloadPointerError
-	}
-
-	structureAsBodyBytes, err := json.Marshal(structure)
-	if err != nil {
-		return nil, err
-	}
-
-	return bytes.NewReader(structureAsBodyBytes), nil
+	return res, nil
 }

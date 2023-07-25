@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"fmt"
 	"github.com/ctreminiom/go-atlassian/confluence/internal"
 	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service/common"
@@ -75,6 +76,10 @@ func (c *Client) NewFormRequest(ctx context.Context, method, apiEndpoint, conten
 
 	if c.Auth.HasUserAgent() {
 		request.Header.Set("User-Agent", c.Auth.GetUserAgent())
+	}
+
+	if c.Auth.GetBearerToken() != "" {
+		request.Header.Add("Authorization", fmt.Sprintf("Bearer %v", c.Auth.GetBearerToken()))
 	}
 
 	return request, nil

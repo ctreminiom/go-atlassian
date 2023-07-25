@@ -242,6 +242,7 @@ func TestClient_NewRequest(t *testing.T) {
 	authMocked := internal.NewAuthenticationService(nil)
 	authMocked.SetBasicAuth("mail", "token")
 	authMocked.SetUserAgent("firefox")
+	authMocked.SetBearerToken("token_sample")
 
 	siteAsURL, err := url.Parse("https://ctreminiom.atlassian.net")
 	if err != nil {

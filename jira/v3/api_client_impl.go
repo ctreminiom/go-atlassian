@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"fmt"
 	"github.com/ctreminiom/go-atlassian/jira/internal"
 	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service/common"
@@ -451,6 +452,10 @@ func (c *Client) NewRequest(ctx context.Context, method, urlStr, type_ string, b
 
 	if c.Auth.HasUserAgent() {
 		req.Header.Set("User-Agent", c.Auth.GetUserAgent())
+	}
+
+	if c.Auth.GetBearerToken() != "" {
+		req.Header.Add("Authorization", fmt.Sprintf("Bearer %v", c.Auth.GetBearerToken()))
 	}
 
 	return req, nil

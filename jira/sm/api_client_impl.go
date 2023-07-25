@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"fmt"
 	"github.com/ctreminiom/go-atlassian/jira/sm/internal"
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service/common"
@@ -131,6 +132,10 @@ func (c *Client) NewRequest(ctx context.Context, method, urlStr, type_ string, b
 
 	if c.Auth.HasSetExperimentalFlag() {
 		req.Header.Set("X-ExperimentalApi", "opt-in")
+	}
+
+	if c.Auth.GetBearerToken() != "" {
+		req.Header.Add("Authorization", fmt.Sprintf("Bearer %v", c.Auth.GetBearerToken()))
 	}
 
 	if c.Auth.HasUserAgent() {

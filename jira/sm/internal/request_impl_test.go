@@ -1,21 +1,22 @@
 package internal
 
 import (
-	"bytes"
 	"context"
 	"errors"
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
 	"github.com/stretchr/testify/assert"
+	"log"
 	"net/http"
 	"testing"
+	"time"
 )
 
 func Test_internalServiceRequestImpl_Gets(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -51,12 +52,13 @@ func Test_internalServiceRequestImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/request?approvalStatus=MY_PENDING_APPROVAL&expand=serviceDesk%2Caction&limit=50&organizationId=39933&requestOwnership=ORGANIZATION&requestStatus=OPEN_REQUESTS&requestTypeId=1002&searchTerm=IT+Help&serviceDeskId=10002&start=100",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -88,12 +90,13 @@ func Test_internalServiceRequestImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/request?approvalStatus=MY_PENDING_APPROVAL&expand=serviceDesk%2Caction&limit=50&organizationId=39933&requestOwnership=ORGANIZATION&requestStatus=OPEN_REQUESTS&requestTypeId=1002&searchTerm=IT+Help&serviceDeskId=10002&start=100",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -127,12 +130,13 @@ func Test_internalServiceRequestImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/request?approvalStatus=MY_PENDING_APPROVAL&expand=serviceDesk%2Caction&limit=50&organizationId=39933&requestOwnership=ORGANIZATION&requestStatus=OPEN_REQUESTS&requestTypeId=1002&searchTerm=IT+Help&serviceDeskId=10002&start=100",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("client: no http request created"))
 
@@ -177,7 +181,7 @@ func Test_internalServiceRequestImpl_Gets(t *testing.T) {
 func Test_internalServiceRequestImpl_Transitions(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -204,12 +208,13 @@ func Test_internalServiceRequestImpl_Transitions(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/request/DESK-1/transition?limit=50&start=100",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -232,12 +237,13 @@ func Test_internalServiceRequestImpl_Transitions(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/request/DESK-1/transition?limit=50&start=100",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -262,12 +268,13 @@ func Test_internalServiceRequestImpl_Transitions(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/request/DESK-1/transition?limit=50&start=100",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("client: no http request created"))
 
@@ -321,7 +328,7 @@ func Test_internalServiceRequestImpl_Transitions(t *testing.T) {
 func Test_internalServiceRequestImpl_Get(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -347,12 +354,13 @@ func Test_internalServiceRequestImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/request/DESK-1?expand=serviceDesk",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -374,12 +382,13 @@ func Test_internalServiceRequestImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/request/DESK-1?expand=serviceDesk",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -403,12 +412,13 @@ func Test_internalServiceRequestImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/request/DESK-1?expand=serviceDesk",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("client: no http request created"))
 
@@ -461,7 +471,7 @@ func Test_internalServiceRequestImpl_Get(t *testing.T) {
 func Test_internalServiceRequestImpl_Subscribe(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -485,12 +495,13 @@ func Test_internalServiceRequestImpl_Subscribe(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/servicedeskapi/request/DESK-1/notification",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -511,12 +522,13 @@ func Test_internalServiceRequestImpl_Subscribe(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/servicedeskapi/request/DESK-1/notification",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -539,12 +551,13 @@ func Test_internalServiceRequestImpl_Subscribe(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/servicedeskapi/request/DESK-1/notification",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("client: no http request created"))
 
@@ -596,7 +609,7 @@ func Test_internalServiceRequestImpl_Subscribe(t *testing.T) {
 func Test_internalServiceRequestImpl_Unsubscribe(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -620,12 +633,13 @@ func Test_internalServiceRequestImpl_Unsubscribe(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/servicedeskapi/request/DESK-1/notification",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -646,12 +660,13 @@ func Test_internalServiceRequestImpl_Unsubscribe(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/servicedeskapi/request/DESK-1/notification",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -674,12 +689,13 @@ func Test_internalServiceRequestImpl_Unsubscribe(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/servicedeskapi/request/DESK-1/notification",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("client: no http request created"))
 
@@ -730,17 +746,8 @@ func Test_internalServiceRequestImpl_Unsubscribe(t *testing.T) {
 
 func Test_internalServiceRequestImpl_Transition(t *testing.T) {
 
-	payloadMocked := &struct {
-		ID                string "json:\"id\""
-		AdditionalComment struct {
-			Body string "json:\"body,omitempty\""
-		} "json:\"additionalComment,omitempty\""
-	}{ID: "299991", AdditionalComment: struct {
-		Body string "json:\"body,omitempty\""
-	}{Body: "Hello there!"}}
-
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -762,21 +769,46 @@ func Test_internalServiceRequestImpl_Transition(t *testing.T) {
 				ctx:          context.Background(),
 				issueKeyOrID: "DESK-1",
 				transitionID: "299991",
-				comment:      "Hello there!",
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/servicedeskapi/request/DESK-1/transition",
-					bytes.NewReader([]byte{})).
+					"",
+					map[string]interface{}{"id": "299991"}).
+					Return(&http.Request{}, nil)
+
+				client.On("Call",
+					&http.Request{},
+					nil).
+					Return(&model.ResponseScheme{}, nil)
+
+				fields.c = client
+			},
+		},
+
+		{
+			name: "when the comment is provided",
+			args: args{
+				ctx:          context.Background(),
+				issueKeyOrID: "DESK-1",
+				transitionID: "299991",
+				comment:      "Hello there!",
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewConnector(t)
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodPost,
+					"rest/servicedeskapi/request/DESK-1/transition",
+					"",
+					map[string]interface{}{"additionalComment": map[string]interface{}{"body": "Hello there!"}, "id": "299991"}).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -798,17 +830,14 @@ func Test_internalServiceRequestImpl_Transition(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/servicedeskapi/request/DESK-1/transition",
-					bytes.NewReader([]byte{})).
+					"",
+					map[string]interface{}{"additionalComment": map[string]interface{}{"body": "Hello there!"}, "id": "299991"}).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -832,17 +861,14 @@ func Test_internalServiceRequestImpl_Transition(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/servicedeskapi/request/DESK-1/transition",
-					bytes.NewReader([]byte{})).
+					"",
+					map[string]interface{}{"additionalComment": map[string]interface{}{"body": "Hello there!"}, "id": "299991"}).
 					Return(&http.Request{}, errors.New("client: no http request created"))
 
 				fields.c = client
@@ -903,15 +929,7 @@ func Test_internalServiceRequestImpl_Transition(t *testing.T) {
 
 func Test_internalServiceRequestImpl_Create(t *testing.T) {
 
-	payloadMocked := &map[string]interface{}{
-		"requestFieldValues": map[string]interface{}{
-			"description": "I need a new *mouse* for my Mac", "summary": "Request JSD help via REST"},
-		"requestParticipants": []interface{}{
-			"uuid-sample-1", "uuid-sample-2"},
-		"requestTypeId": "28881",
-		"serviceDeskId": "29990"}
-
-	fieldsMocked := &model.CustomerRequestFields{}
+	fieldsMocked := &model.CustomerRequestFields{Fields: make(map[string]interface{})}
 
 	if err := fieldsMocked.Text("summary", "Request JSD help via REST"); err != nil {
 		t.Fatal(err)
@@ -921,8 +939,41 @@ func Test_internalServiceRequestImpl_Create(t *testing.T) {
 		t.Fatal(err)
 	}
 
+	if err := fieldsMocked.Select("priority", "Major"); err != nil {
+		t.Fatal(err)
+	}
+
+	if err := fieldsMocked.Components([]string{"Jira", "Intranet"}); err != nil {
+		t.Fatal(err)
+	}
+
+	if err := fieldsMocked.Users("customfield_320239", []string{"account-id-sample"}); err != nil {
+		t.Fatal(err)
+	}
+
+	if err := fieldsMocked.Date("duedate", time.Date(2020, 1, 2, 3, 4, 5, 0, time.UTC)); err != nil {
+		log.Fatal(err)
+	}
+
+	if err := fieldsMocked.Labels([]string{"label-00", "label-01"}); err != nil {
+		log.Fatal(err)
+	}
+
+	payloadMocked := map[string]interface{}{
+		"requestFieldValues": map[string]interface{}{
+			"components":         []map[string]interface{}{map[string]interface{}{"name": "Jira"}, map[string]interface{}{"name": "Intranet"}},
+			"customfield_320239": []map[string]interface{}{map[string]interface{}{"accountId": "account-id-sample"}},
+			"description":        "I need a new *mouse* for my Mac",
+			"duedate":            "2020-01-02",
+			"labels":             []string{"label-00", "label-01"},
+			"priority":           map[string]interface{}{"value": "Major"},
+			"summary":            "Request JSD help via REST"},
+		"requestParticipants": []interface{}{"uuid-sample-1", "uuid-sample-2"},
+		"requestTypeId":       "28881",
+		"serviceDeskId":       "29990"}
+
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -952,17 +1003,14 @@ func Test_internalServiceRequestImpl_Create(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/servicedeskapi/request",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -987,17 +1035,14 @@ func Test_internalServiceRequestImpl_Create(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/servicedeskapi/request",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -1024,17 +1069,14 @@ func Test_internalServiceRequestImpl_Create(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/servicedeskapi/request",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, errors.New("client: no http request created"))
 
 				fields.c = client

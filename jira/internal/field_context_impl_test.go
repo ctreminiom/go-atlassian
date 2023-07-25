@@ -1,7 +1,6 @@
 package internal
 
 import (
-	"bytes"
 	"context"
 	"errors"
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
@@ -15,7 +14,7 @@ import (
 func Test_internalIssueFieldContextServiceImpl_Gets(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -50,12 +49,13 @@ func Test_internalIssueFieldContextServiceImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/field/custom_field_10002/context?contextId=10001&contextId=10002&isAnyIssueType=true&isGlobalContext=false&maxResults=50&startAt=50",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -86,12 +86,13 @@ func Test_internalIssueFieldContextServiceImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/field/custom_field_10002/context?contextId=10001&contextId=10002&isAnyIssueType=true&isGlobalContext=false&maxResults=50&startAt=50",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -140,12 +141,13 @@ func Test_internalIssueFieldContextServiceImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/field/custom_field_10002/context?contextId=10001&contextId=10002&isAnyIssueType=true&isGlobalContext=false&maxResults=50&startAt=50",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error"))
 
@@ -190,8 +192,15 @@ func Test_internalIssueFieldContextServiceImpl_Gets(t *testing.T) {
 
 func Test_internalIssueFieldContextServiceImpl_Create(t *testing.T) {
 
+	payloadMocked := &model.FieldContextPayloadScheme{
+		IssueTypeIDs: []int{10010},
+		ProjectIDs:   nil,
+		Name:         "Bug fields context",
+		Description:  "A context used to define the custom field options for bugs.",
+	}
+
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -215,32 +224,18 @@ func Test_internalIssueFieldContextServiceImpl_Create(t *testing.T) {
 			args: args{
 				ctx:     context.TODO(),
 				fieldId: "custom_field_10002",
-				payload: &model.FieldContextPayloadScheme{
-					IssueTypeIDs: []int{10010},
-					ProjectIDs:   nil,
-					Name:         "Bug fields context",
-					Description:  "A context used to define the custom field options for bugs.",
-				},
+				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&model.FieldContextPayloadScheme{
-						IssueTypeIDs: []int{10010},
-						ProjectIDs:   nil,
-						Name:         "Bug fields context",
-						Description:  "A context used to define the custom field options for bugs.",
-					},
-				).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/3/field/custom_field_10002/context",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -260,32 +255,18 @@ func Test_internalIssueFieldContextServiceImpl_Create(t *testing.T) {
 			args: args{
 				ctx:     context.TODO(),
 				fieldId: "custom_field_10002",
-				payload: &model.FieldContextPayloadScheme{
-					IssueTypeIDs: []int{10010},
-					ProjectIDs:   nil,
-					Name:         "Bug fields context",
-					Description:  "A context used to define the custom field options for bugs.",
-				},
+				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&model.FieldContextPayloadScheme{
-						IssueTypeIDs: []int{10010},
-						ProjectIDs:   nil,
-						Name:         "Bug fields context",
-						Description:  "A context used to define the custom field options for bugs.",
-					},
-				).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/field/custom_field_10002/context",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -305,12 +286,7 @@ func Test_internalIssueFieldContextServiceImpl_Create(t *testing.T) {
 			args: args{
 				ctx:     context.TODO(),
 				fieldId: "",
-				payload: &model.FieldContextPayloadScheme{
-					IssueTypeIDs: []int{10010},
-					ProjectIDs:   nil,
-					Name:         "Bug fields context",
-					Description:  "A context used to define the custom field options for bugs.",
-				},
+				payload: payloadMocked,
 			},
 			wantErr: true,
 			Err:     model.ErrNoFieldIDError,
@@ -322,32 +298,18 @@ func Test_internalIssueFieldContextServiceImpl_Create(t *testing.T) {
 			args: args{
 				ctx:     context.TODO(),
 				fieldId: "custom_field_10002",
-				payload: &model.FieldContextPayloadScheme{
-					IssueTypeIDs: []int{10010},
-					ProjectIDs:   nil,
-					Name:         "Bug fields context",
-					Description:  "A context used to define the custom field options for bugs.",
-				},
+				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&model.FieldContextPayloadScheme{
-						IssueTypeIDs: []int{10010},
-						ProjectIDs:   nil,
-						Name:         "Bug fields context",
-						Description:  "A context used to define the custom field options for bugs.",
-					},
-				).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/field/custom_field_10002/context",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, errors.New("error"))
 
 				fields.c = client
@@ -391,7 +353,7 @@ func Test_internalIssueFieldContextServiceImpl_Create(t *testing.T) {
 func Test_internalIssueFieldContextServiceImpl_GetDefaultValues(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -422,12 +384,13 @@ func Test_internalIssueFieldContextServiceImpl_GetDefaultValues(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/field/custom_field_10002/context/defaultValue?contextId=10001&maxResults=50&startAt=0",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -454,12 +417,13 @@ func Test_internalIssueFieldContextServiceImpl_GetDefaultValues(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/field/custom_field_10002/context/defaultValue?contextId=10001&maxResults=50&startAt=0",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -497,12 +461,13 @@ func Test_internalIssueFieldContextServiceImpl_GetDefaultValues(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/field/custom_field_10002/context/defaultValue?contextId=10001&maxResults=50&startAt=0",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -552,8 +517,18 @@ func Test_internalIssueFieldContextServiceImpl_GetDefaultValues(t *testing.T) {
 
 func Test_internalIssueFieldContextServiceImpl_SetDefaultValue(t *testing.T) {
 
+	payloadMocked := &model.FieldContextDefaultPayloadScheme{
+		DefaultValues: []*model.CustomFieldDefaultValueScheme{
+			{
+				ContextID: "10128",
+				OptionID:  "10022",
+				Type:      "option.single",
+			},
+		},
+	}
+
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -577,38 +552,18 @@ func Test_internalIssueFieldContextServiceImpl_SetDefaultValue(t *testing.T) {
 			args: args{
 				ctx:     context.TODO(),
 				fieldId: "custom_field_10002",
-				payload: &model.FieldContextDefaultPayloadScheme{
-					DefaultValues: []*model.CustomFieldDefaultValueScheme{
-						{
-							ContextID: "10128",
-							OptionID:  "10022",
-							Type:      "option.single",
-						},
-					},
-				},
+				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&model.FieldContextDefaultPayloadScheme{
-						DefaultValues: []*model.CustomFieldDefaultValueScheme{
-							{
-								ContextID: "10128",
-								OptionID:  "10022",
-								Type:      "option.single",
-							},
-						},
-					},
-				).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/3/field/custom_field_10002/context/defaultValue",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -628,38 +583,18 @@ func Test_internalIssueFieldContextServiceImpl_SetDefaultValue(t *testing.T) {
 			args: args{
 				ctx:     context.TODO(),
 				fieldId: "custom_field_10002",
-				payload: &model.FieldContextDefaultPayloadScheme{
-					DefaultValues: []*model.CustomFieldDefaultValueScheme{
-						{
-							ContextID: "10128",
-							OptionID:  "10022",
-							Type:      "option.single",
-						},
-					},
-				},
+				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&model.FieldContextDefaultPayloadScheme{
-						DefaultValues: []*model.CustomFieldDefaultValueScheme{
-							{
-								ContextID: "10128",
-								OptionID:  "10022",
-								Type:      "option.single",
-							},
-						},
-					},
-				).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/2/field/custom_field_10002/context/defaultValue",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -690,38 +625,18 @@ func Test_internalIssueFieldContextServiceImpl_SetDefaultValue(t *testing.T) {
 			args: args{
 				ctx:     context.TODO(),
 				fieldId: "custom_field_10002",
-				payload: &model.FieldContextDefaultPayloadScheme{
-					DefaultValues: []*model.CustomFieldDefaultValueScheme{
-						{
-							ContextID: "10128",
-							OptionID:  "10022",
-							Type:      "option.single",
-						},
-					},
-				},
+				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&model.FieldContextDefaultPayloadScheme{
-						DefaultValues: []*model.CustomFieldDefaultValueScheme{
-							{
-								ContextID: "10128",
-								OptionID:  "10022",
-								Type:      "option.single",
-							},
-						},
-					},
-				).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/2/field/custom_field_10002/context/defaultValue",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, errors.New("error"))
 
 				fields.c = client
@@ -764,7 +679,7 @@ func Test_internalIssueFieldContextServiceImpl_SetDefaultValue(t *testing.T) {
 func Test_internalIssueFieldContextServiceImpl_IssueTypesContext(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -795,12 +710,13 @@ func Test_internalIssueFieldContextServiceImpl_IssueTypesContext(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/field/custom_field_10002/context/issuetypemapping?contextId=10001&maxResults=50&startAt=0",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -827,12 +743,13 @@ func Test_internalIssueFieldContextServiceImpl_IssueTypesContext(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/field/custom_field_10002/context/issuetypemapping?contextId=10001&maxResults=50&startAt=0",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -870,12 +787,13 @@ func Test_internalIssueFieldContextServiceImpl_IssueTypesContext(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/field/custom_field_10002/context/issuetypemapping?contextId=10001&maxResults=50&startAt=0",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error"))
 
@@ -921,7 +839,7 @@ func Test_internalIssueFieldContextServiceImpl_IssueTypesContext(t *testing.T) {
 func Test_internalIssueFieldContextServiceImpl_ProjectsContext(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -952,12 +870,13 @@ func Test_internalIssueFieldContextServiceImpl_ProjectsContext(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/field/custom_field_10002/context/projectmapping?contextId=10001&maxResults=50&startAt=0",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -984,12 +903,13 @@ func Test_internalIssueFieldContextServiceImpl_ProjectsContext(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/field/custom_field_10002/context/projectmapping?contextId=10001&maxResults=50&startAt=0",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -1027,12 +947,13 @@ func Test_internalIssueFieldContextServiceImpl_ProjectsContext(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/field/custom_field_10002/context/projectmapping?contextId=10001&maxResults=50&startAt=0",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error"))
 
@@ -1077,8 +998,12 @@ func Test_internalIssueFieldContextServiceImpl_ProjectsContext(t *testing.T) {
 
 func Test_internalIssueFieldContextServiceImpl_Update(t *testing.T) {
 
+	payloadMockedWithDescription := map[string]interface{}{"description": "new customfield context description", "name": "DUMMY - customfield_10002 Context"}
+
+	payloadMocked := map[string]interface{}{"name": "DUMMY - customfield_10002 Context"}
+
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -1109,23 +1034,47 @@ func Test_internalIssueFieldContextServiceImpl_Update(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&struct {
-						Name        string "json:\"name,omitempty\""
-						Description string "json:\"description,omitempty\""
-					}{
-						Name:        "DUMMY - customfield_10002 Context",
-						Description: "new customfield context description"},
-				).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/3/field/custom_field_10002/context/10001",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMockedWithDescription).
+					Return(&http.Request{}, nil)
+
+				client.On("Call",
+					&http.Request{},
+					nil).
+					Return(&model.ResponseScheme{}, nil)
+
+				fields.c = client
+			},
+			wantErr: false,
+			Err:     nil,
+		},
+
+		{
+			name:   "when the description is not provided",
+			fields: fields{version: "3"},
+			args: args{
+				ctx:         context.TODO(),
+				fieldId:     "custom_field_10002",
+				contextId:   10001,
+				name:        "DUMMY - customfield_10002 Context",
+				description: "",
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewConnector(t)
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodPut,
+					"rest/api/3/field/custom_field_10002/context/10001",
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -1151,23 +1100,14 @@ func Test_internalIssueFieldContextServiceImpl_Update(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&struct {
-						Name        string "json:\"name,omitempty\""
-						Description string "json:\"description,omitempty\""
-					}{
-						Name:        "DUMMY - customfield_10002 Context",
-						Description: "new customfield context description"},
-				).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/2/field/custom_field_10002/context/10001",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMockedWithDescription).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -1204,23 +1144,14 @@ func Test_internalIssueFieldContextServiceImpl_Update(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&struct {
-						Name        string "json:\"name,omitempty\""
-						Description string "json:\"description,omitempty\""
-					}{
-						Name:        "DUMMY - customfield_10002 Context",
-						Description: "new customfield context description"},
-				).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/2/field/custom_field_10002/context/10001",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMockedWithDescription).
 					Return(&http.Request{}, errors.New("error"))
 
 				fields.c = client
@@ -1264,7 +1195,7 @@ func Test_internalIssueFieldContextServiceImpl_Update(t *testing.T) {
 func Test_internalIssueFieldContextServiceImpl_Delete(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -1292,12 +1223,13 @@ func Test_internalIssueFieldContextServiceImpl_Delete(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/api/3/field/custom_field_10002/context/10001",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -1322,12 +1254,13 @@ func Test_internalIssueFieldContextServiceImpl_Delete(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/api/2/field/custom_field_10002/context/10001",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -1363,12 +1296,13 @@ func Test_internalIssueFieldContextServiceImpl_Delete(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/api/2/field/custom_field_10002/context/10001",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error"))
 
@@ -1411,8 +1345,10 @@ func Test_internalIssueFieldContextServiceImpl_Delete(t *testing.T) {
 
 func Test_internalIssueFieldContextServiceImpl_AddIssueTypes(t *testing.T) {
 
+	payloadMocked := map[string]interface{}{"issueTypeIds": []string{"4", "3"}}
+
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -1442,20 +1378,14 @@ func Test_internalIssueFieldContextServiceImpl_AddIssueTypes(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&struct {
-						IssueTypeIds []string "json:\"issueTypeIds\""
-					}{IssueTypeIds: []string{"4", "3"}},
-				).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/3/field/custom_field_10002/context/10001/issuetype",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -1480,20 +1410,14 @@ func Test_internalIssueFieldContextServiceImpl_AddIssueTypes(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&struct {
-						IssueTypeIds []string "json:\"issueTypeIds\""
-					}{IssueTypeIds: []string{"4", "3"}},
-				).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/2/field/custom_field_10002/context/10001/issuetype",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -1529,20 +1453,14 @@ func Test_internalIssueFieldContextServiceImpl_AddIssueTypes(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&struct {
-						IssueTypeIds []string "json:\"issueTypeIds\""
-					}{IssueTypeIds: []string{"4", "3"}},
-				).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/2/field/custom_field_10002/context/10001/issuetype",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, errors.New("error"))
 
 				fields.c = client
@@ -1585,8 +1503,10 @@ func Test_internalIssueFieldContextServiceImpl_AddIssueTypes(t *testing.T) {
 
 func Test_internalIssueFieldContextServiceImpl_RemoveIssueTypes(t *testing.T) {
 
+	payloadMocked := map[string]interface{}{"issueTypeIds": []string{"4", "3"}}
+
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -1616,20 +1536,14 @@ func Test_internalIssueFieldContextServiceImpl_RemoveIssueTypes(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&struct {
-						IssueTypeIds []string "json:\"issueTypeIds\""
-					}{IssueTypeIds: []string{"4", "3"}},
-				).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/3/field/custom_field_10002/context/10001/issuetype/remove",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -1654,20 +1568,14 @@ func Test_internalIssueFieldContextServiceImpl_RemoveIssueTypes(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&struct {
-						IssueTypeIds []string "json:\"issueTypeIds\""
-					}{IssueTypeIds: []string{"4", "3"}},
-				).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/field/custom_field_10002/context/10001/issuetype/remove",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -1693,6 +1601,18 @@ func Test_internalIssueFieldContextServiceImpl_RemoveIssueTypes(t *testing.T) {
 		},
 
 		{
+			name:   "when the issuetype id's are not provided",
+			fields: fields{version: "3"},
+			args: args{
+				ctx:           context.TODO(),
+				fieldId:       "custom_field_10002",
+				issueTypesIds: nil,
+			},
+			wantErr: true,
+			Err:     model.ErrNoIssueTypesError,
+		},
+
+		{
 			name:   "when the http request cannot be created",
 			fields: fields{version: "2"},
 			args: args{
@@ -1703,20 +1623,14 @@ func Test_internalIssueFieldContextServiceImpl_RemoveIssueTypes(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&struct {
-						IssueTypeIds []string "json:\"issueTypeIds\""
-					}{IssueTypeIds: []string{"4", "3"}},
-				).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/field/custom_field_10002/context/10001/issuetype/remove",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, errors.New("error"))
 
 				fields.c = client
@@ -1759,8 +1673,10 @@ func Test_internalIssueFieldContextServiceImpl_RemoveIssueTypes(t *testing.T) {
 
 func Test_internalIssueFieldContextServiceImpl_Link(t *testing.T) {
 
+	payloadMocked := map[string]interface{}{"projectIds": []string{"4", "3"}}
+
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -1790,20 +1706,14 @@ func Test_internalIssueFieldContextServiceImpl_Link(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&struct {
-						ProjectIds []string "json:\"projectIds\""
-					}{ProjectIds: []string{"4", "3"}},
-				).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/3/field/custom_field_10002/context/10001/project",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -1828,20 +1738,14 @@ func Test_internalIssueFieldContextServiceImpl_Link(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&struct {
-						ProjectIds []string "json:\"projectIds\""
-					}{ProjectIds: []string{"4", "3"}},
-				).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/2/field/custom_field_10002/context/10001/project",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -1867,6 +1771,29 @@ func Test_internalIssueFieldContextServiceImpl_Link(t *testing.T) {
 		},
 
 		{
+			name:   "when the context id is not provided",
+			fields: fields{version: "3"},
+			args: args{
+				ctx:     context.TODO(),
+				fieldId: "custom_field_10002",
+			},
+			wantErr: true,
+			Err:     model.ErrNoFieldContextIDError,
+		},
+
+		{
+			name:   "when the field id is not provided",
+			fields: fields{version: "3"},
+			args: args{
+				ctx:       context.TODO(),
+				fieldId:   "custom_field_10002",
+				contextId: 10001,
+			},
+			wantErr: true,
+			Err:     model.ErrNoProjectIDsError,
+		},
+
+		{
 			name:   "when the http request cannot be created",
 			fields: fields{version: "2"},
 			args: args{
@@ -1877,20 +1804,14 @@ func Test_internalIssueFieldContextServiceImpl_Link(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&struct {
-						ProjectIds []string "json:\"projectIds\""
-					}{ProjectIds: []string{"4", "3"}},
-				).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/2/field/custom_field_10002/context/10001/project",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, errors.New("error"))
 
 				fields.c = client
@@ -1931,10 +1852,12 @@ func Test_internalIssueFieldContextServiceImpl_Link(t *testing.T) {
 	}
 }
 
-func Test_internalIssueFieldContextServiceImpl_UnLink(t *testing.T) {
+func Test_internalIssueFieldContextServiceImpl_Unlink(t *testing.T) {
+
+	payloadMocked := map[string]interface{}{"projectIds": []string{"4", "3"}}
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -1964,20 +1887,14 @@ func Test_internalIssueFieldContextServiceImpl_UnLink(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&struct {
-						ProjectIds []string "json:\"projectIds\""
-					}{ProjectIds: []string{"4", "3"}},
-				).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/3/field/custom_field_10002/context/10001/project/remove",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -2002,20 +1919,14 @@ func Test_internalIssueFieldContextServiceImpl_UnLink(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&struct {
-						ProjectIds []string "json:\"projectIds\""
-					}{ProjectIds: []string{"4", "3"}},
-				).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/field/custom_field_10002/context/10001/project/remove",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -2041,6 +1952,29 @@ func Test_internalIssueFieldContextServiceImpl_UnLink(t *testing.T) {
 		},
 
 		{
+			name:   "when the context id is not provided",
+			fields: fields{version: "3"},
+			args: args{
+				ctx:     context.TODO(),
+				fieldId: "custom_field_10002",
+			},
+			wantErr: true,
+			Err:     model.ErrNoFieldContextIDError,
+		},
+
+		{
+			name:   "when the field id is not provided",
+			fields: fields{version: "3"},
+			args: args{
+				ctx:       context.TODO(),
+				fieldId:   "custom_field_10002",
+				contextId: 10001,
+			},
+			wantErr: true,
+			Err:     model.ErrNoProjectIDsError,
+		},
+
+		{
 			name:   "when the http request cannot be created",
 			fields: fields{version: "2"},
 			args: args{
@@ -2051,20 +1985,14 @@ func Test_internalIssueFieldContextServiceImpl_UnLink(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&struct {
-						ProjectIds []string "json:\"projectIds\""
-					}{ProjectIds: []string{"4", "3"}},
-				).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/field/custom_field_10002/context/10001/project/remove",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, errors.New("error"))
 
 				fields.c = client

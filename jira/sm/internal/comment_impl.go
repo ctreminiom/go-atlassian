@@ -12,15 +12,11 @@ import (
 	"strings"
 )
 
-func NewCommentService(client service.Client, version string) (*CommentService, error) {
-
-	if version == "" {
-		return nil, model.ErrNoVersionProvided
-	}
+func NewCommentService(client service.Connector, version string) *CommentService {
 
 	return &CommentService{
 		internalClient: &internalServiceRequestCommentImpl{c: client, version: version},
-	}, nil
+	}
 }
 
 type CommentService struct {
@@ -68,7 +64,7 @@ func (s *CommentService) Attachments(ctx context.Context, issueKeyOrID string, c
 }
 
 type internalServiceRequestCommentImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -92,18 +88,18 @@ func (i *internalServiceRequestCommentImpl) Gets(ctx context.Context, issueKeyOr
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/request/%v/comment?%v", issueKeyOrID, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	page := new(model.RequestCommentPageScheme)
-	response, err := i.c.Call(request, page)
+	res, err := i.c.Call(req, page)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return page, response, nil
+	return page, res, nil
 }
 
 func (i *internalServiceRequestCommentImpl) Get(ctx context.Context, issueKeyOrID string, commentID int, expand []string) (*model.RequestCommentScheme, *model.ResponseScheme, error) {
@@ -126,18 +122,18 @@ func (i *internalServiceRequestCommentImpl) Get(ctx context.Context, issueKeyOrI
 		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), nil)
+	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	comment := new(model.RequestCommentScheme)
-	response, err := i.c.Call(request, comment)
+	res, err := i.c.Call(req, comment)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return comment, response, nil
+	return comment, res, nil
 }
 
 func (i *internalServiceRequestCommentImpl) Create(ctx context.Context, issueKeyOrID, body string, public bool) (*model.RequestCommentScheme, *model.ResponseScheme, error) {
@@ -150,33 +146,21 @@ func (i *internalServiceRequestCommentImpl) Create(ctx context.Context, issueKey
 		return nil, nil, model.ErrNoCommentBodyError
 	}
 
-	payload := struct {
-		Public bool   `json:"public"`
-		Body   string `json:"body"`
-	}{
-		Public: public,
-		Body:   body,
-	}
-
-	reader, err := i.c.TransformStructToReader(&payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
+	payload := map[string]interface{}{"public": public, "body": body}
 	endpoint := fmt.Sprintf("rest/servicedeskapi/request/%v/comment", issueKeyOrID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	req, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	comment := new(model.RequestCommentScheme)
-	response, err := i.c.Call(request, comment)
+	res, err := i.c.Call(req, comment)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return comment, response, nil
+	return comment, res, nil
 }
 
 func (i *internalServiceRequestCommentImpl) Attachments(ctx context.Context, issueKeyOrID string, commentID, start, limit int) (*model.RequestAttachmentPageScheme, *model.ResponseScheme, error) {
@@ -195,16 +179,16 @@ func (i *internalServiceRequestCommentImpl) Attachments(ctx context.Context, iss
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/request/%v/comment/%v/attachment?%v", issueKeyOrID, commentID, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	page := new(model.RequestAttachmentPageScheme)
-	response, err := i.c.Call(request, page)
+	res, err := i.c.Call(req, page)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return page, response, nil
+	return page, res, nil
 }

@@ -5,12 +5,12 @@ import (
 	"github.com/ctreminiom/go-atlassian/service/common"
 )
 
-func NewAuthenticationService(client service.Client) common.Authentication {
+func NewAuthenticationService(client service.Connector) common.Authentication {
 	return &AuthenticationService{c: client}
 }
 
 type AuthenticationService struct {
-	c service.Client
+	c service.Connector
 
 	basicAuthProvided bool
 	mail, token       string
@@ -26,7 +26,6 @@ func (a *AuthenticationService) SetBearerToken(token string) {
 func (a *AuthenticationService) GetBearerToken() string {
 	return a.token
 }
-
 func (a *AuthenticationService) SetExperimentalFlag() {}
 
 func (a *AuthenticationService) HasSetExperimentalFlag() bool {

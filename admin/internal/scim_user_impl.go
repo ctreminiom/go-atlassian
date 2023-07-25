@@ -12,7 +12,7 @@ import (
 	"strings"
 )
 
-func NewSCIMUserService(client service.Client) *SCIMUserService {
+func NewSCIMUserService(client service.Connector) *SCIMUserService {
 	return &SCIMUserService{internalClient: &internalSCIMUserImpl{c: client}}
 }
 
@@ -97,18 +97,13 @@ func (s *SCIMUserService) Update(ctx context.Context, directoryID, userID string
 }
 
 type internalSCIMUserImpl struct {
-	c service.Client
+	c service.Connector
 }
 
 func (i *internalSCIMUserImpl) Create(ctx context.Context, directoryID string, payload *model.SCIMUserScheme, attributes, excludedAttributes []string) (*model.SCIMUserScheme, *model.ResponseScheme, error) {
 
 	if directoryID == "" {
 		return nil, nil, model.ErrNoAdminDirectoryIDError
-	}
-
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
 	}
 
 	params := url.Values{}
@@ -128,7 +123,7 @@ func (i *internalSCIMUserImpl) Create(ctx context.Context, directoryID string, p
 		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint.String(), reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint.String(), "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -169,7 +164,7 @@ func (i *internalSCIMUserImpl) Gets(ctx context.Context, directoryID string, opt
 
 	endpoint := fmt.Sprintf("scim/directory/%v/Users?%v", directoryID, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -209,7 +204,7 @@ func (i *internalSCIMUserImpl) Get(ctx context.Context, directoryID, userID stri
 		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -235,7 +230,7 @@ func (i *internalSCIMUserImpl) Deactivate(ctx context.Context, directoryID, user
 
 	endpoint := fmt.Sprintf("scim/directory/%v/Users/%v", directoryID, userID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -270,12 +265,7 @@ func (i *internalSCIMUserImpl) Path(ctx context.Context, directoryID, userID str
 		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	request, err := i.c.NewRequest(ctx, http.MethodPatch, endpoint.String(), reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPatch, endpoint.String(), "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -315,12 +305,7 @@ func (i *internalSCIMUserImpl) Update(ctx context.Context, directoryID, userID s
 		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint.String(), reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint.String(), "", payload)
 	if err != nil {
 		return nil, nil, err
 	}

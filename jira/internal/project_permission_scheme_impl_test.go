@@ -1,7 +1,6 @@
 package internal
 
 import (
-	"bytes"
 	"context"
 	"errors"
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
@@ -15,7 +14,7 @@ import (
 func Test_internalProjectPermissionSchemeImpl_Get(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -43,13 +42,13 @@ func Test_internalProjectPermissionSchemeImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/project/DUMMY/permissionscheme?expand=field%2Cgroup",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -73,13 +72,13 @@ func Test_internalProjectPermissionSchemeImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/project/DUMMY/permissionscheme?expand=field%2Cgroup",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -113,13 +112,13 @@ func Test_internalProjectPermissionSchemeImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/project/DUMMY/permissionscheme?expand=field%2Cgroup",
-					nil).
+					"", nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -163,7 +162,7 @@ func Test_internalProjectPermissionSchemeImpl_Get(t *testing.T) {
 func Test_internalProjectPermissionSchemeImpl_SecurityLevels(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -189,13 +188,13 @@ func Test_internalProjectPermissionSchemeImpl_SecurityLevels(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/project/DUMMY/securitylevel",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -218,13 +217,13 @@ func Test_internalProjectPermissionSchemeImpl_SecurityLevels(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/project/DUMMY/securitylevel",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -257,13 +256,13 @@ func Test_internalProjectPermissionSchemeImpl_SecurityLevels(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/project/DUMMY/securitylevel",
-					nil).
+					"", nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -306,12 +305,10 @@ func Test_internalProjectPermissionSchemeImpl_SecurityLevels(t *testing.T) {
 
 func Test_internalProjectPermissionSchemeImpl_Assign(t *testing.T) {
 
-	payloadMocked := &struct {
-		ID int "json:\"id\""
-	}{ID: 10001}
+	payloadMocked := map[string]interface{}{"id": 10001}
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -339,17 +336,13 @@ func Test_internalProjectPermissionSchemeImpl_Assign(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/3/project/DUMMY/permissionscheme",
-					bytes.NewReader([]byte{})).
+					"", payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -373,17 +366,13 @@ func Test_internalProjectPermissionSchemeImpl_Assign(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/2/project/DUMMY/permissionscheme",
-					bytes.NewReader([]byte{})).
+					"", payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -417,17 +406,13 @@ func Test_internalProjectPermissionSchemeImpl_Assign(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/3/project/DUMMY/permissionscheme",
-					bytes.NewReader([]byte{})).
+					"", payloadMocked).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -471,7 +456,7 @@ func Test_internalProjectPermissionSchemeImpl_Assign(t *testing.T) {
 func Test_NewProjectPermissionSchemeService(t *testing.T) {
 
 	type args struct {
-		client  service.Client
+		client  service.Connector
 		version string
 	}
 

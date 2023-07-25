@@ -11,7 +11,7 @@ import (
 	"strconv"
 )
 
-func NewScreenService(client service.Client, version string, scheme *ScreenSchemeService, tab *ScreenTabService) (*ScreenService, error) {
+func NewScreenService(client service.Connector, version string, scheme *ScreenSchemeService, tab *ScreenTabService) (*ScreenService, error) {
 
 	if version == "" {
 		return nil, model.ErrNoVersionProvided
@@ -97,7 +97,7 @@ func (s *ScreenService) Available(ctx context.Context, screenId int) ([]*model.A
 }
 
 type internalScreenImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -113,7 +113,7 @@ func (i *internalScreenImpl) Fields(ctx context.Context, fieldId string, startAt
 
 	endpoint := fmt.Sprintf("rest/api/%v/field/%v/screens?%v", i.version, fieldId, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -154,7 +154,7 @@ func (i *internalScreenImpl) Gets(ctx context.Context, options *model.ScreenPara
 
 	endpoint := fmt.Sprintf("rest/api/%v/screens?%v", i.version, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -174,22 +174,15 @@ func (i *internalScreenImpl) Create(ctx context.Context, name, description strin
 		return nil, nil, model.ErrNoScreenNameError
 	}
 
-	payload := struct {
-		Name        string `json:"name,omitempty"`
-		Description string `json:"description,omitempty"`
-	}{
-		Name:        name,
-		Description: description,
-	}
+	payload := map[string]interface{}{"name": name}
 
-	reader, err := i.c.TransformStructToReader(&payload)
-	if err != nil {
-		return nil, nil, err
+	if description != "" {
+		payload["description"] = description
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/screens", i.version)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -211,7 +204,7 @@ func (i *internalScreenImpl) AddToDefault(ctx context.Context, fieldId string) (
 
 	endpoint := fmt.Sprintf("rest/api/%v/screens/addToDefault/%v", i.version, fieldId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -225,22 +218,15 @@ func (i *internalScreenImpl) Update(ctx context.Context, screenId int, name, des
 		return nil, nil, model.ErrNoScreenIDError
 	}
 
-	payload := struct {
-		Name        string `json:"name,omitempty"`
-		Description string `json:"description,omitempty"`
-	}{
-		Name:        name,
-		Description: description,
-	}
+	payload := map[string]interface{}{"name": name}
 
-	reader, err := i.c.TransformStructToReader(&payload)
-	if err != nil {
-		return nil, nil, err
+	if description != "" {
+		payload["description"] = description
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/screens/%v", i.version, screenId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -262,7 +248,7 @@ func (i *internalScreenImpl) Delete(ctx context.Context, screenId int) (*model.R
 
 	endpoint := fmt.Sprintf("rest/api/%v/screens/%v", i.version, screenId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -278,7 +264,7 @@ func (i *internalScreenImpl) Available(ctx context.Context, screenId int) ([]*mo
 
 	endpoint := fmt.Sprintf("rest/api/%v/screens/%v/availableFields", i.version, screenId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}

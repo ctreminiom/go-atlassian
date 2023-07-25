@@ -15,7 +15,7 @@ import (
 func Test_internalPriorityImpl_Gets(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -39,13 +39,13 @@ func Test_internalPriorityImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/priority",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -67,13 +67,13 @@ func Test_internalPriorityImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/priority",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -95,13 +95,13 @@ func Test_internalPriorityImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/priority",
-					nil).
+					"", nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -145,7 +145,7 @@ func Test_internalPriorityImpl_Gets(t *testing.T) {
 func Test_internalPriorityImpl_Get(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -171,13 +171,13 @@ func Test_internalPriorityImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/priority/2",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -200,13 +200,13 @@ func Test_internalPriorityImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/priority/2",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -239,13 +239,13 @@ func Test_internalPriorityImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/priority/2",
-					nil).
+					"", nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -289,7 +289,7 @@ func Test_internalPriorityImpl_Get(t *testing.T) {
 func Test_NewPriorityService(t *testing.T) {
 
 	type args struct {
-		client  service.Client
+		client  service.Connector
 		version string
 	}
 

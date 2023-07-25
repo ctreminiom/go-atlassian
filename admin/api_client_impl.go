@@ -1,34 +1,27 @@
-package agile
+package admin
 
 import (
 	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/ctreminiom/go-atlassian/jira/agile/internal"
+	"github.com/ctreminiom/go-atlassian/admin/internal"
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service/common"
 	"io"
 	"net/http"
 	"net/url"
-	"strings"
 )
 
-func New(httpClient common.HttpClient, site string) (*Client, error) {
+const defaultApiEndpoint = "https://api.atlassian.com/"
+
+func New(httpClient common.HttpClient) (*Client, error) {
 
 	if httpClient == nil {
 		httpClient = http.DefaultClient
 	}
 
-	if site == "" {
-		return nil, model.ErrNoSiteError
-	}
-
-	if !strings.HasSuffix(site, "/") {
-		site += "/"
-	}
-
-	u, err := url.Parse(site)
+	u, err := url.Parse(defaultApiEndpoint)
 	if err != nil {
 		return nil, err
 	}
@@ -38,23 +31,31 @@ func New(httpClient common.HttpClient, site string) (*Client, error) {
 		Site: u,
 	}
 
-	client.Board = internal.NewBoardService(client, "1.0")
-	client.Epic = internal.NewEpicService(client, "1.0")
-	client.Sprint = internal.NewSprintService(client, "1.0")
-	client.Backlog = internal.NewBoardBacklogService(client, "1.0")
 	client.Auth = internal.NewAuthenticationService(client)
+
+	client.SCIM = &internal.SCIMService{
+		User:   internal.NewSCIMUserService(client),
+		Group:  internal.NewSCIMGroupService(client),
+		Schema: internal.NewSCIMSchemaService(client),
+	}
+
+	client.Organization = internal.NewOrganizationService(
+		client,
+		internal.NewOrganizationPolicyService(client),
+		internal.NewOrganizationDirectoryService(client))
+
+	client.User = internal.NewUserService(client, internal.NewUserTokenService(client))
 
 	return client, nil
 }
 
 type Client struct {
-	HTTP    common.HttpClient
-	Site    *url.URL
-	Auth    common.Authentication
-	Board   *internal.BoardService
-	Backlog *internal.BoardBacklogService
-	Epic    *internal.EpicService
-	Sprint  *internal.SprintService
+	HTTP         common.HttpClient
+	Site         *url.URL
+	Auth         common.Authentication
+	Organization *internal.OrganizationService
+	User         *internal.UserService
+	SCIM         *internal.SCIMService
 }
 
 func (c *Client) NewRequest(ctx context.Context, method, urlStr, type_ string, body interface{}) (*http.Request, error) {
@@ -87,16 +88,12 @@ func (c *Client) NewRequest(ctx context.Context, method, urlStr, type_ string, b
 		req.Header.Set("Content-Type", type_)
 	}
 
-	if c.Auth.HasBasicAuth() {
-		req.SetBasicAuth(c.Auth.GetBasicAuth())
+	if c.Auth.GetBearerToken() != "" {
+		req.Header.Add("Authorization", fmt.Sprintf("Bearer %v", c.Auth.GetBearerToken()))
 	}
 
 	if c.Auth.HasUserAgent() {
 		req.Header.Set("User-Agent", c.Auth.GetUserAgent())
-	}
-
-	if c.Auth.GetBearerToken() != "" {
-		req.Header.Add("Authorization", fmt.Sprintf("Bearer %v", c.Auth.GetBearerToken()))
 	}
 
 	return req, nil

@@ -9,15 +9,11 @@ import (
 	"net/http"
 )
 
-func NewFeedbackService(client service.Client, version string) (*FeedbackService, error) {
-
-	if version == "" {
-		return nil, model.ErrNoVersionProvided
-	}
+func NewFeedbackService(client service.Connector, version string) *FeedbackService {
 
 	return &FeedbackService{
 		internalClient: &internalServiceRequestFeedbackImpl{c: client, version: version},
-	}, nil
+	}
 }
 
 type FeedbackService struct {
@@ -52,7 +48,7 @@ func (s *FeedbackService) Delete(ctx context.Context, requestIDOrKey string) (*m
 }
 
 type internalServiceRequestFeedbackImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -64,18 +60,18 @@ func (i *internalServiceRequestFeedbackImpl) Get(ctx context.Context, requestIDO
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/request/%v/feedback", requestIDOrKey)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	feedback := new(model.CustomerFeedbackScheme)
-	response, err := i.c.Call(request, feedback)
+	res, err := i.c.Call(req, feedback)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return feedback, response, nil
+	return feedback, res, nil
 }
 
 func (i *internalServiceRequestFeedbackImpl) Post(ctx context.Context, requestIDOrKey string, rating int, comment string) (*model.CustomerFeedbackScheme, *model.ResponseScheme, error) {
@@ -84,41 +80,28 @@ func (i *internalServiceRequestFeedbackImpl) Post(ctx context.Context, requestID
 		return nil, nil, model.ErrNoIssueKeyOrIDError
 	}
 
-	payload := struct {
-		Rating  int `json:"rating,omitempty"`
-		Comment struct {
-			Body string `json:"body,omitempty"`
-		} `json:"comment,omitempty"`
-		Type string `json:"type,omitempty"`
-	}{
-		Rating: rating,
-		Comment: struct {
-			Body string `json:"body,omitempty"`
-		}{
-			Body: comment,
+	payload := map[string]interface{}{
+		"rating": rating,
+		"type":   "csat",
+		"comment": map[string]interface{}{
+			"body": comment,
 		},
-		Type: "csat",
-	}
-
-	reader, err := i.c.TransformStructToReader(&payload)
-	if err != nil {
-		return nil, nil, err
 	}
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/request/%v/feedback", requestIDOrKey)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	req, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	feedback := new(model.CustomerFeedbackScheme)
-	response, err := i.c.Call(request, feedback)
+	res, err := i.c.Call(req, feedback)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return feedback, response, nil
+	return feedback, res, nil
 }
 
 func (i *internalServiceRequestFeedbackImpl) Delete(ctx context.Context, requestIDOrKey string) (*model.ResponseScheme, error) {
@@ -129,10 +112,10 @@ func (i *internalServiceRequestFeedbackImpl) Delete(ctx context.Context, request
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/request/%v/feedback", requestIDOrKey)
 
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.c.Call(request, nil)
+	return i.c.Call(req, nil)
 }

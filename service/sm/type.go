@@ -27,7 +27,7 @@ type TypeConnector interface {
 	// POST /rest/servicedeskapi/servicedesk/{serviceDeskId}/requesttype
 	//
 	// https://docs.go-atlassian.io/jira-service-management-cloud/request/types#create-request-type
-	Create(ctx context.Context, serviceDeskID int, issueTypeID, name, description, helpText string) (*model.RequestTypeScheme, *model.ResponseScheme, error)
+	Create(ctx context.Context, serviceDeskID int, payload *model.RequestTypePayloadScheme) (*model.RequestTypeScheme, *model.ResponseScheme, error)
 
 	// Get returns a customer request type from a service desk.
 	//

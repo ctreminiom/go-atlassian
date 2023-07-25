@@ -14,7 +14,7 @@ import (
 func Test_internalInfoImpl_Get(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -36,12 +36,13 @@ func Test_internalInfoImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/info",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -61,12 +62,13 @@ func Test_internalInfoImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/info",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -88,12 +90,13 @@ func Test_internalInfoImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/info",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("client: no http request created"))
 
@@ -111,10 +114,9 @@ func Test_internalInfoImpl_Get(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			smService, err := NewInfoService(testCase.fields.c, "latest")
-			assert.NoError(t, err)
+			infoService := NewInfoService(testCase.fields.c, "latest")
 
-			gotResult, gotResponse, err := smService.Get(testCase.args.ctx)
+			gotResult, gotResponse, err := infoService.Get(testCase.args.ctx)
 
 			if testCase.wantErr {
 

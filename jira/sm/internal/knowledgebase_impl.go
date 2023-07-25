@@ -11,15 +11,11 @@ import (
 	"strconv"
 )
 
-func NewKnowledgebaseService(client service.Client, version string) (*KnowledgebaseService, error) {
-
-	if version == "" {
-		return nil, model.ErrNoVersionProvided
-	}
+func NewKnowledgebaseService(client service.Connector, version string) *KnowledgebaseService {
 
 	return &KnowledgebaseService{
 		internalClient: &internalKnowledgebaseImpl{c: client, version: version},
-	}, nil
+	}
 }
 
 type KnowledgebaseService struct {
@@ -45,7 +41,7 @@ func (k *KnowledgebaseService) Gets(ctx context.Context, serviceDeskID int, quer
 }
 
 type internalKnowledgebaseImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -63,18 +59,18 @@ func (i *internalKnowledgebaseImpl) Search(ctx context.Context, query string, hi
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/knowledgebase/article?%v", params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	page := new(model.ArticlePageScheme)
-	response, err := i.c.Call(request, page)
+	res, err := i.c.Call(req, page)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return page, response, nil
+	return page, res, nil
 }
 
 func (i *internalKnowledgebaseImpl) Gets(ctx context.Context, serviceDeskID int, query string, highlight bool, start, limit int) (*model.ArticlePageScheme, *model.ResponseScheme, error) {
@@ -95,16 +91,16 @@ func (i *internalKnowledgebaseImpl) Gets(ctx context.Context, serviceDeskID int,
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/servicedesk/%v/knowledgebase/article?%v", serviceDeskID, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	page := new(model.ArticlePageScheme)
-	response, err := i.c.Call(request, page)
+	res, err := i.c.Call(req, page)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return page, response, nil
+	return page, res, nil
 }

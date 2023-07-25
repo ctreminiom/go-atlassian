@@ -2,13 +2,11 @@ package internal
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/jira"
 	"github.com/imdario/mergo"
-	"io"
 	"net/http"
 	"net/url"
 	"strings"
@@ -48,7 +46,7 @@ func (i *IssueADFService) Delete(ctx context.Context, issueKeyOrId string, delet
 
 // Assign assigns an issue to a user.
 //
-// Use this operation when the calling user does not have the Edit Issues permission but has the
+// # Use this operation when the calling user does not have the Edit Issues permission but has the
 //
 // Assign issue permission for the project that the issue is in.
 //
@@ -127,7 +125,7 @@ func (i *IssueADFService) Get(ctx context.Context, issueKeyOrId string, fields, 
 //
 // Edits an issue. A transition may be applied and issue properties updated as part of the edit.
 //
-// The edits to the issue's fields are defined using update and fields
+// # The edits to the issue's fields are defined using update and fields
 //
 // PUT /rest/api/{2-3}/issue/{issueIdOrKey}
 //
@@ -148,7 +146,7 @@ func (i *IssueADFService) Move(ctx context.Context, issueKeyOrId, transitionId s
 }
 
 type internalIssueADFServiceImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -170,34 +168,27 @@ func (i *internalIssueADFServiceImpl) Transitions(ctx context.Context, issueKeyO
 
 func (i *internalIssueADFServiceImpl) Create(ctx context.Context, payload *model.IssueScheme, customFields *model.CustomFields) (*model.IssueResponseScheme, *model.ResponseScheme, error) {
 
-	var reader io.Reader
+	var request *http.Request
 	var err error
-
-	if customFields != nil {
-
-		payloadUpdated, err := payload.MergeCustomFields(customFields)
-		if err != nil {
-			return nil, nil, err
-		}
-
-		reader, err = i.c.TransformStructToReader(payloadUpdated)
-		if err != nil {
-			return nil, nil, err
-		}
-
-	} else {
-
-		reader, err = i.c.TransformStructToReader(payload)
-		if err != nil {
-			return nil, nil, err
-		}
-	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issue", i.version)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
-	if err != nil {
-		return nil, nil, err
+	if customFields != nil {
+
+		payloadWithFields, err := payload.MergeCustomFields(customFields)
+		if err != nil {
+			return nil, nil, err
+		}
+
+		request, err = i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payloadWithFields)
+		if err != nil {
+			return nil, nil, err
+		}
+	} else {
+		request, err = i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
+		if err != nil {
+			return nil, nil, err
+		}
 	}
 
 	issue := new(model.IssueResponseScheme)
@@ -212,8 +203,7 @@ func (i *internalIssueADFServiceImpl) Create(ctx context.Context, payload *model
 func (i *internalIssueADFServiceImpl) Creates(ctx context.Context, payload []*model.IssueBulkSchemeV3) (*model.IssueBulkResponseScheme, *model.ResponseScheme, error) {
 
 	if len(payload) == 0 {
-		return nil, nil, errors.New("error, please provide a valid []*IssueBulkScheme slice of pointers")
-		// TODO: The errors when the bulk creates does not contains values needs to be parsed and moved to the model package
+		return nil, nil, model.ErrNoCreateIssuesError
 	}
 
 	var issuePayloads []map[string]interface{}
@@ -231,17 +221,9 @@ func (i *internalIssueADFServiceImpl) Creates(ctx context.Context, payload []*mo
 		issuePayloads = append(issuePayloads, issuePayload)
 	}
 
-	var bulkPayload = map[string]interface{}{}
-	bulkPayload["issueUpdates"] = issuePayloads
-
-	reader, err := i.c.TransformStructToReader(&bulkPayload)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	endpoint := fmt.Sprintf("rest/api/%v/issue/bulk", i.version)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", map[string]interface{}{"issueUpdates": issuePayloads})
 	if err != nil {
 		return nil, nil, err
 	}
@@ -278,7 +260,7 @@ func (i *internalIssueADFServiceImpl) Get(ctx context.Context, issueKeyOrId stri
 		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -302,22 +284,16 @@ func (i *internalIssueADFServiceImpl) Update(ctx context.Context, issueKeyOrId s
 	params.Add("notifyUsers", fmt.Sprintf("%v", notify))
 	endpoint := fmt.Sprintf("rest/api/%v/issue/%v?%v", i.version, issueKeyOrId, params.Encode())
 
-	var reader io.Reader
+	withCustomFields := customFields != nil
+	withOperations := operations != nil
+
 	var err error
+	payloadUpdated := make(map[string]interface{})
 
-	// Executed when customfields and operations are not provided
-	if customFields == nil && operations == nil {
+	// Executed when the customfields and operations are provided
+	if withCustomFields && withOperations {
 
-		reader, err = i.c.TransformStructToReader(payload)
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	// Executed when customfields and operation are provided
-	if customFields != nil && operations != nil {
-
-		payloadUpdated, err := payload.MergeCustomFields(customFields)
+		payloadUpdated, err = payload.MergeCustomFields(customFields)
 		if err != nil {
 			return nil, err
 		}
@@ -327,47 +303,43 @@ func (i *internalIssueADFServiceImpl) Update(ctx context.Context, issueKeyOrId s
 			return nil, err
 		}
 
-		if err := mergo.Map(&payloadUpdated, &payloadWithOperations, mergo.WithOverride); err != nil {
+		if err = mergo.Map(&payloadUpdated, &payloadWithOperations, mergo.WithOverride); err != nil {
 			return nil, err
 		}
+	}
 
-		reader, err = i.c.TransformStructToReader(&payloadUpdated)
+	// Executed when only the customfields are provided, but not the operations
+	if withCustomFields && !withOperations {
+
+		payloadUpdated, err = payload.MergeCustomFields(customFields)
 		if err != nil {
 			return nil, err
 		}
 	}
 
-	// Executed when customfields are provided but not the operations
-	if customFields != nil && operations == nil {
+	// Executed when only the operations are provided, but not the customfields
+	if withOperations && !withCustomFields {
 
-		payloadUpdated, err := payload.MergeCustomFields(customFields)
-		if err != nil {
-			return nil, err
-		}
-
-		reader, err = i.c.TransformStructToReader(&payloadUpdated)
+		payloadUpdated, err = payload.MergeOperations(operations)
 		if err != nil {
 			return nil, err
 		}
 	}
 
-	// Executed when operations are provided but not the customfields
-	if customFields == nil && operations != nil {
+	// After the payload transformation, validate if the shadowed payloadUpdated variable contains data
+	var request *http.Request
 
-		payloadUpdated, err := payload.MergeOperations(operations)
+	if len(payloadUpdated) != 0 {
+
+		request, err = i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payloadUpdated)
 		if err != nil {
 			return nil, err
 		}
-
-		reader, err = i.c.TransformStructToReader(&payloadUpdated)
+	} else {
+		request, err = i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 		if err != nil {
 			return nil, err
 		}
-	}
-
-	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, reader)
-	if err != nil {
-		return nil, err
 	}
 
 	return i.c.Call(request, nil)
@@ -386,15 +358,22 @@ func (i *internalIssueADFServiceImpl) Move(ctx context.Context, issueKeyOrId, tr
 	payloadUpdated := make(map[string]interface{})
 	payloadUpdated["transition"] = map[string]interface{}{"id": transitionId}
 
-	var reader io.Reader
-	var err error
+	// Process logic only if the transition options are provided
+	if options != nil {
 
-	if options != nil && options.Fields != nil {
+		if options.Fields == nil {
+			return nil, model.ErrNoIssueSchemeError
+		}
 
-		// Executed when customfields and operation are provided
-		if options.CustomFields != nil && options.Operations != nil {
+		withCustomFields := options.CustomFields != nil
+		withOperations := options.Operations != nil
 
-			payloadWithCustomFields, err := options.Fields.MergeCustomFields(options.CustomFields)
+		var err error
+
+		// Executed when the customfields and operations are provided
+		if withCustomFields && withOperations {
+
+			payloadUpdated, err = options.Fields.MergeCustomFields(options.CustomFields)
 			if err != nil {
 				return nil, err
 			}
@@ -404,65 +383,34 @@ func (i *internalIssueADFServiceImpl) Move(ctx context.Context, issueKeyOrId, tr
 				return nil, err
 			}
 
-			if err := mergo.Map(&payloadWithCustomFields, &payloadWithOperations, mergo.WithOverride); err != nil {
+			if err = mergo.Map(&payloadUpdated, &payloadWithOperations, mergo.WithOverride); err != nil {
 				return nil, err
 			}
+		}
 
-			if err := mergo.Map(&payloadWithCustomFields, &payloadUpdated, mergo.WithOverride); err != nil {
-				return nil, err
-			}
+		// Executed when only the customfields are provided, but not the operations
+		if withCustomFields && !withOperations {
 
-			reader, err = i.c.TransformStructToReader(&payloadWithCustomFields)
+			payloadUpdated, err = options.Fields.MergeCustomFields(options.CustomFields)
 			if err != nil {
 				return nil, err
 			}
 		}
 
-		// Executed when customfields are provided but not the operations
-		if options.CustomFields != nil && options.Operations == nil {
+		// Executed when only the operations are provided, but not the customfields
+		if withOperations && !withCustomFields {
 
-			payloadWithCustomFields, err := options.Fields.MergeCustomFields(options.CustomFields)
-			if err != nil {
-				return nil, err
-			}
-
-			if err := mergo.Map(&payloadWithCustomFields, &payloadUpdated, mergo.WithOverride); err != nil {
-				return nil, err
-			}
-
-			reader, err = i.c.TransformStructToReader(&payloadWithCustomFields)
+			payloadUpdated, err = options.Fields.MergeOperations(options.Operations)
 			if err != nil {
 				return nil, err
 			}
 		}
 
-		// Executed when operations are provided but not the customfields
-		if options.CustomFields == nil && options.Operations != nil {
-
-			payloadWithOperations, err := options.Fields.MergeOperations(options.Operations)
-			if err != nil {
-				return nil, err
-			}
-
-			if err := mergo.Map(&payloadWithOperations, &payloadUpdated, mergo.WithOverride); err != nil {
-				return nil, err
-			}
-
-			reader, err = i.c.TransformStructToReader(&payloadWithOperations)
-			if err != nil {
-				return nil, err
-			}
-		}
-	} else {
-		reader, err = i.c.TransformStructToReader(&payloadUpdated)
-		if err != nil {
-			return nil, err
-		}
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/transitions", i.version, issueKeyOrId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payloadUpdated)
 	if err != nil {
 		return nil, err
 	}

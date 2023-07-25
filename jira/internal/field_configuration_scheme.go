@@ -11,7 +11,7 @@ import (
 	"strconv"
 )
 
-func NewIssueFieldConfigurationSchemeService(client service.Client, version string) (*IssueFieldConfigSchemeService, error) {
+func NewIssueFieldConfigurationSchemeService(client service.Connector, version string) (*IssueFieldConfigSchemeService, error) {
 
 	if version == "" {
 		return nil, model.ErrNoVersionProvided
@@ -130,7 +130,7 @@ func (i *IssueFieldConfigSchemeService) Unlink(ctx context.Context, schemeId int
 }
 
 type internalIssueFieldConfigSchemeServiceImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -146,7 +146,7 @@ func (i *internalIssueFieldConfigSchemeServiceImpl) Gets(ctx context.Context, id
 
 	endpoint := fmt.Sprintf("rest/api/%v/fieldconfigurationscheme?%v", i.version, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -166,22 +166,15 @@ func (i *internalIssueFieldConfigSchemeServiceImpl) Create(ctx context.Context, 
 		return nil, nil, model.ErrNoFieldConfigurationSchemeNameError
 	}
 
-	payload := struct {
-		Name        string `json:"name"`
-		Description string `json:"description,omitempty"`
-	}{
-		Name:        name,
-		Description: description,
-	}
+	payload := map[string]interface{}{"name": name}
 
-	reader, err := i.c.TransformStructToReader(&payload)
-	if err != nil {
-		return nil, nil, err
+	if description != "" {
+		payload["description"] = description
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/fieldconfigurationscheme", i.version)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -195,19 +188,19 @@ func (i *internalIssueFieldConfigSchemeServiceImpl) Create(ctx context.Context, 
 	return scheme, response, nil
 }
 
-func (i *internalIssueFieldConfigSchemeServiceImpl) Mapping(ctx context.Context, fieldConfigIds []int, startAt, maxResults int) (*model.FieldConfigurationIssueTypeItemPageScheme, *model.ResponseScheme, error) {
+func (i *internalIssueFieldConfigSchemeServiceImpl) Mapping(ctx context.Context, fieldConfigIDs []int, startAt, maxResults int) (*model.FieldConfigurationIssueTypeItemPageScheme, *model.ResponseScheme, error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
 	params.Add("maxResults", strconv.Itoa(maxResults))
 
-	for _, id := range fieldConfigIds {
+	for _, id := range fieldConfigIDs {
 		params.Add("fieldConfigurationSchemeId", strconv.Itoa(id))
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/fieldconfigurationscheme/mapping?%v", i.version, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -233,7 +226,7 @@ func (i *internalIssueFieldConfigSchemeServiceImpl) Project(ctx context.Context,
 
 	endpoint := fmt.Sprintf("rest/api/%v/fieldconfigurationscheme/project?%v", i.version, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -249,14 +242,9 @@ func (i *internalIssueFieldConfigSchemeServiceImpl) Project(ctx context.Context,
 
 func (i *internalIssueFieldConfigSchemeServiceImpl) Assign(ctx context.Context, payload *model.FieldConfigurationSchemeAssignPayload) (*model.ResponseScheme, error) {
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, err
-	}
-
 	endpoint := fmt.Sprintf("rest/api/%v/fieldconfigurationscheme/project", i.version)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
 		return nil, err
 	}
@@ -274,22 +262,15 @@ func (i *internalIssueFieldConfigSchemeServiceImpl) Update(ctx context.Context, 
 		return nil, model.ErrNoFieldConfigurationSchemeNameError
 	}
 
-	payload := struct {
-		Name        string `json:"name"`
-		Description string `json:"description,omitempty"`
-	}{
-		Name:        name,
-		Description: description,
-	}
+	payload := map[string]interface{}{"name": name}
 
-	reader, err := i.c.TransformStructToReader(&payload)
-	if err != nil {
-		return nil, err
+	if description != "" {
+		payload["description"] = description
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/fieldconfigurationscheme/%v", i.version, schemeId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
 		return nil, err
 	}
@@ -305,7 +286,7 @@ func (i *internalIssueFieldConfigSchemeServiceImpl) Delete(ctx context.Context, 
 
 	endpoint := fmt.Sprintf("rest/api/%v/fieldconfigurationscheme/%v", i.version, schemeId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -319,14 +300,9 @@ func (i *internalIssueFieldConfigSchemeServiceImpl) Link(ctx context.Context, sc
 		return nil, model.ErrNoFieldConfigurationSchemeIDError
 	}
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, err
-	}
-
 	endpoint := fmt.Sprintf("rest/api/%v/fieldconfigurationscheme/%v/mapping", i.version, schemeId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
 		return nil, err
 	}
@@ -340,20 +316,13 @@ func (i *internalIssueFieldConfigSchemeServiceImpl) Unlink(ctx context.Context, 
 		return nil, model.ErrNoFieldConfigurationSchemeIDError
 	}
 
-	payload := struct {
-		IssueTypeIds []string `json:"issueTypeIds"`
-	}{
-		IssueTypeIds: issueTypeIDs,
-	}
-
-	reader, err := i.c.TransformStructToReader(&payload)
-	if err != nil {
-		return nil, err
+	if len(issueTypeIDs) == 0 {
+		return nil, model.ErrNoIssueTypesError
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/fieldconfigurationscheme/%v/mapping/delete", i.version, schemeId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", map[string]interface{}{"issueTypeIds": issueTypeIDs})
 	if err != nil {
 		return nil, err
 	}

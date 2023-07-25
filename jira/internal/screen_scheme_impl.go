@@ -12,7 +12,7 @@ import (
 	"strings"
 )
 
-func NewScreenSchemeService(client service.Client, version string) (*ScreenSchemeService, error) {
+func NewScreenSchemeService(client service.Connector, version string) (*ScreenSchemeService, error) {
 
 	if version == "" {
 		return nil, model.ErrNoVersionProvided
@@ -68,7 +68,7 @@ func (s *ScreenSchemeService) Delete(ctx context.Context, screenSchemeId string)
 }
 
 type internalScreenSchemeImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -99,7 +99,7 @@ func (i *internalScreenSchemeImpl) Gets(ctx context.Context, options *model.Scre
 
 	endpoint := fmt.Sprintf("rest/api/%v/screenscheme?%v", i.version, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -115,14 +115,9 @@ func (i *internalScreenSchemeImpl) Gets(ctx context.Context, options *model.Scre
 
 func (i *internalScreenSchemeImpl) Create(ctx context.Context, payload *model.ScreenSchemePayloadScheme) (*model.ScreenSchemeScheme, *model.ResponseScheme, error) {
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	endpoint := fmt.Sprintf("rest/api/%v/screenscheme", i.version)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -142,14 +137,9 @@ func (i *internalScreenSchemeImpl) Update(ctx context.Context, screenSchemeId st
 		return nil, model.ErrNoScreenSchemeIDError
 	}
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, err
-	}
-
 	endpoint := fmt.Sprintf("rest/api/%v/screenscheme/%v", i.version, screenSchemeId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
 		return nil, err
 	}
@@ -165,7 +155,7 @@ func (i *internalScreenSchemeImpl) Delete(ctx context.Context, screenSchemeId st
 
 	endpoint := fmt.Sprintf("rest/api/%v/screenscheme/%v", i.version, screenSchemeId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}

@@ -11,7 +11,7 @@ import (
 	"strings"
 )
 
-func NewOrganizationPolicyService(client service.Client) *OrganizationPolicyService {
+func NewOrganizationPolicyService(client service.Connector) *OrganizationPolicyService {
 	return &OrganizationPolicyService{internalClient: &internalOrganizationPolicyImpl{c: client}}
 }
 
@@ -65,7 +65,7 @@ func (o *OrganizationPolicyService) Delete(ctx context.Context, organizationID, 
 }
 
 type internalOrganizationPolicyImpl struct {
-	c service.Client
+	c service.Connector
 }
 
 func (i *internalOrganizationPolicyImpl) Gets(ctx context.Context, organizationID, policyType, cursor string) (*model.OrganizationPolicyPageScheme, *model.ResponseScheme, error) {
@@ -90,18 +90,18 @@ func (i *internalOrganizationPolicyImpl) Gets(ctx context.Context, organizationI
 		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), nil)
+	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	policies := new(model.OrganizationPolicyPageScheme)
-	response, err := i.c.Call(request, policies)
+	res, err := i.c.Call(req, policies)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return policies, response, nil
+	return policies, res, nil
 }
 
 func (i *internalOrganizationPolicyImpl) Get(ctx context.Context, organizationID, policyID string) (*model.OrganizationPolicyScheme, *model.ResponseScheme, error) {
@@ -116,18 +116,18 @@ func (i *internalOrganizationPolicyImpl) Get(ctx context.Context, organizationID
 
 	endpoint := fmt.Sprintf("admin/v1/orgs/%v/policies/%v", organizationID, policyID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	policy := new(model.OrganizationPolicyScheme)
-	response, err := i.c.Call(request, policy)
+	res, err := i.c.Call(req, policy)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return policy, response, nil
+	return policy, res, nil
 }
 
 func (i *internalOrganizationPolicyImpl) Create(ctx context.Context, organizationID string, payload *model.OrganizationPolicyData) (*model.OrganizationPolicyScheme, *model.ResponseScheme, error) {
@@ -136,14 +136,9 @@ func (i *internalOrganizationPolicyImpl) Create(ctx context.Context, organizatio
 		return nil, nil, model.ErrNoAdminOrganizationError
 	}
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	endpoint := fmt.Sprintf("admin/v1/orgs/%v/policies", organizationID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -167,14 +162,9 @@ func (i *internalOrganizationPolicyImpl) Update(ctx context.Context, organizatio
 		return nil, nil, model.ErrNoAdminPolicyError
 	}
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	endpoint := fmt.Sprintf("admin/v1/orgs/%v/policies/%v", organizationID, policyID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -200,7 +190,7 @@ func (i *internalOrganizationPolicyImpl) Delete(ctx context.Context, organizatio
 
 	endpoint := fmt.Sprintf("admin/v1/orgs/%v/policies/%v", organizationID, policyID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}

@@ -1,7 +1,6 @@
 package internal
 
 import (
-	"bytes"
 	"context"
 	"errors"
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
@@ -15,7 +14,7 @@ import (
 func Test_internalIssueFieldContextOptionServiceImpl_Gets(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -51,12 +50,13 @@ func Test_internalIssueFieldContextOptionServiceImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/field/custom_field_10002/context/10001/option?maxResults=50&onlyOptions=false&optionId=3022&startAt=50",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -87,12 +87,13 @@ func Test_internalIssueFieldContextOptionServiceImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/field/custom_field_10002/context/10001/option?maxResults=50&onlyOptions=false&optionId=3022&startAt=50",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -141,12 +142,13 @@ func Test_internalIssueFieldContextOptionServiceImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/field/custom_field_10002/context/10001/option?maxResults=50&onlyOptions=false&optionId=3022&startAt=50",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error"))
 
@@ -191,8 +193,23 @@ func Test_internalIssueFieldContextOptionServiceImpl_Gets(t *testing.T) {
 
 func Test_internalIssueFieldContextOptionServiceImpl_Create(t *testing.T) {
 
+	payloadMocked := &model.FieldContextOptionListScheme{
+		Options: []*model.CustomFieldContextOptionScheme{
+
+			// Single/Multiple Choice example
+			{
+				Value:    "Option 2",
+				Disabled: false,
+			},
+			{
+				Value:    "Option 4",
+				Disabled: false,
+			},
+		},
+	}
+
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -218,46 +235,18 @@ func Test_internalIssueFieldContextOptionServiceImpl_Create(t *testing.T) {
 				ctx:       context.TODO(),
 				fieldId:   "custom_field_10002",
 				contextId: 10001,
-				payload: &model.FieldContextOptionListScheme{
-					Options: []*model.CustomFieldContextOptionScheme{
-
-						// Single/Multiple Choice example
-						{
-							Value:    "Option 2",
-							Disabled: false,
-						},
-						{
-							Value:    "Option 4",
-							Disabled: false,
-						},
-					}},
+				payload:   payloadMocked,
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&model.FieldContextOptionListScheme{
-						Options: []*model.CustomFieldContextOptionScheme{
-
-							// Single/Multiple Choice example
-							{
-								Value:    "Option 2",
-								Disabled: false,
-							},
-							{
-								Value:    "Option 4",
-								Disabled: false,
-							},
-						}},
-				).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/3/field/custom_field_10002/context/10001/option",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -278,46 +267,18 @@ func Test_internalIssueFieldContextOptionServiceImpl_Create(t *testing.T) {
 				ctx:       context.TODO(),
 				fieldId:   "custom_field_10002",
 				contextId: 10001,
-				payload: &model.FieldContextOptionListScheme{
-					Options: []*model.CustomFieldContextOptionScheme{
-
-						// Single/Multiple Choice example
-						{
-							Value:    "Option 2",
-							Disabled: false,
-						},
-						{
-							Value:    "Option 4",
-							Disabled: false,
-						},
-					}},
+				payload:   payloadMocked,
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&model.FieldContextOptionListScheme{
-						Options: []*model.CustomFieldContextOptionScheme{
-
-							// Single/Multiple Choice example
-							{
-								Value:    "Option 2",
-								Disabled: false,
-							},
-							{
-								Value:    "Option 4",
-								Disabled: false,
-							},
-						}},
-				).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/field/custom_field_10002/context/10001/option",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -344,52 +305,36 @@ func Test_internalIssueFieldContextOptionServiceImpl_Create(t *testing.T) {
 		},
 
 		{
+			name:   "when the context id is not provided",
+			fields: fields{version: "3"},
+			args: args{
+				ctx:       context.TODO(),
+				fieldId:   "customfield_1000",
+				contextId: 0,
+			},
+			wantErr: true,
+			Err:     model.ErrNoFieldContextIDError,
+		},
+
+		{
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
 				ctx:       context.TODO(),
 				fieldId:   "custom_field_10002",
 				contextId: 10001,
-				payload: &model.FieldContextOptionListScheme{
-					Options: []*model.CustomFieldContextOptionScheme{
-
-						// Single/Multiple Choice example
-						{
-							Value:    "Option 2",
-							Disabled: false,
-						},
-						{
-							Value:    "Option 4",
-							Disabled: false,
-						},
-					}},
+				payload:   payloadMocked,
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&model.FieldContextOptionListScheme{
-						Options: []*model.CustomFieldContextOptionScheme{
-
-							// Single/Multiple Choice example
-							{
-								Value:    "Option 2",
-								Disabled: false,
-							},
-							{
-								Value:    "Option 4",
-								Disabled: false,
-							},
-						}},
-				).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/3/field/custom_field_10002/context/10001/option",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, errors.New("error"))
 
 				fields.c = client
@@ -433,8 +378,23 @@ func Test_internalIssueFieldContextOptionServiceImpl_Create(t *testing.T) {
 
 func Test_internalIssueFieldContextOptionServiceImpl_Update(t *testing.T) {
 
+	payloadMocked := &model.FieldContextOptionListScheme{
+		Options: []*model.CustomFieldContextOptionScheme{
+
+			// Single/Multiple Choice example
+			{
+				Value:    "Option 2",
+				Disabled: false,
+			},
+			{
+				Value:    "Option 4",
+				Disabled: false,
+			},
+		},
+	}
+
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -460,46 +420,18 @@ func Test_internalIssueFieldContextOptionServiceImpl_Update(t *testing.T) {
 				ctx:       context.TODO(),
 				fieldId:   "custom_field_10002",
 				contextId: 10001,
-				payload: &model.FieldContextOptionListScheme{
-					Options: []*model.CustomFieldContextOptionScheme{
-
-						// Single/Multiple Choice example
-						{
-							Value:    "Option 2",
-							Disabled: false,
-						},
-						{
-							Value:    "Option 4",
-							Disabled: false,
-						},
-					}},
+				payload:   payloadMocked,
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&model.FieldContextOptionListScheme{
-						Options: []*model.CustomFieldContextOptionScheme{
-
-							// Single/Multiple Choice example
-							{
-								Value:    "Option 2",
-								Disabled: false,
-							},
-							{
-								Value:    "Option 4",
-								Disabled: false,
-							},
-						}},
-				).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/3/field/custom_field_10002/context/10001/option",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -520,46 +452,18 @@ func Test_internalIssueFieldContextOptionServiceImpl_Update(t *testing.T) {
 				ctx:       context.TODO(),
 				fieldId:   "custom_field_10002",
 				contextId: 10001,
-				payload: &model.FieldContextOptionListScheme{
-					Options: []*model.CustomFieldContextOptionScheme{
-
-						// Single/Multiple Choice example
-						{
-							Value:    "Option 2",
-							Disabled: false,
-						},
-						{
-							Value:    "Option 4",
-							Disabled: false,
-						},
-					}},
+				payload:   payloadMocked,
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&model.FieldContextOptionListScheme{
-						Options: []*model.CustomFieldContextOptionScheme{
-
-							// Single/Multiple Choice example
-							{
-								Value:    "Option 2",
-								Disabled: false,
-							},
-							{
-								Value:    "Option 4",
-								Disabled: false,
-							},
-						}},
-				).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/2/field/custom_field_10002/context/10001/option",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -586,52 +490,36 @@ func Test_internalIssueFieldContextOptionServiceImpl_Update(t *testing.T) {
 		},
 
 		{
+			name:   "when the context id is not provided",
+			fields: fields{version: "3"},
+			args: args{
+				ctx:       context.TODO(),
+				fieldId:   "customfield_1000",
+				contextId: 0,
+			},
+			wantErr: true,
+			Err:     model.ErrNoFieldContextIDError,
+		},
+
+		{
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
 				ctx:       context.TODO(),
 				fieldId:   "custom_field_10002",
 				contextId: 10001,
-				payload: &model.FieldContextOptionListScheme{
-					Options: []*model.CustomFieldContextOptionScheme{
-
-						// Single/Multiple Choice example
-						{
-							Value:    "Option 2",
-							Disabled: false,
-						},
-						{
-							Value:    "Option 4",
-							Disabled: false,
-						},
-					}},
+				payload:   payloadMocked,
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&model.FieldContextOptionListScheme{
-						Options: []*model.CustomFieldContextOptionScheme{
-
-							// Single/Multiple Choice example
-							{
-								Value:    "Option 2",
-								Disabled: false,
-							},
-							{
-								Value:    "Option 4",
-								Disabled: false,
-							},
-						}},
-				).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/3/field/custom_field_10002/context/10001/option",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, errors.New("error"))
 
 				fields.c = client
@@ -676,7 +564,7 @@ func Test_internalIssueFieldContextOptionServiceImpl_Update(t *testing.T) {
 func Test_internalIssueFieldContextOptionServiceImpl_Delete(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -706,12 +594,13 @@ func Test_internalIssueFieldContextOptionServiceImpl_Delete(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/api/3/field/custom_field_10002/context/10001/option/1001",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -737,12 +626,13 @@ func Test_internalIssueFieldContextOptionServiceImpl_Delete(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/api/2/field/custom_field_10002/context/10001/option/1001",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -770,6 +660,32 @@ func Test_internalIssueFieldContextOptionServiceImpl_Delete(t *testing.T) {
 		},
 
 		{
+			name:   "when the context id is not provided",
+			fields: fields{version: "3"},
+			args: args{
+				ctx:       context.TODO(),
+				fieldId:   "customfield_1000",
+				contextId: 0,
+			},
+			wantErr: true,
+			Err:     model.ErrNoFieldContextIDError,
+		},
+
+		{
+			name:   "when the option id is not provided",
+			fields: fields{version: "3"},
+			args: args{
+				ctx:       context.TODO(),
+				fieldId:   "customfield_1000",
+				contextId: 1000,
+				optionId:  0,
+			},
+
+			wantErr: true,
+			Err:     model.ErrNoContextOptionIDError,
+		},
+
+		{
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
@@ -780,12 +696,13 @@ func Test_internalIssueFieldContextOptionServiceImpl_Delete(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/api/3/field/custom_field_10002/context/10001/option/1001",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error"))
 
@@ -829,8 +746,13 @@ func Test_internalIssueFieldContextOptionServiceImpl_Delete(t *testing.T) {
 
 func Test_internalIssueFieldContextOptionServiceImpl_Order(t *testing.T) {
 
+	payloadMocked := &model.OrderFieldOptionPayloadScheme{
+		Position:             "Last",
+		CustomFieldOptionIds: []string{"111"},
+	}
+
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -856,28 +778,18 @@ func Test_internalIssueFieldContextOptionServiceImpl_Order(t *testing.T) {
 				ctx:       context.TODO(),
 				fieldId:   "custom_field_10002",
 				contextId: 10001,
-				payload: &model.OrderFieldOptionPayloadScheme{
-					Position:             "Last",
-					CustomFieldOptionIds: []string{"111"},
-				},
+				payload:   payloadMocked,
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&model.OrderFieldOptionPayloadScheme{
-						Position:             "Last",
-						CustomFieldOptionIds: []string{"111"},
-					},
-				).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/3/field/custom_field_10002/context/10001/option/move",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -898,28 +810,18 @@ func Test_internalIssueFieldContextOptionServiceImpl_Order(t *testing.T) {
 				ctx:       context.TODO(),
 				fieldId:   "custom_field_10002",
 				contextId: 10001,
-				payload: &model.OrderFieldOptionPayloadScheme{
-					Position:             "Last",
-					CustomFieldOptionIds: []string{"111"},
-				},
+				payload:   payloadMocked,
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&model.OrderFieldOptionPayloadScheme{
-						Position:             "Last",
-						CustomFieldOptionIds: []string{"111"},
-					},
-				).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/2/field/custom_field_10002/context/10001/option/move",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -946,34 +848,36 @@ func Test_internalIssueFieldContextOptionServiceImpl_Order(t *testing.T) {
 		},
 
 		{
+			name:   "when the context id is not provided",
+			fields: fields{version: "3"},
+			args: args{
+				ctx:       context.TODO(),
+				fieldId:   "customfield_1000",
+				contextId: 0,
+			},
+			wantErr: true,
+			Err:     model.ErrNoFieldContextIDError,
+		},
+
+		{
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
 				ctx:       context.TODO(),
 				fieldId:   "custom_field_10002",
 				contextId: 10001,
-				payload: &model.OrderFieldOptionPayloadScheme{
-					Position:             "Last",
-					CustomFieldOptionIds: []string{"111"},
-				},
+				payload:   payloadMocked,
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&model.OrderFieldOptionPayloadScheme{
-						Position:             "Last",
-						CustomFieldOptionIds: []string{"111"},
-					},
-				).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/3/field/custom_field_10002/context/10001/option/move",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, errors.New("error"))
 
 				fields.c = client
@@ -1017,7 +921,7 @@ func Test_internalIssueFieldContextOptionServiceImpl_Order(t *testing.T) {
 func Test_NewIssueFieldContextOptionService(t *testing.T) {
 
 	type args struct {
-		client  service.Client
+		client  service.Connector
 		version string
 	}
 

@@ -8,7 +8,7 @@ import (
 	"net/http"
 )
 
-func NewTeamService(client service.Client) *TeamService {
+func NewTeamService(client service.Connector) *TeamService {
 
 	return &TeamService{
 		internalClient: &internalTeamServiceImpl{c: client},
@@ -46,25 +46,14 @@ func (t *TeamService) Create(ctx context.Context, payload *model.JiraTeamCreateP
 }
 
 type internalTeamServiceImpl struct {
-	c service.Client
+	c service.Connector
 }
 
 func (i *internalTeamServiceImpl) Gets(ctx context.Context, maxResults int) (*model.JiraTeamPageScheme, *model.ResponseScheme, error) {
 
-	payload := struct {
-		MaxResults int `json:"maxResults"`
-	}{
-		MaxResults: maxResults,
-	}
-
-	reader, err := i.c.TransformStructToReader(&payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	endpoint := "rest/teams/1.0/teams/find"
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", map[string]interface{}{"maxResults": maxResults})
 	if err != nil {
 		return nil, nil, err
 	}
@@ -80,14 +69,9 @@ func (i *internalTeamServiceImpl) Gets(ctx context.Context, maxResults int) (*mo
 
 func (i *internalTeamServiceImpl) Create(ctx context.Context, payload *model.JiraTeamCreatePayloadScheme) (*model.JiraTeamCreateResponseScheme, *model.ResponseScheme, error) {
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	endpoint := "rest/teams/1.0/teams/create"
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}

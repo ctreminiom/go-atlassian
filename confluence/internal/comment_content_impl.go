@@ -12,7 +12,7 @@ import (
 	"strings"
 )
 
-func NewCommentService(client service.Client) *CommentService {
+func NewCommentService(client service.Connector) *CommentService {
 
 	return &CommentService{
 		internalClient: &internalCommentImpl{c: client},
@@ -33,7 +33,7 @@ func (c *CommentService) Gets(ctx context.Context, contentID string, expand, loc
 }
 
 type internalCommentImpl struct {
-	c service.Client
+	c service.Connector
 }
 
 func (i *internalCommentImpl) Gets(ctx context.Context, contentID string, expand, location []string, startAt, maxResults int) (*model.ContentPageScheme, *model.ResponseScheme, error) {
@@ -56,7 +56,7 @@ func (i *internalCommentImpl) Gets(ctx context.Context, contentID string, expand
 
 	endpoint := fmt.Sprintf("wiki/rest/api/content/%v/child/comment?%v", contentID, query.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}

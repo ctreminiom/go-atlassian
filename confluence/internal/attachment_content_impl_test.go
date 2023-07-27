@@ -18,7 +18,7 @@ import (
 func Test_internalContentAttachmentImpl_Gets(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -51,13 +51,13 @@ func Test_internalContentAttachmentImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"wiki/rest/api/content/100100101/child/attachment?expand=childTypes.all%2Cmetadata.currentuser&filename=report_CCID&limit=50&mediaType=excel&start=50",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -85,13 +85,13 @@ func Test_internalContentAttachmentImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"wiki/rest/api/content/100100101/child/attachment?expand=childTypes.all%2Cmetadata.currentuser&filename=report_CCID&limit=50&mediaType=excel&start=50",
-					nil).
+					"", nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -155,7 +155,7 @@ func Test_internalContentAttachmentImpl_CreateOrUpdate(t *testing.T) {
 	}
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -183,9 +183,9 @@ func Test_internalContentAttachmentImpl_CreateOrUpdate(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
-				client.On("NewFormRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"wiki/rest/api/content/3837272/child/attachment?status=current",
@@ -214,9 +214,9 @@ func Test_internalContentAttachmentImpl_CreateOrUpdate(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
-				client.On("NewFormRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"wiki/rest/api/content/3837272/child/attachment?status=current",
@@ -306,7 +306,7 @@ func Test_internalContentAttachmentImpl_Create(t *testing.T) {
 	}
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -334,9 +334,9 @@ func Test_internalContentAttachmentImpl_Create(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
-				client.On("NewFormRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"wiki/rest/api/content/3837272/child/attachment?status=current",
@@ -365,9 +365,9 @@ func Test_internalContentAttachmentImpl_Create(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
-				client.On("NewFormRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"wiki/rest/api/content/3837272/child/attachment?status=current",

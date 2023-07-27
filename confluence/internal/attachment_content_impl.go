@@ -15,7 +15,7 @@ import (
 	"strings"
 )
 
-func NewContentAttachmentService(client service.Client) *ContentAttachmentService {
+func NewContentAttachmentService(client service.Connector) *ContentAttachmentService {
 
 	return &ContentAttachmentService{
 		internalClient: &internalContentAttachmentImpl{c: client},
@@ -64,7 +64,7 @@ func (a *ContentAttachmentService) Create(ctx context.Context, attachmentID, sta
 }
 
 type internalContentAttachmentImpl struct {
-	c service.Client
+	c service.Connector
 }
 
 func (i *internalContentAttachmentImpl) Gets(ctx context.Context, contentID string, startAt, maxResults int, options *model.GetContentAttachmentsOptionsScheme) (*model.ContentPageScheme, *model.ResponseScheme, error) {
@@ -95,7 +95,7 @@ func (i *internalContentAttachmentImpl) Gets(ctx context.Context, contentID stri
 
 	endpoint := fmt.Sprintf("wiki/rest/api/content/%v/child/attachment?%v", contentID, query.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -152,7 +152,7 @@ func (i *internalContentAttachmentImpl) CreateOrUpdate(ctx context.Context, atta
 
 	writer.Close()
 
-	request, err := i.c.NewFormRequest(ctx, http.MethodPut, endpoint.String(), writer.FormDataContentType(), reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint.String(), writer.FormDataContentType(), reader)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -209,7 +209,7 @@ func (i *internalContentAttachmentImpl) Create(ctx context.Context, attachmentID
 
 	writer.Close()
 
-	request, err := i.c.NewFormRequest(ctx, http.MethodPost, endpoint.String(), writer.FormDataContentType(), reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint.String(), writer.FormDataContentType(), reader)
 	if err != nil {
 		return nil, nil, err
 	}

@@ -14,7 +14,7 @@ import (
 func Test_internalAttachmentImpl_Get(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -42,13 +42,13 @@ func Test_internalAttachmentImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"wiki/api/v2/attachments/100001?serialize-ids-as-strings=true&version=25",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -71,13 +71,13 @@ func Test_internalAttachmentImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"wiki/api/v2/attachments/100001?serialize-ids-as-strings=true&version=25",
-					nil).
+					"", nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -131,7 +131,7 @@ func Test_internalAttachmentImpl_Get(t *testing.T) {
 func Test_internalAttachmentImpl_Gets(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -168,13 +168,13 @@ func Test_internalAttachmentImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"wiki/api/v2/labels/10001/attachments?cursor=uuid-sample&filename=credit-info&limit=100&mediaType=json&serialize-ids-as-strings=true&sort=created-date",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -204,13 +204,13 @@ func Test_internalAttachmentImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"wiki/api/v2/labels/10001/attachments?cursor=uuid-sample&filename=credit-info&limit=100&mediaType=json&serialize-ids-as-strings=true&sort=created-date",
-					nil).
+					"", nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client

@@ -13,7 +13,7 @@ import (
 )
 
 // NewAttachmentService returns a new Confluence V2 Page service
-func NewAttachmentService(client service.Client) *AttachmentService {
+func NewAttachmentService(client service.Connector) *AttachmentService {
 	return &AttachmentService{
 		internalClient: &internalAttachmentImpl{c: client},
 	}
@@ -52,7 +52,7 @@ func (a *AttachmentService) Gets(ctx context.Context, entityID int, entityType s
 }
 
 type internalAttachmentImpl struct {
-	c service.Client
+	c service.Connector
 }
 
 func (i *internalAttachmentImpl) Get(ctx context.Context, attachmentID string, versionID int, serializeIDs bool) (*model.AttachmentScheme, *model.ResponseScheme, error) {
@@ -77,7 +77,7 @@ func (i *internalAttachmentImpl) Get(ctx context.Context, attachmentID string, v
 		endpoint.WriteString(fmt.Sprintf("?%v", query.Encode()))
 	}
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -139,7 +139,7 @@ func (i *internalAttachmentImpl) Gets(ctx context.Context, entityID int, entityT
 
 	endpoint := fmt.Sprintf("wiki/api/v2/%v/%v/attachments?%v", entityType, entityID, query.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}

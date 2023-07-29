@@ -1,7 +1,6 @@
 package internal
 
 import (
-	"bytes"
 	"context"
 	"encoding/json"
 	"errors"
@@ -17,7 +16,7 @@ import (
 func Test_internalPageImpl_Get(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -47,13 +46,13 @@ func Test_internalPageImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"wiki/api/v2/pages/200001?body-format=atlas_doc_format&get-draft=true&version=2",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -76,13 +75,13 @@ func Test_internalPageImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"wiki/api/v2/pages/200001?body-format=atlas_doc_format&get-draft=true&version=2",
-					nil).
+					"", nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -135,7 +134,7 @@ func Test_internalPageImpl_Get(t *testing.T) {
 func Test_internalPageImpl_Bulk(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -161,13 +160,13 @@ func Test_internalPageImpl_Bulk(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"wiki/api/v2/pages?cursor=cursor-sample&limit=200",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -188,13 +187,13 @@ func Test_internalPageImpl_Bulk(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"wiki/api/v2/pages?cursor=cursor-sample&limit=200",
-					nil).
+					"", nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -237,7 +236,7 @@ func Test_internalPageImpl_Bulk(t *testing.T) {
 func Test_internalPageImpl_BulkFiltered(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -266,13 +265,13 @@ func Test_internalPageImpl_BulkFiltered(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"wiki/api/v2/pages?cursor=cursor-sample&limit=200",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -296,13 +295,13 @@ func Test_internalPageImpl_BulkFiltered(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"wiki/api/v2/pages?body-format=format-sample&cursor=cursor-sample&id=1%2C2%2C3%2C4%2C5%2C6&limit=200&status=status-sample",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -323,13 +322,13 @@ func Test_internalPageImpl_BulkFiltered(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"wiki/api/v2/pages?cursor=cursor-sample&limit=200",
-					nil).
+					"", nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -379,7 +378,7 @@ func Test_internalPageImpl_BulkFiltered(t *testing.T) {
 func Test_internalPageImpl_GetsByLabel(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -409,13 +408,13 @@ func Test_internalPageImpl_GetsByLabel(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"wiki/api/v2/labels/20001/pages?cursor=cursor-sample&limit=200&sort=test-label",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -447,13 +446,13 @@ func Test_internalPageImpl_GetsByLabel(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"wiki/api/v2/labels/20001/pages?cursor=cursor-sample&limit=200&sort=test-label",
-					nil).
+					"", nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -497,7 +496,7 @@ func Test_internalPageImpl_GetsByLabel(t *testing.T) {
 func Test_internalPageImpl_GetsBySpace(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -525,13 +524,13 @@ func Test_internalPageImpl_GetsBySpace(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"wiki/api/v2/spaces/20001/pages?cursor=cursor-sample&limit=200",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -562,13 +561,13 @@ func Test_internalPageImpl_GetsBySpace(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"wiki/api/v2/spaces/20001/pages?cursor=cursor-sample&limit=200",
-					nil).
+					"", nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -611,7 +610,7 @@ func Test_internalPageImpl_GetsBySpace(t *testing.T) {
 func Test_internalPageImpl_Delete(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -635,13 +634,13 @@ func Test_internalPageImpl_Delete(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"wiki/api/v2/pages/200001",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -661,13 +660,13 @@ func Test_internalPageImpl_Delete(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"wiki/api/v2/pages/200001",
-					nil).
+					"", nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -752,7 +751,7 @@ func Test_internalPageImpl_Create(t *testing.T) {
 	}
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -776,17 +775,13 @@ func Test_internalPageImpl_Create(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					mockedPayload).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"wiki/api/v2/pages",
-					bytes.NewReader([]byte{})).
+					"", mockedPayload).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -806,17 +801,13 @@ func Test_internalPageImpl_Create(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					mockedPayload).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"wiki/api/v2/pages",
-					bytes.NewReader([]byte{})).
+					"", mockedPayload).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -824,26 +815,6 @@ func Test_internalPageImpl_Create(t *testing.T) {
 			},
 			wantErr: true,
 			Err:     errors.New("error, unable to create the http request"),
-		},
-
-		{
-			name: "when the payload is not provided",
-			args: args{
-				ctx: context.TODO(),
-			},
-			on: func(fields *fields) {
-
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					(*model.PageCreatePayloadScheme)(nil)).
-					Return(nil, model.ErrNilPayloadError)
-
-				fields.c = client
-
-			},
-			wantErr: true,
-			Err:     model.ErrNilPayloadError,
 		},
 	}
 
@@ -919,7 +890,7 @@ func Test_internalPageImpl_Update(t *testing.T) {
 	}
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -945,17 +916,13 @@ func Test_internalPageImpl_Update(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					mockedPayload).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"wiki/api/v2/pages/215646235",
-					bytes.NewReader([]byte{})).
+					"", mockedPayload).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -976,17 +943,13 @@ func Test_internalPageImpl_Update(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					mockedPayload).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"wiki/api/v2/pages/215646235",
-					bytes.NewReader([]byte{})).
+					"", mockedPayload).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -1003,27 +966,6 @@ func Test_internalPageImpl_Update(t *testing.T) {
 			},
 			wantErr: true,
 			Err:     model.ErrNoPageIDError,
-		},
-
-		{
-			name: "when the payload is not provided",
-			args: args{
-				ctx:    context.TODO(),
-				pageID: 215646235,
-			},
-			on: func(fields *fields) {
-
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					(*model.PageUpdatePayloadScheme)(nil)).
-					Return(nil, model.ErrNilPayloadError)
-
-				fields.c = client
-
-			},
-			wantErr: true,
-			Err:     model.ErrNilPayloadError,
 		},
 	}
 

@@ -13,10 +13,8 @@ import (
 )
 
 // NewPageService returns a new Confluence V2 Page service
-func NewPageService(client service.Client) *PageService {
-	return &PageService{
-		internalClient: &internalPageImpl{c: client},
-	}
+func NewPageService(client service.Connector) *PageService {
+	return &PageService{internalClient: &internalPageImpl{c: client}}
 }
 
 type PageService struct {
@@ -116,7 +114,7 @@ func (p *PageService) Delete(ctx context.Context, pageID int) (*model.ResponseSc
 }
 
 type internalPageImpl struct {
-	c service.Client
+	c service.Connector
 }
 
 func (i *internalPageImpl) Get(ctx context.Context, pageID int, format string, draft bool, version int) (*model.PageScheme, *model.ResponseScheme, error) {
@@ -141,7 +139,7 @@ func (i *internalPageImpl) Get(ctx context.Context, pageID int, format string, d
 
 	endpoint := fmt.Sprintf("wiki/api/v2/pages/%v?%v", pageID, query.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -186,7 +184,7 @@ func (i *internalPageImpl) BulkFiltered(ctx context.Context, status, format, cur
 
 	endpoint := fmt.Sprintf("wiki/api/v2/pages?%v", query.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -219,7 +217,7 @@ func (i *internalPageImpl) GetsByLabel(ctx context.Context, labelID int, sort, c
 
 	endpoint := fmt.Sprintf("wiki/api/v2/labels/%v/pages?%v", labelID, query.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -248,7 +246,7 @@ func (i *internalPageImpl) GetsBySpace(ctx context.Context, spaceID int, cursor 
 
 	endpoint := fmt.Sprintf("wiki/api/v2/spaces/%v/pages?%v", spaceID, query.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -264,14 +262,9 @@ func (i *internalPageImpl) GetsBySpace(ctx context.Context, spaceID int, cursor 
 
 func (i *internalPageImpl) Create(ctx context.Context, payload *model.PageCreatePayloadScheme) (*model.PageScheme, *model.ResponseScheme, error) {
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	endpoint := "wiki/api/v2/pages"
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -291,14 +284,9 @@ func (i *internalPageImpl) Update(ctx context.Context, pageID int, payload *mode
 		return nil, nil, model.ErrNoPageIDError
 	}
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	endpoint := fmt.Sprintf("wiki/api/v2/pages/%v", pageID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -320,7 +308,7 @@ func (i *internalPageImpl) Delete(ctx context.Context, pageID int) (*model.Respo
 
 	endpoint := fmt.Sprintf("wiki/api/v2/pages/%v", pageID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}

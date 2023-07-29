@@ -12,7 +12,7 @@ import (
 	"strings"
 )
 
-func NewRestrictionOperationService(client service.Client, group *RestrictionOperationGroupService, user *RestrictionOperationUserService) *RestrictionOperationService {
+func NewRestrictionOperationService(client service.Connector, group *RestrictionOperationGroupService, user *RestrictionOperationUserService) *RestrictionOperationService {
 
 	return &RestrictionOperationService{
 		internalClient: &internalRestrictionOperationImpl{c: client},
@@ -29,7 +29,7 @@ type RestrictionOperationService struct {
 
 // Gets returns restrictions on a piece of content by operation.
 //
-// This method is similar to Get restrictions except that the operations are properties
+// # This method is similar to Get restrictions except that the operations are properties
 //
 // of the return object, rather than items in a results array.
 //
@@ -50,7 +50,7 @@ func (r *RestrictionOperationService) Get(ctx context.Context, contentID, operat
 }
 
 type internalRestrictionOperationImpl struct {
-	c service.Client
+	c service.Connector
 }
 
 func (i *internalRestrictionOperationImpl) Gets(ctx context.Context, contentID string, expand []string) (*model.ContentRestrictionByOperationScheme, *model.ResponseScheme, error) {
@@ -69,7 +69,7 @@ func (i *internalRestrictionOperationImpl) Gets(ctx context.Context, contentID s
 		endpoint.WriteString(fmt.Sprintf("?%v", query.Encode()))
 	}
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -103,7 +103,7 @@ func (i *internalRestrictionOperationImpl) Get(ctx context.Context, contentID, o
 
 	endpoint := fmt.Sprintf("wiki/rest/api/content/%v/restriction/byOperation/%v?%v", contentID, operationKey, query.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}

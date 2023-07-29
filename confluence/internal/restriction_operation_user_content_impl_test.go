@@ -14,7 +14,7 @@ import (
 func Test_internalRestrictionOperationUserImpl_Get(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -40,13 +40,13 @@ func Test_internalRestrictionOperationUserImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"wiki/rest/api/content/100001/restriction/byOperation/read/user?accountId=06db0c76-115b-498e-9cd6-921d6f6dde46",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -69,13 +69,13 @@ func Test_internalRestrictionOperationUserImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"wiki/rest/api/content/100001/restriction/byOperation/read/user?accountId=06db0c76-115b-498e-9cd6-921d6f6dde46",
-					nil).
+					"", nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -149,7 +149,7 @@ func Test_internalRestrictionOperationUserImpl_Get(t *testing.T) {
 func Test_internalRestrictionOperationUserImpl_Add(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -175,13 +175,13 @@ func Test_internalRestrictionOperationUserImpl_Add(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"wiki/rest/api/content/100001/restriction/byOperation/read/user?accountId=06db0c76-115b-498e-9cd6-921d6f6dde46",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -204,13 +204,13 @@ func Test_internalRestrictionOperationUserImpl_Add(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"wiki/rest/api/content/100001/restriction/byOperation/read/user?accountId=06db0c76-115b-498e-9cd6-921d6f6dde46",
-					nil).
+					"", nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -284,7 +284,7 @@ func Test_internalRestrictionOperationUserImpl_Add(t *testing.T) {
 func Test_internalRestrictionOperationUserImpl_Remove(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -310,13 +310,13 @@ func Test_internalRestrictionOperationUserImpl_Remove(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"wiki/rest/api/content/100001/restriction/byOperation/read/user?accountId=06db0c76-115b-498e-9cd6-921d6f6dde46",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -339,13 +339,13 @@ func Test_internalRestrictionOperationUserImpl_Remove(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"wiki/rest/api/content/100001/restriction/byOperation/read/user?accountId=06db0c76-115b-498e-9cd6-921d6f6dde46",
-					nil).
+					"", nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client

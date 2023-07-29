@@ -11,7 +11,7 @@ import (
 	"strings"
 )
 
-func NewRestrictionOperationGroupService(client service.Client) *RestrictionOperationGroupService {
+func NewRestrictionOperationGroupService(client service.Connector) *RestrictionOperationGroupService {
 
 	return &RestrictionOperationGroupService{
 		internalClient: &internalRestrictionOperationGroupImpl{c: client},
@@ -58,7 +58,7 @@ func (r *RestrictionOperationGroupService) Remove(ctx context.Context, contentID
 }
 
 type internalRestrictionOperationGroupImpl struct {
-	c service.Client
+	c service.Connector
 }
 
 func (i *internalRestrictionOperationGroupImpl) Get(ctx context.Context, contentID, operationKey, groupNameOrID string) (*model.ResponseScheme, error) {
@@ -88,7 +88,7 @@ func (i *internalRestrictionOperationGroupImpl) Get(ctx context.Context, content
 		endpoint.WriteString(fmt.Sprintf("group/%v", groupNameOrID))
 	}
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -123,7 +123,7 @@ func (i *internalRestrictionOperationGroupImpl) Add(ctx context.Context, content
 		endpoint.WriteString(fmt.Sprintf("group/%v", groupNameOrID))
 	}
 
-	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint.String(), nil)
+	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint.String(), "", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -158,7 +158,7 @@ func (i *internalRestrictionOperationGroupImpl) Remove(ctx context.Context, cont
 		endpoint.WriteString(fmt.Sprintf("group/%v", groupNameOrID))
 	}
 
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint.String(), nil)
+	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint.String(), "", nil)
 	if err != nil {
 		return nil, err
 	}

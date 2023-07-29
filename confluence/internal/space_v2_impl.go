@@ -40,7 +40,7 @@ func (s *SpaceV2Service) Get(ctx context.Context, spaceID int, descriptionFormat
 	return s.internalClient.Get(ctx, spaceID, descriptionFormat)
 }
 
-func NewSpaceV2Service(client service.Client) *SpaceV2Service {
+func NewSpaceV2Service(client service.Connector) *SpaceV2Service {
 
 	return &SpaceV2Service{
 		internalClient: &internalSpaceV2Impl{c: client},
@@ -48,7 +48,7 @@ func NewSpaceV2Service(client service.Client) *SpaceV2Service {
 }
 
 type internalSpaceV2Impl struct {
-	c service.Client
+	c service.Connector
 }
 
 func (i *internalSpaceV2Impl) Bulk(ctx context.Context, options *model.GetSpacesOptionSchemeV2, cursor string, limit int) (*model.SpaceChunkV2Scheme, *model.ResponseScheme, error) {
@@ -98,7 +98,7 @@ func (i *internalSpaceV2Impl) Bulk(ctx context.Context, options *model.GetSpaces
 
 	endpoint := fmt.Sprintf("wiki/api/v2/spaces?%v", query.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -128,7 +128,7 @@ func (i *internalSpaceV2Impl) Get(ctx context.Context, spaceID int, descriptionF
 		endpoint.WriteString(fmt.Sprintf("?%v", query.Encode()))
 	}
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
 		return nil, nil, err
 	}

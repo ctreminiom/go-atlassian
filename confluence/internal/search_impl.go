@@ -12,7 +12,7 @@ import (
 	"strings"
 )
 
-func NewSearchService(client service.Client) *SearchService {
+func NewSearchService(client service.Connector) *SearchService {
 
 	return &SearchService{
 		internalClient: &internalSearchImpl{c: client},
@@ -46,7 +46,7 @@ func (s *SearchService) Users(ctx context.Context, cql string, start, limit int,
 }
 
 type internalSearchImpl struct {
-	c service.Client
+	c service.Connector
 }
 
 func (i *internalSearchImpl) Content(ctx context.Context, cql string, options *model.SearchContentOptions) (*model.SearchPageScheme, *model.ResponseScheme, error) {
@@ -109,7 +109,7 @@ func (i *internalSearchImpl) Content(ctx context.Context, cql string, options *m
 
 	endpoint := fmt.Sprintf("wiki/rest/api/search?%v", query.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -140,7 +140,7 @@ func (i *internalSearchImpl) Users(ctx context.Context, cql string, start, limit
 
 	endpoint := fmt.Sprintf("wiki/rest/api/search/user?%v", query.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}

@@ -2,6 +2,9 @@ package models
 
 import (
 	"bytes"
+	"encoding/json"
+	"fmt"
+	"github.com/tidwall/gjson"
 
 	"github.com/perimeterx/marshmallow"
 )
@@ -51,6 +54,45 @@ func ParseMultiSelectCustomField(buffer bytes.Buffer, customField string) ([]*Cu
 	}
 
 	return records, nil
+}
+
+func ParseMultiSelectCustomFields(buffer bytes.Buffer, customField string) (map[string][]*CustomFieldContextOptionScheme, error) {
+
+	raw := gjson.ParseBytes(buffer.Bytes())
+
+	// Check if the buffer contains the "issues" object
+	if !raw.Get("issues").Exists() {
+		return nil, ErrNoIssuesSliceError
+	}
+
+	// Loop through each custom field, extract the information and stores the data on a map
+	customfieldsAsMap := make(map[string][]*CustomFieldContextOptionScheme)
+	raw.Get("issues").ForEach(func(key, value gjson.Result) bool {
+
+		path, issueKey := fmt.Sprintf("fields.%v", customField), value.Get("key").String()
+
+		// Check if the issue iteration contains information on the customfield selected,
+		// if not, continue
+		if value.Get(path).Type == gjson.Null {
+			return true
+		}
+
+		var customFields []*CustomFieldContextOptionScheme
+		if err := json.Unmarshal([]byte(value.Get(path).String()), &customFields); err != nil {
+			return true
+		}
+
+		customfieldsAsMap[issueKey] = customFields
+		return true
+	})
+
+	// Check if the map processed contains elements
+	// if so, return an error interface
+	if len(customfieldsAsMap) == 0 {
+		return nil, ErrNoMapValuesError
+	}
+
+	return customfieldsAsMap, nil
 }
 
 func ParseMultiGroupPickerCustomField(buffer bytes.Buffer, customField string) ([]*GroupDetailScheme, error) {

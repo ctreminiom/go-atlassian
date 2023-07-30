@@ -1865,3 +1865,187 @@ func TestParseSelectCustomField(t *testing.T) {
 		})
 	}
 }
+
+func TestParseMultiSelectCustomFields(t *testing.T) {
+
+	bufferMocked := bytes.Buffer{}
+	bufferMocked.WriteString(`
+{
+    "expand": "names,schema",
+    "startAt": 0,
+    "maxResults": 50,
+    "total": 1,
+    "issues": [
+        {
+            "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+            "id": "10035",
+            "self": "https://ctreminiom.atlassian.net/rest/api/2/issue/10035",
+            "key": "KP-22",
+            "fields": {
+                "customfield_10046": [
+                    {
+                        "self": "https://ctreminiom.atlassian.net/rest/api/2/customFieldOption/10046",
+                        "value": "Option 3",
+                        "id": "10046"
+                    },
+                    {
+                        "self": "https://ctreminiom.atlassian.net/rest/api/2/customFieldOption/10047",
+                        "value": "Option 4",
+                        "id": "10047"
+                    }
+                ]
+            }
+        }
+    ]
+}`)
+
+	bufferMockedWithNoIssues := bytes.Buffer{}
+	bufferMockedWithNoIssues.WriteString(`
+{
+    "expand": "names,schema",
+    "startAt": 0,
+    "maxResults": 50,
+    "total": 1,
+    "no_issues": [
+        {
+            "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+            "id": "10035",
+            "self": "https://ctreminiom.atlassian.net/rest/api/2/issue/10035",
+            "key": "KP-22",
+            "no_fields": {
+                "customfield_10046": [
+                    {
+                        "self": "https://ctreminiom.atlassian.net/rest/api/2/customFieldOption/10046",
+                        "value": "Option 3",
+                        "id": "10046"
+                    },
+                    {
+                        "self": "https://ctreminiom.atlassian.net/rest/api/2/customFieldOption/10047",
+                        "value": "Option 4",
+                        "id": "10047"
+                    }
+                ]
+            }
+        }
+    ]
+}`)
+
+	bufferMockedWithNoInfo := bytes.Buffer{}
+	bufferMockedWithNoInfo.WriteString(`
+{
+    "expand": "names,schema",
+    "startAt": 0,
+    "maxResults": 50,
+    "total": 1,
+    "issues": [
+        {
+            "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+            "id": "10035",
+            "self": "https://ctreminiom.atlassian.net/rest/api/2/issue/10035",
+            "key": "KP-22",
+            "fields": {
+                "customfield_10046": null
+            }
+        }
+    ]
+}`)
+
+	bufferMockedWithInvalidType := bytes.Buffer{}
+	bufferMockedWithInvalidType.WriteString(`
+{
+    "expand": "names,schema",
+    "startAt": 0,
+    "maxResults": 50,
+    "total": 1,
+    "issues": [
+        {
+            "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+            "id": "10035",
+            "self": "https://ctreminiom.atlassian.net/rest/api/2/issue/10035",
+            "key": "KP-22",
+            "fields": {
+                "customfield_10046": "string"
+            }
+        }
+    ]
+}`)
+
+	type args struct {
+		buffer      bytes.Buffer
+		customField string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    map[string][]*CustomFieldContextOptionScheme
+		wantErr bool
+		Err     error
+	}{
+		{
+			name: "when the buffer contains information",
+			args: args{
+				buffer:      bufferMocked,
+				customField: "customfield_10046",
+			},
+			want: map[string][]*CustomFieldContextOptionScheme{
+				"KP-22": {
+					{
+						ID:    "10046",
+						Value: "Option 3",
+					},
+					{
+						ID:    "10047",
+						Value: "Option 4",
+					},
+				},
+			},
+			wantErr: false,
+		},
+
+		{
+			name: "when the buffer does not contain the issues object",
+			args: args{
+				buffer:      bufferMockedWithNoInfo,
+				customField: "customfield_10046",
+			},
+			wantErr: true,
+			Err:     ErrNoMapValuesError,
+		},
+
+		{
+			name: "when the buffer contains null customfields",
+			args: args{
+				buffer:      bufferMocked,
+				customField: "customfield_10046",
+			},
+			want: map[string][]*CustomFieldContextOptionScheme{
+				"KP-22": {
+					{
+						ID:    "10046",
+						Value: "Option 3",
+					},
+					{
+						ID:    "10047",
+						Value: "Option 4",
+					},
+				},
+			},
+			wantErr: false,
+		},
+	}
+	for _, testCase := range tests {
+		t.Run(testCase.name, func(t *testing.T) {
+			got, err := ParseMultiSelectCustomFields(testCase.args.buffer, testCase.args.customField)
+			if (err != nil) != testCase.wantErr {
+				t.Errorf("ParseMultiSelectCustomField() error = %v, wantErr %v", err, testCase.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, testCase.want) {
+				t.Errorf("ParseMultiSelectCustomField() got = %v, want %v", got, testCase.want)
+			}
+			if !reflect.DeepEqual(err, testCase.Err) {
+				t.Errorf("ParseMultiSelectCustomField() got = (%v), want (%v)", err, testCase.Err)
+			}
+		})
+	}
+}

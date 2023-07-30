@@ -134,7 +134,7 @@ func (c *Client) NewRequest(ctx context.Context, method, urlStr, type_ string, b
 		req.Header.Set("X-ExperimentalApi", "opt-in")
 	}
 
-	if c.Auth.GetBearerToken() != "" {
+	if c.Auth.GetBearerToken() != "" && !c.Auth.HasBasicAuth() {
 		req.Header.Add("Authorization", fmt.Sprintf("Bearer %v", c.Auth.GetBearerToken()))
 	}
 

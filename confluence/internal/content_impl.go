@@ -23,7 +23,7 @@ type ContentSubServices struct {
 	Version            *VersionService
 }
 
-func NewContentService(client service.Client, subServices *ContentSubServices) *ContentService {
+func NewContentService(client service.Connector, subServices *ContentSubServices) *ContentService {
 
 	return &ContentService{
 		internalClient:     &internalContentImpl{c: client},
@@ -147,7 +147,7 @@ func (c *ContentService) Archive(ctx context.Context, payload *model.ContentArch
 }
 
 type internalContentImpl struct {
-	c service.Client
+	c service.Connector
 }
 
 func (i *internalContentImpl) Gets(ctx context.Context, options *model.GetContentOptionsScheme, startAt, maxResults int) (*model.ContentPageScheme, *model.ResponseScheme, error) {
@@ -194,7 +194,7 @@ func (i *internalContentImpl) Gets(ctx context.Context, options *model.GetConten
 
 	endpoint := fmt.Sprintf("wiki/rest/api/content?%v", query.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -210,14 +210,9 @@ func (i *internalContentImpl) Gets(ctx context.Context, options *model.GetConten
 
 func (i *internalContentImpl) Create(ctx context.Context, payload *model.ContentScheme) (*model.ContentScheme, *model.ResponseScheme, error) {
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	endpoint := "wiki/rest/api/content"
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -255,7 +250,7 @@ func (i *internalContentImpl) Search(ctx context.Context, cql, cqlContext string
 
 	endpoint := fmt.Sprintf("wiki/rest/api/content/search?%v", query.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -284,7 +279,7 @@ func (i *internalContentImpl) Get(ctx context.Context, contentID string, expand 
 
 	endpoint := fmt.Sprintf("wiki/rest/api/content/%v?%v", contentID, query.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -304,14 +299,9 @@ func (i *internalContentImpl) Update(ctx context.Context, contentID string, payl
 		return nil, nil, model.ErrNoContentIDError
 	}
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	endpoint := fmt.Sprintf("wiki/rest/api/content/%v", contentID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -341,7 +331,7 @@ func (i *internalContentImpl) Delete(ctx context.Context, contentID, status stri
 		endpoint.WriteString(fmt.Sprintf("?%v", query.Encode()))
 	}
 
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint.String(), nil)
+	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint.String(), "", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -365,7 +355,7 @@ func (i *internalContentImpl) History(ctx context.Context, contentID string, exp
 		endpoint.WriteString(fmt.Sprintf("?%v", query.Encode()))
 	}
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -381,14 +371,9 @@ func (i *internalContentImpl) History(ctx context.Context, contentID string, exp
 
 func (i *internalContentImpl) Archive(ctx context.Context, payload *model.ContentArchivePayloadScheme) (*model.ContentArchiveResultScheme, *model.ResponseScheme, error) {
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	endpoint := "wiki/rest/api/content/archive"
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}

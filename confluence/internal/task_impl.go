@@ -11,7 +11,7 @@ import (
 	"strconv"
 )
 
-func NewTaskService(client service.Client) *TaskService {
+func NewTaskService(client service.Connector) *TaskService {
 
 	return &TaskService{
 		internalClient: &internalTaskImpl{c: client},
@@ -45,7 +45,7 @@ func (t *TaskService) Get(ctx context.Context, taskID string) (*model.LongTaskSc
 }
 
 type internalTaskImpl struct {
-	c service.Client
+	c service.Connector
 }
 
 func (i *internalTaskImpl) Gets(ctx context.Context, start, limit int) (*model.LongTaskPageScheme, *model.ResponseScheme, error) {
@@ -56,7 +56,7 @@ func (i *internalTaskImpl) Gets(ctx context.Context, start, limit int) (*model.L
 
 	endpoint := fmt.Sprintf("wiki/rest/api/longtask?%v", query.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -74,7 +74,7 @@ func (i *internalTaskImpl) Get(ctx context.Context, taskID string) (*model.LongT
 
 	endpoint := fmt.Sprintf("wiki/rest/api/longtask/%v", taskID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}

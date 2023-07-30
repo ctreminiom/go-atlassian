@@ -25,7 +25,7 @@ func Test_internalSpaceV2Impl_Bulk(t *testing.T) {
 	}
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -53,13 +53,13 @@ func Test_internalSpaceV2Impl_Bulk(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"wiki/api/v2/spaces?cursor=cursor_sample_uuid&description-format=view&ids=10001%2C10002&keys=DUMMY&labels=test-label&limit=50&serialize-ids-as-strings=true&sort=-name&status=current&type=global",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -82,13 +82,13 @@ func Test_internalSpaceV2Impl_Bulk(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"wiki/api/v2/spaces?cursor=cursor_sample_uuid&description-format=view&ids=10001%2C10002&keys=DUMMY&labels=test-label&limit=50&serialize-ids-as-strings=true&sort=-name&status=current&type=global",
-					nil).
+					"", nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -133,7 +133,7 @@ func Test_internalSpaceV2Impl_Bulk(t *testing.T) {
 func Test_internalSpaceV2Impl_Get(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -159,13 +159,13 @@ func Test_internalSpaceV2Impl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"wiki/api/v2/spaces/10001?description-format=view",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -196,13 +196,13 @@ func Test_internalSpaceV2Impl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"wiki/api/v2/spaces/10001?description-format=view",
-					nil).
+					"", nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client

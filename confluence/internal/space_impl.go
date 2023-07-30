@@ -12,7 +12,7 @@ import (
 	"strings"
 )
 
-func NewSpaceService(client service.Client, permission *SpacePermissionService) *SpaceService {
+func NewSpaceService(client service.Connector, permission *SpacePermissionService) *SpaceService {
 
 	return &SpaceService{
 		internalClient: &internalSpaceImpl{c: client},
@@ -105,7 +105,7 @@ func (s *SpaceService) ContentByType(ctx context.Context, spaceKey, contentType,
 }
 
 type internalSpaceImpl struct {
-	c service.Client
+	c service.Connector
 }
 
 func (i *internalSpaceImpl) Gets(ctx context.Context, options *model.GetSpacesOptionScheme, startAt, maxResults int) (*model.SpacePageScheme, *model.ResponseScheme, error) {
@@ -157,7 +157,7 @@ func (i *internalSpaceImpl) Gets(ctx context.Context, options *model.GetSpacesOp
 
 	var endpoint = fmt.Sprintf("wiki/rest/api/space?%v", query.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -173,17 +173,16 @@ func (i *internalSpaceImpl) Gets(ctx context.Context, options *model.GetSpacesOp
 
 func (i *internalSpaceImpl) Create(ctx context.Context, payload *model.CreateSpaceScheme, private bool) (*model.SpaceScheme, *model.ResponseScheme, error) {
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
+	if payload != nil {
 
-	if payload.Name == "" {
-		return nil, nil, model.ErrNoSpaceNameError
-	}
+		if payload.Name == "" {
+			return nil, nil, model.ErrNoSpaceNameError
+		}
 
-	if payload.Key == "" {
-		return nil, nil, model.ErrNoSpaceKeyError
+		if payload.Key == "" {
+			return nil, nil, model.ErrNoSpaceKeyError
+		}
+
 	}
 
 	var endpoint strings.Builder
@@ -193,7 +192,7 @@ func (i *internalSpaceImpl) Create(ctx context.Context, payload *model.CreateSpa
 		endpoint.WriteString("/_private")
 	}
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint.String(), reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint.String(), "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -223,7 +222,7 @@ func (i *internalSpaceImpl) Get(ctx context.Context, spaceKey string, expand []s
 		endpoint.WriteString(fmt.Sprintf("?%v", query.Encode()))
 	}
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -243,14 +242,9 @@ func (i *internalSpaceImpl) Update(ctx context.Context, spaceKey string, payload
 		return nil, nil, model.ErrNoSpaceKeyError
 	}
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	endpoint := fmt.Sprintf("wiki/rest/api/space/%v", spaceKey)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -272,7 +266,7 @@ func (i *internalSpaceImpl) Delete(ctx context.Context, spaceKey string) (*model
 
 	endpoint := fmt.Sprintf("wiki/rest/api/space/%v", spaceKey)
 
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -306,7 +300,7 @@ func (i *internalSpaceImpl) Content(ctx context.Context, spaceKey, depth string,
 
 	endpoint := fmt.Sprintf("wiki/rest/api/space/%v/content?%v", spaceKey, query.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -340,7 +334,7 @@ func (i *internalSpaceImpl) ContentByType(ctx context.Context, spaceKey, content
 
 	endpoint := fmt.Sprintf("wiki/rest/api/space/%v/content/%v?%v", spaceKey, contentType, query.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}

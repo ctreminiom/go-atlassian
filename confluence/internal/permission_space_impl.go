@@ -9,7 +9,7 @@ import (
 	"net/http"
 )
 
-func NewSpacePermissionService(client service.Client) *SpacePermissionService {
+func NewSpacePermissionService(client service.Connector) *SpacePermissionService {
 
 	return &SpacePermissionService{
 		internalClient: &internalSpacePermissionImpl{c: client},
@@ -58,7 +58,7 @@ func (s *SpacePermissionService) Remove(ctx context.Context, spaceKey string, pe
 }
 
 type internalSpacePermissionImpl struct {
-	c service.Client
+	c service.Connector
 }
 
 func (i *internalSpacePermissionImpl) Add(ctx context.Context, spaceKey string, payload *model.SpacePermissionPayloadScheme) (*model.SpacePermissionV2Scheme, *model.ResponseScheme, error) {
@@ -67,14 +67,9 @@ func (i *internalSpacePermissionImpl) Add(ctx context.Context, spaceKey string, 
 		return nil, nil, model.ErrNoSpaceKeyError
 	}
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	endpoint := fmt.Sprintf("wiki/rest/api/space/%v/permission", spaceKey)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -94,14 +89,9 @@ func (i *internalSpacePermissionImpl) Bulk(ctx context.Context, spaceKey string,
 		return nil, model.ErrNoSpaceKeyError
 	}
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, err
-	}
-
 	endpoint := fmt.Sprintf("wiki/rest/api/space/%v/permission/custom-content", spaceKey)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
 		return nil, err
 	}
@@ -117,7 +107,7 @@ func (i *internalSpacePermissionImpl) Remove(ctx context.Context, spaceKey strin
 
 	endpoint := fmt.Sprintf("wiki/rest/api/space/%v/permission/%v", spaceKey, permissionID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}

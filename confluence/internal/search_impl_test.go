@@ -14,7 +14,7 @@ import (
 func Test_internalSearchImpl_Content(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -52,13 +52,13 @@ func Test_internalSearchImpl_Content(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"wiki/rest/api/search?cql=type%3Dpage&cqlcontext=spaceKey&cursor=raNDoMsTRiNg&excerpt=indexed&excludeCurrentSpaces=true&expand=space&includeArchivedSpaces=true&limit=20&next=true&prev=true&sitePermissionTypeFilter=externalCollaborator&start=10",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -92,13 +92,13 @@ func Test_internalSearchImpl_Content(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"wiki/rest/api/search?cql=type%3Dpage&cqlcontext=spaceKey&cursor=raNDoMsTRiNg&excerpt=indexed&excludeCurrentSpaces=true&expand=space&includeArchivedSpaces=true&limit=20&next=true&prev=true&sitePermissionTypeFilter=externalCollaborator&start=10",
-					nil).
+					"", nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -151,7 +151,7 @@ func Test_internalSearchImpl_Content(t *testing.T) {
 func Test_internalSearchImpl_Users(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -181,13 +181,13 @@ func Test_internalSearchImpl_Users(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"wiki/rest/api/search/user?cql=type%3Dpage&expand=operations%2CpersonalSpace&limit=50&start=20",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -211,13 +211,13 @@ func Test_internalSearchImpl_Users(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"wiki/rest/api/search/user?cql=type%3Dpage&expand=operations%2CpersonalSpace&limit=50&start=20",
-					nil).
+					"", nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client

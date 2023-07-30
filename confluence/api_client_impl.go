@@ -11,7 +11,6 @@ import (
 	"io"
 	"net/http"
 	"net/url"
-	"reflect"
 	"strings"
 )
 
@@ -21,18 +20,22 @@ func New(httpClient common.HttpClient, site string) (*Client, error) {
 		httpClient = http.DefaultClient
 	}
 
+	if site == "" {
+		return nil, models.ErrNoSiteError
+	}
+
 	if !strings.HasSuffix(site, "/") {
 		site += "/"
 	}
 
-	siteAsURL, err := url.Parse(site)
+	u, err := url.Parse(site)
 	if err != nil {
 		return nil, err
 	}
 
 	client := &Client{
 		HTTP: httpClient,
-		Site: siteAsURL,
+		Site: u,
 	}
 
 	contentSubServices := &internal.ContentSubServices{
@@ -72,68 +75,58 @@ type Client struct {
 	Analytics *internal.AnalyticsService
 }
 
-func (c *Client) NewFormRequest(ctx context.Context, method, apiEndpoint, contentType string, payload io.Reader) (*http.Request, error) {
+func (c *Client) NewRequest(ctx context.Context, method, urlStr, type_ string, body interface{}) (*http.Request, error) {
 
-	relativePath, err := url.Parse(apiEndpoint)
+	rel, err := url.Parse(urlStr)
 	if err != nil {
 		return nil, err
 	}
 
-	var endpoint = c.Site.ResolveReference(relativePath).String()
+	u := c.Site.ResolveReference(rel)
 
-	request, err := http.NewRequestWithContext(ctx, method, endpoint, payload)
+	buf := new(bytes.Buffer)
+	if body != nil {
+		if err = json.NewEncoder(buf).Encode(body); err != nil {
+			return nil, err
+		}
+	}
+
+	// If the body interface is a *bytes.Buffer type
+	// it means the NewRequest() requires to handle the RFC 1867 ISO
+	if attachBuffer, ok := body.(*bytes.Buffer); ok {
+		buf = attachBuffer
+	}
+
+	req, err := http.NewRequestWithContext(ctx, method, u.String(), buf)
 	if err != nil {
 		return nil, err
 	}
 
-	request.Header.Add("Content-Type", contentType)
-	request.Header.Add("Accept", "application/json")
-	request.Header.Set("X-Atlassian-Token", "no-check")
+	req.Header.Set("Accept", "application/json")
 
-	if c.Auth.HasBasicAuth() {
-		request.SetBasicAuth(c.Auth.GetBasicAuth())
+	if body != nil {
+		req.Header.Set("Content-Type", "application/json")
 	}
 
-	if c.Auth.HasUserAgent() {
-		request.Header.Set("User-Agent", c.Auth.GetUserAgent())
-	}
-
-	if c.Auth.GetBearerToken() != "" {
-		request.Header.Add("Authorization", fmt.Sprintf("Bearer %v", c.Auth.GetBearerToken()))
-	}
-
-	return request, nil
-}
-
-func (c *Client) NewRequest(ctx context.Context, method, apiEndpoint string, payload io.Reader) (*http.Request, error) {
-
-	relativePath, err := url.Parse(apiEndpoint)
-	if err != nil {
-		return nil, err
-	}
-
-	var endpoint = c.Site.ResolveReference(relativePath).String()
-
-	request, err := http.NewRequestWithContext(ctx, method, endpoint, payload)
-	if err != nil {
-		return nil, err
-	}
-
-	request.Header.Set("Accept", "application/json")
-
-	if payload != nil {
-		request.Header.Set("Content-Type", "application/json")
+	if type_ != "" {
+		// When the type_ is provided, it means the request needs to be created to handle files
+		req.Header.Set("Content-Type", type_)
+		req.Header.Set("X-Atlassian-Token", "no-check")
 	}
 
 	if c.Auth.HasBasicAuth() {
-		request.SetBasicAuth(c.Auth.GetBasicAuth())
+		req.SetBasicAuth(c.Auth.GetBasicAuth())
 	}
 
 	if c.Auth.HasUserAgent() {
-		request.Header.Set("User-Agent", c.Auth.GetUserAgent())
+		req.Header.Set("User-Agent", c.Auth.GetUserAgent())
 	}
 
-	return request, nil
+	if c.Auth.GetBearerToken() != "" && !c.Auth.HasBasicAuth() {
+		req.Header.Add("Authorization", fmt.Sprintf("Bearer %v", c.Auth.GetBearerToken()))
+	}
+
+	return req, nil
 }
 
 func (c *Client) Call(request *http.Request, structure interface{}) (*models.ResponseScheme, error) {
@@ -143,12 +136,14 @@ func (c *Client) Call(request *http.Request, structure interface{}) (*models.Res
 		return nil, err
 	}
 
-	return c.TransformTheHTTPResponse(response, structure)
+	return c.processResponse(response, structure)
 }
 
-func (c *Client) TransformTheHTTPResponse(response *http.Response, structure interface{}) (*models.ResponseScheme, error) {
+func (c *Client) processResponse(response *http.Response, structure interface{}) (*models.ResponseScheme, error) {
 
-	responseTransformed := &models.ResponseScheme{
+	defer response.Body.Close()
+
+	res := &models.ResponseScheme{
 		Response: response,
 		Code:     response.StatusCode,
 		Endpoint: response.Request.URL.String(),
@@ -157,39 +152,39 @@ func (c *Client) TransformTheHTTPResponse(response *http.Response, structure int
 
 	responseAsBytes, err := io.ReadAll(response.Body)
 	if err != nil {
-		return responseTransformed, err
+		return res, err
 	}
 
-	responseTransformed.Bytes.Write(responseAsBytes)
+	res.Bytes.Write(responseAsBytes)
 
-	var wasSuccess = response.StatusCode >= 200 && response.StatusCode < 300
+	wasSuccess := response.StatusCode >= 200 && response.StatusCode < 300
+
 	if !wasSuccess {
-		return responseTransformed, models.ErrInvalidStatusCodeError
+
+		switch response.StatusCode {
+
+		case http.StatusNotFound:
+			return res, models.ErrNotFound
+
+		case http.StatusUnauthorized:
+			return res, models.ErrUnauthorized
+
+		case http.StatusInternalServerError:
+			return res, models.ErrInternalError
+
+		case http.StatusBadRequest:
+			return res, models.ErrBadRequestError
+
+		default:
+			return res, models.ErrInvalidStatusCodeError
+		}
 	}
 
 	if structure != nil {
 		if err = json.Unmarshal(responseAsBytes, &structure); err != nil {
-			return responseTransformed, err
+			return res, err
 		}
 	}
 
-	return responseTransformed, nil
-}
-
-func (c *Client) TransformStructToReader(structure interface{}) (io.Reader, error) {
-
-	if structure == nil {
-		return nil, models.ErrNilPayloadError
-	}
-
-	if reflect.ValueOf(structure).Type().Kind() == reflect.Struct {
-		return nil, models.ErrNonPayloadPointerError
-	}
-
-	structureAsBodyBytes, err := json.Marshal(structure)
-	if err != nil {
-		return nil, err
-	}
-
-	return bytes.NewReader(structureAsBodyBytes), nil
+	return res, nil
 }

@@ -11,7 +11,7 @@ import (
 	"strconv"
 )
 
-func NewLabelService(client service.Client) *LabelService {
+func NewLabelService(client service.Connector) *LabelService {
 
 	return &LabelService{
 		internalClient: &internalLabelImpl{c: client},
@@ -32,7 +32,7 @@ func (l *LabelService) Get(ctx context.Context, labelName, labelType string, sta
 }
 
 type internalLabelImpl struct {
-	c service.Client
+	c service.Connector
 }
 
 func (i *internalLabelImpl) Get(ctx context.Context, labelName, labelType string, start, limit int) (*model.LabelDetailsScheme, *model.ResponseScheme, error) {
@@ -49,7 +49,7 @@ func (i *internalLabelImpl) Get(ctx context.Context, labelName, labelType string
 
 	endpoint := fmt.Sprintf("wiki/rest/api/label?%v", query.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}

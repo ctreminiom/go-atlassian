@@ -146,7 +146,7 @@ func Test_internalWorkflowImpl_Gets(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			newService, err := NewWorkflowService(testCase.fields.c, testCase.fields.version, nil, nil)
+			newService, err := NewWorkflowService(testCase.fields.c, testCase.fields.version, nil, nil, nil)
 			assert.NoError(t, err)
 
 			gotResult, gotResponse, err := newService.Gets(testCase.args.ctx, testCase.args.options, testCase.args.startAt,
@@ -291,7 +291,7 @@ func Test_internalWorkflowImpl_Delete(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			newService, err := NewWorkflowService(testCase.fields.c, testCase.fields.version, nil, nil)
+			newService, err := NewWorkflowService(testCase.fields.c, testCase.fields.version, nil, nil, nil)
 			assert.NoError(t, err)
 
 			gotResponse, err := newService.Delete(testCase.args.ctx, testCase.args.workflowId)
@@ -446,7 +446,7 @@ func Test_internalWorkflowImpl_Create(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			newService, err := NewWorkflowService(testCase.fields.c, testCase.fields.version, nil, nil)
+			newService, err := NewWorkflowService(testCase.fields.c, testCase.fields.version, nil, nil, nil)
 			assert.NoError(t, err)
 
 			gotResult, gotResponse, err := newService.Create(testCase.args.ctx, testCase.args.payload)
@@ -504,7 +504,7 @@ func Test_NewWorkflowService(t *testing.T) {
 	}
 	for _, testCase := range testCases {
 		t.Run(testCase.name, func(t *testing.T) {
-			got, err := NewWorkflowService(testCase.args.client, testCase.args.version, nil, nil)
+			got, err := NewWorkflowService(testCase.args.client, testCase.args.version, nil, nil, nil)
 
 			if testCase.wantErr {
 
@@ -648,7 +648,7 @@ func Test_internalWorkflowImpl_Bulk(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			newService, err := NewWorkflowService(testCase.fields.c, testCase.fields.version, nil, nil)
+			newService, err := NewWorkflowService(testCase.fields.c, testCase.fields.version, nil, nil, nil)
 			assert.NoError(t, err)
 
 			gotResult, gotResponse, err := newService.Bulk(testCase.args.ctx, testCase.args.options, testCase.args.expand)
@@ -866,7 +866,7 @@ func Test_internalWorkflowImpl_Creates(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			newService, err := NewWorkflowService(testCase.fields.c, testCase.fields.version, nil, nil)
+			newService, err := NewWorkflowService(testCase.fields.c, testCase.fields.version, nil, nil, nil)
 			assert.NoError(t, err)
 
 			gotResult, gotResponse, err := newService.Creates(testCase.args.ctx, testCase.args.payload)
@@ -1101,7 +1101,7 @@ func Test_internalWorkflowImpl_Updates(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			newService, err := NewWorkflowService(testCase.fields.c, testCase.fields.version, nil, nil)
+			newService, err := NewWorkflowService(testCase.fields.c, testCase.fields.version, nil, nil, nil)
 			assert.NoError(t, err)
 
 			gotResult, gotResponse, err := newService.Updates(testCase.args.ctx, testCase.args.payload, testCase.args.expand)
@@ -1242,7 +1242,7 @@ func Test_internalWorkflowImpl_Capabilities(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			newService, err := NewWorkflowService(testCase.fields.c, testCase.fields.version, nil, nil)
+			newService, err := NewWorkflowService(testCase.fields.c, testCase.fields.version, nil, nil, nil)
 			assert.NoError(t, err)
 
 			gotResult, gotResponse, err := newService.Capabilities(testCase.args.ctx,

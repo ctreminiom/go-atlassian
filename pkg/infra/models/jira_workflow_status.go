@@ -11,12 +11,13 @@ type WorkflowStatusDetailPageScheme struct {
 }
 
 type WorkflowStatusDetailScheme struct {
-	ID             string                     `json:"id,omitempty"`
-	Name           string                     `json:"name,omitempty"`
-	StatusCategory string                     `json:"statusCategory,omitempty"`
-	Scope          *WorkflowStatusScopeScheme `json:"scope,omitempty"`
-	Description    string                     `json:"description,omitempty"`
-	Usages         []*ProjectIssueTypesScheme `json:"usages,omitempty"`
+	ID              string                     `json:"id,omitempty"`
+	Name            string                     `json:"name,omitempty"`
+	StatusCategory  string                     `json:"statusCategory,omitempty"`
+	StatusReference string                     `json:"statusReference,omitempty"`
+	Scope           *WorkflowStatusScopeScheme `json:"scope,omitempty"`
+	Description     string                     `json:"description,omitempty"`
+	Usages          []*ProjectIssueTypesScheme `json:"usages,omitempty"`
 }
 
 type WorkflowStatusScopeScheme struct {

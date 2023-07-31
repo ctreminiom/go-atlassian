@@ -42,6 +42,49 @@ type WorkflowConnector interface {
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/workflow#search-workflows
 	Delete(ctx context.Context, workflowId string) (*model.ResponseScheme, error)
+
+	// Bulk returns a list of workflows and related statuses by providing workflow names,
+	//
+	// workflow IDs, or project and issue types.
+	//
+	// POST /rest/api/{2-3}/workflows
+	Bulk(ctx context.Context, options *model.WorkflowBulkOptionsScheme, expand []string) (*model.WorkflowReadResponseScheme, *model.ResponseScheme, error)
+
+	// Capabilities get the list of workflow capabilities for a specific workflow using either the workflow ID, or the project and issue type ID pair.
+	//
+	// The response includes the scope of the workflow, defined as global/project-based,
+	//
+	// and a list of project types that the workflow is scoped to.
+	//
+	// It also includes all rules organised into their broad categories (conditions, validators, actions, triggers, screens)
+	//
+	// as well as the source location (Atlassian-provided, Connect, Forge).
+	//
+	// GET /rest/api/{2-3}/workflows/capabilities
+	Capabilities(ctx context.Context, workflowID, projectID, issueTypeID string) (*model.WorkflowCapabilitiesScheme, *model.ResponseScheme, error)
+
+	// Creates creates workflows and related statuses.
+	//
+	// POST /rest/api/{2-3}/workflows/create
+	Creates(ctx context.Context, payload *model.WorkflowCreatesPayloadScheme) (*model.WorkflowCreateResponseScheme, *model.ResponseScheme, error)
+
+	// Updates updates workflows and related statuses.
+	//
+	// POST /rest/api/{2-3}/workflows/update
+	Updates(ctx context.Context, payload *model.WorkflowUpdatesPayloadScheme, expand []string) (*model.WorkflowUpdateResponseScheme, *model.ResponseScheme, error)
+}
+
+type WorkflowValidatorConnector interface {
+
+	// Creation validates the payload for bulk create workflows.
+	//
+	// POST /rest/api/{2-3}/workflows/create/validation
+	Creation(ctx context.Context, payload *model.WorkflowCreateValidatorPayloadScheme) (*model.WorkflowValidationErrorListScheme, *model.ResponseScheme, error)
+
+	// Modification validates the payload for bulk update workflows.
+	//
+	// POST /rest/api/{2-3}/workflows/update/validation
+	Modification(ctx context.Context, payload *model.WorkflowUpdateValidatorPayloadScheme) (*model.WorkflowValidationErrorListScheme, *model.ResponseScheme, error)
 }
 
 type WorkflowSchemeConnector interface {

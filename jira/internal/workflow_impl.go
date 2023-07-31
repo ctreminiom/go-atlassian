@@ -13,7 +13,12 @@ import (
 	"github.com/ctreminiom/go-atlassian/service/jira"
 )
 
-func NewWorkflowService(client service.Connector, version string, scheme *WorkflowSchemeService, status *WorkflowStatusService) (*WorkflowService, error) {
+func NewWorkflowService(client service.Connector,
+	version string,
+	scheme *WorkflowSchemeService,
+	status *WorkflowStatusService,
+	validator *WorkflowValidatorService,
+) (*WorkflowService, error) {
 
 	if version == "" {
 		return nil, model.ErrNoVersionProvided
@@ -23,6 +28,7 @@ func NewWorkflowService(client service.Connector, version string, scheme *Workfl
 		internalClient: &internalWorkflowImpl{c: client, version: version},
 		Scheme:         scheme,
 		Status:         status,
+		Validator:      validator,
 	}, nil
 }
 
@@ -30,6 +36,7 @@ type WorkflowService struct {
 	internalClient jira.WorkflowConnector
 	Scheme         *WorkflowSchemeService
 	Status         *WorkflowStatusService
+	Validator      *WorkflowValidatorService
 }
 
 // Create creates a workflow.

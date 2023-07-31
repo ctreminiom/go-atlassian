@@ -362,7 +362,12 @@ func New(httpClient common.HttpClient, site string) (*Client, error) {
 		return nil, err
 	}
 
-	workflow, err := internal.NewWorkflowService(client, ApiVersion, workflowScheme, workflowStatus)
+	workflowValidator, err := internal.NewWorkflowValidatorService(client, ApiVersion)
+	if err != nil {
+		return nil, err
+	}
+
+	workflow, err := internal.NewWorkflowService(client, ApiVersion, workflowScheme, workflowStatus, workflowValidator)
 	if err != nil {
 		return nil, err
 	}

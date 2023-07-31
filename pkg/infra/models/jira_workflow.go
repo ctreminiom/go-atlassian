@@ -260,7 +260,7 @@ type WorkflowCreatePayloadScheme struct {
 	Name             string                      `json:"name,omitempty"`
 	StartPointLayout *StartPointLayoutScheme     `json:"startPointLayout,omitempty"`
 	Statuses         []*StatusLayoutUpdateScheme `json:"statuses,omitempty"`
-	Transitions      []*TransitionUpdateScheme   `json:"transitions"`
+	Transitions      []*TransitionUpdateScheme   `json:"transitions,omitempty"`
 }
 
 type StatusLayoutUpdateScheme struct {
@@ -274,12 +274,12 @@ type TransitionUpdateScheme struct {
 	CustomIssueEventID string                             `json:"customIssueEventId,omitempty"`
 	Description        string                             `json:"description,omitempty"`
 	From               []*StatusReferenceAndPortScheme    `json:"from,omitempty"`
-	ID                 string                             `json:"id,omitempty"`
-	Name               string                             `json:"name,omitempty"`
+	ID                 string                             `json:"id"`
+	Name               string                             `json:"name"`
 	To                 *StatusReferenceAndPortScheme      `json:"to,omitempty"`
 	TransitionScreen   *WorkflowRuleConfigurationScheme   `json:"transitionScreen,omitempty"`
 	Triggers           []*WorkflowTriggerScheme           `json:"triggers,omitempty"`
-	Type               string                             `json:"type,omitempty"`
+	Type               string                             `json:"type"`
 	Validators         []*WorkflowRuleConfigurationScheme `json:"validators,omitempty"`
 }
 

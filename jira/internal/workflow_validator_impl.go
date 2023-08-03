@@ -55,7 +55,7 @@ func (i *internalWorkflowValidatorImpl) Creation(ctx context.Context, payload *m
 	errorList := new(model.WorkflowValidationErrorListScheme)
 	response, err := i.c.Call(request, errorList)
 	if err != nil {
-		return nil, response, err
+		return errorList, response, err
 	}
 
 	return errorList, response, nil
@@ -73,7 +73,7 @@ func (i *internalWorkflowValidatorImpl) Modification(ctx context.Context, payloa
 	errorList := new(model.WorkflowValidationErrorListScheme)
 	response, err := i.c.Call(request, errorList)
 	if err != nil {
-		return nil, response, err
+		return errorList, response, err
 	}
 
 	return errorList, response, nil

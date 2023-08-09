@@ -65,4 +65,9 @@ type AttachmentConnector interface {
 	//
 	// https://docs.go-atlassian.io/confluence-cloud/v2/attachments#get-attachments-by-type
 	Gets(ctx context.Context, entityID int, entityType string, options *model.AttachmentParamsScheme, cursor string, limit int) (*model.AttachmentPageScheme, *model.ResponseScheme, error)
+
+	// Delete deletes an attachment by id.
+	//
+	// DELETE /wiki/api/v2/attachments/{id}
+	Delete(ctx context.Context, attachmentID int) (*model.ResponseScheme, error)
 }

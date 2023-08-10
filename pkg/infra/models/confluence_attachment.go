@@ -18,11 +18,17 @@ type AttachmentScheme struct {
 }
 
 type AttachmentVersionScheme struct {
-	CreatedAt string `json:"createdAt,omitempty"`
-	Message   string `json:"message,omitempty"`
-	Number    int    `json:"number,omitempty"`
-	MinorEdit bool   `json:"minorEdit,omitempty"`
-	AuthorID  string `json:"authorId,omitempty"`
+	CreatedAt  string                       `json:"createdAt,omitempty"`
+	Message    string                       `json:"message,omitempty"`
+	Number     int                          `json:"number,omitempty"`
+	MinorEdit  bool                         `json:"minorEdit,omitempty"`
+	AuthorID   string                       `json:"authorId,omitempty"`
+	Attachment *AttachmentVersionBodyScheme `json:"attachment,omitempty"`
+}
+
+type AttachmentVersionBodyScheme struct {
+	Title string `json:"title,omitempty"`
+	ID    string `json:"id,omitempty"`
 }
 
 type AttachmentParamsScheme struct {
@@ -45,10 +51,27 @@ type AttachmentParamsScheme struct {
 }
 
 type AttachmentPageScheme struct {
-	Results []*AttachmentScheme        `json:"results,omitempty"`
-	Links   *AttachmentPageLinksScheme `json:"_links,omitempty"`
+	Results []*AttachmentScheme `json:"results,omitempty"`
+	Links   *PageLinkScheme     `json:"_links,omitempty"`
 }
 
-type AttachmentPageLinksScheme struct {
+type PageLinkScheme struct {
 	Next string `json:"next,omitempty"`
+}
+
+type AttachmentVersionPageScheme struct {
+	Results []*AttachmentVersionScheme `json:"results,omitempty"`
+	Links   *PageLinkScheme            `json:"_links,omitempty"`
+}
+
+type DetailedVersionScheme struct {
+	Number              int      `json:"number,omitempty"`
+	AuthorID            string   `json:"authorId,omitempty"`
+	Message             string   `json:"message,omitempty"`
+	CreatedAt           string   `json:"createdAt,omitempty"`
+	MinorEdit           bool     `json:"minorEdit,omitempty"`
+	ContentTypeModified bool     `json:"contentTypeModified,omitempty"`
+	Collaborators       []string `json:"collaborators,omitempty"`
+	PrevVersion         int      `json:"prevVersion,omitempty"`
+	NextVersion         int      `json:"nextVersion,omitempty"`
 }

@@ -104,7 +104,7 @@ func Test_internalAttachmentImpl_Get(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			attachmentService := NewAttachmentService(testCase.fields.c)
+			attachmentService := NewAttachmentService(testCase.fields.c, nil)
 
 			gotResult, gotResponse, err := attachmentService.Get(testCase.args.ctx, testCase.args.attachmentID, testCase.args.versionID,
 				testCase.args.serializeIDs)
@@ -248,7 +248,7 @@ func Test_internalAttachmentImpl_Gets(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			attachmentService := NewAttachmentService(testCase.fields.c)
+			attachmentService := NewAttachmentService(testCase.fields.c, nil)
 
 			gotResult, gotResponse, err := attachmentService.Gets(testCase.args.ctx, testCase.args.entityID, testCase.args.entityType,
 				testCase.args.options, testCase.args.cursor, testCase.args.limit)
@@ -359,7 +359,7 @@ func Test_internalAttachmentImpl_Delete(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			attachmentService := NewAttachmentService(testCase.fields.c)
+			attachmentService := NewAttachmentService(testCase.fields.c, nil)
 
 			gotResponse, err := attachmentService.Delete(testCase.args.ctx, testCase.args.attachmentID)
 

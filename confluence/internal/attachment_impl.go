@@ -13,14 +13,16 @@ import (
 )
 
 // NewAttachmentService returns a new Confluence V2 Page service
-func NewAttachmentService(client service.Connector) *AttachmentService {
+func NewAttachmentService(client service.Connector, version *AttachmentVersionService) *AttachmentService {
 	return &AttachmentService{
 		internalClient: &internalAttachmentImpl{c: client},
+		Version:        version,
 	}
 }
 
 type AttachmentService struct {
 	internalClient confluence.AttachmentConnector
+	Version        *AttachmentVersionService
 }
 
 // Get returns a specific attachment.

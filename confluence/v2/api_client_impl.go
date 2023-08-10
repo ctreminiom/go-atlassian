@@ -41,7 +41,7 @@ func New(httpClient common.HttpClient, site string) (*Client, error) {
 	client.Auth = internal.NewAuthenticationService(client)
 	client.Page = internal.NewPageService(client)
 	client.Space = internal.NewSpaceV2Service(client)
-	client.Attachment = internal.NewAttachmentService(client)
+	client.Attachment = internal.NewAttachmentService(client, internal.NewAttachmentVersionService(client))
 
 	return client, nil
 }

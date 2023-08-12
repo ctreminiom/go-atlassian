@@ -7,5 +7,5 @@ require (
 	github.com/imdario/mergo v0.3.16
 	github.com/perimeterx/marshmallow v1.1.5
 	github.com/stretchr/testify v1.8.4
-	github.com/tidwall/gjson v1.15.0
+	github.com/tidwall/gjson v1.16.0
 )

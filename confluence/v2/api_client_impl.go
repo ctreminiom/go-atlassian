@@ -42,17 +42,19 @@ func New(httpClient common.HttpClient, site string) (*Client, error) {
 	client.Page = internal.NewPageService(client)
 	client.Space = internal.NewSpaceV2Service(client)
 	client.Attachment = internal.NewAttachmentService(client, internal.NewAttachmentVersionService(client))
+	client.CustomContent = internal.NewCustomContentService(client)
 
 	return client, nil
 }
 
 type Client struct {
-	HTTP       common.HttpClient
-	Site       *url.URL
-	Auth       common.Authentication
-	Page       *internal.PageService
-	Space      *internal.SpaceV2Service
-	Attachment *internal.AttachmentService
+	HTTP          common.HttpClient
+	Site          *url.URL
+	Auth          common.Authentication
+	Page          *internal.PageService
+	Space         *internal.SpaceV2Service
+	Attachment    *internal.AttachmentService
+	CustomContent *internal.CustomContentService
 }
 
 func (c *Client) NewRequest(ctx context.Context, method, urlStr, type_ string, body interface{}) (*http.Request, error) {

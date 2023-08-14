@@ -65,4 +65,28 @@ type AttachmentConnector interface {
 	//
 	// https://docs.go-atlassian.io/confluence-cloud/v2/attachments#get-attachments-by-type
 	Gets(ctx context.Context, entityID int, entityType string, options *model.AttachmentParamsScheme, cursor string, limit int) (*model.AttachmentPageScheme, *model.ResponseScheme, error)
+
+	// Delete deletes an attachment by id.
+	//
+	// DELETE /wiki/api/v2/attachments/{id}
+	//
+	// https://docs.go-atlassian.io/confluence-cloud/v2/attachments#delete-attachment
+	Delete(ctx context.Context, attachmentID string) (*model.ResponseScheme, error)
+}
+
+type AttachmentVersionConnector interface {
+
+	// Gets returns the versions of specific attachment.
+	//
+	// GET /wiki/api/v2/attachments/{id}/versions
+	//
+	// https://docs.go-atlassian.io/confluence-cloud/v2/attachments/versions#get-attachment-versions
+	Gets(ctx context.Context, attachmentID, cursor, sort string, limit int) (*model.AttachmentVersionPageScheme, *model.ResponseScheme, error)
+
+	// Get retrieves version details for the specified attachment and version number.
+	//
+	// GET /wiki/api/v2/attachments/{attachment-id}/versions/{version-number}
+	//
+	// https://docs.go-atlassian.io/confluence-cloud/v2/attachments/versions#get-attachment-version
+	Get(ctx context.Context, attachmentID string, versionID int) (*model.DetailedVersionScheme, *model.ResponseScheme, error)
 }

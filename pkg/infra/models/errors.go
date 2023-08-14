@@ -36,6 +36,8 @@ var (
 	ErrNoContentAttachmentNameError        = errors.New("confluence: no attachment filename set")
 	ErrNoContentReaderError                = errors.New("confluence: no reader set")
 	ErrNoContentIDError                    = errors.New("confluence: no content id set")
+	ErrNoCustomContentTypeError            = errors.New("confluence: no custom content type set")
+	ErrNoCustomContentIDError              = errors.New("confluence: no custom content id set")
 	ErrNoPageIDError                       = errors.New("confluence: no page id set")
 	ErrNoSpaceIDError                      = errors.New("confluence: no space id set")
 	ErrNoTargetIDError                     = errors.New("confluence: no target id set")

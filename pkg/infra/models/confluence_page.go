@@ -19,15 +19,17 @@ type PageChunkLinksScheme struct {
 }
 
 type PageScheme struct {
-	ID        int                `json:"id,omitempty"`
-	Status    string             `json:"status,omitempty"`
-	Title     string             `json:"title,omitempty"`
-	SpaceID   int                `json:"spaceId,omitempty"`
-	ParentID  int                `json:"parentId,omitempty"`
-	AuthorID  string             `json:"authorId,omitempty"`
-	CreatedAt string             `json:"createdAt,omitempty"`
-	Version   *PageVersionScheme `json:"version,omitempty"`
-	Body      *PageBodyScheme    `json:"body,omitempty"`
+	ID         string             `json:"id,omitempty"`
+	Status     string             `json:"status,omitempty"`
+	Title      string             `json:"title,omitempty"`
+	SpaceID    string             `json:"spaceId,omitempty"`
+	ParentID   string             `json:"parentId,omitempty"`
+	AuthorID   string             `json:"authorId,omitempty"`
+	CreatedAt  string             `json:"createdAt,omitempty"`
+	ParentType string             `json:"parentType,omitempty"`
+	Position   int                `json:"position,omitempty"`
+	Version    *PageVersionScheme `json:"version,omitempty"`
+	Body       *PageBodyScheme    `json:"body,omitempty"`
 }
 
 type PageVersionScheme struct {

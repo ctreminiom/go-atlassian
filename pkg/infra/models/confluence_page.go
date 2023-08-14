@@ -1,5 +1,14 @@
 package models
 
+type PageOptionsScheme struct {
+	PageIDs    []int
+	SpaceIDs   []int
+	Sort       string
+	Status     []string
+	Title      string
+	BodyFormat string
+}
+
 type PageChunkScheme struct {
 	Results []*PageScheme         `json:"results,omitempty"`
 	Links   *PageChunkLinksScheme `json:"_links,omitempty"`

@@ -25,6 +25,8 @@ type AttachmentVersionService struct {
 // Gets returns the versions of specific attachment.
 //
 // GET /wiki/api/v2/attachments/{id}/versions
+//
+// https://docs.go-atlassian.io/confluence-cloud/v2/attachments/versions#get-attachment-versions
 func (a *AttachmentVersionService) Gets(ctx context.Context, attachmentID, cursor, sort string, limit int) (*model.AttachmentVersionPageScheme, *model.ResponseScheme, error) {
 	return a.internalClient.Gets(ctx, attachmentID, cursor, sort, limit)
 }
@@ -32,6 +34,8 @@ func (a *AttachmentVersionService) Gets(ctx context.Context, attachmentID, curso
 // Get retrieves version details for the specified attachment and version number.
 //
 // GET /wiki/api/v2/attachments/{attachment-id}/versions/{version-number}
+//
+// https://docs.go-atlassian.io/confluence-cloud/v2/attachments/versions#get-attachment-version
 func (a *AttachmentVersionService) Get(ctx context.Context, attachmentID string, versionID int) (*model.DetailedVersionScheme, *model.ResponseScheme, error) {
 	return a.internalClient.Get(ctx, attachmentID, versionID)
 }

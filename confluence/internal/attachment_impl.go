@@ -56,6 +56,8 @@ func (a *AttachmentService) Gets(ctx context.Context, entityID int, entityType s
 // Delete deletes an attachment by id.
 //
 // DELETE /wiki/api/v2/attachments/{id}
+//
+// https://docs.go-atlassian.io/confluence-cloud/v2/attachments#delete-attachment
 func (a *AttachmentService) Delete(ctx context.Context, attachmentID string) (*model.ResponseScheme, error) {
 	return a.internalClient.Delete(ctx, attachmentID)
 }

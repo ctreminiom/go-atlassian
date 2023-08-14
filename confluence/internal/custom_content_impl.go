@@ -25,11 +25,9 @@ type CustomContentService struct {
 
 // Gets returns all custom content for a given type.
 //
-// # The number of results is limited by the limit parameter and additional results (if available) will be available
-//
-// through the next URL present in the Link response header.
-//
 // GET /wiki/api/v2/custom-content
+//
+// https://docs.go-atlassian.io/confluence-cloud/v2/custom-content#get-custom-content-by-type
 func (c *CustomContentService) Gets(ctx context.Context, type_ string, options *model.CustomContentOptionsScheme, cursor string, limit int) (*model.CustomContentPageScheme, *model.ResponseScheme, error) {
 	return c.internalClient.Gets(ctx, type_, options, cursor, limit)
 }
@@ -37,6 +35,8 @@ func (c *CustomContentService) Gets(ctx context.Context, type_ string, options *
 // Create creates a new custom content in the given space, page, blogpost or other custom content.
 //
 // POST /wiki/api/v2/custom-content
+//
+// https://docs.go-atlassian.io/confluence-cloud/v2/custom-content#create-custom-content
 func (c *CustomContentService) Create(ctx context.Context, payload *model.CustomContentPayloadScheme) (*model.CustomContentScheme, *model.ResponseScheme, error) {
 	return c.internalClient.Create(ctx, payload)
 }
@@ -44,6 +44,8 @@ func (c *CustomContentService) Create(ctx context.Context, payload *model.Custom
 // Get returns a specific piece of custom content.
 //
 // GET /wiki/api/v2/custom-content/{id}
+//
+// https://docs.go-atlassian.io/confluence-cloud/v2/custom-content#get-custom-content-by-id
 func (c *CustomContentService) Get(ctx context.Context, customContentID int, format string, versionID int) (*model.CustomContentScheme, *model.ResponseScheme, error) {
 	return c.internalClient.Get(ctx, customContentID, format, versionID)
 }
@@ -55,6 +57,8 @@ func (c *CustomContentService) Get(ctx context.Context, customContentID int, for
 // or customContentId is allowed in the request body
 //
 // PUT /wiki/api/v2/custom-content/{id}
+//
+// https://docs.go-atlassian.io/confluence-cloud/v2/custom-content#update-custom-content
 func (c *CustomContentService) Update(ctx context.Context, customContentID int, payload *model.CustomContentPayloadScheme) (*model.CustomContentScheme, *model.ResponseScheme, error) {
 	return c.internalClient.Update(ctx, customContentID, payload)
 }
@@ -62,6 +66,8 @@ func (c *CustomContentService) Update(ctx context.Context, customContentID int, 
 // Delete deletes a custom content by id.
 //
 // DELETE /wiki/api/v2/custom-content/{id}
+//
+// https://docs.go-atlassian.io/confluence-cloud/v2/custom-content#delete-custom-content
 func (c *CustomContentService) Delete(ctx context.Context, customContentID int) (*model.ResponseScheme, error) {
 	return c.internalClient.Delete(ctx, customContentID)
 }

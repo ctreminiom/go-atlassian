@@ -12,7 +12,7 @@ type AttachmentScheme struct {
 	Status               string                   `json:"status,omitempty"`
 	FileSize             int                      `json:"fileSize,omitempty"`
 	MediaType            string                   `json:"mediaType,omitempty"`
-	PageID               int                      `json:"pageId,omitempty"`
+	PageID               string                   `json:"pageId,omitempty"`
 	FileID               string                   `json:"fileId,omitempty"`
 	Version              *AttachmentVersionScheme `json:"version,omitempty"`
 }

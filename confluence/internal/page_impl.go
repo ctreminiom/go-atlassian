@@ -32,10 +32,6 @@ func (p *PageService) Get(ctx context.Context, pageID int, format string, draft 
 
 // Gets returns all pages.
 //
-// # The number of results is limited by the limit parameter and additional results
-//
-// (if available) will be available through the next cursor
-//
 // GET /wiki/api/v2/pages
 //
 // https://docs.go-atlassian.io/confluence-cloud/v2/page#get-pages
@@ -44,10 +40,6 @@ func (p *PageService) Gets(ctx context.Context, options *model.PageOptionsScheme
 }
 
 // Bulk returns all pages.
-//
-// # The number of results is limited by the limit parameter and additional results
-//
-// (if available) will be available through the next cursor
 //
 // Deprecated. Please use Page.Gets() instead.
 //
@@ -59,10 +51,6 @@ func (p *PageService) Bulk(ctx context.Context, cursor string, limit int) (*mode
 }
 
 // GetsByLabel returns the pages of specified label.
-//
-// # The number of results is limited by the limit parameter and additional results
-//
-// (if available) will be available through the next cursor
 //
 // GET /wiki/api/v2/labels/{id}/pages
 //

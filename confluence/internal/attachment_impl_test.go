@@ -280,7 +280,7 @@ func Test_internalAttachmentImpl_Delete(t *testing.T) {
 
 	type args struct {
 		ctx          context.Context
-		attachmentID int
+		attachmentID string
 	}
 
 	testCases := []struct {
@@ -295,7 +295,7 @@ func Test_internalAttachmentImpl_Delete(t *testing.T) {
 			name: "when the parameters are correct",
 			args: args{
 				ctx:          context.TODO(),
-				attachmentID: 100001,
+				attachmentID: "att10001",
 			},
 			on: func(fields *fields) {
 
@@ -304,7 +304,7 @@ func Test_internalAttachmentImpl_Delete(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
-					"wiki/api/v2/attachments/100001",
+					"wiki/api/v2/attachments/att10001",
 					"", nil).
 					Return(&http.Request{}, nil)
 
@@ -322,7 +322,7 @@ func Test_internalAttachmentImpl_Delete(t *testing.T) {
 			name: "when the http request cannot be created",
 			args: args{
 				ctx:          context.TODO(),
-				attachmentID: 100001,
+				attachmentID: "att10001",
 			},
 			on: func(fields *fields) {
 
@@ -331,7 +331,7 @@ func Test_internalAttachmentImpl_Delete(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
-					"wiki/api/v2/attachments/100001",
+					"wiki/api/v2/attachments/att10001",
 					"", nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 

@@ -56,7 +56,7 @@ func (a *AttachmentService) Gets(ctx context.Context, entityID int, entityType s
 // Delete deletes an attachment by id.
 //
 // DELETE /wiki/api/v2/attachments/{id}
-func (a *AttachmentService) Delete(ctx context.Context, attachmentID int) (*model.ResponseScheme, error) {
+func (a *AttachmentService) Delete(ctx context.Context, attachmentID string) (*model.ResponseScheme, error) {
 	return a.internalClient.Delete(ctx, attachmentID)
 }
 
@@ -64,9 +64,9 @@ type internalAttachmentImpl struct {
 	c service.Connector
 }
 
-func (i *internalAttachmentImpl) Delete(ctx context.Context, attachmentID int) (*model.ResponseScheme, error) {
+func (i *internalAttachmentImpl) Delete(ctx context.Context, attachmentID string) (*model.ResponseScheme, error) {
 
-	if attachmentID == 0 {
+	if attachmentID == "" {
 		return nil, model.ErrNoContentAttachmentIDError
 	}
 

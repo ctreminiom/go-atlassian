@@ -69,7 +69,7 @@ type AttachmentConnector interface {
 	// Delete deletes an attachment by id.
 	//
 	// DELETE /wiki/api/v2/attachments/{id}
-	Delete(ctx context.Context, attachmentID int) (*model.ResponseScheme, error)
+	Delete(ctx context.Context, attachmentID string) (*model.ResponseScheme, error)
 }
 
 type AttachmentVersionConnector interface {

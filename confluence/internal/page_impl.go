@@ -30,11 +30,18 @@ func (p *PageService) Get(ctx context.Context, pageID int, format string, draft 
 	return p.internalClient.Get(ctx, pageID, format, draft, version)
 }
 
+// Gets returns all pages.
+//
+// GET /wiki/api/v2/pages
+//
+// https://docs.go-atlassian.io/confluence-cloud/v2/page#get-pages
+func (p *PageService) Gets(ctx context.Context, options *model.PageOptionsScheme, cursor string, limit int) (*model.PageChunkScheme, *model.ResponseScheme, error) {
+	return p.internalClient.Gets(ctx, options, cursor, limit)
+}
+
 // Bulk returns all pages.
 //
-// # The number of results is limited by the limit parameter and additional results
-//
-// (if available) will be available through the next cursor
+// Deprecated. Please use Page.Gets() instead.
 //
 // GET /wiki/api/v2/pages
 //
@@ -43,24 +50,7 @@ func (p *PageService) Bulk(ctx context.Context, cursor string, limit int) (*mode
 	return p.internalClient.Bulk(ctx, cursor, limit)
 }
 
-// BulkFiltered returns all pages that fit the filtering criteria
-//
-// # The number of results is limited by the limit parameter and additional results
-//
-// (if available) will be available through the next cursor
-//
-// GET /wiki/api/v2/pages
-//
-// https://docs.go-atlassian.io/confluence-cloud/v2/page#get-pages
-func (p *PageService) BulkFiltered(ctx context.Context, status, format, cursor string, limit int, pageIDs ...int) (*model.PageChunkScheme, *model.ResponseScheme, error) {
-	return p.internalClient.BulkFiltered(ctx, status, format, cursor, limit, pageIDs...)
-}
-
 // GetsByLabel returns the pages of specified label.
-//
-// # The number of results is limited by the limit parameter and additional results
-//
-// (if available) will be available through the next cursor
 //
 // GET /wiki/api/v2/labels/{id}/pages
 //
@@ -117,6 +107,70 @@ type internalPageImpl struct {
 	c service.Connector
 }
 
+func (i *internalPageImpl) Gets(ctx context.Context, options *model.PageOptionsScheme, cursor string, limit int) (*model.PageChunkScheme, *model.ResponseScheme, error) {
+
+	query := url.Values{}
+	query.Add("limit", strconv.Itoa(limit))
+
+	if cursor != "" {
+		query.Add("cursor", cursor)
+	}
+
+	if options != nil {
+
+		if options.Title != "" {
+			query.Add("title", options.Title)
+		}
+
+		if options.Sort != "" {
+			query.Add("sort", options.Sort)
+		}
+
+		if options.BodyFormat != "" {
+			query.Add("body-format", options.BodyFormat)
+		}
+
+		if options.Status != nil {
+			query.Add("status", strings.Join(options.Status, ","))
+		}
+
+		if len(options.PageIDs) > 0 {
+
+			var pageIDs = make([]string, 0, len(options.PageIDs))
+			for _, pageIDAsInt := range options.PageIDs {
+				pageIDs = append(pageIDs, strconv.Itoa(pageIDAsInt))
+			}
+
+			query.Add("id", strings.Join(pageIDs, ","))
+		}
+
+		if len(options.SpaceIDs) > 0 {
+
+			var spaceIDs = make([]string, 0, len(options.SpaceIDs))
+			for _, spaceIDAsInt := range options.SpaceIDs {
+				spaceIDs = append(spaceIDs, strconv.Itoa(spaceIDAsInt))
+			}
+
+			query.Add("space-id", strings.Join(spaceIDs, ","))
+		}
+	}
+
+	endpoint := fmt.Sprintf("wiki/api/v2/pages?%v", query.Encode())
+
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	chunk := new(model.PageChunkScheme)
+	response, err := i.c.Call(request, chunk)
+	if err != nil {
+		return nil, response, err
+	}
+
+	return chunk, response, nil
+}
+
 func (i *internalPageImpl) Get(ctx context.Context, pageID int, format string, draft bool, version int) (*model.PageScheme, *model.ResponseScheme, error) {
 
 	if pageID == 0 {
@@ -154,48 +208,7 @@ func (i *internalPageImpl) Get(ctx context.Context, pageID int, format string, d
 }
 
 func (i *internalPageImpl) Bulk(ctx context.Context, cursor string, limit int) (*model.PageChunkScheme, *model.ResponseScheme, error) {
-	return i.BulkFiltered(ctx, "", "", cursor, limit)
-}
-
-func (i *internalPageImpl) BulkFiltered(ctx context.Context, status, format, cursor string, limit int, pageIDs ...int) (*model.PageChunkScheme, *model.ResponseScheme, error) {
-
-	query := url.Values{}
-	query.Add("limit", strconv.Itoa(limit))
-
-	if status != "" {
-		query.Add("status", status)
-	}
-
-	if format != "" {
-		query.Add("body-format", format)
-	}
-
-	if cursor != "" {
-		query.Add("cursor", cursor)
-	}
-
-	if len(pageIDs) > 0 {
-		ids := make([]string, 0, len(pageIDs))
-		for _, id := range pageIDs {
-			ids = append(ids, strconv.Itoa(id))
-		}
-		query.Add("id", strings.Join(ids, ","))
-	}
-
-	endpoint := fmt.Sprintf("wiki/api/v2/pages?%v", query.Encode())
-
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	chunk := new(model.PageChunkScheme)
-	response, err := i.c.Call(request, chunk)
-	if err != nil {
-		return nil, response, err
-	}
-
-	return chunk, response, nil
+	return i.Gets(ctx, nil, cursor, limit)
 }
 
 func (i *internalPageImpl) GetsByLabel(ctx context.Context, labelID int, sort, cursor string, limit int) (*model.PageChunkScheme, *model.ResponseScheme, error) {

@@ -83,8 +83,9 @@ type CustomerRequestReporterScheme struct {
 }
 
 type CustomerRequestRequestFieldValueScheme struct {
-	FieldID string `json:"fieldId,omitempty"`
-	Label   string `json:"label,omitempty"`
+	FieldID string      `json:"fieldId,omitempty"`
+	Label   string      `json:"label,omitempty"`
+	Value   interface{} `json:"value,omitempty"`
 }
 
 type CustomerRequestCurrentStatusScheme struct {

@@ -9,7 +9,7 @@ import (
 	"net/http"
 )
 
-func NewBoardBacklogService(client service.Client, version string) *BoardBacklogService {
+func NewBoardBacklogService(client service.Connector, version string) *BoardBacklogService {
 
 	return &BoardBacklogService{
 		internalClient: &internalBoardBacklogImpl{c: client, version: version},
@@ -49,29 +49,22 @@ func (b *BoardBacklogService) MoveTo(ctx context.Context, boardID int, payload *
 }
 
 type internalBoardBacklogImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
 func (i *internalBoardBacklogImpl) Move(ctx context.Context, issues []string) (*model.ResponseScheme, error) {
 
-	payload := struct {
-		Issues []string `json:"issues"`
-	}{Issues: issues}
+	payload := map[string]interface{}{"issues": issues}
 
-	reader, err := i.c.TransformStructToReader(&payload)
+	url := fmt.Sprintf("rest/agile/%v/backlog/issue", i.version)
+
+	req, err := i.c.NewRequest(ctx, http.MethodPost, url, "", payload)
 	if err != nil {
 		return nil, err
 	}
 
-	endpoint := fmt.Sprintf("rest/agile/%v/backlog/issue", i.version)
-
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
-	if err != nil {
-		return nil, err
-	}
-
-	return i.c.Call(request, nil)
+	return i.c.Call(req, nil)
 }
 
 func (i *internalBoardBacklogImpl) MoveTo(ctx context.Context, boardID int, payload *model.BoardBacklogPayloadScheme) (*model.ResponseScheme, error) {
@@ -80,17 +73,12 @@ func (i *internalBoardBacklogImpl) MoveTo(ctx context.Context, boardID int, payl
 		return nil, model.ErrNoBoardIDError
 	}
 
-	reader, err := i.c.TransformStructToReader(payload)
+	url := fmt.Sprintf("rest/agile/%v/backlog/%v/issue", i.version, boardID)
+
+	req, err := i.c.NewRequest(ctx, http.MethodPost, url, "", payload)
 	if err != nil {
 		return nil, err
 	}
 
-	endpoint := fmt.Sprintf("rest/agile/%v/backlog/%v/issue", i.version, boardID)
-
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
-	if err != nil {
-		return nil, err
-	}
-
-	return i.c.Call(request, nil)
+	return i.c.Call(req, nil)
 }

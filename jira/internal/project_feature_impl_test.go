@@ -1,7 +1,6 @@
 package internal
 
 import (
-	"bytes"
 	"context"
 	"errors"
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
@@ -14,12 +13,10 @@ import (
 
 func Test_internalProjectFeatureImpl_Set(t *testing.T) {
 
-	payloadMocked := &struct {
-		State string "json:\"state,omitempty\""
-	}{State: "ENABLED"}
+	payloadMocked := map[string]interface{}{"state": "ENABLED"}
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -47,17 +44,13 @@ func Test_internalProjectFeatureImpl_Set(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/3/project/DUMMY/features/jsw.classic.roadmap",
-					bytes.NewReader([]byte{})).
+					"", payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -82,17 +75,13 @@ func Test_internalProjectFeatureImpl_Set(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/2/project/DUMMY/features/jsw.classic.roadmap",
-					bytes.NewReader([]byte{})).
+					"", payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -128,6 +117,18 @@ func Test_internalProjectFeatureImpl_Set(t *testing.T) {
 		},
 
 		{
+			name:   "when the project feature state is not provided",
+			fields: fields{version: "3"},
+			args: args{
+				ctx:            context.TODO(),
+				projectKeyOrId: "DUMMY",
+				featureKey:     "jsw.classic.roadmap",
+			},
+			wantErr: true,
+			Err:     model.ErrNoProjectFeatureStateError,
+		},
+
+		{
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
@@ -138,17 +139,13 @@ func Test_internalProjectFeatureImpl_Set(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/3/project/DUMMY/features/jsw.classic.roadmap",
-					bytes.NewReader([]byte{})).
+					"", payloadMocked).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -193,7 +190,7 @@ func Test_internalProjectFeatureImpl_Set(t *testing.T) {
 func Test_internalProjectFeatureImpl_Gets(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -219,13 +216,13 @@ func Test_internalProjectFeatureImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/project/DUMMY/features",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -248,13 +245,13 @@ func Test_internalProjectFeatureImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/project/DUMMY/features",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -287,13 +284,13 @@ func Test_internalProjectFeatureImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/project/DUMMY/features",
-					nil).
+					"", nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -337,7 +334,7 @@ func Test_internalProjectFeatureImpl_Gets(t *testing.T) {
 func Test_NewProjectFeatureService(t *testing.T) {
 
 	type args struct {
-		client  service.Client
+		client  service.Connector
 		version string
 	}
 

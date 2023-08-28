@@ -12,7 +12,7 @@ import (
 	"strings"
 )
 
-func NewChildrenDescandantsService(client service.Client) *ChildrenDescandantsService {
+func NewChildrenDescandantsService(client service.Connector) *ChildrenDescandantsService {
 
 	return &ChildrenDescandantsService{
 		internalClient: &internalChildrenDescandantsImpl{c: client},
@@ -44,9 +44,30 @@ func (c *ChildrenDescandantsService) Children(ctx context.Context, contentID str
 	return c.internalClient.Children(ctx, contentID, expand, parentVersion)
 }
 
+// Move moves a page from its current location in the hierarchy to another.
+//
+// Position describes where in the hierarchy the page should be moved to in
+// relationship to targetID.
+//
+// before: page will be a sibling of target but show up just before target in
+// the list of children
+//
+// after: page will be a sibling of target but show up just after target in the
+// list of children
+//
+// append: page will be a child of the target and be appended to targets list of
+// children
+//
+// PUT /wiki/rest/api/content/{pageId}/move/{position}/{targetId}
+//
+// https://docs.go-atlassian.io/confluence-cloud/content/children-descendants#move
+func (c *ChildrenDescandantsService) Move(ctx context.Context, pageID string, position string, targetID string) (*model.ContentMoveScheme, *model.ResponseScheme, error) {
+	return c.internalClient.Move(ctx, pageID, position, targetID)
+}
+
 // ChildrenByType returns all children of a given type, for a piece of content.
 //
-// A piece of content has different types of child content
+// # A piece of content has different types of child content
 //
 // GET /wiki/rest/api/content/{id}/child/{type}
 //
@@ -122,7 +143,7 @@ func (c *ChildrenDescandantsService) CopyPage(ctx context.Context, contentID str
 }
 
 type internalChildrenDescandantsImpl struct {
-	c service.Client
+	c service.Connector
 }
 
 func (i *internalChildrenDescandantsImpl) Children(ctx context.Context, contentID string, expand []string, parentVersion int) (*model.ContentChildrenScheme, *model.ResponseScheme, error) {
@@ -148,7 +169,7 @@ func (i *internalChildrenDescandantsImpl) Children(ctx context.Context, contentI
 		endpoint.WriteString(fmt.Sprintf("?%v", query.Encode()))
 	}
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -160,6 +181,42 @@ func (i *internalChildrenDescandantsImpl) Children(ctx context.Context, contentI
 	}
 
 	return children, response, nil
+}
+
+func (i *internalChildrenDescandantsImpl) Move(ctx context.Context, pageID string, position string, targetID string) (*model.ContentMoveScheme, *model.ResponseScheme, error) {
+
+	if pageID == "" {
+		return nil, nil, model.ErrNoPageIDError
+	}
+
+	if position == "" {
+		return nil, nil, model.ErrNoPositionError
+	}
+
+	if targetID == "" {
+		return nil, nil, model.ErrNoTargetIDError
+	}
+
+	_, validPosition := model.ValidPositions[position]
+	if !validPosition {
+		return nil, nil, model.ErrInvalidPositionError
+	}
+
+	var endpoint strings.Builder
+	endpoint.WriteString(fmt.Sprintf("wiki/rest/api/content/%v/move/%s/%v", pageID, position, targetID))
+
+	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint.String(), "", nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	movement := new(model.ContentMoveScheme)
+	response, err := i.c.Call(request, movement)
+	if err != nil {
+		return nil, response, err
+	}
+
+	return movement, response, nil
 }
 
 func (i *internalChildrenDescandantsImpl) ChildrenByType(ctx context.Context, contentID, contentType string, parentVersion int, expand []string, startAt, maxResults int) (*model.ContentPageScheme, *model.ResponseScheme, error) {
@@ -186,7 +243,7 @@ func (i *internalChildrenDescandantsImpl) ChildrenByType(ctx context.Context, co
 
 	endpoint := fmt.Sprintf("wiki/rest/api/content/%v/child/%v?%v", contentID, contentType, query.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -219,7 +276,7 @@ func (i *internalChildrenDescandantsImpl) Descendants(ctx context.Context, conte
 		endpoint.WriteString(fmt.Sprintf("?%v", query.Encode()))
 	}
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -257,7 +314,7 @@ func (i *internalChildrenDescandantsImpl) DescendantsByType(ctx context.Context,
 
 	endpoint := fmt.Sprintf("wiki/rest/api/content/%v/descendant/%v?%v", contentID, contentType, query.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -277,14 +334,9 @@ func (i *internalChildrenDescandantsImpl) CopyHierarchy(ctx context.Context, con
 		return nil, nil, model.ErrNoContentIDError
 	}
 
-	reader, err := i.c.TransformStructToReader(options)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	endpoint := fmt.Sprintf("wiki/rest/api/content/%v/pagehierarchy/copy", contentID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", options)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -314,12 +366,7 @@ func (i *internalChildrenDescandantsImpl) CopyPage(ctx context.Context, contentI
 		endpoint.WriteString(fmt.Sprintf("?%v", query.Encode()))
 	}
 
-	reader, err := i.c.TransformStructToReader(options)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint.String(), reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint.String(), "", options)
 	if err != nil {
 		return nil, nil, err
 	}

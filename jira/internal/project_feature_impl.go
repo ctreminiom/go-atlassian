@@ -9,7 +9,7 @@ import (
 	"net/http"
 )
 
-func NewProjectFeatureService(client service.Client, version string) (*ProjectFeatureService, error) {
+func NewProjectFeatureService(client service.Connector, version string) (*ProjectFeatureService, error) {
 
 	if version == "" {
 		return nil, model.ErrNoVersionProvided
@@ -43,7 +43,7 @@ func (p *ProjectFeatureService) Set(ctx context.Context, projectKeyOrId, feature
 }
 
 type internalProjectFeatureImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -55,7 +55,7 @@ func (i *internalProjectFeatureImpl) Gets(ctx context.Context, projectKeyOrId st
 
 	endpoint := fmt.Sprintf("rest/api/%v/project/%v/features", i.version, projectKeyOrId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -79,20 +79,15 @@ func (i *internalProjectFeatureImpl) Set(ctx context.Context, projectKeyOrId, fe
 		return nil, nil, model.ErrNoProjectFeatureKeyError
 	}
 
-	payload := struct {
-		State string `json:"state,omitempty"`
-	}{
-		State: state,
+	if state == "" {
+		return nil, nil, model.ErrNoProjectFeatureStateError
 	}
 
-	reader, err := i.c.TransformStructToReader(&payload)
-	if err != nil {
-		return nil, nil, err
-	}
+	payload := map[string]interface{}{"state": state}
 
 	endpoint := fmt.Sprintf("rest/api/%v/project/%v/features/%v", i.version, projectKeyOrId, featureKey)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}

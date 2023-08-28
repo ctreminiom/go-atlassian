@@ -9,7 +9,7 @@ import (
 	"net/http"
 )
 
-func NewApplicationRoleService(client service.Client, version string) (*ApplicationRoleService, error) {
+func NewApplicationRoleService(client service.Connector, version string) (*ApplicationRoleService, error) {
 
 	if version == "" {
 		return nil, model.ErrNoVersionProvided
@@ -45,7 +45,7 @@ func (a *ApplicationRoleService) Get(ctx context.Context, key string) (*model.Ap
 }
 
 type internalApplicationRoleImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -53,7 +53,7 @@ func (i *internalApplicationRoleImpl) Gets(ctx context.Context) ([]*model.Applic
 
 	endpoint := fmt.Sprintf("rest/api/%v/applicationrole", i.version)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -75,7 +75,7 @@ func (i *internalApplicationRoleImpl) Get(ctx context.Context, key string) (*mod
 
 	endpoint := fmt.Sprintf("rest/api/%v/applicationrole/%v", i.version, key)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}

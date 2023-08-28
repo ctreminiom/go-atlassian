@@ -9,7 +9,7 @@ import (
 	"net/http"
 )
 
-func NewOrganizationDirectoryService(client service.Client) *OrganizationDirectoryService {
+func NewOrganizationDirectoryService(client service.Connector) *OrganizationDirectoryService {
 	return &OrganizationDirectoryService{internalClient: &internalOrganizationDirectoryServiceImpl{c: client}}
 }
 
@@ -74,7 +74,7 @@ func (o *OrganizationDirectoryService) Restore(ctx context.Context, organization
 }
 
 type internalOrganizationDirectoryServiceImpl struct {
-	c service.Client
+	c service.Connector
 }
 
 func (i *internalOrganizationDirectoryServiceImpl) Activity(ctx context.Context, organizationID, accountID string) (*model.UserProductAccessScheme, *model.ResponseScheme, error) {
@@ -89,18 +89,18 @@ func (i *internalOrganizationDirectoryServiceImpl) Activity(ctx context.Context,
 
 	endpoint := fmt.Sprintf("admin/v1/orgs/%v/directory/users/%v/last-active-dates", organizationID, accountID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	accessInfo := new(model.UserProductAccessScheme)
-	response, err := i.c.Call(request, accessInfo)
+	activity := new(model.UserProductAccessScheme)
+	res, err := i.c.Call(req, activity)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return accessInfo, response, nil
+	return activity, res, nil
 }
 
 func (i *internalOrganizationDirectoryServiceImpl) Remove(ctx context.Context, organizationID, accountID string) (*model.ResponseScheme, error) {
@@ -115,12 +115,12 @@ func (i *internalOrganizationDirectoryServiceImpl) Remove(ctx context.Context, o
 
 	endpoint := fmt.Sprintf("admin/v1/orgs/%v/directory/users/%v", organizationID, accountID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.c.Call(request, nil)
+	return i.c.Call(req, nil)
 }
 
 func (i *internalOrganizationDirectoryServiceImpl) Suspend(ctx context.Context, organizationID, accountID string) (*model.GenericActionSuccessScheme, *model.ResponseScheme, error) {
@@ -135,18 +135,18 @@ func (i *internalOrganizationDirectoryServiceImpl) Suspend(ctx context.Context, 
 
 	endpoint := fmt.Sprintf("admin/v1/orgs/%v/directory/users/%v/suspend-access", organizationID, accountID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	message := new(model.GenericActionSuccessScheme)
-	response, err := i.c.Call(request, message)
+	res, err := i.c.Call(req, message)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return message, response, nil
+	return message, res, nil
 }
 
 func (i *internalOrganizationDirectoryServiceImpl) Restore(ctx context.Context, organizationID, accountID string) (*model.GenericActionSuccessScheme, *model.ResponseScheme, error) {
@@ -161,16 +161,16 @@ func (i *internalOrganizationDirectoryServiceImpl) Restore(ctx context.Context, 
 
 	endpoint := fmt.Sprintf("admin/v1/orgs/%v/directory/users/%v/restore-access", organizationID, accountID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	message := new(model.GenericActionSuccessScheme)
-	response, err := i.c.Call(request, message)
+	res, err := i.c.Call(req, message)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return message, response, nil
+	return message, res, nil
 }

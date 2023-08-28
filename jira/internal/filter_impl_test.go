@@ -1,7 +1,6 @@
 package internal
 
 import (
-	"bytes"
 	"context"
 	"errors"
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
@@ -15,8 +14,14 @@ import (
 
 func TestFilterService_Create(t *testing.T) {
 
+	payloadMocked := &model.FilterPayloadScheme{
+		Name:        "All Open Bugs",
+		Description: "Lists all open bugs",
+		JQL:         "type = Bug and resolution is empty",
+	}
+
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 		share   jira.FilterSharingConnector
 	}
@@ -39,21 +44,18 @@ func TestFilterService_Create(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:     context.Background(),
-				payload: &model.FilterPayloadScheme{},
+				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&model.FilterPayloadScheme{}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/filter",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -71,21 +73,18 @@ func TestFilterService_Create(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:     context.Background(),
-				payload: &model.FilterPayloadScheme{},
+				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&model.FilterPayloadScheme{}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/3/filter",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -99,47 +98,22 @@ func TestFilterService_Create(t *testing.T) {
 		},
 
 		{
-			name:   "when the payload is not provided",
-			fields: fields{version: "2"},
-			args: args{
-				ctx:     context.Background(),
-				payload: nil,
-			},
-			on: func(fields *fields) {
-
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					(*model.FilterPayloadScheme)(nil)).
-					Return(nil, model.ErrNilPayloadError)
-
-				fields.c = client
-
-			},
-			wantErr: true,
-			Err:     model.ErrNilPayloadError,
-		},
-
-		{
 			name:   "when the http request cannot be created",
 			fields: fields{version: "2"},
 			args: args{
 				ctx:     context.Background(),
-				payload: &model.FilterPayloadScheme{},
+				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&model.FilterPayloadScheme{}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/filter",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -184,7 +158,7 @@ func TestFilterService_Create(t *testing.T) {
 func TestFilterService_Favorite(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 		share   jira.FilterSharingConnector
 	}
@@ -209,12 +183,13 @@ func TestFilterService_Favorite(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/filter/favourite",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -236,12 +211,13 @@ func TestFilterService_Favorite(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/filter/favourite",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -263,12 +239,14 @@ func TestFilterService_Favorite(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/filter/favourite",
+					"",
+
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -314,7 +292,7 @@ func TestFilterService_Favorite(t *testing.T) {
 func TestFilterService_My(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 		share   jira.FilterSharingConnector
 	}
@@ -343,12 +321,13 @@ func TestFilterService_My(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/filter/my?expand=subscriptions&includeFavourites=true",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -372,12 +351,13 @@ func TestFilterService_My(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/filter/my?expand=subscriptions&includeFavourites=true",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -401,12 +381,13 @@ func TestFilterService_My(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/filter/my?expand=subscriptions&includeFavourites=true",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -452,7 +433,7 @@ func TestFilterService_My(t *testing.T) {
 func TestFilterService_Search(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 		share   jira.FilterSharingConnector
 	}
@@ -491,12 +472,13 @@ func TestFilterService_Search(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/filter/search?accountId=owner.accountId&expand=description%2CviewUrl&filterName=filterName&groupname=sharePermissions.group.groupId&id=10000&id=10001&maxResults=100&orderBy=description&projectId=100&startAt=50",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -529,12 +511,13 @@ func TestFilterService_Search(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/filter/search?accountId=owner.accountId&expand=description%2CviewUrl&filterName=filterName&groupname=sharePermissions.group.groupId&id=10000&id=10001&maxResults=100&orderBy=description&projectId=100&startAt=50",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -567,12 +550,13 @@ func TestFilterService_Search(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/filter/search?accountId=owner.accountId&expand=description%2CviewUrl&filterName=filterName&groupname=sharePermissions.group.groupId&id=10000&id=10001&maxResults=100&orderBy=description&projectId=100&startAt=50",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -619,7 +603,7 @@ func TestFilterService_Search(t *testing.T) {
 func TestFilterService_Get(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 		share   jira.FilterSharingConnector
 	}
@@ -639,6 +623,15 @@ func TestFilterService_Get(t *testing.T) {
 		Err     error
 	}{
 		{
+			name:   "when filter id is not provided",
+			fields: fields{version: "2"},
+			args: args{
+				ctx: context.Background(),
+			},
+			wantErr: true,
+			Err:     model.ErrNoFilterIDError,
+		},
+		{
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
@@ -648,12 +641,13 @@ func TestFilterService_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/filter/10001?expand=viewurl",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -677,12 +671,13 @@ func TestFilterService_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/filter/10001?expand=viewurl",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -706,13 +701,14 @@ func TestFilterService_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/filter/10001?expand=viewurl",
-					nil).
+
+					"", nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -756,8 +752,12 @@ func TestFilterService_Get(t *testing.T) {
 
 func TestFilterService_Update(t *testing.T) {
 
+	payloadMocked := &model.FilterPayloadScheme{
+		Name: "Filter updated!",
+	}
+
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 		share   jira.FilterSharingConnector
 	}
@@ -777,26 +777,32 @@ func TestFilterService_Update(t *testing.T) {
 		Err     error
 	}{
 		{
+			name:   "when filter id is not provided",
+			fields: fields{version: "2"},
+			args: args{
+				ctx: context.Background(),
+			},
+			wantErr: true,
+			Err:     model.ErrNoFilterIDError,
+		},
+		{
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
 				ctx:      context.Background(),
 				filterId: 10001,
-				payload:  &model.FilterPayloadScheme{},
+				payload:  payloadMocked,
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&model.FilterPayloadScheme{}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/2/filter/10001",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -815,21 +821,18 @@ func TestFilterService_Update(t *testing.T) {
 			args: args{
 				ctx:      context.Background(),
 				filterId: 10001,
-				payload:  &model.FilterPayloadScheme{},
+				payload:  payloadMocked,
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&model.FilterPayloadScheme{}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/3/filter/10001",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -842,49 +845,23 @@ func TestFilterService_Update(t *testing.T) {
 		},
 
 		{
-			name:   "when the payload is not provided",
-			fields: fields{version: "2"},
-			args: args{
-				ctx:      context.Background(),
-				filterId: 10001,
-				payload:  nil,
-			},
-			on: func(fields *fields) {
-
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					(*model.FilterPayloadScheme)(nil)).
-					Return(nil, model.ErrNilPayloadError)
-
-				fields.c = client
-
-			},
-			wantErr: true,
-			Err:     model.ErrNilPayloadError,
-		},
-
-		{
 			name:   "when the http request cannot be created",
 			fields: fields{version: "2"},
 			args: args{
 				ctx:      context.Background(),
 				filterId: 10001,
-				payload:  &model.FilterPayloadScheme{},
+				payload:  payloadMocked,
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&model.FilterPayloadScheme{}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/2/filter/10001",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -928,7 +905,7 @@ func TestFilterService_Update(t *testing.T) {
 func TestFilterService_Delete(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 		share   jira.FilterSharingConnector
 	}
@@ -946,6 +923,16 @@ func TestFilterService_Delete(t *testing.T) {
 		wantErr bool
 		Err     error
 	}{
+
+		{
+			name:   "when filter id is not provided",
+			fields: fields{version: "2"},
+			args: args{
+				ctx: context.Background(),
+			},
+			wantErr: true,
+			Err:     model.ErrNoFilterIDError,
+		},
 		{
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
@@ -955,12 +942,13 @@ func TestFilterService_Delete(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/api/2/filter/10001",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -983,12 +971,13 @@ func TestFilterService_Delete(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/api/3/filter/10001",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -1011,12 +1000,13 @@ func TestFilterService_Delete(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/api/2/filter/10001",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -1061,7 +1051,7 @@ func TestFilterService_Delete(t *testing.T) {
 func TestFilterService_Change(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 		share   jira.FilterSharingConnector
 	}
@@ -1090,19 +1080,14 @@ func TestFilterService_Change(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&struct {
-						AccountID string "json:\"accountId\""
-					}{AccountID: "account-id-sample"}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/2/filter/10001/owner",
-					bytes.NewReader([]byte{})).
+					"",
+					map[string]interface{}{"accountId": "account-id-sample"}).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -1125,19 +1110,14 @@ func TestFilterService_Change(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&struct {
-						AccountID string "json:\"accountId\""
-					}{AccountID: "account-id-sample"}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/3/filter/10001/owner",
-					bytes.NewReader([]byte{})).
+					"",
+					map[string]interface{}{"accountId": "account-id-sample"}).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -1151,6 +1131,28 @@ func TestFilterService_Change(t *testing.T) {
 		},
 
 		{
+			name:   "when filter id is not provided",
+			fields: fields{version: "2"},
+			args: args{
+				ctx: context.Background(),
+			},
+			wantErr: true,
+			Err:     model.ErrNoFilterIDError,
+		},
+
+		{
+			name:   "when accountID is not provided",
+			fields: fields{version: "2"},
+			args: args{
+				ctx:       context.Background(),
+				filterId:  10002,
+				accountId: "",
+			},
+			wantErr: true,
+			Err:     model.ErrNoAccountIDError,
+		},
+
+		{
 			name:   "when the http request cannot be created",
 			fields: fields{version: "2"},
 			args: args{
@@ -1160,19 +1162,14 @@ func TestFilterService_Change(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&struct {
-						AccountID string "json:\"accountId\""
-					}{AccountID: "account-id-sample"}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/2/filter/10001/owner",
-					bytes.NewReader([]byte{})).
+					"",
+					map[string]interface{}{"accountId": "account-id-sample"}).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -1216,7 +1213,7 @@ func TestFilterService_Change(t *testing.T) {
 func Test_NewFilterService(t *testing.T) {
 
 	type args struct {
-		client  service.Client
+		client  service.Connector
 		version string
 	}
 

@@ -9,7 +9,7 @@ import (
 	"net/http"
 )
 
-func NewProjectComponentService(client service.Client, version string) (*ProjectComponentService, error) {
+func NewProjectComponentService(client service.Connector, version string) (*ProjectComponentService, error) {
 
 	if version == "" {
 		return nil, model.ErrNoVersionProvided
@@ -62,7 +62,7 @@ func (p *ProjectComponentService) Delete(ctx context.Context, componentId string
 
 // Update updates a component.
 //
-// Any fields included in the request are overwritten
+// # Any fields included in the request are overwritten
 //
 // PUT /rest/api/{2-3}/component/{id}
 //
@@ -81,20 +81,15 @@ func (p *ProjectComponentService) Get(ctx context.Context, componentId string) (
 }
 
 type internalProjectComponentImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
 func (i *internalProjectComponentImpl) Create(ctx context.Context, payload *model.ComponentPayloadScheme) (*model.ComponentScheme, *model.ResponseScheme, error) {
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	endpoint := fmt.Sprintf("rest/api/%v/component", i.version)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -116,7 +111,7 @@ func (i *internalProjectComponentImpl) Gets(ctx context.Context, projectIdOrKey 
 
 	endpoint := fmt.Sprintf("rest/api/%v/project/%v/components", i.version, projectIdOrKey)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -138,7 +133,7 @@ func (i *internalProjectComponentImpl) Count(ctx context.Context, componentId st
 
 	endpoint := fmt.Sprintf("rest/api/%v/component/%v/relatedIssueCounts", i.version, componentId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -160,7 +155,7 @@ func (i *internalProjectComponentImpl) Delete(ctx context.Context, componentId s
 
 	endpoint := fmt.Sprintf("rest/api/%v/component/%v", i.version, componentId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -174,14 +169,9 @@ func (i *internalProjectComponentImpl) Update(ctx context.Context, componentId s
 		return nil, nil, model.ErrNoComponentIDError
 	}
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	endpoint := fmt.Sprintf("rest/api/%v/component/%v", i.version, componentId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -203,7 +193,7 @@ func (i *internalProjectComponentImpl) Get(ctx context.Context, componentId stri
 
 	endpoint := fmt.Sprintf("rest/api/%v/component/%v", i.version, componentId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}

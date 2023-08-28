@@ -11,7 +11,7 @@ import (
 	"strings"
 )
 
-func NewProjectPermissionSchemeService(client service.Client, version string) (*ProjectPermissionSchemeService, error) {
+func NewProjectPermissionSchemeService(client service.Connector, version string) (*ProjectPermissionSchemeService, error) {
 
 	if version == "" {
 		return nil, model.ErrNoVersionProvided
@@ -54,7 +54,7 @@ func (p *ProjectPermissionSchemeService) SecurityLevels(ctx context.Context, pro
 }
 
 type internalProjectPermissionSchemeImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -74,7 +74,7 @@ func (i *internalProjectPermissionSchemeImpl) Get(ctx context.Context, projectKe
 		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -94,20 +94,9 @@ func (i *internalProjectPermissionSchemeImpl) Assign(ctx context.Context, projec
 		return nil, nil, model.ErrNoProjectIDOrKeyError
 	}
 
-	payload := struct {
-		ID int `json:"id"`
-	}{
-		ID: permissionSchemeId,
-	}
-
-	reader, err := i.c.TransformStructToReader(&payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	endpoint := fmt.Sprintf("rest/api/%v/project/%v/permissionscheme", i.version, projectKeyOrId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", map[string]interface{}{"id": permissionSchemeId})
 	if err != nil {
 		return nil, nil, err
 	}
@@ -129,7 +118,7 @@ func (i *internalProjectPermissionSchemeImpl) SecurityLevels(ctx context.Context
 
 	endpoint := fmt.Sprintf("rest/api/%v/project/%v/securitylevel", i.version, projectKeyOrId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}

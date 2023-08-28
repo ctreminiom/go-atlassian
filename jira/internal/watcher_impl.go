@@ -10,7 +10,7 @@ import (
 	"net/url"
 )
 
-func NewWatcherService(client service.Client, version string) (*WatcherService, error) {
+func NewWatcherService(client service.Connector, version string) (*WatcherService, error) {
 
 	if version == "" {
 		return nil, model.ErrNoVersionProvided
@@ -55,7 +55,7 @@ func (w *WatcherService) Delete(ctx context.Context, issueKeyOrId, accountId str
 }
 
 type internalWatcherImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -67,7 +67,7 @@ func (i *internalWatcherImpl) Gets(ctx context.Context, issueKeyOrId string) (*m
 
 	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/watchers", i.version, issueKeyOrId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -89,7 +89,7 @@ func (i *internalWatcherImpl) Add(ctx context.Context, issueKeyOrId string) (*mo
 
 	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/watchers", i.version, issueKeyOrId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -112,7 +112,7 @@ func (i *internalWatcherImpl) Delete(ctx context.Context, issueKeyOrId, accountI
 
 	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/watchers?%v", i.version, issueKeyOrId, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}

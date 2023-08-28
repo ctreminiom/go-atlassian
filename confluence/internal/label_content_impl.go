@@ -12,7 +12,7 @@ import (
 	"strings"
 )
 
-func NewContentLabelService(client service.Client) *ContentLabelService {
+func NewContentLabelService(client service.Connector) *ContentLabelService {
 
 	return &ContentLabelService{
 		internalClient: &internalContentLabelImpl{c: client},
@@ -51,7 +51,7 @@ func (c *ContentLabelService) Remove(ctx context.Context, contentID, labelName s
 }
 
 type internalContentLabelImpl struct {
-	c service.Client
+	c service.Connector
 }
 
 func (i *internalContentLabelImpl) Gets(ctx context.Context, contentID, prefix string, startAt, maxResults int) (*model.ContentLabelPageScheme, *model.ResponseScheme, error) {
@@ -70,7 +70,7 @@ func (i *internalContentLabelImpl) Gets(ctx context.Context, contentID, prefix s
 
 	endpoint := fmt.Sprintf("wiki/rest/api/content/%v/label?%v", contentID, query.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -90,11 +90,6 @@ func (i *internalContentLabelImpl) Add(ctx context.Context, contentID string, pa
 		return nil, nil, model.ErrNoContentIDError
 	}
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	var endpoint strings.Builder
 	endpoint.WriteString(fmt.Sprintf("wiki/rest/api/content/%v/label", contentID))
 
@@ -105,7 +100,7 @@ func (i *internalContentLabelImpl) Add(ctx context.Context, contentID string, pa
 		endpoint.WriteString(fmt.Sprintf("?%v", query.Encode()))
 	}
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint.String(), reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint.String(), "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -131,7 +126,7 @@ func (i *internalContentLabelImpl) Remove(ctx context.Context, contentID, labelN
 
 	endpoint := fmt.Sprintf("wiki/rest/api/content/%v/label/%v", contentID, labelName)
 
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}

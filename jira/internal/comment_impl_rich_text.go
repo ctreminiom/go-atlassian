@@ -47,29 +47,29 @@ func (c *CommentRichTextService) Get(ctx context.Context, issueKeyOrId, commentI
 //
 // POST /rest/api/{2-3}/issue/{issueIdOrKey}/comment
 //
-//https://docs.go-atlassian.io/jira-software-cloud/issues/comments#add-comment
+// https://docs.go-atlassian.io/jira-software-cloud/issues/comments#add-comment
 func (c *CommentRichTextService) Add(ctx context.Context, issueKeyOrId string, payload *model.CommentPayloadSchemeV2, expand []string) (*model.IssueCommentSchemeV2, *model.ResponseScheme, error) {
 	return c.internalClient.Add(ctx, issueKeyOrId, payload, expand)
 }
 
 type internalRichTextCommentImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
-func (i *internalRichTextCommentImpl) Delete(ctx context.Context, issueKeyOrId, commentId string) (*model.ResponseScheme, error) {
+func (i *internalRichTextCommentImpl) Delete(ctx context.Context, issueKeyOrID, commentID string) (*model.ResponseScheme, error) {
 
-	if issueKeyOrId == "" {
+	if issueKeyOrID == "" {
 		return nil, model.ErrNoIssueKeyOrIDError
 	}
 
-	if commentId == "" {
+	if commentID == "" {
 		return nil, model.ErrNoCommentIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/comment/%v", i.version, issueKeyOrId, commentId)
+	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/comment/%v", i.version, issueKeyOrID, commentID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -77,9 +77,9 @@ func (i *internalRichTextCommentImpl) Delete(ctx context.Context, issueKeyOrId, 
 	return i.c.Call(request, nil)
 }
 
-func (i *internalRichTextCommentImpl) Gets(ctx context.Context, issueKeyOrId, orderBy string, expand []string, startAt, maxResults int) (*model.IssueCommentPageSchemeV2, *model.ResponseScheme, error) {
+func (i *internalRichTextCommentImpl) Gets(ctx context.Context, issueKeyOrID, orderBy string, expand []string, startAt, maxResults int) (*model.IssueCommentPageSchemeV2, *model.ResponseScheme, error) {
 
-	if issueKeyOrId == "" {
+	if issueKeyOrID == "" {
 		return nil, nil, model.ErrNoIssueKeyOrIDError
 	}
 
@@ -95,9 +95,9 @@ func (i *internalRichTextCommentImpl) Gets(ctx context.Context, issueKeyOrId, or
 		params.Add("orderBy", orderBy)
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/comment?%v", i.version, issueKeyOrId, params.Encode())
+	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/comment?%v", i.version, issueKeyOrID, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -111,19 +111,19 @@ func (i *internalRichTextCommentImpl) Gets(ctx context.Context, issueKeyOrId, or
 	return comments, response, nil
 }
 
-func (i *internalRichTextCommentImpl) Get(ctx context.Context, issueKeyOrId, commentId string) (*model.IssueCommentSchemeV2, *model.ResponseScheme, error) {
+func (i *internalRichTextCommentImpl) Get(ctx context.Context, issueKeyOrID, commentID string) (*model.IssueCommentSchemeV2, *model.ResponseScheme, error) {
 
-	if issueKeyOrId == "" {
+	if issueKeyOrID == "" {
 		return nil, nil, model.ErrNoIssueKeyOrIDError
 	}
 
-	if commentId == "" {
+	if commentID == "" {
 		return nil, nil, model.ErrNoCommentIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/comment/%v", i.version, issueKeyOrId, commentId)
+	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/comment/%v", i.version, issueKeyOrID, commentID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -137,9 +137,9 @@ func (i *internalRichTextCommentImpl) Get(ctx context.Context, issueKeyOrId, com
 	return comment, response, nil
 }
 
-func (i *internalRichTextCommentImpl) Add(ctx context.Context, issueKeyOrId string, payload *model.CommentPayloadSchemeV2, expand []string) (*model.IssueCommentSchemeV2, *model.ResponseScheme, error) {
+func (i *internalRichTextCommentImpl) Add(ctx context.Context, issueKeyOrID string, payload *model.CommentPayloadSchemeV2, expand []string) (*model.IssueCommentSchemeV2, *model.ResponseScheme, error) {
 
-	if issueKeyOrId == "" {
+	if issueKeyOrID == "" {
 		return nil, nil, model.ErrNoIssueKeyOrIDError
 	}
 
@@ -149,18 +149,13 @@ func (i *internalRichTextCommentImpl) Add(ctx context.Context, issueKeyOrId stri
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("rest/api/%v/issue/%v/comment", i.version, issueKeyOrId))
+	endpoint.WriteString(fmt.Sprintf("rest/api/%v/issue/%v/comment", i.version, issueKeyOrID))
 
 	if params.Encode() != "" {
 		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint.String(), reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint.String(), "", payload)
 	if err != nil {
 		return nil, nil, err
 	}

@@ -14,7 +14,7 @@ import (
 	"strings"
 )
 
-func NewIssueAttachmentService(client service.Client, version string) (*IssueAttachmentService, error) {
+func NewIssueAttachmentService(client service.Connector, version string) (*IssueAttachmentService, error) {
 
 	if version == "" {
 		return nil, model.ErrNoVersionProvided
@@ -74,7 +74,7 @@ func (i *IssueAttachmentService) Human(ctx context.Context, attachmentId string)
 // POST /rest/api/{2-3}/issue/{issueIdOrKey}/attachments
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/attachments#add-attachment
-func (i *IssueAttachmentService) Add(ctx context.Context, issueKeyOrId, fileName string, file io.Reader) ([]*model.AttachmentScheme, *model.ResponseScheme, error) {
+func (i *IssueAttachmentService) Add(ctx context.Context, issueKeyOrId, fileName string, file io.Reader) ([]*model.IssueAttachmentScheme, *model.ResponseScheme, error) {
 	return i.internalClient.Add(ctx, issueKeyOrId, fileName, file)
 }
 
@@ -90,7 +90,7 @@ func (i *IssueAttachmentService) Download(ctx context.Context, attachmentID stri
 }
 
 type internalIssueAttachmentServiceImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -111,7 +111,7 @@ func (i *internalIssueAttachmentServiceImpl) Download(ctx context.Context, attac
 		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -123,7 +123,7 @@ func (i *internalIssueAttachmentServiceImpl) Settings(ctx context.Context) (*mod
 
 	endpoint := fmt.Sprintf("rest/api/%v/attachment/meta", i.version)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -145,7 +145,7 @@ func (i *internalIssueAttachmentServiceImpl) Metadata(ctx context.Context, attac
 
 	endpoint := fmt.Sprintf("rest/api/%v/attachment/%v", i.version, attachmentId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -167,7 +167,7 @@ func (i *internalIssueAttachmentServiceImpl) Delete(ctx context.Context, attachm
 
 	endpoint := fmt.Sprintf("rest/api/%v/attachment/%v", i.version, attachmentId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -183,7 +183,7 @@ func (i *internalIssueAttachmentServiceImpl) Human(ctx context.Context, attachme
 
 	endpoint := fmt.Sprintf("rest/api/%v/attachment/%v/expand/human", i.version, attachmentId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -197,7 +197,7 @@ func (i *internalIssueAttachmentServiceImpl) Human(ctx context.Context, attachme
 	return metadata, response, nil
 }
 
-func (i *internalIssueAttachmentServiceImpl) Add(ctx context.Context, issueKeyOrId, fileName string, file io.Reader) ([]*model.AttachmentScheme, *model.ResponseScheme, error) {
+func (i *internalIssueAttachmentServiceImpl) Add(ctx context.Context, issueKeyOrId, fileName string, file io.Reader) ([]*model.IssueAttachmentScheme, *model.ResponseScheme, error) {
 
 	if issueKeyOrId == "" {
 		return nil, nil, model.ErrNoIssueKeyOrIDError
@@ -228,12 +228,12 @@ func (i *internalIssueAttachmentServiceImpl) Add(ctx context.Context, issueKeyOr
 
 	writer.Close()
 
-	request, err := i.c.NewFormRequest(ctx, http.MethodPost, endpoint, writer.FormDataContentType(), reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, writer.FormDataContentType(), reader)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	var attachments []*model.AttachmentScheme
+	var attachments []*model.IssueAttachmentScheme
 	response, err := i.c.Call(request, attachments)
 	if err != nil {
 		return nil, response, err

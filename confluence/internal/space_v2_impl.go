@@ -40,7 +40,14 @@ func (s *SpaceV2Service) Get(ctx context.Context, spaceID int, descriptionFormat
 	return s.internalClient.Get(ctx, spaceID, descriptionFormat)
 }
 
-func NewSpaceV2Service(client service.Client) *SpaceV2Service {
+// Permissions returns space permissions for a specific space.
+//
+// GET /wiki/api/v2/spaces/{id}/permissions
+func (s *SpaceV2Service) Permissions(ctx context.Context, spaceID int, cursor string, limit int) (*model.SpacePermissionPageScheme, *model.ResponseScheme, error) {
+	return s.internalClient.Permissions(ctx, spaceID, cursor, limit)
+}
+
+func NewSpaceV2Service(client service.Connector) *SpaceV2Service {
 
 	return &SpaceV2Service{
 		internalClient: &internalSpaceV2Impl{c: client},
@@ -48,7 +55,36 @@ func NewSpaceV2Service(client service.Client) *SpaceV2Service {
 }
 
 type internalSpaceV2Impl struct {
-	c service.Client
+	c service.Connector
+}
+
+func (i *internalSpaceV2Impl) Permissions(ctx context.Context, spaceID int, cursor string, limit int) (*model.SpacePermissionPageScheme, *model.ResponseScheme, error) {
+
+	if spaceID == 0 {
+		return nil, nil, model.ErrNoSpaceIDError
+	}
+
+	query := url.Values{}
+	query.Add("limit", strconv.Itoa(limit))
+
+	if cursor != "" {
+		query.Add("cursor", cursor)
+	}
+
+	endpoint := fmt.Sprintf("wiki/api/v2/spaces/%v/permissions?%v", spaceID, query.Encode())
+
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	chunk := new(model.SpacePermissionPageScheme)
+	response, err := i.c.Call(request, chunk)
+	if err != nil {
+		return nil, response, err
+	}
+
+	return chunk, response, nil
 }
 
 func (i *internalSpaceV2Impl) Bulk(ctx context.Context, options *model.GetSpacesOptionSchemeV2, cursor string, limit int) (*model.SpaceChunkV2Scheme, *model.ResponseScheme, error) {
@@ -98,7 +134,7 @@ func (i *internalSpaceV2Impl) Bulk(ctx context.Context, options *model.GetSpaces
 
 	endpoint := fmt.Sprintf("wiki/api/v2/spaces?%v", query.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -128,7 +164,7 @@ func (i *internalSpaceV2Impl) Get(ctx context.Context, spaceID int, descriptionF
 		endpoint.WriteString(fmt.Sprintf("?%v", query.Encode()))
 	}
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
 		return nil, nil, err
 	}

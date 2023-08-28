@@ -12,7 +12,7 @@ import (
 	"strings"
 )
 
-func NewProjectVersionService(client service.Client, version string) (*ProjectVersionService, error) {
+func NewProjectVersionService(client service.Connector, version string) (*ProjectVersionService, error) {
 
 	if version == "" {
 		return nil, model.ErrNoVersionProvided
@@ -78,7 +78,7 @@ func (p *ProjectVersionService) Update(ctx context.Context, versionId string, pa
 
 // Merge merges two project versions.
 //
-// The merge is completed by deleting the version specified in id and replacing any occurrences of
+// # The merge is completed by deleting the version specified in id and replacing any occurrences of
 //
 // its ID in fixVersion with the version ID specified in moveIssuesTo.
 //
@@ -112,7 +112,7 @@ func (p *ProjectVersionService) UnresolvedIssueCount(ctx context.Context, versio
 }
 
 type internalProjectVersionImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -124,7 +124,7 @@ func (i *internalProjectVersionImpl) Gets(ctx context.Context, projectKeyOrId st
 
 	endpoint := fmt.Sprintf("rest/api/%v/project/%v/versions", i.version, projectKeyOrId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -169,7 +169,7 @@ func (i *internalProjectVersionImpl) Search(ctx context.Context, projectKeyOrId 
 
 	endpoint := fmt.Sprintf("rest/api/%v/project/%v/version?%v", i.version, projectKeyOrId, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -185,14 +185,9 @@ func (i *internalProjectVersionImpl) Search(ctx context.Context, projectKeyOrId 
 
 func (i *internalProjectVersionImpl) Create(ctx context.Context, payload *model.VersionPayloadScheme) (*model.VersionScheme, *model.ResponseScheme, error) {
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	endpoint := fmt.Sprintf("rest/api/%v/version", i.version)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -223,7 +218,7 @@ func (i *internalProjectVersionImpl) Get(ctx context.Context, versionId string, 
 		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -243,14 +238,9 @@ func (i *internalProjectVersionImpl) Update(ctx context.Context, versionId strin
 		return nil, nil, model.ErrNoVersionIDError
 	}
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	endpoint := fmt.Sprintf("rest/api/%v/version/%v", i.version, versionId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -276,7 +266,7 @@ func (i *internalProjectVersionImpl) Merge(ctx context.Context, versionId, versi
 
 	endpoint := fmt.Sprintf("rest/api/%v/version/%v/mergeto/%v", i.version, versionId, versionMoveIssuesTo)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -292,7 +282,7 @@ func (i *internalProjectVersionImpl) RelatedIssueCounts(ctx context.Context, ver
 
 	endpoint := fmt.Sprintf("rest/api/%v/version/%v/relatedIssueCounts", i.version, versionId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -314,7 +304,7 @@ func (i *internalProjectVersionImpl) UnresolvedIssueCount(ctx context.Context, v
 
 	endpoint := fmt.Sprintf("rest/api/%v/version/%v/unresolvedIssueCount", i.version, versionId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}

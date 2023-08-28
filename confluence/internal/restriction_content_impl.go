@@ -12,7 +12,7 @@ import (
 	"strings"
 )
 
-func NewRestrictionService(client service.Client, operation *RestrictionOperationService) *RestrictionService {
+func NewRestrictionService(client service.Connector, operation *RestrictionOperationService) *RestrictionService {
 
 	return &RestrictionService{
 		internalClient: &internalRestrictionImpl{c: client},
@@ -62,7 +62,7 @@ func (r *RestrictionService) Update(ctx context.Context, contentID string, paylo
 }
 
 type internalRestrictionImpl struct {
-	c service.Client
+	c service.Connector
 }
 
 func (i *internalRestrictionImpl) Gets(ctx context.Context, contentID string, expand []string, startAt, maxResults int) (*model.ContentRestrictionPageScheme, *model.ResponseScheme, error) {
@@ -81,7 +81,7 @@ func (i *internalRestrictionImpl) Gets(ctx context.Context, contentID string, ex
 
 	endpoint := fmt.Sprintf("wiki/rest/api/content/%v/restriction?%v", contentID, query.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -101,11 +101,6 @@ func (i *internalRestrictionImpl) Add(ctx context.Context, contentID string, pay
 		return nil, nil, model.ErrNoContentIDError
 	}
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	var endpoint strings.Builder
 	endpoint.WriteString(fmt.Sprintf("wiki/rest/api/content/%v/restriction", contentID))
 
@@ -116,7 +111,7 @@ func (i *internalRestrictionImpl) Add(ctx context.Context, contentID string, pay
 		endpoint.WriteString(fmt.Sprintf("?%v", query.Encode()))
 	}
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint.String(), reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint.String(), "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -146,7 +141,7 @@ func (i *internalRestrictionImpl) Delete(ctx context.Context, contentID string, 
 		endpoint.WriteString(fmt.Sprintf("?%v", query.Encode()))
 	}
 
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint.String(), nil)
+	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint.String(), "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -166,11 +161,6 @@ func (i *internalRestrictionImpl) Update(ctx context.Context, contentID string, 
 		return nil, nil, model.ErrNoContentIDError
 	}
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	var endpoint strings.Builder
 	endpoint.WriteString(fmt.Sprintf("wiki/rest/api/content/%v/restriction", contentID))
 
@@ -181,7 +171,7 @@ func (i *internalRestrictionImpl) Update(ctx context.Context, contentID string, 
 		endpoint.WriteString(fmt.Sprintf("?%v", query.Encode()))
 	}
 
-	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint.String(), reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint.String(), "", payload)
 	if err != nil {
 		return nil, nil, err
 	}

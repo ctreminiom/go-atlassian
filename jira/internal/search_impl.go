@@ -5,7 +5,7 @@ import (
 	"github.com/ctreminiom/go-atlassian/service"
 )
 
-func NewSearchService(client service.Client, version string) (*SearchADFService, *SearchRichTextService, error) {
+func NewSearchService(client service.Connector, version string) (*SearchADFService, *SearchRichTextService, error) {
 
 	if version == "" {
 		return nil, nil, model.ErrNoVersionProvided

@@ -11,15 +11,11 @@ import (
 	"strconv"
 )
 
-func NewQueueService(client service.Client, version string) (*QueueService, error) {
-
-	if version == "" {
-		return nil, model.ErrNoVersionProvided
-	}
+func NewQueueService(client service.Connector, version string) *QueueService {
 
 	return &QueueService{
 		internalClient: &internalQueueServiceImpl{c: client, version: version},
-	}, nil
+	}
 }
 
 type QueueService struct {
@@ -54,7 +50,7 @@ func (q *QueueService) Issues(ctx context.Context, serviceDeskID, queueID, start
 }
 
 type internalQueueServiceImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -71,18 +67,18 @@ func (i *internalQueueServiceImpl) Gets(ctx context.Context, serviceDeskID int, 
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/servicedesk/%v/queue?%v", serviceDeskID, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	page := new(model.ServiceDeskQueuePageScheme)
-	response, err := i.c.Call(request, page)
+	res, err := i.c.Call(req, page)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return page, response, nil
+	return page, res, nil
 }
 
 func (i *internalQueueServiceImpl) Get(ctx context.Context, serviceDeskID, queueID int, includeCount bool) (*model.ServiceDeskQueueScheme, *model.ResponseScheme, error) {
@@ -100,18 +96,18 @@ func (i *internalQueueServiceImpl) Get(ctx context.Context, serviceDeskID, queue
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/servicedesk/%v/queue/%v?%v", serviceDeskID, queueID, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	queue := new(model.ServiceDeskQueueScheme)
-	response, err := i.c.Call(request, queue)
+	res, err := i.c.Call(req, queue)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return queue, response, nil
+	return queue, res, nil
 }
 
 func (i *internalQueueServiceImpl) Issues(ctx context.Context, serviceDeskID, queueID, start, limit int) (*model.ServiceDeskIssueQueueScheme, *model.ResponseScheme, error) {
@@ -130,16 +126,16 @@ func (i *internalQueueServiceImpl) Issues(ctx context.Context, serviceDeskID, qu
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/servicedesk/%v/queue/%v/issue?%v", serviceDeskID, queueID, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	issues := new(model.ServiceDeskIssueQueueScheme)
-	response, err := i.c.Call(request, issues)
+	res, err := i.c.Call(req, issues)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return issues, response, nil
+	return issues, res, nil
 }

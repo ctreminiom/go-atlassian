@@ -1,7 +1,6 @@
 package internal
 
 import (
-	"bytes"
 	"context"
 	"errors"
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
@@ -15,7 +14,7 @@ import (
 func Test_BoardService_Get(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -39,12 +38,13 @@ func Test_BoardService_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/agile/1.0/board/1",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -65,23 +65,24 @@ func Test_BoardService_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/agile/1.0/board/1",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
 					&http.Request{},
 					&model.BoardScheme{}).
-					Return(&model.ResponseScheme{}, errors.New("error, unable to execute the http call"))
+					Return(&model.ResponseScheme{}, model.ErrNotFound)
 
 				fields.c = client
 			},
-			Err:     errors.New("error, unable to execute the http call"),
+			Err:     model.ErrNotFound,
 			wantErr: true,
 		},
 
@@ -93,12 +94,13 @@ func Test_BoardService_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/agile/1.0/board/1",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("unable to create the http request"))
 
@@ -115,7 +117,7 @@ func Test_BoardService_Get(t *testing.T) {
 				boardId: 0,
 			},
 			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
+				fields.c = mocks.NewConnector(t)
 			},
 			Err:     model.ErrNoBoardIDError,
 			wantErr: true,
@@ -130,10 +132,9 @@ func Test_BoardService_Get(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			service, err := NewBoardService(testCase.fields.c, "1.0")
-			assert.NoError(t, err)
+			boardService := NewBoardService(testCase.fields.c, "1.0")
 
-			gotResult, gotResponse, err := service.Get(testCase.args.ctx, testCase.args.boardId)
+			gotResult, gotResponse, err := boardService.Get(testCase.args.ctx, testCase.args.boardId)
 
 			if testCase.wantErr {
 
@@ -155,8 +156,14 @@ func Test_BoardService_Get(t *testing.T) {
 
 func Test_BoardService_Create(t *testing.T) {
 
+	payloadMocked := &model.BoardPayloadScheme{
+		Name:     "BoardConnector Name Sample",
+		Type:     "scrum",
+		FilterID: 1002,
+	}
+
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -175,30 +182,19 @@ func Test_BoardService_Create(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx: context.Background(),
-				payload: &model.BoardPayloadScheme{
-					Name:     "BoardConnector Name Sample",
-					Type:     "scrum",
-					FilterID: 1002,
-				},
+				ctx:     context.Background(),
+				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&model.BoardPayloadScheme{
-						Name:     "BoardConnector Name Sample",
-						Type:     "scrum",
-						FilterID: 1002,
-					}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/agile/1.0/board",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -213,30 +209,19 @@ func Test_BoardService_Create(t *testing.T) {
 		{
 			name: "when the api cannot be executed",
 			args: args{
-				ctx: context.Background(),
-				payload: &model.BoardPayloadScheme{
-					Name:     "BoardConnector Name Sample",
-					Type:     "scrum",
-					FilterID: 1002,
-				},
+				ctx:     context.Background(),
+				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&model.BoardPayloadScheme{
-						Name:     "BoardConnector Name Sample",
-						Type:     "scrum",
-						FilterID: 1002,
-					}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/agile/1.0/board",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -253,55 +238,24 @@ func Test_BoardService_Create(t *testing.T) {
 		{
 			name: "when the request cannot be created",
 			args: args{
-				ctx: context.Background(),
-				payload: &model.BoardPayloadScheme{
-					Name:     "BoardConnector Name Sample",
-					Type:     "scrum",
-					FilterID: 1002,
-				},
+				ctx:     context.Background(),
+				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&model.BoardPayloadScheme{
-						Name:     "BoardConnector Name Sample",
-						Type:     "scrum",
-						FilterID: 1002,
-					}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/agile/1.0/board",
-					bytes.NewReader([]byte{})).
-					Return(&http.Request{}, errors.New("unable to create the http request"))
+					"",
+					payloadMocked).
+					Return(&http.Request{}, model.ErrNotFound)
 
 				fields.c = client
 			},
-			Err:     errors.New("unable to create the http request"),
-			wantErr: true,
-		},
-
-		{
-			name: "when the payload is not provided",
-			args: args{
-				ctx:     context.Background(),
-				payload: nil,
-			},
-			on: func(fields *fields) {
-
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					(*model.BoardPayloadScheme)(nil)).
-					Return(nil, errors.New("client: no payload provided"))
-
-				fields.c = client
-			},
-			Err:     errors.New("client: no payload provided"),
+			Err:     model.ErrNotFound,
 			wantErr: true,
 		},
 	}
@@ -313,10 +267,9 @@ func Test_BoardService_Create(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			service, err := NewBoardService(testCase.fields.c, "1.0")
-			assert.NoError(t, err)
+			boardService := NewBoardService(testCase.fields.c, "1.0")
 
-			gotResult, gotResponse, err := service.Create(testCase.args.ctx, testCase.args.payload)
+			gotResult, gotResponse, err := boardService.Create(testCase.args.ctx, testCase.args.payload)
 
 			if testCase.wantErr {
 
@@ -338,8 +291,9 @@ func Test_BoardService_Create(t *testing.T) {
 }
 
 func Test_BoardService_Backlog(t *testing.T) {
+
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -374,12 +328,13 @@ func Test_BoardService_Backlog(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/agile/1.0/board/1001/backlog?expand=changelogs+&fields=status%2Cdescription&jql=project+%3D+ACA&maxResults=50&startAt=0&validateQuery=true",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -408,12 +363,13 @@ func Test_BoardService_Backlog(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/agile/1.0/board/1001/backlog?expand=changelogs+&fields=status%2Cdescription&jql=project+%3D+ACA&maxResults=50&startAt=0&validateQuery=true",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -444,12 +400,13 @@ func Test_BoardService_Backlog(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/agile/1.0/board/1001/backlog?expand=changelogs+&fields=status%2Cdescription&jql=project+%3D+ACA&maxResults=50&startAt=0&validateQuery=true",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("client: no http request created"))
 
@@ -473,7 +430,7 @@ func Test_BoardService_Backlog(t *testing.T) {
 				},
 			},
 			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
+				fields.c = mocks.NewConnector(t)
 			},
 			Err:     model.ErrNoBoardIDError,
 			wantErr: true,
@@ -487,10 +444,9 @@ func Test_BoardService_Backlog(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			service, err := NewBoardService(testCase.fields.c, "1.0")
-			assert.NoError(t, err)
+			boardService := NewBoardService(testCase.fields.c, "1.0")
 
-			gotResult, gotResponse, err := service.Backlog(testCase.args.ctx, testCase.args.boardId, testCase.args.opts, testCase.args.startAt,
+			gotResult, gotResponse, err := boardService.Backlog(testCase.args.ctx, testCase.args.boardId, testCase.args.opts, testCase.args.startAt,
 				testCase.args.maxResults)
 
 			if testCase.wantErr {
@@ -513,7 +469,7 @@ func Test_BoardService_Backlog(t *testing.T) {
 
 func Test_BoardService_Configuration(t *testing.T) {
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -537,12 +493,13 @@ func Test_BoardService_Configuration(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/agile/1.0/board/1001/configuration",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -563,23 +520,24 @@ func Test_BoardService_Configuration(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/agile/1.0/board/1001/configuration",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
 					&http.Request{},
 					&model.BoardConfigurationScheme{}).
-					Return(&model.ResponseScheme{}, errors.New("client: no http response found"))
+					Return(&model.ResponseScheme{}, model.ErrNotFound)
 
 				fields.c = client
 			},
-			Err:     errors.New("client: no http response found"),
+			Err:     model.ErrNotFound,
 			wantErr: true,
 		},
 
@@ -591,12 +549,13 @@ func Test_BoardService_Configuration(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/agile/1.0/board/1001/configuration",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("client: no http request created"))
 
@@ -612,7 +571,7 @@ func Test_BoardService_Configuration(t *testing.T) {
 				ctx: context.Background(),
 			},
 			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
+				fields.c = mocks.NewConnector(t)
 			},
 			Err:     model.ErrNoBoardIDError,
 			wantErr: true,
@@ -626,10 +585,9 @@ func Test_BoardService_Configuration(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			service, err := NewBoardService(testCase.fields.c, "1.0")
-			assert.NoError(t, err)
+			boardService := NewBoardService(testCase.fields.c, "1.0")
 
-			gotResult, gotResponse, err := service.Configuration(testCase.args.ctx, testCase.args.boardId)
+			gotResult, gotResponse, err := boardService.Configuration(testCase.args.ctx, testCase.args.boardId)
 
 			if testCase.wantErr {
 
@@ -652,7 +610,7 @@ func Test_BoardService_Configuration(t *testing.T) {
 func Test_BoardService_Epics(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -682,12 +640,13 @@ func Test_BoardService_Epics(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/agile/1.0/board/1001/epic?done=false&maxResults=50&startAt=0",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -711,23 +670,24 @@ func Test_BoardService_Epics(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/agile/1.0/board/1001/epic?done=false&maxResults=50&startAt=0",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
 					&http.Request{},
 					&model.BoardEpicPageScheme{}).
-					Return(&model.ResponseScheme{}, errors.New("client: no http response found"))
+					Return(&model.ResponseScheme{}, model.ErrNotFound)
 
 				fields.c = client
 			},
-			Err:     errors.New("client: no http response found"),
+			Err:     model.ErrNotFound,
 			wantErr: true,
 		},
 
@@ -742,12 +702,13 @@ func Test_BoardService_Epics(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/agile/1.0/board/1001/epic?done=false&maxResults=50&startAt=0",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("client: no http request created"))
 
@@ -763,7 +724,7 @@ func Test_BoardService_Epics(t *testing.T) {
 				ctx: context.Background(),
 			},
 			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
+				fields.c = mocks.NewConnector(t)
 			},
 			Err:     model.ErrNoBoardIDError,
 			wantErr: true,
@@ -777,10 +738,9 @@ func Test_BoardService_Epics(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			service, err := NewBoardService(testCase.fields.c, "1.0")
-			assert.NoError(t, err)
+			boardService := NewBoardService(testCase.fields.c, "1.0")
 
-			gotResult, gotResponse, err := service.Epics(testCase.args.ctx, testCase.args.boardId, testCase.args.startAt,
+			gotResult, gotResponse, err := boardService.Epics(testCase.args.ctx, testCase.args.boardId, testCase.args.startAt,
 				testCase.args.maxResults, testCase.args.done)
 
 			if testCase.wantErr {
@@ -804,7 +764,7 @@ func Test_BoardService_Epics(t *testing.T) {
 func Test_BoardService_Delete(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -828,12 +788,13 @@ func Test_BoardService_Delete(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/agile/1.0/board/1001",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -854,23 +815,24 @@ func Test_BoardService_Delete(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/agile/1.0/board/1001",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
 					&http.Request{},
 					nil).
-					Return(&model.ResponseScheme{}, errors.New("client: no http response found"))
+					Return(&model.ResponseScheme{}, model.ErrNotFound)
 
 				fields.c = client
 			},
-			Err:     errors.New("client: no http response found"),
+			Err:     model.ErrNotFound,
 			wantErr: true,
 		},
 
@@ -882,12 +844,13 @@ func Test_BoardService_Delete(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/agile/1.0/board/1001",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("client: no http request created"))
 
@@ -903,7 +866,7 @@ func Test_BoardService_Delete(t *testing.T) {
 				ctx: context.Background(),
 			},
 			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
+				fields.c = mocks.NewConnector(t)
 			},
 			Err:     model.ErrNoBoardIDError,
 			wantErr: true,
@@ -917,10 +880,9 @@ func Test_BoardService_Delete(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			service, err := NewBoardService(testCase.fields.c, "1.0")
-			assert.NoError(t, err)
+			boardService := NewBoardService(testCase.fields.c, "1.0")
 
-			gotResponse, err := service.Delete(testCase.args.ctx, testCase.args.boardId)
+			gotResponse, err := boardService.Delete(testCase.args.ctx, testCase.args.boardId)
 
 			if testCase.wantErr {
 
@@ -942,7 +904,7 @@ func Test_BoardService_Delete(t *testing.T) {
 func Test_BoardService_Filter(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -970,12 +932,13 @@ func Test_BoardService_Filter(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/agile/1.0/board/filter/1001?maxResults=50&startAt=0",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -998,23 +961,24 @@ func Test_BoardService_Filter(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/agile/1.0/board/filter/1001?maxResults=50&startAt=0",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
 					&http.Request{},
 					&model.BoardPageScheme{}).
-					Return(&model.ResponseScheme{}, errors.New("client: no http response found"))
+					Return(&model.ResponseScheme{}, model.ErrNotFound)
 
 				fields.c = client
 			},
-			Err:     errors.New("client: no http response found"),
+			Err:     model.ErrNotFound,
 			wantErr: true,
 		},
 
@@ -1028,12 +992,13 @@ func Test_BoardService_Filter(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/agile/1.0/board/filter/1001?maxResults=50&startAt=0",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("client: no http request created"))
 
@@ -1049,7 +1014,7 @@ func Test_BoardService_Filter(t *testing.T) {
 				ctx: context.Background(),
 			},
 			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
+				fields.c = mocks.NewConnector(t)
 			},
 			Err:     model.ErrNoFilterIDError,
 			wantErr: true,
@@ -1063,10 +1028,9 @@ func Test_BoardService_Filter(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			service, err := NewBoardService(testCase.fields.c, "1.0")
-			assert.NoError(t, err)
+			boardService := NewBoardService(testCase.fields.c, "1.0")
 
-			gotResult, gotResponse, err := service.Filter(testCase.args.ctx, testCase.args.filterId, testCase.args.startAt,
+			gotResult, gotResponse, err := boardService.Filter(testCase.args.ctx, testCase.args.filterId, testCase.args.startAt,
 				testCase.args.maxResults)
 
 			if testCase.wantErr {
@@ -1090,7 +1054,7 @@ func Test_BoardService_Filter(t *testing.T) {
 func Test_BoardService_Gets(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -1117,12 +1081,13 @@ func Test_BoardService_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/agile/1.0/board?maxResults=50&startAt=0",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -1156,7 +1121,7 @@ func Test_BoardService_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
@@ -1164,6 +1129,7 @@ func Test_BoardService_Gets(t *testing.T) {
 					"rest/agile/1.0/board?accountIdLocation=uuid-sample&expand=issues&filterId=100&includePrivate=true&"+
 						"maxResults=50&name=Sample+Name&negateLocationFiltering=true&orderBy=issues&projectKeyOrId=DUMMY&proj"+
 						"ectLocation=uuid-sample&startAt=0&type=scrum",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -1185,23 +1151,24 @@ func Test_BoardService_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/agile/1.0/board?maxResults=50&startAt=0",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
 					&http.Request{},
 					&model.BoardPageScheme{}).
-					Return(&model.ResponseScheme{}, errors.New("client: no http response found"))
+					Return(&model.ResponseScheme{}, model.ErrNotFound)
 
 				fields.c = client
 			},
-			Err:     errors.New("client: no http response found"),
+			Err:     model.ErrNotFound,
 			wantErr: true,
 		},
 
@@ -1214,12 +1181,13 @@ func Test_BoardService_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/agile/1.0/board?maxResults=50&startAt=0",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("client: no http request created"))
 
@@ -1237,10 +1205,9 @@ func Test_BoardService_Gets(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			service, err := NewBoardService(testCase.fields.c, "1.0")
-			assert.NoError(t, err)
+			boardService := NewBoardService(testCase.fields.c, "1.0")
 
-			gotResult, gotResponse, err := service.Gets(testCase.args.ctx, testCase.args.opts, testCase.args.startAt,
+			gotResult, gotResponse, err := boardService.Gets(testCase.args.ctx, testCase.args.opts, testCase.args.startAt,
 				testCase.args.maxResults)
 
 			if testCase.wantErr {
@@ -1264,7 +1231,7 @@ func Test_BoardService_Gets(t *testing.T) {
 func Test_BoardService_Issues(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -1293,12 +1260,13 @@ func Test_BoardService_Issues(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/agile/1.0/board/1000/issue?maxResults=50&startAt=0",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -1327,12 +1295,13 @@ func Test_BoardService_Issues(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/agile/1.0/board/1000/issue?expand=orders&fields=fields&jql=project+%3D+DUMMY&maxResults=50&startAt=0",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -1355,23 +1324,24 @@ func Test_BoardService_Issues(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/agile/1.0/board/1000/issue?maxResults=50&startAt=0",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
 					&http.Request{},
 					&model.BoardIssuePageScheme{}).
-					Return(&model.ResponseScheme{}, errors.New("client: no http response found"))
+					Return(&model.ResponseScheme{}, model.ErrNotFound)
 
 				fields.c = client
 			},
-			Err:     errors.New("client: no http response found"),
+			Err:     model.ErrNotFound,
 			wantErr: true,
 		},
 
@@ -1385,12 +1355,13 @@ func Test_BoardService_Issues(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/agile/1.0/board/1000/issue?maxResults=50&startAt=0",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("client: no http request created"))
 
@@ -1408,7 +1379,7 @@ func Test_BoardService_Issues(t *testing.T) {
 				maxResults: 50,
 			},
 			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
+				fields.c = mocks.NewConnector(t)
 			},
 			Err:     model.ErrNoBoardIDError,
 			wantErr: true,
@@ -1422,10 +1393,9 @@ func Test_BoardService_Issues(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			service, err := NewBoardService(testCase.fields.c, "1.0")
-			assert.NoError(t, err)
+			boardService := NewBoardService(testCase.fields.c, "1.0")
 
-			gotResult, gotResponse, err := service.Issues(testCase.args.ctx, testCase.args.boardId, testCase.args.opts,
+			gotResult, gotResponse, err := boardService.Issues(testCase.args.ctx, testCase.args.boardId, testCase.args.opts,
 				testCase.args.startAt, testCase.args.maxResults)
 
 			if testCase.wantErr {
@@ -1449,7 +1419,7 @@ func Test_BoardService_Issues(t *testing.T) {
 func Test_BoardService_IssuesByEpic(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -1480,12 +1450,13 @@ func Test_BoardService_IssuesByEpic(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/agile/1.0/board/1000/epic/102/issue?maxResults=50&startAt=0",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -1515,12 +1486,13 @@ func Test_BoardService_IssuesByEpic(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/agile/1.0/board/1000/epic/102/issue?expand=orders&fields=fields&jql=project+%3D+DUMMY&maxResults=50&startAt=0",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -1544,23 +1516,24 @@ func Test_BoardService_IssuesByEpic(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/agile/1.0/board/1000/epic/102/issue?maxResults=50&startAt=0",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
 					&http.Request{},
 					&model.BoardIssuePageScheme{}).
-					Return(&model.ResponseScheme{}, errors.New("client: no http response found"))
+					Return(&model.ResponseScheme{}, model.ErrNotFound)
 
 				fields.c = client
 			},
-			Err:     errors.New("client: no http response found"),
+			Err:     model.ErrNotFound,
 			wantErr: true,
 		},
 
@@ -1575,12 +1548,13 @@ func Test_BoardService_IssuesByEpic(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/agile/1.0/board/1000/epic/102/issue?maxResults=50&startAt=0",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("client: no http request created"))
 
@@ -1598,7 +1572,7 @@ func Test_BoardService_IssuesByEpic(t *testing.T) {
 				maxResults: 50,
 			},
 			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
+				fields.c = mocks.NewConnector(t)
 			},
 			Err:     model.ErrNoBoardIDError,
 			wantErr: true,
@@ -1613,7 +1587,7 @@ func Test_BoardService_IssuesByEpic(t *testing.T) {
 				maxResults: 50,
 			},
 			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
+				fields.c = mocks.NewConnector(t)
 			},
 			Err:     model.ErrNoEpicIDError,
 			wantErr: true,
@@ -1627,10 +1601,9 @@ func Test_BoardService_IssuesByEpic(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			service, err := NewBoardService(testCase.fields.c, "1.0")
-			assert.NoError(t, err)
+			boardService := NewBoardService(testCase.fields.c, "1.0")
 
-			gotResult, gotResponse, err := service.IssuesByEpic(testCase.args.ctx, testCase.args.boardId, testCase.args.epicId,
+			gotResult, gotResponse, err := boardService.IssuesByEpic(testCase.args.ctx, testCase.args.boardId, testCase.args.epicId,
 				testCase.args.opts, testCase.args.startAt, testCase.args.maxResults)
 
 			if testCase.wantErr {
@@ -1654,7 +1627,7 @@ func Test_BoardService_IssuesByEpic(t *testing.T) {
 func Test_BoardService_IssuesBySprint(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -1685,12 +1658,13 @@ func Test_BoardService_IssuesBySprint(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/agile/1.0/board/1000/sprint/102/issue?maxResults=50&startAt=0",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -1720,12 +1694,13 @@ func Test_BoardService_IssuesBySprint(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/agile/1.0/board/1000/sprint/102/issue?expand=orders&fields=fields&jql=project+%3D+DUMMY&maxResults=50&startAt=0&validateQuery=false",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -1749,23 +1724,24 @@ func Test_BoardService_IssuesBySprint(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/agile/1.0/board/1000/sprint/102/issue?maxResults=50&startAt=0",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
 					&http.Request{},
 					&model.BoardIssuePageScheme{}).
-					Return(&model.ResponseScheme{}, errors.New("client: no http response found"))
+					Return(&model.ResponseScheme{}, model.ErrNotFound)
 
 				fields.c = client
 			},
-			Err:     errors.New("client: no http response found"),
+			Err:     model.ErrNotFound,
 			wantErr: true,
 		},
 
@@ -1780,12 +1756,13 @@ func Test_BoardService_IssuesBySprint(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/agile/1.0/board/1000/sprint/102/issue?maxResults=50&startAt=0",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("client: no http request created"))
 
@@ -1803,7 +1780,7 @@ func Test_BoardService_IssuesBySprint(t *testing.T) {
 				maxResults: 50,
 			},
 			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
+				fields.c = mocks.NewConnector(t)
 			},
 			Err:     model.ErrNoBoardIDError,
 			wantErr: true,
@@ -1818,7 +1795,7 @@ func Test_BoardService_IssuesBySprint(t *testing.T) {
 				maxResults: 50,
 			},
 			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
+				fields.c = mocks.NewConnector(t)
 			},
 			Err:     model.ErrNoSprintIDError,
 			wantErr: true,
@@ -1832,10 +1809,9 @@ func Test_BoardService_IssuesBySprint(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			service, err := NewBoardService(testCase.fields.c, "1.0")
-			assert.NoError(t, err)
+			boardService := NewBoardService(testCase.fields.c, "1.0")
 
-			gotResult, gotResponse, err := service.IssuesBySprint(testCase.args.ctx, testCase.args.boardId, testCase.args.sprintId,
+			gotResult, gotResponse, err := boardService.IssuesBySprint(testCase.args.ctx, testCase.args.boardId, testCase.args.sprintId,
 				testCase.args.opts, testCase.args.startAt, testCase.args.maxResults)
 
 			if testCase.wantErr {
@@ -1859,7 +1835,7 @@ func Test_BoardService_IssuesBySprint(t *testing.T) {
 func Test_BoardService_IssuesWithoutEpic(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -1888,12 +1864,13 @@ func Test_BoardService_IssuesWithoutEpic(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/agile/1.0/board/1000/epic/none/issue?maxResults=50&startAt=0",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -1922,12 +1899,13 @@ func Test_BoardService_IssuesWithoutEpic(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/agile/1.0/board/1000/epic/none/issue?expand=orders&fields=fields&jql=project+%3D+DUMMY&maxResults=50&startAt=0&validateQuery=false",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -1950,23 +1928,24 @@ func Test_BoardService_IssuesWithoutEpic(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/agile/1.0/board/1000/epic/none/issue?maxResults=50&startAt=0",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
 					&http.Request{},
 					&model.BoardIssuePageScheme{}).
-					Return(&model.ResponseScheme{}, errors.New("client: no http response found"))
+					Return(&model.ResponseScheme{}, model.ErrNotFound)
 
 				fields.c = client
 			},
-			Err:     errors.New("client: no http response found"),
+			Err:     model.ErrNotFound,
 			wantErr: true,
 		},
 
@@ -1980,12 +1959,13 @@ func Test_BoardService_IssuesWithoutEpic(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/agile/1.0/board/1000/epic/none/issue?maxResults=50&startAt=0",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("client: no http request created"))
 
@@ -2003,7 +1983,7 @@ func Test_BoardService_IssuesWithoutEpic(t *testing.T) {
 				maxResults: 50,
 			},
 			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
+				fields.c = mocks.NewConnector(t)
 			},
 			Err:     model.ErrNoBoardIDError,
 			wantErr: true,
@@ -2017,10 +1997,9 @@ func Test_BoardService_IssuesWithoutEpic(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			service, err := NewBoardService(testCase.fields.c, "1.0")
-			assert.NoError(t, err)
+			boardService := NewBoardService(testCase.fields.c, "1.0")
 
-			gotResult, gotResponse, err := service.IssuesWithoutEpic(testCase.args.ctx, testCase.args.boardId, testCase.args.opts,
+			gotResult, gotResponse, err := boardService.IssuesWithoutEpic(testCase.args.ctx, testCase.args.boardId, testCase.args.opts,
 				testCase.args.startAt, testCase.args.maxResults)
 
 			if testCase.wantErr {
@@ -2043,8 +2022,14 @@ func Test_BoardService_IssuesWithoutEpic(t *testing.T) {
 
 func Test_BoardService_Move(t *testing.T) {
 
+	payloadMocked := &model.BoardMovementPayloadScheme{
+		Issues:            []string{"PR-1", "10001", "PR-3"},
+		RankBeforeIssue:   "PR-4",
+		RankCustomFieldID: 10521,
+	}
+
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -2066,28 +2051,18 @@ func Test_BoardService_Move(t *testing.T) {
 			args: args{
 				ctx:     context.Background(),
 				boardId: 1000,
-				payload: &model.BoardMovementPayloadScheme{
-					Issues:            []string{"PR-1", "10001", "PR-3"},
-					RankBeforeIssue:   "PR-4",
-					RankCustomFieldID: 10521,
-				},
+				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&model.BoardMovementPayloadScheme{
-						Issues:            []string{"PR-1", "10001", "PR-3"},
-						RankBeforeIssue:   "PR-4",
-						RankCustomFieldID: 10521,
-					}).Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/agile/1.0/board/1000/issue",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -2104,38 +2079,28 @@ func Test_BoardService_Move(t *testing.T) {
 			args: args{
 				ctx:     context.Background(),
 				boardId: 1000,
-				payload: &model.BoardMovementPayloadScheme{
-					Issues:            []string{"PR-1", "10001", "PR-3"},
-					RankBeforeIssue:   "PR-4",
-					RankCustomFieldID: 10521,
-				},
+				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&model.BoardMovementPayloadScheme{
-						Issues:            []string{"PR-1", "10001", "PR-3"},
-						RankBeforeIssue:   "PR-4",
-						RankCustomFieldID: 10521,
-					}).Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/agile/1.0/board/1000/issue",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
 					&http.Request{},
 					nil).
-					Return(&model.ResponseScheme{}, errors.New("client: no http response found"))
+					Return(&model.ResponseScheme{}, model.ErrNotFound)
 
 				fields.c = client
 			},
-			Err:     errors.New("client: no http response found"),
+			Err:     model.ErrNotFound,
 			wantErr: true,
 		},
 
@@ -2144,28 +2109,18 @@ func Test_BoardService_Move(t *testing.T) {
 			args: args{
 				ctx:     context.Background(),
 				boardId: 1000,
-				payload: &model.BoardMovementPayloadScheme{
-					Issues:            []string{"PR-1", "10001", "PR-3"},
-					RankBeforeIssue:   "PR-4",
-					RankCustomFieldID: 10521,
-				},
+				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&model.BoardMovementPayloadScheme{
-						Issues:            []string{"PR-1", "10001", "PR-3"},
-						RankBeforeIssue:   "PR-4",
-						RankCustomFieldID: 10521,
-					}).Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/agile/1.0/board/1000/issue",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, errors.New("client: no http request created"))
 
 				fields.c = client
@@ -2179,14 +2134,10 @@ func Test_BoardService_Move(t *testing.T) {
 			args: args{
 				ctx:     context.Background(),
 				boardId: 0,
-				payload: &model.BoardMovementPayloadScheme{
-					Issues:            []string{"PR-1", "10001", "PR-3"},
-					RankBeforeIssue:   "PR-4",
-					RankCustomFieldID: 10521,
-				},
+				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
+				fields.c = mocks.NewConnector(t)
 			},
 			Err:     model.ErrNoBoardIDError,
 			wantErr: true,
@@ -2200,10 +2151,9 @@ func Test_BoardService_Move(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			service, err := NewBoardService(testCase.fields.c, "1.0")
-			assert.NoError(t, err)
+			boardService := NewBoardService(testCase.fields.c, "1.0")
 
-			gotResponse, err := service.Move(testCase.args.ctx, testCase.args.boardId, testCase.args.payload)
+			gotResponse, err := boardService.Move(testCase.args.ctx, testCase.args.boardId, testCase.args.payload)
 
 			if testCase.wantErr {
 
@@ -2225,7 +2175,7 @@ func Test_BoardService_Move(t *testing.T) {
 func Test_BoardService_Projects(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -2251,12 +2201,13 @@ func Test_BoardService_Projects(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/agile/1.0/board/1000/project?maxResults=50&startAt=0",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -2279,23 +2230,24 @@ func Test_BoardService_Projects(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/agile/1.0/board/1000/project?maxResults=50&startAt=0",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
 					&http.Request{},
 					&model.BoardProjectPageScheme{}).
-					Return(&model.ResponseScheme{}, errors.New("client: no http response found"))
+					Return(&model.ResponseScheme{}, model.ErrNotFound)
 
 				fields.c = client
 			},
-			Err:     errors.New("client: no http response found"),
+			Err:     model.ErrNotFound,
 			wantErr: true,
 		},
 
@@ -2309,12 +2261,13 @@ func Test_BoardService_Projects(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/agile/1.0/board/1000/project?maxResults=50&startAt=0",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("client: no http request created"))
 
@@ -2332,7 +2285,7 @@ func Test_BoardService_Projects(t *testing.T) {
 				maxResults: 50,
 			},
 			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
+				fields.c = mocks.NewConnector(t)
 			},
 			Err:     model.ErrNoBoardIDError,
 			wantErr: true,
@@ -2346,10 +2299,9 @@ func Test_BoardService_Projects(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			service, err := NewBoardService(testCase.fields.c, "1.0")
-			assert.NoError(t, err)
+			boardService := NewBoardService(testCase.fields.c, "1.0")
 
-			gotResult, gotResponse, err := service.Projects(testCase.args.ctx, testCase.args.boardId, testCase.args.startAt,
+			gotResult, gotResponse, err := boardService.Projects(testCase.args.ctx, testCase.args.boardId, testCase.args.startAt,
 				testCase.args.maxResults)
 
 			if testCase.wantErr {
@@ -2373,7 +2325,7 @@ func Test_BoardService_Projects(t *testing.T) {
 func Test_BoardService_Sprints(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -2401,12 +2353,13 @@ func Test_BoardService_Sprints(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/agile/1.0/board/1000/sprint?maxResults=50&startAt=0&state=active",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -2430,23 +2383,24 @@ func Test_BoardService_Sprints(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/agile/1.0/board/1000/sprint?maxResults=50&startAt=0&state=active",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
 					&http.Request{},
 					&model.BoardSprintPageScheme{}).
-					Return(&model.ResponseScheme{}, errors.New("client: no http response found"))
+					Return(&model.ResponseScheme{}, model.ErrNotFound)
 
 				fields.c = client
 			},
-			Err:     errors.New("client: no http response found"),
+			Err:     model.ErrNotFound,
 			wantErr: true,
 		},
 
@@ -2461,12 +2415,13 @@ func Test_BoardService_Sprints(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/agile/1.0/board/1000/sprint?maxResults=50&startAt=0&state=active",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("client: no http request created"))
 
@@ -2484,7 +2439,7 @@ func Test_BoardService_Sprints(t *testing.T) {
 				maxResults: 50,
 			},
 			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
+				fields.c = mocks.NewConnector(t)
 			},
 			Err:     model.ErrNoBoardIDError,
 			wantErr: true,
@@ -2498,10 +2453,9 @@ func Test_BoardService_Sprints(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			service, err := NewBoardService(testCase.fields.c, "1.0")
-			assert.NoError(t, err)
+			boardService := NewBoardService(testCase.fields.c, "1.0")
 
-			gotResult, gotResponse, err := service.Sprints(testCase.args.ctx, testCase.args.boardId, testCase.args.startAt,
+			gotResult, gotResponse, err := boardService.Sprints(testCase.args.ctx, testCase.args.boardId, testCase.args.startAt,
 				testCase.args.maxResults, testCase.args.states)
 
 			if testCase.wantErr {
@@ -2525,7 +2479,7 @@ func Test_BoardService_Sprints(t *testing.T) {
 func Test_BoardService_Versions(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -2553,12 +2507,13 @@ func Test_BoardService_Versions(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/agile/1.0/board/1000/version?maxResults=50&released=true&startAt=0",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -2582,12 +2537,13 @@ func Test_BoardService_Versions(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/agile/1.0/board/1000/version?maxResults=50&released=false&startAt=0",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -2611,23 +2567,24 @@ func Test_BoardService_Versions(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/agile/1.0/board/1000/version?maxResults=50&released=true&startAt=0",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
 					&http.Request{},
 					&model.BoardVersionPageScheme{}).
-					Return(&model.ResponseScheme{}, errors.New("client: no http response found"))
+					Return(&model.ResponseScheme{}, model.ErrNotFound)
 
 				fields.c = client
 			},
-			Err:     errors.New("client: no http response found"),
+			Err:     model.ErrNotFound,
 			wantErr: true,
 		},
 
@@ -2642,12 +2599,13 @@ func Test_BoardService_Versions(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/agile/1.0/board/1000/version?maxResults=50&released=true&startAt=0",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("client: no http request created"))
 
@@ -2665,7 +2623,7 @@ func Test_BoardService_Versions(t *testing.T) {
 				maxResults: 50,
 			},
 			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
+				fields.c = mocks.NewConnector(t)
 			},
 			Err:     model.ErrNoBoardIDError,
 			wantErr: true,
@@ -2679,10 +2637,9 @@ func Test_BoardService_Versions(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			service, err := NewBoardService(testCase.fields.c, "1.0")
-			assert.NoError(t, err)
+			boardService := NewBoardService(testCase.fields.c, "1.0")
 
-			gotResult, gotResponse, err := service.Versions(testCase.args.ctx, testCase.args.boardId, testCase.args.startAt,
+			gotResult, gotResponse, err := boardService.Versions(testCase.args.ctx, testCase.args.boardId, testCase.args.startAt,
 				testCase.args.maxResults, testCase.args.released)
 
 			if testCase.wantErr {

@@ -15,7 +15,7 @@ import (
 func Test_internalUserSearchImpl_Projects(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -46,13 +46,13 @@ func Test_internalUserSearchImpl_Projects(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/user/assignable/multiProjectSearch?accountId=uuid-sample&maxResults=50&projectKeys=DUMMY%2CKP&startAt=100",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -78,13 +78,13 @@ func Test_internalUserSearchImpl_Projects(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/user/assignable/multiProjectSearch?accountId=uuid-sample&maxResults=50&projectKeys=DUMMY%2CKP&startAt=100",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -121,13 +121,13 @@ func Test_internalUserSearchImpl_Projects(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/user/assignable/multiProjectSearch?accountId=uuid-sample&maxResults=50&projectKeys=DUMMY%2CKP&startAt=100",
-					nil).
+					"", nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -172,7 +172,7 @@ func Test_internalUserSearchImpl_Projects(t *testing.T) {
 func Test_internalUserSearchImpl_Do(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -203,13 +203,13 @@ func Test_internalUserSearchImpl_Do(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/user/search?accountId=uuid-sample&maxResults=50&query=charles.smith%40example.com&startAt=100",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -235,13 +235,13 @@ func Test_internalUserSearchImpl_Do(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/user/search?accountId=uuid-sample&maxResults=50&query=charles.smith%40example.com&startAt=100",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -267,13 +267,13 @@ func Test_internalUserSearchImpl_Do(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/user/search?accountId=uuid-sample&maxResults=50&query=charles.smith%40example.com&startAt=100",
-					nil).
+					"", nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -318,7 +318,7 @@ func Test_internalUserSearchImpl_Do(t *testing.T) {
 func Test_internalUserSearchImpl_Check(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -354,13 +354,13 @@ func Test_internalUserSearchImpl_Check(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/user/permission/search?accountId=uuid-sample&issueKey=DFUMM-1&maxResults=50&permission=CREATE_ISSUES&projectKey=DUMMY&query=project+A&startAt=100",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -381,7 +381,7 @@ func Test_internalUserSearchImpl_Check(t *testing.T) {
 				ctx: context.TODO(),
 			},
 			on: func(fields *fields) {
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 				fields.c = client
 			},
 			wantErr: true,
@@ -405,13 +405,13 @@ func Test_internalUserSearchImpl_Check(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/user/permission/search?accountId=uuid-sample&issueKey=DFUMM-1&maxResults=50&permission=CREATE_ISSUES&projectKey=DUMMY&query=project+A&startAt=100",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -442,13 +442,13 @@ func Test_internalUserSearchImpl_Check(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/user/permission/search?accountId=uuid-sample&issueKey=DFUMM-1&maxResults=50&permission=CREATE_ISSUES&projectKey=DUMMY&query=project+A&startAt=100",
-					nil).
+					"", nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -493,7 +493,7 @@ func Test_internalUserSearchImpl_Check(t *testing.T) {
 func Test_NewUserSearchService(t *testing.T) {
 
 	type args struct {
-		client  service.Client
+		client  service.Connector
 		version string
 	}
 

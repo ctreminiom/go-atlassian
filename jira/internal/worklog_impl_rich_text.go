@@ -12,7 +12,7 @@ import (
 	"strings"
 )
 
-func NewWorklogRichTextService(client service.Client, version string) (*WorklogRichTextService, error) {
+func NewWorklogRichTextService(client service.Connector, version string) (*WorklogRichTextService, error) {
 
 	if version == "" {
 		return nil, model.ErrNoVersionProvided
@@ -126,7 +126,7 @@ func (w *WorklogRichTextService) Update(ctx context.Context, issueKeyOrId, workl
 }
 
 type internalWorklogRichTextImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -148,18 +148,7 @@ func (i *internalWorklogRichTextImpl) Gets(ctx context.Context, worklogIds []int
 		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
-	payload := struct {
-		Ids []int `json:"ids"`
-	}{
-		Ids: worklogIds,
-	}
-
-	reader, err := i.c.TransformStructToReader(&payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint.String(), reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint.String(), "", map[string]interface{}{"ids": worklogIds})
 	if err != nil {
 		return nil, nil, err
 	}
@@ -195,7 +184,7 @@ func (i *internalWorklogRichTextImpl) Get(ctx context.Context, issueKeyOrId, wor
 		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -229,7 +218,7 @@ func (i *internalWorklogRichTextImpl) Issue(ctx context.Context, issueKeyOrId st
 
 	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/worklog?%v", i.version, issueKeyOrId, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -281,7 +270,7 @@ func (i *internalWorklogRichTextImpl) Delete(ctx context.Context, issueKeyOrId, 
 		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint.String(), nil)
+	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint.String(), "", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -303,7 +292,7 @@ func (i *internalWorklogRichTextImpl) Deleted(ctx context.Context, since int) (*
 		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -335,7 +324,7 @@ func (i *internalWorklogRichTextImpl) Updated(ctx context.Context, since int, ex
 		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -384,12 +373,7 @@ func (i *internalWorklogRichTextImpl) Add(ctx context.Context, issueKeyOrID stri
 		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint.String(), reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint.String(), "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -442,12 +426,7 @@ func (i *internalWorklogRichTextImpl) Update(ctx context.Context, issueKeyOrId, 
 		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint.String(), reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint.String(), "", payload)
 	if err != nil {
 		return nil, nil, err
 	}

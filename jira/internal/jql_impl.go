@@ -11,7 +11,7 @@ import (
 	"strings"
 )
 
-func NewJQLService(client service.Client, version string) (*JQLService, error) {
+func NewJQLService(client service.Connector, version string) (*JQLService, error) {
 
 	if version == "" {
 		return nil, model.ErrNoVersionProvided
@@ -38,7 +38,7 @@ func (j *JQLService) Parse(ctx context.Context, validationType string, JqlQuerie
 }
 
 type internalJQLServiceImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -54,18 +54,7 @@ func (i *internalJQLServiceImpl) Parse(ctx context.Context, validationType strin
 		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
-	payload := struct {
-		Queries []string `json:"queries,omitempty"`
-	}{
-		Queries: JqlQueries,
-	}
-
-	reader, err := i.c.TransformStructToReader(&payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint.String(), reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint.String(), "", map[string]interface{}{"queries": JqlQueries})
 	if err != nil {
 		return nil, nil, err
 	}

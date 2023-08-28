@@ -18,7 +18,7 @@ import (
 func Test_internalIssueAttachmentServiceImpl_Settings(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -42,12 +42,13 @@ func Test_internalIssueAttachmentServiceImpl_Settings(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/attachment/meta",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -69,12 +70,13 @@ func Test_internalIssueAttachmentServiceImpl_Settings(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/attachment/meta",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -96,12 +98,13 @@ func Test_internalIssueAttachmentServiceImpl_Settings(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/attachment/meta",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -147,7 +150,7 @@ func Test_internalIssueAttachmentServiceImpl_Settings(t *testing.T) {
 func Test_internalIssueAttachmentServiceImpl_Metadata(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -173,12 +176,13 @@ func Test_internalIssueAttachmentServiceImpl_Metadata(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/attachment/1110",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -200,12 +204,13 @@ func Test_internalIssueAttachmentServiceImpl_Metadata(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/attachment/1110",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -227,7 +232,7 @@ func Test_internalIssueAttachmentServiceImpl_Metadata(t *testing.T) {
 				attachmentId: "",
 			},
 			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
+				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
 			Err:     model.ErrNoAttachmentIDError,
@@ -242,12 +247,13 @@ func Test_internalIssueAttachmentServiceImpl_Metadata(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/attachment/1110",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -293,7 +299,7 @@ func Test_internalIssueAttachmentServiceImpl_Metadata(t *testing.T) {
 func Test_internalIssueAttachmentServiceImpl_Human(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -319,12 +325,13 @@ func Test_internalIssueAttachmentServiceImpl_Human(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/attachment/1110/expand/human",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -346,12 +353,13 @@ func Test_internalIssueAttachmentServiceImpl_Human(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/attachment/1110/expand/human",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -373,7 +381,7 @@ func Test_internalIssueAttachmentServiceImpl_Human(t *testing.T) {
 				attachmentId: "",
 			},
 			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
+				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
 			Err:     model.ErrNoAttachmentIDError,
@@ -388,12 +396,13 @@ func Test_internalIssueAttachmentServiceImpl_Human(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/attachment/1110/expand/human",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -439,7 +448,7 @@ func Test_internalIssueAttachmentServiceImpl_Human(t *testing.T) {
 func Test_internalIssueAttachmentServiceImpl_Delete(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -465,12 +474,13 @@ func Test_internalIssueAttachmentServiceImpl_Delete(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/api/2/attachment/1110",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -492,12 +502,13 @@ func Test_internalIssueAttachmentServiceImpl_Delete(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/api/3/attachment/1110",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -519,7 +530,7 @@ func Test_internalIssueAttachmentServiceImpl_Delete(t *testing.T) {
 				attachmentId: "",
 			},
 			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
+				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
 			Err:     model.ErrNoAttachmentIDError,
@@ -534,12 +545,13 @@ func Test_internalIssueAttachmentServiceImpl_Delete(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/api/2/attachment/1110",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -594,7 +606,7 @@ func Test_internalIssueAttachmentServiceImpl_Add(t *testing.T) {
 	}
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -623,9 +635,9 @@ func Test_internalIssueAttachmentServiceImpl_Add(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
-				client.On("NewFormRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/issue/DUMMY-1/attachments",
@@ -635,7 +647,7 @@ func Test_internalIssueAttachmentServiceImpl_Add(t *testing.T) {
 
 				client.On("Call",
 					&http.Request{},
-					[]*model.AttachmentScheme(nil)).
+					[]*model.IssueAttachmentScheme(nil)).
 					Return(&model.ResponseScheme{}, nil)
 
 				fields.c = client
@@ -653,9 +665,9 @@ func Test_internalIssueAttachmentServiceImpl_Add(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
-				client.On("NewFormRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/3/issue/DUMMY-1/attachments",
@@ -665,7 +677,7 @@ func Test_internalIssueAttachmentServiceImpl_Add(t *testing.T) {
 
 				client.On("Call",
 					&http.Request{},
-					[]*model.AttachmentScheme(nil)).
+					[]*model.IssueAttachmentScheme(nil)).
 					Return(&model.ResponseScheme{}, nil)
 
 				fields.c = client
@@ -722,9 +734,9 @@ func Test_internalIssueAttachmentServiceImpl_Add(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
-				client.On("NewFormRequest",
+				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/issue/DUMMY-1/attachments",
@@ -774,7 +786,7 @@ func Test_internalIssueAttachmentServiceImpl_Add(t *testing.T) {
 func Test_internalIssueAttachmentServiceImpl_Download(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -802,12 +814,13 @@ func Test_internalIssueAttachmentServiceImpl_Download(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/attachment/content/1110?redirect=false",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -830,12 +843,13 @@ func Test_internalIssueAttachmentServiceImpl_Download(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/attachment/content/1110",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -857,7 +871,7 @@ func Test_internalIssueAttachmentServiceImpl_Download(t *testing.T) {
 				attachmentId: "",
 			},
 			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
+				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
 			Err:     model.ErrNoAttachmentIDError,
@@ -873,12 +887,13 @@ func Test_internalIssueAttachmentServiceImpl_Download(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/attachment/content/1110",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -923,7 +938,7 @@ func Test_internalIssueAttachmentServiceImpl_Download(t *testing.T) {
 func TestNewIssueAttachmentService(t *testing.T) {
 
 	type args struct {
-		client  service.Client
+		client  service.Connector
 		version string
 	}
 

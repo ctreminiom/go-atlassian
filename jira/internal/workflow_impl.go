@@ -12,7 +12,7 @@ import (
 	"strings"
 )
 
-func NewWorkflowService(client service.Client, version string, scheme *WorkflowSchemeService, status *WorkflowStatusService) (*WorkflowService, error) {
+func NewWorkflowService(client service.Connector, version string, scheme *WorkflowSchemeService, status *WorkflowStatusService) (*WorkflowService, error) {
 
 	if version == "" {
 		return nil, model.ErrNoVersionProvided
@@ -74,20 +74,15 @@ func (w *WorkflowService) Delete(ctx context.Context, workflowId string) (*model
 }
 
 type internalWorkflowImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
 func (i *internalWorkflowImpl) Create(ctx context.Context, payload *model.WorkflowPayloadScheme) (*model.WorkflowCreatedResponseScheme, *model.ResponseScheme, error) {
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	endpoint := fmt.Sprintf("rest/api/%v/workflow", i.version)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -129,7 +124,7 @@ func (i *internalWorkflowImpl) Gets(ctx context.Context, options *model.Workflow
 
 	endpoint := fmt.Sprintf("rest/api/%v/workflow/search?%v", i.version, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -151,7 +146,7 @@ func (i *internalWorkflowImpl) Delete(ctx context.Context, workflowId string) (*
 
 	endpoint := fmt.Sprintf("rest/api/%v/workflow/%v", i.version, workflowId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}

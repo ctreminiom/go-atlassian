@@ -1,5 +1,11 @@
 package models
 
+type CustomFieldAssetScheme struct {
+	WorkspaceId string `json:"workspaceId,omitempty"`
+	Id          string `json:"id,omitempty"`
+	ObjectId    string `json:"objectId,omitempty"`
+}
+
 type CustomFieldContextOptionPageScheme struct {
 	Self       string                            `json:"self,omitempty"`
 	NextPage   string                            `json:"nextPage,omitempty"`

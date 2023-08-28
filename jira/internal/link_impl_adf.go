@@ -16,7 +16,7 @@ type LinkADFService struct {
 }
 
 type internalLinkADFServiceImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -47,7 +47,7 @@ func (l *LinkADFService) Delete(ctx context.Context, linkId string) (*model.Resp
 
 // Create creates a link between two issues. Use this operation to indicate a relationship between two issues
 //
-// and optionally add a comment to the from (outward) issue.
+// and optionally add a comment to the form (outward) issue.
 //
 // To use this resource the site must have Issue Linking enabled.
 //
@@ -64,7 +64,7 @@ func (i *internalLinkADFServiceImpl) Get(ctx context.Context, linkId string) (*m
 
 	endpoint := fmt.Sprintf("rest/api/%v/issueLink/%v", i.version, linkId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -86,7 +86,7 @@ func (i *internalLinkADFServiceImpl) Gets(ctx context.Context, issueKeyOrId stri
 
 	endpoint := fmt.Sprintf("rest/api/%v/issue/%v?fields=issuelinks", i.version, issueKeyOrId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -108,7 +108,7 @@ func (i *internalLinkADFServiceImpl) Delete(ctx context.Context, linkId string) 
 
 	endpoint := fmt.Sprintf("rest/api/%v/issueLink/%v", i.version, linkId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -118,14 +118,9 @@ func (i *internalLinkADFServiceImpl) Delete(ctx context.Context, linkId string) 
 
 func (i *internalLinkADFServiceImpl) Create(ctx context.Context, payload *model.LinkPayloadSchemeV3) (*model.ResponseScheme, error) {
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, err
-	}
-
 	endpoint := fmt.Sprintf("rest/api/%v/issueLink", i.version)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
 		return nil, err
 	}

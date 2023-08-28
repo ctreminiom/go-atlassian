@@ -1,7 +1,9 @@
 package models
 
 import (
+	"fmt"
 	"github.com/stretchr/testify/assert"
+	"log"
 	"testing"
 	"time"
 )
@@ -9,7 +11,7 @@ import (
 func TestCustomerRequestFields_Attachments(t *testing.T) {
 
 	type fields struct {
-		Fields []map[string]interface{}
+		Fields map[string]interface{}
 	}
 	type args struct {
 		attachments []string
@@ -23,7 +25,7 @@ func TestCustomerRequestFields_Attachments(t *testing.T) {
 	}{
 		{
 			name:   "when the parameters are correct",
-			fields: fields{},
+			fields: fields{Fields: make(map[string]interface{})},
 			args: args{
 				attachments: []string{"uuid-sample"},
 			},
@@ -32,7 +34,7 @@ func TestCustomerRequestFields_Attachments(t *testing.T) {
 
 		{
 			name:   "when the attachments are not provided",
-			fields: fields{},
+			fields: fields{Fields: make(map[string]interface{})},
 			args: args{
 				attachments: nil,
 			},
@@ -66,7 +68,7 @@ func TestCustomerRequestFields_Attachments(t *testing.T) {
 func TestCustomerRequestFields_Labels(t *testing.T) {
 
 	type fields struct {
-		Fields []map[string]interface{}
+		Fields map[string]interface{}
 	}
 	type args struct {
 		labels []string
@@ -80,7 +82,7 @@ func TestCustomerRequestFields_Labels(t *testing.T) {
 	}{
 		{
 			name:   "when the parameters are correct",
-			fields: fields{},
+			fields: fields{Fields: make(map[string]interface{})},
 			args: args{
 				labels: []string{"label-sample"},
 			},
@@ -89,7 +91,7 @@ func TestCustomerRequestFields_Labels(t *testing.T) {
 
 		{
 			name:   "when the labels are not provided",
-			fields: fields{},
+			fields: fields{Fields: make(map[string]interface{})},
 			args: args{
 				labels: nil,
 			},
@@ -123,7 +125,7 @@ func TestCustomerRequestFields_Labels(t *testing.T) {
 func TestCustomerRequestFields_Components(t *testing.T) {
 
 	type fields struct {
-		Fields []map[string]interface{}
+		Fields map[string]interface{}
 	}
 	type args struct {
 		components []string
@@ -137,7 +139,7 @@ func TestCustomerRequestFields_Components(t *testing.T) {
 	}{
 		{
 			name:   "when the parameters are correct",
-			fields: fields{},
+			fields: fields{Fields: make(map[string]interface{})},
 			args: args{
 				components: []string{"component-sample"},
 			},
@@ -146,7 +148,7 @@ func TestCustomerRequestFields_Components(t *testing.T) {
 
 		{
 			name:   "when the components are not provided",
-			fields: fields{},
+			fields: fields{Fields: make(map[string]interface{})},
 			args: args{
 				components: nil,
 			},
@@ -180,7 +182,7 @@ func TestCustomerRequestFields_Components(t *testing.T) {
 func TestCustomerRequestFields_Groups(t *testing.T) {
 
 	type fields struct {
-		Fields []map[string]interface{}
+		Fields map[string]interface{}
 	}
 	type args struct {
 		customFieldID string
@@ -195,7 +197,7 @@ func TestCustomerRequestFields_Groups(t *testing.T) {
 	}{
 		{
 			name:   "when the parameters are correct",
-			fields: fields{},
+			fields: fields{Fields: make(map[string]interface{})},
 			args: args{
 				customFieldID: "customfield_10000",
 				groups:        []string{"group-sample"},
@@ -205,7 +207,7 @@ func TestCustomerRequestFields_Groups(t *testing.T) {
 
 		{
 			name:   "when the customfield is not provided",
-			fields: fields{},
+			fields: fields{Fields: make(map[string]interface{})},
 			args: args{
 				customFieldID: "",
 				groups:        []string{"group-sample"},
@@ -216,7 +218,7 @@ func TestCustomerRequestFields_Groups(t *testing.T) {
 
 		{
 			name:   "when the groups are not provided",
-			fields: fields{},
+			fields: fields{Fields: make(map[string]interface{})},
 			args: args{
 				customFieldID: "customfield_10000",
 				groups:        nil,
@@ -251,7 +253,7 @@ func TestCustomerRequestFields_Groups(t *testing.T) {
 func TestCustomerRequestFields_Group(t *testing.T) {
 
 	type fields struct {
-		Fields []map[string]interface{}
+		Fields map[string]interface{}
 	}
 	type args struct {
 		customFieldID string
@@ -266,7 +268,7 @@ func TestCustomerRequestFields_Group(t *testing.T) {
 	}{
 		{
 			name:   "when the parameters are correct",
-			fields: fields{},
+			fields: fields{Fields: make(map[string]interface{})},
 			args: args{
 				customFieldID: "customfield_10000",
 				group:         "group-sample",
@@ -276,7 +278,7 @@ func TestCustomerRequestFields_Group(t *testing.T) {
 
 		{
 			name:   "when the customfield is not provided",
-			fields: fields{},
+			fields: fields{Fields: make(map[string]interface{})},
 			args: args{
 				customFieldID: "",
 				group:         "group-sample",
@@ -287,7 +289,7 @@ func TestCustomerRequestFields_Group(t *testing.T) {
 
 		{
 			name:   "when the group is not provided",
-			fields: fields{},
+			fields: fields{Fields: make(map[string]interface{})},
 			args: args{
 				customFieldID: "customfield_10000",
 				group:         "",
@@ -322,7 +324,7 @@ func TestCustomerRequestFields_Group(t *testing.T) {
 func TestCustomerRequestFields_URL(t *testing.T) {
 
 	type fields struct {
-		Fields []map[string]interface{}
+		Fields map[string]interface{}
 	}
 	type args struct {
 		customFieldID string
@@ -337,7 +339,7 @@ func TestCustomerRequestFields_URL(t *testing.T) {
 	}{
 		{
 			name:   "when the parameters are correct",
-			fields: fields{},
+			fields: fields{Fields: make(map[string]interface{})},
 			args: args{
 				customFieldID: "customfield_10000",
 				url:           "url-sample",
@@ -347,7 +349,7 @@ func TestCustomerRequestFields_URL(t *testing.T) {
 
 		{
 			name:   "when the customfield is not provided",
-			fields: fields{},
+			fields: fields{Fields: make(map[string]interface{})},
 			args: args{
 				customFieldID: "",
 				url:           "url-sample",
@@ -358,7 +360,7 @@ func TestCustomerRequestFields_URL(t *testing.T) {
 
 		{
 			name:   "when the url is not provided",
-			fields: fields{},
+			fields: fields{Fields: make(map[string]interface{})},
 			args: args{
 				customFieldID: "customfield_10000",
 				url:           "",
@@ -393,7 +395,7 @@ func TestCustomerRequestFields_URL(t *testing.T) {
 func TestCustomerRequestFields_Text(t *testing.T) {
 
 	type fields struct {
-		Fields []map[string]interface{}
+		Fields map[string]interface{}
 	}
 	type args struct {
 		customFieldID string
@@ -408,7 +410,7 @@ func TestCustomerRequestFields_Text(t *testing.T) {
 	}{
 		{
 			name:   "when the parameters are correct",
-			fields: fields{},
+			fields: fields{Fields: make(map[string]interface{})},
 			args: args{
 				customFieldID: "customfield_10000",
 				textValue:     "text-sample",
@@ -418,7 +420,7 @@ func TestCustomerRequestFields_Text(t *testing.T) {
 
 		{
 			name:   "when the customfield is not provided",
-			fields: fields{},
+			fields: fields{Fields: make(map[string]interface{})},
 			args: args{
 				customFieldID: "",
 				textValue:     "url-sample",
@@ -429,7 +431,7 @@ func TestCustomerRequestFields_Text(t *testing.T) {
 
 		{
 			name:   "when the text is not provided",
-			fields: fields{},
+			fields: fields{Fields: make(map[string]interface{})},
 			args: args{
 				customFieldID: "customfield_10000",
 				textValue:     "",
@@ -464,7 +466,7 @@ func TestCustomerRequestFields_Text(t *testing.T) {
 func TestCustomerRequestFields_DateTime(t *testing.T) {
 
 	type fields struct {
-		Fields []map[string]interface{}
+		Fields map[string]interface{}
 	}
 	type args struct {
 		customFieldID string
@@ -479,7 +481,7 @@ func TestCustomerRequestFields_DateTime(t *testing.T) {
 	}{
 		{
 			name:   "when the parameters are correct",
-			fields: fields{},
+			fields: fields{Fields: make(map[string]interface{})},
 			args: args{
 				customFieldID: "customfield_10000",
 				dateValue:     time.Now().AddDate(0, -1, 0),
@@ -489,7 +491,7 @@ func TestCustomerRequestFields_DateTime(t *testing.T) {
 
 		{
 			name:   "when the customfield is not provided",
-			fields: fields{},
+			fields: fields{Fields: make(map[string]interface{})},
 			args: args{
 				customFieldID: "",
 				dateValue:     time.Now().AddDate(0, -1, 0),
@@ -500,7 +502,7 @@ func TestCustomerRequestFields_DateTime(t *testing.T) {
 
 		{
 			name:   "when the date-time is not provided",
-			fields: fields{},
+			fields: fields{Fields: make(map[string]interface{})},
 			args: args{
 				customFieldID: "customfield_10000",
 			},
@@ -534,7 +536,7 @@ func TestCustomerRequestFields_DateTime(t *testing.T) {
 func TestCustomerRequestFields_Date(t *testing.T) {
 
 	type fields struct {
-		Fields []map[string]interface{}
+		Fields map[string]interface{}
 	}
 	type args struct {
 		customFieldID string
@@ -549,7 +551,7 @@ func TestCustomerRequestFields_Date(t *testing.T) {
 	}{
 		{
 			name:   "when the parameters are correct",
-			fields: fields{},
+			fields: fields{Fields: make(map[string]interface{})},
 			args: args{
 				customFieldID: "customfield_10000",
 				dateValue:     time.Now().AddDate(0, -1, 0),
@@ -559,7 +561,7 @@ func TestCustomerRequestFields_Date(t *testing.T) {
 
 		{
 			name:   "when the customfield is not provided",
-			fields: fields{},
+			fields: fields{Fields: make(map[string]interface{})},
 			args: args{
 				customFieldID: "",
 				dateValue:     time.Now().AddDate(0, -1, 0),
@@ -570,7 +572,7 @@ func TestCustomerRequestFields_Date(t *testing.T) {
 
 		{
 			name:   "when the date-time is not provided",
-			fields: fields{},
+			fields: fields{Fields: make(map[string]interface{})},
 			args: args{
 				customFieldID: "customfield_10000",
 			},
@@ -604,7 +606,7 @@ func TestCustomerRequestFields_Date(t *testing.T) {
 func TestCustomerRequestFields_MultiSelect(t *testing.T) {
 
 	type fields struct {
-		Fields []map[string]interface{}
+		Fields map[string]interface{}
 	}
 	type args struct {
 		customFieldID string
@@ -619,7 +621,7 @@ func TestCustomerRequestFields_MultiSelect(t *testing.T) {
 	}{
 		{
 			name:   "when the parameters are correct",
-			fields: fields{},
+			fields: fields{Fields: make(map[string]interface{})},
 			args: args{
 				customFieldID: "customfield_10000",
 				options:       []string{"option-1"},
@@ -629,7 +631,7 @@ func TestCustomerRequestFields_MultiSelect(t *testing.T) {
 
 		{
 			name:   "when the customfield is not provided",
-			fields: fields{},
+			fields: fields{Fields: make(map[string]interface{})},
 			args: args{
 				customFieldID: "",
 				options:       []string{"option-1"},
@@ -640,7 +642,7 @@ func TestCustomerRequestFields_MultiSelect(t *testing.T) {
 
 		{
 			name:   "when the groups are not provided",
-			fields: fields{},
+			fields: fields{Fields: make(map[string]interface{})},
 			args: args{
 				customFieldID: "customfield_10000",
 				options:       nil,
@@ -675,7 +677,7 @@ func TestCustomerRequestFields_MultiSelect(t *testing.T) {
 func TestCustomerRequestFields_Select(t *testing.T) {
 
 	type fields struct {
-		Fields []map[string]interface{}
+		Fields map[string]interface{}
 	}
 	type args struct {
 		customFieldID string
@@ -690,7 +692,7 @@ func TestCustomerRequestFields_Select(t *testing.T) {
 	}{
 		{
 			name:   "when the parameters are correct",
-			fields: fields{},
+			fields: fields{Fields: make(map[string]interface{})},
 			args: args{
 				customFieldID: "customfield_10000",
 				option:        "option-sample",
@@ -700,7 +702,7 @@ func TestCustomerRequestFields_Select(t *testing.T) {
 
 		{
 			name:   "when the customfield is not provided",
-			fields: fields{},
+			fields: fields{Fields: make(map[string]interface{})},
 			args: args{
 				customFieldID: "",
 				option:        "option-sample",
@@ -711,7 +713,7 @@ func TestCustomerRequestFields_Select(t *testing.T) {
 
 		{
 			name:   "when the group is not provided",
-			fields: fields{},
+			fields: fields{Fields: make(map[string]interface{})},
 			args: args{
 				customFieldID: "customfield_10000",
 				option:        "",
@@ -746,7 +748,7 @@ func TestCustomerRequestFields_Select(t *testing.T) {
 func TestCustomerRequestFields_RadioButton(t *testing.T) {
 
 	type fields struct {
-		Fields []map[string]interface{}
+		Fields map[string]interface{}
 	}
 	type args struct {
 		customFieldID string
@@ -761,7 +763,7 @@ func TestCustomerRequestFields_RadioButton(t *testing.T) {
 	}{
 		{
 			name:   "when the parameters are correct",
-			fields: fields{},
+			fields: fields{Fields: make(map[string]interface{})},
 			args: args{
 				customFieldID: "customfield_10000",
 				option:        "option-sample",
@@ -771,7 +773,7 @@ func TestCustomerRequestFields_RadioButton(t *testing.T) {
 
 		{
 			name:   "when the customfield is not provided",
-			fields: fields{},
+			fields: fields{Fields: make(map[string]interface{})},
 			args: args{
 				customFieldID: "",
 				option:        "option-sample",
@@ -782,7 +784,7 @@ func TestCustomerRequestFields_RadioButton(t *testing.T) {
 
 		{
 			name:   "when the group is not provided",
-			fields: fields{},
+			fields: fields{Fields: make(map[string]interface{})},
 			args: args{
 				customFieldID: "customfield_10000",
 				option:        "",
@@ -817,7 +819,7 @@ func TestCustomerRequestFields_RadioButton(t *testing.T) {
 func TestCustomerRequestFields_User(t *testing.T) {
 
 	type fields struct {
-		Fields []map[string]interface{}
+		Fields map[string]interface{}
 	}
 	type args struct {
 		customFieldID string
@@ -832,7 +834,7 @@ func TestCustomerRequestFields_User(t *testing.T) {
 	}{
 		{
 			name:   "when the parameters are correct",
-			fields: fields{},
+			fields: fields{Fields: make(map[string]interface{})},
 			args: args{
 				customFieldID: "customfield_10000",
 				accountID:     "account-id-sample-uuid",
@@ -842,7 +844,7 @@ func TestCustomerRequestFields_User(t *testing.T) {
 
 		{
 			name:   "when the customfield is not provided",
-			fields: fields{},
+			fields: fields{Fields: make(map[string]interface{})},
 			args: args{
 				customFieldID: "",
 				accountID:     "account-id-sample-uuid",
@@ -853,7 +855,7 @@ func TestCustomerRequestFields_User(t *testing.T) {
 
 		{
 			name:   "when the group is not provided",
-			fields: fields{},
+			fields: fields{Fields: make(map[string]interface{})},
 			args: args{
 				customFieldID: "customfield_10000",
 				accountID:     "",
@@ -888,7 +890,7 @@ func TestCustomerRequestFields_User(t *testing.T) {
 func TestCustomerRequestFields_Users(t *testing.T) {
 
 	type fields struct {
-		Fields []map[string]interface{}
+		Fields map[string]interface{}
 	}
 	type args struct {
 		customFieldID string
@@ -903,7 +905,7 @@ func TestCustomerRequestFields_Users(t *testing.T) {
 	}{
 		{
 			name:   "when the parameters are correct",
-			fields: fields{},
+			fields: fields{Fields: make(map[string]interface{})},
 			args: args{
 				customFieldID: "customfield_10000",
 				accountIDs:    []string{"account-id-sample-uuid"},
@@ -913,7 +915,7 @@ func TestCustomerRequestFields_Users(t *testing.T) {
 
 		{
 			name:   "when the customfield is not provided",
-			fields: fields{},
+			fields: fields{Fields: make(map[string]interface{})},
 			args: args{
 				customFieldID: "",
 				accountIDs:    []string{"account-id-sample-uuid"},
@@ -924,7 +926,7 @@ func TestCustomerRequestFields_Users(t *testing.T) {
 
 		{
 			name:   "when the group is not provided",
-			fields: fields{},
+			fields: fields{Fields: make(map[string]interface{})},
 			args: args{
 				customFieldID: "customfield_10000",
 				accountIDs:    nil,
@@ -959,7 +961,7 @@ func TestCustomerRequestFields_Users(t *testing.T) {
 func TestCustomerRequestFields_Number(t *testing.T) {
 
 	type fields struct {
-		Fields []map[string]interface{}
+		Fields map[string]interface{}
 	}
 	type args struct {
 		customFieldID string
@@ -974,7 +976,7 @@ func TestCustomerRequestFields_Number(t *testing.T) {
 	}{
 		{
 			name:   "when the parameters are correct",
-			fields: fields{},
+			fields: fields{Fields: make(map[string]interface{})},
 			args: args{
 				customFieldID: "customfield_10000",
 				numberValue:   10000.232,
@@ -984,7 +986,7 @@ func TestCustomerRequestFields_Number(t *testing.T) {
 
 		{
 			name:   "when the customfield is not provided",
-			fields: fields{},
+			fields: fields{Fields: make(map[string]interface{})},
 			args: args{
 				customFieldID: "",
 				numberValue:   10000.232,
@@ -1019,7 +1021,7 @@ func TestCustomerRequestFields_Number(t *testing.T) {
 func TestCustomerRequestFields_CheckBox(t *testing.T) {
 
 	type fields struct {
-		Fields []map[string]interface{}
+		Fields map[string]interface{}
 	}
 	type args struct {
 		customFieldID string
@@ -1034,7 +1036,7 @@ func TestCustomerRequestFields_CheckBox(t *testing.T) {
 	}{
 		{
 			name:   "when the parameters are correct",
-			fields: fields{},
+			fields: fields{Fields: make(map[string]interface{})},
 			args: args{
 				customFieldID: "customfield_10000",
 				options:       []string{"option-1"},
@@ -1044,7 +1046,7 @@ func TestCustomerRequestFields_CheckBox(t *testing.T) {
 
 		{
 			name:   "when the customfield is not provided",
-			fields: fields{},
+			fields: fields{Fields: make(map[string]interface{})},
 			args: args{
 				customFieldID: "",
 				options:       []string{"option-1"},
@@ -1055,7 +1057,7 @@ func TestCustomerRequestFields_CheckBox(t *testing.T) {
 
 		{
 			name:   "when the groups are not provided",
-			fields: fields{},
+			fields: fields{Fields: make(map[string]interface{})},
 			args: args{
 				customFieldID: "customfield_10000",
 				options:       nil,
@@ -1089,7 +1091,7 @@ func TestCustomerRequestFields_CheckBox(t *testing.T) {
 
 func TestCustomerRequestFields_Cascading(t *testing.T) {
 	type fields struct {
-		Fields []map[string]interface{}
+		Fields map[string]interface{}
 	}
 	type args struct {
 		customFieldID string
@@ -1105,7 +1107,7 @@ func TestCustomerRequestFields_Cascading(t *testing.T) {
 	}{
 		{
 			name:   "when the parameters are correct",
-			fields: fields{},
+			fields: fields{Fields: make(map[string]interface{})},
 			args: args{
 				customFieldID: "customfield_10001",
 				parent:        "America",
@@ -1116,7 +1118,7 @@ func TestCustomerRequestFields_Cascading(t *testing.T) {
 
 		{
 			name:   "when the custom-field is not provided",
-			fields: fields{},
+			fields: fields{Fields: make(map[string]interface{})},
 			args: args{
 				customFieldID: "",
 				parent:        "America",
@@ -1128,7 +1130,7 @@ func TestCustomerRequestFields_Cascading(t *testing.T) {
 
 		{
 			name:   "when the parent value is not provided",
-			fields: fields{},
+			fields: fields{Fields: make(map[string]interface{})},
 			args: args{
 				customFieldID: "customfield_10001",
 				parent:        "",
@@ -1140,7 +1142,7 @@ func TestCustomerRequestFields_Cascading(t *testing.T) {
 
 		{
 			name:   "when the child value is not provided",
-			fields: fields{},
+			fields: fields{Fields: make(map[string]interface{})},
 			args: args{
 				customFieldID: "customfield_10001",
 				parent:        "America",
@@ -1168,6 +1170,131 @@ func TestCustomerRequestFields_Cascading(t *testing.T) {
 			} else {
 				assert.NoError(t, err)
 			}
+		})
+	}
+}
+
+func TestCreateCustomerRequestPayloadScheme_MergeFields(t *testing.T) {
+
+	fieldsMocked := &CustomerRequestFields{Fields: make(map[string]interface{})}
+
+	if err := fieldsMocked.Text("summary", "Request JSD help via REST"); err != nil {
+		t.Fatal(err)
+	}
+
+	if err := fieldsMocked.Text("description", "I need a new *mouse* for my Mac"); err != nil {
+		t.Fatal(err)
+	}
+
+	if err := fieldsMocked.Select("priority", "Major"); err != nil {
+		t.Fatal(err)
+	}
+
+	if err := fieldsMocked.Components([]string{"Jira", "Intranet"}); err != nil {
+		t.Fatal(err)
+	}
+
+	if err := fieldsMocked.Users("customfield_320239", []string{"account-id-sample"}); err != nil {
+		t.Fatal(err)
+	}
+
+	if err := fieldsMocked.Date("duedate", time.Date(2020, 1, 2, 3, 4, 5, 0, time.UTC)); err != nil {
+		log.Fatal(err)
+	}
+
+	if err := fieldsMocked.Labels([]string{"label-00", "label-01"}); err != nil {
+		log.Fatal(err)
+	}
+
+	payloadMocked := map[string]interface{}{
+		"requestFieldValues": map[string]interface{}{
+			"components":         []map[string]interface{}{map[string]interface{}{"name": "Jira"}, map[string]interface{}{"name": "Intranet"}},
+			"customfield_320239": []map[string]interface{}{map[string]interface{}{"accountId": "account-id-sample"}},
+			"description":        "I need a new *mouse* for my Mac",
+			"duedate":            "2020-01-02",
+			"labels":             []string{"label-00", "label-01"},
+			"priority":           map[string]interface{}{"value": "Major"},
+			"summary":            "Request JSD help via REST"},
+		"requestParticipants": []interface{}{"uuid-sample-1", "uuid-sample-2"},
+		"requestTypeId":       "28881",
+		"serviceDeskId":       "29990"}
+
+	type fields struct {
+		RequestParticipants []string
+		ServiceDeskID       string
+		RequestTypeID       string
+	}
+	type args struct {
+		fields *CustomerRequestFields
+	}
+
+	testCases := []struct {
+		name    string
+		fields  fields
+		args    args
+		want    map[string]interface{}
+		wantErr assert.ErrorAssertionFunc
+		Err     error
+	}{
+		{
+			name: "when the parameters are correct",
+			fields: fields{
+				RequestParticipants: []string{"uuid-sample-1", "uuid-sample-2"},
+				ServiceDeskID:       "29990",
+				RequestTypeID:       "28881",
+			},
+			args: args{
+				fields: fieldsMocked,
+			},
+			want:    payloadMocked,
+			wantErr: assert.NoError,
+		},
+
+		{
+			name: "when the field struct is not provided",
+			fields: fields{
+				RequestParticipants: []string{"uuid-sample-1", "uuid-sample-2"},
+				ServiceDeskID:       "29990",
+				RequestTypeID:       "28881",
+			},
+			args: args{
+				fields: nil,
+			},
+			wantErr: assert.Error,
+			Err:     ErrNoCustomFieldError,
+		},
+
+		{
+			name: "when the field struct does not contain values",
+			fields: fields{
+				RequestParticipants: []string{"uuid-sample-1", "uuid-sample-2"},
+				ServiceDeskID:       "29990",
+				RequestTypeID:       "28881",
+			},
+			args: args{
+				fields: &CustomerRequestFields{},
+			},
+			wantErr: assert.Error,
+			Err:     ErrNoCustomFieldError,
+		},
+	}
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+
+			c := &CreateCustomerRequestPayloadScheme{
+				RequestParticipants: testCase.fields.RequestParticipants,
+				ServiceDeskID:       testCase.fields.ServiceDeskID,
+				RequestTypeID:       testCase.fields.RequestTypeID,
+			}
+
+			got, err := c.MergeFields(testCase.args.fields)
+
+			if !testCase.wantErr(t, err, fmt.Sprintf("MergeFields(%v)", testCase.args.fields)) {
+
+				assert.NoError(t, err)
+				return
+			}
+			assert.Equalf(t, testCase.want, got, "MergeFields(%v)", testCase.args.fields)
 		})
 	}
 }

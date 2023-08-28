@@ -1,7 +1,6 @@
 package internal
 
 import (
-	"bytes"
 	"context"
 	"errors"
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
@@ -15,12 +14,10 @@ import (
 
 func Test_internalWorklogAdfImpl_Gets(t *testing.T) {
 
-	payloadMocked := &struct {
-		Ids []int "json:\"ids\""
-	}{Ids: []int{1, 2, 3, 4}}
+	payloadMocked := map[string]interface{}{"ids": []int{1, 2, 3, 4}}
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -48,17 +45,13 @@ func Test_internalWorklogAdfImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/3/worklog/list?expand=properties",
-					bytes.NewReader([]byte{})).
+					"", payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -82,17 +75,13 @@ func Test_internalWorklogAdfImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/worklog/list?expand=properties",
-					bytes.NewReader([]byte{})).
+					"", payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -126,17 +115,13 @@ func Test_internalWorklogAdfImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/3/worklog/list?expand=properties",
-					bytes.NewReader([]byte{})).
+					"", payloadMocked).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -180,7 +165,7 @@ func Test_internalWorklogAdfImpl_Gets(t *testing.T) {
 func Test_internalWorklogAdfImpl_Get(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -209,13 +194,13 @@ func Test_internalWorklogAdfImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/issue/DUMMY-5/worklog/493939?expand=properties",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -240,13 +225,13 @@ func Test_internalWorklogAdfImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/issue/DUMMY-5/worklog/493939?expand=properties",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -292,13 +277,13 @@ func Test_internalWorklogAdfImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/issue/DUMMY-5/worklog/493939?expand=properties",
-					nil).
+					"", nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -342,7 +327,7 @@ func Test_internalWorklogAdfImpl_Get(t *testing.T) {
 func Test_internalWorklogAdfImpl_Issue(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -374,13 +359,13 @@ func Test_internalWorklogAdfImpl_Issue(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/issue/DUMMY-5/worklog?expand=properties&maxResults=50&startAt=0&startedAfter=1661101991",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -407,13 +392,13 @@ func Test_internalWorklogAdfImpl_Issue(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/issue/DUMMY-5/worklog?expand=properties&maxResults=50&startAt=0&startedAfter=1661101991",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -450,13 +435,13 @@ func Test_internalWorklogAdfImpl_Issue(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/issue/DUMMY-5/worklog?expand=properties&maxResults=50&startAt=0&startedAfter=1661101991",
-					nil).
+					"", nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -501,7 +486,7 @@ func Test_internalWorklogAdfImpl_Issue(t *testing.T) {
 func Test_internalWorklogAdfImpl_Delete(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -537,13 +522,13 @@ func Test_internalWorklogAdfImpl_Delete(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/api/3/issue/DUMMY-5/worklog/h837372?adjustEstimate=new&expand=properties&newEstimate=2d&notifyUsers=true&overrideEditableFlag=true&reduceBy=manual",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -575,13 +560,13 @@ func Test_internalWorklogAdfImpl_Delete(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/api/2/issue/DUMMY-5/worklog/h837372?adjustEstimate=new&expand=properties&newEstimate=2d&notifyUsers=true&overrideEditableFlag=true&reduceBy=manual",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -605,13 +590,13 @@ func Test_internalWorklogAdfImpl_Delete(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/api/3/issue/DUMMY-5/worklog/h837372",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -656,13 +641,13 @@ func Test_internalWorklogAdfImpl_Delete(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/api/3/issue/DUMMY-5/worklog/h837372",
-					nil).
+					"", nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -706,7 +691,7 @@ func Test_internalWorklogAdfImpl_Delete(t *testing.T) {
 func Test_internalWorklogAdfImpl_Deleted(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -732,13 +717,13 @@ func Test_internalWorklogAdfImpl_Deleted(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/worklog/deleted?since=928281811",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -761,13 +746,13 @@ func Test_internalWorklogAdfImpl_Deleted(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/worklog/deleted?since=928281811",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -790,13 +775,13 @@ func Test_internalWorklogAdfImpl_Deleted(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/worklog/deleted?since=928281811",
-					nil).
+					"", nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -840,7 +825,7 @@ func Test_internalWorklogAdfImpl_Deleted(t *testing.T) {
 func Test_internalWorklogAdfImpl_Updated(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -868,13 +853,13 @@ func Test_internalWorklogAdfImpl_Updated(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/worklog/updated?expand=properties&since=928281811",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -898,13 +883,13 @@ func Test_internalWorklogAdfImpl_Updated(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/worklog/updated?expand=properties&since=928281811",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -928,13 +913,13 @@ func Test_internalWorklogAdfImpl_Updated(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/worklog/updated?expand=properties&since=928281811",
-					nil).
+					"", nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -1004,7 +989,7 @@ func Test_internalWorklogAdfImpl_Add(t *testing.T) {
 	}
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -1041,17 +1026,13 @@ func Test_internalWorklogAdfImpl_Add(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/3/issue/DUMMY-5/worklog?adjustEstimate=new&expand=properties&newEstimate=2d&notifyUsers=true&overrideEditableFlag=true&reduceBy=manual",
-					bytes.NewReader([]byte{})).
+					"", payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -1083,17 +1064,13 @@ func Test_internalWorklogAdfImpl_Add(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/issue/DUMMY-5/worklog?adjustEstimate=new&expand=properties&newEstimate=2d&notifyUsers=true&overrideEditableFlag=true&reduceBy=manual",
-					bytes.NewReader([]byte{})).
+					"", payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -1105,28 +1082,6 @@ func Test_internalWorklogAdfImpl_Add(t *testing.T) {
 			},
 			wantErr: false,
 			Err:     nil,
-		},
-
-		{
-			name:   "when the payload is not provided",
-			fields: fields{version: "3"},
-			args: args{
-				ctx:          context.TODO(),
-				issueKeyOrID: "DUMMY-5",
-				payload:      nil,
-			},
-			on: func(fields *fields) {
-
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					(*model.WorklogADFPayloadScheme)(nil)).
-					Return(bytes.NewReader([]byte{}), model.ErrNonPayloadPointerError)
-
-				fields.c = client
-			},
-			wantErr: true,
-			Err:     model.ErrNonPayloadPointerError,
 		},
 
 		{
@@ -1147,17 +1102,13 @@ func Test_internalWorklogAdfImpl_Add(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/3/issue/DUMMY-5/worklog?adjustEstimate=new&expand=properties&newEstimate=2d&notifyUsers=true&overrideEditableFlag=true&reduceBy=manual",
-					bytes.NewReader([]byte{})).
+					"", payloadMocked).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -1228,7 +1179,7 @@ func Test_internalWorklogAdfImpl_Update(t *testing.T) {
 	}
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -1266,17 +1217,13 @@ func Test_internalWorklogAdfImpl_Update(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/3/issue/DUMMY-5/worklog/3933828822?adjustEstimate=new&expand=properties&newEstimate=2d&notifyUsers=true&overrideEditableFlag=true&reduceBy=manual",
-					bytes.NewReader([]byte{})).
+					"", payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -1309,17 +1256,13 @@ func Test_internalWorklogAdfImpl_Update(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/2/issue/DUMMY-5/worklog/3933828822?adjustEstimate=new&expand=properties&newEstimate=2d&notifyUsers=true&overrideEditableFlag=true&reduceBy=manual",
-					bytes.NewReader([]byte{})).
+					"", payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -1355,29 +1298,6 @@ func Test_internalWorklogAdfImpl_Update(t *testing.T) {
 		},
 
 		{
-			name:   "when the payload is not provided",
-			fields: fields{version: "3"},
-			args: args{
-				ctx:          context.TODO(),
-				issueKeyOrID: "DUMMY-5",
-				worklogId:    "38388382",
-				payload:      nil,
-			},
-			on: func(fields *fields) {
-
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					(*model.WorklogADFPayloadScheme)(nil)).
-					Return(bytes.NewReader([]byte{}), model.ErrNonPayloadPointerError)
-
-				fields.c = client
-			},
-			wantErr: true,
-			Err:     model.ErrNonPayloadPointerError,
-		},
-
-		{
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
@@ -1396,17 +1316,13 @@ func Test_internalWorklogAdfImpl_Update(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/3/issue/DUMMY-5/worklog/3933828822?adjustEstimate=new&expand=properties&newEstimate=2d&notifyUsers=true&overrideEditableFlag=true&reduceBy=manual",
-					bytes.NewReader([]byte{})).
+					"", payloadMocked).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -1451,7 +1367,7 @@ func Test_internalWorklogAdfImpl_Update(t *testing.T) {
 func Test_NewWorklogADFService(t *testing.T) {
 
 	type args struct {
-		client  service.Client
+		client  service.Connector
 		version string
 	}
 

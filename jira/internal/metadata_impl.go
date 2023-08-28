@@ -11,7 +11,7 @@ import (
 	"net/url"
 )
 
-func NewMetadataService(client service.Client, version string) (*MetadataService, error) {
+func NewMetadataService(client service.Connector, version string) (*MetadataService, error) {
 
 	if version == "" {
 		return nil, model.ErrNoVersionProvided
@@ -32,7 +32,7 @@ type MetadataService struct {
 //
 // GET /rest/api/{2-3}/issue/{issueIdOrKey}/editmeta
 //
-// TODO: the documentation needs to be created
+// https://docs.go-atlassian.io/jira-software-cloud/issues/metadata#get-edit-issue-metadata
 func (m *MetadataService) Get(ctx context.Context, issueKeyOrId string, overrideScreenSecurity, overrideEditableFlag bool) (gjson.Result, *model.ResponseScheme, error) {
 	return m.internalClient.Get(ctx, issueKeyOrId, overrideScreenSecurity, overrideEditableFlag)
 }
@@ -43,13 +43,13 @@ func (m *MetadataService) Get(ctx context.Context, issueKeyOrId string, override
 //
 // GET /rest/api/{2-3}/issue/createmeta
 //
-// TODO: the documentation needs to be created
+// https://docs.go-atlassian.io/jira-software-cloud/issues/metadata#get-create-issue-metadata
 func (m *MetadataService) Create(ctx context.Context, opts *model.IssueMetadataCreateOptions) (gjson.Result, *model.ResponseScheme, error) {
 	return m.internalClient.Create(ctx, opts)
 }
 
 type internalMetadataImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -65,7 +65,7 @@ func (i *internalMetadataImpl) Get(ctx context.Context, issueKeyOrId string, ove
 
 	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/editmeta?%v", i.version, issueKeyOrId, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return gjson.Result{}, nil, err
 	}
@@ -104,7 +104,7 @@ func (i *internalMetadataImpl) Create(ctx context.Context, opts *model.IssueMeta
 
 	endpoint := fmt.Sprintf("rest/api/%v/issue/createmeta?%v", i.version, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return gjson.Result{}, nil, err
 	}

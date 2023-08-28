@@ -12,7 +12,7 @@ import (
 	"strings"
 )
 
-func NewVersionService(client service.Client) *VersionService {
+func NewVersionService(client service.Connector) *VersionService {
 
 	return &VersionService{
 		internalClient: &internalVersionImpl{c: client},
@@ -52,7 +52,7 @@ func (v *VersionService) Restore(ctx context.Context, contentID string, payload 
 
 // Delete deletes a historical version.
 //
-// This does not delete the changes made to the content in that version, rather the changes for the deleted version
+// # This does not delete the changes made to the content in that version, rather the changes for the deleted version
 //
 // are rolled up into the next version. Note, you cannot delete the current version.
 //
@@ -64,7 +64,7 @@ func (v *VersionService) Delete(ctx context.Context, contentID string, versionNu
 }
 
 type internalVersionImpl struct {
-	c service.Client
+	c service.Connector
 }
 
 func (i *internalVersionImpl) Gets(ctx context.Context, contentID string, expand []string, start, limit int) (*model.ContentVersionPageScheme, *model.ResponseScheme, error) {
@@ -83,7 +83,7 @@ func (i *internalVersionImpl) Gets(ctx context.Context, contentID string, expand
 
 	endpoint := fmt.Sprintf("wiki/rest/api/content/%v/version?%v", contentID, query.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -113,7 +113,7 @@ func (i *internalVersionImpl) Get(ctx context.Context, contentID string, version
 		endpoint.WriteString(fmt.Sprintf("?%v", query.Encode()))
 	}
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -133,11 +133,6 @@ func (i *internalVersionImpl) Restore(ctx context.Context, contentID string, pay
 		return nil, nil, model.ErrNoContentIDError
 	}
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	var endpoint strings.Builder
 	endpoint.WriteString(fmt.Sprintf("wiki/rest/api/content/%v/version", contentID))
 
@@ -148,7 +143,7 @@ func (i *internalVersionImpl) Restore(ctx context.Context, contentID string, pay
 		endpoint.WriteString(fmt.Sprintf("?%v", query.Encode()))
 	}
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint.String(), reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint.String(), "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -170,7 +165,7 @@ func (i *internalVersionImpl) Delete(ctx context.Context, contentID string, vers
 
 	endpoint := fmt.Sprintf("wiki/rest/api/content/%v/version/%v", contentID, versionNumber)
 
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}

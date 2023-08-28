@@ -11,7 +11,7 @@ import (
 	"strings"
 )
 
-func NewAnalyticsService(client service.Client) *AnalyticsService {
+func NewAnalyticsService(client service.Connector) *AnalyticsService {
 
 	return &AnalyticsService{
 		internalClient: &internalAnalyticsServiceImpl{c: client},
@@ -41,7 +41,7 @@ func (a *AnalyticsService) Distinct(ctx context.Context, contentId, fromDate str
 }
 
 type internalAnalyticsServiceImpl struct {
-	c service.Client
+	c service.Connector
 }
 
 func (i *internalAnalyticsServiceImpl) Get(ctx context.Context, contentId, fromDate string) (*model.ContentViewScheme, *model.ResponseScheme, error) {
@@ -60,7 +60,7 @@ func (i *internalAnalyticsServiceImpl) Get(ctx context.Context, contentId, fromD
 		endpoint.WriteString(fmt.Sprintf("?%v", query.Encode()))
 	}
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -90,7 +90,7 @@ func (i *internalAnalyticsServiceImpl) Distinct(ctx context.Context, contentId, 
 		endpoint.WriteString(fmt.Sprintf("?%v", query.Encode()))
 	}
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
 		return nil, nil, err
 	}

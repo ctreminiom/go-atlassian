@@ -1,7 +1,6 @@
 package internal
 
 import (
-	"bytes"
 	"context"
 	"errors"
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
@@ -15,7 +14,7 @@ import (
 func Test_internalServiceRequestApprovalImpl_Gets(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -42,12 +41,13 @@ func Test_internalServiceRequestApprovalImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/request/DUMMY-2/approval?limit=50&start=100",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -70,12 +70,13 @@ func Test_internalServiceRequestApprovalImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/request/DUMMY-2/approval?limit=50&start=100",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -100,12 +101,13 @@ func Test_internalServiceRequestApprovalImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/request/DUMMY-2/approval?limit=50&start=100",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("client: no http request created"))
 
@@ -121,7 +123,7 @@ func Test_internalServiceRequestApprovalImpl_Gets(t *testing.T) {
 				ctx: context.Background(),
 			},
 			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
+				fields.c = mocks.NewConnector(t)
 			},
 			Err:     model.ErrNoIssueKeyOrIDError,
 			wantErr: true,
@@ -135,10 +137,9 @@ func Test_internalServiceRequestApprovalImpl_Gets(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			smService, err := NewApprovalService(testCase.fields.c, "latest")
-			assert.NoError(t, err)
+			approvalService := NewApprovalService(testCase.fields.c, "latest")
 
-			gotResult, gotResponse, err := smService.Gets(testCase.args.ctx, testCase.args.issueKeyOrID, testCase.args.start,
+			gotResult, gotResponse, err := approvalService.Gets(testCase.args.ctx, testCase.args.issueKeyOrID, testCase.args.start,
 				testCase.args.limit)
 
 			if testCase.wantErr {
@@ -162,7 +163,7 @@ func Test_internalServiceRequestApprovalImpl_Gets(t *testing.T) {
 func Test_internalServiceRequestApprovalImpl_Get(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -188,12 +189,13 @@ func Test_internalServiceRequestApprovalImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/request/DUMMY-2/approval/19991",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -215,12 +217,13 @@ func Test_internalServiceRequestApprovalImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/request/DUMMY-2/approval/19991",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -244,12 +247,13 @@ func Test_internalServiceRequestApprovalImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/request/DUMMY-2/approval/19991",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("client: no http request created"))
 
@@ -265,7 +269,7 @@ func Test_internalServiceRequestApprovalImpl_Get(t *testing.T) {
 				ctx: context.Background(),
 			},
 			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
+				fields.c = mocks.NewConnector(t)
 			},
 			Err:     model.ErrNoIssueKeyOrIDError,
 			wantErr: true,
@@ -278,7 +282,7 @@ func Test_internalServiceRequestApprovalImpl_Get(t *testing.T) {
 				issueKeyOrID: "DUMMY-2",
 			},
 			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
+				fields.c = mocks.NewConnector(t)
 			},
 			Err:     model.ErrNoApprovalIDError,
 			wantErr: true,
@@ -292,10 +296,9 @@ func Test_internalServiceRequestApprovalImpl_Get(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			smService, err := NewApprovalService(testCase.fields.c, "latest")
-			assert.NoError(t, err)
+			approvalService := NewApprovalService(testCase.fields.c, "latest")
 
-			gotResult, gotResponse, err := smService.Get(testCase.args.ctx, testCase.args.issueKeyOrID, testCase.args.approvalID)
+			gotResult, gotResponse, err := approvalService.Get(testCase.args.ctx, testCase.args.issueKeyOrID, testCase.args.approvalID)
 
 			if testCase.wantErr {
 
@@ -317,10 +320,8 @@ func Test_internalServiceRequestApprovalImpl_Get(t *testing.T) {
 
 func Test_internalServiceRequestApprovalImpl_Answer(t *testing.T) {
 
-	payloadMocked := &map[string]interface{}{"decision": "approve"}
-
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -348,17 +349,14 @@ func Test_internalServiceRequestApprovalImpl_Answer(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/servicedeskapi/request/DUMMY-2/approval/19991",
-					bytes.NewReader([]byte{})).
+					"",
+					map[string]interface{}{"decision": "approve"}).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -380,17 +378,14 @@ func Test_internalServiceRequestApprovalImpl_Answer(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/servicedeskapi/request/DUMMY-2/approval/19991",
-					bytes.NewReader([]byte{})).
+					"",
+					map[string]interface{}{"decision": "approve"}).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -414,17 +409,14 @@ func Test_internalServiceRequestApprovalImpl_Answer(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/servicedeskapi/request/DUMMY-2/approval/19991",
-					bytes.NewReader([]byte{})).
+					"",
+					map[string]interface{}{"decision": "approve"}).
 					Return(&http.Request{}, errors.New("client: no http request created"))
 
 				fields.c = client
@@ -439,7 +431,7 @@ func Test_internalServiceRequestApprovalImpl_Answer(t *testing.T) {
 				ctx: context.Background(),
 			},
 			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
+				fields.c = mocks.NewConnector(t)
 			},
 			Err:     model.ErrNoIssueKeyOrIDError,
 			wantErr: true,
@@ -452,7 +444,7 @@ func Test_internalServiceRequestApprovalImpl_Answer(t *testing.T) {
 				issueKeyOrID: "DUMMY-2",
 			},
 			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
+				fields.c = mocks.NewConnector(t)
 			},
 			Err:     model.ErrNoApprovalIDError,
 			wantErr: true,
@@ -466,10 +458,9 @@ func Test_internalServiceRequestApprovalImpl_Answer(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			smService, err := NewApprovalService(testCase.fields.c, "latest")
-			assert.NoError(t, err)
+			approvalService := NewApprovalService(testCase.fields.c, "latest")
 
-			gotResult, gotResponse, err := smService.Answer(testCase.args.ctx, testCase.args.issueKeyOrID,
+			gotResult, gotResponse, err := approvalService.Answer(testCase.args.ctx, testCase.args.issueKeyOrID,
 				testCase.args.approvalID, testCase.args.approve)
 
 			if testCase.wantErr {

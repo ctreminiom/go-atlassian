@@ -1,7 +1,6 @@
 package internal
 
 import (
-	"bytes"
 	"context"
 	"errors"
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
@@ -15,7 +14,7 @@ import (
 func Test_EpicService_Get(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -39,12 +38,13 @@ func Test_EpicService_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/agile/1.0/epic/EPIC-1",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -65,12 +65,13 @@ func Test_EpicService_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/agile/1.0/epic/EPIC-1",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -93,12 +94,13 @@ func Test_EpicService_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/agile/1.0/epic/EPIC-1",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("unable to create the http request"))
 
@@ -115,7 +117,7 @@ func Test_EpicService_Get(t *testing.T) {
 				epicIdOrKey: "",
 			},
 			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
+				fields.c = mocks.NewConnector(t)
 			},
 			Err:     model.ErrNoEpicIDError,
 			wantErr: true,
@@ -130,10 +132,9 @@ func Test_EpicService_Get(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			service, err := NewEpicService(testCase.fields.c, "1.0")
-			assert.NoError(t, err)
+			epicService := NewEpicService(testCase.fields.c, "1.0")
 
-			gotResult, gotResponse, err := service.Get(testCase.args.ctx, testCase.args.epicIdOrKey)
+			gotResult, gotResponse, err := epicService.Get(testCase.args.ctx, testCase.args.epicIdOrKey)
 
 			if testCase.wantErr {
 
@@ -156,7 +157,7 @@ func Test_EpicService_Get(t *testing.T) {
 func Test_EpicService_Issues(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -191,12 +192,13 @@ func Test_EpicService_Issues(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/agile/1.0/epic/EPIC-1/issue?expand=changelogs&fields=status%2Csummary&jql=project+%3D+EPIC&maxResults=50&startAt=10&validateQuery=true",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -225,12 +227,13 @@ func Test_EpicService_Issues(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/agile/1.0/epic/EPIC-1/issue?expand=changelogs&fields=status%2Csummary&jql=project+%3D+EPIC&maxResults=50&startAt=10&validateQuery=true",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -261,12 +264,13 @@ func Test_EpicService_Issues(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/agile/1.0/epic/EPIC-1/issue?expand=changelogs&fields=status%2Csummary&jql=project+%3D+EPIC&maxResults=50&startAt=10&validateQuery=true",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("unable to create the http request"))
 
@@ -283,7 +287,7 @@ func Test_EpicService_Issues(t *testing.T) {
 				epicIdOrKey: "",
 			},
 			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
+				fields.c = mocks.NewConnector(t)
 			},
 			Err:     model.ErrNoEpicIDError,
 			wantErr: true,
@@ -298,10 +302,9 @@ func Test_EpicService_Issues(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			service, err := NewEpicService(testCase.fields.c, "1.0")
-			assert.NoError(t, err)
+			epicService := NewEpicService(testCase.fields.c, "1.0")
 
-			gotResult, gotResponse, err := service.Issues(testCase.args.ctx, testCase.args.epicIdOrKey, testCase.args.opts,
+			gotResult, gotResponse, err := epicService.Issues(testCase.args.ctx, testCase.args.epicIdOrKey, testCase.args.opts,
 				testCase.args.startAt, testCase.args.maxResults)
 
 			if testCase.wantErr {
@@ -324,8 +327,10 @@ func Test_EpicService_Issues(t *testing.T) {
 
 func Test_EpicService_Move(t *testing.T) {
 
+	payloadMocked := map[string]interface{}{"issues": []string{"EPIC-10"}}
+
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -351,17 +356,14 @@ func Test_EpicService_Move(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					map[string]interface{}{"issues": []string{"EPIC-10"}}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/agile/1.0/epic/EPIC-1/issue",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -382,17 +384,14 @@ func Test_EpicService_Move(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					map[string]interface{}{"issues": []string{"EPIC-10"}}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/agile/1.0/epic/EPIC-1/issue",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -415,17 +414,14 @@ func Test_EpicService_Move(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					map[string]interface{}{"issues": []string{"EPIC-10"}}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/agile/1.0/epic/EPIC-1/issue",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, errors.New("unable to create the http request"))
 
 				fields.c = client
@@ -441,7 +437,7 @@ func Test_EpicService_Move(t *testing.T) {
 				epicIdOrKey: "",
 			},
 			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
+				fields.c = mocks.NewConnector(t)
 			},
 			Err:     model.ErrNoEpicIDError,
 			wantErr: true,
@@ -456,10 +452,9 @@ func Test_EpicService_Move(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			service, err := NewEpicService(testCase.fields.c, "1.0")
-			assert.NoError(t, err)
+			epicService := NewEpicService(testCase.fields.c, "1.0")
 
-			gotResponse, err := service.Move(testCase.args.ctx, testCase.args.epicIdOrKey, testCase.args.issues)
+			gotResponse, err := epicService.Move(testCase.args.ctx, testCase.args.epicIdOrKey, testCase.args.issues)
 
 			if testCase.wantErr {
 

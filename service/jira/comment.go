@@ -19,7 +19,7 @@ type CommentRichTextConnector interface {
 	//
 	// GET /rest/api/{2-3}/issue/{issueIdOrKey}/comment/{id}
 	//
-	// TODO: The documentation needs to be created, raise a ticket here: https://github.com/ctreminiom/go-atlassian/issues
+	// https://docs.go-atlassian.io/jira-software-cloud/issues/comments#get-comment
 	Get(ctx context.Context, issueKeyOrId, commentId string) (*model.IssueCommentSchemeV2, *model.ResponseScheme, error)
 
 	// Add adds a comment to an issue.
@@ -44,7 +44,7 @@ type CommentADFConnector interface {
 	//
 	// GET /rest/api/{2-3}/issue/{issueIdOrKey}/comment/{id}
 	//
-	// TODO: The documentation needs to be created, raise a ticket here: https://github.com/ctreminiom/go-atlassian/issues
+	// https://docs.go-atlassian.io/jira-software-cloud/issues/comments#get-comment
 	Get(ctx context.Context, issueKeyOrId, commentId string) (*model.IssueCommentScheme, *model.ResponseScheme, error)
 
 	// Add adds a comment to an issue.

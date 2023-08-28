@@ -14,7 +14,7 @@ import (
 func Test_internalQueueServiceImpl_Gets(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -43,12 +43,13 @@ func Test_internalQueueServiceImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/servicedesk/10001/queue?includeCount=true&limit=50&start=100",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -72,12 +73,13 @@ func Test_internalQueueServiceImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/servicedesk/10001/queue?includeCount=true&limit=50&start=100",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -103,12 +105,13 @@ func Test_internalQueueServiceImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/servicedesk/10001/queue?includeCount=true&limit=50&start=100",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("client: no http request created"))
 
@@ -135,10 +138,9 @@ func Test_internalQueueServiceImpl_Gets(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			smService, err := NewQueueService(testCase.fields.c, "latest")
-			assert.NoError(t, err)
+			queueService := NewQueueService(testCase.fields.c, "latest")
 
-			gotResult, gotResponse, err := smService.Gets(testCase.args.ctx, testCase.args.serviceDeskID, testCase.args.includeCount,
+			gotResult, gotResponse, err := queueService.Gets(testCase.args.ctx, testCase.args.serviceDeskID, testCase.args.includeCount,
 				testCase.args.start, testCase.args.limit)
 
 			if testCase.wantErr {
@@ -162,7 +164,7 @@ func Test_internalQueueServiceImpl_Gets(t *testing.T) {
 func Test_internalQueueServiceImpl_Get(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -190,12 +192,13 @@ func Test_internalQueueServiceImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/servicedesk/10001/queue/29?includeCount=true",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -218,12 +221,13 @@ func Test_internalQueueServiceImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/servicedesk/10001/queue/29?includeCount=true",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -248,12 +252,13 @@ func Test_internalQueueServiceImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/servicedesk/10001/queue/29?includeCount=true",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("client: no http request created"))
 
@@ -290,10 +295,9 @@ func Test_internalQueueServiceImpl_Get(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			smService, err := NewQueueService(testCase.fields.c, "latest")
-			assert.NoError(t, err)
+			queueService := NewQueueService(testCase.fields.c, "latest")
 
-			gotResult, gotResponse, err := smService.Get(testCase.args.ctx, testCase.args.serviceDeskID,
+			gotResult, gotResponse, err := queueService.Get(testCase.args.ctx, testCase.args.serviceDeskID,
 				testCase.args.queueID, testCase.args.includeCount)
 
 			if testCase.wantErr {
@@ -317,7 +321,7 @@ func Test_internalQueueServiceImpl_Get(t *testing.T) {
 func Test_internalQueueServiceImpl_Issues(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -348,12 +352,13 @@ func Test_internalQueueServiceImpl_Issues(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/servicedesk/10001/queue/29/issue?limit=50&start=100",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -378,12 +383,13 @@ func Test_internalQueueServiceImpl_Issues(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/servicedesk/10001/queue/29/issue?limit=50&start=100",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -410,12 +416,13 @@ func Test_internalQueueServiceImpl_Issues(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/servicedesk/10001/queue/29/issue?limit=50&start=100",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("client: no http request created"))
 
@@ -442,10 +449,9 @@ func Test_internalQueueServiceImpl_Issues(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			smService, err := NewQueueService(testCase.fields.c, "latest")
-			assert.NoError(t, err)
+			queueService := NewQueueService(testCase.fields.c, "latest")
 
-			gotResult, gotResponse, err := smService.Issues(testCase.args.ctx, testCase.args.serviceDeskID, testCase.args.queueID,
+			gotResult, gotResponse, err := queueService.Issues(testCase.args.ctx, testCase.args.serviceDeskID, testCase.args.queueID,
 				testCase.args.start, testCase.args.limit)
 
 			if testCase.wantErr {

@@ -14,7 +14,7 @@ import (
 func Test_internalOrganizationDirectoryServiceImpl_Activity(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -39,12 +39,13 @@ func Test_internalOrganizationDirectoryServiceImpl_Activity(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"admin/v1/orgs/organization-id-sample/directory/users/account-id-sample/last-active-dates",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -87,12 +88,13 @@ func Test_internalOrganizationDirectoryServiceImpl_Activity(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"admin/v1/orgs/organization-id-sample/directory/users/account-id-sample/last-active-dates",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -111,9 +113,9 @@ func Test_internalOrganizationDirectoryServiceImpl_Activity(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			service := NewOrganizationDirectoryService(testCase.fields.c)
+			newOrganizationDirectoryService := NewOrganizationDirectoryService(testCase.fields.c)
 
-			gotResult, gotResponse, err := service.Activity(testCase.args.ctx, testCase.args.organizationID,
+			gotResult, gotResponse, err := newOrganizationDirectoryService.Activity(testCase.args.ctx, testCase.args.organizationID,
 				testCase.args.accountID)
 
 			if testCase.wantErr {
@@ -138,7 +140,7 @@ func Test_internalOrganizationDirectoryServiceImpl_Activity(t *testing.T) {
 func Test_internalOrganizationDirectoryServiceImpl_Remove(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -163,12 +165,13 @@ func Test_internalOrganizationDirectoryServiceImpl_Remove(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"admin/v1/orgs/organization-id-sample/directory/users/account-id-sample",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -211,12 +214,13 @@ func Test_internalOrganizationDirectoryServiceImpl_Remove(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"admin/v1/orgs/organization-id-sample/directory/users/account-id-sample",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -235,9 +239,9 @@ func Test_internalOrganizationDirectoryServiceImpl_Remove(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			service := NewOrganizationDirectoryService(testCase.fields.c)
+			newOrganizationDirectoryService := NewOrganizationDirectoryService(testCase.fields.c)
 
-			gotResponse, err := service.Remove(testCase.args.ctx, testCase.args.organizationID,
+			gotResponse, err := newOrganizationDirectoryService.Remove(testCase.args.ctx, testCase.args.organizationID,
 				testCase.args.accountID)
 
 			if testCase.wantErr {
@@ -261,7 +265,7 @@ func Test_internalOrganizationDirectoryServiceImpl_Remove(t *testing.T) {
 func Test_internalOrganizationDirectoryServiceImpl_Suspend(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -286,12 +290,13 @@ func Test_internalOrganizationDirectoryServiceImpl_Suspend(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"admin/v1/orgs/organization-id-sample/directory/users/account-id-sample/suspend-access",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -334,12 +339,13 @@ func Test_internalOrganizationDirectoryServiceImpl_Suspend(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"admin/v1/orgs/organization-id-sample/directory/users/account-id-sample/suspend-access",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -358,9 +364,9 @@ func Test_internalOrganizationDirectoryServiceImpl_Suspend(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			service := NewOrganizationDirectoryService(testCase.fields.c)
+			newOrganizationDirectoryService := NewOrganizationDirectoryService(testCase.fields.c)
 
-			gotResult, gotResponse, err := service.Suspend(testCase.args.ctx, testCase.args.organizationID,
+			gotResult, gotResponse, err := newOrganizationDirectoryService.Suspend(testCase.args.ctx, testCase.args.organizationID,
 				testCase.args.accountID)
 
 			if testCase.wantErr {
@@ -385,7 +391,7 @@ func Test_internalOrganizationDirectoryServiceImpl_Suspend(t *testing.T) {
 func Test_internalOrganizationDirectoryServiceImpl_Restore(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -410,12 +416,13 @@ func Test_internalOrganizationDirectoryServiceImpl_Restore(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"admin/v1/orgs/organization-id-sample/directory/users/account-id-sample/restore-access",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -458,12 +465,13 @@ func Test_internalOrganizationDirectoryServiceImpl_Restore(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"admin/v1/orgs/organization-id-sample/directory/users/account-id-sample/restore-access",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -482,9 +490,9 @@ func Test_internalOrganizationDirectoryServiceImpl_Restore(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			service := NewOrganizationDirectoryService(testCase.fields.c)
+			newOrganizationDirectoryService := NewOrganizationDirectoryService(testCase.fields.c)
 
-			gotResult, gotResponse, err := service.Restore(testCase.args.ctx, testCase.args.organizationID,
+			gotResult, gotResponse, err := newOrganizationDirectoryService.Restore(testCase.args.ctx, testCase.args.organizationID,
 				testCase.args.accountID)
 
 			if testCase.wantErr {

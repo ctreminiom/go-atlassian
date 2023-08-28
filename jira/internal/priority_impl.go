@@ -9,7 +9,7 @@ import (
 	"net/http"
 )
 
-func NewPriorityService(client service.Client, version string) (*PriorityService, error) {
+func NewPriorityService(client service.Connector, version string) (*PriorityService, error) {
 
 	if version == "" {
 		return nil, model.ErrNoVersionProvided
@@ -43,7 +43,7 @@ func (p *PriorityService) Get(ctx context.Context, priorityId string) (*model.Pr
 }
 
 type internalPriorityImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -51,7 +51,7 @@ func (i *internalPriorityImpl) Gets(ctx context.Context) ([]*model.PrioritySchem
 
 	endpoint := fmt.Sprintf("rest/api/%v/priority", i.version)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -73,7 +73,7 @@ func (i *internalPriorityImpl) Get(ctx context.Context, priorityId string) (*mod
 
 	endpoint := fmt.Sprintf("rest/api/%v/priority/%v", i.version, priorityId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}

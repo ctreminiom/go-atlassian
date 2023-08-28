@@ -10,7 +10,7 @@ import (
 	"net/url"
 )
 
-func NewProjectValidatorService(client service.Client, version string) (*ProjectValidatorService, error) {
+func NewProjectValidatorService(client service.Connector, version string) (*ProjectValidatorService, error) {
 
 	if version == "" {
 		return nil, model.ErrNoVersionProvided
@@ -61,7 +61,7 @@ func (p *ProjectValidatorService) Name(ctx context.Context, name string) (string
 }
 
 type internalProjectValidatorImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -76,7 +76,7 @@ func (i *internalProjectValidatorImpl) Validate(ctx context.Context, key string)
 
 	endpoint := fmt.Sprintf("rest/api/%v/projectvalidate/key?%v", i.version, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -101,7 +101,7 @@ func (i *internalProjectValidatorImpl) Key(ctx context.Context, key string) (str
 
 	endpoint := fmt.Sprintf("rest/api/%v/projectvalidate/validProjectKey?%v", i.version, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return "", nil, err
 	}
@@ -125,7 +125,7 @@ func (i *internalProjectValidatorImpl) Name(ctx context.Context, name string) (s
 
 	endpoint := fmt.Sprintf("rest/api/%v/projectvalidate/validProjectName?%v", i.version, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return "", nil, err
 	}

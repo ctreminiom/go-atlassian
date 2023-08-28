@@ -1,7 +1,6 @@
 package internal
 
 import (
-	"bytes"
 	"context"
 	"errors"
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
@@ -15,7 +14,7 @@ import (
 func Test_internalLinkRichTextServiceImpl_Get(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -41,12 +40,13 @@ func Test_internalLinkRichTextServiceImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/issueLink/10002",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -70,12 +70,13 @@ func Test_internalLinkRichTextServiceImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/issueLink/10002",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -99,12 +100,13 @@ func Test_internalLinkRichTextServiceImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/issueLink/10002",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -112,6 +114,17 @@ func Test_internalLinkRichTextServiceImpl_Get(t *testing.T) {
 			},
 			wantErr: true,
 			Err:     errors.New("error, unable to create the http request"),
+		},
+
+		{
+			name:   "when the issue link is not provided",
+			fields: fields{version: "3"},
+			args: args{
+				ctx:    context.TODO(),
+				linkId: "",
+			},
+			wantErr: true,
+			Err:     model.ErrNoTypeIDError,
 		},
 	}
 
@@ -149,7 +162,7 @@ func Test_internalLinkRichTextServiceImpl_Get(t *testing.T) {
 func Test_internalLinkRichTextServiceImpl_Gets(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -175,12 +188,13 @@ func Test_internalLinkRichTextServiceImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/issue/DUMMY-4?fields=issuelinks",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -204,12 +218,13 @@ func Test_internalLinkRichTextServiceImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/issue/DUMMY-4?fields=issuelinks",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -244,12 +259,13 @@ func Test_internalLinkRichTextServiceImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/issue/DUMMY-4?fields=issuelinks",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -294,7 +310,7 @@ func Test_internalLinkRichTextServiceImpl_Gets(t *testing.T) {
 func Test_internalLinkRichTextServiceImpl_Delete(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -320,12 +336,13 @@ func Test_internalLinkRichTextServiceImpl_Delete(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/api/3/issueLink/10002",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -349,12 +366,13 @@ func Test_internalLinkRichTextServiceImpl_Delete(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/api/2/issueLink/10002",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -378,12 +396,13 @@ func Test_internalLinkRichTextServiceImpl_Delete(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/api/3/issueLink/10002",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -391,6 +410,17 @@ func Test_internalLinkRichTextServiceImpl_Delete(t *testing.T) {
 			},
 			wantErr: true,
 			Err:     errors.New("error, unable to create the http request"),
+		},
+
+		{
+			name:   "when the issue link is not provided",
+			fields: fields{version: "3"},
+			args: args{
+				ctx:    context.TODO(),
+				linkId: "",
+			},
+			wantErr: true,
+			Err:     model.ErrNoTypeIDError,
 		},
 	}
 
@@ -442,7 +472,7 @@ func Test_internalLinkRichTextServiceImpl_Create(t *testing.T) {
 	}
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -468,17 +498,14 @@ func Test_internalLinkRichTextServiceImpl_Create(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/3/issueLink",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -501,17 +528,14 @@ func Test_internalLinkRichTextServiceImpl_Create(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/issueLink",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -534,17 +558,14 @@ func Test_internalLinkRichTextServiceImpl_Create(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/3/issueLink",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client

@@ -1,7 +1,6 @@
 package internal
 
 import (
-	"bytes"
 	"context"
 	"errors"
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
@@ -16,7 +15,7 @@ import (
 func Test_internalRemoteLinkImpl_Gets(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -38,12 +37,13 @@ func Test_internalRemoteLinkImpl_Gets(t *testing.T) {
 			fields: fields{version: "2"},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/issue/KP-23/remotelink?globalId=system%3Dhttp%3A%2F%2Fwww.mycompany.com%2Fsupport%26id%3D1",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -67,12 +67,13 @@ func Test_internalRemoteLinkImpl_Gets(t *testing.T) {
 			fields: fields{version: "3"},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/issue/KP-23/remotelink?globalId=system%3Dhttp%3A%2F%2Fwww.mycompany.com%2Fsupport%26id%3D1",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -106,12 +107,13 @@ func Test_internalRemoteLinkImpl_Gets(t *testing.T) {
 			fields: fields{version: "2"},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/issue/KP-23/remotelink?globalId=system%3Dhttp%3A%2F%2Fwww.mycompany.com%2Fsupport%26id%3D1",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("unable to create the http request"))
 
@@ -131,12 +133,13 @@ func Test_internalRemoteLinkImpl_Gets(t *testing.T) {
 			fields: fields{version: "2"},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/issue/KP-23/remotelink?globalId=system%3Dhttp%3A%2F%2Fwww.mycompany.com%2Fsupport%26id%3D1",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -190,7 +193,7 @@ func Test_internalRemoteLinkImpl_Gets(t *testing.T) {
 func Test_internalRemoteLinkImpl_Get(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -212,12 +215,13 @@ func Test_internalRemoteLinkImpl_Get(t *testing.T) {
 			fields: fields{version: "2"},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/issue/KP-23/remotelink/10001",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -241,12 +245,13 @@ func Test_internalRemoteLinkImpl_Get(t *testing.T) {
 			fields: fields{version: "3"},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/issue/KP-23/remotelink/10001",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -291,12 +296,13 @@ func Test_internalRemoteLinkImpl_Get(t *testing.T) {
 			fields: fields{version: "2"},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/issue/KP-23/remotelink/10001",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("unable to create the http request"))
 
@@ -316,12 +322,13 @@ func Test_internalRemoteLinkImpl_Get(t *testing.T) {
 			fields: fields{version: "2"},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/issue/KP-23/remotelink/10001",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -401,7 +408,7 @@ func Test_internalRemoteLinkImpl_Update(t *testing.T) {
 	}
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -424,17 +431,14 @@ func Test_internalRemoteLinkImpl_Update(t *testing.T) {
 			fields: fields{version: "2"},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/2/issue/KP-23/remotelink/10001",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -458,17 +462,14 @@ func Test_internalRemoteLinkImpl_Update(t *testing.T) {
 			fields: fields{version: "3"},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/3/issue/KP-23/remotelink/10001",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -513,17 +514,14 @@ func Test_internalRemoteLinkImpl_Update(t *testing.T) {
 			fields: fields{version: "2"},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/2/issue/KP-23/remotelink/10001",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, errors.New("unable to create the http request"))
 
 				fields.c = client
@@ -543,17 +541,14 @@ func Test_internalRemoteLinkImpl_Update(t *testing.T) {
 			fields: fields{version: "2"},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"rest/api/2/issue/KP-23/remotelink/10001",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -633,7 +628,7 @@ func Test_internalRemoteLinkImpl_Create(t *testing.T) {
 	}
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -656,17 +651,14 @@ func Test_internalRemoteLinkImpl_Create(t *testing.T) {
 			fields: fields{version: "2"},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/issue/KP-23/remotelink",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -689,17 +681,14 @@ func Test_internalRemoteLinkImpl_Create(t *testing.T) {
 			fields: fields{version: "3"},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/3/issue/KP-23/remotelink",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -732,17 +721,14 @@ func Test_internalRemoteLinkImpl_Create(t *testing.T) {
 			fields: fields{version: "2"},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/issue/KP-23/remotelink",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, errors.New("unable to create the http request"))
 
 				fields.c = client
@@ -761,17 +747,14 @@ func Test_internalRemoteLinkImpl_Create(t *testing.T) {
 			fields: fields{version: "2"},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/issue/KP-23/remotelink",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -825,7 +808,7 @@ func Test_internalRemoteLinkImpl_Create(t *testing.T) {
 func Test_internalRemoteLinkImpl_DeleteById(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -847,12 +830,13 @@ func Test_internalRemoteLinkImpl_DeleteById(t *testing.T) {
 			fields: fields{version: "2"},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/api/2/issue/KP-23/remotelink/10001",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -876,12 +860,13 @@ func Test_internalRemoteLinkImpl_DeleteById(t *testing.T) {
 			fields: fields{version: "3"},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/api/3/issue/KP-23/remotelink/10001",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -926,12 +911,13 @@ func Test_internalRemoteLinkImpl_DeleteById(t *testing.T) {
 			fields: fields{version: "2"},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/api/2/issue/KP-23/remotelink/10001",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("unable to create the http request"))
 
@@ -951,12 +937,13 @@ func Test_internalRemoteLinkImpl_DeleteById(t *testing.T) {
 			fields: fields{version: "2"},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/api/2/issue/KP-23/remotelink/10001",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -1009,7 +996,7 @@ func Test_internalRemoteLinkImpl_DeleteById(t *testing.T) {
 func Test_internalRemoteLinkImpl_DeleteByGlobalId(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -1031,12 +1018,13 @@ func Test_internalRemoteLinkImpl_DeleteByGlobalId(t *testing.T) {
 			fields: fields{version: "2"},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/api/2/issue/KP-23/remotelink?globalId=system%3Dhttp%3A%2F%2Fwww.mycompany.com%2Fsupport%26id%3D1",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -1060,12 +1048,13 @@ func Test_internalRemoteLinkImpl_DeleteByGlobalId(t *testing.T) {
 			fields: fields{version: "3"},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/api/3/issue/KP-23/remotelink?globalId=system%3Dhttp%3A%2F%2Fwww.mycompany.com%2Fsupport%26id%3D1",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -1110,12 +1099,13 @@ func Test_internalRemoteLinkImpl_DeleteByGlobalId(t *testing.T) {
 			fields: fields{version: "2"},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/api/2/issue/KP-23/remotelink?globalId=system%3Dhttp%3A%2F%2Fwww.mycompany.com%2Fsupport%26id%3D1",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("unable to create the http request"))
 
@@ -1135,12 +1125,13 @@ func Test_internalRemoteLinkImpl_DeleteByGlobalId(t *testing.T) {
 			fields: fields{version: "2"},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/api/2/issue/KP-23/remotelink?globalId=system%3Dhttp%3A%2F%2Fwww.mycompany.com%2Fsupport%26id%3D1",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 

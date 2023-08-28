@@ -1,7 +1,6 @@
 package internal
 
 import (
-	"bytes"
 	"context"
 	"errors"
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
@@ -14,13 +13,8 @@ import (
 
 func Test_internalCustomerImpl_Create(t *testing.T) {
 
-	payloadMocked := &struct {
-		DisplayName string "json:\"displayName,omitempty\""
-		Email       string "json:\"email,omitempty\""
-	}{DisplayName: "Carlos T", Email: "carlos.treminio@example.com"}
-
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -45,17 +39,14 @@ func Test_internalCustomerImpl_Create(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/servicedeskapi/customer",
-					bytes.NewReader([]byte{})).
+					"",
+					map[string]interface{}{"displayName": "Carlos T", "email": "carlos.treminio@example.com"}).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -76,17 +67,14 @@ func Test_internalCustomerImpl_Create(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/servicedeskapi/customer",
-					bytes.NewReader([]byte{})).
+					"",
+					map[string]interface{}{"displayName": "Carlos T", "email": "carlos.treminio@example.com"}).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -109,17 +97,14 @@ func Test_internalCustomerImpl_Create(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/servicedeskapi/customer",
-					bytes.NewReader([]byte{})).
+					"",
+					map[string]interface{}{"displayName": "Carlos T", "email": "carlos.treminio@example.com"}).
 					Return(&http.Request{}, errors.New("client: no http request created"))
 
 				fields.c = client
@@ -136,10 +121,9 @@ func Test_internalCustomerImpl_Create(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			smService, err := NewCustomerService(testCase.fields.c, "latest")
-			assert.NoError(t, err)
+			customerService := NewCustomerService(testCase.fields.c, "latest")
 
-			gotResult, gotResponse, err := smService.Create(testCase.args.ctx, testCase.args.email, testCase.args.displayName)
+			gotResult, gotResponse, err := customerService.Create(testCase.args.ctx, testCase.args.email, testCase.args.displayName)
 
 			if testCase.wantErr {
 
@@ -162,7 +146,7 @@ func Test_internalCustomerImpl_Create(t *testing.T) {
 func Test_internalCustomerImpl_Gets(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -191,12 +175,13 @@ func Test_internalCustomerImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/servicedesk/10001/customer?limit=50&query=Carlos+T&start=100",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -220,12 +205,13 @@ func Test_internalCustomerImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/servicedesk/10001/customer?limit=50&query=Carlos+T&start=100",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -251,12 +237,13 @@ func Test_internalCustomerImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/servicedesk/10001/customer?limit=50&query=Carlos+T&start=100",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("client: no http request created"))
 
@@ -274,10 +261,9 @@ func Test_internalCustomerImpl_Gets(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			smService, err := NewCustomerService(testCase.fields.c, "latest")
-			assert.NoError(t, err)
+			customerService := NewCustomerService(testCase.fields.c, "latest")
 
-			gotResult, gotResponse, err := smService.Gets(testCase.args.ctx, testCase.args.serviceDeskID, testCase.args.query,
+			gotResult, gotResponse, err := customerService.Gets(testCase.args.ctx, testCase.args.serviceDeskID, testCase.args.query,
 				testCase.args.start, testCase.args.limit)
 
 			if testCase.wantErr {
@@ -300,12 +286,8 @@ func Test_internalCustomerImpl_Gets(t *testing.T) {
 
 func Test_internalCustomerImpl_Add(t *testing.T) {
 
-	payloadMocked := &struct {
-		AccountIds []string "json:\"accountIds\""
-	}{AccountIds: []string{"uuid-sample-1", "uuid-sample-2"}}
-
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -331,17 +313,14 @@ func Test_internalCustomerImpl_Add(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/servicedeskapi/servicedesk/10001/customer",
-					bytes.NewReader([]byte{})).
+					"",
+					map[string]interface{}{"accountIds": []string{"uuid-sample-1", "uuid-sample-2"}}).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -362,17 +341,14 @@ func Test_internalCustomerImpl_Add(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/servicedeskapi/servicedesk/10001/customer",
-					bytes.NewReader([]byte{})).
+					"",
+					map[string]interface{}{"accountIds": []string{"uuid-sample-1", "uuid-sample-2"}}).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -395,17 +371,14 @@ func Test_internalCustomerImpl_Add(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/servicedeskapi/servicedesk/10001/customer",
-					bytes.NewReader([]byte{})).
+					"",
+					map[string]interface{}{"accountIds": []string{"uuid-sample-1", "uuid-sample-2"}}).
 					Return(&http.Request{}, errors.New("client: no http request created"))
 
 				fields.c = client
@@ -441,10 +414,9 @@ func Test_internalCustomerImpl_Add(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			smService, err := NewCustomerService(testCase.fields.c, "latest")
-			assert.NoError(t, err)
+			customerService := NewCustomerService(testCase.fields.c, "latest")
 
-			gotResponse, err := smService.Add(testCase.args.ctx, testCase.args.serviceDeskID, testCase.args.accountIDs)
+			gotResponse, err := customerService.Add(testCase.args.ctx, testCase.args.serviceDeskID, testCase.args.accountIDs)
 
 			if testCase.wantErr {
 
@@ -465,12 +437,8 @@ func Test_internalCustomerImpl_Add(t *testing.T) {
 
 func Test_internalCustomerImpl_Remove(t *testing.T) {
 
-	payloadMocked := &struct {
-		AccountIds []string "json:\"accountIds\""
-	}{AccountIds: []string{"uuid-sample-1", "uuid-sample-2"}}
-
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -496,17 +464,14 @@ func Test_internalCustomerImpl_Remove(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/servicedeskapi/servicedesk/10001/customer",
-					bytes.NewReader([]byte{})).
+					"",
+					map[string]interface{}{"accountIds": []string{"uuid-sample-1", "uuid-sample-2"}}).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -527,17 +492,14 @@ func Test_internalCustomerImpl_Remove(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/servicedeskapi/servicedesk/10001/customer",
-					bytes.NewReader([]byte{})).
+					"",
+					map[string]interface{}{"accountIds": []string{"uuid-sample-1", "uuid-sample-2"}}).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -560,17 +522,14 @@ func Test_internalCustomerImpl_Remove(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/servicedeskapi/servicedesk/10001/customer",
-					bytes.NewReader([]byte{})).
+					"",
+					map[string]interface{}{"accountIds": []string{"uuid-sample-1", "uuid-sample-2"}}).
 					Return(&http.Request{}, errors.New("client: no http request created"))
 
 				fields.c = client
@@ -606,10 +565,9 @@ func Test_internalCustomerImpl_Remove(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			smService, err := NewCustomerService(testCase.fields.c, "latest")
-			assert.NoError(t, err)
+			customerService := NewCustomerService(testCase.fields.c, "latest")
 
-			gotResponse, err := smService.Remove(testCase.args.ctx, testCase.args.serviceDeskID, testCase.args.accountIDs)
+			gotResponse, err := customerService.Remove(testCase.args.ctx, testCase.args.serviceDeskID, testCase.args.accountIDs)
 
 			if testCase.wantErr {
 

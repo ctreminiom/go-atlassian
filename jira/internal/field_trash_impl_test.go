@@ -14,7 +14,7 @@ import (
 func Test_internalFieldTrashServiceImpl_Search(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -47,12 +47,13 @@ func Test_internalFieldTrashServiceImpl_Search(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/field/search/trashed?id=111%2C12222&maxResults=50&orderBy=lastUsed&query=query-sample&startAt=0",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -83,12 +84,13 @@ func Test_internalFieldTrashServiceImpl_Search(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/field/search/trashed?id=111%2C12222&maxResults=50&orderBy=lastUsed&query=query-sample&startAt=0",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -119,12 +121,13 @@ func Test_internalFieldTrashServiceImpl_Search(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/field/search/trashed?id=111%2C12222&maxResults=50&orderBy=lastUsed&query=query-sample&startAt=0",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -143,12 +146,13 @@ func Test_internalFieldTrashServiceImpl_Search(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/field/search/trashed?maxResults=0&startAt=0",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -195,7 +199,7 @@ func Test_internalFieldTrashServiceImpl_Search(t *testing.T) {
 func Test_internalFieldTrashServiceImpl_Move(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -221,12 +225,13 @@ func Test_internalFieldTrashServiceImpl_Move(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/3/field/customfield_12000/trash",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -251,12 +256,13 @@ func Test_internalFieldTrashServiceImpl_Move(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/field/customfield_12000/trash",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -292,12 +298,13 @@ func Test_internalFieldTrashServiceImpl_Move(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/3/field/customfield_12000/trash",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -342,7 +349,7 @@ func Test_internalFieldTrashServiceImpl_Move(t *testing.T) {
 func Test_internalFieldTrashServiceImpl_Restore(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -368,12 +375,13 @@ func Test_internalFieldTrashServiceImpl_Restore(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/3/field/customfield_12000/restore",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -398,12 +406,13 @@ func Test_internalFieldTrashServiceImpl_Restore(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/field/customfield_12000/restore",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -439,12 +448,13 @@ func Test_internalFieldTrashServiceImpl_Restore(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/3/field/customfield_12000/restore",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -489,7 +499,7 @@ func Test_internalFieldTrashServiceImpl_Restore(t *testing.T) {
 func Test_NewIssueFieldTrashService(t *testing.T) {
 
 	type args struct {
-		client  service.Client
+		client  service.Connector
 		version string
 	}
 

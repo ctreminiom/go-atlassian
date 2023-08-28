@@ -9,7 +9,7 @@ import (
 	"net/http"
 )
 
-func NewResolutionService(client service.Client, version string) (*ResolutionService, error) {
+func NewResolutionService(client service.Connector, version string) (*ResolutionService, error) {
 
 	if version == "" {
 		return nil, model.ErrNoVersionProvided
@@ -35,7 +35,6 @@ func (r *ResolutionService) Gets(ctx context.Context) ([]*model.ResolutionScheme
 
 // Get returns an issue resolution value.
 //
-//
 // GET /rest/api/{2-3}/resolution/{id}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/resolutions#get-resolution
@@ -44,7 +43,7 @@ func (r *ResolutionService) Get(ctx context.Context, resolutionId string) (*mode
 }
 
 type internalResolutionImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -52,7 +51,7 @@ func (i *internalResolutionImpl) Gets(ctx context.Context) ([]*model.ResolutionS
 
 	endpoint := fmt.Sprintf("rest/api/%v/resolution", i.version)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -74,7 +73,7 @@ func (i *internalResolutionImpl) Get(ctx context.Context, resolutionId string) (
 
 	endpoint := fmt.Sprintf("rest/api/%v/resolution/%v", i.version, resolutionId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}

@@ -15,7 +15,7 @@ import (
 func Test_internalAuditRecordImpl_Get(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -48,12 +48,13 @@ func Test_internalAuditRecordImpl_Get(t *testing.T) {
 			},
 			fields: fields{version: "2"},
 			on: func(fields *fields) {
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/auditing/record?=summary&from=2015-11-17&limit=1000&offset=2000&to=2019-11-17",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -80,12 +81,13 @@ func Test_internalAuditRecordImpl_Get(t *testing.T) {
 			},
 			fields: fields{version: "3"},
 			on: func(fields *fields) {
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/auditing/record?=summary&from=2015-11-17&limit=1000&offset=2000&to=2019-11-17",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -112,12 +114,13 @@ func Test_internalAuditRecordImpl_Get(t *testing.T) {
 				limit:  1000,
 			},
 			on: func(fields *fields) {
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/auditing/record?=summary&from=2015-11-17&limit=1000&offset=2000&to=2019-11-17",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("unable to create the http request"))
 
@@ -141,12 +144,13 @@ func Test_internalAuditRecordImpl_Get(t *testing.T) {
 				limit:  1000,
 			},
 			on: func(fields *fields) {
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/auditing/record?=summary&from=2015-11-17&limit=1000&offset=2000&to=2019-11-17",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -169,10 +173,10 @@ func Test_internalAuditRecordImpl_Get(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			service, err := NewAuditRecordService(testCase.fields.c, testCase.fields.version)
+			newAuditRecordService, err := NewAuditRecordService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := service.Get(testCase.args.ctx, testCase.args.options, testCase.args.offSet,
+			gotResult, gotResponse, err := newAuditRecordService.Get(testCase.args.ctx, testCase.args.options, testCase.args.offSet,
 				testCase.args.limit)
 
 			if testCase.wantErr {
@@ -197,7 +201,7 @@ func Test_internalAuditRecordImpl_Get(t *testing.T) {
 func TestNewAuditRecordService(t *testing.T) {
 
 	type args struct {
-		client  service.Client
+		client  service.Connector
 		version string
 	}
 

@@ -16,7 +16,7 @@ type LinkRichTextService struct {
 }
 
 type internalLinkRichTextServiceImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -64,7 +64,7 @@ func (i *internalLinkRichTextServiceImpl) Get(ctx context.Context, linkId string
 
 	endpoint := fmt.Sprintf("rest/api/%v/issueLink/%v", i.version, linkId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -86,7 +86,7 @@ func (i *internalLinkRichTextServiceImpl) Gets(ctx context.Context, issueKeyOrId
 
 	endpoint := fmt.Sprintf("rest/api/%v/issue/%v?fields=issuelinks", i.version, issueKeyOrId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -108,7 +108,7 @@ func (i *internalLinkRichTextServiceImpl) Delete(ctx context.Context, linkId str
 
 	endpoint := fmt.Sprintf("rest/api/%v/issueLink/%v", i.version, linkId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -118,14 +118,9 @@ func (i *internalLinkRichTextServiceImpl) Delete(ctx context.Context, linkId str
 
 func (i *internalLinkRichTextServiceImpl) Create(ctx context.Context, payload *model.LinkPayloadSchemeV2) (*model.ResponseScheme, error) {
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, err
-	}
-
 	endpoint := fmt.Sprintf("rest/api/%v/issueLink", i.version)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
 		return nil, err
 	}

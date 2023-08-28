@@ -721,7 +721,7 @@ func Test_internalPageImpl_Create(t *testing.T) {
 		SpaceID:  203718658,
 		Status:   "current",
 		Title:    "Page create title test",
-		ParentID: 123456789,
+		ParentID: "123456789",
 		Body: &model.PageBodyRepresentationScheme{
 			Representation: "atlas_doc_format",
 			Value:          string(mockedBodyValue),

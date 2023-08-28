@@ -49,7 +49,7 @@ type PageCreatePayloadScheme struct {
 	SpaceID  int                           `json:"spaceId,omitempty"`
 	Status   string                        `json:"status,omitempty"`
 	Title    string                        `json:"title,omitempty"`
-	ParentID int                           `json:"parentId,omitempty"`
+	ParentID string                        `json:"parentId,omitempty"`
 	Body     *PageBodyRepresentationScheme `json:"body,omitempty"`
 }
 

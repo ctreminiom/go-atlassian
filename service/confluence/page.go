@@ -70,7 +70,7 @@ type PageConnector interface {
 	// GET /wiki/api/v2/pages/{id}/children
 	//
 	// https://docs.go-atlassian.io/confluence-cloud/v2/page#get-pages-by-parent
-	GetsByParent(ctx context.Context, spaceID int, cursor string, limit int) (*models.PageChunkScheme, *models.ResponseScheme, error)
+	GetsByParent(ctx context.Context, spaceID int, cursor string, limit int) (*models.ChildPageChunkScheme, *models.ResponseScheme, error)
 
 	// Create creates a page in the space.
 	//

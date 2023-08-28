@@ -81,7 +81,7 @@ func (p *PageService) GetsBySpace(ctx context.Context, spaceID int, cursor strin
 // GET /wiki/api/v2/pages/{id}/children
 //
 // https://docs.go-atlassian.io/confluence-cloud/v2/page#get-pages-by-parent
-func (p *PageService) GetsByParent(ctx context.Context, pageID int, cursor string, limit int) (*model.PageChunkScheme, *model.ResponseScheme, error) {
+func (p *PageService) GetsByParent(ctx context.Context, pageID int, cursor string, limit int) (*model.ChildPageChunkScheme, *model.ResponseScheme, error) {
 	return p.internalClient.GetsByParent(ctx, pageID, cursor, limit)
 }
 
@@ -286,7 +286,7 @@ func (i *internalPageImpl) GetsBySpace(ctx context.Context, spaceID int, cursor 
 	return chunk, response, nil
 }
 
-func (i *internalPageImpl) GetsByParent(ctx context.Context, parentID int, cursor string, limit int) (*model.PageChunkScheme, *model.ResponseScheme, error) {
+func (i *internalPageImpl) GetsByParent(ctx context.Context, parentID int, cursor string, limit int) (*model.ChildPageChunkScheme, *model.ResponseScheme, error) {
 
 	if parentID == 0 {
 		return nil, nil, model.ErrNoPageIDError
@@ -301,12 +301,12 @@ func (i *internalPageImpl) GetsByParent(ctx context.Context, parentID int, curso
 
 	endpoint := fmt.Sprintf("wiki/api/v2/pages/%v/children?%v", parentID, query.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	chunk := new(model.PageChunkScheme)
+	chunk := new(model.ChildPageChunkScheme)
 	response, err := i.c.Call(request, chunk)
 	if err != nil {
 		return nil, response, err

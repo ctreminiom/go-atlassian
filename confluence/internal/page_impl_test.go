@@ -587,7 +587,7 @@ func Test_internalPageImpl_GetsBySpace(t *testing.T) {
 func Test_internalPageImpl_GetsByParent(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -615,18 +615,18 @@ func Test_internalPageImpl_GetsByParent(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"wiki/api/v2/pages/20001/children?cursor=cursor-sample&limit=200",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
 					&http.Request{},
-					&model.PageChunkScheme{}).
+					&model.ChildPageChunkScheme{}).
 					Return(&model.ResponseScheme{}, nil)
 
 				fields.c = client
@@ -652,13 +652,13 @@ func Test_internalPageImpl_GetsByParent(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"wiki/api/v2/pages/20001/children?cursor=cursor-sample&limit=200",
-					nil).
+					"", nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -678,18 +678,18 @@ func Test_internalPageImpl_GetsByParent(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"wiki/api/v2/pages/20001/children?cursor=cursor-sample&limit=200",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
 					&http.Request{},
-					&model.PageChunkScheme{}).
+					&model.ChildPageChunkScheme{}).
 					Return(&model.ResponseScheme{}, errors.New("error, request failed"))
 
 				fields.c = client

@@ -10,7 +10,7 @@ import (
 	"net/url"
 )
 
-func NewRestrictionOperationUserService(client service.Client) *RestrictionOperationUserService {
+func NewRestrictionOperationUserService(client service.Connector) *RestrictionOperationUserService {
 
 	return &RestrictionOperationUserService{
 		internalClient: &internalRestrictionOperationUserImpl{c: client},
@@ -53,7 +53,7 @@ func (r *RestrictionOperationUserService) Remove(ctx context.Context, contentID,
 }
 
 type internalRestrictionOperationUserImpl struct {
-	c service.Client
+	c service.Connector
 }
 
 func (i *internalRestrictionOperationUserImpl) Get(ctx context.Context, contentID, operationKey, accountID string) (*model.ResponseScheme, error) {
@@ -75,7 +75,7 @@ func (i *internalRestrictionOperationUserImpl) Get(ctx context.Context, contentI
 
 	endpoint := fmt.Sprintf("wiki/rest/api/content/%v/restriction/byOperation/%v/user?%v", contentID, operationKey, query.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -102,7 +102,7 @@ func (i *internalRestrictionOperationUserImpl) Add(ctx context.Context, contentI
 
 	endpoint := fmt.Sprintf("wiki/rest/api/content/%v/restriction/byOperation/%v/user?%v", contentID, operationKey, query.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -129,7 +129,7 @@ func (i *internalRestrictionOperationUserImpl) Remove(ctx context.Context, conte
 
 	endpoint := fmt.Sprintf("wiki/rest/api/content/%v/restriction/byOperation/%v/user?%v", contentID, operationKey, query.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}

@@ -1,7 +1,6 @@
 package internal
 
 import (
-	"bytes"
 	"context"
 	"errors"
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
@@ -15,7 +14,7 @@ import (
 func Test_internalTypeImpl_Search(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -42,12 +41,13 @@ func Test_internalTypeImpl_Search(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/requesttype?limit=50&searchQuery=Request+Testing+Environment&start=100",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -70,12 +70,13 @@ func Test_internalTypeImpl_Search(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/requesttype?limit=50&searchQuery=Request+Testing+Environment&start=100",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -100,12 +101,13 @@ func Test_internalTypeImpl_Search(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/requesttype?limit=50&searchQuery=Request+Testing+Environment&start=100",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("client: no http request created"))
 
@@ -123,10 +125,9 @@ func Test_internalTypeImpl_Search(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			smService, err := NewTypeService(testCase.fields.c, "latest")
-			assert.NoError(t, err)
+			requestTypeSchemer := NewTypeService(testCase.fields.c, "latest")
 
-			gotResult, gotResponse, err := smService.Search(testCase.args.ctx, testCase.args.query, testCase.args.start,
+			gotResult, gotResponse, err := requestTypeSchemer.Search(testCase.args.ctx, testCase.args.query, testCase.args.start,
 				testCase.args.limit)
 
 			if testCase.wantErr {
@@ -150,7 +151,7 @@ func Test_internalTypeImpl_Search(t *testing.T) {
 func Test_internalTypeImpl_Gets(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -178,12 +179,13 @@ func Test_internalTypeImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/servicedesk/10001/requesttype?groupId=38383&limit=50&start=100",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -207,12 +209,13 @@ func Test_internalTypeImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/servicedesk/10001/requesttype?groupId=38383&limit=50&start=100",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -238,12 +241,13 @@ func Test_internalTypeImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/servicedesk/10001/requesttype?groupId=38383&limit=50&start=100",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("client: no http request created"))
 
@@ -270,10 +274,9 @@ func Test_internalTypeImpl_Gets(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			smService, err := NewTypeService(testCase.fields.c, "latest")
-			assert.NoError(t, err)
+			requestTypeService := NewTypeService(testCase.fields.c, "latest")
 
-			gotResult, gotResponse, err := smService.Gets(testCase.args.ctx, testCase.args.serviceDeskID,
+			gotResult, gotResponse, err := requestTypeService.Gets(testCase.args.ctx, testCase.args.serviceDeskID,
 				testCase.args.groupID, testCase.args.start, testCase.args.limit)
 
 			if testCase.wantErr {
@@ -297,7 +300,7 @@ func Test_internalTypeImpl_Gets(t *testing.T) {
 func Test_internalTypeImpl_Get(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -322,12 +325,13 @@ func Test_internalTypeImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/servicedesk/10001/requesttype/38383",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -349,12 +353,13 @@ func Test_internalTypeImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/servicedesk/10001/requesttype/38383",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -378,12 +383,13 @@ func Test_internalTypeImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/servicedesk/10001/requesttype/38383",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("client: no http request created"))
 
@@ -420,10 +426,9 @@ func Test_internalTypeImpl_Get(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			smService, err := NewTypeService(testCase.fields.c, "latest")
-			assert.NoError(t, err)
+			requestTypeService := NewTypeService(testCase.fields.c, "latest")
 
-			gotResult, gotResponse, err := smService.Get(testCase.args.ctx, testCase.args.serviceDeskID,
+			gotResult, gotResponse, err := requestTypeService.Get(testCase.args.ctx, testCase.args.serviceDeskID,
 				testCase.args.requestTypeID)
 
 			if testCase.wantErr {
@@ -447,7 +452,7 @@ func Test_internalTypeImpl_Get(t *testing.T) {
 func Test_internalTypeImpl_Fields(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -472,12 +477,13 @@ func Test_internalTypeImpl_Fields(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/servicedesk/10001/requesttype/38383/field",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -499,12 +505,13 @@ func Test_internalTypeImpl_Fields(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/servicedesk/10001/requesttype/38383/field",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -528,12 +535,13 @@ func Test_internalTypeImpl_Fields(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/servicedesk/10001/requesttype/38383/field",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("client: no http request created"))
 
@@ -570,10 +578,9 @@ func Test_internalTypeImpl_Fields(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			smService, err := NewTypeService(testCase.fields.c, "latest")
-			assert.NoError(t, err)
+			requestTypeService := NewTypeService(testCase.fields.c, "latest")
 
-			gotResult, gotResponse, err := smService.Fields(testCase.args.ctx, testCase.args.serviceDeskID,
+			gotResult, gotResponse, err := requestTypeService.Fields(testCase.args.ctx, testCase.args.serviceDeskID,
 				testCase.args.requestTypeID)
 
 			if testCase.wantErr {
@@ -597,7 +604,7 @@ func Test_internalTypeImpl_Fields(t *testing.T) {
 func Test_internalTypeImpl_Delete(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -622,12 +629,13 @@ func Test_internalTypeImpl_Delete(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/servicedeskapi/servicedesk/10001/requesttype/38383",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -649,12 +657,13 @@ func Test_internalTypeImpl_Delete(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/servicedeskapi/servicedesk/10001/requesttype/38383",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -678,12 +687,13 @@ func Test_internalTypeImpl_Delete(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/servicedeskapi/servicedesk/10001/requesttype/38383",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("client: no http request created"))
 
@@ -720,10 +730,9 @@ func Test_internalTypeImpl_Delete(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			smService, err := NewTypeService(testCase.fields.c, "latest")
-			assert.NoError(t, err)
+			requestTypeService := NewTypeService(testCase.fields.c, "latest")
 
-			gotResponse, err := smService.Delete(testCase.args.ctx, testCase.args.serviceDeskID,
+			gotResponse, err := requestTypeService.Delete(testCase.args.ctx, testCase.args.serviceDeskID,
 				testCase.args.requestTypeID)
 
 			if testCase.wantErr {
@@ -745,21 +754,20 @@ func Test_internalTypeImpl_Delete(t *testing.T) {
 
 func Test_internalTypeImpl_Create(t *testing.T) {
 
-	payloadMocked := &struct {
-		IssueTypeID string "json:\"issueTypeId,omitempty\""
-		HelpText    string "json:\"helpText,omitempty\""
-		Name        string "json:\"name,omitempty\""
-		Description string "json:\"description,omitempty\""
-	}{IssueTypeID: "12345", HelpText: "Please tell us clearly the problem you have within 100 words.", Name: "Get IT Help", Description: "Get IT Help"}
+	payloadMocked := &model.RequestTypePayloadScheme{
+		Description: "Get IT Help",
+		HelpText:    "Please tell us clearly the problem you have within 100 words.",
+		IssueTypeId: "12345",
+		Name:        "Get IT Help"}
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
-		ctx                                      context.Context
-		serviceDeskID                            int
-		issueTypeID, name, description, helpText string
+		ctx           context.Context
+		serviceDeskID int
+		payload       *model.RequestTypePayloadScheme
 	}
 
 	testCases := []struct {
@@ -775,24 +783,23 @@ func Test_internalTypeImpl_Create(t *testing.T) {
 			args: args{
 				ctx:           context.Background(),
 				serviceDeskID: 10001,
-				issueTypeID:   "12345",
-				name:          "Get IT Help",
-				description:   "Get IT Help",
-				helpText:      "Please tell us clearly the problem you have within 100 words.",
+				payload: &model.RequestTypePayloadScheme{
+					Description: "Get IT Help",
+					HelpText:    "Please tell us clearly the problem you have within 100 words.",
+					IssueTypeId: "12345",
+					Name:        "Get IT Help",
+				},
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/servicedeskapi/servicedesk/10001/requesttype",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -809,24 +816,23 @@ func Test_internalTypeImpl_Create(t *testing.T) {
 			args: args{
 				ctx:           context.Background(),
 				serviceDeskID: 10001,
-				issueTypeID:   "12345",
-				name:          "Get IT Help",
-				description:   "Get IT Help",
-				helpText:      "Please tell us clearly the problem you have within 100 words.",
+				payload: &model.RequestTypePayloadScheme{
+					Description: "Get IT Help",
+					HelpText:    "Please tell us clearly the problem you have within 100 words.",
+					IssueTypeId: "12345",
+					Name:        "Get IT Help",
+				},
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/servicedeskapi/servicedesk/10001/requesttype",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -845,24 +851,23 @@ func Test_internalTypeImpl_Create(t *testing.T) {
 			args: args{
 				ctx:           context.Background(),
 				serviceDeskID: 10001,
-				issueTypeID:   "12345",
-				name:          "Get IT Help",
-				description:   "Get IT Help",
-				helpText:      "Please tell us clearly the problem you have within 100 words.",
+				payload: &model.RequestTypePayloadScheme{
+					Description: "Get IT Help",
+					HelpText:    "Please tell us clearly the problem you have within 100 words.",
+					IssueTypeId: "12345",
+					Name:        "Get IT Help",
+				},
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/servicedeskapi/servicedesk/10001/requesttype",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, errors.New("client: no http request created"))
 
 				fields.c = client
@@ -888,11 +893,10 @@ func Test_internalTypeImpl_Create(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			smService, err := NewTypeService(testCase.fields.c, "latest")
-			assert.NoError(t, err)
+			requestTypeService := NewTypeService(testCase.fields.c, "latest")
 
-			gotResult, gotResponse, err := smService.Create(testCase.args.ctx, testCase.args.serviceDeskID,
-				testCase.args.issueTypeID, testCase.args.name, testCase.args.description, testCase.args.helpText)
+			gotResult, gotResponse, err := requestTypeService.Create(testCase.args.ctx, testCase.args.serviceDeskID,
+				testCase.args.payload)
 
 			if testCase.wantErr {
 

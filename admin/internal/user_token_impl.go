@@ -9,7 +9,7 @@ import (
 	"net/http"
 )
 
-func NewUserTokenService(client service.Client) *UserTokenService {
+func NewUserTokenService(client service.Connector) *UserTokenService {
 	return &UserTokenService{internalClient: &internalUserTokenImpl{c: client}}
 }
 
@@ -36,7 +36,7 @@ func (u *UserTokenService) Delete(ctx context.Context, accountID, tokenID string
 }
 
 type internalUserTokenImpl struct {
-	c service.Client
+	c service.Connector
 }
 
 func (i *internalUserTokenImpl) Gets(ctx context.Context, accountID string) ([]*model.UserTokensScheme, *model.ResponseScheme, error) {
@@ -47,7 +47,7 @@ func (i *internalUserTokenImpl) Gets(ctx context.Context, accountID string) ([]*
 
 	endpoint := fmt.Sprintf("users/%v/manage/api-tokens", accountID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -73,7 +73,7 @@ func (i *internalUserTokenImpl) Delete(ctx context.Context, accountID, tokenID s
 
 	endpoint := fmt.Sprintf("users/%v/manage/api-tokens/%v", accountID, tokenID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}

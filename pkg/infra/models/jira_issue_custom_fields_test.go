@@ -1212,6 +1212,126 @@ func TestParseUserPickerCustomField(t *testing.T) {
 	}
 }
 
+func TestParseStringCustomField(t *testing.T) {
+
+	bufferMocked := bytes.Buffer{}
+	bufferMocked.WriteString(`
+{
+  "fields": {
+    "customfield_10045": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua."
+  }
+}`)
+
+	bufferMockedWithNoFields := bytes.Buffer{}
+	bufferMockedWithNoFields.WriteString(`
+{
+  "fields_no_mapped": {
+    "customfield_10045": "At vero eos et accusam et justo"
+  }
+}`)
+
+	bufferMockedWithNoJSON := bytes.Buffer{}
+	bufferMockedWithNoJSON.WriteString(`{}{`)
+
+	bufferMockedWithNoInfo := bytes.Buffer{}
+	bufferMockedWithNoInfo.WriteString(`
+{
+	"fields": {
+		"customfield_10045": null
+	}
+}`)
+
+	bufferMockedWithInvalidType := bytes.Buffer{}
+	bufferMockedWithInvalidType.WriteString(`
+{
+	"fields": {
+		"customfield_10045": 10023.345
+	}
+}`)
+
+	type args struct {
+		buffer      bytes.Buffer
+		customField string
+	}
+
+	testCases := []struct {
+		name    string
+		args    args
+		want    string
+		wantErr bool
+		Err     error
+	}{
+		{
+			name: "when the buffer contains information",
+			args: args{
+				buffer:      bufferMocked,
+				customField: "customfield_10045",
+			},
+			want:    "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.",
+			wantErr: false,
+		},
+
+		{
+			name: "when the buffer no contains information",
+			args: args{
+				buffer:      bufferMockedWithNoInfo,
+				customField: "customfield_10045",
+			},
+			want:    "",
+			wantErr: false,
+		},
+
+		{
+			name: "when the buffer does not contains the fields object",
+			args: args{
+				buffer:      bufferMockedWithNoFields,
+				customField: "customfield_10045",
+			},
+			want:    "",
+			wantErr: true,
+			Err:     ErrNoFieldInformationError,
+		},
+
+		{
+			name: "when the buffer does not contains a valid field type",
+			args: args{
+				buffer:      bufferMockedWithInvalidType,
+				customField: "customfield_10045",
+			},
+			want:    "",
+			wantErr: true,
+			Err:     ErrNoMultiSelectTypeError,
+		},
+
+		{
+			name: "when the buffer cannot be parsed",
+			args: args{
+				buffer:      bufferMockedWithNoJSON,
+				customField: "customfield_10045",
+			},
+			want:    "",
+			wantErr: true,
+			Err:     ErrNoCustomFieldUnmarshalError,
+		},
+	}
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+			got, err := ParseStringCustomField(testCase.args.buffer, testCase.args.customField)
+			if (err != nil) != testCase.wantErr {
+				t.Errorf("ParseMultiSelectCustomField() error = %v, wantErr %v", err, testCase.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, testCase.want) {
+				t.Errorf("ParseMultiSelectCustomField() got = %v, want %v", got, testCase.want)
+			}
+
+			if !reflect.DeepEqual(err, testCase.Err) {
+				t.Errorf("ParseMultiSelectCustomField() got = (%v), want (%v)", err, testCase.Err)
+			}
+		})
+	}
+}
+
 func TestParseFloatCustomField(t *testing.T) {
 
 	bufferMocked := bytes.Buffer{}
@@ -1741,6 +1861,149 @@ func TestParseSelectCustomField(t *testing.T) {
 
 			if !reflect.DeepEqual(err, testCase.Err) {
 				t.Errorf("ParseSelectCustomField() got = (%v), want (%v)", err, testCase.Err)
+			}
+		})
+	}
+}
+
+func TestParseAssetCustomField(t *testing.T) {
+
+	bufferMocked := bytes.Buffer{}
+	bufferMocked.WriteString(`
+{
+	"fields": {
+		"customfield_10046": [
+      {
+        "workspaceId": "5e037d73-1c0a-43ce-adca-f169a42557f1",
+        "id": "5e037d73-1c0a-43ce-adca-f169a42557f1:1",
+        "objectId": "1"
+      }
+    ]
+	}
+}`)
+
+	bufferMockedWithNoFields := bytes.Buffer{}
+	bufferMockedWithNoFields.WriteString(`
+{
+	"field_no_mapped": {
+		"customfield_10046": [
+     {
+        "workspaceId": "5e037d73-1c0a-43ce-adca-f169a42557f1",
+        "id": "5e037d73-1c0a-43ce-adca-f169a42557f1:1",
+        "objectId": "1"
+      }
+    ]
+	}
+}`)
+
+	bufferMockedWithNoJSON := bytes.Buffer{}
+	bufferMockedWithNoJSON.WriteString(`{}{`)
+
+	bufferMockedWithNoInfo := bytes.Buffer{}
+	bufferMockedWithNoInfo.WriteString(`
+{
+	"fields": {
+		"customfield_10046": null
+	}
+}`)
+
+	bufferMockedWithInvalidType := bytes.Buffer{}
+	bufferMockedWithInvalidType.WriteString(`
+{
+	"fields": {
+		"customfield_10046": "Test field sample"
+	}
+}`)
+
+	type args struct {
+		buffer      bytes.Buffer
+		customField string
+	}
+
+	testCases := []struct {
+		name    string
+		args    args
+		want    []*CustomFieldAssetScheme
+		want1   bool
+		wantErr bool
+		Err     error
+	}{
+		{
+			name: "when the buffer contains information",
+			args: args{
+				buffer:      bufferMocked,
+				customField: "customfield_10046",
+			},
+			want: []*CustomFieldAssetScheme{
+				{
+					WorkspaceId: "5e037d73-1c0a-43ce-adca-f169a42557f1",
+					Id:          "5e037d73-1c0a-43ce-adca-f169a42557f1:1",
+					ObjectId:    "1",
+				},
+			},
+			want1:   true,
+			wantErr: false,
+		},
+
+		{
+			name: "when the buffer no contains information",
+			args: args{
+				buffer:      bufferMockedWithNoInfo,
+				customField: "customfield_10046",
+			},
+			want:    nil,
+			want1:   false,
+			wantErr: false,
+		},
+
+		{
+			name: "when the buffer does not contains the fields object",
+			args: args{
+				buffer:      bufferMockedWithNoFields,
+				customField: "customfield_10046",
+			},
+			want:    nil,
+			want1:   false,
+			wantErr: true,
+			Err:     ErrNoFieldInformationError,
+		},
+
+		{
+			name: "when the buffer does not contains a valid field type",
+			args: args{
+				buffer:      bufferMockedWithInvalidType,
+				customField: "customfield_10046",
+			},
+			want:    nil,
+			want1:   false,
+			wantErr: true,
+			Err:     ErrNoAssetTypeError,
+		},
+
+		{
+			name: "when the buffer cannot be parsed",
+			args: args{
+				buffer:      bufferMockedWithNoJSON,
+				customField: "customfield_10046",
+			},
+			want:    nil,
+			want1:   false,
+			wantErr: true,
+			Err:     ErrNoCustomFieldUnmarshalError,
+		},
+	}
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+			got, err := ParseAssetCustomField(testCase.args.buffer, testCase.args.customField)
+			if (err != nil) != testCase.wantErr {
+				t.Errorf("ParseMultiSelectCustomField() error = %v, wantErr %v", err, testCase.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, testCase.want) {
+				t.Errorf("ParseMultiSelectCustomField() got = %v, want %v", got, testCase.want)
+			}
+			if !reflect.DeepEqual(err, testCase.Err) {
+				t.Errorf("ParseMultiSelectCustomField() got = (%v), want (%v)", err, testCase.Err)
 			}
 		})
 	}

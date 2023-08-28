@@ -15,7 +15,7 @@ import (
 func Test_internalOrganizationImpl_Gets(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -39,12 +39,13 @@ func Test_internalOrganizationImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"admin/v1/orgs?cursor=cursor-sample-uuid",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -66,12 +67,13 @@ func Test_internalOrganizationImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"admin/v1/orgs?cursor=cursor-sample-uuid",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -90,9 +92,9 @@ func Test_internalOrganizationImpl_Gets(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			service := NewOrganizationService(testCase.fields.c, nil, nil)
+			newOrganizationService := NewOrganizationService(testCase.fields.c, nil, nil)
 
-			gotResult, gotResponse, err := service.Gets(testCase.args.ctx, testCase.args.cursor)
+			gotResult, gotResponse, err := newOrganizationService.Gets(testCase.args.ctx, testCase.args.cursor)
 
 			if testCase.wantErr {
 
@@ -116,7 +118,7 @@ func Test_internalOrganizationImpl_Gets(t *testing.T) {
 func Test_internalOrganizationImpl_Get(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -140,12 +142,13 @@ func Test_internalOrganizationImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"admin/v1/orgs/organization-sample-uuid",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -177,12 +180,13 @@ func Test_internalOrganizationImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"admin/v1/orgs/organization-sample-uuid",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -201,9 +205,9 @@ func Test_internalOrganizationImpl_Get(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			service := NewOrganizationService(testCase.fields.c, nil, nil)
+			newOrganizationService := NewOrganizationService(testCase.fields.c, nil, nil)
 
-			gotResult, gotResponse, err := service.Get(testCase.args.ctx, testCase.args.organizationID)
+			gotResult, gotResponse, err := newOrganizationService.Get(testCase.args.ctx, testCase.args.organizationID)
 
 			if testCase.wantErr {
 
@@ -227,7 +231,7 @@ func Test_internalOrganizationImpl_Get(t *testing.T) {
 func Test_internalOrganizationImpl_Users(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -252,12 +256,13 @@ func Test_internalOrganizationImpl_Users(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"admin/v1/orgs/organization-sample-uuid/users?cursor=cursor-sample-uuid",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -290,12 +295,13 @@ func Test_internalOrganizationImpl_Users(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"admin/v1/orgs/organization-sample-uuid/users?cursor=cursor-sample-uuid",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -314,9 +320,9 @@ func Test_internalOrganizationImpl_Users(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			service := NewOrganizationService(testCase.fields.c, nil, nil)
+			newOrganizationService := NewOrganizationService(testCase.fields.c, nil, nil)
 
-			gotResult, gotResponse, err := service.Users(testCase.args.ctx, testCase.args.organizationID, testCase.args.cursor)
+			gotResult, gotResponse, err := newOrganizationService.Users(testCase.args.ctx, testCase.args.organizationID, testCase.args.cursor)
 
 			if testCase.wantErr {
 
@@ -340,7 +346,7 @@ func Test_internalOrganizationImpl_Users(t *testing.T) {
 func Test_internalOrganizationImpl_Domains(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -365,12 +371,13 @@ func Test_internalOrganizationImpl_Domains(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"admin/v1/orgs/organization-sample-uuid/domains?cursor=cursor-sample-uuid",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -403,12 +410,13 @@ func Test_internalOrganizationImpl_Domains(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"admin/v1/orgs/organization-sample-uuid/domains?cursor=cursor-sample-uuid",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -427,9 +435,9 @@ func Test_internalOrganizationImpl_Domains(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			service := NewOrganizationService(testCase.fields.c, nil, nil)
+			newOrganizationService := NewOrganizationService(testCase.fields.c, nil, nil)
 
-			gotResult, gotResponse, err := service.Domains(testCase.args.ctx, testCase.args.organizationID, testCase.args.cursor)
+			gotResult, gotResponse, err := newOrganizationService.Domains(testCase.args.ctx, testCase.args.organizationID, testCase.args.cursor)
 
 			if testCase.wantErr {
 
@@ -453,7 +461,7 @@ func Test_internalOrganizationImpl_Domains(t *testing.T) {
 func Test_internalOrganizationImpl_Domain(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -478,12 +486,13 @@ func Test_internalOrganizationImpl_Domain(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"admin/v1/orgs/organization-sample-uuid/domains/domain-sample-uuid",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -526,12 +535,13 @@ func Test_internalOrganizationImpl_Domain(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"admin/v1/orgs/organization-sample-uuid/domains/domain-sample-uuid",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -550,9 +560,9 @@ func Test_internalOrganizationImpl_Domain(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			service := NewOrganizationService(testCase.fields.c, nil, nil)
+			newOrganizationService := NewOrganizationService(testCase.fields.c, nil, nil)
 
-			gotResult, gotResponse, err := service.Domain(testCase.args.ctx, testCase.args.organizationID, testCase.args.domainID)
+			gotResult, gotResponse, err := newOrganizationService.Domain(testCase.args.ctx, testCase.args.organizationID, testCase.args.domainID)
 
 			if testCase.wantErr {
 
@@ -586,7 +596,7 @@ func Test_internalOrganizationImpl_Events(t *testing.T) {
 	}
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -619,12 +629,13 @@ func Test_internalOrganizationImpl_Events(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"admin/v1/orgs/organization-sample-uuid/events?action=user_added_to_group&cursor=cursor-id-sample&from=1589197526&q=qq&to=1605177926",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -663,12 +674,13 @@ func Test_internalOrganizationImpl_Events(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"admin/v1/orgs/organization-sample-uuid/events?action=user_added_to_group&cursor=cursor-id-sample&from=1589197526&q=qq&to=1605177926",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -687,9 +699,9 @@ func Test_internalOrganizationImpl_Events(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			service := NewOrganizationService(testCase.fields.c, nil, nil)
+			newOrganizationService := NewOrganizationService(testCase.fields.c, nil, nil)
 
-			gotResult, gotResponse, err := service.Events(testCase.args.ctx, testCase.args.organizationID,
+			gotResult, gotResponse, err := newOrganizationService.Events(testCase.args.ctx, testCase.args.organizationID,
 				testCase.args.options, testCase.args.cursor)
 
 			if testCase.wantErr {
@@ -714,7 +726,7 @@ func Test_internalOrganizationImpl_Events(t *testing.T) {
 func Test_internalOrganizationImpl_Event(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -739,12 +751,13 @@ func Test_internalOrganizationImpl_Event(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"admin/v1/orgs/organization-sample-uuid/events/event-sample-uuid",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -787,12 +800,13 @@ func Test_internalOrganizationImpl_Event(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"admin/v1/orgs/organization-sample-uuid/events/event-sample-uuid",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -811,9 +825,9 @@ func Test_internalOrganizationImpl_Event(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			service := NewOrganizationService(testCase.fields.c, nil, nil)
+			newOrganizationService := NewOrganizationService(testCase.fields.c, nil, nil)
 
-			gotResult, gotResponse, err := service.Event(testCase.args.ctx, testCase.args.organizationID, testCase.args.eventID)
+			gotResult, gotResponse, err := newOrganizationService.Event(testCase.args.ctx, testCase.args.organizationID, testCase.args.eventID)
 
 			if testCase.wantErr {
 
@@ -837,7 +851,7 @@ func Test_internalOrganizationImpl_Event(t *testing.T) {
 func Test_internalOrganizationImpl_Actions(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -861,12 +875,13 @@ func Test_internalOrganizationImpl_Actions(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"admin/v1/orgs/organization-sample-uuid/event-actions",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -888,12 +903,13 @@ func Test_internalOrganizationImpl_Actions(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"admin/v1/orgs/organization-sample-uuid/event-actions",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -912,9 +928,9 @@ func Test_internalOrganizationImpl_Actions(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			service := NewOrganizationService(testCase.fields.c, nil, nil)
+			newOrganizationService := NewOrganizationService(testCase.fields.c, nil, nil)
 
-			gotResult, gotResponse, err := service.Actions(testCase.args.ctx, testCase.args.organizationID)
+			gotResult, gotResponse, err := newOrganizationService.Actions(testCase.args.ctx, testCase.args.organizationID)
 
 			if testCase.wantErr {
 
@@ -930,7 +946,6 @@ func Test_internalOrganizationImpl_Actions(t *testing.T) {
 				assert.NotEqual(t, gotResponse, nil)
 				assert.NotEqual(t, gotResult, nil)
 			}
-
 		})
 	}
 }

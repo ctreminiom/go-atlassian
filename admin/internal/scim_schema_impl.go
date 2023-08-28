@@ -9,7 +9,7 @@ import (
 	"net/http"
 )
 
-func NewSCIMSchemaService(client service.Client) *SCIMSchemaService {
+func NewSCIMSchemaService(client service.Connector) *SCIMSchemaService {
 	return &SCIMSchemaService{internalClient: &internalSCIMSchemaImpl{c: client}}
 }
 
@@ -75,7 +75,7 @@ func (s *SCIMSchemaService) Feature(ctx context.Context, directoryID string) (*m
 }
 
 type internalSCIMSchemaImpl struct {
-	c service.Client
+	c service.Connector
 }
 
 func (i *internalSCIMSchemaImpl) Gets(ctx context.Context, directoryID string) (*model.SCIMSchemasScheme, *model.ResponseScheme, error) {
@@ -86,7 +86,7 @@ func (i *internalSCIMSchemaImpl) Gets(ctx context.Context, directoryID string) (
 
 	endpoint := fmt.Sprintf("scim/directory/%v/Schemas", directoryID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -108,7 +108,7 @@ func (i *internalSCIMSchemaImpl) Group(ctx context.Context, directoryID string) 
 
 	endpoint := fmt.Sprintf("scim/directory/%v/Schemas/urn:ietf:params:scim:schemas:core:2.0:Group", directoryID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -130,7 +130,7 @@ func (i *internalSCIMSchemaImpl) User(ctx context.Context, directoryID string) (
 
 	endpoint := fmt.Sprintf("scim/directory/%v/Schemas/urn:ietf:params:scim:schemas:core:2.0:User", directoryID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -152,7 +152,7 @@ func (i *internalSCIMSchemaImpl) Enterprise(ctx context.Context, directoryID str
 
 	endpoint := fmt.Sprintf("scim/directory/%v/Schemas/urn:ietf:params:scim:schemas:extension:enterprise:2.0:User", directoryID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -174,7 +174,7 @@ func (i *internalSCIMSchemaImpl) Feature(ctx context.Context, directoryID string
 
 	endpoint := fmt.Sprintf("scim/directory/%v/ServiceProviderConfig", directoryID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}

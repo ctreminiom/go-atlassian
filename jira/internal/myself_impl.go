@@ -11,7 +11,7 @@ import (
 	"strings"
 )
 
-func NewMySelfService(client service.Client, version string) (*MySelfService, error) {
+func NewMySelfService(client service.Connector, version string) (*MySelfService, error) {
 
 	if version == "" {
 		return nil, model.ErrNoVersionProvided
@@ -36,7 +36,7 @@ func (m *MySelfService) Details(ctx context.Context, expand []string) (*model.Us
 }
 
 type internalMySelfImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -53,7 +53,7 @@ func (i *internalMySelfImpl) Details(ctx context.Context, expand []string) (*mod
 		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
 		return nil, nil, err
 	}

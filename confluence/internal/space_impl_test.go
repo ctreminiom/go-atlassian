@@ -1,7 +1,6 @@
 package internal
 
 import (
-	"bytes"
 	"context"
 	"errors"
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
@@ -15,7 +14,7 @@ import (
 func Test_internalSpaceImpl_Gets(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -51,13 +50,13 @@ func Test_internalSpaceImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"wiki/rest/api/space?expand=operations&favorite=true&favouriteUserKey=DUMMY&label=label-09%2Clabel-02&limit=50&spaceID=1111&spaceID=2222&spaceID=3333&spaceKey=DUMMY&spaceKey=TEST&start=0&status=archived&type=global",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -89,13 +88,13 @@ func Test_internalSpaceImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"wiki/rest/api/space?expand=operations&favorite=true&favouriteUserKey=DUMMY&label=label-09%2Clabel-02&limit=50&spaceID=1111&spaceID=2222&spaceID=3333&spaceKey=DUMMY&spaceKey=TEST&start=0&status=archived&type=global",
-					nil).
+					"", nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -140,7 +139,7 @@ func Test_internalSpaceImpl_Gets(t *testing.T) {
 func Test_internalSpaceImpl_Get(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -166,13 +165,13 @@ func Test_internalSpaceImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"wiki/rest/api/space/DUMMY?expand=childtypes.all%2Coperations",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -194,13 +193,13 @@ func Test_internalSpaceImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"wiki/rest/api/space/DUMMY?expand=childtypes.all%2Coperations",
-					nil).
+					"", nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -253,7 +252,7 @@ func Test_internalSpaceImpl_Get(t *testing.T) {
 func Test_internalSpaceImpl_Content(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -283,13 +282,13 @@ func Test_internalSpaceImpl_Content(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"wiki/rest/api/space/DUMMY/content?depth=all&expand=childtypes.all%2Coperations&limit=50&start=0",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -314,13 +313,13 @@ func Test_internalSpaceImpl_Content(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"wiki/rest/api/space/DUMMY/content?depth=all&expand=childtypes.all%2Coperations&limit=50&start=0",
-					nil).
+					"", nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -374,7 +373,7 @@ func Test_internalSpaceImpl_Content(t *testing.T) {
 func Test_internalSpaceImpl_ContentByType(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -405,13 +404,13 @@ func Test_internalSpaceImpl_ContentByType(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"wiki/rest/api/space/DUMMY/content/page?depth=all&expand=childtypes.all%2Coperations&limit=50&start=0",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -437,13 +436,13 @@ func Test_internalSpaceImpl_ContentByType(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"wiki/rest/api/space/DUMMY/content/page?depth=all&expand=childtypes.all%2Coperations&limit=50&start=0",
-					nil).
+					"", nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -498,7 +497,7 @@ func Test_internalSpaceImpl_ContentByType(t *testing.T) {
 func Test_internalSpaceImpl_Delete(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -522,13 +521,13 @@ func Test_internalSpaceImpl_Delete(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"wiki/rest/api/space/DUMMY",
-					nil).
+					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -549,13 +548,13 @@ func Test_internalSpaceImpl_Delete(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"wiki/rest/api/space/DUMMY",
-					nil).
+					"", nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -616,7 +615,7 @@ func Test_internalSpaceImpl_Create(t *testing.T) {
 	}
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -642,17 +641,13 @@ func Test_internalSpaceImpl_Create(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"wiki/rest/api/space/_private",
-					bytes.NewReader([]byte{})).
+					"", payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -674,17 +669,13 @@ func Test_internalSpaceImpl_Create(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"wiki/rest/api/space/_private",
-					bytes.NewReader([]byte{})).
+					"", payloadMocked).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -700,17 +691,6 @@ func Test_internalSpaceImpl_Create(t *testing.T) {
 				ctx:     context.TODO(),
 				payload: &model.CreateSpaceScheme{},
 			},
-			on: func(fields *fields) {
-
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&model.CreateSpaceScheme{}).
-					Return(bytes.NewReader([]byte{}), nil)
-
-				fields.c = client
-
-			},
 			wantErr: true,
 			Err:     model.ErrNoSpaceNameError,
 		},
@@ -723,17 +703,7 @@ func Test_internalSpaceImpl_Create(t *testing.T) {
 					Name: "DUMMY Space",
 				},
 			},
-			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&model.CreateSpaceScheme{Name: "DUMMY Space"}).
-					Return(bytes.NewReader([]byte{}), nil)
-
-				fields.c = client
-
-			},
 			wantErr: true,
 			Err:     model.ErrNoSpaceKeyError,
 		},
@@ -777,7 +747,7 @@ func Test_internalSpaceImpl_Update(t *testing.T) {
 	}
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -803,17 +773,13 @@ func Test_internalSpaceImpl_Update(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"wiki/rest/api/space/DUMMY",
-					bytes.NewReader([]byte{})).
+					"", payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -835,17 +801,13 @@ func Test_internalSpaceImpl_Update(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"wiki/rest/api/space/DUMMY",
-					bytes.NewReader([]byte{})).
+					"", payloadMocked).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client

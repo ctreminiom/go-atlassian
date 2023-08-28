@@ -11,7 +11,7 @@ import (
 	"strconv"
 )
 
-func NewIssueFieldConfigurationItemService(client service.Client, version string) (*IssueFieldConfigItemService, error) {
+func NewIssueFieldConfigurationItemService(client service.Connector, version string) (*IssueFieldConfigItemService, error) {
 
 	if version == "" {
 		return nil, model.ErrNoVersionProvided
@@ -48,7 +48,7 @@ func (i *IssueFieldConfigItemService) Update(ctx context.Context, id int, payloa
 }
 
 type internalIssueFieldConfigItemServiceImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -64,7 +64,7 @@ func (i *internalIssueFieldConfigItemServiceImpl) Gets(ctx context.Context, id, 
 
 	endpoint := fmt.Sprintf("rest/api/%v/fieldconfiguration/%v/fields?%v", i.version, id, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -84,14 +84,9 @@ func (i *internalIssueFieldConfigItemServiceImpl) Update(ctx context.Context, id
 		return nil, model.ErrNoFieldConfigurationIDError
 	}
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, err
-	}
-
 	endpoint := fmt.Sprintf("rest/api/%v/fieldconfiguration/%v/fields", i.version, id)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
 		return nil, err
 	}

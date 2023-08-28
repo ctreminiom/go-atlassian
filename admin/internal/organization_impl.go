@@ -12,7 +12,7 @@ import (
 	"strings"
 )
 
-func NewOrganizationService(client service.Client, policy *OrganizationPolicyService, directory *OrganizationDirectoryService) *OrganizationService {
+func NewOrganizationService(client service.Connector, policy *OrganizationPolicyService, directory *OrganizationDirectoryService) *OrganizationService {
 	return &OrganizationService{internalClient: &internalOrganizationImpl{c: client}, Policy: policy, Directory: directory}
 }
 
@@ -95,7 +95,7 @@ func (o *OrganizationService) Actions(ctx context.Context, organizationID string
 }
 
 type internalOrganizationImpl struct {
-	c service.Client
+	c service.Connector
 }
 
 func (i *internalOrganizationImpl) Gets(ctx context.Context, cursor string) (*model.AdminOrganizationPageScheme, *model.ResponseScheme, error) {
@@ -110,18 +110,18 @@ func (i *internalOrganizationImpl) Gets(ctx context.Context, cursor string) (*mo
 		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), nil)
+	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	organizations := new(model.AdminOrganizationPageScheme)
-	response, err := i.c.Call(request, organizations)
+	res, err := i.c.Call(req, organizations)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return organizations, response, nil
+	return organizations, res, nil
 }
 
 func (i *internalOrganizationImpl) Get(ctx context.Context, organizationID string) (*model.AdminOrganizationScheme, *model.ResponseScheme, error) {
@@ -132,18 +132,18 @@ func (i *internalOrganizationImpl) Get(ctx context.Context, organizationID strin
 
 	endpoint := fmt.Sprintf("admin/v1/orgs/%v", organizationID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	organization := new(model.AdminOrganizationScheme)
-	response, err := i.c.Call(request, organization)
+	res, err := i.c.Call(req, organization)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return organization, response, nil
+	return organization, res, nil
 }
 
 func (i *internalOrganizationImpl) Users(ctx context.Context, organizationID, cursor string) (*model.OrganizationUserPageScheme, *model.ResponseScheme, error) {
@@ -162,18 +162,18 @@ func (i *internalOrganizationImpl) Users(ctx context.Context, organizationID, cu
 		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), nil)
+	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	users := new(model.OrganizationUserPageScheme)
-	response, err := i.c.Call(request, users)
+	res, err := i.c.Call(req, users)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return users, response, nil
+	return users, res, nil
 }
 
 func (i *internalOrganizationImpl) Domains(ctx context.Context, organizationID, cursor string) (*model.OrganizationDomainPageScheme, *model.ResponseScheme, error) {
@@ -192,18 +192,18 @@ func (i *internalOrganizationImpl) Domains(ctx context.Context, organizationID, 
 		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), nil)
+	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	domains := new(model.OrganizationDomainPageScheme)
-	response, err := i.c.Call(request, domains)
+	res, err := i.c.Call(req, domains)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return domains, response, nil
+	return domains, res, nil
 }
 
 func (i *internalOrganizationImpl) Domain(ctx context.Context, organizationID, domainID string) (*model.OrganizationDomainScheme, *model.ResponseScheme, error) {
@@ -218,18 +218,18 @@ func (i *internalOrganizationImpl) Domain(ctx context.Context, organizationID, d
 
 	endpoint := fmt.Sprintf("admin/v1/orgs/%v/domains/%v", organizationID, domainID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	domain := new(model.OrganizationDomainScheme)
-	response, err := i.c.Call(request, domain)
+	res, err := i.c.Call(req, domain)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return domain, response, nil
+	return domain, res, nil
 }
 
 func (i *internalOrganizationImpl) Events(ctx context.Context, organizationID string, options *model.OrganizationEventOptScheme, cursor string) (*model.OrganizationEventPageScheme, *model.ResponseScheme, error) {
@@ -271,18 +271,18 @@ func (i *internalOrganizationImpl) Events(ctx context.Context, organizationID st
 		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), nil)
+	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	events := new(model.OrganizationEventPageScheme)
-	response, err := i.c.Call(request, events)
+	res, err := i.c.Call(req, events)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return events, response, nil
+	return events, res, nil
 }
 
 func (i *internalOrganizationImpl) Event(ctx context.Context, organizationID, eventID string) (*model.OrganizationEventScheme, *model.ResponseScheme, error) {
@@ -297,18 +297,18 @@ func (i *internalOrganizationImpl) Event(ctx context.Context, organizationID, ev
 
 	endpoint := fmt.Sprintf("admin/v1/orgs/%v/events/%v", organizationID, eventID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	event := new(model.OrganizationEventScheme)
-	response, err := i.c.Call(request, event)
+	res, err := i.c.Call(req, event)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return event, response, nil
+	return event, res, nil
 }
 
 func (i *internalOrganizationImpl) Actions(ctx context.Context, organizationID string) (*model.OrganizationEventActionScheme, *model.ResponseScheme, error) {
@@ -319,16 +319,16 @@ func (i *internalOrganizationImpl) Actions(ctx context.Context, organizationID s
 
 	endpoint := fmt.Sprintf("admin/v1/orgs/%v/event-actions", organizationID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	event := new(model.OrganizationEventActionScheme)
-	response, err := i.c.Call(request, event)
+	res, err := i.c.Call(req, event)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return event, response, nil
+	return event, res, nil
 }

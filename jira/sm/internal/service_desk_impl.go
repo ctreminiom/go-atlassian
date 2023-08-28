@@ -14,7 +14,7 @@ import (
 	"strconv"
 )
 
-func NewServiceDeskService(client service.Client, version string, queue *QueueService) (*ServiceDeskService, error) {
+func NewServiceDeskService(client service.Connector, version string, queue *QueueService) (*ServiceDeskService, error) {
 
 	if version == "" {
 		return nil, model.ErrNoVersionProvided
@@ -42,7 +42,7 @@ func (s *ServiceDeskService) Gets(ctx context.Context, start, limit int) (*model
 
 // Get returns a service desk.
 //
-// Use this method to get service desk details whenever your application component is passed a service desk ID
+// # Use this method to get service desk details whenever your application component is passed a service desk ID
 //
 // but needs to display other service desk details.
 //
@@ -63,7 +63,7 @@ func (s *ServiceDeskService) Attach(ctx context.Context, serviceDeskID int, file
 }
 
 type internalServiceDeskImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -75,18 +75,18 @@ func (i *internalServiceDeskImpl) Gets(ctx context.Context, start, limit int) (*
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/servicedesk?%v", params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	page := new(model.ServiceDeskPageScheme)
-	response, err := i.c.Call(request, page)
+	res, err := i.c.Call(req, page)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return page, response, nil
+	return page, res, nil
 }
 
 func (i *internalServiceDeskImpl) Get(ctx context.Context, serviceDeskID int) (*model.ServiceDeskScheme, *model.ResponseScheme, error) {
@@ -97,18 +97,18 @@ func (i *internalServiceDeskImpl) Get(ctx context.Context, serviceDeskID int) (*
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/servicedesk/%v", serviceDeskID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	serviceDesk := new(model.ServiceDeskScheme)
-	response, err := i.c.Call(request, serviceDesk)
+	res, err := i.c.Call(req, serviceDesk)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return serviceDesk, response, nil
+	return serviceDesk, res, nil
 }
 
 func (i *internalServiceDeskImpl) Attach(ctx context.Context, serviceDeskID int, fileName string, file io.Reader) (*model.ServiceDeskTemporaryFileScheme, *model.ResponseScheme, error) {
@@ -140,18 +140,20 @@ func (i *internalServiceDeskImpl) Attach(ctx context.Context, serviceDeskID int,
 		return nil, nil, err
 	}
 
-	writer.Close()
+	if err := writer.Close(); err != nil {
+		return nil, nil, err
+	}
 
-	request, err := i.c.NewFormRequest(ctx, http.MethodPost, endpoint, writer.FormDataContentType(), reader)
+	req, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, writer.FormDataContentType(), reader)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	attachmentID := new(model.ServiceDeskTemporaryFileScheme)
-	response, err := i.c.Call(request, attachmentID)
+	res, err := i.c.Call(req, attachmentID)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return attachmentID, response, nil
+	return attachmentID, res, nil
 }

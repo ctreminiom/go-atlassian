@@ -11,7 +11,7 @@ import (
 	"strings"
 )
 
-func NewRemoteLinkService(client service.Client, version string) (*RemoteLinkService, error) {
+func NewRemoteLinkService(client service.Connector, version string) (*RemoteLinkService, error) {
 
 	if version == "" {
 		return nil, model.ErrNoVersionProvided
@@ -97,7 +97,7 @@ func (r *RemoteLinkService) DeleteByGlobalId(ctx context.Context, issueKeyOrId, 
 }
 
 type internalRemoteLinkImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -117,7 +117,7 @@ func (i *internalRemoteLinkImpl) Gets(ctx context.Context, issueKeyOrId, globalI
 		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -143,7 +143,7 @@ func (i *internalRemoteLinkImpl) Get(ctx context.Context, issueKeyOrId, linkId s
 
 	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/remotelink/%v", i.version, issueKeyOrId, linkId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -163,14 +163,9 @@ func (i *internalRemoteLinkImpl) Create(ctx context.Context, issueKeyOrId string
 		return nil, nil, model.ErrNoIssueKeyOrIDError
 	}
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/remotelink", i.version, issueKeyOrId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -194,14 +189,9 @@ func (i *internalRemoteLinkImpl) Update(ctx context.Context, issueKeyOrId, linkI
 		return nil, model.ErrNoRemoteLinkIDError
 	}
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, err
-	}
-
 	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/remotelink/%v", i.version, issueKeyOrId, linkId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
 		return nil, err
 	}
@@ -221,7 +211,7 @@ func (i *internalRemoteLinkImpl) DeleteById(ctx context.Context, issueKeyOrId, l
 
 	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/remotelink/%v", i.version, issueKeyOrId, linkId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -244,7 +234,7 @@ func (i *internalRemoteLinkImpl) DeleteByGlobalId(ctx context.Context, issueKeyO
 
 	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/remotelink?%v", i.version, issueKeyOrId, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}

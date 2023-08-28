@@ -1,7 +1,6 @@
 package internal
 
 import (
-	"bytes"
 	"context"
 	"errors"
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
@@ -15,7 +14,7 @@ import (
 func Test_internalSCIMGroupImpl_Gets(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -43,12 +42,13 @@ func Test_internalSCIMGroupImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"scim/directory/direction-id-sample/Groups?count=50&filter=filter-sample&startIndex=50",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -83,12 +83,13 @@ func Test_internalSCIMGroupImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"scim/directory/direction-id-sample/Groups?count=50&filter=filter-sample&startIndex=50",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -107,9 +108,9 @@ func Test_internalSCIMGroupImpl_Gets(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			service := NewSCIMGroupService(testCase.fields.c)
+			newSCIMGroupService := NewSCIMGroupService(testCase.fields.c)
 
-			gotResult, gotResponse, err := service.Gets(testCase.args.ctx, testCase.args.directoryID,
+			gotResult, gotResponse, err := newSCIMGroupService.Gets(testCase.args.ctx, testCase.args.directoryID,
 				testCase.args.filter, testCase.args.startAt, testCase.args.maxResults)
 
 			if testCase.wantErr {
@@ -134,7 +135,7 @@ func Test_internalSCIMGroupImpl_Gets(t *testing.T) {
 func Test_internalSCIMGroupImpl_Get(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -159,12 +160,13 @@ func Test_internalSCIMGroupImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"scim/directory/direction-id-sample/Groups/group-id-sample",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -207,12 +209,13 @@ func Test_internalSCIMGroupImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"scim/directory/direction-id-sample/Groups/group-id-sample",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -231,9 +234,9 @@ func Test_internalSCIMGroupImpl_Get(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			service := NewSCIMGroupService(testCase.fields.c)
+			newSCIMGroupService := NewSCIMGroupService(testCase.fields.c)
 
-			gotResult, gotResponse, err := service.Get(testCase.args.ctx, testCase.args.directoryID,
+			gotResult, gotResponse, err := newSCIMGroupService.Get(testCase.args.ctx, testCase.args.directoryID,
 				testCase.args.groupID)
 
 			if testCase.wantErr {
@@ -258,7 +261,7 @@ func Test_internalSCIMGroupImpl_Get(t *testing.T) {
 func Test_internalSCIMGroupImpl_Delete(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -283,12 +286,13 @@ func Test_internalSCIMGroupImpl_Delete(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"scim/directory/direction-id-sample/Groups/group-id-sample",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -331,12 +335,13 @@ func Test_internalSCIMGroupImpl_Delete(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"scim/directory/direction-id-sample/Groups/group-id-sample",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -355,9 +360,9 @@ func Test_internalSCIMGroupImpl_Delete(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			service := NewSCIMGroupService(testCase.fields.c)
+			newSCIMGroupService := NewSCIMGroupService(testCase.fields.c)
 
-			gotResponse, err := service.Delete(testCase.args.ctx, testCase.args.directoryID,
+			gotResponse, err := newSCIMGroupService.Delete(testCase.args.ctx, testCase.args.directoryID,
 				testCase.args.groupID)
 
 			if testCase.wantErr {
@@ -380,14 +385,10 @@ func Test_internalSCIMGroupImpl_Delete(t *testing.T) {
 
 func Test_internalSCIMGroupImpl_Create(t *testing.T) {
 
-	payloadMocked := &struct {
-		DisplayName string `json:"displayName"`
-	}{
-		DisplayName: "group-name-sample",
-	}
+	payloadMocked := map[string]interface{}{"displayName": "group-name-sample"}
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -412,17 +413,14 @@ func Test_internalSCIMGroupImpl_Create(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"scim/directory/direction-id-sample/Groups",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -464,17 +462,14 @@ func Test_internalSCIMGroupImpl_Create(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"scim/directory/direction-id-sample/Groups",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -492,9 +487,9 @@ func Test_internalSCIMGroupImpl_Create(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			service := NewSCIMGroupService(testCase.fields.c)
+			newSCIMGroupService := NewSCIMGroupService(testCase.fields.c)
 
-			gotResult, gotResponse, err := service.Create(testCase.args.ctx, testCase.args.directoryID,
+			gotResult, gotResponse, err := newSCIMGroupService.Create(testCase.args.ctx, testCase.args.directoryID,
 				testCase.args.groupName)
 
 			if testCase.wantErr {
@@ -518,14 +513,10 @@ func Test_internalSCIMGroupImpl_Create(t *testing.T) {
 
 func Test_internalSCIMGroupImpl_Update(t *testing.T) {
 
-	payloadMocked := &struct {
-		DisplayName string `json:"displayName"`
-	}{
-		DisplayName: "group-name-sample",
-	}
+	payloadMocked := map[string]interface{}{"displayName": "group-name-sample"}
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -551,17 +542,14 @@ func Test_internalSCIMGroupImpl_Update(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"scim/directory/direction-id-sample/Groups/group-id-sample",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -615,17 +603,14 @@ func Test_internalSCIMGroupImpl_Update(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
 					"scim/directory/direction-id-sample/Groups/group-id-sample",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -643,9 +628,9 @@ func Test_internalSCIMGroupImpl_Update(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			service := NewSCIMGroupService(testCase.fields.c)
+			newSCIMGroupService := NewSCIMGroupService(testCase.fields.c)
 
-			gotResult, gotResponse, err := service.Update(testCase.args.ctx, testCase.args.directoryID,
+			gotResult, gotResponse, err := newSCIMGroupService.Update(testCase.args.ctx, testCase.args.directoryID,
 				testCase.args.groupID, testCase.args.newGroupName)
 
 			if testCase.wantErr {
@@ -686,7 +671,7 @@ func Test_internalSCIMGroupImpl_Path(t *testing.T) {
 	}
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -713,17 +698,14 @@ func Test_internalSCIMGroupImpl_Path(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPatch,
 					"scim/directory/direction-id-sample/Groups/group-id-sample",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -766,17 +748,14 @@ func Test_internalSCIMGroupImpl_Path(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPatch,
 					"scim/directory/direction-id-sample/Groups/group-id-sample",
-					bytes.NewReader([]byte{})).
+					"",
+					payloadMocked).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -794,9 +773,9 @@ func Test_internalSCIMGroupImpl_Path(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			service := NewSCIMGroupService(testCase.fields.c)
+			newSCIMGroupService := NewSCIMGroupService(testCase.fields.c)
 
-			gotResult, gotResponse, err := service.Path(testCase.args.ctx, testCase.args.directoryID,
+			gotResult, gotResponse, err := newSCIMGroupService.Path(testCase.args.ctx, testCase.args.directoryID,
 				testCase.args.groupID, testCase.args.payload)
 
 			if testCase.wantErr {

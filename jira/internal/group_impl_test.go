@@ -1,7 +1,6 @@
 package internal
 
 import (
-	"bytes"
 	"context"
 	"errors"
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
@@ -15,7 +14,7 @@ import (
 func Test_internalGroupServiceImpl_Create(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -41,19 +40,14 @@ func Test_internalGroupServiceImpl_Create(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&struct {
-						Name string "json:\"name\""
-					}{Name: "jira-users"}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/group",
-					bytes.NewReader([]byte{})).
+					"",
+					map[string]interface{}{"name": "jira-users"}).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -74,19 +68,14 @@ func Test_internalGroupServiceImpl_Create(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&struct {
-						Name string "json:\"name\""
-					}{Name: "jira-users"}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/3/group",
-					bytes.NewReader([]byte{})).
+					"",
+					map[string]interface{}{"name": "jira-users"}).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -106,7 +95,7 @@ func Test_internalGroupServiceImpl_Create(t *testing.T) {
 				groupName: "",
 			},
 			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
+				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
 			Err:     model.ErrNoGroupNameError,
@@ -121,19 +110,14 @@ func Test_internalGroupServiceImpl_Create(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&struct {
-						Name string "json:\"name\""
-					}{Name: "jira-users"}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/3/group",
-					bytes.NewReader([]byte{})).
+					"",
+					map[string]interface{}{"name": "jira-users"}).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -176,7 +160,7 @@ func Test_internalGroupServiceImpl_Create(t *testing.T) {
 func Test_internalGroupServiceImpl_Delete(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -202,12 +186,13 @@ func Test_internalGroupServiceImpl_Delete(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/api/2/group?groupname=jira-users",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -229,12 +214,13 @@ func Test_internalGroupServiceImpl_Delete(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/api/3/group?groupname=jira-users",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -255,7 +241,7 @@ func Test_internalGroupServiceImpl_Delete(t *testing.T) {
 				groupName: "",
 			},
 			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
+				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
 			Err:     model.ErrNoGroupNameError,
@@ -270,12 +256,13 @@ func Test_internalGroupServiceImpl_Delete(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/api/3/group?groupname=jira-users",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -318,7 +305,7 @@ func Test_internalGroupServiceImpl_Delete(t *testing.T) {
 func Test_internalGroupServiceImpl_Remove(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -346,12 +333,13 @@ func Test_internalGroupServiceImpl_Remove(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/api/2/group/user?accountId=account-id-sample&groupname=jira-users",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -374,12 +362,13 @@ func Test_internalGroupServiceImpl_Remove(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/api/3/group/user?accountId=account-id-sample&groupname=jira-users",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -400,7 +389,7 @@ func Test_internalGroupServiceImpl_Remove(t *testing.T) {
 				groupName: "",
 			},
 			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
+				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
 			Err:     model.ErrNoGroupNameError,
@@ -415,7 +404,7 @@ func Test_internalGroupServiceImpl_Remove(t *testing.T) {
 				accountId: "",
 			},
 			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
+				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
 			Err:     model.ErrNoAccountIDError,
@@ -431,12 +420,13 @@ func Test_internalGroupServiceImpl_Remove(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/api/3/group/user?accountId=account-id-sample&groupname=jira-users",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -479,7 +469,7 @@ func Test_internalGroupServiceImpl_Remove(t *testing.T) {
 func Test_internalGroupServiceImpl_Add(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -507,19 +497,14 @@ func Test_internalGroupServiceImpl_Add(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&struct {
-						AccountID string "json:\"accountId\""
-					}{AccountID: "account-id-sample"}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/group/user?groupname=jira-users",
-					bytes.NewReader([]byte{})).
+					"",
+					map[string]interface{}{"accountId": "account-id-sample"}).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -541,19 +526,14 @@ func Test_internalGroupServiceImpl_Add(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&struct {
-						AccountID string "json:\"accountId\""
-					}{AccountID: "account-id-sample"}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/3/group/user?groupname=jira-users",
-					bytes.NewReader([]byte{})).
+					"",
+					map[string]interface{}{"accountId": "account-id-sample"}).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -573,7 +553,7 @@ func Test_internalGroupServiceImpl_Add(t *testing.T) {
 				groupName: "",
 			},
 			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
+				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
 			Err:     model.ErrNoGroupNameError,
@@ -588,7 +568,7 @@ func Test_internalGroupServiceImpl_Add(t *testing.T) {
 				accountId: "",
 			},
 			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
+				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
 			Err:     model.ErrNoAccountIDError,
@@ -604,19 +584,14 @@ func Test_internalGroupServiceImpl_Add(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					&struct {
-						AccountID string "json:\"accountId\""
-					}{AccountID: "account-id-sample"}).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/api/3/group/user?groupname=jira-users",
-					bytes.NewReader([]byte{})).
+					"",
+					map[string]interface{}{"accountId": "account-id-sample"}).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -659,7 +634,7 @@ func Test_internalGroupServiceImpl_Add(t *testing.T) {
 func Test_internalGroupServiceImpl_Bulk(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -691,12 +666,13 @@ func Test_internalGroupServiceImpl_Bulk(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/group/bulk?groupId=1001&groupId=1002&groupName=jira-users&groupName=confluence-users&maxResults=50&startAt=0",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -723,12 +699,13 @@ func Test_internalGroupServiceImpl_Bulk(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/group/bulk?groupId=1001&groupId=1002&groupName=jira-users&groupName=confluence-users&maxResults=50&startAt=0",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -755,12 +732,13 @@ func Test_internalGroupServiceImpl_Bulk(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/group/bulk?groupId=1001&groupId=1002&groupName=jira-users&groupName=confluence-users&maxResults=50&startAt=0",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -805,7 +783,7 @@ func Test_internalGroupServiceImpl_Bulk(t *testing.T) {
 func Test_internalGroupServiceImpl_Members(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -836,12 +814,13 @@ func Test_internalGroupServiceImpl_Members(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/group/member?groupname=jira-users&includeInactiveUsers=true&maxResults=50&startAt=0",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -866,12 +845,13 @@ func Test_internalGroupServiceImpl_Members(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/group/member?groupname=jira-users&includeInactiveUsers=true&maxResults=50&startAt=0",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -895,7 +875,7 @@ func Test_internalGroupServiceImpl_Members(t *testing.T) {
 				maxResults: 50,
 			},
 			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
+				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
 			Err:     model.ErrNoGroupNameError,
@@ -913,12 +893,13 @@ func Test_internalGroupServiceImpl_Members(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/group/member?groupname=jira-users&includeInactiveUsers=true&maxResults=50&startAt=0",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -963,7 +944,7 @@ func Test_internalGroupServiceImpl_Members(t *testing.T) {
 func Test_NewGroupService(t *testing.T) {
 
 	type args struct {
-		client  service.Client
+		client  service.Connector
 		version string
 	}
 

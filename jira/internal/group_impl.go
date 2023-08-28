@@ -11,7 +11,7 @@ import (
 	"strconv"
 )
 
-func NewGroupService(client service.Client, version string) (*GroupService, error) {
+func NewGroupService(client service.Connector, version string) (*GroupService, error) {
 
 	if version == "" {
 		return nil, model.ErrNoVersionProvided
@@ -81,7 +81,7 @@ func (g *GroupService) Create(ctx context.Context, groupName string) (*model.Gro
 }
 
 type internalGroupServiceImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -91,20 +91,9 @@ func (i *internalGroupServiceImpl) Create(ctx context.Context, groupName string)
 		return nil, nil, model.ErrNoGroupNameError
 	}
 
-	payload := struct {
-		Name string `json:"name"`
-	}{
-		Name: groupName,
-	}
-
-	reader, err := i.c.TransformStructToReader(&payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	endpoint := fmt.Sprintf("rest/api/%v/group", i.version)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", map[string]interface{}{"name": groupName})
 	if err != nil {
 		return nil, nil, err
 	}
@@ -129,7 +118,7 @@ func (i *internalGroupServiceImpl) Delete(ctx context.Context, groupName string)
 
 	endpoint := fmt.Sprintf("rest/api/%v/group?%v", i.version, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -156,7 +145,7 @@ func (i *internalGroupServiceImpl) Bulk(ctx context.Context, options *model.Grou
 
 	endpoint := fmt.Sprintf("rest/api/%v/group/bulk?%v", i.version, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -184,7 +173,7 @@ func (i *internalGroupServiceImpl) Members(ctx context.Context, groupName string
 
 	endpoint := fmt.Sprintf("rest/api/%v/group/member?%v", i.version, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -208,22 +197,11 @@ func (i *internalGroupServiceImpl) Add(ctx context.Context, groupName, accountId
 		return nil, nil, model.ErrNoAccountIDError
 	}
 
-	payload := struct {
-		AccountID string `json:"accountId"`
-	}{
-		AccountID: accountId,
-	}
-
-	reader, err := i.c.TransformStructToReader(&payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	params := url.Values{}
 	params.Add("groupname", groupName)
 	endpoint := fmt.Sprintf("rest/api/%v/group/user?%v", i.version, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", map[string]interface{}{"accountId": accountId})
 	if err != nil {
 		return nil, nil, err
 	}
@@ -252,7 +230,7 @@ func (i *internalGroupServiceImpl) Remove(ctx context.Context, groupName, accoun
 	params.Add("accountId", accountId)
 	endpoint := fmt.Sprintf("rest/api/%v/group/user?%v", i.version, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}

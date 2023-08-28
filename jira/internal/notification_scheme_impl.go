@@ -12,7 +12,7 @@ import (
 	"strings"
 )
 
-func NewNotificationSchemeService(client service.Client, version string) (*NotificationSchemeService, error) {
+func NewNotificationSchemeService(client service.Connector, version string) (*NotificationSchemeService, error) {
 
 	if version == "" {
 		return nil, model.ErrNoVersionProvided
@@ -112,7 +112,7 @@ func (n *NotificationSchemeService) Remove(ctx context.Context, schemeID, notifi
 }
 
 type internalNotificationSchemeImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -143,7 +143,7 @@ func (i *internalNotificationSchemeImpl) Search(ctx context.Context, options *mo
 
 	endpoint := fmt.Sprintf("rest/api/%v/notificationscheme?%v", i.version, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -159,14 +159,9 @@ func (i *internalNotificationSchemeImpl) Search(ctx context.Context, options *mo
 
 func (i *internalNotificationSchemeImpl) Create(ctx context.Context, payload *model.NotificationSchemePayloadScheme) (*model.NotificationSchemeCreatedPayload, *model.ResponseScheme, error) {
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	endpoint := fmt.Sprintf("rest/api/%v/notificationscheme", i.version)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -196,7 +191,7 @@ func (i *internalNotificationSchemeImpl) Projects(ctx context.Context, schemeIDs
 
 	endpoint := fmt.Sprintf("rest/api/%v/notificationscheme/project?%v", i.version, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -227,7 +222,7 @@ func (i *internalNotificationSchemeImpl) Get(ctx context.Context, schemeID strin
 		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -247,14 +242,9 @@ func (i *internalNotificationSchemeImpl) Update(ctx context.Context, schemeID st
 		return nil, model.ErrNoNotificationSchemeIDError
 	}
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, err
-	}
-
 	endpoint := fmt.Sprintf("rest/api/%v/notificationscheme/%v", i.version, schemeID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
 		return nil, err
 	}
@@ -268,14 +258,9 @@ func (i *internalNotificationSchemeImpl) Append(ctx context.Context, schemeID st
 		return nil, model.ErrNoNotificationSchemeIDError
 	}
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, err
-	}
-
 	endpoint := fmt.Sprintf("rest/api/%v/notificationscheme/%v/notification", i.version, schemeID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
 		return nil, err
 	}
@@ -291,7 +276,7 @@ func (i *internalNotificationSchemeImpl) Delete(ctx context.Context, schemeID st
 
 	endpoint := fmt.Sprintf("rest/api/%v/notificationscheme/%v", i.version, schemeID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -311,7 +296,7 @@ func (i *internalNotificationSchemeImpl) Remove(ctx context.Context, schemeID, n
 
 	endpoint := fmt.Sprintf("rest/api/%v/notificationscheme/%v/notification/%v", i.version, schemeID, notificationID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}

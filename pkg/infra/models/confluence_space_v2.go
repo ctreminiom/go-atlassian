@@ -36,3 +36,28 @@ type SpaceDescriptionSchemeV2 struct {
 	Plain *PageBodyRepresentationScheme `json:"plain,omitempty"`
 	View  *PageBodyRepresentationScheme `json:"view,omitempty"`
 }
+
+type SpacePermissionPageScheme struct {
+	Results []*SpacePermissionsV2Scheme    `json:"results,omitempty"`
+	Links   *SpacePermissionPageLinkScheme `json:"_links,omitempty"`
+}
+
+type SpacePermissionsV2Scheme struct {
+	ID        string                           `json:"id"`
+	Principal *SpacePermissionsPrincipalScheme `json:"principal"`
+	Operation *SpacePermissionsOperationScheme `json:"operation"`
+}
+
+type SpacePermissionsPrincipalScheme struct {
+	Type string `json:"type,omitempty"`
+	ID   string `json:"id,omitempty"`
+}
+
+type SpacePermissionsOperationScheme struct {
+	Key        string `json:"key,omitempty"`
+	TargetType string `json:"targetType,omitempty"`
+}
+
+type SpacePermissionPageLinkScheme struct {
+	Next string `json:"next,omitempty"`
+}

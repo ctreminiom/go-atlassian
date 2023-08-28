@@ -220,6 +220,6 @@ type TypeScreenSchemeConnector interface {
 	//
 	// GET /rest/api/{2-3}/issuetypescreenscheme/{issueTypeScreenSchemeId}/project
 	//
-	// Docs: TODO: the documentation needs to be created
+	// https://docs.go-atlassian.io/jira-software-cloud/issues/types/screen-scheme#get-issue-type-screen-scheme-projects
 	SchemesByProject(ctx context.Context, issueTypeScreenSchemeId, startAt, maxResults int) (*model.IssueTypeScreenSchemeByProjectPageScheme, *model.ResponseScheme, error)
 }

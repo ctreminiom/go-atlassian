@@ -2,6 +2,7 @@ package models
 
 import (
 	"bytes"
+
 	"github.com/perimeterx/marshmallow"
 )
 
@@ -261,6 +262,33 @@ func ParseUserPickerCustomField(buffer bytes.Buffer, customField string) (*UserD
 	return user, nil
 }
 
+func ParseStringCustomField(buffer bytes.Buffer, customField string) (string, error) {
+
+	raw, err := marshmallow.Unmarshal(buffer.Bytes(), &struct{}{})
+	if err != nil {
+		return "", ErrNoCustomFieldUnmarshalError
+	}
+
+	fields, containsFields := raw["fields"]
+	if !containsFields {
+		return "", ErrNoFieldInformationError
+	}
+
+	var text string
+	customFields := fields.(map[string]interface{})
+
+	switch value := customFields[customField].(type) {
+	case string:
+		text = value
+	case nil:
+		return "", nil
+	default:
+		return "", ErrNoMultiSelectTypeError
+	}
+
+	return text, err
+}
+
 func ParseFloatCustomField(buffer bytes.Buffer, customField string) (float64, error) {
 
 	raw, err := marshmallow.Unmarshal(buffer.Bytes(), &struct{}{})
@@ -392,4 +420,42 @@ func ParseSelectCustomField(buffer bytes.Buffer, customField string) (*CustomFie
 	}
 
 	return cascading, nil
+}
+
+func ParseAssetCustomField(buffer bytes.Buffer, customField string) ([]*CustomFieldAssetScheme, error) {
+
+	raw, err := marshmallow.Unmarshal(buffer.Bytes(), &struct{}{})
+	if err != nil {
+		return nil, ErrNoCustomFieldUnmarshalError
+	}
+
+	fields, containsFields := raw["fields"]
+	if !containsFields {
+		return nil, ErrNoFieldInformationError
+	}
+
+	customFields := fields.(map[string]interface{})
+	var records []*CustomFieldAssetScheme
+
+	switch options := customFields[customField].(type) {
+	case []interface{}:
+
+		for _, option := range options {
+
+			record := &CustomFieldAssetScheme{
+				WorkspaceId: option.(map[string]interface{})["workspaceId"].(string),
+				Id:          option.(map[string]interface{})["id"].(string),
+				ObjectId:    option.(map[string]interface{})["objectId"].(string),
+			}
+
+			records = append(records, record)
+		}
+
+	case nil:
+		return nil, nil
+	default:
+		return nil, ErrNoAssetTypeError
+	}
+
+	return records, nil
 }

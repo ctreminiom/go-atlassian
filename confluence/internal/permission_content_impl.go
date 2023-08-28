@@ -9,7 +9,7 @@ import (
 	"net/http"
 )
 
-func NewPermissionService(client service.Client) *PermissionService {
+func NewPermissionService(client service.Connector) *PermissionService {
 
 	return &PermissionService{
 		internalClient: &internalPermissionImpl{c: client},
@@ -43,7 +43,7 @@ func (p *PermissionService) Check(ctx context.Context, contentID string, payload
 }
 
 type internalPermissionImpl struct {
-	c service.Client
+	c service.Connector
 }
 
 func (i *internalPermissionImpl) Check(ctx context.Context, contentID string, payload *model.CheckPermissionScheme) (*model.PermissionCheckResponseScheme, *model.ResponseScheme, error) {
@@ -52,14 +52,9 @@ func (i *internalPermissionImpl) Check(ctx context.Context, contentID string, pa
 		return nil, nil, model.ErrNoContentIDError
 	}
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	endpoint := fmt.Sprintf("wiki/rest/api/content/%v/permission/check", contentID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}

@@ -15,7 +15,7 @@ import (
 func TestApplicationRoleService_Get(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -40,12 +40,13 @@ func TestApplicationRoleService_Get(t *testing.T) {
 			},
 			fields: fields{version: "2"},
 			on: func(fields *fields) {
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/applicationrole/jira-users",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -66,12 +67,13 @@ func TestApplicationRoleService_Get(t *testing.T) {
 			},
 			fields: fields{version: "3"},
 			on: func(fields *fields) {
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/applicationrole/jira-users",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -92,7 +94,7 @@ func TestApplicationRoleService_Get(t *testing.T) {
 			},
 			fields: fields{version: "2"},
 			on: func(fields *fields) {
-				fields.c = mocks.NewClient(t)
+				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
 			Err:     model.ErrNoApplicationRoleError,
@@ -106,12 +108,13 @@ func TestApplicationRoleService_Get(t *testing.T) {
 				key: "jira-users",
 			},
 			on: func(fields *fields) {
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/applicationrole/jira-users",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("unable to create the http request"))
 
@@ -129,12 +132,13 @@ func TestApplicationRoleService_Get(t *testing.T) {
 				key: "jira-users",
 			},
 			on: func(fields *fields) {
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/applicationrole/jira-users",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -184,7 +188,7 @@ func TestApplicationRoleService_Get(t *testing.T) {
 func TestApplicationRoleService_Gets(t *testing.T) {
 
 	type fields struct {
-		c       service.Client
+		c       service.Connector
 		version string
 	}
 
@@ -205,12 +209,13 @@ func TestApplicationRoleService_Gets(t *testing.T) {
 			fields: fields{version: "2"},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/applicationrole",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -232,12 +237,13 @@ func TestApplicationRoleService_Gets(t *testing.T) {
 			fields: fields{version: "3"},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/3/applicationrole",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -259,12 +265,13 @@ func TestApplicationRoleService_Gets(t *testing.T) {
 			fields: fields{version: "2"},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/applicationrole",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("unable to create the http request"))
 
@@ -282,12 +289,13 @@ func TestApplicationRoleService_Gets(t *testing.T) {
 			fields: fields{version: "2"},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/applicationrole",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -310,12 +318,13 @@ func TestApplicationRoleService_Gets(t *testing.T) {
 			fields: fields{version: "2"},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/api/2/applicationrole",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -366,7 +375,7 @@ func TestApplicationRoleService_Gets(t *testing.T) {
 func TestNewApplicationRoleService(t *testing.T) {
 
 	type args struct {
-		client  service.Client
+		client  service.Connector
 		version string
 	}
 

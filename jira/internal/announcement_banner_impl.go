@@ -9,7 +9,7 @@ import (
 	"net/http"
 )
 
-func NewAnnouncementBannerService(client service.Client, version string) *AnnouncementBannerService {
+func NewAnnouncementBannerService(client service.Connector, version string) *AnnouncementBannerService {
 
 	return &AnnouncementBannerService{
 		internalClient: &internalAnnouncementBannerImpl{c: client, version: version},
@@ -39,7 +39,7 @@ func (a *AnnouncementBannerService) Update(ctx context.Context, payload *model.A
 }
 
 type internalAnnouncementBannerImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -47,7 +47,7 @@ func (i *internalAnnouncementBannerImpl) Get(ctx context.Context) (*model.Announ
 
 	endpoint := fmt.Sprintf("rest/api/%v/announcementBanner", i.version)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -63,14 +63,9 @@ func (i *internalAnnouncementBannerImpl) Get(ctx context.Context) (*model.Announ
 
 func (i *internalAnnouncementBannerImpl) Update(ctx context.Context, payload *model.AnnouncementBannerPayloadScheme) (*model.ResponseScheme, error) {
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, err
-	}
-
 	endpoint := fmt.Sprintf("rest/api/%v/announcementBanner", i.version)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
 		return nil, err
 	}

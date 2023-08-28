@@ -12,7 +12,7 @@ import (
 	"strings"
 )
 
-func NewIssueFieldService(client service.Client, version string, configuration *IssueFieldConfigService, context *IssueFieldContextService,
+func NewIssueFieldService(client service.Connector, version string, configuration *IssueFieldConfigService, context *IssueFieldContextService,
 	trash *IssueFieldTrashService) (*IssueFieldService, error) {
 
 	if version == "" {
@@ -82,7 +82,7 @@ func (i *IssueFieldService) Delete(ctx context.Context, fieldId string) (*model.
 }
 
 type internalIssueFieldServiceImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -90,7 +90,7 @@ func (i *internalIssueFieldServiceImpl) Gets(ctx context.Context) ([]*model.Issu
 
 	endpoint := fmt.Sprintf("rest/api/%v/field", i.version)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -106,14 +106,9 @@ func (i *internalIssueFieldServiceImpl) Gets(ctx context.Context) ([]*model.Issu
 
 func (i *internalIssueFieldServiceImpl) Create(ctx context.Context, payload *model.CustomFieldScheme) (*model.IssueFieldScheme, *model.ResponseScheme, error) {
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	endpoint := fmt.Sprintf("rest/api/%v/field", i.version)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -158,7 +153,7 @@ func (i *internalIssueFieldServiceImpl) Search(ctx context.Context, options *mod
 
 	endpoint := fmt.Sprintf("rest/api/%v/field/search?%v", i.version, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -180,7 +175,7 @@ func (i *internalIssueFieldServiceImpl) Delete(ctx context.Context, fieldId stri
 
 	endpoint := fmt.Sprintf("rest/api/%v/field/%v", i.version, fieldId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}

@@ -19,19 +19,23 @@ const (
 )
 
 type ProjectPayloadScheme struct {
-	NotificationScheme  int    `json:"notificationScheme,omitempty"`
-	Description         string `json:"description,omitempty"`
-	LeadAccountID       string `json:"leadAccountId,omitempty"`
-	URL                 string `json:"url,omitempty"`
-	ProjectTemplateKey  string `json:"projectTemplateKey,omitempty"`
-	AvatarID            int    `json:"avatarId,omitempty"`
-	IssueSecurityScheme int    `json:"issueSecurityScheme,omitempty"`
-	Name                string `json:"name,omitempty"`
-	PermissionScheme    int    `json:"permissionScheme,omitempty"`
-	AssigneeType        string `json:"assigneeType,omitempty"`
-	ProjectTypeKey      string `json:"projectTypeKey,omitempty"`
-	Key                 string `json:"key,omitempty"`
-	CategoryID          int    `json:"categoryId,omitempty"`
+	NotificationScheme       int    `json:"notificationScheme,omitempty"`
+	FieldConfigurationScheme int    `json:"fieldConfigurationScheme,omitempty"`
+	IssueSecurityScheme      int    `json:"issueSecurityScheme,omitempty"`
+	PermissionScheme         int    `json:"permissionScheme,omitempty"`
+	IssueTypeScheme          int    `json:"issueTypeScheme,omitempty"`
+	IssueTypeScreenScheme    int    `json:"issueTypeScreenScheme,omitempty"`
+	WorkflowScheme           int    `json:"workflowScheme,omitempty"`
+	Description              string `json:"description,omitempty"`
+	LeadAccountID            string `json:"leadAccountId,omitempty"`
+	URL                      string `json:"url,omitempty"`
+	ProjectTemplateKey       string `json:"projectTemplateKey,omitempty"`
+	AvatarID                 int    `json:"avatarId,omitempty"`
+	Name                     string `json:"name,omitempty"`
+	AssigneeType             string `json:"assigneeType,omitempty"`
+	ProjectTypeKey           string `json:"projectTypeKey,omitempty"`
+	Key                      string `json:"key,omitempty"`
+	CategoryID               int    `json:"categoryId,omitempty"`
 }
 
 type NewProjectCreatedScheme struct {

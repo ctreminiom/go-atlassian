@@ -11,7 +11,7 @@ import (
 	"strings"
 )
 
-func NewScreenTabService(client service.Client, version string, field *ScreenTabFieldService) (*ScreenTabService, error) {
+func NewScreenTabService(client service.Connector, version string, field *ScreenTabFieldService) (*ScreenTabService, error) {
 
 	if version == "" {
 		return nil, model.ErrNoVersionProvided
@@ -74,7 +74,7 @@ func (s *ScreenTabService) Move(ctx context.Context, screenId, tabId, position i
 }
 
 type internalScreenTabImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -95,7 +95,7 @@ func (i *internalScreenTabImpl) Gets(ctx context.Context, screenId int, projectK
 		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -119,20 +119,9 @@ func (i *internalScreenTabImpl) Create(ctx context.Context, screenId int, tabNam
 		return nil, nil, model.ErrNoScreenTabNameError
 	}
 
-	payload := struct {
-		Name string `json:"name"`
-	}{
-		Name: tabName,
-	}
-
-	reader, err := i.c.TransformStructToReader(&payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	endpoint := fmt.Sprintf("rest/api/%v/screens/%v/tabs", i.version, screenId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", map[string]interface{}{"name": tabName})
 	if err != nil {
 		return nil, nil, err
 	}
@@ -160,20 +149,9 @@ func (i *internalScreenTabImpl) Update(ctx context.Context, screenId, tabId int,
 		return nil, nil, model.ErrNoScreenTabNameError
 	}
 
-	payload := struct {
-		Name string `json:"name"`
-	}{
-		Name: newTabName,
-	}
-
-	reader, err := i.c.TransformStructToReader(&payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	endpoint := fmt.Sprintf("rest/api/%v/screens/%v/tabs/%v", i.version, screenId, tabId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", map[string]interface{}{"name": newTabName})
 	if err != nil {
 		return nil, nil, err
 	}
@@ -199,7 +177,7 @@ func (i *internalScreenTabImpl) Delete(ctx context.Context, screenId, tabId int)
 
 	endpoint := fmt.Sprintf("rest/api/%v/screens/%v/tabs/%v", i.version, screenId, tabId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -219,7 +197,7 @@ func (i *internalScreenTabImpl) Move(ctx context.Context, screenId, tabId, posit
 
 	endpoint := fmt.Sprintf("rest/api/%v/screens/%v/tabs/%v/move/%v", i.version, screenId, tabId, position)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}

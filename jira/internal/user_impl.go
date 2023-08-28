@@ -12,7 +12,7 @@ import (
 	"strings"
 )
 
-func NewUserService(client service.Client, version string, connector *UserSearchService) (*UserService, error) {
+func NewUserService(client service.Connector, version string, connector *UserSearchService) (*UserService, error) {
 
 	if version == "" {
 		return nil, model.ErrNoVersionProvided
@@ -96,7 +96,7 @@ func (u *UserService) Gets(ctx context.Context, startAt, maxResults int) ([]*mod
 }
 
 type internalUserImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -115,7 +115,7 @@ func (i *internalUserImpl) Get(ctx context.Context, accountId string, expand []s
 
 	endpoint := fmt.Sprintf("rest/api/%v/user?%v", i.version, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -131,14 +131,9 @@ func (i *internalUserImpl) Get(ctx context.Context, accountId string, expand []s
 
 func (i *internalUserImpl) Create(ctx context.Context, payload *model.UserPayloadScheme) (*model.UserScheme, *model.ResponseScheme, error) {
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	endpoint := fmt.Sprintf("rest/api/%v/user", i.version)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -162,7 +157,7 @@ func (i *internalUserImpl) Delete(ctx context.Context, accountId string) (*model
 	params.Add("accountId", accountId)
 	endpoint := fmt.Sprintf("rest/api/%v/user?%v", i.version, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -186,7 +181,7 @@ func (i *internalUserImpl) Find(ctx context.Context, accountIds []string, startA
 
 	endpoint := fmt.Sprintf("rest/api/%v/user/bulk?%v", i.version, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -210,7 +205,7 @@ func (i *internalUserImpl) Groups(ctx context.Context, accountId string) ([]*mod
 	params.Add("accountId", accountId)
 	endpoint := fmt.Sprintf("rest/api/%v/user/groups?%v", i.version, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -232,7 +227,7 @@ func (i *internalUserImpl) Gets(ctx context.Context, startAt, maxResults int) ([
 
 	endpoint := fmt.Sprintf("rest/api/%v/users/search?%v", i.version, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}

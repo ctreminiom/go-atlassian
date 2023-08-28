@@ -12,7 +12,7 @@ import (
 	"strings"
 )
 
-func NewWorkflowSchemeService(client service.Client, version string, issueType *WorkflowSchemeIssueTypeService) *WorkflowSchemeService {
+func NewWorkflowSchemeService(client service.Connector, version string, issueType *WorkflowSchemeIssueTypeService) *WorkflowSchemeService {
 
 	return &WorkflowSchemeService{
 		internalClient: &internalWorkflowSchemeImpl{c: client, version: version},
@@ -107,7 +107,7 @@ func (w *WorkflowSchemeService) Assign(ctx context.Context, schemeId, projectId 
 }
 
 type internalWorkflowSchemeImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -119,7 +119,7 @@ func (i *internalWorkflowSchemeImpl) Gets(ctx context.Context, startAt, maxResul
 
 	endpoint := fmt.Sprintf("rest/api/%v/workflowscheme?%v", i.version, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -135,14 +135,9 @@ func (i *internalWorkflowSchemeImpl) Gets(ctx context.Context, startAt, maxResul
 
 func (i *internalWorkflowSchemeImpl) Create(ctx context.Context, payload *model.WorkflowSchemePayloadScheme) (*model.WorkflowSchemeScheme, *model.ResponseScheme, error) {
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	endpoint := fmt.Sprintf("rest/api/%v/workflowscheme", i.version)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -173,7 +168,7 @@ func (i *internalWorkflowSchemeImpl) Get(ctx context.Context, schemeId int, retu
 		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -193,14 +188,9 @@ func (i *internalWorkflowSchemeImpl) Update(ctx context.Context, schemeId int, p
 		return nil, nil, model.ErrNoWorkflowSchemeIDError
 	}
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	endpoint := fmt.Sprintf("rest/api/%v/workflowscheme/%v", i.version, schemeId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -222,7 +212,7 @@ func (i *internalWorkflowSchemeImpl) Delete(ctx context.Context, schemeId int) (
 
 	endpoint := fmt.Sprintf("rest/api/%v/workflowscheme/%v", i.version, schemeId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -243,7 +233,7 @@ func (i *internalWorkflowSchemeImpl) Associations(ctx context.Context, projectId
 
 	endpoint := fmt.Sprintf("rest/api/%v/workflowscheme/project?%v", i.version, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -267,22 +257,9 @@ func (i *internalWorkflowSchemeImpl) Assign(ctx context.Context, schemeId, proje
 		return nil, model.ErrNoProjectIDOrKeyError
 	}
 
-	payload := struct {
-		WorkflowSchemeID string `json:"workflowSchemeId"`
-		ProjectID        string `json:"projectId"`
-	}{
-		WorkflowSchemeID: schemeId,
-		ProjectID:        projectId,
-	}
-
-	reader, err := i.c.TransformStructToReader(&payload)
-	if err != nil {
-		return nil, err
-	}
-
 	endpoint := fmt.Sprintf("rest/api/%v/workflowscheme/project", i.version)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", map[string]interface{}{"workflowSchemeId": schemeId, "projectId": projectId})
 	if err != nil {
 		return nil, err
 	}

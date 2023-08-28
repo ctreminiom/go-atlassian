@@ -14,7 +14,7 @@ import (
 func Test_internalKnowledgebaseImpl_Search(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -43,12 +43,13 @@ func Test_internalKnowledgebaseImpl_Search(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/knowledgebase/article?highlight=true&limit=50&query=how+to+login+to+Jira%3F&start=50",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -72,12 +73,13 @@ func Test_internalKnowledgebaseImpl_Search(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/knowledgebase/article?highlight=true&limit=50&query=how+to+login+to+Jira%3F&start=50",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -103,12 +105,13 @@ func Test_internalKnowledgebaseImpl_Search(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/knowledgebase/article?highlight=true&limit=50&query=how+to+login+to+Jira%3F&start=50",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("client: no http request created"))
 
@@ -135,11 +138,13 @@ func Test_internalKnowledgebaseImpl_Search(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			smService, err := NewKnowledgebaseService(testCase.fields.c, "latest")
-			assert.NoError(t, err)
+			baseService := NewKnowledgebaseService(testCase.fields.c, "latest")
 
-			gotResult, gotResponse, err := smService.Search(testCase.args.ctx, testCase.args.query, testCase.args.highlight,
-				testCase.args.start, testCase.args.limit)
+			gotResult, gotResponse, err := baseService.Search(
+				testCase.args.ctx, testCase.args.query,
+				testCase.args.highlight, testCase.args.start,
+				testCase.args.limit,
+			)
 
 			if testCase.wantErr {
 
@@ -162,7 +167,7 @@ func Test_internalKnowledgebaseImpl_Search(t *testing.T) {
 func Test_internalKnowledgebaseImpl_Gets(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -193,12 +198,13 @@ func Test_internalKnowledgebaseImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/servicedesk/10001/knowledgebase/article?highlight=true&limit=50&query=how+to+login+to+Jira%3F&start=50",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -223,12 +229,13 @@ func Test_internalKnowledgebaseImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/servicedesk/10001/knowledgebase/article?highlight=true&limit=50&query=how+to+login+to+Jira%3F&start=50",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -255,12 +262,13 @@ func Test_internalKnowledgebaseImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/servicedesk/10001/knowledgebase/article?highlight=true&limit=50&query=how+to+login+to+Jira%3F&start=50",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("client: no http request created"))
 
@@ -297,11 +305,13 @@ func Test_internalKnowledgebaseImpl_Gets(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			smService, err := NewKnowledgebaseService(testCase.fields.c, "latest")
-			assert.NoError(t, err)
+			baseService := NewKnowledgebaseService(testCase.fields.c, "latest")
 
-			gotResult, gotResponse, err := smService.Gets(testCase.args.ctx, testCase.args.serviceDeskID, testCase.args.query, testCase.args.highlight,
-				testCase.args.start, testCase.args.limit)
+			gotResult, gotResponse, err := baseService.Gets(
+				testCase.args.ctx, testCase.args.serviceDeskID,
+				testCase.args.query, testCase.args.highlight,
+				testCase.args.start, testCase.args.limit,
+			)
 
 			if testCase.wantErr {
 

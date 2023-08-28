@@ -11,15 +11,11 @@ import (
 	"strconv"
 )
 
-func NewOrganizationService(client service.Client, version string) (*OrganizationService, error) {
-
-	if version == "" {
-		return nil, model.ErrNoVersionProvided
-	}
+func NewOrganizationService(client service.Connector, version string) *OrganizationService {
 
 	return &OrganizationService{
 		internalClient: &internalOrganizationImpl{c: client, version: version},
-	}, nil
+	}
 }
 
 type OrganizationService struct {
@@ -39,7 +35,7 @@ func (o *OrganizationService) Gets(ctx context.Context, accountID string, start,
 
 // Get returns details of an organization.
 //
-// Use this method to get organization details whenever your application component is passed an organization ID
+// # Use this method to get organization details whenever your application component is passed an organization ID
 //
 // but needs to display other organization details.
 //
@@ -74,7 +70,7 @@ func (o *OrganizationService) Create(ctx context.Context, name string) (*model.O
 
 // Users returns all the users associated with an organization.
 //
-// Use this method where you want to provide a list of users for an
+// # Use this method where you want to provide a list of users for an
 //
 // organization or determine if a user is associated with an organization.
 //
@@ -139,7 +135,7 @@ func (o *OrganizationService) Detach(ctx context.Context, serviceDeskID, organiz
 }
 
 type internalOrganizationImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -155,18 +151,18 @@ func (i *internalOrganizationImpl) Gets(ctx context.Context, accountID string, s
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/organization?%v", params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	page := new(model.OrganizationPageScheme)
-	response, err := i.c.Call(request, page)
+	res, err := i.c.Call(req, page)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return page, response, nil
+	return page, res, nil
 }
 
 func (i *internalOrganizationImpl) Get(ctx context.Context, organizationID int) (*model.OrganizationScheme, *model.ResponseScheme, error) {
@@ -177,18 +173,18 @@ func (i *internalOrganizationImpl) Get(ctx context.Context, organizationID int) 
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/organization/%v", organizationID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	organization := new(model.OrganizationScheme)
-	response, err := i.c.Call(request, organization)
+	res, err := i.c.Call(req, organization)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return organization, response, nil
+	return organization, res, nil
 }
 
 func (i *internalOrganizationImpl) Delete(ctx context.Context, organizationID int) (*model.ResponseScheme, error) {
@@ -199,12 +195,12 @@ func (i *internalOrganizationImpl) Delete(ctx context.Context, organizationID in
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/organization/%v", organizationID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.c.Call(request, nil)
+	return i.c.Call(req, nil)
 }
 
 func (i *internalOrganizationImpl) Create(ctx context.Context, name string) (*model.OrganizationScheme, *model.ResponseScheme, error) {
@@ -213,31 +209,20 @@ func (i *internalOrganizationImpl) Create(ctx context.Context, name string) (*mo
 		return nil, nil, model.ErrNoOrganizationNameError
 	}
 
-	payload := struct {
-		Name string `json:"name"`
-	}{
-		Name: name,
-	}
-
-	reader, err := i.c.TransformStructToReader(&payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	endpoint := "rest/servicedeskapi/organization"
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	req, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", map[string]interface{}{"name": name})
 	if err != nil {
 		return nil, nil, err
 	}
 
 	organization := new(model.OrganizationScheme)
-	response, err := i.c.Call(request, organization)
+	res, err := i.c.Call(req, organization)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return organization, response, nil
+	return organization, res, nil
 }
 
 func (i *internalOrganizationImpl) Users(ctx context.Context, organizationID, start, limit int) (*model.OrganizationUsersPageScheme, *model.ResponseScheme, error) {
@@ -252,18 +237,18 @@ func (i *internalOrganizationImpl) Users(ctx context.Context, organizationID, st
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/organization/%v/user?%v", organizationID, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	page := new(model.OrganizationUsersPageScheme)
-	response, err := i.c.Call(request, page)
+	res, err := i.c.Call(req, page)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return page, response, nil
+	return page, res, nil
 }
 
 func (i *internalOrganizationImpl) Add(ctx context.Context, organizationID int, accountIDs []string) (*model.ResponseScheme, error) {
@@ -276,25 +261,14 @@ func (i *internalOrganizationImpl) Add(ctx context.Context, organizationID int, 
 		return nil, model.ErrNoAccountSliceError
 	}
 
-	payload := struct {
-		AccountIds []string `json:"accountIds"`
-	}{
-		AccountIds: accountIDs,
-	}
-
-	reader, err := i.c.TransformStructToReader(&payload)
-	if err != nil {
-		return nil, err
-	}
-
 	endpoint := fmt.Sprintf("rest/servicedeskapi/organization/%v/user", organizationID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	req, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", map[string]interface{}{"accountIds": accountIDs})
 	if err != nil {
 		return nil, err
 	}
 
-	return i.c.Call(request, nil)
+	return i.c.Call(req, nil)
 }
 
 func (i *internalOrganizationImpl) Remove(ctx context.Context, organizationID int, accountIDs []string) (*model.ResponseScheme, error) {
@@ -307,25 +281,14 @@ func (i *internalOrganizationImpl) Remove(ctx context.Context, organizationID in
 		return nil, model.ErrNoAccountSliceError
 	}
 
-	payload := struct {
-		AccountIds []string `json:"accountIds"`
-	}{
-		AccountIds: accountIDs,
-	}
-
-	reader, err := i.c.TransformStructToReader(&payload)
-	if err != nil {
-		return nil, err
-	}
-
 	endpoint := fmt.Sprintf("rest/servicedeskapi/organization/%v/user", organizationID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, reader)
+	req, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", map[string]interface{}{"accountIds": accountIDs})
 	if err != nil {
 		return nil, err
 	}
 
-	return i.c.Call(request, nil)
+	return i.c.Call(req, nil)
 }
 
 func (i *internalOrganizationImpl) Project(ctx context.Context, accountID string, serviceDeskID, start, limit int) (*model.OrganizationPageScheme, *model.ResponseScheme, error) {
@@ -344,18 +307,18 @@ func (i *internalOrganizationImpl) Project(ctx context.Context, accountID string
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/servicedesk/%v/organization?%v", serviceDeskID, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	page := new(model.OrganizationPageScheme)
-	response, err := i.c.Call(request, page)
+	res, err := i.c.Call(req, page)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return page, response, nil
+	return page, res, nil
 }
 
 func (i *internalOrganizationImpl) Associate(ctx context.Context, serviceDeskID, organizationID int) (*model.ResponseScheme, error) {
@@ -368,25 +331,14 @@ func (i *internalOrganizationImpl) Associate(ctx context.Context, serviceDeskID,
 		return nil, model.ErrNoOrganizationIDError
 	}
 
-	payload := struct {
-		OrganizationID int `json:"organizationId"`
-	}{
-		OrganizationID: organizationID,
-	}
-
-	reader, err := i.c.TransformStructToReader(&payload)
-	if err != nil {
-		return nil, err
-	}
-
 	endpoint := fmt.Sprintf("rest/servicedeskapi/servicedesk/%v/organization", serviceDeskID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	req, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", map[string]interface{}{"organizationId": organizationID})
 	if err != nil {
 		return nil, err
 	}
 
-	return i.c.Call(request, nil)
+	return i.c.Call(req, nil)
 }
 
 func (i *internalOrganizationImpl) Detach(ctx context.Context, serviceDeskID, organizationID int) (*model.ResponseScheme, error) {
@@ -399,23 +351,12 @@ func (i *internalOrganizationImpl) Detach(ctx context.Context, serviceDeskID, or
 		return nil, model.ErrNoOrganizationIDError
 	}
 
-	payload := struct {
-		OrganizationID int `json:"organizationId"`
-	}{
-		OrganizationID: organizationID,
-	}
-
-	reader, err := i.c.TransformStructToReader(&payload)
-	if err != nil {
-		return nil, err
-	}
-
 	endpoint := fmt.Sprintf("rest/servicedeskapi/servicedesk/%v/organization", serviceDeskID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, reader)
+	req, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", map[string]interface{}{"organizationId": organizationID})
 	if err != nil {
 		return nil, err
 	}
 
-	return i.c.Call(request, nil)
+	return i.c.Call(req, nil)
 }

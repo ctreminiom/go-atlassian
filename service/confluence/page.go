@@ -22,10 +22,22 @@ type PageConnector interface {
 	//
 	// (if available) will be available through the next cursor
 	//
+	// Deprecated. Please use Page.Gets() instead.
+	//
+	// GET /wiki/api/v2/pages
+	//
+	Bulk(ctx context.Context, cursor string, limit int) (*models.PageChunkScheme, *models.ResponseScheme, error)
+
+	// Gets returns all pages that fit the filtering criteria.
+	//
+	// The number of results is limited by the limit parameter and additional results
+	//
+	// (if available) will be available through the next cursor
+	//
 	// GET /wiki/api/v2/pages
 	//
 	// https://docs.go-atlassian.io/confluence-cloud/v2/page#get-pages
-	Bulk(ctx context.Context, cursor string, limit int) (*models.PageChunkScheme, *models.ResponseScheme, error)
+	Gets(ctx context.Context, options *models.PageOptionsScheme, cursor string, limit int) (*models.PageChunkScheme, *models.ResponseScheme, error)
 
 	// GetsByLabel returns the pages of specified label.
 	//

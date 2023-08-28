@@ -12,7 +12,7 @@ import (
 	"strings"
 )
 
-func NewPropertyService(client service.Client) *PropertyService {
+func NewPropertyService(client service.Connector) *PropertyService {
 
 	return &PropertyService{
 		internalClient: &internalPropertyImpl{c: client},
@@ -60,7 +60,7 @@ func (p *PropertyService) Delete(ctx context.Context, contentID, key string) (*m
 }
 
 type internalPropertyImpl struct {
-	c service.Client
+	c service.Connector
 }
 
 func (i *internalPropertyImpl) Gets(ctx context.Context, contentID string, expand []string, startAt, maxResults int) (*model.ContentPropertyPageScheme, *model.ResponseScheme, error) {
@@ -79,7 +79,7 @@ func (i *internalPropertyImpl) Gets(ctx context.Context, contentID string, expan
 
 	endpoint := fmt.Sprintf("wiki/rest/api/content/%v/property?%v", contentID, query.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -99,14 +99,9 @@ func (i *internalPropertyImpl) Create(ctx context.Context, contentID string, pay
 		return nil, nil, model.ErrNoContentIDError
 	}
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	endpoint := fmt.Sprintf("wiki/rest/api/content/%v/property", contentID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -132,7 +127,7 @@ func (i *internalPropertyImpl) Get(ctx context.Context, contentID, key string) (
 
 	endpoint := fmt.Sprintf("wiki/rest/api/content/%v/property/%v", contentID, key)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -158,7 +153,7 @@ func (i *internalPropertyImpl) Delete(ctx context.Context, contentID, key string
 
 	endpoint := fmt.Sprintf("wiki/rest/api/content/%v/property/%v", contentID, key)
 
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}

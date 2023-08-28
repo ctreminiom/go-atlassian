@@ -14,7 +14,7 @@ import (
 func Test_internalServiceLevelAgreementImpl_Gets(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -41,12 +41,13 @@ func Test_internalServiceLevelAgreementImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/request/DESK-1/sla?limit=50&start=100",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -69,12 +70,13 @@ func Test_internalServiceLevelAgreementImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/request/DESK-1/sla?limit=50&start=100",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -99,12 +101,13 @@ func Test_internalServiceLevelAgreementImpl_Gets(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/request/DESK-1/sla?limit=50&start=100",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("client: no http request created"))
 
@@ -131,10 +134,9 @@ func Test_internalServiceLevelAgreementImpl_Gets(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			smService, err := NewServiceLevelAgreementService(testCase.fields.c, "latest")
-			assert.NoError(t, err)
+			slaService := NewServiceLevelAgreementService(testCase.fields.c, "latest")
 
-			gotResult, gotResponse, err := smService.Gets(testCase.args.ctx, testCase.args.issueKeyOrID, testCase.args.start,
+			gotResult, gotResponse, err := slaService.Gets(testCase.args.ctx, testCase.args.issueKeyOrID, testCase.args.start,
 				testCase.args.limit)
 
 			if testCase.wantErr {
@@ -158,7 +160,7 @@ func Test_internalServiceLevelAgreementImpl_Gets(t *testing.T) {
 func Test_internalServiceLevelAgreementImpl_Get(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -184,12 +186,13 @@ func Test_internalServiceLevelAgreementImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/request/DESK-1/sla/1999",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -211,12 +214,13 @@ func Test_internalServiceLevelAgreementImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/request/DESK-1/sla/1999",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -240,12 +244,13 @@ func Test_internalServiceLevelAgreementImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/request/DESK-1/sla/1999",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("client: no http request created"))
 
@@ -282,10 +287,9 @@ func Test_internalServiceLevelAgreementImpl_Get(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			smService, err := NewServiceLevelAgreementService(testCase.fields.c, "latest")
-			assert.NoError(t, err)
+			slaService := NewServiceLevelAgreementService(testCase.fields.c, "latest")
 
-			gotResult, gotResponse, err := smService.Get(testCase.args.ctx, testCase.args.issueKeyOrID, testCase.args.metricID)
+			gotResult, gotResponse, err := slaService.Get(testCase.args.ctx, testCase.args.issueKeyOrID, testCase.args.metricID)
 
 			if testCase.wantErr {
 

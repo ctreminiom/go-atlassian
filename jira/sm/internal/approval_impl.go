@@ -11,15 +11,11 @@ import (
 	"strconv"
 )
 
-func NewApprovalService(client service.Client, version string) (*ApprovalService, error) {
-
-	if version == "" {
-		return nil, model.ErrNoVersionProvided
-	}
+func NewApprovalService(client service.Connector, version string) *ApprovalService {
 
 	return &ApprovalService{
 		internalClient: &internalServiceRequestApprovalImpl{c: client, version: version},
-	}, nil
+	}
 }
 
 type ApprovalService struct {
@@ -56,7 +52,7 @@ func (s *ApprovalService) Answer(ctx context.Context, issueKeyOrID string, appro
 }
 
 type internalServiceRequestApprovalImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -70,20 +66,20 @@ func (i *internalServiceRequestApprovalImpl) Gets(ctx context.Context, issueKeyO
 	params.Add("start", strconv.Itoa(start))
 	params.Add("limit", strconv.Itoa(limit))
 
-	endpoint := fmt.Sprintf("rest/servicedeskapi/request/%v/approval?%v", issueKeyOrID, params.Encode())
+	url := fmt.Sprintf("rest/servicedeskapi/request/%v/approval?%v", issueKeyOrID, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodGet, url, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	page := new(model.CustomerApprovalPageScheme)
-	response, err := i.c.Call(request, page)
+	res, err := i.c.Call(req, page)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return page, response, nil
+	return page, res, nil
 }
 
 func (i *internalServiceRequestApprovalImpl) Get(ctx context.Context, issueKeyOrID string, approvalID int) (*model.CustomerApprovalScheme, *model.ResponseScheme, error) {
@@ -96,20 +92,20 @@ func (i *internalServiceRequestApprovalImpl) Get(ctx context.Context, issueKeyOr
 		return nil, nil, model.ErrNoApprovalIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/servicedeskapi/request/%v/approval/%v", issueKeyOrID, approvalID)
+	url := fmt.Sprintf("rest/servicedeskapi/request/%v/approval/%v", issueKeyOrID, approvalID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodGet, url, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	approval := new(model.CustomerApprovalScheme)
-	response, err := i.c.Call(request, approval)
+	res, err := i.c.Call(req, approval)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return approval, response, nil
+	return approval, res, nil
 }
 
 func (i *internalServiceRequestApprovalImpl) Answer(ctx context.Context, issueKeyOrID string, approvalID int, approve bool) (*model.CustomerApprovalScheme, *model.ResponseScheme, error) {
@@ -122,7 +118,7 @@ func (i *internalServiceRequestApprovalImpl) Answer(ctx context.Context, issueKe
 		return nil, nil, model.ErrNoApprovalIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/servicedeskapi/request/%v/approval/%v", issueKeyOrID, approvalID)
+	url := fmt.Sprintf("rest/servicedeskapi/request/%v/approval/%v", issueKeyOrID, approvalID)
 
 	payload := make(map[string]interface{})
 
@@ -132,21 +128,16 @@ func (i *internalServiceRequestApprovalImpl) Answer(ctx context.Context, issueKe
 		payload["decision"] = "decline"
 	}
 
-	reader, err := i.c.TransformStructToReader(&payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	req, err := i.c.NewRequest(ctx, http.MethodPost, url, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	approval := new(model.CustomerApprovalScheme)
-	response, err := i.c.Call(request, approval)
+	res, err := i.c.Call(req, approval)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return approval, response, nil
+	return approval, res, nil
 }

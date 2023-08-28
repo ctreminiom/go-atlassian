@@ -1,7 +1,6 @@
 package internal
 
 import (
-	"bytes"
 	"context"
 	"errors"
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
@@ -15,7 +14,7 @@ import (
 func Test_internalServiceRequestFeedbackImpl_Get(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -39,12 +38,13 @@ func Test_internalServiceRequestFeedbackImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/request/DESK-1/feedback",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -65,12 +65,13 @@ func Test_internalServiceRequestFeedbackImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/request/DESK-1/feedback",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -93,12 +94,13 @@ func Test_internalServiceRequestFeedbackImpl_Get(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
 					"rest/servicedeskapi/request/DESK-1/feedback",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("client: no http request created"))
 
@@ -125,10 +127,9 @@ func Test_internalServiceRequestFeedbackImpl_Get(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			smService, err := NewFeedbackService(testCase.fields.c, "latest")
-			assert.NoError(t, err)
+			feedbackService := NewFeedbackService(testCase.fields.c, "latest")
 
-			gotResult, gotResponse, err := smService.Get(testCase.args.ctx, testCase.args.requestIDOrKey)
+			gotResult, gotResponse, err := feedbackService.Get(testCase.args.ctx, testCase.args.requestIDOrKey)
 
 			if testCase.wantErr {
 
@@ -150,18 +151,8 @@ func Test_internalServiceRequestFeedbackImpl_Get(t *testing.T) {
 
 func Test_internalServiceRequestFeedbackImpl_Post(t *testing.T) {
 
-	payloadMocked := &struct {
-		Rating  int "json:\"rating,omitempty\""
-		Comment struct {
-			Body string "json:\"body,omitempty\""
-		} "json:\"comment,omitempty\""
-		Type string "json:\"type,omitempty\""
-	}{Rating: 5, Comment: struct {
-		Body string "json:\"body,omitempty\""
-	}{Body: "Excellent service"}, Type: "csat"}
-
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -189,17 +180,14 @@ func Test_internalServiceRequestFeedbackImpl_Post(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/servicedeskapi/request/DESK-1/feedback",
-					bytes.NewReader([]byte{})).
+					"",
+					map[string]interface{}{"comment": map[string]interface{}{"body": "Excellent service"}, "rating": 5, "type": "csat"}).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -221,17 +209,14 @@ func Test_internalServiceRequestFeedbackImpl_Post(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/servicedeskapi/request/DESK-1/feedback",
-					bytes.NewReader([]byte{})).
+					"",
+					map[string]interface{}{"comment": map[string]interface{}{"body": "Excellent service"}, "rating": 5, "type": "csat"}).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -255,17 +240,14 @@ func Test_internalServiceRequestFeedbackImpl_Post(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
-
-				client.On("TransformStructToReader",
-					payloadMocked).
-					Return(bytes.NewReader([]byte{}), nil)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPost,
 					"rest/servicedeskapi/request/DESK-1/feedback",
-					bytes.NewReader([]byte{})).
+					"",
+					map[string]interface{}{"comment": map[string]interface{}{"body": "Excellent service"}, "rating": 5, "type": "csat"}).
 					Return(&http.Request{}, errors.New("client: no http request created"))
 
 				fields.c = client
@@ -291,10 +273,9 @@ func Test_internalServiceRequestFeedbackImpl_Post(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			smService, err := NewFeedbackService(testCase.fields.c, "latest")
-			assert.NoError(t, err)
+			feedbackService := NewFeedbackService(testCase.fields.c, "latest")
 
-			gotResult, gotResponse, err := smService.Post(testCase.args.ctx, testCase.args.requestIDOrKey, testCase.args.rating,
+			gotResult, gotResponse, err := feedbackService.Post(testCase.args.ctx, testCase.args.requestIDOrKey, testCase.args.rating,
 				testCase.args.comment)
 
 			if testCase.wantErr {
@@ -318,7 +299,7 @@ func Test_internalServiceRequestFeedbackImpl_Post(t *testing.T) {
 func Test_internalServiceRequestFeedbackImpl_Delete(t *testing.T) {
 
 	type fields struct {
-		c service.Client
+		c service.Connector
 	}
 
 	type args struct {
@@ -342,12 +323,13 @@ func Test_internalServiceRequestFeedbackImpl_Delete(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/servicedeskapi/request/DESK-1/feedback",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -368,12 +350,13 @@ func Test_internalServiceRequestFeedbackImpl_Delete(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/servicedeskapi/request/DESK-1/feedback",
+					"",
 					nil).
 					Return(&http.Request{}, nil)
 
@@ -396,12 +379,13 @@ func Test_internalServiceRequestFeedbackImpl_Delete(t *testing.T) {
 			},
 			on: func(fields *fields) {
 
-				client := mocks.NewClient(t)
+				client := mocks.NewConnector(t)
 
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
 					"rest/servicedeskapi/request/DESK-1/feedback",
+					"",
 					nil).
 					Return(&http.Request{}, errors.New("client: no http request created"))
 
@@ -428,10 +412,9 @@ func Test_internalServiceRequestFeedbackImpl_Delete(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			smService, err := NewFeedbackService(testCase.fields.c, "latest")
-			assert.NoError(t, err)
+			feedbackService := NewFeedbackService(testCase.fields.c, "latest")
 
-			gotResponse, err := smService.Delete(testCase.args.ctx, testCase.args.requestIDOrKey)
+			gotResponse, err := feedbackService.Delete(testCase.args.ctx, testCase.args.requestIDOrKey)
 
 			if testCase.wantErr {
 

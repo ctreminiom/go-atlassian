@@ -9,7 +9,7 @@ import (
 	"net/http"
 )
 
-func NewLinkTypeService(client service.Client, version string) (*LinkTypeService, error) {
+func NewLinkTypeService(client service.Connector, version string) (*LinkTypeService, error) {
 
 	if version == "" {
 		return nil, model.ErrNoVersionProvided
@@ -34,7 +34,6 @@ func (l *LinkTypeService) Gets(ctx context.Context) (*model.IssueLinkTypeSearchS
 }
 
 // Get returns an issue link type.
-//
 //
 // GET /rest/api/{2-3}/issueLinkType/{issueLinkTypeId}
 //
@@ -75,7 +74,7 @@ func (l *LinkTypeService) Delete(ctx context.Context, issueLinkTypeId string) (*
 }
 
 type internalLinkTypeImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
@@ -83,7 +82,7 @@ func (i *internalLinkTypeImpl) Gets(ctx context.Context) (*model.IssueLinkTypeSe
 
 	endpoint := fmt.Sprintf("rest/api/%v/issueLinkType", i.version)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -105,7 +104,7 @@ func (i *internalLinkTypeImpl) Get(ctx context.Context, issueLinkTypeId string) 
 
 	endpoint := fmt.Sprintf("rest/api/%v/issueLinkType/%v", i.version, issueLinkTypeId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -121,14 +120,9 @@ func (i *internalLinkTypeImpl) Get(ctx context.Context, issueLinkTypeId string) 
 
 func (i *internalLinkTypeImpl) Create(ctx context.Context, payload *model.LinkTypeScheme) (*model.LinkTypeScheme, *model.ResponseScheme, error) {
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	endpoint := fmt.Sprintf("rest/api/%v/issueLinkType", i.version)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -148,14 +142,9 @@ func (i *internalLinkTypeImpl) Update(ctx context.Context, issueLinkTypeId strin
 		return nil, nil, model.ErrNoLinkTypeIDError
 	}
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	endpoint := fmt.Sprintf("rest/api/%v/issueLinkType/%v", i.version, issueLinkTypeId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -177,7 +166,7 @@ func (i *internalLinkTypeImpl) Delete(ctx context.Context, issueLinkTypeId strin
 
 	endpoint := fmt.Sprintf("rest/api/%v/issueLinkType/%v", i.version, issueLinkTypeId)
 
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}

@@ -6,13 +6,12 @@ import (
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/admin"
-	"io"
 	"net/http"
 	"net/url"
 	"strings"
 )
 
-func NewUserService(client service.Client, token *UserTokenService) *UserService {
+func NewUserService(client service.Connector, token *UserTokenService) *UserService {
 	return &UserService{
 		internalClient: &internalUserImpl{c: client},
 		Token:          token,
@@ -78,7 +77,7 @@ func (u *UserService) Enable(ctx context.Context, accountID string) (*model.Resp
 }
 
 type internalUserImpl struct {
-	c service.Client
+	c service.Connector
 }
 
 func (i *internalUserImpl) Permissions(ctx context.Context, accountID string, privileges []string) (*model.AdminUserPermissionScheme, *model.ResponseScheme, error) {
@@ -98,7 +97,7 @@ func (i *internalUserImpl) Permissions(ctx context.Context, accountID string, pr
 		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -120,7 +119,7 @@ func (i *internalUserImpl) Get(ctx context.Context, accountID string) (*model.Ad
 
 	endpoint := fmt.Sprintf("users/%v/manage/profile", accountID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -140,14 +139,9 @@ func (i *internalUserImpl) Update(ctx context.Context, accountID string, payload
 		return nil, nil, model.ErrNoAdminAccountIDError
 	}
 
-	reader, err := i.c.TransformStructToReader(payload)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	endpoint := fmt.Sprintf("users/%v/manage/profile", accountID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPatch, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPatch, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -169,26 +163,12 @@ func (i *internalUserImpl) Disable(ctx context.Context, accountID, message strin
 
 	endpoint := fmt.Sprintf("users/%v/manage/lifecycle/disable", accountID)
 
-	var (
-		reader io.Reader
-		err    error
-	)
-
+	payload := map[string]interface{}{}
 	if message != "" {
-
-		payload := struct {
-			Message string `json:"message"`
-		}{
-			Message: message,
-		}
-
-		reader, err = i.c.TransformStructToReader(&payload)
-		if err != nil {
-			return nil, err
-		}
+		payload["message"] = message
 	}
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
 		return nil, err
 	}
@@ -204,7 +184,7 @@ func (i *internalUserImpl) Enable(ctx context.Context, accountID string) (*model
 
 	endpoint := fmt.Sprintf("users/%v/manage/lifecycle/enable", accountID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, nil)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}

@@ -11,15 +11,11 @@ import (
 	"strconv"
 )
 
-func NewCustomerService(client service.Client, version string) (*CustomerService, error) {
-
-	if version == "" {
-		return nil, model.ErrNoVersionProvided
-	}
+func NewCustomerService(client service.Connector, version string) *CustomerService {
 
 	return &CustomerService{
 		internalClient: &internalCustomerImpl{c: client, version: version},
-	}, nil
+	}
 }
 
 type CustomerService struct {
@@ -69,39 +65,31 @@ func (c *CustomerService) Remove(ctx context.Context, serviceDeskID int, account
 }
 
 type internalCustomerImpl struct {
-	c       service.Client
+	c       service.Connector
 	version string
 }
 
 func (i *internalCustomerImpl) Create(ctx context.Context, email, displayName string) (*model.CustomerScheme, *model.ResponseScheme, error) {
 
-	payload := struct {
-		DisplayName string `json:"displayName,omitempty"`
-		Email       string `json:"email,omitempty"`
-	}{
-		DisplayName: displayName,
-		Email:       email,
-	}
-
-	reader, err := i.c.TransformStructToReader(&payload)
-	if err != nil {
-		return nil, nil, err
+	payload := map[string]interface{}{
+		"displayName": displayName,
+		"email":       email,
 	}
 
 	endpoint := "rest/servicedeskapi/customer"
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	req, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	customer := new(model.CustomerScheme)
-	response, err := i.c.Call(request, customer)
+	res, err := i.c.Call(req, customer)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return customer, response, nil
+	return customer, res, nil
 }
 
 func (i *internalCustomerImpl) Gets(ctx context.Context, serviceDeskID int, query string, start, limit int) (*model.CustomerPageScheme, *model.ResponseScheme, error) {
@@ -116,18 +104,18 @@ func (i *internalCustomerImpl) Gets(ctx context.Context, serviceDeskID int, quer
 
 	var endpoint = fmt.Sprintf("rest/servicedeskapi/servicedesk/%v/customer?%v", serviceDeskID, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, nil)
+	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	page := new(model.CustomerPageScheme)
-	response, err := i.c.Call(request, page)
+	res, err := i.c.Call(req, page)
 	if err != nil {
-		return nil, response, err
+		return nil, res, err
 	}
 
-	return page, response, nil
+	return page, res, nil
 }
 
 func (i *internalCustomerImpl) Add(ctx context.Context, serviceDeskID int, accountIDs []string) (*model.ResponseScheme, error) {
@@ -140,25 +128,18 @@ func (i *internalCustomerImpl) Add(ctx context.Context, serviceDeskID int, accou
 		return nil, model.ErrNoAccountSliceError
 	}
 
-	payload := struct {
-		AccountIds []string `json:"accountIds"`
-	}{
-		AccountIds: accountIDs,
-	}
-
-	reader, err := i.c.TransformStructToReader(&payload)
-	if err != nil {
-		return nil, err
+	payload := map[string]interface{}{
+		"accountIds": accountIDs,
 	}
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/servicedesk/%v/customer", serviceDeskID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, reader)
+	req, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.c.Call(request, nil)
+	return i.c.Call(req, nil)
 }
 
 func (i *internalCustomerImpl) Remove(ctx context.Context, serviceDeskID int, accountIDs []string) (*model.ResponseScheme, error) {
@@ -171,23 +152,16 @@ func (i *internalCustomerImpl) Remove(ctx context.Context, serviceDeskID int, ac
 		return nil, model.ErrNoAccountSliceError
 	}
 
-	payload := struct {
-		AccountIds []string `json:"accountIds"`
-	}{
-		AccountIds: accountIDs,
-	}
-
-	reader, err := i.c.TransformStructToReader(&payload)
-	if err != nil {
-		return nil, err
+	payload := map[string]interface{}{
+		"accountIds": accountIDs,
 	}
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/servicedesk/%v/customer", serviceDeskID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, reader)
+	req, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", payload)
 	if err != nil {
 		return nil, err
 	}
 
-	return i.c.Call(request, nil)
+	return i.c.Call(req, nil)
 }

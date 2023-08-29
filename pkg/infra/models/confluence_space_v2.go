@@ -28,7 +28,7 @@ type SpaceSchemeV2 struct {
 	Name        string                    `json:"name,omitempty"`
 	Type        string                    `json:"type,omitempty"`
 	Status      string                    `json:"status,omitempty"`
-	HomepageId  int                       `json:"homepageId,omitempty"`
+	HomepageId  string                    `json:"homepageId,omitempty"`
 	Description *SpaceDescriptionSchemeV2 `json:"description,omitempty"`
 }
 

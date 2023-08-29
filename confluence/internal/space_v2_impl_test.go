@@ -14,7 +14,7 @@ import (
 func Test_internalSpaceV2Impl_Bulk(t *testing.T) {
 
 	optionsMocked := &model.GetSpacesOptionSchemeV2{
-		IDs:               []int{10001, 10002},
+		IDs:               []string{"10001", "10002"},
 		Keys:              []string{"DUMMY"},
 		Type:              "global",
 		Status:            "current",

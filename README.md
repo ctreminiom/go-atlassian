@@ -56,7 +56,6 @@ Then import the package into your project as you normally would. You can import 
 | Confluence              	 | `github.com/ctreminiom/go-atlassian/confluence`    	| [Getting Started](https://docs.go-atlassian.io/confluence-cloud/introduction)        	|
 | Confluence v2           	 | `github.com/ctreminiom/go-atlassian/confluence/v2` 	| [Getting Started](https://docs.go-atlassian.io/confluence-cloud/v2/introduction)     	|
 | Admin Cloud             	 | `github.com/ctreminiom/go-atlassian/admin`         	| [Getting Started](https://docs.go-atlassian.io/atlassian-admin-cloud/overview)       	|
-Now you're ready to Go 😁
 
 -------------------------
 ## 🔨 Usage

@@ -7,10 +7,8 @@ import (
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
 	"github.com/stretchr/testify/assert"
-	"log"
 	"net/http"
 	"testing"
-	"time"
 )
 
 func Test_internalServiceRequestImpl_Gets(t *testing.T) {
@@ -929,48 +927,40 @@ func Test_internalServiceRequestImpl_Transition(t *testing.T) {
 
 func Test_internalServiceRequestImpl_Create(t *testing.T) {
 
-	fieldsMocked := &model.CustomerRequestFields{Fields: make(map[string]interface{})}
+	payloadMocked := &model.CreateCustomerRequestPayloadScheme{
+		RequestParticipants: []string{"uuid-sample-1", "uuid-sample-2"},
+		ServiceDeskID:       "29990",
+		RequestTypeID:       "28881",
+	}
 
-	if err := fieldsMocked.Text("summary", "Request JSD help via REST"); err != nil {
+	// Append the request form fields
+	if err := payloadMocked.AddCustomField("summary", "Request JSD help via REST"); err != nil {
 		t.Fatal(err)
 	}
 
-	if err := fieldsMocked.Text("description", "I need a new *mouse* for my Mac"); err != nil {
+	if err := payloadMocked.AddCustomField("description", "Request JSD help via REST"); err != nil {
 		t.Fatal(err)
 	}
 
-	if err := fieldsMocked.Select("priority", "Major"); err != nil {
+	if err := payloadMocked.RadioButtonOrSelectCustomField("priority", "Major"); err != nil {
 		t.Fatal(err)
 	}
 
-	if err := fieldsMocked.Components([]string{"Jira", "Intranet"}); err != nil {
+	if err := payloadMocked.UsersCustomField("customfield_320239", []string{"account-id-sample", "account-id-sample"}); err != nil {
 		t.Fatal(err)
 	}
 
-	if err := fieldsMocked.Users("customfield_320239", []string{"account-id-sample"}); err != nil {
+	if err := payloadMocked.AddCustomField("labels", []string{"label-00", "label-01"}); err != nil {
 		t.Fatal(err)
 	}
 
-	if err := fieldsMocked.Date("duedate", time.Date(2020, 1, 2, 3, 4, 5, 0, time.UTC)); err != nil {
-		log.Fatal(err)
+	if err := payloadMocked.AddCustomField("labels", []string{"label-00", "label-01"}); err != nil {
+		t.Fatal(err)
 	}
 
-	if err := fieldsMocked.Labels([]string{"label-00", "label-01"}); err != nil {
-		log.Fatal(err)
+	if err := payloadMocked.CascadingCustomField("customfield_10002", "America", "Costa Rica"); err != nil {
+		t.Fatal(err)
 	}
-
-	payloadMocked := map[string]interface{}{
-		"requestFieldValues": map[string]interface{}{
-			"components":         []map[string]interface{}{map[string]interface{}{"name": "Jira"}, map[string]interface{}{"name": "Intranet"}},
-			"customfield_320239": []map[string]interface{}{map[string]interface{}{"accountId": "account-id-sample"}},
-			"description":        "I need a new *mouse* for my Mac",
-			"duedate":            "2020-01-02",
-			"labels":             []string{"label-00", "label-01"},
-			"priority":           map[string]interface{}{"value": "Major"},
-			"summary":            "Request JSD help via REST"},
-		"requestParticipants": []interface{}{"uuid-sample-1", "uuid-sample-2"},
-		"requestTypeId":       "28881",
-		"serviceDeskId":       "29990"}
 
 	type fields struct {
 		c service.Connector
@@ -979,7 +969,6 @@ func Test_internalServiceRequestImpl_Create(t *testing.T) {
 	type args struct {
 		ctx     context.Context
 		payload *model.CreateCustomerRequestPayloadScheme
-		fields  *model.CustomerRequestFields
 	}
 
 	testCases := []struct {
@@ -993,13 +982,8 @@ func Test_internalServiceRequestImpl_Create(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx: context.Background(),
-				payload: &model.CreateCustomerRequestPayloadScheme{
-					RequestParticipants: []string{"uuid-sample-1", "uuid-sample-2"},
-					ServiceDeskID:       "29990",
-					RequestTypeID:       "28881",
-				},
-				fields: fieldsMocked,
+				ctx:     context.Background(),
+				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
 
@@ -1025,13 +1009,8 @@ func Test_internalServiceRequestImpl_Create(t *testing.T) {
 		{
 			name: "when the http call cannot be executed",
 			args: args{
-				ctx: context.Background(),
-				payload: &model.CreateCustomerRequestPayloadScheme{
-					RequestParticipants: []string{"uuid-sample-1", "uuid-sample-2"},
-					ServiceDeskID:       "29990",
-					RequestTypeID:       "28881",
-				},
-				fields: fieldsMocked,
+				ctx:     context.Background(),
+				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
 
@@ -1059,13 +1038,8 @@ func Test_internalServiceRequestImpl_Create(t *testing.T) {
 		{
 			name: "when the request cannot be created",
 			args: args{
-				ctx: context.Background(),
-				payload: &model.CreateCustomerRequestPayloadScheme{
-					RequestParticipants: []string{"uuid-sample-1", "uuid-sample-2"},
-					ServiceDeskID:       "29990",
-					RequestTypeID:       "28881",
-				},
-				fields: fieldsMocked,
+				ctx:     context.Background(),
+				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
 
@@ -1084,16 +1058,6 @@ func Test_internalServiceRequestImpl_Create(t *testing.T) {
 			Err:     errors.New("client: no http request created"),
 			wantErr: true,
 		},
-
-		{
-			name: "when the request type fields are not provided",
-			args: args{
-				ctx:    context.Background(),
-				fields: &model.CustomerRequestFields{},
-			},
-			wantErr: true,
-			Err:     model.ErrNoCustomRequestFieldsError,
-		},
 	}
 
 	for _, testCase := range testCases {
@@ -1106,7 +1070,7 @@ func Test_internalServiceRequestImpl_Create(t *testing.T) {
 			smService, err := NewRequestService(testCase.fields.c, "latest", nil)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := smService.Create(testCase.args.ctx, testCase.args.payload, testCase.args.fields)
+			gotResult, gotResponse, err := smService.Create(testCase.args.ctx, testCase.args.payload)
 
 			if testCase.wantErr {
 

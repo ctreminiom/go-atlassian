@@ -1,5 +1,5 @@
 
-![Library Logo](https://github.com/ctreminiom/go-atlassian/assets/16035390/72a952ce-345e-4bde-940d-6873ffd4cfaa)
+<p align="center"><img src="https://github.com/ctreminiom/go-atlassian/assets/16035390/72a952ce-345e-4bde-940d-6873ffd4cfaa" width="300"></p>
 
 [![Releases](https://img.shields.io/github/v/release/ctreminiom/go-atlassian)](https://github.com/ctreminiom/go-atlassian/releases/latest)
 [![Testing](https://github.com/ctreminiom/go-atlassian/actions/workflows/test.yml/badge.svg)](https://github.com/ctreminiom/go-atlassian/actions/workflows/test.yml)

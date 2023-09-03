@@ -168,4 +168,9 @@ var (
 	ErrNoSiteError                         = errors.New("client: no atlassian site set")
 	ErrNoCreateIssuesError                 = errors.New("jira: no issues payload set")
 	ErrNoIssueSchemeError                  = errors.New("jira: no issue instance set")
+
+	ErrNoWorkspaceError  = errors.New("bitbucket: no workspace set")
+	ErrNoMemberIDError   = errors.New("bitbucket: no member id set")
+	ErrNoWebhookIDError  = errors.New("bitbucket: no webhook id set")
+	ErrNoRepositoryError = errors.New("bitbucket: no repository set")
 )

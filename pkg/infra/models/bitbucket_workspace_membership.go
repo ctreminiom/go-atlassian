@@ -13,7 +13,7 @@ type WorkspaceMembershipPageScheme struct {
 
 type WorkspaceMembershipScheme struct {
 	Links        *WorkspaceMembershipLinksScheme `json:"links,omitempty"`
-	User         *BitbucketAccountScheme         `json:"use,omitempty"`
+	User         *BitbucketAccountScheme         `json:"user,omitempty"`
 	Workspace    *WorkspaceScheme                `json:"workspace,omitempty"`
 	AddedOn      time.Time                       `json:"added_on,omitempty"`
 	Permission   string                          `json:"permission,omitempty"`

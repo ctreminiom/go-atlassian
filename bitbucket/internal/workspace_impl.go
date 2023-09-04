@@ -13,29 +13,51 @@ func NewWorkspaceService(client service.Connector, webhook *WorkspaceHookService
 
 	return &WorkspaceService{
 		internalClient: &internalWorkspaceServiceImpl{c: client},
-		Webhook:        webhook,
+		Hook:           webhook,
 		Permission:     permission,
 	}
 }
 
 type WorkspaceService struct {
 	internalClient bitbucket.WorkspaceConnector
-	Webhook        *WorkspaceHookService
+	Hook           *WorkspaceHookService
 	Permission     *WorkspacePermissionService
 }
 
+// Get returns the requested workspace.
+//
+// GET /2.0/workspaces/{workspace}
+//
+// https://docs.go-atlassian.io/bitbucket-cloud/workspace#get-a-workspace
 func (w *WorkspaceService) Get(ctx context.Context, workspace string) (*model.WorkspaceScheme, *model.ResponseScheme, error) {
 	return w.internalClient.Get(ctx, workspace)
 }
 
+// Members returns all members of the requested workspace.
+//
+// GET /2.0/workspaces/{workspace}/members
+//
+// https://docs.go-atlassian.io/bitbucket-cloud/workspace#get-a-workspace
 func (w *WorkspaceService) Members(ctx context.Context, workspace string) (*model.WorkspaceMembershipPageScheme, *model.ResponseScheme, error) {
 	return w.internalClient.Members(ctx, workspace)
 }
 
+// Membership returns the workspace membership,
+//
+// which includes a User object for the member and a Workspace object for the requested workspace.
+//
+// GET /2.0/workspaces/{workspace}/members/{member}
+//
+// https://docs.go-atlassian.io/bitbucket-cloud/workspace#get-member-in-a-workspace
 func (w *WorkspaceService) Membership(ctx context.Context, workspace, memberId string) (*model.WorkspaceMembershipScheme, *model.ResponseScheme, error) {
 	return w.internalClient.Membership(ctx, workspace, memberId)
 }
 
+// Projects returns the list of projects in this workspace.
+//
+// GET /2.0/workspaces/{workspace}/projects
+//
+// https://docs.go-atlassian.io/bitbucket-cloud/workspace#get-projects-in-a-workspace
 func (w *WorkspaceService) Projects(ctx context.Context, workspace string) (*model.BitbucketProjectPageScheme, *model.ResponseScheme, error) {
 	return w.internalClient.Projects(ctx, workspace)
 }

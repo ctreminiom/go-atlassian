@@ -20,22 +20,49 @@ type WorkspaceHookService struct {
 	internalClient bitbucket.WorkspaceHookConnector
 }
 
+// Gets returns a paginated list of webhooks installed on this workspace.
+//
+// GET /2.0/workspaces/{workspace}/hooks
+//
+// https://docs.go-atlassian.io/bitbucket-cloud/workspace/webhooks#list-webhooks-for-a-workspace
 func (w *WorkspaceHookService) Gets(ctx context.Context, workspace string) (*model.WebhookSubscriptionPageScheme, *model.ResponseScheme, error) {
 	return w.internalClient.Gets(ctx, workspace)
 }
 
+// Create creates a new webhook on the specified workspace.
+//
+// Workspace webhooks are fired for events from all repositories contained by that workspace.
+//
+// POST /2.0/workspaces/{workspace}/hooks
+//
+// https://docs.go-atlassian.io/bitbucket-cloud/workspace/webhooks#create-webhook-for-a-workspace
 func (w *WorkspaceHookService) Create(ctx context.Context, workspace string, payload *model.WebhookSubscriptionPayloadScheme) (*model.WebhookSubscriptionScheme, *model.ResponseScheme, error) {
 	return w.internalClient.Create(ctx, workspace, payload)
 }
 
+// Get returns the webhook with the specified id installed on the given workspace.
+//
+// GET /2.0/workspaces/{workspace}/hooks/{uid}
+//
+// https://docs.go-atlassian.io/bitbucket-cloud/workspace/webhooks#get-webhook-for-a-workspace
 func (w *WorkspaceHookService) Get(ctx context.Context, workspace, webhookId string) (*model.WebhookSubscriptionScheme, *model.ResponseScheme, error) {
 	return w.internalClient.Get(ctx, workspace, webhookId)
 }
 
+// Update updates the specified webhook subscription.
+//
+// PUT /2.0/workspaces/{workspace}/hooks/{uid}
+//
+// https://docs.go-atlassian.io/bitbucket-cloud/workspace/webhooks#update-webhook-for-a-workspace
 func (w *WorkspaceHookService) Update(ctx context.Context, workspace, webhookId string, payload *model.WebhookSubscriptionPayloadScheme) (*model.WebhookSubscriptionScheme, *model.ResponseScheme, error) {
 	return w.internalClient.Update(ctx, workspace, webhookId, payload)
 }
 
+// Delete deletes the specified webhook subscription from the given workspace.
+//
+// DELETE /2.0/workspaces/{workspace}/hooks/{uid}
+//
+// https://docs.go-atlassian.io/bitbucket-cloud/workspace/webhooks#delete-webhook-for-a-workspace
 func (w *WorkspaceHookService) Delete(ctx context.Context, workspace, webhookId string) (*model.ResponseScheme, error) {
 	return w.internalClient.Delete(ctx, workspace, webhookId)
 }

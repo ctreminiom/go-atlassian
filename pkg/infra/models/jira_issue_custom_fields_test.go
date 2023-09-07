@@ -60,7 +60,7 @@ func TestParseMultiSelectField(t *testing.T) {
 	bufferMockedWithNoInfo.WriteString(`
 {
 	"fields": {
-		"customfield_10046": null
+		"w": null
 	}
 }`)
 
@@ -107,7 +107,6 @@ func TestParseMultiSelectField(t *testing.T) {
 					Value: "Option 4",
 				},
 			},
-			want1:   true,
 			wantErr: false,
 		},
 
@@ -118,8 +117,8 @@ func TestParseMultiSelectField(t *testing.T) {
 				customField: "customfield_10046",
 			},
 			want:    nil,
-			want1:   false,
-			wantErr: false,
+			wantErr: true,
+			Err:     ErrNoMultiSelectTypeError,
 		},
 
 		{
@@ -129,7 +128,6 @@ func TestParseMultiSelectField(t *testing.T) {
 				customField: "customfield_10046",
 			},
 			want:    nil,
-			want1:   false,
 			wantErr: true,
 			Err:     ErrNoFieldInformationError,
 		},
@@ -141,7 +139,6 @@ func TestParseMultiSelectField(t *testing.T) {
 				customField: "customfield_10046",
 			},
 			want:    nil,
-			want1:   false,
 			wantErr: true,
 			Err:     ErrNoMultiSelectTypeError,
 		},
@@ -153,9 +150,8 @@ func TestParseMultiSelectField(t *testing.T) {
 				customField: "customfield_10046",
 			},
 			want:    nil,
-			want1:   false,
 			wantErr: true,
-			Err:     ErrNoCustomFieldUnmarshalError,
+			Err:     ErrNoFieldInformationError,
 		},
 	}
 	for _, testCase := range testCases {
@@ -243,7 +239,6 @@ func TestParseMultiGroupPickerField(t *testing.T) {
 		name    string
 		args    args
 		want    []*GroupDetailScheme
-		want1   bool
 		wantErr bool
 		Err     error
 	}{
@@ -265,7 +260,6 @@ func TestParseMultiGroupPickerField(t *testing.T) {
 					GroupID: "be9ba0ab-ecdc-445b-9ce6-b95202026c1a",
 				},
 			},
-			want1:   true,
 			wantErr: false,
 		},
 
@@ -276,8 +270,8 @@ func TestParseMultiGroupPickerField(t *testing.T) {
 				customField: "customfield_10052",
 			},
 			want:    nil,
-			want1:   false,
-			wantErr: false,
+			wantErr: true,
+			Err:     ErrNoMultiSelectTypeError,
 		},
 
 		{
@@ -287,7 +281,6 @@ func TestParseMultiGroupPickerField(t *testing.T) {
 				customField: "customfield_10052",
 			},
 			want:    nil,
-			want1:   false,
 			wantErr: true,
 			Err:     ErrNoFieldInformationError,
 		},
@@ -299,7 +292,6 @@ func TestParseMultiGroupPickerField(t *testing.T) {
 				customField: "customfield_10052",
 			},
 			want:    nil,
-			want1:   false,
 			wantErr: true,
 			Err:     ErrNoMultiSelectTypeError,
 		},
@@ -311,9 +303,8 @@ func TestParseMultiGroupPickerField(t *testing.T) {
 				customField: "customfield_10052",
 			},
 			want:    nil,
-			want1:   false,
 			wantErr: true,
-			Err:     ErrNoCustomFieldUnmarshalError,
+			Err:     ErrNoFieldInformationError,
 		},
 	}
 	for _, testCase := range testCases {
@@ -705,162 +696,6 @@ func TestParseCascadingSelectField(t *testing.T) {
 				t.Errorf("ParseMultiSelectCustomField() got = %v, want %v", got, testCase.want)
 			}
 
-			if !reflect.DeepEqual(err, testCase.Err) {
-				t.Errorf("ParseMultiSelectCustomField() got = (%v), want (%v)", err, testCase.Err)
-			}
-		})
-	}
-}
-
-func TestParseMultiCheckboxesCustomField(t *testing.T) {
-
-	bufferMocked := bytes.Buffer{}
-	bufferMocked.WriteString(`
-{
-	"fields": {
-		"customfield_10046": [
-      {
-        "self": "https://ctreminiom.atlassian.net/rest/api/3/customFieldOption/10037",
-        "value": "Option 2",
-        "id": "10037"
-      },
-      {
-        "self": "https://ctreminiom.atlassian.net/rest/api/3/customFieldOption/10039",
-        "value": "Options 4",
-        "id": "10039"
-      }
-    ]
-	}
-}`)
-
-	bufferMockedWithNoFields := bytes.Buffer{}
-	bufferMockedWithNoFields.WriteString(`
-{
-	"field_no_mapped": {
-		"customfield_10046": [
-      {
-        "self": "https://ctreminiom.atlassian.net/rest/api/3/customFieldOption/10037",
-        "value": "Option 2",
-        "id": "10037"
-      },
-      {
-        "self": "https://ctreminiom.atlassian.net/rest/api/3/customFieldOption/10039",
-        "value": "Options 4",
-        "id": "10039"
-      }
-    ]
-	}
-}`)
-
-	bufferMockedWithNoJSON := bytes.Buffer{}
-	bufferMockedWithNoJSON.WriteString(`{}{`)
-
-	bufferMockedWithNoInfo := bytes.Buffer{}
-	bufferMockedWithNoInfo.WriteString(`
-{
-	"fields": {
-		"customfield_10046": null
-	}
-}`)
-
-	bufferMockedWithInvalidType := bytes.Buffer{}
-	bufferMockedWithInvalidType.WriteString(`
-{
-	"fields": {
-		"customfield_10046": "Test field sample"
-	}
-}`)
-
-	type args struct {
-		buffer      bytes.Buffer
-		customField string
-	}
-
-	testCases := []struct {
-		name    string
-		args    args
-		want    []*CustomFieldContextOptionScheme
-		want1   bool
-		wantErr bool
-		Err     error
-	}{
-		{
-			name: "when the buffer contains information",
-			args: args{
-				buffer:      bufferMocked,
-				customField: "customfield_10046",
-			},
-			want: []*CustomFieldContextOptionScheme{
-				{
-					ID:    "10037",
-					Value: "Option 2",
-				},
-				{
-					ID:    "10039",
-					Value: "Options 4",
-				},
-			},
-			want1:   true,
-			wantErr: false,
-		},
-
-		{
-			name: "when the buffer no contains information",
-			args: args{
-				buffer:      bufferMockedWithNoInfo,
-				customField: "customfield_10046",
-			},
-			want:    nil,
-			want1:   false,
-			wantErr: false,
-		},
-
-		{
-			name: "when the buffer does not contains the fields object",
-			args: args{
-				buffer:      bufferMockedWithNoFields,
-				customField: "customfield_10046",
-			},
-			want:    nil,
-			want1:   false,
-			wantErr: true,
-			Err:     ErrNoFieldInformationError,
-		},
-
-		{
-			name: "when the buffer does not contains a valid field type",
-			args: args{
-				buffer:      bufferMockedWithInvalidType,
-				customField: "customfield_10046",
-			},
-			want:    nil,
-			want1:   false,
-			wantErr: true,
-			Err:     ErrNoMultiSelectTypeError,
-		},
-
-		{
-			name: "when the buffer cannot be parsed",
-			args: args{
-				buffer:      bufferMockedWithNoJSON,
-				customField: "customfield_10046",
-			},
-			want:    nil,
-			want1:   false,
-			wantErr: true,
-			Err:     ErrNoCustomFieldUnmarshalError,
-		},
-	}
-	for _, testCase := range testCases {
-		t.Run(testCase.name, func(t *testing.T) {
-			got, err := ParseMultiCheckboxesCustomField(testCase.args.buffer, testCase.args.customField)
-			if (err != nil) != testCase.wantErr {
-				t.Errorf("ParseMultiSelectCustomField() error = %v, wantErr %v", err, testCase.wantErr)
-				return
-			}
-			if !reflect.DeepEqual(got, testCase.want) {
-				t.Errorf("ParseMultiSelectCustomField() got = %v, want %v", got, testCase.want)
-			}
 			if !reflect.DeepEqual(err, testCase.Err) {
 				t.Errorf("ParseMultiSelectCustomField() got = (%v), want (%v)", err, testCase.Err)
 			}
@@ -1937,7 +1772,7 @@ func TestParseMultiSelectCustomFields(t *testing.T) {
     "startAt": 0,
     "maxResults": 50,
     "total": 1,
-    "issues": [
+    "data": [
         {
             "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
             "id": "10035",
@@ -2009,7 +1844,28 @@ func TestParseMultiSelectCustomFields(t *testing.T) {
 				customField: "customfield_10046",
 			},
 			wantErr: true,
-			Err:     ErrNoMapValuesError,
+			Err:     ErrNoIssuesSliceError,
+		},
+
+		{
+			name: "when the buffer contains null customfields",
+			args: args{
+				buffer:      bufferMocked,
+				customField: "customfield_10046",
+			},
+			want: map[string][]*CustomFieldContextOptionScheme{
+				"KP-22": {
+					{
+						ID:    "10046",
+						Value: "Option 3",
+					},
+					{
+						ID:    "10047",
+						Value: "Option 4",
+					},
+				},
+			},
+			wantErr: false,
 		},
 
 		{

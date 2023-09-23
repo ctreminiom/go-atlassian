@@ -1397,3 +1397,41 @@ func ParseSelectCustomFields(buffer bytes.Buffer, customField string) (map[strin
 
 	return customfieldsAsMap, nil
 }
+
+func ParseAssetCustomField(buffer bytes.Buffer, customField string) ([]*CustomFieldAssetScheme, error) {
+
+	raw, err := marshmallow.Unmarshal(buffer.Bytes(), &struct{}{})
+	if err != nil {
+		return nil, ErrNoCustomFieldUnmarshalError
+	}
+
+	fields, containsFields := raw["fields"]
+	if !containsFields {
+		return nil, ErrNoFieldInformationError
+	}
+
+	customFields := fields.(map[string]interface{})
+	var records []*CustomFieldAssetScheme
+
+	switch options := customFields[customField].(type) {
+	case []interface{}:
+
+		for _, option := range options {
+
+			record := &CustomFieldAssetScheme{
+				WorkspaceId: option.(map[string]interface{})["workspaceId"].(string),
+				Id:          option.(map[string]interface{})["id"].(string),
+				ObjectId:    option.(map[string]interface{})["objectId"].(string),
+			}
+
+			records = append(records, record)
+		}
+
+	case nil:
+		return nil, nil
+	default:
+		return nil, ErrNoAssetTypeError
+	}
+
+	return records, nil
+}

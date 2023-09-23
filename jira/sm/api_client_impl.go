@@ -45,6 +45,7 @@ func New(httpClient common.HttpClient, site string) (*Client, error) {
 	client.Info = internal.NewInfoService(client, defaultServiceManagementVersion)
 	client.Knowledgebase = internal.NewKnowledgebaseService(client, defaultServiceManagementVersion)
 	client.Organization = internal.NewOrganizationService(client, defaultServiceManagementVersion)
+	client.WorkSpace = internal.NewWorkSpaceService(client, defaultServiceManagementVersion)
 
 	requestSubServices := &internal.ServiceRequestSubServices{
 		Approval:    internal.NewApprovalService(client, defaultServiceManagementVersion),
@@ -85,6 +86,7 @@ type Client struct {
 	Organization  *internal.OrganizationService
 	Request       *internal.RequestService
 	ServiceDesk   *internal.ServiceDeskService
+	WorkSpace     *internal.WorkSpaceService
 }
 
 func (c *Client) NewRequest(ctx context.Context, method, urlStr, type_ string, body interface{}) (*http.Request, error) {

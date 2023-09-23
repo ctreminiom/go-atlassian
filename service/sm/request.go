@@ -14,7 +14,7 @@ type RequestConnector interface {
 	// POST /rest/servicedeskapi/request
 	//
 	// https://docs.go-atlassian.io/jira-service-management/request#create-customer-request
-	Create(ctx context.Context, payload *model.CreateCustomerRequestPayloadScheme, fields *model.CustomerRequestFields) (*model.CustomerRequestScheme, *model.ResponseScheme, error)
+	Create(ctx context.Context, payload *model.CreateCustomerRequestPayloadScheme) (*model.CustomerRequestScheme, *model.ResponseScheme, error)
 
 	// Gets returns all customer requests for the user executing the query.
 	//

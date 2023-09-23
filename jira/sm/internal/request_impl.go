@@ -64,8 +64,8 @@ type RequestService struct {
 // POST /rest/servicedeskapi/request
 //
 // https://docs.go-atlassian.io/jira-service-management/request#create-customer-request
-func (s *RequestService) Create(ctx context.Context, payload *model.CreateCustomerRequestPayloadScheme, fields *model.CustomerRequestFields) (*model.CustomerRequestScheme, *model.ResponseScheme, error) {
-	return s.internalClient.Create(ctx, payload, fields)
+func (s *RequestService) Create(ctx context.Context, payload *model.CreateCustomerRequestPayloadScheme) (*model.CustomerRequestScheme, *model.ResponseScheme, error) {
+	return s.internalClient.Create(ctx, payload)
 }
 
 // Gets returns all customer requests for the user executing the query.
@@ -131,20 +131,11 @@ type internalServiceRequestImpl struct {
 	version string
 }
 
-func (i *internalServiceRequestImpl) Create(ctx context.Context, payload *model.CreateCustomerRequestPayloadScheme, fields *model.CustomerRequestFields) (*model.CustomerRequestScheme, *model.ResponseScheme, error) {
-
-	if fields == nil || fields.Fields == nil {
-		return nil, nil, model.ErrNoCustomRequestFieldsError
-	}
-
-	payloadWithFields, err := payload.MergeFields(fields)
-	if err != nil {
-		return nil, nil, err
-	}
+func (i *internalServiceRequestImpl) Create(ctx context.Context, payload *model.CreateCustomerRequestPayloadScheme) (*model.CustomerRequestScheme, *model.ResponseScheme, error) {
 
 	endpoint := "rest/servicedeskapi/request"
 
-	req, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payloadWithFields)
+	req, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
 		return nil, nil, err
 	}

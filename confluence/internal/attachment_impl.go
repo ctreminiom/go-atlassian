@@ -13,14 +13,16 @@ import (
 )
 
 // NewAttachmentService returns a new Confluence V2 Page service
-func NewAttachmentService(client service.Connector) *AttachmentService {
+func NewAttachmentService(client service.Connector, version *AttachmentVersionService) *AttachmentService {
 	return &AttachmentService{
 		internalClient: &internalAttachmentImpl{c: client},
+		Version:        version,
 	}
 }
 
 type AttachmentService struct {
 	internalClient confluence.AttachmentConnector
+	Version        *AttachmentVersionService
 }
 
 // Get returns a specific attachment.
@@ -51,8 +53,33 @@ func (a *AttachmentService) Gets(ctx context.Context, entityID int, entityType s
 	return a.internalClient.Gets(ctx, entityID, entityType, options, cursor, limit)
 }
 
+// Delete deletes an attachment by id.
+//
+// DELETE /wiki/api/v2/attachments/{id}
+//
+// https://docs.go-atlassian.io/confluence-cloud/v2/attachments#delete-attachment
+func (a *AttachmentService) Delete(ctx context.Context, attachmentID string) (*model.ResponseScheme, error) {
+	return a.internalClient.Delete(ctx, attachmentID)
+}
+
 type internalAttachmentImpl struct {
 	c service.Connector
+}
+
+func (i *internalAttachmentImpl) Delete(ctx context.Context, attachmentID string) (*model.ResponseScheme, error) {
+
+	if attachmentID == "" {
+		return nil, model.ErrNoContentAttachmentIDError
+	}
+
+	endpoint := fmt.Sprintf("wiki/api/v2/attachments/%v", attachmentID)
+
+	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return i.c.Call(request, nil)
 }
 
 func (i *internalAttachmentImpl) Get(ctx context.Context, attachmentID string, versionID int, serializeIDs bool) (*model.AttachmentScheme, *model.ResponseScheme, error) {

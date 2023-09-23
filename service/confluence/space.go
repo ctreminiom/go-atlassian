@@ -26,6 +26,11 @@ type SpaceV2Connector interface {
 	//
 	// https://docs.go-atlassian.io/confluence-cloud/v2/space#get-space-by-id
 	Get(ctx context.Context, spaceID int, descriptionFormat string) (*model.SpaceSchemeV2, *model.ResponseScheme, error)
+
+	// Permissions returns space permissions for a specific space.
+	//
+	// GET /wiki/api/v2/spaces/{id}/permissions
+	Permissions(ctx context.Context, spaceID int, cursor string, limit int) (*model.SpacePermissionPageScheme, *model.ResponseScheme, error)
 }
 
 type SpaceConnector interface {

@@ -216,19 +216,19 @@ func TestParseMultiGroupPickerField(t *testing.T) {
 
 	bufferMockedWithNoInfo := bytes.Buffer{}
 	bufferMockedWithNoInfo.WriteString(`
-{
-	"fields": {
-		"customfield_10052": null
-	}
-}`)
+	{
+		"fields": {
+			"customfield_10052": null
+		}
+	}`)
 
 	bufferMockedWithInvalidType := bytes.Buffer{}
 	bufferMockedWithInvalidType.WriteString(`
-{
-	"fields": {
-		"customfield_10052": "Test field sample"
-	}
-}`)
+	{
+		"fields": {
+			"customfield_10052": "Test field sample"
+		}
+	}`)
 
 	type args struct {
 		buffer      bytes.Buffer
@@ -493,8 +493,8 @@ func TestParseMultiUserPickerField(t *testing.T) {
 				customField: "customfield_10055",
 			},
 			want:    nil,
-			want1:   false,
-			wantErr: false,
+			wantErr: true,
+			Err:     ErrNoMultiSelectTypeError,
 		},
 
 		{
@@ -530,7 +530,7 @@ func TestParseMultiUserPickerField(t *testing.T) {
 			want:    nil,
 			want1:   false,
 			wantErr: true,
-			Err:     ErrNoCustomFieldUnmarshalError,
+			Err:     ErrNoFieldInformationError,
 		},
 	}
 	for _, testCase := range testCases {
@@ -646,7 +646,8 @@ func TestParseCascadingSelectField(t *testing.T) {
 			},
 			want:    nil,
 			want1:   false,
-			wantErr: false,
+			wantErr: true,
+			Err:     ErrNoCascadingParentError,
 		},
 
 		{
@@ -670,7 +671,7 @@ func TestParseCascadingSelectField(t *testing.T) {
 			want:    nil,
 			want1:   false,
 			wantErr: true,
-			Err:     ErrNoMultiSelectTypeError,
+			Err:     ErrNoCascadingParentError,
 		},
 
 		{
@@ -682,7 +683,7 @@ func TestParseCascadingSelectField(t *testing.T) {
 			want:    nil,
 			want1:   false,
 			wantErr: true,
-			Err:     ErrNoCustomFieldUnmarshalError,
+			Err:     ErrNoFieldInformationError,
 		},
 	}
 	for _, testCase := range testCases {
@@ -829,7 +830,8 @@ func TestParseMultiVersionCustomField(t *testing.T) {
 			},
 			want:    nil,
 			want1:   false,
-			wantErr: false,
+			wantErr: true,
+			Err:     ErrNoMultiVersionTypeError,
 		},
 
 		{
@@ -865,7 +867,7 @@ func TestParseMultiVersionCustomField(t *testing.T) {
 			want:    nil,
 			want1:   false,
 			wantErr: true,
-			Err:     ErrNoCustomFieldUnmarshalError,
+			Err:     ErrNoFieldInformationError,
 		},
 	}
 	for _, testCase := range testCases {
@@ -990,7 +992,8 @@ func TestParseUserPickerCustomField(t *testing.T) {
 			},
 			want:    nil,
 			want1:   false,
-			wantErr: false,
+			wantErr: true,
+			Err:     ErrNoUserTypeError,
 		},
 
 		{
@@ -1026,7 +1029,7 @@ func TestParseUserPickerCustomField(t *testing.T) {
 			want:    nil,
 			want1:   false,
 			wantErr: true,
-			Err:     ErrNoCustomFieldUnmarshalError,
+			Err:     ErrNoFieldInformationError,
 		},
 	}
 	for _, testCase := range testCases {
@@ -1053,7 +1056,7 @@ func TestParseStringCustomField(t *testing.T) {
 	bufferMocked.WriteString(`
 {
   "fields": {
-    "customfield_10045": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua."
+    "customfield_10045": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr"
   }
 }`)
 
@@ -1102,17 +1105,7 @@ func TestParseStringCustomField(t *testing.T) {
 				buffer:      bufferMocked,
 				customField: "customfield_10045",
 			},
-			want:    "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.",
-			wantErr: false,
-		},
-
-		{
-			name: "when the buffer no contains information",
-			args: args{
-				buffer:      bufferMockedWithNoInfo,
-				customField: "customfield_10045",
-			},
-			want:    "",
+			want:    "Lorem ipsum dolor sit amet, consetetur sadipscing elitr",
 			wantErr: false,
 		},
 
@@ -1128,25 +1121,25 @@ func TestParseStringCustomField(t *testing.T) {
 		},
 
 		{
-			name: "when the buffer does not contains a valid field type",
+			name: "when the buffer field value is null",
 			args: args{
-				buffer:      bufferMockedWithInvalidType,
+				buffer:      bufferMockedWithNoInfo,
 				customField: "customfield_10045",
 			},
 			want:    "",
 			wantErr: true,
-			Err:     ErrNoMultiSelectTypeError,
+			Err:     ErrNoTextTypeError,
 		},
 
 		{
 			name: "when the buffer cannot be parsed",
 			args: args{
-				buffer:      bufferMockedWithNoJSON,
+				buffer:      bufferMockedWithNoInfo,
 				customField: "customfield_10045",
 			},
 			want:    "",
 			wantErr: true,
-			Err:     ErrNoCustomFieldUnmarshalError,
+			Err:     ErrNoTextTypeError,
 		},
 	}
 	for _, testCase := range testCases {
@@ -1233,7 +1226,8 @@ func TestParseFloatCustomField(t *testing.T) {
 				customField: "customfield_10045",
 			},
 			want:    0,
-			wantErr: false,
+			wantErr: true,
+			Err:     ErrNoFloatTypeError,
 		},
 
 		{
@@ -1255,7 +1249,7 @@ func TestParseFloatCustomField(t *testing.T) {
 			},
 			want:    0,
 			wantErr: true,
-			Err:     ErrNoMultiSelectTypeError,
+			Err:     ErrNoFloatTypeError,
 		},
 
 		{
@@ -1266,7 +1260,7 @@ func TestParseFloatCustomField(t *testing.T) {
 			},
 			want:    0,
 			wantErr: true,
-			Err:     ErrNoCustomFieldUnmarshalError,
+			Err:     ErrNoFieldInformationError,
 		},
 	}
 	for _, testCase := range testCases {
@@ -1359,7 +1353,8 @@ func TestParseLabelCustomField(t *testing.T) {
 				customField: "customfield_10045",
 			},
 			want:    nil,
-			wantErr: false,
+			wantErr: true,
+			Err:     ErrNoLabelsTypeError,
 		},
 
 		{
@@ -1381,7 +1376,7 @@ func TestParseLabelCustomField(t *testing.T) {
 			},
 			want:    nil,
 			wantErr: true,
-			Err:     ErrNoMultiSelectTypeError,
+			Err:     ErrNoLabelsTypeError,
 		},
 
 		{
@@ -1392,7 +1387,7 @@ func TestParseLabelCustomField(t *testing.T) {
 			},
 			want:    nil,
 			wantErr: true,
-			Err:     ErrNoCustomFieldUnmarshalError,
+			Err:     ErrNoFieldInformationError,
 		},
 	}
 	for _, testCase := range testCases {
@@ -1421,7 +1416,7 @@ func TestParseSprintCustomField(t *testing.T) {
 	"fields": {
 		"customfield_10046": [
       {
-        "id": 4,
+        "id": 5,
         "name": "KP Sprint 3",
         "state": "active",
         "boardId": 4,
@@ -1440,7 +1435,7 @@ func TestParseSprintCustomField(t *testing.T) {
 	"field_no_mapped": {
 		"customfield_10046": [
       {
-        "id": 4,
+        "id": 5,
         "name": "KP Sprint 3",
         "state": "active",
         "boardId": 4,
@@ -1492,14 +1487,14 @@ func TestParseSprintCustomField(t *testing.T) {
 			},
 			want: []*SprintDetailScheme{
 				{
-					ID:            4,
-					State:         "active",
-					Name:          "KP Sprint 3",
-					StartDate:     "2023-03-04T02:03:16.273Z",
-					CompleteDate:  "2023-03-04T02:03:16.273Z",
-					EndDate:       "2023-03-17T02:03:00.000Z",
-					OriginBoardID: 4,
-					Goal:          "",
+					ID:           5,
+					State:        "active",
+					Name:         "KP Sprint 3",
+					StartDate:    "2023-03-04T02:03:16.273Z",
+					CompleteDate: "2023-03-04T02:03:16.273Z",
+					EndDate:      "2023-03-17T02:03:00.000Z",
+					BoardID:      4,
+					Goal:         "",
 				},
 			},
 			want1:   true,
@@ -1512,9 +1507,8 @@ func TestParseSprintCustomField(t *testing.T) {
 				buffer:      bufferMockedWithNoInfo,
 				customField: "customfield_10046",
 			},
-			want:    nil,
-			want1:   false,
-			wantErr: false,
+			wantErr: true,
+			Err:     ErrNoSprintTypeError,
 		},
 
 		{
@@ -1538,7 +1532,7 @@ func TestParseSprintCustomField(t *testing.T) {
 			want:    nil,
 			want1:   false,
 			wantErr: true,
-			Err:     ErrNoMultiSelectTypeError,
+			Err:     ErrNoSprintTypeError,
 		},
 
 		{
@@ -1550,7 +1544,7 @@ func TestParseSprintCustomField(t *testing.T) {
 			want:    nil,
 			want1:   false,
 			wantErr: true,
-			Err:     ErrNoCustomFieldUnmarshalError,
+			Err:     ErrNoFieldInformationError,
 		},
 	}
 	for _, testCase := range testCases {
@@ -1647,7 +1641,8 @@ func TestParseSelectCustomField(t *testing.T) {
 				customField: "customfield_10045",
 			},
 			want:    nil,
-			wantErr: false,
+			wantErr: true,
+			Err:     ErrNoSelectTypeError,
 		},
 
 		{
@@ -1669,7 +1664,7 @@ func TestParseSelectCustomField(t *testing.T) {
 			},
 			want:    nil,
 			wantErr: true,
-			Err:     ErrNoMultiSelectTypeError,
+			Err:     ErrNoSelectTypeError,
 		},
 
 		{
@@ -1680,7 +1675,7 @@ func TestParseSelectCustomField(t *testing.T) {
 			},
 			want:    nil,
 			wantErr: true,
-			Err:     ErrNoCustomFieldUnmarshalError,
+			Err:     ErrNoFieldInformationError,
 		},
 	}
 	for _, testCase := range testCases {
@@ -1867,22 +1862,305 @@ func TestParseMultiSelectCustomFields(t *testing.T) {
 			},
 			wantErr: false,
 		},
+	}
+	for _, testCase := range tests {
+		t.Run(testCase.name, func(t *testing.T) {
+			got, err := ParseMultiSelectCustomFields(testCase.args.buffer, testCase.args.customField)
+			if (err != nil) != testCase.wantErr {
+				t.Errorf("ParseMultiSelectCustomField() error = %v, wantErr %v", err, testCase.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, testCase.want) {
+				t.Errorf("ParseMultiSelectCustomField() got = %v, want %v", got, testCase.want)
+			}
+			if !reflect.DeepEqual(err, testCase.Err) {
+				t.Errorf("ParseMultiSelectCustomField() got = (%v), want (%v)", err, testCase.Err)
+			}
+		})
+	}
+}
 
+func TestParseMultiGroupPickerCustomFields(t *testing.T) {
+
+	bufferMocked := bytes.Buffer{}
+	bufferMocked.WriteString(`
+{
+    "expand": "names,schema",
+    "startAt": 0,
+    "maxResults": 50,
+    "total": 1,
+    "issues": [
+        {
+            "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+            "id": "10035",
+            "self": "https://ctreminiom.atlassian.net/rest/api/2/issue/10035",
+            "key": "KP-22",
+            "fields": {
+                "customfield_10046": [
+				  {
+					"name": "jira-administrators",
+					"groupId": "1da6f895-2b42-423b-8bfb-1e09ee8d7764",
+					"self": "https://ctreminiom.atlassian.net/rest/api/3/group?groupId=1da6f895-2b42-423b-8bfb-1e09ee8d7764"
+				  },
+				  {
+					"name": "jira-administrators-system",
+					"groupId": "be9ba0ab-ecdc-445b-9ce6-b95202026c1a",
+					"self": "https://ctreminiom.atlassian.net/rest/api/3/group?groupId=be9ba0ab-ecdc-445b-9ce6-b95202026c1a"
+				  }
+				]
+            }
+        },
 		{
-			name: "when the buffer contains null customfields",
+            "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+            "id": "10035",
+            "self": "https://ctreminiom.atlassian.net/rest/api/2/issue/10035",
+            "key": "KP-23",
+            "fields": {
+                "customfield_10046": [
+				  {
+					"name": "jira-administrators-2",
+					"groupId": "1da6f895-2b42-423b-8bfb-1e09ee8d7764",
+					"self": "https://ctreminiom.atlassian.net/rest/api/3/group?groupId=1da6f895-2b42-423b-8bfb-1e09ee8d7764"
+				  },
+				  {
+					"name": "jira-administrators-system-2",
+					"groupId": "be9ba0ab-ecdc-445b-9ce6-b95202026c1a",
+					"self": "https://ctreminiom.atlassian.net/rest/api/3/group?groupId=be9ba0ab-ecdc-445b-9ce6-b95202026c1a"
+				  }
+				]
+            }
+        }
+    ]
+}`)
+
+	bufferMockedWithNoIssues := bytes.Buffer{}
+	bufferMockedWithNoIssues.WriteString(`
+{
+    "expand": "names,schema",
+    "startAt": 0,
+    "maxResults": 50,
+    "total": 1,
+    "no_issues": [
+        {
+            "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+            "id": "10035",
+            "self": "https://ctreminiom.atlassian.net/rest/api/2/issue/10035",
+            "key": "KP-22",
+            "no_fields": {
+                "customfield_10046": [
+                    {
+                        "self": "https://ctreminiom.atlassian.net/rest/api/2/customFieldOption/10046",
+                        "value": "Option 3",
+                        "id": "10046"
+                    },
+                    {
+                        "self": "https://ctreminiom.atlassian.net/rest/api/2/customFieldOption/10047",
+                        "value": "Option 4",
+                        "id": "10047"
+                    }
+                ]
+            }
+        }
+    ]
+}`)
+
+	bufferMockedWithNoInfo := bytes.Buffer{}
+	bufferMockedWithNoInfo.WriteString(`
+{
+    "expand": "names,schema",
+    "startAt": 0,
+    "maxResults": 50,
+    "total": 1,
+    "data": [
+        {
+            "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+            "id": "10035",
+            "self": "https://ctreminiom.atlassian.net/rest/api/2/issue/10035",
+            "key": "KP-22",
+            "fields": {
+                "customfield_10046": null
+            }
+        }
+    ]
+}`)
+
+	bufferMockedWithNullValues := bytes.Buffer{}
+	bufferMockedWithNullValues.WriteString(`
+{
+    "expand": "names,schema",
+    "startAt": 0,
+    "maxResults": 50,
+    "total": 1,
+    "issues": [
+        {
+            "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+            "id": "10035",
+            "self": "https://ctreminiom.atlassian.net/rest/api/2/issue/10035",
+            "key": "KP-22",
+            "fields": {
+                "customfield_10046": null,
+            }
+        },
+		{
+            "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+            "id": "10035",
+            "self": "https://ctreminiom.atlassian.net/rest/api/2/issue/10035",
+            "key": "KP-23",
+            "fields": {
+                "customfield_10046": [
+				  {
+					"name": "jira-administrators-2",
+					"groupId": "1da6f895-2b42-423b-8bfb-1e09ee8d7764",
+					"self": "https://ctreminiom.atlassian.net/rest/api/3/group?groupId=1da6f895-2b42-423b-8bfb-1e09ee8d7764"
+				  },
+				  {
+					"name": "jira-administrators-system-2",
+					"groupId": "be9ba0ab-ecdc-445b-9ce6-b95202026c1a",
+					"self": "https://ctreminiom.atlassian.net/rest/api/3/group?groupId=be9ba0ab-ecdc-445b-9ce6-b95202026c1a"
+				  }
+				]
+            }
+        }
+    ]
+}`)
+
+	bufferMockedWithInvalidTypes := bytes.Buffer{}
+	bufferMockedWithInvalidTypes.WriteString(`
+{
+    "expand": "names,schema",
+    "startAt": 0,
+    "maxResults": 50,
+    "total": 1,
+    "issues": [
+        {
+            "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+            "id": "10035",
+            "self": "https://ctreminiom.atlassian.net/rest/api/2/issue/10035",
+            "key": "KP-22",
+            "fields": {
+                "customfield_10046": "self": "https://ctreminiom.atlassian.net/rest/api/2/issue/10035",
+            }
+        },
+		{
+            "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+            "id": "10035",
+            "self": "https://ctreminiom.atlassian.net/rest/api/2/issue/10035",
+            "key": "KP-23",
+            "fields": {
+                "customfield_10046": [
+				  {
+					"name": "jira-administrators-2",
+					"groupId": "1da6f895-2b42-423b-8bfb-1e09ee8d7764",
+					"self": "https://ctreminiom.atlassian.net/rest/api/3/group?groupId=1da6f895-2b42-423b-8bfb-1e09ee8d7764"
+				  },
+				  {
+					"name": "jira-administrators-system-2",
+					"groupId": "be9ba0ab-ecdc-445b-9ce6-b95202026c1a",
+					"self": "https://ctreminiom.atlassian.net/rest/api/3/group?groupId=be9ba0ab-ecdc-445b-9ce6-b95202026c1a"
+				  }
+				]
+            }
+        }
+    ]
+}`)
+
+	type args struct {
+		buffer      bytes.Buffer
+		customField string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    map[string][]*GroupDetailScheme
+		wantErr bool
+		Err     error
+	}{
+		{
+			name: "when the buffer contains information",
 			args: args{
 				buffer:      bufferMocked,
 				customField: "customfield_10046",
 			},
-			want: map[string][]*CustomFieldContextOptionScheme{
+			want: map[string][]*GroupDetailScheme{
 				"KP-22": {
 					{
-						ID:    "10046",
-						Value: "Option 3",
+						Self:    "https://ctreminiom.atlassian.net/rest/api/3/group?groupId=1da6f895-2b42-423b-8bfb-1e09ee8d7764",
+						Name:    "jira-administrators",
+						GroupID: "1da6f895-2b42-423b-8bfb-1e09ee8d7764",
 					},
 					{
-						ID:    "10047",
-						Value: "Option 4",
+						Self:    "https://ctreminiom.atlassian.net/rest/api/3/group?groupId=be9ba0ab-ecdc-445b-9ce6-b95202026c1a",
+						Name:    "jira-administrators-system",
+						GroupID: "be9ba0ab-ecdc-445b-9ce6-b95202026c1a",
+					},
+				},
+				"KP-23": {
+					{
+						Self:    "https://ctreminiom.atlassian.net/rest/api/3/group?groupId=1da6f895-2b42-423b-8bfb-1e09ee8d7764",
+						Name:    "jira-administrators-2",
+						GroupID: "1da6f895-2b42-423b-8bfb-1e09ee8d7764",
+					},
+					{
+						Self:    "https://ctreminiom.atlassian.net/rest/api/3/group?groupId=be9ba0ab-ecdc-445b-9ce6-b95202026c1a",
+						Name:    "jira-administrators-system-2",
+						GroupID: "be9ba0ab-ecdc-445b-9ce6-b95202026c1a",
+					},
+				},
+			},
+
+			wantErr: false,
+		},
+
+		{
+			name: "when the buffer does not contain the issues object",
+			args: args{
+				buffer:      bufferMockedWithNoInfo,
+				customField: "customfield_10046",
+			},
+			wantErr: true,
+			Err:     ErrNoIssuesSliceError,
+		},
+
+		{
+			name: "when the buffer contains null customfields",
+			args: args{
+				buffer:      bufferMockedWithNullValues,
+				customField: "customfield_10046",
+			},
+			want: map[string][]*GroupDetailScheme{
+				"KP-23": {
+					{
+						Self:    "https://ctreminiom.atlassian.net/rest/api/3/group?groupId=1da6f895-2b42-423b-8bfb-1e09ee8d7764",
+						Name:    "jira-administrators-2",
+						GroupID: "1da6f895-2b42-423b-8bfb-1e09ee8d7764",
+					},
+					{
+						Self:    "https://ctreminiom.atlassian.net/rest/api/3/group?groupId=be9ba0ab-ecdc-445b-9ce6-b95202026c1a",
+						Name:    "jira-administrators-system-2",
+						GroupID: "be9ba0ab-ecdc-445b-9ce6-b95202026c1a",
+					},
+				},
+			},
+			wantErr: false,
+		},
+
+		{
+			name: "when the buffer contains invalid types",
+			args: args{
+				buffer:      bufferMockedWithInvalidTypes,
+				customField: "customfield_10046",
+			},
+			want: map[string][]*GroupDetailScheme{
+				"KP-23": {
+					{
+						Self:    "https://ctreminiom.atlassian.net/rest/api/3/group?groupId=1da6f895-2b42-423b-8bfb-1e09ee8d7764",
+						Name:    "jira-administrators-2",
+						GroupID: "1da6f895-2b42-423b-8bfb-1e09ee8d7764",
+					},
+					{
+						Self:    "https://ctreminiom.atlassian.net/rest/api/3/group?groupId=be9ba0ab-ecdc-445b-9ce6-b95202026c1a",
+						Name:    "jira-administrators-system-2",
+						GroupID: "be9ba0ab-ecdc-445b-9ce6-b95202026c1a",
 					},
 				},
 			},
@@ -1891,7 +2169,820 @@ func TestParseMultiSelectCustomFields(t *testing.T) {
 	}
 	for _, testCase := range tests {
 		t.Run(testCase.name, func(t *testing.T) {
-			got, err := ParseMultiSelectCustomFields(testCase.args.buffer, testCase.args.customField)
+			got, err := ParseMultiGroupPickerCustomFields(testCase.args.buffer, testCase.args.customField)
+			if (err != nil) != testCase.wantErr {
+				t.Errorf("ParseMultiSelectCustomField() error = %v, wantErr %v", err, testCase.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, testCase.want) {
+				t.Errorf("ParseMultiSelectCustomField() got = %v, want %v", got, testCase.want)
+			}
+			if !reflect.DeepEqual(err, testCase.Err) {
+				t.Errorf("ParseMultiSelectCustomField() got = (%v), want (%v)", err, testCase.Err)
+			}
+		})
+	}
+}
+
+func TestParseMultiUserPickerCustomFields(t *testing.T) {
+
+	bufferMocked := bytes.Buffer{}
+	bufferMocked.WriteString(`
+{
+   "expand":"names,schema",
+   "startAt":0,
+   "maxResults":50,
+   "total":1,
+   "issues":[
+      {
+         "expand":"operations,versionedRepresentations,editmeta,changelog,renderedFields",
+         "id":"10035",
+         "self":"https://ctreminiom.atlassian.net/rest/api/2/issue/10035",
+         "key":"KP-22",
+         "fields":{
+            "customfield_10046":[
+               {
+                  "self":"https://ctreminiom.atlassian.net/rest/api/3/user?accountId=5e5f6a63157ed50cd2b9eaca",
+                  "accountId":"5e5f6a63157ed50cd2b9eaca",
+                  "avatarUrls":{
+                     "48x48":"https://secure.gravatar.com/avatar/2e6d2ee8550c63137e196a2890bc25a9?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-4.png",
+                     "24x24":"https://secure.gravatar.com/avatar/2e6d2ee8550c63137e196a2890bc25a9?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-4.png",
+                     "16x16":"https://secure.gravatar.com/avatar/2e6d2ee8550c63137e196a2890bc25a9?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-4.png",
+                     "32x32":"https://secure.gravatar.com/avatar/2e6d2ee8550c63137e196a2890bc25a9?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-4.png"
+                  },
+                  "displayName":"Carlos Treminio",
+                  "active":true,
+                  "timeZone":"Asia/Dhaka",
+                  "accountType":"atlassian"
+               },
+               {
+                  "self":"https://ctreminiom.atlassian.net/rest/api/3/user?accountId=5b86be50b8e3cb5895860d6d",
+                  "accountId":"5b86be50b8e3cb5895860d6d",
+                  "emailAddress":"ctreminiom079@gmail.com",
+                  "avatarUrls":{
+                     "48x48":"https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                     "24x24":"https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                     "16x16":"https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                     "32x32":"https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png"
+                  },
+                  "displayName":"Carlos Treminio",
+                  "active":true,
+                  "timeZone":"America/Guatemala",
+                  "accountType":"atlassian"
+               },
+               {
+                  "self":"https://ctreminiom.atlassian.net/rest/api/3/user?accountId=557058%3Ad6b5955a-e193-41e1-b051-79cdb0755d68",
+                  "accountId":"557058:d6b5955a-e193-41e1-b051-79cdb0755d68",
+                  "avatarUrls":{
+                     "48x48":"https://secure.gravatar.com/avatar/53e3e37950768a905d53cebdfcbd63e3?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FT-1.png",
+                     "24x24":"https://secure.gravatar.com/avatar/53e3e37950768a905d53cebdfcbd63e3?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FT-1.png",
+                     "16x16":"https://secure.gravatar.com/avatar/53e3e37950768a905d53cebdfcbd63e3?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FT-1.png",
+                     "32x32":"https://secure.gravatar.com/avatar/53e3e37950768a905d53cebdfcbd63e3?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FT-1.png"
+                  },
+                  "displayName":"Trello",
+                  "active":true,
+                  "timeZone":"Europe/London",
+                  "accountType":"app"
+               }
+            ]
+         }
+      },
+      {
+         "expand":"operations,versionedRepresentations,editmeta,changelog,renderedFields",
+         "id":"10035",
+         "self":"https://ctreminiom.atlassian.net/rest/api/2/issue/10035",
+         "key":"KP-23",
+         "fields":{
+            "customfield_10046":[
+               {
+                  "self":"https://ctreminiom.atlassian.net/rest/api/3/user?accountId=5e5f6a63157ed50cd2b9eaca",
+                  "accountId":"5e5f6a63157ed50cd2b9eaca",
+                  "avatarUrls":{
+                     "48x48":"https://secure.gravatar.com/avatar/2e6d2ee8550c63137e196a2890bc25a9?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-4.png",
+                     "24x24":"https://secure.gravatar.com/avatar/2e6d2ee8550c63137e196a2890bc25a9?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-4.png",
+                     "16x16":"https://secure.gravatar.com/avatar/2e6d2ee8550c63137e196a2890bc25a9?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-4.png",
+                     "32x32":"https://secure.gravatar.com/avatar/2e6d2ee8550c63137e196a2890bc25a9?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-4.png"
+                  },
+                  "displayName":"Carlos Treminio",
+                  "active":true,
+                  "timeZone":"Asia/Dhaka",
+                  "accountType":"atlassian"
+               },
+               {
+                  "self":"https://ctreminiom.atlassian.net/rest/api/3/user?accountId=5b86be50b8e3cb5895860d6d",
+                  "accountId":"5b86be50b8e3cb5895860d6d",
+                  "emailAddress":"ctreminiom079@gmail.com",
+                  "avatarUrls":{
+                     "48x48":"https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                     "24x24":"https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                     "16x16":"https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                     "32x32":"https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png"
+                  },
+                  "displayName":"Carlos Treminio",
+                  "active":true,
+                  "timeZone":"America/Guatemala",
+                  "accountType":"atlassian"
+               },
+               {
+                  "self":"https://ctreminiom.atlassian.net/rest/api/3/user?accountId=557058%3Ad6b5955a-e193-41e1-b051-79cdb0755d68",
+                  "accountId":"557058:d6b5955a-e193-41e1-b051-79cdb0755d68",
+                  "avatarUrls":{
+                     "48x48":"https://secure.gravatar.com/avatar/53e3e37950768a905d53cebdfcbd63e3?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FT-1.png",
+                     "24x24":"https://secure.gravatar.com/avatar/53e3e37950768a905d53cebdfcbd63e3?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FT-1.png",
+                     "16x16":"https://secure.gravatar.com/avatar/53e3e37950768a905d53cebdfcbd63e3?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FT-1.png",
+                     "32x32":"https://secure.gravatar.com/avatar/53e3e37950768a905d53cebdfcbd63e3?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FT-1.png"
+                  },
+                  "displayName":"Trello",
+                  "active":true,
+                  "timeZone":"Europe/London",
+                  "accountType":"app"
+               }
+            ]
+         }
+      }
+   ]
+}
+`)
+
+	bufferMockedWithNoIssues := bytes.Buffer{}
+	bufferMockedWithNoIssues.WriteString(`
+{
+    "expand": "names,schema",
+    "startAt": 0,
+    "maxResults": 50,
+    "total": 1,
+    "no_issues": [
+        {
+            "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+            "id": "10035",
+            "self": "https://ctreminiom.atlassian.net/rest/api/2/issue/10035",
+            "key": "KP-22",
+            "no_fields": {
+                "customfield_10046": [
+                    {
+                        "self": "https://ctreminiom.atlassian.net/rest/api/2/customFieldOption/10046",
+                        "value": "Option 3",
+                        "id": "10046"
+                    },
+                    {
+                        "self": "https://ctreminiom.atlassian.net/rest/api/2/customFieldOption/10047",
+                        "value": "Option 4",
+                        "id": "10047"
+                    }
+                ]
+            }
+        }
+    ]
+}`)
+
+	bufferMockedWithNoInfo := bytes.Buffer{}
+	bufferMockedWithNoInfo.WriteString(`
+{
+    "expand": "names,schema",
+    "startAt": 0,
+    "maxResults": 50,
+    "total": 1,
+    "data": [
+        {
+            "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+            "id": "10035",
+            "self": "https://ctreminiom.atlassian.net/rest/api/2/issue/10035",
+            "key": "KP-22",
+            "fields": {
+                "customfield_10046": null
+            }
+        }
+    ]
+}`)
+
+	bufferMockedWithNullValues := bytes.Buffer{}
+	bufferMockedWithNullValues.WriteString(`
+{
+   "expand":"names,schema",
+   "startAt":0,
+   "maxResults":50,
+   "total":1,
+   "issues":[
+      {
+         "expand":"operations,versionedRepresentations,editmeta,changelog,renderedFields",
+         "id":"10035",
+         "self":"https://ctreminiom.atlassian.net/rest/api/2/issue/10035",
+         "key":"KP-22",
+         "fields":{
+            "customfield_10046": null,
+         }
+      },
+      {
+         "expand":"operations,versionedRepresentations,editmeta,changelog,renderedFields",
+         "id":"10035",
+         "self":"https://ctreminiom.atlassian.net/rest/api/2/issue/10035",
+         "key":"KP-23",
+         "fields":{
+            "customfield_10046":[
+               {
+                  "self":"https://ctreminiom.atlassian.net/rest/api/3/user?accountId=5e5f6a63157ed50cd2b9eaca",
+                  "accountId":"5e5f6a63157ed50cd2b9eaca",
+                  "avatarUrls":{
+                     "48x48":"https://secure.gravatar.com/avatar/2e6d2ee8550c63137e196a2890bc25a9?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-4.png",
+                     "24x24":"https://secure.gravatar.com/avatar/2e6d2ee8550c63137e196a2890bc25a9?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-4.png",
+                     "16x16":"https://secure.gravatar.com/avatar/2e6d2ee8550c63137e196a2890bc25a9?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-4.png",
+                     "32x32":"https://secure.gravatar.com/avatar/2e6d2ee8550c63137e196a2890bc25a9?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-4.png"
+                  },
+                  "displayName":"Carlos Treminio",
+                  "active":true,
+                  "timeZone":"Asia/Dhaka",
+                  "accountType":"atlassian"
+               },
+               {
+                  "self":"https://ctreminiom.atlassian.net/rest/api/3/user?accountId=5b86be50b8e3cb5895860d6d",
+                  "accountId":"5b86be50b8e3cb5895860d6d",
+                  "emailAddress":"ctreminiom079@gmail.com",
+                  "avatarUrls":{
+                     "48x48":"https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                     "24x24":"https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                     "16x16":"https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                     "32x32":"https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png"
+                  },
+                  "displayName":"Carlos Treminio",
+                  "active":true,
+                  "timeZone":"America/Guatemala",
+                  "accountType":"atlassian"
+               },
+               {
+                  "self":"https://ctreminiom.atlassian.net/rest/api/3/user?accountId=557058%3Ad6b5955a-e193-41e1-b051-79cdb0755d68",
+                  "accountId":"557058:d6b5955a-e193-41e1-b051-79cdb0755d68",
+                  "avatarUrls":{
+                     "48x48":"https://secure.gravatar.com/avatar/53e3e37950768a905d53cebdfcbd63e3?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FT-1.png",
+                     "24x24":"https://secure.gravatar.com/avatar/53e3e37950768a905d53cebdfcbd63e3?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FT-1.png",
+                     "16x16":"https://secure.gravatar.com/avatar/53e3e37950768a905d53cebdfcbd63e3?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FT-1.png",
+                     "32x32":"https://secure.gravatar.com/avatar/53e3e37950768a905d53cebdfcbd63e3?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FT-1.png"
+                  },
+                  "displayName":"Trello",
+                  "active":true,
+                  "timeZone":"Europe/London",
+                  "accountType":"app"
+               }
+            ]
+         }
+      }
+   ]
+}`)
+
+	bufferMockedWithInvalidTypes := bytes.Buffer{}
+	bufferMockedWithInvalidTypes.WriteString(`
+{
+   "expand":"names,schema",
+   "startAt":0,
+   "maxResults":50,
+   "total":1,
+   "issues":[
+      {
+         "expand":"operations,versionedRepresentations,editmeta,changelog,renderedFields",
+         "id":"10035",
+         "self":"https://ctreminiom.atlassian.net/rest/api/2/issue/10035",
+         "key":"KP-22",
+         "fields":{
+            "customfield_10046": "https://ctreminiom.atlassian.net/rest/api/2/issue/10035",
+         }
+      },
+      {
+         "expand":"operations,versionedRepresentations,editmeta,changelog,renderedFields",
+         "id":"10035",
+         "self":"https://ctreminiom.atlassian.net/rest/api/2/issue/10035",
+         "key":"KP-23",
+         "fields":{
+            "customfield_10046":[
+               {
+                  "self":"https://ctreminiom.atlassian.net/rest/api/3/user?accountId=5e5f6a63157ed50cd2b9eaca",
+                  "accountId":"5e5f6a63157ed50cd2b9eaca",
+                  "avatarUrls":{
+                     "48x48":"https://secure.gravatar.com/avatar/2e6d2ee8550c63137e196a2890bc25a9?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-4.png",
+                     "24x24":"https://secure.gravatar.com/avatar/2e6d2ee8550c63137e196a2890bc25a9?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-4.png",
+                     "16x16":"https://secure.gravatar.com/avatar/2e6d2ee8550c63137e196a2890bc25a9?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-4.png",
+                     "32x32":"https://secure.gravatar.com/avatar/2e6d2ee8550c63137e196a2890bc25a9?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-4.png"
+                  },
+                  "displayName":"Carlos Treminio",
+                  "active":true,
+                  "timeZone":"Asia/Dhaka",
+                  "accountType":"atlassian"
+               },
+               {
+                  "self":"https://ctreminiom.atlassian.net/rest/api/3/user?accountId=5b86be50b8e3cb5895860d6d",
+                  "accountId":"5b86be50b8e3cb5895860d6d",
+                  "emailAddress":"ctreminiom079@gmail.com",
+                  "avatarUrls":{
+                     "48x48":"https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                     "24x24":"https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                     "16x16":"https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                     "32x32":"https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png"
+                  },
+                  "displayName":"Carlos Treminio",
+                  "active":true,
+                  "timeZone":"America/Guatemala",
+                  "accountType":"atlassian"
+               },
+               {
+                  "self":"https://ctreminiom.atlassian.net/rest/api/3/user?accountId=557058%3Ad6b5955a-e193-41e1-b051-79cdb0755d68",
+                  "accountId":"557058:d6b5955a-e193-41e1-b051-79cdb0755d68",
+                  "avatarUrls":{
+                     "48x48":"https://secure.gravatar.com/avatar/53e3e37950768a905d53cebdfcbd63e3?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FT-1.png",
+                     "24x24":"https://secure.gravatar.com/avatar/53e3e37950768a905d53cebdfcbd63e3?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FT-1.png",
+                     "16x16":"https://secure.gravatar.com/avatar/53e3e37950768a905d53cebdfcbd63e3?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FT-1.png",
+                     "32x32":"https://secure.gravatar.com/avatar/53e3e37950768a905d53cebdfcbd63e3?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FT-1.png"
+                  },
+                  "displayName":"Trello",
+                  "active":true,
+                  "timeZone":"Europe/London",
+                  "accountType":"app"
+               }
+            ]
+         }
+      }
+   ]
+}
+`)
+
+	type args struct {
+		buffer      bytes.Buffer
+		customField string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    map[string][]*UserDetailScheme
+		wantErr bool
+		Err     error
+	}{
+		{
+			name: "when the buffer contains information",
+			args: args{
+				buffer:      bufferMocked,
+				customField: "customfield_10046",
+			},
+			want: map[string][]*UserDetailScheme{
+				"KP-22": {
+					{
+						Self:        "https://ctreminiom.atlassian.net/rest/api/3/user?accountId=5e5f6a63157ed50cd2b9eaca",
+						AccountID:   "5e5f6a63157ed50cd2b9eaca",
+						DisplayName: "Carlos Treminio",
+						Active:      true,
+						TimeZone:    "Asia/Dhaka",
+						AccountType: "atlassian",
+					},
+					{
+						Self:         "https://ctreminiom.atlassian.net/rest/api/3/user?accountId=5b86be50b8e3cb5895860d6d",
+						AccountID:    "5b86be50b8e3cb5895860d6d",
+						DisplayName:  "Carlos Treminio",
+						EmailAddress: "ctreminiom079@gmail.com",
+						Active:       true,
+						TimeZone:     "America/Guatemala",
+						AccountType:  "atlassian",
+					},
+					{
+						Self:        "https://ctreminiom.atlassian.net/rest/api/3/user?accountId=557058%3Ad6b5955a-e193-41e1-b051-79cdb0755d68",
+						AccountID:   "557058:d6b5955a-e193-41e1-b051-79cdb0755d68",
+						DisplayName: "Trello",
+						Active:      true,
+						TimeZone:    "Europe/London",
+						AccountType: "app",
+					},
+				},
+				"KP-23": {
+					{
+						Self:        "https://ctreminiom.atlassian.net/rest/api/3/user?accountId=5e5f6a63157ed50cd2b9eaca",
+						AccountID:   "5e5f6a63157ed50cd2b9eaca",
+						DisplayName: "Carlos Treminio",
+						Active:      true,
+						TimeZone:    "Asia/Dhaka",
+						AccountType: "atlassian",
+					},
+					{
+						Self:         "https://ctreminiom.atlassian.net/rest/api/3/user?accountId=5b86be50b8e3cb5895860d6d",
+						AccountID:    "5b86be50b8e3cb5895860d6d",
+						DisplayName:  "Carlos Treminio",
+						EmailAddress: "ctreminiom079@gmail.com",
+						Active:       true,
+						TimeZone:     "America/Guatemala",
+						AccountType:  "atlassian",
+					},
+					{
+						Self:        "https://ctreminiom.atlassian.net/rest/api/3/user?accountId=557058%3Ad6b5955a-e193-41e1-b051-79cdb0755d68",
+						AccountID:   "557058:d6b5955a-e193-41e1-b051-79cdb0755d68",
+						DisplayName: "Trello",
+						Active:      true,
+						TimeZone:    "Europe/London",
+						AccountType: "app",
+					},
+				},
+			},
+
+			wantErr: false,
+		},
+
+		{
+			name: "when the buffer does not contain the issues object",
+			args: args{
+				buffer:      bufferMockedWithNoInfo,
+				customField: "customfield_10046",
+			},
+			wantErr: true,
+			Err:     ErrNoIssuesSliceError,
+		},
+
+		{
+			name: "when the buffer contains null customfields",
+			args: args{
+				buffer:      bufferMockedWithNullValues,
+				customField: "customfield_10046",
+			},
+			want: map[string][]*UserDetailScheme{
+				"KP-23": {
+					{
+						Self:        "https://ctreminiom.atlassian.net/rest/api/3/user?accountId=5e5f6a63157ed50cd2b9eaca",
+						AccountID:   "5e5f6a63157ed50cd2b9eaca",
+						DisplayName: "Carlos Treminio",
+						Active:      true,
+						TimeZone:    "Asia/Dhaka",
+						AccountType: "atlassian",
+					},
+					{
+						Self:         "https://ctreminiom.atlassian.net/rest/api/3/user?accountId=5b86be50b8e3cb5895860d6d",
+						AccountID:    "5b86be50b8e3cb5895860d6d",
+						DisplayName:  "Carlos Treminio",
+						EmailAddress: "ctreminiom079@gmail.com",
+						Active:       true,
+						TimeZone:     "America/Guatemala",
+						AccountType:  "atlassian",
+					},
+					{
+						Self:        "https://ctreminiom.atlassian.net/rest/api/3/user?accountId=557058%3Ad6b5955a-e193-41e1-b051-79cdb0755d68",
+						AccountID:   "557058:d6b5955a-e193-41e1-b051-79cdb0755d68",
+						DisplayName: "Trello",
+						Active:      true,
+						TimeZone:    "Europe/London",
+						AccountType: "app",
+					},
+				},
+			},
+			wantErr: false,
+		},
+
+		{
+			name: "when the buffer contains invalid types",
+			args: args{
+				buffer:      bufferMockedWithInvalidTypes,
+				customField: "customfield_10046",
+			},
+			want: map[string][]*UserDetailScheme{
+				"KP-23": {
+					{
+						Self:        "https://ctreminiom.atlassian.net/rest/api/3/user?accountId=5e5f6a63157ed50cd2b9eaca",
+						AccountID:   "5e5f6a63157ed50cd2b9eaca",
+						DisplayName: "Carlos Treminio",
+						Active:      true,
+						TimeZone:    "Asia/Dhaka",
+						AccountType: "atlassian",
+					},
+					{
+						Self:         "https://ctreminiom.atlassian.net/rest/api/3/user?accountId=5b86be50b8e3cb5895860d6d",
+						AccountID:    "5b86be50b8e3cb5895860d6d",
+						DisplayName:  "Carlos Treminio",
+						EmailAddress: "ctreminiom079@gmail.com",
+						Active:       true,
+						TimeZone:     "America/Guatemala",
+						AccountType:  "atlassian",
+					},
+					{
+						Self:        "https://ctreminiom.atlassian.net/rest/api/3/user?accountId=557058%3Ad6b5955a-e193-41e1-b051-79cdb0755d68",
+						AccountID:   "557058:d6b5955a-e193-41e1-b051-79cdb0755d68",
+						DisplayName: "Trello",
+						Active:      true,
+						TimeZone:    "Europe/London",
+						AccountType: "app",
+					},
+				},
+			},
+			wantErr: false,
+		},
+	}
+	for _, testCase := range tests {
+		t.Run(testCase.name, func(t *testing.T) {
+			got, err := ParseMultiUserPickerCustomFields(testCase.args.buffer, testCase.args.customField)
+			if (err != nil) != testCase.wantErr {
+				t.Errorf("ParseMultiSelectCustomField() error = %v, wantErr %v", err, testCase.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, testCase.want) {
+				t.Errorf("ParseMultiSelectCustomField() got = %v, want %v", got, testCase.want)
+			}
+			if !reflect.DeepEqual(err, testCase.Err) {
+				t.Errorf("ParseMultiSelectCustomField() got = (%v), want (%v)", err, testCase.Err)
+			}
+		})
+	}
+}
+
+func TestParseCascadingCustomFields(t *testing.T) {
+
+	bufferMocked := bytes.Buffer{}
+	bufferMocked.WriteString(`
+{
+   "expand":"names,schema",
+   "startAt":0,
+   "maxResults":50,
+   "total":1,
+   "issues":[
+      {
+         "expand":"operations,versionedRepresentations,editmeta,changelog,renderedFields",
+         "id":"10035",
+         "self":"https://ctreminiom.atlassian.net/rest/api/2/issue/10035",
+         "key":"KP-22",
+         "fields":{
+            "customfield_10046":{
+			  "self": "https://ctreminiom.atlassian.net/rest/api/3/customFieldOption/10054",
+			  "value": "America",
+			  "id": "10054",
+			  "child": {
+				"self": "https://ctreminiom.atlassian.net/rest/api/3/customFieldOption/10057",
+				"value": "Costa Rica",
+				"id": "10057"
+			  }
+			}
+         }
+      },
+     {
+         "expand":"operations,versionedRepresentations,editmeta,changelog,renderedFields",
+         "id":"10035",
+         "self":"https://ctreminiom.atlassian.net/rest/api/2/issue/10035",
+         "key":"KP-23",
+         "fields":{
+            "customfield_10046":{
+			  "self": "https://ctreminiom.atlassian.net/rest/api/3/customFieldOption/10054",
+			  "value": "America",
+			  "id": "10054",
+			  "child": {
+				"self": "https://ctreminiom.atlassian.net/rest/api/3/customFieldOption/10057",
+				"value": "Costa Rica",
+				"id": "10057"
+			  }
+			}
+         }
+      },
+   ]
+}
+`)
+
+	bufferMockedWithNoIssues := bytes.Buffer{}
+	bufferMockedWithNoIssues.WriteString(`
+{
+    "expand": "names,schema",
+    "startAt": 0,
+    "maxResults": 50,
+    "total": 1,
+    "no_issues": [
+        {
+            "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+            "id": "10035",
+            "self": "https://ctreminiom.atlassian.net/rest/api/2/issue/10035",
+            "key": "KP-22",
+            "no_fields": {
+                "customfield_10046": [
+                    {
+                        "self": "https://ctreminiom.atlassian.net/rest/api/2/customFieldOption/10046",
+                        "value": "Option 3",
+                        "id": "10046"
+                    },
+                    {
+                        "self": "https://ctreminiom.atlassian.net/rest/api/2/customFieldOption/10047",
+                        "value": "Option 4",
+                        "id": "10047"
+                    }
+                ]
+            }
+        }
+    ]
+}`)
+
+	bufferMockedWithNoInfo := bytes.Buffer{}
+	bufferMockedWithNoInfo.WriteString(`
+{
+    "expand": "names,schema",
+    "startAt": 0,
+    "maxResults": 50,
+    "total": 1,
+    "data": [
+        {
+            "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+            "id": "10035",
+            "self": "https://ctreminiom.atlassian.net/rest/api/2/issue/10035",
+            "key": "KP-22",
+            "fields": {
+                "customfield_10046": null
+            }
+        }
+    ]
+}`)
+
+	bufferMockedWithNullValues := bytes.Buffer{}
+	bufferMockedWithNullValues.WriteString(`
+{
+   "expand":"names,schema",
+   "startAt":0,
+   "maxResults":50,
+   "total":1,
+   "issues":[
+      {
+         "expand":"operations,versionedRepresentations,editmeta,changelog,renderedFields",
+         "id":"10035",
+         "self":"https://ctreminiom.atlassian.net/rest/api/2/issue/10035",
+         "key":"KP-22",
+         "fields":{
+            "customfield_10046":{
+			  "self": "https://ctreminiom.atlassian.net/rest/api/3/customFieldOption/10054",
+			  "value": "America",
+			  "id": "10054",
+			  "child": {
+				"self": "https://ctreminiom.atlassian.net/rest/api/3/customFieldOption/10057",
+				"value": "Costa Rica",
+				"id": "10057"
+			  }
+			}
+         }
+      },
+     {
+         "expand":"operations,versionedRepresentations,editmeta,changelog,renderedFields",
+         "id":"10035",
+         "self":"https://ctreminiom.atlassian.net/rest/api/2/issue/10035",
+         "key":"KP-23",
+         "fields":{
+            "customfield_10046": null
+         }
+      },
+   ]
+}
+`)
+
+	bufferMockedWithInvalidTypes := bytes.Buffer{}
+	bufferMockedWithInvalidTypes.WriteString(`
+{
+   "expand":"names,schema",
+   "startAt":0,
+   "maxResults":50,
+   "total":1,
+   "issues":[
+      {
+         "expand":"operations,versionedRepresentations,editmeta,changelog,renderedFields",
+         "id":"10035",
+         "self":"https://ctreminiom.atlassian.net/rest/api/2/issue/10035",
+         "key":"KP-22",
+         "fields":{
+            "customfield_10046": "https://ctreminiom.atlassian.net/rest/api/2/issue/10035",
+         }
+      },
+      {
+         "expand":"operations,versionedRepresentations,editmeta,changelog,renderedFields",
+         "id":"10035",
+         "self":"https://ctreminiom.atlassian.net/rest/api/2/issue/10035",
+         "key":"KP-23",
+         "fields":{
+            "customfield_10046":[
+               {
+                  "self":"https://ctreminiom.atlassian.net/rest/api/3/user?accountId=5e5f6a63157ed50cd2b9eaca",
+                  "accountId":"5e5f6a63157ed50cd2b9eaca",
+                  "avatarUrls":{
+                     "48x48":"https://secure.gravatar.com/avatar/2e6d2ee8550c63137e196a2890bc25a9?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-4.png",
+                     "24x24":"https://secure.gravatar.com/avatar/2e6d2ee8550c63137e196a2890bc25a9?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-4.png",
+                     "16x16":"https://secure.gravatar.com/avatar/2e6d2ee8550c63137e196a2890bc25a9?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-4.png",
+                     "32x32":"https://secure.gravatar.com/avatar/2e6d2ee8550c63137e196a2890bc25a9?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-4.png"
+                  },
+                  "displayName":"Carlos Treminio",
+                  "active":true,
+                  "timeZone":"Asia/Dhaka",
+                  "accountType":"atlassian"
+               },
+               {
+                  "self":"https://ctreminiom.atlassian.net/rest/api/3/user?accountId=5b86be50b8e3cb5895860d6d",
+                  "accountId":"5b86be50b8e3cb5895860d6d",
+                  "emailAddress":"ctreminiom079@gmail.com",
+                  "avatarUrls":{
+                     "48x48":"https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                     "24x24":"https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                     "16x16":"https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png",
+                     "32x32":"https://secure.gravatar.com/avatar/b830f79c6cc32dcbcb9842f98cd3d3cd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FCT-6.png"
+                  },
+                  "displayName":"Carlos Treminio",
+                  "active":true,
+                  "timeZone":"America/Guatemala",
+                  "accountType":"atlassian"
+               },
+               {
+                  "self":"https://ctreminiom.atlassian.net/rest/api/3/user?accountId=557058%3Ad6b5955a-e193-41e1-b051-79cdb0755d68",
+                  "accountId":"557058:d6b5955a-e193-41e1-b051-79cdb0755d68",
+                  "avatarUrls":{
+                     "48x48":"https://secure.gravatar.com/avatar/53e3e37950768a905d53cebdfcbd63e3?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FT-1.png",
+                     "24x24":"https://secure.gravatar.com/avatar/53e3e37950768a905d53cebdfcbd63e3?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FT-1.png",
+                     "16x16":"https://secure.gravatar.com/avatar/53e3e37950768a905d53cebdfcbd63e3?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FT-1.png",
+                     "32x32":"https://secure.gravatar.com/avatar/53e3e37950768a905d53cebdfcbd63e3?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FT-1.png"
+                  },
+                  "displayName":"Trello",
+                  "active":true,
+                  "timeZone":"Europe/London",
+                  "accountType":"app"
+               }
+            ]
+         }
+      }
+   ]
+}
+`)
+
+	type args struct {
+		buffer      bytes.Buffer
+		customField string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    map[string]*CascadingSelectScheme
+		wantErr bool
+		Err     error
+	}{
+		{
+			name: "when the buffer contains information",
+			args: args{
+				buffer:      bufferMocked,
+				customField: "customfield_10046",
+			},
+			want: map[string]*CascadingSelectScheme{
+				"KP-22": {
+					Self:  "https://ctreminiom.atlassian.net/rest/api/3/customFieldOption/10054",
+					Value: "America",
+					Id:    "10054",
+					Child: &CascadingSelectChildScheme{
+						Self:  "https://ctreminiom.atlassian.net/rest/api/3/customFieldOption/10057",
+						Value: "Costa Rica",
+						Id:    "10057",
+					},
+				},
+				"KP-23": {
+					Self:  "https://ctreminiom.atlassian.net/rest/api/3/customFieldOption/10054",
+					Value: "America",
+					Id:    "10054",
+					Child: &CascadingSelectChildScheme{
+						Self:  "https://ctreminiom.atlassian.net/rest/api/3/customFieldOption/10057",
+						Value: "Costa Rica",
+						Id:    "10057",
+					},
+				},
+			},
+
+			wantErr: false,
+		},
+
+		{
+			name: "when the buffer does not contain the issues object",
+			args: args{
+				buffer:      bufferMockedWithNoInfo,
+				customField: "customfield_10046",
+			},
+			wantErr: true,
+			Err:     ErrNoIssuesSliceError,
+		},
+
+		{
+			name: "when the buffer contains null customfields",
+			args: args{
+				buffer:      bufferMockedWithNullValues,
+				customField: "customfield_10046",
+			},
+			want: map[string]*CascadingSelectScheme{
+				"KP-22": {
+					Self:  "https://ctreminiom.atlassian.net/rest/api/3/customFieldOption/10054",
+					Value: "America",
+					Id:    "10054",
+					Child: &CascadingSelectChildScheme{
+						Self:  "https://ctreminiom.atlassian.net/rest/api/3/customFieldOption/10057",
+						Value: "Costa Rica",
+						Id:    "10057",
+					},
+				},
+			},
+			wantErr: false,
+		},
+
+		{
+			name: "when the buffer contains invalid types",
+			args: args{
+				buffer:      bufferMockedWithInvalidTypes,
+				customField: "customfield_10046",
+			},
+			wantErr: true,
+			Err:     ErrNoMapValuesError,
+		},
+	}
+	for _, testCase := range tests {
+		t.Run(testCase.name, func(t *testing.T) {
+			got, err := ParseCascadingCustomFields(testCase.args.buffer, testCase.args.customField)
 			if (err != nil) != testCase.wantErr {
 				t.Errorf("ParseMultiSelectCustomField() error = %v, wantErr %v", err, testCase.wantErr)
 				return

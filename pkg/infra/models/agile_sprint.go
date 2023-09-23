@@ -54,4 +54,5 @@ type SprintDetailScheme struct {
 	CompleteDate  string `json:"completeDate,omitempty"`
 	OriginBoardID int    `json:"originBoardId,omitempty"`
 	Goal          string `json:"goal,omitempty"`
+	BoardID       int    `json:"boardId,omitempty"`
 }

@@ -441,12 +441,12 @@ func ParseCascadingSelectCustomField(buffer bytes.Buffer, customField string) (*
 	// Check if the issue iteration contains information on the customfield selected,
 	// if not, continue
 	if raw.Get(path).Type == gjson.Null {
-		return nil, ErrNoMultiSelectTypeError
+		return nil, ErrNoCascadingParentError
 	}
 
 	var cascading CascadingSelectScheme
 	if err := json.Unmarshal([]byte(raw.Get(path).String()), &cascading); err != nil {
-		return nil, ErrNoMultiSelectTypeError
+		return nil, ErrNoCascadingParentError
 	}
 
 	return &cascading, nil
@@ -572,7 +572,7 @@ func ParseMultiVersionCustomField(buffer bytes.Buffer, customField string) ([]*V
 	// Check if the issue iteration contains information on the customfield selected,
 	// if not, continue
 	if raw.Get(path).Type == gjson.Null {
-		return nil, ErrNoMultiSelectTypeError
+		return nil, ErrNoMultiVersionTypeError
 	}
 
 	var versions []*VersionDetailScheme
@@ -701,7 +701,7 @@ func ParseUserPickerCustomField(buffer bytes.Buffer, customField string) (*UserD
 	// Check if the issue iteration contains information on the customfield selected,
 	// if not, continue
 	if raw.Get(path).Type == gjson.Null {
-		return nil, ErrNoMultiSelectTypeError
+		return nil, ErrNoUserTypeError
 	}
 
 	var user UserDetailScheme
@@ -824,15 +824,10 @@ func ParseStringCustomField(buffer bytes.Buffer, customField string) (string, er
 	// Check if the issue iteration contains information on the customfield selected,
 	// if not, continue
 	if raw.Get(path).Type == gjson.Null {
-		return "", ErrNoMultiSelectTypeError
+		return "", ErrNoTextTypeError
 	}
 
-	var textField string
-	if err := json.Unmarshal([]byte(raw.Get(path).String()), &textField); err != nil {
-		return "", ErrNoMultiSelectTypeError
-	}
-
-	return textField, nil
+	return raw.Get(path).String(), nil
 }
 
 // ParseStringCustomFields extracts and parses the textfield customfield information from multiple issues using a bytes.Buffer.
@@ -913,7 +908,7 @@ func ParseStringCustomFields(buffer bytes.Buffer, customField string) (map[strin
 	return customfieldsAsMap, nil
 }
 
-// ParseStringCustomField parses a textfield custom field from the given buffer data
+// ParseFloatCustomField parses a float custom field from the given buffer data
 // associated with the specified custom field ID and returns string
 //
 // Parameters:
@@ -921,18 +916,18 @@ func ParseStringCustomFields(buffer bytes.Buffer, customField string) (map[strin
 //   - buffer: A bytes.Buffer containing the serialized data to be parsed.
 //
 // Returns:
-//   - string: the customfield value as string type
+//   - float64: the customfield value as float64 type
 //
 // Example usage:
 //
 //	customfieldID := "customfield_10001"
 //	buffer := bytes.NewBuffer([]byte{ /* Serialized data */ })
-//	textField, err := ParseStringCustomField(customfieldID, buffer)
+//	floatField, err := ParseFloatCustomField(customfieldID, buffer)
 //	if err != nil {
 //	    log.Fatal(err)
 //	}
 //
-// fmt.Println(textField)
+// fmt.Println(floatField)
 func ParseFloatCustomField(buffer bytes.Buffer, customField string) (float64, error) {
 
 	raw := gjson.ParseBytes(buffer.Bytes())
@@ -946,12 +941,12 @@ func ParseFloatCustomField(buffer bytes.Buffer, customField string) (float64, er
 	// Check if the issue iteration contains information on the customfield selected,
 	// if not, continue
 	if raw.Get(path).Type == gjson.Null {
-		return 0, ErrNoMultiSelectTypeError
+		return 0, ErrNoFloatTypeError
 	}
 
 	var textFloat float64
 	if err := json.Unmarshal([]byte(raw.Get(path).String()), &textFloat); err != nil {
-		return 0, ErrNoMultiSelectTypeError
+		return 0, ErrNoFloatTypeError
 	}
 
 	return textFloat, nil
@@ -1035,26 +1030,26 @@ func ParseFloatCustomFields(buffer bytes.Buffer, customField string) (map[string
 	return customfieldsAsMap, nil
 }
 
-// ParseLabelCustomField parses a textfield custom field from the given buffer data
-// associated with the specified custom field ID and returns string
+// ParseLabelCustomField parses a textfield slice custom field from the given buffer data
+// associated with the specified custom field ID and returns string slice
 //
 // Parameters:
 //   - customfieldID: A string representing the unique identifier of the custom field.
 //   - buffer: A bytes.Buffer containing the serialized data to be parsed.
 //
 // Returns:
-//   - string: the customfield value as string type
+//   - []string: the customfield value as string slice type
 //
 // Example usage:
 //
 //	customfieldID := "customfield_10001"
 //	buffer := bytes.NewBuffer([]byte{ /* Serialized data */ })
-//	textField, err := ParseStringCustomField(customfieldID, buffer)
+//	labels, err := ParseLabelCustomField(customfieldID, buffer)
 //	if err != nil {
 //	    log.Fatal(err)
 //	}
 //
-// fmt.Println(textField)
+// fmt.Println(labels)
 func ParseLabelCustomField(buffer bytes.Buffer, customField string) ([]string, error) {
 
 	raw := gjson.ParseBytes(buffer.Bytes())
@@ -1068,12 +1063,12 @@ func ParseLabelCustomField(buffer bytes.Buffer, customField string) ([]string, e
 	// Check if the issue iteration contains information on the customfield selected,
 	// if not, continue
 	if raw.Get(path).Type == gjson.Null {
-		return nil, ErrNoMultiSelectTypeError
+		return nil, ErrNoLabelsTypeError
 	}
 
 	var labels []string
 	if err := json.Unmarshal([]byte(raw.Get(path).String()), &labels); err != nil {
-		return nil, ErrNoMultiSelectTypeError
+		return nil, ErrNoLabelsTypeError
 	}
 
 	return labels, nil
@@ -1190,12 +1185,12 @@ func ParseSprintCustomField(buffer bytes.Buffer, customField string) ([]*SprintD
 	// Check if the issue iteration contains information on the customfield selected,
 	// if not, continue
 	if raw.Get(path).Type == gjson.Null {
-		return nil, ErrNoMultiSelectTypeError
+		return nil, ErrNoSprintTypeError
 	}
 
 	var sprints []*SprintDetailScheme
 	if err := json.Unmarshal([]byte(raw.Get(path).String()), &sprints); err != nil {
-		return nil, ErrNoMultiSelectTypeError
+		return nil, ErrNoSprintTypeError
 	}
 
 	return sprints, nil
@@ -1280,26 +1275,26 @@ func ParseSprintCustomFields(buffer bytes.Buffer, customField string) (map[strin
 	return customfieldsAsMap, nil
 }
 
-// ParseSelectCustomField parses a sprints custom field from the given buffer data
-// associated with the specified custom field ID and returns string
+// ParseSelectCustomField parses a select custom field from the given buffer data
+// associated with the specified custom field ID and returns struct
 //
 // Parameters:
 //   - customfieldID: A string representing the unique identifier of the custom field.
 //   - buffer: A bytes.Buffer containing the serialized data to be parsed.
 //
 // Returns:
-//   - string: the customfield value as string type
+//   - CustomFieldContextOptionScheme: the customfield value as CustomFieldContextOptionScheme type
 //
 // Example usage:
 //
 //	customfieldID := "customfield_10001"
 //	buffer := bytes.NewBuffer([]byte{ /* Serialized data */ })
-//	textField, err := ParseStringCustomField(customfieldID, buffer)
+//	option, err := ParseSelectCustomField(customfieldID, buffer)
 //	if err != nil {
 //	    log.Fatal(err)
 //	}
 //
-// fmt.Println(textField)
+// fmt.Println(option.ID, option.Value)
 func ParseSelectCustomField(buffer bytes.Buffer, customField string) (*CustomFieldContextOptionScheme, error) {
 
 	raw := gjson.ParseBytes(buffer.Bytes())
@@ -1313,12 +1308,12 @@ func ParseSelectCustomField(buffer bytes.Buffer, customField string) (*CustomFie
 	// Check if the issue iteration contains information on the customfield selected,
 	// if not, continue
 	if raw.Get(path).Type == gjson.Null {
-		return nil, ErrNoMultiSelectTypeError
+		return nil, ErrNoSelectTypeError
 	}
 
 	var sprints *CustomFieldContextOptionScheme
 	if err := json.Unmarshal([]byte(raw.Get(path).String()), &sprints); err != nil {
-		return nil, ErrNoMultiSelectTypeError
+		return nil, ErrNoSelectTypeError
 	}
 
 	return sprints, nil

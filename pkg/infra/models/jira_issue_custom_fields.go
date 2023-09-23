@@ -1398,40 +1398,125 @@ func ParseSelectCustomFields(buffer bytes.Buffer, customField string) (map[strin
 	return customfieldsAsMap, nil
 }
 
+// ParseAssetCustomField parses the Jira assets elements from the given buffer data
+// associated with the specified custom field ID and returns a struct CustomFieldAssetScheme slice
+//
+// Parameters:
+//   - customfieldID: A string representing the unique identifier of the custom field.
+//   - buffer: A bytes.Buffer containing the serialized data to be parsed.
+//
+// Returns:
+//   - []*CustomFieldAssetScheme: the customfield value as CustomFieldAssetScheme slice type
+//
+// Example usage:
+//
+//	customfieldID := "customfield_10001"
+//	buffer := bytes.NewBuffer([]byte{ /* Serialized data */ })
+//	assets, err := ParseAssetCustomField(customfieldID, buffer)
+//	if err != nil {
+//	    log.Fatal(err)
+//	}
+//
+// fmt.Println(assets)
 func ParseAssetCustomField(buffer bytes.Buffer, customField string) ([]*CustomFieldAssetScheme, error) {
 
-	raw, err := marshmallow.Unmarshal(buffer.Bytes(), &struct{}{})
-	if err != nil {
-		return nil, ErrNoCustomFieldUnmarshalError
-	}
+	raw := gjson.ParseBytes(buffer.Bytes())
+	path := fmt.Sprintf("fields.%v", customField)
 
-	fields, containsFields := raw["fields"]
-	if !containsFields {
+	// Check if the buffer contains the "fields" object
+	if !raw.Get("fields").Exists() {
 		return nil, ErrNoFieldInformationError
 	}
 
-	customFields := fields.(map[string]interface{})
-	var records []*CustomFieldAssetScheme
-
-	switch options := customFields[customField].(type) {
-	case []interface{}:
-
-		for _, option := range options {
-
-			record := &CustomFieldAssetScheme{
-				WorkspaceId: option.(map[string]interface{})["workspaceId"].(string),
-				Id:          option.(map[string]interface{})["id"].(string),
-				ObjectId:    option.(map[string]interface{})["objectId"].(string),
-			}
-
-			records = append(records, record)
-		}
-
-	case nil:
-		return nil, nil
-	default:
+	// Check if the issue iteration contains information on the customfield selected,
+	// if not, continue
+	if raw.Get(path).Type == gjson.Null {
 		return nil, ErrNoAssetTypeError
 	}
 
-	return records, nil
+	var assets []*CustomFieldAssetScheme
+	if err := json.Unmarshal([]byte(raw.Get(path).String()), &assets); err != nil {
+		return nil, ErrNoAssetTypeError
+	}
+
+	return assets, nil
+}
+
+// ParseAssetCustomFields extracts and parses jira assets customfield data from a given bytes.Buffer from multiple issues
+//
+// This function takes the name of the custom field to parse and a bytes.Buffer containing
+// JSON data representing the custom field values associated with different issues. It returns
+// a map where the key is the issue key and the value is a slice of CustomFieldAssetScheme
+// structs, representing the parsed assets associated with a Jira issues.
+//
+// The JSON data within the buffer is expected to have a specific structure where the custom field
+// values are organized by issue keys and options are represented within a context. The function
+// parses this structure to extract and organize the custom field values.
+//
+// If the custom field data cannot be parsed successfully, an error is returned.
+//
+// Example Usage:
+//
+//	customFieldName := "customfield_10001"
+//	buffer := // Populate the buffer with JSON data
+//	customFields, err := ParseAssetCustomFields(customFieldName, buffer)
+//	if err != nil {
+//	    // Handle the error
+//	}
+//
+//	// Iterate through the parsed custom fields
+//	for issueKey, customFieldValues := range customFields {
+//	    fmt.Printf("Issue Key: %s\n", issueKey)
+//	    for _, value := range customFieldValues {
+//	        fmt.Printf("Custom Field Value: %+v\n", value)
+//	    }
+//	}
+//
+// Parameters:
+//   - customField: The name of the multi-select custom field to parse.
+//   - buffer: A bytes.Buffer containing JSON data representing custom field values.
+//
+// Returns:
+//   - map[string]*CustomFieldAssetScheme: A map where the key is the issue key and the
+//     value is a CustomFieldAssetScheme struct representing the parsed
+//     jira assets values.
+//   - error: An error if there was a problem parsing the custom field data or if the JSON data
+//     did not conform to the expected structure.
+func ParseAssetCustomFields(buffer bytes.Buffer, customField string) (map[string][]*CustomFieldAssetScheme, error) {
+
+	raw := gjson.ParseBytes(buffer.Bytes())
+
+	// Check if the buffer contains the "issues" object
+	if !raw.Get("issues").Exists() {
+		return nil, ErrNoIssuesSliceError
+	}
+
+	// Loop through each custom field, extract the information and stores the data on a map
+	customfieldsAsMap := make(map[string][]*CustomFieldAssetScheme)
+	raw.Get("issues").ForEach(func(key, value gjson.Result) bool {
+
+		path, issueKey := fmt.Sprintf("fields.%v", customField), value.Get("key").String()
+
+		// Check if the issue iteration contains information on the customfield selected,
+		// if not, continue
+		if value.Get(path).Type == gjson.Null {
+			return true
+		}
+
+		var customFields []*CustomFieldAssetScheme
+		if err := json.Unmarshal([]byte(value.Get(path).String()), &customFields); err != nil {
+			return true
+		}
+
+		customfieldsAsMap[issueKey] = customFields
+		return true
+	})
+
+	// Check if the map processed contains elements
+	// if so, return an error interface
+	if len(customfieldsAsMap) == 0 {
+		return nil, ErrNoMapValuesError
+	}
+
+	return customfieldsAsMap, nil
 }

@@ -1696,6 +1696,145 @@ func TestParseSelectCustomField(t *testing.T) {
 	}
 }
 
+func TestParseAssetCustomField(t *testing.T) {
+
+	bufferMocked := bytes.Buffer{}
+	bufferMocked.WriteString(`
+{
+	"fields": {
+		"customfield_10046": [
+		 {
+			"workspaceId": "5e037d73-1c0a-43ce-adca-f169a42557f1",
+			"id": "5e037d73-1c0a-43ce-adca-f169a42557f1:1",
+			"objectId": "1"
+		  }
+		]
+	}
+}`)
+
+	bufferMockedWithNoFields := bytes.Buffer{}
+	bufferMockedWithNoFields.WriteString(`
+{
+	"field_no_mapped": {
+		"customfield_10046": [
+		 {
+			"workspaceId": "5e037d73-1c0a-43ce-adca-f169a42557f1",
+			"id": "5e037d73-1c0a-43ce-adca-f169a42557f1:1",
+			"objectId": "1"
+		  }
+		]
+	}
+}`)
+
+	bufferMockedWithNoJSON := bytes.Buffer{}
+	bufferMockedWithNoJSON.WriteString(`{}{`)
+
+	bufferMockedWithNoInfo := bytes.Buffer{}
+	bufferMockedWithNoInfo.WriteString(`
+{
+	"fields": {
+		"w": null
+	}
+}`)
+
+	bufferMockedWithInvalidType := bytes.Buffer{}
+	bufferMockedWithInvalidType.WriteString(`
+{
+	"fields": {
+		"customfield_10046": "Test field sample"
+	}
+}`)
+
+	type args struct {
+		buffer      bytes.Buffer
+		customField string
+	}
+
+	testCases := []struct {
+		name    string
+		args    args
+		want    []*CustomFieldAssetScheme
+		want1   bool
+		wantErr bool
+		Err     error
+	}{
+		{
+			name: "when the buffer contains information",
+			args: args{
+				buffer:      bufferMocked,
+				customField: "customfield_10046",
+			},
+			want: []*CustomFieldAssetScheme{
+				{
+					WorkspaceId: "5e037d73-1c0a-43ce-adca-f169a42557f1",
+					Id:          "5e037d73-1c0a-43ce-adca-f169a42557f1:1",
+					ObjectId:    "1",
+				},
+			},
+			wantErr: false,
+		},
+
+		{
+			name: "when the buffer no contains information",
+			args: args{
+				buffer:      bufferMockedWithNoInfo,
+				customField: "customfield_10046",
+			},
+			want:    nil,
+			wantErr: true,
+			Err:     ErrNoAssetTypeError,
+		},
+
+		{
+			name: "when the buffer does not contains the fields object",
+			args: args{
+				buffer:      bufferMockedWithNoFields,
+				customField: "customfield_10046",
+			},
+			want:    nil,
+			wantErr: true,
+			Err:     ErrNoFieldInformationError,
+		},
+
+		{
+			name: "when the buffer does not contains a valid field type",
+			args: args{
+				buffer:      bufferMockedWithInvalidType,
+				customField: "customfield_10046",
+			},
+			want:    nil,
+			wantErr: true,
+			Err:     ErrNoAssetTypeError,
+		},
+
+		{
+			name: "when the buffer cannot be parsed",
+			args: args{
+				buffer:      bufferMockedWithNoJSON,
+				customField: "customfield_10046",
+			},
+			want:    nil,
+			wantErr: true,
+			Err:     ErrNoFieldInformationError,
+		},
+	}
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+			got, err := ParseAssetCustomField(testCase.args.buffer, testCase.args.customField)
+			if (err != nil) != testCase.wantErr {
+				t.Errorf("ParseMultiSelectCustomField() error = %v, wantErr %v", err, testCase.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, testCase.want) {
+				t.Errorf("ParseMultiSelectCustomField() got = %v, want %v", got, testCase.want)
+			}
+			if !reflect.DeepEqual(err, testCase.Err) {
+				t.Errorf("ParseMultiSelectCustomField() got = (%v), want (%v)", err, testCase.Err)
+			}
+		})
+	}
+}
+
 func TestParseMultiSelectCustomFields(t *testing.T) {
 
 	bufferMocked := bytes.Buffer{}
@@ -4949,6 +5088,328 @@ func TestParseSelectCustomFields(t *testing.T) {
 			}
 			if !reflect.DeepEqual(err, testCase.Err) {
 				t.Errorf("ParseSelectCustomFields() got = (%v), want (%v)", err, testCase.Err)
+			}
+		})
+	}
+}
+
+func TestParseAssetCustomFields(t *testing.T) {
+
+	bufferMocked := bytes.Buffer{}
+	bufferMocked.WriteString(`
+{
+   "expand":"names,schema",
+   "startAt":0,
+   "maxResults":50,
+   "total":1,
+   "issues":[
+      {
+         "expand":"operations,versionedRepresentations,editmeta,changelog,renderedFields",
+         "id":"10035",
+         "self":"https://ctreminiom.atlassian.net/rest/api/2/issue/10035",
+         "key":"KP-22",
+         "fields":{
+            "customfield_10046":[
+			 {
+				"workspaceId": "5e037d73-1c0a-43ce-adca-f169a42557f1",
+				"id": "5e037d73-1c0a-43ce-adca-f169a42557f1:1",
+				"objectId": "1"
+			  },
+				{
+				"workspaceId": "5e037d73-1c0a-43ce-adca-f169a42557f2",
+				"id": "5e037d73-1c0a-43ce-adca-f169a42557f1:2",
+				"objectId": "1"
+			  }
+			]
+         }
+      },
+      {
+         "expand":"operations,versionedRepresentations,editmeta,changelog,renderedFields",
+         "id":"10035",
+         "self":"https://ctreminiom.atlassian.net/rest/api/2/issue/10035",
+         "key":"KP-23",
+         "fields":{
+            "customfield_10046":[
+			 {
+				"workspaceId": "5e037d73-1c0a-43ce-adca-f169a42557f1",
+				"id": "5e037d73-1c0a-43ce-adca-f169a42557f1:1",
+				"objectId": "1"
+			  },
+				{
+				"workspaceId": "5e037d73-1c0a-43ce-adca-f169a42557f2",
+				"id": "5e037d73-1c0a-43ce-adca-f169a42557f1:2",
+				"objectId": "1"
+			  }
+			]
+         }
+      }
+   ]
+}
+`)
+
+	bufferMockedWithNoIssues := bytes.Buffer{}
+	bufferMockedWithNoIssues.WriteString(`
+{
+    "expand": "names,schema",
+    "startAt": 0,
+    "maxResults": 50,
+    "total": 1,
+    "no_issues": [
+        {
+            "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+            "id": "10035",
+            "self": "https://ctreminiom.atlassian.net/rest/api/2/issue/10035",
+            "key": "KP-22",
+            "no_fields": {
+                "customfield_10046": [
+                    {
+                        "self": "https://ctreminiom.atlassian.net/rest/api/2/customFieldOption/10046",
+                        "value": "Option 3",
+                        "id": "10046"
+                    },
+                    {
+                        "self": "https://ctreminiom.atlassian.net/rest/api/2/customFieldOption/10047",
+                        "value": "Option 4",
+                        "id": "10047"
+                    }
+                ]
+            }
+        }
+    ]
+}`)
+
+	bufferMockedWithNoInfo := bytes.Buffer{}
+	bufferMockedWithNoInfo.WriteString(`
+{
+    "expand": "names,schema",
+    "startAt": 0,
+    "maxResults": 50,
+    "total": 1,
+    "data": [
+        {
+            "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+            "id": "10035",
+            "self": "https://ctreminiom.atlassian.net/rest/api/2/issue/10035",
+            "key": "KP-22",
+            "fields": {
+                "customfield_10046": null
+            }
+        }
+    ]
+}`)
+
+	bufferMockedWithNullValues := bytes.Buffer{}
+	bufferMockedWithNullValues.WriteString(`
+{
+   "expand":"names,schema",
+   "startAt":0,
+   "maxResults":50,
+   "total":1,
+   "issues":[
+      {
+         "expand":"operations,versionedRepresentations,editmeta,changelog,renderedFields",
+         "id":"10035",
+         "self":"https://ctreminiom.atlassian.net/rest/api/2/issue/10035",
+         "key":"KP-22",
+         "fields":{
+            "customfield_10046": null
+         }
+      },
+      {
+         "expand":"operations,versionedRepresentations,editmeta,changelog,renderedFields",
+         "id":"10035",
+         "self":"https://ctreminiom.atlassian.net/rest/api/2/issue/10035",
+         "key":"KP-23",
+         "fields":{
+            "customfield_10046":[
+			 {
+				"workspaceId": "5e037d73-1c0a-43ce-adca-f169a42557f1",
+				"id": "5e037d73-1c0a-43ce-adca-f169a42557f1:1",
+				"objectId": "1"
+			  },
+				{
+				"workspaceId": "5e037d73-1c0a-43ce-adca-f169a42557f2",
+				"id": "5e037d73-1c0a-43ce-adca-f169a42557f1:2",
+				"objectId": "1"
+			  }
+			]
+         }
+      }
+   ]
+}`)
+
+	bufferMockedWithInvalidTypes := bytes.Buffer{}
+	bufferMockedWithInvalidTypes.WriteString(`
+{
+   "expand":"names,schema",
+   "startAt":0,
+   "maxResults":50,
+   "total":1,
+   "issues":[
+      {
+         "expand":"operations,versionedRepresentations,editmeta,changelog,renderedFields",
+         "id":"10035",
+         "self":"https://ctreminiom.atlassian.net/rest/api/2/issue/10035",
+         "key":"KP-22",
+         "fields":{
+            "customfield_10046": "test"
+         }
+      },
+      {
+         "expand":"operations,versionedRepresentations,editmeta,changelog,renderedFields",
+         "id":"10035",
+         "self":"https://ctreminiom.atlassian.net/rest/api/2/issue/10035",
+         "key":"KP-23",
+         "fields":{
+            "customfield_10046":[
+			 {
+				"workspaceId": "5e037d73-1c0a-43ce-adca-f169a42557f1",
+				"id": "5e037d73-1c0a-43ce-adca-f169a42557f1:1",
+				"objectId": "1"
+			  },
+				{
+				"workspaceId": "5e037d73-1c0a-43ce-adca-f169a42557f2",
+				"id": "5e037d73-1c0a-43ce-adca-f169a42557f1:2",
+				"objectId": "1"
+			  }
+			]
+         }
+      }
+   ]
+}
+`)
+
+	type args struct {
+		buffer      bytes.Buffer
+		customField string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    map[string][]*CustomFieldAssetScheme
+		wantErr bool
+		Err     error
+	}{
+
+		/*
+			"customfield_10046":[
+					 {
+						"workspaceId": "5e037d73-1c0a-43ce-adca-f169a42557f1",
+						"id": "5e037d73-1c0a-43ce-adca-f169a42557f1:1",
+						"objectId": "1"
+					  },
+						{
+						"workspaceId": "5e037d73-1c0a-43ce-adca-f169a42557f2",
+						"id": "5e037d73-1c0a-43ce-adca-f169a42557f1:2",
+						"objectId": "1"
+					  }
+					]
+		*/
+
+		{
+			name: "when the buffer contains information",
+			args: args{
+				buffer:      bufferMocked,
+				customField: "customfield_10046",
+			},
+			want: map[string][]*CustomFieldAssetScheme{
+				"KP-22": {
+					{
+						WorkspaceId: "5e037d73-1c0a-43ce-adca-f169a42557f1",
+						Id:          "5e037d73-1c0a-43ce-adca-f169a42557f1:1",
+						ObjectId:    "1",
+					},
+					{
+						WorkspaceId: "5e037d73-1c0a-43ce-adca-f169a42557f2",
+						Id:          "5e037d73-1c0a-43ce-adca-f169a42557f1:2",
+						ObjectId:    "1",
+					},
+				},
+				"KP-23": {
+					{
+						WorkspaceId: "5e037d73-1c0a-43ce-adca-f169a42557f1",
+						Id:          "5e037d73-1c0a-43ce-adca-f169a42557f1:1",
+						ObjectId:    "1",
+					},
+					{
+						WorkspaceId: "5e037d73-1c0a-43ce-adca-f169a42557f2",
+						Id:          "5e037d73-1c0a-43ce-adca-f169a42557f1:2",
+						ObjectId:    "1",
+					},
+				},
+			},
+
+			wantErr: false,
+		},
+
+		{
+			name: "when the buffer does not contain the issues object",
+			args: args{
+				buffer:      bufferMockedWithNoInfo,
+				customField: "customfield_10046",
+			},
+			wantErr: true,
+			Err:     ErrNoIssuesSliceError,
+		},
+
+		{
+			name: "when the buffer contains null customfields",
+			args: args{
+				buffer:      bufferMockedWithNullValues,
+				customField: "customfield_10046",
+			},
+			want: map[string][]*CustomFieldAssetScheme{
+				"KP-23": {
+					{
+						WorkspaceId: "5e037d73-1c0a-43ce-adca-f169a42557f1",
+						Id:          "5e037d73-1c0a-43ce-adca-f169a42557f1:1",
+						ObjectId:    "1",
+					},
+					{
+						WorkspaceId: "5e037d73-1c0a-43ce-adca-f169a42557f2",
+						Id:          "5e037d73-1c0a-43ce-adca-f169a42557f1:2",
+						ObjectId:    "1",
+					},
+				},
+			},
+			wantErr: false,
+		},
+
+		{
+			name: "when the buffer contains invalid types",
+			args: args{
+				buffer:      bufferMockedWithInvalidTypes,
+				customField: "customfield_10046",
+			},
+			want: map[string][]*CustomFieldAssetScheme{
+				"KP-23": {
+					{
+						WorkspaceId: "5e037d73-1c0a-43ce-adca-f169a42557f1",
+						Id:          "5e037d73-1c0a-43ce-adca-f169a42557f1:1",
+						ObjectId:    "1",
+					},
+					{
+						WorkspaceId: "5e037d73-1c0a-43ce-adca-f169a42557f2",
+						Id:          "5e037d73-1c0a-43ce-adca-f169a42557f1:2",
+						ObjectId:    "1",
+					},
+				},
+			},
+			wantErr: false,
+		},
+	}
+	for _, testCase := range tests {
+		t.Run(testCase.name, func(t *testing.T) {
+			got, err := ParseAssetCustomFields(testCase.args.buffer, testCase.args.customField)
+			if (err != nil) != testCase.wantErr {
+				t.Errorf("ParseMultiSelectCustomField() error = %v, wantErr %v", err, testCase.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, testCase.want) {
+				t.Errorf("ParseMultiSelectCustomField() got = %v, want %v", got, testCase.want)
+			}
+			if !reflect.DeepEqual(err, testCase.Err) {
+				t.Errorf("ParseMultiSelectCustomField() got = (%v), want (%v)", err, testCase.Err)
 			}
 		})
 	}

@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/tidwall/gjson"
+	"reflect"
 )
 
 // ParseMultiSelectCustomField parses a multi-select custom field from the given buffer data
@@ -890,12 +891,11 @@ func ParseStringCustomFields(buffer bytes.Buffer, customField string) (map[strin
 			return true
 		}
 
-		var customFields string
-		if err := json.Unmarshal([]byte(value.Get(path).String()), &customFields); err != nil {
-			return true
+		// Check if the customfield value is a string type
+		// if not, don't append the value on the map
+		if reflect.TypeOf(value.Get(path).Value()).Kind() == reflect.String {
+			customfieldsAsMap[issueKey] = value.Get(path).String()
 		}
-
-		customfieldsAsMap[issueKey] = customFields
 		return true
 	})
 
@@ -952,7 +952,7 @@ func ParseFloatCustomField(buffer bytes.Buffer, customField string) (float64, er
 	return textFloat, nil
 }
 
-// ParseFloatCustomFields extracts and parses the textfield customfield information from multiple issues using a bytes.Buffer.
+// ParseFloatCustomFields extracts and parses the float customfield information from multiple issues using a bytes.Buffer.
 //
 // This function takes the name of the custom field to parse and a bytes.Buffer containing
 // JSON data representing the custom field values associated with different issues. It returns
@@ -1196,12 +1196,12 @@ func ParseSprintCustomField(buffer bytes.Buffer, customField string) ([]*SprintD
 	return sprints, nil
 }
 
-// ParseSprintCustomFields extracts and parses multi-select custom field data from a given bytes.Buffer from multiple issues
+// ParseSprintCustomFields extracts and parses sprint custom field data from a given bytes.Buffer from multiple issues
 //
 // This function takes the name of the custom field to parse and a bytes.Buffer containing
 // JSON data representing the custom field values associated with different issues. It returns
-// a map where the key is the issue key and the value is a slice of CustomFieldContextOptionScheme
-// structs, representing the parsed multi-select custom field values.
+// a map where the key is the issue key and the value is a slice of SprintDetailScheme
+// structs, representing the parsed sprint custom field values.
 //
 // The JSON data within the buffer is expected to have a specific structure where the custom field
 // values are organized by issue keys and options are represented within a context. The function
@@ -1213,7 +1213,7 @@ func ParseSprintCustomField(buffer bytes.Buffer, customField string) ([]*SprintD
 //
 //	customFieldName := "customfield_10001"
 //	buffer := // Populate the buffer with JSON data
-//	customFields, err := ParseMultiSelectCustomFields(customFieldName, buffer)
+//	customFields, err := ParseSprintCustomFields(customFieldName, buffer)
 //	if err != nil {
 //	    // Handle the error
 //	}
@@ -1227,12 +1227,12 @@ func ParseSprintCustomField(buffer bytes.Buffer, customField string) ([]*SprintD
 //	}
 //
 // Parameters:
-//   - customField: The name of the multi-select custom field to parse.
+//   - customField: The name of the sprint custom field to parse.
 //   - buffer: A bytes.Buffer containing JSON data representing custom field values.
 //
 // Returns:
-//   - map[string][]*CustomFieldContextOptionScheme: A map where the key is the issue key and the
-//     value is a slice of CustomFieldContextOptionScheme structs representing the parsed
+//   - map[string][]*SprintDetailScheme: A map where the key is the issue key and the
+//     value is a slice of SprintDetailScheme structs representing the parsed
 //     multi-select custom field values.
 //   - error: An error if there was a problem parsing the custom field data or if the JSON data
 //     did not conform to the expected structure.
@@ -1319,7 +1319,7 @@ func ParseSelectCustomField(buffer bytes.Buffer, customField string) (*CustomFie
 	return sprints, nil
 }
 
-// ParseSprintCustomFields extracts and parses multi-select custom field data from a given bytes.Buffer from multiple issues
+// ParseSelectCustomFields extracts and parses select custom field data from a given bytes.Buffer from multiple issues
 //
 // This function takes the name of the custom field to parse and a bytes.Buffer containing
 // JSON data representing the custom field values associated with different issues. It returns
@@ -1336,7 +1336,7 @@ func ParseSelectCustomField(buffer bytes.Buffer, customField string) (*CustomFie
 //
 //	customFieldName := "customfield_10001"
 //	buffer := // Populate the buffer with JSON data
-//	customFields, err := ParseMultiSelectCustomFields(customFieldName, buffer)
+//	customFields, err := ParseSelectCustomFields(customFieldName, buffer)
 //	if err != nil {
 //	    // Handle the error
 //	}
@@ -1354,12 +1354,12 @@ func ParseSelectCustomField(buffer bytes.Buffer, customField string) (*CustomFie
 //   - buffer: A bytes.Buffer containing JSON data representing custom field values.
 //
 // Returns:
-//   - map[string][]*CustomFieldContextOptionScheme: A map where the key is the issue key and the
-//     value is a slice of CustomFieldContextOptionScheme structs representing the parsed
+//   - map[string]*CustomFieldContextOptionScheme: A map where the key is the issue key and the
+//     value is a CustomFieldContextOptionScheme struct representing the parsed
 //     multi-select custom field values.
 //   - error: An error if there was a problem parsing the custom field data or if the JSON data
 //     did not conform to the expected structure.
-func ParseSelectCustomFields(buffer bytes.Buffer, customField string) (map[string][]*CustomFieldContextOptionScheme, error) {
+func ParseSelectCustomFields(buffer bytes.Buffer, customField string) (map[string]*CustomFieldContextOptionScheme, error) {
 
 	raw := gjson.ParseBytes(buffer.Bytes())
 
@@ -1369,7 +1369,7 @@ func ParseSelectCustomFields(buffer bytes.Buffer, customField string) (map[strin
 	}
 
 	// Loop through each custom field, extract the information and stores the data on a map
-	customfieldsAsMap := make(map[string][]*CustomFieldContextOptionScheme)
+	customfieldsAsMap := make(map[string]*CustomFieldContextOptionScheme)
 	raw.Get("issues").ForEach(func(key, value gjson.Result) bool {
 
 		path, issueKey := fmt.Sprintf("fields.%v", customField), value.Get("key").String()
@@ -1380,7 +1380,7 @@ func ParseSelectCustomFields(buffer bytes.Buffer, customField string) (map[strin
 			return true
 		}
 
-		var customFields []*CustomFieldContextOptionScheme
+		var customFields *CustomFieldContextOptionScheme
 		if err := json.Unmarshal([]byte(value.Get(path).String()), &customFields); err != nil {
 			return true
 		}

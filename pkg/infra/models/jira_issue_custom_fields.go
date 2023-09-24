@@ -38,6 +38,8 @@ import (
 //	}
 //
 // NOTE: This method can be used to extract check-box customfield values
+//
+// Docs: https://docs.go-atlassian.io/cookbooks/extract-customfields-from-issue-s#parse-multiselect-customfield
 func ParseMultiSelectCustomField(buffer bytes.Buffer, customField string) ([]*CustomFieldContextOptionScheme, error) {
 
 	raw := gjson.ParseBytes(buffer.Bytes())
@@ -102,6 +104,8 @@ func ParseMultiSelectCustomField(buffer bytes.Buffer, customField string) ([]*Cu
 //     multi-select custom field values.
 //   - error: An error if there was a problem parsing the custom field data or if the JSON data
 //     did not conform to the expected structure.
+//
+// Docs: https://docs.go-atlassian.io/cookbooks/extract-customfields-from-issue-s#parse-multiselect-customfields
 func ParseMultiSelectCustomFields(buffer bytes.Buffer, customField string) (map[string][]*CustomFieldContextOptionScheme, error) {
 
 	raw := gjson.ParseBytes(buffer.Bytes())
@@ -169,6 +173,8 @@ func ParseMultiSelectCustomFields(buffer bytes.Buffer, customField string) (map[
 //	for _, group := range groups {
 //	    fmt.Printf("Group ID: %s, Group Name: %s\n", group.GroupID, group.Name)
 //	}
+//
+// Docs: https://docs.go-atlassian.io/cookbooks/extract-customfields-from-issue-s#parse-grouppicker-customfield
 func ParseMultiGroupPickerCustomField(buffer bytes.Buffer, customField string) ([]*GroupDetailScheme, error) {
 
 	raw := gjson.ParseBytes(buffer.Bytes())
@@ -233,6 +239,8 @@ func ParseMultiGroupPickerCustomField(buffer bytes.Buffer, customField string) (
 //     multi-select custom field values.
 //   - error: An error if there was a problem parsing the custom field data or if the JSON data
 //     did not conform to the expected structure.
+//
+// Docs: https://docs.go-atlassian.io/cookbooks/extract-customfields-from-issue-s#parse-grouppicker-customfields
 func ParseMultiGroupPickerCustomFields(buffer bytes.Buffer, customField string) (map[string][]*GroupDetailScheme, error) {
 
 	raw := gjson.ParseBytes(buffer.Bytes())
@@ -300,6 +308,8 @@ func ParseMultiGroupPickerCustomFields(buffer bytes.Buffer, customField string) 
 //	for _, user := range users {
 //	    fmt.Printf("User ID: %s, User Name: %s\n", user.AccountID, user.DisplayName)
 //	}
+//
+// Docs: https://docs.go-atlassian.io/cookbooks/extract-customfields-from-issue-s#parse-multi-userpicker-customfield
 func ParseMultiUserPickerCustomField(buffer bytes.Buffer, customField string) ([]*UserDetailScheme, error) {
 
 	raw := gjson.ParseBytes(buffer.Bytes())
@@ -364,6 +374,8 @@ func ParseMultiUserPickerCustomField(buffer bytes.Buffer, customField string) ([
 //     multi-select custom field values.
 //   - error: An error if there was a problem parsing the custom field data or if the JSON data
 //     did not conform to the expected structure.
+//
+// Docs: https://docs.go-atlassian.io/cookbooks/extract-customfields-from-issue-s#parse-multi-userpicker-customfields
 func ParseMultiUserPickerCustomFields(buffer bytes.Buffer, customField string) (map[string][]*UserDetailScheme, error) {
 
 	raw := gjson.ParseBytes(buffer.Bytes())
@@ -429,6 +441,8 @@ func ParseMultiUserPickerCustomFields(buffer bytes.Buffer, customField string) (
 //	for _, user := range users {
 //	    fmt.Printf("Parent Value: %s, Child Value: %s\n", field.Value, field.Child.Value)
 //	}
+//
+// Docs: https://docs.go-atlassian.io/cookbooks/extract-customfields-from-issue-s#parse-cascading-customfield
 func ParseCascadingSelectCustomField(buffer bytes.Buffer, customField string) (*CascadingSelectScheme, error) {
 
 	raw := gjson.ParseBytes(buffer.Bytes())
@@ -493,6 +507,8 @@ func ParseCascadingSelectCustomField(buffer bytes.Buffer, customField string) (*
 //     cascading custom field value.
 //   - error: An error if there was a problem parsing the custom field data or if the JSON data
 //     did not conform to the expected structure.
+//
+// Docs: https://docs.go-atlassian.io/cookbooks/extract-customfields-from-issue-s#parse-cascading-customfields
 func ParseCascadingCustomFields(buffer bytes.Buffer, customField string) (map[string]*CascadingSelectScheme, error) {
 
 	raw := gjson.ParseBytes(buffer.Bytes())
@@ -560,6 +576,8 @@ func ParseCascadingCustomFields(buffer bytes.Buffer, customField string) (map[st
 //	for _, version := range versions {
 //	    fmt.Printf("Version ID: %s, Version Name: %s\n", version.ID, version.Name)
 //	}
+//
+// Docs: https://docs.go-atlassian.io/cookbooks/extract-customfields-from-issue-s#parse-versionpicker-customfield
 func ParseMultiVersionCustomField(buffer bytes.Buffer, customField string) ([]*VersionDetailScheme, error) {
 
 	raw := gjson.ParseBytes(buffer.Bytes())
@@ -588,7 +606,7 @@ func ParseMultiVersionCustomField(buffer bytes.Buffer, customField string) ([]*V
 //
 // This function takes the name of the custom field to parse and a bytes.Buffer containing
 // JSON data representing the custom field values associated with different issues. It returns
-// a map where the key is the issue key and the value is a slice of ParseMultiVersionCustomFields
+// a map where the key is the issue key and the value is a slice of VersionDetailScheme
 // structs, representing the parsed multi-version custom field values.
 //
 // The JSON data within the buffer is expected to have a specific structure where the custom field
@@ -619,11 +637,13 @@ func ParseMultiVersionCustomField(buffer bytes.Buffer, customField string) ([]*V
 //   - buffer: A bytes.Buffer containing JSON data representing custom field values.
 //
 // Returns:
-//   - map[string][]*ParseMultiVersionCustomFields: A map where the key is the issue key and the
-//     value is a slice of ParseMultiVersionCustomFields structs representing the parsed
+//   - map[string][]*VersionDetailScheme: A map where the key is the issue key and the
+//     value is a slice of VersionDetailScheme structs representing the parsed
 //     multi-select custom field values.
 //   - error: An error if there was a problem parsing the custom field data or if the JSON data
 //     did not conform to the expected structure.
+//
+// Docs: https://docs.go-atlassian.io/cookbooks/extract-customfields-from-issue-s#parse-versionpicker-customfields
 func ParseMultiVersionCustomFields(buffer bytes.Buffer, customField string) (map[string][]*VersionDetailScheme, error) {
 
 	raw := gjson.ParseBytes(buffer.Bytes())
@@ -689,6 +709,8 @@ func ParseMultiVersionCustomFields(buffer bytes.Buffer, customField string) (map
 //	}
 //
 // fmt.Printf("User ID: %s, User Name: %s\n", version.AccountID, version. DisplayName)
+//
+// Docs: https://docs.go-atlassian.io/cookbooks/extract-customfields-from-issue-s#parse-userpicker-customfield
 func ParseUserPickerCustomField(buffer bytes.Buffer, customField string) (*UserDetailScheme, error) {
 
 	raw := gjson.ParseBytes(buffer.Bytes())
@@ -717,7 +739,7 @@ func ParseUserPickerCustomField(buffer bytes.Buffer, customField string) (*UserD
 //
 // This function takes the name of the custom field to parse and a bytes.Buffer containing
 // JSON data representing the custom field values associated with different issues. It returns
-// a map where the key is the issue key and the value is a ParseUserPickerCustomFields struct pointer
+// a map where the key is the issue key and the value is a UserDetailScheme struct pointer
 // ,representing the parsed cascading custom field value.
 //
 // The JSON data within the buffer is expected to have a specific structure where the custom field
@@ -748,11 +770,13 @@ func ParseUserPickerCustomField(buffer bytes.Buffer, customField string) (*UserD
 //   - buffer: A bytes.Buffer containing JSON data representing custom field values.
 //
 // Returns:
-//   - map[string]*ParseUserPickerCustomFields: A map where the key is the issue key and the
-//     value is a ParseUserPickerCustomFields struct pointer representing the parsed
+//   - map[string]*UserDetailScheme: A map where the key is the issue key and the
+//     value is a UserDetailScheme struct pointer representing the parsed
 //     cascading custom field value.
 //   - error: An error if there was a problem parsing the custom field data or if the JSON data
 //     did not conform to the expected structure.
+//
+// Docs: https://docs.go-atlassian.io/cookbooks/extract-customfields-from-issue-s#parse-userpicker-customfields
 func ParseUserPickerCustomFields(buffer bytes.Buffer, customField string) (map[string]*UserDetailScheme, error) {
 
 	raw := gjson.ParseBytes(buffer.Bytes())
@@ -812,6 +836,8 @@ func ParseUserPickerCustomFields(buffer bytes.Buffer, customField string) (map[s
 //	}
 //
 // fmt.Println(textField)
+//
+// Docs: https://docs.go-atlassian.io/cookbooks/extract-customfields-from-issue-s#parse-textfield-customfield
 func ParseStringCustomField(buffer bytes.Buffer, customField string) (string, error) {
 
 	raw := gjson.ParseBytes(buffer.Bytes())
@@ -865,11 +891,12 @@ func ParseStringCustomField(buffer bytes.Buffer, customField string) (string, er
 //   - buffer: A bytes.Buffer containing JSON data representing custom field values.
 //
 // Returns:
-//   - map[string]*ParseUserPickerCustomFields: A map where the key is the issue key and the
-//     value is a ParseUserPickerCustomFields struct pointer representing the parsed
-//     cascading custom field value.
+//   - map[string]string: A map where the key is the issue key and the
+//     value is a string with the customfield textfield value
 //   - error: An error if there was a problem parsing the custom field data or if the JSON data
 //     did not conform to the expected structure.
+//
+// Docs: https://docs.go-atlassian.io/cookbooks/extract-customfields-from-issue-s#parse-textfield-customfields
 func ParseStringCustomFields(buffer bytes.Buffer, customField string) (map[string]string, error) {
 
 	raw := gjson.ParseBytes(buffer.Bytes())
@@ -909,7 +936,7 @@ func ParseStringCustomFields(buffer bytes.Buffer, customField string) (map[strin
 }
 
 // ParseFloatCustomField parses a float custom field from the given buffer data
-// associated with the specified custom field ID and returns string
+// associated with the specified custom field ID and returns float64 value
 //
 // Parameters:
 //   - customfieldID: A string representing the unique identifier of the custom field.
@@ -928,6 +955,8 @@ func ParseStringCustomFields(buffer bytes.Buffer, customField string) (map[strin
 //	}
 //
 // fmt.Println(floatField)
+//
+// Docs: https://docs.go-atlassian.io/cookbooks/extract-customfields-from-issue-s#parse-float-customfield
 func ParseFloatCustomField(buffer bytes.Buffer, customField string) (float64, error) {
 
 	raw := gjson.ParseBytes(buffer.Bytes())
@@ -956,7 +985,7 @@ func ParseFloatCustomField(buffer bytes.Buffer, customField string) (float64, er
 //
 // This function takes the name of the custom field to parse and a bytes.Buffer containing
 // JSON data representing the custom field values associated with different issues. It returns
-// a map where the key is the issue key and the value is a string representing the parsed textfield customfield value.
+// a map where the key is the issue key and the value is a float64 representing the parsed float customfield value.
 //
 // The JSON data within the buffer is expected to have a specific structure where the custom field
 // values are organized by issue keys and options are represented within a context. The function
@@ -968,7 +997,7 @@ func ParseFloatCustomField(buffer bytes.Buffer, customField string) (float64, er
 //
 //	customFieldName := "customfield_10001"
 //	buffer := // Populate the buffer with JSON data
-//	customFields, err := ParseStringCustomFields(customFieldName, buffer)
+//	customFields, err := ParseFloatCustomFields(customFieldName, buffer)
 //	if err != nil {
 //	    // Handle the error
 //	}
@@ -986,11 +1015,12 @@ func ParseFloatCustomField(buffer bytes.Buffer, customField string) (float64, er
 //   - buffer: A bytes.Buffer containing JSON data representing custom field values.
 //
 // Returns:
-//   - map[string]*ParseUserPickerCustomFields: A map where the key is the issue key and the
-//     value is a ParseUserPickerCustomFields struct pointer representing the parsed
-//     cascading custom field value.
+//   - map[string]float: A map where the key is the issue key and the
+//     value is a float64 value.
 //   - error: An error if there was a problem parsing the custom field data or if the JSON data
 //     did not conform to the expected structure.
+//
+// Docs: https://docs.go-atlassian.io/cookbooks/extract-customfields-from-issue-s#parse-float-customfields
 func ParseFloatCustomFields(buffer bytes.Buffer, customField string) (map[string]float64, error) {
 
 	raw := gjson.ParseBytes(buffer.Bytes())
@@ -1050,6 +1080,8 @@ func ParseFloatCustomFields(buffer bytes.Buffer, customField string) (map[string
 //	}
 //
 // fmt.Println(labels)
+//
+// Docs: https://docs.go-atlassian.io/cookbooks/extract-customfields-from-issue-s#parse-labels-customfield
 func ParseLabelCustomField(buffer bytes.Buffer, customField string) ([]string, error) {
 
 	raw := gjson.ParseBytes(buffer.Bytes())
@@ -1078,7 +1110,7 @@ func ParseLabelCustomField(buffer bytes.Buffer, customField string) ([]string, e
 //
 // This function takes the name of the custom field to parse and a bytes.Buffer containing
 // JSON data representing the custom field values associated with different issues. It returns
-// a map where the key is the issue key and the value is a string representing the parsed textfield customfield value.
+// a map where the key is the issue key and the value is a string slice representing the parsed labels customfield value.
 //
 // The JSON data within the buffer is expected to have a specific structure where the custom field
 // values are organized by issue keys and options are represented within a context. The function
@@ -1090,7 +1122,7 @@ func ParseLabelCustomField(buffer bytes.Buffer, customField string) ([]string, e
 //
 //	customFieldName := "customfield_10001"
 //	buffer := // Populate the buffer with JSON data
-//	customFields, err := ParseStringCustomFields(customFieldName, buffer)
+//	customFields, err := ParseLabelCustomFields(customFieldName, buffer)
 //	if err != nil {
 //	    // Handle the error
 //	}
@@ -1108,11 +1140,12 @@ func ParseLabelCustomField(buffer bytes.Buffer, customField string) ([]string, e
 //   - buffer: A bytes.Buffer containing JSON data representing custom field values.
 //
 // Returns:
-//   - map[string]*ParseUserPickerCustomFields: A map where the key is the issue key and the
-//     value is a ParseUserPickerCustomFields struct pointer representing the parsed
-//     cascading custom field value.
+//   - map[string][]string: A map where the key is the issue key and the
+//     value is a string slice with the labels.
 //   - error: An error if there was a problem parsing the custom field data or if the JSON data
 //     did not conform to the expected structure.
+//
+// Docs: https://docs.go-atlassian.io/cookbooks/extract-customfields-from-issue-s#parse-labels-customfields
 func ParseLabelCustomFields(buffer bytes.Buffer, customField string) (map[string][]string, error) {
 
 	raw := gjson.ParseBytes(buffer.Bytes())
@@ -1153,7 +1186,7 @@ func ParseLabelCustomFields(buffer bytes.Buffer, customField string) (map[string
 }
 
 // ParseSprintCustomField parses a sprints custom field from the given buffer data
-// associated with the specified custom field ID and returns string
+// associated with the specified custom field ID and returns the issue sprints
 //
 // Parameters:
 //   - customfieldID: A string representing the unique identifier of the custom field.
@@ -1166,12 +1199,14 @@ func ParseLabelCustomFields(buffer bytes.Buffer, customField string) (map[string
 //
 //	customfieldID := "customfield_10001"
 //	buffer := bytes.NewBuffer([]byte{ /* Serialized data */ })
-//	textField, err := ParseStringCustomField(customfieldID, buffer)
+//	sprints, err := ParseSprintCustomField(customfieldID, buffer)
 //	if err != nil {
 //	    log.Fatal(err)
 //	}
 //
-// fmt.Println(textField)
+// fmt.Println(sprints)
+//
+// Docs: https://docs.go-atlassian.io/cookbooks/extract-customfields-from-issue-s#parse-sprints-customfield
 func ParseSprintCustomField(buffer bytes.Buffer, customField string) ([]*SprintDetailScheme, error) {
 
 	raw := gjson.ParseBytes(buffer.Bytes())
@@ -1236,6 +1271,8 @@ func ParseSprintCustomField(buffer bytes.Buffer, customField string) ([]*SprintD
 //     multi-select custom field values.
 //   - error: An error if there was a problem parsing the custom field data or if the JSON data
 //     did not conform to the expected structure.
+//
+// Docs: https://docs.go-atlassian.io/cookbooks/extract-customfields-from-issue-s#parse-sprints-customfields
 func ParseSprintCustomFields(buffer bytes.Buffer, customField string) (map[string][]*SprintDetailScheme, error) {
 
 	raw := gjson.ParseBytes(buffer.Bytes())
@@ -1276,7 +1313,7 @@ func ParseSprintCustomFields(buffer bytes.Buffer, customField string) (map[strin
 }
 
 // ParseSelectCustomField parses a select custom field from the given buffer data
-// associated with the specified custom field ID and returns struct
+// associated with the specified custom field ID and returns a CustomFieldContextOptionScheme struct
 //
 // Parameters:
 //   - customfieldID: A string representing the unique identifier of the custom field.
@@ -1295,6 +1332,8 @@ func ParseSprintCustomFields(buffer bytes.Buffer, customField string) (map[strin
 //	}
 //
 // fmt.Println(option.ID, option.Value)
+//
+// Docs: https://docs.go-atlassian.io/cookbooks/extract-customfields-from-issue-s#parse-select-customfield
 func ParseSelectCustomField(buffer bytes.Buffer, customField string) (*CustomFieldContextOptionScheme, error) {
 
 	raw := gjson.ParseBytes(buffer.Bytes())
@@ -1323,8 +1362,8 @@ func ParseSelectCustomField(buffer bytes.Buffer, customField string) (*CustomFie
 //
 // This function takes the name of the custom field to parse and a bytes.Buffer containing
 // JSON data representing the custom field values associated with different issues. It returns
-// a map where the key is the issue key and the value is a slice of CustomFieldContextOptionScheme
-// structs, representing the parsed multi-select custom field values.
+// a map where the key is the issue key and the value is a CustomFieldContextOptionScheme
+// struct, representing the parsed select custom field value.
 //
 // The JSON data within the buffer is expected to have a specific structure where the custom field
 // values are organized by issue keys and options are represented within a context. The function
@@ -1359,6 +1398,8 @@ func ParseSelectCustomField(buffer bytes.Buffer, customField string) (*CustomFie
 //     multi-select custom field values.
 //   - error: An error if there was a problem parsing the custom field data or if the JSON data
 //     did not conform to the expected structure.
+//
+// Docs: https://docs.go-atlassian.io/cookbooks/extract-customfields-from-issue-s#parse-select-customfields
 func ParseSelectCustomFields(buffer bytes.Buffer, customField string) (map[string]*CustomFieldContextOptionScheme, error) {
 
 	raw := gjson.ParseBytes(buffer.Bytes())
@@ -1418,6 +1459,8 @@ func ParseSelectCustomFields(buffer bytes.Buffer, customField string) (map[strin
 //	}
 //
 // fmt.Println(assets)
+//
+// Docs: https://docs.go-atlassian.io/cookbooks/extract-customfields-from-issue-s#parse-assets-customfield
 func ParseAssetCustomField(buffer bytes.Buffer, customField string) ([]*CustomFieldAssetScheme, error) {
 
 	raw := gjson.ParseBytes(buffer.Bytes())
@@ -1482,6 +1525,8 @@ func ParseAssetCustomField(buffer bytes.Buffer, customField string) ([]*CustomFi
 //     jira assets values.
 //   - error: An error if there was a problem parsing the custom field data or if the JSON data
 //     did not conform to the expected structure.
+//
+// Docs: https://docs.go-atlassian.io/cookbooks/extract-customfields-from-issue-s#parse-assets-customfields
 func ParseAssetCustomFields(buffer bytes.Buffer, customField string) (map[string][]*CustomFieldAssetScheme, error) {
 
 	raw := gjson.ParseBytes(buffer.Bytes())

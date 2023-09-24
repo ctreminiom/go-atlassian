@@ -105,7 +105,7 @@ func (c *CustomFields) DateTime(customFieldID string, dateValue time.Time) error
 	}
 
 	if dateValue.IsZero() {
-		return ErrNoDateTimeTypeError
+		return ErrNoDatePickerTypeError
 	}
 
 	var dateNode = map[string]interface{}{}
@@ -125,7 +125,7 @@ func (c *CustomFields) Date(customFieldID string, dateTimeValue time.Time) (err 
 	}
 
 	if dateTimeValue.IsZero() {
-		return ErrNoDateTypeError
+		return ErrNoDateTimeTypeError
 	}
 
 	var dateTimeNode = map[string]interface{}{}

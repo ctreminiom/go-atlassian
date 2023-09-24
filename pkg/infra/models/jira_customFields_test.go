@@ -204,7 +204,7 @@ func TestCustomFields_Date(t *testing.T) {
 				dateTimeValue: time.Time{},
 			},
 			wantErr: true,
-			Err:     ErrNoDateTypeError,
+			Err:     ErrNoDateTimeTypeError,
 		},
 	}
 	for _, testCase := range testCases {
@@ -275,7 +275,7 @@ func TestCustomFields_DateTime(t *testing.T) {
 				dateValue:     time.Time{},
 			},
 			wantErr: true,
-			Err:     ErrNoDateTimeTypeError,
+			Err:     ErrNoDatePickerTypeError,
 		},
 	}
 	for _, testCase := range testCases {

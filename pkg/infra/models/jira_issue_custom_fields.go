@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/tidwall/gjson"
 	"reflect"
+	"time"
 )
 
 // ParseMultiSelectCustomField parses a multi-select custom field from the given buffer data
@@ -1554,6 +1555,258 @@ func ParseAssetCustomFields(buffer bytes.Buffer, customField string) (map[string
 		}
 
 		customfieldsAsMap[issueKey] = customFields
+		return true
+	})
+
+	// Check if the map processed contains elements
+	// if so, return an error interface
+	if len(customfieldsAsMap) == 0 {
+		return nil, ErrNoMapValuesError
+	}
+
+	return customfieldsAsMap, nil
+}
+
+// ParseDatePickerCustomField parses the datepicker customfield from the given buffer data
+// associated with the specified custom field ID and returns a struct time.Time value
+//
+// Parameters:
+//   - customfieldID: A string representing the unique identifier of the custom field.
+//   - buffer: A bytes.Buffer containing the serialized data to be parsed.
+//
+// Returns:
+//   - time.Time: the customfield value as time.Time type
+//
+// Example usage:
+//
+//	customfieldID := "customfield_10001"
+//	buffer := bytes.NewBuffer([]byte{ /* Serialized data */ })
+//	datepicker, err := ParseDatePickerCustomField(customfieldID, buffer)
+//	if err != nil {
+//	    log.Fatal(err)
+//	}
+//
+// fmt.Println(datepicker)
+//
+// https://docs.go-atlassian.io/cookbooks/extract-customfields-from-issue-s#parse-datepicker-customfield
+func ParseDatePickerCustomField(buffer bytes.Buffer, customField string) (time.Time, error) {
+
+	raw := gjson.ParseBytes(buffer.Bytes())
+	path := fmt.Sprintf("fields.%v", customField)
+
+	// Check if the buffer contains the "issues" object
+	if !raw.Get("fields").Exists() {
+		return time.Time{}, ErrNoFieldInformationError
+	}
+
+	// Check if the issue iteration contains information on the customfield selected,
+	// if not, continue
+	if raw.Get(path).Type == gjson.Null {
+		return time.Time{}, ErrNoDatePickerTypeError
+	}
+
+	value, err := time.Parse("2006-01-02", raw.Get(path).String())
+	if err != nil {
+		return time.Time{}, ErrNoDatePickerTypeError
+	}
+
+	return value, nil
+}
+
+// ParseDatePickerCustomFields extracts and parses the datepicker customfield data from a given bytes.Buffer from multiple issues
+//
+// This function takes the name of the custom field to parse and a bytes.Buffer containing
+// JSON data representing the custom field values associated with different issues. It returns
+// a map where the key is the issue key and the value is a time.Time value,
+// representing the parsed datepicker values with the Jira issues.
+//
+// The JSON data within the buffer is expected to have a specific structure where the custom field
+// values are organized by issue keys and options are represented within a context. The function
+// parses this structure to extract and organize the custom field values.
+//
+// If the custom field data cannot be parsed successfully, an error is returned.
+//
+// Example Usage:
+//
+//	customFieldName := "customfield_10001"
+//	buffer := // Populate the buffer with JSON data
+//	customFields, err := ParseDatePickerCustomFields(customFieldName, buffer)
+//	if err != nil {
+//	    // Handle the error
+//	}
+//
+//	// Iterate through the parsed custom fields
+//	for issueKey, customFieldValues := range customFields {
+//	    fmt.Printf("Issue Key: %s\n", issueKey)
+//	    for _, value := range customFieldValues {
+//	        fmt.Printf("Custom Field Value: %+v\n", value)
+//	    }
+//	}
+//
+// Parameters:
+//   - customField: The name of the multi-select custom field to parse.
+//   - buffer: A bytes.Buffer containing JSON data representing custom field values.
+//
+// Returns:
+//   - map[string]time.Time: A map where the key is the issue key and the
+//     value is a time.Time representing the parsed jira datepicker values.
+//   - error: An error if there was a problem parsing the custom field data or if the JSON data
+//     did not conform to the expected structure.
+//
+// Docs: https://docs.go-atlassian.io/cookbooks/extract-customfields-from-issue-s#parse-datepicker-customfields
+func ParseDatePickerCustomFields(buffer bytes.Buffer, customField string) (map[string]time.Time, error) {
+
+	raw := gjson.ParseBytes(buffer.Bytes())
+
+	// Check if the buffer contains the "issues" object
+	if !raw.Get("issues").Exists() {
+		return nil, ErrNoIssuesSliceError
+	}
+
+	// Loop through each custom field, extract the information and stores the data on a map
+	customfieldsAsMap := make(map[string]time.Time)
+	raw.Get("issues").ForEach(func(key, value gjson.Result) bool {
+
+		path, issueKey := fmt.Sprintf("fields.%v", customField), value.Get("key").String()
+
+		// Check if the issue iteration contains information on the customfield selected,
+		// if not, continue
+		if value.Get(path).Type == gjson.Null {
+			return true
+		}
+
+		datepicker, err := time.Parse("2006-01-02", value.Get(path).String())
+		if err != nil {
+			return true
+		}
+
+		customfieldsAsMap[issueKey] = datepicker
+		return true
+	})
+
+	// Check if the map processed contains elements
+	// if so, return an error interface
+	if len(customfieldsAsMap) == 0 {
+		return nil, ErrNoMapValuesError
+	}
+
+	return customfieldsAsMap, nil
+}
+
+// ParseDateTimeCustomField parses the datetime customfield from the given buffer data
+// associated with the specified custom field ID and returns a struct time.Time value
+//
+// Parameters:
+//   - customfieldID: A string representing the unique identifier of the custom field.
+//   - buffer: A bytes.Buffer containing the serialized data to be parsed.
+//
+// Returns:
+//   - time.Time: the customfield value as time.Time type
+//
+// Example usage:
+//
+//	customfieldID := "customfield_10001"
+//	buffer := bytes.NewBuffer([]byte{ /* Serialized data */ })
+//	datetime, err := ParseDateTimeCustomField(customfieldID, buffer)
+//	if err != nil {
+//	    log.Fatal(err)
+//	}
+//
+// fmt.Println(datetime)
+//
+// Docs: https://docs.go-atlassian.io/cookbooks/extract-customfields-from-issue-s#parse-datetime-customfield
+func ParseDateTimeCustomField(buffer bytes.Buffer, customField string) (time.Time, error) {
+
+	raw := gjson.ParseBytes(buffer.Bytes())
+	path := fmt.Sprintf("fields.%v", customField)
+
+	// Check if the buffer contains the "issues" object
+	if !raw.Get("fields").Exists() {
+		return time.Time{}, ErrNoFieldInformationError
+	}
+
+	// Check if the issue iteration contains information on the customfield selected,
+	// if not, continue
+	if raw.Get(path).Type == gjson.Null {
+		return time.Time{}, ErrNoDateTimeTypeError
+	}
+
+	value, err := time.Parse("2006-01-02T15:04:05.000-0700", raw.Get(path).String())
+	if err != nil {
+		return time.Time{}, ErrNoDateTimeTypeError
+	}
+
+	return value, nil
+}
+
+// ParseDateTimeCustomFields extracts and parses the datetime customfield data from a given bytes.Buffer from multiple issues
+//
+// This function takes the name of the custom field to parse and a bytes.Buffer containing
+// JSON data representing the custom field values associated with different issues. It returns
+// a map where the key is the issue key and the value is a time.Time value,
+// representing the parsed datetime values with the Jira issues.
+//
+// The JSON data within the buffer is expected to have a specific structure where the custom field
+// values are organized by issue keys and options are represented within a context. The function
+// parses this structure to extract and organize the custom field values.
+//
+// If the custom field data cannot be parsed successfully, an error is returned.
+//
+// Example Usage:
+//
+//	customFieldName := "customfield_10001"
+//	buffer := // Populate the buffer with JSON data
+//	customFields, err := ParseDateTimeCustomFields(customFieldName, buffer)
+//	if err != nil {
+//	    // Handle the error
+//	}
+//
+//	// Iterate through the parsed custom fields
+//	for issueKey, customFieldValues := range customFields {
+//	    fmt.Printf("Issue Key: %s\n", issueKey)
+//	    for _, value := range customFieldValues {
+//	        fmt.Printf("Custom Field Value: %+v\n", value)
+//	    }
+//	}
+//
+// Parameters:
+//   - customField: The name of the multi-select custom field to parse.
+//   - buffer: A bytes.Buffer containing JSON data representing custom field values.
+//
+// Returns:
+//   - map[string]time.Time: A map where the key is the issue key and the
+//     value is a time.Time representing the parsed jira datetime values.
+//   - error: An error if there was a problem parsing the custom field data or if the JSON data
+//     did not conform to the expected structure.
+//
+// Docs: https://docs.go-atlassian.io/cookbooks/extract-customfields-from-issue-s#parse-datetime-customfields
+func ParseDateTimeCustomFields(buffer bytes.Buffer, customField string) (map[string]time.Time, error) {
+
+	raw := gjson.ParseBytes(buffer.Bytes())
+
+	// Check if the buffer contains the "issues" object
+	if !raw.Get("issues").Exists() {
+		return nil, ErrNoIssuesSliceError
+	}
+
+	// Loop through each custom field, extract the information and stores the data on a map
+	customfieldsAsMap := make(map[string]time.Time)
+	raw.Get("issues").ForEach(func(key, value gjson.Result) bool {
+
+		path, issueKey := fmt.Sprintf("fields.%v", customField), value.Get("key").String()
+
+		// Check if the issue iteration contains information on the customfield selected,
+		// if not, continue
+		if value.Get(path).Type == gjson.Null {
+			return true
+		}
+
+		datepicker, err := time.Parse("2006-01-02T15:04:05.000-0700", value.Get(path).String())
+		if err != nil {
+			return true
+		}
+
+		customfieldsAsMap[issueKey] = datepicker
 		return true
 	})
 

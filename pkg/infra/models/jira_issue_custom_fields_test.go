@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"reflect"
 	"testing"
+	"time"
 )
 
 func TestParseMultiSelectField(t *testing.T) {
@@ -1145,6 +1146,225 @@ func TestParseStringCustomField(t *testing.T) {
 	for _, testCase := range testCases {
 		t.Run(testCase.name, func(t *testing.T) {
 			got, err := ParseStringCustomField(testCase.args.buffer, testCase.args.customField)
+			if (err != nil) != testCase.wantErr {
+				t.Errorf("ParseMultiSelectCustomField() error = %v, wantErr %v", err, testCase.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, testCase.want) {
+				t.Errorf("ParseMultiSelectCustomField() got = %v, want %v", got, testCase.want)
+			}
+
+			if !reflect.DeepEqual(err, testCase.Err) {
+				t.Errorf("ParseMultiSelectCustomField() got = (%v), want (%v)", err, testCase.Err)
+			}
+		})
+	}
+}
+
+func TestParseDatePickerCustomField(t *testing.T) {
+
+	bufferMocked := bytes.Buffer{}
+	bufferMocked.WriteString(`
+{
+  "fields": {
+    "customfield_10045": "2023-09-22"
+  }
+}`)
+
+	bufferMockedWithNoFields := bytes.Buffer{}
+	bufferMockedWithNoFields.WriteString(`
+{
+  "fields_no_mapped": {
+    "customfield_10045": "2023-09-22"
+  }
+}`)
+
+	bufferMockedWithNoJSON := bytes.Buffer{}
+	bufferMockedWithNoJSON.WriteString(`{}{`)
+
+	bufferMockedWithNoInfo := bytes.Buffer{}
+	bufferMockedWithNoInfo.WriteString(`
+{
+	"fields": {
+		"customfield_10045": null
+	}
+}`)
+
+	bufferMockedWithInvalidType := bytes.Buffer{}
+	bufferMockedWithInvalidType.WriteString(`
+{
+	"fields": {
+		"customfield_10045": 10023.345
+	}
+}`)
+
+	type args struct {
+		buffer      bytes.Buffer
+		customField string
+	}
+
+	testCases := []struct {
+		name    string
+		args    args
+		want    time.Time
+		wantErr bool
+		Err     error
+	}{
+		{
+			name: "when the buffer contains information",
+			args: args{
+				buffer:      bufferMocked,
+				customField: "customfield_10045",
+			},
+			want:    time.Date(2023, time.September, 22, 0, 0, 0, 0, time.UTC),
+			wantErr: false,
+		},
+
+		{
+			name: "when the buffer does not contains the fields object",
+			args: args{
+				buffer:      bufferMockedWithNoFields,
+				customField: "customfield_10045",
+			},
+			wantErr: true,
+			Err:     ErrNoFieldInformationError,
+		},
+
+		{
+			name: "when the buffer field value is null",
+			args: args{
+				buffer:      bufferMockedWithNoInfo,
+				customField: "customfield_10045",
+			},
+			wantErr: true,
+			Err:     ErrNoDatePickerTypeError,
+		},
+
+		{
+			name: "when the buffer cannot be parsed",
+			args: args{
+				buffer:      bufferMockedWithNoInfo,
+				customField: "customfield_10045",
+			},
+			wantErr: true,
+			Err:     ErrNoDatePickerTypeError,
+		},
+	}
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+			got, err := ParseDatePickerCustomField(testCase.args.buffer, testCase.args.customField)
+			if (err != nil) != testCase.wantErr {
+				t.Errorf("ParseMultiSelectCustomField() error = %v, wantErr %v", err, testCase.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, testCase.want) {
+				t.Errorf("ParseMultiSelectCustomField() got = %v, want %v", got, testCase.want)
+			}
+
+			if !reflect.DeepEqual(err, testCase.Err) {
+				t.Errorf("ParseMultiSelectCustomField() got = (%v), want (%v)", err, testCase.Err)
+			}
+		})
+	}
+}
+
+func TestParseDateTimeCustomField(t *testing.T) {
+
+	mockedTime, err := time.Parse("2006-01-02T15:04:05.000-0700", "2023-07-12T16:00:00.000+0100")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	bufferMocked := bytes.Buffer{}
+	bufferMocked.WriteString(`
+{
+  "fields": {
+    "customfield_10045": "2023-07-12T16:00:00.000+0100"
+  }
+}`)
+
+	bufferMockedWithNoFields := bytes.Buffer{}
+	bufferMockedWithNoFields.WriteString(`
+{
+  "fields_no_mapped": {
+    "customfield_10045": "2023-07-12T16:00:00.000+0100"
+  }
+}`)
+
+	bufferMockedWithNoJSON := bytes.Buffer{}
+	bufferMockedWithNoJSON.WriteString(`{}{`)
+
+	bufferMockedWithNoInfo := bytes.Buffer{}
+	bufferMockedWithNoInfo.WriteString(`
+{
+	"fields": {
+		"customfield_10045": null
+	}
+}`)
+
+	bufferMockedWithInvalidType := bytes.Buffer{}
+	bufferMockedWithInvalidType.WriteString(`
+{
+	"fields": {
+		"customfield_10045": 10023.345
+	}
+}`)
+
+	type args struct {
+		buffer      bytes.Buffer
+		customField string
+	}
+
+	testCases := []struct {
+		name    string
+		args    args
+		want    time.Time
+		wantErr bool
+		Err     error
+	}{
+		{
+			name: "when the buffer contains information",
+			args: args{
+				buffer:      bufferMocked,
+				customField: "customfield_10045",
+			},
+			want:    mockedTime,
+			wantErr: false,
+		},
+
+		{
+			name: "when the buffer does not contains the fields object",
+			args: args{
+				buffer:      bufferMockedWithNoFields,
+				customField: "customfield_10045",
+			},
+			wantErr: true,
+			Err:     ErrNoFieldInformationError,
+		},
+
+		{
+			name: "when the buffer field value is null",
+			args: args{
+				buffer:      bufferMockedWithNoInfo,
+				customField: "customfield_10045",
+			},
+			wantErr: true,
+			Err:     ErrNoDateTimeTypeError,
+		},
+
+		{
+			name: "when the buffer cannot be parsed",
+			args: args{
+				buffer:      bufferMockedWithNoInfo,
+				customField: "customfield_10045",
+			},
+			wantErr: true,
+			Err:     ErrNoDateTimeTypeError,
+		},
+	}
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+			got, err := ParseDateTimeCustomField(testCase.args.buffer, testCase.args.customField)
 			if (err != nil) != testCase.wantErr {
 				t.Errorf("ParseMultiSelectCustomField() error = %v, wantErr %v", err, testCase.wantErr)
 				return
@@ -5410,6 +5630,443 @@ func TestParseAssetCustomFields(t *testing.T) {
 			}
 			if !reflect.DeepEqual(err, testCase.Err) {
 				t.Errorf("ParseMultiSelectCustomField() got = (%v), want (%v)", err, testCase.Err)
+			}
+		})
+	}
+}
+
+func TestParseDatePickerCustomFields(t *testing.T) {
+
+	bufferMocked := bytes.Buffer{}
+	bufferMocked.WriteString(`
+{
+   "expand":"names,schema",
+   "startAt":0,
+   "maxResults":50,
+   "total":1,
+   "issues":[
+      {
+         "expand":"operations,versionedRepresentations,editmeta,changelog,renderedFields",
+         "id":"10035",
+         "self":"https://ctreminiom.atlassian.net/rest/api/2/issue/10035",
+         "key":"KP-22",
+         "fields":{
+            "customfield_10046": "2023-09-22"
+         }
+      },
+      {
+         "expand":"operations,versionedRepresentations,editmeta,changelog,renderedFields",
+         "id":"10035",
+         "self":"https://ctreminiom.atlassian.net/rest/api/2/issue/10035",
+         "key":"KP-23",
+         "fields":{
+             "customfield_10046": "2023-09-23"
+         }
+      }
+   ]
+}
+`)
+
+	bufferMockedWithNoIssues := bytes.Buffer{}
+	bufferMockedWithNoIssues.WriteString(`
+{
+    "expand": "names,schema",
+    "startAt": 0,
+    "maxResults": 50,
+    "total": 1,
+    "no_issues": [
+        {
+            "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+            "id": "10035",
+            "self": "https://ctreminiom.atlassian.net/rest/api/2/issue/10035",
+            "key": "KP-22",
+            "no_fields": {
+                "customfield_10046": [
+                    {
+                        "self": "https://ctreminiom.atlassian.net/rest/api/2/customFieldOption/10046",
+                        "value": "Option 3",
+                        "id": "10046"
+                    },
+                    {
+                        "self": "https://ctreminiom.atlassian.net/rest/api/2/customFieldOption/10047",
+                        "value": "Option 4",
+                        "id": "10047"
+                    }
+                ]
+            }
+        }
+    ]
+}`)
+
+	bufferMockedWithNoInfo := bytes.Buffer{}
+	bufferMockedWithNoInfo.WriteString(`
+{
+    "expand": "names,schema",
+    "startAt": 0,
+    "maxResults": 50,
+    "total": 1,
+    "data": [
+        {
+            "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+            "id": "10035",
+            "self": "https://ctreminiom.atlassian.net/rest/api/2/issue/10035",
+            "key": "KP-22",
+            "fields": {
+                "customfield_10046": null
+            }
+        }
+    ]
+}`)
+
+	bufferMockedWithNullValues := bytes.Buffer{}
+	bufferMockedWithNullValues.WriteString(`
+{
+   "expand":"names,schema",
+   "startAt":0,
+   "maxResults":50,
+   "total":1,
+   "issues":[
+      {
+         "expand":"operations,versionedRepresentations,editmeta,changelog,renderedFields",
+         "id":"10035",
+         "self":"https://ctreminiom.atlassian.net/rest/api/2/issue/10035",
+         "key":"KP-22",
+         "fields":{
+            "customfield_10046": null,
+         }
+      },
+      {
+         "expand":"operations,versionedRepresentations,editmeta,changelog,renderedFields",
+         "id":"10035",
+         "self":"https://ctreminiom.atlassian.net/rest/api/2/issue/10035",
+         "key":"KP-23",
+         "fields":{
+            "customfield_10046": "2023-09-23"
+         }
+      }
+   ]
+}`)
+
+	bufferMockedWithInvalidTypes := bytes.Buffer{}
+	bufferMockedWithInvalidTypes.WriteString(`
+{
+   "expand":"names,schema",
+   "startAt":0,
+   "maxResults":50,
+   "total":1,
+   "issues":[
+      {
+         "expand":"operations,versionedRepresentations,editmeta,changelog,renderedFields",
+         "id":"10035",
+         "self":"https://ctreminiom.atlassian.net/rest/api/2/issue/10035",
+         "key":"KP-22",
+         "fields":{
+            "customfield_10046": 33030303,
+         }
+      },
+      {
+         "expand":"operations,versionedRepresentations,editmeta,changelog,renderedFields",
+         "id":"10035",
+         "self":"https://ctreminiom.atlassian.net/rest/api/2/issue/10035",
+         "key":"KP-23",
+         "fields":{
+            "customfield_10046": true
+         }
+      }
+   ]
+}
+`)
+
+	type args struct {
+		buffer      bytes.Buffer
+		customField string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    map[string]time.Time
+		wantErr bool
+		Err     error
+	}{
+		{
+			name: "when the buffer contains information",
+			args: args{
+				buffer:      bufferMocked,
+				customField: "customfield_10046",
+			},
+			want: map[string]time.Time{
+				"KP-22": time.Date(2023, time.September, 22, 0, 0, 0, 0, time.UTC),
+				"KP-23": time.Date(2023, time.September, 23, 0, 0, 0, 0, time.UTC),
+			},
+
+			wantErr: false,
+		},
+
+		{
+			name: "when the buffer does not contain the issues object",
+			args: args{
+				buffer:      bufferMockedWithNoInfo,
+				customField: "customfield_10046",
+			},
+			wantErr: true,
+			Err:     ErrNoIssuesSliceError,
+		},
+
+		{
+			name: "when the buffer contains null customfields",
+			args: args{
+				buffer:      bufferMockedWithNullValues,
+				customField: "customfield_10046",
+			},
+			want: map[string]time.Time{
+				"KP-23": time.Date(2023, time.September, 23, 0, 0, 0, 0, time.UTC),
+			},
+			wantErr: false,
+		},
+
+		{
+			name: "when the buffer contains invalid types",
+			args: args{
+				buffer:      bufferMockedWithInvalidTypes,
+				customField: "customfield_10046",
+			},
+			wantErr: true,
+			Err:     ErrNoMapValuesError,
+		},
+	}
+	for _, testCase := range tests {
+		t.Run(testCase.name, func(t *testing.T) {
+			got, err := ParseDatePickerCustomFields(testCase.args.buffer, testCase.args.customField)
+			if (err != nil) != testCase.wantErr {
+				t.Errorf("ParseSelectCustomFields() error = %v, wantErr %v", err, testCase.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, testCase.want) {
+				t.Errorf("ParseSelectCustomFields() got = %v, want %v", got, testCase.want)
+			}
+			if !reflect.DeepEqual(err, testCase.Err) {
+				t.Errorf("ParseSelectCustomFields() got = (%v), want (%v)", err, testCase.Err)
+			}
+		})
+	}
+}
+
+func TestParseDateTimeCustomFields(t *testing.T) {
+
+	mockedTime, err := time.Parse("2006-01-02T15:04:05.000-0700", "2023-07-12T16:00:00.000+0100")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	bufferMocked := bytes.Buffer{}
+	bufferMocked.WriteString(`
+{
+   "expand":"names,schema",
+   "startAt":0,
+   "maxResults":50,
+   "total":1,
+   "issues":[
+      {
+         "expand":"operations,versionedRepresentations,editmeta,changelog,renderedFields",
+         "id":"10035",
+         "self":"https://ctreminiom.atlassian.net/rest/api/2/issue/10035",
+         "key":"KP-22",
+         "fields":{
+            "customfield_10046": "2023-07-12T16:00:00.000+0100"
+         }
+      },
+      {
+         "expand":"operations,versionedRepresentations,editmeta,changelog,renderedFields",
+         "id":"10035",
+         "self":"https://ctreminiom.atlassian.net/rest/api/2/issue/10035",
+         "key":"KP-23",
+         "fields":{
+             "customfield_10046": "2023-07-12T16:00:00.000+0100"
+         }
+      }
+   ]
+}
+`)
+
+	bufferMockedWithNoIssues := bytes.Buffer{}
+	bufferMockedWithNoIssues.WriteString(`
+{
+    "expand": "names,schema",
+    "startAt": 0,
+    "maxResults": 50,
+    "total": 1,
+    "no_issues": [
+        {
+            "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+            "id": "10035",
+            "self": "https://ctreminiom.atlassian.net/rest/api/2/issue/10035",
+            "key": "KP-22",
+            "no_fields": {
+                "customfield_10046": [
+                    {
+                        "self": "https://ctreminiom.atlassian.net/rest/api/2/customFieldOption/10046",
+                        "value": "Option 3",
+                        "id": "10046"
+                    },
+                    {
+                        "self": "https://ctreminiom.atlassian.net/rest/api/2/customFieldOption/10047",
+                        "value": "Option 4",
+                        "id": "10047"
+                    }
+                ]
+            }
+        }
+    ]
+}`)
+
+	bufferMockedWithNoInfo := bytes.Buffer{}
+	bufferMockedWithNoInfo.WriteString(`
+{
+    "expand": "names,schema",
+    "startAt": 0,
+    "maxResults": 50,
+    "total": 1,
+    "data": [
+        {
+            "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+            "id": "10035",
+            "self": "https://ctreminiom.atlassian.net/rest/api/2/issue/10035",
+            "key": "KP-22",
+            "fields": {
+                "customfield_10046": null
+            }
+        }
+    ]
+}`)
+
+	bufferMockedWithNullValues := bytes.Buffer{}
+	bufferMockedWithNullValues.WriteString(`
+{
+   "expand":"names,schema",
+   "startAt":0,
+   "maxResults":50,
+   "total":1,
+   "issues":[
+      {
+         "expand":"operations,versionedRepresentations,editmeta,changelog,renderedFields",
+         "id":"10035",
+         "self":"https://ctreminiom.atlassian.net/rest/api/2/issue/10035",
+         "key":"KP-22",
+         "fields":{
+            "customfield_10046": null,
+         }
+      },
+      {
+         "expand":"operations,versionedRepresentations,editmeta,changelog,renderedFields",
+         "id":"10035",
+         "self":"https://ctreminiom.atlassian.net/rest/api/2/issue/10035",
+         "key":"KP-23",
+         "fields":{
+            "customfield_10046": "2023-07-12T16:00:00.000+0100"
+         }
+      }
+   ]
+}`)
+
+	bufferMockedWithInvalidTypes := bytes.Buffer{}
+	bufferMockedWithInvalidTypes.WriteString(`
+{
+   "expand":"names,schema",
+   "startAt":0,
+   "maxResults":50,
+   "total":1,
+   "issues":[
+      {
+         "expand":"operations,versionedRepresentations,editmeta,changelog,renderedFields",
+         "id":"10035",
+         "self":"https://ctreminiom.atlassian.net/rest/api/2/issue/10035",
+         "key":"KP-22",
+         "fields":{
+            "customfield_10046": 33030303,
+         }
+      },
+      {
+         "expand":"operations,versionedRepresentations,editmeta,changelog,renderedFields",
+         "id":"10035",
+         "self":"https://ctreminiom.atlassian.net/rest/api/2/issue/10035",
+         "key":"KP-23",
+         "fields":{
+            "customfield_10046": true
+         }
+      }
+   ]
+}
+`)
+
+	type args struct {
+		buffer      bytes.Buffer
+		customField string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    map[string]time.Time
+		wantErr bool
+		Err     error
+	}{
+		{
+			name: "when the buffer contains information",
+			args: args{
+				buffer:      bufferMocked,
+				customField: "customfield_10046",
+			},
+			want: map[string]time.Time{
+				"KP-22": mockedTime,
+				"KP-23": mockedTime,
+			},
+
+			wantErr: false,
+		},
+
+		{
+			name: "when the buffer does not contain the issues object",
+			args: args{
+				buffer:      bufferMockedWithNoInfo,
+				customField: "customfield_10046",
+			},
+			wantErr: true,
+			Err:     ErrNoIssuesSliceError,
+		},
+
+		{
+			name: "when the buffer contains null customfields",
+			args: args{
+				buffer:      bufferMockedWithNullValues,
+				customField: "customfield_10046",
+			},
+			want: map[string]time.Time{
+				"KP-23": mockedTime,
+			},
+			wantErr: false,
+		},
+
+		{
+			name: "when the buffer contains invalid types",
+			args: args{
+				buffer:      bufferMockedWithInvalidTypes,
+				customField: "customfield_10046",
+			},
+			wantErr: true,
+			Err:     ErrNoMapValuesError,
+		},
+	}
+	for _, testCase := range tests {
+		t.Run(testCase.name, func(t *testing.T) {
+			got, err := ParseDateTimeCustomFields(testCase.args.buffer, testCase.args.customField)
+			if (err != nil) != testCase.wantErr {
+				t.Errorf("ParseSelectCustomFields() error = %v, wantErr %v", err, testCase.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, testCase.want) {
+				t.Errorf("ParseSelectCustomFields() got = %v, want %v", got, testCase.want)
+			}
+			if !reflect.DeepEqual(err, testCase.Err) {
+				t.Errorf("ParseSelectCustomFields() got = (%v), want (%v)", err, testCase.Err)
 			}
 		})
 	}

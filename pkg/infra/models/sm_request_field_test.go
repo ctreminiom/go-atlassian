@@ -64,7 +64,7 @@ func TestCreateCustomerRequestPayloadScheme_DateTimeCustomField(t *testing.T) {
 				value: time.Time{},
 			},
 			wantErr: true,
-			Err:     ErrNoDateTimeTypeError,
+			Err:     ErrNoDatePickerTypeError,
 		},
 	}
 	for _, tt := range tests {
@@ -155,7 +155,7 @@ func TestCreateCustomerRequestPayloadScheme_DateCustomField(t *testing.T) {
 				value: time.Time{},
 			},
 			wantErr: true,
-			Err:     ErrNoDateTimeTypeError,
+			Err:     ErrNoDatePickerTypeError,
 		},
 	}
 	for _, tt := range tests {

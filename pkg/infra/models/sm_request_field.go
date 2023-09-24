@@ -36,7 +36,7 @@ func (c *CreateCustomerRequestPayloadScheme) DateTimeCustomField(id string, valu
 	}
 
 	if value.IsZero() {
-		return ErrNoDateTimeTypeError
+		return ErrNoDatePickerTypeError
 	}
 
 	return c.AddCustomField(id, value.Format(time.RFC3339))
@@ -49,7 +49,7 @@ func (c *CreateCustomerRequestPayloadScheme) DateCustomField(id string, value ti
 	}
 
 	if value.IsZero() {
-		return ErrNoDateTimeTypeError
+		return ErrNoDatePickerTypeError
 	}
 
 	return c.AddCustomField(id, value.Format("2006-01-02"))

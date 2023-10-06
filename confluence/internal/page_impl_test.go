@@ -718,7 +718,7 @@ func Test_internalPageImpl_Create(t *testing.T) {
 	}
 
 	mockedPayload := &model.PageCreatePayloadScheme{
-		SpaceID: 203718658,
+		SpaceID: "203718658",
 		Status:  "current",
 		Title:   "Page create title test",
 		Body: &model.PageBodyRepresentationScheme{

@@ -35,7 +35,7 @@ func Test_internalProjectPropertyImpl_Gets(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				projectKeyOrId: "DUMMY",
 			},
 			on: func(fields *fields) {
@@ -51,7 +51,7 @@ func Test_internalProjectPropertyImpl_Gets(t *testing.T) {
 
 				client.On("Call",
 					&http.Request{},
-					&model.ProjectPropertyPageScheme{}).
+					&model.PropertyPageScheme{}).
 					Return(&model.ResponseScheme{}, nil)
 
 				fields.c = client
@@ -64,7 +64,7 @@ func Test_internalProjectPropertyImpl_Gets(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				projectKeyOrId: "DUMMY",
 			},
 			on: func(fields *fields) {
@@ -80,7 +80,7 @@ func Test_internalProjectPropertyImpl_Gets(t *testing.T) {
 
 				client.On("Call",
 					&http.Request{},
-					&model.ProjectPropertyPageScheme{}).
+					&model.PropertyPageScheme{}).
 					Return(&model.ResponseScheme{}, nil)
 
 				fields.c = client
@@ -103,7 +103,7 @@ func Test_internalProjectPropertyImpl_Gets(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				projectKeyOrId: "DUMMY",
 			},
 			on: func(fields *fields) {
@@ -180,7 +180,7 @@ func Test_internalProjectPropertyImpl_Get(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				projectKeyOrId: "DUMMY",
 				propertyKey:    "alliance",
 			},
@@ -210,7 +210,7 @@ func Test_internalProjectPropertyImpl_Get(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				projectKeyOrId: "DUMMY",
 				propertyKey:    "alliance",
 			},
@@ -240,7 +240,7 @@ func Test_internalProjectPropertyImpl_Get(t *testing.T) {
 			name:   "when the project key or id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoProjectIDOrKeyError,
@@ -250,7 +250,7 @@ func Test_internalProjectPropertyImpl_Get(t *testing.T) {
 			name:   "when the property key is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				projectKeyOrId: "DUMMY",
 			},
 			wantErr: true,
@@ -261,7 +261,7 @@ func Test_internalProjectPropertyImpl_Get(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				projectKeyOrId: "DUMMY",
 				propertyKey:    "alliance",
 			},
@@ -339,7 +339,7 @@ func Test_internalProjectPropertyImpl_Delete(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				projectKeyOrId: "DUMMY",
 				propertyKey:    "alliance",
 			},
@@ -369,7 +369,7 @@ func Test_internalProjectPropertyImpl_Delete(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				projectKeyOrId: "DUMMY",
 				propertyKey:    "alliance",
 			},
@@ -399,7 +399,7 @@ func Test_internalProjectPropertyImpl_Delete(t *testing.T) {
 			name:   "when the project key or id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoProjectIDOrKeyError,
@@ -409,7 +409,7 @@ func Test_internalProjectPropertyImpl_Delete(t *testing.T) {
 			name:   "when the property key is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				projectKeyOrId: "DUMMY",
 			},
 			wantErr: true,
@@ -420,7 +420,7 @@ func Test_internalProjectPropertyImpl_Delete(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				projectKeyOrId: "DUMMY",
 				propertyKey:    "alliance",
 			},
@@ -503,7 +503,7 @@ func Test_internalProjectPropertyImpl_Set(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				projectKeyOrId: "DUMMY",
 				propertyKey:    "alliance",
 				payload:        payloadMocked,
@@ -534,7 +534,7 @@ func Test_internalProjectPropertyImpl_Set(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				projectKeyOrId: "DUMMY",
 				propertyKey:    "alliance",
 				payload:        payloadMocked,
@@ -565,7 +565,7 @@ func Test_internalProjectPropertyImpl_Set(t *testing.T) {
 			name:   "when the project key or id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoProjectIDOrKeyError,
@@ -575,7 +575,7 @@ func Test_internalProjectPropertyImpl_Set(t *testing.T) {
 			name:   "when the property key is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				projectKeyOrId: "DUMMY",
 			},
 			wantErr: true,
@@ -586,7 +586,7 @@ func Test_internalProjectPropertyImpl_Set(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				projectKeyOrId: "DUMMY",
 				propertyKey:    "alliance",
 				payload:        payloadMocked,

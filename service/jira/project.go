@@ -225,7 +225,7 @@ type ProjectPropertyConnector interface {
 	// GET /rest/api/{2-3}/project/{projectIdOrKey}/properties
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/projects/properties#get-project-properties-keys
-	Gets(ctx context.Context, projectKeyOrId string) (*model.ProjectPropertyPageScheme, *model.ResponseScheme, error)
+	Gets(ctx context.Context, projectKeyOrId string) (*model.PropertyPageScheme, *model.ResponseScheme, error)
 
 	// Get returns the value of a project property.
 	//

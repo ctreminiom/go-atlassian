@@ -187,6 +187,11 @@ func New(httpClient common.HttpClient, site string) (*Client, error) {
 		return nil, err
 	}
 
+	issueProperty, err := internal.NewIssuePropertyService(client, ApiVersion)
+	if err != nil {
+		return nil, err
+	}
+
 	issueServices := &internal.IssueServices{
 		Attachment:      issueAttachmentService,
 		CommentRT:       commentService,
@@ -201,6 +206,7 @@ func New(httpClient common.HttpClient, site string) (*Client, error) {
 		Vote:            vote,
 		Watcher:         watcher,
 		WorklogRichText: worklog,
+		Property:        issueProperty,
 	}
 
 	issueService, _, err := internal.NewIssueService(client, ApiVersion, issueServices)

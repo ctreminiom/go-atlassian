@@ -1,10 +1,10 @@
 package models
 
-type ProjectPropertyPageScheme struct {
-	Keys []*ProjectPropertyScheme `json:"keys,omitempty"`
+type PropertyPageScheme struct {
+	Keys []*PropertyScheme `json:"keys,omitempty"`
 }
 
-type ProjectPropertyScheme struct {
+type PropertyScheme struct {
 	Self string `json:"self,omitempty"`
 	Key  string `json:"key,omitempty"`
 }

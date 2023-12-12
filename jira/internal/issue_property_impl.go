@@ -36,7 +36,7 @@ Endpoint: GET /rest/api/{apiVersion}/issue/{issueIdOrKey}/properties
 
 You can refer to the documentation: [Get issue property keys]
 
-[Get issue property keys]: https://docs.go-atlassian.io/jira-software-cloud/groups#create-group
+[Get issue property keys]: https://docs.go-atlassian.io/jira-software-cloud/issues/properties#get-issue-property-keys
 */
 func (i *IssuePropertyService) Gets(ctx context.Context, issueIdOrKey string) (*model.PropertyPageScheme, *model.ResponseScheme, error) {
 	return i.internalClient.Gets(ctx, issueIdOrKey)
@@ -54,7 +54,7 @@ Endpoint: GET /rest/api/{apiVersion}/issue/{issueIdOrKey}/properties/{propertyKe
 
 You can refer to the documentation: [Get issue property]
 
-[Get issue property]: https://docs.go-atlassian.io/jira-software-cloud/groups#create-group
+[Get issue property]: https://docs.go-atlassian.io/jira-software-cloud/issues/properties#get-issue-property
 */
 func (i *IssuePropertyService) Get(ctx context.Context, issueKey, propertyKey string) (*model.EntityPropertyScheme, *model.ResponseScheme, error) {
 	return i.internalClient.Get(ctx, issueKey, propertyKey)
@@ -73,7 +73,7 @@ Endpoint: PUT /rest/api/{apiVersion}/issue/{issueIdOrKey}/properties/{propertyKe
 
 You can refer to the documentation: [Set issue property]
 
-[Set issue property]: https://docs.go-atlassian.io/jira-software-cloud/groups#create-group
+[Set issue property]: https://docs.go-atlassian.io/jira-software-cloud/issues/properties#set-issue-property
 */
 func (i *IssuePropertyService) Set(ctx context.Context, issueKey, propertyKey string, payload interface{}) (*model.ResponseScheme, error) {
 	return i.internalClient.Set(ctx, issueKey, propertyKey, payload)
@@ -91,7 +91,7 @@ Endpoint: DELETE /rest/api/{apiVersion}/issue/{issueIdOrKey}/properties/{propert
 
 You can refer to the documentation: [Delete issue property]
 
-[Delete issue property]: https://docs.go-atlassian.io/jira-software-cloud/groups#create-group
+[Delete issue property]: https://docs.go-atlassian.io/jira-software-cloud/issues/properties#delete-issue-property
 */
 func (i *IssuePropertyService) Delete(ctx context.Context, issueKey, propertyKey string) (*model.ResponseScheme, error) {
 	return i.internalClient.Delete(ctx, issueKey, propertyKey)

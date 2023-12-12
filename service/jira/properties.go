@@ -26,7 +26,7 @@ type IssuePropertyConnector interface {
 
 		You can refer to the documentation: [Get issue property keys]
 
-		[Get issue property keys]: https://docs.go-atlassian.io/jira-software-cloud/groups#create-group
+		[Get issue property keys]: https://docs.go-atlassian.io/jira-software-cloud/issues/properties#get-issue-property-keys
 	*/
 	Gets(ctx context.Context, issueIdOrKey string) (*model.PropertyPageScheme, *model.ResponseScheme, error)
 
@@ -42,7 +42,7 @@ type IssuePropertyConnector interface {
 
 		You can refer to the documentation: [Get issue property]
 
-		[Get issue property]: https://docs.go-atlassian.io/jira-software-cloud/groups#create-group
+		[Get issue property]: https://docs.go-atlassian.io/jira-software-cloud/issues/properties#get-issue-property
 	*/
 	Get(ctx context.Context, issueKey, propertyKey string) (*model.EntityPropertyScheme, *model.ResponseScheme, error)
 
@@ -59,7 +59,7 @@ type IssuePropertyConnector interface {
 
 		You can refer to the documentation: [Set issue property]
 
-		[Set issue property]: https://docs.go-atlassian.io/jira-software-cloud/groups#create-group
+		[Set issue property]: https://docs.go-atlassian.io/jira-software-cloud/issues/properties#set-issue-property
 	*/
 	Set(ctx context.Context, issueKey, propertyKey string, payload interface{}) (*model.ResponseScheme, error)
 
@@ -75,7 +75,7 @@ type IssuePropertyConnector interface {
 
 		You can refer to the documentation: [Delete issue property]
 
-		[Delete issue property]: https://docs.go-atlassian.io/jira-software-cloud/groups#create-group
+		[Delete issue property]: https://docs.go-atlassian.io/jira-software-cloud/issues/properties#delete-issue-property
 	*/
 	Delete(ctx context.Context, issueKey, propertyKey string) (*model.ResponseScheme, error)
 }

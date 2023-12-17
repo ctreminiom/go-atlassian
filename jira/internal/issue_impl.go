@@ -27,6 +27,7 @@ type IssueServices struct {
 	Watcher         *WatcherService
 	WorklogAdf      *WorklogADFService
 	WorklogRichText *WorklogRichTextService
+	Property        *IssuePropertyService
 }
 
 func NewIssueService(client service.Connector, version string, services *IssueServices) (*IssueRichTextService, *IssueADFService, error) {
@@ -64,6 +65,7 @@ func NewIssueService(client service.Connector, version string, services *IssueSe
 		adfService.Vote = services.Vote
 		adfService.Watcher = services.Watcher
 		adfService.Worklog = services.WorklogAdf
+		adfService.Property = services.Property
 
 		richTextService.Comment = services.CommentRT
 		richTextService.Attachment = services.Attachment
@@ -78,6 +80,7 @@ func NewIssueService(client service.Connector, version string, services *IssueSe
 		richTextService.Vote = services.Vote
 		richTextService.Watcher = services.Watcher
 		richTextService.Worklog = services.WorklogRichText
+		richTextService.Property = services.Property
 
 	}
 

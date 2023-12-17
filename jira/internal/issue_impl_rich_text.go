@@ -27,6 +27,7 @@ type IssueRichTextService struct {
 	Vote           *VoteService
 	Watcher        *WatcherService
 	Worklog        *WorklogRichTextService
+	Property       *IssuePropertyService
 }
 
 // Delete deletes an issue.

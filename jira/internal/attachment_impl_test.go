@@ -38,7 +38,7 @@ func Test_internalIssueAttachmentServiceImpl_Settings(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			on: func(fields *fields) {
 
@@ -66,7 +66,7 @@ func Test_internalIssueAttachmentServiceImpl_Settings(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			on: func(fields *fields) {
 
@@ -94,7 +94,7 @@ func Test_internalIssueAttachmentServiceImpl_Settings(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "2"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			on: func(fields *fields) {
 
@@ -171,7 +171,7 @@ func Test_internalIssueAttachmentServiceImpl_Metadata(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				attachmentId: "1110",
 			},
 			on: func(fields *fields) {
@@ -199,7 +199,7 @@ func Test_internalIssueAttachmentServiceImpl_Metadata(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				attachmentId: "1110",
 			},
 			on: func(fields *fields) {
@@ -228,7 +228,7 @@ func Test_internalIssueAttachmentServiceImpl_Metadata(t *testing.T) {
 			name:   "when the attachment id is not provided",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				attachmentId: "",
 			},
 			on: func(fields *fields) {
@@ -242,7 +242,7 @@ func Test_internalIssueAttachmentServiceImpl_Metadata(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				attachmentId: "1110",
 			},
 			on: func(fields *fields) {
@@ -320,7 +320,7 @@ func Test_internalIssueAttachmentServiceImpl_Human(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				attachmentId: "1110",
 			},
 			on: func(fields *fields) {
@@ -348,7 +348,7 @@ func Test_internalIssueAttachmentServiceImpl_Human(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				attachmentId: "1110",
 			},
 			on: func(fields *fields) {
@@ -377,7 +377,7 @@ func Test_internalIssueAttachmentServiceImpl_Human(t *testing.T) {
 			name:   "when the attachment id is not provided",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				attachmentId: "",
 			},
 			on: func(fields *fields) {
@@ -391,7 +391,7 @@ func Test_internalIssueAttachmentServiceImpl_Human(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				attachmentId: "1110",
 			},
 			on: func(fields *fields) {
@@ -469,7 +469,7 @@ func Test_internalIssueAttachmentServiceImpl_Delete(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				attachmentId: "1110",
 			},
 			on: func(fields *fields) {
@@ -497,7 +497,7 @@ func Test_internalIssueAttachmentServiceImpl_Delete(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				attachmentId: "1110",
 			},
 			on: func(fields *fields) {
@@ -526,7 +526,7 @@ func Test_internalIssueAttachmentServiceImpl_Delete(t *testing.T) {
 			name:   "when the attachment id is not provided",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				attachmentId: "",
 			},
 			on: func(fields *fields) {
@@ -540,7 +540,7 @@ func Test_internalIssueAttachmentServiceImpl_Delete(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				attachmentId: "1110",
 			},
 			on: func(fields *fields) {
@@ -628,7 +628,7 @@ func Test_internalIssueAttachmentServiceImpl_Add(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "DUMMY-1",
 				fileName:     "LICENSE",
 				file:         fileMocked,
@@ -658,7 +658,7 @@ func Test_internalIssueAttachmentServiceImpl_Add(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "DUMMY-1",
 				fileName:     "LICENSE",
 				file:         fileMocked,
@@ -688,7 +688,7 @@ func Test_internalIssueAttachmentServiceImpl_Add(t *testing.T) {
 			name:   "when the issue key or id is not provided",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "",
 				fileName:     "LICENSE",
 				file:         fileMocked,
@@ -701,7 +701,7 @@ func Test_internalIssueAttachmentServiceImpl_Add(t *testing.T) {
 			name:   "when the file name is not provided",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "DUMMY-1",
 				fileName:     "",
 				file:         fileMocked,
@@ -714,7 +714,7 @@ func Test_internalIssueAttachmentServiceImpl_Add(t *testing.T) {
 			name:   "when the field reader is not provided",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "DUMMY-1",
 				fileName:     "LICENSE",
 				file:         nil,
@@ -727,7 +727,7 @@ func Test_internalIssueAttachmentServiceImpl_Add(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "DUMMY-1",
 				fileName:     "LICENSE",
 				file:         fileMocked,
@@ -808,7 +808,7 @@ func Test_internalIssueAttachmentServiceImpl_Download(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				attachmentId: "1110",
 				redirect:     false,
 			},
@@ -837,7 +837,7 @@ func Test_internalIssueAttachmentServiceImpl_Download(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				attachmentId: "1110",
 				redirect:     true,
 			},
@@ -867,7 +867,7 @@ func Test_internalIssueAttachmentServiceImpl_Download(t *testing.T) {
 			name:   "when the attachment id is not provided",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				attachmentId: "",
 			},
 			on: func(fields *fields) {
@@ -881,7 +881,7 @@ func Test_internalIssueAttachmentServiceImpl_Download(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				attachmentId: "1110",
 				redirect:     true,
 			},

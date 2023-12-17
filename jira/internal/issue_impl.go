@@ -80,7 +80,7 @@ func NewIssueService(client service.Connector, version string, services *IssueSe
 		richTextService.Vote = services.Vote
 		richTextService.Watcher = services.Watcher
 		richTextService.Worklog = services.WorklogRichText
-		adfService.Property = services.Property
+		richTextService.Property = services.Property
 
 	}
 

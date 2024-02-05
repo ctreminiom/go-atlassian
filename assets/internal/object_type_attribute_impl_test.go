@@ -13,19 +13,16 @@ import (
 
 func Test_internalObjectTypeAttributeImpl_Create(t *testing.T) {
 
-	payloadMocked := &model.ObjectTypeAttributeScheme{
-		WorkspaceId: "g2778e1d-939d-581d-c8e2-9d5g59de456b",
-		GlobalId:    "g2778e1d-939d-581d-c8e2-9d5g59de456b:1330",
-		ID:          "1330",
-		ObjectType:  nil,
-		Name:        "Geolocation",
-		Label:       false,
-		Type:        0,
-		Description: "",
-		DefaultType: &model.ObjectTypeAssetAttributeDefaultTypeScheme{
-			ID:   0,
-			Name: "Text",
-		},
+	payloadMocked := &model.ObjectTypeAttributePayloadScheme{
+		WorkspaceId: 		"g2778e1d-939d-581d-c8e2-9d5g59de456b",
+		GlobalId:    		"g2778e1d-939d-581d-c8e2-9d5g59de456b:1330",
+		ID:          		"1330",
+		ObjectType:  		nil,
+		Name:        		"Geolocation",
+		Label:  	 	 false,
+		Type:       		 0,
+		Description: 		 "",
+		DefaultTypeId: 		 0,
 		TypeValue:               "",
 		TypeValueMulti:          nil,
 		AdditionalValue:         "",
@@ -182,19 +179,16 @@ func Test_internalObjectTypeAttributeImpl_Create(t *testing.T) {
 
 func Test_internalObjectTypeAttributeImpl_Update(t *testing.T) {
 
-	payloadMocked := &model.ObjectTypeAttributeScheme{
-		WorkspaceId: "g2778e1d-939d-581d-c8e2-9d5g59de456b",
-		GlobalId:    "g2778e1d-939d-581d-c8e2-9d5g59de456b:1330",
-		ID:          "1330",
-		ObjectType:  nil,
-		Name:        "Geolocation",
-		Label:       false,
-		Type:        0,
-		Description: "",
-		DefaultType: &model.ObjectTypeAssetAttributeDefaultTypeScheme{
-			ID:   0,
-			Name: "Text",
-		},
+	payloadMocked := &model.ObjectTypeAttributePayloadScheme{
+		WorkspaceId: 		 "g2778e1d-939d-581d-c8e2-9d5g59de456b",
+		GlobalId:    		 "g2778e1d-939d-581d-c8e2-9d5g59de456b:1330",
+		ID:          		 "1330",
+		ObjectType:  		 nil,
+		Name:        		 "Geolocation",
+		Label:       		 false,
+		Type:        		 0,
+		Description: 		 "",
+		DefaultTypeId: 		 0,
 		TypeValue:               "",
 		TypeValueMulti:          nil,
 		AdditionalValue:         "",

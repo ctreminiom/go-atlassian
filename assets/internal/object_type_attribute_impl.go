@@ -25,7 +25,7 @@ type ObjectTypeAttributeService struct {
 // POST /jsm/assets/workspace/{workspaceId}/v1/objecttypeattribute/{objectTypeId}
 //
 // https://docs.go-atlassian.io/jira-assets/object/type/attribute#create-object-type-attribute
-func (o *ObjectTypeAttributeService) Create(ctx context.Context, workspaceID, objectTypeID string, payload *model.ObjectTypeAttributeScheme) (*model.ObjectTypeAttributeScheme, *model.ResponseScheme, error) {
+func (o *ObjectTypeAttributeService) Create(ctx context.Context, workspaceID, objectTypeID string, payload *model.ObjectTypeAttributePayloadScheme) (*model.ObjectTypeAttributeScheme, *model.ResponseScheme, error) {
 	return o.internalClient.Create(ctx, workspaceID, objectTypeID, payload)
 }
 
@@ -51,7 +51,7 @@ type internalObjectTypeAttributeImpl struct {
 	c service.Connector
 }
 
-func (i *internalObjectTypeAttributeImpl) Create(ctx context.Context, workspaceID, objectTypeID string, payload *model.ObjectTypeAttributeScheme) (*model.ObjectTypeAttributeScheme, *model.ResponseScheme, error) {
+func (i *internalObjectTypeAttributeImpl) Create(ctx context.Context, workspaceID, objectTypeID string, payload *model.ObjectTypeAttributePayloadScheme) (*model.ObjectTypeAttributeScheme, *model.ResponseScheme, error) {
 
 	if workspaceID == "" {
 		return nil, nil, model.ErrNoWorkspaceIDError
@@ -77,7 +77,7 @@ func (i *internalObjectTypeAttributeImpl) Create(ctx context.Context, workspaceI
 	return attribute, res, nil
 }
 
-func (i *internalObjectTypeAttributeImpl) Update(ctx context.Context, workspaceID, objectTypeID, attributeID string, payload *model.ObjectTypeAttributeScheme) (*model.ObjectTypeAttributeScheme, *model.ResponseScheme, error) {
+func (i *internalObjectTypeAttributeImpl) Update(ctx context.Context, workspaceID, objectTypeID, attributeID string, payload *model.ObjectTypeAttributePayloadScheme) (*model.ObjectTypeAttributeScheme, *model.ResponseScheme, error) {
 
 	if workspaceID == "" {
 		return nil, nil, model.ErrNoWorkspaceIDError

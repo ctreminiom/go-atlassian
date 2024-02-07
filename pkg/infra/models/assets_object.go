@@ -105,13 +105,13 @@ type ObjectTypeAttributePayloadScheme struct {
 	Name                    string   `json:"name,omitempty"`
 	Label                   bool     `json:"label,omitempty"`
 	Description             string   `json:"description,omitempty"`
-	Type                    int      `json:"type,omitempty"`
-	DefaultTypeId		int      `json:defaultTypeId,omitempty"`
+	Type                    *int      `json:"type,omitempty"`
+	DefaultTypeId		*int      `json:defaultTypeId,omitempty"`
  	TypeValue               string   `json:"typeValue,omitempty"`
 	TypeValueMulti          []string `json:"typeValueMulti,omitempty"`
 	AdditionalValue         string   `json:"additionalValue,omitempty"`
-	MinimumCardinality      int      `json:"minimumCardinality,omitempty"`
-	MaximumCardinality      int      `json:"maximumCardinality,omitempty"`
+	MinimumCardinality      *int      `json:"minimumCardinality,omitempty"`
+	MaximumCardinality      *int      `json:"maximumCardinality,omitempty"`
 	Suffix                  string   `json:"suffix,omitempty"`
 	IncludeChildObjectTypes bool     `json:"includeChildObjectTypes,omitempty"`
 	Hidden                  bool     `json:"hidden,omitempty"`

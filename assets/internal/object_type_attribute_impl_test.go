@@ -12,12 +12,16 @@ import (
 )
 
 func Test_internalObjectTypeAttributeImpl_Create(t *testing.T) {
+	var attributeType int
+	var defaultTypeID int
+	attributeType = 0
+	defaultTypeID = 0
 	payloadMocked := &model.ObjectTypeAttributePayloadScheme{
 		Name:        		"Geolocation",
 		Label:  	 	 false,
-		Type:       		 &int(0),
+		Type:       		 &attributeType,
 		Description: 		 "",
-		DefaultTypeId: 		 &int(0),
+		DefaultTypeId: 		 &defaultTypeID,
 		TypeValue:               "",
 		TypeValueMulti:          nil,
 		AdditionalValue:         "",

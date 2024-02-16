@@ -23,16 +23,10 @@ func Test_internalObjectTypeAttributeImpl_Create(t *testing.T) {
 		TypeValue:               "",
 		TypeValueMulti:          nil,
 		AdditionalValue:         "",
-		Editable:                false,
-		System:                  false,
-		Indexed:                 false,
-		Sortable:                false,
 		Summable:                false,
 		MinimumCardinality:      0,
 		MaximumCardinality:      0,
 		Suffix:                  "",
-		Removable:               false,
-		ObjectAttributeExists:   false,
 		Hidden:                  false,
 		IncludeChildObjectTypes: false,
 		UniqueAttribute:         false,
@@ -40,7 +34,6 @@ func Test_internalObjectTypeAttributeImpl_Create(t *testing.T) {
 		Iql:                     "",
 		QlQuery:                 "",
 		Options:                 "",
-		Position:                6,
 	}
 
 	type fields struct {

@@ -12,20 +12,26 @@ import (
 )
 
 func Test_internalObjectTypeAttributeImpl_Create(t *testing.T) {
-	attributeType := 0
-	defaultTypeId := 0
+	var attributeType int
+	var defaultTypeID int
+	var minimumCardinality int
+	var maximumCardinality int
+	attributeType = 0
+	defaultTypeID = 0
+	minimumCardinality = 0
+	maximumCardinality = 0
 	payloadMocked := &model.ObjectTypeAttributePayloadScheme{
 		Name:        		"Geolocation",
 		Label:  	 	 false,
 		Type:       		 &attributeType,
 		Description: 		 "",
-		DefaultTypeId: 		 &defaultTypeId,
+		DefaultTypeId: 		 &defaultTypeID,
 		TypeValue:               "",
 		TypeValueMulti:          nil,
 		AdditionalValue:         "",
 		Summable:                false,
-		MinimumCardinality:      0,
-		MaximumCardinality:      0,
+		MinimumCardinality:      &minimumCardinality,
+		MaximumCardinality:      &maximumCardinality,
 		Suffix:                  "",
 		Hidden:                  false,
 		IncludeChildObjectTypes: false,
@@ -43,7 +49,7 @@ func Test_internalObjectTypeAttributeImpl_Create(t *testing.T) {
 	type args struct {
 		ctx                       context.Context
 		workspaceID, objectTypeID string
-		payload                   *model.ObjectTypeAttributeScheme
+		payload                   *model.ObjectTypeAttributePayloadScheme
 	}
 
 	testCases := []struct {
@@ -166,32 +172,27 @@ func Test_internalObjectTypeAttributeImpl_Create(t *testing.T) {
 
 func Test_internalObjectTypeAttributeImpl_Update(t *testing.T) {
 
+	var attributeType int
+	var defaultTypeID int
+	var minimumCardinality int
+	var maximumCardinality int
+	attributeType = 0
+	defaultTypeID = 0
+	minimumCardinality = 0
+	maximumCardinality = 0
 	payloadMocked := &model.ObjectTypeAttributePayloadScheme{
-		WorkspaceId: 		 "g2778e1d-939d-581d-c8e2-9d5g59de456b",
-		GlobalId:    		 "g2778e1d-939d-581d-c8e2-9d5g59de456b:1330",
-		ID:          		 "1330",
-		ObjectType:  		 nil,
-		Name:        		 "Geolocation",
-		Label:       		 false,
-		Type:        		 0,
+		Name:        		"Geolocation",
+		Label:  	 	 false,
+		Type:       		 &attributeType,
 		Description: 		 "",
-		DefaultTypeId: 		 0,
+		DefaultTypeId: 		 &defaultTypeID,
 		TypeValue:               "",
 		TypeValueMulti:          nil,
 		AdditionalValue:         "",
-		ReferenceType:           nil,
-		ReferenceObjectTypeId:   "",
-		ReferenceObjectType:     nil,
-		Editable:                false,
-		System:                  false,
-		Indexed:                 false,
-		Sortable:                false,
 		Summable:                false,
-		MinimumCardinality:      0,
-		MaximumCardinality:      0,
+		MinimumCardinality:      &minimumCardinality,
+		MaximumCardinality:      &maximumCardinality,
 		Suffix:                  "",
-		Removable:               false,
-		ObjectAttributeExists:   false,
 		Hidden:                  false,
 		IncludeChildObjectTypes: false,
 		UniqueAttribute:         false,
@@ -199,7 +200,6 @@ func Test_internalObjectTypeAttributeImpl_Update(t *testing.T) {
 		Iql:                     "",
 		QlQuery:                 "",
 		Options:                 "",
-		Position:                6,
 	}
 
 	type fields struct {
@@ -209,7 +209,7 @@ func Test_internalObjectTypeAttributeImpl_Update(t *testing.T) {
 	type args struct {
 		ctx                                    context.Context
 		workspaceID, objectTypeID, attributeID string
-		payload                                *model.ObjectTypeAttributeScheme
+		payload                                *model.ObjectTypeAttributePayloadScheme
 	}
 
 	testCases := []struct {

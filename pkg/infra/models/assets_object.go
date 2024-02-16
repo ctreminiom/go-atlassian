@@ -106,7 +106,7 @@ type ObjectTypeAttributePayloadScheme struct {
 	Label                   bool     `json:"label,omitempty"`
 	Description             string   `json:"description,omitempty"`
 	Type                    *int      `json:"type,omitempty"`
-	DefaultTypeId		*int      `json:defaultTypeId,omitempty"`
+	DefaultTypeId		*int      `json:"defaultTypeId,omitempty"`
  	TypeValue               string   `json:"typeValue,omitempty"`
 	TypeValueMulti          []string `json:"typeValueMulti,omitempty"`
 	AdditionalValue         string   `json:"additionalValue,omitempty"`

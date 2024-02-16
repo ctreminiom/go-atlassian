@@ -209,7 +209,7 @@ func Test_internalObjectTypeAttributeImpl_Update(t *testing.T) {
 	type args struct {
 		ctx                                    context.Context
 		workspaceID, objectTypeID, attributeID string
-		payload                                *model.ObjectTypeAttributeScheme
+		payload                                *model.ObjectTypeAttributePayloadScheme
 	}
 
 	testCases := []struct {

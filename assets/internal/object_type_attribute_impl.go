@@ -34,7 +34,7 @@ func (o *ObjectTypeAttributeService) Create(ctx context.Context, workspaceID, ob
 // PUT /jsm/assets/workspace/{workspaceId}/v1/objecttypeattribute/{objectTypeId}/{id}
 //
 // https://docs.go-atlassian.io/jira-assets/object/type/attribute#update-object-type-attribute
-func (o *ObjectTypeAttributeService) Update(ctx context.Context, workspaceID, objectTypeID, attributeID string, payload *model.ObjectTypeAttributeScheme) (*model.ObjectTypeAttributeScheme, *model.ResponseScheme, error) {
+func (o *ObjectTypeAttributeService) Update(ctx context.Context, workspaceID, objectTypeID, attributeID string, payload *model.ObjectTypeAttributePayloadScheme) (*model.ObjectTypeAttributeScheme, *model.ResponseScheme, error) {
 	return o.internalClient.Update(ctx, workspaceID, objectTypeID, attributeID, payload)
 }
 

@@ -14,10 +14,6 @@ import (
 func Test_internalObjectTypeAttributeImpl_Create(t *testing.T) {
 
 	payloadMocked := &model.ObjectTypeAttributePayloadScheme{
-		WorkspaceId: 		"g2778e1d-939d-581d-c8e2-9d5g59de456b",
-		GlobalId:    		"g2778e1d-939d-581d-c8e2-9d5g59de456b:1330",
-		ID:          		"1330",
-		ObjectType:  		nil,
 		Name:        		"Geolocation",
 		Label:  	 	 false,
 		Type:       		 0,

@@ -101,6 +101,28 @@ type ObjectAttributeScheme struct {
 	ObjectAttributeValues []*ObjectTypeAssetAttributeValueScheme `json:"objectAttributeValues,omitempty"`
 }
 
+type ObjectTypeAttributePayloadScheme struct {
+	Name                    string   `json:"name,omitempty"`
+	Label                   bool     `json:"label,omitempty"`
+	Description             string   `json:"description,omitempty"`
+	Type                    *int      `json:"type,omitempty"`
+	DefaultTypeId		*int      `json:"defaultTypeId,omitempty"`
+ 	TypeValue               string   `json:"typeValue,omitempty"`
+	TypeValueMulti          []string `json:"typeValueMulti,omitempty"`
+	AdditionalValue         string   `json:"additionalValue,omitempty"`
+	MinimumCardinality      *int      `json:"minimumCardinality,omitempty"`
+	MaximumCardinality      *int      `json:"maximumCardinality,omitempty"`
+	Suffix                  string   `json:"suffix,omitempty"`
+	IncludeChildObjectTypes bool     `json:"includeChildObjectTypes,omitempty"`
+	Hidden                  bool     `json:"hidden,omitempty"`
+	UniqueAttribute         bool     `json:"uniqueAttribute,omitempty"`
+	Summable                bool     `json:"summable,omitempty"`
+	RegexValidation         string   `json:"regexValidation,omitempty"`
+	QlQuery                 string   `json:"qlQuery,omitempty"`
+	Iql                     string   `json:"iql,omitempty"`
+	Options                 string   `json:"options,omitempty"`
+}
+
 type ObjectTypeAttributeScheme struct {
 	WorkspaceId             string                                       `json:"workspaceId,omitempty"`
 	GlobalId                string                                       `json:"globalId,omitempty"`

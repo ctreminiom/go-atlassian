@@ -14,7 +14,7 @@ type ObjectTypeAttributeConnector interface {
 	// POST /jsm/assets/workspace/{workspaceId}/v1/objecttypeattribute/{objectTypeId}
 	//
 	// https://docs.go-atlassian.io/jira-assets/object/type/attribute#create-object-type-attribute
-	Create(ctx context.Context, workspaceID, objectTypeID string, payload *models.ObjectTypeAttributeScheme) (
+	Create(ctx context.Context, workspaceID, objectTypeID string, payload *models.ObjectTypeAttributePayloadScheme) (
 		*models.ObjectTypeAttributeScheme, *models.ResponseScheme, error)
 
 	// Update updates an existing object type attribute
@@ -22,7 +22,7 @@ type ObjectTypeAttributeConnector interface {
 	// PUT /jsm/assets/workspace/{workspaceId}/v1/objecttypeattribute/{objectTypeId}/{id}
 	//
 	// https://docs.go-atlassian.io/jira-assets/object/type/attribute#update-object-type-attribute
-	Update(ctx context.Context, workspaceID, objectTypeID, attributeID string, payload *models.ObjectTypeAttributeScheme) (
+	Update(ctx context.Context, workspaceID, objectTypeID, attributeID string, payload *models.ObjectTypeAttributePayloadScheme) (
 		*models.ObjectTypeAttributeScheme, *models.ResponseScheme, error)
 
 	// Delete deletes an existing object type attribute

@@ -57,3 +57,22 @@ func (u *UpdateOperations) AddStringOperation(customFieldID, operation, value st
 
 	return nil
 }
+
+func (u *UpdateOperations) AddMultiRawOperation(customFieldID string, mappings []map[string]interface{}) error {
+
+	if len(customFieldID) == 0 {
+		return ErrNoFieldIDError
+	}
+
+	var operations []map[string]interface{}
+	operations = append(operations, mappings...)
+
+	var fieldNode = map[string]interface{}{}
+	fieldNode[customFieldID] = operations
+
+	var updateNode = map[string]interface{}{}
+	updateNode["update"] = fieldNode
+
+	u.Fields = append(u.Fields, updateNode)
+	return nil
+}

@@ -61,6 +61,17 @@ type PageConnector interface {
 	// https://docs.go-atlassian.io/confluence-cloud/v2/page#get-pages-in-space
 	GetsBySpace(ctx context.Context, spaceID int, cursor string, limit int) (*models.PageChunkScheme, *models.ResponseScheme, error)
 
+	// GetsByParent returns all children of a page.
+	//
+	// The number of results is limited by the limit parameter and additional results (if available)
+	//
+	// will be available through the next cursor
+	//
+	// GET /wiki/api/v2/pages/{id}/children
+	//
+	// https://docs.go-atlassian.io/confluence-cloud/v2/page#get-pages-by-parent
+	GetsByParent(ctx context.Context, spaceID int, cursor string, limit int) (*models.ChildPageChunkScheme, *models.ResponseScheme, error)
+
 	// Create creates a page in the space.
 	//
 	// Pages are created as published by default unless specified as a draft in the status field.

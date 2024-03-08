@@ -65,9 +65,7 @@ func (u *UpdateOperations) AddMultiRawOperation(customFieldID string, mappings [
 	}
 
 	var operations []map[string]interface{}
-	for _, mapping := range mappings {
-		operations = append(operations, mapping)
-	}
+	operations = append(operations, mappings...)
 
 	var fieldNode = map[string]interface{}{}
 	fieldNode[customFieldID] = operations

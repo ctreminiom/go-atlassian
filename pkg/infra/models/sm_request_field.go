@@ -1,267 +1,96 @@
 package models
 
 import (
-	"encoding/json"
-	"github.com/imdario/mergo"
 	"time"
 )
 
 type CreateCustomerRequestPayloadScheme struct {
-	RequestParticipants []string `json:"requestParticipants,omitempty"`
-	ServiceDeskID       string   `json:"serviceDeskId,omitempty"`
-	RequestTypeID       string   `json:"requestTypeId,omitempty"`
+	Channel             string                                  `json:"channel,omitempty"`
+	Form                *CreateCustomerRequestFormPayloadScheme `json:"form,omitempty"`
+	IsAdfRequest        bool                                    `json:"isAdfRequest,omitempty"`
+	RaiseOnBehalfOf     string                                  `json:"raiseOnBehalfOf,omitempty"`
+	RequestFieldValues  map[string]interface{}                  `json:"requestFieldValues,omitempty"`
+	RequestParticipants []string                                `json:"requestParticipants,omitempty"`
+	RequestTypeID       string                                  `json:"requestTypeId,omitempty"`
+	ServiceDeskID       string                                  `json:"serviceDeskId,omitempty"`
 }
 
-func (c *CreateCustomerRequestPayloadScheme) MergeFields(fields *CustomerRequestFields) (map[string]interface{}, error) {
-
-	if fields == nil || len(fields.Fields) == 0 {
-		return nil, ErrNoCustomFieldError
-	}
-
-	//Convert the IssueScheme struct to map[string]interface{}
-	issueSchemeAsBytes, err := json.Marshal(c)
-	if err != nil {
-		return nil, err
-	}
-
-	issueSchemeAsMap := make(map[string]interface{})
-	if err := json.Unmarshal(issueSchemeAsBytes, &issueSchemeAsMap); err != nil {
-		return nil, err
-	}
-
-	// Create the requestFieldValues object with the custom fields
-	fieldsAsMap := make(map[string]interface{})
-	for key, value := range fields.Fields {
-		fieldsAsMap[key] = value
-	}
-
-	requestFieldValues := map[string]interface{}{"requestFieldValues": fieldsAsMap}
-
-	// Merge the requestFieldValues map struct with the service desk request struct information
-	if err := mergo.Merge(&issueSchemeAsMap, requestFieldValues, mergo.WithOverride); err != nil {
-		return nil, err
-	}
-
-	return issueSchemeAsMap, nil
+type CreateCustomerRequestFormPayloadScheme struct {
+	Answers interface{} `json:"answers,omitempty"`
 }
 
-type CustomerRequestFields struct{ Fields map[string]interface{} }
+func (c *CreateCustomerRequestPayloadScheme) AddCustomField(key string, value interface{}) error {
 
-func (c *CustomerRequestFields) Attachments(attachments []string) error {
-
-	if len(attachments) == 0 {
-		return ErrNoAttachmentIdsError
+	if c.RequestFieldValues == nil {
+		c.RequestFieldValues = make(map[string]interface{})
 	}
 
-	c.Fields["attachments"] = attachments
+	c.RequestFieldValues[key] = value
 	return nil
 }
 
-func (c *CustomerRequestFields) Labels(labels []string) error {
+func (c *CreateCustomerRequestPayloadScheme) DateTimeCustomField(id string, value time.Time) error {
 
-	if len(labels) == 0 {
-		return ErrNoLabelsError
-	}
-
-	c.Fields["labels"] = labels
-	return nil
-}
-
-func (c *CustomerRequestFields) Components(components []string) error {
-
-	if len(components) == 0 {
-		return ErrNoComponentsError
-	}
-
-	var componentNode []map[string]interface{}
-	for _, component := range components {
-
-		var groupNode = map[string]interface{}{}
-		groupNode["name"] = component
-
-		componentNode = append(componentNode, groupNode)
-	}
-
-	c.Fields["components"] = componentNode
-	return nil
-}
-
-func (c *CustomerRequestFields) Groups(customFieldID string, groups []string) error {
-
-	if len(customFieldID) == 0 {
+	if id == "" {
 		return ErrNoCustomFieldIDError
 	}
 
-	if len(groups) == 0 {
-		return ErrNoGroupsNameError
+	if value.IsZero() {
+		return ErrNoDatePickerTypeError
 	}
 
-	var groupsNode []map[string]interface{}
-	for _, group := range groups {
-
-		var groupNode = map[string]interface{}{}
-		groupNode["name"] = group
-
-		groupsNode = append(groupsNode, groupNode)
-	}
-
-	var fieldNode = map[string]interface{}{}
-	fieldNode[customFieldID] = groupsNode
-
-	c.Fields["components"] = fieldNode
-	return nil
+	return c.AddCustomField(id, value.Format(time.RFC3339))
 }
 
-func (c *CustomerRequestFields) Group(customFieldID, group string) error {
+func (c *CreateCustomerRequestPayloadScheme) DateCustomField(id string, value time.Time) error {
 
-	if len(customFieldID) == 0 {
+	if id == "" {
 		return ErrNoCustomFieldIDError
 	}
 
-	if len(group) == 0 {
-		return ErrNoGroupNameError
+	if value.IsZero() {
+		return ErrNoDatePickerTypeError
 	}
 
-	var groupNode = map[string]interface{}{}
-	groupNode["name"] = group
-
-	c.Fields[customFieldID] = groupNode
-	return nil
+	return c.AddCustomField(id, value.Format("2006-01-02"))
 }
 
-func (c *CustomerRequestFields) URL(customFieldID, URL string) error {
+func (c *CreateCustomerRequestPayloadScheme) MultiSelectOrCheckBoxCustomField(id string, values []string) error {
 
-	if len(customFieldID) == 0 {
+	if id == "" {
 		return ErrNoCustomFieldIDError
 	}
 
-	if len(URL) == 0 {
-		return ErrNoUrlTypeError
-	}
-
-	c.Fields[customFieldID] = URL
-	return nil
-}
-
-func (c *CustomerRequestFields) Text(customFieldID, textValue string) error {
-
-	if len(customFieldID) == 0 {
-		return ErrNoCustomFieldIDError
-	}
-
-	if len(textValue) == 0 {
-		return ErrNoTextTypeError
-	}
-
-	c.Fields[customFieldID] = textValue
-	return nil
-}
-
-func (c *CustomerRequestFields) DateTime(customFieldID string, dateValue time.Time) error {
-
-	if len(customFieldID) == 0 {
-		return ErrNoCustomFieldIDError
-	}
-
-	if dateValue.IsZero() {
-		return ErrNoDateTimeTypeError
-	}
-
-	c.Fields[customFieldID] = dateValue.Format(time.RFC3339)
-	return nil
-}
-
-func (c *CustomerRequestFields) Date(customFieldID string, dateTimeValue time.Time) error {
-
-	if len(customFieldID) == 0 {
-		return ErrNoCustomFieldIDError
-	}
-
-	if dateTimeValue.IsZero() {
-		return ErrNoDateTypeError
-	}
-
-	c.Fields[customFieldID] = dateTimeValue.Format("2006-01-02")
-	return nil
-}
-
-func (c *CustomerRequestFields) MultiSelect(customFieldID string, options []string) error {
-
-	if len(customFieldID) == 0 {
-		return ErrNoCustomFieldIDError
-	}
-
-	if len(options) == 0 {
+	if len(values) == 0 {
 		return ErrNoMultiSelectTypeError
 	}
 
-	var multiSelectOptions []map[string]interface{}
-	for _, group := range options {
-
-		var groupNode = map[string]interface{}{}
-		groupNode["value"] = group
-
-		multiSelectOptions = append(multiSelectOptions, groupNode)
+	var options []map[string]interface{}
+	for _, option := range values {
+		optionNode := make(map[string]interface{})
+		optionNode["value"] = option
+		options = append(options, optionNode)
 	}
 
-	c.Fields[customFieldID] = multiSelectOptions
-	return nil
+	return c.AddCustomField(id, options)
 }
 
-func (c *CustomerRequestFields) Select(customFieldID string, option string) error {
+func (c *CreateCustomerRequestPayloadScheme) UserCustomField(id, accountID string) error {
 
-	if len(customFieldID) == 0 {
+	if id == "" {
 		return ErrNoCustomFieldIDError
 	}
 
-	if len(option) == 0 {
-		return ErrNoSelectTypeError
-	}
-
-	var selectNode = map[string]interface{}{}
-	selectNode["value"] = option
-
-	c.Fields[customFieldID] = selectNode
-	return nil
-}
-
-func (c *CustomerRequestFields) RadioButton(customFieldID, button string) error {
-
-	if len(customFieldID) == 0 {
-		return ErrNoCustomFieldIDError
-	}
-
-	if len(button) == 0 {
-		return ErrNoButtonTypeError
-	}
-
-	var selectNode = map[string]interface{}{}
-	selectNode["value"] = button
-
-	c.Fields[customFieldID] = selectNode
-	return nil
-}
-
-func (c *CustomerRequestFields) User(customFieldID string, accountID string) error {
-
-	if len(customFieldID) == 0 {
-		return ErrNoCustomFieldIDError
-	}
-
-	if len(accountID) == 0 {
+	if accountID == "" {
 		return ErrNoUserTypeError
 	}
 
-	var userNode = map[string]interface{}{}
-	userNode["accountId"] = accountID
-
-	c.Fields[customFieldID] = userNode
-	return nil
+	return c.AddCustomField(id, map[string]interface{}{"accountId": accountID})
 }
 
-func (c *CustomerRequestFields) Users(customFieldID string, accountIDs []string) error {
+func (c *CreateCustomerRequestPayloadScheme) UsersCustomField(id string, accountIDs []string) error {
 
-	if len(customFieldID) == 0 {
+	if id == "" {
 		return ErrNoCustomFieldIDError
 	}
 
@@ -269,73 +98,101 @@ func (c *CustomerRequestFields) Users(customFieldID string, accountIDs []string)
 		return ErrNoMultiUserTypeError
 	}
 
-	var accountsNode []map[string]interface{}
+	var accounts []map[string]interface{}
 	for _, accountID := range accountIDs {
 
-		var groupNode = map[string]interface{}{}
-		groupNode["accountId"] = accountID
+		if accountID == "" {
+			return ErrNoUserTypeError
+		}
 
-		accountsNode = append(accountsNode, groupNode)
+		accounts = append(accounts, map[string]interface{}{"accountId": accountID})
 	}
 
-	c.Fields[customFieldID] = accountsNode
-	return nil
+	return c.AddCustomField(id, accounts)
 }
 
-func (c *CustomerRequestFields) Number(customFieldID string, numberValue float64) error {
+func (c *CreateCustomerRequestPayloadScheme) CascadingCustomField(id, parent, child string) error {
 
-	if len(customFieldID) == 0 {
+	if id == "" {
 		return ErrNoCustomFieldIDError
 	}
 
-	c.Fields[customFieldID] = numberValue
-	return nil
-}
-
-func (c *CustomerRequestFields) CheckBox(customFieldID string, options []string) error {
-
-	if len(customFieldID) == 0 {
-		return ErrNoCustomFieldIDError
-	}
-
-	if len(options) == 0 {
-		return ErrNoCheckBoxTypeError
-	}
-
-	var groupsNode []map[string]interface{}
-	for _, group := range options {
-
-		var groupNode = map[string]interface{}{}
-		groupNode["value"] = group
-
-		groupsNode = append(groupsNode, groupNode)
-	}
-
-	c.Fields[customFieldID] = groupsNode
-	return nil
-}
-
-func (c *CustomerRequestFields) Cascading(customFieldID, parent, child string) error {
-
-	if len(customFieldID) == 0 {
-		return ErrNoCustomFieldIDError
-	}
-
-	if len(parent) == 0 {
+	if parent == "" {
 		return ErrNoCascadingParentError
 	}
 
-	if len(child) == 0 {
+	if child == "" {
 		return ErrNoCascadingChildError
 	}
 
-	var childNode = map[string]interface{}{}
-	childNode["value"] = child
+	childNode := map[string]interface{}{"value": child}
+	return c.AddCustomField(id, map[string]interface{}{"value": parent, "child": childNode})
+}
 
-	var parentNode = map[string]interface{}{}
-	parentNode["value"] = parent
-	parentNode["child"] = childNode
+func (c *CreateCustomerRequestPayloadScheme) GroupsCustomField(id string, names []string) error {
 
-	c.Fields[customFieldID] = parentNode
-	return nil
+	if id == "" {
+		return ErrNoCustomFieldIDError
+	}
+
+	if len(names) == 0 {
+		return ErrNoGroupsNameError
+	}
+
+	var groups []map[string]interface{}
+	for _, name := range names {
+
+		if name == "" {
+			return ErrNoGroupNameError
+		}
+
+		groups = append(groups, map[string]interface{}{"name": name})
+	}
+
+	return c.AddCustomField(id, groups)
+}
+
+func (c *CreateCustomerRequestPayloadScheme) GroupCustomField(id, name string) error {
+
+	if id == "" {
+		return ErrNoCustomFieldIDError
+	}
+
+	if name == "" {
+		return ErrNoGroupNameError
+	}
+
+	return c.AddCustomField(id, map[string]interface{}{"name": name})
+}
+
+func (c *CreateCustomerRequestPayloadScheme) RadioButtonOrSelectCustomField(id string, option string) error {
+
+	if id == "" {
+		return ErrNoCustomFieldIDError
+	}
+
+	if option == "" {
+		return ErrNoSelectTypeError
+	}
+
+	return c.AddCustomField(id, map[string]interface{}{"value": option})
+}
+
+func (c *CreateCustomerRequestPayloadScheme) Components(components []string) error {
+
+	if len(components) == 0 {
+		return ErrNoComponentsError
+	}
+
+	var values []map[string]interface{}
+	for _, component := range components {
+
+		if component == "" {
+			return ErrNCoComponentError
+		}
+
+		values = append(values, map[string]interface{}{"name": component})
+	}
+
+	return c.AddCustomField("components", values)
 }

@@ -29,7 +29,7 @@ type ProjectPropertyService struct {
 // GET /rest/api/{2-3}/project/{projectIdOrKey}/properties
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/properties#get-project-properties-keys
-func (p *ProjectPropertyService) Gets(ctx context.Context, projectKeyOrId string) (*model.ProjectPropertyPageScheme, *model.ResponseScheme, error) {
+func (p *ProjectPropertyService) Gets(ctx context.Context, projectKeyOrId string) (*model.PropertyPageScheme, *model.ResponseScheme, error) {
 	return p.internalClient.Gets(ctx, projectKeyOrId)
 }
 
@@ -71,7 +71,7 @@ type internalProjectPropertyImpl struct {
 	version string
 }
 
-func (i *internalProjectPropertyImpl) Gets(ctx context.Context, projectKeyOrId string) (*model.ProjectPropertyPageScheme, *model.ResponseScheme, error) {
+func (i *internalProjectPropertyImpl) Gets(ctx context.Context, projectKeyOrId string) (*model.PropertyPageScheme, *model.ResponseScheme, error) {
 
 	if projectKeyOrId == "" {
 		return nil, nil, model.ErrNoProjectIDOrKeyError
@@ -84,7 +84,7 @@ func (i *internalProjectPropertyImpl) Gets(ctx context.Context, projectKeyOrId s
 		return nil, nil, err
 	}
 
-	properties := new(model.ProjectPropertyPageScheme)
+	properties := new(model.PropertyPageScheme)
 	response, err := i.c.Call(request, properties)
 	if err != nil {
 		return nil, response, err

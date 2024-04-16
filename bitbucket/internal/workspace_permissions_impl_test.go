@@ -11,28 +11,16 @@ import (
 	"testing"
 )
 
-func Test_internalSpaceV2Impl_Bulk(t *testing.T) {
-
-	optionsMocked := &model.GetSpacesOptionSchemeV2{
-		IDs:               []string{"10001", "10002"},
-		Keys:              []string{"DUMMY"},
-		Type:              "global",
-		Status:            "current",
-		Labels:            []string{"test-label"},
-		Sort:              "-name",
-		DescriptionFormat: "view",
-		SerializeIDs:      true,
-	}
+func Test_internalWorkspacePermissionServiceImpl_Members(t *testing.T) {
 
 	type fields struct {
 		c service.Connector
 	}
 
 	type args struct {
-		ctx     context.Context
-		options *model.GetSpacesOptionSchemeV2
-		cursor  string
-		limit   int
+		ctx       context.Context
+		workspace string
+		query     string
 	}
 
 	testCases := []struct {
@@ -46,10 +34,9 @@ func Test_internalSpaceV2Impl_Bulk(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:     context.TODO(),
-				options: optionsMocked,
-				cursor:  "cursor_sample_uuid",
-				limit:   50,
+				ctx:       context.TODO(),
+				workspace: "work-space-name-sample",
+				query:     "permission=\"owner\"",
 			},
 			on: func(fields *fields) {
 
@@ -58,27 +45,25 @@ func Test_internalSpaceV2Impl_Bulk(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"wiki/api/v2/spaces?cursor=cursor_sample_uuid&description-format=view&ids=10001%2C10002&keys=DUMMY&labels=test-label&limit=50&serialize-ids-as-strings=true&sort=-name&status=current&type=global",
+					"2.0/workspaces/work-space-name-sample/permissions?q=permission%3D%22owner%22",
 					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
 					&http.Request{},
-					&model.SpaceChunkV2Scheme{}).
+					&model.WorkspaceMembershipPageScheme{}).
 					Return(&model.ResponseScheme{}, nil)
 
 				fields.c = client
-
 			},
 		},
 
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:     context.TODO(),
-				options: optionsMocked,
-				cursor:  "cursor_sample_uuid",
-				limit:   50,
+				ctx:       context.TODO(),
+				workspace: "work-space-name-sample",
+				query:     "permission=\"owner\"",
 			},
 			on: func(fields *fields) {
 
@@ -87,7 +72,7 @@ func Test_internalSpaceV2Impl_Bulk(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"wiki/api/v2/spaces?cursor=cursor_sample_uuid&description-format=view&ids=10001%2C10002&keys=DUMMY&labels=test-label&limit=50&serialize-ids-as-strings=true&sort=-name&status=current&type=global",
+					"2.0/workspaces/work-space-name-sample/permissions?q=permission%3D%22owner%22",
 					"", nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -96,6 +81,16 @@ func Test_internalSpaceV2Impl_Bulk(t *testing.T) {
 			},
 			wantErr: true,
 			Err:     errors.New("error, unable to create the http request"),
+		},
+
+		{
+			name: "when the workspace is not provided",
+			args: args{
+				ctx:       context.TODO(),
+				workspace: "",
+			},
+			wantErr: true,
+			Err:     model.ErrNoWorkspaceError,
 		},
 	}
 
@@ -106,10 +101,9 @@ func Test_internalSpaceV2Impl_Bulk(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			newService := NewSpaceV2Service(testCase.fields.c)
+			newService := NewWorkspacePermissionService(testCase.fields.c)
 
-			gotResult, gotResponse, err := newService.Bulk(testCase.args.ctx, testCase.args.options, testCase.args.cursor,
-				testCase.args.limit)
+			gotResult, gotResponse, err := newService.Members(testCase.args.ctx, testCase.args.workspace, testCase.args.query)
 
 			if testCase.wantErr {
 
@@ -118,7 +112,6 @@ func Test_internalSpaceV2Impl_Bulk(t *testing.T) {
 				}
 
 				assert.EqualError(t, err, testCase.Err.Error())
-
 			} else {
 
 				assert.NoError(t, err)
@@ -130,16 +123,17 @@ func Test_internalSpaceV2Impl_Bulk(t *testing.T) {
 	}
 }
 
-func Test_internalSpaceV2Impl_Get(t *testing.T) {
+func Test_internalWorkspacePermissionServiceImpl_Repositories(t *testing.T) {
 
 	type fields struct {
 		c service.Connector
 	}
 
 	type args struct {
-		ctx               context.Context
-		spaceID           int
-		descriptionFormat string
+		ctx       context.Context
+		workspace string
+		query     string
+		sort      string
 	}
 
 	testCases := []struct {
@@ -153,9 +147,10 @@ func Test_internalSpaceV2Impl_Get(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:               context.TODO(),
-				spaceID:           10001,
-				descriptionFormat: "view",
+				ctx:       context.TODO(),
+				workspace: "work-space-name-sample",
+				query:     "permission=\"owner\"",
+				sort:      "user.display_name",
 			},
 			on: func(fields *fields) {
 
@@ -164,35 +159,26 @@ func Test_internalSpaceV2Impl_Get(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"wiki/api/v2/spaces/10001?description-format=view",
+					"2.0/workspaces/work-space-name-sample/permissions/repositories?q=permission%3D%22owner%22&sort=user.display_name",
 					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
 					&http.Request{},
-					&model.SpaceSchemeV2{}).
+					&model.RepositoryPermissionPageScheme{}).
 					Return(&model.ResponseScheme{}, nil)
 
 				fields.c = client
-
 			},
-		},
-
-		{
-			name: "when the space id is not provided",
-			args: args{
-				ctx: context.TODO(),
-			},
-			wantErr: true,
-			Err:     model.ErrNoSpaceIDError,
 		},
 
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:               context.TODO(),
-				spaceID:           10001,
-				descriptionFormat: "view",
+				ctx:       context.TODO(),
+				workspace: "work-space-name-sample",
+				query:     "permission=\"owner\"",
+				sort:      "user.display_name",
 			},
 			on: func(fields *fields) {
 
@@ -201,7 +187,7 @@ func Test_internalSpaceV2Impl_Get(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"wiki/api/v2/spaces/10001?description-format=view",
+					"2.0/workspaces/work-space-name-sample/permissions/repositories?q=permission%3D%22owner%22&sort=user.display_name",
 					"", nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -210,6 +196,16 @@ func Test_internalSpaceV2Impl_Get(t *testing.T) {
 			},
 			wantErr: true,
 			Err:     errors.New("error, unable to create the http request"),
+		},
+
+		{
+			name: "when the workspace is not provided",
+			args: args{
+				ctx:       context.TODO(),
+				workspace: "",
+			},
+			wantErr: true,
+			Err:     model.ErrNoWorkspaceError,
 		},
 	}
 
@@ -220,9 +216,10 @@ func Test_internalSpaceV2Impl_Get(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			newService := NewSpaceV2Service(testCase.fields.c)
+			newService := NewWorkspacePermissionService(testCase.fields.c)
 
-			gotResult, gotResponse, err := newService.Get(testCase.args.ctx, testCase.args.spaceID, testCase.args.descriptionFormat)
+			gotResult, gotResponse, err := newService.Repositories(testCase.args.ctx, testCase.args.workspace, testCase.args.query,
+				testCase.args.sort)
 
 			if testCase.wantErr {
 
@@ -231,7 +228,6 @@ func Test_internalSpaceV2Impl_Get(t *testing.T) {
 				}
 
 				assert.EqualError(t, err, testCase.Err.Error())
-
 			} else {
 
 				assert.NoError(t, err)
@@ -243,17 +239,18 @@ func Test_internalSpaceV2Impl_Get(t *testing.T) {
 	}
 }
 
-func Test_internalSpaceV2Impl_Permissions(t *testing.T) {
+func Test_internalWorkspacePermissionServiceImpl_Repository(t *testing.T) {
 
 	type fields struct {
 		c service.Connector
 	}
 
 	type args struct {
-		ctx     context.Context
-		spaceID int
-		cursor  string
-		limit   int
+		ctx        context.Context
+		workspace  string
+		repository string
+		query      string
+		sort       string
 	}
 
 	testCases := []struct {
@@ -267,10 +264,11 @@ func Test_internalSpaceV2Impl_Permissions(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:     context.TODO(),
-				spaceID: 10001,
-				cursor:  "cursor_sample_uuid",
-				limit:   50,
+				ctx:        context.TODO(),
+				workspace:  "work-space-name-sample",
+				query:      "permission=\"owner\"",
+				sort:       "user.display_name",
+				repository: "microservice-a",
 			},
 			on: func(fields *fields) {
 
@@ -279,27 +277,27 @@ func Test_internalSpaceV2Impl_Permissions(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"wiki/api/v2/spaces/10001/permissions?cursor=cursor_sample_uuid&limit=50",
+					"2.0/workspaces/work-space-name-sample/permissions/repositories/microservice-a?q=permission%3D%22owner%22&sort=user.display_name",
 					"", nil).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
 					&http.Request{},
-					&model.SpacePermissionPageScheme{}).
+					&model.RepositoryPermissionPageScheme{}).
 					Return(&model.ResponseScheme{}, nil)
 
 				fields.c = client
-
 			},
 		},
 
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:     context.TODO(),
-				spaceID: 10001,
-				cursor:  "cursor_sample_uuid",
-				limit:   50,
+				ctx:        context.TODO(),
+				workspace:  "work-space-name-sample",
+				query:      "permission=\"owner\"",
+				sort:       "user.display_name",
+				repository: "microservice-a",
 			},
 			on: func(fields *fields) {
 
@@ -308,7 +306,7 @@ func Test_internalSpaceV2Impl_Permissions(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"wiki/api/v2/spaces/10001/permissions?cursor=cursor_sample_uuid&limit=50",
+					"2.0/workspaces/work-space-name-sample/permissions/repositories/microservice-a?q=permission%3D%22owner%22&sort=user.display_name",
 					"", nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
@@ -317,6 +315,26 @@ func Test_internalSpaceV2Impl_Permissions(t *testing.T) {
 			},
 			wantErr: true,
 			Err:     errors.New("error, unable to create the http request"),
+		},
+
+		{
+			name: "when the workspace is not provided",
+			args: args{
+				ctx:       context.TODO(),
+				workspace: "",
+			},
+			wantErr: true,
+			Err:     model.ErrNoWorkspaceError,
+		},
+
+		{
+			name: "when the repository is not provided",
+			args: args{
+				ctx:       context.TODO(),
+				workspace: "work-space-name-sample",
+			},
+			wantErr: true,
+			Err:     model.ErrNoRepositoryError,
 		},
 	}
 
@@ -327,10 +345,10 @@ func Test_internalSpaceV2Impl_Permissions(t *testing.T) {
 				testCase.on(&testCase.fields)
 			}
 
-			newService := NewSpaceV2Service(testCase.fields.c)
+			newService := NewWorkspacePermissionService(testCase.fields.c)
 
-			gotResult, gotResponse, err := newService.Permissions(testCase.args.ctx, testCase.args.spaceID, testCase.args.cursor,
-				testCase.args.limit)
+			gotResult, gotResponse, err := newService.Repository(testCase.args.ctx, testCase.args.workspace, testCase.args.repository,
+				testCase.args.query, testCase.args.sort)
 
 			if testCase.wantErr {
 
@@ -339,7 +357,6 @@ func Test_internalSpaceV2Impl_Permissions(t *testing.T) {
 				}
 
 				assert.EqualError(t, err, testCase.Err.Error())
-
 			} else {
 
 				assert.NoError(t, err)

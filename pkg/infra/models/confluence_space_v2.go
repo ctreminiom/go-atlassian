@@ -12,7 +12,7 @@ type SpacePageLinkSchemeV2 struct {
 }
 
 type GetSpacesOptionSchemeV2 struct {
-	IDs               []int
+	IDs               []string
 	Keys              []string
 	Type              string
 	Status            string
@@ -23,12 +23,12 @@ type GetSpacesOptionSchemeV2 struct {
 }
 
 type SpaceSchemeV2 struct {
-	ID          int                       `json:"id,omitempty"`
+	ID          string                    `json:"id,omitempty"`
 	Key         string                    `json:"key,omitempty"`
 	Name        string                    `json:"name,omitempty"`
 	Type        string                    `json:"type,omitempty"`
 	Status      string                    `json:"status,omitempty"`
-	HomepageId  int                       `json:"homepageId,omitempty"`
+	HomepageId  string                    `json:"homepageId,omitempty"`
 	Description *SpaceDescriptionSchemeV2 `json:"description,omitempty"`
 }
 

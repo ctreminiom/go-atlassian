@@ -584,6 +584,152 @@ func Test_internalPageImpl_GetsBySpace(t *testing.T) {
 	}
 }
 
+func Test_internalPageImpl_GetsByParent(t *testing.T) {
+
+	type fields struct {
+		c service.Connector
+	}
+
+	type args struct {
+		ctx      context.Context
+		parentID int
+		cursor   string
+		limit    int
+	}
+
+	testCases := []struct {
+		name    string
+		fields  fields
+		args    args
+		on      func(*fields)
+		wantErr bool
+		Err     error
+	}{
+		{
+			name: "when the parameters are correct",
+			args: args{
+				ctx:      context.TODO(),
+				parentID: 20001,
+				cursor:   "cursor-sample",
+				limit:    200,
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewConnector(t)
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodGet,
+					"wiki/api/v2/pages/20001/children?cursor=cursor-sample&limit=200",
+					"", nil).
+					Return(&http.Request{}, nil)
+
+				client.On("Call",
+					&http.Request{},
+					&model.ChildPageChunkScheme{}).
+					Return(&model.ResponseScheme{}, nil)
+
+				fields.c = client
+			},
+		},
+
+		{
+			name: "when the parent id is not provided",
+			args: args{
+				ctx: context.TODO(),
+			},
+			wantErr: true,
+			Err:     model.ErrNoPageIDError,
+		},
+
+		{
+			name: "when the http request cannot be created",
+			args: args{
+				ctx:      context.TODO(),
+				parentID: 20001,
+				cursor:   "cursor-sample",
+				limit:    200,
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewConnector(t)
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodGet,
+					"wiki/api/v2/pages/20001/children?cursor=cursor-sample&limit=200",
+					"", nil).
+					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+
+				fields.c = client
+			},
+
+			wantErr: true,
+			Err:     errors.New("error, unable to create the http request"),
+		},
+
+		{
+			name: "when the call fails",
+			args: args{
+				ctx:      context.TODO(),
+				parentID: 20001,
+				cursor:   "cursor-sample",
+				limit:    200,
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewConnector(t)
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodGet,
+					"wiki/api/v2/pages/20001/children?cursor=cursor-sample&limit=200",
+					"", nil).
+					Return(&http.Request{}, nil)
+
+				client.On("Call",
+					&http.Request{},
+					&model.ChildPageChunkScheme{}).
+					Return(&model.ResponseScheme{}, errors.New("error, request failed"))
+
+				fields.c = client
+			},
+
+			wantErr: true,
+			Err:     errors.New("error, request failed"),
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+
+			if testCase.on != nil {
+				testCase.on(&testCase.fields)
+			}
+
+			newService := NewPageService(testCase.fields.c)
+
+			gotResult, gotResponse, err := newService.GetsByParent(testCase.args.ctx, testCase.args.parentID,
+				testCase.args.cursor, testCase.args.limit)
+
+			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+
+				assert.EqualError(t, err, testCase.Err.Error())
+			} else {
+
+				assert.NoError(t, err)
+				assert.NotEqual(t, gotResponse, nil)
+				assert.NotEqual(t, gotResult, nil)
+			}
+
+		})
+	}
+}
+
 func Test_internalPageImpl_Delete(t *testing.T) {
 
 	type fields struct {
@@ -718,7 +864,7 @@ func Test_internalPageImpl_Create(t *testing.T) {
 	}
 
 	mockedPayload := &model.PageCreatePayloadScheme{
-		SpaceID:  203718658,
+		SpaceID:  "203718658",
 		Status:   "current",
 		Title:    "Page create title test",
 		ParentID: "123456789",

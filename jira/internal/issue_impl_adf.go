@@ -27,6 +27,7 @@ type IssueADFService struct {
 	Vote           *VoteService
 	Watcher        *WatcherService
 	Worklog        *WorklogADFService
+	Property       *IssuePropertyService
 }
 
 // Delete deletes an issue.

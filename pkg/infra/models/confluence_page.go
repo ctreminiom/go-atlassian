@@ -1,5 +1,22 @@
 package models
 
+type ChildPageChunkLinksScheme struct {
+	Next string `json:"next,omitempty"`
+}
+
+type ChildPageChunkScheme struct {
+	Results []*ChildPageScheme         `json:"results,omitempty"`
+	Links   *ChildPageChunkLinksScheme `json:"_links,omitempty"`
+}
+
+type ChildPageScheme struct {
+	ID            string `json:"id,omitempty"`
+	Status        string `json:"status,omitempty"`
+	Title         string `json:"title,omitempty"`
+	SpaceID       string `json:"spaceId,omitempty"`
+	ChildPosition int    `json:"childPosition,omitempty"`
+}
+
 type PageOptionsScheme struct {
 	PageIDs    []int
 	SpaceIDs   []int
@@ -46,7 +63,7 @@ type PageBodyScheme struct {
 }
 
 type PageCreatePayloadScheme struct {
-	SpaceID  int                           `json:"spaceId,omitempty"`
+	SpaceID  string                        `json:"spaceId,omitempty"`
 	Status   string                        `json:"status,omitempty"`
 	Title    string                        `json:"title,omitempty"`
 	ParentID string                        `json:"parentId,omitempty"`

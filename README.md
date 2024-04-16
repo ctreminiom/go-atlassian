@@ -1,4 +1,5 @@
-![Go Atlassian Framework](https://user-images.githubusercontent.com/16035390/131232958-022b0382-e6bc-42db-97b6-82fbd190e19a.png)
+
+<p align="center"><img src="https://github.com/ctreminiom/go-atlassian/assets/16035390/f73c7a54-ff48-454a-9821-f3d391ccd9d8"></p>
 
 [![Releases](https://img.shields.io/github/v/release/ctreminiom/go-atlassian)](https://github.com/ctreminiom/go-atlassian/releases/latest)
 [![Testing](https://github.com/ctreminiom/go-atlassian/actions/workflows/test.yml/badge.svg)](https://github.com/ctreminiom/go-atlassian/actions/workflows/test.yml)
@@ -7,7 +8,6 @@
 [![Go Report Card](https://goreportcard.com/badge/ctreminiom/go-atlassian)](https://goreportcard.com/report/github.com/ctreminiom/go-atlassian)
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fctreminiom%2Fgo-atlassian.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fctreminiom%2Fgo-atlassian?ref=badge_shield)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/fe5c1b3c9fd64f84989ae51c42803456)](https://app.codacy.com/gh/ctreminiom/go-atlassian/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
-![GitHub commits since latest release (by date)](https://img.shields.io/github/commits-since/ctreminiom/go-atlassian/v1.4.4)
 ![GitHub](https://img.shields.io/github/license/ctreminiom/go-atlassian)
 [![Mentioned in Awesome Go-Atlassian](https://awesome.re/mentioned-badge-flat.svg)](https://github.com/avelino/awesome-go#third-party-apis)
 [![OpenSSF Best Practices](https://bestpractices.coreinfrastructure.org/projects/4861/badge)](https://bestpractices.coreinfrastructure.org/projects/4861)
@@ -15,13 +15,13 @@
 [![Dependency Review](https://github.com/ctreminiom/go-atlassian/actions/workflows/dependency-review.yml/badge.svg)](https://github.com/ctreminiom/go-atlassian/actions/workflows/dependency-review.yml)
 [![Analysis](https://github.com/ctreminiom/go-atlassian/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/ctreminiom/go-atlassian/actions/workflows/codeql-analysis.yml)
 
-
 **go-atlassian** is a Go library that provides a simple and convenient way to interact with various Atlassian products' REST APIs. [Atlassian](https://developer.atlassian.com/cloud/) is a leading provider of software and tools for software development, 
 project management, and collaboration. Some of the products that **go-atlassian** supports include Jira, Confluence, Jira Service Management, and more.
 
 The **go-atlassian** library is designed to simplify the process of building Go applications that interact with Atlassian products. It provides a set of functions and data structures that can be used to easily send HTTP requests to the Atlassian APIs, parse the responses, and work with the data returned.&#x20;
 
-### 🚀Features
+-------------------------
+## 🚀Features
 
 - Easy-to-use functions and data structures that abstract away much of the complexity of working with the APIs.
 - Comprehensive support for various Atlassian products' APIs.
@@ -29,7 +29,8 @@ The **go-atlassian** library is designed to simplify the process of building Go 
 - Active development and maintenance by the community, with regular updates and bug fixes.
 - Comprehensive [documentation](https://docs.go-atlassian.io/jira-software-cloud/introduction) and examples to help developers get started with using the library.
 
-### 📁 Installation
+-------------------------
+## 📁 Installation
 
 If you do not have [Go](https://golang.org/) installed yet, you can find installation instructions
 [here](https://golang.org/doc/install). Please note that the package requires Go version
@@ -41,22 +42,24 @@ To pull the most recent version of **go-atlassian**, use `go get`.
 go get github.com/ctreminiom/go-atlassian
 ```
 
-### 📪 Packages
-Then import the package into your project as you normally would. You can import the following packages
+-------------------------
+## 📪 Packages
+Then import the package into your project as you normally would. You can import the following packages:
 
-|Package|import path  |
-|--|--|
-|Jira v2|`github.com/ctreminiom/go-atlassian/jira/v2`|
-|Jira v3|`github.com/ctreminiom/go-atlassian/jira/v3`|
-|Jira Agile|`github.com/ctreminiom/go-atlassian/jira/agile`|
-|Jira ITSM|`github.com/ctreminiom/go-atlassian/jira/sm`|
-|Confluence|`github.com/ctreminiom/go-atlassian/confluence`|
-|Confluence V2|`github.com/ctreminiom/go-atlassian/confluence/v2`|
-|Cloud Admin|`github.com/ctreminiom/go-atlassian/admin`|
+| Module                  	       | Path                                               	     | URL's                                                                                	|
+|---------------------------------|----------------------------------------------------------|--------------------------------------------------------------------------------------	|
+| Jira v2                 	       | `github.com/ctreminiom/go-atlassian/jira/v2`       	     | [Getting Started](https://docs.go-atlassian.io/jira-software-cloud/introduction)     	|
+| Jira v3                 	       | `github.com/ctreminiom/go-atlassian/jira/v3`       	     | [Getting Started](https://docs.go-atlassian.io/jira-software-cloud/introduction)     	|
+| Jira Software Agile     	       | `github.com/ctreminiom/go-atlassian/jira/agile`    	     | [Getting Started](https://docs.go-atlassian.io/jira-agile/introduction)              	|
+| Jira Service Management 	       | `github.com/ctreminiom/go-atlassian/jira/sm`       	     | [Getting Started](https://docs.go-atlassian.io/jira-service-management/introduction) 	|
+| Jira Assets             	       | `github.com/ctreminiom/go-atlassian/assets`        	     | [Getting Started](https://docs.go-atlassian.io/jira-assets/overview)                 	|
+| Confluence              	       | `github.com/ctreminiom/go-atlassian/confluence`    	     | [Getting Started](https://docs.go-atlassian.io/confluence-cloud/introduction)        	|
+| Confluence v2           	       | `github.com/ctreminiom/go-atlassian/confluence/v2` 	     | [Getting Started](https://docs.go-atlassian.io/confluence-cloud/v2/introduction)     	|
+| Admin Cloud             	       | `github.com/ctreminiom/go-atlassian/admin`         	     | [Getting Started](https://docs.go-atlassian.io/atlassian-admin-cloud/overview)       	|
+| Bitbucket Cloud *(In Progress)*<br/> | `github.com/ctreminiom/go-atlassian/bitbucket`         	 | [Getting Started](https://docs.go-atlassian.io/bitbucket-cloud/introduction)       	|
 
-Now you're ready to Go 😁.
-
-### 🔨 Usage
+-------------------------
+## 🔨 Usage
 
 Before using the **go-atlassian** package, you need to have an Atlassian API key. If you do not have a key yet, you can sign up [here](https://support.atlassian.com/atlassian-account/docs/manage-api-tokens-for-your-atlassian-account/).
 
@@ -92,7 +95,12 @@ if err != nil {
 instance.Auth.SetBasicAuth("YOUR_CLIENT_MAIL", "YOUR_APP_ACCESS_TOKEN")
 ```
 
-### 🌍 Services
+## ☕Cookbooks
+
+For detailed examples and usage of the go-atlassian library, please refer to our Cookbook. This section provides step-by-step guides and code samples for common tasks and scenarios.
+
+-------------------------
+## 🌍 Services
 
 The library uses the services interfaces to provide a modular and flexible way to interact with Atlassian products' REST APIs. It defines a set of services interfaces that define the functionality of each API, and then provides implementations of those interfaces that can be used to interact with the APIs.
 
@@ -128,7 +136,8 @@ type BoardConnector interface {
 
 Each service interface includes a set of methods that correspond to the available endpoints in the corresponding API. For example, the `IssueService` interface includes methods like `Create`, `Update`, and `Get` that correspond to the `POST`, `PUT`, and `GET` endpoints in the Jira Issues API.
 
-### 🎉 Implementation
+-------------------------
+## 🎉 Implementation
 
 Behind the scenes, the `Create` method on the `IssueService` interface is implemented by the `issueService.Create` function in the go-atlassian library. This function sends an HTTP request to the relevant endpoint in the Jira Issues API, using the credentials and configuration provided by the client, and then parses the response into a usable format.
 
@@ -150,6 +159,7 @@ for _, transition := range issue.Transitions {
 
 The rest of the service functions work much the same way; they are concise and behave as you would expect. The [documentation](https://docs.go-atlassian.io/) contains several examples on how to use each service function.
 
+-------------------------
 ## ✍️ Contributions
 
 If you would like to contribute to this project, please adhere to the following guidelines.
@@ -161,7 +171,7 @@ If you would like to contribute to this project, please adhere to the following 
 
 Again, contributions are greatly appreciated!
 
-
+-------------------------
 ## 💡 Inspiration
 The project was created with the purpose to provide a unique point to provide an interface for interacting with Atlassian products. 
 
@@ -173,12 +183,14 @@ However, go-atlassian also adds several new features and improvements that are n
 
 Despite these differences, go-atlassian remains heavily inspired by go-jira, and many of the core design principles and patterns used in go-jira can be found in go-atlassian as well.
 
+-------------------------
 ## 📝 License
 Copyright © 2023 [Carlos Treminio](https://github.com/ctreminiom).
 This project is [MIT](https://opensource.org/licenses/MIT) licensed.
 
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fctreminiom%2Fgo-atlassian.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fctreminiom%2Fgo-atlassian?ref=badge_large)
 
+-------------------------
 ## 🤝 Special Thanks
 
 We would like to extend our sincere thanks to the following sponsors for their generous support:

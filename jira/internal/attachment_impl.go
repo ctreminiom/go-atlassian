@@ -234,7 +234,7 @@ func (i *internalIssueAttachmentServiceImpl) Add(ctx context.Context, issueKeyOr
 	}
 
 	var attachments []*model.IssueAttachmentScheme
-	response, err := i.c.Call(request, attachments)
+	response, err := i.c.Call(request, &attachments)
 	if err != nil {
 		return nil, response, err
 	}

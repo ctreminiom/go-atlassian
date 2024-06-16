@@ -1,8 +1,8 @@
 package models
 
 import (
+	"dario.cat/mergo"
 	"encoding/json"
-	"github.com/imdario/mergo"
 )
 
 type IssueScheme struct {

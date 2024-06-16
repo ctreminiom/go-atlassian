@@ -38,7 +38,7 @@ func Test_internalWorkflowSchemeIssueTypeImpl_Get(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				schemeID:    10002,
 				issueTypeID: "4",
 				returnDraft: true,
@@ -69,7 +69,7 @@ func Test_internalWorkflowSchemeIssueTypeImpl_Get(t *testing.T) {
 			name:   "when the workflow scheme id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoWorkflowSchemeIDError,
@@ -79,7 +79,7 @@ func Test_internalWorkflowSchemeIssueTypeImpl_Get(t *testing.T) {
 			name:   "when the issue type id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				schemeID: 10002,
 			},
 			wantErr: true,
@@ -90,7 +90,7 @@ func Test_internalWorkflowSchemeIssueTypeImpl_Get(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				schemeID:    10002,
 				issueTypeID: "4",
 				returnDraft: true,
@@ -121,7 +121,7 @@ func Test_internalWorkflowSchemeIssueTypeImpl_Get(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				schemeID:    10002,
 				issueTypeID: "4",
 				returnDraft: true,
@@ -201,7 +201,7 @@ func Test_internalWorkflowSchemeIssueTypeImpl_Mapping(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				schemeID:     10002,
 				workflowName: "jira workflow ",
 				returnDraft:  true,
@@ -232,7 +232,7 @@ func Test_internalWorkflowSchemeIssueTypeImpl_Mapping(t *testing.T) {
 			name:   "when the workflow scheme id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoWorkflowSchemeIDError,
@@ -242,7 +242,7 @@ func Test_internalWorkflowSchemeIssueTypeImpl_Mapping(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				schemeID:     10002,
 				workflowName: "jira workflow ",
 				returnDraft:  true,
@@ -273,7 +273,7 @@ func Test_internalWorkflowSchemeIssueTypeImpl_Mapping(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				schemeID:     10002,
 				workflowName: "jira workflow ",
 				returnDraft:  true,
@@ -353,7 +353,7 @@ func Test_internalWorkflowSchemeIssueTypeImpl_Delete(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				schemeID:    10002,
 				issueTypeID: "4",
 				updateDraft: true,
@@ -384,7 +384,7 @@ func Test_internalWorkflowSchemeIssueTypeImpl_Delete(t *testing.T) {
 			name:   "when the workflow scheme id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoWorkflowSchemeIDError,
@@ -394,7 +394,7 @@ func Test_internalWorkflowSchemeIssueTypeImpl_Delete(t *testing.T) {
 			name:   "when the issue type id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				schemeID: 10002,
 			},
 			wantErr: true,
@@ -405,7 +405,7 @@ func Test_internalWorkflowSchemeIssueTypeImpl_Delete(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				schemeID:    10002,
 				issueTypeID: "4",
 				updateDraft: true,
@@ -436,7 +436,7 @@ func Test_internalWorkflowSchemeIssueTypeImpl_Delete(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				schemeID:    10002,
 				issueTypeID: "4",
 				updateDraft: true,
@@ -522,7 +522,7 @@ func Test_internalWorkflowSchemeIssueTypeImpl_Set(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				schemeID:    10002,
 				issueTypeID: "4",
 				payload:     payloadMocked,
@@ -553,7 +553,7 @@ func Test_internalWorkflowSchemeIssueTypeImpl_Set(t *testing.T) {
 			name:   "when the workflow scheme id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoWorkflowSchemeIDError,
@@ -563,7 +563,7 @@ func Test_internalWorkflowSchemeIssueTypeImpl_Set(t *testing.T) {
 			name:   "when the issue type id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				schemeID: 10002,
 			},
 			wantErr: true,
@@ -574,7 +574,7 @@ func Test_internalWorkflowSchemeIssueTypeImpl_Set(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				schemeID:    10002,
 				issueTypeID: "4",
 				payload:     payloadMocked,
@@ -605,7 +605,7 @@ func Test_internalWorkflowSchemeIssueTypeImpl_Set(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				schemeID:    10002,
 				issueTypeID: "4",
 				payload:     payloadMocked,

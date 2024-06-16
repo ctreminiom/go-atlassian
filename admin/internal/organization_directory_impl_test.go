@@ -33,7 +33,7 @@ func Test_internalOrganizationDirectoryServiceImpl_Activity(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				organizationID: "organization-id-sample",
 				accountID:      "account-id-sample",
 			},
@@ -62,7 +62,7 @@ func Test_internalOrganizationDirectoryServiceImpl_Activity(t *testing.T) {
 		{
 			name: "when the organization id is not provided",
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				organizationID: "",
 			},
 			wantErr: true,
@@ -72,7 +72,7 @@ func Test_internalOrganizationDirectoryServiceImpl_Activity(t *testing.T) {
 		{
 			name: "when the account id is not provided",
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				organizationID: "organization-id-sample",
 			},
 			wantErr: true,
@@ -82,7 +82,7 @@ func Test_internalOrganizationDirectoryServiceImpl_Activity(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				organizationID: "organization-id-sample",
 				accountID:      "account-id-sample",
 			},
@@ -159,7 +159,7 @@ func Test_internalOrganizationDirectoryServiceImpl_Remove(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				organizationID: "organization-id-sample",
 				accountID:      "account-id-sample",
 			},
@@ -188,7 +188,7 @@ func Test_internalOrganizationDirectoryServiceImpl_Remove(t *testing.T) {
 		{
 			name: "when the organization id is not provided",
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				organizationID: "",
 			},
 			wantErr: true,
@@ -198,7 +198,7 @@ func Test_internalOrganizationDirectoryServiceImpl_Remove(t *testing.T) {
 		{
 			name: "when the account id is not provided",
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				organizationID: "organization-id-sample",
 			},
 			wantErr: true,
@@ -208,7 +208,7 @@ func Test_internalOrganizationDirectoryServiceImpl_Remove(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				organizationID: "organization-id-sample",
 				accountID:      "account-id-sample",
 			},
@@ -284,7 +284,7 @@ func Test_internalOrganizationDirectoryServiceImpl_Suspend(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				organizationID: "organization-id-sample",
 				accountID:      "account-id-sample",
 			},
@@ -313,7 +313,7 @@ func Test_internalOrganizationDirectoryServiceImpl_Suspend(t *testing.T) {
 		{
 			name: "when the organization id is not provided",
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				organizationID: "",
 			},
 			wantErr: true,
@@ -323,7 +323,7 @@ func Test_internalOrganizationDirectoryServiceImpl_Suspend(t *testing.T) {
 		{
 			name: "when the account id is not provided",
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				organizationID: "organization-id-sample",
 			},
 			wantErr: true,
@@ -333,7 +333,7 @@ func Test_internalOrganizationDirectoryServiceImpl_Suspend(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				organizationID: "organization-id-sample",
 				accountID:      "account-id-sample",
 			},
@@ -410,7 +410,7 @@ func Test_internalOrganizationDirectoryServiceImpl_Restore(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				organizationID: "organization-id-sample",
 				accountID:      "account-id-sample",
 			},
@@ -439,7 +439,7 @@ func Test_internalOrganizationDirectoryServiceImpl_Restore(t *testing.T) {
 		{
 			name: "when the organization id is not provided",
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				organizationID: "",
 			},
 			wantErr: true,
@@ -449,7 +449,7 @@ func Test_internalOrganizationDirectoryServiceImpl_Restore(t *testing.T) {
 		{
 			name: "when the account id is not provided",
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				organizationID: "organization-id-sample",
 			},
 			wantErr: true,
@@ -459,7 +459,7 @@ func Test_internalOrganizationDirectoryServiceImpl_Restore(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				organizationID: "organization-id-sample",
 				accountID:      "account-id-sample",
 			},

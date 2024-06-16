@@ -35,7 +35,7 @@ func Test_internalTypeImpl_Gets(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			on: func(fields *fields) {
 
@@ -63,7 +63,7 @@ func Test_internalTypeImpl_Gets(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			on: func(fields *fields) {
 
@@ -91,7 +91,7 @@ func Test_internalTypeImpl_Gets(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			on: func(fields *fields) {
 
@@ -166,7 +166,7 @@ func Test_internalTypeImpl_Get(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				issueTypeId: "8",
 			},
 			on: func(fields *fields) {
@@ -195,7 +195,7 @@ func Test_internalTypeImpl_Get(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				issueTypeId: "8",
 			},
 			on: func(fields *fields) {
@@ -224,7 +224,7 @@ func Test_internalTypeImpl_Get(t *testing.T) {
 			name:   "when the issue type id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoIssueTypeIDError,
@@ -234,7 +234,7 @@ func Test_internalTypeImpl_Get(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				issueTypeId: "8",
 			},
 			on: func(fields *fields) {
@@ -310,7 +310,7 @@ func Test_internalTypeImpl_Alternatives(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				issueTypeId: "8",
 			},
 			on: func(fields *fields) {
@@ -339,7 +339,7 @@ func Test_internalTypeImpl_Alternatives(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				issueTypeId: "8",
 			},
 			on: func(fields *fields) {
@@ -368,7 +368,7 @@ func Test_internalTypeImpl_Alternatives(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				issueTypeId: "8",
 			},
 			on: func(fields *fields) {
@@ -450,7 +450,7 @@ func Test_internalTypeImpl_Create(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -479,7 +479,7 @@ func Test_internalTypeImpl_Create(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -508,7 +508,7 @@ func Test_internalTypeImpl_Create(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -591,7 +591,7 @@ func Test_internalTypeImpl_Update(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				issueTypeId: "8",
 				payload:     payloadMocked,
 			},
@@ -621,7 +621,7 @@ func Test_internalTypeImpl_Update(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				issueTypeId: "8",
 				payload:     payloadMocked,
 			},
@@ -651,7 +651,7 @@ func Test_internalTypeImpl_Update(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				issueTypeId: "8",
 				payload:     payloadMocked,
 			},
@@ -728,7 +728,7 @@ func Test_internalTypeImpl_Delete(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				issueTypeId: "8",
 			},
 			on: func(fields *fields) {
@@ -757,7 +757,7 @@ func Test_internalTypeImpl_Delete(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				issueTypeId: "8",
 			},
 			on: func(fields *fields) {
@@ -786,7 +786,7 @@ func Test_internalTypeImpl_Delete(t *testing.T) {
 			name:   "when the issue type id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoIssueTypeIDError,
@@ -796,7 +796,7 @@ func Test_internalTypeImpl_Delete(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				issueTypeId: "8",
 			},
 			on: func(fields *fields) {

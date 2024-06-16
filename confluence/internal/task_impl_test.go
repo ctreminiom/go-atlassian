@@ -34,7 +34,7 @@ func Test_internalTaskImpl_Gets(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:   context.TODO(),
+				ctx:   context.Background(),
 				start: 20,
 				limit: 50,
 			},
@@ -62,7 +62,7 @@ func Test_internalTaskImpl_Gets(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:   context.TODO(),
+				ctx:   context.Background(),
 				start: 20,
 				limit: 50,
 			},
@@ -137,7 +137,7 @@ func Test_internalTaskImpl_Get(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:    context.TODO(),
+				ctx:    context.Background(),
 				taskID: "2272737477",
 			},
 			on: func(fields *fields) {
@@ -164,7 +164,7 @@ func Test_internalTaskImpl_Get(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:    context.TODO(),
+				ctx:    context.Background(),
 				taskID: "2272737477",
 			},
 			on: func(fields *fields) {

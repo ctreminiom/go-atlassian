@@ -45,7 +45,7 @@ func Test_internalSpacePermissionImpl_Add(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				spaceKey: "DUMMY",
 				payload:  payloadMocked,
 			},
@@ -72,7 +72,7 @@ func Test_internalSpacePermissionImpl_Add(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				spaceKey: "DUMMY",
 				payload:  payloadMocked,
 			},
@@ -96,7 +96,7 @@ func Test_internalSpacePermissionImpl_Add(t *testing.T) {
 		{
 			name: "when the space key is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoSpaceKeyError,
@@ -175,7 +175,7 @@ func Test_internalSpacePermissionImpl_Bulk(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				spaceKey: "DUMMY",
 				payload:  payloadMocked,
 			},
@@ -202,7 +202,7 @@ func Test_internalSpacePermissionImpl_Bulk(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				spaceKey: "DUMMY",
 				payload:  payloadMocked,
 			},
@@ -226,7 +226,7 @@ func Test_internalSpacePermissionImpl_Bulk(t *testing.T) {
 		{
 			name: "when the space key is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoSpaceKeyError,
@@ -285,7 +285,7 @@ func Test_internalSpacePermissionImpl_Remove(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				spaceKey:     "DUMMY",
 				permissionID: 10001,
 			},
@@ -312,7 +312,7 @@ func Test_internalSpacePermissionImpl_Remove(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				spaceKey:     "DUMMY",
 				permissionID: 10001,
 			},
@@ -336,7 +336,7 @@ func Test_internalSpacePermissionImpl_Remove(t *testing.T) {
 		{
 			name: "when the space key is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoSpaceKeyError,

@@ -36,7 +36,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Gets(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				ids:        []int{10001},
 				startAt:    50,
 				maxResults: 50,
@@ -68,7 +68,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Gets(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				ids:        []int{10001},
 				startAt:    50,
 				maxResults: 50,
@@ -100,7 +100,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Gets(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				ids:        []int{10001},
 				startAt:    50,
 				maxResults: 50,
@@ -184,7 +184,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Create(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				name:        "field scheme sample",
 				description: "field scheme sample",
 			},
@@ -215,7 +215,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Create(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				name:        "field scheme sample",
 				description: "field scheme sample",
 			},
@@ -246,7 +246,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Create(t *testing.T) {
 			name:   "when the description is not provided",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				name:        "field scheme sample",
 				description: "",
 			},
@@ -277,7 +277,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Create(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				name:        "field scheme sample",
 				description: "field scheme sample",
 			},
@@ -357,7 +357,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Mapping(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				fieldConfigIds: []int{10001},
 				startAt:        50,
 				maxResults:     50,
@@ -389,7 +389,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Mapping(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				fieldConfigIds: []int{10001},
 				startAt:        50,
 				maxResults:     50,
@@ -421,7 +421,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Mapping(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				fieldConfigIds: []int{10001},
 				startAt:        50,
 				maxResults:     50,
@@ -502,7 +502,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Project(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				projectIds: []int{10001},
 				startAt:    50,
 				maxResults: 50,
@@ -534,7 +534,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Project(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				projectIds: []int{10001},
 				startAt:    50,
 				maxResults: 50,
@@ -566,7 +566,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Project(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				projectIds: []int{10001},
 				startAt:    50,
 				maxResults: 50,
@@ -651,7 +651,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Assign(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -681,7 +681,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Assign(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -766,7 +766,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Update(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				schemeId:    10001,
 				name:        "name sample",
 				description: "description sample",
@@ -798,7 +798,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Update(t *testing.T) {
 			name:   "when the description is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				schemeId:    10001,
 				name:        "name sample",
 				description: "",
@@ -830,7 +830,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Update(t *testing.T) {
 			name:   "when the scheme id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				schemeId:    0,
 				name:        "name sample",
 				description: "description sample",
@@ -843,7 +843,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Update(t *testing.T) {
 			name:   "when the scheme name is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				schemeId:    10001,
 				name:        "",
 				description: "description sample",
@@ -856,7 +856,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Update(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				schemeId:    10001,
 				name:        "name sample",
 				description: "description sample",
@@ -938,7 +938,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Delete(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				schemeId: 10001,
 			},
 			on: func(fields *fields) {
@@ -968,7 +968,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Delete(t *testing.T) {
 			name:   "when the scheme id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				schemeId: 0,
 			},
 			wantErr: true,
@@ -979,7 +979,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Delete(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				schemeId: 10001,
 			},
 			on: func(fields *fields) {
@@ -1073,7 +1073,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Link(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				schemeId: 10001,
 				payload:  payloadMocked,
 			},
@@ -1104,7 +1104,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Link(t *testing.T) {
 			name:   "when the scheme id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				schemeId: 0,
 				payload:  payloadMocked,
 			},
@@ -1116,7 +1116,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Link(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				schemeId: 10001,
 				payload:  payloadMocked,
 			},
@@ -1147,7 +1147,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Link(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				schemeId: 10001,
 				payload:  payloadMocked,
 			},
@@ -1226,7 +1226,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Unlink(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				schemeId:     10001,
 				issueTypeIDs: []string{"1001", "1002"},
 			},
@@ -1257,7 +1257,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Unlink(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				schemeId:     10001,
 				issueTypeIDs: []string{"1001", "1002"},
 			},
@@ -1288,7 +1288,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Unlink(t *testing.T) {
 			name:   "when the scheme id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				schemeId: 0,
 			},
 			wantErr: true,
@@ -1299,7 +1299,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Unlink(t *testing.T) {
 			name:   "when the issuetype id's are not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				schemeId: 1000,
 			},
 			wantErr: true,
@@ -1310,7 +1310,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Unlink(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				schemeId:     10001,
 				issueTypeIDs: []string{"1001", "1002"},
 			},

@@ -21,11 +21,11 @@ func Test_internalObjectTypeAttributeImpl_Create(t *testing.T) {
 	minimumCardinality = 0
 	maximumCardinality = 0
 	payloadMocked := &model.ObjectTypeAttributePayloadScheme{
-		Name:        		"Geolocation",
-		Label:  	 	 false,
-		Type:       		 &attributeType,
-		Description: 		 "",
-		DefaultTypeId: 		 &defaultTypeID,
+		Name:                    "Geolocation",
+		Label:                   false,
+		Type:                    &attributeType,
+		Description:             "",
+		DefaultTypeId:           &defaultTypeID,
 		TypeValue:               "",
 		TypeValueMulti:          nil,
 		AdditionalValue:         "",
@@ -63,7 +63,7 @@ func Test_internalObjectTypeAttributeImpl_Create(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				workspaceID:  "workspace-uuid-sample",
 				objectTypeID: "object-type-uuid-sample",
 				payload:      payloadMocked,
@@ -92,7 +92,7 @@ func Test_internalObjectTypeAttributeImpl_Create(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				workspaceID:  "workspace-uuid-sample",
 				objectTypeID: "object-type-uuid-sample",
 				payload:      payloadMocked,
@@ -119,7 +119,7 @@ func Test_internalObjectTypeAttributeImpl_Create(t *testing.T) {
 		{
 			name: "when the workspace id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoWorkspaceIDError,
@@ -128,7 +128,7 @@ func Test_internalObjectTypeAttributeImpl_Create(t *testing.T) {
 		{
 			name: "when the object type id id is not provided",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				workspaceID: "workspace-uuid-sample",
 			},
 			wantErr: true,
@@ -181,11 +181,11 @@ func Test_internalObjectTypeAttributeImpl_Update(t *testing.T) {
 	minimumCardinality = 0
 	maximumCardinality = 0
 	payloadMocked := &model.ObjectTypeAttributePayloadScheme{
-		Name:        		"Geolocation",
-		Label:  	 	 false,
-		Type:       		 &attributeType,
-		Description: 		 "",
-		DefaultTypeId: 		 &defaultTypeID,
+		Name:                    "Geolocation",
+		Label:                   false,
+		Type:                    &attributeType,
+		Description:             "",
+		DefaultTypeId:           &defaultTypeID,
 		TypeValue:               "",
 		TypeValueMulti:          nil,
 		AdditionalValue:         "",
@@ -223,7 +223,7 @@ func Test_internalObjectTypeAttributeImpl_Update(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				workspaceID:  "workspace-uuid-sample",
 				objectTypeID: "object-type-uuid-sample",
 				attributeID:  "attribute-id-sample",
@@ -253,7 +253,7 @@ func Test_internalObjectTypeAttributeImpl_Update(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				workspaceID:  "workspace-uuid-sample",
 				objectTypeID: "object-type-uuid-sample",
 				attributeID:  "attribute-id-sample",
@@ -281,7 +281,7 @@ func Test_internalObjectTypeAttributeImpl_Update(t *testing.T) {
 		{
 			name: "when the workspace id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoWorkspaceIDError,
@@ -290,7 +290,7 @@ func Test_internalObjectTypeAttributeImpl_Update(t *testing.T) {
 		{
 			name: "when the object type id id is not provided",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				workspaceID: "workspace-uuid-sample",
 			},
 			wantErr: true,
@@ -300,7 +300,7 @@ func Test_internalObjectTypeAttributeImpl_Update(t *testing.T) {
 		{
 			name: "when the attribute id id is not provided",
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				workspaceID:  "workspace-uuid-sample",
 				objectTypeID: "object-type-id-sample",
 			},
@@ -366,7 +366,7 @@ func Test_internalObjectTypeAttributeImpl_Delete(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				workspaceID: "workspace-uuid-sample",
 				attributeID: "attribute-id-sample",
 			},
@@ -394,7 +394,7 @@ func Test_internalObjectTypeAttributeImpl_Delete(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				workspaceID: "workspace-uuid-sample",
 				attributeID: "attribute-id-sample",
 			},
@@ -420,7 +420,7 @@ func Test_internalObjectTypeAttributeImpl_Delete(t *testing.T) {
 		{
 			name: "when the workspace id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoWorkspaceIDError,
@@ -429,7 +429,7 @@ func Test_internalObjectTypeAttributeImpl_Delete(t *testing.T) {
 		{
 			name: "when the attribute id id is not provided",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				workspaceID: "workspace-uuid-sample",
 			},
 			wantErr: true,

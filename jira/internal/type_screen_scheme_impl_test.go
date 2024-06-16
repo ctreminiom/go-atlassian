@@ -36,7 +36,7 @@ func Test_internalTypeScreenSchemeImpl_Gets(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 				options: &model.ScreenSchemeParamsScheme{
 					IDs:         []int{10001, 10002},
 					QueryString: "query",
@@ -72,7 +72,7 @@ func Test_internalTypeScreenSchemeImpl_Gets(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 				options: &model.ScreenSchemeParamsScheme{
 					IDs:         []int{10001, 10002},
 					QueryString: "query",
@@ -108,7 +108,7 @@ func Test_internalTypeScreenSchemeImpl_Gets(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 				options: &model.ScreenSchemeParamsScheme{
 					IDs:         []int{10001, 10002},
 					QueryString: "query",
@@ -193,7 +193,7 @@ func Test_internalTypeScreenSchemeImpl_Projects(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				projectIds: []int{29992, 349383},
 				startAt:    50,
 				maxResults: 100,
@@ -224,7 +224,7 @@ func Test_internalTypeScreenSchemeImpl_Projects(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				projectIds: []int{29992, 349383},
 				startAt:    50,
 				maxResults: 100,
@@ -255,7 +255,7 @@ func Test_internalTypeScreenSchemeImpl_Projects(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				projectIds: []int{29992, 349383},
 				startAt:    50,
 				maxResults: 100,
@@ -335,7 +335,7 @@ func Test_internalTypeScreenSchemeImpl_Mapping(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:                      context.TODO(),
+				ctx:                      context.Background(),
 				issueTypeScreenSchemeIds: []int{29992, 349383},
 				startAt:                  50,
 				maxResults:               100,
@@ -366,7 +366,7 @@ func Test_internalTypeScreenSchemeImpl_Mapping(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:                      context.TODO(),
+				ctx:                      context.Background(),
 				issueTypeScreenSchemeIds: []int{29992, 349383},
 				startAt:                  50,
 				maxResults:               100,
@@ -397,7 +397,7 @@ func Test_internalTypeScreenSchemeImpl_Mapping(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:                      context.TODO(),
+				ctx:                      context.Background(),
 				issueTypeScreenSchemeIds: []int{29992, 349383},
 				startAt:                  50,
 				maxResults:               100,
@@ -477,7 +477,7 @@ func Test_internalTypeScreenSchemeImpl_SchemesByProject(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:                     context.TODO(),
+				ctx:                     context.Background(),
 				issueTypeScreenSchemeId: 29992,
 				startAt:                 50,
 				maxResults:              100,
@@ -508,7 +508,7 @@ func Test_internalTypeScreenSchemeImpl_SchemesByProject(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:                     context.TODO(),
+				ctx:                     context.Background(),
 				issueTypeScreenSchemeId: 29992,
 				startAt:                 50,
 				maxResults:              100,
@@ -539,7 +539,7 @@ func Test_internalTypeScreenSchemeImpl_SchemesByProject(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:                     context.TODO(),
+				ctx:                     context.Background(),
 				issueTypeScreenSchemeId: 29992,
 				startAt:                 50,
 				maxResults:              100,
@@ -620,7 +620,7 @@ func Test_internalTypeScreenSchemeImpl_Assign(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:                     context.TODO(),
+				ctx:                     context.Background(),
 				issueTypeScreenSchemeId: "20001",
 				projectId:               "848483",
 			},
@@ -650,7 +650,7 @@ func Test_internalTypeScreenSchemeImpl_Assign(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:                     context.TODO(),
+				ctx:                     context.Background(),
 				issueTypeScreenSchemeId: "20001",
 				projectId:               "848483",
 			},
@@ -680,7 +680,7 @@ func Test_internalTypeScreenSchemeImpl_Assign(t *testing.T) {
 			name:   "when the issue type screen scheme id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:                     context.TODO(),
+				ctx:                     context.Background(),
 				issueTypeScreenSchemeId: "",
 			},
 			wantErr: true,
@@ -691,7 +691,7 @@ func Test_internalTypeScreenSchemeImpl_Assign(t *testing.T) {
 			name:   "when the project id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:                     context.TODO(),
+				ctx:                     context.Background(),
 				issueTypeScreenSchemeId: "20001",
 			},
 			wantErr: true,
@@ -702,7 +702,7 @@ func Test_internalTypeScreenSchemeImpl_Assign(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:                     context.TODO(),
+				ctx:                     context.Background(),
 				issueTypeScreenSchemeId: "20001",
 				projectId:               "848483",
 			},
@@ -780,7 +780,7 @@ func Test_internalTypeScreenSchemeImpl_Update(t *testing.T) {
 			name:   "when the issue type screen scheme id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:                     context.TODO(),
+				ctx:                     context.Background(),
 				issueTypeScreenSchemeId: "",
 			},
 			wantErr: true,
@@ -790,7 +790,7 @@ func Test_internalTypeScreenSchemeImpl_Update(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:                     context.TODO(),
+				ctx:                     context.Background(),
 				issueTypeScreenSchemeId: "20001",
 				name:                    "New issue type scheme name",
 				description:             "New issue type scheme description",
@@ -821,7 +821,7 @@ func Test_internalTypeScreenSchemeImpl_Update(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:                     context.TODO(),
+				ctx:                     context.Background(),
 				issueTypeScreenSchemeId: "20001",
 				name:                    "New issue type scheme name",
 				description:             "New issue type scheme description",
@@ -852,7 +852,7 @@ func Test_internalTypeScreenSchemeImpl_Update(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:                     context.TODO(),
+				ctx:                     context.Background(),
 				issueTypeScreenSchemeId: "20001",
 				name:                    "New issue type scheme name",
 				description:             "New issue type scheme description",
@@ -930,7 +930,7 @@ func Test_internalTypeScreenSchemeImpl_Delete(t *testing.T) {
 			name:   "when the issue type screen scheme id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:                     context.TODO(),
+				ctx:                     context.Background(),
 				issueTypeScreenSchemeId: "",
 			},
 			wantErr: true,
@@ -940,7 +940,7 @@ func Test_internalTypeScreenSchemeImpl_Delete(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:                     context.TODO(),
+				ctx:                     context.Background(),
 				issueTypeScreenSchemeId: "20001",
 			},
 			on: func(fields *fields) {
@@ -969,7 +969,7 @@ func Test_internalTypeScreenSchemeImpl_Delete(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:                     context.TODO(),
+				ctx:                     context.Background(),
 				issueTypeScreenSchemeId: "20001",
 			},
 			on: func(fields *fields) {
@@ -998,7 +998,7 @@ func Test_internalTypeScreenSchemeImpl_Delete(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:                     context.TODO(),
+				ctx:                     context.Background(),
 				issueTypeScreenSchemeId: "20001",
 			},
 			on: func(fields *fields) {
@@ -1087,7 +1087,7 @@ func Test_internalTypeScreenSchemeImpl_Append(t *testing.T) {
 			name:   "when the issue type screen scheme id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:                     context.TODO(),
+				ctx:                     context.Background(),
 				issueTypeScreenSchemeId: "",
 			},
 			wantErr: true,
@@ -1097,7 +1097,7 @@ func Test_internalTypeScreenSchemeImpl_Append(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:                     context.TODO(),
+				ctx:                     context.Background(),
 				issueTypeScreenSchemeId: "20001",
 				payload:                 payloadMocked,
 			},
@@ -1127,7 +1127,7 @@ func Test_internalTypeScreenSchemeImpl_Append(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:                     context.TODO(),
+				ctx:                     context.Background(),
 				issueTypeScreenSchemeId: "20001",
 				payload:                 payloadMocked,
 			},
@@ -1157,7 +1157,7 @@ func Test_internalTypeScreenSchemeImpl_Append(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:                     context.TODO(),
+				ctx:                     context.Background(),
 				issueTypeScreenSchemeId: "20001",
 				payload:                 payloadMocked,
 			},
@@ -1236,7 +1236,7 @@ func Test_internalTypeScreenSchemeImpl_UpdateDefault(t *testing.T) {
 			name:   "when the issue type screen scheme id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:                     context.TODO(),
+				ctx:                     context.Background(),
 				issueTypeScreenSchemeId: "",
 			},
 			wantErr: true,
@@ -1246,7 +1246,7 @@ func Test_internalTypeScreenSchemeImpl_UpdateDefault(t *testing.T) {
 			name:   "when the screen scheme id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:                     context.TODO(),
+				ctx:                     context.Background(),
 				issueTypeScreenSchemeId: "20001",
 			},
 			wantErr: true,
@@ -1256,7 +1256,7 @@ func Test_internalTypeScreenSchemeImpl_UpdateDefault(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:                     context.TODO(),
+				ctx:                     context.Background(),
 				issueTypeScreenSchemeId: "20001",
 				screenSchemeId:          "200202",
 			},
@@ -1286,7 +1286,7 @@ func Test_internalTypeScreenSchemeImpl_UpdateDefault(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:                     context.TODO(),
+				ctx:                     context.Background(),
 				issueTypeScreenSchemeId: "20001",
 				screenSchemeId:          "200202",
 			},
@@ -1316,7 +1316,7 @@ func Test_internalTypeScreenSchemeImpl_UpdateDefault(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:                     context.TODO(),
+				ctx:                     context.Background(),
 				issueTypeScreenSchemeId: "20001",
 				screenSchemeId:          "200202",
 			},
@@ -1396,7 +1396,7 @@ func Test_internalTypeScreenSchemeImpl_Remove(t *testing.T) {
 			name:   "when the issue type screen scheme id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:                     context.TODO(),
+				ctx:                     context.Background(),
 				issueTypeScreenSchemeId: "",
 			},
 			wantErr: true,
@@ -1406,7 +1406,7 @@ func Test_internalTypeScreenSchemeImpl_Remove(t *testing.T) {
 			name:   "when the issue type id's are not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:                     context.TODO(),
+				ctx:                     context.Background(),
 				issueTypeScreenSchemeId: "2201",
 			},
 			wantErr: true,
@@ -1416,7 +1416,7 @@ func Test_internalTypeScreenSchemeImpl_Remove(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:                     context.TODO(),
+				ctx:                     context.Background(),
 				issueTypeScreenSchemeId: "20001",
 				issueTypeIds:            []string{"9", "43"},
 			},
@@ -1446,7 +1446,7 @@ func Test_internalTypeScreenSchemeImpl_Remove(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:                     context.TODO(),
+				ctx:                     context.Background(),
 				issueTypeScreenSchemeId: "20001",
 				issueTypeIds:            []string{"9", "43"},
 			},
@@ -1476,7 +1476,7 @@ func Test_internalTypeScreenSchemeImpl_Remove(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:                     context.TODO(),
+				ctx:                     context.Background(),
 				issueTypeScreenSchemeId: "20001",
 				issueTypeIds:            []string{"9", "43"},
 			},
@@ -1567,7 +1567,7 @@ func Test_internalTypeScreenSchemeImpl_Create(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -1596,7 +1596,7 @@ func Test_internalTypeScreenSchemeImpl_Create(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -1625,7 +1625,7 @@ func Test_internalTypeScreenSchemeImpl_Create(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {

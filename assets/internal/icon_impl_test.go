@@ -34,7 +34,7 @@ func Test_internalIconImpl_Get(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				workspaceID: "workspace-uuid-sample",
 				iconID:      "1",
 			},
@@ -62,7 +62,7 @@ func Test_internalIconImpl_Get(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				workspaceID: "workspace-uuid-sample",
 				iconID:      "1",
 			},
@@ -88,7 +88,7 @@ func Test_internalIconImpl_Get(t *testing.T) {
 		{
 			name: "when the workspace id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoWorkspaceIDError,
@@ -97,7 +97,7 @@ func Test_internalIconImpl_Get(t *testing.T) {
 		{
 			name: "when the icon id is not provided",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				workspaceID: "workspace-uuid-sample",
 			},
 			wantErr: true,
@@ -156,7 +156,7 @@ func Test_internalIconImpl_Global(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				workspaceID: "workspace-uuid-sample",
 			},
 			on: func(fields *fields) {
@@ -183,7 +183,7 @@ func Test_internalIconImpl_Global(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				workspaceID: "workspace-uuid-sample",
 			},
 			on: func(fields *fields) {
@@ -208,7 +208,7 @@ func Test_internalIconImpl_Global(t *testing.T) {
 		{
 			name: "when the workspace id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoWorkspaceIDError,

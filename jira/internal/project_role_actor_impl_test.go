@@ -39,7 +39,7 @@ func Test_internalProjectRoleActorImpl_Add(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				projectKeyOrId: "DUMMY",
 				roleId:         10001,
 				accountIds:     []string{"uuid"},
@@ -71,7 +71,7 @@ func Test_internalProjectRoleActorImpl_Add(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				projectKeyOrId: "DUMMY",
 				roleId:         10001,
 				accountIds:     []string{"uuid"},
@@ -103,7 +103,7 @@ func Test_internalProjectRoleActorImpl_Add(t *testing.T) {
 			name:   "when the project key or id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoProjectIDOrKeyError,
@@ -113,7 +113,7 @@ func Test_internalProjectRoleActorImpl_Add(t *testing.T) {
 			name:   "when the project role id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				projectKeyOrId: "DUMMY",
 			},
 			wantErr: true,
@@ -124,7 +124,7 @@ func Test_internalProjectRoleActorImpl_Add(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				projectKeyOrId: "DUMMY",
 				roleId:         10001,
 				accountIds:     []string{"uuid"},
@@ -206,7 +206,7 @@ func Test_internalProjectRoleActorImpl_Delete(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				projectKeyOrId: "DUMMY",
 				roleId:         10001,
 				accountId:      "uuid",
@@ -238,7 +238,7 @@ func Test_internalProjectRoleActorImpl_Delete(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				projectKeyOrId: "DUMMY",
 				roleId:         10001,
 				accountId:      "uuid",
@@ -270,7 +270,7 @@ func Test_internalProjectRoleActorImpl_Delete(t *testing.T) {
 			name:   "when the project key or id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoProjectIDOrKeyError,
@@ -280,7 +280,7 @@ func Test_internalProjectRoleActorImpl_Delete(t *testing.T) {
 			name:   "when the project role id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				projectKeyOrId: "DUMMY",
 			},
 			wantErr: true,
@@ -291,7 +291,7 @@ func Test_internalProjectRoleActorImpl_Delete(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				projectKeyOrId: "DUMMY",
 				roleId:         10001,
 				accountId:      "uuid",

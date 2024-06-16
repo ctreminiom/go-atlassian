@@ -44,7 +44,7 @@ func Test_internalSearchADFImpl_Checks(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -73,7 +73,7 @@ func Test_internalSearchADFImpl_Checks(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -102,7 +102,7 @@ func Test_internalSearchADFImpl_Checks(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -190,7 +190,7 @@ func Test_internalSearchADFImpl_Post(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				jql:        "project = FOO",
 				fields:     []string{"status", "summary"},
 				expands:    []string{"operations"},
@@ -224,7 +224,7 @@ func Test_internalSearchADFImpl_Post(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				jql:        "project = FOO",
 				fields:     []string{"status", "summary"},
 				expands:    []string{"operations"},
@@ -258,7 +258,7 @@ func Test_internalSearchADFImpl_Post(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				jql:        "project = FOO",
 				fields:     []string{"status", "summary"},
 				expands:    []string{"operations"},
@@ -343,7 +343,7 @@ func Test_internalSearchADFImpl_Get(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				jql:        "project = FOO",
 				fields:     []string{"status", "summary"},
 				expands:    []string{"operations"},
@@ -377,7 +377,7 @@ func Test_internalSearchADFImpl_Get(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				jql:        "project = FOO",
 				fields:     []string{"status", "summary"},
 				expands:    []string{"operations"},
@@ -411,7 +411,7 @@ func Test_internalSearchADFImpl_Get(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				jql:        "project = FOO",
 				fields:     []string{"status", "summary"},
 				expands:    []string{"operations"},

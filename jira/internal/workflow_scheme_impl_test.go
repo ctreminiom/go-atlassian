@@ -35,7 +35,7 @@ func Test_internalWorkflowSchemeImpl_Gets(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				startAt:    50,
 				maxResults: 25,
 			},
@@ -65,7 +65,7 @@ func Test_internalWorkflowSchemeImpl_Gets(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				startAt:    50,
 				maxResults: 25,
 			},
@@ -95,7 +95,7 @@ func Test_internalWorkflowSchemeImpl_Gets(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				startAt:    50,
 				maxResults: 25,
 			},
@@ -172,7 +172,7 @@ func Test_internalWorkflowSchemeImpl_Get(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:                 context.TODO(),
+				ctx:                 context.Background(),
 				schemeId:            10002,
 				returnDraftIfExists: true,
 			},
@@ -202,7 +202,7 @@ func Test_internalWorkflowSchemeImpl_Get(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:                 context.TODO(),
+				ctx:                 context.Background(),
 				schemeId:            10002,
 				returnDraftIfExists: true,
 			},
@@ -232,7 +232,7 @@ func Test_internalWorkflowSchemeImpl_Get(t *testing.T) {
 			name:   "when the workflow scheme id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoWorkflowSchemeIDError,
@@ -242,7 +242,7 @@ func Test_internalWorkflowSchemeImpl_Get(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:                 context.TODO(),
+				ctx:                 context.Background(),
 				schemeId:            10002,
 				returnDraftIfExists: true,
 			},
@@ -318,7 +318,7 @@ func Test_internalWorkflowSchemeImpl_Delete(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				schemeId: 10002,
 			},
 			on: func(fields *fields) {
@@ -347,7 +347,7 @@ func Test_internalWorkflowSchemeImpl_Delete(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				schemeId: 10002,
 			},
 			on: func(fields *fields) {
@@ -376,7 +376,7 @@ func Test_internalWorkflowSchemeImpl_Delete(t *testing.T) {
 			name:   "when the workflow scheme id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoWorkflowSchemeIDError,
@@ -386,7 +386,7 @@ func Test_internalWorkflowSchemeImpl_Delete(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				schemeId: 10002,
 			},
 			on: func(fields *fields) {
@@ -460,7 +460,7 @@ func Test_internalWorkflowSchemeImpl_Associations(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				projectIds: []int{1002, 1003},
 			},
 			on: func(fields *fields) {
@@ -489,7 +489,7 @@ func Test_internalWorkflowSchemeImpl_Associations(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				projectIds: []int{1002, 1003},
 			},
 			on: func(fields *fields) {
@@ -518,7 +518,7 @@ func Test_internalWorkflowSchemeImpl_Associations(t *testing.T) {
 			name:   "when the project ids are not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoProjectsError,
@@ -528,7 +528,7 @@ func Test_internalWorkflowSchemeImpl_Associations(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				projectIds: []int{1002, 1003},
 			},
 			on: func(fields *fields) {
@@ -605,7 +605,7 @@ func Test_internalWorkflowSchemeImpl_Assign(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				schemeId:  "1004561",
 				projectId: "4984838",
 			},
@@ -635,7 +635,7 @@ func Test_internalWorkflowSchemeImpl_Assign(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				schemeId:  "1004561",
 				projectId: "4984838",
 			},
@@ -665,7 +665,7 @@ func Test_internalWorkflowSchemeImpl_Assign(t *testing.T) {
 			name:   "when the scheme id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoWorkflowSchemeIDError,
@@ -675,7 +675,7 @@ func Test_internalWorkflowSchemeImpl_Assign(t *testing.T) {
 			name:   "when the project id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				schemeId: "1004561",
 			},
 			wantErr: true,
@@ -686,7 +686,7 @@ func Test_internalWorkflowSchemeImpl_Assign(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				schemeId:  "1004561",
 				projectId: "4984838",
 			},
@@ -771,7 +771,7 @@ func Test_internalWorkflowSchemeImpl_Update(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				schemeId: 10002,
 				payload:  payloadMocked,
 			},
@@ -801,7 +801,7 @@ func Test_internalWorkflowSchemeImpl_Update(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				schemeId: 10002,
 				payload:  payloadMocked,
 			},
@@ -831,7 +831,7 @@ func Test_internalWorkflowSchemeImpl_Update(t *testing.T) {
 			name:   "when the workflow scheme id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoWorkflowSchemeIDError,
@@ -841,7 +841,7 @@ func Test_internalWorkflowSchemeImpl_Update(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				schemeId: 10002,
 				payload:  payloadMocked,
 			},
@@ -927,7 +927,7 @@ func Test_internalWorkflowSchemeImpl_Create(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -956,7 +956,7 @@ func Test_internalWorkflowSchemeImpl_Create(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -985,7 +985,7 @@ func Test_internalWorkflowSchemeImpl_Create(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {

@@ -34,7 +34,7 @@ func Test_internalObjectSchemaImpl_List(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				workspaceID: "workspace-uuid-sample",
 			},
 			on: func(fields *fields) {
@@ -61,7 +61,7 @@ func Test_internalObjectSchemaImpl_List(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				workspaceID: "workspace-uuid-sample",
 			},
 			on: func(fields *fields) {
@@ -86,7 +86,7 @@ func Test_internalObjectSchemaImpl_List(t *testing.T) {
 		{
 			name: "when the workspace id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoWorkspaceIDError,
@@ -144,7 +144,7 @@ func Test_internalObjectSchemaImpl_Get(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				workspaceID:    "workspace-uuid-sample",
 				objectSchemaID: "object-schema-id-sample",
 			},
@@ -172,7 +172,7 @@ func Test_internalObjectSchemaImpl_Get(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				workspaceID:    "workspace-uuid-sample",
 				objectSchemaID: "object-schema-id-sample",
 			},
@@ -198,7 +198,7 @@ func Test_internalObjectSchemaImpl_Get(t *testing.T) {
 		{
 			name: "when the workspace id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoWorkspaceIDError,
@@ -207,7 +207,7 @@ func Test_internalObjectSchemaImpl_Get(t *testing.T) {
 		{
 			name: "when the object schema id is not provided",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				workspaceID: "workspace-uuid-sample",
 			},
 			wantErr: true,
@@ -266,7 +266,7 @@ func Test_internalObjectSchemaImpl_Delete(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				workspaceID:    "workspace-uuid-sample",
 				objectSchemaID: "object-schema-id-sample",
 			},
@@ -294,7 +294,7 @@ func Test_internalObjectSchemaImpl_Delete(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				workspaceID:    "workspace-uuid-sample",
 				objectSchemaID: "object-schema-id-sample",
 			},
@@ -320,7 +320,7 @@ func Test_internalObjectSchemaImpl_Delete(t *testing.T) {
 		{
 			name: "when the workspace id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoWorkspaceIDError,
@@ -329,7 +329,7 @@ func Test_internalObjectSchemaImpl_Delete(t *testing.T) {
 		{
 			name: "when the object schema id is not provided",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				workspaceID: "workspace-uuid-sample",
 			},
 			wantErr: true,
@@ -395,7 +395,7 @@ func Test_internalObjectSchemaImpl_Attributes(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				workspaceID:    "workspace-uuid-sample",
 				objectSchemaID: "object-schema-id-sample",
 				options:        optionsMocked,
@@ -424,7 +424,7 @@ func Test_internalObjectSchemaImpl_Attributes(t *testing.T) {
 		{
 			name: "when the options are not provided",
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				workspaceID:    "workspace-uuid-sample",
 				objectSchemaID: "object-schema-id-sample",
 			},
@@ -452,7 +452,7 @@ func Test_internalObjectSchemaImpl_Attributes(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				workspaceID:    "workspace-uuid-sample",
 				objectSchemaID: "object-schema-id-sample",
 				options:        optionsMocked,
@@ -479,7 +479,7 @@ func Test_internalObjectSchemaImpl_Attributes(t *testing.T) {
 		{
 			name: "when the workspace id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoWorkspaceIDError,
@@ -488,7 +488,7 @@ func Test_internalObjectSchemaImpl_Attributes(t *testing.T) {
 		{
 			name: "when the object schema id is not provided",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				workspaceID: "workspace-uuid-sample",
 			},
 			wantErr: true,
@@ -552,7 +552,7 @@ func Test_internalObjectSchemaImpl_ObjectTypes(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:             context.TODO(),
+				ctx:             context.Background(),
 				workspaceID:     "workspace-uuid-sample",
 				objectSchemaID:  "object-schema-id-sample",
 				excludeAbstract: true,
@@ -581,7 +581,7 @@ func Test_internalObjectSchemaImpl_ObjectTypes(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:             context.TODO(),
+				ctx:             context.Background(),
 				workspaceID:     "workspace-uuid-sample",
 				objectSchemaID:  "object-schema-id-sample",
 				excludeAbstract: true,
@@ -608,7 +608,7 @@ func Test_internalObjectSchemaImpl_ObjectTypes(t *testing.T) {
 		{
 			name: "when the workspace id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoWorkspaceIDError,
@@ -617,7 +617,7 @@ func Test_internalObjectSchemaImpl_ObjectTypes(t *testing.T) {
 		{
 			name: "when the object schema id is not provided",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				workspaceID: "workspace-uuid-sample",
 			},
 			wantErr: true,
@@ -687,7 +687,7 @@ func Test_internalObjectSchemaImpl_Update(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				workspaceID:    "workspace-uuid-sample",
 				objectSchemaID: "object-schema-id-sample",
 				payload:        payloadMocked,
@@ -716,7 +716,7 @@ func Test_internalObjectSchemaImpl_Update(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				workspaceID:    "workspace-uuid-sample",
 				objectSchemaID: "object-schema-id-sample",
 				payload:        payloadMocked,
@@ -743,7 +743,7 @@ func Test_internalObjectSchemaImpl_Update(t *testing.T) {
 		{
 			name: "when the workspace id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoWorkspaceIDError,
@@ -752,7 +752,7 @@ func Test_internalObjectSchemaImpl_Update(t *testing.T) {
 		{
 			name: "when the object schema id is not provided",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				workspaceID: "workspace-uuid-sample",
 			},
 			wantErr: true,
@@ -823,7 +823,7 @@ func Test_internalObjectSchemaImpl_Create(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				workspaceID: "workspace-uuid-sample",
 				payload:     payloadMocked,
 			},
@@ -851,7 +851,7 @@ func Test_internalObjectSchemaImpl_Create(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				workspaceID: "workspace-uuid-sample",
 				payload:     payloadMocked,
 			},
@@ -877,7 +877,7 @@ func Test_internalObjectSchemaImpl_Create(t *testing.T) {
 		{
 			name: "when the workspace id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoWorkspaceIDError,

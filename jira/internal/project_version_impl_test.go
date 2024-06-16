@@ -36,7 +36,7 @@ func Test_internalProjectVersionImpl_Gets(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				projectKeyOrId: "DUMMY",
 			},
 			on: func(fields *fields) {
@@ -65,7 +65,7 @@ func Test_internalProjectVersionImpl_Gets(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				projectKeyOrId: "DUMMY",
 			},
 			on: func(fields *fields) {
@@ -94,7 +94,7 @@ func Test_internalProjectVersionImpl_Gets(t *testing.T) {
 			name:   "when the project key or id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoProjectIDOrKeyError,
@@ -104,7 +104,7 @@ func Test_internalProjectVersionImpl_Gets(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				projectKeyOrId: "DUMMY",
 			},
 			on: func(fields *fields) {
@@ -182,7 +182,7 @@ func Test_internalProjectVersionImpl_Search(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				projectKeyOrId: "DUMMY",
 				options: &model.VersionGetsOptions{
 					OrderBy: "id",
@@ -219,7 +219,7 @@ func Test_internalProjectVersionImpl_Search(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				projectKeyOrId: "DUMMY",
 				options: &model.VersionGetsOptions{
 					OrderBy: "id",
@@ -256,7 +256,7 @@ func Test_internalProjectVersionImpl_Search(t *testing.T) {
 			name:   "when the project key or id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoProjectIDOrKeyError,
@@ -266,7 +266,7 @@ func Test_internalProjectVersionImpl_Search(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				projectKeyOrId: "DUMMY",
 				options: &model.VersionGetsOptions{
 					OrderBy: "id",
@@ -352,7 +352,7 @@ func Test_internalProjectVersionImpl_Get(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				versionId: "10391",
 				expand:    []string{"operations"},
 			},
@@ -382,7 +382,7 @@ func Test_internalProjectVersionImpl_Get(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				versionId: "10391",
 				expand:    []string{"operations"},
 			},
@@ -412,7 +412,7 @@ func Test_internalProjectVersionImpl_Get(t *testing.T) {
 			name:   "when the project version is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoVersionIDError,
@@ -422,7 +422,7 @@ func Test_internalProjectVersionImpl_Get(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				versionId: "10391",
 				expand:    []string{"operations"},
 			},
@@ -500,7 +500,7 @@ func Test_internalProjectVersionImpl_RelatedIssueCounts(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				versionId: "10391",
 			},
 			on: func(fields *fields) {
@@ -529,7 +529,7 @@ func Test_internalProjectVersionImpl_RelatedIssueCounts(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				versionId: "10391",
 			},
 			on: func(fields *fields) {
@@ -558,7 +558,7 @@ func Test_internalProjectVersionImpl_RelatedIssueCounts(t *testing.T) {
 			name:   "when the project version is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoVersionIDError,
@@ -568,7 +568,7 @@ func Test_internalProjectVersionImpl_RelatedIssueCounts(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				versionId: "10391",
 			},
 			on: func(fields *fields) {
@@ -644,7 +644,7 @@ func Test_internalProjectVersionImpl_UnresolvedIssueCount(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				versionId: "10391",
 			},
 			on: func(fields *fields) {
@@ -673,7 +673,7 @@ func Test_internalProjectVersionImpl_UnresolvedIssueCount(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				versionId: "10391",
 			},
 			on: func(fields *fields) {
@@ -702,7 +702,7 @@ func Test_internalProjectVersionImpl_UnresolvedIssueCount(t *testing.T) {
 			name:   "when the project version is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoVersionIDError,
@@ -712,7 +712,7 @@ func Test_internalProjectVersionImpl_UnresolvedIssueCount(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				versionId: "10391",
 			},
 			on: func(fields *fields) {
@@ -788,7 +788,7 @@ func Test_internalProjectVersionImpl_Merge(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:                 context.TODO(),
+				ctx:                 context.Background(),
 				versionId:           "10391",
 				versionMoveIssuesTo: "10392",
 			},
@@ -818,7 +818,7 @@ func Test_internalProjectVersionImpl_Merge(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:                 context.TODO(),
+				ctx:                 context.Background(),
 				versionId:           "10391",
 				versionMoveIssuesTo: "10392",
 			},
@@ -848,7 +848,7 @@ func Test_internalProjectVersionImpl_Merge(t *testing.T) {
 			name:   "when the source project version is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoVersionIDError,
@@ -858,7 +858,7 @@ func Test_internalProjectVersionImpl_Merge(t *testing.T) {
 			name:   "when the destination project version is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				versionId: "100392",
 			},
 			wantErr: true,
@@ -869,7 +869,7 @@ func Test_internalProjectVersionImpl_Merge(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:                 context.TODO(),
+				ctx:                 context.Background(),
 				versionId:           "10391",
 				versionMoveIssuesTo: "10392",
 			},
@@ -955,7 +955,7 @@ func Test_internalProjectVersionImpl_Create(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -984,7 +984,7 @@ func Test_internalProjectVersionImpl_Create(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -1013,7 +1013,7 @@ func Test_internalProjectVersionImpl_Create(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -1100,7 +1100,7 @@ func Test_internalProjectVersionImpl_Update(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				versionId: "10923",
 				payload:   payloadMocked,
 			},
@@ -1130,7 +1130,7 @@ func Test_internalProjectVersionImpl_Update(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				versionId: "10923",
 				payload:   payloadMocked,
 			},
@@ -1160,7 +1160,7 @@ func Test_internalProjectVersionImpl_Update(t *testing.T) {
 			name:   "when the version id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoVersionIDError,
@@ -1170,7 +1170,7 @@ func Test_internalProjectVersionImpl_Update(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				versionId: "10923",
 				payload:   payloadMocked,
 			},

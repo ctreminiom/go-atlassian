@@ -38,7 +38,7 @@ func Test_internalPageImpl_Get(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				pageID:  200001,
 				format:  "atlas_doc_format",
 				draft:   true,
@@ -67,7 +67,7 @@ func Test_internalPageImpl_Get(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				pageID:  200001,
 				format:  "atlas_doc_format",
 				draft:   true,
@@ -94,7 +94,7 @@ func Test_internalPageImpl_Get(t *testing.T) {
 		{
 			name: "when the page id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoPageIDError,
@@ -155,7 +155,7 @@ func Test_internalPageImpl_Gets(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 				options: &model.PageOptionsScheme{
 					PageIDs:    []int{112, 1223},
 					SpaceIDs:   []int{3040, 3040},
@@ -190,7 +190,7 @@ func Test_internalPageImpl_Gets(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:    context.TODO(),
+				ctx:    context.Background(),
 				cursor: "cursor-sample",
 				options: &model.PageOptionsScheme{
 					PageIDs:    []int{112, 1223},
@@ -273,7 +273,7 @@ func Test_internalPageImpl_Bulk(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:    context.TODO(),
+				ctx:    context.Background(),
 				cursor: "cursor-sample",
 				limit:  200,
 			},
@@ -300,7 +300,7 @@ func Test_internalPageImpl_Bulk(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:    context.TODO(),
+				ctx:    context.Background(),
 				cursor: "cursor-sample",
 				limit:  200,
 			},
@@ -377,7 +377,7 @@ func Test_internalPageImpl_GetsByLabel(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				labelID: 20001,
 				sort:    "test-label",
 				cursor:  "cursor-sample",
@@ -406,7 +406,7 @@ func Test_internalPageImpl_GetsByLabel(t *testing.T) {
 		{
 			name: "when the label id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoLabelIDError,
@@ -415,7 +415,7 @@ func Test_internalPageImpl_GetsByLabel(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				labelID: 20001,
 				sort:    "test-label",
 				cursor:  "cursor-sample",
@@ -494,7 +494,7 @@ func Test_internalPageImpl_GetsBySpace(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				spaceID: 20001,
 				cursor:  "cursor-sample",
 				limit:   200,
@@ -522,7 +522,7 @@ func Test_internalPageImpl_GetsBySpace(t *testing.T) {
 		{
 			name: "when the space id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoSpaceIDError,
@@ -531,7 +531,7 @@ func Test_internalPageImpl_GetsBySpace(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				spaceID: 20001,
 				cursor:  "cursor-sample",
 				limit:   200,
@@ -608,7 +608,7 @@ func Test_internalPageImpl_GetsByParent(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				parentID: 20001,
 				cursor:   "cursor-sample",
 				limit:    200,
@@ -636,7 +636,7 @@ func Test_internalPageImpl_GetsByParent(t *testing.T) {
 		{
 			name: "when the parent id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoPageIDError,
@@ -645,7 +645,7 @@ func Test_internalPageImpl_GetsByParent(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				parentID: 20001,
 				cursor:   "cursor-sample",
 				limit:    200,
@@ -671,7 +671,7 @@ func Test_internalPageImpl_GetsByParent(t *testing.T) {
 		{
 			name: "when the call fails",
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				parentID: 20001,
 				cursor:   "cursor-sample",
 				limit:    200,
@@ -752,7 +752,7 @@ func Test_internalPageImpl_Delete(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:    context.TODO(),
+				ctx:    context.Background(),
 				pageID: 200001,
 			},
 			on: func(fields *fields) {
@@ -778,7 +778,7 @@ func Test_internalPageImpl_Delete(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:    context.TODO(),
+				ctx:    context.Background(),
 				pageID: 200001,
 			},
 			on: func(fields *fields) {
@@ -802,7 +802,7 @@ func Test_internalPageImpl_Delete(t *testing.T) {
 		{
 			name: "when the page id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoPageIDError,
@@ -893,7 +893,7 @@ func Test_internalPageImpl_Create(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				payload: mockedPayload,
 			},
 			on: func(fields *fields) {
@@ -919,7 +919,7 @@ func Test_internalPageImpl_Create(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				payload: mockedPayload,
 			},
 			on: func(fields *fields) {
@@ -1033,7 +1033,7 @@ func Test_internalPageImpl_Update(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				pageID:  215646235,
 				payload: mockedPayload,
 			},
@@ -1060,7 +1060,7 @@ func Test_internalPageImpl_Update(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				pageID:  215646235,
 				payload: mockedPayload,
 			},
@@ -1085,7 +1085,7 @@ func Test_internalPageImpl_Update(t *testing.T) {
 		{
 			name: "when the page id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoPageIDError,

@@ -35,7 +35,7 @@ func Test_internalMySelfImpl_Details(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:    context.TODO(),
+				ctx:    context.Background(),
 				expand: []string{"groups", "applicationRoles"},
 			},
 			on: func(fields *fields) {
@@ -64,7 +64,7 @@ func Test_internalMySelfImpl_Details(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:    context.TODO(),
+				ctx:    context.Background(),
 				expand: []string{"groups", "applicationRoles"},
 			},
 			on: func(fields *fields) {
@@ -93,7 +93,7 @@ func Test_internalMySelfImpl_Details(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:    context.TODO(),
+				ctx:    context.Background(),
 				expand: []string{"groups", "applicationRoles"},
 			},
 			on: func(fields *fields) {

@@ -33,7 +33,7 @@ func Test_internalOrganizationPolicyImpl_Gets(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				organizationID: "organization-id-sample",
 				policyType:     "policy-type-sample",
 				cursor:         "cursor-sample-uuid",
@@ -63,7 +63,7 @@ func Test_internalOrganizationPolicyImpl_Gets(t *testing.T) {
 		{
 			name: "when the organization id is not provided",
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				organizationID: "",
 			},
 			wantErr: true,
@@ -73,7 +73,7 @@ func Test_internalOrganizationPolicyImpl_Gets(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				organizationID: "organization-id-sample",
 				policyType:     "policy-type-sample",
 				cursor:         "cursor-sample-uuid",
@@ -151,7 +151,7 @@ func Test_internalOrganizationPolicyImpl_Get(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				organizationID: "organization-id-sample",
 				policyID:       "policy-id-sample",
 			},
@@ -180,7 +180,7 @@ func Test_internalOrganizationPolicyImpl_Get(t *testing.T) {
 		{
 			name: "when the organization id is not provided",
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				organizationID: "",
 			},
 			wantErr: true,
@@ -190,7 +190,7 @@ func Test_internalOrganizationPolicyImpl_Get(t *testing.T) {
 		{
 			name: "when the organization id is not provided",
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				organizationID: "organization-id-sample",
 			},
 			wantErr: true,
@@ -200,7 +200,7 @@ func Test_internalOrganizationPolicyImpl_Get(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				organizationID: "organization-id-sample",
 				policyID:       "policy-id-sample",
 			},
@@ -287,7 +287,7 @@ func Test_internalOrganizationPolicyImpl_Create(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				organizationID: "organization-id-sample",
 				payload:        payloadMocked,
 			},
@@ -316,7 +316,7 @@ func Test_internalOrganizationPolicyImpl_Create(t *testing.T) {
 		{
 			name: "when the organization id is not provided",
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				organizationID: "",
 			},
 			wantErr: true,
@@ -326,7 +326,7 @@ func Test_internalOrganizationPolicyImpl_Create(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				organizationID: "organization-id-sample",
 				payload:        payloadMocked,
 			},
@@ -412,7 +412,7 @@ func Test_internalOrganizationPolicyImpl_Update(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				organizationID: "organization-id-sample",
 				policyID:       "policy-id-sample",
 				payload:        payloadMocked,
@@ -442,7 +442,7 @@ func Test_internalOrganizationPolicyImpl_Update(t *testing.T) {
 		{
 			name: "when the organization id is not provided",
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				organizationID: "",
 			},
 			wantErr: true,
@@ -452,7 +452,7 @@ func Test_internalOrganizationPolicyImpl_Update(t *testing.T) {
 		{
 			name: "when the policy id is not provided",
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				organizationID: "organization-id-sample",
 			},
 			wantErr: true,
@@ -462,7 +462,7 @@ func Test_internalOrganizationPolicyImpl_Update(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				organizationID: "organization-id-sample",
 				policyID:       "policy-id-sample",
 				payload:        payloadMocked,
@@ -539,7 +539,7 @@ func Test_internalOrganizationPolicyImpl_Delete(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				organizationID: "organization-id-sample",
 				policyID:       "policy-id-sample",
 			},
@@ -568,7 +568,7 @@ func Test_internalOrganizationPolicyImpl_Delete(t *testing.T) {
 		{
 			name: "when the organization id is not provided",
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				organizationID: "",
 			},
 			wantErr: true,
@@ -578,7 +578,7 @@ func Test_internalOrganizationPolicyImpl_Delete(t *testing.T) {
 		{
 			name: "when the policy id is not provided",
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				organizationID: "organization-id-sample",
 			},
 			wantErr: true,
@@ -588,7 +588,7 @@ func Test_internalOrganizationPolicyImpl_Delete(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				organizationID: "organization-id-sample",
 				policyID:       "policy-id-sample",
 			},

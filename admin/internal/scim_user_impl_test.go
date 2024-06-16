@@ -35,7 +35,7 @@ func Test_internalSCIMUserImpl_Gets(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				directoryID: "direction-id-sample",
 				opts: &model.SCIMUserGetsOptionsScheme{
 					Attributes:         []string{"attributes"},
@@ -70,7 +70,7 @@ func Test_internalSCIMUserImpl_Gets(t *testing.T) {
 		{
 			name: "when the directory id is not provided",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				directoryID: "",
 			},
 			wantErr: true,
@@ -80,7 +80,7 @@ func Test_internalSCIMUserImpl_Gets(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				directoryID: "direction-id-sample",
 				opts: &model.SCIMUserGetsOptionsScheme{
 					Attributes:         []string{"attributes"},
@@ -164,7 +164,7 @@ func Test_internalSCIMUserImpl_Get(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:                context.TODO(),
+				ctx:                context.Background(),
 				directoryID:        "direction-id-sample",
 				userID:             "user-id-uuid-sample",
 				attributes:         []string{"groups"},
@@ -195,7 +195,7 @@ func Test_internalSCIMUserImpl_Get(t *testing.T) {
 		{
 			name: "when the directory id is not provided",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				directoryID: "",
 			},
 			wantErr: true,
@@ -205,7 +205,7 @@ func Test_internalSCIMUserImpl_Get(t *testing.T) {
 		{
 			name: "when the user id is not provided",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				directoryID: "direction-id-sample",
 			},
 			wantErr: true,
@@ -215,7 +215,7 @@ func Test_internalSCIMUserImpl_Get(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:                context.TODO(),
+				ctx:                context.Background(),
 				directoryID:        "direction-id-sample",
 				userID:             "user-id-uuid-sample",
 				attributes:         []string{"groups"},
@@ -294,7 +294,7 @@ func Test_internalSCIMUserImpl_Deactivate(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				directoryID: "direction-id-sample",
 				userID:      "user-id-uuid-sample",
 			},
@@ -323,7 +323,7 @@ func Test_internalSCIMUserImpl_Deactivate(t *testing.T) {
 		{
 			name: "when the directory id is not provided",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				directoryID: "",
 			},
 			wantErr: true,
@@ -333,7 +333,7 @@ func Test_internalSCIMUserImpl_Deactivate(t *testing.T) {
 		{
 			name: "when the user id is not provided",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				directoryID: "direction-id-sample",
 			},
 			wantErr: true,
@@ -343,7 +343,7 @@ func Test_internalSCIMUserImpl_Deactivate(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				directoryID: "direction-id-sample",
 				userID:      "user-id-uuid-sample",
 			},
@@ -424,7 +424,7 @@ func Test_internalSCIMUserImpl_Path(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:                context.TODO(),
+				ctx:                context.Background(),
 				directoryID:        "direction-id-sample",
 				userID:             "user-id-uuid-sample",
 				payload:            payloadMocked,
@@ -456,7 +456,7 @@ func Test_internalSCIMUserImpl_Path(t *testing.T) {
 		{
 			name: "when the directory id is not provided",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				directoryID: "",
 			},
 			wantErr: true,
@@ -466,7 +466,7 @@ func Test_internalSCIMUserImpl_Path(t *testing.T) {
 		{
 			name: "when the user id is not provided",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				directoryID: "direction-id-sample",
 			},
 			wantErr: true,
@@ -476,7 +476,7 @@ func Test_internalSCIMUserImpl_Path(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:                context.TODO(),
+				ctx:                context.Background(),
 				directoryID:        "direction-id-sample",
 				userID:             "user-id-uuid-sample",
 				payload:            payloadMocked,
@@ -574,7 +574,7 @@ func Test_internalSCIMUserImpl_Update(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:                context.TODO(),
+				ctx:                context.Background(),
 				directoryID:        "direction-id-sample",
 				userID:             "user-id-uuid-sample",
 				payload:            payloadMocked,
@@ -606,7 +606,7 @@ func Test_internalSCIMUserImpl_Update(t *testing.T) {
 		{
 			name: "when the directory id is not provided",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				directoryID: "",
 			},
 			wantErr: true,
@@ -616,7 +616,7 @@ func Test_internalSCIMUserImpl_Update(t *testing.T) {
 		{
 			name: "when the user id is not provided",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				directoryID: "direction-id-sample",
 			},
 			wantErr: true,
@@ -626,7 +626,7 @@ func Test_internalSCIMUserImpl_Update(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:                context.TODO(),
+				ctx:                context.Background(),
 				directoryID:        "direction-id-sample",
 				userID:             "user-id-uuid-sample",
 				payload:            payloadMocked,
@@ -724,7 +724,7 @@ func Test_internalSCIMUserImpl_Create(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:                context.TODO(),
+				ctx:                context.Background(),
 				directoryID:        "direction-id-sample",
 				payload:            payloadMocked,
 				attributes:         []string{"groups"},
@@ -755,7 +755,7 @@ func Test_internalSCIMUserImpl_Create(t *testing.T) {
 		{
 			name: "when the directory id is not provided",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				directoryID: "",
 			},
 			wantErr: true,
@@ -765,7 +765,7 @@ func Test_internalSCIMUserImpl_Create(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:                context.TODO(),
+				ctx:                context.Background(),
 				directoryID:        "direction-id-sample",
 				payload:            payloadMocked,
 				attributes:         []string{"groups"},

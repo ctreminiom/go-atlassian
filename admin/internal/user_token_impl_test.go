@@ -34,7 +34,7 @@ func Test_internalUserTokenImpl_Gets(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				accountID: "account-id-sample",
 			},
 			on: func(fields *fields) {
@@ -61,7 +61,7 @@ func Test_internalUserTokenImpl_Gets(t *testing.T) {
 		{
 			name: "when the account id is not provided",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				accountID: "",
 			},
 			wantErr: true,
@@ -71,7 +71,7 @@ func Test_internalUserTokenImpl_Gets(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				accountID: "account-id-sample",
 			},
 			on: func(fields *fields) {
@@ -146,7 +146,7 @@ func Test_internalUserTokenImpl_Delete(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				accountID: "account-id-sample",
 				tokenID:   "token-id-sample",
 			},
@@ -174,7 +174,7 @@ func Test_internalUserTokenImpl_Delete(t *testing.T) {
 		{
 			name: "when the account id is not provided",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				accountID: "",
 			},
 			wantErr: true,
@@ -184,7 +184,7 @@ func Test_internalUserTokenImpl_Delete(t *testing.T) {
 		{
 			name: "when the token id is not provided",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				accountID: "account-id-sample",
 			},
 			wantErr: true,
@@ -194,7 +194,7 @@ func Test_internalUserTokenImpl_Delete(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				accountID: "account-id-sample",
 				tokenID:   "token-id-sample",
 			},

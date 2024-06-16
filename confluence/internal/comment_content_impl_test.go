@@ -35,7 +35,7 @@ func Test_internalCommentImpl_Gets(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				contentID:  "100100101",
 				expand:     []string{"attachment", "comments"},
 				location:   []string{"form"},
@@ -66,7 +66,7 @@ func Test_internalCommentImpl_Gets(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				contentID:  "100100101",
 				expand:     []string{"attachment", "comments"},
 				location:   []string{"form"},
@@ -94,7 +94,7 @@ func Test_internalCommentImpl_Gets(t *testing.T) {
 		{
 			name: "when the content id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoContentIDError,

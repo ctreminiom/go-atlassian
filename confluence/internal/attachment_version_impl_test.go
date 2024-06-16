@@ -34,7 +34,7 @@ func Test_internalAttachmentVersionImpl_Gets(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				attachmentID: "100001",
 				sort:         "-modified-date",
 				cursor:       "uuid-sample",
@@ -64,7 +64,7 @@ func Test_internalAttachmentVersionImpl_Gets(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				attachmentID: "100001",
 				sort:         "-modified-date",
 				cursor:       "uuid-sample",
@@ -91,7 +91,7 @@ func Test_internalAttachmentVersionImpl_Gets(t *testing.T) {
 		{
 			name: "when the attachment id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoContentAttachmentIDError,
@@ -152,7 +152,7 @@ func Test_internalAttachmentVersionImpl_Get(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				attachmentID: "100001",
 				versionID:    10002,
 			},
@@ -180,7 +180,7 @@ func Test_internalAttachmentVersionImpl_Get(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				attachmentID: "100001",
 				versionID:    10002,
 			},
@@ -205,7 +205,7 @@ func Test_internalAttachmentVersionImpl_Get(t *testing.T) {
 		{
 			name: "when the attachment id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoContentAttachmentIDError,

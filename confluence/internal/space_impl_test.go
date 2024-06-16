@@ -34,7 +34,7 @@ func Test_internalSpaceImpl_Gets(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 				options: &model.GetSpacesOptionScheme{
 					SpaceKeys:       []string{"DUMMY", "TEST"},
 					SpaceIDs:        []int{1111, 2222, 3333},
@@ -72,7 +72,7 @@ func Test_internalSpaceImpl_Gets(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 				options: &model.GetSpacesOptionScheme{
 					SpaceKeys:       []string{"DUMMY", "TEST"},
 					SpaceIDs:        []int{1111, 2222, 3333},
@@ -159,7 +159,7 @@ func Test_internalSpaceImpl_Get(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				spaceKey: "DUMMY",
 				expand:   []string{"childtypes.all", "operations"},
 			},
@@ -187,7 +187,7 @@ func Test_internalSpaceImpl_Get(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				spaceKey: "DUMMY",
 				expand:   []string{"childtypes.all", "operations"},
 			},
@@ -212,7 +212,7 @@ func Test_internalSpaceImpl_Get(t *testing.T) {
 		{
 			name: "when the space key is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoSpaceKeyError,
@@ -273,7 +273,7 @@ func Test_internalSpaceImpl_Content(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				spaceKey:   "DUMMY",
 				depth:      "all",
 				expand:     []string{"childtypes.all", "operations"},
@@ -304,7 +304,7 @@ func Test_internalSpaceImpl_Content(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				spaceKey:   "DUMMY",
 				depth:      "all",
 				expand:     []string{"childtypes.all", "operations"},
@@ -332,7 +332,7 @@ func Test_internalSpaceImpl_Content(t *testing.T) {
 		{
 			name: "when the space key is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoSpaceKeyError,
@@ -394,7 +394,7 @@ func Test_internalSpaceImpl_ContentByType(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				spaceKey:    "DUMMY",
 				depth:       "all",
 				contentType: "page",
@@ -426,7 +426,7 @@ func Test_internalSpaceImpl_ContentByType(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				spaceKey:    "DUMMY",
 				depth:       "all",
 				contentType: "page",
@@ -455,7 +455,7 @@ func Test_internalSpaceImpl_ContentByType(t *testing.T) {
 		{
 			name: "when the space key is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoSpaceKeyError,
@@ -516,7 +516,7 @@ func Test_internalSpaceImpl_Delete(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				spaceKey: "DUMMY",
 			},
 			on: func(fields *fields) {
@@ -543,7 +543,7 @@ func Test_internalSpaceImpl_Delete(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				spaceKey: "DUMMY",
 			},
 			on: func(fields *fields) {
@@ -567,7 +567,7 @@ func Test_internalSpaceImpl_Delete(t *testing.T) {
 		{
 			name: "when the space key is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoSpaceKeyError,
@@ -635,7 +635,7 @@ func Test_internalSpaceImpl_Create(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				payload: payloadMocked,
 				private: true,
 			},
@@ -663,7 +663,7 @@ func Test_internalSpaceImpl_Create(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				payload: payloadMocked,
 				private: true,
 			},
@@ -688,7 +688,7 @@ func Test_internalSpaceImpl_Create(t *testing.T) {
 		{
 			name: "when the space name is not provided",
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				payload: &model.CreateSpaceScheme{},
 			},
 			wantErr: true,
@@ -698,7 +698,7 @@ func Test_internalSpaceImpl_Create(t *testing.T) {
 		{
 			name: "when the space key is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 				payload: &model.CreateSpaceScheme{
 					Name: "DUMMY Space",
 				},
@@ -767,7 +767,7 @@ func Test_internalSpaceImpl_Update(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				spaceKey: "DUMMY",
 				payload:  payloadMocked,
 			},
@@ -795,7 +795,7 @@ func Test_internalSpaceImpl_Update(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				spaceKey: "DUMMY",
 				payload:  payloadMocked,
 			},
@@ -820,7 +820,7 @@ func Test_internalSpaceImpl_Update(t *testing.T) {
 		{
 			name: "when the space key is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoSpaceKeyError,

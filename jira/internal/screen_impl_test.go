@@ -37,7 +37,7 @@ func Test_internalScreenImpl_Fields(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				fieldId:    "customfield_12000",
 				startAt:    100,
 				maxResults: 50,
@@ -68,7 +68,7 @@ func Test_internalScreenImpl_Fields(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				fieldId:    "customfield_12000",
 				startAt:    100,
 				maxResults: 50,
@@ -99,7 +99,7 @@ func Test_internalScreenImpl_Fields(t *testing.T) {
 			name:   "when the field id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoFieldIDError,
@@ -109,7 +109,7 @@ func Test_internalScreenImpl_Fields(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				fieldId:    "customfield_12000",
 				startAt:    100,
 				maxResults: 50,
@@ -189,7 +189,7 @@ func Test_internalScreenImpl_Gets(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 				options: &model.ScreenParamsScheme{
 					IDs:         []int{10002, 10002},
 					QueryString: "Default DUMMY Screen",
@@ -225,7 +225,7 @@ func Test_internalScreenImpl_Gets(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 				options: &model.ScreenParamsScheme{
 					IDs:         []int{10002, 10002},
 					QueryString: "Default DUMMY Screen",
@@ -261,7 +261,7 @@ func Test_internalScreenImpl_Gets(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 				options: &model.ScreenParamsScheme{
 					IDs:         []int{10002, 10002},
 					QueryString: "Default DUMMY Screen",
@@ -345,7 +345,7 @@ func Test_internalScreenImpl_AddToDefault(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				fieldId: "customfield_12700",
 			},
 			on: func(fields *fields) {
@@ -374,7 +374,7 @@ func Test_internalScreenImpl_AddToDefault(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				fieldId: "customfield_12700",
 			},
 			on: func(fields *fields) {
@@ -403,7 +403,7 @@ func Test_internalScreenImpl_AddToDefault(t *testing.T) {
 			name:   "when the field id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoFieldIDError,
@@ -413,7 +413,7 @@ func Test_internalScreenImpl_AddToDefault(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				fieldId: "customfield_12700",
 			},
 			on: func(fields *fields) {
@@ -488,7 +488,7 @@ func Test_internalScreenImpl_Available(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				screenId: 10001,
 			},
 			on: func(fields *fields) {
@@ -517,7 +517,7 @@ func Test_internalScreenImpl_Available(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				screenId: 10001,
 			},
 			on: func(fields *fields) {
@@ -546,7 +546,7 @@ func Test_internalScreenImpl_Available(t *testing.T) {
 			name:   "when the screen id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoScreenIDError,
@@ -556,7 +556,7 @@ func Test_internalScreenImpl_Available(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				screenId: 10001,
 			},
 			on: func(fields *fields) {
@@ -634,7 +634,7 @@ func Test_internalScreenImpl_Create(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				name:        "Screen Name",
 				description: "Screen Description",
 			},
@@ -664,7 +664,7 @@ func Test_internalScreenImpl_Create(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				name:        "Screen Name",
 				description: "Screen Description",
 			},
@@ -694,7 +694,7 @@ func Test_internalScreenImpl_Create(t *testing.T) {
 			name:   "when the screen name is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoScreenNameError,
@@ -704,7 +704,7 @@ func Test_internalScreenImpl_Create(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				name:        "Screen Name",
 				description: "Screen Description",
 			},
@@ -784,7 +784,7 @@ func Test_internalScreenImpl_Update(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				screenId:    10001,
 				name:        "Screen Name",
 				description: "Screen Description",
@@ -815,7 +815,7 @@ func Test_internalScreenImpl_Update(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				screenId:    10001,
 				name:        "Screen Name",
 				description: "Screen Description",
@@ -846,7 +846,7 @@ func Test_internalScreenImpl_Update(t *testing.T) {
 			name:   "when the screen id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoScreenIDError,
@@ -856,7 +856,7 @@ func Test_internalScreenImpl_Update(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				screenId:    10001,
 				name:        "Screen Name",
 				description: "Screen Description",
@@ -935,7 +935,7 @@ func Test_internalScreenImpl_Delete(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				screenId: 10001,
 			},
 			on: func(fields *fields) {
@@ -964,7 +964,7 @@ func Test_internalScreenImpl_Delete(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				screenId: 10001,
 			},
 			on: func(fields *fields) {
@@ -993,7 +993,7 @@ func Test_internalScreenImpl_Delete(t *testing.T) {
 			name:   "when the screen id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoScreenIDError,
@@ -1003,7 +1003,7 @@ func Test_internalScreenImpl_Delete(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				screenId: 10001,
 			},
 			on: func(fields *fields) {

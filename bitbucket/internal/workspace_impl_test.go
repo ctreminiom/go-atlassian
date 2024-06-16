@@ -33,7 +33,7 @@ func Test_internalWorkspaceServiceImpl_Get(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				workspace: "work-space-name-sample",
 			},
 			on: func(fields *fields) {
@@ -59,7 +59,7 @@ func Test_internalWorkspaceServiceImpl_Get(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				workspace: "work-space-name-sample",
 			},
 			on: func(fields *fields) {
@@ -83,7 +83,7 @@ func Test_internalWorkspaceServiceImpl_Get(t *testing.T) {
 		{
 			name: "when the workspace is not provided",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				workspace: "",
 			},
 			wantErr: true,
@@ -142,7 +142,7 @@ func Test_internalWorkspaceServiceImpl_Members(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				workspace: "work-space-name-sample",
 			},
 			on: func(fields *fields) {
@@ -168,7 +168,7 @@ func Test_internalWorkspaceServiceImpl_Members(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				workspace: "work-space-name-sample",
 			},
 			on: func(fields *fields) {
@@ -192,7 +192,7 @@ func Test_internalWorkspaceServiceImpl_Members(t *testing.T) {
 		{
 			name: "when the workspace is not provided",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				workspace: "",
 			},
 			wantErr: true,
@@ -251,7 +251,7 @@ func Test_internalWorkspaceServiceImpl_Projects(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				workspace: "work-space-name-sample",
 			},
 			on: func(fields *fields) {
@@ -277,7 +277,7 @@ func Test_internalWorkspaceServiceImpl_Projects(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				workspace: "work-space-name-sample",
 			},
 			on: func(fields *fields) {
@@ -301,7 +301,7 @@ func Test_internalWorkspaceServiceImpl_Projects(t *testing.T) {
 		{
 			name: "when the workspace is not provided",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				workspace: "",
 			},
 			wantErr: true,
@@ -361,7 +361,7 @@ func Test_internalWorkspaceServiceImpl_Membership(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				workspace: "work-space-name-sample",
 				memberId:  "account-id-sample",
 			},
@@ -388,7 +388,7 @@ func Test_internalWorkspaceServiceImpl_Membership(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				workspace: "work-space-name-sample",
 				memberId:  "account-id-sample",
 			},
@@ -413,7 +413,7 @@ func Test_internalWorkspaceServiceImpl_Membership(t *testing.T) {
 		{
 			name: "when the workspace is not provided",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				workspace: "",
 			},
 			wantErr: true,
@@ -423,7 +423,7 @@ func Test_internalWorkspaceServiceImpl_Membership(t *testing.T) {
 		{
 			name: "when the member id is not provided",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				workspace: "work-space-name-sample",
 			},
 			wantErr: true,

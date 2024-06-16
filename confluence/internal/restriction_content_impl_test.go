@@ -36,7 +36,7 @@ func Test_internalRestrictionImpl_Gets(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				contentID:  "100001",
 				expand:     []string{"restrictions.user"},
 				startAt:    50,
@@ -66,7 +66,7 @@ func Test_internalRestrictionImpl_Gets(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				contentID:  "100001",
 				expand:     []string{"restrictions.user"},
 				startAt:    50,
@@ -93,7 +93,7 @@ func Test_internalRestrictionImpl_Gets(t *testing.T) {
 		{
 			name: "when the content id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoContentIDError,
@@ -157,7 +157,7 @@ func Test_internalRestrictionImpl_Add(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				contentID: "100001",
 				payload:   payloadMocked,
 				expand:    []string{"restrictions.user"},
@@ -186,7 +186,7 @@ func Test_internalRestrictionImpl_Add(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				contentID: "100001",
 				payload:   payloadMocked,
 				expand:    []string{"restrictions.user"},
@@ -212,7 +212,7 @@ func Test_internalRestrictionImpl_Add(t *testing.T) {
 		{
 			name: "when the content id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoContentIDError,
@@ -273,7 +273,7 @@ func Test_internalRestrictionImpl_Delete(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				contentID: "100001",
 				expand:    []string{"restrictions.user"},
 			},
@@ -301,7 +301,7 @@ func Test_internalRestrictionImpl_Delete(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				contentID: "100001",
 				expand:    []string{"restrictions.user"},
 			},
@@ -326,7 +326,7 @@ func Test_internalRestrictionImpl_Delete(t *testing.T) {
 		{
 			name: "when the content id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoContentIDError,
@@ -389,7 +389,7 @@ func Test_internalRestrictionImpl_Update(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				contentID: "100001",
 				payload:   payloadMocked,
 				expand:    []string{"restrictions.user"},
@@ -418,7 +418,7 @@ func Test_internalRestrictionImpl_Update(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				contentID: "100001",
 				payload:   payloadMocked,
 				expand:    []string{"restrictions.user"},
@@ -444,7 +444,7 @@ func Test_internalRestrictionImpl_Update(t *testing.T) {
 		{
 			name: "when the content id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoContentIDError,

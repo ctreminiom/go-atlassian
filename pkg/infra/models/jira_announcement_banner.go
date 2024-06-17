@@ -1,16 +1,18 @@
 package models
 
+// AnnouncementBannerScheme represents an announcement banner in Jira.
 type AnnouncementBannerScheme struct {
-	HashId        string `json:"hashId,omitempty"`
-	IsDismissible bool   `json:"isDismissible,omitempty"`
-	IsEnabled     bool   `json:"isEnabled,omitempty"`
-	Message       string `json:"message,omitempty"`
-	Visibility    string `json:"visibility,omitempty"`
+	HashId        string `json:"hashId,omitempty"`        // The hash ID of the banner.
+	IsDismissible bool   `json:"isDismissible,omitempty"` // Indicates if the banner is dismissible.
+	IsEnabled     bool   `json:"isEnabled,omitempty"`     // Indicates if the banner is enabled.
+	Message       string `json:"message,omitempty"`       // The message of the banner.
+	Visibility    string `json:"visibility,omitempty"`    // The visibility of the banner.
 }
 
+// AnnouncementBannerPayloadScheme represents the payload for an announcement banner in Jira.
 type AnnouncementBannerPayloadScheme struct {
-	IsDismissible bool   `json:"isDismissible,omitempty"`
-	IsEnabled     bool   `json:"isEnabled,omitempty"`
-	Message       string `json:"message,omitempty"`
-	Visibility    string `json:"visibility,omitempty"`
+	IsDismissible bool   `json:"isDismissible,omitempty"` // Indicates if the banner is dismissible.
+	IsEnabled     bool   `json:"isEnabled,omitempty"`     // Indicates if the banner is enabled.
+	Message       string `json:"message,omitempty"`       // The message of the banner.
+	Visibility    string `json:"visibility,omitempty"`    // The visibility of the banner.
 }

@@ -226,10 +226,10 @@ type UserProductAccessDataScheme struct {
 
 // UserProductLastActiveScheme represents a product a user has access to.
 type UserProductLastActiveScheme struct {
-	Id         string `json:"id,omitempty"`          // The ID of the product.
+	ID         string `json:"id,omitempty"`          // The ID of the product.
 	Key        string `json:"key,omitempty"`         // The key of the product.
 	Name       string `json:"name,omitempty"`        // The name of the product.
-	Url        string `json:"url,omitempty"`         // The URL of the product.
+	URL        string `json:"url,omitempty"`         // The URL of the product.
 	LastActive string `json:"last_active,omitempty"` // The last active time of the product.
 }
 

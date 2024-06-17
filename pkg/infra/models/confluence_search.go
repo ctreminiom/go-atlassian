@@ -1,5 +1,6 @@
 package models
 
+// SearchContentOptions represents the options for searching content in Confluence.
 type SearchContentOptions struct {
 	Context                  string
 	Cursor                   string
@@ -14,6 +15,7 @@ type SearchContentOptions struct {
 	Expand                   []string
 }
 
+// SearchPageScheme represents a page of search results in Confluence.
 type SearchPageScheme struct {
 	Results             []*SearchResultScheme  `json:"results,omitempty"`
 	Start               int                    `json:"start,omitempty"`
@@ -26,6 +28,7 @@ type SearchPageScheme struct {
 	Links               *SearchPageLinksScheme `json:"_links,omitempty"`
 }
 
+// SearchPageLinksScheme represents the links of a page of search results in Confluence.
 type SearchPageLinksScheme struct {
 	Base    string `json:"base,omitempty"`
 	Context string `json:"context,omitempty"`
@@ -33,6 +36,7 @@ type SearchPageLinksScheme struct {
 	Self    string `json:"self,omitempty"`
 }
 
+// SearchResultScheme represents a search result in Confluence.
 type SearchResultScheme struct {
 	Content               *ContentScheme            `json:"content,omitempty"`
 	User                  *ContentUserScheme        `json:"user,omitempty"`
@@ -50,11 +54,13 @@ type SearchResultScheme struct {
 	Score                 float64                   `json:"score,omitempty"`
 }
 
+// ContainerSummaryScheme represents a summary of a container in Confluence.
 type ContainerSummaryScheme struct {
 	Title      string `json:"title,omitempty"`
 	DisplayURL string `json:"displayUrl,omitempty"`
 }
 
+// SearchBreadcrumbScheme represents a breadcrumb in a search result in Confluence.
 type SearchBreadcrumbScheme struct {
 	Label     string `json:"label,omitempty"`
 	URL       string `json:"url,omitempty"`

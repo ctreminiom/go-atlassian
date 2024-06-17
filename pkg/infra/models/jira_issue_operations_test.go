@@ -210,12 +210,12 @@ func TestUpdateOperations_AddMultiRawOperation(t *testing.T) {
 				fmt.Sprintf("AddMultiRawOperation(%v, %v)", tt.args.customFieldID, tt.args.mappings))
 
 			if !tt.expectedErr {
-				actualJson, err := json.Marshal(u.Fields)
+				actualJSON, err := json.Marshal(u.Fields)
 				if err != nil {
 					t.Fatal(err)
 				}
 
-				assert.Equal(t, expectedJson, string(actualJson))
+				assert.Equal(t, expectedJson, string(actualJSON))
 			}
 		})
 	}

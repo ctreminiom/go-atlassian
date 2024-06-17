@@ -5,22 +5,26 @@ import (
 	"encoding/json"
 )
 
+// IssueSchemeV2 represents the scheme of an issue in Jira version 2.
 type IssueSchemeV2 struct {
-	ID          string                   `json:"id,omitempty"`
-	Key         string                   `json:"key,omitempty"`
-	Self        string                   `json:"self,omitempty"`
-	Transitions []*IssueTransitionScheme `json:"transitions,omitempty"`
-	Changelog   *IssueChangelogScheme    `json:"changelog,omitempty"`
-	Fields      *IssueFieldsSchemeV2     `json:"fields,omitempty"`
+	ID          string                   `json:"id,omitempty"`          // The ID of the issue.
+	Key         string                   `json:"key,omitempty"`         // The key of the issue.
+	Self        string                   `json:"self,omitempty"`        // The URL of the issue.
+	Transitions []*IssueTransitionScheme `json:"transitions,omitempty"` // The transitions of the issue.
+	Changelog   *IssueChangelogScheme    `json:"changelog,omitempty"`   // The changelog of the issue.
+	Fields      *IssueFieldsSchemeV2     `json:"fields,omitempty"`      // The fields of the issue.
 }
 
+// MergeCustomFields merges custom fields into the issue scheme.
+// It returns a map representation of the issue scheme with the merged fields.
+// If the provided fields are nil or empty, it returns an error.
 func (i *IssueSchemeV2) MergeCustomFields(fields *CustomFields) (map[string]interface{}, error) {
 
 	if fields == nil || len(fields.Fields) == 0 {
 		return nil, ErrNoCustomFieldError
 	}
 
-	//Convert the IssueScheme struct to map[string]interface{}
+	// Convert the IssueScheme struct to map[string]interface{}
 	issueSchemeAsBytes, err := json.Marshal(i)
 	if err != nil {
 		return nil, err
@@ -31,7 +35,7 @@ func (i *IssueSchemeV2) MergeCustomFields(fields *CustomFields) (map[string]inte
 		return nil, err
 	}
 
-	//For each customField created, merge it into the eAsMap
+	// For each customField created, merge it into the eAsMap
 	for _, customField := range fields.Fields {
 		if err := mergo.Merge(&issueSchemeAsMap, customField, mergo.WithOverride); err != nil {
 			return nil, err
@@ -41,13 +45,16 @@ func (i *IssueSchemeV2) MergeCustomFields(fields *CustomFields) (map[string]inte
 	return issueSchemeAsMap, nil
 }
 
+// MergeOperations merges operations into the issue scheme.
+// It returns a map representation of the issue scheme with the merged operations.
+// If the provided operations are nil or empty, it returns an error.
 func (i *IssueSchemeV2) MergeOperations(operations *UpdateOperations) (map[string]interface{}, error) {
 
 	if operations == nil || len(operations.Fields) == 0 {
 		return nil, ErrNoOperatorError
 	}
 
-	//Convert the IssueScheme struct to map[string]interface{}
+	// Convert the IssueScheme struct to map[string]interface{}
 	issueSchemeAsBytes, err := json.Marshal(i)
 	if err != nil {
 		return nil, err
@@ -58,7 +65,7 @@ func (i *IssueSchemeV2) MergeOperations(operations *UpdateOperations) (map[strin
 		return nil, err
 	}
 
-	//For each customField created, merge it into the eAsMap
+	// For each customField created, merge it into the eAsMap
 	for _, customField := range operations.Fields {
 		if err := mergo.Merge(&issueSchemeAsMap, customField, mergo.WithOverride); err != nil {
 			return nil, err
@@ -68,9 +75,11 @@ func (i *IssueSchemeV2) MergeOperations(operations *UpdateOperations) (map[strin
 	return issueSchemeAsMap, nil
 }
 
+// ToMap converts the issue scheme to a map representation.
+// It returns a map[string]interface{} where the keys are the field names and the values are the field values.
 func (i *IssueSchemeV2) ToMap() (map[string]interface{}, error) {
 
-	//Convert the IssueScheme struct to map[string]interface{}
+	// Convert the IssueScheme struct to map[string]interface{}
 	issueSchemeAsBytes, err := json.Marshal(i)
 	if err != nil {
 		return nil, err
@@ -84,6 +93,7 @@ func (i *IssueSchemeV2) ToMap() (map[string]interface{}, error) {
 	return issueSchemeAsMap, nil
 }
 
+// IssueFieldsSchemeV2 represents the fields of an issue in Jira version 2.
 type IssueFieldsSchemeV2 struct {
 	Parent                   *ParentScheme                   `json:"parent,omitempty"`
 	IssueType                *IssueTypeScheme                `json:"issuetype,omitempty"`
@@ -115,53 +125,61 @@ type IssueFieldsSchemeV2 struct {
 	Worklog                  *IssueWorklogRichTextPageScheme `json:"worklog,omitempty"`
 }
 
+// ParentScheme represents the parent of an issue in Jira.
 type ParentScheme struct {
-	ID     string              `json:"id,omitempty"`
-	Key    string              `json:"key,omitempty"`
-	Self   string              `json:"self,omitempty"`
-	Fields *ParentFieldsScheme `json:"fields,omitempty"`
+	ID     string              `json:"id,omitempty"`     // The ID of the parent issue.
+	Key    string              `json:"key,omitempty"`    // The key of the parent issue.
+	Self   string              `json:"self,omitempty"`   // The URL of the parent issue.
+	Fields *ParentFieldsScheme `json:"fields,omitempty"` // The fields of the parent issue.
 }
 
+// ParentFieldsScheme represents the fields of a parent issue in Jira.
 type ParentFieldsScheme struct {
-	Summary string        `json:"summary,omitempty"`
-	Status  *StatusScheme `json:"status,omitempty"`
+	Summary string        `json:"summary,omitempty"` // The summary of the parent issue.
+	Status  *StatusScheme `json:"status,omitempty"`  // The status of the parent issue.
 }
 
+// IssueResponseScheme represents the response of an issue operation in Jira.
 type IssueResponseScheme struct {
-	ID   string `json:"id,omitempty"`
-	Key  string `json:"key,omitempty"`
-	Self string `json:"self,omitempty"`
+	ID   string `json:"id,omitempty"`   // The ID of the issue.
+	Key  string `json:"key,omitempty"`  // The key of the issue.
+	Self string `json:"self,omitempty"` // The URL of the issue.
 }
 
+// IssueBulkSchemeV2 represents the bulk operation scheme for issues in Jira.
 type IssueBulkSchemeV2 struct {
-	Payload      *IssueSchemeV2
-	CustomFields *CustomFields
+	Payload      *IssueSchemeV2 // The payload of the bulk operation.
+	CustomFields *CustomFields  // The custom fields of the bulk operation.
 }
 
+// BulkIssueSchemeV2 represents the bulk issue scheme in Jira.
 type BulkIssueSchemeV2 struct {
-	Issues []*IssueSchemeV2 `json:"issues,omitempty"`
+	Issues []*IssueSchemeV2 `json:"issues,omitempty"` // The issues in the bulk operation.
 }
 
+// IssueBulkResponseScheme represents the response of a bulk issue operation in Jira.
 type IssueBulkResponseScheme struct {
 	Issues []struct {
-		ID   string `json:"id,omitempty"`
-		Key  string `json:"key,omitempty"`
-		Self string `json:"self,omitempty"`
-	} `json:"issues,omitempty"`
-	Errors []*IssueBulkResponseErrorScheme `json:"errors,omitempty"`
+		ID   string `json:"id,omitempty"`   // The ID of the issue.
+		Key  string `json:"key,omitempty"`  // The key of the issue.
+		Self string `json:"self,omitempty"` // The URL of the issue.
+	} `json:"issues,omitempty"` // The issues in the response.
+	Errors []*IssueBulkResponseErrorScheme `json:"errors,omitempty"` // The errors in the response.
 }
 
+// IssueBulkResponseErrorScheme represents the error scheme of a bulk issue operation in Jira.
 type IssueBulkResponseErrorScheme struct {
-	Status        int `json:"status"`
+	Status        int `json:"status"` // The status of the error.
 	ElementErrors struct {
-		ErrorMessages []string `json:"errorMessages"`
-		Status        int      `json:"status"`
-	} `json:"elementErrors"`
-	FailedElementNumber int `json:"failedElementNumber"`
+		ErrorMessages []string `json:"errorMessages"` // The error messages.
+		Status        int      `json:"status"`        // The status of the error messages.
+	} `json:"elementErrors"` // The element errors in the response.
+	FailedElementNumber int `json:"failedElementNumber"` // The number of the failed element.
 }
 
+// IssueMoveOptionsV2 represents the move options for an issue in Jira.
 type IssueMoveOptionsV2 struct {
-	Fields       *IssueSchemeV2
-	CustomFields *CustomFields
-	Operations   *UpdateOperations
+	Fields       *IssueSchemeV2    // The fields of the issue.
+	CustomFields *CustomFields     // The custom fields of the issue.
+	Operations   *UpdateOperations // The operations for the issue.
 }

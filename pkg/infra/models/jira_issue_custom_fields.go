@@ -4,9 +4,10 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/tidwall/gjson"
 	"reflect"
 	"time"
+
+	"github.com/tidwall/gjson"
 )
 
 // ParseMultiSelectCustomField parses a multi-select custom field from the given buffer data

@@ -53,12 +53,12 @@ func ParseCustomField[T any](buffer bytes.Buffer, customField string) (*T, error
 	// Check if the issue iteration contains information on the customfield selected,
 	// if not, continue
 	if raw.Get(path).Type == gjson.Null {
-		return nil, ErrNoMultiSelectTypeError
+		return nil, ErrNoCustomTypeError
 	}
 
 	var value *T
 	if err := json.Unmarshal([]byte(raw.Get(path).String()), &value); err != nil {
-		return nil, ErrNoMultiSelectTypeError
+		return nil, ErrNoCustomTypeError
 	}
 
 	return value, nil

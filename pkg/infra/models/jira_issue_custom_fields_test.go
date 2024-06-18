@@ -14,24 +14,24 @@ func TestParseMultiSelectField(t *testing.T) {
 {
 	"fields": {
 		"customfield_10046": [
-      {
-        "self": "https://ctreminiom.atlassian.net/rest/api/3/customFieldOption/10044",
-        "value": "Option 1",
-        "id": "10044",
-		"optionId": "12222",
-		"disabled": true
-      },
-      {
-        "self": "https://ctreminiom.atlassian.net/rest/api/3/customFieldOption/10046",
-        "value": "Option 3",
-        "id": "10046"
-      },
-      {
-        "self": "https://ctreminiom.atlassian.net/rest/api/3/customFieldOption/10047",
-        "value": "Option 4",
-        "id": "10047"
-      }
-    ]
+			{
+				"self": "https://ctreminiom.atlassian.net/rest/api/3/customFieldOption/10044",
+				"value": "Option 1",
+				"id": "10044",
+				"optionId": "12222",
+				"disabled": true
+			},
+			{
+				"self": "https://ctreminiom.atlassian.net/rest/api/3/customFieldOption/10046",
+				"value": "Option 3",
+				"id": "10046"
+			},
+			{
+				"self": "https://ctreminiom.atlassian.net/rest/api/3/customFieldOption/10047",
+				"value": "Option 4",
+				"id": "10047"
+			}
+		]
 	}
 }`)
 
@@ -40,17 +40,17 @@ func TestParseMultiSelectField(t *testing.T) {
 {
 	"field_no_mapped": {
 		"customfield_10046": [
-      {
-        "self": "https://ctreminiom.atlassian.net/rest/api/3/customFieldOption/10044",
-        "value": "Option 1",
-        "id": "10044"
-      },
-      {
-        "self": "https://ctreminiom.atlassian.net/rest/api/3/customFieldOption/10046",
-        "value": "Option 3",
-        "id": "10046"
-      }
-    ]
+			{
+				"self": "https://ctreminiom.atlassian.net/rest/api/3/customFieldOption/10044",
+				"value": "Option 1",
+				"id": "10044"
+			},
+			{
+				"self": "https://ctreminiom.atlassian.net/rest/api/3/customFieldOption/10046",
+				"value": "Option 3",
+				"id": "10046"
+			}
+		]
 	}
 }`)
 
@@ -179,17 +179,17 @@ func TestParseMultiGroupPickerField(t *testing.T) {
 {
 	"fields": {
 		"customfield_10052": [
-      {
-        "name": "jira-administrators",
-        "groupId": "1da6f895-2b42-423b-8bfb-1e09ee8d7764",
-        "self": "https://ctreminiom.atlassian.net/rest/api/3/group?groupId=1da6f895-2b42-423b-8bfb-1e09ee8d7764"
-      },
-      {
-        "name": "jira-administrators-system",
-        "groupId": "be9ba0ab-ecdc-445b-9ce6-b95202026c1a",
-        "self": "https://ctreminiom.atlassian.net/rest/api/3/group?groupId=be9ba0ab-ecdc-445b-9ce6-b95202026c1a"
-      }
-    ]
+			{
+				"name": "jira-administrators",
+				"groupId": "1da6f895-2b42-423b-8bfb-1e09ee8d7764",
+				"self": "https://ctreminiom.atlassian.net/rest/api/3/group?groupId=1da6f895-2b42-423b-8bfb-1e09ee8d7764"
+			},
+			{
+				"name": "jira-administrators-system",
+				"groupId": "be9ba0ab-ecdc-445b-9ce6-b95202026c1a",
+				"self": "https://ctreminiom.atlassian.net/rest/api/3/group?groupId=be9ba0ab-ecdc-445b-9ce6-b95202026c1a"
+			}
+		]
 	}
 }`)
 
@@ -198,17 +198,17 @@ func TestParseMultiGroupPickerField(t *testing.T) {
 {
 	"field_no_mapped": {
 		"customfield_10052": [
-      {
-        "name": "jira-administrators",
-        "groupId": "1da6f895-2b42-423b-8bfb-1e09ee8d7764",
-        "self": "https://ctreminiom.atlassian.net/rest/api/3/group?groupId=1da6f895-2b42-423b-8bfb-1e09ee8d7764"
-      },
-      {
-        "name": "jira-administrators-system",
-        "groupId": "be9ba0ab-ecdc-445b-9ce6-b95202026c1a",
-        "self": "https://ctreminiom.atlassian.net/rest/api/3/group?groupId=be9ba0ab-ecdc-445b-9ce6-b95202026c1a"
-      }
-    ]
+			{
+				"name": "jira-administrators",
+				"groupId": "1da6f895-2b42-423b-8bfb-1e09ee8d7764",
+				"self": "https://ctreminiom.atlassian.net/rest/api/3/group?groupId=1da6f895-2b42-423b-8bfb-1e09ee8d7764"
+			},
+			{
+				"name": "jira-administrators-system",
+				"groupId": "be9ba0ab-ecdc-445b-9ce6-b95202026c1a",
+				"self": "https://ctreminiom.atlassian.net/rest/api/3/group?groupId=be9ba0ab-ecdc-445b-9ce6-b95202026c1a"
+			}
+		]
 	}
 }`)
 

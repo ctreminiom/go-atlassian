@@ -38,7 +38,7 @@ func Test_internalIssueFieldContextOptionServiceImpl_Gets(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				fieldId:   "custom_field_10002",
 				contextId: 10001,
 				options: &model.FieldOptionContextParams{
@@ -75,7 +75,7 @@ func Test_internalIssueFieldContextOptionServiceImpl_Gets(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				fieldId:   "custom_field_10002",
 				contextId: 10001,
 				options: &model.FieldOptionContextParams{
@@ -112,7 +112,7 @@ func Test_internalIssueFieldContextOptionServiceImpl_Gets(t *testing.T) {
 			name:   "when the field id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				fieldId:   "",
 				contextId: 10001,
 				options: &model.FieldOptionContextParams{
@@ -130,7 +130,7 @@ func Test_internalIssueFieldContextOptionServiceImpl_Gets(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				fieldId:   "custom_field_10002",
 				contextId: 10001,
 				options: &model.FieldOptionContextParams{
@@ -232,7 +232,7 @@ func Test_internalIssueFieldContextOptionServiceImpl_Create(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				fieldId:   "custom_field_10002",
 				contextId: 10001,
 				payload:   payloadMocked,
@@ -264,7 +264,7 @@ func Test_internalIssueFieldContextOptionServiceImpl_Create(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				fieldId:   "custom_field_10002",
 				contextId: 10001,
 				payload:   payloadMocked,
@@ -296,7 +296,7 @@ func Test_internalIssueFieldContextOptionServiceImpl_Create(t *testing.T) {
 			name:   "when the field id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				fieldId:   "",
 				contextId: 10001,
 			},
@@ -308,7 +308,7 @@ func Test_internalIssueFieldContextOptionServiceImpl_Create(t *testing.T) {
 			name:   "when the context id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				fieldId:   "customfield_1000",
 				contextId: 0,
 			},
@@ -320,7 +320,7 @@ func Test_internalIssueFieldContextOptionServiceImpl_Create(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				fieldId:   "custom_field_10002",
 				contextId: 10001,
 				payload:   payloadMocked,
@@ -417,7 +417,7 @@ func Test_internalIssueFieldContextOptionServiceImpl_Update(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				fieldId:   "custom_field_10002",
 				contextId: 10001,
 				payload:   payloadMocked,
@@ -449,7 +449,7 @@ func Test_internalIssueFieldContextOptionServiceImpl_Update(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				fieldId:   "custom_field_10002",
 				contextId: 10001,
 				payload:   payloadMocked,
@@ -481,7 +481,7 @@ func Test_internalIssueFieldContextOptionServiceImpl_Update(t *testing.T) {
 			name:   "when the field id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				fieldId:   "",
 				contextId: 10001,
 			},
@@ -493,7 +493,7 @@ func Test_internalIssueFieldContextOptionServiceImpl_Update(t *testing.T) {
 			name:   "when the context id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				fieldId:   "customfield_1000",
 				contextId: 0,
 			},
@@ -505,7 +505,7 @@ func Test_internalIssueFieldContextOptionServiceImpl_Update(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				fieldId:   "custom_field_10002",
 				contextId: 10001,
 				payload:   payloadMocked,
@@ -587,7 +587,7 @@ func Test_internalIssueFieldContextOptionServiceImpl_Delete(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				fieldId:   "custom_field_10002",
 				contextId: 10001,
 				optionId:  1001,
@@ -619,7 +619,7 @@ func Test_internalIssueFieldContextOptionServiceImpl_Delete(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				fieldId:   "custom_field_10002",
 				contextId: 10001,
 				optionId:  1001,
@@ -651,7 +651,7 @@ func Test_internalIssueFieldContextOptionServiceImpl_Delete(t *testing.T) {
 			name:   "when the field id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				fieldId:   "",
 				contextId: 10001,
 			},
@@ -663,7 +663,7 @@ func Test_internalIssueFieldContextOptionServiceImpl_Delete(t *testing.T) {
 			name:   "when the context id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				fieldId:   "customfield_1000",
 				contextId: 0,
 			},
@@ -675,7 +675,7 @@ func Test_internalIssueFieldContextOptionServiceImpl_Delete(t *testing.T) {
 			name:   "when the option id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				fieldId:   "customfield_1000",
 				contextId: 1000,
 				optionId:  0,
@@ -689,7 +689,7 @@ func Test_internalIssueFieldContextOptionServiceImpl_Delete(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				fieldId:   "custom_field_10002",
 				contextId: 10001,
 				optionId:  1001,
@@ -775,7 +775,7 @@ func Test_internalIssueFieldContextOptionServiceImpl_Order(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				fieldId:   "custom_field_10002",
 				contextId: 10001,
 				payload:   payloadMocked,
@@ -807,7 +807,7 @@ func Test_internalIssueFieldContextOptionServiceImpl_Order(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				fieldId:   "custom_field_10002",
 				contextId: 10001,
 				payload:   payloadMocked,
@@ -839,7 +839,7 @@ func Test_internalIssueFieldContextOptionServiceImpl_Order(t *testing.T) {
 			name:   "when the field id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				fieldId:   "",
 				contextId: 10001,
 			},
@@ -851,7 +851,7 @@ func Test_internalIssueFieldContextOptionServiceImpl_Order(t *testing.T) {
 			name:   "when the context id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				fieldId:   "customfield_1000",
 				contextId: 0,
 			},
@@ -863,7 +863,7 @@ func Test_internalIssueFieldContextOptionServiceImpl_Order(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				fieldId:   "custom_field_10002",
 				contextId: 10001,
 				payload:   payloadMocked,

@@ -2,11 +2,11 @@ package internal
 
 import (
 	"context"
+	"dario.cat/mergo"
 	"fmt"
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/jira"
-	"github.com/imdario/mergo"
 	"net/http"
 	"net/url"
 	"strings"

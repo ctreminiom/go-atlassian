@@ -34,7 +34,7 @@ func Test_internalWorkspacePermissionServiceImpl_Members(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				workspace: "work-space-name-sample",
 				query:     "permission=\"owner\"",
 			},
@@ -61,7 +61,7 @@ func Test_internalWorkspacePermissionServiceImpl_Members(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				workspace: "work-space-name-sample",
 				query:     "permission=\"owner\"",
 			},
@@ -86,7 +86,7 @@ func Test_internalWorkspacePermissionServiceImpl_Members(t *testing.T) {
 		{
 			name: "when the workspace is not provided",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				workspace: "",
 			},
 			wantErr: true,
@@ -147,7 +147,7 @@ func Test_internalWorkspacePermissionServiceImpl_Repositories(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				workspace: "work-space-name-sample",
 				query:     "permission=\"owner\"",
 				sort:      "user.display_name",
@@ -175,7 +175,7 @@ func Test_internalWorkspacePermissionServiceImpl_Repositories(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				workspace: "work-space-name-sample",
 				query:     "permission=\"owner\"",
 				sort:      "user.display_name",
@@ -201,7 +201,7 @@ func Test_internalWorkspacePermissionServiceImpl_Repositories(t *testing.T) {
 		{
 			name: "when the workspace is not provided",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				workspace: "",
 			},
 			wantErr: true,
@@ -264,7 +264,7 @@ func Test_internalWorkspacePermissionServiceImpl_Repository(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				workspace:  "work-space-name-sample",
 				query:      "permission=\"owner\"",
 				sort:       "user.display_name",
@@ -293,7 +293,7 @@ func Test_internalWorkspacePermissionServiceImpl_Repository(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				workspace:  "work-space-name-sample",
 				query:      "permission=\"owner\"",
 				sort:       "user.display_name",
@@ -320,7 +320,7 @@ func Test_internalWorkspacePermissionServiceImpl_Repository(t *testing.T) {
 		{
 			name: "when the workspace is not provided",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				workspace: "",
 			},
 			wantErr: true,
@@ -330,7 +330,7 @@ func Test_internalWorkspacePermissionServiceImpl_Repository(t *testing.T) {
 		{
 			name: "when the repository is not provided",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				workspace: "work-space-name-sample",
 			},
 			wantErr: true,

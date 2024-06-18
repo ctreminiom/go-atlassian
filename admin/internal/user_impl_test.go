@@ -34,7 +34,7 @@ func Test_internalUserImpl_Permissions(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				accountID:  "account-id-sample",
 				privileges: []string{"privileges-sample"},
 			},
@@ -63,7 +63,7 @@ func Test_internalUserImpl_Permissions(t *testing.T) {
 		{
 			name: "when the account id is not provided",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				accountID: "",
 			},
 			wantErr: true,
@@ -73,7 +73,7 @@ func Test_internalUserImpl_Permissions(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				accountID:  "account-id-sample",
 				privileges: []string{"privileges-sample"},
 			},
@@ -149,7 +149,7 @@ func Test_internalUserImpl_Get(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				accountID: "account-id-sample",
 			},
 			on: func(fields *fields) {
@@ -177,7 +177,7 @@ func Test_internalUserImpl_Get(t *testing.T) {
 		{
 			name: "when the account id is not provided",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				accountID: "",
 			},
 			wantErr: true,
@@ -187,7 +187,7 @@ func Test_internalUserImpl_Get(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				accountID: "account-id-sample",
 			},
 			on: func(fields *fields) {
@@ -262,7 +262,7 @@ func Test_internalUserImpl_Enable(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				accountID: "account-id-sample",
 			},
 			on: func(fields *fields) {
@@ -290,7 +290,7 @@ func Test_internalUserImpl_Enable(t *testing.T) {
 		{
 			name: "when the account id is not provided",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				accountID: "",
 			},
 			wantErr: true,
@@ -300,7 +300,7 @@ func Test_internalUserImpl_Enable(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				accountID: "account-id-sample",
 			},
 			on: func(fields *fields) {
@@ -376,7 +376,7 @@ func Test_internalUserImpl_Disable(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				accountID: "account-id-sample",
 				message:   "Your account has been disabled :(",
 			},
@@ -405,7 +405,7 @@ func Test_internalUserImpl_Disable(t *testing.T) {
 		{
 			name: "when the account id is not provided",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				accountID: "",
 			},
 			wantErr: true,
@@ -415,7 +415,7 @@ func Test_internalUserImpl_Disable(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				accountID: "account-id-sample",
 				message:   "Your account has been disabled :(",
 			},
@@ -493,7 +493,7 @@ func Test_internalUserImpl_Update(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				accountID: "account-id-sample",
 				payload:   payloadMocked,
 			},
@@ -522,7 +522,7 @@ func Test_internalUserImpl_Update(t *testing.T) {
 		{
 			name: "when the account id is not provided",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				accountID: "",
 			},
 			wantErr: true,
@@ -532,7 +532,7 @@ func Test_internalUserImpl_Update(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				accountID: "account-id-sample",
 				payload:   payloadMocked,
 			},

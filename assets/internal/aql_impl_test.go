@@ -44,7 +44,7 @@ func Test_internalAQLImpl_Filter(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				workspaceID: "workspace-uuid-sample",
 				payload:     payloadMocked,
 			},
@@ -72,7 +72,7 @@ func Test_internalAQLImpl_Filter(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				workspaceID: "workspace-uuid-sample",
 				payload:     payloadMocked,
 			},
@@ -98,7 +98,7 @@ func Test_internalAQLImpl_Filter(t *testing.T) {
 		{
 			name: "when the workspace id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoWorkspaceIDError,

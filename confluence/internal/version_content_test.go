@@ -35,7 +35,7 @@ func Test_internalVersionImpl_Gets(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				contentID: "3838282",
 				expand:    []string{"operations"},
 				start:     20,
@@ -65,7 +65,7 @@ func Test_internalVersionImpl_Gets(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				contentID: "3838282",
 				expand:    []string{"operations"},
 				start:     20,
@@ -92,7 +92,7 @@ func Test_internalVersionImpl_Gets(t *testing.T) {
 		{
 			name: "when the content id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoContentIDError,
@@ -154,7 +154,7 @@ func Test_internalVersionImpl_Get(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:           context.TODO(),
+				ctx:           context.Background(),
 				contentID:     "3838282",
 				expand:        []string{"operations"},
 				versionNumber: 29,
@@ -183,7 +183,7 @@ func Test_internalVersionImpl_Get(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:           context.TODO(),
+				ctx:           context.Background(),
 				contentID:     "3838282",
 				expand:        []string{"operations"},
 				versionNumber: 29,
@@ -209,7 +209,7 @@ func Test_internalVersionImpl_Get(t *testing.T) {
 		{
 			name: "when the content id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoContentIDError,
@@ -280,7 +280,7 @@ func Test_internalVersionImpl_Restore(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				contentID: "3838282",
 				payload:   payloadMocked,
 				expand:    []string{"operations"},
@@ -309,7 +309,7 @@ func Test_internalVersionImpl_Restore(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				contentID: "3838282",
 				payload:   payloadMocked,
 				expand:    []string{"operations"},
@@ -335,7 +335,7 @@ func Test_internalVersionImpl_Restore(t *testing.T) {
 		{
 			name: "when the content id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoContentIDError,
@@ -396,7 +396,7 @@ func Test_internalVersionImpl_Delete(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:           context.TODO(),
+				ctx:           context.Background(),
 				contentID:     "3838282",
 				versionNumber: 29,
 			},
@@ -424,7 +424,7 @@ func Test_internalVersionImpl_Delete(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:           context.TODO(),
+				ctx:           context.Background(),
 				contentID:     "3838282",
 				versionNumber: 29,
 			},
@@ -449,7 +449,7 @@ func Test_internalVersionImpl_Delete(t *testing.T) {
 		{
 			name: "when the content id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoContentIDError,

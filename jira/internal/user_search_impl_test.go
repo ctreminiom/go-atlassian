@@ -38,7 +38,7 @@ func Test_internalUserSearchImpl_Projects(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				accountId:   "uuid-sample",
 				projectKeys: []string{"DUMMY", "KP"},
 				startAt:     100,
@@ -70,7 +70,7 @@ func Test_internalUserSearchImpl_Projects(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				accountId:   "uuid-sample",
 				projectKeys: []string{"DUMMY", "KP"},
 				startAt:     100,
@@ -102,7 +102,7 @@ func Test_internalUserSearchImpl_Projects(t *testing.T) {
 			name:   "when the project keys are not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				projectKeys: nil,
 			},
 			wantErr: true,
@@ -113,7 +113,7 @@ func Test_internalUserSearchImpl_Projects(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				accountId:   "uuid-sample",
 				projectKeys: []string{"DUMMY", "KP"},
 				startAt:     100,
@@ -195,7 +195,7 @@ func Test_internalUserSearchImpl_Do(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				accountId:  "uuid-sample",
 				query:      "charles.smith@example.com",
 				startAt:    100,
@@ -227,7 +227,7 @@ func Test_internalUserSearchImpl_Do(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				accountId:  "uuid-sample",
 				query:      "charles.smith@example.com",
 				startAt:    100,
@@ -259,7 +259,7 @@ func Test_internalUserSearchImpl_Do(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				accountId:  "uuid-sample",
 				query:      "charles.smith@example.com",
 				startAt:    100,
@@ -341,7 +341,7 @@ func Test_internalUserSearchImpl_Check(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				permission: "CREATE_ISSUES",
 				options: &model.UserPermissionCheckParamsScheme{
 					Query:      "project A",
@@ -378,7 +378,7 @@ func Test_internalUserSearchImpl_Check(t *testing.T) {
 			name:   "when the permission grant is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			on: func(fields *fields) {
 				client := mocks.NewConnector(t)
@@ -392,7 +392,7 @@ func Test_internalUserSearchImpl_Check(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				permission: "CREATE_ISSUES",
 				options: &model.UserPermissionCheckParamsScheme{
 					Query:      "project A",
@@ -429,7 +429,7 @@ func Test_internalUserSearchImpl_Check(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				permission: "CREATE_ISSUES",
 				options: &model.UserPermissionCheckParamsScheme{
 					Query:      "project A",

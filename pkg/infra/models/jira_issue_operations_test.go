@@ -1,6 +1,9 @@
 package models
 
 import (
+	"encoding/json"
+	"fmt"
+	"github.com/stretchr/testify/assert"
 	"reflect"
 	"testing"
 )
@@ -137,6 +140,82 @@ func TestUpdateOperations_AddStringOperation(t *testing.T) {
 				}
 
 				t.Errorf("AddStringOperation() error = %v, wantErr %v", err, testCase.wantErr)
+			}
+		})
+	}
+}
+
+func TestUpdateOperations_AddMultiRawOperation(t *testing.T) {
+
+	expectedJson := `[{"update":{"custom_field_id":[{"add":{"id":"10001"}},{"remove":{"name":"Version 00"}},{"add":{"id":"1010"}}]}}]`
+
+	type fields struct {
+		Fields []map[string]interface{}
+	}
+	type args struct {
+		customFieldID string
+		mappings      []map[string]interface{}
+	}
+
+	tests := []struct {
+		name        string
+		fields      fields
+		args        args
+		wantErr     assert.ErrorAssertionFunc
+		expectedErr bool
+	}{
+		{
+			name:   "when the parameters are correct",
+			fields: fields{},
+			args: args{
+				customFieldID: "custom_field_id",
+				mappings: []map[string]interface{}{
+					{
+						"add": map[string]interface{}{
+							"id": "10001",
+						},
+					},
+					{
+						"remove": map[string]interface{}{
+							"name": "Version 00",
+						},
+					},
+					{
+						"add": map[string]interface{}{
+							"id": "1010",
+						},
+					},
+				},
+			},
+			wantErr: assert.NoError,
+		},
+
+		{
+			name:   "when the customfieldID is not provided",
+			fields: fields{},
+			args: args{
+				customFieldID: "",
+			},
+			wantErr:     assert.Error,
+			expectedErr: true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			u := &UpdateOperations{
+				Fields: tt.fields.Fields,
+			}
+
+			tt.wantErr(t, u.AddMultiRawOperation(tt.args.customFieldID, tt.args.mappings),
+				fmt.Sprintf("AddMultiRawOperation(%v, %v)", tt.args.customFieldID, tt.args.mappings))
+
+			if !tt.expectedErr {
+				actualJSON, err := json.Marshal(u.Fields)
+				if err != nil {
+					t.Fatal(err)
+				}
+
+				assert.Equal(t, expectedJson, string(actualJSON))
 			}
 		})
 	}

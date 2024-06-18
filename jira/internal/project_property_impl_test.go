@@ -93,7 +93,7 @@ func Test_internalProjectPropertyImpl_Gets(t *testing.T) {
 			name:   "when the project key or id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoProjectIDOrKeyError,

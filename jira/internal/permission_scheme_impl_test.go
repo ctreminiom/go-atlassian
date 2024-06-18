@@ -34,7 +34,7 @@ func TestPermissionSchemeService_Gets(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			on: func(fields *fields) {
 
@@ -62,7 +62,7 @@ func TestPermissionSchemeService_Gets(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			on: func(fields *fields) {
 
@@ -90,7 +90,7 @@ func TestPermissionSchemeService_Gets(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "2"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			on: func(fields *fields) {
 
@@ -166,7 +166,7 @@ func TestPermissionSchemeService_Get(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:                context.TODO(),
+				ctx:                context.Background(),
 				permissionSchemeId: 10001,
 				expand:             []string{"all"},
 			},
@@ -196,7 +196,7 @@ func TestPermissionSchemeService_Get(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:                context.TODO(),
+				ctx:                context.Background(),
 				permissionSchemeId: 10001,
 				expand:             []string{"all"},
 			},
@@ -226,7 +226,7 @@ func TestPermissionSchemeService_Get(t *testing.T) {
 			name:   "when the permission scheme id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoPermissionSchemeIDError,
@@ -236,7 +236,7 @@ func TestPermissionSchemeService_Get(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:                context.TODO(),
+				ctx:                context.Background(),
 				permissionSchemeId: 10001,
 				expand:             []string{"all"},
 			},
@@ -313,7 +313,7 @@ func TestPermissionSchemeService_Delete(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:                context.TODO(),
+				ctx:                context.Background(),
 				permissionSchemeId: 10001,
 			},
 			on: func(fields *fields) {
@@ -342,7 +342,7 @@ func TestPermissionSchemeService_Delete(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:                context.TODO(),
+				ctx:                context.Background(),
 				permissionSchemeId: 10001,
 			},
 			on: func(fields *fields) {
@@ -371,7 +371,7 @@ func TestPermissionSchemeService_Delete(t *testing.T) {
 			name:   "when the permission scheme id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoPermissionSchemeIDError,
@@ -381,7 +381,7 @@ func TestPermissionSchemeService_Delete(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:                context.TODO(),
+				ctx:                context.Background(),
 				permissionSchemeId: 10001,
 			},
 			on: func(fields *fields) {
@@ -477,7 +477,7 @@ func TestPermissionSchemeService_Create(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -506,7 +506,7 @@ func TestPermissionSchemeService_Create(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -535,7 +535,7 @@ func TestPermissionSchemeService_Create(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -633,7 +633,7 @@ func TestPermissionSchemeService_Update(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:                context.TODO(),
+				ctx:                context.Background(),
 				permissionSchemeId: 10001,
 				payload:            payloadMocked,
 			},
@@ -663,7 +663,7 @@ func TestPermissionSchemeService_Update(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:                context.TODO(),
+				ctx:                context.Background(),
 				permissionSchemeId: 10001,
 				payload:            payloadMocked,
 			},
@@ -693,7 +693,7 @@ func TestPermissionSchemeService_Update(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:                context.TODO(),
+				ctx:                context.Background(),
 				permissionSchemeId: 10001,
 				payload:            payloadMocked,
 			},

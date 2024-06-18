@@ -1,65 +1,81 @@
+// Package models provides the data structures used in the AQL search parameters.
 package models
 
+// AQLSearchParamsScheme represents the parameters for an AQL search.
 type AQLSearchParamsScheme struct {
 
-	// The query to determine which objects that should be fetched.
-	//
-	// E.g. objectType = "Computer". The empty AQL means all objects
+	// Query is the AQL query to determine which objects should be fetched.
 	Query string `query:"qlQuery,omitempty"`
 
-	// Which page to fetch when paginating through the response
+	// Page is the page number to fetch when paginating through the response.
 	Page int `query:"page,omitempty"`
 
-	// The amount of objects returned per page
+	// ResultPerPage is the number of objects returned per page.
 	ResultPerPage int `query:"resultPerPage,omitempty"`
 
-	// Should the objects attributes be included in the response.
-	//
-	// If this parameter is false only the information on the object will
-	//
-	// be returned and the object attributes will not be present
+	// IncludeAttributes determines if the objects' attributes should be included in the response.
 	IncludeAttributes bool `query:"includeAttributes,omitempty"`
 
-	// How many levels of attributes should be included.
-	//
-	// E.g. consider an object A that has a reference to object B that has a reference to object C.
-	//
-	// If object A is included in the response and includeAttributesDeep=1 object A's reference to
-	//
-	// object B will be included in the attributes of object A but object B's reference to
-	//
-	// object C will not be included. However, if the includeAttributesDeep=2 then object B's
-	//
-	// reference to object C will be included in object B's attributes
+	// IncludeAttributesDeep determines how many levels of attributes should be included.
 	IncludeAttributesDeep bool `query:"includeAttributesDeep,omitempty"`
 
-	// Should the response include the object type attribute definition
-	//
-	// for each attribute that is returned with the objects
+	// IncludeTypeAttributes determines if the response should include the object type attribute definition for each attribute returned with the objects.
 	IncludeTypeAttributes bool `query:"includeTypeAttributes,omitempty"`
 
-	// Include information about open Jira issues.
-	//
-	// Should each object have information if open tickets are connected to the object?
+	// IncludeExtendedInfo determines if each object should have information if open tickets are connected to the object.
 	IncludeExtendedInfo bool `query:"includeExtendedInfo,omitempty"`
 }
 
+// ObjectPageScheme represents a page of objects in an AQL search.
 type ObjectPageScheme struct {
-	ObjectEntries         []*ObjectScheme              `json:"objectEntries"`
-	ObjectTypeAttributes  []*ObjectTypeAttributeScheme `json:"objectTypeAttributes"`
-	ObjectTypeID          string                       `json:"objectTypeId"`
-	ObjectTypeIsInherited bool                         `json:"objectTypeIsInherited"`
-	AbstractObjectType    bool                         `json:"abstractObjectType"`
-	TotalFilterCount      int                          `json:"totalFilterCount"`
-	StartIndex            int                          `json:"startIndex"`
-	ToIndex               int                          `json:"toIndex"`
-	PageObjectSize        int                          `json:"pageObjectSize"`
-	PageNumber            int                          `json:"pageNumber"`
-	OrderByTypeAttrId     int                          `json:"orderByTypeAttrId"`
-	OrderWay              string                       `json:"orderWay"`
-	QlQuery               string                       `json:"qlQuery"`
-	QlQuerySearchResult   bool                         `json:"qlQuerySearchResult"`
-	Iql                   string                       `json:"iql"`
-	IqlSearchResult       bool                         `json:"iqlSearchResult"`
-	ConversionPossible    bool                         `json:"conversionPossible"`
+	// ObjectEntries is a slice of the objects in the page.
+	ObjectEntries []*ObjectScheme `json:"objectEntries"`
+
+	// ObjectTypeAttributes is a slice of the object type attributes in the page.
+	ObjectTypeAttributes []*ObjectTypeAttributeScheme `json:"objectTypeAttributes"`
+
+	// ObjectTypeID is the ID of the object type.
+	ObjectTypeID string `json:"objectTypeId"`
+
+	// ObjectTypeIsInherited determines if the object type is inherited.
+	ObjectTypeIsInherited bool `json:"objectTypeIsInherited"`
+
+	// AbstractObjectType determines if the object type is abstract.
+	AbstractObjectType bool `json:"abstractObjectType"`
+
+	// TotalFilterCount is the total number of filters applied.
+	TotalFilterCount int `json:"totalFilterCount"`
+
+	// StartIndex is the starting index of the page.
+	StartIndex int `json:"startIndex"`
+
+	// ToIndex is the ending index of the page.
+	ToIndex int `json:"toIndex"`
+
+	// PageObjectSize is the number of objects in the page.
+	PageObjectSize int `json:"pageObjectSize"`
+
+	// PageNumber is the number of the page.
+	PageNumber int `json:"pageNumber"`
+
+	// OrderByTypeAttrId is the ID of the attribute used for ordering.
+	OrderByTypeAttrId int `json:"orderByTypeAttrId"`
+
+	// OrderWay is the way of ordering (ascending or descending).
+	OrderWay string `json:"orderWay"`
+
+	// QlQuery is the AQL query used for the search.
+	QlQuery string `json:"qlQuery"`
+
+	// QlQuerySearchResult determines if the result is from an AQL query search.
+	QlQuerySearchResult bool `json:"qlQuerySearchResult"`
+
+	// Iql is the IQL query used for the search.
+	Iql string `json:"iql"`
+
+	// IqlSearchResult determines if the result is from an IQL query search.
+	IqlSearchResult bool `json:"iqlSearchResult"`
+
+	// ConversionPossible determines if a conversion is possible.
+	ConversionPossible bool `json:"conversionPossible"`
 }

@@ -34,7 +34,7 @@ func Test_internalObjectTypeImpl_Get(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				workspaceID:  "workspace-uuid-sample",
 				objectTypeID: "object-type-id-sample",
 			},
@@ -62,7 +62,7 @@ func Test_internalObjectTypeImpl_Get(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				workspaceID:  "workspace-uuid-sample",
 				objectTypeID: "object-type-id-sample",
 			},
@@ -88,7 +88,7 @@ func Test_internalObjectTypeImpl_Get(t *testing.T) {
 		{
 			name: "when the workspace id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoWorkspaceIDError,
@@ -97,7 +97,7 @@ func Test_internalObjectTypeImpl_Get(t *testing.T) {
 		{
 			name: "when the object type id is not provided",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				workspaceID: "workspace-id-sample",
 			},
 			wantErr: true,
@@ -156,7 +156,7 @@ func Test_internalObjectTypeImpl_Delete(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				workspaceID:  "workspace-uuid-sample",
 				objectTypeID: "object-type-id-sample",
 			},
@@ -184,7 +184,7 @@ func Test_internalObjectTypeImpl_Delete(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				workspaceID:  "workspace-uuid-sample",
 				objectTypeID: "object-type-id-sample",
 			},
@@ -210,7 +210,7 @@ func Test_internalObjectTypeImpl_Delete(t *testing.T) {
 		{
 			name: "when the workspace id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoWorkspaceIDError,
@@ -219,7 +219,7 @@ func Test_internalObjectTypeImpl_Delete(t *testing.T) {
 		{
 			name: "when the object type id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoWorkspaceIDError,
@@ -288,7 +288,7 @@ func Test_internalObjectTypeImpl_Attributes(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				workspaceID:  "workspace-uuid-sample",
 				objectTypeID: "object-type-id-sample",
 				options:      optionsMocked,
@@ -317,7 +317,7 @@ func Test_internalObjectTypeImpl_Attributes(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				workspaceID:  "workspace-uuid-sample",
 				objectTypeID: "object-type-id-sample",
 				options:      optionsMocked,
@@ -344,7 +344,7 @@ func Test_internalObjectTypeImpl_Attributes(t *testing.T) {
 		{
 			name: "when the workspace id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoWorkspaceIDError,
@@ -353,7 +353,7 @@ func Test_internalObjectTypeImpl_Attributes(t *testing.T) {
 		{
 			name: "when the object type id is not provided",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				workspaceID: "workspace-id-sample",
 			},
 			wantErr: true,
@@ -424,7 +424,7 @@ func Test_internalObjectTypeImpl_Update(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				workspaceID:  "workspace-uuid-sample",
 				objectTypeID: "object-type-id-sample",
 				payload:      payloadMocked,
@@ -453,7 +453,7 @@ func Test_internalObjectTypeImpl_Update(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				workspaceID:  "workspace-uuid-sample",
 				objectTypeID: "object-type-id-sample",
 				payload:      payloadMocked,
@@ -480,7 +480,7 @@ func Test_internalObjectTypeImpl_Update(t *testing.T) {
 		{
 			name: "when the workspace id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoWorkspaceIDError,
@@ -489,7 +489,7 @@ func Test_internalObjectTypeImpl_Update(t *testing.T) {
 		{
 			name: "when the object type id is not provided",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				workspaceID: "workspace-uuid-sample",
 			},
 			wantErr: true,
@@ -564,7 +564,7 @@ func Test_internalObjectTypeImpl_Create(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				workspaceID: "workspace-uuid-sample",
 				payload:     payloadMocked,
 			},
@@ -592,7 +592,7 @@ func Test_internalObjectTypeImpl_Create(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				workspaceID: "workspace-uuid-sample",
 				payload:     payloadMocked,
 			},
@@ -618,7 +618,7 @@ func Test_internalObjectTypeImpl_Create(t *testing.T) {
 		{
 			name: "when the workspace id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoWorkspaceIDError,
@@ -686,7 +686,7 @@ func Test_internalObjectTypeImpl_Position(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				workspaceID:  "workspace-uuid-sample",
 				objectTypeID: "object-type-id-sample",
 				payload:      payloadMocked,
@@ -715,7 +715,7 @@ func Test_internalObjectTypeImpl_Position(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				workspaceID:  "workspace-uuid-sample",
 				objectTypeID: "object-type-id-sample",
 				payload:      payloadMocked,
@@ -742,7 +742,7 @@ func Test_internalObjectTypeImpl_Position(t *testing.T) {
 		{
 			name: "when the workspace id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoWorkspaceIDError,
@@ -751,7 +751,7 @@ func Test_internalObjectTypeImpl_Position(t *testing.T) {
 		{
 			name: "when the object type id is not provided",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				workspaceID: "workspace-uuid-sample",
 			},
 			wantErr: true,

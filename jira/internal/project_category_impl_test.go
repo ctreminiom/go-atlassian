@@ -35,7 +35,7 @@ func Test_internalProjectCategoryImpl_Gets(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			on: func(fields *fields) {
 
@@ -63,7 +63,7 @@ func Test_internalProjectCategoryImpl_Gets(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			on: func(fields *fields) {
 
@@ -91,7 +91,7 @@ func Test_internalProjectCategoryImpl_Gets(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			on: func(fields *fields) {
 
@@ -166,7 +166,7 @@ func Test_internalProjectCategoryImpl_Get(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				categoryId: 10001,
 			},
 			on: func(fields *fields) {
@@ -195,7 +195,7 @@ func Test_internalProjectCategoryImpl_Get(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				categoryId: 10001,
 			},
 			on: func(fields *fields) {
@@ -224,7 +224,7 @@ func Test_internalProjectCategoryImpl_Get(t *testing.T) {
 			name:   "when the project category id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoProjectCategoryIDError,
@@ -234,7 +234,7 @@ func Test_internalProjectCategoryImpl_Get(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				categoryId: 10001,
 			},
 			on: func(fields *fields) {
@@ -315,7 +315,7 @@ func Test_internalProjectCategoryImpl_Create(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -344,7 +344,7 @@ func Test_internalProjectCategoryImpl_Create(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -373,7 +373,7 @@ func Test_internalProjectCategoryImpl_Create(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -455,7 +455,7 @@ func Test_internalProjectCategoryImpl_Update(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				categoryId: 10001,
 				payload:    payloadMocked,
 			},
@@ -485,7 +485,7 @@ func Test_internalProjectCategoryImpl_Update(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				categoryId: 10001,
 				payload:    payloadMocked,
 			},
@@ -515,7 +515,7 @@ func Test_internalProjectCategoryImpl_Update(t *testing.T) {
 			name:   "when the project category id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoProjectCategoryIDError,
@@ -525,7 +525,7 @@ func Test_internalProjectCategoryImpl_Update(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				categoryId: 10001,
 				payload:    payloadMocked,
 			},
@@ -602,7 +602,7 @@ func Test_internalProjectCategoryImpl_Delete(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				categoryId: 10001,
 			},
 			on: func(fields *fields) {
@@ -631,7 +631,7 @@ func Test_internalProjectCategoryImpl_Delete(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				categoryId: 10001,
 			},
 			on: func(fields *fields) {
@@ -660,7 +660,7 @@ func Test_internalProjectCategoryImpl_Delete(t *testing.T) {
 			name:   "when the project category id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoProjectCategoryIDError,
@@ -670,7 +670,7 @@ func Test_internalProjectCategoryImpl_Delete(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				categoryId: 10001,
 			},
 			on: func(fields *fields) {

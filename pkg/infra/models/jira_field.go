@@ -1,5 +1,6 @@
 package models
 
+// IssueFieldScheme represents an issue field in Jira.
 type IssueFieldScheme struct {
 	ID            string                         `json:"id,omitempty"`
 	Key           string                         `json:"key,omitempty"`
@@ -19,6 +20,7 @@ type IssueFieldScheme struct {
 	LastUsed      *IssueFieldLastUsedScheme      `json:"lastUsed,omitempty"`
 }
 
+// IssueFieldSchemaScheme represents the schema of an issue field in Jira.
 type IssueFieldSchemaScheme struct {
 	Type     string `json:"type,omitempty"`
 	Items    string `json:"items,omitempty"`
@@ -27,11 +29,13 @@ type IssueFieldSchemaScheme struct {
 	CustomID int    `json:"customId,omitempty"`
 }
 
+// IssueFieldLastUsedScheme represents the last used information of an issue field in Jira.
 type IssueFieldLastUsedScheme struct {
 	Type  string `json:"type,omitempty"`
 	Value string `json:"value,omitempty"`
 }
 
+// FieldSearchPageScheme represents a search page of fields in Jira.
 type FieldSearchPageScheme struct {
 	MaxResults int                 `json:"maxResults,omitempty"`
 	StartAt    int                 `json:"startAt,omitempty"`
@@ -40,6 +44,7 @@ type FieldSearchPageScheme struct {
 	Values     []*IssueFieldScheme `json:"values,omitempty"`
 }
 
+// FieldSearchOptionsScheme represents the search options for a field in Jira.
 type FieldSearchOptionsScheme struct {
 	Types   []string
 	IDs     []string
@@ -48,6 +53,7 @@ type FieldSearchOptionsScheme struct {
 	Expand  []string
 }
 
+// CustomFieldScheme represents a custom field in Jira.
 type CustomFieldScheme struct {
 	Name        string `json:"name,omitempty"`
 	Description string `json:"description,omitempty"`

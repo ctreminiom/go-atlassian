@@ -44,7 +44,7 @@ func TestPermissionSchemeGrantService_Create(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:                context.TODO(),
+				ctx:                context.Background(),
 				permissionSchemeId: 10001,
 				payload:            payloadMocked,
 			},
@@ -74,7 +74,7 @@ func TestPermissionSchemeGrantService_Create(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:                context.TODO(),
+				ctx:                context.Background(),
 				permissionSchemeId: 10001,
 				payload:            payloadMocked,
 			},
@@ -104,7 +104,7 @@ func TestPermissionSchemeGrantService_Create(t *testing.T) {
 			name:   "when the permission scheme id is not provided",
 			fields: fields{version: "2"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoPermissionSchemeIDError,
@@ -114,7 +114,7 @@ func TestPermissionSchemeGrantService_Create(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:                context.TODO(),
+				ctx:                context.Background(),
 				permissionSchemeId: 10001,
 				payload:            payloadMocked,
 			},
@@ -192,7 +192,7 @@ func TestPermissionSchemeGrantService_Gets(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:                context.TODO(),
+				ctx:                context.Background(),
 				permissionSchemeId: 10001,
 				expand:             []string{"all"},
 			},
@@ -222,7 +222,7 @@ func TestPermissionSchemeGrantService_Gets(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:                context.TODO(),
+				ctx:                context.Background(),
 				permissionSchemeId: 10001,
 				expand:             []string{"all"},
 			},
@@ -252,7 +252,7 @@ func TestPermissionSchemeGrantService_Gets(t *testing.T) {
 			name:   "when the permission scheme id is not provided",
 			fields: fields{version: "2"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoPermissionSchemeIDError,
@@ -262,7 +262,7 @@ func TestPermissionSchemeGrantService_Gets(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:                context.TODO(),
+				ctx:                context.Background(),
 				permissionSchemeId: 10001,
 				expand:             []string{"all"},
 			},
@@ -341,7 +341,7 @@ func TestPermissionSchemeGrantService_Get(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:                context.TODO(),
+				ctx:                context.Background(),
 				permissionSchemeId: 10001,
 				permissionGrantId:  30092,
 				expand:             []string{"all"},
@@ -372,7 +372,7 @@ func TestPermissionSchemeGrantService_Get(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:                context.TODO(),
+				ctx:                context.Background(),
 				permissionSchemeId: 10001,
 				permissionGrantId:  30092,
 				expand:             []string{"all"},
@@ -403,7 +403,7 @@ func TestPermissionSchemeGrantService_Get(t *testing.T) {
 			name:   "when the permission scheme id is not provided",
 			fields: fields{version: "2"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoPermissionSchemeIDError,
@@ -413,7 +413,7 @@ func TestPermissionSchemeGrantService_Get(t *testing.T) {
 			name:   "when the permission scheme grant id is not provided",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:                context.TODO(),
+				ctx:                context.Background(),
 				permissionSchemeId: 10001,
 			},
 			wantErr: true,
@@ -424,7 +424,7 @@ func TestPermissionSchemeGrantService_Get(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:                context.TODO(),
+				ctx:                context.Background(),
 				permissionSchemeId: 10001,
 				permissionGrantId:  30092,
 				expand:             []string{"all"},
@@ -504,7 +504,7 @@ func TestPermissionSchemeGrantService_Delete(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:                context.TODO(),
+				ctx:                context.Background(),
 				permissionSchemeId: 10001,
 				permissionGrantId:  30092,
 			},
@@ -534,7 +534,7 @@ func TestPermissionSchemeGrantService_Delete(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:                context.TODO(),
+				ctx:                context.Background(),
 				permissionSchemeId: 10001,
 				permissionGrantId:  30092,
 			},
@@ -564,7 +564,7 @@ func TestPermissionSchemeGrantService_Delete(t *testing.T) {
 			name:   "when the permission scheme id is not provided",
 			fields: fields{version: "2"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoPermissionSchemeIDError,
@@ -574,7 +574,7 @@ func TestPermissionSchemeGrantService_Delete(t *testing.T) {
 			name:   "when the permission scheme grant id is not provided",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:                context.TODO(),
+				ctx:                context.Background(),
 				permissionSchemeId: 10001,
 			},
 			wantErr: true,
@@ -585,7 +585,7 @@ func TestPermissionSchemeGrantService_Delete(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:                context.TODO(),
+				ctx:                context.Background(),
 				permissionSchemeId: 10001,
 				permissionGrantId:  30092,
 			},

@@ -39,7 +39,7 @@ func Test_internalMetadataImpl_Get(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:                    context.TODO(),
+				ctx:                    context.Background(),
 				issueKeyOrId:           "DUMMY-4",
 				overrideScreenSecurity: true,
 				overrideEditableFlag:   false,
@@ -71,7 +71,7 @@ func Test_internalMetadataImpl_Get(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:                    context.TODO(),
+				ctx:                    context.Background(),
 				issueKeyOrId:           "DUMMY-4",
 				overrideScreenSecurity: true,
 				overrideEditableFlag:   false,
@@ -103,7 +103,7 @@ func Test_internalMetadataImpl_Get(t *testing.T) {
 			name:   "when the issue key or id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:                    context.TODO(),
+				ctx:                    context.Background(),
 				issueKeyOrId:           "",
 				overrideScreenSecurity: true,
 				overrideEditableFlag:   false,
@@ -117,7 +117,7 @@ func Test_internalMetadataImpl_Get(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:                    context.TODO(),
+				ctx:                    context.Background(),
 				issueKeyOrId:           "DUMMY-4",
 				overrideScreenSecurity: true,
 				overrideEditableFlag:   false,
@@ -199,7 +199,7 @@ func Test_internalMetadataImpl_Create(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 				opts: &model.IssueMetadataCreateOptions{
 					ProjectIDs:     []string{"1002"},
 					ProjectKeys:    []string{"DUMMY"},
@@ -235,7 +235,7 @@ func Test_internalMetadataImpl_Create(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 				opts: &model.IssueMetadataCreateOptions{
 					ProjectIDs:     []string{"1002"},
 					ProjectKeys:    []string{"DUMMY"},
@@ -271,7 +271,7 @@ func Test_internalMetadataImpl_Create(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "2"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 				opts: &model.IssueMetadataCreateOptions{
 					ProjectIDs:     []string{"1002"},
 					ProjectKeys:    []string{"DUMMY"},

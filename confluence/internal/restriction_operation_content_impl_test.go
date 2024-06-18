@@ -34,7 +34,7 @@ func Test_internalRestrictionOperationImpl_Gets(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				contentID: "100001",
 				expand:    []string{"restrictions.user"},
 			},
@@ -62,7 +62,7 @@ func Test_internalRestrictionOperationImpl_Gets(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				contentID: "100001",
 				expand:    []string{"restrictions.user"},
 			},
@@ -87,7 +87,7 @@ func Test_internalRestrictionOperationImpl_Gets(t *testing.T) {
 		{
 			name: "when the content id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoContentIDError,
@@ -149,7 +149,7 @@ func Test_internalRestrictionOperationImpl_Get(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				contentID:    "100001",
 				operationKey: "read",
 				expand:       []string{"restrictions.user"},
@@ -180,7 +180,7 @@ func Test_internalRestrictionOperationImpl_Get(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				contentID:    "100001",
 				operationKey: "read",
 				expand:       []string{"restrictions.user"},
@@ -208,7 +208,7 @@ func Test_internalRestrictionOperationImpl_Get(t *testing.T) {
 		{
 			name: "when the content id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoContentIDError,
@@ -217,7 +217,7 @@ func Test_internalRestrictionOperationImpl_Get(t *testing.T) {
 		{
 			name: "when the property key is not provided",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				contentID: "1111",
 			},
 			wantErr: true,

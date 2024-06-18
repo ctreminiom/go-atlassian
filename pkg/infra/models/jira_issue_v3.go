@@ -1,10 +1,11 @@
 package models
 
 import (
+	"dario.cat/mergo"
 	"encoding/json"
-	"github.com/imdario/mergo"
 )
 
+// IssueScheme represents an issue in Jira.
 type IssueScheme struct {
 	ID          string                   `json:"id,omitempty"`
 	Key         string                   `json:"key,omitempty"`
@@ -14,6 +15,9 @@ type IssueScheme struct {
 	Fields      *IssueFieldsScheme       `json:"fields,omitempty"`
 }
 
+// MergeCustomFields merges the custom fields into the issue.
+// fields is a pointer to CustomFields which represents the custom fields to be merged.
+// It returns a map[string]interface{} representing the issue with the merged custom fields and an error if any occurred.
 func (i *IssueScheme) MergeCustomFields(fields *CustomFields) (map[string]interface{}, error) {
 
 	if fields == nil || len(fields.Fields) == 0 {
@@ -41,6 +45,9 @@ func (i *IssueScheme) MergeCustomFields(fields *CustomFields) (map[string]interf
 	return issueSchemeAsMap, nil
 }
 
+// MergeOperations merges the operations into the issue.
+// operations is a pointer to UpdateOperations which represents the operations to be merged.
+// It returns a map[string]interface{} representing the issue with the merged operations and an error if any occurred.
 func (i *IssueScheme) MergeOperations(operations *UpdateOperations) (map[string]interface{}, error) {
 
 	if operations == nil || len(operations.Fields) == 0 {
@@ -68,6 +75,8 @@ func (i *IssueScheme) MergeOperations(operations *UpdateOperations) (map[string]
 	return issueSchemeAsMap, nil
 }
 
+// ToMap converts the issue to a map[string]interface{}.
+// It returns a map[string]interface{} representing the issue and an error if any occurred.
 func (i *IssueScheme) ToMap() (map[string]interface{}, error) {
 
 	//Convert the IssueScheme struct to map[string]interface{}
@@ -84,113 +93,126 @@ func (i *IssueScheme) ToMap() (map[string]interface{}, error) {
 	return issueSchemeAsMap, nil
 }
 
+// IssueFieldsScheme represents the fields of an issue in Jira.
 type IssueFieldsScheme struct {
-	Parent                   *ParentScheme              `json:"parent,omitempty"`
-	IssueType                *IssueTypeScheme           `json:"issuetype,omitempty"`
-	IssueLinks               []*IssueLinkScheme         `json:"issuelinks,omitempty"`
-	Watcher                  *IssueWatcherScheme        `json:"watches,omitempty"`
-	Votes                    *IssueVoteScheme           `json:"votes,omitempty"`
-	Versions                 []*VersionScheme           `json:"versions,omitempty"`
-	Project                  *ProjectScheme             `json:"project,omitempty"`
-	FixVersions              []*VersionScheme           `json:"fixVersions,omitempty"`
-	Priority                 *PriorityScheme            `json:"priority,omitempty"`
-	Components               []*ComponentScheme         `json:"components,omitempty"`
-	Creator                  *UserScheme                `json:"creator,omitempty"`
-	Reporter                 *UserScheme                `json:"reporter,omitempty"`
-	Assignee                 *UserScheme                `json:"assignee,omitempty"`
-	Resolution               *ResolutionScheme          `json:"resolution,omitempty"`
-	Resolutiondate           string                     `json:"resolutiondate,omitempty"`
-	Workratio                int                        `json:"workratio,omitempty"`
-	StatusCategoryChangeDate string                     `json:"statuscategorychangedate,omitempty"`
-	LastViewed               string                     `json:"lastViewed,omitempty"`
-	Summary                  string                     `json:"summary,omitempty"`
-	Created                  string                     `json:"created,omitempty"`
-	Updated                  string                     `json:"updated,omitempty"`
-	Labels                   []string                   `json:"labels,omitempty"`
-	Status                   *StatusScheme              `json:"status,omitempty"`
-	Description              *CommentNodeScheme         `json:"description,omitempty"`
-	Comment                  *IssueCommentPageScheme    `json:"comment,omitempty"`
-	Subtasks                 []*IssueScheme             `json:"subtasks,omitempty"`
-	Security                 *SecurityScheme            `json:"security,omitempty"`
-	Attachment               []*AttachmentScheme        `json:"attachment,omitempty"`
-	Worklog                  *IssueWorklogADFPageScheme `json:"worklog,omitempty"`
+	Parent                   *ParentScheme              `json:"parent,omitempty"`                   // The parent of the issue.
+	IssueType                *IssueTypeScheme           `json:"issuetype,omitempty"`                // The type of the issue.
+	IssueLinks               []*IssueLinkScheme         `json:"issuelinks,omitempty"`               // The links associated with the issue.
+	Watcher                  *IssueWatcherScheme        `json:"watches,omitempty"`                  // The watchers of the issue.
+	Votes                    *IssueVoteScheme           `json:"votes,omitempty"`                    // The votes for the issue.
+	Versions                 []*VersionScheme           `json:"versions,omitempty"`                 // The versions associated with the issue.
+	Project                  *ProjectScheme             `json:"project,omitempty"`                  // The project the issue belongs to.
+	FixVersions              []*VersionScheme           `json:"fixVersions,omitempty"`              // The fix versions for the issue.
+	Priority                 *PriorityScheme            `json:"priority,omitempty"`                 // The priority of the issue.
+	Components               []*ComponentScheme         `json:"components,omitempty"`               // The components associated with the issue.
+	Creator                  *UserScheme                `json:"creator,omitempty"`                  // The user who created the issue.
+	Reporter                 *UserScheme                `json:"reporter,omitempty"`                 // The user who reported the issue.
+	Assignee                 *UserScheme                `json:"assignee,omitempty"`                 // The user assigned to the issue.
+	Resolution               *ResolutionScheme          `json:"resolution,omitempty"`               // The resolution of the issue.
+	Resolutiondate           string                     `json:"resolutiondate,omitempty"`           // The date the issue was resolved.
+	Workratio                int                        `json:"workratio,omitempty"`                // The work ratio of the issue.
+	StatusCategoryChangeDate string                     `json:"statuscategorychangedate,omitempty"` // The date the status category changed.
+	LastViewed               string                     `json:"lastViewed,omitempty"`               // The last time the issue was viewed.
+	Summary                  string                     `json:"summary,omitempty"`                  // The summary of the issue.
+	Created                  string                     `json:"created,omitempty"`                  // The date the issue was created.
+	Updated                  string                     `json:"updated,omitempty"`                  // The date the issue was last updated.
+	Labels                   []string                   `json:"labels,omitempty"`                   // The labels associated with the issue.
+	Status                   *StatusScheme              `json:"status,omitempty"`                   // The status of the issue.
+	Description              *CommentNodeScheme         `json:"description,omitempty"`              // The description of the issue.
+	Comment                  *IssueCommentPageScheme    `json:"comment,omitempty"`                  // The comments on the issue.
+	Subtasks                 []*IssueScheme             `json:"subtasks,omitempty"`                 // The subtasks of the issue.
+	Security                 *SecurityScheme            `json:"security,omitempty"`                 // The security level of the issue.
+	Attachment               []*AttachmentScheme        `json:"attachment,omitempty"`               // The attachments of the issue.
+	Worklog                  *IssueWorklogADFPageScheme `json:"worklog,omitempty"`                  // The worklog of the issue.
 }
 
+// IssueTransitionScheme represents a transition of an issue in Jira.
 type IssueTransitionScheme struct {
-	ID            string        `json:"id,omitempty"`
-	Name          string        `json:"name,omitempty"`
-	To            *StatusScheme `json:"to,omitempty"`
-	HasScreen     bool          `json:"hasScreen,omitempty"`
-	IsGlobal      bool          `json:"isGlobal,omitempty"`
-	IsInitial     bool          `json:"isInitial,omitempty"`
-	IsAvailable   bool          `json:"isAvailable,omitempty"`
-	IsConditional bool          `json:"isConditional,omitempty"`
-	IsLooped      bool          `json:"isLooped,omitempty"`
+	ID            string        `json:"id,omitempty"`            // The ID of the transition.
+	Name          string        `json:"name,omitempty"`          // The name of the transition.
+	To            *StatusScheme `json:"to,omitempty"`            // The status the issue transitions to.
+	HasScreen     bool          `json:"hasScreen,omitempty"`     // Indicates if the transition has a screen.
+	IsGlobal      bool          `json:"isGlobal,omitempty"`      // Indicates if the transition is global.
+	IsInitial     bool          `json:"isInitial,omitempty"`     // Indicates if the transition is initial.
+	IsAvailable   bool          `json:"isAvailable,omitempty"`   // Indicates if the transition is available.
+	IsConditional bool          `json:"isConditional,omitempty"` // Indicates if the transition is conditional.
+	IsLooped      bool          `json:"isLooped,omitempty"`      // Indicates if the transition is looped.
 }
 
+// StatusScheme represents the status of an issue in Jira.
 type StatusScheme struct {
-	Self           string                `json:"self,omitempty"`
-	Description    string                `json:"description,omitempty"`
-	IconURL        string                `json:"iconUrl,omitempty"`
-	Name           string                `json:"name,omitempty"`
-	ID             string                `json:"id,omitempty"`
-	StatusCategory *StatusCategoryScheme `json:"statusCategory,omitempty"`
+	Self           string                `json:"self,omitempty"`           // The URL of the status.
+	Description    string                `json:"description,omitempty"`    // The description of the status.
+	IconURL        string                `json:"iconUrl,omitempty"`        // The icon URL of the status.
+	Name           string                `json:"name,omitempty"`           // The name of the status.
+	ID             string                `json:"id,omitempty"`             // The ID of the status.
+	StatusCategory *StatusCategoryScheme `json:"statusCategory,omitempty"` // The category of the status.
 }
 
+// StatusCategoryScheme represents the category of a status in Jira.
 type StatusCategoryScheme struct {
-	Self      string `json:"self,omitempty"`
-	ID        int    `json:"id,omitempty"`
-	Key       string `json:"key,omitempty"`
-	ColorName string `json:"colorName,omitempty"`
-	Name      string `json:"name,omitempty"`
+	Self      string `json:"self,omitempty"`      // The URL of the status category.
+	ID        int    `json:"id,omitempty"`        // The ID of the status category.
+	Key       string `json:"key,omitempty"`       // The key of the status category.
+	ColorName string `json:"colorName,omitempty"` // The color name of the status category.
+	Name      string `json:"name,omitempty"`      // The name of the status category.
 }
 
+// IssueNotifyOptionsScheme represents the options for notifying about an issue in Jira.
 type IssueNotifyOptionsScheme struct {
-	HTMLBody string                     `json:"htmlBody,omitempty"`
-	Subject  string                     `json:"subject,omitempty"`
-	TextBody string                     `json:"textBody,omitempty"`
-	To       *IssueNotifyToScheme       `json:"to,omitempty"`
-	Restrict *IssueNotifyRestrictScheme `json:"restrict,omitempty"`
+	HTMLBody string                     `json:"htmlBody,omitempty"` // The HTML body of the notification.
+	Subject  string                     `json:"subject,omitempty"`  // The subject of the notification.
+	TextBody string                     `json:"textBody,omitempty"` // The text body of the notification.
+	To       *IssueNotifyToScheme       `json:"to,omitempty"`       // The recipients of the notification.
+	Restrict *IssueNotifyRestrictScheme `json:"restrict,omitempty"` // The restrictions for the notification.
 }
 
+// IssueNotifyRestrictScheme represents the restrictions for notifying about an issue in Jira.
 type IssueNotifyRestrictScheme struct {
-	Groups      []*IssueNotifyGroupScheme      `json:"groups,omitempty"`
-	Permissions []*IssueNotifyPermissionScheme `json:"permissions,omitempty"`
+	Groups      []*IssueNotifyGroupScheme      `json:"groups,omitempty"`      // The groups to restrict the notification to.
+	Permissions []*IssueNotifyPermissionScheme `json:"permissions,omitempty"` // The permissions to restrict the notification to.
 }
 
+// IssueNotifyToScheme represents the recipients for notifying about an issue in Jira.
 type IssueNotifyToScheme struct {
-	Reporter bool                      `json:"reporter,omitempty"`
-	Assignee bool                      `json:"assignee,omitempty"`
-	Watchers bool                      `json:"watchers,omitempty"`
-	Voters   bool                      `json:"voters,omitempty"`
-	Users    []*IssueNotifyUserScheme  `json:"users,omitempty"`
-	Groups   []*IssueNotifyGroupScheme `json:"groups,omitempty"`
+	Reporter bool                      `json:"reporter,omitempty"` // Indicates if the reporter should be notified.
+	Assignee bool                      `json:"assignee,omitempty"` // Indicates if the assignee should be notified.
+	Watchers bool                      `json:"watchers,omitempty"` // Indicates if the watchers should be notified.
+	Voters   bool                      `json:"voters,omitempty"`   // Indicates if the voters should be notified.
+	Users    []*IssueNotifyUserScheme  `json:"users,omitempty"`    // The users to notify.
+	Groups   []*IssueNotifyGroupScheme `json:"groups,omitempty"`   // The groups to notify.
 }
 
+// IssueNotifyPermissionScheme represents a permission for notifying about an issue in Jira.
 type IssueNotifyPermissionScheme struct {
-	ID  string `json:"id,omitempty"`
-	Key string `json:"key,omitempty"`
+	ID  string `json:"id,omitempty"`  // The ID of the permission.
+	Key string `json:"key,omitempty"` // The key of the permission.
 }
 
+// IssueNotifyUserScheme represents a user for notifying about an issue in Jira.
 type IssueNotifyUserScheme struct {
-	AccountID string `json:"accountId,omitempty"`
+	AccountID string `json:"accountId,omitempty"` // The account ID of the user.
 }
 
+// IssueNotifyGroupScheme represents a group for notifying about an issue in Jira.
 type IssueNotifyGroupScheme struct {
-	Name string `json:"name,omitempty"`
+	Name string `json:"name,omitempty"` // The name of the group.
 }
 
+// IssueBulkSchemeV3 represents a bulk operation on version 3 issues in Jira.
 type IssueBulkSchemeV3 struct {
-	Payload      *IssueScheme
-	CustomFields *CustomFields
+	Payload      *IssueScheme  // The payload for the bulk operation.
+	CustomFields *CustomFields // The custom fields for the bulk operation.
 }
 
+// BulkIssueSchemeV3 represents a bulk of version 3 issues in Jira.
 type BulkIssueSchemeV3 struct {
-	Issues []*IssueScheme `json:"issues,omitempty"`
+	Issues []*IssueScheme `json:"issues,omitempty"` // The issues in the bulk.
 }
 
+// IssueMoveOptionsV3 represents the options for moving a version 3 issue in Jira.
 type IssueMoveOptionsV3 struct {
-	Fields       *IssueScheme
-	CustomFields *CustomFields
-	Operations   *UpdateOperations
+	Fields       *IssueScheme      // The fields for the move operation.
+	CustomFields *CustomFields     // The custom fields for the move operation.
+	Operations   *UpdateOperations // The operations for the move operation.
 }

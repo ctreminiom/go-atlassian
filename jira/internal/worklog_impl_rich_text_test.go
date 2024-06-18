@@ -39,7 +39,7 @@ func Test_internalWorklogRichTextImpl_Gets(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				worklogIds: []int{1, 2, 3, 4},
 				expand:     []string{"properties"},
 			},
@@ -69,7 +69,7 @@ func Test_internalWorklogRichTextImpl_Gets(t *testing.T) {
 			name:   "when the worklogs ids are not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNpWorklogsError,
@@ -79,7 +79,7 @@ func Test_internalWorklogRichTextImpl_Gets(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				worklogIds: []int{1, 2, 3, 4},
 				expand:     []string{"properties"},
 			},
@@ -157,7 +157,7 @@ func Test_internalWorklogRichTextImpl_Get(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "DUMMY-5",
 				worklogId:    "493939",
 				expand:       []string{"properties"},
@@ -188,7 +188,7 @@ func Test_internalWorklogRichTextImpl_Get(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "DUMMY-5",
 				worklogId:    "493939",
 				expand:       []string{"properties"},
@@ -219,7 +219,7 @@ func Test_internalWorklogRichTextImpl_Get(t *testing.T) {
 			name:   "when the issue key or id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoIssueKeyOrIDError,
@@ -229,7 +229,7 @@ func Test_internalWorklogRichTextImpl_Get(t *testing.T) {
 			name:   "when the worklog id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "DUMMY-5",
 			},
 			wantErr: true,
@@ -240,7 +240,7 @@ func Test_internalWorklogRichTextImpl_Get(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "DUMMY-5",
 				worklogId:    "493939",
 				expand:       []string{"properties"},
@@ -320,7 +320,7 @@ func Test_internalWorklogRichTextImpl_Issue(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "DUMMY-5",
 				startAt:      0,
 				maxResults:   50,
@@ -353,7 +353,7 @@ func Test_internalWorklogRichTextImpl_Issue(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "DUMMY-5",
 				startAt:      0,
 				maxResults:   50,
@@ -386,7 +386,7 @@ func Test_internalWorklogRichTextImpl_Issue(t *testing.T) {
 			name:   "when the issue key or id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoIssueKeyOrIDError,
@@ -396,7 +396,7 @@ func Test_internalWorklogRichTextImpl_Issue(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "DUMMY-5",
 				startAt:      0,
 				maxResults:   50,
@@ -478,7 +478,7 @@ func Test_internalWorklogRichTextImpl_Delete(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "DUMMY-5",
 				worklogId:    "h837372",
 				options: &model.WorklogOptionsScheme{
@@ -516,7 +516,7 @@ func Test_internalWorklogRichTextImpl_Delete(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "DUMMY-5",
 				worklogId:    "h837372",
 				options: &model.WorklogOptionsScheme{
@@ -554,7 +554,7 @@ func Test_internalWorklogRichTextImpl_Delete(t *testing.T) {
 			name:   "when the options are not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "DUMMY-5",
 				worklogId:    "h837372",
 			},
@@ -584,7 +584,7 @@ func Test_internalWorklogRichTextImpl_Delete(t *testing.T) {
 			name:   "when the issue key or id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoIssueKeyOrIDError,
@@ -594,7 +594,7 @@ func Test_internalWorklogRichTextImpl_Delete(t *testing.T) {
 			name:   "when the worklog id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "DUMMY-5",
 			},
 			wantErr: true,
@@ -605,7 +605,7 @@ func Test_internalWorklogRichTextImpl_Delete(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "DUMMY-5",
 				worklogId:    "h837372",
 			},
@@ -682,7 +682,7 @@ func Test_internalWorklogRichTextImpl_Deleted(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:   context.TODO(),
+				ctx:   context.Background(),
 				since: 928281811,
 			},
 			on: func(fields *fields) {
@@ -711,7 +711,7 @@ func Test_internalWorklogRichTextImpl_Deleted(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:   context.TODO(),
+				ctx:   context.Background(),
 				since: 928281811,
 			},
 			on: func(fields *fields) {
@@ -740,7 +740,7 @@ func Test_internalWorklogRichTextImpl_Deleted(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:   context.TODO(),
+				ctx:   context.Background(),
 				since: 928281811,
 			},
 			on: func(fields *fields) {
@@ -817,7 +817,7 @@ func Test_internalWorklogRichTextImpl_Updated(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:    context.TODO(),
+				ctx:    context.Background(),
 				since:  928281811,
 				expand: []string{"properties"},
 			},
@@ -847,7 +847,7 @@ func Test_internalWorklogRichTextImpl_Updated(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:    context.TODO(),
+				ctx:    context.Background(),
 				since:  928281811,
 				expand: []string{"properties"},
 			},
@@ -877,7 +877,7 @@ func Test_internalWorklogRichTextImpl_Updated(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:    context.TODO(),
+				ctx:    context.Background(),
 				since:  928281811,
 				expand: []string{"properties"},
 			},
@@ -969,7 +969,7 @@ func Test_internalWorklogRichTextImpl_Add(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrID: "DUMMY-5",
 				payload:      payloadMocked,
 				options: &model.WorklogOptionsScheme{
@@ -1007,7 +1007,7 @@ func Test_internalWorklogRichTextImpl_Add(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrID: "DUMMY-5",
 				payload:      payloadMocked,
 				options: &model.WorklogOptionsScheme{
@@ -1045,7 +1045,7 @@ func Test_internalWorklogRichTextImpl_Add(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrID: "DUMMY-5",
 				payload:      payloadMocked,
 				options: &model.WorklogOptionsScheme{
@@ -1144,7 +1144,7 @@ func Test_internalWorklogRichTextImpl_Update(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrID: "DUMMY-5",
 				worklogId:    "3933828822",
 				payload:      payloadMocked,
@@ -1183,7 +1183,7 @@ func Test_internalWorklogRichTextImpl_Update(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrID: "DUMMY-5",
 				worklogId:    "3933828822",
 				payload:      payloadMocked,
@@ -1222,7 +1222,7 @@ func Test_internalWorklogRichTextImpl_Update(t *testing.T) {
 			name:   "when the issue key or id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoIssueKeyOrIDError,
@@ -1232,7 +1232,7 @@ func Test_internalWorklogRichTextImpl_Update(t *testing.T) {
 			name:   "when the worklog id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrID: "DUMMY-5",
 			},
 			wantErr: true,
@@ -1243,7 +1243,7 @@ func Test_internalWorklogRichTextImpl_Update(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrID: "DUMMY-5",
 				worklogId:    "3933828822",
 				payload:      payloadMocked,

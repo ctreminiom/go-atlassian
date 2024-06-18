@@ -1,6 +1,6 @@
 module github.com/ctreminiom/go-atlassian
 
-go 1.17
+go 1.18
 
 require (
 	dario.cat/mergo v1.0.0

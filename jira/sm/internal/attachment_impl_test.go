@@ -201,7 +201,10 @@ func Test_internalServiceRequestAttachmentImpl_Create(t *testing.T) {
 					http.MethodPost,
 					"rest/servicedeskapi/request/DUMMY-2/attachment",
 					"",
-					map[string]interface{}{"public": true, "temporaryAttachmentIds": []string{"10001"}}).
+					&model.RequestAttachmentCreationPayloadScheme{
+						TemporaryAttachmentIDs: []string{"10001"},
+						Public:                 true,
+					}).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -232,7 +235,10 @@ func Test_internalServiceRequestAttachmentImpl_Create(t *testing.T) {
 					http.MethodPost,
 					"rest/servicedeskapi/request/DUMMY-2/attachment",
 					"",
-					map[string]interface{}{"public": true, "temporaryAttachmentIds": []string{"10001"}}).
+					&model.RequestAttachmentCreationPayloadScheme{
+						TemporaryAttachmentIDs: []string{"10001"},
+						Public:                 true,
+					}).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -265,7 +271,10 @@ func Test_internalServiceRequestAttachmentImpl_Create(t *testing.T) {
 					http.MethodPost,
 					"rest/servicedeskapi/request/DUMMY-2/attachment",
 					"",
-					map[string]interface{}{"public": true, "temporaryAttachmentIds": []string{"10001"}}).
+					&model.RequestAttachmentCreationPayloadScheme{
+						TemporaryAttachmentIDs: []string{"10001"},
+						Public:                 true,
+					}).
 					Return(&http.Request{}, errors.New("client: no http request created"))
 
 				fields.c = client

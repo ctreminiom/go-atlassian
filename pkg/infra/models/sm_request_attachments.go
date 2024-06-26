@@ -62,6 +62,18 @@ type RequestAttachmentCreationCommentScheme struct {
 	} `json:"_links,omitempty"` // Links related to the comment.
 }
 
+// RequestAttachmentCreationPayloadScheme represents the payload for creating a request attachment.
+type RequestAttachmentCreationPayloadScheme struct {
+	TemporaryAttachmentIDs []int                                                    `json:"temporaryAttachmentIds,omitempty"`
+	Public                 bool                                                     `json:"public,omitempty"`
+	AdditionalComment      *RequestAttachmentCreationAdditionalCommentPayloadScheme `json:"additionalComment,omitempty"`
+}
+
+// RequestAttachmentCreationAdditionalCommentPayloadScheme represents the additional comment for creating a request attachment.
+type RequestAttachmentCreationAdditionalCommentPayloadScheme struct {
+	Body string `json:"body,omitempty"`
+}
+
 // RequestAttachmentCreationScheme represents the creation of a request attachment.
 type RequestAttachmentCreationScheme struct {
 	Comment     *RequestAttachmentCreationCommentScheme `json:"comment,omitempty"`     // The comment during the creation of the request attachment.

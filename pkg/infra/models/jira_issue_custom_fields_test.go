@@ -1986,9 +1986,9 @@ func TestParseAssetCustomField(t *testing.T) {
 			},
 			want: []*CustomFieldAssetScheme{
 				{
-					WorkspaceId: "5e037d73-1c0a-43ce-adca-f169a42557f1",
-					Id:          "5e037d73-1c0a-43ce-adca-f169a42557f1:1",
-					ObjectId:    "1",
+					WorkspaceID: "5e037d73-1c0a-43ce-adca-f169a42557f1",
+					ID:          "5e037d73-1c0a-43ce-adca-f169a42557f1:1",
+					ObjectID:    "1",
 				},
 			},
 			wantErr: false,
@@ -5535,26 +5535,26 @@ func TestParseAssetCustomFields(t *testing.T) {
 			want: map[string][]*CustomFieldAssetScheme{
 				"KP-22": {
 					{
-						WorkspaceId: "5e037d73-1c0a-43ce-adca-f169a42557f1",
-						Id:          "5e037d73-1c0a-43ce-adca-f169a42557f1:1",
-						ObjectId:    "1",
+						WorkspaceID: "5e037d73-1c0a-43ce-adca-f169a42557f1",
+						ID:          "5e037d73-1c0a-43ce-adca-f169a42557f1:1",
+						ObjectID:    "1",
 					},
 					{
-						WorkspaceId: "5e037d73-1c0a-43ce-adca-f169a42557f2",
-						Id:          "5e037d73-1c0a-43ce-adca-f169a42557f1:2",
-						ObjectId:    "1",
+						WorkspaceID: "5e037d73-1c0a-43ce-adca-f169a42557f2",
+						ID:          "5e037d73-1c0a-43ce-adca-f169a42557f1:2",
+						ObjectID:    "1",
 					},
 				},
 				"KP-23": {
 					{
-						WorkspaceId: "5e037d73-1c0a-43ce-adca-f169a42557f1",
-						Id:          "5e037d73-1c0a-43ce-adca-f169a42557f1:1",
-						ObjectId:    "1",
+						WorkspaceID: "5e037d73-1c0a-43ce-adca-f169a42557f1",
+						ID:          "5e037d73-1c0a-43ce-adca-f169a42557f1:1",
+						ObjectID:    "1",
 					},
 					{
-						WorkspaceId: "5e037d73-1c0a-43ce-adca-f169a42557f2",
-						Id:          "5e037d73-1c0a-43ce-adca-f169a42557f1:2",
-						ObjectId:    "1",
+						WorkspaceID: "5e037d73-1c0a-43ce-adca-f169a42557f2",
+						ID:          "5e037d73-1c0a-43ce-adca-f169a42557f1:2",
+						ObjectID:    "1",
 					},
 				},
 			},
@@ -5581,14 +5581,14 @@ func TestParseAssetCustomFields(t *testing.T) {
 			want: map[string][]*CustomFieldAssetScheme{
 				"KP-23": {
 					{
-						WorkspaceId: "5e037d73-1c0a-43ce-adca-f169a42557f1",
-						Id:          "5e037d73-1c0a-43ce-adca-f169a42557f1:1",
-						ObjectId:    "1",
+						WorkspaceID: "5e037d73-1c0a-43ce-adca-f169a42557f1",
+						ID:          "5e037d73-1c0a-43ce-adca-f169a42557f1:1",
+						ObjectID:    "1",
 					},
 					{
-						WorkspaceId: "5e037d73-1c0a-43ce-adca-f169a42557f2",
-						Id:          "5e037d73-1c0a-43ce-adca-f169a42557f1:2",
-						ObjectId:    "1",
+						WorkspaceID: "5e037d73-1c0a-43ce-adca-f169a42557f2",
+						ID:          "5e037d73-1c0a-43ce-adca-f169a42557f1:2",
+						ObjectID:    "1",
 					},
 				},
 			},
@@ -5604,14 +5604,14 @@ func TestParseAssetCustomFields(t *testing.T) {
 			want: map[string][]*CustomFieldAssetScheme{
 				"KP-23": {
 					{
-						WorkspaceId: "5e037d73-1c0a-43ce-adca-f169a42557f1",
-						Id:          "5e037d73-1c0a-43ce-adca-f169a42557f1:1",
-						ObjectId:    "1",
+						WorkspaceID: "5e037d73-1c0a-43ce-adca-f169a42557f1",
+						ID:          "5e037d73-1c0a-43ce-adca-f169a42557f1:1",
+						ObjectID:    "1",
 					},
 					{
-						WorkspaceId: "5e037d73-1c0a-43ce-adca-f169a42557f2",
-						Id:          "5e037d73-1c0a-43ce-adca-f169a42557f1:2",
-						ObjectId:    "1",
+						WorkspaceID: "5e037d73-1c0a-43ce-adca-f169a42557f2",
+						ID:          "5e037d73-1c0a-43ce-adca-f169a42557f1:2",
+						ObjectID:    "1",
 					},
 				},
 			},

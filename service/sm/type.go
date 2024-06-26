@@ -56,5 +56,5 @@ type TypeConnector interface {
 	// GET /rest/servicedeskapi/servicedesk/{serviceDeskId}/requesttypegroup
 	//
 	// https://docs.go-atlassian.io/jira-service-management-cloud/request/types#get-request-type-groups
-	Groups(ctx context.Context, serviceDeskID int) (*model.RequestTypeGroupsScheme, *model.ResponseScheme, error)
+	Groups(ctx context.Context, serviceDeskID int) (*model.RequestTypeGroupPageScheme, *model.ResponseScheme, error)
 }

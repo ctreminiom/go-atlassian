@@ -83,7 +83,7 @@ func (t *TypeService) Fields(ctx context.Context, serviceDeskID, requestTypeID i
 // GET /rest/servicedeskapi/servicedesk/{serviceDeskId}/requesttypegroup
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request/types#get-request-type-groups
-func (t *TypeService) Groups(ctx context.Context, serviceDeskID int) (*model.RequestTypeGroupsScheme, *model.ResponseScheme, error) {
+func (t *TypeService) Groups(ctx context.Context, serviceDeskID int) (*model.RequestTypeGroupPageScheme, *model.ResponseScheme, error) {
 	return t.internalClient.Groups(ctx, serviceDeskID)
 }
 
@@ -242,7 +242,7 @@ func (i *internalTypeImpl) Fields(ctx context.Context, serviceDeskID, requestTyp
 	return fields, res, nil
 }
 
-func (i *internalTypeImpl) Groups(ctx context.Context, serviceDeskID int) (*model.RequestTypeGroupsScheme, *model.ResponseScheme, error) {
+func (i *internalTypeImpl) Groups(ctx context.Context, serviceDeskID int) (*model.RequestTypeGroupPageScheme, *model.ResponseScheme, error) {
 
 	if serviceDeskID == 0 {
 		return nil, nil, model.ErrNoServiceDeskIDError
@@ -255,7 +255,7 @@ func (i *internalTypeImpl) Groups(ctx context.Context, serviceDeskID int) (*mode
 		return nil, nil, err
 	}
 
-	groups := new(model.RequestTypeGroupsScheme)
+	groups := new(model.RequestTypeGroupPageScheme)
 	res, err := i.c.Call(req, groups)
 	if err != nil {
 		return nil, res, err

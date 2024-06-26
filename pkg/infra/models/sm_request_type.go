@@ -94,19 +94,19 @@ type RequestTypeJiraSchema struct {
 	CustomID int    `json:"customId,omitempty"` // The custom ID of the Jira schema.
 }
 
-// ProjectRequestTypeGroupPageScheme represents a page of project request type groups.
-type ProjectRequestTypeGroupPageScheme struct {
-	Expands    []string                               `json:"_expands,omitempty"`   // The fields to expand in the page.
-	Size       int                                    `json:"size,omitempty"`       // The size of the page.
-	Start      int                                    `json:"start,omitempty"`      // The start index of the page.
-	Limit      int                                    `json:"limit,omitempty"`      // The limit of the page.
-	IsLastPage bool                                   `json:"isLastPage,omitempty"` // Indicates if this is the last page.
-	Values     []*RequestTypeGroupsScheme             `json:"values,omitempty"`     // The project request types in the page.
-	Links      *ProjectRequestTypeGroupPageLinkScheme `json:"_links,omitempty"`     // The links related to the page.
+// RequestTypeGroupPageScheme represents a page of project request type groups.
+type RequestTypeGroupPageScheme struct {
+	Expands    []string                        `json:"_expands,omitempty"`   // The fields to expand in the page.
+	Size       int                             `json:"size,omitempty"`       // The size of the page.
+	Start      int                             `json:"start,omitempty"`      // The start index of the page.
+	Limit      int                             `json:"limit,omitempty"`      // The limit of the page.
+	IsLastPage bool                            `json:"isLastPage,omitempty"` // Indicates if this is the last page.
+	Values     []*RequestTypeGroupsScheme      `json:"values,omitempty"`     // The project request types in the page.
+	Links      *RequestTypeGroupPageLinkScheme `json:"_links,omitempty"`     // The links related to the page.
 }
 
-// ProjectRequestTypeGroupPageLinkScheme represents the links related to a page of project request type groups.
-type ProjectRequestTypeGroupPageLinkScheme struct {
+// RequestTypeGroupPageLinkScheme represents the links related to a page of project request type groups.
+type RequestTypeGroupPageLinkScheme struct {
 	Base    string `json:"base,omitempty"`    // The base link of the page.
 	Context string `json:"context,omitempty"` // The context link of the page.
 	Next    string `json:"next,omitempty"`    // The next link of the page.

@@ -41,14 +41,22 @@ type ProjectRequestTypePageLinkScheme struct {
 
 // RequestTypeScheme represents a request type.
 type RequestTypeScheme struct {
-	ID            string   `json:"id,omitempty"`            // The ID of the request type.
-	Name          string   `json:"name,omitempty"`          // The name of the request type.
-	Description   string   `json:"description,omitempty"`   // The description of the request type.
-	HelpText      string   `json:"helpText,omitempty"`      // The help text of the request type.
-	IssueTypeID   string   `json:"issueTypeId,omitempty"`   // The issue type ID of the request type.
-	ServiceDeskID string   `json:"serviceDeskId,omitempty"` // The service desk ID of the request type.
-	GroupIds      []string `json:"groupIds,omitempty"`      // The group IDs of the request type.
-	Expands       []string `json:"_expands,omitempty"`      // The fields to expand in the request type.
+	ID            string                  `json:"id,omitempty"`            // The ID of the request type.
+	Name          string                  `json:"name,omitempty"`          // The name of the request type.
+	Description   string                  `json:"description,omitempty"`   // The description of the request type.
+	HelpText      string                  `json:"helpText,omitempty"`      // The help text of the request type.
+	Practice      string                  `json:"practice,omitempty"`      // The practice of the request type.
+	IssueTypeID   string                  `json:"issueTypeId,omitempty"`   // The issue type ID of the request type.
+	ServiceDeskID string                  `json:"serviceDeskId,omitempty"` // The service desk ID of the request type.
+	PortalID      string                  `json:"portalId,omitempty"`      // The portal ID of the request type.
+	GroupIDs      []string                `json:"groupIds,omitempty"`      // The group IDs of the request type.
+	Expands       []string                `json:"_expands,omitempty"`      // The fields to expand in the request type.
+	Links         *RequestTypeLinksScheme `json:"_links,omitempty"`        // The links related to the request type.
+}
+
+// RequestTypeLinksScheme represents the links related to a request type.
+type RequestTypeLinksScheme struct {
+	Self string `json:"self,omitempty"` // The self link the request type.
 }
 
 // RequestTypePayloadScheme represents a request type payload.

@@ -358,7 +358,7 @@ func (c *CustomFields) Cascading(customFieldID, parent, child string) error {
 }
 
 // Raw adds an untyped field to the collection.
-func (c *CustomFields) Raw(customFieldID string, value any) error {
+func (c *CustomFields) Raw(customFieldID string, value interface{}) error {
 
 	if len(customFieldID) == 0 {
 		return ErrNoFieldIDError

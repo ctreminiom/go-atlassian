@@ -117,8 +117,8 @@ type IssueFieldsSchemeV2 struct {
 	StatusCategoryChangeDate string                          `json:"statuscategorychangedate,omitempty"`
 	LastViewed               string                          `json:"lastViewed,omitempty"`
 	Summary                  string                          `json:"summary,omitempty"`
-	Created                  time.Time                       `json:"created,omitempty"`
-	Updated                  time.Time                       `json:"updated,omitempty"`
+	Created                  *time.Time                      `json:"created,omitempty"`
+	Updated                  *time.Time                      `json:"updated,omitempty"`
 	Labels                   []string                        `json:"labels,omitempty"`
 	Status                   *StatusScheme                   `json:"status,omitempty"`
 	Description              string                          `json:"description,omitempty"`

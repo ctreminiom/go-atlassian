@@ -94,11 +94,11 @@ func (c *CustomFields) Text(customFieldID, textValue string) error {
 		return ErrNoTextTypeError
 	}
 
-	var urlNode = map[string]interface{}{}
-	urlNode[customFieldID] = textValue
+	var textNode = map[string]interface{}{}
+	textNode[customFieldID] = textValue
 
 	var fieldsNode = map[string]interface{}{}
-	fieldsNode["fields"] = urlNode
+	fieldsNode["fields"] = textNode
 
 	c.Fields = append(c.Fields, fieldsNode)
 	return nil
@@ -285,11 +285,11 @@ func (c *CustomFields) Number(customFieldID string, numberValue float64) error {
 		return ErrNoFieldIDError
 	}
 
-	var urlNode = map[string]interface{}{}
-	urlNode[customFieldID] = numberValue
+	var numberNode = map[string]interface{}{}
+	numberNode[customFieldID] = numberValue
 
 	var fieldsNode = map[string]interface{}{}
-	fieldsNode["fields"] = urlNode
+	fieldsNode["fields"] = numberNode
 
 	c.Fields = append(c.Fields, fieldsNode)
 	return nil
@@ -352,6 +352,27 @@ func (c *CustomFields) Cascading(customFieldID, parent, child string) error {
 
 	var fieldsNode = map[string]interface{}{}
 	fieldsNode["fields"] = fieldNode
+
+	c.Fields = append(c.Fields, fieldsNode)
+	return nil
+}
+
+// Raw adds an untyped field to the collection.
+func (c *CustomFields) Raw(customFieldID string, value any) error {
+
+	if len(customFieldID) == 0 {
+		return ErrNoFieldIDError
+	}
+
+	if value == nil {
+		return ErrNoValueTypeError
+	}
+
+	var valueNode = map[string]interface{}{}
+	valueNode[customFieldID] = value
+
+	var fieldsNode = map[string]interface{}{}
+	fieldsNode["fields"] = valueNode
 
 	c.Fields = append(c.Fields, fieldsNode)
 	return nil

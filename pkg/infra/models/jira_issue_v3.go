@@ -1,8 +1,10 @@
 package models
 
 import (
-	"dario.cat/mergo"
+	"bytes"
 	"encoding/json"
+
+	"dario.cat/mergo"
 )
 
 // IssueScheme represents an issue in Jira.
@@ -124,6 +126,155 @@ type IssueFieldsScheme struct {
 	Security                 *SecurityScheme            `json:"security,omitempty"`                 // The security level of the issue.
 	Attachment               []*AttachmentScheme        `json:"attachment,omitempty"`               // The attachments of the issue.
 	Worklog                  *IssueWorklogADFPageScheme `json:"worklog,omitempty"`                  // The worklog of the issue.
+
+	customFields map[string]*json.RawMessage
+}
+
+// UnmarshalJSON implement custom UnmarshalJSON to capture unknown fields.
+func (i *IssueFieldsScheme) UnmarshalJSON(data []byte) error {
+	type Alias IssueFieldsScheme // Create an alias to prevent infinite recursion
+
+	// Create an alias instance to unmarshal known fields
+	alias := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(i),
+	}
+
+	// Unmarshal known fields
+	if err := json.Unmarshal(data, &alias); err != nil {
+		return err
+	}
+
+	// Unmarshal into a map to capture unknown fields
+	var rawMap map[string]*json.RawMessage
+	if err := json.Unmarshal(data, &rawMap); err != nil {
+		return err
+	}
+
+	// Remove known fields from the map
+	delete(rawMap, "parent")
+	delete(rawMap, "issuetype")
+	delete(rawMap, "issuelinks")
+	delete(rawMap, "watches")
+	delete(rawMap, "votes")
+	delete(rawMap, "versions")
+	delete(rawMap, "project")
+	delete(rawMap, "fixVersions")
+	delete(rawMap, "priority")
+	delete(rawMap, "components")
+	delete(rawMap, "creator")
+	delete(rawMap, "reporter")
+	delete(rawMap, "assignee")
+	delete(rawMap, "resolution")
+	delete(rawMap, "resolutiondate")
+	delete(rawMap, "workratio")
+	delete(rawMap, "statuscategorychangedate")
+	delete(rawMap, "lastViewed")
+	delete(rawMap, "summary")
+	delete(rawMap, "created")
+	delete(rawMap, "updated")
+	delete(rawMap, "labels")
+	delete(rawMap, "status")
+	delete(rawMap, "description")
+	delete(rawMap, "comment")
+	delete(rawMap, "subtasks")
+	delete(rawMap, "security")
+	delete(rawMap, "attachment")
+	delete(rawMap, "worklog")
+
+	// Save unknown fields into the Extras map
+	i.customFields = rawMap
+	return nil
+}
+
+// MarshalJSON implement custom MarshalJSON to handle custom fields.
+func (i IssueFieldsScheme) MarshalJSON() ([]byte, error) {
+	type Alias IssueFieldsScheme // Create an alias to prevent infinite recursion
+
+	// Create an alias instance to marshal known fields
+	alias := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(&i),
+	}
+
+	// Marshal known fields
+	knownFields, err := json.Marshal(alias)
+	if err != nil {
+		return nil, err
+	}
+
+	// Marshal unknown fields
+	extras, err := json.Marshal(i.customFields)
+	if err != nil {
+		return nil, err
+	}
+
+	// Merge known fields and extras
+	var knownFieldsMap, extrasMap map[string]*json.RawMessage
+	err = json.Unmarshal(knownFields, &knownFieldsMap)
+	if err != nil {
+		return nil, err
+	}
+	err = json.Unmarshal(extras, &extrasMap)
+	if err != nil {
+		return nil, err
+	}
+
+	for key, value := range extrasMap {
+		knownFieldsMap[key] = value
+	}
+
+	return json.Marshal(knownFieldsMap)
+}
+
+func (i *IssueFieldsScheme) ParseString(customField string) (string, error) {
+	field, ok := i.customFields[customField]
+	if !ok {
+		return "", ErrNoCustomFieldError
+	}
+
+	b, err := json.Marshal(struct {
+		Fields struct {
+			CustomField *json.RawMessage `json:"customfield,omitempty"`
+		} `json:"fields"`
+	}{
+		Fields: struct {
+			CustomField *json.RawMessage `json:"customfield,omitempty"`
+		}{
+			CustomField: field,
+		},
+	})
+	if err != nil {
+		return "", err
+	}
+
+	return ParseStringCustomField(*bytes.NewBuffer(b), "customfield")
+}
+
+func (i *IssueFieldsScheme) ParseFloat(customField string) (float64, error) {
+	field, ok := i.customFields[customField]
+	if !ok {
+		return 0, ErrNoCustomFieldError
+	}
+
+	b, err := json.Marshal(struct {
+		Fields struct {
+			CustomField *json.RawMessage `json:"customfield,omitempty"`
+		} `json:"fields"`
+	}{
+		Fields: struct {
+			CustomField *json.RawMessage `json:"customfield,omitempty"`
+		}{
+			CustomField: field,
+		},
+	})
+	if err != nil {
+		return 0, err
+	}
+
+	return ParseFloatCustomField(*bytes.NewBuffer(b), "customfield")
 }
 
 // IssueTransitionScheme represents a transition of an issue in Jira.

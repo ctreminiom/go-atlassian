@@ -1,18 +1,21 @@
 package models
 
 import (
-	"dario.cat/mergo"
 	"encoding/json"
+	"time"
+
+	"dario.cat/mergo"
 )
 
 // IssueScheme represents an issue in Jira.
 type IssueScheme struct {
-	ID          string                   `json:"id,omitempty"`
-	Key         string                   `json:"key,omitempty"`
-	Self        string                   `json:"self,omitempty"`
-	Transitions []*IssueTransitionScheme `json:"transitions,omitempty"`
-	Changelog   *IssueChangelogScheme    `json:"changelog,omitempty"`
-	Fields      *IssueFieldsScheme       `json:"fields,omitempty"`
+	ID             string                   `json:"id,omitempty"`
+	Key            string                   `json:"key,omitempty"`
+	Self           string                   `json:"self,omitempty"`
+	Transitions    []*IssueTransitionScheme `json:"transitions,omitempty"`
+	Changelog      *IssueChangelogScheme    `json:"changelog,omitempty"`
+	Fields         *IssueFieldsScheme       `json:"fields,omitempty"`
+	RenderedFields map[string]interface{}   `json:"renderedFields,omitempty"`
 }
 
 // MergeCustomFields merges the custom fields into the issue.
@@ -114,8 +117,8 @@ type IssueFieldsScheme struct {
 	StatusCategoryChangeDate string                     `json:"statuscategorychangedate,omitempty"` // The date the status category changed.
 	LastViewed               string                     `json:"lastViewed,omitempty"`               // The last time the issue was viewed.
 	Summary                  string                     `json:"summary,omitempty"`                  // The summary of the issue.
-	Created                  string                     `json:"created,omitempty"`                  // The date the issue was created.
-	Updated                  string                     `json:"updated,omitempty"`                  // The date the issue was last updated.
+	Created                  time.Time                  `json:"created,omitempty"`                  // The date the issue was created.
+	Updated                  time.Time                  `json:"updated,omitempty"`                  // The date the issue was last updated.
 	Labels                   []string                   `json:"labels,omitempty"`                   // The labels associated with the issue.
 	Status                   *StatusScheme              `json:"status,omitempty"`                   // The status of the issue.
 	Description              *CommentNodeScheme         `json:"description,omitempty"`              // The description of the issue.

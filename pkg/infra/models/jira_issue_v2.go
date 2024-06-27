@@ -1,18 +1,21 @@
 package models
 
 import (
-	"dario.cat/mergo"
 	"encoding/json"
+	"time"
+
+	"dario.cat/mergo"
 )
 
 // IssueSchemeV2 represents the scheme of an issue in Jira version 2.
 type IssueSchemeV2 struct {
-	ID          string                   `json:"id,omitempty"`          // The ID of the issue.
-	Key         string                   `json:"key,omitempty"`         // The key of the issue.
-	Self        string                   `json:"self,omitempty"`        // The URL of the issue.
-	Transitions []*IssueTransitionScheme `json:"transitions,omitempty"` // The transitions of the issue.
-	Changelog   *IssueChangelogScheme    `json:"changelog,omitempty"`   // The changelog of the issue.
-	Fields      *IssueFieldsSchemeV2     `json:"fields,omitempty"`      // The fields of the issue.
+	ID             string                   `json:"id,omitempty"`          // The ID of the issue.
+	Key            string                   `json:"key,omitempty"`         // The key of the issue.
+	Self           string                   `json:"self,omitempty"`        // The URL of the issue.
+	Transitions    []*IssueTransitionScheme `json:"transitions,omitempty"` // The transitions of the issue.
+	Changelog      *IssueChangelogScheme    `json:"changelog,omitempty"`   // The changelog of the issue.
+	Fields         *IssueFieldsSchemeV2     `json:"fields,omitempty"`      // The fields of the issue.
+	RenderedFields map[string]interface{}   `json:"renderedFields,omitempty"`
 }
 
 // MergeCustomFields merges custom fields into the issue scheme.
@@ -114,8 +117,8 @@ type IssueFieldsSchemeV2 struct {
 	StatusCategoryChangeDate string                          `json:"statuscategorychangedate,omitempty"`
 	LastViewed               string                          `json:"lastViewed,omitempty"`
 	Summary                  string                          `json:"summary,omitempty"`
-	Created                  string                          `json:"created,omitempty"`
-	Updated                  string                          `json:"updated,omitempty"`
+	Created                  time.Time                       `json:"created,omitempty"`
+	Updated                  time.Time                       `json:"updated,omitempty"`
 	Labels                   []string                        `json:"labels,omitempty"`
 	Status                   *StatusScheme                   `json:"status,omitempty"`
 	Description              string                          `json:"description,omitempty"`

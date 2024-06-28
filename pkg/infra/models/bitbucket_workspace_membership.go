@@ -45,27 +45,27 @@ type WorkspaceMembershipLinksScheme struct {
 // CreatedOn is the creation time of the account.
 // DisplayName is the display name of the account.
 // Username is the username of the account.
-// Uuid is the unique identifier of the account.
+// UUID is the unique identifier of the account.
 // Type is the type of the account.
-// AccountId is the account ID of the account.
+// AccountID is the account ID of the account.
 // Nickname is the nickname of the account.
 type BitbucketAccountScheme struct {
 	Links       *BitbucketAccountLinksScheme `json:"links,omitempty"`        // The links related to the account.
 	CreatedOn   string                       `json:"created_on,omitempty"`   // The creation time of the account.
 	DisplayName string                       `json:"display_name,omitempty"` // The display name of the account.
 	Username    string                       `json:"username,omitempty"`     // The username of the account.
-	Uuid        string                       `json:"uuid,omitempty"`         // The unique identifier of the account.
+	UUID        string                       `json:"uuid,omitempty"`         // The unique identifier of the account.
 	Type        string                       `json:"type,omitempty"`         // The type of the account.
-	AccountId   string                       `json:"account_id,omitempty"`   // The account ID of the account.
+	AccountID   string                       `json:"account_id,omitempty"`   // The account ID of the account.
 	Nickname    string                       `json:"nickname,omitempty"`     // The nickname of the account.
 }
 
 // BitbucketAccountLinksScheme represents a collection of links related to a Bitbucket account.
 // Avatar is the link to the account's avatar.
 // Self is the link to the account itself.
-// Html is the link to the account's HTML page.
+// HTML is the link to the account's HTML page.
 type BitbucketAccountLinksScheme struct {
 	Avatar *BitbucketLinkScheme `json:"avatar,omitempty"` // The link to the account's avatar.
 	Self   *BitbucketLinkScheme `json:"self,omitempty"`   // The link to the account itself.
-	Html   *BitbucketLinkScheme `json:"html,omitempty"`   // The link to the account's HTML page.
+	HTML   *BitbucketLinkScheme `json:"html,omitempty"`   // The link to the account's HTML page.
 }

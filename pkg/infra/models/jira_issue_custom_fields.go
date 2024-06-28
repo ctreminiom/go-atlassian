@@ -1906,7 +1906,7 @@ func ParseRequestTypeCustomField(buffer bytes.Buffer, customField string) (*Cust
 //   - error: An error if there was a problem parsing the custom field data or if the JSON data
 //     did not conform to the expected structure.
 //
-// Docs: https://docs.go-atlassian.io/cookbooks/extract-customfields-from-issue-s#parse-assets-customfields
+// Docs: https://docs.go-atlassian.io/cookbooks/extract-customfields-from-issue-s#parse-requesttype-customfields
 func ParseRequestTypeCustomFields(buffer bytes.Buffer, customField string) (map[string]*CustomFieldRequestTypeScheme, error) {
 
 	raw := gjson.ParseBytes(buffer.Bytes())

@@ -3,14 +3,12 @@ package internal
 import (
 	"context"
 	"errors"
-	"net/http"
-	"testing"
-
-	"github.com/stretchr/testify/assert"
-
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
+	"github.com/stretchr/testify/assert"
+	"net/http"
+	"testing"
 )
 
 func Test_internalIssueADFServiceImpl_Delete(t *testing.T) {
@@ -549,9 +547,7 @@ func Test_internalIssueADFServiceImpl_Create(t *testing.T) {
 			"customfield_10052": []map[string]interface{}{map[string]interface{}{"name": "jira-administrators"}, map[string]interface{}{"name": "jira-administrators-system"}},
 			"issuetype":         map[string]interface{}{"name": "Story"},
 			"project":           map[string]interface{}{"id": "10000"},
-			"summary":           "New summary test",
-			"duedate":           "",
-		},
+			"summary":           "New summary test"},
 	}
 
 	type fields struct {

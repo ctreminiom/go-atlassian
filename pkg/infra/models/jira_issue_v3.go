@@ -127,6 +127,7 @@ type IssueFieldsScheme struct {
 	Security                 *SecurityScheme            `json:"security,omitempty"`                 // The security level of the issue.
 	Attachment               []*AttachmentScheme        `json:"attachment,omitempty"`               // The attachments of the issue.
 	Worklog                  *IssueWorklogADFPageScheme `json:"worklog,omitempty"`                  // The worklog of the issue.
+	DueDate                  string                     `json:"duedate"`                            // The due date of the issue.
 }
 
 // IssueTransitionScheme represents a transition of an issue in Jira.

@@ -126,7 +126,7 @@ type IssueFieldsSchemeV2 struct {
 	Subtasks                 []*IssueScheme                  `json:"subtasks,omitempty"`
 	Security                 *SecurityScheme                 `json:"security,omitempty"`
 	Worklog                  *IssueWorklogRichTextPageScheme `json:"worklog,omitempty"`
-	DueDate                  string                          `json:"duedate"`
+	DueDate                  string                          `json:"duedate,omitempty"`
 }
 
 // ParentScheme represents the parent of an issue in Jira.

@@ -74,24 +74,26 @@ type RequestTypeFieldScheme struct {
 	Required      bool                           `json:"required,omitempty"`      // Indicates if the request type field is required.
 	DefaultValues []*RequestTypeFieldValueScheme `json:"defaultValues,omitempty"` // The default values of the request type field.
 	ValidValues   []*RequestTypeFieldValueScheme `json:"validValues,omitempty"`   // The valid values of the request type field.
+	PresetValues  []string                       `json:"presetValues,omitempty"`  // The preset values of the request type field.
 	JiraSchema    *RequestTypeJiraSchema         `json:"jiraSchema,omitempty"`    // The Jira schema of the request type field.
 	Visible       bool                           `json:"visible,omitempty"`       // Indicates if the request type field is visible.
 }
 
 // RequestTypeFieldValueScheme represents a field value of a request type field.
 type RequestTypeFieldValueScheme struct {
-	Value    string        `json:"value,omitempty"`    // The value of the request type field value.
-	Label    string        `json:"label,omitempty"`    // The label of the request type field value.
-	Children []interface{} `json:"children,omitempty"` // The children of the request type field value.
+	Value    string                         `json:"value,omitempty"`    // The value of the request type field value.
+	Label    string                         `json:"label,omitempty"`    // The label of the request type field value.
+	Children []*RequestTypeFieldValueScheme `json:"children,omitempty"` // The children of the request type field value.
 }
 
 // RequestTypeJiraSchema represents the Jira schema of a request type field.
 type RequestTypeJiraSchema struct {
-	Type     string `json:"type,omitempty"`     // The type of the Jira schema.
-	Items    string `json:"items,omitempty"`    // The items of the Jira schema.
-	System   string `json:"system,omitempty"`   // The system of the Jira schema.
-	Custom   string `json:"custom,omitempty"`   // The custom of the Jira schema.
-	CustomID int    `json:"customId,omitempty"` // The custom ID of the Jira schema.
+	Type          string            `json:"type,omitempty"`          // The type of the Jira schema.
+	Items         string            `json:"items,omitempty"`         // The items of the Jira schema.
+	System        string            `json:"system,omitempty"`        // The system of the Jira schema.
+	Custom        string            `json:"custom,omitempty"`        // The custom of the Jira schema.
+	CustomID      int               `json:"customId,omitempty"`      // The custom ID of the Jira schema.
+	Configuration map[string]string `json:"configuration,omitempty"` // The configuration of the Jira schema.
 }
 
 // RequestTypeGroupPageScheme represents a page of project request type groups.

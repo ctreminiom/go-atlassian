@@ -14,7 +14,7 @@ type BitbucketProjectPageScheme struct {
 // BitbucketProjectScheme represents a Bitbucket project.
 type BitbucketProjectScheme struct {
 	Links                   *BitbucketProjectLinksScheme `json:"links,omitempty"`                      // The links related to the project.
-	Uuid                    string                       `json:"uuid,omitempty"`                       // The UUID of the project.
+	UUID                    string                       `json:"uuid,omitempty"`                       // The UUID of the project.
 	Key                     string                       `json:"key,omitempty"`                        // The key of the project.
 	Name                    string                       `json:"name,omitempty"`                       // The name of the project.
 	Description             string                       `json:"description,omitempty"`                // The description of the project.
@@ -26,6 +26,6 @@ type BitbucketProjectScheme struct {
 
 // BitbucketProjectLinksScheme represents the links related to a Bitbucket project.
 type BitbucketProjectLinksScheme struct {
-	Html   *BitbucketLinkScheme `json:"html,omitempty"`   // The HTML link of the project.
+	HTML   *BitbucketLinkScheme `json:"html,omitempty"`   // The HTML link of the project.
 	Avatar *BitbucketLinkScheme `json:"avatar,omitempty"` // The avatar link of the project.
 }

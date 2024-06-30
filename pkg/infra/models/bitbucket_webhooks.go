@@ -2,12 +2,12 @@ package models
 
 // WebhookSubscriptionPayloadScheme represents the payload for a webhook subscription.
 // Description is the description of the webhook subscription.
-// Url is the URL of the webhook subscription.
+// URL is the URL of the webhook subscription.
 // Active indicates if the webhook subscription is active.
 // Events is a slice of the events for the webhook subscription.
 type WebhookSubscriptionPayloadScheme struct {
 	Description string   `json:"description,omitempty"` // The description of the webhook subscription.
-	Url         string   `json:"url,omitempty"`         // The URL of the webhook subscription.
+	URL         string   `json:"url,omitempty"`         // The URL of the webhook subscription.
 	Active      bool     `json:"active,omitempty"`      // Indicates if the webhook subscription is active.
 	Events      []string `json:"events,omitempty"`      // The events for the webhook subscription.
 }

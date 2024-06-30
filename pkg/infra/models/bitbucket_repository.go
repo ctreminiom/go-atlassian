@@ -30,10 +30,10 @@ type RepositoryPermissionScheme struct {
 
 // RepositoryScheme represents a repository.
 // Type is the type of the repository.
-// Uuid is the unique identifier of the repository.
+// UUID is the unique identifier of the repository.
 // FullName is the full name of the repository.
 // IsPrivate indicates if the repository is private.
-// Scm is the source control management system used by the repository.
+// SCM is the source control management system used by the repository.
 // Name is the name of the repository.
 // Description is the description of the repository.
 // CreatedOn is the creation time of the repository.
@@ -49,10 +49,10 @@ type RepositoryPermissionScheme struct {
 // Links is a collection of links related to the repository.
 type RepositoryScheme struct {
 	Type        string                  `json:"type,omitempty"`        // The type of the repository.
-	Uuid        string                  `json:"uuid,omitempty"`        // The unique identifier of the repository.
+	UUID        string                  `json:"uuid,omitempty"`        // The unique identifier of the repository.
 	FullName    string                  `json:"full_name,omitempty"`   // The full name of the repository.
 	IsPrivate   bool                    `json:"is_private,omitempty"`  // Indicates if the repository is private.
-	Scm         string                  `json:"scm,omitempty"`         // The source control management system used by the repository.
+	SCM         string                  `json:"scm,omitempty"`         // The source control management system used by the repository.
 	Name        string                  `json:"name,omitempty"`        // The name of the repository.
 	Description string                  `json:"description,omitempty"` // The description of the repository.
 	CreatedOn   string                  `json:"created_on,omitempty"`  // The creation time of the repository.
@@ -70,7 +70,7 @@ type RepositoryScheme struct {
 
 // RepositoryLinksScheme represents a collection of links related to a repository.
 // Self is the link to the repository itself.
-// Html is the link to the repository's HTML page.
+// HTML is the link to the repository's HTML page.
 // Avatar is the link to the repository's avatar.
 // PullRequests is the link to the repository's pull requests.
 // Commits is the link to the repository's commits.
@@ -81,7 +81,7 @@ type RepositoryScheme struct {
 // Hooks is the link to the repository's hooks.
 type RepositoryLinksScheme struct {
 	Self         *BitbucketLinkScheme   `json:"self,omitempty"`         // The link to the repository itself.
-	Html         *BitbucketLinkScheme   `json:"html,omitempty"`         // The link to the repository's HTML page.
+	HTML         *BitbucketLinkScheme   `json:"html,omitempty"`         // The link to the repository's HTML page.
 	Avatar       *BitbucketLinkScheme   `json:"avatar,omitempty"`       // The link to the repository's avatar.
 	PullRequests *BitbucketLinkScheme   `json:"pullrequests,omitempty"` // The link to the repository's pull requests.
 	Commits      *BitbucketLinkScheme   `json:"commits,omitempty"`      // The link to the repository's commits.

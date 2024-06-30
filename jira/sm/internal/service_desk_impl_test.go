@@ -3,16 +3,18 @@ package internal
 import (
 	"context"
 	"errors"
-	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/service"
-	"github.com/ctreminiom/go-atlassian/service/mocks"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
 	"io"
 	"net/http"
 	"os"
 	"path/filepath"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
+
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/service"
+	"github.com/ctreminiom/go-atlassian/service/mocks"
 )
 
 func Test_internalServiceDeskImpl_Gets(t *testing.T) {
@@ -156,7 +158,7 @@ func Test_internalServiceDeskImpl_Get(t *testing.T) {
 
 	type args struct {
 		ctx           context.Context
-		serviceDeskID int
+		serviceDeskID string
 	}
 
 	testCases := []struct {
@@ -171,7 +173,7 @@ func Test_internalServiceDeskImpl_Get(t *testing.T) {
 			name: "when the parameters are correct",
 			args: args{
 				ctx:           context.Background(),
-				serviceDeskID: 10001,
+				serviceDeskID: "10001",
 			},
 			on: func(fields *fields) {
 
@@ -198,7 +200,7 @@ func Test_internalServiceDeskImpl_Get(t *testing.T) {
 			name: "when the http call cannot be executed",
 			args: args{
 				ctx:           context.Background(),
-				serviceDeskID: 10001,
+				serviceDeskID: "10001",
 			},
 			on: func(fields *fields) {
 
@@ -227,7 +229,7 @@ func Test_internalServiceDeskImpl_Get(t *testing.T) {
 			name: "when the request cannot be created",
 			args: args{
 				ctx:           context.Background(),
-				serviceDeskID: 10001,
+				serviceDeskID: "10001",
 			},
 			on: func(fields *fields) {
 
@@ -305,7 +307,7 @@ func Test_internalServiceDeskImpl_Attach(t *testing.T) {
 
 	type args struct {
 		ctx           context.Context
-		serviceDeskID int
+		serviceDeskID string
 		fileName      string
 		file          io.Reader
 	}
@@ -322,7 +324,7 @@ func Test_internalServiceDeskImpl_Attach(t *testing.T) {
 			name: "when the parameters are correct",
 			args: args{
 				ctx:           context.Background(),
-				serviceDeskID: 10001,
+				serviceDeskID: "10001",
 				fileName:      "LICENSE",
 				file:          fileMocked,
 			},
@@ -351,7 +353,7 @@ func Test_internalServiceDeskImpl_Attach(t *testing.T) {
 			name: "when the http call cannot be executed",
 			args: args{
 				ctx:           context.Background(),
-				serviceDeskID: 10001,
+				serviceDeskID: "10001",
 				fileName:      "LICENSE",
 				file:          fileMocked,
 			},
@@ -382,7 +384,7 @@ func Test_internalServiceDeskImpl_Attach(t *testing.T) {
 			name: "when the request cannot be created",
 			args: args{
 				ctx:           context.Background(),
-				serviceDeskID: 10001,
+				serviceDeskID: "10001",
 				fileName:      "LICENSE",
 				file:          fileMocked,
 			},
@@ -417,7 +419,7 @@ func Test_internalServiceDeskImpl_Attach(t *testing.T) {
 			name: "when the file name is not provided",
 			args: args{
 				ctx:           context.Background(),
-				serviceDeskID: 10001,
+				serviceDeskID: "10001",
 			},
 			Err:     model.ErrNoFileNameError,
 			wantErr: true,
@@ -427,7 +429,7 @@ func Test_internalServiceDeskImpl_Attach(t *testing.T) {
 			name: "when the file reader is not provided",
 			args: args{
 				ctx:           context.Background(),
-				serviceDeskID: 10001,
+				serviceDeskID: "10001",
 				fileName:      "LICENSE",
 			},
 			Err:     model.ErrNoFileReaderError,

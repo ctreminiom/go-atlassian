@@ -2,8 +2,9 @@ package sm
 
 import (
 	"context"
-	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"io"
+
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 )
 
 type ServiceDeskConnector interface {
@@ -24,12 +25,12 @@ type ServiceDeskConnector interface {
 	// GET /rest/servicedeskapi/servicedesk/{serviceDeskId}
 	//
 	// https://docs.go-atlassian.io/jira-service-management-cloud/request/service-desk#get-service-desk-by-id
-	Get(ctx context.Context, serviceDeskID int) (*model.ServiceDeskScheme, *model.ResponseScheme, error)
+	Get(ctx context.Context, serviceDeskID string) (*model.ServiceDeskScheme, *model.ResponseScheme, error)
 
 	// Attach one temporary attachments to a service desk
 	//
 	// POST /rest/servicedeskapi/servicedesk/{serviceDeskId}/attachTemporaryFile
 	//
 	// https://docs.go-atlassian.io/jira-service-management-cloud/request/service-desk#attach-temporary-file
-	Attach(ctx context.Context, serviceDeskID int, fileName string, file io.Reader) (*model.ServiceDeskTemporaryFileScheme, *model.ResponseScheme, error)
+	Attach(ctx context.Context, serviceDeskID string, fileName string, file io.Reader) (*model.ServiceDeskTemporaryFileScheme, *model.ResponseScheme, error)
 }

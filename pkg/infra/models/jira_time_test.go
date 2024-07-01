@@ -31,7 +31,7 @@ func TestDateScheme_MarshalJSON(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := tt.t.MarshalJSON()
-			if !tt.wantErr(t, err, fmt.Sprintf("MarshalJSON()")) {
+			if !tt.wantErr(t, err, "MarshalJSON()") {
 				return
 			}
 			assert.Equalf(t, string(tt.want), string(got), "MarshalJSON()")
@@ -106,7 +106,7 @@ func TestDateTimeScheme_MarshalJSON(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := tt.t.MarshalJSON()
-			if !tt.wantErr(t, err, fmt.Sprintf("MarshalJSON()")) {
+			if !tt.wantErr(t, err, "MarshalJSON()") {
 				return
 			}
 			assert.Equalf(t, string(tt.want), string(got), "MarshalJSON()")

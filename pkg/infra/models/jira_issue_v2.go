@@ -2,7 +2,6 @@ package models
 
 import (
 	"encoding/json"
-	"time"
 
 	"dario.cat/mergo"
 )
@@ -112,13 +111,13 @@ type IssueFieldsSchemeV2 struct {
 	Reporter                 *UserScheme                     `json:"reporter,omitempty"`
 	Assignee                 *UserScheme                     `json:"assignee,omitempty"`
 	Resolution               *ResolutionScheme               `json:"resolution,omitempty"`
-	Resolutiondate           string                          `json:"resolutiondate,omitempty"`
+	Resolutiondate           *DateTimeScheme                 `json:"resolutiondate,omitempty"`
 	Workratio                int                             `json:"workratio,omitempty"`
-	StatusCategoryChangeDate string                          `json:"statuscategorychangedate,omitempty"`
+	StatusCategoryChangeDate *DateTimeScheme                 `json:"statuscategorychangedate,omitempty"`
 	LastViewed               string                          `json:"lastViewed,omitempty"`
 	Summary                  string                          `json:"summary,omitempty"`
-	Created                  *time.Time                      `json:"created,omitempty"`
-	Updated                  *time.Time                      `json:"updated,omitempty"`
+	Created                  *DateTimeScheme                 `json:"created,omitempty"`
+	Updated                  *DateTimeScheme                 `json:"updated,omitempty"`
 	Labels                   []string                        `json:"labels,omitempty"`
 	Status                   *StatusScheme                   `json:"status,omitempty"`
 	Description              string                          `json:"description,omitempty"`
@@ -126,7 +125,7 @@ type IssueFieldsSchemeV2 struct {
 	Subtasks                 []*IssueScheme                  `json:"subtasks,omitempty"`
 	Security                 *SecurityScheme                 `json:"security,omitempty"`
 	Worklog                  *IssueWorklogRichTextPageScheme `json:"worklog,omitempty"`
-	DueDate                  string                          `json:"duedate,omitempty"`
+	DueDate                  *DateScheme                     `json:"duedate,omitempty"`
 }
 
 // ParentScheme represents the parent of an issue in Jira.

@@ -75,10 +75,10 @@ type CustomerRequestServiceDeskScheme struct {
 
 // CustomerRequestDateScheme represents a date for a customer request.
 type CustomerRequestDateScheme struct {
-	Iso8601     string `json:"iso8601,omitempty"`     // The ISO 8601 format of the date.
-	Jira        string `json:"jira,omitempty"`        // The Jira format of the date.
-	Friendly    string `json:"friendly,omitempty"`    // The friendly format of the date.
-	EpochMillis int    `json:"epochMillis,omitempty"` // The epoch milliseconds of the date.
+	Iso8601     DateTimeScheme `json:"iso8601,omitempty"`     // The ISO 8601 format of the date.
+	Jira        string         `json:"jira,omitempty"`        // The Jira format of the date.
+	Friendly    string         `json:"friendly,omitempty"`    // The friendly format of the date.
+	EpochMillis int            `json:"epochMillis,omitempty"` // The epoch milliseconds of the date.
 }
 
 // CustomerRequestReporterScheme represents a reporter for a customer request.
@@ -108,10 +108,10 @@ type CustomerRequestCurrentStatusScheme struct {
 
 // CustomerRequestCurrentStatusDateScheme represents a date for a customer request current status.
 type CustomerRequestCurrentStatusDateScheme struct {
-	Iso8601     string `json:"iso8601,omitempty"`     // The ISO 8601 format of the date.
-	Jira        string `json:"jira,omitempty"`        // The Jira format of the date.
-	Friendly    string `json:"friendly,omitempty"`    // The friendly format of the date.
-	EpochMillis int    `json:"epochMillis,omitempty"` // The epoch milliseconds of the date.
+	Iso8601     DateTimeScheme `json:"iso8601,omitempty"`     // The ISO 8601 format of the date.
+	Jira        string         `json:"jira,omitempty"`        // The Jira format of the date.
+	Friendly    string         `json:"friendly,omitempty"`    // The friendly format of the date.
+	EpochMillis int            `json:"epochMillis,omitempty"` // The epoch milliseconds of the date.
 }
 
 // CustomerRequestLinksScheme represents the links related to a customer request.

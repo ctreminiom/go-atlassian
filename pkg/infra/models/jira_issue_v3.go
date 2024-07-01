@@ -2,7 +2,6 @@ package models
 
 import (
 	"encoding/json"
-	"time"
 
 	"dario.cat/mergo"
 )
@@ -112,13 +111,13 @@ type IssueFieldsScheme struct {
 	Reporter                 *UserScheme                `json:"reporter,omitempty"`                 // The user who reported the issue.
 	Assignee                 *UserScheme                `json:"assignee,omitempty"`                 // The user assigned to the issue.
 	Resolution               *ResolutionScheme          `json:"resolution,omitempty"`               // The resolution of the issue.
-	Resolutiondate           string                     `json:"resolutiondate,omitempty"`           // The date the issue was resolved.
+	Resolutiondate           *DateTimeScheme            `json:"resolutiondate,omitempty"`           // The date the issue was resolved.
 	Workratio                int                        `json:"workratio,omitempty"`                // The work ratio of the issue.
-	StatusCategoryChangeDate string                     `json:"statuscategorychangedate,omitempty"` // The date the status category changed.
+	StatusCategoryChangeDate *DateTimeScheme            `json:"statuscategorychangedate,omitempty"` // The date the status category changed.
 	LastViewed               string                     `json:"lastViewed,omitempty"`               // The last time the issue was viewed.
 	Summary                  string                     `json:"summary,omitempty"`                  // The summary of the issue.
-	Created                  *time.Time                 `json:"created,omitempty"`                  // The date the issue was created.
-	Updated                  *time.Time                 `json:"updated,omitempty"`                  // The date the issue was last updated.
+	Created                  *DateTimeScheme            `json:"created,omitempty"`                  // The date the issue was created.
+	Updated                  *DateTimeScheme            `json:"updated,omitempty"`                  // The date the issue was last updated.
 	Labels                   []string                   `json:"labels,omitempty"`                   // The labels associated with the issue.
 	Status                   *StatusScheme              `json:"status,omitempty"`                   // The status of the issue.
 	Description              *CommentNodeScheme         `json:"description,omitempty"`              // The description of the issue.
@@ -127,7 +126,7 @@ type IssueFieldsScheme struct {
 	Security                 *SecurityScheme            `json:"security,omitempty"`                 // The security level of the issue.
 	Attachment               []*AttachmentScheme        `json:"attachment,omitempty"`               // The attachments of the issue.
 	Worklog                  *IssueWorklogADFPageScheme `json:"worklog,omitempty"`                  // The worklog of the issue.
-	DueDate                  string                     `json:"duedate,omitempty"`                  // The due date of the issue.
+	DueDate                  *DateScheme                `json:"duedate,omitempty"`                  // The due date of the issue.
 }
 
 // IssueTransitionScheme represents a transition of an issue in Jira.

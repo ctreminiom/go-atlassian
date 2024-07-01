@@ -34,14 +34,14 @@ type FieldOptionContextParams struct {
 type OrderFieldOptionPayloadScheme struct {
 	After                string   `json:"after,omitempty"`                // The ID of the option after which the current option should be placed.
 	Position             string   `json:"position,omitempty"`             // The position of the option.
-	CustomFieldOptionIds []string `json:"customFieldOptionIds,omitempty"` // The IDs of the custom field options.
+	CustomFieldOptionIDs []string `json:"customFieldOptionIds,omitempty"` // The IDs of the custom field options.
 }
 
 // CascadingSelectScheme represents a cascading select in Jira.
 type CascadingSelectScheme struct {
 	Self  string                      `json:"self,omitempty"`  // The URL of the cascading select.
 	Value string                      `json:"value,omitempty"` // The value of the cascading select.
-	Id    string                      `json:"id,omitempty"`    // The ID of the cascading select.
+	ID    string                      `json:"id,omitempty"`    // The ID of the cascading select.
 	Child *CascadingSelectChildScheme `json:"child,omitempty"` // The child of the cascading select.
 }
 
@@ -49,5 +49,5 @@ type CascadingSelectScheme struct {
 type CascadingSelectChildScheme struct {
 	Self  string `json:"self,omitempty"`  // The URL of the child.
 	Value string `json:"value,omitempty"` // The value of the child.
-	Id    string `json:"id,omitempty"`    // The ID of the child.
+	ID    string `json:"id,omitempty"`    // The ID of the child.
 }

@@ -26,7 +26,7 @@ type FilterDetailScheme struct {
 	ID               string                      `json:"id,omitempty"`
 	Name             string                      `json:"name,omitempty"`
 	Owner            *UserScheme                 `json:"owner,omitempty"`
-	Jql              string                      `json:"jql,omitempty"`
+	JQL              string                      `json:"jql,omitempty"`
 	ViewURL          string                      `json:"viewUrl,omitempty"`
 	SearchURL        string                      `json:"searchUrl,omitempty"`
 	Favourite        bool                        `json:"favourite,omitempty"`
@@ -41,7 +41,7 @@ type FilterScheme struct {
 	ID               string                        `json:"id,omitempty"`
 	Name             string                        `json:"name,omitempty"`
 	Owner            *UserScheme                   `json:"owner,omitempty"`
-	Jql              string                        `json:"jql,omitempty"`
+	JQL              string                        `json:"jql,omitempty"`
 	ViewURL          string                        `json:"viewUrl,omitempty"`
 	SearchURL        string                        `json:"searchUrl,omitempty"`
 	Favourite        bool                          `json:"favourite,omitempty"`

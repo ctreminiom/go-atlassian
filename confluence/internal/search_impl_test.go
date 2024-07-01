@@ -34,7 +34,7 @@ func Test_internalSearchImpl_Content(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 				cql: "type=page",
 				options: &model.SearchContentOptions{
 					Context:                  "spaceKey",
@@ -74,7 +74,7 @@ func Test_internalSearchImpl_Content(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 				cql: "type=page",
 				options: &model.SearchContentOptions{
 					Context:                  "spaceKey",
@@ -111,7 +111,7 @@ func Test_internalSearchImpl_Content(t *testing.T) {
 		{
 			name: "when the cql is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoCQLError,
@@ -173,7 +173,7 @@ func Test_internalSearchImpl_Users(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:    context.TODO(),
+				ctx:    context.Background(),
 				cql:    "type=page",
 				start:  20,
 				limit:  50,
@@ -203,7 +203,7 @@ func Test_internalSearchImpl_Users(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:    context.TODO(),
+				ctx:    context.Background(),
 				cql:    "type=page",
 				start:  20,
 				limit:  50,
@@ -230,7 +230,7 @@ func Test_internalSearchImpl_Users(t *testing.T) {
 		{
 			name: "when the cql is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoCQLError,

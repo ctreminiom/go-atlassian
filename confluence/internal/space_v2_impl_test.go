@@ -46,7 +46,7 @@ func Test_internalSpaceV2Impl_Bulk(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				options: optionsMocked,
 				cursor:  "cursor_sample_uuid",
 				limit:   50,
@@ -75,7 +75,7 @@ func Test_internalSpaceV2Impl_Bulk(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				options: optionsMocked,
 				cursor:  "cursor_sample_uuid",
 				limit:   50,
@@ -153,7 +153,7 @@ func Test_internalSpaceV2Impl_Get(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:               context.TODO(),
+				ctx:               context.Background(),
 				spaceID:           10001,
 				descriptionFormat: "view",
 			},
@@ -181,7 +181,7 @@ func Test_internalSpaceV2Impl_Get(t *testing.T) {
 		{
 			name: "when the space id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoSpaceIDError,
@@ -190,7 +190,7 @@ func Test_internalSpaceV2Impl_Get(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:               context.TODO(),
+				ctx:               context.Background(),
 				spaceID:           10001,
 				descriptionFormat: "view",
 			},
@@ -267,7 +267,7 @@ func Test_internalSpaceV2Impl_Permissions(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				spaceID: 10001,
 				cursor:  "cursor_sample_uuid",
 				limit:   50,
@@ -296,7 +296,7 @@ func Test_internalSpaceV2Impl_Permissions(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				spaceID: 10001,
 				cursor:  "cursor_sample_uuid",
 				limit:   50,

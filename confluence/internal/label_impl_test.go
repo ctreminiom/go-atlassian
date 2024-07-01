@@ -34,7 +34,7 @@ func Test_internalLabelImpl_Get(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				labelName: "blogs",
 				labelType: "blogpost",
 				start:     200,
@@ -64,7 +64,7 @@ func Test_internalLabelImpl_Get(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				labelName: "blogs",
 				labelType: "blogpost",
 				start:     200,
@@ -91,7 +91,7 @@ func Test_internalLabelImpl_Get(t *testing.T) {
 		{
 			name: "when the label name is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoLabelNameError,

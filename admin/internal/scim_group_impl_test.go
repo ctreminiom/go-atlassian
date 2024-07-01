@@ -34,7 +34,7 @@ func Test_internalSCIMGroupImpl_Gets(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				directoryID: "direction-id-sample",
 				filter:      "filter-sample",
 				startAt:     50,
@@ -65,7 +65,7 @@ func Test_internalSCIMGroupImpl_Gets(t *testing.T) {
 		{
 			name: "when the directory id is not provided",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				directoryID: "",
 			},
 			wantErr: true,
@@ -75,7 +75,7 @@ func Test_internalSCIMGroupImpl_Gets(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				directoryID: "direction-id-sample",
 				filter:      "filter-sample",
 				startAt:     50,
@@ -154,7 +154,7 @@ func Test_internalSCIMGroupImpl_Get(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				directoryID: "direction-id-sample",
 				groupID:     "group-id-sample",
 			},
@@ -183,7 +183,7 @@ func Test_internalSCIMGroupImpl_Get(t *testing.T) {
 		{
 			name: "when the directory id is not provided",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				directoryID: "",
 			},
 			wantErr: true,
@@ -193,7 +193,7 @@ func Test_internalSCIMGroupImpl_Get(t *testing.T) {
 		{
 			name: "when the group id is not provided",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				directoryID: "directory-id-sample",
 			},
 			wantErr: true,
@@ -203,7 +203,7 @@ func Test_internalSCIMGroupImpl_Get(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				directoryID: "direction-id-sample",
 				groupID:     "group-id-sample",
 			},
@@ -280,7 +280,7 @@ func Test_internalSCIMGroupImpl_Delete(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				directoryID: "direction-id-sample",
 				groupID:     "group-id-sample",
 			},
@@ -309,7 +309,7 @@ func Test_internalSCIMGroupImpl_Delete(t *testing.T) {
 		{
 			name: "when the directory id is not provided",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				directoryID: "",
 			},
 			wantErr: true,
@@ -319,7 +319,7 @@ func Test_internalSCIMGroupImpl_Delete(t *testing.T) {
 		{
 			name: "when the group id is not provided",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				directoryID: "directory-id-sample",
 			},
 			wantErr: true,
@@ -329,7 +329,7 @@ func Test_internalSCIMGroupImpl_Delete(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				directoryID: "direction-id-sample",
 				groupID:     "group-id-sample",
 			},
@@ -407,7 +407,7 @@ func Test_internalSCIMGroupImpl_Create(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				directoryID: "direction-id-sample",
 				groupName:   "group-name-sample",
 			},
@@ -436,7 +436,7 @@ func Test_internalSCIMGroupImpl_Create(t *testing.T) {
 		{
 			name: "when the directory id is not provided",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				directoryID: "",
 			},
 			wantErr: true,
@@ -446,7 +446,7 @@ func Test_internalSCIMGroupImpl_Create(t *testing.T) {
 		{
 			name: "when the group name is not provided",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				directoryID: "directory-id-sample",
 			},
 			wantErr: true,
@@ -456,7 +456,7 @@ func Test_internalSCIMGroupImpl_Create(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				directoryID: "direction-id-sample",
 				groupName:   "group-name-sample",
 			},
@@ -535,7 +535,7 @@ func Test_internalSCIMGroupImpl_Update(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				directoryID:  "direction-id-sample",
 				groupID:      "group-id-sample",
 				newGroupName: "group-name-sample",
@@ -565,7 +565,7 @@ func Test_internalSCIMGroupImpl_Update(t *testing.T) {
 		{
 			name: "when the directory id is not provided",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				directoryID: "",
 			},
 			wantErr: true,
@@ -575,7 +575,7 @@ func Test_internalSCIMGroupImpl_Update(t *testing.T) {
 		{
 			name: "when the group id is not provided",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				directoryID: "directory-id-sample",
 			},
 			wantErr: true,
@@ -585,7 +585,7 @@ func Test_internalSCIMGroupImpl_Update(t *testing.T) {
 		{
 			name: "when the group name is not provided",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				directoryID: "directory-id-sample",
 				groupID:     "group-id-sample",
 			},
@@ -596,7 +596,7 @@ func Test_internalSCIMGroupImpl_Update(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				directoryID:  "direction-id-sample",
 				groupID:      "group-id-sample",
 				newGroupName: "group-name-sample",
@@ -691,7 +691,7 @@ func Test_internalSCIMGroupImpl_Path(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				directoryID: "direction-id-sample",
 				groupID:     "group-id-sample",
 				payload:     payloadMocked,
@@ -721,7 +721,7 @@ func Test_internalSCIMGroupImpl_Path(t *testing.T) {
 		{
 			name: "when the directory id is not provided",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				directoryID: "",
 			},
 			wantErr: true,
@@ -731,7 +731,7 @@ func Test_internalSCIMGroupImpl_Path(t *testing.T) {
 		{
 			name: "when the group id is not provided",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				directoryID: "directory-id-sample",
 			},
 			wantErr: true,
@@ -741,7 +741,7 @@ func Test_internalSCIMGroupImpl_Path(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				directoryID: "direction-id-sample",
 				groupID:     "group-id-sample",
 				payload:     payloadMocked,

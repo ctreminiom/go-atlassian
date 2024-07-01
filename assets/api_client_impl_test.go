@@ -289,7 +289,7 @@ func TestClient_NewRequest(t *testing.T) {
 				Site: siteAsURL,
 			},
 			args: args{
-				ctx:    context.TODO(),
+				ctx:    context.Background(),
 				method: http.MethodGet,
 				urlStr: "rest/2/issue/attachment",
 				type_:  "",
@@ -307,7 +307,7 @@ func TestClient_NewRequest(t *testing.T) {
 				Site: siteAsURL,
 			},
 			args: args{
-				ctx:    context.TODO(),
+				ctx:    context.Background(),
 				method: http.MethodGet,
 				urlStr: " https://zhidao.baidu.com/special/view?id=49105a24626975510000&preview=1",
 				body:   bytes.NewReader([]byte("Hello World")),

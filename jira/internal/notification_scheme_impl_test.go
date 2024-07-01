@@ -36,7 +36,7 @@ func Test_internalNotificationSchemeImpl_Search(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 				options: &model.NotificationSchemeSearchOptions{
 					NotificationSchemeIDs: []string{"1000", "1001"},
 					ProjectIDs:            []string{"50001", "50002"},
@@ -72,7 +72,7 @@ func Test_internalNotificationSchemeImpl_Search(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 				options: &model.NotificationSchemeSearchOptions{
 					NotificationSchemeIDs: []string{"1000", "1001"},
 					ProjectIDs:            []string{"50001", "50002"},
@@ -108,7 +108,7 @@ func Test_internalNotificationSchemeImpl_Search(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 				options: &model.NotificationSchemeSearchOptions{
 					NotificationSchemeIDs: []string{"1000", "1001"},
 					ProjectIDs:            []string{"50001", "50002"},
@@ -193,7 +193,7 @@ func Test_internalNotificationSchemeImpl_Projects(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				schemeIDs:  []string{"scheme-id"},
 				projectIDs: []string{"10001"},
 				startAt:    100,
@@ -225,7 +225,7 @@ func Test_internalNotificationSchemeImpl_Projects(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				schemeIDs:  []string{"scheme-id"},
 				projectIDs: []string{"10001"},
 				startAt:    100,
@@ -257,7 +257,7 @@ func Test_internalNotificationSchemeImpl_Projects(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				schemeIDs:  []string{"scheme-id"},
 				projectIDs: []string{"10001"},
 				startAt:    100,
@@ -339,7 +339,7 @@ func Test_internalNotificationSchemeImpl_Get(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				schemeID: "10001",
 				expand:   []string{"all"},
 			},
@@ -369,7 +369,7 @@ func Test_internalNotificationSchemeImpl_Get(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				schemeID: "10001",
 				expand:   []string{"all"},
 			},
@@ -399,7 +399,7 @@ func Test_internalNotificationSchemeImpl_Get(t *testing.T) {
 			name:   "when the notification scheme is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoNotificationSchemeIDError,
@@ -409,7 +409,7 @@ func Test_internalNotificationSchemeImpl_Get(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				schemeID: "10001",
 				expand:   []string{"all"},
 			},
@@ -492,7 +492,7 @@ func Test_internalNotificationSchemeImpl_Update(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				schemeID: "10001",
 				payload:  payloadMocked,
 			},
@@ -522,7 +522,7 @@ func Test_internalNotificationSchemeImpl_Update(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				schemeID: "10001",
 				payload:  payloadMocked,
 			},
@@ -552,7 +552,7 @@ func Test_internalNotificationSchemeImpl_Update(t *testing.T) {
 			name:   "when the notification scheme is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoNotificationSchemeIDError,
@@ -562,7 +562,7 @@ func Test_internalNotificationSchemeImpl_Update(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				schemeID: "10001",
 				payload:  payloadMocked,
 			},
@@ -655,7 +655,7 @@ func Test_internalNotificationSchemeImpl_Append(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				schemeID: "10001",
 				payload:  payloadMocked,
 			},
@@ -685,7 +685,7 @@ func Test_internalNotificationSchemeImpl_Append(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				schemeID: "10001",
 				payload:  payloadMocked,
 			},
@@ -715,7 +715,7 @@ func Test_internalNotificationSchemeImpl_Append(t *testing.T) {
 			name:   "when the notification scheme is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoNotificationSchemeIDError,
@@ -725,7 +725,7 @@ func Test_internalNotificationSchemeImpl_Append(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				schemeID: "10001",
 				payload:  payloadMocked,
 			},
@@ -802,7 +802,7 @@ func Test_internalNotificationSchemeImpl_Remove(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				schemeID:       "10001",
 				notificationID: "10001",
 			},
@@ -832,7 +832,7 @@ func Test_internalNotificationSchemeImpl_Remove(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				schemeID:       "10001",
 				notificationID: "10001",
 			},
@@ -862,7 +862,7 @@ func Test_internalNotificationSchemeImpl_Remove(t *testing.T) {
 			name:   "when the notification scheme is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoNotificationSchemeIDError,
@@ -872,7 +872,7 @@ func Test_internalNotificationSchemeImpl_Remove(t *testing.T) {
 			name:   "when the notification id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				schemeID: "10001",
 			},
 			wantErr: true,
@@ -883,7 +883,7 @@ func Test_internalNotificationSchemeImpl_Remove(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				schemeID:       "10001",
 				notificationID: "10001",
 			},
@@ -959,7 +959,7 @@ func Test_internalNotificationSchemeImpl_Delete(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				schemeID: "10001",
 			},
 			on: func(fields *fields) {
@@ -988,7 +988,7 @@ func Test_internalNotificationSchemeImpl_Delete(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				schemeID: "10001",
 			},
 			on: func(fields *fields) {
@@ -1017,7 +1017,7 @@ func Test_internalNotificationSchemeImpl_Delete(t *testing.T) {
 			name:   "when the notification scheme is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoNotificationSchemeIDError,
@@ -1027,7 +1027,7 @@ func Test_internalNotificationSchemeImpl_Delete(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				schemeID: "10001",
 			},
 			on: func(fields *fields) {
@@ -1120,7 +1120,7 @@ func Test_internalNotificationSchemeImpl_Create(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -1149,7 +1149,7 @@ func Test_internalNotificationSchemeImpl_Create(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -1178,7 +1178,7 @@ func Test_internalNotificationSchemeImpl_Create(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {

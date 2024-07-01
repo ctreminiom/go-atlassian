@@ -39,7 +39,7 @@ func Test_internalAdfCommentImpl_Gets(t *testing.T) {
 			name:   "when the document format is adf (atlassian document format)",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "DUMMY-1",
 				orderBy:      "id",
 				expand:       []string{"renderedBody"},
@@ -74,7 +74,7 @@ func Test_internalAdfCommentImpl_Gets(t *testing.T) {
 			name:   "when the issue key or id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "",
 				orderBy:      "id",
 				expand:       []string{"renderedBody"},
@@ -89,7 +89,7 @@ func Test_internalAdfCommentImpl_Gets(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "DUMMY-1",
 				orderBy:      "id",
 				expand:       []string{"renderedBody"},
@@ -172,7 +172,7 @@ func Test_internalAdfCommentImpl_Get(t *testing.T) {
 			name:   "when the document format is adf (atlassian document format)",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "DUMMY-1",
 				commentId:    "10001",
 			},
@@ -204,7 +204,7 @@ func Test_internalAdfCommentImpl_Get(t *testing.T) {
 			name:   "when the issue key or id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "",
 			},
 			wantErr: true,
@@ -215,7 +215,7 @@ func Test_internalAdfCommentImpl_Get(t *testing.T) {
 			name:   "when the comment id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "DUMMY-1",
 			},
 			wantErr: true,
@@ -226,7 +226,7 @@ func Test_internalAdfCommentImpl_Get(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "DUMMY-1",
 				commentId:    "10001",
 			},
@@ -305,7 +305,7 @@ func Test_internalAdfCommentImpl_Delete(t *testing.T) {
 			name:   "when the document format is adf (atlassian document format)",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "DUMMY-1",
 				commentId:    "10001",
 			},
@@ -337,7 +337,7 @@ func Test_internalAdfCommentImpl_Delete(t *testing.T) {
 			name:   "when the issue key or id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "",
 			},
 			wantErr: true,
@@ -348,7 +348,7 @@ func Test_internalAdfCommentImpl_Delete(t *testing.T) {
 			name:   "when the comment id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "DUMMY-1",
 			},
 			wantErr: true,
@@ -359,7 +359,7 @@ func Test_internalAdfCommentImpl_Delete(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "DUMMY-1",
 				commentId:    "10001",
 			},
@@ -478,7 +478,7 @@ func Test_internalAdfCommentImpl_Add(t *testing.T) {
 			name:   "when the document format is adf (atlassian document format)",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "DUMMY-1",
 				payload:      payloadMocked,
 				expand:       []string{"body"},
@@ -511,7 +511,7 @@ func Test_internalAdfCommentImpl_Add(t *testing.T) {
 			name:   "when the issue key or id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "",
 				payload:      payloadMocked,
 				expand:       []string{"body"},
@@ -524,7 +524,7 @@ func Test_internalAdfCommentImpl_Add(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "DUMMY-1",
 				payload:      payloadMocked,
 				expand:       []string{"body"},

@@ -36,7 +36,7 @@ func Test_internalWorkflowStatusImpl_Gets(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:    context.TODO(),
+				ctx:    context.Background(),
 				ids:    []string{"10000", "10001"},
 				expand: []string{"usages"},
 			},
@@ -66,7 +66,7 @@ func Test_internalWorkflowStatusImpl_Gets(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:    context.TODO(),
+				ctx:    context.Background(),
 				ids:    []string{"10000", "10001"},
 				expand: []string{"usages"},
 			},
@@ -96,7 +96,7 @@ func Test_internalWorkflowStatusImpl_Gets(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:    context.TODO(),
+				ctx:    context.Background(),
 				ids:    []string{"10000", "10001"},
 				expand: []string{"usages"},
 			},
@@ -190,7 +190,7 @@ func Test_internalWorkflowStatusImpl_Update(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -219,7 +219,7 @@ func Test_internalWorkflowStatusImpl_Update(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -248,7 +248,7 @@ func Test_internalWorkflowStatusImpl_Update(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -364,7 +364,7 @@ func Test_internalWorkflowStatusImpl_Create(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -393,7 +393,7 @@ func Test_internalWorkflowStatusImpl_Create(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -421,7 +421,7 @@ func Test_internalWorkflowStatusImpl_Create(t *testing.T) {
 			name:   "when the payload does not have statuses",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				payload: payloadMockedWithOutStatuses,
 			},
 			on: func(fields *fields) {
@@ -438,7 +438,7 @@ func Test_internalWorkflowStatusImpl_Create(t *testing.T) {
 			name:   "when the payload does not have a scope",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				payload: payloadMockedWithOutScope,
 			},
 			on: func(fields *fields) {
@@ -455,7 +455,7 @@ func Test_internalWorkflowStatusImpl_Create(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -531,7 +531,7 @@ func Test_internalWorkflowStatusImpl_Delete(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 				ids: []string{"10000", "10001"},
 			},
 			on: func(fields *fields) {
@@ -560,7 +560,7 @@ func Test_internalWorkflowStatusImpl_Delete(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 				ids: []string{"10000", "10001"},
 			},
 			on: func(fields *fields) {
@@ -589,7 +589,7 @@ func Test_internalWorkflowStatusImpl_Delete(t *testing.T) {
 			name:   "when the statuses ids are not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoWorkflowStatusesError,
@@ -599,7 +599,7 @@ func Test_internalWorkflowStatusImpl_Delete(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 				ids: []string{"10000", "10001"},
 			},
 			on: func(fields *fields) {
@@ -675,7 +675,7 @@ func Test_internalWorkflowStatusImpl_Search(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 				options: &model.WorkflowStatusSearchParams{
 					ProjectID:      "8373772",
 					SearchString:   "UAT",
@@ -711,7 +711,7 @@ func Test_internalWorkflowStatusImpl_Search(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 				options: &model.WorkflowStatusSearchParams{
 					ProjectID:      "8373772",
 					SearchString:   "UAT",
@@ -747,7 +747,7 @@ func Test_internalWorkflowStatusImpl_Search(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 				options: &model.WorkflowStatusSearchParams{
 					ProjectID:      "8373772",
 					SearchString:   "UAT",
@@ -830,7 +830,7 @@ func Test_internalWorkflowStatusImpl_Bulk(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			on: func(fields *fields) {
 
@@ -858,7 +858,7 @@ func Test_internalWorkflowStatusImpl_Bulk(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			on: func(fields *fields) {
 
@@ -886,7 +886,7 @@ func Test_internalWorkflowStatusImpl_Bulk(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			on: func(fields *fields) {
 
@@ -961,7 +961,7 @@ func Test_internalWorkflowStatusImpl_Get(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				idOrName: "TODO",
 			},
 			on: func(fields *fields) {
@@ -990,7 +990,7 @@ func Test_internalWorkflowStatusImpl_Get(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				idOrName: "TODO",
 			},
 			on: func(fields *fields) {
@@ -1019,7 +1019,7 @@ func Test_internalWorkflowStatusImpl_Get(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				idOrName: "TODO",
 			},
 			on: func(fields *fields) {

@@ -36,7 +36,7 @@ func Test_internalTypeSchemeImpl_Gets(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:                context.TODO(),
+				ctx:                context.Background(),
 				issueTypeSchemeIds: []int{1001, 1002},
 				startAt:            50,
 				maxResults:         100,
@@ -67,7 +67,7 @@ func Test_internalTypeSchemeImpl_Gets(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:                context.TODO(),
+				ctx:                context.Background(),
 				issueTypeSchemeIds: []int{1001, 1002},
 				startAt:            50,
 				maxResults:         100,
@@ -98,7 +98,7 @@ func Test_internalTypeSchemeImpl_Gets(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:                context.TODO(),
+				ctx:                context.Background(),
 				issueTypeSchemeIds: []int{1001, 1002},
 				startAt:            50,
 				maxResults:         100,
@@ -178,7 +178,7 @@ func Test_internalTypeSchemeImpl_Items(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:                context.TODO(),
+				ctx:                context.Background(),
 				issueTypeSchemeIds: []int{1001, 1002},
 				startAt:            50,
 				maxResults:         100,
@@ -209,7 +209,7 @@ func Test_internalTypeSchemeImpl_Items(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:                context.TODO(),
+				ctx:                context.Background(),
 				issueTypeSchemeIds: []int{1001, 1002},
 				startAt:            50,
 				maxResults:         100,
@@ -240,7 +240,7 @@ func Test_internalTypeSchemeImpl_Items(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:                context.TODO(),
+				ctx:                context.Background(),
 				issueTypeSchemeIds: []int{1001, 1002},
 				startAt:            50,
 				maxResults:         100,
@@ -320,7 +320,7 @@ func Test_internalTypeSchemeImpl_Projects(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				projectIds: []int{1001, 1002},
 				startAt:    50,
 				maxResults: 100,
@@ -351,7 +351,7 @@ func Test_internalTypeSchemeImpl_Projects(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				projectIds: []int{1001, 1002},
 				startAt:    50,
 				maxResults: 100,
@@ -382,7 +382,7 @@ func Test_internalTypeSchemeImpl_Projects(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				projectIds: []int{1001, 1002},
 				startAt:    50,
 				maxResults: 100,
@@ -468,7 +468,7 @@ func Test_internalTypeSchemeImpl_Create(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -497,7 +497,7 @@ func Test_internalTypeSchemeImpl_Create(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -526,7 +526,7 @@ func Test_internalTypeSchemeImpl_Create(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -610,7 +610,7 @@ func Test_internalTypeSchemeImpl_Update(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:               context.TODO(),
+				ctx:               context.Background(),
 				issueTypeSchemeId: 10001,
 				payload:           payloadMocked,
 			},
@@ -640,7 +640,7 @@ func Test_internalTypeSchemeImpl_Update(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:               context.TODO(),
+				ctx:               context.Background(),
 				issueTypeSchemeId: 10001,
 				payload:           payloadMocked,
 			},
@@ -670,7 +670,7 @@ func Test_internalTypeSchemeImpl_Update(t *testing.T) {
 			name:   "when the issue type scheme id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				payload: payloadMocked,
 			},
 			wantErr: true,
@@ -681,7 +681,7 @@ func Test_internalTypeSchemeImpl_Update(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:               context.TODO(),
+				ctx:               context.Background(),
 				issueTypeSchemeId: 10001,
 				payload:           payloadMocked,
 			},
@@ -761,7 +761,7 @@ func Test_internalTypeSchemeImpl_Append(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:               context.TODO(),
+				ctx:               context.Background(),
 				issueTypeSchemeId: 10001,
 				issueTypeIds:      []int{8, 10, 2},
 			},
@@ -791,7 +791,7 @@ func Test_internalTypeSchemeImpl_Append(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:               context.TODO(),
+				ctx:               context.Background(),
 				issueTypeSchemeId: 10001,
 				issueTypeIds:      []int{8, 10, 2},
 			},
@@ -821,7 +821,7 @@ func Test_internalTypeSchemeImpl_Append(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:               context.TODO(),
+				ctx:               context.Background(),
 				issueTypeSchemeId: 10001,
 				issueTypeIds:      []int{8, 10, 2},
 			},
@@ -898,7 +898,7 @@ func Test_internalTypeSchemeImpl_Remove(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:               context.TODO(),
+				ctx:               context.Background(),
 				issueTypeId:       9,
 				issueTypeSchemeId: 10001,
 			},
@@ -928,7 +928,7 @@ func Test_internalTypeSchemeImpl_Remove(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:               context.TODO(),
+				ctx:               context.Background(),
 				issueTypeId:       9,
 				issueTypeSchemeId: 10001,
 			},
@@ -958,7 +958,7 @@ func Test_internalTypeSchemeImpl_Remove(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:               context.TODO(),
+				ctx:               context.Background(),
 				issueTypeId:       9,
 				issueTypeSchemeId: 10001,
 			},
@@ -1034,7 +1034,7 @@ func Test_internalTypeSchemeImpl_Delete(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:               context.TODO(),
+				ctx:               context.Background(),
 				issueTypeSchemeId: 10001,
 			},
 			on: func(fields *fields) {
@@ -1063,7 +1063,7 @@ func Test_internalTypeSchemeImpl_Delete(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:               context.TODO(),
+				ctx:               context.Background(),
 				issueTypeSchemeId: 10001,
 			},
 			on: func(fields *fields) {
@@ -1092,7 +1092,7 @@ func Test_internalTypeSchemeImpl_Delete(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:               context.TODO(),
+				ctx:               context.Background(),
 				issueTypeSchemeId: 10001,
 			},
 			on: func(fields *fields) {
@@ -1169,7 +1169,7 @@ func Test_internalTypeSchemeImpl_Assign(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:               context.TODO(),
+				ctx:               context.Background(),
 				projectId:         "9",
 				issueTypeSchemeId: "10001",
 			},
@@ -1199,7 +1199,7 @@ func Test_internalTypeSchemeImpl_Assign(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:               context.TODO(),
+				ctx:               context.Background(),
 				projectId:         "9",
 				issueTypeSchemeId: "10001",
 			},
@@ -1229,7 +1229,7 @@ func Test_internalTypeSchemeImpl_Assign(t *testing.T) {
 			name:   "when the project id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:               context.TODO(),
+				ctx:               context.Background(),
 				issueTypeSchemeId: "10001",
 			},
 			wantErr: true,
@@ -1240,7 +1240,7 @@ func Test_internalTypeSchemeImpl_Assign(t *testing.T) {
 			name:   "when the issue type scheme id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				projectId: "9",
 			},
 			wantErr: true,
@@ -1251,7 +1251,7 @@ func Test_internalTypeSchemeImpl_Assign(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:               context.TODO(),
+				ctx:               context.Background(),
 				projectId:         "9",
 				issueTypeSchemeId: "10001",
 			},

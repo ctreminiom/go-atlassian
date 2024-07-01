@@ -34,7 +34,7 @@ func Test_internalOrganizationImpl_Gets(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:    context.TODO(),
+				ctx:    context.Background(),
 				cursor: "cursor-sample-uuid",
 			},
 			on: func(fields *fields) {
@@ -62,7 +62,7 @@ func Test_internalOrganizationImpl_Gets(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:    context.TODO(),
+				ctx:    context.Background(),
 				cursor: "cursor-sample-uuid",
 			},
 			on: func(fields *fields) {
@@ -137,7 +137,7 @@ func Test_internalOrganizationImpl_Get(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				organizationID: "organization-sample-uuid",
 			},
 			on: func(fields *fields) {
@@ -165,7 +165,7 @@ func Test_internalOrganizationImpl_Get(t *testing.T) {
 		{
 			name: "when the organization id is not provided",
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				organizationID: "",
 			},
 			wantErr: true,
@@ -175,7 +175,7 @@ func Test_internalOrganizationImpl_Get(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				organizationID: "organization-sample-uuid",
 			},
 			on: func(fields *fields) {
@@ -250,7 +250,7 @@ func Test_internalOrganizationImpl_Users(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				organizationID: "organization-sample-uuid",
 				cursor:         "cursor-sample-uuid",
 			},
@@ -279,7 +279,7 @@ func Test_internalOrganizationImpl_Users(t *testing.T) {
 		{
 			name: "when the organization id is not provided",
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				organizationID: "",
 			},
 			wantErr: true,
@@ -289,7 +289,7 @@ func Test_internalOrganizationImpl_Users(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				organizationID: "organization-sample-uuid",
 				cursor:         "cursor-sample-uuid",
 			},
@@ -365,7 +365,7 @@ func Test_internalOrganizationImpl_Domains(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				organizationID: "organization-sample-uuid",
 				cursor:         "cursor-sample-uuid",
 			},
@@ -394,7 +394,7 @@ func Test_internalOrganizationImpl_Domains(t *testing.T) {
 		{
 			name: "when the organization id is not provided",
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				organizationID: "",
 			},
 			wantErr: true,
@@ -404,7 +404,7 @@ func Test_internalOrganizationImpl_Domains(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				organizationID: "organization-sample-uuid",
 				cursor:         "cursor-sample-uuid",
 			},
@@ -480,7 +480,7 @@ func Test_internalOrganizationImpl_Domain(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				organizationID: "organization-sample-uuid",
 				domainID:       "domain-sample-uuid",
 			},
@@ -509,7 +509,7 @@ func Test_internalOrganizationImpl_Domain(t *testing.T) {
 		{
 			name: "when the organization id is not provided",
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				organizationID: "",
 			},
 			wantErr: true,
@@ -519,7 +519,7 @@ func Test_internalOrganizationImpl_Domain(t *testing.T) {
 		{
 			name: "when the domain id is not provided",
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				organizationID: "organization-sample-uuid",
 			},
 			wantErr: true,
@@ -529,7 +529,7 @@ func Test_internalOrganizationImpl_Domain(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				organizationID: "organization-sample-uuid",
 				domainID:       "domain-sample-uuid",
 			},
@@ -617,7 +617,7 @@ func Test_internalOrganizationImpl_Events(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				organizationID: "organization-sample-uuid",
 				options: &model.OrganizationEventOptScheme{
 					Q:      "qq",
@@ -652,7 +652,7 @@ func Test_internalOrganizationImpl_Events(t *testing.T) {
 		{
 			name: "when the organization id is not provided",
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				organizationID: "",
 			},
 			wantErr: true,
@@ -662,7 +662,7 @@ func Test_internalOrganizationImpl_Events(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				organizationID: "organization-sample-uuid",
 				options: &model.OrganizationEventOptScheme{
 					Q:      "qq",
@@ -745,7 +745,7 @@ func Test_internalOrganizationImpl_Event(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				organizationID: "organization-sample-uuid",
 				eventID:        "event-sample-uuid",
 			},
@@ -774,7 +774,7 @@ func Test_internalOrganizationImpl_Event(t *testing.T) {
 		{
 			name: "when the organization id is not provided",
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				organizationID: "",
 			},
 			wantErr: true,
@@ -784,7 +784,7 @@ func Test_internalOrganizationImpl_Event(t *testing.T) {
 		{
 			name: "when the event id is not provided",
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				organizationID: "organization-sample-uuid",
 			},
 			wantErr: true,
@@ -794,7 +794,7 @@ func Test_internalOrganizationImpl_Event(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				organizationID: "organization-sample-uuid",
 				eventID:        "event-sample-uuid",
 			},
@@ -870,7 +870,7 @@ func Test_internalOrganizationImpl_Actions(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				organizationID: "organization-sample-uuid",
 			},
 			on: func(fields *fields) {
@@ -898,7 +898,7 @@ func Test_internalOrganizationImpl_Actions(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				organizationID: "organization-sample-uuid",
 			},
 			on: func(fields *fields) {

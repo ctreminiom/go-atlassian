@@ -35,7 +35,7 @@ func Test_internalLinkRichTextServiceImpl_Get(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:    context.TODO(),
+				ctx:    context.Background(),
 				linkId: "10002",
 			},
 			on: func(fields *fields) {
@@ -65,7 +65,7 @@ func Test_internalLinkRichTextServiceImpl_Get(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:    context.TODO(),
+				ctx:    context.Background(),
 				linkId: "10002",
 			},
 			on: func(fields *fields) {
@@ -95,7 +95,7 @@ func Test_internalLinkRichTextServiceImpl_Get(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:    context.TODO(),
+				ctx:    context.Background(),
 				linkId: "10002",
 			},
 			on: func(fields *fields) {
@@ -120,7 +120,7 @@ func Test_internalLinkRichTextServiceImpl_Get(t *testing.T) {
 			name:   "when the issue link is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:    context.TODO(),
+				ctx:    context.Background(),
 				linkId: "",
 			},
 			wantErr: true,
@@ -183,7 +183,7 @@ func Test_internalLinkRichTextServiceImpl_Gets(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "DUMMY-4",
 			},
 			on: func(fields *fields) {
@@ -213,7 +213,7 @@ func Test_internalLinkRichTextServiceImpl_Gets(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "DUMMY-4",
 			},
 			on: func(fields *fields) {
@@ -243,7 +243,7 @@ func Test_internalLinkRichTextServiceImpl_Gets(t *testing.T) {
 			name:   "when the issue key is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "",
 			},
 			wantErr: true,
@@ -254,7 +254,7 @@ func Test_internalLinkRichTextServiceImpl_Gets(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "DUMMY-4",
 			},
 			on: func(fields *fields) {
@@ -331,7 +331,7 @@ func Test_internalLinkRichTextServiceImpl_Delete(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:    context.TODO(),
+				ctx:    context.Background(),
 				linkId: "10002",
 			},
 			on: func(fields *fields) {
@@ -361,7 +361,7 @@ func Test_internalLinkRichTextServiceImpl_Delete(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:    context.TODO(),
+				ctx:    context.Background(),
 				linkId: "10002",
 			},
 			on: func(fields *fields) {
@@ -391,7 +391,7 @@ func Test_internalLinkRichTextServiceImpl_Delete(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:    context.TODO(),
+				ctx:    context.Background(),
 				linkId: "10002",
 			},
 			on: func(fields *fields) {
@@ -416,7 +416,7 @@ func Test_internalLinkRichTextServiceImpl_Delete(t *testing.T) {
 			name:   "when the issue link is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:    context.TODO(),
+				ctx:    context.Background(),
 				linkId: "",
 			},
 			wantErr: true,
@@ -493,7 +493,7 @@ func Test_internalLinkRichTextServiceImpl_Create(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -523,7 +523,7 @@ func Test_internalLinkRichTextServiceImpl_Create(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -553,7 +553,7 @@ func Test_internalLinkRichTextServiceImpl_Create(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {

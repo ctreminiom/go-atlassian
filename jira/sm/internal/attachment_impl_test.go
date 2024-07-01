@@ -3,12 +3,14 @@ package internal
 import (
 	"context"
 	"errors"
+	"net/http"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
-	"github.com/stretchr/testify/assert"
-	"net/http"
-	"testing"
 )
 
 func Test_internalServiceRequestAttachmentImpl_Gets(t *testing.T) {
@@ -167,10 +169,9 @@ func Test_internalServiceRequestAttachmentImpl_Create(t *testing.T) {
 	}
 
 	type args struct {
-		ctx                    context.Context
-		issueKeyOrID           string
-		temporaryAttachmentIDs []string
-		public                 bool
+		ctx          context.Context
+		issueKeyOrID string
+		payload      *model.RequestAttachmentCreationPayloadScheme
 	}
 
 	testCases := []struct {
@@ -184,10 +185,12 @@ func Test_internalServiceRequestAttachmentImpl_Create(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:                    context.Background(),
-				issueKeyOrID:           "DUMMY-2",
-				temporaryAttachmentIDs: []string{"10001"},
-				public:                 true,
+				ctx:          context.Background(),
+				issueKeyOrID: "DUMMY-2",
+				payload: &model.RequestAttachmentCreationPayloadScheme{
+					TemporaryAttachmentIDs: []string{"10001"},
+					Public:                 true,
+				},
 			},
 			on: func(fields *fields) {
 
@@ -198,7 +201,10 @@ func Test_internalServiceRequestAttachmentImpl_Create(t *testing.T) {
 					http.MethodPost,
 					"rest/servicedeskapi/request/DUMMY-2/attachment",
 					"",
-					map[string]interface{}{"public": true, "temporaryAttachmentIds": []string{"10001"}}).
+					&model.RequestAttachmentCreationPayloadScheme{
+						TemporaryAttachmentIDs: []string{"10001"},
+						Public:                 true,
+					}).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -213,10 +219,12 @@ func Test_internalServiceRequestAttachmentImpl_Create(t *testing.T) {
 		{
 			name: "when the http call cannot be executed",
 			args: args{
-				ctx:                    context.Background(),
-				issueKeyOrID:           "DUMMY-2",
-				temporaryAttachmentIDs: []string{"10001"},
-				public:                 true,
+				ctx:          context.Background(),
+				issueKeyOrID: "DUMMY-2",
+				payload: &model.RequestAttachmentCreationPayloadScheme{
+					TemporaryAttachmentIDs: []string{"10001"},
+					Public:                 true,
+				},
 			},
 			on: func(fields *fields) {
 
@@ -227,7 +235,10 @@ func Test_internalServiceRequestAttachmentImpl_Create(t *testing.T) {
 					http.MethodPost,
 					"rest/servicedeskapi/request/DUMMY-2/attachment",
 					"",
-					map[string]interface{}{"public": true, "temporaryAttachmentIds": []string{"10001"}}).
+					&model.RequestAttachmentCreationPayloadScheme{
+						TemporaryAttachmentIDs: []string{"10001"},
+						Public:                 true,
+					}).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -244,10 +255,12 @@ func Test_internalServiceRequestAttachmentImpl_Create(t *testing.T) {
 		{
 			name: "when the request cannot be created",
 			args: args{
-				ctx:                    context.Background(),
-				issueKeyOrID:           "DUMMY-2",
-				temporaryAttachmentIDs: []string{"10001"},
-				public:                 true,
+				ctx:          context.Background(),
+				issueKeyOrID: "DUMMY-2",
+				payload: &model.RequestAttachmentCreationPayloadScheme{
+					TemporaryAttachmentIDs: []string{"10001"},
+					Public:                 true,
+				},
 			},
 			on: func(fields *fields) {
 
@@ -258,7 +271,10 @@ func Test_internalServiceRequestAttachmentImpl_Create(t *testing.T) {
 					http.MethodPost,
 					"rest/servicedeskapi/request/DUMMY-2/attachment",
 					"",
-					map[string]interface{}{"public": true, "temporaryAttachmentIds": []string{"10001"}}).
+					&model.RequestAttachmentCreationPayloadScheme{
+						TemporaryAttachmentIDs: []string{"10001"},
+						Public:                 true,
+					}).
 					Return(&http.Request{}, errors.New("client: no http request created"))
 
 				fields.c = client
@@ -290,7 +306,7 @@ func Test_internalServiceRequestAttachmentImpl_Create(t *testing.T) {
 			attachmentService := NewAttachmentService(testCase.fields.c, "latest")
 
 			gotResult, gotResponse, err := attachmentService.Create(testCase.args.ctx, testCase.args.issueKeyOrID,
-				testCase.args.temporaryAttachmentIDs, testCase.args.public)
+				testCase.args.payload)
 
 			if testCase.wantErr {
 

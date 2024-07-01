@@ -36,7 +36,7 @@ func Test_internalIssueADFServiceImpl_Delete(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				issueKeyOrId:   "DUMMY-1",
 				deleteSubTasks: true,
 			},
@@ -65,7 +65,7 @@ func Test_internalIssueADFServiceImpl_Delete(t *testing.T) {
 			name:   "when the issue issue key or id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				issueKeyOrId:   "",
 				deleteSubTasks: true,
 			},
@@ -80,7 +80,7 @@ func Test_internalIssueADFServiceImpl_Delete(t *testing.T) {
 			name:   "when the request method cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				issueKeyOrId:   "DUMMY-1",
 				deleteSubTasks: true,
 			},
@@ -157,7 +157,7 @@ func Test_internalIssueADFServiceImpl_Assign(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "DUMMY-1",
 				accountId:    "account-id-sample",
 			},
@@ -186,7 +186,7 @@ func Test_internalIssueADFServiceImpl_Assign(t *testing.T) {
 			name:   "when the issue issue key or id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "",
 				accountId:    "account-id-sample",
 			},
@@ -201,7 +201,7 @@ func Test_internalIssueADFServiceImpl_Assign(t *testing.T) {
 			name:   "when the account id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "DUMMY-1",
 				accountId:    "",
 			},
@@ -216,7 +216,7 @@ func Test_internalIssueADFServiceImpl_Assign(t *testing.T) {
 			name:   "when the request method cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "DUMMY-1",
 				accountId:    "account-id-sample",
 			},
@@ -303,7 +303,7 @@ func Test_internalIssueADFServiceImpl_Notify(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "DUMMY-1",
 				options:      optionsMocked,
 			},
@@ -332,7 +332,7 @@ func Test_internalIssueADFServiceImpl_Notify(t *testing.T) {
 			name:   "when the issue issue key or id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "",
 			},
 			on: func(fields *fields) {
@@ -346,7 +346,7 @@ func Test_internalIssueADFServiceImpl_Notify(t *testing.T) {
 			name:   "when the request method cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "DUMMY-1",
 				options:      optionsMocked,
 			},
@@ -423,7 +423,7 @@ func Test_internalIssueADFServiceImpl_Transitions(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "DUMMY-1",
 			},
 			on: func(fields *fields) {
@@ -451,7 +451,7 @@ func Test_internalIssueADFServiceImpl_Transitions(t *testing.T) {
 			name:   "when the issue issue key or id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "",
 			},
 			on: func(fields *fields) {
@@ -465,7 +465,7 @@ func Test_internalIssueADFServiceImpl_Transitions(t *testing.T) {
 			name:   "when the request method cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "DUMMY-1",
 			},
 			on: func(fields *fields) {
@@ -573,7 +573,7 @@ func Test_internalIssueADFServiceImpl_Create(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				payload:      payloadMocked,
 				customFields: customFieldsMocked,
 			},
@@ -602,7 +602,7 @@ func Test_internalIssueADFServiceImpl_Create(t *testing.T) {
 			name:   "when the customfield are not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				payload:      payloadMocked,
 				customFields: nil,
 			},
@@ -631,7 +631,7 @@ func Test_internalIssueADFServiceImpl_Create(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				payload:      payloadMocked,
 				customFields: customFieldsMocked,
 			},
@@ -768,7 +768,7 @@ func Test_internalIssueADFServiceImpl_Creates(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -796,7 +796,7 @@ func Test_internalIssueADFServiceImpl_Creates(t *testing.T) {
 			name:   "when the payload is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				payload: nil,
 			},
 			on: func(fields *fields) {
@@ -810,7 +810,7 @@ func Test_internalIssueADFServiceImpl_Creates(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -901,7 +901,7 @@ func Test_internalIssueADFServiceImpl_Get(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "DUMMY-1",
 				fields:       []string{"summary", "status"},
 				expand:       []string{"operations", "changelogts"},
@@ -931,7 +931,7 @@ func Test_internalIssueADFServiceImpl_Get(t *testing.T) {
 			name:   "when the issue key or id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "",
 				fields:       []string{"summary", "status"},
 				expand:       []string{"operations", "changelogts"},
@@ -947,7 +947,7 @@ func Test_internalIssueADFServiceImpl_Get(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "DUMMY-1",
 				fields:       []string{"summary", "status"},
 				expand:       []string{"operations", "changelogts"},
@@ -1088,7 +1088,7 @@ func Test_internalIssueADFServiceImpl_Move(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "DUMMY-1",
 				transitionId: "10001",
 				options: &model.IssueMoveOptionsV3{
@@ -1128,7 +1128,7 @@ func Test_internalIssueADFServiceImpl_Move(t *testing.T) {
 			name:   "when the options are provided and the fields are not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "DUMMY-1",
 				transitionId: "10001",
 				options: &model.IssueMoveOptionsV3{
@@ -1144,7 +1144,7 @@ func Test_internalIssueADFServiceImpl_Move(t *testing.T) {
 			name:   "when the operations are not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "DUMMY-1",
 				transitionId: "10001",
 				options: &model.IssueMoveOptionsV3{
@@ -1184,7 +1184,7 @@ func Test_internalIssueADFServiceImpl_Move(t *testing.T) {
 			name:   "when the custom fields are not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "DUMMY-1",
 				transitionId: "10001",
 				options: &model.IssueMoveOptionsV3{
@@ -1224,7 +1224,7 @@ func Test_internalIssueADFServiceImpl_Move(t *testing.T) {
 			name:   "when the the issue comment options are not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "DUMMY-1",
 				transitionId: "10001",
 				options:      nil,
@@ -1254,7 +1254,7 @@ func Test_internalIssueADFServiceImpl_Move(t *testing.T) {
 			name:   "when the issue key is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "",
 				transitionId: "10001",
 				options: &model.IssueMoveOptionsV3{
@@ -1280,7 +1280,7 @@ func Test_internalIssueADFServiceImpl_Move(t *testing.T) {
 			name:   "when the transition id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "DUMMY-1",
 				transitionId: "",
 				options: &model.IssueMoveOptionsV3{
@@ -1306,7 +1306,7 @@ func Test_internalIssueADFServiceImpl_Move(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "DUMMY-1",
 				transitionId: "10001",
 				options: &model.IssueMoveOptionsV3{
@@ -1443,7 +1443,7 @@ func Test_internalIssueADFServiceImpl_Update(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "DUMMY-1",
 				notify:       true,
 				payload: &model.IssueScheme{
@@ -1479,7 +1479,7 @@ func Test_internalIssueADFServiceImpl_Update(t *testing.T) {
 			name:   "when the issue key or id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "",
 				notify:       true,
 				payload: &model.IssueScheme{
@@ -1501,7 +1501,7 @@ func Test_internalIssueADFServiceImpl_Update(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "DUMMY-1",
 				notify:       true,
 				payload: &model.IssueScheme{
@@ -1534,7 +1534,7 @@ func Test_internalIssueADFServiceImpl_Update(t *testing.T) {
 			name:   "when the operations are not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "DUMMY-1",
 				notify:       true,
 				payload: &model.IssueScheme{
@@ -1570,7 +1570,7 @@ func Test_internalIssueADFServiceImpl_Update(t *testing.T) {
 			name:   "when the custom fields are not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "DUMMY-1",
 				notify:       true,
 				payload: &model.IssueScheme{
@@ -1606,7 +1606,7 @@ func Test_internalIssueADFServiceImpl_Update(t *testing.T) {
 			name:   "when the operations are customfields are not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "DUMMY-1",
 				notify:       true,
 				payload: &model.IssueScheme{

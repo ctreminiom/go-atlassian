@@ -35,7 +35,7 @@ func Test_internalContentLabelImpl_Gets(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				contentID:  "11727271",
 				prefix:     "new-",
 				startAt:    25,
@@ -64,7 +64,7 @@ func Test_internalContentLabelImpl_Gets(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				contentID:  "11727271",
 				prefix:     "new-",
 				startAt:    25,
@@ -90,7 +90,7 @@ func Test_internalContentLabelImpl_Gets(t *testing.T) {
 		{
 			name: "when the content id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoContentIDError,
@@ -150,7 +150,7 @@ func Test_internalContentLabelImpl_Remove(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				contentID: "11727271",
 				labelName: "test",
 			},
@@ -177,7 +177,7 @@ func Test_internalContentLabelImpl_Remove(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				contentID: "11727271",
 				labelName: "test",
 			},
@@ -201,7 +201,7 @@ func Test_internalContentLabelImpl_Remove(t *testing.T) {
 		{
 			name: "when the content id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoContentIDError,
@@ -210,7 +210,7 @@ func Test_internalContentLabelImpl_Remove(t *testing.T) {
 		{
 			name: "when the label name is not provided",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				contentID: "1111",
 			},
 			wantErr: true,
@@ -278,7 +278,7 @@ func Test_internalContentLabelImpl_Add(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:             context.TODO(),
+				ctx:             context.Background(),
 				contentID:       "11727271",
 				payload:         payloadMocked,
 				want400Response: true,
@@ -306,7 +306,7 @@ func Test_internalContentLabelImpl_Add(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:             context.TODO(),
+				ctx:             context.Background(),
 				contentID:       "11727271",
 				payload:         payloadMocked,
 				want400Response: true,
@@ -331,7 +331,7 @@ func Test_internalContentLabelImpl_Add(t *testing.T) {
 		{
 			name: "when the content id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoContentIDError,

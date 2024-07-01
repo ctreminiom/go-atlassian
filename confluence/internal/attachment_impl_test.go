@@ -35,7 +35,7 @@ func Test_internalAttachmentImpl_Get(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				attachmentID: "100001",
 				versionID:    25,
 				serializeIDs: true,
@@ -64,7 +64,7 @@ func Test_internalAttachmentImpl_Get(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				attachmentID: "100001",
 				versionID:    25,
 				serializeIDs: true,
@@ -90,7 +90,7 @@ func Test_internalAttachmentImpl_Get(t *testing.T) {
 		{
 			name: "when the attachment id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoContentAttachmentIDError,
@@ -154,7 +154,7 @@ func Test_internalAttachmentImpl_Gets(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				entityID:   10001,
 				entityType: "labels",
 				options: &model.AttachmentParamsScheme{
@@ -190,7 +190,7 @@ func Test_internalAttachmentImpl_Gets(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				entityID:   10001,
 				entityType: "labels",
 				options: &model.AttachmentParamsScheme{
@@ -223,7 +223,7 @@ func Test_internalAttachmentImpl_Gets(t *testing.T) {
 		{
 			name: "when the entity id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoEntityIDError,
@@ -232,7 +232,7 @@ func Test_internalAttachmentImpl_Gets(t *testing.T) {
 		{
 			name: "when the entity type provided is not valid",
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				entityID:   1002,
 				entityType: "questions",
 			},
@@ -294,7 +294,7 @@ func Test_internalAttachmentImpl_Delete(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				attachmentID: "att10001",
 			},
 			on: func(fields *fields) {
@@ -321,7 +321,7 @@ func Test_internalAttachmentImpl_Delete(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				attachmentID: "att10001",
 			},
 			on: func(fields *fields) {
@@ -345,7 +345,7 @@ func Test_internalAttachmentImpl_Delete(t *testing.T) {
 		{
 			name: "when the attachment id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoContentAttachmentIDError,

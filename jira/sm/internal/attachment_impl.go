@@ -3,12 +3,13 @@ package internal
 import (
 	"context"
 	"fmt"
-	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/service"
-	"github.com/ctreminiom/go-atlassian/service/sm"
 	"net/http"
 	"net/url"
 	"strconv"
+
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/service"
+	"github.com/ctreminiom/go-atlassian/service/sm"
 )
 
 func NewAttachmentService(client service.Connector, version string) *AttachmentService {
@@ -38,8 +39,8 @@ func (s *AttachmentService) Gets(ctx context.Context, issueKeyOrID string, start
 // POST /rest/servicedeskapi/request/{issueIdOrKey}/attachment
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request/attachment#create-attachment
-func (s *AttachmentService) Create(ctx context.Context, issueKeyOrID string, temporaryAttachmentIDs []string, public bool) (*model.RequestAttachmentCreationScheme, *model.ResponseScheme, error) {
-	return s.internalClient.Create(ctx, issueKeyOrID, temporaryAttachmentIDs, public)
+func (s *AttachmentService) Create(ctx context.Context, issueKeyOrID string, payload *model.RequestAttachmentCreationPayloadScheme) (*model.RequestAttachmentCreationScheme, *model.ResponseScheme, error) {
+	return s.internalClient.Create(ctx, issueKeyOrID, payload)
 }
 
 type internalServiceRequestAttachmentImpl struct {
@@ -73,19 +74,14 @@ func (i *internalServiceRequestAttachmentImpl) Gets(ctx context.Context, issueKe
 	return page, res, nil
 }
 
-func (i *internalServiceRequestAttachmentImpl) Create(ctx context.Context, issueKeyOrID string, temporaryAttachmentIDs []string, public bool) (*model.RequestAttachmentCreationScheme, *model.ResponseScheme, error) {
+func (i *internalServiceRequestAttachmentImpl) Create(ctx context.Context, issueKeyOrID string, payload *model.RequestAttachmentCreationPayloadScheme) (*model.RequestAttachmentCreationScheme, *model.ResponseScheme, error) {
 
 	if issueKeyOrID == "" {
 		return nil, nil, model.ErrNoIssueKeyOrIDError
 	}
 
-	if len(temporaryAttachmentIDs) == 0 {
+	if len(payload.TemporaryAttachmentIDs) == 0 {
 		return nil, nil, model.ErrNoAttachmentIDError
-	}
-
-	payload := map[string]interface{}{
-		"temporaryAttachmentIds": temporaryAttachmentIDs,
-		"public":                 public,
 	}
 
 	url := fmt.Sprintf("rest/servicedeskapi/request/%v/attachment", issueKeyOrID)

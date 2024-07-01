@@ -35,7 +35,7 @@ func Test_internalGroupServiceImpl_Create(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				groupName: "jira-users",
 			},
 			on: func(fields *fields) {
@@ -63,7 +63,7 @@ func Test_internalGroupServiceImpl_Create(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				groupName: "jira-users",
 			},
 			on: func(fields *fields) {
@@ -91,7 +91,7 @@ func Test_internalGroupServiceImpl_Create(t *testing.T) {
 			name:   "when the group name is not provided",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				groupName: "",
 			},
 			on: func(fields *fields) {
@@ -105,7 +105,7 @@ func Test_internalGroupServiceImpl_Create(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				groupName: "jira-users",
 			},
 			on: func(fields *fields) {
@@ -181,7 +181,7 @@ func Test_internalGroupServiceImpl_Delete(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				groupName: "jira-users",
 			},
 			on: func(fields *fields) {
@@ -209,7 +209,7 @@ func Test_internalGroupServiceImpl_Delete(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				groupName: "jira-users",
 			},
 			on: func(fields *fields) {
@@ -237,7 +237,7 @@ func Test_internalGroupServiceImpl_Delete(t *testing.T) {
 			name:   "when the group name is not provided",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				groupName: "",
 			},
 			on: func(fields *fields) {
@@ -251,7 +251,7 @@ func Test_internalGroupServiceImpl_Delete(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				groupName: "jira-users",
 			},
 			on: func(fields *fields) {
@@ -327,7 +327,7 @@ func Test_internalGroupServiceImpl_Remove(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				groupName: "jira-users",
 				accountId: "account-id-sample",
 			},
@@ -356,7 +356,7 @@ func Test_internalGroupServiceImpl_Remove(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				groupName: "jira-users",
 				accountId: "account-id-sample",
 			},
@@ -385,7 +385,7 @@ func Test_internalGroupServiceImpl_Remove(t *testing.T) {
 			name:   "when the group name is not provided",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				groupName: "",
 			},
 			on: func(fields *fields) {
@@ -399,7 +399,7 @@ func Test_internalGroupServiceImpl_Remove(t *testing.T) {
 			name:   "when the account id is not provided",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				groupName: "jira-users",
 				accountId: "",
 			},
@@ -414,7 +414,7 @@ func Test_internalGroupServiceImpl_Remove(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				groupName: "jira-users",
 				accountId: "account-id-sample",
 			},
@@ -491,7 +491,7 @@ func Test_internalGroupServiceImpl_Add(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				groupName: "jira-users",
 				accountId: "account-id-sample",
 			},
@@ -520,7 +520,7 @@ func Test_internalGroupServiceImpl_Add(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				groupName: "jira-users",
 				accountId: "account-id-sample",
 			},
@@ -549,7 +549,7 @@ func Test_internalGroupServiceImpl_Add(t *testing.T) {
 			name:   "when the group name is not provided",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				groupName: "",
 			},
 			on: func(fields *fields) {
@@ -563,7 +563,7 @@ func Test_internalGroupServiceImpl_Add(t *testing.T) {
 			name:   "when the account id is not provided",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				groupName: "jira-users",
 				accountId: "",
 			},
@@ -578,7 +578,7 @@ func Test_internalGroupServiceImpl_Add(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				groupName: "jira-users",
 				accountId: "account-id-sample",
 			},
@@ -656,7 +656,7 @@ func Test_internalGroupServiceImpl_Bulk(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 				options: &model.GroupBulkOptionsScheme{
 					GroupIDs:   []string{"1001", "1002"},
 					GroupNames: []string{"jira-users", "confluence-users"},
@@ -689,7 +689,7 @@ func Test_internalGroupServiceImpl_Bulk(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 				options: &model.GroupBulkOptionsScheme{
 					GroupIDs:   []string{"1001", "1002"},
 					GroupNames: []string{"jira-users", "confluence-users"},
@@ -722,7 +722,7 @@ func Test_internalGroupServiceImpl_Bulk(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 				options: &model.GroupBulkOptionsScheme{
 					GroupIDs:   []string{"1001", "1002"},
 					GroupNames: []string{"jira-users", "confluence-users"},
@@ -806,7 +806,7 @@ func Test_internalGroupServiceImpl_Members(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				groupName:  "jira-users",
 				inactive:   true,
 				startAt:    0,
@@ -837,7 +837,7 @@ func Test_internalGroupServiceImpl_Members(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				groupName:  "jira-users",
 				inactive:   true,
 				startAt:    0,
@@ -868,7 +868,7 @@ func Test_internalGroupServiceImpl_Members(t *testing.T) {
 			name:   "when the group name is not provided",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				groupName:  "",
 				inactive:   true,
 				startAt:    0,
@@ -885,7 +885,7 @@ func Test_internalGroupServiceImpl_Members(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				groupName:  "jira-users",
 				inactive:   true,
 				startAt:    0,

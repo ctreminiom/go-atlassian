@@ -38,7 +38,7 @@ func Test_internalPageImpl_Get(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				pageID:  200001,
 				format:  "atlas_doc_format",
 				draft:   true,
@@ -67,7 +67,7 @@ func Test_internalPageImpl_Get(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				pageID:  200001,
 				format:  "atlas_doc_format",
 				draft:   true,
@@ -94,7 +94,7 @@ func Test_internalPageImpl_Get(t *testing.T) {
 		{
 			name: "when the page id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoPageIDError,
@@ -155,7 +155,7 @@ func Test_internalPageImpl_Gets(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 				options: &model.PageOptionsScheme{
 					PageIDs:    []int{112, 1223},
 					SpaceIDs:   []int{3040, 3040},
@@ -190,7 +190,7 @@ func Test_internalPageImpl_Gets(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:    context.TODO(),
+				ctx:    context.Background(),
 				cursor: "cursor-sample",
 				options: &model.PageOptionsScheme{
 					PageIDs:    []int{112, 1223},
@@ -273,7 +273,7 @@ func Test_internalPageImpl_Bulk(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:    context.TODO(),
+				ctx:    context.Background(),
 				cursor: "cursor-sample",
 				limit:  200,
 			},
@@ -300,7 +300,7 @@ func Test_internalPageImpl_Bulk(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:    context.TODO(),
+				ctx:    context.Background(),
 				cursor: "cursor-sample",
 				limit:  200,
 			},
@@ -377,7 +377,7 @@ func Test_internalPageImpl_GetsByLabel(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				labelID: 20001,
 				sort:    "test-label",
 				cursor:  "cursor-sample",
@@ -406,7 +406,7 @@ func Test_internalPageImpl_GetsByLabel(t *testing.T) {
 		{
 			name: "when the label id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoLabelIDError,
@@ -415,7 +415,7 @@ func Test_internalPageImpl_GetsByLabel(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				labelID: 20001,
 				sort:    "test-label",
 				cursor:  "cursor-sample",
@@ -494,7 +494,7 @@ func Test_internalPageImpl_GetsBySpace(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				spaceID: 20001,
 				cursor:  "cursor-sample",
 				limit:   200,
@@ -522,7 +522,7 @@ func Test_internalPageImpl_GetsBySpace(t *testing.T) {
 		{
 			name: "when the space id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoSpaceIDError,
@@ -531,7 +531,7 @@ func Test_internalPageImpl_GetsBySpace(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				spaceID: 20001,
 				cursor:  "cursor-sample",
 				limit:   200,
@@ -584,6 +584,152 @@ func Test_internalPageImpl_GetsBySpace(t *testing.T) {
 	}
 }
 
+func Test_internalPageImpl_GetsByParent(t *testing.T) {
+
+	type fields struct {
+		c service.Connector
+	}
+
+	type args struct {
+		ctx      context.Context
+		parentID int
+		cursor   string
+		limit    int
+	}
+
+	testCases := []struct {
+		name    string
+		fields  fields
+		args    args
+		on      func(*fields)
+		wantErr bool
+		Err     error
+	}{
+		{
+			name: "when the parameters are correct",
+			args: args{
+				ctx:      context.Background(),
+				parentID: 20001,
+				cursor:   "cursor-sample",
+				limit:    200,
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewConnector(t)
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodGet,
+					"wiki/api/v2/pages/20001/children?cursor=cursor-sample&limit=200",
+					"", nil).
+					Return(&http.Request{}, nil)
+
+				client.On("Call",
+					&http.Request{},
+					&model.ChildPageChunkScheme{}).
+					Return(&model.ResponseScheme{}, nil)
+
+				fields.c = client
+			},
+		},
+
+		{
+			name: "when the parent id is not provided",
+			args: args{
+				ctx: context.Background(),
+			},
+			wantErr: true,
+			Err:     model.ErrNoPageIDError,
+		},
+
+		{
+			name: "when the http request cannot be created",
+			args: args{
+				ctx:      context.Background(),
+				parentID: 20001,
+				cursor:   "cursor-sample",
+				limit:    200,
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewConnector(t)
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodGet,
+					"wiki/api/v2/pages/20001/children?cursor=cursor-sample&limit=200",
+					"", nil).
+					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+
+				fields.c = client
+			},
+
+			wantErr: true,
+			Err:     errors.New("error, unable to create the http request"),
+		},
+
+		{
+			name: "when the call fails",
+			args: args{
+				ctx:      context.Background(),
+				parentID: 20001,
+				cursor:   "cursor-sample",
+				limit:    200,
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewConnector(t)
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodGet,
+					"wiki/api/v2/pages/20001/children?cursor=cursor-sample&limit=200",
+					"", nil).
+					Return(&http.Request{}, nil)
+
+				client.On("Call",
+					&http.Request{},
+					&model.ChildPageChunkScheme{}).
+					Return(&model.ResponseScheme{}, errors.New("error, request failed"))
+
+				fields.c = client
+			},
+
+			wantErr: true,
+			Err:     errors.New("error, request failed"),
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+
+			if testCase.on != nil {
+				testCase.on(&testCase.fields)
+			}
+
+			newService := NewPageService(testCase.fields.c)
+
+			gotResult, gotResponse, err := newService.GetsByParent(testCase.args.ctx, testCase.args.parentID,
+				testCase.args.cursor, testCase.args.limit)
+
+			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+
+				assert.EqualError(t, err, testCase.Err.Error())
+			} else {
+
+				assert.NoError(t, err)
+				assert.NotEqual(t, gotResponse, nil)
+				assert.NotEqual(t, gotResult, nil)
+			}
+
+		})
+	}
+}
+
 func Test_internalPageImpl_Delete(t *testing.T) {
 
 	type fields struct {
@@ -606,7 +752,7 @@ func Test_internalPageImpl_Delete(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:    context.TODO(),
+				ctx:    context.Background(),
 				pageID: 200001,
 			},
 			on: func(fields *fields) {
@@ -632,7 +778,7 @@ func Test_internalPageImpl_Delete(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:    context.TODO(),
+				ctx:    context.Background(),
 				pageID: 200001,
 			},
 			on: func(fields *fields) {
@@ -656,7 +802,7 @@ func Test_internalPageImpl_Delete(t *testing.T) {
 		{
 			name: "when the page id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoPageIDError,
@@ -747,7 +893,7 @@ func Test_internalPageImpl_Create(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				payload: mockedPayload,
 			},
 			on: func(fields *fields) {
@@ -773,7 +919,7 @@ func Test_internalPageImpl_Create(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				payload: mockedPayload,
 			},
 			on: func(fields *fields) {
@@ -887,7 +1033,7 @@ func Test_internalPageImpl_Update(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				pageID:  215646235,
 				payload: mockedPayload,
 			},
@@ -914,7 +1060,7 @@ func Test_internalPageImpl_Update(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				pageID:  215646235,
 				payload: mockedPayload,
 			},
@@ -939,7 +1085,7 @@ func Test_internalPageImpl_Update(t *testing.T) {
 		{
 			name: "when the page id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoPageIDError,

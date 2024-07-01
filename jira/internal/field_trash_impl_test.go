@@ -36,7 +36,7 @@ func Test_internalFieldTrashServiceImpl_Search(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 				options: &model.FieldSearchOptionsScheme{
 					IDs:     []string{"111", "12222"},
 					Query:   "query-sample",
@@ -73,7 +73,7 @@ func Test_internalFieldTrashServiceImpl_Search(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 				options: &model.FieldSearchOptionsScheme{
 					IDs:     []string{"111", "12222"},
 					Query:   "query-sample",
@@ -110,7 +110,7 @@ func Test_internalFieldTrashServiceImpl_Search(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 				options: &model.FieldSearchOptionsScheme{
 					IDs:     []string{"111", "12222"},
 					Query:   "query-sample",
@@ -142,7 +142,7 @@ func Test_internalFieldTrashServiceImpl_Search(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			on: func(fields *fields) {
 
@@ -220,7 +220,7 @@ func Test_internalFieldTrashServiceImpl_Move(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 				id:  "customfield_12000",
 			},
 			on: func(fields *fields) {
@@ -251,7 +251,7 @@ func Test_internalFieldTrashServiceImpl_Move(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 				id:  "customfield_12000",
 			},
 			on: func(fields *fields) {
@@ -282,7 +282,7 @@ func Test_internalFieldTrashServiceImpl_Move(t *testing.T) {
 			name:   "when the field id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 				id:  "",
 			},
 			wantErr: true,
@@ -293,7 +293,7 @@ func Test_internalFieldTrashServiceImpl_Move(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 				id:  "customfield_12000",
 			},
 			on: func(fields *fields) {
@@ -370,7 +370,7 @@ func Test_internalFieldTrashServiceImpl_Restore(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 				id:  "customfield_12000",
 			},
 			on: func(fields *fields) {
@@ -401,7 +401,7 @@ func Test_internalFieldTrashServiceImpl_Restore(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 				id:  "customfield_12000",
 			},
 			on: func(fields *fields) {
@@ -432,7 +432,7 @@ func Test_internalFieldTrashServiceImpl_Restore(t *testing.T) {
 			name:   "when the field id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 				id:  "",
 			},
 			wantErr: true,
@@ -443,7 +443,7 @@ func Test_internalFieldTrashServiceImpl_Restore(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 				id:  "customfield_12000",
 			},
 			on: func(fields *fields) {

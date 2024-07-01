@@ -36,7 +36,7 @@ func Test_internalProjectPermissionSchemeImpl_Get(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				projectKeyOrId: "DUMMY",
 				expand:         []string{"field", "group"},
 			},
@@ -66,7 +66,7 @@ func Test_internalProjectPermissionSchemeImpl_Get(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				projectKeyOrId: "DUMMY",
 				expand:         []string{"field", "group"},
 			},
@@ -96,7 +96,7 @@ func Test_internalProjectPermissionSchemeImpl_Get(t *testing.T) {
 			name:   "when the project key or id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoProjectIDOrKeyError,
@@ -106,7 +106,7 @@ func Test_internalProjectPermissionSchemeImpl_Get(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				projectKeyOrId: "DUMMY",
 				expand:         []string{"field", "group"},
 			},
@@ -183,7 +183,7 @@ func Test_internalProjectPermissionSchemeImpl_SecurityLevels(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				projectKeyOrId: "DUMMY",
 			},
 			on: func(fields *fields) {
@@ -212,7 +212,7 @@ func Test_internalProjectPermissionSchemeImpl_SecurityLevels(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				projectKeyOrId: "DUMMY",
 			},
 			on: func(fields *fields) {
@@ -241,7 +241,7 @@ func Test_internalProjectPermissionSchemeImpl_SecurityLevels(t *testing.T) {
 			name:   "when the project key or id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoProjectIDOrKeyError,
@@ -251,7 +251,7 @@ func Test_internalProjectPermissionSchemeImpl_SecurityLevels(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				projectKeyOrId: "DUMMY",
 			},
 			on: func(fields *fields) {
@@ -330,7 +330,7 @@ func Test_internalProjectPermissionSchemeImpl_Assign(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:                context.TODO(),
+				ctx:                context.Background(),
 				projectKeyOrId:     "DUMMY",
 				permissionSchemeId: 10001,
 			},
@@ -360,7 +360,7 @@ func Test_internalProjectPermissionSchemeImpl_Assign(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:                context.TODO(),
+				ctx:                context.Background(),
 				projectKeyOrId:     "DUMMY",
 				permissionSchemeId: 10001,
 			},
@@ -390,7 +390,7 @@ func Test_internalProjectPermissionSchemeImpl_Assign(t *testing.T) {
 			name:   "when the project key or id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoProjectIDOrKeyError,
@@ -400,7 +400,7 @@ func Test_internalProjectPermissionSchemeImpl_Assign(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:                context.TODO(),
+				ctx:                context.Background(),
 				projectKeyOrId:     "DUMMY",
 				permissionSchemeId: 10001,
 			},

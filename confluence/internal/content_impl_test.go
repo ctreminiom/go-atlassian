@@ -35,7 +35,7 @@ func Test_internalContentImpl_Gets(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 				options: &model.GetContentOptionsScheme{
 					ContextType: "page",
 					SpaceKey:    "DUMMY",
@@ -73,7 +73,7 @@ func Test_internalContentImpl_Gets(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 				options: &model.GetContentOptionsScheme{
 					ContextType: "page",
 					SpaceKey:    "DUMMY",
@@ -162,7 +162,7 @@ func Test_internalContentImpl_Search(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				cql:        "space = DUMMY",
 				cqlContext: "spaceKey",
 				expand:     []string{"restrictions.update.restrictions.user"},
@@ -192,7 +192,7 @@ func Test_internalContentImpl_Search(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				cql:        "space = DUMMY",
 				cqlContext: "spaceKey",
 				expand:     []string{"restrictions.update.restrictions.user"},
@@ -219,7 +219,7 @@ func Test_internalContentImpl_Search(t *testing.T) {
 		{
 			name: "when the cql is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoCQLError,
@@ -281,7 +281,7 @@ func Test_internalContentImpl_Get(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				contentID: "11727271",
 				expand:    []string{"restrictions.update.restrictions.user"},
 				version:   23,
@@ -309,7 +309,7 @@ func Test_internalContentImpl_Get(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				contentID: "11727271",
 				expand:    []string{"restrictions.update.restrictions.user"},
 				version:   23,
@@ -334,7 +334,7 @@ func Test_internalContentImpl_Get(t *testing.T) {
 		{
 			name: "when the content id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoContentIDError,
@@ -395,7 +395,7 @@ func Test_internalContentImpl_History(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				contentID: "11727271",
 				expand:    []string{"restrictions.update.restrictions.user"},
 			},
@@ -422,7 +422,7 @@ func Test_internalContentImpl_History(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				contentID: "11727271",
 				expand:    []string{"restrictions.update.restrictions.user"},
 			},
@@ -446,7 +446,7 @@ func Test_internalContentImpl_History(t *testing.T) {
 		{
 			name: "when the content id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoContentIDError,
@@ -506,7 +506,7 @@ func Test_internalContentImpl_Delete(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				contentID: "11727271",
 				status:    "trashed",
 			},
@@ -533,7 +533,7 @@ func Test_internalContentImpl_Delete(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				contentID: "11727271",
 				status:    "trashed",
 			},
@@ -557,7 +557,7 @@ func Test_internalContentImpl_Delete(t *testing.T) {
 		{
 			name: "when the content id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoContentIDError,
@@ -627,7 +627,7 @@ func Test_internalContentImpl_Create(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -653,7 +653,7 @@ func Test_internalContentImpl_Create(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -739,7 +739,7 @@ func Test_internalContentImpl_Update(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				contentID: "100001",
 				payload:   payloadMocked,
 			},
@@ -766,7 +766,7 @@ func Test_internalContentImpl_Update(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				contentID: "100001",
 				payload:   payloadMocked,
 			},
@@ -790,7 +790,7 @@ func Test_internalContentImpl_Update(t *testing.T) {
 		{
 			name: "when the content id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoContentIDError,
@@ -857,7 +857,7 @@ func Test_internalContentImpl_Archive(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -883,7 +883,7 @@ func Test_internalContentImpl_Archive(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {

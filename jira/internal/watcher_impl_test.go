@@ -35,7 +35,7 @@ func Test_internalWatcherImpl_Gets(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "DUMMY-5",
 			},
 			on: func(fields *fields) {
@@ -65,7 +65,7 @@ func Test_internalWatcherImpl_Gets(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "DUMMY-5",
 			},
 			on: func(fields *fields) {
@@ -95,7 +95,7 @@ func Test_internalWatcherImpl_Gets(t *testing.T) {
 			name:   "when the issue key or id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "",
 			},
 			wantErr: true,
@@ -106,7 +106,7 @@ func Test_internalWatcherImpl_Gets(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "DUMMY-5",
 			},
 			on: func(fields *fields) {
@@ -183,7 +183,7 @@ func Test_internalWatcherImpl_Add(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "DUMMY-5",
 			},
 			on: func(fields *fields) {
@@ -213,7 +213,7 @@ func Test_internalWatcherImpl_Add(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "DUMMY-5",
 			},
 			on: func(fields *fields) {
@@ -243,7 +243,7 @@ func Test_internalWatcherImpl_Add(t *testing.T) {
 			name:   "when the issue key or id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "",
 			},
 			wantErr: true,
@@ -254,7 +254,7 @@ func Test_internalWatcherImpl_Add(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "DUMMY-5",
 			},
 			on: func(fields *fields) {
@@ -331,7 +331,7 @@ func Test_internalWatcherImpl_Delete(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "DUMMY-5",
 				accountId:    "dummy-account-id",
 			},
@@ -362,7 +362,7 @@ func Test_internalWatcherImpl_Delete(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "DUMMY-5",
 				accountId:    "dummy-account-id",
 			},
@@ -393,7 +393,7 @@ func Test_internalWatcherImpl_Delete(t *testing.T) {
 			name:   "when the issue key or id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "",
 			},
 			wantErr: true,
@@ -404,7 +404,7 @@ func Test_internalWatcherImpl_Delete(t *testing.T) {
 			name:   "when the account id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "DUMMY-5",
 				accountId:    "",
 			},
@@ -416,7 +416,7 @@ func Test_internalWatcherImpl_Delete(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				issueKeyOrId: "DUMMY-5",
 				accountId:    "dummy-account-id",
 			},

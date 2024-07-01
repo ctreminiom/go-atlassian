@@ -36,7 +36,7 @@ func Test_internalScreenTabFieldImpl_Gets(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				screenId: 10002,
 				tabId:    18272,
 			},
@@ -66,7 +66,7 @@ func Test_internalScreenTabFieldImpl_Gets(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				screenId: 10002,
 				tabId:    18272,
 			},
@@ -96,7 +96,7 @@ func Test_internalScreenTabFieldImpl_Gets(t *testing.T) {
 			name:   "when the screen id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoScreenIDError,
@@ -106,7 +106,7 @@ func Test_internalScreenTabFieldImpl_Gets(t *testing.T) {
 			name:   "when the tab id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				screenId: 10001,
 			},
 			wantErr: true,
@@ -117,7 +117,7 @@ func Test_internalScreenTabFieldImpl_Gets(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				screenId: 10002,
 				tabId:    18272,
 			},
@@ -197,7 +197,7 @@ func Test_internalScreenTabFieldImpl_Add(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				screenId: 10002,
 				tabId:    18272,
 				fieldId:  "customfield_10001",
@@ -228,7 +228,7 @@ func Test_internalScreenTabFieldImpl_Add(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				screenId: 10002,
 				tabId:    18272,
 				fieldId:  "customfield_10001",
@@ -259,7 +259,7 @@ func Test_internalScreenTabFieldImpl_Add(t *testing.T) {
 			name:   "when the screen id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoScreenIDError,
@@ -269,7 +269,7 @@ func Test_internalScreenTabFieldImpl_Add(t *testing.T) {
 			name:   "when the tab id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				screenId: 10001,
 			},
 			wantErr: true,
@@ -280,7 +280,7 @@ func Test_internalScreenTabFieldImpl_Add(t *testing.T) {
 			name:   "when the field id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				screenId: 10001,
 				tabId:    10001,
 			},
@@ -292,7 +292,7 @@ func Test_internalScreenTabFieldImpl_Add(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				screenId: 10002,
 				tabId:    18272,
 				fieldId:  "customfield_10001",
@@ -372,7 +372,7 @@ func Test_internalScreenTabFieldImpl_Remove(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				screenId: 10002,
 				tabId:    18272,
 				fieldId:  "customfield_10001",
@@ -403,7 +403,7 @@ func Test_internalScreenTabFieldImpl_Remove(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				screenId: 10002,
 				tabId:    18272,
 				fieldId:  "customfield_10001",
@@ -434,7 +434,7 @@ func Test_internalScreenTabFieldImpl_Remove(t *testing.T) {
 			name:   "when the screen id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoScreenIDError,
@@ -444,7 +444,7 @@ func Test_internalScreenTabFieldImpl_Remove(t *testing.T) {
 			name:   "when the tab id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				screenId: 10001,
 			},
 			wantErr: true,
@@ -455,7 +455,7 @@ func Test_internalScreenTabFieldImpl_Remove(t *testing.T) {
 			name:   "when the field id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				screenId: 10001,
 				tabId:    10001,
 			},
@@ -467,7 +467,7 @@ func Test_internalScreenTabFieldImpl_Remove(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				screenId: 10002,
 				tabId:    18272,
 				fieldId:  "customfield_10001",
@@ -549,7 +549,7 @@ func Test_internalScreenTabFieldImpl_Move(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				screenId: 10002,
 				tabId:    18272,
 				fieldId:  "customfield_10001",
@@ -581,7 +581,7 @@ func Test_internalScreenTabFieldImpl_Move(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				screenId: 10002,
 				tabId:    18272,
 				fieldId:  "customfield_10001",
@@ -613,7 +613,7 @@ func Test_internalScreenTabFieldImpl_Move(t *testing.T) {
 			name:   "when the screen id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoScreenIDError,
@@ -623,7 +623,7 @@ func Test_internalScreenTabFieldImpl_Move(t *testing.T) {
 			name:   "when the tab id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				screenId: 10001,
 			},
 			wantErr: true,
@@ -634,7 +634,7 @@ func Test_internalScreenTabFieldImpl_Move(t *testing.T) {
 			name:   "when the field id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				screenId: 10001,
 				tabId:    10001,
 			},
@@ -646,7 +646,7 @@ func Test_internalScreenTabFieldImpl_Move(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				screenId: 10002,
 				tabId:    18272,
 				fieldId:  "customfield_10001",

@@ -33,7 +33,7 @@ func Test_internalSCIMSchemaImpl_Gets(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				directoryID: "direction-id-sample",
 			},
 			on: func(fields *fields) {
@@ -61,7 +61,7 @@ func Test_internalSCIMSchemaImpl_Gets(t *testing.T) {
 		{
 			name: "when the directory id is not provided",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				directoryID: "",
 			},
 			wantErr: true,
@@ -71,7 +71,7 @@ func Test_internalSCIMSchemaImpl_Gets(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				directoryID: "direction-id-sample",
 			},
 			on: func(fields *fields) {
@@ -146,7 +146,7 @@ func Test_internalSCIMSchemaImpl_Group(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				directoryID: "direction-id-sample",
 			},
 			on: func(fields *fields) {
@@ -174,7 +174,7 @@ func Test_internalSCIMSchemaImpl_Group(t *testing.T) {
 		{
 			name: "when the directory id is not provided",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				directoryID: "",
 			},
 			wantErr: true,
@@ -184,7 +184,7 @@ func Test_internalSCIMSchemaImpl_Group(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				directoryID: "direction-id-sample",
 			},
 			on: func(fields *fields) {
@@ -259,7 +259,7 @@ func Test_internalSCIMSchemaImpl_User(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				directoryID: "direction-id-sample",
 			},
 			on: func(fields *fields) {
@@ -287,7 +287,7 @@ func Test_internalSCIMSchemaImpl_User(t *testing.T) {
 		{
 			name: "when the directory id is not provided",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				directoryID: "",
 			},
 			wantErr: true,
@@ -297,7 +297,7 @@ func Test_internalSCIMSchemaImpl_User(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				directoryID: "direction-id-sample",
 			},
 			on: func(fields *fields) {
@@ -372,7 +372,7 @@ func Test_internalSCIMSchemaImpl_Enterprise(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				directoryID: "direction-id-sample",
 			},
 			on: func(fields *fields) {
@@ -400,7 +400,7 @@ func Test_internalSCIMSchemaImpl_Enterprise(t *testing.T) {
 		{
 			name: "when the directory id is not provided",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				directoryID: "",
 			},
 			wantErr: true,
@@ -410,7 +410,7 @@ func Test_internalSCIMSchemaImpl_Enterprise(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				directoryID: "direction-id-sample",
 			},
 			on: func(fields *fields) {
@@ -485,7 +485,7 @@ func Test_internalSCIMSchemaImpl_Feature(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				directoryID: "direction-id-sample",
 			},
 			on: func(fields *fields) {
@@ -513,7 +513,7 @@ func Test_internalSCIMSchemaImpl_Feature(t *testing.T) {
 		{
 			name: "when the directory id is not provided",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				directoryID: "",
 			},
 			wantErr: true,
@@ -523,7 +523,7 @@ func Test_internalSCIMSchemaImpl_Feature(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				directoryID: "direction-id-sample",
 			},
 			on: func(fields *fields) {

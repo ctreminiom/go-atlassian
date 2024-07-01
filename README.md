@@ -11,7 +11,9 @@
 ![GitHub](https://img.shields.io/github/license/ctreminiom/go-atlassian)
 [![Mentioned in Awesome Go-Atlassian](https://awesome.re/mentioned-badge-flat.svg)](https://github.com/avelino/awesome-go#third-party-apis)
 [![OpenSSF Best Practices](https://bestpractices.coreinfrastructure.org/projects/4861/badge)](https://bestpractices.coreinfrastructure.org/projects/4861)
+[![OpenSSF Best Practices](https://img.shields.io/ossf-scorecard/github.com/ctreminiom/go-atlassian?label=openssf%20scorecard&style=flat)](https://img.shields.io/ossf-scorecard/github.com/ctreminiom/go-atlassian?label=openssf%20scorecard&style=flat)
 [![Documentation](https://img.shields.io/badge/%F0%9F%92%A1%20go-documentation-00ACD7.svg?style=flat)](https://docs.go-atlassian.io/)
+[![Sourcegraph](https://sourcegraph.com/github.com/ctreminiom/go-atlassian/-/badge.svg)](https://sourcegraph.com/github.com/ctreminiom/go-atlassian?badge)
 [![Dependency Review](https://github.com/ctreminiom/go-atlassian/actions/workflows/dependency-review.yml/badge.svg)](https://github.com/ctreminiom/go-atlassian/actions/workflows/dependency-review.yml)
 [![Analysis](https://github.com/ctreminiom/go-atlassian/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/ctreminiom/go-atlassian/actions/workflows/codeql-analysis.yml)
 

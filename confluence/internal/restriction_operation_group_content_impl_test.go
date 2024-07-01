@@ -33,7 +33,7 @@ func Test_internalRestrictionOperationGroupImpl_Get(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:           context.TODO(),
+				ctx:           context.Background(),
 				contentID:     "100001",
 				operationKey:  "read",
 				groupNameOrID: "confluence-users",
@@ -62,7 +62,7 @@ func Test_internalRestrictionOperationGroupImpl_Get(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:           context.TODO(),
+				ctx:           context.Background(),
 				contentID:     "100001",
 				operationKey:  "read",
 				groupNameOrID: "confluence-users",
@@ -88,7 +88,7 @@ func Test_internalRestrictionOperationGroupImpl_Get(t *testing.T) {
 		{
 			name: "when the content id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoContentIDError,
@@ -97,7 +97,7 @@ func Test_internalRestrictionOperationGroupImpl_Get(t *testing.T) {
 		{
 			name: "when the property key is not provided",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				contentID: "1111",
 			},
 			wantErr: true,
@@ -107,7 +107,7 @@ func Test_internalRestrictionOperationGroupImpl_Get(t *testing.T) {
 		{
 			name: "when the group name or id is not provided",
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				contentID:    "1111",
 				operationKey: "read",
 			},
@@ -168,7 +168,7 @@ func Test_internalRestrictionOperationGroupImpl_Add(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:           context.TODO(),
+				ctx:           context.Background(),
 				contentID:     "100001",
 				operationKey:  "read",
 				groupNameOrID: "confluence-users",
@@ -197,7 +197,7 @@ func Test_internalRestrictionOperationGroupImpl_Add(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:           context.TODO(),
+				ctx:           context.Background(),
 				contentID:     "100001",
 				operationKey:  "read",
 				groupNameOrID: "confluence-users",
@@ -223,7 +223,7 @@ func Test_internalRestrictionOperationGroupImpl_Add(t *testing.T) {
 		{
 			name: "when the content id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoContentIDError,
@@ -232,7 +232,7 @@ func Test_internalRestrictionOperationGroupImpl_Add(t *testing.T) {
 		{
 			name: "when the property key is not provided",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				contentID: "1111",
 			},
 			wantErr: true,
@@ -242,7 +242,7 @@ func Test_internalRestrictionOperationGroupImpl_Add(t *testing.T) {
 		{
 			name: "when the group name or id is not provided",
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				contentID:    "1111",
 				operationKey: "read",
 			},
@@ -303,7 +303,7 @@ func Test_internalRestrictionOperationGroupImpl_Remove(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:           context.TODO(),
+				ctx:           context.Background(),
 				contentID:     "100001",
 				operationKey:  "read",
 				groupNameOrID: "confluence-users",
@@ -332,7 +332,7 @@ func Test_internalRestrictionOperationGroupImpl_Remove(t *testing.T) {
 		{
 			name: "when the group provided is an uuid type",
 			args: args{
-				ctx:           context.TODO(),
+				ctx:           context.Background(),
 				contentID:     "100001",
 				operationKey:  "read",
 				groupNameOrID: "5185574c-4008-49bf-803c-e71baecf37d3",
@@ -361,7 +361,7 @@ func Test_internalRestrictionOperationGroupImpl_Remove(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:           context.TODO(),
+				ctx:           context.Background(),
 				contentID:     "100001",
 				operationKey:  "read",
 				groupNameOrID: "confluence-users",
@@ -387,7 +387,7 @@ func Test_internalRestrictionOperationGroupImpl_Remove(t *testing.T) {
 		{
 			name: "when the content id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoContentIDError,
@@ -396,7 +396,7 @@ func Test_internalRestrictionOperationGroupImpl_Remove(t *testing.T) {
 		{
 			name: "when the property key is not provided",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				contentID: "1111",
 			},
 			wantErr: true,
@@ -406,7 +406,7 @@ func Test_internalRestrictionOperationGroupImpl_Remove(t *testing.T) {
 		{
 			name: "when the group name or id is not provided",
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				contentID:    "1111",
 				operationKey: "read",
 			},

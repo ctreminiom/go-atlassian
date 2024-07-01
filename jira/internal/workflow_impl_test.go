@@ -36,7 +36,7 @@ func Test_internalWorkflowImpl_Gets(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 				options: &model.WorkflowSearchOptions{
 					WorkflowName: []string{"workflow-name"},
 					Expand:       []string{"transitions"},
@@ -73,7 +73,7 @@ func Test_internalWorkflowImpl_Gets(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 				options: &model.WorkflowSearchOptions{
 					WorkflowName: []string{"workflow-name"},
 					Expand:       []string{"transitions"},
@@ -110,7 +110,7 @@ func Test_internalWorkflowImpl_Gets(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 				options: &model.WorkflowSearchOptions{
 					WorkflowName: []string{"workflow-name"},
 					Expand:       []string{"transitions"},
@@ -195,7 +195,7 @@ func Test_internalWorkflowImpl_Delete(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				workflowId: "2838382882",
 			},
 			on: func(fields *fields) {
@@ -224,7 +224,7 @@ func Test_internalWorkflowImpl_Delete(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				workflowId: "2838382882",
 			},
 			on: func(fields *fields) {
@@ -253,7 +253,7 @@ func Test_internalWorkflowImpl_Delete(t *testing.T) {
 			name:   "when the workflow id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoWorkflowIDError,
@@ -263,7 +263,7 @@ func Test_internalWorkflowImpl_Delete(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				workflowId: "2838382882",
 			},
 			on: func(fields *fields) {
@@ -360,7 +360,7 @@ func Test_internalWorkflowImpl_Create(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -389,7 +389,7 @@ func Test_internalWorkflowImpl_Create(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -418,7 +418,7 @@ func Test_internalWorkflowImpl_Create(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {

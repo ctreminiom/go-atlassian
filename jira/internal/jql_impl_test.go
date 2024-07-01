@@ -46,7 +46,7 @@ func Test_internalJQLServiceImpl_Parse(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				validationType: "strict",
 				JqlQueries: []string{
 					"summary ~ test AND (labels in (urgent, blocker) OR lastCommentedBy = currentUser()) AND status CHANGED AFTER startOfMonth(-1M) ORDER BY updated DESC",
@@ -83,7 +83,7 @@ func Test_internalJQLServiceImpl_Parse(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				validationType: "strict",
 				JqlQueries: []string{
 					"summary ~ test AND (labels in (urgent, blocker) OR lastCommentedBy = currentUser()) AND status CHANGED AFTER startOfMonth(-1M) ORDER BY updated DESC",
@@ -120,7 +120,7 @@ func Test_internalJQLServiceImpl_Parse(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				validationType: "strict",
 				JqlQueries: []string{
 					"summary ~ test AND (labels in (urgent, blocker) OR lastCommentedBy = currentUser()) AND status CHANGED AFTER startOfMonth(-1M) ORDER BY updated DESC",

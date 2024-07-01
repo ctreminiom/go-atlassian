@@ -35,7 +35,7 @@ func Test_internalChildrenDescandantsImpl_Children(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:           context.TODO(),
+				ctx:           context.Background(),
 				contentID:     "100100101",
 				expand:        []string{"attachment", "comments"},
 				parentVersion: 12,
@@ -64,7 +64,7 @@ func Test_internalChildrenDescandantsImpl_Children(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:           context.TODO(),
+				ctx:           context.Background(),
 				contentID:     "100100101",
 				expand:        []string{"attachment", "comments"},
 				parentVersion: 12,
@@ -90,7 +90,7 @@ func Test_internalChildrenDescandantsImpl_Children(t *testing.T) {
 		{
 			name: "when the content id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoContentIDError,
@@ -150,7 +150,7 @@ func Test_internalChildrenDescandantsImpl_Move(t *testing.T) {
 		{
 			name: "append when the parameters are correct",
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				pageID:   "101010101",
 				position: "append",
 				targetID: "202020202",
@@ -178,7 +178,7 @@ func Test_internalChildrenDescandantsImpl_Move(t *testing.T) {
 		{
 			name: "position before when the parameters are correct",
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				pageID:   "101010101",
 				position: "before",
 				targetID: "202020202",
@@ -206,7 +206,7 @@ func Test_internalChildrenDescandantsImpl_Move(t *testing.T) {
 		{
 			name: "position after when the parameters are correct",
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				pageID:   "101010101",
 				position: "after",
 				targetID: "202020202",
@@ -234,7 +234,7 @@ func Test_internalChildrenDescandantsImpl_Move(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				pageID:   "100100101",
 				position: "append",
 				targetID: "200200202",
@@ -259,7 +259,7 @@ func Test_internalChildrenDescandantsImpl_Move(t *testing.T) {
 		{
 			name: "when the page id is not provided",
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				position: "append",
 				targetID: "100100101",
 			},
@@ -270,7 +270,7 @@ func Test_internalChildrenDescandantsImpl_Move(t *testing.T) {
 		{
 			name: "when the target id is not provided",
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				pageID:   "100100101",
 				position: "append",
 			},
@@ -281,7 +281,7 @@ func Test_internalChildrenDescandantsImpl_Move(t *testing.T) {
 		{
 			name: "when the position is not provided",
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				pageID:   "100100101",
 				targetID: "200200202",
 			},
@@ -292,7 +292,7 @@ func Test_internalChildrenDescandantsImpl_Move(t *testing.T) {
 		{
 			name: "when the position is incorrect",
 			args: args{
-				ctx:      context.TODO(),
+				ctx:      context.Background(),
 				pageID:   "100100101",
 				position: "gopher",
 				targetID: "200200202",
@@ -357,7 +357,7 @@ func Test_internalChildrenDescandantsImpl_ChildrenByType(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:           context.TODO(),
+				ctx:           context.Background(),
 				contentID:     "100100101",
 				contentType:   "blogpost",
 				expand:        []string{"attachment", "comments"},
@@ -389,7 +389,7 @@ func Test_internalChildrenDescandantsImpl_ChildrenByType(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:           context.TODO(),
+				ctx:           context.Background(),
 				contentID:     "100100101",
 				contentType:   "blogpost",
 				expand:        []string{"attachment", "comments"},
@@ -418,7 +418,7 @@ func Test_internalChildrenDescandantsImpl_ChildrenByType(t *testing.T) {
 		{
 			name: "when the content id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoContentIDError,
@@ -427,7 +427,7 @@ func Test_internalChildrenDescandantsImpl_ChildrenByType(t *testing.T) {
 		{
 			name: "when the content type is not provided",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				contentID: "11929292",
 			},
 			wantErr: true,
@@ -490,7 +490,7 @@ func Test_internalChildrenDescandantsImpl_Descendants(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				contentID: "100100101",
 				expand:    []string{"attachment", "comments"},
 			},
@@ -518,7 +518,7 @@ func Test_internalChildrenDescandantsImpl_Descendants(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				contentID: "100100101",
 				expand:    []string{"attachment", "comments"},
 			},
@@ -543,7 +543,7 @@ func Test_internalChildrenDescandantsImpl_Descendants(t *testing.T) {
 		{
 			name: "when the content id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoContentIDError,
@@ -603,7 +603,7 @@ func Test_internalChildrenDescandantsImpl_DescendantsByType(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				contentID:   "100100101",
 				contentType: "blogpost",
 				expand:      []string{"attachment", "comments"},
@@ -635,7 +635,7 @@ func Test_internalChildrenDescandantsImpl_DescendantsByType(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				contentID:   "100100101",
 				contentType: "blogpost",
 				expand:      []string{"attachment", "comments"},
@@ -664,7 +664,7 @@ func Test_internalChildrenDescandantsImpl_DescendantsByType(t *testing.T) {
 		{
 			name: "when the content id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoContentIDError,
@@ -673,7 +673,7 @@ func Test_internalChildrenDescandantsImpl_DescendantsByType(t *testing.T) {
 		{
 			name: "when the content type is not provided",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				contentID: "11929292",
 			},
 			wantErr: true,
@@ -750,7 +750,7 @@ func Test_internalChildrenDescandantsImpl_CopyHierarchy(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				contentID: "100100101",
 				options:   payloadMocked,
 			},
@@ -778,7 +778,7 @@ func Test_internalChildrenDescandantsImpl_CopyHierarchy(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				contentID: "100100101",
 				options:   payloadMocked,
 			},
@@ -803,7 +803,7 @@ func Test_internalChildrenDescandantsImpl_CopyHierarchy(t *testing.T) {
 		{
 			name: "when the content id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoContentIDError,
@@ -879,7 +879,7 @@ func Test_internalChildrenDescandantsImpl_CopyPage(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				contentID: "100100101",
 				options:   payloadMocked,
 				expand:    []string{"childTypes.all"},
@@ -908,7 +908,7 @@ func Test_internalChildrenDescandantsImpl_CopyPage(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				contentID: "100100101",
 				options:   payloadMocked,
 				expand:    []string{"childTypes.all"},
@@ -934,7 +934,7 @@ func Test_internalChildrenDescandantsImpl_CopyPage(t *testing.T) {
 		{
 			name: "when the content id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoContentIDError,

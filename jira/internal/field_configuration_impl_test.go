@@ -37,7 +37,7 @@ func Test_internalIssueFieldConfigServiceImpl_Gets(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				ids:        []int{10000, 100001},
 				isDefault:  false,
 				startAt:    50,
@@ -71,7 +71,7 @@ func Test_internalIssueFieldConfigServiceImpl_Gets(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				ids:        []int{10000, 100001},
 				isDefault:  false,
 				startAt:    50,
@@ -105,7 +105,7 @@ func Test_internalIssueFieldConfigServiceImpl_Gets(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				ids:        []int{10000, 100001},
 				isDefault:  false,
 				startAt:    50,
@@ -194,7 +194,7 @@ func Test_internalIssueFieldConfigServiceImpl_Create(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				name:        "DUMMY Field Configuration Scheme",
 				description: "description sample",
 			},
@@ -226,7 +226,7 @@ func Test_internalIssueFieldConfigServiceImpl_Create(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				name:        "DUMMY Field Configuration Scheme",
 				description: "description sample",
 			},
@@ -258,7 +258,7 @@ func Test_internalIssueFieldConfigServiceImpl_Create(t *testing.T) {
 			name:   "when the description is not provided",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				name:        "DUMMY Field Configuration Scheme",
 				description: "",
 			},
@@ -290,7 +290,7 @@ func Test_internalIssueFieldConfigServiceImpl_Create(t *testing.T) {
 			name:   "when the field configuration name is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				name:        "",
 				description: "description sample",
 			},
@@ -302,7 +302,7 @@ func Test_internalIssueFieldConfigServiceImpl_Create(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				name:        "DUMMY Field Configuration Scheme",
 				description: "description sample",
 			},
@@ -389,7 +389,7 @@ func Test_internalIssueFieldConfigServiceImpl_Update(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				id:          1001,
 				name:        "DUMMY Field Configuration Scheme",
 				description: "description sample",
@@ -422,7 +422,7 @@ func Test_internalIssueFieldConfigServiceImpl_Update(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				id:          1001,
 				name:        "DUMMY Field Configuration Scheme",
 				description: "description sample",
@@ -455,7 +455,7 @@ func Test_internalIssueFieldConfigServiceImpl_Update(t *testing.T) {
 			name:   "when the description is not provided",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				id:          1001,
 				name:        "DUMMY Field Configuration Scheme",
 				description: "",
@@ -488,7 +488,7 @@ func Test_internalIssueFieldConfigServiceImpl_Update(t *testing.T) {
 			name:   "when the field configuration name is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				id:          1001,
 				name:        "",
 				description: "description sample",
@@ -501,7 +501,7 @@ func Test_internalIssueFieldConfigServiceImpl_Update(t *testing.T) {
 			name:   "when the field configuration id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				id:          0,
 				name:        "field configuration id",
 				description: "description sample",
@@ -514,7 +514,7 @@ func Test_internalIssueFieldConfigServiceImpl_Update(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				id:          1001,
 				name:        "DUMMY Field Configuration Scheme",
 				description: "description sample",
@@ -594,7 +594,7 @@ func Test_internalIssueFieldConfigServiceImpl_Delete(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 				id:  1001,
 			},
 			on: func(fields *fields) {
@@ -625,7 +625,7 @@ func Test_internalIssueFieldConfigServiceImpl_Delete(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 				id:  1001,
 			},
 			on: func(fields *fields) {
@@ -656,7 +656,7 @@ func Test_internalIssueFieldConfigServiceImpl_Delete(t *testing.T) {
 			name:   "when the field configuration id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 				id:  0,
 			},
 			wantErr: true,
@@ -667,7 +667,7 @@ func Test_internalIssueFieldConfigServiceImpl_Delete(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 				id:  1001,
 			},
 			on: func(fields *fields) {

@@ -35,7 +35,7 @@ func Test_internalIssueFieldConfigItemServiceImpl_Gets(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				id:         10001,
 				startAt:    50,
 				maxResults: 50,
@@ -68,7 +68,7 @@ func Test_internalIssueFieldConfigItemServiceImpl_Gets(t *testing.T) {
 			name:   "when the field config is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				startAt:    50,
 				maxResults: 50,
 			},
@@ -80,7 +80,7 @@ func Test_internalIssueFieldConfigItemServiceImpl_Gets(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				id:         10001,
 				startAt:    50,
 				maxResults: 50,
@@ -113,7 +113,7 @@ func Test_internalIssueFieldConfigItemServiceImpl_Gets(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				id:         10001,
 				startAt:    50,
 				maxResults: 50,
@@ -216,7 +216,7 @@ func Test_internalIssueFieldConfigItemServiceImpl_Update(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				id:      10001,
 				payload: payloadMocked,
 			},
@@ -248,7 +248,7 @@ func Test_internalIssueFieldConfigItemServiceImpl_Update(t *testing.T) {
 			name:   "when the field config is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoFieldConfigurationIDError,
@@ -258,7 +258,7 @@ func Test_internalIssueFieldConfigItemServiceImpl_Update(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				id:      10001,
 				payload: payloadMocked,
 			},
@@ -290,7 +290,7 @@ func Test_internalIssueFieldConfigItemServiceImpl_Update(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				id:      10001,
 				payload: payloadMocked,
 			},

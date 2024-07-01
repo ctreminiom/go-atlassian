@@ -2,6 +2,7 @@ package sm
 
 import (
 	"context"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 )
 
@@ -21,5 +22,5 @@ type AttachmentConnector interface {
 	// POST /rest/servicedeskapi/request/{issueIdOrKey}/attachment
 	//
 	// https://docs.go-atlassian.io/jira-service-management-cloud/request/attachment#create-attachment
-	Create(ctx context.Context, issueKeyOrID string, temporaryAttachmentIDs []string, public bool) (*model.RequestAttachmentCreationScheme, *model.ResponseScheme, error)
+	Create(ctx context.Context, issueKeyOrID string, payload *model.RequestAttachmentCreationPayloadScheme) (*model.RequestAttachmentCreationScheme, *model.ResponseScheme, error)
 }

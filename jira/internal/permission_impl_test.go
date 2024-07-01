@@ -50,7 +50,7 @@ func Test_internalPermissionImpl_Gets(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			on: func(fields *fields) {
 
@@ -79,7 +79,7 @@ func Test_internalPermissionImpl_Gets(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			on: func(fields *fields) {
 
@@ -108,7 +108,7 @@ func Test_internalPermissionImpl_Gets(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			on: func(fields *fields) {
 
@@ -132,7 +132,7 @@ func Test_internalPermissionImpl_Gets(t *testing.T) {
 			name:   "when the response cannot be parsed",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			on: func(fields *fields) {
 
@@ -238,7 +238,7 @@ func Test_internalPermissionImpl_Checks(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -268,7 +268,7 @@ func Test_internalPermissionImpl_Checks(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -298,7 +298,7 @@ func Test_internalPermissionImpl_Checks(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -377,7 +377,7 @@ func Test_internalPermissionImpl_Projects(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				permissions: []string{"EDIT_ISSUES", "CREATE_ISSUES"},
 			},
 			on: func(fields *fields) {
@@ -407,7 +407,7 @@ func Test_internalPermissionImpl_Projects(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				permissions: []string{"EDIT_ISSUES", "CREATE_ISSUES"},
 			},
 			on: func(fields *fields) {
@@ -437,7 +437,7 @@ func Test_internalPermissionImpl_Projects(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				permissions: []string{"EDIT_ISSUES", "CREATE_ISSUES"},
 			},
 			on: func(fields *fields) {
@@ -462,7 +462,7 @@ func Test_internalPermissionImpl_Projects(t *testing.T) {
 			name:   "when the permission keys are not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoPermissionKeysError,

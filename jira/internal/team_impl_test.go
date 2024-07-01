@@ -35,7 +35,7 @@ func Test_internalTeamServiceImpl_Gets(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				maxResults: 1000,
 			},
 			on: func(fields *fields) {
@@ -63,7 +63,7 @@ func Test_internalTeamServiceImpl_Gets(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				maxResults: 1000,
 			},
 			on: func(fields *fields) {
@@ -86,7 +86,7 @@ func Test_internalTeamServiceImpl_Gets(t *testing.T) {
 		{
 			name: "when the http call returns an error",
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				maxResults: 1000,
 			},
 			on: func(fields *fields) {
@@ -173,7 +173,7 @@ func Test_internalTeamServiceImpl_Create(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -201,7 +201,7 @@ func Test_internalTeamServiceImpl_Create(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -224,7 +224,7 @@ func Test_internalTeamServiceImpl_Create(t *testing.T) {
 		{
 			name: "when the http call cannot be executed",
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {

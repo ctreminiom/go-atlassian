@@ -4,14 +4,15 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/service"
-	"github.com/ctreminiom/go-atlassian/service/sm"
 	"io"
 	"mime/multipart"
 	"net/http"
 	"net/url"
 	"strconv"
+
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/service"
+	"github.com/ctreminiom/go-atlassian/service/sm"
 )
 
 func NewServiceDeskService(client service.Connector, version string, queue *QueueService) (*ServiceDeskService, error) {
@@ -49,7 +50,7 @@ func (s *ServiceDeskService) Gets(ctx context.Context, start, limit int) (*model
 // GET /rest/servicedeskapi/servicedesk/{serviceDeskId}
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request/service-desk#get-service-desk-by-id
-func (s *ServiceDeskService) Get(ctx context.Context, serviceDeskID int) (*model.ServiceDeskScheme, *model.ResponseScheme, error) {
+func (s *ServiceDeskService) Get(ctx context.Context, serviceDeskID string) (*model.ServiceDeskScheme, *model.ResponseScheme, error) {
 	return s.internalClient.Get(ctx, serviceDeskID)
 }
 
@@ -58,7 +59,7 @@ func (s *ServiceDeskService) Get(ctx context.Context, serviceDeskID int) (*model
 // POST /rest/servicedeskapi/servicedesk/{serviceDeskId}/attachTemporaryFile
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request/service-desk#attach-temporary-file
-func (s *ServiceDeskService) Attach(ctx context.Context, serviceDeskID int, fileName string, file io.Reader) (*model.ServiceDeskTemporaryFileScheme, *model.ResponseScheme, error) {
+func (s *ServiceDeskService) Attach(ctx context.Context, serviceDeskID string, fileName string, file io.Reader) (*model.ServiceDeskTemporaryFileScheme, *model.ResponseScheme, error) {
 	return s.internalClient.Attach(ctx, serviceDeskID, fileName, file)
 }
 
@@ -89,9 +90,9 @@ func (i *internalServiceDeskImpl) Gets(ctx context.Context, start, limit int) (*
 	return page, res, nil
 }
 
-func (i *internalServiceDeskImpl) Get(ctx context.Context, serviceDeskID int) (*model.ServiceDeskScheme, *model.ResponseScheme, error) {
+func (i *internalServiceDeskImpl) Get(ctx context.Context, serviceDeskID string) (*model.ServiceDeskScheme, *model.ResponseScheme, error) {
 
-	if serviceDeskID == 0 {
+	if serviceDeskID == "" {
 		return nil, nil, model.ErrNoServiceDeskIDError
 	}
 
@@ -111,9 +112,9 @@ func (i *internalServiceDeskImpl) Get(ctx context.Context, serviceDeskID int) (*
 	return serviceDesk, res, nil
 }
 
-func (i *internalServiceDeskImpl) Attach(ctx context.Context, serviceDeskID int, fileName string, file io.Reader) (*model.ServiceDeskTemporaryFileScheme, *model.ResponseScheme, error) {
+func (i *internalServiceDeskImpl) Attach(ctx context.Context, serviceDeskID string, fileName string, file io.Reader) (*model.ServiceDeskTemporaryFileScheme, *model.ResponseScheme, error) {
 
-	if serviceDeskID == 0 {
+	if serviceDeskID == "" {
 		return nil, nil, model.ErrNoServiceDeskIDError
 	}
 

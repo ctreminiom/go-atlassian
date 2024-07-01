@@ -39,7 +39,7 @@ func Test_internalContentAttachmentImpl_Gets(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				contentID:  "100100101",
 				startAt:    50,
 				maxResults: 50,
@@ -73,7 +73,7 @@ func Test_internalContentAttachmentImpl_Gets(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				contentID:  "100100101",
 				startAt:    50,
 				maxResults: 50,
@@ -104,7 +104,7 @@ func Test_internalContentAttachmentImpl_Gets(t *testing.T) {
 		{
 			name: "when the content id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoContentIDError,
@@ -175,7 +175,7 @@ func Test_internalContentAttachmentImpl_CreateOrUpdate(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				attachmentID: "3837272",
 				status:       "current",
 				fileName:     "LICENSE",
@@ -206,7 +206,7 @@ func Test_internalContentAttachmentImpl_CreateOrUpdate(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				attachmentID: "3837272",
 				status:       "current",
 				fileName:     "LICENSE",
@@ -234,7 +234,7 @@ func Test_internalContentAttachmentImpl_CreateOrUpdate(t *testing.T) {
 		{
 			name: "when the attachment id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoContentAttachmentIDError,
@@ -243,7 +243,7 @@ func Test_internalContentAttachmentImpl_CreateOrUpdate(t *testing.T) {
 		{
 			name: "when the file name is not provided",
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				attachmentID: "3837272",
 			},
 			wantErr: true,
@@ -253,7 +253,7 @@ func Test_internalContentAttachmentImpl_CreateOrUpdate(t *testing.T) {
 		{
 			name: "when the file reader is not provided",
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				attachmentID: "3837272",
 				fileName:     "LICENSE",
 			},
@@ -326,7 +326,7 @@ func Test_internalContentAttachmentImpl_Create(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				attachmentID: "3837272",
 				status:       "current",
 				fileName:     "LICENSE",
@@ -357,7 +357,7 @@ func Test_internalContentAttachmentImpl_Create(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				attachmentID: "3837272",
 				status:       "current",
 				fileName:     "LICENSE",
@@ -385,7 +385,7 @@ func Test_internalContentAttachmentImpl_Create(t *testing.T) {
 		{
 			name: "when the attachment id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoContentAttachmentIDError,
@@ -394,7 +394,7 @@ func Test_internalContentAttachmentImpl_Create(t *testing.T) {
 		{
 			name: "when the file name is not provided",
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				attachmentID: "3837272",
 			},
 			wantErr: true,
@@ -404,7 +404,7 @@ func Test_internalContentAttachmentImpl_Create(t *testing.T) {
 		{
 			name: "when the file reader is not provided",
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				attachmentID: "3837272",
 				fileName:     "LICENSE",
 			},

@@ -12,36 +12,27 @@ import (
 )
 
 func Test_internalObjectTypeAttributeImpl_Create(t *testing.T) {
-
-	payloadMocked := &model.ObjectTypeAttributeScheme{
-		WorkspaceId: "g2778e1d-939d-581d-c8e2-9d5g59de456b",
-		GlobalId:    "g2778e1d-939d-581d-c8e2-9d5g59de456b:1330",
-		ID:          "1330",
-		ObjectType:  nil,
-		Name:        "Geolocation",
-		Label:       false,
-		Type:        0,
-		Description: "",
-		DefaultType: &model.ObjectTypeAssetAttributeDefaultTypeScheme{
-			ID:   0,
-			Name: "Text",
-		},
+	var attributeType int
+	var defaultTypeID int
+	var minimumCardinality int
+	var maximumCardinality int
+	attributeType = 0
+	defaultTypeID = 0
+	minimumCardinality = 0
+	maximumCardinality = 0
+	payloadMocked := &model.ObjectTypeAttributePayloadScheme{
+		Name:                    "Geolocation",
+		Label:                   false,
+		Type:                    &attributeType,
+		Description:             "",
+		DefaultTypeId:           &defaultTypeID,
 		TypeValue:               "",
 		TypeValueMulti:          nil,
 		AdditionalValue:         "",
-		ReferenceType:           nil,
-		ReferenceObjectTypeId:   "",
-		ReferenceObjectType:     nil,
-		Editable:                false,
-		System:                  false,
-		Indexed:                 false,
-		Sortable:                false,
 		Summable:                false,
-		MinimumCardinality:      0,
-		MaximumCardinality:      0,
+		MinimumCardinality:      &minimumCardinality,
+		MaximumCardinality:      &maximumCardinality,
 		Suffix:                  "",
-		Removable:               false,
-		ObjectAttributeExists:   false,
 		Hidden:                  false,
 		IncludeChildObjectTypes: false,
 		UniqueAttribute:         false,
@@ -49,7 +40,6 @@ func Test_internalObjectTypeAttributeImpl_Create(t *testing.T) {
 		Iql:                     "",
 		QlQuery:                 "",
 		Options:                 "",
-		Position:                6,
 	}
 
 	type fields struct {
@@ -59,7 +49,7 @@ func Test_internalObjectTypeAttributeImpl_Create(t *testing.T) {
 	type args struct {
 		ctx                       context.Context
 		workspaceID, objectTypeID string
-		payload                   *model.ObjectTypeAttributeScheme
+		payload                   *model.ObjectTypeAttributePayloadScheme
 	}
 
 	testCases := []struct {
@@ -73,7 +63,7 @@ func Test_internalObjectTypeAttributeImpl_Create(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				workspaceID:  "workspace-uuid-sample",
 				objectTypeID: "object-type-uuid-sample",
 				payload:      payloadMocked,
@@ -102,7 +92,7 @@ func Test_internalObjectTypeAttributeImpl_Create(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				workspaceID:  "workspace-uuid-sample",
 				objectTypeID: "object-type-uuid-sample",
 				payload:      payloadMocked,
@@ -129,7 +119,7 @@ func Test_internalObjectTypeAttributeImpl_Create(t *testing.T) {
 		{
 			name: "when the workspace id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoWorkspaceIDError,
@@ -138,7 +128,7 @@ func Test_internalObjectTypeAttributeImpl_Create(t *testing.T) {
 		{
 			name: "when the object type id id is not provided",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				workspaceID: "workspace-uuid-sample",
 			},
 			wantErr: true,
@@ -182,35 +172,27 @@ func Test_internalObjectTypeAttributeImpl_Create(t *testing.T) {
 
 func Test_internalObjectTypeAttributeImpl_Update(t *testing.T) {
 
-	payloadMocked := &model.ObjectTypeAttributeScheme{
-		WorkspaceId: "g2778e1d-939d-581d-c8e2-9d5g59de456b",
-		GlobalId:    "g2778e1d-939d-581d-c8e2-9d5g59de456b:1330",
-		ID:          "1330",
-		ObjectType:  nil,
-		Name:        "Geolocation",
-		Label:       false,
-		Type:        0,
-		Description: "",
-		DefaultType: &model.ObjectTypeAssetAttributeDefaultTypeScheme{
-			ID:   0,
-			Name: "Text",
-		},
+	var attributeType int
+	var defaultTypeID int
+	var minimumCardinality int
+	var maximumCardinality int
+	attributeType = 0
+	defaultTypeID = 0
+	minimumCardinality = 0
+	maximumCardinality = 0
+	payloadMocked := &model.ObjectTypeAttributePayloadScheme{
+		Name:                    "Geolocation",
+		Label:                   false,
+		Type:                    &attributeType,
+		Description:             "",
+		DefaultTypeId:           &defaultTypeID,
 		TypeValue:               "",
 		TypeValueMulti:          nil,
 		AdditionalValue:         "",
-		ReferenceType:           nil,
-		ReferenceObjectTypeId:   "",
-		ReferenceObjectType:     nil,
-		Editable:                false,
-		System:                  false,
-		Indexed:                 false,
-		Sortable:                false,
 		Summable:                false,
-		MinimumCardinality:      0,
-		MaximumCardinality:      0,
+		MinimumCardinality:      &minimumCardinality,
+		MaximumCardinality:      &maximumCardinality,
 		Suffix:                  "",
-		Removable:               false,
-		ObjectAttributeExists:   false,
 		Hidden:                  false,
 		IncludeChildObjectTypes: false,
 		UniqueAttribute:         false,
@@ -218,7 +200,6 @@ func Test_internalObjectTypeAttributeImpl_Update(t *testing.T) {
 		Iql:                     "",
 		QlQuery:                 "",
 		Options:                 "",
-		Position:                6,
 	}
 
 	type fields struct {
@@ -228,7 +209,7 @@ func Test_internalObjectTypeAttributeImpl_Update(t *testing.T) {
 	type args struct {
 		ctx                                    context.Context
 		workspaceID, objectTypeID, attributeID string
-		payload                                *model.ObjectTypeAttributeScheme
+		payload                                *model.ObjectTypeAttributePayloadScheme
 	}
 
 	testCases := []struct {
@@ -242,7 +223,7 @@ func Test_internalObjectTypeAttributeImpl_Update(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				workspaceID:  "workspace-uuid-sample",
 				objectTypeID: "object-type-uuid-sample",
 				attributeID:  "attribute-id-sample",
@@ -272,7 +253,7 @@ func Test_internalObjectTypeAttributeImpl_Update(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				workspaceID:  "workspace-uuid-sample",
 				objectTypeID: "object-type-uuid-sample",
 				attributeID:  "attribute-id-sample",
@@ -300,7 +281,7 @@ func Test_internalObjectTypeAttributeImpl_Update(t *testing.T) {
 		{
 			name: "when the workspace id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoWorkspaceIDError,
@@ -309,7 +290,7 @@ func Test_internalObjectTypeAttributeImpl_Update(t *testing.T) {
 		{
 			name: "when the object type id id is not provided",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				workspaceID: "workspace-uuid-sample",
 			},
 			wantErr: true,
@@ -319,7 +300,7 @@ func Test_internalObjectTypeAttributeImpl_Update(t *testing.T) {
 		{
 			name: "when the attribute id id is not provided",
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				workspaceID:  "workspace-uuid-sample",
 				objectTypeID: "object-type-id-sample",
 			},
@@ -385,7 +366,7 @@ func Test_internalObjectTypeAttributeImpl_Delete(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				workspaceID: "workspace-uuid-sample",
 				attributeID: "attribute-id-sample",
 			},
@@ -413,7 +394,7 @@ func Test_internalObjectTypeAttributeImpl_Delete(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				workspaceID: "workspace-uuid-sample",
 				attributeID: "attribute-id-sample",
 			},
@@ -439,7 +420,7 @@ func Test_internalObjectTypeAttributeImpl_Delete(t *testing.T) {
 		{
 			name: "when the workspace id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoWorkspaceIDError,
@@ -448,7 +429,7 @@ func Test_internalObjectTypeAttributeImpl_Delete(t *testing.T) {
 		{
 			name: "when the attribute id id is not provided",
 			args: args{
-				ctx:         context.TODO(),
+				ctx:         context.Background(),
 				workspaceID: "workspace-uuid-sample",
 			},
 			wantErr: true,

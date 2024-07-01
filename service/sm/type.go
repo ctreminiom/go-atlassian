@@ -2,6 +2,7 @@ package sm
 
 import (
 	"context"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 )
 
@@ -49,4 +50,11 @@ type TypeConnector interface {
 	//
 	// https://docs.go-atlassian.io/jira-service-management-cloud/request/types#get-request-type-fields
 	Fields(ctx context.Context, serviceDeskID, requestTypeID int) (*model.RequestTypeFieldsScheme, *model.ResponseScheme, error)
+
+	// Groups returns the groups for a service desk's customer request types.
+	//
+	// GET /rest/servicedeskapi/servicedesk/{serviceDeskId}/requesttypegroup
+	//
+	// https://docs.go-atlassian.io/jira-service-management-cloud/request/types#get-request-type-groups
+	Groups(ctx context.Context, serviceDeskID int) (*model.RequestTypeGroupPageScheme, *model.ResponseScheme, error)
 }

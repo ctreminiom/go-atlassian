@@ -36,7 +36,7 @@ func Test_internalCustomContentServiceImpl_Gets(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:   context.TODO(),
+				ctx:   context.Background(),
 				type_: "custom_content_type_id",
 				options: &model.CustomContentOptionsScheme{
 					IDs:        []int{101, 102},
@@ -71,7 +71,7 @@ func Test_internalCustomContentServiceImpl_Gets(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:   context.TODO(),
+				ctx:   context.Background(),
 				type_: "custom_content_type_id",
 				options: &model.CustomContentOptionsScheme{
 					IDs:        []int{101, 102},
@@ -102,7 +102,7 @@ func Test_internalCustomContentServiceImpl_Gets(t *testing.T) {
 		{
 			name: "when the type is not provided are correct",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoCustomContentTypeError,
@@ -179,7 +179,7 @@ func Test_internalCustomContentServiceImpl_Create(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -206,7 +206,7 @@ func Test_internalCustomContentServiceImpl_Create(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -299,7 +299,7 @@ func Test_internalCustomContentServiceImpl_Update(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:             context.TODO(),
+				ctx:             context.Background(),
 				customContentID: 10001,
 				payload:         payloadMocked,
 			},
@@ -327,7 +327,7 @@ func Test_internalCustomContentServiceImpl_Update(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:             context.TODO(),
+				ctx:             context.Background(),
 				customContentID: 10001,
 				payload:         payloadMocked,
 			},
@@ -351,7 +351,7 @@ func Test_internalCustomContentServiceImpl_Update(t *testing.T) {
 		{
 			name: "when the custom content id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoCustomContentIDError,
@@ -414,7 +414,7 @@ func Test_internalCustomContentServiceImpl_Delete(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:             context.TODO(),
+				ctx:             context.Background(),
 				customContentID: 10001,
 			},
 			on: func(fields *fields) {
@@ -441,7 +441,7 @@ func Test_internalCustomContentServiceImpl_Delete(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:             context.TODO(),
+				ctx:             context.Background(),
 				customContentID: 10001,
 			},
 			on: func(fields *fields) {
@@ -464,7 +464,7 @@ func Test_internalCustomContentServiceImpl_Delete(t *testing.T) {
 		{
 			name: "when the custom content id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoCustomContentIDError,
@@ -526,7 +526,7 @@ func Test_internalCustomContentServiceImpl_Get(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:             context.TODO(),
+				ctx:             context.Background(),
 				customContentID: 10001,
 				format:          "anonymous_export_view",
 				versionID:       2,
@@ -555,7 +555,7 @@ func Test_internalCustomContentServiceImpl_Get(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:             context.TODO(),
+				ctx:             context.Background(),
 				customContentID: 10001,
 				format:          "anonymous_export_view",
 				versionID:       2,
@@ -580,7 +580,7 @@ func Test_internalCustomContentServiceImpl_Get(t *testing.T) {
 		{
 			name: "when the custom content id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoCustomContentIDError,

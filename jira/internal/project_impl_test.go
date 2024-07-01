@@ -52,7 +52,7 @@ func Test_internalProjectImpl_Create(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -81,7 +81,7 @@ func Test_internalProjectImpl_Create(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -110,7 +110,7 @@ func Test_internalProjectImpl_Create(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -201,7 +201,7 @@ func Test_internalProjectImpl_Search(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				options:    mockedParams,
 				startAt:    0,
 				maxResults: 50,
@@ -232,7 +232,7 @@ func Test_internalProjectImpl_Search(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				options:    mockedParams,
 				startAt:    0,
 				maxResults: 50,
@@ -263,7 +263,7 @@ func Test_internalProjectImpl_Search(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				options:    mockedParams,
 				startAt:    0,
 				maxResults: 50,
@@ -343,7 +343,7 @@ func Test_internalProjectImpl_Get(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				projectKeyOrId: "KP",
 				expand:         []string{"issueTypes", "lead"},
 			},
@@ -373,7 +373,7 @@ func Test_internalProjectImpl_Get(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				projectKeyOrId: "KP",
 				expand:         []string{"issueTypes", "lead"},
 			},
@@ -403,7 +403,7 @@ func Test_internalProjectImpl_Get(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				projectKeyOrId: "KP",
 				expand:         []string{"issueTypes", "lead"},
 			},
@@ -496,7 +496,7 @@ func Test_internalProjectImpl_Update(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				projectKeyOrId: "KP",
 				payload:        payloadMocked,
 			},
@@ -526,7 +526,7 @@ func Test_internalProjectImpl_Update(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				projectKeyOrId: "KP",
 				payload:        payloadMocked,
 			},
@@ -556,7 +556,7 @@ func Test_internalProjectImpl_Update(t *testing.T) {
 			name:   "when the project key or id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoProjectIDOrKeyError,
@@ -566,7 +566,7 @@ func Test_internalProjectImpl_Update(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				projectKeyOrId: "KP",
 				payload:        payloadMocked,
 			},
@@ -644,7 +644,7 @@ func Test_internalProjectImpl_Delete(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				projectKeyOrId: "KP",
 				enableUndo:     true,
 			},
@@ -674,7 +674,7 @@ func Test_internalProjectImpl_Delete(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				projectKeyOrId: "KP",
 				enableUndo:     true,
 			},
@@ -704,7 +704,7 @@ func Test_internalProjectImpl_Delete(t *testing.T) {
 			name:   "when the project key or id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoProjectIDOrKeyError,
@@ -714,7 +714,7 @@ func Test_internalProjectImpl_Delete(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				projectKeyOrId: "KP",
 				enableUndo:     true,
 			},
@@ -790,7 +790,7 @@ func Test_internalProjectImpl_DeleteAsynchronously(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				projectKeyOrId: "KP",
 			},
 			on: func(fields *fields) {
@@ -819,7 +819,7 @@ func Test_internalProjectImpl_DeleteAsynchronously(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				projectKeyOrId: "KP",
 			},
 			on: func(fields *fields) {
@@ -848,7 +848,7 @@ func Test_internalProjectImpl_DeleteAsynchronously(t *testing.T) {
 			name:   "when the project or id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoProjectIDOrKeyError,
@@ -858,7 +858,7 @@ func Test_internalProjectImpl_DeleteAsynchronously(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				projectKeyOrId: "KP",
 			},
 			on: func(fields *fields) {
@@ -934,7 +934,7 @@ func Test_internalProjectImpl_Archive(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				projectKeyOrId: "KP",
 			},
 			on: func(fields *fields) {
@@ -963,7 +963,7 @@ func Test_internalProjectImpl_Archive(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				projectKeyOrId: "KP",
 			},
 			on: func(fields *fields) {
@@ -992,7 +992,7 @@ func Test_internalProjectImpl_Archive(t *testing.T) {
 			name:   "when the project key or id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoProjectIDOrKeyError,
@@ -1002,7 +1002,7 @@ func Test_internalProjectImpl_Archive(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				projectKeyOrId: "KP",
 			},
 			on: func(fields *fields) {
@@ -1077,7 +1077,7 @@ func Test_internalProjectImpl_Restore(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				projectKeyOrId: "KP",
 			},
 			on: func(fields *fields) {
@@ -1106,7 +1106,7 @@ func Test_internalProjectImpl_Restore(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				projectKeyOrId: "KP",
 			},
 			on: func(fields *fields) {
@@ -1135,7 +1135,7 @@ func Test_internalProjectImpl_Restore(t *testing.T) {
 			name:   "when the project or id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoProjectIDOrKeyError,
@@ -1145,7 +1145,7 @@ func Test_internalProjectImpl_Restore(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				projectKeyOrId: "KP",
 			},
 			on: func(fields *fields) {
@@ -1221,7 +1221,7 @@ func Test_internalProjectImpl_Statuses(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				projectKeyOrId: "KP",
 			},
 			on: func(fields *fields) {
@@ -1250,7 +1250,7 @@ func Test_internalProjectImpl_Statuses(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				projectKeyOrId: "KP",
 			},
 			on: func(fields *fields) {
@@ -1279,7 +1279,7 @@ func Test_internalProjectImpl_Statuses(t *testing.T) {
 			name:   "when the project or id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoProjectIDOrKeyError,
@@ -1289,7 +1289,7 @@ func Test_internalProjectImpl_Statuses(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				projectKeyOrId: "KP",
 			},
 			on: func(fields *fields) {
@@ -1366,7 +1366,7 @@ func Test_internalProjectImpl_NotificationScheme(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				projectKeyOrId: "KP",
 				expand:         []string{"all", "projectRole"},
 			},
@@ -1396,7 +1396,7 @@ func Test_internalProjectImpl_NotificationScheme(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				projectKeyOrId: "KP",
 				expand:         []string{"all", "projectRole"},
 			},
@@ -1426,7 +1426,7 @@ func Test_internalProjectImpl_NotificationScheme(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:            context.TODO(),
+				ctx:            context.Background(),
 				projectKeyOrId: "KP",
 				expand:         []string{"all", "projectRole"},
 			},

@@ -33,7 +33,7 @@ func Test_internalAnalyticsServiceImpl_Get(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				contentId: "2337372172371",
 				fromDate:  "2023-10-03",
 			},
@@ -60,7 +60,7 @@ func Test_internalAnalyticsServiceImpl_Get(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				contentId: "2337372172371",
 				fromDate:  "2023-10-03",
 			},
@@ -85,7 +85,7 @@ func Test_internalAnalyticsServiceImpl_Get(t *testing.T) {
 		{
 			name: "when the content id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoContentIDError,
@@ -143,7 +143,7 @@ func Test_internalAnalyticsServiceImpl_Distinct(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				contentId: "2337372172371",
 				fromDate:  "2023-10-03",
 			},
@@ -170,7 +170,7 @@ func Test_internalAnalyticsServiceImpl_Distinct(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				contentId: "2337372172371",
 				fromDate:  "2023-10-03",
 			},
@@ -195,7 +195,7 @@ func Test_internalAnalyticsServiceImpl_Distinct(t *testing.T) {
 		{
 			name: "when the content id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoContentIDError,

@@ -33,7 +33,7 @@ func Test_internalRestrictionOperationUserImpl_Get(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				contentID:    "100001",
 				operationKey: "read",
 				accountID:    "06db0c76-115b-498e-9cd6-921d6f6dde46",
@@ -62,7 +62,7 @@ func Test_internalRestrictionOperationUserImpl_Get(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				contentID:    "100001",
 				operationKey: "read",
 				accountID:    "06db0c76-115b-498e-9cd6-921d6f6dde46",
@@ -88,7 +88,7 @@ func Test_internalRestrictionOperationUserImpl_Get(t *testing.T) {
 		{
 			name: "when the content id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoContentIDError,
@@ -97,7 +97,7 @@ func Test_internalRestrictionOperationUserImpl_Get(t *testing.T) {
 		{
 			name: "when the property key is not provided",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				contentID: "1111",
 			},
 			wantErr: true,
@@ -107,7 +107,7 @@ func Test_internalRestrictionOperationUserImpl_Get(t *testing.T) {
 		{
 			name: "when the account id is not provided",
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				contentID:    "1111",
 				operationKey: "read",
 			},
@@ -168,7 +168,7 @@ func Test_internalRestrictionOperationUserImpl_Add(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				contentID:    "100001",
 				operationKey: "read",
 				accountID:    "06db0c76-115b-498e-9cd6-921d6f6dde46",
@@ -197,7 +197,7 @@ func Test_internalRestrictionOperationUserImpl_Add(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				contentID:    "100001",
 				operationKey: "read",
 				accountID:    "06db0c76-115b-498e-9cd6-921d6f6dde46",
@@ -223,7 +223,7 @@ func Test_internalRestrictionOperationUserImpl_Add(t *testing.T) {
 		{
 			name: "when the content id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoContentIDError,
@@ -232,7 +232,7 @@ func Test_internalRestrictionOperationUserImpl_Add(t *testing.T) {
 		{
 			name: "when the property key is not provided",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				contentID: "1111",
 			},
 			wantErr: true,
@@ -242,7 +242,7 @@ func Test_internalRestrictionOperationUserImpl_Add(t *testing.T) {
 		{
 			name: "when the account id is not provided",
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				contentID:    "1111",
 				operationKey: "read",
 			},
@@ -303,7 +303,7 @@ func Test_internalRestrictionOperationUserImpl_Remove(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				contentID:    "100001",
 				operationKey: "read",
 				accountID:    "06db0c76-115b-498e-9cd6-921d6f6dde46",
@@ -332,7 +332,7 @@ func Test_internalRestrictionOperationUserImpl_Remove(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				contentID:    "100001",
 				operationKey: "read",
 				accountID:    "06db0c76-115b-498e-9cd6-921d6f6dde46",
@@ -358,7 +358,7 @@ func Test_internalRestrictionOperationUserImpl_Remove(t *testing.T) {
 		{
 			name: "when the content id is not provided",
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoContentIDError,
@@ -367,7 +367,7 @@ func Test_internalRestrictionOperationUserImpl_Remove(t *testing.T) {
 		{
 			name: "when the property key is not provided",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				contentID: "1111",
 			},
 			wantErr: true,
@@ -377,7 +377,7 @@ func Test_internalRestrictionOperationUserImpl_Remove(t *testing.T) {
 		{
 			name: "when the account id is not provided",
 			args: args{
-				ctx:          context.TODO(),
+				ctx:          context.Background(),
 				contentID:    "1111",
 				operationKey: "read",
 			},

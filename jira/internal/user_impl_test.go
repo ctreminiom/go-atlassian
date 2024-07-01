@@ -37,7 +37,7 @@ func Test_internalUserImpl_Get(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				accountId: "uuid-sample",
 				expand:    []string{"groups", "applicationRoles"},
 			},
@@ -67,7 +67,7 @@ func Test_internalUserImpl_Get(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				accountId: "uuid-sample",
 				expand:    []string{"groups", "applicationRoles"},
 			},
@@ -97,7 +97,7 @@ func Test_internalUserImpl_Get(t *testing.T) {
 			name:   "when the account id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoAccountIDError,
@@ -107,7 +107,7 @@ func Test_internalUserImpl_Get(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				accountId: "uuid-sample",
 				expand:    []string{"groups", "applicationRoles"},
 			},
@@ -186,7 +186,7 @@ func Test_internalUserImpl_Find(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				accountIds: []string{"uuid-sample-1", "uuid-sample-2"},
 				startAt:    50,
 				maxResults: 25,
@@ -217,7 +217,7 @@ func Test_internalUserImpl_Find(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				accountIds: []string{"uuid-sample-1", "uuid-sample-2"},
 				startAt:    50,
 				maxResults: 25,
@@ -248,7 +248,7 @@ func Test_internalUserImpl_Find(t *testing.T) {
 			name:   "when the account ids is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoAccountSliceError,
@@ -258,7 +258,7 @@ func Test_internalUserImpl_Find(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:        context.TODO(),
+				ctx:        context.Background(),
 				accountIds: []string{"uuid-sample-1", "uuid-sample-2"},
 				startAt:    50,
 				maxResults: 25,
@@ -337,7 +337,7 @@ func Test_internalUserImpl_Delete(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				accountId: "uuid-sample",
 			},
 			on: func(fields *fields) {
@@ -366,7 +366,7 @@ func Test_internalUserImpl_Delete(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				accountId: "uuid-sample",
 			},
 			on: func(fields *fields) {
@@ -395,7 +395,7 @@ func Test_internalUserImpl_Delete(t *testing.T) {
 			name:   "when the account id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoAccountIDError,
@@ -405,7 +405,7 @@ func Test_internalUserImpl_Delete(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				accountId: "uuid-sample",
 			},
 			on: func(fields *fields) {
@@ -480,7 +480,7 @@ func Test_internalUserImpl_Groups(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				accountId: "uuid-sample",
 			},
 			on: func(fields *fields) {
@@ -509,7 +509,7 @@ func Test_internalUserImpl_Groups(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				accountId: "uuid-sample",
 			},
 			on: func(fields *fields) {
@@ -538,7 +538,7 @@ func Test_internalUserImpl_Groups(t *testing.T) {
 			name:   "when the account id is not provided",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			wantErr: true,
 			Err:     model.ErrNoAccountIDError,
@@ -548,7 +548,7 @@ func Test_internalUserImpl_Groups(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				accountId: "uuid-sample",
 			},
 			on: func(fields *fields) {
@@ -624,7 +624,7 @@ func Test_internalUserImpl_Gets(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			on: func(fields *fields) {
 
@@ -652,7 +652,7 @@ func Test_internalUserImpl_Gets(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			on: func(fields *fields) {
 
@@ -680,7 +680,7 @@ func Test_internalUserImpl_Gets(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx: context.TODO(),
+				ctx: context.Background(),
 			},
 			on: func(fields *fields) {
 
@@ -761,7 +761,7 @@ func Test_internalUserImpl_Create(t *testing.T) {
 			name:   "when the api version is v3",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -790,7 +790,7 @@ func Test_internalUserImpl_Create(t *testing.T) {
 			name:   "when the api version is v2",
 			fields: fields{version: "2"},
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -819,7 +819,7 @@ func Test_internalUserImpl_Create(t *testing.T) {
 			name:   "when the http request cannot be created",
 			fields: fields{version: "3"},
 			args: args{
-				ctx:     context.TODO(),
+				ctx:     context.Background(),
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {

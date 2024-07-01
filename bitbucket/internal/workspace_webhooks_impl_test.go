@@ -3,12 +3,14 @@ package internal
 import (
 	"context"
 	"errors"
+	"net/http"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
-	"github.com/stretchr/testify/assert"
-	"net/http"
-	"testing"
 )
 
 func Test_internalWorkspaceWebhookServiceImpl_Gets(t *testing.T) {
@@ -33,7 +35,7 @@ func Test_internalWorkspaceWebhookServiceImpl_Gets(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				workspace: "work-space-name-sample",
 			},
 			on: func(fields *fields) {
@@ -59,7 +61,7 @@ func Test_internalWorkspaceWebhookServiceImpl_Gets(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				workspace: "work-space-name-sample",
 			},
 			on: func(fields *fields) {
@@ -83,7 +85,7 @@ func Test_internalWorkspaceWebhookServiceImpl_Gets(t *testing.T) {
 		{
 			name: "when the workspace is not provided",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				workspace: "",
 			},
 			wantErr: true,
@@ -143,7 +145,7 @@ func Test_internalWorkspaceWebhookServiceImpl_Get(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				workspace: "work-space-name-sample",
 				webhookId: "uuid-sample",
 			},
@@ -170,7 +172,7 @@ func Test_internalWorkspaceWebhookServiceImpl_Get(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				workspace: "work-space-name-sample",
 				webhookId: "uuid-sample",
 			},
@@ -195,7 +197,7 @@ func Test_internalWorkspaceWebhookServiceImpl_Get(t *testing.T) {
 		{
 			name: "when the workspace is not provided",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				workspace: "",
 			},
 			wantErr: true,
@@ -205,7 +207,7 @@ func Test_internalWorkspaceWebhookServiceImpl_Get(t *testing.T) {
 		{
 			name: "when the webhook is not provided",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				workspace: "work-space-name-sample",
 			},
 			wantErr: true,
@@ -246,7 +248,7 @@ func Test_internalWorkspaceWebhookServiceImpl_Create(t *testing.T) {
 
 	payloadMocked := &model.WebhookSubscriptionPayloadScheme{
 		Description: "",
-		Url:         "",
+		URL:         "",
 		Active:      false,
 		Events:      nil,
 	}
@@ -272,7 +274,7 @@ func Test_internalWorkspaceWebhookServiceImpl_Create(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				workspace: "work-space-name-sample",
 				payload:   payloadMocked,
 			},
@@ -299,7 +301,7 @@ func Test_internalWorkspaceWebhookServiceImpl_Create(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				workspace: "work-space-name-sample",
 				payload:   payloadMocked,
 			},
@@ -324,7 +326,7 @@ func Test_internalWorkspaceWebhookServiceImpl_Create(t *testing.T) {
 		{
 			name: "when the workspace is not provided",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				workspace: "",
 			},
 			wantErr: true,
@@ -365,7 +367,7 @@ func Test_internalWorkspaceWebhookServiceImpl_Update(t *testing.T) {
 
 	payloadMocked := &model.WebhookSubscriptionPayloadScheme{
 		Description: "",
-		Url:         "",
+		URL:         "",
 		Active:      false,
 		Events:      nil,
 	}
@@ -392,7 +394,7 @@ func Test_internalWorkspaceWebhookServiceImpl_Update(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				workspace: "work-space-name-sample",
 				webhookId: "webhook-uuid",
 				payload:   payloadMocked,
@@ -420,7 +422,7 @@ func Test_internalWorkspaceWebhookServiceImpl_Update(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				workspace: "work-space-name-sample",
 				webhookId: "webhook-uuid",
 				payload:   payloadMocked,
@@ -446,7 +448,7 @@ func Test_internalWorkspaceWebhookServiceImpl_Update(t *testing.T) {
 		{
 			name: "when the workspace is not provided",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				workspace: "",
 			},
 			wantErr: true,
@@ -456,7 +458,7 @@ func Test_internalWorkspaceWebhookServiceImpl_Update(t *testing.T) {
 		{
 			name: "when the webhook is not provided",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				workspace: "work-space-name-sample",
 			},
 			wantErr: true,
@@ -517,7 +519,7 @@ func Test_internalWorkspaceWebhookServiceImpl_Delete(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				workspace: "work-space-name-sample",
 				webhookId: "uuid-sample",
 			},
@@ -544,7 +546,7 @@ func Test_internalWorkspaceWebhookServiceImpl_Delete(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				workspace: "work-space-name-sample",
 				webhookId: "uuid-sample",
 			},
@@ -569,7 +571,7 @@ func Test_internalWorkspaceWebhookServiceImpl_Delete(t *testing.T) {
 		{
 			name: "when the workspace is not provided",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				workspace: "",
 			},
 			wantErr: true,
@@ -579,7 +581,7 @@ func Test_internalWorkspaceWebhookServiceImpl_Delete(t *testing.T) {
 		{
 			name: "when the webhook is not provided",
 			args: args{
-				ctx:       context.TODO(),
+				ctx:       context.Background(),
 				workspace: "work-space-name-sample",
 			},
 			wantErr: true,

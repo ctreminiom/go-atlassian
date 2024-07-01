@@ -10,11 +10,11 @@ const (
 // DateScheme is a custom time type for Jira dates.
 type DateScheme time.Time
 
-func (d DateScheme) MarshalJSON() ([]byte, error) {
-	return []byte(time.Time(d).Format(DateFormat)), nil
+func (d *DateScheme) MarshalJSON() ([]byte, error) {
+	return []byte(time.Time(*d).Format(DateFormat)), nil
 }
 
-func (d DateScheme) UnmarshalJSON(data []byte) error {
+func (d *DateScheme) UnmarshalJSON(data []byte) error {
 	if string(data) == "null" {
 		return nil
 	}
@@ -24,18 +24,18 @@ func (d DateScheme) UnmarshalJSON(data []byte) error {
 		return err
 	}
 
-	d = DateScheme(parsed)
+	*d = DateScheme(parsed)
 	return nil
 }
 
 // DateTimeScheme is a custom time type for Jira times.
 type DateTimeScheme time.Time
 
-func (d DateTimeScheme) MarshalJSON() ([]byte, error) {
-	return []byte(time.Time(d).Format(TimeFormat)), nil
+func (d *DateTimeScheme) MarshalJSON() ([]byte, error) {
+	return []byte(time.Time(*d).Format(TimeFormat)), nil
 }
 
-func (d DateTimeScheme) UnmarshalJSON(data []byte) error {
+func (d *DateTimeScheme) UnmarshalJSON(data []byte) error {
 	if string(data) == "null" {
 		return nil
 	}
@@ -45,6 +45,6 @@ func (d DateTimeScheme) UnmarshalJSON(data []byte) error {
 		return err
 	}
 
-	d = DateTimeScheme(parsed)
+	*d = DateTimeScheme(parsed)
 	return nil
 }

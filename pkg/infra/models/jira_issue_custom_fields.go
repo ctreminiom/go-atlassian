@@ -1855,12 +1855,12 @@ func ParseRequestTypeCustomField(buffer bytes.Buffer, customField string) (*Cust
 	// Check if the issue iteration contains information on the customfield selected,
 	// if not, continue
 	if raw.Get(path).Type == gjson.Null {
-		return nil, ErrNoAssetTypeError
+		return nil, ErrNoRequestTypeError
 	}
 
 	var requestType *CustomFieldRequestTypeScheme
 	if err := json.Unmarshal([]byte(raw.Get(path).String()), &requestType); err != nil {
-		return nil, ErrNoAssetTypeError
+		return nil, ErrNoRequestTypeError
 	}
 
 	return requestType, nil

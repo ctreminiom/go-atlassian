@@ -3,13 +3,15 @@ package internal
 import (
 	"context"
 	"errors"
+	"net/http"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
-	"net/http"
-	"testing"
 )
 
 func Test_internalObjectImpl_Get(t *testing.T) {
@@ -1166,7 +1168,7 @@ func Test_internalObjectImpl_Search(t *testing.T) {
 		ObjectSchemaID:    "6",
 		IncludeAttributes: false,
 		AttributesToDisplay: &model.AttributesToDisplayScheme{
-			AttributesToDisplayIds: []int{135, 144},
+			AttributesToDisplayIDs: []int{135, 144},
 		},
 	}
 

@@ -1,17 +1,17 @@
 package models
 
 // ObjectTypePositionPayloadScheme represents the payload for the position of an object type.
-// ToObjectTypeId is the ID of the object type to which the position is related.
+// ToObjectTypeID is the ID of the object type to which the position is related.
 // Position is the position of the object type.
 type ObjectTypePositionPayloadScheme struct {
-	ToObjectTypeId string `json:"toObjectTypeId,omitempty"` // The ID of the object type to which the position is related.
+	ToObjectTypeID string `json:"toObjectTypeId,omitempty"` // The ID of the object type to which the position is related.
 	Position       int    `json:"position,omitempty"`       // The position of the object type.
 }
 
 // ObjectTypeScheme represents an object type.
-// WorkspaceId is the ID of the workspace.
-// GlobalId is the global ID of the object type.
-// Id is the unique identifier of the object type.
+// WorkspaceID is the ID of the workspace.
+// GlobalID is the global ID of the object type.
+// ID is the unique identifier of the object type.
 // Name is the name of the object type.
 // Description is the description of the object type.
 // Icon is the icon of the object type.
@@ -19,15 +19,15 @@ type ObjectTypePositionPayloadScheme struct {
 // Created is the creation time of the object type.
 // Updated is the update time of the object type.
 // ObjectCount is the number of objects of the object type.
-// ParentObjectTypeId is the ID of the parent object type.
+// ParentObjectTypeID is the ID of the parent object type.
 // ObjectSchemaId is the ID of the object schema.
 // Inherited indicates if the object type is inherited.
 // AbstractObjectType indicates if the object type is abstract.
 // ParentObjectTypeInherited indicates if the parent object type is inherited.
 type ObjectTypeScheme struct {
-	WorkspaceId               string      `json:"workspaceId,omitempty"`               // The ID of the workspace.
-	GlobalId                  string      `json:"globalId,omitempty"`                  // The global ID of the object type.
-	Id                        string      `json:"id,omitempty"`                        // The ID of the object type.
+	WorkspaceID               string      `json:"workspaceId,omitempty"`               // The ID of the workspace.
+	GlobalID                  string      `json:"globalId,omitempty"`                  // The global ID of the object type.
+	ID                        string      `json:"id,omitempty"`                        // The ID of the object type.
 	Name                      string      `json:"name,omitempty"`                      // The name of the object type.
 	Description               string      `json:"description,omitempty"`               // The description of the object type.
 	Icon                      *IconScheme `json:"icon,omitempty"`                      // The icon of the object type.
@@ -35,7 +35,7 @@ type ObjectTypeScheme struct {
 	Created                   string      `json:"created,omitempty"`                   // The creation time of the object type.
 	Updated                   string      `json:"updated,omitempty"`                   // The update time of the object type.
 	ObjectCount               int         `json:"objectCount,omitempty"`               // The number of objects of the object type.
-	ParentObjectTypeId        string      `json:"parentObjectTypeId,omitempty"`        // The ID of the parent object type.
+	ParentObjectTypeID        string      `json:"parentObjectTypeId,omitempty"`        // The ID of the parent object type.
 	ObjectSchemaId            string      `json:"objectSchemaId,omitempty"`            // The ID of the object schema.
 	Inherited                 bool        `json:"inherited,omitempty"`                 // Indicates if the object type is inherited.
 	AbstractObjectType        bool        `json:"abstractObjectType,omitempty"`        // Indicates if the object type is abstract.
@@ -46,16 +46,16 @@ type ObjectTypeScheme struct {
 // Name is the name of the object type.
 // Description is the description of the object type.
 // IconId is the ID of the icon of the object type.
-// ObjectSchemaId is the ID of the object schema.
-// ParentObjectTypeId is the ID of the parent object type.
+// ObjectSchemaID is the ID of the object schema.
+// ParentObjectTypeID is the ID of the parent object type.
 // Inherited indicates if the object type is inherited.
 // AbstractObjectType indicates if the object type is abstract.
 type ObjectTypePayloadScheme struct {
 	Name               string `json:"name,omitempty"`               // The name of the object type.
 	Description        string `json:"description,omitempty"`        // The description of the object type.
 	IconId             string `json:"iconId,omitempty"`             // The ID of the icon of the object type.
-	ObjectSchemaId     string `json:"objectSchemaId,omitempty"`     // The ID of the object schema.
-	ParentObjectTypeId string `json:"parentObjectTypeId,omitempty"` // The ID of the parent object type.
+	ObjectSchemaID     string `json:"objectSchemaId,omitempty"`     // The ID of the object schema.
+	ParentObjectTypeID string `json:"parentObjectTypeId,omitempty"` // The ID of the parent object type.
 	Inherited          bool   `json:"inherited,omitempty"`          // Indicates if the object type is inherited.
 	AbstractObjectType bool   `json:"abstractObjectType,omitempty"` // Indicates if the object type is abstract.
 }

@@ -57,7 +57,7 @@ type ApproverScheme struct {
 
 // ApproverLinkScheme represents links related to an approver.
 type ApproverLinkScheme struct {
-	JiraRest   string           `json:"jiraRest,omitempty"`   // The Jira REST API link for the approver.
-	AvatarUrls *AvatarURLScheme `json:"avatarUrls,omitempty"` // The avatar URLs of the approver.
+	JiraREST   string           `json:"jiraRest,omitempty"`   // The Jira REST API link for the approver.
+	AvatarURLs *AvatarURLScheme `json:"avatarUrls,omitempty"` // The avatar URLs of the approver.
 	Self       string           `json:"self,omitempty"`       // The URL of the approver itself.
 }

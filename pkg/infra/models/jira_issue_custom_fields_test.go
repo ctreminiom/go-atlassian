@@ -628,11 +628,11 @@ func TestParseCascadingSelectField(t *testing.T) {
 			want: &CascadingSelectScheme{
 				Self:  "https://ctreminiom.atlassian.net/rest/api/3/customFieldOption/10054",
 				Value: "America",
-				Id:    "10054",
+				ID:    "10054",
 				Child: &CascadingSelectChildScheme{
 					Self:  "https://ctreminiom.atlassian.net/rest/api/3/customFieldOption/10057",
 					Value: "Costa Rica",
-					Id:    "10057",
+					ID:    "10057",
 				},
 			},
 			want1:   false,
@@ -3276,21 +3276,21 @@ func TestParseCascadingCustomFields(t *testing.T) {
 				"KP-22": {
 					Self:  "https://ctreminiom.atlassian.net/rest/api/3/customFieldOption/10054",
 					Value: "America",
-					Id:    "10054",
+					ID:    "10054",
 					Child: &CascadingSelectChildScheme{
 						Self:  "https://ctreminiom.atlassian.net/rest/api/3/customFieldOption/10057",
 						Value: "Costa Rica",
-						Id:    "10057",
+						ID:    "10057",
 					},
 				},
 				"KP-23": {
 					Self:  "https://ctreminiom.atlassian.net/rest/api/3/customFieldOption/10054",
 					Value: "America",
-					Id:    "10054",
+					ID:    "10054",
 					Child: &CascadingSelectChildScheme{
 						Self:  "https://ctreminiom.atlassian.net/rest/api/3/customFieldOption/10057",
 						Value: "Costa Rica",
-						Id:    "10057",
+						ID:    "10057",
 					},
 				},
 			},
@@ -3318,11 +3318,11 @@ func TestParseCascadingCustomFields(t *testing.T) {
 				"KP-22": {
 					Self:  "https://ctreminiom.atlassian.net/rest/api/3/customFieldOption/10054",
 					Value: "America",
-					Id:    "10054",
+					ID:    "10054",
 					Child: &CascadingSelectChildScheme{
 						Self:  "https://ctreminiom.atlassian.net/rest/api/3/customFieldOption/10057",
 						Value: "Costa Rica",
-						Id:    "10057",
+						ID:    "10057",
 					},
 				},
 			},

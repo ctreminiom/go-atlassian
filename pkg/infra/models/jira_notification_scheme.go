@@ -43,7 +43,7 @@ type NotificationSchemePageScheme struct {
 
 // NotificationSchemeCreatedPayload represents the payload for a created notification scheme in Jira.
 type NotificationSchemeCreatedPayload struct {
-	Id string `json:"id"` // The ID of the created notification scheme.
+	ID string `json:"id"` // The ID of the created notification scheme.
 }
 
 // NotificationSchemeProjectPageScheme represents a page of projects for a notification scheme in Jira.
@@ -57,8 +57,8 @@ type NotificationSchemeProjectPageScheme struct {
 
 // NotificationSchemeProjectScheme represents a project for a notification scheme in Jira.
 type NotificationSchemeProjectScheme struct {
-	NotificationSchemeId string `json:"notificationSchemeId,omitempty"` // The ID of the notification scheme.
-	ProjectId            string `json:"projectId,omitempty"`            // The ID of the project.
+	NotificationSchemeID string `json:"notificationSchemeId,omitempty"` // The ID of the notification scheme.
+	ProjectID            string `json:"projectId,omitempty"`            // The ID of the project.
 }
 
 // NotificationSchemeEventsPayloadScheme represents the payload for the events of a notification scheme in Jira.

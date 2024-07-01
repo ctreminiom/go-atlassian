@@ -40,6 +40,6 @@ type WorkflowSchemeAssociationPageScheme struct {
 
 // WorkflowSchemeAssociationsScheme represents a workflow scheme association in Jira.
 type WorkflowSchemeAssociationsScheme struct {
-	ProjectIds     []string              `json:"projectIds,omitempty"`     // The IDs of the projects associated with the scheme.
+	ProjectIDs     []string              `json:"projectIds,omitempty"`     // The IDs of the projects associated with the scheme.
 	WorkflowScheme *WorkflowSchemeScheme `json:"workflowScheme,omitempty"` // The workflow scheme associated with the projects.
 }

@@ -8,7 +8,7 @@ type UserScheme struct {
 	AccountType      string                      `json:"accountType,omitempty"`      // The account type of the user.
 	Name             string                      `json:"name,omitempty"`             // The name of the user.
 	EmailAddress     string                      `json:"emailAddress,omitempty"`     // The email address of the user.
-	AvatarUrls       *AvatarURLScheme            `json:"avatarUrls,omitempty"`       // The avatar URLs of the user.
+	AvatarURLs       *AvatarURLScheme            `json:"avatarUrls,omitempty"`       // The avatar URLs of the user.
 	DisplayName      string                      `json:"displayName,omitempty"`      // The display name of the user.
 	Active           bool                        `json:"active,omitempty"`           // Indicates if the user is active.
 	TimeZone         string                      `json:"timeZone,omitempty"`         // The time zone of the user.

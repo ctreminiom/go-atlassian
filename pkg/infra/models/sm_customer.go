@@ -33,7 +33,7 @@ type CustomerScheme struct {
 
 // CustomerLinkScheme represents links related to a customer.
 type CustomerLinkScheme struct {
-	JiraRest   string           `json:"jiraRest"`   // The Jira REST API link for the customer.
-	AvatarUrls *AvatarURLScheme `json:"avatarUrls"` // The URLs for the customer's avatars.
+	JiraREST   string           `json:"jiraRest"`   // The Jira REST API link for the customer.
+	AvatarURLs *AvatarURLScheme `json:"avatarUrls"` // The URLs for the customer's avatars.
 	Self       string           `json:"self"`       // The URL for the customer itself.
 }

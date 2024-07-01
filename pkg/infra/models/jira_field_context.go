@@ -23,8 +23,8 @@ type FieldContextScheme struct {
 	Description     string   `json:"description,omitempty"`     // The description of the field context.
 	IsGlobalContext bool     `json:"isGlobalContext,omitempty"` // Indicates if the context is global.
 	IsAnyIssueType  bool     `json:"isAnyIssueType,omitempty"`  // Indicates if any issue type is applicable.
-	ProjectIds      []string `json:"projectIds,omitempty"`      // The IDs of the projects.
-	IssueTypeIds    []string `json:"issueTypeIds,omitempty"`    // The IDs of the issue types.
+	ProjectIDs      []string `json:"projectIds,omitempty"`      // The IDs of the projects.
+	IssueTypeIDs    []string `json:"issueTypeIds,omitempty"`    // The IDs of the issue types.
 }
 
 // CustomFieldDefaultValuePageScheme represents a page of default values for custom fields in Jira.

@@ -135,9 +135,9 @@ func TestDateTimeScheme_UnmarshalJSON(t *testing.T) {
 		{
 			name: "random date",
 			args: args{
-				data: []byte(`"2021-06-22T07:34:41+0000"`),
+				data: []byte(`"2021-06-22T07:34:41+0200"`),
 			},
-			want:    DateTimeScheme(time.Date(2021, 6, 22, 7, 34, 41, 0, time.FixedZone("", 0))),
+			want:    DateTimeScheme(time.Date(2021, 6, 22, 7, 34, 41, 0, time.FixedZone("", 7200))),
 			wantErr: assert.NoError,
 		},
 		{

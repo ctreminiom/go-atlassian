@@ -3,12 +3,14 @@ package internal
 import (
 	"context"
 	"errors"
+	"net/http"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
-	"github.com/stretchr/testify/assert"
-	"net/http"
-	"testing"
 )
 
 func Test_internalTypeSchemeImpl_Gets(t *testing.T) {
@@ -20,7 +22,7 @@ func Test_internalTypeSchemeImpl_Gets(t *testing.T) {
 
 	type args struct {
 		ctx                 context.Context
-		issueTypeSchemeIds  []int
+		issueTypeSchemeIDs  []int
 		startAt, maxResults int
 	}
 
@@ -37,7 +39,7 @@ func Test_internalTypeSchemeImpl_Gets(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:                context.Background(),
-				issueTypeSchemeIds: []int{1001, 1002},
+				issueTypeSchemeIDs: []int{1001, 1002},
 				startAt:            50,
 				maxResults:         100,
 			},
@@ -68,7 +70,7 @@ func Test_internalTypeSchemeImpl_Gets(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:                context.Background(),
-				issueTypeSchemeIds: []int{1001, 1002},
+				issueTypeSchemeIDs: []int{1001, 1002},
 				startAt:            50,
 				maxResults:         100,
 			},
@@ -99,7 +101,7 @@ func Test_internalTypeSchemeImpl_Gets(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:                context.Background(),
-				issueTypeSchemeIds: []int{1001, 1002},
+				issueTypeSchemeIDs: []int{1001, 1002},
 				startAt:            50,
 				maxResults:         100,
 			},
@@ -131,7 +133,7 @@ func Test_internalTypeSchemeImpl_Gets(t *testing.T) {
 			newService, err := NewTypeSchemeService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := newService.Gets(testCase.args.ctx, testCase.args.issueTypeSchemeIds, testCase.args.startAt,
+			gotResult, gotResponse, err := newService.Gets(testCase.args.ctx, testCase.args.issueTypeSchemeIDs, testCase.args.startAt,
 				testCase.args.maxResults)
 
 			if testCase.wantErr {
@@ -162,7 +164,7 @@ func Test_internalTypeSchemeImpl_Items(t *testing.T) {
 
 	type args struct {
 		ctx                 context.Context
-		issueTypeSchemeIds  []int
+		issueTypeSchemeIDs  []int
 		startAt, maxResults int
 	}
 
@@ -179,7 +181,7 @@ func Test_internalTypeSchemeImpl_Items(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:                context.Background(),
-				issueTypeSchemeIds: []int{1001, 1002},
+				issueTypeSchemeIDs: []int{1001, 1002},
 				startAt:            50,
 				maxResults:         100,
 			},
@@ -210,7 +212,7 @@ func Test_internalTypeSchemeImpl_Items(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:                context.Background(),
-				issueTypeSchemeIds: []int{1001, 1002},
+				issueTypeSchemeIDs: []int{1001, 1002},
 				startAt:            50,
 				maxResults:         100,
 			},
@@ -241,7 +243,7 @@ func Test_internalTypeSchemeImpl_Items(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:                context.Background(),
-				issueTypeSchemeIds: []int{1001, 1002},
+				issueTypeSchemeIDs: []int{1001, 1002},
 				startAt:            50,
 				maxResults:         100,
 			},
@@ -273,7 +275,7 @@ func Test_internalTypeSchemeImpl_Items(t *testing.T) {
 			newService, err := NewTypeSchemeService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := newService.Items(testCase.args.ctx, testCase.args.issueTypeSchemeIds, testCase.args.startAt,
+			gotResult, gotResponse, err := newService.Items(testCase.args.ctx, testCase.args.issueTypeSchemeIDs, testCase.args.startAt,
 				testCase.args.maxResults)
 
 			if testCase.wantErr {
@@ -304,7 +306,7 @@ func Test_internalTypeSchemeImpl_Projects(t *testing.T) {
 
 	type args struct {
 		ctx                 context.Context
-		projectIds          []int
+		projectIDs          []int
 		startAt, maxResults int
 	}
 
@@ -321,7 +323,7 @@ func Test_internalTypeSchemeImpl_Projects(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:        context.Background(),
-				projectIds: []int{1001, 1002},
+				projectIDs: []int{1001, 1002},
 				startAt:    50,
 				maxResults: 100,
 			},
@@ -352,7 +354,7 @@ func Test_internalTypeSchemeImpl_Projects(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:        context.Background(),
-				projectIds: []int{1001, 1002},
+				projectIDs: []int{1001, 1002},
 				startAt:    50,
 				maxResults: 100,
 			},
@@ -383,7 +385,7 @@ func Test_internalTypeSchemeImpl_Projects(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:        context.Background(),
-				projectIds: []int{1001, 1002},
+				projectIDs: []int{1001, 1002},
 				startAt:    50,
 				maxResults: 100,
 			},
@@ -415,7 +417,7 @@ func Test_internalTypeSchemeImpl_Projects(t *testing.T) {
 			newService, err := NewTypeSchemeService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := newService.Projects(testCase.args.ctx, testCase.args.projectIds, testCase.args.startAt,
+			gotResult, gotResponse, err := newService.Projects(testCase.args.ctx, testCase.args.projectIDs, testCase.args.startAt,
 				testCase.args.maxResults)
 
 			if testCase.wantErr {
@@ -594,7 +596,7 @@ func Test_internalTypeSchemeImpl_Update(t *testing.T) {
 
 	type args struct {
 		ctx               context.Context
-		issueTypeSchemeId int
+		issueTypeSchemeID int
 		payload           *model.IssueTypeSchemePayloadScheme
 	}
 
@@ -611,7 +613,7 @@ func Test_internalTypeSchemeImpl_Update(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:               context.Background(),
-				issueTypeSchemeId: 10001,
+				issueTypeSchemeID: 10001,
 				payload:           payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -641,7 +643,7 @@ func Test_internalTypeSchemeImpl_Update(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:               context.Background(),
-				issueTypeSchemeId: 10001,
+				issueTypeSchemeID: 10001,
 				payload:           payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -682,7 +684,7 @@ func Test_internalTypeSchemeImpl_Update(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:               context.Background(),
-				issueTypeSchemeId: 10001,
+				issueTypeSchemeID: 10001,
 				payload:           payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -713,7 +715,7 @@ func Test_internalTypeSchemeImpl_Update(t *testing.T) {
 			newService, err := NewTypeSchemeService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResponse, err := newService.Update(testCase.args.ctx, testCase.args.issueTypeSchemeId,
+			gotResponse, err := newService.Update(testCase.args.ctx, testCase.args.issueTypeSchemeID,
 				testCase.args.payload)
 
 			if testCase.wantErr {
@@ -745,8 +747,8 @@ func Test_internalTypeSchemeImpl_Append(t *testing.T) {
 
 	type args struct {
 		ctx               context.Context
-		issueTypeSchemeId int
-		issueTypeIds      []int
+		issueTypeSchemeID int
+		issueTypeIDs      []int
 	}
 
 	testCases := []struct {
@@ -762,8 +764,8 @@ func Test_internalTypeSchemeImpl_Append(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:               context.Background(),
-				issueTypeSchemeId: 10001,
-				issueTypeIds:      []int{8, 10, 2},
+				issueTypeSchemeID: 10001,
+				issueTypeIDs:      []int{8, 10, 2},
 			},
 			on: func(fields *fields) {
 
@@ -792,8 +794,8 @@ func Test_internalTypeSchemeImpl_Append(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:               context.Background(),
-				issueTypeSchemeId: 10001,
-				issueTypeIds:      []int{8, 10, 2},
+				issueTypeSchemeID: 10001,
+				issueTypeIDs:      []int{8, 10, 2},
 			},
 			on: func(fields *fields) {
 
@@ -822,8 +824,8 @@ func Test_internalTypeSchemeImpl_Append(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:               context.Background(),
-				issueTypeSchemeId: 10001,
-				issueTypeIds:      []int{8, 10, 2},
+				issueTypeSchemeID: 10001,
+				issueTypeIDs:      []int{8, 10, 2},
 			},
 			on: func(fields *fields) {
 
@@ -853,8 +855,8 @@ func Test_internalTypeSchemeImpl_Append(t *testing.T) {
 			newService, err := NewTypeSchemeService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResponse, err := newService.Append(testCase.args.ctx, testCase.args.issueTypeSchemeId,
-				testCase.args.issueTypeIds)
+			gotResponse, err := newService.Append(testCase.args.ctx, testCase.args.issueTypeSchemeID,
+				testCase.args.issueTypeIDs)
 
 			if testCase.wantErr {
 
@@ -883,7 +885,7 @@ func Test_internalTypeSchemeImpl_Remove(t *testing.T) {
 
 	type args struct {
 		ctx                            context.Context
-		issueTypeSchemeId, issueTypeId int
+		issueTypeSchemeID, issueTypeID int
 	}
 
 	testCases := []struct {
@@ -899,8 +901,8 @@ func Test_internalTypeSchemeImpl_Remove(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:               context.Background(),
-				issueTypeId:       9,
-				issueTypeSchemeId: 10001,
+				issueTypeID:       9,
+				issueTypeSchemeID: 10001,
 			},
 			on: func(fields *fields) {
 
@@ -929,8 +931,8 @@ func Test_internalTypeSchemeImpl_Remove(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:               context.Background(),
-				issueTypeId:       9,
-				issueTypeSchemeId: 10001,
+				issueTypeID:       9,
+				issueTypeSchemeID: 10001,
 			},
 			on: func(fields *fields) {
 
@@ -959,8 +961,8 @@ func Test_internalTypeSchemeImpl_Remove(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:               context.Background(),
-				issueTypeId:       9,
-				issueTypeSchemeId: 10001,
+				issueTypeID:       9,
+				issueTypeSchemeID: 10001,
 			},
 			on: func(fields *fields) {
 
@@ -990,7 +992,7 @@ func Test_internalTypeSchemeImpl_Remove(t *testing.T) {
 			newService, err := NewTypeSchemeService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResponse, err := newService.Remove(testCase.args.ctx, testCase.args.issueTypeSchemeId, testCase.args.issueTypeId)
+			gotResponse, err := newService.Remove(testCase.args.ctx, testCase.args.issueTypeSchemeID, testCase.args.issueTypeID)
 
 			if testCase.wantErr {
 
@@ -1019,7 +1021,7 @@ func Test_internalTypeSchemeImpl_Delete(t *testing.T) {
 
 	type args struct {
 		ctx               context.Context
-		issueTypeSchemeId int
+		issueTypeSchemeID int
 	}
 
 	testCases := []struct {
@@ -1035,7 +1037,7 @@ func Test_internalTypeSchemeImpl_Delete(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:               context.Background(),
-				issueTypeSchemeId: 10001,
+				issueTypeSchemeID: 10001,
 			},
 			on: func(fields *fields) {
 
@@ -1064,7 +1066,7 @@ func Test_internalTypeSchemeImpl_Delete(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:               context.Background(),
-				issueTypeSchemeId: 10001,
+				issueTypeSchemeID: 10001,
 			},
 			on: func(fields *fields) {
 
@@ -1093,7 +1095,7 @@ func Test_internalTypeSchemeImpl_Delete(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:               context.Background(),
-				issueTypeSchemeId: 10001,
+				issueTypeSchemeID: 10001,
 			},
 			on: func(fields *fields) {
 
@@ -1123,7 +1125,7 @@ func Test_internalTypeSchemeImpl_Delete(t *testing.T) {
 			newService, err := NewTypeSchemeService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResponse, err := newService.Delete(testCase.args.ctx, testCase.args.issueTypeSchemeId)
+			gotResponse, err := newService.Delete(testCase.args.ctx, testCase.args.issueTypeSchemeID)
 
 			if testCase.wantErr {
 
@@ -1154,7 +1156,7 @@ func Test_internalTypeSchemeImpl_Assign(t *testing.T) {
 
 	type args struct {
 		ctx                          context.Context
-		issueTypeSchemeId, projectId string
+		issueTypeSchemeID, projectID string
 	}
 
 	testCases := []struct {
@@ -1170,8 +1172,8 @@ func Test_internalTypeSchemeImpl_Assign(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:               context.Background(),
-				projectId:         "9",
-				issueTypeSchemeId: "10001",
+				projectID:         "9",
+				issueTypeSchemeID: "10001",
 			},
 			on: func(fields *fields) {
 
@@ -1200,8 +1202,8 @@ func Test_internalTypeSchemeImpl_Assign(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:               context.Background(),
-				projectId:         "9",
-				issueTypeSchemeId: "10001",
+				projectID:         "9",
+				issueTypeSchemeID: "10001",
 			},
 			on: func(fields *fields) {
 
@@ -1230,7 +1232,7 @@ func Test_internalTypeSchemeImpl_Assign(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:               context.Background(),
-				issueTypeSchemeId: "10001",
+				issueTypeSchemeID: "10001",
 			},
 			wantErr: true,
 			Err:     model.ErrNoProjectIDError,
@@ -1241,7 +1243,7 @@ func Test_internalTypeSchemeImpl_Assign(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:       context.Background(),
-				projectId: "9",
+				projectID: "9",
 			},
 			wantErr: true,
 			Err:     model.ErrNoIssueTypeSchemeIDError,
@@ -1252,8 +1254,8 @@ func Test_internalTypeSchemeImpl_Assign(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:               context.Background(),
-				projectId:         "9",
-				issueTypeSchemeId: "10001",
+				projectID:         "9",
+				issueTypeSchemeID: "10001",
 			},
 			on: func(fields *fields) {
 
@@ -1283,7 +1285,7 @@ func Test_internalTypeSchemeImpl_Assign(t *testing.T) {
 			newService, err := NewTypeSchemeService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResponse, err := newService.Assign(testCase.args.ctx, testCase.args.issueTypeSchemeId, testCase.args.projectId)
+			gotResponse, err := newService.Assign(testCase.args.ctx, testCase.args.issueTypeSchemeID, testCase.args.projectID)
 
 			if testCase.wantErr {
 

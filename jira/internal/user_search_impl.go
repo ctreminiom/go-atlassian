@@ -3,13 +3,14 @@ package internal
 import (
 	"context"
 	"fmt"
-	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/service"
-	"github.com/ctreminiom/go-atlassian/service/jira"
 	"net/http"
 	"net/url"
 	"strconv"
 	"strings"
+
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/service"
+	"github.com/ctreminiom/go-atlassian/service/jira"
 )
 
 func NewUserSearchService(client service.Connector, version string) (*UserSearchService, error) {
@@ -34,8 +35,8 @@ type UserSearchService struct {
 // GET /rest/api/{2-3}/user/assignable/multiProjectSearch
 //
 // https://docs.go-atlassian.io/jira-software-cloud/users/search#find-users-assignable-to-projects
-func (u *UserSearchService) Projects(ctx context.Context, accountId string, projectKeys []string, startAt, maxResults int) ([]*model.UserScheme, *model.ResponseScheme, error) {
-	return u.internalClient.Projects(ctx, accountId, projectKeys, startAt, maxResults)
+func (u *UserSearchService) Projects(ctx context.Context, accountID string, projectKeys []string, startAt, maxResults int) ([]*model.UserScheme, *model.ResponseScheme, error) {
+	return u.internalClient.Projects(ctx, accountID, projectKeys, startAt, maxResults)
 }
 
 // Do return a list of users that match the search string and property.
@@ -49,8 +50,8 @@ func (u *UserSearchService) Projects(ctx context.Context, accountId string, proj
 // GET /rest/api/{2-3}/user/search
 //
 // https://docs.go-atlassian.io/jira-software-cloud/users/search#find-users
-func (u *UserSearchService) Do(ctx context.Context, accountId, query string, startAt, maxResults int) ([]*model.UserScheme, *model.ResponseScheme, error) {
-	return u.internalClient.Do(ctx, accountId, query, startAt, maxResults)
+func (u *UserSearchService) Do(ctx context.Context, accountID, query string, startAt, maxResults int) ([]*model.UserScheme, *model.ResponseScheme, error) {
+	return u.internalClient.Do(ctx, accountID, query, startAt, maxResults)
 }
 
 // Check returns a list of users who fulfill these criteria:
@@ -118,7 +119,7 @@ func (i *internalUserSearchImpl) Check(ctx context.Context, permission string, o
 	return users, response, nil
 }
 
-func (i *internalUserSearchImpl) Projects(ctx context.Context, accountId string, projectKeys []string, startAt, maxResults int) ([]*model.UserScheme, *model.ResponseScheme, error) {
+func (i *internalUserSearchImpl) Projects(ctx context.Context, accountID string, projectKeys []string, startAt, maxResults int) ([]*model.UserScheme, *model.ResponseScheme, error) {
 
 	if len(projectKeys) == 0 {
 		return nil, nil, model.ErrNoProjectKeySliceError
@@ -128,8 +129,8 @@ func (i *internalUserSearchImpl) Projects(ctx context.Context, accountId string,
 	params.Add("startAt", strconv.Itoa(startAt))
 	params.Add("maxResults", strconv.Itoa(maxResults))
 
-	if accountId != "" {
-		params.Add("accountId", accountId)
+	if accountID != "" {
+		params.Add("accountId", accountID)
 	}
 
 	if len(projectKeys) != 0 {
@@ -152,14 +153,14 @@ func (i *internalUserSearchImpl) Projects(ctx context.Context, accountId string,
 	return users, response, nil
 }
 
-func (i *internalUserSearchImpl) Do(ctx context.Context, accountId, query string, startAt, maxResults int) ([]*model.UserScheme, *model.ResponseScheme, error) {
+func (i *internalUserSearchImpl) Do(ctx context.Context, accountID, query string, startAt, maxResults int) ([]*model.UserScheme, *model.ResponseScheme, error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
 	params.Add("maxResults", strconv.Itoa(maxResults))
 
-	if accountId != "" {
-		params.Add("accountId", accountId)
+	if accountID != "" {
+		params.Add("accountId", accountID)
 	}
 
 	if query != "" {

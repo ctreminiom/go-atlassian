@@ -3,12 +3,14 @@ package internal
 import (
 	"context"
 	"errors"
+	"net/http"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
-	"github.com/stretchr/testify/assert"
-	"net/http"
-	"testing"
 )
 
 func Test_internalIssueADFServiceImpl_Delete(t *testing.T) {
@@ -20,7 +22,7 @@ func Test_internalIssueADFServiceImpl_Delete(t *testing.T) {
 
 	type args struct {
 		ctx            context.Context
-		issueKeyOrId   string
+		issueKeyOrID   string
 		deleteSubTasks bool
 	}
 
@@ -37,7 +39,7 @@ func Test_internalIssueADFServiceImpl_Delete(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:            context.Background(),
-				issueKeyOrId:   "DUMMY-1",
+				issueKeyOrID:   "DUMMY-1",
 				deleteSubTasks: true,
 			},
 			on: func(fields *fields) {
@@ -66,7 +68,7 @@ func Test_internalIssueADFServiceImpl_Delete(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:            context.Background(),
-				issueKeyOrId:   "",
+				issueKeyOrID:   "",
 				deleteSubTasks: true,
 			},
 			on: func(fields *fields) {
@@ -81,7 +83,7 @@ func Test_internalIssueADFServiceImpl_Delete(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:            context.Background(),
-				issueKeyOrId:   "DUMMY-1",
+				issueKeyOrID:   "DUMMY-1",
 				deleteSubTasks: true,
 			},
 			on: func(fields *fields) {
@@ -113,7 +115,7 @@ func Test_internalIssueADFServiceImpl_Delete(t *testing.T) {
 			_, issueService, err := NewIssueService(testCase.fields.c, testCase.fields.version, nil)
 			assert.NoError(t, err)
 
-			gotResponse, err := issueService.Delete(testCase.args.ctx, testCase.args.issueKeyOrId, testCase.args.deleteSubTasks)
+			gotResponse, err := issueService.Delete(testCase.args.ctx, testCase.args.issueKeyOrID, testCase.args.deleteSubTasks)
 
 			if testCase.wantErr {
 
@@ -142,7 +144,7 @@ func Test_internalIssueADFServiceImpl_Assign(t *testing.T) {
 
 	type args struct {
 		ctx                     context.Context
-		issueKeyOrId, accountId string
+		issueKeyOrID, accountID string
 	}
 
 	testCases := []struct {
@@ -158,8 +160,8 @@ func Test_internalIssueADFServiceImpl_Assign(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-1",
-				accountId:    "account-id-sample",
+				issueKeyOrID: "DUMMY-1",
+				accountID:    "account-id-sample",
 			},
 			on: func(fields *fields) {
 
@@ -187,8 +189,8 @@ func Test_internalIssueADFServiceImpl_Assign(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "",
-				accountId:    "account-id-sample",
+				issueKeyOrID: "",
+				accountID:    "account-id-sample",
 			},
 			on: func(fields *fields) {
 				fields.c = mocks.NewConnector(t)
@@ -202,8 +204,8 @@ func Test_internalIssueADFServiceImpl_Assign(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-1",
-				accountId:    "",
+				issueKeyOrID: "DUMMY-1",
+				accountID:    "",
 			},
 			on: func(fields *fields) {
 				fields.c = mocks.NewConnector(t)
@@ -217,8 +219,8 @@ func Test_internalIssueADFServiceImpl_Assign(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-1",
-				accountId:    "account-id-sample",
+				issueKeyOrID: "DUMMY-1",
+				accountID:    "account-id-sample",
 			},
 			on: func(fields *fields) {
 
@@ -249,7 +251,7 @@ func Test_internalIssueADFServiceImpl_Assign(t *testing.T) {
 			_, issueService, err := NewIssueService(testCase.fields.c, testCase.fields.version, nil)
 			assert.NoError(t, err)
 
-			gotResponse, err := issueService.Assign(testCase.args.ctx, testCase.args.issueKeyOrId, testCase.args.accountId)
+			gotResponse, err := issueService.Assign(testCase.args.ctx, testCase.args.issueKeyOrID, testCase.args.accountID)
 
 			if testCase.wantErr {
 
@@ -287,7 +289,7 @@ func Test_internalIssueADFServiceImpl_Notify(t *testing.T) {
 
 	type args struct {
 		ctx          context.Context
-		issueKeyOrId string
+		issueKeyOrID string
 		options      *model.IssueNotifyOptionsScheme
 	}
 
@@ -304,7 +306,7 @@ func Test_internalIssueADFServiceImpl_Notify(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-1",
+				issueKeyOrID: "DUMMY-1",
 				options:      optionsMocked,
 			},
 			on: func(fields *fields) {
@@ -333,7 +335,7 @@ func Test_internalIssueADFServiceImpl_Notify(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "",
+				issueKeyOrID: "",
 			},
 			on: func(fields *fields) {
 				fields.c = mocks.NewConnector(t)
@@ -347,7 +349,7 @@ func Test_internalIssueADFServiceImpl_Notify(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-1",
+				issueKeyOrID: "DUMMY-1",
 				options:      optionsMocked,
 			},
 			on: func(fields *fields) {
@@ -379,7 +381,7 @@ func Test_internalIssueADFServiceImpl_Notify(t *testing.T) {
 			_, issueService, err := NewIssueService(testCase.fields.c, testCase.fields.version, nil)
 			assert.NoError(t, err)
 
-			gotResponse, err := issueService.Notify(testCase.args.ctx, testCase.args.issueKeyOrId, testCase.args.options)
+			gotResponse, err := issueService.Notify(testCase.args.ctx, testCase.args.issueKeyOrID, testCase.args.options)
 
 			if testCase.wantErr {
 
@@ -408,7 +410,7 @@ func Test_internalIssueADFServiceImpl_Transitions(t *testing.T) {
 
 	type args struct {
 		ctx          context.Context
-		issueKeyOrId string
+		issueKeyOrID string
 	}
 
 	testCases := []struct {
@@ -424,7 +426,7 @@ func Test_internalIssueADFServiceImpl_Transitions(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-1",
+				issueKeyOrID: "DUMMY-1",
 			},
 			on: func(fields *fields) {
 
@@ -452,7 +454,7 @@ func Test_internalIssueADFServiceImpl_Transitions(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "",
+				issueKeyOrID: "",
 			},
 			on: func(fields *fields) {
 				fields.c = mocks.NewConnector(t)
@@ -466,7 +468,7 @@ func Test_internalIssueADFServiceImpl_Transitions(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-1",
+				issueKeyOrID: "DUMMY-1",
 			},
 			on: func(fields *fields) {
 
@@ -497,7 +499,7 @@ func Test_internalIssueADFServiceImpl_Transitions(t *testing.T) {
 			_, issueService, err := NewIssueService(testCase.fields.c, testCase.fields.version, nil)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := issueService.Transitions(testCase.args.ctx, testCase.args.issueKeyOrId)
+			gotResult, gotResponse, err := issueService.Transitions(testCase.args.ctx, testCase.args.issueKeyOrID)
 
 			if testCase.wantErr {
 
@@ -885,7 +887,7 @@ func Test_internalIssueADFServiceImpl_Get(t *testing.T) {
 
 	type args struct {
 		ctx            context.Context
-		issueKeyOrId   string
+		issueKeyOrID   string
 		fields, expand []string
 	}
 
@@ -902,7 +904,7 @@ func Test_internalIssueADFServiceImpl_Get(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-1",
+				issueKeyOrID: "DUMMY-1",
 				fields:       []string{"summary", "status"},
 				expand:       []string{"operations", "changelogts"},
 			},
@@ -932,7 +934,7 @@ func Test_internalIssueADFServiceImpl_Get(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "",
+				issueKeyOrID: "",
 				fields:       []string{"summary", "status"},
 				expand:       []string{"operations", "changelogts"},
 			},
@@ -948,7 +950,7 @@ func Test_internalIssueADFServiceImpl_Get(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-1",
+				issueKeyOrID: "DUMMY-1",
 				fields:       []string{"summary", "status"},
 				expand:       []string{"operations", "changelogts"},
 			},
@@ -981,7 +983,7 @@ func Test_internalIssueADFServiceImpl_Get(t *testing.T) {
 			_, issueService, err := NewIssueService(testCase.fields.c, testCase.fields.version, nil)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := issueService.Get(testCase.args.ctx, testCase.args.issueKeyOrId, testCase.args.fields,
+			gotResult, gotResponse, err := issueService.Get(testCase.args.ctx, testCase.args.issueKeyOrID, testCase.args.fields,
 				testCase.args.expand)
 
 			if testCase.wantErr {
@@ -1072,7 +1074,7 @@ func Test_internalIssueADFServiceImpl_Move(t *testing.T) {
 
 	type args struct {
 		ctx                        context.Context
-		issueKeyOrId, transitionId string
+		issueKeyOrID, transitionID string
 		options                    *model.IssueMoveOptionsV3
 	}
 
@@ -1089,8 +1091,8 @@ func Test_internalIssueADFServiceImpl_Move(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-1",
-				transitionId: "10001",
+				issueKeyOrID: "DUMMY-1",
+				transitionID: "10001",
 				options: &model.IssueMoveOptionsV3{
 					Fields: &model.IssueScheme{
 						Fields: &model.IssueFieldsScheme{
@@ -1129,8 +1131,8 @@ func Test_internalIssueADFServiceImpl_Move(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-1",
-				transitionId: "10001",
+				issueKeyOrID: "DUMMY-1",
+				transitionID: "10001",
 				options: &model.IssueMoveOptionsV3{
 					CustomFields: customFieldsMocked,
 					Operations:   operationsMocked,
@@ -1145,8 +1147,8 @@ func Test_internalIssueADFServiceImpl_Move(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-1",
-				transitionId: "10001",
+				issueKeyOrID: "DUMMY-1",
+				transitionID: "10001",
 				options: &model.IssueMoveOptionsV3{
 					Fields: &model.IssueScheme{
 						Fields: &model.IssueFieldsScheme{
@@ -1185,8 +1187,8 @@ func Test_internalIssueADFServiceImpl_Move(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-1",
-				transitionId: "10001",
+				issueKeyOrID: "DUMMY-1",
+				transitionID: "10001",
 				options: &model.IssueMoveOptionsV3{
 					Fields: &model.IssueScheme{
 						Fields: &model.IssueFieldsScheme{
@@ -1225,8 +1227,8 @@ func Test_internalIssueADFServiceImpl_Move(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-1",
-				transitionId: "10001",
+				issueKeyOrID: "DUMMY-1",
+				transitionID: "10001",
 				options:      nil,
 			},
 			on: func(fields *fields) {
@@ -1255,8 +1257,8 @@ func Test_internalIssueADFServiceImpl_Move(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "",
-				transitionId: "10001",
+				issueKeyOrID: "",
+				transitionID: "10001",
 				options: &model.IssueMoveOptionsV3{
 					Fields: &model.IssueScheme{
 						Fields: &model.IssueFieldsScheme{
@@ -1281,8 +1283,8 @@ func Test_internalIssueADFServiceImpl_Move(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-1",
-				transitionId: "",
+				issueKeyOrID: "DUMMY-1",
+				transitionID: "",
 				options: &model.IssueMoveOptionsV3{
 					Fields: &model.IssueScheme{
 						Fields: &model.IssueFieldsScheme{
@@ -1307,8 +1309,8 @@ func Test_internalIssueADFServiceImpl_Move(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-1",
-				transitionId: "10001",
+				issueKeyOrID: "DUMMY-1",
+				transitionID: "10001",
 				options: &model.IssueMoveOptionsV3{
 					Fields: &model.IssueScheme{
 						Fields: &model.IssueFieldsScheme{
@@ -1350,7 +1352,7 @@ func Test_internalIssueADFServiceImpl_Move(t *testing.T) {
 			_, issueService, err := NewIssueService(testCase.fields.c, testCase.fields.version, nil)
 			assert.NoError(t, err)
 
-			gotResponse, err := issueService.Move(testCase.args.ctx, testCase.args.issueKeyOrId, testCase.args.transitionId,
+			gotResponse, err := issueService.Move(testCase.args.ctx, testCase.args.issueKeyOrID, testCase.args.transitionID,
 				testCase.args.options)
 
 			if testCase.wantErr {
@@ -1424,7 +1426,7 @@ func Test_internalIssueADFServiceImpl_Update(t *testing.T) {
 
 	type args struct {
 		ctx          context.Context
-		issueKeyOrId string
+		issueKeyOrID string
 		notify       bool
 		payload      *model.IssueScheme
 		customFields *model.CustomFields
@@ -1444,7 +1446,7 @@ func Test_internalIssueADFServiceImpl_Update(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-1",
+				issueKeyOrID: "DUMMY-1",
 				notify:       true,
 				payload: &model.IssueScheme{
 					Fields: &model.IssueFieldsScheme{
@@ -1480,7 +1482,7 @@ func Test_internalIssueADFServiceImpl_Update(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "",
+				issueKeyOrID: "",
 				notify:       true,
 				payload: &model.IssueScheme{
 					Fields: &model.IssueFieldsScheme{
@@ -1502,7 +1504,7 @@ func Test_internalIssueADFServiceImpl_Update(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-1",
+				issueKeyOrID: "DUMMY-1",
 				notify:       true,
 				payload: &model.IssueScheme{
 					Fields: &model.IssueFieldsScheme{
@@ -1535,7 +1537,7 @@ func Test_internalIssueADFServiceImpl_Update(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-1",
+				issueKeyOrID: "DUMMY-1",
 				notify:       true,
 				payload: &model.IssueScheme{
 					Fields: &model.IssueFieldsScheme{
@@ -1571,7 +1573,7 @@ func Test_internalIssueADFServiceImpl_Update(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-1",
+				issueKeyOrID: "DUMMY-1",
 				notify:       true,
 				payload: &model.IssueScheme{
 					Fields: &model.IssueFieldsScheme{
@@ -1607,7 +1609,7 @@ func Test_internalIssueADFServiceImpl_Update(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-1",
+				issueKeyOrID: "DUMMY-1",
 				notify:       true,
 				payload: &model.IssueScheme{
 					Fields: &model.IssueFieldsScheme{
@@ -1653,7 +1655,7 @@ func Test_internalIssueADFServiceImpl_Update(t *testing.T) {
 			_, issueService, err := NewIssueService(testCase.fields.c, testCase.fields.version, nil)
 			assert.NoError(t, err)
 
-			gotResponse, err := issueService.Update(testCase.args.ctx, testCase.args.issueKeyOrId, testCase.args.notify,
+			gotResponse, err := issueService.Update(testCase.args.ctx, testCase.args.issueKeyOrID, testCase.args.notify,
 				testCase.args.payload, testCase.args.customFields, testCase.args.operations)
 
 			if testCase.wantErr {

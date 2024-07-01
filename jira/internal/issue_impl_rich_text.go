@@ -2,14 +2,16 @@ package internal
 
 import (
 	"context"
-	"dario.cat/mergo"
 	"fmt"
-	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/service"
-	"github.com/ctreminiom/go-atlassian/service/jira"
 	"net/http"
 	"net/url"
 	"strings"
+
+	"dario.cat/mergo"
+
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/service"
+	"github.com/ctreminiom/go-atlassian/service/jira"
 )
 
 type IssueRichTextService struct {
@@ -38,11 +40,11 @@ type IssueRichTextService struct {
 //
 // 3.This causes the issue's subtasks to be deleted with the issue.
 //
-// DELETE /rest/api/{2-3}/issue/{issueIdOrKey}
+// DELETE /rest/api/{2-3}/issue/{issueKeyOrID}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues#delete-issue
-func (i IssueRichTextService) Delete(ctx context.Context, issueKeyOrId string, deleteSubTasks bool) (*model.ResponseScheme, error) {
-	return i.internalClient.Delete(ctx, issueKeyOrId, deleteSubTasks)
+func (i IssueRichTextService) Delete(ctx context.Context, issueKeyOrID string, deleteSubTasks bool) (*model.ResponseScheme, error) {
+	return i.internalClient.Delete(ctx, issueKeyOrID, deleteSubTasks)
 }
 
 // Assign assigns an issue to a user.
@@ -51,25 +53,25 @@ func (i IssueRichTextService) Delete(ctx context.Context, issueKeyOrId string, d
 //
 // Assign issue permission for the project that the issue is in.
 //
-// If accountId is set to:
+// If accountID is set to:
 //
 //  1. "-1", the issue is assigned to the default assignee for the project.
 //  2. null, the issue is set to unassigned.
 //
-// PUT /rest/api/{2-3}/issue/{issueIdOrKey}/assignee
+// PUT /rest/api/{2-3}/issue/{issueKeyOrID}/assignee
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues#assign-issue
-func (i IssueRichTextService) Assign(ctx context.Context, issueKeyOrId, accountId string) (*model.ResponseScheme, error) {
-	return i.internalClient.Assign(ctx, issueKeyOrId, accountId)
+func (i IssueRichTextService) Assign(ctx context.Context, issueKeyOrID, accountID string) (*model.ResponseScheme, error) {
+	return i.internalClient.Assign(ctx, issueKeyOrID, accountID)
 }
 
 // Notify creates an email notification for an issue and adds it to the mail queue.
 //
-// POST /rest/api/{2-3}/issue/{issueIdOrKey}/notify
+// POST /rest/api/{2-3}/issue/{issueKeyOrID}/notify
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues#send-notification-for-issue
-func (i IssueRichTextService) Notify(ctx context.Context, issueKeyOrId string, options *model.IssueNotifyOptionsScheme) (*model.ResponseScheme, error) {
-	return i.internalClient.Notify(ctx, issueKeyOrId, options)
+func (i IssueRichTextService) Notify(ctx context.Context, issueKeyOrID string, options *model.IssueNotifyOptionsScheme) (*model.ResponseScheme, error) {
+	return i.internalClient.Notify(ctx, issueKeyOrID, options)
 }
 
 // Transitions returns either all transitions or a transition that can be performed by the user on an issue, based on the issue's status.
@@ -78,11 +80,11 @@ func (i IssueRichTextService) Notify(ctx context.Context, issueKeyOrId string, o
 //
 // given its status, the response will return any empty transitions list.
 //
-// GET /rest/api/{2-3}/issue/{issueIdOrKey}/transitions
+// GET /rest/api/{2-3}/issue/{issueKeyOrID}/transitions
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues#get-transitions
-func (i IssueRichTextService) Transitions(ctx context.Context, issueKeyOrId string) (*model.IssueTransitionsScheme, *model.ResponseScheme, error) {
-	return i.internalClient.Transitions(ctx, issueKeyOrId)
+func (i IssueRichTextService) Transitions(ctx context.Context, issueKeyOrID string) (*model.IssueTransitionsScheme, *model.ResponseScheme, error) {
+	return i.internalClient.Transitions(ctx, issueKeyOrID)
 }
 
 // Create creates an issue or, where the option to create subtasks is enabled in Jira, a subtask.
@@ -115,11 +117,11 @@ func (i IssueRichTextService) Creates(ctx context.Context, payload []*model.Issu
 //
 // The issue key returned to the response is the key of the issue found.
 //
-// GET /rest/api/{2-3}/issue/{issueIdOrKey}
+// GET /rest/api/{2-3}/issue/{issueKeyOrID}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues#get-issue
-func (i IssueRichTextService) Get(ctx context.Context, issueKeyOrId string, fields, expand []string) (*model.IssueSchemeV2, *model.ResponseScheme, error) {
-	return i.internalClient.Get(ctx, issueKeyOrId, fields, expand)
+func (i IssueRichTextService) Get(ctx context.Context, issueKeyOrID string, fields, expand []string) (*model.IssueSchemeV2, *model.ResponseScheme, error) {
+	return i.internalClient.Get(ctx, issueKeyOrID, fields, expand)
 }
 
 // Update edits an issue.
@@ -128,22 +130,22 @@ func (i IssueRichTextService) Get(ctx context.Context, issueKeyOrId string, fiel
 //
 // # The edits to the issue's fields are defined using update and fields
 //
-// PUT /rest/api/{2-3}/issue/{issueIdOrKey}
+// PUT /rest/api/{2-3}/issue/{issueKeyOrID}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues#edit-issue
-func (i IssueRichTextService) Update(ctx context.Context, issueKeyOrId string, notify bool, payload *model.IssueSchemeV2, customFields *model.CustomFields, operations *model.UpdateOperations) (*model.ResponseScheme, error) {
-	return i.internalClient.Update(ctx, issueKeyOrId, notify, payload, customFields, operations)
+func (i IssueRichTextService) Update(ctx context.Context, issueKeyOrID string, notify bool, payload *model.IssueSchemeV2, customFields *model.CustomFields, operations *model.UpdateOperations) (*model.ResponseScheme, error) {
+	return i.internalClient.Update(ctx, issueKeyOrID, notify, payload, customFields, operations)
 }
 
 // Move performs an issue transition and, if the transition has a screen, updates the fields from the transition screen.
 //
 // sortByCategory To update the fields on the transition screen, specify the fields in the fields or update parameters in the request body. Get details about the fields using Get transitions with the transitions.fields expand.
 //
-// POST /rest/api/{2-3}/issue/{issueIdOrKey}/transitions
+// POST /rest/api/{2-3}/issue/{issueKeyOrID}/transitions
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues#transition-issue
-func (i IssueRichTextService) Move(ctx context.Context, issueKeyOrId, transitionId string, options *model.IssueMoveOptionsV2) (*model.ResponseScheme, error) {
-	return i.internalClient.Move(ctx, issueKeyOrId, transitionId, options)
+func (i IssueRichTextService) Move(ctx context.Context, issueKeyOrID, transitionID string, options *model.IssueMoveOptionsV2) (*model.ResponseScheme, error) {
+	return i.internalClient.Move(ctx, issueKeyOrID, transitionID, options)
 }
 
 type internalRichTextServiceImpl struct {
@@ -151,20 +153,20 @@ type internalRichTextServiceImpl struct {
 	version string
 }
 
-func (i *internalRichTextServiceImpl) Delete(ctx context.Context, issueKeyOrId string, deleteSubTasks bool) (*model.ResponseScheme, error) {
-	return deleteIssue(ctx, i.c, i.version, issueKeyOrId, deleteSubTasks)
+func (i *internalRichTextServiceImpl) Delete(ctx context.Context, issueKeyOrID string, deleteSubTasks bool) (*model.ResponseScheme, error) {
+	return deleteIssue(ctx, i.c, i.version, issueKeyOrID, deleteSubTasks)
 }
 
-func (i *internalRichTextServiceImpl) Assign(ctx context.Context, issueKeyOrId, accountId string) (*model.ResponseScheme, error) {
-	return assignIssue(ctx, i.c, i.version, issueKeyOrId, accountId)
+func (i *internalRichTextServiceImpl) Assign(ctx context.Context, issueKeyOrID, accountID string) (*model.ResponseScheme, error) {
+	return assignIssue(ctx, i.c, i.version, issueKeyOrID, accountID)
 }
 
-func (i *internalRichTextServiceImpl) Notify(ctx context.Context, issueKeyOrId string, options *model.IssueNotifyOptionsScheme) (*model.ResponseScheme, error) {
-	return sendNotification(ctx, i.c, i.version, issueKeyOrId, options)
+func (i *internalRichTextServiceImpl) Notify(ctx context.Context, issueKeyOrID string, options *model.IssueNotifyOptionsScheme) (*model.ResponseScheme, error) {
+	return sendNotification(ctx, i.c, i.version, issueKeyOrID, options)
 }
 
-func (i *internalRichTextServiceImpl) Transitions(ctx context.Context, issueKeyOrId string) (*model.IssueTransitionsScheme, *model.ResponseScheme, error) {
-	return getTransitions(ctx, i.c, i.version, issueKeyOrId)
+func (i *internalRichTextServiceImpl) Transitions(ctx context.Context, issueKeyOrID string) (*model.IssueTransitionsScheme, *model.ResponseScheme, error) {
+	return getTransitions(ctx, i.c, i.version, issueKeyOrID)
 }
 
 func (i *internalRichTextServiceImpl) Create(ctx context.Context, payload *model.IssueSchemeV2, customFields *model.CustomFields) (*model.IssueResponseScheme, *model.ResponseScheme, error) {
@@ -238,9 +240,9 @@ func (i *internalRichTextServiceImpl) Creates(ctx context.Context, payload []*mo
 	return issues, response, nil
 }
 
-func (i *internalRichTextServiceImpl) Get(ctx context.Context, issueKeyOrId string, fields, expand []string) (*model.IssueSchemeV2, *model.ResponseScheme, error) {
+func (i *internalRichTextServiceImpl) Get(ctx context.Context, issueKeyOrID string, fields, expand []string) (*model.IssueSchemeV2, *model.ResponseScheme, error) {
 
-	if issueKeyOrId == "" {
+	if issueKeyOrID == "" {
 		return nil, nil, model.ErrNoIssueKeyOrIDError
 	}
 
@@ -255,7 +257,7 @@ func (i *internalRichTextServiceImpl) Get(ctx context.Context, issueKeyOrId stri
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("rest/api/%v/issue/%v", i.version, issueKeyOrId))
+	endpoint.WriteString(fmt.Sprintf("rest/api/%v/issue/%v", i.version, issueKeyOrID))
 
 	if params.Encode() != "" {
 		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
@@ -275,15 +277,15 @@ func (i *internalRichTextServiceImpl) Get(ctx context.Context, issueKeyOrId stri
 	return issue, response, nil
 }
 
-func (i *internalRichTextServiceImpl) Update(ctx context.Context, issueKeyOrId string, notify bool, payload *model.IssueSchemeV2, customFields *model.CustomFields, operations *model.UpdateOperations) (*model.ResponseScheme, error) {
+func (i *internalRichTextServiceImpl) Update(ctx context.Context, issueKeyOrID string, notify bool, payload *model.IssueSchemeV2, customFields *model.CustomFields, operations *model.UpdateOperations) (*model.ResponseScheme, error) {
 
-	if issueKeyOrId == "" {
+	if issueKeyOrID == "" {
 		return nil, model.ErrNoIssueKeyOrIDError
 	}
 
 	params := url.Values{}
 	params.Add("notifyUsers", fmt.Sprintf("%v", notify))
-	endpoint := fmt.Sprintf("rest/api/%v/issue/%v?%v", i.version, issueKeyOrId, params.Encode())
+	endpoint := fmt.Sprintf("rest/api/%v/issue/%v?%v", i.version, issueKeyOrID, params.Encode())
 
 	withCustomFields := customFields != nil
 	withOperations := operations != nil
@@ -346,18 +348,18 @@ func (i *internalRichTextServiceImpl) Update(ctx context.Context, issueKeyOrId s
 	return i.c.Call(request, nil)
 }
 
-func (i *internalRichTextServiceImpl) Move(ctx context.Context, issueKeyOrId, transitionId string, options *model.IssueMoveOptionsV2) (*model.ResponseScheme, error) {
+func (i *internalRichTextServiceImpl) Move(ctx context.Context, issueKeyOrID, transitionID string, options *model.IssueMoveOptionsV2) (*model.ResponseScheme, error) {
 
-	if issueKeyOrId == "" {
+	if issueKeyOrID == "" {
 		return nil, model.ErrNoIssueKeyOrIDError
 	}
 
-	if transitionId == "" {
+	if transitionID == "" {
 		return nil, model.ErrNoTransitionIDError
 	}
 
 	payloadUpdated := make(map[string]interface{})
-	payloadUpdated["transition"] = map[string]interface{}{"id": transitionId}
+	payloadUpdated["transition"] = map[string]interface{}{"id": transitionID}
 
 	// Process logic only if the transition options are provided
 	if options != nil {
@@ -409,7 +411,7 @@ func (i *internalRichTextServiceImpl) Move(ctx context.Context, issueKeyOrId, tr
 
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/transitions", i.version, issueKeyOrId)
+	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/transitions", i.version, issueKeyOrID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payloadUpdated)
 	if err != nil {

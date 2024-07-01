@@ -3,10 +3,11 @@ package internal
 import (
 	"context"
 	"fmt"
+	"net/http"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/jira"
-	"net/http"
 )
 
 func NewIssuePropertyService(client service.Connector, version string) (*IssuePropertyService, error) {
@@ -32,14 +33,14 @@ Permissions required:
   - Browse projects project permission for the project containing the issue.
   - If issue-level security is configured, issue-level security permission to view the issue.
 
-Endpoint: GET /rest/api/{apiVersion}/issue/{issueIdOrKey}/properties
+Endpoint: GET /rest/api/{apiVersion}/issue/{issueKeyOrID}/properties
 
 You can refer to the documentation: [Get issue property keys]
 
 [Get issue property keys]: https://docs.go-atlassian.io/jira-software-cloud/issues/properties#get-issue-property-keys
 */
-func (i *IssuePropertyService) Gets(ctx context.Context, issueIdOrKey string) (*model.PropertyPageScheme, *model.ResponseScheme, error) {
-	return i.internalClient.Gets(ctx, issueIdOrKey)
+func (i *IssuePropertyService) Gets(ctx context.Context, issueKeyOrID string) (*model.PropertyPageScheme, *model.ResponseScheme, error) {
+	return i.internalClient.Gets(ctx, issueKeyOrID)
 }
 
 /*
@@ -50,14 +51,14 @@ Permissions required:
   - Browse projects project permission for the project containing the issue.
   - If issue-level security is configured, issue-level security permission to view the issue.
 
-Endpoint: GET /rest/api/{apiVersion}/issue/{issueIdOrKey}/properties/{propertyKey}
+Endpoint: GET /rest/api/{apiVersion}/issue/{issueKeyOrID}/properties/{propertyKey}
 
 You can refer to the documentation: [Get issue property]
 
 [Get issue property]: https://docs.go-atlassian.io/jira-software-cloud/issues/properties#get-issue-property
 */
-func (i *IssuePropertyService) Get(ctx context.Context, issueKey, propertyKey string) (*model.EntityPropertyScheme, *model.ResponseScheme, error) {
-	return i.internalClient.Get(ctx, issueKey, propertyKey)
+func (i *IssuePropertyService) Get(ctx context.Context, issueKeyOrID, propertyKey string) (*model.EntityPropertyScheme, *model.ResponseScheme, error) {
+	return i.internalClient.Get(ctx, issueKeyOrID, propertyKey)
 }
 
 /*
@@ -69,14 +70,14 @@ Permissions required:
   - Browse projects and Edit issues project permissions for the project containing the issue.
   - If issue-level security is configured, issue-level security permission to view the issue.
 
-Endpoint: PUT /rest/api/{apiVersion}/issue/{issueIdOrKey}/properties/{propertyKey}
+Endpoint: PUT /rest/api/{apiVersion}/issue/{issueKeyOrID}/properties/{propertyKey}
 
 You can refer to the documentation: [Set issue property]
 
 [Set issue property]: https://docs.go-atlassian.io/jira-software-cloud/issues/properties#set-issue-property
 */
-func (i *IssuePropertyService) Set(ctx context.Context, issueKey, propertyKey string, payload interface{}) (*model.ResponseScheme, error) {
-	return i.internalClient.Set(ctx, issueKey, propertyKey, payload)
+func (i *IssuePropertyService) Set(ctx context.Context, issueKeyOrID, propertyKey string, payload interface{}) (*model.ResponseScheme, error) {
+	return i.internalClient.Set(ctx, issueKeyOrID, propertyKey, payload)
 }
 
 /*
@@ -87,14 +88,14 @@ Permissions required:
   - Browse projects and Edit issues project permissions for the project containing the issue.
   - If issue-level security is configured, issue-level security permission to view the issue.
 
-Endpoint: DELETE /rest/api/{apiVersion}/issue/{issueIdOrKey}/properties/{propertyKey}
+Endpoint: DELETE /rest/api/{apiVersion}/issue/{issueKeyOrID}/properties/{propertyKey}
 
 You can refer to the documentation: [Delete issue property]
 
 [Delete issue property]: https://docs.go-atlassian.io/jira-software-cloud/issues/properties#delete-issue-property
 */
-func (i *IssuePropertyService) Delete(ctx context.Context, issueKey, propertyKey string) (*model.ResponseScheme, error) {
-	return i.internalClient.Delete(ctx, issueKey, propertyKey)
+func (i *IssuePropertyService) Delete(ctx context.Context, issueKeyOrID, propertyKey string) (*model.ResponseScheme, error) {
+	return i.internalClient.Delete(ctx, issueKeyOrID, propertyKey)
 }
 
 type internalIssuePropertyImpl struct {
@@ -102,13 +103,13 @@ type internalIssuePropertyImpl struct {
 	version string
 }
 
-func (i *internalIssuePropertyImpl) Gets(ctx context.Context, issueIdOrKey string) (*model.PropertyPageScheme, *model.ResponseScheme, error) {
+func (i *internalIssuePropertyImpl) Gets(ctx context.Context, issueKeyOrID string) (*model.PropertyPageScheme, *model.ResponseScheme, error) {
 
-	if issueIdOrKey == "" {
+	if issueKeyOrID == "" {
 		return nil, nil, model.ErrNoIssueKeyOrIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/properties", i.version, issueIdOrKey)
+	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/properties", i.version, issueKeyOrID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {

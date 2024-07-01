@@ -3,12 +3,13 @@ package internal
 import (
 	"context"
 	"fmt"
-	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/service"
-	"github.com/ctreminiom/go-atlassian/service/sm"
 	"net/http"
 	"net/url"
 	"strconv"
+
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/service"
+	"github.com/ctreminiom/go-atlassian/service/sm"
 )
 
 func NewTypeService(client service.Connector, version string) *TypeService {
@@ -75,6 +76,15 @@ func (t *TypeService) Delete(ctx context.Context, serviceDeskID, requestTypeID i
 // https://docs.go-atlassian.io/jira-service-management-cloud/request/types#get-request-type-fields
 func (t *TypeService) Fields(ctx context.Context, serviceDeskID, requestTypeID int) (*model.RequestTypeFieldsScheme, *model.ResponseScheme, error) {
 	return t.internalClient.Fields(ctx, serviceDeskID, requestTypeID)
+}
+
+// Groups returns the groups for a service desk's customer request type.
+//
+// GET /rest/servicedeskapi/servicedesk/{serviceDeskId}/requesttypegroup
+//
+// https://docs.go-atlassian.io/jira-service-management-cloud/request/types#get-request-type-groups
+func (t *TypeService) Groups(ctx context.Context, serviceDeskID int) (*model.RequestTypeGroupPageScheme, *model.ResponseScheme, error) {
+	return t.internalClient.Groups(ctx, serviceDeskID)
 }
 
 type internalTypeImpl struct {
@@ -230,4 +240,26 @@ func (i *internalTypeImpl) Fields(ctx context.Context, serviceDeskID, requestTyp
 	}
 
 	return fields, res, nil
+}
+
+func (i *internalTypeImpl) Groups(ctx context.Context, serviceDeskID int) (*model.RequestTypeGroupPageScheme, *model.ResponseScheme, error) {
+
+	if serviceDeskID == 0 {
+		return nil, nil, model.ErrNoServiceDeskIDError
+	}
+
+	endpoint := fmt.Sprintf("rest/servicedeskapi/servicedesk/%v/requesttypegroup", serviceDeskID)
+
+	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	groups := new(model.RequestTypeGroupPageScheme)
+	res, err := i.c.Call(req, groups)
+	if err != nil {
+		return nil, res, err
+	}
+
+	return groups, res, nil
 }

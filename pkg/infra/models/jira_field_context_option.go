@@ -1,12 +1,5 @@
 package models
 
-// CustomFieldAssetScheme represents a custom field asset in Jira.
-type CustomFieldAssetScheme struct {
-	WorkspaceID string `json:"workspaceId,omitempty"` // The ID of the workspace.
-	ID          string `json:"id,omitempty"`          // The ID of the custom field asset.
-	ObjectID    string `json:"objectId,omitempty"`    // The object ID of the custom field asset.
-}
-
 // CustomFieldContextOptionPageScheme represents a page of custom field context options in Jira.
 type CustomFieldContextOptionPageScheme struct {
 	Self       string                            `json:"self,omitempty"`       // The URL of the page.

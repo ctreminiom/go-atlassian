@@ -3,13 +3,15 @@ package internal
 import (
 	"context"
 	"errors"
+	"net/http"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
-	"net/http"
-	"testing"
 )
 
 func Test_internalUserImpl_Get(t *testing.T) {
@@ -21,7 +23,7 @@ func Test_internalUserImpl_Get(t *testing.T) {
 
 	type args struct {
 		ctx       context.Context
-		accountId string
+		accountID string
 		expand    []string
 	}
 
@@ -38,7 +40,7 @@ func Test_internalUserImpl_Get(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:       context.Background(),
-				accountId: "uuid-sample",
+				accountID: "uuid-sample",
 				expand:    []string{"groups", "applicationRoles"},
 			},
 			on: func(fields *fields) {
@@ -68,7 +70,7 @@ func Test_internalUserImpl_Get(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:       context.Background(),
-				accountId: "uuid-sample",
+				accountID: "uuid-sample",
 				expand:    []string{"groups", "applicationRoles"},
 			},
 			on: func(fields *fields) {
@@ -108,7 +110,7 @@ func Test_internalUserImpl_Get(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:       context.Background(),
-				accountId: "uuid-sample",
+				accountID: "uuid-sample",
 				expand:    []string{"groups", "applicationRoles"},
 			},
 			on: func(fields *fields) {
@@ -139,7 +141,7 @@ func Test_internalUserImpl_Get(t *testing.T) {
 			newService, err := NewUserService(testCase.fields.c, testCase.fields.version, nil)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := newService.Get(testCase.args.ctx, testCase.args.accountId,
+			gotResult, gotResponse, err := newService.Get(testCase.args.ctx, testCase.args.accountID,
 				testCase.args.expand)
 
 			if testCase.wantErr {
@@ -170,7 +172,7 @@ func Test_internalUserImpl_Find(t *testing.T) {
 
 	type args struct {
 		ctx                 context.Context
-		accountIds          []string
+		accountIDs          []string
 		startAt, maxResults int
 	}
 
@@ -187,7 +189,7 @@ func Test_internalUserImpl_Find(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:        context.Background(),
-				accountIds: []string{"uuid-sample-1", "uuid-sample-2"},
+				accountIDs: []string{"uuid-sample-1", "uuid-sample-2"},
 				startAt:    50,
 				maxResults: 25,
 			},
@@ -218,7 +220,7 @@ func Test_internalUserImpl_Find(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:        context.Background(),
-				accountIds: []string{"uuid-sample-1", "uuid-sample-2"},
+				accountIDs: []string{"uuid-sample-1", "uuid-sample-2"},
 				startAt:    50,
 				maxResults: 25,
 			},
@@ -259,7 +261,7 @@ func Test_internalUserImpl_Find(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:        context.Background(),
-				accountIds: []string{"uuid-sample-1", "uuid-sample-2"},
+				accountIDs: []string{"uuid-sample-1", "uuid-sample-2"},
 				startAt:    50,
 				maxResults: 25,
 			},
@@ -291,7 +293,7 @@ func Test_internalUserImpl_Find(t *testing.T) {
 			newService, err := NewUserService(testCase.fields.c, testCase.fields.version, nil)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := newService.Find(testCase.args.ctx, testCase.args.accountIds,
+			gotResult, gotResponse, err := newService.Find(testCase.args.ctx, testCase.args.accountIDs,
 				testCase.args.startAt, testCase.args.maxResults)
 
 			if testCase.wantErr {
@@ -322,7 +324,7 @@ func Test_internalUserImpl_Delete(t *testing.T) {
 
 	type args struct {
 		ctx       context.Context
-		accountId string
+		accountID string
 	}
 
 	testCases := []struct {
@@ -338,7 +340,7 @@ func Test_internalUserImpl_Delete(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:       context.Background(),
-				accountId: "uuid-sample",
+				accountID: "uuid-sample",
 			},
 			on: func(fields *fields) {
 
@@ -367,7 +369,7 @@ func Test_internalUserImpl_Delete(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:       context.Background(),
-				accountId: "uuid-sample",
+				accountID: "uuid-sample",
 			},
 			on: func(fields *fields) {
 
@@ -406,7 +408,7 @@ func Test_internalUserImpl_Delete(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:       context.Background(),
-				accountId: "uuid-sample",
+				accountID: "uuid-sample",
 			},
 			on: func(fields *fields) {
 
@@ -436,7 +438,7 @@ func Test_internalUserImpl_Delete(t *testing.T) {
 			newService, err := NewUserService(testCase.fields.c, testCase.fields.version, nil)
 			assert.NoError(t, err)
 
-			gotResponse, err := newService.Delete(testCase.args.ctx, testCase.args.accountId)
+			gotResponse, err := newService.Delete(testCase.args.ctx, testCase.args.accountID)
 
 			if testCase.wantErr {
 
@@ -465,7 +467,7 @@ func Test_internalUserImpl_Groups(t *testing.T) {
 
 	type args struct {
 		ctx       context.Context
-		accountId string
+		accountID string
 	}
 
 	testCases := []struct {
@@ -481,7 +483,7 @@ func Test_internalUserImpl_Groups(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:       context.Background(),
-				accountId: "uuid-sample",
+				accountID: "uuid-sample",
 			},
 			on: func(fields *fields) {
 
@@ -510,7 +512,7 @@ func Test_internalUserImpl_Groups(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:       context.Background(),
-				accountId: "uuid-sample",
+				accountID: "uuid-sample",
 			},
 			on: func(fields *fields) {
 
@@ -549,7 +551,7 @@ func Test_internalUserImpl_Groups(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:       context.Background(),
-				accountId: "uuid-sample",
+				accountID: "uuid-sample",
 			},
 			on: func(fields *fields) {
 
@@ -579,7 +581,7 @@ func Test_internalUserImpl_Groups(t *testing.T) {
 			newService, err := NewUserService(testCase.fields.c, testCase.fields.version, nil)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := newService.Groups(testCase.args.ctx, testCase.args.accountId)
+			gotResult, gotResponse, err := newService.Groups(testCase.args.ctx, testCase.args.accountID)
 
 			if testCase.wantErr {
 

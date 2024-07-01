@@ -3,10 +3,11 @@ package internal
 import (
 	"context"
 	"fmt"
+	"net/http"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/jira"
-	"net/http"
 )
 
 func NewVoteService(client service.Connector, version string) (*VoteService, error) {
@@ -28,33 +29,33 @@ type VoteService struct {
 //
 // # This operation requires allowing users to vote on issues option to be ON
 //
-// GET /rest/api/{2-3}/issue/{issueIdOrKey}/votes
+// GET /rest/api/{2-3}/issue/{issueKeyOrID}/votes
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/vote#get-votes
-func (v *VoteService) Gets(ctx context.Context, issueKeyOrId string) (*model.IssueVoteScheme, *model.ResponseScheme, error) {
-	return v.internalClient.Gets(ctx, issueKeyOrId)
+func (v *VoteService) Gets(ctx context.Context, issueKeyOrID string) (*model.IssueVoteScheme, *model.ResponseScheme, error) {
+	return v.internalClient.Gets(ctx, issueKeyOrID)
 }
 
 // Add adds the user's vote to an issue. This is the equivalent of the user clicking Vote on an issue in Jira.
 //
 // This operation requires the Allow users to vote on issues option to be ON.
 //
-// POST /rest/api/{2-3}/issue/{issueIdOrKey}/votes
+// POST /rest/api/{2-3}/issue/{issueKeyOrID}/votes
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/vote#add-vote
-func (v *VoteService) Add(ctx context.Context, issueKeyOrId string) (*model.ResponseScheme, error) {
-	return v.internalClient.Add(ctx, issueKeyOrId)
+func (v *VoteService) Add(ctx context.Context, issueKeyOrID string) (*model.ResponseScheme, error) {
+	return v.internalClient.Add(ctx, issueKeyOrID)
 }
 
 // Delete deletes a user's vote from an issue. This is the equivalent of the user clicking Unvote on an issue in Jira.
 //
 // This operation requires the Allow users to vote on issues option to be ON.
 //
-// DELETE /rest/api/{2-3}/issue/{issueIdOrKey}/votes
+// DELETE /rest/api/{2-3}/issue/{issueKeyOrID}/votes
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/vote#delete-vote
-func (v *VoteService) Delete(ctx context.Context, issueKeyOrId string) (*model.ResponseScheme, error) {
-	return v.internalClient.Delete(ctx, issueKeyOrId)
+func (v *VoteService) Delete(ctx context.Context, issueKeyOrID string) (*model.ResponseScheme, error) {
+	return v.internalClient.Delete(ctx, issueKeyOrID)
 }
 
 type internalVoteImpl struct {
@@ -62,13 +63,13 @@ type internalVoteImpl struct {
 	version string
 }
 
-func (i *internalVoteImpl) Gets(ctx context.Context, issueKeyOrId string) (*model.IssueVoteScheme, *model.ResponseScheme, error) {
+func (i *internalVoteImpl) Gets(ctx context.Context, issueKeyOrID string) (*model.IssueVoteScheme, *model.ResponseScheme, error) {
 
-	if issueKeyOrId == "" {
+	if issueKeyOrID == "" {
 		return nil, nil, model.ErrNoIssueKeyOrIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/votes", i.version, issueKeyOrId)
+	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/votes", i.version, issueKeyOrID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
@@ -84,13 +85,13 @@ func (i *internalVoteImpl) Gets(ctx context.Context, issueKeyOrId string) (*mode
 	return votes, response, nil
 }
 
-func (i *internalVoteImpl) Add(ctx context.Context, issueKeyOrId string) (*model.ResponseScheme, error) {
+func (i *internalVoteImpl) Add(ctx context.Context, issueKeyOrID string) (*model.ResponseScheme, error) {
 
-	if issueKeyOrId == "" {
+	if issueKeyOrID == "" {
 		return nil, model.ErrNoIssueKeyOrIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/votes", i.version, issueKeyOrId)
+	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/votes", i.version, issueKeyOrID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", nil)
 	if err != nil {
@@ -100,13 +101,13 @@ func (i *internalVoteImpl) Add(ctx context.Context, issueKeyOrId string) (*model
 	return i.c.Call(request, nil)
 }
 
-func (i *internalVoteImpl) Delete(ctx context.Context, issueKeyOrId string) (*model.ResponseScheme, error) {
+func (i *internalVoteImpl) Delete(ctx context.Context, issueKeyOrID string) (*model.ResponseScheme, error) {
 
-	if issueKeyOrId == "" {
+	if issueKeyOrID == "" {
 		return nil, model.ErrNoIssueKeyOrIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/votes", i.version, issueKeyOrId)
+	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/votes", i.version, issueKeyOrID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {

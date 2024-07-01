@@ -4,14 +4,15 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/service"
-	"github.com/ctreminiom/go-atlassian/service/jira"
 	"io"
 	"mime/multipart"
 	"net/http"
 	"net/url"
 	"strings"
+
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/service"
+	"github.com/ctreminiom/go-atlassian/service/jira"
 )
 
 func NewIssueAttachmentService(client service.Connector, version string) (*IssueAttachmentService, error) {
@@ -43,8 +44,8 @@ func (i *IssueAttachmentService) Settings(ctx context.Context) (*model.Attachmen
 // GET /rest/api/{2-3}/attachment/{id}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/attachments#get-attachment-metadata
-func (i *IssueAttachmentService) Metadata(ctx context.Context, attachmentId string) (*model.IssueAttachmentMetadataScheme, *model.ResponseScheme, error) {
-	return i.internalClient.Metadata(ctx, attachmentId)
+func (i *IssueAttachmentService) Metadata(ctx context.Context, attachmentID string) (*model.IssueAttachmentMetadataScheme, *model.ResponseScheme, error) {
+	return i.internalClient.Metadata(ctx, attachmentID)
 }
 
 // Delete deletes an attachment from an issue.
@@ -52,8 +53,8 @@ func (i *IssueAttachmentService) Metadata(ctx context.Context, attachmentId stri
 // DELETE /rest/api/{2-3}/attachment/{id}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/attachments#delete-attachment
-func (i *IssueAttachmentService) Delete(ctx context.Context, attachmentId string) (*model.ResponseScheme, error) {
-	return i.internalClient.Delete(ctx, attachmentId)
+func (i *IssueAttachmentService) Delete(ctx context.Context, attachmentID string) (*model.ResponseScheme, error) {
+	return i.internalClient.Delete(ctx, attachmentID)
 }
 
 // Human returns the metadata for the contents of an attachment, if it is an archive, and metadata for the attachment itself.
@@ -65,17 +66,17 @@ func (i *IssueAttachmentService) Delete(ctx context.Context, attachmentId string
 // # Experimental Endpoint
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/attachments#get-all-metadata-for-an-expanded-attachment
-func (i *IssueAttachmentService) Human(ctx context.Context, attachmentId string) (*model.IssueAttachmentHumanMetadataScheme, *model.ResponseScheme, error) {
-	return i.internalClient.Human(ctx, attachmentId)
+func (i *IssueAttachmentService) Human(ctx context.Context, attachmentID string) (*model.IssueAttachmentHumanMetadataScheme, *model.ResponseScheme, error) {
+	return i.internalClient.Human(ctx, attachmentID)
 }
 
 // Add adds one attachment to an issue. Attachments are posted as multipart/form-data (RFC 1867).
 //
-// POST /rest/api/{2-3}/issue/{issueIdOrKey}/attachments
+// POST /rest/api/{2-3}/issue/{issueKeyOrID}/attachments
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/attachments#add-attachment
-func (i *IssueAttachmentService) Add(ctx context.Context, issueKeyOrId, fileName string, file io.Reader) ([]*model.IssueAttachmentScheme, *model.ResponseScheme, error) {
-	return i.internalClient.Add(ctx, issueKeyOrId, fileName, file)
+func (i *IssueAttachmentService) Add(ctx context.Context, issueKeyOrID, fileName string, file io.Reader) ([]*model.IssueAttachmentScheme, *model.ResponseScheme, error) {
+	return i.internalClient.Add(ctx, issueKeyOrID, fileName, file)
 }
 
 // Download returns the contents of an attachment. A Range header can be set to define a range of bytes within the attachment to download.
@@ -137,13 +138,13 @@ func (i *internalIssueAttachmentServiceImpl) Settings(ctx context.Context) (*mod
 	return settings, response, nil
 }
 
-func (i *internalIssueAttachmentServiceImpl) Metadata(ctx context.Context, attachmentId string) (*model.IssueAttachmentMetadataScheme, *model.ResponseScheme, error) {
+func (i *internalIssueAttachmentServiceImpl) Metadata(ctx context.Context, attachmentID string) (*model.IssueAttachmentMetadataScheme, *model.ResponseScheme, error) {
 
-	if attachmentId == "" {
+	if attachmentID == "" {
 		return nil, nil, model.ErrNoAttachmentIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/attachment/%v", i.version, attachmentId)
+	endpoint := fmt.Sprintf("rest/api/%v/attachment/%v", i.version, attachmentID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
@@ -159,13 +160,13 @@ func (i *internalIssueAttachmentServiceImpl) Metadata(ctx context.Context, attac
 	return metadata, response, nil
 }
 
-func (i *internalIssueAttachmentServiceImpl) Delete(ctx context.Context, attachmentId string) (*model.ResponseScheme, error) {
+func (i *internalIssueAttachmentServiceImpl) Delete(ctx context.Context, attachmentID string) (*model.ResponseScheme, error) {
 
-	if attachmentId == "" {
+	if attachmentID == "" {
 		return nil, model.ErrNoAttachmentIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/attachment/%v", i.version, attachmentId)
+	endpoint := fmt.Sprintf("rest/api/%v/attachment/%v", i.version, attachmentID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
@@ -175,13 +176,13 @@ func (i *internalIssueAttachmentServiceImpl) Delete(ctx context.Context, attachm
 	return i.c.Call(request, nil)
 }
 
-func (i *internalIssueAttachmentServiceImpl) Human(ctx context.Context, attachmentId string) (*model.IssueAttachmentHumanMetadataScheme, *model.ResponseScheme, error) {
+func (i *internalIssueAttachmentServiceImpl) Human(ctx context.Context, attachmentID string) (*model.IssueAttachmentHumanMetadataScheme, *model.ResponseScheme, error) {
 
-	if attachmentId == "" {
+	if attachmentID == "" {
 		return nil, nil, model.ErrNoAttachmentIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/attachment/%v/expand/human", i.version, attachmentId)
+	endpoint := fmt.Sprintf("rest/api/%v/attachment/%v/expand/human", i.version, attachmentID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
@@ -197,9 +198,9 @@ func (i *internalIssueAttachmentServiceImpl) Human(ctx context.Context, attachme
 	return metadata, response, nil
 }
 
-func (i *internalIssueAttachmentServiceImpl) Add(ctx context.Context, issueKeyOrId, fileName string, file io.Reader) ([]*model.IssueAttachmentScheme, *model.ResponseScheme, error) {
+func (i *internalIssueAttachmentServiceImpl) Add(ctx context.Context, issueKeyOrID, fileName string, file io.Reader) ([]*model.IssueAttachmentScheme, *model.ResponseScheme, error) {
 
-	if issueKeyOrId == "" {
+	if issueKeyOrID == "" {
 		return nil, nil, model.ErrNoIssueKeyOrIDError
 	}
 
@@ -211,7 +212,7 @@ func (i *internalIssueAttachmentServiceImpl) Add(ctx context.Context, issueKeyOr
 		return nil, nil, model.ErrNoReaderError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/attachments", i.version, issueKeyOrId)
+	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/attachments", i.version, issueKeyOrID)
 
 	reader := &bytes.Buffer{}
 	writer := multipart.NewWriter(reader)

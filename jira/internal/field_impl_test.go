@@ -3,13 +3,15 @@ package internal
 import (
 	"context"
 	"errors"
+	"net/http"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
-	"net/http"
-	"testing"
 )
 
 func Test_internalIssueFieldServiceImpl_Gets(t *testing.T) {
@@ -494,7 +496,7 @@ func Test_internalIssueFieldServiceImpl_Delete(t *testing.T) {
 
 	type args struct {
 		ctx     context.Context
-		fieldId string
+		fieldID string
 	}
 
 	testCases := []struct {
@@ -510,7 +512,7 @@ func Test_internalIssueFieldServiceImpl_Delete(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:     context.Background(),
-				fieldId: "10005",
+				fieldID: "10005",
 			},
 			on: func(fields *fields) {
 
@@ -541,7 +543,7 @@ func Test_internalIssueFieldServiceImpl_Delete(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:     context.Background(),
-				fieldId: "10005",
+				fieldID: "10005",
 			},
 			on: func(fields *fields) {
 
@@ -572,7 +574,7 @@ func Test_internalIssueFieldServiceImpl_Delete(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:     context.Background(),
-				fieldId: "",
+				fieldID: "",
 			},
 			wantErr: true,
 			Err:     model.ErrNoFieldIDError,
@@ -583,7 +585,7 @@ func Test_internalIssueFieldServiceImpl_Delete(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:     context.Background(),
-				fieldId: "10005",
+				fieldID: "10005",
 			},
 			on: func(fields *fields) {
 
@@ -615,7 +617,7 @@ func Test_internalIssueFieldServiceImpl_Delete(t *testing.T) {
 			fieldService, err := NewIssueFieldService(testCase.fields.c, testCase.fields.version, nil, nil, nil)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := fieldService.Delete(testCase.args.ctx, testCase.args.fieldId)
+			gotResult, gotResponse, err := fieldService.Delete(testCase.args.ctx, testCase.args.fieldID)
 
 			if testCase.wantErr {
 

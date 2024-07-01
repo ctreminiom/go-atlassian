@@ -3,12 +3,14 @@ package internal
 import (
 	"context"
 	"errors"
+	"net/http"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
-	"github.com/stretchr/testify/assert"
-	"net/http"
-	"testing"
 )
 
 func Test_internalWorkflowImpl_Gets(t *testing.T) {
@@ -180,7 +182,7 @@ func Test_internalWorkflowImpl_Delete(t *testing.T) {
 
 	type args struct {
 		ctx        context.Context
-		workflowId string
+		workflowID string
 	}
 
 	testCases := []struct {
@@ -196,7 +198,7 @@ func Test_internalWorkflowImpl_Delete(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:        context.Background(),
-				workflowId: "2838382882",
+				workflowID: "2838382882",
 			},
 			on: func(fields *fields) {
 
@@ -225,7 +227,7 @@ func Test_internalWorkflowImpl_Delete(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:        context.Background(),
-				workflowId: "2838382882",
+				workflowID: "2838382882",
 			},
 			on: func(fields *fields) {
 
@@ -264,7 +266,7 @@ func Test_internalWorkflowImpl_Delete(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:        context.Background(),
-				workflowId: "2838382882",
+				workflowID: "2838382882",
 			},
 			on: func(fields *fields) {
 
@@ -294,7 +296,7 @@ func Test_internalWorkflowImpl_Delete(t *testing.T) {
 			newService, err := NewWorkflowService(testCase.fields.c, testCase.fields.version, nil, nil)
 			assert.NoError(t, err)
 
-			gotResponse, err := newService.Delete(testCase.args.ctx, testCase.args.workflowId)
+			gotResponse, err := newService.Delete(testCase.args.ctx, testCase.args.workflowID)
 
 			if testCase.wantErr {
 

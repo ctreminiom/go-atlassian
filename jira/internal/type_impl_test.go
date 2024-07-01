@@ -3,13 +3,15 @@ package internal
 import (
 	"context"
 	"errors"
+	"net/http"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
-	"net/http"
-	"testing"
 )
 
 func Test_internalTypeImpl_Gets(t *testing.T) {
@@ -151,7 +153,7 @@ func Test_internalTypeImpl_Get(t *testing.T) {
 
 	type args struct {
 		ctx         context.Context
-		issueTypeId string
+		issueTypeID string
 	}
 
 	testCases := []struct {
@@ -167,7 +169,7 @@ func Test_internalTypeImpl_Get(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:         context.Background(),
-				issueTypeId: "8",
+				issueTypeID: "8",
 			},
 			on: func(fields *fields) {
 
@@ -196,7 +198,7 @@ func Test_internalTypeImpl_Get(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:         context.Background(),
-				issueTypeId: "8",
+				issueTypeID: "8",
 			},
 			on: func(fields *fields) {
 
@@ -235,7 +237,7 @@ func Test_internalTypeImpl_Get(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:         context.Background(),
-				issueTypeId: "8",
+				issueTypeID: "8",
 			},
 			on: func(fields *fields) {
 
@@ -265,7 +267,7 @@ func Test_internalTypeImpl_Get(t *testing.T) {
 			newService, err := NewTypeService(testCase.fields.c, testCase.fields.version, nil, nil)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := newService.Get(testCase.args.ctx, testCase.args.issueTypeId)
+			gotResult, gotResponse, err := newService.Get(testCase.args.ctx, testCase.args.issueTypeID)
 
 			if testCase.wantErr {
 
@@ -295,7 +297,7 @@ func Test_internalTypeImpl_Alternatives(t *testing.T) {
 
 	type args struct {
 		ctx         context.Context
-		issueTypeId string
+		issueTypeID string
 	}
 
 	testCases := []struct {
@@ -311,7 +313,7 @@ func Test_internalTypeImpl_Alternatives(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:         context.Background(),
-				issueTypeId: "8",
+				issueTypeID: "8",
 			},
 			on: func(fields *fields) {
 
@@ -340,7 +342,7 @@ func Test_internalTypeImpl_Alternatives(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:         context.Background(),
-				issueTypeId: "8",
+				issueTypeID: "8",
 			},
 			on: func(fields *fields) {
 
@@ -369,7 +371,7 @@ func Test_internalTypeImpl_Alternatives(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:         context.Background(),
-				issueTypeId: "8",
+				issueTypeID: "8",
 			},
 			on: func(fields *fields) {
 
@@ -399,7 +401,7 @@ func Test_internalTypeImpl_Alternatives(t *testing.T) {
 			newService, err := NewTypeService(testCase.fields.c, testCase.fields.version, nil, nil)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := newService.Alternatives(testCase.args.ctx, testCase.args.issueTypeId)
+			gotResult, gotResponse, err := newService.Alternatives(testCase.args.ctx, testCase.args.issueTypeID)
 
 			if testCase.wantErr {
 
@@ -575,7 +577,7 @@ func Test_internalTypeImpl_Update(t *testing.T) {
 
 	type args struct {
 		ctx         context.Context
-		issueTypeId string
+		issueTypeID string
 		payload     *model.IssueTypePayloadScheme
 	}
 
@@ -592,7 +594,7 @@ func Test_internalTypeImpl_Update(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:         context.Background(),
-				issueTypeId: "8",
+				issueTypeID: "8",
 				payload:     payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -622,7 +624,7 @@ func Test_internalTypeImpl_Update(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:         context.Background(),
-				issueTypeId: "8",
+				issueTypeID: "8",
 				payload:     payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -652,7 +654,7 @@ func Test_internalTypeImpl_Update(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:         context.Background(),
-				issueTypeId: "8",
+				issueTypeID: "8",
 				payload:     payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -683,7 +685,7 @@ func Test_internalTypeImpl_Update(t *testing.T) {
 			newService, err := NewTypeService(testCase.fields.c, testCase.fields.version, nil, nil)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := newService.Update(testCase.args.ctx, testCase.args.issueTypeId, testCase.args.payload)
+			gotResult, gotResponse, err := newService.Update(testCase.args.ctx, testCase.args.issueTypeID, testCase.args.payload)
 
 			if testCase.wantErr {
 
@@ -713,7 +715,7 @@ func Test_internalTypeImpl_Delete(t *testing.T) {
 
 	type args struct {
 		ctx         context.Context
-		issueTypeId string
+		issueTypeID string
 	}
 
 	testCases := []struct {
@@ -729,7 +731,7 @@ func Test_internalTypeImpl_Delete(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:         context.Background(),
-				issueTypeId: "8",
+				issueTypeID: "8",
 			},
 			on: func(fields *fields) {
 
@@ -758,7 +760,7 @@ func Test_internalTypeImpl_Delete(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:         context.Background(),
-				issueTypeId: "8",
+				issueTypeID: "8",
 			},
 			on: func(fields *fields) {
 
@@ -797,7 +799,7 @@ func Test_internalTypeImpl_Delete(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:         context.Background(),
-				issueTypeId: "8",
+				issueTypeID: "8",
 			},
 			on: func(fields *fields) {
 
@@ -827,7 +829,7 @@ func Test_internalTypeImpl_Delete(t *testing.T) {
 			newService, err := NewTypeService(testCase.fields.c, testCase.fields.version, nil, nil)
 			assert.NoError(t, err)
 
-			gotResponse, err := newService.Delete(testCase.args.ctx, testCase.args.issueTypeId)
+			gotResponse, err := newService.Delete(testCase.args.ctx, testCase.args.issueTypeID)
 
 			if testCase.wantErr {
 

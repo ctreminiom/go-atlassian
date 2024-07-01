@@ -3,12 +3,14 @@ package internal
 import (
 	"context"
 	"errors"
+	"net/http"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
-	"github.com/stretchr/testify/assert"
-	"net/http"
-	"testing"
 )
 
 func Test_internalAdfCommentImpl_Gets(t *testing.T) {
@@ -20,7 +22,7 @@ func Test_internalAdfCommentImpl_Gets(t *testing.T) {
 
 	type args struct {
 		ctx          context.Context
-		issueKeyOrId string
+		issueKeyOrID string
 		orderBy      string
 		expand       []string
 		startAt      int
@@ -40,7 +42,7 @@ func Test_internalAdfCommentImpl_Gets(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-1",
+				issueKeyOrID: "DUMMY-1",
 				orderBy:      "id",
 				expand:       []string{"renderedBody"},
 				startAt:      0,
@@ -75,7 +77,7 @@ func Test_internalAdfCommentImpl_Gets(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "",
+				issueKeyOrID: "",
 				orderBy:      "id",
 				expand:       []string{"renderedBody"},
 				startAt:      0,
@@ -90,7 +92,7 @@ func Test_internalAdfCommentImpl_Gets(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-1",
+				issueKeyOrID: "DUMMY-1",
 				orderBy:      "id",
 				expand:       []string{"renderedBody"},
 				startAt:      0,
@@ -126,7 +128,7 @@ func Test_internalAdfCommentImpl_Gets(t *testing.T) {
 			commentService, _, err := NewCommentService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := commentService.Gets(testCase.args.ctx, testCase.args.issueKeyOrId,
+			gotResult, gotResponse, err := commentService.Gets(testCase.args.ctx, testCase.args.issueKeyOrID,
 				testCase.args.orderBy, testCase.args.expand, testCase.args.startAt, testCase.args.maxResults)
 
 			if testCase.wantErr {
@@ -157,7 +159,7 @@ func Test_internalAdfCommentImpl_Get(t *testing.T) {
 
 	type args struct {
 		ctx                     context.Context
-		issueKeyOrId, commentId string
+		issueKeyOrID, commentID string
 	}
 
 	testCases := []struct {
@@ -173,8 +175,8 @@ func Test_internalAdfCommentImpl_Get(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-1",
-				commentId:    "10001",
+				issueKeyOrID: "DUMMY-1",
+				commentID:    "10001",
 			},
 			on: func(fields *fields) {
 
@@ -205,7 +207,7 @@ func Test_internalAdfCommentImpl_Get(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "",
+				issueKeyOrID: "",
 			},
 			wantErr: true,
 			Err:     model.ErrNoIssueKeyOrIDError,
@@ -216,7 +218,7 @@ func Test_internalAdfCommentImpl_Get(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-1",
+				issueKeyOrID: "DUMMY-1",
 			},
 			wantErr: true,
 			Err:     model.ErrNoCommentIDError,
@@ -227,8 +229,8 @@ func Test_internalAdfCommentImpl_Get(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-1",
-				commentId:    "10001",
+				issueKeyOrID: "DUMMY-1",
+				commentID:    "10001",
 			},
 			on: func(fields *fields) {
 
@@ -260,7 +262,7 @@ func Test_internalAdfCommentImpl_Get(t *testing.T) {
 			commentService, _, err := NewCommentService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := commentService.Get(testCase.args.ctx, testCase.args.issueKeyOrId, testCase.args.commentId)
+			gotResult, gotResponse, err := commentService.Get(testCase.args.ctx, testCase.args.issueKeyOrID, testCase.args.commentID)
 
 			if testCase.wantErr {
 
@@ -290,7 +292,7 @@ func Test_internalAdfCommentImpl_Delete(t *testing.T) {
 
 	type args struct {
 		ctx                     context.Context
-		issueKeyOrId, commentId string
+		issueKeyOrID, commentID string
 	}
 
 	testCases := []struct {
@@ -306,8 +308,8 @@ func Test_internalAdfCommentImpl_Delete(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-1",
-				commentId:    "10001",
+				issueKeyOrID: "DUMMY-1",
+				commentID:    "10001",
 			},
 			on: func(fields *fields) {
 
@@ -338,7 +340,7 @@ func Test_internalAdfCommentImpl_Delete(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "",
+				issueKeyOrID: "",
 			},
 			wantErr: true,
 			Err:     model.ErrNoIssueKeyOrIDError,
@@ -349,7 +351,7 @@ func Test_internalAdfCommentImpl_Delete(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-1",
+				issueKeyOrID: "DUMMY-1",
 			},
 			wantErr: true,
 			Err:     model.ErrNoCommentIDError,
@@ -360,8 +362,8 @@ func Test_internalAdfCommentImpl_Delete(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-1",
-				commentId:    "10001",
+				issueKeyOrID: "DUMMY-1",
+				commentID:    "10001",
 			},
 			on: func(fields *fields) {
 
@@ -393,7 +395,7 @@ func Test_internalAdfCommentImpl_Delete(t *testing.T) {
 			commentService, _, err := NewCommentService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResponse, err := commentService.Delete(testCase.args.ctx, testCase.args.issueKeyOrId, testCase.args.commentId)
+			gotResponse, err := commentService.Delete(testCase.args.ctx, testCase.args.issueKeyOrID, testCase.args.commentID)
 
 			if testCase.wantErr {
 
@@ -461,7 +463,7 @@ func Test_internalAdfCommentImpl_Add(t *testing.T) {
 
 	type args struct {
 		ctx          context.Context
-		issueKeyOrId string
+		issueKeyOrID string
 		payload      *model.CommentPayloadScheme
 		expand       []string
 	}
@@ -479,7 +481,7 @@ func Test_internalAdfCommentImpl_Add(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-1",
+				issueKeyOrID: "DUMMY-1",
 				payload:      payloadMocked,
 				expand:       []string{"body"},
 			},
@@ -512,7 +514,7 @@ func Test_internalAdfCommentImpl_Add(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "",
+				issueKeyOrID: "",
 				payload:      payloadMocked,
 				expand:       []string{"body"},
 			},
@@ -525,7 +527,7 @@ func Test_internalAdfCommentImpl_Add(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-1",
+				issueKeyOrID: "DUMMY-1",
 				payload:      payloadMocked,
 				expand:       []string{"body"},
 			},
@@ -559,7 +561,7 @@ func Test_internalAdfCommentImpl_Add(t *testing.T) {
 			commentService, _, err := NewCommentService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := commentService.Add(testCase.args.ctx, testCase.args.issueKeyOrId, testCase.args.payload,
+			gotResult, gotResponse, err := commentService.Add(testCase.args.ctx, testCase.args.issueKeyOrID, testCase.args.payload,
 				testCase.args.expand)
 
 			if testCase.wantErr {

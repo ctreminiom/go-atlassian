@@ -3,13 +3,15 @@ package internal
 import (
 	"context"
 	"errors"
+	"net/http"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
-	"net/http"
-	"testing"
 )
 
 func Test_internalResolutionImpl_Gets(t *testing.T) {
@@ -151,7 +153,7 @@ func Test_internalResolutionImpl_Get(t *testing.T) {
 
 	type args struct {
 		ctx          context.Context
-		resolutionId string
+		resolutionID string
 	}
 
 	testCases := []struct {
@@ -167,7 +169,7 @@ func Test_internalResolutionImpl_Get(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				resolutionId: "2",
+				resolutionID: "2",
 			},
 			on: func(fields *fields) {
 
@@ -196,7 +198,7 @@ func Test_internalResolutionImpl_Get(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.Background(),
-				resolutionId: "2",
+				resolutionID: "2",
 			},
 			on: func(fields *fields) {
 
@@ -235,7 +237,7 @@ func Test_internalResolutionImpl_Get(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				resolutionId: "2",
+				resolutionID: "2",
 			},
 			on: func(fields *fields) {
 
@@ -265,7 +267,7 @@ func Test_internalResolutionImpl_Get(t *testing.T) {
 			resolutionService, err := NewResolutionService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := resolutionService.Get(testCase.args.ctx, testCase.args.resolutionId)
+			gotResult, gotResponse, err := resolutionService.Get(testCase.args.ctx, testCase.args.resolutionID)
 
 			if testCase.wantErr {
 

@@ -3,13 +3,14 @@ package internal
 import (
 	"context"
 	"fmt"
-	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/service"
-	"github.com/ctreminiom/go-atlassian/service/jira"
 	"net/http"
 	"net/url"
 	"strconv"
 	"strings"
+
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/service"
+	"github.com/ctreminiom/go-atlassian/service/jira"
 )
 
 func NewWorklogADFService(client service.Connector, version string) (*WorklogADFService, error) {
@@ -34,41 +35,41 @@ type WorklogADFService struct {
 // POST /rest/api/{2-3}/worklog/list
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/worklogs#get-worklogs
-func (w *WorklogADFService) Gets(ctx context.Context, worklogIds []int, expand []string) ([]*model.IssueWorklogADFScheme, *model.ResponseScheme, error) {
-	return w.internalClient.Gets(ctx, worklogIds, expand)
+func (w *WorklogADFService) Gets(ctx context.Context, worklogIDs []int, expand []string) ([]*model.IssueWorklogADFScheme, *model.ResponseScheme, error) {
+	return w.internalClient.Gets(ctx, worklogIDs, expand)
 }
 
 // Get returns a worklog.
 //
 // Time tracking must be enabled in Jira, otherwise this operation returns an error.
 //
-// GET /rest/api/{2-3}/issue/{issueIdOrKey}/worklog/{id}
+// GET /rest/api/{2-3}/issue/{issueKeyOrID}/worklog/{id}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/worklogs#get-worklog
-func (w *WorklogADFService) Get(ctx context.Context, issueKeyOrId, worklogId string, expand []string) (*model.IssueWorklogADFScheme, *model.ResponseScheme, error) {
-	return w.internalClient.Get(ctx, issueKeyOrId, worklogId, expand)
+func (w *WorklogADFService) Get(ctx context.Context, issueKeyOrID, worklogID string, expand []string) (*model.IssueWorklogADFScheme, *model.ResponseScheme, error) {
+	return w.internalClient.Get(ctx, issueKeyOrID, worklogID, expand)
 }
 
 // Issue returns worklogs for an issue, starting from the oldest worklog or from the worklog started on or after a date and time.
 //
 // Time tracking must be enabled in Jira, otherwise this operation returns an error.
 //
-// GET /rest/api/{2-3}/issue/{issueIdOrKey}/worklog
+// GET /rest/api/{2-3}/issue/{issueKeyOrID}/worklog
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/worklogs#get-issue-worklogs
-func (w *WorklogADFService) Issue(ctx context.Context, issueKeyOrId string, startAt, maxResults, after int, expand []string) (*model.IssueWorklogADFPageScheme, *model.ResponseScheme, error) {
-	return w.internalClient.Issue(ctx, issueKeyOrId, startAt, maxResults, after, expand)
+func (w *WorklogADFService) Issue(ctx context.Context, issueKeyOrID string, startAt, maxResults, after int, expand []string) (*model.IssueWorklogADFPageScheme, *model.ResponseScheme, error) {
+	return w.internalClient.Issue(ctx, issueKeyOrID, startAt, maxResults, after, expand)
 }
 
 // Delete deletes a worklog from an issue.
 //
 // Time tracking must be enabled in Jira, otherwise this operation returns an error.
 //
-// DELETE /rest/api/{2-3}/issue/{issueIdOrKey}/worklog/{id}
+// DELETE /rest/api/{2-3}/issue/{issueKeyOrID}/worklog/{id}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/worklogs#delete-worklog
-func (w *WorklogADFService) Delete(ctx context.Context, issueKeyOrId, worklogId string, options *model.WorklogOptionsScheme) (*model.ResponseScheme, error) {
-	return w.internalClient.Delete(ctx, issueKeyOrId, worklogId, options)
+func (w *WorklogADFService) Delete(ctx context.Context, issueKeyOrID, worklogID string, options *model.WorklogOptionsScheme) (*model.ResponseScheme, error) {
+	return w.internalClient.Delete(ctx, issueKeyOrID, worklogID, options)
 }
 
 // Deleted returns a list of IDs and delete timestamps for worklogs deleted after a date and time.
@@ -107,7 +108,7 @@ func (w *WorklogADFService) Updated(ctx context.Context, since int, expand []str
 //
 // Time tracking must be enabled in Jira, otherwise this operation returns an error.
 //
-// POST /rest/api/3/issue/{issueIdOrKey}/worklog
+// POST /rest/api/3/issue/{issueKeyOrID}/worklog
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/worklogs#add-worklog
 func (w *WorklogADFService) Add(ctx context.Context, issueKeyOrID string, payload *model.WorklogADFPayloadScheme, options *model.WorklogOptionsScheme) (*model.IssueWorklogADFScheme, *model.ResponseScheme, error) {
@@ -118,11 +119,11 @@ func (w *WorklogADFService) Add(ctx context.Context, issueKeyOrID string, payloa
 //
 // Time tracking must be enabled in Jira, otherwise this operation returns an error.
 //
-// PUT /rest/api/3/issue/{issueIdOrKey}/worklog/{id}
+// PUT /rest/api/3/issue/{issueKeyOrID}/worklog/{id}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/worklogs#update-worklog
-func (w *WorklogADFService) Update(ctx context.Context, issueKeyOrId, worklogId string, payload *model.WorklogADFPayloadScheme, options *model.WorklogOptionsScheme) (*model.IssueWorklogADFScheme, *model.ResponseScheme, error) {
-	return w.internalClient.Update(ctx, issueKeyOrId, worklogId, payload, options)
+func (w *WorklogADFService) Update(ctx context.Context, issueKeyOrID, worklogID string, payload *model.WorklogADFPayloadScheme, options *model.WorklogOptionsScheme) (*model.IssueWorklogADFScheme, *model.ResponseScheme, error) {
+	return w.internalClient.Update(ctx, issueKeyOrID, worklogID, payload, options)
 }
 
 type internalWorklogAdfImpl struct {
@@ -130,9 +131,9 @@ type internalWorklogAdfImpl struct {
 	version string
 }
 
-func (i *internalWorklogAdfImpl) Gets(ctx context.Context, worklogIds []int, expand []string) ([]*model.IssueWorklogADFScheme, *model.ResponseScheme, error) {
+func (i *internalWorklogAdfImpl) Gets(ctx context.Context, worklogIDs []int, expand []string) ([]*model.IssueWorklogADFScheme, *model.ResponseScheme, error) {
 
-	if len(worklogIds) == 0 {
+	if len(worklogIDs) == 0 {
 		return nil, nil, model.ErrNpWorklogsError
 	}
 
@@ -148,7 +149,7 @@ func (i *internalWorklogAdfImpl) Gets(ctx context.Context, worklogIds []int, exp
 		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint.String(), "", map[string]interface{}{"ids": worklogIds})
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint.String(), "", map[string]interface{}{"ids": worklogIDs})
 	if err != nil {
 		return nil, nil, err
 	}
@@ -162,13 +163,13 @@ func (i *internalWorklogAdfImpl) Gets(ctx context.Context, worklogIds []int, exp
 	return worklogs, response, nil
 }
 
-func (i *internalWorklogAdfImpl) Get(ctx context.Context, issueKeyOrId, worklogId string, expand []string) (*model.IssueWorklogADFScheme, *model.ResponseScheme, error) {
+func (i *internalWorklogAdfImpl) Get(ctx context.Context, issueKeyOrID, worklogID string, expand []string) (*model.IssueWorklogADFScheme, *model.ResponseScheme, error) {
 
-	if issueKeyOrId == "" {
+	if issueKeyOrID == "" {
 		return nil, nil, model.ErrNoIssueKeyOrIDError
 	}
 
-	if worklogId == "" {
+	if worklogID == "" {
 		return nil, nil, model.ErrNoWorklogIDError
 	}
 
@@ -178,7 +179,7 @@ func (i *internalWorklogAdfImpl) Get(ctx context.Context, issueKeyOrId, worklogI
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("rest/api/%v/issue/%v/worklog/%v", i.version, issueKeyOrId, worklogId))
+	endpoint.WriteString(fmt.Sprintf("rest/api/%v/issue/%v/worklog/%v", i.version, issueKeyOrID, worklogID))
 
 	if params.Encode() != "" {
 		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
@@ -198,9 +199,9 @@ func (i *internalWorklogAdfImpl) Get(ctx context.Context, issueKeyOrId, worklogI
 	return worklog, response, nil
 }
 
-func (i *internalWorklogAdfImpl) Issue(ctx context.Context, issueKeyOrId string, startAt, maxResults, after int, expand []string) (*model.IssueWorklogADFPageScheme, *model.ResponseScheme, error) {
+func (i *internalWorklogAdfImpl) Issue(ctx context.Context, issueKeyOrID string, startAt, maxResults, after int, expand []string) (*model.IssueWorklogADFPageScheme, *model.ResponseScheme, error) {
 
-	if issueKeyOrId == "" {
+	if issueKeyOrID == "" {
 		return nil, nil, model.ErrNoIssueKeyOrIDError
 	}
 
@@ -216,7 +217,7 @@ func (i *internalWorklogAdfImpl) Issue(ctx context.Context, issueKeyOrId string,
 		params.Add("expand", strings.Join(expand, ","))
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/worklog?%v", i.version, issueKeyOrId, params.Encode())
+	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/worklog?%v", i.version, issueKeyOrID, params.Encode())
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
@@ -232,18 +233,18 @@ func (i *internalWorklogAdfImpl) Issue(ctx context.Context, issueKeyOrId string,
 	return worklogs, response, nil
 }
 
-func (i *internalWorklogAdfImpl) Delete(ctx context.Context, issueKeyOrId, worklogId string, options *model.WorklogOptionsScheme) (*model.ResponseScheme, error) {
+func (i *internalWorklogAdfImpl) Delete(ctx context.Context, issueKeyOrID, worklogID string, options *model.WorklogOptionsScheme) (*model.ResponseScheme, error) {
 
-	if issueKeyOrId == "" {
+	if issueKeyOrID == "" {
 		return nil, model.ErrNoIssueKeyOrIDError
 	}
 
-	if worklogId == "" {
+	if worklogID == "" {
 		return nil, model.ErrNoWorklogIDError
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("rest/api/%v/issue/%v/worklog/%v", i.version, issueKeyOrId, worklogId))
+	endpoint.WriteString(fmt.Sprintf("rest/api/%v/issue/%v/worklog/%v", i.version, issueKeyOrID, worklogID))
 
 	if options != nil {
 
@@ -387,18 +388,18 @@ func (i *internalWorklogAdfImpl) Add(ctx context.Context, issueKeyOrID string, p
 	return worklog, response, nil
 }
 
-func (i *internalWorklogAdfImpl) Update(ctx context.Context, issueKeyOrId, worklogId string, payload *model.WorklogADFPayloadScheme, options *model.WorklogOptionsScheme) (*model.IssueWorklogADFScheme, *model.ResponseScheme, error) {
+func (i *internalWorklogAdfImpl) Update(ctx context.Context, issueKeyOrID, worklogID string, payload *model.WorklogADFPayloadScheme, options *model.WorklogOptionsScheme) (*model.IssueWorklogADFScheme, *model.ResponseScheme, error) {
 
-	if issueKeyOrId == "" {
+	if issueKeyOrID == "" {
 		return nil, nil, model.ErrNoIssueKeyOrIDError
 	}
 
-	if worklogId == "" {
+	if worklogID == "" {
 		return nil, nil, model.ErrNoWorklogIDError
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("rest/api/%v/issue/%v/worklog/%v", i.version, issueKeyOrId, worklogId))
+	endpoint.WriteString(fmt.Sprintf("rest/api/%v/issue/%v/worklog/%v", i.version, issueKeyOrID, worklogID))
 
 	if options != nil {
 

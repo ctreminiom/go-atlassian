@@ -3,13 +3,14 @@ package internal
 import (
 	"context"
 	"fmt"
-	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/service"
-	"github.com/ctreminiom/go-atlassian/service/jira"
 	"net/http"
 	"net/url"
 	"strconv"
 	"strings"
+
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/service"
+	"github.com/ctreminiom/go-atlassian/service/jira"
 )
 
 type CommentADFService struct {
@@ -18,7 +19,7 @@ type CommentADFService struct {
 
 // Delete deletes a comment.
 //
-// DELETE /rest/api/{2-3}/issue/{issueIdOrKey}/comment/{id}
+// DELETE /rest/api/{2-3}/issue/{issueKeyOrID}/comment/{id}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/comments#delete-comment
 func (c *CommentADFService) Delete(ctx context.Context, issueKeyOrID, commentID string) (*model.ResponseScheme, error) {
@@ -27,7 +28,7 @@ func (c *CommentADFService) Delete(ctx context.Context, issueKeyOrID, commentID 
 
 // Gets returns all comments for an issue.
 //
-// GET /rest/api/{2-3}/issue/{issueIdOrKey}/comment
+// GET /rest/api/{2-3}/issue/{issueKeyOrID}/comment
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/comments#get-comments
 func (c *CommentADFService) Gets(ctx context.Context, issueKeyOrID, orderBy string, expand []string, startAt, maxResults int) (*model.IssueCommentPageScheme, *model.ResponseScheme, error) {
@@ -36,7 +37,7 @@ func (c *CommentADFService) Gets(ctx context.Context, issueKeyOrID, orderBy stri
 
 // Get returns a comment.
 //
-// GET /rest/api/{2-3}/issue/{issueIdOrKey}/comment/{id}
+// GET /rest/api/{2-3}/issue/{issueKeyOrID}/comment/{id}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/comments#get-comment
 func (c *CommentADFService) Get(ctx context.Context, issueKeyOrID, commentID string) (*model.IssueCommentScheme, *model.ResponseScheme, error) {
@@ -45,7 +46,7 @@ func (c *CommentADFService) Get(ctx context.Context, issueKeyOrID, commentID str
 
 // Add adds a comment to an issue.
 //
-// POST /rest/api/{2-3}/issue/{issueIdOrKey}/comment
+// POST /rest/api/{2-3}/issue/{issueKeyOrID}/comment
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/comments#add-comment
 func (c *CommentADFService) Add(ctx context.Context, issueKeyOrID string, payload *model.CommentPayloadScheme, expand []string) (*model.IssueCommentScheme, *model.ResponseScheme, error) {

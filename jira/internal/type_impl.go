@@ -3,10 +3,11 @@ package internal
 import (
 	"context"
 	"fmt"
+	"net/http"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/jira"
-	"net/http"
 )
 
 func NewTypeService(client service.Connector, version string, scheme *TypeSchemeService, screenScheme *TypeScreenSchemeService) (
@@ -52,8 +53,8 @@ func (t *TypeService) Create(ctx context.Context, payload *model.IssueTypePayloa
 // GET /rest/api/{2-3}/issuetype/{id}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/type#get-issue-type
-func (t *TypeService) Get(ctx context.Context, issueTypeId string) (*model.IssueTypeScheme, *model.ResponseScheme, error) {
-	return t.internalClient.Get(ctx, issueTypeId)
+func (t *TypeService) Get(ctx context.Context, issueTypeID string) (*model.IssueTypeScheme, *model.ResponseScheme, error) {
+	return t.internalClient.Get(ctx, issueTypeID)
 }
 
 // Update updates the issue type.
@@ -61,20 +62,20 @@ func (t *TypeService) Get(ctx context.Context, issueTypeId string) (*model.Issue
 // PUT /rest/api/{2-3}/issuetype/{id}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/type#update-issue-type
-func (t *TypeService) Update(ctx context.Context, issueTypeId string, payload *model.IssueTypePayloadScheme) (*model.IssueTypeScheme, *model.ResponseScheme, error) {
-	return t.internalClient.Update(ctx, issueTypeId, payload)
+func (t *TypeService) Update(ctx context.Context, issueTypeID string, payload *model.IssueTypePayloadScheme) (*model.IssueTypeScheme, *model.ResponseScheme, error) {
+	return t.internalClient.Update(ctx, issueTypeID, payload)
 }
 
 // Delete deletes the issue type.
 //
-// If the issue type is in use, all uses are updated with the alternative issue type (alternativeIssueTypeId).
+// If the issue type is in use, all uses are updated with the alternative issue type (alternativeIssueTypeID).
 // A list of alternative issue types are obtained from the Get alternative issue types resource.
 //
 // DELETE /rest/api/{2-3}/issuetype/{id}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/type#delete-issue-type
-func (t *TypeService) Delete(ctx context.Context, issueTypeId string) (*model.ResponseScheme, error) {
-	return t.internalClient.Delete(ctx, issueTypeId)
+func (t *TypeService) Delete(ctx context.Context, issueTypeID string) (*model.ResponseScheme, error) {
+	return t.internalClient.Delete(ctx, issueTypeID)
 }
 
 // Alternatives returns a list of issue types that can be used to replace the issue type.
@@ -84,8 +85,8 @@ func (t *TypeService) Delete(ctx context.Context, issueTypeId string) (*model.Re
 // GET /rest/api/{2-3}/issuetype/{id}/alternatives
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/type#get-alternative-issue-types
-func (t *TypeService) Alternatives(ctx context.Context, issueTypeId string) ([]*model.IssueTypeScheme, *model.ResponseScheme, error) {
-	return t.internalClient.Alternatives(ctx, issueTypeId)
+func (t *TypeService) Alternatives(ctx context.Context, issueTypeID string) ([]*model.IssueTypeScheme, *model.ResponseScheme, error) {
+	return t.internalClient.Alternatives(ctx, issueTypeID)
 }
 
 type internalTypeImpl struct {
@@ -129,13 +130,13 @@ func (i *internalTypeImpl) Create(ctx context.Context, payload *model.IssueTypeP
 	return issueType, response, nil
 }
 
-func (i *internalTypeImpl) Get(ctx context.Context, issueTypeId string) (*model.IssueTypeScheme, *model.ResponseScheme, error) {
+func (i *internalTypeImpl) Get(ctx context.Context, issueTypeID string) (*model.IssueTypeScheme, *model.ResponseScheme, error) {
 
-	if issueTypeId == "" {
+	if issueTypeID == "" {
 		return nil, nil, model.ErrNoIssueTypeIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/issuetype/%v", i.version, issueTypeId)
+	endpoint := fmt.Sprintf("rest/api/%v/issuetype/%v", i.version, issueTypeID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
@@ -151,13 +152,13 @@ func (i *internalTypeImpl) Get(ctx context.Context, issueTypeId string) (*model.
 	return issueType, response, nil
 }
 
-func (i *internalTypeImpl) Update(ctx context.Context, issueTypeId string, payload *model.IssueTypePayloadScheme) (*model.IssueTypeScheme, *model.ResponseScheme, error) {
+func (i *internalTypeImpl) Update(ctx context.Context, issueTypeID string, payload *model.IssueTypePayloadScheme) (*model.IssueTypeScheme, *model.ResponseScheme, error) {
 
-	if issueTypeId == "" {
+	if issueTypeID == "" {
 		return nil, nil, model.ErrNoIssueTypeIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/issuetype/%v", i.version, issueTypeId)
+	endpoint := fmt.Sprintf("rest/api/%v/issuetype/%v", i.version, issueTypeID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
@@ -173,13 +174,13 @@ func (i *internalTypeImpl) Update(ctx context.Context, issueTypeId string, paylo
 	return issueType, response, nil
 }
 
-func (i *internalTypeImpl) Delete(ctx context.Context, issueTypeId string) (*model.ResponseScheme, error) {
+func (i *internalTypeImpl) Delete(ctx context.Context, issueTypeID string) (*model.ResponseScheme, error) {
 
-	if issueTypeId == "" {
+	if issueTypeID == "" {
 		return nil, model.ErrNoIssueTypeIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/issuetype/%v", i.version, issueTypeId)
+	endpoint := fmt.Sprintf("rest/api/%v/issuetype/%v", i.version, issueTypeID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
@@ -189,9 +190,9 @@ func (i *internalTypeImpl) Delete(ctx context.Context, issueTypeId string) (*mod
 	return i.c.Call(request, nil)
 }
 
-func (i *internalTypeImpl) Alternatives(ctx context.Context, issueTypeId string) ([]*model.IssueTypeScheme, *model.ResponseScheme, error) {
+func (i *internalTypeImpl) Alternatives(ctx context.Context, issueTypeID string) ([]*model.IssueTypeScheme, *model.ResponseScheme, error) {
 
-	endpoint := fmt.Sprintf("rest/api/%v/issuetype/%v/alternatives", i.version, issueTypeId)
+	endpoint := fmt.Sprintf("rest/api/%v/issuetype/%v/alternatives", i.version, issueTypeID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {

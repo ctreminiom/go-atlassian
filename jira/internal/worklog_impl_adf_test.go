@@ -3,13 +3,15 @@ package internal
 import (
 	"context"
 	"errors"
+	"net/http"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
-	"net/http"
-	"testing"
 )
 
 func Test_internalWorklogAdfImpl_Gets(t *testing.T) {
@@ -23,7 +25,7 @@ func Test_internalWorklogAdfImpl_Gets(t *testing.T) {
 
 	type args struct {
 		ctx        context.Context
-		worklogIds []int
+		worklogIDs []int
 		expand     []string
 	}
 
@@ -40,7 +42,7 @@ func Test_internalWorklogAdfImpl_Gets(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:        context.Background(),
-				worklogIds: []int{1, 2, 3, 4},
+				worklogIDs: []int{1, 2, 3, 4},
 				expand:     []string{"properties"},
 			},
 			on: func(fields *fields) {
@@ -70,7 +72,7 @@ func Test_internalWorklogAdfImpl_Gets(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:        context.Background(),
-				worklogIds: []int{1, 2, 3, 4},
+				worklogIDs: []int{1, 2, 3, 4},
 				expand:     []string{"properties"},
 			},
 			on: func(fields *fields) {
@@ -110,7 +112,7 @@ func Test_internalWorklogAdfImpl_Gets(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:        context.Background(),
-				worklogIds: []int{1, 2, 3, 4},
+				worklogIDs: []int{1, 2, 3, 4},
 				expand:     []string{"properties"},
 			},
 			on: func(fields *fields) {
@@ -141,7 +143,7 @@ func Test_internalWorklogAdfImpl_Gets(t *testing.T) {
 			newService, err := NewWorklogADFService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := newService.Gets(testCase.args.ctx, testCase.args.worklogIds, testCase.args.expand)
+			gotResult, gotResponse, err := newService.Gets(testCase.args.ctx, testCase.args.worklogIDs, testCase.args.expand)
 
 			if testCase.wantErr {
 
@@ -171,7 +173,7 @@ func Test_internalWorklogAdfImpl_Get(t *testing.T) {
 
 	type args struct {
 		ctx                     context.Context
-		issueKeyOrId, worklogId string
+		issueKeyOrID, worklogID string
 		expand                  []string
 	}
 
@@ -188,8 +190,8 @@ func Test_internalWorklogAdfImpl_Get(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-5",
-				worklogId:    "493939",
+				issueKeyOrID: "DUMMY-5",
+				worklogID:    "493939",
 				expand:       []string{"properties"},
 			},
 			on: func(fields *fields) {
@@ -219,8 +221,8 @@ func Test_internalWorklogAdfImpl_Get(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-5",
-				worklogId:    "493939",
+				issueKeyOrID: "DUMMY-5",
+				worklogID:    "493939",
 				expand:       []string{"properties"},
 			},
 			on: func(fields *fields) {
@@ -260,7 +262,7 @@ func Test_internalWorklogAdfImpl_Get(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-5",
+				issueKeyOrID: "DUMMY-5",
 			},
 			wantErr: true,
 			Err:     model.ErrNoWorklogIDError,
@@ -271,8 +273,8 @@ func Test_internalWorklogAdfImpl_Get(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-5",
-				worklogId:    "493939",
+				issueKeyOrID: "DUMMY-5",
+				worklogID:    "493939",
 				expand:       []string{"properties"},
 			},
 			on: func(fields *fields) {
@@ -303,7 +305,7 @@ func Test_internalWorklogAdfImpl_Get(t *testing.T) {
 			newService, err := NewWorklogADFService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := newService.Get(testCase.args.ctx, testCase.args.issueKeyOrId, testCase.args.worklogId, testCase.args.expand)
+			gotResult, gotResponse, err := newService.Get(testCase.args.ctx, testCase.args.issueKeyOrID, testCase.args.worklogID, testCase.args.expand)
 
 			if testCase.wantErr {
 
@@ -333,7 +335,7 @@ func Test_internalWorklogAdfImpl_Issue(t *testing.T) {
 
 	type args struct {
 		ctx                        context.Context
-		issueKeyOrId               string
+		issueKeyOrID               string
 		startAt, maxResults, after int
 		expand                     []string
 	}
@@ -351,7 +353,7 @@ func Test_internalWorklogAdfImpl_Issue(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-5",
+				issueKeyOrID: "DUMMY-5",
 				startAt:      0,
 				maxResults:   50,
 				after:        1661101991,
@@ -384,7 +386,7 @@ func Test_internalWorklogAdfImpl_Issue(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-5",
+				issueKeyOrID: "DUMMY-5",
 				startAt:      0,
 				maxResults:   50,
 				after:        1661101991,
@@ -427,7 +429,7 @@ func Test_internalWorklogAdfImpl_Issue(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-5",
+				issueKeyOrID: "DUMMY-5",
 				startAt:      0,
 				maxResults:   50,
 				after:        1661101991,
@@ -461,7 +463,7 @@ func Test_internalWorklogAdfImpl_Issue(t *testing.T) {
 			newService, err := NewWorklogADFService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := newService.Issue(testCase.args.ctx, testCase.args.issueKeyOrId, testCase.args.startAt,
+			gotResult, gotResponse, err := newService.Issue(testCase.args.ctx, testCase.args.issueKeyOrID, testCase.args.startAt,
 				testCase.args.maxResults, testCase.args.after, testCase.args.expand)
 
 			if testCase.wantErr {
@@ -492,7 +494,7 @@ func Test_internalWorklogAdfImpl_Delete(t *testing.T) {
 
 	type args struct {
 		ctx                     context.Context
-		issueKeyOrId, worklogId string
+		issueKeyOrID, worklogID string
 		options                 *model.WorklogOptionsScheme
 	}
 
@@ -509,8 +511,8 @@ func Test_internalWorklogAdfImpl_Delete(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-5",
-				worklogId:    "h837372",
+				issueKeyOrID: "DUMMY-5",
+				worklogID:    "h837372",
 				options: &model.WorklogOptionsScheme{
 					Notify:               true,
 					AdjustEstimate:       "new",
@@ -547,8 +549,8 @@ func Test_internalWorklogAdfImpl_Delete(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-5",
-				worklogId:    "h837372",
+				issueKeyOrID: "DUMMY-5",
+				worklogID:    "h837372",
 				options: &model.WorklogOptionsScheme{
 					Notify:               true,
 					AdjustEstimate:       "new",
@@ -585,8 +587,8 @@ func Test_internalWorklogAdfImpl_Delete(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-5",
-				worklogId:    "h837372",
+				issueKeyOrID: "DUMMY-5",
+				worklogID:    "h837372",
 			},
 			on: func(fields *fields) {
 
@@ -625,7 +627,7 @@ func Test_internalWorklogAdfImpl_Delete(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-5",
+				issueKeyOrID: "DUMMY-5",
 			},
 			wantErr: true,
 			Err:     model.ErrNoWorklogIDError,
@@ -636,8 +638,8 @@ func Test_internalWorklogAdfImpl_Delete(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-5",
-				worklogId:    "h837372",
+				issueKeyOrID: "DUMMY-5",
+				worklogID:    "h837372",
 			},
 			on: func(fields *fields) {
 
@@ -667,7 +669,7 @@ func Test_internalWorklogAdfImpl_Delete(t *testing.T) {
 			newService, err := NewWorklogADFService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResponse, err := newService.Delete(testCase.args.ctx, testCase.args.issueKeyOrId, testCase.args.worklogId,
+			gotResponse, err := newService.Delete(testCase.args.ctx, testCase.args.issueKeyOrID, testCase.args.worklogID,
 				testCase.args.options)
 
 			if testCase.wantErr {
@@ -1185,7 +1187,7 @@ func Test_internalWorklogAdfImpl_Update(t *testing.T) {
 
 	type args struct {
 		ctx                     context.Context
-		issueKeyOrID, worklogId string
+		issueKeyOrID, worklogID string
 		payload                 *model.WorklogADFPayloadScheme
 		options                 *model.WorklogOptionsScheme
 	}
@@ -1204,7 +1206,7 @@ func Test_internalWorklogAdfImpl_Update(t *testing.T) {
 			args: args{
 				ctx:          context.Background(),
 				issueKeyOrID: "DUMMY-5",
-				worklogId:    "3933828822",
+				worklogID:    "3933828822",
 				payload:      payloadMocked,
 				options: &model.WorklogOptionsScheme{
 					Notify:               true,
@@ -1243,7 +1245,7 @@ func Test_internalWorklogAdfImpl_Update(t *testing.T) {
 			args: args{
 				ctx:          context.Background(),
 				issueKeyOrID: "DUMMY-5",
-				worklogId:    "3933828822",
+				worklogID:    "3933828822",
 				payload:      payloadMocked,
 				options: &model.WorklogOptionsScheme{
 					Notify:               true,
@@ -1303,7 +1305,7 @@ func Test_internalWorklogAdfImpl_Update(t *testing.T) {
 			args: args{
 				ctx:          context.Background(),
 				issueKeyOrID: "DUMMY-5",
-				worklogId:    "3933828822",
+				worklogID:    "3933828822",
 				payload:      payloadMocked,
 				options: &model.WorklogOptionsScheme{
 					Notify:               true,
@@ -1342,7 +1344,7 @@ func Test_internalWorklogAdfImpl_Update(t *testing.T) {
 			newService, err := NewWorklogADFService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := newService.Update(testCase.args.ctx, testCase.args.issueKeyOrID, testCase.args.worklogId,
+			gotResult, gotResponse, err := newService.Update(testCase.args.ctx, testCase.args.issueKeyOrID, testCase.args.worklogID,
 				testCase.args.payload, testCase.args.options)
 
 			if testCase.wantErr {

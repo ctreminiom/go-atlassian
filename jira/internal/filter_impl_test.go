@@ -3,13 +3,15 @@ package internal
 import (
 	"context"
 	"errors"
+	"net/http"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/jira"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
-	"github.com/stretchr/testify/assert"
-	"net/http"
-	"testing"
 )
 
 func TestFilterService_Create(t *testing.T) {
@@ -610,7 +612,7 @@ func TestFilterService_Get(t *testing.T) {
 
 	type args struct {
 		ctx      context.Context
-		filterId int
+		filterID int
 		expand   []string
 	}
 
@@ -636,7 +638,7 @@ func TestFilterService_Get(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:      context.Background(),
-				filterId: 10001,
+				filterID: 10001,
 				expand:   []string{"viewurl"},
 			},
 			on: func(fields *fields) {
@@ -666,7 +668,7 @@ func TestFilterService_Get(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:      context.Background(),
-				filterId: 10001,
+				filterID: 10001,
 				expand:   []string{"viewurl"},
 			},
 			on: func(fields *fields) {
@@ -696,7 +698,7 @@ func TestFilterService_Get(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:      context.Background(),
-				filterId: 10001,
+				filterID: 10001,
 				expand:   []string{"viewurl"},
 			},
 			on: func(fields *fields) {
@@ -729,7 +731,7 @@ func TestFilterService_Get(t *testing.T) {
 			applicationService, err := NewFilterService(testCase.fields.c, testCase.fields.version, testCase.fields.share)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := applicationService.Get(testCase.args.ctx, testCase.args.filterId, testCase.args.expand)
+			gotResult, gotResponse, err := applicationService.Get(testCase.args.ctx, testCase.args.filterID, testCase.args.expand)
 
 			if testCase.wantErr {
 
@@ -764,7 +766,7 @@ func TestFilterService_Update(t *testing.T) {
 
 	type args struct {
 		ctx      context.Context
-		filterId int
+		filterID int
 		payload  *model.FilterPayloadScheme
 	}
 
@@ -790,7 +792,7 @@ func TestFilterService_Update(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:      context.Background(),
-				filterId: 10001,
+				filterID: 10001,
 				payload:  payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -820,7 +822,7 @@ func TestFilterService_Update(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:      context.Background(),
-				filterId: 10001,
+				filterID: 10001,
 				payload:  payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -849,7 +851,7 @@ func TestFilterService_Update(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:      context.Background(),
-				filterId: 10001,
+				filterID: 10001,
 				payload:  payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -881,7 +883,7 @@ func TestFilterService_Update(t *testing.T) {
 			applicationService, err := NewFilterService(testCase.fields.c, testCase.fields.version, testCase.fields.share)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := applicationService.Update(testCase.args.ctx, testCase.args.filterId, testCase.args.payload)
+			gotResult, gotResponse, err := applicationService.Update(testCase.args.ctx, testCase.args.filterID, testCase.args.payload)
 
 			if testCase.wantErr {
 
@@ -912,7 +914,7 @@ func TestFilterService_Delete(t *testing.T) {
 
 	type args struct {
 		ctx      context.Context
-		filterId int
+		filterID int
 	}
 
 	testCases := []struct {
@@ -938,7 +940,7 @@ func TestFilterService_Delete(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:      context.Background(),
-				filterId: 10001,
+				filterID: 10001,
 			},
 			on: func(fields *fields) {
 
@@ -967,7 +969,7 @@ func TestFilterService_Delete(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:      context.Background(),
-				filterId: 10001,
+				filterID: 10001,
 			},
 			on: func(fields *fields) {
 
@@ -996,7 +998,7 @@ func TestFilterService_Delete(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:      context.Background(),
-				filterId: 10001,
+				filterID: 10001,
 			},
 			on: func(fields *fields) {
 
@@ -1028,7 +1030,7 @@ func TestFilterService_Delete(t *testing.T) {
 			applicationService, err := NewFilterService(testCase.fields.c, testCase.fields.version, testCase.fields.share)
 			assert.NoError(t, err)
 
-			gotResponse, err := applicationService.Delete(testCase.args.ctx, testCase.args.filterId)
+			gotResponse, err := applicationService.Delete(testCase.args.ctx, testCase.args.filterID)
 
 			if testCase.wantErr {
 
@@ -1058,8 +1060,8 @@ func TestFilterService_Change(t *testing.T) {
 
 	type args struct {
 		ctx       context.Context
-		filterId  int
-		accountId string
+		filterID  int
+		accountID string
 	}
 
 	testCases := []struct {
@@ -1075,8 +1077,8 @@ func TestFilterService_Change(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:       context.Background(),
-				filterId:  10001,
-				accountId: "account-id-sample",
+				filterID:  10001,
+				accountID: "account-id-sample",
 			},
 			on: func(fields *fields) {
 
@@ -1105,8 +1107,8 @@ func TestFilterService_Change(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:       context.Background(),
-				filterId:  10001,
-				accountId: "account-id-sample",
+				filterID:  10001,
+				accountID: "account-id-sample",
 			},
 			on: func(fields *fields) {
 
@@ -1145,8 +1147,8 @@ func TestFilterService_Change(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:       context.Background(),
-				filterId:  10002,
-				accountId: "",
+				filterID:  10002,
+				accountID: "",
 			},
 			wantErr: true,
 			Err:     model.ErrNoAccountIDError,
@@ -1157,8 +1159,8 @@ func TestFilterService_Change(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:       context.Background(),
-				filterId:  10001,
-				accountId: "account-id-sample",
+				filterID:  10001,
+				accountID: "account-id-sample",
 			},
 			on: func(fields *fields) {
 
@@ -1190,7 +1192,7 @@ func TestFilterService_Change(t *testing.T) {
 			applicationService, err := NewFilterService(testCase.fields.c, testCase.fields.version, testCase.fields.share)
 			assert.NoError(t, err)
 
-			gotResponse, err := applicationService.Change(testCase.args.ctx, testCase.args.filterId, testCase.args.accountId)
+			gotResponse, err := applicationService.Change(testCase.args.ctx, testCase.args.filterID, testCase.args.accountID)
 
 			if testCase.wantErr {
 

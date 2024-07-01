@@ -3,10 +3,11 @@ package internal
 import (
 	"context"
 	"fmt"
+	"net/http"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/jira"
-	"net/http"
 )
 
 func NewTaskService(client service.Connector, version string) (*TaskService, error) {
@@ -32,20 +33,20 @@ type TaskService struct {
 //
 // Task details are not permanently retained.
 //
-// GET /rest/api/{2-3}/task/{taskId}
+// GET /rest/api/{2-3}/task/{taskID}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/tasks#get-task
-func (t *TaskService) Get(ctx context.Context, taskId string) (*model.TaskScheme, *model.ResponseScheme, error) {
-	return t.internalClient.Get(ctx, taskId)
+func (t *TaskService) Get(ctx context.Context, taskID string) (*model.TaskScheme, *model.ResponseScheme, error) {
+	return t.internalClient.Get(ctx, taskID)
 }
 
 // Cancel cancels a task.
 //
-// POST /rest/api/{2-3}/task/{taskId}/cancel
+// POST /rest/api/{2-3}/task/{taskID}/cancel
 //
 // https://docs.go-atlassian.io/jira-software-cloud/tasks#cancel-task
-func (t *TaskService) Cancel(ctx context.Context, taskId string) (*model.ResponseScheme, error) {
-	return t.internalClient.Cancel(ctx, taskId)
+func (t *TaskService) Cancel(ctx context.Context, taskID string) (*model.ResponseScheme, error) {
+	return t.internalClient.Cancel(ctx, taskID)
 }
 
 type internalTaskServiceImpl struct {
@@ -53,13 +54,13 @@ type internalTaskServiceImpl struct {
 	version string
 }
 
-func (i *internalTaskServiceImpl) Get(ctx context.Context, taskId string) (*model.TaskScheme, *model.ResponseScheme, error) {
+func (i *internalTaskServiceImpl) Get(ctx context.Context, taskID string) (*model.TaskScheme, *model.ResponseScheme, error) {
 
-	if taskId == "" {
+	if taskID == "" {
 		return nil, nil, model.ErrNoTaskIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/task/%v", i.version, taskId)
+	endpoint := fmt.Sprintf("rest/api/%v/task/%v", i.version, taskID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
@@ -75,13 +76,13 @@ func (i *internalTaskServiceImpl) Get(ctx context.Context, taskId string) (*mode
 	return task, response, nil
 }
 
-func (i *internalTaskServiceImpl) Cancel(ctx context.Context, taskId string) (*model.ResponseScheme, error) {
+func (i *internalTaskServiceImpl) Cancel(ctx context.Context, taskID string) (*model.ResponseScheme, error) {
 
-	if taskId == "" {
+	if taskID == "" {
 		return nil, model.ErrNoTaskIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/task/%v/cancel", i.version, taskId)
+	endpoint := fmt.Sprintf("rest/api/%v/task/%v/cancel", i.version, taskID)
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", nil)
 	if err != nil {
 		return nil, err

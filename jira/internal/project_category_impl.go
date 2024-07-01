@@ -3,10 +3,11 @@ package internal
 import (
 	"context"
 	"fmt"
+	"net/http"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/jira"
-	"net/http"
 )
 
 func NewProjectCategoryService(client service.Connector, version string) (*ProjectCategoryService, error) {
@@ -35,11 +36,11 @@ func (p *ProjectCategoryService) Gets(ctx context.Context) ([]*model.ProjectCate
 
 // Get returns a project category.
 //
-// GET /rest/api/{2-3}/projectCategory/{id}
+// GET /rest/api/{2-3}/projectCategory/{categoryID}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/categories#get-project-category-by-id
-func (p *ProjectCategoryService) Get(ctx context.Context, categoryId int) (*model.ProjectCategoryScheme, *model.ResponseScheme, error) {
-	return p.internalClient.Get(ctx, categoryId)
+func (p *ProjectCategoryService) Get(ctx context.Context, categoryID int) (*model.ProjectCategoryScheme, *model.ResponseScheme, error) {
+	return p.internalClient.Get(ctx, categoryID)
 }
 
 // Create creates a project category.
@@ -53,20 +54,20 @@ func (p *ProjectCategoryService) Create(ctx context.Context, payload *model.Proj
 
 // Update updates a project category.
 //
-// PUT /rest/api/{2-3}/projectCategory/{id}
+// PUT /rest/api/{2-3}/projectCategory/{categoryID}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/categories#update-project-category
-func (p *ProjectCategoryService) Update(ctx context.Context, categoryId int, payload *model.ProjectCategoryPayloadScheme) (*model.ProjectCategoryScheme, *model.ResponseScheme, error) {
-	return p.internalClient.Update(ctx, categoryId, payload)
+func (p *ProjectCategoryService) Update(ctx context.Context, categoryID int, payload *model.ProjectCategoryPayloadScheme) (*model.ProjectCategoryScheme, *model.ResponseScheme, error) {
+	return p.internalClient.Update(ctx, categoryID, payload)
 }
 
 // Delete deletes a project category.
 //
-// DELETE /rest/api/{2-3}/projectCategory/{id}
+// DELETE /rest/api/{2-3}/projectCategory/{categoryID}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/categories#delete-project-category
-func (p *ProjectCategoryService) Delete(ctx context.Context, categoryId int) (*model.ResponseScheme, error) {
-	return p.internalClient.Delete(ctx, categoryId)
+func (p *ProjectCategoryService) Delete(ctx context.Context, categoryID int) (*model.ResponseScheme, error) {
+	return p.internalClient.Delete(ctx, categoryID)
 }
 
 type internalProjectCategoryImpl struct {
@@ -92,13 +93,13 @@ func (i *internalProjectCategoryImpl) Gets(ctx context.Context) ([]*model.Projec
 	return categories, response, nil
 }
 
-func (i *internalProjectCategoryImpl) Get(ctx context.Context, categoryId int) (*model.ProjectCategoryScheme, *model.ResponseScheme, error) {
+func (i *internalProjectCategoryImpl) Get(ctx context.Context, categoryID int) (*model.ProjectCategoryScheme, *model.ResponseScheme, error) {
 
-	if categoryId == 0 {
+	if categoryID == 0 {
 		return nil, nil, model.ErrNoProjectCategoryIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/projectCategory/%v", i.version, categoryId)
+	endpoint := fmt.Sprintf("rest/api/%v/projectCategory/%v", i.version, categoryID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
@@ -132,13 +133,13 @@ func (i *internalProjectCategoryImpl) Create(ctx context.Context, payload *model
 	return category, response, nil
 }
 
-func (i *internalProjectCategoryImpl) Update(ctx context.Context, categoryId int, payload *model.ProjectCategoryPayloadScheme) (*model.ProjectCategoryScheme, *model.ResponseScheme, error) {
+func (i *internalProjectCategoryImpl) Update(ctx context.Context, categoryID int, payload *model.ProjectCategoryPayloadScheme) (*model.ProjectCategoryScheme, *model.ResponseScheme, error) {
 
-	if categoryId == 0 {
+	if categoryID == 0 {
 		return nil, nil, model.ErrNoProjectCategoryIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/projectCategory/%v", i.version, categoryId)
+	endpoint := fmt.Sprintf("rest/api/%v/projectCategory/%v", i.version, categoryID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
@@ -154,13 +155,13 @@ func (i *internalProjectCategoryImpl) Update(ctx context.Context, categoryId int
 	return category, response, nil
 }
 
-func (i *internalProjectCategoryImpl) Delete(ctx context.Context, categoryId int) (*model.ResponseScheme, error) {
+func (i *internalProjectCategoryImpl) Delete(ctx context.Context, categoryID int) (*model.ResponseScheme, error) {
 
-	if categoryId == 0 {
+	if categoryID == 0 {
 		return nil, model.ErrNoProjectCategoryIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/projectCategory/%v", i.version, categoryId)
+	endpoint := fmt.Sprintf("rest/api/%v/projectCategory/%v", i.version, categoryID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {

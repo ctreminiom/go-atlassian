@@ -3,11 +3,12 @@ package internal
 import (
 	"context"
 	"fmt"
+	"net/http"
+	"net/url"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/jira"
-	"net/http"
-	"net/url"
 )
 
 func NewWatcherService(client service.Connector, version string) (*WatcherService, error) {
@@ -27,31 +28,31 @@ type WatcherService struct {
 
 // Gets returns the watchers for an issue.
 //
-// GET /rest/api/{2-3}/issue/{issueIdOrKey}/watchers
+// GET /rest/api/{2-3}/issue/{issueKeyOrID}/watchers
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/watcher#get-issue-watchers
-func (w *WatcherService) Gets(ctx context.Context, issueKeyOrId string) (*model.IssueWatcherScheme, *model.ResponseScheme, error) {
-	return w.internalClient.Gets(ctx, issueKeyOrId)
+func (w *WatcherService) Gets(ctx context.Context, issueKeyOrID string) (*model.IssueWatcherScheme, *model.ResponseScheme, error) {
+	return w.internalClient.Gets(ctx, issueKeyOrID)
 }
 
 // Add adds a user as a watcher of an issue by passing the account ID of the user.
 //
 // For example, "5b10ac8d82e05b22cc7d4ef5". If no user is specified the calling user is added.
 //
-// POST /rest/api/{2-3}/issue/{issueIdOrKey}/watchers
+// POST /rest/api/{2-3}/issue/{issueKeyOrID}/watchers
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/watcher#add-watcher
-func (w *WatcherService) Add(ctx context.Context, issueKeyOrId string) (*model.ResponseScheme, error) {
-	return w.internalClient.Add(ctx, issueKeyOrId)
+func (w *WatcherService) Add(ctx context.Context, issueKeyOrID string) (*model.ResponseScheme, error) {
+	return w.internalClient.Add(ctx, issueKeyOrID)
 }
 
 // Delete deletes a user as a watcher of an issue.
 //
-// DELETE /rest/api/{2-3}/issue/{issueIdOrKey}/watchers
+// DELETE /rest/api/{2-3}/issue/{issueKeyOrID}/watchers
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/watcher#delete-watcher
-func (w *WatcherService) Delete(ctx context.Context, issueKeyOrId, accountId string) (*model.ResponseScheme, error) {
-	return w.internalClient.Delete(ctx, issueKeyOrId, accountId)
+func (w *WatcherService) Delete(ctx context.Context, issueKeyOrID, accountID string) (*model.ResponseScheme, error) {
+	return w.internalClient.Delete(ctx, issueKeyOrID, accountID)
 }
 
 type internalWatcherImpl struct {
@@ -59,13 +60,13 @@ type internalWatcherImpl struct {
 	version string
 }
 
-func (i *internalWatcherImpl) Gets(ctx context.Context, issueKeyOrId string) (*model.IssueWatcherScheme, *model.ResponseScheme, error) {
+func (i *internalWatcherImpl) Gets(ctx context.Context, issueKeyOrID string) (*model.IssueWatcherScheme, *model.ResponseScheme, error) {
 
-	if issueKeyOrId == "" {
+	if issueKeyOrID == "" {
 		return nil, nil, model.ErrNoIssueKeyOrIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/watchers", i.version, issueKeyOrId)
+	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/watchers", i.version, issueKeyOrID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
@@ -81,13 +82,13 @@ func (i *internalWatcherImpl) Gets(ctx context.Context, issueKeyOrId string) (*m
 	return watchers, response, nil
 }
 
-func (i *internalWatcherImpl) Add(ctx context.Context, issueKeyOrId string) (*model.ResponseScheme, error) {
+func (i *internalWatcherImpl) Add(ctx context.Context, issueKeyOrID string) (*model.ResponseScheme, error) {
 
-	if issueKeyOrId == "" {
+	if issueKeyOrID == "" {
 		return nil, model.ErrNoIssueKeyOrIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/watchers", i.version, issueKeyOrId)
+	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/watchers", i.version, issueKeyOrID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", nil)
 	if err != nil {
@@ -97,20 +98,20 @@ func (i *internalWatcherImpl) Add(ctx context.Context, issueKeyOrId string) (*mo
 	return i.c.Call(request, nil)
 }
 
-func (i *internalWatcherImpl) Delete(ctx context.Context, issueKeyOrId, accountId string) (*model.ResponseScheme, error) {
+func (i *internalWatcherImpl) Delete(ctx context.Context, issueKeyOrID, accountID string) (*model.ResponseScheme, error) {
 
-	if issueKeyOrId == "" {
+	if issueKeyOrID == "" {
 		return nil, model.ErrNoIssueKeyOrIDError
 	}
 
-	if accountId == "" {
+	if accountID == "" {
 		return nil, model.ErrNoAccountIDError
 	}
 
 	params := url.Values{}
-	params.Add("accountId", accountId)
+	params.Add("accountId", accountID)
 
-	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/watchers?%v", i.version, issueKeyOrId, params.Encode())
+	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/watchers?%v", i.version, issueKeyOrID, params.Encode())
 
 	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {

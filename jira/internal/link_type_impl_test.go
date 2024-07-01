@@ -3,12 +3,14 @@ package internal
 import (
 	"context"
 	"errors"
+	"net/http"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
-	"github.com/stretchr/testify/assert"
-	"net/http"
-	"testing"
 )
 
 func Test_internalLinkTypeImpl_Gets(t *testing.T) {
@@ -153,7 +155,7 @@ func Test_internalLinkTypeImpl_Get(t *testing.T) {
 
 	type args struct {
 		ctx             context.Context
-		issueLinkTypeId string
+		issueLinkTypeID string
 	}
 
 	testCases := []struct {
@@ -169,7 +171,7 @@ func Test_internalLinkTypeImpl_Get(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:             context.Background(),
-				issueLinkTypeId: "1002",
+				issueLinkTypeID: "1002",
 			},
 			on: func(fields *fields) {
 
@@ -199,7 +201,7 @@ func Test_internalLinkTypeImpl_Get(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:             context.Background(),
-				issueLinkTypeId: "1002",
+				issueLinkTypeID: "1002",
 			},
 			on: func(fields *fields) {
 
@@ -229,7 +231,7 @@ func Test_internalLinkTypeImpl_Get(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:             context.Background(),
-				issueLinkTypeId: "",
+				issueLinkTypeID: "",
 			},
 			wantErr: true,
 			Err:     model.ErrNoLinkTypeIDError,
@@ -240,7 +242,7 @@ func Test_internalLinkTypeImpl_Get(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:             context.Background(),
-				issueLinkTypeId: "1002",
+				issueLinkTypeID: "1002",
 			},
 			on: func(fields *fields) {
 
@@ -271,7 +273,7 @@ func Test_internalLinkTypeImpl_Get(t *testing.T) {
 			linkTypeService, err := NewLinkTypeService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := linkTypeService.Get(testCase.args.ctx, testCase.args.issueLinkTypeId)
+			gotResult, gotResponse, err := linkTypeService.Get(testCase.args.ctx, testCase.args.issueLinkTypeID)
 
 			if testCase.wantErr {
 
@@ -307,7 +309,7 @@ func Test_internalLinkTypeImpl_Update(t *testing.T) {
 
 	type args struct {
 		ctx             context.Context
-		issueLinkTypeId string
+		issueLinkTypeID string
 		payload         *model.LinkTypeScheme
 	}
 
@@ -324,7 +326,7 @@ func Test_internalLinkTypeImpl_Update(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:             context.Background(),
-				issueLinkTypeId: "",
+				issueLinkTypeID: "",
 			},
 			wantErr: true,
 			Err:     model.ErrNoLinkTypeIDError,
@@ -334,7 +336,7 @@ func Test_internalLinkTypeImpl_Update(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:             context.Background(),
-				issueLinkTypeId: "1002",
+				issueLinkTypeID: "1002",
 				payload:         payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -365,7 +367,7 @@ func Test_internalLinkTypeImpl_Update(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:             context.Background(),
-				issueLinkTypeId: "1002",
+				issueLinkTypeID: "1002",
 				payload:         payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -396,7 +398,7 @@ func Test_internalLinkTypeImpl_Update(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:             context.Background(),
-				issueLinkTypeId: "1002",
+				issueLinkTypeID: "1002",
 				payload:         payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -428,7 +430,7 @@ func Test_internalLinkTypeImpl_Update(t *testing.T) {
 			linkTypeService, err := NewLinkTypeService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := linkTypeService.Update(testCase.args.ctx, testCase.args.issueLinkTypeId, testCase.args.payload)
+			gotResult, gotResponse, err := linkTypeService.Update(testCase.args.ctx, testCase.args.issueLinkTypeID, testCase.args.payload)
 
 			if testCase.wantErr {
 
@@ -601,7 +603,7 @@ func Test_internalLinkTypeImpl_Delete(t *testing.T) {
 
 	type args struct {
 		ctx             context.Context
-		issueLinkTypeId string
+		issueLinkTypeID string
 	}
 
 	testCases := []struct {
@@ -617,7 +619,7 @@ func Test_internalLinkTypeImpl_Delete(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:             context.Background(),
-				issueLinkTypeId: "1002",
+				issueLinkTypeID: "1002",
 			},
 			on: func(fields *fields) {
 
@@ -647,7 +649,7 @@ func Test_internalLinkTypeImpl_Delete(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:             context.Background(),
-				issueLinkTypeId: "1002",
+				issueLinkTypeID: "1002",
 			},
 			on: func(fields *fields) {
 
@@ -677,7 +679,7 @@ func Test_internalLinkTypeImpl_Delete(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:             context.Background(),
-				issueLinkTypeId: "",
+				issueLinkTypeID: "",
 			},
 			wantErr: true,
 			Err:     model.ErrNoLinkTypeIDError,
@@ -688,7 +690,7 @@ func Test_internalLinkTypeImpl_Delete(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:             context.Background(),
-				issueLinkTypeId: "1002",
+				issueLinkTypeID: "1002",
 			},
 			on: func(fields *fields) {
 
@@ -719,7 +721,7 @@ func Test_internalLinkTypeImpl_Delete(t *testing.T) {
 			linkTypeService, err := NewLinkTypeService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResponse, err := linkTypeService.Delete(testCase.args.ctx, testCase.args.issueLinkTypeId)
+			gotResponse, err := linkTypeService.Delete(testCase.args.ctx, testCase.args.issueLinkTypeID)
 
 			if testCase.wantErr {
 

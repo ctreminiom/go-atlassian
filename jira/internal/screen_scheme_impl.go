@@ -3,13 +3,14 @@ package internal
 import (
 	"context"
 	"fmt"
-	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/service"
-	"github.com/ctreminiom/go-atlassian/service/jira"
 	"net/http"
 	"net/url"
 	"strconv"
 	"strings"
+
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/service"
+	"github.com/ctreminiom/go-atlassian/service/jira"
 )
 
 func NewScreenSchemeService(client service.Connector, version string) (*ScreenSchemeService, error) {
@@ -49,22 +50,22 @@ func (s *ScreenSchemeService) Create(ctx context.Context, payload *model.ScreenS
 
 // Update updates a screen scheme. Only screen schemes used in classic projects can be updated.
 //
-// PUT /rest/api/{2-3}/screenscheme/{screenSchemeId}
+// PUT /rest/api/{2-3}/screenscheme/{screenSchemeID}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/screens/schemes#update-screen-scheme
-func (s *ScreenSchemeService) Update(ctx context.Context, screenSchemeId string, payload *model.ScreenSchemePayloadScheme) (*model.ResponseScheme, error) {
-	return s.internalClient.Update(ctx, screenSchemeId, payload)
+func (s *ScreenSchemeService) Update(ctx context.Context, screenSchemeID string, payload *model.ScreenSchemePayloadScheme) (*model.ResponseScheme, error) {
+	return s.internalClient.Update(ctx, screenSchemeID, payload)
 }
 
 // Delete deletes a screen scheme. A screen scheme cannot be deleted if it is used in an issue type screen scheme.
 //
 // Only screens schemes used in classic projects can be deleted.
 //
-// DELETE /rest/api/{2-3}/screenscheme/{screenSchemeId}
+// DELETE /rest/api/{2-3}/screenscheme/{screenSchemeID}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/screens/schemes#delete-screen-scheme
-func (s *ScreenSchemeService) Delete(ctx context.Context, screenSchemeId string) (*model.ResponseScheme, error) {
-	return s.internalClient.Delete(ctx, screenSchemeId)
+func (s *ScreenSchemeService) Delete(ctx context.Context, screenSchemeID string) (*model.ResponseScheme, error) {
+	return s.internalClient.Delete(ctx, screenSchemeID)
 }
 
 type internalScreenSchemeImpl struct {
@@ -131,13 +132,13 @@ func (i *internalScreenSchemeImpl) Create(ctx context.Context, payload *model.Sc
 	return scheme, response, nil
 }
 
-func (i *internalScreenSchemeImpl) Update(ctx context.Context, screenSchemeId string, payload *model.ScreenSchemePayloadScheme) (*model.ResponseScheme, error) {
+func (i *internalScreenSchemeImpl) Update(ctx context.Context, screenSchemeID string, payload *model.ScreenSchemePayloadScheme) (*model.ResponseScheme, error) {
 
-	if screenSchemeId == "" {
+	if screenSchemeID == "" {
 		return nil, model.ErrNoScreenSchemeIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/screenscheme/%v", i.version, screenSchemeId)
+	endpoint := fmt.Sprintf("rest/api/%v/screenscheme/%v", i.version, screenSchemeID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
@@ -147,13 +148,13 @@ func (i *internalScreenSchemeImpl) Update(ctx context.Context, screenSchemeId st
 	return i.c.Call(request, nil)
 }
 
-func (i *internalScreenSchemeImpl) Delete(ctx context.Context, screenSchemeId string) (*model.ResponseScheme, error) {
+func (i *internalScreenSchemeImpl) Delete(ctx context.Context, screenSchemeID string) (*model.ResponseScheme, error) {
 
-	if screenSchemeId == "" {
+	if screenSchemeID == "" {
 		return nil, model.ErrNoScreenSchemeIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/screenscheme/%v", i.version, screenSchemeId)
+	endpoint := fmt.Sprintf("rest/api/%v/screenscheme/%v", i.version, screenSchemeID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {

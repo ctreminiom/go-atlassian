@@ -2,6 +2,7 @@ package jira
 
 import (
 	"context"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 )
 
@@ -22,13 +23,13 @@ type IssuePropertyConnector interface {
 			- Browse projects project permission for the project containing the issue.
 			- If issue-level security is configured, issue-level security permission to view the issue.
 
-		Endpoint: GET /rest/api/{apiVersion}/issue/{issueIdOrKey}/properties
+		Endpoint: GET /rest/api/{apiVersion}/issue/{issueKeyOrID}/properties
 
 		You can refer to the documentation: [Get issue property keys]
 
 		[Get issue property keys]: https://docs.go-atlassian.io/jira-software-cloud/issues/properties#get-issue-property-keys
 	*/
-	Gets(ctx context.Context, issueIdOrKey string) (*model.PropertyPageScheme, *model.ResponseScheme, error)
+	Gets(ctx context.Context, issueKeyOrID string) (*model.PropertyPageScheme, *model.ResponseScheme, error)
 
 	/*
 		Get returns the key and value of an issue's property.
@@ -38,13 +39,13 @@ type IssuePropertyConnector interface {
 			- Browse projects project permission for the project containing the issue.
 			- If issue-level security is configured, issue-level security permission to view the issue.
 
-		Endpoint: GET /rest/api/{apiVersion}/issue/{issueIdOrKey}/properties/{propertyKey}
+		Endpoint: GET /rest/api/{apiVersion}/issue/{issueKeyOrID}/properties/{propertyKey}
 
 		You can refer to the documentation: [Get issue property]
 
 		[Get issue property]: https://docs.go-atlassian.io/jira-software-cloud/issues/properties#get-issue-property
 	*/
-	Get(ctx context.Context, issueKey, propertyKey string) (*model.EntityPropertyScheme, *model.ResponseScheme, error)
+	Get(ctx context.Context, issueKeyOrID, propertyKey string) (*model.EntityPropertyScheme, *model.ResponseScheme, error)
 
 	/*
 		Set sets the value of an issue's property. Use this resource to store custom data against an issue.
@@ -55,13 +56,13 @@ type IssuePropertyConnector interface {
 			- Browse projects and Edit issues project permissions for the project containing the issue.
 			- If issue-level security is configured, issue-level security permission to view the issue.
 
-		Endpoint: PUT /rest/api/{apiVersion}/issue/{issueIdOrKey}/properties/{propertyKey}
+		Endpoint: PUT /rest/api/{apiVersion}/issue/{issueKeyOrID}/properties/{propertyKey}
 
 		You can refer to the documentation: [Set issue property]
 
 		[Set issue property]: https://docs.go-atlassian.io/jira-software-cloud/issues/properties#set-issue-property
 	*/
-	Set(ctx context.Context, issueKey, propertyKey string, payload interface{}) (*model.ResponseScheme, error)
+	Set(ctx context.Context, issueKeyOrID, propertyKey string, payload interface{}) (*model.ResponseScheme, error)
 
 	/*
 		Delete deletes an issue's property.
@@ -71,11 +72,11 @@ type IssuePropertyConnector interface {
 			- Browse projects and Edit issues project permissions for the project containing the issue.
 			- If issue-level security is configured, issue-level security permission to view the issue.
 
-		Endpoint: DELETE /rest/api/{apiVersion}/issue/{issueIdOrKey}/properties/{propertyKey}
+		Endpoint: DELETE /rest/api/{apiVersion}/issue/{issueKeyOrID}/properties/{propertyKey}
 
 		You can refer to the documentation: [Delete issue property]
 
 		[Delete issue property]: https://docs.go-atlassian.io/jira-software-cloud/issues/properties#delete-issue-property
 	*/
-	Delete(ctx context.Context, issueKey, propertyKey string) (*model.ResponseScheme, error)
+	Delete(ctx context.Context, issueKeyOrID, propertyKey string) (*model.ResponseScheme, error)
 }

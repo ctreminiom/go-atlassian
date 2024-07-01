@@ -3,13 +3,14 @@ package internal
 import (
 	"context"
 	"fmt"
-	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/service"
-	"github.com/ctreminiom/go-atlassian/service/jira"
 	"net/http"
 	"net/url"
 	"strconv"
 	"strings"
+
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/service"
+	"github.com/ctreminiom/go-atlassian/service/jira"
 )
 
 func NewIssueFieldService(client service.Connector, version string, configuration *IssueFieldConfigService, context *IssueFieldContextService,
@@ -77,8 +78,8 @@ func (i *IssueFieldService) Search(ctx context.Context, options *model.FieldSear
 // DELETE /rest/api/{2-3}/field/{id}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/fields#delete-field
-func (i *IssueFieldService) Delete(ctx context.Context, fieldId string) (*model.TaskScheme, *model.ResponseScheme, error) {
-	return i.internalClient.Delete(ctx, fieldId)
+func (i *IssueFieldService) Delete(ctx context.Context, fieldID string) (*model.TaskScheme, *model.ResponseScheme, error) {
+	return i.internalClient.Delete(ctx, fieldID)
 }
 
 type internalIssueFieldServiceImpl struct {
@@ -167,13 +168,13 @@ func (i *internalIssueFieldServiceImpl) Search(ctx context.Context, options *mod
 	return page, response, nil
 }
 
-func (i *internalIssueFieldServiceImpl) Delete(ctx context.Context, fieldId string) (*model.TaskScheme, *model.ResponseScheme, error) {
+func (i *internalIssueFieldServiceImpl) Delete(ctx context.Context, fieldID string) (*model.TaskScheme, *model.ResponseScheme, error) {
 
-	if fieldId == "" {
+	if fieldID == "" {
 		return nil, nil, model.ErrNoFieldIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/field/%v", i.version, fieldId)
+	endpoint := fmt.Sprintf("rest/api/%v/field/%v", i.version, fieldID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {

@@ -3,13 +3,15 @@ package internal
 import (
 	"context"
 	"errors"
+	"net/http"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
-	"net/http"
-	"testing"
 )
 
 func Test_internalScreenImpl_Fields(t *testing.T) {
@@ -21,7 +23,7 @@ func Test_internalScreenImpl_Fields(t *testing.T) {
 
 	type args struct {
 		ctx                 context.Context
-		fieldId             string
+		fieldID             string
 		startAt, maxResults int
 	}
 
@@ -38,7 +40,7 @@ func Test_internalScreenImpl_Fields(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:        context.Background(),
-				fieldId:    "customfield_12000",
+				fieldID:    "customfield_12000",
 				startAt:    100,
 				maxResults: 50,
 			},
@@ -69,7 +71,7 @@ func Test_internalScreenImpl_Fields(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:        context.Background(),
-				fieldId:    "customfield_12000",
+				fieldID:    "customfield_12000",
 				startAt:    100,
 				maxResults: 50,
 			},
@@ -110,7 +112,7 @@ func Test_internalScreenImpl_Fields(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:        context.Background(),
-				fieldId:    "customfield_12000",
+				fieldID:    "customfield_12000",
 				startAt:    100,
 				maxResults: 50,
 			},
@@ -142,7 +144,7 @@ func Test_internalScreenImpl_Fields(t *testing.T) {
 			resolutionService, err := NewScreenService(testCase.fields.c, testCase.fields.version, nil, nil)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := resolutionService.Fields(testCase.args.ctx, testCase.args.fieldId, testCase.args.startAt,
+			gotResult, gotResponse, err := resolutionService.Fields(testCase.args.ctx, testCase.args.fieldID, testCase.args.startAt,
 				testCase.args.maxResults)
 
 			if testCase.wantErr {
@@ -330,7 +332,7 @@ func Test_internalScreenImpl_AddToDefault(t *testing.T) {
 
 	type args struct {
 		ctx     context.Context
-		fieldId string
+		fieldID string
 	}
 
 	testCases := []struct {
@@ -346,7 +348,7 @@ func Test_internalScreenImpl_AddToDefault(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:     context.Background(),
-				fieldId: "customfield_12700",
+				fieldID: "customfield_12700",
 			},
 			on: func(fields *fields) {
 
@@ -375,7 +377,7 @@ func Test_internalScreenImpl_AddToDefault(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:     context.Background(),
-				fieldId: "customfield_12700",
+				fieldID: "customfield_12700",
 			},
 			on: func(fields *fields) {
 
@@ -414,7 +416,7 @@ func Test_internalScreenImpl_AddToDefault(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:     context.Background(),
-				fieldId: "customfield_12700",
+				fieldID: "customfield_12700",
 			},
 			on: func(fields *fields) {
 
@@ -444,7 +446,7 @@ func Test_internalScreenImpl_AddToDefault(t *testing.T) {
 			resolutionService, err := NewScreenService(testCase.fields.c, testCase.fields.version, nil, nil)
 			assert.NoError(t, err)
 
-			gotResponse, err := resolutionService.AddToDefault(testCase.args.ctx, testCase.args.fieldId)
+			gotResponse, err := resolutionService.AddToDefault(testCase.args.ctx, testCase.args.fieldID)
 
 			if testCase.wantErr {
 
@@ -473,7 +475,7 @@ func Test_internalScreenImpl_Available(t *testing.T) {
 
 	type args struct {
 		ctx      context.Context
-		screenId int
+		screenID int
 	}
 
 	testCases := []struct {
@@ -489,7 +491,7 @@ func Test_internalScreenImpl_Available(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:      context.Background(),
-				screenId: 10001,
+				screenID: 10001,
 			},
 			on: func(fields *fields) {
 
@@ -518,7 +520,7 @@ func Test_internalScreenImpl_Available(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:      context.Background(),
-				screenId: 10001,
+				screenID: 10001,
 			},
 			on: func(fields *fields) {
 
@@ -557,7 +559,7 @@ func Test_internalScreenImpl_Available(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:      context.Background(),
-				screenId: 10001,
+				screenID: 10001,
 			},
 			on: func(fields *fields) {
 
@@ -587,7 +589,7 @@ func Test_internalScreenImpl_Available(t *testing.T) {
 			resolutionService, err := NewScreenService(testCase.fields.c, testCase.fields.version, nil, nil)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := resolutionService.Available(testCase.args.ctx, testCase.args.screenId)
+			gotResult, gotResponse, err := resolutionService.Available(testCase.args.ctx, testCase.args.screenID)
 
 			if testCase.wantErr {
 
@@ -768,7 +770,7 @@ func Test_internalScreenImpl_Update(t *testing.T) {
 
 	type args struct {
 		ctx               context.Context
-		screenId          int
+		screenID          int
 		name, description string
 	}
 
@@ -785,7 +787,7 @@ func Test_internalScreenImpl_Update(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:         context.Background(),
-				screenId:    10001,
+				screenID:    10001,
 				name:        "Screen Name",
 				description: "Screen Description",
 			},
@@ -816,7 +818,7 @@ func Test_internalScreenImpl_Update(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:         context.Background(),
-				screenId:    10001,
+				screenID:    10001,
 				name:        "Screen Name",
 				description: "Screen Description",
 			},
@@ -857,7 +859,7 @@ func Test_internalScreenImpl_Update(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:         context.Background(),
-				screenId:    10001,
+				screenID:    10001,
 				name:        "Screen Name",
 				description: "Screen Description",
 			},
@@ -889,7 +891,7 @@ func Test_internalScreenImpl_Update(t *testing.T) {
 			resolutionService, err := NewScreenService(testCase.fields.c, testCase.fields.version, nil, nil)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := resolutionService.Update(testCase.args.ctx, testCase.args.screenId, testCase.args.name,
+			gotResult, gotResponse, err := resolutionService.Update(testCase.args.ctx, testCase.args.screenID, testCase.args.name,
 				testCase.args.description)
 
 			if testCase.wantErr {
@@ -920,7 +922,7 @@ func Test_internalScreenImpl_Delete(t *testing.T) {
 
 	type args struct {
 		ctx      context.Context
-		screenId int
+		screenID int
 	}
 
 	testCases := []struct {
@@ -936,7 +938,7 @@ func Test_internalScreenImpl_Delete(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:      context.Background(),
-				screenId: 10001,
+				screenID: 10001,
 			},
 			on: func(fields *fields) {
 
@@ -965,7 +967,7 @@ func Test_internalScreenImpl_Delete(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:      context.Background(),
-				screenId: 10001,
+				screenID: 10001,
 			},
 			on: func(fields *fields) {
 
@@ -1004,7 +1006,7 @@ func Test_internalScreenImpl_Delete(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:      context.Background(),
-				screenId: 10001,
+				screenID: 10001,
 			},
 			on: func(fields *fields) {
 
@@ -1034,7 +1036,7 @@ func Test_internalScreenImpl_Delete(t *testing.T) {
 			resolutionService, err := NewScreenService(testCase.fields.c, testCase.fields.version, nil, nil)
 			assert.NoError(t, err)
 
-			gotResponse, err := resolutionService.Delete(testCase.args.ctx, testCase.args.screenId)
+			gotResponse, err := resolutionService.Delete(testCase.args.ctx, testCase.args.screenID)
 
 			if testCase.wantErr {
 

@@ -3,10 +3,11 @@ package internal
 import (
 	"context"
 	"fmt"
+	"net/http"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/jira"
-	"net/http"
 )
 
 func NewFilterShareService(client service.Connector, version string) (*FilterShareService, error) {
@@ -51,8 +52,8 @@ func (f *FilterShareService) SetScope(ctx context.Context, scope string) (*model
 // GET /rest/api/{2-3}/filter/{id}/permission
 //
 // https://docs.go-atlassian.io/jira-software-cloud/filters/sharing#get-share-permissions
-func (f *FilterShareService) Gets(ctx context.Context, filterId int) ([]*model.SharePermissionScheme, *model.ResponseScheme, error) {
-	return f.internalClient.Gets(ctx, filterId)
+func (f *FilterShareService) Gets(ctx context.Context, filterID int) ([]*model.SharePermissionScheme, *model.ResponseScheme, error) {
+	return f.internalClient.Gets(ctx, filterID)
 }
 
 // Add a share permissions to a filter.
@@ -64,8 +65,8 @@ func (f *FilterShareService) Gets(ctx context.Context, filterId int) ([]*model.S
 // POST /rest/api/{2-3}/filter/{id}/permission
 //
 // https://docs.go-atlassian.io/jira-software-cloud/filters/sharing#add-share-permission
-func (f *FilterShareService) Add(ctx context.Context, filterId int, payload *model.PermissionFilterPayloadScheme) ([]*model.SharePermissionScheme, *model.ResponseScheme, error) {
-	return f.internalClient.Add(ctx, filterId, payload)
+func (f *FilterShareService) Add(ctx context.Context, filterID int, payload *model.PermissionFilterPayloadScheme) ([]*model.SharePermissionScheme, *model.ResponseScheme, error) {
+	return f.internalClient.Add(ctx, filterID, payload)
 }
 
 // Get returns a share permission for a filter.
@@ -74,20 +75,20 @@ func (f *FilterShareService) Add(ctx context.Context, filterId int, payload *mod
 //
 // Sharing with all logged-in users or the public is known as a global share permission.
 //
-// GET /rest/api/{2-3}/filter/{id}/permission/{permissionId}
+// GET /rest/api/{2-3}/filter/{id}/permission/{permissionID}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/filters/sharing#get-share-permission
-func (f *FilterShareService) Get(ctx context.Context, filterId, permissionId int) (*model.SharePermissionScheme, *model.ResponseScheme, error) {
-	return f.internalClient.Get(ctx, filterId, permissionId)
+func (f *FilterShareService) Get(ctx context.Context, filterID, permissionID int) (*model.SharePermissionScheme, *model.ResponseScheme, error) {
+	return f.internalClient.Get(ctx, filterID, permissionID)
 }
 
 // Delete deletes a share permission from a filter.
 //
-// DELETE /rest/api/{2-3}/filter/{id}/permission/{permissionId}
+// DELETE /rest/api/{2-3}/filter/{id}/permission/{permissionID}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/filters/sharing#delete-share-permission
-func (f *FilterShareService) Delete(ctx context.Context, filterId, permissionId int) (*model.ResponseScheme, error) {
-	return f.internalClient.Delete(ctx, filterId, permissionId)
+func (f *FilterShareService) Delete(ctx context.Context, filterID, permissionID int) (*model.ResponseScheme, error) {
+	return f.internalClient.Delete(ctx, filterID, permissionID)
 }
 
 type internalFilterShareImpl struct {
@@ -125,13 +126,13 @@ func (i *internalFilterShareImpl) SetScope(ctx context.Context, scope string) (*
 	return i.c.Call(request, nil)
 }
 
-func (i *internalFilterShareImpl) Gets(ctx context.Context, filterId int) ([]*model.SharePermissionScheme, *model.ResponseScheme, error) {
+func (i *internalFilterShareImpl) Gets(ctx context.Context, filterID int) ([]*model.SharePermissionScheme, *model.ResponseScheme, error) {
 
-	if filterId == 0 {
+	if filterID == 0 {
 		return nil, nil, model.ErrNoFilterIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/filter/%v/permission", i.version, filterId)
+	endpoint := fmt.Sprintf("rest/api/%v/filter/%v/permission", i.version, filterID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
@@ -147,13 +148,13 @@ func (i *internalFilterShareImpl) Gets(ctx context.Context, filterId int) ([]*mo
 	return filters, response, nil
 }
 
-func (i *internalFilterShareImpl) Add(ctx context.Context, filterId int, payload *model.PermissionFilterPayloadScheme) ([]*model.SharePermissionScheme, *model.ResponseScheme, error) {
+func (i *internalFilterShareImpl) Add(ctx context.Context, filterID int, payload *model.PermissionFilterPayloadScheme) ([]*model.SharePermissionScheme, *model.ResponseScheme, error) {
 
-	if filterId == 0 {
+	if filterID == 0 {
 		return nil, nil, model.ErrNoFilterIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/filter/%v/permission", i.version, filterId)
+	endpoint := fmt.Sprintf("rest/api/%v/filter/%v/permission", i.version, filterID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
@@ -169,17 +170,17 @@ func (i *internalFilterShareImpl) Add(ctx context.Context, filterId int, payload
 	return permissions, response, nil
 }
 
-func (i *internalFilterShareImpl) Get(ctx context.Context, filterId, permissionId int) (*model.SharePermissionScheme, *model.ResponseScheme, error) {
+func (i *internalFilterShareImpl) Get(ctx context.Context, filterID, permissionID int) (*model.SharePermissionScheme, *model.ResponseScheme, error) {
 
-	if filterId == 0 {
+	if filterID == 0 {
 		return nil, nil, model.ErrNoFilterIDError
 	}
 
-	if permissionId == 0 {
+	if permissionID == 0 {
 		return nil, nil, model.ErrNoPermissionGrantIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/filter/%v/permission/%v", i.version, filterId, permissionId)
+	endpoint := fmt.Sprintf("rest/api/%v/filter/%v/permission/%v", i.version, filterID, permissionID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
@@ -195,17 +196,17 @@ func (i *internalFilterShareImpl) Get(ctx context.Context, filterId, permissionI
 	return permission, response, nil
 }
 
-func (i *internalFilterShareImpl) Delete(ctx context.Context, filterId, permissionId int) (*model.ResponseScheme, error) {
+func (i *internalFilterShareImpl) Delete(ctx context.Context, filterID, permissionID int) (*model.ResponseScheme, error) {
 
-	if filterId == 0 {
+	if filterID == 0 {
 		return nil, model.ErrNoFilterIDError
 	}
 
-	if permissionId == 0 {
+	if permissionID == 0 {
 		return nil, model.ErrNoPermissionGrantIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/filter/%v/permission/%v", i.version, filterId, permissionId)
+	endpoint := fmt.Sprintf("rest/api/%v/filter/%v/permission/%v", i.version, filterID, permissionID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {

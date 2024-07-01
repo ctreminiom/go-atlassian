@@ -3,12 +3,13 @@ package internal
 import (
 	"context"
 	"fmt"
-	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/service"
-	"github.com/ctreminiom/go-atlassian/service/jira"
 	"net/http"
 	"net/url"
 	"strconv"
+
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/service"
+	"github.com/ctreminiom/go-atlassian/service/jira"
 )
 
 func NewGroupService(client service.Connector, version string) (*GroupService, error) {
@@ -58,8 +59,8 @@ func (g *GroupService) Members(ctx context.Context, groupName string, inactive b
 // POST /rest/api/{2-3}/group/user
 //
 // https://docs.go-atlassian.io/jira-software-cloud/groups#add-user-to-group
-func (g *GroupService) Add(ctx context.Context, groupName, accountId string) (*model.GroupScheme, *model.ResponseScheme, error) {
-	return g.internalClient.Add(ctx, groupName, accountId)
+func (g *GroupService) Add(ctx context.Context, groupName, accountID string) (*model.GroupScheme, *model.ResponseScheme, error) {
+	return g.internalClient.Add(ctx, groupName, accountID)
 }
 
 // Remove removes a user from a group.
@@ -67,8 +68,8 @@ func (g *GroupService) Add(ctx context.Context, groupName, accountId string) (*m
 // DELETE /rest/api/{2-3}/group/user
 //
 // https://docs.go-atlassian.io/jira-software-cloud/groups#remove-user-from-group
-func (g *GroupService) Remove(ctx context.Context, groupName, accountId string) (*model.ResponseScheme, error) {
-	return g.internalClient.Remove(ctx, groupName, accountId)
+func (g *GroupService) Remove(ctx context.Context, groupName, accountID string) (*model.ResponseScheme, error) {
+	return g.internalClient.Remove(ctx, groupName, accountID)
 }
 
 // Create creates a group.
@@ -187,13 +188,13 @@ func (i *internalGroupServiceImpl) Members(ctx context.Context, groupName string
 	return page, response, nil
 }
 
-func (i *internalGroupServiceImpl) Add(ctx context.Context, groupName, accountId string) (*model.GroupScheme, *model.ResponseScheme, error) {
+func (i *internalGroupServiceImpl) Add(ctx context.Context, groupName, accountID string) (*model.GroupScheme, *model.ResponseScheme, error) {
 
 	if groupName == "" {
 		return nil, nil, model.ErrNoGroupNameError
 	}
 
-	if accountId == "" {
+	if accountID == "" {
 		return nil, nil, model.ErrNoAccountIDError
 	}
 
@@ -201,7 +202,7 @@ func (i *internalGroupServiceImpl) Add(ctx context.Context, groupName, accountId
 	params.Add("groupname", groupName)
 	endpoint := fmt.Sprintf("rest/api/%v/group/user?%v", i.version, params.Encode())
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", map[string]interface{}{"accountId": accountId})
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", map[string]interface{}{"accountId": accountID})
 	if err != nil {
 		return nil, nil, err
 	}
@@ -215,19 +216,19 @@ func (i *internalGroupServiceImpl) Add(ctx context.Context, groupName, accountId
 	return group, response, nil
 }
 
-func (i *internalGroupServiceImpl) Remove(ctx context.Context, groupName, accountId string) (*model.ResponseScheme, error) {
+func (i *internalGroupServiceImpl) Remove(ctx context.Context, groupName, accountID string) (*model.ResponseScheme, error) {
 
 	if groupName == "" {
 		return nil, model.ErrNoGroupNameError
 	}
 
-	if accountId == "" {
+	if accountID == "" {
 		return nil, model.ErrNoAccountIDError
 	}
 
 	params := url.Values{}
 	params.Add("groupname", groupName)
-	params.Add("accountId", accountId)
+	params.Add("accountId", accountID)
 	endpoint := fmt.Sprintf("rest/api/%v/group/user?%v", i.version, params.Encode())
 
 	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)

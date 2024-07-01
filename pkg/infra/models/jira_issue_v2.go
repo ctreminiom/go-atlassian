@@ -112,7 +112,7 @@ type IssueFieldsSchemeV2 struct {
 	Reporter                 *UserScheme                     `json:"reporter,omitempty"`
 	Assignee                 *UserScheme                     `json:"assignee,omitempty"`
 	Resolution               *ResolutionScheme               `json:"resolution,omitempty"`
-	Resolutiondate           string                          `json:"resolutiondate,omitempty"`
+	ResolutionDate           string                          `json:"resolutiondate,omitempty"`
 	Workratio                int                             `json:"workratio,omitempty"`
 	StatusCategoryChangeDate string                          `json:"statuscategorychangedate,omitempty"`
 	LastViewed               string                          `json:"lastViewed,omitempty"`

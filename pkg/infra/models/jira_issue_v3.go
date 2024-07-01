@@ -112,7 +112,7 @@ type IssueFieldsScheme struct {
 	Reporter                 *UserScheme                `json:"reporter,omitempty"`                 // The user who reported the issue.
 	Assignee                 *UserScheme                `json:"assignee,omitempty"`                 // The user assigned to the issue.
 	Resolution               *ResolutionScheme          `json:"resolution,omitempty"`               // The resolution of the issue.
-	Resolutiondate           string                     `json:"resolutiondate,omitempty"`           // The date the issue was resolved.
+	ResolutionDate           string                     `json:"resolutiondate,omitempty"`           // The date the issue was resolved.
 	Workratio                int                        `json:"workratio,omitempty"`                // The work ratio of the issue.
 	StatusCategoryChangeDate string                     `json:"statuscategorychangedate,omitempty"` // The date the status category changed.
 	LastViewed               string                     `json:"lastViewed,omitempty"`               // The last time the issue was viewed.

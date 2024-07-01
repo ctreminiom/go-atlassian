@@ -10,10 +10,10 @@ type TicketPageScheme struct {
 
 // TicketScheme represents a ticket.
 type TicketScheme struct {
-	WorkspaceId string                `json:"workspaceId,omitempty"` // The ID of the workspace.
-	GlobalId    string                `json:"globalId,omitempty"`    // The global ID of the ticket.
+	WorkspaceID string                `json:"workspaceId,omitempty"` // The ID of the workspace.
+	GlobalID    string                `json:"globalId,omitempty"`    // The global ID of the ticket.
 	Key         string                `json:"key,omitempty"`         // The key of the ticket.
-	Id          string                `json:"id,omitempty"`          // The ID of the ticket.
+	ID          string                `json:"id,omitempty"`          // The ID of the ticket.
 	Reporter    string                `json:"reporter,omitempty"`    // The reporter of the ticket.
 	Created     string                `json:"created,omitempty"`     // The creation time of the ticket.
 	Updated     string                `json:"updated,omitempty"`     // The update time of the ticket.

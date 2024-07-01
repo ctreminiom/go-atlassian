@@ -10,8 +10,8 @@ type JiraTeamPageScheme struct {
 
 // JiraTeamScheme represents a team in Jira.
 type JiraTeamScheme struct {
-	Id         int                       `json:"id,omitempty"`         // The ID of the team.
-	ExternalId string                    `json:"externalId,omitempty"` // The external ID of the team.
+	ID         int                       `json:"id,omitempty"`         // The ID of the team.
+	ExternalID string                    `json:"externalId,omitempty"` // The external ID of the team.
 	Title      string                    `json:"title,omitempty"`      // The title of the team.
 	Shareable  bool                      `json:"shareable,omitempty"`  // Indicates if the team is shareable.
 	Resources  []*JiraTeamResourceScheme `json:"resources,omitempty"`  // The resources of the team.
@@ -19,13 +19,13 @@ type JiraTeamScheme struct {
 
 // JiraTeamResourceScheme represents a resource in a Jira team.
 type JiraTeamResourceScheme struct {
-	Id       int `json:"id,omitempty"`       // The ID of the resource.
-	PersonId int `json:"personId,omitempty"` // The ID of the person associated with the resource.
+	ID       int `json:"id,omitempty"`       // The ID of the resource.
+	PersonID int `json:"personId,omitempty"` // The ID of the person associated with the resource.
 }
 
 // JiraTeamPersonScheme represents a person in a Jira team.
 type JiraTeamPersonScheme struct {
-	PersonId int                 `json:"personId,omitempty"` // The ID of the person.
+	PersonID int                 `json:"personId,omitempty"` // The ID of the person.
 	JiraUser *JiraTeamUserScheme `json:"jiraUser,omitempty"` // The Jira user associated with the person.
 }
 
@@ -33,7 +33,7 @@ type JiraTeamPersonScheme struct {
 type JiraTeamUserScheme struct {
 	Title     string `json:"title,omitempty"`     // The title of the user.
 	Email     string `json:"email,omitempty"`     // The email of the user.
-	AvatarUrl string `json:"avatarUrl,omitempty"` // The avatar URL of the user.
+	AvatarURL string `json:"avatarUrl,omitempty"` // The avatar URL of the user.
 }
 
 // JiraTeamCreatePayloadScheme represents the payload for creating a Jira team.

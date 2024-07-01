@@ -21,5 +21,5 @@ type WorkSpaceLinksPageScheme struct {
 // WorkSpaceScheme represents a workspace.
 // It contains the ID of the workspace.
 type WorkSpaceScheme struct {
-	WorkspaceId string `json:"workspaceId,omitempty"` // The ID of the workspace.
+	WorkspaceID string `json:"workspaceId,omitempty"` // The ID of the workspace.
 }

@@ -3,12 +3,14 @@ package internal
 import (
 	"context"
 	"errors"
+	"net/http"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
-	"github.com/stretchr/testify/assert"
-	"net/http"
-	"testing"
 )
 
 func Test_internalObjectTypeAttributeImpl_Create(t *testing.T) {
@@ -25,7 +27,7 @@ func Test_internalObjectTypeAttributeImpl_Create(t *testing.T) {
 		Label:                   false,
 		Type:                    &attributeType,
 		Description:             "",
-		DefaultTypeId:           &defaultTypeID,
+		DefaultTypeID:           &defaultTypeID,
 		TypeValue:               "",
 		TypeValueMulti:          nil,
 		AdditionalValue:         "",
@@ -185,7 +187,7 @@ func Test_internalObjectTypeAttributeImpl_Update(t *testing.T) {
 		Label:                   false,
 		Type:                    &attributeType,
 		Description:             "",
-		DefaultTypeId:           &defaultTypeID,
+		DefaultTypeID:           &defaultTypeID,
 		TypeValue:               "",
 		TypeValueMulti:          nil,
 		AdditionalValue:         "",

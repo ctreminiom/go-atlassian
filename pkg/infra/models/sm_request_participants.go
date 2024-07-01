@@ -35,5 +35,5 @@ type RequestParticipantScheme struct {
 // RequestParticipantLinkScheme represents the links related to a request participant.
 type RequestParticipantLinkScheme struct {
 	Self     string `json:"self,omitempty"`     // The self link of the participant.
-	JiraRest string `json:"jiraRest,omitempty"` // The Jira REST link of the participant.
+	JiraREST string `json:"jiraRest,omitempty"` // The Jira REST link of the participant.
 }

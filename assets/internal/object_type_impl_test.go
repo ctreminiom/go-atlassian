@@ -3,13 +3,15 @@ package internal
 import (
 	"context"
 	"errors"
+	"net/http"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
-	"net/http"
-	"testing"
 )
 
 func Test_internalObjectTypeImpl_Get(t *testing.T) {
@@ -397,8 +399,8 @@ func Test_internalObjectTypeImpl_Update(t *testing.T) {
 		Name:               "Office",
 		Description:        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec ex.",
 		IconId:             "13",
-		ObjectSchemaId:     "",
-		ParentObjectTypeId: "",
+		ObjectSchemaID:     "",
+		ParentObjectTypeID: "",
 		Inherited:          true,
 		AbstractObjectType: true,
 	}
@@ -537,8 +539,8 @@ func Test_internalObjectTypeImpl_Create(t *testing.T) {
 		Name:               "Office",
 		Description:        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec ex.",
 		IconId:             "13",
-		ObjectSchemaId:     "",
-		ParentObjectTypeId: "",
+		ObjectSchemaID:     "",
+		ParentObjectTypeID: "",
 		Inherited:          true,
 		AbstractObjectType: true,
 	}
@@ -661,7 +663,7 @@ func Test_internalObjectTypeImpl_Create(t *testing.T) {
 func Test_internalObjectTypeImpl_Position(t *testing.T) {
 
 	payloadMocked := &model.ObjectTypePositionPayloadScheme{
-		ToObjectTypeId: "2",
+		ToObjectTypeID: "2",
 		Position:       0,
 	}
 

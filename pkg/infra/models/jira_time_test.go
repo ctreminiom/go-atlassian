@@ -92,8 +92,8 @@ func TestDateTimeScheme_MarshalJSON(t *testing.T) {
 	}{
 		{
 			name:    "random time",
-			t:       DateTimeScheme(time.Date(2021, 6, 22, 7, 34, 41, 123, time.UTC)),
-			want:    []byte(`2021-06-22T07:34:41+0000`),
+			t:       DateTimeScheme(time.Date(2021, 6, 22, 7, 34, 41, 123, time.FixedZone("UTC-9", -32400))),
+			want:    []byte(`2021-06-22T07:34:41-0900`),
 			wantErr: assert.NoError,
 		},
 		{

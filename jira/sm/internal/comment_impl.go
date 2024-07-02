@@ -79,17 +79,18 @@ func (i *internalServiceRequestCommentImpl) Gets(ctx context.Context, issueKeyOr
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/request/%v/comment", issueKeyOrID)
 
-	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	if options != nil {
 		q, err := query.Values(options)
 		if err != nil {
 			return nil, nil, err
 		}
-		req.URL.RawQuery = q.Encode()
+
+		endpoint += "?" + q.Encode()
+	}
+
+	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
+	if err != nil {
+		return nil, nil, err
 	}
 
 	page := new(model.RequestCommentPageScheme)

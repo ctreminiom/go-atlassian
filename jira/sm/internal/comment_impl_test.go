@@ -3,12 +3,14 @@ package internal
 import (
 	"context"
 	"errors"
+	"net/http"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
-	"github.com/stretchr/testify/assert"
-	"net/http"
-	"testing"
 )
 
 func Test_internalServiceRequestCommentImpl_Gets(t *testing.T) {
@@ -20,10 +22,10 @@ func Test_internalServiceRequestCommentImpl_Gets(t *testing.T) {
 	type args struct {
 		ctx          context.Context
 		issueKeyOrID string
-		public       bool
-		expand       []string
-		start, limit int
+		options      *model.RequestCommentOptionsScheme
 	}
+
+	truePtr := true
 
 	testCases := []struct {
 		name    string
@@ -38,10 +40,12 @@ func Test_internalServiceRequestCommentImpl_Gets(t *testing.T) {
 			args: args{
 				ctx:          context.Background(),
 				issueKeyOrID: "DUMMY-2",
-				public:       true,
-				expand:       []string{"attachment"},
-				start:        100,
-				limit:        50,
+				options: &model.RequestCommentOptionsScheme{
+					Public: &truePtr,
+					Expand: []string{"attachment"},
+					Start:  100,
+					Limit:  50,
+				},
 			},
 			on: func(fields *fields) {
 
@@ -50,7 +54,7 @@ func Test_internalServiceRequestCommentImpl_Gets(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"rest/servicedeskapi/request/DUMMY-2/comment?expand=attachment&limit=50&start=100",
+					"rest/servicedeskapi/request/DUMMY-2/comment?expand=attachment&limit=50&public=true&start=100",
 					"",
 					nil).
 					Return(&http.Request{}, nil)
@@ -69,10 +73,12 @@ func Test_internalServiceRequestCommentImpl_Gets(t *testing.T) {
 			args: args{
 				ctx:          context.Background(),
 				issueKeyOrID: "DUMMY-2",
-				public:       true,
-				expand:       []string{"attachment"},
-				start:        100,
-				limit:        50,
+				options: &model.RequestCommentOptionsScheme{
+					Public: &truePtr,
+					Expand: []string{"attachment"},
+					Start:  100,
+					Limit:  50,
+				},
 			},
 			on: func(fields *fields) {
 
@@ -81,7 +87,7 @@ func Test_internalServiceRequestCommentImpl_Gets(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"rest/servicedeskapi/request/DUMMY-2/comment?expand=attachment&limit=50&start=100",
+					"rest/servicedeskapi/request/DUMMY-2/comment?expand=attachment&limit=50&public=true&start=100",
 					"",
 					nil).
 					Return(&http.Request{}, nil)
@@ -102,10 +108,12 @@ func Test_internalServiceRequestCommentImpl_Gets(t *testing.T) {
 			args: args{
 				ctx:          context.Background(),
 				issueKeyOrID: "DUMMY-2",
-				public:       true,
-				expand:       []string{"attachment"},
-				start:        100,
-				limit:        50,
+				options: &model.RequestCommentOptionsScheme{
+					Public: &truePtr,
+					Expand: []string{"attachment"},
+					Start:  100,
+					Limit:  50,
+				},
 			},
 			on: func(fields *fields) {
 
@@ -114,7 +122,7 @@ func Test_internalServiceRequestCommentImpl_Gets(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"rest/servicedeskapi/request/DUMMY-2/comment?expand=attachment&limit=50&start=100",
+					"rest/servicedeskapi/request/DUMMY-2/comment?expand=attachment&limit=50&public=true&start=100",
 					"",
 					nil).
 					Return(&http.Request{}, errors.New("client: no http request created"))
@@ -147,9 +155,7 @@ func Test_internalServiceRequestCommentImpl_Gets(t *testing.T) {
 
 			commentService := NewCommentService(testCase.fields.c, "latest")
 
-			gotResult, gotResponse, err := commentService.Gets(testCase.args.ctx, testCase.args.issueKeyOrID, testCase.args.public,
-				testCase.args.expand, testCase.args.start,
-				testCase.args.limit)
+			gotResult, gotResponse, err := commentService.Gets(testCase.args.ctx, testCase.args.issueKeyOrID, testCase.args.options)
 
 			if testCase.wantErr {
 

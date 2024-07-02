@@ -3,13 +3,16 @@ package internal
 import (
 	"context"
 	"fmt"
-	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/service"
-	"github.com/ctreminiom/go-atlassian/service/sm"
 	"net/http"
 	"net/url"
 	"strconv"
 	"strings"
+
+	"github.com/google/go-querystring/query"
+
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/service"
+	"github.com/ctreminiom/go-atlassian/service/sm"
 )
 
 func NewCommentService(client service.Connector, version string) *CommentService {
@@ -32,8 +35,8 @@ type CommentService struct {
 // GET /rest/servicedeskapi/request/{issueIdOrKey}/comment
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request/comments#get-request-comments
-func (s *CommentService) Gets(ctx context.Context, issueKeyOrID string, public bool, expand []string, start, limit int) (*model.RequestCommentPageScheme, *model.ResponseScheme, error) {
-	return s.internalClient.Gets(ctx, issueKeyOrID, public, expand, start, limit)
+func (s *CommentService) Gets(ctx context.Context, issueKeyOrID string, options *model.RequestCommentOptionsScheme) (*model.RequestCommentPageScheme, *model.ResponseScheme, error) {
+	return s.internalClient.Gets(ctx, issueKeyOrID, options)
 }
 
 // Get returns details of a customer request's comment.
@@ -68,25 +71,22 @@ type internalServiceRequestCommentImpl struct {
 	version string
 }
 
-func (i *internalServiceRequestCommentImpl) Gets(ctx context.Context, issueKeyOrID string, public bool, expand []string, start, limit int) (*model.RequestCommentPageScheme, *model.ResponseScheme, error) {
+func (i *internalServiceRequestCommentImpl) Gets(ctx context.Context, issueKeyOrID string, options *model.RequestCommentOptionsScheme) (*model.RequestCommentPageScheme, *model.ResponseScheme, error) {
 
 	if issueKeyOrID == "" {
 		return nil, nil, model.ErrNoIssueKeyOrIDError
 	}
 
-	params := url.Values{}
-	params.Add("start", strconv.Itoa(start))
-	params.Add("limit", strconv.Itoa(limit))
+	endpoint := fmt.Sprintf("rest/servicedeskapi/request/%v/comment", issueKeyOrID)
 
-	if !public {
-		params.Add("public", "false")
+	if options != nil {
+		q, err := query.Values(options)
+		if err != nil {
+			return nil, nil, err
+		}
+
+		endpoint += "?" + q.Encode()
 	}
-
-	if len(expand) != 0 {
-		params.Add("expand", strings.Join(expand, ","))
-	}
-
-	endpoint := fmt.Sprintf("rest/servicedeskapi/request/%v/comment?%v", issueKeyOrID, params.Encode())
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {

@@ -2,6 +2,7 @@ package sm
 
 import (
 	"context"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 )
 
@@ -16,7 +17,7 @@ type CommentConnector interface {
 	// GET /rest/servicedeskapi/request/{issueIdOrKey}/comment
 	//
 	// https://docs.go-atlassian.io/jira-service-management-cloud/request/comments#get-request-comments
-	Gets(ctx context.Context, issueKeyOrID string, public bool, expand []string, start, limit int) (*model.RequestCommentPageScheme, *model.ResponseScheme, error)
+	Gets(ctx context.Context, issueKeyOrID string, options *model.RequestCommentOptionsScheme) (*model.RequestCommentPageScheme, *model.ResponseScheme, error)
 
 	// Get returns details of a customer request's comment.
 	//

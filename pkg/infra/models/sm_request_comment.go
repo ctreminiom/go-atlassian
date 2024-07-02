@@ -1,5 +1,13 @@
 package models
 
+type RequestCommentOptionsScheme struct {
+	Public   *bool    `url:"public,omitempty"`
+	Internal *bool    `url:"internal,omitempty"`
+	Expand   []string `url:"expand,omitempty"`
+	Start    int      `url:"start,omitempty"`
+	Limit    int      `url:"limit,omitempty"`
+}
+
 // RequestCommentPageScheme represents a page of request comments in a system.
 type RequestCommentPageScheme struct {
 	Size       int                           `json:"size"`       // The number of request comments on the page.

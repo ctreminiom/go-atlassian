@@ -5,13 +5,14 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/ctreminiom/go-atlassian/jira/internal"
-	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/service/common"
 	"io"
 	"net/http"
 	"net/url"
 	"strings"
+
+	"github.com/ctreminiom/go-atlassian/jira/internal"
+	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/service/common"
 )
 
 const ApiVersion = "2"
@@ -63,6 +64,11 @@ func New(httpClient common.HttpClient, site string) (*Client, error) {
 	}
 
 	filterService, err := internal.NewFilterService(client, ApiVersion, filterShareService)
+	if err != nil {
+		return nil, err
+	}
+
+	groupUserPickerService, err := internal.NewGroupUserPickerService(client, ApiVersion)
 	if err != nil {
 		return nil, err
 	}
@@ -374,6 +380,7 @@ func New(httpClient common.HttpClient, site string) (*Client, error) {
 	client.Role = applicationRoleService
 	client.Dashboard = dashboardService
 	client.Filter = filterService
+	client.GroupUserPicker = groupUserPickerService
 	client.Group = groupService
 	client.Issue = issueService
 	client.Project = project
@@ -399,6 +406,7 @@ type Client struct {
 	Dashboard          *internal.DashboardService
 	Filter             *internal.FilterService
 	Group              *internal.GroupService
+	GroupUserPicker    *internal.GroupUserPickerService
 	Issue              *internal.IssueRichTextService
 	MySelf             *internal.MySelfService
 	Permission         *internal.PermissionService

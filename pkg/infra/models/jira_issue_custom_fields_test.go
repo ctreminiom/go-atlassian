@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-func TestParseMultiSelectField(t *testing.T) {
+func TestParseMultiSelectCustomField(t *testing.T) {
 
 	bufferMocked := bytes.Buffer{}
 	bufferMocked.WriteString(`

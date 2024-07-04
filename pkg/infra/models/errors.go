@@ -162,6 +162,7 @@ var (
 	ErrNoCascadingParentError              = errors.New("custom-field: no cascading parent value set")
 	ErrNoCascadingChildError               = errors.New("custom-field: no cascading child value set")
 	ErrNoValueTypeError                    = errors.New("custom-field: no value set")
+	ErrNoTempoAccountTypeError             = errors.New("custom-field: no tempo account value set")
 	ErrNoAttachmentIdsError                = errors.New("sm: no attachment id's set")
 	ErrNoLabelsError                       = errors.New("sm: no label names set")
 	ErrNoComponentsError                   = errors.New("sm: no components set")

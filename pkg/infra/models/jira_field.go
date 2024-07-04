@@ -84,6 +84,6 @@ type CustomFieldRequestTypeLinkScheme struct {
 }
 
 type CustomFieldTempoAccountScheme struct {
+	ID    int    `json:"id"`
 	Value string `json:"value"`
-	ID    string `json:"id"`
 }

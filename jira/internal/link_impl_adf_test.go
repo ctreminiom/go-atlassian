@@ -3,12 +3,14 @@ package internal
 import (
 	"context"
 	"errors"
+	"net/http"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
-	"github.com/stretchr/testify/assert"
-	"net/http"
-	"testing"
 )
 
 func Test_internalLinkADFServiceImpl_Get(t *testing.T) {
@@ -20,7 +22,7 @@ func Test_internalLinkADFServiceImpl_Get(t *testing.T) {
 
 	type args struct {
 		ctx    context.Context
-		linkId string
+		linkID string
 	}
 
 	testCases := []struct {
@@ -36,7 +38,7 @@ func Test_internalLinkADFServiceImpl_Get(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:    context.Background(),
-				linkId: "10002",
+				linkID: "10002",
 			},
 			on: func(fields *fields) {
 
@@ -66,7 +68,7 @@ func Test_internalLinkADFServiceImpl_Get(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:    context.Background(),
-				linkId: "10002",
+				linkID: "10002",
 			},
 			on: func(fields *fields) {
 
@@ -96,7 +98,7 @@ func Test_internalLinkADFServiceImpl_Get(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:    context.Background(),
-				linkId: "10002",
+				linkID: "10002",
 			},
 			on: func(fields *fields) {
 
@@ -121,7 +123,7 @@ func Test_internalLinkADFServiceImpl_Get(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:    context.Background(),
-				linkId: "",
+				linkID: "",
 			},
 			wantErr: true,
 			Err:     model.ErrNoTypeIDError,
@@ -138,7 +140,7 @@ func Test_internalLinkADFServiceImpl_Get(t *testing.T) {
 			linkService, _, err := NewLinkService(testCase.fields.c, testCase.fields.version, nil, nil)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := linkService.Get(testCase.args.ctx, testCase.args.linkId)
+			gotResult, gotResponse, err := linkService.Get(testCase.args.ctx, testCase.args.linkID)
 
 			if testCase.wantErr {
 
@@ -168,7 +170,7 @@ func Test_internalLinkADFServiceImpl_Gets(t *testing.T) {
 
 	type args struct {
 		ctx          context.Context
-		issueKeyOrId string
+		issueKeyOrID string
 	}
 
 	testCases := []struct {
@@ -184,7 +186,7 @@ func Test_internalLinkADFServiceImpl_Gets(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-4",
+				issueKeyOrID: "DUMMY-4",
 			},
 			on: func(fields *fields) {
 
@@ -214,7 +216,7 @@ func Test_internalLinkADFServiceImpl_Gets(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-4",
+				issueKeyOrID: "DUMMY-4",
 			},
 			on: func(fields *fields) {
 
@@ -244,7 +246,7 @@ func Test_internalLinkADFServiceImpl_Gets(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "",
+				issueKeyOrID: "",
 			},
 			wantErr: true,
 			Err:     model.ErrNoIssueKeyOrIDError,
@@ -255,7 +257,7 @@ func Test_internalLinkADFServiceImpl_Gets(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-4",
+				issueKeyOrID: "DUMMY-4",
 			},
 			on: func(fields *fields) {
 
@@ -286,7 +288,7 @@ func Test_internalLinkADFServiceImpl_Gets(t *testing.T) {
 			linkService, _, err := NewLinkService(testCase.fields.c, testCase.fields.version, nil, nil)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := linkService.Gets(testCase.args.ctx, testCase.args.issueKeyOrId)
+			gotResult, gotResponse, err := linkService.Gets(testCase.args.ctx, testCase.args.issueKeyOrID)
 
 			if testCase.wantErr {
 
@@ -316,7 +318,7 @@ func Test_internalLinkADFServiceImpl_Delete(t *testing.T) {
 
 	type args struct {
 		ctx    context.Context
-		linkId string
+		linkID string
 	}
 
 	testCases := []struct {
@@ -332,7 +334,7 @@ func Test_internalLinkADFServiceImpl_Delete(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:    context.Background(),
-				linkId: "10002",
+				linkID: "10002",
 			},
 			on: func(fields *fields) {
 
@@ -362,7 +364,7 @@ func Test_internalLinkADFServiceImpl_Delete(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:    context.Background(),
-				linkId: "10002",
+				linkID: "10002",
 			},
 			on: func(fields *fields) {
 
@@ -392,7 +394,7 @@ func Test_internalLinkADFServiceImpl_Delete(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:    context.Background(),
-				linkId: "10002",
+				linkID: "10002",
 			},
 			on: func(fields *fields) {
 
@@ -417,7 +419,7 @@ func Test_internalLinkADFServiceImpl_Delete(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:    context.Background(),
-				linkId: "",
+				linkID: "",
 			},
 			wantErr: true,
 			Err:     model.ErrNoTypeIDError,
@@ -434,7 +436,7 @@ func Test_internalLinkADFServiceImpl_Delete(t *testing.T) {
 			linkService, _, err := NewLinkService(testCase.fields.c, testCase.fields.version, nil, nil)
 			assert.NoError(t, err)
 
-			gotResponse, err := linkService.Delete(testCase.args.ctx, testCase.args.linkId)
+			gotResponse, err := linkService.Delete(testCase.args.ctx, testCase.args.linkID)
 
 			if testCase.wantErr {
 

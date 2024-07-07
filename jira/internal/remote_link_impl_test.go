@@ -3,13 +3,15 @@ package internal
 import (
 	"context"
 	"errors"
+	"net/http"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
-	"net/http"
-	"testing"
 )
 
 func Test_internalRemoteLinkImpl_Gets(t *testing.T) {
@@ -21,7 +23,7 @@ func Test_internalRemoteLinkImpl_Gets(t *testing.T) {
 
 	type args struct {
 		ctx                    context.Context
-		issueKeyOrId, globalId string
+		issueKeyOrID, globalID string
 	}
 
 	testCases := []struct {
@@ -56,8 +58,8 @@ func Test_internalRemoteLinkImpl_Gets(t *testing.T) {
 			},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "KP-23",
-				globalId:     "system=http://www.mycompany.com/support&id=1",
+				issueKeyOrID: "KP-23",
+				globalID:     "system=http://www.mycompany.com/support&id=1",
 			},
 			wantErr: false,
 		},
@@ -86,8 +88,8 @@ func Test_internalRemoteLinkImpl_Gets(t *testing.T) {
 			},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "KP-23",
-				globalId:     "system=http://www.mycompany.com/support&id=1",
+				issueKeyOrID: "KP-23",
+				globalID:     "system=http://www.mycompany.com/support&id=1",
 			},
 			wantErr: false,
 		},
@@ -121,8 +123,8 @@ func Test_internalRemoteLinkImpl_Gets(t *testing.T) {
 			},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "KP-23",
-				globalId:     "system=http://www.mycompany.com/support&id=1",
+				issueKeyOrID: "KP-23",
+				globalID:     "system=http://www.mycompany.com/support&id=1",
 			},
 			wantErr: true,
 			Err:     errors.New("unable to create the http request"),
@@ -152,8 +154,8 @@ func Test_internalRemoteLinkImpl_Gets(t *testing.T) {
 			},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "KP-23",
-				globalId:     "system=http://www.mycompany.com/support&id=1",
+				issueKeyOrID: "KP-23",
+				globalID:     "system=http://www.mycompany.com/support&id=1",
 			},
 			wantErr: true,
 			Err:     errors.New("error, unable to execute the http call"),
@@ -170,7 +172,7 @@ func Test_internalRemoteLinkImpl_Gets(t *testing.T) {
 			applicationService, err := NewRemoteLinkService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := applicationService.Gets(testCase.args.ctx, testCase.args.issueKeyOrId, testCase.args.globalId)
+			gotResult, gotResponse, err := applicationService.Gets(testCase.args.ctx, testCase.args.issueKeyOrID, testCase.args.globalID)
 
 			if testCase.wantErr {
 
@@ -199,7 +201,7 @@ func Test_internalRemoteLinkImpl_Get(t *testing.T) {
 
 	type args struct {
 		ctx                  context.Context
-		issueKeyOrId, linkId string
+		issueKeyOrID, linkID string
 	}
 
 	testCases := []struct {
@@ -234,8 +236,8 @@ func Test_internalRemoteLinkImpl_Get(t *testing.T) {
 			},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "KP-23",
-				linkId:       "10001",
+				issueKeyOrID: "KP-23",
+				linkID:       "10001",
 			},
 			wantErr: false,
 		},
@@ -264,8 +266,8 @@ func Test_internalRemoteLinkImpl_Get(t *testing.T) {
 			},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "KP-23",
-				linkId:       "10001",
+				issueKeyOrID: "KP-23",
+				linkID:       "10001",
 			},
 			wantErr: false,
 		},
@@ -285,7 +287,7 @@ func Test_internalRemoteLinkImpl_Get(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "KP-3",
+				issueKeyOrID: "KP-3",
 			},
 			wantErr: true,
 			Err:     model.ErrNoRemoteLinkIDError,
@@ -310,8 +312,8 @@ func Test_internalRemoteLinkImpl_Get(t *testing.T) {
 			},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "KP-23",
-				linkId:       "10001",
+				issueKeyOrID: "KP-23",
+				linkID:       "10001",
 			},
 			wantErr: true,
 			Err:     errors.New("unable to create the http request"),
@@ -341,8 +343,8 @@ func Test_internalRemoteLinkImpl_Get(t *testing.T) {
 			},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "KP-23",
-				linkId:       "10001",
+				issueKeyOrID: "KP-23",
+				linkID:       "10001",
 			},
 			wantErr: true,
 			Err:     errors.New("error, unable to execute the http call"),
@@ -359,7 +361,7 @@ func Test_internalRemoteLinkImpl_Get(t *testing.T) {
 			applicationService, err := NewRemoteLinkService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := applicationService.Get(testCase.args.ctx, testCase.args.issueKeyOrId, testCase.args.linkId)
+			gotResult, gotResponse, err := applicationService.Get(testCase.args.ctx, testCase.args.issueKeyOrID, testCase.args.linkID)
 
 			if testCase.wantErr {
 
@@ -414,7 +416,7 @@ func Test_internalRemoteLinkImpl_Update(t *testing.T) {
 
 	type args struct {
 		ctx                  context.Context
-		issueKeyOrId, linkId string
+		issueKeyOrID, linkID string
 		payload              *model.RemoteLinkScheme
 	}
 
@@ -450,8 +452,8 @@ func Test_internalRemoteLinkImpl_Update(t *testing.T) {
 			},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "KP-23",
-				linkId:       "10001",
+				issueKeyOrID: "KP-23",
+				linkID:       "10001",
 				payload:      payloadMocked,
 			},
 			wantErr: false,
@@ -481,8 +483,8 @@ func Test_internalRemoteLinkImpl_Update(t *testing.T) {
 			},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "KP-23",
-				linkId:       "10001",
+				issueKeyOrID: "KP-23",
+				linkID:       "10001",
 				payload:      payloadMocked,
 			},
 			wantErr: false,
@@ -503,7 +505,7 @@ func Test_internalRemoteLinkImpl_Update(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "KP-3",
+				issueKeyOrID: "KP-3",
 			},
 			wantErr: true,
 			Err:     model.ErrNoRemoteLinkIDError,
@@ -528,8 +530,8 @@ func Test_internalRemoteLinkImpl_Update(t *testing.T) {
 			},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "KP-23",
-				linkId:       "10001",
+				issueKeyOrID: "KP-23",
+				linkID:       "10001",
 				payload:      payloadMocked,
 			},
 			wantErr: true,
@@ -560,8 +562,8 @@ func Test_internalRemoteLinkImpl_Update(t *testing.T) {
 			},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "KP-23",
-				linkId:       "10001",
+				issueKeyOrID: "KP-23",
+				linkID:       "10001",
 				payload:      payloadMocked,
 			},
 			wantErr: true,
@@ -579,7 +581,7 @@ func Test_internalRemoteLinkImpl_Update(t *testing.T) {
 			applicationService, err := NewRemoteLinkService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResponse, err := applicationService.Update(testCase.args.ctx, testCase.args.issueKeyOrId, testCase.args.linkId,
+			gotResponse, err := applicationService.Update(testCase.args.ctx, testCase.args.issueKeyOrID, testCase.args.linkID,
 				testCase.args.payload)
 
 			if testCase.wantErr {
@@ -634,7 +636,7 @@ func Test_internalRemoteLinkImpl_Create(t *testing.T) {
 
 	type args struct {
 		ctx          context.Context
-		issueKeyOrId string
+		issueKeyOrID string
 		payload      *model.RemoteLinkScheme
 	}
 
@@ -670,7 +672,7 @@ func Test_internalRemoteLinkImpl_Create(t *testing.T) {
 			},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "KP-23",
+				issueKeyOrID: "KP-23",
 				payload:      payloadMocked,
 			},
 			wantErr: false,
@@ -700,7 +702,7 @@ func Test_internalRemoteLinkImpl_Create(t *testing.T) {
 			},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "KP-23",
+				issueKeyOrID: "KP-23",
 				payload:      payloadMocked,
 			},
 			wantErr: false,
@@ -735,7 +737,7 @@ func Test_internalRemoteLinkImpl_Create(t *testing.T) {
 			},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "KP-23",
+				issueKeyOrID: "KP-23",
 				payload:      payloadMocked,
 			},
 			wantErr: true,
@@ -766,7 +768,7 @@ func Test_internalRemoteLinkImpl_Create(t *testing.T) {
 			},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "KP-23",
+				issueKeyOrID: "KP-23",
 				payload:      payloadMocked,
 			},
 			wantErr: true,
@@ -784,7 +786,7 @@ func Test_internalRemoteLinkImpl_Create(t *testing.T) {
 			applicationService, err := NewRemoteLinkService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := applicationService.Create(testCase.args.ctx, testCase.args.issueKeyOrId,
+			gotResult, gotResponse, err := applicationService.Create(testCase.args.ctx, testCase.args.issueKeyOrID,
 				testCase.args.payload)
 
 			if testCase.wantErr {
@@ -805,7 +807,7 @@ func Test_internalRemoteLinkImpl_Create(t *testing.T) {
 	}
 }
 
-func Test_internalRemoteLinkImpl_DeleteById(t *testing.T) {
+func Test_internalRemoteLinkImpl_DeleteByID(t *testing.T) {
 
 	type fields struct {
 		c       service.Connector
@@ -814,7 +816,7 @@ func Test_internalRemoteLinkImpl_DeleteById(t *testing.T) {
 
 	type args struct {
 		ctx                  context.Context
-		issueKeyOrId, linkId string
+		issueKeyOrID, linkID string
 	}
 
 	testCases := []struct {
@@ -849,8 +851,8 @@ func Test_internalRemoteLinkImpl_DeleteById(t *testing.T) {
 			},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "KP-23",
-				linkId:       "10001",
+				issueKeyOrID: "KP-23",
+				linkID:       "10001",
 			},
 			wantErr: false,
 		},
@@ -879,8 +881,8 @@ func Test_internalRemoteLinkImpl_DeleteById(t *testing.T) {
 			},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "KP-23",
-				linkId:       "10001",
+				issueKeyOrID: "KP-23",
+				linkID:       "10001",
 			},
 			wantErr: false,
 		},
@@ -900,7 +902,7 @@ func Test_internalRemoteLinkImpl_DeleteById(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "KP-3",
+				issueKeyOrID: "KP-3",
 			},
 			wantErr: true,
 			Err:     model.ErrNoRemoteLinkIDError,
@@ -925,8 +927,8 @@ func Test_internalRemoteLinkImpl_DeleteById(t *testing.T) {
 			},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "KP-23",
-				linkId:       "10001",
+				issueKeyOrID: "KP-23",
+				linkID:       "10001",
 			},
 			wantErr: true,
 			Err:     errors.New("unable to create the http request"),
@@ -956,8 +958,8 @@ func Test_internalRemoteLinkImpl_DeleteById(t *testing.T) {
 			},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "KP-23",
-				linkId:       "10001",
+				issueKeyOrID: "KP-23",
+				linkID:       "10001",
 			},
 			wantErr: true,
 			Err:     errors.New("error, unable to execute the http call"),
@@ -974,7 +976,7 @@ func Test_internalRemoteLinkImpl_DeleteById(t *testing.T) {
 			applicationService, err := NewRemoteLinkService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResponse, err := applicationService.DeleteById(testCase.args.ctx, testCase.args.issueKeyOrId, testCase.args.linkId)
+			gotResponse, err := applicationService.DeleteByID(testCase.args.ctx, testCase.args.issueKeyOrID, testCase.args.linkID)
 
 			if testCase.wantErr {
 
@@ -993,7 +995,7 @@ func Test_internalRemoteLinkImpl_DeleteById(t *testing.T) {
 	}
 }
 
-func Test_internalRemoteLinkImpl_DeleteByGlobalId(t *testing.T) {
+func Test_internalRemoteLinkImpl_DeleteByGlobalID(t *testing.T) {
 
 	type fields struct {
 		c       service.Connector
@@ -1002,7 +1004,7 @@ func Test_internalRemoteLinkImpl_DeleteByGlobalId(t *testing.T) {
 
 	type args struct {
 		ctx                    context.Context
-		issueKeyOrId, globalId string
+		issueKeyOrID, globalID string
 	}
 
 	testCases := []struct {
@@ -1037,8 +1039,8 @@ func Test_internalRemoteLinkImpl_DeleteByGlobalId(t *testing.T) {
 			},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "KP-23",
-				globalId:     "system=http://www.mycompany.com/support&id=1",
+				issueKeyOrID: "KP-23",
+				globalID:     "system=http://www.mycompany.com/support&id=1",
 			},
 			wantErr: false,
 		},
@@ -1067,8 +1069,8 @@ func Test_internalRemoteLinkImpl_DeleteByGlobalId(t *testing.T) {
 			},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "KP-23",
-				globalId:     "system=http://www.mycompany.com/support&id=1",
+				issueKeyOrID: "KP-23",
+				globalID:     "system=http://www.mycompany.com/support&id=1",
 			},
 			wantErr: false,
 		},
@@ -1088,7 +1090,7 @@ func Test_internalRemoteLinkImpl_DeleteByGlobalId(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "KP-3",
+				issueKeyOrID: "KP-3",
 			},
 			wantErr: true,
 			Err:     model.ErrNoRemoteLinkGlobalIDError,
@@ -1113,8 +1115,8 @@ func Test_internalRemoteLinkImpl_DeleteByGlobalId(t *testing.T) {
 			},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "KP-23",
-				globalId:     "system=http://www.mycompany.com/support&id=1",
+				issueKeyOrID: "KP-23",
+				globalID:     "system=http://www.mycompany.com/support&id=1",
 			},
 			wantErr: true,
 			Err:     errors.New("unable to create the http request"),
@@ -1144,8 +1146,8 @@ func Test_internalRemoteLinkImpl_DeleteByGlobalId(t *testing.T) {
 			},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "KP-23",
-				globalId:     "system=http://www.mycompany.com/support&id=1",
+				issueKeyOrID: "KP-23",
+				globalID:     "system=http://www.mycompany.com/support&id=1",
 			},
 			wantErr: true,
 			Err:     errors.New("error, unable to execute the http call"),
@@ -1162,7 +1164,7 @@ func Test_internalRemoteLinkImpl_DeleteByGlobalId(t *testing.T) {
 			applicationService, err := NewRemoteLinkService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResponse, err := applicationService.DeleteByGlobalId(testCase.args.ctx, testCase.args.issueKeyOrId, testCase.args.globalId)
+			gotResponse, err := applicationService.DeleteByGlobalID(testCase.args.ctx, testCase.args.issueKeyOrID, testCase.args.globalID)
 
 			if testCase.wantErr {
 

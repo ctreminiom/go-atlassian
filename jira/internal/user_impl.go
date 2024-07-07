@@ -3,13 +3,14 @@ package internal
 import (
 	"context"
 	"fmt"
-	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/service"
-	"github.com/ctreminiom/go-atlassian/service/jira"
 	"net/http"
 	"net/url"
 	"strconv"
 	"strings"
+
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/service"
+	"github.com/ctreminiom/go-atlassian/service/jira"
 )
 
 func NewUserService(client service.Connector, version string, connector *UserSearchService) (*UserService, error) {
@@ -34,8 +35,8 @@ type UserService struct {
 // GET /rest/api/{2-3}/user
 //
 // https://docs.go-atlassian.io/jira-software-cloud/users#get-user
-func (u *UserService) Get(ctx context.Context, accountId string, expand []string) (*model.UserScheme, *model.ResponseScheme, error) {
-	return u.internalClient.Get(ctx, accountId, expand)
+func (u *UserService) Get(ctx context.Context, accountID string, expand []string) (*model.UserScheme, *model.ResponseScheme, error) {
+	return u.internalClient.Get(ctx, accountID, expand)
 }
 
 // Create creates a user. This resource is retained for legacy compatibility.
@@ -64,8 +65,8 @@ func (u *UserService) Create(ctx context.Context, payload *model.UserPayloadSche
 // DELETE /rest/api/{2-3}/user
 //
 // https://docs.go-atlassian.io/jira-software-cloud/users#delete-user
-func (u *UserService) Delete(ctx context.Context, accountId string) (*model.ResponseScheme, error) {
-	return u.internalClient.Delete(ctx, accountId)
+func (u *UserService) Delete(ctx context.Context, accountID string) (*model.ResponseScheme, error) {
+	return u.internalClient.Delete(ctx, accountID)
 }
 
 // Find returns a paginated list of the users specified by one or more account IDs.
@@ -73,8 +74,8 @@ func (u *UserService) Delete(ctx context.Context, accountId string) (*model.Resp
 // GET /rest/api/{2-3}/user/bulk
 //
 // https://docs.go-atlassian.io/jira-software-cloud/users#bulk-get-users
-func (u *UserService) Find(ctx context.Context, accountIds []string, startAt, maxResults int) (*model.UserSearchPageScheme, *model.ResponseScheme, error) {
-	return u.internalClient.Find(ctx, accountIds, startAt, maxResults)
+func (u *UserService) Find(ctx context.Context, accountIDs []string, startAt, maxResults int) (*model.UserSearchPageScheme, *model.ResponseScheme, error) {
+	return u.internalClient.Find(ctx, accountIDs, startAt, maxResults)
 }
 
 // Groups returns the groups to which a user belongs.
@@ -82,8 +83,8 @@ func (u *UserService) Find(ctx context.Context, accountIds []string, startAt, ma
 // GET /rest/api/{2-3}/user/groups
 //
 // https://docs.go-atlassian.io/jira-software-cloud/users#get-user-groups
-func (u *UserService) Groups(ctx context.Context, accountIds string) ([]*model.UserGroupScheme, *model.ResponseScheme, error) {
-	return u.internalClient.Groups(ctx, accountIds)
+func (u *UserService) Groups(ctx context.Context, accountIDs string) ([]*model.UserGroupScheme, *model.ResponseScheme, error) {
+	return u.internalClient.Groups(ctx, accountIDs)
 }
 
 // Gets returns a list of all (active and inactive) users.
@@ -100,14 +101,14 @@ type internalUserImpl struct {
 	version string
 }
 
-func (i *internalUserImpl) Get(ctx context.Context, accountId string, expand []string) (*model.UserScheme, *model.ResponseScheme, error) {
+func (i *internalUserImpl) Get(ctx context.Context, accountID string, expand []string) (*model.UserScheme, *model.ResponseScheme, error) {
 
-	if accountId == "" {
+	if accountID == "" {
 		return nil, nil, model.ErrNoAccountIDError
 	}
 
 	params := url.Values{}
-	params.Add("accountId", accountId)
+	params.Add("accountId", accountID)
 
 	if len(expand) != 0 {
 		params.Add("expand", strings.Join(expand, ","))
@@ -147,14 +148,14 @@ func (i *internalUserImpl) Create(ctx context.Context, payload *model.UserPayloa
 	return user, response, nil
 }
 
-func (i *internalUserImpl) Delete(ctx context.Context, accountId string) (*model.ResponseScheme, error) {
+func (i *internalUserImpl) Delete(ctx context.Context, accountID string) (*model.ResponseScheme, error) {
 
-	if accountId == "" {
+	if accountID == "" {
 		return nil, model.ErrNoAccountIDError
 	}
 
 	params := url.Values{}
-	params.Add("accountId", accountId)
+	params.Add("accountId", accountID)
 	endpoint := fmt.Sprintf("rest/api/%v/user?%v", i.version, params.Encode())
 
 	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
@@ -165,9 +166,9 @@ func (i *internalUserImpl) Delete(ctx context.Context, accountId string) (*model
 	return i.c.Call(request, nil)
 }
 
-func (i *internalUserImpl) Find(ctx context.Context, accountIds []string, startAt, maxResults int) (*model.UserSearchPageScheme, *model.ResponseScheme, error) {
+func (i *internalUserImpl) Find(ctx context.Context, accountIDs []string, startAt, maxResults int) (*model.UserSearchPageScheme, *model.ResponseScheme, error) {
 
-	if len(accountIds) == 0 {
+	if len(accountIDs) == 0 {
 		return nil, nil, model.ErrNoAccountSliceError
 	}
 
@@ -175,7 +176,7 @@ func (i *internalUserImpl) Find(ctx context.Context, accountIds []string, startA
 	params.Add("startAt", strconv.Itoa(startAt))
 	params.Add("maxResults", strconv.Itoa(maxResults))
 
-	for _, accountID := range accountIds {
+	for _, accountID := range accountIDs {
 		params.Add("accountId", accountID)
 	}
 
@@ -195,14 +196,14 @@ func (i *internalUserImpl) Find(ctx context.Context, accountIds []string, startA
 	return page, response, nil
 }
 
-func (i *internalUserImpl) Groups(ctx context.Context, accountId string) ([]*model.UserGroupScheme, *model.ResponseScheme, error) {
+func (i *internalUserImpl) Groups(ctx context.Context, accountID string) ([]*model.UserGroupScheme, *model.ResponseScheme, error) {
 
-	if accountId == "" {
+	if accountID == "" {
 		return nil, nil, model.ErrNoAccountIDError
 	}
 
 	params := url.Values{}
-	params.Add("accountId", accountId)
+	params.Add("accountId", accountID)
 	endpoint := fmt.Sprintf("rest/api/%v/user/groups?%v", i.version, params.Encode())
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)

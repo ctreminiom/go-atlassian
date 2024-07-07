@@ -3,12 +3,14 @@ package internal
 import (
 	"context"
 	"errors"
+	"net/http"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
-	"github.com/stretchr/testify/assert"
-	"net/http"
-	"testing"
 )
 
 func Test_internalGroupServiceImpl_Create(t *testing.T) {
@@ -312,7 +314,7 @@ func Test_internalGroupServiceImpl_Remove(t *testing.T) {
 	type args struct {
 		ctx       context.Context
 		groupName string
-		accountId string
+		accountID string
 	}
 
 	testCases := []struct {
@@ -329,7 +331,7 @@ func Test_internalGroupServiceImpl_Remove(t *testing.T) {
 			args: args{
 				ctx:       context.Background(),
 				groupName: "jira-users",
-				accountId: "account-id-sample",
+				accountID: "account-id-sample",
 			},
 			on: func(fields *fields) {
 
@@ -358,7 +360,7 @@ func Test_internalGroupServiceImpl_Remove(t *testing.T) {
 			args: args{
 				ctx:       context.Background(),
 				groupName: "jira-users",
-				accountId: "account-id-sample",
+				accountID: "account-id-sample",
 			},
 			on: func(fields *fields) {
 
@@ -401,7 +403,7 @@ func Test_internalGroupServiceImpl_Remove(t *testing.T) {
 			args: args{
 				ctx:       context.Background(),
 				groupName: "jira-users",
-				accountId: "",
+				accountID: "",
 			},
 			on: func(fields *fields) {
 				fields.c = mocks.NewConnector(t)
@@ -416,7 +418,7 @@ func Test_internalGroupServiceImpl_Remove(t *testing.T) {
 			args: args{
 				ctx:       context.Background(),
 				groupName: "jira-users",
-				accountId: "account-id-sample",
+				accountID: "account-id-sample",
 			},
 			on: func(fields *fields) {
 
@@ -446,7 +448,7 @@ func Test_internalGroupServiceImpl_Remove(t *testing.T) {
 			groupService, err := NewGroupService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResponse, err := groupService.Remove(testCase.args.ctx, testCase.args.groupName, testCase.args.accountId)
+			gotResponse, err := groupService.Remove(testCase.args.ctx, testCase.args.groupName, testCase.args.accountID)
 
 			if testCase.wantErr {
 
@@ -476,7 +478,7 @@ func Test_internalGroupServiceImpl_Add(t *testing.T) {
 	type args struct {
 		ctx       context.Context
 		groupName string
-		accountId string
+		accountID string
 	}
 
 	testCases := []struct {
@@ -493,7 +495,7 @@ func Test_internalGroupServiceImpl_Add(t *testing.T) {
 			args: args{
 				ctx:       context.Background(),
 				groupName: "jira-users",
-				accountId: "account-id-sample",
+				accountID: "account-id-sample",
 			},
 			on: func(fields *fields) {
 
@@ -522,7 +524,7 @@ func Test_internalGroupServiceImpl_Add(t *testing.T) {
 			args: args{
 				ctx:       context.Background(),
 				groupName: "jira-users",
-				accountId: "account-id-sample",
+				accountID: "account-id-sample",
 			},
 			on: func(fields *fields) {
 
@@ -565,7 +567,7 @@ func Test_internalGroupServiceImpl_Add(t *testing.T) {
 			args: args{
 				ctx:       context.Background(),
 				groupName: "jira-users",
-				accountId: "",
+				accountID: "",
 			},
 			on: func(fields *fields) {
 				fields.c = mocks.NewConnector(t)
@@ -580,7 +582,7 @@ func Test_internalGroupServiceImpl_Add(t *testing.T) {
 			args: args{
 				ctx:       context.Background(),
 				groupName: "jira-users",
-				accountId: "account-id-sample",
+				accountID: "account-id-sample",
 			},
 			on: func(fields *fields) {
 
@@ -610,7 +612,7 @@ func Test_internalGroupServiceImpl_Add(t *testing.T) {
 			groupService, err := NewGroupService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := groupService.Add(testCase.args.ctx, testCase.args.groupName, testCase.args.accountId)
+			gotResult, gotResponse, err := groupService.Add(testCase.args.ctx, testCase.args.groupName, testCase.args.accountID)
 
 			if testCase.wantErr {
 

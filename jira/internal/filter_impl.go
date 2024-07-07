@@ -3,13 +3,14 @@ package internal
 import (
 	"context"
 	"fmt"
-	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/service"
-	"github.com/ctreminiom/go-atlassian/service/jira"
 	"net/http"
 	"net/url"
 	"strconv"
 	"strings"
+
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/service"
+	"github.com/ctreminiom/go-atlassian/service/jira"
 )
 
 func NewFilterService(client service.Connector, version string, share jira.FilterSharingConnector) (*FilterService, error) {
@@ -74,8 +75,8 @@ func (f *FilterService) Search(ctx context.Context, options *model.FilterSearchO
 // GET /rest/api/{2-3}/filter/{id}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/filters#get-filter
-func (f *FilterService) Get(ctx context.Context, filterId int, expand []string) (*model.FilterScheme, *model.ResponseScheme, error) {
-	return f.internalClient.Get(ctx, filterId, expand)
+func (f *FilterService) Get(ctx context.Context, filterID int, expand []string) (*model.FilterScheme, *model.ResponseScheme, error) {
+	return f.internalClient.Get(ctx, filterID, expand)
 }
 
 // Update updates a filter. Use this operation to update a filter's name, description, JQL, or sharing.
@@ -83,8 +84,8 @@ func (f *FilterService) Get(ctx context.Context, filterId int, expand []string) 
 // PUT /rest/api/{2-3}/filter/{id}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/filters#update-filter
-func (f *FilterService) Update(ctx context.Context, filterId int, payload *model.FilterPayloadScheme) (*model.FilterScheme, *model.ResponseScheme, error) {
-	return f.internalClient.Update(ctx, filterId, payload)
+func (f *FilterService) Update(ctx context.Context, filterID int, payload *model.FilterPayloadScheme) (*model.FilterScheme, *model.ResponseScheme, error) {
+	return f.internalClient.Update(ctx, filterID, payload)
 }
 
 // Delete a filter.
@@ -92,8 +93,8 @@ func (f *FilterService) Update(ctx context.Context, filterId int, payload *model
 // DELETE /rest/api/{2-3}/filter/{id}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/filters#delete-filter
-func (f *FilterService) Delete(ctx context.Context, filterId int) (*model.ResponseScheme, error) {
-	return f.internalClient.Delete(ctx, filterId)
+func (f *FilterService) Delete(ctx context.Context, filterID int) (*model.ResponseScheme, error) {
+	return f.internalClient.Delete(ctx, filterID)
 }
 
 // Change changes the owner of the filter.
@@ -101,8 +102,8 @@ func (f *FilterService) Delete(ctx context.Context, filterId int) (*model.Respon
 // PUT /rest/api/{2-3}/filter/{id}/owner
 //
 // https://docs.go-atlassian.io/jira-software-cloud/filters#change-filter-owner
-func (f *FilterService) Change(ctx context.Context, filterId int, accountId string) (*model.ResponseScheme, error) {
-	return f.internalClient.Change(ctx, filterId, accountId)
+func (f *FilterService) Change(ctx context.Context, filterID int, accountID string) (*model.ResponseScheme, error) {
+	return f.internalClient.Change(ctx, filterID, accountID)
 }
 
 type internalFilterServiceImpl struct {
@@ -224,14 +225,14 @@ func (i *internalFilterServiceImpl) Search(ctx context.Context, options *model.F
 	return page, response, nil
 }
 
-func (i *internalFilterServiceImpl) Get(ctx context.Context, filterId int, expand []string) (*model.FilterScheme, *model.ResponseScheme, error) {
+func (i *internalFilterServiceImpl) Get(ctx context.Context, filterID int, expand []string) (*model.FilterScheme, *model.ResponseScheme, error) {
 
-	if filterId == 0 {
+	if filterID == 0 {
 		return nil, nil, model.ErrNoFilterIDError
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("rest/api/%v/filter/%v", i.version, filterId))
+	endpoint.WriteString(fmt.Sprintf("rest/api/%v/filter/%v", i.version, filterID))
 
 	params := url.Values{}
 	if len(expand) != 0 {
@@ -256,13 +257,13 @@ func (i *internalFilterServiceImpl) Get(ctx context.Context, filterId int, expan
 	return filter, response, nil
 }
 
-func (i *internalFilterServiceImpl) Update(ctx context.Context, filterId int, payload *model.FilterPayloadScheme) (*model.FilterScheme, *model.ResponseScheme, error) {
+func (i *internalFilterServiceImpl) Update(ctx context.Context, filterID int, payload *model.FilterPayloadScheme) (*model.FilterScheme, *model.ResponseScheme, error) {
 
-	if filterId == 0 {
+	if filterID == 0 {
 		return nil, nil, model.ErrNoFilterIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/filter/%v", i.version, filterId)
+	endpoint := fmt.Sprintf("rest/api/%v/filter/%v", i.version, filterID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
@@ -278,13 +279,13 @@ func (i *internalFilterServiceImpl) Update(ctx context.Context, filterId int, pa
 	return filter, response, nil
 }
 
-func (i *internalFilterServiceImpl) Delete(ctx context.Context, filterId int) (*model.ResponseScheme, error) {
+func (i *internalFilterServiceImpl) Delete(ctx context.Context, filterID int) (*model.ResponseScheme, error) {
 
-	if filterId == 0 {
+	if filterID == 0 {
 		return nil, model.ErrNoFilterIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/filter/%v", i.version, filterId)
+	endpoint := fmt.Sprintf("rest/api/%v/filter/%v", i.version, filterID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
@@ -299,19 +300,19 @@ func (i *internalFilterServiceImpl) Delete(ctx context.Context, filterId int) (*
 	return i.c.Call(request, nil)
 }
 
-func (i *internalFilterServiceImpl) Change(ctx context.Context, filterId int, accountId string) (*model.ResponseScheme, error) {
+func (i *internalFilterServiceImpl) Change(ctx context.Context, filterID int, accountID string) (*model.ResponseScheme, error) {
 
-	if filterId == 0 {
+	if filterID == 0 {
 		return nil, model.ErrNoFilterIDError
 	}
 
-	if accountId == "" {
+	if accountID == "" {
 		return nil, model.ErrNoAccountIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/filter/%v/owner", i.version, filterId)
+	endpoint := fmt.Sprintf("rest/api/%v/filter/%v/owner", i.version, filterID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", map[string]interface{}{"accountId": accountId})
+	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", map[string]interface{}{"accountId": accountID})
 	if err != nil {
 		return nil, err
 	}

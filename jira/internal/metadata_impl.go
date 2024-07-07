@@ -3,12 +3,14 @@ package internal
 import (
 	"context"
 	"fmt"
+	"net/http"
+	"net/url"
+
+	"github.com/tidwall/gjson"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/jira"
-	"github.com/tidwall/gjson"
-	"net/http"
-	"net/url"
 )
 
 func NewMetadataService(client service.Connector, version string) (*MetadataService, error) {
@@ -30,11 +32,11 @@ type MetadataService struct {
 //
 // Use the information to populate the requests in Edit issue.
 //
-// GET /rest/api/{2-3}/issue/{issueIdOrKey}/editmeta
+// GET /rest/api/{2-3}/issue/{issueKeyOrID}/editmeta
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/metadata#get-edit-issue-metadata
-func (m *MetadataService) Get(ctx context.Context, issueKeyOrId string, overrideScreenSecurity, overrideEditableFlag bool) (gjson.Result, *model.ResponseScheme, error) {
-	return m.internalClient.Get(ctx, issueKeyOrId, overrideScreenSecurity, overrideEditableFlag)
+func (m *MetadataService) Get(ctx context.Context, issueKeyOrID string, overrideScreenSecurity, overrideEditableFlag bool) (gjson.Result, *model.ResponseScheme, error) {
+	return m.internalClient.Get(ctx, issueKeyOrID, overrideScreenSecurity, overrideEditableFlag)
 }
 
 // Create returns details of projects, issue types within projects, and, when requested,
@@ -53,9 +55,9 @@ type internalMetadataImpl struct {
 	version string
 }
 
-func (i *internalMetadataImpl) Get(ctx context.Context, issueKeyOrId string, overrideScreenSecurity, overrideEditableFlag bool) (gjson.Result, *model.ResponseScheme, error) {
+func (i *internalMetadataImpl) Get(ctx context.Context, issueKeyOrID string, overrideScreenSecurity, overrideEditableFlag bool) (gjson.Result, *model.ResponseScheme, error) {
 
-	if issueKeyOrId == "" {
+	if issueKeyOrID == "" {
 		return gjson.Result{}, nil, model.ErrNoIssueKeyOrIDError
 	}
 
@@ -63,7 +65,7 @@ func (i *internalMetadataImpl) Get(ctx context.Context, issueKeyOrId string, ove
 	params.Add("overrideEditableFlag", fmt.Sprintf("%v", overrideEditableFlag))
 	params.Add("overrideScreenSecurity", fmt.Sprintf("%v", overrideScreenSecurity))
 
-	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/editmeta?%v", i.version, issueKeyOrId, params.Encode())
+	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/editmeta?%v", i.version, issueKeyOrID, params.Encode())
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {

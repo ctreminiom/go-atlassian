@@ -82,3 +82,8 @@ type CustomFieldRequestTypeLinkScheme struct {
 	Web      string `json:"web,omitempty"`      // The web link for the custom field request type.
 	Agent    string `json:"agent,omitempty"`    // The agent link for the custom field request type.
 }
+
+type CustomFieldTempoAccountScheme struct {
+	ID    int    `json:"id"`
+	Value string `json:"value"`
+}

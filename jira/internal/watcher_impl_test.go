@@ -288,7 +288,7 @@ func Test_internalWatcherImpl_Add(t *testing.T) {
 			newService, err := NewWatcherService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResponse, err := newService.Add(testCase.args.ctx, testCase.args.issueKeyOrID)
+			gotResponse, err := newService.Add(testCase.args.ctx, testCase.args.issueKeyOrID, "")
 
 			if testCase.wantErr {
 

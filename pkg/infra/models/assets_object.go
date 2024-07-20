@@ -105,8 +105,8 @@ type ObjectPayloadAttributeValueScheme struct {
 }
 
 // ObjectScheme represents an object.
-// WorkspaceId is the ID of the workspace.
-// GlobalId is the global ID of the object.
+// WorkspaceID is the ID of the workspace.
+// GlobalID is the global ID of the object.
 // ID is the unique identifier of the object.
 // Label is the label of the object.
 // ObjectKey is the key of the object.
@@ -119,8 +119,8 @@ type ObjectPayloadAttributeValueScheme struct {
 // Attributes is a slice of the attributes of the object.
 // Links is the links of the object.
 type ObjectScheme struct {
-	WorkspaceId string                   `json:"workspaceId,omitempty"` // The ID of the workspace.
-	GlobalId    string                   `json:"globalId,omitempty"`    // The global ID of the object.
+	WorkspaceID string                   `json:"workspaceId,omitempty"` // The ID of the workspace.
+	GlobalID    string                   `json:"globalId,omitempty"`    // The global ID of the object.
 	ID          string                   `json:"id,omitempty"`          // The ID of the object.
 	Label       string                   `json:"label,omitempty"`       // The label of the object.
 	ObjectKey   string                   `json:"objectKey,omitempty"`   // The key of the object.
@@ -135,8 +135,8 @@ type ObjectScheme struct {
 }
 
 // ObjectAvatarScheme represents an avatar of an object.
-// WorkspaceId is the ID of the workspace.
-// GlobalId is the global ID of the avatar.
+// WorkspaceID is the ID of the workspace.
+// GlobalID is the global ID of the avatar.
 // ID is the unique identifier of the avatar.
 // AvatarUUID is the UUID of the avatar.
 // Url16 is the URL for the 16x16 version of the avatar.
@@ -144,10 +144,10 @@ type ObjectScheme struct {
 // Url72 is the URL for the 72x72 version of the avatar.
 // Url144 is the URL for the 144x144 version of the avatar.
 // Url288 is the URL for the 288x288 version of the avatar.
-// ObjectId is the ID of the object.
+// ObjectID is the ID of the object.
 type ObjectAvatarScheme struct {
-	WorkspaceId string `json:"workspaceId,omitempty"` // The ID of the workspace.
-	GlobalId    string `json:"globalId,omitempty"`    // The global ID of the avatar.
+	WorkspaceID string `json:"workspaceId,omitempty"` // The ID of the workspace.
+	GlobalID    string `json:"globalId,omitempty"`    // The global ID of the avatar.
 	ID          string `json:"id,omitempty"`          // The ID of the avatar.
 	AvatarUUID  string `json:"avatarUUID,omitempty"`  // The UUID of the avatar.
 	Url16       string `json:"url16,omitempty"`       // The URL for the 16x16 version of the avatar.
@@ -155,7 +155,7 @@ type ObjectAvatarScheme struct {
 	Url72       string `json:"url72,omitempty"`       // The URL for the 72x72 version of the avatar.
 	Url144      string `json:"url144,omitempty"`      // The URL for the 144x144 version of the avatar.
 	Url288      string `json:"url288,omitempty"`      // The URL for the 288x288 version of the avatar.
-	ObjectId    string `json:"objectId,omitempty"`    // The ID of the object.
+	ObjectID    string `json:"objectId,omitempty"`    // The ID of the object.
 }
 
 // ObjectLinksScheme represents the links of an object.
@@ -165,18 +165,18 @@ type ObjectLinksScheme struct {
 }
 
 // ObjectAttributeScheme represents an attribute of an object.
-// WorkspaceId is the ID of the workspace.
-// GlobalId is the global ID of the attribute.
+// WorkspaceID is the ID of the workspace.
+// GlobalID is the global ID of the attribute.
 // ID is the unique identifier of the attribute.
 // ObjectTypeAttribute is the type of the attribute.
-// ObjectTypeAttributeId is the ID of the attribute type.
+// ObjectTypeAttributeID is the ID of the attribute type.
 // ObjectAttributeValues is a slice of the values of the attribute.
 type ObjectAttributeScheme struct {
-	WorkspaceId           string                                 `json:"workspaceId,omitempty"`           // The ID of the workspace.
-	GlobalId              string                                 `json:"globalId,omitempty"`              // The global ID of the attribute.
+	WorkspaceID           string                                 `json:"workspaceId,omitempty"`           // The ID of the workspace.
+	GlobalID              string                                 `json:"globalId,omitempty"`              // The global ID of the attribute.
 	ID                    string                                 `json:"id,omitempty"`                    // The ID of the attribute.
 	ObjectTypeAttribute   *ObjectTypeAttributeScheme             `json:"objectTypeAttribute,omitempty"`   // The type of the attribute.
-	ObjectTypeAttributeId string                                 `json:"objectTypeAttributeId,omitempty"` // The ID of the attribute type.
+	ObjectTypeAttributeID string                                 `json:"objectTypeAttributeId,omitempty"` // The ID of the attribute type.
 	ObjectAttributeValues []*ObjectTypeAssetAttributeValueScheme `json:"objectAttributeValues,omitempty"` // The values of the attribute.
 }
 
@@ -187,7 +187,7 @@ type ObjectTypeAttributePayloadScheme struct {
 	Label                   bool     `json:"label,omitempty"`                   // Indicates if the attribute type is a label.
 	Description             string   `json:"description,omitempty"`             // The description of the attribute type.
 	Type                    *int     `json:"type,omitempty"`                    // The type of the attribute type.
-	DefaultTypeId           *int     `json:"defaultTypeId,omitempty"`           // The default type ID of the attribute type.
+	DefaultTypeID           *int     `json:"defaultTypeId,omitempty"`           // The default type ID of the attribute type.
 	TypeValue               string   `json:"typeValue,omitempty"`               // The type value of the attribute type.
 	TypeValueMulti          []string `json:"typeValueMulti,omitempty"`          // The multiple type values of the attribute type.
 	AdditionalValue         string   `json:"additionalValue,omitempty"`         // The additional value of the attribute type.
@@ -207,8 +207,8 @@ type ObjectTypeAttributePayloadScheme struct {
 // ObjectTypeAttributeScheme represents an attribute type of an object.
 // It includes various properties of the attribute type like workspace ID, global ID, ID, object type, name, label, type, description, etc.
 type ObjectTypeAttributeScheme struct {
-	WorkspaceId             string                                       `json:"workspaceId,omitempty"`             // The ID of the workspace.
-	GlobalId                string                                       `json:"globalId,omitempty"`                // The global ID of the attribute type.
+	WorkspaceID             string                                       `json:"workspaceId,omitempty"`             // The ID of the workspace.
+	GlobalID                string                                       `json:"globalId,omitempty"`                // The global ID of the attribute type.
 	ID                      string                                       `json:"id,omitempty"`                      // The ID of the attribute type.
 	ObjectType              *ObjectTypeScheme                            `json:"objectType,omitempty"`              // The type of the object.
 	Name                    string                                       `json:"name,omitempty"`                    // The name of the attribute type.
@@ -220,7 +220,7 @@ type ObjectTypeAttributeScheme struct {
 	TypeValueMulti          []string                                     `json:"typeValueMulti,omitempty"`          // The multiple type values of the attribute type.
 	AdditionalValue         string                                       `json:"additionalValue,omitempty"`         // The additional value of the attribute type.
 	ReferenceType           *ObjectTypeAssetAttributeReferenceTypeScheme `json:"referenceType,omitempty"`           // The reference type of the attribute type.
-	ReferenceObjectTypeId   string                                       `json:"referenceObjectTypeId,omitempty"`   // The ID of the reference object type.
+	ReferenceObjectTypeID   string                                       `json:"referenceObjectTypeId,omitempty"`   // The ID of the reference object type.
 	ReferenceObjectType     *ObjectTypeScheme                            `json:"referenceObjectType,omitempty"`     // The reference object type.
 	Editable                bool                                         `json:"editable,omitempty"`                // Indicates if the attribute type is editable.
 	System                  bool                                         `json:"system,omitempty"`                  // Indicates if the attribute type is a system attribute.
@@ -251,12 +251,12 @@ type ObjectTypeAssetAttributeDefaultTypeScheme struct {
 }
 
 // ObjectTypeAssetAttributeReferenceTypeScheme represents a reference type of an attribute in an asset.
-// WorkspaceId is the ID of the workspace.
-// GlobalId is the global ID of the reference type.
+// WorkspaceID is the ID of the workspace.
+// GlobalID is the global ID of the reference type.
 // Name is the name of the reference type.
 type ObjectTypeAssetAttributeReferenceTypeScheme struct {
-	WorkspaceId string `json:"workspaceId,omitempty"` // The ID of the workspace.
-	GlobalId    string `json:"globalId,omitempty"`    // The global ID of the reference type.
+	WorkspaceID string `json:"workspaceId,omitempty"` // The ID of the workspace.
+	GlobalID    string `json:"globalId,omitempty"`    // The global ID of the reference type.
 	Name        string `json:"name,omitempty"`        // The name of the reference type.
 }
 
@@ -298,7 +298,7 @@ type ObjectTypeAssetAttributeStatusScheme struct {
 type ObjectListScheme struct {
 	ObjectEntries         []*ObjectScheme              `json:"objectEntries,omitempty"`         // The objects in the list.
 	ObjectTypeAttributes  []*ObjectTypeAttributeScheme `json:"objectTypeAttributes,omitempty"`  // The attributes of the object type.
-	ObjectTypeId          string                       `json:"objectTypeId,omitempty"`          // The ID of the object type.
+	ObjectTypeID          string                       `json:"objectTypeId,omitempty"`          // The ID of the object type.
 	ObjectTypeIsInherited bool                         `json:"objectTypeIsInherited,omitempty"` // Indicates if the object type is inherited.
 	AbstractObjectType    bool                         `json:"abstractObjectType,omitempty"`    // Indicates if the object type is abstract.
 	TotalFilterCount      int                          `json:"totalFilterCount,omitempty"`      // The total count of filters.
@@ -306,7 +306,7 @@ type ObjectListScheme struct {
 	ToIndex               int                          `json:"toIndex,omitempty"`               // The end index of the list.
 	PageObjectSize        int                          `json:"pageObjectSize,omitempty"`        // The size of the page of objects.
 	PageNumber            int                          `json:"pageNumber,omitempty"`            // The number of the page of objects.
-	OrderByTypeAttrId     int                          `json:"orderByTypeAttrId,omitempty"`     // The ID of the attribute type to order by.
+	OrderByTypeAttrID     int                          `json:"orderByTypeAttrId,omitempty"`     // The ID of the attribute type to order by.
 	OrderWay              string                       `json:"orderWay,omitempty"`              // The way to order the list.
 	QlQuery               string                       `json:"qlQuery,omitempty"`               // The QL query to filter the list.
 	QlQuerySearchResult   bool                         `json:"qlQuerySearchResult,omitempty"`   // Indicates if the QL query search result is included.
@@ -358,7 +358,7 @@ type ObjectSearchParamsScheme struct {
 }
 
 // AttributesToDisplayScheme represents a scheme for attributes to be displayed.
-// AttributesToDisplayIds is a slice of the IDs of the attributes to be displayed.
+// AttributesToDisplayIDs is a slice of the IDs of the attributes to be displayed.
 type AttributesToDisplayScheme struct {
-	AttributesToDisplayIds []int `json:"attributesToDisplayIds,omitempty"` // The IDs of the attributes to be displayed.
+	AttributesToDisplayIDs []int `json:"attributesToDisplayIds,omitempty"` // The IDs of the attributes to be displayed.
 }

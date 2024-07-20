@@ -3,12 +3,14 @@ package internal
 import (
 	"context"
 	"errors"
+	"net/http"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
-	"github.com/stretchr/testify/assert"
-	"net/http"
-	"testing"
 )
 
 func Test_internalTaskServiceImpl_Get(t *testing.T) {
@@ -20,7 +22,7 @@ func Test_internalTaskServiceImpl_Get(t *testing.T) {
 
 	type args struct {
 		ctx    context.Context
-		taskId string
+		taskID string
 	}
 
 	testCases := []struct {
@@ -36,7 +38,7 @@ func Test_internalTaskServiceImpl_Get(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:    context.Background(),
-				taskId: "uuid-sample",
+				taskID: "uuid-sample",
 			},
 			on: func(fields *fields) {
 
@@ -65,7 +67,7 @@ func Test_internalTaskServiceImpl_Get(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:    context.Background(),
-				taskId: "uuid-sample",
+				taskID: "uuid-sample",
 			},
 			on: func(fields *fields) {
 
@@ -104,7 +106,7 @@ func Test_internalTaskServiceImpl_Get(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:    context.Background(),
-				taskId: "uuid-sample",
+				taskID: "uuid-sample",
 			},
 			on: func(fields *fields) {
 
@@ -134,7 +136,7 @@ func Test_internalTaskServiceImpl_Get(t *testing.T) {
 			fieldConfigService, err := NewTaskService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := fieldConfigService.Get(testCase.args.ctx, testCase.args.taskId)
+			gotResult, gotResponse, err := fieldConfigService.Get(testCase.args.ctx, testCase.args.taskID)
 
 			if testCase.wantErr {
 
@@ -164,7 +166,7 @@ func Test_internalTaskServiceImpl_Cancel(t *testing.T) {
 
 	type args struct {
 		ctx    context.Context
-		taskId string
+		taskID string
 	}
 
 	testCases := []struct {
@@ -180,7 +182,7 @@ func Test_internalTaskServiceImpl_Cancel(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:    context.Background(),
-				taskId: "uuid-sample",
+				taskID: "uuid-sample",
 			},
 			on: func(fields *fields) {
 
@@ -209,7 +211,7 @@ func Test_internalTaskServiceImpl_Cancel(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:    context.Background(),
-				taskId: "uuid-sample",
+				taskID: "uuid-sample",
 			},
 			on: func(fields *fields) {
 
@@ -248,7 +250,7 @@ func Test_internalTaskServiceImpl_Cancel(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:    context.Background(),
-				taskId: "uuid-sample",
+				taskID: "uuid-sample",
 			},
 			on: func(fields *fields) {
 
@@ -278,7 +280,7 @@ func Test_internalTaskServiceImpl_Cancel(t *testing.T) {
 			fieldConfigService, err := NewTaskService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResponse, err := fieldConfigService.Cancel(testCase.args.ctx, testCase.args.taskId)
+			gotResponse, err := fieldConfigService.Cancel(testCase.args.ctx, testCase.args.taskID)
 
 			if testCase.wantErr {
 

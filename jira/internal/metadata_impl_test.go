@@ -3,13 +3,15 @@ package internal
 import (
 	"context"
 	"errors"
+	"net/http"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/tidwall/gjson"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
-	"github.com/stretchr/testify/assert"
-	"github.com/tidwall/gjson"
-	"net/http"
-	"testing"
 )
 
 func Test_internalMetadataImpl_Get(t *testing.T) {
@@ -21,7 +23,7 @@ func Test_internalMetadataImpl_Get(t *testing.T) {
 
 	type args struct {
 		ctx                    context.Context
-		issueKeyOrId           string
+		issueKeyOrID           string
 		overrideScreenSecurity bool
 		overrideEditableFlag   bool
 	}
@@ -40,7 +42,7 @@ func Test_internalMetadataImpl_Get(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:                    context.Background(),
-				issueKeyOrId:           "DUMMY-4",
+				issueKeyOrID:           "DUMMY-4",
 				overrideScreenSecurity: true,
 				overrideEditableFlag:   false,
 			},
@@ -72,7 +74,7 @@ func Test_internalMetadataImpl_Get(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:                    context.Background(),
-				issueKeyOrId:           "DUMMY-4",
+				issueKeyOrID:           "DUMMY-4",
 				overrideScreenSecurity: true,
 				overrideEditableFlag:   false,
 			},
@@ -104,7 +106,7 @@ func Test_internalMetadataImpl_Get(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:                    context.Background(),
-				issueKeyOrId:           "",
+				issueKeyOrID:           "",
 				overrideScreenSecurity: true,
 				overrideEditableFlag:   false,
 			},
@@ -118,7 +120,7 @@ func Test_internalMetadataImpl_Get(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:                    context.Background(),
-				issueKeyOrId:           "DUMMY-4",
+				issueKeyOrID:           "DUMMY-4",
 				overrideScreenSecurity: true,
 				overrideEditableFlag:   false,
 			},
@@ -152,7 +154,7 @@ func Test_internalMetadataImpl_Get(t *testing.T) {
 			metadataService, err := NewMetadataService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := metadataService.Get(testCase.args.ctx, testCase.args.issueKeyOrId, testCase.args.overrideScreenSecurity,
+			gotResult, gotResponse, err := metadataService.Get(testCase.args.ctx, testCase.args.issueKeyOrID, testCase.args.overrideScreenSecurity,
 				testCase.args.overrideEditableFlag)
 
 			if testCase.wantErr {

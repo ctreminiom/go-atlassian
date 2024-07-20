@@ -59,7 +59,7 @@ type IssueTypeProjectScreenSchemePageScheme struct {
 // IssueTypeScreenSchemesProjectScheme represents the project issue type screen schemes in Jira.
 type IssueTypeScreenSchemesProjectScheme struct {
 	IssueTypeScreenScheme *IssueTypeScreenSchemeScheme `json:"issueTypeScreenScheme,omitempty"` // The issue type screen scheme.
-	ProjectIds            []string                     `json:"projectIds,omitempty"`            // The IDs of the projects.
+	ProjectIDs            []string                     `json:"projectIds,omitempty"`            // The IDs of the projects.
 }
 
 // IssueTypeScreenSchemeMappingScheme represents a mapping of an issue type screen scheme in Jira.

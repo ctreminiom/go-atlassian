@@ -33,7 +33,7 @@ type RequestAttachmentScheme struct {
 // RequestAttachmentLinkScheme represents links related to a request attachment.
 type RequestAttachmentLinkScheme struct {
 	Self      string `json:"self,omitempty"`      // The URL of the request attachment itself.
-	JiraRest  string `json:"jiraRest,omitempty"`  // The Jira REST API link for the request attachment.
+	JiraREST  string `json:"jiraRest,omitempty"`  // The Jira REST API link for the request attachment.
 	Content   string `json:"content,omitempty"`   // The content link for the request attachment.
 	Thumbnail string `json:"thumbnail,omitempty"` // The thumbnail link for the request attachment.
 }
@@ -65,7 +65,7 @@ type RequestAttachmentCreationCommentScheme struct {
 // RequestAttachmentCreationPayloadScheme represents the payload for creating a request attachment.
 type RequestAttachmentCreationPayloadScheme struct {
 	TemporaryAttachmentIDs []string                                                 `json:"temporaryAttachmentIds,omitempty"`
-	Public                 bool                                                     `json:"public,omitempty"`
+	Public                 bool                                                     `json:"public"`
 	AdditionalComment      *RequestAttachmentCreationAdditionalCommentPayloadScheme `json:"additionalComment,omitempty"`
 }
 

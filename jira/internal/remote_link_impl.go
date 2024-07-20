@@ -3,12 +3,13 @@ package internal
 import (
 	"context"
 	"fmt"
-	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/service"
-	"github.com/ctreminiom/go-atlassian/service/jira"
 	"net/http"
 	"net/url"
 	"strings"
+
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/service"
+	"github.com/ctreminiom/go-atlassian/service/jira"
 )
 
 func NewRemoteLinkService(client service.Connector, version string) (*RemoteLinkService, error) {
@@ -34,66 +35,66 @@ type RemoteLinkService struct {
 //
 // # Where a global ID includes reserved URL characters these must be escaped in the request
 //
-// GET /rest/api/{2-3}/issue/{issueIdOrKey}/remotelink
+// GET /rest/api/{2-3}/issue/{issueIDOrKey}/remotelink
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/link/remote#get-remote-issue-links
-func (r *RemoteLinkService) Gets(ctx context.Context, issueKeyOrId, globalId string) ([]*model.RemoteLinkScheme, *model.ResponseScheme, error) {
-	return r.internalClient.Gets(ctx, issueKeyOrId, globalId)
+func (r *RemoteLinkService) Gets(ctx context.Context, issueKeyOrID, globalID string) ([]*model.RemoteLinkScheme, *model.ResponseScheme, error) {
+	return r.internalClient.Gets(ctx, issueKeyOrID, globalID)
 }
 
 // Get returns a remote issue link for an issue.
 //
-// GET /rest/api/{2-3}/issue/{issueIdOrKey}/remotelink/{linkId}
+// GET /rest/api/{2-3}/issue/{issueIDOrKey}/remotelink/{linkID}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/link/remote#get-remote-issue-link
-func (r *RemoteLinkService) Get(ctx context.Context, issueKeyOrId, linkId string) (*model.RemoteLinkScheme, *model.ResponseScheme, error) {
-	return r.internalClient.Get(ctx, issueKeyOrId, linkId)
+func (r *RemoteLinkService) Get(ctx context.Context, issueKeyOrID, linkID string) (*model.RemoteLinkScheme, *model.ResponseScheme, error) {
+	return r.internalClient.Get(ctx, issueKeyOrID, linkID)
 }
 
 // Create creates or updates a remote issue link for an issue.
 //
-// If a globalId is provided and a remote issue link with that global ID is found it is updated.
+// If a globalID is provided and a remote issue link with that global ID is found it is updated.
 //
 // Any fields without values in the request are set to null. Otherwise, the remote issue link is created.
 //
-// POST /rest/api/{2-3}/issue/{issueIdOrKey}/remotelink
+// POST /rest/api/{2-3}/issue/{issueIDOrKey}/remotelink
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/link/remote#create-remote-issue-link
-func (r *RemoteLinkService) Create(ctx context.Context, issueKeyOrId string, payload *model.RemoteLinkScheme) (*model.RemoteLinkIdentify, *model.ResponseScheme, error) {
-	return r.internalClient.Create(ctx, issueKeyOrId, payload)
+func (r *RemoteLinkService) Create(ctx context.Context, issueKeyOrID string, payload *model.RemoteLinkScheme) (*model.RemoteLinkIdentify, *model.ResponseScheme, error) {
+	return r.internalClient.Create(ctx, issueKeyOrID, payload)
 }
 
 // Update updates a remote issue link for an issue.
 //
 // Note: Fields without values in the request are set to null.
 //
-// PUT /rest/api/{2-3}/issue/{issueIdOrKey}/remotelink/{linkId}
+// PUT /rest/api/{2-3}/issue/{issueIDOrKey}/remotelink/{linkID}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/link/remote#update-remote-issue-link
-func (r *RemoteLinkService) Update(ctx context.Context, issueKeyOrId, linkId string, payload *model.RemoteLinkScheme) (*model.ResponseScheme, error) {
-	return r.internalClient.Update(ctx, issueKeyOrId, linkId, payload)
+func (r *RemoteLinkService) Update(ctx context.Context, issueKeyOrID, linkID string, payload *model.RemoteLinkScheme) (*model.ResponseScheme, error) {
+	return r.internalClient.Update(ctx, issueKeyOrID, linkID, payload)
 }
 
-// DeleteById deletes a remote issue link from an issue.
+// DeleteByID deletes a remote issue link from an issue.
 //
-// DELETE /rest/api/{2-3}/issue/{issueIdOrKey}/remotelink/{linkId}
+// DELETE /rest/api/{2-3}/issue/{issueIDOrKey}/remotelink/{linkID}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/link/remote#delete-remote-issue-link-by-id
-func (r *RemoteLinkService) DeleteById(ctx context.Context, issueKeyOrId, linkId string) (*model.ResponseScheme, error) {
-	return r.internalClient.DeleteById(ctx, issueKeyOrId, linkId)
+func (r *RemoteLinkService) DeleteByID(ctx context.Context, issueKeyOrID, linkID string) (*model.ResponseScheme, error) {
+	return r.internalClient.DeleteByID(ctx, issueKeyOrID, linkID)
 }
 
-// DeleteByGlobalId deletes the remote issue link from the issue using the link's global ID.
+// DeleteByGlobalID deletes the remote issue link from the issue using the link's global ID.
 //
 // Where the global ID includes reserved URL characters these must be escaped in the request.
 //
 // For example, pass system=http://www.mycompany.com/support&id=1 as system%3Dhttp%3A%2F%2Fwww.mycompany.com%2Fsupport%26id%3D1.
 //
-// DELETE /rest/api/{2-3}/issue/{issueIdOrKey}/remotelink
+// DELETE /rest/api/{2-3}/issue/{issueIDOrKey}/remotelink
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/link/remote#delete-remote-issue-link-by-global-id
-func (r *RemoteLinkService) DeleteByGlobalId(ctx context.Context, issueKeyOrId, globalId string) (*model.ResponseScheme, error) {
-	return r.internalClient.DeleteByGlobalId(ctx, issueKeyOrId, globalId)
+func (r *RemoteLinkService) DeleteByGlobalID(ctx context.Context, issueKeyOrID, globalID string) (*model.ResponseScheme, error) {
+	return r.internalClient.DeleteByGlobalID(ctx, issueKeyOrID, globalID)
 }
 
 type internalRemoteLinkImpl struct {
@@ -101,19 +102,19 @@ type internalRemoteLinkImpl struct {
 	version string
 }
 
-func (i *internalRemoteLinkImpl) Gets(ctx context.Context, issueKeyOrId, globalId string) ([]*model.RemoteLinkScheme, *model.ResponseScheme, error) {
+func (i *internalRemoteLinkImpl) Gets(ctx context.Context, issueKeyOrID, globalID string) ([]*model.RemoteLinkScheme, *model.ResponseScheme, error) {
 
-	if issueKeyOrId == "" {
+	if issueKeyOrID == "" {
 		return nil, nil, model.ErrNoIssueKeyOrIDError
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("rest/api/%v/issue/%v/remotelink", i.version, issueKeyOrId))
+	endpoint.WriteString(fmt.Sprintf("rest/api/%v/issue/%v/remotelink", i.version, issueKeyOrID))
 
-	if globalId != "" {
+	if globalID != "" {
 
 		params := url.Values{}
-		params.Add("globalId", globalId)
+		params.Add("globalId", globalID)
 		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
@@ -131,17 +132,17 @@ func (i *internalRemoteLinkImpl) Gets(ctx context.Context, issueKeyOrId, globalI
 	return remoteLinks, response, nil
 }
 
-func (i *internalRemoteLinkImpl) Get(ctx context.Context, issueKeyOrId, linkId string) (*model.RemoteLinkScheme, *model.ResponseScheme, error) {
+func (i *internalRemoteLinkImpl) Get(ctx context.Context, issueKeyOrID, linkID string) (*model.RemoteLinkScheme, *model.ResponseScheme, error) {
 
-	if issueKeyOrId == "" {
+	if issueKeyOrID == "" {
 		return nil, nil, model.ErrNoIssueKeyOrIDError
 	}
 
-	if linkId == "" {
+	if linkID == "" {
 		return nil, nil, model.ErrNoRemoteLinkIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/remotelink/%v", i.version, issueKeyOrId, linkId)
+	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/remotelink/%v", i.version, issueKeyOrID, linkID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
@@ -157,13 +158,13 @@ func (i *internalRemoteLinkImpl) Get(ctx context.Context, issueKeyOrId, linkId s
 	return remoteLink, response, nil
 }
 
-func (i *internalRemoteLinkImpl) Create(ctx context.Context, issueKeyOrId string, payload *model.RemoteLinkScheme) (*model.RemoteLinkIdentify, *model.ResponseScheme, error) {
+func (i *internalRemoteLinkImpl) Create(ctx context.Context, issueKeyOrID string, payload *model.RemoteLinkScheme) (*model.RemoteLinkIdentify, *model.ResponseScheme, error) {
 
-	if issueKeyOrId == "" {
+	if issueKeyOrID == "" {
 		return nil, nil, model.ErrNoIssueKeyOrIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/remotelink", i.version, issueKeyOrId)
+	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/remotelink", i.version, issueKeyOrID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
@@ -179,17 +180,17 @@ func (i *internalRemoteLinkImpl) Create(ctx context.Context, issueKeyOrId string
 	return identify, response, nil
 }
 
-func (i *internalRemoteLinkImpl) Update(ctx context.Context, issueKeyOrId, linkId string, payload *model.RemoteLinkScheme) (*model.ResponseScheme, error) {
+func (i *internalRemoteLinkImpl) Update(ctx context.Context, issueKeyOrID, linkID string, payload *model.RemoteLinkScheme) (*model.ResponseScheme, error) {
 
-	if issueKeyOrId == "" {
+	if issueKeyOrID == "" {
 		return nil, model.ErrNoIssueKeyOrIDError
 	}
 
-	if linkId == "" {
+	if linkID == "" {
 		return nil, model.ErrNoRemoteLinkIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/remotelink/%v", i.version, issueKeyOrId, linkId)
+	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/remotelink/%v", i.version, issueKeyOrID, linkID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
@@ -199,17 +200,17 @@ func (i *internalRemoteLinkImpl) Update(ctx context.Context, issueKeyOrId, linkI
 	return i.c.Call(request, nil)
 }
 
-func (i *internalRemoteLinkImpl) DeleteById(ctx context.Context, issueKeyOrId, linkId string) (*model.ResponseScheme, error) {
+func (i *internalRemoteLinkImpl) DeleteByID(ctx context.Context, issueKeyOrID, linkID string) (*model.ResponseScheme, error) {
 
-	if issueKeyOrId == "" {
+	if issueKeyOrID == "" {
 		return nil, model.ErrNoIssueKeyOrIDError
 	}
 
-	if linkId == "" {
+	if linkID == "" {
 		return nil, model.ErrNoRemoteLinkIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/remotelink/%v", i.version, issueKeyOrId, linkId)
+	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/remotelink/%v", i.version, issueKeyOrID, linkID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
@@ -219,20 +220,20 @@ func (i *internalRemoteLinkImpl) DeleteById(ctx context.Context, issueKeyOrId, l
 	return i.c.Call(request, nil)
 }
 
-func (i *internalRemoteLinkImpl) DeleteByGlobalId(ctx context.Context, issueKeyOrId, globalId string) (*model.ResponseScheme, error) {
+func (i *internalRemoteLinkImpl) DeleteByGlobalID(ctx context.Context, issueKeyOrID, globalID string) (*model.ResponseScheme, error) {
 
-	if issueKeyOrId == "" {
+	if issueKeyOrID == "" {
 		return nil, model.ErrNoIssueKeyOrIDError
 	}
 
-	if globalId == "" {
+	if globalID == "" {
 		return nil, model.ErrNoRemoteLinkGlobalIDError
 	}
 
 	params := url.Values{}
-	params.Add("globalId", globalId)
+	params.Add("globalId", globalID)
 
-	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/remotelink?%v", i.version, issueKeyOrId, params.Encode())
+	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/remotelink?%v", i.version, issueKeyOrID, params.Encode())
 
 	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {

@@ -3,10 +3,11 @@ package internal
 import (
 	"context"
 	"fmt"
+	"net/http"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/jira"
-	"net/http"
 )
 
 func NewPriorityService(client service.Connector, version string) (*PriorityService, error) {
@@ -35,11 +36,11 @@ func (p *PriorityService) Gets(ctx context.Context) ([]*model.PriorityScheme, *m
 
 // Get returns an issue priority.
 //
-// GET /rest/api/{2-3}/priority/{id}
+// GET /rest/api/{2-3}/priority/{priorityID}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/priorities#get-priority
-func (p *PriorityService) Get(ctx context.Context, priorityId string) (*model.PriorityScheme, *model.ResponseScheme, error) {
-	return p.internalClient.Get(ctx, priorityId)
+func (p *PriorityService) Get(ctx context.Context, priorityID string) (*model.PriorityScheme, *model.ResponseScheme, error) {
+	return p.internalClient.Get(ctx, priorityID)
 }
 
 type internalPriorityImpl struct {
@@ -65,13 +66,13 @@ func (i *internalPriorityImpl) Gets(ctx context.Context) ([]*model.PrioritySchem
 	return priorities, response, nil
 }
 
-func (i *internalPriorityImpl) Get(ctx context.Context, priorityId string) (*model.PriorityScheme, *model.ResponseScheme, error) {
+func (i *internalPriorityImpl) Get(ctx context.Context, priorityID string) (*model.PriorityScheme, *model.ResponseScheme, error) {
 
-	if priorityId == "" {
+	if priorityID == "" {
 		return nil, nil, model.ErrNoPriorityIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/priority/%v", i.version, priorityId)
+	endpoint := fmt.Sprintf("rest/api/%v/priority/%v", i.version, priorityID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {

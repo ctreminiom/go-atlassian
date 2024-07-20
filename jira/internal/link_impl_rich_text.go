@@ -3,10 +3,11 @@ package internal
 import (
 	"context"
 	"fmt"
+	"net/http"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/jira"
-	"net/http"
 )
 
 type LinkRichTextService struct {
@@ -22,27 +23,27 @@ type internalLinkRichTextServiceImpl struct {
 
 // Get returns an issue link.
 //
-// GET /rest/api/{2-3}/issueLink/{linkId}
+// GET /rest/api/{2-3}/issueLink/{linkID}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/link#get-issue-link
-func (l *LinkRichTextService) Get(ctx context.Context, linkId string) (*model.IssueLinkScheme, *model.ResponseScheme, error) {
-	return l.internalClient.Get(ctx, linkId)
+func (l *LinkRichTextService) Get(ctx context.Context, linkID string) (*model.IssueLinkScheme, *model.ResponseScheme, error) {
+	return l.internalClient.Get(ctx, linkID)
 }
 
 // Gets get the issue links ID's associated with a Jira Issue
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/link#get-issue-links
-func (l *LinkRichTextService) Gets(ctx context.Context, issueKeyOrId string) (*model.IssueLinkPageScheme, *model.ResponseScheme, error) {
-	return l.internalClient.Gets(ctx, issueKeyOrId)
+func (l *LinkRichTextService) Gets(ctx context.Context, issueKeyOrID string) (*model.IssueLinkPageScheme, *model.ResponseScheme, error) {
+	return l.internalClient.Gets(ctx, issueKeyOrID)
 }
 
 // Delete deletes an issue link.
 //
-// DELETE /rest/api/{2-3}/issueLink/{linkId}
+// DELETE /rest/api/{2-3}/issueLink/{linkID}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/link#delete-issue-link
-func (l *LinkRichTextService) Delete(ctx context.Context, linkId string) (*model.ResponseScheme, error) {
-	return l.internalClient.Delete(ctx, linkId)
+func (l *LinkRichTextService) Delete(ctx context.Context, linkID string) (*model.ResponseScheme, error) {
+	return l.internalClient.Delete(ctx, linkID)
 }
 
 // Create creates a link between two issues. Use this operation to indicate a relationship between two issues
@@ -56,13 +57,13 @@ func (l *LinkRichTextService) Create(ctx context.Context, payload *model.LinkPay
 	return l.internalClient.Create(ctx, payload)
 }
 
-func (i *internalLinkRichTextServiceImpl) Get(ctx context.Context, linkId string) (*model.IssueLinkScheme, *model.ResponseScheme, error) {
+func (i *internalLinkRichTextServiceImpl) Get(ctx context.Context, linkID string) (*model.IssueLinkScheme, *model.ResponseScheme, error) {
 
-	if linkId == "" {
+	if linkID == "" {
 		return nil, nil, model.ErrNoTypeIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/issueLink/%v", i.version, linkId)
+	endpoint := fmt.Sprintf("rest/api/%v/issueLink/%v", i.version, linkID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
@@ -78,13 +79,13 @@ func (i *internalLinkRichTextServiceImpl) Get(ctx context.Context, linkId string
 	return link, response, nil
 }
 
-func (i *internalLinkRichTextServiceImpl) Gets(ctx context.Context, issueKeyOrId string) (*model.IssueLinkPageScheme, *model.ResponseScheme, error) {
+func (i *internalLinkRichTextServiceImpl) Gets(ctx context.Context, issueKeyOrID string) (*model.IssueLinkPageScheme, *model.ResponseScheme, error) {
 
-	if len(issueKeyOrId) == 0 {
+	if len(issueKeyOrID) == 0 {
 		return nil, nil, model.ErrNoIssueKeyOrIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/issue/%v?fields=issuelinks", i.version, issueKeyOrId)
+	endpoint := fmt.Sprintf("rest/api/%v/issue/%v?fields=issuelinks", i.version, issueKeyOrID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
@@ -100,13 +101,13 @@ func (i *internalLinkRichTextServiceImpl) Gets(ctx context.Context, issueKeyOrId
 	return links, response, nil
 }
 
-func (i *internalLinkRichTextServiceImpl) Delete(ctx context.Context, linkId string) (*model.ResponseScheme, error) {
+func (i *internalLinkRichTextServiceImpl) Delete(ctx context.Context, linkID string) (*model.ResponseScheme, error) {
 
-	if linkId == "" {
+	if linkID == "" {
 		return nil, model.ErrNoTypeIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/issueLink/%v", i.version, linkId)
+	endpoint := fmt.Sprintf("rest/api/%v/issueLink/%v", i.version, linkID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {

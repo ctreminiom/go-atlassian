@@ -4,13 +4,14 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/service"
-	"github.com/ctreminiom/go-atlassian/service/jira"
 	"net/http"
 	"net/url"
 	"strconv"
 	"strings"
+
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/service"
+	"github.com/ctreminiom/go-atlassian/service/jira"
 )
 
 func NewProjectRoleService(client service.Connector, version string, actor *ProjectRoleActorService) (*ProjectRoleService, error) {
@@ -32,29 +33,29 @@ type ProjectRoleService struct {
 
 // Gets returns a list of project roles for the project returning the name and self URL for each role.
 //
-// GET /rest/api/{2-3}/project/{projectIdOrKey}/role
+// GET /rest/api/{2-3}/project/{projectKeyOrID}/role
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/roles#get-project-roles-for-project
-func (p *ProjectRoleService) Gets(ctx context.Context, projectKeyOrId string) (*map[string]int, *model.ResponseScheme, error) {
-	return p.internalClient.Gets(ctx, projectKeyOrId)
+func (p *ProjectRoleService) Gets(ctx context.Context, projectKeyOrID string) (*map[string]int, *model.ResponseScheme, error) {
+	return p.internalClient.Gets(ctx, projectKeyOrID)
 }
 
 // Get returns a project role's details and actors associated with the project.
 //
-// GET /rest/api/{2-3}/project/{projectIdOrKey}/role/{id}
+// GET /rest/api/{2-3}/project/{projectKeyOrID}/role/{id}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/roles#get-project-role-for-project
-func (p *ProjectRoleService) Get(ctx context.Context, projectKeyOrId string, roleId int) (*model.ProjectRoleScheme, *model.ResponseScheme, error) {
-	return p.internalClient.Get(ctx, projectKeyOrId, roleId)
+func (p *ProjectRoleService) Get(ctx context.Context, projectKeyOrID string, roleID int) (*model.ProjectRoleScheme, *model.ResponseScheme, error) {
+	return p.internalClient.Get(ctx, projectKeyOrID, roleID)
 }
 
 // Details returns all project roles and the details for each role.
 //
-// GET /rest/api/{2-3}/project/{projectIdOrKey}/roledetails
+// GET /rest/api/{2-3}/project/{projectKeyOrID}/roledetails
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/roles#get-project-role-details
-func (p *ProjectRoleService) Details(ctx context.Context, projectKeyOrId string) ([]*model.ProjectRoleDetailScheme, *model.ResponseScheme, error) {
-	return p.internalClient.Details(ctx, projectKeyOrId)
+func (p *ProjectRoleService) Details(ctx context.Context, projectKeyOrID string) ([]*model.ProjectRoleDetailScheme, *model.ResponseScheme, error) {
+	return p.internalClient.Details(ctx, projectKeyOrID)
 }
 
 // Global gets a list of all project roles, complete with project role details and default actors.
@@ -80,13 +81,13 @@ type internalProjectRoleImpl struct {
 	version string
 }
 
-func (i *internalProjectRoleImpl) Gets(ctx context.Context, projectKeyOrId string) (*map[string]int, *model.ResponseScheme, error) {
+func (i *internalProjectRoleImpl) Gets(ctx context.Context, projectKeyOrID string) (*map[string]int, *model.ResponseScheme, error) {
 
-	if projectKeyOrId == "" {
+	if projectKeyOrID == "" {
 		return nil, nil, model.ErrNoProjectIDOrKeyError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/project/%v/role", i.version, projectKeyOrId)
+	endpoint := fmt.Sprintf("rest/api/%v/project/%v/role", i.version, projectKeyOrID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
@@ -112,26 +113,26 @@ func (i *internalProjectRoleImpl) Gets(ctx context.Context, projectKeyOrId strin
 		}
 
 		uriAsSlice := strings.Split(uri.Path, "/") // "ctreminiom.atlassian.net,rest,api,3,project,10000,role,10002"
-		uriRoleId := uriAsSlice[len(uriAsSlice)-1] // 10002
+		uriRoleID := uriAsSlice[len(uriAsSlice)-1] // 10002
 
-		roleId, err := strconv.Atoi(uriRoleId)
+		roleID, err := strconv.Atoi(uriRoleID)
 		if err != nil {
 			return nil, response, err
 		}
 
-		roles[name] = roleId
+		roles[name] = roleID
 	}
 
 	return &roles, response, nil
 }
 
-func (i *internalProjectRoleImpl) Get(ctx context.Context, projectKeyOrId string, roleId int) (*model.ProjectRoleScheme, *model.ResponseScheme, error) {
+func (i *internalProjectRoleImpl) Get(ctx context.Context, projectKeyOrID string, roleID int) (*model.ProjectRoleScheme, *model.ResponseScheme, error) {
 
-	if projectKeyOrId == "" {
+	if projectKeyOrID == "" {
 		return nil, nil, model.ErrNoProjectIDOrKeyError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/project/%v/role/%v", i.version, projectKeyOrId, roleId)
+	endpoint := fmt.Sprintf("rest/api/%v/project/%v/role/%v", i.version, projectKeyOrID, roleID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
@@ -147,13 +148,13 @@ func (i *internalProjectRoleImpl) Get(ctx context.Context, projectKeyOrId string
 	return role, response, nil
 }
 
-func (i *internalProjectRoleImpl) Details(ctx context.Context, projectKeyOrId string) ([]*model.ProjectRoleDetailScheme, *model.ResponseScheme, error) {
+func (i *internalProjectRoleImpl) Details(ctx context.Context, projectKeyOrID string) ([]*model.ProjectRoleDetailScheme, *model.ResponseScheme, error) {
 
-	if projectKeyOrId == "" {
+	if projectKeyOrID == "" {
 		return nil, nil, model.ErrNoProjectIDOrKeyError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/project/%v/roledetails", i.version, projectKeyOrId)
+	endpoint := fmt.Sprintf("rest/api/%v/project/%v/roledetails", i.version, projectKeyOrID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {

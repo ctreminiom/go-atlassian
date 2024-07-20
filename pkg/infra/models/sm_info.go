@@ -12,7 +12,7 @@ type InfoScheme struct {
 
 // InfoBuildDataScheme represents the build date of a system.
 type InfoBuildDataScheme struct {
-	Iso8601     DateTimeScheme `json:"iso8601,omitempty"`     // The ISO 8601 format of the build date.
+	ISO8601     DateTimeScheme `json:"iso8601,omitempty"`     // The ISO 8601 format of the build date.
 	Jira        string         `json:"jira,omitempty"`        // The Jira format of the build date.
 	Friendly    string         `json:"friendly,omitempty"`    // The friendly format of the build date.
 	EpochMillis int64          `json:"epochMillis,omitempty"` // The epoch milliseconds of the build date.

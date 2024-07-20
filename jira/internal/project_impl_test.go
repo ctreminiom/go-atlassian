@@ -3,13 +3,15 @@ package internal
 import (
 	"context"
 	"errors"
+	"net/http"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
-	"net/http"
-	"testing"
 )
 
 func Test_internalProjectImpl_Create(t *testing.T) {
@@ -327,7 +329,7 @@ func Test_internalProjectImpl_Get(t *testing.T) {
 
 	type args struct {
 		ctx            context.Context
-		projectKeyOrId string
+		projectKeyOrID string
 		expand         []string
 	}
 
@@ -344,7 +346,7 @@ func Test_internalProjectImpl_Get(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:            context.Background(),
-				projectKeyOrId: "KP",
+				projectKeyOrID: "KP",
 				expand:         []string{"issueTypes", "lead"},
 			},
 			on: func(fields *fields) {
@@ -374,7 +376,7 @@ func Test_internalProjectImpl_Get(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:            context.Background(),
-				projectKeyOrId: "KP",
+				projectKeyOrID: "KP",
 				expand:         []string{"issueTypes", "lead"},
 			},
 			on: func(fields *fields) {
@@ -404,7 +406,7 @@ func Test_internalProjectImpl_Get(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:            context.Background(),
-				projectKeyOrId: "KP",
+				projectKeyOrID: "KP",
 				expand:         []string{"issueTypes", "lead"},
 			},
 			on: func(fields *fields) {
@@ -435,7 +437,7 @@ func Test_internalProjectImpl_Get(t *testing.T) {
 			newService, err := NewProjectService(testCase.fields.c, testCase.fields.version, &ProjectChildServices{})
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := newService.Get(testCase.args.ctx, testCase.args.projectKeyOrId, testCase.args.expand)
+			gotResult, gotResponse, err := newService.Get(testCase.args.ctx, testCase.args.projectKeyOrID, testCase.args.expand)
 
 			if testCase.wantErr {
 
@@ -480,7 +482,7 @@ func Test_internalProjectImpl_Update(t *testing.T) {
 
 	type args struct {
 		ctx            context.Context
-		projectKeyOrId string
+		projectKeyOrID string
 		payload        *model.ProjectUpdateScheme
 	}
 
@@ -497,7 +499,7 @@ func Test_internalProjectImpl_Update(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:            context.Background(),
-				projectKeyOrId: "KP",
+				projectKeyOrID: "KP",
 				payload:        payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -527,7 +529,7 @@ func Test_internalProjectImpl_Update(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:            context.Background(),
-				projectKeyOrId: "KP",
+				projectKeyOrID: "KP",
 				payload:        payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -567,7 +569,7 @@ func Test_internalProjectImpl_Update(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:            context.Background(),
-				projectKeyOrId: "KP",
+				projectKeyOrID: "KP",
 				payload:        payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -598,7 +600,7 @@ func Test_internalProjectImpl_Update(t *testing.T) {
 			newService, err := NewProjectService(testCase.fields.c, testCase.fields.version, &ProjectChildServices{})
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := newService.Update(testCase.args.ctx, testCase.args.projectKeyOrId, testCase.args.payload)
+			gotResult, gotResponse, err := newService.Update(testCase.args.ctx, testCase.args.projectKeyOrID, testCase.args.payload)
 
 			if testCase.wantErr {
 
@@ -628,7 +630,7 @@ func Test_internalProjectImpl_Delete(t *testing.T) {
 
 	type args struct {
 		ctx            context.Context
-		projectKeyOrId string
+		projectKeyOrID string
 		enableUndo     bool
 	}
 
@@ -645,7 +647,7 @@ func Test_internalProjectImpl_Delete(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:            context.Background(),
-				projectKeyOrId: "KP",
+				projectKeyOrID: "KP",
 				enableUndo:     true,
 			},
 			on: func(fields *fields) {
@@ -675,7 +677,7 @@ func Test_internalProjectImpl_Delete(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:            context.Background(),
-				projectKeyOrId: "KP",
+				projectKeyOrID: "KP",
 				enableUndo:     true,
 			},
 			on: func(fields *fields) {
@@ -715,7 +717,7 @@ func Test_internalProjectImpl_Delete(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:            context.Background(),
-				projectKeyOrId: "KP",
+				projectKeyOrID: "KP",
 				enableUndo:     true,
 			},
 			on: func(fields *fields) {
@@ -746,7 +748,7 @@ func Test_internalProjectImpl_Delete(t *testing.T) {
 			newService, err := NewProjectService(testCase.fields.c, testCase.fields.version, &ProjectChildServices{})
 			assert.NoError(t, err)
 
-			gotResponse, err := newService.Delete(testCase.args.ctx, testCase.args.projectKeyOrId, testCase.args.enableUndo)
+			gotResponse, err := newService.Delete(testCase.args.ctx, testCase.args.projectKeyOrID, testCase.args.enableUndo)
 
 			if testCase.wantErr {
 
@@ -775,7 +777,7 @@ func Test_internalProjectImpl_DeleteAsynchronously(t *testing.T) {
 
 	type args struct {
 		ctx            context.Context
-		projectKeyOrId string
+		projectKeyOrID string
 	}
 
 	testCases := []struct {
@@ -791,7 +793,7 @@ func Test_internalProjectImpl_DeleteAsynchronously(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:            context.Background(),
-				projectKeyOrId: "KP",
+				projectKeyOrID: "KP",
 			},
 			on: func(fields *fields) {
 
@@ -820,7 +822,7 @@ func Test_internalProjectImpl_DeleteAsynchronously(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:            context.Background(),
-				projectKeyOrId: "KP",
+				projectKeyOrID: "KP",
 			},
 			on: func(fields *fields) {
 
@@ -859,7 +861,7 @@ func Test_internalProjectImpl_DeleteAsynchronously(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:            context.Background(),
-				projectKeyOrId: "KP",
+				projectKeyOrID: "KP",
 			},
 			on: func(fields *fields) {
 
@@ -889,7 +891,7 @@ func Test_internalProjectImpl_DeleteAsynchronously(t *testing.T) {
 			newService, err := NewProjectService(testCase.fields.c, testCase.fields.version, &ProjectChildServices{})
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := newService.DeleteAsynchronously(testCase.args.ctx, testCase.args.projectKeyOrId)
+			gotResult, gotResponse, err := newService.DeleteAsynchronously(testCase.args.ctx, testCase.args.projectKeyOrID)
 
 			if testCase.wantErr {
 
@@ -919,7 +921,7 @@ func Test_internalProjectImpl_Archive(t *testing.T) {
 
 	type args struct {
 		ctx            context.Context
-		projectKeyOrId string
+		projectKeyOrID string
 	}
 
 	testCases := []struct {
@@ -935,7 +937,7 @@ func Test_internalProjectImpl_Archive(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:            context.Background(),
-				projectKeyOrId: "KP",
+				projectKeyOrID: "KP",
 			},
 			on: func(fields *fields) {
 
@@ -964,7 +966,7 @@ func Test_internalProjectImpl_Archive(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:            context.Background(),
-				projectKeyOrId: "KP",
+				projectKeyOrID: "KP",
 			},
 			on: func(fields *fields) {
 
@@ -1003,7 +1005,7 @@ func Test_internalProjectImpl_Archive(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:            context.Background(),
-				projectKeyOrId: "KP",
+				projectKeyOrID: "KP",
 			},
 			on: func(fields *fields) {
 
@@ -1033,7 +1035,7 @@ func Test_internalProjectImpl_Archive(t *testing.T) {
 			newService, err := NewProjectService(testCase.fields.c, testCase.fields.version, &ProjectChildServices{})
 			assert.NoError(t, err)
 
-			gotResponse, err := newService.Archive(testCase.args.ctx, testCase.args.projectKeyOrId)
+			gotResponse, err := newService.Archive(testCase.args.ctx, testCase.args.projectKeyOrID)
 
 			if testCase.wantErr {
 
@@ -1062,7 +1064,7 @@ func Test_internalProjectImpl_Restore(t *testing.T) {
 
 	type args struct {
 		ctx            context.Context
-		projectKeyOrId string
+		projectKeyOrID string
 	}
 
 	testCases := []struct {
@@ -1078,7 +1080,7 @@ func Test_internalProjectImpl_Restore(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:            context.Background(),
-				projectKeyOrId: "KP",
+				projectKeyOrID: "KP",
 			},
 			on: func(fields *fields) {
 
@@ -1107,7 +1109,7 @@ func Test_internalProjectImpl_Restore(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:            context.Background(),
-				projectKeyOrId: "KP",
+				projectKeyOrID: "KP",
 			},
 			on: func(fields *fields) {
 
@@ -1146,7 +1148,7 @@ func Test_internalProjectImpl_Restore(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:            context.Background(),
-				projectKeyOrId: "KP",
+				projectKeyOrID: "KP",
 			},
 			on: func(fields *fields) {
 
@@ -1176,7 +1178,7 @@ func Test_internalProjectImpl_Restore(t *testing.T) {
 			newService, err := NewProjectService(testCase.fields.c, testCase.fields.version, &ProjectChildServices{})
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := newService.Restore(testCase.args.ctx, testCase.args.projectKeyOrId)
+			gotResult, gotResponse, err := newService.Restore(testCase.args.ctx, testCase.args.projectKeyOrID)
 
 			if testCase.wantErr {
 
@@ -1206,7 +1208,7 @@ func Test_internalProjectImpl_Statuses(t *testing.T) {
 
 	type args struct {
 		ctx            context.Context
-		projectKeyOrId string
+		projectKeyOrID string
 	}
 
 	testCases := []struct {
@@ -1222,7 +1224,7 @@ func Test_internalProjectImpl_Statuses(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:            context.Background(),
-				projectKeyOrId: "KP",
+				projectKeyOrID: "KP",
 			},
 			on: func(fields *fields) {
 
@@ -1251,7 +1253,7 @@ func Test_internalProjectImpl_Statuses(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:            context.Background(),
-				projectKeyOrId: "KP",
+				projectKeyOrID: "KP",
 			},
 			on: func(fields *fields) {
 
@@ -1290,7 +1292,7 @@ func Test_internalProjectImpl_Statuses(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:            context.Background(),
-				projectKeyOrId: "KP",
+				projectKeyOrID: "KP",
 			},
 			on: func(fields *fields) {
 
@@ -1320,7 +1322,7 @@ func Test_internalProjectImpl_Statuses(t *testing.T) {
 			newService, err := NewProjectService(testCase.fields.c, testCase.fields.version, &ProjectChildServices{})
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := newService.Statuses(testCase.args.ctx, testCase.args.projectKeyOrId)
+			gotResult, gotResponse, err := newService.Statuses(testCase.args.ctx, testCase.args.projectKeyOrID)
 
 			if testCase.wantErr {
 
@@ -1350,7 +1352,7 @@ func Test_internalProjectImpl_NotificationScheme(t *testing.T) {
 
 	type args struct {
 		ctx            context.Context
-		projectKeyOrId string
+		projectKeyOrID string
 		expand         []string
 	}
 
@@ -1367,7 +1369,7 @@ func Test_internalProjectImpl_NotificationScheme(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:            context.Background(),
-				projectKeyOrId: "KP",
+				projectKeyOrID: "KP",
 				expand:         []string{"all", "projectRole"},
 			},
 			on: func(fields *fields) {
@@ -1397,7 +1399,7 @@ func Test_internalProjectImpl_NotificationScheme(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:            context.Background(),
-				projectKeyOrId: "KP",
+				projectKeyOrID: "KP",
 				expand:         []string{"all", "projectRole"},
 			},
 			on: func(fields *fields) {
@@ -1427,7 +1429,7 @@ func Test_internalProjectImpl_NotificationScheme(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:            context.Background(),
-				projectKeyOrId: "KP",
+				projectKeyOrID: "KP",
 				expand:         []string{"all", "projectRole"},
 			},
 			on: func(fields *fields) {
@@ -1458,7 +1460,7 @@ func Test_internalProjectImpl_NotificationScheme(t *testing.T) {
 			newService, err := NewProjectService(testCase.fields.c, testCase.fields.version, &ProjectChildServices{})
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := newService.NotificationScheme(testCase.args.ctx, testCase.args.projectKeyOrId, testCase.args.expand)
+			gotResult, gotResponse, err := newService.NotificationScheme(testCase.args.ctx, testCase.args.projectKeyOrID, testCase.args.expand)
 
 			if testCase.wantErr {
 

@@ -3,12 +3,14 @@ package internal
 import (
 	"context"
 	"errors"
+	"net/http"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
-	"github.com/stretchr/testify/assert"
-	"net/http"
-	"testing"
 )
 
 func Test_internalWatcherImpl_Gets(t *testing.T) {
@@ -20,7 +22,7 @@ func Test_internalWatcherImpl_Gets(t *testing.T) {
 
 	type args struct {
 		ctx          context.Context
-		issueKeyOrId string
+		issueKeyOrID string
 	}
 
 	testCases := []struct {
@@ -36,7 +38,7 @@ func Test_internalWatcherImpl_Gets(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-5",
+				issueKeyOrID: "DUMMY-5",
 			},
 			on: func(fields *fields) {
 
@@ -66,7 +68,7 @@ func Test_internalWatcherImpl_Gets(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-5",
+				issueKeyOrID: "DUMMY-5",
 			},
 			on: func(fields *fields) {
 
@@ -96,7 +98,7 @@ func Test_internalWatcherImpl_Gets(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "",
+				issueKeyOrID: "",
 			},
 			wantErr: true,
 			Err:     model.ErrNoIssueKeyOrIDError,
@@ -107,7 +109,7 @@ func Test_internalWatcherImpl_Gets(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-5",
+				issueKeyOrID: "DUMMY-5",
 			},
 			on: func(fields *fields) {
 
@@ -138,7 +140,7 @@ func Test_internalWatcherImpl_Gets(t *testing.T) {
 			newService, err := NewWatcherService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := newService.Gets(testCase.args.ctx, testCase.args.issueKeyOrId)
+			gotResult, gotResponse, err := newService.Gets(testCase.args.ctx, testCase.args.issueKeyOrID)
 
 			if testCase.wantErr {
 
@@ -168,7 +170,7 @@ func Test_internalWatcherImpl_Add(t *testing.T) {
 
 	type args struct {
 		ctx          context.Context
-		issueKeyOrId string
+		issueKeyOrID string
 	}
 
 	testCases := []struct {
@@ -184,7 +186,7 @@ func Test_internalWatcherImpl_Add(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-5",
+				issueKeyOrID: "DUMMY-5",
 			},
 			on: func(fields *fields) {
 
@@ -214,7 +216,7 @@ func Test_internalWatcherImpl_Add(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-5",
+				issueKeyOrID: "DUMMY-5",
 			},
 			on: func(fields *fields) {
 
@@ -244,7 +246,7 @@ func Test_internalWatcherImpl_Add(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "",
+				issueKeyOrID: "",
 			},
 			wantErr: true,
 			Err:     model.ErrNoIssueKeyOrIDError,
@@ -255,7 +257,7 @@ func Test_internalWatcherImpl_Add(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-5",
+				issueKeyOrID: "DUMMY-5",
 			},
 			on: func(fields *fields) {
 
@@ -286,7 +288,7 @@ func Test_internalWatcherImpl_Add(t *testing.T) {
 			newService, err := NewWatcherService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResponse, err := newService.Add(testCase.args.ctx, testCase.args.issueKeyOrId)
+			gotResponse, err := newService.Add(testCase.args.ctx, testCase.args.issueKeyOrID)
 
 			if testCase.wantErr {
 
@@ -315,8 +317,8 @@ func Test_internalWatcherImpl_Delete(t *testing.T) {
 
 	type args struct {
 		ctx          context.Context
-		issueKeyOrId string
-		accountId    string
+		issueKeyOrID string
+		accountID    string
 	}
 
 	testCases := []struct {
@@ -332,8 +334,8 @@ func Test_internalWatcherImpl_Delete(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-5",
-				accountId:    "dummy-account-id",
+				issueKeyOrID: "DUMMY-5",
+				accountID:    "dummy-account-id",
 			},
 			on: func(fields *fields) {
 
@@ -363,8 +365,8 @@ func Test_internalWatcherImpl_Delete(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-5",
-				accountId:    "dummy-account-id",
+				issueKeyOrID: "DUMMY-5",
+				accountID:    "dummy-account-id",
 			},
 			on: func(fields *fields) {
 
@@ -394,7 +396,7 @@ func Test_internalWatcherImpl_Delete(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "",
+				issueKeyOrID: "",
 			},
 			wantErr: true,
 			Err:     model.ErrNoIssueKeyOrIDError,
@@ -405,8 +407,8 @@ func Test_internalWatcherImpl_Delete(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-5",
-				accountId:    "",
+				issueKeyOrID: "DUMMY-5",
+				accountID:    "",
 			},
 			wantErr: true,
 			Err:     model.ErrNoAccountIDError,
@@ -417,8 +419,8 @@ func Test_internalWatcherImpl_Delete(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-5",
-				accountId:    "dummy-account-id",
+				issueKeyOrID: "DUMMY-5",
+				accountID:    "dummy-account-id",
 			},
 			on: func(fields *fields) {
 
@@ -449,7 +451,7 @@ func Test_internalWatcherImpl_Delete(t *testing.T) {
 			newService, err := NewWatcherService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResponse, err := newService.Delete(testCase.args.ctx, testCase.args.issueKeyOrId, testCase.args.accountId)
+			gotResponse, err := newService.Delete(testCase.args.ctx, testCase.args.issueKeyOrID, testCase.args.accountID)
 
 			if testCase.wantErr {
 

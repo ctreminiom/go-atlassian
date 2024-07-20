@@ -63,9 +63,9 @@ type CustomFieldScheme struct {
 
 // CustomFieldAssetScheme represents a custom field asset in Jira.
 type CustomFieldAssetScheme struct {
-	WorkspaceId string `json:"workspaceId,omitempty"` // The ID of the workspace.
-	Id          string `json:"id,omitempty"`          // The ID of the custom field asset.
-	ObjectId    string `json:"objectId,omitempty"`    // The object ID of the custom field asset.
+	WorkspaceID string `json:"workspaceId,omitempty"` // The ID of the workspace.
+	ID          string `json:"id,omitempty"`          // The ID of the custom field asset.
+	ObjectID    string `json:"objectId,omitempty"`    // The object ID of the custom field asset.
 }
 
 // CustomFieldRequestTypeScheme represents a custom field request type in Jira.
@@ -81,4 +81,9 @@ type CustomFieldRequestTypeLinkScheme struct {
 	JiraRest string `json:"jiraRest,omitempty"` // The Jira REST API link for the custom field request type.
 	Web      string `json:"web,omitempty"`      // The web link for the custom field request type.
 	Agent    string `json:"agent,omitempty"`    // The agent link for the custom field request type.
+}
+
+type CustomFieldTempoAccountScheme struct {
+	ID    int    `json:"id"`
+	Value string `json:"value"`
 }

@@ -14,9 +14,9 @@ type ObjectSchemaPageScheme struct {
 
 // ObjectSchemaScheme represents an object schema.
 type ObjectSchemaScheme struct {
-	WorkspaceId     string `json:"workspaceId,omitempty"`     // The ID of the workspace.
-	GlobalId        string `json:"globalId,omitempty"`        // The global ID of the object schema.
-	Id              string `json:"id,omitempty"`              // The ID of the object schema.
+	WorkspaceID     string `json:"workspaceId,omitempty"`     // The ID of the workspace.
+	GlobalID        string `json:"globalId,omitempty"`        // The global ID of the object schema.
+	ID              string `json:"id,omitempty"`              // The ID of the object schema.
 	Name            string `json:"name,omitempty"`            // The name of the object schema.
 	ObjectSchemaKey string `json:"objectSchemaKey,omitempty"` // The key of the object schema.
 	Description     string `json:"description,omitempty"`     // The description of the object schema.

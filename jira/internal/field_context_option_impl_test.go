@@ -3,12 +3,14 @@ package internal
 import (
 	"context"
 	"errors"
+	"net/http"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
-	"github.com/stretchr/testify/assert"
-	"net/http"
-	"testing"
 )
 
 func Test_internalIssueFieldContextOptionServiceImpl_Gets(t *testing.T) {
@@ -748,7 +750,7 @@ func Test_internalIssueFieldContextOptionServiceImpl_Order(t *testing.T) {
 
 	payloadMocked := &model.OrderFieldOptionPayloadScheme{
 		Position:             "Last",
-		CustomFieldOptionIds: []string{"111"},
+		CustomFieldOptionIDs: []string{"111"},
 	}
 
 	type fields struct {

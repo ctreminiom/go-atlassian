@@ -2205,7 +2205,7 @@ func TestParseRequestTypeCustomField(t *testing.T) {
 					Status:         "Check billing account",
 					StatusCategory: "NEW",
 					StatusDate: &CustomerRequestCurrentStatusDateScheme{
-						Iso8601:     "2024-06-28T15:33:57+0900",
+						ISO8601:     "2024-06-28T15:33:57+0900",
 						Jira:        "2024-06-28T08:33:57.313+0200",
 						Friendly:    "Friday 15:33",
 						EpochMillis: 1719556437313,
@@ -6523,7 +6523,7 @@ func TestParseRequestTypeCustomFields(t *testing.T) {
 						Status:         "Check billing account",
 						StatusCategory: "NEW",
 						StatusDate: &CustomerRequestCurrentStatusDateScheme{
-							Iso8601:     "2024-06-28T15:33:57+0900",
+							ISO8601:     "2024-06-28T15:33:57+0900",
 							Jira:        "2024-06-28T08:33:57.313+0200",
 							Friendly:    "Friday 15:33",
 							EpochMillis: 1719556437313,
@@ -6550,7 +6550,7 @@ func TestParseRequestTypeCustomFields(t *testing.T) {
 						Status:         "Check billing account",
 						StatusCategory: "NEW",
 						StatusDate: &CustomerRequestCurrentStatusDateScheme{
-							Iso8601:     "2024-06-28T15:33:57+0900",
+							ISO8601:     "2024-06-28T15:33:57+0900",
 							Jira:        "2024-06-28T08:33:57.313+0200",
 							Friendly:    "Friday 15:33",
 							EpochMillis: 1719556437313,

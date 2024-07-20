@@ -2,6 +2,7 @@ package bitbucket
 
 import (
 	"context"
+
 	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
 )
 
@@ -33,7 +34,7 @@ type WorkspaceConnector interface {
 	// GET /2.0/workspaces/{workspace}/members/{member}
 	//
 	// https://docs.go-atlassian.io/bitbucket-cloud/workspace#get-member-in-a-workspace
-	Membership(ctx context.Context, workspace, memberId string) (*models.WorkspaceMembershipScheme, *models.ResponseScheme, error)
+	Membership(ctx context.Context, workspace, memberID string) (*models.WorkspaceMembershipScheme, *models.ResponseScheme, error)
 
 	// Projects returns the list of projects in this workspace.
 	//
@@ -69,21 +70,21 @@ type WorkspaceHookConnector interface {
 	// GET /2.0/workspaces/{workspace}/hooks/{uid}
 	//
 	// https://docs.go-atlassian.io/bitbucket-cloud/workspace/webhooks#get-webhook-for-a-workspace
-	Get(ctx context.Context, workspace, webhookId string) (*models.WebhookSubscriptionScheme, *models.ResponseScheme, error)
+	Get(ctx context.Context, workspace, webhookID string) (*models.WebhookSubscriptionScheme, *models.ResponseScheme, error)
 
 	// Update updates the specified webhook subscription.
 	//
 	// PUT /2.0/workspaces/{workspace}/hooks/{uid}
 	//
 	// https://docs.go-atlassian.io/bitbucket-cloud/workspace/webhooks#update-webhook-for-a-workspace
-	Update(ctx context.Context, workspace, webhookId string, payload *models.WebhookSubscriptionPayloadScheme) (*models.WebhookSubscriptionScheme, *models.ResponseScheme, error)
+	Update(ctx context.Context, workspace, webhookID string, payload *models.WebhookSubscriptionPayloadScheme) (*models.WebhookSubscriptionScheme, *models.ResponseScheme, error)
 
 	// Delete deletes the specified webhook subscription from the given workspace.
 	//
 	// DELETE /2.0/workspaces/{workspace}/hooks/{uid}
 	//
 	// https://docs.go-atlassian.io/bitbucket-cloud/workspace/webhooks#delete-webhook-for-a-workspace
-	Delete(ctx context.Context, workspace, webhookId string) (*models.ResponseScheme, error)
+	Delete(ctx context.Context, workspace, webhookID string) (*models.ResponseScheme, error)
 }
 
 // WorkspacePermissionConnector is where you can manage the workspace permissions

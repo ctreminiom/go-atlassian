@@ -3,19 +3,21 @@ package internal
 import (
 	"context"
 	"fmt"
+	"net/http"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/bitbucket"
-	"net/http"
 )
 
+// NewWorkspaceHookService creates a new WorkspaceHookService.
 func NewWorkspaceHookService(client service.Connector) *WorkspaceHookService {
-
 	return &WorkspaceHookService{
 		internalClient: &internalWorkspaceHookServiceImpl{c: client},
 	}
 }
 
+// WorkspaceHookService handles communication with the workspace hook related methods of the Bitbucket API.
 type WorkspaceHookService struct {
 	internalClient bitbucket.WorkspaceHookConnector
 }
@@ -45,8 +47,8 @@ func (w *WorkspaceHookService) Create(ctx context.Context, workspace string, pay
 // GET /2.0/workspaces/{workspace}/hooks/{uid}
 //
 // https://docs.go-atlassian.io/bitbucket-cloud/workspace/webhooks#get-webhook-for-a-workspace
-func (w *WorkspaceHookService) Get(ctx context.Context, workspace, webhookId string) (*model.WebhookSubscriptionScheme, *model.ResponseScheme, error) {
-	return w.internalClient.Get(ctx, workspace, webhookId)
+func (w *WorkspaceHookService) Get(ctx context.Context, workspace, webhookID string) (*model.WebhookSubscriptionScheme, *model.ResponseScheme, error) {
+	return w.internalClient.Get(ctx, workspace, webhookID)
 }
 
 // Update updates the specified webhook subscription.
@@ -54,8 +56,8 @@ func (w *WorkspaceHookService) Get(ctx context.Context, workspace, webhookId str
 // PUT /2.0/workspaces/{workspace}/hooks/{uid}
 //
 // https://docs.go-atlassian.io/bitbucket-cloud/workspace/webhooks#update-webhook-for-a-workspace
-func (w *WorkspaceHookService) Update(ctx context.Context, workspace, webhookId string, payload *model.WebhookSubscriptionPayloadScheme) (*model.WebhookSubscriptionScheme, *model.ResponseScheme, error) {
-	return w.internalClient.Update(ctx, workspace, webhookId, payload)
+func (w *WorkspaceHookService) Update(ctx context.Context, workspace, webhookID string, payload *model.WebhookSubscriptionPayloadScheme) (*model.WebhookSubscriptionScheme, *model.ResponseScheme, error) {
+	return w.internalClient.Update(ctx, workspace, webhookID, payload)
 }
 
 // Delete deletes the specified webhook subscription from the given workspace.
@@ -63,8 +65,8 @@ func (w *WorkspaceHookService) Update(ctx context.Context, workspace, webhookId 
 // DELETE /2.0/workspaces/{workspace}/hooks/{uid}
 //
 // https://docs.go-atlassian.io/bitbucket-cloud/workspace/webhooks#delete-webhook-for-a-workspace
-func (w *WorkspaceHookService) Delete(ctx context.Context, workspace, webhookId string) (*model.ResponseScheme, error) {
-	return w.internalClient.Delete(ctx, workspace, webhookId)
+func (w *WorkspaceHookService) Delete(ctx context.Context, workspace, webhookID string) (*model.ResponseScheme, error) {
+	return w.internalClient.Delete(ctx, workspace, webhookID)
 }
 
 type internalWorkspaceHookServiceImpl struct {
@@ -115,17 +117,17 @@ func (i *internalWorkspaceHookServiceImpl) Create(ctx context.Context, workspace
 	return webhook, response, nil
 }
 
-func (i *internalWorkspaceHookServiceImpl) Get(ctx context.Context, workspace, webhookId string) (*model.WebhookSubscriptionScheme, *model.ResponseScheme, error) {
+func (i *internalWorkspaceHookServiceImpl) Get(ctx context.Context, workspace, webhookID string) (*model.WebhookSubscriptionScheme, *model.ResponseScheme, error) {
 
 	if workspace == "" {
 		return nil, nil, model.ErrNoWorkspaceError
 	}
 
-	if webhookId == "" {
+	if webhookID == "" {
 		return nil, nil, model.ErrNoWebhookIDError
 	}
 
-	endpoint := fmt.Sprintf("2.0/workspaces/%v/hooks/%v", workspace, webhookId)
+	endpoint := fmt.Sprintf("2.0/workspaces/%v/hooks/%v", workspace, webhookID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
@@ -141,17 +143,17 @@ func (i *internalWorkspaceHookServiceImpl) Get(ctx context.Context, workspace, w
 	return webhook, response, nil
 }
 
-func (i *internalWorkspaceHookServiceImpl) Update(ctx context.Context, workspace, webhookId string, payload *model.WebhookSubscriptionPayloadScheme) (*model.WebhookSubscriptionScheme, *model.ResponseScheme, error) {
+func (i *internalWorkspaceHookServiceImpl) Update(ctx context.Context, workspace, webhookID string, payload *model.WebhookSubscriptionPayloadScheme) (*model.WebhookSubscriptionScheme, *model.ResponseScheme, error) {
 
 	if workspace == "" {
 		return nil, nil, model.ErrNoWorkspaceError
 	}
 
-	if webhookId == "" {
+	if webhookID == "" {
 		return nil, nil, model.ErrNoWebhookIDError
 	}
 
-	endpoint := fmt.Sprintf("2.0/workspaces/%v/hooks/%v", workspace, webhookId)
+	endpoint := fmt.Sprintf("2.0/workspaces/%v/hooks/%v", workspace, webhookID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
@@ -167,17 +169,17 @@ func (i *internalWorkspaceHookServiceImpl) Update(ctx context.Context, workspace
 	return webhook, response, nil
 }
 
-func (i *internalWorkspaceHookServiceImpl) Delete(ctx context.Context, workspace, webhookId string) (*model.ResponseScheme, error) {
+func (i *internalWorkspaceHookServiceImpl) Delete(ctx context.Context, workspace, webhookID string) (*model.ResponseScheme, error) {
 
 	if workspace == "" {
 		return nil, model.ErrNoWorkspaceError
 	}
 
-	if webhookId == "" {
+	if webhookID == "" {
 		return nil, model.ErrNoWebhookIDError
 	}
 
-	endpoint := fmt.Sprintf("2.0/workspaces/%v/hooks/%v", workspace, webhookId)
+	endpoint := fmt.Sprintf("2.0/workspaces/%v/hooks/%v", workspace, webhookID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {

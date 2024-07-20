@@ -3,12 +3,14 @@ package internal
 import (
 	"context"
 	"errors"
+	"net/http"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
-	"github.com/stretchr/testify/assert"
-	"net/http"
-	"testing"
 )
 
 func Test_internalCustomerImpl_Create(t *testing.T) {
@@ -151,7 +153,7 @@ func Test_internalCustomerImpl_Gets(t *testing.T) {
 
 	type args struct {
 		ctx           context.Context
-		serviceDeskID int
+		serviceDeskID string
 		query         string
 		start, limit  int
 	}
@@ -168,7 +170,7 @@ func Test_internalCustomerImpl_Gets(t *testing.T) {
 			name: "when the parameters are correct",
 			args: args{
 				ctx:           context.Background(),
-				serviceDeskID: 10001,
+				serviceDeskID: "10001",
 				query:         "Carlos T",
 				start:         100,
 				limit:         50,
@@ -198,7 +200,7 @@ func Test_internalCustomerImpl_Gets(t *testing.T) {
 			name: "when the http call cannot be executed",
 			args: args{
 				ctx:           context.Background(),
-				serviceDeskID: 10001,
+				serviceDeskID: "10001",
 				query:         "Carlos T",
 				start:         100,
 				limit:         50,
@@ -230,7 +232,7 @@ func Test_internalCustomerImpl_Gets(t *testing.T) {
 			name: "when the request cannot be created",
 			args: args{
 				ctx:           context.Background(),
-				serviceDeskID: 10001,
+				serviceDeskID: "10001",
 				query:         "Carlos T",
 				start:         100,
 				limit:         50,
@@ -292,7 +294,7 @@ func Test_internalCustomerImpl_Add(t *testing.T) {
 
 	type args struct {
 		ctx           context.Context
-		serviceDeskID int
+		serviceDeskID string
 		accountIDs    []string
 	}
 
@@ -308,7 +310,7 @@ func Test_internalCustomerImpl_Add(t *testing.T) {
 			name: "when the parameters are correct",
 			args: args{
 				ctx:           context.Background(),
-				serviceDeskID: 10001,
+				serviceDeskID: "10001",
 				accountIDs:    []string{"uuid-sample-1", "uuid-sample-2"},
 			},
 			on: func(fields *fields) {
@@ -336,7 +338,7 @@ func Test_internalCustomerImpl_Add(t *testing.T) {
 			name: "when the http call cannot be executed",
 			args: args{
 				ctx:           context.Background(),
-				serviceDeskID: 10001,
+				serviceDeskID: "10001",
 				accountIDs:    []string{"uuid-sample-1", "uuid-sample-2"},
 			},
 			on: func(fields *fields) {
@@ -366,7 +368,7 @@ func Test_internalCustomerImpl_Add(t *testing.T) {
 			name: "when the request cannot be created",
 			args: args{
 				ctx:           context.Background(),
-				serviceDeskID: 10001,
+				serviceDeskID: "10001",
 				accountIDs:    []string{"uuid-sample-1", "uuid-sample-2"},
 			},
 			on: func(fields *fields) {
@@ -400,7 +402,7 @@ func Test_internalCustomerImpl_Add(t *testing.T) {
 			name: "when the account ids are not provided",
 			args: args{
 				ctx:           context.Background(),
-				serviceDeskID: 10001,
+				serviceDeskID: "10001",
 			},
 			wantErr: true,
 			Err:     model.ErrNoAccountSliceError,
@@ -443,7 +445,7 @@ func Test_internalCustomerImpl_Remove(t *testing.T) {
 
 	type args struct {
 		ctx           context.Context
-		serviceDeskID int
+		serviceDeskID string
 		accountIDs    []string
 	}
 
@@ -459,7 +461,7 @@ func Test_internalCustomerImpl_Remove(t *testing.T) {
 			name: "when the parameters are correct",
 			args: args{
 				ctx:           context.Background(),
-				serviceDeskID: 10001,
+				serviceDeskID: "10001",
 				accountIDs:    []string{"uuid-sample-1", "uuid-sample-2"},
 			},
 			on: func(fields *fields) {
@@ -487,7 +489,7 @@ func Test_internalCustomerImpl_Remove(t *testing.T) {
 			name: "when the http call cannot be executed",
 			args: args{
 				ctx:           context.Background(),
-				serviceDeskID: 10001,
+				serviceDeskID: "10001",
 				accountIDs:    []string{"uuid-sample-1", "uuid-sample-2"},
 			},
 			on: func(fields *fields) {
@@ -517,7 +519,7 @@ func Test_internalCustomerImpl_Remove(t *testing.T) {
 			name: "when the request cannot be created",
 			args: args{
 				ctx:           context.Background(),
-				serviceDeskID: 10001,
+				serviceDeskID: "10001",
 				accountIDs:    []string{"uuid-sample-1", "uuid-sample-2"},
 			},
 			on: func(fields *fields) {
@@ -551,7 +553,7 @@ func Test_internalCustomerImpl_Remove(t *testing.T) {
 			name: "when the account ids are not provided",
 			args: args{
 				ctx:           context.Background(),
-				serviceDeskID: 10001,
+				serviceDeskID: "10001",
 			},
 			wantErr: true,
 			Err:     model.ErrNoAccountSliceError,

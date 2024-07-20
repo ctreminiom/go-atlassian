@@ -3,13 +3,14 @@ package internal
 import (
 	"context"
 	"fmt"
-	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/service"
-	"github.com/ctreminiom/go-atlassian/service/jira"
 	"net/http"
 	"net/url"
 	"strconv"
 	"strings"
+
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/service"
+	"github.com/ctreminiom/go-atlassian/service/jira"
 )
 
 func NewWorkflowService(client service.Connector, version string, scheme *WorkflowSchemeService, status *WorkflowStatusService) (*WorkflowService, error) {
@@ -66,11 +67,11 @@ func (w *WorkflowService) Gets(ctx context.Context, options *model.WorkflowSearc
 // 3. associated with any workflow scheme.
 // 4. associated with any draft workflow scheme.
 //
-// DELETE /rest/api/{2-3}/workflow/{entityId}
+// DELETE /rest/api/{2-3}/workflow/{workflowID}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/workflow#search-workflows
-func (w *WorkflowService) Delete(ctx context.Context, workflowId string) (*model.ResponseScheme, error) {
-	return w.internalClient.Delete(ctx, workflowId)
+func (w *WorkflowService) Delete(ctx context.Context, workflowID string) (*model.ResponseScheme, error) {
+	return w.internalClient.Delete(ctx, workflowID)
 }
 
 type internalWorkflowImpl struct {
@@ -138,13 +139,13 @@ func (i *internalWorkflowImpl) Gets(ctx context.Context, options *model.Workflow
 	return page, response, nil
 }
 
-func (i *internalWorkflowImpl) Delete(ctx context.Context, workflowId string) (*model.ResponseScheme, error) {
+func (i *internalWorkflowImpl) Delete(ctx context.Context, workflowID string) (*model.ResponseScheme, error) {
 
-	if workflowId == "" {
+	if workflowID == "" {
 		return nil, model.ErrNoWorkflowIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/workflow/%v", i.version, workflowId)
+	endpoint := fmt.Sprintf("rest/api/%v/workflow/%v", i.version, workflowID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {

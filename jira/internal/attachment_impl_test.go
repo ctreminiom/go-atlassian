@@ -3,16 +3,18 @@ package internal
 import (
 	"context"
 	"errors"
-	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/service"
-	"github.com/ctreminiom/go-atlassian/service/mocks"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
 	"io"
 	"net/http"
 	"os"
 	"path/filepath"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
+
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/service"
+	"github.com/ctreminiom/go-atlassian/service/mocks"
 )
 
 func Test_internalIssueAttachmentServiceImpl_Settings(t *testing.T) {
@@ -156,7 +158,7 @@ func Test_internalIssueAttachmentServiceImpl_Metadata(t *testing.T) {
 
 	type args struct {
 		ctx          context.Context
-		attachmentId string
+		attachmentID string
 	}
 
 	testCases := []struct {
@@ -172,7 +174,7 @@ func Test_internalIssueAttachmentServiceImpl_Metadata(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.Background(),
-				attachmentId: "1110",
+				attachmentID: "1110",
 			},
 			on: func(fields *fields) {
 
@@ -200,7 +202,7 @@ func Test_internalIssueAttachmentServiceImpl_Metadata(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				attachmentId: "1110",
+				attachmentID: "1110",
 			},
 			on: func(fields *fields) {
 
@@ -229,7 +231,7 @@ func Test_internalIssueAttachmentServiceImpl_Metadata(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.Background(),
-				attachmentId: "",
+				attachmentID: "",
 			},
 			on: func(fields *fields) {
 				fields.c = mocks.NewConnector(t)
@@ -243,7 +245,7 @@ func Test_internalIssueAttachmentServiceImpl_Metadata(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.Background(),
-				attachmentId: "1110",
+				attachmentID: "1110",
 			},
 			on: func(fields *fields) {
 
@@ -275,7 +277,7 @@ func Test_internalIssueAttachmentServiceImpl_Metadata(t *testing.T) {
 			attachmentService, err := NewIssueAttachmentService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := attachmentService.Metadata(testCase.args.ctx, testCase.args.attachmentId)
+			gotResult, gotResponse, err := attachmentService.Metadata(testCase.args.ctx, testCase.args.attachmentID)
 
 			if testCase.wantErr {
 
@@ -305,7 +307,7 @@ func Test_internalIssueAttachmentServiceImpl_Human(t *testing.T) {
 
 	type args struct {
 		ctx          context.Context
-		attachmentId string
+		attachmentID string
 	}
 
 	testCases := []struct {
@@ -321,7 +323,7 @@ func Test_internalIssueAttachmentServiceImpl_Human(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.Background(),
-				attachmentId: "1110",
+				attachmentID: "1110",
 			},
 			on: func(fields *fields) {
 
@@ -349,7 +351,7 @@ func Test_internalIssueAttachmentServiceImpl_Human(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				attachmentId: "1110",
+				attachmentID: "1110",
 			},
 			on: func(fields *fields) {
 
@@ -378,7 +380,7 @@ func Test_internalIssueAttachmentServiceImpl_Human(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.Background(),
-				attachmentId: "",
+				attachmentID: "",
 			},
 			on: func(fields *fields) {
 				fields.c = mocks.NewConnector(t)
@@ -392,7 +394,7 @@ func Test_internalIssueAttachmentServiceImpl_Human(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.Background(),
-				attachmentId: "1110",
+				attachmentID: "1110",
 			},
 			on: func(fields *fields) {
 
@@ -424,7 +426,7 @@ func Test_internalIssueAttachmentServiceImpl_Human(t *testing.T) {
 			attachmentService, err := NewIssueAttachmentService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := attachmentService.Human(testCase.args.ctx, testCase.args.attachmentId)
+			gotResult, gotResponse, err := attachmentService.Human(testCase.args.ctx, testCase.args.attachmentID)
 
 			if testCase.wantErr {
 
@@ -454,7 +456,7 @@ func Test_internalIssueAttachmentServiceImpl_Delete(t *testing.T) {
 
 	type args struct {
 		ctx          context.Context
-		attachmentId string
+		attachmentID string
 	}
 
 	testCases := []struct {
@@ -470,7 +472,7 @@ func Test_internalIssueAttachmentServiceImpl_Delete(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.Background(),
-				attachmentId: "1110",
+				attachmentID: "1110",
 			},
 			on: func(fields *fields) {
 
@@ -498,7 +500,7 @@ func Test_internalIssueAttachmentServiceImpl_Delete(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				attachmentId: "1110",
+				attachmentID: "1110",
 			},
 			on: func(fields *fields) {
 
@@ -527,7 +529,7 @@ func Test_internalIssueAttachmentServiceImpl_Delete(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.Background(),
-				attachmentId: "",
+				attachmentID: "",
 			},
 			on: func(fields *fields) {
 				fields.c = mocks.NewConnector(t)
@@ -541,7 +543,7 @@ func Test_internalIssueAttachmentServiceImpl_Delete(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.Background(),
-				attachmentId: "1110",
+				attachmentID: "1110",
 			},
 			on: func(fields *fields) {
 
@@ -573,7 +575,7 @@ func Test_internalIssueAttachmentServiceImpl_Delete(t *testing.T) {
 			attachmentService, err := NewIssueAttachmentService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResponse, err := attachmentService.Delete(testCase.args.ctx, testCase.args.attachmentId)
+			gotResponse, err := attachmentService.Delete(testCase.args.ctx, testCase.args.attachmentID)
 
 			if testCase.wantErr {
 
@@ -612,7 +614,7 @@ func Test_internalIssueAttachmentServiceImpl_Add(t *testing.T) {
 
 	type args struct {
 		ctx                    context.Context
-		issueKeyOrId, fileName string
+		issueKeyOrID, fileName string
 		file                   io.Reader
 	}
 
@@ -629,7 +631,7 @@ func Test_internalIssueAttachmentServiceImpl_Add(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-1",
+				issueKeyOrID: "DUMMY-1",
 				fileName:     "LICENSE",
 				file:         fileMocked,
 			},
@@ -659,7 +661,7 @@ func Test_internalIssueAttachmentServiceImpl_Add(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-1",
+				issueKeyOrID: "DUMMY-1",
 				fileName:     "LICENSE",
 				file:         fileMocked,
 			},
@@ -689,7 +691,7 @@ func Test_internalIssueAttachmentServiceImpl_Add(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "",
+				issueKeyOrID: "",
 				fileName:     "LICENSE",
 				file:         fileMocked,
 			},
@@ -702,7 +704,7 @@ func Test_internalIssueAttachmentServiceImpl_Add(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-1",
+				issueKeyOrID: "DUMMY-1",
 				fileName:     "",
 				file:         fileMocked,
 			},
@@ -715,7 +717,7 @@ func Test_internalIssueAttachmentServiceImpl_Add(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-1",
+				issueKeyOrID: "DUMMY-1",
 				fileName:     "LICENSE",
 				file:         nil,
 			},
@@ -728,7 +730,7 @@ func Test_internalIssueAttachmentServiceImpl_Add(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-1",
+				issueKeyOrID: "DUMMY-1",
 				fileName:     "LICENSE",
 				file:         fileMocked,
 			},
@@ -761,7 +763,7 @@ func Test_internalIssueAttachmentServiceImpl_Add(t *testing.T) {
 			attachmentService, err := NewIssueAttachmentService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := attachmentService.Add(testCase.args.ctx, testCase.args.issueKeyOrId,
+			gotResult, gotResponse, err := attachmentService.Add(testCase.args.ctx, testCase.args.issueKeyOrID,
 				testCase.args.fileName, testCase.args.file)
 
 			if testCase.wantErr {
@@ -792,7 +794,7 @@ func Test_internalIssueAttachmentServiceImpl_Download(t *testing.T) {
 
 	type args struct {
 		ctx          context.Context
-		attachmentId string
+		attachmentID string
 		redirect     bool
 	}
 
@@ -809,7 +811,7 @@ func Test_internalIssueAttachmentServiceImpl_Download(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.Background(),
-				attachmentId: "1110",
+				attachmentID: "1110",
 				redirect:     false,
 			},
 			on: func(fields *fields) {
@@ -838,7 +840,7 @@ func Test_internalIssueAttachmentServiceImpl_Download(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				attachmentId: "1110",
+				attachmentID: "1110",
 				redirect:     true,
 			},
 			on: func(fields *fields) {
@@ -868,7 +870,7 @@ func Test_internalIssueAttachmentServiceImpl_Download(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.Background(),
-				attachmentId: "",
+				attachmentID: "",
 			},
 			on: func(fields *fields) {
 				fields.c = mocks.NewConnector(t)
@@ -882,7 +884,7 @@ func Test_internalIssueAttachmentServiceImpl_Download(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.Background(),
-				attachmentId: "1110",
+				attachmentID: "1110",
 				redirect:     true,
 			},
 			on: func(fields *fields) {
@@ -915,7 +917,7 @@ func Test_internalIssueAttachmentServiceImpl_Download(t *testing.T) {
 			attachmentService, err := NewIssueAttachmentService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResponse, err := attachmentService.Download(testCase.args.ctx, testCase.args.attachmentId, testCase.args.redirect)
+			gotResponse, err := attachmentService.Download(testCase.args.ctx, testCase.args.attachmentID, testCase.args.redirect)
 
 			if testCase.wantErr {
 

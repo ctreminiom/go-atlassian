@@ -3,10 +3,11 @@ package internal
 import (
 	"context"
 	"fmt"
+	"net/http"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/jira"
-	"net/http"
 )
 
 func NewProjectPropertyService(client service.Connector, version string) (*ProjectPropertyService, error) {
@@ -26,20 +27,20 @@ type ProjectPropertyService struct {
 
 // Gets returns all project property keys for the project.
 //
-// GET /rest/api/{2-3}/project/{projectIdOrKey}/properties
+// GET /rest/api/{2-3}/project/{projectKeyOrID}/properties
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/properties#get-project-properties-keys
-func (p *ProjectPropertyService) Gets(ctx context.Context, projectKeyOrId string) (*model.PropertyPageScheme, *model.ResponseScheme, error) {
-	return p.internalClient.Gets(ctx, projectKeyOrId)
+func (p *ProjectPropertyService) Gets(ctx context.Context, projectKeyOrID string) (*model.PropertyPageScheme, *model.ResponseScheme, error) {
+	return p.internalClient.Gets(ctx, projectKeyOrID)
 }
 
 // Get returns the value of a project property.
 //
-// GET /rest/api/{2-3}/project/{projectIdOrKey}/properties/{propertyKey}
+// GET /rest/api/{2-3}/project/{projectKeyOrID}/properties/{propertyKey}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/properties#get-project-property
-func (p *ProjectPropertyService) Get(ctx context.Context, projectKeyOrId, propertyKey string) (*model.EntityPropertyScheme, *model.ResponseScheme, error) {
-	return p.internalClient.Get(ctx, projectKeyOrId, propertyKey)
+func (p *ProjectPropertyService) Get(ctx context.Context, projectKeyOrID, propertyKey string) (*model.EntityPropertyScheme, *model.ResponseScheme, error) {
+	return p.internalClient.Get(ctx, projectKeyOrID, propertyKey)
 }
 
 // Set sets the value of the project property.
@@ -50,20 +51,20 @@ func (p *ProjectPropertyService) Get(ctx context.Context, projectKeyOrId, proper
 //
 // The maximum length is 32768 characters.
 //
-// PUT /rest/api/{2-3}/project/{projectIdOrKey}/properties/{propertyKey}
+// PUT /rest/api/{2-3}/project/{projectKeyOrID}/properties/{propertyKey}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/properties#set-project-property
-func (p *ProjectPropertyService) Set(ctx context.Context, projectKeyOrId, propertyKey string, payload interface{}) (*model.ResponseScheme, error) {
-	return p.internalClient.Set(ctx, projectKeyOrId, propertyKey, payload)
+func (p *ProjectPropertyService) Set(ctx context.Context, projectKeyOrID, propertyKey string, payload interface{}) (*model.ResponseScheme, error) {
+	return p.internalClient.Set(ctx, projectKeyOrID, propertyKey, payload)
 }
 
 // Delete deletes the property from a project.
 //
-// DELETE /rest/api/{2-3}/project/{projectIdOrKey}/properties/{propertyKey}
+// DELETE /rest/api/{2-3}/project/{projectKeyOrID}/properties/{propertyKey}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/properties#delete-project-property
-func (p *ProjectPropertyService) Delete(ctx context.Context, projectKeyOrId, propertyKey string) (*model.ResponseScheme, error) {
-	return p.internalClient.Delete(ctx, projectKeyOrId, propertyKey)
+func (p *ProjectPropertyService) Delete(ctx context.Context, projectKeyOrID, propertyKey string) (*model.ResponseScheme, error) {
+	return p.internalClient.Delete(ctx, projectKeyOrID, propertyKey)
 }
 
 type internalProjectPropertyImpl struct {
@@ -71,13 +72,13 @@ type internalProjectPropertyImpl struct {
 	version string
 }
 
-func (i *internalProjectPropertyImpl) Gets(ctx context.Context, projectKeyOrId string) (*model.PropertyPageScheme, *model.ResponseScheme, error) {
+func (i *internalProjectPropertyImpl) Gets(ctx context.Context, projectKeyOrID string) (*model.PropertyPageScheme, *model.ResponseScheme, error) {
 
-	if projectKeyOrId == "" {
+	if projectKeyOrID == "" {
 		return nil, nil, model.ErrNoProjectIDOrKeyError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/project/%v/properties", i.version, projectKeyOrId)
+	endpoint := fmt.Sprintf("rest/api/%v/project/%v/properties", i.version, projectKeyOrID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
@@ -93,9 +94,9 @@ func (i *internalProjectPropertyImpl) Gets(ctx context.Context, projectKeyOrId s
 	return properties, response, nil
 }
 
-func (i *internalProjectPropertyImpl) Get(ctx context.Context, projectKeyOrId, propertyKey string) (*model.EntityPropertyScheme, *model.ResponseScheme, error) {
+func (i *internalProjectPropertyImpl) Get(ctx context.Context, projectKeyOrID, propertyKey string) (*model.EntityPropertyScheme, *model.ResponseScheme, error) {
 
-	if projectKeyOrId == "" {
+	if projectKeyOrID == "" {
 		return nil, nil, model.ErrNoProjectIDOrKeyError
 	}
 
@@ -103,7 +104,7 @@ func (i *internalProjectPropertyImpl) Get(ctx context.Context, projectKeyOrId, p
 		return nil, nil, model.ErrNoPropertyKeyError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/project/%v/properties/%v", i.version, projectKeyOrId, propertyKey)
+	endpoint := fmt.Sprintf("rest/api/%v/project/%v/properties/%v", i.version, projectKeyOrID, propertyKey)
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
@@ -119,9 +120,9 @@ func (i *internalProjectPropertyImpl) Get(ctx context.Context, projectKeyOrId, p
 	return property, response, nil
 }
 
-func (i *internalProjectPropertyImpl) Set(ctx context.Context, projectKeyOrId, propertyKey string, payload interface{}) (*model.ResponseScheme, error) {
+func (i *internalProjectPropertyImpl) Set(ctx context.Context, projectKeyOrID, propertyKey string, payload interface{}) (*model.ResponseScheme, error) {
 
-	if projectKeyOrId == "" {
+	if projectKeyOrID == "" {
 		return nil, model.ErrNoProjectIDOrKeyError
 	}
 
@@ -129,7 +130,7 @@ func (i *internalProjectPropertyImpl) Set(ctx context.Context, projectKeyOrId, p
 		return nil, model.ErrNoPropertyKeyError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/project/%v/properties/%v", i.version, projectKeyOrId, propertyKey)
+	endpoint := fmt.Sprintf("rest/api/%v/project/%v/properties/%v", i.version, projectKeyOrID, propertyKey)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
@@ -139,9 +140,9 @@ func (i *internalProjectPropertyImpl) Set(ctx context.Context, projectKeyOrId, p
 	return i.c.Call(request, nil)
 }
 
-func (i *internalProjectPropertyImpl) Delete(ctx context.Context, projectKeyOrId, propertyKey string) (*model.ResponseScheme, error) {
+func (i *internalProjectPropertyImpl) Delete(ctx context.Context, projectKeyOrID, propertyKey string) (*model.ResponseScheme, error) {
 
-	if projectKeyOrId == "" {
+	if projectKeyOrID == "" {
 		return nil, model.ErrNoProjectIDOrKeyError
 	}
 
@@ -149,7 +150,7 @@ func (i *internalProjectPropertyImpl) Delete(ctx context.Context, projectKeyOrId
 		return nil, model.ErrNoPropertyKeyError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/project/%v/properties/%v", i.version, projectKeyOrId, propertyKey)
+	endpoint := fmt.Sprintf("rest/api/%v/project/%v/properties/%v", i.version, projectKeyOrID, propertyKey)
 
 	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {

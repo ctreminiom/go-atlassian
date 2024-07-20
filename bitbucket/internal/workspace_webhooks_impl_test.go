@@ -3,12 +3,14 @@ package internal
 import (
 	"context"
 	"errors"
+	"net/http"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
-	"github.com/stretchr/testify/assert"
-	"net/http"
-	"testing"
 )
 
 func Test_internalWorkspaceWebhookServiceImpl_Gets(t *testing.T) {
@@ -246,7 +248,7 @@ func Test_internalWorkspaceWebhookServiceImpl_Create(t *testing.T) {
 
 	payloadMocked := &model.WebhookSubscriptionPayloadScheme{
 		Description: "",
-		Url:         "",
+		URL:         "",
 		Active:      false,
 		Events:      nil,
 	}
@@ -365,7 +367,7 @@ func Test_internalWorkspaceWebhookServiceImpl_Update(t *testing.T) {
 
 	payloadMocked := &model.WebhookSubscriptionPayloadScheme{
 		Description: "",
-		Url:         "",
+		URL:         "",
 		Active:      false,
 		Events:      nil,
 	}

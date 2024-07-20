@@ -3,13 +3,14 @@ package internal
 import (
 	"context"
 	"fmt"
-	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/service"
-	"github.com/ctreminiom/go-atlassian/service/jira"
 	"net/http"
 	"net/url"
 	"strconv"
 	"strings"
+
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/service"
+	"github.com/ctreminiom/go-atlassian/service/jira"
 )
 
 func NewProjectVersionService(client service.Connector, version string) (*ProjectVersionService, error) {
@@ -33,20 +34,20 @@ type ProjectVersionService struct {
 //
 // Use Search() if you want to get the versions in a project with pagination.
 //
-// GET /rest/api/{2-3}/project/{projectIdOrKey}/versions
+// GET /rest/api/{2-3}/project/{projectKeyOrID}/versions
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/versions#get-project-versions
-func (p *ProjectVersionService) Gets(ctx context.Context, projectKeyOrId string) ([]*model.VersionScheme, *model.ResponseScheme, error) {
-	return p.internalClient.Gets(ctx, projectKeyOrId)
+func (p *ProjectVersionService) Gets(ctx context.Context, projectKeyOrID string) ([]*model.VersionScheme, *model.ResponseScheme, error) {
+	return p.internalClient.Gets(ctx, projectKeyOrID)
 }
 
 // Search returns a paginated list of all versions in a project.
 //
-// GET /rest/api/{2-3}/project/{projectIdOrKey}/version
+// GET /rest/api/{2-3}/project/{projectKeyOrID}/version
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/versions#get-project-versions-paginated
-func (p *ProjectVersionService) Search(ctx context.Context, projectKeyOrId string, options *model.VersionGetsOptions, startAt, maxResults int) (*model.VersionPageScheme, *model.ResponseScheme, error) {
-	return p.internalClient.Search(ctx, projectKeyOrId, options, startAt, maxResults)
+func (p *ProjectVersionService) Search(ctx context.Context, projectKeyOrID string, options *model.VersionGetsOptions, startAt, maxResults int) (*model.VersionPageScheme, *model.ResponseScheme, error) {
+	return p.internalClient.Search(ctx, projectKeyOrID, options, startAt, maxResults)
 }
 
 // Create creates a project version.
@@ -63,8 +64,8 @@ func (p *ProjectVersionService) Create(ctx context.Context, payload *model.Versi
 // GET /rest/api/{2-3}/version/{id}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/versions#get-version
-func (p *ProjectVersionService) Get(ctx context.Context, versionId string, expand []string) (*model.VersionScheme, *model.ResponseScheme, error) {
-	return p.internalClient.Get(ctx, versionId, expand)
+func (p *ProjectVersionService) Get(ctx context.Context, versionID string, expand []string) (*model.VersionScheme, *model.ResponseScheme, error) {
+	return p.internalClient.Get(ctx, versionID, expand)
 }
 
 // Update updates a project version.
@@ -72,8 +73,8 @@ func (p *ProjectVersionService) Get(ctx context.Context, versionId string, expan
 // PUT /rest/api/{2-3}/version/{id}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/versions#update-version
-func (p *ProjectVersionService) Update(ctx context.Context, versionId string, payload *model.VersionPayloadScheme) (*model.VersionScheme, *model.ResponseScheme, error) {
-	return p.internalClient.Update(ctx, versionId, payload)
+func (p *ProjectVersionService) Update(ctx context.Context, versionID string, payload *model.VersionPayloadScheme) (*model.VersionScheme, *model.ResponseScheme, error) {
+	return p.internalClient.Update(ctx, versionID, payload)
 }
 
 // Merge merges two project versions.
@@ -83,8 +84,8 @@ func (p *ProjectVersionService) Update(ctx context.Context, versionId string, pa
 // its ID in fixVersion with the version ID specified in moveIssuesTo.
 //
 // PUT /rest/api/{2-3}/version/{id}/mergeto/{moveIssuesTo}
-func (p *ProjectVersionService) Merge(ctx context.Context, versionId, versionMoveIssuesTo string) (*model.ResponseScheme, error) {
-	return p.internalClient.Merge(ctx, versionId, versionMoveIssuesTo)
+func (p *ProjectVersionService) Merge(ctx context.Context, versionID, versionMoveIssuesTo string) (*model.ResponseScheme, error) {
+	return p.internalClient.Merge(ctx, versionID, versionMoveIssuesTo)
 }
 
 // RelatedIssueCounts returns the following counts for a version:
@@ -98,8 +99,8 @@ func (p *ProjectVersionService) Merge(ctx context.Context, versionId, versionMov
 // GET /rest/api/{2-3}/version/{id}/relatedIssueCounts
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/versions#get-versions-related-issues-count
-func (p *ProjectVersionService) RelatedIssueCounts(ctx context.Context, versionId string) (*model.VersionIssueCountsScheme, *model.ResponseScheme, error) {
-	return p.internalClient.RelatedIssueCounts(ctx, versionId)
+func (p *ProjectVersionService) RelatedIssueCounts(ctx context.Context, versionID string) (*model.VersionIssueCountsScheme, *model.ResponseScheme, error) {
+	return p.internalClient.RelatedIssueCounts(ctx, versionID)
 }
 
 // UnresolvedIssueCount returns counts of the issues and unresolved issues for the project version.
@@ -107,8 +108,8 @@ func (p *ProjectVersionService) RelatedIssueCounts(ctx context.Context, versionI
 // GET /rest/api/{2-3}/version/{id}/unresolvedIssueCount
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/versions#get-versions-unresolved-issues-count
-func (p *ProjectVersionService) UnresolvedIssueCount(ctx context.Context, versionId string) (*model.VersionUnresolvedIssuesCountScheme, *model.ResponseScheme, error) {
-	return p.internalClient.UnresolvedIssueCount(ctx, versionId)
+func (p *ProjectVersionService) UnresolvedIssueCount(ctx context.Context, versionID string) (*model.VersionUnresolvedIssuesCountScheme, *model.ResponseScheme, error) {
+	return p.internalClient.UnresolvedIssueCount(ctx, versionID)
 }
 
 type internalProjectVersionImpl struct {
@@ -116,13 +117,13 @@ type internalProjectVersionImpl struct {
 	version string
 }
 
-func (i *internalProjectVersionImpl) Gets(ctx context.Context, projectKeyOrId string) ([]*model.VersionScheme, *model.ResponseScheme, error) {
+func (i *internalProjectVersionImpl) Gets(ctx context.Context, projectKeyOrID string) ([]*model.VersionScheme, *model.ResponseScheme, error) {
 
-	if projectKeyOrId == "" {
+	if projectKeyOrID == "" {
 		return nil, nil, model.ErrNoProjectIDOrKeyError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/project/%v/versions", i.version, projectKeyOrId)
+	endpoint := fmt.Sprintf("rest/api/%v/project/%v/versions", i.version, projectKeyOrID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
@@ -138,9 +139,9 @@ func (i *internalProjectVersionImpl) Gets(ctx context.Context, projectKeyOrId st
 	return versions, response, nil
 }
 
-func (i *internalProjectVersionImpl) Search(ctx context.Context, projectKeyOrId string, options *model.VersionGetsOptions, startAt, maxResults int) (*model.VersionPageScheme, *model.ResponseScheme, error) {
+func (i *internalProjectVersionImpl) Search(ctx context.Context, projectKeyOrID string, options *model.VersionGetsOptions, startAt, maxResults int) (*model.VersionPageScheme, *model.ResponseScheme, error) {
 
-	if projectKeyOrId == "" {
+	if projectKeyOrID == "" {
 		return nil, nil, model.ErrNoProjectIDOrKeyError
 	}
 
@@ -167,7 +168,7 @@ func (i *internalProjectVersionImpl) Search(ctx context.Context, projectKeyOrId 
 		}
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/project/%v/version?%v", i.version, projectKeyOrId, params.Encode())
+	endpoint := fmt.Sprintf("rest/api/%v/project/%v/version?%v", i.version, projectKeyOrID, params.Encode())
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
@@ -201,14 +202,14 @@ func (i *internalProjectVersionImpl) Create(ctx context.Context, payload *model.
 	return version, response, nil
 }
 
-func (i *internalProjectVersionImpl) Get(ctx context.Context, versionId string, expand []string) (*model.VersionScheme, *model.ResponseScheme, error) {
+func (i *internalProjectVersionImpl) Get(ctx context.Context, versionID string, expand []string) (*model.VersionScheme, *model.ResponseScheme, error) {
 
-	if versionId == "" {
+	if versionID == "" {
 		return nil, nil, model.ErrNoVersionIDError
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("rest/api/%v/version/%v", i.version, versionId))
+	endpoint.WriteString(fmt.Sprintf("rest/api/%v/version/%v", i.version, versionID))
 
 	if expand != nil {
 
@@ -232,13 +233,13 @@ func (i *internalProjectVersionImpl) Get(ctx context.Context, versionId string, 
 	return version, response, nil
 }
 
-func (i *internalProjectVersionImpl) Update(ctx context.Context, versionId string, payload *model.VersionPayloadScheme) (*model.VersionScheme, *model.ResponseScheme, error) {
+func (i *internalProjectVersionImpl) Update(ctx context.Context, versionID string, payload *model.VersionPayloadScheme) (*model.VersionScheme, *model.ResponseScheme, error) {
 
-	if versionId == "" {
+	if versionID == "" {
 		return nil, nil, model.ErrNoVersionIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/version/%v", i.version, versionId)
+	endpoint := fmt.Sprintf("rest/api/%v/version/%v", i.version, versionID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
@@ -254,9 +255,9 @@ func (i *internalProjectVersionImpl) Update(ctx context.Context, versionId strin
 	return version, response, nil
 }
 
-func (i *internalProjectVersionImpl) Merge(ctx context.Context, versionId, versionMoveIssuesTo string) (*model.ResponseScheme, error) {
+func (i *internalProjectVersionImpl) Merge(ctx context.Context, versionID, versionMoveIssuesTo string) (*model.ResponseScheme, error) {
 
-	if versionId == "" {
+	if versionID == "" {
 		return nil, model.ErrNoVersionIDError
 	}
 
@@ -264,7 +265,7 @@ func (i *internalProjectVersionImpl) Merge(ctx context.Context, versionId, versi
 		return nil, model.ErrNoVersionIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/version/%v/mergeto/%v", i.version, versionId, versionMoveIssuesTo)
+	endpoint := fmt.Sprintf("rest/api/%v/version/%v/mergeto/%v", i.version, versionID, versionMoveIssuesTo)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", nil)
 	if err != nil {
@@ -274,13 +275,13 @@ func (i *internalProjectVersionImpl) Merge(ctx context.Context, versionId, versi
 	return i.c.Call(request, nil)
 }
 
-func (i *internalProjectVersionImpl) RelatedIssueCounts(ctx context.Context, versionId string) (*model.VersionIssueCountsScheme, *model.ResponseScheme, error) {
+func (i *internalProjectVersionImpl) RelatedIssueCounts(ctx context.Context, versionID string) (*model.VersionIssueCountsScheme, *model.ResponseScheme, error) {
 
-	if versionId == "" {
+	if versionID == "" {
 		return nil, nil, model.ErrNoVersionIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/version/%v/relatedIssueCounts", i.version, versionId)
+	endpoint := fmt.Sprintf("rest/api/%v/version/%v/relatedIssueCounts", i.version, versionID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
@@ -296,13 +297,13 @@ func (i *internalProjectVersionImpl) RelatedIssueCounts(ctx context.Context, ver
 	return issues, response, nil
 }
 
-func (i *internalProjectVersionImpl) UnresolvedIssueCount(ctx context.Context, versionId string) (*model.VersionUnresolvedIssuesCountScheme, *model.ResponseScheme, error) {
+func (i *internalProjectVersionImpl) UnresolvedIssueCount(ctx context.Context, versionID string) (*model.VersionUnresolvedIssuesCountScheme, *model.ResponseScheme, error) {
 
-	if versionId == "" {
+	if versionID == "" {
 		return nil, nil, model.ErrNoVersionIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/version/%v/unresolvedIssueCount", i.version, versionId)
+	endpoint := fmt.Sprintf("rest/api/%v/version/%v/unresolvedIssueCount", i.version, versionID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {

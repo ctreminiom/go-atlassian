@@ -3,12 +3,14 @@ package internal
 import (
 	"context"
 	"errors"
+	"net/http"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
-	"github.com/stretchr/testify/assert"
-	"net/http"
-	"testing"
 )
 
 func TestDashboardService_Copy(t *testing.T) {
@@ -35,7 +37,7 @@ func TestDashboardService_Copy(t *testing.T) {
 
 	type args struct {
 		ctx         context.Context
-		dashboardId string
+		dashboardID string
 		payload     *model.DashboardPayloadScheme
 	}
 
@@ -52,7 +54,7 @@ func TestDashboardService_Copy(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:         context.Background(),
-				dashboardId: "10001",
+				dashboardID: "10001",
 				payload:     payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -82,7 +84,7 @@ func TestDashboardService_Copy(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:         context.Background(),
-				dashboardId: "10001",
+				dashboardID: "10001",
 				payload:     payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -108,11 +110,11 @@ func TestDashboardService_Copy(t *testing.T) {
 		},
 
 		{
-			name:   "when the dashboardId is not provided",
+			name:   "when the dashboardID is not provided",
 			fields: fields{version: "2"},
 			args: args{
 				ctx:         context.Background(),
-				dashboardId: "",
+				dashboardID: "",
 				payload:     payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -127,7 +129,7 @@ func TestDashboardService_Copy(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:         context.Background(),
-				dashboardId: "10001",
+				dashboardID: "10001",
 				payload:     payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -159,7 +161,7 @@ func TestDashboardService_Copy(t *testing.T) {
 			applicationService, err := NewDashboardService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := applicationService.Copy(testCase.args.ctx, testCase.args.dashboardId, testCase.args.payload)
+			gotResult, gotResponse, err := applicationService.Copy(testCase.args.ctx, testCase.args.dashboardID, testCase.args.payload)
 
 			if testCase.wantErr {
 
@@ -204,7 +206,7 @@ func TestDashboardService_Update(t *testing.T) {
 
 	type args struct {
 		ctx         context.Context
-		dashboardId string
+		dashboardID string
 		payload     *model.DashboardPayloadScheme
 	}
 
@@ -221,7 +223,7 @@ func TestDashboardService_Update(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:         context.Background(),
-				dashboardId: "10001",
+				dashboardID: "10001",
 				payload:     payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -251,7 +253,7 @@ func TestDashboardService_Update(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:         context.Background(),
-				dashboardId: "10001",
+				dashboardID: "10001",
 				payload:     payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -277,11 +279,11 @@ func TestDashboardService_Update(t *testing.T) {
 		},
 
 		{
-			name:   "when the dashboardId is not provided",
+			name:   "when the dashboardID is not provided",
 			fields: fields{version: "2"},
 			args: args{
 				ctx:         context.Background(),
-				dashboardId: "",
+				dashboardID: "",
 				payload:     &model.DashboardPayloadScheme{},
 			},
 			on: func(fields *fields) {
@@ -296,7 +298,7 @@ func TestDashboardService_Update(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:         context.Background(),
-				dashboardId: "10001",
+				dashboardID: "10001",
 				payload:     payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -328,7 +330,7 @@ func TestDashboardService_Update(t *testing.T) {
 			applicationService, err := NewDashboardService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := applicationService.Update(testCase.args.ctx, testCase.args.dashboardId, testCase.args.payload)
+			gotResult, gotResponse, err := applicationService.Update(testCase.args.ctx, testCase.args.dashboardID, testCase.args.payload)
 
 			if testCase.wantErr {
 
@@ -847,7 +849,7 @@ func TestDashboardService_Get(t *testing.T) {
 
 	type args struct {
 		ctx         context.Context
-		dashboardId string
+		dashboardID string
 	}
 
 	testCases := []struct {
@@ -863,7 +865,7 @@ func TestDashboardService_Get(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:         context.Background(),
-				dashboardId: "10001",
+				dashboardID: "10001",
 			},
 			on: func(fields *fields) {
 
@@ -892,7 +894,7 @@ func TestDashboardService_Get(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:         context.Background(),
-				dashboardId: "10001",
+				dashboardID: "10001",
 			},
 			on: func(fields *fields) {
 
@@ -917,11 +919,11 @@ func TestDashboardService_Get(t *testing.T) {
 		},
 
 		{
-			name:   "when the dashboardId is not provided",
+			name:   "when the dashboardID is not provided",
 			fields: fields{version: "2"},
 			args: args{
 				ctx:         context.Background(),
-				dashboardId: "",
+				dashboardID: "",
 			},
 			on: func(fields *fields) {
 				fields.c = mocks.NewConnector(t)
@@ -935,7 +937,7 @@ func TestDashboardService_Get(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:         context.Background(),
-				dashboardId: "10001",
+				dashboardID: "10001",
 			},
 			on: func(fields *fields) {
 
@@ -966,7 +968,7 @@ func TestDashboardService_Get(t *testing.T) {
 			applicationService, err := NewDashboardService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := applicationService.Get(testCase.args.ctx, testCase.args.dashboardId)
+			gotResult, gotResponse, err := applicationService.Get(testCase.args.ctx, testCase.args.dashboardID)
 
 			if testCase.wantErr {
 
@@ -996,7 +998,7 @@ func TestDashboardService_Delete(t *testing.T) {
 
 	type args struct {
 		ctx         context.Context
-		dashboardId string
+		dashboardID string
 	}
 
 	testCases := []struct {
@@ -1012,7 +1014,7 @@ func TestDashboardService_Delete(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:         context.Background(),
-				dashboardId: "10001",
+				dashboardID: "10001",
 			},
 			on: func(fields *fields) {
 
@@ -1041,7 +1043,7 @@ func TestDashboardService_Delete(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:         context.Background(),
-				dashboardId: "10001",
+				dashboardID: "10001",
 			},
 			on: func(fields *fields) {
 
@@ -1066,11 +1068,11 @@ func TestDashboardService_Delete(t *testing.T) {
 		},
 
 		{
-			name:   "when the dashboardId is not provided",
+			name:   "when the dashboardID is not provided",
 			fields: fields{version: "2"},
 			args: args{
 				ctx:         context.Background(),
-				dashboardId: "",
+				dashboardID: "",
 			},
 			on: func(fields *fields) {
 				fields.c = mocks.NewConnector(t)
@@ -1084,7 +1086,7 @@ func TestDashboardService_Delete(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:         context.Background(),
-				dashboardId: "10001",
+				dashboardID: "10001",
 			},
 			on: func(fields *fields) {
 
@@ -1115,7 +1117,7 @@ func TestDashboardService_Delete(t *testing.T) {
 			applicationService, err := NewDashboardService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResponse, err := applicationService.Delete(testCase.args.ctx, testCase.args.dashboardId)
+			gotResponse, err := applicationService.Delete(testCase.args.ctx, testCase.args.dashboardID)
 
 			if testCase.wantErr {
 

@@ -3,13 +3,14 @@ package internal
 import (
 	"context"
 	"fmt"
-	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/service"
-	"github.com/ctreminiom/go-atlassian/service/jira"
 	"net/http"
 	"net/url"
 	"strconv"
 	"strings"
+
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/service"
+	"github.com/ctreminiom/go-atlassian/service/jira"
 )
 
 func NewWorkflowSchemeService(client service.Connector, version string, issueType *WorkflowSchemeIssueTypeService) *WorkflowSchemeService {
@@ -48,8 +49,8 @@ func (w *WorkflowSchemeService) Create(ctx context.Context, payload *model.Workf
 // GET /rest/api/{2-3}/workflowscheme/{id}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/workflow/scheme#get-workflow-scheme
-func (w *WorkflowSchemeService) Get(ctx context.Context, schemeId int, returnDraftIfExists bool) (*model.WorkflowSchemeScheme, *model.ResponseScheme, error) {
-	return w.internalClient.Get(ctx, schemeId, returnDraftIfExists)
+func (w *WorkflowSchemeService) Get(ctx context.Context, schemeID int, returnDraftIfExists bool) (*model.WorkflowSchemeScheme, *model.ResponseScheme, error) {
+	return w.internalClient.Get(ctx, schemeID, returnDraftIfExists)
 }
 
 // Update updates a workflow scheme, including the name, default workflow, issue type to project mappings, and more.
@@ -61,8 +62,8 @@ func (w *WorkflowSchemeService) Get(ctx context.Context, schemeId int, returnDra
 // PUT /rest/api/{2-3}/workflowscheme/{id}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/workflow/scheme#update-workflow-scheme
-func (w *WorkflowSchemeService) Update(ctx context.Context, schemeId int, payload *model.WorkflowSchemePayloadScheme) (*model.WorkflowSchemeScheme, *model.ResponseScheme, error) {
-	return w.internalClient.Update(ctx, schemeId, payload)
+func (w *WorkflowSchemeService) Update(ctx context.Context, schemeID int, payload *model.WorkflowSchemePayloadScheme) (*model.WorkflowSchemeScheme, *model.ResponseScheme, error) {
+	return w.internalClient.Update(ctx, schemeID, payload)
 }
 
 // Delete deletes a workflow scheme.
@@ -72,8 +73,8 @@ func (w *WorkflowSchemeService) Update(ctx context.Context, schemeId int, payloa
 // DELETE /rest/api/{2-3}/workflowscheme/{id}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/workflow/scheme#delete-workflow-scheme
-func (w *WorkflowSchemeService) Delete(ctx context.Context, schemeId int) (*model.ResponseScheme, error) {
-	return w.internalClient.Delete(ctx, schemeId)
+func (w *WorkflowSchemeService) Delete(ctx context.Context, schemeID int) (*model.ResponseScheme, error) {
+	return w.internalClient.Delete(ctx, schemeID)
 }
 
 // Associations returns a list of the workflow schemes associated with a list of projects.
@@ -89,8 +90,8 @@ func (w *WorkflowSchemeService) Delete(ctx context.Context, schemeId int) (*mode
 // GET /rest/api/{2-3}/workflowscheme/project
 //
 // https://docs.go-atlassian.io/jira-software-cloud/workflow/scheme#get-workflow-schemes-associations
-func (w *WorkflowSchemeService) Associations(ctx context.Context, projectIds []int) (*model.WorkflowSchemeAssociationPageScheme, *model.ResponseScheme, error) {
-	return w.internalClient.Associations(ctx, projectIds)
+func (w *WorkflowSchemeService) Associations(ctx context.Context, projectIDs []int) (*model.WorkflowSchemeAssociationPageScheme, *model.ResponseScheme, error) {
+	return w.internalClient.Associations(ctx, projectIDs)
 }
 
 // Assign assigns a workflow scheme to a project.
@@ -102,8 +103,8 @@ func (w *WorkflowSchemeService) Associations(ctx context.Context, projectIds []i
 // PUT /rest/api/{2-3}/workflowscheme/project
 //
 // https://docs.go-atlassian.io/jira-software-cloud/workflow/scheme#get-workflow-schemes-associations
-func (w *WorkflowSchemeService) Assign(ctx context.Context, schemeId, projectId string) (*model.ResponseScheme, error) {
-	return w.internalClient.Assign(ctx, schemeId, projectId)
+func (w *WorkflowSchemeService) Assign(ctx context.Context, schemeID, projectID string) (*model.ResponseScheme, error) {
+	return w.internalClient.Assign(ctx, schemeID, projectID)
 }
 
 type internalWorkflowSchemeImpl struct {
@@ -151,14 +152,14 @@ func (i *internalWorkflowSchemeImpl) Create(ctx context.Context, payload *model.
 	return workflowScheme, response, nil
 }
 
-func (i *internalWorkflowSchemeImpl) Get(ctx context.Context, schemeId int, returnDraftIfExists bool) (*model.WorkflowSchemeScheme, *model.ResponseScheme, error) {
+func (i *internalWorkflowSchemeImpl) Get(ctx context.Context, schemeID int, returnDraftIfExists bool) (*model.WorkflowSchemeScheme, *model.ResponseScheme, error) {
 
-	if schemeId == 0 {
+	if schemeID == 0 {
 		return nil, nil, model.ErrNoWorkflowSchemeIDError
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("rest/api/%v/workflowscheme/%v", i.version, schemeId))
+	endpoint.WriteString(fmt.Sprintf("rest/api/%v/workflowscheme/%v", i.version, schemeID))
 
 	if returnDraftIfExists {
 
@@ -182,13 +183,13 @@ func (i *internalWorkflowSchemeImpl) Get(ctx context.Context, schemeId int, retu
 	return workflowScheme, response, nil
 }
 
-func (i *internalWorkflowSchemeImpl) Update(ctx context.Context, schemeId int, payload *model.WorkflowSchemePayloadScheme) (*model.WorkflowSchemeScheme, *model.ResponseScheme, error) {
+func (i *internalWorkflowSchemeImpl) Update(ctx context.Context, schemeID int, payload *model.WorkflowSchemePayloadScheme) (*model.WorkflowSchemeScheme, *model.ResponseScheme, error) {
 
-	if schemeId == 0 {
+	if schemeID == 0 {
 		return nil, nil, model.ErrNoWorkflowSchemeIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/workflowscheme/%v", i.version, schemeId)
+	endpoint := fmt.Sprintf("rest/api/%v/workflowscheme/%v", i.version, schemeID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
@@ -204,13 +205,13 @@ func (i *internalWorkflowSchemeImpl) Update(ctx context.Context, schemeId int, p
 	return workflowScheme, response, nil
 }
 
-func (i *internalWorkflowSchemeImpl) Delete(ctx context.Context, schemeId int) (*model.ResponseScheme, error) {
+func (i *internalWorkflowSchemeImpl) Delete(ctx context.Context, schemeID int) (*model.ResponseScheme, error) {
 
-	if schemeId == 0 {
+	if schemeID == 0 {
 		return nil, model.ErrNoWorkflowSchemeIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/workflowscheme/%v", i.version, schemeId)
+	endpoint := fmt.Sprintf("rest/api/%v/workflowscheme/%v", i.version, schemeID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
@@ -220,14 +221,14 @@ func (i *internalWorkflowSchemeImpl) Delete(ctx context.Context, schemeId int) (
 	return i.c.Call(request, nil)
 }
 
-func (i *internalWorkflowSchemeImpl) Associations(ctx context.Context, projectIds []int) (*model.WorkflowSchemeAssociationPageScheme, *model.ResponseScheme, error) {
+func (i *internalWorkflowSchemeImpl) Associations(ctx context.Context, projectIDs []int) (*model.WorkflowSchemeAssociationPageScheme, *model.ResponseScheme, error) {
 
-	if len(projectIds) == 0 {
+	if len(projectIDs) == 0 {
 		return nil, nil, model.ErrNoProjectsError
 	}
 
 	params := url.Values{}
-	for _, projectID := range projectIds {
+	for _, projectID := range projectIDs {
 		params.Add("projectId", strconv.Itoa(projectID))
 	}
 
@@ -247,19 +248,19 @@ func (i *internalWorkflowSchemeImpl) Associations(ctx context.Context, projectId
 	return mapping, response, nil
 }
 
-func (i *internalWorkflowSchemeImpl) Assign(ctx context.Context, schemeId, projectId string) (*model.ResponseScheme, error) {
+func (i *internalWorkflowSchemeImpl) Assign(ctx context.Context, schemeID, projectID string) (*model.ResponseScheme, error) {
 
-	if schemeId == "" {
+	if schemeID == "" {
 		return nil, model.ErrNoWorkflowSchemeIDError
 	}
 
-	if projectId == "" {
+	if projectID == "" {
 		return nil, model.ErrNoProjectIDOrKeyError
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/workflowscheme/project", i.version)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", map[string]interface{}{"workflowSchemeId": schemeId, "projectId": projectId})
+	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", map[string]interface{}{"workflowSchemeId": schemeID, "projectId": projectID})
 	if err != nil {
 		return nil, err
 	}

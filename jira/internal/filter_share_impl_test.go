@@ -3,12 +3,14 @@ package internal
 import (
 	"context"
 	"errors"
+	"net/http"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
-	"github.com/stretchr/testify/assert"
-	"net/http"
-	"testing"
 )
 
 func TestFilterShareService_Scope(t *testing.T) {
@@ -346,7 +348,7 @@ func TestFilterShareService_Gets(t *testing.T) {
 		},
 
 		{
-			name:   "when the fieldId is not provied",
+			name:   "when the fieldID is not provied",
 			fields: fields{version: "2"},
 			args: args{
 				ctx:      context.Background(),
@@ -499,7 +501,7 @@ func TestFilterShareService_Add(t *testing.T) {
 		},
 
 		{
-			name:   "when the fieldId is not provided",
+			name:   "when the fieldID is not provided",
 			fields: fields{version: "2"},
 			args: args{
 				ctx:      context.Background(),

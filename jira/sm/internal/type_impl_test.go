@@ -3,12 +3,14 @@ package internal
 import (
 	"context"
 	"errors"
+	"net/http"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
-	"github.com/stretchr/testify/assert"
-	"net/http"
-	"testing"
 )
 
 func Test_internalTypeImpl_Search(t *testing.T) {
@@ -757,7 +759,7 @@ func Test_internalTypeImpl_Create(t *testing.T) {
 	payloadMocked := &model.RequestTypePayloadScheme{
 		Description: "Get IT Help",
 		HelpText:    "Please tell us clearly the problem you have within 100 words.",
-		IssueTypeId: "12345",
+		IssueTypeID: "12345",
 		Name:        "Get IT Help"}
 
 	type fields struct {
@@ -786,7 +788,7 @@ func Test_internalTypeImpl_Create(t *testing.T) {
 				payload: &model.RequestTypePayloadScheme{
 					Description: "Get IT Help",
 					HelpText:    "Please tell us clearly the problem you have within 100 words.",
-					IssueTypeId: "12345",
+					IssueTypeID: "12345",
 					Name:        "Get IT Help",
 				},
 			},
@@ -819,7 +821,7 @@ func Test_internalTypeImpl_Create(t *testing.T) {
 				payload: &model.RequestTypePayloadScheme{
 					Description: "Get IT Help",
 					HelpText:    "Please tell us clearly the problem you have within 100 words.",
-					IssueTypeId: "12345",
+					IssueTypeID: "12345",
 					Name:        "Get IT Help",
 				},
 			},
@@ -854,7 +856,7 @@ func Test_internalTypeImpl_Create(t *testing.T) {
 				payload: &model.RequestTypePayloadScheme{
 					Description: "Get IT Help",
 					HelpText:    "Please tell us clearly the problem you have within 100 words.",
-					IssueTypeId: "12345",
+					IssueTypeID: "12345",
 					Name:        "Get IT Help",
 				},
 			},

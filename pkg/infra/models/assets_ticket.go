@@ -36,17 +36,17 @@ type TicketStatusScheme struct {
 // TicketTypeScheme represents the type of a ticket.
 // Name is the name of the type.
 // Description is the description of the type.
-// IconUrl is the URL of the icon associated with the type.
+// IconURL is the URL of the icon associated with the type.
 type TicketTypeScheme struct {
 	Name        string `json:"name,omitempty"`        // The name of the type.
 	Description string `json:"description,omitempty"` // The description of the type.
-	IconUrl     string `json:"iconUrl,omitempty"`     // The URL of the icon associated with the type.
+	IconURL     string `json:"iconUrl,omitempty"`     // The URL of the icon associated with the type.
 }
 
 // TicketPriorityScheme represents the priority of a ticket.
 // Name is the name of the priority.
-// IconUrl is the URL of the icon associated with the priority.
+// IconURL is the URL of the icon associated with the priority.
 type TicketPriorityScheme struct {
 	Name    string `json:"name,omitempty"`    // The name of the priority.
-	IconUrl string `json:"iconUrl,omitempty"` // The URL of the icon associated with the priority.
+	IconURL string `json:"iconUrl,omitempty"` // The URL of the icon associated with the priority.
 }

@@ -32,7 +32,7 @@ type SpaceSchemeV2 struct {
 	Name        string                    `json:"name,omitempty"`        // The name of the space.
 	Type        string                    `json:"type,omitempty"`        // The type of the space.
 	Status      string                    `json:"status,omitempty"`      // The status of the space.
-	HomepageId  string                    `json:"homepageId,omitempty"`  // The ID of the home page of the space.
+	HomepageID  string                    `json:"homepageId,omitempty"`  // The ID of the home page of the space.
 	Description *SpaceDescriptionSchemeV2 `json:"description,omitempty"` // The description of the space.
 }
 

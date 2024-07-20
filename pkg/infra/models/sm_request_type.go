@@ -63,7 +63,7 @@ type RequestTypeLinksScheme struct {
 type RequestTypePayloadScheme struct {
 	Description string `json:"description,omitempty"` // The description of the request type payload.
 	HelpText    string `json:"helpText,omitempty"`    // The help text of the request type payload.
-	IssueTypeId string `json:"issueTypeId,omitempty"` // The issue type ID of the request type payload.
+	IssueTypeID string `json:"issueTypeId,omitempty"` // The issue type ID of the request type payload.
 	Name        string `json:"name,omitempty"`        // The name of the request type payload.
 }
 

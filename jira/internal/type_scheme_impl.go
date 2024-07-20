@@ -3,12 +3,13 @@ package internal
 import (
 	"context"
 	"fmt"
-	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/service"
-	"github.com/ctreminiom/go-atlassian/service/jira"
 	"net/http"
 	"net/url"
 	"strconv"
+
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/service"
+	"github.com/ctreminiom/go-atlassian/service/jira"
 )
 
 func NewTypeSchemeService(client service.Connector, version string) (*TypeSchemeService, error) {
@@ -31,8 +32,8 @@ type TypeSchemeService struct {
 // GET /rest/api/{2-3}/issuetypescheme
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/types/scheme#get-all-issue-type-schemes
-func (t *TypeSchemeService) Gets(ctx context.Context, issueTypeSchemeIds []int, startAt, maxResults int) (*model.IssueTypeSchemePageScheme, *model.ResponseScheme, error) {
-	return t.internalClient.Gets(ctx, issueTypeSchemeIds, startAt, maxResults)
+func (t *TypeSchemeService) Gets(ctx context.Context, issueTypeSchemeIDs []int, startAt, maxResults int) (*model.IssueTypeSchemePageScheme, *model.ResponseScheme, error) {
+	return t.internalClient.Gets(ctx, issueTypeSchemeIDs, startAt, maxResults)
 }
 
 // Create creates an issue type scheme.
@@ -49,8 +50,8 @@ func (t *TypeSchemeService) Create(ctx context.Context, payload *model.IssueType
 // GET /rest/api/{2-3}/issuetypescheme/mapping
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/types/scheme#get-issue-type-scheme-items
-func (t *TypeSchemeService) Items(ctx context.Context, issueTypeSchemeIds []int, startAt, maxResults int) (*model.IssueTypeSchemeItemPageScheme, *model.ResponseScheme, error) {
-	return t.internalClient.Items(ctx, issueTypeSchemeIds, startAt, maxResults)
+func (t *TypeSchemeService) Items(ctx context.Context, issueTypeSchemeIDs []int, startAt, maxResults int) (*model.IssueTypeSchemeItemPageScheme, *model.ResponseScheme, error) {
+	return t.internalClient.Items(ctx, issueTypeSchemeIDs, startAt, maxResults)
 }
 
 // Projects returns a paginated list of issue type schemes and, for each issue type scheme, a list of the projects that use it.
@@ -58,8 +59,8 @@ func (t *TypeSchemeService) Items(ctx context.Context, issueTypeSchemeIds []int,
 // GET /rest/api/{2-3}/issuetypescheme/project
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/types/scheme#get-issue-type-schemes-for-projects
-func (t *TypeSchemeService) Projects(ctx context.Context, projectIds []int, startAt, maxResults int) (*model.ProjectIssueTypeSchemePageScheme, *model.ResponseScheme, error) {
-	return t.internalClient.Projects(ctx, projectIds, startAt, maxResults)
+func (t *TypeSchemeService) Projects(ctx context.Context, projectIDs []int, startAt, maxResults int) (*model.ProjectIssueTypeSchemePageScheme, *model.ResponseScheme, error) {
+	return t.internalClient.Projects(ctx, projectIDs, startAt, maxResults)
 }
 
 // Assign assigns an issue type scheme to a project.
@@ -67,17 +68,17 @@ func (t *TypeSchemeService) Projects(ctx context.Context, projectIds []int, star
 // PUT /rest/api/{2-3}/issuetypescheme/project
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/types/scheme#assign-issue-type-scheme-to-project
-func (t *TypeSchemeService) Assign(ctx context.Context, issueTypeSchemeId, projectId string) (*model.ResponseScheme, error) {
-	return t.internalClient.Assign(ctx, issueTypeSchemeId, projectId)
+func (t *TypeSchemeService) Assign(ctx context.Context, issueTypeSchemeID, projectID string) (*model.ResponseScheme, error) {
+	return t.internalClient.Assign(ctx, issueTypeSchemeID, projectID)
 }
 
 // Update updates an issue type scheme.
 //
-// PUT /rest/api/{2-3}/issuetypescheme/{issueTypeSchemeId}
+// PUT /rest/api/{2-3}/issuetypescheme/{issueTypeSchemeID}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/types/scheme#update-issue-type-scheme
-func (t *TypeSchemeService) Update(ctx context.Context, issueTypeSchemeId int, payload *model.IssueTypeSchemePayloadScheme) (*model.ResponseScheme, error) {
-	return t.internalClient.Update(ctx, issueTypeSchemeId, payload)
+func (t *TypeSchemeService) Update(ctx context.Context, issueTypeSchemeID int, payload *model.IssueTypeSchemePayloadScheme) (*model.ResponseScheme, error) {
+	return t.internalClient.Update(ctx, issueTypeSchemeID, payload)
 }
 
 // Delete deletes an issue type scheme.
@@ -86,11 +87,11 @@ func (t *TypeSchemeService) Update(ctx context.Context, issueTypeSchemeId int, p
 //
 // 2.Any projects assigned to the scheme are reassigned to the default issue type scheme.
 //
-// DELETE /rest/api/{2-3}/issuetypescheme/{issueTypeSchemeId}
+// DELETE /rest/api/{2-3}/issuetypescheme/{issueTypeSchemeID}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/types/scheme#delete-issue-type-scheme
-func (t *TypeSchemeService) Delete(ctx context.Context, issueTypeSchemeId int) (*model.ResponseScheme, error) {
-	return t.internalClient.Delete(ctx, issueTypeSchemeId)
+func (t *TypeSchemeService) Delete(ctx context.Context, issueTypeSchemeID int) (*model.ResponseScheme, error) {
+	return t.internalClient.Delete(ctx, issueTypeSchemeID)
 }
 
 // Append adds issue types to an issue type scheme.
@@ -99,11 +100,11 @@ func (t *TypeSchemeService) Delete(ctx context.Context, issueTypeSchemeId int) (
 //
 // 2.If any of the issue types exist in the issue type scheme, the operation fails and no issue types are added.
 //
-// PUT /rest/api/{2-3}/issuetypescheme/{issueTypeSchemeId}/issuetype
+// PUT /rest/api/{2-3}/issuetypescheme/{issueTypeSchemeID}/issuetype
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/types/scheme#add-issue-types-to-issue-type-scheme
-func (t *TypeSchemeService) Append(ctx context.Context, issueTypeSchemeId int, issueTypeIds []int) (*model.ResponseScheme, error) {
-	return t.internalClient.Append(ctx, issueTypeSchemeId, issueTypeIds)
+func (t *TypeSchemeService) Append(ctx context.Context, issueTypeSchemeID int, issueTypeIDs []int) (*model.ResponseScheme, error) {
+	return t.internalClient.Append(ctx, issueTypeSchemeID, issueTypeIDs)
 }
 
 // Remove removes an issue type from an issue type scheme, this operation cannot remove:
@@ -114,11 +115,11 @@ func (t *TypeSchemeService) Append(ctx context.Context, issueTypeSchemeId int, i
 //
 // 3.the last standard issue type from an issue type scheme.
 //
-// DELETE /rest/api/{2-3}/issuetypescheme/{issueTypeSchemeId}/issuetype/{issueTypeId}
+// DELETE /rest/api/{2-3}/issuetypescheme/{issueTypeSchemeID}/issuetype/{issueTypeID}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/types/scheme#remove-issue-type-from-issue-type-scheme
-func (t *TypeSchemeService) Remove(ctx context.Context, issueTypeSchemeId, issueTypeId int) (*model.ResponseScheme, error) {
-	return t.internalClient.Remove(ctx, issueTypeSchemeId, issueTypeId)
+func (t *TypeSchemeService) Remove(ctx context.Context, issueTypeSchemeID, issueTypeID int) (*model.ResponseScheme, error) {
+	return t.internalClient.Remove(ctx, issueTypeSchemeID, issueTypeID)
 }
 
 type internalTypeSchemeImpl struct {
@@ -126,13 +127,13 @@ type internalTypeSchemeImpl struct {
 	version string
 }
 
-func (i *internalTypeSchemeImpl) Gets(ctx context.Context, issueTypeSchemeIds []int, startAt, maxResults int) (*model.IssueTypeSchemePageScheme, *model.ResponseScheme, error) {
+func (i *internalTypeSchemeImpl) Gets(ctx context.Context, issueTypeSchemeIDs []int, startAt, maxResults int) (*model.IssueTypeSchemePageScheme, *model.ResponseScheme, error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
 	params.Add("maxResults", strconv.Itoa(maxResults))
 
-	for _, id := range issueTypeSchemeIds {
+	for _, id := range issueTypeSchemeIDs {
 		params.Add("id", strconv.Itoa(id))
 	}
 
@@ -170,13 +171,13 @@ func (i *internalTypeSchemeImpl) Create(ctx context.Context, payload *model.Issu
 	return issueType, response, nil
 }
 
-func (i *internalTypeSchemeImpl) Items(ctx context.Context, issueTypeSchemeIds []int, startAt, maxResults int) (*model.IssueTypeSchemeItemPageScheme, *model.ResponseScheme, error) {
+func (i *internalTypeSchemeImpl) Items(ctx context.Context, issueTypeSchemeIDs []int, startAt, maxResults int) (*model.IssueTypeSchemeItemPageScheme, *model.ResponseScheme, error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
 	params.Add("maxResults", strconv.Itoa(maxResults))
 
-	for _, id := range issueTypeSchemeIds {
+	for _, id := range issueTypeSchemeIDs {
 		params.Add("issueTypeSchemeId", strconv.Itoa(id))
 	}
 
@@ -196,13 +197,13 @@ func (i *internalTypeSchemeImpl) Items(ctx context.Context, issueTypeSchemeIds [
 	return page, response, nil
 }
 
-func (i *internalTypeSchemeImpl) Projects(ctx context.Context, projectIds []int, startAt, maxResults int) (*model.ProjectIssueTypeSchemePageScheme, *model.ResponseScheme, error) {
+func (i *internalTypeSchemeImpl) Projects(ctx context.Context, projectIDs []int, startAt, maxResults int) (*model.ProjectIssueTypeSchemePageScheme, *model.ResponseScheme, error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
 	params.Add("maxResults", strconv.Itoa(maxResults))
 
-	for _, id := range projectIds {
+	for _, id := range projectIDs {
 		params.Add("projectId", strconv.Itoa(id))
 	}
 
@@ -222,19 +223,20 @@ func (i *internalTypeSchemeImpl) Projects(ctx context.Context, projectIds []int,
 	return page, response, nil
 }
 
-func (i *internalTypeSchemeImpl) Assign(ctx context.Context, issueTypeSchemeId, projectId string) (*model.ResponseScheme, error) {
+func (i *internalTypeSchemeImpl) Assign(ctx context.Context, issueTypeSchemeID, projectID string) (*model.ResponseScheme, error) {
 
-	if issueTypeSchemeId == "" {
+	if issueTypeSchemeID == "" {
 		return nil, model.ErrNoIssueTypeSchemeIDError
 	}
 
-	if projectId == "" {
+	if projectID == "" {
 		return nil, model.ErrNoProjectIDError
 	}
 
 	payload := map[string]interface{}{
-		"issueTypeSchemeId": issueTypeSchemeId,
-		"projectId":         projectId}
+		"issueTypeSchemeId": issueTypeSchemeID,
+		"projectId":         projectID,
+	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issuetypescheme/project", i.version)
 
@@ -246,13 +248,13 @@ func (i *internalTypeSchemeImpl) Assign(ctx context.Context, issueTypeSchemeId, 
 	return i.c.Call(request, nil)
 }
 
-func (i *internalTypeSchemeImpl) Update(ctx context.Context, issueTypeSchemeId int, payload *model.IssueTypeSchemePayloadScheme) (*model.ResponseScheme, error) {
+func (i *internalTypeSchemeImpl) Update(ctx context.Context, issueTypeSchemeID int, payload *model.IssueTypeSchemePayloadScheme) (*model.ResponseScheme, error) {
 
-	if issueTypeSchemeId == 0 {
+	if issueTypeSchemeID == 0 {
 		return nil, model.ErrNoIssueTypeSchemeIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/issuetypescheme/%v", i.version, issueTypeSchemeId)
+	endpoint := fmt.Sprintf("rest/api/%v/issuetypescheme/%v", i.version, issueTypeSchemeID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
@@ -262,13 +264,13 @@ func (i *internalTypeSchemeImpl) Update(ctx context.Context, issueTypeSchemeId i
 	return i.c.Call(request, nil)
 }
 
-func (i *internalTypeSchemeImpl) Delete(ctx context.Context, issueTypeSchemeId int) (*model.ResponseScheme, error) {
+func (i *internalTypeSchemeImpl) Delete(ctx context.Context, issueTypeSchemeID int) (*model.ResponseScheme, error) {
 
-	if issueTypeSchemeId == 0 {
+	if issueTypeSchemeID == 0 {
 		return nil, model.ErrNoIssueTypeSchemeIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/issuetypescheme/%v", i.version, issueTypeSchemeId)
+	endpoint := fmt.Sprintf("rest/api/%v/issuetypescheme/%v", i.version, issueTypeSchemeID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
@@ -278,18 +280,18 @@ func (i *internalTypeSchemeImpl) Delete(ctx context.Context, issueTypeSchemeId i
 	return i.c.Call(request, nil)
 }
 
-func (i *internalTypeSchemeImpl) Append(ctx context.Context, issueTypeSchemeId int, issueTypeIds []int) (*model.ResponseScheme, error) {
+func (i *internalTypeSchemeImpl) Append(ctx context.Context, issueTypeSchemeID int, issueTypeIDs []int) (*model.ResponseScheme, error) {
 
-	if len(issueTypeIds) == 0 {
+	if len(issueTypeIDs) == 0 {
 		return nil, model.ErrNoIssueTypesError
 	}
 
 	var ids []string
-	for _, issueTypeID := range issueTypeIds {
+	for _, issueTypeID := range issueTypeIDs {
 		ids = append(ids, strconv.Itoa(issueTypeID))
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/issuetypescheme/%v/issuetype", i.version, issueTypeSchemeId)
+	endpoint := fmt.Sprintf("rest/api/%v/issuetypescheme/%v/issuetype", i.version, issueTypeSchemeID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", map[string]interface{}{"issueTypeIds": ids})
 	if err != nil {
@@ -299,17 +301,17 @@ func (i *internalTypeSchemeImpl) Append(ctx context.Context, issueTypeSchemeId i
 	return i.c.Call(request, nil)
 }
 
-func (i *internalTypeSchemeImpl) Remove(ctx context.Context, issueTypeSchemeId, issueTypeId int) (*model.ResponseScheme, error) {
+func (i *internalTypeSchemeImpl) Remove(ctx context.Context, issueTypeSchemeID, issueTypeID int) (*model.ResponseScheme, error) {
 
-	if issueTypeSchemeId == 0 {
+	if issueTypeSchemeID == 0 {
 		return nil, model.ErrNoIssueTypeSchemeIDError
 	}
 
-	if issueTypeId == 0 {
+	if issueTypeID == 0 {
 		return nil, model.ErrNoIssueTypeIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/issuetypescheme/%v/issuetype/%v", i.version, issueTypeSchemeId, issueTypeId)
+	endpoint := fmt.Sprintf("rest/api/%v/issuetypescheme/%v/issuetype/%v", i.version, issueTypeSchemeID, issueTypeID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {

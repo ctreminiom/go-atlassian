@@ -3,12 +3,13 @@ package internal
 import (
 	"context"
 	"fmt"
-	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/service"
-	"github.com/ctreminiom/go-atlassian/service/jira"
 	"net/http"
 	"net/url"
 	"strconv"
+
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/service"
+	"github.com/ctreminiom/go-atlassian/service/jira"
 )
 
 func NewScreenService(client service.Connector, version string, scheme *ScreenSchemeService, tab *ScreenTabService) (*ScreenService, error) {
@@ -32,11 +33,11 @@ type ScreenService struct {
 
 // Fields returns a paginated list of the screens a field is used in.
 //
-// GET /rest/api/{2-3}/field/{fieldId}/screens
+// GET /rest/api/{2-3}/field/{fieldID}/screens
 //
 // https://docs.go-atlassian.io/jira-software-cloud/screens#get-screens-for-a-field
-func (s *ScreenService) Fields(ctx context.Context, fieldId string, startAt, maxResults int) (*model.ScreenFieldPageScheme, *model.ResponseScheme, error) {
-	return s.internalClient.Fields(ctx, fieldId, startAt, maxResults)
+func (s *ScreenService) Fields(ctx context.Context, fieldID string, startAt, maxResults int) (*model.ScreenFieldPageScheme, *model.ResponseScheme, error) {
+	return s.internalClient.Fields(ctx, fieldID, startAt, maxResults)
 }
 
 // Gets returns a paginated list of all screens or those specified by one or more screen IDs.
@@ -59,20 +60,20 @@ func (s *ScreenService) Create(ctx context.Context, name, description string) (*
 
 // AddToDefault adds a field to the default tab of the default screen.
 //
-// POST /rest/api/{2-3}/screens/addToDefault/{fieldId}
+// POST /rest/api/{2-3}/screens/addToDefault/{fieldID}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/screens#add-field-to-default-screen
-func (s *ScreenService) AddToDefault(ctx context.Context, fieldId string) (*model.ResponseScheme, error) {
-	return s.internalClient.AddToDefault(ctx, fieldId)
+func (s *ScreenService) AddToDefault(ctx context.Context, fieldID string) (*model.ResponseScheme, error) {
+	return s.internalClient.AddToDefault(ctx, fieldID)
 }
 
 // Update updates a screen. Only screens used in classic projects can be updated.
 //
-// PUT /rest/api/{2-3}/screens/{screenId}
+// PUT /rest/api/{2-3}/screens/{screenID}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/screens#update-screen
-func (s *ScreenService) Update(ctx context.Context, screenId int, name, description string) (*model.ScreenScheme, *model.ResponseScheme, error) {
-	return s.internalClient.Update(ctx, screenId, name, description)
+func (s *ScreenService) Update(ctx context.Context, screenID int, name, description string) (*model.ScreenScheme, *model.ResponseScheme, error) {
+	return s.internalClient.Update(ctx, screenID, name, description)
 }
 
 // Delete deletes a screen.
@@ -80,20 +81,20 @@ func (s *ScreenService) Update(ctx context.Context, screenId int, name, descript
 //
 // workflow, or workflow draft. Only screens used in classic projects can be deleted.
 //
-// DELETE /rest/api/{2-3}/screens/{screenId}
+// DELETE /rest/api/{2-3}/screens/{screenID}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/screens#delete-screen
-func (s *ScreenService) Delete(ctx context.Context, screenId int) (*model.ResponseScheme, error) {
-	return s.internalClient.Delete(ctx, screenId)
+func (s *ScreenService) Delete(ctx context.Context, screenID int) (*model.ResponseScheme, error) {
+	return s.internalClient.Delete(ctx, screenID)
 }
 
 // Available returns the fields that can be added to a tab on a screen.
 //
-// GET /rest/api/{2-3}/screens/{screenId}/availableFields
+// GET /rest/api/{2-3}/screens/{screenID}/availableFields
 //
 // https://docs.go-atlassian.io/jira-software-cloud/screens#get-available-screen-fields
-func (s *ScreenService) Available(ctx context.Context, screenId int) ([]*model.AvailableScreenFieldScheme, *model.ResponseScheme, error) {
-	return s.internalClient.Available(ctx, screenId)
+func (s *ScreenService) Available(ctx context.Context, screenID int) ([]*model.AvailableScreenFieldScheme, *model.ResponseScheme, error) {
+	return s.internalClient.Available(ctx, screenID)
 }
 
 type internalScreenImpl struct {
@@ -101,9 +102,9 @@ type internalScreenImpl struct {
 	version string
 }
 
-func (i *internalScreenImpl) Fields(ctx context.Context, fieldId string, startAt, maxResults int) (*model.ScreenFieldPageScheme, *model.ResponseScheme, error) {
+func (i *internalScreenImpl) Fields(ctx context.Context, fieldID string, startAt, maxResults int) (*model.ScreenFieldPageScheme, *model.ResponseScheme, error) {
 
-	if fieldId == "" {
+	if fieldID == "" {
 		return nil, nil, model.ErrNoFieldIDError
 	}
 
@@ -111,7 +112,7 @@ func (i *internalScreenImpl) Fields(ctx context.Context, fieldId string, startAt
 	params.Add("startAt", strconv.Itoa(startAt))
 	params.Add("maxResults", strconv.Itoa(maxResults))
 
-	endpoint := fmt.Sprintf("rest/api/%v/field/%v/screens?%v", i.version, fieldId, params.Encode())
+	endpoint := fmt.Sprintf("rest/api/%v/field/%v/screens?%v", i.version, fieldID, params.Encode())
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
@@ -196,13 +197,13 @@ func (i *internalScreenImpl) Create(ctx context.Context, name, description strin
 	return screen, response, nil
 }
 
-func (i *internalScreenImpl) AddToDefault(ctx context.Context, fieldId string) (*model.ResponseScheme, error) {
+func (i *internalScreenImpl) AddToDefault(ctx context.Context, fieldID string) (*model.ResponseScheme, error) {
 
-	if fieldId == "" {
+	if fieldID == "" {
 		return nil, model.ErrNoFieldIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/screens/addToDefault/%v", i.version, fieldId)
+	endpoint := fmt.Sprintf("rest/api/%v/screens/addToDefault/%v", i.version, fieldID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", nil)
 	if err != nil {
@@ -212,9 +213,9 @@ func (i *internalScreenImpl) AddToDefault(ctx context.Context, fieldId string) (
 	return i.c.Call(request, nil)
 }
 
-func (i *internalScreenImpl) Update(ctx context.Context, screenId int, name, description string) (*model.ScreenScheme, *model.ResponseScheme, error) {
+func (i *internalScreenImpl) Update(ctx context.Context, screenID int, name, description string) (*model.ScreenScheme, *model.ResponseScheme, error) {
 
-	if screenId == 0 {
+	if screenID == 0 {
 		return nil, nil, model.ErrNoScreenIDError
 	}
 
@@ -224,7 +225,7 @@ func (i *internalScreenImpl) Update(ctx context.Context, screenId int, name, des
 		payload["description"] = description
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/screens/%v", i.version, screenId)
+	endpoint := fmt.Sprintf("rest/api/%v/screens/%v", i.version, screenID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
@@ -240,13 +241,13 @@ func (i *internalScreenImpl) Update(ctx context.Context, screenId int, name, des
 	return screen, response, nil
 }
 
-func (i *internalScreenImpl) Delete(ctx context.Context, screenId int) (*model.ResponseScheme, error) {
+func (i *internalScreenImpl) Delete(ctx context.Context, screenID int) (*model.ResponseScheme, error) {
 
-	if screenId == 0 {
+	if screenID == 0 {
 		return nil, model.ErrNoScreenIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/screens/%v", i.version, screenId)
+	endpoint := fmt.Sprintf("rest/api/%v/screens/%v", i.version, screenID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
@@ -256,13 +257,13 @@ func (i *internalScreenImpl) Delete(ctx context.Context, screenId int) (*model.R
 	return i.c.Call(request, nil)
 }
 
-func (i *internalScreenImpl) Available(ctx context.Context, screenId int) ([]*model.AvailableScreenFieldScheme, *model.ResponseScheme, error) {
+func (i *internalScreenImpl) Available(ctx context.Context, screenID int) ([]*model.AvailableScreenFieldScheme, *model.ResponseScheme, error) {
 
-	if screenId == 0 {
+	if screenID == 0 {
 		return nil, nil, model.ErrNoScreenIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/screens/%v/availableFields", i.version, screenId)
+	endpoint := fmt.Sprintf("rest/api/%v/screens/%v/availableFields", i.version, screenID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {

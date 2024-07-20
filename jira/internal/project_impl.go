@@ -3,13 +3,14 @@ package internal
 import (
 	"context"
 	"fmt"
-	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/service"
-	"github.com/ctreminiom/go-atlassian/service/jira"
 	"net/http"
 	"net/url"
 	"strconv"
 	"strings"
+
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/service"
+	"github.com/ctreminiom/go-atlassian/service/jira"
 )
 
 type ProjectChildServices struct {
@@ -77,20 +78,20 @@ func (p *ProjectService) Search(ctx context.Context, options *model.ProjectSearc
 
 // Get returns the project details for a project.
 //
-// GET /rest/api/{2-3}project/{projectIdOrKey}
+// GET /rest/api/{2-3}project/{projectKeyOrID}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects#get-project
-func (p *ProjectService) Get(ctx context.Context, projectKeyOrId string, expand []string) (*model.ProjectScheme, *model.ResponseScheme, error) {
-	return p.internalClient.Get(ctx, projectKeyOrId, expand)
+func (p *ProjectService) Get(ctx context.Context, projectKeyOrID string, expand []string) (*model.ProjectScheme, *model.ResponseScheme, error) {
+	return p.internalClient.Get(ctx, projectKeyOrID, expand)
 }
 
 // Update updates the project details of a project.
 //
-// PUT /rest/api/{2-3}/project/{projectIdOrKey}
+// PUT /rest/api/{2-3}/project/{projectKeyOrID}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects#update-project
-func (p *ProjectService) Update(ctx context.Context, projectKeyOrId string, payload *model.ProjectUpdateScheme) (*model.ProjectScheme, *model.ResponseScheme, error) {
-	return p.internalClient.Update(ctx, projectKeyOrId, payload)
+func (p *ProjectService) Update(ctx context.Context, projectKeyOrID string, payload *model.ProjectUpdateScheme) (*model.ProjectScheme, *model.ResponseScheme, error) {
+	return p.internalClient.Update(ctx, projectKeyOrID, payload)
 }
 
 // Delete deletes a project.
@@ -99,11 +100,11 @@ func (p *ProjectService) Update(ctx context.Context, projectKeyOrId string, payl
 //
 // To restore a project, use the Jira UI.
 //
-// DELETE /rest/api/{2-3}/project/{projectIdOrKey}
+// DELETE /rest/api/{2-3}/project/{projectKeyOrID}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects#delete-project
-func (p *ProjectService) Delete(ctx context.Context, projectKeyOrId string, enableUndo bool) (*model.ResponseScheme, error) {
-	return p.internalClient.Delete(ctx, projectKeyOrId, enableUndo)
+func (p *ProjectService) Delete(ctx context.Context, projectKeyOrID string, enableUndo bool) (*model.ResponseScheme, error) {
+	return p.internalClient.Delete(ctx, projectKeyOrID, enableUndo)
 }
 
 // DeleteAsynchronously deletes a project asynchronously.
@@ -112,11 +113,11 @@ func (p *ProjectService) Delete(ctx context.Context, projectKeyOrId string, enab
 //
 // 2. asynchronous. Follow the location link in the response to determine the status of the task and use Get task to obtain subsequent updates.
 //
-// POST /rest/api/{2-3}/project/{projectIdOrKey}/delete
+// POST /rest/api/{2-3}/project/{projectKeyOrID}/delete
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects#delete-project-asynchronously
-func (p *ProjectService) DeleteAsynchronously(ctx context.Context, projectKeyOrId string) (*model.TaskScheme, *model.ResponseScheme, error) {
-	return p.internalClient.DeleteAsynchronously(ctx, projectKeyOrId)
+func (p *ProjectService) DeleteAsynchronously(ctx context.Context, projectKeyOrID string) (*model.TaskScheme, *model.ResponseScheme, error) {
+	return p.internalClient.DeleteAsynchronously(ctx, projectKeyOrID)
 }
 
 // Archive archives a project. Archived projects cannot be deleted.
@@ -125,40 +126,40 @@ func (p *ProjectService) DeleteAsynchronously(ctx context.Context, projectKeyOrI
 //
 // To restore a project, use the Jira UI.
 //
-// POST /rest/api/{2-3}/project/{projectIdOrKey}/archive
+// POST /rest/api/{2-3}/project/{projectKeyOrID}/archive
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects#archive-project
-func (p *ProjectService) Archive(ctx context.Context, projectKeyOrId string) (*model.ResponseScheme, error) {
-	return p.internalClient.Archive(ctx, projectKeyOrId)
+func (p *ProjectService) Archive(ctx context.Context, projectKeyOrID string) (*model.ResponseScheme, error) {
+	return p.internalClient.Archive(ctx, projectKeyOrID)
 }
 
 // Restore restores a project from the Jira recycle bin.
 //
-// POST /rest/api/3/project/{projectIdOrKey}/restore
+// POST /rest/api/3/project/{projectKeyOrID}/restore
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects#restore-deleted-project
-func (p *ProjectService) Restore(ctx context.Context, projectKeyOrId string) (*model.ProjectScheme, *model.ResponseScheme, error) {
-	return p.internalClient.Restore(ctx, projectKeyOrId)
+func (p *ProjectService) Restore(ctx context.Context, projectKeyOrID string) (*model.ProjectScheme, *model.ResponseScheme, error) {
+	return p.internalClient.Restore(ctx, projectKeyOrID)
 }
 
 // Statuses returns the valid statuses for a project.
 //
 // The statuses are grouped by issue type, as each project has a set of valid issue types and each issue type has a set of valid statuses.
 //
-// GET /rest/api/{2-3}/project/{projectIdOrKey}/statuses
+// GET /rest/api/{2-3}/project/{projectKeyOrID}/statuses
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects#get-all-statuses-for-project
-func (p *ProjectService) Statuses(ctx context.Context, projectKeyOrId string) ([]*model.ProjectStatusPageScheme, *model.ResponseScheme, error) {
-	return p.internalClient.Statuses(ctx, projectKeyOrId)
+func (p *ProjectService) Statuses(ctx context.Context, projectKeyOrID string) ([]*model.ProjectStatusPageScheme, *model.ResponseScheme, error) {
+	return p.internalClient.Statuses(ctx, projectKeyOrID)
 }
 
 // NotificationScheme gets the notification scheme associated with the project.
 //
-// GET /rest/api/{2-3}/project/{projectKeyOrId}/notificationscheme
+// GET /rest/api/{2-3}/project/{projectKeyOrID}/notificationscheme
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects#get-project-notification-scheme
-func (p *ProjectService) NotificationScheme(ctx context.Context, projectKeyOrId string, expand []string) (*model.NotificationSchemeScheme, *model.ResponseScheme, error) {
-	return p.internalClient.NotificationScheme(ctx, projectKeyOrId, expand)
+func (p *ProjectService) NotificationScheme(ctx context.Context, projectKeyOrID string, expand []string) (*model.NotificationSchemeScheme, *model.ResponseScheme, error) {
+	return p.internalClient.NotificationScheme(ctx, projectKeyOrID, expand)
 }
 
 type internalProjectImpl struct {
@@ -253,14 +254,14 @@ func (i *internalProjectImpl) Search(ctx context.Context, options *model.Project
 	return page, response, nil
 }
 
-func (i *internalProjectImpl) Get(ctx context.Context, projectKeyOrId string, expand []string) (*model.ProjectScheme, *model.ResponseScheme, error) {
+func (i *internalProjectImpl) Get(ctx context.Context, projectKeyOrID string, expand []string) (*model.ProjectScheme, *model.ResponseScheme, error) {
 
-	if projectKeyOrId == "" {
+	if projectKeyOrID == "" {
 		return nil, nil, model.ErrNoProjectIDOrKeyError
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("rest/api/%v/project/%v", i.version, projectKeyOrId))
+	endpoint.WriteString(fmt.Sprintf("rest/api/%v/project/%v", i.version, projectKeyOrID))
 
 	if expand != nil {
 
@@ -284,13 +285,13 @@ func (i *internalProjectImpl) Get(ctx context.Context, projectKeyOrId string, ex
 	return project, response, nil
 }
 
-func (i *internalProjectImpl) Update(ctx context.Context, projectKeyOrId string, payload *model.ProjectUpdateScheme) (*model.ProjectScheme, *model.ResponseScheme, error) {
+func (i *internalProjectImpl) Update(ctx context.Context, projectKeyOrID string, payload *model.ProjectUpdateScheme) (*model.ProjectScheme, *model.ResponseScheme, error) {
 
-	if projectKeyOrId == "" {
+	if projectKeyOrID == "" {
 		return nil, nil, model.ErrNoProjectIDOrKeyError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/project/%v", i.version, projectKeyOrId)
+	endpoint := fmt.Sprintf("rest/api/%v/project/%v", i.version, projectKeyOrID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
@@ -306,16 +307,16 @@ func (i *internalProjectImpl) Update(ctx context.Context, projectKeyOrId string,
 	return project, response, nil
 }
 
-func (i *internalProjectImpl) Delete(ctx context.Context, projectKeyOrId string, enableUndo bool) (*model.ResponseScheme, error) {
+func (i *internalProjectImpl) Delete(ctx context.Context, projectKeyOrID string, enableUndo bool) (*model.ResponseScheme, error) {
 
-	if projectKeyOrId == "" {
+	if projectKeyOrID == "" {
 		return nil, model.ErrNoProjectIDOrKeyError
 	}
 
 	params := url.Values{}
 	params.Add("enableUndo", fmt.Sprintf("%v", enableUndo))
 
-	endpoint := fmt.Sprintf("rest/api/%v/project/%v?%v", i.version, projectKeyOrId, params.Encode())
+	endpoint := fmt.Sprintf("rest/api/%v/project/%v?%v", i.version, projectKeyOrID, params.Encode())
 
 	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
@@ -325,13 +326,13 @@ func (i *internalProjectImpl) Delete(ctx context.Context, projectKeyOrId string,
 	return i.c.Call(request, nil)
 }
 
-func (i *internalProjectImpl) DeleteAsynchronously(ctx context.Context, projectKeyOrId string) (*model.TaskScheme, *model.ResponseScheme, error) {
+func (i *internalProjectImpl) DeleteAsynchronously(ctx context.Context, projectKeyOrID string) (*model.TaskScheme, *model.ResponseScheme, error) {
 
-	if projectKeyOrId == "" {
+	if projectKeyOrID == "" {
 		return nil, nil, model.ErrNoProjectIDOrKeyError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/project/%v/delete", i.version, projectKeyOrId)
+	endpoint := fmt.Sprintf("rest/api/%v/project/%v/delete", i.version, projectKeyOrID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", nil)
 	if err != nil {
@@ -347,13 +348,13 @@ func (i *internalProjectImpl) DeleteAsynchronously(ctx context.Context, projectK
 	return task, response, nil
 }
 
-func (i *internalProjectImpl) Archive(ctx context.Context, projectKeyOrId string) (*model.ResponseScheme, error) {
+func (i *internalProjectImpl) Archive(ctx context.Context, projectKeyOrID string) (*model.ResponseScheme, error) {
 
-	if projectKeyOrId == "" {
+	if projectKeyOrID == "" {
 		return nil, model.ErrNoProjectIDOrKeyError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/project/%v/archive", i.version, projectKeyOrId)
+	endpoint := fmt.Sprintf("rest/api/%v/project/%v/archive", i.version, projectKeyOrID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", nil)
 	if err != nil {
@@ -363,13 +364,13 @@ func (i *internalProjectImpl) Archive(ctx context.Context, projectKeyOrId string
 	return i.c.Call(request, nil)
 }
 
-func (i *internalProjectImpl) Restore(ctx context.Context, projectKeyOrId string) (*model.ProjectScheme, *model.ResponseScheme, error) {
+func (i *internalProjectImpl) Restore(ctx context.Context, projectKeyOrID string) (*model.ProjectScheme, *model.ResponseScheme, error) {
 
-	if projectKeyOrId == "" {
+	if projectKeyOrID == "" {
 		return nil, nil, model.ErrNoProjectIDOrKeyError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/project/%v/restore", i.version, projectKeyOrId)
+	endpoint := fmt.Sprintf("rest/api/%v/project/%v/restore", i.version, projectKeyOrID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", nil)
 	if err != nil {
@@ -385,13 +386,13 @@ func (i *internalProjectImpl) Restore(ctx context.Context, projectKeyOrId string
 	return project, response, nil
 }
 
-func (i *internalProjectImpl) Statuses(ctx context.Context, projectKeyOrId string) ([]*model.ProjectStatusPageScheme, *model.ResponseScheme, error) {
+func (i *internalProjectImpl) Statuses(ctx context.Context, projectKeyOrID string) ([]*model.ProjectStatusPageScheme, *model.ResponseScheme, error) {
 
-	if projectKeyOrId == "" {
+	if projectKeyOrID == "" {
 		return nil, nil, model.ErrNoProjectIDOrKeyError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/project/%v/statuses", i.version, projectKeyOrId)
+	endpoint := fmt.Sprintf("rest/api/%v/project/%v/statuses", i.version, projectKeyOrID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
@@ -407,14 +408,14 @@ func (i *internalProjectImpl) Statuses(ctx context.Context, projectKeyOrId strin
 	return statuses, response, nil
 }
 
-func (i *internalProjectImpl) NotificationScheme(ctx context.Context, projectKeyOrId string, expand []string) (*model.NotificationSchemeScheme, *model.ResponseScheme, error) {
+func (i *internalProjectImpl) NotificationScheme(ctx context.Context, projectKeyOrID string, expand []string) (*model.NotificationSchemeScheme, *model.ResponseScheme, error) {
 
-	if projectKeyOrId == "" {
+	if projectKeyOrID == "" {
 		return nil, nil, model.ErrNoProjectIDOrKeyError
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("rest/api/%v/project/%v/notificationscheme", i.version, projectKeyOrId))
+	endpoint.WriteString(fmt.Sprintf("rest/api/%v/project/%v/notificationscheme", i.version, projectKeyOrID))
 
 	if expand != nil {
 

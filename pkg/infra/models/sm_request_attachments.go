@@ -65,7 +65,7 @@ type RequestAttachmentCreationCommentScheme struct {
 // RequestAttachmentCreationPayloadScheme represents the payload for creating a request attachment.
 type RequestAttachmentCreationPayloadScheme struct {
 	TemporaryAttachmentIDs []string                                                 `json:"temporaryAttachmentIds,omitempty"`
-	Public                 bool                                                     `json:"public,omitempty"`
+	Public                 bool                                                     `json:"public"`
 	AdditionalComment      *RequestAttachmentCreationAdditionalCommentPayloadScheme `json:"additionalComment,omitempty"`
 }
 

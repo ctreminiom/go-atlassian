@@ -3,13 +3,14 @@ package internal
 import (
 	"context"
 	"fmt"
-	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/service"
-	"github.com/ctreminiom/go-atlassian/service/jira"
 	"net/http"
 	"net/url"
 	"strconv"
 	"strings"
+
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/service"
+	"github.com/ctreminiom/go-atlassian/service/jira"
 )
 
 func NewDashboardService(client service.Connector, version string) (*DashboardService, error) {
@@ -63,8 +64,8 @@ func (d *DashboardService) Search(ctx context.Context, options *model.DashboardS
 // GET /rest/api/{2-3}/dashboard/{id}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/dashboards#get-dashboard
-func (d *DashboardService) Get(ctx context.Context, dashboardId string) (*model.DashboardScheme, *model.ResponseScheme, error) {
-	return d.internalClient.Get(ctx, dashboardId)
+func (d *DashboardService) Get(ctx context.Context, dashboardID string) (*model.DashboardScheme, *model.ResponseScheme, error) {
+	return d.internalClient.Get(ctx, dashboardID)
 }
 
 // Delete deletes a dashboard.
@@ -72,8 +73,8 @@ func (d *DashboardService) Get(ctx context.Context, dashboardId string) (*model.
 // DELETE /rest/api/{2-3}/dashboard/{id}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/dashboards#delete-dashboard
-func (d *DashboardService) Delete(ctx context.Context, dashboardId string) (*model.ResponseScheme, error) {
-	return d.internalClient.Delete(ctx, dashboardId)
+func (d *DashboardService) Delete(ctx context.Context, dashboardID string) (*model.ResponseScheme, error) {
+	return d.internalClient.Delete(ctx, dashboardID)
 }
 
 // Copy copies a dashboard.
@@ -83,8 +84,8 @@ func (d *DashboardService) Delete(ctx context.Context, dashboardId string) (*mod
 // POST /rest/api/{2-3}/dashboard/{id}/copy
 //
 // https://docs.go-atlassian.io/jira-software-cloud/dashboards#copy-dashboard
-func (d *DashboardService) Copy(ctx context.Context, dashboardId string, payload *model.DashboardPayloadScheme) (*model.DashboardScheme, *model.ResponseScheme, error) {
-	return d.internalClient.Copy(ctx, dashboardId, payload)
+func (d *DashboardService) Copy(ctx context.Context, dashboardID string, payload *model.DashboardPayloadScheme) (*model.DashboardScheme, *model.ResponseScheme, error) {
+	return d.internalClient.Copy(ctx, dashboardID, payload)
 }
 
 // Update updates a dashboard
@@ -92,8 +93,8 @@ func (d *DashboardService) Copy(ctx context.Context, dashboardId string, payload
 // PUT /rest/api/{2-3}/dashboard/{id}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/dashboards#update-dashboard
-func (d *DashboardService) Update(ctx context.Context, dashboardId string, payload *model.DashboardPayloadScheme) (*model.DashboardScheme, *model.ResponseScheme, error) {
-	return d.internalClient.Update(ctx, dashboardId, payload)
+func (d *DashboardService) Update(ctx context.Context, dashboardID string, payload *model.DashboardPayloadScheme) (*model.DashboardScheme, *model.ResponseScheme, error) {
+	return d.internalClient.Update(ctx, dashboardID, payload)
 }
 
 type internalDashboardImpl struct {
@@ -190,13 +191,13 @@ func (i *internalDashboardImpl) Search(ctx context.Context, options *model.Dashb
 	return page, response, nil
 }
 
-func (i *internalDashboardImpl) Get(ctx context.Context, dashboardId string) (*model.DashboardScheme, *model.ResponseScheme, error) {
+func (i *internalDashboardImpl) Get(ctx context.Context, dashboardID string) (*model.DashboardScheme, *model.ResponseScheme, error) {
 
-	if dashboardId == "" {
+	if dashboardID == "" {
 		return nil, nil, model.ErrNoDashboardIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/dashboard/%v", i.version, dashboardId)
+	endpoint := fmt.Sprintf("rest/api/%v/dashboard/%v", i.version, dashboardID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
@@ -212,13 +213,13 @@ func (i *internalDashboardImpl) Get(ctx context.Context, dashboardId string) (*m
 	return dashboard, response, nil
 }
 
-func (i *internalDashboardImpl) Delete(ctx context.Context, dashboardId string) (*model.ResponseScheme, error) {
+func (i *internalDashboardImpl) Delete(ctx context.Context, dashboardID string) (*model.ResponseScheme, error) {
 
-	if dashboardId == "" {
+	if dashboardID == "" {
 		return nil, model.ErrNoDashboardIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/dashboard/%v", i.version, dashboardId)
+	endpoint := fmt.Sprintf("rest/api/%v/dashboard/%v", i.version, dashboardID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
@@ -228,13 +229,13 @@ func (i *internalDashboardImpl) Delete(ctx context.Context, dashboardId string) 
 	return i.c.Call(request, nil)
 }
 
-func (i *internalDashboardImpl) Copy(ctx context.Context, dashboardId string, payload *model.DashboardPayloadScheme) (*model.DashboardScheme, *model.ResponseScheme, error) {
+func (i *internalDashboardImpl) Copy(ctx context.Context, dashboardID string, payload *model.DashboardPayloadScheme) (*model.DashboardScheme, *model.ResponseScheme, error) {
 
-	if dashboardId == "" {
+	if dashboardID == "" {
 		return nil, nil, model.ErrNoDashboardIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/dashboard/%v/copy", i.version, dashboardId)
+	endpoint := fmt.Sprintf("rest/api/%v/dashboard/%v/copy", i.version, dashboardID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
@@ -250,13 +251,13 @@ func (i *internalDashboardImpl) Copy(ctx context.Context, dashboardId string, pa
 	return dashboard, response, nil
 }
 
-func (i *internalDashboardImpl) Update(ctx context.Context, dashboardId string, payload *model.DashboardPayloadScheme) (*model.DashboardScheme, *model.ResponseScheme, error) {
+func (i *internalDashboardImpl) Update(ctx context.Context, dashboardID string, payload *model.DashboardPayloadScheme) (*model.DashboardScheme, *model.ResponseScheme, error) {
 
-	if dashboardId == "" {
+	if dashboardID == "" {
 		return nil, nil, model.ErrNoDashboardIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/dashboard/%v", i.version, dashboardId)
+	endpoint := fmt.Sprintf("rest/api/%v/dashboard/%v", i.version, dashboardID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {

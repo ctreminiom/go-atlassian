@@ -3,10 +3,11 @@ package internal
 import (
 	"context"
 	"fmt"
+	"net/http"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/jira"
-	"net/http"
 )
 
 func NewResolutionService(client service.Connector, version string) (*ResolutionService, error) {
@@ -35,11 +36,11 @@ func (r *ResolutionService) Gets(ctx context.Context) ([]*model.ResolutionScheme
 
 // Get returns an issue resolution value.
 //
-// GET /rest/api/{2-3}/resolution/{id}
+// GET /rest/api/{2-3}/resolution/{resolutionID}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/resolutions#get-resolution
-func (r *ResolutionService) Get(ctx context.Context, resolutionId string) (*model.ResolutionScheme, *model.ResponseScheme, error) {
-	return r.internalClient.Get(ctx, resolutionId)
+func (r *ResolutionService) Get(ctx context.Context, resolutionID string) (*model.ResolutionScheme, *model.ResponseScheme, error) {
+	return r.internalClient.Get(ctx, resolutionID)
 }
 
 type internalResolutionImpl struct {
@@ -65,13 +66,13 @@ func (i *internalResolutionImpl) Gets(ctx context.Context) ([]*model.ResolutionS
 	return resolutions, response, nil
 }
 
-func (i *internalResolutionImpl) Get(ctx context.Context, resolutionId string) (*model.ResolutionScheme, *model.ResponseScheme, error) {
+func (i *internalResolutionImpl) Get(ctx context.Context, resolutionID string) (*model.ResolutionScheme, *model.ResponseScheme, error) {
 
-	if resolutionId == "" {
+	if resolutionID == "" {
 		return nil, nil, model.ErrNoResolutionIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/resolution/%v", i.version, resolutionId)
+	endpoint := fmt.Sprintf("rest/api/%v/resolution/%v", i.version, resolutionID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {

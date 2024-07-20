@@ -3,10 +3,11 @@ package internal
 import (
 	"context"
 	"fmt"
+	"net/http"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/jira"
-	"net/http"
 )
 
 func NewLinkTypeService(client service.Connector, version string) (*LinkTypeService, error) {
@@ -35,11 +36,11 @@ func (l *LinkTypeService) Gets(ctx context.Context) (*model.IssueLinkTypeSearchS
 
 // Get returns an issue link type.
 //
-// GET /rest/api/{2-3}/issueLinkType/{issueLinkTypeId}
+// GET /rest/api/{2-3}/issueLinkType/{issueLinkTypeID}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/link/types#get-issue-link-type
-func (l *LinkTypeService) Get(ctx context.Context, issueLinkTypeId string) (*model.LinkTypeScheme, *model.ResponseScheme, error) {
-	return l.internalClient.Get(ctx, issueLinkTypeId)
+func (l *LinkTypeService) Get(ctx context.Context, issueLinkTypeID string) (*model.LinkTypeScheme, *model.ResponseScheme, error) {
+	return l.internalClient.Get(ctx, issueLinkTypeID)
 }
 
 // Create creates an issue link type.
@@ -57,20 +58,20 @@ func (l *LinkTypeService) Create(ctx context.Context, payload *model.LinkTypeSch
 
 // Update updates an issue link type.
 //
-// PUT /rest/api/{2-3}/issueLinkType/{issueLinkTypeId}
+// PUT /rest/api/{2-3}/issueLinkType/{issueLinkTypeID}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/link/types#update-issue-link-type
-func (l *LinkTypeService) Update(ctx context.Context, issueLinkTypeId string, payload *model.LinkTypeScheme) (*model.LinkTypeScheme, *model.ResponseScheme, error) {
-	return l.internalClient.Update(ctx, issueLinkTypeId, payload)
+func (l *LinkTypeService) Update(ctx context.Context, issueLinkTypeID string, payload *model.LinkTypeScheme) (*model.LinkTypeScheme, *model.ResponseScheme, error) {
+	return l.internalClient.Update(ctx, issueLinkTypeID, payload)
 }
 
 // Delete deletes an issue link type.
 //
-// DELETE /rest/api/{2-3}/issueLinkType/{issueLinkTypeId}
+// DELETE /rest/api/{2-3}/issueLinkType/{issueLinkTypeID}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/link/types#delete-issue-link-type
-func (l *LinkTypeService) Delete(ctx context.Context, issueLinkTypeId string) (*model.ResponseScheme, error) {
-	return l.internalClient.Delete(ctx, issueLinkTypeId)
+func (l *LinkTypeService) Delete(ctx context.Context, issueLinkTypeID string) (*model.ResponseScheme, error) {
+	return l.internalClient.Delete(ctx, issueLinkTypeID)
 }
 
 type internalLinkTypeImpl struct {
@@ -96,13 +97,13 @@ func (i *internalLinkTypeImpl) Gets(ctx context.Context) (*model.IssueLinkTypeSe
 	return types, response, nil
 }
 
-func (i *internalLinkTypeImpl) Get(ctx context.Context, issueLinkTypeId string) (*model.LinkTypeScheme, *model.ResponseScheme, error) {
+func (i *internalLinkTypeImpl) Get(ctx context.Context, issueLinkTypeID string) (*model.LinkTypeScheme, *model.ResponseScheme, error) {
 
-	if issueLinkTypeId == "" {
+	if issueLinkTypeID == "" {
 		return nil, nil, model.ErrNoLinkTypeIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/issueLinkType/%v", i.version, issueLinkTypeId)
+	endpoint := fmt.Sprintf("rest/api/%v/issueLinkType/%v", i.version, issueLinkTypeID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
@@ -136,13 +137,13 @@ func (i *internalLinkTypeImpl) Create(ctx context.Context, payload *model.LinkTy
 	return linkType, response, nil
 }
 
-func (i *internalLinkTypeImpl) Update(ctx context.Context, issueLinkTypeId string, payload *model.LinkTypeScheme) (*model.LinkTypeScheme, *model.ResponseScheme, error) {
+func (i *internalLinkTypeImpl) Update(ctx context.Context, issueLinkTypeID string, payload *model.LinkTypeScheme) (*model.LinkTypeScheme, *model.ResponseScheme, error) {
 
-	if issueLinkTypeId == "" {
+	if issueLinkTypeID == "" {
 		return nil, nil, model.ErrNoLinkTypeIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/issueLinkType/%v", i.version, issueLinkTypeId)
+	endpoint := fmt.Sprintf("rest/api/%v/issueLinkType/%v", i.version, issueLinkTypeID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
@@ -158,13 +159,13 @@ func (i *internalLinkTypeImpl) Update(ctx context.Context, issueLinkTypeId strin
 	return linkType, response, nil
 }
 
-func (i *internalLinkTypeImpl) Delete(ctx context.Context, issueLinkTypeId string) (*model.ResponseScheme, error) {
+func (i *internalLinkTypeImpl) Delete(ctx context.Context, issueLinkTypeID string) (*model.ResponseScheme, error) {
 
-	if issueLinkTypeId == "" {
+	if issueLinkTypeID == "" {
 		return nil, model.ErrNoLinkTypeIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/issueLinkType/%v", i.version, issueLinkTypeId)
+	endpoint := fmt.Sprintf("rest/api/%v/issueLinkType/%v", i.version, issueLinkTypeID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {

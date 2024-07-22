@@ -171,6 +171,7 @@ func Test_internalWatcherImpl_Add(t *testing.T) {
 	type args struct {
 		ctx          context.Context
 		issueKeyOrID string
+		accountId    []string
 	}
 
 	testCases := []struct {
@@ -187,6 +188,7 @@ func Test_internalWatcherImpl_Add(t *testing.T) {
 			args: args{
 				ctx:          context.Background(),
 				issueKeyOrID: "DUMMY-5",
+				accountId:    nil,
 			},
 			on: func(fields *fields) {
 
@@ -197,7 +199,38 @@ func Test_internalWatcherImpl_Add(t *testing.T) {
 					http.MethodPost,
 					"rest/api/3/issue/DUMMY-5/watchers",
 					"",
+					[]byte(nil)).
+					Return(&http.Request{}, nil)
+
+				client.On("Call",
+					&http.Request{},
 					nil).
+					Return(&model.ResponseScheme{}, nil)
+
+				fields.c = client
+			},
+			wantErr: false,
+			Err:     nil,
+		},
+
+		{
+			name:   "when the api version is v3 and the watcher accountId is set",
+			fields: fields{version: "3"},
+			args: args{
+				ctx:          context.Background(),
+				issueKeyOrID: "DUMMY-5",
+				accountId:    []string{"someAccountId"},
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewConnector(t)
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodPost,
+					"rest/api/3/issue/DUMMY-5/watchers",
+					"",
+					[]byte("someAccountId")).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -217,6 +250,7 @@ func Test_internalWatcherImpl_Add(t *testing.T) {
 			args: args{
 				ctx:          context.Background(),
 				issueKeyOrID: "DUMMY-5",
+				accountId:    nil,
 			},
 			on: func(fields *fields) {
 
@@ -227,7 +261,39 @@ func Test_internalWatcherImpl_Add(t *testing.T) {
 					http.MethodPost,
 					"rest/api/2/issue/DUMMY-5/watchers",
 					"",
+					[]byte(nil),
+				).
+					Return(&http.Request{}, nil)
+
+				client.On("Call",
+					&http.Request{},
 					nil).
+					Return(&model.ResponseScheme{}, nil)
+
+				fields.c = client
+			},
+			wantErr: false,
+			Err:     nil,
+		},
+
+		{
+			name:   "when the api version is v2 and the watcher accountId is set",
+			fields: fields{version: "2"},
+			args: args{
+				ctx:          context.Background(),
+				issueKeyOrID: "DUMMY-5",
+				accountId:    []string{"someAccountId"},
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewConnector(t)
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodPost,
+					"rest/api/2/issue/DUMMY-5/watchers",
+					"",
+					[]byte("someAccountId")).
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -258,6 +324,7 @@ func Test_internalWatcherImpl_Add(t *testing.T) {
 			args: args{
 				ctx:          context.Background(),
 				issueKeyOrID: "DUMMY-5",
+				accountId:    nil,
 			},
 			on: func(fields *fields) {
 
@@ -268,7 +335,7 @@ func Test_internalWatcherImpl_Add(t *testing.T) {
 					http.MethodPost,
 					"rest/api/3/issue/DUMMY-5/watchers",
 					"",
-					nil).
+					[]byte(nil)).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
@@ -288,7 +355,7 @@ func Test_internalWatcherImpl_Add(t *testing.T) {
 			newService, err := NewWatcherService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResponse, err := newService.Add(testCase.args.ctx, testCase.args.issueKeyOrID, "")
+			gotResponse, err := newService.Add(testCase.args.ctx, testCase.args.issueKeyOrID, testCase.args.accountId...)
 
 			if testCase.wantErr {
 

@@ -171,7 +171,7 @@ func Test_internalWatcherImpl_Add(t *testing.T) {
 	type args struct {
 		ctx          context.Context
 		issueKeyOrID string
-		accountId    []string
+		accountId    string
 	}
 
 	testCases := []struct {
@@ -188,7 +188,7 @@ func Test_internalWatcherImpl_Add(t *testing.T) {
 			args: args{
 				ctx:          context.Background(),
 				issueKeyOrID: "DUMMY-5",
-				accountId:    nil,
+				accountId:    "",
 			},
 			on: func(fields *fields) {
 
@@ -219,7 +219,7 @@ func Test_internalWatcherImpl_Add(t *testing.T) {
 			args: args{
 				ctx:          context.Background(),
 				issueKeyOrID: "DUMMY-5",
-				accountId:    []string{"someAccountId"},
+				accountId:    "someAccountId",
 			},
 			on: func(fields *fields) {
 
@@ -250,7 +250,7 @@ func Test_internalWatcherImpl_Add(t *testing.T) {
 			args: args{
 				ctx:          context.Background(),
 				issueKeyOrID: "DUMMY-5",
-				accountId:    nil,
+				accountId:    "",
 			},
 			on: func(fields *fields) {
 
@@ -282,7 +282,7 @@ func Test_internalWatcherImpl_Add(t *testing.T) {
 			args: args{
 				ctx:          context.Background(),
 				issueKeyOrID: "DUMMY-5",
-				accountId:    []string{"someAccountId"},
+				accountId:    "someAccountId",
 			},
 			on: func(fields *fields) {
 
@@ -324,7 +324,7 @@ func Test_internalWatcherImpl_Add(t *testing.T) {
 			args: args{
 				ctx:          context.Background(),
 				issueKeyOrID: "DUMMY-5",
-				accountId:    nil,
+				accountId:    "",
 			},
 			on: func(fields *fields) {
 
@@ -355,7 +355,7 @@ func Test_internalWatcherImpl_Add(t *testing.T) {
 			newService, err := NewWatcherService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResponse, err := newService.Add(testCase.args.ctx, testCase.args.issueKeyOrID, testCase.args.accountId...)
+			gotResponse, err := newService.Add(testCase.args.ctx, testCase.args.issueKeyOrID, testCase.args.accountId)
 
 			if testCase.wantErr {
 

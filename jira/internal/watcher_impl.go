@@ -42,8 +42,8 @@ func (w *WatcherService) Gets(ctx context.Context, issueKeyOrID string) (*model.
 // POST /rest/api/{2-3}/issue/{issueKeyOrID}/watchers
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/watcher#add-watcher
-func (w *WatcherService) Add(ctx context.Context, issueKeyOrID string, accountId ...string) (*model.ResponseScheme, error) {
-	return w.internalClient.Add(ctx, issueKeyOrID, accountId...)
+func (w *WatcherService) Add(ctx context.Context, issueKeyOrID string, accountId string) (*model.ResponseScheme, error) {
+	return w.internalClient.Add(ctx, issueKeyOrID, accountId)
 }
 
 // Delete deletes a user as a watcher of an issue.
@@ -82,7 +82,7 @@ func (i *internalWatcherImpl) Gets(ctx context.Context, issueKeyOrID string) (*m
 	return watchers, response, nil
 }
 
-func (i *internalWatcherImpl) Add(ctx context.Context, issueKeyOrID string, accountId ...string) (*model.ResponseScheme, error) {
+func (i *internalWatcherImpl) Add(ctx context.Context, issueKeyOrID, accountId string) (*model.ResponseScheme, error) {
 
 	if issueKeyOrID == "" {
 		return nil, model.ErrNoIssueKeyOrIDError
@@ -92,7 +92,7 @@ func (i *internalWatcherImpl) Add(ctx context.Context, issueKeyOrID string, acco
 
 	var payload []byte = nil // add self user
 	if len(accountId) > 0 {
-		payload = []byte(accountId[0]) // add another user
+		payload = []byte(accountId) // add another user
 	}
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {

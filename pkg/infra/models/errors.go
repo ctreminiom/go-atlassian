@@ -161,6 +161,7 @@ var (
 	ErrNoCheckBoxTypeError                 = errors.New("custom-field: no check-box type set")
 	ErrNoCascadingParentError              = errors.New("custom-field: no cascading parent value set")
 	ErrNoCascadingChildError               = errors.New("custom-field: no cascading child value set")
+	ErrNoRequestTypeError                  = errors.New("custom-field: no request type value set")
 	ErrNoTempoAccountTypeError             = errors.New("custom-field: no tempo account value set")
 	ErrNoAttachmentIdsError                = errors.New("sm: no attachment id's set")
 	ErrNoLabelsError                       = errors.New("sm: no label names set")

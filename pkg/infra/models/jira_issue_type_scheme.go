@@ -40,5 +40,5 @@ type ProjectIssueTypeSchemePageScheme struct {
 // IssueTypeSchemeProjectsScheme represents the projects of an issue type scheme in Jira.
 type IssueTypeSchemeProjectsScheme struct {
 	IssueTypeScheme *IssueTypeSchemeScheme `json:"issueTypeScheme,omitempty"` // The issue type scheme.
-	ProjectIds      []string               `json:"projectIds,omitempty"`      // The IDs of the projects.
+	ProjectIDs      []string               `json:"projectIds,omitempty"`      // The IDs of the projects.
 }

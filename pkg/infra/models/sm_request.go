@@ -75,7 +75,7 @@ type CustomerRequestServiceDeskScheme struct {
 
 // CustomerRequestDateScheme represents a date for a customer request.
 type CustomerRequestDateScheme struct {
-	Iso8601     string `json:"iso8601,omitempty"`     // The ISO 8601 format of the date.
+	ISO8601     string `json:"iso8601,omitempty"`     // The ISO 8601 format of the date.
 	Jira        string `json:"jira,omitempty"`        // The Jira format of the date.
 	Friendly    string `json:"friendly,omitempty"`    // The friendly format of the date.
 	EpochMillis int    `json:"epochMillis,omitempty"` // The epoch milliseconds of the date.
@@ -108,7 +108,7 @@ type CustomerRequestCurrentStatusScheme struct {
 
 // CustomerRequestCurrentStatusDateScheme represents a date for a customer request current status.
 type CustomerRequestCurrentStatusDateScheme struct {
-	Iso8601     string `json:"iso8601,omitempty"`     // The ISO 8601 format of the date.
+	ISO8601     string `json:"iso8601,omitempty"`     // The ISO 8601 format of the date.
 	Jira        string `json:"jira,omitempty"`        // The Jira format of the date.
 	Friendly    string `json:"friendly,omitempty"`    // The friendly format of the date.
 	EpochMillis int    `json:"epochMillis,omitempty"` // The epoch milliseconds of the date.
@@ -117,7 +117,7 @@ type CustomerRequestCurrentStatusDateScheme struct {
 // CustomerRequestLinksScheme represents the links related to a customer request.
 type CustomerRequestLinksScheme struct {
 	Self     string `json:"self,omitempty"`     // The URL of the customer request itself.
-	JiraRest string `json:"jiraRest,omitempty"` // The Jira REST API link for the customer request.
+	JiraREST string `json:"jiraRest,omitempty"` // The Jira REST API link for the customer request.
 	Web      string `json:"web,omitempty"`      // The web link for the customer request.
 	Agent    string `json:"agent,omitempty"`    // The agent link for the customer request.
 }

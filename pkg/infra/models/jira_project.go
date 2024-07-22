@@ -128,7 +128,7 @@ type ProjectScheme struct {
 	IssueTypes        []*IssueTypeScheme     `json:"issueTypes,omitempty"`        // The issue types of the project.
 	Versions          []*VersionScheme       `json:"versions,omitempty"`          // The versions of the project.
 	Roles             *ProjectRolesScheme    `json:"roles,omitempty"`             // The roles of the project.
-	AvatarUrls        *AvatarURLScheme       `json:"avatarUrls,omitempty"`        // The avatar URLs of the project.
+	AvatarURLs        *AvatarURLScheme       `json:"avatarUrls,omitempty"`        // The avatar URLs of the project.
 	ProjectKeys       []string               `json:"projectKeys,omitempty"`       // The keys of the project.
 	Insight           *ProjectInsightScheme  `json:"insight,omitempty"`           // The insight of the project.
 	Category          *ProjectCategoryScheme `json:"projectCategory,omitempty"`   // The category of the project.

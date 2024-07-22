@@ -26,7 +26,7 @@ type ServiceDeskQueuePageLinkScheme struct {
 type ServiceDeskQueueScheme struct {
 	ID         string   `json:"id,omitempty"`         // The ID of the queue.
 	Name       string   `json:"name,omitempty"`       // The name of the queue.
-	Jql        string   `json:"jql,omitempty"`        // The JQL of the queue.
+	JQL        string   `json:"jql,omitempty"`        // The JQL of the queue.
 	Fields     []string `json:"fields,omitempty"`     // The fields of the queue.
 	IssueCount int      `json:"issueCount,omitempty"` // The issue count of the queue.
 }

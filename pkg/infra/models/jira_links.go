@@ -40,7 +40,7 @@ type IssueLinkFieldsScheme struct {
 	Reporter                 *UserScheme         `json:"reporter,omitempty"`                 // The reporter of the linked issue.
 	Assignee                 *UserScheme         `json:"assignee,omitempty"`                 // The assignee of the linked issue.
 	Resolution               *ResolutionScheme   `json:"resolution,omitempty"`               // The resolution of the linked issue.
-	Resolutiondate           string              `json:"resolutiondate,omitempty"`           // The date the linked issue was resolved.
+	ResolutionDate           string              `json:"resolutiondate,omitempty"`           // The date the linked issue was resolved.
 	Workratio                int                 `json:"workratio,omitempty"`                // The work ratio of the linked issue.
 	StatusCategoryChangeDate string              `json:"statuscategorychangedate,omitempty"` // The date the status category of the linked issue changed.
 	LastViewed               string              `json:"lastViewed,omitempty"`               // The last time the linked issue was viewed.

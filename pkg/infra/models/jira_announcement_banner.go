@@ -2,7 +2,7 @@ package models
 
 // AnnouncementBannerScheme represents an announcement banner in Jira.
 type AnnouncementBannerScheme struct {
-	HashId        string `json:"hashId,omitempty"`        // The hash ID of the banner.
+	HashID        string `json:"hashId,omitempty"`        // The hash ID of the banner.
 	IsDismissible bool   `json:"isDismissible,omitempty"` // Indicates if the banner is dismissible.
 	IsEnabled     bool   `json:"isEnabled,omitempty"`     // Indicates if the banner is enabled.
 	Message       string `json:"message,omitempty"`       // The message of the banner.

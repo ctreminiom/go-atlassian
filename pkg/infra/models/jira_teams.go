@@ -45,7 +45,7 @@ type JiraTeamCreatePayloadScheme struct {
 
 // JiraTeamCreateResponseScheme represents the response from creating a Jira team.
 type JiraTeamCreateResponseScheme struct {
-	Id      int                     `json:"id,omitempty"`      // The ID of the created team.
+	ID      int                     `json:"id,omitempty"`      // The ID of the created team.
 	Team    *JiraTeamScheme         `json:"team,omitempty"`    // The created team.
 	Persons []*JiraTeamPersonScheme `json:"persons,omitempty"` // The persons associated with the created team.
 }

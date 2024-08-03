@@ -6,6 +6,7 @@ import (
 	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
 )
 
+// RemoteLinkConnector is the interface that wraps the Jira remote link methods.
 type RemoteLinkConnector interface {
 
 	// Gets returns the remote issue links for an issue.

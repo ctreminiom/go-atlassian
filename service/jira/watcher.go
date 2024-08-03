@@ -14,7 +14,7 @@ type WatcherConnector interface {
 	// GET /rest/api/{2-3}/issue/{issueIdOrKey}/watchers
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/watcher#get-issue-watchers
-	Gets(ctx context.Context, issueKeyOrId string) (*model.IssueWatcherScheme, *model.ResponseScheme, error)
+	Gets(ctx context.Context, issueKeyOrID string) (*model.IssueWatcherScheme, *model.ResponseScheme, error)
 
 	// Add adds a user as a watcher of an issue by passing the account ID of the user.
 	//
@@ -23,12 +23,12 @@ type WatcherConnector interface {
 	// POST /rest/api/{2-3}/issue/{issueIdOrKey}/watchers
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/watcher#add-watcher
-	Add(ctx context.Context, issueKeyOrId string) (*model.ResponseScheme, error)
+	Add(ctx context.Context, issueKeyOrID string, accountID ...string) (*model.ResponseScheme, error)
 
 	// Delete deletes a user as a watcher of an issue.
 	//
 	// DELETE /rest/api/{2-3}/issue/{issueIdOrKey}/watchers
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/watcher#delete-watcher
-	Delete(ctx context.Context, issueKeyOrId, accountId string) (*model.ResponseScheme, error)
+	Delete(ctx context.Context, issueKeyOrID, accountID string) (*model.ResponseScheme, error)
 }

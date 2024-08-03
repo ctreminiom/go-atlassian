@@ -10,6 +10,7 @@ import (
 	"github.com/ctreminiom/go-atlassian/service/jira"
 )
 
+// NewIssuePropertyService creates a new instance of the IssuePropertyService.
 func NewIssuePropertyService(client service.Connector, version string) (*IssuePropertyService, error) {
 
 	if version == "" {
@@ -21,6 +22,7 @@ func NewIssuePropertyService(client service.Connector, version string) (*IssuePr
 	}, nil
 }
 
+// IssuePropertyService handles the issue property methods for the Jira Cloud REST API.
 type IssuePropertyService struct {
 	internalClient jira.IssuePropertyConnector
 }

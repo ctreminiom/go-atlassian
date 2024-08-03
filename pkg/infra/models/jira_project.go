@@ -133,11 +133,11 @@ type ProjectScheme struct {
 	Insight           *ProjectInsightScheme  `json:"insight,omitempty"`           // The insight of the project.
 	Category          *ProjectCategoryScheme `json:"projectCategory,omitempty"`   // The category of the project.
 	Deleted           bool                   `json:"deleted,omitempty"`           // Indicates if the project is deleted.
-	RetentionTillDate string                 `json:"retentionTillDate,omitempty"` // The retention till date of the project.
-	DeletedDate       string                 `json:"deletedDate,omitempty"`       // The date the project was deleted.
+	RetentionTillDate *DateTimeScheme        `json:"retentionTillDate,omitempty"` // The retention till date of the project.
+	DeletedDate       *DateTimeScheme        `json:"deletedDate,omitempty"`       // The date the project was deleted.
 	DeletedBy         *UserScheme            `json:"deletedBy,omitempty"`         // The user who deleted the project.
 	Archived          bool                   `json:"archived,omitempty"`          // Indicates if the project is archived.
-	ArchivedDate      string                 `json:"archivedDate,omitempty"`      // The date the project was archived.
+	ArchivedDate      *DateTimeScheme        `json:"archivedDate,omitempty"`      // The date the project was archived.
 	ArchivedBy        *UserScheme            `json:"archivedBy,omitempty"`        // The user who archived the project.
 }
 

@@ -74,9 +74,184 @@ func (w *WorkflowService) Delete(ctx context.Context, workflowID string) (*model
 	return w.internalClient.Delete(ctx, workflowID)
 }
 
+func (w *WorkflowService) Search(ctx context.Context, options *model.WorkflowSearchCriteria, expand []string, transitionLinks bool) (*model.WorkflowReadResponseScheme, *model.ResponseScheme, error) {
+	return w.internalClient.Search(ctx, options, expand, transitionLinks)
+}
+
+func (w *WorkflowService) Capabilities(ctx context.Context, workflowID, projectID, issueTypeID string) (*model.WorkflowCapabilitiesScheme, *model.ResponseScheme, error) {
+	return w.internalClient.Capabilities(ctx, workflowID, projectID, issueTypeID)
+}
+
+func (w *WorkflowService) Creates(ctx context.Context, payload *model.WorkflowCreatesPayload) (*model.WorkflowCreateResponseScheme, *model.ResponseScheme, error) {
+	return w.internalClient.Creates(ctx, payload)
+}
+
+func (w *WorkflowService) ValidateCreateWorkflows(ctx context.Context, payload *model.ValidationOptionsForCreateScheme) (*model.WorkflowValidationErrorListScheme, *model.ResponseScheme, error) {
+	return w.internalClient.ValidateCreateWorkflows(ctx, payload)
+}
+
+func (w *WorkflowService) Updates(ctx context.Context, payload *model.WorkflowUpdatesPayloadScheme, expand []string) (*model.WorkflowUpdateResponseScheme, *model.ResponseScheme, error) {
+	return w.internalClient.Updates(ctx, payload, expand)
+}
+
+func (w *WorkflowService) ValidateUpdateWorkflows(ctx context.Context, payload *model.ValidationOptionsForUpdateScheme) (*model.WorkflowValidationErrorListScheme, *model.ResponseScheme, error) {
+	return w.internalClient.ValidateUpdateWorkflows(ctx, payload)
+}
+
 type internalWorkflowImpl struct {
 	c       service.Connector
 	version string
+}
+
+func (i *internalWorkflowImpl) Search(ctx context.Context, options *model.WorkflowSearchCriteria, expand []string, transitionLinks bool) (*model.WorkflowReadResponseScheme, *model.ResponseScheme, error) {
+	params := url.Values{}
+
+	if len(expand) != 0 {
+		params.Add("expand", strings.Join(expand, ","))
+	}
+
+	if transitionLinks {
+		params.Add("useTransitionLinksFormat", "true")
+	}
+
+	var endpoint strings.Builder
+	endpoint.WriteString(fmt.Sprintf("rest/api/%v/workflows", i.version))
+
+	if params.Encode() != "" {
+		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
+	}
+
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint.String(), "", options)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	page := new(model.WorkflowReadResponseScheme)
+	response, err := i.c.Call(request, page)
+	if err != nil {
+		return nil, response, err
+	}
+
+	return page, response, nil
+}
+
+func (i *internalWorkflowImpl) Capabilities(ctx context.Context, workflowID, projectID, issueTypeID string) (*model.WorkflowCapabilitiesScheme, *model.ResponseScheme, error) {
+
+	params := url.Values{}
+
+	if workflowID != "" {
+		params.Add("workflowId", workflowID)
+	}
+
+	if projectID != "" {
+		params.Add("projectId", projectID)
+	}
+
+	if issueTypeID != "" {
+		params.Add("issueTypeId", issueTypeID)
+	}
+
+	var endpoint strings.Builder
+	endpoint.WriteString(fmt.Sprintf("rest/api/%v/workflows/capabilities", i.version))
+
+	if params.Encode() != "" {
+		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
+	}
+
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	capabilities := new(model.WorkflowCapabilitiesScheme)
+	response, err := i.c.Call(request, capabilities)
+	if err != nil {
+		return nil, response, err
+	}
+
+	return capabilities, response, nil
+}
+
+func (i *internalWorkflowImpl) Creates(ctx context.Context, payload *model.WorkflowCreatesPayload) (*model.WorkflowCreateResponseScheme, *model.ResponseScheme, error) {
+
+	endpoint := fmt.Sprintf("rest/api/%v/workflows/create", i.version)
+
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	result := new(model.WorkflowCreateResponseScheme)
+	response, err := i.c.Call(request, result)
+	if err != nil {
+		return nil, response, err
+	}
+
+	return result, response, nil
+}
+
+func (i *internalWorkflowImpl) ValidateCreateWorkflows(ctx context.Context, payload *model.ValidationOptionsForCreateScheme) (*model.WorkflowValidationErrorListScheme, *model.ResponseScheme, error) {
+
+	endpoint := fmt.Sprintf("rest/api/%v/workflows/create/validation", i.version)
+
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	errorList := new(model.WorkflowValidationErrorListScheme)
+	response, err := i.c.Call(request, errorList)
+	if err != nil {
+		return nil, response, err
+	}
+
+	return errorList, response, nil
+}
+
+func (i *internalWorkflowImpl) Updates(ctx context.Context, payload *model.WorkflowUpdatesPayloadScheme, expand []string) (*model.WorkflowUpdateResponseScheme, *model.ResponseScheme, error) {
+
+	params := url.Values{}
+	if len(expand) != 0 {
+		params.Add("expand", strings.Join(expand, ","))
+	}
+
+	var endpoint strings.Builder
+	endpoint.WriteString(fmt.Sprintf("rest/api/%v/workflows/update", i.version))
+
+	if params.Encode() != "" {
+		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
+	}
+
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint.String(), "", payload)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	result := new(model.WorkflowUpdateResponseScheme)
+	response, err := i.c.Call(request, result)
+	if err != nil {
+		return nil, response, err
+	}
+
+	return result, response, nil
+}
+
+func (i *internalWorkflowImpl) ValidateUpdateWorkflows(ctx context.Context, payload *model.ValidationOptionsForUpdateScheme) (*model.WorkflowValidationErrorListScheme, *model.ResponseScheme, error) {
+
+	endpoint := fmt.Sprintf("rest/api/%v/workflows/update/validation", i.version)
+
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	errorList := new(model.WorkflowValidationErrorListScheme)
+	response, err := i.c.Call(request, errorList)
+	if err != nil {
+		return nil, response, err
+	}
+
+	return errorList, response, nil
 }
 
 func (i *internalWorkflowImpl) Create(ctx context.Context, payload *model.WorkflowPayloadScheme) (*model.WorkflowCreatedResponseScheme, *model.ResponseScheme, error) {

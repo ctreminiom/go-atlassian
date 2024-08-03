@@ -119,6 +119,44 @@ func (w *WorkflowService) Updates(ctx context.Context, payload *model.WorkflowUp
 	return w.internalClient.Updates(ctx, payload, expand)
 }
 
+// Bulk returns a list of workflows and related statuses by providing workflow names,
+//
+// workflow IDs, or project and issue types.
+//
+// POST /rest/api/{2-3}/workflows
+func (w *WorkflowService) Bulk(ctx context.Context, options *model.WorkflowBulkOptionsScheme, expand []string) (*model.WorkflowReadResponseScheme, *model.ResponseScheme, error) {
+	return w.internalClient.Bulk(ctx, options, expand)
+}
+
+// Capabilities get the list of workflow capabilities for a specific workflow using either the workflow ID, or the project and issue type ID pair.
+//
+// The response includes the scope of the workflow, defined as global/project-based,
+//
+// and a list of project types that the workflow is scoped to.
+//
+// It also includes all rules organised into their broad categories (conditions, validators, actions, triggers, screens)
+//
+// as well as the source location (Atlassian-provided, Connect, Forge).
+//
+// GET /rest/api/{2-3}/workflows/capabilities
+func (w *WorkflowService) Capabilities(ctx context.Context, workflowID, projectID, issueTypeID string) (*model.WorkflowCapabilitiesScheme, *model.ResponseScheme, error) {
+	return w.internalClient.Capabilities(ctx, workflowID, projectID, issueTypeID)
+}
+
+// Creates creates workflows and related statuses.
+//
+// POST /rest/api/{2-3}/workflows/create
+func (w *WorkflowService) Creates(ctx context.Context, payload *model.WorkflowCreatesPayloadScheme) (*model.WorkflowCreateResponseScheme, *model.ResponseScheme, error) {
+	return w.internalClient.Creates(ctx, payload)
+}
+
+// Updates updates workflows and related statuses.
+//
+// POST /rest/api/{2-3}/workflows/update
+func (w *WorkflowService) Updates(ctx context.Context, payload *model.WorkflowUpdatesPayloadScheme, expand []string) (*model.WorkflowUpdateResponseScheme, *model.ResponseScheme, error) {
+	return w.internalClient.Updates(ctx, payload, expand)
+}
+
 type internalWorkflowImpl struct {
 	c       service.Connector
 	version string

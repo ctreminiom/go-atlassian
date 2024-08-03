@@ -3,12 +3,14 @@ package internal
 import (
 	"context"
 	"fmt"
+	"net/http"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/bitbucket"
-	"net/http"
 )
 
+// NewWorkspaceService handles communication with the workspace related methods of the Bitbucket API.
 func NewWorkspaceService(client service.Connector, webhook *WorkspaceHookService, permission *WorkspacePermissionService) *WorkspaceService {
 
 	return &WorkspaceService{
@@ -18,6 +20,7 @@ func NewWorkspaceService(client service.Connector, webhook *WorkspaceHookService
 	}
 }
 
+// WorkspaceService handles communication with the workspace related methods of the Bitbucket API.
 type WorkspaceService struct {
 	internalClient bitbucket.WorkspaceConnector
 	Hook           *WorkspaceHookService
@@ -42,15 +45,15 @@ func (w *WorkspaceService) Members(ctx context.Context, workspace string) (*mode
 	return w.internalClient.Members(ctx, workspace)
 }
 
-// Membership returns the workspace membership,
+// Membership returns the workspace membership.
 //
 // which includes a User object for the member and a Workspace object for the requested workspace.
 //
-// GET /2.0/workspaces/{workspace}/members/{member}
+// GET /2.0/workspaces/{workspace}/members/{memberID}
 //
 // https://docs.go-atlassian.io/bitbucket-cloud/workspace#get-member-in-a-workspace
-func (w *WorkspaceService) Membership(ctx context.Context, workspace, memberId string) (*model.WorkspaceMembershipScheme, *model.ResponseScheme, error) {
-	return w.internalClient.Membership(ctx, workspace, memberId)
+func (w *WorkspaceService) Membership(ctx context.Context, workspace, memberID string) (*model.WorkspaceMembershipScheme, *model.ResponseScheme, error) {
+	return w.internalClient.Membership(ctx, workspace, memberID)
 }
 
 // Projects returns the list of projects in this workspace.
@@ -66,6 +69,7 @@ type internalWorkspaceServiceImpl struct {
 	c service.Connector
 }
 
+// Get returns the requested workspace.
 func (i *internalWorkspaceServiceImpl) Get(ctx context.Context, workspace string) (*model.WorkspaceScheme, *model.ResponseScheme, error) {
 
 	if workspace == "" {
@@ -88,6 +92,7 @@ func (i *internalWorkspaceServiceImpl) Get(ctx context.Context, workspace string
 	return result, response, nil
 }
 
+// Members returns all members of the requested workspace.
 func (i *internalWorkspaceServiceImpl) Members(ctx context.Context, workspace string) (*model.WorkspaceMembershipPageScheme, *model.ResponseScheme, error) {
 
 	if workspace == "" {
@@ -110,6 +115,7 @@ func (i *internalWorkspaceServiceImpl) Members(ctx context.Context, workspace st
 	return page, response, nil
 }
 
+// Membership returns the workspace membership.
 func (i *internalWorkspaceServiceImpl) Membership(ctx context.Context, workspace, memberId string) (*model.WorkspaceMembershipScheme, *model.ResponseScheme, error) {
 
 	if workspace == "" {
@@ -136,6 +142,7 @@ func (i *internalWorkspaceServiceImpl) Membership(ctx context.Context, workspace
 	return member, response, nil
 }
 
+// Projects returns the list of projects in this workspace.
 func (i *internalWorkspaceServiceImpl) Projects(ctx context.Context, workspace string) (*model.BitbucketProjectPageScheme, *model.ResponseScheme, error) {
 
 	if workspace == "" {

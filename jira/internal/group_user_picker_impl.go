@@ -23,6 +23,7 @@ func NewGroupUserPickerService(client service.Connector, version string) (*Group
 	}, nil
 }
 
+// GroupUserPickerService handles communication with the GroupUserPicker related methods of the Jira API.
 type GroupUserPickerService struct {
 	internalClient jira.GroupUserPickerConnector
 }
@@ -41,6 +42,7 @@ type internalGroupUserPickerServiceImpl struct {
 	version string
 }
 
+// Find returns a list of users and groups matching a string.
 func (i internalGroupUserPickerServiceImpl) Find(ctx context.Context, options *model.GroupUserPickerFindOptionScheme) (*model.GroupUserPickerFindScheme, *model.ResponseScheme, error) {
 
 	if options == nil || options.Query == "" {

@@ -3,12 +3,14 @@ package internal
 import (
 	"context"
 	"errors"
+	"net/http"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
-	"github.com/stretchr/testify/assert"
-	"net/http"
-	"testing"
 )
 
 func Test_SprintService_Get(t *testing.T) {
@@ -19,7 +21,7 @@ func Test_SprintService_Get(t *testing.T) {
 
 	type args struct {
 		ctx      context.Context
-		sprintId int
+		sprintID int
 	}
 
 	testCases := []struct {
@@ -34,7 +36,7 @@ func Test_SprintService_Get(t *testing.T) {
 			name: "when the parameters are correct",
 			args: args{
 				ctx:      context.Background(),
-				sprintId: 10001,
+				sprintID: 10001,
 			},
 			on: func(fields *fields) {
 
@@ -61,7 +63,7 @@ func Test_SprintService_Get(t *testing.T) {
 			name: "when the api cannot be executed",
 			args: args{
 				ctx:      context.Background(),
-				sprintId: 10001,
+				sprintID: 10001,
 			},
 			on: func(fields *fields) {
 
@@ -90,7 +92,7 @@ func Test_SprintService_Get(t *testing.T) {
 			name: "when the request cannot be created",
 			args: args{
 				ctx:      context.Background(),
-				sprintId: 10001,
+				sprintID: 10001,
 			},
 			on: func(fields *fields) {
 
@@ -114,7 +116,7 @@ func Test_SprintService_Get(t *testing.T) {
 			name: "when the sprint id is not provided",
 			args: args{
 				ctx:      context.Background(),
-				sprintId: 0,
+				sprintID: 0,
 			},
 			on: func(fields *fields) {
 				fields.c = mocks.NewConnector(t)
@@ -134,7 +136,7 @@ func Test_SprintService_Get(t *testing.T) {
 
 			sprintService := NewSprintService(testCase.fields.c, "1.0")
 
-			gotResult, gotResponse, err := sprintService.Get(testCase.args.ctx, testCase.args.sprintId)
+			gotResult, gotResponse, err := sprintService.Get(testCase.args.ctx, testCase.args.sprintID)
 
 			if testCase.wantErr {
 
@@ -306,7 +308,7 @@ func Test_SprintService_Update(t *testing.T) {
 
 	type args struct {
 		ctx      context.Context
-		sprintId int
+		sprintID int
 		payload  *model.SprintPayloadScheme
 	}
 
@@ -322,7 +324,7 @@ func Test_SprintService_Update(t *testing.T) {
 			name: "when the parameters are correct",
 			args: args{
 				ctx:      context.Background(),
-				sprintId: 1001,
+				sprintID: 1001,
 				payload:  payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -350,7 +352,7 @@ func Test_SprintService_Update(t *testing.T) {
 			name: "when the api cannot be executed",
 			args: args{
 				ctx:      context.Background(),
-				sprintId: 1001,
+				sprintID: 1001,
 				payload:  payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -380,7 +382,7 @@ func Test_SprintService_Update(t *testing.T) {
 			name: "when the request cannot be created",
 			args: args{
 				ctx:      context.Background(),
-				sprintId: 1001,
+				sprintID: 1001,
 				payload:  payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -411,7 +413,7 @@ func Test_SprintService_Update(t *testing.T) {
 
 			sprintService := NewSprintService(testCase.fields.c, "1.0")
 
-			gotResult, gotResponse, err := sprintService.Update(testCase.args.ctx, testCase.args.sprintId, testCase.args.payload)
+			gotResult, gotResponse, err := sprintService.Update(testCase.args.ctx, testCase.args.sprintID, testCase.args.payload)
 
 			if testCase.wantErr {
 
@@ -447,7 +449,7 @@ func Test_SprintService_Path(t *testing.T) {
 
 	type args struct {
 		ctx      context.Context
-		sprintId int
+		sprintID int
 		payload  *model.SprintPayloadScheme
 	}
 
@@ -463,7 +465,7 @@ func Test_SprintService_Path(t *testing.T) {
 			name: "when the parameters are correct",
 			args: args{
 				ctx:      context.Background(),
-				sprintId: 1001,
+				sprintID: 1001,
 				payload:  payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -491,7 +493,7 @@ func Test_SprintService_Path(t *testing.T) {
 			name: "when the api cannot be executed",
 			args: args{
 				ctx:      context.Background(),
-				sprintId: 1001,
+				sprintID: 1001,
 				payload:  payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -521,7 +523,7 @@ func Test_SprintService_Path(t *testing.T) {
 			name: "when the request cannot be created",
 			args: args{
 				ctx:      context.Background(),
-				sprintId: 1001,
+				sprintID: 1001,
 				payload:  payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -552,7 +554,7 @@ func Test_SprintService_Path(t *testing.T) {
 
 			sprintService := NewSprintService(testCase.fields.c, "1.0")
 
-			gotResult, gotResponse, err := sprintService.Path(testCase.args.ctx, testCase.args.sprintId, testCase.args.payload)
+			gotResult, gotResponse, err := sprintService.Path(testCase.args.ctx, testCase.args.sprintID, testCase.args.payload)
 
 			if testCase.wantErr {
 
@@ -581,7 +583,7 @@ func Test_SprintService_Delete(t *testing.T) {
 
 	type args struct {
 		ctx      context.Context
-		sprintId int
+		sprintID int
 	}
 
 	testCases := []struct {
@@ -596,7 +598,7 @@ func Test_SprintService_Delete(t *testing.T) {
 			name: "when the parameters are correct",
 			args: args{
 				ctx:      context.Background(),
-				sprintId: 1001,
+				sprintID: 1001,
 			},
 			on: func(fields *fields) {
 
@@ -635,7 +637,7 @@ func Test_SprintService_Delete(t *testing.T) {
 			name: "when the api cannot be executed",
 			args: args{
 				ctx:      context.Background(),
-				sprintId: 1001,
+				sprintID: 1001,
 			},
 			on: func(fields *fields) {
 
@@ -664,7 +666,7 @@ func Test_SprintService_Delete(t *testing.T) {
 			name: "when the request cannot be created",
 			args: args{
 				ctx:      context.Background(),
-				sprintId: 1001,
+				sprintID: 1001,
 			},
 			on: func(fields *fields) {
 
@@ -694,7 +696,7 @@ func Test_SprintService_Delete(t *testing.T) {
 
 			sprintService := NewSprintService(testCase.fields.c, "1.0")
 
-			gotResponse, err := sprintService.Delete(testCase.args.ctx, testCase.args.sprintId)
+			gotResponse, err := sprintService.Delete(testCase.args.ctx, testCase.args.sprintID)
 
 			if testCase.wantErr {
 
@@ -722,7 +724,7 @@ func Test_SprintService_Issues(t *testing.T) {
 
 	type args struct {
 		ctx                 context.Context
-		sprintId            int
+		sprintID            int
 		opts                *model.IssueOptionScheme
 		startAt, maxResults int
 	}
@@ -739,7 +741,7 @@ func Test_SprintService_Issues(t *testing.T) {
 			name: "when the parameters are correct",
 			args: args{
 				ctx:      context.Background(),
-				sprintId: 10001,
+				sprintID: 10001,
 				opts: &model.IssueOptionScheme{
 					JQL:           "project = ABC",
 					ValidateQuery: true,
@@ -774,7 +776,7 @@ func Test_SprintService_Issues(t *testing.T) {
 			name: "when the api cannot be executed",
 			args: args{
 				ctx:      context.Background(),
-				sprintId: 10001,
+				sprintID: 10001,
 				opts: &model.IssueOptionScheme{
 					JQL:           "project = ABC",
 					ValidateQuery: true,
@@ -811,7 +813,7 @@ func Test_SprintService_Issues(t *testing.T) {
 			name: "when the request cannot be created",
 			args: args{
 				ctx:      context.Background(),
-				sprintId: 10001,
+				sprintID: 10001,
 				opts: &model.IssueOptionScheme{
 					JQL:           "project = ABC",
 					ValidateQuery: true,
@@ -843,7 +845,7 @@ func Test_SprintService_Issues(t *testing.T) {
 			name: "when the sprint id is not provided",
 			args: args{
 				ctx:      context.Background(),
-				sprintId: 0,
+				sprintID: 0,
 			},
 			on: func(fields *fields) {
 				fields.c = mocks.NewConnector(t)
@@ -863,7 +865,7 @@ func Test_SprintService_Issues(t *testing.T) {
 
 			sprintService := NewSprintService(testCase.fields.c, "1.0")
 
-			gotResult, gotResponse, err := sprintService.Issues(testCase.args.ctx, testCase.args.sprintId, testCase.args.opts,
+			gotResult, gotResponse, err := sprintService.Issues(testCase.args.ctx, testCase.args.sprintID, testCase.args.opts,
 				testCase.args.startAt, testCase.args.maxResults)
 
 			if testCase.wantErr {
@@ -892,7 +894,7 @@ func Test_SprintService_Start(t *testing.T) {
 
 	type args struct {
 		ctx      context.Context
-		sprintId int
+		sprintID int
 	}
 
 	testCases := []struct {
@@ -907,7 +909,7 @@ func Test_SprintService_Start(t *testing.T) {
 			name: "when the parameters are correct",
 			args: args{
 				ctx:      context.Background(),
-				sprintId: 1001,
+				sprintID: 1001,
 			},
 			on: func(fields *fields) {
 
@@ -946,7 +948,7 @@ func Test_SprintService_Start(t *testing.T) {
 			name: "when the api cannot be executed",
 			args: args{
 				ctx:      context.Background(),
-				sprintId: 1001,
+				sprintID: 1001,
 			},
 			on: func(fields *fields) {
 
@@ -975,7 +977,7 @@ func Test_SprintService_Start(t *testing.T) {
 			name: "when the request cannot be created",
 			args: args{
 				ctx:      context.Background(),
-				sprintId: 1001,
+				sprintID: 1001,
 			},
 			on: func(fields *fields) {
 
@@ -1005,7 +1007,7 @@ func Test_SprintService_Start(t *testing.T) {
 
 			sprintService := NewSprintService(testCase.fields.c, "1.0")
 
-			gotResponse, err := sprintService.Start(testCase.args.ctx, testCase.args.sprintId)
+			gotResponse, err := sprintService.Start(testCase.args.ctx, testCase.args.sprintID)
 
 			if testCase.wantErr {
 
@@ -1033,7 +1035,7 @@ func Test_SprintService_Close(t *testing.T) {
 
 	type args struct {
 		ctx      context.Context
-		sprintId int
+		sprintID int
 	}
 
 	testCases := []struct {
@@ -1048,7 +1050,7 @@ func Test_SprintService_Close(t *testing.T) {
 			name: "when the parameters are correct",
 			args: args{
 				ctx:      context.Background(),
-				sprintId: 1001,
+				sprintID: 1001,
 			},
 			on: func(fields *fields) {
 
@@ -1087,7 +1089,7 @@ func Test_SprintService_Close(t *testing.T) {
 			name: "when the api cannot be executed",
 			args: args{
 				ctx:      context.Background(),
-				sprintId: 1001,
+				sprintID: 1001,
 			},
 			on: func(fields *fields) {
 
@@ -1116,7 +1118,7 @@ func Test_SprintService_Close(t *testing.T) {
 			name: "when the request cannot be created",
 			args: args{
 				ctx:      context.Background(),
-				sprintId: 1001,
+				sprintID: 1001,
 			},
 			on: func(fields *fields) {
 
@@ -1146,7 +1148,7 @@ func Test_SprintService_Close(t *testing.T) {
 
 			sprintService := NewSprintService(testCase.fields.c, "1.0")
 
-			gotResponse, err := sprintService.Close(testCase.args.ctx, testCase.args.sprintId)
+			gotResponse, err := sprintService.Close(testCase.args.ctx, testCase.args.sprintID)
 
 			if testCase.wantErr {
 
@@ -1172,7 +1174,7 @@ func Test_SprintService_Move(t *testing.T) {
 		Issues:            []string{"DUMMY-1", "DUMMY-2"},
 		RankBeforeIssue:   "DUMMY-4",
 		RankAfterIssue:    "DUMMY-12",
-		RankCustomFieldId: 10521,
+		RankCustomFieldID: 10521,
 	}
 
 	type fields struct {
@@ -1181,7 +1183,7 @@ func Test_SprintService_Move(t *testing.T) {
 
 	type args struct {
 		ctx      context.Context
-		sprintId int
+		sprintID int
 		payload  *model.SprintMovePayloadScheme
 	}
 
@@ -1197,7 +1199,7 @@ func Test_SprintService_Move(t *testing.T) {
 			name: "when the parameters are correct",
 			args: args{
 				ctx:      context.Background(),
-				sprintId: 1001,
+				sprintID: 1001,
 				payload:  payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -1237,7 +1239,7 @@ func Test_SprintService_Move(t *testing.T) {
 			name: "when the api cannot be executed",
 			args: args{
 				ctx:      context.Background(),
-				sprintId: 1001,
+				sprintID: 1001,
 				payload:  payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -1267,7 +1269,7 @@ func Test_SprintService_Move(t *testing.T) {
 			name: "when the request cannot be created",
 			args: args{
 				ctx:      context.Background(),
-				sprintId: 1001,
+				sprintID: 1001,
 				payload:  payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -1298,7 +1300,7 @@ func Test_SprintService_Move(t *testing.T) {
 
 			sprintService := NewSprintService(testCase.fields.c, "1.0")
 
-			gotResponse, err := sprintService.Move(testCase.args.ctx, testCase.args.sprintId, testCase.args.payload)
+			gotResponse, err := sprintService.Move(testCase.args.ctx, testCase.args.sprintID, testCase.args.payload)
 
 			if testCase.wantErr {
 

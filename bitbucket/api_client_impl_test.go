@@ -274,7 +274,7 @@ func TestClient_NewRequest(t *testing.T) {
 		ctx    context.Context
 		method string
 		urlStr string
-		type_  string
+		typ    string
 		body   interface{}
 	}
 
@@ -296,7 +296,7 @@ func TestClient_NewRequest(t *testing.T) {
 				ctx:    context.Background(),
 				method: http.MethodGet,
 				urlStr: "rest/2/issue/attachment",
-				type_:  "",
+				typ:    "",
 				body:   bytes.NewReader([]byte("Hello World")),
 			},
 			want:    requestMocked,
@@ -331,7 +331,7 @@ func TestClient_NewRequest(t *testing.T) {
 				ctx:    context.Background(),
 				method: http.MethodGet,
 				urlStr: "rest/2/issue/attachment",
-				type_:  "type_sample",
+				typ:    "type_sample",
 				body:   bytes.NewReader([]byte("Hello World")),
 			},
 			want:    requestMocked,
@@ -369,7 +369,7 @@ func TestClient_NewRequest(t *testing.T) {
 				testCase.args.ctx,
 				testCase.args.method,
 				testCase.args.urlStr,
-				testCase.args.type_,
+				testCase.args.typ,
 				testCase.args.body,
 			)
 

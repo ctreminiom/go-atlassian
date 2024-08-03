@@ -6,6 +6,7 @@ import (
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 )
 
+// CommentConnector defines the interface for the Comment methods of the Jira Service Management REST API.
 type CommentConnector interface {
 
 	// Gets returns all comments on a customer request.

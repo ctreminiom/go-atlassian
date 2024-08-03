@@ -131,7 +131,7 @@ func Test_internalWorkspaceWebhookServiceImpl_Get(t *testing.T) {
 	type args struct {
 		ctx       context.Context
 		workspace string
-		webhookId string
+		webhookID string
 	}
 
 	testCases := []struct {
@@ -147,7 +147,7 @@ func Test_internalWorkspaceWebhookServiceImpl_Get(t *testing.T) {
 			args: args{
 				ctx:       context.Background(),
 				workspace: "work-space-name-sample",
-				webhookId: "uuid-sample",
+				webhookID: "uuid-sample",
 			},
 			on: func(fields *fields) {
 
@@ -174,7 +174,7 @@ func Test_internalWorkspaceWebhookServiceImpl_Get(t *testing.T) {
 			args: args{
 				ctx:       context.Background(),
 				workspace: "work-space-name-sample",
-				webhookId: "uuid-sample",
+				webhookID: "uuid-sample",
 			},
 			on: func(fields *fields) {
 
@@ -224,7 +224,7 @@ func Test_internalWorkspaceWebhookServiceImpl_Get(t *testing.T) {
 
 			newService := NewWorkspaceHookService(testCase.fields.c)
 
-			gotResult, gotResponse, err := newService.Get(testCase.args.ctx, testCase.args.workspace, testCase.args.webhookId)
+			gotResult, gotResponse, err := newService.Get(testCase.args.ctx, testCase.args.workspace, testCase.args.webhookID)
 
 			if testCase.wantErr {
 
@@ -379,7 +379,7 @@ func Test_internalWorkspaceWebhookServiceImpl_Update(t *testing.T) {
 	type args struct {
 		ctx       context.Context
 		workspace string
-		webhookId string
+		webhookID string
 		payload   *model.WebhookSubscriptionPayloadScheme
 	}
 
@@ -396,7 +396,7 @@ func Test_internalWorkspaceWebhookServiceImpl_Update(t *testing.T) {
 			args: args{
 				ctx:       context.Background(),
 				workspace: "work-space-name-sample",
-				webhookId: "webhook-uuid",
+				webhookID: "webhook-uuid",
 				payload:   payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -424,7 +424,7 @@ func Test_internalWorkspaceWebhookServiceImpl_Update(t *testing.T) {
 			args: args{
 				ctx:       context.Background(),
 				workspace: "work-space-name-sample",
-				webhookId: "webhook-uuid",
+				webhookID: "webhook-uuid",
 				payload:   payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -476,7 +476,7 @@ func Test_internalWorkspaceWebhookServiceImpl_Update(t *testing.T) {
 			newService := NewWorkspaceHookService(testCase.fields.c)
 
 			gotResult, gotResponse, err := newService.Update(testCase.args.ctx, testCase.args.workspace,
-				testCase.args.webhookId, testCase.args.payload)
+				testCase.args.webhookID, testCase.args.payload)
 
 			if testCase.wantErr {
 
@@ -505,7 +505,7 @@ func Test_internalWorkspaceWebhookServiceImpl_Delete(t *testing.T) {
 	type args struct {
 		ctx       context.Context
 		workspace string
-		webhookId string
+		webhookID string
 	}
 
 	testCases := []struct {
@@ -521,7 +521,7 @@ func Test_internalWorkspaceWebhookServiceImpl_Delete(t *testing.T) {
 			args: args{
 				ctx:       context.Background(),
 				workspace: "work-space-name-sample",
-				webhookId: "uuid-sample",
+				webhookID: "uuid-sample",
 			},
 			on: func(fields *fields) {
 
@@ -548,7 +548,7 @@ func Test_internalWorkspaceWebhookServiceImpl_Delete(t *testing.T) {
 			args: args{
 				ctx:       context.Background(),
 				workspace: "work-space-name-sample",
-				webhookId: "uuid-sample",
+				webhookID: "uuid-sample",
 			},
 			on: func(fields *fields) {
 
@@ -598,7 +598,7 @@ func Test_internalWorkspaceWebhookServiceImpl_Delete(t *testing.T) {
 
 			newService := NewWorkspaceHookService(testCase.fields.c)
 
-			gotResponse, err := newService.Delete(testCase.args.ctx, testCase.args.workspace, testCase.args.webhookId)
+			gotResponse, err := newService.Delete(testCase.args.ctx, testCase.args.workspace, testCase.args.webhookID)
 
 			if testCase.wantErr {
 

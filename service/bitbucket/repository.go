@@ -2,6 +2,7 @@ package bitbucket
 
 import (
 	"context"
+
 	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
 )
 
@@ -42,11 +43,13 @@ type RepositoryConnector interface {
 	Watchers(ctx context.Context, workspace, repoSlug string)
 }
 
+// RepositoryForkConnector represents the Bitbucket Cloud repository forks.
 type RepositoryForkConnector interface {
 	Gets(ctx context.Context)
 	Execute(ctx context.Context)
 }
 
+// RepositoryWebhookConnector represents the Bitbucket Cloud repository webhooks.
 type RepositoryWebhookConnector interface {
 	Gets(ctx context.Context)
 	Get(ctx context.Context)
@@ -55,11 +58,13 @@ type RepositoryWebhookConnector interface {
 	Delete(ctx context.Context)
 }
 
+// RepositorySettingConnector represents the Bitbucket Cloud repository settings.
 type RepositorySettingConnector interface {
 	Gets(ctx context.Context)
 	Set(ctx context.Context)
 }
 
+// RepositoryGroupPermissionConnector represents the Bitbucket Cloud repository group permissions.
 type RepositoryGroupPermissionConnector interface {
 	Gets(ctx context.Context)
 	Get(ctx context.Context)
@@ -67,6 +72,7 @@ type RepositoryGroupPermissionConnector interface {
 	Delete(ctx context.Context)
 }
 
+// RepositoryUserPermissionConnector represents the Bitbucket Cloud repository user permissions.
 type RepositoryUserPermissionConnector interface {
 	Gets(ctx context.Context)
 	Get(ctx context.Context)

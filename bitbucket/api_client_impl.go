@@ -5,17 +5,20 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/ctreminiom/go-atlassian/bitbucket/internal"
-	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/service/common"
 	"io"
 	"net/http"
 	"net/url"
 	"strings"
+
+	"github.com/ctreminiom/go-atlassian/bitbucket/internal"
+	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/service/common"
 )
 
+// DefaultBitbucketSite is the default Bitbucket API site.
 const DefaultBitbucketSite = "https://api.bitbucket.org"
 
+// New creates a new Bitbucket API client.
 func New(httpClient common.HttpClient, site string) (*Client, error) {
 
 	if httpClient == nil {
@@ -50,6 +53,7 @@ func New(httpClient common.HttpClient, site string) (*Client, error) {
 	return client, nil
 }
 
+// Client is a Bitbucket API client.
 type Client struct {
 	HTTP      common.HttpClient
 	Site      *url.URL
@@ -57,6 +61,7 @@ type Client struct {
 	Workspace *internal.WorkspaceService
 }
 
+// NewRequest creates an API request.
 func (c *Client) NewRequest(ctx context.Context, method, urlStr, type_ string, body interface{}) (*http.Request, error) {
 
 	rel, err := url.Parse(urlStr)
@@ -111,6 +116,7 @@ func (c *Client) NewRequest(ctx context.Context, method, urlStr, type_ string, b
 	return req, nil
 }
 
+// Call executes an API request and returns the response.
 func (c *Client) Call(request *http.Request, structure interface{}) (*models.ResponseScheme, error) {
 
 	response, err := c.HTTP.Do(request)

@@ -55,7 +55,7 @@ type ObjectHistoryScheme struct {
 }
 
 // ObjectHistoryActorScheme represents the actor who made a change in the object history.
-// AvatarUrl is the URL of the actor's avatar.
+// AvatarURL is the URL of the actor's avatar.
 // DisplayName is the display name of the actor.
 // Name is the name of the actor.
 // Key is the key of the actor.
@@ -66,7 +66,7 @@ type ObjectHistoryScheme struct {
 // LastSeenVersion is the last seen version of the actor.
 // Self is the self URL of the actor.
 type ObjectHistoryActorScheme struct {
-	AvatarUrl       string `json:"avatarUrl,omitempty"`       // The URL of the actor's avatar.
+	AvatarURL       string `json:"avatarUrl,omitempty"`       // The URL of the actor's avatar.
 	DisplayName     string `json:"displayName,omitempty"`     // The display name of the actor.
 	Name            string `json:"name,omitempty"`            // The name of the actor.
 	Key             string `json:"key,omitempty"`             // The key of the actor.
@@ -139,22 +139,22 @@ type ObjectScheme struct {
 // GlobalID is the global ID of the avatar.
 // ID is the unique identifier of the avatar.
 // AvatarUUID is the UUID of the avatar.
-// Url16 is the URL for the 16x16 version of the avatar.
-// Url48 is the URL for the 48x48 version of the avatar.
-// Url72 is the URL for the 72x72 version of the avatar.
-// Url144 is the URL for the 144x144 version of the avatar.
-// Url288 is the URL for the 288x288 version of the avatar.
+// URL16 is the URL for the 16x16 version of the avatar.
+// URL48 is the URL for the 48x48 version of the avatar.
+// URL72 is the URL for the 72x72 version of the avatar.
+// URL144 is the URL for the 144x144 version of the avatar.
+// URL288 is the URL for the 288x288 version of the avatar.
 // ObjectID is the ID of the object.
 type ObjectAvatarScheme struct {
 	WorkspaceID string `json:"workspaceId,omitempty"` // The ID of the workspace.
 	GlobalID    string `json:"globalId,omitempty"`    // The global ID of the avatar.
 	ID          string `json:"id,omitempty"`          // The ID of the avatar.
 	AvatarUUID  string `json:"avatarUUID,omitempty"`  // The UUID of the avatar.
-	Url16       string `json:"url16,omitempty"`       // The URL for the 16x16 version of the avatar.
-	Url48       string `json:"url48,omitempty"`       // The URL for the 48x48 version of the avatar.
-	Url72       string `json:"url72,omitempty"`       // The URL for the 72x72 version of the avatar.
-	Url144      string `json:"url144,omitempty"`      // The URL for the 144x144 version of the avatar.
-	Url288      string `json:"url288,omitempty"`      // The URL for the 288x288 version of the avatar.
+	URL16       string `json:"url16,omitempty"`       // The URL for the 16x16 version of the avatar.
+	URL48       string `json:"url48,omitempty"`       // The URL for the 48x48 version of the avatar.
+	URL72       string `json:"url72,omitempty"`       // The URL for the 72x72 version of the avatar.
+	URL144      string `json:"url144,omitempty"`      // The URL for the 144x144 version of the avatar.
+	URL288      string `json:"url288,omitempty"`      // The URL for the 288x288 version of the avatar.
 	ObjectID    string `json:"objectId,omitempty"`    // The ID of the object.
 }
 

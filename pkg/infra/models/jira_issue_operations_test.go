@@ -3,9 +3,10 @@ package models
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/stretchr/testify/assert"
 	"reflect"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestUpdateOperations_AddArrayOperation(t *testing.T) {
@@ -147,7 +148,7 @@ func TestUpdateOperations_AddStringOperation(t *testing.T) {
 
 func TestUpdateOperations_AddMultiRawOperation(t *testing.T) {
 
-	expectedJson := `[{"update":{"custom_field_id":[{"add":{"id":"10001"}},{"remove":{"name":"Version 00"}},{"add":{"id":"1010"}}]}}]`
+	expectedJSON := `[{"update":{"custom_field_id":[{"add":{"id":"10001"}},{"remove":{"name":"Version 00"}},{"add":{"id":"1010"}}]}}]`
 
 	type fields struct {
 		Fields []map[string]interface{}
@@ -215,7 +216,7 @@ func TestUpdateOperations_AddMultiRawOperation(t *testing.T) {
 					t.Fatal(err)
 				}
 
-				assert.Equal(t, expectedJson, string(actualJSON))
+				assert.Equal(t, expectedJSON, string(actualJSON))
 			}
 		})
 	}

@@ -2,9 +2,11 @@ package jira
 
 import (
 	"context"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 )
 
+// FieldConfigConnector interface holds the methods available for the FieldConfig resource.
 type FieldConfigConnector interface {
 
 	// Gets Returns a paginated list of all field configurations.
@@ -91,7 +93,7 @@ type FieldConfigSchemeConnector interface {
 	// GET /rest/api/{2-3}/fieldconfigurationscheme/mapping
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration/schemes#get-field-configuration-scheme-mapping
-	Mapping(ctx context.Context, fieldConfigIds []int, startAt, maxResults int) (*model.FieldConfigurationIssueTypeItemPageScheme,
+	Mapping(ctx context.Context, fieldConfigIDs []int, startAt, maxResults int) (*model.FieldConfigurationIssueTypeItemPageScheme,
 		*model.ResponseScheme, error)
 
 	// Project returns a paginated list of field configuration schemes and, for each scheme, a list of the projects that use it.
@@ -103,7 +105,7 @@ type FieldConfigSchemeConnector interface {
 	// GET /rest/api/{2-3}/fieldconfigurationscheme/project
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration/schemes#get-field-configuration-schemes-by-project
-	Project(ctx context.Context, projectIds []int, startAt, maxResults int) (*model.FieldConfigurationSchemeProjectPageScheme,
+	Project(ctx context.Context, projectIDs []int, startAt, maxResults int) (*model.FieldConfigurationSchemeProjectPageScheme,
 		*model.ResponseScheme, error)
 
 	// Assign assigns a field configuration scheme to a project. If the field configuration scheme ID is null,
@@ -124,7 +126,7 @@ type FieldConfigSchemeConnector interface {
 	// PUT /rest/api/{2-3}/fieldconfigurationscheme/{id}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration/schemes#update-field-configuration-scheme
-	Update(ctx context.Context, schemeId int, name, description string) (*model.ResponseScheme, error)
+	Update(ctx context.Context, schemeID int, name, description string) (*model.ResponseScheme, error)
 
 	// Delete deletes a field configuration scheme.
 	//
@@ -133,7 +135,7 @@ type FieldConfigSchemeConnector interface {
 	// DELETE /rest/api/{2-3}/fieldconfigurationscheme/{id}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration/schemes#delete-field-configuration-scheme
-	Delete(ctx context.Context, schemeId int) (*model.ResponseScheme, error)
+	Delete(ctx context.Context, schemeID int) (*model.ResponseScheme, error)
 
 	// Link assigns issue types to field configurations on field configuration scheme.
 	//
@@ -142,7 +144,7 @@ type FieldConfigSchemeConnector interface {
 	// PUT /rest/api/{2-3}/fieldconfigurationscheme/{id}/mapping
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration/schemes#assign-issue-types-to-field-configuration
-	Link(ctx context.Context, schemeId int, payload *model.FieldConfigurationToIssueTypeMappingPayloadScheme) (
+	Link(ctx context.Context, schemeID int, payload *model.FieldConfigurationToIssueTypeMappingPayloadScheme) (
 		*model.ResponseScheme, error)
 
 	// Unlink removes issue types from the field configuration scheme.
@@ -152,5 +154,5 @@ type FieldConfigSchemeConnector interface {
 	// POST /rest/api/{2-3}/fieldconfigurationscheme/{id}/mapping/delete
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration/schemes#remove-issue-types-to-field-configuration
-	Unlink(ctx context.Context, schemeId int, issueTypeIDs []string) (*model.ResponseScheme, error)
+	Unlink(ctx context.Context, schemeID int, issueTypeIDs []string) (*model.ResponseScheme, error)
 }

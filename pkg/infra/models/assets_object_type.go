@@ -20,7 +20,7 @@ type ObjectTypePositionPayloadScheme struct {
 // Updated is the update time of the object type.
 // ObjectCount is the number of objects of the object type.
 // ParentObjectTypeID is the ID of the parent object type.
-// ObjectSchemaId is the ID of the object schema.
+// ObjectSchemaID is the ID of the object schema.
 // Inherited indicates if the object type is inherited.
 // AbstractObjectType indicates if the object type is abstract.
 // ParentObjectTypeInherited indicates if the parent object type is inherited.
@@ -36,7 +36,7 @@ type ObjectTypeScheme struct {
 	Updated                   string      `json:"updated,omitempty"`                   // The update time of the object type.
 	ObjectCount               int         `json:"objectCount,omitempty"`               // The number of objects of the object type.
 	ParentObjectTypeID        string      `json:"parentObjectTypeId,omitempty"`        // The ID of the parent object type.
-	ObjectSchemaId            string      `json:"objectSchemaId,omitempty"`            // The ID of the object schema.
+	ObjectSchemaID            string      `json:"objectSchemaId,omitempty"`            // The ID of the object schema.
 	Inherited                 bool        `json:"inherited,omitempty"`                 // Indicates if the object type is inherited.
 	AbstractObjectType        bool        `json:"abstractObjectType,omitempty"`        // Indicates if the object type is abstract.
 	ParentObjectTypeInherited bool        `json:"parentObjectTypeInherited,omitempty"` // Indicates if the parent object type is inherited.
@@ -45,7 +45,7 @@ type ObjectTypeScheme struct {
 // ObjectTypePayloadScheme represents the payload for an object type.
 // Name is the name of the object type.
 // Description is the description of the object type.
-// IconId is the ID of the icon of the object type.
+// IconID is the ID of the icon of the object type.
 // ObjectSchemaID is the ID of the object schema.
 // ParentObjectTypeID is the ID of the parent object type.
 // Inherited indicates if the object type is inherited.
@@ -53,7 +53,7 @@ type ObjectTypeScheme struct {
 type ObjectTypePayloadScheme struct {
 	Name               string `json:"name,omitempty"`               // The name of the object type.
 	Description        string `json:"description,omitempty"`        // The description of the object type.
-	IconId             string `json:"iconId,omitempty"`             // The ID of the icon of the object type.
+	IconID             string `json:"iconId,omitempty"`             // The ID of the icon of the object type.
 	ObjectSchemaID     string `json:"objectSchemaId,omitempty"`     // The ID of the object schema.
 	ParentObjectTypeID string `json:"parentObjectTypeId,omitempty"` // The ID of the parent object type.
 	Inherited          bool   `json:"inherited,omitempty"`          // Indicates if the object type is inherited.

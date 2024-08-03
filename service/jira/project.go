@@ -2,6 +2,7 @@ package jira
 
 import (
 	"context"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 )
 
@@ -23,17 +24,17 @@ type ProjectConnector interface {
 
 	// Get returns the project details for a project.
 	//
-	// GET /rest/api/{2-3}project/{projectIdOrKey}
+	// GET /rest/api/{2-3}project/{projectKeyOrID}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/projects#get-project
-	Get(ctx context.Context, projectKeyOrId string, expand []string) (*model.ProjectScheme, *model.ResponseScheme, error)
+	Get(ctx context.Context, projectKeyOrID string, expand []string) (*model.ProjectScheme, *model.ResponseScheme, error)
 
 	// Update updates the project details of a project.
 	//
-	// PUT /rest/api/{2-3}/project/{projectIdOrKey}
+	// PUT /rest/api/{2-3}/project/{projectKeyOrID}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/projects#update-project
-	Update(ctx context.Context, projectKeyOrId string, payload *model.ProjectUpdateScheme) (*model.ProjectScheme, *model.ResponseScheme, error)
+	Update(ctx context.Context, projectKeyOrID string, payload *model.ProjectUpdateScheme) (*model.ProjectScheme, *model.ResponseScheme, error)
 
 	// Delete deletes a project.
 	//
@@ -41,10 +42,10 @@ type ProjectConnector interface {
 	//
 	// To restore a project, use the Jira UI.
 	//
-	// DELETE /rest/api/{2-3}/project/{projectIdOrKey}
+	// DELETE /rest/api/{2-3}/project/{projectKeyOrID}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/projects#delete-project
-	Delete(ctx context.Context, projectKeyOrId string, enableUndo bool) (*model.ResponseScheme, error)
+	Delete(ctx context.Context, projectKeyOrID string, enableUndo bool) (*model.ResponseScheme, error)
 
 	// DeleteAsynchronously deletes a project asynchronously.
 	//
@@ -52,10 +53,10 @@ type ProjectConnector interface {
 	//
 	// 2. asynchronous. Follow the location link in the response to determine the status of the task and use Get task to obtain subsequent updates.
 	//
-	// POST /rest/api/{2-3}/project/{projectIdOrKey}/delete
+	// POST /rest/api/{2-3}/project/{projectKeyOrID}/delete
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/projects#delete-project-asynchronously
-	DeleteAsynchronously(ctx context.Context, projectKeyOrId string) (*model.TaskScheme, *model.ResponseScheme, error)
+	DeleteAsynchronously(ctx context.Context, projectKeyOrID string) (*model.TaskScheme, *model.ResponseScheme, error)
 
 	// Archive archives a project. Archived projects cannot be deleted.
 	//
@@ -63,33 +64,33 @@ type ProjectConnector interface {
 	//
 	// To restore a project, use the Jira UI.
 	//
-	// POST /rest/api/{2-3}/project/{projectIdOrKey}/archive
+	// POST /rest/api/{2-3}/project/{projectKeyOrID}/archive
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/projects#archive-project
-	Archive(ctx context.Context, projectKeyOrId string) (*model.ResponseScheme, error)
+	Archive(ctx context.Context, projectKeyOrID string) (*model.ResponseScheme, error)
 
 	// Restore restores a project from the Jira recycle bin.
 	//
-	// POST /rest/api/3/project/{projectIdOrKey}/restore
+	// POST /rest/api/3/project/{projectKeyOrID}/restore
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/projects#restore-deleted-project
-	Restore(ctx context.Context, projectKeyOrId string) (*model.ProjectScheme, *model.ResponseScheme, error)
+	Restore(ctx context.Context, projectKeyOrID string) (*model.ProjectScheme, *model.ResponseScheme, error)
 
 	// Statuses returns the valid statuses for a project.
 	//
 	// The statuses are grouped by issue type, as each project has a set of valid issue types and each issue type has a set of valid statuses.
 	//
-	// GET /rest/api/{2-3}/project/{projectIdOrKey}/statuses
+	// GET /rest/api/{2-3}/project/{projectKeyOrID}/statuses
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/projects#get-all-statuses-for-project
-	Statuses(ctx context.Context, projectKeyOrId string) ([]*model.ProjectStatusPageScheme, *model.ResponseScheme, error)
+	Statuses(ctx context.Context, projectKeyOrID string) ([]*model.ProjectStatusPageScheme, *model.ResponseScheme, error)
 
 	// NotificationScheme gets the notification scheme associated with the project.
 	//
-	// GET /rest/api/{2-3}/project/{projectKeyOrId}/notificationscheme
+	// GET /rest/api/{2-3}/project/{projectKeyOrID}/notificationscheme
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/projects#get-project-notification-scheme
-	NotificationScheme(ctx context.Context, projectKeyOrId string, expand []string) (*model.NotificationSchemeScheme, *model.ResponseScheme, error)
+	NotificationScheme(ctx context.Context, projectKeyOrID string, expand []string) (*model.NotificationSchemeScheme, *model.ResponseScheme, error)
 }
 
 type ProjectCategoryConnector interface {
@@ -106,7 +107,7 @@ type ProjectCategoryConnector interface {
 	// GET /rest/api/{2-3}/projectCategory/{id}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/projects/categories#get-project-category-by-id
-	Get(ctx context.Context, categoryId int) (*model.ProjectCategoryScheme, *model.ResponseScheme, error)
+	Get(ctx context.Context, categoryID int) (*model.ProjectCategoryScheme, *model.ResponseScheme, error)
 
 	// Create creates a project category.
 	//
@@ -120,14 +121,14 @@ type ProjectCategoryConnector interface {
 	// PUT /rest/api/{2-3}/projectCategory/{id}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/projects/categories#update-project-category
-	Update(ctx context.Context, categoryId int, payload *model.ProjectCategoryPayloadScheme) (*model.ProjectCategoryScheme, *model.ResponseScheme, error)
+	Update(ctx context.Context, categoryID int, payload *model.ProjectCategoryPayloadScheme) (*model.ProjectCategoryScheme, *model.ResponseScheme, error)
 
 	// Delete deletes a project category.
 	//
 	// DELETE /rest/api/{2-3}/projectCategory/{id}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/projects/categories#delete-project-category
-	Delete(ctx context.Context, categoryId int) (*model.ResponseScheme, error)
+	Delete(ctx context.Context, categoryID int) (*model.ResponseScheme, error)
 }
 
 type ProjectComponentConnector interface {
@@ -141,24 +142,24 @@ type ProjectComponentConnector interface {
 
 	// Gets returns all components in a project.
 	//
-	// GET /rest/api/{2-3}/project/{projectIdOrKey}/components
+	// GET /rest/api/{2-3}/project/{projectKeyOrID}/components
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/projects/components#get-project-components
-	Gets(ctx context.Context, projectIdOrKey string) ([]*model.ComponentScheme, *model.ResponseScheme, error)
+	Gets(ctx context.Context, projectKeyOrID string) ([]*model.ComponentScheme, *model.ResponseScheme, error)
 
 	// Count returns the counts of issues assigned to the component.
 	//
 	// GET /rest/api/{2-3}/component/{id}/relatedIssueCounts
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/projects/components#get-component-issues-count
-	Count(ctx context.Context, componentId string) (*model.ComponentCountScheme, *model.ResponseScheme, error)
+	Count(ctx context.Context, componentID string) (*model.ComponentCountScheme, *model.ResponseScheme, error)
 
 	// Delete deletes a component.
 	//
 	// DELETE /rest/api/{2-3}/component/{id}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/projects/components#delete-component
-	Delete(ctx context.Context, componentId string) (*model.ResponseScheme, error)
+	Delete(ctx context.Context, componentID string) (*model.ResponseScheme, error)
 
 	// Update updates a component.
 	//
@@ -167,72 +168,72 @@ type ProjectComponentConnector interface {
 	// PUT /rest/api/{2-3}/component/{id}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/projects/components#update-component
-	Update(ctx context.Context, componentId string, payload *model.ComponentPayloadScheme) (*model.ComponentScheme, *model.ResponseScheme, error)
+	Update(ctx context.Context, componentID string, payload *model.ComponentPayloadScheme) (*model.ComponentScheme, *model.ResponseScheme, error)
 
 	// Get returns a component.
 	//
 	// GET /rest/api/{2-3}/component/{id}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/projects/components#get-component
-	Get(ctx context.Context, componentId string) (*model.ComponentScheme, *model.ResponseScheme, error)
+	Get(ctx context.Context, componentID string) (*model.ComponentScheme, *model.ResponseScheme, error)
 }
 
 type ProjectFeatureConnector interface {
 
 	// Gets returns the list of features for a project.
 	//
-	// GET /rest/api/{2-3}/project/{projectIdOrKey}/features
+	// GET /rest/api/{2-3}/project/{projectKeyOrID}/features
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/projects/features#get-project-features
-	Gets(ctx context.Context, projectKeyOrId string) (*model.ProjectFeaturesScheme, *model.ResponseScheme, error)
+	Gets(ctx context.Context, projectKeyOrID string) (*model.ProjectFeaturesScheme, *model.ResponseScheme, error)
 
 	// Set sets the state of a project feature.
 	//
-	// PUT /rest/api/{2-3}/project/{projectIdOrKey}/features/{featureKey}
+	// PUT /rest/api/{2-3}/project/{projectKeyOrID}/features/{featureKey}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/projects/features#set-project-feature-state
-	Set(ctx context.Context, projectKeyOrId, featureKey, state string) (*model.ProjectFeaturesScheme, *model.ResponseScheme, error)
+	Set(ctx context.Context, projectKeyOrID, featureKey, state string) (*model.ProjectFeaturesScheme, *model.ResponseScheme, error)
 }
 
 type ProjectPermissionSchemeConnector interface {
 
 	// Get search the permission scheme associated with the project.
 	//
-	// GET /rest/api/{2-3}/project/{projectKeyOrId}/permissionscheme
+	// GET /rest/api/{2-3}/project/{projectKeyOrID}/permissionscheme
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/projects/permission-schemes#get-assigned-permission-scheme
-	Get(ctx context.Context, projectKeyOrId string, expand []string) (*model.PermissionSchemeScheme, *model.ResponseScheme, error)
+	Get(ctx context.Context, projectKeyOrID string, expand []string) (*model.PermissionSchemeScheme, *model.ResponseScheme, error)
 
 	// Assign assigns a permission scheme with a project.
 	//
 	// See Managing project permissions for more information about permission schemes.
 	//
-	// PUT /rest/api/{2-3}/project/{projectKeyOrId}/permissionscheme
-	Assign(ctx context.Context, projectKeyOrId string, permissionSchemeId int) (*model.PermissionSchemeScheme, *model.ResponseScheme, error)
+	// PUT /rest/api/{2-3}/project/{projectKeyOrID}/permissionscheme
+	Assign(ctx context.Context, projectKeyOrID string, permissionSchemeID int) (*model.PermissionSchemeScheme, *model.ResponseScheme, error)
 
 	// SecurityLevels returns all issue security levels for the project that the user has access to.
 	//
-	// GET /rest/api/{2-3}/project/{projectKeyOrId}/securitylevel
+	// GET /rest/api/{2-3}/project/{projectKeyOrID}/securitylevel
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/projects/permission-schemes#get-project-issue-security-levels
-	SecurityLevels(ctx context.Context, projectKeyOrId string) (*model.IssueSecurityLevelsScheme, *model.ResponseScheme, error)
+	SecurityLevels(ctx context.Context, projectKeyOrID string) (*model.IssueSecurityLevelsScheme, *model.ResponseScheme, error)
 }
 
 type ProjectPropertyConnector interface {
 
 	// Gets returns all project property keys for the project.
 	//
-	// GET /rest/api/{2-3}/project/{projectIdOrKey}/properties
+	// GET /rest/api/{2-3}/project/{projectKeyOrID}/properties
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/projects/properties#get-project-properties-keys
-	Gets(ctx context.Context, projectKeyOrId string) (*model.PropertyPageScheme, *model.ResponseScheme, error)
+	Gets(ctx context.Context, projectKeyOrID string) (*model.PropertyPageScheme, *model.ResponseScheme, error)
 
 	// Get returns the value of a project property.
 	//
-	// GET /rest/api/{2-3}/project/{projectIdOrKey}/properties/{propertyKey}
+	// GET /rest/api/{2-3}/project/{projectKeyOrID}/properties/{propertyKey}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/projects/properties#get-project-property
-	Get(ctx context.Context, projectKeyOrId, propertyKey string) (*model.EntityPropertyScheme, *model.ResponseScheme, error)
+	Get(ctx context.Context, projectKeyOrID, propertyKey string) (*model.EntityPropertyScheme, *model.ResponseScheme, error)
 
 	// Set sets the value of the project property.
 	//
@@ -242,41 +243,41 @@ type ProjectPropertyConnector interface {
 	//
 	// The maximum length is 32768 characters.
 	//
-	// PUT /rest/api/{2-3}/project/{projectIdOrKey}/properties/{propertyKey}
+	// PUT /rest/api/{2-3}/project/{projectKeyOrID}/properties/{propertyKey}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/projects/properties#set-project-property
-	Set(ctx context.Context, projectKeyOrId, propertyKey string, payload interface{}) (*model.ResponseScheme, error)
+	Set(ctx context.Context, projectKeyOrID, propertyKey string, payload interface{}) (*model.ResponseScheme, error)
 
 	// Delete deletes the property from a project.
 	//
-	// DELETE /rest/api/{2-3}/project/{projectIdOrKey}/properties/{propertyKey}
+	// DELETE /rest/api/{2-3}/project/{projectKeyOrID}/properties/{propertyKey}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/projects/properties#delete-project-property
-	Delete(ctx context.Context, projectKeyOrId, propertyKey string) (*model.ResponseScheme, error)
+	Delete(ctx context.Context, projectKeyOrID, propertyKey string) (*model.ResponseScheme, error)
 }
 
 type ProjectRoleConnector interface {
 
 	// Gets returns a list of project roles for the project returning the name and self URL for each role.
 	//
-	// GET /rest/api/{2-3}/project/{projectIdOrKey}/role
+	// GET /rest/api/{2-3}/project/{projectKeyOrID}/role
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/projects/roles#get-project-roles-for-project
-	Gets(ctx context.Context, projectKeyOrId string) (*map[string]int, *model.ResponseScheme, error)
+	Gets(ctx context.Context, projectKeyOrID string) (*map[string]int, *model.ResponseScheme, error)
 
 	// Get returns a project role's details and actors associated with the project.
 	//
-	// GET /rest/api/{2-3}/project/{projectIdOrKey}/role/{id}
+	// GET /rest/api/{2-3}/project/{projectKeyOrID}/role/{id}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/projects/roles#get-project-role-for-project
-	Get(ctx context.Context, projectKeyOrId string, roleId int) (*model.ProjectRoleScheme, *model.ResponseScheme, error)
+	Get(ctx context.Context, projectKeyOrID string, roleID int) (*model.ProjectRoleScheme, *model.ResponseScheme, error)
 
 	// Details returns all project roles and the details for each role.
 	//
-	// GET /rest/api/{2-3}/project/{projectIdOrKey}/roledetails
+	// GET /rest/api/{2-3}/project/{projectKeyOrID}/roledetails
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/projects/roles#get-project-role-details
-	Details(ctx context.Context, projectKeyOrId string) ([]*model.ProjectRoleDetailScheme, *model.ResponseScheme, error)
+	Details(ctx context.Context, projectKeyOrID string) ([]*model.ProjectRoleDetailScheme, *model.ResponseScheme, error)
 
 	// Global gets a list of all project roles, complete with project role details and default actors.
 	//
@@ -297,17 +298,17 @@ type ProjectRoleActorConnector interface {
 
 	// Add adds actors to a project role for the project.
 	//
-	// POST /rest/api/{2-3}/project/{projectIdOrKey}/role/{id}
+	// POST /rest/api/{2-3}/project/{projectKeyOrID}/role/{id}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/projects/roles/actors#add-actors-to-project-role
-	Add(ctx context.Context, projectKeyOrId string, roleId int, accountIds, groups []string) (*model.ProjectRoleScheme, *model.ResponseScheme, error)
+	Add(ctx context.Context, projectKeyOrID string, roleID int, accountIDs, groups []string) (*model.ProjectRoleScheme, *model.ResponseScheme, error)
 
 	// Delete deletes actors from a project role for the project.
 	//
-	// DELETE /rest/api/{2-3}/project/{projectIdOrKey}/role/{id}
+	// DELETE /rest/api/{2-3}/project/{projectKeyOrID}/role/{id}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/projects/roles/actors#delete-actors-from-project-role
-	Delete(ctx context.Context, projectKeyOrId string, roleId int, accountId, group string) (*model.ResponseScheme, error)
+	Delete(ctx context.Context, projectKeyOrID string, roleID int, accountID, group string) (*model.ResponseScheme, error)
 }
 
 type ProjectTypeConnector interface {
@@ -381,17 +382,17 @@ type ProjectVersionConnector interface {
 	//
 	// Use Search() if you want to get the versions in a project with pagination.
 	//
-	// GET /rest/api/{2-3}/project/{projectIdOrKey}/versions
+	// GET /rest/api/{2-3}/project/{projectKeyOrID}/versions
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/projects/versions#get-project-versions
-	Gets(ctx context.Context, projectKeyOrId string) ([]*model.VersionScheme, *model.ResponseScheme, error)
+	Gets(ctx context.Context, projectKeyOrID string) ([]*model.VersionScheme, *model.ResponseScheme, error)
 
 	// Search returns a paginated list of all versions in a project.
 	//
-	// GET /rest/api/{2-3}/project/{projectIdOrKey}/version
+	// GET /rest/api/{2-3}/project/{projectKeyOrID}/version
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/projects/versions#get-project-versions-paginated
-	Search(ctx context.Context, projectKeyOrId string, options *model.VersionGetsOptions, startAt, maxResults int) (*model.VersionPageScheme, *model.ResponseScheme, error)
+	Search(ctx context.Context, projectKeyOrID string, options *model.VersionGetsOptions, startAt, maxResults int) (*model.VersionPageScheme, *model.ResponseScheme, error)
 
 	// Create creates a project version.
 	//
@@ -405,14 +406,14 @@ type ProjectVersionConnector interface {
 	// GET /rest/api/{2-3}/version/{id}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/projects/versions#get-version
-	Get(ctx context.Context, versionId string, expand []string) (*model.VersionScheme, *model.ResponseScheme, error)
+	Get(ctx context.Context, versionID string, expand []string) (*model.VersionScheme, *model.ResponseScheme, error)
 
 	// Update updates a project version.
 	//
 	// PUT /rest/api/{2-3}/version/{id}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/projects/versions#update-version
-	Update(ctx context.Context, versionId string, payload *model.VersionPayloadScheme) (*model.VersionScheme, *model.ResponseScheme, error)
+	Update(ctx context.Context, versionID string, payload *model.VersionPayloadScheme) (*model.VersionScheme, *model.ResponseScheme, error)
 
 	// Merge merges two project versions.
 	//
@@ -421,7 +422,7 @@ type ProjectVersionConnector interface {
 	// its ID in fixVersion with the version ID specified in moveIssuesTo.
 	//
 	// PUT /rest/api/{2-3}/version/{id}/mergeto/{moveIssuesTo}
-	Merge(ctx context.Context, versionId, versionMoveIssuesTo string) (*model.ResponseScheme, error)
+	Merge(ctx context.Context, versionID, versionMoveIssuesTo string) (*model.ResponseScheme, error)
 
 	// RelatedIssueCounts returns the following counts for a version:
 	//
@@ -434,12 +435,12 @@ type ProjectVersionConnector interface {
 	// GET /rest/api/{2-3}/version/{id}/relatedIssueCounts
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/projects/versions#get-versions-related-issues-count
-	RelatedIssueCounts(ctx context.Context, versionId string) (*model.VersionIssueCountsScheme, *model.ResponseScheme, error)
+	RelatedIssueCounts(ctx context.Context, versionID string) (*model.VersionIssueCountsScheme, *model.ResponseScheme, error)
 
 	// UnresolvedIssueCount returns counts of the issues and unresolved issues for the project version.
 	//
 	// GET /rest/api/{2-3}/version/{id}/unresolvedIssueCount
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/projects/versions#get-versions-unresolved-issues-count
-	UnresolvedIssueCount(ctx context.Context, versionId string) (*model.VersionUnresolvedIssuesCountScheme, *model.ResponseScheme, error)
+	UnresolvedIssueCount(ctx context.Context, versionID string) (*model.VersionUnresolvedIssuesCountScheme, *model.ResponseScheme, error)
 }

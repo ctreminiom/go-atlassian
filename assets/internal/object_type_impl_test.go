@@ -398,7 +398,7 @@ func Test_internalObjectTypeImpl_Update(t *testing.T) {
 	payloadMocked := &model.ObjectTypePayloadScheme{
 		Name:               "Office",
 		Description:        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec ex.",
-		IconId:             "13",
+		IconID:             "13",
 		ObjectSchemaID:     "",
 		ParentObjectTypeID: "",
 		Inherited:          true,
@@ -538,7 +538,7 @@ func Test_internalObjectTypeImpl_Create(t *testing.T) {
 	payloadMocked := &model.ObjectTypePayloadScheme{
 		Name:               "Office",
 		Description:        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec ex.",
-		IconId:             "13",
+		IconID:             "13",
 		ObjectSchemaID:     "",
 		ParentObjectTypeID: "",
 		Inherited:          true,

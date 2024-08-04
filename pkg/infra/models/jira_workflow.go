@@ -43,7 +43,7 @@ type WorkflowPublishedIDScheme struct {
 type WorkflowTransitionScheme struct {
 	Actions            []*WorkflowRuleConfigurationScheme `json:"actions,omitempty"`
 	Conditions         *ConditionGroupConfigurationScheme `json:"conditions,omitempty"`
-	CustomIssueEventId string                             `json:"customIssueEventId,omitempty"`
+	CustomIssueEventID string                             `json:"customIssueEventId,omitempty"`
 	Description        string                             `json:"description,omitempty"`
 	From               []*WorkflowStatusAndPortScheme     `json:"from,omitempty"` // This field is deprecated - use toStatusReference/links instead.
 	ID                 string                             `json:"id,omitempty"`
@@ -58,7 +58,7 @@ type WorkflowTransitionScheme struct {
 }
 
 type WorkflowRuleConfigurationScheme struct {
-	Id      string `json:"id,omitempty"`
+	ID      string `json:"id,omitempty"`
 	RuleKey string `json:"ruleKey,omitempty"`
 }
 
@@ -80,7 +80,7 @@ type WorkflowTransitionLinkScheme struct {
 }
 
 type WorkflowTriggerScheme struct {
-	Id      string `json:"id,omitempty"`
+	ID      string `json:"id,omitempty"`
 	RuleKey string `json:"ruleKey,omitempty"`
 }
 
@@ -163,13 +163,13 @@ type WorkflowConditionScheme struct {
 
 type WorkflowSearchCriteria struct {
 	ProjectAndIssueTypes []*WorkflowSearchProjectIssueTypeMapping `json:"projectAndIssueTypes,omitempty"`
-	WorkflowIds          []string                                 `json:"workflowIds,omitempty"`
+	WorkflowIDs          []string                                 `json:"workflowIds,omitempty"`
 	WorkflowNames        []string                                 `json:"workflowNames,omitempty"`
 }
 
 type WorkflowSearchProjectIssueTypeMapping struct {
-	IssueTypeId string `json:"issueTypeId,omitempty"`
-	ProjectId   string `json:"projectId,omitempty"`
+	IssueTypeID string `json:"issueTypeId,omitempty"`
+	ProjectID   string `json:"projectId,omitempty"`
 }
 
 type WorkflowReadResponseScheme struct {
@@ -264,34 +264,28 @@ type WorkflowCreatesPayload struct {
 }
 
 // AddWorkflow adds a new workflow and its statuses to the payload, ensuring no duplicate statuses.
-func (w *WorkflowCreatesPayload) AddWorkflow(workflow *WorkflowCreateScheme, statuses []*WorkflowStatusUpdateScheme) error {
-	// Check for duplicate statuses
-	existingStatusReferences := make(map[string]bool)
-	for _, status := range w.Statuses {
-		existingStatusReferences[status.StatusReference] = true
-	}
+func (w *WorkflowCreatesPayload) AddWorkflow(workflow *WorkflowCreateScheme) error {
 
-	for _, status := range statuses {
-		if _, exists := existingStatusReferences[status.StatusReference]; exists {
-			return fmt.Errorf("status with reference %s already exists in the payload", status.StatusReference)
+	// Check if the status references are present in the payload
+	for _, referenceID := range workflow.Statuses {
+		found := false
+		for _, status := range w.Statuses {
+			if referenceID.StatusReference == status.StatusReference {
+				found = true
+				break
+			}
+		}
+		if !found {
+			return fmt.Errorf("status reference %s not found", referenceID.StatusReference)
 		}
 	}
 
-	w.Statuses = append(w.Statuses, statuses...)
 	w.Workflows = append(w.Workflows, workflow)
 	return nil
 }
 
-func (w *WorkflowCreatesPayload) AddStatus(status *WorkflowStatusUpdateScheme, layout *WorkflowLayoutScheme, transition *TransitionUpdateDTOScheme) {
+func (w *WorkflowCreatesPayload) AddStatus(status *WorkflowStatusUpdateScheme) {
 	w.Statuses = append(w.Statuses, status)
-
-	for _, workflow := range w.Workflows {
-		workflow.Statuses = append(workflow.Statuses, &StatusLayoutUpdateScheme{
-			StatusReference: status.StatusReference,
-			Layout:          layout,
-		})
-		workflow.Transitions = append(workflow.Transitions, transition)
-	}
 }
 
 type WorkflowScopeScheme struct {

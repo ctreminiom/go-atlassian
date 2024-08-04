@@ -1,5 +1,7 @@
 package models
 
+import "fmt"
+
 // WorkflowSearchOptions represents the search options for a workflow in Jira.
 type WorkflowSearchOptions struct {
 	WorkflowName []string // The names of the workflows to search for.
@@ -177,13 +179,13 @@ type WorkflowReadResponseScheme struct {
 
 type JiraWorkflowScheme struct {
 	Description      string                           `json:"description,omitempty"`
-	Id               string                           `json:"id,omitempty"`
+	ID               string                           `json:"id,omitempty"`
 	IsEditable       bool                             `json:"isEditable,omitempty"`
 	Name             string                           `json:"name,omitempty"`
 	Scope            *WorkflowStatusScopeScheme       `json:"scope,omitempty"`
 	StartPointLayout *WorkflowLayoutScheme            `json:"startPointLayout,omitempty"`
 	Statuses         []*WorkflowReferenceStatusScheme `json:"statuses,omitempty"`
-	TaskId           string                           `json:"taskId,omitempty"`
+	TaskID           string                           `json:"taskId,omitempty"`
 	Transitions      []*WorkflowTransitionScheme      `json:"transitions,omitempty"`
 	Usages           []*ProjectIssueTypesScheme       `json:"usages,omitempty"`
 	Version          *WorkflowDocumentVersionScheme   `json:"version,omitempty"`
@@ -216,14 +218,14 @@ type WorkflowCapabilitiesScheme struct {
 
 type AvailableWorkflowConnectRuleScheme struct {
 	AddonKey    string `json:"addonKey,omitempty"`
-	CreateUrl   string `json:"createUrl,omitempty"`
+	CreateURL   string `json:"createUrl,omitempty"`
 	Description string `json:"description,omitempty"`
-	EditUrl     string `json:"editUrl,omitempty"`
+	EditURL     string `json:"editUrl,omitempty"`
 	ModuleKey   string `json:"moduleKey,omitempty"`
 	Name        string `json:"name,omitempty"`
 	RuleKey     string `json:"ruleKey,omitempty"`
 	RuleType    string `json:"ruleType,omitempty"`
-	ViewUrl     string `json:"viewUrl,omitempty"`
+	ViewURL     string `json:"viewUrl,omitempty"`
 }
 
 type AvailableWorkflowForgeRuleScheme struct {
@@ -259,6 +261,25 @@ type WorkflowCreatesPayload struct {
 	Scope     *WorkflowScopeScheme          `json:"scope,omitempty"`
 	Statuses  []*WorkflowStatusUpdateScheme `json:"statuses,omitempty"`
 	Workflows []*WorkflowCreateScheme       `json:"workflows,omitempty"`
+}
+
+// AddWorkflow adds a new workflow and its statuses to the payload, ensuring no duplicate statuses.
+func (w *WorkflowCreatesPayload) AddWorkflow(workflow *WorkflowCreateScheme, statuses []*WorkflowStatusUpdateScheme) error {
+	// Check for duplicate statuses
+	existingStatusReferences := make(map[string]bool)
+	for _, status := range w.Statuses {
+		existingStatusReferences[status.StatusReference] = true
+	}
+
+	for _, status := range statuses {
+		if _, exists := existingStatusReferences[status.StatusReference]; exists {
+			return fmt.Errorf("status with reference %s already exists in the payload", status.StatusReference)
+		}
+	}
+
+	w.Statuses = append(w.Statuses, statuses...)
+	w.Workflows = append(w.Workflows, workflow)
+	return nil
 }
 
 func (w *WorkflowCreatesPayload) AddStatus(status *WorkflowStatusUpdateScheme, layout *WorkflowLayoutScheme, transition *TransitionUpdateDTOScheme) {
@@ -298,6 +319,28 @@ type WorkflowCreateScheme struct {
 	Transitions      []*TransitionUpdateDTOScheme `json:"transitions,omitempty"`
 }
 
+func (w *WorkflowCreateScheme) AddStatus(status *StatusLayoutUpdateScheme) {
+	w.Statuses = append(w.Statuses, status)
+}
+
+func (w *WorkflowCreateScheme) AddTransition(transition *TransitionUpdateDTOScheme) error {
+	if !w.isStatusReferenceAdded(transition.To.StatusReference) {
+		return fmt.Errorf("status reference %s not found", transition.To.StatusReference)
+	}
+
+	w.Transitions = append(w.Transitions, transition)
+	return nil
+}
+
+func (w *WorkflowCreateScheme) isStatusReferenceAdded(statusReference string) bool {
+	for _, status := range w.Statuses {
+		if status.StatusReference == statusReference {
+			return true
+		}
+	}
+	return false
+}
+
 type StatusLayoutUpdateScheme struct {
 	Layout          *WorkflowLayoutScheme `json:"layout,omitempty"`
 	StatusReference string                `json:"statusReference"`
@@ -306,7 +349,7 @@ type StatusLayoutUpdateScheme struct {
 type TransitionUpdateDTOScheme struct {
 	Actions            []*WorkflowRuleConfigurationScheme `json:"actions,omitempty"`
 	Conditions         *ConditionGroupUpdateScheme        `json:"conditions,omitempty"`
-	CustomIssueEventId string                             `json:"customIssueEventId,omitempty"`
+	CustomIssueEventID string                             `json:"customIssueEventId,omitempty"`
 	Description        string                             `json:"description,omitempty"`
 	From               []*StatusReferenceAndPortScheme    `json:"from,omitempty"`
 	ID                 string                             `json:"id,omitempty"`

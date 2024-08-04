@@ -261,6 +261,18 @@ type WorkflowCreatesPayload struct {
 	Workflows []*WorkflowCreateScheme       `json:"workflows,omitempty"`
 }
 
+func (w *WorkflowCreatesPayload) AddStatus(status *WorkflowStatusUpdateScheme, layout *WorkflowLayoutScheme, transition *TransitionUpdateDTOScheme) {
+	w.Statuses = append(w.Statuses, status)
+
+	for _, workflow := range w.Workflows {
+		workflow.Statuses = append(workflow.Statuses, &StatusLayoutUpdateScheme{
+			StatusReference: status.StatusReference,
+			Layout:          layout,
+		})
+		workflow.Transitions = append(workflow.Transitions, transition)
+	}
+}
+
 type WorkflowScopeScheme struct {
 	Project *WorkflowScopeProjectScheme `json:"project,omitempty"`
 	Type    string                      `json:"type,omitempty"`

@@ -422,12 +422,24 @@ type WorkflowUpdatesPayloadScheme struct {
 	Workflows []*WorkflowUpdateScheme       `json:"workflows,omitempty"`
 }
 
+func (w *WorkflowUpdatesPayloadScheme) InjectWorkflow(workflow *JiraWorkflowScheme) {
+
+	w.Workflows = append(w.Workflows, &WorkflowUpdateScheme{
+		Description:      workflow.Description,
+		ID:               workflow.ID,
+		StartPointLayout: workflow.StartPointLayout,
+		Version:          workflow.Version,
+	})
+}
+
 type WorkflowUpdateScheme struct {
 	DefaultStatusMappings []*StatusMigrationScheme       `json:"defaultStatusMappings,omitempty"`
 	Description           string                         `json:"description,omitempty"`
 	ID                    string                         `json:"id,omitempty"`
 	StartPointLayout      *WorkflowLayoutScheme          `json:"startPointLayout,omitempty"`
 	StatusMappings        []*StatusMappingDTOScheme      `json:"statusMappings,omitempty"`
+	Statuses              []*StatusLayoutUpdateScheme    `json:"statuses,omitempty"`
+	Transitions           []*TransitionUpdateDTOScheme   `json:"transitions,omitempty"`
 	Version               *WorkflowDocumentVersionScheme `json:"version,omitempty"`
 }
 

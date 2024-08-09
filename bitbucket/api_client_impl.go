@@ -62,7 +62,7 @@ type Client struct {
 }
 
 // NewRequest creates an API request.
-func (c *Client) NewRequest(ctx context.Context, method, urlStr, type_ string, body interface{}) (*http.Request, error) {
+func (c *Client) NewRequest(ctx context.Context, method, urlStr, typ string, body interface{}) (*http.Request, error) {
 
 	rel, err := url.Parse(urlStr)
 	if err != nil {
@@ -95,9 +95,9 @@ func (c *Client) NewRequest(ctx context.Context, method, urlStr, type_ string, b
 		req.Header.Set("Content-Type", "application/json")
 	}
 
-	if type_ != "" {
-		// When the type_ is provided, it means the request needs to be created to handle files
-		req.Header.Set("Content-Type", type_)
+	if typ != "" {
+		// When the typ is provided, it means the request needs to be created to handle files
+		req.Header.Set("Content-Type", typ)
 		req.Header.Set("X-Atlassian-Token", "no-check")
 	}
 

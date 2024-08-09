@@ -3,12 +3,14 @@ package internal
 import (
 	"context"
 	"errors"
+	"net/http"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
-	"github.com/stretchr/testify/assert"
-	"net/http"
-	"testing"
 )
 
 func Test_internalWorkspaceServiceImpl_Get(t *testing.T) {
@@ -347,7 +349,7 @@ func Test_internalWorkspaceServiceImpl_Membership(t *testing.T) {
 	type args struct {
 		ctx       context.Context
 		workspace string
-		memberId  string
+		memberID  string
 	}
 
 	testCases := []struct {
@@ -363,7 +365,7 @@ func Test_internalWorkspaceServiceImpl_Membership(t *testing.T) {
 			args: args{
 				ctx:       context.Background(),
 				workspace: "work-space-name-sample",
-				memberId:  "account-id-sample",
+				memberID:  "account-id-sample",
 			},
 			on: func(fields *fields) {
 
@@ -390,7 +392,7 @@ func Test_internalWorkspaceServiceImpl_Membership(t *testing.T) {
 			args: args{
 				ctx:       context.Background(),
 				workspace: "work-space-name-sample",
-				memberId:  "account-id-sample",
+				memberID:  "account-id-sample",
 			},
 			on: func(fields *fields) {
 
@@ -440,7 +442,7 @@ func Test_internalWorkspaceServiceImpl_Membership(t *testing.T) {
 
 			newService := NewWorkspaceService(testCase.fields.c, nil, nil)
 
-			gotResult, gotResponse, err := newService.Membership(testCase.args.ctx, testCase.args.workspace, testCase.args.memberId)
+			gotResult, gotResponse, err := newService.Membership(testCase.args.ctx, testCase.args.workspace, testCase.args.memberID)
 
 			if testCase.wantErr {
 

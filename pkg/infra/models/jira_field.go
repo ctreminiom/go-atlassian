@@ -83,6 +83,7 @@ type CustomFieldRequestTypeLinkScheme struct {
 	Agent    string `json:"agent,omitempty"`    // The agent link for the custom field request type.
 }
 
+// CustomFieldTempoAccountScheme represents a custom field tempo account in Jira.
 type CustomFieldTempoAccountScheme struct {
 	ID    int    `json:"id"`
 	Value string `json:"value"`

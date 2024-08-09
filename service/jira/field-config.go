@@ -46,6 +46,7 @@ type FieldConfigConnector interface {
 	Delete(ctx context.Context, id int) (*model.ResponseScheme, error)
 }
 
+// FieldConfigItemConnector interface holds the methods available for the FieldConfigItem resource.
 type FieldConfigItemConnector interface {
 
 	// Gets Returns a paginated list of all fields for a configuration.
@@ -66,6 +67,7 @@ type FieldConfigItemConnector interface {
 	Update(ctx context.Context, id int, payload *model.UpdateFieldConfigurationItemPayloadScheme) (*model.ResponseScheme, error)
 }
 
+// FieldConfigSchemeConnector interface holds the methods available for the FieldConfigScheme resource.
 type FieldConfigSchemeConnector interface {
 
 	// Gets returns a paginated list of field configuration schemes.

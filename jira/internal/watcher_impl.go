@@ -90,7 +90,7 @@ func (i *internalWatcherImpl) Add(ctx context.Context, issueKeyOrID string, acco
 
 	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/watchers", i.version, issueKeyOrID)
 
-	var payload []byte = nil // add self user
+	var payload []byte // add self user
 	if len(accountID) > 0 {
 		payload = []byte(accountID[0]) // add another user
 	}

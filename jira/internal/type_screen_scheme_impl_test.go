@@ -3,12 +3,14 @@ package internal
 import (
 	"context"
 	"errors"
+	"net/http"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
-	"github.com/stretchr/testify/assert"
-	"net/http"
-	"testing"
 )
 
 func Test_internalTypeScreenSchemeImpl_Gets(t *testing.T) {
@@ -177,7 +179,7 @@ func Test_internalTypeScreenSchemeImpl_Projects(t *testing.T) {
 
 	type args struct {
 		ctx                 context.Context
-		projectIds          []int
+		projectIDs          []int
 		startAt, maxResults int
 	}
 
@@ -194,7 +196,7 @@ func Test_internalTypeScreenSchemeImpl_Projects(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:        context.Background(),
-				projectIds: []int{29992, 349383},
+				projectIDs: []int{29992, 349383},
 				startAt:    50,
 				maxResults: 100,
 			},
@@ -225,7 +227,7 @@ func Test_internalTypeScreenSchemeImpl_Projects(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:        context.Background(),
-				projectIds: []int{29992, 349383},
+				projectIDs: []int{29992, 349383},
 				startAt:    50,
 				maxResults: 100,
 			},
@@ -256,7 +258,7 @@ func Test_internalTypeScreenSchemeImpl_Projects(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:        context.Background(),
-				projectIds: []int{29992, 349383},
+				projectIDs: []int{29992, 349383},
 				startAt:    50,
 				maxResults: 100,
 			},
@@ -288,7 +290,7 @@ func Test_internalTypeScreenSchemeImpl_Projects(t *testing.T) {
 			newService, err := NewTypeScreenSchemeService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := newService.Projects(testCase.args.ctx, testCase.args.projectIds, testCase.args.startAt,
+			gotResult, gotResponse, err := newService.Projects(testCase.args.ctx, testCase.args.projectIDs, testCase.args.startAt,
 				testCase.args.maxResults)
 
 			if testCase.wantErr {
@@ -319,7 +321,7 @@ func Test_internalTypeScreenSchemeImpl_Mapping(t *testing.T) {
 
 	type args struct {
 		ctx                      context.Context
-		issueTypeScreenSchemeIds []int
+		issueTypeScreenSchemeIDs []int
 		startAt, maxResults      int
 	}
 
@@ -336,7 +338,7 @@ func Test_internalTypeScreenSchemeImpl_Mapping(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:                      context.Background(),
-				issueTypeScreenSchemeIds: []int{29992, 349383},
+				issueTypeScreenSchemeIDs: []int{29992, 349383},
 				startAt:                  50,
 				maxResults:               100,
 			},
@@ -367,7 +369,7 @@ func Test_internalTypeScreenSchemeImpl_Mapping(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:                      context.Background(),
-				issueTypeScreenSchemeIds: []int{29992, 349383},
+				issueTypeScreenSchemeIDs: []int{29992, 349383},
 				startAt:                  50,
 				maxResults:               100,
 			},
@@ -398,7 +400,7 @@ func Test_internalTypeScreenSchemeImpl_Mapping(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:                      context.Background(),
-				issueTypeScreenSchemeIds: []int{29992, 349383},
+				issueTypeScreenSchemeIDs: []int{29992, 349383},
 				startAt:                  50,
 				maxResults:               100,
 			},
@@ -430,7 +432,7 @@ func Test_internalTypeScreenSchemeImpl_Mapping(t *testing.T) {
 			newService, err := NewTypeScreenSchemeService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := newService.Mapping(testCase.args.ctx, testCase.args.issueTypeScreenSchemeIds, testCase.args.startAt,
+			gotResult, gotResponse, err := newService.Mapping(testCase.args.ctx, testCase.args.issueTypeScreenSchemeIDs, testCase.args.startAt,
 				testCase.args.maxResults)
 
 			if testCase.wantErr {
@@ -461,7 +463,7 @@ func Test_internalTypeScreenSchemeImpl_SchemesByProject(t *testing.T) {
 
 	type args struct {
 		ctx                     context.Context
-		issueTypeScreenSchemeId int
+		issueTypeScreenSchemeID int
 		startAt, maxResults     int
 	}
 
@@ -478,7 +480,7 @@ func Test_internalTypeScreenSchemeImpl_SchemesByProject(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:                     context.Background(),
-				issueTypeScreenSchemeId: 29992,
+				issueTypeScreenSchemeID: 29992,
 				startAt:                 50,
 				maxResults:              100,
 			},
@@ -509,7 +511,7 @@ func Test_internalTypeScreenSchemeImpl_SchemesByProject(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:                     context.Background(),
-				issueTypeScreenSchemeId: 29992,
+				issueTypeScreenSchemeID: 29992,
 				startAt:                 50,
 				maxResults:              100,
 			},
@@ -540,7 +542,7 @@ func Test_internalTypeScreenSchemeImpl_SchemesByProject(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:                     context.Background(),
-				issueTypeScreenSchemeId: 29992,
+				issueTypeScreenSchemeID: 29992,
 				startAt:                 50,
 				maxResults:              100,
 			},
@@ -572,7 +574,7 @@ func Test_internalTypeScreenSchemeImpl_SchemesByProject(t *testing.T) {
 			newService, err := NewTypeScreenSchemeService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := newService.SchemesByProject(testCase.args.ctx, testCase.args.issueTypeScreenSchemeId, testCase.args.startAt,
+			gotResult, gotResponse, err := newService.SchemesByProject(testCase.args.ctx, testCase.args.issueTypeScreenSchemeID, testCase.args.startAt,
 				testCase.args.maxResults)
 
 			if testCase.wantErr {
@@ -605,7 +607,7 @@ func Test_internalTypeScreenSchemeImpl_Assign(t *testing.T) {
 
 	type args struct {
 		ctx                                context.Context
-		issueTypeScreenSchemeId, projectId string
+		issueTypeScreenSchemeID, projectID string
 	}
 
 	testCases := []struct {
@@ -621,8 +623,8 @@ func Test_internalTypeScreenSchemeImpl_Assign(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:                     context.Background(),
-				issueTypeScreenSchemeId: "20001",
-				projectId:               "848483",
+				issueTypeScreenSchemeID: "20001",
+				projectID:               "848483",
 			},
 			on: func(fields *fields) {
 
@@ -651,8 +653,8 @@ func Test_internalTypeScreenSchemeImpl_Assign(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:                     context.Background(),
-				issueTypeScreenSchemeId: "20001",
-				projectId:               "848483",
+				issueTypeScreenSchemeID: "20001",
+				projectID:               "848483",
 			},
 			on: func(fields *fields) {
 
@@ -681,7 +683,7 @@ func Test_internalTypeScreenSchemeImpl_Assign(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:                     context.Background(),
-				issueTypeScreenSchemeId: "",
+				issueTypeScreenSchemeID: "",
 			},
 			wantErr: true,
 			Err:     model.ErrNoIssueTypeScreenSchemeIDError,
@@ -692,7 +694,7 @@ func Test_internalTypeScreenSchemeImpl_Assign(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:                     context.Background(),
-				issueTypeScreenSchemeId: "20001",
+				issueTypeScreenSchemeID: "20001",
 			},
 			wantErr: true,
 			Err:     model.ErrNoProjectIDError,
@@ -703,8 +705,8 @@ func Test_internalTypeScreenSchemeImpl_Assign(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:                     context.Background(),
-				issueTypeScreenSchemeId: "20001",
-				projectId:               "848483",
+				issueTypeScreenSchemeID: "20001",
+				projectID:               "848483",
 			},
 			on: func(fields *fields) {
 
@@ -734,7 +736,7 @@ func Test_internalTypeScreenSchemeImpl_Assign(t *testing.T) {
 			newService, err := NewTypeScreenSchemeService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResponse, err := newService.Assign(testCase.args.ctx, testCase.args.issueTypeScreenSchemeId, testCase.args.projectId)
+			gotResponse, err := newService.Assign(testCase.args.ctx, testCase.args.issueTypeScreenSchemeID, testCase.args.projectID)
 
 			if testCase.wantErr {
 
@@ -765,7 +767,7 @@ func Test_internalTypeScreenSchemeImpl_Update(t *testing.T) {
 
 	type args struct {
 		ctx                                        context.Context
-		issueTypeScreenSchemeId, name, description string
+		issueTypeScreenSchemeID, name, description string
 	}
 
 	testCases := []struct {
@@ -781,7 +783,7 @@ func Test_internalTypeScreenSchemeImpl_Update(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:                     context.Background(),
-				issueTypeScreenSchemeId: "",
+				issueTypeScreenSchemeID: "",
 			},
 			wantErr: true,
 			Err:     model.ErrNoIssueTypeScreenSchemeIDError,
@@ -791,7 +793,7 @@ func Test_internalTypeScreenSchemeImpl_Update(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:                     context.Background(),
-				issueTypeScreenSchemeId: "20001",
+				issueTypeScreenSchemeID: "20001",
 				name:                    "New issue type scheme name",
 				description:             "New issue type scheme description",
 			},
@@ -822,7 +824,7 @@ func Test_internalTypeScreenSchemeImpl_Update(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:                     context.Background(),
-				issueTypeScreenSchemeId: "20001",
+				issueTypeScreenSchemeID: "20001",
 				name:                    "New issue type scheme name",
 				description:             "New issue type scheme description",
 			},
@@ -853,7 +855,7 @@ func Test_internalTypeScreenSchemeImpl_Update(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:                     context.Background(),
-				issueTypeScreenSchemeId: "20001",
+				issueTypeScreenSchemeID: "20001",
 				name:                    "New issue type scheme name",
 				description:             "New issue type scheme description",
 			},
@@ -885,7 +887,7 @@ func Test_internalTypeScreenSchemeImpl_Update(t *testing.T) {
 			newService, err := NewTypeScreenSchemeService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResponse, err := newService.Update(testCase.args.ctx, testCase.args.issueTypeScreenSchemeId, testCase.args.name,
+			gotResponse, err := newService.Update(testCase.args.ctx, testCase.args.issueTypeScreenSchemeID, testCase.args.name,
 				testCase.args.description)
 
 			if testCase.wantErr {
@@ -915,7 +917,7 @@ func Test_internalTypeScreenSchemeImpl_Delete(t *testing.T) {
 
 	type args struct {
 		ctx                     context.Context
-		issueTypeScreenSchemeId string
+		issueTypeScreenSchemeID string
 	}
 
 	testCases := []struct {
@@ -931,7 +933,7 @@ func Test_internalTypeScreenSchemeImpl_Delete(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:                     context.Background(),
-				issueTypeScreenSchemeId: "",
+				issueTypeScreenSchemeID: "",
 			},
 			wantErr: true,
 			Err:     model.ErrNoIssueTypeScreenSchemeIDError,
@@ -941,7 +943,7 @@ func Test_internalTypeScreenSchemeImpl_Delete(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:                     context.Background(),
-				issueTypeScreenSchemeId: "20001",
+				issueTypeScreenSchemeID: "20001",
 			},
 			on: func(fields *fields) {
 
@@ -970,7 +972,7 @@ func Test_internalTypeScreenSchemeImpl_Delete(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:                     context.Background(),
-				issueTypeScreenSchemeId: "20001",
+				issueTypeScreenSchemeID: "20001",
 			},
 			on: func(fields *fields) {
 
@@ -999,7 +1001,7 @@ func Test_internalTypeScreenSchemeImpl_Delete(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:                     context.Background(),
-				issueTypeScreenSchemeId: "20001",
+				issueTypeScreenSchemeID: "20001",
 			},
 			on: func(fields *fields) {
 
@@ -1029,7 +1031,7 @@ func Test_internalTypeScreenSchemeImpl_Delete(t *testing.T) {
 			newService, err := NewTypeScreenSchemeService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResponse, err := newService.Delete(testCase.args.ctx, testCase.args.issueTypeScreenSchemeId)
+			gotResponse, err := newService.Delete(testCase.args.ctx, testCase.args.issueTypeScreenSchemeID)
 
 			if testCase.wantErr {
 
@@ -1071,7 +1073,7 @@ func Test_internalTypeScreenSchemeImpl_Append(t *testing.T) {
 
 	type args struct {
 		ctx                     context.Context
-		issueTypeScreenSchemeId string
+		issueTypeScreenSchemeID string
 		payload                 *model.IssueTypeScreenSchemePayloadScheme
 	}
 
@@ -1088,7 +1090,7 @@ func Test_internalTypeScreenSchemeImpl_Append(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:                     context.Background(),
-				issueTypeScreenSchemeId: "",
+				issueTypeScreenSchemeID: "",
 			},
 			wantErr: true,
 			Err:     model.ErrNoIssueTypeScreenSchemeIDError,
@@ -1098,7 +1100,7 @@ func Test_internalTypeScreenSchemeImpl_Append(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:                     context.Background(),
-				issueTypeScreenSchemeId: "20001",
+				issueTypeScreenSchemeID: "20001",
 				payload:                 payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -1128,7 +1130,7 @@ func Test_internalTypeScreenSchemeImpl_Append(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:                     context.Background(),
-				issueTypeScreenSchemeId: "20001",
+				issueTypeScreenSchemeID: "20001",
 				payload:                 payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -1158,7 +1160,7 @@ func Test_internalTypeScreenSchemeImpl_Append(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:                     context.Background(),
-				issueTypeScreenSchemeId: "20001",
+				issueTypeScreenSchemeID: "20001",
 				payload:                 payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -1189,7 +1191,7 @@ func Test_internalTypeScreenSchemeImpl_Append(t *testing.T) {
 			newService, err := NewTypeScreenSchemeService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResponse, err := newService.Append(testCase.args.ctx, testCase.args.issueTypeScreenSchemeId,
+			gotResponse, err := newService.Append(testCase.args.ctx, testCase.args.issueTypeScreenSchemeID,
 				testCase.args.payload)
 
 			if testCase.wantErr {
@@ -1221,7 +1223,7 @@ func Test_internalTypeScreenSchemeImpl_UpdateDefault(t *testing.T) {
 
 	type args struct {
 		ctx                                     context.Context
-		issueTypeScreenSchemeId, screenSchemeId string
+		issueTypeScreenSchemeID, screenSchemeID string
 	}
 
 	testCases := []struct {
@@ -1237,7 +1239,7 @@ func Test_internalTypeScreenSchemeImpl_UpdateDefault(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:                     context.Background(),
-				issueTypeScreenSchemeId: "",
+				issueTypeScreenSchemeID: "",
 			},
 			wantErr: true,
 			Err:     model.ErrNoIssueTypeScreenSchemeIDError,
@@ -1247,7 +1249,7 @@ func Test_internalTypeScreenSchemeImpl_UpdateDefault(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:                     context.Background(),
-				issueTypeScreenSchemeId: "20001",
+				issueTypeScreenSchemeID: "20001",
 			},
 			wantErr: true,
 			Err:     model.ErrNoScreenSchemeIDError,
@@ -1257,8 +1259,8 @@ func Test_internalTypeScreenSchemeImpl_UpdateDefault(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:                     context.Background(),
-				issueTypeScreenSchemeId: "20001",
-				screenSchemeId:          "200202",
+				issueTypeScreenSchemeID: "20001",
+				screenSchemeID:          "200202",
 			},
 			on: func(fields *fields) {
 
@@ -1287,8 +1289,8 @@ func Test_internalTypeScreenSchemeImpl_UpdateDefault(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:                     context.Background(),
-				issueTypeScreenSchemeId: "20001",
-				screenSchemeId:          "200202",
+				issueTypeScreenSchemeID: "20001",
+				screenSchemeID:          "200202",
 			},
 			on: func(fields *fields) {
 
@@ -1317,8 +1319,8 @@ func Test_internalTypeScreenSchemeImpl_UpdateDefault(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:                     context.Background(),
-				issueTypeScreenSchemeId: "20001",
-				screenSchemeId:          "200202",
+				issueTypeScreenSchemeID: "20001",
+				screenSchemeID:          "200202",
 			},
 			on: func(fields *fields) {
 
@@ -1348,8 +1350,8 @@ func Test_internalTypeScreenSchemeImpl_UpdateDefault(t *testing.T) {
 			newService, err := NewTypeScreenSchemeService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResponse, err := newService.UpdateDefault(testCase.args.ctx, testCase.args.issueTypeScreenSchemeId,
-				testCase.args.screenSchemeId)
+			gotResponse, err := newService.UpdateDefault(testCase.args.ctx, testCase.args.issueTypeScreenSchemeID,
+				testCase.args.screenSchemeID)
 
 			if testCase.wantErr {
 
@@ -1380,8 +1382,8 @@ func Test_internalTypeScreenSchemeImpl_Remove(t *testing.T) {
 
 	type args struct {
 		ctx                     context.Context
-		issueTypeScreenSchemeId string
-		issueTypeIds            []string
+		issueTypeScreenSchemeID string
+		issueTypeIDs            []string
 	}
 
 	testCases := []struct {
@@ -1397,7 +1399,7 @@ func Test_internalTypeScreenSchemeImpl_Remove(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:                     context.Background(),
-				issueTypeScreenSchemeId: "",
+				issueTypeScreenSchemeID: "",
 			},
 			wantErr: true,
 			Err:     model.ErrNoIssueTypeScreenSchemeIDError,
@@ -1407,7 +1409,7 @@ func Test_internalTypeScreenSchemeImpl_Remove(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:                     context.Background(),
-				issueTypeScreenSchemeId: "2201",
+				issueTypeScreenSchemeID: "2201",
 			},
 			wantErr: true,
 			Err:     model.ErrNoIssueTypesError,
@@ -1417,8 +1419,8 @@ func Test_internalTypeScreenSchemeImpl_Remove(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:                     context.Background(),
-				issueTypeScreenSchemeId: "20001",
-				issueTypeIds:            []string{"9", "43"},
+				issueTypeScreenSchemeID: "20001",
+				issueTypeIDs:            []string{"9", "43"},
 			},
 			on: func(fields *fields) {
 
@@ -1447,8 +1449,8 @@ func Test_internalTypeScreenSchemeImpl_Remove(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:                     context.Background(),
-				issueTypeScreenSchemeId: "20001",
-				issueTypeIds:            []string{"9", "43"},
+				issueTypeScreenSchemeID: "20001",
+				issueTypeIDs:            []string{"9", "43"},
 			},
 			on: func(fields *fields) {
 
@@ -1477,8 +1479,8 @@ func Test_internalTypeScreenSchemeImpl_Remove(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:                     context.Background(),
-				issueTypeScreenSchemeId: "20001",
-				issueTypeIds:            []string{"9", "43"},
+				issueTypeScreenSchemeID: "20001",
+				issueTypeIDs:            []string{"9", "43"},
 			},
 			on: func(fields *fields) {
 
@@ -1508,8 +1510,8 @@ func Test_internalTypeScreenSchemeImpl_Remove(t *testing.T) {
 			newService, err := NewTypeScreenSchemeService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResponse, err := newService.Remove(testCase.args.ctx, testCase.args.issueTypeScreenSchemeId,
-				testCase.args.issueTypeIds)
+			gotResponse, err := newService.Remove(testCase.args.ctx, testCase.args.issueTypeScreenSchemeID,
+				testCase.args.issueTypeIDs)
 
 			if testCase.wantErr {
 

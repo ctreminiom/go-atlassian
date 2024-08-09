@@ -2,9 +2,11 @@ package jira
 
 import (
 	"context"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 )
 
+// TaskConnector the interface for the task methods of the Jira Service.
 type TaskConnector interface {
 
 	// Get returns the status of a long-running asynchronous task.
@@ -15,15 +17,15 @@ type TaskConnector interface {
 	//
 	// Task details are not permanently retained.
 	//
-	// GET /rest/api/{2-3}/task/{taskId}
+	// GET /rest/api/{2-3}/task/{taskID}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/tasks#get-task
-	Get(ctx context.Context, taskId string) (*model.TaskScheme, *model.ResponseScheme, error)
+	Get(ctx context.Context, taskID string) (*model.TaskScheme, *model.ResponseScheme, error)
 
 	// Cancel cancels a task.
 	//
-	// POST /rest/api/{2-3}/task/{taskId}/cancel
+	// POST /rest/api/{2-3}/task/{taskID}/cancel
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/tasks#cancel-task
-	Cancel(ctx context.Context, taskId string) (*model.ResponseScheme, error)
+	Cancel(ctx context.Context, taskID string) (*model.ResponseScheme, error)
 }

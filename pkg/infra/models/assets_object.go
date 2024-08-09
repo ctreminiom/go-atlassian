@@ -60,7 +60,7 @@ type ObjectHistoryScheme struct {
 // Name is the name of the actor.
 // Key is the key of the actor.
 // EmailAddress is the email address of the actor.
-// Html is the HTML representation of the actor.
+// HTML is the HTML representation of the actor.
 // RenderedLink is the rendered link of the actor.
 // IsDeleted indicates if the actor is deleted.
 // LastSeenVersion is the last seen version of the actor.
@@ -71,7 +71,7 @@ type ObjectHistoryActorScheme struct {
 	Name            string `json:"name,omitempty"`            // The name of the actor.
 	Key             string `json:"key,omitempty"`             // The key of the actor.
 	EmailAddress    string `json:"emailAddress,omitempty"`    // The email address of the actor.
-	Html            string `json:"html,omitempty"`            // The HTML representation of the actor.
+	HTML            string `json:"html,omitempty"`            // The HTML representation of the actor.
 	RenderedLink    string `json:"renderedLink,omitempty"`    // The rendered link of the actor.
 	IsDeleted       bool   `json:"isDeleted,omitempty"`       // Indicates if the actor is deleted.
 	LastSeenVersion string `json:"lastSeenVersion,omitempty"` // The last seen version of the actor.
@@ -277,10 +277,10 @@ type ObjectTypeAssetAttributeValueScheme struct {
 }
 
 // ObjectTypeAssetAttributeValueGroupScheme represents a group of attribute values in an asset.
-// AvatarUrl is the URL of the avatar for the group.
+// AvatarURL is the URL of the avatar for the group.
 // Name is the name of the group.
 type ObjectTypeAssetAttributeValueGroupScheme struct {
-	AvatarUrl string `json:"avatarUrl,omitempty"` // The URL of the avatar for the group.
+	AvatarURL string `json:"avatarUrl,omitempty"` // The URL of the avatar for the group.
 	Name      string `json:"name,omitempty"`      // The name of the group.
 }
 

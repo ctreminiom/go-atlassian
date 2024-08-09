@@ -71,12 +71,12 @@ type SprintIssueScheme struct {
 // Issues is a slice of the issues to be moved.
 // RankBeforeIssue is the rank of the issue before the move.
 // RankAfterIssue is the rank of the issue after the move.
-// RankCustomFieldId is the ID of the custom field used for ranking.
+// RankCustomFieldID is the ID of the custom field used for ranking.
 type SprintMovePayloadScheme struct {
 	Issues            []string `json:"issues,omitempty"`
 	RankBeforeIssue   string   `json:"rankBeforeIssue,omitempty"`
 	RankAfterIssue    string   `json:"rankAfterIssue,omitempty"`
-	RankCustomFieldId int      `json:"rankCustomFieldId,omitempty"`
+	RankCustomFieldID int      `json:"rankCustomFieldId,omitempty"`
 }
 
 // SprintDetailScheme represents the details of a sprint.

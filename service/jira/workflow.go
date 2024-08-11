@@ -42,6 +42,139 @@ type WorkflowConnector interface {
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/workflow#search-workflows
 	Delete(ctx context.Context, workflowId string) (*model.ResponseScheme, error)
+
+	// Search searches for workflows based on specified criteria.
+	//
+	// This method returns a paginated list of workflows that match the search criteria provided in the `options` parameter.
+	//
+	// The search can be expanded to include additional details, such as transition links, by specifying the `expand` and `transitionLinks` parameters.
+	//
+	// When search criteria are provided in the `options` parameter, only workflows matching those criteria are returned.
+	// If no criteria are specified, all workflows are returned.
+	//
+	// GET /rest/api/{2-3}/workflow/search
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/workflow#bulk-get-workflows
+	Search(ctx context.Context, options *model.WorkflowSearchCriteria, expand []string, transitionLinks bool) (*model.WorkflowReadResponseScheme, *model.ResponseScheme, error)
+
+	// Capabilities Get the list of workflow capabilities for a specific workflow using either the workflow ID, or the project and issue type ID pair.
+	//
+	// The response includes the scope of the workflow, defined as global/project-based, and a list of project types that the workflow is scoped to.
+	//
+	// It also includes all rules organised into their broad categories (conditions, validators, actions, triggers, screens) as well as the source location (Atlassian-provided, Connect, Forge).
+	//
+	// GET /rest/api/{2-3}/workflows/capabilities
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/workflow#get-workflow-capabilities
+	Capabilities(ctx context.Context, workflowID, projectID, issueTypeID string) (*model.WorkflowCapabilitiesScheme, *model.ResponseScheme, error)
+
+	// Creates create workflows and related statuses.
+	//
+	// This method allows you to create a workflow by defining transition rules
+	// using the shapes detailed in the Atlassian REST API documentation.
+	// If no transition rules are specified, the default system transition rules
+	// will be used.
+	//
+	// POST /rest/api/{2-3}/workflows
+	//
+	// For more details, refer to:
+	// https://docs.go-atlassian.io/jira-software-cloud/workflow#bulk-create-workflows
+	//
+	// Example:
+	//
+	//	payload := &models.WorkflowCreatesPayload{
+	//		Scope: &models.WorkflowScopeScheme{Type: "GLOBAL"},
+	//		// The workflows to create, with transition rules.
+	//	}
+	//
+	//	response, respScheme, err := client.Workflow.Creates(ctx, payload)
+	//	if err != nil {
+	//		log.Fatalf("Failed to create workflow: %v", err)
+	//	}
+	//
+	//	fmt.Printf("Workflow created with ID: %s", response.ID)
+	Creates(ctx context.Context, payload *model.WorkflowCreatesPayload) (*model.WorkflowCreateResponseScheme, *model.ResponseScheme, error)
+
+	// ValidateCreateWorkflows validates workflows before creating them.
+	//
+	// This method allows you to validate the configuration of one or more workflows
+	// before they are created in Jira. It helps ensure that the workflows adhere
+	// to the defined rules and constraints.
+	//
+	// The validation checks will include all aspects of the workflows, such as transitions,
+	// statuses, and any related conditions or validators.
+	//
+	// POST /rest/api/{2-3}/workflows/create/validation
+	//
+	// For more details, refer to:
+	// https://docs.go-atlassian.io/jira-software-cloud/workflow#validate-create-workflows
+	//
+	// Example:
+	//  ctx := context.Background()
+	//  payload := &model.ValidationOptionsForCreateScheme{
+	//      Payload: payload,
+	//     Options: &models.ValidationOptionsLevelScheme{
+	//		  Levels: []string{"ERROR", "WARNING"},
+	//	  }
+	//
+	//  validationResult, response, err := client.Workflow.ValidateCreateWorkflows(ctx, payload)
+	//  if err != nil {
+	//      log.Fatalf("Failed to validate workflow: %v", err)
+	//  }
+	//
+	//  if validationResult != nil {
+	//      log.Printf("Workflow validation errors: %v", validationResult.Errors)
+	//  }
+	//
+	//  log.Printf("Validation response: %v", response)
+	ValidateCreateWorkflows(ctx context.Context, payload *model.ValidationOptionsForCreateScheme) (*model.WorkflowValidationErrorListScheme, *model.ResponseScheme, error)
+
+	// Updates updates workflows.
+	//
+	// This method allows you to update workflows by providing a payload containing the details
+	// of the updates. You can expand specific fields using the 'expand' parameter.
+	//
+	// The update follows the API detailed in the Atlassian documentation.
+	//
+	// POST /rest/api/{2-3}/workflows/update
+	//
+	// For more details, refer to:
+	// https://docs.go-atlassian.io/jira-software-cloud/workflow#bulk-update-workflows
+	Updates(ctx context.Context, payload *model.WorkflowUpdatesPayloadScheme, expand []string) (*model.WorkflowUpdateResponseScheme, *model.ResponseScheme, error)
+
+	// ValidateUpdateWorkflows validates the update of one or more workflows.
+	//
+	// This method allows you to validate changes to workflows before they are applied.
+	// The validation checks for potential issues that could prevent the workflows from being updated successfully.
+	//
+	// The validation process will check for conditions such as:
+	//
+	// 		1.Whether the transitions are valid.
+	// 		2. Whether the status and transition names are unique within the workflow.
+	// 		3. If the validation fails, a list of validation errors is returned, which should be resolved before applying the changes.
+	//
+	// POST /rest/api/{2-3}/workflows/update/validation
+	//
+	// For more details, refer to:
+	// https://docs.go-atlassian.io/jira-software-cloud/workflow#validate-update-workflows
+	//
+	// Example:
+	//
+	//     options := &model.ValidationOptionsForUpdateScheme{
+	//         // populate the validation options here
+	//     }
+	//
+	//     result, response, err := client.Workflow.ValidateUpdateWorkflows(ctx, options)
+	//     if err != nil {
+	//         log.Fatalf("Validation failed: %v", err)
+	//     }
+	//
+	//     if len(result.Errors) > 0 {
+	//         log.Printf("Validation errors: %v", result.Errors)
+	//     } else {
+	//         log.Println("Validation passed, you can proceed with the update.")
+	//     }
+	ValidateUpdateWorkflows(ctx context.Context, payload *model.ValidationOptionsForUpdateScheme) (*model.WorkflowValidationErrorListScheme, *model.ResponseScheme, error)
 }
 
 type WorkflowSchemeConnector interface {

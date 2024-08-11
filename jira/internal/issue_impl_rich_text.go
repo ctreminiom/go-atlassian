@@ -170,28 +170,23 @@ func (i *internalRichTextServiceImpl) Transitions(ctx context.Context, issueKeyO
 }
 
 func (i *internalRichTextServiceImpl) Create(ctx context.Context, payload *model.IssueSchemeV2, customFields *model.CustomFields) (*model.IssueResponseScheme, *model.ResponseScheme, error) {
-
-	var request *http.Request
+	var body interface{} = payload
 	var err error
 
-	endpoint := fmt.Sprintf("rest/api/%v/issue", i.version)
-
-	if customFields != nil {
+	if customFields != nil && len(customFields.Fields) != 0 {
 
 		payloadWithFields, err := payload.MergeCustomFields(customFields)
 		if err != nil {
 			return nil, nil, err
 		}
 
-		request, err = i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payloadWithFields)
-		if err != nil {
-			return nil, nil, err
-		}
-	} else {
-		request, err = i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
-		if err != nil {
-			return nil, nil, err
-		}
+		body = payloadWithFields
+	}
+
+	endpoint := fmt.Sprintf("rest/api/%v/issue", i.version)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", body)
+	if err != nil {
+		return nil, nil, err
 	}
 
 	issue := new(model.IssueResponseScheme)

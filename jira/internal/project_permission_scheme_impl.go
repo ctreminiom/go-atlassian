@@ -44,8 +44,8 @@ func (p *ProjectPermissionSchemeService) Get(ctx context.Context, projectKeyOrID
 // See Managing project permissions for more information about permission schemes.
 //
 // PUT /rest/api/{2-3}/project/{projectKeyOrID}/permissionscheme
-func (p *ProjectPermissionSchemeService) Assign(ctx context.Context, projectKeyOrID string, permissionSchemeId int) (*model.PermissionSchemeScheme, *model.ResponseScheme, error) {
-	return p.internalClient.Assign(ctx, projectKeyOrID, permissionSchemeId)
+func (p *ProjectPermissionSchemeService) Assign(ctx context.Context, projectKeyOrID string, permissionSchemeID int) (*model.PermissionSchemeScheme, *model.ResponseScheme, error) {
+	return p.internalClient.Assign(ctx, projectKeyOrID, permissionSchemeID)
 }
 
 // SecurityLevels returns all issue security levels for the project that the user has access to.
@@ -92,7 +92,7 @@ func (i *internalProjectPermissionSchemeImpl) Get(ctx context.Context, projectKe
 	return permissionScheme, response, nil
 }
 
-func (i *internalProjectPermissionSchemeImpl) Assign(ctx context.Context, projectKeyOrID string, permissionSchemeId int) (*model.PermissionSchemeScheme, *model.ResponseScheme, error) {
+func (i *internalProjectPermissionSchemeImpl) Assign(ctx context.Context, projectKeyOrID string, permissionSchemeID int) (*model.PermissionSchemeScheme, *model.ResponseScheme, error) {
 
 	if projectKeyOrID == "" {
 		return nil, nil, model.ErrNoProjectIDOrKeyError
@@ -100,7 +100,7 @@ func (i *internalProjectPermissionSchemeImpl) Assign(ctx context.Context, projec
 
 	endpoint := fmt.Sprintf("rest/api/%v/project/%v/permissionscheme", i.version, projectKeyOrID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", map[string]interface{}{"id": permissionSchemeId})
+	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", map[string]interface{}{"id": permissionSchemeID})
 	if err != nil {
 		return nil, nil, err
 	}

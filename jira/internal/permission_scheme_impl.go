@@ -44,20 +44,20 @@ func (p *PermissionSchemeService) Gets(ctx context.Context) (*model.PermissionSc
 
 // Get returns a permission scheme.
 //
-// GET /rest/api/{2-3}/permissionscheme/{permissionSchemeId}
+// GET /rest/api/{2-3}/permissionscheme/{permissionSchemeID}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/permissions/scheme#get-permission-scheme
-func (p *PermissionSchemeService) Get(ctx context.Context, permissionSchemeId int, expand []string) (*model.PermissionSchemeScheme, *model.ResponseScheme, error) {
-	return p.internalClient.Get(ctx, permissionSchemeId, expand)
+func (p *PermissionSchemeService) Get(ctx context.Context, permissionSchemeID int, expand []string) (*model.PermissionSchemeScheme, *model.ResponseScheme, error) {
+	return p.internalClient.Get(ctx, permissionSchemeID, expand)
 }
 
 // Delete deletes a permission scheme.
 //
-// DELETE /rest/api/{2-3}/permissionscheme/{permissionSchemeId}
+// DELETE /rest/api/{2-3}/permissionscheme/{permissionSchemeID}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/permissions/scheme#delete-permission-scheme
-func (p *PermissionSchemeService) Delete(ctx context.Context, permissionSchemeId int) (*model.ResponseScheme, error) {
-	return p.internalClient.Delete(ctx, permissionSchemeId)
+func (p *PermissionSchemeService) Delete(ctx context.Context, permissionSchemeID int) (*model.ResponseScheme, error) {
+	return p.internalClient.Delete(ctx, permissionSchemeID)
 }
 
 // Create creates a new permission scheme.
@@ -80,11 +80,11 @@ func (p *PermissionSchemeService) Create(ctx context.Context, payload *model.Per
 //
 // 3. Sending an empty list will remove all permission grants from the permission scheme.
 //
-// PUT /rest/api/{2-3}/permissionscheme/{permissionSchemeId}
+// PUT /rest/api/{2-3}/permissionscheme/{permissionSchemeID}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/permissions/scheme#update-permission-scheme
-func (p *PermissionSchemeService) Update(ctx context.Context, permissionSchemeId int, payload *model.PermissionSchemeScheme) (*model.PermissionSchemeScheme, *model.ResponseScheme, error) {
-	return p.internalClient.Update(ctx, permissionSchemeId, payload)
+func (p *PermissionSchemeService) Update(ctx context.Context, permissionSchemeID int, payload *model.PermissionSchemeScheme) (*model.PermissionSchemeScheme, *model.ResponseScheme, error) {
+	return p.internalClient.Update(ctx, permissionSchemeID, payload)
 }
 
 type internalPermissionSchemeImpl struct {
@@ -110,14 +110,14 @@ func (i *internalPermissionSchemeImpl) Gets(ctx context.Context) (*model.Permiss
 	return page, response, nil
 }
 
-func (i *internalPermissionSchemeImpl) Get(ctx context.Context, permissionSchemeId int, expand []string) (*model.PermissionSchemeScheme, *model.ResponseScheme, error) {
+func (i *internalPermissionSchemeImpl) Get(ctx context.Context, permissionSchemeID int, expand []string) (*model.PermissionSchemeScheme, *model.ResponseScheme, error) {
 
-	if permissionSchemeId == 0 {
+	if permissionSchemeID == 0 {
 		return nil, nil, model.ErrNoPermissionSchemeIDError
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("rest/api/%v/permissionscheme/%v", i.version, permissionSchemeId))
+	endpoint.WriteString(fmt.Sprintf("rest/api/%v/permissionscheme/%v", i.version, permissionSchemeID))
 
 	if expand != nil {
 
@@ -141,13 +141,13 @@ func (i *internalPermissionSchemeImpl) Get(ctx context.Context, permissionScheme
 	return permissionScheme, response, nil
 }
 
-func (i *internalPermissionSchemeImpl) Delete(ctx context.Context, permissionSchemeId int) (*model.ResponseScheme, error) {
+func (i *internalPermissionSchemeImpl) Delete(ctx context.Context, permissionSchemeID int) (*model.ResponseScheme, error) {
 
-	if permissionSchemeId == 0 {
+	if permissionSchemeID == 0 {
 		return nil, model.ErrNoPermissionSchemeIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/permissionscheme/%v", i.version, permissionSchemeId)
+	endpoint := fmt.Sprintf("rest/api/%v/permissionscheme/%v", i.version, permissionSchemeID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
@@ -175,13 +175,13 @@ func (i *internalPermissionSchemeImpl) Create(ctx context.Context, payload *mode
 	return permissionScheme, response, nil
 }
 
-func (i *internalPermissionSchemeImpl) Update(ctx context.Context, permissionSchemeId int, payload *model.PermissionSchemeScheme) (*model.PermissionSchemeScheme, *model.ResponseScheme, error) {
+func (i *internalPermissionSchemeImpl) Update(ctx context.Context, permissionSchemeID int, payload *model.PermissionSchemeScheme) (*model.PermissionSchemeScheme, *model.ResponseScheme, error) {
 
-	if permissionSchemeId == 0 {
+	if permissionSchemeID == 0 {
 		return nil, nil, model.ErrNoPermissionSchemeIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/permissionscheme/%v", i.version, permissionSchemeId)
+	endpoint := fmt.Sprintf("rest/api/%v/permissionscheme/%v", i.version, permissionSchemeID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {

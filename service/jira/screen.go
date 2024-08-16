@@ -2,6 +2,7 @@ package jira
 
 import (
 	"context"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 )
 
@@ -80,19 +81,19 @@ type ScreenSchemeConnector interface {
 
 	// Update updates a screen scheme. Only screen schemes used in classic projects can be updated.
 	//
-	// PUT /rest/api/{2-3}/screenscheme/{screenSchemeId}
+	// PUT /rest/api/{2-3}/screenscheme/{screenSchemeID}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/screens/schemes#update-screen-scheme
-	Update(ctx context.Context, screenSchemeId string, payload *model.ScreenSchemePayloadScheme) (*model.ResponseScheme, error)
+	Update(ctx context.Context, screenSchemeID string, payload *model.ScreenSchemePayloadScheme) (*model.ResponseScheme, error)
 
 	// Delete deletes a screen scheme. A screen scheme cannot be deleted if it is used in an issue type screen scheme.
 	//
 	// Only screens schemes used in classic projects can be deleted.
 	//
-	// DELETE /rest/api/{2-3}/screenscheme/{screenSchemeId}
+	// DELETE /rest/api/{2-3}/screenscheme/{screenSchemeID}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/screens/schemes#delete-screen-scheme
-	Delete(ctx context.Context, screenSchemeId string) (*model.ResponseScheme, error)
+	Delete(ctx context.Context, screenSchemeID string) (*model.ResponseScheme, error)
 }
 
 type ScreenTabConnector interface {

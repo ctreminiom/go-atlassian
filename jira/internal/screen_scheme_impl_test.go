@@ -3,12 +3,14 @@ package internal
 import (
 	"context"
 	"errors"
+	"net/http"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
-	"github.com/stretchr/testify/assert"
-	"net/http"
-	"testing"
 )
 
 func Test_internalScreenSchemeImpl_Gets(t *testing.T) {
@@ -331,7 +333,7 @@ func Test_internalScreenSchemeImpl_Update(t *testing.T) {
 
 	type args struct {
 		ctx            context.Context
-		screenSchemeId string
+		screenSchemeID string
 		payload        *model.ScreenSchemePayloadScheme
 	}
 
@@ -348,7 +350,7 @@ func Test_internalScreenSchemeImpl_Update(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:            context.Background(),
-				screenSchemeId: "10001",
+				screenSchemeID: "10001",
 				payload:        payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -378,7 +380,7 @@ func Test_internalScreenSchemeImpl_Update(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:            context.Background(),
-				screenSchemeId: "10001",
+				screenSchemeID: "10001",
 				payload:        payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -418,7 +420,7 @@ func Test_internalScreenSchemeImpl_Update(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:            context.Background(),
-				screenSchemeId: "10001",
+				screenSchemeID: "10001",
 				payload:        payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -449,7 +451,7 @@ func Test_internalScreenSchemeImpl_Update(t *testing.T) {
 			resolutionService, err := NewScreenSchemeService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResponse, err := resolutionService.Update(testCase.args.ctx, testCase.args.screenSchemeId, testCase.args.payload)
+			gotResponse, err := resolutionService.Update(testCase.args.ctx, testCase.args.screenSchemeID, testCase.args.payload)
 
 			if testCase.wantErr {
 
@@ -478,7 +480,7 @@ func Test_internalScreenSchemeImpl_Delete(t *testing.T) {
 
 	type args struct {
 		ctx            context.Context
-		screenSchemeId string
+		screenSchemeID string
 	}
 
 	testCases := []struct {
@@ -494,7 +496,7 @@ func Test_internalScreenSchemeImpl_Delete(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:            context.Background(),
-				screenSchemeId: "10001",
+				screenSchemeID: "10001",
 			},
 			on: func(fields *fields) {
 
@@ -523,7 +525,7 @@ func Test_internalScreenSchemeImpl_Delete(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:            context.Background(),
-				screenSchemeId: "10001",
+				screenSchemeID: "10001",
 			},
 			on: func(fields *fields) {
 
@@ -562,7 +564,7 @@ func Test_internalScreenSchemeImpl_Delete(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:            context.Background(),
-				screenSchemeId: "10001",
+				screenSchemeID: "10001",
 			},
 			on: func(fields *fields) {
 
@@ -592,7 +594,7 @@ func Test_internalScreenSchemeImpl_Delete(t *testing.T) {
 			resolutionService, err := NewScreenSchemeService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResponse, err := resolutionService.Delete(testCase.args.ctx, testCase.args.screenSchemeId)
+			gotResponse, err := resolutionService.Delete(testCase.args.ctx, testCase.args.screenSchemeID)
 
 			if testCase.wantErr {
 

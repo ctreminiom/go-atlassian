@@ -208,7 +208,7 @@ type TypeScreenSchemeConnector interface {
 	// PUT /rest/api/{2-3}/issuetypescreenscheme/{issueTypeScreenSchemeID}/mapping/default
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/types/screen-scheme#update-issue-type-screen-scheme-default-screen-scheme
-	UpdateDefault(ctx context.Context, issueTypeScreenSchemeID, screenSchemeId string) (*model.ResponseScheme, error)
+	UpdateDefault(ctx context.Context, issueTypeScreenSchemeID, screenSchemeID string) (*model.ResponseScheme, error)
 
 	// Remove removes issue type to screen scheme mappings from an issue type screen scheme.
 	//

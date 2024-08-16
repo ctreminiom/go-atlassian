@@ -116,8 +116,8 @@ func (t *TypeScreenSchemeService) Append(ctx context.Context, issueTypeScreenSch
 // PUT /rest/api/{2-3}/issuetypescreenscheme/{issueTypeScreenSchemeID}/mapping/default
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/types/screen-scheme#update-issue-type-screen-scheme-default-screen-scheme
-func (t *TypeScreenSchemeService) UpdateDefault(ctx context.Context, issueTypeScreenSchemeID, screenSchemeId string) (*model.ResponseScheme, error) {
-	return t.internalClient.UpdateDefault(ctx, issueTypeScreenSchemeID, screenSchemeId)
+func (t *TypeScreenSchemeService) UpdateDefault(ctx context.Context, issueTypeScreenSchemeID, screenSchemeID string) (*model.ResponseScheme, error) {
+	return t.internalClient.UpdateDefault(ctx, issueTypeScreenSchemeID, screenSchemeID)
 }
 
 // Remove removes issue type to screen scheme mappings from an issue type screen scheme.
@@ -333,19 +333,19 @@ func (i *internalTypeScreenSchemeImpl) Append(ctx context.Context, issueTypeScre
 	return i.c.Call(request, nil)
 }
 
-func (i *internalTypeScreenSchemeImpl) UpdateDefault(ctx context.Context, issueTypeScreenSchemeID, screenSchemeId string) (*model.ResponseScheme, error) {
+func (i *internalTypeScreenSchemeImpl) UpdateDefault(ctx context.Context, issueTypeScreenSchemeID, screenSchemeID string) (*model.ResponseScheme, error) {
 
 	if issueTypeScreenSchemeID == "" {
 		return nil, model.ErrNoIssueTypeScreenSchemeIDError
 	}
 
-	if screenSchemeId == "" {
+	if screenSchemeID == "" {
 		return nil, model.ErrNoScreenSchemeIDError
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issuetypescreenscheme/%v/mapping/default", i.version, issueTypeScreenSchemeID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", map[string]interface{}{"screenSchemeId": screenSchemeId})
+	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", map[string]interface{}{"screenSchemeId": screenSchemeID})
 	if err != nil {
 		return nil, err
 	}

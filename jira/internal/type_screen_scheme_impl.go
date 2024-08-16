@@ -55,11 +55,11 @@ func (t *TypeScreenSchemeService) Create(ctx context.Context, payload *model.Iss
 //
 // Issue type screen schemes can only be assigned to classic projects.
 //
-// PUT /rest/api/{2-3}/issuetypescreenscheme/project/{projectID}
+// PUT /rest/api/{2-3}/issuetypescreenscheme/projectg
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/types/screen-scheme#assign-issue-type-screen-scheme-to-project
-func (t *TypeScreenSchemeService) Assign(ctx context.Context, issueTypeScreenSchemeId, projectID string) (*model.ResponseScheme, error) {
-	return t.internalClient.Assign(ctx, issueTypeScreenSchemeId, projectID)
+func (t *TypeScreenSchemeService) Assign(ctx context.Context, issueTypeScreenSchemeID, projectID string) (*model.ResponseScheme, error) {
+	return t.internalClient.Assign(ctx, issueTypeScreenSchemeID, projectID)
 }
 
 // Projects returns a paginated list of issue type screen schemes and,
@@ -85,57 +85,57 @@ func (t *TypeScreenSchemeService) Mapping(ctx context.Context, issueTypeScreenSc
 
 // Update updates an issue type screen scheme.
 //
-// PUT /rest/api/{2-3}/issuetypescreenscheme/{issueTypeScreenSchemeId}
+// PUT /rest/api/{2-3}/issuetypescreenscheme/{issueTypeScreenSchemeID}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/types/screen-scheme#update-issue-type-screen-scheme
-func (t *TypeScreenSchemeService) Update(ctx context.Context, issueTypeScreenSchemeId, name, description string) (*model.ResponseScheme, error) {
-	return t.internalClient.Update(ctx, issueTypeScreenSchemeId, name, description)
+func (t *TypeScreenSchemeService) Update(ctx context.Context, issueTypeScreenSchemeID, name, description string) (*model.ResponseScheme, error) {
+	return t.internalClient.Update(ctx, issueTypeScreenSchemeID, name, description)
 }
 
 // Delete deletes an issue type screen scheme.
 //
-// DELETE /rest/api/{2-3}/issuetypescreenscheme/{issueTypeScreenSchemeId}
+// DELETE /rest/api/{2-3}/issuetypescreenscheme/{issueTypeScreenSchemeID}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/types/screen-scheme#delete-issue-type-screen-scheme
-func (t *TypeScreenSchemeService) Delete(ctx context.Context, issueTypeScreenSchemeId string) (*model.ResponseScheme, error) {
-	return t.internalClient.Delete(ctx, issueTypeScreenSchemeId)
+func (t *TypeScreenSchemeService) Delete(ctx context.Context, issueTypeScreenSchemeID string) (*model.ResponseScheme, error) {
+	return t.internalClient.Delete(ctx, issueTypeScreenSchemeID)
 }
 
 // Append appends issue type to screen scheme mappings to an issue type screen scheme.
 //
-// PUT /rest/api/{2-3}/issuetypescreenscheme/{issueTypeScreenSchemeId}/mapping
+// PUT /rest/api/{2-3}/issuetypescreenscheme/{issueTypeScreenSchemeID}/mapping
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/types/screen-scheme#append-mappings-to-issue-type-screen-scheme
-func (t *TypeScreenSchemeService) Append(ctx context.Context, issueTypeScreenSchemeId string, payload *model.IssueTypeScreenSchemePayloadScheme) (*model.ResponseScheme, error) {
-	return t.internalClient.Append(ctx, issueTypeScreenSchemeId, payload)
+func (t *TypeScreenSchemeService) Append(ctx context.Context, issueTypeScreenSchemeID string, payload *model.IssueTypeScreenSchemePayloadScheme) (*model.ResponseScheme, error) {
+	return t.internalClient.Append(ctx, issueTypeScreenSchemeID, payload)
 }
 
 // UpdateDefault updates the default screen scheme of an issue type screen scheme.
 // The default screen scheme is used for all unmapped issue types.
 //
-// PUT /rest/api/{2-3}/issuetypescreenscheme/{issueTypeScreenSchemeId}/mapping/default
+// PUT /rest/api/{2-3}/issuetypescreenscheme/{issueTypeScreenSchemeID}/mapping/default
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/types/screen-scheme#update-issue-type-screen-scheme-default-screen-scheme
-func (t *TypeScreenSchemeService) UpdateDefault(ctx context.Context, issueTypeScreenSchemeId, screenSchemeId string) (*model.ResponseScheme, error) {
-	return t.internalClient.UpdateDefault(ctx, issueTypeScreenSchemeId, screenSchemeId)
+func (t *TypeScreenSchemeService) UpdateDefault(ctx context.Context, issueTypeScreenSchemeID, screenSchemeId string) (*model.ResponseScheme, error) {
+	return t.internalClient.UpdateDefault(ctx, issueTypeScreenSchemeID, screenSchemeId)
 }
 
 // Remove removes issue type to screen scheme mappings from an issue type screen scheme.
 //
-// POST /rest/api/{2-3}/issuetypescreenscheme/{issueTypeScreenSchemeId}/mapping/remove
+// POST /rest/api/{2-3}/issuetypescreenscheme/{issueTypeScreenSchemeID}/mapping/remove
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/types/screen-scheme#remove-mappings-from-issue-type-screen-scheme
-func (t *TypeScreenSchemeService) Remove(ctx context.Context, issueTypeScreenSchemeId string, issueTypeIds []string) (*model.ResponseScheme, error) {
-	return t.internalClient.Remove(ctx, issueTypeScreenSchemeId, issueTypeIds)
+func (t *TypeScreenSchemeService) Remove(ctx context.Context, issueTypeScreenSchemeID string, issueTypeIds []string) (*model.ResponseScheme, error) {
+	return t.internalClient.Remove(ctx, issueTypeScreenSchemeID, issueTypeIds)
 }
 
 // SchemesByProject returns a paginated list of projects associated with an issue type screen scheme.
 //
-// GET /rest/api/{2-3}/issuetypescreenscheme/{issueTypeScreenSchemeId}/project
+// GET /rest/api/{2-3}/issuetypescreenscheme/{issueTypeScreenSchemeID}/project
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/types/screen-scheme#get-issue-type-screen-scheme-projects
-func (t *TypeScreenSchemeService) SchemesByProject(ctx context.Context, issueTypeScreenSchemeId, startAt, maxResults int) (*model.IssueTypeScreenSchemeByProjectPageScheme, *model.ResponseScheme, error) {
-	return t.internalClient.SchemesByProject(ctx, issueTypeScreenSchemeId, startAt, maxResults)
+func (t *TypeScreenSchemeService) SchemesByProject(ctx context.Context, issueTypeScreenSchemeID, startAt, maxResults int) (*model.IssueTypeScreenSchemeByProjectPageScheme, *model.ResponseScheme, error) {
+	return t.internalClient.SchemesByProject(ctx, issueTypeScreenSchemeID, startAt, maxResults)
 }
 
 type internalTypeScreenSchemeImpl struct {
@@ -202,9 +202,9 @@ func (i *internalTypeScreenSchemeImpl) Create(ctx context.Context, payload *mode
 	return scheme, response, nil
 }
 
-func (i *internalTypeScreenSchemeImpl) Assign(ctx context.Context, issueTypeScreenSchemeId, projectID string) (*model.ResponseScheme, error) {
+func (i *internalTypeScreenSchemeImpl) Assign(ctx context.Context, issueTypeScreenSchemeID, projectID string) (*model.ResponseScheme, error) {
 
-	if issueTypeScreenSchemeId == "" {
+	if issueTypeScreenSchemeID == "" {
 		return nil, model.ErrNoIssueTypeScreenSchemeIDError
 	}
 
@@ -213,7 +213,7 @@ func (i *internalTypeScreenSchemeImpl) Assign(ctx context.Context, issueTypeScre
 	}
 
 	payload := map[string]interface{}{
-		"issueTypeScreenSchemeId": issueTypeScreenSchemeId,
+		"issueTypeScreenSchemeId": issueTypeScreenSchemeID,
 		"projectId":               projectID,
 	}
 
@@ -279,9 +279,9 @@ func (i *internalTypeScreenSchemeImpl) Mapping(ctx context.Context, issueTypeScr
 	return mapping, response, nil
 }
 
-func (i *internalTypeScreenSchemeImpl) Update(ctx context.Context, issueTypeScreenSchemeId, name, description string) (*model.ResponseScheme, error) {
+func (i *internalTypeScreenSchemeImpl) Update(ctx context.Context, issueTypeScreenSchemeID, name, description string) (*model.ResponseScheme, error) {
 
-	if issueTypeScreenSchemeId == "" {
+	if issueTypeScreenSchemeID == "" {
 		return nil, model.ErrNoIssueTypeScreenSchemeIDError
 	}
 
@@ -291,7 +291,7 @@ func (i *internalTypeScreenSchemeImpl) Update(ctx context.Context, issueTypeScre
 		payload["description"] = description
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/issuetypescreenscheme/%v", i.version, issueTypeScreenSchemeId)
+	endpoint := fmt.Sprintf("rest/api/%v/issuetypescreenscheme/%v", i.version, issueTypeScreenSchemeID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
@@ -301,13 +301,13 @@ func (i *internalTypeScreenSchemeImpl) Update(ctx context.Context, issueTypeScre
 	return i.c.Call(request, nil)
 }
 
-func (i *internalTypeScreenSchemeImpl) Delete(ctx context.Context, issueTypeScreenSchemeId string) (*model.ResponseScheme, error) {
+func (i *internalTypeScreenSchemeImpl) Delete(ctx context.Context, issueTypeScreenSchemeID string) (*model.ResponseScheme, error) {
 
-	if issueTypeScreenSchemeId == "" {
+	if issueTypeScreenSchemeID == "" {
 		return nil, model.ErrNoIssueTypeScreenSchemeIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/issuetypescreenscheme/%v", i.version, issueTypeScreenSchemeId)
+	endpoint := fmt.Sprintf("rest/api/%v/issuetypescreenscheme/%v", i.version, issueTypeScreenSchemeID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
@@ -317,13 +317,13 @@ func (i *internalTypeScreenSchemeImpl) Delete(ctx context.Context, issueTypeScre
 	return i.c.Call(request, nil)
 }
 
-func (i *internalTypeScreenSchemeImpl) Append(ctx context.Context, issueTypeScreenSchemeId string, payload *model.IssueTypeScreenSchemePayloadScheme) (*model.ResponseScheme, error) {
+func (i *internalTypeScreenSchemeImpl) Append(ctx context.Context, issueTypeScreenSchemeID string, payload *model.IssueTypeScreenSchemePayloadScheme) (*model.ResponseScheme, error) {
 
-	if issueTypeScreenSchemeId == "" {
+	if issueTypeScreenSchemeID == "" {
 		return nil, model.ErrNoIssueTypeScreenSchemeIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/issuetypescreenscheme/%v/mapping", i.version, issueTypeScreenSchemeId)
+	endpoint := fmt.Sprintf("rest/api/%v/issuetypescreenscheme/%v/mapping", i.version, issueTypeScreenSchemeID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
@@ -333,9 +333,9 @@ func (i *internalTypeScreenSchemeImpl) Append(ctx context.Context, issueTypeScre
 	return i.c.Call(request, nil)
 }
 
-func (i *internalTypeScreenSchemeImpl) UpdateDefault(ctx context.Context, issueTypeScreenSchemeId, screenSchemeId string) (*model.ResponseScheme, error) {
+func (i *internalTypeScreenSchemeImpl) UpdateDefault(ctx context.Context, issueTypeScreenSchemeID, screenSchemeId string) (*model.ResponseScheme, error) {
 
-	if issueTypeScreenSchemeId == "" {
+	if issueTypeScreenSchemeID == "" {
 		return nil, model.ErrNoIssueTypeScreenSchemeIDError
 	}
 
@@ -343,7 +343,7 @@ func (i *internalTypeScreenSchemeImpl) UpdateDefault(ctx context.Context, issueT
 		return nil, model.ErrNoScreenSchemeIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/issuetypescreenscheme/%v/mapping/default", i.version, issueTypeScreenSchemeId)
+	endpoint := fmt.Sprintf("rest/api/%v/issuetypescreenscheme/%v/mapping/default", i.version, issueTypeScreenSchemeID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", map[string]interface{}{"screenSchemeId": screenSchemeId})
 	if err != nil {
@@ -353,9 +353,9 @@ func (i *internalTypeScreenSchemeImpl) UpdateDefault(ctx context.Context, issueT
 	return i.c.Call(request, nil)
 }
 
-func (i *internalTypeScreenSchemeImpl) Remove(ctx context.Context, issueTypeScreenSchemeId string, issueTypeIds []string) (*model.ResponseScheme, error) {
+func (i *internalTypeScreenSchemeImpl) Remove(ctx context.Context, issueTypeScreenSchemeID string, issueTypeIds []string) (*model.ResponseScheme, error) {
 
-	if issueTypeScreenSchemeId == "" {
+	if issueTypeScreenSchemeID == "" {
 		return nil, model.ErrNoIssueTypeScreenSchemeIDError
 	}
 
@@ -363,7 +363,7 @@ func (i *internalTypeScreenSchemeImpl) Remove(ctx context.Context, issueTypeScre
 		return nil, model.ErrNoIssueTypesError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/issuetypescreenscheme/%v/mapping/remove", i.version, issueTypeScreenSchemeId)
+	endpoint := fmt.Sprintf("rest/api/%v/issuetypescreenscheme/%v/mapping/remove", i.version, issueTypeScreenSchemeID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", map[string]interface{}{"issueTypeIds": issueTypeIds})
 	if err != nil {
@@ -373,13 +373,13 @@ func (i *internalTypeScreenSchemeImpl) Remove(ctx context.Context, issueTypeScre
 	return i.c.Call(request, nil)
 }
 
-func (i *internalTypeScreenSchemeImpl) SchemesByProject(ctx context.Context, issueTypeScreenSchemeId int, startAt, maxResults int) (*model.IssueTypeScreenSchemeByProjectPageScheme, *model.ResponseScheme, error) {
+func (i *internalTypeScreenSchemeImpl) SchemesByProject(ctx context.Context, issueTypeScreenSchemeID int, startAt, maxResults int) (*model.IssueTypeScreenSchemeByProjectPageScheme, *model.ResponseScheme, error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
 	params.Add("maxResults", strconv.Itoa(maxResults))
 
-	endpoint := fmt.Sprintf("rest/api/%v/issuetypescreenscheme/%v/project?%v", i.version, issueTypeScreenSchemeId, params.Encode())
+	endpoint := fmt.Sprintf("rest/api/%v/issuetypescreenscheme/%v/project?%v", i.version, issueTypeScreenSchemeID, params.Encode())
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {

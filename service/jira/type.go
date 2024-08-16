@@ -2,6 +2,7 @@ package jira
 
 import (
 	"context"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 )
 
@@ -90,7 +91,7 @@ type TypeSchemeConnector interface {
 	// PUT /rest/api/{2-3}/issuetypescheme/project
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/types/scheme#assign-issue-type-scheme-to-project
-	Assign(ctx context.Context, issueTypeSchemeId, projectId string) (*model.ResponseScheme, error)
+	Assign(ctx context.Context, issueTypeSchemeId, projectID string) (*model.ResponseScheme, error)
 
 	// Update updates an issue type scheme.
 	//
@@ -161,7 +162,7 @@ type TypeScreenSchemeConnector interface {
 	// PUT /rest/api/{2-3}/issuetypescreenscheme/project
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/types/screen-scheme#assign-issue-type-screen-scheme-to-project
-	Assign(ctx context.Context, issueTypeScreenSchemeId, projectId string) (*model.ResponseScheme, error)
+	Assign(ctx context.Context, issueTypeScreenSchemeID, projectID string) (*model.ResponseScheme, error)
 
 	// Projects returns a paginated list of issue type screen schemes and,
 	// for each issue type screen scheme, a list of the projects that use it.
@@ -182,44 +183,44 @@ type TypeScreenSchemeConnector interface {
 
 	// Update updates an issue type screen scheme.
 	//
-	// PUT /rest/api/{2-3}/issuetypescreenscheme/{issueTypeScreenSchemeId}
+	// PUT /rest/api/{2-3}/issuetypescreenscheme/{issueTypeScreenSchemeID}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/types/screen-scheme#update-issue-type-screen-scheme
-	Update(ctx context.Context, issueTypeScreenSchemeId, name, description string) (*model.ResponseScheme, error)
+	Update(ctx context.Context, issueTypeScreenSchemeID, name, description string) (*model.ResponseScheme, error)
 
 	// Delete deletes an issue type screen scheme.
 	//
-	// DELETE /rest/api/{2-3}/issuetypescreenscheme/{issueTypeScreenSchemeId}
+	// DELETE /rest/api/{2-3}/issuetypescreenscheme/{issueTypeScreenSchemeID}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/types/screen-scheme#delete-issue-type-screen-scheme
-	Delete(ctx context.Context, issueTypeScreenSchemeId string) (*model.ResponseScheme, error)
+	Delete(ctx context.Context, issueTypeScreenSchemeID string) (*model.ResponseScheme, error)
 
 	// Append appends issue type to screen scheme mappings to an issue type screen scheme.
 	//
-	// PUT /rest/api/{2-3}/issuetypescreenscheme/{issueTypeScreenSchemeId}/mapping
+	// PUT /rest/api/{2-3}/issuetypescreenscheme/{issueTypeScreenSchemeID}/mapping
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/types/screen-scheme#append-mappings-to-issue-type-screen-scheme
-	Append(ctx context.Context, issueTypeScreenSchemeId string, payload *model.IssueTypeScreenSchemePayloadScheme) (*model.ResponseScheme, error)
+	Append(ctx context.Context, issueTypeScreenSchemeID string, payload *model.IssueTypeScreenSchemePayloadScheme) (*model.ResponseScheme, error)
 
 	// UpdateDefault updates the default screen scheme of an issue type screen scheme.
 	// The default screen scheme is used for all unmapped issue types.
 	//
-	// PUT /rest/api/{2-3}/issuetypescreenscheme/{issueTypeScreenSchemeId}/mapping/default
+	// PUT /rest/api/{2-3}/issuetypescreenscheme/{issueTypeScreenSchemeID}/mapping/default
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/types/screen-scheme#update-issue-type-screen-scheme-default-screen-scheme
-	UpdateDefault(ctx context.Context, issueTypeScreenSchemeId, screenSchemeId string) (*model.ResponseScheme, error)
+	UpdateDefault(ctx context.Context, issueTypeScreenSchemeID, screenSchemeId string) (*model.ResponseScheme, error)
 
 	// Remove removes issue type to screen scheme mappings from an issue type screen scheme.
 	//
-	// POST /rest/api/{2-3}/issuetypescreenscheme/{issueTypeScreenSchemeId}/mapping/remove
+	// POST /rest/api/{2-3}/issuetypescreenscheme/{issueTypeScreenSchemeID}/mapping/remove
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/types/screen-scheme#remove-mappings-from-issue-type-screen-scheme
-	Remove(ctx context.Context, issueTypeScreenSchemeId string, issueTypeIds []string) (*model.ResponseScheme, error)
+	Remove(ctx context.Context, issueTypeScreenSchemeID string, issueTypeIds []string) (*model.ResponseScheme, error)
 
 	// SchemesByProject returns a paginated list of projects associated with an issue type screen scheme.
 	//
-	// GET /rest/api/{2-3}/issuetypescreenscheme/{issueTypeScreenSchemeId}/project
+	// GET /rest/api/{2-3}/issuetypescreenscheme/{issueTypeScreenSchemeID}/project
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/types/screen-scheme#get-issue-type-screen-scheme-projects
-	SchemesByProject(ctx context.Context, issueTypeScreenSchemeId, startAt, maxResults int) (*model.IssueTypeScreenSchemeByProjectPageScheme, *model.ResponseScheme, error)
+	SchemesByProject(ctx context.Context, issueTypeScreenSchemeID, startAt, maxResults int) (*model.IssueTypeScreenSchemeByProjectPageScheme, *model.ResponseScheme, error)
 }

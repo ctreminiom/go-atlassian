@@ -2,6 +2,7 @@ package jira
 
 import (
 	"context"
+
 	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
 )
 
@@ -34,7 +35,7 @@ type NotificationSchemeConnector interface {
 	//
 	// This is because team-managed projects don't have a concept of a default notification scheme.
 	//
-	// The mappings are ordered by projectId.
+	// The mappings are ordered by projectID.
 	//
 	// GET /rest/api/{2-3}/notificationscheme/project
 	Projects(ctx context.Context, schemeIDs, projectIDs []string, startAt, maxResults int) (*models.NotificationSchemeProjectPageScheme, *models.ResponseScheme, error)

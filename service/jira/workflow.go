@@ -2,6 +2,7 @@ package jira
 
 import (
 	"context"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 )
 
@@ -244,7 +245,7 @@ type WorkflowSchemeConnector interface {
 	// PUT /rest/api/{2-3}/workflowscheme/project
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/workflow/scheme#get-workflow-schemes-associations
-	Assign(ctx context.Context, schemeId, projectId string) (*model.ResponseScheme, error)
+	Assign(ctx context.Context, schemeId, projectID string) (*model.ResponseScheme, error)
 }
 
 // WorkflowSchemeIssueTypeConnector represents the workflows scheme issue type endpoints.

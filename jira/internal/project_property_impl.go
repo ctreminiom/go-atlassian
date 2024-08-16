@@ -10,6 +10,7 @@ import (
 	"github.com/ctreminiom/go-atlassian/service/jira"
 )
 
+// NewProjectPropertyService creates a new instance of ProjectPropertyService.
 func NewProjectPropertyService(client service.Connector, version string) (*ProjectPropertyService, error) {
 
 	if version == "" {
@@ -21,7 +22,9 @@ func NewProjectPropertyService(client service.Connector, version string) (*Proje
 	}, nil
 }
 
+// ProjectPropertyService provides methods to manage project properties in Jira Service Management.
 type ProjectPropertyService struct {
+	// internalClient is the connector interface for project property operations.
 	internalClient jira.ProjectPropertyConnector
 }
 

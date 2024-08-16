@@ -9,6 +9,8 @@ import (
 	"net/http"
 )
 
+// NewPermissionService creates a new instance of PermissionService.
+// It takes a service.Connector as input and returns a pointer to PermissionService.
 func NewPermissionService(client service.Connector) *PermissionService {
 
 	return &PermissionService{
@@ -16,6 +18,7 @@ func NewPermissionService(client service.Connector) *PermissionService {
 	}
 }
 
+// PermissionService provides methods to interact with content permission operations in Confluence.
 type PermissionService struct {
 	internalClient confluence.ContentPermissionConnector
 }

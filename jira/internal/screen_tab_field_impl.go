@@ -9,6 +9,7 @@ import (
 	"net/http"
 )
 
+// NewScreenTabFieldService creates a new instance of ScreenTabFieldService.
 func NewScreenTabFieldService(client service.Connector, version string) (*ScreenTabFieldService, error) {
 
 	if version == "" {
@@ -20,7 +21,9 @@ func NewScreenTabFieldService(client service.Connector, version string) (*Screen
 	}, nil
 }
 
+// ScreenTabFieldService provides methods to manage screen tab fields in Jira Service Management.
 type ScreenTabFieldService struct {
+	// internalClient is the connector interface for screen tab field operations.
 	internalClient jira.ScreenTabFieldConnector
 }
 

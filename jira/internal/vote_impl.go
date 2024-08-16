@@ -10,6 +10,7 @@ import (
 	"github.com/ctreminiom/go-atlassian/service/jira"
 )
 
+// NewVoteService creates a new instance of VoteService.
 func NewVoteService(client service.Connector, version string) (*VoteService, error) {
 
 	if version == "" {
@@ -21,7 +22,9 @@ func NewVoteService(client service.Connector, version string) (*VoteService, err
 	}, nil
 }
 
+// VoteService provides methods to manage votes on issues in Jira Service Management.
 type VoteService struct {
+	// internalClient is the connector interface for vote operations.
 	internalClient jira.VoteConnector
 }
 

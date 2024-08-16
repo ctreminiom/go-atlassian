@@ -1,14 +1,6 @@
 package models
 
 // WorkspaceScheme represents a workspace.
-// Type is the type of the workspace.
-// Links is a collection of links related to the workspace.
-// UUID is the unique identifier of the workspace.
-// Name is the name of the workspace.
-// Slug is the slug of the workspace.
-// IsPrivate indicates if the workspace is private.
-// CreatedOn is the creation time of the workspace.
-// UpdatedOn is the update time of the workspace.
 type WorkspaceScheme struct {
 	Type      string                `json:"type,omitempty"`       // The type of the workspace.
 	Links     *WorkspaceLinksScheme `json:"links,omitempty"`      // The links related to the workspace.
@@ -21,14 +13,6 @@ type WorkspaceScheme struct {
 }
 
 // WorkspaceLinksScheme represents a collection of links related to a workspace.
-// Avatar is the link to the workspace's avatar.
-// HTML is the link to the workspace's HTML page.
-// Members is the link to the workspace's members.
-// Owners is the link to the workspace's owners.
-// Projects is the link to the workspace's projects.
-// Repositories is the link to the workspace's repositories.
-// Snippets is the link to the workspace's snippets.
-// Self is the link to the workspace itself.
 type WorkspaceLinksScheme struct {
 	Avatar       *BitbucketLinkScheme `json:"avatar,omitempty"`       // The link to the workspace's avatar.
 	HTML         *BitbucketLinkScheme `json:"html,omitempty"`         // The link to the workspace's HTML page.
@@ -41,8 +25,6 @@ type WorkspaceLinksScheme struct {
 }
 
 // BitbucketLinkScheme represents a link in Bitbucket.
-// Href is the URL of the link.
-// Name is the name of the link.
 type BitbucketLinkScheme struct {
 	Href string `json:"href,omitempty"` // The URL of the link.
 	Name string `json:"name,omitempty"` // The name of the link.

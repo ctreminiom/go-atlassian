@@ -9,14 +9,17 @@ import (
 	"net/http"
 )
 
+// NewIconService creates a new instance of IconService.
+// It takes a service.Connector as input and returns a pointer to IconService.
 func NewIconService(client service.Connector) *IconService {
-
 	return &IconService{
 		internalClient: &internalIconImpl{c: client},
 	}
 }
 
+// IconService provides methods to interact with asset icons in Jira.
 type IconService struct {
+	// internalClient is the connector interface for icon operations.
 	internalClient assets.IconConnector
 }
 

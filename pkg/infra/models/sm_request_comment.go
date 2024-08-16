@@ -1,5 +1,6 @@
 package models
 
+// RequestCommentOptionsScheme represents the options for filtering and paginating request comments.
 type RequestCommentOptionsScheme struct {
 	Public   *bool    `url:"public,omitempty"`
 	Internal *bool    `url:"internal,omitempty"`

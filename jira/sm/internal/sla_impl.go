@@ -11,14 +11,17 @@ import (
 	"strconv"
 )
 
+// NewServiceLevelAgreementService creates a new instance of ServiceLevelAgreementService.
+// It takes a service.Connector and a version string as input and returns a pointer to ServiceLevelAgreementService.
 func NewServiceLevelAgreementService(client service.Connector, version string) *ServiceLevelAgreementService {
-
 	return &ServiceLevelAgreementService{
 		internalClient: &internalServiceLevelAgreementImpl{c: client, version: version},
 	}
 }
 
+// ServiceLevelAgreementService provides methods to interact with SLA operations in Jira Service Management.
 type ServiceLevelAgreementService struct {
+	// internalClient is the connector interface for SLA operations.
 	internalClient sm.ServiceLevelAgreementConnector
 }
 

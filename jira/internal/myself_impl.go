@@ -11,6 +11,7 @@ import (
 	"strings"
 )
 
+// NewMySelfService creates a new instance of MySelfService.
 func NewMySelfService(client service.Connector, version string) (*MySelfService, error) {
 
 	if version == "" {
@@ -22,7 +23,9 @@ func NewMySelfService(client service.Connector, version string) (*MySelfService,
 	}, nil
 }
 
+// MySelfService provides methods to manage the current user's details in Jira Service Management.
 type MySelfService struct {
+	// internalClient is the connector interface for current user operations.
 	internalClient jira.MySelfConnector
 }
 

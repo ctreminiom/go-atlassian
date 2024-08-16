@@ -13,6 +13,7 @@ import (
 	"github.com/ctreminiom/go-atlassian/service/jira"
 )
 
+// NewProjectVersionService creates a new instance of ProjectVersionService.
 func NewProjectVersionService(client service.Connector, version string) (*ProjectVersionService, error) {
 
 	if version == "" {
@@ -24,7 +25,9 @@ func NewProjectVersionService(client service.Connector, version string) (*Projec
 	}, nil
 }
 
+// ProjectVersionService provides methods to manage project versions in Jira Service Management.
 type ProjectVersionService struct {
+	// internalClient is the connector interface for project version operations.
 	internalClient jira.ProjectVersionConnector
 }
 

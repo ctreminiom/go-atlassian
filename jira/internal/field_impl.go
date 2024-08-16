@@ -13,6 +13,9 @@ import (
 	"github.com/ctreminiom/go-atlassian/service/jira"
 )
 
+// NewIssueFieldService creates a new instance of IssueFieldService.
+// It takes a service.Connector, a version string, an IssueFieldConfigService, an IssueFieldContextService, and an IssueFieldTrashService as input.
+// Returns a pointer to IssueFieldService and an error if the version is not provided.
 func NewIssueFieldService(client service.Connector, version string, configuration *IssueFieldConfigService, context *IssueFieldContextService,
 	trash *IssueFieldTrashService) (*IssueFieldService, error) {
 
@@ -28,11 +31,16 @@ func NewIssueFieldService(client service.Connector, version string, configuratio
 	}, nil
 }
 
+// IssueFieldService provides methods to manage issue fields in Jira Service Management.
 type IssueFieldService struct {
+	// internalClient is the connector interface for issue field operations.
 	internalClient jira.FieldConnector
-	Configuration  *IssueFieldConfigService
-	Context        *IssueFieldContextService
-	Trash          *IssueFieldTrashService
+	// Configuration is the service for managing field configurations.
+	Configuration *IssueFieldConfigService
+	// Context is the service for managing field contexts.
+	Context *IssueFieldContextService
+	// Trash is the service for managing trashed fields.
+	Trash *IssueFieldTrashService
 }
 
 // Gets returns system and custom issue fields according to the following rules:

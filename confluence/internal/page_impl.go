@@ -12,12 +12,15 @@ import (
 	"strings"
 )
 
-// NewPageService returns a new Confluence V2 Page service
+// NewPageService creates a new instance of PageService.
+// It takes a service.Connector as input and returns a pointer to PageService.
 func NewPageService(client service.Connector) *PageService {
 	return &PageService{internalClient: &internalPageImpl{c: client}}
 }
 
+// PageService provides methods to interact with page operations in Confluence.
 type PageService struct {
+	// internalClient is the connector interface for page operations.
 	internalClient confluence.PageConnector
 }
 

@@ -8,6 +8,8 @@ import (
 	"net/http"
 )
 
+// NewInfoService creates a new instance of InfoService.
+// It takes a service.Connector and a version string as input and returns a pointer to InfoService.
 func NewInfoService(client service.Connector, version string) *InfoService {
 
 	return &InfoService{
@@ -15,7 +17,9 @@ func NewInfoService(client service.Connector, version string) *InfoService {
 	}
 }
 
+// InfoService provides methods to interact with information operations in Jira Service Management.
 type InfoService struct {
+	// internalClient is the connector interface for information operations.
 	internalClient sm.InfoConnector
 }
 

@@ -12,6 +12,7 @@ import (
 	"github.com/ctreminiom/go-atlassian/service/jira"
 )
 
+// NewScreenService creates a new instance of ScreenService.
 func NewScreenService(client service.Connector, version string, scheme *ScreenSchemeService, tab *ScreenTabService) (*ScreenService, error) {
 
 	if version == "" {
@@ -25,10 +26,14 @@ func NewScreenService(client service.Connector, version string, scheme *ScreenSc
 	}, nil
 }
 
+// ScreenService provides methods to manage screens in Jira Service Management.
 type ScreenService struct {
+	// internalClient is the connector interface for screen operations.
 	internalClient jira.ScreenConnector
-	Scheme         *ScreenSchemeService
-	Tab            *ScreenTabService
+	// Scheme is the service for managing screen schemes.
+	Scheme *ScreenSchemeService
+	// Tab is the service for managing screen tabs.
+	Tab *ScreenTabService
 }
 
 // Fields returns a paginated list of the screens a field is used in.

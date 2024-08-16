@@ -12,7 +12,9 @@ import (
 	"strings"
 )
 
+// SpaceV2Service provides methods to interact with space operations in Confluence V2.
 type SpaceV2Service struct {
+	// internalClient is the connector interface for space operations.
 	internalClient confluence.SpaceV2Connector
 }
 

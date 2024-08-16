@@ -12,6 +12,9 @@ import (
 	"github.com/ctreminiom/go-atlassian/service/jira"
 )
 
+// NewIssueFieldContextService creates a new instance of IssueFieldContextService.
+// It takes a service.Connector, a version string, and an IssueFieldContextOptionService as input.
+// Returns a pointer to IssueFieldContextService and an error if the version is not provided.
 func NewIssueFieldContextService(client service.Connector, version string, option *IssueFieldContextOptionService) (*IssueFieldContextService, error) {
 
 	if version == "" {
@@ -24,9 +27,12 @@ func NewIssueFieldContextService(client service.Connector, version string, optio
 	}, nil
 }
 
+// IssueFieldContextService provides methods to manage field contexts in Jira Service Management.
 type IssueFieldContextService struct {
+	// internalClient is the connector interface for field context operations.
 	internalClient jira.FieldContextConnector
-	Option         *IssueFieldContextOptionService
+	// Option is the service for managing field context options.
+	Option *IssueFieldContextOptionService
 }
 
 // Gets returns a paginated list of contexts for a custom field. Contexts can be returned as follows:

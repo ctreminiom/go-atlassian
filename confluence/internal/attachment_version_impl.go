@@ -11,14 +11,17 @@ import (
 	"strconv"
 )
 
-// NewAttachmentVersionService returns a new Confluence V2 Attachment Version service
+// NewAttachmentVersionService creates a new instance of AttachmentVersionService.
+// It takes a service.Connector as input and returns a pointer to AttachmentVersionService.
 func NewAttachmentVersionService(client service.Connector) *AttachmentVersionService {
 	return &AttachmentVersionService{
 		internalClient: &internalAttachmentVersionImpl{c: client},
 	}
 }
 
+// AttachmentVersionService provides methods to interact with attachment version operations in Confluence.
 type AttachmentVersionService struct {
+	// internalClient is the connector interface for attachment version operations.
 	internalClient confluence.AttachmentVersionConnector
 }
 

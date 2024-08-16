@@ -12,14 +12,17 @@ import (
 	"strings"
 )
 
+// NewCommentService creates a new instance of CommentService.
+// It takes a service.Connector as input and returns a pointer to CommentService.
 func NewCommentService(client service.Connector) *CommentService {
-
 	return &CommentService{
 		internalClient: &internalCommentImpl{c: client},
 	}
 }
 
+// CommentService provides methods to interact with comment operations in Confluence.
 type CommentService struct {
+	// internalClient is the connector interface for comment operations.
 	internalClient confluence.CommentConnector
 }
 

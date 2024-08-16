@@ -12,6 +12,7 @@ import (
 	"github.com/ctreminiom/go-atlassian/service/jira"
 )
 
+// NewTypeSchemeService creates a new instance of TypeSchemeService.
 func NewTypeSchemeService(client service.Connector, version string) (*TypeSchemeService, error) {
 
 	if version == "" {
@@ -23,7 +24,9 @@ func NewTypeSchemeService(client service.Connector, version string) (*TypeScheme
 	}, nil
 }
 
+// TypeSchemeService provides methods to manage issue type schemes in Jira Service Management.
 type TypeSchemeService struct {
+	// internalClient is the connector interface for issue type scheme operations.
 	internalClient jira.TypeSchemeConnector
 }
 

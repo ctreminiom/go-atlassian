@@ -12,14 +12,17 @@ import (
 	"strings"
 )
 
+// NewSprintService creates a new instance of SprintService.
+// It takes a service.Connector and a version string as input and returns a pointer to SprintService.
 func NewSprintService(client service.Connector, version string) *SprintService {
-
 	return &SprintService{
 		internalClient: &internalSprintImpl{c: client, version: version},
 	}
 }
 
+// SprintService provides methods to interact with sprint operations in Jira Agile.
 type SprintService struct {
+	// internalClient is the connector interface for sprint operations.
 	internalClient agile.SprintConnector
 }
 

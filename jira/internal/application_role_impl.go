@@ -9,6 +9,9 @@ import (
 	"net/http"
 )
 
+// NewApplicationRoleService creates a new instance of ApplicationRoleService.
+// It takes a service.Connector and a version string as input.
+// Returns a pointer to ApplicationRoleService and an error if the version is not provided.
 func NewApplicationRoleService(client service.Connector, version string) (*ApplicationRoleService, error) {
 
 	if version == "" {
@@ -20,7 +23,9 @@ func NewApplicationRoleService(client service.Connector, version string) (*Appli
 	}, nil
 }
 
+// ApplicationRoleService provides methods to interact with application role operations in Jira Service Management.
 type ApplicationRoleService struct {
+	// internalClient is the connector interface for application role operations.
 	internalClient jira.AppRoleConnector
 }
 

@@ -11,6 +11,7 @@ import (
 	"strings"
 )
 
+// NewWorkflowSchemeIssueTypeService creates a new instance of WorkflowSchemeIssueTypeService.
 func NewWorkflowSchemeIssueTypeService(client service.Connector, version string) *WorkflowSchemeIssueTypeService {
 
 	return &WorkflowSchemeIssueTypeService{
@@ -18,7 +19,9 @@ func NewWorkflowSchemeIssueTypeService(client service.Connector, version string)
 	}
 }
 
+// WorkflowSchemeIssueTypeService provides methods to manage issue type-workflow mappings in workflow schemes.
 type WorkflowSchemeIssueTypeService struct {
+	// internalClient is the connector interface for workflow scheme issue type operations.
 	internalClient jira.WorkflowSchemeIssueTypeConnector
 }
 

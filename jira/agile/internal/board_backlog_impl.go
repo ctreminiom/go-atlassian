@@ -9,14 +9,17 @@ import (
 	"net/http"
 )
 
+// NewBoardBacklogService creates a new instance of BoardBacklogService.
+// It takes a service.Connector and a version string as input and returns a pointer to BoardBacklogService.
 func NewBoardBacklogService(client service.Connector, version string) *BoardBacklogService {
-
 	return &BoardBacklogService{
 		internalClient: &internalBoardBacklogImpl{c: client, version: version},
 	}
 }
 
+// BoardBacklogService provides methods to interact with board backlog operations in Jira Agile.
 type BoardBacklogService struct {
+	// internalClient is the connector interface for board backlog operations.
 	internalClient agile.BoardBacklogConnector
 }
 

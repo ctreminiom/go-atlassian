@@ -11,6 +11,8 @@ import (
 	"strings"
 )
 
+// NewUserService creates a new instance of UserService.
+// It takes a service.Connector and a UserTokenService as inputs and returns a pointer to UserService.
 func NewUserService(client service.Connector, token *UserTokenService) *UserService {
 	return &UserService{
 		internalClient: &internalUserImpl{c: client},
@@ -18,9 +20,12 @@ func NewUserService(client service.Connector, token *UserTokenService) *UserServ
 	}
 }
 
+// UserService provides methods to interact with user-related operations in Atlassian Administration.
 type UserService struct {
+	// internalClient is the connector interface for user operations.
 	internalClient admin.UserConnector
-	Token          *UserTokenService
+	// Token is a service for managing user tokens.
+	Token *UserTokenService
 }
 
 // Permissions returns the set of permissions you have for managing the specified Atlassian account

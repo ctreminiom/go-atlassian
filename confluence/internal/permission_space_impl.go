@@ -9,6 +9,8 @@ import (
 	"net/http"
 )
 
+// NewSpacePermissionService creates a new instance of SpacePermissionService.
+// It takes a service.Connector as input and returns a pointer to SpacePermissionService.
 func NewSpacePermissionService(client service.Connector) *SpacePermissionService {
 
 	return &SpacePermissionService{
@@ -16,7 +18,9 @@ func NewSpacePermissionService(client service.Connector) *SpacePermissionService
 	}
 }
 
+// SpacePermissionService provides methods to interact with space permission operations in Confluence.
 type SpacePermissionService struct {
+	// internalClient is the connector interface for space permission operations.
 	internalClient confluence.SpacePermissionConnector
 }
 

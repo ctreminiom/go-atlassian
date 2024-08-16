@@ -15,6 +15,9 @@ import (
 	"github.com/ctreminiom/go-atlassian/service/jira"
 )
 
+// NewIssueAttachmentService creates a new instance of IssueAttachmentService.
+// It takes a service.Connector and a version string as input.
+// Returns a pointer to IssueAttachmentService and an error if the version is not provided.
 func NewIssueAttachmentService(client service.Connector, version string) (*IssueAttachmentService, error) {
 
 	if version == "" {
@@ -26,7 +29,9 @@ func NewIssueAttachmentService(client service.Connector, version string) (*Issue
 	}, nil
 }
 
+// IssueAttachmentService provides methods to interact with issue attachment operations in Jira Service Management.
 type IssueAttachmentService struct {
+	// internalClient is the connector interface for issue attachment operations.
 	internalClient jira.AttachmentConnector
 }
 

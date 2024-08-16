@@ -10,6 +10,7 @@ import (
 	"github.com/ctreminiom/go-atlassian/service/jira"
 )
 
+// NewLinkTypeService creates a new instance of LinkTypeService.
 func NewLinkTypeService(client service.Connector, version string) (*LinkTypeService, error) {
 
 	if version == "" {
@@ -21,7 +22,9 @@ func NewLinkTypeService(client service.Connector, version string) (*LinkTypeServ
 	}, nil
 }
 
+// LinkTypeService provides methods to manage issue link types in Jira Service Management.
 type LinkTypeService struct {
+	// internalClient is the connector interface for issue link type operations.
 	internalClient jira.LinkTypeConnector
 }
 

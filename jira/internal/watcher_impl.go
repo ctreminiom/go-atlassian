@@ -11,6 +11,7 @@ import (
 	"github.com/ctreminiom/go-atlassian/service/jira"
 )
 
+// NewWatcherService creates a new instance of WatcherService.
 func NewWatcherService(client service.Connector, version string) (*WatcherService, error) {
 
 	if version == "" {
@@ -22,7 +23,9 @@ func NewWatcherService(client service.Connector, version string) (*WatcherServic
 	}, nil
 }
 
+// WatcherService provides methods to manage watchers in Jira Service Management.
 type WatcherService struct {
+	// internalClient is the connector interface for watcher operations.
 	internalClient jira.WatcherConnector
 }
 

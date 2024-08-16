@@ -12,6 +12,9 @@ import (
 	"strings"
 )
 
+// NewIssueFieldTrashService creates a new instance of IssueFieldTrashService.
+// It takes a service.Connector and a version string as input.
+// Returns a pointer to IssueFieldTrashService and an error if the version is not provided.
 func NewIssueFieldTrashService(client service.Connector, version string) (*IssueFieldTrashService, error) {
 
 	if version == "" {
@@ -23,7 +26,9 @@ func NewIssueFieldTrashService(client service.Connector, version string) (*Issue
 	}, nil
 }
 
+// IssueFieldTrashService provides methods to manage trashed fields in Jira Service Management.
 type IssueFieldTrashService struct {
+	// internalClient is the connector interface for field trash operations.
 	internalClient jira.FieldTrashConnector
 }
 

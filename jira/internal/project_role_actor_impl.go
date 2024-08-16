@@ -11,6 +11,7 @@ import (
 	"strings"
 )
 
+// NewProjectRoleActorService creates a new instance of ProjectRoleActorService.
 func NewProjectRoleActorService(client service.Connector, version string) (*ProjectRoleActorService, error) {
 
 	if version == "" {
@@ -22,7 +23,9 @@ func NewProjectRoleActorService(client service.Connector, version string) (*Proj
 	}, nil
 }
 
+// ProjectRoleActorService provides methods to manage project role actors in Jira Service Management.
 type ProjectRoleActorService struct {
+	// internalClient is the connector interface for project role actor operations.
 	internalClient jira.ProjectRoleActorConnector
 }
 

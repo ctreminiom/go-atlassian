@@ -13,6 +13,9 @@ import (
 	"github.com/ctreminiom/go-atlassian/service/jira"
 )
 
+// NewFilterService creates a new instance of FilterService.
+// It takes a service.Connector, a version string, and a jira.FilterSharingConnector as input.
+// Returns a pointer to FilterService and an error if the version is not provided.
 func NewFilterService(client service.Connector, version string, share jira.FilterSharingConnector) (*FilterService, error) {
 
 	if version == "" {
@@ -25,9 +28,12 @@ func NewFilterService(client service.Connector, version string, share jira.Filte
 	}, nil
 }
 
+// FilterService provides methods to manage filters in Jira Service Management.
 type FilterService struct {
+	// internalClient is the connector interface for filter operations.
 	internalClient jira.FilterConnector
-	Share          jira.FilterSharingConnector
+	// Share is the service for managing filter sharing.
+	Share jira.FilterSharingConnector
 }
 
 // Create creates a filter. The filter is shared according to the default share scope.

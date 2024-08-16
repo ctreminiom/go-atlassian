@@ -11,6 +11,9 @@ import (
 	"strconv"
 )
 
+// NewIssueFieldContextOptionService creates a new instance of IssueFieldContextOptionService.
+// It takes a service.Connector and a version string as input.
+// Returns a pointer to IssueFieldContextOptionService and an error if the version is not provided.
 func NewIssueFieldContextOptionService(client service.Connector, version string) (*IssueFieldContextOptionService, error) {
 
 	if version == "" {
@@ -22,7 +25,9 @@ func NewIssueFieldContextOptionService(client service.Connector, version string)
 	}, nil
 }
 
+// IssueFieldContextOptionService provides methods to manage field context options in Jira Service Management.
 type IssueFieldContextOptionService struct {
+	// internalClient is the connector interface for field context option operations.
 	internalClient jira.FieldContextOptionConnector
 }
 

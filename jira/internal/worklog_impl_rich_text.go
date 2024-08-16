@@ -12,6 +12,7 @@ import (
 	"strings"
 )
 
+// NewWorklogRichTextService creates a new instance of WorklogRichTextService.
 func NewWorklogRichTextService(client service.Connector, version string) (*WorklogRichTextService, error) {
 
 	if version == "" {
@@ -23,7 +24,9 @@ func NewWorklogRichTextService(client service.Connector, version string) (*Workl
 	}, nil
 }
 
+// WorklogRichTextService provides methods to manage worklogs in Jira Service Management.
 type WorklogRichTextService struct {
+	// internalClient is the connector interface for worklog operations.
 	internalClient jira.WorklogRichTextConnector
 }
 

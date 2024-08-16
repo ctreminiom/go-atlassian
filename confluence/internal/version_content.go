@@ -12,14 +12,17 @@ import (
 	"strings"
 )
 
+// NewVersionService creates a new instance of VersionService.
+// It takes a service.Connector as input and returns a pointer to VersionService.
 func NewVersionService(client service.Connector) *VersionService {
-
 	return &VersionService{
 		internalClient: &internalVersionImpl{c: client},
 	}
 }
 
+// VersionService provides methods to interact with version operations in Confluence.
 type VersionService struct {
+	// internalClient is the connector interface for version operations.
 	internalClient confluence.VersionConnector
 }
 

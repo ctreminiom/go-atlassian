@@ -14,6 +14,7 @@ import (
 	"github.com/ctreminiom/go-atlassian/service/jira"
 )
 
+// NewProjectRoleService creates a new instance of ProjectRoleService.
 func NewProjectRoleService(client service.Connector, version string, actor *ProjectRoleActorService) (*ProjectRoleService, error) {
 
 	if version == "" {
@@ -26,9 +27,12 @@ func NewProjectRoleService(client service.Connector, version string, actor *Proj
 	}, nil
 }
 
+// ProjectRoleService provides methods to manage project roles in Jira Service Management.
 type ProjectRoleService struct {
+	// internalClient is the connector interface for project role operations.
 	internalClient jira.ProjectRoleConnector
-	Actor          *ProjectRoleActorService
+	// Actor is the service for managing project role actors.
+	Actor *ProjectRoleActorService
 }
 
 // Gets returns a list of project roles for the project returning the name and self URL for each role.

@@ -11,6 +11,7 @@ import (
 	"strings"
 )
 
+// NewProjectPermissionSchemeService creates a new instance of ProjectPermissionSchemeService.
 func NewProjectPermissionSchemeService(client service.Connector, version string) (*ProjectPermissionSchemeService, error) {
 
 	if version == "" {
@@ -22,7 +23,9 @@ func NewProjectPermissionSchemeService(client service.Connector, version string)
 	}, nil
 }
 
+// ProjectPermissionSchemeService provides methods to manage project permission schemes in Jira Service Management.
 type ProjectPermissionSchemeService struct {
+	// internalClient is the connector interface for project permission scheme operations.
 	internalClient jira.ProjectPermissionSchemeConnector
 }
 

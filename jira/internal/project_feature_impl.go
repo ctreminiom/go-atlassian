@@ -10,6 +10,7 @@ import (
 	"github.com/ctreminiom/go-atlassian/service/jira"
 )
 
+// NewProjectFeatureService creates a new instance of ProjectFeatureService.
 func NewProjectFeatureService(client service.Connector, version string) (*ProjectFeatureService, error) {
 
 	if version == "" {
@@ -21,7 +22,9 @@ func NewProjectFeatureService(client service.Connector, version string) (*Projec
 	}, nil
 }
 
+// ProjectFeatureService provides methods to manage project features in Jira Service Management.
 type ProjectFeatureService struct {
+	// internalClient is the connector interface for project feature operations.
 	internalClient jira.ProjectFeatureConnector
 }
 

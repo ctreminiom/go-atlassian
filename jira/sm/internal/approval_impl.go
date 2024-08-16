@@ -11,14 +11,17 @@ import (
 	"strconv"
 )
 
+// NewApprovalService creates a new instance of ApprovalService.
+// It takes a service.Connector and a version string as input and returns a pointer to ApprovalService.
 func NewApprovalService(client service.Connector, version string) *ApprovalService {
-
 	return &ApprovalService{
 		internalClient: &internalServiceRequestApprovalImpl{c: client, version: version},
 	}
 }
 
+// ApprovalService provides methods to interact with approval operations in Jira Service Management.
 type ApprovalService struct {
+	// internalClient is the connector interface for approval operations.
 	internalClient sm.ApprovalConnector
 }
 

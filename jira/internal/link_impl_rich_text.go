@@ -10,10 +10,14 @@ import (
 	"github.com/ctreminiom/go-atlassian/service/jira"
 )
 
+// LinkRichTextService provides methods to manage issue links in Jira Service Management using the rich text format.
 type LinkRichTextService struct {
+	// internalClient is the connector interface for rich text issue link operations.
 	internalClient jira.LinkRichTextConnector
-	Type           *LinkTypeService
-	Remote         *RemoteLinkService
+	// Type is the service for managing link types.
+	Type *LinkTypeService
+	// Remote is the service for managing remote links.
+	Remote *RemoteLinkService
 }
 
 type internalLinkRichTextServiceImpl struct {

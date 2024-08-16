@@ -11,14 +11,17 @@ import (
 	"strconv"
 )
 
+// NewParticipantService creates a new instance of ParticipantService.
+// It takes a service.Connector and a version string as input and returns a pointer to ParticipantService.
 func NewParticipantService(client service.Connector, version string) *ParticipantService {
-
 	return &ParticipantService{
 		internalClient: &internalServiceRequestParticipantImpl{c: client, version: version},
 	}
 }
 
+// ParticipantService provides methods to interact with participant operations in Jira Service Management.
 type ParticipantService struct {
+	// internalClient is the connector interface for participant operations.
 	internalClient sm.ParticipantConnector
 }
 

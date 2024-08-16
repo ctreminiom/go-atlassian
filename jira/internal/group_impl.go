@@ -12,6 +12,9 @@ import (
 	"github.com/ctreminiom/go-atlassian/service/jira"
 )
 
+// NewGroupService creates a new instance of GroupService.
+// It takes a service.Connector and a version string as input.
+// Returns a pointer to GroupService and an error if the version is not provided.
 func NewGroupService(client service.Connector, version string) (*GroupService, error) {
 
 	if version == "" {
@@ -23,7 +26,9 @@ func NewGroupService(client service.Connector, version string) (*GroupService, e
 	}, nil
 }
 
+// GroupService provides methods to manage groups in Jira Service Management.
 type GroupService struct {
+	// internalClient is the connector interface for group operations.
 	internalClient jira.GroupConnector
 }
 

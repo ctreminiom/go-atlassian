@@ -3,13 +3,15 @@ package internal
 import (
 	"context"
 	"errors"
+	"net/http"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
-	"net/http"
-	"testing"
 )
 
 func Test_internalProjectComponentImpl_Create(t *testing.T) {
@@ -321,7 +323,7 @@ func Test_internalProjectComponentImpl_Gets(t *testing.T) {
 
 	type args struct {
 		ctx            context.Context
-		projectIdOrKey string
+		projectKeyOrID string
 	}
 
 	testCases := []struct {
@@ -337,7 +339,7 @@ func Test_internalProjectComponentImpl_Gets(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:            context.Background(),
-				projectIdOrKey: "DUMMY",
+				projectKeyOrID: "DUMMY",
 			},
 			on: func(fields *fields) {
 
@@ -366,7 +368,7 @@ func Test_internalProjectComponentImpl_Gets(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:            context.Background(),
-				projectIdOrKey: "DUMMY",
+				projectKeyOrID: "DUMMY",
 			},
 			on: func(fields *fields) {
 
@@ -405,7 +407,7 @@ func Test_internalProjectComponentImpl_Gets(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:            context.Background(),
-				projectIdOrKey: "DUMMY",
+				projectKeyOrID: "DUMMY",
 			},
 			on: func(fields *fields) {
 
@@ -435,7 +437,7 @@ func Test_internalProjectComponentImpl_Gets(t *testing.T) {
 			newService, err := NewProjectComponentService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := newService.Gets(testCase.args.ctx, testCase.args.projectIdOrKey)
+			gotResult, gotResponse, err := newService.Gets(testCase.args.ctx, testCase.args.projectKeyOrID)
 
 			if testCase.wantErr {
 

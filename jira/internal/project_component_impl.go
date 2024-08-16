@@ -3,10 +3,11 @@ package internal
 import (
 	"context"
 	"fmt"
+	"net/http"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/jira"
-	"net/http"
 )
 
 // NewProjectComponentService creates a new instance of ProjectComponentService.
@@ -38,11 +39,11 @@ func (p *ProjectComponentService) Create(ctx context.Context, payload *model.Com
 
 // Gets returns all components in a project.
 //
-// GET /rest/api/{2-3}/project/{projectIdOrKey}/components
+// GET /rest/api/{2-3}/project/{projectKeyOrID}/components
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/components#get-project-components
-func (p *ProjectComponentService) Gets(ctx context.Context, projectIdOrKey string) ([]*model.ComponentScheme, *model.ResponseScheme, error) {
-	return p.internalClient.Gets(ctx, projectIdOrKey)
+func (p *ProjectComponentService) Gets(ctx context.Context, projectKeyOrID string) ([]*model.ComponentScheme, *model.ResponseScheme, error) {
+	return p.internalClient.Gets(ctx, projectKeyOrID)
 }
 
 // Count returns the counts of issues assigned to the component.
@@ -106,13 +107,13 @@ func (i *internalProjectComponentImpl) Create(ctx context.Context, payload *mode
 	return component, response, nil
 }
 
-func (i *internalProjectComponentImpl) Gets(ctx context.Context, projectIdOrKey string) ([]*model.ComponentScheme, *model.ResponseScheme, error) {
+func (i *internalProjectComponentImpl) Gets(ctx context.Context, projectKeyOrID string) ([]*model.ComponentScheme, *model.ResponseScheme, error) {
 
-	if projectIdOrKey == "" {
+	if projectKeyOrID == "" {
 		return nil, nil, model.ErrNoProjectIDOrKeyError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/project/%v/components", i.version, projectIdOrKey)
+	endpoint := fmt.Sprintf("rest/api/%v/project/%v/components", i.version, projectKeyOrID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {

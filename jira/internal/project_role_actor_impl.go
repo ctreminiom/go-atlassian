@@ -3,12 +3,13 @@ package internal
 import (
 	"context"
 	"fmt"
-	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/service"
-	"github.com/ctreminiom/go-atlassian/service/jira"
 	"net/http"
 	"net/url"
 	"strings"
+
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/service"
+	"github.com/ctreminiom/go-atlassian/service/jira"
 )
 
 // NewProjectRoleActorService creates a new instance of ProjectRoleActorService.
@@ -31,20 +32,20 @@ type ProjectRoleActorService struct {
 
 // Add adds actors to a project role for the project.
 //
-// POST /rest/api/{2-3}/project/{projectIdOrKey}/role/{id}
+// POST /rest/api/{2-3}/project/{projectKeyOrID}/role/{id}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/roles/actors#add-actors-to-project-role
-func (p *ProjectRoleActorService) Add(ctx context.Context, projectKeyOrId string, roleId int, accountIds, groups []string) (*model.ProjectRoleScheme, *model.ResponseScheme, error) {
-	return p.internalClient.Add(ctx, projectKeyOrId, roleId, accountIds, groups)
+func (p *ProjectRoleActorService) Add(ctx context.Context, projectKeyOrID string, roleId int, accountIds, groups []string) (*model.ProjectRoleScheme, *model.ResponseScheme, error) {
+	return p.internalClient.Add(ctx, projectKeyOrID, roleId, accountIds, groups)
 }
 
 // Delete deletes actors from a project role for the project.
 //
-// DELETE /rest/api/{2-3}/project/{projectIdOrKey}/role/{id}
+// DELETE /rest/api/{2-3}/project/{projectKeyOrID}/role/{id}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/roles/actors#delete-actors-from-project-role
-func (p *ProjectRoleActorService) Delete(ctx context.Context, projectKeyOrId string, roleId int, accountId, group string) (*model.ResponseScheme, error) {
-	return p.internalClient.Delete(ctx, projectKeyOrId, roleId, accountId, group)
+func (p *ProjectRoleActorService) Delete(ctx context.Context, projectKeyOrID string, roleId int, accountId, group string) (*model.ResponseScheme, error) {
+	return p.internalClient.Delete(ctx, projectKeyOrID, roleId, accountId, group)
 }
 
 type internalProjectRoleActorImpl struct {
@@ -52,9 +53,9 @@ type internalProjectRoleActorImpl struct {
 	version string
 }
 
-func (i *internalProjectRoleActorImpl) Add(ctx context.Context, projectKeyOrId string, roleId int, accountIds, groups []string) (*model.ProjectRoleScheme, *model.ResponseScheme, error) {
+func (i *internalProjectRoleActorImpl) Add(ctx context.Context, projectKeyOrID string, roleId int, accountIds, groups []string) (*model.ProjectRoleScheme, *model.ResponseScheme, error) {
 
-	if projectKeyOrId == "" {
+	if projectKeyOrID == "" {
 		return nil, nil, model.ErrNoProjectIDOrKeyError
 	}
 
@@ -62,7 +63,7 @@ func (i *internalProjectRoleActorImpl) Add(ctx context.Context, projectKeyOrId s
 		return nil, nil, model.ErrNoProjectRoleIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/project/%v/role/%v", i.version, projectKeyOrId, roleId)
+	endpoint := fmt.Sprintf("rest/api/%v/project/%v/role/%v", i.version, projectKeyOrID, roleId)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", map[string]interface{}{"group": groups, "user": accountIds})
 	if err != nil {
@@ -78,9 +79,9 @@ func (i *internalProjectRoleActorImpl) Add(ctx context.Context, projectKeyOrId s
 	return role, response, nil
 }
 
-func (i *internalProjectRoleActorImpl) Delete(ctx context.Context, projectKeyOrId string, roleId int, accountId, group string) (*model.ResponseScheme, error) {
+func (i *internalProjectRoleActorImpl) Delete(ctx context.Context, projectKeyOrID string, roleId int, accountId, group string) (*model.ResponseScheme, error) {
 
-	if projectKeyOrId == "" {
+	if projectKeyOrID == "" {
 		return nil, model.ErrNoProjectIDOrKeyError
 	}
 
@@ -89,7 +90,7 @@ func (i *internalProjectRoleActorImpl) Delete(ctx context.Context, projectKeyOrI
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("rest/api/%v/project/%v/role/%v", i.version, projectKeyOrId, roleId))
+	endpoint.WriteString(fmt.Sprintf("rest/api/%v/project/%v/role/%v", i.version, projectKeyOrID, roleId))
 
 	params := url.Values{}
 

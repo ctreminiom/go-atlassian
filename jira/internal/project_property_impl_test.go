@@ -3,12 +3,14 @@ package internal
 import (
 	"context"
 	"errors"
+	"net/http"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
-	"github.com/stretchr/testify/assert"
-	"net/http"
-	"testing"
 )
 
 func Test_internalProjectPropertyImpl_Gets(t *testing.T) {
@@ -20,7 +22,7 @@ func Test_internalProjectPropertyImpl_Gets(t *testing.T) {
 
 	type args struct {
 		ctx            context.Context
-		projectKeyOrId string
+		projectKeyOrID string
 	}
 
 	testCases := []struct {
@@ -36,7 +38,7 @@ func Test_internalProjectPropertyImpl_Gets(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:            context.Background(),
-				projectKeyOrId: "DUMMY",
+				projectKeyOrID: "DUMMY",
 			},
 			on: func(fields *fields) {
 
@@ -65,7 +67,7 @@ func Test_internalProjectPropertyImpl_Gets(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:            context.Background(),
-				projectKeyOrId: "DUMMY",
+				projectKeyOrID: "DUMMY",
 			},
 			on: func(fields *fields) {
 
@@ -104,7 +106,7 @@ func Test_internalProjectPropertyImpl_Gets(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:            context.Background(),
-				projectKeyOrId: "DUMMY",
+				projectKeyOrID: "DUMMY",
 			},
 			on: func(fields *fields) {
 
@@ -134,7 +136,7 @@ func Test_internalProjectPropertyImpl_Gets(t *testing.T) {
 			newService, err := NewProjectPropertyService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := newService.Gets(testCase.args.ctx, testCase.args.projectKeyOrId)
+			gotResult, gotResponse, err := newService.Gets(testCase.args.ctx, testCase.args.projectKeyOrID)
 
 			if testCase.wantErr {
 
@@ -164,7 +166,7 @@ func Test_internalProjectPropertyImpl_Get(t *testing.T) {
 
 	type args struct {
 		ctx            context.Context
-		projectKeyOrId string
+		projectKeyOrID string
 		propertyKey    string
 	}
 
@@ -181,7 +183,7 @@ func Test_internalProjectPropertyImpl_Get(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:            context.Background(),
-				projectKeyOrId: "DUMMY",
+				projectKeyOrID: "DUMMY",
 				propertyKey:    "alliance",
 			},
 			on: func(fields *fields) {
@@ -211,7 +213,7 @@ func Test_internalProjectPropertyImpl_Get(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:            context.Background(),
-				projectKeyOrId: "DUMMY",
+				projectKeyOrID: "DUMMY",
 				propertyKey:    "alliance",
 			},
 			on: func(fields *fields) {
@@ -251,7 +253,7 @@ func Test_internalProjectPropertyImpl_Get(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:            context.Background(),
-				projectKeyOrId: "DUMMY",
+				projectKeyOrID: "DUMMY",
 			},
 			wantErr: true,
 			Err:     model.ErrNoPropertyKeyError,
@@ -262,7 +264,7 @@ func Test_internalProjectPropertyImpl_Get(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:            context.Background(),
-				projectKeyOrId: "DUMMY",
+				projectKeyOrID: "DUMMY",
 				propertyKey:    "alliance",
 			},
 			on: func(fields *fields) {
@@ -293,7 +295,7 @@ func Test_internalProjectPropertyImpl_Get(t *testing.T) {
 			newService, err := NewProjectPropertyService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := newService.Get(testCase.args.ctx, testCase.args.projectKeyOrId, testCase.args.propertyKey)
+			gotResult, gotResponse, err := newService.Get(testCase.args.ctx, testCase.args.projectKeyOrID, testCase.args.propertyKey)
 
 			if testCase.wantErr {
 
@@ -323,7 +325,7 @@ func Test_internalProjectPropertyImpl_Delete(t *testing.T) {
 
 	type args struct {
 		ctx            context.Context
-		projectKeyOrId string
+		projectKeyOrID string
 		propertyKey    string
 	}
 
@@ -340,7 +342,7 @@ func Test_internalProjectPropertyImpl_Delete(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:            context.Background(),
-				projectKeyOrId: "DUMMY",
+				projectKeyOrID: "DUMMY",
 				propertyKey:    "alliance",
 			},
 			on: func(fields *fields) {
@@ -370,7 +372,7 @@ func Test_internalProjectPropertyImpl_Delete(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:            context.Background(),
-				projectKeyOrId: "DUMMY",
+				projectKeyOrID: "DUMMY",
 				propertyKey:    "alliance",
 			},
 			on: func(fields *fields) {

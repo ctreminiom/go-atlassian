@@ -3,12 +3,14 @@ package internal
 import (
 	"context"
 	"errors"
+	"net/http"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
-	"github.com/stretchr/testify/assert"
-	"net/http"
-	"testing"
 )
 
 func Test_internalProjectPermissionSchemeImpl_Get(t *testing.T) {
@@ -20,7 +22,7 @@ func Test_internalProjectPermissionSchemeImpl_Get(t *testing.T) {
 
 	type args struct {
 		ctx            context.Context
-		projectKeyOrId string
+		projectKeyOrID string
 		expand         []string
 	}
 
@@ -37,7 +39,7 @@ func Test_internalProjectPermissionSchemeImpl_Get(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:            context.Background(),
-				projectKeyOrId: "DUMMY",
+				projectKeyOrID: "DUMMY",
 				expand:         []string{"field", "group"},
 			},
 			on: func(fields *fields) {
@@ -67,7 +69,7 @@ func Test_internalProjectPermissionSchemeImpl_Get(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:            context.Background(),
-				projectKeyOrId: "DUMMY",
+				projectKeyOrID: "DUMMY",
 				expand:         []string{"field", "group"},
 			},
 			on: func(fields *fields) {
@@ -107,7 +109,7 @@ func Test_internalProjectPermissionSchemeImpl_Get(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:            context.Background(),
-				projectKeyOrId: "DUMMY",
+				projectKeyOrID: "DUMMY",
 				expand:         []string{"field", "group"},
 			},
 			on: func(fields *fields) {
@@ -138,7 +140,7 @@ func Test_internalProjectPermissionSchemeImpl_Get(t *testing.T) {
 			newService, err := NewProjectPermissionSchemeService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := newService.Get(testCase.args.ctx, testCase.args.projectKeyOrId, testCase.args.expand)
+			gotResult, gotResponse, err := newService.Get(testCase.args.ctx, testCase.args.projectKeyOrID, testCase.args.expand)
 
 			if testCase.wantErr {
 
@@ -168,7 +170,7 @@ func Test_internalProjectPermissionSchemeImpl_SecurityLevels(t *testing.T) {
 
 	type args struct {
 		ctx            context.Context
-		projectKeyOrId string
+		projectKeyOrID string
 	}
 
 	testCases := []struct {
@@ -184,7 +186,7 @@ func Test_internalProjectPermissionSchemeImpl_SecurityLevels(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:            context.Background(),
-				projectKeyOrId: "DUMMY",
+				projectKeyOrID: "DUMMY",
 			},
 			on: func(fields *fields) {
 
@@ -213,7 +215,7 @@ func Test_internalProjectPermissionSchemeImpl_SecurityLevels(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:            context.Background(),
-				projectKeyOrId: "DUMMY",
+				projectKeyOrID: "DUMMY",
 			},
 			on: func(fields *fields) {
 
@@ -252,7 +254,7 @@ func Test_internalProjectPermissionSchemeImpl_SecurityLevels(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:            context.Background(),
-				projectKeyOrId: "DUMMY",
+				projectKeyOrID: "DUMMY",
 			},
 			on: func(fields *fields) {
 
@@ -282,7 +284,7 @@ func Test_internalProjectPermissionSchemeImpl_SecurityLevels(t *testing.T) {
 			newService, err := NewProjectPermissionSchemeService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := newService.SecurityLevels(testCase.args.ctx, testCase.args.projectKeyOrId)
+			gotResult, gotResponse, err := newService.SecurityLevels(testCase.args.ctx, testCase.args.projectKeyOrID)
 
 			if testCase.wantErr {
 

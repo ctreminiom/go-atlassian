@@ -3,13 +3,14 @@ package internal
 import (
 	"context"
 	"fmt"
-	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/service"
-	"github.com/ctreminiom/go-atlassian/service/agile"
 	"net/http"
 	"net/url"
 	"strconv"
 	"strings"
+
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/service"
+	"github.com/ctreminiom/go-atlassian/service/agile"
 )
 
 // NewBoardService creates a new instance of BoardService.
@@ -720,7 +721,7 @@ func (i *internalBoardImpl) Gets(ctx context.Context, opts *model.GetBoardsOptio
 		}
 
 		if opts.ProjectKeyOrID != "" {
-			params.Add("projectKeyOrId", opts.ProjectKeyOrID)
+			params.Add("projectKeyOrID", opts.ProjectKeyOrID)
 		}
 
 		if opts.AccountIDLocation != "" {

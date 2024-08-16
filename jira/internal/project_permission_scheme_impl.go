@@ -3,12 +3,13 @@ package internal
 import (
 	"context"
 	"fmt"
-	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/service"
-	"github.com/ctreminiom/go-atlassian/service/jira"
 	"net/http"
 	"net/url"
 	"strings"
+
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/service"
+	"github.com/ctreminiom/go-atlassian/service/jira"
 )
 
 // NewProjectPermissionSchemeService creates a new instance of ProjectPermissionSchemeService.
@@ -31,29 +32,29 @@ type ProjectPermissionSchemeService struct {
 
 // Get search the permission scheme associated with the project.
 //
-// GET /rest/api/{2-3}/project/{projectKeyOrId}/permissionscheme
+// GET /rest/api/{2-3}/project/{projectKeyOrID}/permissionscheme
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/permission-schemes#get-assigned-permission-scheme
-func (p *ProjectPermissionSchemeService) Get(ctx context.Context, projectKeyOrId string, expand []string) (*model.PermissionSchemeScheme, *model.ResponseScheme, error) {
-	return p.internalClient.Get(ctx, projectKeyOrId, expand)
+func (p *ProjectPermissionSchemeService) Get(ctx context.Context, projectKeyOrID string, expand []string) (*model.PermissionSchemeScheme, *model.ResponseScheme, error) {
+	return p.internalClient.Get(ctx, projectKeyOrID, expand)
 }
 
 // Assign assigns a permission scheme with a project.
 //
 // See Managing project permissions for more information about permission schemes.
 //
-// PUT /rest/api/{2-3}/project/{projectKeyOrId}/permissionscheme
-func (p *ProjectPermissionSchemeService) Assign(ctx context.Context, projectKeyOrId string, permissionSchemeId int) (*model.PermissionSchemeScheme, *model.ResponseScheme, error) {
-	return p.internalClient.Assign(ctx, projectKeyOrId, permissionSchemeId)
+// PUT /rest/api/{2-3}/project/{projectKeyOrID}/permissionscheme
+func (p *ProjectPermissionSchemeService) Assign(ctx context.Context, projectKeyOrID string, permissionSchemeId int) (*model.PermissionSchemeScheme, *model.ResponseScheme, error) {
+	return p.internalClient.Assign(ctx, projectKeyOrID, permissionSchemeId)
 }
 
 // SecurityLevels returns all issue security levels for the project that the user has access to.
 //
-// GET /rest/api/{2-3}/project/{projectKeyOrId}/securitylevel
+// GET /rest/api/{2-3}/project/{projectKeyOrID}/securitylevel
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/permission-schemes#get-project-issue-security-levels
-func (p *ProjectPermissionSchemeService) SecurityLevels(ctx context.Context, projectKeyOrId string) (*model.IssueSecurityLevelsScheme, *model.ResponseScheme, error) {
-	return p.internalClient.SecurityLevels(ctx, projectKeyOrId)
+func (p *ProjectPermissionSchemeService) SecurityLevels(ctx context.Context, projectKeyOrID string) (*model.IssueSecurityLevelsScheme, *model.ResponseScheme, error) {
+	return p.internalClient.SecurityLevels(ctx, projectKeyOrID)
 }
 
 type internalProjectPermissionSchemeImpl struct {
@@ -61,14 +62,14 @@ type internalProjectPermissionSchemeImpl struct {
 	version string
 }
 
-func (i *internalProjectPermissionSchemeImpl) Get(ctx context.Context, projectKeyOrId string, expand []string) (*model.PermissionSchemeScheme, *model.ResponseScheme, error) {
+func (i *internalProjectPermissionSchemeImpl) Get(ctx context.Context, projectKeyOrID string, expand []string) (*model.PermissionSchemeScheme, *model.ResponseScheme, error) {
 
-	if projectKeyOrId == "" {
+	if projectKeyOrID == "" {
 		return nil, nil, model.ErrNoProjectIDOrKeyError
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("rest/api/%v/project/%v/permissionscheme", i.version, projectKeyOrId))
+	endpoint.WriteString(fmt.Sprintf("rest/api/%v/project/%v/permissionscheme", i.version, projectKeyOrID))
 
 	if expand != nil {
 		params := url.Values{}
@@ -91,13 +92,13 @@ func (i *internalProjectPermissionSchemeImpl) Get(ctx context.Context, projectKe
 	return permissionScheme, response, nil
 }
 
-func (i *internalProjectPermissionSchemeImpl) Assign(ctx context.Context, projectKeyOrId string, permissionSchemeId int) (*model.PermissionSchemeScheme, *model.ResponseScheme, error) {
+func (i *internalProjectPermissionSchemeImpl) Assign(ctx context.Context, projectKeyOrID string, permissionSchemeId int) (*model.PermissionSchemeScheme, *model.ResponseScheme, error) {
 
-	if projectKeyOrId == "" {
+	if projectKeyOrID == "" {
 		return nil, nil, model.ErrNoProjectIDOrKeyError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/project/%v/permissionscheme", i.version, projectKeyOrId)
+	endpoint := fmt.Sprintf("rest/api/%v/project/%v/permissionscheme", i.version, projectKeyOrID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", map[string]interface{}{"id": permissionSchemeId})
 	if err != nil {
@@ -113,13 +114,13 @@ func (i *internalProjectPermissionSchemeImpl) Assign(ctx context.Context, projec
 	return permissionScheme, response, nil
 }
 
-func (i *internalProjectPermissionSchemeImpl) SecurityLevels(ctx context.Context, projectKeyOrId string) (*model.IssueSecurityLevelsScheme, *model.ResponseScheme, error) {
+func (i *internalProjectPermissionSchemeImpl) SecurityLevels(ctx context.Context, projectKeyOrID string) (*model.IssueSecurityLevelsScheme, *model.ResponseScheme, error) {
 
-	if projectKeyOrId == "" {
+	if projectKeyOrID == "" {
 		return nil, nil, model.ErrNoProjectIDOrKeyError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/project/%v/securitylevel", i.version, projectKeyOrId)
+	endpoint := fmt.Sprintf("rest/api/%v/project/%v/securitylevel", i.version, projectKeyOrID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {

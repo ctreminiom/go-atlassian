@@ -3,12 +3,13 @@ package internal
 import (
 	"context"
 	"fmt"
-	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/service"
-	"github.com/ctreminiom/go-atlassian/service/confluence"
 	"net/http"
 	"net/url"
 	"strings"
+
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/service"
+	"github.com/ctreminiom/go-atlassian/service/confluence"
 )
 
 // NewAnalyticsService creates a new instance of AnalyticsService.
@@ -27,7 +28,7 @@ type AnalyticsService struct {
 
 // Get gets the total number of views a piece of content has.
 //
-// GET /wiki/rest/api/analytics/content/{contentId}/views
+// GET /wiki/rest/api/analytics/content/{contentID}/views
 //
 // https://docs.go-atlassian.io/confluence-cloud/analytics#get-views
 func (a *AnalyticsService) Get(ctx context.Context, contentID, fromDate string) (*model.ContentViewScheme, *model.ResponseScheme, error) {
@@ -36,7 +37,7 @@ func (a *AnalyticsService) Get(ctx context.Context, contentID, fromDate string) 
 
 // Distinct get the total number of distinct viewers a piece of content has.
 //
-// GET /wiki/rest/api/analytics/content/{contentId}/viewers
+// GET /wiki/rest/api/analytics/content/{contentID}/viewers
 //
 // https://docs.go-atlassian.io/confluence-cloud/analytics#get-viewers
 func (a *AnalyticsService) Distinct(ctx context.Context, contentID, fromDate string) (*model.ContentViewScheme, *model.ResponseScheme, error) {

@@ -3,13 +3,14 @@ package internal
 import (
 	"context"
 	"fmt"
-	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/service"
-	"github.com/ctreminiom/go-atlassian/service/agile"
 	"net/http"
 	"net/url"
 	"strconv"
 	"strings"
+
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/service"
+	"github.com/ctreminiom/go-atlassian/service/agile"
 )
 
 // NewEpicService creates a new instance of EpicService.
@@ -32,11 +33,11 @@ type EpicService struct {
 //
 // Note: This operation does not work for epics in next-gen projects.
 //
-// GET /rest/agile/1.0/epic/{epicIdOrKey}
+// GET /rest/agile/1.0/epic/{epicIDOrKey}
 //
 // https://docs.go-atlassian.io/jira-agile/epics#get-epic
-func (e *EpicService) Get(ctx context.Context, epicIdOrKey string) (*model.EpicScheme, *model.ResponseScheme, error) {
-	return e.internalClient.Get(ctx, epicIdOrKey)
+func (e *EpicService) Get(ctx context.Context, epicIDOrKey string) (*model.EpicScheme, *model.ResponseScheme, error) {
+	return e.internalClient.Get(ctx, epicIDOrKey)
 }
 
 // Issues returns all issues that belong to the epic, for the given epic ID.
@@ -47,11 +48,11 @@ func (e *EpicService) Get(ctx context.Context, epicIdOrKey string) (*model.EpicS
 //
 // By default, the returned issues are ordered by rank.
 //
-// GET /rest/agile/1.0/epic/{epicIdOrKey}/issue
+// GET /rest/agile/1.0/epic/{epicIDOrKey}/issue
 //
 // https://docs.go-atlassian.io/jira-agile/epics#get-issues-for-epic
-func (e *EpicService) Issues(ctx context.Context, epicIdOrKey string, opts *model.IssueOptionScheme, startAt, maxResults int) (*model.BoardIssuePageScheme, *model.ResponseScheme, error) {
-	return e.internalClient.Issues(ctx, epicIdOrKey, opts, startAt, maxResults)
+func (e *EpicService) Issues(ctx context.Context, epicIDOrKey string, opts *model.IssueOptionScheme, startAt, maxResults int) (*model.BoardIssuePageScheme, *model.ResponseScheme, error) {
+	return e.internalClient.Issues(ctx, epicIDOrKey, opts, startAt, maxResults)
 }
 
 // Move moves issues to an epic, for a given epic id.
@@ -63,11 +64,11 @@ func (e *EpicService) Issues(ctx context.Context, epicIdOrKey string, opts *mode
 //
 // The maximum number of issues that can be moved in one operation is 50.
 //
-// POST /rest/agile/1.0/epic/{epicIdOrKey}/issue
+// POST /rest/agile/1.0/epic/{epicIDOrKey}/issue
 //
 // https://docs.go-atlassian.io/jira-agile/epics#move-issues-to-epic
-func (e *EpicService) Move(ctx context.Context, epicIdOrKey string, issues []string) (*model.ResponseScheme, error) {
-	return e.internalClient.Move(ctx, epicIdOrKey, issues)
+func (e *EpicService) Move(ctx context.Context, epicIDOrKey string, issues []string) (*model.ResponseScheme, error) {
+	return e.internalClient.Move(ctx, epicIDOrKey, issues)
 }
 
 type internalEpicImpl struct {
@@ -75,13 +76,13 @@ type internalEpicImpl struct {
 	version string
 }
 
-func (i *internalEpicImpl) Get(ctx context.Context, epicIdOrKey string) (*model.EpicScheme, *model.ResponseScheme, error) {
+func (i *internalEpicImpl) Get(ctx context.Context, epicIDOrKey string) (*model.EpicScheme, *model.ResponseScheme, error) {
 
-	if epicIdOrKey == "" {
+	if epicIDOrKey == "" {
 		return nil, nil, model.ErrNoEpicIDError
 	}
 
-	url := fmt.Sprintf("rest/agile/%v/epic/%v", i.version, epicIdOrKey)
+	url := fmt.Sprintf("rest/agile/%v/epic/%v", i.version, epicIDOrKey)
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, url, "", nil)
 	if err != nil {
@@ -97,9 +98,9 @@ func (i *internalEpicImpl) Get(ctx context.Context, epicIdOrKey string) (*model.
 	return epic, res, nil
 }
 
-func (i *internalEpicImpl) Issues(ctx context.Context, epicIdOrKey string, opts *model.IssueOptionScheme, startAt, maxResults int) (*model.BoardIssuePageScheme, *model.ResponseScheme, error) {
+func (i *internalEpicImpl) Issues(ctx context.Context, epicIDOrKey string, opts *model.IssueOptionScheme, startAt, maxResults int) (*model.BoardIssuePageScheme, *model.ResponseScheme, error) {
 
-	if epicIdOrKey == "" {
+	if epicIDOrKey == "" {
 		return nil, nil, model.ErrNoEpicIDError
 	}
 
@@ -124,7 +125,7 @@ func (i *internalEpicImpl) Issues(ctx context.Context, epicIdOrKey string, opts 
 		}
 	}
 
-	url := fmt.Sprintf("rest/agile/%v/epic/%v/issue?%v", i.version, epicIdOrKey, params.Encode())
+	url := fmt.Sprintf("rest/agile/%v/epic/%v/issue?%v", i.version, epicIDOrKey, params.Encode())
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, url, "", nil)
 	if err != nil {
@@ -140,14 +141,14 @@ func (i *internalEpicImpl) Issues(ctx context.Context, epicIdOrKey string, opts 
 	return page, res, nil
 }
 
-func (i *internalEpicImpl) Move(ctx context.Context, epicIdOrKey string, issues []string) (*model.ResponseScheme, error) {
+func (i *internalEpicImpl) Move(ctx context.Context, epicIDOrKey string, issues []string) (*model.ResponseScheme, error) {
 
-	if epicIdOrKey == "" {
+	if epicIDOrKey == "" {
 		return nil, model.ErrNoEpicIDError
 	}
 
 	payload := map[string]interface{}{"issues": issues}
-	url := fmt.Sprintf("rest/agile/%v/epic/%v/issue", i.version, epicIdOrKey)
+	url := fmt.Sprintf("rest/agile/%v/epic/%v/issue", i.version, epicIDOrKey)
 
 	req, err := i.c.NewRequest(ctx, http.MethodPost, url, "", payload)
 	if err != nil {

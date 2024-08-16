@@ -3,10 +3,11 @@ package internal
 import (
 	"context"
 	"fmt"
+	"net/http"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/agile"
-	"net/http"
 )
 
 // NewBoardBacklogService creates a new instance of BoardBacklogService.
@@ -44,7 +45,7 @@ func (b *BoardBacklogService) Move(ctx context.Context, issues []string) (*model
 //
 // At most 50 issues may be moved at once.
 //
-// POST /rest/agile/1.0/backlog/{boardId}/issue
+// POST /rest/agile/1.0/backlog/{boardID}/issue
 //
 // https://docs.go-atlassian.io/jira-agile/boards/backlog#move-issues-to-a-board-backlog
 func (b *BoardBacklogService) MoveTo(ctx context.Context, boardID int, payload *model.BoardBacklogPayloadScheme) (*model.ResponseScheme, error) {

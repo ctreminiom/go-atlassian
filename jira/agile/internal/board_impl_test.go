@@ -21,7 +21,7 @@ func Test_BoardService_Get(t *testing.T) {
 
 	type args struct {
 		ctx     context.Context
-		boardId int
+		boardID int
 	}
 
 	testCases := []struct {
@@ -36,7 +36,7 @@ func Test_BoardService_Get(t *testing.T) {
 			name: "when the parameters are correct",
 			args: args{
 				ctx:     context.Background(),
-				boardId: 1,
+				boardID: 1,
 			},
 			on: func(fields *fields) {
 
@@ -63,7 +63,7 @@ func Test_BoardService_Get(t *testing.T) {
 			name: "when the api cannot be executed",
 			args: args{
 				ctx:     context.Background(),
-				boardId: 1,
+				boardID: 1,
 			},
 			on: func(fields *fields) {
 
@@ -92,7 +92,7 @@ func Test_BoardService_Get(t *testing.T) {
 			name: "when the request cannot be created",
 			args: args{
 				ctx:     context.Background(),
-				boardId: 1,
+				boardID: 1,
 			},
 			on: func(fields *fields) {
 
@@ -116,7 +116,7 @@ func Test_BoardService_Get(t *testing.T) {
 			name: "when the board id is not provided",
 			args: args{
 				ctx:     context.Background(),
-				boardId: 0,
+				boardID: 0,
 			},
 			on: func(fields *fields) {
 				fields.c = mocks.NewConnector(t)
@@ -136,7 +136,7 @@ func Test_BoardService_Get(t *testing.T) {
 
 			boardService := NewBoardService(testCase.fields.c, "1.0")
 
-			gotResult, gotResponse, err := boardService.Get(testCase.args.ctx, testCase.args.boardId)
+			gotResult, gotResponse, err := boardService.Get(testCase.args.ctx, testCase.args.boardID)
 
 			if testCase.wantErr {
 
@@ -300,7 +300,7 @@ func Test_BoardService_Backlog(t *testing.T) {
 
 	type args struct {
 		ctx        context.Context
-		boardId    int
+		boardID    int
 		startAt    int
 		maxResults int
 		opts       *model.IssueOptionScheme
@@ -318,7 +318,7 @@ func Test_BoardService_Backlog(t *testing.T) {
 			name: "when the parameters are correct",
 			args: args{
 				ctx:        context.Background(),
-				boardId:    1001,
+				boardID:    1001,
 				startAt:    0,
 				maxResults: 50,
 				opts: &model.IssueOptionScheme{
@@ -353,7 +353,7 @@ func Test_BoardService_Backlog(t *testing.T) {
 			name: "when the http call cannot be executed",
 			args: args{
 				ctx:        context.Background(),
-				boardId:    1001,
+				boardID:    1001,
 				startAt:    0,
 				maxResults: 50,
 				opts: &model.IssueOptionScheme{
@@ -390,7 +390,7 @@ func Test_BoardService_Backlog(t *testing.T) {
 			name: "when the request cannot be created",
 			args: args{
 				ctx:        context.Background(),
-				boardId:    1001,
+				boardID:    1001,
 				startAt:    0,
 				maxResults: 50,
 				opts: &model.IssueOptionScheme{
@@ -448,7 +448,7 @@ func Test_BoardService_Backlog(t *testing.T) {
 
 			boardService := NewBoardService(testCase.fields.c, "1.0")
 
-			gotResult, gotResponse, err := boardService.Backlog(testCase.args.ctx, testCase.args.boardId, testCase.args.opts, testCase.args.startAt,
+			gotResult, gotResponse, err := boardService.Backlog(testCase.args.ctx, testCase.args.boardID, testCase.args.opts, testCase.args.startAt,
 				testCase.args.maxResults)
 
 			if testCase.wantErr {
@@ -476,7 +476,7 @@ func Test_BoardService_Configuration(t *testing.T) {
 
 	type args struct {
 		ctx     context.Context
-		boardId int
+		boardID int
 	}
 
 	testCases := []struct {
@@ -491,7 +491,7 @@ func Test_BoardService_Configuration(t *testing.T) {
 			name: "when the parameters are correct",
 			args: args{
 				ctx:     context.Background(),
-				boardId: 1001,
+				boardID: 1001,
 			},
 			on: func(fields *fields) {
 
@@ -518,7 +518,7 @@ func Test_BoardService_Configuration(t *testing.T) {
 			name: "when the http call cannot be executed",
 			args: args{
 				ctx:     context.Background(),
-				boardId: 1001,
+				boardID: 1001,
 			},
 			on: func(fields *fields) {
 
@@ -547,7 +547,7 @@ func Test_BoardService_Configuration(t *testing.T) {
 			name: "when the request cannot be created",
 			args: args{
 				ctx:     context.Background(),
-				boardId: 1001,
+				boardID: 1001,
 			},
 			on: func(fields *fields) {
 
@@ -589,7 +589,7 @@ func Test_BoardService_Configuration(t *testing.T) {
 
 			boardService := NewBoardService(testCase.fields.c, "1.0")
 
-			gotResult, gotResponse, err := boardService.Configuration(testCase.args.ctx, testCase.args.boardId)
+			gotResult, gotResponse, err := boardService.Configuration(testCase.args.ctx, testCase.args.boardID)
 
 			if testCase.wantErr {
 
@@ -617,7 +617,7 @@ func Test_BoardService_Epics(t *testing.T) {
 
 	type args struct {
 		ctx        context.Context
-		boardId    int
+		boardID    int
 		startAt    int
 		maxResults int
 		done       bool
@@ -635,7 +635,7 @@ func Test_BoardService_Epics(t *testing.T) {
 			name: "when the parameters are correct",
 			args: args{
 				ctx:        context.Background(),
-				boardId:    1001,
+				boardID:    1001,
 				startAt:    0,
 				maxResults: 50,
 				done:       false,
@@ -665,7 +665,7 @@ func Test_BoardService_Epics(t *testing.T) {
 			name: "when the http call cannot be executed",
 			args: args{
 				ctx:        context.Background(),
-				boardId:    1001,
+				boardID:    1001,
 				startAt:    0,
 				maxResults: 50,
 				done:       false,
@@ -697,7 +697,7 @@ func Test_BoardService_Epics(t *testing.T) {
 			name: "when the request cannot be created",
 			args: args{
 				ctx:        context.Background(),
-				boardId:    1001,
+				boardID:    1001,
 				startAt:    0,
 				maxResults: 50,
 				done:       false,
@@ -742,7 +742,7 @@ func Test_BoardService_Epics(t *testing.T) {
 
 			boardService := NewBoardService(testCase.fields.c, "1.0")
 
-			gotResult, gotResponse, err := boardService.Epics(testCase.args.ctx, testCase.args.boardId, testCase.args.startAt,
+			gotResult, gotResponse, err := boardService.Epics(testCase.args.ctx, testCase.args.boardID, testCase.args.startAt,
 				testCase.args.maxResults, testCase.args.done)
 
 			if testCase.wantErr {
@@ -771,7 +771,7 @@ func Test_BoardService_Delete(t *testing.T) {
 
 	type args struct {
 		ctx     context.Context
-		boardId int
+		boardID int
 	}
 
 	testCases := []struct {
@@ -786,7 +786,7 @@ func Test_BoardService_Delete(t *testing.T) {
 			name: "when the parameters are correct",
 			args: args{
 				ctx:     context.Background(),
-				boardId: 1001,
+				boardID: 1001,
 			},
 			on: func(fields *fields) {
 
@@ -813,7 +813,7 @@ func Test_BoardService_Delete(t *testing.T) {
 			name: "when the http call cannot be executed",
 			args: args{
 				ctx:     context.Background(),
-				boardId: 1001,
+				boardID: 1001,
 			},
 			on: func(fields *fields) {
 
@@ -842,7 +842,7 @@ func Test_BoardService_Delete(t *testing.T) {
 			name: "when the request cannot be created",
 			args: args{
 				ctx:     context.Background(),
-				boardId: 1001,
+				boardID: 1001,
 			},
 			on: func(fields *fields) {
 
@@ -884,7 +884,7 @@ func Test_BoardService_Delete(t *testing.T) {
 
 			boardService := NewBoardService(testCase.fields.c, "1.0")
 
-			gotResponse, err := boardService.Delete(testCase.args.ctx, testCase.args.boardId)
+			gotResponse, err := boardService.Delete(testCase.args.ctx, testCase.args.boardID)
 
 			if testCase.wantErr {
 
@@ -1238,7 +1238,7 @@ func Test_BoardService_Issues(t *testing.T) {
 
 	type args struct {
 		ctx        context.Context
-		boardId    int
+		boardID    int
 		opts       *model.IssueOptionScheme
 		startAt    int
 		maxResults int
@@ -1256,7 +1256,7 @@ func Test_BoardService_Issues(t *testing.T) {
 			name: "when the parameters are correct",
 			args: args{
 				ctx:        context.Background(),
-				boardId:    1000,
+				boardID:    1000,
 				startAt:    0,
 				maxResults: 50,
 			},
@@ -1285,7 +1285,7 @@ func Test_BoardService_Issues(t *testing.T) {
 			name: "when the search options are provided",
 			args: args{
 				ctx:        context.Background(),
-				boardId:    1000,
+				boardID:    1000,
 				startAt:    0,
 				maxResults: 50,
 				opts: &model.IssueOptionScheme{
@@ -1320,7 +1320,7 @@ func Test_BoardService_Issues(t *testing.T) {
 			name: "when the http call cannot be executed",
 			args: args{
 				ctx:        context.Background(),
-				boardId:    1000,
+				boardID:    1000,
 				startAt:    0,
 				maxResults: 50,
 			},
@@ -1351,7 +1351,7 @@ func Test_BoardService_Issues(t *testing.T) {
 			name: "when the request cannot be created",
 			args: args{
 				ctx:        context.Background(),
-				boardId:    1000,
+				boardID:    1000,
 				startAt:    0,
 				maxResults: 50,
 			},
@@ -1397,7 +1397,7 @@ func Test_BoardService_Issues(t *testing.T) {
 
 			boardService := NewBoardService(testCase.fields.c, "1.0")
 
-			gotResult, gotResponse, err := boardService.Issues(testCase.args.ctx, testCase.args.boardId, testCase.args.opts,
+			gotResult, gotResponse, err := boardService.Issues(testCase.args.ctx, testCase.args.boardID, testCase.args.opts,
 				testCase.args.startAt, testCase.args.maxResults)
 
 			if testCase.wantErr {
@@ -1426,7 +1426,7 @@ func Test_BoardService_IssuesByEpic(t *testing.T) {
 
 	type args struct {
 		ctx        context.Context
-		boardId    int
+		boardID    int
 		epicId     int
 		opts       *model.IssueOptionScheme
 		startAt    int
@@ -1445,7 +1445,7 @@ func Test_BoardService_IssuesByEpic(t *testing.T) {
 			name: "when the parameters are correct",
 			args: args{
 				ctx:        context.Background(),
-				boardId:    1000,
+				boardID:    1000,
 				epicId:     102,
 				startAt:    0,
 				maxResults: 50,
@@ -1475,7 +1475,7 @@ func Test_BoardService_IssuesByEpic(t *testing.T) {
 			name: "when the search options are provided",
 			args: args{
 				ctx:        context.Background(),
-				boardId:    1000,
+				boardID:    1000,
 				epicId:     102,
 				startAt:    0,
 				maxResults: 50,
@@ -1511,7 +1511,7 @@ func Test_BoardService_IssuesByEpic(t *testing.T) {
 			name: "when the http call cannot be executed",
 			args: args{
 				ctx:        context.Background(),
-				boardId:    1000,
+				boardID:    1000,
 				epicId:     102,
 				startAt:    0,
 				maxResults: 50,
@@ -1543,7 +1543,7 @@ func Test_BoardService_IssuesByEpic(t *testing.T) {
 			name: "when the request cannot be created",
 			args: args{
 				ctx:        context.Background(),
-				boardId:    1000,
+				boardID:    1000,
 				epicId:     102,
 				startAt:    0,
 				maxResults: 50,
@@ -1584,7 +1584,7 @@ func Test_BoardService_IssuesByEpic(t *testing.T) {
 			name: "when the epic id is not provided",
 			args: args{
 				ctx:        context.Background(),
-				boardId:    1000,
+				boardID:    1000,
 				startAt:    0,
 				maxResults: 50,
 			},
@@ -1605,7 +1605,7 @@ func Test_BoardService_IssuesByEpic(t *testing.T) {
 
 			boardService := NewBoardService(testCase.fields.c, "1.0")
 
-			gotResult, gotResponse, err := boardService.IssuesByEpic(testCase.args.ctx, testCase.args.boardId, testCase.args.epicId,
+			gotResult, gotResponse, err := boardService.IssuesByEpic(testCase.args.ctx, testCase.args.boardID, testCase.args.epicId,
 				testCase.args.opts, testCase.args.startAt, testCase.args.maxResults)
 
 			if testCase.wantErr {
@@ -1634,7 +1634,7 @@ func Test_BoardService_IssuesBySprint(t *testing.T) {
 
 	type args struct {
 		ctx        context.Context
-		boardId    int
+		boardID    int
 		sprintId   int
 		opts       *model.IssueOptionScheme
 		startAt    int
@@ -1653,7 +1653,7 @@ func Test_BoardService_IssuesBySprint(t *testing.T) {
 			name: "when the parameters are correct",
 			args: args{
 				ctx:        context.Background(),
-				boardId:    1000,
+				boardID:    1000,
 				sprintId:   102,
 				startAt:    0,
 				maxResults: 50,
@@ -1683,7 +1683,7 @@ func Test_BoardService_IssuesBySprint(t *testing.T) {
 			name: "when the search options are provided",
 			args: args{
 				ctx:        context.Background(),
-				boardId:    1000,
+				boardID:    1000,
 				sprintId:   102,
 				startAt:    0,
 				maxResults: 50,
@@ -1719,7 +1719,7 @@ func Test_BoardService_IssuesBySprint(t *testing.T) {
 			name: "when the http call cannot be executed",
 			args: args{
 				ctx:        context.Background(),
-				boardId:    1000,
+				boardID:    1000,
 				sprintId:   102,
 				startAt:    0,
 				maxResults: 50,
@@ -1751,7 +1751,7 @@ func Test_BoardService_IssuesBySprint(t *testing.T) {
 			name: "when the request cannot be created",
 			args: args{
 				ctx:        context.Background(),
-				boardId:    1000,
+				boardID:    1000,
 				sprintId:   102,
 				startAt:    0,
 				maxResults: 50,
@@ -1792,7 +1792,7 @@ func Test_BoardService_IssuesBySprint(t *testing.T) {
 			name: "when the sprint id is not provided",
 			args: args{
 				ctx:        context.Background(),
-				boardId:    1000,
+				boardID:    1000,
 				startAt:    0,
 				maxResults: 50,
 			},
@@ -1813,7 +1813,7 @@ func Test_BoardService_IssuesBySprint(t *testing.T) {
 
 			boardService := NewBoardService(testCase.fields.c, "1.0")
 
-			gotResult, gotResponse, err := boardService.IssuesBySprint(testCase.args.ctx, testCase.args.boardId, testCase.args.sprintId,
+			gotResult, gotResponse, err := boardService.IssuesBySprint(testCase.args.ctx, testCase.args.boardID, testCase.args.sprintId,
 				testCase.args.opts, testCase.args.startAt, testCase.args.maxResults)
 
 			if testCase.wantErr {
@@ -1842,7 +1842,7 @@ func Test_BoardService_IssuesWithoutEpic(t *testing.T) {
 
 	type args struct {
 		ctx        context.Context
-		boardId    int
+		boardID    int
 		opts       *model.IssueOptionScheme
 		startAt    int
 		maxResults int
@@ -1860,7 +1860,7 @@ func Test_BoardService_IssuesWithoutEpic(t *testing.T) {
 			name: "when the parameters are correct",
 			args: args{
 				ctx:        context.Background(),
-				boardId:    1000,
+				boardID:    1000,
 				startAt:    0,
 				maxResults: 50,
 			},
@@ -1889,7 +1889,7 @@ func Test_BoardService_IssuesWithoutEpic(t *testing.T) {
 			name: "when the search options are provided",
 			args: args{
 				ctx:        context.Background(),
-				boardId:    1000,
+				boardID:    1000,
 				startAt:    0,
 				maxResults: 50,
 				opts: &model.IssueOptionScheme{
@@ -1924,7 +1924,7 @@ func Test_BoardService_IssuesWithoutEpic(t *testing.T) {
 			name: "when the http call cannot be executed",
 			args: args{
 				ctx:        context.Background(),
-				boardId:    1000,
+				boardID:    1000,
 				startAt:    0,
 				maxResults: 50,
 			},
@@ -1955,7 +1955,7 @@ func Test_BoardService_IssuesWithoutEpic(t *testing.T) {
 			name: "when the request cannot be created",
 			args: args{
 				ctx:        context.Background(),
-				boardId:    1000,
+				boardID:    1000,
 				startAt:    0,
 				maxResults: 50,
 			},
@@ -2001,7 +2001,7 @@ func Test_BoardService_IssuesWithoutEpic(t *testing.T) {
 
 			boardService := NewBoardService(testCase.fields.c, "1.0")
 
-			gotResult, gotResponse, err := boardService.IssuesWithoutEpic(testCase.args.ctx, testCase.args.boardId, testCase.args.opts,
+			gotResult, gotResponse, err := boardService.IssuesWithoutEpic(testCase.args.ctx, testCase.args.boardID, testCase.args.opts,
 				testCase.args.startAt, testCase.args.maxResults)
 
 			if testCase.wantErr {
@@ -2036,7 +2036,7 @@ func Test_BoardService_Move(t *testing.T) {
 
 	type args struct {
 		ctx     context.Context
-		boardId int
+		boardID int
 		payload *model.BoardMovementPayloadScheme
 	}
 
@@ -2052,7 +2052,7 @@ func Test_BoardService_Move(t *testing.T) {
 			name: "when the parameters are correct",
 			args: args{
 				ctx:     context.Background(),
-				boardId: 1000,
+				boardID: 1000,
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -2080,7 +2080,7 @@ func Test_BoardService_Move(t *testing.T) {
 			name: "when the http call cannot be executed",
 			args: args{
 				ctx:     context.Background(),
-				boardId: 1000,
+				boardID: 1000,
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -2110,7 +2110,7 @@ func Test_BoardService_Move(t *testing.T) {
 			name: "when the request cannot be created",
 			args: args{
 				ctx:     context.Background(),
-				boardId: 1000,
+				boardID: 1000,
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -2135,7 +2135,7 @@ func Test_BoardService_Move(t *testing.T) {
 			name: "when the board id is not provided",
 			args: args{
 				ctx:     context.Background(),
-				boardId: 0,
+				boardID: 0,
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -2155,7 +2155,7 @@ func Test_BoardService_Move(t *testing.T) {
 
 			boardService := NewBoardService(testCase.fields.c, "1.0")
 
-			gotResponse, err := boardService.Move(testCase.args.ctx, testCase.args.boardId, testCase.args.payload)
+			gotResponse, err := boardService.Move(testCase.args.ctx, testCase.args.boardID, testCase.args.payload)
 
 			if testCase.wantErr {
 
@@ -2182,7 +2182,7 @@ func Test_BoardService_Projects(t *testing.T) {
 
 	type args struct {
 		ctx                          context.Context
-		boardId, startAt, maxResults int
+		boardID, startAt, maxResults int
 	}
 
 	testCases := []struct {
@@ -2197,7 +2197,7 @@ func Test_BoardService_Projects(t *testing.T) {
 			name: "when the parameters are correct",
 			args: args{
 				ctx:        context.Background(),
-				boardId:    1000,
+				boardID:    1000,
 				startAt:    0,
 				maxResults: 50,
 			},
@@ -2226,7 +2226,7 @@ func Test_BoardService_Projects(t *testing.T) {
 			name: "when the http call cannot be executed",
 			args: args{
 				ctx:        context.Background(),
-				boardId:    1000,
+				boardID:    1000,
 				startAt:    0,
 				maxResults: 50,
 			},
@@ -2257,7 +2257,7 @@ func Test_BoardService_Projects(t *testing.T) {
 			name: "when the request cannot be created",
 			args: args{
 				ctx:        context.Background(),
-				boardId:    1000,
+				boardID:    1000,
 				startAt:    0,
 				maxResults: 50,
 			},
@@ -2303,7 +2303,7 @@ func Test_BoardService_Projects(t *testing.T) {
 
 			boardService := NewBoardService(testCase.fields.c, "1.0")
 
-			gotResult, gotResponse, err := boardService.Projects(testCase.args.ctx, testCase.args.boardId, testCase.args.startAt,
+			gotResult, gotResponse, err := boardService.Projects(testCase.args.ctx, testCase.args.boardID, testCase.args.startAt,
 				testCase.args.maxResults)
 
 			if testCase.wantErr {
@@ -2332,7 +2332,7 @@ func Test_BoardService_Sprints(t *testing.T) {
 
 	type args struct {
 		ctx                          context.Context
-		boardId, startAt, maxResults int
+		boardID, startAt, maxResults int
 		states                       []string
 	}
 
@@ -2348,7 +2348,7 @@ func Test_BoardService_Sprints(t *testing.T) {
 			name: "when the parameters are correct",
 			args: args{
 				ctx:        context.Background(),
-				boardId:    1000,
+				boardID:    1000,
 				startAt:    0,
 				maxResults: 50,
 				states:     []string{"active"},
@@ -2378,7 +2378,7 @@ func Test_BoardService_Sprints(t *testing.T) {
 			name: "when the http call cannot be executed",
 			args: args{
 				ctx:        context.Background(),
-				boardId:    1000,
+				boardID:    1000,
 				startAt:    0,
 				maxResults: 50,
 				states:     []string{"active"},
@@ -2410,7 +2410,7 @@ func Test_BoardService_Sprints(t *testing.T) {
 			name: "when the request cannot be created",
 			args: args{
 				ctx:        context.Background(),
-				boardId:    1000,
+				boardID:    1000,
 				startAt:    0,
 				maxResults: 50,
 				states:     []string{"active"},
@@ -2457,7 +2457,7 @@ func Test_BoardService_Sprints(t *testing.T) {
 
 			boardService := NewBoardService(testCase.fields.c, "1.0")
 
-			gotResult, gotResponse, err := boardService.Sprints(testCase.args.ctx, testCase.args.boardId, testCase.args.startAt,
+			gotResult, gotResponse, err := boardService.Sprints(testCase.args.ctx, testCase.args.boardID, testCase.args.startAt,
 				testCase.args.maxResults, testCase.args.states)
 
 			if testCase.wantErr {

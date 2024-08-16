@@ -2,6 +2,7 @@ package agile
 
 import (
 	"context"
+
 	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
 )
 
@@ -28,7 +29,7 @@ type BoardBacklogConnector interface {
 	//
 	// At most 50 issues may be moved at once.
 	//
-	// POST /rest/agile/1.0/backlog/{boardId}/issue
+	// POST /rest/agile/1.0/backlog/{boardID}/issue
 	//
 	// https://docs.go-atlassian.io/jira-agile/boards/backlog#move-issues-to-a-board-backlog
 	MoveTo(ctx context.Context, boardID int, payload *models.BoardBacklogPayloadScheme) (*models.ResponseScheme, error)

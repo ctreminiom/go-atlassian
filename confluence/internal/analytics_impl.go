@@ -11,14 +11,17 @@ import (
 	"strings"
 )
 
+// NewAnalyticsService creates a new instance of AnalyticsService.
+// It takes a service.Connector as input and returns a pointer to AnalyticsService.
 func NewAnalyticsService(client service.Connector) *AnalyticsService {
-
 	return &AnalyticsService{
 		internalClient: &internalAnalyticsServiceImpl{c: client},
 	}
 }
 
+// AnalyticsService provides methods to interact with analytics operations in Confluence.
 type AnalyticsService struct {
+	// internalClient is the connector interface for analytics operations.
 	internalClient confluence.AnalyticsConnector
 }
 
@@ -27,8 +30,8 @@ type AnalyticsService struct {
 // GET /wiki/rest/api/analytics/content/{contentId}/views
 //
 // https://docs.go-atlassian.io/confluence-cloud/analytics#get-views
-func (a *AnalyticsService) Get(ctx context.Context, contentId, fromDate string) (*model.ContentViewScheme, *model.ResponseScheme, error) {
-	return a.internalClient.Get(ctx, contentId, fromDate)
+func (a *AnalyticsService) Get(ctx context.Context, contentID, fromDate string) (*model.ContentViewScheme, *model.ResponseScheme, error) {
+	return a.internalClient.Get(ctx, contentID, fromDate)
 }
 
 // Distinct get the total number of distinct viewers a piece of content has.
@@ -36,22 +39,22 @@ func (a *AnalyticsService) Get(ctx context.Context, contentId, fromDate string) 
 // GET /wiki/rest/api/analytics/content/{contentId}/viewers
 //
 // https://docs.go-atlassian.io/confluence-cloud/analytics#get-viewers
-func (a *AnalyticsService) Distinct(ctx context.Context, contentId, fromDate string) (*model.ContentViewScheme, *model.ResponseScheme, error) {
-	return a.internalClient.Distinct(ctx, contentId, fromDate)
+func (a *AnalyticsService) Distinct(ctx context.Context, contentID, fromDate string) (*model.ContentViewScheme, *model.ResponseScheme, error) {
+	return a.internalClient.Distinct(ctx, contentID, fromDate)
 }
 
 type internalAnalyticsServiceImpl struct {
 	c service.Connector
 }
 
-func (i *internalAnalyticsServiceImpl) Get(ctx context.Context, contentId, fromDate string) (*model.ContentViewScheme, *model.ResponseScheme, error) {
+func (i *internalAnalyticsServiceImpl) Get(ctx context.Context, contentID, fromDate string) (*model.ContentViewScheme, *model.ResponseScheme, error) {
 
-	if contentId == "" {
+	if contentID == "" {
 		return nil, nil, model.ErrNoContentIDError
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("wiki/rest/api/analytics/content/%v/views", contentId))
+	endpoint.WriteString(fmt.Sprintf("wiki/rest/api/analytics/content/%v/views", contentID))
 
 	if fromDate != "" {
 		query := url.Values{}
@@ -74,14 +77,14 @@ func (i *internalAnalyticsServiceImpl) Get(ctx context.Context, contentId, fromD
 	return views, response, nil
 }
 
-func (i *internalAnalyticsServiceImpl) Distinct(ctx context.Context, contentId, fromDate string) (*model.ContentViewScheme, *model.ResponseScheme, error) {
+func (i *internalAnalyticsServiceImpl) Distinct(ctx context.Context, contentID, fromDate string) (*model.ContentViewScheme, *model.ResponseScheme, error) {
 
-	if contentId == "" {
+	if contentID == "" {
 		return nil, nil, model.ErrNoContentIDError
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("wiki/rest/api/analytics/content/%v/viewers", contentId))
+	endpoint.WriteString(fmt.Sprintf("wiki/rest/api/analytics/content/%v/viewers", contentID))
 
 	if fromDate != "" {
 		query := url.Values{}

@@ -12,6 +12,7 @@ import (
 	"github.com/ctreminiom/go-atlassian/service/jira"
 )
 
+// NewRemoteLinkService creates a new instance of RemoteLinkService.
 func NewRemoteLinkService(client service.Connector, version string) (*RemoteLinkService, error) {
 
 	if version == "" {
@@ -23,7 +24,9 @@ func NewRemoteLinkService(client service.Connector, version string) (*RemoteLink
 	}, nil
 }
 
+// RemoteLinkService provides methods to manage remote issue links in Jira Service Management.
 type RemoteLinkService struct {
+	// internalClient is the connector interface for remote link operations.
 	internalClient jira.RemoteLinkConnector
 }
 

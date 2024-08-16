@@ -11,6 +11,8 @@ import (
 	"strings"
 )
 
+// NewWorkspacePermissionService creates a new WorkspacePermissionService instance.
+// It takes a service.Connector as input and returns a pointer to WorkspacePermissionService.
 func NewWorkspacePermissionService(client service.Connector) *WorkspacePermissionService {
 
 	return &WorkspacePermissionService{
@@ -18,6 +20,7 @@ func NewWorkspacePermissionService(client service.Connector) *WorkspacePermissio
 	}
 }
 
+// WorkspacePermissionService provides methods to interact with workspace permissions in Bitbucket.
 type WorkspacePermissionService struct {
 	internalClient bitbucket.WorkspacePermissionConnector
 }

@@ -11,6 +11,7 @@ import (
 	"strings"
 )
 
+// NewJQLService creates a new instance of JQLService.
 func NewJQLService(client service.Connector, version string) (*JQLService, error) {
 
 	if version == "" {
@@ -22,7 +23,9 @@ func NewJQLService(client service.Connector, version string) (*JQLService, error
 	}, nil
 }
 
+// JQLService provides methods to manage JQL queries in Jira Service Management.
 type JQLService struct {
+	// internalClient is the connector interface for JQL operations.
 	internalClient jira.JQLConnector
 }
 

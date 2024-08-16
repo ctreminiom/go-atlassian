@@ -12,6 +12,8 @@ import (
 	"github.com/ctreminiom/go-atlassian/service/sm"
 )
 
+// NewTypeService creates a new instance of TypeService.
+// It takes a service.Connector and a version string as input and returns a pointer to TypeService.
 func NewTypeService(client service.Connector, version string) *TypeService {
 
 	return &TypeService{
@@ -19,7 +21,9 @@ func NewTypeService(client service.Connector, version string) *TypeService {
 	}
 }
 
+// TypeService provides methods to interact with request type operations in Jira Service Management.
 type TypeService struct {
+	// internalClient is the connector interface for request type operations.
 	internalClient sm.TypeConnector
 }
 

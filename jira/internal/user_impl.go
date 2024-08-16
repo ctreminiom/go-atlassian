@@ -13,6 +13,7 @@ import (
 	"github.com/ctreminiom/go-atlassian/service/jira"
 )
 
+// NewUserService creates a new instance of UserService.
 func NewUserService(client service.Connector, version string, connector *UserSearchService) (*UserService, error) {
 
 	if version == "" {
@@ -25,9 +26,12 @@ func NewUserService(client service.Connector, version string, connector *UserSea
 	}, nil
 }
 
+// UserService provides methods to manage users in Jira Service Management.
 type UserService struct {
+	// internalClient is the connector interface for user operations.
 	internalClient jira.UserConnector
-	Search         *UserSearchService
+	// Search is the service for searching users.
+	Search *UserSearchService
 }
 
 // Get returns a user

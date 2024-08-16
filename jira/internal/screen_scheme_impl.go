@@ -13,6 +13,7 @@ import (
 	"github.com/ctreminiom/go-atlassian/service/jira"
 )
 
+// NewScreenSchemeService creates a new instance of ScreenSchemeService.
 func NewScreenSchemeService(client service.Connector, version string) (*ScreenSchemeService, error) {
 
 	if version == "" {
@@ -24,7 +25,9 @@ func NewScreenSchemeService(client service.Connector, version string) (*ScreenSc
 	}, nil
 }
 
+// ScreenSchemeService provides methods to manage screen schemes in Jira Service Management.
 type ScreenSchemeService struct {
+	// internalClient is the connector interface for screen scheme operations.
 	internalClient jira.ScreenSchemeConnector
 }
 

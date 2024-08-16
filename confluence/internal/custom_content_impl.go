@@ -12,14 +12,17 @@ import (
 	"strings"
 )
 
+// NewCustomContentService creates a new instance of CustomContentService.
+// It takes a service.Connector as input and returns a pointer to CustomContentService.
 func NewCustomContentService(client service.Connector) *CustomContentService {
-
 	return &CustomContentService{
 		internalClient: &internalCustomContentServiceImpl{c: client},
 	}
 }
 
+// CustomContentService provides methods to interact with custom content operations in Confluence.
 type CustomContentService struct {
+	// internalClient is the connector interface for custom content operations.
 	internalClient confluence.CustomContentConnector
 }
 

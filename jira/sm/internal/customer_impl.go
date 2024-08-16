@@ -12,14 +12,17 @@ import (
 	"github.com/ctreminiom/go-atlassian/service/sm"
 )
 
+// NewCustomerService creates a new instance of CustomerService.
+// It takes a service.Connector and a version string as input and returns a pointer to CustomerService.
 func NewCustomerService(client service.Connector, version string) *CustomerService {
-
 	return &CustomerService{
 		internalClient: &internalCustomerImpl{c: client, version: version},
 	}
 }
 
+// CustomerService provides methods to interact with customer operations in Jira Service Management.
 type CustomerService struct {
+	// internalClient is the connector interface for customer operations.
 	internalClient sm.CustomerConnector
 }
 

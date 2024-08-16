@@ -116,17 +116,17 @@ func (i *internalWorkspaceServiceImpl) Members(ctx context.Context, workspace st
 }
 
 // Membership returns the workspace membership.
-func (i *internalWorkspaceServiceImpl) Membership(ctx context.Context, workspace, memberId string) (*model.WorkspaceMembershipScheme, *model.ResponseScheme, error) {
+func (i *internalWorkspaceServiceImpl) Membership(ctx context.Context, workspace, memberID string) (*model.WorkspaceMembershipScheme, *model.ResponseScheme, error) {
 
 	if workspace == "" {
 		return nil, nil, model.ErrNoWorkspaceError
 	}
 
-	if memberId == "" {
+	if memberID == "" {
 		return nil, nil, model.ErrNoMemberIDError
 	}
 
-	endpoint := fmt.Sprintf("2.0/workspaces/%v/members/%v", workspace, memberId)
+	endpoint := fmt.Sprintf("2.0/workspaces/%v/members/%v", workspace, memberID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {

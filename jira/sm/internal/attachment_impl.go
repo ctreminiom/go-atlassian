@@ -12,14 +12,17 @@ import (
 	"github.com/ctreminiom/go-atlassian/service/sm"
 )
 
+// NewAttachmentService creates a new instance of AttachmentService.
+// It takes a service.Connector and a version string as input and returns a pointer to AttachmentService.
 func NewAttachmentService(client service.Connector, version string) *AttachmentService {
-
 	return &AttachmentService{
 		internalClient: &internalServiceRequestAttachmentImpl{c: client, version: version},
 	}
 }
 
+// AttachmentService provides methods to interact with attachment operations in Jira Service Management.
 type AttachmentService struct {
+	// internalClient is the connector interface for attachment operations.
 	internalClient sm.AttachmentConnector
 }
 

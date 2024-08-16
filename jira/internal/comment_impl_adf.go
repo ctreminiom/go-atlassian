@@ -13,7 +13,9 @@ import (
 	"github.com/ctreminiom/go-atlassian/service/jira"
 )
 
+// CommentADFService provides methods to interact with comment operations in Jira Service Management using ADF format.
 type CommentADFService struct {
+	// internalClient is the connector interface for ADF comment operations.
 	internalClient jira.CommentADFConnector
 }
 

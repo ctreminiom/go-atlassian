@@ -12,14 +12,17 @@ import (
 	"strings"
 )
 
+// NewAQLService creates a new instance of AQLService.
+// It takes a service.Connector as input and returns a pointer to AQLService.
 func NewAQLService(client service.Connector) *AQLService {
-
 	return &AQLService{
 		internalClient: &internalAQLImpl{c: client},
 	}
 }
 
+// AQLService provides methods to interact with the Assets Query Language (AQL) in Jira.
 type AQLService struct {
+	// internalClient is the connector interface for AQL operations.
 	internalClient assets.AQLAssetConnector
 }
 

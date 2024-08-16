@@ -10,6 +10,7 @@ import (
 	"github.com/ctreminiom/go-atlassian/service/jira"
 )
 
+// NewPriorityService creates a new instance of PriorityService.
 func NewPriorityService(client service.Connector, version string) (*PriorityService, error) {
 
 	if version == "" {
@@ -21,7 +22,9 @@ func NewPriorityService(client service.Connector, version string) (*PriorityServ
 	}, nil
 }
 
+// PriorityService provides methods to manage issue priorities in Jira Service Management.
 type PriorityService struct {
+	// internalClient is the connector interface for priority operations.
 	internalClient jira.PriorityConnector
 }
 

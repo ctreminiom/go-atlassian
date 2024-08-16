@@ -15,14 +15,17 @@ import (
 	"github.com/ctreminiom/go-atlassian/service/sm"
 )
 
+// NewCommentService creates a new instance of CommentService.
+// It takes a service.Connector and a version string as input and returns a pointer to CommentService.
 func NewCommentService(client service.Connector, version string) *CommentService {
-
 	return &CommentService{
 		internalClient: &internalServiceRequestCommentImpl{c: client, version: version},
 	}
 }
 
+// CommentService provides methods to interact with comment operations in Jira Service Management.
 type CommentService struct {
+	// internalClient is the connector interface for comment operations.
 	internalClient sm.CommentConnector
 }
 

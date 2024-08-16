@@ -9,14 +9,17 @@ import (
 	"net/http"
 )
 
+// NewObjectTypeAttributeService creates a new instance of ObjectTypeAttributeService.
+// It takes a service.Connector as input and returns a pointer to ObjectTypeAttributeService.
 func NewObjectTypeAttributeService(client service.Connector) *ObjectTypeAttributeService {
-
 	return &ObjectTypeAttributeService{
 		internalClient: &internalObjectTypeAttributeImpl{c: client},
 	}
 }
 
+// ObjectTypeAttributeService provides methods to interact with object type attributes in Jira Assets.
 type ObjectTypeAttributeService struct {
+	// internalClient is the connector interface for object type attribute operations.
 	internalClient assets.ObjectTypeAttributeConnector
 }
 

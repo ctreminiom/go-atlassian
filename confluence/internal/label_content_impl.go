@@ -12,14 +12,17 @@ import (
 	"strings"
 )
 
+// NewContentLabelService creates a new instance of ContentLabelService.
+// It takes a service.Connector as input and returns a pointer to ContentLabelService.
 func NewContentLabelService(client service.Connector) *ContentLabelService {
-
 	return &ContentLabelService{
 		internalClient: &internalContentLabelImpl{c: client},
 	}
 }
 
+// ContentLabelService provides methods to interact with content label operations in Confluence.
 type ContentLabelService struct {
+	// internalClient is the connector interface for label operations.
 	internalClient confluence.LabelsConnector
 }
 

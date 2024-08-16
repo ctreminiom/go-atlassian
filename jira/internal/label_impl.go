@@ -11,6 +11,7 @@ import (
 	"strconv"
 )
 
+// NewLabelService creates a new instance of LabelService.
 func NewLabelService(client service.Connector, version string) (*LabelService, error) {
 
 	if version == "" {
@@ -22,7 +23,9 @@ func NewLabelService(client service.Connector, version string) (*LabelService, e
 	}, nil
 }
 
+// LabelService provides methods to manage labels in Jira Service Management.
 type LabelService struct {
+	// internalClient is the connector interface for label operations.
 	internalClient jira.LabelConnector
 }
 

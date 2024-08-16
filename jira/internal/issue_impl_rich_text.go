@@ -14,22 +14,38 @@ import (
 	"github.com/ctreminiom/go-atlassian/service/jira"
 )
 
+// IssueRichTextService provides methods to manage issues in Jira Service Management using the rich text format.
 type IssueRichTextService struct {
+	// internalClient is the connector interface for rich text issue operations.
 	internalClient jira.IssueRichTextConnector
-	Attachment     *IssueAttachmentService
-	Comment        *CommentRichTextService
-	Field          *IssueFieldService
-	Label          *LabelService
-	Link           *LinkRichTextService
-	Metadata       *MetadataService
-	Priority       *PriorityService
-	Resolution     *ResolutionService
-	Search         *SearchRichTextService
-	Type           *TypeService
-	Vote           *VoteService
-	Watcher        *WatcherService
-	Worklog        *WorklogRichTextService
-	Property       *IssuePropertyService
+	// Attachment is the service for managing issue attachments.
+	Attachment *IssueAttachmentService
+	// Comment is the service for managing rich text comments.
+	Comment *CommentRichTextService
+	// Field is the service for managing issue fields.
+	Field *IssueFieldService
+	// Label is the service for managing issue labels.
+	Label *LabelService
+	// Link is the service for managing rich text issue links.
+	Link *LinkRichTextService
+	// Metadata is the service for managing issue metadata.
+	Metadata *MetadataService
+	// Priority is the service for managing issue priorities.
+	Priority *PriorityService
+	// Resolution is the service for managing issue resolutions.
+	Resolution *ResolutionService
+	// Search is the service for managing rich text issue searches.
+	Search *SearchRichTextService
+	// Type is the service for managing issue types.
+	Type *TypeService
+	// Vote is the service for managing issue votes.
+	Vote *VoteService
+	// Watcher is the service for managing issue watchers.
+	Watcher *WatcherService
+	// Worklog is the service for managing rich text worklogs.
+	Worklog *WorklogRichTextService
+	// Property is the service for managing issue properties.
+	Property *IssuePropertyService
 }
 
 // Delete deletes an issue.

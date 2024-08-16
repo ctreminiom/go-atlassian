@@ -10,6 +10,7 @@ import (
 	"net/http"
 )
 
+// NewPermissionService creates a new instance of PermissionService.
 func NewPermissionService(client service.Connector, version string, scheme *PermissionSchemeService) (*PermissionService, error) {
 
 	if version == "" {
@@ -22,9 +23,12 @@ func NewPermissionService(client service.Connector, version string, scheme *Perm
 	}, nil
 }
 
+// PermissionService provides methods to manage permissions in Jira Service Management.
 type PermissionService struct {
+	// internalClient is the connector interface for permission operations.
 	internalClient jira.PermissionConnector
-	Scheme         *PermissionSchemeService
+	// Scheme is the service for managing permission schemes.
+	Scheme *PermissionSchemeService
 }
 
 // Gets returns all permissions, including: global permissions, project permissions and global permissions added by plugins.

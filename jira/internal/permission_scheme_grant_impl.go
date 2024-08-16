@@ -11,6 +11,7 @@ import (
 	"strings"
 )
 
+// NewPermissionSchemeGrantService creates a new instance of PermissionSchemeGrantService.
 func NewPermissionSchemeGrantService(client service.Connector, version string) (*PermissionSchemeGrantService, error) {
 
 	if version == "" {
@@ -22,7 +23,9 @@ func NewPermissionSchemeGrantService(client service.Connector, version string) (
 	}, nil
 }
 
+// PermissionSchemeGrantService provides methods to manage permission scheme grants in Jira Service Management.
 type PermissionSchemeGrantService struct {
+	// internalClient is the connector interface for permission scheme grant operations.
 	internalClient jira.PermissionSchemeGrantConnector
 }
 

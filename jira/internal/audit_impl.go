@@ -12,6 +12,9 @@ import (
 	"strings"
 )
 
+// NewAuditRecordService creates a new instance of AuditRecordService.
+// It takes a service.Connector and a version string as input.
+// Returns a pointer to AuditRecordService and an error if the version is not provided.
 func NewAuditRecordService(client service.Connector, version string) (*AuditRecordService, error) {
 
 	if version == "" {
@@ -23,7 +26,9 @@ func NewAuditRecordService(client service.Connector, version string) (*AuditReco
 	}, nil
 }
 
+// AuditRecordService provides methods to interact with audit record operations in Jira Service Management.
 type AuditRecordService struct {
+	// internalClient is the connector interface for audit record operations.
 	internalClient jira.AuditRecordConnector
 }
 

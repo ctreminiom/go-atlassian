@@ -12,7 +12,8 @@ import (
 	"strings"
 )
 
-// NewAttachmentService returns a new Confluence V2 Page service
+// NewAttachmentService creates a new instance of AttachmentService.
+// It takes a service.Connector and an AttachmentVersionService as inputs and returns a pointer to AttachmentService.
 func NewAttachmentService(client service.Connector, version *AttachmentVersionService) *AttachmentService {
 	return &AttachmentService{
 		internalClient: &internalAttachmentImpl{c: client},
@@ -20,9 +21,12 @@ func NewAttachmentService(client service.Connector, version *AttachmentVersionSe
 	}
 }
 
+// AttachmentService provides methods to interact with attachment operations in Confluence.
 type AttachmentService struct {
+	// internalClient is the connector interface for attachment operations.
 	internalClient confluence.AttachmentConnector
-	Version        *AttachmentVersionService
+	// Version is the service for attachment version-related operations.
+	Version *AttachmentVersionService
 }
 
 // Get returns a specific attachment.

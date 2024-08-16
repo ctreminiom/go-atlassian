@@ -9,11 +9,15 @@ import (
 	"net/http"
 )
 
+// NewSCIMSchemaService creates a new instance of SCIMSchemaService.
+// It takes a service.Connector as input and returns a pointer to SCIMSchemaService.
 func NewSCIMSchemaService(client service.Connector) *SCIMSchemaService {
 	return &SCIMSchemaService{internalClient: &internalSCIMSchemaImpl{c: client}}
 }
 
+// SCIMSchemaService provides methods to interact with SCIM schemas in Atlassian Administration.
 type SCIMSchemaService struct {
+	// internalClient is the connector interface for SCIM schema operations.
 	internalClient admin.SCIMSchemaConnector
 }
 

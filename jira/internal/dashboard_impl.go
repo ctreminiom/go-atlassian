@@ -13,6 +13,9 @@ import (
 	"github.com/ctreminiom/go-atlassian/service/jira"
 )
 
+// NewDashboardService creates a new instance of DashboardService.
+// It takes a service.Connector and a version string as input.
+// Returns a pointer to DashboardService and an error if the version is not provided.
 func NewDashboardService(client service.Connector, version string) (*DashboardService, error) {
 
 	if version == "" {
@@ -24,7 +27,9 @@ func NewDashboardService(client service.Connector, version string) (*DashboardSe
 	}, nil
 }
 
+// DashboardService provides methods to interact with dashboard operations in Jira Service Management.
 type DashboardService struct {
+	// internalClient is the connector interface for dashboard operations.
 	internalClient jira.DashboardConnector
 }
 

@@ -13,6 +13,7 @@ import (
 	"github.com/ctreminiom/go-atlassian/service/jira"
 )
 
+// NewWorklogADFService creates a new instance of WorklogADFService.
 func NewWorklogADFService(client service.Connector, version string) (*WorklogADFService, error) {
 
 	if version == "" {
@@ -24,7 +25,9 @@ func NewWorklogADFService(client service.Connector, version string) (*WorklogADF
 	}, nil
 }
 
+// WorklogADFService provides methods to manage worklogs in Jira Service Management.
 type WorklogADFService struct {
+	// internalClient is the connector interface for worklog operations.
 	internalClient jira.WorklogADFConnector
 }
 

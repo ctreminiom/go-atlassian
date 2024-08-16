@@ -11,6 +11,8 @@ import (
 	"strconv"
 )
 
+// NewQueueService creates a new instance of QueueService.
+// It takes a service.Connector and a version string as input and returns a pointer to QueueService.
 func NewQueueService(client service.Connector, version string) *QueueService {
 
 	return &QueueService{
@@ -18,7 +20,9 @@ func NewQueueService(client service.Connector, version string) *QueueService {
 	}
 }
 
+// QueueService provides methods to interact with queue operations in Jira Service Management.
 type QueueService struct {
+	// internalClient is the connector interface for queue operations.
 	internalClient sm.QueueConnector
 }
 

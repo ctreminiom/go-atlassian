@@ -12,7 +12,9 @@ import (
 	"strings"
 )
 
+// CommentRichTextService provides methods to interact with comment operations in Jira Service Management using Rich Text format.
 type CommentRichTextService struct {
+	// internalClient is the connector interface for Rich Text comment operations.
 	internalClient jira.CommentRichTextConnector
 }
 

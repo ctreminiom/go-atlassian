@@ -9,11 +9,15 @@ import (
 	"net/http"
 )
 
+// NewOrganizationDirectoryService creates a new instance of OrganizationDirectoryService.
+// It takes a service.Connector as input and returns a pointer to OrganizationDirectoryService.
 func NewOrganizationDirectoryService(client service.Connector) *OrganizationDirectoryService {
 	return &OrganizationDirectoryService{internalClient: &internalOrganizationDirectoryServiceImpl{c: client}}
 }
 
+// OrganizationDirectoryService provides methods to interact with the organization directory in Atlassian Administration.
 type OrganizationDirectoryService struct {
+	// internalClient is the connector interface for organization directory operations.
 	internalClient admin.OrganizationDirectoryConnector
 }
 

@@ -12,11 +12,15 @@ import (
 	"strings"
 )
 
+// NewSCIMUserService creates a new instance of SCIMUserService.
+// It takes a service.Connector as input and returns a pointer to SCIMUserService.
 func NewSCIMUserService(client service.Connector) *SCIMUserService {
 	return &SCIMUserService{internalClient: &internalSCIMUserImpl{c: client}}
 }
 
+// SCIMUserService provides methods to interact with SCIM users in Atlassian Administration.
 type SCIMUserService struct {
+	// internalClient is the connector interface for SCIM user operations.
 	internalClient admin.SCIMUserConnector
 }
 

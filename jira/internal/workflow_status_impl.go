@@ -12,6 +12,7 @@ import (
 	"strings"
 )
 
+// NewWorkflowStatusService creates a new instance of WorkflowStatusService.
 func NewWorkflowStatusService(client service.Connector, version string) (*WorkflowStatusService, error) {
 
 	if version == "" {
@@ -23,7 +24,9 @@ func NewWorkflowStatusService(client service.Connector, version string) (*Workfl
 	}, nil
 }
 
+// WorkflowStatusService provides methods to manage workflow statuses in Jira Service Management.
 type WorkflowStatusService struct {
+	// internalClient is the connector interface for workflow status operations.
 	internalClient jira.WorkflowStatusConnector
 }
 

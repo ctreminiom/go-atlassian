@@ -10,6 +10,7 @@ import (
 	"github.com/ctreminiom/go-atlassian/service/jira"
 )
 
+// NewResolutionService creates a new instance of ResolutionService.
 func NewResolutionService(client service.Connector, version string) (*ResolutionService, error) {
 
 	if version == "" {
@@ -21,7 +22,9 @@ func NewResolutionService(client service.Connector, version string) (*Resolution
 	}, nil
 }
 
+// ResolutionService provides methods to manage issue resolutions in Jira Service Management.
 type ResolutionService struct {
+	// internalClient is the connector interface for resolution operations.
 	internalClient jira.ResolutionConnector
 }
 

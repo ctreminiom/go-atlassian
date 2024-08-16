@@ -10,6 +10,7 @@ import (
 	"github.com/ctreminiom/go-atlassian/service/jira"
 )
 
+// NewProjectCategoryService creates a new instance of ProjectCategoryService.
 func NewProjectCategoryService(client service.Connector, version string) (*ProjectCategoryService, error) {
 
 	if version == "" {
@@ -21,7 +22,9 @@ func NewProjectCategoryService(client service.Connector, version string) (*Proje
 	}, nil
 }
 
+// ProjectCategoryService provides methods to manage project categories in Jira Service Management.
 type ProjectCategoryService struct {
+	// internalClient is the connector interface for project category operations.
 	internalClient jira.ProjectCategoryConnector
 }
 

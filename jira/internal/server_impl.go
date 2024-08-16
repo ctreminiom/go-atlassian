@@ -9,6 +9,7 @@ import (
 	"net/http"
 )
 
+// NewServerService creates a new instance of ServerService.
 func NewServerService(client service.Connector, version string) (*ServerService, error) {
 
 	if version == "" {
@@ -20,7 +21,9 @@ func NewServerService(client service.Connector, version string) (*ServerService,
 	}, nil
 }
 
+// ServerService provides methods to manage server information in Jira Service Management.
 type ServerService struct {
+	// internalClient is the connector interface for server operations.
 	internalClient jira.ServerConnector
 }
 

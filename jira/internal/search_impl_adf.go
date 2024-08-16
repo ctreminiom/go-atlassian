@@ -12,7 +12,9 @@ import (
 	"strings"
 )
 
+// SearchADFService provides methods to manage advanced document format (ADF) searches in Jira Service Management.
 type SearchADFService struct {
+	// internalClient is the connector interface for ADF search operations.
 	internalClient jira.SearchADFConnector
 }
 

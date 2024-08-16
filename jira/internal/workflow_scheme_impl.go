@@ -13,6 +13,7 @@ import (
 	"github.com/ctreminiom/go-atlassian/service/jira"
 )
 
+// NewWorkflowSchemeService creates a new instance of WorkflowSchemeService.
 func NewWorkflowSchemeService(client service.Connector, version string, issueType *WorkflowSchemeIssueTypeService) *WorkflowSchemeService {
 
 	return &WorkflowSchemeService{
@@ -21,9 +22,12 @@ func NewWorkflowSchemeService(client service.Connector, version string, issueTyp
 	}
 }
 
+// WorkflowSchemeService provides methods to manage workflow schemes in Jira Service Management.
 type WorkflowSchemeService struct {
+	// internalClient is the connector interface for workflow scheme operations.
 	internalClient jira.WorkflowSchemeConnector
-	IssueType      *WorkflowSchemeIssueTypeService
+	// IssueType is the service for managing workflow scheme issue types.
+	IssueType *WorkflowSchemeIssueTypeService
 }
 
 // Gets returns a paginated list of all workflow schemes, not including draft workflow schemes.

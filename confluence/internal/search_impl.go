@@ -12,14 +12,17 @@ import (
 	"strings"
 )
 
+// NewSearchService creates a new instance of SearchService.
+// It takes a service.Connector as input and returns a pointer to SearchService.
 func NewSearchService(client service.Connector) *SearchService {
-
 	return &SearchService{
 		internalClient: &internalSearchImpl{c: client},
 	}
 }
 
+// SearchService provides methods to interact with search operations in Confluence.
 type SearchService struct {
+	// internalClient is the connector interface for search operations.
 	internalClient confluence.SearchConnector
 }
 

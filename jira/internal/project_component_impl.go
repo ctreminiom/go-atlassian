@@ -9,6 +9,7 @@ import (
 	"net/http"
 )
 
+// NewProjectComponentService creates a new instance of ProjectComponentService.
 func NewProjectComponentService(client service.Connector, version string) (*ProjectComponentService, error) {
 
 	if version == "" {
@@ -20,7 +21,9 @@ func NewProjectComponentService(client service.Connector, version string) (*Proj
 	}, nil
 }
 
+// ProjectComponentService provides methods to manage project components in Jira Service Management.
 type ProjectComponentService struct {
+	// internalClient is the connector interface for project component operations.
 	internalClient jira.ProjectComponentConnector
 }
 

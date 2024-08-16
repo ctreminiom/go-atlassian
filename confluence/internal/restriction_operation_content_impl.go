@@ -12,8 +12,10 @@ import (
 	"strings"
 )
 
+// NewRestrictionOperationService creates a new instance of RestrictionOperationService.
+// It takes a service.Connector, a pointer to RestrictionOperationGroupService, and a pointer to RestrictionOperationUserService as input,
+// and returns a pointer to RestrictionOperationService.
 func NewRestrictionOperationService(client service.Connector, group *RestrictionOperationGroupService, user *RestrictionOperationUserService) *RestrictionOperationService {
-
 	return &RestrictionOperationService{
 		internalClient: &internalRestrictionOperationImpl{c: client},
 		Group:          group,
@@ -21,10 +23,14 @@ func NewRestrictionOperationService(client service.Connector, group *Restriction
 	}
 }
 
+// RestrictionOperationService provides methods to interact with content restriction operations in Confluence.
 type RestrictionOperationService struct {
+	// internalClient is the connector interface for content restriction operations.
 	internalClient confluence.RestrictionOperationConnector
-	Group          *RestrictionOperationGroupService
-	User           *RestrictionOperationUserService
+	// Group is a pointer to RestrictionOperationGroupService for group-related restriction operations.
+	Group *RestrictionOperationGroupService
+	// User is a pointer to RestrictionOperationUserService for user-related restriction operations.
+	User *RestrictionOperationUserService
 }
 
 // Gets returns restrictions on a piece of content by operation.

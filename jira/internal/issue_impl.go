@@ -10,27 +10,49 @@ import (
 	"github.com/ctreminiom/go-atlassian/service"
 )
 
+// IssueServices groups various services related to issue management in Jira Service Management.
 type IssueServices struct {
-	Attachment      *IssueAttachmentService
-	CommentRT       *CommentRichTextService
-	CommentADF      *CommentADFService
-	Field           *IssueFieldService
-	Label           *LabelService
-	LinkRT          *LinkRichTextService
-	LinkADF         *LinkADFService
-	Metadata        *MetadataService
-	Priority        *PriorityService
-	Resolution      *ResolutionService
-	SearchRT        *SearchRichTextService
-	SearchADF       *SearchADFService
-	Type            *TypeService
-	Vote            *VoteService
-	Watcher         *WatcherService
-	WorklogAdf      *WorklogADFService
+	// Attachment is the service for managing issue attachments.
+	Attachment *IssueAttachmentService
+	// CommentRT is the service for managing rich text comments.
+	CommentRT *CommentRichTextService
+	// CommentADF is the service for managing ADF comments.
+	CommentADF *CommentADFService
+	// Field is the service for managing issue fields.
+	Field *IssueFieldService
+	// Label is the service for managing issue labels.
+	Label *LabelService
+	// LinkRT is the service for managing rich text issue links.
+	LinkRT *LinkRichTextService
+	// LinkADF is the service for managing ADF issue links.
+	LinkADF *LinkADFService
+	// Metadata is the service for managing issue metadata.
+	Metadata *MetadataService
+	// Priority is the service for managing issue priorities.
+	Priority *PriorityService
+	// Resolution is the service for managing issue resolutions.
+	Resolution *ResolutionService
+	// SearchRT is the service for managing rich text issue searches.
+	SearchRT *SearchRichTextService
+	// SearchADF is the service for managing ADF issue searches.
+	SearchADF *SearchADFService
+	// Type is the service for managing issue types.
+	Type *TypeService
+	// Vote is the service for managing issue votes.
+	Vote *VoteService
+	// Watcher is the service for managing issue watchers.
+	Watcher *WatcherService
+	// WorklogAdf is the service for managing ADF worklogs.
+	WorklogAdf *WorklogADFService
+	// WorklogRichText is the service for managing rich text worklogs.
 	WorklogRichText *WorklogRichTextService
-	Property        *IssuePropertyService
+	// Property is the service for managing issue properties.
+	Property *IssuePropertyService
 }
 
+// NewIssueService creates new instances of IssueRichTextService and IssueADFService.
+// It takes a service.Connector, a version string, and an optional IssueServices struct as input.
+// Returns pointers to IssueRichTextService and IssueADFService, and an error if the version is not provided.
 func NewIssueService(client service.Connector, version string, services *IssueServices) (*IssueRichTextService, *IssueADFService, error) {
 
 	if version == "" {

@@ -11,11 +11,15 @@ import (
 	"strings"
 )
 
+// NewOrganizationPolicyService creates a new instance of OrganizationPolicyService.
+// It takes a service.Connector as input and returns a pointer to OrganizationPolicyService.
 func NewOrganizationPolicyService(client service.Connector) *OrganizationPolicyService {
 	return &OrganizationPolicyService{internalClient: &internalOrganizationPolicyImpl{c: client}}
 }
 
+// OrganizationPolicyService provides methods to interact with organization policies in Atlassian Administration.
 type OrganizationPolicyService struct {
+	// internalClient is the connector interface for organization policy operations.
 	internalClient admin.OrganizationPolicyConnector
 }
 

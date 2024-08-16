@@ -12,14 +12,17 @@ import (
 	"strings"
 )
 
+// NewObjectService creates a new instance of ObjectService.
+// It takes a service.Connector as input and returns a pointer to ObjectService.
 func NewObjectService(client service.Connector) *ObjectService {
-
 	return &ObjectService{
 		internalClient: &internalObjectImpl{c: client},
 	}
 }
 
+// ObjectService provides methods to interact with objects in Jira Assets.
 type ObjectService struct {
+	// internalClient is the connector interface for object operations.
 	internalClient assets.ObjectConnector
 }
 

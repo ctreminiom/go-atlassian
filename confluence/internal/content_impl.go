@@ -12,19 +12,29 @@ import (
 	"strings"
 )
 
+// ContentSubServices holds references to various sub-services related to content operations in Confluence.
 type ContentSubServices struct {
-	Attachment         *ContentAttachmentService
+	// Attachment is the service for content attachment operations.
+	Attachment *ContentAttachmentService
+	// ChildrenDescendant is the service for children and descendants operations.
 	ChildrenDescendant *ChildrenDescandantsService
-	Comment            *CommentService
-	Permission         *PermissionService
-	Label              *ContentLabelService
-	Property           *PropertyService
-	Restriction        *RestrictionService
-	Version            *VersionService
+	// Comment is the service for comment operations.
+	Comment *CommentService
+	// Permission is the service for permission operations.
+	Permission *PermissionService
+	// Label is the service for content label operations.
+	Label *ContentLabelService
+	// Property is the service for content property operations.
+	Property *PropertyService
+	// Restriction is the service for content restriction operations.
+	Restriction *RestrictionService
+	// Version is the service for content version operations.
+	Version *VersionService
 }
 
+// NewContentService creates a new instance of ContentService.
+// It takes a service.Connector and a ContentSubServices as inputs and returns a pointer to ContentService.
 func NewContentService(client service.Connector, subServices *ContentSubServices) *ContentService {
-
 	return &ContentService{
 		internalClient:     &internalContentImpl{c: client},
 		Attachment:         subServices.Attachment,
@@ -38,16 +48,26 @@ func NewContentService(client service.Connector, subServices *ContentSubServices
 	}
 }
 
+// ContentService provides methods to interact with content operations in Confluence.
 type ContentService struct {
-	internalClient     confluence.ContentConnector
-	Attachment         *ContentAttachmentService
+	// internalClient is the connector interface for content operations.
+	internalClient confluence.ContentConnector
+	// Attachment is the service for content attachment operations.
+	Attachment *ContentAttachmentService
+	// ChildrenDescendant is the service for children and descendants operations.
 	ChildrenDescendant *ChildrenDescandantsService
-	Comment            *CommentService
-	Permission         *PermissionService
-	Label              *ContentLabelService
-	Property           *PropertyService
-	Restriction        *RestrictionService
-	Version            *VersionService
+	// Comment is the service for comment operations.
+	Comment *CommentService
+	// Permission is the service for permission operations.
+	Permission *PermissionService
+	// Label is the service for content label operations.
+	Label *ContentLabelService
+	// Property is the service for content property operations.
+	Property *PropertyService
+	// Restriction is the service for content restriction operations.
+	Restriction *RestrictionService
+	// Version is the service for content version operations.
+	Version *VersionService
 }
 
 // Gets returns all content in a Confluence instance.

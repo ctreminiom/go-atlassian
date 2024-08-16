@@ -11,11 +11,15 @@ import (
 	"strconv"
 )
 
+// NewSCIMGroupService creates a new instance of SCIMGroupService.
+// It takes a service.Connector as input and returns a pointer to SCIMGroupService.
 func NewSCIMGroupService(client service.Connector) *SCIMGroupService {
 	return &SCIMGroupService{internalClient: &internalSCIMGroupImpl{c: client}}
 }
 
+// SCIMGroupService provides methods to interact with SCIM groups in Atlassian Administration.
 type SCIMGroupService struct {
+	// internalClient is the connector interface for SCIM group operations.
 	internalClient admin.SCIMGroupConnector
 }
 

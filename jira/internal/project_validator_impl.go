@@ -10,6 +10,7 @@ import (
 	"net/url"
 )
 
+// NewProjectValidatorService creates a new instance of ProjectValidatorService.
 func NewProjectValidatorService(client service.Connector, version string) (*ProjectValidatorService, error) {
 
 	if version == "" {
@@ -21,7 +22,9 @@ func NewProjectValidatorService(client service.Connector, version string) (*Proj
 	}, nil
 }
 
+// ProjectValidatorService provides methods to validate project keys and names in Jira Service Management.
 type ProjectValidatorService struct {
+	// internalClient is the connector interface for project validation operations.
 	internalClient jira.ProjectValidatorConnector
 }
 

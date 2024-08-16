@@ -11,6 +11,9 @@ import (
 	"strconv"
 )
 
+// NewIssueFieldConfigurationService creates a new instance of IssueFieldConfigService.
+// It takes a service.Connector, a version string, an IssueFieldConfigItemService, and an IssueFieldConfigSchemeService as input.
+// Returns a pointer to IssueFieldConfigService and an error if the version is not provided.
 func NewIssueFieldConfigurationService(client service.Connector, version string, item *IssueFieldConfigItemService,
 	scheme *IssueFieldConfigSchemeService) (*IssueFieldConfigService, error) {
 
@@ -25,10 +28,14 @@ func NewIssueFieldConfigurationService(client service.Connector, version string,
 	}, nil
 }
 
+// IssueFieldConfigService provides methods to manage field configurations in Jira Service Management.
 type IssueFieldConfigService struct {
+	// internalClient is the connector interface for field configuration operations.
 	internalClient jira.FieldConfigConnector
-	Item           *IssueFieldConfigItemService
-	Scheme         *IssueFieldConfigSchemeService
+	// Item is the service for managing field configuration items.
+	Item *IssueFieldConfigItemService
+	// Scheme is the service for managing field configuration schemes.
+	Scheme *IssueFieldConfigSchemeService
 }
 
 // Gets Returns a paginated list of all field configurations.

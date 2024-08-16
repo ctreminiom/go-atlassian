@@ -11,14 +11,17 @@ import (
 	"strconv"
 )
 
+// NewKnowledgebaseService creates a new instance of KnowledgebaseService.
+// It takes a service.Connector and a version string as input and returns a pointer to KnowledgebaseService.
 func NewKnowledgebaseService(client service.Connector, version string) *KnowledgebaseService {
-
 	return &KnowledgebaseService{
 		internalClient: &internalKnowledgebaseImpl{c: client, version: version},
 	}
 }
 
+// KnowledgebaseService provides methods to interact with knowledge base operations in Jira Service Management.
 type KnowledgebaseService struct {
+	// internalClient is the connector interface for knowledge base operations.
 	internalClient sm.KnowledgeBaseConnector
 }
 

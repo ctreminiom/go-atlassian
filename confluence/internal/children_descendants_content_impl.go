@@ -12,14 +12,16 @@ import (
 	"strings"
 )
 
+// NewChildrenDescandantsService creates a new instance of ChildrenDescandantsService.
 func NewChildrenDescandantsService(client service.Connector) *ChildrenDescandantsService {
-
 	return &ChildrenDescandantsService{
 		internalClient: &internalChildrenDescandantsImpl{c: client},
 	}
 }
 
+// ChildrenDescandantsService provides methods to interact with children and descendants operations in Confluence.
 type ChildrenDescandantsService struct {
+	// internalClient is the connector interface for children and descendants operations.
 	internalClient confluence.ChildrenDescendantConnector
 }
 

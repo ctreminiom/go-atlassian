@@ -12,6 +12,7 @@ import (
 	"github.com/ctreminiom/go-atlassian/service/jira"
 )
 
+// NewGroupUserPickerService creates a new GroupUserPickerService instance.
 func NewGroupUserPickerService(client service.Connector, version string) (*GroupUserPickerService, error) {
 
 	if version == "" {

@@ -12,7 +12,9 @@ import (
 	"strings"
 )
 
+// SearchRichTextService provides methods to manage rich text searches in Jira Service Management.
 type SearchRichTextService struct {
+	// internalClient is the connector interface for rich text search operations.
 	internalClient jira.SearchRichTextConnector
 }
 

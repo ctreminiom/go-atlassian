@@ -10,14 +10,17 @@ import (
 	"net/url"
 )
 
+// NewRestrictionOperationUserService creates a new instance of RestrictionOperationUserService.
+// It takes a service.Connector as input and returns a pointer to RestrictionOperationUserService.
 func NewRestrictionOperationUserService(client service.Connector) *RestrictionOperationUserService {
-
 	return &RestrictionOperationUserService{
 		internalClient: &internalRestrictionOperationUserImpl{c: client},
 	}
 }
 
+// RestrictionOperationUserService provides methods to interact with content restriction operations for users in Confluence.
 type RestrictionOperationUserService struct {
+	// internalClient is the connector interface for content restriction operations for users.
 	internalClient confluence.RestrictionUserOperationConnector
 }
 

@@ -8,6 +8,8 @@ import (
 	"net/http"
 )
 
+// NewWorkSpaceService creates a new instance of WorkSpaceService.
+// It takes a service.Connector and a version string as input and returns a pointer to WorkSpaceService.
 func NewWorkSpaceService(client service.Connector, version string) *WorkSpaceService {
 
 	return &WorkSpaceService{
@@ -15,7 +17,9 @@ func NewWorkSpaceService(client service.Connector, version string) *WorkSpaceSer
 	}
 }
 
+// WorkSpaceService provides methods to interact with workspace operations in Jira Service Management.
 type WorkSpaceService struct {
+	// internalClient is the connector interface for workspace operations.
 	internalClient sm.WorkSpaceConnector
 }
 

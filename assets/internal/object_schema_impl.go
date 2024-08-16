@@ -11,14 +11,17 @@ import (
 	"strings"
 )
 
+// NewObjectSchemaService creates a new instance of ObjectSchemaService.
+// It takes a service.Connector as input and returns a pointer to ObjectSchemaService.
 func NewObjectSchemaService(client service.Connector) *ObjectSchemaService {
-
 	return &ObjectSchemaService{
 		internalClient: &internalObjectSchemaImpl{c: client},
 	}
 }
 
+// ObjectSchemaService provides methods to interact with object schemas in Jira Assets.
 type ObjectSchemaService struct {
+	// internalClient is the connector interface for object schema operations.
 	internalClient assets.ObjectSchemaConnector
 }
 

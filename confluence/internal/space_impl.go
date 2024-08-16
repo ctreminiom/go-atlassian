@@ -12,17 +12,21 @@ import (
 	"strings"
 )
 
+// NewSpaceService creates a new instance of SpaceService.
+// It takes a service.Connector and a pointer to SpacePermissionService as input and returns a pointer to SpaceService.
 func NewSpaceService(client service.Connector, permission *SpacePermissionService) *SpaceService {
-
 	return &SpaceService{
 		internalClient: &internalSpaceImpl{c: client},
 		Permission:     permission,
 	}
 }
 
+// SpaceService provides methods to interact with space operations in Confluence.
 type SpaceService struct {
+	// internalClient is the connector interface for space operations.
 	internalClient confluence.SpaceConnector
-	Permission     *SpacePermissionService
+	// Permission is a pointer to SpacePermissionService for additional permission operations.
+	Permission *SpacePermissionService
 }
 
 // Gets returns all spaces.

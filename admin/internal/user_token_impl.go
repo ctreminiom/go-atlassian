@@ -9,11 +9,15 @@ import (
 	"net/http"
 )
 
+// NewUserTokenService creates a new instance of UserTokenService.
+// It takes a service.Connector as input and returns a pointer to UserTokenService.
 func NewUserTokenService(client service.Connector) *UserTokenService {
 	return &UserTokenService{internalClient: &internalUserTokenImpl{c: client}}
 }
 
+// UserTokenService provides methods to interact with user token operations in Atlassian Administration.
 type UserTokenService struct {
+	// internalClient is the connector interface for user token operations.
 	internalClient admin.UserTokenConnector
 }
 

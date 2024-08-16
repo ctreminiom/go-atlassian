@@ -13,6 +13,7 @@ import (
 	"github.com/ctreminiom/go-atlassian/service/jira"
 )
 
+// NewMetadataService creates a new instance of MetadataService.
 func NewMetadataService(client service.Connector, version string) (*MetadataService, error) {
 
 	if version == "" {
@@ -24,7 +25,9 @@ func NewMetadataService(client service.Connector, version string) (*MetadataServ
 	}, nil
 }
 
+// MetadataService provides methods to manage metadata in Jira Service Management.
 type MetadataService struct {
+	// internalClient is the connector interface for metadata operations.
 	internalClient jira.MetadataConnector
 }
 

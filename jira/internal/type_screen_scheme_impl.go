@@ -12,6 +12,7 @@ import (
 	"strings"
 )
 
+// NewTypeScreenSchemeService creates a new instance of TypeScreenSchemeService.
 func NewTypeScreenSchemeService(client service.Connector, version string) (*TypeScreenSchemeService, error) {
 
 	if version == "" {
@@ -23,7 +24,9 @@ func NewTypeScreenSchemeService(client service.Connector, version string) (*Type
 	}, nil
 }
 
+// TypeScreenSchemeService provides methods to manage issue type screen schemes in Jira Service Management.
 type TypeScreenSchemeService struct {
+	// internalClient is the connector interface for issue type screen scheme operations.
 	internalClient jira.TypeScreenSchemeConnector
 }
 

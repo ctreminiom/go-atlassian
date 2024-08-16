@@ -13,18 +13,29 @@ import (
 	"github.com/ctreminiom/go-atlassian/service/jira"
 )
 
+// ProjectChildServices holds various child services related to project management in Jira Service Management.
 type ProjectChildServices struct {
-	Category   *ProjectCategoryService
-	Component  *ProjectComponentService
-	Feature    *ProjectFeatureService
+	// Category is the service for managing project categories.
+	Category *ProjectCategoryService
+	// Component is the service for managing project components.
+	Component *ProjectComponentService
+	// Feature is the service for managing project features.
+	Feature *ProjectFeatureService
+	// Permission is the service for managing project permission schemes.
 	Permission *ProjectPermissionSchemeService
-	Property   *ProjectPropertyService
-	Role       *ProjectRoleService
-	Type       *ProjectTypeService
-	Validator  *ProjectValidatorService
-	Version    *ProjectVersionService
+	// Property is the service for managing project properties.
+	Property *ProjectPropertyService
+	// Role is the service for managing project roles.
+	Role *ProjectRoleService
+	// Type is the service for managing project types.
+	Type *ProjectTypeService
+	// Validator is the service for managing project validators.
+	Validator *ProjectValidatorService
+	// Version is the service for managing project versions.
+	Version *ProjectVersionService
 }
 
+// NewProjectService creates a new instance of ProjectService.
 func NewProjectService(client service.Connector, version string, subServices *ProjectChildServices) (*ProjectService, error) {
 
 	if version == "" {
@@ -45,17 +56,28 @@ func NewProjectService(client service.Connector, version string, subServices *Pr
 	}, nil
 }
 
+// ProjectService provides methods to manage projects in Jira Service Management.
 type ProjectService struct {
+	// internalClient is the connector interface for project operations.
 	internalClient jira.ProjectConnector
-	Category       *ProjectCategoryService
-	Component      *ProjectComponentService
-	Feature        *ProjectFeatureService
-	Permission     *ProjectPermissionSchemeService
-	Property       *ProjectPropertyService
-	Role           *ProjectRoleService
-	Type           *ProjectTypeService
-	Validator      *ProjectValidatorService
-	Version        *ProjectVersionService
+	// Category is the service for managing project categories.
+	Category *ProjectCategoryService
+	// Component is the service for managing project components.
+	Component *ProjectComponentService
+	// Feature is the service for managing project features.
+	Feature *ProjectFeatureService
+	// Permission is the service for managing project permission schemes.
+	Permission *ProjectPermissionSchemeService
+	// Property is the service for managing project properties.
+	Property *ProjectPropertyService
+	// Role is the service for managing project roles.
+	Role *ProjectRoleService
+	// Type is the service for managing project types.
+	Type *ProjectTypeService
+	// Validator is the service for managing project validators.
+	Validator *ProjectValidatorService
+	// Version is the service for managing project versions.
+	Version *ProjectVersionService
 }
 
 // Create creates a project based on a project type template

@@ -12,6 +12,7 @@ import (
 	"strings"
 )
 
+// NewNotificationSchemeService creates a new instance of NotificationSchemeService.
 func NewNotificationSchemeService(client service.Connector, version string) (*NotificationSchemeService, error) {
 
 	if version == "" {
@@ -23,7 +24,9 @@ func NewNotificationSchemeService(client service.Connector, version string) (*No
 	}, nil
 }
 
+// NotificationSchemeService provides methods to manage notification schemes in Jira Service Management.
 type NotificationSchemeService struct {
+	// internalClient is the connector interface for notification scheme operations.
 	internalClient jira.NotificationSchemeConnector
 }
 

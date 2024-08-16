@@ -15,6 +15,8 @@ import (
 	"strings"
 )
 
+// NewContentAttachmentService creates a new instance of ContentAttachmentService.
+// It takes a service.Connector as input and returns a pointer to ContentAttachmentService.
 func NewContentAttachmentService(client service.Connector) *ContentAttachmentService {
 
 	return &ContentAttachmentService{
@@ -22,7 +24,9 @@ func NewContentAttachmentService(client service.Connector) *ContentAttachmentSer
 	}
 }
 
+// ContentAttachmentService provides methods to interact with content attachment operations in Confluence.
 type ContentAttachmentService struct {
+	// internalClient is the connector interface for content attachment operations.
 	internalClient confluence.ContentAttachmentConnector
 }
 

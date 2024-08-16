@@ -1,8 +1,6 @@
 package models
 
 // TicketPageScheme represents a paginated list of tickets.
-// Tickets is a slice of the tickets on the page.
-// AllTicketsQuery is a query that fetches all tickets.
 type TicketPageScheme struct {
 	Tickets         []*TicketScheme `json:"tickets,omitempty"`         // The tickets on the page.
 	AllTicketsQuery string          `json:"allTicketsQuery,omitempty"` // A query that fetches all tickets.
@@ -24,9 +22,6 @@ type TicketScheme struct {
 }
 
 // TicketStatusScheme represents the status of a ticket.
-// Name is the name of the status.
-// Description is the description of the status.
-// ColorName is the name of the color associated with the status.
 type TicketStatusScheme struct {
 	Name        string `json:"name,omitempty"`        // The name of the status.
 	Description string `json:"description,omitempty"` // The description of the status.
@@ -34,9 +29,6 @@ type TicketStatusScheme struct {
 }
 
 // TicketTypeScheme represents the type of a ticket.
-// Name is the name of the type.
-// Description is the description of the type.
-// IconURL is the URL of the icon associated with the type.
 type TicketTypeScheme struct {
 	Name        string `json:"name,omitempty"`        // The name of the type.
 	Description string `json:"description,omitempty"` // The description of the type.
@@ -44,8 +36,6 @@ type TicketTypeScheme struct {
 }
 
 // TicketPriorityScheme represents the priority of a ticket.
-// Name is the name of the priority.
-// IconURL is the URL of the icon associated with the priority.
 type TicketPriorityScheme struct {
 	Name    string `json:"name,omitempty"`    // The name of the priority.
 	IconURL string `json:"iconUrl,omitempty"` // The URL of the icon associated with the priority.

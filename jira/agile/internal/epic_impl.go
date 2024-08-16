@@ -12,14 +12,17 @@ import (
 	"strings"
 )
 
+// NewEpicService creates a new instance of EpicService.
+// It takes a service.Connector and a version string as input and returns a pointer to EpicService.
 func NewEpicService(client service.Connector, version string) *EpicService {
-
 	return &EpicService{
 		internalClient: &internalEpicImpl{c: client, version: version},
 	}
 }
 
+// EpicService provides methods to interact with epic operations in Jira Agile.
 type EpicService struct {
+	// internalClient is the connector interface for epic operations.
 	internalClient agile.EpicConnector
 }
 

@@ -11,14 +11,17 @@ import (
 	"strconv"
 )
 
+// NewTaskService creates a new instance of TaskService.
+// It takes a service.Connector as input and returns a pointer to TaskService.
 func NewTaskService(client service.Connector) *TaskService {
-
 	return &TaskService{
 		internalClient: &internalTaskImpl{c: client},
 	}
 }
 
+// TaskService provides methods to interact with long-running task operations in Confluence.
 type TaskService struct {
+	// internalClient is the connector interface for task operations.
 	internalClient confluence.TaskConnector
 }
 

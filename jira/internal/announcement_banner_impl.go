@@ -9,6 +9,8 @@ import (
 	"net/http"
 )
 
+// NewAnnouncementBannerService creates a new instance of AnnouncementBannerService.
+// It takes a service.Connector and a version string as input and returns a pointer to AnnouncementBannerService.
 func NewAnnouncementBannerService(client service.Connector, version string) *AnnouncementBannerService {
 
 	return &AnnouncementBannerService{
@@ -16,7 +18,9 @@ func NewAnnouncementBannerService(client service.Connector, version string) *Ann
 	}
 }
 
+// AnnouncementBannerService provides methods to interact with announcement banner operations in Jira Service Management.
 type AnnouncementBannerService struct {
+	// internalClient is the connector interface for announcement banner operations.
 	internalClient jira.AnnouncementBannerConnector
 }
 

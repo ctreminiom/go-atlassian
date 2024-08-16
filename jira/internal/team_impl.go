@@ -8,6 +8,7 @@ import (
 	"net/http"
 )
 
+// NewTeamService creates a new instance of TeamService.
 func NewTeamService(client service.Connector) *TeamService {
 
 	return &TeamService{
@@ -15,7 +16,9 @@ func NewTeamService(client service.Connector) *TeamService {
 	}
 }
 
+// TeamService provides methods to manage team information in Jira Advanced Roadmaps.
 type TeamService struct {
+	// internalClient is the connector interface for team operations.
 	internalClient jira.TeamConnector
 }
 

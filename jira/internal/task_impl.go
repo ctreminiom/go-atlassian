@@ -10,6 +10,7 @@ import (
 	"github.com/ctreminiom/go-atlassian/service/jira"
 )
 
+// NewTaskService creates a new instance of TaskService.
 func NewTaskService(client service.Connector, version string) (*TaskService, error) {
 
 	if version == "" {
@@ -21,7 +22,9 @@ func NewTaskService(client service.Connector, version string) (*TaskService, err
 	}, nil
 }
 
+// TaskService provides methods to manage tasks in Jira Service Management.
 type TaskService struct {
+	// internalClient is the connector interface for task operations.
 	internalClient jira.TaskConnector
 }
 

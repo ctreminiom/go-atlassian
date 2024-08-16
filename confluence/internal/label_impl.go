@@ -11,14 +11,16 @@ import (
 	"strconv"
 )
 
+// NewLabelService creates a new instance of LabelService.
 func NewLabelService(client service.Connector) *LabelService {
-
 	return &LabelService{
 		internalClient: &internalLabelImpl{c: client},
 	}
 }
 
+// LabelService provides methods to interact with label operations in Confluence.
 type LabelService struct {
+	// internalClient is the connector interface for label operations.
 	internalClient confluence.LabelConnector
 }
 

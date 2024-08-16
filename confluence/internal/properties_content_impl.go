@@ -12,14 +12,17 @@ import (
 	"strings"
 )
 
+// NewPropertyService creates a new instance of PropertyService.
+// It takes a service.Connector as input and returns a pointer to PropertyService.
 func NewPropertyService(client service.Connector) *PropertyService {
-
 	return &PropertyService{
 		internalClient: &internalPropertyImpl{c: client},
 	}
 }
 
+// PropertyService provides methods to interact with content property operations in Confluence.
 type PropertyService struct {
+	// internalClient is the connector interface for content property operations.
 	internalClient confluence.ContentPropertyConnector
 }
 

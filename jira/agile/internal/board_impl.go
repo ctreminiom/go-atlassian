@@ -12,14 +12,17 @@ import (
 	"strings"
 )
 
+// NewBoardService creates a new instance of BoardService.
+// It takes a service.Connector and a version string as input and returns a pointer to BoardService.
 func NewBoardService(client service.Connector, version string) *BoardService {
-
 	return &BoardService{
 		internalClient: &internalBoardImpl{c: client, version: version},
 	}
 }
 
+// BoardService provides methods to interact with board operations in Jira Agile.
 type BoardService struct {
+	// internalClient is the connector interface for board operations.
 	internalClient agile.BoardConnector
 }
 

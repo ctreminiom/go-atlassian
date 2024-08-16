@@ -9,14 +9,17 @@ import (
 	"net/http"
 )
 
+// NewFeedbackService creates a new instance of FeedbackService.
+// It takes a service.Connector and a version string as input and returns a pointer to FeedbackService.
 func NewFeedbackService(client service.Connector, version string) *FeedbackService {
-
 	return &FeedbackService{
 		internalClient: &internalServiceRequestFeedbackImpl{c: client, version: version},
 	}
 }
 
+// FeedbackService provides methods to interact with feedback operations in Jira Service Management.
 type FeedbackService struct {
+	// internalClient is the connector interface for feedback operations.
 	internalClient sm.FeedbackConnector
 }
 

@@ -15,6 +15,9 @@ import (
 	"github.com/ctreminiom/go-atlassian/service/sm"
 )
 
+// NewServiceDeskService creates a new instance of ServiceDeskService.
+// It takes a service.Connector, a version string, and a QueueService as input.
+// Returns a pointer to ServiceDeskService and an error if the version is not provided.
 func NewServiceDeskService(client service.Connector, version string, queue *QueueService) (*ServiceDeskService, error) {
 
 	if version == "" {
@@ -27,9 +30,12 @@ func NewServiceDeskService(client service.Connector, version string, queue *Queu
 	}, nil
 }
 
+// ServiceDeskService provides methods to interact with service desk operations in Jira Service Management.
 type ServiceDeskService struct {
+	// internalClient is the connector interface for service desk operations.
 	internalClient sm.ServiceDeskConnector
-	Queue          *QueueService
+	// Queue handles queue operations.
+	Queue *QueueService
 }
 
 // Gets returns all the service desks in the Jira Service Management instance that the user has permission to access.

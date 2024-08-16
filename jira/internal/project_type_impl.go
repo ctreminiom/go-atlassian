@@ -9,6 +9,7 @@ import (
 	"net/http"
 )
 
+// NewProjectTypeService creates a new instance of ProjectTypeService.
 func NewProjectTypeService(client service.Connector, version string) (*ProjectTypeService, error) {
 
 	if version == "" {
@@ -20,7 +21,9 @@ func NewProjectTypeService(client service.Connector, version string) (*ProjectTy
 	}, nil
 }
 
+// ProjectTypeService provides methods to manage project types in Jira Service Management.
 type ProjectTypeService struct {
+	// internalClient is the connector interface for project type operations.
 	internalClient jira.ProjectTypeConnector
 }
 

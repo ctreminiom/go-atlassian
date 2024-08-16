@@ -5,6 +5,9 @@ import (
 	"github.com/ctreminiom/go-atlassian/service"
 )
 
+// NewCommentService creates a new instance of CommentADFService and CommentRichTextService.
+// It takes a service.Connector and a version string as input.
+// Returns pointers to CommentADFService and CommentRichTextService, and an error if the version is not provided.
 func NewCommentService(client service.Connector, version string) (*CommentADFService, *CommentRichTextService, error) {
 
 	if version == "" {

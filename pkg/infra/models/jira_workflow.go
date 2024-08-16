@@ -161,106 +161,119 @@ type WorkflowConditionScheme struct {
 	Type          string                     `json:"type,omitempty"`          // The type of the condition.
 }
 
+// WorkflowSearchCriteria represents the criteria for searching workflows in Jira.
 type WorkflowSearchCriteria struct {
-	ProjectAndIssueTypes []*WorkflowSearchProjectIssueTypeMapping `json:"projectAndIssueTypes,omitempty"`
-	WorkflowIDs          []string                                 `json:"workflowIds,omitempty"`
-	WorkflowNames        []string                                 `json:"workflowNames,omitempty"`
+	ProjectAndIssueTypes []*WorkflowSearchProjectIssueTypeMapping `json:"projectAndIssueTypes,omitempty"` // ProjectAndIssueTypes is a list of project and issue type mappings to filter the search.
+	WorkflowIDs          []string                                 `json:"workflowIds,omitempty"`          // WorkflowIDs is a list of workflow IDs to filter the search.
+	WorkflowNames        []string                                 `json:"workflowNames,omitempty"`        // WorkflowNames is a list of workflow names to filter the search.
 }
 
+// WorkflowSearchProjectIssueTypeMapping represents a mapping of project and issue type for workflow search.
 type WorkflowSearchProjectIssueTypeMapping struct {
-	IssueTypeID string `json:"issueTypeId,omitempty"`
-	ProjectID   string `json:"projectId,omitempty"`
+	IssueTypeID string `json:"issueTypeId,omitempty"` // IssueTypeID is the ID of the issue type.
+	ProjectID   string `json:"projectId,omitempty"`   // ProjectID is the ID of the project.
 }
 
+// WorkflowReadResponseScheme represents the response scheme for reading workflows in Jira.
 type WorkflowReadResponseScheme struct {
-	Statuses  []*WorkflowStatusDetailScheme `json:"statuses,omitempty"`
-	Workflows []*JiraWorkflowScheme         `json:"workflows,omitempty"`
+	Statuses  []*WorkflowStatusDetailScheme `json:"statuses,omitempty"`  // Statuses is a list of workflow status details.
+	Workflows []*JiraWorkflowScheme         `json:"workflows,omitempty"` // Workflows is a list of Jira workflows.
 }
 
+// JiraWorkflowScheme represents a workflow in Jira.
 type JiraWorkflowScheme struct {
-	Description      string                           `json:"description,omitempty"`
-	ID               string                           `json:"id,omitempty"`
-	IsEditable       bool                             `json:"isEditable,omitempty"`
-	Name             string                           `json:"name,omitempty"`
-	Scope            *WorkflowStatusScopeScheme       `json:"scope,omitempty"`
-	StartPointLayout *WorkflowLayoutScheme            `json:"startPointLayout,omitempty"`
-	Statuses         []*WorkflowReferenceStatusScheme `json:"statuses,omitempty"`
-	TaskID           string                           `json:"taskId,omitempty"`
-	Transitions      []*WorkflowTransitionScheme      `json:"transitions,omitempty"`
-	Usages           []*ProjectIssueTypesScheme       `json:"usages,omitempty"`
-	Version          *WorkflowDocumentVersionScheme   `json:"version,omitempty"`
+	Description      string                           `json:"description,omitempty"`      // Description is the description of the workflow.
+	ID               string                           `json:"id,omitempty"`               // ID is the ID of the workflow.
+	IsEditable       bool                             `json:"isEditable,omitempty"`       // IsEditable indicates if the workflow is editable.
+	Name             string                           `json:"name,omitempty"`             // Name is the name of the workflow.
+	Scope            *WorkflowStatusScopeScheme       `json:"scope,omitempty"`            // Scope is the scope of the workflow.
+	StartPointLayout *WorkflowLayoutScheme            `json:"startPointLayout,omitempty"` // StartPointLayout is the layout of the start point of the workflow.
+	Statuses         []*WorkflowReferenceStatusScheme `json:"statuses,omitempty"`         // Statuses is a list of reference statuses in the workflow.
+	TaskID           string                           `json:"taskId,omitempty"`           // TaskID is the ID of the task associated with the workflow.
+	Transitions      []*WorkflowTransitionScheme      `json:"transitions,omitempty"`      // Transitions is a list of transitions in the workflow.
+	Usages           []*ProjectIssueTypesScheme       `json:"usages,omitempty"`           // Usages is a list of project issue types that use the workflow.
+	Version          *WorkflowDocumentVersionScheme   `json:"version,omitempty"`          // Version is the version of the workflow document.
 }
 
+// WorkflowLayoutScheme represents the layout of a workflow element in Jira.
 type WorkflowLayoutScheme struct {
-	X float64 `json:"x,omitempty"`
-	Y float64 `json:"y,omitempty"`
+	X float64 `json:"x,omitempty"` // X is the X coordinate of the layout.
+	Y float64 `json:"y,omitempty"` // Y is the Y coordinate of the layout.
 }
 
+// WorkflowReferenceStatusScheme represents a reference status in a workflow in Jira.
 type WorkflowReferenceStatusScheme struct {
-	Deprecated      bool                  `json:"deprecated,omitempty"`
-	Layout          *WorkflowLayoutScheme `json:"layout,omitempty"`
-	StatusReference string                `json:"statusReference,omitempty"`
+	Deprecated      bool                  `json:"deprecated,omitempty"`      // Deprecated indicates if the status is deprecated.
+	Layout          *WorkflowLayoutScheme `json:"layout,omitempty"`          // Layout is the layout of the status.
+	StatusReference string                `json:"statusReference,omitempty"` // StatusReference is the reference of the status.
 }
 
+// WorkflowDocumentVersionScheme represents the version of a workflow document in Jira.
 type WorkflowDocumentVersionScheme struct {
-	ID            string `json:"id,omitempty"`
-	VersionNumber int    `json:"versionNumber,omitempty"`
+	ID            string `json:"id,omitempty"`            // ID is the ID of the document version.
+	VersionNumber int    `json:"versionNumber,omitempty"` // VersionNumber is the version number of the document.
 }
 
+// WorkflowCapabilitiesScheme represents the capabilities of a workflow in Jira.
 type WorkflowCapabilitiesScheme struct {
-	ConnectRules []*AvailableWorkflowConnectRuleScheme `json:"connectRules,omitempty"`
-	EditorScope  string                                `json:"editorScope,omitempty"`
-	ForgeRules   []*AvailableWorkflowForgeRuleScheme   `json:"forgeRules,omitempty"`
-	ProjectTypes []string                              `json:"projectTypes,omitempty"`
-	SystemRules  []*AvailableWorkflowSystemRuleScheme  `json:"systemRules,omitempty"`
-	TriggerRules []*AvailableWorkflowTriggers          `json:"triggerRules,omitempty"`
+	ConnectRules []*AvailableWorkflowConnectRuleScheme `json:"connectRules,omitempty"` // ConnectRules is a list of available workflow connect rules.
+	EditorScope  string                                `json:"editorScope,omitempty"`  // EditorScope is the scope of the editor.
+	ForgeRules   []*AvailableWorkflowForgeRuleScheme   `json:"forgeRules,omitempty"`   // ForgeRules is a list of available workflow forge rules.
+	SystemRules  []*AvailableWorkflowSystemRuleScheme  `json:"systemRules,omitempty"`  // SystemRules is a list of available workflow system rules.
+	TriggerRules []*AvailableWorkflowTriggers          `json:"triggerRules,omitempty"` // TriggerRules is a list of available workflow trigger rules.
 }
 
+// AvailableWorkflowConnectRuleScheme represents a connect rule in a workflow.
 type AvailableWorkflowConnectRuleScheme struct {
-	AddonKey    string `json:"addonKey,omitempty"`
-	CreateURL   string `json:"createUrl,omitempty"`
-	Description string `json:"description,omitempty"`
-	EditURL     string `json:"editUrl,omitempty"`
-	ModuleKey   string `json:"moduleKey,omitempty"`
-	Name        string `json:"name,omitempty"`
-	RuleKey     string `json:"ruleKey,omitempty"`
-	RuleType    string `json:"ruleType,omitempty"`
-	ViewURL     string `json:"viewUrl,omitempty"`
+	AddonKey    string `json:"addonKey,omitempty"`    // AddonKey is the key of the addon.
+	CreateURL   string `json:"createUrl,omitempty"`   // CreateURL is the URL to create the rule.
+	Description string `json:"description,omitempty"` // Description is the description of the rule.
+	EditURL     string `json:"editUrl,omitempty"`     // EditURL is the URL to edit the rule.
+	ModuleKey   string `json:"moduleKey,omitempty"`   // ModuleKey is the key of the module.
+	Name        string `json:"name,omitempty"`        // Name is the name of the rule.
+	RuleKey     string `json:"ruleKey,omitempty"`     // RuleKey is the key of the rule.
+	RuleType    string `json:"ruleType,omitempty"`    // RuleType is the type of the rule.
+	ViewURL     string `json:"viewUrl,omitempty"`     // ViewURL is the URL to view the rule.
 }
 
+// AvailableWorkflowForgeRuleScheme represents a forge rule in a workflow.
 type AvailableWorkflowForgeRuleScheme struct {
-	Description string `json:"description,omitempty"`
-	ID          string `json:"id,omitempty"`
-	Name        string `json:"name,omitempty"`
-	RuleKey     string `json:"ruleKey,omitempty"`
-	RuleType    string `json:"ruleType,omitempty"`
+	Description string `json:"description,omitempty"` // Description is the description of the rule.
+	ID          string `json:"id,omitempty"`          // ID is the ID of the rule.
+	Name        string `json:"name,omitempty"`        // Name is the name of the rule.
+	RuleKey     string `json:"ruleKey,omitempty"`     // RuleKey is the key of the rule.
+	RuleType    string `json:"ruleType,omitempty"`    // RuleType is the type of the rule.
 }
 
+// AvailableWorkflowSystemRuleScheme represents a system rule in a workflow.
 type AvailableWorkflowSystemRuleScheme struct {
-	Description                     string   `json:"description,omitempty"`
-	IncompatibleRuleKeys            []string `json:"incompatibleRuleKeys,omitempty"`
-	IsAvailableForInitialTransition bool     `json:"isAvailableForInitialTransition,omitempty"`
-	IsVisible                       bool     `json:"isVisible,omitempty"`
-	Name                            string   `json:"name,omitempty"`
-	RuleKey                         string   `json:"ruleKey,omitempty"`
-	RuleType                        string   `json:"ruleType,omitempty"`
+	Description                     string   `json:"description,omitempty"`                     // Description is the description of the rule.
+	IncompatibleRuleKeys            []string `json:"incompatibleRuleKeys,omitempty"`            // IncompatibleRuleKeys is a list of keys of incompatible rules.
+	IsAvailableForInitialTransition bool     `json:"isAvailableForInitialTransition,omitempty"` // IsAvailableForInitialTransition indicates if the rule is available for the initial transition.
+	IsVisible                       bool     `json:"isVisible,omitempty"`                       // IsVisible indicates if the rule is visible.
+	Name                            string   `json:"name,omitempty"`                            // Name is the name of the rule.
+	RuleKey                         string   `json:"ruleKey,omitempty"`                         // RuleKey is the key of the rule.
+	RuleType                        string   `json:"ruleType,omitempty"`                        // RuleType is the type of the rule.
 }
 
+// AvailableWorkflowTriggers represents the triggers available in a workflow.
 type AvailableWorkflowTriggers struct {
-	AvailableTypes []*AvailableWorkflowTriggerTypeScheme `json:"availableTypes,omitempty"`
-	RuleKey        string                                `json:"ruleKey,omitempty"`
+	AvailableTypes []*AvailableWorkflowTriggerTypeScheme `json:"availableTypes,omitempty"` // AvailableTypes is a list of available trigger types.
+	RuleKey        string                                `json:"ruleKey,omitempty"`        // RuleKey is the key of the rule.
 }
 
+// AvailableWorkflowTriggerTypeScheme represents a trigger type in a workflow.
 type AvailableWorkflowTriggerTypeScheme struct {
-	Description string `json:"description,omitempty"`
-	Name        string `json:"name,omitempty"`
-	Type        string `json:"type,omitempty"`
+	Description string `json:"description,omitempty"` // Description is the description of the trigger type.
+	Name        string `json:"name,omitempty"`        // Name is the name of the trigger type.
+	Type        string `json:"type,omitempty"`        // Type is the type of the trigger.
 }
 
+// WorkflowCreatesPayload represents the payload for creating workflows in Jira.
 type WorkflowCreatesPayload struct {
-	Scope     *WorkflowScopeScheme          `json:"scope,omitempty"`
-	Statuses  []*WorkflowStatusUpdateScheme `json:"statuses,omitempty"`
-	Workflows []*WorkflowCreateScheme       `json:"workflows,omitempty"`
+	Scope     *WorkflowScopeScheme          `json:"scope,omitempty"`     // Scope is the scope of the workflow.
+	Statuses  []*WorkflowStatusUpdateScheme `json:"statuses,omitempty"`  // Statuses is a list of statuses in the workflow.
+	Workflows []*WorkflowCreateScheme       `json:"workflows,omitempty"` // Workflows is a list of workflows to be created.
 }
 
 // AddWorkflow adds a new workflow and its statuses to the payload, ensuring no duplicate statuses.
@@ -284,39 +297,46 @@ func (w *WorkflowCreatesPayload) AddWorkflow(workflow *WorkflowCreateScheme) err
 	return nil
 }
 
+// AddStatus adds a new status to the WorkflowCreatesPayload.
 func (w *WorkflowCreatesPayload) AddStatus(status *WorkflowStatusUpdateScheme) {
 	w.Statuses = append(w.Statuses, status)
 }
 
+// WorkflowScopeScheme represents the scope of a workflow in Jira.
 type WorkflowScopeScheme struct {
-	Project *WorkflowScopeProjectScheme `json:"project,omitempty"`
-	Type    string                      `json:"type,omitempty"`
+	Project *WorkflowScopeProjectScheme `json:"project,omitempty"` // Project is the project associated with the workflow.
+	Type    string                      `json:"type,omitempty"`    // Valid values: PROJECT, GLOBAL.
 }
 
+// WorkflowScopeProjectScheme represents a project in the workflow scope.
 type WorkflowScopeProjectScheme struct {
-	ID string `json:"id,omitempty"`
+	ID string `json:"id,omitempty"` // ID is the ID of the project.
 }
 
+// WorkflowStatusUpdateScheme represents an update to a workflow status in Jira.
 type WorkflowStatusUpdateScheme struct {
-	Description     string `json:"description,omitempty"`
-	ID              string `json:"id,omitempty"`
-	Name            string `json:"name,omitempty"`
-	StatusCategory  string `json:"statusCategory,omitempty"`
-	StatusReference string `json:"statusReference,omitempty"`
+	Description     string `json:"description,omitempty"`     // Description is the description of the status.
+	ID              string `json:"id,omitempty"`              // ID is the ID of the status.
+	Name            string `json:"name,omitempty"`            // Name is the name of the status.
+	StatusCategory  string `json:"statusCategory,omitempty"`  // StatusCategory is the category of the status.
+	StatusReference string `json:"statusReference,omitempty"` // StatusReference is the reference of the status.
 }
 
+// WorkflowCreateScheme represents the creation of a workflow in Jira.
 type WorkflowCreateScheme struct {
-	Description      string                       `json:"description,omitempty"`
-	Name             string                       `json:"name,omitempty"`
-	StartPointLayout *WorkflowLayoutScheme        `json:"startPointLayout,omitempty"`
-	Statuses         []*StatusLayoutUpdateScheme  `json:"statuses,omitempty"`
-	Transitions      []*TransitionUpdateDTOScheme `json:"transitions,omitempty"`
+	Description      string                       `json:"description,omitempty"`      // Description is the description of the workflow.
+	Name             string                       `json:"name,omitempty"`             // Name is the name of the workflow.
+	StartPointLayout *WorkflowLayoutScheme        `json:"startPointLayout,omitempty"` // StartPointLayout is the layout of the start point of the workflow.
+	Statuses         []*StatusLayoutUpdateScheme  `json:"statuses,omitempty"`         // Statuses is a list of statuses in the workflow.
+	Transitions      []*TransitionUpdateDTOScheme `json:"transitions,omitempty"`      // Transitions is a list of transitions in the workflow.
 }
 
+// AddStatus adds a new status to the WorkflowCreateScheme.
 func (w *WorkflowCreateScheme) AddStatus(status *StatusLayoutUpdateScheme) {
 	w.Statuses = append(w.Statuses, status)
 }
 
+// AddTransition adds a new transition to the WorkflowCreateScheme.
 func (w *WorkflowCreateScheme) AddTransition(transition *TransitionUpdateDTOScheme) error {
 	if !w.isStatusReferenceAdded(transition.To.StatusReference) {
 		return fmt.Errorf("status reference %s not found", transition.To.StatusReference)
@@ -326,6 +346,8 @@ func (w *WorkflowCreateScheme) AddTransition(transition *TransitionUpdateDTOSche
 	return nil
 }
 
+// isStatusReferenceAdded checks if a status reference is already added to the workflow.
+// It returns true if the status reference is found, otherwise false.
 func (w *WorkflowCreateScheme) isStatusReferenceAdded(statusReference string) bool {
 	for _, status := range w.Statuses {
 		if status.StatusReference == statusReference {
@@ -335,95 +357,111 @@ func (w *WorkflowCreateScheme) isStatusReferenceAdded(statusReference string) bo
 	return false
 }
 
+// StatusLayoutUpdateScheme represents an update to the layout of a status in a workflow.
 type StatusLayoutUpdateScheme struct {
-	Layout          *WorkflowLayoutScheme `json:"layout,omitempty"`
-	StatusReference string                `json:"statusReference"`
+	// Layout is the layout of the status.
+	Layout *WorkflowLayoutScheme `json:"layout,omitempty"`
+	// StatusReference is the reference of the status.
+	StatusReference string `json:"statusReference"`
 }
 
+// TransitionUpdateDTOScheme represents an update to a transition in a workflow.
 type TransitionUpdateDTOScheme struct {
-	Actions            []*WorkflowRuleConfigurationScheme `json:"actions,omitempty"`
-	Conditions         *ConditionGroupUpdateScheme        `json:"conditions,omitempty"`
-	CustomIssueEventID string                             `json:"customIssueEventId,omitempty"`
-	Description        string                             `json:"description,omitempty"`
-	From               []*StatusReferenceAndPortScheme    `json:"from,omitempty"`
-	ID                 string                             `json:"id,omitempty"`
-	Links              []*WorkflowTransitionLinkScheme    `json:"links,omitempty"`
-	Name               string                             `json:"name,omitempty"`
-	To                 *StatusReferenceAndPortScheme      `json:"to,omitempty"`
-	ToStatusReference  string                             `json:"toStatusReference,omitempty"`
-	TransitionScreen   *WorkflowRuleConfigurationScheme   `json:"transitionScreen,omitempty"`
-	Triggers           []*WorkflowTriggerScheme           `json:"triggers,omitempty"`
-	Type               string                             `json:"type,omitempty"`
-	Validators         []*WorkflowRuleConfigurationScheme `json:"validators,omitempty"`
+	Actions            []*WorkflowRuleConfigurationScheme `json:"actions,omitempty"`            // Actions is a list of actions associated with the transition.
+	Conditions         *ConditionGroupUpdateScheme        `json:"conditions,omitempty"`         // Conditions is a list of conditions associated with the transition.
+	CustomIssueEventID string                             `json:"customIssueEventId,omitempty"` // CustomIssueEventID is the custom issue event ID associated with the transition.
+	Description        string                             `json:"description,omitempty"`        // Description is the description of the transition.
+	From               []*StatusReferenceAndPortScheme    `json:"from,omitempty"`               // From is a list of statuses from which this transition can be executed.
+	ID                 string                             `json:"id,omitempty"`                 // ID is the ID of the transition.
+	Links              []*WorkflowTransitionLinkScheme    `json:"links,omitempty"`              // Links is a list of links associated with the transition.
+	Name               string                             `json:"name,omitempty"`               // Name is the name of the transition.
+	To                 *StatusReferenceAndPortScheme      `json:"to,omitempty"`                 // To is the status to which this transition goes.
+	ToStatusReference  string                             `json:"toStatusReference,omitempty"`  // ToStatusReference is the reference of the status to which this transition goes.
+	TransitionScreen   *WorkflowRuleConfigurationScheme   `json:"transitionScreen,omitempty"`   // TransitionScreen is the screen associated with the transition.
+	Triggers           []*WorkflowTriggerScheme           `json:"triggers,omitempty"`           // Triggers is a list of triggers associated with the transition.
+	Type               string                             `json:"type,omitempty"`               // Type is the type of the transition.
+	Validators         []*WorkflowRuleConfigurationScheme `json:"validators,omitempty"`         // Validators is a list of validators associated with the transition.
 }
 
+// ConditionGroupUpdateScheme represents an update to a condition group in a workflow.
 type ConditionGroupUpdateScheme struct {
-	ConditionGroups []*ConditionGroupUpdateScheme      `json:"conditionGroups,omitempty"`
-	Conditions      []*WorkflowRuleConfigurationScheme `json:"conditions,omitempty"`
-	Operation       string                             `json:"operation,omitempty"`
+	ConditionGroups []*ConditionGroupUpdateScheme      `json:"conditionGroups,omitempty"` // ConditionGroups is a list of nested condition groups.
+	Conditions      []*WorkflowRuleConfigurationScheme `json:"conditions,omitempty"`      // Conditions is a list of conditions.
+	Operation       string                             `json:"operation,omitempty"`       // Operation is the operation applied to the conditions.
 }
 
+// StatusReferenceAndPortScheme represents a status reference and port in a workflow.
 type StatusReferenceAndPortScheme struct {
-	Port            int    `json:"port,omitempty"`
-	StatusReference string `json:"statusReference,omitempty"`
+	Port            int    `json:"port,omitempty"`            // Port is the port associated with the status.
+	StatusReference string `json:"statusReference,omitempty"` // StatusReference is the reference of the status.
 }
 
+// WorkflowCreateResponseScheme represents the response after creating a workflow in Jira.
 type WorkflowCreateResponseScheme struct {
-	Statuses  []*JiraWorkflowStatusScheme `json:"statuses,omitempty"`
-	Workflows []*JiraWorkflowScheme       `json:"workflows,omitempty"`
+	Statuses  []*JiraWorkflowStatusScheme `json:"statuses,omitempty"`  // Statuses is a list of statuses in the workflow.
+	Workflows []*JiraWorkflowScheme       `json:"workflows,omitempty"` // Workflows is a list of Jira workflows.
 }
 
+// JiraWorkflowStatusScheme represents a status in a Jira workflow.
 type JiraWorkflowStatusScheme struct {
-	Description     string                     `json:"description,omitempty"`
-	ID              string                     `json:"id,omitempty"`
-	Name            string                     `json:"name,omitempty"`
-	Scope           *WorkflowScopeScheme       `json:"scope,omitempty"`
-	StatusCategory  string                     `json:"statusCategory,omitempty"`
-	StatusReference string                     `json:"statusReference,omitempty"`
-	Usages          []*ProjectIssueTypesScheme `json:"usages,omitempty"`
+	Description     string                     `json:"description,omitempty"`     // Description is the description of the status.
+	ID              string                     `json:"id,omitempty"`              // ID is the ID of the status.
+	Name            string                     `json:"name,omitempty"`            // Name is the name of the status.
+	Scope           *WorkflowScopeScheme       `json:"scope,omitempty"`           // Scope is the scope of the status.
+	StatusCategory  string                     `json:"statusCategory,omitempty"`  // StatusCategory is the category of the status.
+	StatusReference string                     `json:"statusReference,omitempty"` // StatusReference is the reference of the status.
+	Usages          []*ProjectIssueTypesScheme `json:"usages,omitempty"`          // Usages is a list of project issue types that use the status.
 }
 
+// ValidationOptionsForCreateScheme represents the validation options for creating a workflow.
 type ValidationOptionsForCreateScheme struct {
-	Payload *WorkflowCreatesPayload       `json:"payload,omitempty"`
-	Options *ValidationOptionsLevelScheme `json:"validationOptions"`
+	Payload *WorkflowCreatesPayload       `json:"payload,omitempty"` // Payload is the payload for creating workflows.
+	Options *ValidationOptionsLevelScheme `json:"validationOptions"` // Options are the validation options.
 }
 
+// ValidationOptionsLevelScheme represents the levels of validation options.
 type ValidationOptionsLevelScheme struct {
-	Levels []string `json:"levels,omitempty"`
+	Levels []string `json:"levels,omitempty"` // Valid values: WARNING, ERROR.
 }
 
+// WorkflowValidationErrorListScheme represents a list of workflow validation errors.
 type WorkflowValidationErrorListScheme struct {
-	Errors []*WorkflowValidationErrorScheme `json:"errors,omitempty"`
+	Errors []*WorkflowValidationErrorScheme `json:"errors,omitempty"` // Errors is a list of workflow validation errors.
 }
 
+// WorkflowValidationErrorScheme represents a workflow validation error.
 type WorkflowValidationErrorScheme struct {
-	Code             string                          `json:"code,omitempty"`
-	ElementReference *WorkflowElementReferenceScheme `json:"elementReference,omitempty"`
-	Level            string                          `json:"level,omitempty"`
-	Message          string                          `json:"message,omitempty"`
-	Type             string                          `json:"type,omitempty"`
+	Code             string                          `json:"code,omitempty"`             // Valid values: INVALID_TRANSITION, INVALID_STATUS, INVALID_TRANSITION_TO_STATUS, INVALID_TRANSITION_FROM_STATUS, INVALID_TRANSITION_TO_STATUS
+	ElementReference *WorkflowElementReferenceScheme `json:"elementReference,omitempty"` // ElementReference is the reference to the element that caused the error.
+	Level            string                          `json:"level,omitempty"`            // Valid values: WARNING, ERROR.
+	Message          string                          `json:"message,omitempty"`          // Message is the error message.
+	Type             string                          `json:"type,omitempty"`             // Valid values: TRANSITION, STATUS
 }
 
+// WorkflowElementReferenceScheme represents a reference to an element in a workflow.
 type WorkflowElementReferenceScheme struct {
-	PropertyKey            string                         `json:"propertyKey,omitempty"`
-	RuleID                 string                         `json:"ruleId,omitempty"`
-	StatusMappingReference *ProjectAndIssueTypePairScheme `json:"statusMappingReference,omitempty"`
-	StatusReference        string                         `json:"statusReference,omitempty"`
-	TransitionID           string                         `json:"transitionId,omitempty"`
+	PropertyKey            string                         `json:"propertyKey,omitempty"`            // PropertyKey is the key of the property.
+	RuleID                 string                         `json:"ruleId,omitempty"`                 // RuleID is the ID of the rule.
+	StatusMappingReference *ProjectAndIssueTypePairScheme `json:"statusMappingReference,omitempty"` // StatusMappingReference is the reference to the status mapping.
+	StatusReference        string                         `json:"statusReference,omitempty"`        // StatusReference is the reference of the status.
+	TransitionID           string                         `json:"transitionId,omitempty"`           // TransitionID is the ID of the transition.
 }
 
+// ProjectAndIssueTypePairScheme represents a pair of project and issue type.
 type ProjectAndIssueTypePairScheme struct {
-	IssueTypeID string `json:"issueTypeId,omitempty"`
-	ProjectID   string `json:"projectId,omitempty"`
+	IssueTypeID string `json:"issueTypeId,omitempty"` // IssueTypeID is the ID of the issue type.
+	ProjectID   string `json:"projectId,omitempty"`   // ProjectID is the ID of the project.
 }
 
+// WorkflowUpdatesPayloadScheme represents the payload for updating workflows in Jira.
 type WorkflowUpdatesPayloadScheme struct {
-	Statuses  []*WorkflowStatusUpdateScheme `json:"statuses,omitempty"`
-	Workflows []*WorkflowUpdateScheme       `json:"workflows,omitempty"`
+	Statuses  []*WorkflowStatusUpdateScheme `json:"statuses,omitempty"`  // Statuses is a list of statuses in the workflow.
+	Workflows []*WorkflowUpdateScheme       `json:"workflows,omitempty"` // Workflows is a list of workflows to be updated.
 }
 
+// InjectWorkflow adds a new workflow to the payload for updating workflows.
+// It takes a JiraWorkflowScheme as input and appends it to the Workflows slice.
 func (w *WorkflowUpdatesPayloadScheme) InjectWorkflow(workflow *JiraWorkflowScheme) {
-
 	w.Workflows = append(w.Workflows, &WorkflowUpdateScheme{
 		Description:      workflow.Description,
 		ID:               workflow.ID,
@@ -432,37 +470,42 @@ func (w *WorkflowUpdatesPayloadScheme) InjectWorkflow(workflow *JiraWorkflowSche
 	})
 }
 
+// WorkflowUpdateScheme represents the update scheme for a workflow in Jira.
 type WorkflowUpdateScheme struct {
-	DefaultStatusMappings []*StatusMigrationScheme       `json:"defaultStatusMappings,omitempty"`
-	Description           string                         `json:"description,omitempty"`
-	ID                    string                         `json:"id,omitempty"`
-	StartPointLayout      *WorkflowLayoutScheme          `json:"startPointLayout,omitempty"`
-	StatusMappings        []*StatusMappingDTOScheme      `json:"statusMappings,omitempty"`
-	Statuses              []*StatusLayoutUpdateScheme    `json:"statuses,omitempty"`
-	Transitions           []*TransitionUpdateDTOScheme   `json:"transitions,omitempty"`
-	Version               *WorkflowDocumentVersionScheme `json:"version,omitempty"`
+	DefaultStatusMappings []*StatusMigrationScheme       `json:"defaultStatusMappings,omitempty"` // DefaultStatusMappings is a list of default status mappings.
+	Description           string                         `json:"description,omitempty"`           // Description is the description of the workflow.
+	ID                    string                         `json:"id,omitempty"`                    // ID is the ID of the workflow.
+	StartPointLayout      *WorkflowLayoutScheme          `json:"startPointLayout,omitempty"`      // StartPointLayout is the layout of the start point of the workflow.
+	StatusMappings        []*StatusMappingDTOScheme      `json:"statusMappings,omitempty"`        // StatusMappings is a list of status mappings in the workflow.
+	Statuses              []*StatusLayoutUpdateScheme    `json:"statuses,omitempty"`              // Statuses is a list of statuses in the workflow.
+	Transitions           []*TransitionUpdateDTOScheme   `json:"transitions,omitempty"`           // Transitions is a list of transitions in the workflow.
+	Version               *WorkflowDocumentVersionScheme `json:"version,omitempty"`               // Version is the version of the workflow document.
 }
 
+// StatusMigrationScheme represents a status migration in a workflow in Jira.
 type StatusMigrationScheme struct {
-	NewStatusReference string `json:"newStatusReference,omitempty"`
-	OldStatusReference string `json:"oldStatusReference,omitempty"`
+	NewStatusReference string `json:"newStatusReference,omitempty"` // NewStatusReference is the reference of the new status.
+	OldStatusReference string `json:"oldStatusReference,omitempty"` // OldStatusReference is the reference of the old status.
 }
 
+// StatusMappingDTOScheme represents a status mapping DTO in a workflow in Jira.
 type StatusMappingDTOScheme struct {
-	IssueTypeID      string                       `json:"issueTypeId,omitempty"`
-	ProjectID        string                       `json:"projectId,omitempty"`
-	StatusMigrations []*StatusMigrationScheme     `json:"statusMigrations,omitempty"`
-	Statuses         []*StatusLayoutUpdateScheme  `json:"statuses,omitempty"`
-	Transitions      []*TransitionUpdateDTOScheme `json:"transitions,omitempty"`
+	IssueTypeID      string                       `json:"issueTypeId,omitempty"`      // IssueTypeID is the ID of the issue type.
+	ProjectID        string                       `json:"projectId,omitempty"`        // ProjectID is the ID of the project.
+	StatusMigrations []*StatusMigrationScheme     `json:"statusMigrations,omitempty"` // StatusMigrations is a list of status migrations.
+	Statuses         []*StatusLayoutUpdateScheme  `json:"statuses,omitempty"`         // Statuses is a list of statuses in the workflow.
+	Transitions      []*TransitionUpdateDTOScheme `json:"transitions,omitempty"`      // Transitions is a list of transitions in the workflow.
 }
 
+// WorkflowUpdateResponseScheme represents the response after updating a workflow in Jira.
 type WorkflowUpdateResponseScheme struct {
-	Statuses  []*JiraWorkflowStatusScheme `json:"statuses,omitempty"`
-	TaskID    string                      `json:"taskId,omitempty"`
-	Workflows []*JiraWorkflowScheme       `json:"workflows,omitempty"`
+	Statuses  []*JiraWorkflowStatusScheme `json:"statuses,omitempty"`  // Statuses is a list of statuses in the workflow.
+	TaskID    string                      `json:"taskId,omitempty"`    // TaskID is the ID of the task associated with the workflow update.
+	Workflows []*JiraWorkflowScheme       `json:"workflows,omitempty"` // Workflows is a list of Jira workflows.
 }
 
+// ValidationOptionsForUpdateScheme represents the validation options for updating a workflow.
 type ValidationOptionsForUpdateScheme struct {
-	Payload *WorkflowUpdatesPayloadScheme `json:"payload,omitempty"`
-	Options *ValidationOptionsLevelScheme `json:"validationOptions,omitempty"`
+	Payload *WorkflowUpdatesPayloadScheme `json:"payload,omitempty"`           // Payload is the payload for updating workflows.
+	Options *ValidationOptionsLevelScheme `json:"validationOptions,omitempty"` // Options are the validation options.
 }

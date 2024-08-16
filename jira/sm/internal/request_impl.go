@@ -12,16 +12,27 @@ import (
 	"strings"
 )
 
+// ServiceRequestSubServices holds the sub-services related to service requests in Jira Service Management.
 type ServiceRequestSubServices struct {
-	Approval    *ApprovalService
-	Attachment  *AttachmentService
-	Comment     *CommentService
+	// Approval handles approval operations.
+	Approval *ApprovalService
+	// Attachment handles attachment operations.
+	Attachment *AttachmentService
+	// Comment handles comment operations.
+	Comment *CommentService
+	// Participant handles participant operations.
 	Participant *ParticipantService
-	SLA         *ServiceLevelAgreementService
-	Feedback    *FeedbackService
-	Type        *TypeService
+	// SLA handles service level agreement operations.
+	SLA *ServiceLevelAgreementService
+	// Feedback handles feedback operations.
+	Feedback *FeedbackService
+	// Type handles request type operations.
+	Type *TypeService
 }
 
+// NewRequestService creates a new instance of RequestService.
+// It takes a service.Connector, a version string, and an optional ServiceRequestSubServices as input.
+// Returns a pointer to RequestService and an error if the version is not provided.
 func NewRequestService(client service.Connector, version string, subServices *ServiceRequestSubServices) (*RequestService, error) {
 
 	if version == "" {
@@ -40,21 +51,29 @@ func NewRequestService(client service.Connector, version string, subServices *Se
 		requestService.SLA = subServices.SLA
 		requestService.Feedback = subServices.Feedback
 		requestService.Type = subServices.Type
-
 	}
 
 	return requestService, nil
 }
 
+// RequestService provides methods to interact with service request operations in Jira Service Management.
 type RequestService struct {
+	// internalClient is the connector interface for service request operations.
 	internalClient sm.RequestConnector
-	Approval       *ApprovalService
-	Attachment     *AttachmentService
-	Comment        *CommentService
-	Participant    *ParticipantService
-	SLA            *ServiceLevelAgreementService
-	Feedback       *FeedbackService
-	Type           *TypeService
+	// Approval handles approval operations.
+	Approval *ApprovalService
+	// Attachment handles attachment operations.
+	Attachment *AttachmentService
+	// Comment handles comment operations.
+	Comment *CommentService
+	// Participant handles participant operations.
+	Participant *ParticipantService
+	// SLA handles service level agreement operations.
+	SLA *ServiceLevelAgreementService
+	// Feedback handles feedback operations.
+	Feedback *FeedbackService
+	// Type handles request type operations.
+	Type *TypeService
 }
 
 // Create creates a customer request in a service desk.

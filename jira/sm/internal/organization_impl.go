@@ -11,14 +11,17 @@ import (
 	"strconv"
 )
 
+// NewOrganizationService creates a new instance of OrganizationService.
+// It takes a service.Connector and a version string as input and returns a pointer to OrganizationService.
 func NewOrganizationService(client service.Connector, version string) *OrganizationService {
-
 	return &OrganizationService{
 		internalClient: &internalOrganizationImpl{c: client, version: version},
 	}
 }
 
+// OrganizationService provides methods to interact with organization operations in Jira Service Management.
 type OrganizationService struct {
+	// internalClient is the connector interface for organization operations.
 	internalClient sm.OrganizationConnector
 }
 

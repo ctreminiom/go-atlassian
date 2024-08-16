@@ -5,6 +5,7 @@ import (
 	"github.com/ctreminiom/go-atlassian/service"
 )
 
+// NewSearchService creates a new instance of SearchADFService and SearchRichTextService.
 func NewSearchService(client service.Connector, version string) (*SearchADFService, *SearchRichTextService, error) {
 
 	if version == "" {

@@ -3,12 +3,14 @@ package internal
 import (
 	"context"
 	"errors"
+	"net/http"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
-	"github.com/stretchr/testify/assert"
-	"net/http"
-	"testing"
 )
 
 func Test_BoardService_Get(t *testing.T) {
@@ -909,7 +911,7 @@ func Test_BoardService_Filter(t *testing.T) {
 
 	type args struct {
 		ctx        context.Context
-		filterId   int
+		filterID   int
 		startAt    int
 		maxResults int
 	}
@@ -926,7 +928,7 @@ func Test_BoardService_Filter(t *testing.T) {
 			name: "when the parameters are correct",
 			args: args{
 				ctx:        context.Background(),
-				filterId:   1001,
+				filterID:   1001,
 				startAt:    0,
 				maxResults: 50,
 			},
@@ -955,7 +957,7 @@ func Test_BoardService_Filter(t *testing.T) {
 			name: "when the http call cannot be executed",
 			args: args{
 				ctx:        context.Background(),
-				filterId:   1001,
+				filterID:   1001,
 				startAt:    0,
 				maxResults: 50,
 			},
@@ -986,7 +988,7 @@ func Test_BoardService_Filter(t *testing.T) {
 			name: "when the request cannot be created",
 			args: args{
 				ctx:        context.Background(),
-				filterId:   1001,
+				filterID:   1001,
 				startAt:    0,
 				maxResults: 50,
 			},
@@ -1030,7 +1032,7 @@ func Test_BoardService_Filter(t *testing.T) {
 
 			boardService := NewBoardService(testCase.fields.c, "1.0")
 
-			gotResult, gotResponse, err := boardService.Filter(testCase.args.ctx, testCase.args.filterId, testCase.args.startAt,
+			gotResult, gotResponse, err := boardService.Filter(testCase.args.ctx, testCase.args.filterID, testCase.args.startAt,
 				testCase.args.maxResults)
 
 			if testCase.wantErr {

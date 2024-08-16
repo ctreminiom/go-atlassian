@@ -2,6 +2,7 @@ package jira
 
 import (
 	"context"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 )
 
@@ -42,29 +43,29 @@ type FilterConnector interface {
 
 	// Get returns a filter.
 	//
-	// GET /rest/api/{2-3}/filter/{id}
+	// GET /rest/api/{2-3}/filter/{filterID}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/filters#get-filter
-	Get(ctx context.Context, filterId int, expand []string) (*model.FilterScheme, *model.ResponseScheme, error)
+	Get(ctx context.Context, filterID int, expand []string) (*model.FilterScheme, *model.ResponseScheme, error)
 
 	// Update updates a filter. Use this operation to update a filter's name, description, JQL, or sharing.
 	//
-	// PUT /rest/api/{2-3}/filter/{id}
+	// PUT /rest/api/{2-3}/filter/{filterID}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/filters#update-filter
-	Update(ctx context.Context, filterId int, payload *model.FilterPayloadScheme) (*model.FilterScheme, *model.ResponseScheme, error)
+	Update(ctx context.Context, filterID int, payload *model.FilterPayloadScheme) (*model.FilterScheme, *model.ResponseScheme, error)
 
 	// Delete a filter.
 	//
-	// DELETE /rest/api/{2-3}/filter/{id}
+	// DELETE /rest/api/{2-3}/filter/{filterID}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/filters#delete-filter
-	Delete(ctx context.Context, filterId int) (*model.ResponseScheme, error)
+	Delete(ctx context.Context, filterID int) (*model.ResponseScheme, error)
 
 	// Change changes the owner of the filter.
 	//
-	// PUT /rest/api/{2-3}/filter/{id}/owner
+	// PUT /rest/api/{2-3}/filter/{filterID}/owner
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/filters#change-filter-owner
-	Change(ctx context.Context, filterId int, accountId string) (*model.ResponseScheme, error)
+	Change(ctx context.Context, filterID int, accountId string) (*model.ResponseScheme, error)
 }

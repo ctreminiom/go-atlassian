@@ -280,7 +280,7 @@ func TestFilterShareService_Gets(t *testing.T) {
 
 	type args struct {
 		ctx      context.Context
-		filterId int
+		filterID int
 	}
 
 	testCases := []struct {
@@ -296,7 +296,7 @@ func TestFilterShareService_Gets(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:      context.Background(),
-				filterId: 10001,
+				filterID: 10001,
 			},
 			on: func(fields *fields) {
 
@@ -324,7 +324,7 @@ func TestFilterShareService_Gets(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:      context.Background(),
-				filterId: 10001,
+				filterID: 10001,
 			},
 			on: func(fields *fields) {
 
@@ -352,7 +352,7 @@ func TestFilterShareService_Gets(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:      context.Background(),
-				filterId: 0,
+				filterID: 0,
 			},
 			on: func(fields *fields) {
 				fields.c = mocks.NewConnector(t)
@@ -366,7 +366,7 @@ func TestFilterShareService_Gets(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:      context.Background(),
-				filterId: 10001,
+				filterID: 10001,
 			},
 			on: func(fields *fields) {
 
@@ -395,7 +395,7 @@ func TestFilterShareService_Gets(t *testing.T) {
 			shareService, err := NewFilterShareService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := shareService.Gets(testCase.args.ctx, testCase.args.filterId)
+			gotResult, gotResponse, err := shareService.Gets(testCase.args.ctx, testCase.args.filterID)
 
 			if testCase.wantErr {
 
@@ -430,7 +430,7 @@ func TestFilterShareService_Add(t *testing.T) {
 
 	type args struct {
 		ctx      context.Context
-		filterId int
+		filterID int
 		payload  *model.PermissionFilterPayloadScheme
 	}
 
@@ -447,7 +447,7 @@ func TestFilterShareService_Add(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:      context.Background(),
-				filterId: 10001,
+				filterID: 10001,
 				payload:  payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -476,7 +476,7 @@ func TestFilterShareService_Add(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:      context.Background(),
-				filterId: 10001,
+				filterID: 10001,
 				payload:  payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -505,7 +505,7 @@ func TestFilterShareService_Add(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:      context.Background(),
-				filterId: 0,
+				filterID: 0,
 				payload:  payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -520,7 +520,7 @@ func TestFilterShareService_Add(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:      context.Background(),
-				filterId: 10001,
+				filterID: 10001,
 				payload:  payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -551,7 +551,7 @@ func TestFilterShareService_Add(t *testing.T) {
 			shareService, err := NewFilterShareService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := shareService.Add(testCase.args.ctx, testCase.args.filterId, testCase.args.payload)
+			gotResult, gotResponse, err := shareService.Add(testCase.args.ctx, testCase.args.filterID, testCase.args.payload)
 
 			if testCase.wantErr {
 
@@ -581,7 +581,7 @@ func TestFilterShareService_Get(t *testing.T) {
 
 	type args struct {
 		ctx                    context.Context
-		filterId, permissionId int
+		filterID, permissionID int
 	}
 
 	testCases := []struct {
@@ -597,8 +597,8 @@ func TestFilterShareService_Get(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.Background(),
-				filterId:     10001,
-				permissionId: 20,
+				filterID:     10001,
+				permissionID: 20,
 			},
 			on: func(fields *fields) {
 
@@ -626,8 +626,8 @@ func TestFilterShareService_Get(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				filterId:     10001,
-				permissionId: 20,
+				filterID:     10001,
+				permissionID: 20,
 			},
 			on: func(fields *fields) {
 
@@ -651,12 +651,12 @@ func TestFilterShareService_Get(t *testing.T) {
 		},
 
 		{
-			name:   "when the filterId is not provided",
+			name:   "when the filterID is not provided",
 			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.Background(),
-				filterId:     0,
-				permissionId: 20,
+				filterID:     0,
+				permissionID: 20,
 			},
 			on: func(fields *fields) {
 				fields.c = mocks.NewConnector(t)
@@ -666,12 +666,12 @@ func TestFilterShareService_Get(t *testing.T) {
 		},
 
 		{
-			name:   "when the permissionId is not provided",
+			name:   "when the permissionID is not provided",
 			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.Background(),
-				filterId:     10001,
-				permissionId: 0,
+				filterID:     10001,
+				permissionID: 0,
 			},
 			on: func(fields *fields) {
 				fields.c = mocks.NewConnector(t)
@@ -685,8 +685,8 @@ func TestFilterShareService_Get(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.Background(),
-				filterId:     10001,
-				permissionId: 20,
+				filterID:     10001,
+				permissionID: 20,
 			},
 			on: func(fields *fields) {
 
@@ -716,7 +716,7 @@ func TestFilterShareService_Get(t *testing.T) {
 			shareService, err := NewFilterShareService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := shareService.Get(testCase.args.ctx, testCase.args.filterId, testCase.args.permissionId)
+			gotResult, gotResponse, err := shareService.Get(testCase.args.ctx, testCase.args.filterID, testCase.args.permissionID)
 
 			if testCase.wantErr {
 
@@ -746,7 +746,7 @@ func TestFilterShareService_Delete(t *testing.T) {
 
 	type args struct {
 		ctx                    context.Context
-		filterId, permissionId int
+		filterID, permissionID int
 	}
 
 	testCases := []struct {
@@ -762,8 +762,8 @@ func TestFilterShareService_Delete(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.Background(),
-				filterId:     10001,
-				permissionId: 20,
+				filterID:     10001,
+				permissionID: 20,
 			},
 			on: func(fields *fields) {
 
@@ -791,8 +791,8 @@ func TestFilterShareService_Delete(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				filterId:     10001,
-				permissionId: 20,
+				filterID:     10001,
+				permissionID: 20,
 			},
 			on: func(fields *fields) {
 
@@ -816,12 +816,12 @@ func TestFilterShareService_Delete(t *testing.T) {
 		},
 
 		{
-			name:   "when the filterId is not provided",
+			name:   "when the filterID is not provided",
 			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.Background(),
-				filterId:     0,
-				permissionId: 20,
+				filterID:     0,
+				permissionID: 20,
 			},
 			on: func(fields *fields) {
 				fields.c = mocks.NewConnector(t)
@@ -831,12 +831,12 @@ func TestFilterShareService_Delete(t *testing.T) {
 		},
 
 		{
-			name:   "when the permissionId is not provided",
+			name:   "when the permissionID is not provided",
 			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.Background(),
-				filterId:     10001,
-				permissionId: 0,
+				filterID:     10001,
+				permissionID: 0,
 			},
 			on: func(fields *fields) {
 				fields.c = mocks.NewConnector(t)
@@ -850,8 +850,8 @@ func TestFilterShareService_Delete(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.Background(),
-				filterId:     10001,
-				permissionId: 20,
+				filterID:     10001,
+				permissionID: 20,
 			},
 			on: func(fields *fields) {
 
@@ -881,7 +881,7 @@ func TestFilterShareService_Delete(t *testing.T) {
 			shareService, err := NewFilterShareService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResponse, err := shareService.Delete(testCase.args.ctx, testCase.args.filterId, testCase.args.permissionId)
+			gotResponse, err := shareService.Delete(testCase.args.ctx, testCase.args.filterID, testCase.args.permissionID)
 
 			if testCase.wantErr {
 

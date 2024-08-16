@@ -56,7 +56,7 @@ func (b *BoardService) Create(ctx context.Context, payload *model.BoardPayloadSc
 //
 // to find which boards are using a particular filter.
 //
-// GET /rest/agile/1.0/board/filter/{filterId}
+// GET /rest/agile/1.0/board/filter/{filterID}
 //
 // https://docs.go-atlassian.io/jira-agile/boards#get-board-by-filter-id
 func (b *BoardService) Filter(ctx context.Context, filterID, startAt, maxResults int) (*model.BoardPageScheme, *model.ResponseScheme, error) {

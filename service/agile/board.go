@@ -2,6 +2,7 @@ package agile
 
 import (
 	"context"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 )
 
@@ -35,7 +36,7 @@ type BoardConnector interface {
 	//
 	// to find which boards are using a particular filter.
 	//
-	// GET /rest/agile/1.0/board/filter/{filterId}
+	// GET /rest/agile/1.0/board/filter/{filterID}
 	//
 	// https://docs.go-atlassian.io/jira-agile/boards#get-board-by-filter-id
 	Filter(ctx context.Context, filterID, startAt, maxResults int) (*model.BoardPageScheme, *model.ResponseScheme, error)

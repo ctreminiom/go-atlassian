@@ -592,7 +592,7 @@ func Test_internalWorkflowSchemeImpl_Assign(t *testing.T) {
 
 	type args struct {
 		ctx                 context.Context
-		schemeID, projectId string
+		schemeID, projectID string
 	}
 
 	testCases := []struct {
@@ -609,7 +609,7 @@ func Test_internalWorkflowSchemeImpl_Assign(t *testing.T) {
 			args: args{
 				ctx:       context.Background(),
 				schemeID:  "1004561",
-				projectId: "4984838",
+				projectID: "4984838",
 			},
 			on: func(fields *fields) {
 
@@ -639,7 +639,7 @@ func Test_internalWorkflowSchemeImpl_Assign(t *testing.T) {
 			args: args{
 				ctx:       context.Background(),
 				schemeID:  "1004561",
-				projectId: "4984838",
+				projectID: "4984838",
 			},
 			on: func(fields *fields) {
 
@@ -690,7 +690,7 @@ func Test_internalWorkflowSchemeImpl_Assign(t *testing.T) {
 			args: args{
 				ctx:       context.Background(),
 				schemeID:  "1004561",
-				projectId: "4984838",
+				projectID: "4984838",
 			},
 			on: func(fields *fields) {
 
@@ -719,7 +719,7 @@ func Test_internalWorkflowSchemeImpl_Assign(t *testing.T) {
 
 			newService := NewWorkflowSchemeService(testCase.fields.c, testCase.fields.version, nil)
 
-			gotResponse, err := newService.Assign(testCase.args.ctx, testCase.args.schemeID, testCase.args.projectId)
+			gotResponse, err := newService.Assign(testCase.args.ctx, testCase.args.schemeID, testCase.args.projectID)
 
 			if testCase.wantErr {
 

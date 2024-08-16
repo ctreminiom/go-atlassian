@@ -3,13 +3,14 @@ package internal
 import (
 	"context"
 	"fmt"
-	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/service"
-	"github.com/ctreminiom/go-atlassian/service/jira"
 	"net/http"
 	"net/url"
 	"strconv"
 	"strings"
+
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/service"
+	"github.com/ctreminiom/go-atlassian/service/jira"
 )
 
 // NewTypeScreenSchemeService creates a new instance of TypeScreenSchemeService.
@@ -54,17 +55,17 @@ func (t *TypeScreenSchemeService) Create(ctx context.Context, payload *model.Iss
 //
 // Issue type screen schemes can only be assigned to classic projects.
 //
-// PUT /rest/api/{2-3}/issuetypescreenscheme/project
+// PUT /rest/api/{2-3}/issuetypescreenscheme/project/{projectID}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/types/screen-scheme#assign-issue-type-screen-scheme-to-project
-func (t *TypeScreenSchemeService) Assign(ctx context.Context, issueTypeScreenSchemeId, projectId string) (*model.ResponseScheme, error) {
-	return t.internalClient.Assign(ctx, issueTypeScreenSchemeId, projectId)
+func (t *TypeScreenSchemeService) Assign(ctx context.Context, issueTypeScreenSchemeId, projectID string) (*model.ResponseScheme, error) {
+	return t.internalClient.Assign(ctx, issueTypeScreenSchemeId, projectID)
 }
 
 // Projects returns a paginated list of issue type screen schemes and,
 // for each issue type screen scheme, a list of the projects that use it.
 //
-// GET /rest/api/{2-3}/issuetypescreenscheme/project
+// GET /rest/api/{2-3}/issuetypescreenscheme/project/{projectID}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/types/screen-scheme#assign-issue-type-screen-scheme-to-project
 func (t *TypeScreenSchemeService) Projects(ctx context.Context, projectIds []int, startAt, maxResults int) (*model.IssueTypeProjectScreenSchemePageScheme, *model.ResponseScheme, error) {
@@ -201,19 +202,19 @@ func (i *internalTypeScreenSchemeImpl) Create(ctx context.Context, payload *mode
 	return scheme, response, nil
 }
 
-func (i *internalTypeScreenSchemeImpl) Assign(ctx context.Context, issueTypeScreenSchemeId, projectId string) (*model.ResponseScheme, error) {
+func (i *internalTypeScreenSchemeImpl) Assign(ctx context.Context, issueTypeScreenSchemeId, projectID string) (*model.ResponseScheme, error) {
 
 	if issueTypeScreenSchemeId == "" {
 		return nil, model.ErrNoIssueTypeScreenSchemeIDError
 	}
 
-	if projectId == "" {
+	if projectID == "" {
 		return nil, model.ErrNoProjectIDError
 	}
 
 	payload := map[string]interface{}{
 		"issueTypeScreenSchemeId": issueTypeScreenSchemeId,
-		"projectId":               projectId,
+		"projectId":               projectID,
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issuetypescreenscheme/project", i.version)

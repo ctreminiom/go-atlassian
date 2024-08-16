@@ -3,12 +3,14 @@ package internal
 import (
 	"context"
 	"errors"
+	"net/http"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
-	"github.com/stretchr/testify/assert"
-	"net/http"
-	"testing"
 )
 
 func Test_internalIssueFieldContextServiceImpl_Gets(t *testing.T) {
@@ -20,7 +22,7 @@ func Test_internalIssueFieldContextServiceImpl_Gets(t *testing.T) {
 
 	type args struct {
 		ctx                 context.Context
-		fieldId             string
+		fieldID             string
 		options             *model.FieldContextOptionsScheme
 		startAt, maxResults int
 	}
@@ -38,7 +40,7 @@ func Test_internalIssueFieldContextServiceImpl_Gets(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:     context.Background(),
-				fieldId: "custom_field_10002",
+				fieldID: "custom_field_10002",
 				options: &model.FieldContextOptionsScheme{
 					IsAnyIssueType:  true,
 					IsGlobalContext: false,
@@ -75,7 +77,7 @@ func Test_internalIssueFieldContextServiceImpl_Gets(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:     context.Background(),
-				fieldId: "custom_field_10002",
+				fieldID: "custom_field_10002",
 				options: &model.FieldContextOptionsScheme{
 					IsAnyIssueType:  true,
 					IsGlobalContext: false,
@@ -112,7 +114,7 @@ func Test_internalIssueFieldContextServiceImpl_Gets(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:     context.Background(),
-				fieldId: "",
+				fieldID: "",
 				options: &model.FieldContextOptionsScheme{
 					IsAnyIssueType:  true,
 					IsGlobalContext: false,
@@ -130,7 +132,7 @@ func Test_internalIssueFieldContextServiceImpl_Gets(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:     context.Background(),
-				fieldId: "custom_field_10002",
+				fieldID: "custom_field_10002",
 				options: &model.FieldContextOptionsScheme{
 					IsAnyIssueType:  true,
 					IsGlobalContext: false,
@@ -168,7 +170,7 @@ func Test_internalIssueFieldContextServiceImpl_Gets(t *testing.T) {
 			fieldConfigService, err := NewIssueFieldContextService(testCase.fields.c, testCase.fields.version, nil)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := fieldConfigService.Gets(testCase.args.ctx, testCase.args.fieldId, testCase.args.options,
+			gotResult, gotResponse, err := fieldConfigService.Gets(testCase.args.ctx, testCase.args.fieldID, testCase.args.options,
 				testCase.args.startAt, testCase.args.maxResults)
 
 			if testCase.wantErr {
@@ -206,7 +208,7 @@ func Test_internalIssueFieldContextServiceImpl_Create(t *testing.T) {
 
 	type args struct {
 		ctx     context.Context
-		fieldId string
+		fieldID string
 		payload *model.FieldContextPayloadScheme
 	}
 
@@ -223,7 +225,7 @@ func Test_internalIssueFieldContextServiceImpl_Create(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:     context.Background(),
-				fieldId: "custom_field_10002",
+				fieldID: "custom_field_10002",
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -254,7 +256,7 @@ func Test_internalIssueFieldContextServiceImpl_Create(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:     context.Background(),
-				fieldId: "custom_field_10002",
+				fieldID: "custom_field_10002",
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -285,7 +287,7 @@ func Test_internalIssueFieldContextServiceImpl_Create(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:     context.Background(),
-				fieldId: "",
+				fieldID: "",
 				payload: payloadMocked,
 			},
 			wantErr: true,
@@ -297,7 +299,7 @@ func Test_internalIssueFieldContextServiceImpl_Create(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:     context.Background(),
-				fieldId: "custom_field_10002",
+				fieldID: "custom_field_10002",
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -329,7 +331,7 @@ func Test_internalIssueFieldContextServiceImpl_Create(t *testing.T) {
 			fieldConfigService, err := NewIssueFieldContextService(testCase.fields.c, testCase.fields.version, nil)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := fieldConfigService.Create(testCase.args.ctx, testCase.args.fieldId, testCase.args.payload)
+			gotResult, gotResponse, err := fieldConfigService.Create(testCase.args.ctx, testCase.args.fieldID, testCase.args.payload)
 
 			if testCase.wantErr {
 
@@ -359,7 +361,7 @@ func Test_internalIssueFieldContextServiceImpl_GetDefaultValues(t *testing.T) {
 
 	type args struct {
 		ctx                 context.Context
-		fieldId             string
+		fieldID             string
 		contextIds          []int
 		startAt, maxResults int
 	}
@@ -377,7 +379,7 @@ func Test_internalIssueFieldContextServiceImpl_GetDefaultValues(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:        context.Background(),
-				fieldId:    "custom_field_10002",
+				fieldID:    "custom_field_10002",
 				contextIds: []int{10001},
 				startAt:    0,
 				maxResults: 50,
@@ -410,7 +412,7 @@ func Test_internalIssueFieldContextServiceImpl_GetDefaultValues(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:        context.Background(),
-				fieldId:    "custom_field_10002",
+				fieldID:    "custom_field_10002",
 				contextIds: []int{10001},
 				startAt:    0,
 				maxResults: 50,
@@ -443,7 +445,7 @@ func Test_internalIssueFieldContextServiceImpl_GetDefaultValues(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:     context.Background(),
-				fieldId: "",
+				fieldID: "",
 			},
 			wantErr: true,
 			Err:     model.ErrNoFieldIDError,
@@ -454,7 +456,7 @@ func Test_internalIssueFieldContextServiceImpl_GetDefaultValues(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:        context.Background(),
-				fieldId:    "custom_field_10002",
+				fieldID:    "custom_field_10002",
 				contextIds: []int{10001},
 				startAt:    0,
 				maxResults: 50,
@@ -493,7 +495,7 @@ func Test_internalIssueFieldContextServiceImpl_GetDefaultValues(t *testing.T) {
 			fieldConfigService, err := NewIssueFieldContextService(testCase.fields.c, testCase.fields.version, nil)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := fieldConfigService.GetDefaultValues(testCase.args.ctx, testCase.args.fieldId, testCase.args.contextIds,
+			gotResult, gotResponse, err := fieldConfigService.GetDefaultValues(testCase.args.ctx, testCase.args.fieldID, testCase.args.contextIds,
 				testCase.args.startAt, testCase.args.maxResults)
 
 			if testCase.wantErr {
@@ -534,7 +536,7 @@ func Test_internalIssueFieldContextServiceImpl_SetDefaultValue(t *testing.T) {
 
 	type args struct {
 		ctx     context.Context
-		fieldId string
+		fieldID string
 		payload *model.FieldContextDefaultPayloadScheme
 	}
 
@@ -551,7 +553,7 @@ func Test_internalIssueFieldContextServiceImpl_SetDefaultValue(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:     context.Background(),
-				fieldId: "custom_field_10002",
+				fieldID: "custom_field_10002",
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -582,7 +584,7 @@ func Test_internalIssueFieldContextServiceImpl_SetDefaultValue(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:     context.Background(),
-				fieldId: "custom_field_10002",
+				fieldID: "custom_field_10002",
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -613,7 +615,7 @@ func Test_internalIssueFieldContextServiceImpl_SetDefaultValue(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:     context.Background(),
-				fieldId: "",
+				fieldID: "",
 			},
 			wantErr: true,
 			Err:     model.ErrNoFieldIDError,
@@ -624,7 +626,7 @@ func Test_internalIssueFieldContextServiceImpl_SetDefaultValue(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:     context.Background(),
-				fieldId: "custom_field_10002",
+				fieldID: "custom_field_10002",
 				payload: payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -656,7 +658,7 @@ func Test_internalIssueFieldContextServiceImpl_SetDefaultValue(t *testing.T) {
 			fieldConfigService, err := NewIssueFieldContextService(testCase.fields.c, testCase.fields.version, nil)
 			assert.NoError(t, err)
 
-			gotResponse, err := fieldConfigService.SetDefaultValue(testCase.args.ctx, testCase.args.fieldId, testCase.args.payload)
+			gotResponse, err := fieldConfigService.SetDefaultValue(testCase.args.ctx, testCase.args.fieldID, testCase.args.payload)
 
 			if testCase.wantErr {
 

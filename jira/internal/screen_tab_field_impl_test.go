@@ -3,13 +3,15 @@ package internal
 import (
 	"context"
 	"errors"
+	"net/http"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
-	"net/http"
-	"testing"
 )
 
 func Test_internalScreenTabFieldImpl_Gets(t *testing.T) {
@@ -21,7 +23,7 @@ func Test_internalScreenTabFieldImpl_Gets(t *testing.T) {
 
 	type args struct {
 		ctx             context.Context
-		screenId, tabId int
+		screenID, tabID int
 	}
 
 	testCases := []struct {
@@ -37,8 +39,8 @@ func Test_internalScreenTabFieldImpl_Gets(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:      context.Background(),
-				screenId: 10002,
-				tabId:    18272,
+				screenID: 10002,
+				tabID:    18272,
 			},
 			on: func(fields *fields) {
 
@@ -67,8 +69,8 @@ func Test_internalScreenTabFieldImpl_Gets(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:      context.Background(),
-				screenId: 10002,
-				tabId:    18272,
+				screenID: 10002,
+				tabID:    18272,
 			},
 			on: func(fields *fields) {
 
@@ -107,7 +109,7 @@ func Test_internalScreenTabFieldImpl_Gets(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:      context.Background(),
-				screenId: 10001,
+				screenID: 10001,
 			},
 			wantErr: true,
 			Err:     model.ErrNoScreenTabIDError,
@@ -118,8 +120,8 @@ func Test_internalScreenTabFieldImpl_Gets(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:      context.Background(),
-				screenId: 10002,
-				tabId:    18272,
+				screenID: 10002,
+				tabID:    18272,
 			},
 			on: func(fields *fields) {
 
@@ -149,7 +151,7 @@ func Test_internalScreenTabFieldImpl_Gets(t *testing.T) {
 			resolutionService, err := NewScreenTabFieldService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := resolutionService.Gets(testCase.args.ctx, testCase.args.screenId, testCase.args.tabId)
+			gotResult, gotResponse, err := resolutionService.Gets(testCase.args.ctx, testCase.args.screenID, testCase.args.tabID)
 
 			if testCase.wantErr {
 
@@ -181,8 +183,8 @@ func Test_internalScreenTabFieldImpl_Add(t *testing.T) {
 
 	type args struct {
 		ctx             context.Context
-		screenId, tabId int
-		fieldId         string
+		screenID, tabID int
+		fieldID         string
 	}
 
 	testCases := []struct {
@@ -198,9 +200,9 @@ func Test_internalScreenTabFieldImpl_Add(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:      context.Background(),
-				screenId: 10002,
-				tabId:    18272,
-				fieldId:  "customfield_10001",
+				screenID: 10002,
+				tabID:    18272,
+				fieldID:  "customfield_10001",
 			},
 			on: func(fields *fields) {
 
@@ -229,9 +231,9 @@ func Test_internalScreenTabFieldImpl_Add(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:      context.Background(),
-				screenId: 10002,
-				tabId:    18272,
-				fieldId:  "customfield_10001",
+				screenID: 10002,
+				tabID:    18272,
+				fieldID:  "customfield_10001",
 			},
 			on: func(fields *fields) {
 
@@ -270,7 +272,7 @@ func Test_internalScreenTabFieldImpl_Add(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:      context.Background(),
-				screenId: 10001,
+				screenID: 10001,
 			},
 			wantErr: true,
 			Err:     model.ErrNoScreenTabIDError,
@@ -281,8 +283,8 @@ func Test_internalScreenTabFieldImpl_Add(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:      context.Background(),
-				screenId: 10001,
-				tabId:    10001,
+				screenID: 10001,
+				tabID:    10001,
 			},
 			wantErr: true,
 			Err:     model.ErrNoFieldIDError,
@@ -293,9 +295,9 @@ func Test_internalScreenTabFieldImpl_Add(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:      context.Background(),
-				screenId: 10002,
-				tabId:    18272,
-				fieldId:  "customfield_10001",
+				screenID: 10002,
+				tabID:    18272,
+				fieldID:  "customfield_10001",
 			},
 			on: func(fields *fields) {
 
@@ -325,8 +327,8 @@ func Test_internalScreenTabFieldImpl_Add(t *testing.T) {
 			resolutionService, err := NewScreenTabFieldService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := resolutionService.Add(testCase.args.ctx, testCase.args.screenId, testCase.args.tabId,
-				testCase.args.fieldId)
+			gotResult, gotResponse, err := resolutionService.Add(testCase.args.ctx, testCase.args.screenID, testCase.args.tabID,
+				testCase.args.fieldID)
 
 			if testCase.wantErr {
 
@@ -356,8 +358,8 @@ func Test_internalScreenTabFieldImpl_Remove(t *testing.T) {
 
 	type args struct {
 		ctx             context.Context
-		screenId, tabId int
-		fieldId         string
+		screenID, tabID int
+		fieldID         string
 	}
 
 	testCases := []struct {
@@ -373,9 +375,9 @@ func Test_internalScreenTabFieldImpl_Remove(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:      context.Background(),
-				screenId: 10002,
-				tabId:    18272,
-				fieldId:  "customfield_10001",
+				screenID: 10002,
+				tabID:    18272,
+				fieldID:  "customfield_10001",
 			},
 			on: func(fields *fields) {
 
@@ -404,9 +406,9 @@ func Test_internalScreenTabFieldImpl_Remove(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:      context.Background(),
-				screenId: 10002,
-				tabId:    18272,
-				fieldId:  "customfield_10001",
+				screenID: 10002,
+				tabID:    18272,
+				fieldID:  "customfield_10001",
 			},
 			on: func(fields *fields) {
 
@@ -445,7 +447,7 @@ func Test_internalScreenTabFieldImpl_Remove(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:      context.Background(),
-				screenId: 10001,
+				screenID: 10001,
 			},
 			wantErr: true,
 			Err:     model.ErrNoScreenTabIDError,
@@ -456,8 +458,8 @@ func Test_internalScreenTabFieldImpl_Remove(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:      context.Background(),
-				screenId: 10001,
-				tabId:    10001,
+				screenID: 10001,
+				tabID:    10001,
 			},
 			wantErr: true,
 			Err:     model.ErrNoFieldIDError,
@@ -468,9 +470,9 @@ func Test_internalScreenTabFieldImpl_Remove(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:      context.Background(),
-				screenId: 10002,
-				tabId:    18272,
-				fieldId:  "customfield_10001",
+				screenID: 10002,
+				tabID:    18272,
+				fieldID:  "customfield_10001",
 			},
 			on: func(fields *fields) {
 
@@ -500,8 +502,8 @@ func Test_internalScreenTabFieldImpl_Remove(t *testing.T) {
 			resolutionService, err := NewScreenTabFieldService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResponse, err := resolutionService.Remove(testCase.args.ctx, testCase.args.screenId, testCase.args.tabId,
-				testCase.args.fieldId)
+			gotResponse, err := resolutionService.Remove(testCase.args.ctx, testCase.args.screenID, testCase.args.tabID,
+				testCase.args.fieldID)
 
 			if testCase.wantErr {
 
@@ -532,8 +534,8 @@ func Test_internalScreenTabFieldImpl_Move(t *testing.T) {
 
 	type args struct {
 		ctx             context.Context
-		screenId, tabId int
-		fieldId         string
+		screenID, tabID int
+		fieldID         string
 		after, position string
 	}
 
@@ -550,9 +552,9 @@ func Test_internalScreenTabFieldImpl_Move(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:      context.Background(),
-				screenId: 10002,
-				tabId:    18272,
-				fieldId:  "customfield_10001",
+				screenID: 10002,
+				tabID:    18272,
+				fieldID:  "customfield_10001",
 				position: "First",
 			},
 			on: func(fields *fields) {
@@ -582,9 +584,9 @@ func Test_internalScreenTabFieldImpl_Move(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:      context.Background(),
-				screenId: 10002,
-				tabId:    18272,
-				fieldId:  "customfield_10001",
+				screenID: 10002,
+				tabID:    18272,
+				fieldID:  "customfield_10001",
 				position: "First",
 			},
 			on: func(fields *fields) {
@@ -624,7 +626,7 @@ func Test_internalScreenTabFieldImpl_Move(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:      context.Background(),
-				screenId: 10001,
+				screenID: 10001,
 			},
 			wantErr: true,
 			Err:     model.ErrNoScreenTabIDError,
@@ -635,8 +637,8 @@ func Test_internalScreenTabFieldImpl_Move(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:      context.Background(),
-				screenId: 10001,
-				tabId:    10001,
+				screenID: 10001,
+				tabID:    10001,
 			},
 			wantErr: true,
 			Err:     model.ErrNoFieldIDError,
@@ -647,9 +649,9 @@ func Test_internalScreenTabFieldImpl_Move(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:      context.Background(),
-				screenId: 10002,
-				tabId:    18272,
-				fieldId:  "customfield_10001",
+				screenID: 10002,
+				tabID:    18272,
+				fieldID:  "customfield_10001",
 				position: "First",
 			},
 			on: func(fields *fields) {
@@ -680,8 +682,8 @@ func Test_internalScreenTabFieldImpl_Move(t *testing.T) {
 			resolutionService, err := NewScreenTabFieldService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResponse, err := resolutionService.Move(testCase.args.ctx, testCase.args.screenId, testCase.args.tabId,
-				testCase.args.fieldId, testCase.args.after, testCase.args.position)
+			gotResponse, err := resolutionService.Move(testCase.args.ctx, testCase.args.screenID, testCase.args.tabID,
+				testCase.args.fieldID, testCase.args.after, testCase.args.position)
 
 			if testCase.wantErr {
 

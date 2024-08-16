@@ -163,19 +163,20 @@ type TeamManagedProjectScopeScheme struct {
 
 // ProjectUpdateScheme represents the update scheme for a project in Jira.
 type ProjectUpdateScheme struct {
-	NotificationScheme  int    `json:"notificationScheme,omitempty"`  // The ID of the notification scheme for the project.
+	AssigneeType        string `json:"assigneeType,omitempty"`        // The type of assignee for the project.
+	AvatarID            int    `json:"avatarId,omitempty"`            // The ID of the avatar for the project.
+	CategoryID          int    `json:"categoryId,omitempty"`          // The ID of the category for the project.
 	Description         string `json:"description,omitempty"`         // The description of the project.
-	Lead                string `json:"lead,omitempty"`                // The lead of the project.
+	IssueSecurityScheme int    `json:"issueSecurityScheme,omitempty"` // The ID of the issue security scheme for the project.
+	Key                 string `json:"key,omitempty"`                 // The key of the project.
+	Lead                string `json:"lead,omitempty"`                // Deprecated, use LeadAccountID instead. The lead of the project.
+	LeadAccountID       string `json:"leadAccountId,omitempty"`       // The account ID of the lead for the project.
+	Name                string `json:"name,omitempty"`                // The name of the project.
+	NotificationScheme  int    `json:"notificationScheme,omitempty"`  // The ID of the notification scheme for the project.
+	PermissionScheme    int    `json:"permissionScheme,omitempty"`    // The ID of the permission scheme for the project.
 	URL                 string `json:"url,omitempty"`                 // The URL of the project.
 	ProjectTemplateKey  string `json:"projectTemplateKey,omitempty"`  // The key of the project template for the project.
-	AvatarID            int    `json:"avatarId,omitempty"`            // The ID of the avatar for the project.
-	IssueSecurityScheme int    `json:"issueSecurityScheme,omitempty"` // The ID of the issue security scheme for the project.
-	Name                string `json:"name,omitempty"`                // The name of the project.
-	PermissionScheme    int    `json:"permissionScheme,omitempty"`    // The ID of the permission scheme for the project.
-	AssigneeType        string `json:"assigneeType,omitempty"`        // The type of assignee for the project.
 	ProjectTypeKey      string `json:"projectTypeKey,omitempty"`      // The key of the project type for the project.
-	Key                 string `json:"key,omitempty"`                 // The key of the project.
-	CategoryID          int    `json:"categoryId,omitempty"`          // The ID of the category for the project.
 }
 
 // ProjectStatusPageScheme represents the status page scheme for a project in Jira.

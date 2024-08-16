@@ -25,7 +25,7 @@ func Test_internalProjectRoleImpl_Get(t *testing.T) {
 	type args struct {
 		ctx            context.Context
 		projectKeyOrID string
-		roleId         int
+		roleID         int
 	}
 
 	testCases := []struct {
@@ -42,7 +42,7 @@ func Test_internalProjectRoleImpl_Get(t *testing.T) {
 			args: args{
 				ctx:            context.Background(),
 				projectKeyOrID: "DUMMY",
-				roleId:         10001,
+				roleID:         10001,
 			},
 			on: func(fields *fields) {
 
@@ -72,7 +72,7 @@ func Test_internalProjectRoleImpl_Get(t *testing.T) {
 			args: args{
 				ctx:            context.Background(),
 				projectKeyOrID: "DUMMY",
-				roleId:         10001,
+				roleID:         10001,
 			},
 			on: func(fields *fields) {
 
@@ -112,7 +112,7 @@ func Test_internalProjectRoleImpl_Get(t *testing.T) {
 			args: args{
 				ctx:            context.Background(),
 				projectKeyOrID: "DUMMY",
-				roleId:         10001,
+				roleID:         10001,
 			},
 			on: func(fields *fields) {
 
@@ -142,7 +142,7 @@ func Test_internalProjectRoleImpl_Get(t *testing.T) {
 			newService, err := NewProjectRoleService(testCase.fields.c, testCase.fields.version, nil)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := newService.Get(testCase.args.ctx, testCase.args.projectKeyOrID, testCase.args.roleId)
+			gotResult, gotResponse, err := newService.Get(testCase.args.ctx, testCase.args.projectKeyOrID, testCase.args.roleID)
 
 			if testCase.wantErr {
 

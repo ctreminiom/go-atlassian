@@ -25,7 +25,7 @@ func Test_internalProjectRoleActorImpl_Add(t *testing.T) {
 	type args struct {
 		ctx                context.Context
 		projectKeyOrID     string
-		roleId             int
+		roleID             int
 		accountIds, groups []string
 	}
 
@@ -43,7 +43,7 @@ func Test_internalProjectRoleActorImpl_Add(t *testing.T) {
 			args: args{
 				ctx:            context.Background(),
 				projectKeyOrID: "DUMMY",
-				roleId:         10001,
+				roleID:         10001,
 				accountIds:     []string{"uuid"},
 				groups:         []string{"jira-users"},
 			},
@@ -75,7 +75,7 @@ func Test_internalProjectRoleActorImpl_Add(t *testing.T) {
 			args: args{
 				ctx:            context.Background(),
 				projectKeyOrID: "DUMMY",
-				roleId:         10001,
+				roleID:         10001,
 				accountIds:     []string{"uuid"},
 				groups:         []string{"jira-users"},
 			},
@@ -128,7 +128,7 @@ func Test_internalProjectRoleActorImpl_Add(t *testing.T) {
 			args: args{
 				ctx:            context.Background(),
 				projectKeyOrID: "DUMMY",
-				roleId:         10001,
+				roleID:         10001,
 				accountIds:     []string{"uuid"},
 				groups:         []string{"jira-users"},
 			},
@@ -160,7 +160,7 @@ func Test_internalProjectRoleActorImpl_Add(t *testing.T) {
 			newService, err := NewProjectRoleActorService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := newService.Add(testCase.args.ctx, testCase.args.projectKeyOrID, testCase.args.roleId,
+			gotResult, gotResponse, err := newService.Add(testCase.args.ctx, testCase.args.projectKeyOrID, testCase.args.roleID,
 				testCase.args.accountIds, testCase.args.groups)
 
 			if testCase.wantErr {
@@ -192,8 +192,8 @@ func Test_internalProjectRoleActorImpl_Delete(t *testing.T) {
 	type args struct {
 		ctx              context.Context
 		projectKeyOrID   string
-		roleId           int
-		accountId, group string
+		roleID           int
+		accountID, group string
 	}
 
 	testCases := []struct {
@@ -210,8 +210,8 @@ func Test_internalProjectRoleActorImpl_Delete(t *testing.T) {
 			args: args{
 				ctx:            context.Background(),
 				projectKeyOrID: "DUMMY",
-				roleId:         10001,
-				accountId:      "uuid",
+				roleID:         10001,
+				accountID:      "uuid",
 				group:          "jira-users",
 			},
 			on: func(fields *fields) {
@@ -242,8 +242,8 @@ func Test_internalProjectRoleActorImpl_Delete(t *testing.T) {
 			args: args{
 				ctx:            context.Background(),
 				projectKeyOrID: "DUMMY",
-				roleId:         10001,
-				accountId:      "uuid",
+				roleID:         10001,
+				accountID:      "uuid",
 				group:          "jira-users",
 			},
 			on: func(fields *fields) {
@@ -295,8 +295,8 @@ func Test_internalProjectRoleActorImpl_Delete(t *testing.T) {
 			args: args{
 				ctx:            context.Background(),
 				projectKeyOrID: "DUMMY",
-				roleId:         10001,
-				accountId:      "uuid",
+				roleID:         10001,
+				accountID:      "uuid",
 				group:          "jira-users",
 			},
 			on: func(fields *fields) {
@@ -327,8 +327,8 @@ func Test_internalProjectRoleActorImpl_Delete(t *testing.T) {
 			newService, err := NewProjectRoleActorService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResponse, err := newService.Delete(testCase.args.ctx, testCase.args.projectKeyOrID, testCase.args.roleId,
-				testCase.args.accountId, testCase.args.group)
+			gotResponse, err := newService.Delete(testCase.args.ctx, testCase.args.projectKeyOrID, testCase.args.roleID,
+				testCase.args.accountID, testCase.args.group)
 
 			if testCase.wantErr {
 

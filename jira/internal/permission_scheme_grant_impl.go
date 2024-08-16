@@ -3,12 +3,13 @@ package internal
 import (
 	"context"
 	"fmt"
-	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/service"
-	"github.com/ctreminiom/go-atlassian/service/jira"
 	"net/http"
 	"net/url"
 	"strings"
+
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/service"
+	"github.com/ctreminiom/go-atlassian/service/jira"
 )
 
 // NewPermissionSchemeGrantService creates a new instance of PermissionSchemeGrantService.
@@ -31,7 +32,7 @@ type PermissionSchemeGrantService struct {
 
 // Create creates a permission grant in a permission scheme.
 //
-// POST /rest/api/{2-3}/permissionscheme/{schemeId}/permission
+// POST /rest/api/{2-3}/permissionscheme/{permissionSchemeId}/permission
 //
 // https://docs.go-atlassian.io/jira-software-cloud/permissions/scheme/grant#create-permission-grant
 func (p *PermissionSchemeGrantService) Create(ctx context.Context, permissionSchemeId int, payload *model.PermissionGrantPayloadScheme) (*model.PermissionGrantScheme, *model.ResponseScheme, error) {
@@ -40,7 +41,7 @@ func (p *PermissionSchemeGrantService) Create(ctx context.Context, permissionSch
 
 // Gets returns all permission grants for a permission scheme.
 //
-// GET /rest/api/{2-3}/permissionscheme/{schemeId}/permission
+// GET /rest/api/{2-3}/permissionscheme/{permissionSchemeId}/permission
 //
 // https://docs.go-atlassian.io/jira-software-cloud/permissions/scheme/grant#get-permission-scheme-grants
 func (p *PermissionSchemeGrantService) Gets(ctx context.Context, permissionSchemeId int, expand []string) (*model.PermissionSchemeGrantsScheme, *model.ResponseScheme, error) {
@@ -49,7 +50,7 @@ func (p *PermissionSchemeGrantService) Gets(ctx context.Context, permissionSchem
 
 // Get returns a permission grant.
 //
-// GET /rest/api/{2-3}/permissionscheme/{schemeId}/permission/{permissionId}
+// GET /rest/api/{2-3}/permissionscheme/{permissionSchemeId}/permission/{permissionGrantId}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/permissions/scheme/grant#get-permission-scheme-grant
 func (p *PermissionSchemeGrantService) Get(ctx context.Context, permissionSchemeId, permissionGrantId int, expand []string) (*model.PermissionGrantScheme, *model.ResponseScheme, error) {
@@ -58,7 +59,7 @@ func (p *PermissionSchemeGrantService) Get(ctx context.Context, permissionScheme
 
 // Delete deletes a permission grant from a permission scheme. See About permission schemes and grants for more details.
 //
-// DELETE /rest/api/{2-3}/permissionscheme/{schemeId}/permission/{permissionId}
+// DELETE /rest/api/{2-3}/permissionscheme/{permissionSchemeId}/permission/{permissionGrantId}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/permissions/scheme/grant#delete-permission-scheme-grant
 func (p *PermissionSchemeGrantService) Delete(ctx context.Context, permissionSchemeId, permissionGrantId int) (*model.ResponseScheme, error) {

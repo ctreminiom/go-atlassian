@@ -3,12 +3,14 @@ package internal
 import (
 	"context"
 	"errors"
+	"net/http"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
-	"github.com/stretchr/testify/assert"
-	"net/http"
-	"testing"
 )
 
 func Test_internalWorkflowSchemeImpl_Gets(t *testing.T) {
@@ -156,7 +158,7 @@ func Test_internalWorkflowSchemeImpl_Get(t *testing.T) {
 
 	type args struct {
 		ctx                 context.Context
-		schemeId            int
+		schemeID            int
 		returnDraftIfExists bool
 	}
 
@@ -173,7 +175,7 @@ func Test_internalWorkflowSchemeImpl_Get(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:                 context.Background(),
-				schemeId:            10002,
+				schemeID:            10002,
 				returnDraftIfExists: true,
 			},
 			on: func(fields *fields) {
@@ -203,7 +205,7 @@ func Test_internalWorkflowSchemeImpl_Get(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:                 context.Background(),
-				schemeId:            10002,
+				schemeID:            10002,
 				returnDraftIfExists: true,
 			},
 			on: func(fields *fields) {
@@ -243,7 +245,7 @@ func Test_internalWorkflowSchemeImpl_Get(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:                 context.Background(),
-				schemeId:            10002,
+				schemeID:            10002,
 				returnDraftIfExists: true,
 			},
 			on: func(fields *fields) {
@@ -273,7 +275,7 @@ func Test_internalWorkflowSchemeImpl_Get(t *testing.T) {
 
 			newService := NewWorkflowSchemeService(testCase.fields.c, testCase.fields.version, nil)
 
-			gotResult, gotResponse, err := newService.Get(testCase.args.ctx, testCase.args.schemeId, testCase.args.returnDraftIfExists)
+			gotResult, gotResponse, err := newService.Get(testCase.args.ctx, testCase.args.schemeID, testCase.args.returnDraftIfExists)
 
 			if testCase.wantErr {
 
@@ -303,7 +305,7 @@ func Test_internalWorkflowSchemeImpl_Delete(t *testing.T) {
 
 	type args struct {
 		ctx      context.Context
-		schemeId int
+		schemeID int
 	}
 
 	testCases := []struct {
@@ -319,7 +321,7 @@ func Test_internalWorkflowSchemeImpl_Delete(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:      context.Background(),
-				schemeId: 10002,
+				schemeID: 10002,
 			},
 			on: func(fields *fields) {
 
@@ -348,7 +350,7 @@ func Test_internalWorkflowSchemeImpl_Delete(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:      context.Background(),
-				schemeId: 10002,
+				schemeID: 10002,
 			},
 			on: func(fields *fields) {
 
@@ -387,7 +389,7 @@ func Test_internalWorkflowSchemeImpl_Delete(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:      context.Background(),
-				schemeId: 10002,
+				schemeID: 10002,
 			},
 			on: func(fields *fields) {
 
@@ -416,7 +418,7 @@ func Test_internalWorkflowSchemeImpl_Delete(t *testing.T) {
 
 			newService := NewWorkflowSchemeService(testCase.fields.c, testCase.fields.version, nil)
 
-			gotResponse, err := newService.Delete(testCase.args.ctx, testCase.args.schemeId)
+			gotResponse, err := newService.Delete(testCase.args.ctx, testCase.args.schemeID)
 
 			if testCase.wantErr {
 
@@ -590,7 +592,7 @@ func Test_internalWorkflowSchemeImpl_Assign(t *testing.T) {
 
 	type args struct {
 		ctx                 context.Context
-		schemeId, projectId string
+		schemeID, projectId string
 	}
 
 	testCases := []struct {
@@ -606,7 +608,7 @@ func Test_internalWorkflowSchemeImpl_Assign(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:       context.Background(),
-				schemeId:  "1004561",
+				schemeID:  "1004561",
 				projectId: "4984838",
 			},
 			on: func(fields *fields) {
@@ -636,7 +638,7 @@ func Test_internalWorkflowSchemeImpl_Assign(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:       context.Background(),
-				schemeId:  "1004561",
+				schemeID:  "1004561",
 				projectId: "4984838",
 			},
 			on: func(fields *fields) {
@@ -676,7 +678,7 @@ func Test_internalWorkflowSchemeImpl_Assign(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:      context.Background(),
-				schemeId: "1004561",
+				schemeID: "1004561",
 			},
 			wantErr: true,
 			Err:     model.ErrNoProjectIDOrKeyError,
@@ -687,7 +689,7 @@ func Test_internalWorkflowSchemeImpl_Assign(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:       context.Background(),
-				schemeId:  "1004561",
+				schemeID:  "1004561",
 				projectId: "4984838",
 			},
 			on: func(fields *fields) {
@@ -717,7 +719,7 @@ func Test_internalWorkflowSchemeImpl_Assign(t *testing.T) {
 
 			newService := NewWorkflowSchemeService(testCase.fields.c, testCase.fields.version, nil)
 
-			gotResponse, err := newService.Assign(testCase.args.ctx, testCase.args.schemeId, testCase.args.projectId)
+			gotResponse, err := newService.Assign(testCase.args.ctx, testCase.args.schemeID, testCase.args.projectId)
 
 			if testCase.wantErr {
 
@@ -755,7 +757,7 @@ func Test_internalWorkflowSchemeImpl_Update(t *testing.T) {
 
 	type args struct {
 		ctx      context.Context
-		schemeId int
+		schemeID int
 		payload  *model.WorkflowSchemePayloadScheme
 	}
 
@@ -772,7 +774,7 @@ func Test_internalWorkflowSchemeImpl_Update(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:      context.Background(),
-				schemeId: 10002,
+				schemeID: 10002,
 				payload:  payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -802,7 +804,7 @@ func Test_internalWorkflowSchemeImpl_Update(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:      context.Background(),
-				schemeId: 10002,
+				schemeID: 10002,
 				payload:  payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -842,7 +844,7 @@ func Test_internalWorkflowSchemeImpl_Update(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:      context.Background(),
-				schemeId: 10002,
+				schemeID: 10002,
 				payload:  payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -872,7 +874,7 @@ func Test_internalWorkflowSchemeImpl_Update(t *testing.T) {
 
 			newService := NewWorkflowSchemeService(testCase.fields.c, testCase.fields.version, nil)
 
-			gotResult, gotResponse, err := newService.Update(testCase.args.ctx, testCase.args.schemeId, testCase.args.payload)
+			gotResult, gotResponse, err := newService.Update(testCase.args.ctx, testCase.args.schemeID, testCase.args.payload)
 
 			if testCase.wantErr {
 

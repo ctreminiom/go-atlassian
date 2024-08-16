@@ -3,12 +3,13 @@ package internal
 import (
 	"context"
 	"fmt"
-	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/service"
-	"github.com/ctreminiom/go-atlassian/service/jira"
 	"net/http"
 	"net/url"
 	"strings"
+
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/service"
+	"github.com/ctreminiom/go-atlassian/service/jira"
 )
 
 // NewPermissionSchemeService creates a new instance of PermissionSchemeService.
@@ -43,7 +44,7 @@ func (p *PermissionSchemeService) Gets(ctx context.Context) (*model.PermissionSc
 
 // Get returns a permission scheme.
 //
-// GET /rest/api/{2-3}/permissionscheme/{schemeId}
+// GET /rest/api/{2-3}/permissionscheme/{permissionSchemeId}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/permissions/scheme#get-permission-scheme
 func (p *PermissionSchemeService) Get(ctx context.Context, permissionSchemeId int, expand []string) (*model.PermissionSchemeScheme, *model.ResponseScheme, error) {
@@ -52,7 +53,7 @@ func (p *PermissionSchemeService) Get(ctx context.Context, permissionSchemeId in
 
 // Delete deletes a permission scheme.
 //
-// DELETE /rest/api/{2-3}/permissionscheme/{schemeId}
+// DELETE /rest/api/{2-3}/permissionscheme/{permissionSchemeId}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/permissions/scheme#delete-permission-scheme
 func (p *PermissionSchemeService) Delete(ctx context.Context, permissionSchemeId int) (*model.ResponseScheme, error) {
@@ -79,7 +80,7 @@ func (p *PermissionSchemeService) Create(ctx context.Context, payload *model.Per
 //
 // 3. Sending an empty list will remove all permission grants from the permission scheme.
 //
-// PUT /rest/api/{2-3}/permissionscheme/{schemeId}
+// PUT /rest/api/{2-3}/permissionscheme/{permissionSchemeId}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/permissions/scheme#update-permission-scheme
 func (p *PermissionSchemeService) Update(ctx context.Context, permissionSchemeId int, payload *model.PermissionSchemeScheme) (*model.PermissionSchemeScheme, *model.ResponseScheme, error) {

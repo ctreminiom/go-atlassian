@@ -3,12 +3,13 @@ package internal
 import (
 	"context"
 	"fmt"
-	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/service"
-	"github.com/ctreminiom/go-atlassian/service/sm"
 	"net/http"
 	"net/url"
 	"strconv"
+
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/service"
+	"github.com/ctreminiom/go-atlassian/service/sm"
 )
 
 // NewParticipantService creates a new instance of ParticipantService.
@@ -27,7 +28,7 @@ type ParticipantService struct {
 
 // Gets returns a list of all the participants on a customer request.
 //
-// GET /rest/servicedeskapi/request/{issueIdOrKey}/participant
+// GET /rest/servicedeskapi/request/{issueKeyOrID}/participant
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request/participants#get-request-participants
 func (s *ParticipantService) Gets(ctx context.Context, issueKeyOrID string, start, limit int) (*model.RequestParticipantPageScheme, *model.ResponseScheme, error) {
@@ -36,7 +37,7 @@ func (s *ParticipantService) Gets(ctx context.Context, issueKeyOrID string, star
 
 // Add adds participants to a customer request.
 //
-// POST /rest/servicedeskapi/request/{issueIdOrKey}/participant
+// POST /rest/servicedeskapi/request/{issueKeyOrID}/participant
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request/participants#add-request-participants
 func (s *ParticipantService) Add(ctx context.Context, issueKeyOrID string, accountIDs []string) (*model.RequestParticipantPageScheme, *model.ResponseScheme, error) {
@@ -45,7 +46,7 @@ func (s *ParticipantService) Add(ctx context.Context, issueKeyOrID string, accou
 
 // Remove removes participants from a customer request.
 //
-// DELETE /rest/servicedeskapi/request/{issueIdOrKey}/participant
+// DELETE /rest/servicedeskapi/request/{issueKeyOrID}/participant
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request/participants#remove-request-participants
 func (s *ParticipantService) Remove(ctx context.Context, issueKeyOrID string, accountIDs []string) (*model.RequestParticipantPageScheme, *model.ResponseScheme, error) {

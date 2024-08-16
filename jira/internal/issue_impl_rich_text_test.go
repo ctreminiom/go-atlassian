@@ -3,12 +3,14 @@ package internal
 import (
 	"context"
 	"errors"
+	"net/http"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
-	"github.com/stretchr/testify/assert"
-	"net/http"
-	"testing"
 )
 
 func Test_internalRichTextServiceImpl_Delete(t *testing.T) {
@@ -20,7 +22,7 @@ func Test_internalRichTextServiceImpl_Delete(t *testing.T) {
 
 	type args struct {
 		ctx            context.Context
-		issueKeyOrId   string
+		issueKeyOrID   string
 		deleteSubTasks bool
 	}
 
@@ -37,7 +39,7 @@ func Test_internalRichTextServiceImpl_Delete(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:            context.Background(),
-				issueKeyOrId:   "DUMMY-1",
+				issueKeyOrID:   "DUMMY-1",
 				deleteSubTasks: true,
 			},
 			on: func(fields *fields) {
@@ -66,7 +68,7 @@ func Test_internalRichTextServiceImpl_Delete(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:            context.Background(),
-				issueKeyOrId:   "",
+				issueKeyOrID:   "",
 				deleteSubTasks: true,
 			},
 			on: func(fields *fields) {
@@ -81,7 +83,7 @@ func Test_internalRichTextServiceImpl_Delete(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:            context.Background(),
-				issueKeyOrId:   "DUMMY-1",
+				issueKeyOrID:   "DUMMY-1",
 				deleteSubTasks: true,
 			},
 			on: func(fields *fields) {
@@ -113,7 +115,7 @@ func Test_internalRichTextServiceImpl_Delete(t *testing.T) {
 			issueService, _, err := NewIssueService(testCase.fields.c, testCase.fields.version, nil)
 			assert.NoError(t, err)
 
-			gotResponse, err := issueService.Delete(testCase.args.ctx, testCase.args.issueKeyOrId, testCase.args.deleteSubTasks)
+			gotResponse, err := issueService.Delete(testCase.args.ctx, testCase.args.issueKeyOrID, testCase.args.deleteSubTasks)
 
 			if testCase.wantErr {
 
@@ -142,7 +144,7 @@ func Test_internalRichTextServiceImpl_Assign(t *testing.T) {
 
 	type args struct {
 		ctx                     context.Context
-		issueKeyOrId, accountId string
+		issueKeyOrID, accountId string
 	}
 
 	testCases := []struct {
@@ -158,7 +160,7 @@ func Test_internalRichTextServiceImpl_Assign(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-1",
+				issueKeyOrID: "DUMMY-1",
 				accountId:    "account-id-sample",
 			},
 			on: func(fields *fields) {
@@ -187,7 +189,7 @@ func Test_internalRichTextServiceImpl_Assign(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "",
+				issueKeyOrID: "",
 				accountId:    "account-id-sample",
 			},
 			on: func(fields *fields) {
@@ -202,7 +204,7 @@ func Test_internalRichTextServiceImpl_Assign(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-1",
+				issueKeyOrID: "DUMMY-1",
 				accountId:    "",
 			},
 			on: func(fields *fields) {
@@ -217,7 +219,7 @@ func Test_internalRichTextServiceImpl_Assign(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-1",
+				issueKeyOrID: "DUMMY-1",
 				accountId:    "account-id-sample",
 			},
 			on: func(fields *fields) {
@@ -249,7 +251,7 @@ func Test_internalRichTextServiceImpl_Assign(t *testing.T) {
 			issueService, _, err := NewIssueService(testCase.fields.c, testCase.fields.version, nil)
 			assert.NoError(t, err)
 
-			gotResponse, err := issueService.Assign(testCase.args.ctx, testCase.args.issueKeyOrId, testCase.args.accountId)
+			gotResponse, err := issueService.Assign(testCase.args.ctx, testCase.args.issueKeyOrID, testCase.args.accountId)
 
 			if testCase.wantErr {
 
@@ -287,7 +289,7 @@ func Test_internalRichTextServiceImpl_Notify(t *testing.T) {
 
 	type args struct {
 		ctx          context.Context
-		issueKeyOrId string
+		issueKeyOrID string
 		options      *model.IssueNotifyOptionsScheme
 	}
 
@@ -304,7 +306,7 @@ func Test_internalRichTextServiceImpl_Notify(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-1",
+				issueKeyOrID: "DUMMY-1",
 				options:      optionsMocked,
 			},
 			on: func(fields *fields) {
@@ -333,7 +335,7 @@ func Test_internalRichTextServiceImpl_Notify(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "",
+				issueKeyOrID: "",
 			},
 			on: func(fields *fields) {
 				fields.c = mocks.NewConnector(t)
@@ -347,7 +349,7 @@ func Test_internalRichTextServiceImpl_Notify(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-1",
+				issueKeyOrID: "DUMMY-1",
 				options:      optionsMocked,
 			},
 			on: func(fields *fields) {
@@ -379,7 +381,7 @@ func Test_internalRichTextServiceImpl_Notify(t *testing.T) {
 			issueService, _, err := NewIssueService(testCase.fields.c, testCase.fields.version, nil)
 			assert.NoError(t, err)
 
-			gotResponse, err := issueService.Notify(testCase.args.ctx, testCase.args.issueKeyOrId, testCase.args.options)
+			gotResponse, err := issueService.Notify(testCase.args.ctx, testCase.args.issueKeyOrID, testCase.args.options)
 
 			if testCase.wantErr {
 
@@ -408,7 +410,7 @@ func Test_internalRichTextServiceImpl_Transitions(t *testing.T) {
 
 	type args struct {
 		ctx          context.Context
-		issueKeyOrId string
+		issueKeyOrID string
 	}
 
 	testCases := []struct {
@@ -424,7 +426,7 @@ func Test_internalRichTextServiceImpl_Transitions(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-1",
+				issueKeyOrID: "DUMMY-1",
 			},
 			on: func(fields *fields) {
 
@@ -452,7 +454,7 @@ func Test_internalRichTextServiceImpl_Transitions(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "",
+				issueKeyOrID: "",
 			},
 			on: func(fields *fields) {
 				fields.c = mocks.NewConnector(t)
@@ -466,7 +468,7 @@ func Test_internalRichTextServiceImpl_Transitions(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-1",
+				issueKeyOrID: "DUMMY-1",
 			},
 			on: func(fields *fields) {
 
@@ -497,7 +499,7 @@ func Test_internalRichTextServiceImpl_Transitions(t *testing.T) {
 			issueService, _, err := NewIssueService(testCase.fields.c, testCase.fields.version, nil)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := issueService.Transitions(testCase.args.ctx, testCase.args.issueKeyOrId)
+			gotResult, gotResponse, err := issueService.Transitions(testCase.args.ctx, testCase.args.issueKeyOrID)
 
 			if testCase.wantErr {
 
@@ -885,7 +887,7 @@ func Test_internalRichTextServiceImpl_Get(t *testing.T) {
 
 	type args struct {
 		ctx            context.Context
-		issueKeyOrId   string
+		issueKeyOrID   string
 		fields, expand []string
 	}
 
@@ -902,7 +904,7 @@ func Test_internalRichTextServiceImpl_Get(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-1",
+				issueKeyOrID: "DUMMY-1",
 				fields:       []string{"summary", "status"},
 				expand:       []string{"operations", "changelogts"},
 			},
@@ -932,7 +934,7 @@ func Test_internalRichTextServiceImpl_Get(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "",
+				issueKeyOrID: "",
 				fields:       []string{"summary", "status"},
 				expand:       []string{"operations", "changelogts"},
 			},
@@ -948,7 +950,7 @@ func Test_internalRichTextServiceImpl_Get(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-1",
+				issueKeyOrID: "DUMMY-1",
 				fields:       []string{"summary", "status"},
 				expand:       []string{"operations", "changelogts"},
 			},
@@ -981,7 +983,7 @@ func Test_internalRichTextServiceImpl_Get(t *testing.T) {
 			issueService, _, err := NewIssueService(testCase.fields.c, testCase.fields.version, nil)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := issueService.Get(testCase.args.ctx, testCase.args.issueKeyOrId, testCase.args.fields,
+			gotResult, gotResponse, err := issueService.Get(testCase.args.ctx, testCase.args.issueKeyOrID, testCase.args.fields,
 				testCase.args.expand)
 
 			if testCase.wantErr {
@@ -1071,7 +1073,7 @@ func Test_internalRichTextServiceImpl_Move(t *testing.T) {
 
 	type args struct {
 		ctx                        context.Context
-		issueKeyOrId, transitionId string
+		issueKeyOrID, transitionId string
 		options                    *model.IssueMoveOptionsV2
 	}
 
@@ -1088,7 +1090,7 @@ func Test_internalRichTextServiceImpl_Move(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-1",
+				issueKeyOrID: "DUMMY-1",
 				transitionId: "10001",
 				options: &model.IssueMoveOptionsV2{
 					Fields: &model.IssueSchemeV2{
@@ -1128,7 +1130,7 @@ func Test_internalRichTextServiceImpl_Move(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-1",
+				issueKeyOrID: "DUMMY-1",
 				transitionId: "10001",
 				options: &model.IssueMoveOptionsV2{
 					CustomFields: customFieldsMocked,
@@ -1144,7 +1146,7 @@ func Test_internalRichTextServiceImpl_Move(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-1",
+				issueKeyOrID: "DUMMY-1",
 				transitionId: "10001",
 				options: &model.IssueMoveOptionsV2{
 					Fields: &model.IssueSchemeV2{
@@ -1184,7 +1186,7 @@ func Test_internalRichTextServiceImpl_Move(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-1",
+				issueKeyOrID: "DUMMY-1",
 				transitionId: "10001",
 				options: &model.IssueMoveOptionsV2{
 					Fields: &model.IssueSchemeV2{
@@ -1224,7 +1226,7 @@ func Test_internalRichTextServiceImpl_Move(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-1",
+				issueKeyOrID: "DUMMY-1",
 				transitionId: "10001",
 				options:      nil,
 			},
@@ -1254,7 +1256,7 @@ func Test_internalRichTextServiceImpl_Move(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "",
+				issueKeyOrID: "",
 				transitionId: "10001",
 				options: &model.IssueMoveOptionsV2{
 					Fields: &model.IssueSchemeV2{
@@ -1280,7 +1282,7 @@ func Test_internalRichTextServiceImpl_Move(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-1",
+				issueKeyOrID: "DUMMY-1",
 				transitionId: "",
 				options: &model.IssueMoveOptionsV2{
 					Fields: &model.IssueSchemeV2{
@@ -1306,7 +1308,7 @@ func Test_internalRichTextServiceImpl_Move(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-1",
+				issueKeyOrID: "DUMMY-1",
 				transitionId: "10001",
 				options: &model.IssueMoveOptionsV2{
 					Fields: &model.IssueSchemeV2{
@@ -1349,7 +1351,7 @@ func Test_internalRichTextServiceImpl_Move(t *testing.T) {
 			issueService, _, err := NewIssueService(testCase.fields.c, testCase.fields.version, nil)
 			assert.NoError(t, err)
 
-			gotResponse, err := issueService.Move(testCase.args.ctx, testCase.args.issueKeyOrId, testCase.args.transitionId,
+			gotResponse, err := issueService.Move(testCase.args.ctx, testCase.args.issueKeyOrID, testCase.args.transitionId,
 				testCase.args.options)
 
 			if testCase.wantErr {
@@ -1423,7 +1425,7 @@ func Test_internalRichTextServiceImpl_Update(t *testing.T) {
 
 	type args struct {
 		ctx          context.Context
-		issueKeyOrId string
+		issueKeyOrID string
 		notify       bool
 		payload      *model.IssueSchemeV2
 		customFields *model.CustomFields
@@ -1443,7 +1445,7 @@ func Test_internalRichTextServiceImpl_Update(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-1",
+				issueKeyOrID: "DUMMY-1",
 				notify:       true,
 				payload: &model.IssueSchemeV2{
 					Fields: &model.IssueFieldsSchemeV2{
@@ -1479,7 +1481,7 @@ func Test_internalRichTextServiceImpl_Update(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "",
+				issueKeyOrID: "",
 				notify:       true,
 				payload: &model.IssueSchemeV2{
 					Fields: &model.IssueFieldsSchemeV2{
@@ -1501,7 +1503,7 @@ func Test_internalRichTextServiceImpl_Update(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-1",
+				issueKeyOrID: "DUMMY-1",
 				notify:       true,
 				payload: &model.IssueSchemeV2{
 					Fields: &model.IssueFieldsSchemeV2{
@@ -1534,7 +1536,7 @@ func Test_internalRichTextServiceImpl_Update(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-1",
+				issueKeyOrID: "DUMMY-1",
 				notify:       true,
 				payload: &model.IssueSchemeV2{
 					Fields: &model.IssueFieldsSchemeV2{
@@ -1570,7 +1572,7 @@ func Test_internalRichTextServiceImpl_Update(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-1",
+				issueKeyOrID: "DUMMY-1",
 				notify:       true,
 				payload: &model.IssueSchemeV2{
 					Fields: &model.IssueFieldsSchemeV2{
@@ -1606,7 +1608,7 @@ func Test_internalRichTextServiceImpl_Update(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.Background(),
-				issueKeyOrId: "DUMMY-1",
+				issueKeyOrID: "DUMMY-1",
 				notify:       true,
 				payload: &model.IssueSchemeV2{
 					Fields: &model.IssueFieldsSchemeV2{
@@ -1652,7 +1654,7 @@ func Test_internalRichTextServiceImpl_Update(t *testing.T) {
 			issueService, _, err := NewIssueService(testCase.fields.c, testCase.fields.version, nil)
 			assert.NoError(t, err)
 
-			gotResponse, err := issueService.Update(testCase.args.ctx, testCase.args.issueKeyOrId, testCase.args.notify,
+			gotResponse, err := issueService.Update(testCase.args.ctx, testCase.args.issueKeyOrID, testCase.args.notify,
 				testCase.args.payload, testCase.args.customFields, testCase.args.operations)
 
 			if testCase.wantErr {

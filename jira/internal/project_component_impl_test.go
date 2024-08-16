@@ -175,7 +175,7 @@ func Test_internalProjectComponentImpl_Update(t *testing.T) {
 
 	type args struct {
 		ctx         context.Context
-		componentId string
+		componentID string
 		payload     *model.ComponentPayloadScheme
 	}
 
@@ -192,7 +192,7 @@ func Test_internalProjectComponentImpl_Update(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:         context.Background(),
-				componentId: "10393",
+				componentID: "10393",
 				payload:     payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -222,7 +222,7 @@ func Test_internalProjectComponentImpl_Update(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:         context.Background(),
-				componentId: "10393",
+				componentID: "10393",
 				payload:     payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -262,7 +262,7 @@ func Test_internalProjectComponentImpl_Update(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:         context.Background(),
-				componentId: "10393",
+				componentID: "10393",
 				payload:     payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -293,7 +293,7 @@ func Test_internalProjectComponentImpl_Update(t *testing.T) {
 			newService, err := NewProjectComponentService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := newService.Update(testCase.args.ctx, testCase.args.componentId, testCase.args.payload)
+			gotResult, gotResponse, err := newService.Update(testCase.args.ctx, testCase.args.componentID, testCase.args.payload)
 
 			if testCase.wantErr {
 
@@ -467,7 +467,7 @@ func Test_internalProjectComponentImpl_Count(t *testing.T) {
 
 	type args struct {
 		ctx         context.Context
-		componentId string
+		componentID string
 	}
 
 	testCases := []struct {
@@ -483,7 +483,7 @@ func Test_internalProjectComponentImpl_Count(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:         context.Background(),
-				componentId: "10001",
+				componentID: "10001",
 			},
 			on: func(fields *fields) {
 
@@ -512,7 +512,7 @@ func Test_internalProjectComponentImpl_Count(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:         context.Background(),
-				componentId: "10001",
+				componentID: "10001",
 			},
 			on: func(fields *fields) {
 
@@ -551,7 +551,7 @@ func Test_internalProjectComponentImpl_Count(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:         context.Background(),
-				componentId: "10001",
+				componentID: "10001",
 			},
 			on: func(fields *fields) {
 
@@ -581,7 +581,7 @@ func Test_internalProjectComponentImpl_Count(t *testing.T) {
 			newService, err := NewProjectComponentService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := newService.Count(testCase.args.ctx, testCase.args.componentId)
+			gotResult, gotResponse, err := newService.Count(testCase.args.ctx, testCase.args.componentID)
 
 			if testCase.wantErr {
 
@@ -611,7 +611,7 @@ func Test_internalProjectComponentImpl_Get(t *testing.T) {
 
 	type args struct {
 		ctx         context.Context
-		componentId string
+		componentID string
 	}
 
 	testCases := []struct {
@@ -627,7 +627,7 @@ func Test_internalProjectComponentImpl_Get(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:         context.Background(),
-				componentId: "10001",
+				componentID: "10001",
 			},
 			on: func(fields *fields) {
 
@@ -656,7 +656,7 @@ func Test_internalProjectComponentImpl_Get(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:         context.Background(),
-				componentId: "10001",
+				componentID: "10001",
 			},
 			on: func(fields *fields) {
 
@@ -695,7 +695,7 @@ func Test_internalProjectComponentImpl_Get(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:         context.Background(),
-				componentId: "10001",
+				componentID: "10001",
 			},
 			on: func(fields *fields) {
 
@@ -725,7 +725,7 @@ func Test_internalProjectComponentImpl_Get(t *testing.T) {
 			newService, err := NewProjectComponentService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := newService.Get(testCase.args.ctx, testCase.args.componentId)
+			gotResult, gotResponse, err := newService.Get(testCase.args.ctx, testCase.args.componentID)
 
 			if testCase.wantErr {
 
@@ -755,7 +755,7 @@ func Test_internalProjectComponentImpl_Delete(t *testing.T) {
 
 	type args struct {
 		ctx         context.Context
-		componentId string
+		componentID string
 	}
 
 	testCases := []struct {
@@ -771,7 +771,7 @@ func Test_internalProjectComponentImpl_Delete(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:         context.Background(),
-				componentId: "10001",
+				componentID: "10001",
 			},
 			on: func(fields *fields) {
 
@@ -800,7 +800,7 @@ func Test_internalProjectComponentImpl_Delete(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:         context.Background(),
-				componentId: "10001",
+				componentID: "10001",
 			},
 			on: func(fields *fields) {
 
@@ -839,7 +839,7 @@ func Test_internalProjectComponentImpl_Delete(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:         context.Background(),
-				componentId: "10001",
+				componentID: "10001",
 			},
 			on: func(fields *fields) {
 
@@ -869,7 +869,7 @@ func Test_internalProjectComponentImpl_Delete(t *testing.T) {
 			newService, err := NewProjectComponentService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResponse, err := newService.Delete(testCase.args.ctx, testCase.args.componentId)
+			gotResponse, err := newService.Delete(testCase.args.ctx, testCase.args.componentID)
 
 			if testCase.wantErr {
 

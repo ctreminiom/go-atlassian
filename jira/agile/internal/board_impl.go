@@ -721,7 +721,7 @@ func (i *internalBoardImpl) Gets(ctx context.Context, opts *model.GetBoardsOptio
 		}
 
 		if opts.ProjectKeyOrID != "" {
-			params.Add("projectKeyOrID", opts.ProjectKeyOrID)
+			params.Add("projectKeyOrId", opts.ProjectKeyOrID)
 		}
 
 		if opts.AccountIDLocation != "" {

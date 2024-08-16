@@ -412,7 +412,7 @@ func Test_internalProjectPropertyImpl_Delete(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:            context.Background(),
-				projectKeyOrId: "DUMMY",
+				projectKeyOrID: "DUMMY",
 			},
 			wantErr: true,
 			Err:     model.ErrNoPropertyKeyError,
@@ -423,7 +423,7 @@ func Test_internalProjectPropertyImpl_Delete(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:            context.Background(),
-				projectKeyOrId: "DUMMY",
+				projectKeyOrID: "DUMMY",
 				propertyKey:    "alliance",
 			},
 			on: func(fields *fields) {
@@ -454,7 +454,7 @@ func Test_internalProjectPropertyImpl_Delete(t *testing.T) {
 			newService, err := NewProjectPropertyService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResponse, err := newService.Delete(testCase.args.ctx, testCase.args.projectKeyOrId, testCase.args.propertyKey)
+			gotResponse, err := newService.Delete(testCase.args.ctx, testCase.args.projectKeyOrID, testCase.args.propertyKey)
 
 			if testCase.wantErr {
 

@@ -15,7 +15,7 @@ jobs:
     strategy:
       max-parallel: 6
       matrix:
-        go: [1.21, 1.22]
+        go: [1.22, 1.23]
         os: [ubuntu-latest, macos-latest, windows-latest]
     name: lint
     runs-on: ${{ matrix.os }}

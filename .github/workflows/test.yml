@@ -13,7 +13,7 @@ jobs:
     strategy:
       max-parallel: 6
       matrix:
-        go-version: [1.21, 1.22]
+        go-version: [1.22, 1.23]
         platform: [ubuntu-latest, macos-latest, windows-latest]
 
     runs-on: ${{ matrix.platform }}

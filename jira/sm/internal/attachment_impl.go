@@ -28,7 +28,7 @@ type AttachmentService struct {
 
 // Gets returns all the attachments for a customer requests.
 //
-// GET /rest/servicedeskapi/request/{issueIdOrKey}/attachment
+// GET /rest/servicedeskapi/request/{issueKeyOrID}/attachment
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request/attachment#get-attachments-for-request
 func (s *AttachmentService) Gets(ctx context.Context, issueKeyOrID string, start, limit int) (*model.RequestAttachmentPageScheme, *model.ResponseScheme, error) {
@@ -39,7 +39,7 @@ func (s *AttachmentService) Gets(ctx context.Context, issueKeyOrID string, start
 //
 // servicedesk/{serviceDeskId}/attachTemporaryFile) as attachments to a customer request
 //
-// POST /rest/servicedeskapi/request/{issueIdOrKey}/attachment
+// POST /rest/servicedeskapi/request/{issueKeyOrID}/attachment
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request/attachment#create-attachment
 func (s *AttachmentService) Create(ctx context.Context, issueKeyOrID string, payload *model.RequestAttachmentCreationPayloadScheme) (*model.RequestAttachmentCreationScheme, *model.ResponseScheme, error) {

@@ -3,13 +3,14 @@ package internal
 import (
 	"context"
 	"fmt"
-	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/service"
-	"github.com/ctreminiom/go-atlassian/service/sm"
 	"net/http"
 	"net/url"
 	"strconv"
 	"strings"
+
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/service"
+	"github.com/ctreminiom/go-atlassian/service/sm"
 )
 
 // ServiceRequestSubServices holds the sub-services related to service requests in Jira Service Management.
@@ -100,7 +101,7 @@ func (s *RequestService) Gets(ctx context.Context, options *model.ServiceRequest
 
 // Get returns a customer request.
 //
-// GET /rest/servicedeskapi/request/{issueIdOrKey}
+// GET /rest/servicedeskapi/request/{issueKeyOrID}
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request#get-customer-request-by-id-or-key
 func (s *RequestService) Get(ctx context.Context, issueKeyOrID string, expand []string) (*model.CustomerRequestScheme, *model.ResponseScheme, error) {
@@ -109,7 +110,7 @@ func (s *RequestService) Get(ctx context.Context, issueKeyOrID string, expand []
 
 // Subscribe subscribes the user to receiving notifications from a customer request.
 //
-// PUT /rest/servicedeskapi/request/{issueIdOrKey}/notification
+// PUT /rest/servicedeskapi/request/{issueKeyOrID}/notification
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request#subscribe
 func (s *RequestService) Subscribe(ctx context.Context, issueKeyOrID string) (*model.ResponseScheme, error) {
@@ -118,7 +119,7 @@ func (s *RequestService) Subscribe(ctx context.Context, issueKeyOrID string) (*m
 
 // Unsubscribe unsubscribes the user from notifications from a customer request.
 //
-// DELETE /rest/servicedeskapi/request/{issueIdOrKey}/notification
+// DELETE /rest/servicedeskapi/request/{issueKeyOrID}/notification
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request#unsubscribe
 func (s *RequestService) Unsubscribe(ctx context.Context, issueKeyOrID string) (*model.ResponseScheme, error) {
@@ -127,7 +128,7 @@ func (s *RequestService) Unsubscribe(ctx context.Context, issueKeyOrID string) (
 
 // Transitions returns a list of transitions, the workflow processes that moves a customer request from one status to another, that the user can perform on a request.
 //
-// GET /rest/servicedeskapi/request/{issueIdOrKey}/transition
+// GET /rest/servicedeskapi/request/{issueKeyOrID}/transition
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request#get-customer-transitions
 func (s *RequestService) Transitions(ctx context.Context, issueKeyOrID string, start, limit int) (*model.CustomerRequestTransitionPageScheme, *model.ResponseScheme, error) {
@@ -138,7 +139,7 @@ func (s *RequestService) Transitions(ctx context.Context, issueKeyOrID string, s
 //
 // An optional comment can be included to provide a reason for the transition.
 //
-// POST /rest/servicedeskapi/request/{issueIdOrKey}/transition
+// POST /rest/servicedeskapi/request/{issueKeyOrID}/transition
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request#perform-customer-transition
 func (s *RequestService) Transition(ctx context.Context, issueKeyOrID, transitionID, comment string) (*model.ResponseScheme, error) {

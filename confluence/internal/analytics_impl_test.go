@@ -3,12 +3,14 @@ package internal
 import (
 	"context"
 	"errors"
+	"net/http"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
-	"github.com/stretchr/testify/assert"
-	"net/http"
-	"testing"
 )
 
 func Test_internalAnalyticsServiceImpl_Get(t *testing.T) {
@@ -19,7 +21,7 @@ func Test_internalAnalyticsServiceImpl_Get(t *testing.T) {
 
 	type args struct {
 		ctx                 context.Context
-		contentId, fromDate string
+		contentID, fromDate string
 	}
 
 	testCases := []struct {
@@ -34,7 +36,7 @@ func Test_internalAnalyticsServiceImpl_Get(t *testing.T) {
 			name: "when the parameters are correct",
 			args: args{
 				ctx:       context.Background(),
-				contentId: "2337372172371",
+				contentID: "2337372172371",
 				fromDate:  "2023-10-03",
 			},
 			on: func(fields *fields) {
@@ -61,7 +63,7 @@ func Test_internalAnalyticsServiceImpl_Get(t *testing.T) {
 			name: "when the http request cannot be created",
 			args: args{
 				ctx:       context.Background(),
-				contentId: "2337372172371",
+				contentID: "2337372172371",
 				fromDate:  "2023-10-03",
 			},
 			on: func(fields *fields) {
@@ -101,7 +103,7 @@ func Test_internalAnalyticsServiceImpl_Get(t *testing.T) {
 
 			newService := NewAnalyticsService(testCase.fields.c)
 
-			gotResult, gotResponse, err := newService.Get(testCase.args.ctx, testCase.args.contentId, testCase.args.fromDate)
+			gotResult, gotResponse, err := newService.Get(testCase.args.ctx, testCase.args.contentID, testCase.args.fromDate)
 
 			if testCase.wantErr {
 
@@ -129,7 +131,7 @@ func Test_internalAnalyticsServiceImpl_Distinct(t *testing.T) {
 
 	type args struct {
 		ctx                 context.Context
-		contentId, fromDate string
+		contentID, fromDate string
 	}
 
 	testCases := []struct {
@@ -144,7 +146,7 @@ func Test_internalAnalyticsServiceImpl_Distinct(t *testing.T) {
 			name: "when the parameters are correct",
 			args: args{
 				ctx:       context.Background(),
-				contentId: "2337372172371",
+				contentID: "2337372172371",
 				fromDate:  "2023-10-03",
 			},
 			on: func(fields *fields) {
@@ -171,7 +173,7 @@ func Test_internalAnalyticsServiceImpl_Distinct(t *testing.T) {
 			name: "when the http request cannot be created",
 			args: args{
 				ctx:       context.Background(),
-				contentId: "2337372172371",
+				contentID: "2337372172371",
 				fromDate:  "2023-10-03",
 			},
 			on: func(fields *fields) {
@@ -211,7 +213,7 @@ func Test_internalAnalyticsServiceImpl_Distinct(t *testing.T) {
 
 			newService := NewAnalyticsService(testCase.fields.c)
 
-			gotResult, gotResponse, err := newService.Distinct(testCase.args.ctx, testCase.args.contentId, testCase.args.fromDate)
+			gotResult, gotResponse, err := newService.Distinct(testCase.args.ctx, testCase.args.contentID, testCase.args.fromDate)
 
 			if testCase.wantErr {
 

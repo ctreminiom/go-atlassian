@@ -2,6 +2,7 @@ package jira
 
 import (
 	"context"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 )
 
@@ -27,10 +28,10 @@ type FilterSharingConnector interface {
 	//
 	// 2.Sharing with all logged-in users or the public is known as a global share permission.
 	//
-	// GET /rest/api/{2-3}/filter/{id}/permission
+	// GET /rest/api/{2-3}/filter/{filterID}/permission
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/filters/sharing#get-share-permissions
-	Gets(ctx context.Context, filterId int) ([]*model.SharePermissionScheme, *model.ResponseScheme, error)
+	Gets(ctx context.Context, filterID int) ([]*model.SharePermissionScheme, *model.ResponseScheme, error)
 
 	// Add a share permissions to a filter.
 	//
@@ -38,10 +39,10 @@ type FilterSharingConnector interface {
 	//
 	// it will overwrite all share permissions for the filter.
 	//
-	// POST /rest/api/{2-3}/filter/{id}/permission
+	// POST /rest/api/{2-3}/filter/{filterID}/permission
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/filters/sharing#add-share-permission
-	Add(ctx context.Context, filterId int, payload *model.PermissionFilterPayloadScheme) ([]*model.SharePermissionScheme, *model.ResponseScheme, error)
+	Add(ctx context.Context, filterID int, payload *model.PermissionFilterPayloadScheme) ([]*model.SharePermissionScheme, *model.ResponseScheme, error)
 
 	// Get returns a share permission for a filter.
 	//
@@ -49,15 +50,15 @@ type FilterSharingConnector interface {
 	//
 	// Sharing with all logged-in users or the public is known as a global share permission.
 	//
-	// GET /rest/api/{2-3}/filter/{id}/permission/{permissionId}
+	// GET /rest/api/{2-3}/filter/{filterID}/permission/{permissionID}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/filters/sharing#get-share-permission
-	Get(ctx context.Context, filterId, permissionId int) (*model.SharePermissionScheme, *model.ResponseScheme, error)
+	Get(ctx context.Context, filterID, permissionID int) (*model.SharePermissionScheme, *model.ResponseScheme, error)
 
 	// Delete deletes a share permission from a filter.
 	//
-	// DELETE /rest/api/{2-3}/filter/{id}/permission/{permissionId}
+	// DELETE /rest/api/{2-3}/filter/{filterID}/permission/{permissionID}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/filters/sharing#delete-share-permission
-	Delete(ctx context.Context, filterId, permissionId int) (*model.ResponseScheme, error)
+	Delete(ctx context.Context, filterID, permissionID int) (*model.ResponseScheme, error)
 }

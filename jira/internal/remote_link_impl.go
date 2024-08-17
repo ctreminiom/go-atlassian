@@ -38,7 +38,7 @@ type RemoteLinkService struct {
 //
 // # Where a global ID includes reserved URL characters these must be escaped in the request
 //
-// GET /rest/api/{2-3}/issue/{issueIDOrKey}/remotelink
+// GET /rest/api/{2-3}/issue/{issueKeyOrID}/remotelink
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/link/remote#get-remote-issue-links
 func (r *RemoteLinkService) Gets(ctx context.Context, issueKeyOrID, globalID string) ([]*model.RemoteLinkScheme, *model.ResponseScheme, error) {
@@ -47,7 +47,7 @@ func (r *RemoteLinkService) Gets(ctx context.Context, issueKeyOrID, globalID str
 
 // Get returns a remote issue link for an issue.
 //
-// GET /rest/api/{2-3}/issue/{issueIDOrKey}/remotelink/{linkID}
+// GET /rest/api/{2-3}/issue/{issueKeyOrID}/remotelink/{linkID}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/link/remote#get-remote-issue-link
 func (r *RemoteLinkService) Get(ctx context.Context, issueKeyOrID, linkID string) (*model.RemoteLinkScheme, *model.ResponseScheme, error) {
@@ -60,7 +60,7 @@ func (r *RemoteLinkService) Get(ctx context.Context, issueKeyOrID, linkID string
 //
 // Any fields without values in the request are set to null. Otherwise, the remote issue link is created.
 //
-// POST /rest/api/{2-3}/issue/{issueIDOrKey}/remotelink
+// POST /rest/api/{2-3}/issue/{issueKeyOrID}/remotelink
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/link/remote#create-remote-issue-link
 func (r *RemoteLinkService) Create(ctx context.Context, issueKeyOrID string, payload *model.RemoteLinkScheme) (*model.RemoteLinkIdentify, *model.ResponseScheme, error) {
@@ -71,7 +71,7 @@ func (r *RemoteLinkService) Create(ctx context.Context, issueKeyOrID string, pay
 //
 // Note: Fields without values in the request are set to null.
 //
-// PUT /rest/api/{2-3}/issue/{issueIDOrKey}/remotelink/{linkID}
+// PUT /rest/api/{2-3}/issue/{issueKeyOrID}/remotelink/{linkID}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/link/remote#update-remote-issue-link
 func (r *RemoteLinkService) Update(ctx context.Context, issueKeyOrID, linkID string, payload *model.RemoteLinkScheme) (*model.ResponseScheme, error) {
@@ -80,7 +80,7 @@ func (r *RemoteLinkService) Update(ctx context.Context, issueKeyOrID, linkID str
 
 // DeleteByID deletes a remote issue link from an issue.
 //
-// DELETE /rest/api/{2-3}/issue/{issueIDOrKey}/remotelink/{linkID}
+// DELETE /rest/api/{2-3}/issue/{issueKeyOrID}/remotelink/{linkID}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/link/remote#delete-remote-issue-link-by-id
 func (r *RemoteLinkService) DeleteByID(ctx context.Context, issueKeyOrID, linkID string) (*model.ResponseScheme, error) {
@@ -93,7 +93,7 @@ func (r *RemoteLinkService) DeleteByID(ctx context.Context, issueKeyOrID, linkID
 //
 // For example, pass system=http://www.mycompany.com/support&id=1 as system%3Dhttp%3A%2F%2Fwww.mycompany.com%2Fsupport%26id%3D1.
 //
-// DELETE /rest/api/{2-3}/issue/{issueIDOrKey}/remotelink
+// DELETE /rest/api/{2-3}/issue/{issueKeyOrID}/remotelink
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/link/remote#delete-remote-issue-link-by-global-id
 func (r *RemoteLinkService) DeleteByGlobalID(ctx context.Context, issueKeyOrID, globalID string) (*model.ResponseScheme, error) {

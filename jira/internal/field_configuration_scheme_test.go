@@ -3,12 +3,14 @@ package internal
 import (
 	"context"
 	"errors"
+	"net/http"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
-	"github.com/stretchr/testify/assert"
-	"net/http"
-	"testing"
 )
 
 func Test_internalIssueFieldConfigSchemeServiceImpl_Gets(t *testing.T) {
@@ -750,7 +752,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Update(t *testing.T) {
 
 	type args struct {
 		ctx               context.Context
-		schemeId          int
+		schemeID          int
 		name, description string
 	}
 
@@ -767,7 +769,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Update(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:         context.Background(),
-				schemeId:    10001,
+				schemeID:    10001,
 				name:        "name sample",
 				description: "description sample",
 			},
@@ -799,7 +801,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Update(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:         context.Background(),
-				schemeId:    10001,
+				schemeID:    10001,
 				name:        "name sample",
 				description: "",
 			},
@@ -831,7 +833,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Update(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:         context.Background(),
-				schemeId:    0,
+				schemeID:    0,
 				name:        "name sample",
 				description: "description sample",
 			},
@@ -844,7 +846,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Update(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:         context.Background(),
-				schemeId:    10001,
+				schemeID:    10001,
 				name:        "",
 				description: "description sample",
 			},
@@ -857,7 +859,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Update(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:         context.Background(),
-				schemeId:    10001,
+				schemeID:    10001,
 				name:        "name sample",
 				description: "description sample",
 			},
@@ -895,7 +897,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Update(t *testing.T) {
 			fieldConfigService, err := NewIssueFieldConfigurationSchemeService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResponse, err := fieldConfigService.Update(testCase.args.ctx, testCase.args.schemeId, testCase.args.name, testCase.args.description)
+			gotResponse, err := fieldConfigService.Update(testCase.args.ctx, testCase.args.schemeID, testCase.args.name, testCase.args.description)
 
 			if testCase.wantErr {
 
@@ -923,7 +925,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Delete(t *testing.T) {
 
 	type args struct {
 		ctx      context.Context
-		schemeId int
+		schemeID int
 	}
 
 	testCases := []struct {
@@ -939,7 +941,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Delete(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:      context.Background(),
-				schemeId: 10001,
+				schemeID: 10001,
 			},
 			on: func(fields *fields) {
 
@@ -969,7 +971,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Delete(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:      context.Background(),
-				schemeId: 0,
+				schemeID: 0,
 			},
 			wantErr: true,
 			Err:     model.ErrNoFieldConfigurationSchemeIDError,
@@ -980,7 +982,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Delete(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:      context.Background(),
-				schemeId: 10001,
+				schemeID: 10001,
 			},
 			on: func(fields *fields) {
 
@@ -1016,7 +1018,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Delete(t *testing.T) {
 			fieldConfigService, err := NewIssueFieldConfigurationSchemeService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResponse, err := fieldConfigService.Delete(testCase.args.ctx, testCase.args.schemeId)
+			gotResponse, err := fieldConfigService.Delete(testCase.args.ctx, testCase.args.schemeID)
 
 			if testCase.wantErr {
 
@@ -1057,7 +1059,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Link(t *testing.T) {
 
 	type args struct {
 		ctx      context.Context
-		schemeId int
+		schemeID int
 		payload  *model.FieldConfigurationToIssueTypeMappingPayloadScheme
 	}
 
@@ -1074,7 +1076,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Link(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:      context.Background(),
-				schemeId: 10001,
+				schemeID: 10001,
 				payload:  payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -1105,7 +1107,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Link(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:      context.Background(),
-				schemeId: 0,
+				schemeID: 0,
 				payload:  payloadMocked,
 			},
 			wantErr: true,
@@ -1117,7 +1119,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Link(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:      context.Background(),
-				schemeId: 10001,
+				schemeID: 10001,
 				payload:  payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -1148,7 +1150,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Link(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:      context.Background(),
-				schemeId: 10001,
+				schemeID: 10001,
 				payload:  payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -1180,7 +1182,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Link(t *testing.T) {
 			fieldConfigService, err := NewIssueFieldConfigurationSchemeService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResponse, err := fieldConfigService.Link(testCase.args.ctx, testCase.args.schemeId, testCase.args.payload)
+			gotResponse, err := fieldConfigService.Link(testCase.args.ctx, testCase.args.schemeID, testCase.args.payload)
 
 			if testCase.wantErr {
 
@@ -1210,7 +1212,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Unlink(t *testing.T) {
 
 	type args struct {
 		ctx          context.Context
-		schemeId     int
+		schemeID     int
 		issueTypeIDs []string
 	}
 
@@ -1227,7 +1229,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Unlink(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				schemeId:     10001,
+				schemeID:     10001,
 				issueTypeIDs: []string{"1001", "1002"},
 			},
 			on: func(fields *fields) {
@@ -1258,7 +1260,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Unlink(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.Background(),
-				schemeId:     10001,
+				schemeID:     10001,
 				issueTypeIDs: []string{"1001", "1002"},
 			},
 			on: func(fields *fields) {
@@ -1289,7 +1291,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Unlink(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:      context.Background(),
-				schemeId: 0,
+				schemeID: 0,
 			},
 			wantErr: true,
 			Err:     model.ErrNoFieldConfigurationSchemeIDError,
@@ -1300,7 +1302,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Unlink(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:      context.Background(),
-				schemeId: 1000,
+				schemeID: 1000,
 			},
 			wantErr: true,
 			Err:     model.ErrNoIssueTypesError,
@@ -1311,7 +1313,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Unlink(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
-				schemeId:     10001,
+				schemeID:     10001,
 				issueTypeIDs: []string{"1001", "1002"},
 			},
 			on: func(fields *fields) {
@@ -1343,7 +1345,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Unlink(t *testing.T) {
 			fieldConfigService, err := NewIssueFieldConfigurationSchemeService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResponse, err := fieldConfigService.Unlink(testCase.args.ctx, testCase.args.schemeId, testCase.args.issueTypeIDs)
+			gotResponse, err := fieldConfigService.Unlink(testCase.args.ctx, testCase.args.schemeID, testCase.args.issueTypeIDs)
 
 			if testCase.wantErr {
 

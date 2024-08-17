@@ -3,12 +3,14 @@ package internal
 import (
 	"context"
 	"errors"
+	"net/http"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
-	"github.com/stretchr/testify/assert"
-	"net/http"
-	"testing"
 )
 
 func TestPermissionSchemeService_Gets(t *testing.T) {
@@ -150,7 +152,7 @@ func TestPermissionSchemeService_Get(t *testing.T) {
 
 	type args struct {
 		ctx                context.Context
-		permissionSchemeId int
+		permissionSchemeID int
 		expand             []string
 	}
 
@@ -167,7 +169,7 @@ func TestPermissionSchemeService_Get(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:                context.Background(),
-				permissionSchemeId: 10001,
+				permissionSchemeID: 10001,
 				expand:             []string{"all"},
 			},
 			on: func(fields *fields) {
@@ -197,7 +199,7 @@ func TestPermissionSchemeService_Get(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:                context.Background(),
-				permissionSchemeId: 10001,
+				permissionSchemeID: 10001,
 				expand:             []string{"all"},
 			},
 			on: func(fields *fields) {
@@ -237,7 +239,7 @@ func TestPermissionSchemeService_Get(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:                context.Background(),
-				permissionSchemeId: 10001,
+				permissionSchemeID: 10001,
 				expand:             []string{"all"},
 			},
 			on: func(fields *fields) {
@@ -268,7 +270,7 @@ func TestPermissionSchemeService_Get(t *testing.T) {
 			newService, err := NewPermissionSchemeService(testCase.fields.c, testCase.fields.version, nil)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := newService.Get(testCase.args.ctx, testCase.args.permissionSchemeId, testCase.args.expand)
+			gotResult, gotResponse, err := newService.Get(testCase.args.ctx, testCase.args.permissionSchemeID, testCase.args.expand)
 
 			if testCase.wantErr {
 
@@ -298,7 +300,7 @@ func TestPermissionSchemeService_Delete(t *testing.T) {
 
 	type args struct {
 		ctx                context.Context
-		permissionSchemeId int
+		permissionSchemeID int
 	}
 
 	testCases := []struct {
@@ -314,7 +316,7 @@ func TestPermissionSchemeService_Delete(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:                context.Background(),
-				permissionSchemeId: 10001,
+				permissionSchemeID: 10001,
 			},
 			on: func(fields *fields) {
 
@@ -343,7 +345,7 @@ func TestPermissionSchemeService_Delete(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:                context.Background(),
-				permissionSchemeId: 10001,
+				permissionSchemeID: 10001,
 			},
 			on: func(fields *fields) {
 
@@ -382,7 +384,7 @@ func TestPermissionSchemeService_Delete(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:                context.Background(),
-				permissionSchemeId: 10001,
+				permissionSchemeID: 10001,
 			},
 			on: func(fields *fields) {
 
@@ -412,7 +414,7 @@ func TestPermissionSchemeService_Delete(t *testing.T) {
 			newService, err := NewPermissionSchemeService(testCase.fields.c, testCase.fields.version, nil)
 			assert.NoError(t, err)
 
-			gotResponse, err := newService.Delete(testCase.args.ctx, testCase.args.permissionSchemeId)
+			gotResponse, err := newService.Delete(testCase.args.ctx, testCase.args.permissionSchemeID)
 
 			if testCase.wantErr {
 
@@ -617,7 +619,7 @@ func TestPermissionSchemeService_Update(t *testing.T) {
 
 	type args struct {
 		ctx                context.Context
-		permissionSchemeId int
+		permissionSchemeID int
 		payload            *model.PermissionSchemeScheme
 	}
 
@@ -634,7 +636,7 @@ func TestPermissionSchemeService_Update(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:                context.Background(),
-				permissionSchemeId: 10001,
+				permissionSchemeID: 10001,
 				payload:            payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -664,7 +666,7 @@ func TestPermissionSchemeService_Update(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:                context.Background(),
-				permissionSchemeId: 10001,
+				permissionSchemeID: 10001,
 				payload:            payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -694,7 +696,7 @@ func TestPermissionSchemeService_Update(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:                context.Background(),
-				permissionSchemeId: 10001,
+				permissionSchemeID: 10001,
 				payload:            payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -725,7 +727,7 @@ func TestPermissionSchemeService_Update(t *testing.T) {
 			newService, err := NewPermissionSchemeService(testCase.fields.c, testCase.fields.version, nil)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := newService.Update(testCase.args.ctx, testCase.args.permissionSchemeId, testCase.args.payload)
+			gotResult, gotResponse, err := newService.Update(testCase.args.ctx, testCase.args.permissionSchemeID, testCase.args.payload)
 
 			if testCase.wantErr {
 

@@ -3,13 +3,15 @@ package internal
 import (
 	"context"
 	"errors"
+	"net/http"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
-	"net/http"
-	"testing"
 )
 
 func Test_internalUserSearchImpl_Projects(t *testing.T) {
@@ -21,7 +23,7 @@ func Test_internalUserSearchImpl_Projects(t *testing.T) {
 
 	type args struct {
 		ctx                 context.Context
-		accountId           string
+		accountID           string
 		projectKeys         []string
 		startAt, maxResults int
 	}
@@ -39,7 +41,7 @@ func Test_internalUserSearchImpl_Projects(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:         context.Background(),
-				accountId:   "uuid-sample",
+				accountID:   "uuid-sample",
 				projectKeys: []string{"DUMMY", "KP"},
 				startAt:     100,
 				maxResults:  50,
@@ -71,7 +73,7 @@ func Test_internalUserSearchImpl_Projects(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:         context.Background(),
-				accountId:   "uuid-sample",
+				accountID:   "uuid-sample",
 				projectKeys: []string{"DUMMY", "KP"},
 				startAt:     100,
 				maxResults:  50,
@@ -114,7 +116,7 @@ func Test_internalUserSearchImpl_Projects(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:         context.Background(),
-				accountId:   "uuid-sample",
+				accountID:   "uuid-sample",
 				projectKeys: []string{"DUMMY", "KP"},
 				startAt:     100,
 				maxResults:  50,
@@ -147,7 +149,7 @@ func Test_internalUserSearchImpl_Projects(t *testing.T) {
 			newService, err := NewUserSearchService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := newService.Projects(testCase.args.ctx, testCase.args.accountId, testCase.args.projectKeys,
+			gotResult, gotResponse, err := newService.Projects(testCase.args.ctx, testCase.args.accountID, testCase.args.projectKeys,
 				testCase.args.startAt, testCase.args.maxResults)
 
 			if testCase.wantErr {

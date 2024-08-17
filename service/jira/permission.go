@@ -2,6 +2,7 @@ package jira
 
 import (
 	"context"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 )
 
@@ -40,17 +41,17 @@ type PermissionSchemeConnector interface {
 
 	// Get returns a permission scheme.
 	//
-	// GET /rest/api/{2-3}/permissionscheme/{schemeId}
+	// GET /rest/api/{2-3}/permissionscheme/{permissionSchemeID}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/permissions/scheme#get-permission-scheme
-	Get(ctx context.Context, permissionSchemeId int, expand []string) (*model.PermissionSchemeScheme, *model.ResponseScheme, error)
+	Get(ctx context.Context, permissionSchemeID int, expand []string) (*model.PermissionSchemeScheme, *model.ResponseScheme, error)
 
 	// Delete deletes a permission scheme.
 	//
-	// DELETE /rest/api/{2-3}/permissionscheme/{schemeId}
+	// DELETE /rest/api/{2-3}/permissionscheme/{permissionSchemeID}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/permissions/scheme#delete-permission-scheme
-	Delete(ctx context.Context, permissionSchemeId int) (*model.ResponseScheme, error)
+	Delete(ctx context.Context, permissionSchemeID int) (*model.ResponseScheme, error)
 
 	// Create creates a new permission scheme.
 	//
@@ -70,39 +71,39 @@ type PermissionSchemeConnector interface {
 	//
 	// 3. Sending an empty list will remove all permission grants from the permission scheme.
 	//
-	// PUT /rest/api/{2-3}/permissionscheme/{schemeId}
+	// PUT /rest/api/{2-3}/permissionscheme/{permissionSchemeID}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/permissions/scheme#update-permission-scheme
-	Update(ctx context.Context, permissionSchemeId int, payload *model.PermissionSchemeScheme) (*model.PermissionSchemeScheme, *model.ResponseScheme, error)
+	Update(ctx context.Context, permissionSchemeID int, payload *model.PermissionSchemeScheme) (*model.PermissionSchemeScheme, *model.ResponseScheme, error)
 }
 
 type PermissionSchemeGrantConnector interface {
 
 	// Create creates a permission grant in a permission scheme.
 	//
-	// POST /rest/api/{2-3}/permissionscheme/{schemeId}/permission
+	// POST /rest/api/{2-3}/permissionscheme/{permissionSchemeID}/permission
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/permissions/scheme/grant#create-permission-grant
-	Create(ctx context.Context, permissionSchemeId int, payload *model.PermissionGrantPayloadScheme) (*model.PermissionGrantScheme, *model.ResponseScheme, error)
+	Create(ctx context.Context, permissionSchemeID int, payload *model.PermissionGrantPayloadScheme) (*model.PermissionGrantScheme, *model.ResponseScheme, error)
 
 	// Gets returns all permission grants for a permission scheme.
 	//
-	// GET /rest/api/{2-3}/permissionscheme/{schemeId}/permission
+	// GET /rest/api/{2-3}/permissionscheme/{permissionSchemeID}/permission
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/permissions/scheme/grant#get-permission-scheme-grants
-	Gets(ctx context.Context, permissionSchemeId int, expand []string) (*model.PermissionSchemeGrantsScheme, *model.ResponseScheme, error)
+	Gets(ctx context.Context, permissionSchemeID int, expand []string) (*model.PermissionSchemeGrantsScheme, *model.ResponseScheme, error)
 
 	// Get returns a permission grant.
 	//
-	// GET /rest/api/{2-3}/permissionscheme/{schemeId}/permission/{permissionId}
+	// GET /rest/api/{2-3}/permissionscheme/{permissionSchemeID}/permission/{permissionGrantID}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/permissions/scheme/grant#get-permission-scheme-grant
-	Get(ctx context.Context, permissionSchemeId, permissionGrantId int, expand []string) (*model.PermissionGrantScheme, *model.ResponseScheme, error)
+	Get(ctx context.Context, permissionSchemeID, permissionGrantID int, expand []string) (*model.PermissionGrantScheme, *model.ResponseScheme, error)
 
 	// Delete deletes a permission grant from a permission scheme. See About permission schemes and grants for more details.
 	//
-	// DELETE /rest/api/{2-3}/permissionscheme/{schemeId}/permission/{permissionId}
+	// DELETE /rest/api/{2-3}/permissionscheme/{permissionSchemeID}/permission/{permissionGrantID}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/permissions/scheme/grant#delete-permission-scheme-grant
-	Delete(ctx context.Context, permissionSchemeId, permissionGrantId int) (*model.ResponseScheme, error)
+	Delete(ctx context.Context, permissionSchemeID, permissionGrantID int) (*model.ResponseScheme, error)
 }

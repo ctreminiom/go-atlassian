@@ -3,12 +3,14 @@ package internal
 import (
 	"context"
 	"errors"
+	"net/http"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
-	"github.com/stretchr/testify/assert"
-	"net/http"
-	"testing"
 )
 
 func Test_internalProjectFeatureImpl_Set(t *testing.T) {
@@ -22,7 +24,7 @@ func Test_internalProjectFeatureImpl_Set(t *testing.T) {
 
 	type args struct {
 		ctx                               context.Context
-		projectKeyOrId, featureKey, state string
+		projectKeyOrID, featureKey, state string
 	}
 
 	testCases := []struct {
@@ -38,7 +40,7 @@ func Test_internalProjectFeatureImpl_Set(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:            context.Background(),
-				projectKeyOrId: "DUMMY",
+				projectKeyOrID: "DUMMY",
 				featureKey:     "jsw.classic.roadmap",
 				state:          "ENABLED",
 			},
@@ -69,7 +71,7 @@ func Test_internalProjectFeatureImpl_Set(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:            context.Background(),
-				projectKeyOrId: "DUMMY",
+				projectKeyOrID: "DUMMY",
 				featureKey:     "jsw.classic.roadmap",
 				state:          "ENABLED",
 			},
@@ -110,7 +112,7 @@ func Test_internalProjectFeatureImpl_Set(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:            context.Background(),
-				projectKeyOrId: "DUMMY",
+				projectKeyOrID: "DUMMY",
 			},
 			wantErr: true,
 			Err:     model.ErrNoProjectFeatureKeyError,
@@ -121,7 +123,7 @@ func Test_internalProjectFeatureImpl_Set(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:            context.Background(),
-				projectKeyOrId: "DUMMY",
+				projectKeyOrID: "DUMMY",
 				featureKey:     "jsw.classic.roadmap",
 			},
 			wantErr: true,
@@ -133,7 +135,7 @@ func Test_internalProjectFeatureImpl_Set(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:            context.Background(),
-				projectKeyOrId: "DUMMY",
+				projectKeyOrID: "DUMMY",
 				featureKey:     "jsw.classic.roadmap",
 				state:          "ENABLED",
 			},
@@ -165,7 +167,7 @@ func Test_internalProjectFeatureImpl_Set(t *testing.T) {
 			newService, err := NewProjectFeatureService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := newService.Set(testCase.args.ctx, testCase.args.projectKeyOrId, testCase.args.featureKey,
+			gotResult, gotResponse, err := newService.Set(testCase.args.ctx, testCase.args.projectKeyOrID, testCase.args.featureKey,
 				testCase.args.state)
 
 			if testCase.wantErr {
@@ -196,7 +198,7 @@ func Test_internalProjectFeatureImpl_Gets(t *testing.T) {
 
 	type args struct {
 		ctx            context.Context
-		projectKeyOrId string
+		projectKeyOrID string
 	}
 
 	testCases := []struct {
@@ -212,7 +214,7 @@ func Test_internalProjectFeatureImpl_Gets(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:            context.Background(),
-				projectKeyOrId: "DUMMY",
+				projectKeyOrID: "DUMMY",
 			},
 			on: func(fields *fields) {
 
@@ -241,7 +243,7 @@ func Test_internalProjectFeatureImpl_Gets(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:            context.Background(),
-				projectKeyOrId: "DUMMY",
+				projectKeyOrID: "DUMMY",
 			},
 			on: func(fields *fields) {
 
@@ -280,7 +282,7 @@ func Test_internalProjectFeatureImpl_Gets(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:            context.Background(),
-				projectKeyOrId: "DUMMY",
+				projectKeyOrID: "DUMMY",
 			},
 			on: func(fields *fields) {
 
@@ -310,7 +312,7 @@ func Test_internalProjectFeatureImpl_Gets(t *testing.T) {
 			newService, err := NewProjectFeatureService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := newService.Gets(testCase.args.ctx, testCase.args.projectKeyOrId)
+			gotResult, gotResponse, err := newService.Gets(testCase.args.ctx, testCase.args.projectKeyOrID)
 
 			if testCase.wantErr {
 

@@ -3,12 +3,14 @@ package internal
 import (
 	"context"
 	"errors"
+	"net/http"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
-	"github.com/stretchr/testify/assert"
-	"net/http"
-	"testing"
 )
 
 func Test_internalProjectRoleActorImpl_Add(t *testing.T) {
@@ -22,8 +24,8 @@ func Test_internalProjectRoleActorImpl_Add(t *testing.T) {
 
 	type args struct {
 		ctx                context.Context
-		projectKeyOrId     string
-		roleId             int
+		projectKeyOrID     string
+		roleID             int
 		accountIds, groups []string
 	}
 
@@ -40,8 +42,8 @@ func Test_internalProjectRoleActorImpl_Add(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:            context.Background(),
-				projectKeyOrId: "DUMMY",
-				roleId:         10001,
+				projectKeyOrID: "DUMMY",
+				roleID:         10001,
 				accountIds:     []string{"uuid"},
 				groups:         []string{"jira-users"},
 			},
@@ -72,8 +74,8 @@ func Test_internalProjectRoleActorImpl_Add(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:            context.Background(),
-				projectKeyOrId: "DUMMY",
-				roleId:         10001,
+				projectKeyOrID: "DUMMY",
+				roleID:         10001,
 				accountIds:     []string{"uuid"},
 				groups:         []string{"jira-users"},
 			},
@@ -114,7 +116,7 @@ func Test_internalProjectRoleActorImpl_Add(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:            context.Background(),
-				projectKeyOrId: "DUMMY",
+				projectKeyOrID: "DUMMY",
 			},
 			wantErr: true,
 			Err:     model.ErrNoProjectRoleIDError,
@@ -125,8 +127,8 @@ func Test_internalProjectRoleActorImpl_Add(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:            context.Background(),
-				projectKeyOrId: "DUMMY",
-				roleId:         10001,
+				projectKeyOrID: "DUMMY",
+				roleID:         10001,
 				accountIds:     []string{"uuid"},
 				groups:         []string{"jira-users"},
 			},
@@ -158,7 +160,7 @@ func Test_internalProjectRoleActorImpl_Add(t *testing.T) {
 			newService, err := NewProjectRoleActorService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := newService.Add(testCase.args.ctx, testCase.args.projectKeyOrId, testCase.args.roleId,
+			gotResult, gotResponse, err := newService.Add(testCase.args.ctx, testCase.args.projectKeyOrID, testCase.args.roleID,
 				testCase.args.accountIds, testCase.args.groups)
 
 			if testCase.wantErr {
@@ -189,9 +191,9 @@ func Test_internalProjectRoleActorImpl_Delete(t *testing.T) {
 
 	type args struct {
 		ctx              context.Context
-		projectKeyOrId   string
-		roleId           int
-		accountId, group string
+		projectKeyOrID   string
+		roleID           int
+		accountID, group string
 	}
 
 	testCases := []struct {
@@ -207,9 +209,9 @@ func Test_internalProjectRoleActorImpl_Delete(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:            context.Background(),
-				projectKeyOrId: "DUMMY",
-				roleId:         10001,
-				accountId:      "uuid",
+				projectKeyOrID: "DUMMY",
+				roleID:         10001,
+				accountID:      "uuid",
 				group:          "jira-users",
 			},
 			on: func(fields *fields) {
@@ -239,9 +241,9 @@ func Test_internalProjectRoleActorImpl_Delete(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:            context.Background(),
-				projectKeyOrId: "DUMMY",
-				roleId:         10001,
-				accountId:      "uuid",
+				projectKeyOrID: "DUMMY",
+				roleID:         10001,
+				accountID:      "uuid",
 				group:          "jira-users",
 			},
 			on: func(fields *fields) {
@@ -281,7 +283,7 @@ func Test_internalProjectRoleActorImpl_Delete(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:            context.Background(),
-				projectKeyOrId: "DUMMY",
+				projectKeyOrID: "DUMMY",
 			},
 			wantErr: true,
 			Err:     model.ErrNoProjectRoleIDError,
@@ -292,9 +294,9 @@ func Test_internalProjectRoleActorImpl_Delete(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:            context.Background(),
-				projectKeyOrId: "DUMMY",
-				roleId:         10001,
-				accountId:      "uuid",
+				projectKeyOrID: "DUMMY",
+				roleID:         10001,
+				accountID:      "uuid",
 				group:          "jira-users",
 			},
 			on: func(fields *fields) {
@@ -325,8 +327,8 @@ func Test_internalProjectRoleActorImpl_Delete(t *testing.T) {
 			newService, err := NewProjectRoleActorService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResponse, err := newService.Delete(testCase.args.ctx, testCase.args.projectKeyOrId, testCase.args.roleId,
-				testCase.args.accountId, testCase.args.group)
+			gotResponse, err := newService.Delete(testCase.args.ctx, testCase.args.projectKeyOrID, testCase.args.roleID,
+				testCase.args.accountID, testCase.args.group)
 
 			if testCase.wantErr {
 

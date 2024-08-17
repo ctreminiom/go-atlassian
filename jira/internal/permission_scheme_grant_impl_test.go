@@ -3,12 +3,14 @@ package internal
 import (
 	"context"
 	"errors"
+	"net/http"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
-	"github.com/stretchr/testify/assert"
-	"net/http"
-	"testing"
 )
 
 func TestPermissionSchemeGrantService_Create(t *testing.T) {
@@ -28,7 +30,7 @@ func TestPermissionSchemeGrantService_Create(t *testing.T) {
 
 	type args struct {
 		ctx                context.Context
-		permissionSchemeId int
+		permissionSchemeID int
 		payload            *model.PermissionGrantPayloadScheme
 	}
 
@@ -45,7 +47,7 @@ func TestPermissionSchemeGrantService_Create(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:                context.Background(),
-				permissionSchemeId: 10001,
+				permissionSchemeID: 10001,
 				payload:            payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -75,7 +77,7 @@ func TestPermissionSchemeGrantService_Create(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:                context.Background(),
-				permissionSchemeId: 10001,
+				permissionSchemeID: 10001,
 				payload:            payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -115,7 +117,7 @@ func TestPermissionSchemeGrantService_Create(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:                context.Background(),
-				permissionSchemeId: 10001,
+				permissionSchemeID: 10001,
 				payload:            payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -146,7 +148,7 @@ func TestPermissionSchemeGrantService_Create(t *testing.T) {
 			newService, err := NewPermissionSchemeGrantService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := newService.Create(testCase.args.ctx, testCase.args.permissionSchemeId, testCase.args.payload)
+			gotResult, gotResponse, err := newService.Create(testCase.args.ctx, testCase.args.permissionSchemeID, testCase.args.payload)
 
 			if testCase.wantErr {
 
@@ -176,7 +178,7 @@ func TestPermissionSchemeGrantService_Gets(t *testing.T) {
 
 	type args struct {
 		ctx                context.Context
-		permissionSchemeId int
+		permissionSchemeID int
 		expand             []string
 	}
 
@@ -193,7 +195,7 @@ func TestPermissionSchemeGrantService_Gets(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:                context.Background(),
-				permissionSchemeId: 10001,
+				permissionSchemeID: 10001,
 				expand:             []string{"all"},
 			},
 			on: func(fields *fields) {
@@ -223,7 +225,7 @@ func TestPermissionSchemeGrantService_Gets(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:                context.Background(),
-				permissionSchemeId: 10001,
+				permissionSchemeID: 10001,
 				expand:             []string{"all"},
 			},
 			on: func(fields *fields) {
@@ -263,7 +265,7 @@ func TestPermissionSchemeGrantService_Gets(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:                context.Background(),
-				permissionSchemeId: 10001,
+				permissionSchemeID: 10001,
 				expand:             []string{"all"},
 			},
 			on: func(fields *fields) {
@@ -294,7 +296,7 @@ func TestPermissionSchemeGrantService_Gets(t *testing.T) {
 			newService, err := NewPermissionSchemeGrantService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := newService.Gets(testCase.args.ctx, testCase.args.permissionSchemeId, testCase.args.expand)
+			gotResult, gotResponse, err := newService.Gets(testCase.args.ctx, testCase.args.permissionSchemeID, testCase.args.expand)
 
 			if testCase.wantErr {
 
@@ -324,8 +326,8 @@ func TestPermissionSchemeGrantService_Get(t *testing.T) {
 
 	type args struct {
 		ctx                context.Context
-		permissionSchemeId int
-		permissionGrantId  int
+		permissionSchemeID int
+		permissionGrantID  int
 		expand             []string
 	}
 
@@ -342,8 +344,8 @@ func TestPermissionSchemeGrantService_Get(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:                context.Background(),
-				permissionSchemeId: 10001,
-				permissionGrantId:  30092,
+				permissionSchemeID: 10001,
+				permissionGrantID:  30092,
 				expand:             []string{"all"},
 			},
 			on: func(fields *fields) {
@@ -373,8 +375,8 @@ func TestPermissionSchemeGrantService_Get(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:                context.Background(),
-				permissionSchemeId: 10001,
-				permissionGrantId:  30092,
+				permissionSchemeID: 10001,
+				permissionGrantID:  30092,
 				expand:             []string{"all"},
 			},
 			on: func(fields *fields) {
@@ -414,7 +416,7 @@ func TestPermissionSchemeGrantService_Get(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:                context.Background(),
-				permissionSchemeId: 10001,
+				permissionSchemeID: 10001,
 			},
 			wantErr: true,
 			Err:     model.ErrNoPermissionGrantIDError,
@@ -425,8 +427,8 @@ func TestPermissionSchemeGrantService_Get(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:                context.Background(),
-				permissionSchemeId: 10001,
-				permissionGrantId:  30092,
+				permissionSchemeID: 10001,
+				permissionGrantID:  30092,
 				expand:             []string{"all"},
 			},
 			on: func(fields *fields) {
@@ -457,7 +459,7 @@ func TestPermissionSchemeGrantService_Get(t *testing.T) {
 			newService, err := NewPermissionSchemeGrantService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := newService.Get(testCase.args.ctx, testCase.args.permissionSchemeId, testCase.args.permissionGrantId,
+			gotResult, gotResponse, err := newService.Get(testCase.args.ctx, testCase.args.permissionSchemeID, testCase.args.permissionGrantID,
 				testCase.args.expand)
 
 			if testCase.wantErr {
@@ -488,8 +490,8 @@ func TestPermissionSchemeGrantService_Delete(t *testing.T) {
 
 	type args struct {
 		ctx                context.Context
-		permissionSchemeId int
-		permissionGrantId  int
+		permissionSchemeID int
+		permissionGrantID  int
 	}
 
 	testCases := []struct {
@@ -505,8 +507,8 @@ func TestPermissionSchemeGrantService_Delete(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:                context.Background(),
-				permissionSchemeId: 10001,
-				permissionGrantId:  30092,
+				permissionSchemeID: 10001,
+				permissionGrantID:  30092,
 			},
 			on: func(fields *fields) {
 
@@ -535,8 +537,8 @@ func TestPermissionSchemeGrantService_Delete(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:                context.Background(),
-				permissionSchemeId: 10001,
-				permissionGrantId:  30092,
+				permissionSchemeID: 10001,
+				permissionGrantID:  30092,
 			},
 			on: func(fields *fields) {
 
@@ -575,7 +577,7 @@ func TestPermissionSchemeGrantService_Delete(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:                context.Background(),
-				permissionSchemeId: 10001,
+				permissionSchemeID: 10001,
 			},
 			wantErr: true,
 			Err:     model.ErrNoPermissionGrantIDError,
@@ -586,8 +588,8 @@ func TestPermissionSchemeGrantService_Delete(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:                context.Background(),
-				permissionSchemeId: 10001,
-				permissionGrantId:  30092,
+				permissionSchemeID: 10001,
+				permissionGrantID:  30092,
 			},
 			on: func(fields *fields) {
 
@@ -617,7 +619,7 @@ func TestPermissionSchemeGrantService_Delete(t *testing.T) {
 			newService, err := NewPermissionSchemeGrantService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResponse, err := newService.Delete(testCase.args.ctx, testCase.args.permissionSchemeId, testCase.args.permissionGrantId)
+			gotResponse, err := newService.Delete(testCase.args.ctx, testCase.args.permissionSchemeID, testCase.args.permissionGrantID)
 
 			if testCase.wantErr {
 

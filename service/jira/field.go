@@ -2,6 +2,7 @@ package jira
 
 import (
 	"context"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 )
 
@@ -41,10 +42,10 @@ type FieldConnector interface {
 	//
 	// See Edit or delete a custom field for more information on trashing and deleting custom fields.
 	//
-	// DELETE /rest/api/{2-3}/field/{id}
+	// DELETE /rest/api/{2-3}/field/{fieldID}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/fields#delete-field
-	Delete(ctx context.Context, fieldId string) (*model.TaskScheme, *model.ResponseScheme, error)
+	Delete(ctx context.Context, fieldID string) (*model.TaskScheme, *model.ResponseScheme, error)
 }
 
 type FieldTrashConnector interface {

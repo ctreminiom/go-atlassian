@@ -3,12 +3,13 @@ package internal
 import (
 	"context"
 	"fmt"
-	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/service"
-	"github.com/ctreminiom/go-atlassian/service/sm"
 	"net/http"
 	"net/url"
 	"strconv"
+
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/service"
+	"github.com/ctreminiom/go-atlassian/service/sm"
 )
 
 // NewServiceLevelAgreementService creates a new instance of ServiceLevelAgreementService.
@@ -29,7 +30,7 @@ type ServiceLevelAgreementService struct {
 //
 // A customer request can have zero or more SLAs. Each SLA can have recordings for zero or more "completed cycles" and zero or 1 "ongoing cycle".
 //
-// GET /rest/servicedeskapi/request/{issueIdOrKey}/sla
+// GET /rest/servicedeskapi/request/{issueKeyOrID}/sla
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request/sla#get-sla-information
 func (s *ServiceLevelAgreementService) Gets(ctx context.Context, issueKeyOrID string, start, limit int) (*model.RequestSLAPageScheme, *model.ResponseScheme, error) {
@@ -38,7 +39,7 @@ func (s *ServiceLevelAgreementService) Gets(ctx context.Context, issueKeyOrID st
 
 // Get returns the details for an SLA on a customer request.
 //
-// GET /rest/servicedeskapi/request/{issueIdOrKey}/sla/{slaMetricId}
+// GET /rest/servicedeskapi/request/{issueKeyOrID}/sla/{slaMetricId}
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request/sla#get-sla-information-by-id
 func (s *ServiceLevelAgreementService) Get(ctx context.Context, issueKeyOrID string, metricID int) (*model.RequestSLAScheme, *model.ResponseScheme, error) {

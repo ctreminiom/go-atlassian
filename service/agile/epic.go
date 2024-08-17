@@ -2,6 +2,7 @@ package agile
 
 import (
 	"context"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 )
 
@@ -13,10 +14,10 @@ type EpicConnector interface {
 	//
 	// Note: This operation does not work for epics in next-gen projects.
 	//
-	// GET /rest/agile/1.0/epic/{epicIdOrKey}
+	// GET /rest/agile/1.0/epic/{epicIDOrKey}
 	//
 	// https://docs.go-atlassian.io/jira-agile/epics#get-epic
-	Get(ctx context.Context, epicIdOrKey string) (*model.EpicScheme, *model.ResponseScheme, error)
+	Get(ctx context.Context, epicIDOrKey string) (*model.EpicScheme, *model.ResponseScheme, error)
 
 	// Issues returns all issues that belong to the epic, for the given epic ID.
 	//
@@ -26,10 +27,10 @@ type EpicConnector interface {
 	//
 	// By default, the returned issues are ordered by rank.
 	//
-	// GET /rest/agile/1.0/epic/{epicIdOrKey}/issue
+	// GET /rest/agile/1.0/epic/{epicIDOrKey}/issue
 	//
 	// https://docs.go-atlassian.io/jira-agile/epics#get-issues-for-epic
-	Issues(ctx context.Context, epicIdOrKey string, opts *model.IssueOptionScheme, startAt, maxResults int) (*model.BoardIssuePageScheme,
+	Issues(ctx context.Context, epicIDOrKey string, opts *model.IssueOptionScheme, startAt, maxResults int) (*model.BoardIssuePageScheme,
 		*model.ResponseScheme, error)
 
 	// Move moves issues to an epic, for a given epic id.
@@ -41,8 +42,8 @@ type EpicConnector interface {
 	//
 	// The maximum number of issues that can be moved in one operation is 50.
 	//
-	// POST /rest/agile/1.0/epic/{epicIdOrKey}/issue
+	// POST /rest/agile/1.0/epic/{epicIDOrKey}/issue
 	//
 	// https://docs.go-atlassian.io/jira-agile/epics#move-issues-to-epic
-	Move(ctx context.Context, epicIdOrKey string, issues []string) (*model.ResponseScheme, error)
+	Move(ctx context.Context, epicIDOrKey string, issues []string) (*model.ResponseScheme, error)
 }

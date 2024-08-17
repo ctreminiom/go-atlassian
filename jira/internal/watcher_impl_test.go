@@ -214,7 +214,7 @@ func Test_internalWatcherImpl_Add(t *testing.T) {
 		},
 
 		{
-			name:   "when the api version is v3 and the watcher accountId is set",
+			name:   "when the api version is v3 and the watcher accountID is set",
 			fields: fields{version: "3"},
 			args: args{
 				ctx:          context.Background(),
@@ -277,7 +277,7 @@ func Test_internalWatcherImpl_Add(t *testing.T) {
 		},
 
 		{
-			name:   "when the api version is v2 and the watcher accountId is set",
+			name:   "when the api version is v2 and the watcher accountID is set",
 			fields: fields{version: "2"},
 			args: args{
 				ctx:          context.Background(),

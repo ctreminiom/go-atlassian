@@ -3,12 +3,13 @@ package internal
 import (
 	"context"
 	"fmt"
-	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/service"
-	"github.com/ctreminiom/go-atlassian/service/jira"
 	"net/http"
 	"net/url"
 	"strconv"
+
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/service"
+	"github.com/ctreminiom/go-atlassian/service/jira"
 )
 
 // NewIssueFieldContextOptionService creates a new instance of IssueFieldContextOptionService.
@@ -35,11 +36,11 @@ type IssueFieldContextOptionService struct {
 //
 // Options are returned first then cascading options, in the order they display in Jira.
 //
-// GET /rest/api/{2-3}/field/{fieldId}/context/{contextId}/option
+// GET /rest/api/{2-3}/field/{fieldID}/context/{contextId}/option
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/fields/context/option#get-custom-field-options
-func (i *IssueFieldContextOptionService) Gets(ctx context.Context, fieldId string, contextId int, options *model.FieldOptionContextParams, startAt, maxResults int) (*model.CustomFieldContextOptionPageScheme, *model.ResponseScheme, error) {
-	return i.internalClient.Gets(ctx, fieldId, contextId, options, startAt, maxResults)
+func (i *IssueFieldContextOptionService) Gets(ctx context.Context, fieldID string, contextId int, options *model.FieldOptionContextParams, startAt, maxResults int) (*model.CustomFieldContextOptionPageScheme, *model.ResponseScheme, error) {
+	return i.internalClient.Gets(ctx, fieldID, contextId, options, startAt, maxResults)
 }
 
 // Create creates options and, where the custom select field is of the type Select List (cascading), cascading options for a custom select field.
@@ -48,11 +49,11 @@ func (i *IssueFieldContextOptionService) Gets(ctx context.Context, fieldId strin
 //
 // 2. The maximum number of options that can be created per request is 1000 and each field can have a maximum of 10000 options.
 //
-// POST /rest/api/{2-3}/field/{fieldId}/context/{contextId}/option
+// POST /rest/api/{2-3}/field/{fieldID}/context/{contextId}/option
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/fields/context/option#create-custom-field-options
-func (i *IssueFieldContextOptionService) Create(ctx context.Context, fieldId string, contextId int, payload *model.FieldContextOptionListScheme) (*model.FieldContextOptionListScheme, *model.ResponseScheme, error) {
-	return i.internalClient.Create(ctx, fieldId, contextId, payload)
+func (i *IssueFieldContextOptionService) Create(ctx context.Context, fieldID string, contextId int, payload *model.FieldContextOptionListScheme) (*model.FieldContextOptionListScheme, *model.ResponseScheme, error) {
+	return i.internalClient.Create(ctx, fieldID, contextId, payload)
 }
 
 // Update updates the options of a custom field.
@@ -61,31 +62,31 @@ func (i *IssueFieldContextOptionService) Create(ctx context.Context, fieldId str
 //
 // 2. Options where the values in the request match the current values aren't updated and aren't reported in the response.
 //
-// PUT /rest/api/{2-3}/field/{fieldId}/context/{contextId}/option
+// PUT /rest/api/{2-3}/field/{fieldID}/context/{contextId}/option
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/fields/context/option#update-custom-field-options
-func (i *IssueFieldContextOptionService) Update(ctx context.Context, fieldId string, contextId int, payload *model.FieldContextOptionListScheme) (*model.FieldContextOptionListScheme, *model.ResponseScheme, error) {
-	return i.internalClient.Update(ctx, fieldId, contextId, payload)
+func (i *IssueFieldContextOptionService) Update(ctx context.Context, fieldID string, contextId int, payload *model.FieldContextOptionListScheme) (*model.FieldContextOptionListScheme, *model.ResponseScheme, error) {
+	return i.internalClient.Update(ctx, fieldID, contextId, payload)
 }
 
 // Delete deletes a custom field option.
 //
 // 1. Options with cascading options cannot be deleted without deleting the cascading options first.
 //
-// DELETE /rest/api/{2-3}/field/{fieldId}/context/{contextId}/option/{optionId}
+// DELETE /rest/api/{2-3}/field/{fieldID}/context/{contextId}/option/{optionId}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/fields/context/option#delete-custom-field-options
-func (i *IssueFieldContextOptionService) Delete(ctx context.Context, fieldId string, contextId, optionId int) (*model.ResponseScheme, error) {
-	return i.internalClient.Delete(ctx, fieldId, contextId, optionId)
+func (i *IssueFieldContextOptionService) Delete(ctx context.Context, fieldID string, contextId, optionId int) (*model.ResponseScheme, error) {
+	return i.internalClient.Delete(ctx, fieldID, contextId, optionId)
 }
 
 // Order changes the order of custom field options or cascading options in a context.
 //
-// PUT /rest/api/{2-3}/field/{fieldId}/context/{contextId}/option/move
+// PUT /rest/api/{2-3}/field/{fieldID}/context/{contextId}/option/move
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/fields/context/option#reorder-custom-field-options
-func (i *IssueFieldContextOptionService) Order(ctx context.Context, fieldId string, contextId int, payload *model.OrderFieldOptionPayloadScheme) (*model.ResponseScheme, error) {
-	return i.internalClient.Order(ctx, fieldId, contextId, payload)
+func (i *IssueFieldContextOptionService) Order(ctx context.Context, fieldID string, contextId int, payload *model.OrderFieldOptionPayloadScheme) (*model.ResponseScheme, error) {
+	return i.internalClient.Order(ctx, fieldID, contextId, payload)
 }
 
 type internalIssueFieldContextOptionServiceImpl struct {
@@ -93,9 +94,9 @@ type internalIssueFieldContextOptionServiceImpl struct {
 	version string
 }
 
-func (i *internalIssueFieldContextOptionServiceImpl) Gets(ctx context.Context, fieldId string, contextId int, options *model.FieldOptionContextParams, startAt, maxResults int) (*model.CustomFieldContextOptionPageScheme, *model.ResponseScheme, error) {
+func (i *internalIssueFieldContextOptionServiceImpl) Gets(ctx context.Context, fieldID string, contextId int, options *model.FieldOptionContextParams, startAt, maxResults int) (*model.CustomFieldContextOptionPageScheme, *model.ResponseScheme, error) {
 
-	if fieldId == "" {
+	if fieldID == "" {
 		return nil, nil, model.ErrNoFieldIDError
 	}
 
@@ -111,7 +112,7 @@ func (i *internalIssueFieldContextOptionServiceImpl) Gets(ctx context.Context, f
 		}
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/field/%v/context/%v/option?%v", i.version, fieldId, contextId, params.Encode())
+	endpoint := fmt.Sprintf("rest/api/%v/field/%v/context/%v/option?%v", i.version, fieldID, contextId, params.Encode())
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
@@ -127,9 +128,9 @@ func (i *internalIssueFieldContextOptionServiceImpl) Gets(ctx context.Context, f
 	return pagination, response, nil
 }
 
-func (i *internalIssueFieldContextOptionServiceImpl) Create(ctx context.Context, fieldId string, contextId int, payload *model.FieldContextOptionListScheme) (*model.FieldContextOptionListScheme, *model.ResponseScheme, error) {
+func (i *internalIssueFieldContextOptionServiceImpl) Create(ctx context.Context, fieldID string, contextId int, payload *model.FieldContextOptionListScheme) (*model.FieldContextOptionListScheme, *model.ResponseScheme, error) {
 
-	if fieldId == "" {
+	if fieldID == "" {
 		return nil, nil, model.ErrNoFieldIDError
 	}
 
@@ -137,7 +138,7 @@ func (i *internalIssueFieldContextOptionServiceImpl) Create(ctx context.Context,
 		return nil, nil, model.ErrNoFieldContextIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/field/%v/context/%v/option", i.version, fieldId, contextId)
+	endpoint := fmt.Sprintf("rest/api/%v/field/%v/context/%v/option", i.version, fieldID, contextId)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {

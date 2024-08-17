@@ -3,12 +3,13 @@ package internal
 import (
 	"context"
 	"fmt"
-	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/service"
-	"github.com/ctreminiom/go-atlassian/service/jira"
 	"net/http"
 	"net/url"
 	"strconv"
+
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/service"
+	"github.com/ctreminiom/go-atlassian/service/jira"
 )
 
 // NewIssueFieldConfigurationSchemeService creates a new instance of IssueFieldConfigSchemeService.
@@ -94,44 +95,44 @@ func (i *IssueFieldConfigSchemeService) Assign(ctx context.Context, payload *mod
 //
 // This operation can only update field configuration schemes used in company-managed (classic) projects.
 //
-// PUT /rest/api/{2-3}/fieldconfigurationscheme/{id}
+// PUT /rest/api/{2-3}/fieldconfigurationscheme/{schemeID}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration/schemes#update-field-configuration-scheme
-func (i *IssueFieldConfigSchemeService) Update(ctx context.Context, schemeId int, name, description string) (*model.ResponseScheme, error) {
-	return i.internalClient.Update(ctx, schemeId, name, description)
+func (i *IssueFieldConfigSchemeService) Update(ctx context.Context, schemeID int, name, description string) (*model.ResponseScheme, error) {
+	return i.internalClient.Update(ctx, schemeID, name, description)
 }
 
 // Delete deletes a field configuration scheme.
 //
 // This operation can only delete field configuration schemes used in company-managed (classic) projects.
 //
-// DELETE /rest/api/{2-3}/fieldconfigurationscheme/{id}
+// DELETE /rest/api/{2-3}/fieldconfigurationscheme/{schemeID}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration/schemes#delete-field-configuration-scheme
-func (i *IssueFieldConfigSchemeService) Delete(ctx context.Context, schemeId int) (*model.ResponseScheme, error) {
-	return i.internalClient.Delete(ctx, schemeId)
+func (i *IssueFieldConfigSchemeService) Delete(ctx context.Context, schemeID int) (*model.ResponseScheme, error) {
+	return i.internalClient.Delete(ctx, schemeID)
 }
 
 // Link assigns issue types to field configurations on field configuration scheme.
 //
 // This operation can only modify field configuration schemes used in company-managed (classic) projects.
 //
-// PUT /rest/api/{2-3}/fieldconfigurationscheme/{id}/mapping
+// PUT /rest/api/{2-3}/fieldconfigurationscheme/{schemeID}/mapping
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration/schemes#assign-issue-types-to-field-configuration
-func (i *IssueFieldConfigSchemeService) Link(ctx context.Context, schemeId int, payload *model.FieldConfigurationToIssueTypeMappingPayloadScheme) (*model.ResponseScheme, error) {
-	return i.internalClient.Link(ctx, schemeId, payload)
+func (i *IssueFieldConfigSchemeService) Link(ctx context.Context, schemeID int, payload *model.FieldConfigurationToIssueTypeMappingPayloadScheme) (*model.ResponseScheme, error) {
+	return i.internalClient.Link(ctx, schemeID, payload)
 }
 
 // Unlink removes issue types from the field configuration scheme.
 //
 // This operation can only modify field configuration schemes used in company-managed (classic) projects.
 //
-// POST /rest/api/{2-3}/fieldconfigurationscheme/{id}/mapping/delete
+// POST /rest/api/{2-3}/fieldconfigurationscheme/{schemeID}/mapping/delete
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration/schemes#remove-issue-types-to-field-configuration
-func (i *IssueFieldConfigSchemeService) Unlink(ctx context.Context, schemeId int, issueTypeIDs []string) (*model.ResponseScheme, error) {
-	return i.internalClient.Unlink(ctx, schemeId, issueTypeIDs)
+func (i *IssueFieldConfigSchemeService) Unlink(ctx context.Context, schemeID int, issueTypeIDs []string) (*model.ResponseScheme, error) {
+	return i.internalClient.Unlink(ctx, schemeID, issueTypeIDs)
 }
 
 type internalIssueFieldConfigSchemeServiceImpl struct {
@@ -257,9 +258,9 @@ func (i *internalIssueFieldConfigSchemeServiceImpl) Assign(ctx context.Context, 
 	return i.c.Call(request, nil)
 }
 
-func (i *internalIssueFieldConfigSchemeServiceImpl) Update(ctx context.Context, schemeId int, name, description string) (*model.ResponseScheme, error) {
+func (i *internalIssueFieldConfigSchemeServiceImpl) Update(ctx context.Context, schemeID int, name, description string) (*model.ResponseScheme, error) {
 
-	if schemeId == 0 {
+	if schemeID == 0 {
 		return nil, model.ErrNoFieldConfigurationSchemeIDError
 	}
 
@@ -273,7 +274,7 @@ func (i *internalIssueFieldConfigSchemeServiceImpl) Update(ctx context.Context, 
 		payload["description"] = description
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/fieldconfigurationscheme/%v", i.version, schemeId)
+	endpoint := fmt.Sprintf("rest/api/%v/fieldconfigurationscheme/%v", i.version, schemeID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
@@ -283,13 +284,13 @@ func (i *internalIssueFieldConfigSchemeServiceImpl) Update(ctx context.Context, 
 	return i.c.Call(request, nil)
 }
 
-func (i *internalIssueFieldConfigSchemeServiceImpl) Delete(ctx context.Context, schemeId int) (*model.ResponseScheme, error) {
+func (i *internalIssueFieldConfigSchemeServiceImpl) Delete(ctx context.Context, schemeID int) (*model.ResponseScheme, error) {
 
-	if schemeId == 0 {
+	if schemeID == 0 {
 		return nil, model.ErrNoFieldConfigurationSchemeIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/fieldconfigurationscheme/%v", i.version, schemeId)
+	endpoint := fmt.Sprintf("rest/api/%v/fieldconfigurationscheme/%v", i.version, schemeID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
@@ -299,13 +300,13 @@ func (i *internalIssueFieldConfigSchemeServiceImpl) Delete(ctx context.Context, 
 	return i.c.Call(request, nil)
 }
 
-func (i *internalIssueFieldConfigSchemeServiceImpl) Link(ctx context.Context, schemeId int, payload *model.FieldConfigurationToIssueTypeMappingPayloadScheme) (*model.ResponseScheme, error) {
+func (i *internalIssueFieldConfigSchemeServiceImpl) Link(ctx context.Context, schemeID int, payload *model.FieldConfigurationToIssueTypeMappingPayloadScheme) (*model.ResponseScheme, error) {
 
-	if schemeId == 0 {
+	if schemeID == 0 {
 		return nil, model.ErrNoFieldConfigurationSchemeIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/fieldconfigurationscheme/%v/mapping", i.version, schemeId)
+	endpoint := fmt.Sprintf("rest/api/%v/fieldconfigurationscheme/%v/mapping", i.version, schemeID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
@@ -315,9 +316,9 @@ func (i *internalIssueFieldConfigSchemeServiceImpl) Link(ctx context.Context, sc
 	return i.c.Call(request, nil)
 }
 
-func (i *internalIssueFieldConfigSchemeServiceImpl) Unlink(ctx context.Context, schemeId int, issueTypeIDs []string) (*model.ResponseScheme, error) {
+func (i *internalIssueFieldConfigSchemeServiceImpl) Unlink(ctx context.Context, schemeID int, issueTypeIDs []string) (*model.ResponseScheme, error) {
 
-	if schemeId == 0 {
+	if schemeID == 0 {
 		return nil, model.ErrNoFieldConfigurationSchemeIDError
 	}
 
@@ -325,7 +326,7 @@ func (i *internalIssueFieldConfigSchemeServiceImpl) Unlink(ctx context.Context, 
 		return nil, model.ErrNoIssueTypesError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/fieldconfigurationscheme/%v/mapping/delete", i.version, schemeId)
+	endpoint := fmt.Sprintf("rest/api/%v/fieldconfigurationscheme/%v/mapping/delete", i.version, schemeID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", map[string]interface{}{"issueTypeIds": issueTypeIDs})
 	if err != nil {

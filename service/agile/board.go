@@ -2,6 +2,7 @@ package agile
 
 import (
 	"context"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 )
 
@@ -17,7 +18,7 @@ type BoardConnector interface {
 	//
 	// so will see only a subset of the board's data (board location for instance).
 	//
-	// GET /rest/agile/1.0/board/{boardId}
+	// GET /rest/agile/1.0/board/{boardID}
 	//
 	// https://docs.go-atlassian.io/jira-agile/boards#get-board
 	Get(ctx context.Context, boardID int) (*model.BoardScheme, *model.ResponseScheme, error)
@@ -35,7 +36,7 @@ type BoardConnector interface {
 	//
 	// to find which boards are using a particular filter.
 	//
-	// GET /rest/agile/1.0/board/filter/{filterId}
+	// GET /rest/agile/1.0/board/filter/{filterID}
 	//
 	// https://docs.go-atlassian.io/jira-agile/boards#get-board-by-filter-id
 	Filter(ctx context.Context, filterID, startAt, maxResults int) (*model.BoardPageScheme, *model.ResponseScheme, error)
@@ -52,14 +53,14 @@ type BoardConnector interface {
 	//
 	// By default, the returned issues are ordered by rank.
 	//
-	// GET /rest/agile/1.0/board/{boardId}/backlog
+	// GET /rest/agile/1.0/board/{boardID}/backlog
 	//
 	// https://docs.go-atlassian.io/jira-agile/boards#get-issues-for-backlog
 	Backlog(ctx context.Context, boardID int, opts *model.IssueOptionScheme, startAt, maxResults int) (*model.BoardIssuePageScheme, *model.ResponseScheme, error)
 
 	// Configuration get the board configuration.
 	//
-	// GET /rest/agile/1.0/board/{boardId}/configuration
+	// GET /rest/agile/1.0/board/{boardID}/configuration
 	//
 	// https://docs.go-atlassian.io/jira-agile/boards#get-configuration
 	Configuration(ctx context.Context, boardID int) (*model.BoardConfigurationScheme, *model.ResponseScheme, error)
@@ -70,7 +71,7 @@ type BoardConnector interface {
 	//
 	// Note, if the user does not have permission to view the board, no epics will be returned at all.
 	//
-	// GET /rest/agile/1.0/board/{boardId}/epic
+	// GET /rest/agile/1.0/board/{boardID}/epic
 	//
 	// https://docs.go-atlassian.io/jira-agile/boards#get-epics
 	Epics(ctx context.Context, boardID, startAt, maxResults int, done bool) (*model.BoardEpicPageScheme, *model.ResponseScheme, error)
@@ -83,7 +84,7 @@ type BoardConnector interface {
 	//
 	// By default, the returned issues are ordered by rank.
 	//
-	// GET /rest/agile/1.0/board/{boardId}/epic/none/issue
+	// GET /rest/agile/1.0/board/{boardID}/epic/none/issue
 	//
 	// Docs: https://docs.go-atlassian.io/jira-agile/boards#get-issues-without-epic-for-board
 	IssuesWithoutEpic(ctx context.Context, boardID int, opts *model.IssueOptionScheme, startAt, maxResults int) (
@@ -97,7 +98,7 @@ type BoardConnector interface {
 	//
 	// flagged, and epic. By default, the returned issues are ordered by rank.
 	//
-	// GET /rest/agile/1.0/board/{boardId}/epic/none/issue
+	// GET /rest/agile/1.0/board/{boardID}/epic/none/issue
 	//
 	// https://docs.go-atlassian.io/jira-agile/boards#get-board-issues-for-epic
 	IssuesByEpic(ctx context.Context, boardID, epicID int, opts *model.IssueOptionScheme, startAt, maxResults int) (
@@ -117,7 +118,7 @@ type BoardConnector interface {
 	//
 	// By default, the returned issues are ordered by rank.
 	//
-	// GET /rest/agile/1.0/board/{boardId}/issue
+	// GET /rest/agile/1.0/board/{boardID}/issue
 	//
 	// https://docs.go-atlassian.io/jira-agile/boards#get-issues-for-board
 	Issues(ctx context.Context, boardID int, opts *model.IssueOptionScheme, startAt, maxResults int) (*model.BoardIssuePageScheme,
@@ -131,7 +132,7 @@ type BoardConnector interface {
 	//
 	// At most 50 issues may be moved at once.
 	//
-	// POST /rest/agile/1.0/board/{boardId}/issue
+	// POST /rest/agile/1.0/board/{boardID}/issue
 	//
 	// https://docs.go-atlassian.io/jira-agile/boards#move-issues-to-backlog-for-board
 	Move(ctx context.Context, boardID int, payload *model.BoardMovementPayloadScheme) (*model.ResponseScheme, error)
@@ -142,7 +143,7 @@ type BoardConnector interface {
 	//
 	// Returned projects are ordered by the name.
 	//
-	// GET /rest/agile/1.0/board/{boardId}/project
+	// GET /rest/agile/1.0/board/{boardID}/project
 	//
 	// https://docs.go-atlassian.io/jira-agile/boards#get-projects
 	Projects(ctx context.Context, boardID, startAt, maxResults int) (*model.BoardProjectPageScheme, *model.ResponseScheme, error)
@@ -151,7 +152,7 @@ type BoardConnector interface {
 	//
 	// This only includes sprints that the user has permission to view.
 	//
-	// GET /rest/agile/1.0/board/{boardId}/sprint
+	// GET /rest/agile/1.0/board/{boardID}/sprint
 	//
 	// https://docs.go-atlassian.io/jira-agile/boards#get-all-sprints
 	Sprints(ctx context.Context, boardID, startAt, maxResults int, states []string) (*model.BoardSprintPageScheme,
@@ -163,7 +164,7 @@ type BoardConnector interface {
 	//
 	// Issues are returned ordered by rank. JQL order has higher priority than default rank.
 	//
-	// GET /rest/agile/1.0/board/{boardId}/sprint/{sprintId}/issue
+	// GET /rest/agile/1.0/board/{boardID}/sprint/{sprintId}/issue
 	//
 	// https://docs.go-atlassian.io/jira-agile/boards#get-board-issues-for-sprint
 	IssuesBySprint(ctx context.Context, boardID, sprintID int, opts *model.IssueOptionScheme, startAt, maxResults int) (
@@ -177,7 +178,7 @@ type BoardConnector interface {
 	//
 	// Returned versions are ordered by the name of the project from which they belong and then by sequence defined by user.
 	//
-	// GET /rest/agile/1.0/board/{boardId}/sprint/{sprintId}/issue
+	// GET /rest/agile/1.0/board/{boardID}/sprint/{sprintId}/issue
 	//
 	// https://docs.go-atlassian.io/jira-agile/boards#get-all-versions
 	Versions(ctx context.Context, boardID, startAt, maxResults int, released bool) (*model.BoardVersionPageScheme,
@@ -185,7 +186,7 @@ type BoardConnector interface {
 
 	// Delete deletes the board. Admin without the view permission can still remove the board.
 	//
-	// DELETE /rest/agile/1.0/board/{boardId}
+	// DELETE /rest/agile/1.0/board/{boardID}
 	//
 	// https://docs.go-atlassian.io/jira-agile/boards#delete-board
 	Delete(ctx context.Context, boardID int) (*model.ResponseScheme, error)

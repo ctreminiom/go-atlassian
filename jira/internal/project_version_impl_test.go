@@ -3,13 +3,15 @@ package internal
 import (
 	"context"
 	"errors"
+	"net/http"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
-	"net/http"
-	"testing"
 )
 
 func Test_internalProjectVersionImpl_Gets(t *testing.T) {
@@ -21,7 +23,7 @@ func Test_internalProjectVersionImpl_Gets(t *testing.T) {
 
 	type args struct {
 		ctx            context.Context
-		projectKeyOrId string
+		projectKeyOrID string
 	}
 
 	testCases := []struct {
@@ -37,7 +39,7 @@ func Test_internalProjectVersionImpl_Gets(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:            context.Background(),
-				projectKeyOrId: "DUMMY",
+				projectKeyOrID: "DUMMY",
 			},
 			on: func(fields *fields) {
 
@@ -66,7 +68,7 @@ func Test_internalProjectVersionImpl_Gets(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:            context.Background(),
-				projectKeyOrId: "DUMMY",
+				projectKeyOrID: "DUMMY",
 			},
 			on: func(fields *fields) {
 
@@ -105,7 +107,7 @@ func Test_internalProjectVersionImpl_Gets(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:            context.Background(),
-				projectKeyOrId: "DUMMY",
+				projectKeyOrID: "DUMMY",
 			},
 			on: func(fields *fields) {
 
@@ -135,7 +137,7 @@ func Test_internalProjectVersionImpl_Gets(t *testing.T) {
 			resolutionService, err := NewProjectVersionService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := resolutionService.Gets(testCase.args.ctx, testCase.args.projectKeyOrId)
+			gotResult, gotResponse, err := resolutionService.Gets(testCase.args.ctx, testCase.args.projectKeyOrID)
 
 			if testCase.wantErr {
 
@@ -165,7 +167,7 @@ func Test_internalProjectVersionImpl_Search(t *testing.T) {
 
 	type args struct {
 		ctx                 context.Context
-		projectKeyOrId      string
+		projectKeyOrID      string
 		options             *model.VersionGetsOptions
 		startAt, maxResults int
 	}
@@ -183,7 +185,7 @@ func Test_internalProjectVersionImpl_Search(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:            context.Background(),
-				projectKeyOrId: "DUMMY",
+				projectKeyOrID: "DUMMY",
 				options: &model.VersionGetsOptions{
 					OrderBy: "id",
 					Query:   "release",
@@ -220,7 +222,7 @@ func Test_internalProjectVersionImpl_Search(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:            context.Background(),
-				projectKeyOrId: "DUMMY",
+				projectKeyOrID: "DUMMY",
 				options: &model.VersionGetsOptions{
 					OrderBy: "id",
 					Query:   "release",
@@ -267,7 +269,7 @@ func Test_internalProjectVersionImpl_Search(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:            context.Background(),
-				projectKeyOrId: "DUMMY",
+				projectKeyOrID: "DUMMY",
 				options: &model.VersionGetsOptions{
 					OrderBy: "id",
 					Query:   "release",
@@ -305,7 +307,7 @@ func Test_internalProjectVersionImpl_Search(t *testing.T) {
 			resolutionService, err := NewProjectVersionService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := resolutionService.Search(testCase.args.ctx, testCase.args.projectKeyOrId,
+			gotResult, gotResponse, err := resolutionService.Search(testCase.args.ctx, testCase.args.projectKeyOrID,
 				testCase.args.options, testCase.args.startAt, testCase.args.maxResults)
 
 			if testCase.wantErr {
@@ -336,7 +338,7 @@ func Test_internalProjectVersionImpl_Get(t *testing.T) {
 
 	type args struct {
 		ctx       context.Context
-		versionId string
+		versionID string
 		expand    []string
 	}
 
@@ -353,7 +355,7 @@ func Test_internalProjectVersionImpl_Get(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:       context.Background(),
-				versionId: "10391",
+				versionID: "10391",
 				expand:    []string{"operations"},
 			},
 			on: func(fields *fields) {
@@ -383,7 +385,7 @@ func Test_internalProjectVersionImpl_Get(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:       context.Background(),
-				versionId: "10391",
+				versionID: "10391",
 				expand:    []string{"operations"},
 			},
 			on: func(fields *fields) {
@@ -423,7 +425,7 @@ func Test_internalProjectVersionImpl_Get(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:       context.Background(),
-				versionId: "10391",
+				versionID: "10391",
 				expand:    []string{"operations"},
 			},
 			on: func(fields *fields) {
@@ -454,7 +456,7 @@ func Test_internalProjectVersionImpl_Get(t *testing.T) {
 			resolutionService, err := NewProjectVersionService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := resolutionService.Get(testCase.args.ctx, testCase.args.versionId,
+			gotResult, gotResponse, err := resolutionService.Get(testCase.args.ctx, testCase.args.versionID,
 				testCase.args.expand)
 
 			if testCase.wantErr {
@@ -485,7 +487,7 @@ func Test_internalProjectVersionImpl_RelatedIssueCounts(t *testing.T) {
 
 	type args struct {
 		ctx       context.Context
-		versionId string
+		versionID string
 	}
 
 	testCases := []struct {
@@ -501,7 +503,7 @@ func Test_internalProjectVersionImpl_RelatedIssueCounts(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:       context.Background(),
-				versionId: "10391",
+				versionID: "10391",
 			},
 			on: func(fields *fields) {
 
@@ -530,7 +532,7 @@ func Test_internalProjectVersionImpl_RelatedIssueCounts(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:       context.Background(),
-				versionId: "10391",
+				versionID: "10391",
 			},
 			on: func(fields *fields) {
 
@@ -569,7 +571,7 @@ func Test_internalProjectVersionImpl_RelatedIssueCounts(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:       context.Background(),
-				versionId: "10391",
+				versionID: "10391",
 			},
 			on: func(fields *fields) {
 
@@ -599,7 +601,7 @@ func Test_internalProjectVersionImpl_RelatedIssueCounts(t *testing.T) {
 			resolutionService, err := NewProjectVersionService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := resolutionService.RelatedIssueCounts(testCase.args.ctx, testCase.args.versionId)
+			gotResult, gotResponse, err := resolutionService.RelatedIssueCounts(testCase.args.ctx, testCase.args.versionID)
 
 			if testCase.wantErr {
 
@@ -629,7 +631,7 @@ func Test_internalProjectVersionImpl_UnresolvedIssueCount(t *testing.T) {
 
 	type args struct {
 		ctx       context.Context
-		versionId string
+		versionID string
 	}
 
 	testCases := []struct {
@@ -645,7 +647,7 @@ func Test_internalProjectVersionImpl_UnresolvedIssueCount(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:       context.Background(),
-				versionId: "10391",
+				versionID: "10391",
 			},
 			on: func(fields *fields) {
 
@@ -674,7 +676,7 @@ func Test_internalProjectVersionImpl_UnresolvedIssueCount(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:       context.Background(),
-				versionId: "10391",
+				versionID: "10391",
 			},
 			on: func(fields *fields) {
 
@@ -713,7 +715,7 @@ func Test_internalProjectVersionImpl_UnresolvedIssueCount(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:       context.Background(),
-				versionId: "10391",
+				versionID: "10391",
 			},
 			on: func(fields *fields) {
 
@@ -743,7 +745,7 @@ func Test_internalProjectVersionImpl_UnresolvedIssueCount(t *testing.T) {
 			resolutionService, err := NewProjectVersionService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := resolutionService.UnresolvedIssueCount(testCase.args.ctx, testCase.args.versionId)
+			gotResult, gotResponse, err := resolutionService.UnresolvedIssueCount(testCase.args.ctx, testCase.args.versionID)
 
 			if testCase.wantErr {
 
@@ -773,7 +775,7 @@ func Test_internalProjectVersionImpl_Merge(t *testing.T) {
 
 	type args struct {
 		ctx                            context.Context
-		versionId, versionMoveIssuesTo string
+		versionID, versionMoveIssuesTo string
 	}
 
 	testCases := []struct {
@@ -789,7 +791,7 @@ func Test_internalProjectVersionImpl_Merge(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:                 context.Background(),
-				versionId:           "10391",
+				versionID:           "10391",
 				versionMoveIssuesTo: "10392",
 			},
 			on: func(fields *fields) {
@@ -819,7 +821,7 @@ func Test_internalProjectVersionImpl_Merge(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:                 context.Background(),
-				versionId:           "10391",
+				versionID:           "10391",
 				versionMoveIssuesTo: "10392",
 			},
 			on: func(fields *fields) {
@@ -859,7 +861,7 @@ func Test_internalProjectVersionImpl_Merge(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:       context.Background(),
-				versionId: "100392",
+				versionID: "100392",
 			},
 			wantErr: true,
 			Err:     model.ErrNoVersionIDError,
@@ -870,7 +872,7 @@ func Test_internalProjectVersionImpl_Merge(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:                 context.Background(),
-				versionId:           "10391",
+				versionID:           "10391",
 				versionMoveIssuesTo: "10392",
 			},
 			on: func(fields *fields) {
@@ -901,7 +903,7 @@ func Test_internalProjectVersionImpl_Merge(t *testing.T) {
 			resolutionService, err := NewProjectVersionService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResponse, err := resolutionService.Merge(testCase.args.ctx, testCase.args.versionId, testCase.args.versionMoveIssuesTo)
+			gotResponse, err := resolutionService.Merge(testCase.args.ctx, testCase.args.versionID, testCase.args.versionMoveIssuesTo)
 
 			if testCase.wantErr {
 
@@ -1084,7 +1086,7 @@ func Test_internalProjectVersionImpl_Update(t *testing.T) {
 
 	type args struct {
 		ctx       context.Context
-		versionId string
+		versionID string
 		payload   *model.VersionPayloadScheme
 	}
 
@@ -1101,7 +1103,7 @@ func Test_internalProjectVersionImpl_Update(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:       context.Background(),
-				versionId: "10923",
+				versionID: "10923",
 				payload:   payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -1131,7 +1133,7 @@ func Test_internalProjectVersionImpl_Update(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:       context.Background(),
-				versionId: "10923",
+				versionID: "10923",
 				payload:   payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -1171,7 +1173,7 @@ func Test_internalProjectVersionImpl_Update(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:       context.Background(),
-				versionId: "10923",
+				versionID: "10923",
 				payload:   payloadMocked,
 			},
 			on: func(fields *fields) {
@@ -1202,7 +1204,7 @@ func Test_internalProjectVersionImpl_Update(t *testing.T) {
 			resolutionService, err := NewProjectVersionService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := resolutionService.Update(testCase.args.ctx, testCase.args.versionId,
+			gotResult, gotResponse, err := resolutionService.Update(testCase.args.ctx, testCase.args.versionID,
 				testCase.args.payload)
 
 			if testCase.wantErr {

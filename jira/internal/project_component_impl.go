@@ -3,10 +3,11 @@ package internal
 import (
 	"context"
 	"fmt"
+	"net/http"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/jira"
-	"net/http"
 )
 
 // NewProjectComponentService creates a new instance of ProjectComponentService.
@@ -38,49 +39,49 @@ func (p *ProjectComponentService) Create(ctx context.Context, payload *model.Com
 
 // Gets returns all components in a project.
 //
-// GET /rest/api/{2-3}/project/{projectIdOrKey}/components
+// GET /rest/api/{2-3}/project/{projectKeyOrID}/components
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/components#get-project-components
-func (p *ProjectComponentService) Gets(ctx context.Context, projectIdOrKey string) ([]*model.ComponentScheme, *model.ResponseScheme, error) {
-	return p.internalClient.Gets(ctx, projectIdOrKey)
+func (p *ProjectComponentService) Gets(ctx context.Context, projectKeyOrID string) ([]*model.ComponentScheme, *model.ResponseScheme, error) {
+	return p.internalClient.Gets(ctx, projectKeyOrID)
 }
 
 // Count returns the counts of issues assigned to the component.
 //
-// GET /rest/api/{2-3}/component/{id}/relatedIssueCounts
+// GET /rest/api/{2-3}/component/{componentID}/relatedIssueCounts
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/components#get-component-issues-count
-func (p *ProjectComponentService) Count(ctx context.Context, componentId string) (*model.ComponentCountScheme, *model.ResponseScheme, error) {
-	return p.internalClient.Count(ctx, componentId)
+func (p *ProjectComponentService) Count(ctx context.Context, componentID string) (*model.ComponentCountScheme, *model.ResponseScheme, error) {
+	return p.internalClient.Count(ctx, componentID)
 }
 
 // Delete deletes a component.
 //
-// DELETE /rest/api/{2-3}/component/{id}
+// DELETE /rest/api/{2-3}/component/{componentID}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/components#delete-component
-func (p *ProjectComponentService) Delete(ctx context.Context, componentId string) (*model.ResponseScheme, error) {
-	return p.internalClient.Delete(ctx, componentId)
+func (p *ProjectComponentService) Delete(ctx context.Context, componentID string) (*model.ResponseScheme, error) {
+	return p.internalClient.Delete(ctx, componentID)
 }
 
 // Update updates a component.
 //
 // # Any fields included in the request are overwritten
 //
-// PUT /rest/api/{2-3}/component/{id}
+// PUT /rest/api/{2-3}/component/{componentID}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/components#update-component
-func (p *ProjectComponentService) Update(ctx context.Context, componentId string, payload *model.ComponentPayloadScheme) (*model.ComponentScheme, *model.ResponseScheme, error) {
-	return p.internalClient.Update(ctx, componentId, payload)
+func (p *ProjectComponentService) Update(ctx context.Context, componentID string, payload *model.ComponentPayloadScheme) (*model.ComponentScheme, *model.ResponseScheme, error) {
+	return p.internalClient.Update(ctx, componentID, payload)
 }
 
 // Get returns a component.
 //
-// GET /rest/api/{2-3}/component/{id}
+// GET /rest/api/{2-3}/component/{componentID}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/components#get-component
-func (p *ProjectComponentService) Get(ctx context.Context, componentId string) (*model.ComponentScheme, *model.ResponseScheme, error) {
-	return p.internalClient.Get(ctx, componentId)
+func (p *ProjectComponentService) Get(ctx context.Context, componentID string) (*model.ComponentScheme, *model.ResponseScheme, error) {
+	return p.internalClient.Get(ctx, componentID)
 }
 
 type internalProjectComponentImpl struct {
@@ -106,13 +107,13 @@ func (i *internalProjectComponentImpl) Create(ctx context.Context, payload *mode
 	return component, response, nil
 }
 
-func (i *internalProjectComponentImpl) Gets(ctx context.Context, projectIdOrKey string) ([]*model.ComponentScheme, *model.ResponseScheme, error) {
+func (i *internalProjectComponentImpl) Gets(ctx context.Context, projectKeyOrID string) ([]*model.ComponentScheme, *model.ResponseScheme, error) {
 
-	if projectIdOrKey == "" {
+	if projectKeyOrID == "" {
 		return nil, nil, model.ErrNoProjectIDOrKeyError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/project/%v/components", i.version, projectIdOrKey)
+	endpoint := fmt.Sprintf("rest/api/%v/project/%v/components", i.version, projectKeyOrID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
@@ -128,13 +129,13 @@ func (i *internalProjectComponentImpl) Gets(ctx context.Context, projectIdOrKey 
 	return components, response, nil
 }
 
-func (i *internalProjectComponentImpl) Count(ctx context.Context, componentId string) (*model.ComponentCountScheme, *model.ResponseScheme, error) {
+func (i *internalProjectComponentImpl) Count(ctx context.Context, componentID string) (*model.ComponentCountScheme, *model.ResponseScheme, error) {
 
-	if componentId == "" {
+	if componentID == "" {
 		return nil, nil, model.ErrNoComponentIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/component/%v/relatedIssueCounts", i.version, componentId)
+	endpoint := fmt.Sprintf("rest/api/%v/component/%v/relatedIssueCounts", i.version, componentID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
@@ -150,13 +151,13 @@ func (i *internalProjectComponentImpl) Count(ctx context.Context, componentId st
 	return count, response, nil
 }
 
-func (i *internalProjectComponentImpl) Delete(ctx context.Context, componentId string) (*model.ResponseScheme, error) {
+func (i *internalProjectComponentImpl) Delete(ctx context.Context, componentID string) (*model.ResponseScheme, error) {
 
-	if componentId == "" {
+	if componentID == "" {
 		return nil, model.ErrNoComponentIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/component/%v", i.version, componentId)
+	endpoint := fmt.Sprintf("rest/api/%v/component/%v", i.version, componentID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
@@ -166,13 +167,13 @@ func (i *internalProjectComponentImpl) Delete(ctx context.Context, componentId s
 	return i.c.Call(request, nil)
 }
 
-func (i *internalProjectComponentImpl) Update(ctx context.Context, componentId string, payload *model.ComponentPayloadScheme) (*model.ComponentScheme, *model.ResponseScheme, error) {
+func (i *internalProjectComponentImpl) Update(ctx context.Context, componentID string, payload *model.ComponentPayloadScheme) (*model.ComponentScheme, *model.ResponseScheme, error) {
 
-	if componentId == "" {
+	if componentID == "" {
 		return nil, nil, model.ErrNoComponentIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/component/%v", i.version, componentId)
+	endpoint := fmt.Sprintf("rest/api/%v/component/%v", i.version, componentID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
@@ -188,13 +189,13 @@ func (i *internalProjectComponentImpl) Update(ctx context.Context, componentId s
 	return component, response, nil
 }
 
-func (i *internalProjectComponentImpl) Get(ctx context.Context, componentId string) (*model.ComponentScheme, *model.ResponseScheme, error) {
+func (i *internalProjectComponentImpl) Get(ctx context.Context, componentID string) (*model.ComponentScheme, *model.ResponseScheme, error) {
 
-	if componentId == "" {
+	if componentID == "" {
 		return nil, nil, model.ErrNoComponentIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/component/%v", i.version, componentId)
+	endpoint := fmt.Sprintf("rest/api/%v/component/%v", i.version, componentID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {

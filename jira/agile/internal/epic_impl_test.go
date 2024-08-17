@@ -3,12 +3,14 @@ package internal
 import (
 	"context"
 	"errors"
+	"net/http"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
-	"github.com/stretchr/testify/assert"
-	"net/http"
-	"testing"
 )
 
 func Test_EpicService_Get(t *testing.T) {
@@ -19,7 +21,7 @@ func Test_EpicService_Get(t *testing.T) {
 
 	type args struct {
 		ctx         context.Context
-		epicIdOrKey string
+		epicIDOrKey string
 	}
 
 	testCases := []struct {
@@ -34,7 +36,7 @@ func Test_EpicService_Get(t *testing.T) {
 			name: "when the parameters are correct",
 			args: args{
 				ctx:         context.Background(),
-				epicIdOrKey: "EPIC-1",
+				epicIDOrKey: "EPIC-1",
 			},
 			on: func(fields *fields) {
 
@@ -61,7 +63,7 @@ func Test_EpicService_Get(t *testing.T) {
 			name: "when the api cannot be executed",
 			args: args{
 				ctx:         context.Background(),
-				epicIdOrKey: "EPIC-1",
+				epicIDOrKey: "EPIC-1",
 			},
 			on: func(fields *fields) {
 
@@ -90,7 +92,7 @@ func Test_EpicService_Get(t *testing.T) {
 			name: "when the request cannot be created",
 			args: args{
 				ctx:         context.Background(),
-				epicIdOrKey: "EPIC-1",
+				epicIDOrKey: "EPIC-1",
 			},
 			on: func(fields *fields) {
 
@@ -114,7 +116,7 @@ func Test_EpicService_Get(t *testing.T) {
 			name: "when the epic id is not provided",
 			args: args{
 				ctx:         context.Background(),
-				epicIdOrKey: "",
+				epicIDOrKey: "",
 			},
 			on: func(fields *fields) {
 				fields.c = mocks.NewConnector(t)
@@ -134,7 +136,7 @@ func Test_EpicService_Get(t *testing.T) {
 
 			epicService := NewEpicService(testCase.fields.c, "1.0")
 
-			gotResult, gotResponse, err := epicService.Get(testCase.args.ctx, testCase.args.epicIdOrKey)
+			gotResult, gotResponse, err := epicService.Get(testCase.args.ctx, testCase.args.epicIDOrKey)
 
 			if testCase.wantErr {
 
@@ -162,7 +164,7 @@ func Test_EpicService_Issues(t *testing.T) {
 
 	type args struct {
 		ctx         context.Context
-		epicIdOrKey string
+		epicIDOrKey string
 		startAt     int
 		maxResults  int
 		opts        *model.IssueOptionScheme
@@ -180,7 +182,7 @@ func Test_EpicService_Issues(t *testing.T) {
 			name: "when the parameters are correct",
 			args: args{
 				ctx:         context.Background(),
-				epicIdOrKey: "EPIC-1",
+				epicIDOrKey: "EPIC-1",
 				startAt:     10,
 				maxResults:  50,
 				opts: &model.IssueOptionScheme{
@@ -215,7 +217,7 @@ func Test_EpicService_Issues(t *testing.T) {
 			name: "when the api cannot be executed",
 			args: args{
 				ctx:         context.Background(),
-				epicIdOrKey: "EPIC-1",
+				epicIDOrKey: "EPIC-1",
 				startAt:     10,
 				maxResults:  50,
 				opts: &model.IssueOptionScheme{
@@ -252,7 +254,7 @@ func Test_EpicService_Issues(t *testing.T) {
 			name: "when the request cannot be created",
 			args: args{
 				ctx:         context.Background(),
-				epicIdOrKey: "EPIC-1",
+				epicIDOrKey: "EPIC-1",
 				startAt:     10,
 				maxResults:  50,
 				opts: &model.IssueOptionScheme{
@@ -284,7 +286,7 @@ func Test_EpicService_Issues(t *testing.T) {
 			name: "when the epic id is not provided",
 			args: args{
 				ctx:         context.Background(),
-				epicIdOrKey: "",
+				epicIDOrKey: "",
 			},
 			on: func(fields *fields) {
 				fields.c = mocks.NewConnector(t)
@@ -304,7 +306,7 @@ func Test_EpicService_Issues(t *testing.T) {
 
 			epicService := NewEpicService(testCase.fields.c, "1.0")
 
-			gotResult, gotResponse, err := epicService.Issues(testCase.args.ctx, testCase.args.epicIdOrKey, testCase.args.opts,
+			gotResult, gotResponse, err := epicService.Issues(testCase.args.ctx, testCase.args.epicIDOrKey, testCase.args.opts,
 				testCase.args.startAt, testCase.args.maxResults)
 
 			if testCase.wantErr {
@@ -335,7 +337,7 @@ func Test_EpicService_Move(t *testing.T) {
 
 	type args struct {
 		ctx         context.Context
-		epicIdOrKey string
+		epicIDOrKey string
 		issues      []string
 	}
 
@@ -351,7 +353,7 @@ func Test_EpicService_Move(t *testing.T) {
 			name: "when the parameters are correct",
 			args: args{
 				ctx:         context.Background(),
-				epicIdOrKey: "EPIC-1",
+				epicIDOrKey: "EPIC-1",
 				issues:      []string{"EPIC-10"},
 			},
 			on: func(fields *fields) {
@@ -379,7 +381,7 @@ func Test_EpicService_Move(t *testing.T) {
 			name: "when the api cannot be executed",
 			args: args{
 				ctx:         context.Background(),
-				epicIdOrKey: "EPIC-1",
+				epicIDOrKey: "EPIC-1",
 				issues:      []string{"EPIC-10"},
 			},
 			on: func(fields *fields) {
@@ -409,7 +411,7 @@ func Test_EpicService_Move(t *testing.T) {
 			name: "when the request cannot be created",
 			args: args{
 				ctx:         context.Background(),
-				epicIdOrKey: "EPIC-1",
+				epicIDOrKey: "EPIC-1",
 				issues:      []string{"EPIC-10"},
 			},
 			on: func(fields *fields) {
@@ -434,7 +436,7 @@ func Test_EpicService_Move(t *testing.T) {
 			name: "when the epic id is not provided",
 			args: args{
 				ctx:         context.Background(),
-				epicIdOrKey: "",
+				epicIDOrKey: "",
 			},
 			on: func(fields *fields) {
 				fields.c = mocks.NewConnector(t)
@@ -454,7 +456,7 @@ func Test_EpicService_Move(t *testing.T) {
 
 			epicService := NewEpicService(testCase.fields.c, "1.0")
 
-			gotResponse, err := epicService.Move(testCase.args.ctx, testCase.args.epicIdOrKey, testCase.args.issues)
+			gotResponse, err := epicService.Move(testCase.args.ctx, testCase.args.epicIDOrKey, testCase.args.issues)
 
 			if testCase.wantErr {
 

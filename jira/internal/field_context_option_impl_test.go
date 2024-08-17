@@ -22,7 +22,7 @@ func Test_internalIssueFieldContextOptionServiceImpl_Gets(t *testing.T) {
 
 	type args struct {
 		ctx                 context.Context
-		fieldId             string
+		fieldID             string
 		contextId           int
 		options             *model.FieldOptionContextParams
 		startAt, maxResults int
@@ -41,7 +41,7 @@ func Test_internalIssueFieldContextOptionServiceImpl_Gets(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:       context.Background(),
-				fieldId:   "custom_field_10002",
+				fieldID:   "custom_field_10002",
 				contextId: 10001,
 				options: &model.FieldOptionContextParams{
 					OptionID:    3022,
@@ -78,7 +78,7 @@ func Test_internalIssueFieldContextOptionServiceImpl_Gets(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:       context.Background(),
-				fieldId:   "custom_field_10002",
+				fieldID:   "custom_field_10002",
 				contextId: 10001,
 				options: &model.FieldOptionContextParams{
 					OptionID:    3022,
@@ -115,7 +115,7 @@ func Test_internalIssueFieldContextOptionServiceImpl_Gets(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:       context.Background(),
-				fieldId:   "",
+				fieldID:   "",
 				contextId: 10001,
 				options: &model.FieldOptionContextParams{
 					OptionID:    3022,
@@ -133,7 +133,7 @@ func Test_internalIssueFieldContextOptionServiceImpl_Gets(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:       context.Background(),
-				fieldId:   "custom_field_10002",
+				fieldID:   "custom_field_10002",
 				contextId: 10001,
 				options: &model.FieldOptionContextParams{
 					OptionID:    3022,
@@ -171,7 +171,7 @@ func Test_internalIssueFieldContextOptionServiceImpl_Gets(t *testing.T) {
 			fieldConfigService, err := NewIssueFieldContextOptionService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := fieldConfigService.Gets(testCase.args.ctx, testCase.args.fieldId, testCase.args.contextId,
+			gotResult, gotResponse, err := fieldConfigService.Gets(testCase.args.ctx, testCase.args.fieldID, testCase.args.contextId,
 				testCase.args.options, testCase.args.startAt, testCase.args.maxResults)
 
 			if testCase.wantErr {
@@ -217,7 +217,7 @@ func Test_internalIssueFieldContextOptionServiceImpl_Create(t *testing.T) {
 
 	type args struct {
 		ctx       context.Context
-		fieldId   string
+		fieldID   string
 		contextId int
 		payload   *model.FieldContextOptionListScheme
 	}
@@ -235,7 +235,7 @@ func Test_internalIssueFieldContextOptionServiceImpl_Create(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:       context.Background(),
-				fieldId:   "custom_field_10002",
+				fieldID:   "custom_field_10002",
 				contextId: 10001,
 				payload:   payloadMocked,
 			},
@@ -267,7 +267,7 @@ func Test_internalIssueFieldContextOptionServiceImpl_Create(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:       context.Background(),
-				fieldId:   "custom_field_10002",
+				fieldID:   "custom_field_10002",
 				contextId: 10001,
 				payload:   payloadMocked,
 			},
@@ -299,7 +299,7 @@ func Test_internalIssueFieldContextOptionServiceImpl_Create(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:       context.Background(),
-				fieldId:   "",
+				fieldID:   "",
 				contextId: 10001,
 			},
 			wantErr: true,
@@ -311,7 +311,7 @@ func Test_internalIssueFieldContextOptionServiceImpl_Create(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:       context.Background(),
-				fieldId:   "customfield_1000",
+				fieldID:   "customfield_1000",
 				contextId: 0,
 			},
 			wantErr: true,
@@ -323,7 +323,7 @@ func Test_internalIssueFieldContextOptionServiceImpl_Create(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:       context.Background(),
-				fieldId:   "custom_field_10002",
+				fieldID:   "custom_field_10002",
 				contextId: 10001,
 				payload:   payloadMocked,
 			},
@@ -356,7 +356,7 @@ func Test_internalIssueFieldContextOptionServiceImpl_Create(t *testing.T) {
 			fieldConfigService, err := NewIssueFieldContextOptionService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := fieldConfigService.Create(testCase.args.ctx, testCase.args.fieldId, testCase.args.contextId,
+			gotResult, gotResponse, err := fieldConfigService.Create(testCase.args.ctx, testCase.args.fieldID, testCase.args.contextId,
 				testCase.args.payload)
 
 			if testCase.wantErr {
@@ -402,7 +402,7 @@ func Test_internalIssueFieldContextOptionServiceImpl_Update(t *testing.T) {
 
 	type args struct {
 		ctx       context.Context
-		fieldId   string
+		fieldID   string
 		contextId int
 		payload   *model.FieldContextOptionListScheme
 	}
@@ -420,7 +420,7 @@ func Test_internalIssueFieldContextOptionServiceImpl_Update(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:       context.Background(),
-				fieldId:   "custom_field_10002",
+				fieldID:   "custom_field_10002",
 				contextId: 10001,
 				payload:   payloadMocked,
 			},
@@ -452,7 +452,7 @@ func Test_internalIssueFieldContextOptionServiceImpl_Update(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:       context.Background(),
-				fieldId:   "custom_field_10002",
+				fieldID:   "custom_field_10002",
 				contextId: 10001,
 				payload:   payloadMocked,
 			},
@@ -484,7 +484,7 @@ func Test_internalIssueFieldContextOptionServiceImpl_Update(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:       context.Background(),
-				fieldId:   "",
+				fieldID:   "",
 				contextId: 10001,
 			},
 			wantErr: true,
@@ -496,7 +496,7 @@ func Test_internalIssueFieldContextOptionServiceImpl_Update(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:       context.Background(),
-				fieldId:   "customfield_1000",
+				fieldID:   "customfield_1000",
 				contextId: 0,
 			},
 			wantErr: true,
@@ -508,7 +508,7 @@ func Test_internalIssueFieldContextOptionServiceImpl_Update(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:       context.Background(),
-				fieldId:   "custom_field_10002",
+				fieldID:   "custom_field_10002",
 				contextId: 10001,
 				payload:   payloadMocked,
 			},
@@ -541,7 +541,7 @@ func Test_internalIssueFieldContextOptionServiceImpl_Update(t *testing.T) {
 			fieldConfigService, err := NewIssueFieldContextOptionService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := fieldConfigService.Update(testCase.args.ctx, testCase.args.fieldId, testCase.args.contextId,
+			gotResult, gotResponse, err := fieldConfigService.Update(testCase.args.ctx, testCase.args.fieldID, testCase.args.contextId,
 				testCase.args.payload)
 
 			if testCase.wantErr {
@@ -572,7 +572,7 @@ func Test_internalIssueFieldContextOptionServiceImpl_Delete(t *testing.T) {
 
 	type args struct {
 		ctx       context.Context
-		fieldId   string
+		fieldID   string
 		contextId int
 		optionId  int
 	}
@@ -590,7 +590,7 @@ func Test_internalIssueFieldContextOptionServiceImpl_Delete(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:       context.Background(),
-				fieldId:   "custom_field_10002",
+				fieldID:   "custom_field_10002",
 				contextId: 10001,
 				optionId:  1001,
 			},
@@ -622,7 +622,7 @@ func Test_internalIssueFieldContextOptionServiceImpl_Delete(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:       context.Background(),
-				fieldId:   "custom_field_10002",
+				fieldID:   "custom_field_10002",
 				contextId: 10001,
 				optionId:  1001,
 			},
@@ -654,7 +654,7 @@ func Test_internalIssueFieldContextOptionServiceImpl_Delete(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:       context.Background(),
-				fieldId:   "",
+				fieldID:   "",
 				contextId: 10001,
 			},
 			wantErr: true,
@@ -666,7 +666,7 @@ func Test_internalIssueFieldContextOptionServiceImpl_Delete(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:       context.Background(),
-				fieldId:   "customfield_1000",
+				fieldID:   "customfield_1000",
 				contextId: 0,
 			},
 			wantErr: true,
@@ -678,7 +678,7 @@ func Test_internalIssueFieldContextOptionServiceImpl_Delete(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:       context.Background(),
-				fieldId:   "customfield_1000",
+				fieldID:   "customfield_1000",
 				contextId: 1000,
 				optionId:  0,
 			},
@@ -692,7 +692,7 @@ func Test_internalIssueFieldContextOptionServiceImpl_Delete(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:       context.Background(),
-				fieldId:   "custom_field_10002",
+				fieldID:   "custom_field_10002",
 				contextId: 10001,
 				optionId:  1001,
 			},
@@ -725,7 +725,7 @@ func Test_internalIssueFieldContextOptionServiceImpl_Delete(t *testing.T) {
 			fieldConfigService, err := NewIssueFieldContextOptionService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResponse, err := fieldConfigService.Delete(testCase.args.ctx, testCase.args.fieldId, testCase.args.contextId,
+			gotResponse, err := fieldConfigService.Delete(testCase.args.ctx, testCase.args.fieldID, testCase.args.contextId,
 				testCase.args.optionId)
 
 			if testCase.wantErr {

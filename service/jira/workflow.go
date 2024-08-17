@@ -2,6 +2,7 @@ package jira
 
 import (
 	"context"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 )
 
@@ -195,10 +196,10 @@ type WorkflowSchemeConnector interface {
 
 	// Get returns a workflow scheme
 	//
-	// GET /rest/api/{2-3}/workflowscheme/{id}
+	// GET /rest/api/{2-3}/workflowscheme/{schemeID}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/workflow/scheme#get-workflow-scheme
-	Get(ctx context.Context, schemeId int, returnDraftIfExists bool) (*model.WorkflowSchemeScheme, *model.ResponseScheme, error)
+	Get(ctx context.Context, schemeID int, returnDraftIfExists bool) (*model.WorkflowSchemeScheme, *model.ResponseScheme, error)
 
 	// Update updates a workflow scheme, including the name, default workflow, issue type to project mappings, and more.
 	//
@@ -206,19 +207,19 @@ type WorkflowSchemeConnector interface {
 	//
 	// provided that updateDraftIfNeeded is set to true.
 	//
-	// PUT /rest/api/{2-3}/workflowscheme/{id}
+	// PUT /rest/api/{2-3}/workflowscheme/{schemeID}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/workflow/scheme#update-workflow-scheme
-	Update(ctx context.Context, schemeId int, payload *model.WorkflowSchemePayloadScheme) (*model.WorkflowSchemeScheme, *model.ResponseScheme, error)
+	Update(ctx context.Context, schemeID int, payload *model.WorkflowSchemePayloadScheme) (*model.WorkflowSchemeScheme, *model.ResponseScheme, error)
 
 	// Delete deletes a workflow scheme.
 	//
 	// Note that a workflow scheme cannot be deleted if it is active (that is, being used by at least one project).
 	//
-	// DELETE /rest/api/{2-3}/workflowscheme/{id}
+	// DELETE /rest/api/{2-3}/workflowscheme/{schemeID}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/workflow/scheme#delete-workflow-scheme
-	Delete(ctx context.Context, schemeId int) (*model.ResponseScheme, error)
+	Delete(ctx context.Context, schemeID int) (*model.ResponseScheme, error)
 
 	// Associations returns a list of the workflow schemes associated with a list of projects.
 	//
@@ -244,7 +245,7 @@ type WorkflowSchemeConnector interface {
 	// PUT /rest/api/{2-3}/workflowscheme/project
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/workflow/scheme#get-workflow-schemes-associations
-	Assign(ctx context.Context, schemeId, projectId string) (*model.ResponseScheme, error)
+	Assign(ctx context.Context, schemeID, projectID string) (*model.ResponseScheme, error)
 }
 
 // WorkflowSchemeIssueTypeConnector represents the workflows scheme issue type endpoints.

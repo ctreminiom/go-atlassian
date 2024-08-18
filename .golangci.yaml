@@ -12,6 +12,9 @@ linters:
 
 linters-settings:
   revive:
+    rules:
+      - name: unused-parameter
+        disabled: true # forces all unused to be "_" which leads to confusion
 
 issues:
   max-issues-per-linter: 0

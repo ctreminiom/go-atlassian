@@ -488,7 +488,7 @@ func Test_internalProjectPropertyImpl_Set(t *testing.T) {
 
 	type args struct {
 		ctx            context.Context
-		projectKeyOrId string
+		projectKeyOrID string
 		propertyKey    string
 		payload        interface{}
 	}
@@ -506,7 +506,7 @@ func Test_internalProjectPropertyImpl_Set(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:            context.Background(),
-				projectKeyOrId: "DUMMY",
+				projectKeyOrID: "DUMMY",
 				propertyKey:    "alliance",
 				payload:        payloadMocked,
 			},
@@ -537,7 +537,7 @@ func Test_internalProjectPropertyImpl_Set(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:            context.Background(),
-				projectKeyOrId: "DUMMY",
+				projectKeyOrID: "DUMMY",
 				propertyKey:    "alliance",
 				payload:        payloadMocked,
 			},
@@ -578,7 +578,7 @@ func Test_internalProjectPropertyImpl_Set(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:            context.Background(),
-				projectKeyOrId: "DUMMY",
+				projectKeyOrID: "DUMMY",
 			},
 			wantErr: true,
 			Err:     model.ErrNoPropertyKeyError,
@@ -589,7 +589,7 @@ func Test_internalProjectPropertyImpl_Set(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:            context.Background(),
-				projectKeyOrId: "DUMMY",
+				projectKeyOrID: "DUMMY",
 				propertyKey:    "alliance",
 				payload:        payloadMocked,
 			},
@@ -621,7 +621,7 @@ func Test_internalProjectPropertyImpl_Set(t *testing.T) {
 			newService, err := NewProjectPropertyService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResponse, err := newService.Set(testCase.args.ctx, testCase.args.projectKeyOrId, testCase.args.propertyKey,
+			gotResponse, err := newService.Set(testCase.args.ctx, testCase.args.projectKeyOrID, testCase.args.propertyKey,
 				testCase.args.payload)
 
 			if testCase.wantErr {

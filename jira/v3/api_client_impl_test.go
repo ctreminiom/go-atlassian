@@ -391,7 +391,7 @@ func TestClient_NewRequest(t *testing.T) {
 
 func TestClient_processResponse(t *testing.T) {
 
-	expectedJsonResponse := `
+	expectedJSONResponse := `
 	{
 	  "id": 4,
 	  "self": "https://ctreminiom.atlassian.net/rest/agile/1.0/board/4",
@@ -401,7 +401,7 @@ func TestClient_processResponse(t *testing.T) {
 
 	expectedResponse := &http.Response{
 		StatusCode: http.StatusOK,
-		Body:       io.NopCloser(strings.NewReader(expectedJsonResponse)),
+		Body:       io.NopCloser(strings.NewReader(expectedJSONResponse)),
 		Request: &http.Request{
 			Method: http.MethodGet,
 			URL:    &url.URL{},
@@ -437,7 +437,7 @@ func TestClient_processResponse(t *testing.T) {
 				Response: expectedResponse,
 				Code:     http.StatusOK,
 				Method:   http.MethodGet,
-				Bytes:    *bytes.NewBufferString(expectedJsonResponse),
+				Bytes:    *bytes.NewBufferString(expectedJSONResponse),
 			},
 			wantErr: false,
 		},

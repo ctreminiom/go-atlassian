@@ -602,7 +602,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Project(t *testing.T) {
 			fieldConfigService, err := NewIssueFieldConfigurationSchemeService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := fieldConfigService.Project(testCase.args.ctx, testCase.args.projectIds,
+			gotResult, gotResponse, err := fieldConfigService.Project(testCase.args.ctx, testCase.args.projectIDs,
 				testCase.args.startAt, testCase.args.maxResults)
 
 			if testCase.wantErr {

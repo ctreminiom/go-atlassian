@@ -3,18 +3,20 @@ package internal
 import (
 	"context"
 	"errors"
+	"net/http"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
-	"github.com/stretchr/testify/assert"
-	"net/http"
-	"testing"
 )
 
 func Test_internalSearchRichTextImpl_Checks(t *testing.T) {
 
 	payloadMocked := &model.IssueSearchCheckPayloadScheme{
-		IssueIds: []int{10001, 1000, 10042},
+		IssueIDs: []int{10001, 1000, 10042},
 		JQLs: []string{
 			"project = FOO",
 			"issuetype = Bug",

@@ -213,5 +213,5 @@ type BoardBacklogPayloadScheme struct {
 	Issues            []string `json:"issues,omitempty"`
 	RankBeforeIssue   string   `json:"rankBeforeIssue,omitempty"`
 	RankAfterIssue    string   `json:"rankAfterIssue,omitempty"`
-	RankCustomFieldId int      `json:"rankCustomFieldId,omitempty"`
+	RankCustomFieldID int      `json:"rankCustomFieldId,omitempty"`
 }

@@ -2198,7 +2198,7 @@ func TestParseRequestTypeCustomField(t *testing.T) {
 					HelpText:      "",
 					IssueTypeID:   "10039",
 					ServiceDeskID: "2",
-					GroupIds:      []string{},
+					GroupIDs:      []string{},
 				},
 				CurrentStatus: &CustomerRequestCurrentStatusScheme{
 					Status:         "Check billing account",
@@ -6513,7 +6513,7 @@ func TestParseRequestTypeCustomFields(t *testing.T) {
 						HelpText:      "",
 						IssueTypeID:   "10039",
 						ServiceDeskID: "2",
-						GroupIds:      []string{},
+						GroupIDs:      []string{},
 					},
 					CurrentStatus: &CustomerRequestCurrentStatusScheme{
 						Status:         "Check billing account",
@@ -6539,7 +6539,7 @@ func TestParseRequestTypeCustomFields(t *testing.T) {
 						HelpText:      "",
 						IssueTypeID:   "10039",
 						ServiceDeskID: "2",
-						GroupIds:      []string{},
+						GroupIDs:      []string{},
 					},
 					CurrentStatus: &CustomerRequestCurrentStatusScheme{
 						Status:         "Check billing account",

@@ -2,7 +2,7 @@ package models
 
 // IssueSearchCheckPayloadScheme represents the payload for checking issue search in Jira.
 type IssueSearchCheckPayloadScheme struct {
-	IssueIds []int    `json:"issueIds,omitempty"` // The IDs of the issues.
+	IssueIDs []int    `json:"issueIds,omitempty"` // The IDs of the issues.
 	JQLs     []string `json:"jqls,omitempty"`     // The JQLs for the issue search.
 }
 

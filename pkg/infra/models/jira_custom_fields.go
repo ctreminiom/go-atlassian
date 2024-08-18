@@ -70,7 +70,7 @@ func (c *CustomFields) URL(customFieldID, URL string) error {
 	}
 
 	if len(URL) == 0 {
-		return ErrNoUrlTypeError
+		return ErrNoURLTypeError
 	}
 
 	var urlNode = map[string]interface{}{}

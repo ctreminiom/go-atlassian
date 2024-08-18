@@ -3,13 +3,14 @@ package internal
 import (
 	"context"
 	"fmt"
-	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/service"
-	"github.com/ctreminiom/go-atlassian/service/confluence"
 	"net/http"
 	"net/url"
 	"strconv"
 	"strings"
+
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/service"
+	"github.com/ctreminiom/go-atlassian/service/confluence"
 )
 
 // NewCustomContentService creates a new instance of CustomContentService.
@@ -31,8 +32,8 @@ type CustomContentService struct {
 // GET /wiki/api/v2/custom-content
 //
 // https://docs.go-atlassian.io/confluence-cloud/v2/custom-content#get-custom-content-by-type
-func (c *CustomContentService) Gets(ctx context.Context, type_ string, options *model.CustomContentOptionsScheme, cursor string, limit int) (*model.CustomContentPageScheme, *model.ResponseScheme, error) {
-	return c.internalClient.Gets(ctx, type_, options, cursor, limit)
+func (c *CustomContentService) Gets(ctx context.Context, typ string, options *model.CustomContentOptionsScheme, cursor string, limit int) (*model.CustomContentPageScheme, *model.ResponseScheme, error) {
+	return c.internalClient.Gets(ctx, typ, options, cursor, limit)
 }
 
 // Create creates a new custom content in the given space, page, blogpost or other custom content.
@@ -79,9 +80,9 @@ type internalCustomContentServiceImpl struct {
 	c service.Connector
 }
 
-func (i *internalCustomContentServiceImpl) Gets(ctx context.Context, type_ string, options *model.CustomContentOptionsScheme, cursor string, limit int) (*model.CustomContentPageScheme, *model.ResponseScheme, error) {
+func (i *internalCustomContentServiceImpl) Gets(ctx context.Context, typ string, options *model.CustomContentOptionsScheme, cursor string, limit int) (*model.CustomContentPageScheme, *model.ResponseScheme, error) {
 
-	if type_ == "" {
+	if typ == "" {
 		return nil, nil, model.ErrNoCustomContentTypeError
 	}
 

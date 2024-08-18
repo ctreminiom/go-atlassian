@@ -5,18 +5,19 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/ctreminiom/go-atlassian/jira/sm/internal"
-	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/service/common"
 	"io"
 	"net/http"
 	"net/url"
 	"strings"
+
+	"github.com/ctreminiom/go-atlassian/jira/sm/internal"
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/service/common"
 )
 
 const defaultServiceManagementVersion = "latest"
 
-func New(httpClient common.HttpClient, site string) (*Client, error) {
+func New(httpClient common.HTTPClient, site string) (*Client, error) {
 
 	if httpClient == nil {
 		httpClient = http.DefaultClient
@@ -77,7 +78,7 @@ func New(httpClient common.HttpClient, site string) (*Client, error) {
 }
 
 type Client struct {
-	HTTP          common.HttpClient
+	HTTP          common.HTTPClient
 	Site          *url.URL
 	Auth          common.Authentication
 	Customer      *internal.CustomerService
@@ -89,7 +90,7 @@ type Client struct {
 	WorkSpace     *internal.WorkSpaceService
 }
 
-func (c *Client) NewRequest(ctx context.Context, method, urlStr, type_ string, body interface{}) (*http.Request, error) {
+func (c *Client) NewRequest(ctx context.Context, method, urlStr, contentType string, body interface{}) (*http.Request, error) {
 
 	rel, err := url.Parse(urlStr)
 	if err != nil {
@@ -122,9 +123,9 @@ func (c *Client) NewRequest(ctx context.Context, method, urlStr, type_ string, b
 		req.Header.Set("Content-Type", "application/json")
 	}
 
-	if type_ != "" {
-		// When the type_ is provided, it means the request needs to be created to handle files
-		req.Header.Set("Content-Type", type_)
+	if contentType != "" {
+		// When the contentType is provided, it means the request needs to be created to handle files
+		req.Header.Set("Content-Type", contentType)
 		req.Header.Set("X-Atlassian-Token", "no-check")
 	}
 

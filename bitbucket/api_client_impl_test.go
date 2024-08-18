@@ -66,7 +66,7 @@ func TestClient_Call(t *testing.T) {
 	}
 
 	type fields struct {
-		HTTP common.HttpClient
+		HTTP common.HTTPClient
 		Site *url.URL
 		Auth common.Authentication
 	}
@@ -88,7 +88,7 @@ func TestClient_Call(t *testing.T) {
 			name: "when the parameters are correct",
 			on: func(fields *fields) {
 
-				client := mocks.NewHttpClient(t)
+				client := mocks.NewHTTPClient(t)
 
 				client.On("Do", (*http.Request)(nil)).
 					Return(expectedResponse, nil)
@@ -112,7 +112,7 @@ func TestClient_Call(t *testing.T) {
 			name: "when the response status is a bad request",
 			on: func(fields *fields) {
 
-				client := mocks.NewHttpClient(t)
+				client := mocks.NewHTTPClient(t)
 
 				client.On("Do", (*http.Request)(nil)).
 					Return(badRequestResponse, nil)
@@ -137,7 +137,7 @@ func TestClient_Call(t *testing.T) {
 			name: "when the response status is an internal service error",
 			on: func(fields *fields) {
 
-				client := mocks.NewHttpClient(t)
+				client := mocks.NewHTTPClient(t)
 
 				client.On("Do", (*http.Request)(nil)).
 					Return(internalServerResponse, nil)
@@ -162,7 +162,7 @@ func TestClient_Call(t *testing.T) {
 			name: "when the response status is a not found",
 			on: func(fields *fields) {
 
-				client := mocks.NewHttpClient(t)
+				client := mocks.NewHTTPClient(t)
 
 				client.On("Do", (*http.Request)(nil)).
 					Return(notFoundResponse, nil)
@@ -187,7 +187,7 @@ func TestClient_Call(t *testing.T) {
 			name: "when the response status is unauthorized",
 			on: func(fields *fields) {
 
-				client := mocks.NewHttpClient(t)
+				client := mocks.NewHTTPClient(t)
 
 				client.On("Do", (*http.Request)(nil)).
 					Return(unauthorizedResponse, nil)
@@ -265,17 +265,17 @@ func TestClient_NewRequest(t *testing.T) {
 	requestMocked.Header.Set("Content-Type", "application/json")
 
 	type fields struct {
-		HTTP common.HttpClient
+		HTTP common.HTTPClient
 		Auth common.Authentication
 		Site *url.URL
 	}
 
 	type args struct {
-		ctx    context.Context
-		method string
-		urlStr string
-		typ    string
-		body   interface{}
+		ctx         context.Context
+		method      string
+		urlStr      string
+		contentType string
+		body        interface{}
 	}
 
 	testCases := []struct {
@@ -293,11 +293,11 @@ func TestClient_NewRequest(t *testing.T) {
 				Site: siteAsURL,
 			},
 			args: args{
-				ctx:    context.Background(),
-				method: http.MethodGet,
-				urlStr: "rest/2/issue/attachment",
-				typ:    "",
-				body:   bytes.NewReader([]byte("Hello World")),
+				ctx:         context.Background(),
+				method:      http.MethodGet,
+				urlStr:      "rest/2/issue/attachment",
+				contentType: "",
+				body:        bytes.NewReader([]byte("Hello World")),
 			},
 			want:    requestMocked,
 			wantErr: false,
@@ -328,11 +328,11 @@ func TestClient_NewRequest(t *testing.T) {
 				Site: siteAsURL,
 			},
 			args: args{
-				ctx:    context.Background(),
-				method: http.MethodGet,
-				urlStr: "rest/2/issue/attachment",
-				typ:    "type_sample",
-				body:   bytes.NewReader([]byte("Hello World")),
+				ctx:         context.Background(),
+				method:      http.MethodGet,
+				urlStr:      "rest/2/issue/attachment",
+				contentType: "type_sample",
+				body:        bytes.NewReader([]byte("Hello World")),
 			},
 			want:    requestMocked,
 			wantErr: false,
@@ -369,7 +369,7 @@ func TestClient_NewRequest(t *testing.T) {
 				testCase.args.ctx,
 				testCase.args.method,
 				testCase.args.urlStr,
-				testCase.args.typ,
+				testCase.args.contentType,
 				testCase.args.body,
 			)
 
@@ -409,7 +409,7 @@ func TestClient_processResponse(t *testing.T) {
 	}
 
 	type fields struct {
-		HTTP           common.HttpClient
+		HTTP           common.HTTPClient
 		Site           *url.URL
 		Authentication common.Authentication
 	}
@@ -484,7 +484,7 @@ func TestNew(t *testing.T) {
 	invalidURLClientMocked, _ := New(nil, " https://zhidao.baidu.com/special/view?id=sd&preview=1")
 
 	type args struct {
-		httpClient common.HttpClient
+		httpClient common.HTTPClient
 		site       string
 	}
 

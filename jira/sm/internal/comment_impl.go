@@ -44,7 +44,7 @@ func (s *CommentService) Gets(ctx context.Context, issueKeyOrID string, options 
 
 // Get returns details of a customer request's comment.
 //
-// GET /rest/servicedeskapi/request/{issueKeyOrID}/comment/{commentId}
+// GET /rest/servicedeskapi/request/{issueKeyOrID}/comment/{commentID}
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request/comments#get-request-comment-by-id
 func (s *CommentService) Get(ctx context.Context, issueKeyOrID string, commentID int, expand []string) (*model.RequestCommentScheme, *model.ResponseScheme, error) {
@@ -62,7 +62,7 @@ func (s *CommentService) Create(ctx context.Context, issueKeyOrID, body string, 
 
 // Attachments  returns the attachments referenced in a comment.
 //
-// GET /rest/servicedeskapi/request/{issueKeyOrID}/comment/{commentId}/attachment
+// GET /rest/servicedeskapi/request/{issueKeyOrID}/comment/{commentID}/attachment
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request/comments#get-comment-attachments
 func (s *CommentService) Attachments(ctx context.Context, issueKeyOrID string, commentID, start, limit int) (*model.RequestAttachmentPageScheme, *model.ResponseScheme, error) {

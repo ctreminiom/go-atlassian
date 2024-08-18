@@ -22,7 +22,7 @@ type CommentConnector interface {
 
 	// Get returns details of a customer request's comment.
 	//
-	// GET /rest/servicedeskapi/request/{issueKeyOrID}/comment/{commentId}
+	// GET /rest/servicedeskapi/request/{issueKeyOrID}/comment/{commentID}
 	//
 	// https://docs.go-atlassian.io/jira-service-management-cloud/request/comments#get-request-comment-by-id
 	Get(ctx context.Context, issueKeyOrID string, commentID int, expand []string) (*model.RequestCommentScheme, *model.ResponseScheme, error)
@@ -36,7 +36,7 @@ type CommentConnector interface {
 
 	// Attachments  returns the attachments referenced in a comment.
 	//
-	// GET /rest/servicedeskapi/request/{issueKeyOrID}/comment/{commentId}/attachment
+	// GET /rest/servicedeskapi/request/{issueKeyOrID}/comment/{commentID}/attachment
 	//
 	// https://docs.go-atlassian.io/jira-service-management-cloud/request/comments#get-comment-attachments
 	Attachments(ctx context.Context, issueKeyOrID string, commentID, start, limit int) (*model.RequestAttachmentPageScheme, *model.ResponseScheme, error)

@@ -234,7 +234,7 @@ type WorkflowSchemeConnector interface {
 	// GET /rest/api/{2-3}/workflowscheme/project
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/workflow/scheme#get-workflow-schemes-associations
-	Associations(ctx context.Context, projectIds []int) (*model.WorkflowSchemeAssociationPageScheme, *model.ResponseScheme, error)
+	Associations(ctx context.Context, projectIDs []int) (*model.WorkflowSchemeAssociationPageScheme, *model.ResponseScheme, error)
 
 	// Assign assigns a workflow scheme to a project.
 	//

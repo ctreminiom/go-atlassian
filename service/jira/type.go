@@ -24,36 +24,36 @@ type TypeConnector interface {
 
 	// Get returns an issue type.
 	//
-	// GET /rest/api/{2-3}/issuetype/{id}
+	// GET /rest/api/{2-3}/issuetype/{issueTypeID}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/type#get-issue-type
-	Get(ctx context.Context, issueTypeId string) (*model.IssueTypeScheme, *model.ResponseScheme, error)
+	Get(ctx context.Context, issueTypeID string) (*model.IssueTypeScheme, *model.ResponseScheme, error)
 
 	// Update updates the issue type.
 	//
-	// PUT /rest/api/{2-3}/issuetype/{id}
+	// PUT /rest/api/{2-3}/issuetype/{issueTypeID}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/type#update-issue-type
-	Update(ctx context.Context, issueTypeId string, payload *model.IssueTypePayloadScheme) (*model.IssueTypeScheme, *model.ResponseScheme, error)
+	Update(ctx context.Context, issueTypeID string, payload *model.IssueTypePayloadScheme) (*model.IssueTypeScheme, *model.ResponseScheme, error)
 
 	// Delete deletes the issue type.
 	//
 	// If the issue type is in use, all uses are updated with the alternative issue type (alternativeIssueTypeId).
 	// A list of alternative issue types are obtained from the Get alternative issue types resource.
 	//
-	// DELETE /rest/api/{2-3}/issuetype/{id}
+	// DELETE /rest/api/{2-3}/issuetype/{issueTypeID}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/type#delete-issue-type
-	Delete(ctx context.Context, issueTypeId string) (*model.ResponseScheme, error)
+	Delete(ctx context.Context, issueTypeID string) (*model.ResponseScheme, error)
 
 	// Alternatives returns a list of issue types that can be used to replace the issue type.
 	//
 	// The alternative issue types are those assigned to the same workflow scheme, field configuration scheme, and screen scheme.
 	//
-	// GET /rest/api/{2-3}/issuetype/{id}/alternatives
+	// GET /rest/api/{2-3}/issuetype/{issueTypeID}/alternatives
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/type#get-alternative-issue-types
-	Alternatives(ctx context.Context, issueTypeId string) ([]*model.IssueTypeScheme, *model.ResponseScheme, error)
+	Alternatives(ctx context.Context, issueTypeID string) ([]*model.IssueTypeScheme, *model.ResponseScheme, error)
 }
 
 type TypeSchemeConnector interface {
@@ -84,7 +84,7 @@ type TypeSchemeConnector interface {
 	// GET /rest/api/{2-3}/issuetypescheme/project
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/types/scheme#get-issue-type-schemes-for-projects
-	Projects(ctx context.Context, projectIds []int, startAt, maxResults int) (*model.ProjectIssueTypeSchemePageScheme, *model.ResponseScheme, error)
+	Projects(ctx context.Context, projectIDs []int, startAt, maxResults int) (*model.ProjectIssueTypeSchemePageScheme, *model.ResponseScheme, error)
 
 	// Assign assigns an issue type scheme to a project.
 	//
@@ -120,7 +120,7 @@ type TypeSchemeConnector interface {
 	// PUT /rest/api/{2-3}/issuetypescheme/{issueTypeSchemeId}/issuetype
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/types/scheme#add-issue-types-to-issue-type-scheme
-	Append(ctx context.Context, issueTypeSchemeId int, issueTypeIds []int) (*model.ResponseScheme, error)
+	Append(ctx context.Context, issueTypeSchemeId int, issueTypeIDs []int) (*model.ResponseScheme, error)
 
 	// Remove removes an issue type from an issue type scheme, this operation cannot remove:
 	//
@@ -130,11 +130,11 @@ type TypeSchemeConnector interface {
 	//
 	// 3.the last standard issue type from an issue type scheme.
 	//
-	// DELETE /rest/api/{2-3}/issuetypescheme/{issueTypeSchemeId}/issuetype/{issueTypeId}
+	// DELETE /rest/api/{2-3}/issuetypescheme/{issueTypeSchemeId}/issuetype/{issueTypeID}
 	//
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/types/scheme#remove-issue-type-from-issue-type-scheme
-	Remove(ctx context.Context, issueTypeSchemeId, issueTypeId int) (*model.ResponseScheme, error)
+	Remove(ctx context.Context, issueTypeSchemeId, issueTypeID int) (*model.ResponseScheme, error)
 }
 
 type TypeScreenSchemeConnector interface {
@@ -179,7 +179,7 @@ type TypeScreenSchemeConnector interface {
 	// GET /rest/api/{2-3}/issuetypescreenscheme/mapping
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/types/screen-scheme#get-issue-type-screen-scheme-items
-	Mapping(ctx context.Context, issueTypeScreenSchemeIds []int, startAt, maxResults int) (*model.IssueTypeScreenSchemeMappingScheme, *model.ResponseScheme, error)
+	Mapping(ctx context.Context, issueTypeScreenSchemeIDs []int, startAt, maxResults int) (*model.IssueTypeScreenSchemeMappingScheme, *model.ResponseScheme, error)
 
 	// Update updates an issue type screen scheme.
 	//
@@ -215,7 +215,7 @@ type TypeScreenSchemeConnector interface {
 	// POST /rest/api/{2-3}/issuetypescreenscheme/{issueTypeScreenSchemeID}/mapping/remove
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/types/screen-scheme#remove-mappings-from-issue-type-screen-scheme
-	Remove(ctx context.Context, issueTypeScreenSchemeID string, issueTypeIds []string) (*model.ResponseScheme, error)
+	Remove(ctx context.Context, issueTypeScreenSchemeID string, issueTypeIDs []string) (*model.ResponseScheme, error)
 
 	// SchemesByProject returns a paginated list of projects associated with an issue type screen scheme.
 	//

@@ -159,7 +159,7 @@ func Test_internalRichTextCommentImpl_Get(t *testing.T) {
 
 	type args struct {
 		ctx                     context.Context
-		issueKeyOrID, commentId string
+		issueKeyOrID, commentID string
 	}
 
 	testCases := []struct {
@@ -176,7 +176,7 @@ func Test_internalRichTextCommentImpl_Get(t *testing.T) {
 			args: args{
 				ctx:          context.Background(),
 				issueKeyOrID: "DUMMY-1",
-				commentId:    "10001",
+				commentID:    "10001",
 			},
 			on: func(fields *fields) {
 
@@ -230,7 +230,7 @@ func Test_internalRichTextCommentImpl_Get(t *testing.T) {
 			args: args{
 				ctx:          context.Background(),
 				issueKeyOrID: "DUMMY-1",
-				commentId:    "10001",
+				commentID:    "10001",
 			},
 			on: func(fields *fields) {
 
@@ -262,7 +262,7 @@ func Test_internalRichTextCommentImpl_Get(t *testing.T) {
 			_, commentService, err := NewCommentService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := commentService.Get(testCase.args.ctx, testCase.args.issueKeyOrID, testCase.args.commentId)
+			gotResult, gotResponse, err := commentService.Get(testCase.args.ctx, testCase.args.issueKeyOrID, testCase.args.commentID)
 
 			if testCase.wantErr {
 
@@ -292,7 +292,7 @@ func Test_internalRichTextCommentImpl_Delete(t *testing.T) {
 
 	type args struct {
 		ctx                     context.Context
-		issueKeyOrID, commentId string
+		issueKeyOrID, commentID string
 	}
 
 	testCases := []struct {
@@ -309,7 +309,7 @@ func Test_internalRichTextCommentImpl_Delete(t *testing.T) {
 			args: args{
 				ctx:          context.Background(),
 				issueKeyOrID: "DUMMY-1",
-				commentId:    "10001",
+				commentID:    "10001",
 			},
 			on: func(fields *fields) {
 
@@ -363,7 +363,7 @@ func Test_internalRichTextCommentImpl_Delete(t *testing.T) {
 			args: args{
 				ctx:          context.Background(),
 				issueKeyOrID: "DUMMY-1",
-				commentId:    "10001",
+				commentID:    "10001",
 			},
 			on: func(fields *fields) {
 
@@ -395,7 +395,7 @@ func Test_internalRichTextCommentImpl_Delete(t *testing.T) {
 			_, commentService, err := NewCommentService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResponse, err := commentService.Delete(testCase.args.ctx, testCase.args.issueKeyOrID, testCase.args.commentId)
+			gotResponse, err := commentService.Delete(testCase.args.ctx, testCase.args.issueKeyOrID, testCase.args.commentID)
 
 			if testCase.wantErr {
 

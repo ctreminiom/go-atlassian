@@ -3,16 +3,18 @@ package assets
 import (
 	"bytes"
 	"context"
-	"github.com/ctreminiom/go-atlassian/assets/internal"
-	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/service/common"
-	"github.com/ctreminiom/go-atlassian/service/mocks"
-	"github.com/stretchr/testify/assert"
 	"io"
 	"net/http"
 	"net/url"
 	"strings"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
+
+	"github.com/ctreminiom/go-atlassian/assets/internal"
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/service/common"
+	"github.com/ctreminiom/go-atlassian/service/mocks"
 )
 
 func TestClient_Call(t *testing.T) {
@@ -63,7 +65,7 @@ func TestClient_Call(t *testing.T) {
 	}
 
 	type fields struct {
-		HTTP common.HttpClient
+		HTTP common.HTTPClient
 		Site *url.URL
 		Auth common.Authentication
 	}
@@ -85,7 +87,7 @@ func TestClient_Call(t *testing.T) {
 			name: "when the parameters are correct",
 			on: func(fields *fields) {
 
-				client := mocks.NewHttpClient(t)
+				client := mocks.NewHTTPClient(t)
 
 				client.On("Do", (*http.Request)(nil)).
 					Return(expectedResponse, nil)
@@ -109,7 +111,7 @@ func TestClient_Call(t *testing.T) {
 			name: "when the response status is a bad request",
 			on: func(fields *fields) {
 
-				client := mocks.NewHttpClient(t)
+				client := mocks.NewHTTPClient(t)
 
 				client.On("Do", (*http.Request)(nil)).
 					Return(badRequestResponse, nil)
@@ -134,7 +136,7 @@ func TestClient_Call(t *testing.T) {
 			name: "when the response status is an internal service error",
 			on: func(fields *fields) {
 
-				client := mocks.NewHttpClient(t)
+				client := mocks.NewHTTPClient(t)
 
 				client.On("Do", (*http.Request)(nil)).
 					Return(internalServerResponse, nil)
@@ -159,7 +161,7 @@ func TestClient_Call(t *testing.T) {
 			name: "when the response status is a not found",
 			on: func(fields *fields) {
 
-				client := mocks.NewHttpClient(t)
+				client := mocks.NewHTTPClient(t)
 
 				client.On("Do", (*http.Request)(nil)).
 					Return(notFoundResponse, nil)
@@ -184,7 +186,7 @@ func TestClient_Call(t *testing.T) {
 			name: "when the response status is unauthorized",
 			on: func(fields *fields) {
 
-				client := mocks.NewHttpClient(t)
+				client := mocks.NewHTTPClient(t)
 
 				client.On("Do", (*http.Request)(nil)).
 					Return(unauthorizedResponse, nil)
@@ -261,17 +263,17 @@ func TestClient_NewRequest(t *testing.T) {
 	requestMocked.Header.Set("Content-Type", "application/json")
 
 	type fields struct {
-		HTTP common.HttpClient
+		HTTP common.HTTPClient
 		Auth common.Authentication
 		Site *url.URL
 	}
 
 	type args struct {
-		ctx    context.Context
-		method string
-		urlStr string
-		type_  string
-		body   interface{}
+		ctx         context.Context
+		method      string
+		urlStr      string
+		contentType string
+		body        interface{}
 	}
 
 	testCases := []struct {
@@ -289,11 +291,11 @@ func TestClient_NewRequest(t *testing.T) {
 				Site: siteAsURL,
 			},
 			args: args{
-				ctx:    context.Background(),
-				method: http.MethodGet,
-				urlStr: "rest/2/issue/attachment",
-				type_:  "",
-				body:   bytes.NewReader([]byte("Hello World")),
+				ctx:         context.Background(),
+				method:      http.MethodGet,
+				urlStr:      "rest/2/issue/attachment",
+				contentType: "",
+				body:        bytes.NewReader([]byte("Hello World")),
 			},
 			want:    requestMocked,
 			wantErr: false,
@@ -347,7 +349,7 @@ func TestClient_NewRequest(t *testing.T) {
 				testCase.args.ctx,
 				testCase.args.method,
 				testCase.args.urlStr,
-				testCase.args.type_,
+				testCase.args.contentType,
 				testCase.args.body,
 			)
 
@@ -387,7 +389,7 @@ func TestClient_processResponse(t *testing.T) {
 	}
 
 	type fields struct {
-		HTTP           common.HttpClient
+		HTTP           common.HTTPClient
 		Site           *url.URL
 		Authentication common.Authentication
 	}
@@ -468,7 +470,7 @@ func TestNew(t *testing.T) {
 	mockClientWithOutClient.Auth.SetUserAgent("aaa")
 
 	type args struct {
-		httpClient common.HttpClient
+		httpClient common.HTTPClient
 		site       string
 	}
 

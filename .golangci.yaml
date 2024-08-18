@@ -1,0 +1,21 @@
+run:
+  concurrency: 4
+  timeout: 20m
+  tests: false
+  # This gives us the ability to efficiently skip whole files by using "//go:build !codeanalysis" at the top of a file.
+  build-tags:
+    - codeanalysis
+
+linters:
+  enable:
+    - revive
+
+linters-settings:
+  revive:
+
+issues:
+  max-issues-per-linter: 0
+  max-same-issues: 0
+
+severity:
+  default-severity: critical

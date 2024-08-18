@@ -17,7 +17,7 @@ import (
 
 const ApiVersion = "3"
 
-func New(httpClient common.HttpClient, site string) (*Client, error) {
+func New(httpClient common.HTTPClient, site string) (*Client, error) {
 
 	if httpClient == nil {
 		httpClient = http.DefaultClient
@@ -397,7 +397,7 @@ func New(httpClient common.HttpClient, site string) (*Client, error) {
 }
 
 type Client struct {
-	HTTP               common.HttpClient
+	HTTP               common.HTTPClient
 	Auth               common.Authentication
 	Site               *url.URL
 	Audit              *internal.AuditRecordService

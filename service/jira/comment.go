@@ -21,7 +21,7 @@ type CommentRichTextConnector interface {
 	// GET /rest/api/{2-3}/issue/{issueKeyOrID}/comment/{id}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/comments#get-comment
-	Get(ctx context.Context, issueKeyOrID, commentId string) (*model.IssueCommentSchemeV2, *model.ResponseScheme, error)
+	Get(ctx context.Context, issueKeyOrID, commentID string) (*model.IssueCommentSchemeV2, *model.ResponseScheme, error)
 
 	// Add adds a comment to an issue.
 	//
@@ -46,7 +46,7 @@ type CommentADFConnector interface {
 	// GET /rest/api/{2-3}/issue/{issueKeyOrID}/comment/{id}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/comments#get-comment
-	Get(ctx context.Context, issueKeyOrID, commentId string) (*model.IssueCommentScheme, *model.ResponseScheme, error)
+	Get(ctx context.Context, issueKeyOrID, commentID string) (*model.IssueCommentScheme, *model.ResponseScheme, error)
 
 	// Add adds a comment to an issue.
 	//
@@ -63,5 +63,5 @@ type CommentSharedConnector interface {
 	// DELETE /rest/api/{2-3}/issue/{issueKeyOrID}/comment/{id}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/comments#delete-comment
-	Delete(ctx context.Context, issueKeyOrID, commentId string) (*model.ResponseScheme, error)
+	Delete(ctx context.Context, issueKeyOrID, commentID string) (*model.ResponseScheme, error)
 }

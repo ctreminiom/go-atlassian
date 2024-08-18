@@ -21,11 +21,11 @@ type CommentRichTextService struct {
 
 // Delete deletes a comment.
 //
-// DELETE /rest/api/{2-3}/issue/{issueKeyOrID}/comment/{id}
+// DELETE /rest/api/{2-3}/issue/{issueKeyOrID}/comment/{commentID}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/comments#delete-comment
-func (c *CommentRichTextService) Delete(ctx context.Context, issueKeyOrID, commentId string) (*model.ResponseScheme, error) {
-	return c.internalClient.Delete(ctx, issueKeyOrID, commentId)
+func (c *CommentRichTextService) Delete(ctx context.Context, issueKeyOrID, commentID string) (*model.ResponseScheme, error) {
+	return c.internalClient.Delete(ctx, issueKeyOrID, commentID)
 }
 
 // Gets returns all comments for an issue.
@@ -39,11 +39,11 @@ func (c *CommentRichTextService) Gets(ctx context.Context, issueKeyOrID, orderBy
 
 // Get returns a comment.
 //
-// GET /rest/api/{2-3}/issue/{issueKeyOrID}/comment/{id}
+// GET /rest/api/{2-3}/issue/{issueKeyOrID}/comment/{commentID}
 //
 // TODO: The documentation needs to be created, raise a ticket here: https://github.com/ctreminiom/go-atlassian/issues
-func (c *CommentRichTextService) Get(ctx context.Context, issueKeyOrID, commentId string) (*model.IssueCommentSchemeV2, *model.ResponseScheme, error) {
-	return c.internalClient.Get(ctx, issueKeyOrID, commentId)
+func (c *CommentRichTextService) Get(ctx context.Context, issueKeyOrID, commentID string) (*model.IssueCommentSchemeV2, *model.ResponseScheme, error) {
+	return c.internalClient.Get(ctx, issueKeyOrID, commentID)
 }
 
 // Add adds a comment to an issue.

@@ -4,19 +4,20 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"github.com/ctreminiom/go-atlassian/assets/internal"
-	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/service/common"
 	"io"
 	"net/http"
 	"net/url"
+
+	"github.com/ctreminiom/go-atlassian/assets/internal"
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/service/common"
 )
 
 const DefaultAssetsSite = "https://api.atlassian.com/"
 
 // New creates a new instance of Client.
-// It takes a common.HttpClient and a site URL as inputs and returns a pointer to Client and an error.
-func New(httpClient common.HttpClient, site string) (*Client, error) {
+// It takes a common.HTTPClient and a site URL as inputs and returns a pointer to Client and an error.
+func New(httpClient common.HTTPClient, site string) (*Client, error) {
 
 	// If no HTTP client is provided, use the default HTTP client.
 	if httpClient == nil {
@@ -57,7 +58,7 @@ func New(httpClient common.HttpClient, site string) (*Client, error) {
 // Client represents a client for interacting with the Atlassian Assets API.
 type Client struct {
 	// HTTP is the HTTP client used for making requests.
-	HTTP common.HttpClient
+	HTTP common.HTTPClient
 	// Site is the base URL for the API.
 	Site *url.URL
 	// Auth is the authentication service.
@@ -78,7 +79,7 @@ type Client struct {
 
 // NewRequest creates a new HTTP request with the given context, method, URL string, content type, and body.
 // It returns an HTTP request and an error.
-func (c *Client) NewRequest(ctx context.Context, method, urlStr, type_ string, body interface{}) (*http.Request, error) {
+func (c *Client) NewRequest(ctx context.Context, method, urlStr, contentType string, body interface{}) (*http.Request, error) {
 
 	// Parse the relative URL.
 	rel, err := url.Parse(urlStr)
@@ -105,12 +106,12 @@ func (c *Client) NewRequest(ctx context.Context, method, urlStr, type_ string, b
 	req.Header.Set("Accept", "application/json")
 
 	// Set the Content-Type header if a body is provided.
-	if body != nil && type_ == "" {
+	if body != nil && contentType == "" {
 		req.Header.Set("Content-Type", "application/json")
 	}
 
-	if body != nil && type_ != "" {
-		req.Header.Set("Content-Type", type_)
+	if body != nil && contentType != "" {
+		req.Header.Set("Content-Type", contentType)
 	}
 
 	// Add the Basic Authentication header if available.

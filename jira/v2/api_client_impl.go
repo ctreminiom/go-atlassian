@@ -173,7 +173,7 @@ func New(httpClient common.HTTPClient, site string) (*Client, error) {
 		return nil, err
 	}
 
-	type_, err := internal.NewTypeService(client, APIVersion, typeScheme, issueTypeScreenScheme)
+	typ, err := internal.NewTypeService(client, APIVersion, typeScheme, issueTypeScreenScheme)
 	if err != nil {
 		return nil, err
 	}
@@ -208,7 +208,7 @@ func New(httpClient common.HTTPClient, site string) (*Client, error) {
 		Priority:        priority,
 		Resolution:      resolution,
 		SearchRT:        search,
-		Type:            type_,
+		Type:            typ,
 		Vote:            vote,
 		Watcher:         watcher,
 		WorklogRichText: worklog,
@@ -421,7 +421,7 @@ type Client struct {
 	Team               *internal.TeamService
 }
 
-func (c *Client) NewRequest(ctx context.Context, method, urlStr, type_ string, body interface{}) (*http.Request, error) {
+func (c *Client) NewRequest(ctx context.Context, method, urlStr, contentType string, body interface{}) (*http.Request, error) {
 
 	rel, err := url.Parse(urlStr)
 	if err != nil {
@@ -454,9 +454,9 @@ func (c *Client) NewRequest(ctx context.Context, method, urlStr, type_ string, b
 		req.Header.Set("Content-Type", "application/json")
 	}
 
-	if type_ != "" {
-		// When the type_ is provided, it means the request needs to be created to handle files
-		req.Header.Set("Content-Type", type_)
+	if contentType != "" {
+		// When the contentType is provided, it means the request needs to be created to handle files
+		req.Header.Set("Content-Type", contentType)
 		req.Header.Set("X-Atlassian-Token", "no-check")
 	}
 

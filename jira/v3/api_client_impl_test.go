@@ -271,11 +271,11 @@ func TestClient_NewRequest(t *testing.T) {
 	}
 
 	type args struct {
-		ctx    context.Context
-		method string
-		urlStr string
-		type_  string
-		body   interface{}
+		ctx         context.Context
+		method      string
+		urlStr      string
+		contentType string
+		body        interface{}
 	}
 
 	testCases := []struct {
@@ -293,11 +293,11 @@ func TestClient_NewRequest(t *testing.T) {
 				Site: siteAsURL,
 			},
 			args: args{
-				ctx:    context.Background(),
-				method: http.MethodGet,
-				urlStr: "rest/2/issue/attachment",
-				type_:  "",
-				body:   bytes.NewReader([]byte("Hello World")),
+				ctx:         context.Background(),
+				method:      http.MethodGet,
+				urlStr:      "rest/2/issue/attachment",
+				contentType: "",
+				body:        bytes.NewReader([]byte("Hello World")),
 			},
 			want:    requestMocked,
 			wantErr: false,
@@ -328,11 +328,11 @@ func TestClient_NewRequest(t *testing.T) {
 				Site: siteAsURL,
 			},
 			args: args{
-				ctx:    context.Background(),
-				method: http.MethodGet,
-				urlStr: "rest/2/issue/attachment",
-				type_:  "type_sample",
-				body:   bytes.NewReader([]byte("Hello World")),
+				ctx:         context.Background(),
+				method:      http.MethodGet,
+				urlStr:      "rest/2/issue/attachment",
+				contentType: "type_sample",
+				body:        bytes.NewReader([]byte("Hello World")),
 			},
 			want:    requestMocked,
 			wantErr: false,
@@ -369,7 +369,7 @@ func TestClient_NewRequest(t *testing.T) {
 				testCase.args.ctx,
 				testCase.args.method,
 				testCase.args.urlStr,
-				testCase.args.type_,
+				testCase.args.contentType,
 				testCase.args.body,
 			)
 

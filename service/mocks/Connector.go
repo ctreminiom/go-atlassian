@@ -42,17 +42,17 @@ func (_m *Connector) Call(request *http.Request, structure interface{}) (*models
 	return r0, r1
 }
 
-// NewRequest provides a mock function with given fields: ctx, method, urlStr, type_, body
-func (_m *Connector) NewRequest(ctx context.Context, method string, urlStr string, type_ string, body interface{}) (*http.Request, error) {
-	ret := _m.Called(ctx, method, urlStr, type_, body)
+// NewRequest provides a mock function with given fields: ctx, method, urlStr, contentType, body
+func (_m *Connector) NewRequest(ctx context.Context, method string, urlStr string, contentType string, body interface{}) (*http.Request, error) {
+	ret := _m.Called(ctx, method, urlStr, contentType, body)
 
 	var r0 *http.Request
 	var r1 error
 	if rf, ok := ret.Get(0).(func(context.Context, string, string, string, interface{}) (*http.Request, error)); ok {
-		return rf(ctx, method, urlStr, type_, body)
+		return rf(ctx, method, urlStr, contentType, body)
 	}
 	if rf, ok := ret.Get(0).(func(context.Context, string, string, string, interface{}) *http.Request); ok {
-		r0 = rf(ctx, method, urlStr, type_, body)
+		r0 = rf(ctx, method, urlStr, contentType, body)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*http.Request)
@@ -60,7 +60,7 @@ func (_m *Connector) NewRequest(ctx context.Context, method string, urlStr strin
 	}
 
 	if rf, ok := ret.Get(1).(func(context.Context, string, string, string, interface{}) error); ok {
-		r1 = rf(ctx, method, urlStr, type_, body)
+		r1 = rf(ctx, method, urlStr, contentType, body)
 	} else {
 		r1 = ret.Error(1)
 	}

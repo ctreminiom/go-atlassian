@@ -165,13 +165,13 @@ func (i *internalTypeImpl) Create(ctx context.Context, serviceDeskID int, payloa
 		return nil, nil, err
 	}
 
-	type_ := new(model.RequestTypeScheme)
-	res, err := i.c.Call(req, type_)
+	requestType := new(model.RequestTypeScheme)
+	res, err := i.c.Call(req, requestType)
 	if err != nil {
 		return nil, res, err
 	}
 
-	return type_, res, nil
+	return requestType, res, nil
 }
 
 func (i *internalTypeImpl) Get(ctx context.Context, serviceDeskID, requestTypeID int) (*model.RequestTypeScheme, *model.ResponseScheme, error) {
@@ -191,13 +191,13 @@ func (i *internalTypeImpl) Get(ctx context.Context, serviceDeskID, requestTypeID
 		return nil, nil, err
 	}
 
-	type_ := new(model.RequestTypeScheme)
-	res, err := i.c.Call(req, type_)
+	requestType := new(model.RequestTypeScheme)
+	res, err := i.c.Call(req, requestType)
 	if err != nil {
 		return nil, res, err
 	}
 
-	return type_, res, nil
+	return requestType, res, nil
 }
 
 func (i *internalTypeImpl) Delete(ctx context.Context, serviceDeskID, requestTypeID int) (*model.ResponseScheme, error) {

@@ -2,6 +2,7 @@ package confluence
 
 import (
 	"context"
+
 	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
 )
 
@@ -12,7 +13,7 @@ type CustomContentConnector interface {
 	// GET /wiki/api/v2/custom-content
 	//
 	// https://docs.go-atlassian.io/confluence-cloud/v2/custom-content#get-custom-content-by-type
-	Gets(ctx context.Context, type_ string, options *models.CustomContentOptionsScheme, cursor string, limit int) (
+	Gets(ctx context.Context, typ string, options *models.CustomContentOptionsScheme, cursor string, limit int) (
 		*models.CustomContentPageScheme, *models.ResponseScheme, error)
 
 	// Create creates a new custom content in the given space, page, blogpost or other custom content.

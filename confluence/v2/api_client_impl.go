@@ -92,7 +92,7 @@ func (c *Client) NewRequest(ctx context.Context, method, urlStr, contentType str
 	}
 
 	if contentType != "" {
-		// When the type_ is provided, it means the request needs to be created to handle files
+		// When the contentType is provided, it means the request needs to be created to handle files
 		req.Header.Set("Content-Type", contentType)
 		req.Header.Set("X-Atlassian-Token", "no-check")
 	}

@@ -14,7 +14,7 @@ import (
 	"github.com/ctreminiom/go-atlassian/service/common"
 )
 
-const defaultApiEndpoint = "https://api.atlassian.com/"
+const defaultAPIEndpoint = "https://api.atlassian.com/"
 
 // New creates a new instance of Client.
 // It takes a common.HTTPClient as input and returns a pointer to Client and an error.
@@ -26,7 +26,7 @@ func New(httpClient common.HTTPClient) (*Client, error) {
 	}
 
 	// Parse the default API endpoint URL.
-	u, err := url.Parse(defaultApiEndpoint)
+	u, err := url.Parse(defaultAPIEndpoint)
 	if err != nil {
 		return nil, err
 	}

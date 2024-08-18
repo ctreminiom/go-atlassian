@@ -91,14 +91,14 @@ type TypeSchemeConnector interface {
 	// PUT /rest/api/{2-3}/issuetypescheme/project
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/types/scheme#assign-issue-type-scheme-to-project
-	Assign(ctx context.Context, issueTypeSchemeId, projectID string) (*model.ResponseScheme, error)
+	Assign(ctx context.Context, issueTypeSchemeID, projectID string) (*model.ResponseScheme, error)
 
 	// Update updates an issue type scheme.
 	//
-	// PUT /rest/api/{2-3}/issuetypescheme/{issueTypeSchemeId}
+	// PUT /rest/api/{2-3}/issuetypescheme/{issueTypeSchemeID}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/types/scheme#update-issue-type-scheme
-	Update(ctx context.Context, issueTypeSchemeId int, payload *model.IssueTypeSchemePayloadScheme) (*model.ResponseScheme, error)
+	Update(ctx context.Context, issueTypeSchemeID int, payload *model.IssueTypeSchemePayloadScheme) (*model.ResponseScheme, error)
 
 	// Delete deletes an issue type scheme.
 	//
@@ -106,10 +106,10 @@ type TypeSchemeConnector interface {
 	//
 	// 2.Any projects assigned to the scheme are reassigned to the default issue type scheme.
 	//
-	// DELETE /rest/api/{2-3}/issuetypescheme/{issueTypeSchemeId}
+	// DELETE /rest/api/{2-3}/issuetypescheme/{issueTypeSchemeID}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/types/scheme#delete-issue-type-scheme
-	Delete(ctx context.Context, issueTypeSchemeId int) (*model.ResponseScheme, error)
+	Delete(ctx context.Context, issueTypeSchemeID int) (*model.ResponseScheme, error)
 
 	// Append adds issue types to an issue type scheme.
 	//
@@ -117,10 +117,10 @@ type TypeSchemeConnector interface {
 	//
 	// 2.If any of the issue types exist in the issue type scheme, the operation fails and no issue types are added.
 	//
-	// PUT /rest/api/{2-3}/issuetypescheme/{issueTypeSchemeId}/issuetype
+	// PUT /rest/api/{2-3}/issuetypescheme/{issueTypeSchemeID}/issuetype
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/types/scheme#add-issue-types-to-issue-type-scheme
-	Append(ctx context.Context, issueTypeSchemeId int, issueTypeIDs []int) (*model.ResponseScheme, error)
+	Append(ctx context.Context, issueTypeSchemeID int, issueTypeIDs []int) (*model.ResponseScheme, error)
 
 	// Remove removes an issue type from an issue type scheme, this operation cannot remove:
 	//
@@ -130,11 +130,11 @@ type TypeSchemeConnector interface {
 	//
 	// 3.the last standard issue type from an issue type scheme.
 	//
-	// DELETE /rest/api/{2-3}/issuetypescheme/{issueTypeSchemeId}/issuetype/{issueTypeID}
+	// DELETE /rest/api/{2-3}/issuetypescheme/{issueTypeSchemeID}/issuetype/{issueTypeID}
 	//
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/types/scheme#remove-issue-type-from-issue-type-scheme
-	Remove(ctx context.Context, issueTypeSchemeId, issueTypeID int) (*model.ResponseScheme, error)
+	Remove(ctx context.Context, issueTypeSchemeID, issueTypeID int) (*model.ResponseScheme, error)
 }
 
 type TypeScreenSchemeConnector interface {

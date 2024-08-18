@@ -15,8 +15,12 @@ import (
 	"github.com/ctreminiom/go-atlassian/service/common"
 )
 
+// APIVersion is the version of the Jira API that this client targets.
 const APIVersion = "2"
 
+// New creates a new Jira API client.
+// If a nil httpClient is provided, http.DefaultClient will be used.
+// If the site is empty, an error will be returned.
 func New(httpClient common.HTTPClient, site string) (*Client, error) {
 
 	if httpClient == nil {
@@ -421,6 +425,7 @@ type Client struct {
 	Team               *internal.TeamService
 }
 
+// NewRequest creates an API request.
 func (c *Client) NewRequest(ctx context.Context, method, urlStr, contentType string, body interface{}) (*http.Request, error) {
 
 	rel, err := url.Parse(urlStr)

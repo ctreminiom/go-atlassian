@@ -49,7 +49,7 @@ type GroupConnector interface {
 	// DELETE /rest/api/{2-3}/group/user
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/groups#remove-user-from-group
-	Remove(ctx context.Context, groupName, accountId string) (*model.ResponseScheme, error)
+	Remove(ctx context.Context, groupName, accountID string) (*model.ResponseScheme, error)
 
 	// TODO: GET /rest/api/3/groups/picker needs to be parsed
 }

@@ -2,6 +2,7 @@ package admin
 
 import (
 	"context"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 )
 
@@ -19,56 +20,56 @@ type SCIMUserConnector interface {
 	//
 	// the user in your identity provider is linked to the user in your Atlassian organization.
 	//
-	// POST /scim/directory/{directoryId}/Users
+	// POST /scim/directory/{directoryID}/Users
 	//
 	// https://docs.go-atlassian.io/atlassian-admin-cloud/scim/users#create-a-user
 	Create(ctx context.Context, directoryID string, payload *model.SCIMUserScheme, attributes, excludedAttributes []string) (*model.SCIMUserScheme, *model.ResponseScheme, error)
 
 	// Gets get users from the specified directory.
 	//
-	// Filtering is supported with a single exact match (eq) against the userName and externalId attributes.
+	// Filtering is supported with a single exact match (eq) against the userName and external id attributes.
 	//
 	// Pagination is supported.
 	//
 	// Sorting is not supported.
 	//
-	// GET /scim/directory/{directoryId}/Users
+	// GET /scim/directory/{directoryID}/Users
 	//
 	// https://docs.go-atlassian.io/atlassian-admin-cloud/scim/users#get-users
 	Gets(ctx context.Context, directoryID string, opts *model.SCIMUserGetsOptionsScheme, startIndex, count int) (*model.SCIMUserPageScheme, *model.ResponseScheme, error)
 
-	// Get gets a user from a directory by userId.
+	// Get gets a user from a directory by user id.
 	//
-	// GET /scim/directory/{directoryId}/Users/{userId}
+	// GET /scim/directory/{directoryID}/Users/{userID}
 	//
 	// https://docs.go-atlassian.io/atlassian-admin-cloud/scim/users#get-a-user-by-id
 	Get(ctx context.Context, directoryID, userID string, attributes, excludedAttributes []string) (*model.SCIMUserScheme, *model.ResponseScheme, error)
 
-	// Deactivate deactivates a user by userId.
+	// Deactivate deactivates a user by user id.
 	//
 	// The user is not available for future requests until activated again.
 	//
 	// Any future operation for the deactivated user returns the 404 (resource not found) error.
 	//
-	// DELETE /scim/directory/{directoryId}/Users/{userId}
+	// DELETE /scim/directory/{directoryID}/Users/{userID}
 	Deactivate(ctx context.Context, directoryID, userID string) (*model.ResponseScheme, error)
 
-	// Path updates a user's information in a directory by userId via PATCH.
+	// Path updates a user's information in a directory by user id via PATCH.
 	//
 	// Refer to GET /ServiceProviderConfig for details on the supported operations.
 	//
-	// PATCH /scim/directory/{directoryId}/Users/{userId}
+	// PATCH /scim/directory/{directoryID}/Users/{userID}
 	//
 	// https://docs.go-atlassian.io/atlassian-admin-cloud/scim/users#update-user-by-id-patch
 	Path(ctx context.Context, directoryID, userID string, payload *model.SCIMUserToPathScheme, attributes, excludedAttributes []string) (*model.SCIMUserScheme, *model.ResponseScheme, error)
 
-	// Update updates a user's information in a directory by userId via user attributes.
+	// Update updates a user's information in a directory by user id via user attributes.
 	//
 	// User information is replaced attribute-by-attribute, except immutable and read-only attributes.
 	//
 	// Existing values of unspecified attributes are cleaned.
 	//
-	// PUT /scim/directory/{directoryId}/Users/{userId}
+	// PUT /scim/directory/{directoryID}/Users/{userID}
 	//
 	// https://docs.go-atlassian.io/atlassian-admin-cloud/scim/users#update-user-via-user-attributes
 	Update(ctx context.Context, directoryID, userID string, payload *model.SCIMUserScheme, attributes, excludedAttributes []string) (*model.SCIMUserScheme, *model.ResponseScheme, error)

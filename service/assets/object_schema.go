@@ -2,6 +2,7 @@ package assets
 
 import (
 	"context"
+
 	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
 )
 
@@ -11,14 +12,14 @@ type ObjectSchemaConnector interface {
 
 	// List returns all the object schemas available on Assets
 	//
-	// GET /jsm/assets/workspace/{workspaceId}/v1/objectschema/list
+	// GET /jsm/assets/workspace/{workspaceID}/v1/objectschema/list
 	//
 	// https://docs.go-atlassian.io/jira-assets/object/schema#get-object-schema-list
 	List(ctx context.Context, workspaceID string) (*models.ObjectSchemaPageScheme, *models.ResponseScheme, error)
 
 	// Create creates a new object schema
 	//
-	// POST /jsm/assets/workspace/{workspaceId}/v1/objectschema/create
+	// POST /jsm/assets/workspace/{workspaceID}/v1/objectschema/create
 	//
 	// https://docs.go-atlassian.io/jira-assets/object/schema#create-object-schema
 	Create(ctx context.Context, workspaceID string, payload *models.ObjectSchemaPayloadScheme) (*models.ObjectSchemaScheme,
@@ -26,14 +27,14 @@ type ObjectSchemaConnector interface {
 
 	// Get returns an object schema by ID
 	//
-	// GET /jsm/assets/workspace/{workspaceId}/v1/objectschema/{id}
+	// GET /jsm/assets/workspace/{workspaceID}/v1/objectschema/{objectSchemaID}
 	//
 	// https://docs.go-atlassian.io/jira-assets/object/schema#get-object-schema
 	Get(ctx context.Context, workspaceID, objectSchemaID string) (*models.ObjectSchemaScheme, *models.ResponseScheme, error)
 
 	// Update updates an object schema
 	//
-	// PUT /jsm/assets/workspace/{workspaceId}/v1/objectschema/{id}
+	// PUT /jsm/assets/workspace/{workspaceID}/v1/objectschema/{objectSchemaID}
 	//
 	// https://docs.go-atlassian.io/jira-assets/object/schema#update-object-schema
 	Update(ctx context.Context, workspaceID, objectSchemaID string, payload *models.ObjectSchemaPayloadScheme) (
@@ -41,14 +42,14 @@ type ObjectSchemaConnector interface {
 
 	// Delete deletes a schema
 	//
-	// DELETE /jsm/assets/workspace/{workspaceId}/v1/objectschema/{id}
+	// DELETE /jsm/assets/workspace/{workspaceID}/v1/objectschema/{objectSchemaID}
 	//
 	// https://docs.go-atlassian.io/jira-assets/object/schema#delete-object-schema
 	Delete(ctx context.Context, workspaceID, objectSchemaID string) (*models.ObjectSchemaScheme, *models.ResponseScheme, error)
 
 	// Attributes finds all object type attributes for this object schema
 	//
-	// GET /jsm/assets/workspace/{workspaceId}/v1/objectschema/{id}/attributes
+	// GET /jsm/assets/workspace/{workspaceID}/v1/objectschema/{objectSchemaID}/attributes
 	//
 	// https://docs.go-atlassian.io/jira-assets/object/schema#get-object-schema-attributes
 	Attributes(ctx context.Context, workspaceID, objectSchemaID string, options *models.ObjectSchemaAttributesParamsScheme) (
@@ -56,7 +57,7 @@ type ObjectSchemaConnector interface {
 
 	// ObjectTypes returns all object types for this object schema
 	//
-	// GET /jsm/assets/workspace/{workspaceId}/v1/objectschema/{id}/objecttypes
+	// GET /jsm/assets/workspace/{workspaceID}/v1/objectschema/{objectSchemaID}/objecttypes
 	//
 	// https://docs.go-atlassian.io/jira-assets/object/schema#get-object-schema-types
 	ObjectTypes(ctx context.Context, workspaceID, objectSchemaID string, excludeAbstract bool) (

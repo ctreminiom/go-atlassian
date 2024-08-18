@@ -2,6 +2,7 @@ package jira
 
 import (
 	"context"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 )
 
@@ -16,8 +17,8 @@ type PriorityConnector interface {
 
 	// Get returns an issue priority.
 	//
-	// GET /rest/api/{2-3}/priority/{id}
+	// GET /rest/api/{2-3}/priority/{priorityID}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/priorities#get-priority
-	Get(ctx context.Context, priorityId string) (*model.PriorityScheme, *model.ResponseScheme, error)
+	Get(ctx context.Context, priorityID string) (*model.PriorityScheme, *model.ResponseScheme, error)
 }

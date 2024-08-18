@@ -67,14 +67,14 @@ type NotificationSchemeConnector interface {
 
 	// Delete deletes a notification scheme.
 	//
-	// DELETE /rest/api/{2-3}/notificationscheme/{notificationSchemeId}
+	// DELETE /rest/api/{2-3}/notificationscheme/{schemeID}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/projects/notification-schemes#delete-notification-scheme
 	Delete(ctx context.Context, schemeID string) (*models.ResponseScheme, error)
 
 	// Remove removes a notification from a notification scheme.
 	//
-	// DELETE /rest/api/{2-3}/notificationscheme/{notificationSchemeId}/notification/{notificationId}
+	// DELETE /rest/api/{2-3}/notificationscheme/{schemeID}/notification/{notificationID}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/projects/notification-schemes#remove-notifications-to-scheme
 	Remove(ctx context.Context, schemeID, notificationID string) (*models.ResponseScheme, error)

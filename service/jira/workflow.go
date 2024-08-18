@@ -39,10 +39,10 @@ type WorkflowConnector interface {
 	// 3. associated with any workflow scheme.
 	// 4. associated with any draft workflow scheme.
 	//
-	// DELETE /rest/api/{2-3}/workflow/{entityId}
+	// DELETE /rest/api/{2-3}/workflow/{workflowID}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/workflow#search-workflows
-	Delete(ctx context.Context, workflowId string) (*model.ResponseScheme, error)
+	Delete(ctx context.Context, workflowID string) (*model.ResponseScheme, error)
 
 	// Search searches for workflows based on specified criteria.
 	//

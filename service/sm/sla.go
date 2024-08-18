@@ -19,7 +19,7 @@ type ServiceLevelAgreementConnector interface {
 
 	// Get returns the details for an SLA on a customer request.
 	//
-	// GET /rest/servicedeskapi/request/{issueKeyOrID}/sla/{slaMetricId}
+	// GET /rest/servicedeskapi/request/{issueKeyOrID}/sla/{metricID}
 	//
 	// https://docs.go-atlassian.io/jira-service-management-cloud/request/sla#get-sla-information-by-id
 	Get(ctx context.Context, issueKeyOrID string, metricID int) (*model.RequestSLAScheme, *model.ResponseScheme, error)

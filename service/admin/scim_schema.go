@@ -2,6 +2,7 @@ package admin
 
 import (
 	"context"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 )
 
@@ -13,7 +14,7 @@ type SCIMSchemaConnector interface {
 	//
 	// Filtering, pagination and sorting are not supported.
 	//
-	// GET /scim/directory/{directoryId}/Schemas
+	// GET /scim/directory/{directoryID}/Schemas
 	//
 	// https://docs.go-atlassian.io/atlassian-admin-cloud/scim/schemas#get-all-schemas
 	Gets(ctx context.Context, directoryID string) (*model.SCIMSchemasScheme, *model.ResponseScheme, error)
@@ -22,7 +23,7 @@ type SCIMSchemaConnector interface {
 	//
 	// Filtering, pagination and sorting are not supported.
 	//
-	// GET /scim/directory/{directoryId}/Schemas/urn:ietf:params:scim:schemas:core:2.0:Group
+	// GET /scim/directory/{directoryID}/Schemas/urn:ietf:params:scim:schemas:core:2.0:Group
 	//
 	// https://docs.go-atlassian.io/atlassian-admin-cloud/scim/schemas#get-group-schemas
 	Group(ctx context.Context, directoryID string) (*model.SCIMSchemaScheme, *model.ResponseScheme, error)
@@ -31,7 +32,7 @@ type SCIMSchemaConnector interface {
 	//
 	// Filtering, pagination and sorting are not supported.
 	//
-	// GET /scim/directory/{directoryId}/Schemas/urn:ietf:params:scim:schemas:core:2.0:User
+	// GET /scim/directory/{directoryID}/Schemas/urn:ietf:params:scim:schemas:core:2.0:User
 	//
 	// https://docs.go-atlassian.io/atlassian-admin-cloud/scim/schemas#get-user-schemas
 	User(ctx context.Context, directoryID string) (*model.SCIMSchemaScheme, *model.ResponseScheme, error)
@@ -40,7 +41,7 @@ type SCIMSchemaConnector interface {
 	//
 	// Filtering, pagination and sorting are not supported.
 	//
-	// GET /scim/directory/{directoryId}/Schemas/urn:ietf:params:scim:schemas:extension:enterprise:2.0:User
+	// GET /scim/directory/{directoryID}/Schemas/urn:ietf:params:scim:schemas:extension:enterprise:2.0:User
 	//
 	// https://docs.go-atlassian.io/atlassian-admin-cloud/scim/schemas#get-user-enterprise-extension-schemas
 	Enterprise(ctx context.Context, directoryID string) (*model.SCIMSchemaScheme, *model.ResponseScheme, error)
@@ -51,7 +52,7 @@ type SCIMSchemaConnector interface {
 	//
 	// Filtering, pagination and sorting are not supported.
 	//
-	// GET /scim/directory/{directoryId}/ServiceProviderConfig
+	// GET /scim/directory/{directoryID}/ServiceProviderConfig
 	//
 	// https://docs.go-atlassian.io/atlassian-admin-cloud/scim/schemas#get-feature-metadata
 	Feature(ctx context.Context, directoryID string) (*model.ServiceProviderConfigScheme, *model.ResponseScheme, error)

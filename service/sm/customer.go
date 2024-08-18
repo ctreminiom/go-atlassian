@@ -23,21 +23,21 @@ type CustomerConnector interface {
 
 	// Gets  returns a list of the customers on a service desk.
 	//
-	// GET /rest/servicedeskapi/servicedesk/{serviceDeskId}/customer
+	// GET /rest/servicedeskapi/servicedesk/{serviceDeskID}/customer
 	//
 	// https://docs.go-atlassian.io/jira-service-management-cloud/customer#get-customers
 	Gets(ctx context.Context, serviceDeskID string, query string, start, limit int) (*model.CustomerPageScheme, *model.ResponseScheme, error)
 
 	// Add adds one or more customers to a service desk.
 	//
-	// POST /rest/servicedeskapi/servicedesk/{serviceDeskId}/customer
+	// POST /rest/servicedeskapi/servicedesk/{serviceDeskID}/customer
 	//
 	// https://docs.go-atlassian.io/jira-service-management-cloud/customer#add-customers
 	Add(ctx context.Context, serviceDeskID string, accountIDs []string) (*model.ResponseScheme, error)
 
 	// Remove removes one or more customers from a service desk. The service desk must have closed access
 	//
-	// DELETE /rest/servicedeskapi/servicedesk/{serviceDeskId}/customer
+	// DELETE /rest/servicedeskapi/servicedesk/{serviceDeskID}/customer
 	//
 	// https://docs.go-atlassian.io/jira-service-management-cloud/customer#remove-customers
 	Remove(ctx context.Context, serviceDeskID string, accountIDs []string) (*model.ResponseScheme, error)

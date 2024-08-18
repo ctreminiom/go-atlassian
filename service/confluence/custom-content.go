@@ -32,9 +32,9 @@ type CustomContentConnector interface {
 
 	// Update updates a custom content by id.
 	//
-	// The spaceId is always required and maximum one of pageId, blogPostId,
+	// The space id is always required and maximum one of page id, blog post id,
 	//
-	// or customContentId is allowed in the request body
+	// or custom content id is allowed in the request body
 	//
 	// PUT /wiki/api/v2/custom-content/{id}
 	//

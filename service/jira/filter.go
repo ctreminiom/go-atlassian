@@ -67,5 +67,5 @@ type FilterConnector interface {
 	// PUT /rest/api/{2-3}/filter/{filterID}/owner
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/filters#change-filter-owner
-	Change(ctx context.Context, filterID int, accountId string) (*model.ResponseScheme, error)
+	Change(ctx context.Context, filterID int, accountID string) (*model.ResponseScheme, error)
 }

@@ -2,6 +2,7 @@ package confluence
 
 import (
 	"context"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 )
 
@@ -21,7 +22,7 @@ type ChildrenDescendantConnector interface {
 	//
 	// comment: child content is attachment
 	//
-	// GET /wiki/rest/api/content/{id}/child
+	// GET /wiki/rest/api/content/{contentID}/child
 	//
 	// https://docs.go-atlassian.io/confluence-cloud/content/children-descendants#get-content-children
 	Children(ctx context.Context, contentID string, expand []string, parentVersion int) (*model.ContentChildrenScheme, *model.ResponseScheme, error)
@@ -40,16 +41,16 @@ type ChildrenDescendantConnector interface {
 	// append: page will be a child of the target and be appended to targets list of
 	// children
 	//
-	// PUT /wiki/rest/api/content/{pageId}/move/{position}/{targetId}
+	// PUT /wiki/rest/api/content/{contentID}/move/{position}/{targetID}
 	//
 	// https://docs.go-atlassian.io/confluence-cloud/content/children-descendants#move
-	Move(ctx context.Context, pageID string, position string, targetID string) (*model.ContentMoveScheme, *model.ResponseScheme, error)
+	Move(ctx context.Context, contentID string, position string, targetID string) (*model.ContentMoveScheme, *model.ResponseScheme, error)
 
 	// ChildrenByType returns all children of a given type, for a piece of content.
 	//
 	// A piece of content has different types of child content
 	//
-	// GET /wiki/rest/api/content/{id}/child/{type}
+	// GET /wiki/rest/api/content/{contentID}/child/{type}
 	//
 	// https://docs.go-atlassian.io/confluence-cloud/content/children-descendants#get-content-children-by-type
 	ChildrenByType(ctx context.Context, contentID, contentType string, parentVersion int, expand []string, startAt, maxResults int) (*model.ContentPageScheme, *model.ResponseScheme, error)
@@ -60,7 +61,7 @@ type ChildrenDescendantConnector interface {
 	//
 	// rather than just the direct child pages.
 	//
-	// GET /wiki/rest/api/content/{id}/descendant
+	// GET /wiki/rest/api/content/{contentID}/descendant
 	//
 	// https://docs.go-atlassian.io/confluence-cloud/content/children-descendants#get-content-descendants
 	Descendants(ctx context.Context, contentID string, expand []string) (*model.ContentChildrenScheme, *model.ResponseScheme, error)
@@ -71,7 +72,7 @@ type ChildrenDescendantConnector interface {
 	//
 	// except that this method returns child pages at all levels, rather than just the direct child pages.
 	//
-	// GET /wiki/rest/api/content/{id}/descendant/{type}
+	// GET /wiki/rest/api/content/{contentID}/descendant/{type}
 	//
 	// https://docs.go-atlassian.io/confluence-cloud/content/children-descendants#get-content-descendants-by-type
 	DescendantsByType(ctx context.Context, contentID, contentType, depth string, expand []string, startAt, maxResults int) (*model.ContentPageScheme, *model.ResponseScheme, error)
@@ -80,7 +81,7 @@ type ChildrenDescendantConnector interface {
 	//
 	// permissions and attachments. The id path parameter refers to the content id of the page to copy,
 	//
-	// and the new parent of this copied page is defined using the destinationPageId in the request body.
+	// and the new parent of this copied page is defined using the destinationPage id in the request body.
 	//
 	// The titleOptions object defines the rules of renaming page titles during the copy;
 	//
@@ -88,7 +89,7 @@ type ChildrenDescendantConnector interface {
 	//
 	// RESPONSE =  Use the /longtask/ REST API to get the copy task status.
 	//
-	// POST /wiki/rest/api/content/{id}/pagehierarchy/copy
+	// POST /wiki/rest/api/content/{contentID}/pagehierarchy/copy
 	//
 	// https://docs.go-atlassian.io/confluence-cloud/content/children-descendants#copy-page-hierarchy
 	CopyHierarchy(ctx context.Context, contentID string, options *model.CopyOptionsScheme) (*model.TaskScheme, *model.ResponseScheme, error)
@@ -107,7 +108,7 @@ type ChildrenDescendantConnector interface {
 	//
 	// By default, the following objects are expanded: space, history, version.
 	//
-	// POST /wiki/rest/api/content/{id}/copy
+	// POST /wiki/rest/api/content/{contentID}/copy
 	//
 	// https://docs.go-atlassian.io/confluence-cloud/content/children-descendants#copy-single-page
 	CopyPage(ctx context.Context, contentID string, expand []string, options *model.CopyOptionsScheme) (*model.ContentScheme, *model.ResponseScheme, error)

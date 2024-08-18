@@ -17,7 +17,7 @@ type AttachmentConnector interface {
 
 	// Create adds one or more temporary files (attached to the request's service desk using
 	//
-	// servicedesk/{serviceDeskId}/attachTemporaryFile) as attachments to a customer request
+	// servicedesk/{serviceDeskID}/attachTemporaryFile) as attachments to a customer request
 	//
 	// POST /rest/servicedeskapi/request/{issueKeyOrID}/attachment
 	//

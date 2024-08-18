@@ -2,6 +2,7 @@ package confluence
 
 import (
 	"context"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 )
 
@@ -65,7 +66,7 @@ type RestrictionGroupOperationConnector interface {
 	//
 	// as it does not account for account-inherited restrictions, space permissions, or even product access.
 	//
-	// GET /wiki/rest/api/content/{id}/restriction/byOperation/{operationKey}/byGroupId/{groupId}
+	// GET /wiki/rest/api/content/{id}/restriction/byOperation/{operationKey}/byGroupId/{groupNameOrID}
 	//
 	// https://docs.go-atlassian.io/confluence-cloud/content/restrictions/operations/group#get-content-restriction-status-for-group
 	Get(ctx context.Context, contentID, operationKey, groupNameOrID string) (*model.ResponseScheme, error)
@@ -74,7 +75,7 @@ type RestrictionGroupOperationConnector interface {
 	//
 	// That is, grant read or update permission to the group for a piece of content.
 	//
-	// PUT /wiki/rest/api/content/{id}/restriction/byOperation/{operationKey}/byGroupId/{groupId}
+	// PUT /wiki/rest/api/content/{id}/restriction/byOperation/{operationKey}/byGroupId/{groupNameOrID}
 	//
 	// https://docs.go-atlassian.io/confluence-cloud/content/restrictions/operations/group#add-group-to-content-restriction
 	Add(ctx context.Context, contentID, operationKey, groupNameOrID string) (*model.ResponseScheme, error)
@@ -83,7 +84,7 @@ type RestrictionGroupOperationConnector interface {
 	//
 	// That is, remove read or update permission for the group for a piece of content.
 	//
-	// DELETE /wiki/rest/api/content/{id}/restriction/byOperation/{operationKey}/byGroupId/{groupId}
+	// DELETE /wiki/rest/api/content/{id}/restriction/byOperation/{operationKey}/byGroupId/{groupNameOrID}
 	//
 	// https://docs.go-atlassian.io/confluence-cloud/content/restrictions/operations/group#remove-group-from-content-restriction
 	Remove(ctx context.Context, contentID, operationKey, groupNameOrID string) (*model.ResponseScheme, error)

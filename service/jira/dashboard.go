@@ -2,6 +2,7 @@ package jira
 
 import (
 	"context"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 )
 
@@ -34,31 +35,31 @@ type DashboardConnector interface {
 
 	// Get returns a dashboard.
 	//
-	// GET /rest/api/{2-3}/dashboard/{id}
+	// GET /rest/api/{2-3}/dashboard/{dashboardID}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/dashboards#get-dashboard
-	Get(ctx context.Context, dashboardId string) (*model.DashboardScheme, *model.ResponseScheme, error)
+	Get(ctx context.Context, dashboardID string) (*model.DashboardScheme, *model.ResponseScheme, error)
 
 	// Delete deletes a dashboard.
 	//
-	// DELETE /rest/api/{2-3}/dashboard/{id}
+	// DELETE /rest/api/{2-3}/dashboard/{dashboardID}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/dashboards#delete-dashboard
-	Delete(ctx context.Context, dashboardId string) (*model.ResponseScheme, error)
+	Delete(ctx context.Context, dashboardID string) (*model.ResponseScheme, error)
 
 	// Copy copies a dashboard.
 	//
 	// Any values provided in the dashboard parameter replace those in the copied dashboard.
 	//
-	// POST /rest/api/{2-3}/dashboard/{id}/copy
+	// POST /rest/api/{2-3}/dashboard/{dashboardID}/copy
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/dashboards#copy-dashboard
-	Copy(ctx context.Context, dashboardId string, payload *model.DashboardPayloadScheme) (*model.DashboardScheme, *model.ResponseScheme, error)
+	Copy(ctx context.Context, dashboardID string, payload *model.DashboardPayloadScheme) (*model.DashboardScheme, *model.ResponseScheme, error)
 
 	// Update updates a dashboard
 	//
-	// PUT /rest/api/{2-3}/dashboard/{id}
+	// PUT /rest/api/{2-3}/dashboard/{dashboardID}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/dashboards#update-dashboard
-	Update(ctx context.Context, dashboardId string, payload *model.DashboardPayloadScheme) (*model.DashboardScheme, *model.ResponseScheme, error)
+	Update(ctx context.Context, dashboardID string, payload *model.DashboardPayloadScheme) (*model.DashboardScheme, *model.ResponseScheme, error)
 }

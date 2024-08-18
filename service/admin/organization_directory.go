@@ -2,6 +2,7 @@ package admin
 
 import (
 	"context"
+
 	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
 )
 
@@ -19,7 +20,7 @@ type OrganizationDirectoryConnector interface {
 	//
 	// The added_to_org date field is available only to customers using the new user management experience.
 	//
-	// GET /admin/v1/orgs/{orgId}/directory/users/{accountId}/last-active-dates
+	// GET /admin/v1/orgs/{organizationID}/directory/users/{accountID}/last-active-dates
 	//
 	// https://docs.go-atlassian.io/atlassian-admin-cloud/organization/directory#users-last-active-dates
 	Activity(ctx context.Context, organizationID, accountID string) (*models.UserProductAccessScheme, *models.ResponseScheme, error)
@@ -30,7 +31,7 @@ type OrganizationDirectoryConnector interface {
 	//
 	// Note: Users with emails whose domain is claimed can still be found in Managed accounts in Directory.
 	//
-	// DELETE /admin/v1/orgs/{orgId}/directory/users/{accountId}
+	// DELETE /admin/v1/orgs/{organizationID}/directory/users/{accountID}
 	//
 	// https://docs.go-atlassian.io/atlassian-admin-cloud/organization/directory#remove-user-access
 	Remove(ctx context.Context, organizationID, accountID string) (*models.ResponseScheme, error)
@@ -41,7 +42,7 @@ type OrganizationDirectoryConnector interface {
 	//
 	// Note: Users with emails whose domain is claimed can still be found in Managed accounts in Directory.
 	//
-	// POST /admin/v1/orgs/{orgId}/directory/users/{accountId}/suspend-access
+	// POST /admin/v1/orgs/{organizationID}/directory/users/{accountID}/suspend-access
 	//
 	// https://docs.go-atlassian.io/atlassian-admin-cloud/organization/directory#suspend-user-access
 	Suspend(ctx context.Context, organizationID, accountID string) (*models.GenericActionSuccessScheme, *models.ResponseScheme, error)
@@ -52,7 +53,7 @@ type OrganizationDirectoryConnector interface {
 	//
 	// Note: Users with emails whose domain is claimed can still be found in Managed accounts in Directory.
 	//
-	// POST /admin/v1/orgs/{orgId}/directory/users/{accountId}/restore-access
+	// POST /admin/v1/orgs/{organizationID}/directory/users/{accountID}/restore-access
 	//
 	// https://docs.go-atlassian.io/atlassian-admin-cloud/organization/directory#restore-user-access
 	Restore(ctx context.Context, organizationID, accountID string) (*models.GenericActionSuccessScheme, *models.ResponseScheme, error)

@@ -63,7 +63,7 @@ type TypeSchemeConnector interface {
 	// GET /rest/api/{2-3}/issuetypescheme
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/types/scheme#get-all-issue-type-schemes
-	Gets(ctx context.Context, issueTypeSchemeIds []int, startAt, maxResults int) (*model.IssueTypeSchemePageScheme, *model.ResponseScheme, error)
+	Gets(ctx context.Context, issueTypeSchemeIDs []int, startAt, maxResults int) (*model.IssueTypeSchemePageScheme, *model.ResponseScheme, error)
 
 	// Create creates an issue type scheme.
 	//
@@ -77,7 +77,7 @@ type TypeSchemeConnector interface {
 	// GET /rest/api/{2-3}/issuetypescheme/mapping
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/types/scheme#get-issue-type-scheme-items
-	Items(ctx context.Context, issueTypeSchemeIds []int, startAt, maxResults int) (*model.IssueTypeSchemeItemPageScheme, *model.ResponseScheme, error)
+	Items(ctx context.Context, issueTypeSchemeIDs []int, startAt, maxResults int) (*model.IssueTypeSchemeItemPageScheme, *model.ResponseScheme, error)
 
 	// Projects returns a paginated list of issue type schemes and, for each issue type scheme, a list of the projects that use it.
 	//

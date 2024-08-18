@@ -27,7 +27,7 @@ type IssueSharedConnector interface {
 	//
 	// Assign issue permission for the project that the issue is in.
 	//
-	// If accountId is set to:
+	// If accountID is set to:
 	//
 	//  1. "-1", the issue is assigned to the default assignee for the project.
 	//  2. null, the issue is set to unassigned.
@@ -35,7 +35,7 @@ type IssueSharedConnector interface {
 	// PUT /rest/api/{2-3}/issue/{issueKeyOrID}/assignee
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues#assign-issue
-	Assign(ctx context.Context, issueKeyOrID, accountId string) (*model.ResponseScheme, error)
+	Assign(ctx context.Context, issueKeyOrID, accountID string) (*model.ResponseScheme, error)
 
 	// Notify creates an email notification for an issue and adds it to the mail queue.
 	//

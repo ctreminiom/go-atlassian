@@ -54,7 +54,7 @@ type IssueSharedConnector interface {
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues#get-transitions
 	Transitions(ctx context.Context, issueKeyOrID string) (*model.IssueTransitionsScheme, *model.ResponseScheme, error)
-	// TODO The Transitions methods requires more parameters such as expand, transitionId, and more
+	// TODO The Transitions methods requires more parameters such as expand, transitionID, and more
 	// The parameters are documented on this [page](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-transitions-get)
 }
 
@@ -111,7 +111,7 @@ type IssueRichTextConnector interface {
 	// POST /rest/api/{2-3}/issue/{issueKeyOrID}/transitions
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues#transition-issue
-	Move(ctx context.Context, issueKeyOrID, transitionId string, options *model.IssueMoveOptionsV2) (*model.ResponseScheme, error)
+	Move(ctx context.Context, issueKeyOrID, transitionID string, options *model.IssueMoveOptionsV2) (*model.ResponseScheme, error)
 }
 
 type IssueADFConnector interface {
@@ -167,5 +167,5 @@ type IssueADFConnector interface {
 	// POST /rest/api/{2-3}/issue/{issueKeyOrID}/transitions
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues#transition-issue
-	Move(ctx context.Context, issueKeyOrID, transitionId string, options *model.IssueMoveOptionsV3) (*model.ResponseScheme, error)
+	Move(ctx context.Context, issueKeyOrID, transitionID string, options *model.IssueMoveOptionsV3) (*model.ResponseScheme, error)
 }

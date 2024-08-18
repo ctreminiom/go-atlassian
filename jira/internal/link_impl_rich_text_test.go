@@ -22,7 +22,7 @@ func Test_internalLinkRichTextServiceImpl_Get(t *testing.T) {
 
 	type args struct {
 		ctx    context.Context
-		linkId string
+		linkID string
 	}
 
 	testCases := []struct {
@@ -38,7 +38,7 @@ func Test_internalLinkRichTextServiceImpl_Get(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:    context.Background(),
-				linkId: "10002",
+				linkID: "10002",
 			},
 			on: func(fields *fields) {
 
@@ -68,7 +68,7 @@ func Test_internalLinkRichTextServiceImpl_Get(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:    context.Background(),
-				linkId: "10002",
+				linkID: "10002",
 			},
 			on: func(fields *fields) {
 
@@ -98,7 +98,7 @@ func Test_internalLinkRichTextServiceImpl_Get(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:    context.Background(),
-				linkId: "10002",
+				linkID: "10002",
 			},
 			on: func(fields *fields) {
 
@@ -123,7 +123,7 @@ func Test_internalLinkRichTextServiceImpl_Get(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:    context.Background(),
-				linkId: "",
+				linkID: "",
 			},
 			wantErr: true,
 			Err:     model.ErrNoTypeIDError,
@@ -140,7 +140,7 @@ func Test_internalLinkRichTextServiceImpl_Get(t *testing.T) {
 			_, linkService, err := NewLinkService(testCase.fields.c, testCase.fields.version, nil, nil)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := linkService.Get(testCase.args.ctx, testCase.args.linkId)
+			gotResult, gotResponse, err := linkService.Get(testCase.args.ctx, testCase.args.linkID)
 
 			if testCase.wantErr {
 
@@ -318,7 +318,7 @@ func Test_internalLinkRichTextServiceImpl_Delete(t *testing.T) {
 
 	type args struct {
 		ctx    context.Context
-		linkId string
+		linkID string
 	}
 
 	testCases := []struct {
@@ -334,7 +334,7 @@ func Test_internalLinkRichTextServiceImpl_Delete(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:    context.Background(),
-				linkId: "10002",
+				linkID: "10002",
 			},
 			on: func(fields *fields) {
 
@@ -364,7 +364,7 @@ func Test_internalLinkRichTextServiceImpl_Delete(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:    context.Background(),
-				linkId: "10002",
+				linkID: "10002",
 			},
 			on: func(fields *fields) {
 
@@ -394,7 +394,7 @@ func Test_internalLinkRichTextServiceImpl_Delete(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:    context.Background(),
-				linkId: "10002",
+				linkID: "10002",
 			},
 			on: func(fields *fields) {
 
@@ -419,7 +419,7 @@ func Test_internalLinkRichTextServiceImpl_Delete(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:    context.Background(),
-				linkId: "",
+				linkID: "",
 			},
 			wantErr: true,
 			Err:     model.ErrNoTypeIDError,
@@ -436,7 +436,7 @@ func Test_internalLinkRichTextServiceImpl_Delete(t *testing.T) {
 			_, linkService, err := NewLinkService(testCase.fields.c, testCase.fields.version, nil, nil)
 			assert.NoError(t, err)
 
-			gotResponse, err := linkService.Delete(testCase.args.ctx, testCase.args.linkId)
+			gotResponse, err := linkService.Delete(testCase.args.ctx, testCase.args.linkID)
 
 			if testCase.wantErr {
 

@@ -2,8 +2,9 @@ package jira
 
 import (
 	"context"
-	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"io"
+
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 )
 
 type AttachmentConnector interface {
@@ -42,10 +43,10 @@ type AttachmentConnector interface {
 
 	// Add adds one attachment to an issue. Attachments are posted as multipart/form-data (RFC 1867).
 	//
-	// POST /rest/api/{2-3}/issue/{issueIdOrKey}/attachments
+	// POST /rest/api/{2-3}/issue/{issueKeyOrID}/attachments
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/attachments#add-attachment
-	Add(ctx context.Context, issueKeyOrId, fileName string, file io.Reader) ([]*model.IssueAttachmentScheme, *model.ResponseScheme, error)
+	Add(ctx context.Context, issueKeyOrID, fileName string, file io.Reader) ([]*model.IssueAttachmentScheme, *model.ResponseScheme, error)
 
 	// Download returns the contents of an attachment. A Range header can be set to define a range of bytes within the attachment to download.
 	//

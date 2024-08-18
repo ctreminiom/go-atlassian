@@ -38,19 +38,19 @@ type WorklogRichTextService struct {
 // POST /rest/api/{2-3}/worklog/list
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/worklogs#get-worklogs
-func (w *WorklogRichTextService) Gets(ctx context.Context, worklogIds []int, expand []string) ([]*model.IssueWorklogRichTextScheme, *model.ResponseScheme, error) {
-	return w.internalClient.Gets(ctx, worklogIds, expand)
+func (w *WorklogRichTextService) Gets(ctx context.Context, worklogIDs []int, expand []string) ([]*model.IssueWorklogRichTextScheme, *model.ResponseScheme, error) {
+	return w.internalClient.Gets(ctx, worklogIDs, expand)
 }
 
 // Get returns a worklog.
 //
 // Time tracking must be enabled in Jira, otherwise this operation returns an error.
 //
-// GET /rest/api/{2-3}/issue/{issueKeyOrID}/worklog/{id}
+// GET /rest/api/{2-3}/issue/{issueKeyOrID}/worklog/{worklogID}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/worklogs#get-worklog
-func (w *WorklogRichTextService) Get(ctx context.Context, issueKeyOrID, worklogId string, expand []string) (*model.IssueWorklogRichTextScheme, *model.ResponseScheme, error) {
-	return w.internalClient.Get(ctx, issueKeyOrID, worklogId, expand)
+func (w *WorklogRichTextService) Get(ctx context.Context, issueKeyOrID, worklogID string, expand []string) (*model.IssueWorklogRichTextScheme, *model.ResponseScheme, error) {
+	return w.internalClient.Get(ctx, issueKeyOrID, worklogID, expand)
 }
 
 // Issue returns worklogs for an issue, starting from the oldest worklog or from the worklog started on or after a date and time.
@@ -71,8 +71,8 @@ func (w *WorklogRichTextService) Issue(ctx context.Context, issueKeyOrID string,
 // DELETE /rest/api/{2-3}/issue/{issueKeyOrID}/worklog/{id}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/worklogs#delete-worklog
-func (w *WorklogRichTextService) Delete(ctx context.Context, issueKeyOrID, worklogId string, options *model.WorklogOptionsScheme) (*model.ResponseScheme, error) {
-	return w.internalClient.Delete(ctx, issueKeyOrID, worklogId, options)
+func (w *WorklogRichTextService) Delete(ctx context.Context, issueKeyOrID, worklogID string, options *model.WorklogOptionsScheme) (*model.ResponseScheme, error) {
+	return w.internalClient.Delete(ctx, issueKeyOrID, worklogID, options)
 }
 
 // Deleted returns a list of IDs and delete timestamps for worklogs deleted after a date and time.
@@ -122,11 +122,11 @@ func (w *WorklogRichTextService) Add(ctx context.Context, issueKeyOrID string, p
 //
 // Time tracking must be enabled in Jira, otherwise this operation returns an error.
 //
-// PUT /rest/api/2/issue/{issueKeyOrID}/worklog/{id}
+// PUT /rest/api/2/issue/{issueKeyOrID}/worklog/{worklogID}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/worklogs#update-worklog
-func (w *WorklogRichTextService) Update(ctx context.Context, issueKeyOrID, worklogId string, payload *model.WorklogRichTextPayloadScheme, options *model.WorklogOptionsScheme) (*model.IssueWorklogRichTextScheme, *model.ResponseScheme, error) {
-	return w.internalClient.Update(ctx, issueKeyOrID, worklogId, payload, options)
+func (w *WorklogRichTextService) Update(ctx context.Context, issueKeyOrID, worklogID string, payload *model.WorklogRichTextPayloadScheme, options *model.WorklogOptionsScheme) (*model.IssueWorklogRichTextScheme, *model.ResponseScheme, error) {
+	return w.internalClient.Update(ctx, issueKeyOrID, worklogID, payload, options)
 }
 
 type internalWorklogRichTextImpl struct {
@@ -134,9 +134,9 @@ type internalWorklogRichTextImpl struct {
 	version string
 }
 
-func (i *internalWorklogRichTextImpl) Gets(ctx context.Context, worklogIds []int, expand []string) ([]*model.IssueWorklogRichTextScheme, *model.ResponseScheme, error) {
+func (i *internalWorklogRichTextImpl) Gets(ctx context.Context, worklogIDs []int, expand []string) ([]*model.IssueWorklogRichTextScheme, *model.ResponseScheme, error) {
 
-	if len(worklogIds) == 0 {
+	if len(worklogIDs) == 0 {
 		return nil, nil, model.ErrNpWorklogsError
 	}
 
@@ -152,7 +152,7 @@ func (i *internalWorklogRichTextImpl) Gets(ctx context.Context, worklogIds []int
 		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
 	}
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint.String(), "", map[string]interface{}{"ids": worklogIds})
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint.String(), "", map[string]interface{}{"ids": worklogIDs})
 	if err != nil {
 		return nil, nil, err
 	}
@@ -166,13 +166,13 @@ func (i *internalWorklogRichTextImpl) Gets(ctx context.Context, worklogIds []int
 	return worklogs, response, nil
 }
 
-func (i *internalWorklogRichTextImpl) Get(ctx context.Context, issueKeyOrID, worklogId string, expand []string) (*model.IssueWorklogRichTextScheme, *model.ResponseScheme, error) {
+func (i *internalWorklogRichTextImpl) Get(ctx context.Context, issueKeyOrID, worklogID string, expand []string) (*model.IssueWorklogRichTextScheme, *model.ResponseScheme, error) {
 
 	if issueKeyOrID == "" {
 		return nil, nil, model.ErrNoIssueKeyOrIDError
 	}
 
-	if worklogId == "" {
+	if worklogID == "" {
 		return nil, nil, model.ErrNoWorklogIDError
 	}
 
@@ -182,7 +182,7 @@ func (i *internalWorklogRichTextImpl) Get(ctx context.Context, issueKeyOrID, wor
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("rest/api/%v/issue/%v/worklog/%v", i.version, issueKeyOrID, worklogId))
+	endpoint.WriteString(fmt.Sprintf("rest/api/%v/issue/%v/worklog/%v", i.version, issueKeyOrID, worklogID))
 
 	if params.Encode() != "" {
 		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
@@ -236,18 +236,18 @@ func (i *internalWorklogRichTextImpl) Issue(ctx context.Context, issueKeyOrID st
 	return worklogs, response, nil
 }
 
-func (i *internalWorklogRichTextImpl) Delete(ctx context.Context, issueKeyOrID, worklogId string, options *model.WorklogOptionsScheme) (*model.ResponseScheme, error) {
+func (i *internalWorklogRichTextImpl) Delete(ctx context.Context, issueKeyOrID, worklogID string, options *model.WorklogOptionsScheme) (*model.ResponseScheme, error) {
 
 	if issueKeyOrID == "" {
 		return nil, model.ErrNoIssueKeyOrIDError
 	}
 
-	if worklogId == "" {
+	if worklogID == "" {
 		return nil, model.ErrNoWorklogIDError
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("rest/api/%v/issue/%v/worklog/%v", i.version, issueKeyOrID, worklogId))
+	endpoint.WriteString(fmt.Sprintf("rest/api/%v/issue/%v/worklog/%v", i.version, issueKeyOrID, worklogID))
 
 	if options != nil {
 
@@ -391,18 +391,18 @@ func (i *internalWorklogRichTextImpl) Add(ctx context.Context, issueKeyOrID stri
 	return worklog, response, nil
 }
 
-func (i *internalWorklogRichTextImpl) Update(ctx context.Context, issueKeyOrID, worklogId string, payload *model.WorklogRichTextPayloadScheme, options *model.WorklogOptionsScheme) (*model.IssueWorklogRichTextScheme, *model.ResponseScheme, error) {
+func (i *internalWorklogRichTextImpl) Update(ctx context.Context, issueKeyOrID, worklogID string, payload *model.WorklogRichTextPayloadScheme, options *model.WorklogOptionsScheme) (*model.IssueWorklogRichTextScheme, *model.ResponseScheme, error) {
 
 	if issueKeyOrID == "" {
 		return nil, nil, model.ErrNoIssueKeyOrIDError
 	}
 
-	if worklogId == "" {
+	if worklogID == "" {
 		return nil, nil, model.ErrNoWorklogIDError
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("rest/api/%v/issue/%v/worklog/%v", i.version, issueKeyOrID, worklogId))
+	endpoint.WriteString(fmt.Sprintf("rest/api/%v/issue/%v/worklog/%v", i.version, issueKeyOrID, worklogID))
 
 	if options != nil {
 

@@ -2,6 +2,7 @@ package jira
 
 import (
 	"context"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 )
 
@@ -9,22 +10,22 @@ type LinkSharedConnector interface {
 
 	// Get returns an issue link.
 	//
-	// GET /rest/api/{2-3}/issueLink/{linkId}
+	// GET /rest/api/{2-3}/issueLink/{linkID}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/link#get-issue-link
-	Get(ctx context.Context, linkId string) (*model.IssueLinkScheme, *model.ResponseScheme, error)
+	Get(ctx context.Context, linkID string) (*model.IssueLinkScheme, *model.ResponseScheme, error)
 
 	// Gets get the issue links ID's associated with a Jira Issue
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/link#get-issue-links
-	Gets(ctx context.Context, issueKeyOrId string) (*model.IssueLinkPageScheme, *model.ResponseScheme, error)
+	Gets(ctx context.Context, issueKeyOrID string) (*model.IssueLinkPageScheme, *model.ResponseScheme, error)
 
 	// Delete deletes an issue link.
 	//
-	// DELETE /rest/api/{2-3}/issueLink/{linkId}
+	// DELETE /rest/api/{2-3}/issueLink/{linkID}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/link#delete-issue-link
-	Delete(ctx context.Context, linkId string) (*model.ResponseScheme, error)
+	Delete(ctx context.Context, linkID string) (*model.ResponseScheme, error)
 }
 
 type LinkRichTextConnector interface {
@@ -67,10 +68,10 @@ type LinkTypeConnector interface {
 	// Get returns an issue link type.
 	//
 	//
-	// GET /rest/api/{2-3}/issueLinkType/{issueLinkTypeId}
+	// GET /rest/api/{2-3}/issueLinkType/{issueLinkTypeID}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/link/types#get-issue-link-type
-	Get(ctx context.Context, issueLinkTypeId string) (*model.LinkTypeScheme, *model.ResponseScheme, error)
+	Get(ctx context.Context, issueLinkTypeID string) (*model.LinkTypeScheme, *model.ResponseScheme, error)
 
 	// Create creates an issue link type.
 	//
@@ -85,15 +86,15 @@ type LinkTypeConnector interface {
 
 	// Update updates an issue link type.
 	//
-	// PUT /rest/api/{2-3}/issueLinkType/{issueLinkTypeId}
+	// PUT /rest/api/{2-3}/issueLinkType/{issueLinkTypeID}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/link/types#update-issue-link-type
-	Update(ctx context.Context, issueLinkTypeId string, payload *model.LinkTypeScheme) (*model.LinkTypeScheme, *model.ResponseScheme, error)
+	Update(ctx context.Context, issueLinkTypeID string, payload *model.LinkTypeScheme) (*model.LinkTypeScheme, *model.ResponseScheme, error)
 
 	// Delete deletes an issue link type.
 	//
-	// DELETE /rest/api/{2-3}/issueLinkType/{issueLinkTypeId}
+	// DELETE /rest/api/{2-3}/issueLinkType/{issueLinkTypeID}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/link/types#delete-issue-link-type
-	Delete(ctx context.Context, issueLinkTypeId string) (*model.ResponseScheme, error)
+	Delete(ctx context.Context, issueLinkTypeID string) (*model.ResponseScheme, error)
 }

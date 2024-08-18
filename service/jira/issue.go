@@ -2,6 +2,7 @@ package jira
 
 import (
 	"context"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 )
 
@@ -15,10 +16,10 @@ type IssueSharedConnector interface {
 	//
 	// 3.This causes the issue's subtasks to be deleted with the issue.
 	//
-	// DELETE /rest/api/{2-3}/issue/{issueIdOrKey}
+	// DELETE /rest/api/{2-3}/issue/{issueKeyOrID}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues#delete-issue
-	Delete(ctx context.Context, issueKeyOrId string, deleteSubTasks bool) (*model.ResponseScheme, error)
+	Delete(ctx context.Context, issueKeyOrID string, deleteSubTasks bool) (*model.ResponseScheme, error)
 
 	// Assign assigns an issue to a user.
 	//
@@ -31,17 +32,17 @@ type IssueSharedConnector interface {
 	//  1. "-1", the issue is assigned to the default assignee for the project.
 	//  2. null, the issue is set to unassigned.
 	//
-	// PUT /rest/api/{2-3}/issue/{issueIdOrKey}/assignee
+	// PUT /rest/api/{2-3}/issue/{issueKeyOrID}/assignee
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues#assign-issue
-	Assign(ctx context.Context, issueKeyOrId, accountId string) (*model.ResponseScheme, error)
+	Assign(ctx context.Context, issueKeyOrID, accountId string) (*model.ResponseScheme, error)
 
 	// Notify creates an email notification for an issue and adds it to the mail queue.
 	//
-	// POST /rest/api/{2-3}/issue/{issueIdOrKey}/notify
+	// POST /rest/api/{2-3}/issue/{issueKeyOrID}/notify
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues#send-notification-for-issue
-	Notify(ctx context.Context, issueKeyOrId string, options *model.IssueNotifyOptionsScheme) (*model.ResponseScheme, error)
+	Notify(ctx context.Context, issueKeyOrID string, options *model.IssueNotifyOptionsScheme) (*model.ResponseScheme, error)
 
 	// Transitions returns either all transitions or a transition that can be performed by the user on an issue, based on the issue's status.
 	//
@@ -49,10 +50,10 @@ type IssueSharedConnector interface {
 	//
 	// given its status, the response will return any empty transitions list.
 	//
-	// GET /rest/api/{2-3}/issue/{issueIdOrKey}/transitions
+	// GET /rest/api/{2-3}/issue/{issueKeyOrID}/transitions
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues#get-transitions
-	Transitions(ctx context.Context, issueKeyOrId string) (*model.IssueTransitionsScheme, *model.ResponseScheme, error)
+	Transitions(ctx context.Context, issueKeyOrID string) (*model.IssueTransitionsScheme, *model.ResponseScheme, error)
 	// TODO The Transitions methods requires more parameters such as expand, transitionId, and more
 	// The parameters are documented on this [page](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-transitions-get)
 }
@@ -86,10 +87,10 @@ type IssueRichTextConnector interface {
 	//
 	// The issue key returned to the response is the key of the issue found.
 	//
-	// GET /rest/api/{2-3}/issue/{issueIdOrKey}
+	// GET /rest/api/{2-3}/issue/{issueKeyOrID}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues#get-issue
-	Get(ctx context.Context, issueKeyOrId string, fields, expand []string) (*model.IssueSchemeV2, *model.ResponseScheme, error)
+	Get(ctx context.Context, issueKeyOrID string, fields, expand []string) (*model.IssueSchemeV2, *model.ResponseScheme, error)
 
 	// Update edits an issue.
 	//
@@ -97,20 +98,20 @@ type IssueRichTextConnector interface {
 	//
 	// The edits to the issue's fields are defined using update and fields
 	//
-	// PUT /rest/api/{2-3}/issue/{issueIdOrKey}
+	// PUT /rest/api/{2-3}/issue/{issueKeyOrID}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues#edit-issue
-	Update(ctx context.Context, issueKeyOrId string, notify bool, payload *model.IssueSchemeV2, customFields *model.CustomFields,
+	Update(ctx context.Context, issueKeyOrID string, notify bool, payload *model.IssueSchemeV2, customFields *model.CustomFields,
 		operations *model.UpdateOperations) (*model.ResponseScheme, error)
 
 	// Move performs an issue transition and, if the transition has a screen, updates the fields from the transition screen.
 	//
 	// sortByCategory To update the fields on the transition screen, specify the fields in the fields or update parameters in the request body. Get details about the fields using Get transitions with the transitions.fields expand.
 	//
-	// POST /rest/api/{2-3}/issue/{issueIdOrKey}/transitions
+	// POST /rest/api/{2-3}/issue/{issueKeyOrID}/transitions
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues#transition-issue
-	Move(ctx context.Context, issueKeyOrId, transitionId string, options *model.IssueMoveOptionsV2) (*model.ResponseScheme, error)
+	Move(ctx context.Context, issueKeyOrID, transitionId string, options *model.IssueMoveOptionsV2) (*model.ResponseScheme, error)
 }
 
 type IssueADFConnector interface {
@@ -142,10 +143,10 @@ type IssueADFConnector interface {
 	//
 	// The issue key returned to the response is the key of the issue found.
 	//
-	// GET /rest/api/{2-3}/issue/{issueIdOrKey}
+	// GET /rest/api/{2-3}/issue/{issueKeyOrID}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues#get-issue
-	Get(ctx context.Context, issueKeyOrId string, fields, expand []string) (*model.IssueScheme, *model.ResponseScheme, error)
+	Get(ctx context.Context, issueKeyOrID string, fields, expand []string) (*model.IssueScheme, *model.ResponseScheme, error)
 
 	// Update edits an issue.
 	//
@@ -153,18 +154,18 @@ type IssueADFConnector interface {
 	//
 	// The edits to the issue's fields are defined using update and fields
 	//
-	// PUT /rest/api/{2-3}/issue/{issueIdOrKey}
+	// PUT /rest/api/{2-3}/issue/{issueKeyOrID}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues#edit-issue
-	Update(ctx context.Context, issueKeyOrId string, notify bool, payload *model.IssueScheme, customFields *model.CustomFields,
+	Update(ctx context.Context, issueKeyOrID string, notify bool, payload *model.IssueScheme, customFields *model.CustomFields,
 		operations *model.UpdateOperations) (*model.ResponseScheme, error)
 
 	// Move performs an issue transition and, if the transition has a screen, updates the fields from the transition screen.
 	//
 	// sortByCategory To update the fields on the transition screen, specify the fields in the fields or update parameters in the request body. Get details about the fields using Get transitions with the transitions.fields expand.
 	//
-	// POST /rest/api/{2-3}/issue/{issueIdOrKey}/transitions
+	// POST /rest/api/{2-3}/issue/{issueKeyOrID}/transitions
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues#transition-issue
-	Move(ctx context.Context, issueKeyOrId, transitionId string, options *model.IssueMoveOptionsV3) (*model.ResponseScheme, error)
+	Move(ctx context.Context, issueKeyOrID, transitionId string, options *model.IssueMoveOptionsV3) (*model.ResponseScheme, error)
 }

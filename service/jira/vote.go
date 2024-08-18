@@ -2,6 +2,7 @@ package jira
 
 import (
 	"context"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 )
 
@@ -13,26 +14,26 @@ type VoteConnector interface {
 	//
 	// This operation requires allowing users to vote on issues option to be ON
 	//
-	// GET /rest/api/{2-3}/issue/{issueIdOrKey}/votes
+	// GET /rest/api/{2-3}/issue/{issueKeyOrID}/votes
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/vote#get-votes
-	Gets(ctx context.Context, issueKeyOrId string) (*model.IssueVoteScheme, *model.ResponseScheme, error)
+	Gets(ctx context.Context, issueKeyOrID string) (*model.IssueVoteScheme, *model.ResponseScheme, error)
 
 	// Add adds the user's vote to an issue. This is the equivalent of the user clicking Vote on an issue in Jira.
 	//
 	// This operation requires the Allow users to vote on issues option to be ON.
 	//
-	// POST /rest/api/{2-3}/issue/{issueIdOrKey}/votes
+	// POST /rest/api/{2-3}/issue/{issueKeyOrID}/votes
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/vote#add-vote
-	Add(ctx context.Context, issueKeyOrId string) (*model.ResponseScheme, error)
+	Add(ctx context.Context, issueKeyOrID string) (*model.ResponseScheme, error)
 
 	// Delete deletes a user's vote from an issue. This is the equivalent of the user clicking Unvote on an issue in Jira.
 	//
 	// This operation requires the Allow users to vote on issues option to be ON.
 	//
-	// DELETE /rest/api/{2-3}/issue/{issueIdOrKey}/votes
+	// DELETE /rest/api/{2-3}/issue/{issueKeyOrID}/votes
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/vote#delete-vote
-	Delete(ctx context.Context, issueKeyOrId string) (*model.ResponseScheme, error)
+	Delete(ctx context.Context, issueKeyOrID string) (*model.ResponseScheme, error)
 }

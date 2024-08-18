@@ -2,8 +2,10 @@ package jira
 
 import (
 	"context"
-	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
+
 	"github.com/tidwall/gjson"
+
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 )
 
 type MetadataConnector interface {
@@ -12,10 +14,10 @@ type MetadataConnector interface {
 	//
 	// Use the information to populate the requests in Edit issue.
 	//
-	// GET /rest/api/{2-3}/issue/{issueIdOrKey}/editmeta
+	// GET /rest/api/{2-3}/issue/{issueKeyOrID}/editmeta
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/metadata#get-edit-issue-metadata
-	Get(ctx context.Context, issueKeyOrId string, overrideScreenSecurity, overrideEditableFlag bool) (gjson.Result, *model.ResponseScheme, error)
+	Get(ctx context.Context, issueKeyOrID string, overrideScreenSecurity, overrideEditableFlag bool) (gjson.Result, *model.ResponseScheme, error)
 
 	// Create returns details of projects, issue types within projects, and, when requested,
 	//

@@ -170,7 +170,7 @@ type TypeScreenSchemeConnector interface {
 	// GET /rest/api/{2-3}/issuetypescreenscheme/project
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/types/screen-scheme#assign-issue-type-screen-scheme-to-project
-	Projects(ctx context.Context, projectIds []int, startAt, maxResults int) (*model.IssueTypeProjectScreenSchemePageScheme, *model.ResponseScheme, error)
+	Projects(ctx context.Context, projectIDs []int, startAt, maxResults int) (*model.IssueTypeProjectScreenSchemePageScheme, *model.ResponseScheme, error)
 
 	// Mapping returns a paginated list of issue type screen scheme items.
 	//

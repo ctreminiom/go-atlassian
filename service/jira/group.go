@@ -2,6 +2,7 @@ package jira
 
 import (
 	"context"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 )
 
@@ -41,7 +42,7 @@ type GroupConnector interface {
 	// POST /rest/api/{2-3}/group/user
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/groups#add-user-to-group
-	Add(ctx context.Context, groupName, accountId string) (*model.GroupScheme, *model.ResponseScheme, error)
+	Add(ctx context.Context, groupName, accountID string) (*model.GroupScheme, *model.ResponseScheme, error)
 
 	// Remove removes a user from a group.
 	//

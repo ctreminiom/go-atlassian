@@ -180,7 +180,7 @@ func Test_internalUserSearchImpl_Do(t *testing.T) {
 
 	type args struct {
 		ctx                 context.Context
-		accountId           string
+		accountID           string
 		query               string
 		startAt, maxResults int
 	}
@@ -198,7 +198,7 @@ func Test_internalUserSearchImpl_Do(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:        context.Background(),
-				accountId:  "uuid-sample",
+				accountID:  "uuid-sample",
 				query:      "charles.smith@example.com",
 				startAt:    100,
 				maxResults: 50,
@@ -230,7 +230,7 @@ func Test_internalUserSearchImpl_Do(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:        context.Background(),
-				accountId:  "uuid-sample",
+				accountID:  "uuid-sample",
 				query:      "charles.smith@example.com",
 				startAt:    100,
 				maxResults: 50,
@@ -262,7 +262,7 @@ func Test_internalUserSearchImpl_Do(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:        context.Background(),
-				accountId:  "uuid-sample",
+				accountID:  "uuid-sample",
 				query:      "charles.smith@example.com",
 				startAt:    100,
 				maxResults: 50,
@@ -295,7 +295,7 @@ func Test_internalUserSearchImpl_Do(t *testing.T) {
 			newService, err := NewUserSearchService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := newService.Do(testCase.args.ctx, testCase.args.accountId, testCase.args.query,
+			gotResult, gotResponse, err := newService.Do(testCase.args.ctx, testCase.args.accountID, testCase.args.query,
 				testCase.args.startAt, testCase.args.maxResults)
 
 			if testCase.wantErr {

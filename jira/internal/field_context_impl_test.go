@@ -1686,7 +1686,7 @@ func Test_internalIssueFieldContextServiceImpl_Link(t *testing.T) {
 		ctx        context.Context
 		fieldID    string
 		contextId  int
-		projectIds []string
+		projectIDs []string
 	}
 
 	testCases := []struct {
@@ -1704,7 +1704,7 @@ func Test_internalIssueFieldContextServiceImpl_Link(t *testing.T) {
 				ctx:        context.Background(),
 				fieldID:    "custom_field_10002",
 				contextId:  10001,
-				projectIds: []string{"4", "3"},
+				projectIDs: []string{"4", "3"},
 			},
 			on: func(fields *fields) {
 
@@ -1736,7 +1736,7 @@ func Test_internalIssueFieldContextServiceImpl_Link(t *testing.T) {
 				ctx:        context.Background(),
 				fieldID:    "custom_field_10002",
 				contextId:  10001,
-				projectIds: []string{"4", "3"},
+				projectIDs: []string{"4", "3"},
 			},
 			on: func(fields *fields) {
 
@@ -1802,7 +1802,7 @@ func Test_internalIssueFieldContextServiceImpl_Link(t *testing.T) {
 				ctx:        context.Background(),
 				fieldID:    "custom_field_10002",
 				contextId:  10001,
-				projectIds: []string{"4", "3"},
+				projectIDs: []string{"4", "3"},
 			},
 			on: func(fields *fields) {
 
@@ -1834,7 +1834,7 @@ func Test_internalIssueFieldContextServiceImpl_Link(t *testing.T) {
 			assert.NoError(t, err)
 
 			gotResponse, err := fieldConfigService.Link(testCase.args.ctx, testCase.args.fieldID, testCase.args.contextId,
-				testCase.args.projectIds)
+				testCase.args.projectIDs)
 
 			if testCase.wantErr {
 
@@ -1867,7 +1867,7 @@ func Test_internalIssueFieldContextServiceImpl_Unlink(t *testing.T) {
 		ctx        context.Context
 		fieldID    string
 		contextId  int
-		projectIds []string
+		projectIDs []string
 	}
 
 	testCases := []struct {
@@ -1885,7 +1885,7 @@ func Test_internalIssueFieldContextServiceImpl_Unlink(t *testing.T) {
 				ctx:        context.Background(),
 				fieldID:    "custom_field_10002",
 				contextId:  10001,
-				projectIds: []string{"4", "3"},
+				projectIDs: []string{"4", "3"},
 			},
 			on: func(fields *fields) {
 
@@ -1917,7 +1917,7 @@ func Test_internalIssueFieldContextServiceImpl_Unlink(t *testing.T) {
 				ctx:        context.Background(),
 				fieldID:    "custom_field_10002",
 				contextId:  10001,
-				projectIds: []string{"4", "3"},
+				projectIDs: []string{"4", "3"},
 			},
 			on: func(fields *fields) {
 
@@ -1983,7 +1983,7 @@ func Test_internalIssueFieldContextServiceImpl_Unlink(t *testing.T) {
 				ctx:        context.Background(),
 				fieldID:    "custom_field_10002",
 				contextId:  10001,
-				projectIds: []string{"4", "3"},
+				projectIDs: []string{"4", "3"},
 			},
 			on: func(fields *fields) {
 
@@ -2015,7 +2015,7 @@ func Test_internalIssueFieldContextServiceImpl_Unlink(t *testing.T) {
 			assert.NoError(t, err)
 
 			gotResponse, err := fieldConfigService.UnLink(testCase.args.ctx, testCase.args.fieldID, testCase.args.contextId,
-				testCase.args.projectIds)
+				testCase.args.projectIDs)
 
 			if testCase.wantErr {
 

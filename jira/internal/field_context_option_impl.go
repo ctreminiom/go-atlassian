@@ -73,11 +73,11 @@ func (i *IssueFieldContextOptionService) Update(ctx context.Context, fieldID str
 //
 // 1. Options with cascading options cannot be deleted without deleting the cascading options first.
 //
-// DELETE /rest/api/{2-3}/field/{fieldID}/context/{contextID}/option/{optionId}
+// DELETE /rest/api/{2-3}/field/{fieldID}/context/{contextID}/option/{optionID}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/fields/context/option#delete-custom-field-options
-func (i *IssueFieldContextOptionService) Delete(ctx context.Context, fieldID string, contextID, optionId int) (*model.ResponseScheme, error) {
-	return i.internalClient.Delete(ctx, fieldID, contextID, optionId)
+func (i *IssueFieldContextOptionService) Delete(ctx context.Context, fieldID string, contextID, optionID int) (*model.ResponseScheme, error) {
+	return i.internalClient.Delete(ctx, fieldID, contextID, optionID)
 }
 
 // Order changes the order of custom field options or cascading options in a context.
@@ -180,7 +180,7 @@ func (i *internalIssueFieldContextOptionServiceImpl) Update(ctx context.Context,
 	return options, response, nil
 }
 
-func (i *internalIssueFieldContextOptionServiceImpl) Delete(ctx context.Context, fieldID string, contextID, optionId int) (*model.ResponseScheme, error) {
+func (i *internalIssueFieldContextOptionServiceImpl) Delete(ctx context.Context, fieldID string, contextID, optionID int) (*model.ResponseScheme, error) {
 
 	if fieldID == "" {
 		return nil, model.ErrNoFieldIDError
@@ -190,11 +190,11 @@ func (i *internalIssueFieldContextOptionServiceImpl) Delete(ctx context.Context,
 		return nil, model.ErrNoFieldContextIDError
 	}
 
-	if optionId == 0 {
+	if optionID == 0 {
 		return nil, model.ErrNoContextOptionIDError
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/field/%v/context/%v/option/%v", i.version, fieldID, contextID, optionId)
+	endpoint := fmt.Sprintf("rest/api/%v/field/%v/context/%v/option/%v", i.version, fieldID, contextID, optionID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {

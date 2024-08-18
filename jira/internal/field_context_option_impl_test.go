@@ -574,7 +574,7 @@ func Test_internalIssueFieldContextOptionServiceImpl_Delete(t *testing.T) {
 		ctx       context.Context
 		fieldID   string
 		contextID int
-		optionId  int
+		optionID  int
 	}
 
 	testCases := []struct {
@@ -592,7 +592,7 @@ func Test_internalIssueFieldContextOptionServiceImpl_Delete(t *testing.T) {
 				ctx:       context.Background(),
 				fieldID:   "custom_field_10002",
 				contextID: 10001,
-				optionId:  1001,
+				optionID:  1001,
 			},
 			on: func(fields *fields) {
 
@@ -624,7 +624,7 @@ func Test_internalIssueFieldContextOptionServiceImpl_Delete(t *testing.T) {
 				ctx:       context.Background(),
 				fieldID:   "custom_field_10002",
 				contextID: 10001,
-				optionId:  1001,
+				optionID:  1001,
 			},
 			on: func(fields *fields) {
 
@@ -680,7 +680,7 @@ func Test_internalIssueFieldContextOptionServiceImpl_Delete(t *testing.T) {
 				ctx:       context.Background(),
 				fieldID:   "customfield_1000",
 				contextID: 1000,
-				optionId:  0,
+				optionID:  0,
 			},
 
 			wantErr: true,
@@ -694,7 +694,7 @@ func Test_internalIssueFieldContextOptionServiceImpl_Delete(t *testing.T) {
 				ctx:       context.Background(),
 				fieldID:   "custom_field_10002",
 				contextID: 10001,
-				optionId:  1001,
+				optionID:  1001,
 			},
 			on: func(fields *fields) {
 
@@ -726,7 +726,7 @@ func Test_internalIssueFieldContextOptionServiceImpl_Delete(t *testing.T) {
 			assert.NoError(t, err)
 
 			gotResponse, err := fieldConfigService.Delete(testCase.args.ctx, testCase.args.fieldID, testCase.args.contextID,
-				testCase.args.optionId)
+				testCase.args.optionID)
 
 			if testCase.wantErr {
 

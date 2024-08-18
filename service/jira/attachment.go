@@ -18,28 +18,28 @@ type AttachmentConnector interface {
 
 	// Metadata returns the metadata for an attachment. Note that the attachment itself is not returned.
 	//
-	// GET /rest/api/{2-3}/attachment/{id}
+	// GET /rest/api/{2-3}/attachment/{attachmentID}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/attachments#get-attachment-metadata
-	Metadata(ctx context.Context, attachmentId string) (*model.IssueAttachmentMetadataScheme, *model.ResponseScheme, error)
+	Metadata(ctx context.Context, attachmentID string) (*model.IssueAttachmentMetadataScheme, *model.ResponseScheme, error)
 
 	// Delete deletes an attachment from an issue.
 	//
-	// DELETE /rest/api/{2-3}/attachment/{id}
+	// DELETE /rest/api/{2-3}/attachment/{attachmentID}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/attachments#delete-attachment
-	Delete(ctx context.Context, attachmentId string) (*model.ResponseScheme, error)
+	Delete(ctx context.Context, attachmentID string) (*model.ResponseScheme, error)
 
 	// Human returns the metadata for the contents of an attachment, if it is an archive, and metadata for the attachment itself.
 	//
 	// For example, if the attachment is a ZIP archive, then information about the files in the archive is returned and metadata for the ZIP archive.
 	//
-	// GET /rest/api/{2-3}/attachment/{id}/expand/human
+	// GET /rest/api/{2-3}/attachment/{attachmentID}/expand/human
 	//
 	// Experimental Endpoint
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/attachments#get-all-metadata-for-an-expanded-attachment
-	Human(ctx context.Context, attachmentId string) (*model.IssueAttachmentHumanMetadataScheme, *model.ResponseScheme, error)
+	Human(ctx context.Context, attachmentID string) (*model.IssueAttachmentHumanMetadataScheme, *model.ResponseScheme, error)
 
 	// Add adds one attachment to an issue. Attachments are posted as multipart/form-data (RFC 1867).
 	//

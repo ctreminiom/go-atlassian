@@ -260,7 +260,7 @@ func Test_internalWorkflowImpl_Delete(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoWorkflowIDError,
+			Err:     model.ErrNoWorkflowID,
 		},
 
 		{

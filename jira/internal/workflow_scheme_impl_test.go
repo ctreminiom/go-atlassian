@@ -237,7 +237,7 @@ func Test_internalWorkflowSchemeImpl_Get(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoWorkflowSchemeIDError,
+			Err:     model.ErrNoWorkflowSchemeID,
 		},
 
 		{
@@ -381,7 +381,7 @@ func Test_internalWorkflowSchemeImpl_Delete(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoWorkflowSchemeIDError,
+			Err:     model.ErrNoWorkflowSchemeID,
 		},
 
 		{
@@ -523,7 +523,7 @@ func Test_internalWorkflowSchemeImpl_Associations(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoProjectsError,
+			Err:     model.ErrNoProjects,
 		},
 
 		{
@@ -670,7 +670,7 @@ func Test_internalWorkflowSchemeImpl_Assign(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoWorkflowSchemeIDError,
+			Err:     model.ErrNoWorkflowSchemeID,
 		},
 
 		{
@@ -681,7 +681,7 @@ func Test_internalWorkflowSchemeImpl_Assign(t *testing.T) {
 				schemeID: "1004561",
 			},
 			wantErr: true,
-			Err:     model.ErrNoProjectIDOrKeyError,
+			Err:     model.ErrNoProjectIDOrKey,
 		},
 
 		{
@@ -836,7 +836,7 @@ func Test_internalWorkflowSchemeImpl_Update(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoWorkflowSchemeIDError,
+			Err:     model.ErrNoWorkflowSchemeID,
 		},
 
 		{

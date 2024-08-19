@@ -138,7 +138,7 @@ func (i *internalScreenSchemeImpl) Create(ctx context.Context, payload *model.Sc
 func (i *internalScreenSchemeImpl) Update(ctx context.Context, screenSchemeID string, payload *model.ScreenSchemePayloadScheme) (*model.ResponseScheme, error) {
 
 	if screenSchemeID == "" {
-		return nil, model.ErrNoScreenSchemeIDError
+		return nil, model.ErrNoScreenSchemeID
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/screenscheme/%v", i.version, screenSchemeID)
@@ -154,7 +154,7 @@ func (i *internalScreenSchemeImpl) Update(ctx context.Context, screenSchemeID st
 func (i *internalScreenSchemeImpl) Delete(ctx context.Context, screenSchemeID string) (*model.ResponseScheme, error) {
 
 	if screenSchemeID == "" {
-		return nil, model.ErrNoScreenSchemeIDError
+		return nil, model.ErrNoScreenSchemeID
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/screenscheme/%v", i.version, screenSchemeID)

@@ -101,7 +101,7 @@ func Test_internalAQLImpl_Filter(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoWorkspaceIDError,
+			Err:     model.ErrNoWorkspaceID,
 		},
 	}
 

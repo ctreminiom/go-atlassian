@@ -73,7 +73,7 @@ type internalWorkspaceServiceImpl struct {
 func (i *internalWorkspaceServiceImpl) Get(ctx context.Context, workspace string) (*model.WorkspaceScheme, *model.ResponseScheme, error) {
 
 	if workspace == "" {
-		return nil, nil, model.ErrNoWorkspaceError
+		return nil, nil, model.ErrNoWorkspace
 	}
 
 	endpoint := fmt.Sprintf("2.0/workspaces/%v", workspace)
@@ -96,7 +96,7 @@ func (i *internalWorkspaceServiceImpl) Get(ctx context.Context, workspace string
 func (i *internalWorkspaceServiceImpl) Members(ctx context.Context, workspace string) (*model.WorkspaceMembershipPageScheme, *model.ResponseScheme, error) {
 
 	if workspace == "" {
-		return nil, nil, model.ErrNoWorkspaceError
+		return nil, nil, model.ErrNoWorkspace
 	}
 
 	endpoint := fmt.Sprintf("2.0/workspaces/%v/members", workspace)
@@ -119,11 +119,11 @@ func (i *internalWorkspaceServiceImpl) Members(ctx context.Context, workspace st
 func (i *internalWorkspaceServiceImpl) Membership(ctx context.Context, workspace, memberID string) (*model.WorkspaceMembershipScheme, *model.ResponseScheme, error) {
 
 	if workspace == "" {
-		return nil, nil, model.ErrNoWorkspaceError
+		return nil, nil, model.ErrNoWorkspace
 	}
 
 	if memberID == "" {
-		return nil, nil, model.ErrNoMemberIDError
+		return nil, nil, model.ErrNoMemberID
 	}
 
 	endpoint := fmt.Sprintf("2.0/workspaces/%v/members/%v", workspace, memberID)
@@ -146,7 +146,7 @@ func (i *internalWorkspaceServiceImpl) Membership(ctx context.Context, workspace
 func (i *internalWorkspaceServiceImpl) Projects(ctx context.Context, workspace string) (*model.BitbucketProjectPageScheme, *model.ResponseScheme, error) {
 
 	if workspace == "" {
-		return nil, nil, model.ErrNoWorkspaceError
+		return nil, nil, model.ErrNoWorkspace
 	}
 
 	endpoint := fmt.Sprintf("2.0/workspaces/%v/projects", workspace)

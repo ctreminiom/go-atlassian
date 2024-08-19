@@ -69,7 +69,7 @@ type internalPropertyImpl struct {
 func (i *internalPropertyImpl) Gets(ctx context.Context, contentID string, expand []string, startAt, maxResults int) (*model.ContentPropertyPageScheme, *model.ResponseScheme, error) {
 
 	if contentID == "" {
-		return nil, nil, model.ErrNoContentIDError
+		return nil, nil, model.ErrNoContentID
 	}
 
 	query := url.Values{}
@@ -99,7 +99,7 @@ func (i *internalPropertyImpl) Gets(ctx context.Context, contentID string, expan
 func (i *internalPropertyImpl) Create(ctx context.Context, contentID string, payload *model.ContentPropertyPayloadScheme) (*model.ContentPropertyScheme, *model.ResponseScheme, error) {
 
 	if contentID == "" {
-		return nil, nil, model.ErrNoContentIDError
+		return nil, nil, model.ErrNoContentID
 	}
 
 	endpoint := fmt.Sprintf("wiki/rest/api/content/%v/property", contentID)
@@ -121,11 +121,11 @@ func (i *internalPropertyImpl) Create(ctx context.Context, contentID string, pay
 func (i *internalPropertyImpl) Get(ctx context.Context, contentID, key string) (*model.ContentPropertyScheme, *model.ResponseScheme, error) {
 
 	if contentID == "" {
-		return nil, nil, model.ErrNoContentIDError
+		return nil, nil, model.ErrNoContentID
 	}
 
 	if key == "" {
-		return nil, nil, model.ErrNoContentPropertyError
+		return nil, nil, model.ErrNoContentProperty
 	}
 
 	endpoint := fmt.Sprintf("wiki/rest/api/content/%v/property/%v", contentID, key)
@@ -147,11 +147,11 @@ func (i *internalPropertyImpl) Get(ctx context.Context, contentID, key string) (
 func (i *internalPropertyImpl) Delete(ctx context.Context, contentID, key string) (*model.ResponseScheme, error) {
 
 	if contentID == "" {
-		return nil, model.ErrNoContentIDError
+		return nil, model.ErrNoContentID
 	}
 
 	if key == "" {
-		return nil, model.ErrNoContentPropertyError
+		return nil, model.ErrNoContentProperty
 	}
 
 	endpoint := fmt.Sprintf("wiki/rest/api/content/%v/property/%v", contentID, key)

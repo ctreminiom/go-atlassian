@@ -65,7 +65,7 @@ func Test_internalSCIMSchemaImpl_Gets(t *testing.T) {
 				directoryID: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoAdminDirectoryIDError,
+			Err:     model.ErrNoAdminDirectoryID,
 		},
 
 		{
@@ -178,7 +178,7 @@ func Test_internalSCIMSchemaImpl_Group(t *testing.T) {
 				directoryID: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoAdminDirectoryIDError,
+			Err:     model.ErrNoAdminDirectoryID,
 		},
 
 		{
@@ -291,7 +291,7 @@ func Test_internalSCIMSchemaImpl_User(t *testing.T) {
 				directoryID: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoAdminDirectoryIDError,
+			Err:     model.ErrNoAdminDirectoryID,
 		},
 
 		{
@@ -404,7 +404,7 @@ func Test_internalSCIMSchemaImpl_Enterprise(t *testing.T) {
 				directoryID: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoAdminDirectoryIDError,
+			Err:     model.ErrNoAdminDirectoryID,
 		},
 
 		{
@@ -517,7 +517,7 @@ func Test_internalSCIMSchemaImpl_Feature(t *testing.T) {
 				directoryID: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoAdminDirectoryIDError,
+			Err:     model.ErrNoAdminDirectoryID,
 		},
 
 		{

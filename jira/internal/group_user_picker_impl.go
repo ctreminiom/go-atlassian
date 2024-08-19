@@ -47,7 +47,7 @@ type internalGroupUserPickerServiceImpl struct {
 func (i internalGroupUserPickerServiceImpl) Find(ctx context.Context, options *model.GroupUserPickerFindOptionScheme) (*model.GroupUserPickerFindScheme, *model.ResponseScheme, error) {
 
 	if options == nil || options.Query == "" {
-		return nil, nil, model.ErrNoQueryError
+		return nil, nil, model.ErrNoQuery
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/groupuserpicker", i.version)

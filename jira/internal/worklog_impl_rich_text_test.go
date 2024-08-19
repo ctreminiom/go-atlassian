@@ -74,7 +74,7 @@ func Test_internalWorklogRichTextImpl_Gets(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNpWorklogsError,
+			Err:     model.ErrNpWorklogs,
 		},
 
 		{
@@ -224,7 +224,7 @@ func Test_internalWorklogRichTextImpl_Get(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoIssueKeyOrIDError,
+			Err:     model.ErrNoIssueKeyOrID,
 		},
 
 		{
@@ -235,7 +235,7 @@ func Test_internalWorklogRichTextImpl_Get(t *testing.T) {
 				issueKeyOrID: "DUMMY-5",
 			},
 			wantErr: true,
-			Err:     model.ErrNoWorklogIDError,
+			Err:     model.ErrNoWorklogID,
 		},
 
 		{
@@ -391,7 +391,7 @@ func Test_internalWorklogRichTextImpl_Issue(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoIssueKeyOrIDError,
+			Err:     model.ErrNoIssueKeyOrID,
 		},
 
 		{
@@ -589,7 +589,7 @@ func Test_internalWorklogRichTextImpl_Delete(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoIssueKeyOrIDError,
+			Err:     model.ErrNoIssueKeyOrID,
 		},
 
 		{
@@ -600,7 +600,7 @@ func Test_internalWorklogRichTextImpl_Delete(t *testing.T) {
 				issueKeyOrID: "DUMMY-5",
 			},
 			wantErr: true,
-			Err:     model.ErrNoWorklogIDError,
+			Err:     model.ErrNoWorklogID,
 		},
 
 		{
@@ -1227,7 +1227,7 @@ func Test_internalWorklogRichTextImpl_Update(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoIssueKeyOrIDError,
+			Err:     model.ErrNoIssueKeyOrID,
 		},
 
 		{
@@ -1238,7 +1238,7 @@ func Test_internalWorklogRichTextImpl_Update(t *testing.T) {
 				issueKeyOrID: "DUMMY-5",
 			},
 			wantErr: true,
-			Err:     model.ErrNoWorklogIDError,
+			Err:     model.ErrNoWorklogID,
 		},
 
 		{

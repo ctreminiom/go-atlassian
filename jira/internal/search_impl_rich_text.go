@@ -71,7 +71,7 @@ func (i *internalSearchRichTextImpl) Checks(ctx context.Context, payload *model.
 func (i *internalSearchRichTextImpl) Get(ctx context.Context, jql string, fields, expands []string, startAt, maxResults int, validate string) (*model.IssueSearchSchemeV2, *model.ResponseScheme, error) {
 
 	if jql == "" {
-		return nil, nil, model.ErrNoJQLError
+		return nil, nil, model.ErrNoJQL
 	}
 
 	params := url.Values{}

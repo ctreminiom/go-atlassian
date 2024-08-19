@@ -107,7 +107,7 @@ func Test_internalContentAttachmentImpl_Gets(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoContentIDError,
+			Err:     model.ErrNoContentID,
 		},
 	}
 
@@ -237,7 +237,7 @@ func Test_internalContentAttachmentImpl_CreateOrUpdate(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoContentAttachmentIDError,
+			Err:     model.ErrNoContentAttachmentID,
 		},
 
 		{
@@ -247,7 +247,7 @@ func Test_internalContentAttachmentImpl_CreateOrUpdate(t *testing.T) {
 				attachmentID: "3837272",
 			},
 			wantErr: true,
-			Err:     model.ErrNoContentAttachmentNameError,
+			Err:     model.ErrNoContentAttachmentName,
 		},
 
 		{
@@ -258,7 +258,7 @@ func Test_internalContentAttachmentImpl_CreateOrUpdate(t *testing.T) {
 				fileName:     "LICENSE",
 			},
 			wantErr: true,
-			Err:     model.ErrNoContentReaderError,
+			Err:     model.ErrNoContentReader,
 		},
 	}
 
@@ -388,7 +388,7 @@ func Test_internalContentAttachmentImpl_Create(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoContentAttachmentIDError,
+			Err:     model.ErrNoContentAttachmentID,
 		},
 
 		{
@@ -398,7 +398,7 @@ func Test_internalContentAttachmentImpl_Create(t *testing.T) {
 				attachmentID: "3837272",
 			},
 			wantErr: true,
-			Err:     model.ErrNoContentAttachmentNameError,
+			Err:     model.ErrNoContentAttachmentName,
 		},
 
 		{
@@ -409,7 +409,7 @@ func Test_internalContentAttachmentImpl_Create(t *testing.T) {
 				fileName:     "LICENSE",
 			},
 			wantErr: true,
-			Err:     model.ErrNoContentReaderError,
+			Err:     model.ErrNoContentReader,
 		},
 	}
 

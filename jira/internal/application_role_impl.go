@@ -75,7 +75,7 @@ func (i *internalApplicationRoleImpl) Gets(ctx context.Context) ([]*model.Applic
 func (i *internalApplicationRoleImpl) Get(ctx context.Context, key string) (*model.ApplicationRoleScheme, *model.ResponseScheme, error) {
 
 	if key == "" {
-		return nil, nil, model.ErrNoApplicationRoleError
+		return nil, nil, model.ErrNoApplicationRole
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/applicationrole/%v", i.version, key)

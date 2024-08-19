@@ -295,7 +295,7 @@ func Test_internalIssueFieldConfigServiceImpl_Create(t *testing.T) {
 				description: "description sample",
 			},
 			wantErr: true,
-			Err:     model.ErrNoFieldConfigurationNameError,
+			Err:     model.ErrNoFieldConfigurationName,
 		},
 
 		{
@@ -494,7 +494,7 @@ func Test_internalIssueFieldConfigServiceImpl_Update(t *testing.T) {
 				description: "description sample",
 			},
 			wantErr: true,
-			Err:     model.ErrNoFieldConfigurationNameError,
+			Err:     model.ErrNoFieldConfigurationName,
 		},
 
 		{
@@ -507,7 +507,7 @@ func Test_internalIssueFieldConfigServiceImpl_Update(t *testing.T) {
 				description: "description sample",
 			},
 			wantErr: true,
-			Err:     model.ErrNoFieldConfigurationIDError,
+			Err:     model.ErrNoFieldConfigurationID,
 		},
 
 		{
@@ -660,7 +660,7 @@ func Test_internalIssueFieldConfigServiceImpl_Delete(t *testing.T) {
 				id:  0,
 			},
 			wantErr: true,
-			Err:     model.ErrNoFieldConfigurationIDError,
+			Err:     model.ErrNoFieldConfigurationID,
 		},
 
 		{

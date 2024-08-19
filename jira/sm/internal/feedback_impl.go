@@ -58,7 +58,7 @@ type internalServiceRequestFeedbackImpl struct {
 func (i *internalServiceRequestFeedbackImpl) Get(ctx context.Context, requestIDOrKey string) (*model.CustomerFeedbackScheme, *model.ResponseScheme, error) {
 
 	if requestIDOrKey == "" {
-		return nil, nil, model.ErrNoIssueKeyOrIDError
+		return nil, nil, model.ErrNoIssueKeyOrID
 	}
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/request/%v/feedback", requestIDOrKey)
@@ -80,7 +80,7 @@ func (i *internalServiceRequestFeedbackImpl) Get(ctx context.Context, requestIDO
 func (i *internalServiceRequestFeedbackImpl) Post(ctx context.Context, requestIDOrKey string, rating int, comment string) (*model.CustomerFeedbackScheme, *model.ResponseScheme, error) {
 
 	if requestIDOrKey == "" {
-		return nil, nil, model.ErrNoIssueKeyOrIDError
+		return nil, nil, model.ErrNoIssueKeyOrID
 	}
 
 	payload := map[string]interface{}{
@@ -110,7 +110,7 @@ func (i *internalServiceRequestFeedbackImpl) Post(ctx context.Context, requestID
 func (i *internalServiceRequestFeedbackImpl) Delete(ctx context.Context, requestIDOrKey string) (*model.ResponseScheme, error) {
 
 	if requestIDOrKey == "" {
-		return nil, model.ErrNoIssueKeyOrIDError
+		return nil, model.ErrNoIssueKeyOrID
 	}
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/request/%v/feedback", requestIDOrKey)

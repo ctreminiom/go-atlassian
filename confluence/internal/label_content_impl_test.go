@@ -93,7 +93,7 @@ func Test_internalContentLabelImpl_Gets(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoContentIDError,
+			Err:     model.ErrNoContentID,
 		},
 	}
 
@@ -204,7 +204,7 @@ func Test_internalContentLabelImpl_Remove(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoContentIDError,
+			Err:     model.ErrNoContentID,
 		},
 
 		{
@@ -214,7 +214,7 @@ func Test_internalContentLabelImpl_Remove(t *testing.T) {
 				contentID: "1111",
 			},
 			wantErr: true,
-			Err:     model.ErrNoContentLabelError,
+			Err:     model.ErrNoContentLabel,
 		},
 	}
 
@@ -334,7 +334,7 @@ func Test_internalContentLabelImpl_Add(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoContentIDError,
+			Err:     model.ErrNoContentID,
 		},
 	}
 

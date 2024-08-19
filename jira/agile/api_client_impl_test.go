@@ -132,7 +132,7 @@ func TestClient_Call(t *testing.T) {
 				Bytes:    *bytes.NewBufferString("Hello, world!"),
 			},
 			wantErr: true,
-			Err:     model.ErrBadRequestError,
+			Err:     model.ErrBadRequest,
 		},
 
 		{
@@ -157,7 +157,7 @@ func TestClient_Call(t *testing.T) {
 				Bytes:    *bytes.NewBufferString("Hello, world!"),
 			},
 			wantErr: true,
-			Err:     model.ErrInternalError,
+			Err:     model.ErrInternal,
 		},
 
 		{
@@ -509,7 +509,7 @@ func TestNew(t *testing.T) {
 			},
 			want:    noURLClientMocked,
 			wantErr: true,
-			Err:     model.ErrNoSiteError,
+			Err:     model.ErrNoSite,
 		},
 		{
 			name: "when the site url is not valid",

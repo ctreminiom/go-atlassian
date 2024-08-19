@@ -101,7 +101,7 @@ func Test_internalRemoteLinkImpl_Gets(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoIssueKeyOrIDError,
+			Err:     model.ErrNoIssueKeyOrID,
 		},
 
 		{
@@ -279,7 +279,7 @@ func Test_internalRemoteLinkImpl_Get(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoIssueKeyOrIDError,
+			Err:     model.ErrNoIssueKeyOrID,
 		},
 
 		{
@@ -290,7 +290,7 @@ func Test_internalRemoteLinkImpl_Get(t *testing.T) {
 				issueKeyOrID: "KP-3",
 			},
 			wantErr: true,
-			Err:     model.ErrNoRemoteLinkIDError,
+			Err:     model.ErrNoRemoteLinkID,
 		},
 
 		{
@@ -497,7 +497,7 @@ func Test_internalRemoteLinkImpl_Update(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoIssueKeyOrIDError,
+			Err:     model.ErrNoIssueKeyOrID,
 		},
 
 		{
@@ -508,7 +508,7 @@ func Test_internalRemoteLinkImpl_Update(t *testing.T) {
 				issueKeyOrID: "KP-3",
 			},
 			wantErr: true,
-			Err:     model.ErrNoRemoteLinkIDError,
+			Err:     model.ErrNoRemoteLinkID,
 		},
 
 		{
@@ -715,7 +715,7 @@ func Test_internalRemoteLinkImpl_Create(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoIssueKeyOrIDError,
+			Err:     model.ErrNoIssueKeyOrID,
 		},
 
 		{
@@ -894,7 +894,7 @@ func Test_internalRemoteLinkImpl_DeleteByID(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoIssueKeyOrIDError,
+			Err:     model.ErrNoIssueKeyOrID,
 		},
 
 		{
@@ -905,7 +905,7 @@ func Test_internalRemoteLinkImpl_DeleteByID(t *testing.T) {
 				issueKeyOrID: "KP-3",
 			},
 			wantErr: true,
-			Err:     model.ErrNoRemoteLinkIDError,
+			Err:     model.ErrNoRemoteLinkID,
 		},
 
 		{
@@ -1082,7 +1082,7 @@ func Test_internalRemoteLinkImpl_DeleteByGlobalID(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoIssueKeyOrIDError,
+			Err:     model.ErrNoIssueKeyOrID,
 		},
 
 		{
@@ -1093,7 +1093,7 @@ func Test_internalRemoteLinkImpl_DeleteByGlobalID(t *testing.T) {
 				issueKeyOrID: "KP-3",
 			},
 			wantErr: true,
-			Err:     model.ErrNoRemoteLinkGlobalIDError,
+			Err:     model.ErrNoRemoteLinkGlobalID,
 		},
 
 		{

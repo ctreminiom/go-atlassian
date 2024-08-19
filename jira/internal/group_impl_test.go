@@ -100,7 +100,7 @@ func Test_internalGroupServiceImpl_Create(t *testing.T) {
 				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
-			Err:     model.ErrNoGroupNameError,
+			Err:     model.ErrNoGroupName,
 		},
 
 		{
@@ -246,7 +246,7 @@ func Test_internalGroupServiceImpl_Delete(t *testing.T) {
 				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
-			Err:     model.ErrNoGroupNameError,
+			Err:     model.ErrNoGroupName,
 		},
 
 		{
@@ -394,7 +394,7 @@ func Test_internalGroupServiceImpl_Remove(t *testing.T) {
 				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
-			Err:     model.ErrNoGroupNameError,
+			Err:     model.ErrNoGroupName,
 		},
 
 		{
@@ -409,7 +409,7 @@ func Test_internalGroupServiceImpl_Remove(t *testing.T) {
 				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
-			Err:     model.ErrNoAccountIDError,
+			Err:     model.ErrNoAccountID,
 		},
 
 		{
@@ -558,7 +558,7 @@ func Test_internalGroupServiceImpl_Add(t *testing.T) {
 				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
-			Err:     model.ErrNoGroupNameError,
+			Err:     model.ErrNoGroupName,
 		},
 
 		{
@@ -573,7 +573,7 @@ func Test_internalGroupServiceImpl_Add(t *testing.T) {
 				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
-			Err:     model.ErrNoAccountIDError,
+			Err:     model.ErrNoAccountID,
 		},
 
 		{
@@ -880,7 +880,7 @@ func Test_internalGroupServiceImpl_Members(t *testing.T) {
 				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
-			Err:     model.ErrNoGroupNameError,
+			Err:     model.ErrNoGroupName,
 		},
 
 		{

@@ -93,7 +93,7 @@ func Test_internalAttachmentImpl_Get(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoContentAttachmentIDError,
+			Err:     model.ErrNoContentAttachmentID,
 		},
 	}
 
@@ -226,7 +226,7 @@ func Test_internalAttachmentImpl_Gets(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoEntityIDError,
+			Err:     model.ErrNoEntityID,
 		},
 
 		{
@@ -348,7 +348,7 @@ func Test_internalAttachmentImpl_Delete(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoContentAttachmentIDError,
+			Err:     model.ErrNoContentAttachmentID,
 		},
 	}
 

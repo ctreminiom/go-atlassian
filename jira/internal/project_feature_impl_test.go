@@ -104,7 +104,7 @@ func Test_internalProjectFeatureImpl_Set(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoProjectIDOrKeyError,
+			Err:     model.ErrNoProjectIDOrKey,
 		},
 
 		{
@@ -115,7 +115,7 @@ func Test_internalProjectFeatureImpl_Set(t *testing.T) {
 				projectKeyOrID: "DUMMY",
 			},
 			wantErr: true,
-			Err:     model.ErrNoProjectFeatureKeyError,
+			Err:     model.ErrNoProjectFeatureKey,
 		},
 
 		{
@@ -127,7 +127,7 @@ func Test_internalProjectFeatureImpl_Set(t *testing.T) {
 				featureKey:     "jsw.classic.roadmap",
 			},
 			wantErr: true,
-			Err:     model.ErrNoProjectFeatureStateError,
+			Err:     model.ErrNoProjectFeatureState,
 		},
 
 		{
@@ -274,7 +274,7 @@ func Test_internalProjectFeatureImpl_Gets(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoProjectIDOrKeyError,
+			Err:     model.ErrNoProjectIDOrKey,
 		},
 
 		{

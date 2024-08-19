@@ -114,7 +114,7 @@ func Test_internalSearchImpl_Content(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoCQLError,
+			Err:     model.ErrNoCQL,
 		},
 	}
 
@@ -233,7 +233,7 @@ func Test_internalSearchImpl_Users(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoCQLError,
+			Err:     model.ErrNoCQL,
 		},
 	}
 

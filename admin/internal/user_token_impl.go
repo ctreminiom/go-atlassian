@@ -46,7 +46,7 @@ type internalUserTokenImpl struct {
 func (i *internalUserTokenImpl) Gets(ctx context.Context, accountID string) ([]*model.UserTokensScheme, *model.ResponseScheme, error) {
 
 	if accountID == "" {
-		return nil, nil, model.ErrNoAdminAccountIDError
+		return nil, nil, model.ErrNoAdminAccountID
 	}
 
 	endpoint := fmt.Sprintf("users/%v/manage/api-tokens", accountID)
@@ -68,11 +68,11 @@ func (i *internalUserTokenImpl) Gets(ctx context.Context, accountID string) ([]*
 func (i *internalUserTokenImpl) Delete(ctx context.Context, accountID, tokenID string) (*model.ResponseScheme, error) {
 
 	if accountID == "" {
-		return nil, model.ErrNoAdminAccountIDError
+		return nil, model.ErrNoAdminAccountID
 	}
 
 	if tokenID == "" {
-		return nil, model.ErrNoAdminUserTokenError
+		return nil, model.ErrNoAdminUserToken
 	}
 
 	endpoint := fmt.Sprintf("users/%v/manage/api-tokens/%v", accountID, tokenID)

@@ -121,7 +121,7 @@ func TestDashboardService_Copy(t *testing.T) {
 				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
-			Err:     model.ErrNoDashboardIDError,
+			Err:     model.ErrNoDashboardID,
 		},
 
 		{
@@ -290,7 +290,7 @@ func TestDashboardService_Update(t *testing.T) {
 				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
-			Err:     model.ErrNoDashboardIDError,
+			Err:     model.ErrNoDashboardID,
 		},
 
 		{
@@ -929,7 +929,7 @@ func TestDashboardService_Get(t *testing.T) {
 				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
-			Err:     model.ErrNoDashboardIDError,
+			Err:     model.ErrNoDashboardID,
 		},
 
 		{
@@ -1078,7 +1078,7 @@ func TestDashboardService_Delete(t *testing.T) {
 				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
-			Err:     model.ErrNoDashboardIDError,
+			Err:     model.ErrNoDashboardID,
 		},
 
 		{

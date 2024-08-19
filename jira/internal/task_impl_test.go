@@ -98,7 +98,7 @@ func Test_internalTaskServiceImpl_Get(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoTaskIDError,
+			Err:     model.ErrNoTaskID,
 		},
 
 		{
@@ -242,7 +242,7 @@ func Test_internalTaskServiceImpl_Cancel(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoTaskIDError,
+			Err:     model.ErrNoTaskID,
 		},
 
 		{

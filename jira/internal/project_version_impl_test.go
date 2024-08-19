@@ -99,7 +99,7 @@ func Test_internalProjectVersionImpl_Gets(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoProjectIDOrKeyError,
+			Err:     model.ErrNoProjectIDOrKey,
 		},
 
 		{
@@ -261,7 +261,7 @@ func Test_internalProjectVersionImpl_Search(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoProjectIDOrKeyError,
+			Err:     model.ErrNoProjectIDOrKey,
 		},
 
 		{
@@ -417,7 +417,7 @@ func Test_internalProjectVersionImpl_Get(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoVersionIDError,
+			Err:     model.ErrNoVersionID,
 		},
 
 		{
@@ -563,7 +563,7 @@ func Test_internalProjectVersionImpl_RelatedIssueCounts(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoVersionIDError,
+			Err:     model.ErrNoVersionID,
 		},
 
 		{
@@ -707,7 +707,7 @@ func Test_internalProjectVersionImpl_UnresolvedIssueCount(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoVersionIDError,
+			Err:     model.ErrNoVersionID,
 		},
 
 		{
@@ -853,7 +853,7 @@ func Test_internalProjectVersionImpl_Merge(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoVersionIDError,
+			Err:     model.ErrNoVersionID,
 		},
 
 		{
@@ -864,7 +864,7 @@ func Test_internalProjectVersionImpl_Merge(t *testing.T) {
 				versionID: "100392",
 			},
 			wantErr: true,
-			Err:     model.ErrNoVersionIDError,
+			Err:     model.ErrNoVersionID,
 		},
 
 		{
@@ -1165,7 +1165,7 @@ func Test_internalProjectVersionImpl_Update(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoVersionIDError,
+			Err:     model.ErrNoVersionID,
 		},
 
 		{

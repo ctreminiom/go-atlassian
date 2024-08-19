@@ -61,7 +61,7 @@ type internalServiceRequestParticipantImpl struct {
 func (i *internalServiceRequestParticipantImpl) Gets(ctx context.Context, issueKeyOrID string, start, limit int) (*model.RequestParticipantPageScheme, *model.ResponseScheme, error) {
 
 	if issueKeyOrID == "" {
-		return nil, nil, model.ErrNoIssueKeyOrIDError
+		return nil, nil, model.ErrNoIssueKeyOrID
 	}
 
 	params := url.Values{}
@@ -87,11 +87,11 @@ func (i *internalServiceRequestParticipantImpl) Gets(ctx context.Context, issueK
 func (i *internalServiceRequestParticipantImpl) Add(ctx context.Context, issueKeyOrID string, accountIDs []string) (*model.RequestParticipantPageScheme, *model.ResponseScheme, error) {
 
 	if issueKeyOrID == "" {
-		return nil, nil, model.ErrNoIssueKeyOrIDError
+		return nil, nil, model.ErrNoIssueKeyOrID
 	}
 
 	if len(accountIDs) == 0 {
-		return nil, nil, model.ErrNoAccountSliceError
+		return nil, nil, model.ErrNoAccountSlice
 	}
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/request/%v/participant", issueKeyOrID)
@@ -113,11 +113,11 @@ func (i *internalServiceRequestParticipantImpl) Add(ctx context.Context, issueKe
 func (i *internalServiceRequestParticipantImpl) Remove(ctx context.Context, issueKeyOrID string, accountIDs []string) (*model.RequestParticipantPageScheme, *model.ResponseScheme, error) {
 
 	if issueKeyOrID == "" {
-		return nil, nil, model.ErrNoIssueKeyOrIDError
+		return nil, nil, model.ErrNoIssueKeyOrID
 	}
 
 	if len(accountIDs) == 0 {
-		return nil, nil, model.ErrNoAccountSliceError
+		return nil, nil, model.ErrNoAccountSlice
 	}
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/request/%v/participant", issueKeyOrID)

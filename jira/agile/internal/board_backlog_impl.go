@@ -74,7 +74,7 @@ func (i *internalBoardBacklogImpl) Move(ctx context.Context, issues []string) (*
 func (i *internalBoardBacklogImpl) MoveTo(ctx context.Context, boardID int, payload *model.BoardBacklogPayloadScheme) (*model.ResponseScheme, error) {
 
 	if boardID == 0 {
-		return nil, model.ErrNoBoardIDError
+		return nil, model.ErrNoBoardID
 	}
 
 	url := fmt.Sprintf("rest/agile/%v/backlog/%v/issue", i.version, boardID)

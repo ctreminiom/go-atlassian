@@ -122,7 +122,7 @@ func Test_internalServiceLevelAgreementImpl_Gets(t *testing.T) {
 			args: args{
 				ctx: context.Background(),
 			},
-			Err:     model.ErrNoIssueKeyOrIDError,
+			Err:     model.ErrNoIssueKeyOrID,
 			wantErr: true,
 		},
 	}
@@ -265,7 +265,7 @@ func Test_internalServiceLevelAgreementImpl_Get(t *testing.T) {
 			args: args{
 				ctx: context.Background(),
 			},
-			Err:     model.ErrNoIssueKeyOrIDError,
+			Err:     model.ErrNoIssueKeyOrID,
 			wantErr: true,
 		},
 
@@ -275,7 +275,7 @@ func Test_internalServiceLevelAgreementImpl_Get(t *testing.T) {
 				ctx:          context.Background(),
 				issueKeyOrID: "DESK-1",
 			},
-			Err:     model.ErrNoSLAMetricIDError,
+			Err:     model.ErrNoSLAMetricID,
 			wantErr: true,
 		},
 	}

@@ -358,7 +358,7 @@ func TestFilterShareService_Gets(t *testing.T) {
 				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
-			Err:     model.ErrNoFilterIDError,
+			Err:     model.ErrNoFilterID,
 		},
 
 		{
@@ -512,7 +512,7 @@ func TestFilterShareService_Add(t *testing.T) {
 				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
-			Err:     model.ErrNoFilterIDError,
+			Err:     model.ErrNoFilterID,
 		},
 
 		{
@@ -662,7 +662,7 @@ func TestFilterShareService_Get(t *testing.T) {
 				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
-			Err:     model.ErrNoFilterIDError,
+			Err:     model.ErrNoFilterID,
 		},
 
 		{
@@ -677,7 +677,7 @@ func TestFilterShareService_Get(t *testing.T) {
 				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
-			Err:     model.ErrNoPermissionGrantIDError,
+			Err:     model.ErrNoPermissionGrantID,
 		},
 
 		{
@@ -827,7 +827,7 @@ func TestFilterShareService_Delete(t *testing.T) {
 				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
-			Err:     model.ErrNoFilterIDError,
+			Err:     model.ErrNoFilterID,
 		},
 
 		{
@@ -842,7 +842,7 @@ func TestFilterShareService_Delete(t *testing.T) {
 				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
-			Err:     model.ErrNoPermissionGrantIDError,
+			Err:     model.ErrNoPermissionGrantID,
 		},
 
 		{

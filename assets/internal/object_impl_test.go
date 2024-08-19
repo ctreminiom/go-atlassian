@@ -93,7 +93,7 @@ func Test_internalObjectImpl_Get(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoWorkspaceIDError,
+			Err:     model.ErrNoWorkspaceID,
 		},
 
 		{
@@ -103,7 +103,7 @@ func Test_internalObjectImpl_Get(t *testing.T) {
 				workspaceID: "workspace-uuid-sample",
 			},
 			wantErr: true,
-			Err:     model.ErrNoObjectIDError,
+			Err:     model.ErrNoObjectID,
 		},
 	}
 
@@ -215,7 +215,7 @@ func Test_internalObjectImpl_Delete(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoWorkspaceIDError,
+			Err:     model.ErrNoWorkspaceID,
 		},
 
 		{
@@ -225,7 +225,7 @@ func Test_internalObjectImpl_Delete(t *testing.T) {
 				workspaceID: "workspace-uuid-sample",
 			},
 			wantErr: true,
-			Err:     model.ErrNoObjectIDError,
+			Err:     model.ErrNoObjectID,
 		},
 	}
 
@@ -336,7 +336,7 @@ func Test_internalObjectImpl_Attributes(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoWorkspaceIDError,
+			Err:     model.ErrNoWorkspaceID,
 		},
 
 		{
@@ -346,7 +346,7 @@ func Test_internalObjectImpl_Attributes(t *testing.T) {
 				workspaceID: "workspace-uuid-sample",
 			},
 			wantErr: true,
-			Err:     model.ErrNoObjectIDError,
+			Err:     model.ErrNoObjectID,
 		},
 	}
 
@@ -461,7 +461,7 @@ func Test_internalObjectImpl_History(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoWorkspaceIDError,
+			Err:     model.ErrNoWorkspaceID,
 		},
 
 		{
@@ -471,7 +471,7 @@ func Test_internalObjectImpl_History(t *testing.T) {
 				workspaceID: "workspace-uuid-sample",
 			},
 			wantErr: true,
-			Err:     model.ErrNoObjectIDError,
+			Err:     model.ErrNoObjectID,
 		},
 	}
 
@@ -584,7 +584,7 @@ func Test_internalObjectImpl_References(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoWorkspaceIDError,
+			Err:     model.ErrNoWorkspaceID,
 		},
 
 		{
@@ -594,7 +594,7 @@ func Test_internalObjectImpl_References(t *testing.T) {
 				workspaceID: "workspace-uuid-sample",
 			},
 			wantErr: true,
-			Err:     model.ErrNoObjectIDError,
+			Err:     model.ErrNoObjectID,
 		},
 	}
 
@@ -706,7 +706,7 @@ func Test_internalObjectImpl_Relation(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoWorkspaceIDError,
+			Err:     model.ErrNoWorkspaceID,
 		},
 
 		{
@@ -716,7 +716,7 @@ func Test_internalObjectImpl_Relation(t *testing.T) {
 				workspaceID: "workspace-uuid-sample",
 			},
 			wantErr: true,
-			Err:     model.ErrNoObjectIDError,
+			Err:     model.ErrNoObjectID,
 		},
 	}
 
@@ -847,7 +847,7 @@ func Test_internalObjectImpl_Update(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoWorkspaceIDError,
+			Err:     model.ErrNoWorkspaceID,
 		},
 
 		{
@@ -857,7 +857,7 @@ func Test_internalObjectImpl_Update(t *testing.T) {
 				workspaceID: "workspace-uuid-sample",
 			},
 			wantErr: true,
-			Err:     model.ErrNoObjectIDError,
+			Err:     model.ErrNoObjectID,
 		},
 	}
 
@@ -994,7 +994,7 @@ func Test_internalObjectImpl_Create(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoWorkspaceIDError,
+			Err:     model.ErrNoWorkspaceID,
 		},
 	}
 
@@ -1114,7 +1114,7 @@ func Test_internalObjectImpl_Filter(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoWorkspaceIDError,
+			Err:     model.ErrNoWorkspaceID,
 		},
 
 		{
@@ -1124,7 +1124,7 @@ func Test_internalObjectImpl_Filter(t *testing.T) {
 				workspaceID: "workspace-uuid-sample",
 			},
 			wantErr: true,
-			Err:     model.ErrNoAqlQueryError,
+			Err:     model.ErrNoAqlQuery,
 		},
 	}
 
@@ -1250,7 +1250,7 @@ func Test_internalObjectImpl_Search(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoWorkspaceIDError,
+			Err:     model.ErrNoWorkspaceID,
 		},
 	}
 

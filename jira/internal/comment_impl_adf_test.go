@@ -84,7 +84,7 @@ func Test_internalAdfCommentImpl_Gets(t *testing.T) {
 				maxResults:   50,
 			},
 			wantErr: true,
-			Err:     model.ErrNoIssueKeyOrIDError,
+			Err:     model.ErrNoIssueKeyOrID,
 		},
 
 		{
@@ -210,7 +210,7 @@ func Test_internalAdfCommentImpl_Get(t *testing.T) {
 				issueKeyOrID: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoIssueKeyOrIDError,
+			Err:     model.ErrNoIssueKeyOrID,
 		},
 
 		{
@@ -221,7 +221,7 @@ func Test_internalAdfCommentImpl_Get(t *testing.T) {
 				issueKeyOrID: "DUMMY-1",
 			},
 			wantErr: true,
-			Err:     model.ErrNoCommentIDError,
+			Err:     model.ErrNoCommentID,
 		},
 
 		{
@@ -343,7 +343,7 @@ func Test_internalAdfCommentImpl_Delete(t *testing.T) {
 				issueKeyOrID: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoIssueKeyOrIDError,
+			Err:     model.ErrNoIssueKeyOrID,
 		},
 
 		{
@@ -354,7 +354,7 @@ func Test_internalAdfCommentImpl_Delete(t *testing.T) {
 				issueKeyOrID: "DUMMY-1",
 			},
 			wantErr: true,
-			Err:     model.ErrNoCommentIDError,
+			Err:     model.ErrNoCommentID,
 		},
 
 		{
@@ -519,7 +519,7 @@ func Test_internalAdfCommentImpl_Add(t *testing.T) {
 				expand:       []string{"body"},
 			},
 			wantErr: true,
-			Err:     model.ErrNoIssueKeyOrIDError,
+			Err:     model.ErrNoIssueKeyOrID,
 		},
 
 		{

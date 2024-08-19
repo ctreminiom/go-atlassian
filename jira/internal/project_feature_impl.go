@@ -54,7 +54,7 @@ type internalProjectFeatureImpl struct {
 func (i *internalProjectFeatureImpl) Gets(ctx context.Context, projectKeyOrID string) (*model.ProjectFeaturesScheme, *model.ResponseScheme, error) {
 
 	if projectKeyOrID == "" {
-		return nil, nil, model.ErrNoProjectIDOrKeyError
+		return nil, nil, model.ErrNoProjectIDOrKey
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/project/%v/features", i.version, projectKeyOrID)
@@ -76,15 +76,15 @@ func (i *internalProjectFeatureImpl) Gets(ctx context.Context, projectKeyOrID st
 func (i *internalProjectFeatureImpl) Set(ctx context.Context, projectKeyOrID, featureKey, state string) (*model.ProjectFeaturesScheme, *model.ResponseScheme, error) {
 
 	if projectKeyOrID == "" {
-		return nil, nil, model.ErrNoProjectIDOrKeyError
+		return nil, nil, model.ErrNoProjectIDOrKey
 	}
 
 	if featureKey == "" {
-		return nil, nil, model.ErrNoProjectFeatureKeyError
+		return nil, nil, model.ErrNoProjectFeatureKey
 	}
 
 	if state == "" {
-		return nil, nil, model.ErrNoProjectFeatureStateError
+		return nil, nil, model.ErrNoProjectFeatureState
 	}
 
 	payload := map[string]interface{}{"state": state}

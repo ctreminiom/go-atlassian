@@ -51,7 +51,7 @@ type internalAnalyticsServiceImpl struct {
 func (i *internalAnalyticsServiceImpl) Get(ctx context.Context, contentID, fromDate string) (*model.ContentViewScheme, *model.ResponseScheme, error) {
 
 	if contentID == "" {
-		return nil, nil, model.ErrNoContentIDError
+		return nil, nil, model.ErrNoContentID
 	}
 
 	var endpoint strings.Builder
@@ -81,7 +81,7 @@ func (i *internalAnalyticsServiceImpl) Get(ctx context.Context, contentID, fromD
 func (i *internalAnalyticsServiceImpl) Distinct(ctx context.Context, contentID, fromDate string) (*model.ContentViewScheme, *model.ResponseScheme, error) {
 
 	if contentID == "" {
-		return nil, nil, model.ErrNoContentIDError
+		return nil, nil, model.ErrNoContentID
 	}
 
 	var endpoint strings.Builder

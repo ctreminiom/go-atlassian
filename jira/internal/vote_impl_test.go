@@ -101,7 +101,7 @@ func Test_internalVoteImpl_Gets(t *testing.T) {
 				issueKeyOrID: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoIssueKeyOrIDError,
+			Err:     model.ErrNoIssueKeyOrID,
 		},
 
 		{
@@ -249,7 +249,7 @@ func Test_internalVoteImpl_Add(t *testing.T) {
 				issueKeyOrID: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoIssueKeyOrIDError,
+			Err:     model.ErrNoIssueKeyOrID,
 		},
 
 		{
@@ -396,7 +396,7 @@ func Test_internalVoteImpl_Delete(t *testing.T) {
 				issueKeyOrID: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoIssueKeyOrIDError,
+			Err:     model.ErrNoIssueKeyOrID,
 		},
 
 		{

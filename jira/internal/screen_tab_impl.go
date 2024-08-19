@@ -86,7 +86,7 @@ type internalScreenTabImpl struct {
 func (i *internalScreenTabImpl) Gets(ctx context.Context, screenID int, projectKey string) ([]*model.ScreenTabScheme, *model.ResponseScheme, error) {
 
 	if screenID == 0 {
-		return nil, nil, model.ErrNoScreenIDError
+		return nil, nil, model.ErrNoScreenID
 	}
 
 	var endpoint strings.Builder
@@ -117,11 +117,11 @@ func (i *internalScreenTabImpl) Gets(ctx context.Context, screenID int, projectK
 func (i *internalScreenTabImpl) Create(ctx context.Context, screenID int, tabName string) (*model.ScreenTabScheme, *model.ResponseScheme, error) {
 
 	if screenID == 0 {
-		return nil, nil, model.ErrNoScreenIDError
+		return nil, nil, model.ErrNoScreenID
 	}
 
 	if tabName == "" {
-		return nil, nil, model.ErrNoScreenTabNameError
+		return nil, nil, model.ErrNoScreenTabName
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/screens/%v/tabs", i.version, screenID)
@@ -143,15 +143,15 @@ func (i *internalScreenTabImpl) Create(ctx context.Context, screenID int, tabNam
 func (i *internalScreenTabImpl) Update(ctx context.Context, screenID, tabID int, newTabName string) (*model.ScreenTabScheme, *model.ResponseScheme, error) {
 
 	if screenID == 0 {
-		return nil, nil, model.ErrNoScreenIDError
+		return nil, nil, model.ErrNoScreenID
 	}
 
 	if tabID == 0 {
-		return nil, nil, model.ErrNoScreenTabIDError
+		return nil, nil, model.ErrNoScreenTabID
 	}
 
 	if newTabName == "" {
-		return nil, nil, model.ErrNoScreenTabNameError
+		return nil, nil, model.ErrNoScreenTabName
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/screens/%v/tabs/%v", i.version, screenID, tabID)
@@ -173,11 +173,11 @@ func (i *internalScreenTabImpl) Update(ctx context.Context, screenID, tabID int,
 func (i *internalScreenTabImpl) Delete(ctx context.Context, screenID, tabID int) (*model.ResponseScheme, error) {
 
 	if screenID == 0 {
-		return nil, model.ErrNoScreenIDError
+		return nil, model.ErrNoScreenID
 	}
 
 	if tabID == 0 {
-		return nil, model.ErrNoScreenTabIDError
+		return nil, model.ErrNoScreenTabID
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/screens/%v/tabs/%v", i.version, screenID, tabID)
@@ -193,11 +193,11 @@ func (i *internalScreenTabImpl) Delete(ctx context.Context, screenID, tabID int)
 func (i *internalScreenTabImpl) Move(ctx context.Context, screenID, tabID, position int) (*model.ResponseScheme, error) {
 
 	if screenID == 0 {
-		return nil, model.ErrNoScreenIDError
+		return nil, model.ErrNoScreenID
 	}
 
 	if tabID == 0 {
-		return nil, model.ErrNoScreenTabIDError
+		return nil, model.ErrNoScreenTabID
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/screens/%v/tabs/%v/move/%v", i.version, screenID, tabID, position)

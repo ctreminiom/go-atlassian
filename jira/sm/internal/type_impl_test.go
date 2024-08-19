@@ -264,7 +264,7 @@ func Test_internalTypeImpl_Gets(t *testing.T) {
 			args: args{
 				ctx: context.Background(),
 			},
-			Err:     model.ErrNoServiceDeskIDError,
+			Err:     model.ErrNoServiceDeskID,
 			wantErr: true,
 		},
 	}
@@ -406,7 +406,7 @@ func Test_internalTypeImpl_Get(t *testing.T) {
 			args: args{
 				ctx: context.Background(),
 			},
-			Err:     model.ErrNoServiceDeskIDError,
+			Err:     model.ErrNoServiceDeskID,
 			wantErr: true,
 		},
 
@@ -416,7 +416,7 @@ func Test_internalTypeImpl_Get(t *testing.T) {
 				ctx:           context.Background(),
 				serviceDeskID: 10001,
 			},
-			Err:     model.ErrNoRequestTypeIDError,
+			Err:     model.ErrNoRequestTypeID,
 			wantErr: true,
 		},
 	}
@@ -558,7 +558,7 @@ func Test_internalTypeImpl_Fields(t *testing.T) {
 			args: args{
 				ctx: context.Background(),
 			},
-			Err:     model.ErrNoServiceDeskIDError,
+			Err:     model.ErrNoServiceDeskID,
 			wantErr: true,
 		},
 
@@ -568,7 +568,7 @@ func Test_internalTypeImpl_Fields(t *testing.T) {
 				ctx:           context.Background(),
 				serviceDeskID: 10001,
 			},
-			Err:     model.ErrNoRequestTypeIDError,
+			Err:     model.ErrNoRequestTypeID,
 			wantErr: true,
 		},
 	}
@@ -710,7 +710,7 @@ func Test_internalTypeImpl_Delete(t *testing.T) {
 			args: args{
 				ctx: context.Background(),
 			},
-			Err:     model.ErrNoServiceDeskIDError,
+			Err:     model.ErrNoServiceDeskID,
 			wantErr: true,
 		},
 
@@ -720,7 +720,7 @@ func Test_internalTypeImpl_Delete(t *testing.T) {
 				ctx:           context.Background(),
 				serviceDeskID: 10001,
 			},
-			Err:     model.ErrNoRequestTypeIDError,
+			Err:     model.ErrNoRequestTypeID,
 			wantErr: true,
 		},
 	}
@@ -883,7 +883,7 @@ func Test_internalTypeImpl_Create(t *testing.T) {
 			args: args{
 				ctx: context.Background(),
 			},
-			Err:     model.ErrNoServiceDeskIDError,
+			Err:     model.ErrNoServiceDeskID,
 			wantErr: true,
 		},
 	}

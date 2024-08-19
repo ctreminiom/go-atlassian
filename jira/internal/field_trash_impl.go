@@ -112,7 +112,7 @@ func (i *internalFieldTrashServiceImpl) Search(ctx context.Context, options *mod
 func (i *internalFieldTrashServiceImpl) Move(ctx context.Context, id string) (*model.ResponseScheme, error) {
 
 	if id == "" {
-		return nil, model.ErrNoFieldIDError
+		return nil, model.ErrNoFieldID
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/field/%v/trash", i.version, id)
@@ -128,7 +128,7 @@ func (i *internalFieldTrashServiceImpl) Move(ctx context.Context, id string) (*m
 func (i *internalFieldTrashServiceImpl) Restore(ctx context.Context, id string) (*model.ResponseScheme, error) {
 
 	if id == "" {
-		return nil, model.ErrNoFieldIDError
+		return nil, model.ErrNoFieldID
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/field/%v/restore", i.version, id)

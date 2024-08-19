@@ -73,7 +73,7 @@ func Test_internalIssueFieldConfigItemServiceImpl_Gets(t *testing.T) {
 				maxResults: 50,
 			},
 			wantErr: true,
-			Err:     model.ErrNoFieldConfigurationIDError,
+			Err:     model.ErrNoFieldConfigurationID,
 		},
 
 		{
@@ -251,7 +251,7 @@ func Test_internalIssueFieldConfigItemServiceImpl_Update(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoFieldConfigurationIDError,
+			Err:     model.ErrNoFieldConfigurationID,
 		},
 
 		{

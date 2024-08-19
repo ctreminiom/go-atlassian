@@ -125,11 +125,11 @@ func (i *internalCustomerImpl) Gets(ctx context.Context, serviceDeskID string, q
 func (i *internalCustomerImpl) Add(ctx context.Context, serviceDeskID string, accountIDs []string) (*model.ResponseScheme, error) {
 
 	if serviceDeskID == "" {
-		return nil, model.ErrNoServiceDeskIDError
+		return nil, model.ErrNoServiceDeskID
 	}
 
 	if len(accountIDs) == 0 {
-		return nil, model.ErrNoAccountSliceError
+		return nil, model.ErrNoAccountSlice
 	}
 
 	payload := map[string]interface{}{
@@ -149,11 +149,11 @@ func (i *internalCustomerImpl) Add(ctx context.Context, serviceDeskID string, ac
 func (i *internalCustomerImpl) Remove(ctx context.Context, serviceDeskID string, accountIDs []string) (*model.ResponseScheme, error) {
 
 	if serviceDeskID == "" {
-		return nil, model.ErrNoServiceDeskIDError
+		return nil, model.ErrNoServiceDeskID
 	}
 
 	if len(accountIDs) == 0 {
-		return nil, model.ErrNoAccountSliceError
+		return nil, model.ErrNoAccountSlice
 	}
 
 	payload := map[string]interface{}{

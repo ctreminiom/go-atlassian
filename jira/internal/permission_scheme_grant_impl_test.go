@@ -109,7 +109,7 @@ func TestPermissionSchemeGrantService_Create(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoPermissionSchemeIDError,
+			Err:     model.ErrNoPermissionSchemeID,
 		},
 
 		{
@@ -257,7 +257,7 @@ func TestPermissionSchemeGrantService_Gets(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoPermissionSchemeIDError,
+			Err:     model.ErrNoPermissionSchemeID,
 		},
 
 		{
@@ -408,7 +408,7 @@ func TestPermissionSchemeGrantService_Get(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoPermissionSchemeIDError,
+			Err:     model.ErrNoPermissionSchemeID,
 		},
 
 		{
@@ -419,7 +419,7 @@ func TestPermissionSchemeGrantService_Get(t *testing.T) {
 				permissionSchemeID: 10001,
 			},
 			wantErr: true,
-			Err:     model.ErrNoPermissionGrantIDError,
+			Err:     model.ErrNoPermissionGrantID,
 		},
 
 		{
@@ -569,7 +569,7 @@ func TestPermissionSchemeGrantService_Delete(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoPermissionSchemeIDError,
+			Err:     model.ErrNoPermissionSchemeID,
 		},
 
 		{
@@ -580,7 +580,7 @@ func TestPermissionSchemeGrantService_Delete(t *testing.T) {
 				permissionSchemeID: 10001,
 			},
 			wantErr: true,
-			Err:     model.ErrNoPermissionGrantIDError,
+			Err:     model.ErrNoPermissionGrantID,
 		},
 
 		{

@@ -229,7 +229,7 @@ func Test_internalTypeImpl_Get(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoIssueTypeIDError,
+			Err:     model.ErrNoIssueTypeID,
 		},
 
 		{
@@ -791,7 +791,7 @@ func Test_internalTypeImpl_Delete(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoIssueTypeIDError,
+			Err:     model.ErrNoIssueTypeID,
 		},
 
 		{

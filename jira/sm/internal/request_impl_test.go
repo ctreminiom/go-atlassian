@@ -434,7 +434,7 @@ func Test_internalServiceRequestImpl_Get(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoIssueKeyOrIDError,
+			Err:     model.ErrNoIssueKeyOrID,
 		},
 	}
 
@@ -573,7 +573,7 @@ func Test_internalServiceRequestImpl_Subscribe(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoIssueKeyOrIDError,
+			Err:     model.ErrNoIssueKeyOrID,
 		},
 	}
 
@@ -711,7 +711,7 @@ func Test_internalServiceRequestImpl_Unsubscribe(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoIssueKeyOrIDError,
+			Err:     model.ErrNoIssueKeyOrID,
 		},
 	}
 
@@ -883,7 +883,7 @@ func Test_internalServiceRequestImpl_Transition(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoIssueKeyOrIDError,
+			Err:     model.ErrNoIssueKeyOrID,
 		},
 
 		{
@@ -893,7 +893,7 @@ func Test_internalServiceRequestImpl_Transition(t *testing.T) {
 				issueKeyOrID: "DESK-1",
 			},
 			wantErr: true,
-			Err:     model.ErrNoTransitionIDError,
+			Err:     model.ErrNoTransitionID,
 		},
 	}
 

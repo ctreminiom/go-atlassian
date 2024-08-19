@@ -257,7 +257,7 @@ func Test_internalBoardBacklogImpl_MoveTo(t *testing.T) {
 			args: args{
 				ctx: context.Background(),
 			},
-			Err:     model.ErrNoBoardIDError,
+			Err:     model.ErrNoBoardID,
 			wantErr: true,
 		},
 	}

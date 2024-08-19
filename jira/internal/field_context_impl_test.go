@@ -124,7 +124,7 @@ func Test_internalIssueFieldContextServiceImpl_Gets(t *testing.T) {
 				maxResults: 50,
 			},
 			wantErr: true,
-			Err:     model.ErrNoFieldIDError,
+			Err:     model.ErrNoFieldID,
 		},
 
 		{
@@ -291,7 +291,7 @@ func Test_internalIssueFieldContextServiceImpl_Create(t *testing.T) {
 				payload: payloadMocked,
 			},
 			wantErr: true,
-			Err:     model.ErrNoFieldIDError,
+			Err:     model.ErrNoFieldID,
 		},
 
 		{
@@ -448,7 +448,7 @@ func Test_internalIssueFieldContextServiceImpl_GetDefaultValues(t *testing.T) {
 				fieldID: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoFieldIDError,
+			Err:     model.ErrNoFieldID,
 		},
 
 		{
@@ -618,7 +618,7 @@ func Test_internalIssueFieldContextServiceImpl_SetDefaultValue(t *testing.T) {
 				fieldID: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoFieldIDError,
+			Err:     model.ErrNoFieldID,
 		},
 
 		{
@@ -774,7 +774,7 @@ func Test_internalIssueFieldContextServiceImpl_IssueTypesContext(t *testing.T) {
 				fieldId: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoFieldIDError,
+			Err:     model.ErrNoFieldID,
 		},
 
 		{
@@ -934,7 +934,7 @@ func Test_internalIssueFieldContextServiceImpl_ProjectsContext(t *testing.T) {
 				fieldId: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoFieldIDError,
+			Err:     model.ErrNoFieldID,
 		},
 
 		{
@@ -1131,7 +1131,7 @@ func Test_internalIssueFieldContextServiceImpl_Update(t *testing.T) {
 				fieldId: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoFieldIDError,
+			Err:     model.ErrNoFieldID,
 		},
 
 		{
@@ -1285,7 +1285,7 @@ func Test_internalIssueFieldContextServiceImpl_Delete(t *testing.T) {
 				fieldId: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoFieldIDError,
+			Err:     model.ErrNoFieldID,
 		},
 
 		{
@@ -1441,7 +1441,7 @@ func Test_internalIssueFieldContextServiceImpl_AddIssueTypes(t *testing.T) {
 				fieldId: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoFieldIDError,
+			Err:     model.ErrNoFieldID,
 		},
 
 		{
@@ -1599,7 +1599,7 @@ func Test_internalIssueFieldContextServiceImpl_RemoveIssueTypes(t *testing.T) {
 				fieldId: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoFieldIDError,
+			Err:     model.ErrNoFieldID,
 		},
 
 		{
@@ -1611,7 +1611,7 @@ func Test_internalIssueFieldContextServiceImpl_RemoveIssueTypes(t *testing.T) {
 				issueTypesIds: nil,
 			},
 			wantErr: true,
-			Err:     model.ErrNoIssueTypesError,
+			Err:     model.ErrNoIssueTypes,
 		},
 
 		{
@@ -1769,7 +1769,7 @@ func Test_internalIssueFieldContextServiceImpl_Link(t *testing.T) {
 				fieldId: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoFieldIDError,
+			Err:     model.ErrNoFieldID,
 		},
 
 		{
@@ -1780,7 +1780,7 @@ func Test_internalIssueFieldContextServiceImpl_Link(t *testing.T) {
 				fieldId: "custom_field_10002",
 			},
 			wantErr: true,
-			Err:     model.ErrNoFieldContextIDError,
+			Err:     model.ErrNoFieldContextID,
 		},
 
 		{
@@ -1792,7 +1792,7 @@ func Test_internalIssueFieldContextServiceImpl_Link(t *testing.T) {
 				contextId: 10001,
 			},
 			wantErr: true,
-			Err:     model.ErrNoProjectIDsError,
+			Err:     model.ErrNoProjectIDs,
 		},
 
 		{
@@ -1950,7 +1950,7 @@ func Test_internalIssueFieldContextServiceImpl_Unlink(t *testing.T) {
 				fieldId: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoFieldIDError,
+			Err:     model.ErrNoFieldID,
 		},
 
 		{
@@ -1961,7 +1961,7 @@ func Test_internalIssueFieldContextServiceImpl_Unlink(t *testing.T) {
 				fieldId: "custom_field_10002",
 			},
 			wantErr: true,
-			Err:     model.ErrNoFieldContextIDError,
+			Err:     model.ErrNoFieldContextID,
 		},
 
 		{
@@ -1973,7 +1973,7 @@ func Test_internalIssueFieldContextServiceImpl_Unlink(t *testing.T) {
 				contextId: 10001,
 			},
 			wantErr: true,
-			Err:     model.ErrNoProjectIDsError,
+			Err:     model.ErrNoProjectIDs,
 		},
 
 		{

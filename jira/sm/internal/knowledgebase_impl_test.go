@@ -286,7 +286,7 @@ func Test_internalKnowledgebaseImpl_Gets(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoServiceDeskIDError,
+			Err:     model.ErrNoServiceDeskID,
 		},
 
 		{
@@ -296,7 +296,7 @@ func Test_internalKnowledgebaseImpl_Gets(t *testing.T) {
 				serviceDeskID: 10001,
 			},
 			wantErr: true,
-			Err:     model.ErrNoKBQueryError,
+			Err:     model.ErrNoKBQuery,
 		},
 	}
 

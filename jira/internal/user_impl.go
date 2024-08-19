@@ -108,7 +108,7 @@ type internalUserImpl struct {
 func (i *internalUserImpl) Get(ctx context.Context, accountID string, expand []string) (*model.UserScheme, *model.ResponseScheme, error) {
 
 	if accountID == "" {
-		return nil, nil, model.ErrNoAccountIDError
+		return nil, nil, model.ErrNoAccountID
 	}
 
 	params := url.Values{}
@@ -155,7 +155,7 @@ func (i *internalUserImpl) Create(ctx context.Context, payload *model.UserPayloa
 func (i *internalUserImpl) Delete(ctx context.Context, accountID string) (*model.ResponseScheme, error) {
 
 	if accountID == "" {
-		return nil, model.ErrNoAccountIDError
+		return nil, model.ErrNoAccountID
 	}
 
 	params := url.Values{}
@@ -173,7 +173,7 @@ func (i *internalUserImpl) Delete(ctx context.Context, accountID string) (*model
 func (i *internalUserImpl) Find(ctx context.Context, accountIDs []string, startAt, maxResults int) (*model.UserSearchPageScheme, *model.ResponseScheme, error) {
 
 	if len(accountIDs) == 0 {
-		return nil, nil, model.ErrNoAccountSliceError
+		return nil, nil, model.ErrNoAccountSlice
 	}
 
 	params := url.Values{}
@@ -203,7 +203,7 @@ func (i *internalUserImpl) Find(ctx context.Context, accountIDs []string, startA
 func (i *internalUserImpl) Groups(ctx context.Context, accountID string) ([]*model.UserGroupScheme, *model.ResponseScheme, error) {
 
 	if accountID == "" {
-		return nil, nil, model.ErrNoAccountIDError
+		return nil, nil, model.ErrNoAccountID
 	}
 
 	params := url.Values{}

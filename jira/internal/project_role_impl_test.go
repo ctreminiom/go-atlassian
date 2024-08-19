@@ -103,7 +103,7 @@ func Test_internalProjectRoleImpl_Get(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoProjectIDOrKeyError,
+			Err:     model.ErrNoProjectIDOrKey,
 		},
 
 		{
@@ -258,7 +258,7 @@ func Test_internalProjectRoleImpl_Gets(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoProjectIDOrKeyError,
+			Err:     model.ErrNoProjectIDOrKey,
 		},
 
 		{
@@ -431,7 +431,7 @@ func Test_internalProjectRoleImpl_Details(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoProjectIDOrKeyError,
+			Err:     model.ErrNoProjectIDOrKey,
 		},
 
 		{

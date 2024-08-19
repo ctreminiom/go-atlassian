@@ -63,7 +63,7 @@ type internalSpaceV2Impl struct {
 func (i *internalSpaceV2Impl) Permissions(ctx context.Context, spaceID int, cursor string, limit int) (*model.SpacePermissionPageScheme, *model.ResponseScheme, error) {
 
 	if spaceID == 0 {
-		return nil, nil, model.ErrNoSpaceIDError
+		return nil, nil, model.ErrNoSpaceID
 	}
 
 	query := url.Values{}
@@ -153,7 +153,7 @@ func (i *internalSpaceV2Impl) Bulk(ctx context.Context, options *model.GetSpaces
 func (i *internalSpaceV2Impl) Get(ctx context.Context, spaceID int, descriptionFormat string) (*model.SpaceSchemeV2, *model.ResponseScheme, error) {
 
 	if spaceID == 0 {
-		return nil, nil, model.ErrNoSpaceIDError
+		return nil, nil, model.ErrNoSpaceID
 	}
 
 	var endpoint strings.Builder

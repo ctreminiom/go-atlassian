@@ -175,7 +175,7 @@ type internalIssueFieldContextServiceImpl struct {
 func (i *internalIssueFieldContextServiceImpl) Gets(ctx context.Context, fieldID string, options *model.FieldContextOptionsScheme, startAt, maxResults int) (*model.CustomFieldContextPageScheme, *model.ResponseScheme, error) {
 
 	if fieldID == "" {
-		return nil, nil, model.ErrNoFieldIDError
+		return nil, nil, model.ErrNoFieldID
 	}
 
 	params := url.Values{}
@@ -210,7 +210,7 @@ func (i *internalIssueFieldContextServiceImpl) Gets(ctx context.Context, fieldID
 func (i *internalIssueFieldContextServiceImpl) Create(ctx context.Context, fieldID string, payload *model.FieldContextPayloadScheme) (*model.FieldContextScheme, *model.ResponseScheme, error) {
 
 	if fieldID == "" {
-		return nil, nil, model.ErrNoFieldIDError
+		return nil, nil, model.ErrNoFieldID
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/field/%v/context", i.version, fieldID)
@@ -232,7 +232,7 @@ func (i *internalIssueFieldContextServiceImpl) Create(ctx context.Context, field
 func (i *internalIssueFieldContextServiceImpl) GetDefaultValues(ctx context.Context, fieldID string, contextIDs []int, startAt, maxResults int) (*model.CustomFieldDefaultValuePageScheme, *model.ResponseScheme, error) {
 
 	if fieldID == "" {
-		return nil, nil, model.ErrNoFieldIDError
+		return nil, nil, model.ErrNoFieldID
 	}
 
 	params := url.Values{}
@@ -262,7 +262,7 @@ func (i *internalIssueFieldContextServiceImpl) GetDefaultValues(ctx context.Cont
 func (i *internalIssueFieldContextServiceImpl) SetDefaultValue(ctx context.Context, fieldID string, payload *model.FieldContextDefaultPayloadScheme) (*model.ResponseScheme, error) {
 
 	if fieldID == "" {
-		return nil, model.ErrNoFieldIDError
+		return nil, model.ErrNoFieldID
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/field/%v/context/defaultValue", i.version, fieldID)
@@ -278,7 +278,7 @@ func (i *internalIssueFieldContextServiceImpl) SetDefaultValue(ctx context.Conte
 func (i *internalIssueFieldContextServiceImpl) IssueTypesContext(ctx context.Context, fieldID string, contextIDs []int, startAt, maxResults int) (*model.IssueTypeToContextMappingPageScheme, *model.ResponseScheme, error) {
 
 	if fieldID == "" {
-		return nil, nil, model.ErrNoFieldIDError
+		return nil, nil, model.ErrNoFieldID
 	}
 
 	params := url.Values{}
@@ -308,7 +308,7 @@ func (i *internalIssueFieldContextServiceImpl) IssueTypesContext(ctx context.Con
 func (i *internalIssueFieldContextServiceImpl) ProjectsContext(ctx context.Context, fieldID string, contextIDs []int, startAt, maxResults int) (*model.CustomFieldContextProjectMappingPageScheme, *model.ResponseScheme, error) {
 
 	if fieldID == "" {
-		return nil, nil, model.ErrNoFieldIDError
+		return nil, nil, model.ErrNoFieldID
 	}
 
 	params := url.Values{}
@@ -338,11 +338,11 @@ func (i *internalIssueFieldContextServiceImpl) ProjectsContext(ctx context.Conte
 func (i *internalIssueFieldContextServiceImpl) Update(ctx context.Context, fieldID string, contextID int, name, description string) (*model.ResponseScheme, error) {
 
 	if fieldID == "" {
-		return nil, model.ErrNoFieldIDError
+		return nil, model.ErrNoFieldID
 	}
 
 	if contextID == 0 {
-		return nil, model.ErrNoFieldContextIDError
+		return nil, model.ErrNoFieldContextID
 	}
 
 	payload := map[string]interface{}{"name": name}
@@ -364,11 +364,11 @@ func (i *internalIssueFieldContextServiceImpl) Update(ctx context.Context, field
 func (i *internalIssueFieldContextServiceImpl) Delete(ctx context.Context, fieldID string, contextID int) (*model.ResponseScheme, error) {
 
 	if fieldID == "" {
-		return nil, model.ErrNoFieldIDError
+		return nil, model.ErrNoFieldID
 	}
 
 	if contextID == 0 {
-		return nil, model.ErrNoFieldContextIDError
+		return nil, model.ErrNoFieldContextID
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/field/%v/context/%v", i.version, fieldID, contextID)
@@ -384,11 +384,11 @@ func (i *internalIssueFieldContextServiceImpl) Delete(ctx context.Context, field
 func (i *internalIssueFieldContextServiceImpl) AddIssueTypes(ctx context.Context, fieldID string, contextID int, issueTypesIDs []string) (*model.ResponseScheme, error) {
 
 	if fieldID == "" {
-		return nil, model.ErrNoFieldIDError
+		return nil, model.ErrNoFieldID
 	}
 
 	if len(issueTypesIDs) == 0 {
-		return nil, model.ErrNoIssueTypesError
+		return nil, model.ErrNoIssueTypes
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/field/%v/context/%v/issuetype", i.version, fieldID, contextID)
@@ -404,11 +404,11 @@ func (i *internalIssueFieldContextServiceImpl) AddIssueTypes(ctx context.Context
 func (i *internalIssueFieldContextServiceImpl) RemoveIssueTypes(ctx context.Context, fieldID string, contextID int, issueTypesIDs []string) (*model.ResponseScheme, error) {
 
 	if fieldID == "" {
-		return nil, model.ErrNoFieldIDError
+		return nil, model.ErrNoFieldID
 	}
 
 	if len(issueTypesIDs) == 0 {
-		return nil, model.ErrNoIssueTypesError
+		return nil, model.ErrNoIssueTypes
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/field/%v/context/%v/issuetype/remove", i.version, fieldID, contextID)
@@ -424,15 +424,15 @@ func (i *internalIssueFieldContextServiceImpl) RemoveIssueTypes(ctx context.Cont
 func (i *internalIssueFieldContextServiceImpl) Link(ctx context.Context, fieldID string, contextID int, projectIDs []string) (*model.ResponseScheme, error) {
 
 	if fieldID == "" {
-		return nil, model.ErrNoFieldIDError
+		return nil, model.ErrNoFieldID
 	}
 
 	if contextID == 0 {
-		return nil, model.ErrNoFieldContextIDError
+		return nil, model.ErrNoFieldContextID
 	}
 
 	if len(projectIDs) == 0 {
-		return nil, model.ErrNoProjectIDsError
+		return nil, model.ErrNoProjectIDs
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/field/%v/context/%v/project", i.version, fieldID, contextID)
@@ -448,15 +448,15 @@ func (i *internalIssueFieldContextServiceImpl) Link(ctx context.Context, fieldID
 func (i *internalIssueFieldContextServiceImpl) UnLink(ctx context.Context, fieldID string, contextID int, projectIDs []string) (*model.ResponseScheme, error) {
 
 	if fieldID == "" {
-		return nil, model.ErrNoFieldIDError
+		return nil, model.ErrNoFieldID
 	}
 
 	if contextID == 0 {
-		return nil, model.ErrNoFieldContextIDError
+		return nil, model.ErrNoFieldContextID
 	}
 
 	if len(projectIDs) == 0 {
-		return nil, model.ErrNoProjectIDsError
+		return nil, model.ErrNoProjectIDs
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/field/%v/context/%v/project/remove", i.version, fieldID, contextID)

@@ -676,7 +676,7 @@ func Test_internalTypeSchemeImpl_Update(t *testing.T) {
 				payload: payloadMocked,
 			},
 			wantErr: true,
-			Err:     model.ErrNoIssueTypeSchemeIDError,
+			Err:     model.ErrNoIssueTypeSchemeID,
 		},
 
 		{
@@ -1235,7 +1235,7 @@ func Test_internalTypeSchemeImpl_Assign(t *testing.T) {
 				issueTypeSchemeID: "10001",
 			},
 			wantErr: true,
-			Err:     model.ErrNoProjectIDError,
+			Err:     model.ErrNoProjectID,
 		},
 
 		{
@@ -1246,7 +1246,7 @@ func Test_internalTypeSchemeImpl_Assign(t *testing.T) {
 				projectID: "9",
 			},
 			wantErr: true,
-			Err:     model.ErrNoIssueTypeSchemeIDError,
+			Err:     model.ErrNoIssueTypeSchemeID,
 		},
 
 		{

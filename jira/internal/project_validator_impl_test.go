@@ -96,7 +96,7 @@ func Test_internalProjectValidatorImpl_Validate(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoProjectIDOrKeyError,
+			Err:     model.ErrNoProjectIDOrKey,
 		},
 
 		{
@@ -240,7 +240,7 @@ func Test_internalProjectValidatorImpl_Key(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoProjectIDOrKeyError,
+			Err:     model.ErrNoProjectIDOrKey,
 		},
 
 		{
@@ -384,7 +384,7 @@ func Test_internalProjectValidatorImpl_Name(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoProjectNameError,
+			Err:     model.ErrNoProjectName,
 		},
 
 		{

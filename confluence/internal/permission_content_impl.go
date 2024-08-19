@@ -52,7 +52,7 @@ type internalPermissionImpl struct {
 func (i *internalPermissionImpl) Check(ctx context.Context, contentID string, payload *model.CheckPermissionScheme) (*model.PermissionCheckResponseScheme, *model.ResponseScheme, error) {
 
 	if contentID == "" {
-		return nil, nil, model.ErrNoContentIDError
+		return nil, nil, model.ErrNoContentID
 	}
 
 	endpoint := fmt.Sprintf("wiki/rest/api/content/%v/permission/check", contentID)

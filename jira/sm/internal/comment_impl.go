@@ -108,11 +108,11 @@ func (i *internalServiceRequestCommentImpl) Gets(ctx context.Context, issueKeyOr
 func (i *internalServiceRequestCommentImpl) Get(ctx context.Context, issueKeyOrID string, commentID int, expand []string) (*model.RequestCommentScheme, *model.ResponseScheme, error) {
 
 	if issueKeyOrID == "" {
-		return nil, nil, model.ErrNoIssueKeyOrIDError
+		return nil, nil, model.ErrNoIssueKeyOrID
 	}
 
 	if commentID == 0 {
-		return nil, nil, model.ErrNoCommentIDError
+		return nil, nil, model.ErrNoCommentID
 	}
 
 	var endpoint strings.Builder
@@ -142,11 +142,11 @@ func (i *internalServiceRequestCommentImpl) Get(ctx context.Context, issueKeyOrI
 func (i *internalServiceRequestCommentImpl) Create(ctx context.Context, issueKeyOrID, body string, public bool) (*model.RequestCommentScheme, *model.ResponseScheme, error) {
 
 	if issueKeyOrID == "" {
-		return nil, nil, model.ErrNoIssueKeyOrIDError
+		return nil, nil, model.ErrNoIssueKeyOrID
 	}
 
 	if body == "" {
-		return nil, nil, model.ErrNoCommentBodyError
+		return nil, nil, model.ErrNoCommentBody
 	}
 
 	payload := map[string]interface{}{"public": public, "body": body}
@@ -169,11 +169,11 @@ func (i *internalServiceRequestCommentImpl) Create(ctx context.Context, issueKey
 func (i *internalServiceRequestCommentImpl) Attachments(ctx context.Context, issueKeyOrID string, commentID, start, limit int) (*model.RequestAttachmentPageScheme, *model.ResponseScheme, error) {
 
 	if issueKeyOrID == "" {
-		return nil, nil, model.ErrNoIssueKeyOrIDError
+		return nil, nil, model.ErrNoIssueKeyOrID
 	}
 
 	if commentID == 0 {
-		return nil, nil, model.ErrNoContentIDError
+		return nil, nil, model.ErrNoContentID
 	}
 
 	params := url.Values{}

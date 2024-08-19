@@ -79,7 +79,7 @@ type internalUserSearchImpl struct {
 func (i *internalUserSearchImpl) Check(ctx context.Context, permission string, options *model.UserPermissionCheckParamsScheme, startAt, maxResults int) ([]*model.UserScheme, *model.ResponseScheme, error) {
 
 	if permission == "" {
-		return nil, nil, model.ErrNoPermissionGrantIDError
+		return nil, nil, model.ErrNoPermissionGrantID
 	}
 
 	params := url.Values{}
@@ -125,7 +125,7 @@ func (i *internalUserSearchImpl) Check(ctx context.Context, permission string, o
 func (i *internalUserSearchImpl) Projects(ctx context.Context, accountID string, projectKeys []string, startAt, maxResults int) ([]*model.UserScheme, *model.ResponseScheme, error) {
 
 	if len(projectKeys) == 0 {
-		return nil, nil, model.ErrNoProjectKeySliceError
+		return nil, nil, model.ErrNoProjectKeySlice
 	}
 
 	params := url.Values{}

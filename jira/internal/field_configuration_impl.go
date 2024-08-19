@@ -116,7 +116,7 @@ func (i *internalIssueFieldConfigServiceImpl) Gets(ctx context.Context, ids []in
 func (i *internalIssueFieldConfigServiceImpl) Create(ctx context.Context, name, description string) (*model.FieldConfigurationScheme, *model.ResponseScheme, error) {
 
 	if name == "" {
-		return nil, nil, model.ErrNoFieldConfigurationNameError
+		return nil, nil, model.ErrNoFieldConfigurationName
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/fieldconfiguration", i.version)
@@ -144,11 +144,11 @@ func (i *internalIssueFieldConfigServiceImpl) Create(ctx context.Context, name, 
 func (i *internalIssueFieldConfigServiceImpl) Update(ctx context.Context, id int, name, description string) (*model.ResponseScheme, error) {
 
 	if id == 0 {
-		return nil, model.ErrNoFieldConfigurationIDError
+		return nil, model.ErrNoFieldConfigurationID
 	}
 
 	if name == "" {
-		return nil, model.ErrNoFieldConfigurationNameError
+		return nil, model.ErrNoFieldConfigurationName
 	}
 
 	payload := map[string]interface{}{"name": name}
@@ -170,7 +170,7 @@ func (i *internalIssueFieldConfigServiceImpl) Update(ctx context.Context, id int
 func (i *internalIssueFieldConfigServiceImpl) Delete(ctx context.Context, id int) (*model.ResponseScheme, error) {
 
 	if id == 0 {
-		return nil, model.ErrNoFieldConfigurationIDError
+		return nil, model.ErrNoFieldConfigurationID
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/fieldconfiguration/%v", i.version, id)

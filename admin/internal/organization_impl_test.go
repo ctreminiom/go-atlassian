@@ -169,7 +169,7 @@ func Test_internalOrganizationImpl_Get(t *testing.T) {
 				organizationID: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoAdminOrganizationError,
+			Err:     model.ErrNoAdminOrganization,
 		},
 
 		{
@@ -283,7 +283,7 @@ func Test_internalOrganizationImpl_Users(t *testing.T) {
 				organizationID: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoAdminOrganizationError,
+			Err:     model.ErrNoAdminOrganization,
 		},
 
 		{
@@ -398,7 +398,7 @@ func Test_internalOrganizationImpl_Domains(t *testing.T) {
 				organizationID: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoAdminOrganizationError,
+			Err:     model.ErrNoAdminOrganization,
 		},
 
 		{
@@ -513,7 +513,7 @@ func Test_internalOrganizationImpl_Domain(t *testing.T) {
 				organizationID: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoAdminOrganizationError,
+			Err:     model.ErrNoAdminOrganization,
 		},
 
 		{
@@ -523,7 +523,7 @@ func Test_internalOrganizationImpl_Domain(t *testing.T) {
 				organizationID: "organization-sample-uuid",
 			},
 			wantErr: true,
-			Err:     model.ErrNoAdminDomainIDError,
+			Err:     model.ErrNoAdminDomainID,
 		},
 
 		{
@@ -656,7 +656,7 @@ func Test_internalOrganizationImpl_Events(t *testing.T) {
 				organizationID: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoAdminOrganizationError,
+			Err:     model.ErrNoAdminOrganization,
 		},
 
 		{
@@ -778,7 +778,7 @@ func Test_internalOrganizationImpl_Event(t *testing.T) {
 				organizationID: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoAdminOrganizationError,
+			Err:     model.ErrNoAdminOrganization,
 		},
 
 		{
@@ -788,7 +788,7 @@ func Test_internalOrganizationImpl_Event(t *testing.T) {
 				organizationID: "organization-sample-uuid",
 			},
 			wantErr: true,
-			Err:     model.ErrNoEventIDError,
+			Err:     model.ErrNoEventID,
 		},
 
 		{

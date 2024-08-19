@@ -577,7 +577,7 @@ func Test_internalIssueFieldServiceImpl_Delete(t *testing.T) {
 				fieldID: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoFieldIDError,
+			Err:     model.ErrNoFieldID,
 		},
 
 		{

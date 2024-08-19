@@ -130,7 +130,7 @@ func (i *internalOrganizationImpl) Gets(ctx context.Context, cursor string) (*mo
 func (i *internalOrganizationImpl) Get(ctx context.Context, organizationID string) (*model.AdminOrganizationScheme, *model.ResponseScheme, error) {
 
 	if organizationID == "" {
-		return nil, nil, model.ErrNoAdminOrganizationError
+		return nil, nil, model.ErrNoAdminOrganization
 	}
 
 	endpoint := fmt.Sprintf("admin/v1/orgs/%v", organizationID)
@@ -152,7 +152,7 @@ func (i *internalOrganizationImpl) Get(ctx context.Context, organizationID strin
 func (i *internalOrganizationImpl) Users(ctx context.Context, organizationID, cursor string) (*model.OrganizationUserPageScheme, *model.ResponseScheme, error) {
 
 	if organizationID == "" {
-		return nil, nil, model.ErrNoAdminOrganizationError
+		return nil, nil, model.ErrNoAdminOrganization
 	}
 
 	var endpoint strings.Builder
@@ -182,7 +182,7 @@ func (i *internalOrganizationImpl) Users(ctx context.Context, organizationID, cu
 func (i *internalOrganizationImpl) Domains(ctx context.Context, organizationID, cursor string) (*model.OrganizationDomainPageScheme, *model.ResponseScheme, error) {
 
 	if organizationID == "" {
-		return nil, nil, model.ErrNoAdminOrganizationError
+		return nil, nil, model.ErrNoAdminOrganization
 	}
 
 	var endpoint strings.Builder
@@ -212,11 +212,11 @@ func (i *internalOrganizationImpl) Domains(ctx context.Context, organizationID, 
 func (i *internalOrganizationImpl) Domain(ctx context.Context, organizationID, domainID string) (*model.OrganizationDomainScheme, *model.ResponseScheme, error) {
 
 	if organizationID == "" {
-		return nil, nil, model.ErrNoAdminOrganizationError
+		return nil, nil, model.ErrNoAdminOrganization
 	}
 
 	if domainID == "" {
-		return nil, nil, model.ErrNoAdminDomainIDError
+		return nil, nil, model.ErrNoAdminDomainID
 	}
 
 	endpoint := fmt.Sprintf("admin/v1/orgs/%v/domains/%v", organizationID, domainID)
@@ -238,7 +238,7 @@ func (i *internalOrganizationImpl) Domain(ctx context.Context, organizationID, d
 func (i *internalOrganizationImpl) Events(ctx context.Context, organizationID string, options *model.OrganizationEventOptScheme, cursor string) (*model.OrganizationEventPageScheme, *model.ResponseScheme, error) {
 
 	if organizationID == "" {
-		return nil, nil, model.ErrNoAdminOrganizationError
+		return nil, nil, model.ErrNoAdminOrganization
 	}
 
 	params := url.Values{}
@@ -291,11 +291,11 @@ func (i *internalOrganizationImpl) Events(ctx context.Context, organizationID st
 func (i *internalOrganizationImpl) Event(ctx context.Context, organizationID, eventID string) (*model.OrganizationEventScheme, *model.ResponseScheme, error) {
 
 	if organizationID == "" {
-		return nil, nil, model.ErrNoAdminOrganizationError
+		return nil, nil, model.ErrNoAdminOrganization
 	}
 
 	if eventID == "" {
-		return nil, nil, model.ErrNoEventIDError
+		return nil, nil, model.ErrNoEventID
 	}
 
 	endpoint := fmt.Sprintf("admin/v1/orgs/%v/events/%v", organizationID, eventID)
@@ -317,7 +317,7 @@ func (i *internalOrganizationImpl) Event(ctx context.Context, organizationID, ev
 func (i *internalOrganizationImpl) Actions(ctx context.Context, organizationID string) (*model.OrganizationEventActionScheme, *model.ResponseScheme, error) {
 
 	if organizationID == "" {
-		return nil, nil, model.ErrNoAdminOrganizationError
+		return nil, nil, model.ErrNoAdminOrganization
 	}
 
 	endpoint := fmt.Sprintf("admin/v1/orgs/%v/event-actions", organizationID)

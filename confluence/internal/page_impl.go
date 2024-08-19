@@ -190,7 +190,7 @@ func (i *internalPageImpl) Gets(ctx context.Context, options *model.PageOptionsS
 func (i *internalPageImpl) Get(ctx context.Context, pageID int, format string, draft bool, version int) (*model.PageScheme, *model.ResponseScheme, error) {
 
 	if pageID == 0 {
-		return nil, nil, model.ErrNoPageIDError
+		return nil, nil, model.ErrNoPageID
 	}
 
 	query := url.Values{}
@@ -230,7 +230,7 @@ func (i *internalPageImpl) Bulk(ctx context.Context, cursor string, limit int) (
 func (i *internalPageImpl) GetsByLabel(ctx context.Context, labelID int, sort, cursor string, limit int) (*model.PageChunkScheme, *model.ResponseScheme, error) {
 
 	if labelID == 0 {
-		return nil, nil, model.ErrNoLabelIDError
+		return nil, nil, model.ErrNoLabelID
 	}
 
 	query := url.Values{}
@@ -263,7 +263,7 @@ func (i *internalPageImpl) GetsByLabel(ctx context.Context, labelID int, sort, c
 func (i *internalPageImpl) GetsBySpace(ctx context.Context, spaceID int, cursor string, limit int) (*model.PageChunkScheme, *model.ResponseScheme, error) {
 
 	if spaceID == 0 {
-		return nil, nil, model.ErrNoSpaceIDError
+		return nil, nil, model.ErrNoSpaceID
 	}
 
 	query := url.Values{}
@@ -292,7 +292,7 @@ func (i *internalPageImpl) GetsBySpace(ctx context.Context, spaceID int, cursor 
 func (i *internalPageImpl) GetsByParent(ctx context.Context, parentID int, cursor string, limit int) (*model.ChildPageChunkScheme, *model.ResponseScheme, error) {
 
 	if parentID == 0 {
-		return nil, nil, model.ErrNoPageIDError
+		return nil, nil, model.ErrNoPageID
 	}
 
 	query := url.Values{}
@@ -339,7 +339,7 @@ func (i *internalPageImpl) Create(ctx context.Context, payload *model.PageCreate
 func (i *internalPageImpl) Update(ctx context.Context, pageID int, payload *model.PageUpdatePayloadScheme) (*model.PageScheme, *model.ResponseScheme, error) {
 
 	if pageID == 0 {
-		return nil, nil, model.ErrNoPageIDError
+		return nil, nil, model.ErrNoPageID
 	}
 
 	endpoint := fmt.Sprintf("wiki/api/v2/pages/%v", pageID)
@@ -361,7 +361,7 @@ func (i *internalPageImpl) Update(ctx context.Context, pageID int, payload *mode
 func (i *internalPageImpl) Delete(ctx context.Context, pageID int) (*model.ResponseScheme, error) {
 
 	if pageID == 0 {
-		return nil, model.ErrNoPageIDError
+		return nil, model.ErrNoPageID
 	}
 
 	endpoint := fmt.Sprintf("wiki/api/v2/pages/%v", pageID)

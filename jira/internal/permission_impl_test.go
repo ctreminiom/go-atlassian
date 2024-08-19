@@ -465,7 +465,7 @@ func Test_internalPermissionImpl_Projects(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoPermissionKeysError,
+			Err:     model.ErrNoPermissionKeys,
 		},
 	}
 

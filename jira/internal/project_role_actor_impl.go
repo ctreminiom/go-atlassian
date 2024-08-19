@@ -56,11 +56,11 @@ type internalProjectRoleActorImpl struct {
 func (i *internalProjectRoleActorImpl) Add(ctx context.Context, projectKeyOrID string, roleID int, accountIds, groups []string) (*model.ProjectRoleScheme, *model.ResponseScheme, error) {
 
 	if projectKeyOrID == "" {
-		return nil, nil, model.ErrNoProjectIDOrKeyError
+		return nil, nil, model.ErrNoProjectIDOrKey
 	}
 
 	if roleID == 0 {
-		return nil, nil, model.ErrNoProjectRoleIDError
+		return nil, nil, model.ErrNoProjectRoleID
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/project/%v/role/%v", i.version, projectKeyOrID, roleID)
@@ -82,11 +82,11 @@ func (i *internalProjectRoleActorImpl) Add(ctx context.Context, projectKeyOrID s
 func (i *internalProjectRoleActorImpl) Delete(ctx context.Context, projectKeyOrID string, roleID int, accountID, group string) (*model.ResponseScheme, error) {
 
 	if projectKeyOrID == "" {
-		return nil, model.ErrNoProjectIDOrKeyError
+		return nil, model.ErrNoProjectIDOrKey
 	}
 
 	if roleID == 0 {
-		return nil, model.ErrNoProjectRoleIDError
+		return nil, model.ErrNoProjectRoleID
 	}
 
 	var endpoint strings.Builder

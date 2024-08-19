@@ -72,7 +72,7 @@ func (i *internalResolutionImpl) Gets(ctx context.Context) ([]*model.ResolutionS
 func (i *internalResolutionImpl) Get(ctx context.Context, resolutionID string) (*model.ResolutionScheme, *model.ResponseScheme, error) {
 
 	if resolutionID == "" {
-		return nil, nil, model.ErrNoResolutionIDError
+		return nil, nil, model.ErrNoResolutionID
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/resolution/%v", i.version, resolutionID)

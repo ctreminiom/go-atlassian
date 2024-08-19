@@ -97,7 +97,7 @@ func Test_internalPageImpl_Get(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoPageIDError,
+			Err:     model.ErrNoPageID,
 		},
 	}
 
@@ -409,7 +409,7 @@ func Test_internalPageImpl_GetsByLabel(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoLabelIDError,
+			Err:     model.ErrNoLabelID,
 		},
 
 		{
@@ -525,7 +525,7 @@ func Test_internalPageImpl_GetsBySpace(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoSpaceIDError,
+			Err:     model.ErrNoSpaceID,
 		},
 
 		{
@@ -639,7 +639,7 @@ func Test_internalPageImpl_GetsByParent(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoPageIDError,
+			Err:     model.ErrNoPageID,
 		},
 
 		{
@@ -805,7 +805,7 @@ func Test_internalPageImpl_Delete(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoPageIDError,
+			Err:     model.ErrNoPageID,
 		},
 	}
 
@@ -1088,7 +1088,7 @@ func Test_internalPageImpl_Update(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoPageIDError,
+			Err:     model.ErrNoPageID,
 		},
 	}
 

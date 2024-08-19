@@ -66,7 +66,7 @@ func Test_internalOrganizationDirectoryServiceImpl_Activity(t *testing.T) {
 				organizationID: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoAdminOrganizationError,
+			Err:     model.ErrNoAdminOrganization,
 		},
 
 		{
@@ -76,7 +76,7 @@ func Test_internalOrganizationDirectoryServiceImpl_Activity(t *testing.T) {
 				organizationID: "organization-id-sample",
 			},
 			wantErr: true,
-			Err:     model.ErrNoAdminAccountIDError,
+			Err:     model.ErrNoAdminAccountID,
 		},
 
 		{
@@ -192,7 +192,7 @@ func Test_internalOrganizationDirectoryServiceImpl_Remove(t *testing.T) {
 				organizationID: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoAdminOrganizationError,
+			Err:     model.ErrNoAdminOrganization,
 		},
 
 		{
@@ -202,7 +202,7 @@ func Test_internalOrganizationDirectoryServiceImpl_Remove(t *testing.T) {
 				organizationID: "organization-id-sample",
 			},
 			wantErr: true,
-			Err:     model.ErrNoAdminAccountIDError,
+			Err:     model.ErrNoAdminAccountID,
 		},
 
 		{
@@ -317,7 +317,7 @@ func Test_internalOrganizationDirectoryServiceImpl_Suspend(t *testing.T) {
 				organizationID: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoAdminOrganizationError,
+			Err:     model.ErrNoAdminOrganization,
 		},
 
 		{
@@ -327,7 +327,7 @@ func Test_internalOrganizationDirectoryServiceImpl_Suspend(t *testing.T) {
 				organizationID: "organization-id-sample",
 			},
 			wantErr: true,
-			Err:     model.ErrNoAdminAccountIDError,
+			Err:     model.ErrNoAdminAccountID,
 		},
 
 		{
@@ -443,7 +443,7 @@ func Test_internalOrganizationDirectoryServiceImpl_Restore(t *testing.T) {
 				organizationID: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoAdminOrganizationError,
+			Err:     model.ErrNoAdminOrganization,
 		},
 
 		{
@@ -453,7 +453,7 @@ func Test_internalOrganizationDirectoryServiceImpl_Restore(t *testing.T) {
 				organizationID: "organization-id-sample",
 			},
 			wantErr: true,
-			Err:     model.ErrNoAdminAccountIDError,
+			Err:     model.ErrNoAdminAccountID,
 		},
 
 		{

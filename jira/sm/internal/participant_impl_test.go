@@ -122,7 +122,7 @@ func Test_internalServiceRequestParticipantImpl_Gets(t *testing.T) {
 			args: args{
 				ctx: context.Background(),
 			},
-			Err:     model.ErrNoIssueKeyOrIDError,
+			Err:     model.ErrNoIssueKeyOrID,
 			wantErr: true,
 		},
 	}
@@ -264,7 +264,7 @@ func Test_internalServiceRequestParticipantImpl_Add(t *testing.T) {
 			args: args{
 				ctx: context.Background(),
 			},
-			Err:     model.ErrNoIssueKeyOrIDError,
+			Err:     model.ErrNoIssueKeyOrID,
 			wantErr: true,
 		},
 
@@ -274,7 +274,7 @@ func Test_internalServiceRequestParticipantImpl_Add(t *testing.T) {
 				ctx:          context.Background(),
 				issueKeyOrID: "DESK-1",
 			},
-			Err:     model.ErrNoAccountSliceError,
+			Err:     model.ErrNoAccountSlice,
 			wantErr: true,
 		},
 	}
@@ -416,7 +416,7 @@ func Test_internalServiceRequestParticipantImpl_Remove(t *testing.T) {
 			args: args{
 				ctx: context.Background(),
 			},
-			Err:     model.ErrNoIssueKeyOrIDError,
+			Err:     model.ErrNoIssueKeyOrID,
 			wantErr: true,
 		},
 
@@ -426,7 +426,7 @@ func Test_internalServiceRequestParticipantImpl_Remove(t *testing.T) {
 				ctx:          context.Background(),
 				issueKeyOrID: "DESK-1",
 			},
-			Err:     model.ErrNoAccountSliceError,
+			Err:     model.ErrNoAccountSlice,
 			wantErr: true,
 		},
 	}

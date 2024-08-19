@@ -42,7 +42,7 @@ type internalCommentImpl struct {
 func (i *internalCommentImpl) Gets(ctx context.Context, contentID string, expand, location []string, startAt, maxResults int) (*model.ContentPageScheme, *model.ResponseScheme, error) {
 
 	if contentID == "" {
-		return nil, nil, model.ErrNoContentIDError
+		return nil, nil, model.ErrNoContentID
 	}
 
 	query := url.Values{}

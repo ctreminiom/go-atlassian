@@ -108,7 +108,7 @@ func Test_internalProjectRoleActorImpl_Add(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoProjectIDOrKeyError,
+			Err:     model.ErrNoProjectIDOrKey,
 		},
 
 		{
@@ -119,7 +119,7 @@ func Test_internalProjectRoleActorImpl_Add(t *testing.T) {
 				projectKeyOrID: "DUMMY",
 			},
 			wantErr: true,
-			Err:     model.ErrNoProjectRoleIDError,
+			Err:     model.ErrNoProjectRoleID,
 		},
 
 		{
@@ -275,7 +275,7 @@ func Test_internalProjectRoleActorImpl_Delete(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoProjectIDOrKeyError,
+			Err:     model.ErrNoProjectIDOrKey,
 		},
 
 		{
@@ -286,7 +286,7 @@ func Test_internalProjectRoleActorImpl_Delete(t *testing.T) {
 				projectKeyOrID: "DUMMY",
 			},
 			wantErr: true,
-			Err:     model.ErrNoProjectRoleIDError,
+			Err:     model.ErrNoProjectRoleID,
 		},
 
 		{

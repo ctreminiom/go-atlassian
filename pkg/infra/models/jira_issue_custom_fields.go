@@ -49,18 +49,18 @@ func ParseMultiSelectCustomField(buffer bytes.Buffer, customField string) ([]*Cu
 
 	// Check if the buffer contains the "issues" object
 	if !raw.Get("fields").Exists() {
-		return nil, ErrNoFieldInformationError
+		return nil, ErrNoFieldInformation
 	}
 
 	// Check if the issue iteration contains information on the customfield selected,
 	// if not, continue
 	if raw.Get(path).Type == gjson.Null {
-		return nil, ErrNoMultiSelectTypeError
+		return nil, ErrNoMultiSelectType
 	}
 
 	var options []*CustomFieldContextOptionScheme
 	if err := json.Unmarshal([]byte(raw.Get(path).String()), &options); err != nil {
-		return nil, ErrNoMultiSelectTypeError
+		return nil, ErrNoMultiSelectType
 	}
 
 	return options, nil
@@ -114,7 +114,7 @@ func ParseMultiSelectCustomFields(buffer bytes.Buffer, customField string) (map[
 
 	// Check if the buffer contains the "issues" object
 	if !raw.Get("issues").Exists() {
-		return nil, ErrNoIssuesSliceError
+		return nil, ErrNoIssuesSlice
 	}
 
 	// Loop through each custom field, extract the information and stores the data on a map
@@ -141,7 +141,7 @@ func ParseMultiSelectCustomFields(buffer bytes.Buffer, customField string) (map[
 	// Check if the map processed contains elements
 	// if so, return an error interface
 	if len(customfieldsAsMap) == 0 {
-		return nil, ErrNoMapValuesError
+		return nil, ErrNoMapValues
 	}
 
 	return customfieldsAsMap, nil
@@ -184,18 +184,18 @@ func ParseMultiGroupPickerCustomField(buffer bytes.Buffer, customField string) (
 
 	// Check if the buffer contains the "issues" object
 	if !raw.Get("fields").Exists() {
-		return nil, ErrNoFieldInformationError
+		return nil, ErrNoFieldInformation
 	}
 
 	// Check if the issue iteration contains information on the customfield selected,
 	// if not, continue
 	if raw.Get(path).Type == gjson.Null {
-		return nil, ErrNoMultiSelectTypeError
+		return nil, ErrNoMultiSelectType
 	}
 
 	var options []*GroupDetailScheme
 	if err := json.Unmarshal([]byte(raw.Get(path).String()), &options); err != nil {
-		return nil, ErrNoMultiSelectTypeError
+		return nil, ErrNoMultiSelectType
 	}
 
 	return options, nil
@@ -249,7 +249,7 @@ func ParseMultiGroupPickerCustomFields(buffer bytes.Buffer, customField string) 
 
 	// Check if the buffer contains the "issues" object
 	if !raw.Get("issues").Exists() {
-		return nil, ErrNoIssuesSliceError
+		return nil, ErrNoIssuesSlice
 	}
 
 	// Loop through each custom field, extract the information and stores the data on a map
@@ -276,7 +276,7 @@ func ParseMultiGroupPickerCustomFields(buffer bytes.Buffer, customField string) 
 	// Check if the map processed contains elements
 	// if so, return an error interface
 	if len(customfieldsAsMap) == 0 {
-		return nil, ErrNoMapValuesError
+		return nil, ErrNoMapValues
 	}
 
 	return customfieldsAsMap, nil
@@ -319,18 +319,18 @@ func ParseMultiUserPickerCustomField(buffer bytes.Buffer, customField string) ([
 
 	// Check if the buffer contains the "issues" object
 	if !raw.Get("fields").Exists() {
-		return nil, ErrNoFieldInformationError
+		return nil, ErrNoFieldInformation
 	}
 
 	// Check if the issue iteration contains information on the customfield selected,
 	// if not, continue
 	if raw.Get(path).Type == gjson.Null {
-		return nil, ErrNoMultiSelectTypeError
+		return nil, ErrNoMultiSelectType
 	}
 
 	var users []*UserDetailScheme
 	if err := json.Unmarshal([]byte(raw.Get(path).String()), &users); err != nil {
-		return nil, ErrNoMultiSelectTypeError
+		return nil, ErrNoMultiSelectType
 	}
 
 	return users, nil
@@ -384,7 +384,7 @@ func ParseMultiUserPickerCustomFields(buffer bytes.Buffer, customField string) (
 
 	// Check if the buffer contains the "issues" object
 	if !raw.Get("issues").Exists() {
-		return nil, ErrNoIssuesSliceError
+		return nil, ErrNoIssuesSlice
 	}
 
 	// Loop through each custom field, extract the information and stores the data on a map
@@ -411,7 +411,7 @@ func ParseMultiUserPickerCustomFields(buffer bytes.Buffer, customField string) (
 	// Check if the map processed contains elements
 	// if so, return an error interface
 	if len(customfieldsAsMap) == 0 {
-		return nil, ErrNoMapValuesError
+		return nil, ErrNoMapValues
 	}
 
 	return customfieldsAsMap, nil
@@ -452,18 +452,18 @@ func ParseCascadingSelectCustomField(buffer bytes.Buffer, customField string) (*
 
 	// Check if the buffer contains the "issues" object
 	if !raw.Get("fields").Exists() {
-		return nil, ErrNoFieldInformationError
+		return nil, ErrNoFieldInformation
 	}
 
 	// Check if the issue iteration contains information on the customfield selected,
 	// if not, continue
 	if raw.Get(path).Type == gjson.Null {
-		return nil, ErrNoCascadingParentError
+		return nil, ErrNoCascadingParent
 	}
 
 	var cascading CascadingSelectScheme
 	if err := json.Unmarshal([]byte(raw.Get(path).String()), &cascading); err != nil {
-		return nil, ErrNoCascadingParentError
+		return nil, ErrNoCascadingParent
 	}
 
 	return &cascading, nil
@@ -517,7 +517,7 @@ func ParseCascadingCustomFields(buffer bytes.Buffer, customField string) (map[st
 
 	// Check if the buffer contains the "issues" object
 	if !raw.Get("issues").Exists() {
-		return nil, ErrNoIssuesSliceError
+		return nil, ErrNoIssuesSlice
 	}
 
 	// Loop through each custom field, extract the information and stores the data on a map
@@ -544,7 +544,7 @@ func ParseCascadingCustomFields(buffer bytes.Buffer, customField string) (map[st
 	// Check if the map processed contains elements
 	// if so, return an error interface
 	if len(customfieldsAsMap) == 0 {
-		return nil, ErrNoMapValuesError
+		return nil, ErrNoMapValues
 	}
 
 	return customfieldsAsMap, nil
@@ -587,13 +587,13 @@ func ParseMultiVersionCustomField(buffer bytes.Buffer, customField string) ([]*V
 
 	// Check if the buffer contains the "fields" object
 	if !raw.Get("fields").Exists() {
-		return nil, ErrNoFieldInformationError
+		return nil, ErrNoFieldInformation
 	}
 
 	// Check if the issue iteration contains information on the customfield selected,
 	// if not, continue
 	if raw.Get(path).Type == gjson.Null {
-		return nil, ErrNoMultiVersionTypeError
+		return nil, ErrNoMultiVersionType
 	}
 
 	var versions []*VersionDetailScheme

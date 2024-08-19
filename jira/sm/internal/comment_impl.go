@@ -77,7 +77,7 @@ type internalServiceRequestCommentImpl struct {
 func (i *internalServiceRequestCommentImpl) Gets(ctx context.Context, issueKeyOrID string, options *model.RequestCommentOptionsScheme) (*model.RequestCommentPageScheme, *model.ResponseScheme, error) {
 
 	if issueKeyOrID == "" {
-		return nil, nil, model.ErrNoIssueKeyOrIDError
+		return nil, nil, model.ErrNoIssueKeyOrID
 	}
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/request/%v/comment", issueKeyOrID)

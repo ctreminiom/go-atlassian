@@ -56,7 +56,7 @@ func TestIssueScheme_MergeCustomFields(t *testing.T) {
 			},
 			want:    nil,
 			wantErr: true,
-			Err:     ErrNoCustomFieldError,
+			Err:     ErrNoCustomField,
 		},
 
 		{
@@ -67,7 +67,7 @@ func TestIssueScheme_MergeCustomFields(t *testing.T) {
 			},
 			want:    nil,
 			wantErr: true,
-			Err:     ErrNoCustomFieldError,
+			Err:     ErrNoCustomField,
 		},
 	}
 	for _, testCase := range testCases {
@@ -151,7 +151,7 @@ func TestIssueScheme_MergeOperations(t *testing.T) {
 			},
 			want:    nil,
 			wantErr: true,
-			Err:     ErrNoOperatorError,
+			Err:     ErrNoOperator,
 		},
 
 		{
@@ -162,7 +162,7 @@ func TestIssueScheme_MergeOperations(t *testing.T) {
 			},
 			want:    nil,
 			wantErr: true,
-			Err:     ErrNoOperatorError,
+			Err:     ErrNoOperator,
 		},
 	}
 	for _, testCase := range testCases {

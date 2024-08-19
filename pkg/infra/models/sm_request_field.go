@@ -42,11 +42,11 @@ func (c *CreateCustomerRequestPayloadScheme) AddCustomField(key string, value in
 func (c *CreateCustomerRequestPayloadScheme) DateTimeCustomField(id string, value time.Time) error {
 
 	if id == "" {
-		return ErrNoCustomFieldIDError
+		return ErrNoCustomFieldID
 	}
 
 	if value.IsZero() {
-		return ErrNoDatePickerTypeError
+		return ErrNoDatePickerType
 	}
 
 	return c.AddCustomField(id, value.Format(time.RFC3339))
@@ -59,11 +59,11 @@ func (c *CreateCustomerRequestPayloadScheme) DateTimeCustomField(id string, valu
 func (c *CreateCustomerRequestPayloadScheme) DateCustomField(id string, value time.Time) error {
 
 	if id == "" {
-		return ErrNoCustomFieldIDError
+		return ErrNoCustomFieldID
 	}
 
 	if value.IsZero() {
-		return ErrNoDatePickerTypeError
+		return ErrNoDatePickerType
 	}
 
 	return c.AddCustomField(id, value.Format("2006-01-02"))
@@ -75,11 +75,11 @@ func (c *CreateCustomerRequestPayloadScheme) DateCustomField(id string, value ti
 func (c *CreateCustomerRequestPayloadScheme) MultiSelectOrCheckBoxCustomField(id string, values []string) error {
 
 	if id == "" {
-		return ErrNoCustomFieldIDError
+		return ErrNoCustomFieldID
 	}
 
 	if len(values) == 0 {
-		return ErrNoMultiSelectTypeError
+		return ErrNoMultiSelectType
 	}
 
 	var options []map[string]interface{}
@@ -98,11 +98,11 @@ func (c *CreateCustomerRequestPayloadScheme) MultiSelectOrCheckBoxCustomField(id
 func (c *CreateCustomerRequestPayloadScheme) UserCustomField(id, accountID string) error {
 
 	if id == "" {
-		return ErrNoCustomFieldIDError
+		return ErrNoCustomFieldID
 	}
 
 	if accountID == "" {
-		return ErrNoUserTypeError
+		return ErrNoUserType
 	}
 
 	return c.AddCustomField(id, map[string]interface{}{"accountId": accountID})
@@ -114,18 +114,18 @@ func (c *CreateCustomerRequestPayloadScheme) UserCustomField(id, accountID strin
 func (c *CreateCustomerRequestPayloadScheme) UsersCustomField(id string, accountIDs []string) error {
 
 	if id == "" {
-		return ErrNoCustomFieldIDError
+		return ErrNoCustomFieldID
 	}
 
 	if len(accountIDs) == 0 {
-		return ErrNoMultiUserTypeError
+		return ErrNoMultiUserType
 	}
 
 	var accounts []map[string]interface{}
 	for _, accountID := range accountIDs {
 
 		if accountID == "" {
-			return ErrNoUserTypeError
+			return ErrNoUserType
 		}
 
 		accounts = append(accounts, map[string]interface{}{"accountId": accountID})
@@ -141,15 +141,15 @@ func (c *CreateCustomerRequestPayloadScheme) UsersCustomField(id string, account
 func (c *CreateCustomerRequestPayloadScheme) CascadingCustomField(id, parent, child string) error {
 
 	if id == "" {
-		return ErrNoCustomFieldIDError
+		return ErrNoCustomFieldID
 	}
 
 	if parent == "" {
-		return ErrNoCascadingParentError
+		return ErrNoCascadingParent
 	}
 
 	if child == "" {
-		return ErrNoCascadingChildError
+		return ErrNoCascadingChild
 	}
 
 	childNode := map[string]interface{}{"value": child}
@@ -162,18 +162,18 @@ func (c *CreateCustomerRequestPayloadScheme) CascadingCustomField(id, parent, ch
 func (c *CreateCustomerRequestPayloadScheme) GroupsCustomField(id string, names []string) error {
 
 	if id == "" {
-		return ErrNoCustomFieldIDError
+		return ErrNoCustomFieldID
 	}
 
 	if len(names) == 0 {
-		return ErrNoGroupsNameError
+		return ErrNoGroupsName
 	}
 
 	var groups []map[string]interface{}
 	for _, name := range names {
 
 		if name == "" {
-			return ErrNoGroupNameError
+			return ErrNoGroupName
 		}
 
 		groups = append(groups, map[string]interface{}{"name": name})
@@ -188,11 +188,11 @@ func (c *CreateCustomerRequestPayloadScheme) GroupsCustomField(id string, names 
 func (c *CreateCustomerRequestPayloadScheme) GroupCustomField(id, name string) error {
 
 	if id == "" {
-		return ErrNoCustomFieldIDError
+		return ErrNoCustomFieldID
 	}
 
 	if name == "" {
-		return ErrNoGroupNameError
+		return ErrNoGroupName
 	}
 
 	return c.AddCustomField(id, map[string]interface{}{"name": name})
@@ -204,11 +204,11 @@ func (c *CreateCustomerRequestPayloadScheme) GroupCustomField(id, name string) e
 func (c *CreateCustomerRequestPayloadScheme) RadioButtonOrSelectCustomField(id string, option string) error {
 
 	if id == "" {
-		return ErrNoCustomFieldIDError
+		return ErrNoCustomFieldID
 	}
 
 	if option == "" {
-		return ErrNoSelectTypeError
+		return ErrNoSelectType
 	}
 
 	return c.AddCustomField(id, map[string]interface{}{"value": option})
@@ -220,14 +220,14 @@ func (c *CreateCustomerRequestPayloadScheme) RadioButtonOrSelectCustomField(id s
 func (c *CreateCustomerRequestPayloadScheme) Components(components []string) error {
 
 	if len(components) == 0 {
-		return ErrNoComponentsError
+		return ErrNoComponents
 	}
 
 	var values []map[string]interface{}
 	for _, component := range components {
 
 		if component == "" {
-			return ErrNCoComponentError
+			return ErrNCoComponent
 		}
 
 		values = append(values, map[string]interface{}{"name": component})

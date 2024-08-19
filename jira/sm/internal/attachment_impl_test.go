@@ -127,7 +127,7 @@ func Test_internalServiceRequestAttachmentImpl_Gets(t *testing.T) {
 			on: func(fields *fields) {
 				fields.c = mocks.NewConnector(t)
 			},
-			Err:     model.ErrNoIssueKeyOrIDError,
+			Err:     model.ErrNoIssueKeyOrID,
 			wantErr: true,
 		},
 	}
@@ -291,7 +291,7 @@ func Test_internalServiceRequestAttachmentImpl_Create(t *testing.T) {
 			on: func(fields *fields) {
 				fields.c = mocks.NewConnector(t)
 			},
-			Err:     model.ErrNoIssueKeyOrIDError,
+			Err:     model.ErrNoIssueKeyOrID,
 			wantErr: true,
 		},
 	}

@@ -45,7 +45,7 @@ func TestUpdateOperations_AddArrayOperation(t *testing.T) {
 					"value1": "verb"},
 			},
 			wantErr: true,
-			Err:     ErrNoFieldIDError,
+			Err:     ErrNoFieldID,
 		},
 	}
 	for _, testCase := range testCases {
@@ -102,7 +102,7 @@ func TestUpdateOperations_AddStringOperation(t *testing.T) {
 				value:         "value_sample",
 			},
 			wantErr: true,
-			Err:     ErrNoFieldIDError,
+			Err:     ErrNoFieldID,
 		},
 
 		{
@@ -114,7 +114,7 @@ func TestUpdateOperations_AddStringOperation(t *testing.T) {
 				value:         "value_sample",
 			},
 			wantErr: true,
-			Err:     ErrNoEditOperatorError,
+			Err:     ErrNoEditOperator,
 		},
 
 		{
@@ -126,7 +126,7 @@ func TestUpdateOperations_AddStringOperation(t *testing.T) {
 				value:         "",
 			},
 			wantErr: true,
-			Err:     ErrNoEditValueError,
+			Err:     ErrNoEditValue,
 		},
 	}
 	for _, testCase := range testCases {

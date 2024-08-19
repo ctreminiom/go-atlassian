@@ -141,7 +141,7 @@ func Test_internalServiceRequestCommentImpl_Gets(t *testing.T) {
 			on: func(fields *fields) {
 				fields.c = mocks.NewConnector(t)
 			},
-			Err:     model.ErrNoIssueKeyOrIDError,
+			Err:     model.ErrNoIssueKeyOrID,
 			wantErr: true,
 		},
 	}

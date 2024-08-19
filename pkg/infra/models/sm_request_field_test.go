@@ -1,9 +1,10 @@
 package models
 
 import (
-	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestCreateCustomerRequestPayloadScheme_DateTimeCustomField(t *testing.T) {
@@ -53,7 +54,7 @@ func TestCreateCustomerRequestPayloadScheme_DateTimeCustomField(t *testing.T) {
 				value: time.Date(2019, 1, 1, 0, 0, 0, 0, time.UTC),
 			},
 			wantErr: true,
-			Err:     ErrNoCustomFieldIDError,
+			Err:     ErrNoCustomFieldID,
 		},
 
 		{
@@ -64,7 +65,7 @@ func TestCreateCustomerRequestPayloadScheme_DateTimeCustomField(t *testing.T) {
 				value: time.Time{},
 			},
 			wantErr: true,
-			Err:     ErrNoDatePickerTypeError,
+			Err:     ErrNoDatePickerType,
 		},
 	}
 	for _, tt := range tests {
@@ -144,7 +145,7 @@ func TestCreateCustomerRequestPayloadScheme_DateCustomField(t *testing.T) {
 				value: time.Date(2019, 1, 1, 0, 0, 0, 0, time.UTC),
 			},
 			wantErr: true,
-			Err:     ErrNoCustomFieldIDError,
+			Err:     ErrNoCustomFieldID,
 		},
 
 		{
@@ -155,7 +156,7 @@ func TestCreateCustomerRequestPayloadScheme_DateCustomField(t *testing.T) {
 				value: time.Time{},
 			},
 			wantErr: true,
-			Err:     ErrNoDatePickerTypeError,
+			Err:     ErrNoDatePickerType,
 		},
 	}
 	for _, tt := range tests {
@@ -234,7 +235,7 @@ func TestCreateCustomerRequestPayloadScheme_MultiSelectOrCheckBoxCustomField(t *
 				id: "",
 			},
 			wantErr: true,
-			Err:     ErrNoCustomFieldIDError,
+			Err:     ErrNoCustomFieldID,
 		},
 
 		{
@@ -244,7 +245,7 @@ func TestCreateCustomerRequestPayloadScheme_MultiSelectOrCheckBoxCustomField(t *
 				id: "customfield_10021",
 			},
 			wantErr: true,
-			Err:     ErrNoMultiSelectTypeError,
+			Err:     ErrNoMultiSelectType,
 		},
 	}
 	for _, tt := range tests {
@@ -323,7 +324,7 @@ func TestCreateCustomerRequestPayloadScheme_UserCustomField(t *testing.T) {
 				id: "",
 			},
 			wantErr: true,
-			Err:     ErrNoCustomFieldIDError,
+			Err:     ErrNoCustomFieldID,
 		},
 
 		{
@@ -333,7 +334,7 @@ func TestCreateCustomerRequestPayloadScheme_UserCustomField(t *testing.T) {
 				id: "customfield_10021",
 			},
 			wantErr: true,
-			Err:     ErrNoUserTypeError,
+			Err:     ErrNoUserType,
 		},
 	}
 	for _, tt := range tests {
@@ -412,7 +413,7 @@ func TestCreateCustomerRequestPayloadScheme_UsersCustomField(t *testing.T) {
 				id: "",
 			},
 			wantErr: true,
-			Err:     ErrNoCustomFieldIDError,
+			Err:     ErrNoCustomFieldID,
 		},
 
 		{
@@ -422,7 +423,7 @@ func TestCreateCustomerRequestPayloadScheme_UsersCustomField(t *testing.T) {
 				id: "customfield_10021",
 			},
 			wantErr: true,
-			Err:     ErrNoMultiUserTypeError,
+			Err:     ErrNoMultiUserType,
 		},
 
 		{
@@ -433,7 +434,7 @@ func TestCreateCustomerRequestPayloadScheme_UsersCustomField(t *testing.T) {
 				options: []string{"uuid-sample", ""},
 			},
 			wantErr: true,
-			Err:     ErrNoUserTypeError,
+			Err:     ErrNoUserType,
 		},
 	}
 	for _, tt := range tests {
@@ -512,7 +513,7 @@ func TestCreateCustomerRequestPayloadScheme_CascadingCustomField(t *testing.T) {
 				id: "",
 			},
 			wantErr: true,
-			Err:     ErrNoCustomFieldIDError,
+			Err:     ErrNoCustomFieldID,
 		},
 
 		{
@@ -522,7 +523,7 @@ func TestCreateCustomerRequestPayloadScheme_CascadingCustomField(t *testing.T) {
 				id: "customfield_10021",
 			},
 			wantErr: true,
-			Err:     ErrNoCascadingParentError,
+			Err:     ErrNoCascadingParent,
 		},
 
 		{
@@ -533,7 +534,7 @@ func TestCreateCustomerRequestPayloadScheme_CascadingCustomField(t *testing.T) {
 				parent: "America",
 			},
 			wantErr: true,
-			Err:     ErrNoCascadingChildError,
+			Err:     ErrNoCascadingChild,
 		},
 	}
 	for _, tt := range tests {
@@ -612,7 +613,7 @@ func TestCreateCustomerRequestPayloadScheme_GroupsCustomField(t *testing.T) {
 				id: "",
 			},
 			wantErr: true,
-			Err:     ErrNoCustomFieldIDError,
+			Err:     ErrNoCustomFieldID,
 		},
 
 		{
@@ -622,7 +623,7 @@ func TestCreateCustomerRequestPayloadScheme_GroupsCustomField(t *testing.T) {
 				id: "customfield_10021",
 			},
 			wantErr: true,
-			Err:     ErrNoGroupsNameError,
+			Err:     ErrNoGroupsName,
 		},
 
 		{
@@ -633,7 +634,7 @@ func TestCreateCustomerRequestPayloadScheme_GroupsCustomField(t *testing.T) {
 				options: []string{"group-name-01", ""},
 			},
 			wantErr: true,
-			Err:     ErrNoGroupNameError,
+			Err:     ErrNoGroupName,
 		},
 	}
 	for _, tt := range tests {
@@ -712,7 +713,7 @@ func TestCreateCustomerRequestPayloadScheme_GroupCustomField(t *testing.T) {
 				id: "",
 			},
 			wantErr: true,
-			Err:     ErrNoCustomFieldIDError,
+			Err:     ErrNoCustomFieldID,
 		},
 
 		{
@@ -722,7 +723,7 @@ func TestCreateCustomerRequestPayloadScheme_GroupCustomField(t *testing.T) {
 				id: "customfield_10021",
 			},
 			wantErr: true,
-			Err:     ErrNoGroupNameError,
+			Err:     ErrNoGroupName,
 		},
 	}
 	for _, tt := range tests {
@@ -801,7 +802,7 @@ func TestCreateCustomerRequestPayloadScheme_RadioButtonOrSelectCustomField(t *te
 				id: "",
 			},
 			wantErr: true,
-			Err:     ErrNoCustomFieldIDError,
+			Err:     ErrNoCustomFieldID,
 		},
 
 		{
@@ -811,7 +812,7 @@ func TestCreateCustomerRequestPayloadScheme_RadioButtonOrSelectCustomField(t *te
 				id: "customfield_10021",
 			},
 			wantErr: true,
-			Err:     ErrNoSelectTypeError,
+			Err:     ErrNoSelectType,
 		},
 	}
 	for _, tt := range tests {
@@ -888,7 +889,7 @@ func TestCreateCustomerRequestPayloadScheme_Components(t *testing.T) {
 				components: nil,
 			},
 			wantErr: true,
-			Err:     ErrNoComponentsError,
+			Err:     ErrNoComponents,
 		},
 
 		{
@@ -898,7 +899,7 @@ func TestCreateCustomerRequestPayloadScheme_Components(t *testing.T) {
 				components: []string{"Jira Cloud", ""},
 			},
 			wantErr: true,
-			Err:     ErrNCoComponentError,
+			Err:     ErrNCoComponent,
 		},
 	}
 	for _, tt := range tests {

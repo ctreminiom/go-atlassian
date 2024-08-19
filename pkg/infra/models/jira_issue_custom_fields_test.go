@@ -119,7 +119,7 @@ func TestParseMultiSelectCustomField(t *testing.T) {
 			},
 			want:    nil,
 			wantErr: true,
-			Err:     ErrNoMultiSelectTypeError,
+			Err:     ErrNoMultiSelectType,
 		},
 
 		{
@@ -130,7 +130,7 @@ func TestParseMultiSelectCustomField(t *testing.T) {
 			},
 			want:    nil,
 			wantErr: true,
-			Err:     ErrNoFieldInformationError,
+			Err:     ErrNoFieldInformation,
 		},
 
 		{
@@ -141,7 +141,7 @@ func TestParseMultiSelectCustomField(t *testing.T) {
 			},
 			want:    nil,
 			wantErr: true,
-			Err:     ErrNoMultiSelectTypeError,
+			Err:     ErrNoMultiSelectType,
 		},
 
 		{
@@ -152,7 +152,7 @@ func TestParseMultiSelectCustomField(t *testing.T) {
 			},
 			want:    nil,
 			wantErr: true,
-			Err:     ErrNoFieldInformationError,
+			Err:     ErrNoFieldInformation,
 		},
 	}
 	for _, testCase := range testCases {
@@ -272,7 +272,7 @@ func TestParseMultiGroupPickerField(t *testing.T) {
 			},
 			want:    nil,
 			wantErr: true,
-			Err:     ErrNoMultiSelectTypeError,
+			Err:     ErrNoMultiSelectType,
 		},
 
 		{
@@ -283,7 +283,7 @@ func TestParseMultiGroupPickerField(t *testing.T) {
 			},
 			want:    nil,
 			wantErr: true,
-			Err:     ErrNoFieldInformationError,
+			Err:     ErrNoFieldInformation,
 		},
 
 		{
@@ -294,7 +294,7 @@ func TestParseMultiGroupPickerField(t *testing.T) {
 			},
 			want:    nil,
 			wantErr: true,
-			Err:     ErrNoMultiSelectTypeError,
+			Err:     ErrNoMultiSelectType,
 		},
 
 		{
@@ -305,7 +305,7 @@ func TestParseMultiGroupPickerField(t *testing.T) {
 			},
 			want:    nil,
 			wantErr: true,
-			Err:     ErrNoFieldInformationError,
+			Err:     ErrNoFieldInformation,
 		},
 	}
 	for _, testCase := range testCases {
@@ -495,7 +495,7 @@ func TestParseMultiUserPickerField(t *testing.T) {
 			},
 			want:    nil,
 			wantErr: true,
-			Err:     ErrNoMultiSelectTypeError,
+			Err:     ErrNoMultiSelectType,
 		},
 
 		{
@@ -507,7 +507,7 @@ func TestParseMultiUserPickerField(t *testing.T) {
 			want:    nil,
 			want1:   false,
 			wantErr: true,
-			Err:     ErrNoFieldInformationError,
+			Err:     ErrNoFieldInformation,
 		},
 
 		{
@@ -519,7 +519,7 @@ func TestParseMultiUserPickerField(t *testing.T) {
 			want:    nil,
 			want1:   false,
 			wantErr: true,
-			Err:     ErrNoMultiSelectTypeError,
+			Err:     ErrNoMultiSelectType,
 		},
 
 		{
@@ -531,7 +531,7 @@ func TestParseMultiUserPickerField(t *testing.T) {
 			want:    nil,
 			want1:   false,
 			wantErr: true,
-			Err:     ErrNoFieldInformationError,
+			Err:     ErrNoFieldInformation,
 		},
 	}
 	for _, testCase := range testCases {
@@ -648,7 +648,7 @@ func TestParseCascadingSelectField(t *testing.T) {
 			want:    nil,
 			want1:   false,
 			wantErr: true,
-			Err:     ErrNoCascadingParentError,
+			Err:     ErrNoCascadingParent,
 		},
 
 		{
@@ -660,7 +660,7 @@ func TestParseCascadingSelectField(t *testing.T) {
 			want:    nil,
 			want1:   false,
 			wantErr: true,
-			Err:     ErrNoFieldInformationError,
+			Err:     ErrNoFieldInformation,
 		},
 
 		{
@@ -672,7 +672,7 @@ func TestParseCascadingSelectField(t *testing.T) {
 			want:    nil,
 			want1:   false,
 			wantErr: true,
-			Err:     ErrNoCascadingParentError,
+			Err:     ErrNoCascadingParent,
 		},
 
 		{
@@ -684,7 +684,7 @@ func TestParseCascadingSelectField(t *testing.T) {
 			want:    nil,
 			want1:   false,
 			wantErr: true,
-			Err:     ErrNoFieldInformationError,
+			Err:     ErrNoFieldInformation,
 		},
 	}
 	for _, testCase := range testCases {
@@ -832,7 +832,7 @@ func TestParseMultiVersionCustomField(t *testing.T) {
 			want:    nil,
 			want1:   false,
 			wantErr: true,
-			Err:     ErrNoMultiVersionTypeError,
+			Err:     ErrNoMultiVersionType,
 		},
 
 		{
@@ -844,7 +844,7 @@ func TestParseMultiVersionCustomField(t *testing.T) {
 			want:    nil,
 			want1:   false,
 			wantErr: true,
-			Err:     ErrNoFieldInformationError,
+			Err:     ErrNoFieldInformation,
 		},
 
 		{
@@ -856,7 +856,7 @@ func TestParseMultiVersionCustomField(t *testing.T) {
 			want:    nil,
 			want1:   false,
 			wantErr: true,
-			Err:     ErrNoMultiSelectTypeError,
+			Err:     ErrNoMultiSelectType,
 		},
 
 		{
@@ -868,7 +868,7 @@ func TestParseMultiVersionCustomField(t *testing.T) {
 			want:    nil,
 			want1:   false,
 			wantErr: true,
-			Err:     ErrNoFieldInformationError,
+			Err:     ErrNoFieldInformation,
 		},
 	}
 	for _, testCase := range testCases {
@@ -994,7 +994,7 @@ func TestParseUserPickerCustomField(t *testing.T) {
 			want:    nil,
 			want1:   false,
 			wantErr: true,
-			Err:     ErrNoUserTypeError,
+			Err:     ErrNoUserType,
 		},
 
 		{

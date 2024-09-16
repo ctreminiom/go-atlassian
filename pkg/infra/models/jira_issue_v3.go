@@ -23,7 +23,7 @@ type IssueScheme struct {
 func (i *IssueScheme) MergeCustomFields(fields *CustomFields) (map[string]interface{}, error) {
 
 	if fields == nil || len(fields.Fields) == 0 {
-		return nil, ErrNoCustomFieldError
+		return nil, ErrNoCustomField
 	}
 
 	//Convert the IssueScheme struct to map[string]interface{}
@@ -53,7 +53,7 @@ func (i *IssueScheme) MergeCustomFields(fields *CustomFields) (map[string]interf
 func (i *IssueScheme) MergeOperations(operations *UpdateOperations) (map[string]interface{}, error) {
 
 	if operations == nil || len(operations.Fields) == 0 {
-		return nil, ErrNoOperatorError
+		return nil, ErrNoOperator
 	}
 
 	//Convert the IssueScheme struct to map[string]interface{}

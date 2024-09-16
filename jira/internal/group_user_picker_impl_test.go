@@ -100,7 +100,7 @@ func Test_internalGroupUserPickerServiceImpl_Find(t *testing.T) {
 				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
-			Err:     model.ErrNoQueryError,
+			Err:     model.ErrNoQuery,
 		},
 
 		{

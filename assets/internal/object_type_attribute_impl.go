@@ -57,11 +57,11 @@ type internalObjectTypeAttributeImpl struct {
 func (i *internalObjectTypeAttributeImpl) Create(ctx context.Context, workspaceID, objectTypeID string, payload *model.ObjectTypeAttributePayloadScheme) (*model.ObjectTypeAttributeScheme, *model.ResponseScheme, error) {
 
 	if workspaceID == "" {
-		return nil, nil, model.ErrNoWorkspaceIDError
+		return nil, nil, model.ErrNoWorkspaceID
 	}
 
 	if objectTypeID == "" {
-		return nil, nil, model.ErrNoObjectTypeIDError
+		return nil, nil, model.ErrNoObjectTypeID
 	}
 
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/objecttypeattribute/%v", workspaceID, objectTypeID)
@@ -83,15 +83,15 @@ func (i *internalObjectTypeAttributeImpl) Create(ctx context.Context, workspaceI
 func (i *internalObjectTypeAttributeImpl) Update(ctx context.Context, workspaceID, objectTypeID, attributeID string, payload *model.ObjectTypeAttributePayloadScheme) (*model.ObjectTypeAttributeScheme, *model.ResponseScheme, error) {
 
 	if workspaceID == "" {
-		return nil, nil, model.ErrNoWorkspaceIDError
+		return nil, nil, model.ErrNoWorkspaceID
 	}
 
 	if objectTypeID == "" {
-		return nil, nil, model.ErrNoObjectTypeIDError
+		return nil, nil, model.ErrNoObjectTypeID
 	}
 
 	if attributeID == "" {
-		return nil, nil, model.ErrNoObjectTypeAttributeIDError
+		return nil, nil, model.ErrNoObjectTypeAttributeID
 	}
 
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/objecttypeattribute/%v/%v", workspaceID, objectTypeID, attributeID)
@@ -113,11 +113,11 @@ func (i *internalObjectTypeAttributeImpl) Update(ctx context.Context, workspaceI
 func (i *internalObjectTypeAttributeImpl) Delete(ctx context.Context, workspaceID, attributeID string) (*model.ResponseScheme, error) {
 
 	if workspaceID == "" {
-		return nil, model.ErrNoWorkspaceIDError
+		return nil, model.ErrNoWorkspaceID
 	}
 
 	if attributeID == "" {
-		return nil, model.ErrNoObjectTypeAttributeIDError
+		return nil, model.ErrNoObjectTypeAttributeID
 	}
 
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/objecttypeattribute/%v", workspaceID, attributeID)

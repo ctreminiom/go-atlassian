@@ -93,7 +93,7 @@ func Test_internalChildrenDescandantsImpl_Children(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoContentIDError,
+			Err:     model.ErrNoContentID,
 		},
 	}
 
@@ -264,7 +264,7 @@ func Test_internalChildrenDescandantsImpl_Move(t *testing.T) {
 				targetID: "100100101",
 			},
 			wantErr: true,
-			Err:     model.ErrNoPageIDError,
+			Err:     model.ErrNoPageID,
 		},
 
 		{
@@ -275,7 +275,7 @@ func Test_internalChildrenDescandantsImpl_Move(t *testing.T) {
 				position: "append",
 			},
 			wantErr: true,
-			Err:     model.ErrNoTargetIDError,
+			Err:     model.ErrNoTargetID,
 		},
 
 		{
@@ -286,7 +286,7 @@ func Test_internalChildrenDescandantsImpl_Move(t *testing.T) {
 				targetID: "200200202",
 			},
 			wantErr: true,
-			Err:     model.ErrNoPositionError,
+			Err:     model.ErrNoPosition,
 		},
 
 		{
@@ -298,7 +298,7 @@ func Test_internalChildrenDescandantsImpl_Move(t *testing.T) {
 				targetID: "200200202",
 			},
 			wantErr: true,
-			Err:     model.ErrInvalidPositionError,
+			Err:     model.ErrInvalidPosition,
 		},
 	}
 
@@ -421,7 +421,7 @@ func Test_internalChildrenDescandantsImpl_ChildrenByType(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoContentIDError,
+			Err:     model.ErrNoContentID,
 		},
 
 		{
@@ -431,7 +431,7 @@ func Test_internalChildrenDescandantsImpl_ChildrenByType(t *testing.T) {
 				contentID: "11929292",
 			},
 			wantErr: true,
-			Err:     model.ErrNoContentTypeError,
+			Err:     model.ErrNoContentType,
 		},
 	}
 
@@ -546,7 +546,7 @@ func Test_internalChildrenDescandantsImpl_Descendants(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoContentIDError,
+			Err:     model.ErrNoContentID,
 		},
 	}
 
@@ -667,7 +667,7 @@ func Test_internalChildrenDescandantsImpl_DescendantsByType(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoContentIDError,
+			Err:     model.ErrNoContentID,
 		},
 
 		{
@@ -677,7 +677,7 @@ func Test_internalChildrenDescandantsImpl_DescendantsByType(t *testing.T) {
 				contentID: "11929292",
 			},
 			wantErr: true,
-			Err:     model.ErrNoContentTypeError,
+			Err:     model.ErrNoContentType,
 		},
 	}
 
@@ -806,7 +806,7 @@ func Test_internalChildrenDescandantsImpl_CopyHierarchy(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoContentIDError,
+			Err:     model.ErrNoContentID,
 		},
 	}
 
@@ -937,7 +937,7 @@ func Test_internalChildrenDescandantsImpl_CopyPage(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoContentIDError,
+			Err:     model.ErrNoContentID,
 		},
 	}
 

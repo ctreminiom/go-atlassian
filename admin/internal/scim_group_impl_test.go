@@ -69,7 +69,7 @@ func Test_internalSCIMGroupImpl_Gets(t *testing.T) {
 				directoryID: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoAdminDirectoryIDError,
+			Err:     model.ErrNoAdminDirectoryID,
 		},
 
 		{
@@ -187,7 +187,7 @@ func Test_internalSCIMGroupImpl_Get(t *testing.T) {
 				directoryID: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoAdminDirectoryIDError,
+			Err:     model.ErrNoAdminDirectoryID,
 		},
 
 		{
@@ -197,7 +197,7 @@ func Test_internalSCIMGroupImpl_Get(t *testing.T) {
 				directoryID: "directory-id-sample",
 			},
 			wantErr: true,
-			Err:     model.ErrNoAdminGroupIDError,
+			Err:     model.ErrNoAdminGroupID,
 		},
 
 		{
@@ -313,7 +313,7 @@ func Test_internalSCIMGroupImpl_Delete(t *testing.T) {
 				directoryID: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoAdminDirectoryIDError,
+			Err:     model.ErrNoAdminDirectoryID,
 		},
 
 		{
@@ -323,7 +323,7 @@ func Test_internalSCIMGroupImpl_Delete(t *testing.T) {
 				directoryID: "directory-id-sample",
 			},
 			wantErr: true,
-			Err:     model.ErrNoAdminGroupIDError,
+			Err:     model.ErrNoAdminGroupID,
 		},
 
 		{
@@ -440,7 +440,7 @@ func Test_internalSCIMGroupImpl_Create(t *testing.T) {
 				directoryID: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoAdminDirectoryIDError,
+			Err:     model.ErrNoAdminDirectoryID,
 		},
 
 		{
@@ -450,7 +450,7 @@ func Test_internalSCIMGroupImpl_Create(t *testing.T) {
 				directoryID: "directory-id-sample",
 			},
 			wantErr: true,
-			Err:     model.ErrNoAdminGroupNameError,
+			Err:     model.ErrNoAdminGroupName,
 		},
 
 		{
@@ -569,7 +569,7 @@ func Test_internalSCIMGroupImpl_Update(t *testing.T) {
 				directoryID: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoAdminDirectoryIDError,
+			Err:     model.ErrNoAdminDirectoryID,
 		},
 
 		{
@@ -579,7 +579,7 @@ func Test_internalSCIMGroupImpl_Update(t *testing.T) {
 				directoryID: "directory-id-sample",
 			},
 			wantErr: true,
-			Err:     model.ErrNoAdminGroupIDError,
+			Err:     model.ErrNoAdminGroupID,
 		},
 
 		{
@@ -590,7 +590,7 @@ func Test_internalSCIMGroupImpl_Update(t *testing.T) {
 				groupID:     "group-id-sample",
 			},
 			wantErr: true,
-			Err:     model.ErrNoAdminGroupNameError,
+			Err:     model.ErrNoAdminGroupName,
 		},
 
 		{
@@ -725,7 +725,7 @@ func Test_internalSCIMGroupImpl_Path(t *testing.T) {
 				directoryID: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoAdminDirectoryIDError,
+			Err:     model.ErrNoAdminDirectoryID,
 		},
 
 		{
@@ -735,7 +735,7 @@ func Test_internalSCIMGroupImpl_Path(t *testing.T) {
 				directoryID: "directory-id-sample",
 			},
 			wantErr: true,
-			Err:     model.ErrNoAdminGroupIDError,
+			Err:     model.ErrNoAdminGroupID,
 		},
 
 		{

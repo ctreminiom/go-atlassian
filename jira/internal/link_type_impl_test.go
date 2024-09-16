@@ -234,7 +234,7 @@ func Test_internalLinkTypeImpl_Get(t *testing.T) {
 				issueLinkTypeID: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoLinkTypeIDError,
+			Err:     model.ErrNoLinkTypeID,
 		},
 
 		{
@@ -329,7 +329,7 @@ func Test_internalLinkTypeImpl_Update(t *testing.T) {
 				issueLinkTypeID: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoLinkTypeIDError,
+			Err:     model.ErrNoLinkTypeID,
 		},
 		{
 			name:   "when the api version is v3",
@@ -682,7 +682,7 @@ func Test_internalLinkTypeImpl_Delete(t *testing.T) {
 				issueLinkTypeID: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoLinkTypeIDError,
+			Err:     model.ErrNoLinkTypeID,
 		},
 
 		{

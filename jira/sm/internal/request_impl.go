@@ -229,7 +229,7 @@ func (i *internalServiceRequestImpl) Gets(ctx context.Context, options *model.Se
 func (i *internalServiceRequestImpl) Get(ctx context.Context, issueKeyOrID string, expand []string) (*model.CustomerRequestScheme, *model.ResponseScheme, error) {
 
 	if issueKeyOrID == "" {
-		return nil, nil, model.ErrNoIssueKeyOrIDError
+		return nil, nil, model.ErrNoIssueKeyOrID
 	}
 
 	var endpoint strings.Builder
@@ -259,7 +259,7 @@ func (i *internalServiceRequestImpl) Get(ctx context.Context, issueKeyOrID strin
 func (i *internalServiceRequestImpl) Subscribe(ctx context.Context, issueKeyOrID string) (*model.ResponseScheme, error) {
 
 	if issueKeyOrID == "" {
-		return nil, model.ErrNoIssueKeyOrIDError
+		return nil, model.ErrNoIssueKeyOrID
 	}
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/request/%v/notification", issueKeyOrID)
@@ -275,7 +275,7 @@ func (i *internalServiceRequestImpl) Subscribe(ctx context.Context, issueKeyOrID
 func (i *internalServiceRequestImpl) Unsubscribe(ctx context.Context, issueKeyOrID string) (*model.ResponseScheme, error) {
 
 	if issueKeyOrID == "" {
-		return nil, model.ErrNoIssueKeyOrIDError
+		return nil, model.ErrNoIssueKeyOrID
 	}
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/request/%v/notification", issueKeyOrID)
@@ -291,7 +291,7 @@ func (i *internalServiceRequestImpl) Unsubscribe(ctx context.Context, issueKeyOr
 func (i *internalServiceRequestImpl) Transitions(ctx context.Context, issueKeyOrID string, start, limit int) (*model.CustomerRequestTransitionPageScheme, *model.ResponseScheme, error) {
 
 	if issueKeyOrID == "" {
-		return nil, nil, model.ErrNoIssueKeyOrIDError
+		return nil, nil, model.ErrNoIssueKeyOrID
 	}
 
 	params := url.Values{}
@@ -317,11 +317,11 @@ func (i *internalServiceRequestImpl) Transitions(ctx context.Context, issueKeyOr
 func (i internalServiceRequestImpl) Transition(ctx context.Context, issueKeyOrID, transitionID, comment string) (*model.ResponseScheme, error) {
 
 	if issueKeyOrID == "" {
-		return nil, model.ErrNoIssueKeyOrIDError
+		return nil, model.ErrNoIssueKeyOrID
 	}
 
 	if transitionID == "" {
-		return nil, model.ErrNoTransitionIDError
+		return nil, model.ErrNoTransitionID
 	}
 
 	payload := map[string]interface{}{"id": transitionID}

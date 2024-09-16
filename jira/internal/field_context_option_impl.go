@@ -97,7 +97,7 @@ type internalIssueFieldContextOptionServiceImpl struct {
 func (i *internalIssueFieldContextOptionServiceImpl) Gets(ctx context.Context, fieldID string, contextID int, options *model.FieldOptionContextParams, startAt, maxResults int) (*model.CustomFieldContextOptionPageScheme, *model.ResponseScheme, error) {
 
 	if fieldID == "" {
-		return nil, nil, model.ErrNoFieldIDError
+		return nil, nil, model.ErrNoFieldID
 	}
 
 	params := url.Values{}
@@ -131,11 +131,11 @@ func (i *internalIssueFieldContextOptionServiceImpl) Gets(ctx context.Context, f
 func (i *internalIssueFieldContextOptionServiceImpl) Create(ctx context.Context, fieldID string, contextID int, payload *model.FieldContextOptionListScheme) (*model.FieldContextOptionListScheme, *model.ResponseScheme, error) {
 
 	if fieldID == "" {
-		return nil, nil, model.ErrNoFieldIDError
+		return nil, nil, model.ErrNoFieldID
 	}
 
 	if contextID == 0 {
-		return nil, nil, model.ErrNoFieldContextIDError
+		return nil, nil, model.ErrNoFieldContextID
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/field/%v/context/%v/option", i.version, fieldID, contextID)
@@ -157,11 +157,11 @@ func (i *internalIssueFieldContextOptionServiceImpl) Create(ctx context.Context,
 func (i *internalIssueFieldContextOptionServiceImpl) Update(ctx context.Context, fieldID string, contextID int, payload *model.FieldContextOptionListScheme) (*model.FieldContextOptionListScheme, *model.ResponseScheme, error) {
 
 	if fieldID == "" {
-		return nil, nil, model.ErrNoFieldIDError
+		return nil, nil, model.ErrNoFieldID
 	}
 
 	if contextID == 0 {
-		return nil, nil, model.ErrNoFieldContextIDError
+		return nil, nil, model.ErrNoFieldContextID
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/field/%v/context/%v/option", i.version, fieldID, contextID)
@@ -183,15 +183,15 @@ func (i *internalIssueFieldContextOptionServiceImpl) Update(ctx context.Context,
 func (i *internalIssueFieldContextOptionServiceImpl) Delete(ctx context.Context, fieldID string, contextID, optionID int) (*model.ResponseScheme, error) {
 
 	if fieldID == "" {
-		return nil, model.ErrNoFieldIDError
+		return nil, model.ErrNoFieldID
 	}
 
 	if contextID == 0 {
-		return nil, model.ErrNoFieldContextIDError
+		return nil, model.ErrNoFieldContextID
 	}
 
 	if optionID == 0 {
-		return nil, model.ErrNoContextOptionIDError
+		return nil, model.ErrNoContextOptionID
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/field/%v/context/%v/option/%v", i.version, fieldID, contextID, optionID)
@@ -207,11 +207,11 @@ func (i *internalIssueFieldContextOptionServiceImpl) Delete(ctx context.Context,
 func (i *internalIssueFieldContextOptionServiceImpl) Order(ctx context.Context, fieldID string, contextID int, payload *model.OrderFieldOptionPayloadScheme) (*model.ResponseScheme, error) {
 
 	if fieldID == "" {
-		return nil, model.ErrNoFieldIDError
+		return nil, model.ErrNoFieldID
 	}
 
 	if contextID == 0 {
-		return nil, model.ErrNoFieldContextIDError
+		return nil, model.ErrNoFieldContextID
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/field/%v/context/%v/option/move", i.version, fieldID, contextID)

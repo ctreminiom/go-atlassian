@@ -125,7 +125,7 @@ func (i *internalTypeImpl) Search(ctx context.Context, query string, start, limi
 func (i *internalTypeImpl) Gets(ctx context.Context, serviceDeskID, groupID, start, limit int) (*model.ProjectRequestTypePageScheme, *model.ResponseScheme, error) {
 
 	if serviceDeskID == 0 {
-		return nil, nil, model.ErrNoServiceDeskIDError
+		return nil, nil, model.ErrNoServiceDeskID
 	}
 
 	params := url.Values{}
@@ -155,7 +155,7 @@ func (i *internalTypeImpl) Gets(ctx context.Context, serviceDeskID, groupID, sta
 func (i *internalTypeImpl) Create(ctx context.Context, serviceDeskID int, payload *model.RequestTypePayloadScheme) (*model.RequestTypeScheme, *model.ResponseScheme, error) {
 
 	if serviceDeskID == 0 {
-		return nil, nil, model.ErrNoServiceDeskIDError
+		return nil, nil, model.ErrNoServiceDeskID
 	}
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/servicedesk/%v/requesttype", serviceDeskID)
@@ -177,11 +177,11 @@ func (i *internalTypeImpl) Create(ctx context.Context, serviceDeskID int, payloa
 func (i *internalTypeImpl) Get(ctx context.Context, serviceDeskID, requestTypeID int) (*model.RequestTypeScheme, *model.ResponseScheme, error) {
 
 	if serviceDeskID == 0 {
-		return nil, nil, model.ErrNoServiceDeskIDError
+		return nil, nil, model.ErrNoServiceDeskID
 	}
 
 	if requestTypeID == 0 {
-		return nil, nil, model.ErrNoRequestTypeIDError
+		return nil, nil, model.ErrNoRequestTypeID
 	}
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/servicedesk/%v/requesttype/%v", serviceDeskID, requestTypeID)
@@ -203,11 +203,11 @@ func (i *internalTypeImpl) Get(ctx context.Context, serviceDeskID, requestTypeID
 func (i *internalTypeImpl) Delete(ctx context.Context, serviceDeskID, requestTypeID int) (*model.ResponseScheme, error) {
 
 	if serviceDeskID == 0 {
-		return nil, model.ErrNoServiceDeskIDError
+		return nil, model.ErrNoServiceDeskID
 	}
 
 	if requestTypeID == 0 {
-		return nil, model.ErrNoRequestTypeIDError
+		return nil, model.ErrNoRequestTypeID
 	}
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/servicedesk/%v/requesttype/%v", serviceDeskID, requestTypeID)
@@ -223,11 +223,11 @@ func (i *internalTypeImpl) Delete(ctx context.Context, serviceDeskID, requestTyp
 func (i *internalTypeImpl) Fields(ctx context.Context, serviceDeskID, requestTypeID int) (*model.RequestTypeFieldsScheme, *model.ResponseScheme, error) {
 
 	if serviceDeskID == 0 {
-		return nil, nil, model.ErrNoServiceDeskIDError
+		return nil, nil, model.ErrNoServiceDeskID
 	}
 
 	if requestTypeID == 0 {
-		return nil, nil, model.ErrNoRequestTypeIDError
+		return nil, nil, model.ErrNoRequestTypeID
 	}
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/servicedesk/%v/requesttype/%v/field", serviceDeskID, requestTypeID)
@@ -249,7 +249,7 @@ func (i *internalTypeImpl) Fields(ctx context.Context, serviceDeskID, requestTyp
 func (i *internalTypeImpl) Groups(ctx context.Context, serviceDeskID int) (*model.RequestTypeGroupPageScheme, *model.ResponseScheme, error) {
 
 	if serviceDeskID == 0 {
-		return nil, nil, model.ErrNoServiceDeskIDError
+		return nil, nil, model.ErrNoServiceDeskID
 	}
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/servicedesk/%v/requesttypegroup", serviceDeskID)

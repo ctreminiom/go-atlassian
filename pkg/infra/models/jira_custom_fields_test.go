@@ -43,7 +43,7 @@ func TestCustomFields_Cascading(t *testing.T) {
 				child:         "US",
 			},
 			wantErr: true,
-			Err:     ErrNoFieldIDError,
+			Err:     ErrNoFieldID,
 		},
 
 		{
@@ -55,7 +55,7 @@ func TestCustomFields_Cascading(t *testing.T) {
 				child:         "US",
 			},
 			wantErr: true,
-			Err:     ErrNoCascadingParentError,
+			Err:     ErrNoCascadingParent,
 		},
 
 		{
@@ -67,7 +67,7 @@ func TestCustomFields_Cascading(t *testing.T) {
 				child:         "",
 			},
 			wantErr: true,
-			Err:     ErrNoCascadingChildError,
+			Err:     ErrNoCascadingChild,
 		},
 	}
 	for _, testCase := range testCases {
@@ -125,7 +125,7 @@ func TestCustomFields_CheckBox(t *testing.T) {
 				options:       []string{"Value"},
 			},
 			wantErr: true,
-			Err:     ErrNoFieldIDError,
+			Err:     ErrNoFieldID,
 		},
 
 		{
@@ -136,7 +136,7 @@ func TestCustomFields_CheckBox(t *testing.T) {
 				options:       nil,
 			},
 			wantErr: true,
-			Err:     ErrNoCheckBoxTypeError,
+			Err:     ErrNoCheckBoxType,
 		},
 	}
 	for _, testCase := range testCases {
@@ -194,7 +194,7 @@ func TestCustomFields_Date(t *testing.T) {
 				dateTimeValue: time.Now().AddDate(0, -1, 0),
 			},
 			wantErr: true,
-			Err:     ErrNoFieldIDError,
+			Err:     ErrNoFieldID,
 		},
 
 		{
@@ -205,7 +205,7 @@ func TestCustomFields_Date(t *testing.T) {
 				dateTimeValue: time.Time{},
 			},
 			wantErr: true,
-			Err:     ErrNoDateTimeTypeError,
+			Err:     ErrNoDateTimeType,
 		},
 	}
 	for _, testCase := range testCases {
@@ -265,7 +265,7 @@ func TestCustomFields_DateTime(t *testing.T) {
 				dateValue:     time.Now().AddDate(0, -1, 0),
 			},
 			wantErr: true,
-			Err:     ErrNoFieldIDError,
+			Err:     ErrNoFieldID,
 		},
 
 		{
@@ -276,7 +276,7 @@ func TestCustomFields_DateTime(t *testing.T) {
 				dateValue:     time.Time{},
 			},
 			wantErr: true,
-			Err:     ErrNoDatePickerTypeError,
+			Err:     ErrNoDatePickerType,
 		},
 	}
 	for _, testCase := range testCases {
@@ -335,7 +335,7 @@ func TestCustomFields_Group(t *testing.T) {
 				group:         "jira-users",
 			},
 			wantErr: true,
-			Err:     ErrNoFieldIDError,
+			Err:     ErrNoFieldID,
 		},
 
 		{
@@ -346,7 +346,7 @@ func TestCustomFields_Group(t *testing.T) {
 				group:         "",
 			},
 			wantErr: true,
-			Err:     ErrNoGroupNameError,
+			Err:     ErrNoGroupName,
 		},
 	}
 
@@ -405,7 +405,7 @@ func TestCustomFields_Groups(t *testing.T) {
 				groups:        []string{"jira-users", "jira-admins"},
 			},
 			wantErr: true,
-			Err:     ErrNoFieldIDError,
+			Err:     ErrNoFieldID,
 		},
 
 		{
@@ -416,7 +416,7 @@ func TestCustomFields_Groups(t *testing.T) {
 				groups:        nil,
 			},
 			wantErr: true,
-			Err:     ErrNoGroupsNameError,
+			Err:     ErrNoGroupsName,
 		},
 	}
 	for _, testCase := range testCases {
@@ -474,7 +474,7 @@ func TestCustomFields_MultiSelect(t *testing.T) {
 				options:       []string{"options"},
 			},
 			wantErr: true,
-			Err:     ErrNoFieldIDError,
+			Err:     ErrNoFieldID,
 		},
 
 		{
@@ -485,7 +485,7 @@ func TestCustomFields_MultiSelect(t *testing.T) {
 				options:       nil,
 			},
 			wantErr: true,
-			Err:     ErrNoMultiSelectTypeError,
+			Err:     ErrNoMultiSelectType,
 		},
 	}
 	for _, testCase := range testCases {
@@ -590,7 +590,7 @@ func TestCustomFields_RadioButton(t *testing.T) {
 				button:        "Button 1 ",
 			},
 			wantErr: true,
-			Err:     ErrNoFieldIDError,
+			Err:     ErrNoFieldID,
 		},
 
 		{
@@ -601,7 +601,7 @@ func TestCustomFields_RadioButton(t *testing.T) {
 				button:        "",
 			},
 			wantErr: true,
-			Err:     ErrNoButtonTypeError,
+			Err:     ErrNoButtonType,
 		},
 	}
 	for _, testCase := range testCases {
@@ -659,7 +659,7 @@ func TestCustomFields_Select(t *testing.T) {
 				option:        "Option 1",
 			},
 			wantErr: true,
-			Err:     ErrNoFieldIDError,
+			Err:     ErrNoFieldID,
 		},
 
 		{
@@ -670,7 +670,7 @@ func TestCustomFields_Select(t *testing.T) {
 				option:        "",
 			},
 			wantErr: true,
-			Err:     ErrNoSelectTypeError,
+			Err:     ErrNoSelectType,
 		},
 	}
 	for _, testCase := range testCases {
@@ -728,7 +728,7 @@ func TestCustomFields_Text(t *testing.T) {
 				textValue:     "Application",
 			},
 			wantErr: true,
-			Err:     ErrNoFieldIDError,
+			Err:     ErrNoFieldID,
 		},
 
 		{
@@ -739,7 +739,7 @@ func TestCustomFields_Text(t *testing.T) {
 				textValue:     "",
 			},
 			wantErr: true,
-			Err:     ErrNoTextTypeError,
+			Err:     ErrNoTextType,
 		},
 	}
 	for _, testCase := range testCases {
@@ -797,7 +797,7 @@ func TestCustomFields_URL(t *testing.T) {
 				URL:           "https://www.google.com/",
 			},
 			wantErr: true,
-			Err:     ErrNoFieldIDError,
+			Err:     ErrNoFieldID,
 		},
 
 		{
@@ -808,7 +808,7 @@ func TestCustomFields_URL(t *testing.T) {
 				URL:           "",
 			},
 			wantErr: true,
-			Err:     ErrNoURLTypeError,
+			Err:     ErrNoURLType,
 		},
 	}
 	for _, testCase := range testCases {
@@ -866,7 +866,7 @@ func TestCustomFields_User(t *testing.T) {
 				accountID:     "uuid-sample",
 			},
 			wantErr: true,
-			Err:     ErrNoFieldIDError,
+			Err:     ErrNoFieldID,
 		},
 
 		{
@@ -877,7 +877,7 @@ func TestCustomFields_User(t *testing.T) {
 				accountID:     "",
 			},
 			wantErr: true,
-			Err:     ErrNoUserTypeError,
+			Err:     ErrNoUserType,
 		},
 	}
 	for _, testCase := range testCases {
@@ -935,7 +935,7 @@ func TestCustomFields_Users(t *testing.T) {
 				accountIDs:    []string{"user-1", "user-2"},
 			},
 			wantErr: true,
-			Err:     ErrNoFieldIDError,
+			Err:     ErrNoFieldID,
 		},
 		{
 			name:   "when the users are not provided",
@@ -945,7 +945,7 @@ func TestCustomFields_Users(t *testing.T) {
 				accountIDs:    nil,
 			},
 			wantErr: true,
-			Err:     ErrNoMultiUserTypeError,
+			Err:     ErrNoMultiUserType,
 		},
 	}
 	for _, testCase := range testCases {

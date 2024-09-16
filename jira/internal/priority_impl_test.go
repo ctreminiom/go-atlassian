@@ -229,7 +229,7 @@ func Test_internalPriorityImpl_Get(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoPriorityIDError,
+			Err:     model.ErrNoPriorityID,
 		},
 
 		{

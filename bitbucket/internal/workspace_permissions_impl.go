@@ -65,7 +65,7 @@ type internalWorkspacePermissionServiceImpl struct {
 func (i *internalWorkspacePermissionServiceImpl) Members(ctx context.Context, workspace, query string) (*model.WorkspaceMembershipPageScheme, *model.ResponseScheme, error) {
 
 	if workspace == "" {
-		return nil, nil, model.ErrNoWorkspaceError
+		return nil, nil, model.ErrNoWorkspace
 	}
 
 	var endpoint strings.Builder
@@ -96,7 +96,7 @@ func (i *internalWorkspacePermissionServiceImpl) Members(ctx context.Context, wo
 func (i *internalWorkspacePermissionServiceImpl) Repositories(ctx context.Context, workspace, query, sort string) (*model.RepositoryPermissionPageScheme, *model.ResponseScheme, error) {
 
 	if workspace == "" {
-		return nil, nil, model.ErrNoWorkspaceError
+		return nil, nil, model.ErrNoWorkspace
 	}
 
 	var endpoint strings.Builder
@@ -131,11 +131,11 @@ func (i *internalWorkspacePermissionServiceImpl) Repositories(ctx context.Contex
 func (i *internalWorkspacePermissionServiceImpl) Repository(ctx context.Context, workspace, repository, query, sort string) (*model.RepositoryPermissionPageScheme, *model.ResponseScheme, error) {
 
 	if workspace == "" {
-		return nil, nil, model.ErrNoWorkspaceError
+		return nil, nil, model.ErrNoWorkspace
 	}
 
 	if repository == "" {
-		return nil, nil, model.ErrNoRepositoryError
+		return nil, nil, model.ErrNoRepository
 	}
 
 	var endpoint strings.Builder

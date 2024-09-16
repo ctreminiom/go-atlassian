@@ -129,7 +129,7 @@ func TestClient_Call(t *testing.T) {
 				Bytes:    *bytes.NewBufferString("Hello, world!"),
 			},
 			wantErr: true,
-			Err:     model.ErrBadRequestError,
+			Err:     model.ErrBadRequest,
 		},
 
 		{
@@ -154,7 +154,7 @@ func TestClient_Call(t *testing.T) {
 				Bytes:    *bytes.NewBufferString("Hello, world!"),
 			},
 			wantErr: true,
-			Err:     model.ErrInternalError,
+			Err:     model.ErrInternal,
 		},
 
 		{

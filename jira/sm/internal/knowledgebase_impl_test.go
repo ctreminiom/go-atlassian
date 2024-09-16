@@ -3,12 +3,14 @@ package internal
 import (
 	"context"
 	"errors"
+	"net/http"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
-	"github.com/stretchr/testify/assert"
-	"net/http"
-	"testing"
 )
 
 func Test_internalKnowledgebaseImpl_Search(t *testing.T) {
@@ -127,7 +129,7 @@ func Test_internalKnowledgebaseImpl_Search(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoKBQueryError,
+			Err:     model.ErrNoKBQuery,
 		},
 	}
 
@@ -284,7 +286,7 @@ func Test_internalKnowledgebaseImpl_Gets(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoServiceDeskIDError,
+			Err:     model.ErrNoServiceDeskID,
 		},
 
 		{
@@ -294,7 +296,7 @@ func Test_internalKnowledgebaseImpl_Gets(t *testing.T) {
 				serviceDeskID: 10001,
 			},
 			wantErr: true,
-			Err:     model.ErrNoKBQueryError,
+			Err:     model.ErrNoKBQuery,
 		},
 	}
 

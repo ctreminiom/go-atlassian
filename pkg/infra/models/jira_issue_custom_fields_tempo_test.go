@@ -83,7 +83,7 @@ func TestParseTempoAccountCustomField(t *testing.T) {
 			},
 			want:    nil,
 			wantErr: true,
-			Err:     ErrNoTempoAccountTypeError,
+			Err:     ErrNoTempoAccountType,
 		},
 
 		{
@@ -94,7 +94,7 @@ func TestParseTempoAccountCustomField(t *testing.T) {
 			},
 			want:    nil,
 			wantErr: true,
-			Err:     ErrNoFieldInformationError,
+			Err:     ErrNoFieldInformation,
 		},
 
 		{
@@ -105,7 +105,7 @@ func TestParseTempoAccountCustomField(t *testing.T) {
 			},
 			want:    nil,
 			wantErr: true,
-			Err:     ErrNoTempoAccountTypeError,
+			Err:     ErrNoTempoAccountType,
 		},
 
 		{
@@ -116,7 +116,7 @@ func TestParseTempoAccountCustomField(t *testing.T) {
 			},
 			want:    nil,
 			wantErr: true,
-			Err:     ErrNoFieldInformationError,
+			Err:     ErrNoFieldInformation,
 		},
 	}
 	for _, testCase := range testCases {
@@ -257,7 +257,7 @@ func TestParseTempoAccountCustomFields(t *testing.T) {
 				customField: "customfield_10036",
 			},
 			wantErr: true,
-			Err:     ErrNoIssuesSliceError,
+			Err:     ErrNoIssuesSlice,
 		},
 
 		{
@@ -267,7 +267,7 @@ func TestParseTempoAccountCustomFields(t *testing.T) {
 				customField: "customfield_10036",
 			},
 			wantErr: true,
-			Err:     ErrNoMapValuesError,
+			Err:     ErrNoMapValues,
 		},
 	}
 	for _, testCase := range tests {

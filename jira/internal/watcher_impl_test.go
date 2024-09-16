@@ -101,7 +101,7 @@ func Test_internalWatcherImpl_Gets(t *testing.T) {
 				issueKeyOrID: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoIssueKeyOrIDError,
+			Err:     model.ErrNoIssueKeyOrID,
 		},
 
 		{
@@ -315,7 +315,7 @@ func Test_internalWatcherImpl_Add(t *testing.T) {
 				issueKeyOrID: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoIssueKeyOrIDError,
+			Err:     model.ErrNoIssueKeyOrID,
 		},
 
 		{
@@ -466,7 +466,7 @@ func Test_internalWatcherImpl_Delete(t *testing.T) {
 				issueKeyOrID: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoIssueKeyOrIDError,
+			Err:     model.ErrNoIssueKeyOrID,
 		},
 
 		{
@@ -478,7 +478,7 @@ func Test_internalWatcherImpl_Delete(t *testing.T) {
 				accountID:    "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoAccountIDError,
+			Err:     model.ErrNoAccountID,
 		},
 
 		{

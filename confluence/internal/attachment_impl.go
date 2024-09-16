@@ -74,7 +74,7 @@ type internalAttachmentImpl struct {
 func (i *internalAttachmentImpl) Delete(ctx context.Context, attachmentID string) (*model.ResponseScheme, error) {
 
 	if attachmentID == "" {
-		return nil, model.ErrNoContentAttachmentIDError
+		return nil, model.ErrNoContentAttachmentID
 	}
 
 	endpoint := fmt.Sprintf("wiki/api/v2/attachments/%v", attachmentID)
@@ -90,7 +90,7 @@ func (i *internalAttachmentImpl) Delete(ctx context.Context, attachmentID string
 func (i *internalAttachmentImpl) Get(ctx context.Context, attachmentID string, versionID int, serializeIDs bool) (*model.AttachmentScheme, *model.ResponseScheme, error) {
 
 	if attachmentID == "" {
-		return nil, nil, model.ErrNoContentAttachmentIDError
+		return nil, nil, model.ErrNoContentAttachmentID
 	}
 
 	var endpoint strings.Builder
@@ -126,7 +126,7 @@ func (i *internalAttachmentImpl) Get(ctx context.Context, attachmentID string, v
 func (i *internalAttachmentImpl) Gets(ctx context.Context, entityID int, entityType string, options *model.AttachmentParamsScheme, cursor string, limit int) (*model.AttachmentPageScheme, *model.ResponseScheme, error) {
 
 	if entityID == 0 {
-		return nil, nil, model.ErrNoEntityIDError
+		return nil, nil, model.ErrNoEntityID
 	}
 
 	query := url.Values{}

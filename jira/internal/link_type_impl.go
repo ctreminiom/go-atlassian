@@ -103,7 +103,7 @@ func (i *internalLinkTypeImpl) Gets(ctx context.Context) (*model.IssueLinkTypeSe
 func (i *internalLinkTypeImpl) Get(ctx context.Context, issueLinkTypeID string) (*model.LinkTypeScheme, *model.ResponseScheme, error) {
 
 	if issueLinkTypeID == "" {
-		return nil, nil, model.ErrNoLinkTypeIDError
+		return nil, nil, model.ErrNoLinkTypeID
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issueLinkType/%v", i.version, issueLinkTypeID)
@@ -143,7 +143,7 @@ func (i *internalLinkTypeImpl) Create(ctx context.Context, payload *model.LinkTy
 func (i *internalLinkTypeImpl) Update(ctx context.Context, issueLinkTypeID string, payload *model.LinkTypeScheme) (*model.LinkTypeScheme, *model.ResponseScheme, error) {
 
 	if issueLinkTypeID == "" {
-		return nil, nil, model.ErrNoLinkTypeIDError
+		return nil, nil, model.ErrNoLinkTypeID
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issueLinkType/%v", i.version, issueLinkTypeID)
@@ -165,7 +165,7 @@ func (i *internalLinkTypeImpl) Update(ctx context.Context, issueLinkTypeID strin
 func (i *internalLinkTypeImpl) Delete(ctx context.Context, issueLinkTypeID string) (*model.ResponseScheme, error) {
 
 	if issueLinkTypeID == "" {
-		return nil, model.ErrNoLinkTypeIDError
+		return nil, model.ErrNoLinkTypeID
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issueLinkType/%v", i.version, issueLinkTypeID)

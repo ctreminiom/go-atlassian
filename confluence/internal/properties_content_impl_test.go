@@ -95,7 +95,7 @@ func Test_internalPropertyImpl_Gets(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoContentIDError,
+			Err:     model.ErrNoContentID,
 		},
 	}
 
@@ -208,7 +208,7 @@ func Test_internalPropertyImpl_Get(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoContentIDError,
+			Err:     model.ErrNoContentID,
 		},
 
 		{
@@ -218,7 +218,7 @@ func Test_internalPropertyImpl_Get(t *testing.T) {
 				contentID: "1111",
 			},
 			wantErr: true,
-			Err:     model.ErrNoContentPropertyError,
+			Err:     model.ErrNoContentProperty,
 		},
 	}
 
@@ -330,7 +330,7 @@ func Test_internalPropertyImpl_Delete(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoContentIDError,
+			Err:     model.ErrNoContentID,
 		},
 
 		{
@@ -340,7 +340,7 @@ func Test_internalPropertyImpl_Delete(t *testing.T) {
 				contentID: "1111",
 			},
 			wantErr: true,
-			Err:     model.ErrNoContentPropertyError,
+			Err:     model.ErrNoContentProperty,
 		},
 	}
 
@@ -457,7 +457,7 @@ func Test_internalPropertyImpl_Create(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoContentIDError,
+			Err:     model.ErrNoContentID,
 		},
 	}
 

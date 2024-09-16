@@ -86,11 +86,11 @@ type internalObjectTypeImpl struct {
 func (i *internalObjectTypeImpl) Get(ctx context.Context, workspaceID, objectTypeID string) (*model.ObjectTypeScheme, *model.ResponseScheme, error) {
 
 	if workspaceID == "" {
-		return nil, nil, model.ErrNoWorkspaceIDError
+		return nil, nil, model.ErrNoWorkspaceID
 	}
 
 	if objectTypeID == "" {
-		return nil, nil, model.ErrNoObjectTypeIDError
+		return nil, nil, model.ErrNoObjectTypeID
 	}
 
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/objecttype/%v", workspaceID, objectTypeID)
@@ -112,11 +112,11 @@ func (i *internalObjectTypeImpl) Get(ctx context.Context, workspaceID, objectTyp
 func (i *internalObjectTypeImpl) Update(ctx context.Context, workspaceID, objectTypeID string, payload *model.ObjectTypePayloadScheme) (*model.ObjectTypeScheme, *model.ResponseScheme, error) {
 
 	if workspaceID == "" {
-		return nil, nil, model.ErrNoWorkspaceIDError
+		return nil, nil, model.ErrNoWorkspaceID
 	}
 
 	if objectTypeID == "" {
-		return nil, nil, model.ErrNoObjectTypeIDError
+		return nil, nil, model.ErrNoObjectTypeID
 	}
 
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/objecttype/%v", workspaceID, objectTypeID)
@@ -138,7 +138,7 @@ func (i *internalObjectTypeImpl) Update(ctx context.Context, workspaceID, object
 func (i *internalObjectTypeImpl) Create(ctx context.Context, workspaceID string, payload *model.ObjectTypePayloadScheme) (*model.ObjectTypeScheme, *model.ResponseScheme, error) {
 
 	if workspaceID == "" {
-		return nil, nil, model.ErrNoWorkspaceIDError
+		return nil, nil, model.ErrNoWorkspaceID
 	}
 
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/objecttype/create", workspaceID)
@@ -160,11 +160,11 @@ func (i *internalObjectTypeImpl) Create(ctx context.Context, workspaceID string,
 func (i *internalObjectTypeImpl) Delete(ctx context.Context, workspaceID, objectTypeID string) (*model.ObjectTypeScheme, *model.ResponseScheme, error) {
 
 	if workspaceID == "" {
-		return nil, nil, model.ErrNoWorkspaceIDError
+		return nil, nil, model.ErrNoWorkspaceID
 	}
 
 	if objectTypeID == "" {
-		return nil, nil, model.ErrNoObjectTypeIDError
+		return nil, nil, model.ErrNoObjectTypeID
 	}
 
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/objecttype/%v", workspaceID, objectTypeID)
@@ -186,11 +186,11 @@ func (i *internalObjectTypeImpl) Delete(ctx context.Context, workspaceID, object
 func (i *internalObjectTypeImpl) Attributes(ctx context.Context, workspaceID, objectTypeID string, options *model.ObjectTypeAttributesParamsScheme) ([]*model.ObjectTypeAttributeScheme, *model.ResponseScheme, error) {
 
 	if workspaceID == "" {
-		return nil, nil, model.ErrNoWorkspaceIDError
+		return nil, nil, model.ErrNoWorkspaceID
 	}
 
 	if objectTypeID == "" {
-		return nil, nil, model.ErrNoObjectTypeIDError
+		return nil, nil, model.ErrNoObjectTypeID
 	}
 
 	var endpoint strings.Builder
@@ -249,11 +249,11 @@ func (i *internalObjectTypeImpl) Attributes(ctx context.Context, workspaceID, ob
 func (i *internalObjectTypeImpl) Position(ctx context.Context, workspaceID, objectTypeID string, payload *model.ObjectTypePositionPayloadScheme) (*model.ObjectTypeScheme, *model.ResponseScheme, error) {
 
 	if workspaceID == "" {
-		return nil, nil, model.ErrNoWorkspaceIDError
+		return nil, nil, model.ErrNoWorkspaceID
 	}
 
 	if objectTypeID == "" {
-		return nil, nil, model.ErrNoObjectTypeIDError
+		return nil, nil, model.ErrNoObjectTypeID
 	}
 
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/objecttype/%v/position", workspaceID, objectTypeID)

@@ -215,7 +215,7 @@ func Test_internalSpaceImpl_Get(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoSpaceKeyError,
+			Err:     model.ErrNoSpaceKey,
 		},
 	}
 
@@ -335,7 +335,7 @@ func Test_internalSpaceImpl_Content(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoSpaceKeyError,
+			Err:     model.ErrNoSpaceKey,
 		},
 	}
 
@@ -458,7 +458,7 @@ func Test_internalSpaceImpl_ContentByType(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoSpaceKeyError,
+			Err:     model.ErrNoSpaceKey,
 		},
 	}
 
@@ -570,7 +570,7 @@ func Test_internalSpaceImpl_Delete(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoSpaceKeyError,
+			Err:     model.ErrNoSpaceKey,
 		},
 	}
 
@@ -692,7 +692,7 @@ func Test_internalSpaceImpl_Create(t *testing.T) {
 				payload: &model.CreateSpaceScheme{},
 			},
 			wantErr: true,
-			Err:     model.ErrNoSpaceNameError,
+			Err:     model.ErrNoSpaceName,
 		},
 
 		{
@@ -705,7 +705,7 @@ func Test_internalSpaceImpl_Create(t *testing.T) {
 			},
 
 			wantErr: true,
-			Err:     model.ErrNoSpaceKeyError,
+			Err:     model.ErrNoSpaceKey,
 		},
 	}
 
@@ -823,7 +823,7 @@ func Test_internalSpaceImpl_Update(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoSpaceKeyError,
+			Err:     model.ErrNoSpaceKey,
 		},
 	}
 

@@ -686,7 +686,7 @@ func Test_internalTypeScreenSchemeImpl_Assign(t *testing.T) {
 				issueTypeScreenSchemeID: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoIssueTypeScreenSchemeIDError,
+			Err:     model.ErrNoIssueTypeScreenSchemeID,
 		},
 
 		{
@@ -697,7 +697,7 @@ func Test_internalTypeScreenSchemeImpl_Assign(t *testing.T) {
 				issueTypeScreenSchemeID: "20001",
 			},
 			wantErr: true,
-			Err:     model.ErrNoProjectIDError,
+			Err:     model.ErrNoProjectID,
 		},
 
 		{
@@ -786,7 +786,7 @@ func Test_internalTypeScreenSchemeImpl_Update(t *testing.T) {
 				issueTypeScreenSchemeID: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoIssueTypeScreenSchemeIDError,
+			Err:     model.ErrNoIssueTypeScreenSchemeID,
 		},
 		{
 			name:   "when the api version is v3",
@@ -936,7 +936,7 @@ func Test_internalTypeScreenSchemeImpl_Delete(t *testing.T) {
 				issueTypeScreenSchemeID: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoIssueTypeScreenSchemeIDError,
+			Err:     model.ErrNoIssueTypeScreenSchemeID,
 		},
 		{
 			name:   "when the api version is v3",
@@ -1093,7 +1093,7 @@ func Test_internalTypeScreenSchemeImpl_Append(t *testing.T) {
 				issueTypeScreenSchemeID: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoIssueTypeScreenSchemeIDError,
+			Err:     model.ErrNoIssueTypeScreenSchemeID,
 		},
 		{
 			name:   "when the api version is v3",
@@ -1242,7 +1242,7 @@ func Test_internalTypeScreenSchemeImpl_UpdateDefault(t *testing.T) {
 				issueTypeScreenSchemeID: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoIssueTypeScreenSchemeIDError,
+			Err:     model.ErrNoIssueTypeScreenSchemeID,
 		},
 		{
 			name:   "when the screen scheme id is not provided",
@@ -1252,7 +1252,7 @@ func Test_internalTypeScreenSchemeImpl_UpdateDefault(t *testing.T) {
 				issueTypeScreenSchemeID: "20001",
 			},
 			wantErr: true,
-			Err:     model.ErrNoScreenSchemeIDError,
+			Err:     model.ErrNoScreenSchemeID,
 		},
 		{
 			name:   "when the api version is v3",
@@ -1402,7 +1402,7 @@ func Test_internalTypeScreenSchemeImpl_Remove(t *testing.T) {
 				issueTypeScreenSchemeID: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoIssueTypeScreenSchemeIDError,
+			Err:     model.ErrNoIssueTypeScreenSchemeID,
 		},
 		{
 			name:   "when the issue type id's are not provided",
@@ -1412,7 +1412,7 @@ func Test_internalTypeScreenSchemeImpl_Remove(t *testing.T) {
 				issueTypeScreenSchemeID: "2201",
 			},
 			wantErr: true,
-			Err:     model.ErrNoIssueTypesError,
+			Err:     model.ErrNoIssueTypes,
 		},
 		{
 			name:   "when the api version is v3",

@@ -125,7 +125,7 @@ func Test_internalIssueFieldContextOptionServiceImpl_Gets(t *testing.T) {
 				maxResults: 50,
 			},
 			wantErr: true,
-			Err:     model.ErrNoFieldIDError,
+			Err:     model.ErrNoFieldID,
 		},
 
 		{
@@ -303,7 +303,7 @@ func Test_internalIssueFieldContextOptionServiceImpl_Create(t *testing.T) {
 				contextID: 10001,
 			},
 			wantErr: true,
-			Err:     model.ErrNoFieldIDError,
+			Err:     model.ErrNoFieldID,
 		},
 
 		{
@@ -315,7 +315,7 @@ func Test_internalIssueFieldContextOptionServiceImpl_Create(t *testing.T) {
 				contextID: 0,
 			},
 			wantErr: true,
-			Err:     model.ErrNoFieldContextIDError,
+			Err:     model.ErrNoFieldContextID,
 		},
 
 		{
@@ -488,7 +488,7 @@ func Test_internalIssueFieldContextOptionServiceImpl_Update(t *testing.T) {
 				contextID: 10001,
 			},
 			wantErr: true,
-			Err:     model.ErrNoFieldIDError,
+			Err:     model.ErrNoFieldID,
 		},
 
 		{
@@ -500,7 +500,7 @@ func Test_internalIssueFieldContextOptionServiceImpl_Update(t *testing.T) {
 				contextID: 0,
 			},
 			wantErr: true,
-			Err:     model.ErrNoFieldContextIDError,
+			Err:     model.ErrNoFieldContextID,
 		},
 
 		{
@@ -658,7 +658,7 @@ func Test_internalIssueFieldContextOptionServiceImpl_Delete(t *testing.T) {
 				contextID: 10001,
 			},
 			wantErr: true,
-			Err:     model.ErrNoFieldIDError,
+			Err:     model.ErrNoFieldID,
 		},
 
 		{
@@ -670,7 +670,7 @@ func Test_internalIssueFieldContextOptionServiceImpl_Delete(t *testing.T) {
 				contextID: 0,
 			},
 			wantErr: true,
-			Err:     model.ErrNoFieldContextIDError,
+			Err:     model.ErrNoFieldContextID,
 		},
 
 		{
@@ -684,7 +684,7 @@ func Test_internalIssueFieldContextOptionServiceImpl_Delete(t *testing.T) {
 			},
 
 			wantErr: true,
-			Err:     model.ErrNoContextOptionIDError,
+			Err:     model.ErrNoContextOptionID,
 		},
 
 		{
@@ -846,7 +846,7 @@ func Test_internalIssueFieldContextOptionServiceImpl_Order(t *testing.T) {
 				contextID: 10001,
 			},
 			wantErr: true,
-			Err:     model.ErrNoFieldIDError,
+			Err:     model.ErrNoFieldID,
 		},
 
 		{
@@ -858,7 +858,7 @@ func Test_internalIssueFieldContextOptionServiceImpl_Order(t *testing.T) {
 				contextID: 0,
 			},
 			wantErr: true,
-			Err:     model.ErrNoFieldContextIDError,
+			Err:     model.ErrNoFieldContextID,
 		},
 
 		{

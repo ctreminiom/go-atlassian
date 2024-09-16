@@ -104,7 +104,7 @@ func Test_internalScreenImpl_Fields(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoFieldIDError,
+			Err:     model.ErrNoFieldID,
 		},
 
 		{
@@ -408,7 +408,7 @@ func Test_internalScreenImpl_AddToDefault(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoFieldIDError,
+			Err:     model.ErrNoFieldID,
 		},
 
 		{
@@ -551,7 +551,7 @@ func Test_internalScreenImpl_Available(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoScreenIDError,
+			Err:     model.ErrNoScreenID,
 		},
 
 		{
@@ -699,7 +699,7 @@ func Test_internalScreenImpl_Create(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoScreenNameError,
+			Err:     model.ErrNoScreenName,
 		},
 
 		{
@@ -851,7 +851,7 @@ func Test_internalScreenImpl_Update(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoScreenIDError,
+			Err:     model.ErrNoScreenID,
 		},
 
 		{
@@ -998,7 +998,7 @@ func Test_internalScreenImpl_Delete(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoScreenIDError,
+			Err:     model.ErrNoScreenID,
 		},
 
 		{

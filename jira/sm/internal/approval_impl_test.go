@@ -3,12 +3,14 @@ package internal
 import (
 	"context"
 	"errors"
+	"net/http"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
-	"github.com/stretchr/testify/assert"
-	"net/http"
-	"testing"
 )
 
 func Test_internalServiceRequestApprovalImpl_Gets(t *testing.T) {
@@ -125,7 +127,7 @@ func Test_internalServiceRequestApprovalImpl_Gets(t *testing.T) {
 			on: func(fields *fields) {
 				fields.c = mocks.NewConnector(t)
 			},
-			Err:     model.ErrNoIssueKeyOrIDError,
+			Err:     model.ErrNoIssueKeyOrID,
 			wantErr: true,
 		},
 	}
@@ -271,7 +273,7 @@ func Test_internalServiceRequestApprovalImpl_Get(t *testing.T) {
 			on: func(fields *fields) {
 				fields.c = mocks.NewConnector(t)
 			},
-			Err:     model.ErrNoIssueKeyOrIDError,
+			Err:     model.ErrNoIssueKeyOrID,
 			wantErr: true,
 		},
 
@@ -284,7 +286,7 @@ func Test_internalServiceRequestApprovalImpl_Get(t *testing.T) {
 			on: func(fields *fields) {
 				fields.c = mocks.NewConnector(t)
 			},
-			Err:     model.ErrNoApprovalIDError,
+			Err:     model.ErrNoApprovalID,
 			wantErr: true,
 		},
 	}
@@ -433,7 +435,7 @@ func Test_internalServiceRequestApprovalImpl_Answer(t *testing.T) {
 			on: func(fields *fields) {
 				fields.c = mocks.NewConnector(t)
 			},
-			Err:     model.ErrNoIssueKeyOrIDError,
+			Err:     model.ErrNoIssueKeyOrID,
 			wantErr: true,
 		},
 
@@ -446,7 +448,7 @@ func Test_internalServiceRequestApprovalImpl_Answer(t *testing.T) {
 			on: func(fields *fields) {
 				fields.c = mocks.NewConnector(t)
 			},
-			Err:     model.ErrNoApprovalIDError,
+			Err:     model.ErrNoApprovalID,
 			wantErr: true,
 		},
 	}

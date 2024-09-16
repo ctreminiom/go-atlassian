@@ -96,7 +96,7 @@ func Test_internalIssuePropertyImpl_Gets(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoIssueKeyOrIDError,
+			Err:     model.ErrNoIssueKeyOrID,
 		},
 
 		{
@@ -243,7 +243,7 @@ func Test_internalIssuePropertyImpl_Get(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoIssueKeyOrIDError,
+			Err:     model.ErrNoIssueKeyOrID,
 		},
 
 		{
@@ -254,7 +254,7 @@ func Test_internalIssuePropertyImpl_Get(t *testing.T) {
 				issueKeyOrID: "DUMMY-1",
 			},
 			wantErr: true,
-			Err:     model.ErrNoPropertyKeyError,
+			Err:     model.ErrNoPropertyKey,
 		},
 
 		{
@@ -410,7 +410,7 @@ func Test_internalIssuePropertyImpl_Set(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoIssueKeyOrIDError,
+			Err:     model.ErrNoIssueKeyOrID,
 		},
 
 		{
@@ -421,7 +421,7 @@ func Test_internalIssuePropertyImpl_Set(t *testing.T) {
 				issueKeyOrID: "DUMMY-1",
 			},
 			wantErr: true,
-			Err:     model.ErrNoPropertyKeyError,
+			Err:     model.ErrNoPropertyKey,
 		},
 
 		{
@@ -570,7 +570,7 @@ func Test_internalIssuePropertyImpl_Delete(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoIssueKeyOrIDError,
+			Err:     model.ErrNoIssueKeyOrID,
 		},
 
 		{
@@ -581,7 +581,7 @@ func Test_internalIssuePropertyImpl_Delete(t *testing.T) {
 				issueKeyOrID: "DUMMY-1",
 			},
 			wantErr: true,
-			Err:     model.ErrNoPropertyKeyError,
+			Err:     model.ErrNoPropertyKey,
 		},
 
 		{

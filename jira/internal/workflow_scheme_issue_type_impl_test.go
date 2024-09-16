@@ -72,7 +72,7 @@ func Test_internalWorkflowSchemeIssueTypeImpl_Get(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoWorkflowSchemeIDError,
+			Err:     model.ErrNoWorkflowSchemeID,
 		},
 
 		{
@@ -83,7 +83,7 @@ func Test_internalWorkflowSchemeIssueTypeImpl_Get(t *testing.T) {
 				schemeID: 10002,
 			},
 			wantErr: true,
-			Err:     model.ErrNoIssueTypeIDError,
+			Err:     model.ErrNoIssueTypeID,
 		},
 
 		{
@@ -235,7 +235,7 @@ func Test_internalWorkflowSchemeIssueTypeImpl_Mapping(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoWorkflowSchemeIDError,
+			Err:     model.ErrNoWorkflowSchemeID,
 		},
 
 		{
@@ -387,7 +387,7 @@ func Test_internalWorkflowSchemeIssueTypeImpl_Delete(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoWorkflowSchemeIDError,
+			Err:     model.ErrNoWorkflowSchemeID,
 		},
 
 		{
@@ -398,7 +398,7 @@ func Test_internalWorkflowSchemeIssueTypeImpl_Delete(t *testing.T) {
 				schemeID: 10002,
 			},
 			wantErr: true,
-			Err:     model.ErrNoIssueTypeIDError,
+			Err:     model.ErrNoIssueTypeID,
 		},
 
 		{
@@ -556,7 +556,7 @@ func Test_internalWorkflowSchemeIssueTypeImpl_Set(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoWorkflowSchemeIDError,
+			Err:     model.ErrNoWorkflowSchemeID,
 		},
 
 		{
@@ -567,7 +567,7 @@ func Test_internalWorkflowSchemeIssueTypeImpl_Set(t *testing.T) {
 				schemeID: 10002,
 			},
 			wantErr: true,
-			Err:     model.ErrNoIssueTypeIDError,
+			Err:     model.ErrNoIssueTypeID,
 		},
 
 		{

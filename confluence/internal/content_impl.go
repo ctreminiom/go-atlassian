@@ -249,7 +249,7 @@ func (i *internalContentImpl) Create(ctx context.Context, payload *model.Content
 func (i *internalContentImpl) Search(ctx context.Context, cql, cqlContext string, expand []string, cursor string, maxResults int) (*model.ContentPageScheme, *model.ResponseScheme, error) {
 
 	if cql == "" {
-		return nil, nil, model.ErrNoCQLError
+		return nil, nil, model.ErrNoCQL
 	}
 
 	query := url.Values{}
@@ -287,7 +287,7 @@ func (i *internalContentImpl) Search(ctx context.Context, cql, cqlContext string
 func (i *internalContentImpl) Get(ctx context.Context, contentID string, expand []string, version int) (*model.ContentScheme, *model.ResponseScheme, error) {
 
 	if contentID == "" {
-		return nil, nil, model.ErrNoContentIDError
+		return nil, nil, model.ErrNoContentID
 	}
 
 	query := url.Values{}
@@ -316,7 +316,7 @@ func (i *internalContentImpl) Get(ctx context.Context, contentID string, expand 
 func (i *internalContentImpl) Update(ctx context.Context, contentID string, payload *model.ContentScheme) (*model.ContentScheme, *model.ResponseScheme, error) {
 
 	if contentID == "" {
-		return nil, nil, model.ErrNoContentIDError
+		return nil, nil, model.ErrNoContentID
 	}
 
 	endpoint := fmt.Sprintf("wiki/rest/api/content/%v", contentID)
@@ -338,7 +338,7 @@ func (i *internalContentImpl) Update(ctx context.Context, contentID string, payl
 func (i *internalContentImpl) Delete(ctx context.Context, contentID, status string) (*model.ResponseScheme, error) {
 
 	if contentID == "" {
-		return nil, model.ErrNoContentIDError
+		return nil, model.ErrNoContentID
 	}
 
 	var endpoint strings.Builder
@@ -362,7 +362,7 @@ func (i *internalContentImpl) Delete(ctx context.Context, contentID, status stri
 func (i *internalContentImpl) History(ctx context.Context, contentID string, expand []string) (*model.ContentHistoryScheme, *model.ResponseScheme, error) {
 
 	if contentID == "" {
-		return nil, nil, model.ErrNoContentIDError
+		return nil, nil, model.ErrNoContentID
 	}
 
 	var endpoint strings.Builder

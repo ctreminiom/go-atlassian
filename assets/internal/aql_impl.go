@@ -44,7 +44,7 @@ type internalAQLImpl struct {
 func (i *internalAQLImpl) Filter(ctx context.Context, workspaceID string, parameters *model.AQLSearchParamsScheme) (*model.ObjectListScheme, *model.ResponseScheme, error) {
 
 	if workspaceID == "" {
-		return nil, nil, model.ErrNoWorkspaceIDError
+		return nil, nil, model.ErrNoWorkspaceID
 	}
 
 	var endpoint strings.Builder

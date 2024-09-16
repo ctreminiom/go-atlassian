@@ -402,7 +402,7 @@ func Test_internalNotificationSchemeImpl_Get(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoNotificationSchemeIDError,
+			Err:     model.ErrNoNotificationSchemeID,
 		},
 
 		{
@@ -555,7 +555,7 @@ func Test_internalNotificationSchemeImpl_Update(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoNotificationSchemeIDError,
+			Err:     model.ErrNoNotificationSchemeID,
 		},
 
 		{
@@ -718,7 +718,7 @@ func Test_internalNotificationSchemeImpl_Append(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoNotificationSchemeIDError,
+			Err:     model.ErrNoNotificationSchemeID,
 		},
 
 		{
@@ -865,7 +865,7 @@ func Test_internalNotificationSchemeImpl_Remove(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoNotificationSchemeIDError,
+			Err:     model.ErrNoNotificationSchemeID,
 		},
 
 		{
@@ -876,7 +876,7 @@ func Test_internalNotificationSchemeImpl_Remove(t *testing.T) {
 				schemeID: "10001",
 			},
 			wantErr: true,
-			Err:     model.ErrNoNotificationIDError,
+			Err:     model.ErrNoNotificationID,
 		},
 
 		{
@@ -1020,7 +1020,7 @@ func Test_internalNotificationSchemeImpl_Delete(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoNotificationSchemeIDError,
+			Err:     model.ErrNoNotificationSchemeID,
 		},
 
 		{

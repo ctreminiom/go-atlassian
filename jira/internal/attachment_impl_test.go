@@ -237,7 +237,7 @@ func Test_internalIssueAttachmentServiceImpl_Metadata(t *testing.T) {
 				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
-			Err:     model.ErrNoAttachmentIDError,
+			Err:     model.ErrNoAttachmentID,
 		},
 
 		{
@@ -386,7 +386,7 @@ func Test_internalIssueAttachmentServiceImpl_Human(t *testing.T) {
 				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
-			Err:     model.ErrNoAttachmentIDError,
+			Err:     model.ErrNoAttachmentID,
 		},
 
 		{
@@ -535,7 +535,7 @@ func Test_internalIssueAttachmentServiceImpl_Delete(t *testing.T) {
 				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
-			Err:     model.ErrNoAttachmentIDError,
+			Err:     model.ErrNoAttachmentID,
 		},
 
 		{
@@ -696,7 +696,7 @@ func Test_internalIssueAttachmentServiceImpl_Add(t *testing.T) {
 				file:         fileMocked,
 			},
 			wantErr: true,
-			Err:     model.ErrNoIssueKeyOrIDError,
+			Err:     model.ErrNoIssueKeyOrID,
 		},
 
 		{
@@ -709,7 +709,7 @@ func Test_internalIssueAttachmentServiceImpl_Add(t *testing.T) {
 				file:         fileMocked,
 			},
 			wantErr: true,
-			Err:     model.ErrNoAttachmentNameError,
+			Err:     model.ErrNoAttachmentName,
 		},
 
 		{
@@ -722,7 +722,7 @@ func Test_internalIssueAttachmentServiceImpl_Add(t *testing.T) {
 				file:         nil,
 			},
 			wantErr: true,
-			Err:     model.ErrNoReaderError,
+			Err:     model.ErrNoReader,
 		},
 
 		{
@@ -876,7 +876,7 @@ func Test_internalIssueAttachmentServiceImpl_Download(t *testing.T) {
 				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
-			Err:     model.ErrNoAttachmentIDError,
+			Err:     model.ErrNoAttachmentID,
 		},
 
 		{

@@ -126,7 +126,7 @@ func Test_internalQueueServiceImpl_Gets(t *testing.T) {
 			args: args{
 				ctx: context.Background(),
 			},
-			Err:     model.ErrNoServiceDeskIDError,
+			Err:     model.ErrNoServiceDeskID,
 			wantErr: true,
 		},
 	}
@@ -273,7 +273,7 @@ func Test_internalQueueServiceImpl_Get(t *testing.T) {
 			args: args{
 				ctx: context.Background(),
 			},
-			Err:     model.ErrNoServiceDeskIDError,
+			Err:     model.ErrNoServiceDeskID,
 			wantErr: true,
 		},
 
@@ -283,7 +283,7 @@ func Test_internalQueueServiceImpl_Get(t *testing.T) {
 				ctx:           context.Background(),
 				serviceDeskID: 10001,
 			},
-			Err:     model.ErrNoQueueIDError,
+			Err:     model.ErrNoQueueID,
 			wantErr: true,
 		},
 	}
@@ -437,7 +437,7 @@ func Test_internalQueueServiceImpl_Issues(t *testing.T) {
 			args: args{
 				ctx: context.Background(),
 			},
-			Err:     model.ErrNoServiceDeskIDError,
+			Err:     model.ErrNoServiceDeskID,
 			wantErr: true,
 		},
 	}

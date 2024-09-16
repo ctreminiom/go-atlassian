@@ -101,7 +101,7 @@ func Test_internalScreenTabFieldImpl_Gets(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoScreenIDError,
+			Err:     model.ErrNoScreenID,
 		},
 
 		{
@@ -112,7 +112,7 @@ func Test_internalScreenTabFieldImpl_Gets(t *testing.T) {
 				screenID: 10001,
 			},
 			wantErr: true,
-			Err:     model.ErrNoScreenTabIDError,
+			Err:     model.ErrNoScreenTabID,
 		},
 
 		{
@@ -264,7 +264,7 @@ func Test_internalScreenTabFieldImpl_Add(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoScreenIDError,
+			Err:     model.ErrNoScreenID,
 		},
 
 		{
@@ -275,7 +275,7 @@ func Test_internalScreenTabFieldImpl_Add(t *testing.T) {
 				screenID: 10001,
 			},
 			wantErr: true,
-			Err:     model.ErrNoScreenTabIDError,
+			Err:     model.ErrNoScreenTabID,
 		},
 
 		{
@@ -287,7 +287,7 @@ func Test_internalScreenTabFieldImpl_Add(t *testing.T) {
 				tabID:    10001,
 			},
 			wantErr: true,
-			Err:     model.ErrNoFieldIDError,
+			Err:     model.ErrNoFieldID,
 		},
 
 		{
@@ -439,7 +439,7 @@ func Test_internalScreenTabFieldImpl_Remove(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoScreenIDError,
+			Err:     model.ErrNoScreenID,
 		},
 
 		{
@@ -450,7 +450,7 @@ func Test_internalScreenTabFieldImpl_Remove(t *testing.T) {
 				screenID: 10001,
 			},
 			wantErr: true,
-			Err:     model.ErrNoScreenTabIDError,
+			Err:     model.ErrNoScreenTabID,
 		},
 
 		{
@@ -462,7 +462,7 @@ func Test_internalScreenTabFieldImpl_Remove(t *testing.T) {
 				tabID:    10001,
 			},
 			wantErr: true,
-			Err:     model.ErrNoFieldIDError,
+			Err:     model.ErrNoFieldID,
 		},
 
 		{
@@ -618,7 +618,7 @@ func Test_internalScreenTabFieldImpl_Move(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoScreenIDError,
+			Err:     model.ErrNoScreenID,
 		},
 
 		{
@@ -629,7 +629,7 @@ func Test_internalScreenTabFieldImpl_Move(t *testing.T) {
 				screenID: 10001,
 			},
 			wantErr: true,
-			Err:     model.ErrNoScreenTabIDError,
+			Err:     model.ErrNoScreenTabID,
 		},
 
 		{
@@ -641,7 +641,7 @@ func Test_internalScreenTabFieldImpl_Move(t *testing.T) {
 				tabID:    10001,
 			},
 			wantErr: true,
-			Err:     model.ErrNoFieldIDError,
+			Err:     model.ErrNoFieldID,
 		},
 
 		{

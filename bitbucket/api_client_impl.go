@@ -158,13 +158,13 @@ func (c *Client) processResponse(response *http.Response, structure interface{})
 			return res, models.ErrUnauthorized
 
 		case http.StatusInternalServerError:
-			return res, models.ErrInternalError
+			return res, models.ErrInternal
 
 		case http.StatusBadRequest:
-			return res, models.ErrBadRequestError
+			return res, models.ErrBadRequest
 
 		default:
-			return res, models.ErrInvalidStatusCodeError
+			return res, models.ErrInvalidStatusCode
 		}
 	}
 

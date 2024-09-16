@@ -99,7 +99,7 @@ func Test_internalSpacePermissionImpl_Add(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoSpaceKeyError,
+			Err:     model.ErrNoSpaceKey,
 		},
 	}
 
@@ -229,7 +229,7 @@ func Test_internalSpacePermissionImpl_Bulk(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoSpaceKeyError,
+			Err:     model.ErrNoSpaceKey,
 		},
 	}
 
@@ -339,7 +339,7 @@ func Test_internalSpacePermissionImpl_Remove(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoSpaceKeyError,
+			Err:     model.ErrNoSpaceKey,
 		},
 	}
 

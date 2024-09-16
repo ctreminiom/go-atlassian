@@ -199,7 +199,7 @@ func (i *internalDashboardImpl) Search(ctx context.Context, options *model.Dashb
 func (i *internalDashboardImpl) Get(ctx context.Context, dashboardID string) (*model.DashboardScheme, *model.ResponseScheme, error) {
 
 	if dashboardID == "" {
-		return nil, nil, model.ErrNoDashboardIDError
+		return nil, nil, model.ErrNoDashboardID
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/dashboard/%v", i.version, dashboardID)
@@ -221,7 +221,7 @@ func (i *internalDashboardImpl) Get(ctx context.Context, dashboardID string) (*m
 func (i *internalDashboardImpl) Delete(ctx context.Context, dashboardID string) (*model.ResponseScheme, error) {
 
 	if dashboardID == "" {
-		return nil, model.ErrNoDashboardIDError
+		return nil, model.ErrNoDashboardID
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/dashboard/%v", i.version, dashboardID)
@@ -237,7 +237,7 @@ func (i *internalDashboardImpl) Delete(ctx context.Context, dashboardID string) 
 func (i *internalDashboardImpl) Copy(ctx context.Context, dashboardID string, payload *model.DashboardPayloadScheme) (*model.DashboardScheme, *model.ResponseScheme, error) {
 
 	if dashboardID == "" {
-		return nil, nil, model.ErrNoDashboardIDError
+		return nil, nil, model.ErrNoDashboardID
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/dashboard/%v/copy", i.version, dashboardID)
@@ -259,7 +259,7 @@ func (i *internalDashboardImpl) Copy(ctx context.Context, dashboardID string, pa
 func (i *internalDashboardImpl) Update(ctx context.Context, dashboardID string, payload *model.DashboardPayloadScheme) (*model.DashboardScheme, *model.ResponseScheme, error) {
 
 	if dashboardID == "" {
-		return nil, nil, model.ErrNoDashboardIDError
+		return nil, nil, model.ErrNoDashboardID
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/dashboard/%v", i.version, dashboardID)

@@ -126,7 +126,7 @@ func Test_internalLinkRichTextServiceImpl_Get(t *testing.T) {
 				linkID: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoTypeIDError,
+			Err:     model.ErrNoTypeID,
 		},
 	}
 
@@ -249,7 +249,7 @@ func Test_internalLinkRichTextServiceImpl_Gets(t *testing.T) {
 				issueKeyOrID: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoIssueKeyOrIDError,
+			Err:     model.ErrNoIssueKeyOrID,
 		},
 
 		{
@@ -422,7 +422,7 @@ func Test_internalLinkRichTextServiceImpl_Delete(t *testing.T) {
 				linkID: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoTypeIDError,
+			Err:     model.ErrNoTypeID,
 		},
 	}
 

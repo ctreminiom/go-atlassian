@@ -395,7 +395,7 @@ func Test_internalCustomerImpl_Add(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoServiceDeskIDError,
+			Err:     model.ErrNoServiceDeskID,
 		},
 
 		{
@@ -405,7 +405,7 @@ func Test_internalCustomerImpl_Add(t *testing.T) {
 				serviceDeskID: "10001",
 			},
 			wantErr: true,
-			Err:     model.ErrNoAccountSliceError,
+			Err:     model.ErrNoAccountSlice,
 		},
 	}
 
@@ -546,7 +546,7 @@ func Test_internalCustomerImpl_Remove(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoServiceDeskIDError,
+			Err:     model.ErrNoServiceDeskID,
 		},
 
 		{
@@ -556,7 +556,7 @@ func Test_internalCustomerImpl_Remove(t *testing.T) {
 				serviceDeskID: "10001",
 			},
 			wantErr: true,
-			Err:     model.ErrNoAccountSliceError,
+			Err:     model.ErrNoAccountSlice,
 		},
 	}
 

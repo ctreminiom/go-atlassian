@@ -121,7 +121,7 @@ func Test_EpicService_Get(t *testing.T) {
 			on: func(fields *fields) {
 				fields.c = mocks.NewConnector(t)
 			},
-			Err:     model.ErrNoEpicIDError,
+			Err:     model.ErrNoEpicID,
 			wantErr: true,
 		},
 	}
@@ -291,7 +291,7 @@ func Test_EpicService_Issues(t *testing.T) {
 			on: func(fields *fields) {
 				fields.c = mocks.NewConnector(t)
 			},
-			Err:     model.ErrNoEpicIDError,
+			Err:     model.ErrNoEpicID,
 			wantErr: true,
 		},
 	}
@@ -441,7 +441,7 @@ func Test_EpicService_Move(t *testing.T) {
 			on: func(fields *fields) {
 				fields.c = mocks.NewConnector(t)
 			},
-			Err:     model.ErrNoEpicIDError,
+			Err:     model.ErrNoEpicID,
 			wantErr: true,
 		},
 	}

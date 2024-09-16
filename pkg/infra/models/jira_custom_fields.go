@@ -12,11 +12,11 @@ type CustomFields struct{ Fields []map[string]interface{} }
 func (c *CustomFields) Groups(customFieldID string, groups []string) error {
 
 	if len(customFieldID) == 0 {
-		return ErrNoFieldIDError
+		return ErrNoFieldID
 	}
 
 	if len(groups) == 0 {
-		return ErrNoGroupsNameError
+		return ErrNoGroupsName
 	}
 
 	var groupsNode []map[string]interface{}
@@ -42,11 +42,11 @@ func (c *CustomFields) Groups(customFieldID string, groups []string) error {
 func (c *CustomFields) Group(customFieldID, group string) error {
 
 	if len(customFieldID) == 0 {
-		return ErrNoFieldIDError
+		return ErrNoFieldID
 	}
 
 	if len(group) == 0 {
-		return ErrNoGroupNameError
+		return ErrNoGroupName
 	}
 
 	var groupNode = map[string]interface{}{}
@@ -66,11 +66,11 @@ func (c *CustomFields) Group(customFieldID, group string) error {
 func (c *CustomFields) URL(customFieldID, URL string) error {
 
 	if len(customFieldID) == 0 {
-		return ErrNoFieldIDError
+		return ErrNoFieldID
 	}
 
 	if len(URL) == 0 {
-		return ErrNoURLTypeError
+		return ErrNoURLType
 	}
 
 	var urlNode = map[string]interface{}{}
@@ -87,11 +87,11 @@ func (c *CustomFields) URL(customFieldID, URL string) error {
 func (c *CustomFields) Text(customFieldID, textValue string) error {
 
 	if len(customFieldID) == 0 {
-		return ErrNoFieldIDError
+		return ErrNoFieldID
 	}
 
 	if len(textValue) == 0 {
-		return ErrNoTextTypeError
+		return ErrNoTextType
 	}
 
 	var textNode = map[string]interface{}{}
@@ -108,11 +108,11 @@ func (c *CustomFields) Text(customFieldID, textValue string) error {
 func (c *CustomFields) DateTime(customFieldID string, dateValue time.Time) error {
 
 	if len(customFieldID) == 0 {
-		return ErrNoFieldIDError
+		return ErrNoFieldID
 	}
 
 	if dateValue.IsZero() {
-		return ErrNoDatePickerTypeError
+		return ErrNoDatePickerType
 	}
 
 	var dateNode = map[string]interface{}{}
@@ -129,11 +129,11 @@ func (c *CustomFields) DateTime(customFieldID string, dateValue time.Time) error
 func (c *CustomFields) Date(customFieldID string, dateTimeValue time.Time) (err error) {
 
 	if len(customFieldID) == 0 {
-		return ErrNoFieldIDError
+		return ErrNoFieldID
 	}
 
 	if dateTimeValue.IsZero() {
-		return ErrNoDateTimeTypeError
+		return ErrNoDateTimeType
 	}
 
 	var dateTimeNode = map[string]interface{}{}
@@ -150,11 +150,11 @@ func (c *CustomFields) Date(customFieldID string, dateTimeValue time.Time) (err 
 func (c *CustomFields) MultiSelect(customFieldID string, options []string) error {
 
 	if len(customFieldID) == 0 {
-		return ErrNoFieldIDError
+		return ErrNoFieldID
 	}
 
 	if len(options) == 0 {
-		return ErrNoMultiSelectTypeError
+		return ErrNoMultiSelectType
 	}
 
 	var groupsNode []map[string]interface{}
@@ -180,11 +180,11 @@ func (c *CustomFields) MultiSelect(customFieldID string, options []string) error
 func (c *CustomFields) Select(customFieldID string, option string) error {
 
 	if len(customFieldID) == 0 {
-		return ErrNoFieldIDError
+		return ErrNoFieldID
 	}
 
 	if len(option) == 0 {
-		return ErrNoSelectTypeError
+		return ErrNoSelectType
 	}
 
 	var selectNode = map[string]interface{}{}
@@ -204,11 +204,11 @@ func (c *CustomFields) Select(customFieldID string, option string) error {
 func (c *CustomFields) RadioButton(customFieldID, button string) error {
 
 	if len(customFieldID) == 0 {
-		return ErrNoFieldIDError
+		return ErrNoFieldID
 	}
 
 	if len(button) == 0 {
-		return ErrNoButtonTypeError
+		return ErrNoButtonType
 	}
 
 	var selectNode = map[string]interface{}{}
@@ -228,11 +228,11 @@ func (c *CustomFields) RadioButton(customFieldID, button string) error {
 func (c *CustomFields) User(customFieldID string, accountID string) error {
 
 	if len(customFieldID) == 0 {
-		return ErrNoFieldIDError
+		return ErrNoFieldID
 	}
 
 	if len(accountID) == 0 {
-		return ErrNoUserTypeError
+		return ErrNoUserType
 	}
 
 	var userNode = map[string]interface{}{}
@@ -252,11 +252,11 @@ func (c *CustomFields) User(customFieldID string, accountID string) error {
 func (c *CustomFields) Users(customFieldID string, accountIDs []string) error {
 
 	if len(customFieldID) == 0 {
-		return ErrNoFieldIDError
+		return ErrNoFieldID
 	}
 
 	if len(accountIDs) == 0 {
-		return ErrNoMultiUserTypeError
+		return ErrNoMultiUserType
 	}
 
 	var accountsNode []map[string]interface{}
@@ -282,7 +282,7 @@ func (c *CustomFields) Users(customFieldID string, accountIDs []string) error {
 func (c *CustomFields) Number(customFieldID string, numberValue float64) error {
 
 	if len(customFieldID) == 0 {
-		return ErrNoFieldIDError
+		return ErrNoFieldID
 	}
 
 	var numberNode = map[string]interface{}{}
@@ -299,11 +299,11 @@ func (c *CustomFields) Number(customFieldID string, numberValue float64) error {
 func (c *CustomFields) CheckBox(customFieldID string, options []string) error {
 
 	if len(customFieldID) == 0 {
-		return ErrNoFieldIDError
+		return ErrNoFieldID
 	}
 
 	if len(options) == 0 {
-		return ErrNoCheckBoxTypeError
+		return ErrNoCheckBoxType
 	}
 
 	var groupsNode []map[string]interface{}
@@ -329,15 +329,15 @@ func (c *CustomFields) CheckBox(customFieldID string, options []string) error {
 func (c *CustomFields) Cascading(customFieldID, parent, child string) error {
 
 	if len(customFieldID) == 0 {
-		return ErrNoFieldIDError
+		return ErrNoFieldID
 	}
 
 	if parent == "" {
-		return ErrNoCascadingParentError
+		return ErrNoCascadingParent
 	}
 
 	if child == "" {
-		return ErrNoCascadingChildError
+		return ErrNoCascadingChild
 	}
 
 	var childNode = map[string]interface{}{}
@@ -361,11 +361,11 @@ func (c *CustomFields) Cascading(customFieldID, parent, child string) error {
 func (c *CustomFields) Raw(customFieldID string, value interface{}) error {
 
 	if len(customFieldID) == 0 {
-		return ErrNoFieldIDError
+		return ErrNoFieldID
 	}
 
 	if value == nil {
-		return ErrNoValueTypeError
+		return ErrNoValueType
 	}
 
 	var valueNode = map[string]interface{}{}

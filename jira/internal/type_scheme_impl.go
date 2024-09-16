@@ -229,11 +229,11 @@ func (i *internalTypeSchemeImpl) Projects(ctx context.Context, projectIDs []int,
 func (i *internalTypeSchemeImpl) Assign(ctx context.Context, issueTypeSchemeID, projectID string) (*model.ResponseScheme, error) {
 
 	if issueTypeSchemeID == "" {
-		return nil, model.ErrNoIssueTypeSchemeIDError
+		return nil, model.ErrNoIssueTypeSchemeID
 	}
 
 	if projectID == "" {
-		return nil, model.ErrNoProjectIDError
+		return nil, model.ErrNoProjectID
 	}
 
 	payload := map[string]interface{}{
@@ -254,7 +254,7 @@ func (i *internalTypeSchemeImpl) Assign(ctx context.Context, issueTypeSchemeID, 
 func (i *internalTypeSchemeImpl) Update(ctx context.Context, issueTypeSchemeID int, payload *model.IssueTypeSchemePayloadScheme) (*model.ResponseScheme, error) {
 
 	if issueTypeSchemeID == 0 {
-		return nil, model.ErrNoIssueTypeSchemeIDError
+		return nil, model.ErrNoIssueTypeSchemeID
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issuetypescheme/%v", i.version, issueTypeSchemeID)
@@ -270,7 +270,7 @@ func (i *internalTypeSchemeImpl) Update(ctx context.Context, issueTypeSchemeID i
 func (i *internalTypeSchemeImpl) Delete(ctx context.Context, issueTypeSchemeID int) (*model.ResponseScheme, error) {
 
 	if issueTypeSchemeID == 0 {
-		return nil, model.ErrNoIssueTypeSchemeIDError
+		return nil, model.ErrNoIssueTypeSchemeID
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issuetypescheme/%v", i.version, issueTypeSchemeID)
@@ -286,7 +286,7 @@ func (i *internalTypeSchemeImpl) Delete(ctx context.Context, issueTypeSchemeID i
 func (i *internalTypeSchemeImpl) Append(ctx context.Context, issueTypeSchemeID int, issueTypeIDs []int) (*model.ResponseScheme, error) {
 
 	if len(issueTypeIDs) == 0 {
-		return nil, model.ErrNoIssueTypesError
+		return nil, model.ErrNoIssueTypes
 	}
 
 	var ids []string
@@ -307,11 +307,11 @@ func (i *internalTypeSchemeImpl) Append(ctx context.Context, issueTypeSchemeID i
 func (i *internalTypeSchemeImpl) Remove(ctx context.Context, issueTypeSchemeID, issueTypeID int) (*model.ResponseScheme, error) {
 
 	if issueTypeSchemeID == 0 {
-		return nil, model.ErrNoIssueTypeSchemeIDError
+		return nil, model.ErrNoIssueTypeSchemeID
 	}
 
 	if issueTypeID == 0 {
-		return nil, model.ErrNoIssueTypeIDError
+		return nil, model.ErrNoIssueTypeID
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issuetypescheme/%v/issuetype/%v", i.version, issueTypeSchemeID, issueTypeID)

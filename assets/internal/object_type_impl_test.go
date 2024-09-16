@@ -93,7 +93,7 @@ func Test_internalObjectTypeImpl_Get(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoWorkspaceIDError,
+			Err:     model.ErrNoWorkspaceID,
 		},
 
 		{
@@ -103,7 +103,7 @@ func Test_internalObjectTypeImpl_Get(t *testing.T) {
 				workspaceID: "workspace-id-sample",
 			},
 			wantErr: true,
-			Err:     model.ErrNoObjectTypeIDError,
+			Err:     model.ErrNoObjectTypeID,
 		},
 	}
 
@@ -215,7 +215,7 @@ func Test_internalObjectTypeImpl_Delete(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoWorkspaceIDError,
+			Err:     model.ErrNoWorkspaceID,
 		},
 
 		{
@@ -224,7 +224,7 @@ func Test_internalObjectTypeImpl_Delete(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoWorkspaceIDError,
+			Err:     model.ErrNoWorkspaceID,
 		},
 	}
 
@@ -349,7 +349,7 @@ func Test_internalObjectTypeImpl_Attributes(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoWorkspaceIDError,
+			Err:     model.ErrNoWorkspaceID,
 		},
 
 		{
@@ -359,7 +359,7 @@ func Test_internalObjectTypeImpl_Attributes(t *testing.T) {
 				workspaceID: "workspace-id-sample",
 			},
 			wantErr: true,
-			Err:     model.ErrNoObjectTypeIDError,
+			Err:     model.ErrNoObjectTypeID,
 		},
 	}
 
@@ -485,7 +485,7 @@ func Test_internalObjectTypeImpl_Update(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoWorkspaceIDError,
+			Err:     model.ErrNoWorkspaceID,
 		},
 
 		{
@@ -495,7 +495,7 @@ func Test_internalObjectTypeImpl_Update(t *testing.T) {
 				workspaceID: "workspace-uuid-sample",
 			},
 			wantErr: true,
-			Err:     model.ErrNoObjectTypeIDError,
+			Err:     model.ErrNoObjectTypeID,
 		},
 	}
 
@@ -623,7 +623,7 @@ func Test_internalObjectTypeImpl_Create(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoWorkspaceIDError,
+			Err:     model.ErrNoWorkspaceID,
 		},
 	}
 
@@ -747,7 +747,7 @@ func Test_internalObjectTypeImpl_Position(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoWorkspaceIDError,
+			Err:     model.ErrNoWorkspaceID,
 		},
 
 		{
@@ -757,7 +757,7 @@ func Test_internalObjectTypeImpl_Position(t *testing.T) {
 				workspaceID: "workspace-uuid-sample",
 			},
 			wantErr: true,
-			Err:     model.ErrNoObjectTypeIDError,
+			Err:     model.ErrNoObjectTypeID,
 		},
 	}
 

@@ -286,7 +286,7 @@ func Test_internalFieldTrashServiceImpl_Move(t *testing.T) {
 				id:  "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoFieldIDError,
+			Err:     model.ErrNoFieldID,
 		},
 
 		{
@@ -436,7 +436,7 @@ func Test_internalFieldTrashServiceImpl_Restore(t *testing.T) {
 				id:  "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoFieldIDError,
+			Err:     model.ErrNoFieldID,
 		},
 
 		{

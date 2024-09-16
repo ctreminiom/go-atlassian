@@ -90,7 +90,7 @@ func Test_internalRestrictionOperationImpl_Gets(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoContentIDError,
+			Err:     model.ErrNoContentID,
 		},
 	}
 
@@ -211,7 +211,7 @@ func Test_internalRestrictionOperationImpl_Get(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoContentIDError,
+			Err:     model.ErrNoContentID,
 		},
 
 		{
@@ -221,7 +221,7 @@ func Test_internalRestrictionOperationImpl_Get(t *testing.T) {
 				contentID: "1111",
 			},
 			wantErr: true,
-			Err:     model.ErrNoContentRestrictionKeyError,
+			Err:     model.ErrNoContentRestrictionKey,
 		},
 	}
 

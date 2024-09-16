@@ -108,7 +108,7 @@ type internalIssuePropertyImpl struct {
 func (i *internalIssuePropertyImpl) Gets(ctx context.Context, issueKeyOrID string) (*model.PropertyPageScheme, *model.ResponseScheme, error) {
 
 	if issueKeyOrID == "" {
-		return nil, nil, model.ErrNoIssueKeyOrIDError
+		return nil, nil, model.ErrNoIssueKeyOrID
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/properties", i.version, issueKeyOrID)
@@ -131,11 +131,11 @@ func (i *internalIssuePropertyImpl) Gets(ctx context.Context, issueKeyOrID strin
 func (i *internalIssuePropertyImpl) Get(ctx context.Context, issueKey, propertyKey string) (*model.EntityPropertyScheme, *model.ResponseScheme, error) {
 
 	if issueKey == "" {
-		return nil, nil, model.ErrNoIssueKeyOrIDError
+		return nil, nil, model.ErrNoIssueKeyOrID
 	}
 
 	if propertyKey == "" {
-		return nil, nil, model.ErrNoPropertyKeyError
+		return nil, nil, model.ErrNoPropertyKey
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/properties/%v", i.version, issueKey, propertyKey)
@@ -157,11 +157,11 @@ func (i *internalIssuePropertyImpl) Get(ctx context.Context, issueKey, propertyK
 func (i *internalIssuePropertyImpl) Set(ctx context.Context, issueKey, propertyKey string, payload interface{}) (*model.ResponseScheme, error) {
 
 	if issueKey == "" {
-		return nil, model.ErrNoIssueKeyOrIDError
+		return nil, model.ErrNoIssueKeyOrID
 	}
 
 	if propertyKey == "" {
-		return nil, model.ErrNoPropertyKeyError
+		return nil, model.ErrNoPropertyKey
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/properties/%v", i.version, issueKey, propertyKey)
@@ -177,11 +177,11 @@ func (i *internalIssuePropertyImpl) Set(ctx context.Context, issueKey, propertyK
 func (i *internalIssuePropertyImpl) Delete(ctx context.Context, issueKey, propertyKey string) (*model.ResponseScheme, error) {
 
 	if issueKey == "" {
-		return nil, model.ErrNoIssueKeyOrIDError
+		return nil, model.ErrNoIssueKeyOrID
 	}
 
 	if propertyKey == "" {
-		return nil, model.ErrNoPropertyKeyError
+		return nil, model.ErrNoPropertyKey
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/properties/%v", i.version, issueKey, propertyKey)

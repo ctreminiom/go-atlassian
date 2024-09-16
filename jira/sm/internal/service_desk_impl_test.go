@@ -254,7 +254,7 @@ func Test_internalServiceDeskImpl_Get(t *testing.T) {
 			args: args{
 				ctx: context.Background(),
 			},
-			Err:     model.ErrNoServiceDeskIDError,
+			Err:     model.ErrNoServiceDeskID,
 			wantErr: true,
 		},
 	}
@@ -411,7 +411,7 @@ func Test_internalServiceDeskImpl_Attach(t *testing.T) {
 			args: args{
 				ctx: context.Background(),
 			},
-			Err:     model.ErrNoServiceDeskIDError,
+			Err:     model.ErrNoServiceDeskID,
 			wantErr: true,
 		},
 
@@ -421,7 +421,7 @@ func Test_internalServiceDeskImpl_Attach(t *testing.T) {
 				ctx:           context.Background(),
 				serviceDeskID: "10001",
 			},
-			Err:     model.ErrNoFileNameError,
+			Err:     model.ErrNoFileName,
 			wantErr: true,
 		},
 
@@ -432,7 +432,7 @@ func Test_internalServiceDeskImpl_Attach(t *testing.T) {
 				serviceDeskID: "10001",
 				fileName:      "LICENSE",
 			},
-			Err:     model.ErrNoFileReaderError,
+			Err:     model.ErrNoFileReader,
 			wantErr: true,
 		},
 	}

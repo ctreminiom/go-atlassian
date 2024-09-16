@@ -107,7 +107,7 @@ func Test_internalCustomContentServiceImpl_Gets(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoCustomContentTypeError,
+			Err:     model.ErrNoCustomContentType,
 		},
 	}
 
@@ -356,7 +356,7 @@ func Test_internalCustomContentServiceImpl_Update(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoCustomContentIDError,
+			Err:     model.ErrNoCustomContentID,
 		},
 	}
 
@@ -469,7 +469,7 @@ func Test_internalCustomContentServiceImpl_Delete(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoCustomContentIDError,
+			Err:     model.ErrNoCustomContentID,
 		},
 	}
 
@@ -585,7 +585,7 @@ func Test_internalCustomContentServiceImpl_Get(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoCustomContentIDError,
+			Err:     model.ErrNoCustomContentID,
 		},
 	}
 

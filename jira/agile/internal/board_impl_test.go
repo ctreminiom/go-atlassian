@@ -121,7 +121,7 @@ func Test_BoardService_Get(t *testing.T) {
 			on: func(fields *fields) {
 				fields.c = mocks.NewConnector(t)
 			},
-			Err:     model.ErrNoBoardIDError,
+			Err:     model.ErrNoBoardID,
 			wantErr: true,
 		},
 	}
@@ -434,7 +434,7 @@ func Test_BoardService_Backlog(t *testing.T) {
 			on: func(fields *fields) {
 				fields.c = mocks.NewConnector(t)
 			},
-			Err:     model.ErrNoBoardIDError,
+			Err:     model.ErrNoBoardID,
 			wantErr: true,
 		},
 	}
@@ -575,7 +575,7 @@ func Test_BoardService_Configuration(t *testing.T) {
 			on: func(fields *fields) {
 				fields.c = mocks.NewConnector(t)
 			},
-			Err:     model.ErrNoBoardIDError,
+			Err:     model.ErrNoBoardID,
 			wantErr: true,
 		},
 	}
@@ -728,7 +728,7 @@ func Test_BoardService_Epics(t *testing.T) {
 			on: func(fields *fields) {
 				fields.c = mocks.NewConnector(t)
 			},
-			Err:     model.ErrNoBoardIDError,
+			Err:     model.ErrNoBoardID,
 			wantErr: true,
 		},
 	}
@@ -870,7 +870,7 @@ func Test_BoardService_Delete(t *testing.T) {
 			on: func(fields *fields) {
 				fields.c = mocks.NewConnector(t)
 			},
-			Err:     model.ErrNoBoardIDError,
+			Err:     model.ErrNoBoardID,
 			wantErr: true,
 		},
 	}
@@ -1018,7 +1018,7 @@ func Test_BoardService_Filter(t *testing.T) {
 			on: func(fields *fields) {
 				fields.c = mocks.NewConnector(t)
 			},
-			Err:     model.ErrNoFilterIDError,
+			Err:     model.ErrNoFilterID,
 			wantErr: true,
 		},
 	}
@@ -1383,7 +1383,7 @@ func Test_BoardService_Issues(t *testing.T) {
 			on: func(fields *fields) {
 				fields.c = mocks.NewConnector(t)
 			},
-			Err:     model.ErrNoBoardIDError,
+			Err:     model.ErrNoBoardID,
 			wantErr: true,
 		},
 	}
@@ -1576,7 +1576,7 @@ func Test_BoardService_IssuesByEpic(t *testing.T) {
 			on: func(fields *fields) {
 				fields.c = mocks.NewConnector(t)
 			},
-			Err:     model.ErrNoBoardIDError,
+			Err:     model.ErrNoBoardID,
 			wantErr: true,
 		},
 
@@ -1591,7 +1591,7 @@ func Test_BoardService_IssuesByEpic(t *testing.T) {
 			on: func(fields *fields) {
 				fields.c = mocks.NewConnector(t)
 			},
-			Err:     model.ErrNoEpicIDError,
+			Err:     model.ErrNoEpicID,
 			wantErr: true,
 		},
 	}
@@ -1784,7 +1784,7 @@ func Test_BoardService_IssuesBySprint(t *testing.T) {
 			on: func(fields *fields) {
 				fields.c = mocks.NewConnector(t)
 			},
-			Err:     model.ErrNoBoardIDError,
+			Err:     model.ErrNoBoardID,
 			wantErr: true,
 		},
 
@@ -1799,7 +1799,7 @@ func Test_BoardService_IssuesBySprint(t *testing.T) {
 			on: func(fields *fields) {
 				fields.c = mocks.NewConnector(t)
 			},
-			Err:     model.ErrNoSprintIDError,
+			Err:     model.ErrNoSprintID,
 			wantErr: true,
 		},
 	}
@@ -1987,7 +1987,7 @@ func Test_BoardService_IssuesWithoutEpic(t *testing.T) {
 			on: func(fields *fields) {
 				fields.c = mocks.NewConnector(t)
 			},
-			Err:     model.ErrNoBoardIDError,
+			Err:     model.ErrNoBoardID,
 			wantErr: true,
 		},
 	}
@@ -2141,7 +2141,7 @@ func Test_BoardService_Move(t *testing.T) {
 			on: func(fields *fields) {
 				fields.c = mocks.NewConnector(t)
 			},
-			Err:     model.ErrNoBoardIDError,
+			Err:     model.ErrNoBoardID,
 			wantErr: true,
 		},
 	}
@@ -2289,7 +2289,7 @@ func Test_BoardService_Projects(t *testing.T) {
 			on: func(fields *fields) {
 				fields.c = mocks.NewConnector(t)
 			},
-			Err:     model.ErrNoBoardIDError,
+			Err:     model.ErrNoBoardID,
 			wantErr: true,
 		},
 	}
@@ -2443,7 +2443,7 @@ func Test_BoardService_Sprints(t *testing.T) {
 			on: func(fields *fields) {
 				fields.c = mocks.NewConnector(t)
 			},
-			Err:     model.ErrNoBoardIDError,
+			Err:     model.ErrNoBoardID,
 			wantErr: true,
 		},
 	}
@@ -2627,7 +2627,7 @@ func Test_BoardService_Versions(t *testing.T) {
 			on: func(fields *fields) {
 				fields.c = mocks.NewConnector(t)
 			},
-			Err:     model.ErrNoBoardIDError,
+			Err:     model.ErrNoBoardID,
 			wantErr: true,
 		},
 	}

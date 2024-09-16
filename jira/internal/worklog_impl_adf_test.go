@@ -104,7 +104,7 @@ func Test_internalWorklogAdfImpl_Gets(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNpWorklogsError,
+			Err:     model.ErrNpWorklogs,
 		},
 
 		{
@@ -254,7 +254,7 @@ func Test_internalWorklogAdfImpl_Get(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoIssueKeyOrIDError,
+			Err:     model.ErrNoIssueKeyOrID,
 		},
 
 		{
@@ -265,7 +265,7 @@ func Test_internalWorklogAdfImpl_Get(t *testing.T) {
 				issueKeyOrID: "DUMMY-5",
 			},
 			wantErr: true,
-			Err:     model.ErrNoWorklogIDError,
+			Err:     model.ErrNoWorklogID,
 		},
 
 		{
@@ -421,7 +421,7 @@ func Test_internalWorklogAdfImpl_Issue(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoIssueKeyOrIDError,
+			Err:     model.ErrNoIssueKeyOrID,
 		},
 
 		{
@@ -619,7 +619,7 @@ func Test_internalWorklogAdfImpl_Delete(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoIssueKeyOrIDError,
+			Err:     model.ErrNoIssueKeyOrID,
 		},
 
 		{
@@ -630,7 +630,7 @@ func Test_internalWorklogAdfImpl_Delete(t *testing.T) {
 				issueKeyOrID: "DUMMY-5",
 			},
 			wantErr: true,
-			Err:     model.ErrNoWorklogIDError,
+			Err:     model.ErrNoWorklogID,
 		},
 
 		{
@@ -1285,7 +1285,7 @@ func Test_internalWorklogAdfImpl_Update(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoIssueKeyOrIDError,
+			Err:     model.ErrNoIssueKeyOrID,
 		},
 
 		{
@@ -1296,7 +1296,7 @@ func Test_internalWorklogAdfImpl_Update(t *testing.T) {
 				issueKeyOrID: "DUMMY-5",
 			},
 			wantErr: true,
-			Err:     model.ErrNoWorklogIDError,
+			Err:     model.ErrNoWorklogID,
 		},
 
 		{

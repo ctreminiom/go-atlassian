@@ -22,7 +22,7 @@ func New(httpClient common.HTTPClient, site string) (*Client, error) {
 	}
 
 	if site == "" {
-		return nil, model.ErrNoSiteError
+		return nil, model.ErrNoSite
 	}
 
 	if !strings.HasSuffix(site, "/") {
@@ -144,13 +144,13 @@ func (c *Client) processResponse(response *http.Response, structure interface{})
 			return res, model.ErrUnauthorized
 
 		case http.StatusInternalServerError:
-			return res, model.ErrInternalError
+			return res, model.ErrInternal
 
 		case http.StatusBadRequest:
-			return res, model.ErrBadRequestError
+			return res, model.ErrBadRequest
 
 		default:
-			return res, model.ErrInvalidStatusCodeError
+			return res, model.ErrInvalidStatusCode
 		}
 	}
 

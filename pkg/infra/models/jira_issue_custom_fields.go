@@ -49,18 +49,18 @@ func ParseMultiSelectCustomField(buffer bytes.Buffer, customField string) ([]*Cu
 
 	// Check if the buffer contains the "issues" object
 	if !raw.Get("fields").Exists() {
-		return nil, ErrNoFieldInformationError
+		return nil, ErrNoFieldInformation
 	}
 
 	// Check if the issue iteration contains information on the customfield selected,
 	// if not, continue
 	if raw.Get(path).Type == gjson.Null {
-		return nil, ErrNoMultiSelectTypeError
+		return nil, ErrNoMultiSelectType
 	}
 
 	var options []*CustomFieldContextOptionScheme
 	if err := json.Unmarshal([]byte(raw.Get(path).String()), &options); err != nil {
-		return nil, ErrNoMultiSelectTypeError
+		return nil, ErrNoMultiSelectType
 	}
 
 	return options, nil
@@ -114,7 +114,7 @@ func ParseMultiSelectCustomFields(buffer bytes.Buffer, customField string) (map[
 
 	// Check if the buffer contains the "issues" object
 	if !raw.Get("issues").Exists() {
-		return nil, ErrNoIssuesSliceError
+		return nil, ErrNoIssuesSlice
 	}
 
 	// Loop through each custom field, extract the information and stores the data on a map
@@ -141,7 +141,7 @@ func ParseMultiSelectCustomFields(buffer bytes.Buffer, customField string) (map[
 	// Check if the map processed contains elements
 	// if so, return an error interface
 	if len(customfieldsAsMap) == 0 {
-		return nil, ErrNoMapValuesError
+		return nil, ErrNoMapValues
 	}
 
 	return customfieldsAsMap, nil
@@ -184,18 +184,18 @@ func ParseMultiGroupPickerCustomField(buffer bytes.Buffer, customField string) (
 
 	// Check if the buffer contains the "issues" object
 	if !raw.Get("fields").Exists() {
-		return nil, ErrNoFieldInformationError
+		return nil, ErrNoFieldInformation
 	}
 
 	// Check if the issue iteration contains information on the customfield selected,
 	// if not, continue
 	if raw.Get(path).Type == gjson.Null {
-		return nil, ErrNoMultiSelectTypeError
+		return nil, ErrNoMultiSelectType
 	}
 
 	var options []*GroupDetailScheme
 	if err := json.Unmarshal([]byte(raw.Get(path).String()), &options); err != nil {
-		return nil, ErrNoMultiSelectTypeError
+		return nil, ErrNoMultiSelectType
 	}
 
 	return options, nil
@@ -249,7 +249,7 @@ func ParseMultiGroupPickerCustomFields(buffer bytes.Buffer, customField string) 
 
 	// Check if the buffer contains the "issues" object
 	if !raw.Get("issues").Exists() {
-		return nil, ErrNoIssuesSliceError
+		return nil, ErrNoIssuesSlice
 	}
 
 	// Loop through each custom field, extract the information and stores the data on a map
@@ -276,7 +276,7 @@ func ParseMultiGroupPickerCustomFields(buffer bytes.Buffer, customField string) 
 	// Check if the map processed contains elements
 	// if so, return an error interface
 	if len(customfieldsAsMap) == 0 {
-		return nil, ErrNoMapValuesError
+		return nil, ErrNoMapValues
 	}
 
 	return customfieldsAsMap, nil
@@ -319,18 +319,18 @@ func ParseMultiUserPickerCustomField(buffer bytes.Buffer, customField string) ([
 
 	// Check if the buffer contains the "issues" object
 	if !raw.Get("fields").Exists() {
-		return nil, ErrNoFieldInformationError
+		return nil, ErrNoFieldInformation
 	}
 
 	// Check if the issue iteration contains information on the customfield selected,
 	// if not, continue
 	if raw.Get(path).Type == gjson.Null {
-		return nil, ErrNoMultiSelectTypeError
+		return nil, ErrNoMultiSelectType
 	}
 
 	var users []*UserDetailScheme
 	if err := json.Unmarshal([]byte(raw.Get(path).String()), &users); err != nil {
-		return nil, ErrNoMultiSelectTypeError
+		return nil, ErrNoMultiSelectType
 	}
 
 	return users, nil
@@ -384,7 +384,7 @@ func ParseMultiUserPickerCustomFields(buffer bytes.Buffer, customField string) (
 
 	// Check if the buffer contains the "issues" object
 	if !raw.Get("issues").Exists() {
-		return nil, ErrNoIssuesSliceError
+		return nil, ErrNoIssuesSlice
 	}
 
 	// Loop through each custom field, extract the information and stores the data on a map
@@ -411,7 +411,7 @@ func ParseMultiUserPickerCustomFields(buffer bytes.Buffer, customField string) (
 	// Check if the map processed contains elements
 	// if so, return an error interface
 	if len(customfieldsAsMap) == 0 {
-		return nil, ErrNoMapValuesError
+		return nil, ErrNoMapValues
 	}
 
 	return customfieldsAsMap, nil
@@ -452,18 +452,18 @@ func ParseCascadingSelectCustomField(buffer bytes.Buffer, customField string) (*
 
 	// Check if the buffer contains the "issues" object
 	if !raw.Get("fields").Exists() {
-		return nil, ErrNoFieldInformationError
+		return nil, ErrNoFieldInformation
 	}
 
 	// Check if the issue iteration contains information on the customfield selected,
 	// if not, continue
 	if raw.Get(path).Type == gjson.Null {
-		return nil, ErrNoCascadingParentError
+		return nil, ErrNoCascadingParent
 	}
 
 	var cascading CascadingSelectScheme
 	if err := json.Unmarshal([]byte(raw.Get(path).String()), &cascading); err != nil {
-		return nil, ErrNoCascadingParentError
+		return nil, ErrNoCascadingParent
 	}
 
 	return &cascading, nil
@@ -517,7 +517,7 @@ func ParseCascadingCustomFields(buffer bytes.Buffer, customField string) (map[st
 
 	// Check if the buffer contains the "issues" object
 	if !raw.Get("issues").Exists() {
-		return nil, ErrNoIssuesSliceError
+		return nil, ErrNoIssuesSlice
 	}
 
 	// Loop through each custom field, extract the information and stores the data on a map
@@ -544,7 +544,7 @@ func ParseCascadingCustomFields(buffer bytes.Buffer, customField string) (map[st
 	// Check if the map processed contains elements
 	// if so, return an error interface
 	if len(customfieldsAsMap) == 0 {
-		return nil, ErrNoMapValuesError
+		return nil, ErrNoMapValues
 	}
 
 	return customfieldsAsMap, nil
@@ -587,18 +587,18 @@ func ParseMultiVersionCustomField(buffer bytes.Buffer, customField string) ([]*V
 
 	// Check if the buffer contains the "fields" object
 	if !raw.Get("fields").Exists() {
-		return nil, ErrNoFieldInformationError
+		return nil, ErrNoFieldInformation
 	}
 
 	// Check if the issue iteration contains information on the customfield selected,
 	// if not, continue
 	if raw.Get(path).Type == gjson.Null {
-		return nil, ErrNoMultiVersionTypeError
+		return nil, ErrNoMultiVersionType
 	}
 
 	var versions []*VersionDetailScheme
 	if err := json.Unmarshal([]byte(raw.Get(path).String()), &versions); err != nil {
-		return nil, ErrNoMultiSelectTypeError
+		return nil, ErrNoMultiSelectType
 	}
 
 	return versions, nil
@@ -652,7 +652,7 @@ func ParseMultiVersionCustomFields(buffer bytes.Buffer, customField string) (map
 
 	// Check if the buffer contains the "issues" object
 	if !raw.Get("issues").Exists() {
-		return nil, ErrNoIssuesSliceError
+		return nil, ErrNoIssuesSlice
 	}
 
 	// Loop through each custom field, extract the information and stores the data on a map
@@ -679,7 +679,7 @@ func ParseMultiVersionCustomFields(buffer bytes.Buffer, customField string) (map
 	// Check if the map processed contains elements
 	// if so, return an error interface
 	if len(customfieldsAsMap) == 0 {
-		return nil, ErrNoMapValuesError
+		return nil, ErrNoMapValues
 	}
 
 	return customfieldsAsMap, nil
@@ -720,18 +720,18 @@ func ParseUserPickerCustomField(buffer bytes.Buffer, customField string) (*UserD
 
 	// Check if the buffer contains the "fields" object
 	if !raw.Get("fields").Exists() {
-		return nil, ErrNoFieldInformationError
+		return nil, ErrNoFieldInformation
 	}
 
 	// Check if the issue iteration contains information on the customfield selected,
 	// if not, continue
 	if raw.Get(path).Type == gjson.Null {
-		return nil, ErrNoUserTypeError
+		return nil, ErrNoUserType
 	}
 
 	var user UserDetailScheme
 	if err := json.Unmarshal([]byte(raw.Get(path).String()), &user); err != nil {
-		return nil, ErrNoMultiSelectTypeError
+		return nil, ErrNoMultiSelectType
 	}
 
 	return &user, nil
@@ -785,7 +785,7 @@ func ParseUserPickerCustomFields(buffer bytes.Buffer, customField string) (map[s
 
 	// Check if the buffer contains the "issues" object
 	if !raw.Get("issues").Exists() {
-		return nil, ErrNoIssuesSliceError
+		return nil, ErrNoIssuesSlice
 	}
 
 	// Loop through each custom field, extract the information and stores the data on a map
@@ -812,7 +812,7 @@ func ParseUserPickerCustomFields(buffer bytes.Buffer, customField string) (map[s
 	// Check if the map processed contains elements
 	// if so, return an error interface
 	if len(customfieldsAsMap) == 0 {
-		return nil, ErrNoMapValuesError
+		return nil, ErrNoMapValues
 	}
 
 	return customfieldsAsMap, nil
@@ -847,13 +847,13 @@ func ParseStringCustomField(buffer bytes.Buffer, customField string) (string, er
 
 	// Check if the buffer contains the "fields" object
 	if !raw.Get("fields").Exists() {
-		return "", ErrNoFieldInformationError
+		return "", ErrNoFieldInformation
 	}
 
 	// Check if the issue iteration contains information on the customfield selected,
 	// if not, continue
 	if raw.Get(path).Type == gjson.Null {
-		return "", ErrNoTextTypeError
+		return "", ErrNoTextType
 	}
 
 	return raw.Get(path).String(), nil
@@ -905,7 +905,7 @@ func ParseStringCustomFields(buffer bytes.Buffer, customField string) (map[strin
 
 	// Check if the buffer contains the "issues" object
 	if !raw.Get("issues").Exists() {
-		return nil, ErrNoIssuesSliceError
+		return nil, ErrNoIssuesSlice
 	}
 
 	// Loop through each custom field, extract the information and stores the data on a map
@@ -931,7 +931,7 @@ func ParseStringCustomFields(buffer bytes.Buffer, customField string) (map[strin
 	// Check if the map processed contains elements
 	// if so, return an error interface
 	if len(customfieldsAsMap) == 0 {
-		return nil, ErrNoMapValuesError
+		return nil, ErrNoMapValues
 	}
 
 	return customfieldsAsMap, nil
@@ -966,18 +966,18 @@ func ParseFloatCustomField(buffer bytes.Buffer, customField string) (float64, er
 
 	// Check if the buffer contains the "fields" object
 	if !raw.Get("fields").Exists() {
-		return 0, ErrNoFieldInformationError
+		return 0, ErrNoFieldInformation
 	}
 
 	// Check if the issue iteration contains information on the customfield selected,
 	// if not, continue
 	if raw.Get(path).Type == gjson.Null {
-		return 0, ErrNoFloatTypeError
+		return 0, ErrNoFloatType
 	}
 
 	var textFloat float64
 	if err := json.Unmarshal([]byte(raw.Get(path).String()), &textFloat); err != nil {
-		return 0, ErrNoFloatTypeError
+		return 0, ErrNoFloatType
 	}
 
 	return textFloat, nil
@@ -1029,7 +1029,7 @@ func ParseFloatCustomFields(buffer bytes.Buffer, customField string) (map[string
 
 	// Check if the buffer contains the "issues" object
 	if !raw.Get("issues").Exists() {
-		return nil, ErrNoIssuesSliceError
+		return nil, ErrNoIssuesSlice
 	}
 
 	// Loop through each custom field, extract the information and stores the data on a map
@@ -1056,7 +1056,7 @@ func ParseFloatCustomFields(buffer bytes.Buffer, customField string) (map[string
 	// Check if the map processed contains elements
 	// if so, return an error interface
 	if len(customfieldsAsMap) == 0 {
-		return nil, ErrNoMapValuesError
+		return nil, ErrNoMapValues
 	}
 
 	return customfieldsAsMap, nil
@@ -1091,18 +1091,18 @@ func ParseLabelCustomField(buffer bytes.Buffer, customField string) ([]string, e
 
 	// Check if the buffer contains the "fields" object
 	if !raw.Get("fields").Exists() {
-		return nil, ErrNoFieldInformationError
+		return nil, ErrNoFieldInformation
 	}
 
 	// Check if the issue iteration contains information on the customfield selected,
 	// if not, continue
 	if raw.Get(path).Type == gjson.Null {
-		return nil, ErrNoLabelsTypeError
+		return nil, ErrNoLabelsType
 	}
 
 	var labels []string
 	if err := json.Unmarshal([]byte(raw.Get(path).String()), &labels); err != nil {
-		return nil, ErrNoLabelsTypeError
+		return nil, ErrNoLabelsType
 	}
 
 	return labels, nil
@@ -1154,7 +1154,7 @@ func ParseLabelCustomFields(buffer bytes.Buffer, customField string) (map[string
 
 	// Check if the buffer contains the "issues" object
 	if !raw.Get("issues").Exists() {
-		return nil, ErrNoIssuesSliceError
+		return nil, ErrNoIssuesSlice
 	}
 
 	// Loop through each custom field, extract the information and stores the data on a map
@@ -1181,7 +1181,7 @@ func ParseLabelCustomFields(buffer bytes.Buffer, customField string) (map[string
 	// Check if the map processed contains elements
 	// if so, return an error interface
 	if len(customfieldsAsMap) == 0 {
-		return nil, ErrNoMapValuesError
+		return nil, ErrNoMapValues
 	}
 
 	return customfieldsAsMap, nil
@@ -1216,18 +1216,18 @@ func ParseSprintCustomField(buffer bytes.Buffer, customField string) ([]*SprintD
 
 	// Check if the buffer contains the "fields" object
 	if !raw.Get("fields").Exists() {
-		return nil, ErrNoFieldInformationError
+		return nil, ErrNoFieldInformation
 	}
 
 	// Check if the issue iteration contains information on the customfield selected,
 	// if not, continue
 	if raw.Get(path).Type == gjson.Null {
-		return nil, ErrNoSprintTypeError
+		return nil, ErrNoSprintType
 	}
 
 	var sprints []*SprintDetailScheme
 	if err := json.Unmarshal([]byte(raw.Get(path).String()), &sprints); err != nil {
-		return nil, ErrNoSprintTypeError
+		return nil, ErrNoSprintType
 	}
 
 	return sprints, nil
@@ -1281,7 +1281,7 @@ func ParseSprintCustomFields(buffer bytes.Buffer, customField string) (map[strin
 
 	// Check if the buffer contains the "issues" object
 	if !raw.Get("issues").Exists() {
-		return nil, ErrNoIssuesSliceError
+		return nil, ErrNoIssuesSlice
 	}
 
 	// Loop through each custom field, extract the information and stores the data on a map
@@ -1308,7 +1308,7 @@ func ParseSprintCustomFields(buffer bytes.Buffer, customField string) (map[strin
 	// Check if the map processed contains elements
 	// if so, return an error interface
 	if len(customfieldsAsMap) == 0 {
-		return nil, ErrNoMapValuesError
+		return nil, ErrNoMapValues
 	}
 
 	return customfieldsAsMap, nil
@@ -1343,18 +1343,18 @@ func ParseSelectCustomField(buffer bytes.Buffer, customField string) (*CustomFie
 
 	// Check if the buffer contains the "fields" object
 	if !raw.Get("fields").Exists() {
-		return nil, ErrNoFieldInformationError
+		return nil, ErrNoFieldInformation
 	}
 
 	// Check if the issue iteration contains information on the customfield selected,
 	// if not, continue
 	if raw.Get(path).Type == gjson.Null {
-		return nil, ErrNoSelectTypeError
+		return nil, ErrNoSelectType
 	}
 
 	var sprints *CustomFieldContextOptionScheme
 	if err := json.Unmarshal([]byte(raw.Get(path).String()), &sprints); err != nil {
-		return nil, ErrNoSelectTypeError
+		return nil, ErrNoSelectType
 	}
 
 	return sprints, nil
@@ -1408,7 +1408,7 @@ func ParseSelectCustomFields(buffer bytes.Buffer, customField string) (map[strin
 
 	// Check if the buffer contains the "issues" object
 	if !raw.Get("issues").Exists() {
-		return nil, ErrNoIssuesSliceError
+		return nil, ErrNoIssuesSlice
 	}
 
 	// Loop through each custom field, extract the information and stores the data on a map
@@ -1435,7 +1435,7 @@ func ParseSelectCustomFields(buffer bytes.Buffer, customField string) (map[strin
 	// Check if the map processed contains elements
 	// if so, return an error interface
 	if len(customfieldsAsMap) == 0 {
-		return nil, ErrNoMapValuesError
+		return nil, ErrNoMapValues
 	}
 
 	return customfieldsAsMap, nil
@@ -1470,18 +1470,18 @@ func ParseAssetCustomField(buffer bytes.Buffer, customField string) ([]*CustomFi
 
 	// Check if the buffer contains the "fields" object
 	if !raw.Get("fields").Exists() {
-		return nil, ErrNoFieldInformationError
+		return nil, ErrNoFieldInformation
 	}
 
 	// Check if the issue iteration contains information on the customfield selected,
 	// if not, continue
 	if raw.Get(path).Type == gjson.Null {
-		return nil, ErrNoAssetTypeError
+		return nil, ErrNoAssetType
 	}
 
 	var assets []*CustomFieldAssetScheme
 	if err := json.Unmarshal([]byte(raw.Get(path).String()), &assets); err != nil {
-		return nil, ErrNoAssetTypeError
+		return nil, ErrNoAssetType
 	}
 
 	return assets, nil
@@ -1535,7 +1535,7 @@ func ParseAssetCustomFields(buffer bytes.Buffer, customField string) (map[string
 
 	// Check if the buffer contains the "issues" object
 	if !raw.Get("issues").Exists() {
-		return nil, ErrNoIssuesSliceError
+		return nil, ErrNoIssuesSlice
 	}
 
 	// Loop through each custom field, extract the information and stores the data on a map
@@ -1562,7 +1562,7 @@ func ParseAssetCustomFields(buffer bytes.Buffer, customField string) (map[string
 	// Check if the map processed contains elements
 	// if so, return an error interface
 	if len(customfieldsAsMap) == 0 {
-		return nil, ErrNoMapValuesError
+		return nil, ErrNoMapValues
 	}
 
 	return customfieldsAsMap, nil
@@ -1597,18 +1597,18 @@ func ParseDatePickerCustomField(buffer bytes.Buffer, customField string) (time.T
 
 	// Check if the buffer contains the "issues" object
 	if !raw.Get("fields").Exists() {
-		return time.Time{}, ErrNoFieldInformationError
+		return time.Time{}, ErrNoFieldInformation
 	}
 
 	// Check if the issue iteration contains information on the customfield selected,
 	// if not, continue
 	if raw.Get(path).Type == gjson.Null {
-		return time.Time{}, ErrNoDatePickerTypeError
+		return time.Time{}, ErrNoDatePickerType
 	}
 
 	value, err := time.Parse("2006-01-02", raw.Get(path).String())
 	if err != nil {
-		return time.Time{}, ErrNoDatePickerTypeError
+		return time.Time{}, ErrNoDatePickerType
 	}
 
 	return value, nil
@@ -1661,7 +1661,7 @@ func ParseDatePickerCustomFields(buffer bytes.Buffer, customField string) (map[s
 
 	// Check if the buffer contains the "issues" object
 	if !raw.Get("issues").Exists() {
-		return nil, ErrNoIssuesSliceError
+		return nil, ErrNoIssuesSlice
 	}
 
 	// Loop through each custom field, extract the information and stores the data on a map
@@ -1688,7 +1688,7 @@ func ParseDatePickerCustomFields(buffer bytes.Buffer, customField string) (map[s
 	// Check if the map processed contains elements
 	// if so, return an error interface
 	if len(customfieldsAsMap) == 0 {
-		return nil, ErrNoMapValuesError
+		return nil, ErrNoMapValues
 	}
 
 	return customfieldsAsMap, nil
@@ -1723,18 +1723,18 @@ func ParseDateTimeCustomField(buffer bytes.Buffer, customField string) (time.Tim
 
 	// Check if the buffer contains the "issues" object
 	if !raw.Get("fields").Exists() {
-		return time.Time{}, ErrNoFieldInformationError
+		return time.Time{}, ErrNoFieldInformation
 	}
 
 	// Check if the issue iteration contains information on the customfield selected,
 	// if not, continue
 	if raw.Get(path).Type == gjson.Null {
-		return time.Time{}, ErrNoDateTimeTypeError
+		return time.Time{}, ErrNoDateTimeType
 	}
 
 	value, err := time.Parse("2006-01-02T15:04:05.000-0700", raw.Get(path).String())
 	if err != nil {
-		return time.Time{}, ErrNoDateTimeTypeError
+		return time.Time{}, ErrNoDateTimeType
 	}
 
 	return value, nil
@@ -1787,7 +1787,7 @@ func ParseDateTimeCustomFields(buffer bytes.Buffer, customField string) (map[str
 
 	// Check if the buffer contains the "issues" object
 	if !raw.Get("issues").Exists() {
-		return nil, ErrNoIssuesSliceError
+		return nil, ErrNoIssuesSlice
 	}
 
 	// Loop through each custom field, extract the information and stores the data on a map
@@ -1814,7 +1814,7 @@ func ParseDateTimeCustomFields(buffer bytes.Buffer, customField string) (map[str
 	// Check if the map processed contains elements
 	// if so, return an error interface
 	if len(customfieldsAsMap) == 0 {
-		return nil, ErrNoMapValuesError
+		return nil, ErrNoMapValues
 	}
 
 	return customfieldsAsMap, nil
@@ -1849,18 +1849,18 @@ func ParseRequestTypeCustomField(buffer bytes.Buffer, customField string) (*Cust
 
 	// Check if the buffer contains the "fields" object
 	if !raw.Get("fields").Exists() {
-		return nil, ErrNoFieldInformationError
+		return nil, ErrNoFieldInformation
 	}
 
 	// Check if the issue iteration contains information on the customfield selected,
 	// if not, continue
 	if raw.Get(path).Type == gjson.Null {
-		return nil, ErrNoRequestTypeError
+		return nil, ErrNoRequestType
 	}
 
 	var requestType *CustomFieldRequestTypeScheme
 	if err := json.Unmarshal([]byte(raw.Get(path).String()), &requestType); err != nil {
-		return nil, ErrNoRequestTypeError
+		return nil, ErrNoRequestType
 	}
 
 	return requestType, nil
@@ -1913,7 +1913,7 @@ func ParseRequestTypeCustomFields(buffer bytes.Buffer, customField string) (map[
 
 	// Check if the buffer contains the "issues" object
 	if !raw.Get("issues").Exists() {
-		return nil, ErrNoIssuesSliceError
+		return nil, ErrNoIssuesSlice
 	}
 
 	// Loop through each custom field, extract the information and stores the data on a map
@@ -1940,7 +1940,7 @@ func ParseRequestTypeCustomFields(buffer bytes.Buffer, customField string) (map[
 	// Check if the map processed contains elements
 	// if so, return an error interface
 	if len(customfieldsAsMap) == 0 {
-		return nil, ErrNoMapValuesError
+		return nil, ErrNoMapValues
 	}
 
 	return customfieldsAsMap, nil

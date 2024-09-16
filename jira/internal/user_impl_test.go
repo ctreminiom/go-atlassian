@@ -102,7 +102,7 @@ func Test_internalUserImpl_Get(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoAccountIDError,
+			Err:     model.ErrNoAccountID,
 		},
 
 		{
@@ -253,7 +253,7 @@ func Test_internalUserImpl_Find(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoAccountSliceError,
+			Err:     model.ErrNoAccountSlice,
 		},
 
 		{
@@ -400,7 +400,7 @@ func Test_internalUserImpl_Delete(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoAccountIDError,
+			Err:     model.ErrNoAccountID,
 		},
 
 		{
@@ -543,7 +543,7 @@ func Test_internalUserImpl_Groups(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoAccountIDError,
+			Err:     model.ErrNoAccountID,
 		},
 
 		{

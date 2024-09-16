@@ -74,7 +74,7 @@ func Test_internalSCIMUserImpl_Gets(t *testing.T) {
 				directoryID: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoAdminDirectoryIDError,
+			Err:     model.ErrNoAdminDirectoryID,
 		},
 
 		{
@@ -199,7 +199,7 @@ func Test_internalSCIMUserImpl_Get(t *testing.T) {
 				directoryID: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoAdminDirectoryIDError,
+			Err:     model.ErrNoAdminDirectoryID,
 		},
 
 		{
@@ -209,7 +209,7 @@ func Test_internalSCIMUserImpl_Get(t *testing.T) {
 				directoryID: "direction-id-sample",
 			},
 			wantErr: true,
-			Err:     model.ErrNoAdminUserIDError,
+			Err:     model.ErrNoAdminUserID,
 		},
 
 		{
@@ -327,7 +327,7 @@ func Test_internalSCIMUserImpl_Deactivate(t *testing.T) {
 				directoryID: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoAdminDirectoryIDError,
+			Err:     model.ErrNoAdminDirectoryID,
 		},
 
 		{
@@ -337,7 +337,7 @@ func Test_internalSCIMUserImpl_Deactivate(t *testing.T) {
 				directoryID: "direction-id-sample",
 			},
 			wantErr: true,
-			Err:     model.ErrNoAdminUserIDError,
+			Err:     model.ErrNoAdminUserID,
 		},
 
 		{
@@ -460,7 +460,7 @@ func Test_internalSCIMUserImpl_Path(t *testing.T) {
 				directoryID: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoAdminDirectoryIDError,
+			Err:     model.ErrNoAdminDirectoryID,
 		},
 
 		{
@@ -470,7 +470,7 @@ func Test_internalSCIMUserImpl_Path(t *testing.T) {
 				directoryID: "direction-id-sample",
 			},
 			wantErr: true,
-			Err:     model.ErrNoAdminUserIDError,
+			Err:     model.ErrNoAdminUserID,
 		},
 
 		{
@@ -610,7 +610,7 @@ func Test_internalSCIMUserImpl_Update(t *testing.T) {
 				directoryID: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoAdminDirectoryIDError,
+			Err:     model.ErrNoAdminDirectoryID,
 		},
 
 		{
@@ -620,7 +620,7 @@ func Test_internalSCIMUserImpl_Update(t *testing.T) {
 				directoryID: "direction-id-sample",
 			},
 			wantErr: true,
-			Err:     model.ErrNoAdminUserIDError,
+			Err:     model.ErrNoAdminUserID,
 		},
 
 		{
@@ -759,7 +759,7 @@ func Test_internalSCIMUserImpl_Create(t *testing.T) {
 				directoryID: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoAdminDirectoryIDError,
+			Err:     model.ErrNoAdminDirectoryID,
 		},
 
 		{

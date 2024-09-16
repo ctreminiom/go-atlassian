@@ -40,7 +40,7 @@ type internalLabelImpl struct {
 func (i *internalLabelImpl) Get(ctx context.Context, labelName, labelType string, start, limit int) (*model.LabelDetailsScheme, *model.ResponseScheme, error) {
 
 	if labelName == "" {
-		return nil, nil, model.ErrNoLabelNameError
+		return nil, nil, model.ErrNoLabelName
 	}
 
 	query := url.Values{}

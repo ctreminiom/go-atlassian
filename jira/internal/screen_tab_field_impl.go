@@ -74,11 +74,11 @@ type internalScreenTabFieldImpl struct {
 func (i *internalScreenTabFieldImpl) Gets(ctx context.Context, screenID, tabID int) ([]*model.ScreenTabFieldScheme, *model.ResponseScheme, error) {
 
 	if screenID == 0 {
-		return nil, nil, model.ErrNoScreenIDError
+		return nil, nil, model.ErrNoScreenID
 	}
 
 	if tabID == 0 {
-		return nil, nil, model.ErrNoScreenTabIDError
+		return nil, nil, model.ErrNoScreenTabID
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/screens/%v/tabs/%v/fields", i.version, screenID, tabID)
@@ -100,15 +100,15 @@ func (i *internalScreenTabFieldImpl) Gets(ctx context.Context, screenID, tabID i
 func (i *internalScreenTabFieldImpl) Add(ctx context.Context, screenID, tabID int, fieldID string) (*model.ScreenTabFieldScheme, *model.ResponseScheme, error) {
 
 	if screenID == 0 {
-		return nil, nil, model.ErrNoScreenIDError
+		return nil, nil, model.ErrNoScreenID
 	}
 
 	if tabID == 0 {
-		return nil, nil, model.ErrNoScreenTabIDError
+		return nil, nil, model.ErrNoScreenTabID
 	}
 
 	if fieldID == "" {
-		return nil, nil, model.ErrNoFieldIDError
+		return nil, nil, model.ErrNoFieldID
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/screens/%v/tabs/%v/fields", i.version, screenID, tabID)
@@ -130,15 +130,15 @@ func (i *internalScreenTabFieldImpl) Add(ctx context.Context, screenID, tabID in
 func (i *internalScreenTabFieldImpl) Remove(ctx context.Context, screenID, tabID int, fieldID string) (*model.ResponseScheme, error) {
 
 	if screenID == 0 {
-		return nil, model.ErrNoScreenIDError
+		return nil, model.ErrNoScreenID
 	}
 
 	if tabID == 0 {
-		return nil, model.ErrNoScreenTabIDError
+		return nil, model.ErrNoScreenTabID
 	}
 
 	if fieldID == "" {
-		return nil, model.ErrNoFieldIDError
+		return nil, model.ErrNoFieldID
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/screens/%v/tabs/%v/fields/%v", i.version, screenID, tabID, fieldID)
@@ -154,15 +154,15 @@ func (i *internalScreenTabFieldImpl) Remove(ctx context.Context, screenID, tabID
 func (i *internalScreenTabFieldImpl) Move(ctx context.Context, screenID, tabID int, fieldID, after, position string) (*model.ResponseScheme, error) {
 
 	if screenID == 0 {
-		return nil, model.ErrNoScreenIDError
+		return nil, model.ErrNoScreenID
 	}
 
 	if tabID == 0 {
-		return nil, model.ErrNoScreenTabIDError
+		return nil, model.ErrNoScreenTabID
 	}
 
 	if fieldID == "" {
-		return nil, model.ErrNoFieldIDError
+		return nil, model.ErrNoFieldID
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/screens/%v/tabs/%v/fields/%v/move", i.version, screenID, tabID, fieldID)

@@ -838,7 +838,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Update(t *testing.T) {
 				description: "description sample",
 			},
 			wantErr: true,
-			Err:     model.ErrNoFieldConfigurationSchemeIDError,
+			Err:     model.ErrNoFieldConfigurationSchemeID,
 		},
 
 		{
@@ -851,7 +851,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Update(t *testing.T) {
 				description: "description sample",
 			},
 			wantErr: true,
-			Err:     model.ErrNoFieldConfigurationSchemeNameError,
+			Err:     model.ErrNoFieldConfigurationSchemeName,
 		},
 
 		{
@@ -974,7 +974,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Delete(t *testing.T) {
 				schemeID: 0,
 			},
 			wantErr: true,
-			Err:     model.ErrNoFieldConfigurationSchemeIDError,
+			Err:     model.ErrNoFieldConfigurationSchemeID,
 		},
 
 		{
@@ -1111,7 +1111,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Link(t *testing.T) {
 				payload:  payloadMocked,
 			},
 			wantErr: true,
-			Err:     model.ErrNoFieldConfigurationSchemeIDError,
+			Err:     model.ErrNoFieldConfigurationSchemeID,
 		},
 
 		{
@@ -1294,7 +1294,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Unlink(t *testing.T) {
 				schemeID: 0,
 			},
 			wantErr: true,
-			Err:     model.ErrNoFieldConfigurationSchemeIDError,
+			Err:     model.ErrNoFieldConfigurationSchemeID,
 		},
 
 		{
@@ -1305,7 +1305,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Unlink(t *testing.T) {
 				schemeID: 1000,
 			},
 			wantErr: true,
-			Err:     model.ErrNoIssueTypesError,
+			Err:     model.ErrNoIssueTypes,
 		},
 
 		{

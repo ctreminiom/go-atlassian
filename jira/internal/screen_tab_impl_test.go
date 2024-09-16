@@ -102,7 +102,7 @@ func Test_internalScreenTabImpl_Gets(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoScreenIDError,
+			Err:     model.ErrNoScreenID,
 		},
 
 		{
@@ -252,7 +252,7 @@ func Test_internalScreenTabImpl_Create(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoScreenIDError,
+			Err:     model.ErrNoScreenID,
 		},
 
 		{
@@ -263,7 +263,7 @@ func Test_internalScreenTabImpl_Create(t *testing.T) {
 				screenID: 19392,
 			},
 			wantErr: true,
-			Err:     model.ErrNoScreenTabNameError,
+			Err:     model.ErrNoScreenTabName,
 		},
 
 		{
@@ -416,7 +416,7 @@ func Test_internalScreenTabImpl_Update(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoScreenIDError,
+			Err:     model.ErrNoScreenID,
 		},
 
 		{
@@ -427,7 +427,7 @@ func Test_internalScreenTabImpl_Update(t *testing.T) {
 				screenID: 19392,
 			},
 			wantErr: true,
-			Err:     model.ErrNoScreenTabIDError,
+			Err:     model.ErrNoScreenTabID,
 		},
 
 		{
@@ -439,7 +439,7 @@ func Test_internalScreenTabImpl_Update(t *testing.T) {
 				tabID:    10001,
 			},
 			wantErr: true,
-			Err:     model.ErrNoScreenTabNameError,
+			Err:     model.ErrNoScreenTabName,
 		},
 
 		{
@@ -589,7 +589,7 @@ func Test_internalScreenTabImpl_Delete(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoScreenIDError,
+			Err:     model.ErrNoScreenID,
 		},
 
 		{
@@ -600,7 +600,7 @@ func Test_internalScreenTabImpl_Delete(t *testing.T) {
 				screenID: 19392,
 			},
 			wantErr: true,
-			Err:     model.ErrNoScreenTabIDError,
+			Err:     model.ErrNoScreenTabID,
 		},
 
 		{
@@ -750,7 +750,7 @@ func Test_internalScreenTabImpl_Move(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoScreenIDError,
+			Err:     model.ErrNoScreenID,
 		},
 
 		{
@@ -761,7 +761,7 @@ func Test_internalScreenTabImpl_Move(t *testing.T) {
 				screenID: 19392,
 			},
 			wantErr: true,
-			Err:     model.ErrNoScreenTabIDError,
+			Err:     model.ErrNoScreenTabID,
 		},
 
 		{

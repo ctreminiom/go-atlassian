@@ -99,7 +99,7 @@ func (i *internalProjectCategoryImpl) Gets(ctx context.Context) ([]*model.Projec
 func (i *internalProjectCategoryImpl) Get(ctx context.Context, categoryID int) (*model.ProjectCategoryScheme, *model.ResponseScheme, error) {
 
 	if categoryID == 0 {
-		return nil, nil, model.ErrNoProjectCategoryIDError
+		return nil, nil, model.ErrNoProjectCategoryID
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/projectCategory/%v", i.version, categoryID)
@@ -139,7 +139,7 @@ func (i *internalProjectCategoryImpl) Create(ctx context.Context, payload *model
 func (i *internalProjectCategoryImpl) Update(ctx context.Context, categoryID int, payload *model.ProjectCategoryPayloadScheme) (*model.ProjectCategoryScheme, *model.ResponseScheme, error) {
 
 	if categoryID == 0 {
-		return nil, nil, model.ErrNoProjectCategoryIDError
+		return nil, nil, model.ErrNoProjectCategoryID
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/projectCategory/%v", i.version, categoryID)
@@ -161,7 +161,7 @@ func (i *internalProjectCategoryImpl) Update(ctx context.Context, categoryID int
 func (i *internalProjectCategoryImpl) Delete(ctx context.Context, categoryID int) (*model.ResponseScheme, error) {
 
 	if categoryID == 0 {
-		return nil, model.ErrNoProjectCategoryIDError
+		return nil, model.ErrNoProjectCategoryID
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/projectCategory/%v", i.version, categoryID)

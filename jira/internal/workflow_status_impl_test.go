@@ -431,7 +431,7 @@ func Test_internalWorkflowStatusImpl_Create(t *testing.T) {
 				fields.c = client
 			},
 			wantErr: true,
-			Err:     model.ErrNoWorkflowStatusesError,
+			Err:     model.ErrNoWorkflowStatuses,
 		},
 
 		{
@@ -448,7 +448,7 @@ func Test_internalWorkflowStatusImpl_Create(t *testing.T) {
 				fields.c = client
 			},
 			wantErr: true,
-			Err:     model.ErrNoWorkflowScopeError,
+			Err:     model.ErrNoWorkflowScope,
 		},
 
 		{
@@ -592,7 +592,7 @@ func Test_internalWorkflowStatusImpl_Delete(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoWorkflowStatusesError,
+			Err:     model.ErrNoWorkflowStatuses,
 		},
 
 		{

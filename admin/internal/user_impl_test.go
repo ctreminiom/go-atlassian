@@ -67,7 +67,7 @@ func Test_internalUserImpl_Permissions(t *testing.T) {
 				accountID: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoAdminAccountIDError,
+			Err:     model.ErrNoAdminAccountID,
 		},
 
 		{
@@ -181,7 +181,7 @@ func Test_internalUserImpl_Get(t *testing.T) {
 				accountID: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoAdminAccountIDError,
+			Err:     model.ErrNoAdminAccountID,
 		},
 
 		{
@@ -294,7 +294,7 @@ func Test_internalUserImpl_Enable(t *testing.T) {
 				accountID: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoAdminAccountIDError,
+			Err:     model.ErrNoAdminAccountID,
 		},
 
 		{
@@ -409,7 +409,7 @@ func Test_internalUserImpl_Disable(t *testing.T) {
 				accountID: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoAdminAccountIDError,
+			Err:     model.ErrNoAdminAccountID,
 		},
 
 		{
@@ -526,7 +526,7 @@ func Test_internalUserImpl_Update(t *testing.T) {
 				accountID: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoAdminAccountIDError,
+			Err:     model.ErrNoAdminAccountID,
 		},
 
 		{

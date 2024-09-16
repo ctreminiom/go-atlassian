@@ -75,7 +75,7 @@ func Test_internalIssueADFServiceImpl_Delete(t *testing.T) {
 				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
-			Err:     model.ErrNoIssueKeyOrIDError,
+			Err:     model.ErrNoIssueKeyOrID,
 		},
 
 		{
@@ -196,7 +196,7 @@ func Test_internalIssueADFServiceImpl_Assign(t *testing.T) {
 				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
-			Err:     model.ErrNoIssueKeyOrIDError,
+			Err:     model.ErrNoIssueKeyOrID,
 		},
 
 		{
@@ -211,7 +211,7 @@ func Test_internalIssueADFServiceImpl_Assign(t *testing.T) {
 				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
-			Err:     model.ErrNoAccountIDError,
+			Err:     model.ErrNoAccountID,
 		},
 
 		{
@@ -341,7 +341,7 @@ func Test_internalIssueADFServiceImpl_Notify(t *testing.T) {
 				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
-			Err:     model.ErrNoIssueKeyOrIDError,
+			Err:     model.ErrNoIssueKeyOrID,
 		},
 
 		{
@@ -460,7 +460,7 @@ func Test_internalIssueADFServiceImpl_Transitions(t *testing.T) {
 				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
-			Err:     model.ErrNoIssueKeyOrIDError,
+			Err:     model.ErrNoIssueKeyOrID,
 		},
 
 		{
@@ -805,7 +805,7 @@ func Test_internalIssueADFServiceImpl_Creates(t *testing.T) {
 				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
-			Err:     model.ErrNoCreateIssuesError,
+			Err:     model.ErrNoCreateIssues,
 		},
 
 		{
@@ -942,7 +942,7 @@ func Test_internalIssueADFServiceImpl_Get(t *testing.T) {
 				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
-			Err:     model.ErrNoIssueKeyOrIDError,
+			Err:     model.ErrNoIssueKeyOrID,
 		},
 
 		{
@@ -1139,7 +1139,7 @@ func Test_internalIssueADFServiceImpl_Move(t *testing.T) {
 				},
 			},
 			wantErr: true,
-			Err:     model.ErrNoIssueSchemeError,
+			Err:     model.ErrNoIssueScheme,
 		},
 
 		{
@@ -1275,7 +1275,7 @@ func Test_internalIssueADFServiceImpl_Move(t *testing.T) {
 				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
-			Err:     model.ErrNoIssueKeyOrIDError,
+			Err:     model.ErrNoIssueKeyOrID,
 		},
 
 		{
@@ -1301,7 +1301,7 @@ func Test_internalIssueADFServiceImpl_Move(t *testing.T) {
 				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
-			Err:     model.ErrNoTransitionIDError,
+			Err:     model.ErrNoTransitionID,
 		},
 
 		{
@@ -1496,7 +1496,7 @@ func Test_internalIssueADFServiceImpl_Update(t *testing.T) {
 				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
-			Err:     model.ErrNoIssueKeyOrIDError,
+			Err:     model.ErrNoIssueKeyOrID,
 		},
 
 		{

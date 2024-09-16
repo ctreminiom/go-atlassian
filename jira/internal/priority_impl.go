@@ -72,7 +72,7 @@ func (i *internalPriorityImpl) Gets(ctx context.Context) ([]*model.PrioritySchem
 func (i *internalPriorityImpl) Get(ctx context.Context, priorityID string) (*model.PriorityScheme, *model.ResponseScheme, error) {
 
 	if priorityID == "" {
-		return nil, nil, model.ErrNoPriorityIDError
+		return nil, nil, model.ErrNoPriorityID
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/priority/%v", i.version, priorityID)

@@ -64,7 +64,7 @@ func (l *LinkRichTextService) Create(ctx context.Context, payload *model.LinkPay
 func (i *internalLinkRichTextServiceImpl) Get(ctx context.Context, linkID string) (*model.IssueLinkScheme, *model.ResponseScheme, error) {
 
 	if linkID == "" {
-		return nil, nil, model.ErrNoTypeIDError
+		return nil, nil, model.ErrNoTypeID
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issueLink/%v", i.version, linkID)
@@ -86,7 +86,7 @@ func (i *internalLinkRichTextServiceImpl) Get(ctx context.Context, linkID string
 func (i *internalLinkRichTextServiceImpl) Gets(ctx context.Context, issueKeyOrID string) (*model.IssueLinkPageScheme, *model.ResponseScheme, error) {
 
 	if len(issueKeyOrID) == 0 {
-		return nil, nil, model.ErrNoIssueKeyOrIDError
+		return nil, nil, model.ErrNoIssueKeyOrID
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issue/%v?fields=issuelinks", i.version, issueKeyOrID)
@@ -108,7 +108,7 @@ func (i *internalLinkRichTextServiceImpl) Gets(ctx context.Context, issueKeyOrID
 func (i *internalLinkRichTextServiceImpl) Delete(ctx context.Context, linkID string) (*model.ResponseScheme, error) {
 
 	if linkID == "" {
-		return nil, model.ErrNoTypeIDError
+		return nil, model.ErrNoTypeID
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issueLink/%v", i.version, linkID)

@@ -121,7 +121,7 @@ func Test_SprintService_Get(t *testing.T) {
 			on: func(fields *fields) {
 				fields.c = mocks.NewConnector(t)
 			},
-			Err:     model.ErrNoSprintIDError,
+			Err:     model.ErrNoSprintID,
 			wantErr: true,
 		},
 	}
@@ -629,7 +629,7 @@ func Test_SprintService_Delete(t *testing.T) {
 			on: func(fields *fields) {
 				fields.c = mocks.NewConnector(t)
 			},
-			Err:     model.ErrNoSprintIDError,
+			Err:     model.ErrNoSprintID,
 			wantErr: true,
 		},
 
@@ -850,7 +850,7 @@ func Test_SprintService_Issues(t *testing.T) {
 			on: func(fields *fields) {
 				fields.c = mocks.NewConnector(t)
 			},
-			Err:     model.ErrNoSprintIDError,
+			Err:     model.ErrNoSprintID,
 			wantErr: true,
 		},
 	}
@@ -940,7 +940,7 @@ func Test_SprintService_Start(t *testing.T) {
 			on: func(fields *fields) {
 				fields.c = mocks.NewConnector(t)
 			},
-			Err:     model.ErrNoSprintIDError,
+			Err:     model.ErrNoSprintID,
 			wantErr: true,
 		},
 
@@ -1081,7 +1081,7 @@ func Test_SprintService_Close(t *testing.T) {
 			on: func(fields *fields) {
 				fields.c = mocks.NewConnector(t)
 			},
-			Err:     model.ErrNoSprintIDError,
+			Err:     model.ErrNoSprintID,
 			wantErr: true,
 		},
 
@@ -1231,7 +1231,7 @@ func Test_SprintService_Move(t *testing.T) {
 			on: func(fields *fields) {
 				fields.c = mocks.NewConnector(t)
 			},
-			Err:     model.ErrNoSprintIDError,
+			Err:     model.ErrNoSprintID,
 			wantErr: true,
 		},
 

@@ -139,7 +139,7 @@ type internalSprintImpl struct {
 func (i *internalSprintImpl) Move(ctx context.Context, sprintID int, payload *model.SprintMovePayloadScheme) (*model.ResponseScheme, error) {
 
 	if sprintID == 0 {
-		return nil, model.ErrNoSprintIDError
+		return nil, model.ErrNoSprintID
 	}
 
 	url := fmt.Sprintf("/rest/agile/%v/sprint/%v/issue", i.version, sprintID)
@@ -155,7 +155,7 @@ func (i *internalSprintImpl) Move(ctx context.Context, sprintID int, payload *mo
 func (i *internalSprintImpl) Get(ctx context.Context, sprintID int) (*model.SprintScheme, *model.ResponseScheme, error) {
 
 	if sprintID == 0 {
-		return nil, nil, model.ErrNoSprintIDError
+		return nil, nil, model.ErrNoSprintID
 	}
 
 	url := fmt.Sprintf("rest/agile/%v/sprint/%v", i.version, sprintID)
@@ -195,7 +195,7 @@ func (i *internalSprintImpl) Create(ctx context.Context, payload *model.SprintPa
 func (i *internalSprintImpl) Update(ctx context.Context, sprintID int, payload *model.SprintPayloadScheme) (*model.SprintScheme, *model.ResponseScheme, error) {
 
 	if sprintID == 0 {
-		return nil, nil, model.ErrNoSprintIDError
+		return nil, nil, model.ErrNoSprintID
 	}
 
 	url := fmt.Sprintf("rest/agile/%v/sprint/%v", i.version, sprintID)
@@ -217,7 +217,7 @@ func (i *internalSprintImpl) Update(ctx context.Context, sprintID int, payload *
 func (i *internalSprintImpl) Path(ctx context.Context, sprintID int, payload *model.SprintPayloadScheme) (*model.SprintScheme, *model.ResponseScheme, error) {
 
 	if sprintID == 0 {
-		return nil, nil, model.ErrNoSprintIDError
+		return nil, nil, model.ErrNoSprintID
 	}
 
 	url := fmt.Sprintf("rest/agile/%v/sprint/%v", i.version, sprintID)
@@ -239,7 +239,7 @@ func (i *internalSprintImpl) Path(ctx context.Context, sprintID int, payload *mo
 func (i *internalSprintImpl) Delete(ctx context.Context, sprintID int) (*model.ResponseScheme, error) {
 
 	if sprintID == 0 {
-		return nil, model.ErrNoSprintIDError
+		return nil, model.ErrNoSprintID
 	}
 
 	url := fmt.Sprintf("rest/agile/%v/sprint/%v", i.version, sprintID)
@@ -255,7 +255,7 @@ func (i *internalSprintImpl) Delete(ctx context.Context, sprintID int) (*model.R
 func (i *internalSprintImpl) Issues(ctx context.Context, sprintID int, opts *model.IssueOptionScheme, startAt, maxResults int) (*model.SprintIssuePageScheme, *model.ResponseScheme, error) {
 
 	if sprintID == 0 {
-		return nil, nil, model.ErrNoSprintIDError
+		return nil, nil, model.ErrNoSprintID
 	}
 
 	params := url.Values{}
@@ -300,7 +300,7 @@ func (i *internalSprintImpl) Issues(ctx context.Context, sprintID int, opts *mod
 func (i *internalSprintImpl) Start(ctx context.Context, sprintID int) (*model.ResponseScheme, error) {
 
 	if sprintID == 0 {
-		return nil, model.ErrNoSprintIDError
+		return nil, model.ErrNoSprintID
 	}
 
 	url := fmt.Sprintf("rest/agile/%v/sprint/%v", i.version, sprintID)
@@ -316,7 +316,7 @@ func (i *internalSprintImpl) Start(ctx context.Context, sprintID int) (*model.Re
 func (i *internalSprintImpl) Close(ctx context.Context, sprintID int) (*model.ResponseScheme, error) {
 
 	if sprintID == 0 {
-		return nil, model.ErrNoSprintIDError
+		return nil, model.ErrNoSprintID
 	}
 
 	url := fmt.Sprintf("rest/agile/%v/sprint/%v", i.version, sprintID)

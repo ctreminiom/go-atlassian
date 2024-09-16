@@ -36,18 +36,18 @@ func ParseTempoAccountCustomField(buffer bytes.Buffer, customField string) (*Cus
 
 	// Check if the buffer contains the "fields" object
 	if !raw.Get("fields").Exists() {
-		return nil, ErrNoFieldInformationError
+		return nil, ErrNoFieldInformation
 	}
 
 	// Check if the issue iteration contains information on the customfield selected,
 	// if not, continue
 	if raw.Get(path).Type == gjson.Null {
-		return nil, ErrNoTempoAccountTypeError
+		return nil, ErrNoTempoAccountType
 	}
 
 	var tempoAccount *CustomFieldTempoAccountScheme
 	if err := json.Unmarshal([]byte(raw.Get(path).String()), &tempoAccount); err != nil {
-		return nil, ErrNoTempoAccountTypeError
+		return nil, ErrNoTempoAccountType
 	}
 
 	return tempoAccount, nil
@@ -100,7 +100,7 @@ func ParseTempoAccountCustomFields(buffer bytes.Buffer, customField string) (map
 
 	// Check if the buffer contains the "issues" object
 	if !raw.Get("issues").Exists() {
-		return nil, ErrNoIssuesSliceError
+		return nil, ErrNoIssuesSlice
 	}
 
 	// Loop through each custom field, extract the information and stores the data on a map
@@ -127,7 +127,7 @@ func ParseTempoAccountCustomFields(buffer bytes.Buffer, customField string) (map
 	// Check if the map processed contains elements
 	// if so, return an error interface
 	if len(customfieldsAsMap) == 0 {
-		return nil, ErrNoMapValuesError
+		return nil, ErrNoMapValues
 	}
 
 	return customfieldsAsMap, nil

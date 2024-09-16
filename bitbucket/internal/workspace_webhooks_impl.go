@@ -76,7 +76,7 @@ type internalWorkspaceHookServiceImpl struct {
 func (i *internalWorkspaceHookServiceImpl) Gets(ctx context.Context, workspace string) (*model.WebhookSubscriptionPageScheme, *model.ResponseScheme, error) {
 
 	if workspace == "" {
-		return nil, nil, model.ErrNoWorkspaceError
+		return nil, nil, model.ErrNoWorkspace
 	}
 
 	endpoint := fmt.Sprintf("2.0/workspaces/%v/hooks", workspace)
@@ -98,7 +98,7 @@ func (i *internalWorkspaceHookServiceImpl) Gets(ctx context.Context, workspace s
 func (i *internalWorkspaceHookServiceImpl) Create(ctx context.Context, workspace string, payload *model.WebhookSubscriptionPayloadScheme) (*model.WebhookSubscriptionScheme, *model.ResponseScheme, error) {
 
 	if workspace == "" {
-		return nil, nil, model.ErrNoWorkspaceError
+		return nil, nil, model.ErrNoWorkspace
 	}
 
 	endpoint := fmt.Sprintf("2.0/workspaces/%v/hooks", workspace)
@@ -120,11 +120,11 @@ func (i *internalWorkspaceHookServiceImpl) Create(ctx context.Context, workspace
 func (i *internalWorkspaceHookServiceImpl) Get(ctx context.Context, workspace, webhookID string) (*model.WebhookSubscriptionScheme, *model.ResponseScheme, error) {
 
 	if workspace == "" {
-		return nil, nil, model.ErrNoWorkspaceError
+		return nil, nil, model.ErrNoWorkspace
 	}
 
 	if webhookID == "" {
-		return nil, nil, model.ErrNoWebhookIDError
+		return nil, nil, model.ErrNoWebhookID
 	}
 
 	endpoint := fmt.Sprintf("2.0/workspaces/%v/hooks/%v", workspace, webhookID)
@@ -146,11 +146,11 @@ func (i *internalWorkspaceHookServiceImpl) Get(ctx context.Context, workspace, w
 func (i *internalWorkspaceHookServiceImpl) Update(ctx context.Context, workspace, webhookID string, payload *model.WebhookSubscriptionPayloadScheme) (*model.WebhookSubscriptionScheme, *model.ResponseScheme, error) {
 
 	if workspace == "" {
-		return nil, nil, model.ErrNoWorkspaceError
+		return nil, nil, model.ErrNoWorkspace
 	}
 
 	if webhookID == "" {
-		return nil, nil, model.ErrNoWebhookIDError
+		return nil, nil, model.ErrNoWebhookID
 	}
 
 	endpoint := fmt.Sprintf("2.0/workspaces/%v/hooks/%v", workspace, webhookID)
@@ -172,11 +172,11 @@ func (i *internalWorkspaceHookServiceImpl) Update(ctx context.Context, workspace
 func (i *internalWorkspaceHookServiceImpl) Delete(ctx context.Context, workspace, webhookID string) (*model.ResponseScheme, error) {
 
 	if workspace == "" {
-		return nil, model.ErrNoWorkspaceError
+		return nil, model.ErrNoWorkspace
 	}
 
 	if webhookID == "" {
-		return nil, model.ErrNoWebhookIDError
+		return nil, model.ErrNoWebhookID
 	}
 
 	endpoint := fmt.Sprintf("2.0/workspaces/%v/hooks/%v", workspace, webhookID)

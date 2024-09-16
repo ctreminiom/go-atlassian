@@ -67,7 +67,7 @@ func Test_internalOrganizationPolicyImpl_Gets(t *testing.T) {
 				organizationID: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoAdminOrganizationError,
+			Err:     model.ErrNoAdminOrganization,
 		},
 
 		{
@@ -184,7 +184,7 @@ func Test_internalOrganizationPolicyImpl_Get(t *testing.T) {
 				organizationID: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoAdminOrganizationError,
+			Err:     model.ErrNoAdminOrganization,
 		},
 
 		{
@@ -194,7 +194,7 @@ func Test_internalOrganizationPolicyImpl_Get(t *testing.T) {
 				organizationID: "organization-id-sample",
 			},
 			wantErr: true,
-			Err:     model.ErrNoAdminPolicyError,
+			Err:     model.ErrNoAdminPolicy,
 		},
 
 		{
@@ -320,7 +320,7 @@ func Test_internalOrganizationPolicyImpl_Create(t *testing.T) {
 				organizationID: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoAdminOrganizationError,
+			Err:     model.ErrNoAdminOrganization,
 		},
 
 		{
@@ -446,7 +446,7 @@ func Test_internalOrganizationPolicyImpl_Update(t *testing.T) {
 				organizationID: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoAdminOrganizationError,
+			Err:     model.ErrNoAdminOrganization,
 		},
 
 		{
@@ -456,7 +456,7 @@ func Test_internalOrganizationPolicyImpl_Update(t *testing.T) {
 				organizationID: "organization-id-sample",
 			},
 			wantErr: true,
-			Err:     model.ErrNoAdminPolicyError,
+			Err:     model.ErrNoAdminPolicy,
 		},
 
 		{
@@ -572,7 +572,7 @@ func Test_internalOrganizationPolicyImpl_Delete(t *testing.T) {
 				organizationID: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoAdminOrganizationError,
+			Err:     model.ErrNoAdminOrganization,
 		},
 
 		{
@@ -582,7 +582,7 @@ func Test_internalOrganizationPolicyImpl_Delete(t *testing.T) {
 				organizationID: "organization-id-sample",
 			},
 			wantErr: true,
-			Err:     model.ErrNoAdminPolicyError,
+			Err:     model.ErrNoAdminPolicy,
 		},
 
 		{

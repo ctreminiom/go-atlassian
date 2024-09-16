@@ -48,11 +48,11 @@ type internalIconImpl struct {
 func (i *internalIconImpl) Get(ctx context.Context, workspaceID, iconID string) (*model.IconScheme, *model.ResponseScheme, error) {
 
 	if workspaceID == "" {
-		return nil, nil, model.ErrNoWorkspaceIDError
+		return nil, nil, model.ErrNoWorkspaceID
 	}
 
 	if iconID == "" {
-		return nil, nil, model.ErrNoIconIDError
+		return nil, nil, model.ErrNoIconID
 	}
 
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/icon/%v", workspaceID, iconID)
@@ -74,7 +74,7 @@ func (i *internalIconImpl) Get(ctx context.Context, workspaceID, iconID string) 
 func (i *internalIconImpl) Global(ctx context.Context, workspaceID string) ([]*model.IconScheme, *model.ResponseScheme, error) {
 
 	if workspaceID == "" {
-		return nil, nil, model.ErrNoWorkspaceIDError
+		return nil, nil, model.ErrNoWorkspaceID
 	}
 
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/icon/global", workspaceID)

@@ -141,7 +141,7 @@ func Test_internalServiceRequestCommentImpl_Gets(t *testing.T) {
 			on: func(fields *fields) {
 				fields.c = mocks.NewConnector(t)
 			},
-			Err:     model.ErrNoIssueKeyOrIDError,
+			Err:     model.ErrNoIssueKeyOrID,
 			wantErr: true,
 		},
 	}
@@ -290,7 +290,7 @@ func Test_internalServiceRequestCommentImpl_Get(t *testing.T) {
 			on: func(fields *fields) {
 				fields.c = mocks.NewConnector(t)
 			},
-			Err:     model.ErrNoIssueKeyOrIDError,
+			Err:     model.ErrNoIssueKeyOrID,
 			wantErr: true,
 		},
 
@@ -303,7 +303,7 @@ func Test_internalServiceRequestCommentImpl_Get(t *testing.T) {
 			on: func(fields *fields) {
 				fields.c = mocks.NewConnector(t)
 			},
-			Err:     model.ErrNoCommentIDError,
+			Err:     model.ErrNoCommentID,
 			wantErr: true,
 		},
 	}
@@ -452,7 +452,7 @@ func Test_internalServiceRequestCommentImpl_Create(t *testing.T) {
 			on: func(fields *fields) {
 				fields.c = mocks.NewConnector(t)
 			},
-			Err:     model.ErrNoIssueKeyOrIDError,
+			Err:     model.ErrNoIssueKeyOrID,
 			wantErr: true,
 		},
 
@@ -465,7 +465,7 @@ func Test_internalServiceRequestCommentImpl_Create(t *testing.T) {
 			on: func(fields *fields) {
 				fields.c = mocks.NewConnector(t)
 			},
-			Err:     model.ErrNoCommentBodyError,
+			Err:     model.ErrNoCommentBody,
 			wantErr: true,
 		},
 	}
@@ -617,7 +617,7 @@ func Test_internalServiceRequestCommentImpl_Attachments(t *testing.T) {
 			on: func(fields *fields) {
 				fields.c = mocks.NewConnector(t)
 			},
-			Err:     model.ErrNoIssueKeyOrIDError,
+			Err:     model.ErrNoIssueKeyOrID,
 			wantErr: true,
 		},
 	}

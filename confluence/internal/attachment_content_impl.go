@@ -74,7 +74,7 @@ type internalContentAttachmentImpl struct {
 func (i *internalContentAttachmentImpl) Gets(ctx context.Context, contentID string, startAt, maxResults int, options *model.GetContentAttachmentsOptionsScheme) (*model.ContentPageScheme, *model.ResponseScheme, error) {
 
 	if contentID == "" {
-		return nil, nil, model.ErrNoContentIDError
+		return nil, nil, model.ErrNoContentID
 	}
 
 	query := url.Values{}
@@ -116,15 +116,15 @@ func (i *internalContentAttachmentImpl) Gets(ctx context.Context, contentID stri
 func (i *internalContentAttachmentImpl) CreateOrUpdate(ctx context.Context, attachmentID, status, fileName string, file io.Reader) (*model.ContentPageScheme, *model.ResponseScheme, error) {
 
 	if attachmentID == "" {
-		return nil, nil, model.ErrNoContentAttachmentIDError
+		return nil, nil, model.ErrNoContentAttachmentID
 	}
 
 	if fileName == "" {
-		return nil, nil, model.ErrNoContentAttachmentNameError
+		return nil, nil, model.ErrNoContentAttachmentName
 	}
 
 	if file == nil {
-		return nil, nil, model.ErrNoContentReaderError
+		return nil, nil, model.ErrNoContentReader
 	}
 
 	var endpoint strings.Builder
@@ -173,15 +173,15 @@ func (i *internalContentAttachmentImpl) CreateOrUpdate(ctx context.Context, atta
 func (i *internalContentAttachmentImpl) Create(ctx context.Context, attachmentID, status, fileName string, file io.Reader) (*model.ContentPageScheme, *model.ResponseScheme, error) {
 
 	if attachmentID == "" {
-		return nil, nil, model.ErrNoContentAttachmentIDError
+		return nil, nil, model.ErrNoContentAttachmentID
 	}
 
 	if fileName == "" {
-		return nil, nil, model.ErrNoContentAttachmentNameError
+		return nil, nil, model.ErrNoContentAttachmentName
 	}
 
 	if file == nil {
-		return nil, nil, model.ErrNoContentReaderError
+		return nil, nil, model.ErrNoContentReader
 	}
 
 	var endpoint strings.Builder

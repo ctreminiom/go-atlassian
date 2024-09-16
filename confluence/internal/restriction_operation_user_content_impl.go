@@ -62,15 +62,15 @@ type internalRestrictionOperationUserImpl struct {
 func (i *internalRestrictionOperationUserImpl) Get(ctx context.Context, contentID, operationKey, accountID string) (*model.ResponseScheme, error) {
 
 	if contentID == "" {
-		return nil, model.ErrNoContentIDError
+		return nil, model.ErrNoContentID
 	}
 
 	if operationKey == "" {
-		return nil, model.ErrNoContentRestrictionKeyError
+		return nil, model.ErrNoContentRestrictionKey
 	}
 
 	if accountID == "" {
-		return nil, model.ErrNoAccountIDError
+		return nil, model.ErrNoAccountID
 	}
 
 	query := url.Values{}
@@ -89,15 +89,15 @@ func (i *internalRestrictionOperationUserImpl) Get(ctx context.Context, contentI
 func (i *internalRestrictionOperationUserImpl) Add(ctx context.Context, contentID, operationKey, accountID string) (*model.ResponseScheme, error) {
 
 	if contentID == "" {
-		return nil, model.ErrNoContentIDError
+		return nil, model.ErrNoContentID
 	}
 
 	if operationKey == "" {
-		return nil, model.ErrNoContentRestrictionKeyError
+		return nil, model.ErrNoContentRestrictionKey
 	}
 
 	if accountID == "" {
-		return nil, model.ErrNoAccountIDError
+		return nil, model.ErrNoAccountID
 	}
 
 	query := url.Values{}
@@ -116,15 +116,15 @@ func (i *internalRestrictionOperationUserImpl) Add(ctx context.Context, contentI
 func (i *internalRestrictionOperationUserImpl) Remove(ctx context.Context, contentID, operationKey, accountID string) (*model.ResponseScheme, error) {
 
 	if contentID == "" {
-		return nil, model.ErrNoContentIDError
+		return nil, model.ErrNoContentID
 	}
 
 	if operationKey == "" {
-		return nil, model.ErrNoContentRestrictionKeyError
+		return nil, model.ErrNoContentRestrictionKey
 	}
 
 	if accountID == "" {
-		return nil, model.ErrNoAccountIDError
+		return nil, model.ErrNoAccountID
 	}
 
 	query := url.Values{}

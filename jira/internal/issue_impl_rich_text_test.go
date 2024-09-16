@@ -75,7 +75,7 @@ func Test_internalRichTextServiceImpl_Delete(t *testing.T) {
 				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
-			Err:     model.ErrNoIssueKeyOrIDError,
+			Err:     model.ErrNoIssueKeyOrID,
 		},
 
 		{
@@ -196,7 +196,7 @@ func Test_internalRichTextServiceImpl_Assign(t *testing.T) {
 				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
-			Err:     model.ErrNoIssueKeyOrIDError,
+			Err:     model.ErrNoIssueKeyOrID,
 		},
 
 		{
@@ -211,7 +211,7 @@ func Test_internalRichTextServiceImpl_Assign(t *testing.T) {
 				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
-			Err:     model.ErrNoAccountIDError,
+			Err:     model.ErrNoAccountID,
 		},
 
 		{
@@ -341,7 +341,7 @@ func Test_internalRichTextServiceImpl_Notify(t *testing.T) {
 				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
-			Err:     model.ErrNoIssueKeyOrIDError,
+			Err:     model.ErrNoIssueKeyOrID,
 		},
 
 		{
@@ -460,7 +460,7 @@ func Test_internalRichTextServiceImpl_Transitions(t *testing.T) {
 				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
-			Err:     model.ErrNoIssueKeyOrIDError,
+			Err:     model.ErrNoIssueKeyOrID,
 		},
 
 		{
@@ -805,7 +805,7 @@ func Test_internalRichTextServiceImpl_Creates(t *testing.T) {
 				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
-			Err:     model.ErrNoCreateIssuesError,
+			Err:     model.ErrNoCreateIssues,
 		},
 
 		{
@@ -942,7 +942,7 @@ func Test_internalRichTextServiceImpl_Get(t *testing.T) {
 				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
-			Err:     model.ErrNoIssueKeyOrIDError,
+			Err:     model.ErrNoIssueKeyOrID,
 		},
 
 		{
@@ -1138,7 +1138,7 @@ func Test_internalRichTextServiceImpl_Move(t *testing.T) {
 				},
 			},
 			wantErr: true,
-			Err:     model.ErrNoIssueSchemeError,
+			Err:     model.ErrNoIssueScheme,
 		},
 
 		{
@@ -1274,7 +1274,7 @@ func Test_internalRichTextServiceImpl_Move(t *testing.T) {
 				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
-			Err:     model.ErrNoIssueKeyOrIDError,
+			Err:     model.ErrNoIssueKeyOrID,
 		},
 
 		{
@@ -1300,7 +1300,7 @@ func Test_internalRichTextServiceImpl_Move(t *testing.T) {
 				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
-			Err:     model.ErrNoTransitionIDError,
+			Err:     model.ErrNoTransitionID,
 		},
 
 		{
@@ -1495,7 +1495,7 @@ func Test_internalRichTextServiceImpl_Update(t *testing.T) {
 				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
-			Err:     model.ErrNoIssueKeyOrIDError,
+			Err:     model.ErrNoIssueKeyOrID,
 		},
 
 		{

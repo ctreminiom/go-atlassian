@@ -82,7 +82,7 @@ type internalCustomContentServiceImpl struct {
 func (i *internalCustomContentServiceImpl) Gets(ctx context.Context, type_ string, options *model.CustomContentOptionsScheme, cursor string, limit int) (*model.CustomContentPageScheme, *model.ResponseScheme, error) {
 
 	if type_ == "" {
-		return nil, nil, model.ErrNoCustomContentTypeError
+		return nil, nil, model.ErrNoCustomContentType
 	}
 
 	query := url.Values{}
@@ -160,7 +160,7 @@ func (i *internalCustomContentServiceImpl) Create(ctx context.Context, payload *
 func (i *internalCustomContentServiceImpl) Get(ctx context.Context, customContentID int, format string, versionID int) (*model.CustomContentScheme, *model.ResponseScheme, error) {
 
 	if customContentID == 0 {
-		return nil, nil, model.ErrNoCustomContentIDError
+		return nil, nil, model.ErrNoCustomContentID
 	}
 
 	query := url.Values{}
@@ -197,7 +197,7 @@ func (i *internalCustomContentServiceImpl) Get(ctx context.Context, customConten
 func (i *internalCustomContentServiceImpl) Update(ctx context.Context, customContentID int, payload *model.CustomContentPayloadScheme) (*model.CustomContentScheme, *model.ResponseScheme, error) {
 
 	if customContentID == 0 {
-		return nil, nil, model.ErrNoCustomContentIDError
+		return nil, nil, model.ErrNoCustomContentID
 	}
 
 	endpoint := fmt.Sprintf("wiki/api/v2/custom-content/%v", customContentID)
@@ -220,7 +220,7 @@ func (i *internalCustomContentServiceImpl) Update(ctx context.Context, customCon
 func (i *internalCustomContentServiceImpl) Delete(ctx context.Context, customContentID int) (*model.ResponseScheme, error) {
 
 	if customContentID == 0 {
-		return nil, model.ErrNoCustomContentIDError
+		return nil, model.ErrNoCustomContentID
 	}
 
 	endpoint := fmt.Sprintf("wiki/api/v2/custom-content/%v", customContentID)

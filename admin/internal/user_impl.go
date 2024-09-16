@@ -88,7 +88,7 @@ type internalUserImpl struct {
 func (i *internalUserImpl) Permissions(ctx context.Context, accountID string, privileges []string) (*model.AdminUserPermissionScheme, *model.ResponseScheme, error) {
 
 	if accountID == "" {
-		return nil, nil, model.ErrNoAdminAccountIDError
+		return nil, nil, model.ErrNoAdminAccountID
 	}
 
 	var endpoint strings.Builder
@@ -119,7 +119,7 @@ func (i *internalUserImpl) Permissions(ctx context.Context, accountID string, pr
 func (i *internalUserImpl) Get(ctx context.Context, accountID string) (*model.AdminUserScheme, *model.ResponseScheme, error) {
 
 	if accountID == "" {
-		return nil, nil, model.ErrNoAdminAccountIDError
+		return nil, nil, model.ErrNoAdminAccountID
 	}
 
 	endpoint := fmt.Sprintf("users/%v/manage/profile", accountID)
@@ -141,7 +141,7 @@ func (i *internalUserImpl) Get(ctx context.Context, accountID string) (*model.Ad
 func (i *internalUserImpl) Update(ctx context.Context, accountID string, payload map[string]interface{}) (*model.AdminUserScheme, *model.ResponseScheme, error) {
 
 	if accountID == "" {
-		return nil, nil, model.ErrNoAdminAccountIDError
+		return nil, nil, model.ErrNoAdminAccountID
 	}
 
 	endpoint := fmt.Sprintf("users/%v/manage/profile", accountID)
@@ -163,7 +163,7 @@ func (i *internalUserImpl) Update(ctx context.Context, accountID string, payload
 func (i *internalUserImpl) Disable(ctx context.Context, accountID, message string) (*model.ResponseScheme, error) {
 
 	if accountID == "" {
-		return nil, model.ErrNoAdminAccountIDError
+		return nil, model.ErrNoAdminAccountID
 	}
 
 	endpoint := fmt.Sprintf("users/%v/manage/lifecycle/disable", accountID)
@@ -184,7 +184,7 @@ func (i *internalUserImpl) Disable(ctx context.Context, accountID, message strin
 func (i *internalUserImpl) Enable(ctx context.Context, accountID string) (*model.ResponseScheme, error) {
 
 	if accountID == "" {
-		return nil, model.ErrNoAdminAccountIDError
+		return nil, model.ErrNoAdminAccountID
 	}
 
 	endpoint := fmt.Sprintf("users/%v/manage/lifecycle/enable", accountID)

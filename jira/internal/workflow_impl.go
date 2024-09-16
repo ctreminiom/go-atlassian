@@ -444,7 +444,7 @@ func (i *internalWorkflowImpl) Gets(ctx context.Context, options *model.Workflow
 func (i *internalWorkflowImpl) Delete(ctx context.Context, workflowID string) (*model.ResponseScheme, error) {
 
 	if workflowID == "" {
-		return nil, model.ErrNoWorkflowIDError
+		return nil, model.ErrNoWorkflowID
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/workflow/%v", i.version, workflowID)

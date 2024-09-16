@@ -89,7 +89,7 @@ func Test_internalWorkspaceServiceImpl_Get(t *testing.T) {
 				workspace: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoWorkspaceError,
+			Err:     model.ErrNoWorkspace,
 		},
 	}
 
@@ -198,7 +198,7 @@ func Test_internalWorkspaceServiceImpl_Members(t *testing.T) {
 				workspace: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoWorkspaceError,
+			Err:     model.ErrNoWorkspace,
 		},
 	}
 
@@ -307,7 +307,7 @@ func Test_internalWorkspaceServiceImpl_Projects(t *testing.T) {
 				workspace: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoWorkspaceError,
+			Err:     model.ErrNoWorkspace,
 		},
 	}
 
@@ -419,7 +419,7 @@ func Test_internalWorkspaceServiceImpl_Membership(t *testing.T) {
 				workspace: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoWorkspaceError,
+			Err:     model.ErrNoWorkspace,
 		},
 
 		{
@@ -429,7 +429,7 @@ func Test_internalWorkspaceServiceImpl_Membership(t *testing.T) {
 				workspace: "work-space-name-sample",
 			},
 			wantErr: true,
-			Err:     model.ErrNoMemberIDError,
+			Err:     model.ErrNoMemberID,
 		},
 	}
 

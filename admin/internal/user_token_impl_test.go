@@ -65,7 +65,7 @@ func Test_internalUserTokenImpl_Gets(t *testing.T) {
 				accountID: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoAdminAccountIDError,
+			Err:     model.ErrNoAdminAccountID,
 		},
 
 		{
@@ -178,7 +178,7 @@ func Test_internalUserTokenImpl_Delete(t *testing.T) {
 				accountID: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoAdminAccountIDError,
+			Err:     model.ErrNoAdminAccountID,
 		},
 
 		{
@@ -188,7 +188,7 @@ func Test_internalUserTokenImpl_Delete(t *testing.T) {
 				accountID: "account-id-sample",
 			},
 			wantErr: true,
-			Err:     model.ErrNoAdminUserTokenError,
+			Err:     model.ErrNoAdminUserToken,
 		},
 
 		{

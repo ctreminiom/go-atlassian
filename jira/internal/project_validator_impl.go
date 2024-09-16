@@ -71,7 +71,7 @@ type internalProjectValidatorImpl struct {
 func (i *internalProjectValidatorImpl) Validate(ctx context.Context, key string) (*model.ProjectValidationMessageScheme, *model.ResponseScheme, error) {
 
 	if key == "" {
-		return nil, nil, model.ErrNoProjectIDOrKeyError
+		return nil, nil, model.ErrNoProjectIDOrKey
 	}
 
 	params := url.Values{}
@@ -96,7 +96,7 @@ func (i *internalProjectValidatorImpl) Validate(ctx context.Context, key string)
 func (i *internalProjectValidatorImpl) Key(ctx context.Context, key string) (string, *model.ResponseScheme, error) {
 
 	if key == "" {
-		return "", nil, model.ErrNoProjectIDOrKeyError
+		return "", nil, model.ErrNoProjectIDOrKey
 	}
 
 	params := url.Values{}
@@ -120,7 +120,7 @@ func (i *internalProjectValidatorImpl) Key(ctx context.Context, key string) (str
 func (i *internalProjectValidatorImpl) Name(ctx context.Context, name string) (string, *model.ResponseScheme, error) {
 
 	if name == "" {
-		return "", nil, model.ErrNoProjectNameError
+		return "", nil, model.ErrNoProjectName
 	}
 
 	params := url.Values{}

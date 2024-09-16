@@ -112,7 +112,7 @@ func Test_internalMetadataImpl_Get(t *testing.T) {
 			},
 			want:    gjson.Result{},
 			wantErr: true,
-			Err:     model.ErrNoIssueKeyOrIDError,
+			Err:     model.ErrNoIssueKeyOrID,
 		},
 
 		{

@@ -3,12 +3,14 @@ package internal
 import (
 	"context"
 	"errors"
+	"net/http"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
-	"github.com/stretchr/testify/assert"
-	"net/http"
-	"testing"
 )
 
 func Test_internalServiceRequestFeedbackImpl_Get(t *testing.T) {
@@ -115,7 +117,7 @@ func Test_internalServiceRequestFeedbackImpl_Get(t *testing.T) {
 			args: args{
 				ctx: context.Background(),
 			},
-			Err:     model.ErrNoIssueKeyOrIDError,
+			Err:     model.ErrNoIssueKeyOrID,
 			wantErr: true,
 		},
 	}
@@ -262,7 +264,7 @@ func Test_internalServiceRequestFeedbackImpl_Post(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoIssueKeyOrIDError,
+			Err:     model.ErrNoIssueKeyOrID,
 		},
 	}
 
@@ -400,7 +402,7 @@ func Test_internalServiceRequestFeedbackImpl_Delete(t *testing.T) {
 			args: args{
 				ctx: context.Background(),
 			},
-			Err:     model.ErrNoIssueKeyOrIDError,
+			Err:     model.ErrNoIssueKeyOrID,
 			wantErr: true,
 		},
 	}

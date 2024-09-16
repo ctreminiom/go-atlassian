@@ -99,15 +99,15 @@ type SCIMUserToPathScheme struct {
 // AddStringOperation adds a string operation to the SCIM user path scheme.
 func (s *SCIMUserToPathScheme) AddStringOperation(operation, path, value string) error {
 	if operation == "" {
-		return ErrNoSCIMOperationError
+		return ErrNoSCIMOperation
 	}
 
 	if path == "" {
-		return ErrNoSCIMPathError
+		return ErrNoSCIMPath
 	}
 
 	if value == "" {
-		return ErrNoSCIMValueError
+		return ErrNoSCIMValue
 	}
 
 	s.Operations = append(s.Operations, &SCIMUserToPathOperationScheme{
@@ -122,11 +122,11 @@ func (s *SCIMUserToPathScheme) AddStringOperation(operation, path, value string)
 // AddBoolOperation adds a boolean operation to the SCIM user path scheme.
 func (s *SCIMUserToPathScheme) AddBoolOperation(operation, path string, value bool) error {
 	if operation == "" {
-		return ErrNoSCIMOperationError
+		return ErrNoSCIMOperation
 	}
 
 	if path == "" {
-		return ErrNoSCIMPathError
+		return ErrNoSCIMPath
 	}
 
 	s.Operations = append(s.Operations, &SCIMUserToPathOperationScheme{
@@ -141,19 +141,19 @@ func (s *SCIMUserToPathScheme) AddBoolOperation(operation, path string, value bo
 // AddComplexOperation adds a complex operation to the SCIM user path scheme.
 func (s *SCIMUserToPathScheme) AddComplexOperation(operation, path string, values []*SCIMUserComplexOperationScheme) error {
 	if operation == "" {
-		return ErrNoSCIMOperationError
+		return ErrNoSCIMOperation
 	}
 
 	if path == "" {
-		return ErrNoSCIMPathError
+		return ErrNoSCIMPath
 	}
 
 	if values == nil {
-		return ErrNoSCIMComplexValueError
+		return ErrNoSCIMComplexValue
 	}
 
 	if len(values) == 0 {
-		return ErrNoSCIMComplexValueError
+		return ErrNoSCIMComplexValue
 	}
 
 	s.Operations = append(s.Operations, &SCIMUserToPathOperationScheme{

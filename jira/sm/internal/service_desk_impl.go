@@ -99,7 +99,7 @@ func (i *internalServiceDeskImpl) Gets(ctx context.Context, start, limit int) (*
 func (i *internalServiceDeskImpl) Get(ctx context.Context, serviceDeskID string) (*model.ServiceDeskScheme, *model.ResponseScheme, error) {
 
 	if serviceDeskID == "" {
-		return nil, nil, model.ErrNoServiceDeskIDError
+		return nil, nil, model.ErrNoServiceDeskID
 	}
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/servicedesk/%v", serviceDeskID)
@@ -121,15 +121,15 @@ func (i *internalServiceDeskImpl) Get(ctx context.Context, serviceDeskID string)
 func (i *internalServiceDeskImpl) Attach(ctx context.Context, serviceDeskID string, fileName string, file io.Reader) (*model.ServiceDeskTemporaryFileScheme, *model.ResponseScheme, error) {
 
 	if serviceDeskID == "" {
-		return nil, nil, model.ErrNoServiceDeskIDError
+		return nil, nil, model.ErrNoServiceDeskID
 	}
 
 	if fileName == "" {
-		return nil, nil, model.ErrNoFileNameError
+		return nil, nil, model.ErrNoFileName
 	}
 
 	if file == nil {
-		return nil, nil, model.ErrNoFileReaderError
+		return nil, nil, model.ErrNoFileReader
 	}
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/servicedesk/%v/attachTemporaryFile", serviceDeskID)

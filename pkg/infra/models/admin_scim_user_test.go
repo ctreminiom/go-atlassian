@@ -2,8 +2,9 @@
 package models
 
 import (
+	"testing" // Standard Go testing package
+
 	"github.com/stretchr/testify/assert" // Assert package for testing
-	"testing"                            // Standard Go testing package
 )
 
 // TestSCIMUserToPathScheme_AddStringOperation tests the AddStringOperation method of the SCIMUserToPathScheme struct.
@@ -49,7 +50,7 @@ func TestSCIMUserToPathScheme_AddStringOperation(t *testing.T) {
 				value:     "value_sample",
 			},
 			wantErr: true,
-			Err:     ErrNoSCIMOperationError,
+			Err:     ErrNoSCIMOperation,
 		},
 		// Test case when the path is not provided
 		{
@@ -61,7 +62,7 @@ func TestSCIMUserToPathScheme_AddStringOperation(t *testing.T) {
 				value:     "value_sample",
 			},
 			wantErr: true,
-			Err:     ErrNoSCIMPathError,
+			Err:     ErrNoSCIMPath,
 		},
 		// Test case when the value is not provided
 		{
@@ -73,7 +74,7 @@ func TestSCIMUserToPathScheme_AddStringOperation(t *testing.T) {
 				value:     "",
 			},
 			wantErr: true,
-			Err:     ErrNoSCIMValueError,
+			Err:     ErrNoSCIMValue,
 		},
 	}
 	// Loop over each test case
@@ -147,7 +148,7 @@ func TestSCIMUserToPathScheme_AddBoolOperation(t *testing.T) {
 				value:     true,
 			},
 			wantErr: true,
-			Err:     ErrNoSCIMOperationError,
+			Err:     ErrNoSCIMOperation,
 		},
 		// Test case when the path is not provided
 		{
@@ -159,7 +160,7 @@ func TestSCIMUserToPathScheme_AddBoolOperation(t *testing.T) {
 				value:     true,
 			},
 			wantErr: true,
-			Err:     ErrNoSCIMPathError,
+			Err:     ErrNoSCIMPath,
 		},
 	}
 	// Loop over each test case
@@ -238,7 +239,7 @@ func TestSCIMUserToPathScheme_AddComplexOperation(t *testing.T) {
 				path:      "path_sample",
 			},
 			wantErr: true,
-			Err:     ErrNoSCIMOperationError,
+			Err:     ErrNoSCIMOperation,
 		},
 		// Test case when the path is not provided
 		{
@@ -249,7 +250,7 @@ func TestSCIMUserToPathScheme_AddComplexOperation(t *testing.T) {
 				path:      "",
 			},
 			wantErr: true,
-			Err:     ErrNoSCIMPathError,
+			Err:     ErrNoSCIMPath,
 		},
 		// Test case when the value is not provided
 		{
@@ -261,7 +262,7 @@ func TestSCIMUserToPathScheme_AddComplexOperation(t *testing.T) {
 				values:    nil,
 			},
 			wantErr: true,
-			Err:     ErrNoSCIMComplexValueError,
+			Err:     ErrNoSCIMComplexValue,
 		},
 	}
 	// Loop over each test case

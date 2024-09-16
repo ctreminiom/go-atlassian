@@ -60,7 +60,7 @@ type internalIssueFieldConfigItemServiceImpl struct {
 func (i *internalIssueFieldConfigItemServiceImpl) Gets(ctx context.Context, id, startAt, maxResults int) (*model.FieldConfigurationItemPageScheme, *model.ResponseScheme, error) {
 
 	if id == 0 {
-		return nil, nil, model.ErrNoFieldConfigurationIDError
+		return nil, nil, model.ErrNoFieldConfigurationID
 	}
 
 	params := url.Values{}
@@ -86,7 +86,7 @@ func (i *internalIssueFieldConfigItemServiceImpl) Gets(ctx context.Context, id, 
 func (i *internalIssueFieldConfigItemServiceImpl) Update(ctx context.Context, id int, payload *model.UpdateFieldConfigurationItemPayloadScheme) (*model.ResponseScheme, error) {
 
 	if id == 0 {
-		return nil, model.ErrNoFieldConfigurationIDError
+		return nil, model.ErrNoFieldConfigurationID
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/fieldconfiguration/%v/fields", i.version, id)

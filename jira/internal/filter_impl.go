@@ -234,7 +234,7 @@ func (i *internalFilterServiceImpl) Search(ctx context.Context, options *model.F
 func (i *internalFilterServiceImpl) Get(ctx context.Context, filterID int, expand []string) (*model.FilterScheme, *model.ResponseScheme, error) {
 
 	if filterID == 0 {
-		return nil, nil, model.ErrNoFilterIDError
+		return nil, nil, model.ErrNoFilterID
 	}
 
 	var endpoint strings.Builder
@@ -266,7 +266,7 @@ func (i *internalFilterServiceImpl) Get(ctx context.Context, filterID int, expan
 func (i *internalFilterServiceImpl) Update(ctx context.Context, filterID int, payload *model.FilterPayloadScheme) (*model.FilterScheme, *model.ResponseScheme, error) {
 
 	if filterID == 0 {
-		return nil, nil, model.ErrNoFilterIDError
+		return nil, nil, model.ErrNoFilterID
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/filter/%v", i.version, filterID)
@@ -288,7 +288,7 @@ func (i *internalFilterServiceImpl) Update(ctx context.Context, filterID int, pa
 func (i *internalFilterServiceImpl) Delete(ctx context.Context, filterID int) (*model.ResponseScheme, error) {
 
 	if filterID == 0 {
-		return nil, model.ErrNoFilterIDError
+		return nil, model.ErrNoFilterID
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/filter/%v", i.version, filterID)
@@ -309,11 +309,11 @@ func (i *internalFilterServiceImpl) Delete(ctx context.Context, filterID int) (*
 func (i *internalFilterServiceImpl) Change(ctx context.Context, filterID int, accountID string) (*model.ResponseScheme, error) {
 
 	if filterID == 0 {
-		return nil, model.ErrNoFilterIDError
+		return nil, model.ErrNoFilterID
 	}
 
 	if accountID == "" {
-		return nil, model.ErrNoAccountIDError
+		return nil, model.ErrNoAccountID
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/filter/%v/owner", i.version, filterID)

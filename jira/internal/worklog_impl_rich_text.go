@@ -137,7 +137,7 @@ type internalWorklogRichTextImpl struct {
 func (i *internalWorklogRichTextImpl) Gets(ctx context.Context, worklogIds []int, expand []string) ([]*model.IssueWorklogRichTextScheme, *model.ResponseScheme, error) {
 
 	if len(worklogIds) == 0 {
-		return nil, nil, model.ErrNpWorklogsError
+		return nil, nil, model.ErrNpWorklogs
 	}
 
 	params := url.Values{}
@@ -169,11 +169,11 @@ func (i *internalWorklogRichTextImpl) Gets(ctx context.Context, worklogIds []int
 func (i *internalWorklogRichTextImpl) Get(ctx context.Context, issueKeyOrID, worklogId string, expand []string) (*model.IssueWorklogRichTextScheme, *model.ResponseScheme, error) {
 
 	if issueKeyOrID == "" {
-		return nil, nil, model.ErrNoIssueKeyOrIDError
+		return nil, nil, model.ErrNoIssueKeyOrID
 	}
 
 	if worklogId == "" {
-		return nil, nil, model.ErrNoWorklogIDError
+		return nil, nil, model.ErrNoWorklogID
 	}
 
 	params := url.Values{}
@@ -205,7 +205,7 @@ func (i *internalWorklogRichTextImpl) Get(ctx context.Context, issueKeyOrID, wor
 func (i *internalWorklogRichTextImpl) Issue(ctx context.Context, issueKeyOrID string, startAt, maxResults, after int, expand []string) (*model.IssueWorklogRichTextPageScheme, *model.ResponseScheme, error) {
 
 	if issueKeyOrID == "" {
-		return nil, nil, model.ErrNoIssueKeyOrIDError
+		return nil, nil, model.ErrNoIssueKeyOrID
 	}
 
 	params := url.Values{}
@@ -239,11 +239,11 @@ func (i *internalWorklogRichTextImpl) Issue(ctx context.Context, issueKeyOrID st
 func (i *internalWorklogRichTextImpl) Delete(ctx context.Context, issueKeyOrID, worklogId string, options *model.WorklogOptionsScheme) (*model.ResponseScheme, error) {
 
 	if issueKeyOrID == "" {
-		return nil, model.ErrNoIssueKeyOrIDError
+		return nil, model.ErrNoIssueKeyOrID
 	}
 
 	if worklogId == "" {
-		return nil, model.ErrNoWorklogIDError
+		return nil, model.ErrNoWorklogID
 	}
 
 	var endpoint strings.Builder
@@ -345,7 +345,7 @@ func (i *internalWorklogRichTextImpl) Updated(ctx context.Context, since int, ex
 func (i *internalWorklogRichTextImpl) Add(ctx context.Context, issueKeyOrID string, payload *model.WorklogRichTextPayloadScheme, options *model.WorklogOptionsScheme) (*model.IssueWorklogRichTextScheme, *model.ResponseScheme, error) {
 
 	if issueKeyOrID == "" {
-		return nil, nil, model.ErrNoIssueKeyOrIDError
+		return nil, nil, model.ErrNoIssueKeyOrID
 	}
 
 	var endpoint strings.Builder
@@ -394,11 +394,11 @@ func (i *internalWorklogRichTextImpl) Add(ctx context.Context, issueKeyOrID stri
 func (i *internalWorklogRichTextImpl) Update(ctx context.Context, issueKeyOrID, worklogId string, payload *model.WorklogRichTextPayloadScheme, options *model.WorklogOptionsScheme) (*model.IssueWorklogRichTextScheme, *model.ResponseScheme, error) {
 
 	if issueKeyOrID == "" {
-		return nil, nil, model.ErrNoIssueKeyOrIDError
+		return nil, nil, model.ErrNoIssueKeyOrID
 	}
 
 	if worklogId == "" {
-		return nil, nil, model.ErrNoWorklogIDError
+		return nil, nil, model.ErrNoWorklogID
 	}
 
 	var endpoint strings.Builder

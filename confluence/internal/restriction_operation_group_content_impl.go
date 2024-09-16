@@ -67,15 +67,15 @@ type internalRestrictionOperationGroupImpl struct {
 func (i *internalRestrictionOperationGroupImpl) Get(ctx context.Context, contentID, operationKey, groupNameOrID string) (*model.ResponseScheme, error) {
 
 	if contentID == "" {
-		return nil, model.ErrNoContentIDError
+		return nil, model.ErrNoContentID
 	}
 
 	if operationKey == "" {
-		return nil, model.ErrNoContentRestrictionKeyError
+		return nil, model.ErrNoContentRestrictionKey
 	}
 
 	if groupNameOrID == "" {
-		return nil, model.ErrNoConfluenceGroupError
+		return nil, model.ErrNoConfluenceGroup
 	}
 
 	var endpoint strings.Builder
@@ -102,15 +102,15 @@ func (i *internalRestrictionOperationGroupImpl) Get(ctx context.Context, content
 func (i *internalRestrictionOperationGroupImpl) Add(ctx context.Context, contentID, operationKey, groupNameOrID string) (*model.ResponseScheme, error) {
 
 	if contentID == "" {
-		return nil, model.ErrNoContentIDError
+		return nil, model.ErrNoContentID
 	}
 
 	if operationKey == "" {
-		return nil, model.ErrNoContentRestrictionKeyError
+		return nil, model.ErrNoContentRestrictionKey
 	}
 
 	if groupNameOrID == "" {
-		return nil, model.ErrNoConfluenceGroupError
+		return nil, model.ErrNoConfluenceGroup
 	}
 
 	var endpoint strings.Builder
@@ -137,15 +137,15 @@ func (i *internalRestrictionOperationGroupImpl) Add(ctx context.Context, content
 func (i *internalRestrictionOperationGroupImpl) Remove(ctx context.Context, contentID, operationKey, groupNameOrID string) (*model.ResponseScheme, error) {
 
 	if contentID == "" {
-		return nil, model.ErrNoContentIDError
+		return nil, model.ErrNoContentID
 	}
 
 	if operationKey == "" {
-		return nil, model.ErrNoContentRestrictionKeyError
+		return nil, model.ErrNoContentRestrictionKey
 	}
 
 	if groupNameOrID == "" {
-		return nil, model.ErrNoConfluenceGroupError
+		return nil, model.ErrNoConfluenceGroup
 	}
 
 	var endpoint strings.Builder

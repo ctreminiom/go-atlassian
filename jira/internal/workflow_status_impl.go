@@ -109,7 +109,7 @@ type internalWorkflowStatusImpl struct {
 func (i *internalWorkflowStatusImpl) Get(ctx context.Context, idOrName string) (*model.StatusDetailScheme, *model.ResponseScheme, error) {
 
 	if idOrName == "" {
-		return nil, nil, model.ErrNoWorkflowStatusNameOrIdError
+		return nil, nil, model.ErrNoWorkflowStatusNameOrId
 	}
 
 	endpoint := fmt.Sprintf("/rest/api/%v/status/%v", i.version, idOrName)
@@ -193,11 +193,11 @@ func (i *internalWorkflowStatusImpl) Update(ctx context.Context, payload *model.
 func (i *internalWorkflowStatusImpl) Create(ctx context.Context, payload *model.WorkflowStatusPayloadScheme) ([]*model.WorkflowStatusDetailScheme, *model.ResponseScheme, error) {
 
 	if len(payload.Statuses) == 0 {
-		return nil, nil, model.ErrNoWorkflowStatusesError
+		return nil, nil, model.ErrNoWorkflowStatuses
 	}
 
 	if payload.Scope == nil {
-		return nil, nil, model.ErrNoWorkflowScopeError
+		return nil, nil, model.ErrNoWorkflowScope
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/statuses", i.version)
@@ -219,7 +219,7 @@ func (i *internalWorkflowStatusImpl) Create(ctx context.Context, payload *model.
 func (i *internalWorkflowStatusImpl) Delete(ctx context.Context, ids []string) (*model.ResponseScheme, error) {
 
 	if len(ids) == 0 {
-		return nil, model.ErrNoWorkflowStatusesError
+		return nil, model.ErrNoWorkflowStatuses
 	}
 
 	params := url.Values{}

@@ -179,7 +179,7 @@ func (i *internalIssueFieldServiceImpl) Search(ctx context.Context, options *mod
 func (i *internalIssueFieldServiceImpl) Delete(ctx context.Context, fieldID string) (*model.TaskScheme, *model.ResponseScheme, error) {
 
 	if fieldID == "" {
-		return nil, nil, model.ErrNoFieldIDError
+		return nil, nil, model.ErrNoFieldID
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/field/%v", i.version, fieldID)

@@ -222,7 +222,7 @@ func Test_internalContentImpl_Search(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoCQLError,
+			Err:     model.ErrNoCQL,
 		},
 	}
 
@@ -337,7 +337,7 @@ func Test_internalContentImpl_Get(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoContentIDError,
+			Err:     model.ErrNoContentID,
 		},
 	}
 
@@ -449,7 +449,7 @@ func Test_internalContentImpl_History(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoContentIDError,
+			Err:     model.ErrNoContentID,
 		},
 	}
 
@@ -560,7 +560,7 @@ func Test_internalContentImpl_Delete(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoContentIDError,
+			Err:     model.ErrNoContentID,
 		},
 	}
 
@@ -793,7 +793,7 @@ func Test_internalContentImpl_Update(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoContentIDError,
+			Err:     model.ErrNoContentID,
 		},
 	}
 

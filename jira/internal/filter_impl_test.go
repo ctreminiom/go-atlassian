@@ -631,7 +631,7 @@ func TestFilterService_Get(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoFilterIDError,
+			Err:     model.ErrNoFilterID,
 		},
 		{
 			name:   "when the api version is v2",
@@ -785,7 +785,7 @@ func TestFilterService_Update(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoFilterIDError,
+			Err:     model.ErrNoFilterID,
 		},
 		{
 			name:   "when the api version is v2",
@@ -933,7 +933,7 @@ func TestFilterService_Delete(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoFilterIDError,
+			Err:     model.ErrNoFilterID,
 		},
 		{
 			name:   "when the api version is v2",
@@ -1139,7 +1139,7 @@ func TestFilterService_Change(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoFilterIDError,
+			Err:     model.ErrNoFilterID,
 		},
 
 		{
@@ -1151,7 +1151,7 @@ func TestFilterService_Change(t *testing.T) {
 				accountID: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoAccountIDError,
+			Err:     model.ErrNoAccountID,
 		},
 
 		{

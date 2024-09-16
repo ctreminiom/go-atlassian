@@ -94,7 +94,7 @@ func Test_internalAttachmentVersionImpl_Gets(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoContentAttachmentIDError,
+			Err:     model.ErrNoContentAttachmentID,
 		},
 	}
 
@@ -208,7 +208,7 @@ func Test_internalAttachmentVersionImpl_Get(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoContentAttachmentIDError,
+			Err:     model.ErrNoContentAttachmentID,
 		},
 	}
 

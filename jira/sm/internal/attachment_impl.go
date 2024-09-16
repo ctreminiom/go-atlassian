@@ -54,7 +54,7 @@ type internalServiceRequestAttachmentImpl struct {
 func (i *internalServiceRequestAttachmentImpl) Gets(ctx context.Context, issueKeyOrID string, start, limit int) (*model.RequestAttachmentPageScheme, *model.ResponseScheme, error) {
 
 	if issueKeyOrID == "" {
-		return nil, nil, model.ErrNoIssueKeyOrIDError
+		return nil, nil, model.ErrNoIssueKeyOrID
 	}
 
 	params := url.Values{}
@@ -80,11 +80,11 @@ func (i *internalServiceRequestAttachmentImpl) Gets(ctx context.Context, issueKe
 func (i *internalServiceRequestAttachmentImpl) Create(ctx context.Context, issueKeyOrID string, payload *model.RequestAttachmentCreationPayloadScheme) (*model.RequestAttachmentCreationScheme, *model.ResponseScheme, error) {
 
 	if issueKeyOrID == "" {
-		return nil, nil, model.ErrNoIssueKeyOrIDError
+		return nil, nil, model.ErrNoIssueKeyOrID
 	}
 
 	if len(payload.TemporaryAttachmentIDs) == 0 {
-		return nil, nil, model.ErrNoAttachmentIDError
+		return nil, nil, model.ErrNoAttachmentID
 	}
 
 	url := fmt.Sprintf("rest/servicedeskapi/request/%v/attachment", issueKeyOrID)

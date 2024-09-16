@@ -84,11 +84,11 @@ type internalOrganizationDirectoryServiceImpl struct {
 func (i *internalOrganizationDirectoryServiceImpl) Activity(ctx context.Context, organizationID, accountID string) (*model.UserProductAccessScheme, *model.ResponseScheme, error) {
 
 	if organizationID == "" {
-		return nil, nil, model.ErrNoAdminOrganizationError
+		return nil, nil, model.ErrNoAdminOrganization
 	}
 
 	if accountID == "" {
-		return nil, nil, model.ErrNoAdminAccountIDError
+		return nil, nil, model.ErrNoAdminAccountID
 	}
 
 	endpoint := fmt.Sprintf("admin/v1/orgs/%v/directory/users/%v/last-active-dates", organizationID, accountID)
@@ -110,11 +110,11 @@ func (i *internalOrganizationDirectoryServiceImpl) Activity(ctx context.Context,
 func (i *internalOrganizationDirectoryServiceImpl) Remove(ctx context.Context, organizationID, accountID string) (*model.ResponseScheme, error) {
 
 	if organizationID == "" {
-		return nil, model.ErrNoAdminOrganizationError
+		return nil, model.ErrNoAdminOrganization
 	}
 
 	if accountID == "" {
-		return nil, model.ErrNoAdminAccountIDError
+		return nil, model.ErrNoAdminAccountID
 	}
 
 	endpoint := fmt.Sprintf("admin/v1/orgs/%v/directory/users/%v", organizationID, accountID)
@@ -130,11 +130,11 @@ func (i *internalOrganizationDirectoryServiceImpl) Remove(ctx context.Context, o
 func (i *internalOrganizationDirectoryServiceImpl) Suspend(ctx context.Context, organizationID, accountID string) (*model.GenericActionSuccessScheme, *model.ResponseScheme, error) {
 
 	if organizationID == "" {
-		return nil, nil, model.ErrNoAdminOrganizationError
+		return nil, nil, model.ErrNoAdminOrganization
 	}
 
 	if accountID == "" {
-		return nil, nil, model.ErrNoAdminAccountIDError
+		return nil, nil, model.ErrNoAdminAccountID
 	}
 
 	endpoint := fmt.Sprintf("admin/v1/orgs/%v/directory/users/%v/suspend-access", organizationID, accountID)
@@ -156,11 +156,11 @@ func (i *internalOrganizationDirectoryServiceImpl) Suspend(ctx context.Context, 
 func (i *internalOrganizationDirectoryServiceImpl) Restore(ctx context.Context, organizationID, accountID string) (*model.GenericActionSuccessScheme, *model.ResponseScheme, error) {
 
 	if organizationID == "" {
-		return nil, nil, model.ErrNoAdminOrganizationError
+		return nil, nil, model.ErrNoAdminOrganization
 	}
 
 	if accountID == "" {
-		return nil, nil, model.ErrNoAdminAccountIDError
+		return nil, nil, model.ErrNoAdminAccountID
 	}
 
 	endpoint := fmt.Sprintf("admin/v1/orgs/%v/directory/users/%v/restore-access", organizationID, accountID)

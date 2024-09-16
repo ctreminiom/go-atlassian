@@ -90,7 +90,7 @@ func Test_internalAnalyticsServiceImpl_Get(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoContentIDError,
+			Err:     model.ErrNoContentID,
 		},
 	}
 
@@ -200,7 +200,7 @@ func Test_internalAnalyticsServiceImpl_Distinct(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoContentIDError,
+			Err:     model.ErrNoContentID,
 		},
 	}
 

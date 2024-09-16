@@ -254,7 +254,7 @@ func Test_internalProjectComponentImpl_Update(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoComponentIDError,
+			Err:     model.ErrNoComponentID,
 		},
 
 		{
@@ -399,7 +399,7 @@ func Test_internalProjectComponentImpl_Gets(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoProjectIDOrKeyError,
+			Err:     model.ErrNoProjectIDOrKey,
 		},
 
 		{
@@ -543,7 +543,7 @@ func Test_internalProjectComponentImpl_Count(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoComponentIDError,
+			Err:     model.ErrNoComponentID,
 		},
 
 		{
@@ -687,7 +687,7 @@ func Test_internalProjectComponentImpl_Get(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoComponentIDError,
+			Err:     model.ErrNoComponentID,
 		},
 
 		{
@@ -831,7 +831,7 @@ func Test_internalProjectComponentImpl_Delete(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoComponentIDError,
+			Err:     model.ErrNoComponentID,
 		},
 
 		{

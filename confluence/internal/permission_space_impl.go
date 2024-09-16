@@ -68,7 +68,7 @@ type internalSpacePermissionImpl struct {
 func (i *internalSpacePermissionImpl) Add(ctx context.Context, spaceKey string, payload *model.SpacePermissionPayloadScheme) (*model.SpacePermissionV2Scheme, *model.ResponseScheme, error) {
 
 	if spaceKey == "" {
-		return nil, nil, model.ErrNoSpaceKeyError
+		return nil, nil, model.ErrNoSpaceKey
 	}
 
 	endpoint := fmt.Sprintf("wiki/rest/api/space/%v/permission", spaceKey)
@@ -90,7 +90,7 @@ func (i *internalSpacePermissionImpl) Add(ctx context.Context, spaceKey string, 
 func (i *internalSpacePermissionImpl) Bulk(ctx context.Context, spaceKey string, payload *model.SpacePermissionArrayPayloadScheme) (*model.ResponseScheme, error) {
 
 	if spaceKey == "" {
-		return nil, model.ErrNoSpaceKeyError
+		return nil, model.ErrNoSpaceKey
 	}
 
 	endpoint := fmt.Sprintf("wiki/rest/api/space/%v/permission/custom-content", spaceKey)
@@ -106,7 +106,7 @@ func (i *internalSpacePermissionImpl) Bulk(ctx context.Context, spaceKey string,
 func (i *internalSpacePermissionImpl) Remove(ctx context.Context, spaceKey string, permissionID int) (*model.ResponseScheme, error) {
 
 	if spaceKey == "" {
-		return nil, model.ErrNoSpaceKeyError
+		return nil, model.ErrNoSpaceKey
 	}
 
 	endpoint := fmt.Sprintf("wiki/rest/api/space/%v/permission/%v", spaceKey, permissionID)

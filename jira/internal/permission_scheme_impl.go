@@ -113,7 +113,7 @@ func (i *internalPermissionSchemeImpl) Gets(ctx context.Context) (*model.Permiss
 func (i *internalPermissionSchemeImpl) Get(ctx context.Context, permissionSchemeID int, expand []string) (*model.PermissionSchemeScheme, *model.ResponseScheme, error) {
 
 	if permissionSchemeID == 0 {
-		return nil, nil, model.ErrNoPermissionSchemeIDError
+		return nil, nil, model.ErrNoPermissionSchemeID
 	}
 
 	var endpoint strings.Builder
@@ -144,7 +144,7 @@ func (i *internalPermissionSchemeImpl) Get(ctx context.Context, permissionScheme
 func (i *internalPermissionSchemeImpl) Delete(ctx context.Context, permissionSchemeID int) (*model.ResponseScheme, error) {
 
 	if permissionSchemeID == 0 {
-		return nil, model.ErrNoPermissionSchemeIDError
+		return nil, model.ErrNoPermissionSchemeID
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/permissionscheme/%v", i.version, permissionSchemeID)
@@ -178,7 +178,7 @@ func (i *internalPermissionSchemeImpl) Create(ctx context.Context, payload *mode
 func (i *internalPermissionSchemeImpl) Update(ctx context.Context, permissionSchemeID int, payload *model.PermissionSchemeScheme) (*model.PermissionSchemeScheme, *model.ResponseScheme, error) {
 
 	if permissionSchemeID == 0 {
-		return nil, nil, model.ErrNoPermissionSchemeIDError
+		return nil, nil, model.ErrNoPermissionSchemeID
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/permissionscheme/%v", i.version, permissionSchemeID)

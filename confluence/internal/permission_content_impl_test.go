@@ -98,7 +98,7 @@ func Test_internalPermissionImpl_Check(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoContentIDError,
+			Err:     model.ErrNoContentID,
 		},
 	}
 

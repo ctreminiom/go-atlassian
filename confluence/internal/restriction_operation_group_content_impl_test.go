@@ -91,7 +91,7 @@ func Test_internalRestrictionOperationGroupImpl_Get(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoContentIDError,
+			Err:     model.ErrNoContentID,
 		},
 
 		{
@@ -101,7 +101,7 @@ func Test_internalRestrictionOperationGroupImpl_Get(t *testing.T) {
 				contentID: "1111",
 			},
 			wantErr: true,
-			Err:     model.ErrNoContentRestrictionKeyError,
+			Err:     model.ErrNoContentRestrictionKey,
 		},
 
 		{
@@ -112,7 +112,7 @@ func Test_internalRestrictionOperationGroupImpl_Get(t *testing.T) {
 				operationKey: "read",
 			},
 			wantErr: true,
-			Err:     model.ErrNoConfluenceGroupError,
+			Err:     model.ErrNoConfluenceGroup,
 		},
 	}
 
@@ -226,7 +226,7 @@ func Test_internalRestrictionOperationGroupImpl_Add(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoContentIDError,
+			Err:     model.ErrNoContentID,
 		},
 
 		{
@@ -236,7 +236,7 @@ func Test_internalRestrictionOperationGroupImpl_Add(t *testing.T) {
 				contentID: "1111",
 			},
 			wantErr: true,
-			Err:     model.ErrNoContentRestrictionKeyError,
+			Err:     model.ErrNoContentRestrictionKey,
 		},
 
 		{
@@ -247,7 +247,7 @@ func Test_internalRestrictionOperationGroupImpl_Add(t *testing.T) {
 				operationKey: "read",
 			},
 			wantErr: true,
-			Err:     model.ErrNoConfluenceGroupError,
+			Err:     model.ErrNoConfluenceGroup,
 		},
 	}
 
@@ -390,7 +390,7 @@ func Test_internalRestrictionOperationGroupImpl_Remove(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoContentIDError,
+			Err:     model.ErrNoContentID,
 		},
 
 		{
@@ -400,7 +400,7 @@ func Test_internalRestrictionOperationGroupImpl_Remove(t *testing.T) {
 				contentID: "1111",
 			},
 			wantErr: true,
-			Err:     model.ErrNoContentRestrictionKeyError,
+			Err:     model.ErrNoContentRestrictionKey,
 		},
 
 		{
@@ -411,7 +411,7 @@ func Test_internalRestrictionOperationGroupImpl_Remove(t *testing.T) {
 				operationKey: "read",
 			},
 			wantErr: true,
-			Err:     model.ErrNoConfluenceGroupError,
+			Err:     model.ErrNoConfluenceGroup,
 		},
 	}
 

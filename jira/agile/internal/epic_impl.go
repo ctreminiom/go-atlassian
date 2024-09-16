@@ -79,7 +79,7 @@ type internalEpicImpl struct {
 func (i *internalEpicImpl) Get(ctx context.Context, epicIDOrKey string) (*model.EpicScheme, *model.ResponseScheme, error) {
 
 	if epicIDOrKey == "" {
-		return nil, nil, model.ErrNoEpicIDError
+		return nil, nil, model.ErrNoEpicID
 	}
 
 	url := fmt.Sprintf("rest/agile/%v/epic/%v", i.version, epicIDOrKey)
@@ -101,7 +101,7 @@ func (i *internalEpicImpl) Get(ctx context.Context, epicIDOrKey string) (*model.
 func (i *internalEpicImpl) Issues(ctx context.Context, epicIDOrKey string, opts *model.IssueOptionScheme, startAt, maxResults int) (*model.BoardIssuePageScheme, *model.ResponseScheme, error) {
 
 	if epicIDOrKey == "" {
-		return nil, nil, model.ErrNoEpicIDError
+		return nil, nil, model.ErrNoEpicID
 	}
 
 	params := url.Values{}
@@ -144,7 +144,7 @@ func (i *internalEpicImpl) Issues(ctx context.Context, epicIDOrKey string, opts 
 func (i *internalEpicImpl) Move(ctx context.Context, epicIDOrKey string, issues []string) (*model.ResponseScheme, error) {
 
 	if epicIDOrKey == "" {
-		return nil, model.ErrNoEpicIDError
+		return nil, model.ErrNoEpicID
 	}
 
 	payload := map[string]interface{}{"issues": issues}

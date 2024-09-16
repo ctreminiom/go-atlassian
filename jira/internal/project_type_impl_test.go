@@ -358,7 +358,7 @@ func Test_internalProjectTypeImpl_Get(t *testing.T) {
 				projectTypeKey: "",
 			},
 			wantErr: true,
-			Err:     model.ErrProjectTypeKeyError,
+			Err:     model.ErrProjectTypeKey,
 		},
 
 		{
@@ -503,7 +503,7 @@ func Test_internalProjectTypeImpl_Accessible(t *testing.T) {
 				projectTypeKey: "",
 			},
 			wantErr: true,
-			Err:     model.ErrProjectTypeKeyError,
+			Err:     model.ErrProjectTypeKey,
 		},
 
 		{

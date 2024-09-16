@@ -125,7 +125,7 @@ type internalObjectImpl struct {
 func (i *internalObjectImpl) Search(ctx context.Context, workspaceID string, payload *model.ObjectSearchParamsScheme) (*model.ObjectListScheme, *model.ResponseScheme, error) {
 
 	if workspaceID == "" {
-		return nil, nil, model.ErrNoWorkspaceIDError
+		return nil, nil, model.ErrNoWorkspaceID
 	}
 
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/object/navlist/aql", workspaceID)
@@ -148,11 +148,11 @@ func (i *internalObjectImpl) Search(ctx context.Context, workspaceID string, pay
 func (i *internalObjectImpl) Filter(ctx context.Context, workspaceID, aql string, attributes bool, startAt, maxResults int) (*model.ObjectListResultScheme, *model.ResponseScheme, error) {
 
 	if workspaceID == "" {
-		return nil, nil, model.ErrNoWorkspaceIDError
+		return nil, nil, model.ErrNoWorkspaceID
 	}
 
 	if aql == "" {
-		return nil, nil, model.ErrNoAqlQueryError
+		return nil, nil, model.ErrNoAqlQuery
 	}
 
 	params := url.Values{}
@@ -182,11 +182,11 @@ func (i *internalObjectImpl) Filter(ctx context.Context, workspaceID, aql string
 func (i *internalObjectImpl) Get(ctx context.Context, workspaceID, objectID string) (*model.ObjectScheme, *model.ResponseScheme, error) {
 
 	if workspaceID == "" {
-		return nil, nil, model.ErrNoWorkspaceIDError
+		return nil, nil, model.ErrNoWorkspaceID
 	}
 
 	if objectID == "" {
-		return nil, nil, model.ErrNoObjectIDError
+		return nil, nil, model.ErrNoObjectID
 	}
 
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/object/%v", workspaceID, objectID)
@@ -208,11 +208,11 @@ func (i *internalObjectImpl) Get(ctx context.Context, workspaceID, objectID stri
 func (i *internalObjectImpl) Update(ctx context.Context, workspaceID, objectID string, payload *model.ObjectPayloadScheme) (*model.ObjectScheme, *model.ResponseScheme, error) {
 
 	if workspaceID == "" {
-		return nil, nil, model.ErrNoWorkspaceIDError
+		return nil, nil, model.ErrNoWorkspaceID
 	}
 
 	if objectID == "" {
-		return nil, nil, model.ErrNoObjectIDError
+		return nil, nil, model.ErrNoObjectID
 	}
 
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/object/%v", workspaceID, objectID)
@@ -234,11 +234,11 @@ func (i *internalObjectImpl) Update(ctx context.Context, workspaceID, objectID s
 func (i *internalObjectImpl) Delete(ctx context.Context, workspaceID, objectID string) (*model.ResponseScheme, error) {
 
 	if workspaceID == "" {
-		return nil, model.ErrNoWorkspaceIDError
+		return nil, model.ErrNoWorkspaceID
 	}
 
 	if objectID == "" {
-		return nil, model.ErrNoObjectIDError
+		return nil, model.ErrNoObjectID
 	}
 
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/object/%v", workspaceID, objectID)
@@ -254,11 +254,11 @@ func (i *internalObjectImpl) Delete(ctx context.Context, workspaceID, objectID s
 func (i *internalObjectImpl) Attributes(ctx context.Context, workspaceID, objectID string) ([]*model.ObjectAttributeScheme, *model.ResponseScheme, error) {
 
 	if workspaceID == "" {
-		return nil, nil, model.ErrNoWorkspaceIDError
+		return nil, nil, model.ErrNoWorkspaceID
 	}
 
 	if objectID == "" {
-		return nil, nil, model.ErrNoObjectIDError
+		return nil, nil, model.ErrNoObjectID
 	}
 
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/object/%v/attributes", workspaceID, objectID)
@@ -280,11 +280,11 @@ func (i *internalObjectImpl) Attributes(ctx context.Context, workspaceID, object
 func (i *internalObjectImpl) History(ctx context.Context, workspaceID, objectID string, ascOrder bool) ([]*model.ObjectHistoryScheme, *model.ResponseScheme, error) {
 
 	if workspaceID == "" {
-		return nil, nil, model.ErrNoWorkspaceIDError
+		return nil, nil, model.ErrNoWorkspaceID
 	}
 
 	if objectID == "" {
-		return nil, nil, model.ErrNoObjectIDError
+		return nil, nil, model.ErrNoObjectID
 	}
 
 	var endpoint strings.Builder
@@ -315,11 +315,11 @@ func (i *internalObjectImpl) History(ctx context.Context, workspaceID, objectID 
 func (i *internalObjectImpl) References(ctx context.Context, workspaceID, objectID string) ([]*model.ObjectReferenceTypeInfoScheme, *model.ResponseScheme, error) {
 
 	if workspaceID == "" {
-		return nil, nil, model.ErrNoWorkspaceIDError
+		return nil, nil, model.ErrNoWorkspaceID
 	}
 
 	if objectID == "" {
-		return nil, nil, model.ErrNoObjectIDError
+		return nil, nil, model.ErrNoObjectID
 	}
 
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/object/%v/referenceinfo", workspaceID, objectID)
@@ -341,7 +341,7 @@ func (i *internalObjectImpl) References(ctx context.Context, workspaceID, object
 func (i *internalObjectImpl) Create(ctx context.Context, workspaceID string, payload *model.ObjectPayloadScheme) (*model.ObjectScheme, *model.ResponseScheme, error) {
 
 	if workspaceID == "" {
-		return nil, nil, model.ErrNoWorkspaceIDError
+		return nil, nil, model.ErrNoWorkspaceID
 	}
 
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/object/create", workspaceID)
@@ -363,11 +363,11 @@ func (i *internalObjectImpl) Create(ctx context.Context, workspaceID string, pay
 func (i *internalObjectImpl) Relation(ctx context.Context, workspaceID, objectID string) (*model.TicketPageScheme, *model.ResponseScheme, error) {
 
 	if workspaceID == "" {
-		return nil, nil, model.ErrNoWorkspaceIDError
+		return nil, nil, model.ErrNoWorkspaceID
 	}
 
 	if objectID == "" {
-		return nil, nil, model.ErrNoObjectIDError
+		return nil, nil, model.ErrNoObjectID
 	}
 
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/objectconnectedtickets/%v/tickets", workspaceID, objectID)

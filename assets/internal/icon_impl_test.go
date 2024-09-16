@@ -91,7 +91,7 @@ func Test_internalIconImpl_Get(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoWorkspaceIDError,
+			Err:     model.ErrNoWorkspaceID,
 		},
 
 		{
@@ -101,7 +101,7 @@ func Test_internalIconImpl_Get(t *testing.T) {
 				workspaceID: "workspace-uuid-sample",
 			},
 			wantErr: true,
-			Err:     model.ErrNoIconIDError,
+			Err:     model.ErrNoIconID,
 		},
 	}
 
@@ -211,7 +211,7 @@ func Test_internalIconImpl_Global(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoWorkspaceIDError,
+			Err:     model.ErrNoWorkspaceID,
 		},
 	}
 

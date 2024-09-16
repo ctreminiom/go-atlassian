@@ -107,7 +107,7 @@ func (i *internalProjectTypeImpl) Licensed(ctx context.Context) ([]*model.Projec
 func (i *internalProjectTypeImpl) Get(ctx context.Context, projectTypeKey string) (*model.ProjectTypeScheme, *model.ResponseScheme, error) {
 
 	if projectTypeKey == "" {
-		return nil, nil, model.ErrProjectTypeKeyError
+		return nil, nil, model.ErrProjectTypeKey
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/project/type/%v", i.version, projectTypeKey)
@@ -129,7 +129,7 @@ func (i *internalProjectTypeImpl) Get(ctx context.Context, projectTypeKey string
 func (i *internalProjectTypeImpl) Accessible(ctx context.Context, projectTypeKey string) (*model.ProjectTypeScheme, *model.ResponseScheme, error) {
 
 	if projectTypeKey == "" {
-		return nil, nil, model.ErrProjectTypeKeyError
+		return nil, nil, model.ErrProjectTypeKey
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/project/type/%v/accessible", i.version, projectTypeKey)

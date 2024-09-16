@@ -91,7 +91,7 @@ func Test_internalRestrictionOperationUserImpl_Get(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoContentIDError,
+			Err:     model.ErrNoContentID,
 		},
 
 		{
@@ -101,7 +101,7 @@ func Test_internalRestrictionOperationUserImpl_Get(t *testing.T) {
 				contentID: "1111",
 			},
 			wantErr: true,
-			Err:     model.ErrNoContentRestrictionKeyError,
+			Err:     model.ErrNoContentRestrictionKey,
 		},
 
 		{
@@ -112,7 +112,7 @@ func Test_internalRestrictionOperationUserImpl_Get(t *testing.T) {
 				operationKey: "read",
 			},
 			wantErr: true,
-			Err:     model.ErrNoAccountIDError,
+			Err:     model.ErrNoAccountID,
 		},
 	}
 
@@ -226,7 +226,7 @@ func Test_internalRestrictionOperationUserImpl_Add(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoContentIDError,
+			Err:     model.ErrNoContentID,
 		},
 
 		{
@@ -236,7 +236,7 @@ func Test_internalRestrictionOperationUserImpl_Add(t *testing.T) {
 				contentID: "1111",
 			},
 			wantErr: true,
-			Err:     model.ErrNoContentRestrictionKeyError,
+			Err:     model.ErrNoContentRestrictionKey,
 		},
 
 		{
@@ -247,7 +247,7 @@ func Test_internalRestrictionOperationUserImpl_Add(t *testing.T) {
 				operationKey: "read",
 			},
 			wantErr: true,
-			Err:     model.ErrNoAccountIDError,
+			Err:     model.ErrNoAccountID,
 		},
 	}
 
@@ -361,7 +361,7 @@ func Test_internalRestrictionOperationUserImpl_Remove(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoContentIDError,
+			Err:     model.ErrNoContentID,
 		},
 
 		{
@@ -371,7 +371,7 @@ func Test_internalRestrictionOperationUserImpl_Remove(t *testing.T) {
 				contentID: "1111",
 			},
 			wantErr: true,
-			Err:     model.ErrNoContentRestrictionKeyError,
+			Err:     model.ErrNoContentRestrictionKey,
 		},
 
 		{
@@ -382,7 +382,7 @@ func Test_internalRestrictionOperationUserImpl_Remove(t *testing.T) {
 				operationKey: "read",
 			},
 			wantErr: true,
-			Err:     model.ErrNoAccountIDError,
+			Err:     model.ErrNoAccountID,
 		},
 	}
 

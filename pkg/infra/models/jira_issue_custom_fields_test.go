@@ -119,7 +119,7 @@ func TestParseMultiSelectCustomField(t *testing.T) {
 			},
 			want:    nil,
 			wantErr: true,
-			Err:     ErrNoMultiSelectTypeError,
+			Err:     ErrNoMultiSelectType,
 		},
 
 		{
@@ -130,7 +130,7 @@ func TestParseMultiSelectCustomField(t *testing.T) {
 			},
 			want:    nil,
 			wantErr: true,
-			Err:     ErrNoFieldInformationError,
+			Err:     ErrNoFieldInformation,
 		},
 
 		{
@@ -141,7 +141,7 @@ func TestParseMultiSelectCustomField(t *testing.T) {
 			},
 			want:    nil,
 			wantErr: true,
-			Err:     ErrNoMultiSelectTypeError,
+			Err:     ErrNoMultiSelectType,
 		},
 
 		{
@@ -152,7 +152,7 @@ func TestParseMultiSelectCustomField(t *testing.T) {
 			},
 			want:    nil,
 			wantErr: true,
-			Err:     ErrNoFieldInformationError,
+			Err:     ErrNoFieldInformation,
 		},
 	}
 	for _, testCase := range testCases {
@@ -272,7 +272,7 @@ func TestParseMultiGroupPickerField(t *testing.T) {
 			},
 			want:    nil,
 			wantErr: true,
-			Err:     ErrNoMultiSelectTypeError,
+			Err:     ErrNoMultiSelectType,
 		},
 
 		{
@@ -283,7 +283,7 @@ func TestParseMultiGroupPickerField(t *testing.T) {
 			},
 			want:    nil,
 			wantErr: true,
-			Err:     ErrNoFieldInformationError,
+			Err:     ErrNoFieldInformation,
 		},
 
 		{
@@ -294,7 +294,7 @@ func TestParseMultiGroupPickerField(t *testing.T) {
 			},
 			want:    nil,
 			wantErr: true,
-			Err:     ErrNoMultiSelectTypeError,
+			Err:     ErrNoMultiSelectType,
 		},
 
 		{
@@ -305,7 +305,7 @@ func TestParseMultiGroupPickerField(t *testing.T) {
 			},
 			want:    nil,
 			wantErr: true,
-			Err:     ErrNoFieldInformationError,
+			Err:     ErrNoFieldInformation,
 		},
 	}
 	for _, testCase := range testCases {
@@ -495,7 +495,7 @@ func TestParseMultiUserPickerField(t *testing.T) {
 			},
 			want:    nil,
 			wantErr: true,
-			Err:     ErrNoMultiSelectTypeError,
+			Err:     ErrNoMultiSelectType,
 		},
 
 		{
@@ -507,7 +507,7 @@ func TestParseMultiUserPickerField(t *testing.T) {
 			want:    nil,
 			want1:   false,
 			wantErr: true,
-			Err:     ErrNoFieldInformationError,
+			Err:     ErrNoFieldInformation,
 		},
 
 		{
@@ -519,7 +519,7 @@ func TestParseMultiUserPickerField(t *testing.T) {
 			want:    nil,
 			want1:   false,
 			wantErr: true,
-			Err:     ErrNoMultiSelectTypeError,
+			Err:     ErrNoMultiSelectType,
 		},
 
 		{
@@ -531,7 +531,7 @@ func TestParseMultiUserPickerField(t *testing.T) {
 			want:    nil,
 			want1:   false,
 			wantErr: true,
-			Err:     ErrNoFieldInformationError,
+			Err:     ErrNoFieldInformation,
 		},
 	}
 	for _, testCase := range testCases {
@@ -648,7 +648,7 @@ func TestParseCascadingSelectField(t *testing.T) {
 			want:    nil,
 			want1:   false,
 			wantErr: true,
-			Err:     ErrNoCascadingParentError,
+			Err:     ErrNoCascadingParent,
 		},
 
 		{
@@ -660,7 +660,7 @@ func TestParseCascadingSelectField(t *testing.T) {
 			want:    nil,
 			want1:   false,
 			wantErr: true,
-			Err:     ErrNoFieldInformationError,
+			Err:     ErrNoFieldInformation,
 		},
 
 		{
@@ -672,7 +672,7 @@ func TestParseCascadingSelectField(t *testing.T) {
 			want:    nil,
 			want1:   false,
 			wantErr: true,
-			Err:     ErrNoCascadingParentError,
+			Err:     ErrNoCascadingParent,
 		},
 
 		{
@@ -684,7 +684,7 @@ func TestParseCascadingSelectField(t *testing.T) {
 			want:    nil,
 			want1:   false,
 			wantErr: true,
-			Err:     ErrNoFieldInformationError,
+			Err:     ErrNoFieldInformation,
 		},
 	}
 	for _, testCase := range testCases {
@@ -832,7 +832,7 @@ func TestParseMultiVersionCustomField(t *testing.T) {
 			want:    nil,
 			want1:   false,
 			wantErr: true,
-			Err:     ErrNoMultiVersionTypeError,
+			Err:     ErrNoMultiVersionType,
 		},
 
 		{
@@ -844,7 +844,7 @@ func TestParseMultiVersionCustomField(t *testing.T) {
 			want:    nil,
 			want1:   false,
 			wantErr: true,
-			Err:     ErrNoFieldInformationError,
+			Err:     ErrNoFieldInformation,
 		},
 
 		{
@@ -856,7 +856,7 @@ func TestParseMultiVersionCustomField(t *testing.T) {
 			want:    nil,
 			want1:   false,
 			wantErr: true,
-			Err:     ErrNoMultiSelectTypeError,
+			Err:     ErrNoMultiSelectType,
 		},
 
 		{
@@ -868,7 +868,7 @@ func TestParseMultiVersionCustomField(t *testing.T) {
 			want:    nil,
 			want1:   false,
 			wantErr: true,
-			Err:     ErrNoFieldInformationError,
+			Err:     ErrNoFieldInformation,
 		},
 	}
 	for _, testCase := range testCases {
@@ -994,7 +994,7 @@ func TestParseUserPickerCustomField(t *testing.T) {
 			want:    nil,
 			want1:   false,
 			wantErr: true,
-			Err:     ErrNoUserTypeError,
+			Err:     ErrNoUserType,
 		},
 
 		{
@@ -1006,7 +1006,7 @@ func TestParseUserPickerCustomField(t *testing.T) {
 			want:    nil,
 			want1:   false,
 			wantErr: true,
-			Err:     ErrNoFieldInformationError,
+			Err:     ErrNoFieldInformation,
 		},
 
 		{
@@ -1018,7 +1018,7 @@ func TestParseUserPickerCustomField(t *testing.T) {
 			want:    nil,
 			want1:   false,
 			wantErr: true,
-			Err:     ErrNoMultiSelectTypeError,
+			Err:     ErrNoMultiSelectType,
 		},
 
 		{
@@ -1030,7 +1030,7 @@ func TestParseUserPickerCustomField(t *testing.T) {
 			want:    nil,
 			want1:   false,
 			wantErr: true,
-			Err:     ErrNoFieldInformationError,
+			Err:     ErrNoFieldInformation,
 		},
 	}
 	for _, testCase := range testCases {
@@ -1118,7 +1118,7 @@ func TestParseStringCustomField(t *testing.T) {
 			},
 			want:    "",
 			wantErr: true,
-			Err:     ErrNoFieldInformationError,
+			Err:     ErrNoFieldInformation,
 		},
 
 		{
@@ -1129,7 +1129,7 @@ func TestParseStringCustomField(t *testing.T) {
 			},
 			want:    "",
 			wantErr: true,
-			Err:     ErrNoTextTypeError,
+			Err:     ErrNoTextType,
 		},
 
 		{
@@ -1140,7 +1140,7 @@ func TestParseStringCustomField(t *testing.T) {
 			},
 			want:    "",
 			wantErr: true,
-			Err:     ErrNoTextTypeError,
+			Err:     ErrNoTextType,
 		},
 	}
 	for _, testCase := range testCases {
@@ -1227,7 +1227,7 @@ func TestParseDatePickerCustomField(t *testing.T) {
 				customField: "customfield_10045",
 			},
 			wantErr: true,
-			Err:     ErrNoFieldInformationError,
+			Err:     ErrNoFieldInformation,
 		},
 
 		{
@@ -1237,7 +1237,7 @@ func TestParseDatePickerCustomField(t *testing.T) {
 				customField: "customfield_10045",
 			},
 			wantErr: true,
-			Err:     ErrNoDatePickerTypeError,
+			Err:     ErrNoDatePickerType,
 		},
 
 		{
@@ -1247,7 +1247,7 @@ func TestParseDatePickerCustomField(t *testing.T) {
 				customField: "customfield_10045",
 			},
 			wantErr: true,
-			Err:     ErrNoDatePickerTypeError,
+			Err:     ErrNoDatePickerType,
 		},
 	}
 	for _, testCase := range testCases {
@@ -1339,7 +1339,7 @@ func TestParseDateTimeCustomField(t *testing.T) {
 				customField: "customfield_10045",
 			},
 			wantErr: true,
-			Err:     ErrNoFieldInformationError,
+			Err:     ErrNoFieldInformation,
 		},
 
 		{
@@ -1349,7 +1349,7 @@ func TestParseDateTimeCustomField(t *testing.T) {
 				customField: "customfield_10045",
 			},
 			wantErr: true,
-			Err:     ErrNoDateTimeTypeError,
+			Err:     ErrNoDateTimeType,
 		},
 
 		{
@@ -1359,7 +1359,7 @@ func TestParseDateTimeCustomField(t *testing.T) {
 				customField: "customfield_10045",
 			},
 			wantErr: true,
-			Err:     ErrNoDateTimeTypeError,
+			Err:     ErrNoDateTimeType,
 		},
 	}
 	for _, testCase := range testCases {
@@ -1447,7 +1447,7 @@ func TestParseFloatCustomField(t *testing.T) {
 			},
 			want:    0,
 			wantErr: true,
-			Err:     ErrNoFloatTypeError,
+			Err:     ErrNoFloatType,
 		},
 
 		{
@@ -1458,7 +1458,7 @@ func TestParseFloatCustomField(t *testing.T) {
 			},
 			want:    0,
 			wantErr: true,
-			Err:     ErrNoFieldInformationError,
+			Err:     ErrNoFieldInformation,
 		},
 
 		{
@@ -1469,7 +1469,7 @@ func TestParseFloatCustomField(t *testing.T) {
 			},
 			want:    0,
 			wantErr: true,
-			Err:     ErrNoFloatTypeError,
+			Err:     ErrNoFloatType,
 		},
 
 		{
@@ -1480,7 +1480,7 @@ func TestParseFloatCustomField(t *testing.T) {
 			},
 			want:    0,
 			wantErr: true,
-			Err:     ErrNoFieldInformationError,
+			Err:     ErrNoFieldInformation,
 		},
 	}
 	for _, testCase := range testCases {
@@ -1574,7 +1574,7 @@ func TestParseLabelCustomField(t *testing.T) {
 			},
 			want:    nil,
 			wantErr: true,
-			Err:     ErrNoLabelsTypeError,
+			Err:     ErrNoLabelsType,
 		},
 
 		{
@@ -1585,7 +1585,7 @@ func TestParseLabelCustomField(t *testing.T) {
 			},
 			want:    nil,
 			wantErr: true,
-			Err:     ErrNoFieldInformationError,
+			Err:     ErrNoFieldInformation,
 		},
 
 		{
@@ -1596,7 +1596,7 @@ func TestParseLabelCustomField(t *testing.T) {
 			},
 			want:    nil,
 			wantErr: true,
-			Err:     ErrNoLabelsTypeError,
+			Err:     ErrNoLabelsType,
 		},
 
 		{
@@ -1607,7 +1607,7 @@ func TestParseLabelCustomField(t *testing.T) {
 			},
 			want:    nil,
 			wantErr: true,
-			Err:     ErrNoFieldInformationError,
+			Err:     ErrNoFieldInformation,
 		},
 	}
 	for _, testCase := range testCases {
@@ -1728,7 +1728,7 @@ func TestParseSprintCustomField(t *testing.T) {
 				customField: "customfield_10046",
 			},
 			wantErr: true,
-			Err:     ErrNoSprintTypeError,
+			Err:     ErrNoSprintType,
 		},
 
 		{
@@ -1740,7 +1740,7 @@ func TestParseSprintCustomField(t *testing.T) {
 			want:    nil,
 			want1:   false,
 			wantErr: true,
-			Err:     ErrNoFieldInformationError,
+			Err:     ErrNoFieldInformation,
 		},
 
 		{
@@ -1752,7 +1752,7 @@ func TestParseSprintCustomField(t *testing.T) {
 			want:    nil,
 			want1:   false,
 			wantErr: true,
-			Err:     ErrNoSprintTypeError,
+			Err:     ErrNoSprintType,
 		},
 
 		{
@@ -1764,7 +1764,7 @@ func TestParseSprintCustomField(t *testing.T) {
 			want:    nil,
 			want1:   false,
 			wantErr: true,
-			Err:     ErrNoFieldInformationError,
+			Err:     ErrNoFieldInformation,
 		},
 	}
 	for _, testCase := range testCases {
@@ -1862,7 +1862,7 @@ func TestParseSelectCustomField(t *testing.T) {
 			},
 			want:    nil,
 			wantErr: true,
-			Err:     ErrNoSelectTypeError,
+			Err:     ErrNoSelectType,
 		},
 
 		{
@@ -1873,7 +1873,7 @@ func TestParseSelectCustomField(t *testing.T) {
 			},
 			want:    nil,
 			wantErr: true,
-			Err:     ErrNoFieldInformationError,
+			Err:     ErrNoFieldInformation,
 		},
 
 		{
@@ -1884,7 +1884,7 @@ func TestParseSelectCustomField(t *testing.T) {
 			},
 			want:    nil,
 			wantErr: true,
-			Err:     ErrNoSelectTypeError,
+			Err:     ErrNoSelectType,
 		},
 
 		{
@@ -1895,7 +1895,7 @@ func TestParseSelectCustomField(t *testing.T) {
 			},
 			want:    nil,
 			wantErr: true,
-			Err:     ErrNoFieldInformationError,
+			Err:     ErrNoFieldInformation,
 		},
 	}
 	for _, testCase := range testCases {
@@ -2002,7 +2002,7 @@ func TestParseAssetCustomField(t *testing.T) {
 			},
 			want:    nil,
 			wantErr: true,
-			Err:     ErrNoAssetTypeError,
+			Err:     ErrNoAssetType,
 		},
 
 		{
@@ -2013,7 +2013,7 @@ func TestParseAssetCustomField(t *testing.T) {
 			},
 			want:    nil,
 			wantErr: true,
-			Err:     ErrNoFieldInformationError,
+			Err:     ErrNoFieldInformation,
 		},
 
 		{
@@ -2024,7 +2024,7 @@ func TestParseAssetCustomField(t *testing.T) {
 			},
 			want:    nil,
 			wantErr: true,
-			Err:     ErrNoAssetTypeError,
+			Err:     ErrNoAssetType,
 		},
 
 		{
@@ -2035,7 +2035,7 @@ func TestParseAssetCustomField(t *testing.T) {
 			},
 			want:    nil,
 			wantErr: true,
-			Err:     ErrNoFieldInformationError,
+			Err:     ErrNoFieldInformation,
 		},
 	}
 	for _, testCase := range testCases {
@@ -2219,7 +2219,7 @@ func TestParseRequestTypeCustomField(t *testing.T) {
 			},
 			want:    nil,
 			wantErr: true,
-			Err:     ErrNoRequestTypeError,
+			Err:     ErrNoRequestType,
 		},
 		{
 			name: "when the buffer contains no fields",
@@ -2229,7 +2229,7 @@ func TestParseRequestTypeCustomField(t *testing.T) {
 			},
 			want:    nil,
 			wantErr: true,
-			Err:     ErrNoFieldInformationError,
+			Err:     ErrNoFieldInformation,
 		},
 		{
 			name: "when the buffer contains wrong type",
@@ -2239,7 +2239,7 @@ func TestParseRequestTypeCustomField(t *testing.T) {
 			},
 			want:    nil,
 			wantErr: true,
-			Err:     ErrNoRequestTypeError,
+			Err:     ErrNoRequestType,
 		},
 	}
 	for _, tt := range tests {
@@ -2402,7 +2402,7 @@ func TestParseMultiSelectCustomFields(t *testing.T) {
 				customField: "customfield_10046",
 			},
 			wantErr: true,
-			Err:     ErrNoIssuesSliceError,
+			Err:     ErrNoIssuesSlice,
 		},
 
 		{
@@ -2681,7 +2681,7 @@ func TestParseMultiGroupPickerCustomFields(t *testing.T) {
 				customField: "customfield_10046",
 			},
 			wantErr: true,
-			Err:     ErrNoIssuesSliceError,
+			Err:     ErrNoIssuesSlice,
 		},
 
 		{
@@ -3149,7 +3149,7 @@ func TestParseMultiUserPickerCustomFields(t *testing.T) {
 				customField: "customfield_10046",
 			},
 			wantErr: true,
-			Err:     ErrNoIssuesSliceError,
+			Err:     ErrNoIssuesSlice,
 		},
 
 		{
@@ -3509,7 +3509,7 @@ func TestParseCascadingCustomFields(t *testing.T) {
 				customField: "customfield_10046",
 			},
 			wantErr: true,
-			Err:     ErrNoIssuesSliceError,
+			Err:     ErrNoIssuesSlice,
 		},
 
 		{
@@ -3540,7 +3540,7 @@ func TestParseCascadingCustomFields(t *testing.T) {
 				customField: "customfield_10046",
 			},
 			wantErr: true,
-			Err:     ErrNoMapValuesError,
+			Err:     ErrNoMapValues,
 		},
 	}
 	for _, testCase := range tests {
@@ -3829,7 +3829,7 @@ func TestParseMultiVersionCustomFields(t *testing.T) {
 				customField: "customfield_10046",
 			},
 			wantErr: true,
-			Err:     ErrNoIssuesSliceError,
+			Err:     ErrNoIssuesSlice,
 		},
 
 		{
@@ -3871,7 +3871,7 @@ func TestParseMultiVersionCustomFields(t *testing.T) {
 				customField: "customfield_10046",
 			},
 			wantErr: true,
-			Err:     ErrNoMapValuesError,
+			Err:     ErrNoMapValues,
 		},
 	}
 	for _, testCase := range tests {
@@ -4168,7 +4168,7 @@ func TestParseUserPickerCustomFields(t *testing.T) {
 				customField: "customfield_10046",
 			},
 			wantErr: true,
-			Err:     ErrNoIssuesSliceError,
+			Err:     ErrNoIssuesSlice,
 		},
 
 		{
@@ -4198,7 +4198,7 @@ func TestParseUserPickerCustomFields(t *testing.T) {
 				customField: "customfield_10046",
 			},
 			wantErr: true,
-			Err:     ErrNoMapValuesError,
+			Err:     ErrNoMapValues,
 		},
 	}
 	for _, testCase := range tests {
@@ -4437,7 +4437,7 @@ func TestParseStringCustomFields(t *testing.T) {
 				customField: "customfield_10046",
 			},
 			wantErr: true,
-			Err:     ErrNoIssuesSliceError,
+			Err:     ErrNoIssuesSlice,
 		},
 
 		{
@@ -4459,7 +4459,7 @@ func TestParseStringCustomFields(t *testing.T) {
 				customField: "customfield_10046",
 			},
 			wantErr: true,
-			Err:     ErrNoMapValuesError,
+			Err:     ErrNoMapValues,
 		},
 	}
 	for _, testCase := range tests {
@@ -4698,7 +4698,7 @@ func TestParseFloatCustomFields(t *testing.T) {
 				customField: "customfield_10046",
 			},
 			wantErr: true,
-			Err:     ErrNoIssuesSliceError,
+			Err:     ErrNoIssuesSlice,
 		},
 
 		{
@@ -4720,7 +4720,7 @@ func TestParseFloatCustomFields(t *testing.T) {
 				customField: "customfield_10046",
 			},
 			wantErr: true,
-			Err:     ErrNoMapValuesError,
+			Err:     ErrNoMapValues,
 		},
 	}
 	for _, testCase := range tests {
@@ -4959,7 +4959,7 @@ func TestParseLabelCustomFields(t *testing.T) {
 				customField: "customfield_10046",
 			},
 			wantErr: true,
-			Err:     ErrNoIssuesSliceError,
+			Err:     ErrNoIssuesSlice,
 		},
 
 		{
@@ -4981,7 +4981,7 @@ func TestParseLabelCustomFields(t *testing.T) {
 				customField: "customfield_10046",
 			},
 			wantErr: true,
-			Err:     ErrNoMapValuesError,
+			Err:     ErrNoMapValues,
 		},
 	}
 	for _, testCase := range tests {
@@ -5228,7 +5228,7 @@ func TestParseSprintCustomFields(t *testing.T) {
 				customField: "customfield_10046",
 			},
 			wantErr: true,
-			Err:     ErrNoIssuesSliceError,
+			Err:     ErrNoIssuesSlice,
 		},
 
 		{
@@ -5260,7 +5260,7 @@ func TestParseSprintCustomFields(t *testing.T) {
 				customField: "customfield_10046",
 			},
 			wantErr: true,
-			Err:     ErrNoMapValuesError,
+			Err:     ErrNoMapValues,
 		},
 	}
 	for _, testCase := range tests {
@@ -5472,7 +5472,7 @@ func TestParseSelectCustomFields(t *testing.T) {
 				customField: "customfield_10046",
 			},
 			wantErr: true,
-			Err:     ErrNoIssuesSliceError,
+			Err:     ErrNoIssuesSlice,
 		},
 
 		{
@@ -5497,7 +5497,7 @@ func TestParseSelectCustomFields(t *testing.T) {
 				customField: "customfield_10046",
 			},
 			wantErr: true,
-			Err:     ErrNoMapValuesError,
+			Err:     ErrNoMapValues,
 		},
 	}
 	for _, testCase := range tests {
@@ -5773,7 +5773,7 @@ func TestParseAssetCustomFields(t *testing.T) {
 				customField: "customfield_10046",
 			},
 			wantErr: true,
-			Err:     ErrNoIssuesSliceError,
+			Err:     ErrNoIssuesSlice,
 		},
 
 		{
@@ -6013,7 +6013,7 @@ func TestParseDatePickerCustomFields(t *testing.T) {
 				customField: "customfield_10046",
 			},
 			wantErr: true,
-			Err:     ErrNoIssuesSliceError,
+			Err:     ErrNoIssuesSlice,
 		},
 
 		{
@@ -6035,7 +6035,7 @@ func TestParseDatePickerCustomFields(t *testing.T) {
 				customField: "customfield_10046",
 			},
 			wantErr: true,
-			Err:     ErrNoMapValuesError,
+			Err:     ErrNoMapValues,
 		},
 	}
 	for _, testCase := range tests {
@@ -6234,7 +6234,7 @@ func TestParseDateTimeCustomFields(t *testing.T) {
 				customField: "customfield_10046",
 			},
 			wantErr: true,
-			Err:     ErrNoIssuesSliceError,
+			Err:     ErrNoIssuesSlice,
 		},
 
 		{
@@ -6256,7 +6256,7 @@ func TestParseDateTimeCustomFields(t *testing.T) {
 				customField: "customfield_10046",
 			},
 			wantErr: true,
-			Err:     ErrNoMapValuesError,
+			Err:     ErrNoMapValues,
 		},
 	}
 	for _, testCase := range tests {
@@ -6562,7 +6562,7 @@ func TestParseRequestTypeCustomFields(t *testing.T) {
 				customField: "customfield_10010",
 			},
 			wantErr: true,
-			Err:     ErrNoIssuesSliceError,
+			Err:     ErrNoIssuesSlice,
 		},
 		{
 			name: "when the buffer does not contain the fields object",
@@ -6571,7 +6571,7 @@ func TestParseRequestTypeCustomFields(t *testing.T) {
 				customField: "customfield_10010",
 			},
 			wantErr: true,
-			Err:     ErrNoMapValuesError,
+			Err:     ErrNoMapValues,
 		},
 		{
 			name: "when the buffer contains invalid types",
@@ -6580,7 +6580,7 @@ func TestParseRequestTypeCustomFields(t *testing.T) {
 				customField: "customfield_10010",
 			},
 			wantErr: true,
-			Err:     ErrNoMapValuesError,
+			Err:     ErrNoMapValues,
 		},
 	}
 	for _, testCase := range tests {

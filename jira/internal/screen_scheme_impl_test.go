@@ -412,7 +412,7 @@ func Test_internalScreenSchemeImpl_Update(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoScreenSchemeIDError,
+			Err:     model.ErrNoScreenSchemeID,
 		},
 
 		{
@@ -556,7 +556,7 @@ func Test_internalScreenSchemeImpl_Delete(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoScreenSchemeIDError,
+			Err:     model.ErrNoScreenSchemeID,
 		},
 
 		{

@@ -63,7 +63,7 @@ type internalServiceRequestApprovalImpl struct {
 func (i *internalServiceRequestApprovalImpl) Gets(ctx context.Context, issueKeyOrID string, start, limit int) (*model.CustomerApprovalPageScheme, *model.ResponseScheme, error) {
 
 	if issueKeyOrID == "" {
-		return nil, nil, model.ErrNoIssueKeyOrIDError
+		return nil, nil, model.ErrNoIssueKeyOrID
 	}
 
 	params := url.Values{}
@@ -89,11 +89,11 @@ func (i *internalServiceRequestApprovalImpl) Gets(ctx context.Context, issueKeyO
 func (i *internalServiceRequestApprovalImpl) Get(ctx context.Context, issueKeyOrID string, approvalID int) (*model.CustomerApprovalScheme, *model.ResponseScheme, error) {
 
 	if issueKeyOrID == "" {
-		return nil, nil, model.ErrNoIssueKeyOrIDError
+		return nil, nil, model.ErrNoIssueKeyOrID
 	}
 
 	if approvalID == 0 {
-		return nil, nil, model.ErrNoApprovalIDError
+		return nil, nil, model.ErrNoApprovalID
 	}
 
 	url := fmt.Sprintf("rest/servicedeskapi/request/%v/approval/%v", issueKeyOrID, approvalID)
@@ -115,11 +115,11 @@ func (i *internalServiceRequestApprovalImpl) Get(ctx context.Context, issueKeyOr
 func (i *internalServiceRequestApprovalImpl) Answer(ctx context.Context, issueKeyOrID string, approvalID int, approve bool) (*model.CustomerApprovalScheme, *model.ResponseScheme, error) {
 
 	if issueKeyOrID == "" {
-		return nil, nil, model.ErrNoIssueKeyOrIDError
+		return nil, nil, model.ErrNoIssueKeyOrID
 	}
 
 	if approvalID == 0 {
-		return nil, nil, model.ErrNoApprovalIDError
+		return nil, nil, model.ErrNoApprovalID
 	}
 
 	url := fmt.Sprintf("rest/servicedeskapi/request/%v/approval/%v", issueKeyOrID, approvalID)

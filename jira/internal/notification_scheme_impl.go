@@ -211,7 +211,7 @@ func (i *internalNotificationSchemeImpl) Projects(ctx context.Context, schemeIDs
 func (i *internalNotificationSchemeImpl) Get(ctx context.Context, schemeID string, expand []string) (*model.NotificationSchemeScheme, *model.ResponseScheme, error) {
 
 	if schemeID == "" {
-		return nil, nil, model.ErrNoNotificationSchemeIDError
+		return nil, nil, model.ErrNoNotificationSchemeID
 	}
 
 	var endpoint strings.Builder
@@ -242,7 +242,7 @@ func (i *internalNotificationSchemeImpl) Get(ctx context.Context, schemeID strin
 func (i *internalNotificationSchemeImpl) Update(ctx context.Context, schemeID string, payload *model.NotificationSchemePayloadScheme) (*model.ResponseScheme, error) {
 
 	if schemeID == "" {
-		return nil, model.ErrNoNotificationSchemeIDError
+		return nil, model.ErrNoNotificationSchemeID
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/notificationscheme/%v", i.version, schemeID)
@@ -258,7 +258,7 @@ func (i *internalNotificationSchemeImpl) Update(ctx context.Context, schemeID st
 func (i *internalNotificationSchemeImpl) Append(ctx context.Context, schemeID string, payload *model.NotificationSchemeEventsPayloadScheme) (*model.ResponseScheme, error) {
 
 	if schemeID == "" {
-		return nil, model.ErrNoNotificationSchemeIDError
+		return nil, model.ErrNoNotificationSchemeID
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/notificationscheme/%v/notification", i.version, schemeID)
@@ -274,7 +274,7 @@ func (i *internalNotificationSchemeImpl) Append(ctx context.Context, schemeID st
 func (i *internalNotificationSchemeImpl) Delete(ctx context.Context, schemeID string) (*model.ResponseScheme, error) {
 
 	if schemeID == "" {
-		return nil, model.ErrNoNotificationSchemeIDError
+		return nil, model.ErrNoNotificationSchemeID
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/notificationscheme/%v", i.version, schemeID)
@@ -290,11 +290,11 @@ func (i *internalNotificationSchemeImpl) Delete(ctx context.Context, schemeID st
 func (i *internalNotificationSchemeImpl) Remove(ctx context.Context, schemeID, notificationID string) (*model.ResponseScheme, error) {
 
 	if schemeID == "" {
-		return nil, model.ErrNoNotificationSchemeIDError
+		return nil, model.ErrNoNotificationSchemeID
 	}
 
 	if notificationID == "" {
-		return nil, model.ErrNoNotificationIDError
+		return nil, model.ErrNoNotificationID
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/notificationscheme/%v/notification/%v", i.version, schemeID, notificationID)

@@ -94,7 +94,7 @@ func Test_internalLabelImpl_Get(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoLabelNameError,
+			Err:     model.ErrNoLabelName,
 		},
 	}
 

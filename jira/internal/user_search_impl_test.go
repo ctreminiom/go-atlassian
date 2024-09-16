@@ -108,7 +108,7 @@ func Test_internalUserSearchImpl_Projects(t *testing.T) {
 				projectKeys: nil,
 			},
 			wantErr: true,
-			Err:     model.ErrNoProjectKeySliceError,
+			Err:     model.ErrNoProjectKeySlice,
 		},
 
 		{
@@ -387,7 +387,7 @@ func Test_internalUserSearchImpl_Check(t *testing.T) {
 				fields.c = client
 			},
 			wantErr: true,
-			Err:     model.ErrNoPermissionGrantIDError,
+			Err:     model.ErrNoPermissionGrantID,
 		},
 
 		{

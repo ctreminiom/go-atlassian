@@ -69,7 +69,7 @@ type internalVoteImpl struct {
 func (i *internalVoteImpl) Gets(ctx context.Context, issueKeyOrID string) (*model.IssueVoteScheme, *model.ResponseScheme, error) {
 
 	if issueKeyOrID == "" {
-		return nil, nil, model.ErrNoIssueKeyOrIDError
+		return nil, nil, model.ErrNoIssueKeyOrID
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/votes", i.version, issueKeyOrID)
@@ -91,7 +91,7 @@ func (i *internalVoteImpl) Gets(ctx context.Context, issueKeyOrID string) (*mode
 func (i *internalVoteImpl) Add(ctx context.Context, issueKeyOrID string) (*model.ResponseScheme, error) {
 
 	if issueKeyOrID == "" {
-		return nil, model.ErrNoIssueKeyOrIDError
+		return nil, model.ErrNoIssueKeyOrID
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/votes", i.version, issueKeyOrID)
@@ -107,7 +107,7 @@ func (i *internalVoteImpl) Add(ctx context.Context, issueKeyOrID string) (*model
 func (i *internalVoteImpl) Delete(ctx context.Context, issueKeyOrID string) (*model.ResponseScheme, error) {
 
 	if issueKeyOrID == "" {
-		return nil, model.ErrNoIssueKeyOrIDError
+		return nil, model.ErrNoIssueKeyOrID
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/votes", i.version, issueKeyOrID)

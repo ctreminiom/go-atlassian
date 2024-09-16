@@ -90,7 +90,7 @@ func Test_internalWorkspacePermissionServiceImpl_Members(t *testing.T) {
 				workspace: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoWorkspaceError,
+			Err:     model.ErrNoWorkspace,
 		},
 	}
 
@@ -205,7 +205,7 @@ func Test_internalWorkspacePermissionServiceImpl_Repositories(t *testing.T) {
 				workspace: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoWorkspaceError,
+			Err:     model.ErrNoWorkspace,
 		},
 	}
 
@@ -324,7 +324,7 @@ func Test_internalWorkspacePermissionServiceImpl_Repository(t *testing.T) {
 				workspace: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoWorkspaceError,
+			Err:     model.ErrNoWorkspace,
 		},
 
 		{
@@ -334,7 +334,7 @@ func Test_internalWorkspacePermissionServiceImpl_Repository(t *testing.T) {
 				workspace: "work-space-name-sample",
 			},
 			wantErr: true,
-			Err:     model.ErrNoRepositoryError,
+			Err:     model.ErrNoRepository,
 		},
 	}
 

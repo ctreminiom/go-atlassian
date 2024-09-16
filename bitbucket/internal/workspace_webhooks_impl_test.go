@@ -89,7 +89,7 @@ func Test_internalWorkspaceWebhookServiceImpl_Gets(t *testing.T) {
 				workspace: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoWorkspaceError,
+			Err:     model.ErrNoWorkspace,
 		},
 	}
 
@@ -201,7 +201,7 @@ func Test_internalWorkspaceWebhookServiceImpl_Get(t *testing.T) {
 				workspace: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoWorkspaceError,
+			Err:     model.ErrNoWorkspace,
 		},
 
 		{
@@ -211,7 +211,7 @@ func Test_internalWorkspaceWebhookServiceImpl_Get(t *testing.T) {
 				workspace: "work-space-name-sample",
 			},
 			wantErr: true,
-			Err:     model.ErrNoWebhookIDError,
+			Err:     model.ErrNoWebhookID,
 		},
 	}
 
@@ -330,7 +330,7 @@ func Test_internalWorkspaceWebhookServiceImpl_Create(t *testing.T) {
 				workspace: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoWorkspaceError,
+			Err:     model.ErrNoWorkspace,
 		},
 	}
 
@@ -452,7 +452,7 @@ func Test_internalWorkspaceWebhookServiceImpl_Update(t *testing.T) {
 				workspace: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoWorkspaceError,
+			Err:     model.ErrNoWorkspace,
 		},
 
 		{
@@ -462,7 +462,7 @@ func Test_internalWorkspaceWebhookServiceImpl_Update(t *testing.T) {
 				workspace: "work-space-name-sample",
 			},
 			wantErr: true,
-			Err:     model.ErrNoWebhookIDError,
+			Err:     model.ErrNoWebhookID,
 		},
 	}
 
@@ -575,7 +575,7 @@ func Test_internalWorkspaceWebhookServiceImpl_Delete(t *testing.T) {
 				workspace: "",
 			},
 			wantErr: true,
-			Err:     model.ErrNoWorkspaceError,
+			Err:     model.ErrNoWorkspace,
 		},
 
 		{
@@ -585,7 +585,7 @@ func Test_internalWorkspaceWebhookServiceImpl_Delete(t *testing.T) {
 				workspace: "work-space-name-sample",
 			},
 			wantErr: true,
-			Err:     model.ErrNoWebhookIDError,
+			Err:     model.ErrNoWebhookID,
 		},
 	}
 

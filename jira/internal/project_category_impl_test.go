@@ -227,7 +227,7 @@ func Test_internalProjectCategoryImpl_Get(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoProjectCategoryIDError,
+			Err:     model.ErrNoProjectCategoryID,
 		},
 
 		{
@@ -518,7 +518,7 @@ func Test_internalProjectCategoryImpl_Update(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoProjectCategoryIDError,
+			Err:     model.ErrNoProjectCategoryID,
 		},
 
 		{
@@ -663,7 +663,7 @@ func Test_internalProjectCategoryImpl_Delete(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoProjectCategoryIDError,
+			Err:     model.ErrNoProjectCategoryID,
 		},
 
 		{

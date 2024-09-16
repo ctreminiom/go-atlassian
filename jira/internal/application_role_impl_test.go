@@ -97,7 +97,7 @@ func TestApplicationRoleService_Get(t *testing.T) {
 				fields.c = mocks.NewConnector(t)
 			},
 			wantErr: true,
-			Err:     model.ErrNoApplicationRoleError,
+			Err:     model.ErrNoApplicationRole,
 		},
 
 		{

@@ -98,7 +98,7 @@ func Test_internalProjectPropertyImpl_Gets(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoProjectIDOrKeyError,
+			Err:     model.ErrNoProjectIDOrKey,
 		},
 
 		{
@@ -245,7 +245,7 @@ func Test_internalProjectPropertyImpl_Get(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoProjectIDOrKeyError,
+			Err:     model.ErrNoProjectIDOrKey,
 		},
 
 		{
@@ -256,7 +256,7 @@ func Test_internalProjectPropertyImpl_Get(t *testing.T) {
 				projectKeyOrID: "DUMMY",
 			},
 			wantErr: true,
-			Err:     model.ErrNoPropertyKeyError,
+			Err:     model.ErrNoPropertyKey,
 		},
 
 		{
@@ -404,7 +404,7 @@ func Test_internalProjectPropertyImpl_Delete(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoProjectIDOrKeyError,
+			Err:     model.ErrNoProjectIDOrKey,
 		},
 
 		{
@@ -415,7 +415,7 @@ func Test_internalProjectPropertyImpl_Delete(t *testing.T) {
 				projectKeyOrID: "DUMMY",
 			},
 			wantErr: true,
-			Err:     model.ErrNoPropertyKeyError,
+			Err:     model.ErrNoPropertyKey,
 		},
 
 		{
@@ -570,7 +570,7 @@ func Test_internalProjectPropertyImpl_Set(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoProjectIDOrKeyError,
+			Err:     model.ErrNoProjectIDOrKey,
 		},
 
 		{
@@ -581,7 +581,7 @@ func Test_internalProjectPropertyImpl_Set(t *testing.T) {
 				projectKeyOrId: "DUMMY",
 			},
 			wantErr: true,
-			Err:     model.ErrNoPropertyKeyError,
+			Err:     model.ErrNoPropertyKey,
 		},
 
 		{

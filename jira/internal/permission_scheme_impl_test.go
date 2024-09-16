@@ -231,7 +231,7 @@ func TestPermissionSchemeService_Get(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoPermissionSchemeIDError,
+			Err:     model.ErrNoPermissionSchemeID,
 		},
 
 		{
@@ -376,7 +376,7 @@ func TestPermissionSchemeService_Delete(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoPermissionSchemeIDError,
+			Err:     model.ErrNoPermissionSchemeID,
 		},
 
 		{

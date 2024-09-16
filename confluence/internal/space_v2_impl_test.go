@@ -184,7 +184,7 @@ func Test_internalSpaceV2Impl_Get(t *testing.T) {
 				ctx: context.Background(),
 			},
 			wantErr: true,
-			Err:     model.ErrNoSpaceIDError,
+			Err:     model.ErrNoSpaceID,
 		},
 
 		{

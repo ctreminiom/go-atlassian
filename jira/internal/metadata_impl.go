@@ -61,7 +61,7 @@ type internalMetadataImpl struct {
 func (i *internalMetadataImpl) Get(ctx context.Context, issueKeyOrID string, overrideScreenSecurity, overrideEditableFlag bool) (gjson.Result, *model.ResponseScheme, error) {
 
 	if issueKeyOrID == "" {
-		return gjson.Result{}, nil, model.ErrNoIssueKeyOrIDError
+		return gjson.Result{}, nil, model.ErrNoIssueKeyOrID
 	}
 
 	params := url.Values{}

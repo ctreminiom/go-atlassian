@@ -4,16 +4,18 @@ import (
 	"bytes"
 	"context"
 	"errors"
-	"github.com/ctreminiom/go-atlassian/jira/sm/internal"
-	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/service/common"
-	"github.com/ctreminiom/go-atlassian/service/mocks"
-	"github.com/stretchr/testify/assert"
 	"io"
 	"net/http"
 	"net/url"
 	"strings"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
+
+	"github.com/ctreminiom/go-atlassian/jira/sm/internal"
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/service/common"
+	"github.com/ctreminiom/go-atlassian/service/mocks"
 )
 
 func TestClient_Call(t *testing.T) {
@@ -128,7 +130,7 @@ func TestClient_Call(t *testing.T) {
 				Bytes:    *bytes.NewBufferString("Hello, world!"),
 			},
 			wantErr: true,
-			Err:     model.ErrBadRequestError,
+			Err:     model.ErrBadRequest,
 		},
 
 		{
@@ -153,7 +155,7 @@ func TestClient_Call(t *testing.T) {
 				Bytes:    *bytes.NewBufferString("Hello, world!"),
 			},
 			wantErr: true,
-			Err:     model.ErrInternalError,
+			Err:     model.ErrInternal,
 		},
 
 		{
@@ -497,7 +499,7 @@ func TestNew(t *testing.T) {
 			},
 			want:    noURLClientMocked,
 			wantErr: true,
-			Err:     model.ErrNoSiteError,
+			Err:     model.ErrNoSite,
 		},
 		{
 			name: "when the site url is not valid",

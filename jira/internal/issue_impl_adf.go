@@ -217,7 +217,7 @@ func (i *internalIssueADFServiceImpl) Create(ctx context.Context, payload *model
 func (i *internalIssueADFServiceImpl) Creates(ctx context.Context, payload []*model.IssueBulkSchemeV3) (*model.IssueBulkResponseScheme, *model.ResponseScheme, error) {
 
 	if len(payload) == 0 {
-		return nil, nil, model.ErrNoCreateIssuesError
+		return nil, nil, model.ErrNoCreateIssues
 	}
 
 	var issuePayloads []map[string]interface{}
@@ -254,7 +254,7 @@ func (i *internalIssueADFServiceImpl) Creates(ctx context.Context, payload []*mo
 func (i *internalIssueADFServiceImpl) Get(ctx context.Context, issueKeyOrID string, fields, expand []string) (*model.IssueScheme, *model.ResponseScheme, error) {
 
 	if issueKeyOrID == "" {
-		return nil, nil, model.ErrNoIssueKeyOrIDError
+		return nil, nil, model.ErrNoIssueKeyOrID
 	}
 
 	params := url.Values{}
@@ -291,7 +291,7 @@ func (i *internalIssueADFServiceImpl) Get(ctx context.Context, issueKeyOrID stri
 func (i *internalIssueADFServiceImpl) Update(ctx context.Context, issueKeyOrID string, notify bool, payload *model.IssueScheme, customFields *model.CustomFields, operations *model.UpdateOperations) (*model.ResponseScheme, error) {
 
 	if issueKeyOrID == "" {
-		return nil, model.ErrNoIssueKeyOrIDError
+		return nil, model.ErrNoIssueKeyOrID
 	}
 
 	params := url.Values{}
@@ -362,11 +362,11 @@ func (i *internalIssueADFServiceImpl) Update(ctx context.Context, issueKeyOrID s
 func (i *internalIssueADFServiceImpl) Move(ctx context.Context, issueKeyOrID, transitionID string, options *model.IssueMoveOptionsV3) (*model.ResponseScheme, error) {
 
 	if issueKeyOrID == "" {
-		return nil, model.ErrNoIssueKeyOrIDError
+		return nil, model.ErrNoIssueKeyOrID
 	}
 
 	if transitionID == "" {
-		return nil, model.ErrNoTransitionIDError
+		return nil, model.ErrNoTransitionID
 	}
 
 	payloadUpdated := make(map[string]interface{})
@@ -376,7 +376,7 @@ func (i *internalIssueADFServiceImpl) Move(ctx context.Context, issueKeyOrID, tr
 	if options != nil {
 
 		if options.Fields == nil {
-			return nil, model.ErrNoIssueSchemeError
+			return nil, model.ErrNoIssueScheme
 		}
 
 		withCustomFields := options.CustomFields != nil

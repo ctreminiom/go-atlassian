@@ -121,7 +121,7 @@ func (i *internalPermissionImpl) Check(ctx context.Context, payload *model.Permi
 func (i *internalPermissionImpl) Projects(ctx context.Context, permissions []string) (*model.PermittedProjectsScheme, *model.ResponseScheme, error) {
 
 	if len(permissions) == 0 {
-		return nil, nil, model.ErrNoPermissionKeysError
+		return nil, nil, model.ErrNoPermissionKeys
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/permissions/project", i.version)

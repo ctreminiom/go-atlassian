@@ -61,7 +61,7 @@ type internalQueueServiceImpl struct {
 func (i *internalQueueServiceImpl) Gets(ctx context.Context, serviceDeskID int, includeCount bool, start, limit int) (*model.ServiceDeskQueuePageScheme, *model.ResponseScheme, error) {
 
 	if serviceDeskID == 0 {
-		return nil, nil, model.ErrNoServiceDeskIDError
+		return nil, nil, model.ErrNoServiceDeskID
 	}
 
 	params := url.Values{}
@@ -88,11 +88,11 @@ func (i *internalQueueServiceImpl) Gets(ctx context.Context, serviceDeskID int, 
 func (i *internalQueueServiceImpl) Get(ctx context.Context, serviceDeskID, queueID int, includeCount bool) (*model.ServiceDeskQueueScheme, *model.ResponseScheme, error) {
 
 	if serviceDeskID == 0 {
-		return nil, nil, model.ErrNoServiceDeskIDError
+		return nil, nil, model.ErrNoServiceDeskID
 	}
 
 	if queueID == 0 {
-		return nil, nil, model.ErrNoQueueIDError
+		return nil, nil, model.ErrNoQueueID
 	}
 
 	params := url.Values{}
@@ -117,11 +117,11 @@ func (i *internalQueueServiceImpl) Get(ctx context.Context, serviceDeskID, queue
 func (i *internalQueueServiceImpl) Issues(ctx context.Context, serviceDeskID, queueID, start, limit int) (*model.ServiceDeskIssueQueueScheme, *model.ResponseScheme, error) {
 
 	if serviceDeskID == 0 {
-		return nil, nil, model.ErrNoServiceDeskIDError
+		return nil, nil, model.ErrNoServiceDeskID
 	}
 
 	if queueID == 0 {
-		return nil, nil, model.ErrNoQueueIDError
+		return nil, nil, model.ErrNoQueueID
 	}
 
 	params := url.Values{}

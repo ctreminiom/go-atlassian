@@ -21,7 +21,7 @@ type IssueChangelogAuthor struct {
 	Self         string           `json:"self,omitempty"`         // The URL of the author's profile.
 	AccountID    string           `json:"accountId,omitempty"`    // The account ID of the author.
 	EmailAddress string           `json:"emailAddress,omitempty"` // The email address of the author.
-	AvatarUrls   *AvatarURLScheme `json:"avatarUrls,omitempty"`   // The URLs for different sizes of the author's avatar.
+	AvatarURLs   *AvatarURLScheme `json:"avatarUrls,omitempty"`   // The URLs for different sizes of the author's avatar.
 	DisplayName  string           `json:"displayName,omitempty"`  // The display name of the author.
 	Active       bool             `json:"active,omitempty"`       // Indicates if the author's account is active.
 	TimeZone     string           `json:"timeZone,omitempty"`     // The time zone of the author.

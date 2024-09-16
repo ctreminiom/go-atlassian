@@ -39,10 +39,10 @@ type WorkflowConnector interface {
 	// 3. associated with any workflow scheme.
 	// 4. associated with any draft workflow scheme.
 	//
-	// DELETE /rest/api/{2-3}/workflow/{entityId}
+	// DELETE /rest/api/{2-3}/workflow/{workflowID}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/workflow#search-workflows
-	Delete(ctx context.Context, workflowId string) (*model.ResponseScheme, error)
+	Delete(ctx context.Context, workflowID string) (*model.ResponseScheme, error)
 
 	// Search searches for workflows based on specified criteria.
 	//
@@ -234,7 +234,7 @@ type WorkflowSchemeConnector interface {
 	// GET /rest/api/{2-3}/workflowscheme/project
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/workflow/scheme#get-workflow-schemes-associations
-	Associations(ctx context.Context, projectIds []int) (*model.WorkflowSchemeAssociationPageScheme, *model.ResponseScheme, error)
+	Associations(ctx context.Context, projectIDs []int) (*model.WorkflowSchemeAssociationPageScheme, *model.ResponseScheme, error)
 
 	// Assign assigns a workflow scheme to a project.
 	//

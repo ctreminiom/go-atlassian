@@ -151,7 +151,7 @@ func (i *internalScreenTabFieldImpl) Remove(ctx context.Context, screenID, tabID
 	return i.c.Call(request, nil)
 }
 
-func (i *internalScreenTabFieldImpl) Move(ctx context.Context, screenID, tabID int, fieldId, after, position string) (*model.ResponseScheme, error) {
+func (i *internalScreenTabFieldImpl) Move(ctx context.Context, screenID, tabID int, fieldID, after, position string) (*model.ResponseScheme, error) {
 
 	if screenID == 0 {
 		return nil, model.ErrNoScreenID
@@ -161,11 +161,11 @@ func (i *internalScreenTabFieldImpl) Move(ctx context.Context, screenID, tabID i
 		return nil, model.ErrNoScreenTabID
 	}
 
-	if fieldId == "" {
+	if fieldID == "" {
 		return nil, model.ErrNoFieldID
 	}
 
-	endpoint := fmt.Sprintf("rest/api/%v/screens/%v/tabs/%v/fields/%v/move", i.version, screenID, tabID, fieldId)
+	endpoint := fmt.Sprintf("rest/api/%v/screens/%v/tabs/%v/fields/%v/move", i.version, screenID, tabID, fieldID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", map[string]interface{}{"after": after, "position": position})
 	if err != nil {

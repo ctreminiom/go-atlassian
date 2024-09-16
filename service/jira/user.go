@@ -2,6 +2,7 @@ package jira
 
 import (
 	"context"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 )
 
@@ -12,7 +13,7 @@ type UserConnector interface {
 	// GET /rest/api/{2-3}/user
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/users#get-user
-	Get(ctx context.Context, accountId string, expand []string) (*model.UserScheme, *model.ResponseScheme, error)
+	Get(ctx context.Context, accountID string, expand []string) (*model.UserScheme, *model.ResponseScheme, error)
 
 	// Create creates a user. This resource is retained for legacy compatibility.
 	//
@@ -38,14 +39,14 @@ type UserConnector interface {
 	// DELETE /rest/api/{2-3}/user
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/users#delete-user
-	Delete(ctx context.Context, accountId string) (*model.ResponseScheme, error)
+	Delete(ctx context.Context, accountID string) (*model.ResponseScheme, error)
 
 	// Find returns a paginated list of the users specified by one or more account IDs.
 	//
 	// GET /rest/api/{2-3}/user/bulk
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/users#bulk-get-users
-	Find(ctx context.Context, accountIds []string, startAt, maxResults int) (*model.UserSearchPageScheme, *model.ResponseScheme,
+	Find(ctx context.Context, accountIDs []string, startAt, maxResults int) (*model.UserSearchPageScheme, *model.ResponseScheme,
 		error)
 
 	// Groups returns the groups to which a user belongs.
@@ -53,7 +54,7 @@ type UserConnector interface {
 	// GET /rest/api/{2-3}/user/groups
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/users#get-user-groups
-	Groups(ctx context.Context, accountIds string) ([]*model.UserGroupScheme, *model.ResponseScheme, error)
+	Groups(ctx context.Context, accountIDs string) ([]*model.UserGroupScheme, *model.ResponseScheme, error)
 
 	// Gets returns a list of all (active and inactive) users.
 	//
@@ -72,7 +73,7 @@ type UserSearchConnector interface {
 	// GET /rest/api/{2-3}/user/assignable/multiProjectSearch
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/users/search#find-users-assignable-to-projects
-	Projects(ctx context.Context, accountId string, projectKeys []string, startAt, maxResults int) (
+	Projects(ctx context.Context, accountID string, projectKeys []string, startAt, maxResults int) (
 		[]*model.UserScheme, *model.ResponseScheme, error)
 
 	// Do return a list of users that match the search string and property.
@@ -87,7 +88,7 @@ type UserSearchConnector interface {
 	// GET /rest/api/{2-3}/user/search
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/users/search#find-users
-	Do(ctx context.Context, accountId, query string, startAt, maxResults int) ([]*model.UserScheme, *model.ResponseScheme, error)
+	Do(ctx context.Context, accountID, query string, startAt, maxResults int) ([]*model.UserScheme, *model.ResponseScheme, error)
 
 	// Check returns a list of users who fulfill these criteria:
 	//

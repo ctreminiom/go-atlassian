@@ -26,7 +26,7 @@ func Test_internalProjectRoleActorImpl_Add(t *testing.T) {
 		ctx                context.Context
 		projectKeyOrID     string
 		roleID             int
-		accountIds, groups []string
+		accountIDs, groups []string
 	}
 
 	testCases := []struct {
@@ -44,7 +44,7 @@ func Test_internalProjectRoleActorImpl_Add(t *testing.T) {
 				ctx:            context.Background(),
 				projectKeyOrID: "DUMMY",
 				roleID:         10001,
-				accountIds:     []string{"uuid"},
+				accountIDs:     []string{"uuid"},
 				groups:         []string{"jira-users"},
 			},
 			on: func(fields *fields) {
@@ -76,7 +76,7 @@ func Test_internalProjectRoleActorImpl_Add(t *testing.T) {
 				ctx:            context.Background(),
 				projectKeyOrID: "DUMMY",
 				roleID:         10001,
-				accountIds:     []string{"uuid"},
+				accountIDs:     []string{"uuid"},
 				groups:         []string{"jira-users"},
 			},
 			on: func(fields *fields) {
@@ -129,7 +129,7 @@ func Test_internalProjectRoleActorImpl_Add(t *testing.T) {
 				ctx:            context.Background(),
 				projectKeyOrID: "DUMMY",
 				roleID:         10001,
-				accountIds:     []string{"uuid"},
+				accountIDs:     []string{"uuid"},
 				groups:         []string{"jira-users"},
 			},
 			on: func(fields *fields) {
@@ -161,7 +161,7 @@ func Test_internalProjectRoleActorImpl_Add(t *testing.T) {
 			assert.NoError(t, err)
 
 			gotResult, gotResponse, err := newService.Add(testCase.args.ctx, testCase.args.projectKeyOrID, testCase.args.roleID,
-				testCase.args.accountIds, testCase.args.groups)
+				testCase.args.accountIDs, testCase.args.groups)
 
 			if testCase.wantErr {
 

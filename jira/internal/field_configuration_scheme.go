@@ -61,8 +61,8 @@ func (i *IssueFieldConfigSchemeService) Create(ctx context.Context, name, descri
 // GET /rest/api/{2-3}/fieldconfigurationscheme/mapping
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration/schemes#get-field-configuration-scheme-mapping
-func (i *IssueFieldConfigSchemeService) Mapping(ctx context.Context, fieldConfigIds []int, startAt, maxResults int) (*model.FieldConfigurationIssueTypeItemPageScheme, *model.ResponseScheme, error) {
-	return i.internalClient.Mapping(ctx, fieldConfigIds, startAt, maxResults)
+func (i *IssueFieldConfigSchemeService) Mapping(ctx context.Context, fieldConfigIDs []int, startAt, maxResults int) (*model.FieldConfigurationIssueTypeItemPageScheme, *model.ResponseScheme, error) {
+	return i.internalClient.Mapping(ctx, fieldConfigIDs, startAt, maxResults)
 }
 
 // Project returns a paginated list of field configuration schemes and, for each scheme, a list of the projects that use it.
@@ -74,8 +74,8 @@ func (i *IssueFieldConfigSchemeService) Mapping(ctx context.Context, fieldConfig
 // GET /rest/api/{2-3}/fieldconfigurationscheme/project
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration/schemes#get-field-configuration-schemes-by-project
-func (i *IssueFieldConfigSchemeService) Project(ctx context.Context, projectIds []int, startAt, maxResults int) (*model.FieldConfigurationSchemeProjectPageScheme, *model.ResponseScheme, error) {
-	return i.internalClient.Project(ctx, projectIds, startAt, maxResults)
+func (i *IssueFieldConfigSchemeService) Project(ctx context.Context, projectIDs []int, startAt, maxResults int) (*model.FieldConfigurationSchemeProjectPageScheme, *model.ResponseScheme, error) {
+	return i.internalClient.Project(ctx, projectIDs, startAt, maxResults)
 }
 
 // Assign assigns a field configuration scheme to a project. If the field configuration scheme ID is null,
@@ -220,13 +220,13 @@ func (i *internalIssueFieldConfigSchemeServiceImpl) Mapping(ctx context.Context,
 	return page, response, nil
 }
 
-func (i *internalIssueFieldConfigSchemeServiceImpl) Project(ctx context.Context, projectIds []int, startAt, maxResults int) (*model.FieldConfigurationSchemeProjectPageScheme, *model.ResponseScheme, error) {
+func (i *internalIssueFieldConfigSchemeServiceImpl) Project(ctx context.Context, projectIDs []int, startAt, maxResults int) (*model.FieldConfigurationSchemeProjectPageScheme, *model.ResponseScheme, error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
 	params.Add("maxResults", strconv.Itoa(maxResults))
 
-	for _, projectID := range projectIds {
+	for _, projectID := range projectIDs {
 		params.Add("projectId", strconv.Itoa(projectID))
 	}
 

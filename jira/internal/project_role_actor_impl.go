@@ -35,8 +35,8 @@ type ProjectRoleActorService struct {
 // POST /rest/api/{2-3}/project/{projectKeyOrID}/role/{roleID}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/roles/actors#add-actors-to-project-role
-func (p *ProjectRoleActorService) Add(ctx context.Context, projectKeyOrID string, roleID int, accountIds, groups []string) (*model.ProjectRoleScheme, *model.ResponseScheme, error) {
-	return p.internalClient.Add(ctx, projectKeyOrID, roleID, accountIds, groups)
+func (p *ProjectRoleActorService) Add(ctx context.Context, projectKeyOrID string, roleID int, accountIDs, groups []string) (*model.ProjectRoleScheme, *model.ResponseScheme, error) {
+	return p.internalClient.Add(ctx, projectKeyOrID, roleID, accountIDs, groups)
 }
 
 // Delete deletes actors from a project role for the project.
@@ -53,7 +53,7 @@ type internalProjectRoleActorImpl struct {
 	version string
 }
 
-func (i *internalProjectRoleActorImpl) Add(ctx context.Context, projectKeyOrID string, roleID int, accountIds, groups []string) (*model.ProjectRoleScheme, *model.ResponseScheme, error) {
+func (i *internalProjectRoleActorImpl) Add(ctx context.Context, projectKeyOrID string, roleID int, accountIDs, groups []string) (*model.ProjectRoleScheme, *model.ResponseScheme, error) {
 
 	if projectKeyOrID == "" {
 		return nil, nil, model.ErrNoProjectIDOrKey
@@ -65,7 +65,7 @@ func (i *internalProjectRoleActorImpl) Add(ctx context.Context, projectKeyOrID s
 
 	endpoint := fmt.Sprintf("rest/api/%v/project/%v/role/%v", i.version, projectKeyOrID, roleID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", map[string]interface{}{"group": groups, "user": accountIds})
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", map[string]interface{}{"group": groups, "user": accountIDs})
 	if err != nil {
 		return nil, nil, err
 	}

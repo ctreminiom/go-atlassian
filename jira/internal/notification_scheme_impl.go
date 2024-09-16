@@ -3,13 +3,14 @@ package internal
 import (
 	"context"
 	"fmt"
-	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/service"
-	"github.com/ctreminiom/go-atlassian/service/jira"
 	"net/http"
 	"net/url"
 	"strconv"
 	"strings"
+
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/service"
+	"github.com/ctreminiom/go-atlassian/service/jira"
 )
 
 // NewNotificationSchemeService creates a new instance of NotificationSchemeService.
@@ -58,7 +59,7 @@ func (n *NotificationSchemeService) Create(ctx context.Context, payload *model.N
 //
 // This is because team-managed projects don't have a concept of a default notification scheme.
 //
-// The mappings are ordered by projectId.
+// The mappings are ordered by projectID.
 //
 // GET /rest/api/{2-3}/notificationscheme/project
 func (n *NotificationSchemeService) Projects(ctx context.Context, schemeIDs, projectIDs []string, startAt, maxResults int) (*model.NotificationSchemeProjectPageScheme, *model.ResponseScheme, error) {

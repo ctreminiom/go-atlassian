@@ -447,7 +447,7 @@ func Test_internalWorkflowSchemeImpl_Associations(t *testing.T) {
 
 	type args struct {
 		ctx        context.Context
-		projectIds []int
+		projectIDs []int
 	}
 
 	testCases := []struct {
@@ -463,7 +463,7 @@ func Test_internalWorkflowSchemeImpl_Associations(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:        context.Background(),
-				projectIds: []int{1002, 1003},
+				projectIDs: []int{1002, 1003},
 			},
 			on: func(fields *fields) {
 
@@ -492,7 +492,7 @@ func Test_internalWorkflowSchemeImpl_Associations(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:        context.Background(),
-				projectIds: []int{1002, 1003},
+				projectIDs: []int{1002, 1003},
 			},
 			on: func(fields *fields) {
 
@@ -531,7 +531,7 @@ func Test_internalWorkflowSchemeImpl_Associations(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:        context.Background(),
-				projectIds: []int{1002, 1003},
+				projectIDs: []int{1002, 1003},
 			},
 			on: func(fields *fields) {
 
@@ -560,7 +560,7 @@ func Test_internalWorkflowSchemeImpl_Associations(t *testing.T) {
 
 			newService := NewWorkflowSchemeService(testCase.fields.c, testCase.fields.version, nil)
 
-			gotResult, gotResponse, err := newService.Associations(testCase.args.ctx, testCase.args.projectIds)
+			gotResult, gotResponse, err := newService.Associations(testCase.args.ctx, testCase.args.projectIDs)
 
 			if testCase.wantErr {
 

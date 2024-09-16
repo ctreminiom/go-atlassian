@@ -164,7 +164,7 @@ type BoardConnector interface {
 	//
 	// Issues are returned ordered by rank. JQL order has higher priority than default rank.
 	//
-	// GET /rest/agile/1.0/board/{boardID}/sprint/{sprintId}/issue
+	// GET /rest/agile/1.0/board/{boardID}/sprint/{sprintID}/issue
 	//
 	// https://docs.go-atlassian.io/jira-agile/boards#get-board-issues-for-sprint
 	IssuesBySprint(ctx context.Context, boardID, sprintID int, opts *model.IssueOptionScheme, startAt, maxResults int) (
@@ -178,7 +178,7 @@ type BoardConnector interface {
 	//
 	// Returned versions are ordered by the name of the project from which they belong and then by sequence defined by user.
 	//
-	// GET /rest/agile/1.0/board/{boardID}/sprint/{sprintId}/issue
+	// GET /rest/agile/1.0/board/{boardID}/sprint/{sprintID}/issue
 	//
 	// https://docs.go-atlassian.io/jira-agile/boards#get-all-versions
 	Versions(ctx context.Context, boardID, startAt, maxResults int, released bool) (*model.BoardVersionPageScheme,

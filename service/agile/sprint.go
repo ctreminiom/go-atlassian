@@ -2,6 +2,7 @@ package agile
 
 import (
 	"context"
+
 	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
 )
 
@@ -13,7 +14,7 @@ type SprintConnector interface {
 	//
 	// or view at least one of the issues in the sprint.
 	//
-	// GET /rest/agile/1.0/sprint/{sprintId}
+	// GET /rest/agile/1.0/sprint/{sprintID}
 	//
 	// https://docs.go-atlassian.io/jira-agile/sprints#get-sprint
 	Get(ctx context.Context, sprintID int) (*models.SprintScheme, *models.ResponseScheme, error)
@@ -35,7 +36,7 @@ type SprintConnector interface {
 	//
 	// Any fields not present in the request JSON will be set to null.
 	//
-	// PUT /rest/agile/1.0/sprint/{sprintId}
+	// PUT /rest/agile/1.0/sprint/{sprintID}
 	//
 	// https://docs.go-atlassian.io/jira-agile/sprints#update-sprint
 	Update(ctx context.Context, sprintID int, payload *models.SprintPayloadScheme) (*models.SprintScheme, *models.ResponseScheme, error)
@@ -44,7 +45,7 @@ type SprintConnector interface {
 	//
 	// A partial update means that fields not present in the request JSON will not be updated.
 	//
-	// POST /rest/agile/1.0/sprint/{sprintId}
+	// POST /rest/agile/1.0/sprint/{sprintID}
 	//
 	// https://docs.go-atlassian.io/jira-agile/sprints#partially-update-sprint
 	Path(ctx context.Context, sprintID int, payload *models.SprintPayloadScheme) (*models.SprintScheme, *models.ResponseScheme, error)
@@ -53,7 +54,7 @@ type SprintConnector interface {
 	//
 	// Once a sprint is deleted, all open issues in the sprint will be moved to the backlog.
 	//
-	// DELETE /rest/agile/1.0/sprint/{sprintId}
+	// DELETE /rest/agile/1.0/sprint/{sprintID}
 	//
 	// https://docs.go-atlassian.io/jira-agile/sprints#delete-sprint
 	Delete(ctx context.Context, sprintID int) (*models.ResponseScheme, error)
@@ -64,21 +65,21 @@ type SprintConnector interface {
 	//
 	// By default, the returned issues are ordered by rank.
 	//
-	// GET /rest/agile/1.0/sprint/{sprintId}/issue
+	// GET /rest/agile/1.0/sprint/{sprintID}/issue
 	//
 	// https://docs.go-atlassian.io/jira-agile/sprints#get-issues-for-sprint
 	Issues(ctx context.Context, sprintID int, opts *models.IssueOptionScheme, startAt, maxResults int) (*models.SprintIssuePageScheme, *models.ResponseScheme, error)
 
 	// Start initiate the Sprint
 	//
-	// PUT /rest/agile/1.0/sprint/{sprintId}
+	// PUT /rest/agile/1.0/sprint/{sprintID}
 	//
 	// https://docs.go-atlassian.io/jira-agile/sprints#start-sprint
 	Start(ctx context.Context, sprintID int) (*models.ResponseScheme, error)
 
 	// Close closes the Sprint
 	//
-	// PUT /rest/agile/1.0/sprint/{sprintId}
+	// PUT /rest/agile/1.0/sprint/{sprintID}
 	//
 	// https://docs.go-atlassian.io/jira-agile/sprints#close-sprint
 	Close(ctx context.Context, sprintID int) (*models.ResponseScheme, error)
@@ -89,7 +90,7 @@ type SprintConnector interface {
 	//
 	// The maximum number of issues that can be moved in one operation is 50.
 	//
-	// POST /rest/agile/1.0/sprint/{sprintId}/issue
+	// POST /rest/agile/1.0/sprint/{sprintID}/issue
 	//
 	// https://docs.go-atlassian.io/jira-agile/sprints#move-issues-to-sprint
 	Move(ctx context.Context, sprintID int, payload *models.SprintMovePayloadScheme) (*models.ResponseScheme, error)

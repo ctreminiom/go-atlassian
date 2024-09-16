@@ -3,12 +3,14 @@ package internal
 import (
 	"context"
 	"errors"
+	"net/http"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/mocks"
-	"github.com/stretchr/testify/assert"
-	"net/http"
-	"testing"
 )
 
 func Test_internalCustomContentServiceImpl_Gets(t *testing.T) {
@@ -19,7 +21,7 @@ func Test_internalCustomContentServiceImpl_Gets(t *testing.T) {
 
 	type args struct {
 		ctx     context.Context
-		type_   string
+		typ     string
 		options *model.CustomContentOptionsScheme
 		cursor  string
 		limit   int
@@ -36,8 +38,8 @@ func Test_internalCustomContentServiceImpl_Gets(t *testing.T) {
 		{
 			name: "when the parameters are correct",
 			args: args{
-				ctx:   context.Background(),
-				type_: "custom_content_type_id",
+				ctx: context.Background(),
+				typ: "custom_content_type_id",
 				options: &model.CustomContentOptionsScheme{
 					IDs:        []int{101, 102},
 					SpaceIDs:   []int{10001, 10002},
@@ -71,8 +73,8 @@ func Test_internalCustomContentServiceImpl_Gets(t *testing.T) {
 		{
 			name: "when the http request cannot be created",
 			args: args{
-				ctx:   context.Background(),
-				type_: "custom_content_type_id",
+				ctx: context.Background(),
+				typ: "custom_content_type_id",
 				options: &model.CustomContentOptionsScheme{
 					IDs:        []int{101, 102},
 					SpaceIDs:   []int{10001, 10002},
@@ -120,7 +122,7 @@ func Test_internalCustomContentServiceImpl_Gets(t *testing.T) {
 
 			gotResult, gotResponse, err := newService.Gets(
 				testCase.args.ctx,
-				testCase.args.type_,
+				testCase.args.typ,
 				testCase.args.options,
 				testCase.args.cursor,
 				testCase.args.limit,

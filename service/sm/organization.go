@@ -2,6 +2,7 @@ package sm
 
 import (
 	"context"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 )
 
@@ -22,7 +23,7 @@ type OrganizationConnector interface {
 	//
 	// but needs to display other organization details.
 	//
-	// GET /rest/servicedeskapi/organization/{organizationId}
+	// GET /rest/servicedeskapi/organization/{organizationID}
 	//
 	// https://docs.go-atlassian.io/jira-service-management-cloud/organization#get-organization
 	Get(ctx context.Context, organizationID int) (*model.OrganizationScheme, *model.ResponseScheme, error)
@@ -33,7 +34,7 @@ type OrganizationConnector interface {
 	//
 	// For example, associations with service desks.
 	//
-	// DELETE /rest/servicedeskapi/organization/{organizationId}
+	// DELETE /rest/servicedeskapi/organization/{organizationID}
 	//
 	// https://docs.go-atlassian.io/jira-service-management/organization#delete-organization
 	Delete(ctx context.Context, organizationID int) (*model.ResponseScheme, error)
@@ -51,28 +52,28 @@ type OrganizationConnector interface {
 	//
 	// organization or determine if a user is associated with an organization.
 	//
-	// GET /rest/servicedeskapi/organization/{organizationId}/user
+	// GET /rest/servicedeskapi/organization/{organizationID}/user
 	//
 	// https://docs.go-atlassian.io/jira-service-management-cloud/organization#get-users-in-organization
 	Users(ctx context.Context, organizationID, start, limit int) (*model.OrganizationUsersPageScheme, *model.ResponseScheme, error)
 
 	// Add adds users to an organization.
 	//
-	// POST /rest/servicedeskapi/organization/{organizationId}/user
+	// POST /rest/servicedeskapi/organization/{organizationID}/user
 	//
 	// https://docs.go-atlassian.io/jira-service-management-cloud/organization#add-users-to-organization
 	Add(ctx context.Context, organizationID int, accountIDs []string) (*model.ResponseScheme, error)
 
 	// Remove removes users from an organization.
 	//
-	// DELETE /rest/servicedeskapi/organization/{organizationId}/user
+	// DELETE /rest/servicedeskapi/organization/{organizationID}/user
 	//
 	// https://docs.go-atlassian.io/jira-service-management-cloud/organization#remove-users-from-organization
 	Remove(ctx context.Context, organizationID int, accountIDs []string) (*model.ResponseScheme, error)
 
 	// Project returns a list of all organizations associated with a service desk.
 	//
-	// GET /rest/servicedeskapi/servicedesk/{serviceDeskId}/organization
+	// GET /rest/servicedeskapi/servicedesk/{organizationID}/organization
 	//
 	// https://docs.go-atlassian.io/jira-service-management/organization#get-project-organizations
 	Project(ctx context.Context, accountID string, serviceDeskID, start, limit int) (*model.OrganizationPageScheme, *model.ResponseScheme, error)
@@ -83,7 +84,7 @@ type OrganizationConnector interface {
 	//
 	// no change is made and the resource returns a 204 success code.
 	//
-	// POST /rest/servicedeskapi/servicedesk/{serviceDeskId}/organization
+	// POST /rest/servicedeskapi/servicedesk/{organizationID}/organization
 	//
 	// https://docs.go-atlassian.io/jira-service-management-cloud/organization#associate-organization
 	Associate(ctx context.Context, serviceDeskID, organizationID int) (*model.ResponseScheme, error)
@@ -94,7 +95,7 @@ type OrganizationConnector interface {
 	//
 	// no change is made and the resource returns a 204 success code.
 	//
-	// DELETE /rest/servicedeskapi/servicedesk/{serviceDeskId}/organization
+	// DELETE /rest/servicedeskapi/servicedesk/{organizationID}/organization
 	//
 	// https://docs.go-atlassian.io/jira-service-management-cloud/organization#detach-organization
 	Detach(ctx context.Context, serviceDeskID, organizationID int) (*model.ResponseScheme, error)

@@ -3,10 +3,11 @@ package internal
 import (
 	"context"
 	"fmt"
+	"net/http"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/admin"
-	"net/http"
 )
 
 // NewOrganizationDirectoryService creates a new instance of OrganizationDirectoryService.
@@ -31,7 +32,7 @@ type OrganizationDirectoryService struct {
 //
 // The added_to_org date field is available only to customers using the new user management experience.
 //
-// GET /admin/v1/orgs/{orgId}/directory/users/{accountId}/last-active-dates
+// GET /admin/v1/orgs/{orgId}/directory/users/{accountID}/last-active-dates
 //
 // https://docs.go-atlassian.io/atlassian-admin-cloud/organization/directory#users-last-active-dates
 func (o *OrganizationDirectoryService) Activity(ctx context.Context, organizationID, accountID string) (*model.UserProductAccessScheme, *model.ResponseScheme, error) {

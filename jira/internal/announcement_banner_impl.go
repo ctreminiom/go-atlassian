@@ -3,10 +3,11 @@ package internal
 import (
 	"context"
 	"fmt"
+	"net/http"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/service"
 	"github.com/ctreminiom/go-atlassian/service/jira"
-	"net/http"
 )
 
 // NewAnnouncementBannerService creates a new instance of AnnouncementBannerService.

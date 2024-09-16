@@ -3,7 +3,7 @@ package models
 // IssueTypeSchemePayloadScheme represents the payload for an issue type scheme in Jira.
 type IssueTypeSchemePayloadScheme struct {
 	DefaultIssueTypeID string   `json:"defaultIssueTypeId,omitempty"` // The default issue type ID.
-	IssueTypeIds       []string `json:"issueTypeIds,omitempty"`       // The issue type IDs.
+	IssueTypeIDs       []string `json:"issueTypeIds,omitempty"`       // The issue type IDs.
 	Name               string   `json:"name,omitempty"`               // The name of the issue type scheme.
 	Description        string   `json:"description,omitempty"`        // The description of the issue type scheme.
 }

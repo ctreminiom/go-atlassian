@@ -2,6 +2,7 @@ package sm
 
 import (
 	"context"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 )
 
@@ -27,28 +28,28 @@ type RequestConnector interface {
 
 	// Get returns a customer request.
 	//
-	// GET /rest/servicedeskapi/request/{issueIdOrKey}
+	// GET /rest/servicedeskapi/request/{issueKeyOrID}
 	//
 	// https://docs.go-atlassian.io/jira-service-management-cloud/request#get-customer-request-by-id-or-key
 	Get(ctx context.Context, issueKeyOrID string, expand []string) (*model.CustomerRequestScheme, *model.ResponseScheme, error)
 
 	// Subscribe subscribes the user to receiving notifications from a customer request.
 	//
-	// PUT /rest/servicedeskapi/request/{issueIdOrKey}/notification
+	// PUT /rest/servicedeskapi/request/{issueKeyOrID}/notification
 	//
 	// https://docs.go-atlassian.io/jira-service-management-cloud/request#subscribe
 	Subscribe(ctx context.Context, issueKeyOrID string) (*model.ResponseScheme, error)
 
 	// Unsubscribe unsubscribes the user from notifications from a customer request.
 	//
-	// DELETE /rest/servicedeskapi/request/{issueIdOrKey}/notification
+	// DELETE /rest/servicedeskapi/request/{issueKeyOrID}/notification
 	//
 	// https://docs.go-atlassian.io/jira-service-management-cloud/request#unsubscribe
 	Unsubscribe(ctx context.Context, issueKeyOrID string) (*model.ResponseScheme, error)
 
 	// Transitions returns a list of transitions, the workflow processes that moves a customer request from one status to another, that the user can perform on a request.
 	//
-	// GET /rest/servicedeskapi/request/{issueIdOrKey}/transition
+	// GET /rest/servicedeskapi/request/{issueKeyOrID}/transition
 	//
 	// https://docs.go-atlassian.io/jira-service-management-cloud/request#get-customer-transitions
 	Transitions(ctx context.Context, issueKeyOrID string, start, limit int) (*model.CustomerRequestTransitionPageScheme, *model.ResponseScheme, error)
@@ -57,7 +58,7 @@ type RequestConnector interface {
 	//
 	// An optional comment can be included to provide a reason for the transition.
 	//
-	// POST /rest/servicedeskapi/request/{issueIdOrKey}/transition
+	// POST /rest/servicedeskapi/request/{issueKeyOrID}/transition
 	//
 	// https://docs.go-atlassian.io/jira-service-management-cloud/request#perform-customer-transition
 	Transition(ctx context.Context, issueKeyOrID, transitionID, comment string) (*model.ResponseScheme, error)

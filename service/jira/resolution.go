@@ -2,6 +2,7 @@ package jira
 
 import (
 	"context"
+
 	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 )
 
@@ -17,8 +18,8 @@ type ResolutionConnector interface {
 	// Get returns an issue resolution value.
 	//
 	//
-	// GET /rest/api/{2-3}/resolution/{id}
+	// GET /rest/api/{2-3}/resolution/{resolutionID}
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/resolutions#get-resolution
-	Get(ctx context.Context, resolutionId string) (*model.ResolutionScheme, *model.ResponseScheme, error)
+	Get(ctx context.Context, resolutionID string) (*model.ResolutionScheme, *model.ResponseScheme, error)
 }

@@ -2,6 +2,7 @@ package assets
 
 import (
 	"context"
+
 	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
 )
 
@@ -11,7 +12,7 @@ type AQLAssetConnector interface {
 
 	// Filter search objects based on Assets Query Language (AQL)
 	//
-	// POST /jsm/assets/workspace/{workspaceId}/v1/aql/objects
+	// POST /jsm/assets/workspace/{workspaceID}/v1/aql/objects
 	//
 	// Deprecated. Please use Object.Filter() instead.
 	//

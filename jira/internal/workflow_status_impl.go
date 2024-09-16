@@ -3,13 +3,14 @@ package internal
 import (
 	"context"
 	"fmt"
-	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/service"
-	"github.com/ctreminiom/go-atlassian/service/jira"
 	"net/http"
 	"net/url"
 	"strconv"
 	"strings"
+
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/service"
+	"github.com/ctreminiom/go-atlassian/service/jira"
 )
 
 // NewWorkflowStatusService creates a new instance of WorkflowStatusService.
@@ -109,7 +110,7 @@ type internalWorkflowStatusImpl struct {
 func (i *internalWorkflowStatusImpl) Get(ctx context.Context, idOrName string) (*model.StatusDetailScheme, *model.ResponseScheme, error) {
 
 	if idOrName == "" {
-		return nil, nil, model.ErrNoWorkflowStatusNameOrId
+		return nil, nil, model.ErrNoWorkflowStatusNameOrID
 	}
 
 	endpoint := fmt.Sprintf("/rest/api/%v/status/%v", i.version, idOrName)

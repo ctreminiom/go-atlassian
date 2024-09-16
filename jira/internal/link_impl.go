@@ -6,7 +6,7 @@ import (
 )
 
 // NewLinkService creates new instances of LinkADFService and LinkRichTextService.
-func NewLinkService(client service.Connector, version string, type_ *LinkTypeService, remote *RemoteLinkService) (*LinkADFService, *LinkRichTextService, error) {
+func NewLinkService(client service.Connector, version string, linkType *LinkTypeService, remote *RemoteLinkService) (*LinkADFService, *LinkRichTextService, error) {
 
 	if version == "" {
 		return nil, nil, model.ErrNoVersionProvided
@@ -17,7 +17,7 @@ func NewLinkService(client service.Connector, version string, type_ *LinkTypeSer
 			c:       client,
 			version: version,
 		},
-		Type:   type_,
+		Type:   linkType,
 		Remote: remote,
 	}
 
@@ -26,7 +26,7 @@ func NewLinkService(client service.Connector, version string, type_ *LinkTypeSer
 			c:       client,
 			version: version,
 		},
-		Type:   type_,
+		Type:   linkType,
 		Remote: remote,
 	}
 

@@ -3,13 +3,14 @@ package internal
 import (
 	"context"
 	"fmt"
-	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/service"
-	"github.com/ctreminiom/go-atlassian/service/confluence"
 	"net/http"
 	"net/url"
 	"strconv"
 	"strings"
+
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/service"
+	"github.com/ctreminiom/go-atlassian/service/confluence"
 )
 
 // NewAttachmentService creates a new instance of AttachmentService.
@@ -156,9 +157,9 @@ func (i *internalAttachmentImpl) Gets(ctx context.Context, entityID int, entityT
 
 	// Checking if the entity type provided is supported by the library
 	var isSupported bool
-	for _, type_ := range model.ValidEntityValues {
+	for _, typ := range model.ValidEntityValues {
 
-		if entityType == type_ {
+		if entityType == typ {
 			isSupported = true
 			break
 		}

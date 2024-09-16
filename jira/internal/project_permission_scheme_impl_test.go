@@ -316,7 +316,7 @@ func Test_internalProjectPermissionSchemeImpl_Assign(t *testing.T) {
 
 	type args struct {
 		ctx                context.Context
-		projectKeyOrId     string
+		projectKeyOrID     string
 		permissionSchemeID int
 	}
 
@@ -333,7 +333,7 @@ func Test_internalProjectPermissionSchemeImpl_Assign(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:                context.Background(),
-				projectKeyOrId:     "DUMMY",
+				projectKeyOrID:     "DUMMY",
 				permissionSchemeID: 10001,
 			},
 			on: func(fields *fields) {
@@ -363,7 +363,7 @@ func Test_internalProjectPermissionSchemeImpl_Assign(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:                context.Background(),
-				projectKeyOrId:     "DUMMY",
+				projectKeyOrID:     "DUMMY",
 				permissionSchemeID: 10001,
 			},
 			on: func(fields *fields) {
@@ -403,7 +403,7 @@ func Test_internalProjectPermissionSchemeImpl_Assign(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:                context.Background(),
-				projectKeyOrId:     "DUMMY",
+				projectKeyOrID:     "DUMMY",
 				permissionSchemeID: 10001,
 			},
 			on: func(fields *fields) {
@@ -434,7 +434,7 @@ func Test_internalProjectPermissionSchemeImpl_Assign(t *testing.T) {
 			newService, err := NewProjectPermissionSchemeService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := newService.Assign(testCase.args.ctx, testCase.args.projectKeyOrId, testCase.args.permissionSchemeID)
+			gotResult, gotResponse, err := newService.Assign(testCase.args.ctx, testCase.args.projectKeyOrID, testCase.args.permissionSchemeID)
 
 			if testCase.wantErr {
 

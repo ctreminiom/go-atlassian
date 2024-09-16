@@ -362,7 +362,7 @@ func Test_internalIssueFieldContextServiceImpl_GetDefaultValues(t *testing.T) {
 	type args struct {
 		ctx                 context.Context
 		fieldID             string
-		contextIds          []int
+		contextIDs          []int
 		startAt, maxResults int
 	}
 
@@ -380,7 +380,7 @@ func Test_internalIssueFieldContextServiceImpl_GetDefaultValues(t *testing.T) {
 			args: args{
 				ctx:        context.Background(),
 				fieldID:    "custom_field_10002",
-				contextIds: []int{10001},
+				contextIDs: []int{10001},
 				startAt:    0,
 				maxResults: 50,
 			},
@@ -413,7 +413,7 @@ func Test_internalIssueFieldContextServiceImpl_GetDefaultValues(t *testing.T) {
 			args: args{
 				ctx:        context.Background(),
 				fieldID:    "custom_field_10002",
-				contextIds: []int{10001},
+				contextIDs: []int{10001},
 				startAt:    0,
 				maxResults: 50,
 			},
@@ -457,7 +457,7 @@ func Test_internalIssueFieldContextServiceImpl_GetDefaultValues(t *testing.T) {
 			args: args{
 				ctx:        context.Background(),
 				fieldID:    "custom_field_10002",
-				contextIds: []int{10001},
+				contextIDs: []int{10001},
 				startAt:    0,
 				maxResults: 50,
 			},
@@ -495,7 +495,7 @@ func Test_internalIssueFieldContextServiceImpl_GetDefaultValues(t *testing.T) {
 			fieldConfigService, err := NewIssueFieldContextService(testCase.fields.c, testCase.fields.version, nil)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := fieldConfigService.GetDefaultValues(testCase.args.ctx, testCase.args.fieldID, testCase.args.contextIds,
+			gotResult, gotResponse, err := fieldConfigService.GetDefaultValues(testCase.args.ctx, testCase.args.fieldID, testCase.args.contextIDs,
 				testCase.args.startAt, testCase.args.maxResults)
 
 			if testCase.wantErr {
@@ -687,8 +687,8 @@ func Test_internalIssueFieldContextServiceImpl_IssueTypesContext(t *testing.T) {
 
 	type args struct {
 		ctx                 context.Context
-		fieldId             string
-		contextIds          []int
+		fieldID             string
+		contextIDs          []int
 		startAt, maxResults int
 	}
 
@@ -705,8 +705,8 @@ func Test_internalIssueFieldContextServiceImpl_IssueTypesContext(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:        context.Background(),
-				fieldId:    "custom_field_10002",
-				contextIds: []int{10001},
+				fieldID:    "custom_field_10002",
+				contextIDs: []int{10001},
 				startAt:    0,
 				maxResults: 50,
 			},
@@ -738,8 +738,8 @@ func Test_internalIssueFieldContextServiceImpl_IssueTypesContext(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:        context.Background(),
-				fieldId:    "custom_field_10002",
-				contextIds: []int{10001},
+				fieldID:    "custom_field_10002",
+				contextIDs: []int{10001},
 				startAt:    0,
 				maxResults: 50,
 			},
@@ -771,7 +771,7 @@ func Test_internalIssueFieldContextServiceImpl_IssueTypesContext(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:     context.Background(),
-				fieldId: "",
+				fieldID: "",
 			},
 			wantErr: true,
 			Err:     model.ErrNoFieldID,
@@ -782,8 +782,8 @@ func Test_internalIssueFieldContextServiceImpl_IssueTypesContext(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:        context.Background(),
-				fieldId:    "custom_field_10002",
-				contextIds: []int{10001},
+				fieldID:    "custom_field_10002",
+				contextIDs: []int{10001},
 				startAt:    0,
 				maxResults: 50,
 			},
@@ -816,7 +816,7 @@ func Test_internalIssueFieldContextServiceImpl_IssueTypesContext(t *testing.T) {
 			fieldConfigService, err := NewIssueFieldContextService(testCase.fields.c, testCase.fields.version, nil)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := fieldConfigService.IssueTypesContext(testCase.args.ctx, testCase.args.fieldId, testCase.args.contextIds,
+			gotResult, gotResponse, err := fieldConfigService.IssueTypesContext(testCase.args.ctx, testCase.args.fieldID, testCase.args.contextIDs,
 				testCase.args.startAt, testCase.args.maxResults)
 
 			if testCase.wantErr {
@@ -847,8 +847,8 @@ func Test_internalIssueFieldContextServiceImpl_ProjectsContext(t *testing.T) {
 
 	type args struct {
 		ctx                 context.Context
-		fieldId             string
-		contextIds          []int
+		fieldID             string
+		contextIDs          []int
 		startAt, maxResults int
 	}
 
@@ -865,8 +865,8 @@ func Test_internalIssueFieldContextServiceImpl_ProjectsContext(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:        context.Background(),
-				fieldId:    "custom_field_10002",
-				contextIds: []int{10001},
+				fieldID:    "custom_field_10002",
+				contextIDs: []int{10001},
 				startAt:    0,
 				maxResults: 50,
 			},
@@ -898,8 +898,8 @@ func Test_internalIssueFieldContextServiceImpl_ProjectsContext(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:        context.Background(),
-				fieldId:    "custom_field_10002",
-				contextIds: []int{10001},
+				fieldID:    "custom_field_10002",
+				contextIDs: []int{10001},
 				startAt:    0,
 				maxResults: 50,
 			},
@@ -931,7 +931,7 @@ func Test_internalIssueFieldContextServiceImpl_ProjectsContext(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:     context.Background(),
-				fieldId: "",
+				fieldID: "",
 			},
 			wantErr: true,
 			Err:     model.ErrNoFieldID,
@@ -942,8 +942,8 @@ func Test_internalIssueFieldContextServiceImpl_ProjectsContext(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:        context.Background(),
-				fieldId:    "custom_field_10002",
-				contextIds: []int{10001},
+				fieldID:    "custom_field_10002",
+				contextIDs: []int{10001},
 				startAt:    0,
 				maxResults: 50,
 			},
@@ -976,7 +976,7 @@ func Test_internalIssueFieldContextServiceImpl_ProjectsContext(t *testing.T) {
 			fieldConfigService, err := NewIssueFieldContextService(testCase.fields.c, testCase.fields.version, nil)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := fieldConfigService.ProjectsContext(testCase.args.ctx, testCase.args.fieldId, testCase.args.contextIds,
+			gotResult, gotResponse, err := fieldConfigService.ProjectsContext(testCase.args.ctx, testCase.args.fieldID, testCase.args.contextIDs,
 				testCase.args.startAt, testCase.args.maxResults)
 
 			if testCase.wantErr {
@@ -1011,8 +1011,8 @@ func Test_internalIssueFieldContextServiceImpl_Update(t *testing.T) {
 
 	type args struct {
 		ctx               context.Context
-		fieldId           string
-		contextId         int
+		fieldID           string
+		contextID         int
 		name, description string
 	}
 
@@ -1029,8 +1029,8 @@ func Test_internalIssueFieldContextServiceImpl_Update(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:         context.Background(),
-				fieldId:     "custom_field_10002",
-				contextId:   10001,
+				fieldID:     "custom_field_10002",
+				contextID:   10001,
 				name:        "DUMMY - customfield_10002 Context",
 				description: "new customfield context description",
 			},
@@ -1062,8 +1062,8 @@ func Test_internalIssueFieldContextServiceImpl_Update(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:         context.Background(),
-				fieldId:     "custom_field_10002",
-				contextId:   10001,
+				fieldID:     "custom_field_10002",
+				contextID:   10001,
 				name:        "DUMMY - customfield_10002 Context",
 				description: "",
 			},
@@ -1095,8 +1095,8 @@ func Test_internalIssueFieldContextServiceImpl_Update(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:         context.Background(),
-				fieldId:     "custom_field_10002",
-				contextId:   10001,
+				fieldID:     "custom_field_10002",
+				contextID:   10001,
 				name:        "DUMMY - customfield_10002 Context",
 				description: "new customfield context description",
 			},
@@ -1128,7 +1128,7 @@ func Test_internalIssueFieldContextServiceImpl_Update(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:     context.Background(),
-				fieldId: "",
+				fieldID: "",
 			},
 			wantErr: true,
 			Err:     model.ErrNoFieldID,
@@ -1139,8 +1139,8 @@ func Test_internalIssueFieldContextServiceImpl_Update(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:         context.Background(),
-				fieldId:     "custom_field_10002",
-				contextId:   10001,
+				fieldID:     "custom_field_10002",
+				contextID:   10001,
 				name:        "DUMMY - customfield_10002 Context",
 				description: "new customfield context description",
 			},
@@ -1173,7 +1173,7 @@ func Test_internalIssueFieldContextServiceImpl_Update(t *testing.T) {
 			fieldConfigService, err := NewIssueFieldContextService(testCase.fields.c, testCase.fields.version, nil)
 			assert.NoError(t, err)
 
-			gotResponse, err := fieldConfigService.Update(testCase.args.ctx, testCase.args.fieldId, testCase.args.contextId,
+			gotResponse, err := fieldConfigService.Update(testCase.args.ctx, testCase.args.fieldID, testCase.args.contextID,
 				testCase.args.name, testCase.args.description)
 
 			if testCase.wantErr {
@@ -1203,8 +1203,8 @@ func Test_internalIssueFieldContextServiceImpl_Delete(t *testing.T) {
 
 	type args struct {
 		ctx       context.Context
-		fieldId   string
-		contextId int
+		fieldID   string
+		contextID int
 	}
 
 	testCases := []struct {
@@ -1220,8 +1220,8 @@ func Test_internalIssueFieldContextServiceImpl_Delete(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:       context.Background(),
-				fieldId:   "custom_field_10002",
-				contextId: 10001,
+				fieldID:   "custom_field_10002",
+				contextID: 10001,
 			},
 			on: func(fields *fields) {
 
@@ -1251,8 +1251,8 @@ func Test_internalIssueFieldContextServiceImpl_Delete(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:       context.Background(),
-				fieldId:   "custom_field_10002",
-				contextId: 10001,
+				fieldID:   "custom_field_10002",
+				contextID: 10001,
 			},
 			on: func(fields *fields) {
 
@@ -1282,7 +1282,7 @@ func Test_internalIssueFieldContextServiceImpl_Delete(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:     context.Background(),
-				fieldId: "",
+				fieldID: "",
 			},
 			wantErr: true,
 			Err:     model.ErrNoFieldID,
@@ -1293,8 +1293,8 @@ func Test_internalIssueFieldContextServiceImpl_Delete(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:       context.Background(),
-				fieldId:   "custom_field_10002",
-				contextId: 10001,
+				fieldID:   "custom_field_10002",
+				contextID: 10001,
 			},
 			on: func(fields *fields) {
 
@@ -1325,7 +1325,7 @@ func Test_internalIssueFieldContextServiceImpl_Delete(t *testing.T) {
 			fieldConfigService, err := NewIssueFieldContextService(testCase.fields.c, testCase.fields.version, nil)
 			assert.NoError(t, err)
 
-			gotResponse, err := fieldConfigService.Delete(testCase.args.ctx, testCase.args.fieldId, testCase.args.contextId)
+			gotResponse, err := fieldConfigService.Delete(testCase.args.ctx, testCase.args.fieldID, testCase.args.contextID)
 
 			if testCase.wantErr {
 
@@ -1356,8 +1356,8 @@ func Test_internalIssueFieldContextServiceImpl_AddIssueTypes(t *testing.T) {
 
 	type args struct {
 		ctx           context.Context
-		fieldId       string
-		contextId     int
+		fieldID       string
+		contextID     int
 		issueTypesIds []string
 	}
 
@@ -1374,8 +1374,8 @@ func Test_internalIssueFieldContextServiceImpl_AddIssueTypes(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:           context.Background(),
-				fieldId:       "custom_field_10002",
-				contextId:     10001,
+				fieldID:       "custom_field_10002",
+				contextID:     10001,
 				issueTypesIds: []string{"4", "3"},
 			},
 			on: func(fields *fields) {
@@ -1406,8 +1406,8 @@ func Test_internalIssueFieldContextServiceImpl_AddIssueTypes(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:           context.Background(),
-				fieldId:       "custom_field_10002",
-				contextId:     10001,
+				fieldID:       "custom_field_10002",
+				contextID:     10001,
 				issueTypesIds: []string{"4", "3"},
 			},
 			on: func(fields *fields) {
@@ -1438,7 +1438,7 @@ func Test_internalIssueFieldContextServiceImpl_AddIssueTypes(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:     context.Background(),
-				fieldId: "",
+				fieldID: "",
 			},
 			wantErr: true,
 			Err:     model.ErrNoFieldID,
@@ -1449,8 +1449,8 @@ func Test_internalIssueFieldContextServiceImpl_AddIssueTypes(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:           context.Background(),
-				fieldId:       "custom_field_10002",
-				contextId:     10001,
+				fieldID:       "custom_field_10002",
+				contextID:     10001,
 				issueTypesIds: []string{"4", "3"},
 			},
 			on: func(fields *fields) {
@@ -1482,7 +1482,7 @@ func Test_internalIssueFieldContextServiceImpl_AddIssueTypes(t *testing.T) {
 			fieldConfigService, err := NewIssueFieldContextService(testCase.fields.c, testCase.fields.version, nil)
 			assert.NoError(t, err)
 
-			gotResponse, err := fieldConfigService.AddIssueTypes(testCase.args.ctx, testCase.args.fieldId, testCase.args.contextId,
+			gotResponse, err := fieldConfigService.AddIssueTypes(testCase.args.ctx, testCase.args.fieldID, testCase.args.contextID,
 				testCase.args.issueTypesIds)
 
 			if testCase.wantErr {
@@ -1514,8 +1514,8 @@ func Test_internalIssueFieldContextServiceImpl_RemoveIssueTypes(t *testing.T) {
 
 	type args struct {
 		ctx           context.Context
-		fieldId       string
-		contextId     int
+		fieldID       string
+		contextID     int
 		issueTypesIds []string
 	}
 
@@ -1532,8 +1532,8 @@ func Test_internalIssueFieldContextServiceImpl_RemoveIssueTypes(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:           context.Background(),
-				fieldId:       "custom_field_10002",
-				contextId:     10001,
+				fieldID:       "custom_field_10002",
+				contextID:     10001,
 				issueTypesIds: []string{"4", "3"},
 			},
 			on: func(fields *fields) {
@@ -1564,8 +1564,8 @@ func Test_internalIssueFieldContextServiceImpl_RemoveIssueTypes(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:           context.Background(),
-				fieldId:       "custom_field_10002",
-				contextId:     10001,
+				fieldID:       "custom_field_10002",
+				contextID:     10001,
 				issueTypesIds: []string{"4", "3"},
 			},
 			on: func(fields *fields) {
@@ -1596,7 +1596,7 @@ func Test_internalIssueFieldContextServiceImpl_RemoveIssueTypes(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:     context.Background(),
-				fieldId: "",
+				fieldID: "",
 			},
 			wantErr: true,
 			Err:     model.ErrNoFieldID,
@@ -1607,7 +1607,7 @@ func Test_internalIssueFieldContextServiceImpl_RemoveIssueTypes(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:           context.Background(),
-				fieldId:       "custom_field_10002",
+				fieldID:       "custom_field_10002",
 				issueTypesIds: nil,
 			},
 			wantErr: true,
@@ -1619,8 +1619,8 @@ func Test_internalIssueFieldContextServiceImpl_RemoveIssueTypes(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:           context.Background(),
-				fieldId:       "custom_field_10002",
-				contextId:     10001,
+				fieldID:       "custom_field_10002",
+				contextID:     10001,
 				issueTypesIds: []string{"4", "3"},
 			},
 			on: func(fields *fields) {
@@ -1652,7 +1652,7 @@ func Test_internalIssueFieldContextServiceImpl_RemoveIssueTypes(t *testing.T) {
 			fieldConfigService, err := NewIssueFieldContextService(testCase.fields.c, testCase.fields.version, nil)
 			assert.NoError(t, err)
 
-			gotResponse, err := fieldConfigService.RemoveIssueTypes(testCase.args.ctx, testCase.args.fieldId, testCase.args.contextId,
+			gotResponse, err := fieldConfigService.RemoveIssueTypes(testCase.args.ctx, testCase.args.fieldID, testCase.args.contextID,
 				testCase.args.issueTypesIds)
 
 			if testCase.wantErr {
@@ -1684,9 +1684,9 @@ func Test_internalIssueFieldContextServiceImpl_Link(t *testing.T) {
 
 	type args struct {
 		ctx        context.Context
-		fieldId    string
-		contextId  int
-		projectIds []string
+		fieldID    string
+		contextID  int
+		projectIDs []string
 	}
 
 	testCases := []struct {
@@ -1702,9 +1702,9 @@ func Test_internalIssueFieldContextServiceImpl_Link(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:        context.Background(),
-				fieldId:    "custom_field_10002",
-				contextId:  10001,
-				projectIds: []string{"4", "3"},
+				fieldID:    "custom_field_10002",
+				contextID:  10001,
+				projectIDs: []string{"4", "3"},
 			},
 			on: func(fields *fields) {
 
@@ -1734,9 +1734,9 @@ func Test_internalIssueFieldContextServiceImpl_Link(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:        context.Background(),
-				fieldId:    "custom_field_10002",
-				contextId:  10001,
-				projectIds: []string{"4", "3"},
+				fieldID:    "custom_field_10002",
+				contextID:  10001,
+				projectIDs: []string{"4", "3"},
 			},
 			on: func(fields *fields) {
 
@@ -1766,7 +1766,7 @@ func Test_internalIssueFieldContextServiceImpl_Link(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:     context.Background(),
-				fieldId: "",
+				fieldID: "",
 			},
 			wantErr: true,
 			Err:     model.ErrNoFieldID,
@@ -1777,7 +1777,7 @@ func Test_internalIssueFieldContextServiceImpl_Link(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:     context.Background(),
-				fieldId: "custom_field_10002",
+				fieldID: "custom_field_10002",
 			},
 			wantErr: true,
 			Err:     model.ErrNoFieldContextID,
@@ -1788,8 +1788,8 @@ func Test_internalIssueFieldContextServiceImpl_Link(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:       context.Background(),
-				fieldId:   "custom_field_10002",
-				contextId: 10001,
+				fieldID:   "custom_field_10002",
+				contextID: 10001,
 			},
 			wantErr: true,
 			Err:     model.ErrNoProjectIDs,
@@ -1800,9 +1800,9 @@ func Test_internalIssueFieldContextServiceImpl_Link(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:        context.Background(),
-				fieldId:    "custom_field_10002",
-				contextId:  10001,
-				projectIds: []string{"4", "3"},
+				fieldID:    "custom_field_10002",
+				contextID:  10001,
+				projectIDs: []string{"4", "3"},
 			},
 			on: func(fields *fields) {
 
@@ -1833,8 +1833,8 @@ func Test_internalIssueFieldContextServiceImpl_Link(t *testing.T) {
 			fieldConfigService, err := NewIssueFieldContextService(testCase.fields.c, testCase.fields.version, nil)
 			assert.NoError(t, err)
 
-			gotResponse, err := fieldConfigService.Link(testCase.args.ctx, testCase.args.fieldId, testCase.args.contextId,
-				testCase.args.projectIds)
+			gotResponse, err := fieldConfigService.Link(testCase.args.ctx, testCase.args.fieldID, testCase.args.contextID,
+				testCase.args.projectIDs)
 
 			if testCase.wantErr {
 
@@ -1865,9 +1865,9 @@ func Test_internalIssueFieldContextServiceImpl_Unlink(t *testing.T) {
 
 	type args struct {
 		ctx        context.Context
-		fieldId    string
-		contextId  int
-		projectIds []string
+		fieldID    string
+		contextID  int
+		projectIDs []string
 	}
 
 	testCases := []struct {
@@ -1883,9 +1883,9 @@ func Test_internalIssueFieldContextServiceImpl_Unlink(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:        context.Background(),
-				fieldId:    "custom_field_10002",
-				contextId:  10001,
-				projectIds: []string{"4", "3"},
+				fieldID:    "custom_field_10002",
+				contextID:  10001,
+				projectIDs: []string{"4", "3"},
 			},
 			on: func(fields *fields) {
 
@@ -1915,9 +1915,9 @@ func Test_internalIssueFieldContextServiceImpl_Unlink(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:        context.Background(),
-				fieldId:    "custom_field_10002",
-				contextId:  10001,
-				projectIds: []string{"4", "3"},
+				fieldID:    "custom_field_10002",
+				contextID:  10001,
+				projectIDs: []string{"4", "3"},
 			},
 			on: func(fields *fields) {
 
@@ -1947,7 +1947,7 @@ func Test_internalIssueFieldContextServiceImpl_Unlink(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:     context.Background(),
-				fieldId: "",
+				fieldID: "",
 			},
 			wantErr: true,
 			Err:     model.ErrNoFieldID,
@@ -1958,7 +1958,7 @@ func Test_internalIssueFieldContextServiceImpl_Unlink(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:     context.Background(),
-				fieldId: "custom_field_10002",
+				fieldID: "custom_field_10002",
 			},
 			wantErr: true,
 			Err:     model.ErrNoFieldContextID,
@@ -1969,8 +1969,8 @@ func Test_internalIssueFieldContextServiceImpl_Unlink(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:       context.Background(),
-				fieldId:   "custom_field_10002",
-				contextId: 10001,
+				fieldID:   "custom_field_10002",
+				contextID: 10001,
 			},
 			wantErr: true,
 			Err:     model.ErrNoProjectIDs,
@@ -1981,9 +1981,9 @@ func Test_internalIssueFieldContextServiceImpl_Unlink(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:        context.Background(),
-				fieldId:    "custom_field_10002",
-				contextId:  10001,
-				projectIds: []string{"4", "3"},
+				fieldID:    "custom_field_10002",
+				contextID:  10001,
+				projectIDs: []string{"4", "3"},
 			},
 			on: func(fields *fields) {
 
@@ -2014,8 +2014,8 @@ func Test_internalIssueFieldContextServiceImpl_Unlink(t *testing.T) {
 			fieldConfigService, err := NewIssueFieldContextService(testCase.fields.c, testCase.fields.version, nil)
 			assert.NoError(t, err)
 
-			gotResponse, err := fieldConfigService.UnLink(testCase.args.ctx, testCase.args.fieldId, testCase.args.contextId,
-				testCase.args.projectIds)
+			gotResponse, err := fieldConfigService.UnLink(testCase.args.ctx, testCase.args.fieldID, testCase.args.contextID,
+				testCase.args.projectIDs)
 
 			if testCase.wantErr {
 

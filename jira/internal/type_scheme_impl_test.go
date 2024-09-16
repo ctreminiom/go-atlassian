@@ -443,7 +443,7 @@ func Test_internalTypeSchemeImpl_Create(t *testing.T) {
 
 	payloadMocked := &model.IssueTypeSchemePayloadScheme{
 		DefaultIssueTypeID: "1000",
-		IssueTypeIds:       []string{"1000", "1001", "1002"},
+		IssueTypeIDs:       []string{"1000", "1001", "1002"},
 		Name:               "Default Issue Type Scheme",
 		Description:        "Issue Type Scheme description",
 	}
@@ -584,7 +584,7 @@ func Test_internalTypeSchemeImpl_Update(t *testing.T) {
 
 	payloadMocked := &model.IssueTypeSchemePayloadScheme{
 		DefaultIssueTypeID: "1000",
-		IssueTypeIds:       []string{"1000", "1001", "1002"},
+		IssueTypeIDs:       []string{"1000", "1001", "1002"},
 		Name:               "Default Issue Type Scheme",
 		Description:        "Issue Type Scheme description",
 	}

@@ -2,6 +2,7 @@ package assets
 
 import (
 	"context"
+
 	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
 )
 
@@ -11,14 +12,14 @@ type ObjectTypeConnector interface {
 
 	// Get finds an object type by id
 	//
-	// GET /jsm/assets/workspace/{workspaceId}/v1/objecttype/{id}
+	// GET /jsm/assets/workspace/{workspaceID}/v1/objecttype/{objectTypeID}
 	//
 	// https://docs.go-atlassian.io/jira-assets/object/type#get-object-type
 	Get(ctx context.Context, workspaceID, objectTypeID string) (*models.ObjectTypeScheme, *models.ResponseScheme, error)
 
 	// Update updates an existing object type
 	//
-	// PUT /jsm/assets/workspace/{workspaceId}/v1/objecttype/{id}
+	// PUT /jsm/assets/workspace/{workspaceID}/v1/objecttype/{objectTypeID}
 	//
 	// https://docs.go-atlassian.io/jira-assets/object/type#update-object-type
 	Update(ctx context.Context, workspaceID, objectTypeID string, payload *models.ObjectTypePayloadScheme) (
@@ -26,7 +27,7 @@ type ObjectTypeConnector interface {
 
 	// Create creates a new object type
 	//
-	// POST /jsm/assets/workspace/{workspaceId}/v1/objecttype/create
+	// POST /jsm/assets/workspace/{workspaceID}/v1/objecttype/create
 	//
 	// https://docs.go-atlassian.io/jira-assets/object/type#create-object-type
 	Create(ctx context.Context, workspaceID string, payload *models.ObjectTypePayloadScheme) (
@@ -34,14 +35,14 @@ type ObjectTypeConnector interface {
 
 	// Delete deletes an object type
 	//
-	// DELETE /jsm/assets/workspace/{workspaceId}/v1/objecttype/{id}
+	// DELETE /jsm/assets/workspace/{workspaceID}/v1/objecttype/{objectTypeID}
 	//
 	// https://docs.go-atlassian.io/jira-assets/object/type#delete-object-type
 	Delete(ctx context.Context, workspaceID, objectTypeID string) (*models.ObjectTypeScheme, *models.ResponseScheme, error)
 
 	// Attributes finds all attributes for this object type
 	//
-	// GET /jsm/assets/workspace/{workspaceId}/v1/objecttype/{id}/attributes
+	// GET /jsm/assets/workspace/{workspaceID}/v1/objecttype/{objectTypeID}/attributes
 	//
 	// https://docs.go-atlassian.io/jira-assets/object/type#get-object-type-attributes
 	Attributes(ctx context.Context, workspaceID, objectTypeID string, options *models.ObjectTypeAttributesParamsScheme) (
@@ -49,7 +50,7 @@ type ObjectTypeConnector interface {
 
 	// Position changes the position of this object type
 	//
-	// POST /jsm/assets/workspace/{workspaceId}/v1/objecttype/{id}/position
+	// POST /jsm/assets/workspace/{workspaceID}/v1/objecttype/{objectTypeID}/position
 	//
 	// https://docs.go-atlassian.io/jira-assets/object/type#update-object-type-position
 	Position(ctx context.Context, workspaceID, objectTypeID string, payload *models.ObjectTypePositionPayloadScheme) (

@@ -144,7 +144,7 @@ func Test_internalRichTextServiceImpl_Assign(t *testing.T) {
 
 	type args struct {
 		ctx                     context.Context
-		issueKeyOrID, accountId string
+		issueKeyOrID, accountID string
 	}
 
 	testCases := []struct {
@@ -161,7 +161,7 @@ func Test_internalRichTextServiceImpl_Assign(t *testing.T) {
 			args: args{
 				ctx:          context.Background(),
 				issueKeyOrID: "DUMMY-1",
-				accountId:    "account-id-sample",
+				accountID:    "account-id-sample",
 			},
 			on: func(fields *fields) {
 
@@ -190,7 +190,7 @@ func Test_internalRichTextServiceImpl_Assign(t *testing.T) {
 			args: args{
 				ctx:          context.Background(),
 				issueKeyOrID: "",
-				accountId:    "account-id-sample",
+				accountID:    "account-id-sample",
 			},
 			on: func(fields *fields) {
 				fields.c = mocks.NewConnector(t)
@@ -205,7 +205,7 @@ func Test_internalRichTextServiceImpl_Assign(t *testing.T) {
 			args: args{
 				ctx:          context.Background(),
 				issueKeyOrID: "DUMMY-1",
-				accountId:    "",
+				accountID:    "",
 			},
 			on: func(fields *fields) {
 				fields.c = mocks.NewConnector(t)
@@ -220,7 +220,7 @@ func Test_internalRichTextServiceImpl_Assign(t *testing.T) {
 			args: args{
 				ctx:          context.Background(),
 				issueKeyOrID: "DUMMY-1",
-				accountId:    "account-id-sample",
+				accountID:    "account-id-sample",
 			},
 			on: func(fields *fields) {
 
@@ -251,7 +251,7 @@ func Test_internalRichTextServiceImpl_Assign(t *testing.T) {
 			issueService, _, err := NewIssueService(testCase.fields.c, testCase.fields.version, nil)
 			assert.NoError(t, err)
 
-			gotResponse, err := issueService.Assign(testCase.args.ctx, testCase.args.issueKeyOrID, testCase.args.accountId)
+			gotResponse, err := issueService.Assign(testCase.args.ctx, testCase.args.issueKeyOrID, testCase.args.accountID)
 
 			if testCase.wantErr {
 
@@ -1073,7 +1073,7 @@ func Test_internalRichTextServiceImpl_Move(t *testing.T) {
 
 	type args struct {
 		ctx                        context.Context
-		issueKeyOrID, transitionId string
+		issueKeyOrID, transitionID string
 		options                    *model.IssueMoveOptionsV2
 	}
 
@@ -1091,7 +1091,7 @@ func Test_internalRichTextServiceImpl_Move(t *testing.T) {
 			args: args{
 				ctx:          context.Background(),
 				issueKeyOrID: "DUMMY-1",
-				transitionId: "10001",
+				transitionID: "10001",
 				options: &model.IssueMoveOptionsV2{
 					Fields: &model.IssueSchemeV2{
 						Fields: &model.IssueFieldsSchemeV2{
@@ -1131,7 +1131,7 @@ func Test_internalRichTextServiceImpl_Move(t *testing.T) {
 			args: args{
 				ctx:          context.Background(),
 				issueKeyOrID: "DUMMY-1",
-				transitionId: "10001",
+				transitionID: "10001",
 				options: &model.IssueMoveOptionsV2{
 					CustomFields: customFieldsMocked,
 					Operations:   operationsMocked,
@@ -1147,7 +1147,7 @@ func Test_internalRichTextServiceImpl_Move(t *testing.T) {
 			args: args{
 				ctx:          context.Background(),
 				issueKeyOrID: "DUMMY-1",
-				transitionId: "10001",
+				transitionID: "10001",
 				options: &model.IssueMoveOptionsV2{
 					Fields: &model.IssueSchemeV2{
 						Fields: &model.IssueFieldsSchemeV2{
@@ -1187,7 +1187,7 @@ func Test_internalRichTextServiceImpl_Move(t *testing.T) {
 			args: args{
 				ctx:          context.Background(),
 				issueKeyOrID: "DUMMY-1",
-				transitionId: "10001",
+				transitionID: "10001",
 				options: &model.IssueMoveOptionsV2{
 					Fields: &model.IssueSchemeV2{
 						Fields: &model.IssueFieldsSchemeV2{
@@ -1227,7 +1227,7 @@ func Test_internalRichTextServiceImpl_Move(t *testing.T) {
 			args: args{
 				ctx:          context.Background(),
 				issueKeyOrID: "DUMMY-1",
-				transitionId: "10001",
+				transitionID: "10001",
 				options:      nil,
 			},
 			on: func(fields *fields) {
@@ -1257,7 +1257,7 @@ func Test_internalRichTextServiceImpl_Move(t *testing.T) {
 			args: args{
 				ctx:          context.Background(),
 				issueKeyOrID: "",
-				transitionId: "10001",
+				transitionID: "10001",
 				options: &model.IssueMoveOptionsV2{
 					Fields: &model.IssueSchemeV2{
 						Fields: &model.IssueFieldsSchemeV2{
@@ -1283,7 +1283,7 @@ func Test_internalRichTextServiceImpl_Move(t *testing.T) {
 			args: args{
 				ctx:          context.Background(),
 				issueKeyOrID: "DUMMY-1",
-				transitionId: "",
+				transitionID: "",
 				options: &model.IssueMoveOptionsV2{
 					Fields: &model.IssueSchemeV2{
 						Fields: &model.IssueFieldsSchemeV2{
@@ -1309,7 +1309,7 @@ func Test_internalRichTextServiceImpl_Move(t *testing.T) {
 			args: args{
 				ctx:          context.Background(),
 				issueKeyOrID: "DUMMY-1",
-				transitionId: "10001",
+				transitionID: "10001",
 				options: &model.IssueMoveOptionsV2{
 					Fields: &model.IssueSchemeV2{
 						Fields: &model.IssueFieldsSchemeV2{
@@ -1351,7 +1351,7 @@ func Test_internalRichTextServiceImpl_Move(t *testing.T) {
 			issueService, _, err := NewIssueService(testCase.fields.c, testCase.fields.version, nil)
 			assert.NoError(t, err)
 
-			gotResponse, err := issueService.Move(testCase.args.ctx, testCase.args.issueKeyOrID, testCase.args.transitionId,
+			gotResponse, err := issueService.Move(testCase.args.ctx, testCase.args.issueKeyOrID, testCase.args.transitionID,
 				testCase.args.options)
 
 			if testCase.wantErr {

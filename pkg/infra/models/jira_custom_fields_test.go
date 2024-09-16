@@ -1,9 +1,10 @@
 package models
 
 import (
-	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestCustomFields_Cascading(t *testing.T) {
@@ -807,7 +808,7 @@ func TestCustomFields_URL(t *testing.T) {
 				URL:           "",
 			},
 			wantErr: true,
-			Err:     ErrNoUrlType,
+			Err:     ErrNoURLType,
 		},
 	}
 	for _, testCase := range testCases {

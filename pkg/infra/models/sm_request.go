@@ -62,7 +62,7 @@ type CustomerRequestTypeScheme struct {
 	HelpText      string   `json:"helpText,omitempty"`      // The help text for the customer request type.
 	IssueTypeID   string   `json:"issueTypeId,omitempty"`   // The issue type ID for the customer request type.
 	ServiceDeskID string   `json:"serviceDeskId,omitempty"` // The service desk ID for the customer request type.
-	GroupIds      []string `json:"groupIds,omitempty"`      // The group IDs for the customer request type.
+	GroupIDs      []string `json:"groupIds,omitempty"`      // The group IDs for the customer request type.
 }
 
 // CustomerRequestServiceDeskScheme represents a service desk for a customer request.

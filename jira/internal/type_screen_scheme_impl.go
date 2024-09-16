@@ -68,8 +68,8 @@ func (t *TypeScreenSchemeService) Assign(ctx context.Context, issueTypeScreenSch
 // GET /rest/api/{2-3}/issuetypescreenscheme/project/{projectID}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/types/screen-scheme#assign-issue-type-screen-scheme-to-project
-func (t *TypeScreenSchemeService) Projects(ctx context.Context, projectIds []int, startAt, maxResults int) (*model.IssueTypeProjectScreenSchemePageScheme, *model.ResponseScheme, error) {
-	return t.internalClient.Projects(ctx, projectIds, startAt, maxResults)
+func (t *TypeScreenSchemeService) Projects(ctx context.Context, projectIDs []int, startAt, maxResults int) (*model.IssueTypeProjectScreenSchemePageScheme, *model.ResponseScheme, error) {
+	return t.internalClient.Projects(ctx, projectIDs, startAt, maxResults)
 }
 
 // Mapping returns a paginated list of issue type screen scheme items.
@@ -79,8 +79,8 @@ func (t *TypeScreenSchemeService) Projects(ctx context.Context, projectIds []int
 // GET /rest/api/{2-3}/issuetypescreenscheme/mapping
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/types/screen-scheme#get-issue-type-screen-scheme-items
-func (t *TypeScreenSchemeService) Mapping(ctx context.Context, issueTypeScreenSchemeIds []int, startAt, maxResults int) (*model.IssueTypeScreenSchemeMappingScheme, *model.ResponseScheme, error) {
-	return t.internalClient.Mapping(ctx, issueTypeScreenSchemeIds, startAt, maxResults)
+func (t *TypeScreenSchemeService) Mapping(ctx context.Context, issueTypeScreenSchemeIDs []int, startAt, maxResults int) (*model.IssueTypeScreenSchemeMappingScheme, *model.ResponseScheme, error) {
+	return t.internalClient.Mapping(ctx, issueTypeScreenSchemeIDs, startAt, maxResults)
 }
 
 // Update updates an issue type screen scheme.
@@ -125,8 +125,8 @@ func (t *TypeScreenSchemeService) UpdateDefault(ctx context.Context, issueTypeSc
 // POST /rest/api/{2-3}/issuetypescreenscheme/{issueTypeScreenSchemeID}/mapping/remove
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/types/screen-scheme#remove-mappings-from-issue-type-screen-scheme
-func (t *TypeScreenSchemeService) Remove(ctx context.Context, issueTypeScreenSchemeID string, issueTypeIds []string) (*model.ResponseScheme, error) {
-	return t.internalClient.Remove(ctx, issueTypeScreenSchemeID, issueTypeIds)
+func (t *TypeScreenSchemeService) Remove(ctx context.Context, issueTypeScreenSchemeID string, issueTypeIDs []string) (*model.ResponseScheme, error) {
+	return t.internalClient.Remove(ctx, issueTypeScreenSchemeID, issueTypeIDs)
 }
 
 // SchemesByProject returns a paginated list of projects associated with an issue type screen scheme.
@@ -227,13 +227,13 @@ func (i *internalTypeScreenSchemeImpl) Assign(ctx context.Context, issueTypeScre
 	return i.c.Call(request, nil)
 }
 
-func (i *internalTypeScreenSchemeImpl) Projects(ctx context.Context, projectIds []int, startAt, maxResults int) (*model.IssueTypeProjectScreenSchemePageScheme, *model.ResponseScheme, error) {
+func (i *internalTypeScreenSchemeImpl) Projects(ctx context.Context, projectIDs []int, startAt, maxResults int) (*model.IssueTypeProjectScreenSchemePageScheme, *model.ResponseScheme, error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
 	params.Add("maxResults", strconv.Itoa(maxResults))
 
-	for _, id := range projectIds {
+	for _, id := range projectIDs {
 		params.Add("projectId", strconv.Itoa(id))
 	}
 
@@ -253,13 +253,13 @@ func (i *internalTypeScreenSchemeImpl) Projects(ctx context.Context, projectIds 
 	return page, response, nil
 }
 
-func (i *internalTypeScreenSchemeImpl) Mapping(ctx context.Context, issueTypeScreenSchemeIds []int, startAt, maxResults int) (*model.IssueTypeScreenSchemeMappingScheme, *model.ResponseScheme, error) {
+func (i *internalTypeScreenSchemeImpl) Mapping(ctx context.Context, issueTypeScreenSchemeIDs []int, startAt, maxResults int) (*model.IssueTypeScreenSchemeMappingScheme, *model.ResponseScheme, error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
 	params.Add("maxResults", strconv.Itoa(maxResults))
 
-	for _, id := range issueTypeScreenSchemeIds {
+	for _, id := range issueTypeScreenSchemeIDs {
 		params.Add("issueTypeScreenSchemeId", strconv.Itoa(id))
 	}
 
@@ -353,19 +353,19 @@ func (i *internalTypeScreenSchemeImpl) UpdateDefault(ctx context.Context, issueT
 	return i.c.Call(request, nil)
 }
 
-func (i *internalTypeScreenSchemeImpl) Remove(ctx context.Context, issueTypeScreenSchemeID string, issueTypeIds []string) (*model.ResponseScheme, error) {
+func (i *internalTypeScreenSchemeImpl) Remove(ctx context.Context, issueTypeScreenSchemeID string, issueTypeIDs []string) (*model.ResponseScheme, error) {
 
 	if issueTypeScreenSchemeID == "" {
 		return nil, model.ErrNoIssueTypeScreenSchemeID
 	}
 
-	if len(issueTypeIds) == 0 {
+	if len(issueTypeIDs) == 0 {
 		return nil, model.ErrNoIssueTypes
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issuetypescreenscheme/%v/mapping/remove", i.version, issueTypeScreenSchemeID)
 
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", map[string]interface{}{"issueTypeIds": issueTypeIds})
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", map[string]interface{}{"issueTypeIds": issueTypeIDs})
 	if err != nil {
 		return nil, err
 	}

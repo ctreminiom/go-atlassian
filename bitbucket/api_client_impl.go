@@ -19,7 +19,7 @@ import (
 const DefaultBitbucketSite = "https://api.bitbucket.org"
 
 // New creates a new Bitbucket API client.
-func New(httpClient common.HttpClient, site string) (*Client, error) {
+func New(httpClient common.HTTPClient, site string) (*Client, error) {
 
 	if httpClient == nil {
 		httpClient = http.DefaultClient
@@ -55,7 +55,7 @@ func New(httpClient common.HttpClient, site string) (*Client, error) {
 
 // Client is a Bitbucket API client.
 type Client struct {
-	HTTP      common.HttpClient
+	HTTP      common.HTTPClient
 	Site      *url.URL
 	Auth      common.Authentication
 	Workspace *internal.WorkspaceService

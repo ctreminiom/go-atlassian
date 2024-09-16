@@ -343,7 +343,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Mapping(t *testing.T) {
 
 	type args struct {
 		ctx                 context.Context
-		fieldConfigIds      []int
+		fieldConfigIDs      []int
 		startAt, maxResults int
 	}
 
@@ -360,7 +360,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Mapping(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:            context.Background(),
-				fieldConfigIds: []int{10001},
+				fieldConfigIDs: []int{10001},
 				startAt:        50,
 				maxResults:     50,
 			},
@@ -392,7 +392,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Mapping(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:            context.Background(),
-				fieldConfigIds: []int{10001},
+				fieldConfigIDs: []int{10001},
 				startAt:        50,
 				maxResults:     50,
 			},
@@ -424,7 +424,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Mapping(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:            context.Background(),
-				fieldConfigIds: []int{10001},
+				fieldConfigIDs: []int{10001},
 				startAt:        50,
 				maxResults:     50,
 			},
@@ -457,7 +457,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Mapping(t *testing.T) {
 			fieldConfigService, err := NewIssueFieldConfigurationSchemeService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := fieldConfigService.Mapping(testCase.args.ctx, testCase.args.fieldConfigIds,
+			gotResult, gotResponse, err := fieldConfigService.Mapping(testCase.args.ctx, testCase.args.fieldConfigIDs,
 				testCase.args.startAt, testCase.args.maxResults)
 
 			if testCase.wantErr {
@@ -488,7 +488,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Project(t *testing.T) {
 
 	type args struct {
 		ctx                 context.Context
-		projectIds          []int
+		projectIDs          []int
 		startAt, maxResults int
 	}
 
@@ -505,7 +505,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Project(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:        context.Background(),
-				projectIds: []int{10001},
+				projectIDs: []int{10001},
 				startAt:    50,
 				maxResults: 50,
 			},
@@ -537,7 +537,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Project(t *testing.T) {
 			fields: fields{version: "2"},
 			args: args{
 				ctx:        context.Background(),
-				projectIds: []int{10001},
+				projectIDs: []int{10001},
 				startAt:    50,
 				maxResults: 50,
 			},
@@ -569,7 +569,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Project(t *testing.T) {
 			fields: fields{version: "3"},
 			args: args{
 				ctx:        context.Background(),
-				projectIds: []int{10001},
+				projectIDs: []int{10001},
 				startAt:    50,
 				maxResults: 50,
 			},
@@ -602,7 +602,7 @@ func Test_internalIssueFieldConfigSchemeServiceImpl_Project(t *testing.T) {
 			fieldConfigService, err := NewIssueFieldConfigurationSchemeService(testCase.fields.c, testCase.fields.version)
 			assert.NoError(t, err)
 
-			gotResult, gotResponse, err := fieldConfigService.Project(testCase.args.ctx, testCase.args.projectIds,
+			gotResult, gotResponse, err := fieldConfigService.Project(testCase.args.ctx, testCase.args.projectIDs,
 				testCase.args.startAt, testCase.args.maxResults)
 
 			if testCase.wantErr {

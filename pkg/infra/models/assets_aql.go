@@ -58,8 +58,8 @@ type ObjectPageScheme struct {
 	// PageNumber is the number of the page.
 	PageNumber int `json:"pageNumber"`
 
-	// OrderByTypeAttrId is the ID of the attribute used for ordering.
-	OrderByTypeAttrId int `json:"orderByTypeAttrId"`
+	// OrderByTypeAttrID is the ID of the attribute used for ordering.
+	OrderByTypeAttrID int `json:"orderByTypeAttrId"`
 
 	// OrderWay is the way of ordering (ascending or descending).
 	OrderWay string `json:"orderWay"`

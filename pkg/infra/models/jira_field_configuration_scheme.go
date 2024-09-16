@@ -43,7 +43,7 @@ type FieldConfigurationSchemeProjectPageScheme struct {
 
 // FieldConfigurationSchemeProjectScheme represents a field configuration scheme project in Jira.
 type FieldConfigurationSchemeProjectScheme struct {
-	ProjectIds               []string                        `json:"projectIds,omitempty"`               // The IDs of the projects.
+	ProjectIDs               []string                        `json:"projectIds,omitempty"`               // The IDs of the projects.
 	FieldConfigurationScheme *FieldConfigurationSchemeScheme `json:"fieldConfigurationScheme,omitempty"` // The field configuration scheme.
 }
 

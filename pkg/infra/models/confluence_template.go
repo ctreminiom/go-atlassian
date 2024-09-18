@@ -84,6 +84,7 @@ type ContentBodyCreateScheme struct {
 	Representation string `json:"representation"`
 }
 
+// ContentTemplateScheme represents a Confluence template.
 type ContentTemplateScheme struct {
 	TemplateID           string                  `json:"templateId"`
 	OriginalTemplate     *OriginalTemplateScheme `json:"originalTemplate,omitempty"`
@@ -99,11 +100,13 @@ type ContentTemplateScheme struct {
 	Expandable    *ContentTemplateExpandableScheme `json:"_expandable,omitempty"`
 }
 
+// OriginalTemplateScheme contains the original template reference.
 type OriginalTemplateScheme struct {
 	PluginKey string `json:"pluginKey"`
 	ModuleKey string `json:"moduleKey"`
 }
 
+// ContentTemplateExpandableScheme represents the expandable properties of a template.
 type ContentTemplateExpandableScheme struct {
 	Body string `json:"body"`
 }

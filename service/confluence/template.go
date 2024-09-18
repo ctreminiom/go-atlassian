@@ -6,7 +6,9 @@ import (
 	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
 )
 
+// TemplateConnector provides methods to interact with template operations in Confluence.
 type TemplateConnector interface {
+
 	// Update updates a template.
 	//
 	// PUT /wiki/rest/api/template

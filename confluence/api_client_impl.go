@@ -60,6 +60,7 @@ func New(httpClient common.HTTPClient, site string) (*Client, error) {
 	client.Search = internal.NewSearchService(client)
 	client.LongTask = internal.NewTaskService(client)
 	client.Analytics = internal.NewAnalyticsService(client)
+	client.Template = internal.NewTemplateService(client)
 
 	return client, nil
 }
@@ -74,6 +75,7 @@ type Client struct {
 	Search    *internal.SearchService
 	LongTask  *internal.TaskService
 	Analytics *internal.AnalyticsService
+	Template  *internal.TemplateService
 }
 
 func (c *Client) NewRequest(ctx context.Context, method, urlStr, contentType string, body interface{}) (*http.Request, error) {

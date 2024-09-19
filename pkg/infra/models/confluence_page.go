@@ -73,10 +73,11 @@ type PageBodyScheme struct {
 
 // PageCreatePayloadScheme represents the payload for creating a page in Confluence.
 type PageCreatePayloadScheme struct {
-	SpaceID string                        `json:"spaceId,omitempty"` // The ID of the space of the page.
-	Status  string                        `json:"status,omitempty"`  // The status of the page.
-	Title   string                        `json:"title,omitempty"`   // The title of the page.
-	Body    *PageBodyRepresentationScheme `json:"body,omitempty"`    // The body of the page.
+	SpaceID  string                        `json:"spaceId,omitempty"`  // The ID of the space of the page.
+	Status   string                        `json:"status,omitempty"`   // The status of the page.
+	Title    string                        `json:"title,omitempty"`    // The title of the page.
+	ParentID string                        `json:"parentId,omitempty"` // The ID of the parent of the page.
+	Body     *PageBodyRepresentationScheme `json:"body,omitempty"`     // The body of the page.
 }
 
 // PageBodyRepresentationScheme represents a representation of a body in Confluence.
@@ -87,12 +88,14 @@ type PageBodyRepresentationScheme struct {
 
 // PageUpdatePayloadScheme represents the payload for updating a page in Confluence.
 type PageUpdatePayloadScheme struct {
-	ID      int                             `json:"id,omitempty"`      // The ID of the page.
-	Status  string                          `json:"status,omitempty"`  // The status of the page.
-	Title   string                          `json:"title,omitempty"`   // The title of the page.
-	SpaceID int                             `json:"spaceId,omitempty"` // The ID of the space of the page.
-	Body    *PageBodyRepresentationScheme   `json:"body,omitempty"`    // The body of the page.
-	Version *PageUpdatePayloadVersionScheme `json:"version,omitempty"` // The version of the page.
+	ID       string                          `json:"id,omitempty"`       // The ID of the page.
+	Status   string                          `json:"status,omitempty"`   // The status of the page.
+	Title    string                          `json:"title,omitempty"`    // The title of the page.
+	SpaceID  string                          `json:"spaceId,omitempty"`  // The ID of the space of the page.
+	ParentID string                          `json:"parentId,omitempty"` // The ID of the parent of the page.
+	OwnerID  string                          `json:"ownerId,omitempty"`  // The ID of the owner of the page.
+	Body     *PageBodyRepresentationScheme   `json:"body,omitempty"`     // The body of the page.
+	Version  *PageUpdatePayloadVersionScheme `json:"version,omitempty"`  // The version of the page.
 }
 
 // PageUpdatePayloadVersionScheme represents the version of the payload for updating a page in Confluence.

@@ -172,4 +172,8 @@ var (
 	ErrNoMemberID                     = errors.New("bitbucket: no member id set")
 	ErrNoWebhookID                    = errors.New("bitbucket: no webhook id set")
 	ErrNoRepository                   = errors.New("bitbucket: no repository set")
+	ErrNoProjectSlug                  = errors.New("bitbucket: no project slug set")
+	ErrNoAccountSlug                  = errors.New("bitbucket: no account slug set")
+	ErrNoGroupSlug                    = errors.New("bitbucket: no group slug set")
+	ErrNoPermissionSlug               = errors.New("bitbucket: no permission set")
 )

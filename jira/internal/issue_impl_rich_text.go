@@ -2,6 +2,7 @@ package internal
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -393,6 +394,14 @@ func (i *internalRichTextServiceImpl) Move(ctx context.Context, issueKeyOrID, tr
 			return nil, err
 		}
 	}
+
+	jsonData, err := json.MarshalIndent(payload, "", "  ")
+	if err != nil {
+		return nil, err
+	}
+
+	// Print the JSON string
+	fmt.Println("JSON:", string(jsonData))
 
 	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/transitions", i.version, issueKeyOrID)
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)

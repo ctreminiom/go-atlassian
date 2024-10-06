@@ -369,62 +369,33 @@ func (i *internalRichTextServiceImpl) Move(ctx context.Context, issueKeyOrID, tr
 		return nil, model.ErrNoTransitionID
 	}
 
-	payloadUpdated := make(map[string]interface{})
-	payloadUpdated["transition"] = map[string]interface{}{"id": transitionID}
+	payload := map[string]interface{}{"transition": map[string]interface{}{"id": transitionID}}
 
-	// Process logic only if the transition options are provided
 	if options != nil {
-
 		if options.Fields == nil {
 			return nil, model.ErrNoIssueScheme
 		}
 
-		withCustomFields := options.CustomFields != nil
-		withOperations := options.Operations != nil
-
-		var err error
-
-		// Executed when the customfields and operations are provided
-		if withCustomFields && withOperations {
-
-			payloadUpdated, err = options.Fields.MergeCustomFields(options.CustomFields)
-			if err != nil {
-				return nil, err
-			}
-
-			payloadWithOperations, err := options.Fields.MergeOperations(options.Operations)
-			if err != nil {
-				return nil, err
-			}
-
-			if err = mergo.Map(&payloadUpdated, &payloadWithOperations, mergo.WithOverride); err != nil {
-				return nil, err
-			}
+		// Merge the customfields and operations
+		payloadWithFields, err := options.Fields.MergeCustomFields(options.CustomFields)
+		if err != nil {
+			return nil, err
+		}
+		if err = mergo.Map(&payload, &payloadWithFields, mergo.WithOverride); err != nil {
+			return nil, err
 		}
 
-		// Executed when only the customfields are provided, but not the operations
-		if withCustomFields && !withOperations {
-
-			payloadUpdated, err = options.Fields.MergeCustomFields(options.CustomFields)
-			if err != nil {
-				return nil, err
-			}
+		payloadWithOperation, err := options.Fields.MergeOperations(options.Operations)
+		if err != nil {
+			return nil, err
 		}
-
-		// Executed when only the operations are provided, but not the customfields
-		if withOperations && !withCustomFields {
-
-			payloadUpdated, err = options.Fields.MergeOperations(options.Operations)
-			if err != nil {
-				return nil, err
-			}
+		if err = mergo.Map(&payload, &payloadWithOperation, mergo.WithOverride); err != nil {
+			return nil, err
 		}
-
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/transitions", i.version, issueKeyOrID)
-
-	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payloadUpdated)
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
 		return nil, err
 	}

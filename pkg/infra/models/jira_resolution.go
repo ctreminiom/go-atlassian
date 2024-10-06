@@ -2,8 +2,8 @@ package models
 
 // ResolutionScheme represents a resolution in Jira.
 type ResolutionScheme struct {
-	Self        string `json:"self"`        // The URL of the resolution.
-	ID          string `json:"id"`          // The ID of the resolution.
-	Description string `json:"description"` // The description of the resolution.
-	Name        string `json:"name"`        // The name of the resolution.
+	Self        string `json:"self,omitempty"`
+	ID          string `json:"id,omitempty"`
+	Description string `json:"description,omitempty"`
+	Name        string `json:"name,omitempty"`
 }

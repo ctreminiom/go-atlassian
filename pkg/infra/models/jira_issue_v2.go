@@ -23,7 +23,7 @@ type IssueSchemeV2 struct {
 func (i *IssueSchemeV2) MergeCustomFields(fields *CustomFields) (map[string]interface{}, error) {
 
 	if fields == nil || len(fields.Fields) == 0 {
-		return nil, ErrNoCustomField
+		return map[string]interface{}{}, nil
 	}
 
 	// Convert the IssueScheme struct to map[string]interface{}
@@ -50,10 +50,17 @@ func (i *IssueSchemeV2) MergeCustomFields(fields *CustomFields) (map[string]inte
 // MergeOperations merges operations into the issue scheme.
 // It returns a map representation of the issue scheme with the merged operations.
 // If the provided operations are nil or empty, it returns an error.
+//
+// Parameters:
+// - operations: A pointer to UpdateOperations containing the operations to be merged.
+//
+// Returns:
+// - A map[string]interface{} representing the issue scheme with the merged operations.
+// - An error if the operations are nil, empty, or if there is an issue during the merging process.
 func (i *IssueSchemeV2) MergeOperations(operations *UpdateOperations) (map[string]interface{}, error) {
 
 	if operations == nil || len(operations.Fields) == 0 {
-		return nil, ErrNoOperator
+		return map[string]interface{}{}, nil
 	}
 
 	// Convert the IssueScheme struct to map[string]interface{}

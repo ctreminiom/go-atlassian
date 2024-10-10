@@ -99,7 +99,7 @@ instance.Auth.SetBasicAuth("YOUR_CLIENT_MAIL", "YOUR_APP_ACCESS_TOKEN")
 
 ## ☕Cookbooks
 
-For detailed examples and usage of the go-atlassian library, please refer to our Cookbook. This section provides step-by-step guides and code samples for common tasks and scenarios.
+For detailed examples and usage of the go-atlassian library, please refer to our [**Cookbook**](https://docs.go-atlassian.io/cookbooks). This section provides step-by-step guides and code samples for common tasks and scenarios.
 
 -------------------------
 ## 🌍 Services
@@ -160,6 +160,65 @@ for _, transition := range issue.Transitions {
 ```
 
 The rest of the service functions work much the same way; they are concise and behave as you would expect. The [documentation](https://docs.go-atlassian.io/) contains several examples on how to use each service function.
+
+
+## 📪Call a RAW API Endpoint
+If you need to interact with an Atlassian API endpoint that hasn't been implemented in the `go-atlassian` library yet, you can make a custom API request using the built-in `Client.Call` method to execute raw HTTP requests.
+
+> Please raise an issue in order to implement the endpoint
+
+```go
+package main  
+  
+import (  
+    "context"  
+    "fmt" 
+    "github.com/ctreminiom/go-atlassian/jira/v3" 
+    "log" 
+    "net/http" 
+    "os"
+ )  
+  
+type IssueTypeMetadata struct {  
+    IssueTypes []struct {  
+       ID          string `json:"id"`  
+  Name        string `json:"name"`  
+  Description string `json:"description"`  
+  } `json:"issueTypes"`  
+}  
+  
+func main() {  
+  
+    var (  
+       host  = os.Getenv("SITE")  
+       mail  = os.Getenv("MAIL")  
+       token = os.Getenv("TOKEN")  
+    )  
+  
+    atlassian, err := v3.New(nil, host)  
+    if err != nil {  
+       log.Fatal(err)  
+    }  
+  
+    atlassian.Auth.SetBasicAuth(mail, token)  
+  
+    // Define the RAW endpoint  
+    apiEndpoint := "rest/api/3/issue/createmeta/KP/issuetypes"  
+  
+    request, err := atlassian.NewRequest(context.Background(), http.MethodGet, apiEndpoint, "", nil)  
+    if err != nil {  
+       log.Fatal(err)  
+    }  
+  
+    customResponseStruct := new(IssueTypeMetadata)  
+    response, err := atlassian.Call(request, &customResponseStruct)  
+    if err != nil {  
+       log.Fatal(err)  
+    }  
+  
+    fmt.Println(response.Status)  
+}
+```
 
 -------------------------
 ## ✍️ Contributions

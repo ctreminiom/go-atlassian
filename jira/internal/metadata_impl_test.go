@@ -385,3 +385,363 @@ func Test_NewMetadataService(t *testing.T) {
 		})
 	}
 }
+
+func Test_internalMetadataImpl_FetchFieldMappings(t *testing.T) {
+	type fields struct {
+		c       service.Connector
+		version string
+	}
+	type args struct {
+		ctx            context.Context
+		projectKeyOrID string
+		issueTypeID    string
+		startAt        int
+		maxResults     int
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		on      func(*fields)
+		want    gjson.Result
+		wantErr bool
+		Err     error
+	}{
+		{
+			name:   "when the project key or ID is not provided",
+			fields: fields{version: "3"},
+			args: args{
+				ctx:            context.Background(),
+				projectKeyOrID: "",
+				issueTypeID:    "10001",
+				startAt:        0,
+				maxResults:     50,
+			},
+			want:    gjson.Result{},
+			wantErr: true,
+			Err:     model.ErrNoProjectIDOrKey,
+		},
+		{
+			name:   "when the issue type ID is not provided",
+			fields: fields{version: "3"},
+			args: args{
+				ctx:            context.Background(),
+				projectKeyOrID: "DUMMY",
+				issueTypeID:    "",
+				startAt:        0,
+				maxResults:     50,
+			},
+			want:    gjson.Result{},
+			wantErr: true,
+			Err:     model.ErrNoIssueTypeID,
+		},
+		{
+			name:   "when the API version is v3",
+			fields: fields{version: "3"},
+			args: args{
+				ctx:            context.Background(),
+				projectKeyOrID: "DUMMY",
+				issueTypeID:    "10001",
+				startAt:        0,
+				maxResults:     50,
+			},
+			on: func(fields *fields) {
+				client := mocks.NewConnector(t)
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodGet,
+					"rest/api/3/issue/createmeta/DUMMY/issuetypes/10001?maxResults=50&startAt=0",
+					"",
+					nil).
+					Return(&http.Request{}, nil)
+				client.On("Call",
+					&http.Request{},
+					nil).
+					Return(&model.ResponseScheme{}, nil)
+				fields.c = client
+			},
+			want:    gjson.Result{},
+			wantErr: false,
+		},
+		{
+			name:   "when the API version is v2",
+			fields: fields{version: "2"},
+			args: args{
+				ctx:            context.Background(),
+				projectKeyOrID: "DUMMY",
+				issueTypeID:    "10001",
+				startAt:        0,
+				maxResults:     50,
+			},
+			on: func(fields *fields) {
+				client := mocks.NewConnector(t)
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodGet,
+					"rest/api/2/issue/createmeta/DUMMY/issuetypes/10001?maxResults=50&startAt=0",
+					"",
+					nil).
+					Return(&http.Request{}, nil)
+				client.On("Call",
+					&http.Request{},
+					nil).
+					Return(&model.ResponseScheme{}, nil)
+				fields.c = client
+			},
+			want:    gjson.Result{},
+			wantErr: false,
+		},
+		{
+			name:   "when the HTTP request cannot be created",
+			fields: fields{version: "2"},
+			args: args{
+				ctx:            context.Background(),
+				projectKeyOrID: "DUMMY",
+				issueTypeID:    "10001",
+				startAt:        0,
+				maxResults:     50,
+			},
+			on: func(fields *fields) {
+				client := mocks.NewConnector(t)
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodGet,
+					"rest/api/2/issue/createmeta/DUMMY/issuetypes/10001?maxResults=50&startAt=0",
+					"",
+					nil).
+					Return(&http.Request{}, errors.New("error"))
+				fields.c = client
+			},
+			want:    gjson.Result{},
+			wantErr: true,
+			Err:     errors.New("error"),
+		},
+		{
+			name:   "when the HTTP call fails",
+			fields: fields{version: "2"},
+			args: args{
+				ctx:            context.Background(),
+				projectKeyOrID: "DUMMY",
+				issueTypeID:    "10001",
+				startAt:        0,
+				maxResults:     50,
+			},
+			on: func(fields *fields) {
+				client := mocks.NewConnector(t)
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodGet,
+					"rest/api/2/issue/createmeta/DUMMY/issuetypes/10001?maxResults=50&startAt=0",
+					"",
+					nil).
+					Return(&http.Request{}, nil)
+				client.On("Call",
+					&http.Request{},
+					nil).
+					Return(nil, errors.New("error"))
+				fields.c = client
+			},
+			want:    gjson.Result{},
+			wantErr: true,
+			Err:     errors.New("error"),
+		},
+	}
+	for _, testCase := range tests {
+		t.Run(testCase.name, func(t *testing.T) {
+
+			if testCase.on != nil {
+				testCase.on(&testCase.fields)
+			}
+
+			metadataService, err := NewMetadataService(testCase.fields.c, testCase.fields.version)
+			assert.NoError(t, err)
+
+			gotResult, gotResponse, err := metadataService.FetchFieldMappings(testCase.args.ctx, testCase.args.projectKeyOrID, testCase.args.issueTypeID, testCase.args.startAt, testCase.args.maxResults)
+			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+
+				assert.EqualError(t, err, testCase.Err.Error())
+
+			} else {
+
+				assert.NoError(t, err)
+				assert.NotEqual(t, gotResponse, nil)
+				assert.NotEqual(t, gotResult, nil)
+				assert.Equal(t, gotResult, testCase.want)
+			}
+		})
+	}
+}
+
+func Test_internalMetadataImpl_FetchIssueMappings(t *testing.T) {
+	type fields struct {
+		c       service.Connector
+		version string
+	}
+	type args struct {
+		ctx            context.Context
+		projectKeyOrID string
+		startAt        int
+		maxResults     int
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		on      func(*fields)
+		want    gjson.Result
+		wantErr bool
+		Err     error
+	}{
+		{
+			name:   "when the project key or ID is not provided",
+			fields: fields{version: "3"},
+			args: args{
+				ctx:            context.Background(),
+				projectKeyOrID: "",
+				startAt:        0,
+				maxResults:     50,
+			},
+			want:    gjson.Result{},
+			wantErr: true,
+			Err:     model.ErrNoProjectIDOrKey,
+		},
+		{
+			name:   "when the API version is v3",
+			fields: fields{version: "3"},
+			args: args{
+				ctx:            context.Background(),
+				projectKeyOrID: "DUMMY",
+				startAt:        0,
+				maxResults:     50,
+			},
+			on: func(fields *fields) {
+				client := mocks.NewConnector(t)
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodGet,
+					"rest/api/3/issue/createmeta/DUMMY/issuetypes?maxResults=50&startAt=0",
+					"",
+					nil).
+					Return(&http.Request{}, nil)
+				client.On("Call",
+					&http.Request{},
+					nil).
+					Return(&model.ResponseScheme{}, nil)
+				fields.c = client
+			},
+			want:    gjson.Result{},
+			wantErr: false,
+		},
+		{
+			name:   "when the API version is v2",
+			fields: fields{version: "2"},
+			args: args{
+				ctx:            context.Background(),
+				projectKeyOrID: "DUMMY",
+				startAt:        0,
+				maxResults:     50,
+			},
+			on: func(fields *fields) {
+				client := mocks.NewConnector(t)
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodGet,
+					"rest/api/2/issue/createmeta/DUMMY/issuetypes?maxResults=50&startAt=0",
+					"",
+					nil).
+					Return(&http.Request{}, nil)
+				client.On("Call",
+					&http.Request{},
+					nil).
+					Return(&model.ResponseScheme{}, nil)
+				fields.c = client
+			},
+			want:    gjson.Result{},
+			wantErr: false,
+		},
+		{
+			name:   "when the HTTP request cannot be created",
+			fields: fields{version: "2"},
+			args: args{
+				ctx:            context.Background(),
+				projectKeyOrID: "DUMMY",
+				startAt:        0,
+				maxResults:     50,
+			},
+			on: func(fields *fields) {
+				client := mocks.NewConnector(t)
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodGet,
+					"rest/api/2/issue/createmeta/DUMMY/issuetypes?maxResults=50&startAt=0",
+					"",
+					nil).
+					Return(&http.Request{}, errors.New("error"))
+				fields.c = client
+			},
+			want:    gjson.Result{},
+			wantErr: true,
+			Err:     errors.New("error"),
+		},
+		{
+			name:   "when the HTTP call fails",
+			fields: fields{version: "2"},
+			args: args{
+				ctx:            context.Background(),
+				projectKeyOrID: "DUMMY",
+				startAt:        0,
+				maxResults:     50,
+			},
+			on: func(fields *fields) {
+				client := mocks.NewConnector(t)
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodGet,
+					"rest/api/2/issue/createmeta/DUMMY/issuetypes?maxResults=50&startAt=0",
+					"",
+					nil).
+					Return(&http.Request{}, nil)
+				client.On("Call",
+					&http.Request{},
+					nil).
+					Return(nil, errors.New("error"))
+				fields.c = client
+			},
+			want:    gjson.Result{},
+			wantErr: true,
+			Err:     errors.New("error"),
+		},
+	}
+	for _, testCase := range tests {
+		t.Run(testCase.name, func(t *testing.T) {
+
+			if testCase.on != nil {
+				testCase.on(&testCase.fields)
+			}
+
+			metadataService, err := NewMetadataService(testCase.fields.c, testCase.fields.version)
+			assert.NoError(t, err)
+
+			gotResult, gotResponse, err := metadataService.FetchIssueMappings(testCase.args.ctx, testCase.args.projectKeyOrID, testCase.args.startAt, testCase.args.maxResults)
+			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+
+				assert.EqualError(t, err, testCase.Err.Error())
+
+			} else {
+
+				assert.NoError(t, err)
+				assert.NotEqual(t, gotResponse, nil)
+				assert.NotEqual(t, gotResult, nil)
+				assert.Equal(t, gotResult, testCase.want)
+			}
+		})
+	}
+}

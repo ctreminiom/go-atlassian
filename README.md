@@ -36,12 +36,12 @@ The **go-atlassian** library is designed to simplify the process of building Go 
 
 If you do not have [Go](https://golang.org/) installed yet, you can find installation instructions
 [here](https://golang.org/doc/install). Please note that the package requires Go version
-1.17 or later for module support.
+1.20 or later for module support.
 
 To pull the most recent version of **go-atlassian**, use `go get`.
 
 ```
-go get github.com/ctreminiom/go-atlassian
+go get github.com/ctreminiom/go-atlassian/v2
 ```
 
 -------------------------

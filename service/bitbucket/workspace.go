@@ -3,7 +3,7 @@ package bitbucket
 import (
 	"context"
 
-	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
 )
 
 // WorkspaceConnector is where you create repositories, collaborate on your code,

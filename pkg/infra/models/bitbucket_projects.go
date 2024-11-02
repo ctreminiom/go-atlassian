@@ -17,6 +17,7 @@ type BitbucketProjectScheme struct {
 	UUID                    string                       `json:"uuid,omitempty"`                       // The UUID of the project.
 	Key                     string                       `json:"key,omitempty"`                        // The key of the project.
 	Name                    string                       `json:"name,omitempty"`                       // The name of the project.
+	Owner                   *BitbucketAccountScheme      `json:"owner,omitempty"`                      // The owner of the project.
 	Description             string                       `json:"description,omitempty"`                // The description of the project.
 	IsPrivate               bool                         `json:"is_private,omitempty"`                 // Whether the project is private.
 	CreatedOn               string                       `json:"created_on,omitempty"`                 // The creation time of the project.

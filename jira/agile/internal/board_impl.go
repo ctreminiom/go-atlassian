@@ -38,6 +38,9 @@ type BoardService struct {
 //
 // https://docs.go-atlassian.io/jira-agile/boards#get-board
 func (b *BoardService) Get(ctx context.Context, boardID int) (*model.BoardScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*BoardService).Get")
+	defer span.End()
+
 	return b.internalClient.Get(ctx, boardID)
 }
 
@@ -47,6 +50,9 @@ func (b *BoardService) Get(ctx context.Context, boardID int) (*model.BoardScheme
 //
 // Docs: https://docs.go-atlassian.io/jira-agile/boards#create-board
 func (b *BoardService) Create(ctx context.Context, payload *model.BoardPayloadScheme) (*model.BoardScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*BoardService).Create")
+	defer span.End()
+
 	return b.internalClient.Create(ctx, payload)
 }
 
@@ -60,6 +66,9 @@ func (b *BoardService) Create(ctx context.Context, payload *model.BoardPayloadSc
 //
 // https://docs.go-atlassian.io/jira-agile/boards#get-board-by-filter-id
 func (b *BoardService) Filter(ctx context.Context, filterID, startAt, maxResults int) (*model.BoardPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*BoardService).Filter")
+	defer span.End()
+
 	return b.internalClient.Filter(ctx, filterID, startAt, maxResults)
 }
 
@@ -79,6 +88,9 @@ func (b *BoardService) Filter(ctx context.Context, filterID, startAt, maxResults
 //
 // https://docs.go-atlassian.io/jira-agile/boards#get-issues-for-backlog
 func (b *BoardService) Backlog(ctx context.Context, boardID int, opts *model.IssueOptionScheme, startAt, maxResults int) (*model.BoardIssuePageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*BoardService).Backlog")
+	defer span.End()
+
 	return b.internalClient.Backlog(ctx, boardID, opts, startAt, maxResults)
 }
 
@@ -88,6 +100,9 @@ func (b *BoardService) Backlog(ctx context.Context, boardID int, opts *model.Iss
 //
 // https://docs.go-atlassian.io/jira-agile/boards#get-configuration
 func (b *BoardService) Configuration(ctx context.Context, boardID int) (*model.BoardConfigurationScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*BoardService).Configuration")
+	defer span.End()
+
 	return b.internalClient.Configuration(ctx, boardID)
 }
 
@@ -101,6 +116,9 @@ func (b *BoardService) Configuration(ctx context.Context, boardID int) (*model.B
 //
 // https://docs.go-atlassian.io/jira-agile/boards#get-epics
 func (b *BoardService) Epics(ctx context.Context, boardID, startAt, maxResults int, done bool) (*model.BoardEpicPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*BoardService).Epics")
+	defer span.End()
+
 	return b.internalClient.Epics(ctx, boardID, startAt, maxResults, done)
 }
 
@@ -116,6 +134,9 @@ func (b *BoardService) Epics(ctx context.Context, boardID, startAt, maxResults i
 //
 // Docs: https://docs.go-atlassian.io/jira-agile/boards#get-issues-without-epic-for-board
 func (b *BoardService) IssuesWithoutEpic(ctx context.Context, boardID int, opts *model.IssueOptionScheme, startAt, maxResults int) (*model.BoardIssuePageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*BoardService).IssuesWithoutEpic")
+	defer span.End()
+
 	return b.internalClient.IssuesWithoutEpic(ctx, boardID, opts, startAt, maxResults)
 }
 
@@ -131,6 +152,9 @@ func (b *BoardService) IssuesWithoutEpic(ctx context.Context, boardID int, opts 
 //
 // https://docs.go-atlassian.io/jira-agile/boards#get-board-issues-for-epic
 func (b *BoardService) IssuesByEpic(ctx context.Context, boardID, epicID int, opts *model.IssueOptionScheme, startAt, maxResults int) (*model.BoardIssuePageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*BoardService).IssuesByEpic")
+	defer span.End()
+
 	return b.internalClient.IssuesByEpic(ctx, boardID, epicID, opts, startAt, maxResults)
 }
 
@@ -152,6 +176,9 @@ func (b *BoardService) IssuesByEpic(ctx context.Context, boardID, epicID int, op
 //
 // https://docs.go-atlassian.io/jira-agile/boards#get-issues-for-board
 func (b *BoardService) Issues(ctx context.Context, boardID int, opts *model.IssueOptionScheme, startAt, maxResults int) (*model.BoardIssuePageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*BoardService).Issues")
+	defer span.End()
+
 	return b.internalClient.Issues(ctx, boardID, opts, startAt, maxResults)
 }
 
@@ -167,6 +194,9 @@ func (b *BoardService) Issues(ctx context.Context, boardID int, opts *model.Issu
 //
 // https://docs.go-atlassian.io/jira-agile/boards#move-issues-to-backlog-for-board
 func (b *BoardService) Move(ctx context.Context, boardID int, payload *model.BoardMovementPayloadScheme) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*BoardService).Move")
+	defer span.End()
+
 	return b.internalClient.Move(ctx, boardID, payload)
 }
 
@@ -180,6 +210,9 @@ func (b *BoardService) Move(ctx context.Context, boardID int, payload *model.Boa
 //
 // https://docs.go-atlassian.io/jira-agile/boards#get-projects
 func (b *BoardService) Projects(ctx context.Context, boardID, startAt, maxResults int) (*model.BoardProjectPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*BoardService).Projects")
+	defer span.End()
+
 	return b.internalClient.Projects(ctx, boardID, startAt, maxResults)
 }
 
@@ -191,6 +224,9 @@ func (b *BoardService) Projects(ctx context.Context, boardID, startAt, maxResult
 //
 // https://docs.go-atlassian.io/jira-agile/boards#get-all-sprints
 func (b *BoardService) Sprints(ctx context.Context, boardID, startAt, maxResults int, states []string) (*model.BoardSprintPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*BoardService).Sprints")
+	defer span.End()
+
 	return b.internalClient.Sprints(ctx, boardID, startAt, maxResults, states)
 }
 
@@ -204,6 +240,9 @@ func (b *BoardService) Sprints(ctx context.Context, boardID, startAt, maxResults
 //
 // https://docs.go-atlassian.io/jira-agile/boards#get-board-issues-for-sprint
 func (b *BoardService) IssuesBySprint(ctx context.Context, boardID, sprintID int, opts *model.IssueOptionScheme, startAt, maxResults int) (*model.BoardIssuePageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*BoardService).IssuesBySprint")
+	defer span.End()
+
 	return b.internalClient.IssuesBySprint(ctx, boardID, sprintID, opts, startAt, maxResults)
 }
 
@@ -219,6 +258,9 @@ func (b *BoardService) IssuesBySprint(ctx context.Context, boardID, sprintID int
 //
 // https://docs.go-atlassian.io/jira-agile/boards#get-all-versions
 func (b *BoardService) Versions(ctx context.Context, boardID, startAt, maxResults int, released bool) (*model.BoardVersionPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*BoardService).Versions")
+	defer span.End()
+
 	return b.internalClient.Versions(ctx, boardID, startAt, maxResults, released)
 }
 
@@ -228,6 +270,9 @@ func (b *BoardService) Versions(ctx context.Context, boardID, startAt, maxResult
 //
 // https://docs.go-atlassian.io/jira-agile/boards#delete-board
 func (b *BoardService) Delete(ctx context.Context, boardID int) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*BoardService).Delete")
+	defer span.End()
+
 	return b.internalClient.Delete(ctx, boardID)
 }
 
@@ -237,6 +282,9 @@ func (b *BoardService) Delete(ctx context.Context, boardID int) (*model.Response
 //
 // https://docs.go-atlassian.io/jira-agile/boards#get-boards
 func (b *BoardService) Gets(ctx context.Context, opts *model.GetBoardsOptions, startAt, maxResults int) (*model.BoardPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*BoardService).Gets")
+	defer span.End()
+
 	return b.internalClient.Gets(ctx, opts, startAt, maxResults)
 }
 
@@ -246,6 +294,9 @@ type internalBoardImpl struct {
 }
 
 func (i *internalBoardImpl) Get(ctx context.Context, boardID int) (*model.BoardScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalBoardImpl).Get")
+	defer span.End()
 
 	if boardID == 0 {
 		return nil, nil, model.ErrNoBoardID
@@ -269,6 +320,9 @@ func (i *internalBoardImpl) Get(ctx context.Context, boardID int) (*model.BoardS
 
 func (i *internalBoardImpl) Create(ctx context.Context, payload *model.BoardPayloadScheme) (*model.BoardScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalBoardImpl).Create")
+	defer span.End()
+
 	url := fmt.Sprintf("rest/agile/%v/board", i.version)
 
 	req, err := i.c.NewRequest(ctx, http.MethodPost, url, "", payload)
@@ -286,6 +340,9 @@ func (i *internalBoardImpl) Create(ctx context.Context, payload *model.BoardPayl
 }
 
 func (i *internalBoardImpl) Filter(ctx context.Context, filterID, startAt, maxResults int) (*model.BoardPageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalBoardImpl).Filter")
+	defer span.End()
 
 	if filterID == 0 {
 		return nil, nil, model.ErrNoFilterID
@@ -312,6 +369,9 @@ func (i *internalBoardImpl) Filter(ctx context.Context, filterID, startAt, maxRe
 }
 
 func (i *internalBoardImpl) Backlog(ctx context.Context, boardID int, opts *model.IssueOptionScheme, startAt, maxResults int) (*model.BoardIssuePageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalBoardImpl).Backlog")
+	defer span.End()
 
 	if boardID == 0 {
 		return nil, nil, model.ErrNoBoardID
@@ -356,6 +416,9 @@ func (i *internalBoardImpl) Backlog(ctx context.Context, boardID int, opts *mode
 
 func (i *internalBoardImpl) Configuration(ctx context.Context, boardID int) (*model.BoardConfigurationScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalBoardImpl).Configuration")
+	defer span.End()
+
 	if boardID == 0 {
 		return nil, nil, model.ErrNoBoardID
 	}
@@ -377,6 +440,9 @@ func (i *internalBoardImpl) Configuration(ctx context.Context, boardID int) (*mo
 }
 
 func (i *internalBoardImpl) Epics(ctx context.Context, boardID, startAt, maxResults int, done bool) (*model.BoardEpicPageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalBoardImpl).Epics")
+	defer span.End()
 
 	if boardID == 0 {
 		return nil, nil, model.ErrNoBoardID
@@ -404,6 +470,9 @@ func (i *internalBoardImpl) Epics(ctx context.Context, boardID, startAt, maxResu
 }
 
 func (i *internalBoardImpl) IssuesWithoutEpic(ctx context.Context, boardID int, opts *model.IssueOptionScheme, startAt, maxResults int) (*model.BoardIssuePageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalBoardImpl).IssuesWithoutEpic")
+	defer span.End()
 
 	if boardID == 0 {
 		return nil, nil, model.ErrNoBoardID
@@ -449,6 +518,9 @@ func (i *internalBoardImpl) IssuesWithoutEpic(ctx context.Context, boardID int, 
 }
 
 func (i *internalBoardImpl) IssuesByEpic(ctx context.Context, boardID, epicID int, opts *model.IssueOptionScheme, startAt, maxResults int) (*model.BoardIssuePageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalBoardImpl).IssuesByEpic")
+	defer span.End()
 
 	if boardID == 0 {
 		return nil, nil, model.ErrNoBoardID
@@ -499,6 +571,9 @@ func (i *internalBoardImpl) IssuesByEpic(ctx context.Context, boardID, epicID in
 
 func (i *internalBoardImpl) Issues(ctx context.Context, boardID int, opts *model.IssueOptionScheme, startAt, maxResults int) (*model.BoardIssuePageScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalBoardImpl).Issues")
+	defer span.End()
+
 	if boardID == 0 {
 		return nil, nil, model.ErrNoBoardID
 	}
@@ -545,6 +620,9 @@ func (i *internalBoardImpl) Issues(ctx context.Context, boardID int, opts *model
 
 func (i *internalBoardImpl) Move(ctx context.Context, boardID int, payload *model.BoardMovementPayloadScheme) (*model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalBoardImpl).Move")
+	defer span.End()
+
 	if boardID == 0 {
 		return nil, model.ErrNoBoardID
 	}
@@ -560,6 +638,9 @@ func (i *internalBoardImpl) Move(ctx context.Context, boardID int, payload *mode
 }
 
 func (i *internalBoardImpl) Projects(ctx context.Context, boardID, startAt, maxResults int) (*model.BoardProjectPageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalBoardImpl).Projects")
+	defer span.End()
 
 	if boardID == 0 {
 		return nil, nil, model.ErrNoBoardID
@@ -587,6 +668,9 @@ func (i *internalBoardImpl) Projects(ctx context.Context, boardID, startAt, maxR
 
 func (i *internalBoardImpl) Sprints(ctx context.Context, boardID, startAt, maxResults int, states []string) (*model.BoardSprintPageScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalBoardImpl).Sprints")
+	defer span.End()
+
 	if boardID == 0 {
 		return nil, nil, model.ErrNoBoardID
 	}
@@ -613,6 +697,9 @@ func (i *internalBoardImpl) Sprints(ctx context.Context, boardID, startAt, maxRe
 }
 
 func (i *internalBoardImpl) IssuesBySprint(ctx context.Context, boardID, sprintID int, opts *model.IssueOptionScheme, startAt, maxResults int) (*model.BoardIssuePageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalBoardImpl).IssuesBySprint")
+	defer span.End()
 
 	if boardID == 0 {
 		return nil, nil, model.ErrNoBoardID
@@ -663,6 +750,9 @@ func (i *internalBoardImpl) IssuesBySprint(ctx context.Context, boardID, sprintI
 
 func (i *internalBoardImpl) Versions(ctx context.Context, boardID, startAt, maxResults int, released bool) (*model.BoardVersionPageScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalBoardImpl).Versions")
+	defer span.End()
+
 	if boardID == 0 {
 		return nil, nil, model.ErrNoBoardID
 	}
@@ -690,6 +780,9 @@ func (i *internalBoardImpl) Versions(ctx context.Context, boardID, startAt, maxR
 
 func (i *internalBoardImpl) Delete(ctx context.Context, boardID int) (*model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalBoardImpl).Delete")
+	defer span.End()
+
 	if boardID == 0 {
 		return nil, model.ErrNoBoardID
 	}
@@ -705,6 +798,9 @@ func (i *internalBoardImpl) Delete(ctx context.Context, boardID int) (*model.Res
 }
 
 func (i *internalBoardImpl) Gets(ctx context.Context, opts *model.GetBoardsOptions, startAt, maxResults int) (*model.BoardPageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalBoardImpl).Gets")
+	defer span.End()
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))

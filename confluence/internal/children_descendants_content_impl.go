@@ -43,6 +43,9 @@ type ChildrenDescandantsService struct {
 //
 // https://docs.go-atlassian.io/confluence-cloud/content/children-descendants#get-content-children
 func (c *ChildrenDescandantsService) Children(ctx context.Context, contentID string, expand []string, parentVersion int) (*model.ContentChildrenScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ChildrenDescandantsService).Children")
+	defer span.End()
+
 	return c.internalClient.Children(ctx, contentID, expand, parentVersion)
 }
 
@@ -64,6 +67,9 @@ func (c *ChildrenDescandantsService) Children(ctx context.Context, contentID str
 //
 // https://docs.go-atlassian.io/confluence-cloud/content/children-descendants#move
 func (c *ChildrenDescandantsService) Move(ctx context.Context, pageID string, position string, targetID string) (*model.ContentMoveScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ChildrenDescandantsService).Move")
+	defer span.End()
+
 	return c.internalClient.Move(ctx, pageID, position, targetID)
 }
 
@@ -75,6 +81,9 @@ func (c *ChildrenDescandantsService) Move(ctx context.Context, pageID string, po
 //
 // https://docs.go-atlassian.io/confluence-cloud/content/children-descendants#get-content-children-by-type
 func (c *ChildrenDescandantsService) ChildrenByType(ctx context.Context, contentID, contentType string, parentVersion int, expand []string, startAt, maxResults int) (*model.ContentPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ChildrenDescandantsService).ChildrenByType")
+	defer span.End()
+
 	return c.internalClient.ChildrenByType(ctx, contentID, contentType, parentVersion, expand, startAt, maxResults)
 }
 
@@ -88,6 +97,9 @@ func (c *ChildrenDescandantsService) ChildrenByType(ctx context.Context, content
 //
 // https://docs.go-atlassian.io/confluence-cloud/content/children-descendants#get-content-descendants
 func (c *ChildrenDescandantsService) Descendants(ctx context.Context, contentID string, expand []string) (*model.ContentChildrenScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ChildrenDescandantsService).Descendants")
+	defer span.End()
+
 	return c.internalClient.Descendants(ctx, contentID, expand)
 }
 
@@ -101,6 +113,9 @@ func (c *ChildrenDescandantsService) Descendants(ctx context.Context, contentID 
 //
 // https://docs.go-atlassian.io/confluence-cloud/content/children-descendants#get-content-descendants-by-type
 func (c *ChildrenDescandantsService) DescendantsByType(ctx context.Context, contentID, contentType, depth string, expand []string, startAt, maxResults int) (*model.ContentPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ChildrenDescandantsService).DescendantsByType")
+	defer span.End()
+
 	return c.internalClient.DescendantsByType(ctx, contentID, contentType, depth, expand, startAt, maxResults)
 }
 
@@ -120,6 +135,9 @@ func (c *ChildrenDescandantsService) DescendantsByType(ctx context.Context, cont
 //
 // https://docs.go-atlassian.io/confluence-cloud/content/children-descendants#copy-page-hierarchy
 func (c *ChildrenDescandantsService) CopyHierarchy(ctx context.Context, contentID string, options *model.CopyOptionsScheme) (*model.TaskScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ChildrenDescandantsService).CopyHierarchy")
+	defer span.End()
+
 	return c.internalClient.CopyHierarchy(ctx, contentID, options)
 }
 
@@ -141,6 +159,9 @@ func (c *ChildrenDescandantsService) CopyHierarchy(ctx context.Context, contentI
 //
 // https://docs.go-atlassian.io/confluence-cloud/content/children-descendants#copy-single-page
 func (c *ChildrenDescandantsService) CopyPage(ctx context.Context, contentID string, expand []string, options *model.CopyOptionsScheme) (*model.ContentScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ChildrenDescandantsService).CopyPage")
+	defer span.End()
+
 	return c.internalClient.CopyPage(ctx, contentID, expand, options)
 }
 
@@ -149,6 +170,9 @@ type internalChildrenDescandantsImpl struct {
 }
 
 func (i *internalChildrenDescandantsImpl) Children(ctx context.Context, contentID string, expand []string, parentVersion int) (*model.ContentChildrenScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalChildrenDescandantsImpl).Children")
+	defer span.End()
 
 	if contentID == "" {
 		return nil, nil, model.ErrNoContentID
@@ -187,6 +211,9 @@ func (i *internalChildrenDescandantsImpl) Children(ctx context.Context, contentI
 
 func (i *internalChildrenDescandantsImpl) Move(ctx context.Context, pageID string, position string, targetID string) (*model.ContentMoveScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalChildrenDescandantsImpl).Move")
+	defer span.End()
+
 	if pageID == "" {
 		return nil, nil, model.ErrNoPageID
 	}
@@ -222,6 +249,9 @@ func (i *internalChildrenDescandantsImpl) Move(ctx context.Context, pageID strin
 }
 
 func (i *internalChildrenDescandantsImpl) ChildrenByType(ctx context.Context, contentID, contentType string, parentVersion int, expand []string, startAt, maxResults int) (*model.ContentPageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalChildrenDescandantsImpl).ChildrenByType")
+	defer span.End()
 
 	if contentID == "" {
 		return nil, nil, model.ErrNoContentID
@@ -261,6 +291,9 @@ func (i *internalChildrenDescandantsImpl) ChildrenByType(ctx context.Context, co
 
 func (i *internalChildrenDescandantsImpl) Descendants(ctx context.Context, contentID string, expand []string) (*model.ContentChildrenScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalChildrenDescandantsImpl).Descendants")
+	defer span.End()
+
 	if contentID == "" {
 		return nil, nil, model.ErrNoContentID
 	}
@@ -293,6 +326,9 @@ func (i *internalChildrenDescandantsImpl) Descendants(ctx context.Context, conte
 }
 
 func (i *internalChildrenDescandantsImpl) DescendantsByType(ctx context.Context, contentID, contentType, depth string, expand []string, startAt, maxResults int) (*model.ContentPageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalChildrenDescandantsImpl).DescendantsByType")
+	defer span.End()
 
 	if contentID == "" {
 		return nil, nil, model.ErrNoContentID
@@ -332,6 +368,9 @@ func (i *internalChildrenDescandantsImpl) DescendantsByType(ctx context.Context,
 
 func (i *internalChildrenDescandantsImpl) CopyHierarchy(ctx context.Context, contentID string, options *model.CopyOptionsScheme) (*model.TaskScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalChildrenDescandantsImpl).CopyHierarchy")
+	defer span.End()
+
 	if contentID == "" {
 		return nil, nil, model.ErrNoContentID
 	}
@@ -353,6 +392,9 @@ func (i *internalChildrenDescandantsImpl) CopyHierarchy(ctx context.Context, con
 }
 
 func (i *internalChildrenDescandantsImpl) CopyPage(ctx context.Context, contentID string, expand []string, options *model.CopyOptionsScheme) (*model.ContentScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalChildrenDescandantsImpl).CopyPage")
+	defer span.End()
 
 	if contentID == "" {
 		return nil, nil, model.ErrNoContentID

@@ -32,6 +32,9 @@ type CommentService struct {
 //
 // https://docs.go-atlassian.io/confluence-cloud/content/comments#get-content-comments
 func (c *CommentService) Gets(ctx context.Context, contentID string, expand, location []string, startAt, maxResults int) (*model.ContentPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*CommentService).Gets")
+	defer span.End()
+
 	return c.internalClient.Gets(ctx, contentID, expand, location, startAt, maxResults)
 }
 
@@ -40,6 +43,9 @@ type internalCommentImpl struct {
 }
 
 func (i *internalCommentImpl) Gets(ctx context.Context, contentID string, expand, location []string, startAt, maxResults int) (*model.ContentPageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalCommentImpl).Gets")
+	defer span.End()
 
 	if contentID == "" {
 		return nil, nil, model.ErrNoContentID

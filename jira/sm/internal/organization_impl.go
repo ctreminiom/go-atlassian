@@ -33,6 +33,9 @@ type OrganizationService struct {
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/organization#get-organizations
 func (o *OrganizationService) Gets(ctx context.Context, accountID string, start, limit int) (*model.OrganizationPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*OrganizationService).Gets")
+	defer span.End()
+
 	return o.internalClient.Gets(ctx, accountID, start, limit)
 }
 
@@ -46,6 +49,9 @@ func (o *OrganizationService) Gets(ctx context.Context, accountID string, start,
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/organization#get-organization
 func (o *OrganizationService) Get(ctx context.Context, organizationID int) (*model.OrganizationScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*OrganizationService).Get")
+	defer span.End()
+
 	return o.internalClient.Get(ctx, organizationID)
 }
 
@@ -59,6 +65,9 @@ func (o *OrganizationService) Get(ctx context.Context, organizationID int) (*mod
 //
 // https://docs.go-atlassian.io/jira-service-management/organization#delete-organization
 func (o *OrganizationService) Delete(ctx context.Context, organizationID int) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*OrganizationService).Delete")
+	defer span.End()
+
 	return o.internalClient.Delete(ctx, organizationID)
 }
 
@@ -68,6 +77,9 @@ func (o *OrganizationService) Delete(ctx context.Context, organizationID int) (*
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/organization#create-organization
 func (o *OrganizationService) Create(ctx context.Context, name string) (*model.OrganizationScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*OrganizationService).Create")
+	defer span.End()
+
 	return o.internalClient.Create(ctx, name)
 }
 
@@ -81,6 +93,9 @@ func (o *OrganizationService) Create(ctx context.Context, name string) (*model.O
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/organization#get-users-in-organization
 func (o *OrganizationService) Users(ctx context.Context, organizationID, start, limit int) (*model.OrganizationUsersPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*OrganizationService).Users")
+	defer span.End()
+
 	return o.internalClient.Users(ctx, organizationID, start, limit)
 }
 
@@ -90,6 +105,9 @@ func (o *OrganizationService) Users(ctx context.Context, organizationID, start, 
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/organization#add-users-to-organization
 func (o *OrganizationService) Add(ctx context.Context, organizationID int, accountIDs []string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*OrganizationService).Add")
+	defer span.End()
+
 	return o.internalClient.Add(ctx, organizationID, accountIDs)
 }
 
@@ -99,6 +117,9 @@ func (o *OrganizationService) Add(ctx context.Context, organizationID int, accou
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/organization#remove-users-from-organization
 func (o *OrganizationService) Remove(ctx context.Context, organizationID int, accountIDs []string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*OrganizationService).Remove")
+	defer span.End()
+
 	return o.internalClient.Remove(ctx, organizationID, accountIDs)
 }
 
@@ -108,6 +129,9 @@ func (o *OrganizationService) Remove(ctx context.Context, organizationID int, ac
 //
 // https://docs.go-atlassian.io/jira-service-management/organization#get-project-organizations
 func (o *OrganizationService) Project(ctx context.Context, accountID string, serviceDeskID, start, limit int) (*model.OrganizationPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*OrganizationService).Project")
+	defer span.End()
+
 	return o.internalClient.Project(ctx, accountID, serviceDeskID, start, limit)
 }
 
@@ -121,6 +145,9 @@ func (o *OrganizationService) Project(ctx context.Context, accountID string, ser
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/organization#associate-organization
 func (o *OrganizationService) Associate(ctx context.Context, serviceDeskID, organizationID int) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*OrganizationService).Associate")
+	defer span.End()
+
 	return o.internalClient.Associate(ctx, serviceDeskID, organizationID)
 }
 
@@ -134,6 +161,9 @@ func (o *OrganizationService) Associate(ctx context.Context, serviceDeskID, orga
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/organization#detach-organization
 func (o *OrganizationService) Detach(ctx context.Context, serviceDeskID, organizationID int) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*OrganizationService).Detach")
+	defer span.End()
+
 	return o.internalClient.Detach(ctx, serviceDeskID, organizationID)
 }
 
@@ -143,6 +173,9 @@ type internalOrganizationImpl struct {
 }
 
 func (i *internalOrganizationImpl) Gets(ctx context.Context, accountID string, start, limit int) (*model.OrganizationPageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalOrganizationImpl).Gets")
+	defer span.End()
 
 	params := url.Values{}
 	params.Add("start", strconv.Itoa(start))
@@ -170,6 +203,9 @@ func (i *internalOrganizationImpl) Gets(ctx context.Context, accountID string, s
 
 func (i *internalOrganizationImpl) Get(ctx context.Context, organizationID int) (*model.OrganizationScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalOrganizationImpl).Get")
+	defer span.End()
+
 	if organizationID == 0 {
 		return nil, nil, model.ErrNoOrganizationID
 	}
@@ -192,6 +228,9 @@ func (i *internalOrganizationImpl) Get(ctx context.Context, organizationID int) 
 
 func (i *internalOrganizationImpl) Delete(ctx context.Context, organizationID int) (*model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalOrganizationImpl).Delete")
+	defer span.End()
+
 	if organizationID == 0 {
 		return nil, model.ErrNoOrganizationID
 	}
@@ -207,6 +246,9 @@ func (i *internalOrganizationImpl) Delete(ctx context.Context, organizationID in
 }
 
 func (i *internalOrganizationImpl) Create(ctx context.Context, name string) (*model.OrganizationScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalOrganizationImpl).Create")
+	defer span.End()
 
 	if name == "" {
 		return nil, nil, model.ErrNoOrganizationName
@@ -229,6 +271,9 @@ func (i *internalOrganizationImpl) Create(ctx context.Context, name string) (*mo
 }
 
 func (i *internalOrganizationImpl) Users(ctx context.Context, organizationID, start, limit int) (*model.OrganizationUsersPageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalOrganizationImpl).Users")
+	defer span.End()
 
 	if organizationID == 0 {
 		return nil, nil, model.ErrNoOrganizationID
@@ -256,6 +301,9 @@ func (i *internalOrganizationImpl) Users(ctx context.Context, organizationID, st
 
 func (i *internalOrganizationImpl) Add(ctx context.Context, organizationID int, accountIDs []string) (*model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalOrganizationImpl).Add")
+	defer span.End()
+
 	if organizationID == 0 {
 		return nil, model.ErrNoOrganizationID
 	}
@@ -276,6 +324,9 @@ func (i *internalOrganizationImpl) Add(ctx context.Context, organizationID int, 
 
 func (i *internalOrganizationImpl) Remove(ctx context.Context, organizationID int, accountIDs []string) (*model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalOrganizationImpl).Remove")
+	defer span.End()
+
 	if organizationID == 0 {
 		return nil, model.ErrNoOrganizationID
 	}
@@ -295,6 +346,9 @@ func (i *internalOrganizationImpl) Remove(ctx context.Context, organizationID in
 }
 
 func (i *internalOrganizationImpl) Project(ctx context.Context, accountID string, serviceDeskID, start, limit int) (*model.OrganizationPageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalOrganizationImpl).Project")
+	defer span.End()
 
 	if serviceDeskID == 0 {
 		return nil, nil, model.ErrNoServiceDeskID
@@ -326,6 +380,9 @@ func (i *internalOrganizationImpl) Project(ctx context.Context, accountID string
 
 func (i *internalOrganizationImpl) Associate(ctx context.Context, serviceDeskID, organizationID int) (*model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalOrganizationImpl).Associate")
+	defer span.End()
+
 	if serviceDeskID == 0 {
 		return nil, model.ErrNoServiceDeskID
 	}
@@ -345,6 +402,9 @@ func (i *internalOrganizationImpl) Associate(ctx context.Context, serviceDeskID,
 }
 
 func (i *internalOrganizationImpl) Detach(ctx context.Context, serviceDeskID, organizationID int) (*model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalOrganizationImpl).Detach")
+	defer span.End()
 
 	if serviceDeskID == 0 {
 		return nil, model.ErrNoServiceDeskID

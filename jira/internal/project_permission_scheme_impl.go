@@ -36,6 +36,9 @@ type ProjectPermissionSchemeService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/permission-schemes#get-assigned-permission-scheme
 func (p *ProjectPermissionSchemeService) Get(ctx context.Context, projectKeyOrID string, expand []string) (*model.PermissionSchemeScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ProjectPermissionSchemeService).Get")
+	defer span.End()
+
 	return p.internalClient.Get(ctx, projectKeyOrID, expand)
 }
 
@@ -45,6 +48,9 @@ func (p *ProjectPermissionSchemeService) Get(ctx context.Context, projectKeyOrID
 //
 // PUT /rest/api/{2-3}/project/{projectKeyOrID}/permissionscheme
 func (p *ProjectPermissionSchemeService) Assign(ctx context.Context, projectKeyOrID string, permissionSchemeID int) (*model.PermissionSchemeScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ProjectPermissionSchemeService).Assign")
+	defer span.End()
+
 	return p.internalClient.Assign(ctx, projectKeyOrID, permissionSchemeID)
 }
 
@@ -54,6 +60,9 @@ func (p *ProjectPermissionSchemeService) Assign(ctx context.Context, projectKeyO
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/permission-schemes#get-project-issue-security-levels
 func (p *ProjectPermissionSchemeService) SecurityLevels(ctx context.Context, projectKeyOrID string) (*model.IssueSecurityLevelsScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ProjectPermissionSchemeService).SecurityLevels")
+	defer span.End()
+
 	return p.internalClient.SecurityLevels(ctx, projectKeyOrID)
 }
 
@@ -63,6 +72,9 @@ type internalProjectPermissionSchemeImpl struct {
 }
 
 func (i *internalProjectPermissionSchemeImpl) Get(ctx context.Context, projectKeyOrID string, expand []string) (*model.PermissionSchemeScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalProjectPermissionSchemeImpl).Get")
+	defer span.End()
 
 	if projectKeyOrID == "" {
 		return nil, nil, model.ErrNoProjectIDOrKey
@@ -94,6 +106,9 @@ func (i *internalProjectPermissionSchemeImpl) Get(ctx context.Context, projectKe
 
 func (i *internalProjectPermissionSchemeImpl) Assign(ctx context.Context, projectKeyOrID string, permissionSchemeID int) (*model.PermissionSchemeScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalProjectPermissionSchemeImpl).Assign")
+	defer span.End()
+
 	if projectKeyOrID == "" {
 		return nil, nil, model.ErrNoProjectIDOrKey
 	}
@@ -115,6 +130,9 @@ func (i *internalProjectPermissionSchemeImpl) Assign(ctx context.Context, projec
 }
 
 func (i *internalProjectPermissionSchemeImpl) SecurityLevels(ctx context.Context, projectKeyOrID string) (*model.IssueSecurityLevelsScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalProjectPermissionSchemeImpl).SecurityLevels")
+	defer span.End()
 
 	if projectKeyOrID == "" {
 		return nil, nil, model.ErrNoProjectIDOrKey

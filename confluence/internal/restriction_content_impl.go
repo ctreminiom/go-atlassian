@@ -35,6 +35,9 @@ type RestrictionService struct {
 //
 // https://docs.go-atlassian.io/confluence-cloud/content/restrictions#get-restrictions
 func (r *RestrictionService) Gets(ctx context.Context, contentID string, expand []string, startAt, maxResults int) (*model.ContentRestrictionPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*RestrictionService).Gets")
+	defer span.End()
+
 	return r.internalClient.Gets(ctx, contentID, expand, startAt, maxResults)
 }
 
@@ -44,6 +47,9 @@ func (r *RestrictionService) Gets(ctx context.Context, contentID string, expand 
 //
 // https://docs.go-atlassian.io/confluence-cloud/content/restrictions#add-restrictions
 func (r *RestrictionService) Add(ctx context.Context, contentID string, payload *model.ContentRestrictionUpdatePayloadScheme, expand []string) (*model.ContentRestrictionPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*RestrictionService).Add")
+	defer span.End()
+
 	return r.internalClient.Add(ctx, contentID, payload, expand)
 }
 
@@ -53,6 +59,9 @@ func (r *RestrictionService) Add(ctx context.Context, contentID string, payload 
 //
 // https://docs.go-atlassian.io/confluence-cloud/content/restrictions#delete-restrictions
 func (r *RestrictionService) Delete(ctx context.Context, contentID string, expand []string) (*model.ContentRestrictionPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*RestrictionService).Delete")
+	defer span.End()
+
 	return r.internalClient.Delete(ctx, contentID, expand)
 }
 
@@ -62,6 +71,9 @@ func (r *RestrictionService) Delete(ctx context.Context, contentID string, expan
 //
 // https://docs.go-atlassian.io/confluence-cloud/content/restrictions#update-restrictions
 func (r *RestrictionService) Update(ctx context.Context, contentID string, payload *model.ContentRestrictionUpdatePayloadScheme, expand []string) (*model.ContentRestrictionPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*RestrictionService).Update")
+	defer span.End()
+
 	return r.internalClient.Update(ctx, contentID, payload, expand)
 }
 
@@ -70,6 +82,9 @@ type internalRestrictionImpl struct {
 }
 
 func (i *internalRestrictionImpl) Gets(ctx context.Context, contentID string, expand []string, startAt, maxResults int) (*model.ContentRestrictionPageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalRestrictionImpl).Gets")
+	defer span.End()
 
 	if contentID == "" {
 		return nil, nil, model.ErrNoContentID
@@ -101,6 +116,9 @@ func (i *internalRestrictionImpl) Gets(ctx context.Context, contentID string, ex
 
 func (i *internalRestrictionImpl) Add(ctx context.Context, contentID string, payload *model.ContentRestrictionUpdatePayloadScheme, expand []string) (*model.ContentRestrictionPageScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalRestrictionImpl).Add")
+	defer span.End()
+
 	if contentID == "" {
 		return nil, nil, model.ErrNoContentID
 	}
@@ -131,6 +149,9 @@ func (i *internalRestrictionImpl) Add(ctx context.Context, contentID string, pay
 
 func (i *internalRestrictionImpl) Delete(ctx context.Context, contentID string, expand []string) (*model.ContentRestrictionPageScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalRestrictionImpl).Delete")
+	defer span.End()
+
 	if contentID == "" {
 		return nil, nil, model.ErrNoContentID
 	}
@@ -160,6 +181,9 @@ func (i *internalRestrictionImpl) Delete(ctx context.Context, contentID string, 
 }
 
 func (i *internalRestrictionImpl) Update(ctx context.Context, contentID string, payload *model.ContentRestrictionUpdatePayloadScheme, expand []string) (*model.ContentRestrictionPageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalRestrictionImpl).Update")
+	defer span.End()
 
 	if contentID == "" {
 		return nil, nil, model.ErrNoContentID

@@ -30,6 +30,9 @@ type LabelService struct {
 //
 // https://docs.go-atlassian.io/confluence-cloud/label#get-label-information
 func (l *LabelService) Get(ctx context.Context, labelName, labelType string, start, limit int) (*model.LabelDetailsScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*LabelService).Get")
+	defer span.End()
+
 	return l.internalClient.Get(ctx, labelName, labelType, start, limit)
 }
 
@@ -38,6 +41,9 @@ type internalLabelImpl struct {
 }
 
 func (i *internalLabelImpl) Get(ctx context.Context, labelName, labelType string, start, limit int) (*model.LabelDetailsScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalLabelImpl).Get")
+	defer span.End()
 
 	if labelName == "" {
 		return nil, nil, model.ErrNoLabelName

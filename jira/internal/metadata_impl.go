@@ -42,6 +42,9 @@ type MetadataService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/metadata#get-edit-issue-metadata
 func (m *MetadataService) Get(ctx context.Context, issueKeyOrID string, overrideScreenSecurity, overrideEditableFlag bool) (gjson.Result, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*MetadataService).Get")
+	defer span.End()
+
 	return m.internalClient.Get(ctx, issueKeyOrID, overrideScreenSecurity, overrideEditableFlag)
 }
 
@@ -55,6 +58,9 @@ func (m *MetadataService) Get(ctx context.Context, issueKeyOrID string, override
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/metadata#get-create-issue-metadata
 func (m *MetadataService) Create(ctx context.Context, opts *model.IssueMetadataCreateOptions) (gjson.Result, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*MetadataService).Create")
+	defer span.End()
+
 	return m.internalClient.Create(ctx, opts)
 }
 
@@ -79,6 +85,9 @@ func (m *MetadataService) Create(ctx context.Context, opts *model.IssueMetadataC
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/metadata#get-create-metadata-issue-types-for-a-project
 func (m *MetadataService) FetchIssueMappings(ctx context.Context, projectKeyOrID string, startAt, maxResults int) (gjson.Result, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*MetadataService).FetchIssueMappings")
+	defer span.End()
+
 	return m.internalClient.FetchIssueMappings(ctx, projectKeyOrID, startAt, maxResults)
 }
 
@@ -104,6 +113,9 @@ func (m *MetadataService) FetchIssueMappings(ctx context.Context, projectKeyOrID
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/metadata#get-create-field-metadata-for-a-project-and-issue-type-id
 func (m *MetadataService) FetchFieldMappings(ctx context.Context, projectKeyOrID, issueTypeID string, startAt, maxResults int) (gjson.Result, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*MetadataService).FetchFieldMappings")
+	defer span.End()
+
 	return m.internalClient.FetchFieldMappings(ctx, projectKeyOrID, issueTypeID, startAt, maxResults)
 }
 
@@ -113,6 +125,9 @@ type internalMetadataImpl struct {
 }
 
 func (i *internalMetadataImpl) FetchIssueMappings(ctx context.Context, projectKeyOrID string, startAt, maxResults int) (gjson.Result, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalMetadataImpl).FetchIssueMappings")
+	defer span.End()
 
 	if projectKeyOrID == "" {
 		return gjson.Result{}, nil, model.ErrNoProjectIDOrKey
@@ -138,6 +153,9 @@ func (i *internalMetadataImpl) FetchIssueMappings(ctx context.Context, projectKe
 }
 
 func (i *internalMetadataImpl) FetchFieldMappings(ctx context.Context, projectKeyOrID, issueTypeID string, startAt, maxResults int) (gjson.Result, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalMetadataImpl).FetchFieldMappings")
+	defer span.End()
 
 	if projectKeyOrID == "" {
 		return gjson.Result{}, nil, model.ErrNoProjectIDOrKey
@@ -167,6 +185,9 @@ func (i *internalMetadataImpl) FetchFieldMappings(ctx context.Context, projectKe
 
 func (i *internalMetadataImpl) Get(ctx context.Context, issueKeyOrID string, overrideScreenSecurity, overrideEditableFlag bool) (gjson.Result, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalMetadataImpl).Get")
+	defer span.End()
+
 	if issueKeyOrID == "" {
 		return gjson.Result{}, nil, model.ErrNoIssueKeyOrID
 	}
@@ -191,6 +212,9 @@ func (i *internalMetadataImpl) Get(ctx context.Context, issueKeyOrID string, ove
 }
 
 func (i *internalMetadataImpl) Create(ctx context.Context, opts *model.IssueMetadataCreateOptions) (gjson.Result, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalMetadataImpl).Create")
+	defer span.End()
 
 	params := url.Values{}
 

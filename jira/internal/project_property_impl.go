@@ -34,6 +34,9 @@ type ProjectPropertyService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/properties#get-project-properties-keys
 func (p *ProjectPropertyService) Gets(ctx context.Context, projectKeyOrID string) (*model.PropertyPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ProjectPropertyService).Gets")
+	defer span.End()
+
 	return p.internalClient.Gets(ctx, projectKeyOrID)
 }
 
@@ -43,6 +46,9 @@ func (p *ProjectPropertyService) Gets(ctx context.Context, projectKeyOrID string
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/properties#get-project-property
 func (p *ProjectPropertyService) Get(ctx context.Context, projectKeyOrID, propertyKey string) (*model.EntityPropertyScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ProjectPropertyService).Get")
+	defer span.End()
+
 	return p.internalClient.Get(ctx, projectKeyOrID, propertyKey)
 }
 
@@ -58,6 +64,9 @@ func (p *ProjectPropertyService) Get(ctx context.Context, projectKeyOrID, proper
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/properties#set-project-property
 func (p *ProjectPropertyService) Set(ctx context.Context, projectKeyOrID, propertyKey string, payload interface{}) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ProjectPropertyService).Set")
+	defer span.End()
+
 	return p.internalClient.Set(ctx, projectKeyOrID, propertyKey, payload)
 }
 
@@ -67,6 +76,9 @@ func (p *ProjectPropertyService) Set(ctx context.Context, projectKeyOrID, proper
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/properties#delete-project-property
 func (p *ProjectPropertyService) Delete(ctx context.Context, projectKeyOrID, propertyKey string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ProjectPropertyService).Delete")
+	defer span.End()
+
 	return p.internalClient.Delete(ctx, projectKeyOrID, propertyKey)
 }
 
@@ -76,6 +88,9 @@ type internalProjectPropertyImpl struct {
 }
 
 func (i *internalProjectPropertyImpl) Gets(ctx context.Context, projectKeyOrID string) (*model.PropertyPageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalProjectPropertyImpl).Gets")
+	defer span.End()
 
 	if projectKeyOrID == "" {
 		return nil, nil, model.ErrNoProjectIDOrKey
@@ -98,6 +113,9 @@ func (i *internalProjectPropertyImpl) Gets(ctx context.Context, projectKeyOrID s
 }
 
 func (i *internalProjectPropertyImpl) Get(ctx context.Context, projectKeyOrID, propertyKey string) (*model.EntityPropertyScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalProjectPropertyImpl).Get")
+	defer span.End()
 
 	if projectKeyOrID == "" {
 		return nil, nil, model.ErrNoProjectIDOrKey
@@ -125,6 +143,9 @@ func (i *internalProjectPropertyImpl) Get(ctx context.Context, projectKeyOrID, p
 
 func (i *internalProjectPropertyImpl) Set(ctx context.Context, projectKeyOrID, propertyKey string, payload interface{}) (*model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalProjectPropertyImpl).Set")
+	defer span.End()
+
 	if projectKeyOrID == "" {
 		return nil, model.ErrNoProjectIDOrKey
 	}
@@ -144,6 +165,9 @@ func (i *internalProjectPropertyImpl) Set(ctx context.Context, projectKeyOrID, p
 }
 
 func (i *internalProjectPropertyImpl) Delete(ctx context.Context, projectKeyOrID, propertyKey string) (*model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalProjectPropertyImpl).Delete")
+	defer span.End()
 
 	if projectKeyOrID == "" {
 		return nil, model.ErrNoProjectIDOrKey

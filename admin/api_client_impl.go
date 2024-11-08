@@ -80,6 +80,9 @@ type Client struct {
 func (c *Client) NewRequest(ctx context.Context, method, urlStr, contentType string, body interface{}) (*http.Request, error) {
 
 	// Parse the relative URL.
+	ctx, span := tracer().Start(ctx, "(*Client).NewRequest")
+	defer span.End()
+
 	rel, err := url.Parse(urlStr)
 	if err != nil {
 		return nil, err

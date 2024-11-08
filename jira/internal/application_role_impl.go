@@ -37,6 +37,9 @@ type ApplicationRoleService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/application-roles#get-all-application-roles
 func (a *ApplicationRoleService) Gets(ctx context.Context) ([]*model.ApplicationRoleScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ApplicationRoleService).Gets")
+	defer span.End()
+
 	return a.internalClient.Gets(ctx)
 }
 
@@ -46,6 +49,9 @@ func (a *ApplicationRoleService) Gets(ctx context.Context) ([]*model.Application
 //
 // https://docs.go-atlassian.io/jira-software-cloud/application-roles#get-application-role
 func (a *ApplicationRoleService) Get(ctx context.Context, key string) (*model.ApplicationRoleScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ApplicationRoleService).Get")
+	defer span.End()
+
 	return a.internalClient.Get(ctx, key)
 }
 
@@ -55,6 +61,9 @@ type internalApplicationRoleImpl struct {
 }
 
 func (i *internalApplicationRoleImpl) Gets(ctx context.Context) ([]*model.ApplicationRoleScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalApplicationRoleImpl).Gets")
+	defer span.End()
 
 	endpoint := fmt.Sprintf("rest/api/%v/applicationrole", i.version)
 
@@ -73,6 +82,9 @@ func (i *internalApplicationRoleImpl) Gets(ctx context.Context) ([]*model.Applic
 }
 
 func (i *internalApplicationRoleImpl) Get(ctx context.Context, key string) (*model.ApplicationRoleScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalApplicationRoleImpl).Get")
+	defer span.End()
 
 	if key == "" {
 		return nil, nil, model.ErrNoApplicationRole

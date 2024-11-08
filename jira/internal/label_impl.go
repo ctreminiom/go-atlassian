@@ -35,6 +35,9 @@ type LabelService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/labels#get-all-labels
 func (i *LabelService) Gets(ctx context.Context, startAt, maxResults int) (*model.IssueLabelsScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*LabelService).Gets")
+	defer span.End()
+
 	return i.internalClient.Gets(ctx, startAt, maxResults)
 }
 
@@ -44,6 +47,9 @@ type internalLabelServiceImpl struct {
 }
 
 func (i *internalLabelServiceImpl) Gets(ctx context.Context, startAt, maxResults int) (*model.IssueLabelsScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalLabelServiceImpl).Gets")
+	defer span.End()
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))

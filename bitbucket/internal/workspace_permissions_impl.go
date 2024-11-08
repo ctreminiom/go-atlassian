@@ -31,6 +31,9 @@ type WorkspacePermissionService struct {
 //
 // https://docs.go-atlassian.io/bitbucket-cloud/workspace/permissions#get-user-permissions-in-a-workspace
 func (w *WorkspacePermissionService) Members(ctx context.Context, workspace, query string) (*model.WorkspaceMembershipPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*WorkspacePermissionService).Members")
+	defer span.End()
+
 	return w.internalClient.Members(ctx, workspace, query)
 }
 
@@ -44,6 +47,9 @@ func (w *WorkspacePermissionService) Members(ctx context.Context, workspace, que
 //
 // https://docs.go-atlassian.io/bitbucket-cloud/workspace/permissions#gets-all-repository-permissions-in-a-workspace
 func (w *WorkspacePermissionService) Repositories(ctx context.Context, workspace, query, sort string) (*model.RepositoryPermissionPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*WorkspacePermissionService).Repositories")
+	defer span.End()
+
 	return w.internalClient.Repositories(ctx, workspace, query, sort)
 }
 
@@ -55,6 +61,9 @@ func (w *WorkspacePermissionService) Repositories(ctx context.Context, workspace
 //
 // https://docs.go-atlassian.io/bitbucket-cloud/workspace/permissions#get-repository-permission-in-a-workspace
 func (w *WorkspacePermissionService) Repository(ctx context.Context, workspace, repository, query, sort string) (*model.RepositoryPermissionPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*WorkspacePermissionService).Repository")
+	defer span.End()
+
 	return w.internalClient.Repository(ctx, workspace, repository, query, sort)
 }
 
@@ -63,6 +72,9 @@ type internalWorkspacePermissionServiceImpl struct {
 }
 
 func (i *internalWorkspacePermissionServiceImpl) Members(ctx context.Context, workspace, query string) (*model.WorkspaceMembershipPageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalWorkspacePermissionServiceImpl).Members")
+	defer span.End()
 
 	if workspace == "" {
 		return nil, nil, model.ErrNoWorkspace
@@ -94,6 +106,9 @@ func (i *internalWorkspacePermissionServiceImpl) Members(ctx context.Context, wo
 }
 
 func (i *internalWorkspacePermissionServiceImpl) Repositories(ctx context.Context, workspace, query, sort string) (*model.RepositoryPermissionPageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalWorkspacePermissionServiceImpl).Repositories")
+	defer span.End()
 
 	if workspace == "" {
 		return nil, nil, model.ErrNoWorkspace
@@ -129,6 +144,9 @@ func (i *internalWorkspacePermissionServiceImpl) Repositories(ctx context.Contex
 }
 
 func (i *internalWorkspacePermissionServiceImpl) Repository(ctx context.Context, workspace, repository, query, sort string) (*model.RepositoryPermissionPageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalWorkspacePermissionServiceImpl).Repository")
+	defer span.End()
 
 	if workspace == "" {
 		return nil, nil, model.ErrNoWorkspace

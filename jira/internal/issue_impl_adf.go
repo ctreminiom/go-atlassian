@@ -60,6 +60,9 @@ type IssueADFService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues#delete-issue
 func (i *IssueADFService) Delete(ctx context.Context, issueKeyOrID string, deleteSubTasks bool) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*IssueADFService).Delete")
+	defer span.End()
+
 	return i.internalClient.Delete(ctx, issueKeyOrID, deleteSubTasks)
 }
 
@@ -78,6 +81,9 @@ func (i *IssueADFService) Delete(ctx context.Context, issueKeyOrID string, delet
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues#assign-issue
 func (i *IssueADFService) Assign(ctx context.Context, issueKeyOrID, accountID string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*IssueADFService).Assign")
+	defer span.End()
+
 	return i.internalClient.Assign(ctx, issueKeyOrID, accountID)
 }
 
@@ -87,6 +93,9 @@ func (i *IssueADFService) Assign(ctx context.Context, issueKeyOrID, accountID st
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues#send-notification-for-issue
 func (i *IssueADFService) Notify(ctx context.Context, issueKeyOrID string, options *model.IssueNotifyOptionsScheme) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*IssueADFService).Notify")
+	defer span.End()
+
 	return i.internalClient.Notify(ctx, issueKeyOrID, options)
 }
 
@@ -100,6 +109,9 @@ func (i *IssueADFService) Notify(ctx context.Context, issueKeyOrID string, optio
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues#get-transitions
 func (i *IssueADFService) Transitions(ctx context.Context, issueKeyOrID string) (*model.IssueTransitionsScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*IssueADFService).Transitions")
+	defer span.End()
+
 	return i.internalClient.Transitions(ctx, issueKeyOrID)
 }
 
@@ -109,6 +121,9 @@ func (i *IssueADFService) Transitions(ctx context.Context, issueKeyOrID string) 
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues#create-issue
 func (i *IssueADFService) Create(ctx context.Context, payload *model.IssueScheme, customFields *model.CustomFields) (*model.IssueResponseScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*IssueADFService).Create")
+	defer span.End()
+
 	return i.internalClient.Create(ctx, payload, customFields)
 }
 
@@ -122,6 +137,9 @@ func (i *IssueADFService) Create(ctx context.Context, payload *model.IssueScheme
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues#bulk-create-issue
 func (i *IssueADFService) Creates(ctx context.Context, payload []*model.IssueBulkSchemeV3) (*model.IssueBulkResponseScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*IssueADFService).Creates")
+	defer span.End()
+
 	return i.internalClient.Creates(ctx, payload)
 }
 
@@ -137,6 +155,9 @@ func (i *IssueADFService) Creates(ctx context.Context, payload []*model.IssueBul
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues#get-issue
 func (i *IssueADFService) Get(ctx context.Context, issueKeyOrID string, fields, expand []string) (*model.IssueScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*IssueADFService).Get")
+	defer span.End()
+
 	return i.internalClient.Get(ctx, issueKeyOrID, fields, expand)
 }
 
@@ -150,6 +171,9 @@ func (i *IssueADFService) Get(ctx context.Context, issueKeyOrID string, fields, 
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues#edit-issue
 func (i *IssueADFService) Update(ctx context.Context, issueKeyOrID string, notify bool, payload *model.IssueScheme, customFields *model.CustomFields, operations *model.UpdateOperations) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*IssueADFService).Update")
+	defer span.End()
+
 	return i.internalClient.Update(ctx, issueKeyOrID, notify, payload, customFields, operations)
 }
 
@@ -161,6 +185,9 @@ func (i *IssueADFService) Update(ctx context.Context, issueKeyOrID string, notif
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues#transition-issue
 func (i *IssueADFService) Move(ctx context.Context, issueKeyOrID, transitionID string, options *model.IssueMoveOptionsV3) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*IssueADFService).Move")
+	defer span.End()
+
 	return i.internalClient.Move(ctx, issueKeyOrID, transitionID, options)
 }
 
@@ -170,22 +197,37 @@ type internalIssueADFServiceImpl struct {
 }
 
 func (i *internalIssueADFServiceImpl) Delete(ctx context.Context, issueKeyOrID string, deleteSubTasks bool) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalIssueADFServiceImpl).Delete")
+	defer span.End()
+
 	return deleteIssue(ctx, i.c, i.version, issueKeyOrID, deleteSubTasks)
 }
 
 func (i *internalIssueADFServiceImpl) Assign(ctx context.Context, issueKeyOrID, accountID string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalIssueADFServiceImpl).Assign")
+	defer span.End()
+
 	return assignIssue(ctx, i.c, i.version, issueKeyOrID, accountID)
 }
 
 func (i *internalIssueADFServiceImpl) Notify(ctx context.Context, issueKeyOrID string, options *model.IssueNotifyOptionsScheme) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalIssueADFServiceImpl).Notify")
+	defer span.End()
+
 	return sendNotification(ctx, i.c, i.version, issueKeyOrID, options)
 }
 
 func (i *internalIssueADFServiceImpl) Transitions(ctx context.Context, issueKeyOrID string) (*model.IssueTransitionsScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalIssueADFServiceImpl).Transitions")
+	defer span.End()
+
 	return getTransitions(ctx, i.c, i.version, issueKeyOrID)
 }
 
 func (i *internalIssueADFServiceImpl) Create(ctx context.Context, payload *model.IssueScheme, customFields *model.CustomFields) (*model.IssueResponseScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalIssueADFServiceImpl).Create")
+	defer span.End()
+
 	var body interface{} = payload
 	var err error
 
@@ -215,6 +257,9 @@ func (i *internalIssueADFServiceImpl) Create(ctx context.Context, payload *model
 }
 
 func (i *internalIssueADFServiceImpl) Creates(ctx context.Context, payload []*model.IssueBulkSchemeV3) (*model.IssueBulkResponseScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalIssueADFServiceImpl).Creates")
+	defer span.End()
 
 	if len(payload) == 0 {
 		return nil, nil, model.ErrNoCreateIssues
@@ -253,6 +298,9 @@ func (i *internalIssueADFServiceImpl) Creates(ctx context.Context, payload []*mo
 
 func (i *internalIssueADFServiceImpl) Get(ctx context.Context, issueKeyOrID string, fields, expand []string) (*model.IssueScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalIssueADFServiceImpl).Get")
+	defer span.End()
+
 	if issueKeyOrID == "" {
 		return nil, nil, model.ErrNoIssueKeyOrID
 	}
@@ -289,6 +337,9 @@ func (i *internalIssueADFServiceImpl) Get(ctx context.Context, issueKeyOrID stri
 }
 
 func (i *internalIssueADFServiceImpl) Update(ctx context.Context, issueKeyOrID string, notify bool, payload *model.IssueScheme, customFields *model.CustomFields, operations *model.UpdateOperations) (*model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalIssueADFServiceImpl).Update")
+	defer span.End()
 
 	if issueKeyOrID == "" {
 		return nil, model.ErrNoIssueKeyOrID
@@ -360,6 +411,9 @@ func (i *internalIssueADFServiceImpl) Update(ctx context.Context, issueKeyOrID s
 }
 
 func (i *internalIssueADFServiceImpl) Move(ctx context.Context, issueKeyOrID, transitionID string, options *model.IssueMoveOptionsV3) (*model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalIssueADFServiceImpl).Move")
+	defer span.End()
 
 	if issueKeyOrID == "" {
 		return nil, model.ErrNoIssueKeyOrID

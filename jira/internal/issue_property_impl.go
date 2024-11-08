@@ -42,6 +42,9 @@ You can refer to the documentation: [Get issue property keys]
 [Get issue property keys]: https://docs.go-atlassian.io/jira-software-cloud/issues/properties#get-issue-property-keys
 */
 func (i *IssuePropertyService) Gets(ctx context.Context, issueKeyOrID string) (*model.PropertyPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*IssuePropertyService).Gets")
+	defer span.End()
+
 	return i.internalClient.Gets(ctx, issueKeyOrID)
 }
 
@@ -60,6 +63,9 @@ You can refer to the documentation: [Get issue property]
 [Get issue property]: https://docs.go-atlassian.io/jira-software-cloud/issues/properties#get-issue-property
 */
 func (i *IssuePropertyService) Get(ctx context.Context, issueKeyOrID, propertyKey string) (*model.EntityPropertyScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*IssuePropertyService).Get")
+	defer span.End()
+
 	return i.internalClient.Get(ctx, issueKeyOrID, propertyKey)
 }
 
@@ -79,6 +85,9 @@ You can refer to the documentation: [Set issue property]
 [Set issue property]: https://docs.go-atlassian.io/jira-software-cloud/issues/properties#set-issue-property
 */
 func (i *IssuePropertyService) Set(ctx context.Context, issueKeyOrID, propertyKey string, payload interface{}) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*IssuePropertyService).Set")
+	defer span.End()
+
 	return i.internalClient.Set(ctx, issueKeyOrID, propertyKey, payload)
 }
 
@@ -97,6 +106,9 @@ You can refer to the documentation: [Delete issue property]
 [Delete issue property]: https://docs.go-atlassian.io/jira-software-cloud/issues/properties#delete-issue-property
 */
 func (i *IssuePropertyService) Delete(ctx context.Context, issueKeyOrID, propertyKey string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*IssuePropertyService).Delete")
+	defer span.End()
+
 	return i.internalClient.Delete(ctx, issueKeyOrID, propertyKey)
 }
 
@@ -106,6 +118,9 @@ type internalIssuePropertyImpl struct {
 }
 
 func (i *internalIssuePropertyImpl) Gets(ctx context.Context, issueKeyOrID string) (*model.PropertyPageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalIssuePropertyImpl).Gets")
+	defer span.End()
 
 	if issueKeyOrID == "" {
 		return nil, nil, model.ErrNoIssueKeyOrID
@@ -129,6 +144,9 @@ func (i *internalIssuePropertyImpl) Gets(ctx context.Context, issueKeyOrID strin
 }
 
 func (i *internalIssuePropertyImpl) Get(ctx context.Context, issueKey, propertyKey string) (*model.EntityPropertyScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalIssuePropertyImpl).Get")
+	defer span.End()
 
 	if issueKey == "" {
 		return nil, nil, model.ErrNoIssueKeyOrID
@@ -156,6 +174,9 @@ func (i *internalIssuePropertyImpl) Get(ctx context.Context, issueKey, propertyK
 
 func (i *internalIssuePropertyImpl) Set(ctx context.Context, issueKey, propertyKey string, payload interface{}) (*model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalIssuePropertyImpl).Set")
+	defer span.End()
+
 	if issueKey == "" {
 		return nil, model.ErrNoIssueKeyOrID
 	}
@@ -175,6 +196,9 @@ func (i *internalIssuePropertyImpl) Set(ctx context.Context, issueKey, propertyK
 }
 
 func (i *internalIssuePropertyImpl) Delete(ctx context.Context, issueKey, propertyKey string) (*model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalIssuePropertyImpl).Delete")
+	defer span.End()
 
 	if issueKey == "" {
 		return nil, model.ErrNoIssueKeyOrID

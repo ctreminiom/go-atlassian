@@ -39,6 +39,9 @@ type CommentService struct {
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request/comments#get-request-comments
 func (s *CommentService) Gets(ctx context.Context, issueKeyOrID string, options *model.RequestCommentOptionsScheme) (*model.RequestCommentPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*CommentService).Gets")
+	defer span.End()
+
 	return s.internalClient.Gets(ctx, issueKeyOrID, options)
 }
 
@@ -48,6 +51,9 @@ func (s *CommentService) Gets(ctx context.Context, issueKeyOrID string, options 
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request/comments#get-request-comment-by-id
 func (s *CommentService) Get(ctx context.Context, issueKeyOrID string, commentID int, expand []string) (*model.RequestCommentScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*CommentService).Get")
+	defer span.End()
+
 	return s.internalClient.Get(ctx, issueKeyOrID, commentID, expand)
 }
 
@@ -57,6 +63,9 @@ func (s *CommentService) Get(ctx context.Context, issueKeyOrID string, commentID
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request/comments#create-request-comment
 func (s *CommentService) Create(ctx context.Context, issueKeyOrID, body string, public bool) (*model.RequestCommentScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*CommentService).Create")
+	defer span.End()
+
 	return s.internalClient.Create(ctx, issueKeyOrID, body, public)
 }
 
@@ -66,6 +75,9 @@ func (s *CommentService) Create(ctx context.Context, issueKeyOrID, body string, 
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request/comments#get-comment-attachments
 func (s *CommentService) Attachments(ctx context.Context, issueKeyOrID string, commentID, start, limit int) (*model.RequestAttachmentPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*CommentService).Attachments")
+	defer span.End()
+
 	return s.internalClient.Attachments(ctx, issueKeyOrID, commentID, start, limit)
 }
 
@@ -75,6 +87,9 @@ type internalServiceRequestCommentImpl struct {
 }
 
 func (i *internalServiceRequestCommentImpl) Gets(ctx context.Context, issueKeyOrID string, options *model.RequestCommentOptionsScheme) (*model.RequestCommentPageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalServiceRequestCommentImpl).Gets")
+	defer span.End()
 
 	if issueKeyOrID == "" {
 		return nil, nil, model.ErrNoIssueKeyOrID
@@ -106,6 +121,9 @@ func (i *internalServiceRequestCommentImpl) Gets(ctx context.Context, issueKeyOr
 }
 
 func (i *internalServiceRequestCommentImpl) Get(ctx context.Context, issueKeyOrID string, commentID int, expand []string) (*model.RequestCommentScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalServiceRequestCommentImpl).Get")
+	defer span.End()
 
 	if issueKeyOrID == "" {
 		return nil, nil, model.ErrNoIssueKeyOrID
@@ -141,6 +159,9 @@ func (i *internalServiceRequestCommentImpl) Get(ctx context.Context, issueKeyOrI
 
 func (i *internalServiceRequestCommentImpl) Create(ctx context.Context, issueKeyOrID, body string, public bool) (*model.RequestCommentScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalServiceRequestCommentImpl).Create")
+	defer span.End()
+
 	if issueKeyOrID == "" {
 		return nil, nil, model.ErrNoIssueKeyOrID
 	}
@@ -167,6 +188,9 @@ func (i *internalServiceRequestCommentImpl) Create(ctx context.Context, issueKey
 }
 
 func (i *internalServiceRequestCommentImpl) Attachments(ctx context.Context, issueKeyOrID string, commentID, start, limit int) (*model.RequestAttachmentPageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalServiceRequestCommentImpl).Attachments")
+	defer span.End()
 
 	if issueKeyOrID == "" {
 		return nil, nil, model.ErrNoIssueKeyOrID

@@ -38,6 +38,9 @@ type AuditRecordService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/audit-records#get-audit-records
 func (a *AuditRecordService) Get(ctx context.Context, options *model.AuditRecordGetOptions, offSet, limit int) (*model.AuditRecordPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*AuditRecordService).Get")
+	defer span.End()
+
 	return a.internalClient.Get(ctx, options, offSet, limit)
 }
 
@@ -47,6 +50,9 @@ type internalAuditRecordImpl struct {
 }
 
 func (i *internalAuditRecordImpl) Get(ctx context.Context, options *model.AuditRecordGetOptions, offSet, limit int) (*model.AuditRecordPageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalAuditRecordImpl).Get")
+	defer span.End()
 
 	params := url.Values{}
 	params.Add("offset", strconv.Itoa(offSet))

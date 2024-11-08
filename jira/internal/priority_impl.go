@@ -34,6 +34,9 @@ type PriorityService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/priorities#get-priorities
 func (p *PriorityService) Gets(ctx context.Context) ([]*model.PriorityScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*PriorityService).Gets")
+	defer span.End()
+
 	return p.internalClient.Gets(ctx)
 }
 
@@ -43,6 +46,9 @@ func (p *PriorityService) Gets(ctx context.Context) ([]*model.PriorityScheme, *m
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/priorities#get-priority
 func (p *PriorityService) Get(ctx context.Context, priorityID string) (*model.PriorityScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*PriorityService).Get")
+	defer span.End()
+
 	return p.internalClient.Get(ctx, priorityID)
 }
 
@@ -52,6 +58,9 @@ type internalPriorityImpl struct {
 }
 
 func (i *internalPriorityImpl) Gets(ctx context.Context) ([]*model.PriorityScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalPriorityImpl).Gets")
+	defer span.End()
 
 	endpoint := fmt.Sprintf("rest/api/%v/priority", i.version)
 
@@ -70,6 +79,9 @@ func (i *internalPriorityImpl) Gets(ctx context.Context) ([]*model.PrioritySchem
 }
 
 func (i *internalPriorityImpl) Get(ctx context.Context, priorityID string) (*model.PriorityScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalPriorityImpl).Get")
+	defer span.End()
 
 	if priorityID == "" {
 		return nil, nil, model.ErrNoPriorityID

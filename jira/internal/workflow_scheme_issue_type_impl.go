@@ -31,6 +31,9 @@ type WorkflowSchemeIssueTypeService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/workflow/scheme/issue-type#get-workflow-for-issue-type-in-workflow-scheme
 func (w *WorkflowSchemeIssueTypeService) Get(ctx context.Context, schemeID int, issueTypeID string, returnDraft bool) (*model.IssueTypeWorkflowMappingScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*WorkflowSchemeIssueTypeService).Get")
+	defer span.End()
+
 	return w.internalClient.Get(ctx, schemeID, issueTypeID, returnDraft)
 }
 
@@ -48,6 +51,9 @@ func (w *WorkflowSchemeIssueTypeService) Get(ctx context.Context, schemeID int, 
 //
 // https://docs.go-atlassian.io/jira-software-cloud/workflow/scheme/issue-type#set-workflow-for-issue-type-in-workflow-scheme
 func (w *WorkflowSchemeIssueTypeService) Set(ctx context.Context, schemeID int, issueTypeID string, payload *model.IssueTypeWorkflowPayloadScheme) (*model.WorkflowSchemeScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*WorkflowSchemeIssueTypeService).Set")
+	defer span.End()
+
 	return w.internalClient.Set(ctx, schemeID, issueTypeID, payload)
 }
 
@@ -65,6 +71,9 @@ func (w *WorkflowSchemeIssueTypeService) Set(ctx context.Context, schemeID int, 
 //
 // https://docs.go-atlassian.io/jira-software-cloud/workflow/scheme/issue-type#delete-workflow-for-issue-type-in-workflow-scheme
 func (w *WorkflowSchemeIssueTypeService) Delete(ctx context.Context, schemeID int, issueTypeID string, updateDraft bool) (*model.WorkflowSchemeScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*WorkflowSchemeIssueTypeService).Delete")
+	defer span.End()
+
 	return w.internalClient.Delete(ctx, schemeID, issueTypeID, updateDraft)
 }
 
@@ -74,6 +83,9 @@ func (w *WorkflowSchemeIssueTypeService) Delete(ctx context.Context, schemeID in
 //
 // https://docs.go-atlassian.io/jira-software-cloud/workflow/scheme/issue-type#get-issue-types-for-workflows-in-workflow-scheme
 func (w *WorkflowSchemeIssueTypeService) Mapping(ctx context.Context, schemeID int, workflowName string, returnDraft bool) ([]*model.IssueTypesWorkflowMappingScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*WorkflowSchemeIssueTypeService).Mapping")
+	defer span.End()
+
 	return w.internalClient.Mapping(ctx, schemeID, workflowName, returnDraft)
 }
 
@@ -83,6 +95,9 @@ type internalWorkflowSchemeIssueTypeImpl struct {
 }
 
 func (i *internalWorkflowSchemeIssueTypeImpl) Get(ctx context.Context, schemeID int, issueTypeID string, returnDraft bool) (*model.IssueTypeWorkflowMappingScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalWorkflowSchemeIssueTypeImpl).Get")
+	defer span.End()
 
 	if schemeID == 0 {
 		return nil, nil, model.ErrNoWorkflowSchemeID
@@ -118,6 +133,9 @@ func (i *internalWorkflowSchemeIssueTypeImpl) Get(ctx context.Context, schemeID 
 
 func (i *internalWorkflowSchemeIssueTypeImpl) Set(ctx context.Context, schemeID int, issueTypeID string, payload *model.IssueTypeWorkflowPayloadScheme) (*model.WorkflowSchemeScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalWorkflowSchemeIssueTypeImpl).Set")
+	defer span.End()
+
 	if schemeID == 0 {
 		return nil, nil, model.ErrNoWorkflowSchemeID
 	}
@@ -143,6 +161,9 @@ func (i *internalWorkflowSchemeIssueTypeImpl) Set(ctx context.Context, schemeID 
 }
 
 func (i *internalWorkflowSchemeIssueTypeImpl) Delete(ctx context.Context, schemeID int, issueTypeID string, updateDraft bool) (*model.WorkflowSchemeScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalWorkflowSchemeIssueTypeImpl).Delete")
+	defer span.End()
 
 	if schemeID == 0 {
 		return nil, nil, model.ErrNoWorkflowSchemeID
@@ -177,6 +198,9 @@ func (i *internalWorkflowSchemeIssueTypeImpl) Delete(ctx context.Context, scheme
 }
 
 func (i *internalWorkflowSchemeIssueTypeImpl) Mapping(ctx context.Context, schemeID int, workflowName string, returnDraft bool) ([]*model.IssueTypesWorkflowMappingScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalWorkflowSchemeIssueTypeImpl).Mapping")
+	defer span.End()
 
 	if schemeID == 0 {
 		return nil, nil, model.ErrNoWorkflowSchemeID

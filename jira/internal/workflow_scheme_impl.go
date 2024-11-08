@@ -36,6 +36,9 @@ type WorkflowSchemeService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/workflow/scheme#gets-workflows-schemes
 func (w *WorkflowSchemeService) Gets(ctx context.Context, startAt, maxResults int) (*model.WorkflowSchemePageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*WorkflowSchemeService).Gets")
+	defer span.End()
+
 	return w.internalClient.Gets(ctx, startAt, maxResults)
 }
 
@@ -45,6 +48,9 @@ func (w *WorkflowSchemeService) Gets(ctx context.Context, startAt, maxResults in
 //
 // https://docs.go-atlassian.io/jira-software-cloud/workflow/scheme#create-workflows-scheme
 func (w *WorkflowSchemeService) Create(ctx context.Context, payload *model.WorkflowSchemePayloadScheme) (*model.WorkflowSchemeScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*WorkflowSchemeService).Create")
+	defer span.End()
+
 	return w.internalClient.Create(ctx, payload)
 }
 
@@ -54,6 +60,9 @@ func (w *WorkflowSchemeService) Create(ctx context.Context, payload *model.Workf
 //
 // https://docs.go-atlassian.io/jira-software-cloud/workflow/scheme#get-workflow-scheme
 func (w *WorkflowSchemeService) Get(ctx context.Context, schemeID int, returnDraftIfExists bool) (*model.WorkflowSchemeScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*WorkflowSchemeService).Get")
+	defer span.End()
+
 	return w.internalClient.Get(ctx, schemeID, returnDraftIfExists)
 }
 
@@ -67,6 +76,9 @@ func (w *WorkflowSchemeService) Get(ctx context.Context, schemeID int, returnDra
 //
 // https://docs.go-atlassian.io/jira-software-cloud/workflow/scheme#update-workflow-scheme
 func (w *WorkflowSchemeService) Update(ctx context.Context, schemeID int, payload *model.WorkflowSchemePayloadScheme) (*model.WorkflowSchemeScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*WorkflowSchemeService).Update")
+	defer span.End()
+
 	return w.internalClient.Update(ctx, schemeID, payload)
 }
 
@@ -78,6 +90,9 @@ func (w *WorkflowSchemeService) Update(ctx context.Context, schemeID int, payloa
 //
 // https://docs.go-atlassian.io/jira-software-cloud/workflow/scheme#delete-workflow-scheme
 func (w *WorkflowSchemeService) Delete(ctx context.Context, schemeID int) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*WorkflowSchemeService).Delete")
+	defer span.End()
+
 	return w.internalClient.Delete(ctx, schemeID)
 }
 
@@ -95,6 +110,9 @@ func (w *WorkflowSchemeService) Delete(ctx context.Context, schemeID int) (*mode
 //
 // https://docs.go-atlassian.io/jira-software-cloud/workflow/scheme#get-workflow-schemes-associations
 func (w *WorkflowSchemeService) Associations(ctx context.Context, projectIDs []int) (*model.WorkflowSchemeAssociationPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*WorkflowSchemeService).Associations")
+	defer span.End()
+
 	return w.internalClient.Associations(ctx, projectIDs)
 }
 
@@ -108,6 +126,9 @@ func (w *WorkflowSchemeService) Associations(ctx context.Context, projectIDs []i
 //
 // https://docs.go-atlassian.io/jira-software-cloud/workflow/scheme#get-workflow-schemes-associations
 func (w *WorkflowSchemeService) Assign(ctx context.Context, schemeID, projectID string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*WorkflowSchemeService).Assign")
+	defer span.End()
+
 	return w.internalClient.Assign(ctx, schemeID, projectID)
 }
 
@@ -117,6 +138,9 @@ type internalWorkflowSchemeImpl struct {
 }
 
 func (i *internalWorkflowSchemeImpl) Gets(ctx context.Context, startAt, maxResults int) (*model.WorkflowSchemePageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalWorkflowSchemeImpl).Gets")
+	defer span.End()
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -140,6 +164,9 @@ func (i *internalWorkflowSchemeImpl) Gets(ctx context.Context, startAt, maxResul
 
 func (i *internalWorkflowSchemeImpl) Create(ctx context.Context, payload *model.WorkflowSchemePayloadScheme) (*model.WorkflowSchemeScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalWorkflowSchemeImpl).Create")
+	defer span.End()
+
 	endpoint := fmt.Sprintf("rest/api/%v/workflowscheme", i.version)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
@@ -157,6 +184,9 @@ func (i *internalWorkflowSchemeImpl) Create(ctx context.Context, payload *model.
 }
 
 func (i *internalWorkflowSchemeImpl) Get(ctx context.Context, schemeID int, returnDraftIfExists bool) (*model.WorkflowSchemeScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalWorkflowSchemeImpl).Get")
+	defer span.End()
 
 	if schemeID == 0 {
 		return nil, nil, model.ErrNoWorkflowSchemeID
@@ -189,6 +219,9 @@ func (i *internalWorkflowSchemeImpl) Get(ctx context.Context, schemeID int, retu
 
 func (i *internalWorkflowSchemeImpl) Update(ctx context.Context, schemeID int, payload *model.WorkflowSchemePayloadScheme) (*model.WorkflowSchemeScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalWorkflowSchemeImpl).Update")
+	defer span.End()
+
 	if schemeID == 0 {
 		return nil, nil, model.ErrNoWorkflowSchemeID
 	}
@@ -211,6 +244,9 @@ func (i *internalWorkflowSchemeImpl) Update(ctx context.Context, schemeID int, p
 
 func (i *internalWorkflowSchemeImpl) Delete(ctx context.Context, schemeID int) (*model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalWorkflowSchemeImpl).Delete")
+	defer span.End()
+
 	if schemeID == 0 {
 		return nil, model.ErrNoWorkflowSchemeID
 	}
@@ -226,6 +262,9 @@ func (i *internalWorkflowSchemeImpl) Delete(ctx context.Context, schemeID int) (
 }
 
 func (i *internalWorkflowSchemeImpl) Associations(ctx context.Context, projectIDs []int) (*model.WorkflowSchemeAssociationPageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalWorkflowSchemeImpl).Associations")
+	defer span.End()
 
 	if len(projectIDs) == 0 {
 		return nil, nil, model.ErrNoProjects
@@ -253,6 +292,9 @@ func (i *internalWorkflowSchemeImpl) Associations(ctx context.Context, projectID
 }
 
 func (i *internalWorkflowSchemeImpl) Assign(ctx context.Context, schemeID, projectID string) (*model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalWorkflowSchemeImpl).Assign")
+	defer span.End()
 
 	if schemeID == "" {
 		return nil, model.ErrNoWorkflowSchemeID

@@ -39,6 +39,9 @@ type ScreenTabService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/screens/tabs#get-all-screen-tabs
 func (s *ScreenTabService) Gets(ctx context.Context, screenID int, projectKey string) ([]*model.ScreenTabScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ScreenTabService).Gets")
+	defer span.End()
+
 	return s.internalClient.Gets(ctx, screenID, projectKey)
 }
 
@@ -48,6 +51,9 @@ func (s *ScreenTabService) Gets(ctx context.Context, screenID int, projectKey st
 //
 // https://docs.go-atlassian.io/jira-software-cloud/screens/tabs#create-screen-tab
 func (s *ScreenTabService) Create(ctx context.Context, screenID int, tabName string) (*model.ScreenTabScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ScreenTabService).Create")
+	defer span.End()
+
 	return s.internalClient.Create(ctx, screenID, tabName)
 }
 
@@ -57,6 +63,9 @@ func (s *ScreenTabService) Create(ctx context.Context, screenID int, tabName str
 //
 // https://docs.go-atlassian.io/jira-software-cloud/screens/tabs#update-screen-tab
 func (s *ScreenTabService) Update(ctx context.Context, screenID, tabID int, newTabName string) (*model.ScreenTabScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ScreenTabService).Update")
+	defer span.End()
+
 	return s.internalClient.Update(ctx, screenID, tabID, newTabName)
 }
 
@@ -66,6 +75,9 @@ func (s *ScreenTabService) Update(ctx context.Context, screenID, tabID int, newT
 //
 // https://docs.go-atlassian.io/jira-software-cloud/screens/tabs#delete-screen-tab
 func (s *ScreenTabService) Delete(ctx context.Context, screenID, tabID int) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ScreenTabService).Delete")
+	defer span.End()
+
 	return s.internalClient.Delete(ctx, screenID, tabID)
 }
 
@@ -75,6 +87,9 @@ func (s *ScreenTabService) Delete(ctx context.Context, screenID, tabID int) (*mo
 //
 // https://docs.go-atlassian.io/jira-software-cloud/screens/tabs#move-screen-tab
 func (s *ScreenTabService) Move(ctx context.Context, screenID, tabID, position int) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ScreenTabService).Move")
+	defer span.End()
+
 	return s.internalClient.Move(ctx, screenID, tabID, position)
 }
 
@@ -84,6 +99,9 @@ type internalScreenTabImpl struct {
 }
 
 func (i *internalScreenTabImpl) Gets(ctx context.Context, screenID int, projectKey string) ([]*model.ScreenTabScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalScreenTabImpl).Gets")
+	defer span.End()
 
 	if screenID == 0 {
 		return nil, nil, model.ErrNoScreenID
@@ -116,6 +134,9 @@ func (i *internalScreenTabImpl) Gets(ctx context.Context, screenID int, projectK
 
 func (i *internalScreenTabImpl) Create(ctx context.Context, screenID int, tabName string) (*model.ScreenTabScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalScreenTabImpl).Create")
+	defer span.End()
+
 	if screenID == 0 {
 		return nil, nil, model.ErrNoScreenID
 	}
@@ -141,6 +162,9 @@ func (i *internalScreenTabImpl) Create(ctx context.Context, screenID int, tabNam
 }
 
 func (i *internalScreenTabImpl) Update(ctx context.Context, screenID, tabID int, newTabName string) (*model.ScreenTabScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalScreenTabImpl).Update")
+	defer span.End()
 
 	if screenID == 0 {
 		return nil, nil, model.ErrNoScreenID
@@ -172,6 +196,9 @@ func (i *internalScreenTabImpl) Update(ctx context.Context, screenID, tabID int,
 
 func (i *internalScreenTabImpl) Delete(ctx context.Context, screenID, tabID int) (*model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalScreenTabImpl).Delete")
+	defer span.End()
+
 	if screenID == 0 {
 		return nil, model.ErrNoScreenID
 	}
@@ -191,6 +218,9 @@ func (i *internalScreenTabImpl) Delete(ctx context.Context, screenID, tabID int)
 }
 
 func (i *internalScreenTabImpl) Move(ctx context.Context, screenID, tabID, position int) (*model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalScreenTabImpl).Move")
+	defer span.End()
 
 	if screenID == 0 {
 		return nil, model.ErrNoScreenID

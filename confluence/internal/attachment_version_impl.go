@@ -31,6 +31,9 @@ type AttachmentVersionService struct {
 //
 // https://docs.go-atlassian.io/confluence-cloud/v2/attachments/versions#get-attachment-versions
 func (a *AttachmentVersionService) Gets(ctx context.Context, attachmentID, cursor, sort string, limit int) (*model.AttachmentVersionPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*AttachmentVersionService).Gets")
+	defer span.End()
+
 	return a.internalClient.Gets(ctx, attachmentID, cursor, sort, limit)
 }
 
@@ -40,6 +43,9 @@ func (a *AttachmentVersionService) Gets(ctx context.Context, attachmentID, curso
 //
 // https://docs.go-atlassian.io/confluence-cloud/v2/attachments/versions#get-attachment-version
 func (a *AttachmentVersionService) Get(ctx context.Context, attachmentID string, versionID int) (*model.DetailedVersionScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*AttachmentVersionService).Get")
+	defer span.End()
+
 	return a.internalClient.Get(ctx, attachmentID, versionID)
 }
 
@@ -48,6 +54,9 @@ type internalAttachmentVersionImpl struct {
 }
 
 func (i *internalAttachmentVersionImpl) Gets(ctx context.Context, attachmentID, cursor, sort string, limit int) (*model.AttachmentVersionPageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalAttachmentVersionImpl).Gets")
+	defer span.End()
 
 	if attachmentID == "" {
 		return nil, nil, model.ErrNoContentAttachmentID
@@ -81,6 +90,9 @@ func (i *internalAttachmentVersionImpl) Gets(ctx context.Context, attachmentID, 
 }
 
 func (i *internalAttachmentVersionImpl) Get(ctx context.Context, attachmentID string, versionID int) (*model.DetailedVersionScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalAttachmentVersionImpl).Get")
+	defer span.End()
 
 	if attachmentID == "" {
 		return nil, nil, model.ErrNoContentAttachmentID

@@ -29,6 +29,9 @@ type FeedbackService struct {
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request/feedback#get-feedback
 func (s *FeedbackService) Get(ctx context.Context, requestIDOrKey string) (*model.CustomerFeedbackScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*FeedbackService).Get")
+	defer span.End()
+
 	return s.internalClient.Get(ctx, requestIDOrKey)
 }
 
@@ -38,6 +41,9 @@ func (s *FeedbackService) Get(ctx context.Context, requestIDOrKey string) (*mode
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request/feedback#post-feedback
 func (s *FeedbackService) Post(ctx context.Context, requestIDOrKey string, rating int, comment string) (*model.CustomerFeedbackScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*FeedbackService).Post")
+	defer span.End()
+
 	return s.internalClient.Post(ctx, requestIDOrKey, rating, comment)
 }
 
@@ -47,6 +53,9 @@ func (s *FeedbackService) Post(ctx context.Context, requestIDOrKey string, ratin
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request/feedback#delete-feedback
 func (s *FeedbackService) Delete(ctx context.Context, requestIDOrKey string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*FeedbackService).Delete")
+	defer span.End()
+
 	return s.internalClient.Delete(ctx, requestIDOrKey)
 }
 
@@ -56,6 +65,9 @@ type internalServiceRequestFeedbackImpl struct {
 }
 
 func (i *internalServiceRequestFeedbackImpl) Get(ctx context.Context, requestIDOrKey string) (*model.CustomerFeedbackScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalServiceRequestFeedbackImpl).Get")
+	defer span.End()
 
 	if requestIDOrKey == "" {
 		return nil, nil, model.ErrNoIssueKeyOrID
@@ -78,6 +90,9 @@ func (i *internalServiceRequestFeedbackImpl) Get(ctx context.Context, requestIDO
 }
 
 func (i *internalServiceRequestFeedbackImpl) Post(ctx context.Context, requestIDOrKey string, rating int, comment string) (*model.CustomerFeedbackScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalServiceRequestFeedbackImpl).Post")
+	defer span.End()
 
 	if requestIDOrKey == "" {
 		return nil, nil, model.ErrNoIssueKeyOrID
@@ -108,6 +123,9 @@ func (i *internalServiceRequestFeedbackImpl) Post(ctx context.Context, requestID
 }
 
 func (i *internalServiceRequestFeedbackImpl) Delete(ctx context.Context, requestIDOrKey string) (*model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalServiceRequestFeedbackImpl).Delete")
+	defer span.End()
 
 	if requestIDOrKey == "" {
 		return nil, model.ErrNoIssueKeyOrID

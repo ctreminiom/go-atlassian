@@ -47,6 +47,9 @@ type IssueFieldContextService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/fields/context#get-custom-field-contexts
 func (i *IssueFieldContextService) Gets(ctx context.Context, fieldID string, options *model.FieldContextOptionsScheme, startAt, maxResults int) (*model.CustomFieldContextPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*IssueFieldContextService).Gets")
+	defer span.End()
+
 	return i.internalClient.Gets(ctx, fieldID, options, startAt, maxResults)
 }
 
@@ -60,6 +63,9 @@ func (i *IssueFieldContextService) Gets(ctx context.Context, fieldID string, opt
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/fields/context#create-custom-field-context
 func (i *IssueFieldContextService) Create(ctx context.Context, fieldID string, payload *model.FieldContextPayloadScheme) (*model.FieldContextScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*IssueFieldContextService).Create")
+	defer span.End()
+
 	return i.internalClient.Create(ctx, fieldID, payload)
 }
 
@@ -71,6 +77,9 @@ func (i *IssueFieldContextService) Create(ctx context.Context, fieldID string, p
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/fields/context#get-custom-field-contexts-default-values
 func (i *IssueFieldContextService) GetDefaultValues(ctx context.Context, fieldID string, contextIDs []int, startAt, maxResults int) (*model.CustomFieldDefaultValuePageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*IssueFieldContextService).GetDefaultValues")
+	defer span.End()
+
 	return i.internalClient.GetDefaultValues(ctx, fieldID, contextIDs, startAt, maxResults)
 }
 
@@ -80,6 +89,9 @@ func (i *IssueFieldContextService) GetDefaultValues(ctx context.Context, fieldID
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/fields/context#set-custom-field-contexts-default-values
 func (i *IssueFieldContextService) SetDefaultValue(ctx context.Context, fieldID string, payload *model.FieldContextDefaultPayloadScheme) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*IssueFieldContextService).SetDefaultValue")
+	defer span.End()
+
 	return i.internalClient.SetDefaultValue(ctx, fieldID, payload)
 }
 
@@ -93,6 +105,9 @@ func (i *IssueFieldContextService) SetDefaultValue(ctx context.Context, fieldID 
 //
 // Docs: TODO: The documentation needs to be created, raise a ticket here: https://github.com/ctreminiom/go-atlassian/issues
 func (i *IssueFieldContextService) IssueTypesContext(ctx context.Context, fieldID string, contextIDs []int, startAt, maxResults int) (*model.IssueTypeToContextMappingPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*IssueFieldContextService).IssueTypesContext")
+	defer span.End()
+
 	return i.internalClient.IssueTypesContext(ctx, fieldID, contextIDs, startAt, maxResults)
 }
 
@@ -106,6 +121,9 @@ func (i *IssueFieldContextService) IssueTypesContext(ctx context.Context, fieldI
 //
 // Docs: TODO: The documentation needs to be created, raise a ticket here: https://github.com/ctreminiom/go-atlassian/issues
 func (i *IssueFieldContextService) ProjectsContext(ctx context.Context, fieldID string, contextIDs []int, startAt, maxResults int) (*model.CustomFieldContextProjectMappingPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*IssueFieldContextService).ProjectsContext")
+	defer span.End()
+
 	return i.internalClient.ProjectsContext(ctx, fieldID, contextIDs, startAt, maxResults)
 }
 
@@ -115,6 +133,9 @@ func (i *IssueFieldContextService) ProjectsContext(ctx context.Context, fieldID 
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/fields/context#update-custom-field-context
 func (i *IssueFieldContextService) Update(ctx context.Context, fieldID string, contextID int, name, description string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*IssueFieldContextService).Update")
+	defer span.End()
+
 	return i.internalClient.Update(ctx, fieldID, contextID, name, description)
 }
 
@@ -124,6 +145,9 @@ func (i *IssueFieldContextService) Update(ctx context.Context, fieldID string, c
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/fields/context#delete-custom-field-context
 func (i *IssueFieldContextService) Delete(ctx context.Context, fieldID string, contextID int) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*IssueFieldContextService).Delete")
+	defer span.End()
+
 	return i.internalClient.Delete(ctx, fieldID, contextID)
 }
 
@@ -133,6 +157,9 @@ func (i *IssueFieldContextService) Delete(ctx context.Context, fieldID string, c
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/fields/context#add-issue-types-to-context
 func (i *IssueFieldContextService) AddIssueTypes(ctx context.Context, fieldID string, contextID int, issueTypesIDs []string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*IssueFieldContextService).AddIssueTypes")
+	defer span.End()
+
 	return i.internalClient.AddIssueTypes(ctx, fieldID, contextID, issueTypesIDs)
 }
 
@@ -142,6 +169,9 @@ func (i *IssueFieldContextService) AddIssueTypes(ctx context.Context, fieldID st
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/fields/context#remove-issue-types-from-context
 func (i *IssueFieldContextService) RemoveIssueTypes(ctx context.Context, fieldID string, contextID int, issueTypesIDs []string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*IssueFieldContextService).RemoveIssueTypes")
+	defer span.End()
+
 	return i.internalClient.RemoveIssueTypes(ctx, fieldID, contextID, issueTypesIDs)
 }
 
@@ -151,6 +181,9 @@ func (i *IssueFieldContextService) RemoveIssueTypes(ctx context.Context, fieldID
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/fields/context#assign-custom-field-context-to-projects
 func (i *IssueFieldContextService) Link(ctx context.Context, fieldID string, contextID int, projectIDs []string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*IssueFieldContextService).Link")
+	defer span.End()
+
 	return i.internalClient.Link(ctx, fieldID, contextID, projectIDs)
 }
 
@@ -164,6 +197,9 @@ func (i *IssueFieldContextService) Link(ctx context.Context, fieldID string, con
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/fields/context#remove-custom-field-context-from-projects
 func (i *IssueFieldContextService) UnLink(ctx context.Context, fieldID string, contextID int, projectIDs []string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*IssueFieldContextService).UnLink")
+	defer span.End()
+
 	return i.internalClient.UnLink(ctx, fieldID, contextID, projectIDs)
 }
 
@@ -173,6 +209,9 @@ type internalIssueFieldContextServiceImpl struct {
 }
 
 func (i *internalIssueFieldContextServiceImpl) Gets(ctx context.Context, fieldID string, options *model.FieldContextOptionsScheme, startAt, maxResults int) (*model.CustomFieldContextPageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalIssueFieldContextServiceImpl).Gets")
+	defer span.End()
 
 	if fieldID == "" {
 		return nil, nil, model.ErrNoFieldID
@@ -209,6 +248,9 @@ func (i *internalIssueFieldContextServiceImpl) Gets(ctx context.Context, fieldID
 
 func (i *internalIssueFieldContextServiceImpl) Create(ctx context.Context, fieldID string, payload *model.FieldContextPayloadScheme) (*model.FieldContextScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalIssueFieldContextServiceImpl).Create")
+	defer span.End()
+
 	if fieldID == "" {
 		return nil, nil, model.ErrNoFieldID
 	}
@@ -230,6 +272,9 @@ func (i *internalIssueFieldContextServiceImpl) Create(ctx context.Context, field
 }
 
 func (i *internalIssueFieldContextServiceImpl) GetDefaultValues(ctx context.Context, fieldID string, contextIDs []int, startAt, maxResults int) (*model.CustomFieldDefaultValuePageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalIssueFieldContextServiceImpl).GetDefaultValues")
+	defer span.End()
 
 	if fieldID == "" {
 		return nil, nil, model.ErrNoFieldID
@@ -261,6 +306,9 @@ func (i *internalIssueFieldContextServiceImpl) GetDefaultValues(ctx context.Cont
 
 func (i *internalIssueFieldContextServiceImpl) SetDefaultValue(ctx context.Context, fieldID string, payload *model.FieldContextDefaultPayloadScheme) (*model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalIssueFieldContextServiceImpl).SetDefaultValue")
+	defer span.End()
+
 	if fieldID == "" {
 		return nil, model.ErrNoFieldID
 	}
@@ -276,6 +324,9 @@ func (i *internalIssueFieldContextServiceImpl) SetDefaultValue(ctx context.Conte
 }
 
 func (i *internalIssueFieldContextServiceImpl) IssueTypesContext(ctx context.Context, fieldID string, contextIDs []int, startAt, maxResults int) (*model.IssueTypeToContextMappingPageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalIssueFieldContextServiceImpl).IssueTypesContext")
+	defer span.End()
 
 	if fieldID == "" {
 		return nil, nil, model.ErrNoFieldID
@@ -307,6 +358,9 @@ func (i *internalIssueFieldContextServiceImpl) IssueTypesContext(ctx context.Con
 
 func (i *internalIssueFieldContextServiceImpl) ProjectsContext(ctx context.Context, fieldID string, contextIDs []int, startAt, maxResults int) (*model.CustomFieldContextProjectMappingPageScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalIssueFieldContextServiceImpl).ProjectsContext")
+	defer span.End()
+
 	if fieldID == "" {
 		return nil, nil, model.ErrNoFieldID
 	}
@@ -337,6 +391,9 @@ func (i *internalIssueFieldContextServiceImpl) ProjectsContext(ctx context.Conte
 
 func (i *internalIssueFieldContextServiceImpl) Update(ctx context.Context, fieldID string, contextID int, name, description string) (*model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalIssueFieldContextServiceImpl).Update")
+	defer span.End()
+
 	if fieldID == "" {
 		return nil, model.ErrNoFieldID
 	}
@@ -363,6 +420,9 @@ func (i *internalIssueFieldContextServiceImpl) Update(ctx context.Context, field
 
 func (i *internalIssueFieldContextServiceImpl) Delete(ctx context.Context, fieldID string, contextID int) (*model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalIssueFieldContextServiceImpl).Delete")
+	defer span.End()
+
 	if fieldID == "" {
 		return nil, model.ErrNoFieldID
 	}
@@ -382,6 +442,9 @@ func (i *internalIssueFieldContextServiceImpl) Delete(ctx context.Context, field
 }
 
 func (i *internalIssueFieldContextServiceImpl) AddIssueTypes(ctx context.Context, fieldID string, contextID int, issueTypesIDs []string) (*model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalIssueFieldContextServiceImpl).AddIssueTypes")
+	defer span.End()
 
 	if fieldID == "" {
 		return nil, model.ErrNoFieldID
@@ -403,6 +466,9 @@ func (i *internalIssueFieldContextServiceImpl) AddIssueTypes(ctx context.Context
 
 func (i *internalIssueFieldContextServiceImpl) RemoveIssueTypes(ctx context.Context, fieldID string, contextID int, issueTypesIDs []string) (*model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalIssueFieldContextServiceImpl).RemoveIssueTypes")
+	defer span.End()
+
 	if fieldID == "" {
 		return nil, model.ErrNoFieldID
 	}
@@ -422,6 +488,9 @@ func (i *internalIssueFieldContextServiceImpl) RemoveIssueTypes(ctx context.Cont
 }
 
 func (i *internalIssueFieldContextServiceImpl) Link(ctx context.Context, fieldID string, contextID int, projectIDs []string) (*model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalIssueFieldContextServiceImpl).Link")
+	defer span.End()
 
 	if fieldID == "" {
 		return nil, model.ErrNoFieldID
@@ -446,6 +515,9 @@ func (i *internalIssueFieldContextServiceImpl) Link(ctx context.Context, fieldID
 }
 
 func (i *internalIssueFieldContextServiceImpl) UnLink(ctx context.Context, fieldID string, contextID int, projectIDs []string) (*model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalIssueFieldContextServiceImpl).UnLink")
+	defer span.End()
 
 	if fieldID == "" {
 		return nil, model.ErrNoFieldID

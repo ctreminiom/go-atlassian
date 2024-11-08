@@ -34,6 +34,9 @@ type UserService struct {
 //
 // https://docs.go-atlassian.io/atlassian-admin-cloud/user#get-user-management-permissions
 func (u *UserService) Permissions(ctx context.Context, accountID string, privileges []string) (*model.AdminUserPermissionScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*UserService).Permissions")
+	defer span.End()
+
 	return u.internalClient.Permissions(ctx, accountID, privileges)
 }
 
@@ -43,6 +46,9 @@ func (u *UserService) Permissions(ctx context.Context, accountID string, privile
 //
 // https://docs.go-atlassian.io/atlassian-admin-cloud/user#get-profile
 func (u *UserService) Get(ctx context.Context, accountID string) (*model.AdminUserScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*UserService).Get")
+	defer span.End()
+
 	return u.internalClient.Get(ctx, accountID)
 }
 
@@ -52,6 +58,9 @@ func (u *UserService) Get(ctx context.Context, accountID string) (*model.AdminUs
 //
 // https://docs.go-atlassian.io/atlassian-admin-cloud/user#update-profile
 func (u *UserService) Update(ctx context.Context, accountID string, payload map[string]interface{}) (*model.AdminUserScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*UserService).Update")
+	defer span.End()
+
 	return u.internalClient.Update(ctx, accountID, payload)
 }
 
@@ -67,6 +76,9 @@ func (u *UserService) Update(ctx context.Context, accountID string, payload map[
 //
 // https://docs.go-atlassian.io/atlassian-admin-cloud/user#disable-a-user
 func (u *UserService) Disable(ctx context.Context, accountID, message string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*UserService).Disable")
+	defer span.End()
+
 	return u.internalClient.Disable(ctx, accountID, message)
 }
 
@@ -78,6 +90,9 @@ func (u *UserService) Disable(ctx context.Context, accountID, message string) (*
 //
 // https://docs.go-atlassian.io/atlassian-admin-cloud/user#enable-a-user
 func (u *UserService) Enable(ctx context.Context, accountID string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*UserService).Enable")
+	defer span.End()
+
 	return u.internalClient.Enable(ctx, accountID)
 }
 
@@ -86,6 +101,9 @@ type internalUserImpl struct {
 }
 
 func (i *internalUserImpl) Permissions(ctx context.Context, accountID string, privileges []string) (*model.AdminUserPermissionScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalUserImpl).Permissions")
+	defer span.End()
 
 	if accountID == "" {
 		return nil, nil, model.ErrNoAdminAccountID
@@ -118,6 +136,9 @@ func (i *internalUserImpl) Permissions(ctx context.Context, accountID string, pr
 
 func (i *internalUserImpl) Get(ctx context.Context, accountID string) (*model.AdminUserScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalUserImpl).Get")
+	defer span.End()
+
 	if accountID == "" {
 		return nil, nil, model.ErrNoAdminAccountID
 	}
@@ -139,6 +160,9 @@ func (i *internalUserImpl) Get(ctx context.Context, accountID string) (*model.Ad
 }
 
 func (i *internalUserImpl) Update(ctx context.Context, accountID string, payload map[string]interface{}) (*model.AdminUserScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalUserImpl).Update")
+	defer span.End()
 
 	if accountID == "" {
 		return nil, nil, model.ErrNoAdminAccountID
@@ -162,6 +186,9 @@ func (i *internalUserImpl) Update(ctx context.Context, accountID string, payload
 
 func (i *internalUserImpl) Disable(ctx context.Context, accountID, message string) (*model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalUserImpl).Disable")
+	defer span.End()
+
 	if accountID == "" {
 		return nil, model.ErrNoAdminAccountID
 	}
@@ -182,6 +209,9 @@ func (i *internalUserImpl) Disable(ctx context.Context, accountID, message strin
 }
 
 func (i *internalUserImpl) Enable(ctx context.Context, accountID string) (*model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalUserImpl).Enable")
+	defer span.End()
 
 	if accountID == "" {
 		return nil, model.ErrNoAdminAccountID

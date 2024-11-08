@@ -29,6 +29,9 @@ type InfoService struct {
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/info#get-info
 func (i *InfoService) Get(ctx context.Context) (*model.InfoScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*InfoService).Get")
+	defer span.End()
+
 	return i.internalClient.Get(ctx)
 }
 
@@ -38,6 +41,9 @@ type internalInfoImpl struct {
 }
 
 func (i *internalInfoImpl) Get(ctx context.Context) (*model.InfoScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalInfoImpl).Get")
+	defer span.End()
 
 	endpoint := "rest/servicedeskapi/info"
 

@@ -32,6 +32,9 @@ type PropertyService struct {
 //
 // https://docs.go-atlassian.io/confluence-cloud/content/properties#get-content-properties
 func (p *PropertyService) Gets(ctx context.Context, contentID string, expand []string, startAt, maxResults int) (*model.ContentPropertyPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*PropertyService).Gets")
+	defer span.End()
+
 	return p.internalClient.Gets(ctx, contentID, expand, startAt, maxResults)
 }
 
@@ -41,6 +44,9 @@ func (p *PropertyService) Gets(ctx context.Context, contentID string, expand []s
 //
 // https://docs.go-atlassian.io/confluence-cloud/content/properties#create-content-property
 func (p *PropertyService) Create(ctx context.Context, contentID string, payload *model.ContentPropertyPayloadScheme) (*model.ContentPropertyScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*PropertyService).Create")
+	defer span.End()
+
 	return p.internalClient.Create(ctx, contentID, payload)
 }
 
@@ -50,6 +56,9 @@ func (p *PropertyService) Create(ctx context.Context, contentID string, payload 
 //
 // https://docs.go-atlassian.io/confluence-cloud/content/properties#get-content-property
 func (p *PropertyService) Get(ctx context.Context, contentID, key string) (*model.ContentPropertyScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*PropertyService).Get")
+	defer span.End()
+
 	return p.internalClient.Get(ctx, contentID, key)
 }
 
@@ -59,6 +68,9 @@ func (p *PropertyService) Get(ctx context.Context, contentID, key string) (*mode
 //
 // https://docs.go-atlassian.io/confluence-cloud/content/properties#delete-content-property
 func (p *PropertyService) Delete(ctx context.Context, contentID, key string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*PropertyService).Delete")
+	defer span.End()
+
 	return p.internalClient.Delete(ctx, contentID, key)
 }
 
@@ -67,6 +79,9 @@ type internalPropertyImpl struct {
 }
 
 func (i *internalPropertyImpl) Gets(ctx context.Context, contentID string, expand []string, startAt, maxResults int) (*model.ContentPropertyPageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalPropertyImpl).Gets")
+	defer span.End()
 
 	if contentID == "" {
 		return nil, nil, model.ErrNoContentID
@@ -98,6 +113,9 @@ func (i *internalPropertyImpl) Gets(ctx context.Context, contentID string, expan
 
 func (i *internalPropertyImpl) Create(ctx context.Context, contentID string, payload *model.ContentPropertyPayloadScheme) (*model.ContentPropertyScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalPropertyImpl).Create")
+	defer span.End()
+
 	if contentID == "" {
 		return nil, nil, model.ErrNoContentID
 	}
@@ -119,6 +137,9 @@ func (i *internalPropertyImpl) Create(ctx context.Context, contentID string, pay
 }
 
 func (i *internalPropertyImpl) Get(ctx context.Context, contentID, key string) (*model.ContentPropertyScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalPropertyImpl).Get")
+	defer span.End()
 
 	if contentID == "" {
 		return nil, nil, model.ErrNoContentID
@@ -145,6 +166,9 @@ func (i *internalPropertyImpl) Get(ctx context.Context, contentID, key string) (
 }
 
 func (i *internalPropertyImpl) Delete(ctx context.Context, contentID, key string) (*model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalPropertyImpl).Delete")
+	defer span.End()
 
 	if contentID == "" {
 		return nil, model.ErrNoContentID

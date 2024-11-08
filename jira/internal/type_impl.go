@@ -41,6 +41,9 @@ type TypeService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/type#get-all-issue-types-for-user
 func (t *TypeService) Gets(ctx context.Context) ([]*model.IssueTypeScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*TypeService).Gets")
+	defer span.End()
+
 	return t.internalClient.Gets(ctx)
 }
 
@@ -50,6 +53,9 @@ func (t *TypeService) Gets(ctx context.Context) ([]*model.IssueTypeScheme, *mode
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/type#create-issue-type
 func (t *TypeService) Create(ctx context.Context, payload *model.IssueTypePayloadScheme) (*model.IssueTypeScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*TypeService).Create")
+	defer span.End()
+
 	return t.internalClient.Create(ctx, payload)
 }
 
@@ -59,6 +65,9 @@ func (t *TypeService) Create(ctx context.Context, payload *model.IssueTypePayloa
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/type#get-issue-type
 func (t *TypeService) Get(ctx context.Context, issueTypeID string) (*model.IssueTypeScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*TypeService).Get")
+	defer span.End()
+
 	return t.internalClient.Get(ctx, issueTypeID)
 }
 
@@ -68,6 +77,9 @@ func (t *TypeService) Get(ctx context.Context, issueTypeID string) (*model.Issue
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/type#update-issue-type
 func (t *TypeService) Update(ctx context.Context, issueTypeID string, payload *model.IssueTypePayloadScheme) (*model.IssueTypeScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*TypeService).Update")
+	defer span.End()
+
 	return t.internalClient.Update(ctx, issueTypeID, payload)
 }
 
@@ -80,6 +92,9 @@ func (t *TypeService) Update(ctx context.Context, issueTypeID string, payload *m
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/type#delete-issue-type
 func (t *TypeService) Delete(ctx context.Context, issueTypeID string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*TypeService).Delete")
+	defer span.End()
+
 	return t.internalClient.Delete(ctx, issueTypeID)
 }
 
@@ -91,6 +106,9 @@ func (t *TypeService) Delete(ctx context.Context, issueTypeID string) (*model.Re
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/type#get-alternative-issue-types
 func (t *TypeService) Alternatives(ctx context.Context, issueTypeID string) ([]*model.IssueTypeScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*TypeService).Alternatives")
+	defer span.End()
+
 	return t.internalClient.Alternatives(ctx, issueTypeID)
 }
 
@@ -100,6 +118,9 @@ type internalTypeImpl struct {
 }
 
 func (i *internalTypeImpl) Gets(ctx context.Context) ([]*model.IssueTypeScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalTypeImpl).Gets")
+	defer span.End()
 
 	endpoint := fmt.Sprintf("rest/api/%v/issuetype", i.version)
 
@@ -119,6 +140,9 @@ func (i *internalTypeImpl) Gets(ctx context.Context) ([]*model.IssueTypeScheme, 
 
 func (i *internalTypeImpl) Create(ctx context.Context, payload *model.IssueTypePayloadScheme) (*model.IssueTypeScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalTypeImpl).Create")
+	defer span.End()
+
 	endpoint := fmt.Sprintf("rest/api/%v/issuetype", i.version)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
@@ -136,6 +160,9 @@ func (i *internalTypeImpl) Create(ctx context.Context, payload *model.IssueTypeP
 }
 
 func (i *internalTypeImpl) Get(ctx context.Context, issueTypeID string) (*model.IssueTypeScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalTypeImpl).Get")
+	defer span.End()
 
 	if issueTypeID == "" {
 		return nil, nil, model.ErrNoIssueTypeID
@@ -159,6 +186,9 @@ func (i *internalTypeImpl) Get(ctx context.Context, issueTypeID string) (*model.
 
 func (i *internalTypeImpl) Update(ctx context.Context, issueTypeID string, payload *model.IssueTypePayloadScheme) (*model.IssueTypeScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalTypeImpl).Update")
+	defer span.End()
+
 	if issueTypeID == "" {
 		return nil, nil, model.ErrNoIssueTypeID
 	}
@@ -181,6 +211,9 @@ func (i *internalTypeImpl) Update(ctx context.Context, issueTypeID string, paylo
 
 func (i *internalTypeImpl) Delete(ctx context.Context, issueTypeID string) (*model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalTypeImpl).Delete")
+	defer span.End()
+
 	if issueTypeID == "" {
 		return nil, model.ErrNoIssueTypeID
 	}
@@ -196,6 +229,9 @@ func (i *internalTypeImpl) Delete(ctx context.Context, issueTypeID string) (*mod
 }
 
 func (i *internalTypeImpl) Alternatives(ctx context.Context, issueTypeID string) ([]*model.IssueTypeScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalTypeImpl).Alternatives")
+	defer span.End()
 
 	endpoint := fmt.Sprintf("rest/api/%v/issuetype/%v/alternatives", i.version, issueTypeID)
 

@@ -40,6 +40,9 @@ type TaskService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/tasks#get-task
 func (t *TaskService) Get(ctx context.Context, taskID string) (*model.TaskScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*TaskService).Get")
+	defer span.End()
+
 	return t.internalClient.Get(ctx, taskID)
 }
 
@@ -49,6 +52,9 @@ func (t *TaskService) Get(ctx context.Context, taskID string) (*model.TaskScheme
 //
 // https://docs.go-atlassian.io/jira-software-cloud/tasks#cancel-task
 func (t *TaskService) Cancel(ctx context.Context, taskID string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*TaskService).Cancel")
+	defer span.End()
+
 	return t.internalClient.Cancel(ctx, taskID)
 }
 
@@ -58,6 +64,9 @@ type internalTaskServiceImpl struct {
 }
 
 func (i *internalTaskServiceImpl) Get(ctx context.Context, taskID string) (*model.TaskScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalTaskServiceImpl).Get")
+	defer span.End()
 
 	if taskID == "" {
 		return nil, nil, model.ErrNoTaskID
@@ -80,6 +89,9 @@ func (i *internalTaskServiceImpl) Get(ctx context.Context, taskID string) (*mode
 }
 
 func (i *internalTaskServiceImpl) Cancel(ctx context.Context, taskID string) (*model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalTaskServiceImpl).Cancel")
+	defer span.End()
 
 	if taskID == "" {
 		return nil, model.ErrNoTaskID

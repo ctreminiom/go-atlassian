@@ -37,6 +37,9 @@ type SpaceService struct {
 //
 // https://docs.go-atlassian.io/confluence-cloud/space#get-spaces
 func (s *SpaceService) Gets(ctx context.Context, options *model.GetSpacesOptionScheme, startAt, maxResults int) (result *model.SpacePageScheme, response *model.ResponseScheme, err error) {
+	ctx, span := tracer().Start(ctx, "(*SpaceService).Gets")
+	defer span.End()
+
 	return s.internalClient.Gets(ctx, options, startAt, maxResults)
 }
 
@@ -48,6 +51,9 @@ func (s *SpaceService) Gets(ctx context.Context, options *model.GetSpacesOptionS
 //
 // https://docs.go-atlassian.io/confluence-cloud/space#create-space
 func (s *SpaceService) Create(ctx context.Context, payload *model.CreateSpaceScheme, private bool) (*model.SpaceScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SpaceService).Create")
+	defer span.End()
+
 	return s.internalClient.Create(ctx, payload, private)
 }
 
@@ -59,6 +65,9 @@ func (s *SpaceService) Create(ctx context.Context, payload *model.CreateSpaceSch
 //
 // https://docs.go-atlassian.io/confluence-cloud/space#get-space
 func (s *SpaceService) Get(ctx context.Context, spaceKey string, expand []string) (*model.SpaceScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SpaceService).Get")
+	defer span.End()
+
 	return s.internalClient.Get(ctx, spaceKey, expand)
 }
 
@@ -68,6 +77,9 @@ func (s *SpaceService) Get(ctx context.Context, spaceKey string, expand []string
 //
 // https://docs.go-atlassian.io/confluence-cloud/space#update-space
 func (s *SpaceService) Update(ctx context.Context, spaceKey string, payload *model.UpdateSpaceScheme) (*model.SpaceScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SpaceService).Update")
+	defer span.End()
+
 	return s.internalClient.Update(ctx, spaceKey, payload)
 }
 
@@ -83,6 +95,9 @@ func (s *SpaceService) Update(ctx context.Context, spaceKey string, payload *mod
 //
 // https://docs.go-atlassian.io/confluence-cloud/space#delete-space
 func (s *SpaceService) Delete(ctx context.Context, spaceKey string) (*model.ContentTaskScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SpaceService).Delete")
+	defer span.End()
+
 	return s.internalClient.Delete(ctx, spaceKey)
 }
 
@@ -94,6 +109,9 @@ func (s *SpaceService) Delete(ctx context.Context, spaceKey string) (*model.Cont
 //
 // https://docs.go-atlassian.io/confluence-cloud/space#get-content-for-space
 func (s *SpaceService) Content(ctx context.Context, spaceKey, depth string, expand []string, startAt, maxResults int) (*model.ContentChildrenScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SpaceService).Content")
+	defer span.End()
+
 	return s.internalClient.Content(ctx, spaceKey, depth, expand, startAt, maxResults)
 }
 
@@ -105,6 +123,9 @@ func (s *SpaceService) Content(ctx context.Context, spaceKey, depth string, expa
 //
 // https://docs.go-atlassian.io/confluence-cloud/space#get-content-by-type-for-space
 func (s *SpaceService) ContentByType(ctx context.Context, spaceKey, contentType, depth string, expand []string, startAt, maxResults int) (*model.ContentPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SpaceService).ContentByType")
+	defer span.End()
+
 	return s.internalClient.ContentByType(ctx, spaceKey, contentType, depth, expand, startAt, maxResults)
 }
 
@@ -113,6 +134,9 @@ type internalSpaceImpl struct {
 }
 
 func (i *internalSpaceImpl) Gets(ctx context.Context, options *model.GetSpacesOptionScheme, startAt, maxResults int) (*model.SpacePageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalSpaceImpl).Gets")
+	defer span.End()
 
 	query := url.Values{}
 	query.Add("start", strconv.Itoa(startAt))
@@ -177,6 +201,9 @@ func (i *internalSpaceImpl) Gets(ctx context.Context, options *model.GetSpacesOp
 
 func (i *internalSpaceImpl) Create(ctx context.Context, payload *model.CreateSpaceScheme, private bool) (*model.SpaceScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalSpaceImpl).Create")
+	defer span.End()
+
 	if payload != nil {
 
 		if payload.Name == "" {
@@ -212,6 +239,9 @@ func (i *internalSpaceImpl) Create(ctx context.Context, payload *model.CreateSpa
 
 func (i *internalSpaceImpl) Get(ctx context.Context, spaceKey string, expand []string) (*model.SpaceScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalSpaceImpl).Get")
+	defer span.End()
+
 	if spaceKey == "" {
 		return nil, nil, model.ErrNoSpaceKey
 	}
@@ -242,6 +272,9 @@ func (i *internalSpaceImpl) Get(ctx context.Context, spaceKey string, expand []s
 
 func (i *internalSpaceImpl) Update(ctx context.Context, spaceKey string, payload *model.UpdateSpaceScheme) (*model.SpaceScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalSpaceImpl).Update")
+	defer span.End()
+
 	if spaceKey == "" {
 		return nil, nil, model.ErrNoSpaceKey
 	}
@@ -264,6 +297,9 @@ func (i *internalSpaceImpl) Update(ctx context.Context, spaceKey string, payload
 
 func (i *internalSpaceImpl) Delete(ctx context.Context, spaceKey string) (*model.ContentTaskScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalSpaceImpl).Delete")
+	defer span.End()
+
 	if spaceKey == "" {
 		return nil, nil, model.ErrNoSpaceKey
 	}
@@ -285,6 +321,9 @@ func (i *internalSpaceImpl) Delete(ctx context.Context, spaceKey string) (*model
 }
 
 func (i *internalSpaceImpl) Content(ctx context.Context, spaceKey, depth string, expand []string, startAt, maxResults int) (*model.ContentChildrenScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalSpaceImpl).Content")
+	defer span.End()
 
 	if spaceKey == "" {
 		return nil, nil, model.ErrNoSpaceKey
@@ -319,6 +358,9 @@ func (i *internalSpaceImpl) Content(ctx context.Context, spaceKey, depth string,
 }
 
 func (i *internalSpaceImpl) ContentByType(ctx context.Context, spaceKey, contentType, depth string, expand []string, startAt, maxResults int) (*model.ContentPageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalSpaceImpl).ContentByType")
+	defer span.End()
 
 	if spaceKey == "" {
 		return nil, nil, model.ErrNoSpaceKey

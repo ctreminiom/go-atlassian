@@ -35,6 +35,9 @@ type SCIMGroupService struct {
 //
 // https://docs.go-atlassian.io/atlassian-admin-cloud/scim/groups#get-groups
 func (s *SCIMGroupService) Gets(ctx context.Context, directoryID, filter string, startAt, maxResults int) (*model.ScimGroupPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SCIMGroupService).Gets")
+	defer span.End()
+
 	return s.internalClient.Gets(ctx, directoryID, filter, startAt, maxResults)
 }
 
@@ -44,6 +47,9 @@ func (s *SCIMGroupService) Gets(ctx context.Context, directoryID, filter string,
 //
 // https://docs.go-atlassian.io/atlassian-admin-cloud/scim/groups#get-a-group-by-id
 func (s *SCIMGroupService) Get(ctx context.Context, directoryID, groupID string) (*model.ScimGroupScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SCIMGroupService).Get")
+	defer span.End()
+
 	return s.internalClient.Get(ctx, directoryID, groupID)
 }
 
@@ -53,6 +59,9 @@ func (s *SCIMGroupService) Get(ctx context.Context, directoryID, groupID string)
 //
 // https://docs.go-atlassian.io/atlassian-admin-cloud/scim/groups#update-a-group-by-id
 func (s *SCIMGroupService) Update(ctx context.Context, directoryID, groupID string, newGroupName string) (*model.ScimGroupScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SCIMGroupService).Update")
+	defer span.End()
+
 	return s.internalClient.Update(ctx, directoryID, groupID, newGroupName)
 }
 
@@ -64,6 +73,9 @@ func (s *SCIMGroupService) Update(ctx context.Context, directoryID, groupID stri
 //
 // https://docs.go-atlassian.io/atlassian-admin-cloud/scim/groups#delete-a-group-by-id
 func (s *SCIMGroupService) Delete(ctx context.Context, directoryID, groupID string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SCIMGroupService).Delete")
+	defer span.End()
+
 	return s.internalClient.Delete(ctx, directoryID, groupID)
 }
 
@@ -75,6 +87,9 @@ func (s *SCIMGroupService) Delete(ctx context.Context, directoryID, groupID stri
 //
 // https://docs.go-atlassian.io/atlassian-admin-cloud/scim/groups#create-a-group
 func (s *SCIMGroupService) Create(ctx context.Context, directoryID, groupName string) (*model.ScimGroupScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SCIMGroupService).Create")
+	defer span.End()
+
 	return s.internalClient.Create(ctx, directoryID, groupName)
 }
 
@@ -86,6 +101,9 @@ func (s *SCIMGroupService) Create(ctx context.Context, directoryID, groupName st
 //
 // https://docs.go-atlassian.io/atlassian-admin-cloud/scim/groups#update-a-group-by-id-patch
 func (s *SCIMGroupService) Path(ctx context.Context, directoryID, groupID string, payload *model.SCIMGroupPathScheme) (*model.ScimGroupScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SCIMGroupService).Path")
+	defer span.End()
+
 	return s.internalClient.Path(ctx, directoryID, groupID, payload)
 }
 
@@ -94,6 +112,9 @@ type internalSCIMGroupImpl struct {
 }
 
 func (i *internalSCIMGroupImpl) Gets(ctx context.Context, directoryID, filter string, startAt, maxResults int) (*model.ScimGroupPageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalSCIMGroupImpl).Gets")
+	defer span.End()
 
 	if directoryID == "" {
 		return nil, nil, model.ErrNoAdminDirectoryID
@@ -125,6 +146,9 @@ func (i *internalSCIMGroupImpl) Gets(ctx context.Context, directoryID, filter st
 
 func (i *internalSCIMGroupImpl) Get(ctx context.Context, directoryID, groupID string) (*model.ScimGroupScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalSCIMGroupImpl).Get")
+	defer span.End()
+
 	if directoryID == "" {
 		return nil, nil, model.ErrNoAdminDirectoryID
 	}
@@ -150,6 +174,9 @@ func (i *internalSCIMGroupImpl) Get(ctx context.Context, directoryID, groupID st
 }
 
 func (i *internalSCIMGroupImpl) Update(ctx context.Context, directoryID, groupID string, newGroupName string) (*model.ScimGroupScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalSCIMGroupImpl).Update")
+	defer span.End()
 
 	if directoryID == "" {
 		return nil, nil, model.ErrNoAdminDirectoryID
@@ -183,6 +210,9 @@ func (i *internalSCIMGroupImpl) Update(ctx context.Context, directoryID, groupID
 
 func (i *internalSCIMGroupImpl) Delete(ctx context.Context, directoryID, groupID string) (*model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalSCIMGroupImpl).Delete")
+	defer span.End()
+
 	if directoryID == "" {
 		return nil, model.ErrNoAdminDirectoryID
 	}
@@ -202,6 +232,9 @@ func (i *internalSCIMGroupImpl) Delete(ctx context.Context, directoryID, groupID
 }
 
 func (i *internalSCIMGroupImpl) Create(ctx context.Context, directoryID, groupName string) (*model.ScimGroupScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalSCIMGroupImpl).Create")
+	defer span.End()
 
 	if directoryID == "" {
 		return nil, nil, model.ErrNoAdminDirectoryID
@@ -230,6 +263,9 @@ func (i *internalSCIMGroupImpl) Create(ctx context.Context, directoryID, groupNa
 }
 
 func (i *internalSCIMGroupImpl) Path(ctx context.Context, directoryID, groupID string, payload *model.SCIMGroupPathScheme) (*model.ScimGroupScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalSCIMGroupImpl).Path")
+	defer span.End()
 
 	if directoryID == "" {
 		return nil, nil, model.ErrNoAdminDirectoryID

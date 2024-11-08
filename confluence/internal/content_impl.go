@@ -76,6 +76,9 @@ type ContentService struct {
 //
 // https://docs.go-atlassian.io/confluence-cloud/content#get-content
 func (c *ContentService) Gets(ctx context.Context, options *model.GetContentOptionsScheme, startAt, maxResults int) (*model.ContentPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ContentService).Gets")
+	defer span.End()
+
 	return c.internalClient.Gets(ctx, options, startAt, maxResults)
 }
 
@@ -91,6 +94,9 @@ func (c *ContentService) Gets(ctx context.Context, options *model.GetContentOpti
 //
 // https://docs.go-atlassian.io/confluence-cloud/content#create-content
 func (c *ContentService) Create(ctx context.Context, payload *model.ContentScheme) (*model.ContentScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ContentService).Create")
+	defer span.End()
+
 	return c.internalClient.Create(ctx, payload)
 }
 
@@ -100,6 +106,9 @@ func (c *ContentService) Create(ctx context.Context, payload *model.ContentSchem
 //
 // https://docs.go-atlassian.io/confluence-cloud/content#search-contents-by-cql
 func (c *ContentService) Search(ctx context.Context, cql, cqlContext string, expand []string, cursor string, maxResults int) (*model.ContentPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ContentService).Search")
+	defer span.End()
+
 	return c.internalClient.Search(ctx, cql, cqlContext, expand, cursor, maxResults)
 }
 
@@ -111,6 +120,9 @@ func (c *ContentService) Search(ctx context.Context, cql, cqlContext string, exp
 //
 // https://docs.go-atlassian.io/confluence-cloud/content#get-content
 func (c *ContentService) Get(ctx context.Context, contentID string, expand []string, version int) (*model.ContentScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ContentService).Get")
+	defer span.End()
+
 	return c.internalClient.Get(ctx, contentID, expand, version)
 }
 
@@ -122,6 +134,9 @@ func (c *ContentService) Get(ctx context.Context, contentID string, expand []str
 //
 // https://docs.go-atlassian.io/confluence-cloud/content#update-content
 func (c *ContentService) Update(ctx context.Context, contentID string, payload *model.ContentScheme) (*model.ContentScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ContentService).Update")
+	defer span.End()
+
 	return c.internalClient.Update(ctx, contentID, payload)
 }
 
@@ -139,6 +154,9 @@ func (c *ContentService) Update(ctx context.Context, contentID string, payload *
 //
 // https://docs.go-atlassian.io/confluence-cloud/content#delete-content
 func (c *ContentService) Delete(ctx context.Context, contentID, status string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ContentService).Delete")
+	defer span.End()
+
 	return c.internalClient.Delete(ctx, contentID, status)
 }
 
@@ -148,6 +166,9 @@ func (c *ContentService) Delete(ctx context.Context, contentID, status string) (
 //
 // https://docs.go-atlassian.io/confluence-cloud/content#get-content-history
 func (c *ContentService) History(ctx context.Context, contentID string, expand []string) (*model.ContentHistoryScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ContentService).History")
+	defer span.End()
+
 	return c.internalClient.History(ctx, contentID, expand)
 }
 
@@ -163,6 +184,9 @@ func (c *ContentService) History(ctx context.Context, contentID string, expand [
 //
 // https://docs.go-atlassian.io/confluence-cloud/content#archive-pages
 func (c *ContentService) Archive(ctx context.Context, payload *model.ContentArchivePayloadScheme) (*model.ContentArchiveResultScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ContentService).Archive")
+	defer span.End()
+
 	return c.internalClient.Archive(ctx, payload)
 }
 
@@ -171,6 +195,9 @@ type internalContentImpl struct {
 }
 
 func (i *internalContentImpl) Gets(ctx context.Context, options *model.GetContentOptionsScheme, startAt, maxResults int) (*model.ContentPageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalContentImpl).Gets")
+	defer span.End()
 
 	query := url.Values{}
 	query.Add("start", strconv.Itoa(startAt))
@@ -230,6 +257,9 @@ func (i *internalContentImpl) Gets(ctx context.Context, options *model.GetConten
 
 func (i *internalContentImpl) Create(ctx context.Context, payload *model.ContentScheme) (*model.ContentScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalContentImpl).Create")
+	defer span.End()
+
 	endpoint := "wiki/rest/api/content"
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
@@ -247,6 +277,9 @@ func (i *internalContentImpl) Create(ctx context.Context, payload *model.Content
 }
 
 func (i *internalContentImpl) Search(ctx context.Context, cql, cqlContext string, expand []string, cursor string, maxResults int) (*model.ContentPageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalContentImpl).Search")
+	defer span.End()
 
 	if cql == "" {
 		return nil, nil, model.ErrNoCQL
@@ -286,6 +319,9 @@ func (i *internalContentImpl) Search(ctx context.Context, cql, cqlContext string
 
 func (i *internalContentImpl) Get(ctx context.Context, contentID string, expand []string, version int) (*model.ContentScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalContentImpl).Get")
+	defer span.End()
+
 	if contentID == "" {
 		return nil, nil, model.ErrNoContentID
 	}
@@ -315,6 +351,9 @@ func (i *internalContentImpl) Get(ctx context.Context, contentID string, expand 
 
 func (i *internalContentImpl) Update(ctx context.Context, contentID string, payload *model.ContentScheme) (*model.ContentScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalContentImpl).Update")
+	defer span.End()
+
 	if contentID == "" {
 		return nil, nil, model.ErrNoContentID
 	}
@@ -336,6 +375,9 @@ func (i *internalContentImpl) Update(ctx context.Context, contentID string, payl
 }
 
 func (i *internalContentImpl) Delete(ctx context.Context, contentID, status string) (*model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalContentImpl).Delete")
+	defer span.End()
 
 	if contentID == "" {
 		return nil, model.ErrNoContentID
@@ -360,6 +402,9 @@ func (i *internalContentImpl) Delete(ctx context.Context, contentID, status stri
 }
 
 func (i *internalContentImpl) History(ctx context.Context, contentID string, expand []string) (*model.ContentHistoryScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalContentImpl).History")
+	defer span.End()
 
 	if contentID == "" {
 		return nil, nil, model.ErrNoContentID
@@ -390,6 +435,9 @@ func (i *internalContentImpl) History(ctx context.Context, contentID string, exp
 }
 
 func (i *internalContentImpl) Archive(ctx context.Context, payload *model.ContentArchivePayloadScheme) (*model.ContentArchiveResultScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalContentImpl).Archive")
+	defer span.End()
 
 	endpoint := "wiki/rest/api/content/archive"
 

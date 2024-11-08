@@ -32,6 +32,9 @@ type VersionService struct {
 //
 // https://docs.go-atlassian.io/confluence-cloud/content/versions#get-content-versions
 func (v *VersionService) Gets(ctx context.Context, contentID string, expand []string, start, limit int) (*model.ContentVersionPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*VersionService).Gets")
+	defer span.End()
+
 	return v.internalClient.Gets(ctx, contentID, expand, start, limit)
 }
 
@@ -41,6 +44,9 @@ func (v *VersionService) Gets(ctx context.Context, contentID string, expand []st
 //
 // https://docs.go-atlassian.io/confluence-cloud/content/versions#get-content-version
 func (v *VersionService) Get(ctx context.Context, contentID string, versionNumber int, expand []string) (*model.ContentVersionScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*VersionService).Get")
+	defer span.End()
+
 	return v.internalClient.Get(ctx, contentID, versionNumber, expand)
 }
 
@@ -50,6 +56,9 @@ func (v *VersionService) Get(ctx context.Context, contentID string, versionNumbe
 //
 // https://docs.go-atlassian.io/confluence-cloud/content/versions#restore-content-version
 func (v *VersionService) Restore(ctx context.Context, contentID string, payload *model.ContentRestorePayloadScheme, expand []string) (*model.ContentVersionScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*VersionService).Restore")
+	defer span.End()
+
 	return v.internalClient.Restore(ctx, contentID, payload, expand)
 }
 
@@ -63,6 +72,9 @@ func (v *VersionService) Restore(ctx context.Context, contentID string, payload 
 //
 // https://docs.go-atlassian.io/confluence-cloud/content/versions#delete-content-version
 func (v *VersionService) Delete(ctx context.Context, contentID string, versionNumber int) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*VersionService).Delete")
+	defer span.End()
+
 	return v.internalClient.Delete(ctx, contentID, versionNumber)
 }
 
@@ -71,6 +83,9 @@ type internalVersionImpl struct {
 }
 
 func (i *internalVersionImpl) Gets(ctx context.Context, contentID string, expand []string, start, limit int) (*model.ContentVersionPageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalVersionImpl).Gets")
+	defer span.End()
 
 	if contentID == "" {
 		return nil, nil, model.ErrNoContentID
@@ -102,6 +117,9 @@ func (i *internalVersionImpl) Gets(ctx context.Context, contentID string, expand
 
 func (i *internalVersionImpl) Get(ctx context.Context, contentID string, versionNumber int, expand []string) (*model.ContentVersionScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalVersionImpl).Get")
+	defer span.End()
+
 	if contentID == "" {
 		return nil, nil, model.ErrNoContentID
 	}
@@ -132,6 +150,9 @@ func (i *internalVersionImpl) Get(ctx context.Context, contentID string, version
 
 func (i *internalVersionImpl) Restore(ctx context.Context, contentID string, payload *model.ContentRestorePayloadScheme, expand []string) (*model.ContentVersionScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalVersionImpl).Restore")
+	defer span.End()
+
 	if contentID == "" {
 		return nil, nil, model.ErrNoContentID
 	}
@@ -161,6 +182,9 @@ func (i *internalVersionImpl) Restore(ctx context.Context, contentID string, pay
 }
 
 func (i *internalVersionImpl) Delete(ctx context.Context, contentID string, versionNumber int) (*model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalVersionImpl).Delete")
+	defer span.End()
 
 	if contentID == "" {
 		return nil, model.ErrNoContentID

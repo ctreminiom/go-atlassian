@@ -37,6 +37,9 @@ type EpicService struct {
 //
 // https://docs.go-atlassian.io/jira-agile/epics#get-epic
 func (e *EpicService) Get(ctx context.Context, epicIDOrKey string) (*model.EpicScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*EpicService).Get")
+	defer span.End()
+
 	return e.internalClient.Get(ctx, epicIDOrKey)
 }
 
@@ -52,6 +55,9 @@ func (e *EpicService) Get(ctx context.Context, epicIDOrKey string) (*model.EpicS
 //
 // https://docs.go-atlassian.io/jira-agile/epics#get-issues-for-epic
 func (e *EpicService) Issues(ctx context.Context, epicIDOrKey string, opts *model.IssueOptionScheme, startAt, maxResults int) (*model.BoardIssuePageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*EpicService).Issues")
+	defer span.End()
+
 	return e.internalClient.Issues(ctx, epicIDOrKey, opts, startAt, maxResults)
 }
 
@@ -68,6 +74,9 @@ func (e *EpicService) Issues(ctx context.Context, epicIDOrKey string, opts *mode
 //
 // https://docs.go-atlassian.io/jira-agile/epics#move-issues-to-epic
 func (e *EpicService) Move(ctx context.Context, epicIDOrKey string, issues []string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*EpicService).Move")
+	defer span.End()
+
 	return e.internalClient.Move(ctx, epicIDOrKey, issues)
 }
 
@@ -77,6 +86,9 @@ type internalEpicImpl struct {
 }
 
 func (i *internalEpicImpl) Get(ctx context.Context, epicIDOrKey string) (*model.EpicScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalEpicImpl).Get")
+	defer span.End()
 
 	if epicIDOrKey == "" {
 		return nil, nil, model.ErrNoEpicID
@@ -99,6 +111,9 @@ func (i *internalEpicImpl) Get(ctx context.Context, epicIDOrKey string) (*model.
 }
 
 func (i *internalEpicImpl) Issues(ctx context.Context, epicIDOrKey string, opts *model.IssueOptionScheme, startAt, maxResults int) (*model.BoardIssuePageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalEpicImpl).Issues")
+	defer span.End()
 
 	if epicIDOrKey == "" {
 		return nil, nil, model.ErrNoEpicID
@@ -142,6 +157,9 @@ func (i *internalEpicImpl) Issues(ctx context.Context, epicIDOrKey string, opts 
 }
 
 func (i *internalEpicImpl) Move(ctx context.Context, epicIDOrKey string, issues []string) (*model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalEpicImpl).Move")
+	defer span.End()
 
 	if epicIDOrKey == "" {
 		return nil, model.ErrNoEpicID

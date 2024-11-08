@@ -34,6 +34,9 @@ type ProjectComponentService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/components#create-component
 func (p *ProjectComponentService) Create(ctx context.Context, payload *model.ComponentPayloadScheme) (*model.ComponentScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ProjectComponentService).Create")
+	defer span.End()
+
 	return p.internalClient.Create(ctx, payload)
 }
 
@@ -43,6 +46,9 @@ func (p *ProjectComponentService) Create(ctx context.Context, payload *model.Com
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/components#get-project-components
 func (p *ProjectComponentService) Gets(ctx context.Context, projectKeyOrID string) ([]*model.ComponentScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ProjectComponentService).Gets")
+	defer span.End()
+
 	return p.internalClient.Gets(ctx, projectKeyOrID)
 }
 
@@ -52,6 +58,9 @@ func (p *ProjectComponentService) Gets(ctx context.Context, projectKeyOrID strin
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/components#get-component-issues-count
 func (p *ProjectComponentService) Count(ctx context.Context, componentID string) (*model.ComponentCountScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ProjectComponentService).Count")
+	defer span.End()
+
 	return p.internalClient.Count(ctx, componentID)
 }
 
@@ -61,6 +70,9 @@ func (p *ProjectComponentService) Count(ctx context.Context, componentID string)
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/components#delete-component
 func (p *ProjectComponentService) Delete(ctx context.Context, componentID string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ProjectComponentService).Delete")
+	defer span.End()
+
 	return p.internalClient.Delete(ctx, componentID)
 }
 
@@ -72,6 +84,9 @@ func (p *ProjectComponentService) Delete(ctx context.Context, componentID string
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/components#update-component
 func (p *ProjectComponentService) Update(ctx context.Context, componentID string, payload *model.ComponentPayloadScheme) (*model.ComponentScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ProjectComponentService).Update")
+	defer span.End()
+
 	return p.internalClient.Update(ctx, componentID, payload)
 }
 
@@ -81,6 +96,9 @@ func (p *ProjectComponentService) Update(ctx context.Context, componentID string
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/components#get-component
 func (p *ProjectComponentService) Get(ctx context.Context, componentID string) (*model.ComponentScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ProjectComponentService).Get")
+	defer span.End()
+
 	return p.internalClient.Get(ctx, componentID)
 }
 
@@ -90,6 +108,9 @@ type internalProjectComponentImpl struct {
 }
 
 func (i *internalProjectComponentImpl) Create(ctx context.Context, payload *model.ComponentPayloadScheme) (*model.ComponentScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalProjectComponentImpl).Create")
+	defer span.End()
 
 	endpoint := fmt.Sprintf("rest/api/%v/component", i.version)
 
@@ -108,6 +129,9 @@ func (i *internalProjectComponentImpl) Create(ctx context.Context, payload *mode
 }
 
 func (i *internalProjectComponentImpl) Gets(ctx context.Context, projectKeyOrID string) ([]*model.ComponentScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalProjectComponentImpl).Gets")
+	defer span.End()
 
 	if projectKeyOrID == "" {
 		return nil, nil, model.ErrNoProjectIDOrKey
@@ -131,6 +155,9 @@ func (i *internalProjectComponentImpl) Gets(ctx context.Context, projectKeyOrID 
 
 func (i *internalProjectComponentImpl) Count(ctx context.Context, componentID string) (*model.ComponentCountScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalProjectComponentImpl).Count")
+	defer span.End()
+
 	if componentID == "" {
 		return nil, nil, model.ErrNoComponentID
 	}
@@ -153,6 +180,9 @@ func (i *internalProjectComponentImpl) Count(ctx context.Context, componentID st
 
 func (i *internalProjectComponentImpl) Delete(ctx context.Context, componentID string) (*model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalProjectComponentImpl).Delete")
+	defer span.End()
+
 	if componentID == "" {
 		return nil, model.ErrNoComponentID
 	}
@@ -168,6 +198,9 @@ func (i *internalProjectComponentImpl) Delete(ctx context.Context, componentID s
 }
 
 func (i *internalProjectComponentImpl) Update(ctx context.Context, componentID string, payload *model.ComponentPayloadScheme) (*model.ComponentScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalProjectComponentImpl).Update")
+	defer span.End()
 
 	if componentID == "" {
 		return nil, nil, model.ErrNoComponentID
@@ -190,6 +223,9 @@ func (i *internalProjectComponentImpl) Update(ctx context.Context, componentID s
 }
 
 func (i *internalProjectComponentImpl) Get(ctx context.Context, componentID string) (*model.ComponentScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalProjectComponentImpl).Get")
+	defer span.End()
 
 	if componentID == "" {
 		return nil, nil, model.ErrNoComponentID

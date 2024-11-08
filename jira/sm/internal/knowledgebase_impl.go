@@ -31,6 +31,9 @@ type KnowledgebaseService struct {
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/knowledgebase#search-articles
 func (k *KnowledgebaseService) Search(ctx context.Context, query string, highlight bool, start, limit int) (*model.ArticlePageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*KnowledgebaseService).Search")
+	defer span.End()
+
 	return k.internalClient.Search(ctx, query, highlight, start, limit)
 }
 
@@ -40,6 +43,9 @@ func (k *KnowledgebaseService) Search(ctx context.Context, query string, highlig
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/knowledgebase#get-articles
 func (k *KnowledgebaseService) Gets(ctx context.Context, serviceDeskID int, query string, highlight bool, start, limit int) (*model.ArticlePageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*KnowledgebaseService).Gets")
+	defer span.End()
+
 	return k.internalClient.Gets(ctx, serviceDeskID, query, highlight, start, limit)
 }
 
@@ -49,6 +55,9 @@ type internalKnowledgebaseImpl struct {
 }
 
 func (i *internalKnowledgebaseImpl) Search(ctx context.Context, query string, highlight bool, start, limit int) (*model.ArticlePageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalKnowledgebaseImpl).Search")
+	defer span.End()
 
 	if query == "" {
 		return nil, nil, model.ErrNoKBQuery
@@ -77,6 +86,9 @@ func (i *internalKnowledgebaseImpl) Search(ctx context.Context, query string, hi
 }
 
 func (i *internalKnowledgebaseImpl) Gets(ctx context.Context, serviceDeskID int, query string, highlight bool, start, limit int) (*model.ArticlePageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalKnowledgebaseImpl).Gets")
+	defer span.End()
 
 	if serviceDeskID == 0 {
 		return nil, nil, model.ErrNoServiceDeskID

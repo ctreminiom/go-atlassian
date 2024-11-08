@@ -41,6 +41,9 @@ type IssueAttachmentService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/attachments#get-jira-attachment-settings
 func (i *IssueAttachmentService) Settings(ctx context.Context) (*model.AttachmentSettingScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*IssueAttachmentService).Settings")
+	defer span.End()
+
 	return i.internalClient.Settings(ctx)
 }
 
@@ -50,6 +53,9 @@ func (i *IssueAttachmentService) Settings(ctx context.Context) (*model.Attachmen
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/attachments#get-attachment-metadata
 func (i *IssueAttachmentService) Metadata(ctx context.Context, attachmentID string) (*model.IssueAttachmentMetadataScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*IssueAttachmentService).Metadata")
+	defer span.End()
+
 	return i.internalClient.Metadata(ctx, attachmentID)
 }
 
@@ -59,6 +65,9 @@ func (i *IssueAttachmentService) Metadata(ctx context.Context, attachmentID stri
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/attachments#delete-attachment
 func (i *IssueAttachmentService) Delete(ctx context.Context, attachmentID string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*IssueAttachmentService).Delete")
+	defer span.End()
+
 	return i.internalClient.Delete(ctx, attachmentID)
 }
 
@@ -72,6 +81,9 @@ func (i *IssueAttachmentService) Delete(ctx context.Context, attachmentID string
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/attachments#get-all-metadata-for-an-expanded-attachment
 func (i *IssueAttachmentService) Human(ctx context.Context, attachmentID string) (*model.IssueAttachmentHumanMetadataScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*IssueAttachmentService).Human")
+	defer span.End()
+
 	return i.internalClient.Human(ctx, attachmentID)
 }
 
@@ -81,6 +93,9 @@ func (i *IssueAttachmentService) Human(ctx context.Context, attachmentID string)
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/attachments#add-attachment
 func (i *IssueAttachmentService) Add(ctx context.Context, issueKeyOrID, fileName string, file io.Reader) ([]*model.IssueAttachmentScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*IssueAttachmentService).Add")
+	defer span.End()
+
 	return i.internalClient.Add(ctx, issueKeyOrID, fileName, file)
 }
 
@@ -92,6 +107,9 @@ func (i *IssueAttachmentService) Add(ctx context.Context, issueKeyOrID, fileName
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/attachments#download-attachment
 func (i *IssueAttachmentService) Download(ctx context.Context, attachmentID string, redirect bool) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*IssueAttachmentService).Download")
+	defer span.End()
+
 	return i.internalClient.Download(ctx, attachmentID, redirect)
 }
 
@@ -101,6 +119,9 @@ type internalIssueAttachmentServiceImpl struct {
 }
 
 func (i *internalIssueAttachmentServiceImpl) Download(ctx context.Context, attachmentID string, redirect bool) (*model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalIssueAttachmentServiceImpl).Download")
+	defer span.End()
 
 	if attachmentID == "" {
 		return nil, model.ErrNoAttachmentID
@@ -127,6 +148,9 @@ func (i *internalIssueAttachmentServiceImpl) Download(ctx context.Context, attac
 
 func (i *internalIssueAttachmentServiceImpl) Settings(ctx context.Context) (*model.AttachmentSettingScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalIssueAttachmentServiceImpl).Settings")
+	defer span.End()
+
 	endpoint := fmt.Sprintf("rest/api/%v/attachment/meta", i.version)
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
@@ -144,6 +168,9 @@ func (i *internalIssueAttachmentServiceImpl) Settings(ctx context.Context) (*mod
 }
 
 func (i *internalIssueAttachmentServiceImpl) Metadata(ctx context.Context, attachmentID string) (*model.IssueAttachmentMetadataScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalIssueAttachmentServiceImpl).Metadata")
+	defer span.End()
 
 	if attachmentID == "" {
 		return nil, nil, model.ErrNoAttachmentID
@@ -167,6 +194,9 @@ func (i *internalIssueAttachmentServiceImpl) Metadata(ctx context.Context, attac
 
 func (i *internalIssueAttachmentServiceImpl) Delete(ctx context.Context, attachmentID string) (*model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalIssueAttachmentServiceImpl).Delete")
+	defer span.End()
+
 	if attachmentID == "" {
 		return nil, model.ErrNoAttachmentID
 	}
@@ -182,6 +212,9 @@ func (i *internalIssueAttachmentServiceImpl) Delete(ctx context.Context, attachm
 }
 
 func (i *internalIssueAttachmentServiceImpl) Human(ctx context.Context, attachmentID string) (*model.IssueAttachmentHumanMetadataScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalIssueAttachmentServiceImpl).Human")
+	defer span.End()
 
 	if attachmentID == "" {
 		return nil, nil, model.ErrNoAttachmentID
@@ -204,6 +237,9 @@ func (i *internalIssueAttachmentServiceImpl) Human(ctx context.Context, attachme
 }
 
 func (i *internalIssueAttachmentServiceImpl) Add(ctx context.Context, issueKeyOrID, fileName string, file io.Reader) ([]*model.IssueAttachmentScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalIssueAttachmentServiceImpl).Add")
+	defer span.End()
 
 	if issueKeyOrID == "" {
 		return nil, nil, model.ErrNoIssueKeyOrID

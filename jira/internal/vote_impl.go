@@ -36,6 +36,9 @@ type VoteService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/vote#get-votes
 func (v *VoteService) Gets(ctx context.Context, issueKeyOrID string) (*model.IssueVoteScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*VoteService).Gets")
+	defer span.End()
+
 	return v.internalClient.Gets(ctx, issueKeyOrID)
 }
 
@@ -47,6 +50,9 @@ func (v *VoteService) Gets(ctx context.Context, issueKeyOrID string) (*model.Iss
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/vote#add-vote
 func (v *VoteService) Add(ctx context.Context, issueKeyOrID string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*VoteService).Add")
+	defer span.End()
+
 	return v.internalClient.Add(ctx, issueKeyOrID)
 }
 
@@ -58,6 +64,9 @@ func (v *VoteService) Add(ctx context.Context, issueKeyOrID string) (*model.Resp
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/vote#delete-vote
 func (v *VoteService) Delete(ctx context.Context, issueKeyOrID string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*VoteService).Delete")
+	defer span.End()
+
 	return v.internalClient.Delete(ctx, issueKeyOrID)
 }
 
@@ -67,6 +76,9 @@ type internalVoteImpl struct {
 }
 
 func (i *internalVoteImpl) Gets(ctx context.Context, issueKeyOrID string) (*model.IssueVoteScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalVoteImpl).Gets")
+	defer span.End()
 
 	if issueKeyOrID == "" {
 		return nil, nil, model.ErrNoIssueKeyOrID
@@ -90,6 +102,9 @@ func (i *internalVoteImpl) Gets(ctx context.Context, issueKeyOrID string) (*mode
 
 func (i *internalVoteImpl) Add(ctx context.Context, issueKeyOrID string) (*model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalVoteImpl).Add")
+	defer span.End()
+
 	if issueKeyOrID == "" {
 		return nil, model.ErrNoIssueKeyOrID
 	}
@@ -105,6 +120,9 @@ func (i *internalVoteImpl) Add(ctx context.Context, issueKeyOrID string) (*model
 }
 
 func (i *internalVoteImpl) Delete(ctx context.Context, issueKeyOrID string) (*model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalVoteImpl).Delete")
+	defer span.End()
 
 	if issueKeyOrID == "" {
 		return nil, model.ErrNoIssueKeyOrID

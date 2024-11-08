@@ -33,6 +33,9 @@ type ServerService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/server#get-jira-instance-info
 func (s *ServerService) Info(ctx context.Context) (*model.ServerInformationScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ServerService).Info")
+	defer span.End()
+
 	return s.internalClient.Info(ctx)
 }
 
@@ -42,6 +45,9 @@ type internalServerServiceImpl struct {
 }
 
 func (i *internalServerServiceImpl) Info(ctx context.Context) (*model.ServerInformationScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalServerServiceImpl).Info")
+	defer span.End()
 
 	endpoint := fmt.Sprintf("rest/api/%v/serverInfo", i.version)
 

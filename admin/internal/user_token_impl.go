@@ -27,6 +27,9 @@ type UserTokenService struct {
 //
 // https://docs.go-atlassian.io/atlassian-admin-cloud/user/token#get-api-tokens
 func (u *UserTokenService) Gets(ctx context.Context, accountID string) ([]*model.UserTokensScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*UserTokenService).Gets")
+	defer span.End()
+
 	return u.internalClient.Gets(ctx, accountID)
 }
 
@@ -36,6 +39,9 @@ func (u *UserTokenService) Gets(ctx context.Context, accountID string) ([]*model
 //
 // https://docs.go-atlassian.io/atlassian-admin-cloud/user/token#delete-api-token
 func (u *UserTokenService) Delete(ctx context.Context, accountID, tokenID string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*UserTokenService).Delete")
+	defer span.End()
+
 	return u.internalClient.Delete(ctx, accountID, tokenID)
 }
 
@@ -44,6 +50,9 @@ type internalUserTokenImpl struct {
 }
 
 func (i *internalUserTokenImpl) Gets(ctx context.Context, accountID string) ([]*model.UserTokensScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalUserTokenImpl).Gets")
+	defer span.End()
 
 	if accountID == "" {
 		return nil, nil, model.ErrNoAdminAccountID
@@ -66,6 +75,9 @@ func (i *internalUserTokenImpl) Gets(ctx context.Context, accountID string) ([]*
 }
 
 func (i *internalUserTokenImpl) Delete(ctx context.Context, accountID, tokenID string) (*model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalUserTokenImpl).Delete")
+	defer span.End()
 
 	if accountID == "" {
 		return nil, model.ErrNoAdminAccountID

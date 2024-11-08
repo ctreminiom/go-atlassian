@@ -37,6 +37,9 @@ type IssueFieldConfigItemService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration/items#get-field-configuration-items
 func (i *IssueFieldConfigItemService) Gets(ctx context.Context, id, startAt, maxResults int) (*model.FieldConfigurationItemPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*IssueFieldConfigItemService).Gets")
+	defer span.End()
+
 	return i.internalClient.Gets(ctx, id, startAt, maxResults)
 }
 
@@ -49,6 +52,9 @@ func (i *IssueFieldConfigItemService) Gets(ctx context.Context, id, startAt, max
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration/items#update-field-configuration-items
 func (i *IssueFieldConfigItemService) Update(ctx context.Context, id int, payload *model.UpdateFieldConfigurationItemPayloadScheme) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*IssueFieldConfigItemService).Update")
+	defer span.End()
+
 	return i.internalClient.Update(ctx, id, payload)
 }
 
@@ -58,6 +64,9 @@ type internalIssueFieldConfigItemServiceImpl struct {
 }
 
 func (i *internalIssueFieldConfigItemServiceImpl) Gets(ctx context.Context, id, startAt, maxResults int) (*model.FieldConfigurationItemPageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalIssueFieldConfigItemServiceImpl).Gets")
+	defer span.End()
 
 	if id == 0 {
 		return nil, nil, model.ErrNoFieldConfigurationID
@@ -84,6 +93,9 @@ func (i *internalIssueFieldConfigItemServiceImpl) Gets(ctx context.Context, id, 
 }
 
 func (i *internalIssueFieldConfigItemServiceImpl) Update(ctx context.Context, id int, payload *model.UpdateFieldConfigurationItemPayloadScheme) (*model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalIssueFieldConfigItemServiceImpl).Update")
+	defer span.End()
 
 	if id == 0 {
 		return nil, model.ErrNoFieldConfigurationID

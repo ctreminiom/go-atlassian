@@ -29,6 +29,9 @@ type OrganizationPolicyService struct {
 //
 // https://docs.go-atlassian.io/atlassian-admin-cloud/organization/policy#get-list-of-policies
 func (o *OrganizationPolicyService) Gets(ctx context.Context, organizationID, policyType, cursor string) (*model.OrganizationPolicyPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*OrganizationPolicyService).Gets")
+	defer span.End()
+
 	return o.internalClient.Gets(ctx, organizationID, policyType, cursor)
 }
 
@@ -38,6 +41,9 @@ func (o *OrganizationPolicyService) Gets(ctx context.Context, organizationID, po
 //
 // https://docs.go-atlassian.io/atlassian-admin-cloud/organization/policy#get-a-policy-by-id
 func (o *OrganizationPolicyService) Get(ctx context.Context, organizationID, policyID string) (*model.OrganizationPolicyScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*OrganizationPolicyService).Get")
+	defer span.End()
+
 	return o.internalClient.Get(ctx, organizationID, policyID)
 }
 
@@ -47,6 +53,9 @@ func (o *OrganizationPolicyService) Get(ctx context.Context, organizationID, pol
 //
 // https://docs.go-atlassian.io/atlassian-admin-cloud/organization/policy#create-a-policy
 func (o *OrganizationPolicyService) Create(ctx context.Context, organizationID string, payload *model.OrganizationPolicyData) (*model.OrganizationPolicyScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*OrganizationPolicyService).Create")
+	defer span.End()
+
 	return o.internalClient.Create(ctx, organizationID, payload)
 }
 
@@ -56,6 +65,9 @@ func (o *OrganizationPolicyService) Create(ctx context.Context, organizationID s
 //
 // https://docs.go-atlassian.io/atlassian-admin-cloud/organization/policy#update-a-policy
 func (o *OrganizationPolicyService) Update(ctx context.Context, organizationID, policyID string, payload *model.OrganizationPolicyData) (*model.OrganizationPolicyScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*OrganizationPolicyService).Update")
+	defer span.End()
+
 	return o.internalClient.Update(ctx, organizationID, policyID, payload)
 }
 
@@ -65,6 +77,9 @@ func (o *OrganizationPolicyService) Update(ctx context.Context, organizationID, 
 //
 // https://docs.go-atlassian.io/atlassian-admin-cloud/organization/policy#delete-a-policy
 func (o *OrganizationPolicyService) Delete(ctx context.Context, organizationID, policyID string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*OrganizationPolicyService).Delete")
+	defer span.End()
+
 	return o.internalClient.Delete(ctx, organizationID, policyID)
 }
 
@@ -73,6 +88,9 @@ type internalOrganizationPolicyImpl struct {
 }
 
 func (i *internalOrganizationPolicyImpl) Gets(ctx context.Context, organizationID, policyType, cursor string) (*model.OrganizationPolicyPageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalOrganizationPolicyImpl).Gets")
+	defer span.End()
 
 	if organizationID == "" {
 		return nil, nil, model.ErrNoAdminOrganization
@@ -110,6 +128,9 @@ func (i *internalOrganizationPolicyImpl) Gets(ctx context.Context, organizationI
 
 func (i *internalOrganizationPolicyImpl) Get(ctx context.Context, organizationID, policyID string) (*model.OrganizationPolicyScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalOrganizationPolicyImpl).Get")
+	defer span.End()
+
 	if organizationID == "" {
 		return nil, nil, model.ErrNoAdminOrganization
 	}
@@ -136,6 +157,9 @@ func (i *internalOrganizationPolicyImpl) Get(ctx context.Context, organizationID
 
 func (i *internalOrganizationPolicyImpl) Create(ctx context.Context, organizationID string, payload *model.OrganizationPolicyData) (*model.OrganizationPolicyScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalOrganizationPolicyImpl).Create")
+	defer span.End()
+
 	if organizationID == "" {
 		return nil, nil, model.ErrNoAdminOrganization
 	}
@@ -157,6 +181,9 @@ func (i *internalOrganizationPolicyImpl) Create(ctx context.Context, organizatio
 }
 
 func (i *internalOrganizationPolicyImpl) Update(ctx context.Context, organizationID, policyID string, payload *model.OrganizationPolicyData) (*model.OrganizationPolicyScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalOrganizationPolicyImpl).Update")
+	defer span.End()
 
 	if organizationID == "" {
 		return nil, nil, model.ErrNoAdminOrganization
@@ -183,6 +210,9 @@ func (i *internalOrganizationPolicyImpl) Update(ctx context.Context, organizatio
 }
 
 func (i *internalOrganizationPolicyImpl) Delete(ctx context.Context, organizationID, policyID string) (*model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalOrganizationPolicyImpl).Delete")
+	defer span.End()
 
 	if organizationID == "" {
 		return nil, model.ErrNoAdminOrganization

@@ -34,6 +34,9 @@ type ProjectValidatorService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/validation#validate-project-key
 func (p *ProjectValidatorService) Validate(ctx context.Context, key string) (*model.ProjectValidationMessageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ProjectValidatorService).Validate")
+	defer span.End()
+
 	return p.internalClient.Validate(ctx, key)
 }
 
@@ -45,6 +48,9 @@ func (p *ProjectValidatorService) Validate(ctx context.Context, key string) (*mo
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/validation#get-valid-project-key
 func (p *ProjectValidatorService) Key(ctx context.Context, key string) (string, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ProjectValidatorService).Key")
+	defer span.End()
+
 	return p.internalClient.Key(ctx, key)
 }
 
@@ -60,6 +66,9 @@ func (p *ProjectValidatorService) Key(ctx context.Context, key string) (string, 
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/validation#get-valid-project-name
 func (p *ProjectValidatorService) Name(ctx context.Context, name string) (string, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ProjectValidatorService).Name")
+	defer span.End()
+
 	return p.internalClient.Name(ctx, name)
 }
 
@@ -69,6 +78,9 @@ type internalProjectValidatorImpl struct {
 }
 
 func (i *internalProjectValidatorImpl) Validate(ctx context.Context, key string) (*model.ProjectValidationMessageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalProjectValidatorImpl).Validate")
+	defer span.End()
 
 	if key == "" {
 		return nil, nil, model.ErrNoProjectIDOrKey
@@ -95,6 +107,9 @@ func (i *internalProjectValidatorImpl) Validate(ctx context.Context, key string)
 
 func (i *internalProjectValidatorImpl) Key(ctx context.Context, key string) (string, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalProjectValidatorImpl).Key")
+	defer span.End()
+
 	if key == "" {
 		return "", nil, model.ErrNoProjectIDOrKey
 	}
@@ -118,6 +133,9 @@ func (i *internalProjectValidatorImpl) Key(ctx context.Context, key string) (str
 }
 
 func (i *internalProjectValidatorImpl) Name(ctx context.Context, name string) (string, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalProjectValidatorImpl).Name")
+	defer span.End()
 
 	if name == "" {
 		return "", nil, model.ErrNoProjectName

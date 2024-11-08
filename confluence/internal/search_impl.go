@@ -32,6 +32,9 @@ type SearchService struct {
 //
 // https://docs.go-atlassian.io/confluence-cloud/search#search-content
 func (s *SearchService) Content(ctx context.Context, cql string, options *model.SearchContentOptions) (*model.SearchPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SearchService).Content")
+	defer span.End()
+
 	return s.internalClient.Content(ctx, cql, options)
 }
 
@@ -45,6 +48,9 @@ func (s *SearchService) Content(ctx context.Context, cql string, options *model.
 //
 // https://docs.go-atlassian.io/confluence-cloud/search#search-users
 func (s *SearchService) Users(ctx context.Context, cql string, start, limit int, expand []string) (*model.SearchPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SearchService).Users")
+	defer span.End()
+
 	return s.internalClient.Users(ctx, cql, start, limit, expand)
 }
 
@@ -53,6 +59,9 @@ type internalSearchImpl struct {
 }
 
 func (i *internalSearchImpl) Content(ctx context.Context, cql string, options *model.SearchContentOptions) (*model.SearchPageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalSearchImpl).Content")
+	defer span.End()
 
 	if cql == "" {
 		return nil, nil, model.ErrNoCQL
@@ -127,6 +136,9 @@ func (i *internalSearchImpl) Content(ctx context.Context, cql string, options *m
 }
 
 func (i *internalSearchImpl) Users(ctx context.Context, cql string, start, limit int, expand []string) (*model.SearchPageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalSearchImpl).Users")
+	defer span.End()
 
 	if cql == "" {
 		return nil, nil, model.ErrNoCQL

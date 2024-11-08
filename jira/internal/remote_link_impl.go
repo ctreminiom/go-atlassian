@@ -42,6 +42,9 @@ type RemoteLinkService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/link/remote#get-remote-issue-links
 func (r *RemoteLinkService) Gets(ctx context.Context, issueKeyOrID, globalID string) ([]*model.RemoteLinkScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*RemoteLinkService).Gets")
+	defer span.End()
+
 	return r.internalClient.Gets(ctx, issueKeyOrID, globalID)
 }
 
@@ -51,6 +54,9 @@ func (r *RemoteLinkService) Gets(ctx context.Context, issueKeyOrID, globalID str
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/link/remote#get-remote-issue-link
 func (r *RemoteLinkService) Get(ctx context.Context, issueKeyOrID, linkID string) (*model.RemoteLinkScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*RemoteLinkService).Get")
+	defer span.End()
+
 	return r.internalClient.Get(ctx, issueKeyOrID, linkID)
 }
 
@@ -64,6 +70,9 @@ func (r *RemoteLinkService) Get(ctx context.Context, issueKeyOrID, linkID string
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/link/remote#create-remote-issue-link
 func (r *RemoteLinkService) Create(ctx context.Context, issueKeyOrID string, payload *model.RemoteLinkScheme) (*model.RemoteLinkIdentify, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*RemoteLinkService).Create")
+	defer span.End()
+
 	return r.internalClient.Create(ctx, issueKeyOrID, payload)
 }
 
@@ -75,6 +84,9 @@ func (r *RemoteLinkService) Create(ctx context.Context, issueKeyOrID string, pay
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/link/remote#update-remote-issue-link
 func (r *RemoteLinkService) Update(ctx context.Context, issueKeyOrID, linkID string, payload *model.RemoteLinkScheme) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*RemoteLinkService).Update")
+	defer span.End()
+
 	return r.internalClient.Update(ctx, issueKeyOrID, linkID, payload)
 }
 
@@ -84,6 +96,9 @@ func (r *RemoteLinkService) Update(ctx context.Context, issueKeyOrID, linkID str
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/link/remote#delete-remote-issue-link-by-id
 func (r *RemoteLinkService) DeleteByID(ctx context.Context, issueKeyOrID, linkID string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*RemoteLinkService).DeleteByID")
+	defer span.End()
+
 	return r.internalClient.DeleteByID(ctx, issueKeyOrID, linkID)
 }
 
@@ -97,6 +112,9 @@ func (r *RemoteLinkService) DeleteByID(ctx context.Context, issueKeyOrID, linkID
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/link/remote#delete-remote-issue-link-by-global-id
 func (r *RemoteLinkService) DeleteByGlobalID(ctx context.Context, issueKeyOrID, globalID string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*RemoteLinkService).DeleteByGlobalID")
+	defer span.End()
+
 	return r.internalClient.DeleteByGlobalID(ctx, issueKeyOrID, globalID)
 }
 
@@ -106,6 +124,9 @@ type internalRemoteLinkImpl struct {
 }
 
 func (i *internalRemoteLinkImpl) Gets(ctx context.Context, issueKeyOrID, globalID string) ([]*model.RemoteLinkScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalRemoteLinkImpl).Gets")
+	defer span.End()
 
 	if issueKeyOrID == "" {
 		return nil, nil, model.ErrNoIssueKeyOrID
@@ -137,6 +158,9 @@ func (i *internalRemoteLinkImpl) Gets(ctx context.Context, issueKeyOrID, globalI
 
 func (i *internalRemoteLinkImpl) Get(ctx context.Context, issueKeyOrID, linkID string) (*model.RemoteLinkScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalRemoteLinkImpl).Get")
+	defer span.End()
+
 	if issueKeyOrID == "" {
 		return nil, nil, model.ErrNoIssueKeyOrID
 	}
@@ -163,6 +187,9 @@ func (i *internalRemoteLinkImpl) Get(ctx context.Context, issueKeyOrID, linkID s
 
 func (i *internalRemoteLinkImpl) Create(ctx context.Context, issueKeyOrID string, payload *model.RemoteLinkScheme) (*model.RemoteLinkIdentify, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalRemoteLinkImpl).Create")
+	defer span.End()
+
 	if issueKeyOrID == "" {
 		return nil, nil, model.ErrNoIssueKeyOrID
 	}
@@ -185,6 +212,9 @@ func (i *internalRemoteLinkImpl) Create(ctx context.Context, issueKeyOrID string
 
 func (i *internalRemoteLinkImpl) Update(ctx context.Context, issueKeyOrID, linkID string, payload *model.RemoteLinkScheme) (*model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalRemoteLinkImpl).Update")
+	defer span.End()
+
 	if issueKeyOrID == "" {
 		return nil, model.ErrNoIssueKeyOrID
 	}
@@ -205,6 +235,9 @@ func (i *internalRemoteLinkImpl) Update(ctx context.Context, issueKeyOrID, linkI
 
 func (i *internalRemoteLinkImpl) DeleteByID(ctx context.Context, issueKeyOrID, linkID string) (*model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalRemoteLinkImpl).DeleteByID")
+	defer span.End()
+
 	if issueKeyOrID == "" {
 		return nil, model.ErrNoIssueKeyOrID
 	}
@@ -224,6 +257,9 @@ func (i *internalRemoteLinkImpl) DeleteByID(ctx context.Context, issueKeyOrID, l
 }
 
 func (i *internalRemoteLinkImpl) DeleteByGlobalID(ctx context.Context, issueKeyOrID, globalID string) (*model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalRemoteLinkImpl).DeleteByGlobalID")
+	defer span.End()
 
 	if issueKeyOrID == "" {
 		return nil, model.ErrNoIssueKeyOrID

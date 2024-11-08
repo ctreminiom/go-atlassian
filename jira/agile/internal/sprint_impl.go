@@ -36,6 +36,9 @@ type SprintService struct {
 //
 // https://docs.go-atlassian.io/jira-agile/sprints#get-sprint
 func (s *SprintService) Get(ctx context.Context, sprintID int) (*model.SprintScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SprintService).Get")
+	defer span.End()
+
 	return s.internalClient.Get(ctx, sprintID)
 }
 
@@ -49,6 +52,9 @@ func (s *SprintService) Get(ctx context.Context, sprintID int) (*model.SprintSch
 //
 // https://docs.go-atlassian.io/jira-agile/sprints#create-print
 func (s *SprintService) Create(ctx context.Context, payload *model.SprintPayloadScheme) (*model.SprintScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SprintService).Create")
+	defer span.End()
+
 	return s.internalClient.Create(ctx, payload)
 }
 
@@ -62,6 +68,9 @@ func (s *SprintService) Create(ctx context.Context, payload *model.SprintPayload
 //
 // https://docs.go-atlassian.io/jira-agile/sprints#update-sprint
 func (s *SprintService) Update(ctx context.Context, sprintID int, payload *model.SprintPayloadScheme) (*model.SprintScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SprintService).Update")
+	defer span.End()
+
 	return s.internalClient.Update(ctx, sprintID, payload)
 }
 
@@ -73,6 +82,9 @@ func (s *SprintService) Update(ctx context.Context, sprintID int, payload *model
 //
 // https://docs.go-atlassian.io/jira-agile/sprints#partially-update-sprint
 func (s *SprintService) Path(ctx context.Context, sprintID int, payload *model.SprintPayloadScheme) (*model.SprintScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SprintService).Path")
+	defer span.End()
+
 	return s.internalClient.Path(ctx, sprintID, payload)
 }
 
@@ -84,6 +96,9 @@ func (s *SprintService) Path(ctx context.Context, sprintID int, payload *model.S
 //
 // https://docs.go-atlassian.io/jira-agile/sprints#delete-sprint
 func (s *SprintService) Delete(ctx context.Context, sprintID int) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SprintService).Delete")
+	defer span.End()
+
 	return s.internalClient.Delete(ctx, sprintID)
 }
 
@@ -97,6 +112,9 @@ func (s *SprintService) Delete(ctx context.Context, sprintID int) (*model.Respon
 //
 // https://docs.go-atlassian.io/jira-agile/sprints#get-issues-for-sprint
 func (s *SprintService) Issues(ctx context.Context, sprintID int, opts *model.IssueOptionScheme, startAt, maxResults int) (*model.SprintIssuePageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SprintService).Issues")
+	defer span.End()
+
 	return s.internalClient.Issues(ctx, sprintID, opts, startAt, maxResults)
 }
 
@@ -106,6 +124,9 @@ func (s *SprintService) Issues(ctx context.Context, sprintID int, opts *model.Is
 //
 // https://docs.go-atlassian.io/jira-agile/sprints#start-sprint
 func (s *SprintService) Start(ctx context.Context, sprintID int) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SprintService).Start")
+	defer span.End()
+
 	return s.internalClient.Start(ctx, sprintID)
 }
 
@@ -115,6 +136,9 @@ func (s *SprintService) Start(ctx context.Context, sprintID int) (*model.Respons
 //
 // https://docs.go-atlassian.io/jira-agile/sprints#close-sprint
 func (s *SprintService) Close(ctx context.Context, sprintID int) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SprintService).Close")
+	defer span.End()
+
 	return s.internalClient.Close(ctx, sprintID)
 }
 
@@ -128,6 +152,9 @@ func (s *SprintService) Close(ctx context.Context, sprintID int) (*model.Respons
 //
 // https://docs.go-atlassian.io/jira-agile/sprints#move-issues-to-sprint
 func (s *SprintService) Move(ctx context.Context, sprintID int, payload *model.SprintMovePayloadScheme) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SprintService).Move")
+	defer span.End()
+
 	return s.internalClient.Move(ctx, sprintID, payload)
 }
 
@@ -137,6 +164,9 @@ type internalSprintImpl struct {
 }
 
 func (i *internalSprintImpl) Move(ctx context.Context, sprintID int, payload *model.SprintMovePayloadScheme) (*model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalSprintImpl).Move")
+	defer span.End()
 
 	if sprintID == 0 {
 		return nil, model.ErrNoSprintID
@@ -153,6 +183,9 @@ func (i *internalSprintImpl) Move(ctx context.Context, sprintID int, payload *mo
 }
 
 func (i *internalSprintImpl) Get(ctx context.Context, sprintID int) (*model.SprintScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalSprintImpl).Get")
+	defer span.End()
 
 	if sprintID == 0 {
 		return nil, nil, model.ErrNoSprintID
@@ -176,6 +209,9 @@ func (i *internalSprintImpl) Get(ctx context.Context, sprintID int) (*model.Spri
 
 func (i *internalSprintImpl) Create(ctx context.Context, payload *model.SprintPayloadScheme) (*model.SprintScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalSprintImpl).Create")
+	defer span.End()
+
 	url := fmt.Sprintf("rest/agile/%v/sprint", i.version)
 
 	req, err := i.c.NewRequest(ctx, http.MethodPost, url, "", payload)
@@ -193,6 +229,9 @@ func (i *internalSprintImpl) Create(ctx context.Context, payload *model.SprintPa
 }
 
 func (i *internalSprintImpl) Update(ctx context.Context, sprintID int, payload *model.SprintPayloadScheme) (*model.SprintScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalSprintImpl).Update")
+	defer span.End()
 
 	if sprintID == 0 {
 		return nil, nil, model.ErrNoSprintID
@@ -216,6 +255,9 @@ func (i *internalSprintImpl) Update(ctx context.Context, sprintID int, payload *
 
 func (i *internalSprintImpl) Path(ctx context.Context, sprintID int, payload *model.SprintPayloadScheme) (*model.SprintScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalSprintImpl).Path")
+	defer span.End()
+
 	if sprintID == 0 {
 		return nil, nil, model.ErrNoSprintID
 	}
@@ -238,6 +280,9 @@ func (i *internalSprintImpl) Path(ctx context.Context, sprintID int, payload *mo
 
 func (i *internalSprintImpl) Delete(ctx context.Context, sprintID int) (*model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalSprintImpl).Delete")
+	defer span.End()
+
 	if sprintID == 0 {
 		return nil, model.ErrNoSprintID
 	}
@@ -253,6 +298,9 @@ func (i *internalSprintImpl) Delete(ctx context.Context, sprintID int) (*model.R
 }
 
 func (i *internalSprintImpl) Issues(ctx context.Context, sprintID int, opts *model.IssueOptionScheme, startAt, maxResults int) (*model.SprintIssuePageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalSprintImpl).Issues")
+	defer span.End()
 
 	if sprintID == 0 {
 		return nil, nil, model.ErrNoSprintID
@@ -299,6 +347,9 @@ func (i *internalSprintImpl) Issues(ctx context.Context, sprintID int, opts *mod
 
 func (i *internalSprintImpl) Start(ctx context.Context, sprintID int) (*model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalSprintImpl).Start")
+	defer span.End()
+
 	if sprintID == 0 {
 		return nil, model.ErrNoSprintID
 	}
@@ -314,6 +365,9 @@ func (i *internalSprintImpl) Start(ctx context.Context, sprintID int) (*model.Re
 }
 
 func (i *internalSprintImpl) Close(ctx context.Context, sprintID int) (*model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalSprintImpl).Close")
+	defer span.End()
 
 	if sprintID == 0 {
 		return nil, model.ErrNoSprintID

@@ -44,6 +44,9 @@ type IssueFieldConfigService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration#get-all-field-configurations
 func (i *IssueFieldConfigService) Gets(ctx context.Context, ids []int, isDefault bool, startAt, maxResults int) (*model.FieldConfigurationPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*IssueFieldConfigService).Gets")
+	defer span.End()
+
 	return i.internalClient.Gets(ctx, ids, isDefault, startAt, maxResults)
 }
 
@@ -56,6 +59,9 @@ func (i *IssueFieldConfigService) Gets(ctx context.Context, ids []int, isDefault
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration#create-field-configuration
 func (i *IssueFieldConfigService) Create(ctx context.Context, name, description string) (*model.FieldConfigurationScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*IssueFieldConfigService).Create")
+	defer span.End()
+
 	return i.internalClient.Create(ctx, name, description)
 }
 
@@ -67,6 +73,9 @@ func (i *IssueFieldConfigService) Create(ctx context.Context, name, description 
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration#update-field-configuration
 func (i *IssueFieldConfigService) Update(ctx context.Context, id int, name, description string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*IssueFieldConfigService).Update")
+	defer span.End()
+
 	return i.internalClient.Update(ctx, id, name, description)
 }
 
@@ -78,6 +87,9 @@ func (i *IssueFieldConfigService) Update(ctx context.Context, id int, name, desc
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration#delete-field-configuration
 func (i *IssueFieldConfigService) Delete(ctx context.Context, id int) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*IssueFieldConfigService).Delete")
+	defer span.End()
+
 	return i.internalClient.Delete(ctx, id)
 }
 
@@ -87,6 +99,9 @@ type internalIssueFieldConfigServiceImpl struct {
 }
 
 func (i *internalIssueFieldConfigServiceImpl) Gets(ctx context.Context, ids []int, isDefault bool, startAt, maxResults int) (*model.FieldConfigurationPageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalIssueFieldConfigServiceImpl).Gets")
+	defer span.End()
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -114,6 +129,9 @@ func (i *internalIssueFieldConfigServiceImpl) Gets(ctx context.Context, ids []in
 }
 
 func (i *internalIssueFieldConfigServiceImpl) Create(ctx context.Context, name, description string) (*model.FieldConfigurationScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalIssueFieldConfigServiceImpl).Create")
+	defer span.End()
 
 	if name == "" {
 		return nil, nil, model.ErrNoFieldConfigurationName
@@ -143,6 +161,9 @@ func (i *internalIssueFieldConfigServiceImpl) Create(ctx context.Context, name, 
 
 func (i *internalIssueFieldConfigServiceImpl) Update(ctx context.Context, id int, name, description string) (*model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalIssueFieldConfigServiceImpl).Update")
+	defer span.End()
+
 	if id == 0 {
 		return nil, model.ErrNoFieldConfigurationID
 	}
@@ -168,6 +189,9 @@ func (i *internalIssueFieldConfigServiceImpl) Update(ctx context.Context, id int
 }
 
 func (i *internalIssueFieldConfigServiceImpl) Delete(ctx context.Context, id int) (*model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalIssueFieldConfigServiceImpl).Delete")
+	defer span.End()
 
 	if id == 0 {
 		return nil, model.ErrNoFieldConfigurationID

@@ -30,6 +30,9 @@ type RestrictionOperationUserService struct {
 //
 // https://docs.go-atlassian.io/confluence-cloud/content/restrictions/operations/user#get-content-restriction-status-for-user
 func (r *RestrictionOperationUserService) Get(ctx context.Context, contentID, operationKey, accountID string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*RestrictionOperationUserService).Get")
+	defer span.End()
+
 	return r.internalClient.Get(ctx, contentID, operationKey, accountID)
 }
 
@@ -41,6 +44,9 @@ func (r *RestrictionOperationUserService) Get(ctx context.Context, contentID, op
 //
 // https://docs.go-atlassian.io/confluence-cloud/content/restrictions/operations/user#add-user-to-content-restriction
 func (r *RestrictionOperationUserService) Add(ctx context.Context, contentID, operationKey, accountID string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*RestrictionOperationUserService).Add")
+	defer span.End()
+
 	return r.internalClient.Add(ctx, contentID, operationKey, accountID)
 }
 
@@ -52,6 +58,9 @@ func (r *RestrictionOperationUserService) Add(ctx context.Context, contentID, op
 //
 // https://docs.go-atlassian.io/confluence-cloud/content/restrictions/operations/user#remove-user-from-content-restriction
 func (r *RestrictionOperationUserService) Remove(ctx context.Context, contentID, operationKey, accountID string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*RestrictionOperationUserService).Remove")
+	defer span.End()
+
 	return r.internalClient.Remove(ctx, contentID, operationKey, accountID)
 }
 
@@ -60,6 +69,9 @@ type internalRestrictionOperationUserImpl struct {
 }
 
 func (i *internalRestrictionOperationUserImpl) Get(ctx context.Context, contentID, operationKey, accountID string) (*model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalRestrictionOperationUserImpl).Get")
+	defer span.End()
 
 	if contentID == "" {
 		return nil, model.ErrNoContentID
@@ -88,6 +100,9 @@ func (i *internalRestrictionOperationUserImpl) Get(ctx context.Context, contentI
 
 func (i *internalRestrictionOperationUserImpl) Add(ctx context.Context, contentID, operationKey, accountID string) (*model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalRestrictionOperationUserImpl).Add")
+	defer span.End()
+
 	if contentID == "" {
 		return nil, model.ErrNoContentID
 	}
@@ -114,6 +129,9 @@ func (i *internalRestrictionOperationUserImpl) Add(ctx context.Context, contentI
 }
 
 func (i *internalRestrictionOperationUserImpl) Remove(ctx context.Context, contentID, operationKey, accountID string) (*model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalRestrictionOperationUserImpl).Remove")
+	defer span.End()
 
 	if contentID == "" {
 		return nil, model.ErrNoContentID

@@ -42,6 +42,9 @@ type ScreenService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/screens#get-screens-for-a-field
 func (s *ScreenService) Fields(ctx context.Context, fieldID string, startAt, maxResults int) (*model.ScreenFieldPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ScreenService).Fields")
+	defer span.End()
+
 	return s.internalClient.Fields(ctx, fieldID, startAt, maxResults)
 }
 
@@ -51,6 +54,9 @@ func (s *ScreenService) Fields(ctx context.Context, fieldID string, startAt, max
 //
 // https://docs.go-atlassian.io/jira-software-cloud/screens#get-screens
 func (s *ScreenService) Gets(ctx context.Context, options *model.ScreenParamsScheme, startAt, maxResults int) (*model.ScreenSearchPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ScreenService).Gets")
+	defer span.End()
+
 	return s.internalClient.Gets(ctx, options, startAt, maxResults)
 }
 
@@ -60,6 +66,9 @@ func (s *ScreenService) Gets(ctx context.Context, options *model.ScreenParamsSch
 //
 // https://docs.go-atlassian.io/jira-software-cloud/screens#create-screen
 func (s *ScreenService) Create(ctx context.Context, name, description string) (*model.ScreenScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ScreenService).Create")
+	defer span.End()
+
 	return s.internalClient.Create(ctx, name, description)
 }
 
@@ -69,6 +78,9 @@ func (s *ScreenService) Create(ctx context.Context, name, description string) (*
 //
 // https://docs.go-atlassian.io/jira-software-cloud/screens#add-field-to-default-screen
 func (s *ScreenService) AddToDefault(ctx context.Context, fieldID string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ScreenService).AddToDefault")
+	defer span.End()
+
 	return s.internalClient.AddToDefault(ctx, fieldID)
 }
 
@@ -78,6 +90,9 @@ func (s *ScreenService) AddToDefault(ctx context.Context, fieldID string) (*mode
 //
 // https://docs.go-atlassian.io/jira-software-cloud/screens#update-screen
 func (s *ScreenService) Update(ctx context.Context, screenID int, name, description string) (*model.ScreenScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ScreenService).Update")
+	defer span.End()
+
 	return s.internalClient.Update(ctx, screenID, name, description)
 }
 
@@ -90,6 +105,9 @@ func (s *ScreenService) Update(ctx context.Context, screenID int, name, descript
 //
 // https://docs.go-atlassian.io/jira-software-cloud/screens#delete-screen
 func (s *ScreenService) Delete(ctx context.Context, screenID int) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ScreenService).Delete")
+	defer span.End()
+
 	return s.internalClient.Delete(ctx, screenID)
 }
 
@@ -99,6 +117,9 @@ func (s *ScreenService) Delete(ctx context.Context, screenID int) (*model.Respon
 //
 // https://docs.go-atlassian.io/jira-software-cloud/screens#get-available-screen-fields
 func (s *ScreenService) Available(ctx context.Context, screenID int) ([]*model.AvailableScreenFieldScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ScreenService).Available")
+	defer span.End()
+
 	return s.internalClient.Available(ctx, screenID)
 }
 
@@ -108,6 +129,9 @@ type internalScreenImpl struct {
 }
 
 func (i *internalScreenImpl) Fields(ctx context.Context, fieldID string, startAt, maxResults int) (*model.ScreenFieldPageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalScreenImpl).Fields")
+	defer span.End()
 
 	if fieldID == "" {
 		return nil, nil, model.ErrNoFieldID
@@ -134,6 +158,9 @@ func (i *internalScreenImpl) Fields(ctx context.Context, fieldID string, startAt
 }
 
 func (i *internalScreenImpl) Gets(ctx context.Context, options *model.ScreenParamsScheme, startAt, maxResults int) (*model.ScreenSearchPageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalScreenImpl).Gets")
+	defer span.End()
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -176,6 +203,9 @@ func (i *internalScreenImpl) Gets(ctx context.Context, options *model.ScreenPara
 
 func (i *internalScreenImpl) Create(ctx context.Context, name, description string) (*model.ScreenScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalScreenImpl).Create")
+	defer span.End()
+
 	if name == "" {
 		return nil, nil, model.ErrNoScreenName
 	}
@@ -204,6 +234,9 @@ func (i *internalScreenImpl) Create(ctx context.Context, name, description strin
 
 func (i *internalScreenImpl) AddToDefault(ctx context.Context, fieldID string) (*model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalScreenImpl).AddToDefault")
+	defer span.End()
+
 	if fieldID == "" {
 		return nil, model.ErrNoFieldID
 	}
@@ -219,6 +252,9 @@ func (i *internalScreenImpl) AddToDefault(ctx context.Context, fieldID string) (
 }
 
 func (i *internalScreenImpl) Update(ctx context.Context, screenID int, name, description string) (*model.ScreenScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalScreenImpl).Update")
+	defer span.End()
 
 	if screenID == 0 {
 		return nil, nil, model.ErrNoScreenID
@@ -248,6 +284,9 @@ func (i *internalScreenImpl) Update(ctx context.Context, screenID int, name, des
 
 func (i *internalScreenImpl) Delete(ctx context.Context, screenID int) (*model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalScreenImpl).Delete")
+	defer span.End()
+
 	if screenID == 0 {
 		return nil, model.ErrNoScreenID
 	}
@@ -263,6 +302,9 @@ func (i *internalScreenImpl) Delete(ctx context.Context, screenID int) (*model.R
 }
 
 func (i *internalScreenImpl) Available(ctx context.Context, screenID int) ([]*model.AvailableScreenFieldScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalScreenImpl).Available")
+	defer span.End()
 
 	if screenID == 0 {
 		return nil, nil, model.ErrNoScreenID

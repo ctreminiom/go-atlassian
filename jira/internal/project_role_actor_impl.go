@@ -36,6 +36,9 @@ type ProjectRoleActorService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/roles/actors#add-actors-to-project-role
 func (p *ProjectRoleActorService) Add(ctx context.Context, projectKeyOrID string, roleID int, accountIDs, groups []string) (*model.ProjectRoleScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ProjectRoleActorService).Add")
+	defer span.End()
+
 	return p.internalClient.Add(ctx, projectKeyOrID, roleID, accountIDs, groups)
 }
 
@@ -45,6 +48,9 @@ func (p *ProjectRoleActorService) Add(ctx context.Context, projectKeyOrID string
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/roles/actors#delete-actors-from-project-role
 func (p *ProjectRoleActorService) Delete(ctx context.Context, projectKeyOrID string, roleID int, accountID, group string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ProjectRoleActorService).Delete")
+	defer span.End()
+
 	return p.internalClient.Delete(ctx, projectKeyOrID, roleID, accountID, group)
 }
 
@@ -54,6 +60,9 @@ type internalProjectRoleActorImpl struct {
 }
 
 func (i *internalProjectRoleActorImpl) Add(ctx context.Context, projectKeyOrID string, roleID int, accountIDs, groups []string) (*model.ProjectRoleScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalProjectRoleActorImpl).Add")
+	defer span.End()
 
 	if projectKeyOrID == "" {
 		return nil, nil, model.ErrNoProjectIDOrKey
@@ -80,6 +89,9 @@ func (i *internalProjectRoleActorImpl) Add(ctx context.Context, projectKeyOrID s
 }
 
 func (i *internalProjectRoleActorImpl) Delete(ctx context.Context, projectKeyOrID string, roleID int, accountID, group string) (*model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalProjectRoleActorImpl).Delete")
+	defer span.End()
 
 	if projectKeyOrID == "" {
 		return nil, model.ErrNoProjectIDOrKey

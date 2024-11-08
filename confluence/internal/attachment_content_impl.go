@@ -38,6 +38,9 @@ type ContentAttachmentService struct {
 //
 // https://docs.go-atlassian.io/confluence-cloud/content/attachments#get-attachments
 func (a *ContentAttachmentService) Gets(ctx context.Context, contentID string, startAt, maxResults int, options *model.GetContentAttachmentsOptionsScheme) (*model.ContentPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ContentAttachmentService).Gets")
+	defer span.End()
+
 	return a.internalClient.Gets(ctx, contentID, startAt, maxResults, options)
 }
 
@@ -51,6 +54,9 @@ func (a *ContentAttachmentService) Gets(ctx context.Context, contentID string, s
 //
 // https://docs.go-atlassian.io/confluence-cloud/content/attachments#create-or-update-attachment
 func (a *ContentAttachmentService) CreateOrUpdate(ctx context.Context, attachmentID, status, fileName string, file io.Reader) (*model.ContentPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ContentAttachmentService).CreateOrUpdate")
+	defer span.End()
+
 	return a.internalClient.CreateOrUpdate(ctx, attachmentID, status, fileName, file)
 }
 
@@ -64,6 +70,9 @@ func (a *ContentAttachmentService) CreateOrUpdate(ctx context.Context, attachmen
 //
 // https://docs.go-atlassian.io/confluence-cloud/content/attachments#create-attachment
 func (a *ContentAttachmentService) Create(ctx context.Context, attachmentID, status, fileName string, file io.Reader) (*model.ContentPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ContentAttachmentService).Create")
+	defer span.End()
+
 	return a.internalClient.Create(ctx, attachmentID, status, fileName, file)
 }
 
@@ -72,6 +81,9 @@ type internalContentAttachmentImpl struct {
 }
 
 func (i *internalContentAttachmentImpl) Gets(ctx context.Context, contentID string, startAt, maxResults int, options *model.GetContentAttachmentsOptionsScheme) (*model.ContentPageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalContentAttachmentImpl).Gets")
+	defer span.End()
 
 	if contentID == "" {
 		return nil, nil, model.ErrNoContentID
@@ -114,6 +126,9 @@ func (i *internalContentAttachmentImpl) Gets(ctx context.Context, contentID stri
 }
 
 func (i *internalContentAttachmentImpl) CreateOrUpdate(ctx context.Context, attachmentID, status, fileName string, file io.Reader) (*model.ContentPageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalContentAttachmentImpl).CreateOrUpdate")
+	defer span.End()
 
 	if attachmentID == "" {
 		return nil, nil, model.ErrNoContentAttachmentID
@@ -171,6 +186,9 @@ func (i *internalContentAttachmentImpl) CreateOrUpdate(ctx context.Context, atta
 }
 
 func (i *internalContentAttachmentImpl) Create(ctx context.Context, attachmentID, status, fileName string, file io.Reader) (*model.ContentPageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalContentAttachmentImpl).Create")
+	defer span.End()
 
 	if attachmentID == "" {
 		return nil, nil, model.ErrNoContentAttachmentID

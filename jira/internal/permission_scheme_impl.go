@@ -39,6 +39,9 @@ type PermissionSchemeService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/permissions/scheme#get-all-permission-schemes
 func (p *PermissionSchemeService) Gets(ctx context.Context) (*model.PermissionSchemePageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*PermissionSchemeService).Gets")
+	defer span.End()
+
 	return p.internalClient.Gets(ctx)
 }
 
@@ -48,6 +51,9 @@ func (p *PermissionSchemeService) Gets(ctx context.Context) (*model.PermissionSc
 //
 // https://docs.go-atlassian.io/jira-software-cloud/permissions/scheme#get-permission-scheme
 func (p *PermissionSchemeService) Get(ctx context.Context, permissionSchemeID int, expand []string) (*model.PermissionSchemeScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*PermissionSchemeService).Get")
+	defer span.End()
+
 	return p.internalClient.Get(ctx, permissionSchemeID, expand)
 }
 
@@ -57,6 +63,9 @@ func (p *PermissionSchemeService) Get(ctx context.Context, permissionSchemeID in
 //
 // https://docs.go-atlassian.io/jira-software-cloud/permissions/scheme#delete-permission-scheme
 func (p *PermissionSchemeService) Delete(ctx context.Context, permissionSchemeID int) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*PermissionSchemeService).Delete")
+	defer span.End()
+
 	return p.internalClient.Delete(ctx, permissionSchemeID)
 }
 
@@ -68,6 +77,9 @@ func (p *PermissionSchemeService) Delete(ctx context.Context, permissionSchemeID
 //
 // https://docs.go-atlassian.io/jira-software-cloud/permissions/scheme#create-permission-scheme
 func (p *PermissionSchemeService) Create(ctx context.Context, payload *model.PermissionSchemeScheme) (*model.PermissionSchemeScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*PermissionSchemeService).Create")
+	defer span.End()
+
 	return p.internalClient.Create(ctx, payload)
 }
 
@@ -84,6 +96,9 @@ func (p *PermissionSchemeService) Create(ctx context.Context, payload *model.Per
 //
 // https://docs.go-atlassian.io/jira-software-cloud/permissions/scheme#update-permission-scheme
 func (p *PermissionSchemeService) Update(ctx context.Context, permissionSchemeID int, payload *model.PermissionSchemeScheme) (*model.PermissionSchemeScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*PermissionSchemeService).Update")
+	defer span.End()
+
 	return p.internalClient.Update(ctx, permissionSchemeID, payload)
 }
 
@@ -93,6 +108,9 @@ type internalPermissionSchemeImpl struct {
 }
 
 func (i *internalPermissionSchemeImpl) Gets(ctx context.Context) (*model.PermissionSchemePageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalPermissionSchemeImpl).Gets")
+	defer span.End()
 
 	endpoint := fmt.Sprintf("rest/api/%v/permissionscheme", i.version)
 
@@ -111,6 +129,9 @@ func (i *internalPermissionSchemeImpl) Gets(ctx context.Context) (*model.Permiss
 }
 
 func (i *internalPermissionSchemeImpl) Get(ctx context.Context, permissionSchemeID int, expand []string) (*model.PermissionSchemeScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalPermissionSchemeImpl).Get")
+	defer span.End()
 
 	if permissionSchemeID == 0 {
 		return nil, nil, model.ErrNoPermissionSchemeID
@@ -143,6 +164,9 @@ func (i *internalPermissionSchemeImpl) Get(ctx context.Context, permissionScheme
 
 func (i *internalPermissionSchemeImpl) Delete(ctx context.Context, permissionSchemeID int) (*model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalPermissionSchemeImpl).Delete")
+	defer span.End()
+
 	if permissionSchemeID == 0 {
 		return nil, model.ErrNoPermissionSchemeID
 	}
@@ -158,6 +182,9 @@ func (i *internalPermissionSchemeImpl) Delete(ctx context.Context, permissionSch
 }
 
 func (i *internalPermissionSchemeImpl) Create(ctx context.Context, payload *model.PermissionSchemeScheme) (*model.PermissionSchemeScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalPermissionSchemeImpl).Create")
+	defer span.End()
 
 	endpoint := fmt.Sprintf("rest/api/%v/permissionscheme", i.version)
 
@@ -176,6 +203,9 @@ func (i *internalPermissionSchemeImpl) Create(ctx context.Context, payload *mode
 }
 
 func (i *internalPermissionSchemeImpl) Update(ctx context.Context, permissionSchemeID int, payload *model.PermissionSchemeScheme) (*model.PermissionSchemeScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalPermissionSchemeImpl).Update")
+	defer span.End()
 
 	if permissionSchemeID == 0 {
 		return nil, nil, model.ErrNoPermissionSchemeID

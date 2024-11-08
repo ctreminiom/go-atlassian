@@ -34,6 +34,9 @@ type AQLService struct {
 //
 // https://docs.go-atlassian.io/jira-assets/aql#filter-objects
 func (a *AQLService) Filter(ctx context.Context, workspaceID string, parameters *model.AQLSearchParamsScheme) (*model.ObjectListScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*AQLService).Filter")
+	defer span.End()
+
 	return a.internalClient.Filter(ctx, workspaceID, parameters)
 }
 
@@ -42,6 +45,9 @@ type internalAQLImpl struct {
 }
 
 func (i *internalAQLImpl) Filter(ctx context.Context, workspaceID string, parameters *model.AQLSearchParamsScheme) (*model.ObjectListScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalAQLImpl).Filter")
+	defer span.End()
 
 	if workspaceID == "" {
 		return nil, nil, model.ErrNoWorkspaceID

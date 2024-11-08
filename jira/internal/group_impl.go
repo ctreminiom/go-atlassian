@@ -38,6 +38,9 @@ type GroupService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/groups#remove-group
 func (g *GroupService) Delete(ctx context.Context, groupName string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*GroupService).Delete")
+	defer span.End()
+
 	return g.internalClient.Delete(ctx, groupName)
 }
 
@@ -47,6 +50,9 @@ func (g *GroupService) Delete(ctx context.Context, groupName string) (*model.Res
 //
 // https://docs.go-atlassian.io/jira-software-cloud/groups#bulk-groups
 func (g *GroupService) Bulk(ctx context.Context, options *model.GroupBulkOptionsScheme, startAt, maxResults int) (*model.BulkGroupScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*GroupService).Bulk")
+	defer span.End()
+
 	return g.internalClient.Bulk(ctx, options, startAt, maxResults)
 }
 
@@ -56,6 +62,9 @@ func (g *GroupService) Bulk(ctx context.Context, options *model.GroupBulkOptions
 //
 // https://docs.go-atlassian.io/jira-software-cloud/groups#get-users-from-groups
 func (g *GroupService) Members(ctx context.Context, groupName string, inactive bool, startAt, maxResults int) (*model.GroupMemberPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*GroupService).Members")
+	defer span.End()
+
 	return g.internalClient.Members(ctx, groupName, inactive, startAt, maxResults)
 }
 
@@ -65,6 +74,9 @@ func (g *GroupService) Members(ctx context.Context, groupName string, inactive b
 //
 // https://docs.go-atlassian.io/jira-software-cloud/groups#add-user-to-group
 func (g *GroupService) Add(ctx context.Context, groupName, accountID string) (*model.GroupScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*GroupService).Add")
+	defer span.End()
+
 	return g.internalClient.Add(ctx, groupName, accountID)
 }
 
@@ -74,6 +86,9 @@ func (g *GroupService) Add(ctx context.Context, groupName, accountID string) (*m
 //
 // https://docs.go-atlassian.io/jira-software-cloud/groups#remove-user-from-group
 func (g *GroupService) Remove(ctx context.Context, groupName, accountID string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*GroupService).Remove")
+	defer span.End()
+
 	return g.internalClient.Remove(ctx, groupName, accountID)
 }
 
@@ -83,6 +98,9 @@ func (g *GroupService) Remove(ctx context.Context, groupName, accountID string) 
 //
 // https://docs.go-atlassian.io/jira-software-cloud/groups#create-group
 func (g *GroupService) Create(ctx context.Context, groupName string) (*model.GroupScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*GroupService).Create")
+	defer span.End()
+
 	return g.internalClient.Create(ctx, groupName)
 }
 
@@ -92,6 +110,9 @@ type internalGroupServiceImpl struct {
 }
 
 func (i *internalGroupServiceImpl) Create(ctx context.Context, groupName string) (*model.GroupScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalGroupServiceImpl).Create")
+	defer span.End()
 
 	if groupName == "" {
 		return nil, nil, model.ErrNoGroupName
@@ -115,6 +136,9 @@ func (i *internalGroupServiceImpl) Create(ctx context.Context, groupName string)
 
 func (i *internalGroupServiceImpl) Delete(ctx context.Context, groupName string) (*model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalGroupServiceImpl).Delete")
+	defer span.End()
+
 	if groupName == "" {
 		return nil, model.ErrNoGroupName
 	}
@@ -133,6 +157,9 @@ func (i *internalGroupServiceImpl) Delete(ctx context.Context, groupName string)
 }
 
 func (i *internalGroupServiceImpl) Bulk(ctx context.Context, options *model.GroupBulkOptionsScheme, startAt, maxResults int) (*model.BulkGroupScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalGroupServiceImpl).Bulk")
+	defer span.End()
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -167,6 +194,9 @@ func (i *internalGroupServiceImpl) Bulk(ctx context.Context, options *model.Grou
 
 func (i *internalGroupServiceImpl) Members(ctx context.Context, groupName string, inactive bool, startAt, maxResults int) (*model.GroupMemberPageScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalGroupServiceImpl).Members")
+	defer span.End()
+
 	if groupName == "" {
 		return nil, nil, model.ErrNoGroupName
 	}
@@ -195,6 +225,9 @@ func (i *internalGroupServiceImpl) Members(ctx context.Context, groupName string
 
 func (i *internalGroupServiceImpl) Add(ctx context.Context, groupName, accountID string) (*model.GroupScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalGroupServiceImpl).Add")
+	defer span.End()
+
 	if groupName == "" {
 		return nil, nil, model.ErrNoGroupName
 	}
@@ -222,6 +255,9 @@ func (i *internalGroupServiceImpl) Add(ctx context.Context, groupName, accountID
 }
 
 func (i *internalGroupServiceImpl) Remove(ctx context.Context, groupName, accountID string) (*model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalGroupServiceImpl).Remove")
+	defer span.End()
 
 	if groupName == "" {
 		return nil, model.ErrNoGroupName

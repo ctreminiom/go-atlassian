@@ -35,6 +35,9 @@ type GroupUserPickerService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/groupuserpicker#find-users-and-groups
 func (g *GroupUserPickerService) Find(ctx context.Context, options *model.GroupUserPickerFindOptionScheme) (*model.GroupUserPickerFindScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*GroupUserPickerService).Find")
+	defer span.End()
+
 	return g.internalClient.Find(ctx, options)
 }
 
@@ -45,6 +48,9 @@ type internalGroupUserPickerServiceImpl struct {
 
 // Find returns a list of users and groups matching a string.
 func (i internalGroupUserPickerServiceImpl) Find(ctx context.Context, options *model.GroupUserPickerFindOptionScheme) (*model.GroupUserPickerFindScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(internalGroupUserPickerServiceImpl).Find")
+	defer span.End()
 
 	if options == nil || options.Query == "" {
 		return nil, nil, model.ErrNoQuery

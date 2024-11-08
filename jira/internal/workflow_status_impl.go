@@ -37,6 +37,9 @@ type WorkflowStatusService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/workflow/status#gets-workflow-statuses
 func (w *WorkflowStatusService) Gets(ctx context.Context, ids, expand []string) ([]*model.WorkflowStatusDetailScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*WorkflowStatusService).Gets")
+	defer span.End()
+
 	return w.internalClient.Gets(ctx, ids, expand)
 }
 
@@ -46,6 +49,9 @@ func (w *WorkflowStatusService) Gets(ctx context.Context, ids, expand []string) 
 //
 // https://docs.go-atlassian.io/jira-software-cloud/workflow/status#update-workflow-statuses
 func (w *WorkflowStatusService) Update(ctx context.Context, payload *model.WorkflowStatusPayloadScheme) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*WorkflowStatusService).Update")
+	defer span.End()
+
 	return w.internalClient.Update(ctx, payload)
 }
 
@@ -55,6 +61,9 @@ func (w *WorkflowStatusService) Update(ctx context.Context, payload *model.Workf
 //
 // https://docs.go-atlassian.io/jira-software-cloud/workflow/status#create-workflow-statuses
 func (w *WorkflowStatusService) Create(ctx context.Context, payload *model.WorkflowStatusPayloadScheme) ([]*model.WorkflowStatusDetailScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*WorkflowStatusService).Create")
+	defer span.End()
+
 	return w.internalClient.Create(ctx, payload)
 }
 
@@ -64,6 +73,9 @@ func (w *WorkflowStatusService) Create(ctx context.Context, payload *model.Workf
 //
 // https://docs.go-atlassian.io/jira-software-cloud/workflow/status#delete-workflow-statuses
 func (w *WorkflowStatusService) Delete(ctx context.Context, ids []string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*WorkflowStatusService).Delete")
+	defer span.End()
+
 	return w.internalClient.Delete(ctx, ids)
 }
 
@@ -73,6 +85,9 @@ func (w *WorkflowStatusService) Delete(ctx context.Context, ids []string) (*mode
 //
 // https://docs.go-atlassian.io/jira-software-cloud/workflow/status#search-workflow-statuses
 func (w *WorkflowStatusService) Search(ctx context.Context, options *model.WorkflowStatusSearchParams, startAt, maxResults int) (*model.WorkflowStatusDetailPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*WorkflowStatusService).Search")
+	defer span.End()
+
 	return w.internalClient.Search(ctx, options, startAt, maxResults)
 }
 
@@ -82,6 +97,9 @@ func (w *WorkflowStatusService) Search(ctx context.Context, options *model.Workf
 //
 // https://docs.go-atlassian.io/jira-software-cloud/workflow/status#bulk-workflow-statuses
 func (w *WorkflowStatusService) Bulk(ctx context.Context) ([]*model.StatusDetailScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*WorkflowStatusService).Bulk")
+	defer span.End()
+
 	return w.internalClient.Bulk(ctx)
 }
 
@@ -99,6 +117,9 @@ func (w *WorkflowStatusService) Bulk(ctx context.Context) ([]*model.StatusDetail
 //
 // https://docs.go-atlassian.io/jira-software-cloud/workflow/status#get-workflow-status
 func (w *WorkflowStatusService) Get(ctx context.Context, idOrName string) (*model.StatusDetailScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*WorkflowStatusService).Get")
+	defer span.End()
+
 	return w.internalClient.Get(ctx, idOrName)
 }
 
@@ -108,6 +129,9 @@ type internalWorkflowStatusImpl struct {
 }
 
 func (i *internalWorkflowStatusImpl) Get(ctx context.Context, idOrName string) (*model.StatusDetailScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalWorkflowStatusImpl).Get")
+	defer span.End()
 
 	if idOrName == "" {
 		return nil, nil, model.ErrNoWorkflowStatusNameOrID
@@ -131,6 +155,9 @@ func (i *internalWorkflowStatusImpl) Get(ctx context.Context, idOrName string) (
 
 func (i *internalWorkflowStatusImpl) Bulk(ctx context.Context) ([]*model.StatusDetailScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalWorkflowStatusImpl).Bulk")
+	defer span.End()
+
 	endpoint := fmt.Sprintf("/rest/api/%v/status", i.version)
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
@@ -148,6 +175,9 @@ func (i *internalWorkflowStatusImpl) Bulk(ctx context.Context) ([]*model.StatusD
 }
 
 func (i *internalWorkflowStatusImpl) Gets(ctx context.Context, ids, expand []string) ([]*model.WorkflowStatusDetailScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalWorkflowStatusImpl).Gets")
+	defer span.End()
 
 	var endpoint strings.Builder
 	endpoint.WriteString(fmt.Sprintf("rest/api/%v/statuses", i.version))
@@ -181,6 +211,9 @@ func (i *internalWorkflowStatusImpl) Gets(ctx context.Context, ids, expand []str
 
 func (i *internalWorkflowStatusImpl) Update(ctx context.Context, payload *model.WorkflowStatusPayloadScheme) (*model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalWorkflowStatusImpl).Update")
+	defer span.End()
+
 	endpoint := fmt.Sprintf("rest/api/%v/statuses", i.version)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
@@ -192,6 +225,9 @@ func (i *internalWorkflowStatusImpl) Update(ctx context.Context, payload *model.
 }
 
 func (i *internalWorkflowStatusImpl) Create(ctx context.Context, payload *model.WorkflowStatusPayloadScheme) ([]*model.WorkflowStatusDetailScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalWorkflowStatusImpl).Create")
+	defer span.End()
 
 	if len(payload.Statuses) == 0 {
 		return nil, nil, model.ErrNoWorkflowStatuses
@@ -219,6 +255,9 @@ func (i *internalWorkflowStatusImpl) Create(ctx context.Context, payload *model.
 
 func (i *internalWorkflowStatusImpl) Delete(ctx context.Context, ids []string) (*model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalWorkflowStatusImpl).Delete")
+	defer span.End()
+
 	if len(ids) == 0 {
 		return nil, model.ErrNoWorkflowStatuses
 	}
@@ -239,6 +278,9 @@ func (i *internalWorkflowStatusImpl) Delete(ctx context.Context, ids []string) (
 }
 
 func (i *internalWorkflowStatusImpl) Search(ctx context.Context, options *model.WorkflowStatusSearchParams, startAt, maxResults int) (*model.WorkflowStatusDetailPageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalWorkflowStatusImpl).Search")
+	defer span.End()
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))

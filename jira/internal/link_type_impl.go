@@ -34,6 +34,9 @@ type LinkTypeService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/link/types#get-issue-link-types
 func (l *LinkTypeService) Gets(ctx context.Context) (*model.IssueLinkTypeSearchScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*LinkTypeService).Gets")
+	defer span.End()
+
 	return l.internalClient.Gets(ctx)
 }
 
@@ -43,6 +46,9 @@ func (l *LinkTypeService) Gets(ctx context.Context) (*model.IssueLinkTypeSearchS
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/link/types#get-issue-link-type
 func (l *LinkTypeService) Get(ctx context.Context, issueLinkTypeID string) (*model.LinkTypeScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*LinkTypeService).Get")
+	defer span.End()
+
 	return l.internalClient.Get(ctx, issueLinkTypeID)
 }
 
@@ -56,6 +62,9 @@ func (l *LinkTypeService) Get(ctx context.Context, issueLinkTypeID string) (*mod
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/link/types#create-issue-link-type
 func (l *LinkTypeService) Create(ctx context.Context, payload *model.LinkTypeScheme) (*model.LinkTypeScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*LinkTypeService).Create")
+	defer span.End()
+
 	return l.internalClient.Create(ctx, payload)
 }
 
@@ -65,6 +74,9 @@ func (l *LinkTypeService) Create(ctx context.Context, payload *model.LinkTypeSch
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/link/types#update-issue-link-type
 func (l *LinkTypeService) Update(ctx context.Context, issueLinkTypeID string, payload *model.LinkTypeScheme) (*model.LinkTypeScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*LinkTypeService).Update")
+	defer span.End()
+
 	return l.internalClient.Update(ctx, issueLinkTypeID, payload)
 }
 
@@ -74,6 +86,9 @@ func (l *LinkTypeService) Update(ctx context.Context, issueLinkTypeID string, pa
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/link/types#delete-issue-link-type
 func (l *LinkTypeService) Delete(ctx context.Context, issueLinkTypeID string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*LinkTypeService).Delete")
+	defer span.End()
+
 	return l.internalClient.Delete(ctx, issueLinkTypeID)
 }
 
@@ -83,6 +98,9 @@ type internalLinkTypeImpl struct {
 }
 
 func (i *internalLinkTypeImpl) Gets(ctx context.Context) (*model.IssueLinkTypeSearchScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalLinkTypeImpl).Gets")
+	defer span.End()
 
 	endpoint := fmt.Sprintf("rest/api/%v/issueLinkType", i.version)
 
@@ -101,6 +119,9 @@ func (i *internalLinkTypeImpl) Gets(ctx context.Context) (*model.IssueLinkTypeSe
 }
 
 func (i *internalLinkTypeImpl) Get(ctx context.Context, issueLinkTypeID string) (*model.LinkTypeScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalLinkTypeImpl).Get")
+	defer span.End()
 
 	if issueLinkTypeID == "" {
 		return nil, nil, model.ErrNoLinkTypeID
@@ -124,6 +145,9 @@ func (i *internalLinkTypeImpl) Get(ctx context.Context, issueLinkTypeID string) 
 
 func (i *internalLinkTypeImpl) Create(ctx context.Context, payload *model.LinkTypeScheme) (*model.LinkTypeScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalLinkTypeImpl).Create")
+	defer span.End()
+
 	endpoint := fmt.Sprintf("rest/api/%v/issueLinkType", i.version)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
@@ -141,6 +165,9 @@ func (i *internalLinkTypeImpl) Create(ctx context.Context, payload *model.LinkTy
 }
 
 func (i *internalLinkTypeImpl) Update(ctx context.Context, issueLinkTypeID string, payload *model.LinkTypeScheme) (*model.LinkTypeScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalLinkTypeImpl).Update")
+	defer span.End()
 
 	if issueLinkTypeID == "" {
 		return nil, nil, model.ErrNoLinkTypeID
@@ -163,6 +190,9 @@ func (i *internalLinkTypeImpl) Update(ctx context.Context, issueLinkTypeID strin
 }
 
 func (i *internalLinkTypeImpl) Delete(ctx context.Context, issueLinkTypeID string) (*model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalLinkTypeImpl).Delete")
+	defer span.End()
 
 	if issueLinkTypeID == "" {
 		return nil, model.ErrNoLinkTypeID

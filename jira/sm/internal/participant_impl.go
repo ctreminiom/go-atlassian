@@ -32,6 +32,9 @@ type ParticipantService struct {
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request/participants#get-request-participants
 func (s *ParticipantService) Gets(ctx context.Context, issueKeyOrID string, start, limit int) (*model.RequestParticipantPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ParticipantService).Gets")
+	defer span.End()
+
 	return s.internalClient.Gets(ctx, issueKeyOrID, start, limit)
 }
 
@@ -41,6 +44,9 @@ func (s *ParticipantService) Gets(ctx context.Context, issueKeyOrID string, star
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request/participants#add-request-participants
 func (s *ParticipantService) Add(ctx context.Context, issueKeyOrID string, accountIDs []string) (*model.RequestParticipantPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ParticipantService).Add")
+	defer span.End()
+
 	return s.internalClient.Add(ctx, issueKeyOrID, accountIDs)
 }
 
@@ -50,6 +56,9 @@ func (s *ParticipantService) Add(ctx context.Context, issueKeyOrID string, accou
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request/participants#remove-request-participants
 func (s *ParticipantService) Remove(ctx context.Context, issueKeyOrID string, accountIDs []string) (*model.RequestParticipantPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ParticipantService).Remove")
+	defer span.End()
+
 	return s.internalClient.Remove(ctx, issueKeyOrID, accountIDs)
 }
 
@@ -59,6 +68,9 @@ type internalServiceRequestParticipantImpl struct {
 }
 
 func (i *internalServiceRequestParticipantImpl) Gets(ctx context.Context, issueKeyOrID string, start, limit int) (*model.RequestParticipantPageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalServiceRequestParticipantImpl).Gets")
+	defer span.End()
 
 	if issueKeyOrID == "" {
 		return nil, nil, model.ErrNoIssueKeyOrID
@@ -86,6 +98,9 @@ func (i *internalServiceRequestParticipantImpl) Gets(ctx context.Context, issueK
 
 func (i *internalServiceRequestParticipantImpl) Add(ctx context.Context, issueKeyOrID string, accountIDs []string) (*model.RequestParticipantPageScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalServiceRequestParticipantImpl).Add")
+	defer span.End()
+
 	if issueKeyOrID == "" {
 		return nil, nil, model.ErrNoIssueKeyOrID
 	}
@@ -111,6 +126,9 @@ func (i *internalServiceRequestParticipantImpl) Add(ctx context.Context, issueKe
 }
 
 func (i *internalServiceRequestParticipantImpl) Remove(ctx context.Context, issueKeyOrID string, accountIDs []string) (*model.RequestParticipantPageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalServiceRequestParticipantImpl).Remove")
+	defer span.End()
 
 	if issueKeyOrID == "" {
 		return nil, nil, model.ErrNoIssueKeyOrID

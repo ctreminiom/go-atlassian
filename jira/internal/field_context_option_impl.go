@@ -40,6 +40,9 @@ type IssueFieldContextOptionService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/fields/context/option#get-custom-field-options
 func (i *IssueFieldContextOptionService) Gets(ctx context.Context, fieldID string, contextID int, options *model.FieldOptionContextParams, startAt, maxResults int) (*model.CustomFieldContextOptionPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*IssueFieldContextOptionService).Gets")
+	defer span.End()
+
 	return i.internalClient.Gets(ctx, fieldID, contextID, options, startAt, maxResults)
 }
 
@@ -53,6 +56,9 @@ func (i *IssueFieldContextOptionService) Gets(ctx context.Context, fieldID strin
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/fields/context/option#create-custom-field-options
 func (i *IssueFieldContextOptionService) Create(ctx context.Context, fieldID string, contextID int, payload *model.FieldContextOptionListScheme) (*model.FieldContextOptionListScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*IssueFieldContextOptionService).Create")
+	defer span.End()
+
 	return i.internalClient.Create(ctx, fieldID, contextID, payload)
 }
 
@@ -66,6 +72,9 @@ func (i *IssueFieldContextOptionService) Create(ctx context.Context, fieldID str
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/fields/context/option#update-custom-field-options
 func (i *IssueFieldContextOptionService) Update(ctx context.Context, fieldID string, contextID int, payload *model.FieldContextOptionListScheme) (*model.FieldContextOptionListScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*IssueFieldContextOptionService).Update")
+	defer span.End()
+
 	return i.internalClient.Update(ctx, fieldID, contextID, payload)
 }
 
@@ -77,6 +86,9 @@ func (i *IssueFieldContextOptionService) Update(ctx context.Context, fieldID str
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/fields/context/option#delete-custom-field-options
 func (i *IssueFieldContextOptionService) Delete(ctx context.Context, fieldID string, contextID, optionID int) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*IssueFieldContextOptionService).Delete")
+	defer span.End()
+
 	return i.internalClient.Delete(ctx, fieldID, contextID, optionID)
 }
 
@@ -86,6 +98,9 @@ func (i *IssueFieldContextOptionService) Delete(ctx context.Context, fieldID str
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/fields/context/option#reorder-custom-field-options
 func (i *IssueFieldContextOptionService) Order(ctx context.Context, fieldID string, contextID int, payload *model.OrderFieldOptionPayloadScheme) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*IssueFieldContextOptionService).Order")
+	defer span.End()
+
 	return i.internalClient.Order(ctx, fieldID, contextID, payload)
 }
 
@@ -95,6 +110,9 @@ type internalIssueFieldContextOptionServiceImpl struct {
 }
 
 func (i *internalIssueFieldContextOptionServiceImpl) Gets(ctx context.Context, fieldID string, contextID int, options *model.FieldOptionContextParams, startAt, maxResults int) (*model.CustomFieldContextOptionPageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalIssueFieldContextOptionServiceImpl).Gets")
+	defer span.End()
 
 	if fieldID == "" {
 		return nil, nil, model.ErrNoFieldID
@@ -130,6 +148,9 @@ func (i *internalIssueFieldContextOptionServiceImpl) Gets(ctx context.Context, f
 
 func (i *internalIssueFieldContextOptionServiceImpl) Create(ctx context.Context, fieldID string, contextID int, payload *model.FieldContextOptionListScheme) (*model.FieldContextOptionListScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalIssueFieldContextOptionServiceImpl).Create")
+	defer span.End()
+
 	if fieldID == "" {
 		return nil, nil, model.ErrNoFieldID
 	}
@@ -155,6 +176,9 @@ func (i *internalIssueFieldContextOptionServiceImpl) Create(ctx context.Context,
 }
 
 func (i *internalIssueFieldContextOptionServiceImpl) Update(ctx context.Context, fieldID string, contextID int, payload *model.FieldContextOptionListScheme) (*model.FieldContextOptionListScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalIssueFieldContextOptionServiceImpl).Update")
+	defer span.End()
 
 	if fieldID == "" {
 		return nil, nil, model.ErrNoFieldID
@@ -182,6 +206,9 @@ func (i *internalIssueFieldContextOptionServiceImpl) Update(ctx context.Context,
 
 func (i *internalIssueFieldContextOptionServiceImpl) Delete(ctx context.Context, fieldID string, contextID, optionID int) (*model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalIssueFieldContextOptionServiceImpl).Delete")
+	defer span.End()
+
 	if fieldID == "" {
 		return nil, model.ErrNoFieldID
 	}
@@ -205,6 +232,9 @@ func (i *internalIssueFieldContextOptionServiceImpl) Delete(ctx context.Context,
 }
 
 func (i *internalIssueFieldContextOptionServiceImpl) Order(ctx context.Context, fieldID string, contextID int, payload *model.OrderFieldOptionPayloadScheme) (*model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalIssueFieldContextOptionServiceImpl).Order")
+	defer span.End()
 
 	if fieldID == "" {
 		return nil, model.ErrNoFieldID

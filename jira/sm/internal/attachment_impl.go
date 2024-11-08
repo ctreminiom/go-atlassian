@@ -32,6 +32,9 @@ type AttachmentService struct {
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request/attachment#get-attachments-for-request
 func (s *AttachmentService) Gets(ctx context.Context, issueKeyOrID string, start, limit int) (*model.RequestAttachmentPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*AttachmentService).Gets")
+	defer span.End()
+
 	return s.internalClient.Gets(ctx, issueKeyOrID, start, limit)
 }
 
@@ -43,6 +46,9 @@ func (s *AttachmentService) Gets(ctx context.Context, issueKeyOrID string, start
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request/attachment#create-attachment
 func (s *AttachmentService) Create(ctx context.Context, issueKeyOrID string, payload *model.RequestAttachmentCreationPayloadScheme) (*model.RequestAttachmentCreationScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*AttachmentService).Create")
+	defer span.End()
+
 	return s.internalClient.Create(ctx, issueKeyOrID, payload)
 }
 
@@ -52,6 +58,9 @@ type internalServiceRequestAttachmentImpl struct {
 }
 
 func (i *internalServiceRequestAttachmentImpl) Gets(ctx context.Context, issueKeyOrID string, start, limit int) (*model.RequestAttachmentPageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalServiceRequestAttachmentImpl).Gets")
+	defer span.End()
 
 	if issueKeyOrID == "" {
 		return nil, nil, model.ErrNoIssueKeyOrID
@@ -78,6 +87,9 @@ func (i *internalServiceRequestAttachmentImpl) Gets(ctx context.Context, issueKe
 }
 
 func (i *internalServiceRequestAttachmentImpl) Create(ctx context.Context, issueKeyOrID string, payload *model.RequestAttachmentCreationPayloadScheme) (*model.RequestAttachmentCreationScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalServiceRequestAttachmentImpl).Create")
+	defer span.End()
 
 	if issueKeyOrID == "" {
 		return nil, nil, model.ErrNoIssueKeyOrID

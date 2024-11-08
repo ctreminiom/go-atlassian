@@ -34,6 +34,9 @@ type SpacePermissionService struct {
 //
 // https://docs.go-atlassian.io/confluence-cloud/space/permissions#add-new-permission-to-space
 func (s *SpacePermissionService) Add(ctx context.Context, spaceKey string, payload *model.SpacePermissionPayloadScheme) (*model.SpacePermissionV2Scheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SpacePermissionService).Add")
+	defer span.End()
+
 	return s.internalClient.Add(ctx, spaceKey, payload)
 }
 
@@ -47,6 +50,9 @@ func (s *SpacePermissionService) Add(ctx context.Context, spaceKey string, paylo
 //
 // https://docs.go-atlassian.io/confluence-cloud/space/permissions#add-new-custom-content-permission-to-space
 func (s *SpacePermissionService) Bulk(ctx context.Context, spaceKey string, payload *model.SpacePermissionArrayPayloadScheme) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SpacePermissionService).Bulk")
+	defer span.End()
+
 	return s.internalClient.Bulk(ctx, spaceKey, payload)
 }
 
@@ -58,6 +64,9 @@ func (s *SpacePermissionService) Bulk(ctx context.Context, spaceKey string, payl
 //
 // https://docs.go-atlassian.io/confluence-cloud/space/permissions#remove-a-space-permission
 func (s *SpacePermissionService) Remove(ctx context.Context, spaceKey string, permissionID int) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SpacePermissionService).Remove")
+	defer span.End()
+
 	return s.internalClient.Remove(ctx, spaceKey, permissionID)
 }
 
@@ -66,6 +75,9 @@ type internalSpacePermissionImpl struct {
 }
 
 func (i *internalSpacePermissionImpl) Add(ctx context.Context, spaceKey string, payload *model.SpacePermissionPayloadScheme) (*model.SpacePermissionV2Scheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalSpacePermissionImpl).Add")
+	defer span.End()
 
 	if spaceKey == "" {
 		return nil, nil, model.ErrNoSpaceKey
@@ -89,6 +101,9 @@ func (i *internalSpacePermissionImpl) Add(ctx context.Context, spaceKey string, 
 
 func (i *internalSpacePermissionImpl) Bulk(ctx context.Context, spaceKey string, payload *model.SpacePermissionArrayPayloadScheme) (*model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalSpacePermissionImpl).Bulk")
+	defer span.End()
+
 	if spaceKey == "" {
 		return nil, model.ErrNoSpaceKey
 	}
@@ -104,6 +119,9 @@ func (i *internalSpacePermissionImpl) Bulk(ctx context.Context, spaceKey string,
 }
 
 func (i *internalSpacePermissionImpl) Remove(ctx context.Context, spaceKey string, permissionID int) (*model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalSpacePermissionImpl).Remove")
+	defer span.End()
 
 	if spaceKey == "" {
 		return nil, model.ErrNoSpaceKey

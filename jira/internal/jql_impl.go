@@ -37,6 +37,9 @@ type JQLService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/jql#parse-jql-query
 func (j *JQLService) Parse(ctx context.Context, validationType string, JqlQueries []string) (*model.ParsedQueryPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*JQLService).Parse")
+	defer span.End()
+
 	return j.internalClient.Parse(ctx, validationType, JqlQueries)
 }
 
@@ -46,6 +49,9 @@ type internalJQLServiceImpl struct {
 }
 
 func (i *internalJQLServiceImpl) Parse(ctx context.Context, validationType string, JqlQueries []string) (*model.ParsedQueryPageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalJQLServiceImpl).Parse")
+	defer span.End()
 
 	var endpoint strings.Builder
 	endpoint.WriteString(fmt.Sprintf("/rest/api/%v/jql/parse", i.version))

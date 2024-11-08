@@ -36,6 +36,9 @@ type FilterShareService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/filters/sharing#get-default-share-scope
 func (f *FilterShareService) Scope(ctx context.Context) (*model.ShareFilterScopeScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*FilterShareService).Scope")
+	defer span.End()
+
 	return f.internalClient.Scope(ctx)
 }
 
@@ -45,6 +48,9 @@ func (f *FilterShareService) Scope(ctx context.Context) (*model.ShareFilterScope
 //
 // https://docs.go-atlassian.io/jira-software-cloud/filters/sharing#set-default-share-scope
 func (f *FilterShareService) SetScope(ctx context.Context, scope string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*FilterShareService).SetScope")
+	defer span.End()
+
 	return f.internalClient.SetScope(ctx, scope)
 }
 
@@ -58,6 +64,9 @@ func (f *FilterShareService) SetScope(ctx context.Context, scope string) (*model
 //
 // https://docs.go-atlassian.io/jira-software-cloud/filters/sharing#get-share-permissions
 func (f *FilterShareService) Gets(ctx context.Context, filterID int) ([]*model.SharePermissionScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*FilterShareService).Gets")
+	defer span.End()
+
 	return f.internalClient.Gets(ctx, filterID)
 }
 
@@ -71,6 +80,9 @@ func (f *FilterShareService) Gets(ctx context.Context, filterID int) ([]*model.S
 //
 // https://docs.go-atlassian.io/jira-software-cloud/filters/sharing#add-share-permission
 func (f *FilterShareService) Add(ctx context.Context, filterID int, payload *model.PermissionFilterPayloadScheme) ([]*model.SharePermissionScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*FilterShareService).Add")
+	defer span.End()
+
 	return f.internalClient.Add(ctx, filterID, payload)
 }
 
@@ -84,6 +96,9 @@ func (f *FilterShareService) Add(ctx context.Context, filterID int, payload *mod
 //
 // https://docs.go-atlassian.io/jira-software-cloud/filters/sharing#get-share-permission
 func (f *FilterShareService) Get(ctx context.Context, filterID, permissionID int) (*model.SharePermissionScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*FilterShareService).Get")
+	defer span.End()
+
 	return f.internalClient.Get(ctx, filterID, permissionID)
 }
 
@@ -93,6 +108,9 @@ func (f *FilterShareService) Get(ctx context.Context, filterID, permissionID int
 //
 // https://docs.go-atlassian.io/jira-software-cloud/filters/sharing#delete-share-permission
 func (f *FilterShareService) Delete(ctx context.Context, filterID, permissionID int) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*FilterShareService).Delete")
+	defer span.End()
+
 	return f.internalClient.Delete(ctx, filterID, permissionID)
 }
 
@@ -102,6 +120,9 @@ type internalFilterShareImpl struct {
 }
 
 func (i *internalFilterShareImpl) Scope(ctx context.Context) (*model.ShareFilterScopeScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalFilterShareImpl).Scope")
+	defer span.End()
 
 	endpoint := fmt.Sprintf("rest/api/%v/filter/defaultShareScope", i.version)
 
@@ -121,6 +142,9 @@ func (i *internalFilterShareImpl) Scope(ctx context.Context) (*model.ShareFilter
 
 func (i *internalFilterShareImpl) SetScope(ctx context.Context, scope string) (*model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalFilterShareImpl).SetScope")
+	defer span.End()
+
 	endpoint := fmt.Sprintf("rest/api/%v/filter/defaultShareScope", i.version)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", &model.ShareFilterScopeScheme{Scope: scope})
@@ -132,6 +156,9 @@ func (i *internalFilterShareImpl) SetScope(ctx context.Context, scope string) (*
 }
 
 func (i *internalFilterShareImpl) Gets(ctx context.Context, filterID int) ([]*model.SharePermissionScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalFilterShareImpl).Gets")
+	defer span.End()
 
 	if filterID == 0 {
 		return nil, nil, model.ErrNoFilterID
@@ -155,6 +182,9 @@ func (i *internalFilterShareImpl) Gets(ctx context.Context, filterID int) ([]*mo
 
 func (i *internalFilterShareImpl) Add(ctx context.Context, filterID int, payload *model.PermissionFilterPayloadScheme) ([]*model.SharePermissionScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalFilterShareImpl).Add")
+	defer span.End()
+
 	if filterID == 0 {
 		return nil, nil, model.ErrNoFilterID
 	}
@@ -176,6 +206,9 @@ func (i *internalFilterShareImpl) Add(ctx context.Context, filterID int, payload
 }
 
 func (i *internalFilterShareImpl) Get(ctx context.Context, filterID, permissionID int) (*model.SharePermissionScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalFilterShareImpl).Get")
+	defer span.End()
 
 	if filterID == 0 {
 		return nil, nil, model.ErrNoFilterID
@@ -202,6 +235,9 @@ func (i *internalFilterShareImpl) Get(ctx context.Context, filterID, permissionI
 }
 
 func (i *internalFilterShareImpl) Delete(ctx context.Context, filterID, permissionID int) (*model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalFilterShareImpl).Delete")
+	defer span.End()
 
 	if filterID == 0 {
 		return nil, model.ErrNoFilterID

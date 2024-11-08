@@ -32,6 +32,9 @@ type ObjectService struct {
 //
 // https://docs.go-atlassian.io/jira-assets/object#get-object-by-id
 func (o *ObjectService) Get(ctx context.Context, workspaceID, objectID string) (*model.ObjectScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ObjectService).Get")
+	defer span.End()
+
 	return o.internalClient.Get(ctx, workspaceID, objectID)
 }
 
@@ -41,6 +44,9 @@ func (o *ObjectService) Get(ctx context.Context, workspaceID, objectID string) (
 //
 // https://docs.go-atlassian.io/jira-assets/object#update-object-by-id
 func (o *ObjectService) Update(ctx context.Context, workspaceID, objectID string, payload *model.ObjectPayloadScheme) (*model.ObjectScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ObjectService).Update")
+	defer span.End()
+
 	return o.internalClient.Update(ctx, workspaceID, objectID, payload)
 }
 
@@ -50,6 +56,9 @@ func (o *ObjectService) Update(ctx context.Context, workspaceID, objectID string
 //
 // https://docs.go-atlassian.io/jira-assets/object#delete-object-by-id
 func (o *ObjectService) Delete(ctx context.Context, workspaceID, objectID string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ObjectService).Delete")
+	defer span.End()
+
 	return o.internalClient.Delete(ctx, workspaceID, objectID)
 }
 
@@ -59,6 +68,9 @@ func (o *ObjectService) Delete(ctx context.Context, workspaceID, objectID string
 //
 // https://docs.go-atlassian.io/jira-assets/object#get-object-attributes
 func (o *ObjectService) Attributes(ctx context.Context, workspaceID, objectID string) ([]*model.ObjectAttributeScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ObjectService).Attributes")
+	defer span.End()
+
 	return o.internalClient.Attributes(ctx, workspaceID, objectID)
 }
 
@@ -68,6 +80,9 @@ func (o *ObjectService) Attributes(ctx context.Context, workspaceID, objectID st
 //
 // https://docs.go-atlassian.io/jira-assets/object#get-object-changelogs
 func (o *ObjectService) History(ctx context.Context, workspaceID, objectID string, ascOrder bool) ([]*model.ObjectHistoryScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ObjectService).History")
+	defer span.End()
+
 	return o.internalClient.History(ctx, workspaceID, objectID, ascOrder)
 }
 
@@ -77,6 +92,9 @@ func (o *ObjectService) History(ctx context.Context, workspaceID, objectID strin
 //
 // https://docs.go-atlassian.io/jira-assets/object#get-object-references
 func (o *ObjectService) References(ctx context.Context, workspaceID, objectID string) ([]*model.ObjectReferenceTypeInfoScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ObjectService).References")
+	defer span.End()
+
 	return o.internalClient.References(ctx, workspaceID, objectID)
 }
 
@@ -86,6 +104,9 @@ func (o *ObjectService) References(ctx context.Context, workspaceID, objectID st
 //
 // https://docs.go-atlassian.io/jira-assets/object#create-object
 func (o *ObjectService) Create(ctx context.Context, workspaceID string, payload *model.ObjectPayloadScheme) (*model.ObjectScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ObjectService).Create")
+	defer span.End()
+
 	return o.internalClient.Create(ctx, workspaceID, payload)
 }
 
@@ -95,6 +116,9 @@ func (o *ObjectService) Create(ctx context.Context, workspaceID string, payload 
 //
 // https://docs.go-atlassian.io/jira-assets/object#get-object-tickets
 func (o *ObjectService) Relation(ctx context.Context, workspaceID, objectID string) (*model.TicketPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ObjectService).Relation")
+	defer span.End()
+
 	return o.internalClient.Relation(ctx, workspaceID, objectID)
 }
 
@@ -104,6 +128,9 @@ func (o *ObjectService) Relation(ctx context.Context, workspaceID, objectID stri
 //
 // https://docs.go-atlassian.io/jira-assets/object#filter-objects
 func (o *ObjectService) Filter(ctx context.Context, workspaceID, aql string, attributes bool, startAt, maxResults int) (*model.ObjectListResultScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ObjectService).Filter")
+	defer span.End()
+
 	return o.internalClient.Filter(ctx, workspaceID, aql, attributes, startAt, maxResults)
 }
 
@@ -115,6 +142,9 @@ func (o *ObjectService) Filter(ctx context.Context, workspaceID, aql string, att
 //
 // https://docs.go-atlassian.io/jira-assets/object#search-objects
 func (o *ObjectService) Search(ctx context.Context, workspaceID string, payload *model.ObjectSearchParamsScheme) (*model.ObjectListScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ObjectService).Search")
+	defer span.End()
+
 	return o.internalClient.Search(ctx, workspaceID, payload)
 }
 
@@ -123,6 +153,9 @@ type internalObjectImpl struct {
 }
 
 func (i *internalObjectImpl) Search(ctx context.Context, workspaceID string, payload *model.ObjectSearchParamsScheme) (*model.ObjectListScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalObjectImpl).Search")
+	defer span.End()
 
 	if workspaceID == "" {
 		return nil, nil, model.ErrNoWorkspaceID
@@ -146,6 +179,9 @@ func (i *internalObjectImpl) Search(ctx context.Context, workspaceID string, pay
 }
 
 func (i *internalObjectImpl) Filter(ctx context.Context, workspaceID, aql string, attributes bool, startAt, maxResults int) (*model.ObjectListResultScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalObjectImpl).Filter")
+	defer span.End()
 
 	if workspaceID == "" {
 		return nil, nil, model.ErrNoWorkspaceID
@@ -181,6 +217,9 @@ func (i *internalObjectImpl) Filter(ctx context.Context, workspaceID, aql string
 
 func (i *internalObjectImpl) Get(ctx context.Context, workspaceID, objectID string) (*model.ObjectScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalObjectImpl).Get")
+	defer span.End()
+
 	if workspaceID == "" {
 		return nil, nil, model.ErrNoWorkspaceID
 	}
@@ -206,6 +245,9 @@ func (i *internalObjectImpl) Get(ctx context.Context, workspaceID, objectID stri
 }
 
 func (i *internalObjectImpl) Update(ctx context.Context, workspaceID, objectID string, payload *model.ObjectPayloadScheme) (*model.ObjectScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalObjectImpl).Update")
+	defer span.End()
 
 	if workspaceID == "" {
 		return nil, nil, model.ErrNoWorkspaceID
@@ -233,6 +275,9 @@ func (i *internalObjectImpl) Update(ctx context.Context, workspaceID, objectID s
 
 func (i *internalObjectImpl) Delete(ctx context.Context, workspaceID, objectID string) (*model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalObjectImpl).Delete")
+	defer span.End()
+
 	if workspaceID == "" {
 		return nil, model.ErrNoWorkspaceID
 	}
@@ -252,6 +297,9 @@ func (i *internalObjectImpl) Delete(ctx context.Context, workspaceID, objectID s
 }
 
 func (i *internalObjectImpl) Attributes(ctx context.Context, workspaceID, objectID string) ([]*model.ObjectAttributeScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalObjectImpl).Attributes")
+	defer span.End()
 
 	if workspaceID == "" {
 		return nil, nil, model.ErrNoWorkspaceID
@@ -278,6 +326,9 @@ func (i *internalObjectImpl) Attributes(ctx context.Context, workspaceID, object
 }
 
 func (i *internalObjectImpl) History(ctx context.Context, workspaceID, objectID string, ascOrder bool) ([]*model.ObjectHistoryScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalObjectImpl).History")
+	defer span.End()
 
 	if workspaceID == "" {
 		return nil, nil, model.ErrNoWorkspaceID
@@ -314,6 +365,9 @@ func (i *internalObjectImpl) History(ctx context.Context, workspaceID, objectID 
 
 func (i *internalObjectImpl) References(ctx context.Context, workspaceID, objectID string) ([]*model.ObjectReferenceTypeInfoScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalObjectImpl).References")
+	defer span.End()
+
 	if workspaceID == "" {
 		return nil, nil, model.ErrNoWorkspaceID
 	}
@@ -340,6 +394,9 @@ func (i *internalObjectImpl) References(ctx context.Context, workspaceID, object
 
 func (i *internalObjectImpl) Create(ctx context.Context, workspaceID string, payload *model.ObjectPayloadScheme) (*model.ObjectScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalObjectImpl).Create")
+	defer span.End()
+
 	if workspaceID == "" {
 		return nil, nil, model.ErrNoWorkspaceID
 	}
@@ -361,6 +418,9 @@ func (i *internalObjectImpl) Create(ctx context.Context, workspaceID string, pay
 }
 
 func (i *internalObjectImpl) Relation(ctx context.Context, workspaceID, objectID string) (*model.TicketPageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalObjectImpl).Relation")
+	defer span.End()
 
 	if workspaceID == "" {
 		return nil, nil, model.ErrNoWorkspaceID

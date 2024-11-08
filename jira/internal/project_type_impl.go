@@ -33,6 +33,9 @@ type ProjectTypeService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/types#get-all-project-types
 func (p *ProjectTypeService) Gets(ctx context.Context) ([]*model.ProjectTypeScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ProjectTypeService).Gets")
+	defer span.End()
+
 	return p.internalClient.Gets(ctx)
 }
 
@@ -42,6 +45,9 @@ func (p *ProjectTypeService) Gets(ctx context.Context) ([]*model.ProjectTypeSche
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/types#get-licensed-project-types
 func (p *ProjectTypeService) Licensed(ctx context.Context) ([]*model.ProjectTypeScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ProjectTypeService).Licensed")
+	defer span.End()
+
 	return p.internalClient.Licensed(ctx)
 }
 
@@ -51,6 +57,9 @@ func (p *ProjectTypeService) Licensed(ctx context.Context) ([]*model.ProjectType
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/types#get-project-type-by-key
 func (p *ProjectTypeService) Get(ctx context.Context, projectTypeKey string) (*model.ProjectTypeScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ProjectTypeService).Get")
+	defer span.End()
+
 	return p.internalClient.Get(ctx, projectTypeKey)
 }
 
@@ -60,6 +69,9 @@ func (p *ProjectTypeService) Get(ctx context.Context, projectTypeKey string) (*m
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/types#get-accessible-project-type-by-key
 func (p *ProjectTypeService) Accessible(ctx context.Context, projectTypeKey string) (*model.ProjectTypeScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ProjectTypeService).Accessible")
+	defer span.End()
+
 	return p.internalClient.Accessible(ctx, projectTypeKey)
 }
 
@@ -69,6 +81,9 @@ type internalProjectTypeImpl struct {
 }
 
 func (i *internalProjectTypeImpl) Gets(ctx context.Context) ([]*model.ProjectTypeScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalProjectTypeImpl).Gets")
+	defer span.End()
 
 	endpoint := fmt.Sprintf("rest/api/%v/project/type", i.version)
 
@@ -88,6 +103,9 @@ func (i *internalProjectTypeImpl) Gets(ctx context.Context) ([]*model.ProjectTyp
 
 func (i *internalProjectTypeImpl) Licensed(ctx context.Context) ([]*model.ProjectTypeScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalProjectTypeImpl).Licensed")
+	defer span.End()
+
 	endpoint := fmt.Sprintf("rest/api/%v/project/type/accessible", i.version)
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
@@ -105,6 +123,9 @@ func (i *internalProjectTypeImpl) Licensed(ctx context.Context) ([]*model.Projec
 }
 
 func (i *internalProjectTypeImpl) Get(ctx context.Context, projectTypeKey string) (*model.ProjectTypeScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalProjectTypeImpl).Get")
+	defer span.End()
 
 	if projectTypeKey == "" {
 		return nil, nil, model.ErrProjectTypeKey
@@ -127,6 +148,9 @@ func (i *internalProjectTypeImpl) Get(ctx context.Context, projectTypeKey string
 }
 
 func (i *internalProjectTypeImpl) Accessible(ctx context.Context, projectTypeKey string) (*model.ProjectTypeScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalProjectTypeImpl).Accessible")
+	defer span.End()
 
 	if projectTypeKey == "" {
 		return nil, nil, model.ErrProjectTypeKey

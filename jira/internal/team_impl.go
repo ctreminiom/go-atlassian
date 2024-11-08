@@ -36,6 +36,9 @@ type TeamService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/teams#get-teams
 func (t *TeamService) Gets(ctx context.Context, maxResults int) (*model.JiraTeamPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*TeamService).Gets")
+	defer span.End()
+
 	return t.internalClient.Gets(ctx, maxResults)
 }
 
@@ -45,6 +48,9 @@ func (t *TeamService) Gets(ctx context.Context, maxResults int) (*model.JiraTeam
 //
 // https://docs.go-atlassian.io/jira-software-cloud/teams#create-team
 func (t *TeamService) Create(ctx context.Context, payload *model.JiraTeamCreatePayloadScheme) (*model.JiraTeamCreateResponseScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*TeamService).Create")
+	defer span.End()
+
 	return t.internalClient.Create(ctx, payload)
 }
 
@@ -53,6 +59,9 @@ type internalTeamServiceImpl struct {
 }
 
 func (i *internalTeamServiceImpl) Gets(ctx context.Context, maxResults int) (*model.JiraTeamPageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalTeamServiceImpl).Gets")
+	defer span.End()
 
 	endpoint := "rest/teams/1.0/teams/find"
 
@@ -71,6 +80,9 @@ func (i *internalTeamServiceImpl) Gets(ctx context.Context, maxResults int) (*mo
 }
 
 func (i *internalTeamServiceImpl) Create(ctx context.Context, payload *model.JiraTeamCreatePayloadScheme) (*model.JiraTeamCreateResponseScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalTeamServiceImpl).Create")
+	defer span.End()
 
 	endpoint := "rest/teams/1.0/teams/create"
 

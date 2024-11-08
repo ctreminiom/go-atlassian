@@ -33,6 +33,9 @@ type WorkSpaceService struct {
 //
 // https://docs.go-atlassian.io/jira-service-management/workspaces#get-workspaces
 func (w *WorkSpaceService) Gets(ctx context.Context) (*model.WorkSpacePageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*WorkSpaceService).Gets")
+	defer span.End()
+
 	return w.internalClient.Gets(ctx)
 }
 
@@ -42,6 +45,9 @@ type internalWorkSpaceImpl struct {
 }
 
 func (i *internalWorkSpaceImpl) Gets(ctx context.Context) (*model.WorkSpacePageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalWorkSpaceImpl).Gets")
+	defer span.End()
 
 	endpoint := "/rest/servicedeskapi/assets/workspace"
 

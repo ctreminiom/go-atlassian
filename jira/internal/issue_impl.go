@@ -117,6 +117,9 @@ func NewIssueService(client service.Connector, version string, services *IssueSe
 
 func deleteIssue(ctx context.Context, client service.Connector, version, issueKeyOrID string, deleteSubTasks bool) (*model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "deleteIssue")
+	defer span.End()
+
 	if issueKeyOrID == "" {
 		return nil, model.ErrNoIssueKeyOrID
 	}
@@ -135,6 +138,9 @@ func deleteIssue(ctx context.Context, client service.Connector, version, issueKe
 }
 
 func assignIssue(ctx context.Context, client service.Connector, version, issueKeyOrID, accountID string) (*model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "assignIssue")
+	defer span.End()
 
 	if issueKeyOrID == "" {
 		return nil, model.ErrNoIssueKeyOrID
@@ -157,6 +163,9 @@ func assignIssue(ctx context.Context, client service.Connector, version, issueKe
 func sendNotification(ctx context.Context, client service.Connector, version, issueKeyOrID string, options *model.IssueNotifyOptionsScheme) (
 	*model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "sendNotification")
+	defer span.End()
+
 	if issueKeyOrID == "" {
 		return nil, model.ErrNoIssueKeyOrID
 	}
@@ -172,6 +181,9 @@ func sendNotification(ctx context.Context, client service.Connector, version, is
 }
 
 func getTransitions(ctx context.Context, client service.Connector, version, issueKeyOrID string) (*model.IssueTransitionsScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "getTransitions")
+	defer span.End()
 
 	if issueKeyOrID == "" {
 		return nil, nil, model.ErrNoIssueKeyOrID

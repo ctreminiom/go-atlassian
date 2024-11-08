@@ -31,6 +31,9 @@ type AnnouncementBannerService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/announcement-banner#get-announcement-banner-configuration
 func (a *AnnouncementBannerService) Get(ctx context.Context) (*model.AnnouncementBannerScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*AnnouncementBannerService).Get")
+	defer span.End()
+
 	return a.internalClient.Get(ctx)
 }
 
@@ -40,6 +43,9 @@ func (a *AnnouncementBannerService) Get(ctx context.Context) (*model.Announcemen
 //
 // https://docs.go-atlassian.io/jira-software-cloud/announcement-banner#get-announcement-banner-configuration
 func (a *AnnouncementBannerService) Update(ctx context.Context, payload *model.AnnouncementBannerPayloadScheme) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*AnnouncementBannerService).Update")
+	defer span.End()
+
 	return a.internalClient.Update(ctx, payload)
 }
 
@@ -49,6 +55,9 @@ type internalAnnouncementBannerImpl struct {
 }
 
 func (i *internalAnnouncementBannerImpl) Get(ctx context.Context) (*model.AnnouncementBannerScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalAnnouncementBannerImpl).Get")
+	defer span.End()
 
 	endpoint := fmt.Sprintf("rest/api/%v/announcementBanner", i.version)
 
@@ -67,6 +76,9 @@ func (i *internalAnnouncementBannerImpl) Get(ctx context.Context) (*model.Announ
 }
 
 func (i *internalAnnouncementBannerImpl) Update(ctx context.Context, payload *model.AnnouncementBannerPayloadScheme) (*model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalAnnouncementBannerImpl).Update")
+	defer span.End()
 
 	endpoint := fmt.Sprintf("rest/api/%v/announcementBanner", i.version)
 

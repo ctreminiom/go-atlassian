@@ -39,6 +39,9 @@ type UserSearchService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/users/search#find-users-assignable-to-projects
 func (u *UserSearchService) Projects(ctx context.Context, accountID string, projectKeys []string, startAt, maxResults int) ([]*model.UserScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*UserSearchService).Projects")
+	defer span.End()
+
 	return u.internalClient.Projects(ctx, accountID, projectKeys, startAt, maxResults)
 }
 
@@ -54,6 +57,9 @@ func (u *UserSearchService) Projects(ctx context.Context, accountID string, proj
 //
 // https://docs.go-atlassian.io/jira-software-cloud/users/search#find-users
 func (u *UserSearchService) Do(ctx context.Context, accountID, query string, startAt, maxResults int) ([]*model.UserScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*UserSearchService).Do")
+	defer span.End()
+
 	return u.internalClient.Do(ctx, accountID, query, startAt, maxResults)
 }
 
@@ -68,6 +74,9 @@ func (u *UserSearchService) Do(ctx context.Context, accountID, query string, sta
 //
 // https://docs.go-atlassian.io/jira-software-cloud/users/search#find-users-with-permissions
 func (u *UserSearchService) Check(ctx context.Context, permission string, options *model.UserPermissionCheckParamsScheme, startAt, maxResults int) ([]*model.UserScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*UserSearchService).Check")
+	defer span.End()
+
 	return u.internalClient.Check(ctx, permission, options, startAt, maxResults)
 }
 
@@ -77,6 +86,9 @@ type internalUserSearchImpl struct {
 }
 
 func (i *internalUserSearchImpl) Check(ctx context.Context, permission string, options *model.UserPermissionCheckParamsScheme, startAt, maxResults int) ([]*model.UserScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalUserSearchImpl).Check")
+	defer span.End()
 
 	if permission == "" {
 		return nil, nil, model.ErrNoPermissionGrantID
@@ -124,6 +136,9 @@ func (i *internalUserSearchImpl) Check(ctx context.Context, permission string, o
 
 func (i *internalUserSearchImpl) Projects(ctx context.Context, accountID string, projectKeys []string, startAt, maxResults int) ([]*model.UserScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalUserSearchImpl).Projects")
+	defer span.End()
+
 	if len(projectKeys) == 0 {
 		return nil, nil, model.ErrNoProjectKeySlice
 	}
@@ -157,6 +172,9 @@ func (i *internalUserSearchImpl) Projects(ctx context.Context, accountID string,
 }
 
 func (i *internalUserSearchImpl) Do(ctx context.Context, accountID, query string, startAt, maxResults int) ([]*model.UserScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalUserSearchImpl).Do")
+	defer span.End()
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))

@@ -34,6 +34,9 @@ type ResolutionService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/resolutions#get-resolutions
 func (r *ResolutionService) Gets(ctx context.Context) ([]*model.ResolutionScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ResolutionService).Gets")
+	defer span.End()
+
 	return r.internalClient.Gets(ctx)
 }
 
@@ -43,6 +46,9 @@ func (r *ResolutionService) Gets(ctx context.Context) ([]*model.ResolutionScheme
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/resolutions#get-resolution
 func (r *ResolutionService) Get(ctx context.Context, resolutionID string) (*model.ResolutionScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ResolutionService).Get")
+	defer span.End()
+
 	return r.internalClient.Get(ctx, resolutionID)
 }
 
@@ -52,6 +58,9 @@ type internalResolutionImpl struct {
 }
 
 func (i *internalResolutionImpl) Gets(ctx context.Context) ([]*model.ResolutionScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalResolutionImpl).Gets")
+	defer span.End()
 
 	endpoint := fmt.Sprintf("rest/api/%v/resolution", i.version)
 
@@ -70,6 +79,9 @@ func (i *internalResolutionImpl) Gets(ctx context.Context) ([]*model.ResolutionS
 }
 
 func (i *internalResolutionImpl) Get(ctx context.Context, resolutionID string) (*model.ResolutionScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalResolutionImpl).Get")
+	defer span.End()
 
 	if resolutionID == "" {
 		return nil, nil, model.ErrNoResolutionID

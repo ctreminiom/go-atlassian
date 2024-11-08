@@ -36,6 +36,9 @@ type PermissionSchemeGrantService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/permissions/scheme/grant#create-permission-grant
 func (p *PermissionSchemeGrantService) Create(ctx context.Context, permissionSchemeID int, payload *model.PermissionGrantPayloadScheme) (*model.PermissionGrantScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*PermissionSchemeGrantService).Create")
+	defer span.End()
+
 	return p.internalClient.Create(ctx, permissionSchemeID, payload)
 }
 
@@ -45,6 +48,9 @@ func (p *PermissionSchemeGrantService) Create(ctx context.Context, permissionSch
 //
 // https://docs.go-atlassian.io/jira-software-cloud/permissions/scheme/grant#get-permission-scheme-grants
 func (p *PermissionSchemeGrantService) Gets(ctx context.Context, permissionSchemeID int, expand []string) (*model.PermissionSchemeGrantsScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*PermissionSchemeGrantService).Gets")
+	defer span.End()
+
 	return p.internalClient.Gets(ctx, permissionSchemeID, expand)
 }
 
@@ -54,6 +60,9 @@ func (p *PermissionSchemeGrantService) Gets(ctx context.Context, permissionSchem
 //
 // https://docs.go-atlassian.io/jira-software-cloud/permissions/scheme/grant#get-permission-scheme-grant
 func (p *PermissionSchemeGrantService) Get(ctx context.Context, permissionSchemeID, permissionGrantID int, expand []string) (*model.PermissionGrantScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*PermissionSchemeGrantService).Get")
+	defer span.End()
+
 	return p.internalClient.Get(ctx, permissionSchemeID, permissionGrantID, expand)
 }
 
@@ -63,6 +72,9 @@ func (p *PermissionSchemeGrantService) Get(ctx context.Context, permissionScheme
 //
 // https://docs.go-atlassian.io/jira-software-cloud/permissions/scheme/grant#delete-permission-scheme-grant
 func (p *PermissionSchemeGrantService) Delete(ctx context.Context, permissionSchemeID, permissionGrantID int) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*PermissionSchemeGrantService).Delete")
+	defer span.End()
+
 	return p.internalClient.Delete(ctx, permissionSchemeID, permissionGrantID)
 }
 
@@ -72,6 +84,9 @@ type internalPermissionSchemeGrantImpl struct {
 }
 
 func (i *internalPermissionSchemeGrantImpl) Create(ctx context.Context, permissionSchemeID int, payload *model.PermissionGrantPayloadScheme) (*model.PermissionGrantScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalPermissionSchemeGrantImpl).Create")
+	defer span.End()
 
 	if permissionSchemeID == 0 {
 		return nil, nil, model.ErrNoPermissionSchemeID
@@ -94,6 +109,9 @@ func (i *internalPermissionSchemeGrantImpl) Create(ctx context.Context, permissi
 }
 
 func (i *internalPermissionSchemeGrantImpl) Gets(ctx context.Context, permissionSchemeID int, expand []string) (*model.PermissionSchemeGrantsScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalPermissionSchemeGrantImpl).Gets")
+	defer span.End()
 
 	if permissionSchemeID == 0 {
 		return nil, nil, model.ErrNoPermissionSchemeID
@@ -125,6 +143,9 @@ func (i *internalPermissionSchemeGrantImpl) Gets(ctx context.Context, permission
 }
 
 func (i *internalPermissionSchemeGrantImpl) Get(ctx context.Context, permissionSchemeID, permissionGrantID int, expand []string) (*model.PermissionGrantScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalPermissionSchemeGrantImpl).Get")
+	defer span.End()
 
 	if permissionSchemeID == 0 {
 		return nil, nil, model.ErrNoPermissionSchemeID
@@ -160,6 +181,9 @@ func (i *internalPermissionSchemeGrantImpl) Get(ctx context.Context, permissionS
 }
 
 func (i *internalPermissionSchemeGrantImpl) Delete(ctx context.Context, permissionSchemeID, permissionGrantID int) (*model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalPermissionSchemeGrantImpl).Delete")
+	defer span.End()
 
 	if permissionSchemeID == 0 {
 		return nil, model.ErrNoPermissionSchemeID

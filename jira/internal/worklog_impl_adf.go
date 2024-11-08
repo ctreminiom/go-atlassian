@@ -39,6 +39,9 @@ type WorklogADFService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/worklogs#get-worklogs
 func (w *WorklogADFService) Gets(ctx context.Context, worklogIDs []int, expand []string) ([]*model.IssueWorklogADFScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*WorklogADFService).Gets")
+	defer span.End()
+
 	return w.internalClient.Gets(ctx, worklogIDs, expand)
 }
 
@@ -50,6 +53,9 @@ func (w *WorklogADFService) Gets(ctx context.Context, worklogIDs []int, expand [
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/worklogs#get-worklog
 func (w *WorklogADFService) Get(ctx context.Context, issueKeyOrID, worklogID string, expand []string) (*model.IssueWorklogADFScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*WorklogADFService).Get")
+	defer span.End()
+
 	return w.internalClient.Get(ctx, issueKeyOrID, worklogID, expand)
 }
 
@@ -61,6 +67,9 @@ func (w *WorklogADFService) Get(ctx context.Context, issueKeyOrID, worklogID str
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/worklogs#get-issue-worklogs
 func (w *WorklogADFService) Issue(ctx context.Context, issueKeyOrID string, startAt, maxResults, after int, expand []string) (*model.IssueWorklogADFPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*WorklogADFService).Issue")
+	defer span.End()
+
 	return w.internalClient.Issue(ctx, issueKeyOrID, startAt, maxResults, after, expand)
 }
 
@@ -72,6 +81,9 @@ func (w *WorklogADFService) Issue(ctx context.Context, issueKeyOrID string, star
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/worklogs#delete-worklog
 func (w *WorklogADFService) Delete(ctx context.Context, issueKeyOrID, worklogID string, options *model.WorklogOptionsScheme) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*WorklogADFService).Delete")
+	defer span.End()
+
 	return w.internalClient.Delete(ctx, issueKeyOrID, worklogID, options)
 }
 
@@ -88,6 +100,9 @@ func (w *WorklogADFService) Delete(ctx context.Context, issueKeyOrID, worklogID 
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/worklogs#get-ids-of-deleted-worklogs
 func (w *WorklogADFService) Deleted(ctx context.Context, since int) (result *model.ChangedWorklogPageScheme, response *model.ResponseScheme, err error) {
+	ctx, span := tracer().Start(ctx, "(*WorklogADFService).Deleted")
+	defer span.End()
+
 	return w.internalClient.Deleted(ctx, since)
 }
 
@@ -104,6 +119,9 @@ func (w *WorklogADFService) Deleted(ctx context.Context, since int) (result *mod
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/worklogs#get-ids-of-updated-worklogs
 func (w *WorklogADFService) Updated(ctx context.Context, since int, expand []string) (*model.ChangedWorklogPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*WorklogADFService).Updated")
+	defer span.End()
+
 	return w.internalClient.Updated(ctx, since, expand)
 }
 
@@ -115,6 +133,9 @@ func (w *WorklogADFService) Updated(ctx context.Context, since int, expand []str
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/worklogs#add-worklog
 func (w *WorklogADFService) Add(ctx context.Context, issueKeyOrID string, payload *model.WorklogADFPayloadScheme, options *model.WorklogOptionsScheme) (*model.IssueWorklogADFScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*WorklogADFService).Add")
+	defer span.End()
+
 	return w.internalClient.Add(ctx, issueKeyOrID, payload, options)
 }
 
@@ -126,6 +147,9 @@ func (w *WorklogADFService) Add(ctx context.Context, issueKeyOrID string, payloa
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/worklogs#update-worklog
 func (w *WorklogADFService) Update(ctx context.Context, issueKeyOrID, worklogID string, payload *model.WorklogADFPayloadScheme, options *model.WorklogOptionsScheme) (*model.IssueWorklogADFScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*WorklogADFService).Update")
+	defer span.End()
+
 	return w.internalClient.Update(ctx, issueKeyOrID, worklogID, payload, options)
 }
 
@@ -135,6 +159,9 @@ type internalWorklogAdfImpl struct {
 }
 
 func (i *internalWorklogAdfImpl) Gets(ctx context.Context, worklogIDs []int, expand []string) ([]*model.IssueWorklogADFScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalWorklogAdfImpl).Gets")
+	defer span.End()
 
 	if len(worklogIDs) == 0 {
 		return nil, nil, model.ErrNpWorklogs
@@ -167,6 +194,9 @@ func (i *internalWorklogAdfImpl) Gets(ctx context.Context, worklogIDs []int, exp
 }
 
 func (i *internalWorklogAdfImpl) Get(ctx context.Context, issueKeyOrID, worklogID string, expand []string) (*model.IssueWorklogADFScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalWorklogAdfImpl).Get")
+	defer span.End()
 
 	if issueKeyOrID == "" {
 		return nil, nil, model.ErrNoIssueKeyOrID
@@ -204,6 +234,9 @@ func (i *internalWorklogAdfImpl) Get(ctx context.Context, issueKeyOrID, worklogI
 
 func (i *internalWorklogAdfImpl) Issue(ctx context.Context, issueKeyOrID string, startAt, maxResults, after int, expand []string) (*model.IssueWorklogADFPageScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalWorklogAdfImpl).Issue")
+	defer span.End()
+
 	if issueKeyOrID == "" {
 		return nil, nil, model.ErrNoIssueKeyOrID
 	}
@@ -237,6 +270,9 @@ func (i *internalWorklogAdfImpl) Issue(ctx context.Context, issueKeyOrID string,
 }
 
 func (i *internalWorklogAdfImpl) Delete(ctx context.Context, issueKeyOrID, worklogID string, options *model.WorklogOptionsScheme) (*model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalWorklogAdfImpl).Delete")
+	defer span.End()
 
 	if issueKeyOrID == "" {
 		return nil, model.ErrNoIssueKeyOrID
@@ -284,6 +320,9 @@ func (i *internalWorklogAdfImpl) Delete(ctx context.Context, issueKeyOrID, workl
 
 func (i *internalWorklogAdfImpl) Deleted(ctx context.Context, since int) (*model.ChangedWorklogPageScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalWorklogAdfImpl).Deleted")
+	defer span.End()
+
 	params := url.Values{}
 	if since != 0 {
 		params.Add("since", strconv.Itoa(since))
@@ -311,6 +350,9 @@ func (i *internalWorklogAdfImpl) Deleted(ctx context.Context, since int) (*model
 }
 
 func (i *internalWorklogAdfImpl) Updated(ctx context.Context, since int, expand []string) (*model.ChangedWorklogPageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalWorklogAdfImpl).Updated")
+	defer span.End()
 
 	params := url.Values{}
 	if since != 0 {
@@ -343,6 +385,9 @@ func (i *internalWorklogAdfImpl) Updated(ctx context.Context, since int, expand 
 }
 
 func (i *internalWorklogAdfImpl) Add(ctx context.Context, issueKeyOrID string, payload *model.WorklogADFPayloadScheme, options *model.WorklogOptionsScheme) (*model.IssueWorklogADFScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalWorklogAdfImpl).Add")
+	defer span.End()
 
 	if issueKeyOrID == "" {
 		return nil, nil, model.ErrNoIssueKeyOrID
@@ -392,6 +437,9 @@ func (i *internalWorklogAdfImpl) Add(ctx context.Context, issueKeyOrID string, p
 }
 
 func (i *internalWorklogAdfImpl) Update(ctx context.Context, issueKeyOrID, worklogID string, payload *model.WorklogADFPayloadScheme, options *model.WorklogOptionsScheme) (*model.IssueWorklogADFScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalWorklogAdfImpl).Update")
+	defer span.End()
 
 	if issueKeyOrID == "" {
 		return nil, nil, model.ErrNoIssueKeyOrID

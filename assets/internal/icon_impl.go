@@ -29,6 +29,9 @@ type IconService struct {
 //
 // https://docs.go-atlassian.io/jira-assets/icons#get-icon
 func (i *IconService) Get(ctx context.Context, workspaceID, iconID string) (*model.IconScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*IconService).Get")
+	defer span.End()
+
 	return i.internalClient.Get(ctx, workspaceID, iconID)
 }
 
@@ -38,6 +41,9 @@ func (i *IconService) Get(ctx context.Context, workspaceID, iconID string) (*mod
 //
 // https://docs.go-atlassian.io/jira-assets/icons#get-global-icons
 func (i *IconService) Global(ctx context.Context, workspaceID string) ([]*model.IconScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*IconService).Global")
+	defer span.End()
+
 	return i.internalClient.Global(ctx, workspaceID)
 }
 
@@ -46,6 +52,9 @@ type internalIconImpl struct {
 }
 
 func (i *internalIconImpl) Get(ctx context.Context, workspaceID, iconID string) (*model.IconScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalIconImpl).Get")
+	defer span.End()
 
 	if workspaceID == "" {
 		return nil, nil, model.ErrNoWorkspaceID
@@ -72,6 +81,9 @@ func (i *internalIconImpl) Get(ctx context.Context, workspaceID, iconID string) 
 }
 
 func (i *internalIconImpl) Global(ctx context.Context, workspaceID string) ([]*model.IconScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalIconImpl).Global")
+	defer span.End()
 
 	if workspaceID == "" {
 		return nil, nil, model.ErrNoWorkspaceID

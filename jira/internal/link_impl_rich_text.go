@@ -31,6 +31,9 @@ type internalLinkRichTextServiceImpl struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/link#get-issue-link
 func (l *LinkRichTextService) Get(ctx context.Context, linkID string) (*model.IssueLinkScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*LinkRichTextService).Get")
+	defer span.End()
+
 	return l.internalClient.Get(ctx, linkID)
 }
 
@@ -38,6 +41,9 @@ func (l *LinkRichTextService) Get(ctx context.Context, linkID string) (*model.Is
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/link#get-issue-links
 func (l *LinkRichTextService) Gets(ctx context.Context, issueKeyOrID string) (*model.IssueLinkPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*LinkRichTextService).Gets")
+	defer span.End()
+
 	return l.internalClient.Gets(ctx, issueKeyOrID)
 }
 
@@ -47,6 +53,9 @@ func (l *LinkRichTextService) Gets(ctx context.Context, issueKeyOrID string) (*m
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/link#delete-issue-link
 func (l *LinkRichTextService) Delete(ctx context.Context, linkID string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*LinkRichTextService).Delete")
+	defer span.End()
+
 	return l.internalClient.Delete(ctx, linkID)
 }
 
@@ -58,10 +67,16 @@ func (l *LinkRichTextService) Delete(ctx context.Context, linkID string) (*model
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/link#create-issue-link
 func (l *LinkRichTextService) Create(ctx context.Context, payload *model.LinkPayloadSchemeV2) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*LinkRichTextService).Create")
+	defer span.End()
+
 	return l.internalClient.Create(ctx, payload)
 }
 
 func (i *internalLinkRichTextServiceImpl) Get(ctx context.Context, linkID string) (*model.IssueLinkScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalLinkRichTextServiceImpl).Get")
+	defer span.End()
 
 	if linkID == "" {
 		return nil, nil, model.ErrNoTypeID
@@ -85,6 +100,9 @@ func (i *internalLinkRichTextServiceImpl) Get(ctx context.Context, linkID string
 
 func (i *internalLinkRichTextServiceImpl) Gets(ctx context.Context, issueKeyOrID string) (*model.IssueLinkPageScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalLinkRichTextServiceImpl).Gets")
+	defer span.End()
+
 	if len(issueKeyOrID) == 0 {
 		return nil, nil, model.ErrNoIssueKeyOrID
 	}
@@ -107,6 +125,9 @@ func (i *internalLinkRichTextServiceImpl) Gets(ctx context.Context, issueKeyOrID
 
 func (i *internalLinkRichTextServiceImpl) Delete(ctx context.Context, linkID string) (*model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalLinkRichTextServiceImpl).Delete")
+	defer span.End()
+
 	if linkID == "" {
 		return nil, model.ErrNoTypeID
 	}
@@ -122,6 +143,9 @@ func (i *internalLinkRichTextServiceImpl) Delete(ctx context.Context, linkID str
 }
 
 func (i *internalLinkRichTextServiceImpl) Create(ctx context.Context, payload *model.LinkPayloadSchemeV2) (*model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalLinkRichTextServiceImpl).Create")
+	defer span.End()
 
 	endpoint := fmt.Sprintf("rest/api/%v/issueLink", i.version)
 

@@ -24,6 +24,9 @@ type SearchADFService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/search#check-issues-against-jql
 func (s *SearchADFService) Checks(ctx context.Context, payload *model.IssueSearchCheckPayloadScheme) (*model.IssueMatchesPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SearchADFService).Checks")
+	defer span.End()
+
 	return s.internalClient.Checks(ctx, payload)
 }
 
@@ -33,6 +36,9 @@ func (s *SearchADFService) Checks(ctx context.Context, payload *model.IssueSearc
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/search#search-for-issues-using-jql-get
 func (s *SearchADFService) Get(ctx context.Context, jql string, fields, expands []string, startAt, maxResults int, validate string) (*model.IssueSearchScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SearchADFService).Get")
+	defer span.End()
+
 	return s.internalClient.Get(ctx, jql, fields, expands, startAt, maxResults, validate)
 }
 
@@ -42,6 +48,9 @@ func (s *SearchADFService) Get(ctx context.Context, jql string, fields, expands 
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/search#search-for-issues-using-jql-get
 func (s *SearchADFService) Post(ctx context.Context, jql string, fields, expands []string, startAt, maxResults int, validate string) (*model.IssueSearchScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SearchADFService).Post")
+	defer span.End()
+
 	return s.internalClient.Post(ctx, jql, fields, expands, startAt, maxResults, validate)
 }
 
@@ -51,6 +60,9 @@ type internalSearchADFImpl struct {
 }
 
 func (i *internalSearchADFImpl) Checks(ctx context.Context, payload *model.IssueSearchCheckPayloadScheme) (*model.IssueMatchesPageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalSearchADFImpl).Checks")
+	defer span.End()
 
 	endpoint := fmt.Sprintf("rest/api/%v/jql/match", i.version)
 
@@ -69,6 +81,9 @@ func (i *internalSearchADFImpl) Checks(ctx context.Context, payload *model.Issue
 }
 
 func (i *internalSearchADFImpl) Get(ctx context.Context, jql string, fields, expands []string, startAt, maxResults int, validate string) (*model.IssueSearchScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalSearchADFImpl).Get")
+	defer span.End()
 
 	if jql == "" {
 		return nil, nil, model.ErrNoJQL
@@ -108,6 +123,9 @@ func (i *internalSearchADFImpl) Get(ctx context.Context, jql string, fields, exp
 }
 
 func (i *internalSearchADFImpl) Post(ctx context.Context, jql string, fields, expands []string, startAt, maxResults int, validate string) (*model.IssueSearchScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalSearchADFImpl).Post")
+	defer span.End()
 
 	payload := struct {
 		Expand        []string `json:"expand,omitempty"`

@@ -32,6 +32,9 @@ type ApprovalService struct {
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request/approval#get-approvals
 func (s *ApprovalService) Gets(ctx context.Context, issueKeyOrID string, start, limit int) (*model.CustomerApprovalPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ApprovalService).Gets")
+	defer span.End()
+
 	return s.internalClient.Gets(ctx, issueKeyOrID, start, limit)
 }
 
@@ -41,6 +44,9 @@ func (s *ApprovalService) Gets(ctx context.Context, issueKeyOrID string, start, 
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request/approval#get-approval-by-id
 func (s *ApprovalService) Get(ctx context.Context, issueKeyOrID string, approvalID int) (*model.CustomerApprovalScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ApprovalService).Get")
+	defer span.End()
+
 	return s.internalClient.Get(ctx, issueKeyOrID, approvalID)
 }
 
@@ -52,6 +58,9 @@ func (s *ApprovalService) Get(ctx context.Context, issueKeyOrID string, approval
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request/approval#answer-approval
 func (s *ApprovalService) Answer(ctx context.Context, issueKeyOrID string, approvalID int, approve bool) (*model.CustomerApprovalScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ApprovalService).Answer")
+	defer span.End()
+
 	return s.internalClient.Answer(ctx, issueKeyOrID, approvalID, approve)
 }
 
@@ -61,6 +70,9 @@ type internalServiceRequestApprovalImpl struct {
 }
 
 func (i *internalServiceRequestApprovalImpl) Gets(ctx context.Context, issueKeyOrID string, start, limit int) (*model.CustomerApprovalPageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalServiceRequestApprovalImpl).Gets")
+	defer span.End()
 
 	if issueKeyOrID == "" {
 		return nil, nil, model.ErrNoIssueKeyOrID
@@ -88,6 +100,9 @@ func (i *internalServiceRequestApprovalImpl) Gets(ctx context.Context, issueKeyO
 
 func (i *internalServiceRequestApprovalImpl) Get(ctx context.Context, issueKeyOrID string, approvalID int) (*model.CustomerApprovalScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalServiceRequestApprovalImpl).Get")
+	defer span.End()
+
 	if issueKeyOrID == "" {
 		return nil, nil, model.ErrNoIssueKeyOrID
 	}
@@ -113,6 +128,9 @@ func (i *internalServiceRequestApprovalImpl) Get(ctx context.Context, issueKeyOr
 }
 
 func (i *internalServiceRequestApprovalImpl) Answer(ctx context.Context, issueKeyOrID string, approvalID int, approve bool) (*model.CustomerApprovalScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalServiceRequestApprovalImpl).Answer")
+	defer span.End()
 
 	if issueKeyOrID == "" {
 		return nil, nil, model.ErrNoIssueKeyOrID

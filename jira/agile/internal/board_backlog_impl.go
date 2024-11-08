@@ -34,6 +34,9 @@ type BoardBacklogService struct {
 //
 // https://docs.go-atlassian.io/jira-agile/boards/backlog#move-issues-to-backlog
 func (b *BoardBacklogService) Move(ctx context.Context, issues []string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*BoardBacklogService).Move")
+	defer span.End()
+
 	return b.internalClient.Move(ctx, issues)
 }
 
@@ -49,6 +52,9 @@ func (b *BoardBacklogService) Move(ctx context.Context, issues []string) (*model
 //
 // https://docs.go-atlassian.io/jira-agile/boards/backlog#move-issues-to-a-board-backlog
 func (b *BoardBacklogService) MoveTo(ctx context.Context, boardID int, payload *model.BoardBacklogPayloadScheme) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*BoardBacklogService).MoveTo")
+	defer span.End()
+
 	return b.internalClient.MoveTo(ctx, boardID, payload)
 }
 
@@ -58,6 +64,9 @@ type internalBoardBacklogImpl struct {
 }
 
 func (i *internalBoardBacklogImpl) Move(ctx context.Context, issues []string) (*model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalBoardBacklogImpl).Move")
+	defer span.End()
 
 	payload := map[string]interface{}{"issues": issues}
 
@@ -72,6 +81,9 @@ func (i *internalBoardBacklogImpl) Move(ctx context.Context, issues []string) (*
 }
 
 func (i *internalBoardBacklogImpl) MoveTo(ctx context.Context, boardID int, payload *model.BoardBacklogPayloadScheme) (*model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalBoardBacklogImpl).MoveTo")
+	defer span.End()
 
 	if boardID == 0 {
 		return nil, model.ErrNoBoardID

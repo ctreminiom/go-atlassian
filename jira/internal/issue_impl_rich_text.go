@@ -60,6 +60,9 @@ type IssueRichTextService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues#delete-issue
 func (i IssueRichTextService) Delete(ctx context.Context, issueKeyOrID string, deleteSubTasks bool) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(IssueRichTextService).Delete")
+	defer span.End()
+
 	return i.internalClient.Delete(ctx, issueKeyOrID, deleteSubTasks)
 }
 
@@ -78,6 +81,9 @@ func (i IssueRichTextService) Delete(ctx context.Context, issueKeyOrID string, d
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues#assign-issue
 func (i IssueRichTextService) Assign(ctx context.Context, issueKeyOrID, accountID string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(IssueRichTextService).Assign")
+	defer span.End()
+
 	return i.internalClient.Assign(ctx, issueKeyOrID, accountID)
 }
 
@@ -87,6 +93,9 @@ func (i IssueRichTextService) Assign(ctx context.Context, issueKeyOrID, accountI
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues#send-notification-for-issue
 func (i IssueRichTextService) Notify(ctx context.Context, issueKeyOrID string, options *model.IssueNotifyOptionsScheme) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(IssueRichTextService).Notify")
+	defer span.End()
+
 	return i.internalClient.Notify(ctx, issueKeyOrID, options)
 }
 
@@ -100,6 +109,9 @@ func (i IssueRichTextService) Notify(ctx context.Context, issueKeyOrID string, o
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues#get-transitions
 func (i IssueRichTextService) Transitions(ctx context.Context, issueKeyOrID string) (*model.IssueTransitionsScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(IssueRichTextService).Transitions")
+	defer span.End()
+
 	return i.internalClient.Transitions(ctx, issueKeyOrID)
 }
 
@@ -109,6 +121,9 @@ func (i IssueRichTextService) Transitions(ctx context.Context, issueKeyOrID stri
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues#create-issue
 func (i IssueRichTextService) Create(ctx context.Context, payload *model.IssueSchemeV2, customFields *model.CustomFields) (*model.IssueResponseScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(IssueRichTextService).Create")
+	defer span.End()
+
 	return i.internalClient.Create(ctx, payload, customFields)
 }
 
@@ -122,6 +137,9 @@ func (i IssueRichTextService) Create(ctx context.Context, payload *model.IssueSc
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues#bulk-create-issue
 func (i IssueRichTextService) Creates(ctx context.Context, payload []*model.IssueBulkSchemeV2) (*model.IssueBulkResponseScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(IssueRichTextService).Creates")
+	defer span.End()
+
 	return i.internalClient.Creates(ctx, payload)
 }
 
@@ -137,6 +155,9 @@ func (i IssueRichTextService) Creates(ctx context.Context, payload []*model.Issu
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues#get-issue
 func (i IssueRichTextService) Get(ctx context.Context, issueKeyOrID string, fields, expand []string) (*model.IssueSchemeV2, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(IssueRichTextService).Get")
+	defer span.End()
+
 	return i.internalClient.Get(ctx, issueKeyOrID, fields, expand)
 }
 
@@ -150,6 +171,9 @@ func (i IssueRichTextService) Get(ctx context.Context, issueKeyOrID string, fiel
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues#edit-issue
 func (i IssueRichTextService) Update(ctx context.Context, issueKeyOrID string, notify bool, payload *model.IssueSchemeV2, customFields *model.CustomFields, operations *model.UpdateOperations) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(IssueRichTextService).Update")
+	defer span.End()
+
 	return i.internalClient.Update(ctx, issueKeyOrID, notify, payload, customFields, operations)
 }
 
@@ -161,6 +185,9 @@ func (i IssueRichTextService) Update(ctx context.Context, issueKeyOrID string, n
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues#transition-issue
 func (i IssueRichTextService) Move(ctx context.Context, issueKeyOrID, transitionID string, options *model.IssueMoveOptionsV2) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(IssueRichTextService).Move")
+	defer span.End()
+
 	return i.internalClient.Move(ctx, issueKeyOrID, transitionID, options)
 }
 
@@ -170,22 +197,37 @@ type internalRichTextServiceImpl struct {
 }
 
 func (i *internalRichTextServiceImpl) Delete(ctx context.Context, issueKeyOrID string, deleteSubTasks bool) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalRichTextServiceImpl).Delete")
+	defer span.End()
+
 	return deleteIssue(ctx, i.c, i.version, issueKeyOrID, deleteSubTasks)
 }
 
 func (i *internalRichTextServiceImpl) Assign(ctx context.Context, issueKeyOrID, accountID string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalRichTextServiceImpl).Assign")
+	defer span.End()
+
 	return assignIssue(ctx, i.c, i.version, issueKeyOrID, accountID)
 }
 
 func (i *internalRichTextServiceImpl) Notify(ctx context.Context, issueKeyOrID string, options *model.IssueNotifyOptionsScheme) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalRichTextServiceImpl).Notify")
+	defer span.End()
+
 	return sendNotification(ctx, i.c, i.version, issueKeyOrID, options)
 }
 
 func (i *internalRichTextServiceImpl) Transitions(ctx context.Context, issueKeyOrID string) (*model.IssueTransitionsScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalRichTextServiceImpl).Transitions")
+	defer span.End()
+
 	return getTransitions(ctx, i.c, i.version, issueKeyOrID)
 }
 
 func (i *internalRichTextServiceImpl) Create(ctx context.Context, payload *model.IssueSchemeV2, customFields *model.CustomFields) (*model.IssueResponseScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalRichTextServiceImpl).Create")
+	defer span.End()
+
 	var body interface{} = payload
 	var err error
 
@@ -215,6 +257,9 @@ func (i *internalRichTextServiceImpl) Create(ctx context.Context, payload *model
 }
 
 func (i *internalRichTextServiceImpl) Creates(ctx context.Context, payload []*model.IssueBulkSchemeV2) (*model.IssueBulkResponseScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalRichTextServiceImpl).Creates")
+	defer span.End()
 
 	if len(payload) == 0 {
 		return nil, nil, model.ErrNoCreateIssues
@@ -253,6 +298,9 @@ func (i *internalRichTextServiceImpl) Creates(ctx context.Context, payload []*mo
 
 func (i *internalRichTextServiceImpl) Get(ctx context.Context, issueKeyOrID string, fields, expand []string) (*model.IssueSchemeV2, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalRichTextServiceImpl).Get")
+	defer span.End()
+
 	if issueKeyOrID == "" {
 		return nil, nil, model.ErrNoIssueKeyOrID
 	}
@@ -289,6 +337,9 @@ func (i *internalRichTextServiceImpl) Get(ctx context.Context, issueKeyOrID stri
 }
 
 func (i *internalRichTextServiceImpl) Update(ctx context.Context, issueKeyOrID string, notify bool, payload *model.IssueSchemeV2, customFields *model.CustomFields, operations *model.UpdateOperations) (*model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalRichTextServiceImpl).Update")
+	defer span.End()
 
 	if issueKeyOrID == "" {
 		return nil, model.ErrNoIssueKeyOrID
@@ -360,6 +411,9 @@ func (i *internalRichTextServiceImpl) Update(ctx context.Context, issueKeyOrID s
 }
 
 func (i *internalRichTextServiceImpl) Move(ctx context.Context, issueKeyOrID, transitionID string, options *model.IssueMoveOptionsV2) (*model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalRichTextServiceImpl).Move")
+	defer span.End()
 
 	if issueKeyOrID == "" {
 		return nil, model.ErrNoIssueKeyOrID

@@ -47,6 +47,9 @@ type WorkflowService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/workflow#create-workflow
 func (w *WorkflowService) Create(ctx context.Context, payload *model.WorkflowPayloadScheme) (*model.WorkflowCreatedResponseScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*WorkflowService).Create")
+	defer span.End()
+
 	return w.internalClient.Create(ctx, payload)
 }
 
@@ -60,6 +63,9 @@ func (w *WorkflowService) Create(ctx context.Context, payload *model.WorkflowPay
 //
 // https://docs.go-atlassian.io/jira-software-cloud/workflow#search-workflows
 func (w *WorkflowService) Gets(ctx context.Context, options *model.WorkflowSearchOptions, startAt, maxResults int) (*model.WorkflowPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*WorkflowService).Gets")
+	defer span.End()
+
 	return w.internalClient.Gets(ctx, options, startAt, maxResults)
 }
 
@@ -76,6 +82,9 @@ func (w *WorkflowService) Gets(ctx context.Context, options *model.WorkflowSearc
 //
 // https://docs.go-atlassian.io/jira-software-cloud/workflow#search-workflows
 func (w *WorkflowService) Delete(ctx context.Context, workflowID string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*WorkflowService).Delete")
+	defer span.End()
+
 	return w.internalClient.Delete(ctx, workflowID)
 }
 
@@ -92,6 +101,9 @@ func (w *WorkflowService) Delete(ctx context.Context, workflowID string) (*model
 //
 // https://docs.go-atlassian.io/jira-software-cloud/workflow#bulk-get-workflows
 func (w *WorkflowService) Search(ctx context.Context, options *model.WorkflowSearchCriteria, expand []string, transitionLinks bool) (*model.WorkflowReadResponseScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*WorkflowService).Search")
+	defer span.End()
+
 	return w.internalClient.Search(ctx, options, expand, transitionLinks)
 }
 
@@ -105,6 +117,9 @@ func (w *WorkflowService) Search(ctx context.Context, options *model.WorkflowSea
 //
 // https://docs.go-atlassian.io/jira-software-cloud/workflow#get-workflow-capabilities
 func (w *WorkflowService) Capabilities(ctx context.Context, workflowID, projectID, issueTypeID string) (*model.WorkflowCapabilitiesScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*WorkflowService).Capabilities")
+	defer span.End()
+
 	return w.internalClient.Capabilities(ctx, workflowID, projectID, issueTypeID)
 }
 
@@ -134,6 +149,9 @@ func (w *WorkflowService) Capabilities(ctx context.Context, workflowID, projectI
 //
 //	fmt.Printf("Workflow created with ID: %s", response.ID)
 func (w *WorkflowService) Creates(ctx context.Context, payload *model.WorkflowCreatesPayload) (*model.WorkflowCreateResponseScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*WorkflowService).Creates")
+	defer span.End()
+
 	return w.internalClient.Creates(ctx, payload)
 }
 
@@ -171,6 +189,9 @@ func (w *WorkflowService) Creates(ctx context.Context, payload *model.WorkflowCr
 //
 //	 log.Printf("Validation response: %v", response)
 func (w *WorkflowService) ValidateCreateWorkflows(ctx context.Context, payload *model.ValidationOptionsForCreateScheme) (*model.WorkflowValidationErrorListScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*WorkflowService).ValidateCreateWorkflows")
+	defer span.End()
+
 	return w.internalClient.ValidateCreateWorkflows(ctx, payload)
 }
 
@@ -186,6 +207,9 @@ func (w *WorkflowService) ValidateCreateWorkflows(ctx context.Context, payload *
 // For more details, refer to:
 // https://docs.go-atlassian.io/jira-software-cloud/workflow#bulk-update-workflows
 func (w *WorkflowService) Updates(ctx context.Context, payload *model.WorkflowUpdatesPayloadScheme, expand []string) (*model.WorkflowUpdateResponseScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*WorkflowService).Updates")
+	defer span.End()
+
 	return w.internalClient.Updates(ctx, payload, expand)
 }
 
@@ -222,6 +246,9 @@ func (w *WorkflowService) Updates(ctx context.Context, payload *model.WorkflowUp
 //	    log.Println("Validation passed, you can proceed with the update.")
 //	}
 func (w *WorkflowService) ValidateUpdateWorkflows(ctx context.Context, payload *model.ValidationOptionsForUpdateScheme) (*model.WorkflowValidationErrorListScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*WorkflowService).ValidateUpdateWorkflows")
+	defer span.End()
+
 	return w.internalClient.ValidateUpdateWorkflows(ctx, payload)
 }
 
@@ -231,6 +258,9 @@ type internalWorkflowImpl struct {
 }
 
 func (i *internalWorkflowImpl) Search(ctx context.Context, options *model.WorkflowSearchCriteria, expand []string, transitionLinks bool) (*model.WorkflowReadResponseScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalWorkflowImpl).Search")
+	defer span.End()
+
 	params := url.Values{}
 
 	if len(expand) != 0 {
@@ -263,6 +293,9 @@ func (i *internalWorkflowImpl) Search(ctx context.Context, options *model.Workfl
 }
 
 func (i *internalWorkflowImpl) Capabilities(ctx context.Context, workflowID, projectID, issueTypeID string) (*model.WorkflowCapabilitiesScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalWorkflowImpl).Capabilities")
+	defer span.End()
 
 	params := url.Values{}
 
@@ -301,6 +334,9 @@ func (i *internalWorkflowImpl) Capabilities(ctx context.Context, workflowID, pro
 
 func (i *internalWorkflowImpl) Creates(ctx context.Context, payload *model.WorkflowCreatesPayload) (*model.WorkflowCreateResponseScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalWorkflowImpl).Creates")
+	defer span.End()
+
 	endpoint := fmt.Sprintf("rest/api/%v/workflows/create", i.version)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
@@ -319,6 +355,9 @@ func (i *internalWorkflowImpl) Creates(ctx context.Context, payload *model.Workf
 
 func (i *internalWorkflowImpl) ValidateCreateWorkflows(ctx context.Context, payload *model.ValidationOptionsForCreateScheme) (*model.WorkflowValidationErrorListScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalWorkflowImpl).ValidateCreateWorkflows")
+	defer span.End()
+
 	endpoint := fmt.Sprintf("rest/api/%v/workflows/create/validation", i.version)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
@@ -336,6 +375,9 @@ func (i *internalWorkflowImpl) ValidateCreateWorkflows(ctx context.Context, payl
 }
 
 func (i *internalWorkflowImpl) Updates(ctx context.Context, payload *model.WorkflowUpdatesPayloadScheme, expand []string) (*model.WorkflowUpdateResponseScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalWorkflowImpl).Updates")
+	defer span.End()
 
 	params := url.Values{}
 	if len(expand) != 0 {
@@ -365,6 +407,9 @@ func (i *internalWorkflowImpl) Updates(ctx context.Context, payload *model.Workf
 
 func (i *internalWorkflowImpl) ValidateUpdateWorkflows(ctx context.Context, payload *model.ValidationOptionsForUpdateScheme) (*model.WorkflowValidationErrorListScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalWorkflowImpl).ValidateUpdateWorkflows")
+	defer span.End()
+
 	endpoint := fmt.Sprintf("rest/api/%v/workflows/update/validation", i.version)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
@@ -383,6 +428,9 @@ func (i *internalWorkflowImpl) ValidateUpdateWorkflows(ctx context.Context, payl
 
 func (i *internalWorkflowImpl) Create(ctx context.Context, payload *model.WorkflowPayloadScheme) (*model.WorkflowCreatedResponseScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalWorkflowImpl).Create")
+	defer span.End()
+
 	endpoint := fmt.Sprintf("rest/api/%v/workflow", i.version)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
@@ -400,6 +448,9 @@ func (i *internalWorkflowImpl) Create(ctx context.Context, payload *model.Workfl
 }
 
 func (i *internalWorkflowImpl) Gets(ctx context.Context, options *model.WorkflowSearchOptions, startAt, maxResults int) (*model.WorkflowPageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalWorkflowImpl).Gets")
+	defer span.End()
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -442,6 +493,9 @@ func (i *internalWorkflowImpl) Gets(ctx context.Context, options *model.Workflow
 }
 
 func (i *internalWorkflowImpl) Delete(ctx context.Context, workflowID string) (*model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalWorkflowImpl).Delete")
+	defer span.End()
 
 	if workflowID == "" {
 		return nil, model.ErrNoWorkflowID

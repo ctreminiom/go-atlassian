@@ -34,6 +34,9 @@ type ScreenTabFieldService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/screens/tabs/fields#get-all-screen-tab-fields
 func (s *ScreenTabFieldService) Gets(ctx context.Context, screenID, tabID int) ([]*model.ScreenTabFieldScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ScreenTabFieldService).Gets")
+	defer span.End()
+
 	return s.internalClient.Gets(ctx, screenID, tabID)
 }
 
@@ -43,6 +46,9 @@ func (s *ScreenTabFieldService) Gets(ctx context.Context, screenID, tabID int) (
 //
 // https://docs.go-atlassian.io/jira-software-cloud/screens/tabs/fields#add-screen-tab-field
 func (s *ScreenTabFieldService) Add(ctx context.Context, screenID, tabID int, fieldID string) (*model.ScreenTabFieldScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ScreenTabFieldService).Add")
+	defer span.End()
+
 	return s.internalClient.Add(ctx, screenID, tabID, fieldID)
 }
 
@@ -52,6 +58,9 @@ func (s *ScreenTabFieldService) Add(ctx context.Context, screenID, tabID int, fi
 //
 // https://docs.go-atlassian.io/jira-software-cloud/screens/tabs/fields#remove-screen-tab-field
 func (s *ScreenTabFieldService) Remove(ctx context.Context, screenID, tabID int, fieldID string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ScreenTabFieldService).Remove")
+	defer span.End()
+
 	return s.internalClient.Remove(ctx, screenID, tabID, fieldID)
 }
 
@@ -63,6 +72,9 @@ func (s *ScreenTabFieldService) Remove(ctx context.Context, screenID, tabID int,
 //
 // TODO: Add documentation
 func (s *ScreenTabFieldService) Move(ctx context.Context, screenID, tabID int, fieldID, after, position string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ScreenTabFieldService).Move")
+	defer span.End()
+
 	return s.internalClient.Move(ctx, screenID, tabID, fieldID, after, position)
 }
 
@@ -72,6 +84,9 @@ type internalScreenTabFieldImpl struct {
 }
 
 func (i *internalScreenTabFieldImpl) Gets(ctx context.Context, screenID, tabID int) ([]*model.ScreenTabFieldScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalScreenTabFieldImpl).Gets")
+	defer span.End()
 
 	if screenID == 0 {
 		return nil, nil, model.ErrNoScreenID
@@ -98,6 +113,9 @@ func (i *internalScreenTabFieldImpl) Gets(ctx context.Context, screenID, tabID i
 }
 
 func (i *internalScreenTabFieldImpl) Add(ctx context.Context, screenID, tabID int, fieldID string) (*model.ScreenTabFieldScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalScreenTabFieldImpl).Add")
+	defer span.End()
 
 	if screenID == 0 {
 		return nil, nil, model.ErrNoScreenID
@@ -129,6 +147,9 @@ func (i *internalScreenTabFieldImpl) Add(ctx context.Context, screenID, tabID in
 
 func (i *internalScreenTabFieldImpl) Remove(ctx context.Context, screenID, tabID int, fieldID string) (*model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalScreenTabFieldImpl).Remove")
+	defer span.End()
+
 	if screenID == 0 {
 		return nil, model.ErrNoScreenID
 	}
@@ -152,6 +173,9 @@ func (i *internalScreenTabFieldImpl) Remove(ctx context.Context, screenID, tabID
 }
 
 func (i *internalScreenTabFieldImpl) Move(ctx context.Context, screenID, tabID int, fieldID, after, position string) (*model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalScreenTabFieldImpl).Move")
+	defer span.End()
 
 	if screenID == 0 {
 		return nil, model.ErrNoScreenID

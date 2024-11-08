@@ -30,6 +30,9 @@ type SpaceV2Service struct {
 //
 // https://docs.go-atlassian.io/confluence-cloud/v2/space#get-spaces
 func (s *SpaceV2Service) Bulk(ctx context.Context, options *model.GetSpacesOptionSchemeV2, cursor string, limit int) (*model.SpaceChunkV2Scheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SpaceV2Service).Bulk")
+	defer span.End()
+
 	return s.internalClient.Bulk(ctx, options, cursor, limit)
 }
 
@@ -39,6 +42,9 @@ func (s *SpaceV2Service) Bulk(ctx context.Context, options *model.GetSpacesOptio
 //
 // https://docs.go-atlassian.io/confluence-cloud/v2/space#get-space-by-id
 func (s *SpaceV2Service) Get(ctx context.Context, spaceID int, descriptionFormat string) (*model.SpaceSchemeV2, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SpaceV2Service).Get")
+	defer span.End()
+
 	return s.internalClient.Get(ctx, spaceID, descriptionFormat)
 }
 
@@ -46,6 +52,9 @@ func (s *SpaceV2Service) Get(ctx context.Context, spaceID int, descriptionFormat
 //
 // GET /wiki/api/v2/spaces/{id}/permissions
 func (s *SpaceV2Service) Permissions(ctx context.Context, spaceID int, cursor string, limit int) (*model.SpacePermissionPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SpaceV2Service).Permissions")
+	defer span.End()
+
 	return s.internalClient.Permissions(ctx, spaceID, cursor, limit)
 }
 
@@ -61,6 +70,9 @@ type internalSpaceV2Impl struct {
 }
 
 func (i *internalSpaceV2Impl) Permissions(ctx context.Context, spaceID int, cursor string, limit int) (*model.SpacePermissionPageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalSpaceV2Impl).Permissions")
+	defer span.End()
 
 	if spaceID == 0 {
 		return nil, nil, model.ErrNoSpaceID
@@ -90,6 +102,9 @@ func (i *internalSpaceV2Impl) Permissions(ctx context.Context, spaceID int, curs
 }
 
 func (i *internalSpaceV2Impl) Bulk(ctx context.Context, options *model.GetSpacesOptionSchemeV2, cursor string, limit int) (*model.SpaceChunkV2Scheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalSpaceV2Impl).Bulk")
+	defer span.End()
 
 	query := url.Values{}
 	query.Add("limit", strconv.Itoa(limit))
@@ -151,6 +166,9 @@ func (i *internalSpaceV2Impl) Bulk(ctx context.Context, options *model.GetSpaces
 }
 
 func (i *internalSpaceV2Impl) Get(ctx context.Context, spaceID int, descriptionFormat string) (*model.SpaceSchemeV2, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalSpaceV2Impl).Get")
+	defer span.End()
 
 	if spaceID == 0 {
 		return nil, nil, model.ErrNoSpaceID

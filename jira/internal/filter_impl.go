@@ -44,6 +44,9 @@ type FilterService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/filters#create-filter
 func (f *FilterService) Create(ctx context.Context, payload *model.FilterPayloadScheme) (*model.FilterScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*FilterService).Create")
+	defer span.End()
+
 	return f.internalClient.Create(ctx, payload)
 }
 
@@ -53,6 +56,9 @@ func (f *FilterService) Create(ctx context.Context, payload *model.FilterPayload
 //
 // https://docs.go-atlassian.io/jira-software-cloud/filters#get-favorites
 func (f *FilterService) Favorite(ctx context.Context) ([]*model.FilterScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*FilterService).Favorite")
+	defer span.End()
+
 	return f.internalClient.Favorite(ctx)
 }
 
@@ -63,6 +69,9 @@ func (f *FilterService) Favorite(ctx context.Context) ([]*model.FilterScheme, *m
 //
 // https://docs.go-atlassian.io/jira-software-cloud/filters#get-my-filters
 func (f *FilterService) My(ctx context.Context, favorites bool, expand []string) ([]*model.FilterScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*FilterService).My")
+	defer span.End()
+
 	return f.internalClient.My(ctx, favorites, expand)
 }
 
@@ -73,6 +82,9 @@ func (f *FilterService) My(ctx context.Context, favorites bool, expand []string)
 // https://docs.go-atlassian.io/jira-software-cloud/filters#search-filters
 func (f *FilterService) Search(ctx context.Context, options *model.FilterSearchOptionScheme, startAt, maxResults int) (*model.FilterSearchPageScheme,
 	*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*FilterService).Search")
+	defer span.End()
+
 	return f.internalClient.Search(ctx, options, startAt, maxResults)
 }
 
@@ -82,6 +94,9 @@ func (f *FilterService) Search(ctx context.Context, options *model.FilterSearchO
 //
 // https://docs.go-atlassian.io/jira-software-cloud/filters#get-filter
 func (f *FilterService) Get(ctx context.Context, filterID int, expand []string) (*model.FilterScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*FilterService).Get")
+	defer span.End()
+
 	return f.internalClient.Get(ctx, filterID, expand)
 }
 
@@ -91,6 +106,9 @@ func (f *FilterService) Get(ctx context.Context, filterID int, expand []string) 
 //
 // https://docs.go-atlassian.io/jira-software-cloud/filters#update-filter
 func (f *FilterService) Update(ctx context.Context, filterID int, payload *model.FilterPayloadScheme) (*model.FilterScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*FilterService).Update")
+	defer span.End()
+
 	return f.internalClient.Update(ctx, filterID, payload)
 }
 
@@ -100,6 +118,9 @@ func (f *FilterService) Update(ctx context.Context, filterID int, payload *model
 //
 // https://docs.go-atlassian.io/jira-software-cloud/filters#delete-filter
 func (f *FilterService) Delete(ctx context.Context, filterID int) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*FilterService).Delete")
+	defer span.End()
+
 	return f.internalClient.Delete(ctx, filterID)
 }
 
@@ -109,6 +130,9 @@ func (f *FilterService) Delete(ctx context.Context, filterID int) (*model.Respon
 //
 // https://docs.go-atlassian.io/jira-software-cloud/filters#change-filter-owner
 func (f *FilterService) Change(ctx context.Context, filterID int, accountID string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*FilterService).Change")
+	defer span.End()
+
 	return f.internalClient.Change(ctx, filterID, accountID)
 }
 
@@ -118,6 +142,9 @@ type internalFilterServiceImpl struct {
 }
 
 func (i *internalFilterServiceImpl) Create(ctx context.Context, payload *model.FilterPayloadScheme) (*model.FilterScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalFilterServiceImpl).Create")
+	defer span.End()
 
 	endpoint := fmt.Sprintf("rest/api/%v/filter", i.version)
 
@@ -137,6 +164,9 @@ func (i *internalFilterServiceImpl) Create(ctx context.Context, payload *model.F
 
 func (i *internalFilterServiceImpl) Favorite(ctx context.Context) ([]*model.FilterScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalFilterServiceImpl).Favorite")
+	defer span.End()
+
 	endpoint := fmt.Sprintf("rest/api/%v/filter/favourite", i.version)
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
@@ -154,6 +184,9 @@ func (i *internalFilterServiceImpl) Favorite(ctx context.Context) ([]*model.Filt
 }
 
 func (i *internalFilterServiceImpl) My(ctx context.Context, favorites bool, expand []string) ([]*model.FilterScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalFilterServiceImpl).My")
+	defer span.End()
 
 	params := url.Values{}
 	params.Add("includeFavourites", fmt.Sprintf("%v", favorites))
@@ -179,6 +212,9 @@ func (i *internalFilterServiceImpl) My(ctx context.Context, favorites bool, expa
 }
 
 func (i *internalFilterServiceImpl) Search(ctx context.Context, options *model.FilterSearchOptionScheme, startAt, maxResults int) (*model.FilterSearchPageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalFilterServiceImpl).Search")
+	defer span.End()
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -233,6 +269,9 @@ func (i *internalFilterServiceImpl) Search(ctx context.Context, options *model.F
 
 func (i *internalFilterServiceImpl) Get(ctx context.Context, filterID int, expand []string) (*model.FilterScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalFilterServiceImpl).Get")
+	defer span.End()
+
 	if filterID == 0 {
 		return nil, nil, model.ErrNoFilterID
 	}
@@ -265,6 +304,9 @@ func (i *internalFilterServiceImpl) Get(ctx context.Context, filterID int, expan
 
 func (i *internalFilterServiceImpl) Update(ctx context.Context, filterID int, payload *model.FilterPayloadScheme) (*model.FilterScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalFilterServiceImpl).Update")
+	defer span.End()
+
 	if filterID == 0 {
 		return nil, nil, model.ErrNoFilterID
 	}
@@ -287,6 +329,9 @@ func (i *internalFilterServiceImpl) Update(ctx context.Context, filterID int, pa
 
 func (i *internalFilterServiceImpl) Delete(ctx context.Context, filterID int) (*model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalFilterServiceImpl).Delete")
+	defer span.End()
+
 	if filterID == 0 {
 		return nil, model.ErrNoFilterID
 	}
@@ -307,6 +352,9 @@ func (i *internalFilterServiceImpl) Delete(ctx context.Context, filterID int) (*
 }
 
 func (i *internalFilterServiceImpl) Change(ctx context.Context, filterID int, accountID string) (*model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalFilterServiceImpl).Change")
+	defer span.End()
 
 	if filterID == 0 {
 		return nil, model.ErrNoFilterID

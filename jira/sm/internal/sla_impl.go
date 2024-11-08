@@ -34,6 +34,9 @@ type ServiceLevelAgreementService struct {
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request/sla#get-sla-information
 func (s *ServiceLevelAgreementService) Gets(ctx context.Context, issueKeyOrID string, start, limit int) (*model.RequestSLAPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ServiceLevelAgreementService).Gets")
+	defer span.End()
+
 	return s.internalClient.Gets(ctx, issueKeyOrID, start, limit)
 }
 
@@ -43,6 +46,9 @@ func (s *ServiceLevelAgreementService) Gets(ctx context.Context, issueKeyOrID st
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request/sla#get-sla-information-by-id
 func (s *ServiceLevelAgreementService) Get(ctx context.Context, issueKeyOrID string, metricID int) (*model.RequestSLAScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ServiceLevelAgreementService).Get")
+	defer span.End()
+
 	return s.internalClient.Get(ctx, issueKeyOrID, metricID)
 }
 
@@ -52,6 +58,9 @@ type internalServiceLevelAgreementImpl struct {
 }
 
 func (i *internalServiceLevelAgreementImpl) Gets(ctx context.Context, issueKeyOrID string, start, limit int) (*model.RequestSLAPageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalServiceLevelAgreementImpl).Gets")
+	defer span.End()
 
 	if issueKeyOrID == "" {
 		return nil, nil, model.ErrNoIssueKeyOrID
@@ -78,6 +87,9 @@ func (i *internalServiceLevelAgreementImpl) Gets(ctx context.Context, issueKeyOr
 }
 
 func (i *internalServiceLevelAgreementImpl) Get(ctx context.Context, issueKeyOrID string, metricID int) (*model.RequestSLAScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalServiceLevelAgreementImpl).Get")
+	defer span.End()
 
 	if issueKeyOrID == "" {
 		return nil, nil, model.ErrNoIssueKeyOrID

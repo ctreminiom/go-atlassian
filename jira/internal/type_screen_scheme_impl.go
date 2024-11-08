@@ -39,6 +39,9 @@ type TypeScreenSchemeService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/types/screen-scheme#get-issue-type-screen-schemes
 func (t *TypeScreenSchemeService) Gets(ctx context.Context, options *model.ScreenSchemeParamsScheme, startAt, maxResults int) (*model.IssueTypeScreenSchemePageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*TypeScreenSchemeService).Gets")
+	defer span.End()
+
 	return t.internalClient.Gets(ctx, options, startAt, maxResults)
 }
 
@@ -48,6 +51,9 @@ func (t *TypeScreenSchemeService) Gets(ctx context.Context, options *model.Scree
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/types/screen-scheme#create-issue-type-screen-scheme
 func (t *TypeScreenSchemeService) Create(ctx context.Context, payload *model.IssueTypeScreenSchemePayloadScheme) (*model.IssueTypeScreenScreenCreatedScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*TypeScreenSchemeService).Create")
+	defer span.End()
+
 	return t.internalClient.Create(ctx, payload)
 }
 
@@ -59,6 +65,9 @@ func (t *TypeScreenSchemeService) Create(ctx context.Context, payload *model.Iss
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/types/screen-scheme#assign-issue-type-screen-scheme-to-project
 func (t *TypeScreenSchemeService) Assign(ctx context.Context, issueTypeScreenSchemeID, projectID string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*TypeScreenSchemeService).Assign")
+	defer span.End()
+
 	return t.internalClient.Assign(ctx, issueTypeScreenSchemeID, projectID)
 }
 
@@ -69,6 +78,9 @@ func (t *TypeScreenSchemeService) Assign(ctx context.Context, issueTypeScreenSch
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/types/screen-scheme#assign-issue-type-screen-scheme-to-project
 func (t *TypeScreenSchemeService) Projects(ctx context.Context, projectIDs []int, startAt, maxResults int) (*model.IssueTypeProjectScreenSchemePageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*TypeScreenSchemeService).Projects")
+	defer span.End()
+
 	return t.internalClient.Projects(ctx, projectIDs, startAt, maxResults)
 }
 
@@ -80,6 +92,9 @@ func (t *TypeScreenSchemeService) Projects(ctx context.Context, projectIDs []int
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/types/screen-scheme#get-issue-type-screen-scheme-items
 func (t *TypeScreenSchemeService) Mapping(ctx context.Context, issueTypeScreenSchemeIDs []int, startAt, maxResults int) (*model.IssueTypeScreenSchemeMappingScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*TypeScreenSchemeService).Mapping")
+	defer span.End()
+
 	return t.internalClient.Mapping(ctx, issueTypeScreenSchemeIDs, startAt, maxResults)
 }
 
@@ -89,6 +104,9 @@ func (t *TypeScreenSchemeService) Mapping(ctx context.Context, issueTypeScreenSc
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/types/screen-scheme#update-issue-type-screen-scheme
 func (t *TypeScreenSchemeService) Update(ctx context.Context, issueTypeScreenSchemeID, name, description string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*TypeScreenSchemeService).Update")
+	defer span.End()
+
 	return t.internalClient.Update(ctx, issueTypeScreenSchemeID, name, description)
 }
 
@@ -98,6 +116,9 @@ func (t *TypeScreenSchemeService) Update(ctx context.Context, issueTypeScreenSch
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/types/screen-scheme#delete-issue-type-screen-scheme
 func (t *TypeScreenSchemeService) Delete(ctx context.Context, issueTypeScreenSchemeID string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*TypeScreenSchemeService).Delete")
+	defer span.End()
+
 	return t.internalClient.Delete(ctx, issueTypeScreenSchemeID)
 }
 
@@ -107,6 +128,9 @@ func (t *TypeScreenSchemeService) Delete(ctx context.Context, issueTypeScreenSch
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/types/screen-scheme#append-mappings-to-issue-type-screen-scheme
 func (t *TypeScreenSchemeService) Append(ctx context.Context, issueTypeScreenSchemeID string, payload *model.IssueTypeScreenSchemePayloadScheme) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*TypeScreenSchemeService).Append")
+	defer span.End()
+
 	return t.internalClient.Append(ctx, issueTypeScreenSchemeID, payload)
 }
 
@@ -117,6 +141,9 @@ func (t *TypeScreenSchemeService) Append(ctx context.Context, issueTypeScreenSch
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/types/screen-scheme#update-issue-type-screen-scheme-default-screen-scheme
 func (t *TypeScreenSchemeService) UpdateDefault(ctx context.Context, issueTypeScreenSchemeID, screenSchemeID string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*TypeScreenSchemeService).UpdateDefault")
+	defer span.End()
+
 	return t.internalClient.UpdateDefault(ctx, issueTypeScreenSchemeID, screenSchemeID)
 }
 
@@ -126,6 +153,9 @@ func (t *TypeScreenSchemeService) UpdateDefault(ctx context.Context, issueTypeSc
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/types/screen-scheme#remove-mappings-from-issue-type-screen-scheme
 func (t *TypeScreenSchemeService) Remove(ctx context.Context, issueTypeScreenSchemeID string, issueTypeIDs []string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*TypeScreenSchemeService).Remove")
+	defer span.End()
+
 	return t.internalClient.Remove(ctx, issueTypeScreenSchemeID, issueTypeIDs)
 }
 
@@ -135,6 +165,9 @@ func (t *TypeScreenSchemeService) Remove(ctx context.Context, issueTypeScreenSch
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/types/screen-scheme#get-issue-type-screen-scheme-projects
 func (t *TypeScreenSchemeService) SchemesByProject(ctx context.Context, issueTypeScreenSchemeID, startAt, maxResults int) (*model.IssueTypeScreenSchemeByProjectPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*TypeScreenSchemeService).SchemesByProject")
+	defer span.End()
+
 	return t.internalClient.SchemesByProject(ctx, issueTypeScreenSchemeID, startAt, maxResults)
 }
 
@@ -144,6 +177,9 @@ type internalTypeScreenSchemeImpl struct {
 }
 
 func (i *internalTypeScreenSchemeImpl) Gets(ctx context.Context, options *model.ScreenSchemeParamsScheme, startAt, maxResults int) (*model.IssueTypeScreenSchemePageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalTypeScreenSchemeImpl).Gets")
+	defer span.End()
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -186,6 +222,9 @@ func (i *internalTypeScreenSchemeImpl) Gets(ctx context.Context, options *model.
 
 func (i *internalTypeScreenSchemeImpl) Create(ctx context.Context, payload *model.IssueTypeScreenSchemePayloadScheme) (*model.IssueTypeScreenScreenCreatedScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalTypeScreenSchemeImpl).Create")
+	defer span.End()
+
 	endpoint := fmt.Sprintf("rest/api/%v/issuetypescreenscheme", i.version)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
@@ -203,6 +242,9 @@ func (i *internalTypeScreenSchemeImpl) Create(ctx context.Context, payload *mode
 }
 
 func (i *internalTypeScreenSchemeImpl) Assign(ctx context.Context, issueTypeScreenSchemeID, projectID string) (*model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalTypeScreenSchemeImpl).Assign")
+	defer span.End()
 
 	if issueTypeScreenSchemeID == "" {
 		return nil, model.ErrNoIssueTypeScreenSchemeID
@@ -228,6 +270,9 @@ func (i *internalTypeScreenSchemeImpl) Assign(ctx context.Context, issueTypeScre
 }
 
 func (i *internalTypeScreenSchemeImpl) Projects(ctx context.Context, projectIDs []int, startAt, maxResults int) (*model.IssueTypeProjectScreenSchemePageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalTypeScreenSchemeImpl).Projects")
+	defer span.End()
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -255,6 +300,9 @@ func (i *internalTypeScreenSchemeImpl) Projects(ctx context.Context, projectIDs 
 
 func (i *internalTypeScreenSchemeImpl) Mapping(ctx context.Context, issueTypeScreenSchemeIDs []int, startAt, maxResults int) (*model.IssueTypeScreenSchemeMappingScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalTypeScreenSchemeImpl).Mapping")
+	defer span.End()
+
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
 	params.Add("maxResults", strconv.Itoa(maxResults))
@@ -281,6 +329,9 @@ func (i *internalTypeScreenSchemeImpl) Mapping(ctx context.Context, issueTypeScr
 
 func (i *internalTypeScreenSchemeImpl) Update(ctx context.Context, issueTypeScreenSchemeID, name, description string) (*model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalTypeScreenSchemeImpl).Update")
+	defer span.End()
+
 	if issueTypeScreenSchemeID == "" {
 		return nil, model.ErrNoIssueTypeScreenSchemeID
 	}
@@ -303,6 +354,9 @@ func (i *internalTypeScreenSchemeImpl) Update(ctx context.Context, issueTypeScre
 
 func (i *internalTypeScreenSchemeImpl) Delete(ctx context.Context, issueTypeScreenSchemeID string) (*model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalTypeScreenSchemeImpl).Delete")
+	defer span.End()
+
 	if issueTypeScreenSchemeID == "" {
 		return nil, model.ErrNoIssueTypeScreenSchemeID
 	}
@@ -319,6 +373,9 @@ func (i *internalTypeScreenSchemeImpl) Delete(ctx context.Context, issueTypeScre
 
 func (i *internalTypeScreenSchemeImpl) Append(ctx context.Context, issueTypeScreenSchemeID string, payload *model.IssueTypeScreenSchemePayloadScheme) (*model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalTypeScreenSchemeImpl).Append")
+	defer span.End()
+
 	if issueTypeScreenSchemeID == "" {
 		return nil, model.ErrNoIssueTypeScreenSchemeID
 	}
@@ -334,6 +391,9 @@ func (i *internalTypeScreenSchemeImpl) Append(ctx context.Context, issueTypeScre
 }
 
 func (i *internalTypeScreenSchemeImpl) UpdateDefault(ctx context.Context, issueTypeScreenSchemeID, screenSchemeID string) (*model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalTypeScreenSchemeImpl).UpdateDefault")
+	defer span.End()
 
 	if issueTypeScreenSchemeID == "" {
 		return nil, model.ErrNoIssueTypeScreenSchemeID
@@ -355,6 +415,9 @@ func (i *internalTypeScreenSchemeImpl) UpdateDefault(ctx context.Context, issueT
 
 func (i *internalTypeScreenSchemeImpl) Remove(ctx context.Context, issueTypeScreenSchemeID string, issueTypeIDs []string) (*model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalTypeScreenSchemeImpl).Remove")
+	defer span.End()
+
 	if issueTypeScreenSchemeID == "" {
 		return nil, model.ErrNoIssueTypeScreenSchemeID
 	}
@@ -374,6 +437,9 @@ func (i *internalTypeScreenSchemeImpl) Remove(ctx context.Context, issueTypeScre
 }
 
 func (i *internalTypeScreenSchemeImpl) SchemesByProject(ctx context.Context, issueTypeScreenSchemeID int, startAt, maxResults int) (*model.IssueTypeScreenSchemeByProjectPageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalTypeScreenSchemeImpl).SchemesByProject")
+	defer span.End()
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))

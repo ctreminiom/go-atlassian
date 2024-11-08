@@ -36,6 +36,9 @@ type TypeSchemeService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/types/scheme#get-all-issue-type-schemes
 func (t *TypeSchemeService) Gets(ctx context.Context, issueTypeSchemeIDs []int, startAt, maxResults int) (*model.IssueTypeSchemePageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*TypeSchemeService).Gets")
+	defer span.End()
+
 	return t.internalClient.Gets(ctx, issueTypeSchemeIDs, startAt, maxResults)
 }
 
@@ -45,6 +48,9 @@ func (t *TypeSchemeService) Gets(ctx context.Context, issueTypeSchemeIDs []int, 
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/types/scheme#create-issue-type-scheme
 func (t *TypeSchemeService) Create(ctx context.Context, payload *model.IssueTypeSchemePayloadScheme) (*model.NewIssueTypeSchemeScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*TypeSchemeService).Create")
+	defer span.End()
+
 	return t.internalClient.Create(ctx, payload)
 }
 
@@ -54,6 +60,9 @@ func (t *TypeSchemeService) Create(ctx context.Context, payload *model.IssueType
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/types/scheme#get-issue-type-scheme-items
 func (t *TypeSchemeService) Items(ctx context.Context, issueTypeSchemeIDs []int, startAt, maxResults int) (*model.IssueTypeSchemeItemPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*TypeSchemeService).Items")
+	defer span.End()
+
 	return t.internalClient.Items(ctx, issueTypeSchemeIDs, startAt, maxResults)
 }
 
@@ -63,6 +72,9 @@ func (t *TypeSchemeService) Items(ctx context.Context, issueTypeSchemeIDs []int,
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/types/scheme#get-issue-type-schemes-for-projects
 func (t *TypeSchemeService) Projects(ctx context.Context, projectIDs []int, startAt, maxResults int) (*model.ProjectIssueTypeSchemePageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*TypeSchemeService).Projects")
+	defer span.End()
+
 	return t.internalClient.Projects(ctx, projectIDs, startAt, maxResults)
 }
 
@@ -72,6 +84,9 @@ func (t *TypeSchemeService) Projects(ctx context.Context, projectIDs []int, star
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/types/scheme#assign-issue-type-scheme-to-project
 func (t *TypeSchemeService) Assign(ctx context.Context, issueTypeSchemeID, projectID string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*TypeSchemeService).Assign")
+	defer span.End()
+
 	return t.internalClient.Assign(ctx, issueTypeSchemeID, projectID)
 }
 
@@ -81,6 +96,9 @@ func (t *TypeSchemeService) Assign(ctx context.Context, issueTypeSchemeID, proje
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/types/scheme#update-issue-type-scheme
 func (t *TypeSchemeService) Update(ctx context.Context, issueTypeSchemeID int, payload *model.IssueTypeSchemePayloadScheme) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*TypeSchemeService).Update")
+	defer span.End()
+
 	return t.internalClient.Update(ctx, issueTypeSchemeID, payload)
 }
 
@@ -94,6 +112,9 @@ func (t *TypeSchemeService) Update(ctx context.Context, issueTypeSchemeID int, p
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/types/scheme#delete-issue-type-scheme
 func (t *TypeSchemeService) Delete(ctx context.Context, issueTypeSchemeID int) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*TypeSchemeService).Delete")
+	defer span.End()
+
 	return t.internalClient.Delete(ctx, issueTypeSchemeID)
 }
 
@@ -107,6 +128,9 @@ func (t *TypeSchemeService) Delete(ctx context.Context, issueTypeSchemeID int) (
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/types/scheme#add-issue-types-to-issue-type-scheme
 func (t *TypeSchemeService) Append(ctx context.Context, issueTypeSchemeID int, issueTypeIDs []int) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*TypeSchemeService).Append")
+	defer span.End()
+
 	return t.internalClient.Append(ctx, issueTypeSchemeID, issueTypeIDs)
 }
 
@@ -122,6 +146,9 @@ func (t *TypeSchemeService) Append(ctx context.Context, issueTypeSchemeID int, i
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/types/scheme#remove-issue-type-from-issue-type-scheme
 func (t *TypeSchemeService) Remove(ctx context.Context, issueTypeSchemeID, issueTypeID int) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*TypeSchemeService).Remove")
+	defer span.End()
+
 	return t.internalClient.Remove(ctx, issueTypeSchemeID, issueTypeID)
 }
 
@@ -131,6 +158,9 @@ type internalTypeSchemeImpl struct {
 }
 
 func (i *internalTypeSchemeImpl) Gets(ctx context.Context, issueTypeSchemeIDs []int, startAt, maxResults int) (*model.IssueTypeSchemePageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalTypeSchemeImpl).Gets")
+	defer span.End()
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -158,6 +188,9 @@ func (i *internalTypeSchemeImpl) Gets(ctx context.Context, issueTypeSchemeIDs []
 
 func (i *internalTypeSchemeImpl) Create(ctx context.Context, payload *model.IssueTypeSchemePayloadScheme) (*model.NewIssueTypeSchemeScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalTypeSchemeImpl).Create")
+	defer span.End()
+
 	endpoint := fmt.Sprintf("rest/api/%v/issuetypescheme", i.version)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
@@ -175,6 +208,9 @@ func (i *internalTypeSchemeImpl) Create(ctx context.Context, payload *model.Issu
 }
 
 func (i *internalTypeSchemeImpl) Items(ctx context.Context, issueTypeSchemeIDs []int, startAt, maxResults int) (*model.IssueTypeSchemeItemPageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalTypeSchemeImpl).Items")
+	defer span.End()
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -202,6 +238,9 @@ func (i *internalTypeSchemeImpl) Items(ctx context.Context, issueTypeSchemeIDs [
 
 func (i *internalTypeSchemeImpl) Projects(ctx context.Context, projectIDs []int, startAt, maxResults int) (*model.ProjectIssueTypeSchemePageScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalTypeSchemeImpl).Projects")
+	defer span.End()
+
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
 	params.Add("maxResults", strconv.Itoa(maxResults))
@@ -228,6 +267,9 @@ func (i *internalTypeSchemeImpl) Projects(ctx context.Context, projectIDs []int,
 
 func (i *internalTypeSchemeImpl) Assign(ctx context.Context, issueTypeSchemeID, projectID string) (*model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalTypeSchemeImpl).Assign")
+	defer span.End()
+
 	if issueTypeSchemeID == "" {
 		return nil, model.ErrNoIssueTypeSchemeID
 	}
@@ -253,6 +295,9 @@ func (i *internalTypeSchemeImpl) Assign(ctx context.Context, issueTypeSchemeID, 
 
 func (i *internalTypeSchemeImpl) Update(ctx context.Context, issueTypeSchemeID int, payload *model.IssueTypeSchemePayloadScheme) (*model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalTypeSchemeImpl).Update")
+	defer span.End()
+
 	if issueTypeSchemeID == 0 {
 		return nil, model.ErrNoIssueTypeSchemeID
 	}
@@ -269,6 +314,9 @@ func (i *internalTypeSchemeImpl) Update(ctx context.Context, issueTypeSchemeID i
 
 func (i *internalTypeSchemeImpl) Delete(ctx context.Context, issueTypeSchemeID int) (*model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalTypeSchemeImpl).Delete")
+	defer span.End()
+
 	if issueTypeSchemeID == 0 {
 		return nil, model.ErrNoIssueTypeSchemeID
 	}
@@ -284,6 +332,9 @@ func (i *internalTypeSchemeImpl) Delete(ctx context.Context, issueTypeSchemeID i
 }
 
 func (i *internalTypeSchemeImpl) Append(ctx context.Context, issueTypeSchemeID int, issueTypeIDs []int) (*model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalTypeSchemeImpl).Append")
+	defer span.End()
 
 	if len(issueTypeIDs) == 0 {
 		return nil, model.ErrNoIssueTypes
@@ -305,6 +356,9 @@ func (i *internalTypeSchemeImpl) Append(ctx context.Context, issueTypeSchemeID i
 }
 
 func (i *internalTypeSchemeImpl) Remove(ctx context.Context, issueTypeSchemeID, issueTypeID int) (*model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalTypeSchemeImpl).Remove")
+	defer span.End()
 
 	if issueTypeSchemeID == 0 {
 		return nil, model.ErrNoIssueTypeSchemeID

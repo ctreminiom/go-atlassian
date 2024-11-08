@@ -39,6 +39,9 @@ type ScreenSchemeService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/screens/schemes#get-screen-schemes
 func (s *ScreenSchemeService) Gets(ctx context.Context, options *model.ScreenSchemeParamsScheme, startAt, maxResults int) (*model.ScreenSchemePageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ScreenSchemeService).Gets")
+	defer span.End()
+
 	return s.internalClient.Gets(ctx, options, startAt, maxResults)
 }
 
@@ -48,6 +51,9 @@ func (s *ScreenSchemeService) Gets(ctx context.Context, options *model.ScreenSch
 //
 // https://docs.go-atlassian.io/jira-software-cloud/screens/schemes#create-screen-scheme
 func (s *ScreenSchemeService) Create(ctx context.Context, payload *model.ScreenSchemePayloadScheme) (*model.ScreenSchemeScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ScreenSchemeService).Create")
+	defer span.End()
+
 	return s.internalClient.Create(ctx, payload)
 }
 
@@ -57,6 +63,9 @@ func (s *ScreenSchemeService) Create(ctx context.Context, payload *model.ScreenS
 //
 // https://docs.go-atlassian.io/jira-software-cloud/screens/schemes#update-screen-scheme
 func (s *ScreenSchemeService) Update(ctx context.Context, screenSchemeID string, payload *model.ScreenSchemePayloadScheme) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ScreenSchemeService).Update")
+	defer span.End()
+
 	return s.internalClient.Update(ctx, screenSchemeID, payload)
 }
 
@@ -68,6 +77,9 @@ func (s *ScreenSchemeService) Update(ctx context.Context, screenSchemeID string,
 //
 // https://docs.go-atlassian.io/jira-software-cloud/screens/schemes#delete-screen-scheme
 func (s *ScreenSchemeService) Delete(ctx context.Context, screenSchemeID string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ScreenSchemeService).Delete")
+	defer span.End()
+
 	return s.internalClient.Delete(ctx, screenSchemeID)
 }
 
@@ -77,6 +89,9 @@ type internalScreenSchemeImpl struct {
 }
 
 func (i *internalScreenSchemeImpl) Gets(ctx context.Context, options *model.ScreenSchemeParamsScheme, startAt, maxResults int) (*model.ScreenSchemePageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalScreenSchemeImpl).Gets")
+	defer span.End()
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -119,6 +134,9 @@ func (i *internalScreenSchemeImpl) Gets(ctx context.Context, options *model.Scre
 
 func (i *internalScreenSchemeImpl) Create(ctx context.Context, payload *model.ScreenSchemePayloadScheme) (*model.ScreenSchemeScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalScreenSchemeImpl).Create")
+	defer span.End()
+
 	endpoint := fmt.Sprintf("rest/api/%v/screenscheme", i.version)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
@@ -137,6 +155,9 @@ func (i *internalScreenSchemeImpl) Create(ctx context.Context, payload *model.Sc
 
 func (i *internalScreenSchemeImpl) Update(ctx context.Context, screenSchemeID string, payload *model.ScreenSchemePayloadScheme) (*model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalScreenSchemeImpl).Update")
+	defer span.End()
+
 	if screenSchemeID == "" {
 		return nil, model.ErrNoScreenSchemeID
 	}
@@ -152,6 +173,9 @@ func (i *internalScreenSchemeImpl) Update(ctx context.Context, screenSchemeID st
 }
 
 func (i *internalScreenSchemeImpl) Delete(ctx context.Context, screenSchemeID string) (*model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalScreenSchemeImpl).Delete")
+	defer span.End()
 
 	if screenSchemeID == "" {
 		return nil, model.ErrNoScreenSchemeID

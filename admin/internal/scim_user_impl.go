@@ -38,6 +38,9 @@ type SCIMUserService struct {
 //
 // https://docs.go-atlassian.io/atlassian-admin-cloud/scim/users#create-a-user
 func (s *SCIMUserService) Create(ctx context.Context, directoryID string, payload *model.SCIMUserScheme, attributes, excludedAttributes []string) (*model.SCIMUserScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SCIMUserService).Create")
+	defer span.End()
+
 	return s.internalClient.Create(ctx, directoryID, payload, attributes, excludedAttributes)
 }
 
@@ -53,6 +56,9 @@ func (s *SCIMUserService) Create(ctx context.Context, directoryID string, payloa
 //
 // https://docs.go-atlassian.io/atlassian-admin-cloud/scim/users#get-users
 func (s *SCIMUserService) Gets(ctx context.Context, directoryID string, opts *model.SCIMUserGetsOptionsScheme, startIndex, count int) (*model.SCIMUserPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SCIMUserService).Gets")
+	defer span.End()
+
 	return s.internalClient.Gets(ctx, directoryID, opts, startIndex, count)
 }
 
@@ -62,6 +68,9 @@ func (s *SCIMUserService) Gets(ctx context.Context, directoryID string, opts *mo
 //
 // https://docs.go-atlassian.io/atlassian-admin-cloud/scim/users#get-a-user-by-id
 func (s *SCIMUserService) Get(ctx context.Context, directoryID, userID string, attributes, excludedAttributes []string) (*model.SCIMUserScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SCIMUserService).Get")
+	defer span.End()
+
 	return s.internalClient.Get(ctx, directoryID, userID, attributes, excludedAttributes)
 }
 
@@ -73,6 +82,9 @@ func (s *SCIMUserService) Get(ctx context.Context, directoryID, userID string, a
 //
 // DELETE /scim/directory/{directoryId}/Users/{userId}
 func (s *SCIMUserService) Deactivate(ctx context.Context, directoryID, userID string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SCIMUserService).Deactivate")
+	defer span.End()
+
 	return s.internalClient.Deactivate(ctx, directoryID, userID)
 }
 
@@ -84,6 +96,9 @@ func (s *SCIMUserService) Deactivate(ctx context.Context, directoryID, userID st
 //
 // https://docs.go-atlassian.io/atlassian-admin-cloud/scim/users#update-user-by-id-patch
 func (s *SCIMUserService) Path(ctx context.Context, directoryID, userID string, payload *model.SCIMUserToPathScheme, attributes, excludedAttributes []string) (*model.SCIMUserScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SCIMUserService).Path")
+	defer span.End()
+
 	return s.internalClient.Path(ctx, directoryID, userID, payload, attributes, excludedAttributes)
 }
 
@@ -97,6 +112,9 @@ func (s *SCIMUserService) Path(ctx context.Context, directoryID, userID string, 
 //
 // https://docs.go-atlassian.io/atlassian-admin-cloud/scim/users#update-user-via-user-attributes
 func (s *SCIMUserService) Update(ctx context.Context, directoryID, userID string, payload *model.SCIMUserScheme, attributes, excludedAttributes []string) (*model.SCIMUserScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SCIMUserService).Update")
+	defer span.End()
+
 	return s.internalClient.Update(ctx, directoryID, userID, payload, attributes, excludedAttributes)
 }
 
@@ -105,6 +123,9 @@ type internalSCIMUserImpl struct {
 }
 
 func (i *internalSCIMUserImpl) Create(ctx context.Context, directoryID string, payload *model.SCIMUserScheme, attributes, excludedAttributes []string) (*model.SCIMUserScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalSCIMUserImpl).Create")
+	defer span.End()
 
 	if directoryID == "" {
 		return nil, nil, model.ErrNoAdminDirectoryID
@@ -142,6 +163,9 @@ func (i *internalSCIMUserImpl) Create(ctx context.Context, directoryID string, p
 }
 
 func (i *internalSCIMUserImpl) Gets(ctx context.Context, directoryID string, opts *model.SCIMUserGetsOptionsScheme, startIndex, count int) (*model.SCIMUserPageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalSCIMUserImpl).Gets")
+	defer span.End()
 
 	if directoryID == "" {
 		return nil, nil, model.ErrNoAdminDirectoryID
@@ -184,6 +208,9 @@ func (i *internalSCIMUserImpl) Gets(ctx context.Context, directoryID string, opt
 
 func (i *internalSCIMUserImpl) Get(ctx context.Context, directoryID, userID string, attributes, excludedAttributes []string) (*model.SCIMUserScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalSCIMUserImpl).Get")
+	defer span.End()
+
 	if directoryID == "" {
 		return nil, nil, model.ErrNoAdminDirectoryID
 	}
@@ -224,6 +251,9 @@ func (i *internalSCIMUserImpl) Get(ctx context.Context, directoryID, userID stri
 
 func (i *internalSCIMUserImpl) Deactivate(ctx context.Context, directoryID, userID string) (*model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalSCIMUserImpl).Deactivate")
+	defer span.End()
+
 	if directoryID == "" {
 		return nil, model.ErrNoAdminDirectoryID
 	}
@@ -243,6 +273,9 @@ func (i *internalSCIMUserImpl) Deactivate(ctx context.Context, directoryID, user
 }
 
 func (i *internalSCIMUserImpl) Path(ctx context.Context, directoryID, userID string, payload *model.SCIMUserToPathScheme, attributes, excludedAttributes []string) (*model.SCIMUserScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalSCIMUserImpl).Path")
+	defer span.End()
 
 	if directoryID == "" {
 		return nil, nil, model.ErrNoAdminDirectoryID
@@ -284,6 +317,9 @@ func (i *internalSCIMUserImpl) Path(ctx context.Context, directoryID, userID str
 }
 
 func (i *internalSCIMUserImpl) Update(ctx context.Context, directoryID, userID string, payload *model.SCIMUserScheme, attributes, excludedAttributes []string) (*model.SCIMUserScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalSCIMUserImpl).Update")
+	defer span.End()
 
 	if directoryID == "" {
 		return nil, nil, model.ErrNoAdminDirectoryID

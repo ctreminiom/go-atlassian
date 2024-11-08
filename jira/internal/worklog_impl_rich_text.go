@@ -39,6 +39,9 @@ type WorklogRichTextService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/worklogs#get-worklogs
 func (w *WorklogRichTextService) Gets(ctx context.Context, worklogIDs []int, expand []string) ([]*model.IssueWorklogRichTextScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*WorklogRichTextService).Gets")
+	defer span.End()
+
 	return w.internalClient.Gets(ctx, worklogIDs, expand)
 }
 
@@ -50,6 +53,9 @@ func (w *WorklogRichTextService) Gets(ctx context.Context, worklogIDs []int, exp
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/worklogs#get-worklog
 func (w *WorklogRichTextService) Get(ctx context.Context, issueKeyOrID, worklogID string, expand []string) (*model.IssueWorklogRichTextScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*WorklogRichTextService).Get")
+	defer span.End()
+
 	return w.internalClient.Get(ctx, issueKeyOrID, worklogID, expand)
 }
 
@@ -61,6 +67,9 @@ func (w *WorklogRichTextService) Get(ctx context.Context, issueKeyOrID, worklogI
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/worklogs#get-issue-worklogs
 func (w *WorklogRichTextService) Issue(ctx context.Context, issueKeyOrID string, startAt, maxResults, after int, expand []string) (*model.IssueWorklogRichTextPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*WorklogRichTextService).Issue")
+	defer span.End()
+
 	return w.internalClient.Issue(ctx, issueKeyOrID, startAt, maxResults, after, expand)
 }
 
@@ -72,6 +81,9 @@ func (w *WorklogRichTextService) Issue(ctx context.Context, issueKeyOrID string,
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/worklogs#delete-worklog
 func (w *WorklogRichTextService) Delete(ctx context.Context, issueKeyOrID, worklogID string, options *model.WorklogOptionsScheme) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*WorklogRichTextService).Delete")
+	defer span.End()
+
 	return w.internalClient.Delete(ctx, issueKeyOrID, worklogID, options)
 }
 
@@ -88,6 +100,9 @@ func (w *WorklogRichTextService) Delete(ctx context.Context, issueKeyOrID, workl
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/worklogs#get-ids-of-deleted-worklogs
 func (w *WorklogRichTextService) Deleted(ctx context.Context, since int) (result *model.ChangedWorklogPageScheme, response *model.ResponseScheme, err error) {
+	ctx, span := tracer().Start(ctx, "(*WorklogRichTextService).Deleted")
+	defer span.End()
+
 	return w.internalClient.Deleted(ctx, since)
 }
 
@@ -104,6 +119,9 @@ func (w *WorklogRichTextService) Deleted(ctx context.Context, since int) (result
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/worklogs#get-ids-of-updated-worklogs
 func (w *WorklogRichTextService) Updated(ctx context.Context, since int, expand []string) (*model.ChangedWorklogPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*WorklogRichTextService).Updated")
+	defer span.End()
+
 	return w.internalClient.Updated(ctx, since, expand)
 }
 
@@ -115,6 +133,9 @@ func (w *WorklogRichTextService) Updated(ctx context.Context, since int, expand 
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/worklogs#add-worklog
 func (w *WorklogRichTextService) Add(ctx context.Context, issueKeyOrID string, payload *model.WorklogRichTextPayloadScheme, options *model.WorklogOptionsScheme) (*model.IssueWorklogRichTextScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*WorklogRichTextService).Add")
+	defer span.End()
+
 	return w.internalClient.Add(ctx, issueKeyOrID, payload, options)
 }
 
@@ -126,6 +147,9 @@ func (w *WorklogRichTextService) Add(ctx context.Context, issueKeyOrID string, p
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/worklogs#update-worklog
 func (w *WorklogRichTextService) Update(ctx context.Context, issueKeyOrID, worklogID string, payload *model.WorklogRichTextPayloadScheme, options *model.WorklogOptionsScheme) (*model.IssueWorklogRichTextScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*WorklogRichTextService).Update")
+	defer span.End()
+
 	return w.internalClient.Update(ctx, issueKeyOrID, worklogID, payload, options)
 }
 
@@ -135,6 +159,9 @@ type internalWorklogRichTextImpl struct {
 }
 
 func (i *internalWorklogRichTextImpl) Gets(ctx context.Context, worklogIDs []int, expand []string) ([]*model.IssueWorklogRichTextScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalWorklogRichTextImpl).Gets")
+	defer span.End()
 
 	if len(worklogIDs) == 0 {
 		return nil, nil, model.ErrNpWorklogs
@@ -167,6 +194,9 @@ func (i *internalWorklogRichTextImpl) Gets(ctx context.Context, worklogIDs []int
 }
 
 func (i *internalWorklogRichTextImpl) Get(ctx context.Context, issueKeyOrID, worklogID string, expand []string) (*model.IssueWorklogRichTextScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalWorklogRichTextImpl).Get")
+	defer span.End()
 
 	if issueKeyOrID == "" {
 		return nil, nil, model.ErrNoIssueKeyOrID
@@ -204,6 +234,9 @@ func (i *internalWorklogRichTextImpl) Get(ctx context.Context, issueKeyOrID, wor
 
 func (i *internalWorklogRichTextImpl) Issue(ctx context.Context, issueKeyOrID string, startAt, maxResults, after int, expand []string) (*model.IssueWorklogRichTextPageScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalWorklogRichTextImpl).Issue")
+	defer span.End()
+
 	if issueKeyOrID == "" {
 		return nil, nil, model.ErrNoIssueKeyOrID
 	}
@@ -237,6 +270,9 @@ func (i *internalWorklogRichTextImpl) Issue(ctx context.Context, issueKeyOrID st
 }
 
 func (i *internalWorklogRichTextImpl) Delete(ctx context.Context, issueKeyOrID, worklogID string, options *model.WorklogOptionsScheme) (*model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalWorklogRichTextImpl).Delete")
+	defer span.End()
 
 	if issueKeyOrID == "" {
 		return nil, model.ErrNoIssueKeyOrID
@@ -284,6 +320,9 @@ func (i *internalWorklogRichTextImpl) Delete(ctx context.Context, issueKeyOrID, 
 
 func (i *internalWorklogRichTextImpl) Deleted(ctx context.Context, since int) (*model.ChangedWorklogPageScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalWorklogRichTextImpl).Deleted")
+	defer span.End()
+
 	params := url.Values{}
 	if since != 0 {
 		params.Add("since", strconv.Itoa(since))
@@ -311,6 +350,9 @@ func (i *internalWorklogRichTextImpl) Deleted(ctx context.Context, since int) (*
 }
 
 func (i *internalWorklogRichTextImpl) Updated(ctx context.Context, since int, expand []string) (*model.ChangedWorklogPageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalWorklogRichTextImpl).Updated")
+	defer span.End()
 
 	params := url.Values{}
 	if since != 0 {
@@ -343,6 +385,9 @@ func (i *internalWorklogRichTextImpl) Updated(ctx context.Context, since int, ex
 }
 
 func (i *internalWorklogRichTextImpl) Add(ctx context.Context, issueKeyOrID string, payload *model.WorklogRichTextPayloadScheme, options *model.WorklogOptionsScheme) (*model.IssueWorklogRichTextScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalWorklogRichTextImpl).Add")
+	defer span.End()
 
 	if issueKeyOrID == "" {
 		return nil, nil, model.ErrNoIssueKeyOrID
@@ -392,6 +437,9 @@ func (i *internalWorklogRichTextImpl) Add(ctx context.Context, issueKeyOrID stri
 }
 
 func (i *internalWorklogRichTextImpl) Update(ctx context.Context, issueKeyOrID, worklogID string, payload *model.WorklogRichTextPayloadScheme, options *model.WorklogOptionsScheme) (*model.IssueWorklogRichTextScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalWorklogRichTextImpl).Update")
+	defer span.End()
 
 	if issueKeyOrID == "" {
 		return nil, nil, model.ErrNoIssueKeyOrID

@@ -36,6 +36,9 @@ type OrganizationDirectoryService struct {
 //
 // https://docs.go-atlassian.io/atlassian-admin-cloud/organization/directory#users-last-active-dates
 func (o *OrganizationDirectoryService) Activity(ctx context.Context, organizationID, accountID string) (*model.UserProductAccessScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*OrganizationDirectoryService).Activity")
+	defer span.End()
+
 	return o.internalClient.Activity(ctx, organizationID, accountID)
 }
 
@@ -49,6 +52,9 @@ func (o *OrganizationDirectoryService) Activity(ctx context.Context, organizatio
 //
 // https://docs.go-atlassian.io/atlassian-admin-cloud/organization/directory#remove-user-access
 func (o *OrganizationDirectoryService) Remove(ctx context.Context, organizationID, accountID string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*OrganizationDirectoryService).Remove")
+	defer span.End()
+
 	return o.internalClient.Remove(ctx, organizationID, accountID)
 }
 
@@ -62,6 +68,9 @@ func (o *OrganizationDirectoryService) Remove(ctx context.Context, organizationI
 //
 // https://docs.go-atlassian.io/atlassian-admin-cloud/organization/directory#suspend-user-access
 func (o *OrganizationDirectoryService) Suspend(ctx context.Context, organizationID, accountID string) (*model.GenericActionSuccessScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*OrganizationDirectoryService).Suspend")
+	defer span.End()
+
 	return o.internalClient.Suspend(ctx, organizationID, accountID)
 }
 
@@ -75,6 +84,9 @@ func (o *OrganizationDirectoryService) Suspend(ctx context.Context, organization
 //
 // https://docs.go-atlassian.io/atlassian-admin-cloud/organization/directory#restore-user-access
 func (o *OrganizationDirectoryService) Restore(ctx context.Context, organizationID, accountID string) (*model.GenericActionSuccessScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*OrganizationDirectoryService).Restore")
+	defer span.End()
+
 	return o.internalClient.Restore(ctx, organizationID, accountID)
 }
 
@@ -83,6 +95,9 @@ type internalOrganizationDirectoryServiceImpl struct {
 }
 
 func (i *internalOrganizationDirectoryServiceImpl) Activity(ctx context.Context, organizationID, accountID string) (*model.UserProductAccessScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalOrganizationDirectoryServiceImpl).Activity")
+	defer span.End()
 
 	if organizationID == "" {
 		return nil, nil, model.ErrNoAdminOrganization
@@ -110,6 +125,9 @@ func (i *internalOrganizationDirectoryServiceImpl) Activity(ctx context.Context,
 
 func (i *internalOrganizationDirectoryServiceImpl) Remove(ctx context.Context, organizationID, accountID string) (*model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalOrganizationDirectoryServiceImpl).Remove")
+	defer span.End()
+
 	if organizationID == "" {
 		return nil, model.ErrNoAdminOrganization
 	}
@@ -129,6 +147,9 @@ func (i *internalOrganizationDirectoryServiceImpl) Remove(ctx context.Context, o
 }
 
 func (i *internalOrganizationDirectoryServiceImpl) Suspend(ctx context.Context, organizationID, accountID string) (*model.GenericActionSuccessScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalOrganizationDirectoryServiceImpl).Suspend")
+	defer span.End()
 
 	if organizationID == "" {
 		return nil, nil, model.ErrNoAdminOrganization
@@ -155,6 +176,9 @@ func (i *internalOrganizationDirectoryServiceImpl) Suspend(ctx context.Context, 
 }
 
 func (i *internalOrganizationDirectoryServiceImpl) Restore(ctx context.Context, organizationID, accountID string) (*model.GenericActionSuccessScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalOrganizationDirectoryServiceImpl).Restore")
+	defer span.End()
 
 	if organizationID == "" {
 		return nil, nil, model.ErrNoAdminOrganization

@@ -32,6 +32,9 @@ type AnalyticsService struct {
 //
 // https://docs.go-atlassian.io/confluence-cloud/analytics#get-views
 func (a *AnalyticsService) Get(ctx context.Context, contentID, fromDate string) (*model.ContentViewScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*AnalyticsService).Get")
+	defer span.End()
+
 	return a.internalClient.Get(ctx, contentID, fromDate)
 }
 
@@ -41,6 +44,9 @@ func (a *AnalyticsService) Get(ctx context.Context, contentID, fromDate string) 
 //
 // https://docs.go-atlassian.io/confluence-cloud/analytics#get-viewers
 func (a *AnalyticsService) Distinct(ctx context.Context, contentID, fromDate string) (*model.ContentViewScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*AnalyticsService).Distinct")
+	defer span.End()
+
 	return a.internalClient.Distinct(ctx, contentID, fromDate)
 }
 
@@ -49,6 +55,9 @@ type internalAnalyticsServiceImpl struct {
 }
 
 func (i *internalAnalyticsServiceImpl) Get(ctx context.Context, contentID, fromDate string) (*model.ContentViewScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalAnalyticsServiceImpl).Get")
+	defer span.End()
 
 	if contentID == "" {
 		return nil, nil, model.ErrNoContentID
@@ -79,6 +88,9 @@ func (i *internalAnalyticsServiceImpl) Get(ctx context.Context, contentID, fromD
 }
 
 func (i *internalAnalyticsServiceImpl) Distinct(ctx context.Context, contentID, fromDate string) (*model.ContentViewScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalAnalyticsServiceImpl).Distinct")
+	defer span.End()
 
 	if contentID == "" {
 		return nil, nil, model.ErrNoContentID

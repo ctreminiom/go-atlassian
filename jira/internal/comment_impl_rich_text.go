@@ -25,6 +25,9 @@ type CommentRichTextService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/comments#delete-comment
 func (c *CommentRichTextService) Delete(ctx context.Context, issueKeyOrID, commentID string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*CommentRichTextService).Delete")
+	defer span.End()
+
 	return c.internalClient.Delete(ctx, issueKeyOrID, commentID)
 }
 
@@ -34,6 +37,9 @@ func (c *CommentRichTextService) Delete(ctx context.Context, issueKeyOrID, comme
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/comments#get-comments
 func (c *CommentRichTextService) Gets(ctx context.Context, issueKeyOrID, orderBy string, expand []string, startAt, maxResults int) (*model.IssueCommentPageSchemeV2, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*CommentRichTextService).Gets")
+	defer span.End()
+
 	return c.internalClient.Gets(ctx, issueKeyOrID, orderBy, expand, startAt, maxResults)
 }
 
@@ -43,6 +49,9 @@ func (c *CommentRichTextService) Gets(ctx context.Context, issueKeyOrID, orderBy
 //
 // TODO: The documentation needs to be created, raise a ticket here: https://github.com/ctreminiom/go-atlassian/issues
 func (c *CommentRichTextService) Get(ctx context.Context, issueKeyOrID, commentID string) (*model.IssueCommentSchemeV2, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*CommentRichTextService).Get")
+	defer span.End()
+
 	return c.internalClient.Get(ctx, issueKeyOrID, commentID)
 }
 
@@ -52,6 +61,9 @@ func (c *CommentRichTextService) Get(ctx context.Context, issueKeyOrID, commentI
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/comments#add-comment
 func (c *CommentRichTextService) Add(ctx context.Context, issueKeyOrID string, payload *model.CommentPayloadSchemeV2, expand []string) (*model.IssueCommentSchemeV2, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*CommentRichTextService).Add")
+	defer span.End()
+
 	return c.internalClient.Add(ctx, issueKeyOrID, payload, expand)
 }
 
@@ -61,6 +73,9 @@ type internalRichTextCommentImpl struct {
 }
 
 func (i *internalRichTextCommentImpl) Delete(ctx context.Context, issueKeyOrID, commentID string) (*model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalRichTextCommentImpl).Delete")
+	defer span.End()
 
 	if issueKeyOrID == "" {
 		return nil, model.ErrNoIssueKeyOrID
@@ -81,6 +96,9 @@ func (i *internalRichTextCommentImpl) Delete(ctx context.Context, issueKeyOrID, 
 }
 
 func (i *internalRichTextCommentImpl) Gets(ctx context.Context, issueKeyOrID, orderBy string, expand []string, startAt, maxResults int) (*model.IssueCommentPageSchemeV2, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalRichTextCommentImpl).Gets")
+	defer span.End()
 
 	if issueKeyOrID == "" {
 		return nil, nil, model.ErrNoIssueKeyOrID
@@ -116,6 +134,9 @@ func (i *internalRichTextCommentImpl) Gets(ctx context.Context, issueKeyOrID, or
 
 func (i *internalRichTextCommentImpl) Get(ctx context.Context, issueKeyOrID, commentID string) (*model.IssueCommentSchemeV2, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalRichTextCommentImpl).Get")
+	defer span.End()
+
 	if issueKeyOrID == "" {
 		return nil, nil, model.ErrNoIssueKeyOrID
 	}
@@ -141,6 +162,9 @@ func (i *internalRichTextCommentImpl) Get(ctx context.Context, issueKeyOrID, com
 }
 
 func (i *internalRichTextCommentImpl) Add(ctx context.Context, issueKeyOrID string, payload *model.CommentPayloadSchemeV2, expand []string) (*model.IssueCommentSchemeV2, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalRichTextCommentImpl).Add")
+	defer span.End()
 
 	if issueKeyOrID == "" {
 		return nil, nil, model.ErrNoIssueKeyOrID

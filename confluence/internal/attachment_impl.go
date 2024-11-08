@@ -36,6 +36,9 @@ type AttachmentService struct {
 //
 // https://docs.go-atlassian.io/confluence-cloud/v2/attachments#get-attachment-by-id
 func (a *AttachmentService) Get(ctx context.Context, attachmentID string, versionID int, serializeIDs bool) (*model.AttachmentScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*AttachmentService).Get")
+	defer span.End()
+
 	return a.internalClient.Get(ctx, attachmentID, versionID, serializeIDs)
 }
 
@@ -55,6 +58,9 @@ func (a *AttachmentService) Get(ctx context.Context, attachmentID string, versio
 //
 // https://docs.go-atlassian.io/confluence-cloud/v2/attachments#get-attachments-by-type
 func (a *AttachmentService) Gets(ctx context.Context, entityID int, entityType string, options *model.AttachmentParamsScheme, cursor string, limit int) (*model.AttachmentPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*AttachmentService).Gets")
+	defer span.End()
+
 	return a.internalClient.Gets(ctx, entityID, entityType, options, cursor, limit)
 }
 
@@ -64,6 +70,9 @@ func (a *AttachmentService) Gets(ctx context.Context, entityID int, entityType s
 //
 // https://docs.go-atlassian.io/confluence-cloud/v2/attachments#delete-attachment
 func (a *AttachmentService) Delete(ctx context.Context, attachmentID string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*AttachmentService).Delete")
+	defer span.End()
+
 	return a.internalClient.Delete(ctx, attachmentID)
 }
 
@@ -72,6 +81,9 @@ type internalAttachmentImpl struct {
 }
 
 func (i *internalAttachmentImpl) Delete(ctx context.Context, attachmentID string) (*model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalAttachmentImpl).Delete")
+	defer span.End()
 
 	if attachmentID == "" {
 		return nil, model.ErrNoContentAttachmentID
@@ -88,6 +100,9 @@ func (i *internalAttachmentImpl) Delete(ctx context.Context, attachmentID string
 }
 
 func (i *internalAttachmentImpl) Get(ctx context.Context, attachmentID string, versionID int, serializeIDs bool) (*model.AttachmentScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalAttachmentImpl).Get")
+	defer span.End()
 
 	if attachmentID == "" {
 		return nil, nil, model.ErrNoContentAttachmentID
@@ -124,6 +139,9 @@ func (i *internalAttachmentImpl) Get(ctx context.Context, attachmentID string, v
 }
 
 func (i *internalAttachmentImpl) Gets(ctx context.Context, entityID int, entityType string, options *model.AttachmentParamsScheme, cursor string, limit int) (*model.AttachmentPageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalAttachmentImpl).Gets")
+	defer span.End()
 
 	if entityID == 0 {
 		return nil, nil, model.ErrNoEntityID

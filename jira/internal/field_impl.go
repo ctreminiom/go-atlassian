@@ -58,6 +58,9 @@ type IssueFieldService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/fields#get-fields
 func (i *IssueFieldService) Gets(ctx context.Context) ([]*model.IssueFieldScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*IssueFieldService).Gets")
+	defer span.End()
+
 	return i.internalClient.Gets(ctx)
 }
 
@@ -67,6 +70,9 @@ func (i *IssueFieldService) Gets(ctx context.Context) ([]*model.IssueFieldScheme
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/fields#create-custom-field
 func (i *IssueFieldService) Create(ctx context.Context, payload *model.CustomFieldScheme) (*model.IssueFieldScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*IssueFieldService).Create")
+	defer span.End()
+
 	return i.internalClient.Create(ctx, payload)
 }
 
@@ -76,6 +82,9 @@ func (i *IssueFieldService) Create(ctx context.Context, payload *model.CustomFie
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/fields#get-fields-paginated
 func (i *IssueFieldService) Search(ctx context.Context, options *model.FieldSearchOptionsScheme, startAt, maxResults int) (*model.FieldSearchPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*IssueFieldService).Search")
+	defer span.End()
+
 	return i.internalClient.Search(ctx, options, startAt, maxResults)
 }
 
@@ -87,6 +96,9 @@ func (i *IssueFieldService) Search(ctx context.Context, options *model.FieldSear
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/fields#delete-field
 func (i *IssueFieldService) Delete(ctx context.Context, fieldID string) (*model.TaskScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*IssueFieldService).Delete")
+	defer span.End()
+
 	return i.internalClient.Delete(ctx, fieldID)
 }
 
@@ -96,6 +108,9 @@ type internalIssueFieldServiceImpl struct {
 }
 
 func (i *internalIssueFieldServiceImpl) Gets(ctx context.Context) ([]*model.IssueFieldScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalIssueFieldServiceImpl).Gets")
+	defer span.End()
 
 	endpoint := fmt.Sprintf("rest/api/%v/field", i.version)
 
@@ -115,6 +130,9 @@ func (i *internalIssueFieldServiceImpl) Gets(ctx context.Context) ([]*model.Issu
 
 func (i *internalIssueFieldServiceImpl) Create(ctx context.Context, payload *model.CustomFieldScheme) (*model.IssueFieldScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalIssueFieldServiceImpl).Create")
+	defer span.End()
+
 	endpoint := fmt.Sprintf("rest/api/%v/field", i.version)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
@@ -132,6 +150,9 @@ func (i *internalIssueFieldServiceImpl) Create(ctx context.Context, payload *mod
 }
 
 func (i *internalIssueFieldServiceImpl) Search(ctx context.Context, options *model.FieldSearchOptionsScheme, startAt, maxResults int) (*model.FieldSearchPageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalIssueFieldServiceImpl).Search")
+	defer span.End()
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -177,6 +198,9 @@ func (i *internalIssueFieldServiceImpl) Search(ctx context.Context, options *mod
 }
 
 func (i *internalIssueFieldServiceImpl) Delete(ctx context.Context, fieldID string) (*model.TaskScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalIssueFieldServiceImpl).Delete")
+	defer span.End()
 
 	if fieldID == "" {
 		return nil, nil, model.ErrNoFieldID

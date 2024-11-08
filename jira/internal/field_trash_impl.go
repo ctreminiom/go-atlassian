@@ -42,6 +42,9 @@ type IssueFieldTrashService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/fields/trash#search-fields-in-trash
 func (i *IssueFieldTrashService) Search(ctx context.Context, options *model.FieldSearchOptionsScheme, startAt, maxResults int) (*model.FieldSearchPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*IssueFieldTrashService).Search")
+	defer span.End()
+
 	return i.internalClient.Search(ctx, options, startAt, maxResults)
 }
 
@@ -53,6 +56,9 @@ func (i *IssueFieldTrashService) Search(ctx context.Context, options *model.Fiel
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/fields/trash#move-field-to-trash
 func (i *IssueFieldTrashService) Move(ctx context.Context, id string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*IssueFieldTrashService).Move")
+	defer span.End()
+
 	return i.internalClient.Move(ctx, id)
 }
 
@@ -64,6 +70,9 @@ func (i *IssueFieldTrashService) Move(ctx context.Context, id string) (*model.Re
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/fields/trash#move-field-to-trash
 func (i *IssueFieldTrashService) Restore(ctx context.Context, id string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*IssueFieldTrashService).Restore")
+	defer span.End()
+
 	return i.internalClient.Restore(ctx, id)
 }
 
@@ -73,6 +82,9 @@ type internalFieldTrashServiceImpl struct {
 }
 
 func (i *internalFieldTrashServiceImpl) Search(ctx context.Context, options *model.FieldSearchOptionsScheme, startAt, maxResults int) (*model.FieldSearchPageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalFieldTrashServiceImpl).Search")
+	defer span.End()
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -111,6 +123,9 @@ func (i *internalFieldTrashServiceImpl) Search(ctx context.Context, options *mod
 
 func (i *internalFieldTrashServiceImpl) Move(ctx context.Context, id string) (*model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalFieldTrashServiceImpl).Move")
+	defer span.End()
+
 	if id == "" {
 		return nil, model.ErrNoFieldID
 	}
@@ -126,6 +141,9 @@ func (i *internalFieldTrashServiceImpl) Move(ctx context.Context, id string) (*m
 }
 
 func (i *internalFieldTrashServiceImpl) Restore(ctx context.Context, id string) (*model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalFieldTrashServiceImpl).Restore")
+	defer span.End()
 
 	if id == "" {
 		return nil, model.ErrNoFieldID

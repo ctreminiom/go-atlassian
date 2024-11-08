@@ -44,6 +44,9 @@ type ServiceDeskService struct {
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request/service-desk#get-service-desks
 func (s *ServiceDeskService) Gets(ctx context.Context, start, limit int) (*model.ServiceDeskPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ServiceDeskService).Gets")
+	defer span.End()
+
 	return s.internalClient.Gets(ctx, start, limit)
 }
 
@@ -57,6 +60,9 @@ func (s *ServiceDeskService) Gets(ctx context.Context, start, limit int) (*model
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request/service-desk#get-service-desk-by-id
 func (s *ServiceDeskService) Get(ctx context.Context, serviceDeskID string) (*model.ServiceDeskScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ServiceDeskService).Get")
+	defer span.End()
+
 	return s.internalClient.Get(ctx, serviceDeskID)
 }
 
@@ -66,6 +72,9 @@ func (s *ServiceDeskService) Get(ctx context.Context, serviceDeskID string) (*mo
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request/service-desk#attach-temporary-file
 func (s *ServiceDeskService) Attach(ctx context.Context, serviceDeskID string, fileName string, file io.Reader) (*model.ServiceDeskTemporaryFileScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ServiceDeskService).Attach")
+	defer span.End()
+
 	return s.internalClient.Attach(ctx, serviceDeskID, fileName, file)
 }
 
@@ -75,6 +84,9 @@ type internalServiceDeskImpl struct {
 }
 
 func (i *internalServiceDeskImpl) Gets(ctx context.Context, start, limit int) (*model.ServiceDeskPageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalServiceDeskImpl).Gets")
+	defer span.End()
 
 	params := url.Values{}
 	params.Add("start", strconv.Itoa(start))
@@ -98,6 +110,9 @@ func (i *internalServiceDeskImpl) Gets(ctx context.Context, start, limit int) (*
 
 func (i *internalServiceDeskImpl) Get(ctx context.Context, serviceDeskID string) (*model.ServiceDeskScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalServiceDeskImpl).Get")
+	defer span.End()
+
 	if serviceDeskID == "" {
 		return nil, nil, model.ErrNoServiceDeskID
 	}
@@ -119,6 +134,9 @@ func (i *internalServiceDeskImpl) Get(ctx context.Context, serviceDeskID string)
 }
 
 func (i *internalServiceDeskImpl) Attach(ctx context.Context, serviceDeskID string, fileName string, file io.Reader) (*model.ServiceDeskTemporaryFileScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalServiceDeskImpl).Attach")
+	defer span.End()
 
 	if serviceDeskID == "" {
 		return nil, nil, model.ErrNoServiceDeskID

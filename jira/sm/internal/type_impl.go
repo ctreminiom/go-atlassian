@@ -34,6 +34,9 @@ type TypeService struct {
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request/types#get-all-request-types
 func (t *TypeService) Search(ctx context.Context, query string, start, limit int) (*model.RequestTypePageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*TypeService).Search")
+	defer span.End()
+
 	return t.internalClient.Search(ctx, query, start, limit)
 }
 
@@ -43,6 +46,9 @@ func (t *TypeService) Search(ctx context.Context, query string, start, limit int
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request/types#get-request-types
 func (t *TypeService) Gets(ctx context.Context, serviceDeskID, groupID, start, limit int) (*model.ProjectRequestTypePageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*TypeService).Gets")
+	defer span.End()
+
 	return t.internalClient.Gets(ctx, serviceDeskID, groupID, start, limit)
 }
 
@@ -52,6 +58,9 @@ func (t *TypeService) Gets(ctx context.Context, serviceDeskID, groupID, start, l
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request/types#create-request-type
 func (t *TypeService) Create(ctx context.Context, serviceDeskID int, payload *model.RequestTypePayloadScheme) (*model.RequestTypeScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*TypeService).Create")
+	defer span.End()
+
 	return t.internalClient.Create(ctx, serviceDeskID, payload)
 }
 
@@ -61,6 +70,9 @@ func (t *TypeService) Create(ctx context.Context, serviceDeskID int, payload *mo
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request/types#get-request-type-by-id
 func (t *TypeService) Get(ctx context.Context, serviceDeskID, requestTypeID int) (*model.RequestTypeScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*TypeService).Get")
+	defer span.End()
+
 	return t.internalClient.Get(ctx, serviceDeskID, requestTypeID)
 }
 
@@ -70,6 +82,9 @@ func (t *TypeService) Get(ctx context.Context, serviceDeskID, requestTypeID int)
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request/types#delete-request-type
 func (t *TypeService) Delete(ctx context.Context, serviceDeskID, requestTypeID int) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*TypeService).Delete")
+	defer span.End()
+
 	return t.internalClient.Delete(ctx, serviceDeskID, requestTypeID)
 }
 
@@ -79,6 +94,9 @@ func (t *TypeService) Delete(ctx context.Context, serviceDeskID, requestTypeID i
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request/types#get-request-type-fields
 func (t *TypeService) Fields(ctx context.Context, serviceDeskID, requestTypeID int) (*model.RequestTypeFieldsScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*TypeService).Fields")
+	defer span.End()
+
 	return t.internalClient.Fields(ctx, serviceDeskID, requestTypeID)
 }
 
@@ -88,6 +106,9 @@ func (t *TypeService) Fields(ctx context.Context, serviceDeskID, requestTypeID i
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request/types#get-request-type-groups
 func (t *TypeService) Groups(ctx context.Context, serviceDeskID int) (*model.RequestTypeGroupPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*TypeService).Groups")
+	defer span.End()
+
 	return t.internalClient.Groups(ctx, serviceDeskID)
 }
 
@@ -97,6 +118,9 @@ type internalTypeImpl struct {
 }
 
 func (i *internalTypeImpl) Search(ctx context.Context, query string, start, limit int) (*model.RequestTypePageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalTypeImpl).Search")
+	defer span.End()
 
 	params := url.Values{}
 	params.Add("start", strconv.Itoa(start))
@@ -123,6 +147,9 @@ func (i *internalTypeImpl) Search(ctx context.Context, query string, start, limi
 }
 
 func (i *internalTypeImpl) Gets(ctx context.Context, serviceDeskID, groupID, start, limit int) (*model.ProjectRequestTypePageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalTypeImpl).Gets")
+	defer span.End()
 
 	if serviceDeskID == 0 {
 		return nil, nil, model.ErrNoServiceDeskID
@@ -154,6 +181,9 @@ func (i *internalTypeImpl) Gets(ctx context.Context, serviceDeskID, groupID, sta
 
 func (i *internalTypeImpl) Create(ctx context.Context, serviceDeskID int, payload *model.RequestTypePayloadScheme) (*model.RequestTypeScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalTypeImpl).Create")
+	defer span.End()
+
 	if serviceDeskID == 0 {
 		return nil, nil, model.ErrNoServiceDeskID
 	}
@@ -175,6 +205,9 @@ func (i *internalTypeImpl) Create(ctx context.Context, serviceDeskID int, payloa
 }
 
 func (i *internalTypeImpl) Get(ctx context.Context, serviceDeskID, requestTypeID int) (*model.RequestTypeScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalTypeImpl).Get")
+	defer span.End()
 
 	if serviceDeskID == 0 {
 		return nil, nil, model.ErrNoServiceDeskID
@@ -202,6 +235,9 @@ func (i *internalTypeImpl) Get(ctx context.Context, serviceDeskID, requestTypeID
 
 func (i *internalTypeImpl) Delete(ctx context.Context, serviceDeskID, requestTypeID int) (*model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalTypeImpl).Delete")
+	defer span.End()
+
 	if serviceDeskID == 0 {
 		return nil, model.ErrNoServiceDeskID
 	}
@@ -221,6 +257,9 @@ func (i *internalTypeImpl) Delete(ctx context.Context, serviceDeskID, requestTyp
 }
 
 func (i *internalTypeImpl) Fields(ctx context.Context, serviceDeskID, requestTypeID int) (*model.RequestTypeFieldsScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalTypeImpl).Fields")
+	defer span.End()
 
 	if serviceDeskID == 0 {
 		return nil, nil, model.ErrNoServiceDeskID
@@ -247,6 +286,9 @@ func (i *internalTypeImpl) Fields(ctx context.Context, serviceDeskID, requestTyp
 }
 
 func (i *internalTypeImpl) Groups(ctx context.Context, serviceDeskID int) (*model.RequestTypeGroupPageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalTypeImpl).Groups")
+	defer span.End()
 
 	if serviceDeskID == 0 {
 		return nil, nil, model.ErrNoServiceDeskID

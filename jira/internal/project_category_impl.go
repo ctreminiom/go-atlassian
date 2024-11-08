@@ -34,6 +34,9 @@ type ProjectCategoryService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/categories#get-all-project-categories
 func (p *ProjectCategoryService) Gets(ctx context.Context) ([]*model.ProjectCategoryScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ProjectCategoryService).Gets")
+	defer span.End()
+
 	return p.internalClient.Gets(ctx)
 }
 
@@ -43,6 +46,9 @@ func (p *ProjectCategoryService) Gets(ctx context.Context) ([]*model.ProjectCate
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/categories#get-project-category-by-id
 func (p *ProjectCategoryService) Get(ctx context.Context, categoryID int) (*model.ProjectCategoryScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ProjectCategoryService).Get")
+	defer span.End()
+
 	return p.internalClient.Get(ctx, categoryID)
 }
 
@@ -52,6 +58,9 @@ func (p *ProjectCategoryService) Get(ctx context.Context, categoryID int) (*mode
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/categories#create-project-category
 func (p *ProjectCategoryService) Create(ctx context.Context, payload *model.ProjectCategoryPayloadScheme) (*model.ProjectCategoryScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ProjectCategoryService).Create")
+	defer span.End()
+
 	return p.internalClient.Create(ctx, payload)
 }
 
@@ -61,6 +70,9 @@ func (p *ProjectCategoryService) Create(ctx context.Context, payload *model.Proj
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/categories#update-project-category
 func (p *ProjectCategoryService) Update(ctx context.Context, categoryID int, payload *model.ProjectCategoryPayloadScheme) (*model.ProjectCategoryScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ProjectCategoryService).Update")
+	defer span.End()
+
 	return p.internalClient.Update(ctx, categoryID, payload)
 }
 
@@ -70,6 +82,9 @@ func (p *ProjectCategoryService) Update(ctx context.Context, categoryID int, pay
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/categories#delete-project-category
 func (p *ProjectCategoryService) Delete(ctx context.Context, categoryID int) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ProjectCategoryService).Delete")
+	defer span.End()
+
 	return p.internalClient.Delete(ctx, categoryID)
 }
 
@@ -79,6 +94,9 @@ type internalProjectCategoryImpl struct {
 }
 
 func (i *internalProjectCategoryImpl) Gets(ctx context.Context) ([]*model.ProjectCategoryScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalProjectCategoryImpl).Gets")
+	defer span.End()
 
 	endpoint := fmt.Sprintf("rest/api/%v/projectCategory", i.version)
 
@@ -97,6 +115,9 @@ func (i *internalProjectCategoryImpl) Gets(ctx context.Context) ([]*model.Projec
 }
 
 func (i *internalProjectCategoryImpl) Get(ctx context.Context, categoryID int) (*model.ProjectCategoryScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalProjectCategoryImpl).Get")
+	defer span.End()
 
 	if categoryID == 0 {
 		return nil, nil, model.ErrNoProjectCategoryID
@@ -120,6 +141,9 @@ func (i *internalProjectCategoryImpl) Get(ctx context.Context, categoryID int) (
 
 func (i *internalProjectCategoryImpl) Create(ctx context.Context, payload *model.ProjectCategoryPayloadScheme) (*model.ProjectCategoryScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalProjectCategoryImpl).Create")
+	defer span.End()
+
 	endpoint := fmt.Sprintf("rest/api/%v/projectCategory", i.version)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
@@ -137,6 +161,9 @@ func (i *internalProjectCategoryImpl) Create(ctx context.Context, payload *model
 }
 
 func (i *internalProjectCategoryImpl) Update(ctx context.Context, categoryID int, payload *model.ProjectCategoryPayloadScheme) (*model.ProjectCategoryScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalProjectCategoryImpl).Update")
+	defer span.End()
 
 	if categoryID == 0 {
 		return nil, nil, model.ErrNoProjectCategoryID
@@ -159,6 +186,9 @@ func (i *internalProjectCategoryImpl) Update(ctx context.Context, categoryID int
 }
 
 func (i *internalProjectCategoryImpl) Delete(ctx context.Context, categoryID int) (*model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalProjectCategoryImpl).Delete")
+	defer span.End()
 
 	if categoryID == 0 {
 		return nil, model.ErrNoProjectCategoryID

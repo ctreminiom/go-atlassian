@@ -43,6 +43,9 @@ type RestrictionOperationService struct {
 //
 // https://docs.go-atlassian.io/confluence-cloud/content/restrictions/operations#get-restrictions-by-operation
 func (r *RestrictionOperationService) Gets(ctx context.Context, contentID string, expand []string) (*model.ContentRestrictionByOperationScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*RestrictionOperationService).Gets")
+	defer span.End()
+
 	return r.internalClient.Gets(ctx, contentID, expand)
 }
 
@@ -52,6 +55,9 @@ func (r *RestrictionOperationService) Gets(ctx context.Context, contentID string
 //
 // https://docs.go-atlassian.io/confluence-cloud/content/restrictions/operations#get-restrictions-for-operation
 func (r *RestrictionOperationService) Get(ctx context.Context, contentID, operationKey string, expand []string, startAt, maxResults int) (*model.ContentRestrictionScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*RestrictionOperationService).Get")
+	defer span.End()
+
 	return r.internalClient.Get(ctx, contentID, operationKey, expand, startAt, maxResults)
 }
 
@@ -60,6 +66,9 @@ type internalRestrictionOperationImpl struct {
 }
 
 func (i *internalRestrictionOperationImpl) Gets(ctx context.Context, contentID string, expand []string) (*model.ContentRestrictionByOperationScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalRestrictionOperationImpl).Gets")
+	defer span.End()
 
 	if contentID == "" {
 		return nil, nil, model.ErrNoContentID
@@ -90,6 +99,9 @@ func (i *internalRestrictionOperationImpl) Gets(ctx context.Context, contentID s
 }
 
 func (i *internalRestrictionOperationImpl) Get(ctx context.Context, contentID, operationKey string, expand []string, startAt, maxResults int) (*model.ContentRestrictionScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalRestrictionOperationImpl).Get")
+	defer span.End()
 
 	if contentID == "" {
 		return nil, nil, model.ErrNoContentID

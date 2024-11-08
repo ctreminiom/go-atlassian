@@ -35,6 +35,9 @@ type MySelfService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/myself#get-current-user
 func (m *MySelfService) Details(ctx context.Context, expand []string) (*model.UserScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*MySelfService).Details")
+	defer span.End()
+
 	return m.internalClient.Details(ctx, expand)
 }
 
@@ -44,6 +47,9 @@ type internalMySelfImpl struct {
 }
 
 func (i *internalMySelfImpl) Details(ctx context.Context, expand []string) (*model.UserScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalMySelfImpl).Details")
+	defer span.End()
 
 	var endpoint strings.Builder
 	endpoint.WriteString(fmt.Sprintf("rest/api/%v/myself", i.version))

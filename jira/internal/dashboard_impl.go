@@ -41,6 +41,9 @@ type DashboardService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/dashboards#get-all-dashboards
 func (d *DashboardService) Gets(ctx context.Context, startAt, maxResults int, filter string) (*model.DashboardPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*DashboardService).Gets")
+	defer span.End()
+
 	return d.internalClient.Gets(ctx, startAt, maxResults, filter)
 }
 
@@ -50,6 +53,9 @@ func (d *DashboardService) Gets(ctx context.Context, startAt, maxResults int, fi
 //
 // https://docs.go-atlassian.io/jira-software-cloud/dashboards#create-dashboard
 func (d *DashboardService) Create(ctx context.Context, payload *model.DashboardPayloadScheme) (*model.DashboardScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*DashboardService).Create")
+	defer span.End()
+
 	return d.internalClient.Create(ctx, payload)
 }
 
@@ -61,6 +67,9 @@ func (d *DashboardService) Create(ctx context.Context, payload *model.DashboardP
 //
 // https://docs.go-atlassian.io/jira-software-cloud/dashboards#search-for-dashboards
 func (d *DashboardService) Search(ctx context.Context, options *model.DashboardSearchOptionsScheme, startAt, maxResults int) (*model.DashboardSearchPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*DashboardService).Search")
+	defer span.End()
+
 	return d.internalClient.Search(ctx, options, startAt, maxResults)
 }
 
@@ -70,6 +79,9 @@ func (d *DashboardService) Search(ctx context.Context, options *model.DashboardS
 //
 // https://docs.go-atlassian.io/jira-software-cloud/dashboards#get-dashboard
 func (d *DashboardService) Get(ctx context.Context, dashboardID string) (*model.DashboardScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*DashboardService).Get")
+	defer span.End()
+
 	return d.internalClient.Get(ctx, dashboardID)
 }
 
@@ -79,6 +91,9 @@ func (d *DashboardService) Get(ctx context.Context, dashboardID string) (*model.
 //
 // https://docs.go-atlassian.io/jira-software-cloud/dashboards#delete-dashboard
 func (d *DashboardService) Delete(ctx context.Context, dashboardID string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*DashboardService).Delete")
+	defer span.End()
+
 	return d.internalClient.Delete(ctx, dashboardID)
 }
 
@@ -90,6 +105,9 @@ func (d *DashboardService) Delete(ctx context.Context, dashboardID string) (*mod
 //
 // https://docs.go-atlassian.io/jira-software-cloud/dashboards#copy-dashboard
 func (d *DashboardService) Copy(ctx context.Context, dashboardID string, payload *model.DashboardPayloadScheme) (*model.DashboardScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*DashboardService).Copy")
+	defer span.End()
+
 	return d.internalClient.Copy(ctx, dashboardID, payload)
 }
 
@@ -99,6 +117,9 @@ func (d *DashboardService) Copy(ctx context.Context, dashboardID string, payload
 //
 // https://docs.go-atlassian.io/jira-software-cloud/dashboards#update-dashboard
 func (d *DashboardService) Update(ctx context.Context, dashboardID string, payload *model.DashboardPayloadScheme) (*model.DashboardScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*DashboardService).Update")
+	defer span.End()
+
 	return d.internalClient.Update(ctx, dashboardID, payload)
 }
 
@@ -108,6 +129,9 @@ type internalDashboardImpl struct {
 }
 
 func (i *internalDashboardImpl) Gets(ctx context.Context, startAt, maxResults int, filter string) (*model.DashboardPageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalDashboardImpl).Gets")
+	defer span.End()
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -135,6 +159,9 @@ func (i *internalDashboardImpl) Gets(ctx context.Context, startAt, maxResults in
 
 func (i *internalDashboardImpl) Create(ctx context.Context, payload *model.DashboardPayloadScheme) (*model.DashboardScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalDashboardImpl).Create")
+	defer span.End()
+
 	endpoint := fmt.Sprintf("rest/api/%v/dashboard", i.version)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
@@ -152,6 +179,9 @@ func (i *internalDashboardImpl) Create(ctx context.Context, payload *model.Dashb
 }
 
 func (i *internalDashboardImpl) Search(ctx context.Context, options *model.DashboardSearchOptionsScheme, startAt, maxResults int) (*model.DashboardSearchPageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalDashboardImpl).Search")
+	defer span.End()
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -198,6 +228,9 @@ func (i *internalDashboardImpl) Search(ctx context.Context, options *model.Dashb
 
 func (i *internalDashboardImpl) Get(ctx context.Context, dashboardID string) (*model.DashboardScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalDashboardImpl).Get")
+	defer span.End()
+
 	if dashboardID == "" {
 		return nil, nil, model.ErrNoDashboardID
 	}
@@ -220,6 +253,9 @@ func (i *internalDashboardImpl) Get(ctx context.Context, dashboardID string) (*m
 
 func (i *internalDashboardImpl) Delete(ctx context.Context, dashboardID string) (*model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalDashboardImpl).Delete")
+	defer span.End()
+
 	if dashboardID == "" {
 		return nil, model.ErrNoDashboardID
 	}
@@ -235,6 +271,9 @@ func (i *internalDashboardImpl) Delete(ctx context.Context, dashboardID string) 
 }
 
 func (i *internalDashboardImpl) Copy(ctx context.Context, dashboardID string, payload *model.DashboardPayloadScheme) (*model.DashboardScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalDashboardImpl).Copy")
+	defer span.End()
 
 	if dashboardID == "" {
 		return nil, nil, model.ErrNoDashboardID
@@ -257,6 +296,9 @@ func (i *internalDashboardImpl) Copy(ctx context.Context, dashboardID string, pa
 }
 
 func (i *internalDashboardImpl) Update(ctx context.Context, dashboardID string, payload *model.DashboardPayloadScheme) (*model.DashboardScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalDashboardImpl).Update")
+	defer span.End()
 
 	if dashboardID == "" {
 		return nil, nil, model.ErrNoDashboardID

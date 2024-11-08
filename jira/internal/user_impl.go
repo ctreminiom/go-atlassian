@@ -40,6 +40,9 @@ type UserService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/users#get-user
 func (u *UserService) Get(ctx context.Context, accountID string, expand []string) (*model.UserScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*UserService).Get")
+	defer span.End()
+
 	return u.internalClient.Get(ctx, accountID, expand)
 }
 
@@ -61,6 +64,9 @@ func (u *UserService) Get(ctx context.Context, accountID string, expand []string
 //
 // https://docs.go-atlassian.io/jira-software-cloud/users#create-user
 func (u *UserService) Create(ctx context.Context, payload *model.UserPayloadScheme) (*model.UserScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*UserService).Create")
+	defer span.End()
+
 	return u.internalClient.Create(ctx, payload)
 }
 
@@ -70,6 +76,9 @@ func (u *UserService) Create(ctx context.Context, payload *model.UserPayloadSche
 //
 // https://docs.go-atlassian.io/jira-software-cloud/users#delete-user
 func (u *UserService) Delete(ctx context.Context, accountID string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*UserService).Delete")
+	defer span.End()
+
 	return u.internalClient.Delete(ctx, accountID)
 }
 
@@ -79,6 +88,9 @@ func (u *UserService) Delete(ctx context.Context, accountID string) (*model.Resp
 //
 // https://docs.go-atlassian.io/jira-software-cloud/users#bulk-get-users
 func (u *UserService) Find(ctx context.Context, accountIDs []string, startAt, maxResults int) (*model.UserSearchPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*UserService).Find")
+	defer span.End()
+
 	return u.internalClient.Find(ctx, accountIDs, startAt, maxResults)
 }
 
@@ -88,6 +100,9 @@ func (u *UserService) Find(ctx context.Context, accountIDs []string, startAt, ma
 //
 // https://docs.go-atlassian.io/jira-software-cloud/users#get-user-groups
 func (u *UserService) Groups(ctx context.Context, accountIDs string) ([]*model.UserGroupScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*UserService).Groups")
+	defer span.End()
+
 	return u.internalClient.Groups(ctx, accountIDs)
 }
 
@@ -97,6 +112,9 @@ func (u *UserService) Groups(ctx context.Context, accountIDs string) ([]*model.U
 //
 // https://docs.go-atlassian.io/jira-software-cloud/users#get-all-users
 func (u *UserService) Gets(ctx context.Context, startAt, maxResults int) ([]*model.UserScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*UserService).Gets")
+	defer span.End()
+
 	return u.internalClient.Gets(ctx, startAt, maxResults)
 }
 
@@ -106,6 +124,9 @@ type internalUserImpl struct {
 }
 
 func (i *internalUserImpl) Get(ctx context.Context, accountID string, expand []string) (*model.UserScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalUserImpl).Get")
+	defer span.End()
 
 	if accountID == "" {
 		return nil, nil, model.ErrNoAccountID
@@ -136,6 +157,9 @@ func (i *internalUserImpl) Get(ctx context.Context, accountID string, expand []s
 
 func (i *internalUserImpl) Create(ctx context.Context, payload *model.UserPayloadScheme) (*model.UserScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalUserImpl).Create")
+	defer span.End()
+
 	endpoint := fmt.Sprintf("rest/api/%v/user", i.version)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
@@ -154,6 +178,9 @@ func (i *internalUserImpl) Create(ctx context.Context, payload *model.UserPayloa
 
 func (i *internalUserImpl) Delete(ctx context.Context, accountID string) (*model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalUserImpl).Delete")
+	defer span.End()
+
 	if accountID == "" {
 		return nil, model.ErrNoAccountID
 	}
@@ -171,6 +198,9 @@ func (i *internalUserImpl) Delete(ctx context.Context, accountID string) (*model
 }
 
 func (i *internalUserImpl) Find(ctx context.Context, accountIDs []string, startAt, maxResults int) (*model.UserSearchPageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalUserImpl).Find")
+	defer span.End()
 
 	if len(accountIDs) == 0 {
 		return nil, nil, model.ErrNoAccountSlice
@@ -202,6 +232,9 @@ func (i *internalUserImpl) Find(ctx context.Context, accountIDs []string, startA
 
 func (i *internalUserImpl) Groups(ctx context.Context, accountID string) ([]*model.UserGroupScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalUserImpl).Groups")
+	defer span.End()
+
 	if accountID == "" {
 		return nil, nil, model.ErrNoAccountID
 	}
@@ -225,6 +258,9 @@ func (i *internalUserImpl) Groups(ctx context.Context, accountID string) ([]*mod
 }
 
 func (i *internalUserImpl) Gets(ctx context.Context, startAt, maxResults int) ([]*model.UserScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalUserImpl).Gets")
+	defer span.End()
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))

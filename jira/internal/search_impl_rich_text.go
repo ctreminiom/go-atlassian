@@ -24,6 +24,9 @@ type SearchRichTextService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/search#check-issues-against-jql
 func (s *SearchRichTextService) Checks(ctx context.Context, payload *model.IssueSearchCheckPayloadScheme) (*model.IssueMatchesPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SearchRichTextService).Checks")
+	defer span.End()
+
 	return s.internalClient.Checks(ctx, payload)
 }
 
@@ -33,6 +36,9 @@ func (s *SearchRichTextService) Checks(ctx context.Context, payload *model.Issue
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/search#search-for-issues-using-jql-get
 func (s *SearchRichTextService) Get(ctx context.Context, jql string, fields, expands []string, startAt, maxResults int, validate string) (*model.IssueSearchSchemeV2, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SearchRichTextService).Get")
+	defer span.End()
+
 	return s.internalClient.Get(ctx, jql, fields, expands, startAt, maxResults, validate)
 }
 
@@ -42,6 +48,9 @@ func (s *SearchRichTextService) Get(ctx context.Context, jql string, fields, exp
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/search#search-for-issues-using-jql-get
 func (s *SearchRichTextService) Post(ctx context.Context, jql string, fields, expands []string, startAt, maxResults int, validate string) (*model.IssueSearchSchemeV2, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SearchRichTextService).Post")
+	defer span.End()
+
 	return s.internalClient.Post(ctx, jql, fields, expands, startAt, maxResults, validate)
 }
 
@@ -51,6 +60,9 @@ type internalSearchRichTextImpl struct {
 }
 
 func (i *internalSearchRichTextImpl) Checks(ctx context.Context, payload *model.IssueSearchCheckPayloadScheme) (*model.IssueMatchesPageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalSearchRichTextImpl).Checks")
+	defer span.End()
 
 	endpoint := fmt.Sprintf("rest/api/%v/jql/match", i.version)
 
@@ -69,6 +81,9 @@ func (i *internalSearchRichTextImpl) Checks(ctx context.Context, payload *model.
 }
 
 func (i *internalSearchRichTextImpl) Get(ctx context.Context, jql string, fields, expands []string, startAt, maxResults int, validate string) (*model.IssueSearchSchemeV2, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalSearchRichTextImpl).Get")
+	defer span.End()
 
 	if jql == "" {
 		return nil, nil, model.ErrNoJQL
@@ -108,6 +123,9 @@ func (i *internalSearchRichTextImpl) Get(ctx context.Context, jql string, fields
 }
 
 func (i *internalSearchRichTextImpl) Post(ctx context.Context, jql string, fields, expands []string, startAt, maxResults int, validate string) (*model.IssueSearchSchemeV2, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalSearchRichTextImpl).Post")
+	defer span.End()
 
 	payload := struct {
 		Expand        []string `json:"expand,omitempty"`

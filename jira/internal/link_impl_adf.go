@@ -27,6 +27,9 @@ type internalLinkADFServiceImpl struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/link#get-issue-link
 func (l *LinkADFService) Get(ctx context.Context, linkID string) (*model.IssueLinkScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*LinkADFService).Get")
+	defer span.End()
+
 	return l.internalClient.Get(ctx, linkID)
 }
 
@@ -34,6 +37,9 @@ func (l *LinkADFService) Get(ctx context.Context, linkID string) (*model.IssueLi
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/link#get-issue-links
 func (l *LinkADFService) Gets(ctx context.Context, issueKeyOrID string) (*model.IssueLinkPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*LinkADFService).Gets")
+	defer span.End()
+
 	return l.internalClient.Gets(ctx, issueKeyOrID)
 }
 
@@ -43,6 +49,9 @@ func (l *LinkADFService) Gets(ctx context.Context, issueKeyOrID string) (*model.
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/link#delete-issue-link
 func (l *LinkADFService) Delete(ctx context.Context, linkID string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*LinkADFService).Delete")
+	defer span.End()
+
 	return l.internalClient.Delete(ctx, linkID)
 }
 
@@ -54,10 +63,16 @@ func (l *LinkADFService) Delete(ctx context.Context, linkID string) (*model.Resp
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/link#create-issue-link
 func (l *LinkADFService) Create(ctx context.Context, payload *model.LinkPayloadSchemeV3) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*LinkADFService).Create")
+	defer span.End()
+
 	return l.internalClient.Create(ctx, payload)
 }
 
 func (i *internalLinkADFServiceImpl) Get(ctx context.Context, linkID string) (*model.IssueLinkScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalLinkADFServiceImpl).Get")
+	defer span.End()
 
 	if linkID == "" {
 		return nil, nil, model.ErrNoTypeID
@@ -81,6 +96,9 @@ func (i *internalLinkADFServiceImpl) Get(ctx context.Context, linkID string) (*m
 
 func (i *internalLinkADFServiceImpl) Gets(ctx context.Context, issueKeyOrID string) (*model.IssueLinkPageScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalLinkADFServiceImpl).Gets")
+	defer span.End()
+
 	if len(issueKeyOrID) == 0 {
 		return nil, nil, model.ErrNoIssueKeyOrID
 	}
@@ -103,6 +121,9 @@ func (i *internalLinkADFServiceImpl) Gets(ctx context.Context, issueKeyOrID stri
 
 func (i *internalLinkADFServiceImpl) Delete(ctx context.Context, linkID string) (*model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalLinkADFServiceImpl).Delete")
+	defer span.End()
+
 	if linkID == "" {
 		return nil, model.ErrNoTypeID
 	}
@@ -118,6 +139,9 @@ func (i *internalLinkADFServiceImpl) Delete(ctx context.Context, linkID string) 
 }
 
 func (i *internalLinkADFServiceImpl) Create(ctx context.Context, payload *model.LinkPayloadSchemeV3) (*model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalLinkADFServiceImpl).Create")
+	defer span.End()
 
 	endpoint := fmt.Sprintf("rest/api/%v/issueLink", i.version)
 

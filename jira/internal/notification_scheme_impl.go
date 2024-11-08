@@ -37,6 +37,9 @@ type NotificationSchemeService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/notification-schemes#get-notification-schemes
 func (n *NotificationSchemeService) Search(ctx context.Context, options *model.NotificationSchemeSearchOptions, startAt, maxResults int) (*model.NotificationSchemePageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*NotificationSchemeService).Search")
+	defer span.End()
+
 	return n.internalClient.Search(ctx, options, startAt, maxResults)
 }
 
@@ -46,6 +49,9 @@ func (n *NotificationSchemeService) Search(ctx context.Context, options *model.N
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/notification-schemes#create-notification-scheme
 func (n *NotificationSchemeService) Create(ctx context.Context, payload *model.NotificationSchemePayloadScheme) (*model.NotificationSchemeCreatedPayload, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*NotificationSchemeService).Create")
+	defer span.End()
+
 	return n.internalClient.Create(ctx, payload)
 }
 
@@ -63,6 +69,9 @@ func (n *NotificationSchemeService) Create(ctx context.Context, payload *model.N
 //
 // GET /rest/api/{2-3}/notificationscheme/project
 func (n *NotificationSchemeService) Projects(ctx context.Context, schemeIDs, projectIDs []string, startAt, maxResults int) (*model.NotificationSchemeProjectPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*NotificationSchemeService).Projects")
+	defer span.End()
+
 	return n.internalClient.Projects(ctx, schemeIDs, projectIDs, startAt, maxResults)
 }
 
@@ -74,6 +83,9 @@ func (n *NotificationSchemeService) Projects(ctx context.Context, schemeIDs, pro
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/notification-schemes#get-notification-scheme
 func (n *NotificationSchemeService) Get(ctx context.Context, schemeID string, expand []string) (*model.NotificationSchemeScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*NotificationSchemeService).Get")
+	defer span.End()
+
 	return n.internalClient.Get(ctx, schemeID, expand)
 }
 
@@ -83,6 +95,9 @@ func (n *NotificationSchemeService) Get(ctx context.Context, schemeID string, ex
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/notification-schemes#update-notification-scheme
 func (n *NotificationSchemeService) Update(ctx context.Context, schemeID string, payload *model.NotificationSchemePayloadScheme) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*NotificationSchemeService).Update")
+	defer span.End()
+
 	return n.internalClient.Update(ctx, schemeID, payload)
 }
 
@@ -94,6 +109,9 @@ func (n *NotificationSchemeService) Update(ctx context.Context, schemeID string,
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/notification-schemes#append-notifications-to-scheme
 func (n *NotificationSchemeService) Append(ctx context.Context, schemeID string, payload *model.NotificationSchemeEventsPayloadScheme) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*NotificationSchemeService).Append")
+	defer span.End()
+
 	return n.internalClient.Append(ctx, schemeID, payload)
 }
 
@@ -103,6 +121,9 @@ func (n *NotificationSchemeService) Append(ctx context.Context, schemeID string,
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/notification-schemes#delete-notification-scheme
 func (n *NotificationSchemeService) Delete(ctx context.Context, schemeID string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*NotificationSchemeService).Delete")
+	defer span.End()
+
 	return n.internalClient.Delete(ctx, schemeID)
 }
 
@@ -112,6 +133,9 @@ func (n *NotificationSchemeService) Delete(ctx context.Context, schemeID string)
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/notification-schemes#remove-notifications-to-scheme
 func (n *NotificationSchemeService) Remove(ctx context.Context, schemeID, notificationID string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*NotificationSchemeService).Remove")
+	defer span.End()
+
 	return n.internalClient.Remove(ctx, schemeID, notificationID)
 }
 
@@ -121,6 +145,9 @@ type internalNotificationSchemeImpl struct {
 }
 
 func (i *internalNotificationSchemeImpl) Search(ctx context.Context, options *model.NotificationSchemeSearchOptions, startAt, maxResults int) (*model.NotificationSchemePageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalNotificationSchemeImpl).Search")
+	defer span.End()
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -163,6 +190,9 @@ func (i *internalNotificationSchemeImpl) Search(ctx context.Context, options *mo
 
 func (i *internalNotificationSchemeImpl) Create(ctx context.Context, payload *model.NotificationSchemePayloadScheme) (*model.NotificationSchemeCreatedPayload, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalNotificationSchemeImpl).Create")
+	defer span.End()
+
 	endpoint := fmt.Sprintf("rest/api/%v/notificationscheme", i.version)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
@@ -180,6 +210,9 @@ func (i *internalNotificationSchemeImpl) Create(ctx context.Context, payload *mo
 }
 
 func (i *internalNotificationSchemeImpl) Projects(ctx context.Context, schemeIDs, projectIDs []string, startAt, maxResults int) (*model.NotificationSchemeProjectPageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalNotificationSchemeImpl).Projects")
+	defer span.End()
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -210,6 +243,9 @@ func (i *internalNotificationSchemeImpl) Projects(ctx context.Context, schemeIDs
 }
 
 func (i *internalNotificationSchemeImpl) Get(ctx context.Context, schemeID string, expand []string) (*model.NotificationSchemeScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalNotificationSchemeImpl).Get")
+	defer span.End()
 
 	if schemeID == "" {
 		return nil, nil, model.ErrNoNotificationSchemeID
@@ -242,6 +278,9 @@ func (i *internalNotificationSchemeImpl) Get(ctx context.Context, schemeID strin
 
 func (i *internalNotificationSchemeImpl) Update(ctx context.Context, schemeID string, payload *model.NotificationSchemePayloadScheme) (*model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalNotificationSchemeImpl).Update")
+	defer span.End()
+
 	if schemeID == "" {
 		return nil, model.ErrNoNotificationSchemeID
 	}
@@ -257,6 +296,9 @@ func (i *internalNotificationSchemeImpl) Update(ctx context.Context, schemeID st
 }
 
 func (i *internalNotificationSchemeImpl) Append(ctx context.Context, schemeID string, payload *model.NotificationSchemeEventsPayloadScheme) (*model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalNotificationSchemeImpl).Append")
+	defer span.End()
 
 	if schemeID == "" {
 		return nil, model.ErrNoNotificationSchemeID
@@ -274,6 +316,9 @@ func (i *internalNotificationSchemeImpl) Append(ctx context.Context, schemeID st
 
 func (i *internalNotificationSchemeImpl) Delete(ctx context.Context, schemeID string) (*model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalNotificationSchemeImpl).Delete")
+	defer span.End()
+
 	if schemeID == "" {
 		return nil, model.ErrNoNotificationSchemeID
 	}
@@ -289,6 +334,9 @@ func (i *internalNotificationSchemeImpl) Delete(ctx context.Context, schemeID st
 }
 
 func (i *internalNotificationSchemeImpl) Remove(ctx context.Context, schemeID, notificationID string) (*model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalNotificationSchemeImpl).Remove")
+	defer span.End()
 
 	if schemeID == "" {
 		return nil, model.ErrNoNotificationSchemeID

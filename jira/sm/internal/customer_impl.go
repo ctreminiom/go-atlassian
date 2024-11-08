@@ -38,6 +38,9 @@ type CustomerService struct {
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/customer#create-customer
 func (c *CustomerService) Create(ctx context.Context, email, displayName string) (*model.CustomerScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*CustomerService).Create")
+	defer span.End()
+
 	return c.internalClient.Create(ctx, email, displayName)
 }
 
@@ -47,6 +50,9 @@ func (c *CustomerService) Create(ctx context.Context, email, displayName string)
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/customer#get-customers
 func (c *CustomerService) Gets(ctx context.Context, serviceDeskID string, query string, start, limit int) (*model.CustomerPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*CustomerService).Gets")
+	defer span.End()
+
 	return c.internalClient.Gets(ctx, serviceDeskID, query, start, limit)
 }
 
@@ -56,6 +62,9 @@ func (c *CustomerService) Gets(ctx context.Context, serviceDeskID string, query 
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/customer#add-customers
 func (c *CustomerService) Add(ctx context.Context, serviceDeskID string, accountIDs []string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*CustomerService).Add")
+	defer span.End()
+
 	return c.internalClient.Add(ctx, serviceDeskID, accountIDs)
 }
 
@@ -65,6 +74,9 @@ func (c *CustomerService) Add(ctx context.Context, serviceDeskID string, account
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/customer#remove-customers
 func (c *CustomerService) Remove(ctx context.Context, serviceDeskID string, accountIDs []string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*CustomerService).Remove")
+	defer span.End()
+
 	return c.internalClient.Remove(ctx, serviceDeskID, accountIDs)
 }
 
@@ -74,6 +86,9 @@ type internalCustomerImpl struct {
 }
 
 func (i *internalCustomerImpl) Create(ctx context.Context, email, displayName string) (*model.CustomerScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalCustomerImpl).Create")
+	defer span.End()
 
 	payload := map[string]interface{}{
 		"displayName": displayName,
@@ -97,6 +112,9 @@ func (i *internalCustomerImpl) Create(ctx context.Context, email, displayName st
 }
 
 func (i *internalCustomerImpl) Gets(ctx context.Context, serviceDeskID string, query string, start, limit int) (*model.CustomerPageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalCustomerImpl).Gets")
+	defer span.End()
 
 	params := url.Values{}
 	params.Add("start", strconv.Itoa(start))
@@ -124,6 +142,9 @@ func (i *internalCustomerImpl) Gets(ctx context.Context, serviceDeskID string, q
 
 func (i *internalCustomerImpl) Add(ctx context.Context, serviceDeskID string, accountIDs []string) (*model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalCustomerImpl).Add")
+	defer span.End()
+
 	if serviceDeskID == "" {
 		return nil, model.ErrNoServiceDeskID
 	}
@@ -147,6 +168,9 @@ func (i *internalCustomerImpl) Add(ctx context.Context, serviceDeskID string, ac
 }
 
 func (i *internalCustomerImpl) Remove(ctx context.Context, serviceDeskID string, accountIDs []string) (*model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalCustomerImpl).Remove")
+	defer span.End()
 
 	if serviceDeskID == "" {
 		return nil, model.ErrNoServiceDeskID

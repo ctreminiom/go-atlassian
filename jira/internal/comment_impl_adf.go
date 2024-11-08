@@ -25,6 +25,9 @@ type CommentADFService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/comments#delete-comment
 func (c *CommentADFService) Delete(ctx context.Context, issueKeyOrID, commentID string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*CommentADFService).Delete")
+	defer span.End()
+
 	return c.internalClient.Delete(ctx, issueKeyOrID, commentID)
 }
 
@@ -34,6 +37,9 @@ func (c *CommentADFService) Delete(ctx context.Context, issueKeyOrID, commentID 
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/comments#get-comments
 func (c *CommentADFService) Gets(ctx context.Context, issueKeyOrID, orderBy string, expand []string, startAt, maxResults int) (*model.IssueCommentPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*CommentADFService).Gets")
+	defer span.End()
+
 	return c.internalClient.Gets(ctx, issueKeyOrID, orderBy, expand, startAt, maxResults)
 }
 
@@ -43,6 +49,9 @@ func (c *CommentADFService) Gets(ctx context.Context, issueKeyOrID, orderBy stri
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/comments#get-comment
 func (c *CommentADFService) Get(ctx context.Context, issueKeyOrID, commentID string) (*model.IssueCommentScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*CommentADFService).Get")
+	defer span.End()
+
 	return c.internalClient.Get(ctx, issueKeyOrID, commentID)
 }
 
@@ -52,6 +61,9 @@ func (c *CommentADFService) Get(ctx context.Context, issueKeyOrID, commentID str
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/comments#add-comment
 func (c *CommentADFService) Add(ctx context.Context, issueKeyOrID string, payload *model.CommentPayloadScheme, expand []string) (*model.IssueCommentScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*CommentADFService).Add")
+	defer span.End()
+
 	return c.internalClient.Add(ctx, issueKeyOrID, payload, expand)
 }
 
@@ -61,6 +73,9 @@ type internalAdfCommentImpl struct {
 }
 
 func (i *internalAdfCommentImpl) Delete(ctx context.Context, issueKeyOrID, commentID string) (*model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalAdfCommentImpl).Delete")
+	defer span.End()
 
 	if issueKeyOrID == "" {
 		return nil, model.ErrNoIssueKeyOrID
@@ -81,6 +96,9 @@ func (i *internalAdfCommentImpl) Delete(ctx context.Context, issueKeyOrID, comme
 }
 
 func (i *internalAdfCommentImpl) Gets(ctx context.Context, issueKeyOrID, orderBy string, expand []string, startAt, maxResults int) (*model.IssueCommentPageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalAdfCommentImpl).Gets")
+	defer span.End()
 
 	if issueKeyOrID == "" {
 		return nil, nil, model.ErrNoIssueKeyOrID
@@ -116,6 +134,9 @@ func (i *internalAdfCommentImpl) Gets(ctx context.Context, issueKeyOrID, orderBy
 
 func (i *internalAdfCommentImpl) Get(ctx context.Context, issueKeyOrID, commentID string) (*model.IssueCommentScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalAdfCommentImpl).Get")
+	defer span.End()
+
 	if issueKeyOrID == "" {
 		return nil, nil, model.ErrNoIssueKeyOrID
 	}
@@ -141,6 +162,9 @@ func (i *internalAdfCommentImpl) Get(ctx context.Context, issueKeyOrID, commentI
 }
 
 func (i *internalAdfCommentImpl) Add(ctx context.Context, issueKeyOrID string, payload *model.CommentPayloadScheme, expand []string) (*model.IssueCommentScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalAdfCommentImpl).Add")
+	defer span.End()
 
 	if issueKeyOrID == "" {
 		return nil, nil, model.ErrNoIssueKeyOrID

@@ -32,6 +32,9 @@ type ContentLabelService struct {
 //
 // https://docs.go-atlassian.io/confluence-cloud/content/labels#get-labels-for-content
 func (c *ContentLabelService) Gets(ctx context.Context, contentID, prefix string, startAt, maxResults int) (*model.ContentLabelPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ContentLabelService).Gets")
+	defer span.End()
+
 	return c.internalClient.Gets(ctx, contentID, prefix, startAt, maxResults)
 }
 
@@ -41,6 +44,9 @@ func (c *ContentLabelService) Gets(ctx context.Context, contentID, prefix string
 //
 // https://docs.go-atlassian.io/confluence-cloud/content/labels#add-labels-to-content
 func (c *ContentLabelService) Add(ctx context.Context, contentID string, payload []*model.ContentLabelPayloadScheme, want400Response bool) (*model.ContentLabelPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ContentLabelService).Add")
+	defer span.End()
+
 	return c.internalClient.Add(ctx, contentID, payload, want400Response)
 }
 
@@ -50,6 +56,9 @@ func (c *ContentLabelService) Add(ctx context.Context, contentID string, payload
 //
 // https://docs.go-atlassian.io/confluence-cloud/content/labels#remove-label-from-content
 func (c *ContentLabelService) Remove(ctx context.Context, contentID, labelName string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ContentLabelService).Remove")
+	defer span.End()
+
 	return c.internalClient.Remove(ctx, contentID, labelName)
 }
 
@@ -58,6 +67,9 @@ type internalContentLabelImpl struct {
 }
 
 func (i *internalContentLabelImpl) Gets(ctx context.Context, contentID, prefix string, startAt, maxResults int) (*model.ContentLabelPageScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalContentLabelImpl).Gets")
+	defer span.End()
 
 	if contentID == "" {
 		return nil, nil, model.ErrNoContentID
@@ -89,6 +101,9 @@ func (i *internalContentLabelImpl) Gets(ctx context.Context, contentID, prefix s
 
 func (i *internalContentLabelImpl) Add(ctx context.Context, contentID string, payload []*model.ContentLabelPayloadScheme, want400Response bool) (*model.ContentLabelPageScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalContentLabelImpl).Add")
+	defer span.End()
+
 	if contentID == "" {
 		return nil, nil, model.ErrNoContentID
 	}
@@ -118,6 +133,9 @@ func (i *internalContentLabelImpl) Add(ctx context.Context, contentID string, pa
 }
 
 func (i *internalContentLabelImpl) Remove(ctx context.Context, contentID, labelName string) (*model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalContentLabelImpl).Remove")
+	defer span.End()
 
 	if contentID == "" {
 		return nil, model.ErrNoContentID

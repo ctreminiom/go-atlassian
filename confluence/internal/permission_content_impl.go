@@ -42,6 +42,9 @@ type PermissionService struct {
 //
 // https://docs.go-atlassian.io/confluence-cloud/content/permissions#check-content-permissions
 func (p *PermissionService) Check(ctx context.Context, contentID string, payload *model.CheckPermissionScheme) (*model.PermissionCheckResponseScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*PermissionService).Check")
+	defer span.End()
+
 	return p.internalClient.Check(ctx, contentID, payload)
 }
 
@@ -50,6 +53,9 @@ type internalPermissionImpl struct {
 }
 
 func (i *internalPermissionImpl) Check(ctx context.Context, contentID string, payload *model.CheckPermissionScheme) (*model.PermissionCheckResponseScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalPermissionImpl).Check")
+	defer span.End()
 
 	if contentID == "" {
 		return nil, nil, model.ErrNoContentID

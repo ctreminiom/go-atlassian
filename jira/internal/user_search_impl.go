@@ -86,7 +86,6 @@ type internalUserSearchImpl struct {
 }
 
 func (i *internalUserSearchImpl) Check(ctx context.Context, permission string, options *model.UserPermissionCheckParamsScheme, startAt, maxResults int) ([]*model.UserScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalUserSearchImpl).Check")
 	defer span.End()
 
@@ -135,7 +134,6 @@ func (i *internalUserSearchImpl) Check(ctx context.Context, permission string, o
 }
 
 func (i *internalUserSearchImpl) Projects(ctx context.Context, accountID string, projectKeys []string, startAt, maxResults int) ([]*model.UserScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalUserSearchImpl).Projects")
 	defer span.End()
 
@@ -172,7 +170,6 @@ func (i *internalUserSearchImpl) Projects(ctx context.Context, accountID string,
 }
 
 func (i *internalUserSearchImpl) Do(ctx context.Context, accountID, query string, startAt, maxResults int) ([]*model.UserScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalUserSearchImpl).Do")
 	defer span.End()
 

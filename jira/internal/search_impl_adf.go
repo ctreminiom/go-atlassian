@@ -60,7 +60,6 @@ type internalSearchADFImpl struct {
 }
 
 func (i *internalSearchADFImpl) Checks(ctx context.Context, payload *model.IssueSearchCheckPayloadScheme) (*model.IssueMatchesPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalSearchADFImpl).Checks")
 	defer span.End()
 
@@ -81,7 +80,6 @@ func (i *internalSearchADFImpl) Checks(ctx context.Context, payload *model.Issue
 }
 
 func (i *internalSearchADFImpl) Get(ctx context.Context, jql string, fields, expands []string, startAt, maxResults int, validate string) (*model.IssueSearchScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalSearchADFImpl).Get")
 	defer span.End()
 
@@ -123,7 +121,6 @@ func (i *internalSearchADFImpl) Get(ctx context.Context, jql string, fields, exp
 }
 
 func (i *internalSearchADFImpl) Post(ctx context.Context, jql string, fields, expands []string, startAt, maxResults int, validate string) (*model.IssueSearchScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalSearchADFImpl).Post")
 	defer span.End()
 

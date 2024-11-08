@@ -108,7 +108,6 @@ type internalPermissionSchemeImpl struct {
 }
 
 func (i *internalPermissionSchemeImpl) Gets(ctx context.Context) (*model.PermissionSchemePageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalPermissionSchemeImpl).Gets")
 	defer span.End()
 
@@ -129,7 +128,6 @@ func (i *internalPermissionSchemeImpl) Gets(ctx context.Context) (*model.Permiss
 }
 
 func (i *internalPermissionSchemeImpl) Get(ctx context.Context, permissionSchemeID int, expand []string) (*model.PermissionSchemeScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalPermissionSchemeImpl).Get")
 	defer span.End()
 
@@ -163,7 +161,6 @@ func (i *internalPermissionSchemeImpl) Get(ctx context.Context, permissionScheme
 }
 
 func (i *internalPermissionSchemeImpl) Delete(ctx context.Context, permissionSchemeID int) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalPermissionSchemeImpl).Delete")
 	defer span.End()
 
@@ -182,7 +179,6 @@ func (i *internalPermissionSchemeImpl) Delete(ctx context.Context, permissionSch
 }
 
 func (i *internalPermissionSchemeImpl) Create(ctx context.Context, payload *model.PermissionSchemeScheme) (*model.PermissionSchemeScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalPermissionSchemeImpl).Create")
 	defer span.End()
 
@@ -203,7 +199,6 @@ func (i *internalPermissionSchemeImpl) Create(ctx context.Context, payload *mode
 }
 
 func (i *internalPermissionSchemeImpl) Update(ctx context.Context, permissionSchemeID int, payload *model.PermissionSchemeScheme) (*model.PermissionSchemeScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalPermissionSchemeImpl).Update")
 	defer span.End()
 

@@ -119,7 +119,6 @@ type internalIssueAttachmentServiceImpl struct {
 }
 
 func (i *internalIssueAttachmentServiceImpl) Download(ctx context.Context, attachmentID string, redirect bool) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalIssueAttachmentServiceImpl).Download")
 	defer span.End()
 
@@ -147,7 +146,6 @@ func (i *internalIssueAttachmentServiceImpl) Download(ctx context.Context, attac
 }
 
 func (i *internalIssueAttachmentServiceImpl) Settings(ctx context.Context) (*model.AttachmentSettingScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalIssueAttachmentServiceImpl).Settings")
 	defer span.End()
 
@@ -168,7 +166,6 @@ func (i *internalIssueAttachmentServiceImpl) Settings(ctx context.Context) (*mod
 }
 
 func (i *internalIssueAttachmentServiceImpl) Metadata(ctx context.Context, attachmentID string) (*model.IssueAttachmentMetadataScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalIssueAttachmentServiceImpl).Metadata")
 	defer span.End()
 
@@ -193,7 +190,6 @@ func (i *internalIssueAttachmentServiceImpl) Metadata(ctx context.Context, attac
 }
 
 func (i *internalIssueAttachmentServiceImpl) Delete(ctx context.Context, attachmentID string) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalIssueAttachmentServiceImpl).Delete")
 	defer span.End()
 
@@ -212,7 +208,6 @@ func (i *internalIssueAttachmentServiceImpl) Delete(ctx context.Context, attachm
 }
 
 func (i *internalIssueAttachmentServiceImpl) Human(ctx context.Context, attachmentID string) (*model.IssueAttachmentHumanMetadataScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalIssueAttachmentServiceImpl).Human")
 	defer span.End()
 
@@ -237,7 +232,6 @@ func (i *internalIssueAttachmentServiceImpl) Human(ctx context.Context, attachme
 }
 
 func (i *internalIssueAttachmentServiceImpl) Add(ctx context.Context, issueKeyOrID, fileName string, file io.Reader) ([]*model.IssueAttachmentScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalIssueAttachmentServiceImpl).Add")
 	defer span.End()
 

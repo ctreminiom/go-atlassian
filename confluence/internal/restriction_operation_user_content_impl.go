@@ -69,7 +69,6 @@ type internalRestrictionOperationUserImpl struct {
 }
 
 func (i *internalRestrictionOperationUserImpl) Get(ctx context.Context, contentID, operationKey, accountID string) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalRestrictionOperationUserImpl).Get")
 	defer span.End()
 
@@ -99,7 +98,6 @@ func (i *internalRestrictionOperationUserImpl) Get(ctx context.Context, contentI
 }
 
 func (i *internalRestrictionOperationUserImpl) Add(ctx context.Context, contentID, operationKey, accountID string) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalRestrictionOperationUserImpl).Add")
 	defer span.End()
 
@@ -129,7 +127,6 @@ func (i *internalRestrictionOperationUserImpl) Add(ctx context.Context, contentI
 }
 
 func (i *internalRestrictionOperationUserImpl) Remove(ctx context.Context, contentID, operationKey, accountID string) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalRestrictionOperationUserImpl).Remove")
 	defer span.End()
 

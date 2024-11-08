@@ -94,7 +94,6 @@ type internalProjectCategoryImpl struct {
 }
 
 func (i *internalProjectCategoryImpl) Gets(ctx context.Context) ([]*model.ProjectCategoryScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalProjectCategoryImpl).Gets")
 	defer span.End()
 
@@ -115,7 +114,6 @@ func (i *internalProjectCategoryImpl) Gets(ctx context.Context) ([]*model.Projec
 }
 
 func (i *internalProjectCategoryImpl) Get(ctx context.Context, categoryID int) (*model.ProjectCategoryScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalProjectCategoryImpl).Get")
 	defer span.End()
 
@@ -140,7 +138,6 @@ func (i *internalProjectCategoryImpl) Get(ctx context.Context, categoryID int) (
 }
 
 func (i *internalProjectCategoryImpl) Create(ctx context.Context, payload *model.ProjectCategoryPayloadScheme) (*model.ProjectCategoryScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalProjectCategoryImpl).Create")
 	defer span.End()
 
@@ -161,7 +158,6 @@ func (i *internalProjectCategoryImpl) Create(ctx context.Context, payload *model
 }
 
 func (i *internalProjectCategoryImpl) Update(ctx context.Context, categoryID int, payload *model.ProjectCategoryPayloadScheme) (*model.ProjectCategoryScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalProjectCategoryImpl).Update")
 	defer span.End()
 
@@ -186,7 +182,6 @@ func (i *internalProjectCategoryImpl) Update(ctx context.Context, categoryID int
 }
 
 func (i *internalProjectCategoryImpl) Delete(ctx context.Context, categoryID int) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalProjectCategoryImpl).Delete")
 	defer span.End()
 

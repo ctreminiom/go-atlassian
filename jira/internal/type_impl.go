@@ -118,7 +118,6 @@ type internalTypeImpl struct {
 }
 
 func (i *internalTypeImpl) Gets(ctx context.Context) ([]*model.IssueTypeScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalTypeImpl).Gets")
 	defer span.End()
 
@@ -139,7 +138,6 @@ func (i *internalTypeImpl) Gets(ctx context.Context) ([]*model.IssueTypeScheme, 
 }
 
 func (i *internalTypeImpl) Create(ctx context.Context, payload *model.IssueTypePayloadScheme) (*model.IssueTypeScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalTypeImpl).Create")
 	defer span.End()
 
@@ -160,7 +158,6 @@ func (i *internalTypeImpl) Create(ctx context.Context, payload *model.IssueTypeP
 }
 
 func (i *internalTypeImpl) Get(ctx context.Context, issueTypeID string) (*model.IssueTypeScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalTypeImpl).Get")
 	defer span.End()
 
@@ -185,7 +182,6 @@ func (i *internalTypeImpl) Get(ctx context.Context, issueTypeID string) (*model.
 }
 
 func (i *internalTypeImpl) Update(ctx context.Context, issueTypeID string, payload *model.IssueTypePayloadScheme) (*model.IssueTypeScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalTypeImpl).Update")
 	defer span.End()
 
@@ -210,7 +206,6 @@ func (i *internalTypeImpl) Update(ctx context.Context, issueTypeID string, paylo
 }
 
 func (i *internalTypeImpl) Delete(ctx context.Context, issueTypeID string) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalTypeImpl).Delete")
 	defer span.End()
 
@@ -229,7 +224,6 @@ func (i *internalTypeImpl) Delete(ctx context.Context, issueTypeID string) (*mod
 }
 
 func (i *internalTypeImpl) Alternatives(ctx context.Context, issueTypeID string) ([]*model.IssueTypeScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalTypeImpl).Alternatives")
 	defer span.End()
 

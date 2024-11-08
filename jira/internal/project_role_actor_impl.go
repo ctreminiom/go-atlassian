@@ -60,7 +60,6 @@ type internalProjectRoleActorImpl struct {
 }
 
 func (i *internalProjectRoleActorImpl) Add(ctx context.Context, projectKeyOrID string, roleID int, accountIDs, groups []string) (*model.ProjectRoleScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalProjectRoleActorImpl).Add")
 	defer span.End()
 
@@ -89,7 +88,6 @@ func (i *internalProjectRoleActorImpl) Add(ctx context.Context, projectKeyOrID s
 }
 
 func (i *internalProjectRoleActorImpl) Delete(ctx context.Context, projectKeyOrID string, roleID int, accountID, group string) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalProjectRoleActorImpl).Delete")
 	defer span.End()
 

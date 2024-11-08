@@ -88,7 +88,6 @@ type internalOrganizationPolicyImpl struct {
 }
 
 func (i *internalOrganizationPolicyImpl) Gets(ctx context.Context, organizationID, policyType, cursor string) (*model.OrganizationPolicyPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalOrganizationPolicyImpl).Gets")
 	defer span.End()
 
@@ -127,7 +126,6 @@ func (i *internalOrganizationPolicyImpl) Gets(ctx context.Context, organizationI
 }
 
 func (i *internalOrganizationPolicyImpl) Get(ctx context.Context, organizationID, policyID string) (*model.OrganizationPolicyScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalOrganizationPolicyImpl).Get")
 	defer span.End()
 
@@ -156,7 +154,6 @@ func (i *internalOrganizationPolicyImpl) Get(ctx context.Context, organizationID
 }
 
 func (i *internalOrganizationPolicyImpl) Create(ctx context.Context, organizationID string, payload *model.OrganizationPolicyData) (*model.OrganizationPolicyScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalOrganizationPolicyImpl).Create")
 	defer span.End()
 
@@ -181,7 +178,6 @@ func (i *internalOrganizationPolicyImpl) Create(ctx context.Context, organizatio
 }
 
 func (i *internalOrganizationPolicyImpl) Update(ctx context.Context, organizationID, policyID string, payload *model.OrganizationPolicyData) (*model.OrganizationPolicyScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalOrganizationPolicyImpl).Update")
 	defer span.End()
 
@@ -210,7 +206,6 @@ func (i *internalOrganizationPolicyImpl) Update(ctx context.Context, organizatio
 }
 
 func (i *internalOrganizationPolicyImpl) Delete(ctx context.Context, organizationID, policyID string) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalOrganizationPolicyImpl).Delete")
 	defer span.End()
 

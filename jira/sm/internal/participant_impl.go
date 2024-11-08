@@ -68,7 +68,6 @@ type internalServiceRequestParticipantImpl struct {
 }
 
 func (i *internalServiceRequestParticipantImpl) Gets(ctx context.Context, issueKeyOrID string, start, limit int) (*model.RequestParticipantPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalServiceRequestParticipantImpl).Gets")
 	defer span.End()
 
@@ -97,7 +96,6 @@ func (i *internalServiceRequestParticipantImpl) Gets(ctx context.Context, issueK
 }
 
 func (i *internalServiceRequestParticipantImpl) Add(ctx context.Context, issueKeyOrID string, accountIDs []string) (*model.RequestParticipantPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalServiceRequestParticipantImpl).Add")
 	defer span.End()
 
@@ -126,7 +124,6 @@ func (i *internalServiceRequestParticipantImpl) Add(ctx context.Context, issueKe
 }
 
 func (i *internalServiceRequestParticipantImpl) Remove(ctx context.Context, issueKeyOrID string, accountIDs []string) (*model.RequestParticipantPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalServiceRequestParticipantImpl).Remove")
 	defer span.End()
 

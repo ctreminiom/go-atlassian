@@ -45,7 +45,6 @@ type internalWorkSpaceImpl struct {
 }
 
 func (i *internalWorkSpaceImpl) Gets(ctx context.Context) (*model.WorkSpacePageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalWorkSpaceImpl).Gets")
 	defer span.End()
 

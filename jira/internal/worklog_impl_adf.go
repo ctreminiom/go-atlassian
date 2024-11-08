@@ -159,7 +159,6 @@ type internalWorklogAdfImpl struct {
 }
 
 func (i *internalWorklogAdfImpl) Gets(ctx context.Context, worklogIDs []int, expand []string) ([]*model.IssueWorklogADFScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalWorklogAdfImpl).Gets")
 	defer span.End()
 
@@ -194,7 +193,6 @@ func (i *internalWorklogAdfImpl) Gets(ctx context.Context, worklogIDs []int, exp
 }
 
 func (i *internalWorklogAdfImpl) Get(ctx context.Context, issueKeyOrID, worklogID string, expand []string) (*model.IssueWorklogADFScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalWorklogAdfImpl).Get")
 	defer span.End()
 
@@ -233,7 +231,6 @@ func (i *internalWorklogAdfImpl) Get(ctx context.Context, issueKeyOrID, worklogI
 }
 
 func (i *internalWorklogAdfImpl) Issue(ctx context.Context, issueKeyOrID string, startAt, maxResults, after int, expand []string) (*model.IssueWorklogADFPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalWorklogAdfImpl).Issue")
 	defer span.End()
 
@@ -270,7 +267,6 @@ func (i *internalWorklogAdfImpl) Issue(ctx context.Context, issueKeyOrID string,
 }
 
 func (i *internalWorklogAdfImpl) Delete(ctx context.Context, issueKeyOrID, worklogID string, options *model.WorklogOptionsScheme) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalWorklogAdfImpl).Delete")
 	defer span.End()
 
@@ -319,7 +315,6 @@ func (i *internalWorklogAdfImpl) Delete(ctx context.Context, issueKeyOrID, workl
 }
 
 func (i *internalWorklogAdfImpl) Deleted(ctx context.Context, since int) (*model.ChangedWorklogPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalWorklogAdfImpl).Deleted")
 	defer span.End()
 
@@ -350,7 +345,6 @@ func (i *internalWorklogAdfImpl) Deleted(ctx context.Context, since int) (*model
 }
 
 func (i *internalWorklogAdfImpl) Updated(ctx context.Context, since int, expand []string) (*model.ChangedWorklogPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalWorklogAdfImpl).Updated")
 	defer span.End()
 
@@ -385,7 +379,6 @@ func (i *internalWorklogAdfImpl) Updated(ctx context.Context, since int, expand 
 }
 
 func (i *internalWorklogAdfImpl) Add(ctx context.Context, issueKeyOrID string, payload *model.WorklogADFPayloadScheme, options *model.WorklogOptionsScheme) (*model.IssueWorklogADFScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalWorklogAdfImpl).Add")
 	defer span.End()
 
@@ -437,7 +430,6 @@ func (i *internalWorklogAdfImpl) Add(ctx context.Context, issueKeyOrID string, p
 }
 
 func (i *internalWorklogAdfImpl) Update(ctx context.Context, issueKeyOrID, worklogID string, payload *model.WorklogADFPayloadScheme, options *model.WorklogOptionsScheme) (*model.IssueWorklogADFScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalWorklogAdfImpl).Update")
 	defer span.End()
 

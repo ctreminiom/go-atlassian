@@ -74,7 +74,6 @@ func (l *LinkRichTextService) Create(ctx context.Context, payload *model.LinkPay
 }
 
 func (i *internalLinkRichTextServiceImpl) Get(ctx context.Context, linkID string) (*model.IssueLinkScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalLinkRichTextServiceImpl).Get")
 	defer span.End()
 
@@ -99,7 +98,6 @@ func (i *internalLinkRichTextServiceImpl) Get(ctx context.Context, linkID string
 }
 
 func (i *internalLinkRichTextServiceImpl) Gets(ctx context.Context, issueKeyOrID string) (*model.IssueLinkPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalLinkRichTextServiceImpl).Gets")
 	defer span.End()
 
@@ -124,7 +122,6 @@ func (i *internalLinkRichTextServiceImpl) Gets(ctx context.Context, issueKeyOrID
 }
 
 func (i *internalLinkRichTextServiceImpl) Delete(ctx context.Context, linkID string) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalLinkRichTextServiceImpl).Delete")
 	defer span.End()
 
@@ -143,7 +140,6 @@ func (i *internalLinkRichTextServiceImpl) Delete(ctx context.Context, linkID str
 }
 
 func (i *internalLinkRichTextServiceImpl) Create(ctx context.Context, payload *model.LinkPayloadSchemeV2) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalLinkRichTextServiceImpl).Create")
 	defer span.End()
 

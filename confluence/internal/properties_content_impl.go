@@ -79,7 +79,6 @@ type internalPropertyImpl struct {
 }
 
 func (i *internalPropertyImpl) Gets(ctx context.Context, contentID string, expand []string, startAt, maxResults int) (*model.ContentPropertyPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalPropertyImpl).Gets")
 	defer span.End()
 
@@ -112,7 +111,6 @@ func (i *internalPropertyImpl) Gets(ctx context.Context, contentID string, expan
 }
 
 func (i *internalPropertyImpl) Create(ctx context.Context, contentID string, payload *model.ContentPropertyPayloadScheme) (*model.ContentPropertyScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalPropertyImpl).Create")
 	defer span.End()
 
@@ -137,7 +135,6 @@ func (i *internalPropertyImpl) Create(ctx context.Context, contentID string, pay
 }
 
 func (i *internalPropertyImpl) Get(ctx context.Context, contentID, key string) (*model.ContentPropertyScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalPropertyImpl).Get")
 	defer span.End()
 
@@ -166,7 +163,6 @@ func (i *internalPropertyImpl) Get(ctx context.Context, contentID, key string) (
 }
 
 func (i *internalPropertyImpl) Delete(ctx context.Context, contentID, key string) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalPropertyImpl).Delete")
 	defer span.End()
 

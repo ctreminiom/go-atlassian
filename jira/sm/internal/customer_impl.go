@@ -86,7 +86,6 @@ type internalCustomerImpl struct {
 }
 
 func (i *internalCustomerImpl) Create(ctx context.Context, email, displayName string) (*model.CustomerScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalCustomerImpl).Create")
 	defer span.End()
 
@@ -112,7 +111,6 @@ func (i *internalCustomerImpl) Create(ctx context.Context, email, displayName st
 }
 
 func (i *internalCustomerImpl) Gets(ctx context.Context, serviceDeskID string, query string, start, limit int) (*model.CustomerPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalCustomerImpl).Gets")
 	defer span.End()
 
@@ -141,7 +139,6 @@ func (i *internalCustomerImpl) Gets(ctx context.Context, serviceDeskID string, q
 }
 
 func (i *internalCustomerImpl) Add(ctx context.Context, serviceDeskID string, accountIDs []string) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalCustomerImpl).Add")
 	defer span.End()
 
@@ -168,7 +165,6 @@ func (i *internalCustomerImpl) Add(ctx context.Context, serviceDeskID string, ac
 }
 
 func (i *internalCustomerImpl) Remove(ctx context.Context, serviceDeskID string, accountIDs []string) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalCustomerImpl).Remove")
 	defer span.End()
 

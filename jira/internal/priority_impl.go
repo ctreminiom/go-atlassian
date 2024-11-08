@@ -58,7 +58,6 @@ type internalPriorityImpl struct {
 }
 
 func (i *internalPriorityImpl) Gets(ctx context.Context) ([]*model.PriorityScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalPriorityImpl).Gets")
 	defer span.End()
 
@@ -79,7 +78,6 @@ func (i *internalPriorityImpl) Gets(ctx context.Context) ([]*model.PrioritySchem
 }
 
 func (i *internalPriorityImpl) Get(ctx context.Context, priorityID string) (*model.PriorityScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalPriorityImpl).Get")
 	defer span.End()
 

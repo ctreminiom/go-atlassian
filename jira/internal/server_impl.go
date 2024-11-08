@@ -45,7 +45,6 @@ type internalServerServiceImpl struct {
 }
 
 func (i *internalServerServiceImpl) Info(ctx context.Context) (*model.ServerInformationScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalServerServiceImpl).Info")
 	defer span.End()
 

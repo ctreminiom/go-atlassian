@@ -66,7 +66,6 @@ type internalRestrictionOperationImpl struct {
 }
 
 func (i *internalRestrictionOperationImpl) Gets(ctx context.Context, contentID string, expand []string) (*model.ContentRestrictionByOperationScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalRestrictionOperationImpl).Gets")
 	defer span.End()
 
@@ -99,7 +98,6 @@ func (i *internalRestrictionOperationImpl) Gets(ctx context.Context, contentID s
 }
 
 func (i *internalRestrictionOperationImpl) Get(ctx context.Context, contentID, operationKey string, expand []string, startAt, maxResults int) (*model.ContentRestrictionScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalRestrictionOperationImpl).Get")
 	defer span.End()
 

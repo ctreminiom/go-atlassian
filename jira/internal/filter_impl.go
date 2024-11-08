@@ -142,7 +142,6 @@ type internalFilterServiceImpl struct {
 }
 
 func (i *internalFilterServiceImpl) Create(ctx context.Context, payload *model.FilterPayloadScheme) (*model.FilterScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalFilterServiceImpl).Create")
 	defer span.End()
 
@@ -163,7 +162,6 @@ func (i *internalFilterServiceImpl) Create(ctx context.Context, payload *model.F
 }
 
 func (i *internalFilterServiceImpl) Favorite(ctx context.Context) ([]*model.FilterScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalFilterServiceImpl).Favorite")
 	defer span.End()
 
@@ -184,7 +182,6 @@ func (i *internalFilterServiceImpl) Favorite(ctx context.Context) ([]*model.Filt
 }
 
 func (i *internalFilterServiceImpl) My(ctx context.Context, favorites bool, expand []string) ([]*model.FilterScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalFilterServiceImpl).My")
 	defer span.End()
 
@@ -212,7 +209,6 @@ func (i *internalFilterServiceImpl) My(ctx context.Context, favorites bool, expa
 }
 
 func (i *internalFilterServiceImpl) Search(ctx context.Context, options *model.FilterSearchOptionScheme, startAt, maxResults int) (*model.FilterSearchPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalFilterServiceImpl).Search")
 	defer span.End()
 
@@ -268,7 +264,6 @@ func (i *internalFilterServiceImpl) Search(ctx context.Context, options *model.F
 }
 
 func (i *internalFilterServiceImpl) Get(ctx context.Context, filterID int, expand []string) (*model.FilterScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalFilterServiceImpl).Get")
 	defer span.End()
 
@@ -303,7 +298,6 @@ func (i *internalFilterServiceImpl) Get(ctx context.Context, filterID int, expan
 }
 
 func (i *internalFilterServiceImpl) Update(ctx context.Context, filterID int, payload *model.FilterPayloadScheme) (*model.FilterScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalFilterServiceImpl).Update")
 	defer span.End()
 
@@ -328,7 +322,6 @@ func (i *internalFilterServiceImpl) Update(ctx context.Context, filterID int, pa
 }
 
 func (i *internalFilterServiceImpl) Delete(ctx context.Context, filterID int) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalFilterServiceImpl).Delete")
 	defer span.End()
 
@@ -352,7 +345,6 @@ func (i *internalFilterServiceImpl) Delete(ctx context.Context, filterID int) (*
 }
 
 func (i *internalFilterServiceImpl) Change(ctx context.Context, filterID int, accountID string) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalFilterServiceImpl).Change")
 	defer span.End()
 

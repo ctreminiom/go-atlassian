@@ -54,7 +54,6 @@ type internalAttachmentVersionImpl struct {
 }
 
 func (i *internalAttachmentVersionImpl) Gets(ctx context.Context, attachmentID, cursor, sort string, limit int) (*model.AttachmentVersionPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalAttachmentVersionImpl).Gets")
 	defer span.End()
 
@@ -90,7 +89,6 @@ func (i *internalAttachmentVersionImpl) Gets(ctx context.Context, attachmentID, 
 }
 
 func (i *internalAttachmentVersionImpl) Get(ctx context.Context, attachmentID string, versionID int) (*model.DetailedVersionScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalAttachmentVersionImpl).Get")
 	defer span.End()
 

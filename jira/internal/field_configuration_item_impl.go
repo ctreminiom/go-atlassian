@@ -64,7 +64,6 @@ type internalIssueFieldConfigItemServiceImpl struct {
 }
 
 func (i *internalIssueFieldConfigItemServiceImpl) Gets(ctx context.Context, id, startAt, maxResults int) (*model.FieldConfigurationItemPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalIssueFieldConfigItemServiceImpl).Gets")
 	defer span.End()
 
@@ -93,7 +92,6 @@ func (i *internalIssueFieldConfigItemServiceImpl) Gets(ctx context.Context, id, 
 }
 
 func (i *internalIssueFieldConfigItemServiceImpl) Update(ctx context.Context, id int, payload *model.UpdateFieldConfigurationItemPayloadScheme) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalIssueFieldConfigItemServiceImpl).Update")
 	defer span.End()
 

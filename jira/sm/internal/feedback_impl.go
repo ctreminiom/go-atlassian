@@ -65,7 +65,6 @@ type internalServiceRequestFeedbackImpl struct {
 }
 
 func (i *internalServiceRequestFeedbackImpl) Get(ctx context.Context, requestIDOrKey string) (*model.CustomerFeedbackScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalServiceRequestFeedbackImpl).Get")
 	defer span.End()
 
@@ -90,7 +89,6 @@ func (i *internalServiceRequestFeedbackImpl) Get(ctx context.Context, requestIDO
 }
 
 func (i *internalServiceRequestFeedbackImpl) Post(ctx context.Context, requestIDOrKey string, rating int, comment string) (*model.CustomerFeedbackScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalServiceRequestFeedbackImpl).Post")
 	defer span.End()
 
@@ -123,7 +121,6 @@ func (i *internalServiceRequestFeedbackImpl) Post(ctx context.Context, requestID
 }
 
 func (i *internalServiceRequestFeedbackImpl) Delete(ctx context.Context, requestIDOrKey string) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalServiceRequestFeedbackImpl).Delete")
 	defer span.End()
 

@@ -64,7 +64,6 @@ type internalTaskServiceImpl struct {
 }
 
 func (i *internalTaskServiceImpl) Get(ctx context.Context, taskID string) (*model.TaskScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalTaskServiceImpl).Get")
 	defer span.End()
 
@@ -89,7 +88,6 @@ func (i *internalTaskServiceImpl) Get(ctx context.Context, taskID string) (*mode
 }
 
 func (i *internalTaskServiceImpl) Cancel(ctx context.Context, taskID string) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalTaskServiceImpl).Cancel")
 	defer span.End()
 

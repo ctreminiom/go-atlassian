@@ -98,7 +98,6 @@ type internalLinkTypeImpl struct {
 }
 
 func (i *internalLinkTypeImpl) Gets(ctx context.Context) (*model.IssueLinkTypeSearchScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalLinkTypeImpl).Gets")
 	defer span.End()
 
@@ -119,7 +118,6 @@ func (i *internalLinkTypeImpl) Gets(ctx context.Context) (*model.IssueLinkTypeSe
 }
 
 func (i *internalLinkTypeImpl) Get(ctx context.Context, issueLinkTypeID string) (*model.LinkTypeScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalLinkTypeImpl).Get")
 	defer span.End()
 
@@ -144,7 +142,6 @@ func (i *internalLinkTypeImpl) Get(ctx context.Context, issueLinkTypeID string) 
 }
 
 func (i *internalLinkTypeImpl) Create(ctx context.Context, payload *model.LinkTypeScheme) (*model.LinkTypeScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalLinkTypeImpl).Create")
 	defer span.End()
 
@@ -165,7 +162,6 @@ func (i *internalLinkTypeImpl) Create(ctx context.Context, payload *model.LinkTy
 }
 
 func (i *internalLinkTypeImpl) Update(ctx context.Context, issueLinkTypeID string, payload *model.LinkTypeScheme) (*model.LinkTypeScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalLinkTypeImpl).Update")
 	defer span.End()
 
@@ -190,7 +186,6 @@ func (i *internalLinkTypeImpl) Update(ctx context.Context, issueLinkTypeID strin
 }
 
 func (i *internalLinkTypeImpl) Delete(ctx context.Context, issueLinkTypeID string) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalLinkTypeImpl).Delete")
 	defer span.End()
 

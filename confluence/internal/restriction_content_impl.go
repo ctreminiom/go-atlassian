@@ -82,7 +82,6 @@ type internalRestrictionImpl struct {
 }
 
 func (i *internalRestrictionImpl) Gets(ctx context.Context, contentID string, expand []string, startAt, maxResults int) (*model.ContentRestrictionPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalRestrictionImpl).Gets")
 	defer span.End()
 
@@ -115,7 +114,6 @@ func (i *internalRestrictionImpl) Gets(ctx context.Context, contentID string, ex
 }
 
 func (i *internalRestrictionImpl) Add(ctx context.Context, contentID string, payload *model.ContentRestrictionUpdatePayloadScheme, expand []string) (*model.ContentRestrictionPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalRestrictionImpl).Add")
 	defer span.End()
 
@@ -148,7 +146,6 @@ func (i *internalRestrictionImpl) Add(ctx context.Context, contentID string, pay
 }
 
 func (i *internalRestrictionImpl) Delete(ctx context.Context, contentID string, expand []string) (*model.ContentRestrictionPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalRestrictionImpl).Delete")
 	defer span.End()
 
@@ -181,7 +178,6 @@ func (i *internalRestrictionImpl) Delete(ctx context.Context, contentID string, 
 }
 
 func (i *internalRestrictionImpl) Update(ctx context.Context, contentID string, payload *model.ContentRestrictionUpdatePayloadScheme, expand []string) (*model.ContentRestrictionPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalRestrictionImpl).Update")
 	defer span.End()
 

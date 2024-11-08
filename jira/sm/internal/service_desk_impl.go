@@ -84,7 +84,6 @@ type internalServiceDeskImpl struct {
 }
 
 func (i *internalServiceDeskImpl) Gets(ctx context.Context, start, limit int) (*model.ServiceDeskPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalServiceDeskImpl).Gets")
 	defer span.End()
 
@@ -109,7 +108,6 @@ func (i *internalServiceDeskImpl) Gets(ctx context.Context, start, limit int) (*
 }
 
 func (i *internalServiceDeskImpl) Get(ctx context.Context, serviceDeskID string) (*model.ServiceDeskScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalServiceDeskImpl).Get")
 	defer span.End()
 
@@ -134,7 +132,6 @@ func (i *internalServiceDeskImpl) Get(ctx context.Context, serviceDeskID string)
 }
 
 func (i *internalServiceDeskImpl) Attach(ctx context.Context, serviceDeskID string, fileName string, file io.Reader) (*model.ServiceDeskTemporaryFileScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalServiceDeskImpl).Attach")
 	defer span.End()
 

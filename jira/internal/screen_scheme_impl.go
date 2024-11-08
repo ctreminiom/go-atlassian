@@ -89,7 +89,6 @@ type internalScreenSchemeImpl struct {
 }
 
 func (i *internalScreenSchemeImpl) Gets(ctx context.Context, options *model.ScreenSchemeParamsScheme, startAt, maxResults int) (*model.ScreenSchemePageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalScreenSchemeImpl).Gets")
 	defer span.End()
 
@@ -133,7 +132,6 @@ func (i *internalScreenSchemeImpl) Gets(ctx context.Context, options *model.Scre
 }
 
 func (i *internalScreenSchemeImpl) Create(ctx context.Context, payload *model.ScreenSchemePayloadScheme) (*model.ScreenSchemeScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalScreenSchemeImpl).Create")
 	defer span.End()
 
@@ -154,7 +152,6 @@ func (i *internalScreenSchemeImpl) Create(ctx context.Context, payload *model.Sc
 }
 
 func (i *internalScreenSchemeImpl) Update(ctx context.Context, screenSchemeID string, payload *model.ScreenSchemePayloadScheme) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalScreenSchemeImpl).Update")
 	defer span.End()
 
@@ -173,7 +170,6 @@ func (i *internalScreenSchemeImpl) Update(ctx context.Context, screenSchemeID st
 }
 
 func (i *internalScreenSchemeImpl) Delete(ctx context.Context, screenSchemeID string) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalScreenSchemeImpl).Delete")
 	defer span.End()
 

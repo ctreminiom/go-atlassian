@@ -72,7 +72,6 @@ type internalProjectPermissionSchemeImpl struct {
 }
 
 func (i *internalProjectPermissionSchemeImpl) Get(ctx context.Context, projectKeyOrID string, expand []string) (*model.PermissionSchemeScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalProjectPermissionSchemeImpl).Get")
 	defer span.End()
 
@@ -105,7 +104,6 @@ func (i *internalProjectPermissionSchemeImpl) Get(ctx context.Context, projectKe
 }
 
 func (i *internalProjectPermissionSchemeImpl) Assign(ctx context.Context, projectKeyOrID string, permissionSchemeID int) (*model.PermissionSchemeScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalProjectPermissionSchemeImpl).Assign")
 	defer span.End()
 
@@ -130,7 +128,6 @@ func (i *internalProjectPermissionSchemeImpl) Assign(ctx context.Context, projec
 }
 
 func (i *internalProjectPermissionSchemeImpl) SecurityLevels(ctx context.Context, projectKeyOrID string) (*model.IssueSecurityLevelsScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalProjectPermissionSchemeImpl).SecurityLevels")
 	defer span.End()
 

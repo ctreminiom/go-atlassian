@@ -168,7 +168,6 @@ type internalIssueFieldConfigSchemeServiceImpl struct {
 }
 
 func (i *internalIssueFieldConfigSchemeServiceImpl) Gets(ctx context.Context, ids []int, startAt, maxResults int) (*model.FieldConfigurationSchemePageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalIssueFieldConfigSchemeServiceImpl).Gets")
 	defer span.End()
 
@@ -197,7 +196,6 @@ func (i *internalIssueFieldConfigSchemeServiceImpl) Gets(ctx context.Context, id
 }
 
 func (i *internalIssueFieldConfigSchemeServiceImpl) Create(ctx context.Context, name, description string) (*model.FieldConfigurationSchemeScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalIssueFieldConfigSchemeServiceImpl).Create")
 	defer span.End()
 
@@ -228,7 +226,6 @@ func (i *internalIssueFieldConfigSchemeServiceImpl) Create(ctx context.Context, 
 }
 
 func (i *internalIssueFieldConfigSchemeServiceImpl) Mapping(ctx context.Context, fieldConfigIDs []int, startAt, maxResults int) (*model.FieldConfigurationIssueTypeItemPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalIssueFieldConfigSchemeServiceImpl).Mapping")
 	defer span.End()
 
@@ -257,7 +254,6 @@ func (i *internalIssueFieldConfigSchemeServiceImpl) Mapping(ctx context.Context,
 }
 
 func (i *internalIssueFieldConfigSchemeServiceImpl) Project(ctx context.Context, projectIDs []int, startAt, maxResults int) (*model.FieldConfigurationSchemeProjectPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalIssueFieldConfigSchemeServiceImpl).Project")
 	defer span.End()
 
@@ -286,7 +282,6 @@ func (i *internalIssueFieldConfigSchemeServiceImpl) Project(ctx context.Context,
 }
 
 func (i *internalIssueFieldConfigSchemeServiceImpl) Assign(ctx context.Context, payload *model.FieldConfigurationSchemeAssignPayload) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalIssueFieldConfigSchemeServiceImpl).Assign")
 	defer span.End()
 
@@ -301,7 +296,6 @@ func (i *internalIssueFieldConfigSchemeServiceImpl) Assign(ctx context.Context, 
 }
 
 func (i *internalIssueFieldConfigSchemeServiceImpl) Update(ctx context.Context, schemeID int, name, description string) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalIssueFieldConfigSchemeServiceImpl).Update")
 	defer span.End()
 
@@ -330,7 +324,6 @@ func (i *internalIssueFieldConfigSchemeServiceImpl) Update(ctx context.Context, 
 }
 
 func (i *internalIssueFieldConfigSchemeServiceImpl) Delete(ctx context.Context, schemeID int) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalIssueFieldConfigSchemeServiceImpl).Delete")
 	defer span.End()
 
@@ -349,7 +342,6 @@ func (i *internalIssueFieldConfigSchemeServiceImpl) Delete(ctx context.Context, 
 }
 
 func (i *internalIssueFieldConfigSchemeServiceImpl) Link(ctx context.Context, schemeID int, payload *model.FieldConfigurationToIssueTypeMappingPayloadScheme) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalIssueFieldConfigSchemeServiceImpl).Link")
 	defer span.End()
 
@@ -368,7 +360,6 @@ func (i *internalIssueFieldConfigSchemeServiceImpl) Link(ctx context.Context, sc
 }
 
 func (i *internalIssueFieldConfigSchemeServiceImpl) Unlink(ctx context.Context, schemeID int, issueTypeIDs []string) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalIssueFieldConfigSchemeServiceImpl).Unlink")
 	defer span.End()
 

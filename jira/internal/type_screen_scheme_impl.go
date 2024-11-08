@@ -177,7 +177,6 @@ type internalTypeScreenSchemeImpl struct {
 }
 
 func (i *internalTypeScreenSchemeImpl) Gets(ctx context.Context, options *model.ScreenSchemeParamsScheme, startAt, maxResults int) (*model.IssueTypeScreenSchemePageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalTypeScreenSchemeImpl).Gets")
 	defer span.End()
 
@@ -221,7 +220,6 @@ func (i *internalTypeScreenSchemeImpl) Gets(ctx context.Context, options *model.
 }
 
 func (i *internalTypeScreenSchemeImpl) Create(ctx context.Context, payload *model.IssueTypeScreenSchemePayloadScheme) (*model.IssueTypeScreenScreenCreatedScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalTypeScreenSchemeImpl).Create")
 	defer span.End()
 
@@ -242,7 +240,6 @@ func (i *internalTypeScreenSchemeImpl) Create(ctx context.Context, payload *mode
 }
 
 func (i *internalTypeScreenSchemeImpl) Assign(ctx context.Context, issueTypeScreenSchemeID, projectID string) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalTypeScreenSchemeImpl).Assign")
 	defer span.End()
 
@@ -270,7 +267,6 @@ func (i *internalTypeScreenSchemeImpl) Assign(ctx context.Context, issueTypeScre
 }
 
 func (i *internalTypeScreenSchemeImpl) Projects(ctx context.Context, projectIDs []int, startAt, maxResults int) (*model.IssueTypeProjectScreenSchemePageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalTypeScreenSchemeImpl).Projects")
 	defer span.End()
 
@@ -299,7 +295,6 @@ func (i *internalTypeScreenSchemeImpl) Projects(ctx context.Context, projectIDs 
 }
 
 func (i *internalTypeScreenSchemeImpl) Mapping(ctx context.Context, issueTypeScreenSchemeIDs []int, startAt, maxResults int) (*model.IssueTypeScreenSchemeMappingScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalTypeScreenSchemeImpl).Mapping")
 	defer span.End()
 
@@ -328,7 +323,6 @@ func (i *internalTypeScreenSchemeImpl) Mapping(ctx context.Context, issueTypeScr
 }
 
 func (i *internalTypeScreenSchemeImpl) Update(ctx context.Context, issueTypeScreenSchemeID, name, description string) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalTypeScreenSchemeImpl).Update")
 	defer span.End()
 
@@ -353,7 +347,6 @@ func (i *internalTypeScreenSchemeImpl) Update(ctx context.Context, issueTypeScre
 }
 
 func (i *internalTypeScreenSchemeImpl) Delete(ctx context.Context, issueTypeScreenSchemeID string) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalTypeScreenSchemeImpl).Delete")
 	defer span.End()
 
@@ -372,7 +365,6 @@ func (i *internalTypeScreenSchemeImpl) Delete(ctx context.Context, issueTypeScre
 }
 
 func (i *internalTypeScreenSchemeImpl) Append(ctx context.Context, issueTypeScreenSchemeID string, payload *model.IssueTypeScreenSchemePayloadScheme) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalTypeScreenSchemeImpl).Append")
 	defer span.End()
 
@@ -391,7 +383,6 @@ func (i *internalTypeScreenSchemeImpl) Append(ctx context.Context, issueTypeScre
 }
 
 func (i *internalTypeScreenSchemeImpl) UpdateDefault(ctx context.Context, issueTypeScreenSchemeID, screenSchemeID string) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalTypeScreenSchemeImpl).UpdateDefault")
 	defer span.End()
 
@@ -414,7 +405,6 @@ func (i *internalTypeScreenSchemeImpl) UpdateDefault(ctx context.Context, issueT
 }
 
 func (i *internalTypeScreenSchemeImpl) Remove(ctx context.Context, issueTypeScreenSchemeID string, issueTypeIDs []string) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalTypeScreenSchemeImpl).Remove")
 	defer span.End()
 
@@ -437,7 +427,6 @@ func (i *internalTypeScreenSchemeImpl) Remove(ctx context.Context, issueTypeScre
 }
 
 func (i *internalTypeScreenSchemeImpl) SchemesByProject(ctx context.Context, issueTypeScreenSchemeID int, startAt, maxResults int) (*model.IssueTypeScreenSchemeByProjectPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalTypeScreenSchemeImpl).SchemesByProject")
 	defer span.End()
 

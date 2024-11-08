@@ -55,7 +55,6 @@ type internalAnnouncementBannerImpl struct {
 }
 
 func (i *internalAnnouncementBannerImpl) Get(ctx context.Context) (*model.AnnouncementBannerScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalAnnouncementBannerImpl).Get")
 	defer span.End()
 
@@ -76,7 +75,6 @@ func (i *internalAnnouncementBannerImpl) Get(ctx context.Context) (*model.Announ
 }
 
 func (i *internalAnnouncementBannerImpl) Update(ctx context.Context, payload *model.AnnouncementBannerPayloadScheme) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalAnnouncementBannerImpl).Update")
 	defer span.End()
 

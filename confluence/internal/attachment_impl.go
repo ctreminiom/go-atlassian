@@ -81,7 +81,6 @@ type internalAttachmentImpl struct {
 }
 
 func (i *internalAttachmentImpl) Delete(ctx context.Context, attachmentID string) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalAttachmentImpl).Delete")
 	defer span.End()
 
@@ -100,7 +99,6 @@ func (i *internalAttachmentImpl) Delete(ctx context.Context, attachmentID string
 }
 
 func (i *internalAttachmentImpl) Get(ctx context.Context, attachmentID string, versionID int, serializeIDs bool) (*model.AttachmentScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalAttachmentImpl).Get")
 	defer span.End()
 
@@ -139,7 +137,6 @@ func (i *internalAttachmentImpl) Get(ctx context.Context, attachmentID string, v
 }
 
 func (i *internalAttachmentImpl) Gets(ctx context.Context, entityID int, entityType string, options *model.AttachmentParamsScheme, cursor string, limit int) (*model.AttachmentPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalAttachmentImpl).Gets")
 	defer span.End()
 

@@ -112,7 +112,6 @@ type internalSCIMGroupImpl struct {
 }
 
 func (i *internalSCIMGroupImpl) Gets(ctx context.Context, directoryID, filter string, startAt, maxResults int) (*model.ScimGroupPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalSCIMGroupImpl).Gets")
 	defer span.End()
 
@@ -145,7 +144,6 @@ func (i *internalSCIMGroupImpl) Gets(ctx context.Context, directoryID, filter st
 }
 
 func (i *internalSCIMGroupImpl) Get(ctx context.Context, directoryID, groupID string) (*model.ScimGroupScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalSCIMGroupImpl).Get")
 	defer span.End()
 
@@ -174,7 +172,6 @@ func (i *internalSCIMGroupImpl) Get(ctx context.Context, directoryID, groupID st
 }
 
 func (i *internalSCIMGroupImpl) Update(ctx context.Context, directoryID, groupID string, newGroupName string) (*model.ScimGroupScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalSCIMGroupImpl).Update")
 	defer span.End()
 
@@ -209,7 +206,6 @@ func (i *internalSCIMGroupImpl) Update(ctx context.Context, directoryID, groupID
 }
 
 func (i *internalSCIMGroupImpl) Delete(ctx context.Context, directoryID, groupID string) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalSCIMGroupImpl).Delete")
 	defer span.End()
 
@@ -232,7 +228,6 @@ func (i *internalSCIMGroupImpl) Delete(ctx context.Context, directoryID, groupID
 }
 
 func (i *internalSCIMGroupImpl) Create(ctx context.Context, directoryID, groupName string) (*model.ScimGroupScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalSCIMGroupImpl).Create")
 	defer span.End()
 
@@ -263,7 +258,6 @@ func (i *internalSCIMGroupImpl) Create(ctx context.Context, directoryID, groupNa
 }
 
 func (i *internalSCIMGroupImpl) Path(ctx context.Context, directoryID, groupID string, payload *model.SCIMGroupPathScheme) (*model.ScimGroupScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalSCIMGroupImpl).Path")
 	defer span.End()
 

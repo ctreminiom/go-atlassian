@@ -120,7 +120,6 @@ type internalFilterShareImpl struct {
 }
 
 func (i *internalFilterShareImpl) Scope(ctx context.Context) (*model.ShareFilterScopeScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalFilterShareImpl).Scope")
 	defer span.End()
 
@@ -141,7 +140,6 @@ func (i *internalFilterShareImpl) Scope(ctx context.Context) (*model.ShareFilter
 }
 
 func (i *internalFilterShareImpl) SetScope(ctx context.Context, scope string) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalFilterShareImpl).SetScope")
 	defer span.End()
 
@@ -156,7 +154,6 @@ func (i *internalFilterShareImpl) SetScope(ctx context.Context, scope string) (*
 }
 
 func (i *internalFilterShareImpl) Gets(ctx context.Context, filterID int) ([]*model.SharePermissionScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalFilterShareImpl).Gets")
 	defer span.End()
 
@@ -181,7 +178,6 @@ func (i *internalFilterShareImpl) Gets(ctx context.Context, filterID int) ([]*mo
 }
 
 func (i *internalFilterShareImpl) Add(ctx context.Context, filterID int, payload *model.PermissionFilterPayloadScheme) ([]*model.SharePermissionScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalFilterShareImpl).Add")
 	defer span.End()
 
@@ -206,7 +202,6 @@ func (i *internalFilterShareImpl) Add(ctx context.Context, filterID int, payload
 }
 
 func (i *internalFilterShareImpl) Get(ctx context.Context, filterID, permissionID int) (*model.SharePermissionScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalFilterShareImpl).Get")
 	defer span.End()
 
@@ -235,7 +230,6 @@ func (i *internalFilterShareImpl) Get(ctx context.Context, filterID, permissionI
 }
 
 func (i *internalFilterShareImpl) Delete(ctx context.Context, filterID, permissionID int) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalFilterShareImpl).Delete")
 	defer span.End()
 

@@ -138,7 +138,6 @@ type internalWorkflowSchemeImpl struct {
 }
 
 func (i *internalWorkflowSchemeImpl) Gets(ctx context.Context, startAt, maxResults int) (*model.WorkflowSchemePageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalWorkflowSchemeImpl).Gets")
 	defer span.End()
 
@@ -163,7 +162,6 @@ func (i *internalWorkflowSchemeImpl) Gets(ctx context.Context, startAt, maxResul
 }
 
 func (i *internalWorkflowSchemeImpl) Create(ctx context.Context, payload *model.WorkflowSchemePayloadScheme) (*model.WorkflowSchemeScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalWorkflowSchemeImpl).Create")
 	defer span.End()
 
@@ -184,7 +182,6 @@ func (i *internalWorkflowSchemeImpl) Create(ctx context.Context, payload *model.
 }
 
 func (i *internalWorkflowSchemeImpl) Get(ctx context.Context, schemeID int, returnDraftIfExists bool) (*model.WorkflowSchemeScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalWorkflowSchemeImpl).Get")
 	defer span.End()
 
@@ -218,7 +215,6 @@ func (i *internalWorkflowSchemeImpl) Get(ctx context.Context, schemeID int, retu
 }
 
 func (i *internalWorkflowSchemeImpl) Update(ctx context.Context, schemeID int, payload *model.WorkflowSchemePayloadScheme) (*model.WorkflowSchemeScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalWorkflowSchemeImpl).Update")
 	defer span.End()
 
@@ -243,7 +239,6 @@ func (i *internalWorkflowSchemeImpl) Update(ctx context.Context, schemeID int, p
 }
 
 func (i *internalWorkflowSchemeImpl) Delete(ctx context.Context, schemeID int) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalWorkflowSchemeImpl).Delete")
 	defer span.End()
 
@@ -262,7 +257,6 @@ func (i *internalWorkflowSchemeImpl) Delete(ctx context.Context, schemeID int) (
 }
 
 func (i *internalWorkflowSchemeImpl) Associations(ctx context.Context, projectIDs []int) (*model.WorkflowSchemeAssociationPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalWorkflowSchemeImpl).Associations")
 	defer span.End()
 
@@ -292,7 +286,6 @@ func (i *internalWorkflowSchemeImpl) Associations(ctx context.Context, projectID
 }
 
 func (i *internalWorkflowSchemeImpl) Assign(ctx context.Context, schemeID, projectID string) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalWorkflowSchemeImpl).Assign")
 	defer span.End()
 

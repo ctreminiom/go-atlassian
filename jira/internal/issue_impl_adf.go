@@ -257,7 +257,6 @@ func (i *internalIssueADFServiceImpl) Create(ctx context.Context, payload *model
 }
 
 func (i *internalIssueADFServiceImpl) Creates(ctx context.Context, payload []*model.IssueBulkSchemeV3) (*model.IssueBulkResponseScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalIssueADFServiceImpl).Creates")
 	defer span.End()
 
@@ -297,7 +296,6 @@ func (i *internalIssueADFServiceImpl) Creates(ctx context.Context, payload []*mo
 }
 
 func (i *internalIssueADFServiceImpl) Get(ctx context.Context, issueKeyOrID string, fields, expand []string) (*model.IssueScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalIssueADFServiceImpl).Get")
 	defer span.End()
 
@@ -337,7 +335,6 @@ func (i *internalIssueADFServiceImpl) Get(ctx context.Context, issueKeyOrID stri
 }
 
 func (i *internalIssueADFServiceImpl) Update(ctx context.Context, issueKeyOrID string, notify bool, payload *model.IssueScheme, customFields *model.CustomFields, operations *model.UpdateOperations) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalIssueADFServiceImpl).Update")
 	defer span.End()
 
@@ -411,7 +408,6 @@ func (i *internalIssueADFServiceImpl) Update(ctx context.Context, issueKeyOrID s
 }
 
 func (i *internalIssueADFServiceImpl) Move(ctx context.Context, issueKeyOrID, transitionID string, options *model.IssueMoveOptionsV3) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalIssueADFServiceImpl).Move")
 	defer span.End()
 

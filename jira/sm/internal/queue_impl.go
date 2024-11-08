@@ -68,7 +68,6 @@ type internalQueueServiceImpl struct {
 }
 
 func (i *internalQueueServiceImpl) Gets(ctx context.Context, serviceDeskID int, includeCount bool, start, limit int) (*model.ServiceDeskQueuePageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalQueueServiceImpl).Gets")
 	defer span.End()
 
@@ -98,7 +97,6 @@ func (i *internalQueueServiceImpl) Gets(ctx context.Context, serviceDeskID int, 
 }
 
 func (i *internalQueueServiceImpl) Get(ctx context.Context, serviceDeskID, queueID int, includeCount bool) (*model.ServiceDeskQueueScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalQueueServiceImpl).Get")
 	defer span.End()
 
@@ -130,7 +128,6 @@ func (i *internalQueueServiceImpl) Get(ctx context.Context, serviceDeskID, queue
 }
 
 func (i *internalQueueServiceImpl) Issues(ctx context.Context, serviceDeskID, queueID, start, limit int) (*model.ServiceDeskIssueQueueScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalQueueServiceImpl).Issues")
 	defer span.End()
 

@@ -118,7 +118,6 @@ type internalTypeImpl struct {
 }
 
 func (i *internalTypeImpl) Search(ctx context.Context, query string, start, limit int) (*model.RequestTypePageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalTypeImpl).Search")
 	defer span.End()
 
@@ -147,7 +146,6 @@ func (i *internalTypeImpl) Search(ctx context.Context, query string, start, limi
 }
 
 func (i *internalTypeImpl) Gets(ctx context.Context, serviceDeskID, groupID, start, limit int) (*model.ProjectRequestTypePageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalTypeImpl).Gets")
 	defer span.End()
 
@@ -180,7 +178,6 @@ func (i *internalTypeImpl) Gets(ctx context.Context, serviceDeskID, groupID, sta
 }
 
 func (i *internalTypeImpl) Create(ctx context.Context, serviceDeskID int, payload *model.RequestTypePayloadScheme) (*model.RequestTypeScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalTypeImpl).Create")
 	defer span.End()
 
@@ -205,7 +202,6 @@ func (i *internalTypeImpl) Create(ctx context.Context, serviceDeskID int, payloa
 }
 
 func (i *internalTypeImpl) Get(ctx context.Context, serviceDeskID, requestTypeID int) (*model.RequestTypeScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalTypeImpl).Get")
 	defer span.End()
 
@@ -234,7 +230,6 @@ func (i *internalTypeImpl) Get(ctx context.Context, serviceDeskID, requestTypeID
 }
 
 func (i *internalTypeImpl) Delete(ctx context.Context, serviceDeskID, requestTypeID int) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalTypeImpl).Delete")
 	defer span.End()
 
@@ -257,7 +252,6 @@ func (i *internalTypeImpl) Delete(ctx context.Context, serviceDeskID, requestTyp
 }
 
 func (i *internalTypeImpl) Fields(ctx context.Context, serviceDeskID, requestTypeID int) (*model.RequestTypeFieldsScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalTypeImpl).Fields")
 	defer span.End()
 
@@ -286,7 +280,6 @@ func (i *internalTypeImpl) Fields(ctx context.Context, serviceDeskID, requestTyp
 }
 
 func (i *internalTypeImpl) Groups(ctx context.Context, serviceDeskID int) (*model.RequestTypeGroupPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalTypeImpl).Groups")
 	defer span.End()
 

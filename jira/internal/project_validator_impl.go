@@ -78,7 +78,6 @@ type internalProjectValidatorImpl struct {
 }
 
 func (i *internalProjectValidatorImpl) Validate(ctx context.Context, key string) (*model.ProjectValidationMessageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalProjectValidatorImpl).Validate")
 	defer span.End()
 
@@ -106,7 +105,6 @@ func (i *internalProjectValidatorImpl) Validate(ctx context.Context, key string)
 }
 
 func (i *internalProjectValidatorImpl) Key(ctx context.Context, key string) (string, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalProjectValidatorImpl).Key")
 	defer span.End()
 
@@ -133,7 +131,6 @@ func (i *internalProjectValidatorImpl) Key(ctx context.Context, key string) (str
 }
 
 func (i *internalProjectValidatorImpl) Name(ctx context.Context, name string) (string, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalProjectValidatorImpl).Name")
 	defer span.End()
 

@@ -67,7 +67,6 @@ type internalContentLabelImpl struct {
 }
 
 func (i *internalContentLabelImpl) Gets(ctx context.Context, contentID, prefix string, startAt, maxResults int) (*model.ContentLabelPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalContentLabelImpl).Gets")
 	defer span.End()
 
@@ -100,7 +99,6 @@ func (i *internalContentLabelImpl) Gets(ctx context.Context, contentID, prefix s
 }
 
 func (i *internalContentLabelImpl) Add(ctx context.Context, contentID string, payload []*model.ContentLabelPayloadScheme, want400Response bool) (*model.ContentLabelPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalContentLabelImpl).Add")
 	defer span.End()
 
@@ -133,7 +131,6 @@ func (i *internalContentLabelImpl) Add(ctx context.Context, contentID string, pa
 }
 
 func (i *internalContentLabelImpl) Remove(ctx context.Context, contentID, labelName string) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalContentLabelImpl).Remove")
 	defer span.End()
 

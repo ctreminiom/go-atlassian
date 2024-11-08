@@ -134,7 +134,6 @@ type internalSpaceImpl struct {
 }
 
 func (i *internalSpaceImpl) Gets(ctx context.Context, options *model.GetSpacesOptionScheme, startAt, maxResults int) (*model.SpacePageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalSpaceImpl).Gets")
 	defer span.End()
 
@@ -200,7 +199,6 @@ func (i *internalSpaceImpl) Gets(ctx context.Context, options *model.GetSpacesOp
 }
 
 func (i *internalSpaceImpl) Create(ctx context.Context, payload *model.CreateSpaceScheme, private bool) (*model.SpaceScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalSpaceImpl).Create")
 	defer span.End()
 
@@ -238,7 +236,6 @@ func (i *internalSpaceImpl) Create(ctx context.Context, payload *model.CreateSpa
 }
 
 func (i *internalSpaceImpl) Get(ctx context.Context, spaceKey string, expand []string) (*model.SpaceScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalSpaceImpl).Get")
 	defer span.End()
 
@@ -271,7 +268,6 @@ func (i *internalSpaceImpl) Get(ctx context.Context, spaceKey string, expand []s
 }
 
 func (i *internalSpaceImpl) Update(ctx context.Context, spaceKey string, payload *model.UpdateSpaceScheme) (*model.SpaceScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalSpaceImpl).Update")
 	defer span.End()
 
@@ -296,7 +292,6 @@ func (i *internalSpaceImpl) Update(ctx context.Context, spaceKey string, payload
 }
 
 func (i *internalSpaceImpl) Delete(ctx context.Context, spaceKey string) (*model.ContentTaskScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalSpaceImpl).Delete")
 	defer span.End()
 
@@ -321,7 +316,6 @@ func (i *internalSpaceImpl) Delete(ctx context.Context, spaceKey string) (*model
 }
 
 func (i *internalSpaceImpl) Content(ctx context.Context, spaceKey, depth string, expand []string, startAt, maxResults int) (*model.ContentChildrenScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalSpaceImpl).Content")
 	defer span.End()
 
@@ -358,7 +352,6 @@ func (i *internalSpaceImpl) Content(ctx context.Context, spaceKey, depth string,
 }
 
 func (i *internalSpaceImpl) ContentByType(ctx context.Context, spaceKey, contentType, depth string, expand []string, startAt, maxResults int) (*model.ContentPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalSpaceImpl).ContentByType")
 	defer span.End()
 

@@ -87,7 +87,6 @@ type internalServiceRequestCommentImpl struct {
 }
 
 func (i *internalServiceRequestCommentImpl) Gets(ctx context.Context, issueKeyOrID string, options *model.RequestCommentOptionsScheme) (*model.RequestCommentPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalServiceRequestCommentImpl).Gets")
 	defer span.End()
 
@@ -121,7 +120,6 @@ func (i *internalServiceRequestCommentImpl) Gets(ctx context.Context, issueKeyOr
 }
 
 func (i *internalServiceRequestCommentImpl) Get(ctx context.Context, issueKeyOrID string, commentID int, expand []string) (*model.RequestCommentScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalServiceRequestCommentImpl).Get")
 	defer span.End()
 
@@ -158,7 +156,6 @@ func (i *internalServiceRequestCommentImpl) Get(ctx context.Context, issueKeyOrI
 }
 
 func (i *internalServiceRequestCommentImpl) Create(ctx context.Context, issueKeyOrID, body string, public bool) (*model.RequestCommentScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalServiceRequestCommentImpl).Create")
 	defer span.End()
 
@@ -188,7 +185,6 @@ func (i *internalServiceRequestCommentImpl) Create(ctx context.Context, issueKey
 }
 
 func (i *internalServiceRequestCommentImpl) Attachments(ctx context.Context, issueKeyOrID string, commentID, start, limit int) (*model.RequestAttachmentPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalServiceRequestCommentImpl).Attachments")
 	defer span.End()
 

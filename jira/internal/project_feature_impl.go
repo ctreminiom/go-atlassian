@@ -58,7 +58,6 @@ type internalProjectFeatureImpl struct {
 }
 
 func (i *internalProjectFeatureImpl) Gets(ctx context.Context, projectKeyOrID string) (*model.ProjectFeaturesScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalProjectFeatureImpl).Gets")
 	defer span.End()
 
@@ -83,7 +82,6 @@ func (i *internalProjectFeatureImpl) Gets(ctx context.Context, projectKeyOrID st
 }
 
 func (i *internalProjectFeatureImpl) Set(ctx context.Context, projectKeyOrID, featureKey, state string) (*model.ProjectFeaturesScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalProjectFeatureImpl).Set")
 	defer span.End()
 

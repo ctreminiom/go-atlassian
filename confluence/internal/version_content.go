@@ -83,7 +83,6 @@ type internalVersionImpl struct {
 }
 
 func (i *internalVersionImpl) Gets(ctx context.Context, contentID string, expand []string, start, limit int) (*model.ContentVersionPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalVersionImpl).Gets")
 	defer span.End()
 
@@ -116,7 +115,6 @@ func (i *internalVersionImpl) Gets(ctx context.Context, contentID string, expand
 }
 
 func (i *internalVersionImpl) Get(ctx context.Context, contentID string, versionNumber int, expand []string) (*model.ContentVersionScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalVersionImpl).Get")
 	defer span.End()
 
@@ -149,7 +147,6 @@ func (i *internalVersionImpl) Get(ctx context.Context, contentID string, version
 }
 
 func (i *internalVersionImpl) Restore(ctx context.Context, contentID string, payload *model.ContentRestorePayloadScheme, expand []string) (*model.ContentVersionScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalVersionImpl).Restore")
 	defer span.End()
 
@@ -182,7 +179,6 @@ func (i *internalVersionImpl) Restore(ctx context.Context, contentID string, pay
 }
 
 func (i *internalVersionImpl) Delete(ctx context.Context, contentID string, versionNumber int) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalVersionImpl).Delete")
 	defer span.End()
 

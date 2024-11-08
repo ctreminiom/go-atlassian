@@ -98,7 +98,6 @@ type internalSCIMSchemaImpl struct {
 }
 
 func (i *internalSCIMSchemaImpl) Gets(ctx context.Context, directoryID string) (*model.SCIMSchemasScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalSCIMSchemaImpl).Gets")
 	defer span.End()
 
@@ -123,7 +122,6 @@ func (i *internalSCIMSchemaImpl) Gets(ctx context.Context, directoryID string) (
 }
 
 func (i *internalSCIMSchemaImpl) Group(ctx context.Context, directoryID string) (*model.SCIMSchemaScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalSCIMSchemaImpl).Group")
 	defer span.End()
 
@@ -148,7 +146,6 @@ func (i *internalSCIMSchemaImpl) Group(ctx context.Context, directoryID string) 
 }
 
 func (i *internalSCIMSchemaImpl) User(ctx context.Context, directoryID string) (*model.SCIMSchemaScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalSCIMSchemaImpl).User")
 	defer span.End()
 
@@ -173,7 +170,6 @@ func (i *internalSCIMSchemaImpl) User(ctx context.Context, directoryID string) (
 }
 
 func (i *internalSCIMSchemaImpl) Enterprise(ctx context.Context, directoryID string) (*model.SCIMSchemaScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalSCIMSchemaImpl).Enterprise")
 	defer span.End()
 
@@ -198,7 +194,6 @@ func (i *internalSCIMSchemaImpl) Enterprise(ctx context.Context, directoryID str
 }
 
 func (i *internalSCIMSchemaImpl) Feature(ctx context.Context, directoryID string) (*model.ServiceProviderConfigScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalSCIMSchemaImpl).Feature")
 	defer span.End()
 

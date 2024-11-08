@@ -125,7 +125,6 @@ type internalMetadataImpl struct {
 }
 
 func (i *internalMetadataImpl) FetchIssueMappings(ctx context.Context, projectKeyOrID string, startAt, maxResults int) (gjson.Result, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalMetadataImpl).FetchIssueMappings")
 	defer span.End()
 
@@ -153,7 +152,6 @@ func (i *internalMetadataImpl) FetchIssueMappings(ctx context.Context, projectKe
 }
 
 func (i *internalMetadataImpl) FetchFieldMappings(ctx context.Context, projectKeyOrID, issueTypeID string, startAt, maxResults int) (gjson.Result, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalMetadataImpl).FetchFieldMappings")
 	defer span.End()
 
@@ -184,7 +182,6 @@ func (i *internalMetadataImpl) FetchFieldMappings(ctx context.Context, projectKe
 }
 
 func (i *internalMetadataImpl) Get(ctx context.Context, issueKeyOrID string, overrideScreenSecurity, overrideEditableFlag bool) (gjson.Result, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalMetadataImpl).Get")
 	defer span.End()
 
@@ -212,7 +209,6 @@ func (i *internalMetadataImpl) Get(ctx context.Context, issueKeyOrID string, ove
 }
 
 func (i *internalMetadataImpl) Create(ctx context.Context, opts *model.IssueMetadataCreateOptions) (gjson.Result, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalMetadataImpl).Create")
 	defer span.End()
 

@@ -108,7 +108,6 @@ type internalProjectComponentImpl struct {
 }
 
 func (i *internalProjectComponentImpl) Create(ctx context.Context, payload *model.ComponentPayloadScheme) (*model.ComponentScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalProjectComponentImpl).Create")
 	defer span.End()
 
@@ -129,7 +128,6 @@ func (i *internalProjectComponentImpl) Create(ctx context.Context, payload *mode
 }
 
 func (i *internalProjectComponentImpl) Gets(ctx context.Context, projectKeyOrID string) ([]*model.ComponentScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalProjectComponentImpl).Gets")
 	defer span.End()
 
@@ -154,7 +152,6 @@ func (i *internalProjectComponentImpl) Gets(ctx context.Context, projectKeyOrID 
 }
 
 func (i *internalProjectComponentImpl) Count(ctx context.Context, componentID string) (*model.ComponentCountScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalProjectComponentImpl).Count")
 	defer span.End()
 
@@ -179,7 +176,6 @@ func (i *internalProjectComponentImpl) Count(ctx context.Context, componentID st
 }
 
 func (i *internalProjectComponentImpl) Delete(ctx context.Context, componentID string) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalProjectComponentImpl).Delete")
 	defer span.End()
 
@@ -198,7 +194,6 @@ func (i *internalProjectComponentImpl) Delete(ctx context.Context, componentID s
 }
 
 func (i *internalProjectComponentImpl) Update(ctx context.Context, componentID string, payload *model.ComponentPayloadScheme) (*model.ComponentScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalProjectComponentImpl).Update")
 	defer span.End()
 
@@ -223,7 +218,6 @@ func (i *internalProjectComponentImpl) Update(ctx context.Context, componentID s
 }
 
 func (i *internalProjectComponentImpl) Get(ctx context.Context, componentID string) (*model.ComponentScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalProjectComponentImpl).Get")
 	defer span.End()
 

@@ -96,7 +96,6 @@ type internalCustomContentServiceImpl struct {
 }
 
 func (i *internalCustomContentServiceImpl) Gets(ctx context.Context, typ string, options *model.CustomContentOptionsScheme, cursor string, limit int) (*model.CustomContentPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalCustomContentServiceImpl).Gets")
 	defer span.End()
 
@@ -159,7 +158,6 @@ func (i *internalCustomContentServiceImpl) Gets(ctx context.Context, typ string,
 }
 
 func (i *internalCustomContentServiceImpl) Create(ctx context.Context, payload *model.CustomContentPayloadScheme) (*model.CustomContentScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalCustomContentServiceImpl).Create")
 	defer span.End()
 
@@ -180,7 +178,6 @@ func (i *internalCustomContentServiceImpl) Create(ctx context.Context, payload *
 }
 
 func (i *internalCustomContentServiceImpl) Get(ctx context.Context, customContentID int, format string, versionID int) (*model.CustomContentScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalCustomContentServiceImpl).Get")
 	defer span.End()
 
@@ -220,7 +217,6 @@ func (i *internalCustomContentServiceImpl) Get(ctx context.Context, customConten
 }
 
 func (i *internalCustomContentServiceImpl) Update(ctx context.Context, customContentID int, payload *model.CustomContentPayloadScheme) (*model.CustomContentScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalCustomContentServiceImpl).Update")
 	defer span.End()
 
@@ -246,7 +242,6 @@ func (i *internalCustomContentServiceImpl) Update(ctx context.Context, customCon
 }
 
 func (i *internalCustomContentServiceImpl) Delete(ctx context.Context, customContentID int) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalCustomContentServiceImpl).Delete")
 	defer span.End()
 

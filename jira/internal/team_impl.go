@@ -59,7 +59,6 @@ type internalTeamServiceImpl struct {
 }
 
 func (i *internalTeamServiceImpl) Gets(ctx context.Context, maxResults int) (*model.JiraTeamPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalTeamServiceImpl).Gets")
 	defer span.End()
 
@@ -80,7 +79,6 @@ func (i *internalTeamServiceImpl) Gets(ctx context.Context, maxResults int) (*mo
 }
 
 func (i *internalTeamServiceImpl) Create(ctx context.Context, payload *model.JiraTeamCreatePayloadScheme) (*model.JiraTeamCreateResponseScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalTeamServiceImpl).Create")
 	defer span.End()
 

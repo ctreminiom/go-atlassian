@@ -43,7 +43,6 @@ type internalCommentImpl struct {
 }
 
 func (i *internalCommentImpl) Gets(ctx context.Context, contentID string, expand, location []string, startAt, maxResults int) (*model.ContentPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalCommentImpl).Gets")
 	defer span.End()
 

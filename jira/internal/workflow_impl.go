@@ -293,7 +293,6 @@ func (i *internalWorkflowImpl) Search(ctx context.Context, options *model.Workfl
 }
 
 func (i *internalWorkflowImpl) Capabilities(ctx context.Context, workflowID, projectID, issueTypeID string) (*model.WorkflowCapabilitiesScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalWorkflowImpl).Capabilities")
 	defer span.End()
 
@@ -333,7 +332,6 @@ func (i *internalWorkflowImpl) Capabilities(ctx context.Context, workflowID, pro
 }
 
 func (i *internalWorkflowImpl) Creates(ctx context.Context, payload *model.WorkflowCreatesPayload) (*model.WorkflowCreateResponseScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalWorkflowImpl).Creates")
 	defer span.End()
 
@@ -354,7 +352,6 @@ func (i *internalWorkflowImpl) Creates(ctx context.Context, payload *model.Workf
 }
 
 func (i *internalWorkflowImpl) ValidateCreateWorkflows(ctx context.Context, payload *model.ValidationOptionsForCreateScheme) (*model.WorkflowValidationErrorListScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalWorkflowImpl).ValidateCreateWorkflows")
 	defer span.End()
 
@@ -375,7 +372,6 @@ func (i *internalWorkflowImpl) ValidateCreateWorkflows(ctx context.Context, payl
 }
 
 func (i *internalWorkflowImpl) Updates(ctx context.Context, payload *model.WorkflowUpdatesPayloadScheme, expand []string) (*model.WorkflowUpdateResponseScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalWorkflowImpl).Updates")
 	defer span.End()
 
@@ -406,7 +402,6 @@ func (i *internalWorkflowImpl) Updates(ctx context.Context, payload *model.Workf
 }
 
 func (i *internalWorkflowImpl) ValidateUpdateWorkflows(ctx context.Context, payload *model.ValidationOptionsForUpdateScheme) (*model.WorkflowValidationErrorListScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalWorkflowImpl).ValidateUpdateWorkflows")
 	defer span.End()
 
@@ -427,7 +422,6 @@ func (i *internalWorkflowImpl) ValidateUpdateWorkflows(ctx context.Context, payl
 }
 
 func (i *internalWorkflowImpl) Create(ctx context.Context, payload *model.WorkflowPayloadScheme) (*model.WorkflowCreatedResponseScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalWorkflowImpl).Create")
 	defer span.End()
 
@@ -448,7 +442,6 @@ func (i *internalWorkflowImpl) Create(ctx context.Context, payload *model.Workfl
 }
 
 func (i *internalWorkflowImpl) Gets(ctx context.Context, options *model.WorkflowSearchOptions, startAt, maxResults int) (*model.WorkflowPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalWorkflowImpl).Gets")
 	defer span.End()
 
@@ -493,7 +486,6 @@ func (i *internalWorkflowImpl) Gets(ctx context.Context, options *model.Workflow
 }
 
 func (i *internalWorkflowImpl) Delete(ctx context.Context, workflowID string) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalWorkflowImpl).Delete")
 	defer span.End()
 

@@ -123,7 +123,6 @@ type internalSCIMUserImpl struct {
 }
 
 func (i *internalSCIMUserImpl) Create(ctx context.Context, directoryID string, payload *model.SCIMUserScheme, attributes, excludedAttributes []string) (*model.SCIMUserScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalSCIMUserImpl).Create")
 	defer span.End()
 
@@ -163,7 +162,6 @@ func (i *internalSCIMUserImpl) Create(ctx context.Context, directoryID string, p
 }
 
 func (i *internalSCIMUserImpl) Gets(ctx context.Context, directoryID string, opts *model.SCIMUserGetsOptionsScheme, startIndex, count int) (*model.SCIMUserPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalSCIMUserImpl).Gets")
 	defer span.End()
 
@@ -207,7 +205,6 @@ func (i *internalSCIMUserImpl) Gets(ctx context.Context, directoryID string, opt
 }
 
 func (i *internalSCIMUserImpl) Get(ctx context.Context, directoryID, userID string, attributes, excludedAttributes []string) (*model.SCIMUserScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalSCIMUserImpl).Get")
 	defer span.End()
 
@@ -250,7 +247,6 @@ func (i *internalSCIMUserImpl) Get(ctx context.Context, directoryID, userID stri
 }
 
 func (i *internalSCIMUserImpl) Deactivate(ctx context.Context, directoryID, userID string) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalSCIMUserImpl).Deactivate")
 	defer span.End()
 
@@ -273,7 +269,6 @@ func (i *internalSCIMUserImpl) Deactivate(ctx context.Context, directoryID, user
 }
 
 func (i *internalSCIMUserImpl) Path(ctx context.Context, directoryID, userID string, payload *model.SCIMUserToPathScheme, attributes, excludedAttributes []string) (*model.SCIMUserScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalSCIMUserImpl).Path")
 	defer span.End()
 
@@ -317,7 +312,6 @@ func (i *internalSCIMUserImpl) Path(ctx context.Context, directoryID, userID str
 }
 
 func (i *internalSCIMUserImpl) Update(ctx context.Context, directoryID, userID string, payload *model.SCIMUserScheme, attributes, excludedAttributes []string) (*model.SCIMUserScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalSCIMUserImpl).Update")
 	defer span.End()
 

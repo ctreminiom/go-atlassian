@@ -164,7 +164,6 @@ type internalSprintImpl struct {
 }
 
 func (i *internalSprintImpl) Move(ctx context.Context, sprintID int, payload *model.SprintMovePayloadScheme) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalSprintImpl).Move")
 	defer span.End()
 
@@ -183,7 +182,6 @@ func (i *internalSprintImpl) Move(ctx context.Context, sprintID int, payload *mo
 }
 
 func (i *internalSprintImpl) Get(ctx context.Context, sprintID int) (*model.SprintScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalSprintImpl).Get")
 	defer span.End()
 
@@ -208,7 +206,6 @@ func (i *internalSprintImpl) Get(ctx context.Context, sprintID int) (*model.Spri
 }
 
 func (i *internalSprintImpl) Create(ctx context.Context, payload *model.SprintPayloadScheme) (*model.SprintScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalSprintImpl).Create")
 	defer span.End()
 
@@ -229,7 +226,6 @@ func (i *internalSprintImpl) Create(ctx context.Context, payload *model.SprintPa
 }
 
 func (i *internalSprintImpl) Update(ctx context.Context, sprintID int, payload *model.SprintPayloadScheme) (*model.SprintScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalSprintImpl).Update")
 	defer span.End()
 
@@ -254,7 +250,6 @@ func (i *internalSprintImpl) Update(ctx context.Context, sprintID int, payload *
 }
 
 func (i *internalSprintImpl) Path(ctx context.Context, sprintID int, payload *model.SprintPayloadScheme) (*model.SprintScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalSprintImpl).Path")
 	defer span.End()
 
@@ -279,7 +274,6 @@ func (i *internalSprintImpl) Path(ctx context.Context, sprintID int, payload *mo
 }
 
 func (i *internalSprintImpl) Delete(ctx context.Context, sprintID int) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalSprintImpl).Delete")
 	defer span.End()
 
@@ -298,7 +292,6 @@ func (i *internalSprintImpl) Delete(ctx context.Context, sprintID int) (*model.R
 }
 
 func (i *internalSprintImpl) Issues(ctx context.Context, sprintID int, opts *model.IssueOptionScheme, startAt, maxResults int) (*model.SprintIssuePageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalSprintImpl).Issues")
 	defer span.End()
 
@@ -346,7 +339,6 @@ func (i *internalSprintImpl) Issues(ctx context.Context, sprintID int, opts *mod
 }
 
 func (i *internalSprintImpl) Start(ctx context.Context, sprintID int) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalSprintImpl).Start")
 	defer span.End()
 
@@ -365,7 +357,6 @@ func (i *internalSprintImpl) Start(ctx context.Context, sprintID int) (*model.Re
 }
 
 func (i *internalSprintImpl) Close(ctx context.Context, sprintID int) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalSprintImpl).Close")
 	defer span.End()
 

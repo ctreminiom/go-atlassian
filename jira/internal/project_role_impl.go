@@ -101,7 +101,6 @@ type internalProjectRoleImpl struct {
 }
 
 func (i *internalProjectRoleImpl) Gets(ctx context.Context, projectKeyOrID string) (*map[string]int, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalProjectRoleImpl).Gets")
 	defer span.End()
 
@@ -149,7 +148,6 @@ func (i *internalProjectRoleImpl) Gets(ctx context.Context, projectKeyOrID strin
 }
 
 func (i *internalProjectRoleImpl) Get(ctx context.Context, projectKeyOrID string, roleID int) (*model.ProjectRoleScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalProjectRoleImpl).Get")
 	defer span.End()
 
@@ -174,7 +172,6 @@ func (i *internalProjectRoleImpl) Get(ctx context.Context, projectKeyOrID string
 }
 
 func (i *internalProjectRoleImpl) Details(ctx context.Context, projectKeyOrID string) ([]*model.ProjectRoleDetailScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalProjectRoleImpl).Details")
 	defer span.End()
 
@@ -199,7 +196,6 @@ func (i *internalProjectRoleImpl) Details(ctx context.Context, projectKeyOrID st
 }
 
 func (i *internalProjectRoleImpl) Global(ctx context.Context) ([]*model.ProjectRoleScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalProjectRoleImpl).Global")
 	defer span.End()
 
@@ -220,7 +216,6 @@ func (i *internalProjectRoleImpl) Global(ctx context.Context) ([]*model.ProjectR
 }
 
 func (i *internalProjectRoleImpl) Create(ctx context.Context, payload *model.ProjectRolePayloadScheme) (*model.ProjectRoleScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalProjectRoleImpl).Create")
 	defer span.End()
 

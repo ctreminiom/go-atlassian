@@ -82,7 +82,6 @@ type internalFieldTrashServiceImpl struct {
 }
 
 func (i *internalFieldTrashServiceImpl) Search(ctx context.Context, options *model.FieldSearchOptionsScheme, startAt, maxResults int) (*model.FieldSearchPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalFieldTrashServiceImpl).Search")
 	defer span.End()
 
@@ -122,7 +121,6 @@ func (i *internalFieldTrashServiceImpl) Search(ctx context.Context, options *mod
 }
 
 func (i *internalFieldTrashServiceImpl) Move(ctx context.Context, id string) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalFieldTrashServiceImpl).Move")
 	defer span.End()
 
@@ -141,7 +139,6 @@ func (i *internalFieldTrashServiceImpl) Move(ctx context.Context, id string) (*m
 }
 
 func (i *internalFieldTrashServiceImpl) Restore(ctx context.Context, id string) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalFieldTrashServiceImpl).Restore")
 	defer span.End()
 

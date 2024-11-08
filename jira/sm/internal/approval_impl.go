@@ -70,7 +70,6 @@ type internalServiceRequestApprovalImpl struct {
 }
 
 func (i *internalServiceRequestApprovalImpl) Gets(ctx context.Context, issueKeyOrID string, start, limit int) (*model.CustomerApprovalPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalServiceRequestApprovalImpl).Gets")
 	defer span.End()
 
@@ -99,7 +98,6 @@ func (i *internalServiceRequestApprovalImpl) Gets(ctx context.Context, issueKeyO
 }
 
 func (i *internalServiceRequestApprovalImpl) Get(ctx context.Context, issueKeyOrID string, approvalID int) (*model.CustomerApprovalScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalServiceRequestApprovalImpl).Get")
 	defer span.End()
 
@@ -128,7 +126,6 @@ func (i *internalServiceRequestApprovalImpl) Get(ctx context.Context, issueKeyOr
 }
 
 func (i *internalServiceRequestApprovalImpl) Answer(ctx context.Context, issueKeyOrID string, approvalID int, approve bool) (*model.CustomerApprovalScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalServiceRequestApprovalImpl).Answer")
 	defer span.End()
 

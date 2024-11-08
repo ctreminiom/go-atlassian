@@ -124,7 +124,6 @@ type internalUserImpl struct {
 }
 
 func (i *internalUserImpl) Get(ctx context.Context, accountID string, expand []string) (*model.UserScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalUserImpl).Get")
 	defer span.End()
 
@@ -156,7 +155,6 @@ func (i *internalUserImpl) Get(ctx context.Context, accountID string, expand []s
 }
 
 func (i *internalUserImpl) Create(ctx context.Context, payload *model.UserPayloadScheme) (*model.UserScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalUserImpl).Create")
 	defer span.End()
 
@@ -177,7 +175,6 @@ func (i *internalUserImpl) Create(ctx context.Context, payload *model.UserPayloa
 }
 
 func (i *internalUserImpl) Delete(ctx context.Context, accountID string) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalUserImpl).Delete")
 	defer span.End()
 
@@ -198,7 +195,6 @@ func (i *internalUserImpl) Delete(ctx context.Context, accountID string) (*model
 }
 
 func (i *internalUserImpl) Find(ctx context.Context, accountIDs []string, startAt, maxResults int) (*model.UserSearchPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalUserImpl).Find")
 	defer span.End()
 
@@ -231,7 +227,6 @@ func (i *internalUserImpl) Find(ctx context.Context, accountIDs []string, startA
 }
 
 func (i *internalUserImpl) Groups(ctx context.Context, accountID string) ([]*model.UserGroupScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalUserImpl).Groups")
 	defer span.End()
 
@@ -258,7 +253,6 @@ func (i *internalUserImpl) Groups(ctx context.Context, accountID string) ([]*mod
 }
 
 func (i *internalUserImpl) Gets(ctx context.Context, startAt, maxResults int) ([]*model.UserScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalUserImpl).Gets")
 	defer span.End()
 

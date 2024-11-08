@@ -110,7 +110,6 @@ type internalIssueFieldContextOptionServiceImpl struct {
 }
 
 func (i *internalIssueFieldContextOptionServiceImpl) Gets(ctx context.Context, fieldID string, contextID int, options *model.FieldOptionContextParams, startAt, maxResults int) (*model.CustomFieldContextOptionPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalIssueFieldContextOptionServiceImpl).Gets")
 	defer span.End()
 
@@ -147,7 +146,6 @@ func (i *internalIssueFieldContextOptionServiceImpl) Gets(ctx context.Context, f
 }
 
 func (i *internalIssueFieldContextOptionServiceImpl) Create(ctx context.Context, fieldID string, contextID int, payload *model.FieldContextOptionListScheme) (*model.FieldContextOptionListScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalIssueFieldContextOptionServiceImpl).Create")
 	defer span.End()
 
@@ -176,7 +174,6 @@ func (i *internalIssueFieldContextOptionServiceImpl) Create(ctx context.Context,
 }
 
 func (i *internalIssueFieldContextOptionServiceImpl) Update(ctx context.Context, fieldID string, contextID int, payload *model.FieldContextOptionListScheme) (*model.FieldContextOptionListScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalIssueFieldContextOptionServiceImpl).Update")
 	defer span.End()
 
@@ -205,7 +202,6 @@ func (i *internalIssueFieldContextOptionServiceImpl) Update(ctx context.Context,
 }
 
 func (i *internalIssueFieldContextOptionServiceImpl) Delete(ctx context.Context, fieldID string, contextID, optionID int) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalIssueFieldContextOptionServiceImpl).Delete")
 	defer span.End()
 
@@ -232,7 +228,6 @@ func (i *internalIssueFieldContextOptionServiceImpl) Delete(ctx context.Context,
 }
 
 func (i *internalIssueFieldContextOptionServiceImpl) Order(ctx context.Context, fieldID string, contextID int, payload *model.OrderFieldOptionPayloadScheme) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalIssueFieldContextOptionServiceImpl).Order")
 	defer span.End()
 

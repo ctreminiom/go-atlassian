@@ -108,7 +108,6 @@ type internalIssueFieldServiceImpl struct {
 }
 
 func (i *internalIssueFieldServiceImpl) Gets(ctx context.Context) ([]*model.IssueFieldScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalIssueFieldServiceImpl).Gets")
 	defer span.End()
 
@@ -129,7 +128,6 @@ func (i *internalIssueFieldServiceImpl) Gets(ctx context.Context) ([]*model.Issu
 }
 
 func (i *internalIssueFieldServiceImpl) Create(ctx context.Context, payload *model.CustomFieldScheme) (*model.IssueFieldScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalIssueFieldServiceImpl).Create")
 	defer span.End()
 
@@ -150,7 +148,6 @@ func (i *internalIssueFieldServiceImpl) Create(ctx context.Context, payload *mod
 }
 
 func (i *internalIssueFieldServiceImpl) Search(ctx context.Context, options *model.FieldSearchOptionsScheme, startAt, maxResults int) (*model.FieldSearchPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalIssueFieldServiceImpl).Search")
 	defer span.End()
 
@@ -198,7 +195,6 @@ func (i *internalIssueFieldServiceImpl) Search(ctx context.Context, options *mod
 }
 
 func (i *internalIssueFieldServiceImpl) Delete(ctx context.Context, fieldID string) (*model.TaskScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalIssueFieldServiceImpl).Delete")
 	defer span.End()
 

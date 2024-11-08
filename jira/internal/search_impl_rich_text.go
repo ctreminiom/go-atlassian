@@ -60,7 +60,6 @@ type internalSearchRichTextImpl struct {
 }
 
 func (i *internalSearchRichTextImpl) Checks(ctx context.Context, payload *model.IssueSearchCheckPayloadScheme) (*model.IssueMatchesPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalSearchRichTextImpl).Checks")
 	defer span.End()
 
@@ -81,7 +80,6 @@ func (i *internalSearchRichTextImpl) Checks(ctx context.Context, payload *model.
 }
 
 func (i *internalSearchRichTextImpl) Get(ctx context.Context, jql string, fields, expands []string, startAt, maxResults int, validate string) (*model.IssueSearchSchemeV2, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalSearchRichTextImpl).Get")
 	defer span.End()
 
@@ -123,7 +121,6 @@ func (i *internalSearchRichTextImpl) Get(ctx context.Context, jql string, fields
 }
 
 func (i *internalSearchRichTextImpl) Post(ctx context.Context, jql string, fields, expands []string, startAt, maxResults int, validate string) (*model.IssueSearchSchemeV2, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalSearchRichTextImpl).Post")
 	defer span.End()
 

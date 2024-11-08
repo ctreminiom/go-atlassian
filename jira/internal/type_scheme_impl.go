@@ -158,7 +158,6 @@ type internalTypeSchemeImpl struct {
 }
 
 func (i *internalTypeSchemeImpl) Gets(ctx context.Context, issueTypeSchemeIDs []int, startAt, maxResults int) (*model.IssueTypeSchemePageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalTypeSchemeImpl).Gets")
 	defer span.End()
 
@@ -187,7 +186,6 @@ func (i *internalTypeSchemeImpl) Gets(ctx context.Context, issueTypeSchemeIDs []
 }
 
 func (i *internalTypeSchemeImpl) Create(ctx context.Context, payload *model.IssueTypeSchemePayloadScheme) (*model.NewIssueTypeSchemeScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalTypeSchemeImpl).Create")
 	defer span.End()
 
@@ -208,7 +206,6 @@ func (i *internalTypeSchemeImpl) Create(ctx context.Context, payload *model.Issu
 }
 
 func (i *internalTypeSchemeImpl) Items(ctx context.Context, issueTypeSchemeIDs []int, startAt, maxResults int) (*model.IssueTypeSchemeItemPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalTypeSchemeImpl).Items")
 	defer span.End()
 
@@ -237,7 +234,6 @@ func (i *internalTypeSchemeImpl) Items(ctx context.Context, issueTypeSchemeIDs [
 }
 
 func (i *internalTypeSchemeImpl) Projects(ctx context.Context, projectIDs []int, startAt, maxResults int) (*model.ProjectIssueTypeSchemePageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalTypeSchemeImpl).Projects")
 	defer span.End()
 
@@ -266,7 +262,6 @@ func (i *internalTypeSchemeImpl) Projects(ctx context.Context, projectIDs []int,
 }
 
 func (i *internalTypeSchemeImpl) Assign(ctx context.Context, issueTypeSchemeID, projectID string) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalTypeSchemeImpl).Assign")
 	defer span.End()
 
@@ -294,7 +289,6 @@ func (i *internalTypeSchemeImpl) Assign(ctx context.Context, issueTypeSchemeID, 
 }
 
 func (i *internalTypeSchemeImpl) Update(ctx context.Context, issueTypeSchemeID int, payload *model.IssueTypeSchemePayloadScheme) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalTypeSchemeImpl).Update")
 	defer span.End()
 
@@ -313,7 +307,6 @@ func (i *internalTypeSchemeImpl) Update(ctx context.Context, issueTypeSchemeID i
 }
 
 func (i *internalTypeSchemeImpl) Delete(ctx context.Context, issueTypeSchemeID int) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalTypeSchemeImpl).Delete")
 	defer span.End()
 
@@ -332,7 +325,6 @@ func (i *internalTypeSchemeImpl) Delete(ctx context.Context, issueTypeSchemeID i
 }
 
 func (i *internalTypeSchemeImpl) Append(ctx context.Context, issueTypeSchemeID int, issueTypeIDs []int) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalTypeSchemeImpl).Append")
 	defer span.End()
 
@@ -356,7 +348,6 @@ func (i *internalTypeSchemeImpl) Append(ctx context.Context, issueTypeSchemeID i
 }
 
 func (i *internalTypeSchemeImpl) Remove(ctx context.Context, issueTypeSchemeID, issueTypeID int) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalTypeSchemeImpl).Remove")
 	defer span.End()
 

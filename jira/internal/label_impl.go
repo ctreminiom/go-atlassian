@@ -47,7 +47,6 @@ type internalLabelServiceImpl struct {
 }
 
 func (i *internalLabelServiceImpl) Gets(ctx context.Context, startAt, maxResults int) (*model.IssueLabelsScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalLabelServiceImpl).Gets")
 	defer span.End()
 

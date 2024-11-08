@@ -88,7 +88,6 @@ type internalProjectPropertyImpl struct {
 }
 
 func (i *internalProjectPropertyImpl) Gets(ctx context.Context, projectKeyOrID string) (*model.PropertyPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalProjectPropertyImpl).Gets")
 	defer span.End()
 
@@ -113,7 +112,6 @@ func (i *internalProjectPropertyImpl) Gets(ctx context.Context, projectKeyOrID s
 }
 
 func (i *internalProjectPropertyImpl) Get(ctx context.Context, projectKeyOrID, propertyKey string) (*model.EntityPropertyScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalProjectPropertyImpl).Get")
 	defer span.End()
 
@@ -142,7 +140,6 @@ func (i *internalProjectPropertyImpl) Get(ctx context.Context, projectKeyOrID, p
 }
 
 func (i *internalProjectPropertyImpl) Set(ctx context.Context, projectKeyOrID, propertyKey string, payload interface{}) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalProjectPropertyImpl).Set")
 	defer span.End()
 
@@ -165,7 +162,6 @@ func (i *internalProjectPropertyImpl) Set(ctx context.Context, projectKeyOrID, p
 }
 
 func (i *internalProjectPropertyImpl) Delete(ctx context.Context, projectKeyOrID, propertyKey string) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalProjectPropertyImpl).Delete")
 	defer span.End()
 

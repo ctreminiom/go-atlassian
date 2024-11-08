@@ -45,7 +45,6 @@ type internalAQLImpl struct {
 }
 
 func (i *internalAQLImpl) Filter(ctx context.Context, workspaceID string, parameters *model.AQLSearchParamsScheme) (*model.ObjectListScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalAQLImpl).Filter")
 	defer span.End()
 

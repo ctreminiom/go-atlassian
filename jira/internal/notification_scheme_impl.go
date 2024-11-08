@@ -145,7 +145,6 @@ type internalNotificationSchemeImpl struct {
 }
 
 func (i *internalNotificationSchemeImpl) Search(ctx context.Context, options *model.NotificationSchemeSearchOptions, startAt, maxResults int) (*model.NotificationSchemePageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalNotificationSchemeImpl).Search")
 	defer span.End()
 
@@ -189,7 +188,6 @@ func (i *internalNotificationSchemeImpl) Search(ctx context.Context, options *mo
 }
 
 func (i *internalNotificationSchemeImpl) Create(ctx context.Context, payload *model.NotificationSchemePayloadScheme) (*model.NotificationSchemeCreatedPayload, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalNotificationSchemeImpl).Create")
 	defer span.End()
 
@@ -210,7 +208,6 @@ func (i *internalNotificationSchemeImpl) Create(ctx context.Context, payload *mo
 }
 
 func (i *internalNotificationSchemeImpl) Projects(ctx context.Context, schemeIDs, projectIDs []string, startAt, maxResults int) (*model.NotificationSchemeProjectPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalNotificationSchemeImpl).Projects")
 	defer span.End()
 
@@ -243,7 +240,6 @@ func (i *internalNotificationSchemeImpl) Projects(ctx context.Context, schemeIDs
 }
 
 func (i *internalNotificationSchemeImpl) Get(ctx context.Context, schemeID string, expand []string) (*model.NotificationSchemeScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalNotificationSchemeImpl).Get")
 	defer span.End()
 
@@ -277,7 +273,6 @@ func (i *internalNotificationSchemeImpl) Get(ctx context.Context, schemeID strin
 }
 
 func (i *internalNotificationSchemeImpl) Update(ctx context.Context, schemeID string, payload *model.NotificationSchemePayloadScheme) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalNotificationSchemeImpl).Update")
 	defer span.End()
 
@@ -296,7 +291,6 @@ func (i *internalNotificationSchemeImpl) Update(ctx context.Context, schemeID st
 }
 
 func (i *internalNotificationSchemeImpl) Append(ctx context.Context, schemeID string, payload *model.NotificationSchemeEventsPayloadScheme) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalNotificationSchemeImpl).Append")
 	defer span.End()
 
@@ -315,7 +309,6 @@ func (i *internalNotificationSchemeImpl) Append(ctx context.Context, schemeID st
 }
 
 func (i *internalNotificationSchemeImpl) Delete(ctx context.Context, schemeID string) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalNotificationSchemeImpl).Delete")
 	defer span.End()
 
@@ -334,7 +327,6 @@ func (i *internalNotificationSchemeImpl) Delete(ctx context.Context, schemeID st
 }
 
 func (i *internalNotificationSchemeImpl) Remove(ctx context.Context, schemeID, notificationID string) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalNotificationSchemeImpl).Remove")
 	defer span.End()
 

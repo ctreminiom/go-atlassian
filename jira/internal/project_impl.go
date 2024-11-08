@@ -220,7 +220,6 @@ type internalProjectImpl struct {
 }
 
 func (i *internalProjectImpl) Create(ctx context.Context, payload *model.ProjectPayloadScheme) (*model.NewProjectCreatedScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalProjectImpl).Create")
 	defer span.End()
 
@@ -241,7 +240,6 @@ func (i *internalProjectImpl) Create(ctx context.Context, payload *model.Project
 }
 
 func (i *internalProjectImpl) Search(ctx context.Context, options *model.ProjectSearchOptionsScheme, startAt, maxResults int) (*model.ProjectSearchScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalProjectImpl).Search")
 	defer span.End()
 
@@ -313,7 +311,6 @@ func (i *internalProjectImpl) Search(ctx context.Context, options *model.Project
 }
 
 func (i *internalProjectImpl) Get(ctx context.Context, projectKeyOrID string, expand []string) (*model.ProjectScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalProjectImpl).Get")
 	defer span.End()
 
@@ -347,7 +344,6 @@ func (i *internalProjectImpl) Get(ctx context.Context, projectKeyOrID string, ex
 }
 
 func (i *internalProjectImpl) Update(ctx context.Context, projectKeyOrID string, payload *model.ProjectUpdateScheme) (*model.ProjectScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalProjectImpl).Update")
 	defer span.End()
 
@@ -372,7 +368,6 @@ func (i *internalProjectImpl) Update(ctx context.Context, projectKeyOrID string,
 }
 
 func (i *internalProjectImpl) Delete(ctx context.Context, projectKeyOrID string, enableUndo bool) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalProjectImpl).Delete")
 	defer span.End()
 
@@ -394,7 +389,6 @@ func (i *internalProjectImpl) Delete(ctx context.Context, projectKeyOrID string,
 }
 
 func (i *internalProjectImpl) DeleteAsynchronously(ctx context.Context, projectKeyOrID string) (*model.TaskScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalProjectImpl).DeleteAsynchronously")
 	defer span.End()
 
@@ -419,7 +413,6 @@ func (i *internalProjectImpl) DeleteAsynchronously(ctx context.Context, projectK
 }
 
 func (i *internalProjectImpl) Archive(ctx context.Context, projectKeyOrID string) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalProjectImpl).Archive")
 	defer span.End()
 
@@ -438,7 +431,6 @@ func (i *internalProjectImpl) Archive(ctx context.Context, projectKeyOrID string
 }
 
 func (i *internalProjectImpl) Restore(ctx context.Context, projectKeyOrID string) (*model.ProjectScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalProjectImpl).Restore")
 	defer span.End()
 
@@ -463,7 +455,6 @@ func (i *internalProjectImpl) Restore(ctx context.Context, projectKeyOrID string
 }
 
 func (i *internalProjectImpl) Statuses(ctx context.Context, projectKeyOrID string) ([]*model.ProjectStatusPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalProjectImpl).Statuses")
 	defer span.End()
 
@@ -488,7 +479,6 @@ func (i *internalProjectImpl) Statuses(ctx context.Context, projectKeyOrID strin
 }
 
 func (i *internalProjectImpl) NotificationScheme(ctx context.Context, projectKeyOrID string, expand []string) (*model.NotificationSchemeScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalProjectImpl).NotificationScheme")
 	defer span.End()
 

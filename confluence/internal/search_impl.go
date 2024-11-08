@@ -59,7 +59,6 @@ type internalSearchImpl struct {
 }
 
 func (i *internalSearchImpl) Content(ctx context.Context, cql string, options *model.SearchContentOptions) (*model.SearchPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalSearchImpl).Content")
 	defer span.End()
 
@@ -136,7 +135,6 @@ func (i *internalSearchImpl) Content(ctx context.Context, cql string, options *m
 }
 
 func (i *internalSearchImpl) Users(ctx context.Context, cql string, start, limit int, expand []string) (*model.SearchPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalSearchImpl).Users")
 	defer span.End()
 

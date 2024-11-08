@@ -129,7 +129,6 @@ type internalWorkflowStatusImpl struct {
 }
 
 func (i *internalWorkflowStatusImpl) Get(ctx context.Context, idOrName string) (*model.StatusDetailScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalWorkflowStatusImpl).Get")
 	defer span.End()
 
@@ -154,7 +153,6 @@ func (i *internalWorkflowStatusImpl) Get(ctx context.Context, idOrName string) (
 }
 
 func (i *internalWorkflowStatusImpl) Bulk(ctx context.Context) ([]*model.StatusDetailScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalWorkflowStatusImpl).Bulk")
 	defer span.End()
 
@@ -175,7 +173,6 @@ func (i *internalWorkflowStatusImpl) Bulk(ctx context.Context) ([]*model.StatusD
 }
 
 func (i *internalWorkflowStatusImpl) Gets(ctx context.Context, ids, expand []string) ([]*model.WorkflowStatusDetailScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalWorkflowStatusImpl).Gets")
 	defer span.End()
 
@@ -210,7 +207,6 @@ func (i *internalWorkflowStatusImpl) Gets(ctx context.Context, ids, expand []str
 }
 
 func (i *internalWorkflowStatusImpl) Update(ctx context.Context, payload *model.WorkflowStatusPayloadScheme) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalWorkflowStatusImpl).Update")
 	defer span.End()
 
@@ -225,7 +221,6 @@ func (i *internalWorkflowStatusImpl) Update(ctx context.Context, payload *model.
 }
 
 func (i *internalWorkflowStatusImpl) Create(ctx context.Context, payload *model.WorkflowStatusPayloadScheme) ([]*model.WorkflowStatusDetailScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalWorkflowStatusImpl).Create")
 	defer span.End()
 
@@ -254,7 +249,6 @@ func (i *internalWorkflowStatusImpl) Create(ctx context.Context, payload *model.
 }
 
 func (i *internalWorkflowStatusImpl) Delete(ctx context.Context, ids []string) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalWorkflowStatusImpl).Delete")
 	defer span.End()
 
@@ -278,7 +272,6 @@ func (i *internalWorkflowStatusImpl) Delete(ctx context.Context, ids []string) (
 }
 
 func (i *internalWorkflowStatusImpl) Search(ctx context.Context, options *model.WorkflowStatusSearchParams, startAt, maxResults int) (*model.WorkflowStatusDetailPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalWorkflowStatusImpl).Search")
 	defer span.End()
 

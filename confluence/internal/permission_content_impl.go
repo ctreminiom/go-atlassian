@@ -53,7 +53,6 @@ type internalPermissionImpl struct {
 }
 
 func (i *internalPermissionImpl) Check(ctx context.Context, contentID string, payload *model.CheckPermissionScheme) (*model.PermissionCheckResponseScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalPermissionImpl).Check")
 	defer span.End()
 

@@ -195,7 +195,6 @@ type internalContentImpl struct {
 }
 
 func (i *internalContentImpl) Gets(ctx context.Context, options *model.GetContentOptionsScheme, startAt, maxResults int) (*model.ContentPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalContentImpl).Gets")
 	defer span.End()
 
@@ -256,7 +255,6 @@ func (i *internalContentImpl) Gets(ctx context.Context, options *model.GetConten
 }
 
 func (i *internalContentImpl) Create(ctx context.Context, payload *model.ContentScheme) (*model.ContentScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalContentImpl).Create")
 	defer span.End()
 
@@ -277,7 +275,6 @@ func (i *internalContentImpl) Create(ctx context.Context, payload *model.Content
 }
 
 func (i *internalContentImpl) Search(ctx context.Context, cql, cqlContext string, expand []string, cursor string, maxResults int) (*model.ContentPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalContentImpl).Search")
 	defer span.End()
 
@@ -318,7 +315,6 @@ func (i *internalContentImpl) Search(ctx context.Context, cql, cqlContext string
 }
 
 func (i *internalContentImpl) Get(ctx context.Context, contentID string, expand []string, version int) (*model.ContentScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalContentImpl).Get")
 	defer span.End()
 
@@ -350,7 +346,6 @@ func (i *internalContentImpl) Get(ctx context.Context, contentID string, expand 
 }
 
 func (i *internalContentImpl) Update(ctx context.Context, contentID string, payload *model.ContentScheme) (*model.ContentScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalContentImpl).Update")
 	defer span.End()
 
@@ -375,7 +370,6 @@ func (i *internalContentImpl) Update(ctx context.Context, contentID string, payl
 }
 
 func (i *internalContentImpl) Delete(ctx context.Context, contentID, status string) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalContentImpl).Delete")
 	defer span.End()
 
@@ -402,7 +396,6 @@ func (i *internalContentImpl) Delete(ctx context.Context, contentID, status stri
 }
 
 func (i *internalContentImpl) History(ctx context.Context, contentID string, expand []string) (*model.ContentHistoryScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalContentImpl).History")
 	defer span.End()
 
@@ -435,7 +428,6 @@ func (i *internalContentImpl) History(ctx context.Context, contentID string, exp
 }
 
 func (i *internalContentImpl) Archive(ctx context.Context, payload *model.ContentArchivePayloadScheme) (*model.ContentArchiveResultScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalContentImpl).Archive")
 	defer span.End()
 

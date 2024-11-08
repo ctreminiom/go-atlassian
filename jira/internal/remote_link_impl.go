@@ -124,7 +124,6 @@ type internalRemoteLinkImpl struct {
 }
 
 func (i *internalRemoteLinkImpl) Gets(ctx context.Context, issueKeyOrID, globalID string) ([]*model.RemoteLinkScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalRemoteLinkImpl).Gets")
 	defer span.End()
 
@@ -157,7 +156,6 @@ func (i *internalRemoteLinkImpl) Gets(ctx context.Context, issueKeyOrID, globalI
 }
 
 func (i *internalRemoteLinkImpl) Get(ctx context.Context, issueKeyOrID, linkID string) (*model.RemoteLinkScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalRemoteLinkImpl).Get")
 	defer span.End()
 
@@ -186,7 +184,6 @@ func (i *internalRemoteLinkImpl) Get(ctx context.Context, issueKeyOrID, linkID s
 }
 
 func (i *internalRemoteLinkImpl) Create(ctx context.Context, issueKeyOrID string, payload *model.RemoteLinkScheme) (*model.RemoteLinkIdentify, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalRemoteLinkImpl).Create")
 	defer span.End()
 
@@ -211,7 +208,6 @@ func (i *internalRemoteLinkImpl) Create(ctx context.Context, issueKeyOrID string
 }
 
 func (i *internalRemoteLinkImpl) Update(ctx context.Context, issueKeyOrID, linkID string, payload *model.RemoteLinkScheme) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalRemoteLinkImpl).Update")
 	defer span.End()
 
@@ -234,7 +230,6 @@ func (i *internalRemoteLinkImpl) Update(ctx context.Context, issueKeyOrID, linkI
 }
 
 func (i *internalRemoteLinkImpl) DeleteByID(ctx context.Context, issueKeyOrID, linkID string) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalRemoteLinkImpl).DeleteByID")
 	defer span.End()
 
@@ -257,7 +252,6 @@ func (i *internalRemoteLinkImpl) DeleteByID(ctx context.Context, issueKeyOrID, l
 }
 
 func (i *internalRemoteLinkImpl) DeleteByGlobalID(ctx context.Context, issueKeyOrID, globalID string) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalRemoteLinkImpl).DeleteByGlobalID")
 	defer span.End()
 

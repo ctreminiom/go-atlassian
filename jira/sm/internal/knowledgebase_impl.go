@@ -55,7 +55,6 @@ type internalKnowledgebaseImpl struct {
 }
 
 func (i *internalKnowledgebaseImpl) Search(ctx context.Context, query string, highlight bool, start, limit int) (*model.ArticlePageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalKnowledgebaseImpl).Search")
 	defer span.End()
 
@@ -86,7 +85,6 @@ func (i *internalKnowledgebaseImpl) Search(ctx context.Context, query string, hi
 }
 
 func (i *internalKnowledgebaseImpl) Gets(ctx context.Context, serviceDeskID int, query string, highlight bool, start, limit int) (*model.ArticlePageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalKnowledgebaseImpl).Gets")
 	defer span.End()
 

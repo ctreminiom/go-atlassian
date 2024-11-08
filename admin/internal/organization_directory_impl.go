@@ -95,7 +95,6 @@ type internalOrganizationDirectoryServiceImpl struct {
 }
 
 func (i *internalOrganizationDirectoryServiceImpl) Activity(ctx context.Context, organizationID, accountID string) (*model.UserProductAccessScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalOrganizationDirectoryServiceImpl).Activity")
 	defer span.End()
 
@@ -124,7 +123,6 @@ func (i *internalOrganizationDirectoryServiceImpl) Activity(ctx context.Context,
 }
 
 func (i *internalOrganizationDirectoryServiceImpl) Remove(ctx context.Context, organizationID, accountID string) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalOrganizationDirectoryServiceImpl).Remove")
 	defer span.End()
 
@@ -147,7 +145,6 @@ func (i *internalOrganizationDirectoryServiceImpl) Remove(ctx context.Context, o
 }
 
 func (i *internalOrganizationDirectoryServiceImpl) Suspend(ctx context.Context, organizationID, accountID string) (*model.GenericActionSuccessScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalOrganizationDirectoryServiceImpl).Suspend")
 	defer span.End()
 
@@ -176,7 +173,6 @@ func (i *internalOrganizationDirectoryServiceImpl) Suspend(ctx context.Context, 
 }
 
 func (i *internalOrganizationDirectoryServiceImpl) Restore(ctx context.Context, organizationID, accountID string) (*model.GenericActionSuccessScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalOrganizationDirectoryServiceImpl).Restore")
 	defer span.End()
 

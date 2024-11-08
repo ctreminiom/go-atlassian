@@ -58,7 +58,6 @@ type internalServiceRequestAttachmentImpl struct {
 }
 
 func (i *internalServiceRequestAttachmentImpl) Gets(ctx context.Context, issueKeyOrID string, start, limit int) (*model.RequestAttachmentPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalServiceRequestAttachmentImpl).Gets")
 	defer span.End()
 
@@ -87,7 +86,6 @@ func (i *internalServiceRequestAttachmentImpl) Gets(ctx context.Context, issueKe
 }
 
 func (i *internalServiceRequestAttachmentImpl) Create(ctx context.Context, issueKeyOrID string, payload *model.RequestAttachmentCreationPayloadScheme) (*model.RequestAttachmentCreationScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalServiceRequestAttachmentImpl).Create")
 	defer span.End()
 

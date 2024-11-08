@@ -50,7 +50,6 @@ type internalAuditRecordImpl struct {
 }
 
 func (i *internalAuditRecordImpl) Get(ctx context.Context, options *model.AuditRecordGetOptions, offSet, limit int) (*model.AuditRecordPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalAuditRecordImpl).Get")
 	defer span.End()
 

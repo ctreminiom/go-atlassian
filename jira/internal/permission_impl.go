@@ -73,7 +73,6 @@ type internalPermissionImpl struct {
 }
 
 func (i *internalPermissionImpl) Gets(ctx context.Context) ([]*model.PermissionScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalPermissionImpl).Gets")
 	defer span.End()
 
@@ -113,7 +112,6 @@ func (i *internalPermissionImpl) Gets(ctx context.Context) ([]*model.PermissionS
 }
 
 func (i *internalPermissionImpl) Check(ctx context.Context, payload *model.PermissionCheckPayload) (*model.PermissionGrantsScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalPermissionImpl).Check")
 	defer span.End()
 
@@ -134,7 +132,6 @@ func (i *internalPermissionImpl) Check(ctx context.Context, payload *model.Permi
 }
 
 func (i *internalPermissionImpl) Projects(ctx context.Context, permissions []string) (*model.PermittedProjectsScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalPermissionImpl).Projects")
 	defer span.End()
 

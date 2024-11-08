@@ -58,7 +58,6 @@ type internalServiceLevelAgreementImpl struct {
 }
 
 func (i *internalServiceLevelAgreementImpl) Gets(ctx context.Context, issueKeyOrID string, start, limit int) (*model.RequestSLAPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalServiceLevelAgreementImpl).Gets")
 	defer span.End()
 
@@ -87,7 +86,6 @@ func (i *internalServiceLevelAgreementImpl) Gets(ctx context.Context, issueKeyOr
 }
 
 func (i *internalServiceLevelAgreementImpl) Get(ctx context.Context, issueKeyOrID string, metricID int) (*model.RequestSLAScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalServiceLevelAgreementImpl).Get")
 	defer span.End()
 

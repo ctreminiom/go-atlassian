@@ -110,7 +110,6 @@ type internalGroupServiceImpl struct {
 }
 
 func (i *internalGroupServiceImpl) Create(ctx context.Context, groupName string) (*model.GroupScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalGroupServiceImpl).Create")
 	defer span.End()
 
@@ -135,7 +134,6 @@ func (i *internalGroupServiceImpl) Create(ctx context.Context, groupName string)
 }
 
 func (i *internalGroupServiceImpl) Delete(ctx context.Context, groupName string) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalGroupServiceImpl).Delete")
 	defer span.End()
 
@@ -157,7 +155,6 @@ func (i *internalGroupServiceImpl) Delete(ctx context.Context, groupName string)
 }
 
 func (i *internalGroupServiceImpl) Bulk(ctx context.Context, options *model.GroupBulkOptionsScheme, startAt, maxResults int) (*model.BulkGroupScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalGroupServiceImpl).Bulk")
 	defer span.End()
 
@@ -193,7 +190,6 @@ func (i *internalGroupServiceImpl) Bulk(ctx context.Context, options *model.Grou
 }
 
 func (i *internalGroupServiceImpl) Members(ctx context.Context, groupName string, inactive bool, startAt, maxResults int) (*model.GroupMemberPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalGroupServiceImpl).Members")
 	defer span.End()
 
@@ -224,7 +220,6 @@ func (i *internalGroupServiceImpl) Members(ctx context.Context, groupName string
 }
 
 func (i *internalGroupServiceImpl) Add(ctx context.Context, groupName, accountID string) (*model.GroupScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalGroupServiceImpl).Add")
 	defer span.End()
 
@@ -255,7 +250,6 @@ func (i *internalGroupServiceImpl) Add(ctx context.Context, groupName, accountID
 }
 
 func (i *internalGroupServiceImpl) Remove(ctx context.Context, groupName, accountID string) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalGroupServiceImpl).Remove")
 	defer span.End()
 

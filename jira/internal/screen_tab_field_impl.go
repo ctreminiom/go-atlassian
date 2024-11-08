@@ -84,7 +84,6 @@ type internalScreenTabFieldImpl struct {
 }
 
 func (i *internalScreenTabFieldImpl) Gets(ctx context.Context, screenID, tabID int) ([]*model.ScreenTabFieldScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalScreenTabFieldImpl).Gets")
 	defer span.End()
 
@@ -113,7 +112,6 @@ func (i *internalScreenTabFieldImpl) Gets(ctx context.Context, screenID, tabID i
 }
 
 func (i *internalScreenTabFieldImpl) Add(ctx context.Context, screenID, tabID int, fieldID string) (*model.ScreenTabFieldScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalScreenTabFieldImpl).Add")
 	defer span.End()
 
@@ -146,7 +144,6 @@ func (i *internalScreenTabFieldImpl) Add(ctx context.Context, screenID, tabID in
 }
 
 func (i *internalScreenTabFieldImpl) Remove(ctx context.Context, screenID, tabID int, fieldID string) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalScreenTabFieldImpl).Remove")
 	defer span.End()
 
@@ -173,7 +170,6 @@ func (i *internalScreenTabFieldImpl) Remove(ctx context.Context, screenID, tabID
 }
 
 func (i *internalScreenTabFieldImpl) Move(ctx context.Context, screenID, tabID int, fieldID, after, position string) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalScreenTabFieldImpl).Move")
 	defer span.End()
 

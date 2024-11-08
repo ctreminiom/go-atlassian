@@ -64,7 +64,6 @@ type internalBoardBacklogImpl struct {
 }
 
 func (i *internalBoardBacklogImpl) Move(ctx context.Context, issues []string) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalBoardBacklogImpl).Move")
 	defer span.End()
 
@@ -81,7 +80,6 @@ func (i *internalBoardBacklogImpl) Move(ctx context.Context, issues []string) (*
 }
 
 func (i *internalBoardBacklogImpl) MoveTo(ctx context.Context, boardID int, payload *model.BoardBacklogPayloadScheme) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalBoardBacklogImpl).MoveTo")
 	defer span.End()
 

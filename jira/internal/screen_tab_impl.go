@@ -99,7 +99,6 @@ type internalScreenTabImpl struct {
 }
 
 func (i *internalScreenTabImpl) Gets(ctx context.Context, screenID int, projectKey string) ([]*model.ScreenTabScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalScreenTabImpl).Gets")
 	defer span.End()
 
@@ -133,7 +132,6 @@ func (i *internalScreenTabImpl) Gets(ctx context.Context, screenID int, projectK
 }
 
 func (i *internalScreenTabImpl) Create(ctx context.Context, screenID int, tabName string) (*model.ScreenTabScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalScreenTabImpl).Create")
 	defer span.End()
 
@@ -162,7 +160,6 @@ func (i *internalScreenTabImpl) Create(ctx context.Context, screenID int, tabNam
 }
 
 func (i *internalScreenTabImpl) Update(ctx context.Context, screenID, tabID int, newTabName string) (*model.ScreenTabScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalScreenTabImpl).Update")
 	defer span.End()
 
@@ -195,7 +192,6 @@ func (i *internalScreenTabImpl) Update(ctx context.Context, screenID, tabID int,
 }
 
 func (i *internalScreenTabImpl) Delete(ctx context.Context, screenID, tabID int) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalScreenTabImpl).Delete")
 	defer span.End()
 
@@ -218,7 +214,6 @@ func (i *internalScreenTabImpl) Delete(ctx context.Context, screenID, tabID int)
 }
 
 func (i *internalScreenTabImpl) Move(ctx context.Context, screenID, tabID, position int) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalScreenTabImpl).Move")
 	defer span.End()
 

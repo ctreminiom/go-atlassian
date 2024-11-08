@@ -73,7 +73,6 @@ type internalRichTextCommentImpl struct {
 }
 
 func (i *internalRichTextCommentImpl) Delete(ctx context.Context, issueKeyOrID, commentID string) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalRichTextCommentImpl).Delete")
 	defer span.End()
 
@@ -96,7 +95,6 @@ func (i *internalRichTextCommentImpl) Delete(ctx context.Context, issueKeyOrID, 
 }
 
 func (i *internalRichTextCommentImpl) Gets(ctx context.Context, issueKeyOrID, orderBy string, expand []string, startAt, maxResults int) (*model.IssueCommentPageSchemeV2, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalRichTextCommentImpl).Gets")
 	defer span.End()
 
@@ -133,7 +131,6 @@ func (i *internalRichTextCommentImpl) Gets(ctx context.Context, issueKeyOrID, or
 }
 
 func (i *internalRichTextCommentImpl) Get(ctx context.Context, issueKeyOrID, commentID string) (*model.IssueCommentSchemeV2, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalRichTextCommentImpl).Get")
 	defer span.End()
 
@@ -162,7 +159,6 @@ func (i *internalRichTextCommentImpl) Get(ctx context.Context, issueKeyOrID, com
 }
 
 func (i *internalRichTextCommentImpl) Add(ctx context.Context, issueKeyOrID string, payload *model.CommentPayloadSchemeV2, expand []string) (*model.IssueCommentSchemeV2, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalRichTextCommentImpl).Add")
 	defer span.End()
 

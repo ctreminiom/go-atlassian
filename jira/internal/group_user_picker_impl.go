@@ -48,7 +48,6 @@ type internalGroupUserPickerServiceImpl struct {
 
 // Find returns a list of users and groups matching a string.
 func (i internalGroupUserPickerServiceImpl) Find(ctx context.Context, options *model.GroupUserPickerFindOptionScheme) (*model.GroupUserPickerFindScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(internalGroupUserPickerServiceImpl).Find")
 	defer span.End()
 

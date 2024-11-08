@@ -129,7 +129,6 @@ type internalDashboardImpl struct {
 }
 
 func (i *internalDashboardImpl) Gets(ctx context.Context, startAt, maxResults int, filter string) (*model.DashboardPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalDashboardImpl).Gets")
 	defer span.End()
 
@@ -158,7 +157,6 @@ func (i *internalDashboardImpl) Gets(ctx context.Context, startAt, maxResults in
 }
 
 func (i *internalDashboardImpl) Create(ctx context.Context, payload *model.DashboardPayloadScheme) (*model.DashboardScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalDashboardImpl).Create")
 	defer span.End()
 
@@ -179,7 +177,6 @@ func (i *internalDashboardImpl) Create(ctx context.Context, payload *model.Dashb
 }
 
 func (i *internalDashboardImpl) Search(ctx context.Context, options *model.DashboardSearchOptionsScheme, startAt, maxResults int) (*model.DashboardSearchPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalDashboardImpl).Search")
 	defer span.End()
 
@@ -227,7 +224,6 @@ func (i *internalDashboardImpl) Search(ctx context.Context, options *model.Dashb
 }
 
 func (i *internalDashboardImpl) Get(ctx context.Context, dashboardID string) (*model.DashboardScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalDashboardImpl).Get")
 	defer span.End()
 
@@ -252,7 +248,6 @@ func (i *internalDashboardImpl) Get(ctx context.Context, dashboardID string) (*m
 }
 
 func (i *internalDashboardImpl) Delete(ctx context.Context, dashboardID string) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalDashboardImpl).Delete")
 	defer span.End()
 
@@ -271,7 +266,6 @@ func (i *internalDashboardImpl) Delete(ctx context.Context, dashboardID string) 
 }
 
 func (i *internalDashboardImpl) Copy(ctx context.Context, dashboardID string, payload *model.DashboardPayloadScheme) (*model.DashboardScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalDashboardImpl).Copy")
 	defer span.End()
 
@@ -296,7 +290,6 @@ func (i *internalDashboardImpl) Copy(ctx context.Context, dashboardID string, pa
 }
 
 func (i *internalDashboardImpl) Update(ctx context.Context, dashboardID string, payload *model.DashboardPayloadScheme) (*model.DashboardScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalDashboardImpl).Update")
 	defer span.End()
 

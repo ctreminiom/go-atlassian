@@ -61,7 +61,6 @@ type internalApplicationRoleImpl struct {
 }
 
 func (i *internalApplicationRoleImpl) Gets(ctx context.Context) ([]*model.ApplicationRoleScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalApplicationRoleImpl).Gets")
 	defer span.End()
 
@@ -82,7 +81,6 @@ func (i *internalApplicationRoleImpl) Gets(ctx context.Context) ([]*model.Applic
 }
 
 func (i *internalApplicationRoleImpl) Get(ctx context.Context, key string) (*model.ApplicationRoleScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalApplicationRoleImpl).Get")
 	defer span.End()
 

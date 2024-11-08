@@ -41,7 +41,6 @@ type internalLabelImpl struct {
 }
 
 func (i *internalLabelImpl) Get(ctx context.Context, labelName, labelType string, start, limit int) (*model.LabelDetailsScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalLabelImpl).Get")
 	defer span.End()
 

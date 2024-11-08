@@ -70,7 +70,6 @@ func (l *LinkADFService) Create(ctx context.Context, payload *model.LinkPayloadS
 }
 
 func (i *internalLinkADFServiceImpl) Get(ctx context.Context, linkID string) (*model.IssueLinkScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalLinkADFServiceImpl).Get")
 	defer span.End()
 
@@ -95,7 +94,6 @@ func (i *internalLinkADFServiceImpl) Get(ctx context.Context, linkID string) (*m
 }
 
 func (i *internalLinkADFServiceImpl) Gets(ctx context.Context, issueKeyOrID string) (*model.IssueLinkPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalLinkADFServiceImpl).Gets")
 	defer span.End()
 
@@ -120,7 +118,6 @@ func (i *internalLinkADFServiceImpl) Gets(ctx context.Context, issueKeyOrID stri
 }
 
 func (i *internalLinkADFServiceImpl) Delete(ctx context.Context, linkID string) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalLinkADFServiceImpl).Delete")
 	defer span.End()
 
@@ -139,7 +136,6 @@ func (i *internalLinkADFServiceImpl) Delete(ctx context.Context, linkID string) 
 }
 
 func (i *internalLinkADFServiceImpl) Create(ctx context.Context, payload *model.LinkPayloadSchemeV3) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalLinkADFServiceImpl).Create")
 	defer span.End()
 

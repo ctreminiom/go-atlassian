@@ -47,7 +47,6 @@ type internalMySelfImpl struct {
 }
 
 func (i *internalMySelfImpl) Details(ctx context.Context, expand []string) (*model.UserScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalMySelfImpl).Details")
 	defer span.End()
 

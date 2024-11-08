@@ -129,7 +129,6 @@ type internalScreenImpl struct {
 }
 
 func (i *internalScreenImpl) Fields(ctx context.Context, fieldID string, startAt, maxResults int) (*model.ScreenFieldPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalScreenImpl).Fields")
 	defer span.End()
 
@@ -158,7 +157,6 @@ func (i *internalScreenImpl) Fields(ctx context.Context, fieldID string, startAt
 }
 
 func (i *internalScreenImpl) Gets(ctx context.Context, options *model.ScreenParamsScheme, startAt, maxResults int) (*model.ScreenSearchPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalScreenImpl).Gets")
 	defer span.End()
 
@@ -202,7 +200,6 @@ func (i *internalScreenImpl) Gets(ctx context.Context, options *model.ScreenPara
 }
 
 func (i *internalScreenImpl) Create(ctx context.Context, name, description string) (*model.ScreenScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalScreenImpl).Create")
 	defer span.End()
 
@@ -233,7 +230,6 @@ func (i *internalScreenImpl) Create(ctx context.Context, name, description strin
 }
 
 func (i *internalScreenImpl) AddToDefault(ctx context.Context, fieldID string) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalScreenImpl).AddToDefault")
 	defer span.End()
 
@@ -252,7 +248,6 @@ func (i *internalScreenImpl) AddToDefault(ctx context.Context, fieldID string) (
 }
 
 func (i *internalScreenImpl) Update(ctx context.Context, screenID int, name, description string) (*model.ScreenScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalScreenImpl).Update")
 	defer span.End()
 
@@ -283,7 +278,6 @@ func (i *internalScreenImpl) Update(ctx context.Context, screenID int, name, des
 }
 
 func (i *internalScreenImpl) Delete(ctx context.Context, screenID int) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalScreenImpl).Delete")
 	defer span.End()
 
@@ -302,7 +296,6 @@ func (i *internalScreenImpl) Delete(ctx context.Context, screenID int) (*model.R
 }
 
 func (i *internalScreenImpl) Available(ctx context.Context, screenID int) ([]*model.AvailableScreenFieldScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalScreenImpl).Available")
 	defer span.End()
 

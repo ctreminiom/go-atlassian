@@ -118,7 +118,6 @@ type internalIssuePropertyImpl struct {
 }
 
 func (i *internalIssuePropertyImpl) Gets(ctx context.Context, issueKeyOrID string) (*model.PropertyPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalIssuePropertyImpl).Gets")
 	defer span.End()
 
@@ -144,7 +143,6 @@ func (i *internalIssuePropertyImpl) Gets(ctx context.Context, issueKeyOrID strin
 }
 
 func (i *internalIssuePropertyImpl) Get(ctx context.Context, issueKey, propertyKey string) (*model.EntityPropertyScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalIssuePropertyImpl).Get")
 	defer span.End()
 
@@ -173,7 +171,6 @@ func (i *internalIssuePropertyImpl) Get(ctx context.Context, issueKey, propertyK
 }
 
 func (i *internalIssuePropertyImpl) Set(ctx context.Context, issueKey, propertyKey string, payload interface{}) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalIssuePropertyImpl).Set")
 	defer span.End()
 
@@ -196,7 +193,6 @@ func (i *internalIssuePropertyImpl) Set(ctx context.Context, issueKey, propertyK
 }
 
 func (i *internalIssuePropertyImpl) Delete(ctx context.Context, issueKey, propertyKey string) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalIssuePropertyImpl).Delete")
 	defer span.End()
 

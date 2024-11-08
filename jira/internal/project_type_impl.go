@@ -81,7 +81,6 @@ type internalProjectTypeImpl struct {
 }
 
 func (i *internalProjectTypeImpl) Gets(ctx context.Context) ([]*model.ProjectTypeScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalProjectTypeImpl).Gets")
 	defer span.End()
 
@@ -102,7 +101,6 @@ func (i *internalProjectTypeImpl) Gets(ctx context.Context) ([]*model.ProjectTyp
 }
 
 func (i *internalProjectTypeImpl) Licensed(ctx context.Context) ([]*model.ProjectTypeScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalProjectTypeImpl).Licensed")
 	defer span.End()
 
@@ -123,7 +121,6 @@ func (i *internalProjectTypeImpl) Licensed(ctx context.Context) ([]*model.Projec
 }
 
 func (i *internalProjectTypeImpl) Get(ctx context.Context, projectTypeKey string) (*model.ProjectTypeScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalProjectTypeImpl).Get")
 	defer span.End()
 
@@ -148,7 +145,6 @@ func (i *internalProjectTypeImpl) Get(ctx context.Context, projectTypeKey string
 }
 
 func (i *internalProjectTypeImpl) Accessible(ctx context.Context, projectTypeKey string) (*model.ProjectTypeScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalProjectTypeImpl).Accessible")
 	defer span.End()
 

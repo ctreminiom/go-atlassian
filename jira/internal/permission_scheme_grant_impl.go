@@ -84,7 +84,6 @@ type internalPermissionSchemeGrantImpl struct {
 }
 
 func (i *internalPermissionSchemeGrantImpl) Create(ctx context.Context, permissionSchemeID int, payload *model.PermissionGrantPayloadScheme) (*model.PermissionGrantScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalPermissionSchemeGrantImpl).Create")
 	defer span.End()
 
@@ -109,7 +108,6 @@ func (i *internalPermissionSchemeGrantImpl) Create(ctx context.Context, permissi
 }
 
 func (i *internalPermissionSchemeGrantImpl) Gets(ctx context.Context, permissionSchemeID int, expand []string) (*model.PermissionSchemeGrantsScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalPermissionSchemeGrantImpl).Gets")
 	defer span.End()
 
@@ -143,7 +141,6 @@ func (i *internalPermissionSchemeGrantImpl) Gets(ctx context.Context, permission
 }
 
 func (i *internalPermissionSchemeGrantImpl) Get(ctx context.Context, permissionSchemeID, permissionGrantID int, expand []string) (*model.PermissionGrantScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalPermissionSchemeGrantImpl).Get")
 	defer span.End()
 
@@ -181,7 +178,6 @@ func (i *internalPermissionSchemeGrantImpl) Get(ctx context.Context, permissionS
 }
 
 func (i *internalPermissionSchemeGrantImpl) Delete(ctx context.Context, permissionSchemeID, permissionGrantID int) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalPermissionSchemeGrantImpl).Delete")
 	defer span.End()
 

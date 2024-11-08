@@ -257,7 +257,6 @@ func (i *internalRichTextServiceImpl) Create(ctx context.Context, payload *model
 }
 
 func (i *internalRichTextServiceImpl) Creates(ctx context.Context, payload []*model.IssueBulkSchemeV2) (*model.IssueBulkResponseScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalRichTextServiceImpl).Creates")
 	defer span.End()
 
@@ -297,7 +296,6 @@ func (i *internalRichTextServiceImpl) Creates(ctx context.Context, payload []*mo
 }
 
 func (i *internalRichTextServiceImpl) Get(ctx context.Context, issueKeyOrID string, fields, expand []string) (*model.IssueSchemeV2, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalRichTextServiceImpl).Get")
 	defer span.End()
 
@@ -337,7 +335,6 @@ func (i *internalRichTextServiceImpl) Get(ctx context.Context, issueKeyOrID stri
 }
 
 func (i *internalRichTextServiceImpl) Update(ctx context.Context, issueKeyOrID string, notify bool, payload *model.IssueSchemeV2, customFields *model.CustomFields, operations *model.UpdateOperations) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalRichTextServiceImpl).Update")
 	defer span.End()
 
@@ -411,7 +408,6 @@ func (i *internalRichTextServiceImpl) Update(ctx context.Context, issueKeyOrID s
 }
 
 func (i *internalRichTextServiceImpl) Move(ctx context.Context, issueKeyOrID, transitionID string, options *model.IssueMoveOptionsV2) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalRichTextServiceImpl).Move")
 	defer span.End()
 

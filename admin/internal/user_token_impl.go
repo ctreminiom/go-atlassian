@@ -50,7 +50,6 @@ type internalUserTokenImpl struct {
 }
 
 func (i *internalUserTokenImpl) Gets(ctx context.Context, accountID string) ([]*model.UserTokensScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalUserTokenImpl).Gets")
 	defer span.End()
 
@@ -75,7 +74,6 @@ func (i *internalUserTokenImpl) Gets(ctx context.Context, accountID string) ([]*
 }
 
 func (i *internalUserTokenImpl) Delete(ctx context.Context, accountID, tokenID string) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalUserTokenImpl).Delete")
 	defer span.End()
 

@@ -170,7 +170,6 @@ type internalChildrenDescandantsImpl struct {
 }
 
 func (i *internalChildrenDescandantsImpl) Children(ctx context.Context, contentID string, expand []string, parentVersion int) (*model.ContentChildrenScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalChildrenDescandantsImpl).Children")
 	defer span.End()
 
@@ -210,7 +209,6 @@ func (i *internalChildrenDescandantsImpl) Children(ctx context.Context, contentI
 }
 
 func (i *internalChildrenDescandantsImpl) Move(ctx context.Context, pageID string, position string, targetID string) (*model.ContentMoveScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalChildrenDescandantsImpl).Move")
 	defer span.End()
 
@@ -249,7 +247,6 @@ func (i *internalChildrenDescandantsImpl) Move(ctx context.Context, pageID strin
 }
 
 func (i *internalChildrenDescandantsImpl) ChildrenByType(ctx context.Context, contentID, contentType string, parentVersion int, expand []string, startAt, maxResults int) (*model.ContentPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalChildrenDescandantsImpl).ChildrenByType")
 	defer span.End()
 
@@ -290,7 +287,6 @@ func (i *internalChildrenDescandantsImpl) ChildrenByType(ctx context.Context, co
 }
 
 func (i *internalChildrenDescandantsImpl) Descendants(ctx context.Context, contentID string, expand []string) (*model.ContentChildrenScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalChildrenDescandantsImpl).Descendants")
 	defer span.End()
 
@@ -326,7 +322,6 @@ func (i *internalChildrenDescandantsImpl) Descendants(ctx context.Context, conte
 }
 
 func (i *internalChildrenDescandantsImpl) DescendantsByType(ctx context.Context, contentID, contentType, depth string, expand []string, startAt, maxResults int) (*model.ContentPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalChildrenDescandantsImpl).DescendantsByType")
 	defer span.End()
 
@@ -367,7 +362,6 @@ func (i *internalChildrenDescandantsImpl) DescendantsByType(ctx context.Context,
 }
 
 func (i *internalChildrenDescandantsImpl) CopyHierarchy(ctx context.Context, contentID string, options *model.CopyOptionsScheme) (*model.TaskScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalChildrenDescandantsImpl).CopyHierarchy")
 	defer span.End()
 
@@ -392,7 +386,6 @@ func (i *internalChildrenDescandantsImpl) CopyHierarchy(ctx context.Context, con
 }
 
 func (i *internalChildrenDescandantsImpl) CopyPage(ctx context.Context, contentID string, expand []string, options *model.CopyOptionsScheme) (*model.ContentScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalChildrenDescandantsImpl).CopyPage")
 	defer span.End()
 

@@ -58,7 +58,6 @@ type internalResolutionImpl struct {
 }
 
 func (i *internalResolutionImpl) Gets(ctx context.Context) ([]*model.ResolutionScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalResolutionImpl).Gets")
 	defer span.End()
 
@@ -79,7 +78,6 @@ func (i *internalResolutionImpl) Gets(ctx context.Context) ([]*model.ResolutionS
 }
 
 func (i *internalResolutionImpl) Get(ctx context.Context, resolutionID string) (*model.ResolutionScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalResolutionImpl).Get")
 	defer span.End()
 

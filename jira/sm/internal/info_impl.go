@@ -41,7 +41,6 @@ type internalInfoImpl struct {
 }
 
 func (i *internalInfoImpl) Get(ctx context.Context) (*model.InfoScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalInfoImpl).Get")
 	defer span.End()
 

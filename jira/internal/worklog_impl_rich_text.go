@@ -159,7 +159,6 @@ type internalWorklogRichTextImpl struct {
 }
 
 func (i *internalWorklogRichTextImpl) Gets(ctx context.Context, worklogIDs []int, expand []string) ([]*model.IssueWorklogRichTextScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalWorklogRichTextImpl).Gets")
 	defer span.End()
 
@@ -194,7 +193,6 @@ func (i *internalWorklogRichTextImpl) Gets(ctx context.Context, worklogIDs []int
 }
 
 func (i *internalWorklogRichTextImpl) Get(ctx context.Context, issueKeyOrID, worklogID string, expand []string) (*model.IssueWorklogRichTextScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalWorklogRichTextImpl).Get")
 	defer span.End()
 
@@ -233,7 +231,6 @@ func (i *internalWorklogRichTextImpl) Get(ctx context.Context, issueKeyOrID, wor
 }
 
 func (i *internalWorklogRichTextImpl) Issue(ctx context.Context, issueKeyOrID string, startAt, maxResults, after int, expand []string) (*model.IssueWorklogRichTextPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalWorklogRichTextImpl).Issue")
 	defer span.End()
 
@@ -270,7 +267,6 @@ func (i *internalWorklogRichTextImpl) Issue(ctx context.Context, issueKeyOrID st
 }
 
 func (i *internalWorklogRichTextImpl) Delete(ctx context.Context, issueKeyOrID, worklogID string, options *model.WorklogOptionsScheme) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalWorklogRichTextImpl).Delete")
 	defer span.End()
 
@@ -319,7 +315,6 @@ func (i *internalWorklogRichTextImpl) Delete(ctx context.Context, issueKeyOrID, 
 }
 
 func (i *internalWorklogRichTextImpl) Deleted(ctx context.Context, since int) (*model.ChangedWorklogPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalWorklogRichTextImpl).Deleted")
 	defer span.End()
 
@@ -350,7 +345,6 @@ func (i *internalWorklogRichTextImpl) Deleted(ctx context.Context, since int) (*
 }
 
 func (i *internalWorklogRichTextImpl) Updated(ctx context.Context, since int, expand []string) (*model.ChangedWorklogPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalWorklogRichTextImpl).Updated")
 	defer span.End()
 
@@ -385,7 +379,6 @@ func (i *internalWorklogRichTextImpl) Updated(ctx context.Context, since int, ex
 }
 
 func (i *internalWorklogRichTextImpl) Add(ctx context.Context, issueKeyOrID string, payload *model.WorklogRichTextPayloadScheme, options *model.WorklogOptionsScheme) (*model.IssueWorklogRichTextScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalWorklogRichTextImpl).Add")
 	defer span.End()
 
@@ -437,7 +430,6 @@ func (i *internalWorklogRichTextImpl) Add(ctx context.Context, issueKeyOrID stri
 }
 
 func (i *internalWorklogRichTextImpl) Update(ctx context.Context, issueKeyOrID, worklogID string, payload *model.WorklogRichTextPayloadScheme, options *model.WorklogOptionsScheme) (*model.IssueWorklogRichTextScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalWorklogRichTextImpl).Update")
 	defer span.End()
 

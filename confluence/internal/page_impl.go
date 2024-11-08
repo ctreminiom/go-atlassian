@@ -151,7 +151,6 @@ type internalPageImpl struct {
 }
 
 func (i *internalPageImpl) Gets(ctx context.Context, options *model.PageOptionsScheme, cursor string, limit int) (*model.PageChunkScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalPageImpl).Gets")
 	defer span.End()
 
@@ -218,7 +217,6 @@ func (i *internalPageImpl) Gets(ctx context.Context, options *model.PageOptionsS
 }
 
 func (i *internalPageImpl) Get(ctx context.Context, pageID int, format string, draft bool, version int) (*model.PageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalPageImpl).Get")
 	defer span.End()
 
@@ -264,7 +262,6 @@ func (i *internalPageImpl) Bulk(ctx context.Context, cursor string, limit int) (
 }
 
 func (i *internalPageImpl) GetsByLabel(ctx context.Context, labelID int, sort, cursor string, limit int) (*model.PageChunkScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalPageImpl).GetsByLabel")
 	defer span.End()
 
@@ -300,7 +297,6 @@ func (i *internalPageImpl) GetsByLabel(ctx context.Context, labelID int, sort, c
 }
 
 func (i *internalPageImpl) GetsBySpace(ctx context.Context, spaceID int, cursor string, limit int) (*model.PageChunkScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalPageImpl).GetsBySpace")
 	defer span.End()
 
@@ -332,7 +328,6 @@ func (i *internalPageImpl) GetsBySpace(ctx context.Context, spaceID int, cursor 
 }
 
 func (i *internalPageImpl) GetsByParent(ctx context.Context, parentID int, cursor string, limit int) (*model.ChildPageChunkScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalPageImpl).GetsByParent")
 	defer span.End()
 
@@ -364,7 +359,6 @@ func (i *internalPageImpl) GetsByParent(ctx context.Context, parentID int, curso
 }
 
 func (i *internalPageImpl) Create(ctx context.Context, payload *model.PageCreatePayloadScheme) (*model.PageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalPageImpl).Create")
 	defer span.End()
 
@@ -385,7 +379,6 @@ func (i *internalPageImpl) Create(ctx context.Context, payload *model.PageCreate
 }
 
 func (i *internalPageImpl) Update(ctx context.Context, pageID int, payload *model.PageUpdatePayloadScheme) (*model.PageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalPageImpl).Update")
 	defer span.End()
 
@@ -410,7 +403,6 @@ func (i *internalPageImpl) Update(ctx context.Context, pageID int, payload *mode
 }
 
 func (i *internalPageImpl) Delete(ctx context.Context, pageID int) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalPageImpl).Delete")
 	defer span.End()
 

@@ -73,7 +73,6 @@ type internalAdfCommentImpl struct {
 }
 
 func (i *internalAdfCommentImpl) Delete(ctx context.Context, issueKeyOrID, commentID string) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalAdfCommentImpl).Delete")
 	defer span.End()
 
@@ -96,7 +95,6 @@ func (i *internalAdfCommentImpl) Delete(ctx context.Context, issueKeyOrID, comme
 }
 
 func (i *internalAdfCommentImpl) Gets(ctx context.Context, issueKeyOrID, orderBy string, expand []string, startAt, maxResults int) (*model.IssueCommentPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalAdfCommentImpl).Gets")
 	defer span.End()
 
@@ -133,7 +131,6 @@ func (i *internalAdfCommentImpl) Gets(ctx context.Context, issueKeyOrID, orderBy
 }
 
 func (i *internalAdfCommentImpl) Get(ctx context.Context, issueKeyOrID, commentID string) (*model.IssueCommentScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalAdfCommentImpl).Get")
 	defer span.End()
 
@@ -162,7 +159,6 @@ func (i *internalAdfCommentImpl) Get(ctx context.Context, issueKeyOrID, commentI
 }
 
 func (i *internalAdfCommentImpl) Add(ctx context.Context, issueKeyOrID string, payload *model.CommentPayloadScheme, expand []string) (*model.IssueCommentScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalAdfCommentImpl).Add")
 	defer span.End()
 

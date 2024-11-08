@@ -49,7 +49,6 @@ type internalJQLServiceImpl struct {
 }
 
 func (i *internalJQLServiceImpl) Parse(ctx context.Context, validationType string, JqlQueries []string) (*model.ParsedQueryPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalJQLServiceImpl).Parse")
 	defer span.End()
 

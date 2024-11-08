@@ -173,7 +173,6 @@ type internalServiceRequestImpl struct {
 }
 
 func (i *internalServiceRequestImpl) Create(ctx context.Context, payload *model.CreateCustomerRequestPayloadScheme) (*model.CustomerRequestScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalServiceRequestImpl).Create")
 	defer span.End()
 
@@ -194,7 +193,6 @@ func (i *internalServiceRequestImpl) Create(ctx context.Context, payload *model.
 }
 
 func (i *internalServiceRequestImpl) Gets(ctx context.Context, options *model.ServiceRequestOptionScheme, start, limit int) (*model.CustomerRequestPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalServiceRequestImpl).Gets")
 	defer span.End()
 
@@ -254,7 +252,6 @@ func (i *internalServiceRequestImpl) Gets(ctx context.Context, options *model.Se
 }
 
 func (i *internalServiceRequestImpl) Get(ctx context.Context, issueKeyOrID string, expand []string) (*model.CustomerRequestScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalServiceRequestImpl).Get")
 	defer span.End()
 
@@ -287,7 +284,6 @@ func (i *internalServiceRequestImpl) Get(ctx context.Context, issueKeyOrID strin
 }
 
 func (i *internalServiceRequestImpl) Subscribe(ctx context.Context, issueKeyOrID string) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalServiceRequestImpl).Subscribe")
 	defer span.End()
 
@@ -306,7 +302,6 @@ func (i *internalServiceRequestImpl) Subscribe(ctx context.Context, issueKeyOrID
 }
 
 func (i *internalServiceRequestImpl) Unsubscribe(ctx context.Context, issueKeyOrID string) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalServiceRequestImpl).Unsubscribe")
 	defer span.End()
 
@@ -325,7 +320,6 @@ func (i *internalServiceRequestImpl) Unsubscribe(ctx context.Context, issueKeyOr
 }
 
 func (i *internalServiceRequestImpl) Transitions(ctx context.Context, issueKeyOrID string, start, limit int) (*model.CustomerRequestTransitionPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalServiceRequestImpl).Transitions")
 	defer span.End()
 
@@ -354,7 +348,6 @@ func (i *internalServiceRequestImpl) Transitions(ctx context.Context, issueKeyOr
 }
 
 func (i internalServiceRequestImpl) Transition(ctx context.Context, issueKeyOrID, transitionID, comment string) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(internalServiceRequestImpl).Transition")
 	defer span.End()
 

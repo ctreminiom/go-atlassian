@@ -95,7 +95,6 @@ type internalWorkflowSchemeIssueTypeImpl struct {
 }
 
 func (i *internalWorkflowSchemeIssueTypeImpl) Get(ctx context.Context, schemeID int, issueTypeID string, returnDraft bool) (*model.IssueTypeWorkflowMappingScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalWorkflowSchemeIssueTypeImpl).Get")
 	defer span.End()
 
@@ -132,7 +131,6 @@ func (i *internalWorkflowSchemeIssueTypeImpl) Get(ctx context.Context, schemeID 
 }
 
 func (i *internalWorkflowSchemeIssueTypeImpl) Set(ctx context.Context, schemeID int, issueTypeID string, payload *model.IssueTypeWorkflowPayloadScheme) (*model.WorkflowSchemeScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalWorkflowSchemeIssueTypeImpl).Set")
 	defer span.End()
 
@@ -161,7 +159,6 @@ func (i *internalWorkflowSchemeIssueTypeImpl) Set(ctx context.Context, schemeID 
 }
 
 func (i *internalWorkflowSchemeIssueTypeImpl) Delete(ctx context.Context, schemeID int, issueTypeID string, updateDraft bool) (*model.WorkflowSchemeScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalWorkflowSchemeIssueTypeImpl).Delete")
 	defer span.End()
 
@@ -198,7 +195,6 @@ func (i *internalWorkflowSchemeIssueTypeImpl) Delete(ctx context.Context, scheme
 }
 
 func (i *internalWorkflowSchemeIssueTypeImpl) Mapping(ctx context.Context, schemeID int, workflowName string, returnDraft bool) ([]*model.IssueTypesWorkflowMappingScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalWorkflowSchemeIssueTypeImpl).Mapping")
 	defer span.End()
 

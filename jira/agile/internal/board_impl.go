@@ -294,7 +294,6 @@ type internalBoardImpl struct {
 }
 
 func (i *internalBoardImpl) Get(ctx context.Context, boardID int) (*model.BoardScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalBoardImpl).Get")
 	defer span.End()
 
@@ -319,7 +318,6 @@ func (i *internalBoardImpl) Get(ctx context.Context, boardID int) (*model.BoardS
 }
 
 func (i *internalBoardImpl) Create(ctx context.Context, payload *model.BoardPayloadScheme) (*model.BoardScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalBoardImpl).Create")
 	defer span.End()
 
@@ -340,7 +338,6 @@ func (i *internalBoardImpl) Create(ctx context.Context, payload *model.BoardPayl
 }
 
 func (i *internalBoardImpl) Filter(ctx context.Context, filterID, startAt, maxResults int) (*model.BoardPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalBoardImpl).Filter")
 	defer span.End()
 
@@ -369,7 +366,6 @@ func (i *internalBoardImpl) Filter(ctx context.Context, filterID, startAt, maxRe
 }
 
 func (i *internalBoardImpl) Backlog(ctx context.Context, boardID int, opts *model.IssueOptionScheme, startAt, maxResults int) (*model.BoardIssuePageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalBoardImpl).Backlog")
 	defer span.End()
 
@@ -415,7 +411,6 @@ func (i *internalBoardImpl) Backlog(ctx context.Context, boardID int, opts *mode
 }
 
 func (i *internalBoardImpl) Configuration(ctx context.Context, boardID int) (*model.BoardConfigurationScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalBoardImpl).Configuration")
 	defer span.End()
 
@@ -440,7 +435,6 @@ func (i *internalBoardImpl) Configuration(ctx context.Context, boardID int) (*mo
 }
 
 func (i *internalBoardImpl) Epics(ctx context.Context, boardID, startAt, maxResults int, done bool) (*model.BoardEpicPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalBoardImpl).Epics")
 	defer span.End()
 
@@ -470,7 +464,6 @@ func (i *internalBoardImpl) Epics(ctx context.Context, boardID, startAt, maxResu
 }
 
 func (i *internalBoardImpl) IssuesWithoutEpic(ctx context.Context, boardID int, opts *model.IssueOptionScheme, startAt, maxResults int) (*model.BoardIssuePageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalBoardImpl).IssuesWithoutEpic")
 	defer span.End()
 
@@ -518,7 +511,6 @@ func (i *internalBoardImpl) IssuesWithoutEpic(ctx context.Context, boardID int, 
 }
 
 func (i *internalBoardImpl) IssuesByEpic(ctx context.Context, boardID, epicID int, opts *model.IssueOptionScheme, startAt, maxResults int) (*model.BoardIssuePageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalBoardImpl).IssuesByEpic")
 	defer span.End()
 
@@ -570,7 +562,6 @@ func (i *internalBoardImpl) IssuesByEpic(ctx context.Context, boardID, epicID in
 }
 
 func (i *internalBoardImpl) Issues(ctx context.Context, boardID int, opts *model.IssueOptionScheme, startAt, maxResults int) (*model.BoardIssuePageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalBoardImpl).Issues")
 	defer span.End()
 
@@ -619,7 +610,6 @@ func (i *internalBoardImpl) Issues(ctx context.Context, boardID int, opts *model
 }
 
 func (i *internalBoardImpl) Move(ctx context.Context, boardID int, payload *model.BoardMovementPayloadScheme) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalBoardImpl).Move")
 	defer span.End()
 
@@ -638,7 +628,6 @@ func (i *internalBoardImpl) Move(ctx context.Context, boardID int, payload *mode
 }
 
 func (i *internalBoardImpl) Projects(ctx context.Context, boardID, startAt, maxResults int) (*model.BoardProjectPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalBoardImpl).Projects")
 	defer span.End()
 
@@ -667,7 +656,6 @@ func (i *internalBoardImpl) Projects(ctx context.Context, boardID, startAt, maxR
 }
 
 func (i *internalBoardImpl) Sprints(ctx context.Context, boardID, startAt, maxResults int, states []string) (*model.BoardSprintPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalBoardImpl).Sprints")
 	defer span.End()
 
@@ -697,7 +685,6 @@ func (i *internalBoardImpl) Sprints(ctx context.Context, boardID, startAt, maxRe
 }
 
 func (i *internalBoardImpl) IssuesBySprint(ctx context.Context, boardID, sprintID int, opts *model.IssueOptionScheme, startAt, maxResults int) (*model.BoardIssuePageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalBoardImpl).IssuesBySprint")
 	defer span.End()
 
@@ -749,7 +736,6 @@ func (i *internalBoardImpl) IssuesBySprint(ctx context.Context, boardID, sprintI
 }
 
 func (i *internalBoardImpl) Versions(ctx context.Context, boardID, startAt, maxResults int, released bool) (*model.BoardVersionPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalBoardImpl).Versions")
 	defer span.End()
 
@@ -779,7 +765,6 @@ func (i *internalBoardImpl) Versions(ctx context.Context, boardID, startAt, maxR
 }
 
 func (i *internalBoardImpl) Delete(ctx context.Context, boardID int) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalBoardImpl).Delete")
 	defer span.End()
 
@@ -798,7 +783,6 @@ func (i *internalBoardImpl) Delete(ctx context.Context, boardID int) (*model.Res
 }
 
 func (i *internalBoardImpl) Gets(ctx context.Context, opts *model.GetBoardsOptions, startAt, maxResults int) (*model.BoardPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalBoardImpl).Gets")
 	defer span.End()
 

@@ -73,7 +73,6 @@ type internalWatcherImpl struct {
 }
 
 func (i *internalWatcherImpl) Gets(ctx context.Context, issueKeyOrID string) (*model.IssueWatcherScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalWatcherImpl).Gets")
 	defer span.End()
 
@@ -98,7 +97,6 @@ func (i *internalWatcherImpl) Gets(ctx context.Context, issueKeyOrID string) (*m
 }
 
 func (i *internalWatcherImpl) Add(ctx context.Context, issueKeyOrID string, accountID ...string) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalWatcherImpl).Add")
 	defer span.End()
 
@@ -121,7 +119,6 @@ func (i *internalWatcherImpl) Add(ctx context.Context, issueKeyOrID string, acco
 }
 
 func (i *internalWatcherImpl) Delete(ctx context.Context, issueKeyOrID, accountID string) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalWatcherImpl).Delete")
 	defer span.End()
 

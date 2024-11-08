@@ -76,7 +76,6 @@ type internalVoteImpl struct {
 }
 
 func (i *internalVoteImpl) Gets(ctx context.Context, issueKeyOrID string) (*model.IssueVoteScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalVoteImpl).Gets")
 	defer span.End()
 
@@ -101,7 +100,6 @@ func (i *internalVoteImpl) Gets(ctx context.Context, issueKeyOrID string) (*mode
 }
 
 func (i *internalVoteImpl) Add(ctx context.Context, issueKeyOrID string) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalVoteImpl).Add")
 	defer span.End()
 
@@ -120,7 +118,6 @@ func (i *internalVoteImpl) Add(ctx context.Context, issueKeyOrID string) (*model
 }
 
 func (i *internalVoteImpl) Delete(ctx context.Context, issueKeyOrID string) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalVoteImpl).Delete")
 	defer span.End()
 

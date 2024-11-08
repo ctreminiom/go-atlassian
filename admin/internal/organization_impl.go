@@ -126,7 +126,6 @@ type internalOrganizationImpl struct {
 }
 
 func (i *internalOrganizationImpl) Gets(ctx context.Context, cursor string) (*model.AdminOrganizationPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalOrganizationImpl).Gets")
 	defer span.End()
 
@@ -155,7 +154,6 @@ func (i *internalOrganizationImpl) Gets(ctx context.Context, cursor string) (*mo
 }
 
 func (i *internalOrganizationImpl) Get(ctx context.Context, organizationID string) (*model.AdminOrganizationScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalOrganizationImpl).Get")
 	defer span.End()
 
@@ -180,7 +178,6 @@ func (i *internalOrganizationImpl) Get(ctx context.Context, organizationID strin
 }
 
 func (i *internalOrganizationImpl) Users(ctx context.Context, organizationID, cursor string) (*model.OrganizationUserPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalOrganizationImpl).Users")
 	defer span.End()
 
@@ -213,7 +210,6 @@ func (i *internalOrganizationImpl) Users(ctx context.Context, organizationID, cu
 }
 
 func (i *internalOrganizationImpl) Domains(ctx context.Context, organizationID, cursor string) (*model.OrganizationDomainPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalOrganizationImpl).Domains")
 	defer span.End()
 
@@ -246,7 +242,6 @@ func (i *internalOrganizationImpl) Domains(ctx context.Context, organizationID, 
 }
 
 func (i *internalOrganizationImpl) Domain(ctx context.Context, organizationID, domainID string) (*model.OrganizationDomainScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalOrganizationImpl).Domain")
 	defer span.End()
 
@@ -275,7 +270,6 @@ func (i *internalOrganizationImpl) Domain(ctx context.Context, organizationID, d
 }
 
 func (i *internalOrganizationImpl) Events(ctx context.Context, organizationID string, options *model.OrganizationEventOptScheme, cursor string) (*model.OrganizationEventPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalOrganizationImpl).Events")
 	defer span.End()
 
@@ -331,7 +325,6 @@ func (i *internalOrganizationImpl) Events(ctx context.Context, organizationID st
 }
 
 func (i *internalOrganizationImpl) Event(ctx context.Context, organizationID, eventID string) (*model.OrganizationEventScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalOrganizationImpl).Event")
 	defer span.End()
 
@@ -360,7 +353,6 @@ func (i *internalOrganizationImpl) Event(ctx context.Context, organizationID, ev
 }
 
 func (i *internalOrganizationImpl) Actions(ctx context.Context, organizationID string) (*model.OrganizationEventActionScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalOrganizationImpl).Actions")
 	defer span.End()
 

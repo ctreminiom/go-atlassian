@@ -58,7 +58,6 @@ type internalTaskImpl struct {
 }
 
 func (i *internalTaskImpl) Gets(ctx context.Context, start, limit int) (*model.LongTaskPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalTaskImpl).Gets")
 	defer span.End()
 
@@ -83,7 +82,6 @@ func (i *internalTaskImpl) Gets(ctx context.Context, start, limit int) (*model.L
 }
 
 func (i *internalTaskImpl) Get(ctx context.Context, taskID string) (*model.LongTaskScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalTaskImpl).Get")
 	defer span.End()
 

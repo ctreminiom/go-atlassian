@@ -91,7 +91,6 @@ type Client struct {
 }
 
 func (c *Client) NewRequest(ctx context.Context, method, urlStr, contentType string, body interface{}) (*http.Request, error) {
-
 	ctx, span := tracer().Start(ctx, "(*Client).NewRequest")
 	defer span.End()
 

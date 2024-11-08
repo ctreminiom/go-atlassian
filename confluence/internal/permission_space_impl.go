@@ -75,7 +75,6 @@ type internalSpacePermissionImpl struct {
 }
 
 func (i *internalSpacePermissionImpl) Add(ctx context.Context, spaceKey string, payload *model.SpacePermissionPayloadScheme) (*model.SpacePermissionV2Scheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalSpacePermissionImpl).Add")
 	defer span.End()
 
@@ -100,7 +99,6 @@ func (i *internalSpacePermissionImpl) Add(ctx context.Context, spaceKey string, 
 }
 
 func (i *internalSpacePermissionImpl) Bulk(ctx context.Context, spaceKey string, payload *model.SpacePermissionArrayPayloadScheme) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalSpacePermissionImpl).Bulk")
 	defer span.End()
 
@@ -119,7 +117,6 @@ func (i *internalSpacePermissionImpl) Bulk(ctx context.Context, spaceKey string,
 }
 
 func (i *internalSpacePermissionImpl) Remove(ctx context.Context, spaceKey string, permissionID int) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalSpacePermissionImpl).Remove")
 	defer span.End()
 

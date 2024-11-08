@@ -3,12 +3,13 @@ package internal
 import (
 	"context"
 	"fmt"
-	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/v2/service"
-	"github.com/ctreminiom/go-atlassian/v2/service/bitbucket"
 	"net/http"
 	"net/url"
 	"strings"
+
+	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/v2/service"
+	"github.com/ctreminiom/go-atlassian/v2/service/bitbucket"
 )
 
 // NewWorkspacePermissionService creates a new WorkspacePermissionService instance.
@@ -72,7 +73,6 @@ type internalWorkspacePermissionServiceImpl struct {
 }
 
 func (i *internalWorkspacePermissionServiceImpl) Members(ctx context.Context, workspace, query string) (*model.WorkspaceMembershipPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalWorkspacePermissionServiceImpl).Members")
 	defer span.End()
 
@@ -106,7 +106,6 @@ func (i *internalWorkspacePermissionServiceImpl) Members(ctx context.Context, wo
 }
 
 func (i *internalWorkspacePermissionServiceImpl) Repositories(ctx context.Context, workspace, query, sort string) (*model.RepositoryPermissionPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalWorkspacePermissionServiceImpl).Repositories")
 	defer span.End()
 
@@ -144,7 +143,6 @@ func (i *internalWorkspacePermissionServiceImpl) Repositories(ctx context.Contex
 }
 
 func (i *internalWorkspacePermissionServiceImpl) Repository(ctx context.Context, workspace, repository, query, sort string) (*model.RepositoryPermissionPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalWorkspacePermissionServiceImpl).Repository")
 	defer span.End()
 

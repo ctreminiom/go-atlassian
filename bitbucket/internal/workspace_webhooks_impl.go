@@ -89,7 +89,6 @@ type internalWorkspaceHookServiceImpl struct {
 }
 
 func (i *internalWorkspaceHookServiceImpl) Gets(ctx context.Context, workspace string) (*model.WebhookSubscriptionPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalWorkspaceHookServiceImpl).Gets")
 	defer span.End()
 
@@ -114,7 +113,6 @@ func (i *internalWorkspaceHookServiceImpl) Gets(ctx context.Context, workspace s
 }
 
 func (i *internalWorkspaceHookServiceImpl) Create(ctx context.Context, workspace string, payload *model.WebhookSubscriptionPayloadScheme) (*model.WebhookSubscriptionScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalWorkspaceHookServiceImpl).Create")
 	defer span.End()
 
@@ -139,7 +137,6 @@ func (i *internalWorkspaceHookServiceImpl) Create(ctx context.Context, workspace
 }
 
 func (i *internalWorkspaceHookServiceImpl) Get(ctx context.Context, workspace, webhookID string) (*model.WebhookSubscriptionScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalWorkspaceHookServiceImpl).Get")
 	defer span.End()
 
@@ -168,7 +165,6 @@ func (i *internalWorkspaceHookServiceImpl) Get(ctx context.Context, workspace, w
 }
 
 func (i *internalWorkspaceHookServiceImpl) Update(ctx context.Context, workspace, webhookID string, payload *model.WebhookSubscriptionPayloadScheme) (*model.WebhookSubscriptionScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalWorkspaceHookServiceImpl).Update")
 	defer span.End()
 
@@ -197,7 +193,6 @@ func (i *internalWorkspaceHookServiceImpl) Update(ctx context.Context, workspace
 }
 
 func (i *internalWorkspaceHookServiceImpl) Delete(ctx context.Context, workspace, webhookID string) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalWorkspaceHookServiceImpl).Delete")
 	defer span.End()
 

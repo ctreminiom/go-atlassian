@@ -83,7 +83,6 @@ type internalWorkspaceServiceImpl struct {
 
 // Get returns the requested workspace.
 func (i *internalWorkspaceServiceImpl) Get(ctx context.Context, workspace string) (*model.WorkspaceScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalWorkspaceServiceImpl).Get")
 	defer span.End()
 
@@ -109,7 +108,6 @@ func (i *internalWorkspaceServiceImpl) Get(ctx context.Context, workspace string
 
 // Members returns all members of the requested workspace.
 func (i *internalWorkspaceServiceImpl) Members(ctx context.Context, workspace string) (*model.WorkspaceMembershipPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalWorkspaceServiceImpl).Members")
 	defer span.End()
 
@@ -135,7 +133,6 @@ func (i *internalWorkspaceServiceImpl) Members(ctx context.Context, workspace st
 
 // Membership returns the workspace membership.
 func (i *internalWorkspaceServiceImpl) Membership(ctx context.Context, workspace, memberID string) (*model.WorkspaceMembershipScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalWorkspaceServiceImpl).Membership")
 	defer span.End()
 
@@ -165,7 +162,6 @@ func (i *internalWorkspaceServiceImpl) Membership(ctx context.Context, workspace
 
 // Projects returns the list of projects in this workspace.
 func (i *internalWorkspaceServiceImpl) Projects(ctx context.Context, workspace string) (*model.BitbucketProjectPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalWorkspaceServiceImpl).Projects")
 	defer span.End()
 

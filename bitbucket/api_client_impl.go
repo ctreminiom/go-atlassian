@@ -63,7 +63,6 @@ type Client struct {
 
 // NewRequest creates an API request.
 func (c *Client) NewRequest(ctx context.Context, method, urlStr, typ string, body interface{}) (*http.Request, error) {
-
 	ctx, span := tracer().Start(ctx, "(*Client).NewRequest")
 	defer span.End()
 
@@ -121,8 +120,10 @@ func (c *Client) NewRequest(ctx context.Context, method, urlStr, typ string, bod
 
 // Call executes an API request and returns the response.
 func (c *Client) Call(request *http.Request, structure interface{}) (*models.ResponseScheme, error) {
+	ctx, span := tracer().Start(request.Context(), "(*Client).Call")
+	defer span.End()
 
-	response, err := c.HTTP.Do(request)
+	response, err := c.HTTP.Do(request.WithContext(ctx))
 	if err != nil {
 		return nil, err
 	}

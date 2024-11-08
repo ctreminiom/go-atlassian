@@ -55,7 +55,6 @@ type internalAnalyticsServiceImpl struct {
 }
 
 func (i *internalAnalyticsServiceImpl) Get(ctx context.Context, contentID, fromDate string) (*model.ContentViewScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalAnalyticsServiceImpl).Get")
 	defer span.End()
 
@@ -88,7 +87,6 @@ func (i *internalAnalyticsServiceImpl) Get(ctx context.Context, contentID, fromD
 }
 
 func (i *internalAnalyticsServiceImpl) Distinct(ctx context.Context, contentID, fromDate string) (*model.ContentViewScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalAnalyticsServiceImpl).Distinct")
 	defer span.End()
 

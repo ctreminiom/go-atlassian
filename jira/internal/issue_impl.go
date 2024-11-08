@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"net/url"
 
-	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/service"
+	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/v2/service"
 )
 
 // IssueServices groups various services related to issue management in Jira Service Management.

@@ -10,9 +10,9 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/ctreminiom/go-atlassian/bitbucket/internal"
-	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/service/common"
+	"github.com/ctreminiom/go-atlassian/v2/bitbucket/internal"
+	"github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/v2/service/common"
 )
 
 // DefaultBitbucketSite is the default Bitbucket API site.

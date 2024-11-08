@@ -3,10 +3,11 @@ package internal
 import (
 	"context"
 	"fmt"
+	"net/http"
+
 	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/v2/service"
 	"github.com/ctreminiom/go-atlassian/v2/service/assets"
-	"net/http"
 )
 
 // NewObjectTypeAttributeService creates a new instance of ObjectTypeAttributeService.
@@ -64,7 +65,6 @@ type internalObjectTypeAttributeImpl struct {
 }
 
 func (i *internalObjectTypeAttributeImpl) Create(ctx context.Context, workspaceID, objectTypeID string, payload *model.ObjectTypeAttributePayloadScheme) (*model.ObjectTypeAttributeScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalObjectTypeAttributeImpl).Create")
 	defer span.End()
 
@@ -93,7 +93,6 @@ func (i *internalObjectTypeAttributeImpl) Create(ctx context.Context, workspaceI
 }
 
 func (i *internalObjectTypeAttributeImpl) Update(ctx context.Context, workspaceID, objectTypeID, attributeID string, payload *model.ObjectTypeAttributePayloadScheme) (*model.ObjectTypeAttributeScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalObjectTypeAttributeImpl).Update")
 	defer span.End()
 
@@ -126,7 +125,6 @@ func (i *internalObjectTypeAttributeImpl) Update(ctx context.Context, workspaceI
 }
 
 func (i *internalObjectTypeAttributeImpl) Delete(ctx context.Context, workspaceID, attributeID string) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalObjectTypeAttributeImpl).Delete")
 	defer span.End()
 

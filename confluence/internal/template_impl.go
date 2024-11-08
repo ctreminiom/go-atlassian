@@ -4,9 +4,9 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/service"
-	"github.com/ctreminiom/go-atlassian/service/confluence"
+	"github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/v2/service"
+	"github.com/ctreminiom/go-atlassian/v2/service/confluence"
 )
 
 // NewTemplateService creates a new instance of TemplateService.

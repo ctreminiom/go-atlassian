@@ -27,7 +27,7 @@ type TemplateService struct {
 //
 // POST /wiki/rest/api/template
 //
-// https://developer.atlassian.com/cloud/confluence/rest/v1/api-group-template/#api-wiki-rest-api-template-post
+// https://docs.go-atlassian.io/confluence-cloud/template#create-content-template
 func (t *TemplateService) Create(ctx context.Context, payload *models.CreateTemplateScheme) (*models.ContentTemplateScheme, *models.ResponseScheme, error) {
 	return t.internalClient.Create(ctx, payload)
 }
@@ -36,7 +36,7 @@ func (t *TemplateService) Create(ctx context.Context, payload *models.CreateTemp
 //
 // PUT /wiki/rest/api/template
 //
-// https://developer.atlassian.com/cloud/confluence/rest/v1/api-group-template/#api-wiki-rest-api-template-put
+// https://docs.go-atlassian.io/confluence-cloud/template#update-content-template
 func (t *TemplateService) Update(ctx context.Context, payload *models.UpdateTemplateScheme) (*models.ContentTemplateScheme, *models.ResponseScheme, error) {
 	return t.internalClient.Update(ctx, payload)
 }
@@ -45,7 +45,7 @@ func (t *TemplateService) Update(ctx context.Context, payload *models.UpdateTemp
 //
 // GET /wiki/rest/api/template/{id}
 //
-// https://developer.atlassian.com/cloud/confluence/rest/v1/api-group-template/#api-wiki-rest-api-template-contenttemplateid-get
+// https://docs.go-atlassian.io/confluence-cloud/template#get-content-template
 func (t *TemplateService) Get(ctx context.Context, templateID string) (*models.ContentTemplateScheme, *models.ResponseScheme, error) {
 	return t.internalClient.Get(ctx, templateID)
 }

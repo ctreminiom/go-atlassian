@@ -8,25 +8,24 @@ import (
 
 // TemplateConnector provides methods to interact with template operations in Confluence.
 type TemplateConnector interface {
+	// Create creates a new template.
+	//
+	// POST /wiki/rest/api/template
+	//
+	// https://docs.go-atlassian.io/confluence-cloud/template#create-content-template
+	Create(ctx context.Context, payload *models.CreateTemplateScheme) (*models.ContentTemplateScheme, *models.ResponseScheme, error)
 
 	// Update updates a template.
 	//
 	// PUT /wiki/rest/api/template
 	//
-	// https://developer.atlassian.com/cloud/confluence/rest/v1/api-group-template/#api-wiki-rest-api-template-put
+	// https://docs.go-atlassian.io/confluence-cloud/template#update-content-template
 	Update(ctx context.Context, payload *models.UpdateTemplateScheme) (*models.ContentTemplateScheme, *models.ResponseScheme, error)
-
-	// Create creates a new template.
-	//
-	// POST /wiki/rest/api/template
-	//
-	// https://developer.atlassian.com/cloud/confluence/rest/v1/api-group-template/#api-wiki-rest-api-template-post
-	Create(ctx context.Context, payload *models.CreateTemplateScheme) (*models.ContentTemplateScheme, *models.ResponseScheme, error)
 
 	// Get content template by ID.
 	//
 	// GET /wiki/rest/api/template/{id}
 	//
-	// https://developer.atlassian.com/cloud/confluence/rest/v1/api-group-template/#api-wiki-rest-api-template-contenttemplateid-get
+	// https://docs.go-atlassian.io/confluence-cloud/template#get-content-template
 	Get(ctx context.Context, templateID string) (*models.ContentTemplateScheme, *models.ResponseScheme, error)
 }

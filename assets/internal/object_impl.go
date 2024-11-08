@@ -3,13 +3,14 @@ package internal
 import (
 	"context"
 	"fmt"
-	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/v2/service"
-	"github.com/ctreminiom/go-atlassian/v2/service/assets"
 	"net/http"
 	"net/url"
 	"strconv"
 	"strings"
+
+	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/v2/service"
+	"github.com/ctreminiom/go-atlassian/v2/service/assets"
 )
 
 // NewObjectService creates a new instance of ObjectService.
@@ -153,7 +154,6 @@ type internalObjectImpl struct {
 }
 
 func (i *internalObjectImpl) Search(ctx context.Context, workspaceID string, payload *model.ObjectSearchParamsScheme) (*model.ObjectListScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalObjectImpl).Search")
 	defer span.End()
 
@@ -179,7 +179,6 @@ func (i *internalObjectImpl) Search(ctx context.Context, workspaceID string, pay
 }
 
 func (i *internalObjectImpl) Filter(ctx context.Context, workspaceID, aql string, attributes bool, startAt, maxResults int) (*model.ObjectListResultScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalObjectImpl).Filter")
 	defer span.End()
 
@@ -216,7 +215,6 @@ func (i *internalObjectImpl) Filter(ctx context.Context, workspaceID, aql string
 }
 
 func (i *internalObjectImpl) Get(ctx context.Context, workspaceID, objectID string) (*model.ObjectScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalObjectImpl).Get")
 	defer span.End()
 
@@ -245,7 +243,6 @@ func (i *internalObjectImpl) Get(ctx context.Context, workspaceID, objectID stri
 }
 
 func (i *internalObjectImpl) Update(ctx context.Context, workspaceID, objectID string, payload *model.ObjectPayloadScheme) (*model.ObjectScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalObjectImpl).Update")
 	defer span.End()
 
@@ -274,7 +271,6 @@ func (i *internalObjectImpl) Update(ctx context.Context, workspaceID, objectID s
 }
 
 func (i *internalObjectImpl) Delete(ctx context.Context, workspaceID, objectID string) (*model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalObjectImpl).Delete")
 	defer span.End()
 
@@ -297,7 +293,6 @@ func (i *internalObjectImpl) Delete(ctx context.Context, workspaceID, objectID s
 }
 
 func (i *internalObjectImpl) Attributes(ctx context.Context, workspaceID, objectID string) ([]*model.ObjectAttributeScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalObjectImpl).Attributes")
 	defer span.End()
 
@@ -326,7 +321,6 @@ func (i *internalObjectImpl) Attributes(ctx context.Context, workspaceID, object
 }
 
 func (i *internalObjectImpl) History(ctx context.Context, workspaceID, objectID string, ascOrder bool) ([]*model.ObjectHistoryScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalObjectImpl).History")
 	defer span.End()
 
@@ -364,7 +358,6 @@ func (i *internalObjectImpl) History(ctx context.Context, workspaceID, objectID 
 }
 
 func (i *internalObjectImpl) References(ctx context.Context, workspaceID, objectID string) ([]*model.ObjectReferenceTypeInfoScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalObjectImpl).References")
 	defer span.End()
 
@@ -393,7 +386,6 @@ func (i *internalObjectImpl) References(ctx context.Context, workspaceID, object
 }
 
 func (i *internalObjectImpl) Create(ctx context.Context, workspaceID string, payload *model.ObjectPayloadScheme) (*model.ObjectScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalObjectImpl).Create")
 	defer span.End()
 
@@ -418,7 +410,6 @@ func (i *internalObjectImpl) Create(ctx context.Context, workspaceID string, pay
 }
 
 func (i *internalObjectImpl) Relation(ctx context.Context, workspaceID, objectID string) (*model.TicketPageScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalObjectImpl).Relation")
 	defer span.End()
 

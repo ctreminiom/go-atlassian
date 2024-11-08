@@ -80,11 +80,10 @@ type Client struct {
 // NewRequest creates a new HTTP request with the given context, method, URL string, content type, and body.
 // It returns an HTTP request and an error.
 func (c *Client) NewRequest(ctx context.Context, method, urlStr, contentType string, body interface{}) (*http.Request, error) {
-
-	// Parse the relative URL.
 	ctx, span := tracer().Start(ctx, "(*Client).NewRequest")
 	defer span.End()
 
+	// Parse the relative URL.
 	rel, err := url.Parse(urlStr)
 	if err != nil {
 		return nil, err

@@ -3,10 +3,11 @@ package internal
 import (
 	"context"
 	"fmt"
+	"net/http"
+
 	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/v2/service"
 	"github.com/ctreminiom/go-atlassian/v2/service/assets"
-	"net/http"
 )
 
 // NewIconService creates a new instance of IconService.
@@ -52,7 +53,6 @@ type internalIconImpl struct {
 }
 
 func (i *internalIconImpl) Get(ctx context.Context, workspaceID, iconID string) (*model.IconScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalIconImpl).Get")
 	defer span.End()
 
@@ -81,7 +81,6 @@ func (i *internalIconImpl) Get(ctx context.Context, workspaceID, iconID string) 
 }
 
 func (i *internalIconImpl) Global(ctx context.Context, workspaceID string) ([]*model.IconScheme, *model.ResponseScheme, error) {
-
 	ctx, span := tracer().Start(ctx, "(*internalIconImpl).Global")
 	defer span.End()
 

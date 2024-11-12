@@ -199,7 +199,7 @@ func Test_internalWatcherImpl_Add(t *testing.T) {
 					http.MethodPost,
 					"rest/api/3/issue/DUMMY-5/watchers",
 					"",
-					[]byte(nil)).
+					"").
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -230,7 +230,7 @@ func Test_internalWatcherImpl_Add(t *testing.T) {
 					http.MethodPost,
 					"rest/api/3/issue/DUMMY-5/watchers",
 					"",
-					[]byte("someAccountID")).
+					"someAccountID").
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -261,7 +261,7 @@ func Test_internalWatcherImpl_Add(t *testing.T) {
 					http.MethodPost,
 					"rest/api/2/issue/DUMMY-5/watchers",
 					"",
-					[]byte(nil),
+					"",
 				).
 					Return(&http.Request{}, nil)
 
@@ -293,7 +293,7 @@ func Test_internalWatcherImpl_Add(t *testing.T) {
 					http.MethodPost,
 					"rest/api/2/issue/DUMMY-5/watchers",
 					"",
-					[]byte("someAccountID")).
+					"someAccountID").
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -335,7 +335,7 @@ func Test_internalWatcherImpl_Add(t *testing.T) {
 					http.MethodPost,
 					"rest/api/3/issue/DUMMY-5/watchers",
 					"",
-					[]byte(nil)).
+					"").
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client

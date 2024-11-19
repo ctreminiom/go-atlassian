@@ -51,7 +51,7 @@ func Test_internalWorkspaceServiceImpl_Get(t *testing.T) {
 
 				client.On("Call",
 					&http.Request{},
-					&model.WorkspaceScheme{}).
+					&model.BitbucketWorkspaceScheme{}).
 					Return(&model.ResponseScheme{}, nil)
 
 				fields.c = client

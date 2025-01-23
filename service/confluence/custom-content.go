@@ -3,7 +3,7 @@ package confluence
 import (
 	"context"
 
-	"github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
 )
 
 type CustomContentConnector interface {

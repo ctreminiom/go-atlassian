@@ -3,7 +3,7 @@ package jira
 import (
 	"context"
 
-	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
 )
 
 type WorklogSharedConnector interface {

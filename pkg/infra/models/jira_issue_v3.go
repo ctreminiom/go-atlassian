@@ -17,13 +17,13 @@ type IssueScheme struct {
 	RenderedFields map[string]interface{}   `json:"renderedFields,omitempty"`
 }
 
-// MergeCustomFields merges custom fields into the issue scheme.
-// It returns a map representation of the issue scheme with the merged fields.
-// If the provided fields are nil or empty, it returns an error.
+// MergeCustomFields merges the custom fields into the issue.
+// fields is a pointer to CustomFields which represents the custom fields to be merged.
+// It returns a map[string]interface{} representing the issue with the merged custom fields and an error if any occurred.
 func (i *IssueScheme) MergeCustomFields(fields *CustomFields) (map[string]interface{}, error) {
 
 	if fields == nil || len(fields.Fields) == 0 {
-		return map[string]interface{}{}, nil
+		return nil, ErrNoCustomField
 	}
 
 	//Convert the IssueScheme struct to map[string]interface{}
@@ -47,20 +47,13 @@ func (i *IssueScheme) MergeCustomFields(fields *CustomFields) (map[string]interf
 	return issueSchemeAsMap, nil
 }
 
-// MergeOperations merges operations into the issue scheme.
-// It returns a map representation of the issue scheme with the merged operations.
-// If the provided operations are nil or empty, it returns an error.
-//
-// Parameters:
-// - operations: A pointer to UpdateOperations containing the operations to be merged.
-//
-// Returns:
-// - A map[string]interface{} representing the issue scheme with the merged operations.
-// - An error if the operations are nil, empty, or if there is an issue during the merging process.
+// MergeOperations merges the operations into the issue.
+// operations is a pointer to UpdateOperations which represents the operations to be merged.
+// It returns a map[string]interface{} representing the issue with the merged operations and an error if any occurred.
 func (i *IssueScheme) MergeOperations(operations *UpdateOperations) (map[string]interface{}, error) {
 
 	if operations == nil || len(operations.Fields) == 0 {
-		return map[string]interface{}{}, nil
+		return nil, ErrNoOperator
 	}
 
 	//Convert the IssueScheme struct to map[string]interface{}

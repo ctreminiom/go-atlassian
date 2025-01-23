@@ -1,10 +1,6 @@
 package models
 
-import (
-	"fmt"
-	"strconv"
-	"time"
-)
+import "time"
 
 const (
 	// TimeFormat is the format for Jira type "date-time".
@@ -28,17 +24,11 @@ func (d *DateScheme) UnmarshalJSON(data []byte) error {
 	}
 
 	parsed, err := time.Parse(`"`+DateFormat+`"`, string(data))
-	if err == nil {
-		*d = DateScheme(parsed)
-		return nil
-	}
-
-	epoch, err := strconv.ParseInt(string(data), 10, 64)
 	if err != nil {
-		return fmt.Errorf("fallback to epoch: %w", err)
+		return err
 	}
 
-	*d = DateScheme(time.Unix(epoch, 0))
+	*d = DateScheme(parsed)
 	return nil
 }
 
@@ -57,16 +47,10 @@ func (d *DateTimeScheme) UnmarshalJSON(data []byte) error {
 	}
 
 	parsed, err := time.Parse(`"`+TimeFormat+`"`, string(data))
-	if err == nil {
-		*d = DateTimeScheme(parsed)
-		return nil
-	}
-
-	epoch, err := strconv.ParseInt(string(data), 10, 64)
 	if err != nil {
-		return fmt.Errorf("fallback to epoch: %w", err)
+		return err
 	}
 
-	*d = DateTimeScheme(time.Unix(epoch, 0))
+	*d = DateTimeScheme(parsed)
 	return nil
 }

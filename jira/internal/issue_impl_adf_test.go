@@ -3,15 +3,14 @@ package internal
 import (
 	"context"
 	"errors"
-	"github.com/stretchr/testify/mock"
 	"net/http"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 
-	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/v2/service"
-	"github.com/ctreminiom/go-atlassian/v2/service/mocks"
+	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/service"
+	"github.com/ctreminiom/go-atlassian/service/mocks"
 )
 
 func Test_internalIssueADFServiceImpl_Delete(t *testing.T) {
@@ -1008,57 +1007,38 @@ func Test_internalIssueADFServiceImpl_Get(t *testing.T) {
 
 func Test_internalIssueADFServiceImpl_Move(t *testing.T) {
 
-	/*
-		"customfield_10042": 1000.2222,
-		"customfield_10052": [
-			{
-				"name": "jira-administrators"
-			},
-			{
-				"name": "jira-administrators-system"
-			}
-		]
-	*/
 	customFieldsMocked := &model.CustomFields{}
-	if err := customFieldsMocked.Groups("customfield_10052", []string{"jira-administrators", "jira-administrators-system"}); err != nil {
-		t.Fatal(err)
-	}
-	if err := customFieldsMocked.Number("customfield_10042", 1000.2222); err != nil {
+
+	err := customFieldsMocked.Groups("customfield_10052", []string{"jira-administrators", "jira-administrators-system"})
+	if err != nil {
 		t.Fatal(err)
 	}
 
-	/*
-		 "update": {
-			"labels": [
-				{
-					"remove": "triaged"
-				}
-			]
-		}
-	*/
-	operationsMocked := &model.UpdateOperations{}
-	if err := operationsMocked.AddArrayOperation("labels", map[string]string{"triaged": "remove"}); err != nil {
+	err = customFieldsMocked.Number("customfield_10042", 1000.2222)
+	if err != nil {
 		t.Fatal(err)
 	}
+
+	operationsMocked := &model.UpdateOperations{}
+	err = operationsMocked.AddArrayOperation("labels", map[string]string{
+		"triaged": "remove",
+	})
 
 	expectedPayloadWithCustomFieldsAndOperations := map[string]interface{}{
+
 		"fields": map[string]interface{}{
 			"customfield_10042": 1000.2222,
 			"customfield_10052": []map[string]interface{}{map[string]interface{}{
 				"name": "jira-administrators"}, map[string]interface{}{
 				"name": "jira-administrators-system"}},
 
-			"issuetype":  map[string]interface{}{"name": "Story"},
-			"project":    map[string]interface{}{"id": "10000"},
-			"resolution": map[string]interface{}{"name": "Done"},
-			"summary":    "New summary test"},
+			"issuetype": map[string]interface{}{"name": "Story"},
+			"project":   map[string]interface{}{"id": "10000"},
+			"summary":   "New summary test"},
 
 		"update": map[string]interface{}{
 			"labels": []map[string]interface{}{map[string]interface{}{
-				"remove": "triaged"}}},
-
-		"transition": map[string]interface{}{"id": "10001"},
-	}
+				"remove": "triaged"}}}}
 
 	expectedPayloadWithCustomfields := map[string]interface{}{
 		"fields": map[string]interface{}{
@@ -1069,9 +1049,7 @@ func Test_internalIssueADFServiceImpl_Move(t *testing.T) {
 
 			"issuetype": map[string]interface{}{"name": "Story"},
 			"project":   map[string]interface{}{"id": "10000"},
-			"summary":   "New summary test"},
-		"transition": map[string]interface{}{"id": "10001"},
-	}
+			"summary":   "New summary test"}}
 
 	expectedPayloadWithOperations := map[string]interface{}{
 		"fields": map[string]interface{}{
@@ -1081,11 +1059,13 @@ func Test_internalIssueADFServiceImpl_Move(t *testing.T) {
 
 		"update": map[string]interface{}{
 			"labels": []map[string]interface{}{map[string]interface{}{
-				"remove": "triaged"}}},
-		"transition": map[string]interface{}{"id": "10001"},
-	}
+				"remove": "triaged"}}}}
 
 	expectedPayloadWithNoOptions := map[string]interface{}{"transition": map[string]interface{}{"id": "10001"}}
+
+	if err != nil {
+		t.Fatal(err)
+	}
 
 	type fields struct {
 		c       service.Connector
@@ -1119,9 +1099,6 @@ func Test_internalIssueADFServiceImpl_Move(t *testing.T) {
 							Summary:   "New summary test",
 							Project:   &model.ProjectScheme{ID: "10000"},
 							IssueType: &model.IssueTypeScheme{Name: "Story"},
-							Resolution: &model.ResolutionScheme{
-								Name: "Done",
-							},
 						},
 					},
 					CustomFields: customFieldsMocked,
@@ -1355,7 +1332,7 @@ func Test_internalIssueADFServiceImpl_Move(t *testing.T) {
 					http.MethodPost,
 					"rest/api/3/issue/DUMMY-1/transitions",
 					"",
-					mock.Anything).
+					expectedPayloadWithCustomFieldsAndOperations).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client

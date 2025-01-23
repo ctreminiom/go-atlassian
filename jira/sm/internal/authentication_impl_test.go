@@ -1,9 +1,9 @@
 package internal
 
 import (
-	"github.com/ctreminiom/go-atlassian/v2/service"
-	"github.com/ctreminiom/go-atlassian/v2/service/common"
-	"github.com/ctreminiom/go-atlassian/v2/service/mocks"
+	"github.com/ctreminiom/go-atlassian/service"
+	"github.com/ctreminiom/go-atlassian/service/common"
+	"github.com/ctreminiom/go-atlassian/service/mocks"
 	"github.com/stretchr/testify/assert"
 	"reflect"
 	"testing"

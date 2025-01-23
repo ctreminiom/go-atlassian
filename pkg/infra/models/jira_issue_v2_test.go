@@ -48,6 +48,28 @@ func TestIssueSchemeV2_MergeCustomFields(t *testing.T) {
 			wantErr: false,
 			Err:     nil,
 		},
+
+		{
+			name:   "when the custom-fields are not provided",
+			fields: fields{},
+			args: args{
+				fields: nil,
+			},
+			want:    nil,
+			wantErr: true,
+			Err:     ErrNoCustomField,
+		},
+
+		{
+			name:   "when the custom-field don't have information",
+			fields: fields{},
+			args: args{
+				fields: &CustomFields{},
+			},
+			want:    nil,
+			wantErr: true,
+			Err:     ErrNoCustomField,
+		},
 	}
 	for _, testCase := range testCases {
 		t.Run(testCase.name, func(t *testing.T) {
@@ -120,6 +142,28 @@ func TestIssueSchemeV2_MergeOperations(t *testing.T) {
 			},
 			wantErr: false,
 			Err:     nil,
+		},
+
+		{
+			name:   "when the operations are not provided",
+			fields: fields{},
+			args: args{
+				operations: nil,
+			},
+			want:    nil,
+			wantErr: true,
+			Err:     ErrNoOperator,
+		},
+
+		{
+			name:   "when the operations don't have information",
+			fields: fields{},
+			args: args{
+				operations: &UpdateOperations{},
+			},
+			want:    nil,
+			wantErr: true,
+			Err:     ErrNoOperator,
 		},
 	}
 	for _, testCase := range testCases {

@@ -3,7 +3,7 @@ package sm
 import (
 	"context"
 
-	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
+	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
 )
 
 // CommentConnector defines the interface for the Comment methods of the Jira Service Management REST API.

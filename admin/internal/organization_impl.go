@@ -97,6 +97,33 @@ func (o *OrganizationService) Actions(ctx context.Context, organizationID string
 	return o.internalClient.Actions(ctx, organizationID)
 }
 
+// SearchUsers searches for users within an organization with the specified filters
+//
+// POST /admin/v1/orgs/{organizationID}/users/search
+//
+// https://developer.atlassian.com/cloud/admin/organization/rest/api-group-users/#api-v1-orgs-orgid-users-search-post
+func (o *OrganizationService) SearchUsers(ctx context.Context, organizationID string, payload *model.OrganizationUserSearchParams) (*model.OrganizationUserSearchPage, *model.ResponseScheme, error) {
+	return o.internalClient.SearchUsers(ctx, organizationID, payload)
+}
+
+// SearchGroups searches for groups within an organization with the specified filters
+//
+// POST /admin/v1/orgs/{organizationID}/groups/search
+//
+// https://developer.atlassian.com/cloud/admin/organization/rest/api-group-groups/#api-v1-orgs-orgid-groups-search-post
+func (o *OrganizationService) SearchGroups(ctx context.Context, organizationID string, payload *model.OrganizationGroupSearchParams) (*model.OrganizationGroupSearchPage, *model.ResponseScheme, error) {
+	return o.internalClient.SearchGroups(ctx, organizationID, payload)
+}
+
+// SearchWorkspaces searches for workspaces within an organization with the specified filters
+//
+// POST /v2/orgs/{organizationID}/workspaces
+//
+// https://developer.atlassian.com/cloud/admin/organization/rest/api-group-workspaces/#api-v2-orgs-orgid-workspaces-post
+func (o *OrganizationService) SearchWorkspaces(ctx context.Context, organizationID string, payload *model.WorkspaceSearchParams) (*model.WorkspaceSearchPage, *model.ResponseScheme, error) {
+	return o.internalClient.SearchWorkspaces(ctx, organizationID, payload)
+}
+
 type internalOrganizationImpl struct {
 	c service.Connector
 }
@@ -334,4 +361,67 @@ func (i *internalOrganizationImpl) Actions(ctx context.Context, organizationID s
 	}
 
 	return event, res, nil
+}
+
+func (i *internalOrganizationImpl) SearchUsers(ctx context.Context, organizationID string, payload *model.OrganizationUserSearchParams) (*model.OrganizationUserSearchPage, *model.ResponseScheme, error) {
+	if organizationID == "" {
+		return nil, nil, model.ErrNoAdminOrganization
+	}
+
+	endpoint := fmt.Sprintf("admin/v1/orgs/%v/users/search", organizationID)
+
+	req, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	users := new(model.OrganizationUserSearchPage)
+	res, err := i.c.Call(req, users)
+	if err != nil {
+		return nil, res, err
+	}
+
+	return users, res, nil
+}
+
+func (i *internalOrganizationImpl) SearchGroups(ctx context.Context, organizationID string, payload *model.OrganizationGroupSearchParams) (*model.OrganizationGroupSearchPage, *model.ResponseScheme, error) {
+	if organizationID == "" {
+		return nil, nil, model.ErrNoAdminOrganization
+	}
+
+	endpoint := fmt.Sprintf("admin/v1/orgs/%v/groups/search", organizationID)
+
+	req, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	groups := new(model.OrganizationGroupSearchPage)
+	res, err := i.c.Call(req, groups)
+	if err != nil {
+		return nil, res, err
+	}
+
+	return groups, res, nil
+}
+
+func (i *internalOrganizationImpl) SearchWorkspaces(ctx context.Context, organizationID string, payload *model.WorkspaceSearchParams) (*model.WorkspaceSearchPage, *model.ResponseScheme, error) {
+	if organizationID == "" {
+		return nil, nil, model.ErrNoAdminOrganization
+	}
+
+	endpoint := fmt.Sprintf("v2/orgs/%v/workspaces", organizationID)
+
+	req, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	workspaces := new(model.WorkspaceSearchPage)
+	res, err := i.c.Call(req, workspaces)
+	if err != nil {
+		return nil, res, err
+	}
+
+	return workspaces, res, nil
 }

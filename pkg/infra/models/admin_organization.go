@@ -237,3 +237,261 @@ type UserProductLastActiveScheme struct {
 type GenericActionSuccessScheme struct {
 	Message string `json:"message,omitempty"` // The success message.
 }
+
+// StringSearchCriteria represents a common search pattern with exact and partial matches
+type StringSearchCriteria struct {
+	Eq       []string `json:"eq,omitempty"`       // Exact matches
+	Contains string   `json:"contains,omitempty"` // Partial match
+}
+
+// OrganizationUserSearchParams represents the parameters for searching users in an organization
+type OrganizationUserSearchParams struct {
+	AccountIds       []string             `json:"accountIds,omitempty"`
+	AccountTypes     []string             `json:"accountTypes,omitempty"`
+	AccountStatuses  []string             `json:"accountStatuses,omitempty"`
+	NamesOrNicknames StringSearchCriteria `json:"namesOrNicknames,omitempty"`
+	EmailUsernames   StringSearchCriteria `json:"emailUsernames,omitempty"`
+	EmailDomains     StringSearchCriteria `json:"emailDomains,omitempty"`
+	IsSuspended      *bool                `json:"isSuspended,omitempty"`
+	Cursor           string               `json:"cursor,omitempty"`
+	Limit            int                  `json:"limit,omitempty"`
+	Expand           []string             `json:"expand,omitempty"`
+}
+
+// OrganizationUserSearchPage represents the response from searching users in an organization
+type OrganizationUserSearchPage struct {
+	Data  []OrganizationUserSearch `json:"data,omitempty"`
+	Links struct {
+		Next string `json:"next,omitempty"`
+		Self string `json:"self,omitempty"`
+	} `json:"links,omitempty"`
+}
+
+// OrganizationUserSearch represents a user returned from the search endpoint
+type OrganizationUserSearch struct {
+	AccountId         string              `json:"accountId,omitempty"`
+	Name              string              `json:"name,omitempty"`
+	Nickname          string              `json:"nickname,omitempty"`
+	AccountType       string              `json:"accountType,omitempty"`
+	AccountStatus     string              `json:"accountStatus,omitempty"`
+	Email             string              `json:"email,omitempty"`
+	EmailVerified     bool                `json:"emailVerified,omitempty"`
+	StatusInUserbase  bool                `json:"statusInUserbase,omitempty"`
+	ProductLastAccess []ProductLastAccess `json:"productLastAccess,omitempty"`
+	Groups            []Group             `json:"groups,omitempty"`
+}
+
+// ProductLastAccess represents product access information for a user
+type ProductLastAccess struct {
+	ProductKey          string `json:"productKey,omitempty"`
+	LastActiveTimestamp string `json:"lastActiveTimestamp,omitempty"`
+	CloudSiteId         string `json:"cloudSiteId,omitempty"`
+}
+
+// Group represents a group that a user belongs to
+type Group struct {
+	ID          string `json:"id,omitempty"`
+	Name        string `json:"name,omitempty"`
+	Description string `json:"description,omitempty"`
+}
+
+// GroupNames represents the search criteria for group names
+type GroupNames struct {
+	Eq       []string `json:"eq,omitempty"`       // Exact match for group names
+	Contains string   `json:"contains,omitempty"` // Partial match for group names
+}
+
+// OrganizationGroupSearchParams represents the parameters for searching groups in an organization
+type OrganizationGroupSearchParams struct {
+	GroupIds   []string             `json:"groupIds,omitempty"`
+	GroupNames StringSearchCriteria `json:"groupNames,omitempty"`
+	Cursor     string               `json:"cursor,omitempty"`
+	Limit      int                  `json:"limit,omitempty"`
+	Expand     []string             `json:"expand,omitempty"`
+}
+
+// OrganizationGroupSearchPage represents the response from searching groups in an organization
+type OrganizationGroupSearchPage struct {
+	Data  []OrganizationGroupSearch `json:"data,omitempty"`
+	Links struct {
+		Next string `json:"next,omitempty"`
+		Self string `json:"self,omitempty"`
+	} `json:"links,omitempty"`
+}
+
+// OrganizationGroupSearch represents a group returned from the search endpoint
+type OrganizationGroupSearch struct {
+	ID          string `json:"id,omitempty"`
+	Name        string `json:"name,omitempty"`
+	Description string `json:"description,omitempty"`
+	// Fields included when expand=META
+	Meta struct {
+		TotalUserCount int `json:"totalUserCount,omitempty"`
+	} `json:"meta,omitempty"`
+	// Fields included when expand=ROLE_ASSIGNMENTS
+	RoleAssignments []RoleAssignment `json:"roleAssignments,omitempty"`
+	// Fields included when expand=MANAGEMENT_ACCESS
+	ManagementAccess string `json:"managementAccess,omitempty"`
+	// Fields included when expand=USERS
+	Users []GroupUser `json:"users,omitempty"`
+}
+
+// RoleAssignment represents a role assignment for a group
+type RoleAssignment struct {
+	ResourceID  string `json:"resourceId,omitempty"`
+	PrincipalID string `json:"principalId,omitempty"`
+	RoleID      string `json:"roleId,omitempty"`
+}
+
+// GroupUser represents a user in a group
+type GroupUser struct {
+	AccountID     string `json:"accountId,omitempty"`
+	AccountType   string `json:"accountType,omitempty"`
+	AccountStatus string `json:"accountStatus,omitempty"`
+	Name          string `json:"name,omitempty"`
+	Email         string `json:"email,omitempty"`
+}
+
+// WorkspaceSearchParams represents the parameters for searching workspaces in an organization
+type WorkspaceSearchParams struct {
+	Query  interface{} `json:"query,omitempty"` // Query can be AndOperator, FieldOperand, SearchWorkspacesOperand, FeatureFilter, or PolicyFilter
+	Limit  int         `json:"limit,omitempty"`
+	Sort   []SortField `json:"sort,omitempty"`
+	Cursor string      `json:"cursor,omitempty"`
+}
+
+// SortField represents a field to sort by and its direction
+type SortField struct {
+	Field string `json:"field"`
+	Order string `json:"order,omitempty"` // asc or desc
+}
+
+// WorkspaceSearchPage represents the response from searching workspaces
+type WorkspaceSearchPage struct {
+	Data  []WorkspaceSearch `json:"data,omitempty"`
+	Links struct {
+		Self string `json:"self,omitempty"`
+		Prev string `json:"prev,omitempty"`
+		Next string `json:"next,omitempty"`
+	} `json:"links,omitempty"`
+	Meta struct {
+		PageSize   int `json:"pageSize,omitempty"`
+		StartIndex int `json:"startIndex,omitempty"`
+		EndIndex   int `json:"endIndex,omitempty"`
+		Total      int `json:"total,omitempty"`
+	} `json:"meta,omitempty"`
+}
+
+// WorkspaceSearch represents a workspace returned from the search endpoint
+type WorkspaceSearch struct {
+	ID            string                 `json:"id,omitempty"`
+	Type          string                 `json:"type,omitempty"`
+	Attributes    WorkspaceAttributes    `json:"attributes,omitempty"`
+	Links         WorkspaceLinks         `json:"links,omitempty"`
+	Relationships WorkspaceRelationships `json:"relationships,omitempty"`
+}
+
+// WorkspaceLinks represents the links in a workspace
+type WorkspaceLinks struct {
+	Self string `json:"self,omitempty"`
+}
+
+// WorkspaceAttributes represents the attributes of a workspace
+type WorkspaceAttributes struct {
+	Name          string            `json:"name,omitempty"`
+	TypeKey       string            `json:"typeKey,omitempty"`
+	Type          string            `json:"type,omitempty"`
+	Owner         string            `json:"owner,omitempty"`
+	Status        string            `json:"status,omitempty"`
+	StatusDetails []string          `json:"statusDetails,omitempty"`
+	Icons         map[string]string `json:"icons,omitempty"`
+	Avatars       map[string]string `json:"avatars,omitempty"`
+	Labels        []string          `json:"labels,omitempty"`
+	Sandbox       WorkspaceSandbox  `json:"sandbox,omitempty"`
+	Usage         int               `json:"usage,omitempty"`
+	Capacity      int               `json:"capacity,omitempty"`
+	CreatedAt     string            `json:"createdAt,omitempty"`
+	CreatedBy     string            `json:"createdBy,omitempty"`
+	UpdatedAt     string            `json:"updatedAt,omitempty"`
+	HostURL       string            `json:"hostUrl,omitempty"`
+	Realm         string            `json:"realm,omitempty"`
+	Regions       []string          `json:"regions,omitempty"`
+}
+
+// WorkspaceSandbox represents the sandbox information of a workspace
+type WorkspaceSandbox struct {
+	Type     string `json:"type,omitempty"`
+	ParentID string `json:"parentId,omitempty"`
+}
+
+// WorkspaceRelationships represents the relationships of a workspace
+type WorkspaceRelationships struct {
+	Entitlement []WorkspaceEntitlement `json:"entitlement,omitempty"`
+	Policy      []WorkspacePolicy      `json:"policy,omitempty"`
+	Feature     []WorkspaceFeature     `json:"feature,omitempty"`
+}
+
+// WorkspacePolicy represents a policy in a workspace
+type WorkspacePolicy struct {
+	ID         string               `json:"id,omitempty"`
+	Type       string               `json:"type,omitempty"`
+	Links      WorkspaceLinks       `json:"links,omitempty"`
+	Attributes WorkspacePolicyAttrs `json:"attributes,omitempty"`
+}
+
+// WorkspacePolicyAttrs represents the attributes of a workspace policy
+type WorkspacePolicyAttrs struct {
+	Type      string `json:"type,omitempty"`
+	Enabled   bool   `json:"enabled,omitempty"`
+	Suspended string `json:"suspended,omitempty"`
+}
+
+// WorkspaceFeature represents a feature in a workspace
+type WorkspaceFeature struct {
+	ID         string                `json:"id,omitempty"`
+	Type       string                `json:"type,omitempty"`
+	Links      WorkspaceLinks        `json:"links,omitempty"`
+	Attributes WorkspaceFeatureAttrs `json:"attributes,omitempty"`
+}
+
+// WorkspaceFeatureAttrs represents the attributes of a workspace feature
+type WorkspaceFeatureAttrs struct {
+	Type                   string   `json:"type,omitempty"`
+	AllInclusive           bool     `json:"allInclusive,omitempty"`
+	Events                 []string `json:"events,omitempty"`
+	Available              bool     `json:"available,omitempty"`
+	Limit                  int      `json:"limit,omitempty"`
+	EntitledSandbox        string   `json:"entitledSandbox,omitempty"`
+	IP                     int      `json:"ip,omitempty"`
+	Portal                 *Limit   `json:"portal,omitempty"`
+	Parent                 *Limit   `json:"parent,omitempty"`
+	Self                   *Limit   `json:"self,omitempty"`
+	Realms                 []string `json:"realms,omitempty"`
+	IsDataResidencyAllowed bool     `json:"isDataResidencyAllowed,omitempty"`
+	Tracks                 []string `json:"tracks,omitempty"`
+}
+
+// Limit represents a limit configuration
+type Limit struct {
+	Limit int `json:"limit,omitempty"`
+}
+
+// WorkspaceEntitlement represents an entitlement in a workspace
+type WorkspaceEntitlement struct {
+	ID         string                    `json:"id,omitempty"`
+	Type       string                    `json:"type,omitempty"`
+	Links      WorkspaceEntitlementLinks `json:"links,omitempty"`
+	Attributes WorkspaceEntitlementAttrs `json:"attributes,omitempty"`
+}
+
+// WorkspaceEntitlementLinks represents the links in a workspace entitlement
+type WorkspaceEntitlementLinks struct {
+	Self string `json:"self,omitempty"`
+}
+
+// WorkspaceEntitlementAttrs represents the attributes of a workspace entitlement
+type WorkspaceEntitlementAttrs struct {
+	PlanKey string `json:"planKey,omitempty"`
+	Plan    string `json:"plan,omitempty"`
+	Key     string `json:"key,omitempty"`
+}

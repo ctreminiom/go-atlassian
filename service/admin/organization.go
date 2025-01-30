@@ -65,4 +65,25 @@ type OrganizationConnector interface {
 	//
 	// https://docs.go-atlassian.io/atlassian-admin-cloud/organization#get-list-of-event-actions
 	Actions(ctx context.Context, organizationID string) (*model.OrganizationEventActionScheme, *model.ResponseScheme, error)
+
+	// SearchUsers searches for users within an organization with the specified filters
+	//
+	// POST /admin/v1/orgs/{organizationID}/users/search
+	//
+	// https://developer.atlassian.com/cloud/admin/organization/rest/api-group-users/#api-v1-orgs-orgid-users-search-post
+	SearchUsers(ctx context.Context, organizationID string, payload *model.OrganizationUserSearchParams) (*model.OrganizationUserSearchPage, *model.ResponseScheme, error)
+
+	// SearchGroups searches for groups within an organization with the specified filters
+	//
+	// POST /admin/v1/orgs/{organizationID}/groups/search
+	//
+	// https://developer.atlassian.com/cloud/admin/organization/rest/api-group-groups/#api-v1-orgs-orgid-groups-search-post
+	SearchGroups(ctx context.Context, organizationID string, payload *model.OrganizationGroupSearchParams) (*model.OrganizationGroupSearchPage, *model.ResponseScheme, error)
+
+	// SearchWorkspaces searches for workspaces within an organization with the specified filters
+	//
+	// POST /v2/orgs/{organizationID}/workspaces
+	//
+	// https://developer.atlassian.com/cloud/admin/organization/rest/api-group-workspaces/#api-v2-orgs-orgid-workspaces-post
+	SearchWorkspaces(ctx context.Context, organizationID string, payload *model.WorkspaceSearchParams) (*model.WorkspaceSearchPage, *model.ResponseScheme, error)
 }

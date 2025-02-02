@@ -32,7 +32,7 @@ type WorkspaceService struct {
 // GET /2.0/workspaces/{workspace}
 //
 // https://docs.go-atlassian.io/bitbucket-cloud/workspace#get-a-workspace
-func (w *WorkspaceService) Get(ctx context.Context, workspace string) (*model.WorkspaceScheme, *model.ResponseScheme, error) {
+func (w *WorkspaceService) Get(ctx context.Context, workspace string) (*model.BitbucketWorkspaceScheme, *model.ResponseScheme, error) {
 	return w.internalClient.Get(ctx, workspace)
 }
 
@@ -70,7 +70,7 @@ type internalWorkspaceServiceImpl struct {
 }
 
 // Get returns the requested workspace.
-func (i *internalWorkspaceServiceImpl) Get(ctx context.Context, workspace string) (*model.WorkspaceScheme, *model.ResponseScheme, error) {
+func (i *internalWorkspaceServiceImpl) Get(ctx context.Context, workspace string) (*model.BitbucketWorkspaceScheme, *model.ResponseScheme, error) {
 
 	if workspace == "" {
 		return nil, nil, model.ErrNoWorkspace
@@ -83,7 +83,7 @@ func (i *internalWorkspaceServiceImpl) Get(ctx context.Context, workspace string
 		return nil, nil, err
 	}
 
-	result := new(model.WorkspaceScheme)
+	result := new(model.BitbucketWorkspaceScheme)
 	response, err := i.c.Call(request, result)
 	if err != nil {
 		return nil, response, err

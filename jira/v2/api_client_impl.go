@@ -396,6 +396,7 @@ func New(httpClient common.HTTPClient, site string) (*Client, error) {
 	client.JQL = jql
 	client.NotificationScheme = projectNotificationScheme
 	client.Team = internal.NewTeamService(client)
+	client.Bulk = internal.NewBulkOperationsService(client, APIVersion)
 
 	return client, nil
 }
@@ -423,6 +424,7 @@ type Client struct {
 	JQL                *internal.JQLService
 	NotificationScheme *internal.NotificationSchemeService
 	Team               *internal.TeamService
+	Bulk               *internal.BulkOperationsService
 }
 
 // NewRequest creates an API request.

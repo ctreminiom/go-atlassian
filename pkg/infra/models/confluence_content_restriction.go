@@ -36,15 +36,15 @@ type ContentRestrictionUpdatePayloadScheme struct {
 
 // ContentRestrictionUpdateScheme represents a content restriction to be updated in Confluence.
 type ContentRestrictionUpdateScheme struct {
-	Operation    string                                     `json:"operation,omitempty"`    // The operation of the restriction.
-	Restrictions *ContentRestrictionRestrictionUpdateScheme `json:"restrictions,omitempty"` // The details of the restriction to be updated.
-	Content      *ContentScheme                             `json:"content,omitempty"`      // The content of the restriction to be updated.
+	Operation    string                                     `json:"operation,omitempty"` // The operation of the restriction.
+	Restrictions *ContentRestrictionRestrictionUpdateScheme `json:"restrictions"`        // The details of the restriction to be updated.
+	Content      *ContentScheme                             `json:"content,omitempty"`   // The content of the restriction to be updated.
 }
 
 // ContentRestrictionRestrictionUpdateScheme represents the details of a content restriction to be updated in Confluence.
 type ContentRestrictionRestrictionUpdateScheme struct {
-	Group []*SpaceGroupScheme  `json:"group,omitempty"` // The group permissions of the restriction to be updated.
-	User  []*ContentUserScheme `json:"user,omitempty"`  // The user permissions of the restriction to be updated.
+	Group []*SpaceGroupScheme  `json:"group"` // The group permissions of the restriction to be updated.
+	User  []*ContentUserScheme `json:"user"`  // The user permissions of the restriction to be updated.
 }
 
 // ContentRestrictionByOperationScheme represents a content restriction by operation in Confluence.

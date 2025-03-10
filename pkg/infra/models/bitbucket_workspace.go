@@ -1,19 +1,19 @@
 package models
 
-// WorkspaceScheme represents a workspace.
-type WorkspaceScheme struct {
-	Type      string                `json:"type,omitempty"`       // The type of the workspace.
-	Links     *WorkspaceLinksScheme `json:"links,omitempty"`      // The links related to the workspace.
-	UUID      string                `json:"uuid,omitempty"`       // The unique identifier of the workspace.
-	Name      string                `json:"name,omitempty"`       // The name of the workspace.
-	Slug      string                `json:"slug,omitempty"`       // The slug of the workspace.
-	IsPrivate bool                  `json:"is_private,omitempty"` // Indicates if the workspace is private.
-	CreatedOn string                `json:"created_on,omitempty"` // The creation time of the workspace.
-	UpdatedOn string                `json:"updated_on,omitempty"` // The update time of the workspace.
+// BitbucketWorkspaceScheme represents a workspace.
+type BitbucketWorkspaceScheme struct {
+	Type      string                         `json:"type,omitempty"`       // The type of the workspace.
+	Links     *BitbucketWorkspaceLinksScheme `json:"links,omitempty"`      // The links related to the workspace.
+	UUID      string                         `json:"uuid,omitempty"`       // The unique identifier of the workspace.
+	Name      string                         `json:"name,omitempty"`       // The name of the workspace.
+	Slug      string                         `json:"slug,omitempty"`       // The slug of the workspace.
+	IsPrivate bool                           `json:"is_private,omitempty"` // Indicates if the workspace is private.
+	CreatedOn string                         `json:"created_on,omitempty"` // The creation time of the workspace.
+	UpdatedOn string                         `json:"updated_on,omitempty"` // The update time of the workspace.
 }
 
-// WorkspaceLinksScheme represents a collection of links related to a workspace.
-type WorkspaceLinksScheme struct {
+// BitbucketWorkspaceLinksScheme represents a collection of links related to a workspace.
+type BitbucketWorkspaceLinksScheme struct {
 	Avatar       *BitbucketLinkScheme `json:"avatar,omitempty"`       // The link to the workspace's avatar.
 	HTML         *BitbucketLinkScheme `json:"html,omitempty"`         // The link to the workspace's HTML page.
 	Members      *BitbucketLinkScheme `json:"members,omitempty"`      // The link to the workspace's members.

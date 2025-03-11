@@ -3,10 +3,11 @@ package internal
 import (
 	"context"
 	"fmt"
+	"net/http"
+
 	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/v2/service"
 	"github.com/ctreminiom/go-atlassian/v2/service/assets"
-	"net/http"
 )
 
 // NewObjectTypeAttributeService creates a new instance of ObjectTypeAttributeService.
@@ -29,6 +30,9 @@ type ObjectTypeAttributeService struct {
 //
 // https://docs.go-atlassian.io/jira-assets/object/type/attribute#create-object-type-attribute
 func (o *ObjectTypeAttributeService) Create(ctx context.Context, workspaceID, objectTypeID string, payload *model.ObjectTypeAttributePayloadScheme) (*model.ObjectTypeAttributeScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ObjectTypeAttributeService).Create")
+	defer span.End()
+
 	return o.internalClient.Create(ctx, workspaceID, objectTypeID, payload)
 }
 
@@ -38,6 +42,9 @@ func (o *ObjectTypeAttributeService) Create(ctx context.Context, workspaceID, ob
 //
 // https://docs.go-atlassian.io/jira-assets/object/type/attribute#update-object-type-attribute
 func (o *ObjectTypeAttributeService) Update(ctx context.Context, workspaceID, objectTypeID, attributeID string, payload *model.ObjectTypeAttributePayloadScheme) (*model.ObjectTypeAttributeScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ObjectTypeAttributeService).Update")
+	defer span.End()
+
 	return o.internalClient.Update(ctx, workspaceID, objectTypeID, attributeID, payload)
 }
 
@@ -47,6 +54,9 @@ func (o *ObjectTypeAttributeService) Update(ctx context.Context, workspaceID, ob
 //
 // https://docs.go-atlassian.io/jira-assets/object/type/attribute#delete-object-type-attribute
 func (o *ObjectTypeAttributeService) Delete(ctx context.Context, workspaceID, attributeID string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ObjectTypeAttributeService).Delete")
+	defer span.End()
+
 	return o.internalClient.Delete(ctx, workspaceID, attributeID)
 }
 
@@ -55,6 +65,8 @@ type internalObjectTypeAttributeImpl struct {
 }
 
 func (i *internalObjectTypeAttributeImpl) Create(ctx context.Context, workspaceID, objectTypeID string, payload *model.ObjectTypeAttributePayloadScheme) (*model.ObjectTypeAttributeScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalObjectTypeAttributeImpl).Create")
+	defer span.End()
 
 	if workspaceID == "" {
 		return nil, nil, model.ErrNoWorkspaceID
@@ -81,6 +93,8 @@ func (i *internalObjectTypeAttributeImpl) Create(ctx context.Context, workspaceI
 }
 
 func (i *internalObjectTypeAttributeImpl) Update(ctx context.Context, workspaceID, objectTypeID, attributeID string, payload *model.ObjectTypeAttributePayloadScheme) (*model.ObjectTypeAttributeScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalObjectTypeAttributeImpl).Update")
+	defer span.End()
 
 	if workspaceID == "" {
 		return nil, nil, model.ErrNoWorkspaceID
@@ -111,6 +125,8 @@ func (i *internalObjectTypeAttributeImpl) Update(ctx context.Context, workspaceI
 }
 
 func (i *internalObjectTypeAttributeImpl) Delete(ctx context.Context, workspaceID, attributeID string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalObjectTypeAttributeImpl).Delete")
+	defer span.End()
 
 	if workspaceID == "" {
 		return nil, model.ErrNoWorkspaceID

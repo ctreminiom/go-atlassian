@@ -3,12 +3,13 @@ package internal
 import (
 	"context"
 	"fmt"
-	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/v2/service"
-	"github.com/ctreminiom/go-atlassian/v2/service/assets"
 	"net/http"
 	"net/url"
 	"strings"
+
+	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/v2/service"
+	"github.com/ctreminiom/go-atlassian/v2/service/assets"
 )
 
 // NewObjectSchemaService creates a new instance of ObjectSchemaService.
@@ -31,6 +32,9 @@ type ObjectSchemaService struct {
 //
 // https://docs.go-atlassian.io/jira-assets/object/schema#get-object-schema-list
 func (o *ObjectSchemaService) List(ctx context.Context, workspaceID string) (*model.ObjectSchemaPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ObjectSchemaService).List")
+	defer span.End()
+
 	return o.internalClient.List(ctx, workspaceID)
 }
 
@@ -40,6 +44,9 @@ func (o *ObjectSchemaService) List(ctx context.Context, workspaceID string) (*mo
 //
 // https://docs.go-atlassian.io/jira-assets/object/schema#create-object-schema
 func (o *ObjectSchemaService) Create(ctx context.Context, workspaceID string, payload *model.ObjectSchemaPayloadScheme) (*model.ObjectSchemaScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ObjectSchemaService).Create")
+	defer span.End()
+
 	return o.internalClient.Create(ctx, workspaceID, payload)
 }
 
@@ -49,6 +56,9 @@ func (o *ObjectSchemaService) Create(ctx context.Context, workspaceID string, pa
 //
 // https://docs.go-atlassian.io/jira-assets/object/schema#get-object-schema
 func (o *ObjectSchemaService) Get(ctx context.Context, workspaceID, objectSchemaID string) (*model.ObjectSchemaScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ObjectSchemaService).Get")
+	defer span.End()
+
 	return o.internalClient.Get(ctx, workspaceID, objectSchemaID)
 }
 
@@ -58,6 +68,9 @@ func (o *ObjectSchemaService) Get(ctx context.Context, workspaceID, objectSchema
 //
 // https://docs.go-atlassian.io/jira-assets/object/schema#update-object-schema
 func (o *ObjectSchemaService) Update(ctx context.Context, workspaceID, objectSchemaID string, payload *model.ObjectSchemaPayloadScheme) (*model.ObjectSchemaScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ObjectSchemaService).Update")
+	defer span.End()
+
 	return o.internalClient.Update(ctx, workspaceID, objectSchemaID, payload)
 }
 
@@ -67,6 +80,9 @@ func (o *ObjectSchemaService) Update(ctx context.Context, workspaceID, objectSch
 //
 // https://docs.go-atlassian.io/jira-assets/object/schema#delete-object-schema
 func (o *ObjectSchemaService) Delete(ctx context.Context, workspaceID, objectSchemaID string) (*model.ObjectSchemaScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ObjectSchemaService).Delete")
+	defer span.End()
+
 	return o.internalClient.Delete(ctx, workspaceID, objectSchemaID)
 }
 
@@ -76,6 +92,9 @@ func (o *ObjectSchemaService) Delete(ctx context.Context, workspaceID, objectSch
 //
 // https://docs.go-atlassian.io/jira-assets/object/schema#get-object-schema-attributes
 func (o *ObjectSchemaService) Attributes(ctx context.Context, workspaceID, objectSchemaID string, options *model.ObjectSchemaAttributesParamsScheme) ([]*model.ObjectTypeAttributeScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ObjectSchemaService).Attributes")
+	defer span.End()
+
 	return o.internalClient.Attributes(ctx, workspaceID, objectSchemaID, options)
 }
 
@@ -85,6 +104,9 @@ func (o *ObjectSchemaService) Attributes(ctx context.Context, workspaceID, objec
 //
 // https://docs.go-atlassian.io/jira-assets/object/schema#get-object-schema-types
 func (o *ObjectSchemaService) ObjectTypes(ctx context.Context, workspaceID, objectSchemaID string, excludeAbstract bool) ([]*model.ObjectTypeScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ObjectSchemaService).ObjectTypes")
+	defer span.End()
+
 	return o.internalClient.ObjectTypes(ctx, workspaceID, objectSchemaID, excludeAbstract)
 }
 
@@ -93,6 +115,8 @@ type internalObjectSchemaImpl struct {
 }
 
 func (i *internalObjectSchemaImpl) List(ctx context.Context, workspaceID string) (*model.ObjectSchemaPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalObjectSchemaImpl).List")
+	defer span.End()
 
 	if workspaceID == "" {
 		return nil, nil, model.ErrNoWorkspaceID
@@ -115,6 +139,8 @@ func (i *internalObjectSchemaImpl) List(ctx context.Context, workspaceID string)
 }
 
 func (i *internalObjectSchemaImpl) Create(ctx context.Context, workspaceID string, payload *model.ObjectSchemaPayloadScheme) (*model.ObjectSchemaScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalObjectSchemaImpl).Create")
+	defer span.End()
 
 	if workspaceID == "" {
 		return nil, nil, model.ErrNoWorkspaceID
@@ -137,6 +163,8 @@ func (i *internalObjectSchemaImpl) Create(ctx context.Context, workspaceID strin
 }
 
 func (i *internalObjectSchemaImpl) Get(ctx context.Context, workspaceID, objectSchemaID string) (*model.ObjectSchemaScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalObjectSchemaImpl).Get")
+	defer span.End()
 
 	if workspaceID == "" {
 		return nil, nil, model.ErrNoWorkspaceID
@@ -163,6 +191,8 @@ func (i *internalObjectSchemaImpl) Get(ctx context.Context, workspaceID, objectS
 }
 
 func (i *internalObjectSchemaImpl) Update(ctx context.Context, workspaceID, objectSchemaID string, payload *model.ObjectSchemaPayloadScheme) (*model.ObjectSchemaScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalObjectSchemaImpl).Update")
+	defer span.End()
 
 	if workspaceID == "" {
 		return nil, nil, model.ErrNoWorkspaceID
@@ -189,6 +219,8 @@ func (i *internalObjectSchemaImpl) Update(ctx context.Context, workspaceID, obje
 }
 
 func (i *internalObjectSchemaImpl) Delete(ctx context.Context, workspaceID, objectSchemaID string) (*model.ObjectSchemaScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalObjectSchemaImpl).Delete")
+	defer span.End()
 
 	if workspaceID == "" {
 		return nil, nil, model.ErrNoWorkspaceID
@@ -215,6 +247,8 @@ func (i *internalObjectSchemaImpl) Delete(ctx context.Context, workspaceID, obje
 }
 
 func (i *internalObjectSchemaImpl) Attributes(ctx context.Context, workspaceID, objectSchemaID string, options *model.ObjectSchemaAttributesParamsScheme) ([]*model.ObjectTypeAttributeScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalObjectSchemaImpl).Attributes")
+	defer span.End()
 
 	if workspaceID == "" {
 		return nil, nil, model.ErrNoWorkspaceID
@@ -266,6 +300,8 @@ func (i *internalObjectSchemaImpl) Attributes(ctx context.Context, workspaceID, 
 }
 
 func (i *internalObjectSchemaImpl) ObjectTypes(ctx context.Context, workspaceID, objectSchemaID string, excludeAbstract bool) ([]*model.ObjectTypeScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalObjectSchemaImpl).ObjectTypes")
+	defer span.End()
 
 	if workspaceID == "" {
 		return nil, nil, model.ErrNoWorkspaceID

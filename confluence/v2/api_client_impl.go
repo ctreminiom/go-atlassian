@@ -41,6 +41,7 @@ func New(httpClient common.HTTPClient, site string) (*Client, error) {
 
 	client.Auth = internal.NewAuthenticationService(client)
 	client.Page = internal.NewPageService(client)
+	client.Folder = internal.NewFolderService(client)
 	client.Space = internal.NewSpaceV2Service(client)
 	client.Attachment = internal.NewAttachmentService(client, internal.NewAttachmentVersionService(client))
 	client.CustomContent = internal.NewCustomContentService(client)
@@ -53,6 +54,7 @@ type Client struct {
 	Site          *url.URL
 	Auth          common.Authentication
 	Page          *internal.PageService
+	Folder        *internal.FolderService
 	Space         *internal.SpaceV2Service
 	Attachment    *internal.AttachmentService
 	CustomContent *internal.CustomContentService

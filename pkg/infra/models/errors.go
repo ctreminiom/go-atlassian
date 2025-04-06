@@ -36,6 +36,7 @@ var (
 	ErrNoCustomContentType            = errors.New("confluence: no custom content type set")
 	ErrNoCustomContentID              = errors.New("confluence: no custom content id set")
 	ErrNoPageID                       = errors.New("confluence: no page id set")
+	ErrNoFolderID                     = errors.New("confluence: no folder id set")
 	ErrNoSpaceID                      = errors.New("confluence: no space id set")
 	ErrNoTargetID                     = errors.New("confluence: no target id set")
 	ErrNoPosition                     = errors.New("confluence: no position set")

@@ -63,13 +63,13 @@ func (i *internalFolderImpl) Create(ctx context.Context, payload *model.FolderCr
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
-		return nil, nil, err
+		return nil, nil, fmt.Errorf("%w, payload: %+v", err, payload)
 	}
 
 	folder := new(model.FolderScheme)
 	response, err := i.c.Call(request, folder)
 	if err != nil {
-		return nil, response, err
+		return nil, response, fmt.Errorf("%w, payload: %+v", err, payload)
 	}
 
 	return folder, response, nil

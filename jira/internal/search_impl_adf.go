@@ -67,8 +67,8 @@ func (s *SearchADFService) ApproximateCount(ctx context.Context, jql string) (*m
 // BulkFetch fetches multiple issues by their IDs or keys
 //
 // POST /rest/api/3/issue/bulkfetch
-func (s *SearchADFService) BulkFetch(ctx context.Context, issueIdsOrKeys []string, fields []string) (*model.IssueBulkFetchScheme, *model.ResponseScheme, error) {
-	return s.internalClient.BulkFetch(ctx, issueIdsOrKeys, fields)
+func (s *SearchADFService) BulkFetch(ctx context.Context, issueIDsOrKeys []string, fields []string) (*model.IssueBulkFetchScheme, *model.ResponseScheme, error) {
+	return s.internalClient.BulkFetch(ctx, issueIDsOrKeys, fields)
 }
 
 type internalSearchADFImpl struct {
@@ -232,13 +232,13 @@ func (i *internalSearchADFImpl) ApproximateCount(ctx context.Context, jql string
 // BulkFetch fetches multiple issues by their IDs or keys
 //
 // POST /rest/api/3/issue/bulkfetch
-func (i *internalSearchADFImpl) BulkFetch(ctx context.Context, issueIdsOrKeys []string, fields []string) (*model.IssueBulkFetchScheme, *model.ResponseScheme, error) {
+func (i *internalSearchADFImpl) BulkFetch(ctx context.Context, issueIDsOrKeys []string, fields []string) (*model.IssueBulkFetchScheme, *model.ResponseScheme, error) {
 
 	payload := struct {
-		IssueIdsOrKeys []string `json:"issueIdsOrKeys,omitempty"`
+		IssueIDsOrKeys []string `json:"issueIdsOrKeys,omitempty"`
 		Fields         []string `json:"fields,omitempty"`
 	}{
-		IssueIdsOrKeys: issueIdsOrKeys,
+		IssueIDsOrKeys: issueIDsOrKeys,
 		Fields:         fields,
 	}
 

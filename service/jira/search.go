@@ -53,7 +53,7 @@ type SearchRichTextConnector interface {
 	//
 	// POST /rest/api/2/issue/bulkfetch
 	//
-	BulkFetch(ctx context.Context, issueIdsOrKeys []string, fields []string) (*model.IssueBulkFetchSchemeV2, *model.ResponseScheme, error)
+	BulkFetch(ctx context.Context, issueIDsOrKeys []string, fields []string) (*model.IssueBulkFetchSchemeV2, *model.ResponseScheme, error)
 }
 
 type SearchADFConnector interface {
@@ -93,5 +93,5 @@ type SearchADFConnector interface {
 	//
 	// POST /rest/api/3/issue/bulkfetch
 	//
-	BulkFetch(ctx context.Context, issueIdsOrKeys []string, fields []string) (*model.IssueBulkFetchScheme, *model.ResponseScheme, error)
+	BulkFetch(ctx context.Context, issueIDsOrKeys []string, fields []string) (*model.IssueBulkFetchScheme, *model.ResponseScheme, error)
 }

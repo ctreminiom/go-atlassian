@@ -470,3 +470,409 @@ func Test_internalSearchADFImpl_Get(t *testing.T) {
 		})
 	}
 }
+
+func Test_internalSearchADFImpl_SearchJQL(t *testing.T) {
+
+	type fields struct {
+		c       service.Connector
+		version string
+	}
+
+	type args struct {
+		ctx           context.Context
+		jql           string
+		fields        []string
+		expands       []string
+		maxResults    int
+		nextPageToken string
+	}
+
+	testCases := []struct {
+		name    string
+		fields  fields
+		args    args
+		on      func(*fields)
+		wantErr bool
+		Err     error
+	}{
+		{
+			name:   "when the search jql operation is successful",
+			fields: fields{version: "3"},
+			args: args{
+				ctx:           context.Background(),
+				jql:           "project = FOO",
+				fields:        []string{"summary", "status"},
+				expands:       []string{"changelog", "names"},
+				maxResults:    50,
+				nextPageToken: "CAEaAggD",
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewConnector(t)
+
+				payload := struct {
+					Jql           string   `json:"jql,omitempty"`
+					MaxResults    int      `json:"maxResults,omitempty"`
+					Fields        []string `json:"fields,omitempty"`
+					Expand        []string `json:"expand,omitempty"`
+					NextPageToken string   `json:"nextPageToken,omitempty"`
+				}{
+					Jql:           "project = FOO",
+					MaxResults:    50,
+					Fields:        []string{"summary", "status"},
+					Expand:        []string{"changelog", "names"},
+					NextPageToken: "CAEaAggD",
+				}
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodPost,
+					"rest/api/3/search/jql",
+					"", payload).
+					Return(&http.Request{}, nil)
+
+				client.On("Call",
+					&http.Request{},
+					&model.IssueSearchJQLScheme{}).
+					Return(&model.ResponseScheme{}, nil)
+
+				fields.c = client
+			},
+			wantErr: false,
+			Err:     nil,
+		},
+
+		{
+			name:   "when the request returns an error",
+			fields: fields{version: "3"},
+			args: args{
+				ctx:           context.Background(),
+				jql:           "project = FOO",
+				fields:        []string{"summary", "status"},
+				expands:       []string{"changelog", "names"},
+				maxResults:    50,
+				nextPageToken: "CAEaAggD",
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewConnector(t)
+
+				payload := struct {
+					Jql           string   `json:"jql,omitempty"`
+					MaxResults    int      `json:"maxResults,omitempty"`
+					Fields        []string `json:"fields,omitempty"`
+					Expand        []string `json:"expand,omitempty"`
+					NextPageToken string   `json:"nextPageToken,omitempty"`
+				}{
+					Jql:           "project = FOO",
+					MaxResults:    50,
+					Fields:        []string{"summary", "status"},
+					Expand:        []string{"changelog", "names"},
+					NextPageToken: "CAEaAggD",
+				}
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodPost,
+					"rest/api/3/search/jql",
+					"", payload).
+					Return(&http.Request{}, errors.New("error"))
+
+				fields.c = client
+			},
+			wantErr: true,
+			Err:     errors.New("error"),
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+
+			if testCase.on != nil {
+				testCase.on(&testCase.fields)
+			}
+
+			searchImpl := &internalSearchADFImpl{
+				c:       testCase.fields.c,
+				version: testCase.fields.version,
+			}
+
+			gotResult, gotResponse, err := searchImpl.SearchJQL(
+				testCase.args.ctx,
+				testCase.args.jql,
+				testCase.args.fields,
+				testCase.args.expands,
+				testCase.args.maxResults,
+				testCase.args.nextPageToken,
+			)
+
+			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+
+				assert.Error(t, err)
+				assert.EqualError(t, err, testCase.Err.Error())
+
+			} else {
+
+				assert.NoError(t, err)
+				assert.NotEqual(t, gotResponse, nil)
+				assert.NotEqual(t, gotResult, nil)
+			}
+		})
+	}
+}
+
+func Test_internalSearchADFImpl_ApproximateCount(t *testing.T) {
+
+	type fields struct {
+		c       service.Connector
+		version string
+	}
+
+	type args struct {
+		ctx context.Context
+		jql string
+	}
+
+	testCases := []struct {
+		name    string
+		fields  fields
+		args    args
+		on      func(*fields)
+		wantErr bool
+		Err     error
+	}{
+		{
+			name:   "when the approximate count operation is successful",
+			fields: fields{version: "3"},
+			args: args{
+				ctx: context.Background(),
+				jql: "project = FOO",
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewConnector(t)
+
+				payload := struct {
+					Jql string `json:"jql,omitempty"`
+				}{
+					Jql: "project = FOO",
+				}
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodPost,
+					"rest/api/3/search/approximate-count",
+					"", payload).
+					Return(&http.Request{}, nil)
+
+				client.On("Call",
+					&http.Request{},
+					&model.IssueSearchApproximateCountScheme{}).
+					Return(&model.ResponseScheme{}, nil)
+
+				fields.c = client
+			},
+			wantErr: false,
+			Err:     nil,
+		},
+
+		{
+			name:   "when the request returns an error",
+			fields: fields{version: "3"},
+			args: args{
+				ctx: context.Background(),
+				jql: "project = FOO",
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewConnector(t)
+
+				payload := struct {
+					Jql string `json:"jql,omitempty"`
+				}{
+					Jql: "project = FOO",
+				}
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodPost,
+					"rest/api/3/search/approximate-count",
+					"", payload).
+					Return(&http.Request{}, errors.New("error"))
+
+				fields.c = client
+			},
+			wantErr: true,
+			Err:     errors.New("error"),
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+
+			if testCase.on != nil {
+				testCase.on(&testCase.fields)
+			}
+
+			searchImpl := &internalSearchADFImpl{
+				c:       testCase.fields.c,
+				version: testCase.fields.version,
+			}
+
+			gotResult, gotResponse, err := searchImpl.ApproximateCount(
+				testCase.args.ctx,
+				testCase.args.jql,
+			)
+
+			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+
+				assert.Error(t, err)
+				assert.EqualError(t, err, testCase.Err.Error())
+
+			} else {
+
+				assert.NoError(t, err)
+				assert.NotEqual(t, gotResponse, nil)
+				assert.NotEqual(t, gotResult, nil)
+			}
+		})
+	}
+}
+
+func Test_internalSearchADFImpl_BulkFetch(t *testing.T) {
+
+	type fields struct {
+		c       service.Connector
+		version string
+	}
+
+	type args struct {
+		ctx            context.Context
+		issueIDsOrKeys []string
+		fields         []string
+	}
+
+	testCases := []struct {
+		name    string
+		fields  fields
+		args    args
+		on      func(*fields)
+		wantErr bool
+		Err     error
+	}{
+		{
+			name:   "when the bulk fetch operation is successful",
+			fields: fields{version: "3"},
+			args: args{
+				ctx:            context.Background(),
+				issueIDsOrKeys: []string{"FOO-1", "10067", "BAR-1"},
+				fields:         []string{"summary", "status", "priority"},
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewConnector(t)
+
+				payload := struct {
+					IssueIDsOrKeys []string `json:"issueIdsOrKeys,omitempty"`
+					Fields         []string `json:"fields,omitempty"`
+				}{
+					IssueIDsOrKeys: []string{"FOO-1", "10067", "BAR-1"},
+					Fields:         []string{"summary", "status", "priority"},
+				}
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodPost,
+					"rest/api/3/issue/bulkfetch",
+					"", payload).
+					Return(&http.Request{}, nil)
+
+				client.On("Call",
+					&http.Request{},
+					&model.IssueBulkFetchScheme{}).
+					Return(&model.ResponseScheme{}, nil)
+
+				fields.c = client
+			},
+			wantErr: false,
+			Err:     nil,
+		},
+
+		{
+			name:   "when the request returns an error",
+			fields: fields{version: "3"},
+			args: args{
+				ctx:            context.Background(),
+				issueIDsOrKeys: []string{"FOO-1", "10067", "BAR-1"},
+				fields:         []string{"summary", "status", "priority"},
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewConnector(t)
+
+				payload := struct {
+					IssueIDsOrKeys []string `json:"issueIdsOrKeys,omitempty"`
+					Fields         []string `json:"fields,omitempty"`
+				}{
+					IssueIDsOrKeys: []string{"FOO-1", "10067", "BAR-1"},
+					Fields:         []string{"summary", "status", "priority"},
+				}
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodPost,
+					"rest/api/3/issue/bulkfetch",
+					"", payload).
+					Return(&http.Request{}, errors.New("error"))
+
+				fields.c = client
+			},
+			wantErr: true,
+			Err:     errors.New("error"),
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+
+			if testCase.on != nil {
+				testCase.on(&testCase.fields)
+			}
+
+			searchImpl := &internalSearchADFImpl{
+				c:       testCase.fields.c,
+				version: testCase.fields.version,
+			}
+
+			gotResult, gotResponse, err := searchImpl.BulkFetch(
+				testCase.args.ctx,
+				testCase.args.issueIDsOrKeys,
+				testCase.args.fields,
+			)
+
+			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+
+				assert.Error(t, err)
+				assert.EqualError(t, err, testCase.Err.Error())
+
+			} else {
+
+				assert.NoError(t, err)
+				assert.NotEqual(t, gotResponse, nil)
+				assert.NotEqual(t, gotResult, nil)
+			}
+		})
+	}
+}

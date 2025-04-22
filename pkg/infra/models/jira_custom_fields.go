@@ -104,6 +104,26 @@ func (c *CustomFields) Text(customFieldID, textValue string) error {
 	return nil
 }
 
+func (c *CustomFields) TextArea(customFieldID string, textAreaValue *CommentNodeScheme) error {
+
+	if len(customFieldID) == 0 {
+		return ErrNoFieldIDError
+	}
+
+	if textAreaValue == nil {
+		return ErrNoTextTypeError
+	}
+
+	var fieldNode = map[string]interface{}{}
+	fieldNode[customFieldID] = textAreaValue
+
+	var fieldsNode = map[string]interface{}{}
+	fieldsNode["fields"] = fieldNode
+
+	c.Fields = append(c.Fields, fieldsNode)
+	return nil
+}
+
 // DateTime adds a datetime custom field to the collection.
 func (c *CustomFields) DateTime(customFieldID string, dateValue time.Time) error {
 

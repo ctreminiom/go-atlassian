@@ -968,3 +968,86 @@ func TestCustomFields_Users(t *testing.T) {
 		})
 	}
 }
+
+func TestCustomFields_TextArea(t *testing.T) {
+	type fields struct {
+		Fields []map[string]interface{}
+	}
+	type args struct {
+		customFieldID string
+		textAreaValue *CommentNodeScheme
+	}
+	testCases := []struct {
+		name    string
+		fields  fields
+		args    args
+		wantErr bool
+		Err     error
+	}{
+		{
+			name:   "when the parameters are correct",
+			fields: fields{},
+			args: args{
+				customFieldID: "customfield_1000",
+				textAreaValue: &CommentNodeScheme{
+					Type:    "doc",
+					Version: 1,
+					Content: []*CommentNodeScheme{
+						{
+							Type: "paragraph",
+							Content: []*CommentNodeScheme{
+								{
+									Type: "text",
+									Text: "Example comment",
+								},
+							},
+						},
+					},
+				},
+			},
+			wantErr: false,
+			Err:     nil,
+		},
+
+		{
+			name:   "when the custom-field is not provided",
+			fields: fields{},
+			args: args{
+				customFieldID: "",
+				textAreaValue: &CommentNodeScheme{Type: "doc", Version: 1, Content: []*CommentNodeScheme{{Type: "paragraph", Content: []*CommentNodeScheme{{Type: "text", Text: "Example comment"}}}}},
+			},
+			wantErr: true,
+			Err:     ErrNoFieldIDError,
+		},
+
+		{
+			name:   "when the text area value is not provided",
+			fields: fields{},
+			args: args{
+				customFieldID: "customfield_1000",
+				textAreaValue: nil,
+			},
+			wantErr: true,
+			Err:     ErrNoTextTypeError,
+		},
+	}
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+			c := &CustomFields{
+				Fields: testCase.fields.Fields,
+			}
+
+			err := c.TextArea(testCase.args.customFieldID, testCase.args.textAreaValue)
+			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+				assert.EqualError(t, err, testCase.Err.Error())
+
+			} else {
+				assert.NoError(t, err)
+			}
+		})
+	}
+}

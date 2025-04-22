@@ -17,7 +17,7 @@ type AQLSearchParamsScheme struct {
 	IncludeAttributes bool `query:"includeAttributes,omitempty"`
 
 	// IncludeAttributesDeep determines how many levels of attributes should be included.
-	IncludeAttributesDeep bool `query:"includeAttributesDeep,omitempty"`
+	IncludeAttributesDeep int `query:"includeAttributesDeep,omitempty"`
 
 	// IncludeTypeAttributes determines if the response should include the object type attribute definition for each attribute returned with the objects.
 	IncludeTypeAttributes bool `query:"includeTypeAttributes,omitempty"`

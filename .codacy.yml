@@ -1,3 +1,14 @@
 ---
 exclude_paths:
   - "**/*_test.go"
+
+# Disable specific rules
+tools:
+  revive:
+    enabled: true
+    ignore_patterns:
+      - Revive_package-comments # We don't care about package comments for now
+  markdownlint:
+    enabled: true
+    ignore_patterns:
+      - markdownlint_MD013  # Line length rule

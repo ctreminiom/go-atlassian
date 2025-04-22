@@ -1,4 +1,3 @@
-// filepath: c:\Users\info\repo\go-atlassian\service\jira\search.go
 package jira
 
 import (

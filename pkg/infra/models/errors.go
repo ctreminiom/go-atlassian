@@ -172,4 +172,5 @@ var (
 	ErrNoMemberID                     = errors.New("bitbucket: no member id set")
 	ErrNoWebhookID                    = errors.New("bitbucket: no webhook id set")
 	ErrNoRepository                   = errors.New("bitbucket: no repository set")
+	ErrNoKeyError                     = errors.New("jira: no key set")
 )

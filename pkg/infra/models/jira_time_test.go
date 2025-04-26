@@ -18,13 +18,13 @@ func TestDateScheme_MarshalJSON(t *testing.T) {
 		{
 			name:    "random time",
 			t:       DateScheme(time.Date(2021, 6, 22, 7, 34, 41, 123, time.UTC)),
-			want:    []byte(`2021-06-22`),
+			want:    []byte(`"2021-06-22"`),
 			wantErr: assert.NoError,
 		},
 		{
 			name:    "timezone",
 			t:       DateScheme(time.Date(2021, 6, 22, 7, 34, 41, 123, time.FixedZone("UTC+2", 7200))),
-			want:    []byte(`2021-06-22`),
+			want:    []byte(`"2021-06-22"`),
 			wantErr: assert.NoError,
 		},
 	}
@@ -93,13 +93,13 @@ func TestDateTimeScheme_MarshalJSON(t *testing.T) {
 		{
 			name:    "random time",
 			t:       DateTimeScheme(time.Date(2021, 6, 22, 7, 34, 41, 123, time.FixedZone("UTC-9", -32400))),
-			want:    []byte(`2021-06-22T07:34:41-0900`),
+			want:    []byte(`"2021-06-22T07:34:41-0900"`),
 			wantErr: assert.NoError,
 		},
 		{
 			name:    "timezone",
 			t:       DateTimeScheme(time.Date(2021, 6, 22, 7, 34, 41, 123, time.FixedZone("UTC+2", 7200))),
-			want:    []byte(`2021-06-22T07:34:41+0200`),
+			want:    []byte(`"2021-06-22T07:34:41+0200"`),
 			wantErr: assert.NoError,
 		},
 	}

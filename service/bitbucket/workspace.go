@@ -18,7 +18,7 @@ type WorkspaceConnector interface {
 	// GET /2.0/workspaces/{workspace}
 	//
 	// https://docs.go-atlassian.io/bitbucket-cloud/workspace#get-a-workspace
-	Get(ctx context.Context, workspace string) (*models.WorkspaceScheme, *models.ResponseScheme, error)
+	Get(ctx context.Context, workspace string) (*models.BitbucketWorkspaceScheme, *models.ResponseScheme, error)
 
 	// Members returns all members of the requested workspace.
 	//

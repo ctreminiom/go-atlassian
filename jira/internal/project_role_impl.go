@@ -41,6 +41,9 @@ type ProjectRoleService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/roles#get-project-roles-for-project
 func (p *ProjectRoleService) Gets(ctx context.Context, projectKeyOrID string) (*map[string]int, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ProjectRoleService).Gets")
+	defer span.End()
+
 	return p.internalClient.Gets(ctx, projectKeyOrID)
 }
 
@@ -50,6 +53,9 @@ func (p *ProjectRoleService) Gets(ctx context.Context, projectKeyOrID string) (*
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/roles#get-project-role-for-project
 func (p *ProjectRoleService) Get(ctx context.Context, projectKeyOrID string, roleID int) (*model.ProjectRoleScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ProjectRoleService).Get")
+	defer span.End()
+
 	return p.internalClient.Get(ctx, projectKeyOrID, roleID)
 }
 
@@ -59,6 +65,9 @@ func (p *ProjectRoleService) Get(ctx context.Context, projectKeyOrID string, rol
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/roles#get-project-role-details
 func (p *ProjectRoleService) Details(ctx context.Context, projectKeyOrID string) ([]*model.ProjectRoleDetailScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ProjectRoleService).Details")
+	defer span.End()
+
 	return p.internalClient.Details(ctx, projectKeyOrID)
 }
 
@@ -68,6 +77,9 @@ func (p *ProjectRoleService) Details(ctx context.Context, projectKeyOrID string)
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/roles#get-all-project-roles
 func (p *ProjectRoleService) Global(ctx context.Context) ([]*model.ProjectRoleScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ProjectRoleService).Global")
+	defer span.End()
+
 	return p.internalClient.Global(ctx)
 }
 
@@ -77,6 +89,9 @@ func (p *ProjectRoleService) Global(ctx context.Context) ([]*model.ProjectRoleSc
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/roles#create-project-role
 func (p *ProjectRoleService) Create(ctx context.Context, payload *model.ProjectRolePayloadScheme) (*model.ProjectRoleScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ProjectRoleService).Create")
+	defer span.End()
+
 	return p.internalClient.Create(ctx, payload)
 }
 
@@ -86,6 +101,8 @@ type internalProjectRoleImpl struct {
 }
 
 func (i *internalProjectRoleImpl) Gets(ctx context.Context, projectKeyOrID string) (*map[string]int, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalProjectRoleImpl).Gets")
+	defer span.End()
 
 	if projectKeyOrID == "" {
 		return nil, nil, model.ErrNoProjectIDOrKey
@@ -131,6 +148,8 @@ func (i *internalProjectRoleImpl) Gets(ctx context.Context, projectKeyOrID strin
 }
 
 func (i *internalProjectRoleImpl) Get(ctx context.Context, projectKeyOrID string, roleID int) (*model.ProjectRoleScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalProjectRoleImpl).Get")
+	defer span.End()
 
 	if projectKeyOrID == "" {
 		return nil, nil, model.ErrNoProjectIDOrKey
@@ -153,6 +172,8 @@ func (i *internalProjectRoleImpl) Get(ctx context.Context, projectKeyOrID string
 }
 
 func (i *internalProjectRoleImpl) Details(ctx context.Context, projectKeyOrID string) ([]*model.ProjectRoleDetailScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalProjectRoleImpl).Details")
+	defer span.End()
 
 	if projectKeyOrID == "" {
 		return nil, nil, model.ErrNoProjectIDOrKey
@@ -175,6 +196,8 @@ func (i *internalProjectRoleImpl) Details(ctx context.Context, projectKeyOrID st
 }
 
 func (i *internalProjectRoleImpl) Global(ctx context.Context) ([]*model.ProjectRoleScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalProjectRoleImpl).Global")
+	defer span.End()
 
 	endpoint := fmt.Sprintf("rest/api/%v/role", i.version)
 
@@ -193,6 +216,8 @@ func (i *internalProjectRoleImpl) Global(ctx context.Context) ([]*model.ProjectR
 }
 
 func (i *internalProjectRoleImpl) Create(ctx context.Context, payload *model.ProjectRolePayloadScheme) (*model.ProjectRoleScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalProjectRoleImpl).Create")
+	defer span.End()
 
 	endpoint := fmt.Sprintf("rest/api/%v/role", i.version)
 

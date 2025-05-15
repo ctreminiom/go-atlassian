@@ -29,6 +29,9 @@ type SCIMSchemaService struct {
 //
 // https://docs.go-atlassian.io/atlassian-admin-cloud/scim/schemas#get-all-schemas
 func (s *SCIMSchemaService) Gets(ctx context.Context, directoryID string) (*model.SCIMSchemasScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SCIMSchemaService).Gets")
+	defer span.End()
+
 	return s.internalClient.Gets(ctx, directoryID)
 }
 
@@ -40,6 +43,9 @@ func (s *SCIMSchemaService) Gets(ctx context.Context, directoryID string) (*mode
 //
 // https://docs.go-atlassian.io/atlassian-admin-cloud/scim/schemas#get-group-schemas
 func (s *SCIMSchemaService) Group(ctx context.Context, directoryID string) (*model.SCIMSchemaScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SCIMSchemaService).Group")
+	defer span.End()
+
 	return s.internalClient.Group(ctx, directoryID)
 }
 
@@ -51,6 +57,9 @@ func (s *SCIMSchemaService) Group(ctx context.Context, directoryID string) (*mod
 //
 // https://docs.go-atlassian.io/atlassian-admin-cloud/scim/schemas#get-user-schemas
 func (s *SCIMSchemaService) User(ctx context.Context, directoryID string) (*model.SCIMSchemaScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SCIMSchemaService).User")
+	defer span.End()
+
 	return s.internalClient.User(ctx, directoryID)
 }
 
@@ -62,6 +71,9 @@ func (s *SCIMSchemaService) User(ctx context.Context, directoryID string) (*mode
 //
 // https://docs.go-atlassian.io/atlassian-admin-cloud/scim/schemas#get-user-enterprise-extension-schemas
 func (s *SCIMSchemaService) Enterprise(ctx context.Context, directoryID string) (*model.SCIMSchemaScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SCIMSchemaService).Enterprise")
+	defer span.End()
+
 	return s.internalClient.Enterprise(ctx, directoryID)
 }
 
@@ -75,6 +87,9 @@ func (s *SCIMSchemaService) Enterprise(ctx context.Context, directoryID string) 
 //
 // https://docs.go-atlassian.io/atlassian-admin-cloud/scim/schemas#get-feature-metadata
 func (s *SCIMSchemaService) Feature(ctx context.Context, directoryID string) (*model.ServiceProviderConfigScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SCIMSchemaService).Feature")
+	defer span.End()
+
 	return s.internalClient.Feature(ctx, directoryID)
 }
 
@@ -83,6 +98,8 @@ type internalSCIMSchemaImpl struct {
 }
 
 func (i *internalSCIMSchemaImpl) Gets(ctx context.Context, directoryID string) (*model.SCIMSchemasScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalSCIMSchemaImpl).Gets")
+	defer span.End()
 
 	if directoryID == "" {
 		return nil, nil, model.ErrNoAdminDirectoryID
@@ -105,6 +122,8 @@ func (i *internalSCIMSchemaImpl) Gets(ctx context.Context, directoryID string) (
 }
 
 func (i *internalSCIMSchemaImpl) Group(ctx context.Context, directoryID string) (*model.SCIMSchemaScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalSCIMSchemaImpl).Group")
+	defer span.End()
 
 	if directoryID == "" {
 		return nil, nil, model.ErrNoAdminDirectoryID
@@ -127,6 +146,8 @@ func (i *internalSCIMSchemaImpl) Group(ctx context.Context, directoryID string) 
 }
 
 func (i *internalSCIMSchemaImpl) User(ctx context.Context, directoryID string) (*model.SCIMSchemaScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalSCIMSchemaImpl).User")
+	defer span.End()
 
 	if directoryID == "" {
 		return nil, nil, model.ErrNoAdminDirectoryID
@@ -149,6 +170,8 @@ func (i *internalSCIMSchemaImpl) User(ctx context.Context, directoryID string) (
 }
 
 func (i *internalSCIMSchemaImpl) Enterprise(ctx context.Context, directoryID string) (*model.SCIMSchemaScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalSCIMSchemaImpl).Enterprise")
+	defer span.End()
 
 	if directoryID == "" {
 		return nil, nil, model.ErrNoAdminDirectoryID
@@ -171,6 +194,8 @@ func (i *internalSCIMSchemaImpl) Enterprise(ctx context.Context, directoryID str
 }
 
 func (i *internalSCIMSchemaImpl) Feature(ctx context.Context, directoryID string) (*model.ServiceProviderConfigScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalSCIMSchemaImpl).Feature")
+	defer span.End()
 
 	if directoryID == "" {
 		return nil, nil, model.ErrNoAdminDirectoryID

@@ -3,12 +3,13 @@ package internal
 import (
 	"context"
 	"fmt"
-	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/v2/service"
-	"github.com/ctreminiom/go-atlassian/v2/service/assets"
 	"net/http"
 	"net/url"
 	"strings"
+
+	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/v2/service"
+	"github.com/ctreminiom/go-atlassian/v2/service/assets"
 )
 
 // NewObjectTypeService creates a new instance of ObjectTypeService.
@@ -31,6 +32,9 @@ type ObjectTypeService struct {
 //
 // https://docs.go-atlassian.io/jira-assets/object/type#get-object-type
 func (o *ObjectTypeService) Get(ctx context.Context, workspaceID, objectTypeID string) (*model.ObjectTypeScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ObjectTypeService).Get")
+	defer span.End()
+
 	return o.internalClient.Get(ctx, workspaceID, objectTypeID)
 }
 
@@ -40,6 +44,9 @@ func (o *ObjectTypeService) Get(ctx context.Context, workspaceID, objectTypeID s
 //
 // https://docs.go-atlassian.io/jira-assets/object/type#update-object-type
 func (o *ObjectTypeService) Update(ctx context.Context, workspaceID, objectTypeID string, payload *model.ObjectTypePayloadScheme) (*model.ObjectTypeScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ObjectTypeService).Update")
+	defer span.End()
+
 	return o.internalClient.Update(ctx, workspaceID, objectTypeID, payload)
 }
 
@@ -49,6 +56,9 @@ func (o *ObjectTypeService) Update(ctx context.Context, workspaceID, objectTypeI
 //
 // https://docs.go-atlassian.io/jira-assets/object/type#create-object-type
 func (o *ObjectTypeService) Create(ctx context.Context, workspaceID string, payload *model.ObjectTypePayloadScheme) (*model.ObjectTypeScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ObjectTypeService).Create")
+	defer span.End()
+
 	return o.internalClient.Create(ctx, workspaceID, payload)
 }
 
@@ -58,6 +68,9 @@ func (o *ObjectTypeService) Create(ctx context.Context, workspaceID string, payl
 //
 // https://docs.go-atlassian.io/jira-assets/object/type#delete-object-type
 func (o *ObjectTypeService) Delete(ctx context.Context, workspaceID, objectTypeID string) (*model.ObjectTypeScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ObjectTypeService).Delete")
+	defer span.End()
+
 	return o.internalClient.Delete(ctx, workspaceID, objectTypeID)
 }
 
@@ -67,6 +80,9 @@ func (o *ObjectTypeService) Delete(ctx context.Context, workspaceID, objectTypeI
 //
 // https://docs.go-atlassian.io/jira-assets/object/type#get-object-type-attributes
 func (o *ObjectTypeService) Attributes(ctx context.Context, workspaceID, objectTypeID string, options *model.ObjectTypeAttributesParamsScheme) ([]*model.ObjectTypeAttributeScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ObjectTypeService).Attributes")
+	defer span.End()
+
 	return o.internalClient.Attributes(ctx, workspaceID, objectTypeID, options)
 }
 
@@ -76,6 +92,9 @@ func (o *ObjectTypeService) Attributes(ctx context.Context, workspaceID, objectT
 //
 // https://docs.go-atlassian.io/jira-assets/object/type#update-object-type-position
 func (o *ObjectTypeService) Position(ctx context.Context, workspaceID, objectTypeID string, payload *model.ObjectTypePositionPayloadScheme) (*model.ObjectTypeScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ObjectTypeService).Position")
+	defer span.End()
+
 	return o.internalClient.Position(ctx, workspaceID, objectTypeID, payload)
 }
 
@@ -84,6 +103,8 @@ type internalObjectTypeImpl struct {
 }
 
 func (i *internalObjectTypeImpl) Get(ctx context.Context, workspaceID, objectTypeID string) (*model.ObjectTypeScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalObjectTypeImpl).Get")
+	defer span.End()
 
 	if workspaceID == "" {
 		return nil, nil, model.ErrNoWorkspaceID
@@ -110,6 +131,8 @@ func (i *internalObjectTypeImpl) Get(ctx context.Context, workspaceID, objectTyp
 }
 
 func (i *internalObjectTypeImpl) Update(ctx context.Context, workspaceID, objectTypeID string, payload *model.ObjectTypePayloadScheme) (*model.ObjectTypeScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalObjectTypeImpl).Update")
+	defer span.End()
 
 	if workspaceID == "" {
 		return nil, nil, model.ErrNoWorkspaceID
@@ -136,6 +159,8 @@ func (i *internalObjectTypeImpl) Update(ctx context.Context, workspaceID, object
 }
 
 func (i *internalObjectTypeImpl) Create(ctx context.Context, workspaceID string, payload *model.ObjectTypePayloadScheme) (*model.ObjectTypeScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalObjectTypeImpl).Create")
+	defer span.End()
 
 	if workspaceID == "" {
 		return nil, nil, model.ErrNoWorkspaceID
@@ -158,6 +183,8 @@ func (i *internalObjectTypeImpl) Create(ctx context.Context, workspaceID string,
 }
 
 func (i *internalObjectTypeImpl) Delete(ctx context.Context, workspaceID, objectTypeID string) (*model.ObjectTypeScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalObjectTypeImpl).Delete")
+	defer span.End()
 
 	if workspaceID == "" {
 		return nil, nil, model.ErrNoWorkspaceID
@@ -184,6 +211,8 @@ func (i *internalObjectTypeImpl) Delete(ctx context.Context, workspaceID, object
 }
 
 func (i *internalObjectTypeImpl) Attributes(ctx context.Context, workspaceID, objectTypeID string, options *model.ObjectTypeAttributesParamsScheme) ([]*model.ObjectTypeAttributeScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalObjectTypeImpl).Attributes")
+	defer span.End()
 
 	if workspaceID == "" {
 		return nil, nil, model.ErrNoWorkspaceID
@@ -247,6 +276,8 @@ func (i *internalObjectTypeImpl) Attributes(ctx context.Context, workspaceID, ob
 }
 
 func (i *internalObjectTypeImpl) Position(ctx context.Context, workspaceID, objectTypeID string, payload *model.ObjectTypePositionPayloadScheme) (*model.ObjectTypeScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalObjectTypeImpl).Position")
+	defer span.End()
 
 	if workspaceID == "" {
 		return nil, nil, model.ErrNoWorkspaceID

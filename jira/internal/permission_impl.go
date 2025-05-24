@@ -37,6 +37,9 @@ type PermissionService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/permissions#get-my-permissions
 func (p *PermissionService) Gets(ctx context.Context) ([]*model.PermissionScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*PermissionService).Gets")
+	defer span.End()
+
 	return p.internalClient.Gets(ctx)
 }
 
@@ -46,6 +49,9 @@ func (p *PermissionService) Gets(ctx context.Context) ([]*model.PermissionScheme
 //
 // https://docs.go-atlassian.io/jira-software-cloud/permissions#check-permissions
 func (p *PermissionService) Check(ctx context.Context, payload *model.PermissionCheckPayload) (*model.PermissionGrantsScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*PermissionService).Check")
+	defer span.End()
+
 	return p.internalClient.Check(ctx, payload)
 }
 
@@ -55,6 +61,9 @@ func (p *PermissionService) Check(ctx context.Context, payload *model.Permission
 //
 // https://docs.go-atlassian.io/jira-software-cloud/permissions#get-permitted-projects
 func (p *PermissionService) Projects(ctx context.Context, permissions []string) (*model.PermittedProjectsScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*PermissionService).Projects")
+	defer span.End()
+
 	return p.internalClient.Projects(ctx, permissions)
 }
 
@@ -64,6 +73,8 @@ type internalPermissionImpl struct {
 }
 
 func (i *internalPermissionImpl) Gets(ctx context.Context) ([]*model.PermissionScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalPermissionImpl).Gets")
+	defer span.End()
 
 	endpoint := fmt.Sprintf("rest/api/%v/permissions", i.version)
 
@@ -101,6 +112,8 @@ func (i *internalPermissionImpl) Gets(ctx context.Context) ([]*model.PermissionS
 }
 
 func (i *internalPermissionImpl) Check(ctx context.Context, payload *model.PermissionCheckPayload) (*model.PermissionGrantsScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalPermissionImpl).Check")
+	defer span.End()
 
 	endpoint := fmt.Sprintf("rest/api/%v/permissions/check", i.version)
 
@@ -119,6 +132,8 @@ func (i *internalPermissionImpl) Check(ctx context.Context, payload *model.Permi
 }
 
 func (i *internalPermissionImpl) Projects(ctx context.Context, permissions []string) (*model.PermittedProjectsScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalPermissionImpl).Projects")
+	defer span.End()
 
 	if len(permissions) == 0 {
 		return nil, nil, model.ErrNoPermissionKeys

@@ -97,6 +97,15 @@ func (o *OrganizationService) Actions(ctx context.Context, organizationID string
 	return o.internalClient.Actions(ctx, organizationID)
 }
 
+// EventsStream returns a paginated list of audit log events from an organization using the /events-stream endpoint.
+//
+// GET /admin/v1/orgs/{organizationID}/events-stream
+//
+// https://developer.atlassian.com/cloud/admin/organization/rest/api-group-events/#api-v1-orgs-orgid-events-stream-get
+func (o *OrganizationService) EventsStream(ctx context.Context, organizationID string, options *model.OrganizationEventStreamOptScheme) (*model.OrganizationEventStreamPageScheme, *model.ResponseScheme, error) {
+	return o.internalClient.EventsStream(ctx, organizationID, options)
+}
+
 type internalOrganizationImpl struct {
 	c service.Connector
 }
@@ -334,4 +343,48 @@ func (i *internalOrganizationImpl) Actions(ctx context.Context, organizationID s
 	}
 
 	return event, res, nil
+}
+
+func (i *internalOrganizationImpl) EventsStream(ctx context.Context, organizationID string, options *model.OrganizationEventStreamOptScheme) (*model.OrganizationEventStreamPageScheme, *model.ResponseScheme, error) {
+	if organizationID == "" {
+		return nil, nil, model.ErrNoAdminOrganization
+	}
+
+	params := url.Values{}
+	if options != nil {
+		if !options.From.IsZero() {
+			params.Add("from", strconv.FormatInt(options.From.UnixMilli(), 10))
+		}
+		if !options.To.IsZero() {
+			params.Add("to", strconv.FormatInt(options.To.UnixMilli(), 10))
+		}
+		if options.Cursor != "" {
+			params.Add("cursor", options.Cursor)
+		}
+		if options.SortOrder != "" {
+			params.Add("sortOrder", options.SortOrder)
+		}
+		if options.Limit > 0 {
+			params.Add("limit", strconv.Itoa(options.Limit))
+		}
+	}
+
+	var endpoint strings.Builder
+	endpoint.WriteString(fmt.Sprintf("admin/v1/orgs/%v/events-stream", organizationID))
+	if params.Encode() != "" {
+		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
+	}
+
+	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	page := new(model.OrganizationEventStreamPageScheme)
+	res, err := i.c.Call(req, page)
+	if err != nil {
+		return nil, res, err
+	}
+
+	return page, res, nil
 }

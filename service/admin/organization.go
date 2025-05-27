@@ -65,4 +65,11 @@ type OrganizationConnector interface {
 	//
 	// https://docs.go-atlassian.io/atlassian-admin-cloud/organization#get-list-of-event-actions
 	Actions(ctx context.Context, organizationID string) (*model.OrganizationEventActionScheme, *model.ResponseScheme, error)
+
+	// EventsStream returns a paginated list of audit log events from an organization using the /events-stream endpoint.
+	//
+	// GET /admin/v1/orgs/{organizationID}/events-stream
+	//
+	// https://developer.atlassian.com/cloud/admin/organization/rest/api-group-events/#api-v1-orgs-orgid-events-stream-get
+	EventsStream(ctx context.Context, organizationID string, options *model.OrganizationEventStreamOptScheme) (*model.OrganizationEventStreamPageScheme, *model.ResponseScheme, error)
 }

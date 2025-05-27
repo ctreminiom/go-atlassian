@@ -237,3 +237,52 @@ type UserProductLastActiveScheme struct {
 type GenericActionSuccessScheme struct {
 	Message string `json:"message,omitempty"` // The success message.
 }
+
+// OrganizationEventStreamOptScheme represents the options for polling events from the /events-stream endpoint.
+type OrganizationEventStreamOptScheme struct {
+	From      time.Time // The earliest processedAt date/time (epoch millis).
+	To        time.Time // The latest processedAt date/time (epoch millis).
+	Cursor    string    // The cursor for pagination.
+	SortOrder string    // asc or desc.
+	Limit     int       // Page size (default 200, max 500).
+}
+
+// OrganizationEventStreamPageScheme represents a page of events from the /events-stream endpoint.
+type OrganizationEventStreamPageScheme struct {
+	Data []*OrganizationEventStreamModelScheme `json:"data,omitempty"` // The events on this page.
+	Meta struct {
+		Next     string `json:"next,omitempty"`      // The next page cursor.
+		PageSize int    `json:"page_size,omitempty"` // The page size.
+	} `json:"meta,omitempty"`
+	Links struct {
+		Self string `json:"self,omitempty"`
+		Prev string `json:"prev,omitempty"`
+		Next string `json:"next,omitempty"`
+	} `json:"links,omitempty"`
+}
+
+// OrganizationEventStreamModelScheme represents an event from the /events-stream endpoint.
+type OrganizationEventStreamModelScheme struct {
+	ID         string                                        `json:"id,omitempty"`
+	Type       string                                        `json:"type,omitempty"`
+	Attributes *OrganizationEventStreamModelAttributesScheme `json:"attributes,omitempty"`
+	Links      *LinkSelfModelScheme                          `json:"links,omitempty"`
+	Message    *OrganizationEventStreamMessageScheme         `json:"message,omitempty"`
+}
+
+// OrganizationEventStreamModelAttributesScheme represents the attributes of an event from the /events-stream endpoint.
+type OrganizationEventStreamModelAttributesScheme struct {
+	Time        string                          `json:"time,omitempty"`
+	ProcessedAt string                          `json:"processedAt,omitempty"`
+	Action      string                          `json:"action,omitempty"`
+	Actor       *OrganizationEventActorModel    `json:"actor,omitempty"`
+	Context     []*OrganizationEventObjectModel `json:"context,omitempty"`
+	Container   []*OrganizationEventObjectModel `json:"container,omitempty"`
+	Location    *OrganizationEventLocationModel `json:"location,omitempty"`
+}
+
+// OrganizationEventStreamMessageScheme represents the message of an event from the /events-stream endpoint.
+type OrganizationEventStreamMessageScheme struct {
+	Content string `json:"content,omitempty"`
+	Format  string `json:"format,omitempty"`
+}

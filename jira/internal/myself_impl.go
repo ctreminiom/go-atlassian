@@ -16,7 +16,7 @@ import (
 func NewMySelfService(client service.Connector, version string) (*MySelfService, error) {
 
 	if version == "" {
-		return nil, model.ErrNoVersionProvided
+		return nil, fmt.Errorf("jira: %w", model.ErrNoVersionProvided)
 	}
 
 	return &MySelfService{
@@ -126,7 +126,7 @@ func (i *internalMySelfImpl) Get(ctx context.Context, key string) (map[string]in
 func (i *internalMySelfImpl) Set(ctx context.Context, key string, value string) (map[string]interface{}, *model.ResponseScheme, error) {
 
 	if key == "" {
-		return nil, nil, model.ErrNoKeyError
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoKeyError)
 	}
 
 	var endpoint strings.Builder
@@ -159,7 +159,7 @@ func (i *internalMySelfImpl) Set(ctx context.Context, key string, value string) 
 func (i *internalMySelfImpl) Delete(ctx context.Context, key string) (*model.ResponseScheme, error) {
 
 	if key == "" {
-		return nil, model.ErrNoKeyError
+		return nil, fmt.Errorf("jira: %w", model.ErrNoKeyError)
 	}
 
 	var endpoint strings.Builder

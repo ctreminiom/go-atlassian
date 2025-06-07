@@ -16,7 +16,7 @@ import (
 func NewPermissionSchemeGrantService(client service.Connector, version string) (*PermissionSchemeGrantService, error) {
 
 	if version == "" {
-		return nil, model.ErrNoVersionProvided
+		return nil, fmt.Errorf("jira: %w", model.ErrNoVersionProvided)
 	}
 
 	return &PermissionSchemeGrantService{
@@ -74,7 +74,7 @@ type internalPermissionSchemeGrantImpl struct {
 func (i *internalPermissionSchemeGrantImpl) Create(ctx context.Context, permissionSchemeID int, payload *model.PermissionGrantPayloadScheme) (*model.PermissionGrantScheme, *model.ResponseScheme, error) {
 
 	if permissionSchemeID == 0 {
-		return nil, nil, model.ErrNoPermissionSchemeID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoPermissionSchemeID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/permissionscheme/%v/permission", i.version, permissionSchemeID)
@@ -96,7 +96,7 @@ func (i *internalPermissionSchemeGrantImpl) Create(ctx context.Context, permissi
 func (i *internalPermissionSchemeGrantImpl) Gets(ctx context.Context, permissionSchemeID int, expand []string) (*model.PermissionSchemeGrantsScheme, *model.ResponseScheme, error) {
 
 	if permissionSchemeID == 0 {
-		return nil, nil, model.ErrNoPermissionSchemeID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoPermissionSchemeID)
 	}
 
 	var endpoint strings.Builder
@@ -127,11 +127,11 @@ func (i *internalPermissionSchemeGrantImpl) Gets(ctx context.Context, permission
 func (i *internalPermissionSchemeGrantImpl) Get(ctx context.Context, permissionSchemeID, permissionGrantID int, expand []string) (*model.PermissionGrantScheme, *model.ResponseScheme, error) {
 
 	if permissionSchemeID == 0 {
-		return nil, nil, model.ErrNoPermissionSchemeID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoPermissionSchemeID)
 	}
 
 	if permissionGrantID == 0 {
-		return nil, nil, model.ErrNoPermissionGrantID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoPermissionGrantID)
 	}
 
 	var endpoint strings.Builder
@@ -162,11 +162,11 @@ func (i *internalPermissionSchemeGrantImpl) Get(ctx context.Context, permissionS
 func (i *internalPermissionSchemeGrantImpl) Delete(ctx context.Context, permissionSchemeID, permissionGrantID int) (*model.ResponseScheme, error) {
 
 	if permissionSchemeID == 0 {
-		return nil, model.ErrNoPermissionSchemeID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoPermissionSchemeID)
 	}
 
 	if permissionGrantID == 0 {
-		return nil, model.ErrNoPermissionGrantID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoPermissionGrantID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/permissionscheme/%v/permission/%v", i.version, permissionSchemeID, permissionGrantID)

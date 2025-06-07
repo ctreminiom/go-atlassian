@@ -15,7 +15,7 @@ func NewTypeService(client service.Connector, version string, scheme *TypeScheme
 	*TypeService, error) {
 
 	if version == "" {
-		return nil, model.ErrNoVersionProvided
+		return nil, fmt.Errorf("jira: %w", model.ErrNoVersionProvided)
 	}
 
 	return &TypeService{
@@ -138,7 +138,7 @@ func (i *internalTypeImpl) Create(ctx context.Context, payload *model.IssueTypeP
 func (i *internalTypeImpl) Get(ctx context.Context, issueTypeID string) (*model.IssueTypeScheme, *model.ResponseScheme, error) {
 
 	if issueTypeID == "" {
-		return nil, nil, model.ErrNoIssueTypeID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoIssueTypeID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issuetype/%v", i.version, issueTypeID)
@@ -160,7 +160,7 @@ func (i *internalTypeImpl) Get(ctx context.Context, issueTypeID string) (*model.
 func (i *internalTypeImpl) Update(ctx context.Context, issueTypeID string, payload *model.IssueTypePayloadScheme) (*model.IssueTypeScheme, *model.ResponseScheme, error) {
 
 	if issueTypeID == "" {
-		return nil, nil, model.ErrNoIssueTypeID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoIssueTypeID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issuetype/%v", i.version, issueTypeID)
@@ -182,7 +182,7 @@ func (i *internalTypeImpl) Update(ctx context.Context, issueTypeID string, paylo
 func (i *internalTypeImpl) Delete(ctx context.Context, issueTypeID string) (*model.ResponseScheme, error) {
 
 	if issueTypeID == "" {
-		return nil, model.ErrNoIssueTypeID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoIssueTypeID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issuetype/%v", i.version, issueTypeID)

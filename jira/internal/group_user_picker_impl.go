@@ -16,7 +16,7 @@ import (
 func NewGroupUserPickerService(client service.Connector, version string) (*GroupUserPickerService, error) {
 
 	if version == "" {
-		return nil, model.ErrNoVersionProvided
+		return nil, fmt.Errorf("jira: %w", model.ErrNoVersionProvided)
 	}
 
 	return &GroupUserPickerService{
@@ -47,7 +47,7 @@ type internalGroupUserPickerServiceImpl struct {
 func (i internalGroupUserPickerServiceImpl) Find(ctx context.Context, options *model.GroupUserPickerFindOptionScheme) (*model.GroupUserPickerFindScheme, *model.ResponseScheme, error) {
 
 	if options == nil || options.Query == "" {
-		return nil, nil, model.ErrNoQuery
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoQuery)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/groupuserpicker", i.version)

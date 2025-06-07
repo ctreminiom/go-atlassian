@@ -18,7 +18,7 @@ import (
 func NewIssueFieldConfigurationSchemeService(client service.Connector, version string) (*IssueFieldConfigSchemeService, error) {
 
 	if version == "" {
-		return nil, model.ErrNoVersionProvided
+		return nil, fmt.Errorf("jira: %w", model.ErrNoVersionProvided)
 	}
 
 	return &IssueFieldConfigSchemeService{
@@ -169,7 +169,7 @@ func (i *internalIssueFieldConfigSchemeServiceImpl) Gets(ctx context.Context, id
 func (i *internalIssueFieldConfigSchemeServiceImpl) Create(ctx context.Context, name, description string) (*model.FieldConfigurationSchemeScheme, *model.ResponseScheme, error) {
 
 	if name == "" {
-		return nil, nil, model.ErrNoFieldConfigurationSchemeName
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoFieldConfigurationSchemeName)
 	}
 
 	payload := map[string]interface{}{"name": name}
@@ -261,11 +261,11 @@ func (i *internalIssueFieldConfigSchemeServiceImpl) Assign(ctx context.Context, 
 func (i *internalIssueFieldConfigSchemeServiceImpl) Update(ctx context.Context, schemeID int, name, description string) (*model.ResponseScheme, error) {
 
 	if schemeID == 0 {
-		return nil, model.ErrNoFieldConfigurationSchemeID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoFieldConfigurationSchemeID)
 	}
 
 	if name == "" {
-		return nil, model.ErrNoFieldConfigurationSchemeName
+		return nil, fmt.Errorf("jira: %w", model.ErrNoFieldConfigurationSchemeName)
 	}
 
 	payload := map[string]interface{}{"name": name}
@@ -287,7 +287,7 @@ func (i *internalIssueFieldConfigSchemeServiceImpl) Update(ctx context.Context, 
 func (i *internalIssueFieldConfigSchemeServiceImpl) Delete(ctx context.Context, schemeID int) (*model.ResponseScheme, error) {
 
 	if schemeID == 0 {
-		return nil, model.ErrNoFieldConfigurationSchemeID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoFieldConfigurationSchemeID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/fieldconfigurationscheme/%v", i.version, schemeID)
@@ -303,7 +303,7 @@ func (i *internalIssueFieldConfigSchemeServiceImpl) Delete(ctx context.Context, 
 func (i *internalIssueFieldConfigSchemeServiceImpl) Link(ctx context.Context, schemeID int, payload *model.FieldConfigurationToIssueTypeMappingPayloadScheme) (*model.ResponseScheme, error) {
 
 	if schemeID == 0 {
-		return nil, model.ErrNoFieldConfigurationSchemeID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoFieldConfigurationSchemeID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/fieldconfigurationscheme/%v/mapping", i.version, schemeID)
@@ -319,11 +319,11 @@ func (i *internalIssueFieldConfigSchemeServiceImpl) Link(ctx context.Context, sc
 func (i *internalIssueFieldConfigSchemeServiceImpl) Unlink(ctx context.Context, schemeID int, issueTypeIDs []string) (*model.ResponseScheme, error) {
 
 	if schemeID == 0 {
-		return nil, model.ErrNoFieldConfigurationSchemeID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoFieldConfigurationSchemeID)
 	}
 
 	if len(issueTypeIDs) == 0 {
-		return nil, model.ErrNoIssueTypes
+		return nil, fmt.Errorf("jira: %w", model.ErrNoIssueTypes)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/fieldconfigurationscheme/%v/mapping/delete", i.version, schemeID)

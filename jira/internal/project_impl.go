@@ -39,7 +39,7 @@ type ProjectChildServices struct {
 func NewProjectService(client service.Connector, version string, subServices *ProjectChildServices) (*ProjectService, error) {
 
 	if version == "" {
-		return nil, model.ErrNoVersionProvided
+		return nil, fmt.Errorf("jira: %w", model.ErrNoVersionProvided)
 	}
 
 	return &ProjectService{
@@ -279,7 +279,7 @@ func (i *internalProjectImpl) Search(ctx context.Context, options *model.Project
 func (i *internalProjectImpl) Get(ctx context.Context, projectKeyOrID string, expand []string) (*model.ProjectScheme, *model.ResponseScheme, error) {
 
 	if projectKeyOrID == "" {
-		return nil, nil, model.ErrNoProjectIDOrKey
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoProjectIDOrKey)
 	}
 
 	var endpoint strings.Builder
@@ -310,7 +310,7 @@ func (i *internalProjectImpl) Get(ctx context.Context, projectKeyOrID string, ex
 func (i *internalProjectImpl) Update(ctx context.Context, projectKeyOrID string, payload *model.ProjectUpdateScheme) (*model.ProjectScheme, *model.ResponseScheme, error) {
 
 	if projectKeyOrID == "" {
-		return nil, nil, model.ErrNoProjectIDOrKey
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoProjectIDOrKey)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/project/%v", i.version, projectKeyOrID)
@@ -332,7 +332,7 @@ func (i *internalProjectImpl) Update(ctx context.Context, projectKeyOrID string,
 func (i *internalProjectImpl) Delete(ctx context.Context, projectKeyOrID string, enableUndo bool) (*model.ResponseScheme, error) {
 
 	if projectKeyOrID == "" {
-		return nil, model.ErrNoProjectIDOrKey
+		return nil, fmt.Errorf("jira: %w", model.ErrNoProjectIDOrKey)
 	}
 
 	params := url.Values{}
@@ -351,7 +351,7 @@ func (i *internalProjectImpl) Delete(ctx context.Context, projectKeyOrID string,
 func (i *internalProjectImpl) DeleteAsynchronously(ctx context.Context, projectKeyOrID string) (*model.TaskScheme, *model.ResponseScheme, error) {
 
 	if projectKeyOrID == "" {
-		return nil, nil, model.ErrNoProjectIDOrKey
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoProjectIDOrKey)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/project/%v/delete", i.version, projectKeyOrID)
@@ -373,7 +373,7 @@ func (i *internalProjectImpl) DeleteAsynchronously(ctx context.Context, projectK
 func (i *internalProjectImpl) Archive(ctx context.Context, projectKeyOrID string) (*model.ResponseScheme, error) {
 
 	if projectKeyOrID == "" {
-		return nil, model.ErrNoProjectIDOrKey
+		return nil, fmt.Errorf("jira: %w", model.ErrNoProjectIDOrKey)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/project/%v/archive", i.version, projectKeyOrID)
@@ -389,7 +389,7 @@ func (i *internalProjectImpl) Archive(ctx context.Context, projectKeyOrID string
 func (i *internalProjectImpl) Restore(ctx context.Context, projectKeyOrID string) (*model.ProjectScheme, *model.ResponseScheme, error) {
 
 	if projectKeyOrID == "" {
-		return nil, nil, model.ErrNoProjectIDOrKey
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoProjectIDOrKey)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/project/%v/restore", i.version, projectKeyOrID)
@@ -411,7 +411,7 @@ func (i *internalProjectImpl) Restore(ctx context.Context, projectKeyOrID string
 func (i *internalProjectImpl) Statuses(ctx context.Context, projectKeyOrID string) ([]*model.ProjectStatusPageScheme, *model.ResponseScheme, error) {
 
 	if projectKeyOrID == "" {
-		return nil, nil, model.ErrNoProjectIDOrKey
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoProjectIDOrKey)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/project/%v/statuses", i.version, projectKeyOrID)
@@ -433,7 +433,7 @@ func (i *internalProjectImpl) Statuses(ctx context.Context, projectKeyOrID strin
 func (i *internalProjectImpl) NotificationScheme(ctx context.Context, projectKeyOrID string, expand []string) (*model.NotificationSchemeScheme, *model.ResponseScheme, error) {
 
 	if projectKeyOrID == "" {
-		return nil, nil, model.ErrNoProjectIDOrKey
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoProjectIDOrKey)
 	}
 
 	var endpoint strings.Builder

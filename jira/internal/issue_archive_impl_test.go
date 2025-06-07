@@ -82,11 +82,11 @@ func Test_internalIssueArchivalImpl_Preserve(t *testing.T) {
 					context.Background(),
 					http.MethodPut,
 					"rest/api/2/issue/archive", "", map[string]interface{}{"issueIdsOrKeys": []string{"KP-1"}}).
-					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 				fields.c = client
 			},
 			wantErr: true,
-			Err:     errors.New("error, unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 		},
 	}
 	for _, tt := range tests {
@@ -102,6 +102,13 @@ func Test_internalIssueArchivalImpl_Preserve(t *testing.T) {
 
 			if tt.wantErr {
 				assert.Error(t, err)
+
+				errUnwrapped := errors.Unwrap(err)
+
+				if errUnwrapped != nil {
+					err = errUnwrapped
+				}
+
 				assert.EqualError(t, err, tt.Err.Error())
 				return
 			}
@@ -181,11 +188,11 @@ func Test_internalIssueArchivalImpl_PreserveByJQL(t *testing.T) {
 					context.Background(),
 					http.MethodPost,
 					"rest/api/2/issue/archive", "", map[string]interface{}{"jql": "project = KP"}).
-					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 				fields.c = client
 			},
 			wantErr: true,
-			Err:     errors.New("error, unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 		},
 	}
 	for _, tt := range tests {
@@ -201,6 +208,13 @@ func Test_internalIssueArchivalImpl_PreserveByJQL(t *testing.T) {
 
 			if tt.wantErr {
 				assert.Error(t, err)
+
+				errUnwrapped := errors.Unwrap(err)
+
+				if errUnwrapped != nil {
+					err = errUnwrapped
+				}
+
 				assert.EqualError(t, err, tt.Err.Error())
 				return
 			}
@@ -279,11 +293,11 @@ func Test_internalIssueArchivalImpl_Restore(t *testing.T) {
 					context.Background(),
 					http.MethodPut,
 					"rest/api/2/issue/unarchive", "", map[string]interface{}{"issueIdsOrKeys": []string{"KP-1"}}).
-					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 				fields.c = client
 			},
 			wantErr: true,
-			Err:     errors.New("error, unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 		},
 	}
 	for _, tt := range tests {
@@ -299,6 +313,13 @@ func Test_internalIssueArchivalImpl_Restore(t *testing.T) {
 
 			if tt.wantErr {
 				assert.Error(t, err)
+
+				errUnwrapped := errors.Unwrap(err)
+
+				if errUnwrapped != nil {
+					err = errUnwrapped
+				}
+
 				assert.EqualError(t, err, tt.Err.Error())
 				return
 			}
@@ -394,11 +415,11 @@ func Test_internalIssueArchivalImpl_Export(t *testing.T) {
 					context.Background(),
 					http.MethodPut,
 					"rest/api/2/issues/archive/export", "", &model.IssueArchivalExportPayloadScheme{}).
-					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 				fields.c = client
 			},
 			wantErr: true,
-			Err:     errors.New("error, unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 		},
 	}
 	for _, tt := range tests {

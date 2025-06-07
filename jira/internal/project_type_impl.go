@@ -13,7 +13,7 @@ import (
 func NewProjectTypeService(client service.Connector, version string) (*ProjectTypeService, error) {
 
 	if version == "" {
-		return nil, model.ErrNoVersionProvided
+		return nil, fmt.Errorf("jira: %w", model.ErrNoVersionProvided)
 	}
 
 	return &ProjectTypeService{
@@ -107,7 +107,7 @@ func (i *internalProjectTypeImpl) Licensed(ctx context.Context) ([]*model.Projec
 func (i *internalProjectTypeImpl) Get(ctx context.Context, projectTypeKey string) (*model.ProjectTypeScheme, *model.ResponseScheme, error) {
 
 	if projectTypeKey == "" {
-		return nil, nil, model.ErrProjectTypeKey
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrProjectTypeKey)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/project/type/%v", i.version, projectTypeKey)
@@ -129,7 +129,7 @@ func (i *internalProjectTypeImpl) Get(ctx context.Context, projectTypeKey string
 func (i *internalProjectTypeImpl) Accessible(ctx context.Context, projectTypeKey string) (*model.ProjectTypeScheme, *model.ResponseScheme, error) {
 
 	if projectTypeKey == "" {
-		return nil, nil, model.ErrProjectTypeKey
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrProjectTypeKey)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/project/type/%v/accessible", i.version, projectTypeKey)

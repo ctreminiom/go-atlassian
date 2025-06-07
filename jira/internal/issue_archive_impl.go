@@ -110,7 +110,7 @@ type internalIssueArchivalImpl struct {
 func (i *internalIssueArchivalImpl) Preserve(ctx context.Context, issueIDsOrKeys []string) (result *model.IssueArchivalSyncResponseScheme, response *model.ResponseScheme, err error) {
 
 	if len(issueIDsOrKeys) == 0 {
-		return nil, nil, model.ErrNoIssuesSlice
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoIssuesSlice)
 	}
 
 	payload := make(map[string]interface{})
@@ -135,7 +135,7 @@ func (i *internalIssueArchivalImpl) Preserve(ctx context.Context, issueIDsOrKeys
 func (i *internalIssueArchivalImpl) PreserveByJQL(ctx context.Context, jql string) (taskID string, response *model.ResponseScheme, err error) {
 
 	if jql == "" {
-		return "", nil, model.ErrNoJQL
+		return "", nil, fmt.Errorf("jira: %w", model.ErrNoJQL)
 	}
 
 	payload := make(map[string]interface{})
@@ -159,7 +159,7 @@ func (i *internalIssueArchivalImpl) PreserveByJQL(ctx context.Context, jql strin
 func (i *internalIssueArchivalImpl) Restore(ctx context.Context, issueIDsOrKeys []string) (result *model.IssueArchivalSyncResponseScheme, response *model.ResponseScheme, err error) {
 
 	if len(issueIDsOrKeys) == 0 {
-		return nil, nil, model.ErrNoIssuesSlice
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoIssuesSlice)
 	}
 
 	payload := make(map[string]interface{})

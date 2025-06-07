@@ -14,7 +14,7 @@ import (
 func NewProjectPropertyService(client service.Connector, version string) (*ProjectPropertyService, error) {
 
 	if version == "" {
-		return nil, model.ErrNoVersionProvided
+		return nil, fmt.Errorf("jira: %w", model.ErrNoVersionProvided)
 	}
 
 	return &ProjectPropertyService{
@@ -78,7 +78,7 @@ type internalProjectPropertyImpl struct {
 func (i *internalProjectPropertyImpl) Gets(ctx context.Context, projectKeyOrID string) (*model.PropertyPageScheme, *model.ResponseScheme, error) {
 
 	if projectKeyOrID == "" {
-		return nil, nil, model.ErrNoProjectIDOrKey
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoProjectIDOrKey)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/project/%v/properties", i.version, projectKeyOrID)
@@ -100,11 +100,11 @@ func (i *internalProjectPropertyImpl) Gets(ctx context.Context, projectKeyOrID s
 func (i *internalProjectPropertyImpl) Get(ctx context.Context, projectKeyOrID, propertyKey string) (*model.EntityPropertyScheme, *model.ResponseScheme, error) {
 
 	if projectKeyOrID == "" {
-		return nil, nil, model.ErrNoProjectIDOrKey
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoProjectIDOrKey)
 	}
 
 	if propertyKey == "" {
-		return nil, nil, model.ErrNoPropertyKey
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoPropertyKey)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/project/%v/properties/%v", i.version, projectKeyOrID, propertyKey)
@@ -126,11 +126,11 @@ func (i *internalProjectPropertyImpl) Get(ctx context.Context, projectKeyOrID, p
 func (i *internalProjectPropertyImpl) Set(ctx context.Context, projectKeyOrID, propertyKey string, payload interface{}) (*model.ResponseScheme, error) {
 
 	if projectKeyOrID == "" {
-		return nil, model.ErrNoProjectIDOrKey
+		return nil, fmt.Errorf("jira: %w", model.ErrNoProjectIDOrKey)
 	}
 
 	if propertyKey == "" {
-		return nil, model.ErrNoPropertyKey
+		return nil, fmt.Errorf("jira: %w", model.ErrNoPropertyKey)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/project/%v/properties/%v", i.version, projectKeyOrID, propertyKey)
@@ -146,11 +146,11 @@ func (i *internalProjectPropertyImpl) Set(ctx context.Context, projectKeyOrID, p
 func (i *internalProjectPropertyImpl) Delete(ctx context.Context, projectKeyOrID, propertyKey string) (*model.ResponseScheme, error) {
 
 	if projectKeyOrID == "" {
-		return nil, model.ErrNoProjectIDOrKey
+		return nil, fmt.Errorf("jira: %w", model.ErrNoProjectIDOrKey)
 	}
 
 	if propertyKey == "" {
-		return nil, model.ErrNoPropertyKey
+		return nil, fmt.Errorf("jira: %w", model.ErrNoPropertyKey)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/project/%v/properties/%v", i.version, projectKeyOrID, propertyKey)

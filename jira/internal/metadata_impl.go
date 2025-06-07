@@ -18,7 +18,7 @@ import (
 func NewMetadataService(client service.Connector, version string) (*MetadataService, error) {
 
 	if version == "" {
-		return nil, model.ErrNoVersionProvided
+		return nil, fmt.Errorf("jira: %w", model.ErrNoVersionProvided)
 	}
 
 	return &MetadataService{
@@ -115,7 +115,7 @@ type internalMetadataImpl struct {
 func (i *internalMetadataImpl) FetchIssueMappings(ctx context.Context, projectKeyOrID string, startAt, maxResults int) (gjson.Result, *model.ResponseScheme, error) {
 
 	if projectKeyOrID == "" {
-		return gjson.Result{}, nil, model.ErrNoProjectIDOrKey
+		return gjson.Result{}, nil, fmt.Errorf("jira: %w", model.ErrNoProjectIDOrKey)
 	}
 
 	params := url.Values{}
@@ -140,11 +140,11 @@ func (i *internalMetadataImpl) FetchIssueMappings(ctx context.Context, projectKe
 func (i *internalMetadataImpl) FetchFieldMappings(ctx context.Context, projectKeyOrID, issueTypeID string, startAt, maxResults int) (gjson.Result, *model.ResponseScheme, error) {
 
 	if projectKeyOrID == "" {
-		return gjson.Result{}, nil, model.ErrNoProjectIDOrKey
+		return gjson.Result{}, nil, fmt.Errorf("jira: %w", model.ErrNoProjectIDOrKey)
 	}
 
 	if issueTypeID == "" {
-		return gjson.Result{}, nil, model.ErrNoIssueTypeID
+		return gjson.Result{}, nil, fmt.Errorf("jira: %w", model.ErrNoIssueTypeID)
 	}
 
 	params := url.Values{}
@@ -168,7 +168,7 @@ func (i *internalMetadataImpl) FetchFieldMappings(ctx context.Context, projectKe
 func (i *internalMetadataImpl) Get(ctx context.Context, issueKeyOrID string, overrideScreenSecurity, overrideEditableFlag bool) (gjson.Result, *model.ResponseScheme, error) {
 
 	if issueKeyOrID == "" {
-		return gjson.Result{}, nil, model.ErrNoIssueKeyOrID
+		return gjson.Result{}, nil, fmt.Errorf("jira: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	params := url.Values{}

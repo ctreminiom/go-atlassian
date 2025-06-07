@@ -60,7 +60,7 @@ func (l *LinkADFService) Create(ctx context.Context, payload *model.LinkPayloadS
 func (i *internalLinkADFServiceImpl) Get(ctx context.Context, linkID string) (*model.IssueLinkScheme, *model.ResponseScheme, error) {
 
 	if linkID == "" {
-		return nil, nil, model.ErrNoTypeID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoTypeID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issueLink/%v", i.version, linkID)
@@ -82,7 +82,7 @@ func (i *internalLinkADFServiceImpl) Get(ctx context.Context, linkID string) (*m
 func (i *internalLinkADFServiceImpl) Gets(ctx context.Context, issueKeyOrID string) (*model.IssueLinkPageScheme, *model.ResponseScheme, error) {
 
 	if len(issueKeyOrID) == 0 {
-		return nil, nil, model.ErrNoIssueKeyOrID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issue/%v?fields=issuelinks", i.version, issueKeyOrID)
@@ -104,7 +104,7 @@ func (i *internalLinkADFServiceImpl) Gets(ctx context.Context, issueKeyOrID stri
 func (i *internalLinkADFServiceImpl) Delete(ctx context.Context, linkID string) (*model.ResponseScheme, error) {
 
 	if linkID == "" {
-		return nil, model.ErrNoTypeID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoTypeID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issueLink/%v", i.version, linkID)

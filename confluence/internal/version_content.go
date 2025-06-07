@@ -73,7 +73,7 @@ type internalVersionImpl struct {
 func (i *internalVersionImpl) Gets(ctx context.Context, contentID string, expand []string, start, limit int) (*model.ContentVersionPageScheme, *model.ResponseScheme, error) {
 
 	if contentID == "" {
-		return nil, nil, model.ErrNoContentID
+		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
 	}
 
 	query := url.Values{}
@@ -103,7 +103,7 @@ func (i *internalVersionImpl) Gets(ctx context.Context, contentID string, expand
 func (i *internalVersionImpl) Get(ctx context.Context, contentID string, versionNumber int, expand []string) (*model.ContentVersionScheme, *model.ResponseScheme, error) {
 
 	if contentID == "" {
-		return nil, nil, model.ErrNoContentID
+		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
 	}
 
 	var endpoint strings.Builder
@@ -133,7 +133,7 @@ func (i *internalVersionImpl) Get(ctx context.Context, contentID string, version
 func (i *internalVersionImpl) Restore(ctx context.Context, contentID string, payload *model.ContentRestorePayloadScheme, expand []string) (*model.ContentVersionScheme, *model.ResponseScheme, error) {
 
 	if contentID == "" {
-		return nil, nil, model.ErrNoContentID
+		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
 	}
 
 	var endpoint strings.Builder
@@ -163,7 +163,7 @@ func (i *internalVersionImpl) Restore(ctx context.Context, contentID string, pay
 func (i *internalVersionImpl) Delete(ctx context.Context, contentID string, versionNumber int) (*model.ResponseScheme, error) {
 
 	if contentID == "" {
-		return nil, model.ErrNoContentID
+		return nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
 	}
 
 	endpoint := fmt.Sprintf("wiki/rest/api/content/%v/version/%v", contentID, versionNumber)

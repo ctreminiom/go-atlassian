@@ -14,7 +14,7 @@ import (
 func NewProjectComponentService(client service.Connector, version string) (*ProjectComponentService, error) {
 
 	if version == "" {
-		return nil, model.ErrNoVersionProvided
+		return nil, fmt.Errorf("jira: %w", model.ErrNoVersionProvided)
 	}
 
 	return &ProjectComponentService{
@@ -110,7 +110,7 @@ func (i *internalProjectComponentImpl) Create(ctx context.Context, payload *mode
 func (i *internalProjectComponentImpl) Gets(ctx context.Context, projectKeyOrID string) ([]*model.ComponentScheme, *model.ResponseScheme, error) {
 
 	if projectKeyOrID == "" {
-		return nil, nil, model.ErrNoProjectIDOrKey
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoProjectIDOrKey)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/project/%v/components", i.version, projectKeyOrID)
@@ -132,7 +132,7 @@ func (i *internalProjectComponentImpl) Gets(ctx context.Context, projectKeyOrID 
 func (i *internalProjectComponentImpl) Count(ctx context.Context, componentID string) (*model.ComponentCountScheme, *model.ResponseScheme, error) {
 
 	if componentID == "" {
-		return nil, nil, model.ErrNoComponentID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoComponentID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/component/%v/relatedIssueCounts", i.version, componentID)
@@ -154,7 +154,7 @@ func (i *internalProjectComponentImpl) Count(ctx context.Context, componentID st
 func (i *internalProjectComponentImpl) Delete(ctx context.Context, componentID string) (*model.ResponseScheme, error) {
 
 	if componentID == "" {
-		return nil, model.ErrNoComponentID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoComponentID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/component/%v", i.version, componentID)
@@ -170,7 +170,7 @@ func (i *internalProjectComponentImpl) Delete(ctx context.Context, componentID s
 func (i *internalProjectComponentImpl) Update(ctx context.Context, componentID string, payload *model.ComponentPayloadScheme) (*model.ComponentScheme, *model.ResponseScheme, error) {
 
 	if componentID == "" {
-		return nil, nil, model.ErrNoComponentID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoComponentID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/component/%v", i.version, componentID)
@@ -192,7 +192,7 @@ func (i *internalProjectComponentImpl) Update(ctx context.Context, componentID s
 func (i *internalProjectComponentImpl) Get(ctx context.Context, componentID string) (*model.ComponentScheme, *model.ResponseScheme, error) {
 
 	if componentID == "" {
-		return nil, nil, model.ErrNoComponentID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoComponentID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/component/%v", i.version, componentID)

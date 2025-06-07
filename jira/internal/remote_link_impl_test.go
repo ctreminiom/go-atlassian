@@ -2,8 +2,10 @@ package internal
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"net/http"
+	"net/url"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -117,7 +119,7 @@ func Test_internalRemoteLinkImpl_Gets(t *testing.T) {
 					"rest/api/2/issue/KP-23/remotelink?globalId=system%3Dhttp%3A%2F%2Fwww.mycompany.com%2Fsupport%26id%3D1",
 					"",
 					nil).
-					Return(&http.Request{}, errors.New("unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
@@ -127,7 +129,7 @@ func Test_internalRemoteLinkImpl_Gets(t *testing.T) {
 				globalID:     "system=http://www.mycompany.com/support&id=1",
 			},
 			wantErr: true,
-			Err:     errors.New("unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 		},
 
 		{
@@ -148,7 +150,7 @@ func Test_internalRemoteLinkImpl_Gets(t *testing.T) {
 				client.On("Call",
 					&http.Request{},
 					mock.Anything).
-					Return(&model.ResponseScheme{}, errors.New("error, unable to execute the http call"))
+					Return(&model.ResponseScheme{}, model.ErrNoExecHttpCall)
 
 				fields.c = client
 			},
@@ -158,7 +160,7 @@ func Test_internalRemoteLinkImpl_Gets(t *testing.T) {
 				globalID:     "system=http://www.mycompany.com/support&id=1",
 			},
 			wantErr: true,
-			Err:     errors.New("error, unable to execute the http call"),
+			Err:     model.ErrNoExecHttpCall,
 		},
 	}
 
@@ -180,8 +182,14 @@ func Test_internalRemoteLinkImpl_Gets(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -306,7 +314,7 @@ func Test_internalRemoteLinkImpl_Get(t *testing.T) {
 					"rest/api/2/issue/KP-23/remotelink/10001",
 					"",
 					nil).
-					Return(&http.Request{}, errors.New("unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
@@ -316,7 +324,7 @@ func Test_internalRemoteLinkImpl_Get(t *testing.T) {
 				linkID:       "10001",
 			},
 			wantErr: true,
-			Err:     errors.New("unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 		},
 
 		{
@@ -337,7 +345,7 @@ func Test_internalRemoteLinkImpl_Get(t *testing.T) {
 				client.On("Call",
 					&http.Request{},
 					&model.RemoteLinkScheme{}).
-					Return(&model.ResponseScheme{}, errors.New("error, unable to execute the http call"))
+					Return(&model.ResponseScheme{}, model.ErrNoExecHttpCall)
 
 				fields.c = client
 			},
@@ -347,7 +355,7 @@ func Test_internalRemoteLinkImpl_Get(t *testing.T) {
 				linkID:       "10001",
 			},
 			wantErr: true,
-			Err:     errors.New("error, unable to execute the http call"),
+			Err:     model.ErrNoExecHttpCall,
 		},
 	}
 
@@ -369,8 +377,14 @@ func Test_internalRemoteLinkImpl_Get(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -524,7 +538,7 @@ func Test_internalRemoteLinkImpl_Update(t *testing.T) {
 					"rest/api/2/issue/KP-23/remotelink/10001",
 					"",
 					payloadMocked).
-					Return(&http.Request{}, errors.New("unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
@@ -535,7 +549,7 @@ func Test_internalRemoteLinkImpl_Update(t *testing.T) {
 				payload:      payloadMocked,
 			},
 			wantErr: true,
-			Err:     errors.New("unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 		},
 
 		{
@@ -556,7 +570,7 @@ func Test_internalRemoteLinkImpl_Update(t *testing.T) {
 				client.On("Call",
 					&http.Request{},
 					nil).
-					Return(&model.ResponseScheme{}, errors.New("error, unable to execute the http call"))
+					Return(&model.ResponseScheme{}, model.ErrNoExecHttpCall)
 
 				fields.c = client
 			},
@@ -567,7 +581,7 @@ func Test_internalRemoteLinkImpl_Update(t *testing.T) {
 				payload:      payloadMocked,
 			},
 			wantErr: true,
-			Err:     errors.New("error, unable to execute the http call"),
+			Err:     model.ErrNoExecHttpCall,
 		},
 	}
 
@@ -590,8 +604,14 @@ func Test_internalRemoteLinkImpl_Update(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -731,7 +751,7 @@ func Test_internalRemoteLinkImpl_Create(t *testing.T) {
 					"rest/api/2/issue/KP-23/remotelink",
 					"",
 					payloadMocked).
-					Return(&http.Request{}, errors.New("unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
@@ -741,7 +761,7 @@ func Test_internalRemoteLinkImpl_Create(t *testing.T) {
 				payload:      payloadMocked,
 			},
 			wantErr: true,
-			Err:     errors.New("unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 		},
 
 		{
@@ -762,7 +782,7 @@ func Test_internalRemoteLinkImpl_Create(t *testing.T) {
 				client.On("Call",
 					&http.Request{},
 					&model.RemoteLinkIdentify{}).
-					Return(&model.ResponseScheme{}, errors.New("error, unable to execute the http call"))
+					Return(&model.ResponseScheme{}, model.ErrNoExecHttpCall)
 
 				fields.c = client
 			},
@@ -772,7 +792,7 @@ func Test_internalRemoteLinkImpl_Create(t *testing.T) {
 				payload:      payloadMocked,
 			},
 			wantErr: true,
-			Err:     errors.New("error, unable to execute the http call"),
+			Err:     model.ErrNoExecHttpCall,
 		},
 	}
 
@@ -795,8 +815,14 @@ func Test_internalRemoteLinkImpl_Create(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -921,7 +947,7 @@ func Test_internalRemoteLinkImpl_DeleteByID(t *testing.T) {
 					"rest/api/2/issue/KP-23/remotelink/10001",
 					"",
 					nil).
-					Return(&http.Request{}, errors.New("unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
@@ -931,7 +957,7 @@ func Test_internalRemoteLinkImpl_DeleteByID(t *testing.T) {
 				linkID:       "10001",
 			},
 			wantErr: true,
-			Err:     errors.New("unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 		},
 
 		{
@@ -952,7 +978,7 @@ func Test_internalRemoteLinkImpl_DeleteByID(t *testing.T) {
 				client.On("Call",
 					&http.Request{},
 					nil).
-					Return(&model.ResponseScheme{}, errors.New("error, unable to execute the http call"))
+					Return(&model.ResponseScheme{}, model.ErrNoExecHttpCall)
 
 				fields.c = client
 			},
@@ -962,7 +988,7 @@ func Test_internalRemoteLinkImpl_DeleteByID(t *testing.T) {
 				linkID:       "10001",
 			},
 			wantErr: true,
-			Err:     errors.New("error, unable to execute the http call"),
+			Err:     model.ErrNoExecHttpCall,
 		},
 	}
 
@@ -984,8 +1010,14 @@ func Test_internalRemoteLinkImpl_DeleteByID(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -1109,7 +1141,7 @@ func Test_internalRemoteLinkImpl_DeleteByGlobalID(t *testing.T) {
 					"rest/api/2/issue/KP-23/remotelink?globalId=system%3Dhttp%3A%2F%2Fwww.mycompany.com%2Fsupport%26id%3D1",
 					"",
 					nil).
-					Return(&http.Request{}, errors.New("unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
@@ -1119,7 +1151,7 @@ func Test_internalRemoteLinkImpl_DeleteByGlobalID(t *testing.T) {
 				globalID:     "system=http://www.mycompany.com/support&id=1",
 			},
 			wantErr: true,
-			Err:     errors.New("unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 		},
 
 		{
@@ -1140,7 +1172,7 @@ func Test_internalRemoteLinkImpl_DeleteByGlobalID(t *testing.T) {
 				client.On("Call",
 					&http.Request{},
 					nil).
-					Return(&model.ResponseScheme{}, errors.New("error, unable to execute the http call"))
+					Return(&model.ResponseScheme{}, model.ErrNoExecHttpCall)
 
 				fields.c = client
 			},
@@ -1150,7 +1182,7 @@ func Test_internalRemoteLinkImpl_DeleteByGlobalID(t *testing.T) {
 				globalID:     "system=http://www.mycompany.com/support&id=1",
 			},
 			wantErr: true,
-			Err:     errors.New("error, unable to execute the http call"),
+			Err:     model.ErrNoExecHttpCall,
 		},
 	}
 
@@ -1172,8 +1204,14 @@ func Test_internalRemoteLinkImpl_DeleteByGlobalID(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)

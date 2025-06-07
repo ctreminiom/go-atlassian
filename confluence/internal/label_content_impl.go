@@ -60,7 +60,7 @@ type internalContentLabelImpl struct {
 func (i *internalContentLabelImpl) Gets(ctx context.Context, contentID, prefix string, startAt, maxResults int) (*model.ContentLabelPageScheme, *model.ResponseScheme, error) {
 
 	if contentID == "" {
-		return nil, nil, model.ErrNoContentID
+		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
 	}
 
 	query := url.Values{}
@@ -90,7 +90,7 @@ func (i *internalContentLabelImpl) Gets(ctx context.Context, contentID, prefix s
 func (i *internalContentLabelImpl) Add(ctx context.Context, contentID string, payload []*model.ContentLabelPayloadScheme, want400Response bool) (*model.ContentLabelPageScheme, *model.ResponseScheme, error) {
 
 	if contentID == "" {
-		return nil, nil, model.ErrNoContentID
+		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
 	}
 
 	var endpoint strings.Builder
@@ -120,11 +120,11 @@ func (i *internalContentLabelImpl) Add(ctx context.Context, contentID string, pa
 func (i *internalContentLabelImpl) Remove(ctx context.Context, contentID, labelName string) (*model.ResponseScheme, error) {
 
 	if contentID == "" {
-		return nil, model.ErrNoContentID
+		return nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
 	}
 
 	if labelName == "" {
-		return nil, model.ErrNoContentLabel
+		return nil, fmt.Errorf("confluence: %w", model.ErrNoContentLabel)
 	}
 
 	endpoint := fmt.Sprintf("wiki/rest/api/content/%v/label/%v", contentID, labelName)

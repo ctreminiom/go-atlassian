@@ -14,7 +14,7 @@ import (
 func NewResolutionService(client service.Connector, version string) (*ResolutionService, error) {
 
 	if version == "" {
-		return nil, model.ErrNoVersionProvided
+		return nil, fmt.Errorf("jira: %w", model.ErrNoVersionProvided)
 	}
 
 	return &ResolutionService{
@@ -72,7 +72,7 @@ func (i *internalResolutionImpl) Gets(ctx context.Context) ([]*model.ResolutionS
 func (i *internalResolutionImpl) Get(ctx context.Context, resolutionID string) (*model.ResolutionScheme, *model.ResponseScheme, error) {
 
 	if resolutionID == "" {
-		return nil, nil, model.ErrNoResolutionID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoResolutionID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/resolution/%v", i.version, resolutionID)

@@ -97,7 +97,7 @@ func (i *internalSearchADFImpl) Checks(ctx context.Context, payload *model.Issue
 func (i *internalSearchADFImpl) Get(ctx context.Context, jql string, fields, expands []string, startAt, maxResults int, validate string) (*model.IssueSearchScheme, *model.ResponseScheme, error) {
 
 	if jql == "" {
-		return nil, nil, model.ErrNoJQL
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoJQL)
 	}
 
 	params := url.Values{}

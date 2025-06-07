@@ -18,7 +18,7 @@ import (
 func NewAuditRecordService(client service.Connector, version string) (*AuditRecordService, error) {
 
 	if version == "" {
-		return nil, model.ErrNoVersionProvided
+		return nil, fmt.Errorf("jira: %w", model.ErrNoVersionProvided)
 	}
 
 	return &AuditRecordService{

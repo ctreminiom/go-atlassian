@@ -55,7 +55,7 @@ type internalSearchImpl struct {
 func (i *internalSearchImpl) Content(ctx context.Context, cql string, options *model.SearchContentOptions) (*model.SearchPageScheme, *model.ResponseScheme, error) {
 
 	if cql == "" {
-		return nil, nil, model.ErrNoCQL
+		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoCQL)
 	}
 
 	query := url.Values{}
@@ -129,7 +129,7 @@ func (i *internalSearchImpl) Content(ctx context.Context, cql string, options *m
 func (i *internalSearchImpl) Users(ctx context.Context, cql string, start, limit int, expand []string) (*model.SearchPageScheme, *model.ResponseScheme, error) {
 
 	if cql == "" {
-		return nil, nil, model.ErrNoCQL
+		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoCQL)
 	}
 
 	query := url.Values{}

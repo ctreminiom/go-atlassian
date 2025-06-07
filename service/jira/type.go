@@ -135,6 +135,19 @@ type TypeSchemeConnector interface {
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/types/scheme#remove-issue-type-from-issue-type-scheme
 	Remove(ctx context.Context, issueTypeSchemeID, issueTypeID int) (*model.ResponseScheme, error)
+
+	// Reorder reorders the issue types in the specified scheme by IDs after a reference ID at a given position.
+	// The following requirements must be met:
+	//
+	// 1.all the issue types must belong to the issue type scheme.
+	//
+	// 2.either after or position must be provided.
+	//
+	// 3.the issue type in after must not be in the issue type list.
+	//
+	// PUT /rest/api/{2-3}/issuetypescheme/{issueTypeSchemeId}/issuetype/move
+	//
+	Reorder(ctx context.Context, issueTypeSchemeId string, payload *model.IssueTypeSchemeOrderPayloadScheme) (*model.ResponseScheme, error)
 }
 
 type TypeScreenSchemeConnector interface {

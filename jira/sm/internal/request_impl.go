@@ -85,6 +85,9 @@ type RequestService struct {
 //
 // https://docs.go-atlassian.io/jira-service-management/request#create-customer-request
 func (s *RequestService) Create(ctx context.Context, payload *model.CreateCustomerRequestPayloadScheme) (*model.CustomerRequestScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*RequestService).Create")
+	defer span.End()
+
 	return s.internalClient.Create(ctx, payload)
 }
 
@@ -96,6 +99,9 @@ func (s *RequestService) Create(ctx context.Context, payload *model.CreateCustom
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request#get-customer-requests
 func (s *RequestService) Gets(ctx context.Context, options *model.ServiceRequestOptionScheme, start, limit int) (*model.CustomerRequestPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*RequestService).Gets")
+	defer span.End()
+
 	return s.internalClient.Gets(ctx, options, start, limit)
 }
 
@@ -105,6 +111,9 @@ func (s *RequestService) Gets(ctx context.Context, options *model.ServiceRequest
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request#get-customer-request-by-id-or-key
 func (s *RequestService) Get(ctx context.Context, issueKeyOrID string, expand []string) (*model.CustomerRequestScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*RequestService).Get")
+	defer span.End()
+
 	return s.internalClient.Get(ctx, issueKeyOrID, expand)
 }
 
@@ -114,6 +123,9 @@ func (s *RequestService) Get(ctx context.Context, issueKeyOrID string, expand []
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request#subscribe
 func (s *RequestService) Subscribe(ctx context.Context, issueKeyOrID string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*RequestService).Subscribe")
+	defer span.End()
+
 	return s.internalClient.Subscribe(ctx, issueKeyOrID)
 }
 
@@ -123,6 +135,9 @@ func (s *RequestService) Subscribe(ctx context.Context, issueKeyOrID string) (*m
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request#unsubscribe
 func (s *RequestService) Unsubscribe(ctx context.Context, issueKeyOrID string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*RequestService).Unsubscribe")
+	defer span.End()
+
 	return s.internalClient.Unsubscribe(ctx, issueKeyOrID)
 }
 
@@ -132,6 +147,9 @@ func (s *RequestService) Unsubscribe(ctx context.Context, issueKeyOrID string) (
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request#get-customer-transitions
 func (s *RequestService) Transitions(ctx context.Context, issueKeyOrID string, start, limit int) (*model.CustomerRequestTransitionPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*RequestService).Transitions")
+	defer span.End()
+
 	return s.internalClient.Transitions(ctx, issueKeyOrID, start, limit)
 }
 
@@ -143,6 +161,9 @@ func (s *RequestService) Transitions(ctx context.Context, issueKeyOrID string, s
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request#perform-customer-transition
 func (s *RequestService) Transition(ctx context.Context, issueKeyOrID, transitionID, comment string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*RequestService).Transition")
+	defer span.End()
+
 	return s.internalClient.Transition(ctx, issueKeyOrID, transitionID, comment)
 }
 
@@ -152,6 +173,8 @@ type internalServiceRequestImpl struct {
 }
 
 func (i *internalServiceRequestImpl) Create(ctx context.Context, payload *model.CreateCustomerRequestPayloadScheme) (*model.CustomerRequestScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalServiceRequestImpl).Create")
+	defer span.End()
 
 	endpoint := "rest/servicedeskapi/request"
 
@@ -170,6 +193,8 @@ func (i *internalServiceRequestImpl) Create(ctx context.Context, payload *model.
 }
 
 func (i *internalServiceRequestImpl) Gets(ctx context.Context, options *model.ServiceRequestOptionScheme, start, limit int) (*model.CustomerRequestPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalServiceRequestImpl).Gets")
+	defer span.End()
 
 	params := url.Values{}
 	params.Add("start", strconv.Itoa(start))
@@ -227,6 +252,8 @@ func (i *internalServiceRequestImpl) Gets(ctx context.Context, options *model.Se
 }
 
 func (i *internalServiceRequestImpl) Get(ctx context.Context, issueKeyOrID string, expand []string) (*model.CustomerRequestScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalServiceRequestImpl).Get")
+	defer span.End()
 
 	if issueKeyOrID == "" {
 		return nil, nil, model.ErrNoIssueKeyOrID
@@ -257,6 +284,8 @@ func (i *internalServiceRequestImpl) Get(ctx context.Context, issueKeyOrID strin
 }
 
 func (i *internalServiceRequestImpl) Subscribe(ctx context.Context, issueKeyOrID string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalServiceRequestImpl).Subscribe")
+	defer span.End()
 
 	if issueKeyOrID == "" {
 		return nil, model.ErrNoIssueKeyOrID
@@ -273,6 +302,8 @@ func (i *internalServiceRequestImpl) Subscribe(ctx context.Context, issueKeyOrID
 }
 
 func (i *internalServiceRequestImpl) Unsubscribe(ctx context.Context, issueKeyOrID string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalServiceRequestImpl).Unsubscribe")
+	defer span.End()
 
 	if issueKeyOrID == "" {
 		return nil, model.ErrNoIssueKeyOrID
@@ -289,6 +320,8 @@ func (i *internalServiceRequestImpl) Unsubscribe(ctx context.Context, issueKeyOr
 }
 
 func (i *internalServiceRequestImpl) Transitions(ctx context.Context, issueKeyOrID string, start, limit int) (*model.CustomerRequestTransitionPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalServiceRequestImpl).Transitions")
+	defer span.End()
 
 	if issueKeyOrID == "" {
 		return nil, nil, model.ErrNoIssueKeyOrID
@@ -315,6 +348,8 @@ func (i *internalServiceRequestImpl) Transitions(ctx context.Context, issueKeyOr
 }
 
 func (i internalServiceRequestImpl) Transition(ctx context.Context, issueKeyOrID, transitionID, comment string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(internalServiceRequestImpl).Transition")
+	defer span.End()
 
 	if issueKeyOrID == "" {
 		return nil, model.ErrNoIssueKeyOrID

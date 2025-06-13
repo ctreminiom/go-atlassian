@@ -8,6 +8,21 @@ type IssueTypeSchemePayloadScheme struct {
 	Description        string   `json:"description,omitempty"`        // The description of the issue type scheme.
 }
 
+type IssueTypeSchemePosition string
+
+const (
+	SchemePositionFirst IssueTypeSchemePosition = "First"
+	SchemePositionLast  IssueTypeSchemePosition = "Last"
+)
+
+// IssueTypeSchemeOrderPayloadScheme represents the payload for updating the order of issue types in a scheme.
+type IssueTypeSchemeOrderPayloadScheme struct {
+	After        string                  `json:"after,omitempty"`
+	Position     IssueTypeSchemePosition `json:"position,omitempty"`
+	IssueTypeIDs []string                `json:"issueTypeIds"` // The issue type IDs.
+
+}
+
 // NewIssueTypeSchemeScheme represents a new issue type scheme in Jira.
 type NewIssueTypeSchemeScheme struct {
 	IssueTypeSchemeID string `json:"issueTypeSchemeId"` // The ID of the issue type scheme.

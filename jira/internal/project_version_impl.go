@@ -17,7 +17,7 @@ import (
 func NewProjectVersionService(client service.Connector, version string) (*ProjectVersionService, error) {
 
 	if version == "" {
-		return nil, model.ErrNoVersionProvided
+		return nil, fmt.Errorf("jira: %w", model.ErrNoVersionProvided)
 	}
 
 	return &ProjectVersionService{
@@ -123,7 +123,7 @@ type internalProjectVersionImpl struct {
 func (i *internalProjectVersionImpl) Gets(ctx context.Context, projectKeyOrID string) ([]*model.VersionScheme, *model.ResponseScheme, error) {
 
 	if projectKeyOrID == "" {
-		return nil, nil, model.ErrNoProjectIDOrKey
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoProjectIDOrKey)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/project/%v/versions", i.version, projectKeyOrID)
@@ -145,7 +145,7 @@ func (i *internalProjectVersionImpl) Gets(ctx context.Context, projectKeyOrID st
 func (i *internalProjectVersionImpl) Search(ctx context.Context, projectKeyOrID string, options *model.VersionGetsOptions, startAt, maxResults int) (*model.VersionPageScheme, *model.ResponseScheme, error) {
 
 	if projectKeyOrID == "" {
-		return nil, nil, model.ErrNoProjectIDOrKey
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoProjectIDOrKey)
 	}
 
 	params := url.Values{}
@@ -208,7 +208,7 @@ func (i *internalProjectVersionImpl) Create(ctx context.Context, payload *model.
 func (i *internalProjectVersionImpl) Get(ctx context.Context, versionID string, expand []string) (*model.VersionScheme, *model.ResponseScheme, error) {
 
 	if versionID == "" {
-		return nil, nil, model.ErrNoVersionID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoVersionID)
 	}
 
 	var endpoint strings.Builder
@@ -239,7 +239,7 @@ func (i *internalProjectVersionImpl) Get(ctx context.Context, versionID string, 
 func (i *internalProjectVersionImpl) Update(ctx context.Context, versionID string, payload *model.VersionPayloadScheme) (*model.VersionScheme, *model.ResponseScheme, error) {
 
 	if versionID == "" {
-		return nil, nil, model.ErrNoVersionID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoVersionID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/version/%v", i.version, versionID)
@@ -261,11 +261,11 @@ func (i *internalProjectVersionImpl) Update(ctx context.Context, versionID strin
 func (i *internalProjectVersionImpl) Merge(ctx context.Context, versionID, versionMoveIssuesTo string) (*model.ResponseScheme, error) {
 
 	if versionID == "" {
-		return nil, model.ErrNoVersionID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoVersionID)
 	}
 
 	if versionMoveIssuesTo == "" {
-		return nil, model.ErrNoVersionID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoVersionID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/version/%v/mergeto/%v", i.version, versionID, versionMoveIssuesTo)
@@ -281,7 +281,7 @@ func (i *internalProjectVersionImpl) Merge(ctx context.Context, versionID, versi
 func (i *internalProjectVersionImpl) RelatedIssueCounts(ctx context.Context, versionID string) (*model.VersionIssueCountsScheme, *model.ResponseScheme, error) {
 
 	if versionID == "" {
-		return nil, nil, model.ErrNoVersionID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoVersionID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/version/%v/relatedIssueCounts", i.version, versionID)
@@ -303,7 +303,7 @@ func (i *internalProjectVersionImpl) RelatedIssueCounts(ctx context.Context, ver
 func (i *internalProjectVersionImpl) UnresolvedIssueCount(ctx context.Context, versionID string) (*model.VersionUnresolvedIssuesCountScheme, *model.ResponseScheme, error) {
 
 	if versionID == "" {
-		return nil, nil, model.ErrNoVersionID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoVersionID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/version/%v/unresolvedIssueCount", i.version, versionID)

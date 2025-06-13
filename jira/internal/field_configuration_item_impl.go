@@ -17,7 +17,7 @@ import (
 func NewIssueFieldConfigurationItemService(client service.Connector, version string) (*IssueFieldConfigItemService, error) {
 
 	if version == "" {
-		return nil, model.ErrNoVersionProvided
+		return nil, fmt.Errorf("jira: %w", model.ErrNoVersionProvided)
 	}
 
 	return &IssueFieldConfigItemService{
@@ -60,7 +60,7 @@ type internalIssueFieldConfigItemServiceImpl struct {
 func (i *internalIssueFieldConfigItemServiceImpl) Gets(ctx context.Context, id, startAt, maxResults int) (*model.FieldConfigurationItemPageScheme, *model.ResponseScheme, error) {
 
 	if id == 0 {
-		return nil, nil, model.ErrNoFieldConfigurationID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoFieldConfigurationID)
 	}
 
 	params := url.Values{}
@@ -86,7 +86,7 @@ func (i *internalIssueFieldConfigItemServiceImpl) Gets(ctx context.Context, id, 
 func (i *internalIssueFieldConfigItemServiceImpl) Update(ctx context.Context, id int, payload *model.UpdateFieldConfigurationItemPayloadScheme) (*model.ResponseScheme, error) {
 
 	if id == 0 {
-		return nil, model.ErrNoFieldConfigurationID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoFieldConfigurationID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/fieldconfiguration/%v/fields", i.version, id)

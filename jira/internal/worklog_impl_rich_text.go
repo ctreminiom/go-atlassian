@@ -17,7 +17,7 @@ import (
 func NewWorklogRichTextService(client service.Connector, version string) (*WorklogRichTextService, error) {
 
 	if version == "" {
-		return nil, model.ErrNoVersionProvided
+		return nil, fmt.Errorf("jira: %w", model.ErrNoVersionProvided)
 	}
 
 	return &WorklogRichTextService{
@@ -137,7 +137,7 @@ type internalWorklogRichTextImpl struct {
 func (i *internalWorklogRichTextImpl) Gets(ctx context.Context, worklogIDs []int, expand []string) ([]*model.IssueWorklogRichTextScheme, *model.ResponseScheme, error) {
 
 	if len(worklogIDs) == 0 {
-		return nil, nil, model.ErrNpWorklogs
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNpWorklogs)
 	}
 
 	params := url.Values{}
@@ -169,11 +169,11 @@ func (i *internalWorklogRichTextImpl) Gets(ctx context.Context, worklogIDs []int
 func (i *internalWorklogRichTextImpl) Get(ctx context.Context, issueKeyOrID, worklogID string, expand []string) (*model.IssueWorklogRichTextScheme, *model.ResponseScheme, error) {
 
 	if issueKeyOrID == "" {
-		return nil, nil, model.ErrNoIssueKeyOrID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	if worklogID == "" {
-		return nil, nil, model.ErrNoWorklogID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoWorklogID)
 	}
 
 	params := url.Values{}
@@ -205,7 +205,7 @@ func (i *internalWorklogRichTextImpl) Get(ctx context.Context, issueKeyOrID, wor
 func (i *internalWorklogRichTextImpl) Issue(ctx context.Context, issueKeyOrID string, startAt, maxResults, after int, expand []string) (*model.IssueWorklogRichTextPageScheme, *model.ResponseScheme, error) {
 
 	if issueKeyOrID == "" {
-		return nil, nil, model.ErrNoIssueKeyOrID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	params := url.Values{}
@@ -239,11 +239,11 @@ func (i *internalWorklogRichTextImpl) Issue(ctx context.Context, issueKeyOrID st
 func (i *internalWorklogRichTextImpl) Delete(ctx context.Context, issueKeyOrID, worklogID string, options *model.WorklogOptionsScheme) (*model.ResponseScheme, error) {
 
 	if issueKeyOrID == "" {
-		return nil, model.ErrNoIssueKeyOrID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	if worklogID == "" {
-		return nil, model.ErrNoWorklogID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoWorklogID)
 	}
 
 	var endpoint strings.Builder
@@ -345,7 +345,7 @@ func (i *internalWorklogRichTextImpl) Updated(ctx context.Context, since int, ex
 func (i *internalWorklogRichTextImpl) Add(ctx context.Context, issueKeyOrID string, payload *model.WorklogRichTextPayloadScheme, options *model.WorklogOptionsScheme) (*model.IssueWorklogRichTextScheme, *model.ResponseScheme, error) {
 
 	if issueKeyOrID == "" {
-		return nil, nil, model.ErrNoIssueKeyOrID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	var endpoint strings.Builder
@@ -394,11 +394,11 @@ func (i *internalWorklogRichTextImpl) Add(ctx context.Context, issueKeyOrID stri
 func (i *internalWorklogRichTextImpl) Update(ctx context.Context, issueKeyOrID, worklogID string, payload *model.WorklogRichTextPayloadScheme, options *model.WorklogOptionsScheme) (*model.IssueWorklogRichTextScheme, *model.ResponseScheme, error) {
 
 	if issueKeyOrID == "" {
-		return nil, nil, model.ErrNoIssueKeyOrID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	if worklogID == "" {
-		return nil, nil, model.ErrNoWorklogID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoWorklogID)
 	}
 
 	var endpoint strings.Builder

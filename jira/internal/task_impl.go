@@ -14,7 +14,7 @@ import (
 func NewTaskService(client service.Connector, version string) (*TaskService, error) {
 
 	if version == "" {
-		return nil, model.ErrNoVersionProvided
+		return nil, fmt.Errorf("jira: %w", model.ErrNoVersionProvided)
 	}
 
 	return &TaskService{
@@ -60,7 +60,7 @@ type internalTaskServiceImpl struct {
 func (i *internalTaskServiceImpl) Get(ctx context.Context, taskID string) (*model.TaskScheme, *model.ResponseScheme, error) {
 
 	if taskID == "" {
-		return nil, nil, model.ErrNoTaskID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoTaskID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/task/%v", i.version, taskID)
@@ -82,7 +82,7 @@ func (i *internalTaskServiceImpl) Get(ctx context.Context, taskID string) (*mode
 func (i *internalTaskServiceImpl) Cancel(ctx context.Context, taskID string) (*model.ResponseScheme, error) {
 
 	if taskID == "" {
-		return nil, model.ErrNoTaskID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoTaskID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/task/%v/cancel", i.version, taskID)

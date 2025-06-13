@@ -14,7 +14,7 @@ import (
 func NewPriorityService(client service.Connector, version string) (*PriorityService, error) {
 
 	if version == "" {
-		return nil, model.ErrNoVersionProvided
+		return nil, fmt.Errorf("jira: %w", model.ErrNoVersionProvided)
 	}
 
 	return &PriorityService{
@@ -72,7 +72,7 @@ func (i *internalPriorityImpl) Gets(ctx context.Context) ([]*model.PrioritySchem
 func (i *internalPriorityImpl) Get(ctx context.Context, priorityID string) (*model.PriorityScheme, *model.ResponseScheme, error) {
 
 	if priorityID == "" {
-		return nil, nil, model.ErrNoPriorityID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoPriorityID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/priority/%v", i.version, priorityID)

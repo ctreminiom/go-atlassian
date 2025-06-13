@@ -17,7 +17,7 @@ import (
 func NewUserSearchService(client service.Connector, version string) (*UserSearchService, error) {
 
 	if version == "" {
-		return nil, model.ErrNoVersionProvided
+		return nil, fmt.Errorf("jira: %w", model.ErrNoVersionProvided)
 	}
 
 	return &UserSearchService{
@@ -79,7 +79,7 @@ type internalUserSearchImpl struct {
 func (i *internalUserSearchImpl) Check(ctx context.Context, permission string, options *model.UserPermissionCheckParamsScheme, startAt, maxResults int) ([]*model.UserScheme, *model.ResponseScheme, error) {
 
 	if permission == "" {
-		return nil, nil, model.ErrNoPermissionGrantID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoPermissionGrantID)
 	}
 
 	params := url.Values{}
@@ -125,7 +125,7 @@ func (i *internalUserSearchImpl) Check(ctx context.Context, permission string, o
 func (i *internalUserSearchImpl) Projects(ctx context.Context, accountID string, projectKeys []string, startAt, maxResults int) ([]*model.UserScheme, *model.ResponseScheme, error) {
 
 	if len(projectKeys) == 0 {
-		return nil, nil, model.ErrNoProjectKeySlice
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoProjectKeySlice)
 	}
 
 	params := url.Values{}

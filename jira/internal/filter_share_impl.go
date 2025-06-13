@@ -16,7 +16,7 @@ import (
 func NewFilterShareService(client service.Connector, version string) (*FilterShareService, error) {
 
 	if version == "" {
-		return nil, model.ErrNoVersionProvided
+		return nil, fmt.Errorf("jira: %w", model.ErrNoVersionProvided)
 	}
 
 	return &FilterShareService{
@@ -134,7 +134,7 @@ func (i *internalFilterShareImpl) SetScope(ctx context.Context, scope string) (*
 func (i *internalFilterShareImpl) Gets(ctx context.Context, filterID int) ([]*model.SharePermissionScheme, *model.ResponseScheme, error) {
 
 	if filterID == 0 {
-		return nil, nil, model.ErrNoFilterID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoFilterID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/filter/%v/permission", i.version, filterID)
@@ -156,7 +156,7 @@ func (i *internalFilterShareImpl) Gets(ctx context.Context, filterID int) ([]*mo
 func (i *internalFilterShareImpl) Add(ctx context.Context, filterID int, payload *model.PermissionFilterPayloadScheme) ([]*model.SharePermissionScheme, *model.ResponseScheme, error) {
 
 	if filterID == 0 {
-		return nil, nil, model.ErrNoFilterID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoFilterID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/filter/%v/permission", i.version, filterID)
@@ -178,11 +178,11 @@ func (i *internalFilterShareImpl) Add(ctx context.Context, filterID int, payload
 func (i *internalFilterShareImpl) Get(ctx context.Context, filterID, permissionID int) (*model.SharePermissionScheme, *model.ResponseScheme, error) {
 
 	if filterID == 0 {
-		return nil, nil, model.ErrNoFilterID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoFilterID)
 	}
 
 	if permissionID == 0 {
-		return nil, nil, model.ErrNoPermissionGrantID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoPermissionGrantID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/filter/%v/permission/%v", i.version, filterID, permissionID)
@@ -204,11 +204,11 @@ func (i *internalFilterShareImpl) Get(ctx context.Context, filterID, permissionI
 func (i *internalFilterShareImpl) Delete(ctx context.Context, filterID, permissionID int) (*model.ResponseScheme, error) {
 
 	if filterID == 0 {
-		return nil, model.ErrNoFilterID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoFilterID)
 	}
 
 	if permissionID == 0 {
-		return nil, model.ErrNoPermissionGrantID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoPermissionGrantID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/filter/%v/permission/%v", i.version, filterID, permissionID)

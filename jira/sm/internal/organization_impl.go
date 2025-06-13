@@ -171,7 +171,7 @@ func (i *internalOrganizationImpl) Gets(ctx context.Context, accountID string, s
 func (i *internalOrganizationImpl) Get(ctx context.Context, organizationID int) (*model.OrganizationScheme, *model.ResponseScheme, error) {
 
 	if organizationID == 0 {
-		return nil, nil, model.ErrNoOrganizationID
+		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoOrganizationID)
 	}
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/organization/%v", organizationID)
@@ -193,7 +193,7 @@ func (i *internalOrganizationImpl) Get(ctx context.Context, organizationID int) 
 func (i *internalOrganizationImpl) Delete(ctx context.Context, organizationID int) (*model.ResponseScheme, error) {
 
 	if organizationID == 0 {
-		return nil, model.ErrNoOrganizationID
+		return nil, fmt.Errorf("sm: %w", model.ErrNoOrganizationID)
 	}
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/organization/%v", organizationID)
@@ -209,7 +209,7 @@ func (i *internalOrganizationImpl) Delete(ctx context.Context, organizationID in
 func (i *internalOrganizationImpl) Create(ctx context.Context, name string) (*model.OrganizationScheme, *model.ResponseScheme, error) {
 
 	if name == "" {
-		return nil, nil, model.ErrNoOrganizationName
+		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoOrganizationName)
 	}
 
 	endpoint := "rest/servicedeskapi/organization"
@@ -231,7 +231,7 @@ func (i *internalOrganizationImpl) Create(ctx context.Context, name string) (*mo
 func (i *internalOrganizationImpl) Users(ctx context.Context, organizationID, start, limit int) (*model.OrganizationUsersPageScheme, *model.ResponseScheme, error) {
 
 	if organizationID == 0 {
-		return nil, nil, model.ErrNoOrganizationID
+		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoOrganizationID)
 	}
 
 	params := url.Values{}
@@ -257,11 +257,11 @@ func (i *internalOrganizationImpl) Users(ctx context.Context, organizationID, st
 func (i *internalOrganizationImpl) Add(ctx context.Context, organizationID int, accountIDs []string) (*model.ResponseScheme, error) {
 
 	if organizationID == 0 {
-		return nil, model.ErrNoOrganizationID
+		return nil, fmt.Errorf("sm: %w", model.ErrNoOrganizationID)
 	}
 
 	if len(accountIDs) == 0 {
-		return nil, model.ErrNoAccountSlice
+		return nil, fmt.Errorf("sm: %w", model.ErrNoAccountSlice)
 	}
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/organization/%v/user", organizationID)
@@ -277,11 +277,11 @@ func (i *internalOrganizationImpl) Add(ctx context.Context, organizationID int, 
 func (i *internalOrganizationImpl) Remove(ctx context.Context, organizationID int, accountIDs []string) (*model.ResponseScheme, error) {
 
 	if organizationID == 0 {
-		return nil, model.ErrNoOrganizationID
+		return nil, fmt.Errorf("sm: %w", model.ErrNoOrganizationID)
 	}
 
 	if len(accountIDs) == 0 {
-		return nil, model.ErrNoAccountSlice
+		return nil, fmt.Errorf("sm: %w", model.ErrNoAccountSlice)
 	}
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/organization/%v/user", organizationID)
@@ -297,7 +297,7 @@ func (i *internalOrganizationImpl) Remove(ctx context.Context, organizationID in
 func (i *internalOrganizationImpl) Project(ctx context.Context, accountID string, serviceDeskID, start, limit int) (*model.OrganizationPageScheme, *model.ResponseScheme, error) {
 
 	if serviceDeskID == 0 {
-		return nil, nil, model.ErrNoServiceDeskID
+		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoServiceDeskID)
 	}
 
 	params := url.Values{}
@@ -327,11 +327,11 @@ func (i *internalOrganizationImpl) Project(ctx context.Context, accountID string
 func (i *internalOrganizationImpl) Associate(ctx context.Context, serviceDeskID, organizationID int) (*model.ResponseScheme, error) {
 
 	if serviceDeskID == 0 {
-		return nil, model.ErrNoServiceDeskID
+		return nil, fmt.Errorf("sm: %w", model.ErrNoServiceDeskID)
 	}
 
 	if organizationID == 0 {
-		return nil, model.ErrNoOrganizationID
+		return nil, fmt.Errorf("sm: %w", model.ErrNoOrganizationID)
 	}
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/servicedesk/%v/organization", serviceDeskID)
@@ -347,11 +347,11 @@ func (i *internalOrganizationImpl) Associate(ctx context.Context, serviceDeskID,
 func (i *internalOrganizationImpl) Detach(ctx context.Context, serviceDeskID, organizationID int) (*model.ResponseScheme, error) {
 
 	if serviceDeskID == 0 {
-		return nil, model.ErrNoServiceDeskID
+		return nil, fmt.Errorf("sm: %w", model.ErrNoServiceDeskID)
 	}
 
 	if organizationID == 0 {
-		return nil, model.ErrNoOrganizationID
+		return nil, fmt.Errorf("sm: %w", model.ErrNoOrganizationID)
 	}
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/servicedesk/%v/organization", serviceDeskID)

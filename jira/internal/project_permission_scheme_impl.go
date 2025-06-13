@@ -16,7 +16,7 @@ import (
 func NewProjectPermissionSchemeService(client service.Connector, version string) (*ProjectPermissionSchemeService, error) {
 
 	if version == "" {
-		return nil, model.ErrNoVersionProvided
+		return nil, fmt.Errorf("jira: %w", model.ErrNoVersionProvided)
 	}
 
 	return &ProjectPermissionSchemeService{
@@ -65,7 +65,7 @@ type internalProjectPermissionSchemeImpl struct {
 func (i *internalProjectPermissionSchemeImpl) Get(ctx context.Context, projectKeyOrID string, expand []string) (*model.PermissionSchemeScheme, *model.ResponseScheme, error) {
 
 	if projectKeyOrID == "" {
-		return nil, nil, model.ErrNoProjectIDOrKey
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoProjectIDOrKey)
 	}
 
 	var endpoint strings.Builder
@@ -95,7 +95,7 @@ func (i *internalProjectPermissionSchemeImpl) Get(ctx context.Context, projectKe
 func (i *internalProjectPermissionSchemeImpl) Assign(ctx context.Context, projectKeyOrID string, permissionSchemeID int) (*model.PermissionSchemeScheme, *model.ResponseScheme, error) {
 
 	if projectKeyOrID == "" {
-		return nil, nil, model.ErrNoProjectIDOrKey
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoProjectIDOrKey)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/project/%v/permissionscheme", i.version, projectKeyOrID)
@@ -117,7 +117,7 @@ func (i *internalProjectPermissionSchemeImpl) Assign(ctx context.Context, projec
 func (i *internalProjectPermissionSchemeImpl) SecurityLevels(ctx context.Context, projectKeyOrID string) (*model.IssueSecurityLevelsScheme, *model.ResponseScheme, error) {
 
 	if projectKeyOrID == "" {
-		return nil, nil, model.ErrNoProjectIDOrKey
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoProjectIDOrKey)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/project/%v/securitylevel", i.version, projectKeyOrID)

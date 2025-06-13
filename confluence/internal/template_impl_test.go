@@ -2,13 +2,15 @@ package internal
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"net/http"
+	"net/url"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
+	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/v2/service"
 	"github.com/ctreminiom/go-atlassian/v2/service/mocks"
 )
@@ -19,7 +21,7 @@ func Test_internalTemplateImpl_Create(t *testing.T) {
 	}
 	type args struct {
 		ctx     context.Context
-		payload *models.CreateTemplateScheme
+		payload *model.CreateTemplateScheme
 	}
 	tests := []struct {
 		name    string
@@ -33,17 +35,17 @@ func Test_internalTemplateImpl_Create(t *testing.T) {
 			name: "CreateTemplateScheme.Create returned error",
 			args: args{
 				ctx: context.Background(),
-				payload: &models.CreateTemplateScheme{
+				payload: &model.CreateTemplateScheme{
 					Name:         "Test Template",
 					TemplateType: "page",
-					Body: &models.ContentTemplateBodyCreateScheme{
-						View: &models.ContentBodyCreateScheme{
+					Body: &model.ContentTemplateBodyCreateScheme{
+						View: &model.ContentBodyCreateScheme{
 							Value:          "<h1>Test Template</h1>",
 							Representation: "storage",
 						},
 					},
 					Description: "This is a test template",
-					Space: &models.SpaceScheme{
+					Space: &model.SpaceScheme{
 						Key: "TEST",
 					},
 				},
@@ -56,43 +58,43 @@ func Test_internalTemplateImpl_Create(t *testing.T) {
 					http.MethodPost,
 					"/wiki/rest/api/template",
 					"",
-					&models.CreateTemplateScheme{
+					&model.CreateTemplateScheme{
 						Name:         "Test Template",
 						TemplateType: "page",
-						Body: &models.ContentTemplateBodyCreateScheme{
-							View: &models.ContentBodyCreateScheme{
+						Body: &model.ContentTemplateBodyCreateScheme{
+							View: &model.ContentBodyCreateScheme{
 								Value:          "<h1>Test Template</h1>",
 								Representation: "storage",
 							},
 						},
 						Description: "This is a test template",
-						Space: &models.SpaceScheme{
+						Space: &model.SpaceScheme{
 							Key: "TEST",
 						},
 					},
 				).
-					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
 			wantErr: true,
-			Err:     errors.New("error, unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 		},
 		{
 			name: "CreateTemplateScheme.Create success",
 			args: args{
 				ctx: context.Background(),
-				payload: &models.CreateTemplateScheme{
+				payload: &model.CreateTemplateScheme{
 					Name:         "Test Template",
 					TemplateType: "page",
-					Body: &models.ContentTemplateBodyCreateScheme{
-						View: &models.ContentBodyCreateScheme{
+					Body: &model.ContentTemplateBodyCreateScheme{
+						View: &model.ContentBodyCreateScheme{
 							Value:          "<h1>Test Template</h1>",
 							Representation: "storage",
 						},
 					},
 					Description: "This is a test template",
-					Space: &models.SpaceScheme{
+					Space: &model.SpaceScheme{
 						Key: "TEST",
 					},
 				},
@@ -105,25 +107,25 @@ func Test_internalTemplateImpl_Create(t *testing.T) {
 					http.MethodPost,
 					"/wiki/rest/api/template",
 					"",
-					&models.CreateTemplateScheme{
+					&model.CreateTemplateScheme{
 						Name:         "Test Template",
 						TemplateType: "page",
-						Body: &models.ContentTemplateBodyCreateScheme{
-							View: &models.ContentBodyCreateScheme{
+						Body: &model.ContentTemplateBodyCreateScheme{
+							View: &model.ContentBodyCreateScheme{
 								Value:          "<h1>Test Template</h1>",
 								Representation: "storage",
 							},
 						},
 						Description: "This is a test template",
-						Space: &models.SpaceScheme{
+						Space: &model.SpaceScheme{
 							Key: "TEST",
 						},
 					},
 				).
 					Return(&http.Request{}, nil)
 
-				client.On("Call", &http.Request{}, &models.ContentTemplateScheme{}).
-					Return(&models.ResponseScheme{Code: 200}, nil)
+				client.On("Call", &http.Request{}, &model.ContentTemplateScheme{}).
+					Return(&model.ResponseScheme{Code: 200}, nil)
 
 				fields.c = client
 			},
@@ -141,7 +143,14 @@ func Test_internalTemplateImpl_Create(t *testing.T) {
 			gotResult, gotResponse, err := newService.Create(testCase.args.ctx, testCase.args.payload)
 
 			if testCase.wantErr {
-				assert.EqualError(t, err, testCase.Err.Error())
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 				assert.NoError(t, err)
 				assert.NotEqual(t, gotResponse, nil)
@@ -157,7 +166,7 @@ func Test_internalTemplateImpl_Update(t *testing.T) {
 	}
 	type args struct {
 		ctx     context.Context
-		payload *models.UpdateTemplateScheme
+		payload *model.UpdateTemplateScheme
 	}
 	tests := []struct {
 		name    string
@@ -171,18 +180,18 @@ func Test_internalTemplateImpl_Update(t *testing.T) {
 			name: "CreateTemplateScheme.Create returned error",
 			args: args{
 				ctx: context.Background(),
-				payload: &models.UpdateTemplateScheme{
+				payload: &model.UpdateTemplateScheme{
 					TemplateID:   "1234567",
 					Name:         "Test Template",
 					TemplateType: "page",
-					Body: &models.ContentTemplateBodyCreateScheme{
-						View: &models.ContentBodyCreateScheme{
+					Body: &model.ContentTemplateBodyCreateScheme{
+						View: &model.ContentBodyCreateScheme{
 							Value:          "<h1>Test Template</h1>",
 							Representation: "storage",
 						},
 					},
 					Description: "This is a test template",
-					Space: &models.SpaceScheme{
+					Space: &model.SpaceScheme{
 						Key: "TEST",
 					},
 				},
@@ -195,45 +204,45 @@ func Test_internalTemplateImpl_Update(t *testing.T) {
 					http.MethodPut,
 					"/wiki/rest/api/template",
 					"",
-					&models.UpdateTemplateScheme{
+					&model.UpdateTemplateScheme{
 						TemplateID:   "1234567",
 						Name:         "Test Template",
 						TemplateType: "page",
-						Body: &models.ContentTemplateBodyCreateScheme{
-							View: &models.ContentBodyCreateScheme{
+						Body: &model.ContentTemplateBodyCreateScheme{
+							View: &model.ContentBodyCreateScheme{
 								Value:          "<h1>Test Template</h1>",
 								Representation: "storage",
 							},
 						},
 						Description: "This is a test template",
-						Space: &models.SpaceScheme{
+						Space: &model.SpaceScheme{
 							Key: "TEST",
 						},
 					},
 				).
-					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
 			wantErr: true,
-			Err:     errors.New("error, unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 		},
 		{
 			name: "CreateTemplateScheme.Create success",
 			args: args{
 				ctx: context.Background(),
-				payload: &models.UpdateTemplateScheme{
+				payload: &model.UpdateTemplateScheme{
 					TemplateID:   "123456789",
 					Name:         "Test Template",
 					TemplateType: "page",
-					Body: &models.ContentTemplateBodyCreateScheme{
-						View: &models.ContentBodyCreateScheme{
+					Body: &model.ContentTemplateBodyCreateScheme{
+						View: &model.ContentBodyCreateScheme{
 							Value:          "<h1>Test Template</h1>",
 							Representation: "storage",
 						},
 					},
 					Description: "This is a test template",
-					Space: &models.SpaceScheme{
+					Space: &model.SpaceScheme{
 						Key: "TEST",
 					},
 				},
@@ -246,26 +255,26 @@ func Test_internalTemplateImpl_Update(t *testing.T) {
 					http.MethodPut,
 					"/wiki/rest/api/template",
 					"",
-					&models.UpdateTemplateScheme{
+					&model.UpdateTemplateScheme{
 						TemplateID:   "123456789",
 						Name:         "Test Template",
 						TemplateType: "page",
-						Body: &models.ContentTemplateBodyCreateScheme{
-							View: &models.ContentBodyCreateScheme{
+						Body: &model.ContentTemplateBodyCreateScheme{
+							View: &model.ContentBodyCreateScheme{
 								Value:          "<h1>Test Template</h1>",
 								Representation: "storage",
 							},
 						},
 						Description: "This is a test template",
-						Space: &models.SpaceScheme{
+						Space: &model.SpaceScheme{
 							Key: "TEST",
 						},
 					},
 				).
 					Return(&http.Request{}, nil)
 
-				client.On("Call", &http.Request{}, &models.ContentTemplateScheme{}).
-					Return(&models.ResponseScheme{Code: 200}, nil)
+				client.On("Call", &http.Request{}, &model.ContentTemplateScheme{}).
+					Return(&model.ResponseScheme{Code: 200}, nil)
 
 				fields.c = client
 			},
@@ -283,7 +292,14 @@ func Test_internalTemplateImpl_Update(t *testing.T) {
 			gotResult, gotResponse, err := newService.Update(testCase.args.ctx, testCase.args.payload)
 
 			if testCase.wantErr {
-				assert.EqualError(t, err, testCase.Err.Error())
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 				assert.NoError(t, err)
 				assert.NotEqual(t, gotResponse, nil)
@@ -325,12 +341,12 @@ func Test_internalTemplateImpl_Get(t *testing.T) {
 					"",
 					nil,
 				).
-					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
 			wantErr: true,
-			Err:     errors.New("error, unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 		},
 		{
 			name: "CreateTemplateScheme.Create success",
@@ -350,8 +366,8 @@ func Test_internalTemplateImpl_Get(t *testing.T) {
 				).
 					Return(&http.Request{}, nil)
 
-				client.On("Call", &http.Request{}, &models.ContentTemplateScheme{}).
-					Return(&models.ResponseScheme{Code: 200}, nil)
+				client.On("Call", &http.Request{}, &model.ContentTemplateScheme{}).
+					Return(&model.ResponseScheme{Code: 200}, nil)
 
 				fields.c = client
 			},
@@ -369,7 +385,14 @@ func Test_internalTemplateImpl_Get(t *testing.T) {
 			gotResult, gotResponse, err := newService.Get(testCase.args.ctx, testCase.args.templateID)
 
 			if testCase.wantErr {
-				assert.EqualError(t, err, testCase.Err.Error())
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 				assert.NoError(t, err)
 				assert.NotEqual(t, gotResponse, nil)

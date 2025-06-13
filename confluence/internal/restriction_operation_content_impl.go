@@ -62,7 +62,7 @@ type internalRestrictionOperationImpl struct {
 func (i *internalRestrictionOperationImpl) Gets(ctx context.Context, contentID string, expand []string) (*model.ContentRestrictionByOperationScheme, *model.ResponseScheme, error) {
 
 	if contentID == "" {
-		return nil, nil, model.ErrNoContentID
+		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
 	}
 
 	var endpoint strings.Builder
@@ -92,11 +92,11 @@ func (i *internalRestrictionOperationImpl) Gets(ctx context.Context, contentID s
 func (i *internalRestrictionOperationImpl) Get(ctx context.Context, contentID, operationKey string, expand []string, startAt, maxResults int) (*model.ContentRestrictionScheme, *model.ResponseScheme, error) {
 
 	if contentID == "" {
-		return nil, nil, model.ErrNoContentID
+		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
 	}
 
 	if operationKey == "" {
-		return nil, nil, model.ErrNoContentRestrictionKey
+		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentRestrictionKey)
 	}
 
 	query := url.Values{}

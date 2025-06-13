@@ -50,7 +50,7 @@ type internalAttachmentVersionImpl struct {
 func (i *internalAttachmentVersionImpl) Gets(ctx context.Context, attachmentID, cursor, sort string, limit int) (*model.AttachmentVersionPageScheme, *model.ResponseScheme, error) {
 
 	if attachmentID == "" {
-		return nil, nil, model.ErrNoContentAttachmentID
+		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentAttachmentID)
 	}
 
 	query := url.Values{}
@@ -83,7 +83,7 @@ func (i *internalAttachmentVersionImpl) Gets(ctx context.Context, attachmentID, 
 func (i *internalAttachmentVersionImpl) Get(ctx context.Context, attachmentID string, versionID int) (*model.DetailedVersionScheme, *model.ResponseScheme, error) {
 
 	if attachmentID == "" {
-		return nil, nil, model.ErrNoContentAttachmentID
+		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentAttachmentID)
 	}
 
 	endpoint := fmt.Sprintf("wiki/api/v2/attachments/%v/versions/%v", attachmentID, versionID)

@@ -4,4 +4,5 @@ package models
 // The format is "2006-01-02T15:04:05.999-0700".
 const (
 	DateFormatJira = "2006-01-02T15:04:05.999-0700"
+	TestInvalidUrl = " https://zhidao.baidu.com/special/view?id=sd&preview=1/"
 )

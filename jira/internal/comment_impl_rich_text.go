@@ -63,11 +63,11 @@ type internalRichTextCommentImpl struct {
 func (i *internalRichTextCommentImpl) Delete(ctx context.Context, issueKeyOrID, commentID string) (*model.ResponseScheme, error) {
 
 	if issueKeyOrID == "" {
-		return nil, model.ErrNoIssueKeyOrID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	if commentID == "" {
-		return nil, model.ErrNoCommentID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoCommentID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/comment/%v", i.version, issueKeyOrID, commentID)
@@ -83,7 +83,7 @@ func (i *internalRichTextCommentImpl) Delete(ctx context.Context, issueKeyOrID, 
 func (i *internalRichTextCommentImpl) Gets(ctx context.Context, issueKeyOrID, orderBy string, expand []string, startAt, maxResults int) (*model.IssueCommentPageSchemeV2, *model.ResponseScheme, error) {
 
 	if issueKeyOrID == "" {
-		return nil, nil, model.ErrNoIssueKeyOrID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	params := url.Values{}
@@ -117,11 +117,11 @@ func (i *internalRichTextCommentImpl) Gets(ctx context.Context, issueKeyOrID, or
 func (i *internalRichTextCommentImpl) Get(ctx context.Context, issueKeyOrID, commentID string) (*model.IssueCommentSchemeV2, *model.ResponseScheme, error) {
 
 	if issueKeyOrID == "" {
-		return nil, nil, model.ErrNoIssueKeyOrID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	if commentID == "" {
-		return nil, nil, model.ErrNoCommentID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoCommentID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/comment/%v", i.version, issueKeyOrID, commentID)
@@ -143,7 +143,7 @@ func (i *internalRichTextCommentImpl) Get(ctx context.Context, issueKeyOrID, com
 func (i *internalRichTextCommentImpl) Add(ctx context.Context, issueKeyOrID string, payload *model.CommentPayloadSchemeV2, expand []string) (*model.IssueCommentSchemeV2, *model.ResponseScheme, error) {
 
 	if issueKeyOrID == "" {
-		return nil, nil, model.ErrNoIssueKeyOrID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	params := url.Values{}

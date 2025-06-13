@@ -14,7 +14,7 @@ import (
 func NewScreenTabFieldService(client service.Connector, version string) (*ScreenTabFieldService, error) {
 
 	if version == "" {
-		return nil, model.ErrNoVersionProvided
+		return nil, fmt.Errorf("jira: %w", model.ErrNoVersionProvided)
 	}
 
 	return &ScreenTabFieldService{
@@ -74,11 +74,11 @@ type internalScreenTabFieldImpl struct {
 func (i *internalScreenTabFieldImpl) Gets(ctx context.Context, screenID, tabID int) ([]*model.ScreenTabFieldScheme, *model.ResponseScheme, error) {
 
 	if screenID == 0 {
-		return nil, nil, model.ErrNoScreenID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoScreenID)
 	}
 
 	if tabID == 0 {
-		return nil, nil, model.ErrNoScreenTabID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoScreenTabID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/screens/%v/tabs/%v/fields", i.version, screenID, tabID)
@@ -100,15 +100,15 @@ func (i *internalScreenTabFieldImpl) Gets(ctx context.Context, screenID, tabID i
 func (i *internalScreenTabFieldImpl) Add(ctx context.Context, screenID, tabID int, fieldID string) (*model.ScreenTabFieldScheme, *model.ResponseScheme, error) {
 
 	if screenID == 0 {
-		return nil, nil, model.ErrNoScreenID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoScreenID)
 	}
 
 	if tabID == 0 {
-		return nil, nil, model.ErrNoScreenTabID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoScreenTabID)
 	}
 
 	if fieldID == "" {
-		return nil, nil, model.ErrNoFieldID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoFieldID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/screens/%v/tabs/%v/fields", i.version, screenID, tabID)
@@ -130,15 +130,15 @@ func (i *internalScreenTabFieldImpl) Add(ctx context.Context, screenID, tabID in
 func (i *internalScreenTabFieldImpl) Remove(ctx context.Context, screenID, tabID int, fieldID string) (*model.ResponseScheme, error) {
 
 	if screenID == 0 {
-		return nil, model.ErrNoScreenID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoScreenID)
 	}
 
 	if tabID == 0 {
-		return nil, model.ErrNoScreenTabID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoScreenTabID)
 	}
 
 	if fieldID == "" {
-		return nil, model.ErrNoFieldID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoFieldID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/screens/%v/tabs/%v/fields/%v", i.version, screenID, tabID, fieldID)
@@ -154,15 +154,15 @@ func (i *internalScreenTabFieldImpl) Remove(ctx context.Context, screenID, tabID
 func (i *internalScreenTabFieldImpl) Move(ctx context.Context, screenID, tabID int, fieldID, after, position string) (*model.ResponseScheme, error) {
 
 	if screenID == 0 {
-		return nil, model.ErrNoScreenID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoScreenID)
 	}
 
 	if tabID == 0 {
-		return nil, model.ErrNoScreenTabID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoScreenTabID)
 	}
 
 	if fieldID == "" {
-		return nil, model.ErrNoFieldID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoFieldID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/screens/%v/tabs/%v/fields/%v/move", i.version, screenID, tabID, fieldID)

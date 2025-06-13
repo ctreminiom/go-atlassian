@@ -159,7 +159,7 @@ func (i *internalWorkflowSchemeImpl) Create(ctx context.Context, payload *model.
 func (i *internalWorkflowSchemeImpl) Get(ctx context.Context, schemeID int, returnDraftIfExists bool) (*model.WorkflowSchemeScheme, *model.ResponseScheme, error) {
 
 	if schemeID == 0 {
-		return nil, nil, model.ErrNoWorkflowSchemeID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoWorkflowSchemeID)
 	}
 
 	var endpoint strings.Builder
@@ -190,7 +190,7 @@ func (i *internalWorkflowSchemeImpl) Get(ctx context.Context, schemeID int, retu
 func (i *internalWorkflowSchemeImpl) Update(ctx context.Context, schemeID int, payload *model.WorkflowSchemePayloadScheme) (*model.WorkflowSchemeScheme, *model.ResponseScheme, error) {
 
 	if schemeID == 0 {
-		return nil, nil, model.ErrNoWorkflowSchemeID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoWorkflowSchemeID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/workflowscheme/%v", i.version, schemeID)
@@ -212,7 +212,7 @@ func (i *internalWorkflowSchemeImpl) Update(ctx context.Context, schemeID int, p
 func (i *internalWorkflowSchemeImpl) Delete(ctx context.Context, schemeID int) (*model.ResponseScheme, error) {
 
 	if schemeID == 0 {
-		return nil, model.ErrNoWorkflowSchemeID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoWorkflowSchemeID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/workflowscheme/%v", i.version, schemeID)
@@ -228,7 +228,7 @@ func (i *internalWorkflowSchemeImpl) Delete(ctx context.Context, schemeID int) (
 func (i *internalWorkflowSchemeImpl) Associations(ctx context.Context, projectIDs []int) (*model.WorkflowSchemeAssociationPageScheme, *model.ResponseScheme, error) {
 
 	if len(projectIDs) == 0 {
-		return nil, nil, model.ErrNoProjects
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoProjects)
 	}
 
 	params := url.Values{}
@@ -255,11 +255,11 @@ func (i *internalWorkflowSchemeImpl) Associations(ctx context.Context, projectID
 func (i *internalWorkflowSchemeImpl) Assign(ctx context.Context, schemeID, projectID string) (*model.ResponseScheme, error) {
 
 	if schemeID == "" {
-		return nil, model.ErrNoWorkflowSchemeID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoWorkflowSchemeID)
 	}
 
 	if projectID == "" {
-		return nil, model.ErrNoProjectIDOrKey
+		return nil, fmt.Errorf("jira: %w", model.ErrNoProjectIDOrKey)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/workflowscheme/project", i.version)

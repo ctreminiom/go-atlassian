@@ -2,8 +2,11 @@ package internal
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
+	"fmt"
 	"net/http"
+	"net/url"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -82,7 +85,7 @@ func Test_internalBoardBacklogImpl_Move(t *testing.T) {
 				client.On("Call",
 					&http.Request{},
 					nil).
-					Return(&model.ResponseScheme{}, model.ErrNotFound)
+					Return(&model.ResponseScheme{}, fmt.Errorf("agile: %w", model.ErrNotFound))
 
 				fields.c = client
 			},
@@ -106,11 +109,11 @@ func Test_internalBoardBacklogImpl_Move(t *testing.T) {
 					"rest/agile/1.0/backlog/issue",
 					"",
 					payloadMocked).
-					Return(&http.Request{}, errors.New("unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
-			Err:     errors.New("unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 			wantErr: true,
 		},
 	}
@@ -133,8 +136,14 @@ func Test_internalBoardBacklogImpl_Move(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -221,11 +230,11 @@ func Test_internalBoardBacklogImpl_MoveTo(t *testing.T) {
 				client.On("Call",
 					&http.Request{},
 					nil).
-					Return(&model.ResponseScheme{}, errors.New("error, unable to execute the http call"))
+					Return(&model.ResponseScheme{}, model.ErrNoExecHttpCall)
 
 				fields.c = client
 			},
-			Err:     errors.New("error, unable to execute the http call"),
+			Err:     model.ErrNoExecHttpCall,
 			wantErr: true,
 		},
 
@@ -246,11 +255,11 @@ func Test_internalBoardBacklogImpl_MoveTo(t *testing.T) {
 					"rest/agile/1.0/backlog/56/issue",
 					"",
 					payloadMocked).
-					Return(&http.Request{}, errors.New("unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
-			Err:     errors.New("unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 			wantErr: true,
 		},
 
@@ -282,8 +291,14 @@ func Test_internalBoardBacklogImpl_MoveTo(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)

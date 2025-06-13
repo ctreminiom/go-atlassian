@@ -17,7 +17,7 @@ import (
 func NewWorklogADFService(client service.Connector, version string) (*WorklogADFService, error) {
 
 	if version == "" {
-		return nil, model.ErrNoVersionProvided
+		return nil, fmt.Errorf("jira: %w", model.ErrNoVersionProvided)
 	}
 
 	return &WorklogADFService{
@@ -137,7 +137,7 @@ type internalWorklogAdfImpl struct {
 func (i *internalWorklogAdfImpl) Gets(ctx context.Context, worklogIDs []int, expand []string) ([]*model.IssueWorklogADFScheme, *model.ResponseScheme, error) {
 
 	if len(worklogIDs) == 0 {
-		return nil, nil, model.ErrNpWorklogs
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNpWorklogs)
 	}
 
 	params := url.Values{}
@@ -169,11 +169,11 @@ func (i *internalWorklogAdfImpl) Gets(ctx context.Context, worklogIDs []int, exp
 func (i *internalWorklogAdfImpl) Get(ctx context.Context, issueKeyOrID, worklogID string, expand []string) (*model.IssueWorklogADFScheme, *model.ResponseScheme, error) {
 
 	if issueKeyOrID == "" {
-		return nil, nil, model.ErrNoIssueKeyOrID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	if worklogID == "" {
-		return nil, nil, model.ErrNoWorklogID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoWorklogID)
 	}
 
 	params := url.Values{}
@@ -205,7 +205,7 @@ func (i *internalWorklogAdfImpl) Get(ctx context.Context, issueKeyOrID, worklogI
 func (i *internalWorklogAdfImpl) Issue(ctx context.Context, issueKeyOrID string, startAt, maxResults, after int, expand []string) (*model.IssueWorklogADFPageScheme, *model.ResponseScheme, error) {
 
 	if issueKeyOrID == "" {
-		return nil, nil, model.ErrNoIssueKeyOrID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	params := url.Values{}
@@ -239,11 +239,11 @@ func (i *internalWorklogAdfImpl) Issue(ctx context.Context, issueKeyOrID string,
 func (i *internalWorklogAdfImpl) Delete(ctx context.Context, issueKeyOrID, worklogID string, options *model.WorklogOptionsScheme) (*model.ResponseScheme, error) {
 
 	if issueKeyOrID == "" {
-		return nil, model.ErrNoIssueKeyOrID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	if worklogID == "" {
-		return nil, model.ErrNoWorklogID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoWorklogID)
 	}
 
 	var endpoint strings.Builder
@@ -345,7 +345,7 @@ func (i *internalWorklogAdfImpl) Updated(ctx context.Context, since int, expand 
 func (i *internalWorklogAdfImpl) Add(ctx context.Context, issueKeyOrID string, payload *model.WorklogADFPayloadScheme, options *model.WorklogOptionsScheme) (*model.IssueWorklogADFScheme, *model.ResponseScheme, error) {
 
 	if issueKeyOrID == "" {
-		return nil, nil, model.ErrNoIssueKeyOrID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	var endpoint strings.Builder
@@ -394,11 +394,11 @@ func (i *internalWorklogAdfImpl) Add(ctx context.Context, issueKeyOrID string, p
 func (i *internalWorklogAdfImpl) Update(ctx context.Context, issueKeyOrID, worklogID string, payload *model.WorklogADFPayloadScheme, options *model.WorklogOptionsScheme) (*model.IssueWorklogADFScheme, *model.ResponseScheme, error) {
 
 	if issueKeyOrID == "" {
-		return nil, nil, model.ErrNoIssueKeyOrID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	if worklogID == "" {
-		return nil, nil, model.ErrNoWorklogID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoWorklogID)
 	}
 
 	var endpoint strings.Builder

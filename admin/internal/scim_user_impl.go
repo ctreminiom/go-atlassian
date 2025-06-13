@@ -107,7 +107,7 @@ type internalSCIMUserImpl struct {
 func (i *internalSCIMUserImpl) Create(ctx context.Context, directoryID string, payload *model.SCIMUserScheme, attributes, excludedAttributes []string) (*model.SCIMUserScheme, *model.ResponseScheme, error) {
 
 	if directoryID == "" {
-		return nil, nil, model.ErrNoAdminDirectoryID
+		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminDirectoryID)
 	}
 
 	params := url.Values{}
@@ -144,7 +144,7 @@ func (i *internalSCIMUserImpl) Create(ctx context.Context, directoryID string, p
 func (i *internalSCIMUserImpl) Gets(ctx context.Context, directoryID string, opts *model.SCIMUserGetsOptionsScheme, startIndex, count int) (*model.SCIMUserPageScheme, *model.ResponseScheme, error) {
 
 	if directoryID == "" {
-		return nil, nil, model.ErrNoAdminDirectoryID
+		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminDirectoryID)
 	}
 
 	params := url.Values{}
@@ -185,11 +185,11 @@ func (i *internalSCIMUserImpl) Gets(ctx context.Context, directoryID string, opt
 func (i *internalSCIMUserImpl) Get(ctx context.Context, directoryID, userID string, attributes, excludedAttributes []string) (*model.SCIMUserScheme, *model.ResponseScheme, error) {
 
 	if directoryID == "" {
-		return nil, nil, model.ErrNoAdminDirectoryID
+		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminDirectoryID)
 	}
 
 	if userID == "" {
-		return nil, nil, model.ErrNoAdminUserID
+		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminUserID)
 	}
 
 	params := url.Values{}
@@ -225,11 +225,11 @@ func (i *internalSCIMUserImpl) Get(ctx context.Context, directoryID, userID stri
 func (i *internalSCIMUserImpl) Deactivate(ctx context.Context, directoryID, userID string) (*model.ResponseScheme, error) {
 
 	if directoryID == "" {
-		return nil, model.ErrNoAdminDirectoryID
+		return nil, fmt.Errorf("admin: %w", model.ErrNoAdminDirectoryID)
 	}
 
 	if userID == "" {
-		return nil, model.ErrNoAdminUserID
+		return nil, fmt.Errorf("admin: %w", model.ErrNoAdminUserID)
 	}
 
 	endpoint := fmt.Sprintf("scim/directory/%v/Users/%v", directoryID, userID)
@@ -245,11 +245,11 @@ func (i *internalSCIMUserImpl) Deactivate(ctx context.Context, directoryID, user
 func (i *internalSCIMUserImpl) Path(ctx context.Context, directoryID, userID string, payload *model.SCIMUserToPathScheme, attributes, excludedAttributes []string) (*model.SCIMUserScheme, *model.ResponseScheme, error) {
 
 	if directoryID == "" {
-		return nil, nil, model.ErrNoAdminDirectoryID
+		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminDirectoryID)
 	}
 
 	if userID == "" {
-		return nil, nil, model.ErrNoAdminUserID
+		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminUserID)
 	}
 
 	params := url.Values{}
@@ -286,11 +286,11 @@ func (i *internalSCIMUserImpl) Path(ctx context.Context, directoryID, userID str
 func (i *internalSCIMUserImpl) Update(ctx context.Context, directoryID, userID string, payload *model.SCIMUserScheme, attributes, excludedAttributes []string) (*model.SCIMUserScheme, *model.ResponseScheme, error) {
 
 	if directoryID == "" {
-		return nil, nil, model.ErrNoAdminDirectoryID
+		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminDirectoryID)
 	}
 
 	if userID == "" {
-		return nil, nil, model.ErrNoAdminUserID
+		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminUserID)
 	}
 
 	params := url.Values{}

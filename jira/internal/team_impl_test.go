@@ -2,8 +2,10 @@ package internal
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"net/http"
+	"net/url"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -77,12 +79,12 @@ func Test_internalTeamServiceImpl_Gets(t *testing.T) {
 					http.MethodPost,
 					"rest/teams/1.0/teams/find",
 					"", payloadMocked).
-					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
 			wantErr: true,
-			Err:     errors.New("error, unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 		},
 
 		{
@@ -105,12 +107,12 @@ func Test_internalTeamServiceImpl_Gets(t *testing.T) {
 				client.On("Call",
 					&http.Request{},
 					&model.JiraTeamPageScheme{}).
-					Return(&model.ResponseScheme{}, errors.New("error, unable to execute the http call"))
+					Return(&model.ResponseScheme{}, model.ErrNoExecHttpCall)
 
 				fields.c = client
 			},
 			wantErr: true,
-			Err:     errors.New("error, unable to execute the http call"),
+			Err:     model.ErrNoExecHttpCall,
 		},
 	}
 
@@ -131,8 +133,14 @@ func Test_internalTeamServiceImpl_Gets(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -215,12 +223,12 @@ func Test_internalTeamServiceImpl_Create(t *testing.T) {
 					http.MethodPost,
 					"rest/teams/1.0/teams/create",
 					"", payloadMocked).
-					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
 			wantErr: true,
-			Err:     errors.New("error, unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 		},
 
 		{
@@ -243,12 +251,12 @@ func Test_internalTeamServiceImpl_Create(t *testing.T) {
 				client.On("Call",
 					&http.Request{},
 					&model.JiraTeamCreateResponseScheme{}).
-					Return(&model.ResponseScheme{}, errors.New("error, unable to execute the http transition"))
+					Return(&model.ResponseScheme{}, model.ErrHttpTransition)
 
 				fields.c = client
 			},
 			wantErr: true,
-			Err:     errors.New("error, unable to execute the http transition"),
+			Err:     model.ErrHttpTransition,
 		},
 	}
 
@@ -269,8 +277,14 @@ func Test_internalTeamServiceImpl_Create(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)

@@ -15,7 +15,7 @@ import (
 func NewWatcherService(client service.Connector, version string) (*WatcherService, error) {
 
 	if version == "" {
-		return nil, model.ErrNoVersionProvided
+		return nil, fmt.Errorf("jira: %w", model.ErrNoVersionProvided)
 	}
 
 	return &WatcherService{
@@ -66,7 +66,7 @@ type internalWatcherImpl struct {
 func (i *internalWatcherImpl) Gets(ctx context.Context, issueKeyOrID string) (*model.IssueWatcherScheme, *model.ResponseScheme, error) {
 
 	if issueKeyOrID == "" {
-		return nil, nil, model.ErrNoIssueKeyOrID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/watchers", i.version, issueKeyOrID)
@@ -88,7 +88,7 @@ func (i *internalWatcherImpl) Gets(ctx context.Context, issueKeyOrID string) (*m
 func (i *internalWatcherImpl) Add(ctx context.Context, issueKeyOrID string, accountID ...string) (*model.ResponseScheme, error) {
 
 	if issueKeyOrID == "" {
-		return nil, model.ErrNoIssueKeyOrID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/watchers", i.version, issueKeyOrID)
@@ -108,11 +108,11 @@ func (i *internalWatcherImpl) Add(ctx context.Context, issueKeyOrID string, acco
 func (i *internalWatcherImpl) Delete(ctx context.Context, issueKeyOrID, accountID string) (*model.ResponseScheme, error) {
 
 	if issueKeyOrID == "" {
-		return nil, model.ErrNoIssueKeyOrID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	if accountID == "" {
-		return nil, model.ErrNoAccountID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoAccountID)
 	}
 
 	params := url.Values{}

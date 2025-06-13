@@ -85,11 +85,11 @@ type internalWorkflowSchemeIssueTypeImpl struct {
 func (i *internalWorkflowSchemeIssueTypeImpl) Get(ctx context.Context, schemeID int, issueTypeID string, returnDraft bool) (*model.IssueTypeWorkflowMappingScheme, *model.ResponseScheme, error) {
 
 	if schemeID == 0 {
-		return nil, nil, model.ErrNoWorkflowSchemeID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoWorkflowSchemeID)
 	}
 
 	if issueTypeID == "" {
-		return nil, nil, model.ErrNoIssueTypeID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoIssueTypeID)
 	}
 
 	var endpoint strings.Builder
@@ -119,11 +119,11 @@ func (i *internalWorkflowSchemeIssueTypeImpl) Get(ctx context.Context, schemeID 
 func (i *internalWorkflowSchemeIssueTypeImpl) Set(ctx context.Context, schemeID int, issueTypeID string, payload *model.IssueTypeWorkflowPayloadScheme) (*model.WorkflowSchemeScheme, *model.ResponseScheme, error) {
 
 	if schemeID == 0 {
-		return nil, nil, model.ErrNoWorkflowSchemeID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoWorkflowSchemeID)
 	}
 
 	if issueTypeID == "" {
-		return nil, nil, model.ErrNoIssueTypeID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoIssueTypeID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/workflowscheme/%v/issuetype/%v", i.version, schemeID, issueTypeID)
@@ -145,11 +145,11 @@ func (i *internalWorkflowSchemeIssueTypeImpl) Set(ctx context.Context, schemeID 
 func (i *internalWorkflowSchemeIssueTypeImpl) Delete(ctx context.Context, schemeID int, issueTypeID string, updateDraft bool) (*model.WorkflowSchemeScheme, *model.ResponseScheme, error) {
 
 	if schemeID == 0 {
-		return nil, nil, model.ErrNoWorkflowSchemeID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoWorkflowSchemeID)
 	}
 
 	if issueTypeID == "" {
-		return nil, nil, model.ErrNoIssueTypeID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoIssueTypeID)
 	}
 
 	var endpoint strings.Builder
@@ -179,7 +179,7 @@ func (i *internalWorkflowSchemeIssueTypeImpl) Delete(ctx context.Context, scheme
 func (i *internalWorkflowSchemeIssueTypeImpl) Mapping(ctx context.Context, schemeID int, workflowName string, returnDraft bool) ([]*model.IssueTypesWorkflowMappingScheme, *model.ResponseScheme, error) {
 
 	if schemeID == 0 {
-		return nil, nil, model.ErrNoWorkflowSchemeID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoWorkflowSchemeID)
 	}
 
 	var endpoint strings.Builder

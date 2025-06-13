@@ -1,6 +1,7 @@
 package internal
 
 import (
+	"fmt"
 	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/v2/service"
 )
@@ -9,7 +10,7 @@ import (
 func NewLinkService(client service.Connector, version string, linkType *LinkTypeService, remote *RemoteLinkService) (*LinkADFService, *LinkRichTextService, error) {
 
 	if version == "" {
-		return nil, nil, model.ErrNoVersionProvided
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoVersionProvided)
 	}
 
 	adfService := &LinkADFService{

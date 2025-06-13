@@ -75,7 +75,7 @@ type internalOrganizationPolicyImpl struct {
 func (i *internalOrganizationPolicyImpl) Gets(ctx context.Context, organizationID, policyType, cursor string) (*model.OrganizationPolicyPageScheme, *model.ResponseScheme, error) {
 
 	if organizationID == "" {
-		return nil, nil, model.ErrNoAdminOrganization
+		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminOrganization)
 	}
 
 	params := url.Values{}
@@ -111,11 +111,11 @@ func (i *internalOrganizationPolicyImpl) Gets(ctx context.Context, organizationI
 func (i *internalOrganizationPolicyImpl) Get(ctx context.Context, organizationID, policyID string) (*model.OrganizationPolicyScheme, *model.ResponseScheme, error) {
 
 	if organizationID == "" {
-		return nil, nil, model.ErrNoAdminOrganization
+		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminOrganization)
 	}
 
 	if policyID == "" {
-		return nil, nil, model.ErrNoAdminPolicy
+		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminPolicy)
 	}
 
 	endpoint := fmt.Sprintf("admin/v1/orgs/%v/policies/%v", organizationID, policyID)
@@ -137,7 +137,7 @@ func (i *internalOrganizationPolicyImpl) Get(ctx context.Context, organizationID
 func (i *internalOrganizationPolicyImpl) Create(ctx context.Context, organizationID string, payload *model.OrganizationPolicyData) (*model.OrganizationPolicyScheme, *model.ResponseScheme, error) {
 
 	if organizationID == "" {
-		return nil, nil, model.ErrNoAdminOrganization
+		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminOrganization)
 	}
 
 	endpoint := fmt.Sprintf("admin/v1/orgs/%v/policies", organizationID)
@@ -159,11 +159,11 @@ func (i *internalOrganizationPolicyImpl) Create(ctx context.Context, organizatio
 func (i *internalOrganizationPolicyImpl) Update(ctx context.Context, organizationID, policyID string, payload *model.OrganizationPolicyData) (*model.OrganizationPolicyScheme, *model.ResponseScheme, error) {
 
 	if organizationID == "" {
-		return nil, nil, model.ErrNoAdminOrganization
+		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminOrganization)
 	}
 
 	if policyID == "" {
-		return nil, nil, model.ErrNoAdminPolicy
+		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminPolicy)
 	}
 
 	endpoint := fmt.Sprintf("admin/v1/orgs/%v/policies/%v", organizationID, policyID)
@@ -185,11 +185,11 @@ func (i *internalOrganizationPolicyImpl) Update(ctx context.Context, organizatio
 func (i *internalOrganizationPolicyImpl) Delete(ctx context.Context, organizationID, policyID string) (*model.ResponseScheme, error) {
 
 	if organizationID == "" {
-		return nil, model.ErrNoAdminOrganization
+		return nil, fmt.Errorf("admin: %w", model.ErrNoAdminOrganization)
 	}
 
 	if policyID == "" {
-		return nil, model.ErrNoAdminPolicy
+		return nil, fmt.Errorf("admin: %w", model.ErrNoAdminPolicy)
 	}
 
 	endpoint := fmt.Sprintf("admin/v1/orgs/%v/policies/%v", organizationID, policyID)

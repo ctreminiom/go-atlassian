@@ -2,8 +2,10 @@ package internal
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"net/http"
+	"net/url"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -151,12 +153,12 @@ func Test_internalIssueFieldContextServiceImpl_Gets(t *testing.T) {
 					"rest/api/2/field/custom_field_10002/context?contextId=10001&contextId=10002&isAnyIssueType=true&isGlobalContext=false&maxResults=50&startAt=50",
 					"",
 					nil).
-					Return(&http.Request{}, errors.New("error"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
 			wantErr: true,
-			Err:     errors.New("error"),
+			Err:     model.ErrCreateHttpReq,
 		},
 	}
 
@@ -179,8 +181,14 @@ func Test_internalIssueFieldContextServiceImpl_Gets(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -312,12 +320,12 @@ func Test_internalIssueFieldContextServiceImpl_Create(t *testing.T) {
 					"rest/api/2/field/custom_field_10002/context",
 					"",
 					payloadMocked).
-					Return(&http.Request{}, errors.New("error"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
 			wantErr: true,
-			Err:     errors.New("error"),
+			Err:     model.ErrCreateHttpReq,
 		},
 	}
 
@@ -339,8 +347,14 @@ func Test_internalIssueFieldContextServiceImpl_Create(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -476,12 +490,12 @@ func Test_internalIssueFieldContextServiceImpl_GetDefaultValues(t *testing.T) {
 				client.On("Call",
 					&http.Request{},
 					&model.CustomFieldDefaultValuePageScheme{}).
-					Return(&model.ResponseScheme{}, errors.New("error"))
+					Return(&model.ResponseScheme{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
 			wantErr: true,
-			Err:     errors.New("error"),
+			Err:     model.ErrCreateHttpReq,
 		},
 	}
 
@@ -504,8 +518,14 @@ func Test_internalIssueFieldContextServiceImpl_GetDefaultValues(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -639,12 +659,12 @@ func Test_internalIssueFieldContextServiceImpl_SetDefaultValue(t *testing.T) {
 					"rest/api/2/field/custom_field_10002/context/defaultValue",
 					"",
 					payloadMocked).
-					Return(&http.Request{}, errors.New("error"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
 			wantErr: true,
-			Err:     errors.New("error"),
+			Err:     model.ErrCreateHttpReq,
 		},
 	}
 
@@ -666,8 +686,14 @@ func Test_internalIssueFieldContextServiceImpl_SetDefaultValue(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -797,12 +823,12 @@ func Test_internalIssueFieldContextServiceImpl_IssueTypesContext(t *testing.T) {
 					"rest/api/2/field/custom_field_10002/context/issuetypemapping?contextId=10001&maxResults=50&startAt=0",
 					"",
 					nil).
-					Return(&http.Request{}, errors.New("error"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
 			wantErr: true,
-			Err:     errors.New("error"),
+			Err:     model.ErrCreateHttpReq,
 		},
 	}
 
@@ -825,8 +851,14 @@ func Test_internalIssueFieldContextServiceImpl_IssueTypesContext(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -957,12 +989,12 @@ func Test_internalIssueFieldContextServiceImpl_ProjectsContext(t *testing.T) {
 					"rest/api/2/field/custom_field_10002/context/projectmapping?contextId=10001&maxResults=50&startAt=0",
 					"",
 					nil).
-					Return(&http.Request{}, errors.New("error"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
 			wantErr: true,
-			Err:     errors.New("error"),
+			Err:     model.ErrCreateHttpReq,
 		},
 	}
 
@@ -985,8 +1017,14 @@ func Test_internalIssueFieldContextServiceImpl_ProjectsContext(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -1154,12 +1192,12 @@ func Test_internalIssueFieldContextServiceImpl_Update(t *testing.T) {
 					"rest/api/2/field/custom_field_10002/context/10001",
 					"",
 					payloadMockedWithDescription).
-					Return(&http.Request{}, errors.New("error"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
 			wantErr: true,
-			Err:     errors.New("error"),
+			Err:     model.ErrCreateHttpReq,
 		},
 	}
 
@@ -1182,8 +1220,14 @@ func Test_internalIssueFieldContextServiceImpl_Update(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -1306,12 +1350,12 @@ func Test_internalIssueFieldContextServiceImpl_Delete(t *testing.T) {
 					"rest/api/2/field/custom_field_10002/context/10001",
 					"",
 					nil).
-					Return(&http.Request{}, errors.New("error"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
 			wantErr: true,
-			Err:     errors.New("error"),
+			Err:     model.ErrCreateHttpReq,
 		},
 	}
 
@@ -1333,8 +1377,14 @@ func Test_internalIssueFieldContextServiceImpl_Delete(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -1463,12 +1513,12 @@ func Test_internalIssueFieldContextServiceImpl_AddIssueTypes(t *testing.T) {
 					"rest/api/2/field/custom_field_10002/context/10001/issuetype",
 					"",
 					payloadMocked).
-					Return(&http.Request{}, errors.New("error"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
 			wantErr: true,
-			Err:     errors.New("error"),
+			Err:     model.ErrCreateHttpReq,
 		},
 	}
 
@@ -1491,8 +1541,14 @@ func Test_internalIssueFieldContextServiceImpl_AddIssueTypes(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -1633,12 +1689,12 @@ func Test_internalIssueFieldContextServiceImpl_RemoveIssueTypes(t *testing.T) {
 					"rest/api/2/field/custom_field_10002/context/10001/issuetype/remove",
 					"",
 					payloadMocked).
-					Return(&http.Request{}, errors.New("error"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
 			wantErr: true,
-			Err:     errors.New("error"),
+			Err:     model.ErrCreateHttpReq,
 		},
 	}
 
@@ -1661,8 +1717,14 @@ func Test_internalIssueFieldContextServiceImpl_RemoveIssueTypes(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -1814,12 +1876,12 @@ func Test_internalIssueFieldContextServiceImpl_Link(t *testing.T) {
 					"rest/api/2/field/custom_field_10002/context/10001/project",
 					"",
 					payloadMocked).
-					Return(&http.Request{}, errors.New("error"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
 			wantErr: true,
-			Err:     errors.New("error"),
+			Err:     model.ErrCreateHttpReq,
 		},
 	}
 
@@ -1842,8 +1904,14 @@ func Test_internalIssueFieldContextServiceImpl_Link(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -1995,12 +2063,12 @@ func Test_internalIssueFieldContextServiceImpl_Unlink(t *testing.T) {
 					"rest/api/2/field/custom_field_10002/context/10001/project/remove",
 					"",
 					payloadMocked).
-					Return(&http.Request{}, errors.New("error"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
 			wantErr: true,
-			Err:     errors.New("error"),
+			Err:     model.ErrCreateHttpReq,
 		},
 	}
 
@@ -2023,8 +2091,14 @@ func Test_internalIssueFieldContextServiceImpl_Unlink(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)

@@ -56,7 +56,7 @@ type IssueServices struct {
 func NewIssueService(client service.Connector, version string, services *IssueServices) (*IssueRichTextService, *IssueADFService, error) {
 
 	if version == "" {
-		return nil, nil, model.ErrNoVersionProvided
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoVersionProvided)
 	}
 
 	richTextService := &IssueRichTextService{
@@ -118,7 +118,7 @@ func NewIssueService(client service.Connector, version string, services *IssueSe
 func deleteIssue(ctx context.Context, client service.Connector, version, issueKeyOrID string, deleteSubTasks bool) (*model.ResponseScheme, error) {
 
 	if issueKeyOrID == "" {
-		return nil, model.ErrNoIssueKeyOrID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	params := url.Values{}
@@ -137,11 +137,11 @@ func deleteIssue(ctx context.Context, client service.Connector, version, issueKe
 func assignIssue(ctx context.Context, client service.Connector, version, issueKeyOrID, accountID string) (*model.ResponseScheme, error) {
 
 	if issueKeyOrID == "" {
-		return nil, model.ErrNoIssueKeyOrID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	if accountID == "" {
-		return nil, model.ErrNoAccountID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoAccountID)
 	}
 
 	endpoint := fmt.Sprintf("/rest/api/%v/issue/%v/assignee", version, issueKeyOrID)
@@ -158,7 +158,7 @@ func sendNotification(ctx context.Context, client service.Connector, version, is
 	*model.ResponseScheme, error) {
 
 	if issueKeyOrID == "" {
-		return nil, model.ErrNoIssueKeyOrID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/notify", version, issueKeyOrID)
@@ -174,7 +174,7 @@ func sendNotification(ctx context.Context, client service.Connector, version, is
 func getTransitions(ctx context.Context, client service.Connector, version, issueKeyOrID string) (*model.IssueTransitionsScheme, *model.ResponseScheme, error) {
 
 	if issueKeyOrID == "" {
-		return nil, nil, model.ErrNoIssueKeyOrID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/transitions", version, issueKeyOrID)

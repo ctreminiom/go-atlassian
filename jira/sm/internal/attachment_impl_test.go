@@ -2,8 +2,10 @@ package internal
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"net/http"
+	"net/url"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -85,11 +87,11 @@ func Test_internalServiceRequestAttachmentImpl_Gets(t *testing.T) {
 				client.On("Call",
 					&http.Request{},
 					&model.RequestAttachmentPageScheme{}).
-					Return(&model.ResponseScheme{}, errors.New("client: no http response found"))
+					Return(&model.ResponseScheme{}, model.ErrNoHttpResponse)
 
 				fields.c = client
 			},
-			Err:     errors.New("client: no http response found"),
+			Err:     model.ErrNoHttpResponse,
 			wantErr: true,
 		},
 
@@ -111,11 +113,11 @@ func Test_internalServiceRequestAttachmentImpl_Gets(t *testing.T) {
 					"rest/servicedeskapi/request/DUMMY-2/attachment?limit=50&start=100",
 					"",
 					nil).
-					Return(&http.Request{}, errors.New("client: no http request created"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
-			Err:     errors.New("client: no http request created"),
+			Err:     model.ErrCreateHttpReq,
 			wantErr: true,
 		},
 
@@ -150,8 +152,14 @@ func Test_internalServiceRequestAttachmentImpl_Gets(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -244,11 +252,11 @@ func Test_internalServiceRequestAttachmentImpl_Create(t *testing.T) {
 				client.On("Call",
 					&http.Request{},
 					&model.RequestAttachmentCreationScheme{}).
-					Return(&model.ResponseScheme{}, errors.New("client: no http response found"))
+					Return(&model.ResponseScheme{}, model.ErrNoHttpResponse)
 
 				fields.c = client
 			},
-			Err:     errors.New("client: no http response found"),
+			Err:     model.ErrNoHttpResponse,
 			wantErr: true,
 		},
 
@@ -275,11 +283,11 @@ func Test_internalServiceRequestAttachmentImpl_Create(t *testing.T) {
 						TemporaryAttachmentIDs: []string{"10001"},
 						Public:                 true,
 					}).
-					Return(&http.Request{}, errors.New("client: no http request created"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
-			Err:     errors.New("client: no http request created"),
+			Err:     model.ErrCreateHttpReq,
 			wantErr: true,
 		},
 
@@ -314,8 +322,14 @@ func Test_internalServiceRequestAttachmentImpl_Create(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)

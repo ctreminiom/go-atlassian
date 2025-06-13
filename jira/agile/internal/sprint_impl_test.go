@@ -2,8 +2,10 @@ package internal
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"net/http"
+	"net/url"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -80,11 +82,11 @@ func Test_SprintService_Get(t *testing.T) {
 				client.On("Call",
 					&http.Request{},
 					&model.SprintScheme{}).
-					Return(&model.ResponseScheme{}, errors.New("error, unable to execute the http call"))
+					Return(&model.ResponseScheme{}, model.ErrNoExecHttpCall)
 
 				fields.c = client
 			},
-			Err:     errors.New("error, unable to execute the http call"),
+			Err:     model.ErrNoExecHttpCall,
 			wantErr: true,
 		},
 
@@ -104,11 +106,11 @@ func Test_SprintService_Get(t *testing.T) {
 					"rest/agile/1.0/sprint/10001",
 					"",
 					nil).
-					Return(&http.Request{}, errors.New("unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
-			Err:     errors.New("unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 			wantErr: true,
 		},
 
@@ -144,8 +146,14 @@ func Test_SprintService_Get(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -230,11 +238,11 @@ func Test_SprintService_Create(t *testing.T) {
 				client.On("Call",
 					&http.Request{},
 					&model.SprintScheme{}).
-					Return(&model.ResponseScheme{}, errors.New("error, unable to execute the http call"))
+					Return(&model.ResponseScheme{}, model.ErrNoExecHttpCall)
 
 				fields.c = client
 			},
-			Err:     errors.New("error, unable to execute the http call"),
+			Err:     model.ErrNoExecHttpCall,
 			wantErr: true,
 		},
 
@@ -254,11 +262,11 @@ func Test_SprintService_Create(t *testing.T) {
 					"rest/agile/1.0/sprint",
 					"",
 					payloadMocked).
-					Return(&http.Request{}, errors.New("unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
-			Err:     errors.New("unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 			wantErr: true,
 		},
 	}
@@ -280,8 +288,14 @@ func Test_SprintService_Create(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -370,11 +384,11 @@ func Test_SprintService_Update(t *testing.T) {
 				client.On("Call",
 					&http.Request{},
 					&model.SprintScheme{}).
-					Return(&model.ResponseScheme{}, errors.New("error, unable to execute the http call"))
+					Return(&model.ResponseScheme{}, model.ErrNoExecHttpCall)
 
 				fields.c = client
 			},
-			Err:     errors.New("error, unable to execute the http call"),
+			Err:     model.ErrNoExecHttpCall,
 			wantErr: true,
 		},
 
@@ -395,11 +409,11 @@ func Test_SprintService_Update(t *testing.T) {
 					"rest/agile/1.0/sprint/1001",
 					"",
 					payloadMocked).
-					Return(&http.Request{}, errors.New("unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
-			Err:     errors.New("unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 			wantErr: true,
 		},
 	}
@@ -421,8 +435,14 @@ func Test_SprintService_Update(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -511,11 +531,11 @@ func Test_SprintService_Path(t *testing.T) {
 				client.On("Call",
 					&http.Request{},
 					&model.SprintScheme{}).
-					Return(&model.ResponseScheme{}, errors.New("error, unable to execute the http call"))
+					Return(&model.ResponseScheme{}, model.ErrNoExecHttpCall)
 
 				fields.c = client
 			},
-			Err:     errors.New("error, unable to execute the http call"),
+			Err:     model.ErrNoExecHttpCall,
 			wantErr: true,
 		},
 
@@ -536,11 +556,11 @@ func Test_SprintService_Path(t *testing.T) {
 					"rest/agile/1.0/sprint/1001",
 					"",
 					payloadMocked).
-					Return(&http.Request{}, errors.New("unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
-			Err:     errors.New("unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 			wantErr: true,
 		},
 	}
@@ -562,8 +582,14 @@ func Test_SprintService_Path(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -654,11 +680,11 @@ func Test_SprintService_Delete(t *testing.T) {
 				client.On("Call",
 					&http.Request{},
 					nil).
-					Return(&model.ResponseScheme{}, errors.New("error, unable to execute the http call"))
+					Return(&model.ResponseScheme{}, model.ErrNoExecHttpCall)
 
 				fields.c = client
 			},
-			Err:     errors.New("error, unable to execute the http call"),
+			Err:     model.ErrNoExecHttpCall,
 			wantErr: true,
 		},
 
@@ -678,11 +704,11 @@ func Test_SprintService_Delete(t *testing.T) {
 					"rest/agile/1.0/sprint/1001",
 					"",
 					nil).
-					Return(&http.Request{}, errors.New("unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
-			Err:     errors.New("unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 			wantErr: true,
 		},
 	}
@@ -704,8 +730,14 @@ func Test_SprintService_Delete(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -801,11 +833,11 @@ func Test_SprintService_Issues(t *testing.T) {
 				client.On("Call",
 					&http.Request{},
 					&model.SprintIssuePageScheme{}).
-					Return(&model.ResponseScheme{}, errors.New("error, unable to execute the http call"))
+					Return(&model.ResponseScheme{}, model.ErrNoExecHttpCall)
 
 				fields.c = client
 			},
-			Err:     errors.New("error, unable to execute the http call"),
+			Err:     model.ErrNoExecHttpCall,
 			wantErr: true,
 		},
 
@@ -833,11 +865,11 @@ func Test_SprintService_Issues(t *testing.T) {
 					"rest/agile/1.0/sprint/10001/issue?expand=changelog&fields=summary%2Cstatus&jql=project+%3D+ABC&maxResults=50&startAt=100",
 					"",
 					nil).
-					Return(&http.Request{}, errors.New("unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
-			Err:     errors.New("unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 			wantErr: true,
 		},
 
@@ -874,8 +906,14 @@ func Test_SprintService_Issues(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -965,11 +1003,11 @@ func Test_SprintService_Start(t *testing.T) {
 				client.On("Call",
 					&http.Request{},
 					nil).
-					Return(&model.ResponseScheme{}, errors.New("error, unable to execute the http call"))
+					Return(&model.ResponseScheme{}, model.ErrNoExecHttpCall)
 
 				fields.c = client
 			},
-			Err:     errors.New("error, unable to execute the http call"),
+			Err:     model.ErrNoExecHttpCall,
 			wantErr: true,
 		},
 
@@ -989,11 +1027,11 @@ func Test_SprintService_Start(t *testing.T) {
 					"rest/agile/1.0/sprint/1001",
 					"",
 					&model.SprintPayloadScheme{State: "Active"}).
-					Return(&http.Request{}, errors.New("unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
-			Err:     errors.New("unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 			wantErr: true,
 		},
 	}
@@ -1015,8 +1053,14 @@ func Test_SprintService_Start(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -1106,11 +1150,11 @@ func Test_SprintService_Close(t *testing.T) {
 				client.On("Call",
 					&http.Request{},
 					nil).
-					Return(&model.ResponseScheme{}, errors.New("error, unable to execute the http call"))
+					Return(&model.ResponseScheme{}, model.ErrNoExecHttpCall)
 
 				fields.c = client
 			},
-			Err:     errors.New("error, unable to execute the http call"),
+			Err:     model.ErrNoExecHttpCall,
 			wantErr: true,
 		},
 
@@ -1130,11 +1174,11 @@ func Test_SprintService_Close(t *testing.T) {
 					"rest/agile/1.0/sprint/1001",
 					"",
 					&model.SprintPayloadScheme{State: "Closed"}).
-					Return(&http.Request{}, errors.New("unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
-			Err:     errors.New("unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 			wantErr: true,
 		},
 	}
@@ -1156,8 +1200,14 @@ func Test_SprintService_Close(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -1257,11 +1307,11 @@ func Test_SprintService_Move(t *testing.T) {
 				client.On("Call",
 					&http.Request{},
 					nil).
-					Return(&model.ResponseScheme{}, errors.New("error, unable to execute the http call"))
+					Return(&model.ResponseScheme{}, model.ErrNoExecHttpCall)
 
 				fields.c = client
 			},
-			Err:     errors.New("error, unable to execute the http call"),
+			Err:     model.ErrNoExecHttpCall,
 			wantErr: true,
 		},
 
@@ -1282,11 +1332,11 @@ func Test_SprintService_Move(t *testing.T) {
 					"/rest/agile/1.0/sprint/1001/issue",
 					"",
 					payloadMocked).
-					Return(&http.Request{}, errors.New("unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
-			Err:     errors.New("unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 			wantErr: true,
 		},
 	}
@@ -1308,8 +1358,14 @@ func Test_SprintService_Move(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)

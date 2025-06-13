@@ -51,7 +51,7 @@ type internalKnowledgebaseImpl struct {
 func (i *internalKnowledgebaseImpl) Search(ctx context.Context, query string, highlight bool, start, limit int) (*model.ArticlePageScheme, *model.ResponseScheme, error) {
 
 	if query == "" {
-		return nil, nil, model.ErrNoKBQuery
+		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoKBQuery)
 	}
 
 	params := url.Values{}
@@ -79,11 +79,11 @@ func (i *internalKnowledgebaseImpl) Search(ctx context.Context, query string, hi
 func (i *internalKnowledgebaseImpl) Gets(ctx context.Context, serviceDeskID int, query string, highlight bool, start, limit int) (*model.ArticlePageScheme, *model.ResponseScheme, error) {
 
 	if serviceDeskID == 0 {
-		return nil, nil, model.ErrNoServiceDeskID
+		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoServiceDeskID)
 	}
 
 	if query == "" {
-		return nil, nil, model.ErrNoKBQuery
+		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoKBQuery)
 	}
 
 	params := url.Values{}

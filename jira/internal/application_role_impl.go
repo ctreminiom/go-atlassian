@@ -15,7 +15,7 @@ import (
 func NewApplicationRoleService(client service.Connector, version string) (*ApplicationRoleService, error) {
 
 	if version == "" {
-		return nil, model.ErrNoVersionProvided
+		return nil, fmt.Errorf("jira: %w", model.ErrNoVersionProvided)
 	}
 
 	return &ApplicationRoleService{
@@ -75,7 +75,7 @@ func (i *internalApplicationRoleImpl) Gets(ctx context.Context) ([]*model.Applic
 func (i *internalApplicationRoleImpl) Get(ctx context.Context, key string) (*model.ApplicationRoleScheme, *model.ResponseScheme, error) {
 
 	if key == "" {
-		return nil, nil, model.ErrNoApplicationRole
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoApplicationRole)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/applicationrole/%v", i.version, key)

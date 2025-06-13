@@ -3,13 +3,15 @@ package internal
 import (
 	"context"
 	"errors"
-	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/v2/service"
-	"github.com/ctreminiom/go-atlassian/v2/service/mocks"
-	"github.com/stretchr/testify/assert"
 	"net/http"
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/assert"
+
+	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/v2/service"
+	"github.com/ctreminiom/go-atlassian/v2/service/mocks"
 )
 
 func Test_internalOrganizationImpl_Gets(t *testing.T) {
@@ -634,7 +636,7 @@ func Test_internalOrganizationImpl_Events(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"admin/v1/orgs/organization-sample-uuid/events?action=user_added_to_group&cursor=cursor-id-sample&from=1589197526&q=qq&to=1605177926",
+					"admin/v1/orgs/organization-sample-uuid/events?action=user_added_to_group&cursor=cursor-id-sample&from=1589197526371&q=qq&to=1605177926371",
 					"",
 					nil).
 					Return(&http.Request{}, nil)
@@ -679,7 +681,7 @@ func Test_internalOrganizationImpl_Events(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"admin/v1/orgs/organization-sample-uuid/events?action=user_added_to_group&cursor=cursor-id-sample&from=1589197526&q=qq&to=1605177926",
+					"admin/v1/orgs/organization-sample-uuid/events?action=user_added_to_group&cursor=cursor-id-sample&from=1589197526371&q=qq&to=1605177926371",
 					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))

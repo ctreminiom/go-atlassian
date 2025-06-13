@@ -249,12 +249,12 @@ func (i *internalOrganizationImpl) Events(ctx context.Context, organizationID st
 	if options != nil {
 
 		if !options.To.IsZero() {
-			timeAsEpoch := int(options.To.Unix())
+			timeAsEpoch := int(options.To.UnixMilli())
 			params.Add("to", strconv.Itoa(timeAsEpoch))
 		}
 
 		if !options.From.IsZero() {
-			timeAsEpoch := int(options.From.Unix())
+			timeAsEpoch := int(options.From.UnixMilli())
 			params.Add("from", strconv.Itoa(timeAsEpoch))
 		}
 

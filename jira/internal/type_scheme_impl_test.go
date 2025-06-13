@@ -8,9 +8,19 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/service"
-	"github.com/ctreminiom/go-atlassian/service/mocks"
+	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/v2/service"
+	"github.com/ctreminiom/go-atlassian/v2/service/mocks"
+)
+
+const (
+	mockIssueTypeSchemeId = "10001"
+
+	mockIssueTypeEpicId    = "10000"
+	mockIssueTypeStoryId   = "10001"
+	mockIssueTypeTaskId    = "10002"
+	mockIssueTypeSubTaskId = "10003"
+	mockIssueTypeBugId     = "10004"
 )
 
 func Test_internalTypeSchemeImpl_Gets(t *testing.T) {
@@ -864,6 +874,228 @@ func Test_internalTypeSchemeImpl_Append(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
+				assert.EqualError(t, err, testCase.Err.Error())
+
+			} else {
+
+				assert.NoError(t, err)
+				assert.NotEqual(t, gotResponse, nil)
+			}
+
+		})
+	}
+}
+
+func Test_internalTypeSchemeImpl_Reorder(t *testing.T) {
+
+	type fields struct {
+		c       service.Connector
+		version string
+	}
+
+	type args struct {
+		ctx               context.Context
+		issueTypeSchemeID string
+		issueTypeIDs      []string
+		after             string
+		position          model.IssueTypeSchemePosition
+	}
+
+	testCases := []struct {
+		name    string
+		fields  fields
+		args    args
+		on      func(*fields)
+		wantErr bool
+		Err     error
+	}{
+		{
+			name:   "when the api version is v3",
+			fields: fields{version: "3"},
+			args: args{
+				ctx:               context.Background(),
+				issueTypeSchemeID: mockIssueTypeSchemeId,
+				issueTypeIDs:      []string{mockIssueTypeStoryId, mockIssueTypeTaskId, mockIssueTypeSubTaskId, mockIssueTypeBugId},
+				after:             mockIssueTypeEpicId,
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewConnector(t)
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodPut,
+					"/rest/api/3/issuetypescheme/10001/issuetype/move",
+					"", &model.IssueTypeSchemeOrderPayloadScheme{
+						IssueTypeIDs: []string{mockIssueTypeStoryId, mockIssueTypeTaskId, mockIssueTypeSubTaskId, mockIssueTypeBugId},
+						After:        mockIssueTypeEpicId,
+					}).
+					Return(&http.Request{}, nil)
+
+				client.On("Call",
+					&http.Request{},
+					nil).
+					Return(&model.ResponseScheme{}, nil)
+
+				fields.c = client
+			},
+			wantErr: false,
+			Err:     nil,
+		},
+
+		{
+			name:   "when the api version is v2",
+			fields: fields{version: "2"},
+			args: args{
+				ctx:               context.Background(),
+				issueTypeSchemeID: mockIssueTypeSchemeId,
+				issueTypeIDs:      []string{mockIssueTypeStoryId, mockIssueTypeTaskId, mockIssueTypeSubTaskId, mockIssueTypeBugId},
+				after:             mockIssueTypeEpicId,
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewConnector(t)
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodPut,
+					"/rest/api/2/issuetypescheme/10001/issuetype/move",
+					"", &model.IssueTypeSchemeOrderPayloadScheme{
+						IssueTypeIDs: []string{mockIssueTypeStoryId, mockIssueTypeTaskId, mockIssueTypeSubTaskId, mockIssueTypeBugId},
+						After:        mockIssueTypeEpicId,
+					}).
+					Return(&http.Request{}, nil)
+
+				client.On("Call",
+					&http.Request{},
+					nil).
+					Return(&model.ResponseScheme{}, nil)
+
+				fields.c = client
+			},
+			wantErr: false,
+			Err:     nil,
+		},
+
+		{
+			name:   "when the issue type scheme id is not provided",
+			fields: fields{version: "3"},
+			args: args{
+				ctx:          context.Background(),
+				issueTypeIDs: []string{mockIssueTypeStoryId, mockIssueTypeTaskId, mockIssueTypeSubTaskId, mockIssueTypeBugId},
+				after:        mockIssueTypeEpicId,
+			},
+			wantErr: true,
+			Err:     model.ErrNoIssueTypeSchemeID,
+		},
+
+		{
+			name:   "when the issue type ids are not provided",
+			fields: fields{version: "3"},
+			args: args{
+				ctx:               context.Background(),
+				issueTypeSchemeID: mockIssueTypeSchemeId,
+				after:             mockIssueTypeEpicId,
+			},
+			wantErr: true,
+			Err:     model.ErrNoIssueTypes,
+		},
+
+		{
+			name:   "when no required 'after' or 'position' attribute is provided",
+			fields: fields{version: "3"},
+			args: args{
+				ctx:               context.Background(),
+				issueTypeSchemeID: mockIssueTypeSchemeId,
+				issueTypeIDs:      []string{mockIssueTypeStoryId, mockIssueTypeTaskId, mockIssueTypeSubTaskId, mockIssueTypeBugId},
+			},
+			wantErr: true,
+			Err:     model.ErrNoIssueTypeReorderAttr,
+		},
+
+		{
+			name:   "when no required 'after' or 'position' attribute is provided",
+			fields: fields{version: "3"},
+			args: args{
+				ctx:               context.Background(),
+				issueTypeSchemeID: mockIssueTypeSchemeId,
+				position:          "blah",
+				issueTypeIDs:      []string{mockIssueTypeStoryId, mockIssueTypeTaskId, mockIssueTypeSubTaskId, mockIssueTypeBugId},
+			},
+			wantErr: true,
+			Err:     model.ErrInvalidIssueTypeSchemePosition,
+		},
+
+		{
+			name:   "when the http request cannot be created",
+			fields: fields{version: "3"},
+			args: args{
+				ctx:               context.Background(),
+				issueTypeSchemeID: mockIssueTypeSchemeId,
+				issueTypeIDs:      []string{mockIssueTypeStoryId, mockIssueTypeTaskId, mockIssueTypeSubTaskId, mockIssueTypeBugId},
+				after:             mockIssueTypeEpicId,
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewConnector(t)
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodPut,
+					"/rest/api/3/issuetypescheme/10001/issuetype/move",
+					"", &model.IssueTypeSchemeOrderPayloadScheme{
+						IssueTypeIDs: []string{mockIssueTypeStoryId, mockIssueTypeTaskId, mockIssueTypeSubTaskId, mockIssueTypeBugId},
+						After:        mockIssueTypeEpicId,
+					}).
+					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+
+				fields.c = client
+			},
+			wantErr: true,
+			Err:     errors.New("error, unable to create the http request"),
+		},
+
+		{
+			name:   "when using invalid payload with 'after' attribute",
+			fields: fields{version: "3"},
+			args: args{
+				ctx:               context.Background(),
+				issueTypeSchemeID: "10001",
+				after:             mockIssueTypeTaskId,
+				issueTypeIDs:      []string{mockIssueTypeStoryId, mockIssueTypeTaskId, mockIssueTypeSubTaskId, mockIssueTypeBugId},
+			},
+			wantErr: true,
+			Err:     model.ErrInvalidIssueTypeSchemeAfter,
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+
+			if testCase.on != nil {
+				testCase.on(&testCase.fields)
+			}
+
+			newService, err := NewTypeSchemeService(testCase.fields.c, testCase.fields.version)
+			assert.NoError(t, err)
+
+			gotResponse, err := newService.Reorder(testCase.args.ctx, testCase.args.issueTypeSchemeID, &model.IssueTypeSchemeOrderPayloadScheme{
+				After:        testCase.args.after,
+				Position:     testCase.args.position,
+				IssueTypeIDs: testCase.args.issueTypeIDs,
+			})
+
+			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+
+				errUnwrapped := errors.Unwrap(err)
+
+				if errUnwrapped != nil {
+					err = errUnwrapped
+				}
 				assert.EqualError(t, err, testCase.Err.Error())
 
 			} else {

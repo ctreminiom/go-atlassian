@@ -3,12 +3,13 @@ package internal
 import (
 	"context"
 	"errors"
-	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/service"
-	"github.com/ctreminiom/go-atlassian/service/mocks"
-	"github.com/stretchr/testify/assert"
 	"net/http"
 	"testing"
+
+	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/v2/service"
+	"github.com/ctreminiom/go-atlassian/v2/service/mocks"
+	"github.com/stretchr/testify/assert"
 )
 
 func Test_internalAQLImpl_Filter(t *testing.T) {
@@ -18,7 +19,7 @@ func Test_internalAQLImpl_Filter(t *testing.T) {
 		Page:                  2,
 		ResultPerPage:         25,
 		IncludeAttributes:     true,
-		IncludeAttributesDeep: true,
+		IncludeAttributesDeep: 12,
 		IncludeTypeAttributes: true,
 		IncludeExtendedInfo:   true,
 	}
@@ -55,7 +56,7 @@ func Test_internalAQLImpl_Filter(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"jsm/assets/workspace/workspace-uuid-sample/v1/aql/objects?includeAttributes=true&includeAttributesDeep=true&includeExtendedInfo=true&includeTypeAttributes=true&page=2&qlQuery=Name+LIKE+Test&resultPerPage=25",
+					"jsm/assets/workspace/workspace-uuid-sample/v1/aql/objects?includeAttributes=true&includeAttributesDeep=12&includeExtendedInfo=true&includeTypeAttributes=true&page=2&qlQuery=Name+LIKE+Test&resultPerPage=25",
 					"",
 					nil).
 					Return(&http.Request{}, nil)
@@ -83,7 +84,7 @@ func Test_internalAQLImpl_Filter(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"jsm/assets/workspace/workspace-uuid-sample/v1/aql/objects?includeAttributes=true&includeAttributesDeep=true&includeExtendedInfo=true&includeTypeAttributes=true&page=2&qlQuery=Name+LIKE+Test&resultPerPage=25",
+					"jsm/assets/workspace/workspace-uuid-sample/v1/aql/objects?includeAttributes=true&includeAttributesDeep=12&includeExtendedInfo=true&includeTypeAttributes=true&page=2&qlQuery=Name+LIKE+Test&resultPerPage=25",
 					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))

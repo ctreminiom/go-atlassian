@@ -10,9 +10,9 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/ctreminiom/go-atlassian/confluence/internal"
-	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/service/common"
+	"github.com/ctreminiom/go-atlassian/v2/confluence/internal"
+	"github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/v2/service/common"
 )
 
 func New(httpClient common.HTTPClient, site string) (*Client, error) {
@@ -60,6 +60,7 @@ func New(httpClient common.HTTPClient, site string) (*Client, error) {
 	client.Search = internal.NewSearchService(client)
 	client.LongTask = internal.NewTaskService(client)
 	client.Analytics = internal.NewAnalyticsService(client)
+	client.Template = internal.NewTemplateService(client)
 
 	return client, nil
 }
@@ -74,6 +75,7 @@ type Client struct {
 	Search    *internal.SearchService
 	LongTask  *internal.TaskService
 	Analytics *internal.AnalyticsService
+	Template  *internal.TemplateService
 }
 
 func (c *Client) NewRequest(ctx context.Context, method, urlStr, contentType string, body interface{}) (*http.Request, error) {

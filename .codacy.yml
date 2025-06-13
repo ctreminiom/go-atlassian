@@ -1,0 +1,9 @@
+exclude_paths:
+  - "**/*_test.go"
+
+# Disable specific rules
+engines:
+  markdownlint:
+    enabled: true
+    ignore_patterns:
+      - markdownlint_MD013  # Line length rule

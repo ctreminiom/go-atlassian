@@ -36,29 +36,29 @@ The **go-atlassian** library is designed to simplify the process of building Go 
 
 If you do not have [Go](https://golang.org/) installed yet, you can find installation instructions
 [here](https://golang.org/doc/install). Please note that the package requires Go version
-1.17 or later for module support.
+1.20 or later for module support.
 
 To pull the most recent version of **go-atlassian**, use `go get`.
 
 ```
-go get github.com/ctreminiom/go-atlassian
+go get github.com/ctreminiom/go-atlassian/v2
 ```
 
 -------------------------
 ## 📪 Packages
 Then import the package into your project as you normally would. You can import the following packages:
 
-| Module                  	       | Path                                               	     | URL's                                                                                	|
-|---------------------------------|----------------------------------------------------------|--------------------------------------------------------------------------------------	|
-| Jira v2                 	       | `github.com/ctreminiom/go-atlassian/jira/v2`       	     | [Getting Started](https://docs.go-atlassian.io/jira-software-cloud/introduction)     	|
-| Jira v3                 	       | `github.com/ctreminiom/go-atlassian/jira/v3`       	     | [Getting Started](https://docs.go-atlassian.io/jira-software-cloud/introduction)     	|
-| Jira Software Agile     	       | `github.com/ctreminiom/go-atlassian/jira/agile`    	     | [Getting Started](https://docs.go-atlassian.io/jira-agile/introduction)              	|
-| Jira Service Management 	       | `github.com/ctreminiom/go-atlassian/jira/sm`       	     | [Getting Started](https://docs.go-atlassian.io/jira-service-management/introduction) 	|
-| Jira Assets             	       | `github.com/ctreminiom/go-atlassian/assets`        	     | [Getting Started](https://docs.go-atlassian.io/jira-assets/overview)                 	|
-| Confluence              	       | `github.com/ctreminiom/go-atlassian/confluence`    	     | [Getting Started](https://docs.go-atlassian.io/confluence-cloud/introduction)        	|
-| Confluence v2           	       | `github.com/ctreminiom/go-atlassian/confluence/v2` 	     | [Getting Started](https://docs.go-atlassian.io/confluence-cloud/v2/introduction)     	|
-| Admin Cloud             	       | `github.com/ctreminiom/go-atlassian/admin`         	     | [Getting Started](https://docs.go-atlassian.io/atlassian-admin-cloud/overview)       	|
-| Bitbucket Cloud *(In Progress)*<br/> | `github.com/ctreminiom/go-atlassian/bitbucket`         	 | [Getting Started](https://docs.go-atlassian.io/bitbucket-cloud/introduction)       	|
+| Module                              | Path                                                      | URL's                                                                                  |
+|-------------------------------------|-----------------------------------------------------------|----------------------------------------------------------------------------------------|
+| Jira v2                             | `github.com/ctreminiom/go-atlassian/v2/jira/v2`           | [Getting Started](https://docs.go-atlassian.io/jira-software-cloud/introduction)       |
+| Jira v3                             | `github.com/ctreminiom/go-atlassian/v2/jira/v3`           | [Getting Started](https://docs.go-atlassian.io/jira-software-cloud/introduction)       |
+| Jira Software Agile                 | `github.com/ctreminiom/go-atlassian/v2/jira/agile`        | [Getting Started](https://docs.go-atlassian.io/jira-agile/introduction)                |
+| Jira Service Management             | `github.com/ctreminiom/go-atlassian/v2/jira/sm`           | [Getting Started](https://docs.go-atlassian.io/jira-service-management/introduction)   |
+| Jira Assets                         | `github.com/ctreminiom/go-atlassian/v2/assets`            | [Getting Started](https://docs.go-atlassian.io/jira-assets/overview)                   |
+| Confluence                          | `github.com/ctreminiom/go-atlassian/v2/confluence`        | [Getting Started](https://docs.go-atlassian.io/confluence-cloud/introduction)          |
+| Confluence v2                       | `github.com/ctreminiom/go-atlassian/v2/confluence/v2`     | [Getting Started](https://docs.go-atlassian.io/confluence-cloud/v2/introduction)       |
+| Admin Cloud                         | `github.com/ctreminiom/go-atlassian/v2/admin`             | [Getting Started](https://docs.go-atlassian.io/atlassian-admin-cloud/overview)         |
+| Bitbucket Cloud *(In Progress)*     | `github.com/ctreminiom/go-atlassian/v2/bitbucket`         | [Getting Started](https://docs.go-atlassian.io/bitbucket-cloud/introduction)           |
 
 -------------------------
 ## 🔨 Usage
@@ -99,7 +99,7 @@ instance.Auth.SetBasicAuth("YOUR_CLIENT_MAIL", "YOUR_APP_ACCESS_TOKEN")
 
 ## ☕Cookbooks
 
-For detailed examples and usage of the go-atlassian library, please refer to our Cookbook. This section provides step-by-step guides and code samples for common tasks and scenarios.
+For detailed examples and usage of the go-atlassian library, please refer to our [**Cookbook**](https://docs.go-atlassian.io/cookbooks). This section provides step-by-step guides and code samples for common tasks and scenarios.
 
 -------------------------
 ## 🌍 Services
@@ -160,6 +160,65 @@ for _, transition := range issue.Transitions {
 ```
 
 The rest of the service functions work much the same way; they are concise and behave as you would expect. The [documentation](https://docs.go-atlassian.io/) contains several examples on how to use each service function.
+
+
+## 📪Call a RAW API Endpoint
+If you need to interact with an Atlassian API endpoint that hasn't been implemented in the `go-atlassian` library yet, you can make a custom API request using the built-in `Client.Call` method to execute raw HTTP requests.
+
+> Please raise an issue in order to implement the endpoint
+
+```go
+package main  
+  
+import (  
+    "context"  
+    "fmt" 
+    "github.com/ctreminiom/go-atlassian/v2/jira/v3" 
+    "log" 
+    "net/http" 
+    "os"
+ )  
+  
+type IssueTypeMetadata struct {  
+    IssueTypes []struct {  
+       ID          string `json:"id"`  
+  Name        string `json:"name"`  
+  Description string `json:"description"`  
+  } `json:"issueTypes"`  
+}  
+  
+func main() {  
+  
+    var (  
+       host  = os.Getenv("SITE")  
+       mail  = os.Getenv("MAIL")  
+       token = os.Getenv("TOKEN")  
+    )  
+  
+    atlassian, err := v3.New(nil, host)  
+    if err != nil {  
+       log.Fatal(err)  
+    }  
+  
+    atlassian.Auth.SetBasicAuth(mail, token)  
+  
+    // Define the RAW endpoint  
+    apiEndpoint := "rest/api/3/issue/createmeta/KP/issuetypes"  
+  
+    request, err := atlassian.NewRequest(context.Background(), http.MethodGet, apiEndpoint, "", nil)  
+    if err != nil {  
+       log.Fatal(err)  
+    }  
+  
+    customResponseStruct := new(IssueTypeMetadata)  
+    response, err := atlassian.Call(request, &customResponseStruct)  
+    if err != nil {  
+       log.Fatal(err)  
+    }  
+  
+    fmt.Println(response.Status)  
+}
+```
 
 -------------------------
 ## ✍️ Contributions

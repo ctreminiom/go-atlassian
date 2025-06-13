@@ -6,9 +6,9 @@ import (
 	"net/http"
 	"net/url"
 
-	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/service"
-	"github.com/ctreminiom/go-atlassian/service/jira"
+	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/v2/service"
+	"github.com/ctreminiom/go-atlassian/v2/service/jira"
 )
 
 // NewWatcherService creates a new instance of WatcherService.
@@ -93,9 +93,9 @@ func (i *internalWatcherImpl) Add(ctx context.Context, issueKeyOrID string, acco
 
 	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/watchers", i.version, issueKeyOrID)
 
-	var payload []byte // add self user
+	var payload string // add self user
 	if len(accountID) > 0 {
-		payload = []byte(accountID[0]) // add another user
+		payload = accountID[0] // add another user
 	}
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {

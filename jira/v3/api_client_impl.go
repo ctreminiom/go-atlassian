@@ -10,9 +10,9 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/ctreminiom/go-atlassian/jira/internal"
-	"github.com/ctreminiom/go-atlassian/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/service/common"
+	"github.com/ctreminiom/go-atlassian/v2/jira/internal"
+	"github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/v2/service/common"
 )
 
 // APIVersion is the version of the Jira API that this client targets.
@@ -397,6 +397,8 @@ func New(httpClient common.HTTPClient, site string) (*Client, error) {
 	client.NotificationScheme = projectNotificationScheme
 	client.Team = internal.NewTeamService(client)
 
+	client.Archival = internal.NewIssueArchivalService(client, APIVersion)
+
 	return client, nil
 }
 
@@ -423,6 +425,8 @@ type Client struct {
 	JQL                *internal.JQLService
 	NotificationScheme *internal.NotificationSchemeService
 	Team               *internal.TeamService
+
+	Archival *internal.IssueArchivalService
 }
 
 // NewRequest creates an API request.

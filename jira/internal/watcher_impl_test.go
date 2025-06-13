@@ -8,9 +8,9 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/service"
-	"github.com/ctreminiom/go-atlassian/service/mocks"
+	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/v2/service"
+	"github.com/ctreminiom/go-atlassian/v2/service/mocks"
 )
 
 func Test_internalWatcherImpl_Gets(t *testing.T) {
@@ -199,7 +199,7 @@ func Test_internalWatcherImpl_Add(t *testing.T) {
 					http.MethodPost,
 					"rest/api/3/issue/DUMMY-5/watchers",
 					"",
-					[]byte(nil)).
+					"").
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -230,7 +230,7 @@ func Test_internalWatcherImpl_Add(t *testing.T) {
 					http.MethodPost,
 					"rest/api/3/issue/DUMMY-5/watchers",
 					"",
-					[]byte("someAccountID")).
+					"someAccountID").
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -261,7 +261,7 @@ func Test_internalWatcherImpl_Add(t *testing.T) {
 					http.MethodPost,
 					"rest/api/2/issue/DUMMY-5/watchers",
 					"",
-					[]byte(nil),
+					"",
 				).
 					Return(&http.Request{}, nil)
 
@@ -293,7 +293,7 @@ func Test_internalWatcherImpl_Add(t *testing.T) {
 					http.MethodPost,
 					"rest/api/2/issue/DUMMY-5/watchers",
 					"",
-					[]byte("someAccountID")).
+					"someAccountID").
 					Return(&http.Request{}, nil)
 
 				client.On("Call",
@@ -335,7 +335,7 @@ func Test_internalWatcherImpl_Add(t *testing.T) {
 					http.MethodPost,
 					"rest/api/3/issue/DUMMY-5/watchers",
 					"",
-					[]byte(nil)).
+					"").
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client

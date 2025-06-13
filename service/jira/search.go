@@ -2,7 +2,8 @@ package jira
 
 import (
 	"context"
-	model "github.com/ctreminiom/go-atlassian/pkg/infra/models"
+
+	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
 )
 
 type SearchSharedConnector interface {
@@ -23,6 +24,8 @@ type SearchRichTextConnector interface {
 	// GET /rest/api/2/search
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/search#search-for-issues-using-jql-get
+	//
+	// Deprecated: This endpoint will be removed after May 1, 2025. Use SearchJQL, BulkFetch and ApproximateCount instead.
 	Get(ctx context.Context, jql string, fields, expands []string, startAt, maxResults int, validate string) (*model.IssueSearchSchemeV2, *model.ResponseScheme, error)
 
 	// Post search issues using JQL query under the HTTP Method POST
@@ -30,7 +33,27 @@ type SearchRichTextConnector interface {
 	// POST /rest/api/2/search
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/search#search-for-issues-using-jql-get
+	//
+	// Deprecated: This endpoint will be removed after May 1, 2025. Use SearchJQL, BulkFetch and ApproximateCount instead.
 	Post(ctx context.Context, jql string, fields, expands []string, startAt, maxResults int, validate string) (*model.IssueSearchSchemeV2, *model.ResponseScheme, error)
+
+	// SearchJQL search issues using the new JQL search endpoint
+	//
+	// POST /rest/api/2/search/jql
+	//
+	SearchJQL(ctx context.Context, jql string, fields, expands []string, maxResults int, nextPageToken string) (*model.IssueSearchJQLSchemeV2, *model.ResponseScheme, error)
+
+	// ApproximateCount gets an approximate count of issues matching a JQL query
+	//
+	// POST /rest/api/2/search/approximate-count
+	//
+	ApproximateCount(ctx context.Context, jql string) (*model.IssueSearchApproximateCountScheme, *model.ResponseScheme, error)
+
+	// BulkFetch fetches multiple issues by their IDs or keys
+	//
+	// POST /rest/api/2/issue/bulkfetch
+	//
+	BulkFetch(ctx context.Context, issueIDsOrKeys []string, fields []string) (*model.IssueBulkFetchSchemeV2, *model.ResponseScheme, error)
 }
 
 type SearchADFConnector interface {
@@ -41,6 +64,8 @@ type SearchADFConnector interface {
 	// GET /rest/api/3/search
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/search#search-for-issues-using-jql-get
+	//
+	// Deprecated: This endpoint will be removed after May 1, 2025. Use SearchJQL, BulkFetch and ApproximateCount instead.
 	Get(ctx context.Context, jql string, fields, expands []string, startAt, maxResults int, validate string) (*model.IssueSearchScheme, *model.ResponseScheme, error)
 
 	// Post search issues using JQL query under the HTTP Method POST
@@ -48,5 +73,25 @@ type SearchADFConnector interface {
 	// POST /rest/api/3/search
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/search#search-for-issues-using-jql-get
+	//
+	// Deprecated: This endpoint will be removed after May 1, 2025. Use SearchJQL, BulkFetch and ApproximateCount instead.
 	Post(ctx context.Context, jql string, fields, expands []string, startAt, maxResults int, validate string) (*model.IssueSearchScheme, *model.ResponseScheme, error)
+
+	// SearchJQL searches issues using the new JQL search endpoint
+	//
+	// POST /rest/api/3/search/jql
+	//
+	SearchJQL(ctx context.Context, jql string, fields, expands []string, maxResults int, nextPageToken string) (*model.IssueSearchJQLScheme, *model.ResponseScheme, error)
+
+	// ApproximateCount gets an approximate count of issues matching a JQL query
+	//
+	// POST /rest/api/3/search/approximate-count
+	//
+	ApproximateCount(ctx context.Context, jql string) (*model.IssueSearchApproximateCountScheme, *model.ResponseScheme, error)
+
+	// BulkFetch fetches multiple issues by their IDs or keys
+	//
+	// POST /rest/api/3/issue/bulkfetch
+	//
+	BulkFetch(ctx context.Context, issueIDsOrKeys []string, fields []string) (*model.IssueBulkFetchScheme, *model.ResponseScheme, error)
 }

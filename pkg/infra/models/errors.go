@@ -172,4 +172,9 @@ var (
 	ErrNoMemberID                     = errors.New("bitbucket: no member id set")
 	ErrNoWebhookID                    = errors.New("bitbucket: no webhook id set")
 	ErrNoRepository                   = errors.New("bitbucket: no repository set")
+	ErrNoKeyError                     = errors.New("jira: no key set")
+
+	ErrNoIssueTypeReorderAttr         = errors.New("no position or after attribute set for issue type scheme reorder. one must be set")
+	ErrInvalidIssueTypeSchemePosition = errors.New("invalid issue type scheme position. must be one of the following values: First, Last")
+	ErrInvalidIssueTypeSchemeAfter    = errors.New("issue type scheme invalid 'after' attr, issue type id found in 'issueTypeIds'")
 )

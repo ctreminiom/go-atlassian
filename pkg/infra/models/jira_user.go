@@ -1,5 +1,13 @@
 package models
 
+// User account type constants
+const (
+	UserAccountTypeAtlassian = "atlassian"
+	UserAccountTypeApp       = "app"
+	UserAccountTypeCustomer  = "customer"
+	UserAccountTypeUnknown   = "unknown"
+)
+
 // UserScheme represents a user in Jira.
 type UserScheme struct {
 	Self             string                      `json:"self,omitempty"`             // The URL of the user.

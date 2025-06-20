@@ -199,6 +199,9 @@ func (i *internalIssueADFServiceImpl) Create(ctx context.Context, payload *model
 		body = payloadWithFields
 	}
 
+	// TODO: Missing optional updateHistory query parameter from API spec (default: false).
+	// When true, adds the project to the user's Recently viewed project list.
+	// Cannot add without breaking API compatibility. Consider adding in next major version.
 	endpoint := fmt.Sprintf("rest/api/%v/issue", i.version)
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", body)
 	if err != nil {

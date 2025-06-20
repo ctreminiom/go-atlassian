@@ -45,8 +45,8 @@ type IssueCommentScheme struct {
 	Body         *CommentNodeScheme       `json:"body,omitempty"`         // The body of the comment.
 	JSDPublic    bool                     `json:"jsdPublic,omitempty"`    // Whether the comment is public.
 	UpdateAuthor *UserScheme              `json:"updateAuthor,omitempty"` // The author of the last update.
-	Created      string                   `json:"created,omitempty"`      // The creation time of the comment.
-	Updated      string                   `json:"updated,omitempty"`      // The last update time of the comment.
+	Created      string                   `json:"created,omitempty"`      // The creation time of the comment. TODO: Should use *DateTimeScheme for proper RFC3339 formatting. Cannot change without breaking API compatibility.
+	Updated      string                   `json:"updated,omitempty"`      // The last update time of the comment. TODO: Should use *DateTimeScheme for proper RFC3339 formatting. Cannot change without breaking API compatibility.
 	Visibility   *CommentVisibilityScheme `json:"visibility,omitempty"`   // The visibility of the comment.
 }
 

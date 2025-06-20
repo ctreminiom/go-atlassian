@@ -35,6 +35,8 @@ func (s *SearchADFService) Checks(ctx context.Context, payload *model.IssueSearc
 // https://docs.go-atlassian.io/jira-software-cloud/issues/search#search-for-issues-using-jql-get
 //
 // Deprecated: This endpoint will be removed after May 1, 2025. Use SearchJQL, BulkFetch and ApproximateCount instead.
+// TODO: Implementation still uses deprecated GET /rest/api/3/search endpoint.
+// Cannot change without breaking API compatibility. Consider removing in next major version.
 func (s *SearchADFService) Get(ctx context.Context, jql string, fields, expands []string, startAt, maxResults int, validate string) (*model.IssueSearchScheme, *model.ResponseScheme, error) {
 	return s.internalClient.Get(ctx, jql, fields, expands, startAt, maxResults, validate)
 }
@@ -46,6 +48,8 @@ func (s *SearchADFService) Get(ctx context.Context, jql string, fields, expands 
 // https://docs.go-atlassian.io/jira-software-cloud/issues/search#search-for-issues-using-jql-get
 //
 // Deprecated: This endpoint will be removed after May 1, 2025. Use SearchJQL, BulkFetch and ApproximateCount instead.
+// TODO: Implementation still uses deprecated POST /rest/api/3/search endpoint.
+// Cannot change without breaking API compatibility. Consider removing in next major version.
 func (s *SearchADFService) Post(ctx context.Context, jql string, fields, expands []string, startAt, maxResults int, validate string) (*model.IssueSearchScheme, *model.ResponseScheme, error) {
 	return s.internalClient.Post(ctx, jql, fields, expands, startAt, maxResults, validate)
 }
@@ -170,6 +174,8 @@ func (i *internalSearchADFImpl) Post(ctx context.Context, jql string, fields, ex
 // SearchJQL searches issues using the new JQL search endpoint
 //
 // POST /rest/api/3/search/jql
+// TODO: Missing optional parameters from API spec: properties, fieldsByKeys, failFast, reconcileIssues
+// Cannot add without breaking API compatibility. Consider adding in next major version.
 func (i *internalSearchADFImpl) SearchJQL(ctx context.Context, jql string, fields, expands []string, maxResults int, nextPageToken string) (*model.IssueSearchJQLScheme, *model.ResponseScheme, error) {
 
 	payload := struct {

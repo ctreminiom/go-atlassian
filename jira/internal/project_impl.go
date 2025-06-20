@@ -100,7 +100,7 @@ func (p *ProjectService) Search(ctx context.Context, options *model.ProjectSearc
 
 // Get returns the project details for a project.
 //
-// GET /rest/api/{2-3}project/{projectKeyOrID}
+// GET /rest/api/{2-3}/project/{projectKeyOrID}
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects#get-project
 func (p *ProjectService) Get(ctx context.Context, projectKeyOrID string, expand []string) (*model.ProjectScheme, *model.ResponseScheme, error) {

@@ -35,8 +35,7 @@ func (s *SearchRichTextService) Checks(ctx context.Context, payload *model.Issue
 // https://docs.go-atlassian.io/jira-software-cloud/issues/search#search-for-issues-using-jql-get
 //
 // Deprecated: This endpoint will be removed after May 1, 2025. Use SearchJQL, BulkFetch and ApproximateCount instead.
-// TODO: Implementation still uses deprecated GET /rest/api/2/search endpoint.
-// Cannot change without breaking API compatibility. Consider removing in next major version.
+// TODO Cannot change without breaking API compatibility. Consider removing in next major version.
 func (s *SearchRichTextService) Get(ctx context.Context, jql string, fields, expands []string, startAt, maxResults int, validate string) (*model.IssueSearchSchemeV2, *model.ResponseScheme, error) {
 	return s.internalClient.Get(ctx, jql, fields, expands, startAt, maxResults, validate)
 }
@@ -48,8 +47,7 @@ func (s *SearchRichTextService) Get(ctx context.Context, jql string, fields, exp
 // https://docs.go-atlassian.io/jira-software-cloud/issues/search#search-for-issues-using-jql-get
 //
 // Deprecated: This endpoint will be removed after May 1, 2025. Use SearchJQL, BulkFetch and ApproximateCount instead.
-// TODO: Implementation still uses deprecated POST /rest/api/2/search endpoint.
-// Cannot change without breaking API compatibility. Consider removing in next major version.
+// TODO Cannot change without breaking API compatibility. Consider removing in next major version.
 func (s *SearchRichTextService) Post(ctx context.Context, jql string, fields, expands []string, startAt, maxResults int, validate string) (*model.IssueSearchSchemeV2, *model.ResponseScheme, error) {
 	return s.internalClient.Post(ctx, jql, fields, expands, startAt, maxResults, validate)
 }

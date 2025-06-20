@@ -12,8 +12,8 @@ type IssueAttachmentScheme struct {
 	ID        string      `json:"id,omitempty"`        // The ID of the attachment.
 	Filename  string      `json:"filename,omitempty"`  // The filename of the attachment.
 	Author    *UserScheme `json:"author,omitempty"`    // The author of the attachment.
-	Created   string      `json:"created,omitempty"`   // The creation time of the attachment. TODO: Should use *DateTimeScheme for proper RFC3339 formatting. Cannot change without breaking API compatibility.
-	Size      int64       `json:"size,omitempty"`      // The size of the attachment.
+	Created   string      `json:"created,omitempty"`   // The creation time of the attachment.
+	Size      int         `json:"size,omitempty"`      // The size of the attachment.
 	MimeType  string      `json:"mimeType,omitempty"`  // The MIME type of the attachment.
 	Content   string      `json:"content,omitempty"`   // The content of the attachment.
 	Thumbnail string      `json:"thumbnail,omitempty"` // The thumbnail of the attachment.
@@ -25,8 +25,8 @@ type IssueAttachmentMetadataScheme struct {
 	Self      string      `json:"self,omitempty"`      // The URL of the attachment.
 	Filename  string      `json:"filename,omitempty"`  // The filename of the attachment.
 	Author    *UserScheme `json:"author,omitempty"`    // The author of the attachment.
-	Created   string      `json:"created,omitempty"`   // The creation time of the attachment. TODO: Should use *DateTimeScheme for proper RFC3339 formatting. Cannot change without breaking API compatibility.
-	Size      int64       `json:"size,omitempty"`      // The size of the attachment.
+	Created   string      `json:"created,omitempty"`   // The creation time of the attachment.
+	Size      int         `json:"size,omitempty"`      // The size of the attachment.
 	MimeType  string      `json:"mimeType,omitempty"`  // The MIME type of the attachment.
 	Content   string      `json:"content,omitempty"`   // The content of the attachment.
 	Thumbnail string      `json:"thumbnail,omitempty"` // The thumbnail of the attachment.

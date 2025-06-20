@@ -55,7 +55,7 @@ func (m *MetadataService) Get(ctx context.Context, issueKeyOrID string, override
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/metadata#get-create-issue-metadata
 // Deprecated: This endpoint is deprecated in the Jira API spec.
-// TODO Cannot change without breaking API compatibility. Consider removing in next major version.
+// TODO: Cannot change without breaking API compatibility. Consider removing in next major version.
 func (m *MetadataService) Create(ctx context.Context, opts *model.IssueMetadataCreateOptions) (gjson.Result, *model.ResponseScheme, error) {
 	return m.internalClient.Create(ctx, opts)
 }

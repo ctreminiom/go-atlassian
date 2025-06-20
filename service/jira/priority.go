@@ -14,7 +14,7 @@ type PriorityConnector interface {
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/priorities#get-priorities
 	// Deprecated: This endpoint is deprecated in the Jira API spec.
-	// TODO Cannot change without breaking API compatibility. Consider removing in next major version.
+	// TODO: Cannot change without breaking API compatibility. Consider removing in next major version.
 	Gets(ctx context.Context) ([]*model.PriorityScheme, *model.ResponseScheme, error)
 
 	// Get returns an issue priority.

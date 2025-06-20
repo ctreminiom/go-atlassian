@@ -27,7 +27,7 @@ type MetadataConnector interface {
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/metadata#get-create-issue-metadata
 	// Deprecated: This endpoint is deprecated in the Jira API spec.
-	// TODO Cannot change without breaking API compatibility. Consider removing in next major version.
+	// TODO: Cannot change without breaking API compatibility. Consider removing in next major version.
 	Create(ctx context.Context, opts *model.IssueMetadataCreateOptions) (gjson.Result, *model.ResponseScheme, error)
 
 	// FetchIssueMappings returns a page of issue type metadata for a specified project.

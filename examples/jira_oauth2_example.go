@@ -123,28 +123,33 @@ func main() {
 	}
 }
 
-// Example callback handler for your web server
-func callbackHandler(w http.ResponseWriter, r *http.Request) {
-	// Extract authorization code and state from query parameters
-	code := r.URL.Query().Get("code")
-	state := r.URL.Query().Get("state")
-	error := r.URL.Query().Get("error")
-	errorDescription := r.URL.Query().Get("error_description")
+// ExampleCallbackHandler demonstrates how to handle the OAuth callback in your web server
+func ExampleCallbackHandler() {
+	http.HandleFunc("/callback", func(w http.ResponseWriter, r *http.Request) {
+		// Extract authorization code and state from query parameters
+		code := r.URL.Query().Get("code")
+		state := r.URL.Query().Get("state")
+		error := r.URL.Query().Get("error")
+		errorDescription := r.URL.Query().Get("error_description")
+		
+		if error != "" {
+			fmt.Fprintf(w, "Authorization failed: %s - %s", error, errorDescription)
+			return
+		}
+		
+		// Verify state parameter matches what you sent
+		// This prevents CSRF attacks
+		if state != "unique-state-value" {
+			fmt.Fprintf(w, "Invalid state parameter")
+			return
+		}
+		
+		// Use the authorization code to get tokens
+		// ... (see main function for token exchange example)
+		
+		fmt.Fprintf(w, "Authorization successful! Code: %s", code)
+	})
 	
-	if error != "" {
-		fmt.Fprintf(w, "Authorization failed: %s - %s", error, errorDescription)
-		return
-	}
-	
-	// Verify state parameter matches what you sent
-	// This prevents CSRF attacks
-	if state != "unique-state-value" {
-		fmt.Fprintf(w, "Invalid state parameter")
-		return
-	}
-	
-	// Use the authorization code to get tokens
-	// ... (see main function for token exchange example)
-	
-	fmt.Fprintf(w, "Authorization successful! Code: %s", code)
+	// Example of starting the server (commented out to avoid actually running)
+	// log.Fatal(http.ListenAndServe(":8080", nil))
 }

@@ -255,6 +255,10 @@ For complete examples, see:
   Automatic token renewal
 - [examples/jira_oauth2_new_flow_example.go](examples/jira_oauth2_new_flow_example.go) -
   Complete OAuth flow with auto-renewal
+- [examples/jira_oauth2_simple_server_example.go](examples/jira_oauth2_simple_server_example.go) -
+  Simple HTTP server with OAuth callback
+- [examples/jira_oauth2_http_server_example.go](examples/jira_oauth2_http_server_example.go) -
+  Full-featured HTTP server with OAuth flow
 
 ## ☕Cookbooks
 

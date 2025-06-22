@@ -29,6 +29,9 @@ type TemplateService struct {
 //
 // https://docs.go-atlassian.io/confluence-cloud/template#create-content-template
 func (t *TemplateService) Create(ctx context.Context, payload *models.CreateTemplateScheme) (*models.ContentTemplateScheme, *models.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*TemplateService).Create")
+	defer span.End()
+
 	return t.internalClient.Create(ctx, payload)
 }
 
@@ -38,6 +41,9 @@ func (t *TemplateService) Create(ctx context.Context, payload *models.CreateTemp
 //
 // https://docs.go-atlassian.io/confluence-cloud/template#update-content-template
 func (t *TemplateService) Update(ctx context.Context, payload *models.UpdateTemplateScheme) (*models.ContentTemplateScheme, *models.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*TemplateService).Update")
+	defer span.End()
+
 	return t.internalClient.Update(ctx, payload)
 }
 
@@ -47,6 +53,9 @@ func (t *TemplateService) Update(ctx context.Context, payload *models.UpdateTemp
 //
 // https://docs.go-atlassian.io/confluence-cloud/template#get-content-template
 func (t *TemplateService) Get(ctx context.Context, templateID string) (*models.ContentTemplateScheme, *models.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*TemplateService).Get")
+	defer span.End()
+
 	return t.internalClient.Get(ctx, templateID)
 }
 
@@ -57,6 +66,9 @@ type internalTemplateImpl struct {
 
 // Create implements TemplateService.Create.
 func (i *internalTemplateImpl) Create(ctx context.Context, payload *models.CreateTemplateScheme) (*models.ContentTemplateScheme, *models.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalTemplateImpl).Create")
+	defer span.End()
+
 	endpoint := "/wiki/rest/api/template"
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
@@ -75,6 +87,9 @@ func (i *internalTemplateImpl) Create(ctx context.Context, payload *models.Creat
 
 // Update implements TemplateService.Update.
 func (i *internalTemplateImpl) Update(ctx context.Context, payload *models.UpdateTemplateScheme) (*models.ContentTemplateScheme, *models.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalTemplateImpl).Update")
+	defer span.End()
+
 	endpoint := "/wiki/rest/api/template"
 
 	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
@@ -93,6 +108,9 @@ func (i *internalTemplateImpl) Update(ctx context.Context, payload *models.Updat
 
 // Get implements TemplateService.Get.
 func (i *internalTemplateImpl) Get(ctx context.Context, templateID string) (*models.ContentTemplateScheme, *models.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalTemplateImpl).Get")
+	defer span.End()
+
 	endpoint := "/wiki/rest/api/template/" + templateID
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)

@@ -157,6 +157,9 @@ func (t *TypeSchemeService) Remove(ctx context.Context, issueTypeSchemeID, issue
 //
 // PUT /rest/api/{2-3}/issuetypescheme/{issueTypeSchemeId}/issuetype/move
 func (t *TypeSchemeService) Reorder(ctx context.Context, issueTypeSchemeId string, payload *model.IssueTypeSchemeOrderPayloadScheme) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*TypeSchemeService).Reorder")
+	defer span.End()
+
 	return t.internalClient.Reorder(ctx, issueTypeSchemeId, payload)
 }
 
@@ -378,6 +381,9 @@ func (i *internalTypeSchemeImpl) Remove(ctx context.Context, issueTypeSchemeID, 
 }
 
 func (i *internalTypeSchemeImpl) Reorder(ctx context.Context, issueTypeSchemeId string, payload *model.IssueTypeSchemeOrderPayloadScheme) (*model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalTypeSchemeImpl).Reorder")
+	defer span.End()
 
 	if issueTypeSchemeId == "" {
 		return nil, fmt.Errorf("jira: TypeSchemeService.Reorder: %w", model.ErrNoIssueTypeSchemeID)

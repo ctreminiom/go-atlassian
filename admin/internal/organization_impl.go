@@ -127,6 +127,9 @@ func (o *OrganizationService) Actions(ctx context.Context, organizationID string
 //
 // https://developer.atlassian.com/cloud/admin/organization/rest/api-group-events/#api-v1-orgs-orgid-events-stream-get
 func (o *OrganizationService) EventsStream(ctx context.Context, organizationID string, options *model.OrganizationEventStreamOptScheme) (*model.OrganizationEventStreamPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*OrganizationService).EventsStream")
+	defer span.End()
+
 	return o.internalClient.EventsStream(ctx, organizationID, options)
 }
 
@@ -386,6 +389,9 @@ func (i *internalOrganizationImpl) Actions(ctx context.Context, organizationID s
 }
 
 func (i *internalOrganizationImpl) EventsStream(ctx context.Context, organizationID string, options *model.OrganizationEventStreamOptScheme) (*model.OrganizationEventStreamPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalOrganizationImpl).EventsStream")
+	defer span.End()
+
 	if organizationID == "" {
 		return nil, nil, model.ErrNoAdminOrganization
 	}

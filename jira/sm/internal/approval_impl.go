@@ -74,7 +74,7 @@ func (i *internalServiceRequestApprovalImpl) Gets(ctx context.Context, issueKeyO
 	defer span.End()
 
 	if issueKeyOrID == "" {
-		return nil, nil, model.ErrNoIssueKeyOrID
+		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	params := url.Values{}
@@ -102,11 +102,11 @@ func (i *internalServiceRequestApprovalImpl) Get(ctx context.Context, issueKeyOr
 	defer span.End()
 
 	if issueKeyOrID == "" {
-		return nil, nil, model.ErrNoIssueKeyOrID
+		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	if approvalID == 0 {
-		return nil, nil, model.ErrNoApprovalID
+		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoApprovalID)
 	}
 
 	url := fmt.Sprintf("rest/servicedeskapi/request/%v/approval/%v", issueKeyOrID, approvalID)
@@ -130,11 +130,11 @@ func (i *internalServiceRequestApprovalImpl) Answer(ctx context.Context, issueKe
 	defer span.End()
 
 	if issueKeyOrID == "" {
-		return nil, nil, model.ErrNoIssueKeyOrID
+		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	if approvalID == 0 {
-		return nil, nil, model.ErrNoApprovalID
+		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoApprovalID)
 	}
 
 	url := fmt.Sprintf("rest/servicedeskapi/request/%v/approval/%v", issueKeyOrID, approvalID)

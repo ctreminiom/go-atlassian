@@ -18,7 +18,7 @@ import (
 func NewProjectRoleService(client service.Connector, version string, actor *ProjectRoleActorService) (*ProjectRoleService, error) {
 
 	if version == "" {
-		return nil, model.ErrNoVersionProvided
+		return nil, fmt.Errorf("jira: %w", model.ErrNoVersionProvided)
 	}
 
 	return &ProjectRoleService{
@@ -105,7 +105,7 @@ func (i *internalProjectRoleImpl) Gets(ctx context.Context, projectKeyOrID strin
 	defer span.End()
 
 	if projectKeyOrID == "" {
-		return nil, nil, model.ErrNoProjectIDOrKey
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoProjectIDOrKey)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/project/%v/role", i.version, projectKeyOrID)
@@ -152,7 +152,7 @@ func (i *internalProjectRoleImpl) Get(ctx context.Context, projectKeyOrID string
 	defer span.End()
 
 	if projectKeyOrID == "" {
-		return nil, nil, model.ErrNoProjectIDOrKey
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoProjectIDOrKey)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/project/%v/role/%v", i.version, projectKeyOrID, roleID)
@@ -176,7 +176,7 @@ func (i *internalProjectRoleImpl) Details(ctx context.Context, projectKeyOrID st
 	defer span.End()
 
 	if projectKeyOrID == "" {
-		return nil, nil, model.ErrNoProjectIDOrKey
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoProjectIDOrKey)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/project/%v/roledetails", i.version, projectKeyOrID)

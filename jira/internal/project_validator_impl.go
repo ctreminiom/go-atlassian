@@ -14,7 +14,7 @@ import (
 func NewProjectValidatorService(client service.Connector, version string) (*ProjectValidatorService, error) {
 
 	if version == "" {
-		return nil, model.ErrNoVersionProvided
+		return nil, fmt.Errorf("jira: %w", model.ErrNoVersionProvided)
 	}
 
 	return &ProjectValidatorService{
@@ -82,7 +82,7 @@ func (i *internalProjectValidatorImpl) Validate(ctx context.Context, key string)
 	defer span.End()
 
 	if key == "" {
-		return nil, nil, model.ErrNoProjectIDOrKey
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoProjectIDOrKey)
 	}
 
 	params := url.Values{}
@@ -109,7 +109,7 @@ func (i *internalProjectValidatorImpl) Key(ctx context.Context, key string) (str
 	defer span.End()
 
 	if key == "" {
-		return "", nil, model.ErrNoProjectIDOrKey
+		return "", nil, fmt.Errorf("jira: %w", model.ErrNoProjectIDOrKey)
 	}
 
 	params := url.Values{}
@@ -135,7 +135,7 @@ func (i *internalProjectValidatorImpl) Name(ctx context.Context, name string) (s
 	defer span.End()
 
 	if name == "" {
-		return "", nil, model.ErrNoProjectName
+		return "", nil, fmt.Errorf("jira: %w", model.ErrNoProjectName)
 	}
 
 	params := url.Values{}

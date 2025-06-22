@@ -2,10 +2,12 @@ package internal
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"log"
 	"net/http"
+	"net/url"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -134,12 +136,12 @@ func Test_internalWorkflowImpl_Gets(t *testing.T) {
 					http.MethodGet,
 					"rest/api/3/workflow/search?expand=transitions&isActive=true&maxResults=25&orderBy=name&queryString=workflow&startAt=50&workflowName=workflow-name",
 					"", nil).
-					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
 			wantErr: true,
-			Err:     errors.New("error, unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 		},
 	}
 
@@ -162,8 +164,14 @@ func Test_internalWorkflowImpl_Gets(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -279,12 +287,12 @@ func Test_internalWorkflowImpl_Delete(t *testing.T) {
 					http.MethodDelete,
 					"rest/api/3/workflow/2838382882",
 					"", nil).
-					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
 			wantErr: true,
-			Err:     errors.New("error, unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 		},
 	}
 
@@ -306,8 +314,14 @@ func Test_internalWorkflowImpl_Delete(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -434,12 +448,12 @@ func Test_internalWorkflowImpl_Create(t *testing.T) {
 					http.MethodPost,
 					"rest/api/3/workflow",
 					"", payloadMocked).
-					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
 			wantErr: true,
-			Err:     errors.New("error, unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 		},
 	}
 
@@ -461,8 +475,14 @@ func Test_internalWorkflowImpl_Create(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -485,7 +505,7 @@ func Test_NewWorkflowService(t *testing.T) {
 		name    string
 		args    args
 		wantErr bool
-		err     error
+		Err     error
 	}{
 		{
 			name: "when the parameters are correct",
@@ -503,7 +523,7 @@ func Test_NewWorkflowService(t *testing.T) {
 				version: "",
 			},
 			wantErr: true,
-			err:     model.ErrNoVersionProvided,
+			Err:     model.ErrNoVersionProvided,
 		},
 	}
 	for _, testCase := range testCases {
@@ -516,8 +536,14 @@ func Test_NewWorkflowService(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -601,7 +627,7 @@ func Test_internalWorkflowImpl_Search(t *testing.T) {
 					http.MethodPost,
 					"rest/api/3/workflows?expand=transitions&useTransitionLinksFormat=true",
 					"", &model.WorkflowSearchCriteria{}).
-					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 			},
 			want:    nil,
 			want1:   nil,
@@ -754,7 +780,7 @@ func Test_internalWorkflowImpl_Capabilities(t *testing.T) {
 					http.MethodGet,
 					"rest/api/3/workflows/capabilities?issueTypeId=789&projectId=456&workflowId=123",
 					"", nil).
-					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 			},
 			want:    nil,
 			want1:   nil,
@@ -972,7 +998,7 @@ func Test_internalWorkflowImpl_Creates(t *testing.T) {
 					http.MethodPost,
 					"rest/api/3/workflows/create",
 					"", payload).
-					Return(nil, errors.New("error, unable to create the http request"))
+					Return(nil, model.ErrCreateHttpReq)
 			},
 			want:    nil,
 			want1:   nil,
@@ -1095,7 +1121,7 @@ func Test_internalWorkflowImpl_Updates(t *testing.T) {
 					http.MethodPost,
 					"rest/api/3/workflows/update?expand=transitions",
 					"", &model.WorkflowUpdatesPayloadScheme{}).
-					Return(nil, errors.New("error, unable to create the http request"))
+					Return(nil, model.ErrCreateHttpReq)
 			},
 			want:    nil,
 			want1:   nil,
@@ -1248,7 +1274,7 @@ func Test_internalWorkflowImpl_ValidateCreateWorkflows(t *testing.T) {
 					http.MethodPost,
 					"rest/api/3/workflows/create/validation",
 					"", &model.ValidationOptionsForCreateScheme{}).
-					Return(nil, errors.New("error, unable to create the http request"))
+					Return(nil, model.ErrCreateHttpReq)
 			},
 			want:    nil,
 			want1:   nil,
@@ -1370,7 +1396,7 @@ func Test_internalWorkflowImpl_ValidateUpdateWorkflows(t *testing.T) {
 					http.MethodPost,
 					"rest/api/3/workflows/update/validation",
 					"", &model.ValidationOptionsForUpdateScheme{}).
-					Return(nil, errors.New("error, unable to create the http request"))
+					Return(nil, model.ErrCreateHttpReq)
 			},
 			want:    nil,
 			want1:   nil,

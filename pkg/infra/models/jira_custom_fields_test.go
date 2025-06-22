@@ -1,6 +1,9 @@
 package models
 
 import (
+	"encoding/json"
+	"errors"
+	"net/url"
 	"testing"
 	"time"
 
@@ -82,8 +85,14 @@ func TestCustomFields_Cascading(t *testing.T) {
 				if err != nil {
 					t.Logf("error returned: %v", err.Error())
 				}
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 				assert.NoError(t, err)
 			}
@@ -151,8 +160,14 @@ func TestCustomFields_CheckBox(t *testing.T) {
 				if err != nil {
 					t.Logf("error returned: %v", err.Error())
 				}
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 				assert.NoError(t, err)
 			}
@@ -221,8 +236,14 @@ func TestCustomFields_Date(t *testing.T) {
 				if err != nil {
 					t.Logf("error returned: %v", err.Error())
 				}
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 				assert.NoError(t, err)
 			}
@@ -292,8 +313,14 @@ func TestCustomFields_DateTime(t *testing.T) {
 				if err != nil {
 					t.Logf("error returned: %v", err.Error())
 				}
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 				assert.NoError(t, err)
 			}
@@ -362,8 +389,14 @@ func TestCustomFields_Group(t *testing.T) {
 				if err != nil {
 					t.Logf("error returned: %v", err.Error())
 				}
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 				assert.NoError(t, err)
 			}
@@ -431,8 +464,14 @@ func TestCustomFields_Groups(t *testing.T) {
 				if err != nil {
 					t.Logf("error returned: %v", err.Error())
 				}
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 				assert.NoError(t, err)
 			}
@@ -500,8 +539,14 @@ func TestCustomFields_MultiSelect(t *testing.T) {
 				if err != nil {
 					t.Logf("error returned: %v", err.Error())
 				}
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 				assert.NoError(t, err)
 			}
@@ -547,8 +592,14 @@ func TestCustomFields_Number(t *testing.T) {
 				if err != nil {
 					t.Logf("error returned: %v", err.Error())
 				}
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 				assert.NoError(t, err)
 			}
@@ -616,8 +667,14 @@ func TestCustomFields_RadioButton(t *testing.T) {
 				if err != nil {
 					t.Logf("error returned: %v", err.Error())
 				}
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 				assert.NoError(t, err)
 			}
@@ -685,8 +742,14 @@ func TestCustomFields_Select(t *testing.T) {
 				if err != nil {
 					t.Logf("error returned: %v", err.Error())
 				}
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 				assert.NoError(t, err)
 			}
@@ -754,8 +817,14 @@ func TestCustomFields_Text(t *testing.T) {
 				if err != nil {
 					t.Logf("error returned: %v", err.Error())
 				}
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 				assert.NoError(t, err)
 			}
@@ -823,8 +892,14 @@ func TestCustomFields_URL(t *testing.T) {
 				if err != nil {
 					t.Logf("error returned: %v", err.Error())
 				}
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 				assert.NoError(t, err)
 			}
@@ -892,8 +967,14 @@ func TestCustomFields_User(t *testing.T) {
 				if err != nil {
 					t.Logf("error returned: %v", err.Error())
 				}
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 				assert.NoError(t, err)
 			}
@@ -960,8 +1041,14 @@ func TestCustomFields_Users(t *testing.T) {
 				if err != nil {
 					t.Logf("error returned: %v", err.Error())
 				}
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 				assert.NoError(t, err)
 			}

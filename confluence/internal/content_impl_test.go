@@ -2,12 +2,14 @@ package internal
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/v2/service"
 	"github.com/ctreminiom/go-atlassian/v2/service/mocks"
 	"github.com/stretchr/testify/assert"
 	"net/http"
+	"net/url"
 	"testing"
 	"time"
 )
@@ -96,12 +98,12 @@ func Test_internalContentImpl_Gets(t *testing.T) {
 					http.MethodGet,
 					"wiki/rest/api/content?expand=childTypes.all%2Ccontainer&limit=50&orderby=history.createdDate+desc&postingDay=2019-11-17&spaceKey=DUMMY&start=200&status=form&title=How+to+login+to&trigger=viewed&type=page",
 					"", nil).
-					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
 			wantErr: true,
-			Err:     errors.New("error, unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 		},
 	}
 
@@ -123,8 +125,14 @@ func Test_internalContentImpl_Gets(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -208,12 +216,12 @@ func Test_internalContentImpl_Search(t *testing.T) {
 					http.MethodGet,
 					"wiki/rest/api/content/search?cql=space+%3D+DUMMY&cqlcontext=spaceKey&cursor=next-cursor-sample&expand=restrictions.update.restrictions.user&limit=50",
 					"", nil).
-					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
 			wantErr: true,
-			Err:     errors.New("error, unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 		},
 
 		{
@@ -244,8 +252,14 @@ func Test_internalContentImpl_Search(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -323,12 +337,12 @@ func Test_internalContentImpl_Get(t *testing.T) {
 					http.MethodGet,
 					"wiki/rest/api/content/11727271?expand=restrictions.update.restrictions.user&version=23",
 					"", nil).
-					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
 			wantErr: true,
-			Err:     errors.New("error, unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 		},
 
 		{
@@ -359,8 +373,14 @@ func Test_internalContentImpl_Get(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -435,12 +455,12 @@ func Test_internalContentImpl_History(t *testing.T) {
 					http.MethodGet,
 					"wiki/rest/api/content/11727271/history?expand=restrictions.update.restrictions.user",
 					"", nil).
-					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
 			wantErr: true,
-			Err:     errors.New("error, unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 		},
 
 		{
@@ -470,8 +490,14 @@ func Test_internalContentImpl_History(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -546,12 +572,12 @@ func Test_internalContentImpl_Delete(t *testing.T) {
 					http.MethodDelete,
 					"wiki/rest/api/content/11727271?status=trashed",
 					"", nil).
-					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
 			wantErr: true,
-			Err:     errors.New("error, unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 		},
 
 		{
@@ -581,8 +607,14 @@ func Test_internalContentImpl_Delete(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -665,12 +697,12 @@ func Test_internalContentImpl_Create(t *testing.T) {
 					http.MethodPost,
 					"wiki/rest/api/content",
 					"", payloadMocked).
-					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
 			wantErr: true,
-			Err:     errors.New("error, unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 		},
 	}
 
@@ -691,8 +723,14 @@ func Test_internalContentImpl_Create(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -779,12 +817,12 @@ func Test_internalContentImpl_Update(t *testing.T) {
 					http.MethodPut,
 					"wiki/rest/api/content/100001",
 					"", payloadMocked).
-					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
 			wantErr: true,
-			Err:     errors.New("error, unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 		},
 
 		{
@@ -814,8 +852,14 @@ func Test_internalContentImpl_Update(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -895,12 +939,12 @@ func Test_internalContentImpl_Archive(t *testing.T) {
 					http.MethodPost,
 					"wiki/rest/api/content/archive",
 					"", payloadMocked).
-					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
 			wantErr: true,
-			Err:     errors.New("error, unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 		},
 	}
 
@@ -921,8 +965,14 @@ func Test_internalContentImpl_Archive(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)

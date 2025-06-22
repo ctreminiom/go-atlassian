@@ -127,7 +127,7 @@ func (i *internalSCIMUserImpl) Create(ctx context.Context, directoryID string, p
 	defer span.End()
 
 	if directoryID == "" {
-		return nil, nil, model.ErrNoAdminDirectoryID
+		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminDirectoryID)
 	}
 
 	params := url.Values{}
@@ -166,7 +166,7 @@ func (i *internalSCIMUserImpl) Gets(ctx context.Context, directoryID string, opt
 	defer span.End()
 
 	if directoryID == "" {
-		return nil, nil, model.ErrNoAdminDirectoryID
+		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminDirectoryID)
 	}
 
 	params := url.Values{}
@@ -209,11 +209,11 @@ func (i *internalSCIMUserImpl) Get(ctx context.Context, directoryID, userID stri
 	defer span.End()
 
 	if directoryID == "" {
-		return nil, nil, model.ErrNoAdminDirectoryID
+		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminDirectoryID)
 	}
 
 	if userID == "" {
-		return nil, nil, model.ErrNoAdminUserID
+		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminUserID)
 	}
 
 	params := url.Values{}
@@ -251,11 +251,11 @@ func (i *internalSCIMUserImpl) Deactivate(ctx context.Context, directoryID, user
 	defer span.End()
 
 	if directoryID == "" {
-		return nil, model.ErrNoAdminDirectoryID
+		return nil, fmt.Errorf("admin: %w", model.ErrNoAdminDirectoryID)
 	}
 
 	if userID == "" {
-		return nil, model.ErrNoAdminUserID
+		return nil, fmt.Errorf("admin: %w", model.ErrNoAdminUserID)
 	}
 
 	endpoint := fmt.Sprintf("scim/directory/%v/Users/%v", directoryID, userID)
@@ -273,11 +273,11 @@ func (i *internalSCIMUserImpl) Path(ctx context.Context, directoryID, userID str
 	defer span.End()
 
 	if directoryID == "" {
-		return nil, nil, model.ErrNoAdminDirectoryID
+		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminDirectoryID)
 	}
 
 	if userID == "" {
-		return nil, nil, model.ErrNoAdminUserID
+		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminUserID)
 	}
 
 	params := url.Values{}
@@ -316,11 +316,11 @@ func (i *internalSCIMUserImpl) Update(ctx context.Context, directoryID, userID s
 	defer span.End()
 
 	if directoryID == "" {
-		return nil, nil, model.ErrNoAdminDirectoryID
+		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminDirectoryID)
 	}
 
 	if userID == "" {
-		return nil, nil, model.ErrNoAdminUserID
+		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminUserID)
 	}
 
 	params := url.Values{}

@@ -15,7 +15,7 @@ import (
 func NewLabelService(client service.Connector, version string) (*LabelService, error) {
 
 	if version == "" {
-		return nil, model.ErrNoVersionProvided
+		return nil, fmt.Errorf("jira: %w", model.ErrNoVersionProvided)
 	}
 
 	return &LabelService{

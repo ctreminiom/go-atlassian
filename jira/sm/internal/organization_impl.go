@@ -205,7 +205,7 @@ func (i *internalOrganizationImpl) Get(ctx context.Context, organizationID int) 
 	defer span.End()
 
 	if organizationID == 0 {
-		return nil, nil, model.ErrNoOrganizationID
+		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoOrganizationID)
 	}
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/organization/%v", organizationID)
@@ -229,7 +229,7 @@ func (i *internalOrganizationImpl) Delete(ctx context.Context, organizationID in
 	defer span.End()
 
 	if organizationID == 0 {
-		return nil, model.ErrNoOrganizationID
+		return nil, fmt.Errorf("sm: %w", model.ErrNoOrganizationID)
 	}
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/organization/%v", organizationID)
@@ -247,7 +247,7 @@ func (i *internalOrganizationImpl) Create(ctx context.Context, name string) (*mo
 	defer span.End()
 
 	if name == "" {
-		return nil, nil, model.ErrNoOrganizationName
+		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoOrganizationName)
 	}
 
 	endpoint := "rest/servicedeskapi/organization"
@@ -271,7 +271,7 @@ func (i *internalOrganizationImpl) Users(ctx context.Context, organizationID, st
 	defer span.End()
 
 	if organizationID == 0 {
-		return nil, nil, model.ErrNoOrganizationID
+		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoOrganizationID)
 	}
 
 	params := url.Values{}
@@ -299,11 +299,11 @@ func (i *internalOrganizationImpl) Add(ctx context.Context, organizationID int, 
 	defer span.End()
 
 	if organizationID == 0 {
-		return nil, model.ErrNoOrganizationID
+		return nil, fmt.Errorf("sm: %w", model.ErrNoOrganizationID)
 	}
 
 	if len(accountIDs) == 0 {
-		return nil, model.ErrNoAccountSlice
+		return nil, fmt.Errorf("sm: %w", model.ErrNoAccountSlice)
 	}
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/organization/%v/user", organizationID)
@@ -321,11 +321,11 @@ func (i *internalOrganizationImpl) Remove(ctx context.Context, organizationID in
 	defer span.End()
 
 	if organizationID == 0 {
-		return nil, model.ErrNoOrganizationID
+		return nil, fmt.Errorf("sm: %w", model.ErrNoOrganizationID)
 	}
 
 	if len(accountIDs) == 0 {
-		return nil, model.ErrNoAccountSlice
+		return nil, fmt.Errorf("sm: %w", model.ErrNoAccountSlice)
 	}
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/organization/%v/user", organizationID)
@@ -343,7 +343,7 @@ func (i *internalOrganizationImpl) Project(ctx context.Context, accountID string
 	defer span.End()
 
 	if serviceDeskID == 0 {
-		return nil, nil, model.ErrNoServiceDeskID
+		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoServiceDeskID)
 	}
 
 	params := url.Values{}
@@ -375,11 +375,11 @@ func (i *internalOrganizationImpl) Associate(ctx context.Context, serviceDeskID,
 	defer span.End()
 
 	if serviceDeskID == 0 {
-		return nil, model.ErrNoServiceDeskID
+		return nil, fmt.Errorf("sm: %w", model.ErrNoServiceDeskID)
 	}
 
 	if organizationID == 0 {
-		return nil, model.ErrNoOrganizationID
+		return nil, fmt.Errorf("sm: %w", model.ErrNoOrganizationID)
 	}
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/servicedesk/%v/organization", serviceDeskID)
@@ -397,11 +397,11 @@ func (i *internalOrganizationImpl) Detach(ctx context.Context, serviceDeskID, or
 	defer span.End()
 
 	if serviceDeskID == 0 {
-		return nil, model.ErrNoServiceDeskID
+		return nil, fmt.Errorf("sm: %w", model.ErrNoServiceDeskID)
 	}
 
 	if organizationID == 0 {
-		return nil, model.ErrNoOrganizationID
+		return nil, fmt.Errorf("sm: %w", model.ErrNoOrganizationID)
 	}
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/servicedesk/%v/organization", serviceDeskID)

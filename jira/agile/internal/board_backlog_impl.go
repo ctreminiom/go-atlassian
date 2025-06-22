@@ -84,7 +84,7 @@ func (i *internalBoardBacklogImpl) MoveTo(ctx context.Context, boardID int, payl
 	defer span.End()
 
 	if boardID == 0 {
-		return nil, model.ErrNoBoardID
+		return nil, fmt.Errorf("agile: %w", model.ErrNoBoardID)
 	}
 
 	url := fmt.Sprintf("rest/agile/%v/backlog/%v/issue", i.version, boardID)

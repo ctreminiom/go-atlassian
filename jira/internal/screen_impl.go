@@ -16,7 +16,7 @@ import (
 func NewScreenService(client service.Connector, version string, scheme *ScreenSchemeService, tab *ScreenTabService) (*ScreenService, error) {
 
 	if version == "" {
-		return nil, model.ErrNoVersionProvided
+		return nil, fmt.Errorf("jira: %w", model.ErrNoVersionProvided)
 	}
 
 	return &ScreenService{
@@ -133,7 +133,7 @@ func (i *internalScreenImpl) Fields(ctx context.Context, fieldID string, startAt
 	defer span.End()
 
 	if fieldID == "" {
-		return nil, nil, model.ErrNoFieldID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoFieldID)
 	}
 
 	params := url.Values{}
@@ -204,7 +204,7 @@ func (i *internalScreenImpl) Create(ctx context.Context, name, description strin
 	defer span.End()
 
 	if name == "" {
-		return nil, nil, model.ErrNoScreenName
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoScreenName)
 	}
 
 	payload := map[string]interface{}{"name": name}
@@ -234,7 +234,7 @@ func (i *internalScreenImpl) AddToDefault(ctx context.Context, fieldID string) (
 	defer span.End()
 
 	if fieldID == "" {
-		return nil, model.ErrNoFieldID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoFieldID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/screens/addToDefault/%v", i.version, fieldID)
@@ -252,7 +252,7 @@ func (i *internalScreenImpl) Update(ctx context.Context, screenID int, name, des
 	defer span.End()
 
 	if screenID == 0 {
-		return nil, nil, model.ErrNoScreenID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoScreenID)
 	}
 
 	payload := map[string]interface{}{"name": name}
@@ -282,7 +282,7 @@ func (i *internalScreenImpl) Delete(ctx context.Context, screenID int) (*model.R
 	defer span.End()
 
 	if screenID == 0 {
-		return nil, model.ErrNoScreenID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoScreenID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/screens/%v", i.version, screenID)
@@ -300,7 +300,7 @@ func (i *internalScreenImpl) Available(ctx context.Context, screenID int) ([]*mo
 	defer span.End()
 
 	if screenID == 0 {
-		return nil, nil, model.ErrNoScreenID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoScreenID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/screens/%v/availableFields", i.version, screenID)

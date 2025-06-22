@@ -15,7 +15,7 @@ import (
 func NewWatcherService(client service.Connector, version string) (*WatcherService, error) {
 
 	if version == "" {
-		return nil, model.ErrNoVersionProvided
+		return nil, fmt.Errorf("jira: %w", model.ErrNoVersionProvided)
 	}
 
 	return &WatcherService{
@@ -77,7 +77,7 @@ func (i *internalWatcherImpl) Gets(ctx context.Context, issueKeyOrID string) (*m
 	defer span.End()
 
 	if issueKeyOrID == "" {
-		return nil, nil, model.ErrNoIssueKeyOrID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/watchers", i.version, issueKeyOrID)
@@ -101,14 +101,14 @@ func (i *internalWatcherImpl) Add(ctx context.Context, issueKeyOrID string, acco
 	defer span.End()
 
 	if issueKeyOrID == "" {
-		return nil, model.ErrNoIssueKeyOrID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/watchers", i.version, issueKeyOrID)
 
-	var payload []byte // add self user
+	var payload string // add self user
 	if len(accountID) > 0 {
-		payload = []byte(accountID[0]) // add another user
+		payload = accountID[0] // add another user
 	}
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
@@ -123,11 +123,11 @@ func (i *internalWatcherImpl) Delete(ctx context.Context, issueKeyOrID, accountI
 	defer span.End()
 
 	if issueKeyOrID == "" {
-		return nil, model.ErrNoIssueKeyOrID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	if accountID == "" {
-		return nil, model.ErrNoAccountID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoAccountID)
 	}
 
 	params := url.Values{}

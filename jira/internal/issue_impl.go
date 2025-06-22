@@ -56,7 +56,7 @@ type IssueServices struct {
 func NewIssueService(client service.Connector, version string, services *IssueServices) (*IssueRichTextService, *IssueADFService, error) {
 
 	if version == "" {
-		return nil, nil, model.ErrNoVersionProvided
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoVersionProvided)
 	}
 
 	richTextService := &IssueRichTextService{
@@ -120,7 +120,7 @@ func deleteIssue(ctx context.Context, client service.Connector, version, issueKe
 	defer span.End()
 
 	if issueKeyOrID == "" {
-		return nil, model.ErrNoIssueKeyOrID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	params := url.Values{}
@@ -141,11 +141,11 @@ func assignIssue(ctx context.Context, client service.Connector, version, issueKe
 	defer span.End()
 
 	if issueKeyOrID == "" {
-		return nil, model.ErrNoIssueKeyOrID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	if accountID == "" {
-		return nil, model.ErrNoAccountID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoAccountID)
 	}
 
 	endpoint := fmt.Sprintf("/rest/api/%v/issue/%v/assignee", version, issueKeyOrID)
@@ -164,7 +164,7 @@ func sendNotification(ctx context.Context, client service.Connector, version, is
 	defer span.End()
 
 	if issueKeyOrID == "" {
-		return nil, model.ErrNoIssueKeyOrID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/notify", version, issueKeyOrID)
@@ -182,7 +182,7 @@ func getTransitions(ctx context.Context, client service.Connector, version, issu
 	defer span.End()
 
 	if issueKeyOrID == "" {
-		return nil, nil, model.ErrNoIssueKeyOrID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/transitions", version, issueKeyOrID)

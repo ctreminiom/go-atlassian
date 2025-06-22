@@ -90,7 +90,7 @@ func (i *internalEpicImpl) Get(ctx context.Context, epicIDOrKey string) (*model.
 	defer span.End()
 
 	if epicIDOrKey == "" {
-		return nil, nil, model.ErrNoEpicID
+		return nil, nil, fmt.Errorf("agile: %w", model.ErrNoEpicID)
 	}
 
 	url := fmt.Sprintf("rest/agile/%v/epic/%v", i.version, epicIDOrKey)
@@ -114,7 +114,7 @@ func (i *internalEpicImpl) Issues(ctx context.Context, epicIDOrKey string, opts 
 	defer span.End()
 
 	if epicIDOrKey == "" {
-		return nil, nil, model.ErrNoEpicID
+		return nil, nil, fmt.Errorf("agile: %w", model.ErrNoEpicID)
 	}
 
 	params := url.Values{}
@@ -159,7 +159,7 @@ func (i *internalEpicImpl) Move(ctx context.Context, epicIDOrKey string, issues 
 	defer span.End()
 
 	if epicIDOrKey == "" {
-		return nil, model.ErrNoEpicID
+		return nil, fmt.Errorf("agile: %w", model.ErrNoEpicID)
 	}
 
 	payload := map[string]interface{}{"issues": issues}

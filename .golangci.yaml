@@ -1,24 +1,37 @@
+version: "2"
 run:
   concurrency: 4
-  timeout: 20m
-  tests: false
-  # This gives us the ability to efficiently skip whole files by using "//go:build !codeanalysis" at the top of a file.
   build-tags:
     - codeanalysis
-
+  tests: false
 linters:
   enable:
     - revive
-
-linters-settings:
-  revive:
-    rules:
-      - name: unused-parameter
-        disabled: true # forces all unused to be "_" which leads to confusion
-
+  settings:
+    revive:
+      rules:
+        - name: unused-parameter
+          disabled: true
+  exclusions:
+    generated: lax
+    presets:
+      - comments
+      - common-false-positives
+      - legacy
+      - std-error-handling
+    paths:
+      - third_party$
+      - builtin$
+      - examples$
 issues:
   max-issues-per-linter: 0
   max-same-issues: 0
-
 severity:
-  default-severity: critical
+  default: critical
+formatters:
+  exclusions:
+    generated: lax
+    paths:
+      - third_party$
+      - builtin$
+      - examples$

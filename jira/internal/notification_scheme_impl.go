@@ -17,7 +17,7 @@ import (
 func NewNotificationSchemeService(client service.Connector, version string) (*NotificationSchemeService, error) {
 
 	if version == "" {
-		return nil, model.ErrNoVersionProvided
+		return nil, fmt.Errorf("jira: %w", model.ErrNoVersionProvided)
 	}
 
 	return &NotificationSchemeService{
@@ -244,7 +244,7 @@ func (i *internalNotificationSchemeImpl) Get(ctx context.Context, schemeID strin
 	defer span.End()
 
 	if schemeID == "" {
-		return nil, nil, model.ErrNoNotificationSchemeID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoNotificationSchemeID)
 	}
 
 	var endpoint strings.Builder
@@ -277,7 +277,7 @@ func (i *internalNotificationSchemeImpl) Update(ctx context.Context, schemeID st
 	defer span.End()
 
 	if schemeID == "" {
-		return nil, model.ErrNoNotificationSchemeID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoNotificationSchemeID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/notificationscheme/%v", i.version, schemeID)
@@ -295,7 +295,7 @@ func (i *internalNotificationSchemeImpl) Append(ctx context.Context, schemeID st
 	defer span.End()
 
 	if schemeID == "" {
-		return nil, model.ErrNoNotificationSchemeID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoNotificationSchemeID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/notificationscheme/%v/notification", i.version, schemeID)
@@ -313,7 +313,7 @@ func (i *internalNotificationSchemeImpl) Delete(ctx context.Context, schemeID st
 	defer span.End()
 
 	if schemeID == "" {
-		return nil, model.ErrNoNotificationSchemeID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoNotificationSchemeID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/notificationscheme/%v", i.version, schemeID)
@@ -331,11 +331,11 @@ func (i *internalNotificationSchemeImpl) Remove(ctx context.Context, schemeID, n
 	defer span.End()
 
 	if schemeID == "" {
-		return nil, model.ErrNoNotificationSchemeID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoNotificationSchemeID)
 	}
 
 	if notificationID == "" {
-		return nil, model.ErrNoNotificationID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoNotificationID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/notificationscheme/%v/notification/%v", i.version, schemeID, notificationID)

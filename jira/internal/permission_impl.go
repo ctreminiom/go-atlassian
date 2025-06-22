@@ -14,7 +14,7 @@ import (
 func NewPermissionService(client service.Connector, version string, scheme *PermissionSchemeService) (*PermissionService, error) {
 
 	if version == "" {
-		return nil, model.ErrNoVersionProvided
+		return nil, fmt.Errorf("jira: %w", model.ErrNoVersionProvided)
 	}
 
 	return &PermissionService{
@@ -136,7 +136,7 @@ func (i *internalPermissionImpl) Projects(ctx context.Context, permissions []str
 	defer span.End()
 
 	if len(permissions) == 0 {
-		return nil, nil, model.ErrNoPermissionKeys
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoPermissionKeys)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/permissions/project", i.version)

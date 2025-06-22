@@ -59,7 +59,7 @@ func (i *internalAnalyticsServiceImpl) Get(ctx context.Context, contentID, fromD
 	defer span.End()
 
 	if contentID == "" {
-		return nil, nil, model.ErrNoContentID
+		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
 	}
 
 	var endpoint strings.Builder
@@ -91,7 +91,7 @@ func (i *internalAnalyticsServiceImpl) Distinct(ctx context.Context, contentID, 
 	defer span.End()
 
 	if contentID == "" {
-		return nil, nil, model.ErrNoContentID
+		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
 	}
 
 	var endpoint strings.Builder

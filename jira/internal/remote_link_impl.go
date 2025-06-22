@@ -16,7 +16,7 @@ import (
 func NewRemoteLinkService(client service.Connector, version string) (*RemoteLinkService, error) {
 
 	if version == "" {
-		return nil, model.ErrNoVersionProvided
+		return nil, fmt.Errorf("jira: %w", model.ErrNoVersionProvided)
 	}
 
 	return &RemoteLinkService{
@@ -128,7 +128,7 @@ func (i *internalRemoteLinkImpl) Gets(ctx context.Context, issueKeyOrID, globalI
 	defer span.End()
 
 	if issueKeyOrID == "" {
-		return nil, nil, model.ErrNoIssueKeyOrID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	var endpoint strings.Builder
@@ -160,11 +160,11 @@ func (i *internalRemoteLinkImpl) Get(ctx context.Context, issueKeyOrID, linkID s
 	defer span.End()
 
 	if issueKeyOrID == "" {
-		return nil, nil, model.ErrNoIssueKeyOrID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	if linkID == "" {
-		return nil, nil, model.ErrNoRemoteLinkID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoRemoteLinkID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/remotelink/%v", i.version, issueKeyOrID, linkID)
@@ -188,7 +188,7 @@ func (i *internalRemoteLinkImpl) Create(ctx context.Context, issueKeyOrID string
 	defer span.End()
 
 	if issueKeyOrID == "" {
-		return nil, nil, model.ErrNoIssueKeyOrID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/remotelink", i.version, issueKeyOrID)
@@ -212,11 +212,11 @@ func (i *internalRemoteLinkImpl) Update(ctx context.Context, issueKeyOrID, linkI
 	defer span.End()
 
 	if issueKeyOrID == "" {
-		return nil, model.ErrNoIssueKeyOrID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	if linkID == "" {
-		return nil, model.ErrNoRemoteLinkID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoRemoteLinkID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/remotelink/%v", i.version, issueKeyOrID, linkID)
@@ -234,11 +234,11 @@ func (i *internalRemoteLinkImpl) DeleteByID(ctx context.Context, issueKeyOrID, l
 	defer span.End()
 
 	if issueKeyOrID == "" {
-		return nil, model.ErrNoIssueKeyOrID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	if linkID == "" {
-		return nil, model.ErrNoRemoteLinkID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoRemoteLinkID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/remotelink/%v", i.version, issueKeyOrID, linkID)
@@ -256,11 +256,11 @@ func (i *internalRemoteLinkImpl) DeleteByGlobalID(ctx context.Context, issueKeyO
 	defer span.End()
 
 	if issueKeyOrID == "" {
-		return nil, model.ErrNoIssueKeyOrID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	if globalID == "" {
-		return nil, model.ErrNoRemoteLinkGlobalID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoRemoteLinkGlobalID)
 	}
 
 	params := url.Values{}

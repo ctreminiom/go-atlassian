@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 	"strconv"
 
 	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
@@ -16,7 +17,7 @@ import (
 func NewTypeSchemeService(client service.Connector, version string) (*TypeSchemeService, error) {
 
 	if version == "" {
-		return nil, model.ErrNoVersionProvided
+		return nil, fmt.Errorf("jira: %w", model.ErrNoVersionProvided)
 	}
 
 	return &TypeSchemeService{
@@ -152,6 +153,13 @@ func (t *TypeSchemeService) Remove(ctx context.Context, issueTypeSchemeID, issue
 	return t.internalClient.Remove(ctx, issueTypeSchemeID, issueTypeID)
 }
 
+// Reorder reorders the issue type scheme by moving one or more issue types after another issue type or to the first/last position.
+//
+// PUT /rest/api/{2-3}/issuetypescheme/{issueTypeSchemeId}/issuetype/move
+func (t *TypeSchemeService) Reorder(ctx context.Context, issueTypeSchemeId string, payload *model.IssueTypeSchemeOrderPayloadScheme) (*model.ResponseScheme, error) {
+	return t.internalClient.Reorder(ctx, issueTypeSchemeId, payload)
+}
+
 type internalTypeSchemeImpl struct {
 	c       service.Connector
 	version string
@@ -266,11 +274,11 @@ func (i *internalTypeSchemeImpl) Assign(ctx context.Context, issueTypeSchemeID, 
 	defer span.End()
 
 	if issueTypeSchemeID == "" {
-		return nil, model.ErrNoIssueTypeSchemeID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoIssueTypeSchemeID)
 	}
 
 	if projectID == "" {
-		return nil, model.ErrNoProjectID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoProjectID)
 	}
 
 	payload := map[string]interface{}{
@@ -293,7 +301,7 @@ func (i *internalTypeSchemeImpl) Update(ctx context.Context, issueTypeSchemeID i
 	defer span.End()
 
 	if issueTypeSchemeID == 0 {
-		return nil, model.ErrNoIssueTypeSchemeID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoIssueTypeSchemeID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issuetypescheme/%v", i.version, issueTypeSchemeID)
@@ -311,7 +319,7 @@ func (i *internalTypeSchemeImpl) Delete(ctx context.Context, issueTypeSchemeID i
 	defer span.End()
 
 	if issueTypeSchemeID == 0 {
-		return nil, model.ErrNoIssueTypeSchemeID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoIssueTypeSchemeID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issuetypescheme/%v", i.version, issueTypeSchemeID)
@@ -329,7 +337,7 @@ func (i *internalTypeSchemeImpl) Append(ctx context.Context, issueTypeSchemeID i
 	defer span.End()
 
 	if len(issueTypeIDs) == 0 {
-		return nil, model.ErrNoIssueTypes
+		return nil, fmt.Errorf("jira: %w", model.ErrNoIssueTypes)
 	}
 
 	var ids []string
@@ -352,11 +360,11 @@ func (i *internalTypeSchemeImpl) Remove(ctx context.Context, issueTypeSchemeID, 
 	defer span.End()
 
 	if issueTypeSchemeID == 0 {
-		return nil, model.ErrNoIssueTypeSchemeID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoIssueTypeSchemeID)
 	}
 
 	if issueTypeID == 0 {
-		return nil, model.ErrNoIssueTypeID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoIssueTypeID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issuetypescheme/%v/issuetype/%v", i.version, issueTypeSchemeID, issueTypeID)
@@ -364,6 +372,38 @@ func (i *internalTypeSchemeImpl) Remove(ctx context.Context, issueTypeSchemeID, 
 	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
 		return nil, err
+	}
+
+	return i.c.Call(request, nil)
+}
+
+func (i *internalTypeSchemeImpl) Reorder(ctx context.Context, issueTypeSchemeId string, payload *model.IssueTypeSchemeOrderPayloadScheme) (*model.ResponseScheme, error) {
+
+	if issueTypeSchemeId == "" {
+		return nil, fmt.Errorf("jira: TypeSchemeService.Reorder: %w", model.ErrNoIssueTypeSchemeID)
+	}
+
+	if len(payload.IssueTypeIDs) == 0 {
+		return nil, fmt.Errorf("jira: TypeSchemeService.Reorder: %w", model.ErrNoIssueTypes)
+	}
+
+	if payload.After == "" && payload.Position == "" {
+		return nil, fmt.Errorf("jira: TypeSchemeService.Reorder: %w", model.ErrNoIssueTypeReorderAttr)
+	}
+
+	if payload.Position != "" && payload.Position != model.SchemePositionFirst && payload.Position != model.SchemePositionLast {
+		return nil, fmt.Errorf("jira: TypeSchemeService.Reorder: %w", model.ErrInvalidIssueTypeSchemePosition)
+	}
+
+	if slices.Contains(payload.IssueTypeIDs, payload.After) {
+		return nil, fmt.Errorf("jira: TypeSchemeService.Reorder: %w", model.ErrInvalidIssueTypeSchemeAfter)
+	}
+
+	endpoint := fmt.Sprintf("/rest/api/%v/issuetypescheme/%v/issuetype/move", i.version, issueTypeSchemeId)
+
+	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
+	if err != nil {
+		return nil, fmt.Errorf("jira: TypeSchemeService.Reorder: %w", err)
 	}
 
 	return i.c.Call(request, nil)

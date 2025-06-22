@@ -2,12 +2,14 @@ package internal
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/v2/service"
 	"github.com/ctreminiom/go-atlassian/v2/service/mocks"
 	"github.com/stretchr/testify/assert"
 	"net/http"
+	"net/url"
 	"testing"
 )
 
@@ -78,13 +80,13 @@ func Test_internalAttachmentImpl_Get(t *testing.T) {
 					http.MethodGet,
 					"wiki/api/v2/attachments/100001?serialize-ids-as-strings=true&version=25",
 					"", nil).
-					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 
 			},
 			wantErr: true,
-			Err:     errors.New("error, unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 		},
 
 		{
@@ -115,8 +117,14 @@ func Test_internalAttachmentImpl_Get(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -211,13 +219,13 @@ func Test_internalAttachmentImpl_Gets(t *testing.T) {
 					http.MethodGet,
 					"wiki/api/v2/labels/10001/attachments?cursor=uuid-sample&filename=credit-info&limit=100&mediaType=json&serialize-ids-as-strings=true&sort=created-date",
 					"", nil).
-					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 
 			},
 			wantErr: true,
-			Err:     errors.New("error, unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 		},
 
 		{
@@ -259,8 +267,14 @@ func Test_internalAttachmentImpl_Gets(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -333,13 +347,13 @@ func Test_internalAttachmentImpl_Delete(t *testing.T) {
 					http.MethodDelete,
 					"wiki/api/v2/attachments/att10001",
 					"", nil).
-					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 
 			},
 			wantErr: true,
-			Err:     errors.New("error, unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 		},
 
 		{
@@ -369,8 +383,14 @@ func Test_internalAttachmentImpl_Delete(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)

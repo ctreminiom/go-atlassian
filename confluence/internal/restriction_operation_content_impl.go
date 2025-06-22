@@ -70,7 +70,7 @@ func (i *internalRestrictionOperationImpl) Gets(ctx context.Context, contentID s
 	defer span.End()
 
 	if contentID == "" {
-		return nil, nil, model.ErrNoContentID
+		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
 	}
 
 	var endpoint strings.Builder
@@ -102,11 +102,11 @@ func (i *internalRestrictionOperationImpl) Get(ctx context.Context, contentID, o
 	defer span.End()
 
 	if contentID == "" {
-		return nil, nil, model.ErrNoContentID
+		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
 	}
 
 	if operationKey == "" {
-		return nil, nil, model.ErrNoContentRestrictionKey
+		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentRestrictionKey)
 	}
 
 	query := url.Values{}

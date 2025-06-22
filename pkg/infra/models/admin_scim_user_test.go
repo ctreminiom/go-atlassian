@@ -2,6 +2,9 @@
 package models
 
 import (
+	"encoding/json"
+	"errors"
+	"net/url"
 	"testing" // Standard Go testing package
 
 	"github.com/stretchr/testify/assert" // Assert package for testing
@@ -95,8 +98,14 @@ func TestSCIMUserToPathScheme_AddStringOperation(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 				// Assert that the error is as expected
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 				// Assert that no error occurred
 				assert.NoError(t, err)
@@ -181,8 +190,14 @@ func TestSCIMUserToPathScheme_AddBoolOperation(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 				// Assert that the error is as expected
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 				// Assert that no error occurred
 				assert.NoError(t, err)
@@ -283,8 +298,14 @@ func TestSCIMUserToPathScheme_AddComplexOperation(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 				// Assert that the error is as expected
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 				// Assert that no error occurred
 				assert.NoError(t, err)

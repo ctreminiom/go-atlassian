@@ -17,7 +17,7 @@ import (
 func NewWorklogRichTextService(client service.Connector, version string) (*WorklogRichTextService, error) {
 
 	if version == "" {
-		return nil, model.ErrNoVersionProvided
+		return nil, fmt.Errorf("jira: %w", model.ErrNoVersionProvided)
 	}
 
 	return &WorklogRichTextService{
@@ -163,7 +163,7 @@ func (i *internalWorklogRichTextImpl) Gets(ctx context.Context, worklogIDs []int
 	defer span.End()
 
 	if len(worklogIDs) == 0 {
-		return nil, nil, model.ErrNpWorklogs
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNpWorklogs)
 	}
 
 	params := url.Values{}
@@ -197,11 +197,11 @@ func (i *internalWorklogRichTextImpl) Get(ctx context.Context, issueKeyOrID, wor
 	defer span.End()
 
 	if issueKeyOrID == "" {
-		return nil, nil, model.ErrNoIssueKeyOrID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	if worklogID == "" {
-		return nil, nil, model.ErrNoWorklogID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoWorklogID)
 	}
 
 	params := url.Values{}
@@ -235,7 +235,7 @@ func (i *internalWorklogRichTextImpl) Issue(ctx context.Context, issueKeyOrID st
 	defer span.End()
 
 	if issueKeyOrID == "" {
-		return nil, nil, model.ErrNoIssueKeyOrID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	params := url.Values{}
@@ -271,11 +271,11 @@ func (i *internalWorklogRichTextImpl) Delete(ctx context.Context, issueKeyOrID, 
 	defer span.End()
 
 	if issueKeyOrID == "" {
-		return nil, model.ErrNoIssueKeyOrID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	if worklogID == "" {
-		return nil, model.ErrNoWorklogID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoWorklogID)
 	}
 
 	var endpoint strings.Builder
@@ -383,7 +383,7 @@ func (i *internalWorklogRichTextImpl) Add(ctx context.Context, issueKeyOrID stri
 	defer span.End()
 
 	if issueKeyOrID == "" {
-		return nil, nil, model.ErrNoIssueKeyOrID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	var endpoint strings.Builder
@@ -434,11 +434,11 @@ func (i *internalWorklogRichTextImpl) Update(ctx context.Context, issueKeyOrID, 
 	defer span.End()
 
 	if issueKeyOrID == "" {
-		return nil, nil, model.ErrNoIssueKeyOrID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	if worklogID == "" {
-		return nil, nil, model.ErrNoWorklogID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoWorklogID)
 	}
 
 	var endpoint strings.Builder

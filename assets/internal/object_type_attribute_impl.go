@@ -69,11 +69,11 @@ func (i *internalObjectTypeAttributeImpl) Create(ctx context.Context, workspaceI
 	defer span.End()
 
 	if workspaceID == "" {
-		return nil, nil, model.ErrNoWorkspaceID
+		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoWorkspaceID)
 	}
 
 	if objectTypeID == "" {
-		return nil, nil, model.ErrNoObjectTypeID
+		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoObjectTypeID)
 	}
 
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/objecttypeattribute/%v", workspaceID, objectTypeID)
@@ -97,15 +97,15 @@ func (i *internalObjectTypeAttributeImpl) Update(ctx context.Context, workspaceI
 	defer span.End()
 
 	if workspaceID == "" {
-		return nil, nil, model.ErrNoWorkspaceID
+		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoWorkspaceID)
 	}
 
 	if objectTypeID == "" {
-		return nil, nil, model.ErrNoObjectTypeID
+		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoObjectTypeID)
 	}
 
 	if attributeID == "" {
-		return nil, nil, model.ErrNoObjectTypeAttributeID
+		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoObjectTypeAttributeID)
 	}
 
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/objecttypeattribute/%v/%v", workspaceID, objectTypeID, attributeID)
@@ -129,11 +129,11 @@ func (i *internalObjectTypeAttributeImpl) Delete(ctx context.Context, workspaceI
 	defer span.End()
 
 	if workspaceID == "" {
-		return nil, model.ErrNoWorkspaceID
+		return nil, fmt.Errorf("assets: %w", model.ErrNoWorkspaceID)
 	}
 
 	if attributeID == "" {
-		return nil, model.ErrNoObjectTypeAttributeID
+		return nil, fmt.Errorf("assets: %w", model.ErrNoObjectTypeAttributeID)
 	}
 
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/objecttypeattribute/%v", workspaceID, attributeID)

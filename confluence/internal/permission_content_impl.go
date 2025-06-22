@@ -57,7 +57,7 @@ func (i *internalPermissionImpl) Check(ctx context.Context, contentID string, pa
 	defer span.End()
 
 	if contentID == "" {
-		return nil, nil, model.ErrNoContentID
+		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
 	}
 
 	endpoint := fmt.Sprintf("wiki/rest/api/content/%v/permission/check", contentID)

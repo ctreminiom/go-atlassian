@@ -85,7 +85,7 @@ func (i *internalAttachmentImpl) Delete(ctx context.Context, attachmentID string
 	defer span.End()
 
 	if attachmentID == "" {
-		return nil, model.ErrNoContentAttachmentID
+		return nil, fmt.Errorf("confluence: %w", model.ErrNoContentAttachmentID)
 	}
 
 	endpoint := fmt.Sprintf("wiki/api/v2/attachments/%v", attachmentID)
@@ -103,7 +103,7 @@ func (i *internalAttachmentImpl) Get(ctx context.Context, attachmentID string, v
 	defer span.End()
 
 	if attachmentID == "" {
-		return nil, nil, model.ErrNoContentAttachmentID
+		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentAttachmentID)
 	}
 
 	var endpoint strings.Builder
@@ -141,7 +141,7 @@ func (i *internalAttachmentImpl) Gets(ctx context.Context, entityID int, entityT
 	defer span.End()
 
 	if entityID == 0 {
-		return nil, nil, model.ErrNoEntityID
+		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoEntityID)
 	}
 
 	query := url.Values{}
@@ -181,7 +181,7 @@ func (i *internalAttachmentImpl) Gets(ctx context.Context, entityID int, entityT
 	}
 
 	if !isSupported {
-		return nil, nil, model.ErrNoEntityValue
+		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoEntityValue)
 	}
 
 	endpoint := fmt.Sprintf("wiki/api/v2/%v/%v/attachments?%v", entityType, entityID, query.Encode())

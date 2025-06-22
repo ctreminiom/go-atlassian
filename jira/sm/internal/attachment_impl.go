@@ -62,7 +62,7 @@ func (i *internalServiceRequestAttachmentImpl) Gets(ctx context.Context, issueKe
 	defer span.End()
 
 	if issueKeyOrID == "" {
-		return nil, nil, model.ErrNoIssueKeyOrID
+		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	params := url.Values{}
@@ -90,11 +90,11 @@ func (i *internalServiceRequestAttachmentImpl) Create(ctx context.Context, issue
 	defer span.End()
 
 	if issueKeyOrID == "" {
-		return nil, nil, model.ErrNoIssueKeyOrID
+		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	if len(payload.TemporaryAttachmentIDs) == 0 {
-		return nil, nil, model.ErrNoAttachmentID
+		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoAttachmentID)
 	}
 
 	url := fmt.Sprintf("rest/servicedeskapi/request/%v/attachment", issueKeyOrID)

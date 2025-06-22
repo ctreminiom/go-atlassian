@@ -17,7 +17,7 @@ import (
 func NewWorkflowStatusService(client service.Connector, version string) (*WorkflowStatusService, error) {
 
 	if version == "" {
-		return nil, model.ErrNoVersionProvided
+		return nil, fmt.Errorf("jira: %w", model.ErrNoVersionProvided)
 	}
 
 	return &WorkflowStatusService{
@@ -133,7 +133,7 @@ func (i *internalWorkflowStatusImpl) Get(ctx context.Context, idOrName string) (
 	defer span.End()
 
 	if idOrName == "" {
-		return nil, nil, model.ErrNoWorkflowStatusNameOrID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoWorkflowStatusNameOrID)
 	}
 
 	endpoint := fmt.Sprintf("/rest/api/%v/status/%v", i.version, idOrName)
@@ -225,11 +225,11 @@ func (i *internalWorkflowStatusImpl) Create(ctx context.Context, payload *model.
 	defer span.End()
 
 	if len(payload.Statuses) == 0 {
-		return nil, nil, model.ErrNoWorkflowStatuses
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoWorkflowStatuses)
 	}
 
 	if payload.Scope == nil {
-		return nil, nil, model.ErrNoWorkflowScope
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoWorkflowScope)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/statuses", i.version)
@@ -253,7 +253,7 @@ func (i *internalWorkflowStatusImpl) Delete(ctx context.Context, ids []string) (
 	defer span.End()
 
 	if len(ids) == 0 {
-		return nil, model.ErrNoWorkflowStatuses
+		return nil, fmt.Errorf("jira: %w", model.ErrNoWorkflowStatuses)
 	}
 
 	params := url.Values{}

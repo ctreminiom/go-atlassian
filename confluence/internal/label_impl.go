@@ -45,7 +45,7 @@ func (i *internalLabelImpl) Get(ctx context.Context, labelName, labelType string
 	defer span.End()
 
 	if labelName == "" {
-		return nil, nil, model.ErrNoLabelName
+		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoLabelName)
 	}
 
 	query := url.Values{}

@@ -69,7 +69,7 @@ func (i *internalServiceRequestFeedbackImpl) Get(ctx context.Context, requestIDO
 	defer span.End()
 
 	if requestIDOrKey == "" {
-		return nil, nil, model.ErrNoIssueKeyOrID
+		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/request/%v/feedback", requestIDOrKey)
@@ -93,7 +93,7 @@ func (i *internalServiceRequestFeedbackImpl) Post(ctx context.Context, requestID
 	defer span.End()
 
 	if requestIDOrKey == "" {
-		return nil, nil, model.ErrNoIssueKeyOrID
+		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	payload := map[string]interface{}{
@@ -125,7 +125,7 @@ func (i *internalServiceRequestFeedbackImpl) Delete(ctx context.Context, request
 	defer span.End()
 
 	if requestIDOrKey == "" {
-		return nil, model.ErrNoIssueKeyOrID
+		return nil, fmt.Errorf("sm: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/request/%v/feedback", requestIDOrKey)

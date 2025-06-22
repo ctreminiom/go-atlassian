@@ -77,11 +77,11 @@ func (i *internalRichTextCommentImpl) Delete(ctx context.Context, issueKeyOrID, 
 	defer span.End()
 
 	if issueKeyOrID == "" {
-		return nil, model.ErrNoIssueKeyOrID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	if commentID == "" {
-		return nil, model.ErrNoCommentID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoCommentID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/comment/%v", i.version, issueKeyOrID, commentID)
@@ -99,7 +99,7 @@ func (i *internalRichTextCommentImpl) Gets(ctx context.Context, issueKeyOrID, or
 	defer span.End()
 
 	if issueKeyOrID == "" {
-		return nil, nil, model.ErrNoIssueKeyOrID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	params := url.Values{}
@@ -135,11 +135,11 @@ func (i *internalRichTextCommentImpl) Get(ctx context.Context, issueKeyOrID, com
 	defer span.End()
 
 	if issueKeyOrID == "" {
-		return nil, nil, model.ErrNoIssueKeyOrID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	if commentID == "" {
-		return nil, nil, model.ErrNoCommentID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoCommentID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/comment/%v", i.version, issueKeyOrID, commentID)
@@ -163,7 +163,7 @@ func (i *internalRichTextCommentImpl) Add(ctx context.Context, issueKeyOrID stri
 	defer span.End()
 
 	if issueKeyOrID == "" {
-		return nil, nil, model.ErrNoIssueKeyOrID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	params := url.Values{}

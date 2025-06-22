@@ -18,7 +18,7 @@ import (
 func NewIssueFieldContextOptionService(client service.Connector, version string) (*IssueFieldContextOptionService, error) {
 
 	if version == "" {
-		return nil, model.ErrNoVersionProvided
+		return nil, fmt.Errorf("jira: %w", model.ErrNoVersionProvided)
 	}
 
 	return &IssueFieldContextOptionService{
@@ -114,7 +114,7 @@ func (i *internalIssueFieldContextOptionServiceImpl) Gets(ctx context.Context, f
 	defer span.End()
 
 	if fieldID == "" {
-		return nil, nil, model.ErrNoFieldID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoFieldID)
 	}
 
 	params := url.Values{}
@@ -150,11 +150,11 @@ func (i *internalIssueFieldContextOptionServiceImpl) Create(ctx context.Context,
 	defer span.End()
 
 	if fieldID == "" {
-		return nil, nil, model.ErrNoFieldID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoFieldID)
 	}
 
 	if contextID == 0 {
-		return nil, nil, model.ErrNoFieldContextID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoFieldContextID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/field/%v/context/%v/option", i.version, fieldID, contextID)
@@ -178,11 +178,11 @@ func (i *internalIssueFieldContextOptionServiceImpl) Update(ctx context.Context,
 	defer span.End()
 
 	if fieldID == "" {
-		return nil, nil, model.ErrNoFieldID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoFieldID)
 	}
 
 	if contextID == 0 {
-		return nil, nil, model.ErrNoFieldContextID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoFieldContextID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/field/%v/context/%v/option", i.version, fieldID, contextID)
@@ -206,15 +206,15 @@ func (i *internalIssueFieldContextOptionServiceImpl) Delete(ctx context.Context,
 	defer span.End()
 
 	if fieldID == "" {
-		return nil, model.ErrNoFieldID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoFieldID)
 	}
 
 	if contextID == 0 {
-		return nil, model.ErrNoFieldContextID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoFieldContextID)
 	}
 
 	if optionID == 0 {
-		return nil, model.ErrNoContextOptionID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoContextOptionID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/field/%v/context/%v/option/%v", i.version, fieldID, contextID, optionID)
@@ -232,11 +232,11 @@ func (i *internalIssueFieldContextOptionServiceImpl) Order(ctx context.Context, 
 	defer span.End()
 
 	if fieldID == "" {
-		return nil, model.ErrNoFieldID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoFieldID)
 	}
 
 	if contextID == 0 {
-		return nil, model.ErrNoFieldContextID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoFieldContextID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/field/%v/context/%v/option/move", i.version, fieldID, contextID)

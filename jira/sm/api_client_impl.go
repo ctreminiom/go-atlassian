@@ -24,7 +24,7 @@ func New(httpClient common.HTTPClient, site string) (*Client, error) {
 	}
 
 	if site == "" {
-		return nil, model.ErrNoSite
+		return nil, fmt.Errorf("client: %w", model.ErrNoSite)
 	}
 
 	if !strings.HasSuffix(site, "/") {
@@ -185,19 +185,19 @@ func (c *Client) processResponse(response *http.Response, structure interface{})
 		switch response.StatusCode {
 
 		case http.StatusNotFound:
-			return res, model.ErrNotFound
+			return res, fmt.Errorf("client: %w", model.ErrNotFound)
 
 		case http.StatusUnauthorized:
-			return res, model.ErrUnauthorized
+			return res, fmt.Errorf("client: %w", model.ErrUnauthorized)
 
 		case http.StatusInternalServerError:
-			return res, model.ErrInternal
+			return res, fmt.Errorf("client: %w", model.ErrInternal)
 
 		case http.StatusBadRequest:
-			return res, model.ErrBadRequest
+			return res, fmt.Errorf("client: %w", model.ErrBadRequest)
 
 		default:
-			return res, model.ErrInvalidStatusCode
+			return res, fmt.Errorf("client: %w", model.ErrInvalidStatusCode)
 		}
 	}
 

@@ -83,7 +83,7 @@ func (i *internalPropertyImpl) Gets(ctx context.Context, contentID string, expan
 	defer span.End()
 
 	if contentID == "" {
-		return nil, nil, model.ErrNoContentID
+		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
 	}
 
 	query := url.Values{}
@@ -115,7 +115,7 @@ func (i *internalPropertyImpl) Create(ctx context.Context, contentID string, pay
 	defer span.End()
 
 	if contentID == "" {
-		return nil, nil, model.ErrNoContentID
+		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
 	}
 
 	endpoint := fmt.Sprintf("wiki/rest/api/content/%v/property", contentID)
@@ -139,11 +139,11 @@ func (i *internalPropertyImpl) Get(ctx context.Context, contentID, key string) (
 	defer span.End()
 
 	if contentID == "" {
-		return nil, nil, model.ErrNoContentID
+		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
 	}
 
 	if key == "" {
-		return nil, nil, model.ErrNoContentProperty
+		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentProperty)
 	}
 
 	endpoint := fmt.Sprintf("wiki/rest/api/content/%v/property/%v", contentID, key)
@@ -167,11 +167,11 @@ func (i *internalPropertyImpl) Delete(ctx context.Context, contentID, key string
 	defer span.End()
 
 	if contentID == "" {
-		return nil, model.ErrNoContentID
+		return nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
 	}
 
 	if key == "" {
-		return nil, model.ErrNoContentProperty
+		return nil, fmt.Errorf("confluence: %w", model.ErrNoContentProperty)
 	}
 
 	endpoint := fmt.Sprintf("wiki/rest/api/content/%v/property/%v", contentID, key)

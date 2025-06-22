@@ -2,8 +2,10 @@ package internal
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"net/http"
+	"net/url"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -122,12 +124,12 @@ func Test_internalUserImpl_Get(t *testing.T) {
 					http.MethodGet,
 					"rest/api/3/user?accountId=uuid-sample&expand=groups%2CapplicationRoles",
 					"", nil).
-					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
 			wantErr: true,
-			Err:     errors.New("error, unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 		},
 	}
 
@@ -150,8 +152,14 @@ func Test_internalUserImpl_Get(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -274,12 +282,12 @@ func Test_internalUserImpl_Find(t *testing.T) {
 					http.MethodGet,
 					"rest/api/3/user/bulk?accountId=uuid-sample-1&accountId=uuid-sample-2&maxResults=25&startAt=50",
 					"", nil).
-					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
 			wantErr: true,
-			Err:     errors.New("error, unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 		},
 	}
 
@@ -302,8 +310,14 @@ func Test_internalUserImpl_Find(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -419,12 +433,12 @@ func Test_internalUserImpl_Delete(t *testing.T) {
 					http.MethodDelete,
 					"rest/api/3/user?accountId=uuid-sample",
 					"", nil).
-					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
 			wantErr: true,
-			Err:     errors.New("error, unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 		},
 	}
 
@@ -446,8 +460,14 @@ func Test_internalUserImpl_Delete(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -562,12 +582,12 @@ func Test_internalUserImpl_Groups(t *testing.T) {
 					http.MethodGet,
 					"rest/api/3/user/groups?accountId=uuid-sample",
 					"", nil).
-					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
 			wantErr: true,
-			Err:     errors.New("error, unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 		},
 	}
 
@@ -589,8 +609,14 @@ func Test_internalUserImpl_Groups(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -693,12 +719,12 @@ func Test_internalUserImpl_Gets(t *testing.T) {
 					http.MethodGet,
 					"rest/api/3/users/search?maxResults=0&startAt=0",
 					"", nil).
-					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
 			wantErr: true,
-			Err:     errors.New("error, unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 		},
 	}
 
@@ -720,8 +746,14 @@ func Test_internalUserImpl_Gets(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -833,12 +865,12 @@ func Test_internalUserImpl_Create(t *testing.T) {
 					http.MethodPost,
 					"rest/api/3/user",
 					"", payloadMocked).
-					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
 			wantErr: true,
-			Err:     errors.New("error, unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 		},
 	}
 
@@ -860,8 +892,14 @@ func Test_internalUserImpl_Create(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -884,7 +922,7 @@ func Test_NewUserService(t *testing.T) {
 		name    string
 		args    args
 		wantErr bool
-		err     error
+		Err     error
 	}{
 		{
 			name: "when the parameters are correct",
@@ -902,7 +940,7 @@ func Test_NewUserService(t *testing.T) {
 				version: "",
 			},
 			wantErr: true,
-			err:     model.ErrNoVersionProvided,
+			Err:     model.ErrNoVersionProvided,
 		},
 	}
 	for _, testCase := range testCases {
@@ -915,8 +953,14 @@ func Test_NewUserService(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)

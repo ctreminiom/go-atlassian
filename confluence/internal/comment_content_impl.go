@@ -47,7 +47,7 @@ func (i *internalCommentImpl) Gets(ctx context.Context, contentID string, expand
 	defer span.End()
 
 	if contentID == "" {
-		return nil, nil, model.ErrNoContentID
+		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
 	}
 
 	query := url.Values{}

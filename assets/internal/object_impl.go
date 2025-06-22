@@ -158,7 +158,7 @@ func (i *internalObjectImpl) Search(ctx context.Context, workspaceID string, pay
 	defer span.End()
 
 	if workspaceID == "" {
-		return nil, nil, model.ErrNoWorkspaceID
+		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoWorkspaceID)
 	}
 
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/object/navlist/aql", workspaceID)
@@ -183,11 +183,11 @@ func (i *internalObjectImpl) Filter(ctx context.Context, workspaceID, aql string
 	defer span.End()
 
 	if workspaceID == "" {
-		return nil, nil, model.ErrNoWorkspaceID
+		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoWorkspaceID)
 	}
 
 	if aql == "" {
-		return nil, nil, model.ErrNoAqlQuery
+		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoAqlQuery)
 	}
 
 	params := url.Values{}
@@ -219,11 +219,11 @@ func (i *internalObjectImpl) Get(ctx context.Context, workspaceID, objectID stri
 	defer span.End()
 
 	if workspaceID == "" {
-		return nil, nil, model.ErrNoWorkspaceID
+		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoWorkspaceID)
 	}
 
 	if objectID == "" {
-		return nil, nil, model.ErrNoObjectID
+		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoObjectID)
 	}
 
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/object/%v", workspaceID, objectID)
@@ -247,11 +247,11 @@ func (i *internalObjectImpl) Update(ctx context.Context, workspaceID, objectID s
 	defer span.End()
 
 	if workspaceID == "" {
-		return nil, nil, model.ErrNoWorkspaceID
+		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoWorkspaceID)
 	}
 
 	if objectID == "" {
-		return nil, nil, model.ErrNoObjectID
+		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoObjectID)
 	}
 
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/object/%v", workspaceID, objectID)
@@ -275,11 +275,11 @@ func (i *internalObjectImpl) Delete(ctx context.Context, workspaceID, objectID s
 	defer span.End()
 
 	if workspaceID == "" {
-		return nil, model.ErrNoWorkspaceID
+		return nil, fmt.Errorf("assets: %w", model.ErrNoWorkspaceID)
 	}
 
 	if objectID == "" {
-		return nil, model.ErrNoObjectID
+		return nil, fmt.Errorf("assets: %w", model.ErrNoObjectID)
 	}
 
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/object/%v", workspaceID, objectID)
@@ -297,11 +297,11 @@ func (i *internalObjectImpl) Attributes(ctx context.Context, workspaceID, object
 	defer span.End()
 
 	if workspaceID == "" {
-		return nil, nil, model.ErrNoWorkspaceID
+		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoWorkspaceID)
 	}
 
 	if objectID == "" {
-		return nil, nil, model.ErrNoObjectID
+		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoObjectID)
 	}
 
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/object/%v/attributes", workspaceID, objectID)
@@ -325,11 +325,11 @@ func (i *internalObjectImpl) History(ctx context.Context, workspaceID, objectID 
 	defer span.End()
 
 	if workspaceID == "" {
-		return nil, nil, model.ErrNoWorkspaceID
+		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoWorkspaceID)
 	}
 
 	if objectID == "" {
-		return nil, nil, model.ErrNoObjectID
+		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoObjectID)
 	}
 
 	var endpoint strings.Builder
@@ -362,11 +362,11 @@ func (i *internalObjectImpl) References(ctx context.Context, workspaceID, object
 	defer span.End()
 
 	if workspaceID == "" {
-		return nil, nil, model.ErrNoWorkspaceID
+		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoWorkspaceID)
 	}
 
 	if objectID == "" {
-		return nil, nil, model.ErrNoObjectID
+		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoObjectID)
 	}
 
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/object/%v/referenceinfo", workspaceID, objectID)
@@ -390,7 +390,7 @@ func (i *internalObjectImpl) Create(ctx context.Context, workspaceID string, pay
 	defer span.End()
 
 	if workspaceID == "" {
-		return nil, nil, model.ErrNoWorkspaceID
+		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoWorkspaceID)
 	}
 
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/object/create", workspaceID)
@@ -414,11 +414,11 @@ func (i *internalObjectImpl) Relation(ctx context.Context, workspaceID, objectID
 	defer span.End()
 
 	if workspaceID == "" {
-		return nil, nil, model.ErrNoWorkspaceID
+		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoWorkspaceID)
 	}
 
 	if objectID == "" {
-		return nil, nil, model.ErrNoObjectID
+		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoObjectID)
 	}
 
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/objectconnectedtickets/%v/tickets", workspaceID, objectID)

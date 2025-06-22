@@ -49,7 +49,7 @@ func (i *internalAQLImpl) Filter(ctx context.Context, workspaceID string, parame
 	defer span.End()
 
 	if workspaceID == "" {
-		return nil, nil, model.ErrNoWorkspaceID
+		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoWorkspaceID)
 	}
 
 	var endpoint strings.Builder

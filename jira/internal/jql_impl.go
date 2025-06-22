@@ -15,7 +15,7 @@ import (
 func NewJQLService(client service.Connector, version string) (*JQLService, error) {
 
 	if version == "" {
-		return nil, model.ErrNoVersionProvided
+		return nil, fmt.Errorf("jira: %w", model.ErrNoVersionProvided)
 	}
 
 	return &JQLService{

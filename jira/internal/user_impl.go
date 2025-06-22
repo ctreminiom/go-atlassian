@@ -17,7 +17,7 @@ import (
 func NewUserService(client service.Connector, version string, connector *UserSearchService) (*UserService, error) {
 
 	if version == "" {
-		return nil, model.ErrNoVersionProvided
+		return nil, fmt.Errorf("jira: %w", model.ErrNoVersionProvided)
 	}
 
 	return &UserService{
@@ -128,7 +128,7 @@ func (i *internalUserImpl) Get(ctx context.Context, accountID string, expand []s
 	defer span.End()
 
 	if accountID == "" {
-		return nil, nil, model.ErrNoAccountID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoAccountID)
 	}
 
 	params := url.Values{}
@@ -179,7 +179,7 @@ func (i *internalUserImpl) Delete(ctx context.Context, accountID string) (*model
 	defer span.End()
 
 	if accountID == "" {
-		return nil, model.ErrNoAccountID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoAccountID)
 	}
 
 	params := url.Values{}
@@ -199,7 +199,7 @@ func (i *internalUserImpl) Find(ctx context.Context, accountIDs []string, startA
 	defer span.End()
 
 	if len(accountIDs) == 0 {
-		return nil, nil, model.ErrNoAccountSlice
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoAccountSlice)
 	}
 
 	params := url.Values{}
@@ -231,7 +231,7 @@ func (i *internalUserImpl) Groups(ctx context.Context, accountID string) ([]*mod
 	defer span.End()
 
 	if accountID == "" {
-		return nil, nil, model.ErrNoAccountID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoAccountID)
 	}
 
 	params := url.Values{}

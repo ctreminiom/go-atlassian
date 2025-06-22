@@ -2,8 +2,11 @@ package internal
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
+	"fmt"
 	"net/http"
+	"net/url"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -80,7 +83,7 @@ func Test_BoardService_Get(t *testing.T) {
 				client.On("Call",
 					&http.Request{},
 					&model.BoardScheme{}).
-					Return(&model.ResponseScheme{}, model.ErrNotFound)
+					Return(&model.ResponseScheme{}, fmt.Errorf("agile: %w", model.ErrNotFound))
 
 				fields.c = client
 			},
@@ -104,11 +107,11 @@ func Test_BoardService_Get(t *testing.T) {
 					"rest/agile/1.0/board/1",
 					"",
 					nil).
-					Return(&http.Request{}, errors.New("unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
-			Err:     errors.New("unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 			wantErr: true,
 		},
 
@@ -144,8 +147,14 @@ func Test_BoardService_Get(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -229,11 +238,11 @@ func Test_BoardService_Create(t *testing.T) {
 				client.On("Call",
 					&http.Request{},
 					&model.BoardScheme{}).
-					Return(&model.ResponseScheme{}, errors.New("error, unable to execute the http call"))
+					Return(&model.ResponseScheme{}, model.ErrNoExecHttpCall)
 
 				fields.c = client
 			},
-			Err:     errors.New("error, unable to execute the http call"),
+			Err:     model.ErrNoExecHttpCall,
 			wantErr: true,
 		},
 
@@ -253,7 +262,7 @@ func Test_BoardService_Create(t *testing.T) {
 					"rest/agile/1.0/board",
 					"",
 					payloadMocked).
-					Return(&http.Request{}, model.ErrNotFound)
+					Return(&http.Request{}, fmt.Errorf("agile: %w", model.ErrNotFound))
 
 				fields.c = client
 			},
@@ -279,8 +288,14 @@ func Test_BoardService_Create(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -378,11 +393,11 @@ func Test_BoardService_Backlog(t *testing.T) {
 				client.On("Call",
 					&http.Request{},
 					&model.BoardIssuePageScheme{}).
-					Return(&model.ResponseScheme{}, errors.New("client: no http response found"))
+					Return(&model.ResponseScheme{}, model.ErrNoHttpResponse)
 
 				fields.c = client
 			},
-			Err:     errors.New("client: no http response found"),
+			Err:     model.ErrNoHttpResponse,
 			wantErr: true,
 		},
 
@@ -410,11 +425,11 @@ func Test_BoardService_Backlog(t *testing.T) {
 					"rest/agile/1.0/board/1001/backlog?expand=changelogs+&fields=status%2Cdescription&jql=project+%3D+ACA&maxResults=50&startAt=0&validateQuery=true",
 					"",
 					nil).
-					Return(&http.Request{}, errors.New("client: no http request created"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
-			Err:     errors.New("client: no http request created"),
+			Err:     model.ErrCreateHttpReq,
 			wantErr: true,
 		},
 
@@ -457,8 +472,14 @@ func Test_BoardService_Backlog(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -535,7 +556,7 @@ func Test_BoardService_Configuration(t *testing.T) {
 				client.On("Call",
 					&http.Request{},
 					&model.BoardConfigurationScheme{}).
-					Return(&model.ResponseScheme{}, model.ErrNotFound)
+					Return(&model.ResponseScheme{}, fmt.Errorf("agile: %w", model.ErrNotFound))
 
 				fields.c = client
 			},
@@ -559,11 +580,11 @@ func Test_BoardService_Configuration(t *testing.T) {
 					"rest/agile/1.0/board/1001/configuration",
 					"",
 					nil).
-					Return(&http.Request{}, errors.New("client: no http request created"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
-			Err:     errors.New("client: no http request created"),
+			Err:     model.ErrCreateHttpReq,
 			wantErr: true,
 		},
 
@@ -597,8 +618,14 @@ func Test_BoardService_Configuration(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -685,7 +712,7 @@ func Test_BoardService_Epics(t *testing.T) {
 				client.On("Call",
 					&http.Request{},
 					&model.BoardEpicPageScheme{}).
-					Return(&model.ResponseScheme{}, model.ErrNotFound)
+					Return(&model.ResponseScheme{}, fmt.Errorf("agile: %w", model.ErrNotFound))
 
 				fields.c = client
 			},
@@ -712,11 +739,11 @@ func Test_BoardService_Epics(t *testing.T) {
 					"rest/agile/1.0/board/1001/epic?done=false&maxResults=50&startAt=0",
 					"",
 					nil).
-					Return(&http.Request{}, errors.New("client: no http request created"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
-			Err:     errors.New("client: no http request created"),
+			Err:     model.ErrCreateHttpReq,
 			wantErr: true,
 		},
 
@@ -751,8 +778,14 @@ func Test_BoardService_Epics(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -830,7 +863,7 @@ func Test_BoardService_Delete(t *testing.T) {
 				client.On("Call",
 					&http.Request{},
 					nil).
-					Return(&model.ResponseScheme{}, model.ErrNotFound)
+					Return(&model.ResponseScheme{}, fmt.Errorf("agile: %w", model.ErrNotFound))
 
 				fields.c = client
 			},
@@ -854,11 +887,11 @@ func Test_BoardService_Delete(t *testing.T) {
 					"rest/agile/1.0/board/1001",
 					"",
 					nil).
-					Return(&http.Request{}, errors.New("client: no http request created"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
-			Err:     errors.New("client: no http request created"),
+			Err:     model.ErrCreateHttpReq,
 			wantErr: true,
 		},
 
@@ -892,8 +925,14 @@ func Test_BoardService_Delete(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -976,7 +1015,7 @@ func Test_BoardService_Filter(t *testing.T) {
 				client.On("Call",
 					&http.Request{},
 					&model.BoardPageScheme{}).
-					Return(&model.ResponseScheme{}, model.ErrNotFound)
+					Return(&model.ResponseScheme{}, fmt.Errorf("agile: %w", model.ErrNotFound))
 
 				fields.c = client
 			},
@@ -1002,11 +1041,11 @@ func Test_BoardService_Filter(t *testing.T) {
 					"rest/agile/1.0/board/filter/1001?maxResults=50&startAt=0",
 					"",
 					nil).
-					Return(&http.Request{}, errors.New("client: no http request created"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
-			Err:     errors.New("client: no http request created"),
+			Err:     model.ErrCreateHttpReq,
 			wantErr: true,
 		},
 
@@ -1041,8 +1080,14 @@ func Test_BoardService_Filter(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -1166,7 +1211,7 @@ func Test_BoardService_Gets(t *testing.T) {
 				client.On("Call",
 					&http.Request{},
 					&model.BoardPageScheme{}).
-					Return(&model.ResponseScheme{}, model.ErrNotFound)
+					Return(&model.ResponseScheme{}, fmt.Errorf("agile: %w", model.ErrNotFound))
 
 				fields.c = client
 			},
@@ -1191,11 +1236,11 @@ func Test_BoardService_Gets(t *testing.T) {
 					"rest/agile/1.0/board?maxResults=50&startAt=0",
 					"",
 					nil).
-					Return(&http.Request{}, errors.New("client: no http request created"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
-			Err:     errors.New("client: no http request created"),
+			Err:     model.ErrCreateHttpReq,
 			wantErr: true,
 		},
 	}
@@ -1218,8 +1263,14 @@ func Test_BoardService_Gets(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -1339,7 +1390,7 @@ func Test_BoardService_Issues(t *testing.T) {
 				client.On("Call",
 					&http.Request{},
 					&model.BoardIssuePageScheme{}).
-					Return(&model.ResponseScheme{}, model.ErrNotFound)
+					Return(&model.ResponseScheme{}, fmt.Errorf("agile: %w", model.ErrNotFound))
 
 				fields.c = client
 			},
@@ -1365,11 +1416,11 @@ func Test_BoardService_Issues(t *testing.T) {
 					"rest/agile/1.0/board/1000/issue?maxResults=50&startAt=0",
 					"",
 					nil).
-					Return(&http.Request{}, errors.New("client: no http request created"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
-			Err:     errors.New("client: no http request created"),
+			Err:     model.ErrCreateHttpReq,
 			wantErr: true,
 		},
 
@@ -1406,8 +1457,14 @@ func Test_BoardService_Issues(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -1531,7 +1588,7 @@ func Test_BoardService_IssuesByEpic(t *testing.T) {
 				client.On("Call",
 					&http.Request{},
 					&model.BoardIssuePageScheme{}).
-					Return(&model.ResponseScheme{}, model.ErrNotFound)
+					Return(&model.ResponseScheme{}, fmt.Errorf("agile: %w", model.ErrNotFound))
 
 				fields.c = client
 			},
@@ -1558,11 +1615,11 @@ func Test_BoardService_IssuesByEpic(t *testing.T) {
 					"rest/agile/1.0/board/1000/epic/102/issue?maxResults=50&startAt=0",
 					"",
 					nil).
-					Return(&http.Request{}, errors.New("client: no http request created"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
-			Err:     errors.New("client: no http request created"),
+			Err:     model.ErrCreateHttpReq,
 			wantErr: true,
 		},
 
@@ -1614,8 +1671,14 @@ func Test_BoardService_IssuesByEpic(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -1739,7 +1802,7 @@ func Test_BoardService_IssuesBySprint(t *testing.T) {
 				client.On("Call",
 					&http.Request{},
 					&model.BoardIssuePageScheme{}).
-					Return(&model.ResponseScheme{}, model.ErrNotFound)
+					Return(&model.ResponseScheme{}, fmt.Errorf("agile: %w", model.ErrNotFound))
 
 				fields.c = client
 			},
@@ -1766,11 +1829,11 @@ func Test_BoardService_IssuesBySprint(t *testing.T) {
 					"rest/agile/1.0/board/1000/sprint/102/issue?maxResults=50&startAt=0",
 					"",
 					nil).
-					Return(&http.Request{}, errors.New("client: no http request created"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
-			Err:     errors.New("client: no http request created"),
+			Err:     model.ErrCreateHttpReq,
 			wantErr: true,
 		},
 
@@ -1822,8 +1885,14 @@ func Test_BoardService_IssuesBySprint(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -1943,7 +2012,7 @@ func Test_BoardService_IssuesWithoutEpic(t *testing.T) {
 				client.On("Call",
 					&http.Request{},
 					&model.BoardIssuePageScheme{}).
-					Return(&model.ResponseScheme{}, model.ErrNotFound)
+					Return(&model.ResponseScheme{}, fmt.Errorf("agile: %w", model.ErrNotFound))
 
 				fields.c = client
 			},
@@ -1969,11 +2038,11 @@ func Test_BoardService_IssuesWithoutEpic(t *testing.T) {
 					"rest/agile/1.0/board/1000/epic/none/issue?maxResults=50&startAt=0",
 					"",
 					nil).
-					Return(&http.Request{}, errors.New("client: no http request created"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
-			Err:     errors.New("client: no http request created"),
+			Err:     model.ErrCreateHttpReq,
 			wantErr: true,
 		},
 
@@ -2010,8 +2079,14 @@ func Test_BoardService_IssuesWithoutEpic(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -2098,7 +2173,7 @@ func Test_BoardService_Move(t *testing.T) {
 				client.On("Call",
 					&http.Request{},
 					nil).
-					Return(&model.ResponseScheme{}, model.ErrNotFound)
+					Return(&model.ResponseScheme{}, fmt.Errorf("agile: %w", model.ErrNotFound))
 
 				fields.c = client
 			},
@@ -2123,11 +2198,11 @@ func Test_BoardService_Move(t *testing.T) {
 					"rest/agile/1.0/board/1000/issue",
 					"",
 					payloadMocked).
-					Return(&http.Request{}, errors.New("client: no http request created"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
-			Err:     errors.New("client: no http request created"),
+			Err:     model.ErrCreateHttpReq,
 			wantErr: true,
 		},
 
@@ -2163,8 +2238,14 @@ func Test_BoardService_Move(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -2245,7 +2326,7 @@ func Test_BoardService_Projects(t *testing.T) {
 				client.On("Call",
 					&http.Request{},
 					&model.BoardProjectPageScheme{}).
-					Return(&model.ResponseScheme{}, model.ErrNotFound)
+					Return(&model.ResponseScheme{}, fmt.Errorf("agile: %w", model.ErrNotFound))
 
 				fields.c = client
 			},
@@ -2271,11 +2352,11 @@ func Test_BoardService_Projects(t *testing.T) {
 					"rest/agile/1.0/board/1000/project?maxResults=50&startAt=0",
 					"",
 					nil).
-					Return(&http.Request{}, errors.New("client: no http request created"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
-			Err:     errors.New("client: no http request created"),
+			Err:     model.ErrCreateHttpReq,
 			wantErr: true,
 		},
 
@@ -2312,8 +2393,14 @@ func Test_BoardService_Projects(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -2398,7 +2485,7 @@ func Test_BoardService_Sprints(t *testing.T) {
 				client.On("Call",
 					&http.Request{},
 					&model.BoardSprintPageScheme{}).
-					Return(&model.ResponseScheme{}, model.ErrNotFound)
+					Return(&model.ResponseScheme{}, fmt.Errorf("agile: %w", model.ErrNotFound))
 
 				fields.c = client
 			},
@@ -2425,11 +2512,11 @@ func Test_BoardService_Sprints(t *testing.T) {
 					"rest/agile/1.0/board/1000/sprint?maxResults=50&startAt=0&state=active",
 					"",
 					nil).
-					Return(&http.Request{}, errors.New("client: no http request created"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
-			Err:     errors.New("client: no http request created"),
+			Err:     model.ErrCreateHttpReq,
 			wantErr: true,
 		},
 
@@ -2466,8 +2553,14 @@ func Test_BoardService_Sprints(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -2582,7 +2675,7 @@ func Test_BoardService_Versions(t *testing.T) {
 				client.On("Call",
 					&http.Request{},
 					&model.BoardVersionPageScheme{}).
-					Return(&model.ResponseScheme{}, model.ErrNotFound)
+					Return(&model.ResponseScheme{}, fmt.Errorf("agile: %w", model.ErrNotFound))
 
 				fields.c = client
 			},
@@ -2609,11 +2702,11 @@ func Test_BoardService_Versions(t *testing.T) {
 					"rest/agile/1.0/board/1000/version?maxResults=50&released=true&startAt=0",
 					"",
 					nil).
-					Return(&http.Request{}, errors.New("client: no http request created"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
-			Err:     errors.New("client: no http request created"),
+			Err:     model.ErrCreateHttpReq,
 			wantErr: true,
 		},
 
@@ -2650,8 +2743,14 @@ func Test_BoardService_Versions(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)

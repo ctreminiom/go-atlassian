@@ -2,14 +2,19 @@ package internal
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
+	"fmt"
+	"net/http"
+	"net/url"
+	"testing"
+	"time"
+
+	"github.com/stretchr/testify/assert"
+
 	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/v2/service"
 	"github.com/ctreminiom/go-atlassian/v2/service/mocks"
-	"github.com/stretchr/testify/assert"
-	"net/http"
-	"testing"
-	"time"
 )
 
 func Test_internalOrganizationImpl_Gets(t *testing.T) {
@@ -75,13 +80,13 @@ func Test_internalOrganizationImpl_Gets(t *testing.T) {
 					"admin/v1/orgs?cursor=cursor-sample-uuid",
 					"",
 					nil).
-					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 
 			},
 			wantErr: true,
-			Err:     errors.New("error, unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 		},
 	}
 
@@ -102,8 +107,14 @@ func Test_internalOrganizationImpl_Gets(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -188,13 +199,13 @@ func Test_internalOrganizationImpl_Get(t *testing.T) {
 					"admin/v1/orgs/organization-sample-uuid",
 					"",
 					nil).
-					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 
 			},
 			wantErr: true,
-			Err:     errors.New("error, unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 		},
 	}
 
@@ -215,8 +226,14 @@ func Test_internalOrganizationImpl_Get(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -303,13 +320,13 @@ func Test_internalOrganizationImpl_Users(t *testing.T) {
 					"admin/v1/orgs/organization-sample-uuid/users?cursor=cursor-sample-uuid",
 					"",
 					nil).
-					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 
 			},
 			wantErr: true,
-			Err:     errors.New("error, unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 		},
 	}
 
@@ -330,8 +347,14 @@ func Test_internalOrganizationImpl_Users(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -418,13 +441,13 @@ func Test_internalOrganizationImpl_Domains(t *testing.T) {
 					"admin/v1/orgs/organization-sample-uuid/domains?cursor=cursor-sample-uuid",
 					"",
 					nil).
-					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 
 			},
 			wantErr: true,
-			Err:     errors.New("error, unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 		},
 	}
 
@@ -445,8 +468,14 @@ func Test_internalOrganizationImpl_Domains(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -543,13 +572,13 @@ func Test_internalOrganizationImpl_Domain(t *testing.T) {
 					"admin/v1/orgs/organization-sample-uuid/domains/domain-sample-uuid",
 					"",
 					nil).
-					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 
 			},
 			wantErr: true,
-			Err:     errors.New("error, unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 		},
 	}
 
@@ -570,8 +599,14 @@ func Test_internalOrganizationImpl_Domain(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -634,7 +669,7 @@ func Test_internalOrganizationImpl_Events(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"admin/v1/orgs/organization-sample-uuid/events?action=user_added_to_group&cursor=cursor-id-sample&from=1589197526&q=qq&to=1605177926",
+					"admin/v1/orgs/organization-sample-uuid/events?action=user_added_to_group&cursor=cursor-id-sample&from=1589197526371&q=qq&to=1605177926371",
 					"",
 					nil).
 					Return(&http.Request{}, nil)
@@ -679,13 +714,163 @@ func Test_internalOrganizationImpl_Events(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"admin/v1/orgs/organization-sample-uuid/events?action=user_added_to_group&cursor=cursor-id-sample&from=1589197526&q=qq&to=1605177926",
+					"admin/v1/orgs/organization-sample-uuid/events?action=user_added_to_group&cursor=cursor-id-sample&from=1589197526371&q=qq&to=1605177926371",
+					"",
+					nil).
+					Return(&http.Request{}, model.ErrCreateHttpReq)
+
+				fields.c = client
+
+			},
+			wantErr: true,
+			Err:     model.ErrCreateHttpReq,
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+
+			if testCase.on != nil {
+				testCase.on(&testCase.fields)
+			}
+
+			newOrganizationService := NewOrganizationService(testCase.fields.c, nil, nil)
+
+			gotResult, gotResponse, err := newOrganizationService.Events(testCase.args.ctx, testCase.args.organizationID,
+				testCase.args.options, testCase.args.cursor)
+
+			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
+			} else {
+
+				assert.NoError(t, err)
+				assert.NotEqual(t, gotResponse, nil)
+				assert.NotEqual(t, gotResult, nil)
+			}
+
+		})
+	}
+}
+
+func Test_internalOrganizationImpl_EventsStream(t *testing.T) {
+
+	fromMocked, err := time.Parse(time.RFC3339Nano, "2020-05-12T11:45:26.371Z")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	toMocked, err := time.Parse(time.RFC3339Nano, "2020-11-12T11:45:26.371Z")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	type fields struct {
+		c service.Connector
+	}
+
+	type args struct {
+		ctx            context.Context
+		organizationID string
+		options        *model.OrganizationEventStreamOptScheme
+	}
+
+	testCases := []struct {
+		name    string
+		fields  fields
+		args    args
+		on      func(*fields)
+		wantErr bool
+		Err     error
+	}{
+		{
+			name: "when the parameters are correct",
+			args: args{
+				ctx:            context.Background(),
+				organizationID: "organization-sample-uuid",
+				options: &model.OrganizationEventStreamOptScheme{
+					From:      fromMocked.Add(-24 * time.Hour),
+					To:        toMocked.Add(-1 * time.Hour),
+					Cursor:    "cursor-id-sample",
+					SortOrder: "asc",
+					Limit:     10,
+				},
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewConnector(t)
+
+				// Calculate the expected epoch milliseconds to match the actual implementation
+				fromEpoch := fromMocked.Add(-24 * time.Hour).UnixMilli()
+				toEpoch := toMocked.Add(-1 * time.Hour).UnixMilli()
+				expectedURL := fmt.Sprintf("admin/v1/orgs/organization-sample-uuid/events-stream?cursor=cursor-id-sample&from=%d&limit=10&sortOrder=asc&to=%d", fromEpoch, toEpoch)
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodGet,
+					expectedURL,
+					"",
+					nil).
+					Return(&http.Request{}, nil)
+
+				client.On("Call",
+					&http.Request{},
+					&model.OrganizationEventStreamPageScheme{}).
+					Return(&model.ResponseScheme{}, nil)
+
+				fields.c = client
+			},
+		},
+		{
+			name: "when the organization id is not provided",
+			args: args{
+				ctx:            context.Background(),
+				organizationID: "",
+			},
+			wantErr: true,
+			Err:     model.ErrNoAdminOrganization,
+		},
+		{
+			name: "when the http request cannot be created",
+			args: args{
+				ctx:            context.Background(),
+				organizationID: "organization-sample-uuid",
+				options: &model.OrganizationEventStreamOptScheme{
+					From:      fromMocked.Add(-24 * time.Hour),
+					To:        toMocked.Add(-1 * time.Hour),
+					Cursor:    "cursor-id-sample",
+					SortOrder: "asc",
+					Limit:     10,
+				},
+			},
+			on: func(fields *fields) {
+				client := mocks.NewConnector(t)
+
+				// Calculate the expected epoch milliseconds to match the actual implementation
+				fromEpoch := fromMocked.Add(-24 * time.Hour).UnixMilli()
+				toEpoch := toMocked.Add(-1 * time.Hour).UnixMilli()
+				expectedURL := fmt.Sprintf("admin/v1/orgs/organization-sample-uuid/events-stream?cursor=cursor-id-sample&from=%d&limit=10&sortOrder=asc&to=%d", fromEpoch, toEpoch)
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodGet,
+					expectedURL,
 					"",
 					nil).
 					Return(&http.Request{}, errors.New("error, unable to create the http request"))
 
 				fields.c = client
-
 			},
 			wantErr: true,
 			Err:     errors.New("error, unable to create the http request"),
@@ -701,8 +886,7 @@ func Test_internalOrganizationImpl_Events(t *testing.T) {
 
 			newOrganizationService := NewOrganizationService(testCase.fields.c, nil, nil)
 
-			gotResult, gotResponse, err := newOrganizationService.Events(testCase.args.ctx, testCase.args.organizationID,
-				testCase.args.options, testCase.args.cursor)
+			gotResult, gotResponse, err := newOrganizationService.EventsStream(testCase.args.ctx, testCase.args.organizationID, testCase.args.options)
 
 			if testCase.wantErr {
 
@@ -808,13 +992,13 @@ func Test_internalOrganizationImpl_Event(t *testing.T) {
 					"admin/v1/orgs/organization-sample-uuid/events/event-sample-uuid",
 					"",
 					nil).
-					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 
 			},
 			wantErr: true,
-			Err:     errors.New("error, unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 		},
 	}
 
@@ -835,8 +1019,14 @@ func Test_internalOrganizationImpl_Event(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -911,13 +1101,13 @@ func Test_internalOrganizationImpl_Actions(t *testing.T) {
 					"admin/v1/orgs/organization-sample-uuid/event-actions",
 					"",
 					nil).
-					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 
 			},
 			wantErr: true,
-			Err:     errors.New("error, unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 		},
 	}
 
@@ -938,8 +1128,14 @@ func Test_internalOrganizationImpl_Actions(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)

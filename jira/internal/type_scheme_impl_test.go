@@ -2,8 +2,10 @@ package internal
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"net/http"
+	"net/url"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -11,6 +13,16 @@ import (
 	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/v2/service"
 	"github.com/ctreminiom/go-atlassian/v2/service/mocks"
+)
+
+const (
+	mockIssueTypeSchemeId = "10001"
+
+	mockIssueTypeEpicId    = "10000"
+	mockIssueTypeStoryId   = "10001"
+	mockIssueTypeTaskId    = "10002"
+	mockIssueTypeSubTaskId = "10003"
+	mockIssueTypeBugId     = "10004"
 )
 
 func Test_internalTypeSchemeImpl_Gets(t *testing.T) {
@@ -114,12 +126,12 @@ func Test_internalTypeSchemeImpl_Gets(t *testing.T) {
 					http.MethodGet,
 					"rest/api/3/issuetypescheme?id=1001&id=1002&maxResults=100&startAt=50",
 					"", nil).
-					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
 			wantErr: true,
-			Err:     errors.New("error, unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 		},
 	}
 
@@ -142,8 +154,14 @@ func Test_internalTypeSchemeImpl_Gets(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -256,12 +274,12 @@ func Test_internalTypeSchemeImpl_Items(t *testing.T) {
 					http.MethodGet,
 					"rest/api/3/issuetypescheme/mapping?issueTypeSchemeId=1001&issueTypeSchemeId=1002&maxResults=100&startAt=50",
 					"", nil).
-					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
 			wantErr: true,
-			Err:     errors.New("error, unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 		},
 	}
 
@@ -284,8 +302,14 @@ func Test_internalTypeSchemeImpl_Items(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -398,12 +422,12 @@ func Test_internalTypeSchemeImpl_Projects(t *testing.T) {
 					http.MethodGet,
 					"rest/api/3/issuetypescheme/project?maxResults=100&projectId=1001&projectId=1002&startAt=50",
 					"", nil).
-					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
 			wantErr: true,
-			Err:     errors.New("error, unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 		},
 	}
 
@@ -426,8 +450,14 @@ func Test_internalTypeSchemeImpl_Projects(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -540,12 +570,12 @@ func Test_internalTypeSchemeImpl_Create(t *testing.T) {
 					http.MethodPost,
 					"rest/api/3/issuetypescheme",
 					"", payloadMocked).
-					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
 			wantErr: true,
-			Err:     errors.New("error, unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 		},
 	}
 
@@ -567,8 +597,14 @@ func Test_internalTypeSchemeImpl_Create(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -696,12 +732,12 @@ func Test_internalTypeSchemeImpl_Update(t *testing.T) {
 					http.MethodPut,
 					"rest/api/3/issuetypescheme/10001",
 					"", payloadMocked).
-					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
 			wantErr: true,
-			Err:     errors.New("error, unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 		},
 	}
 
@@ -724,8 +760,14 @@ func Test_internalTypeSchemeImpl_Update(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -836,12 +878,12 @@ func Test_internalTypeSchemeImpl_Append(t *testing.T) {
 					http.MethodPut,
 					"rest/api/3/issuetypescheme/10001/issuetype",
 					"", payloadMocked).
-					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
 			wantErr: true,
-			Err:     errors.New("error, unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 		},
 	}
 
@@ -864,6 +906,234 @@ func Test_internalTypeSchemeImpl_Append(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
+			} else {
+
+				assert.NoError(t, err)
+				assert.NotEqual(t, gotResponse, nil)
+			}
+
+		})
+	}
+}
+
+func Test_internalTypeSchemeImpl_Reorder(t *testing.T) {
+
+	type fields struct {
+		c       service.Connector
+		version string
+	}
+
+	type args struct {
+		ctx               context.Context
+		issueTypeSchemeID string
+		issueTypeIDs      []string
+		after             string
+		position          model.IssueTypeSchemePosition
+	}
+
+	testCases := []struct {
+		name    string
+		fields  fields
+		args    args
+		on      func(*fields)
+		wantErr bool
+		Err     error
+	}{
+		{
+			name:   "when the api version is v3",
+			fields: fields{version: "3"},
+			args: args{
+				ctx:               context.Background(),
+				issueTypeSchemeID: mockIssueTypeSchemeId,
+				issueTypeIDs:      []string{mockIssueTypeStoryId, mockIssueTypeTaskId, mockIssueTypeSubTaskId, mockIssueTypeBugId},
+				after:             mockIssueTypeEpicId,
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewConnector(t)
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodPut,
+					"/rest/api/3/issuetypescheme/10001/issuetype/move",
+					"", &model.IssueTypeSchemeOrderPayloadScheme{
+						IssueTypeIDs: []string{mockIssueTypeStoryId, mockIssueTypeTaskId, mockIssueTypeSubTaskId, mockIssueTypeBugId},
+						After:        mockIssueTypeEpicId,
+					}).
+					Return(&http.Request{}, nil)
+
+				client.On("Call",
+					&http.Request{},
+					nil).
+					Return(&model.ResponseScheme{}, nil)
+
+				fields.c = client
+			},
+			wantErr: false,
+			Err:     nil,
+		},
+
+		{
+			name:   "when the api version is v2",
+			fields: fields{version: "2"},
+			args: args{
+				ctx:               context.Background(),
+				issueTypeSchemeID: mockIssueTypeSchemeId,
+				issueTypeIDs:      []string{mockIssueTypeStoryId, mockIssueTypeTaskId, mockIssueTypeSubTaskId, mockIssueTypeBugId},
+				after:             mockIssueTypeEpicId,
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewConnector(t)
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodPut,
+					"/rest/api/2/issuetypescheme/10001/issuetype/move",
+					"", &model.IssueTypeSchemeOrderPayloadScheme{
+						IssueTypeIDs: []string{mockIssueTypeStoryId, mockIssueTypeTaskId, mockIssueTypeSubTaskId, mockIssueTypeBugId},
+						After:        mockIssueTypeEpicId,
+					}).
+					Return(&http.Request{}, nil)
+
+				client.On("Call",
+					&http.Request{},
+					nil).
+					Return(&model.ResponseScheme{}, nil)
+
+				fields.c = client
+			},
+			wantErr: false,
+			Err:     nil,
+		},
+
+		{
+			name:   "when the issue type scheme id is not provided",
+			fields: fields{version: "3"},
+			args: args{
+				ctx:          context.Background(),
+				issueTypeIDs: []string{mockIssueTypeStoryId, mockIssueTypeTaskId, mockIssueTypeSubTaskId, mockIssueTypeBugId},
+				after:        mockIssueTypeEpicId,
+			},
+			wantErr: true,
+			Err:     model.ErrNoIssueTypeSchemeID,
+		},
+
+		{
+			name:   "when the issue type ids are not provided",
+			fields: fields{version: "3"},
+			args: args{
+				ctx:               context.Background(),
+				issueTypeSchemeID: mockIssueTypeSchemeId,
+				after:             mockIssueTypeEpicId,
+			},
+			wantErr: true,
+			Err:     model.ErrNoIssueTypes,
+		},
+
+		{
+			name:   "when no required 'after' or 'position' attribute is provided",
+			fields: fields{version: "3"},
+			args: args{
+				ctx:               context.Background(),
+				issueTypeSchemeID: mockIssueTypeSchemeId,
+				issueTypeIDs:      []string{mockIssueTypeStoryId, mockIssueTypeTaskId, mockIssueTypeSubTaskId, mockIssueTypeBugId},
+			},
+			wantErr: true,
+			Err:     model.ErrNoIssueTypeReorderAttr,
+		},
+
+		{
+			name:   "when no required 'after' or 'position' attribute is provided",
+			fields: fields{version: "3"},
+			args: args{
+				ctx:               context.Background(),
+				issueTypeSchemeID: mockIssueTypeSchemeId,
+				position:          "blah",
+				issueTypeIDs:      []string{mockIssueTypeStoryId, mockIssueTypeTaskId, mockIssueTypeSubTaskId, mockIssueTypeBugId},
+			},
+			wantErr: true,
+			Err:     model.ErrInvalidIssueTypeSchemePosition,
+		},
+
+		{
+			name:   "when the http request cannot be created",
+			fields: fields{version: "3"},
+			args: args{
+				ctx:               context.Background(),
+				issueTypeSchemeID: mockIssueTypeSchemeId,
+				issueTypeIDs:      []string{mockIssueTypeStoryId, mockIssueTypeTaskId, mockIssueTypeSubTaskId, mockIssueTypeBugId},
+				after:             mockIssueTypeEpicId,
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewConnector(t)
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodPut,
+					"/rest/api/3/issuetypescheme/10001/issuetype/move",
+					"", &model.IssueTypeSchemeOrderPayloadScheme{
+						IssueTypeIDs: []string{mockIssueTypeStoryId, mockIssueTypeTaskId, mockIssueTypeSubTaskId, mockIssueTypeBugId},
+						After:        mockIssueTypeEpicId,
+					}).
+					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+
+				fields.c = client
+			},
+			wantErr: true,
+			Err:     errors.New("error, unable to create the http request"),
+		},
+
+		{
+			name:   "when using invalid payload with 'after' attribute",
+			fields: fields{version: "3"},
+			args: args{
+				ctx:               context.Background(),
+				issueTypeSchemeID: "10001",
+				after:             mockIssueTypeTaskId,
+				issueTypeIDs:      []string{mockIssueTypeStoryId, mockIssueTypeTaskId, mockIssueTypeSubTaskId, mockIssueTypeBugId},
+			},
+			wantErr: true,
+			Err:     model.ErrInvalidIssueTypeSchemeAfter,
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+
+			if testCase.on != nil {
+				testCase.on(&testCase.fields)
+			}
+
+			newService, err := NewTypeSchemeService(testCase.fields.c, testCase.fields.version)
+			assert.NoError(t, err)
+
+			gotResponse, err := newService.Reorder(testCase.args.ctx, testCase.args.issueTypeSchemeID, &model.IssueTypeSchemeOrderPayloadScheme{
+				After:        testCase.args.after,
+				Position:     testCase.args.position,
+				IssueTypeIDs: testCase.args.issueTypeIDs,
+			})
+
+			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+
+				errUnwrapped := errors.Unwrap(err)
+
+				if errUnwrapped != nil {
+					err = errUnwrapped
+				}
 				assert.EqualError(t, err, testCase.Err.Error())
 
 			} else {
@@ -973,12 +1243,12 @@ func Test_internalTypeSchemeImpl_Remove(t *testing.T) {
 					http.MethodDelete,
 					"rest/api/3/issuetypescheme/10001/issuetype/9",
 					"", nil).
-					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
 			wantErr: true,
-			Err:     errors.New("error, unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 		},
 	}
 
@@ -1000,8 +1270,14 @@ func Test_internalTypeSchemeImpl_Remove(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -1106,12 +1382,12 @@ func Test_internalTypeSchemeImpl_Delete(t *testing.T) {
 					http.MethodDelete,
 					"rest/api/3/issuetypescheme/10001",
 					"", nil).
-					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
 			wantErr: true,
-			Err:     errors.New("error, unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 		},
 	}
 
@@ -1133,8 +1409,14 @@ func Test_internalTypeSchemeImpl_Delete(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -1266,12 +1548,12 @@ func Test_internalTypeSchemeImpl_Assign(t *testing.T) {
 					http.MethodPut,
 					"rest/api/3/issuetypescheme/project",
 					"", payloadMocked).
-					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
 			wantErr: true,
-			Err:     errors.New("error, unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 		},
 	}
 
@@ -1293,8 +1575,14 @@ func Test_internalTypeSchemeImpl_Assign(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -1316,7 +1604,7 @@ func Test_NewTypeSchemeService(t *testing.T) {
 		name    string
 		args    args
 		wantErr bool
-		err     error
+		Err     error
 	}{
 		{
 			name: "when the parameters are correct",
@@ -1334,7 +1622,7 @@ func Test_NewTypeSchemeService(t *testing.T) {
 				version: "",
 			},
 			wantErr: true,
-			err:     model.ErrNoVersionProvided,
+			Err:     model.ErrNoVersionProvided,
 		},
 	}
 	for _, testCase := range testCases {
@@ -1347,8 +1635,14 @@ func Test_NewTypeSchemeService(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)

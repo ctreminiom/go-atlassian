@@ -2,8 +2,10 @@ package internal
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"net/http"
+	"net/url"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -85,11 +87,11 @@ func Test_internalTypeImpl_Search(t *testing.T) {
 				client.On("Call",
 					&http.Request{},
 					&model.RequestTypePageScheme{}).
-					Return(&model.ResponseScheme{}, errors.New("client: no http response found"))
+					Return(&model.ResponseScheme{}, model.ErrNoHttpResponse)
 
 				fields.c = client
 			},
-			Err:     errors.New("client: no http response found"),
+			Err:     model.ErrNoHttpResponse,
 			wantErr: true,
 		},
 
@@ -111,11 +113,11 @@ func Test_internalTypeImpl_Search(t *testing.T) {
 					"rest/servicedeskapi/requesttype?limit=50&searchQuery=Request+Testing+Environment&start=100",
 					"",
 					nil).
-					Return(&http.Request{}, errors.New("client: no http request created"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
-			Err:     errors.New("client: no http request created"),
+			Err:     model.ErrCreateHttpReq,
 			wantErr: true,
 		},
 	}
@@ -138,8 +140,14 @@ func Test_internalTypeImpl_Search(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -224,11 +232,11 @@ func Test_internalTypeImpl_Gets(t *testing.T) {
 				client.On("Call",
 					&http.Request{},
 					&model.ProjectRequestTypePageScheme{}).
-					Return(&model.ResponseScheme{}, errors.New("client: no http response found"))
+					Return(&model.ResponseScheme{}, model.ErrNoHttpResponse)
 
 				fields.c = client
 			},
-			Err:     errors.New("client: no http response found"),
+			Err:     model.ErrNoHttpResponse,
 			wantErr: true,
 		},
 
@@ -251,11 +259,11 @@ func Test_internalTypeImpl_Gets(t *testing.T) {
 					"rest/servicedeskapi/servicedesk/10001/requesttype?groupId=38383&limit=50&start=100",
 					"",
 					nil).
-					Return(&http.Request{}, errors.New("client: no http request created"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
-			Err:     errors.New("client: no http request created"),
+			Err:     model.ErrCreateHttpReq,
 			wantErr: true,
 		},
 
@@ -287,8 +295,14 @@ func Test_internalTypeImpl_Gets(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -368,11 +382,11 @@ func Test_internalTypeImpl_Get(t *testing.T) {
 				client.On("Call",
 					&http.Request{},
 					&model.RequestTypeScheme{}).
-					Return(&model.ResponseScheme{}, errors.New("client: no http response found"))
+					Return(&model.ResponseScheme{}, model.ErrNoHttpResponse)
 
 				fields.c = client
 			},
-			Err:     errors.New("client: no http response found"),
+			Err:     model.ErrNoHttpResponse,
 			wantErr: true,
 		},
 
@@ -393,11 +407,11 @@ func Test_internalTypeImpl_Get(t *testing.T) {
 					"rest/servicedeskapi/servicedesk/10001/requesttype/38383",
 					"",
 					nil).
-					Return(&http.Request{}, errors.New("client: no http request created"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
-			Err:     errors.New("client: no http request created"),
+			Err:     model.ErrCreateHttpReq,
 			wantErr: true,
 		},
 
@@ -439,8 +453,14 @@ func Test_internalTypeImpl_Get(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -520,11 +540,11 @@ func Test_internalTypeImpl_Fields(t *testing.T) {
 				client.On("Call",
 					&http.Request{},
 					&model.RequestTypeFieldsScheme{}).
-					Return(&model.ResponseScheme{}, errors.New("client: no http response found"))
+					Return(&model.ResponseScheme{}, model.ErrNoHttpResponse)
 
 				fields.c = client
 			},
-			Err:     errors.New("client: no http response found"),
+			Err:     model.ErrNoHttpResponse,
 			wantErr: true,
 		},
 
@@ -545,11 +565,11 @@ func Test_internalTypeImpl_Fields(t *testing.T) {
 					"rest/servicedeskapi/servicedesk/10001/requesttype/38383/field",
 					"",
 					nil).
-					Return(&http.Request{}, errors.New("client: no http request created"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
-			Err:     errors.New("client: no http request created"),
+			Err:     model.ErrCreateHttpReq,
 			wantErr: true,
 		},
 
@@ -591,8 +611,14 @@ func Test_internalTypeImpl_Fields(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -672,11 +698,11 @@ func Test_internalTypeImpl_Delete(t *testing.T) {
 				client.On("Call",
 					&http.Request{},
 					nil).
-					Return(&model.ResponseScheme{}, errors.New("client: no http response found"))
+					Return(&model.ResponseScheme{}, model.ErrNoHttpResponse)
 
 				fields.c = client
 			},
-			Err:     errors.New("client: no http response found"),
+			Err:     model.ErrNoHttpResponse,
 			wantErr: true,
 		},
 
@@ -697,11 +723,11 @@ func Test_internalTypeImpl_Delete(t *testing.T) {
 					"rest/servicedeskapi/servicedesk/10001/requesttype/38383",
 					"",
 					nil).
-					Return(&http.Request{}, errors.New("client: no http request created"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
-			Err:     errors.New("client: no http request created"),
+			Err:     model.ErrCreateHttpReq,
 			wantErr: true,
 		},
 
@@ -743,8 +769,14 @@ func Test_internalTypeImpl_Delete(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -840,11 +872,11 @@ func Test_internalTypeImpl_Create(t *testing.T) {
 				client.On("Call",
 					&http.Request{},
 					&model.RequestTypeScheme{}).
-					Return(&model.ResponseScheme{}, errors.New("client: no http response found"))
+					Return(&model.ResponseScheme{}, model.ErrNoHttpResponse)
 
 				fields.c = client
 			},
-			Err:     errors.New("client: no http response found"),
+			Err:     model.ErrNoHttpResponse,
 			wantErr: true,
 		},
 
@@ -870,11 +902,11 @@ func Test_internalTypeImpl_Create(t *testing.T) {
 					"rest/servicedeskapi/servicedesk/10001/requesttype",
 					"",
 					payloadMocked).
-					Return(&http.Request{}, errors.New("client: no http request created"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
-			Err:     errors.New("client: no http request created"),
+			Err:     model.ErrCreateHttpReq,
 			wantErr: true,
 		},
 
@@ -906,8 +938,14 @@ func Test_internalTypeImpl_Create(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)

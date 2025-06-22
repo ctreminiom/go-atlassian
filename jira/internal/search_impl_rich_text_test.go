@@ -2,8 +2,10 @@ package internal
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"net/http"
+	"net/url"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -116,12 +118,12 @@ func Test_internalSearchRichTextImpl_Checks(t *testing.T) {
 					http.MethodPost,
 					"rest/api/3/jql/match",
 					"", payloadMocked).
-					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
 			wantErr: true,
-			Err:     errors.New("error, unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 		},
 	}
 
@@ -143,8 +145,14 @@ func Test_internalSearchRichTextImpl_Checks(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -277,12 +285,12 @@ func Test_internalSearchRichTextImpl_Post(t *testing.T) {
 					http.MethodPost,
 					"rest/api/3/search",
 					"", payloadMocked).
-					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
 			wantErr: true,
-			Err:     errors.New("error, unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 		},
 	}
 
@@ -305,8 +313,14 @@ func Test_internalSearchRichTextImpl_Post(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -430,12 +444,12 @@ func Test_internalSearchRichTextImpl_Get(t *testing.T) {
 					http.MethodGet,
 					"rest/api/3/search?expand=operations&fields=status%2Csummary&jql=project+%3D+FOO&maxResults=100&startAt=50&validateQuery=strict",
 					"", nil).
-					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
 			wantErr: true,
-			Err:     errors.New("error, unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 		},
 	}
 
@@ -458,8 +472,14 @@ func Test_internalSearchRichTextImpl_Get(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -467,6 +487,430 @@ func Test_internalSearchRichTextImpl_Get(t *testing.T) {
 				assert.NotEqual(t, gotResult, nil)
 			}
 
+		})
+	}
+}
+
+func Test_internalSearchRichTextImpl_SearchJQL(t *testing.T) {
+
+	type fields struct {
+		c       service.Connector
+		version string
+	}
+
+	type args struct {
+		ctx           context.Context
+		jql           string
+		fields        []string
+		expands       []string
+		maxResults    int
+		nextPageToken string
+	}
+
+	testCases := []struct {
+		name    string
+		fields  fields
+		args    args
+		on      func(*fields)
+		wantErr bool
+		Err     error
+	}{
+		{
+			name:   "when the search jql operation is successful",
+			fields: fields{version: "2"},
+			args: args{
+				ctx:           context.Background(),
+				jql:           "project = FOO",
+				fields:        []string{"summary", "status"},
+				expands:       []string{"changelog", "names"},
+				maxResults:    50,
+				nextPageToken: "CAEaAggD",
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewConnector(t)
+
+				payload := struct {
+					Jql           string   `json:"jql,omitempty"`
+					MaxResults    int      `json:"maxResults,omitempty"`
+					Fields        []string `json:"fields,omitempty"`
+					Expand        []string `json:"expand,omitempty"`
+					NextPageToken string   `json:"nextPageToken,omitempty"`
+				}{
+					Jql:           "project = FOO",
+					MaxResults:    50,
+					Fields:        []string{"summary", "status"},
+					Expand:        []string{"changelog", "names"},
+					NextPageToken: "CAEaAggD",
+				}
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodPost,
+					"rest/api/2/search/jql",
+					"", payload).
+					Return(&http.Request{}, nil)
+
+				client.On("Call",
+					&http.Request{},
+					&model.IssueSearchJQLSchemeV2{}).
+					Return(&model.ResponseScheme{}, nil)
+
+				fields.c = client
+			},
+			wantErr: false,
+			Err:     nil,
+		},
+
+		{
+			name:   "when the request returns an error",
+			fields: fields{version: "2"},
+			args: args{
+				ctx:           context.Background(),
+				jql:           "project = FOO",
+				fields:        []string{"summary", "status"},
+				expands:       []string{"changelog", "names"},
+				maxResults:    50,
+				nextPageToken: "CAEaAggD",
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewConnector(t)
+
+				payload := struct {
+					Jql           string   `json:"jql,omitempty"`
+					MaxResults    int      `json:"maxResults,omitempty"`
+					Fields        []string `json:"fields,omitempty"`
+					Expand        []string `json:"expand,omitempty"`
+					NextPageToken string   `json:"nextPageToken,omitempty"`
+				}{
+					Jql:           "project = FOO",
+					MaxResults:    50,
+					Fields:        []string{"summary", "status"},
+					Expand:        []string{"changelog", "names"},
+					NextPageToken: "CAEaAggD",
+				}
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodPost,
+					"rest/api/2/search/jql",
+					"", payload).
+					Return(&http.Request{}, model.ErrCreateHttpReq)
+
+				fields.c = client
+			},
+			wantErr: true,
+			Err:     model.ErrCreateHttpReq,
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+
+			if testCase.on != nil {
+				testCase.on(&testCase.fields)
+			}
+
+			searchImpl := &internalSearchRichTextImpl{
+				c:       testCase.fields.c,
+				version: testCase.fields.version,
+			}
+
+			gotResult, gotResponse, err := searchImpl.SearchJQL(
+				testCase.args.ctx,
+				testCase.args.jql,
+				testCase.args.fields,
+				testCase.args.expands,
+				testCase.args.maxResults,
+				testCase.args.nextPageToken,
+			)
+
+			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+
+				assert.Error(t, err)
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
+			} else {
+
+				assert.NoError(t, err)
+				assert.NotEqual(t, gotResponse, nil)
+				assert.NotEqual(t, gotResult, nil)
+			}
+		})
+	}
+}
+
+func Test_internalSearchRichTextImpl_ApproximateCount(t *testing.T) {
+
+	type fields struct {
+		c       service.Connector
+		version string
+	}
+
+	type args struct {
+		ctx context.Context
+		jql string
+	}
+
+	testCases := []struct {
+		name    string
+		fields  fields
+		args    args
+		on      func(*fields)
+		wantErr bool
+		Err     error
+	}{
+		{
+			name:   "when the approximate count operation is successful",
+			fields: fields{version: "2"},
+			args: args{
+				ctx: context.Background(),
+				jql: "project = FOO",
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewConnector(t)
+
+				payload := struct {
+					Jql string `json:"jql,omitempty"`
+				}{
+					Jql: "project = FOO",
+				}
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodPost,
+					"rest/api/2/search/approximate-count",
+					"", payload).
+					Return(&http.Request{}, nil)
+
+				client.On("Call",
+					&http.Request{},
+					&model.IssueSearchApproximateCountScheme{}).
+					Return(&model.ResponseScheme{}, nil)
+
+				fields.c = client
+			},
+			wantErr: false,
+			Err:     nil,
+		},
+
+		{
+			name:   "when the request returns an error",
+			fields: fields{version: "2"},
+			args: args{
+				ctx: context.Background(),
+				jql: "project = FOO",
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewConnector(t)
+
+				payload := struct {
+					Jql string `json:"jql,omitempty"`
+				}{
+					Jql: "project = FOO",
+				}
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodPost,
+					"rest/api/2/search/approximate-count",
+					"", payload).
+					Return(&http.Request{}, model.ErrCreateHttpReq)
+
+				fields.c = client
+			},
+			wantErr: true,
+			Err:     model.ErrCreateHttpReq,
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+
+			if testCase.on != nil {
+				testCase.on(&testCase.fields)
+			}
+
+			searchImpl := &internalSearchRichTextImpl{
+				c:       testCase.fields.c,
+				version: testCase.fields.version,
+			}
+
+			gotResult, gotResponse, err := searchImpl.ApproximateCount(
+				testCase.args.ctx,
+				testCase.args.jql,
+			)
+
+			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+
+				assert.Error(t, err)
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
+			} else {
+
+				assert.NoError(t, err)
+				assert.NotEqual(t, gotResponse, nil)
+				assert.NotEqual(t, gotResult, nil)
+			}
+		})
+	}
+}
+
+func Test_internalSearchRichTextImpl_BulkFetch(t *testing.T) {
+
+	type fields struct {
+		c       service.Connector
+		version string
+	}
+
+	type args struct {
+		ctx            context.Context
+		issueIDsOrKeys []string
+		fields         []string
+	}
+
+	testCases := []struct {
+		name    string
+		fields  fields
+		args    args
+		on      func(*fields)
+		wantErr bool
+		Err     error
+	}{
+		{
+			name:   "when the bulk fetch operation is successful",
+			fields: fields{version: "2"},
+			args: args{
+				ctx:            context.Background(),
+				issueIDsOrKeys: []string{"FOO-1", "10067", "BAR-1"},
+				fields:         []string{"summary", "status", "priority"},
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewConnector(t)
+
+				payload := struct {
+					IssueIDsOrKeys []string `json:"issueIdsOrKeys,omitempty"`
+					Fields         []string `json:"fields,omitempty"`
+				}{
+					IssueIDsOrKeys: []string{"FOO-1", "10067", "BAR-1"},
+					Fields:         []string{"summary", "status", "priority"},
+				}
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodPost,
+					"rest/api/2/issue/bulkfetch",
+					"", payload).
+					Return(&http.Request{}, nil)
+
+				client.On("Call",
+					&http.Request{},
+					&model.IssueBulkFetchSchemeV2{}).
+					Return(&model.ResponseScheme{}, nil)
+
+				fields.c = client
+			},
+			wantErr: false,
+			Err:     nil,
+		},
+
+		{
+			name:   "when the request returns an error",
+			fields: fields{version: "2"},
+			args: args{
+				ctx:            context.Background(),
+				issueIDsOrKeys: []string{"FOO-1", "10067", "BAR-1"},
+				fields:         []string{"summary", "status", "priority"},
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewConnector(t)
+
+				payload := struct {
+					IssueIDsOrKeys []string `json:"issueIdsOrKeys,omitempty"`
+					Fields         []string `json:"fields,omitempty"`
+				}{
+					IssueIDsOrKeys: []string{"FOO-1", "10067", "BAR-1"},
+					Fields:         []string{"summary", "status", "priority"},
+				}
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodPost,
+					"rest/api/2/issue/bulkfetch",
+					"", payload).
+					Return(&http.Request{}, model.ErrCreateHttpReq)
+
+				fields.c = client
+			},
+			wantErr: true,
+			Err:     model.ErrCreateHttpReq,
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+
+			if testCase.on != nil {
+				testCase.on(&testCase.fields)
+			}
+
+			searchImpl := &internalSearchRichTextImpl{
+				c:       testCase.fields.c,
+				version: testCase.fields.version,
+			}
+
+			gotResult, gotResponse, err := searchImpl.BulkFetch(
+				testCase.args.ctx,
+				testCase.args.issueIDsOrKeys,
+				testCase.args.fields,
+			)
+
+			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+
+				assert.Error(t, err)
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
+			} else {
+
+				assert.NoError(t, err)
+				assert.NotEqual(t, gotResponse, nil)
+				assert.NotEqual(t, gotResult, nil)
+			}
 		})
 	}
 }

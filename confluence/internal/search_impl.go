@@ -63,7 +63,7 @@ func (i *internalSearchImpl) Content(ctx context.Context, cql string, options *m
 	defer span.End()
 
 	if cql == "" {
-		return nil, nil, model.ErrNoCQL
+		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoCQL)
 	}
 
 	query := url.Values{}
@@ -139,7 +139,7 @@ func (i *internalSearchImpl) Users(ctx context.Context, cql string, start, limit
 	defer span.End()
 
 	if cql == "" {
-		return nil, nil, model.ErrNoCQL
+		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoCQL)
 	}
 
 	query := url.Values{}

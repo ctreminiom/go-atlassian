@@ -174,7 +174,7 @@ func (i *internalChildrenDescandantsImpl) Children(ctx context.Context, contentI
 	defer span.End()
 
 	if contentID == "" {
-		return nil, nil, model.ErrNoContentID
+		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
 	}
 
 	var endpoint strings.Builder
@@ -213,20 +213,20 @@ func (i *internalChildrenDescandantsImpl) Move(ctx context.Context, pageID strin
 	defer span.End()
 
 	if pageID == "" {
-		return nil, nil, model.ErrNoPageID
+		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoPageID)
 	}
 
 	if position == "" {
-		return nil, nil, model.ErrNoPosition
+		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoPosition)
 	}
 
 	if targetID == "" {
-		return nil, nil, model.ErrNoTargetID
+		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoTargetID)
 	}
 
 	_, validPosition := model.ValidPositions[position]
 	if !validPosition {
-		return nil, nil, model.ErrInvalidPosition
+		return nil, nil, fmt.Errorf("confluence: %w", model.ErrInvalidPosition)
 	}
 
 	var endpoint strings.Builder
@@ -251,11 +251,11 @@ func (i *internalChildrenDescandantsImpl) ChildrenByType(ctx context.Context, co
 	defer span.End()
 
 	if contentID == "" {
-		return nil, nil, model.ErrNoContentID
+		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
 	}
 
 	if contentType == "" {
-		return nil, nil, model.ErrNoContentType
+		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentType)
 	}
 
 	query := url.Values{}
@@ -291,7 +291,7 @@ func (i *internalChildrenDescandantsImpl) Descendants(ctx context.Context, conte
 	defer span.End()
 
 	if contentID == "" {
-		return nil, nil, model.ErrNoContentID
+		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
 	}
 
 	var endpoint strings.Builder
@@ -326,11 +326,11 @@ func (i *internalChildrenDescandantsImpl) DescendantsByType(ctx context.Context,
 	defer span.End()
 
 	if contentID == "" {
-		return nil, nil, model.ErrNoContentID
+		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
 	}
 
 	if contentType == "" {
-		return nil, nil, model.ErrNoContentType
+		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentType)
 	}
 
 	query := url.Values{}
@@ -366,7 +366,7 @@ func (i *internalChildrenDescandantsImpl) CopyHierarchy(ctx context.Context, con
 	defer span.End()
 
 	if contentID == "" {
-		return nil, nil, model.ErrNoContentID
+		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
 	}
 
 	endpoint := fmt.Sprintf("wiki/rest/api/content/%v/pagehierarchy/copy", contentID)
@@ -390,7 +390,7 @@ func (i *internalChildrenDescandantsImpl) CopyPage(ctx context.Context, contentI
 	defer span.End()
 
 	if contentID == "" {
-		return nil, nil, model.ErrNoContentID
+		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
 	}
 
 	var endpoint strings.Builder

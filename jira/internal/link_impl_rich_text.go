@@ -78,7 +78,7 @@ func (i *internalLinkRichTextServiceImpl) Get(ctx context.Context, linkID string
 	defer span.End()
 
 	if linkID == "" {
-		return nil, nil, model.ErrNoTypeID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoTypeID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issueLink/%v", i.version, linkID)
@@ -102,7 +102,7 @@ func (i *internalLinkRichTextServiceImpl) Gets(ctx context.Context, issueKeyOrID
 	defer span.End()
 
 	if len(issueKeyOrID) == 0 {
-		return nil, nil, model.ErrNoIssueKeyOrID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issue/%v?fields=issuelinks", i.version, issueKeyOrID)
@@ -126,7 +126,7 @@ func (i *internalLinkRichTextServiceImpl) Delete(ctx context.Context, linkID str
 	defer span.End()
 
 	if linkID == "" {
-		return nil, model.ErrNoTypeID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoTypeID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issueLink/%v", i.version, linkID)

@@ -99,11 +99,11 @@ func (i *internalWorkflowSchemeIssueTypeImpl) Get(ctx context.Context, schemeID 
 	defer span.End()
 
 	if schemeID == 0 {
-		return nil, nil, model.ErrNoWorkflowSchemeID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoWorkflowSchemeID)
 	}
 
 	if issueTypeID == "" {
-		return nil, nil, model.ErrNoIssueTypeID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoIssueTypeID)
 	}
 
 	var endpoint strings.Builder
@@ -135,11 +135,11 @@ func (i *internalWorkflowSchemeIssueTypeImpl) Set(ctx context.Context, schemeID 
 	defer span.End()
 
 	if schemeID == 0 {
-		return nil, nil, model.ErrNoWorkflowSchemeID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoWorkflowSchemeID)
 	}
 
 	if issueTypeID == "" {
-		return nil, nil, model.ErrNoIssueTypeID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoIssueTypeID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/workflowscheme/%v/issuetype/%v", i.version, schemeID, issueTypeID)
@@ -163,11 +163,11 @@ func (i *internalWorkflowSchemeIssueTypeImpl) Delete(ctx context.Context, scheme
 	defer span.End()
 
 	if schemeID == 0 {
-		return nil, nil, model.ErrNoWorkflowSchemeID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoWorkflowSchemeID)
 	}
 
 	if issueTypeID == "" {
-		return nil, nil, model.ErrNoIssueTypeID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoIssueTypeID)
 	}
 
 	var endpoint strings.Builder
@@ -199,7 +199,7 @@ func (i *internalWorkflowSchemeIssueTypeImpl) Mapping(ctx context.Context, schem
 	defer span.End()
 
 	if schemeID == 0 {
-		return nil, nil, model.ErrNoWorkflowSchemeID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoWorkflowSchemeID)
 	}
 
 	var endpoint strings.Builder

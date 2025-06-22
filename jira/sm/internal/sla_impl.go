@@ -62,7 +62,7 @@ func (i *internalServiceLevelAgreementImpl) Gets(ctx context.Context, issueKeyOr
 	defer span.End()
 
 	if issueKeyOrID == "" {
-		return nil, nil, model.ErrNoIssueKeyOrID
+		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	params := url.Values{}
@@ -90,11 +90,11 @@ func (i *internalServiceLevelAgreementImpl) Get(ctx context.Context, issueKeyOrI
 	defer span.End()
 
 	if issueKeyOrID == "" {
-		return nil, nil, model.ErrNoIssueKeyOrID
+		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	if metricID == 0 {
-		return nil, nil, model.ErrNoSLAMetricID
+		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoSLAMetricID)
 	}
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/request/%v/sla/%v", issueKeyOrID, metricID)

@@ -74,7 +74,7 @@ func (i *internalSpaceV2Impl) Permissions(ctx context.Context, spaceID int, curs
 	defer span.End()
 
 	if spaceID == 0 {
-		return nil, nil, model.ErrNoSpaceID
+		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoSpaceID)
 	}
 
 	query := url.Values{}
@@ -168,7 +168,7 @@ func (i *internalSpaceV2Impl) Get(ctx context.Context, spaceID int, descriptionF
 	defer span.End()
 
 	if spaceID == 0 {
-		return nil, nil, model.ErrNoSpaceID
+		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoSpaceID)
 	}
 
 	var endpoint strings.Builder

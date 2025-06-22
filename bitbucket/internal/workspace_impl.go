@@ -87,7 +87,7 @@ func (i *internalWorkspaceServiceImpl) Get(ctx context.Context, workspace string
 	defer span.End()
 
 	if workspace == "" {
-		return nil, nil, model.ErrNoWorkspace
+		return nil, nil, fmt.Errorf("bitbucket: %w", model.ErrNoWorkspace)
 	}
 
 	endpoint := fmt.Sprintf("2.0/workspaces/%v", workspace)
@@ -112,7 +112,7 @@ func (i *internalWorkspaceServiceImpl) Members(ctx context.Context, workspace st
 	defer span.End()
 
 	if workspace == "" {
-		return nil, nil, model.ErrNoWorkspace
+		return nil, nil, fmt.Errorf("bitbucket: %w", model.ErrNoWorkspace)
 	}
 
 	endpoint := fmt.Sprintf("2.0/workspaces/%v/members", workspace)
@@ -137,11 +137,11 @@ func (i *internalWorkspaceServiceImpl) Membership(ctx context.Context, workspace
 	defer span.End()
 
 	if workspace == "" {
-		return nil, nil, model.ErrNoWorkspace
+		return nil, nil, fmt.Errorf("bitbucket: %w", model.ErrNoWorkspace)
 	}
 
 	if memberID == "" {
-		return nil, nil, model.ErrNoMemberID
+		return nil, nil, fmt.Errorf("bitbucket: %w", model.ErrNoMemberID)
 	}
 
 	endpoint := fmt.Sprintf("2.0/workspaces/%v/members/%v", workspace, memberID)
@@ -166,7 +166,7 @@ func (i *internalWorkspaceServiceImpl) Projects(ctx context.Context, workspace s
 	defer span.End()
 
 	if workspace == "" {
-		return nil, nil, model.ErrNoWorkspace
+		return nil, nil, fmt.Errorf("bitbucket: %w", model.ErrNoWorkspace)
 	}
 
 	endpoint := fmt.Sprintf("2.0/workspaces/%v/projects", workspace)

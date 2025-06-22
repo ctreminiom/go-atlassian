@@ -2,9 +2,11 @@ package internal
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"github.com/stretchr/testify/mock"
 	"net/http"
+	"net/url"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -97,12 +99,12 @@ func Test_internalIssueADFServiceImpl_Delete(t *testing.T) {
 					"rest/api/3/issue/DUMMY-1?deleteSubtasks=true",
 					"",
 					nil).
-					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
 			wantErr: true,
-			Err:     errors.New("error, unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 		},
 	}
 
@@ -124,8 +126,14 @@ func Test_internalIssueADFServiceImpl_Delete(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -233,12 +241,12 @@ func Test_internalIssueADFServiceImpl_Assign(t *testing.T) {
 					"/rest/api/3/issue/DUMMY-1/assignee",
 					"",
 					map[string]interface{}{"accountId": "account-id-sample"}).
-					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
 			wantErr: true,
-			Err:     errors.New("error, unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 		},
 	}
 
@@ -260,8 +268,14 @@ func Test_internalIssueADFServiceImpl_Assign(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -363,12 +377,12 @@ func Test_internalIssueADFServiceImpl_Notify(t *testing.T) {
 					"rest/api/3/issue/DUMMY-1/notify",
 					"",
 					optionsMocked).
-					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
 			wantErr: true,
-			Err:     errors.New("error, unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 		},
 	}
 
@@ -390,8 +404,14 @@ func Test_internalIssueADFServiceImpl_Notify(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -481,12 +501,12 @@ func Test_internalIssueADFServiceImpl_Transitions(t *testing.T) {
 					"rest/api/3/issue/DUMMY-1/transitions",
 					"",
 					nil).
-					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
 			wantErr: true,
-			Err:     errors.New("error, unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 		},
 	}
 
@@ -508,8 +528,14 @@ func Test_internalIssueADFServiceImpl_Transitions(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -547,7 +573,7 @@ func Test_internalIssueADFServiceImpl_Create(t *testing.T) {
 	expectedPayloadWithCustomFields := map[string]interface{}{
 		"fields": map[string]interface{}{
 			"customfield_10042": 1000.2222,
-			"customfield_10052": []map[string]interface{}{map[string]interface{}{"name": "jira-administrators"}, map[string]interface{}{"name": "jira-administrators-system"}},
+			"customfield_10052": []map[string]interface{}{{"name": "jira-administrators"}, {"name": "jira-administrators-system"}},
 			"issuetype":         map[string]interface{}{"name": "Story"},
 			"project":           map[string]interface{}{"id": "10000"},
 			"summary":           "New summary test"},
@@ -648,12 +674,12 @@ func Test_internalIssueADFServiceImpl_Create(t *testing.T) {
 					"rest/api/3/issue",
 					"",
 					expectedPayloadWithCustomFields).
-					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
 			wantErr: true,
-			Err:     errors.New("error, unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 		},
 	}
 
@@ -675,8 +701,14 @@ func Test_internalIssueADFServiceImpl_Create(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -733,18 +765,18 @@ func Test_internalIssueADFServiceImpl_Creates(t *testing.T) {
 
 	expectedBulkWithCustomFieldsPayload := map[string]interface{}{
 
-		"issueUpdates": []map[string]interface{}{map[string]interface{}{
+		"issueUpdates": []map[string]interface{}{{
 
 			"fields": map[string]interface{}{
 				"customfield_10042": 1000.2222,
-				"customfield_10052": []map[string]interface{}{map[string]interface{}{"name": "jira-administrators"}, map[string]interface{}{"name": "jira-administrators-system"}},
+				"customfield_10052": []map[string]interface{}{{"name": "jira-administrators"}, {"name": "jira-administrators-system"}},
 				"issuetype":         map[string]interface{}{"name": "Story"},
 				"project":           map[string]interface{}{"id": "10000"},
-				"summary":           "New summary test"}}, map[string]interface{}{
+				"summary":           "New summary test"}}, {
 
 			"fields": map[string]interface{}{
 				"customfield_10042": 1000.2222,
-				"customfield_10052": []map[string]interface{}{map[string]interface{}{"name": "jira-administrators"}, map[string]interface{}{"name": "jira-administrators-system"}},
+				"customfield_10052": []map[string]interface{}{{"name": "jira-administrators"}, {"name": "jira-administrators-system"}},
 				"issuetype":         map[string]interface{}{"name": "Story"},
 				"project":           map[string]interface{}{"id": "10000"},
 				"summary":           "New summary test #2"}}}}
@@ -826,12 +858,12 @@ func Test_internalIssueADFServiceImpl_Creates(t *testing.T) {
 					"rest/api/3/issue/bulk",
 					"",
 					expectedBulkWithCustomFieldsPayload).
-					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
 			wantErr: true,
-			Err:     errors.New("error, unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 		},
 	}
 
@@ -853,8 +885,14 @@ func Test_internalIssueADFServiceImpl_Creates(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -965,12 +1003,12 @@ func Test_internalIssueADFServiceImpl_Get(t *testing.T) {
 					"rest/api/3/issue/DUMMY-1?expand=operations%2Cchangelogts&fields=summary%2Cstatus",
 					"",
 					nil).
-					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
 			wantErr: true,
-			Err:     errors.New("error, unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 		},
 	}
 
@@ -993,8 +1031,14 @@ func Test_internalIssueADFServiceImpl_Get(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -1044,8 +1088,8 @@ func Test_internalIssueADFServiceImpl_Move(t *testing.T) {
 	expectedPayloadWithCustomFieldsAndOperations := map[string]interface{}{
 		"fields": map[string]interface{}{
 			"customfield_10042": 1000.2222,
-			"customfield_10052": []map[string]interface{}{map[string]interface{}{
-				"name": "jira-administrators"}, map[string]interface{}{
+			"customfield_10052": []map[string]interface{}{{
+				"name": "jira-administrators"}, {
 				"name": "jira-administrators-system"}},
 
 			"issuetype":  map[string]interface{}{"name": "Story"},
@@ -1054,7 +1098,7 @@ func Test_internalIssueADFServiceImpl_Move(t *testing.T) {
 			"summary":    "New summary test"},
 
 		"update": map[string]interface{}{
-			"labels": []map[string]interface{}{map[string]interface{}{
+			"labels": []map[string]interface{}{{
 				"remove": "triaged"}}},
 
 		"transition": map[string]interface{}{"id": "10001"},
@@ -1063,8 +1107,8 @@ func Test_internalIssueADFServiceImpl_Move(t *testing.T) {
 	expectedPayloadWithCustomfields := map[string]interface{}{
 		"fields": map[string]interface{}{
 			"customfield_10042": 1000.2222,
-			"customfield_10052": []map[string]interface{}{map[string]interface{}{
-				"name": "jira-administrators"}, map[string]interface{}{
+			"customfield_10052": []map[string]interface{}{{
+				"name": "jira-administrators"}, {
 				"name": "jira-administrators-system"}},
 
 			"issuetype": map[string]interface{}{"name": "Story"},
@@ -1080,7 +1124,7 @@ func Test_internalIssueADFServiceImpl_Move(t *testing.T) {
 			"summary":   "New summary test"},
 
 		"update": map[string]interface{}{
-			"labels": []map[string]interface{}{map[string]interface{}{
+			"labels": []map[string]interface{}{{
 				"remove": "triaged"}}},
 		"transition": map[string]interface{}{"id": "10001"},
 	}
@@ -1356,12 +1400,12 @@ func Test_internalIssueADFServiceImpl_Move(t *testing.T) {
 					"rest/api/3/issue/DUMMY-1/transitions",
 					"",
 					mock.Anything).
-					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
 			wantErr: true,
-			Err:     errors.New("error, unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 		},
 	}
 
@@ -1384,8 +1428,14 @@ func Test_internalIssueADFServiceImpl_Move(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -1421,18 +1471,18 @@ func Test_internalIssueADFServiceImpl_Update(t *testing.T) {
 	expectedPayloadWithCustomFieldsAndOperations := map[string]interface{}{
 		"fields": map[string]interface{}{
 			"customfield_10042": 1000.2222,
-			"customfield_10052": []map[string]interface{}{map[string]interface{}{
-				"name": "jira-administrators"}, map[string]interface{}{
+			"customfield_10052": []map[string]interface{}{{
+				"name": "jira-administrators"}, {
 				"name": "jira-administrators-system"}}, "summary": "New summary test"},
 		"update": map[string]interface{}{
-			"labels": []map[string]interface{}{map[string]interface{}{
+			"labels": []map[string]interface{}{{
 				"remove": "triaged"}}}}
 
 	expectedPayloadWithCustomfields := map[string]interface{}{
 		"fields": map[string]interface{}{
 			"customfield_10042": 1000.2222,
-			"customfield_10052": []map[string]interface{}{map[string]interface{}{
-				"name": "jira-administrators"}, map[string]interface{}{
+			"customfield_10052": []map[string]interface{}{{
+				"name": "jira-administrators"}, {
 				"name": "jira-administrators-system"}},
 			"summary": "New summary test"}}
 
@@ -1440,7 +1490,7 @@ func Test_internalIssueADFServiceImpl_Update(t *testing.T) {
 		"fields": map[string]interface{}{
 			"summary": "New summary test"},
 		"update": map[string]interface{}{
-			"labels": []map[string]interface{}{map[string]interface{}{"remove": "triaged"}}}}
+			"labels": []map[string]interface{}{{"remove": "triaged"}}}}
 
 	type fields struct {
 		c       service.Connector
@@ -1547,12 +1597,12 @@ func Test_internalIssueADFServiceImpl_Update(t *testing.T) {
 					"rest/api/3/issue/DUMMY-1?notifyUsers=true",
 					"",
 					expectedPayloadWithCustomFieldsAndOperations).
-					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
 			wantErr: true,
-			Err:     errors.New("error, unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 		},
 
 		{
@@ -1687,8 +1737,14 @@ func Test_internalIssueADFServiceImpl_Update(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)

@@ -102,7 +102,7 @@ func (i *internalSCIMSchemaImpl) Gets(ctx context.Context, directoryID string) (
 	defer span.End()
 
 	if directoryID == "" {
-		return nil, nil, model.ErrNoAdminDirectoryID
+		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminDirectoryID)
 	}
 
 	endpoint := fmt.Sprintf("scim/directory/%v/Schemas", directoryID)
@@ -126,7 +126,7 @@ func (i *internalSCIMSchemaImpl) Group(ctx context.Context, directoryID string) 
 	defer span.End()
 
 	if directoryID == "" {
-		return nil, nil, model.ErrNoAdminDirectoryID
+		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminDirectoryID)
 	}
 
 	endpoint := fmt.Sprintf("scim/directory/%v/Schemas/urn:ietf:params:scim:schemas:core:2.0:Group", directoryID)
@@ -150,7 +150,7 @@ func (i *internalSCIMSchemaImpl) User(ctx context.Context, directoryID string) (
 	defer span.End()
 
 	if directoryID == "" {
-		return nil, nil, model.ErrNoAdminDirectoryID
+		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminDirectoryID)
 	}
 
 	endpoint := fmt.Sprintf("scim/directory/%v/Schemas/urn:ietf:params:scim:schemas:core:2.0:User", directoryID)
@@ -174,7 +174,7 @@ func (i *internalSCIMSchemaImpl) Enterprise(ctx context.Context, directoryID str
 	defer span.End()
 
 	if directoryID == "" {
-		return nil, nil, model.ErrNoAdminDirectoryID
+		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminDirectoryID)
 	}
 
 	endpoint := fmt.Sprintf("scim/directory/%v/Schemas/urn:ietf:params:scim:schemas:extension:enterprise:2.0:User", directoryID)
@@ -198,7 +198,7 @@ func (i *internalSCIMSchemaImpl) Feature(ctx context.Context, directoryID string
 	defer span.End()
 
 	if directoryID == "" {
-		return nil, nil, model.ErrNoAdminDirectoryID
+		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminDirectoryID)
 	}
 
 	endpoint := fmt.Sprintf("scim/directory/%v/ServiceProviderConfig", directoryID)

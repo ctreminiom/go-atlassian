@@ -150,7 +150,7 @@ func (i *internalTypeImpl) Gets(ctx context.Context, serviceDeskID, groupID, sta
 	defer span.End()
 
 	if serviceDeskID == 0 {
-		return nil, nil, model.ErrNoServiceDeskID
+		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoServiceDeskID)
 	}
 
 	params := url.Values{}
@@ -182,7 +182,7 @@ func (i *internalTypeImpl) Create(ctx context.Context, serviceDeskID int, payloa
 	defer span.End()
 
 	if serviceDeskID == 0 {
-		return nil, nil, model.ErrNoServiceDeskID
+		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoServiceDeskID)
 	}
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/servicedesk/%v/requesttype", serviceDeskID)
@@ -206,11 +206,11 @@ func (i *internalTypeImpl) Get(ctx context.Context, serviceDeskID, requestTypeID
 	defer span.End()
 
 	if serviceDeskID == 0 {
-		return nil, nil, model.ErrNoServiceDeskID
+		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoServiceDeskID)
 	}
 
 	if requestTypeID == 0 {
-		return nil, nil, model.ErrNoRequestTypeID
+		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoRequestTypeID)
 	}
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/servicedesk/%v/requesttype/%v", serviceDeskID, requestTypeID)
@@ -234,11 +234,11 @@ func (i *internalTypeImpl) Delete(ctx context.Context, serviceDeskID, requestTyp
 	defer span.End()
 
 	if serviceDeskID == 0 {
-		return nil, model.ErrNoServiceDeskID
+		return nil, fmt.Errorf("sm: %w", model.ErrNoServiceDeskID)
 	}
 
 	if requestTypeID == 0 {
-		return nil, model.ErrNoRequestTypeID
+		return nil, fmt.Errorf("sm: %w", model.ErrNoRequestTypeID)
 	}
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/servicedesk/%v/requesttype/%v", serviceDeskID, requestTypeID)
@@ -256,11 +256,11 @@ func (i *internalTypeImpl) Fields(ctx context.Context, serviceDeskID, requestTyp
 	defer span.End()
 
 	if serviceDeskID == 0 {
-		return nil, nil, model.ErrNoServiceDeskID
+		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoServiceDeskID)
 	}
 
 	if requestTypeID == 0 {
-		return nil, nil, model.ErrNoRequestTypeID
+		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoRequestTypeID)
 	}
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/servicedesk/%v/requesttype/%v/field", serviceDeskID, requestTypeID)
@@ -284,7 +284,7 @@ func (i *internalTypeImpl) Groups(ctx context.Context, serviceDeskID int) (*mode
 	defer span.End()
 
 	if serviceDeskID == 0 {
-		return nil, nil, model.ErrNoServiceDeskID
+		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoServiceDeskID)
 	}
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/servicedesk/%v/requesttypegroup", serviceDeskID)

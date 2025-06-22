@@ -72,7 +72,7 @@ func (i *internalServiceRequestParticipantImpl) Gets(ctx context.Context, issueK
 	defer span.End()
 
 	if issueKeyOrID == "" {
-		return nil, nil, model.ErrNoIssueKeyOrID
+		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	params := url.Values{}
@@ -100,11 +100,11 @@ func (i *internalServiceRequestParticipantImpl) Add(ctx context.Context, issueKe
 	defer span.End()
 
 	if issueKeyOrID == "" {
-		return nil, nil, model.ErrNoIssueKeyOrID
+		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	if len(accountIDs) == 0 {
-		return nil, nil, model.ErrNoAccountSlice
+		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoAccountSlice)
 	}
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/request/%v/participant", issueKeyOrID)
@@ -128,11 +128,11 @@ func (i *internalServiceRequestParticipantImpl) Remove(ctx context.Context, issu
 	defer span.End()
 
 	if issueKeyOrID == "" {
-		return nil, nil, model.ErrNoIssueKeyOrID
+		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	if len(accountIDs) == 0 {
-		return nil, nil, model.ErrNoAccountSlice
+		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoAccountSlice)
 	}
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/request/%v/participant", issueKeyOrID)

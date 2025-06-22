@@ -16,7 +16,7 @@ import (
 func NewProjectRoleActorService(client service.Connector, version string) (*ProjectRoleActorService, error) {
 
 	if version == "" {
-		return nil, model.ErrNoVersionProvided
+		return nil, fmt.Errorf("jira: %w", model.ErrNoVersionProvided)
 	}
 
 	return &ProjectRoleActorService{
@@ -64,11 +64,11 @@ func (i *internalProjectRoleActorImpl) Add(ctx context.Context, projectKeyOrID s
 	defer span.End()
 
 	if projectKeyOrID == "" {
-		return nil, nil, model.ErrNoProjectIDOrKey
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoProjectIDOrKey)
 	}
 
 	if roleID == 0 {
-		return nil, nil, model.ErrNoProjectRoleID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoProjectRoleID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/project/%v/role/%v", i.version, projectKeyOrID, roleID)
@@ -92,11 +92,11 @@ func (i *internalProjectRoleActorImpl) Delete(ctx context.Context, projectKeyOrI
 	defer span.End()
 
 	if projectKeyOrID == "" {
-		return nil, model.ErrNoProjectIDOrKey
+		return nil, fmt.Errorf("jira: %w", model.ErrNoProjectIDOrKey)
 	}
 
 	if roleID == 0 {
-		return nil, model.ErrNoProjectRoleID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoProjectRoleID)
 	}
 
 	var endpoint strings.Builder

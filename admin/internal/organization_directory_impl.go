@@ -99,11 +99,11 @@ func (i *internalOrganizationDirectoryServiceImpl) Activity(ctx context.Context,
 	defer span.End()
 
 	if organizationID == "" {
-		return nil, nil, model.ErrNoAdminOrganization
+		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminOrganization)
 	}
 
 	if accountID == "" {
-		return nil, nil, model.ErrNoAdminAccountID
+		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminAccountID)
 	}
 
 	endpoint := fmt.Sprintf("admin/v1/orgs/%v/directory/users/%v/last-active-dates", organizationID, accountID)
@@ -127,11 +127,11 @@ func (i *internalOrganizationDirectoryServiceImpl) Remove(ctx context.Context, o
 	defer span.End()
 
 	if organizationID == "" {
-		return nil, model.ErrNoAdminOrganization
+		return nil, fmt.Errorf("admin: %w", model.ErrNoAdminOrganization)
 	}
 
 	if accountID == "" {
-		return nil, model.ErrNoAdminAccountID
+		return nil, fmt.Errorf("admin: %w", model.ErrNoAdminAccountID)
 	}
 
 	endpoint := fmt.Sprintf("admin/v1/orgs/%v/directory/users/%v", organizationID, accountID)
@@ -149,11 +149,11 @@ func (i *internalOrganizationDirectoryServiceImpl) Suspend(ctx context.Context, 
 	defer span.End()
 
 	if organizationID == "" {
-		return nil, nil, model.ErrNoAdminOrganization
+		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminOrganization)
 	}
 
 	if accountID == "" {
-		return nil, nil, model.ErrNoAdminAccountID
+		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminAccountID)
 	}
 
 	endpoint := fmt.Sprintf("admin/v1/orgs/%v/directory/users/%v/suspend-access", organizationID, accountID)
@@ -177,11 +177,11 @@ func (i *internalOrganizationDirectoryServiceImpl) Restore(ctx context.Context, 
 	defer span.End()
 
 	if organizationID == "" {
-		return nil, nil, model.ErrNoAdminOrganization
+		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminOrganization)
 	}
 
 	if accountID == "" {
-		return nil, nil, model.ErrNoAdminAccountID
+		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminAccountID)
 	}
 
 	endpoint := fmt.Sprintf("admin/v1/orgs/%v/directory/users/%v/restore-access", organizationID, accountID)

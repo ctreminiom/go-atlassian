@@ -1,0 +1,3 @@
+# We don't care about package comments for now
+[rule.package-comments]
+	Disabled = true

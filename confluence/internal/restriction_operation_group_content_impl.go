@@ -78,15 +78,15 @@ func (i *internalRestrictionOperationGroupImpl) Get(ctx context.Context, content
 	defer span.End()
 
 	if contentID == "" {
-		return nil, model.ErrNoContentID
+		return nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
 	}
 
 	if operationKey == "" {
-		return nil, model.ErrNoContentRestrictionKey
+		return nil, fmt.Errorf("confluence: %w", model.ErrNoContentRestrictionKey)
 	}
 
 	if groupNameOrID == "" {
-		return nil, model.ErrNoConfluenceGroup
+		return nil, fmt.Errorf("confluence: %w", model.ErrNoConfluenceGroup)
 	}
 
 	var endpoint strings.Builder
@@ -115,15 +115,15 @@ func (i *internalRestrictionOperationGroupImpl) Add(ctx context.Context, content
 	defer span.End()
 
 	if contentID == "" {
-		return nil, model.ErrNoContentID
+		return nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
 	}
 
 	if operationKey == "" {
-		return nil, model.ErrNoContentRestrictionKey
+		return nil, fmt.Errorf("confluence: %w", model.ErrNoContentRestrictionKey)
 	}
 
 	if groupNameOrID == "" {
-		return nil, model.ErrNoConfluenceGroup
+		return nil, fmt.Errorf("confluence: %w", model.ErrNoConfluenceGroup)
 	}
 
 	var endpoint strings.Builder
@@ -152,15 +152,15 @@ func (i *internalRestrictionOperationGroupImpl) Remove(ctx context.Context, cont
 	defer span.End()
 
 	if contentID == "" {
-		return nil, model.ErrNoContentID
+		return nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
 	}
 
 	if operationKey == "" {
-		return nil, model.ErrNoContentRestrictionKey
+		return nil, fmt.Errorf("confluence: %w", model.ErrNoContentRestrictionKey)
 	}
 
 	if groupNameOrID == "" {
-		return nil, model.ErrNoConfluenceGroup
+		return nil, fmt.Errorf("confluence: %w", model.ErrNoConfluenceGroup)
 	}
 
 	var endpoint strings.Builder

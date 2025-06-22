@@ -14,7 +14,7 @@ import (
 func NewVoteService(client service.Connector, version string) (*VoteService, error) {
 
 	if version == "" {
-		return nil, model.ErrNoVersionProvided
+		return nil, fmt.Errorf("jira: %w", model.ErrNoVersionProvided)
 	}
 
 	return &VoteService{
@@ -80,7 +80,7 @@ func (i *internalVoteImpl) Gets(ctx context.Context, issueKeyOrID string) (*mode
 	defer span.End()
 
 	if issueKeyOrID == "" {
-		return nil, nil, model.ErrNoIssueKeyOrID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/votes", i.version, issueKeyOrID)
@@ -104,7 +104,7 @@ func (i *internalVoteImpl) Add(ctx context.Context, issueKeyOrID string) (*model
 	defer span.End()
 
 	if issueKeyOrID == "" {
-		return nil, model.ErrNoIssueKeyOrID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/votes", i.version, issueKeyOrID)
@@ -122,7 +122,7 @@ func (i *internalVoteImpl) Delete(ctx context.Context, issueKeyOrID string) (*mo
 	defer span.End()
 
 	if issueKeyOrID == "" {
-		return nil, model.ErrNoIssueKeyOrID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/votes", i.version, issueKeyOrID)

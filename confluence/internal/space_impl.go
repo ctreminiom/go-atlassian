@@ -205,11 +205,11 @@ func (i *internalSpaceImpl) Create(ctx context.Context, payload *model.CreateSpa
 	if payload != nil {
 
 		if payload.Name == "" {
-			return nil, nil, model.ErrNoSpaceName
+			return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoSpaceName)
 		}
 
 		if payload.Key == "" {
-			return nil, nil, model.ErrNoSpaceKey
+			return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoSpaceKey)
 		}
 
 	}
@@ -240,7 +240,7 @@ func (i *internalSpaceImpl) Get(ctx context.Context, spaceKey string, expand []s
 	defer span.End()
 
 	if spaceKey == "" {
-		return nil, nil, model.ErrNoSpaceKey
+		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoSpaceKey)
 	}
 
 	var endpoint strings.Builder
@@ -272,7 +272,7 @@ func (i *internalSpaceImpl) Update(ctx context.Context, spaceKey string, payload
 	defer span.End()
 
 	if spaceKey == "" {
-		return nil, nil, model.ErrNoSpaceKey
+		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoSpaceKey)
 	}
 
 	endpoint := fmt.Sprintf("wiki/rest/api/space/%v", spaceKey)
@@ -296,7 +296,7 @@ func (i *internalSpaceImpl) Delete(ctx context.Context, spaceKey string) (*model
 	defer span.End()
 
 	if spaceKey == "" {
-		return nil, nil, model.ErrNoSpaceKey
+		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoSpaceKey)
 	}
 
 	endpoint := fmt.Sprintf("wiki/rest/api/space/%v", spaceKey)
@@ -320,7 +320,7 @@ func (i *internalSpaceImpl) Content(ctx context.Context, spaceKey, depth string,
 	defer span.End()
 
 	if spaceKey == "" {
-		return nil, nil, model.ErrNoSpaceKey
+		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoSpaceKey)
 	}
 
 	query := url.Values{}
@@ -356,7 +356,7 @@ func (i *internalSpaceImpl) ContentByType(ctx context.Context, spaceKey, content
 	defer span.End()
 
 	if spaceKey == "" {
-		return nil, nil, model.ErrNoSpaceKey
+		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoSpaceKey)
 	}
 
 	query := url.Values{}

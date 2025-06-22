@@ -54,7 +54,7 @@ func (i *internalUserTokenImpl) Gets(ctx context.Context, accountID string) ([]*
 	defer span.End()
 
 	if accountID == "" {
-		return nil, nil, model.ErrNoAdminAccountID
+		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminAccountID)
 	}
 
 	endpoint := fmt.Sprintf("users/%v/manage/api-tokens", accountID)
@@ -78,11 +78,11 @@ func (i *internalUserTokenImpl) Delete(ctx context.Context, accountID, tokenID s
 	defer span.End()
 
 	if accountID == "" {
-		return nil, model.ErrNoAdminAccountID
+		return nil, fmt.Errorf("admin: %w", model.ErrNoAdminAccountID)
 	}
 
 	if tokenID == "" {
-		return nil, model.ErrNoAdminUserToken
+		return nil, fmt.Errorf("admin: %w", model.ErrNoAdminUserToken)
 	}
 
 	endpoint := fmt.Sprintf("users/%v/manage/api-tokens/%v", accountID, tokenID)

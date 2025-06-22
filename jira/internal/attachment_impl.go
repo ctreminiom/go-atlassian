@@ -21,7 +21,7 @@ import (
 func NewIssueAttachmentService(client service.Connector, version string) (*IssueAttachmentService, error) {
 
 	if version == "" {
-		return nil, model.ErrNoVersionProvided
+		return nil, fmt.Errorf("jira: %w", model.ErrNoVersionProvided)
 	}
 
 	return &IssueAttachmentService{
@@ -123,7 +123,7 @@ func (i *internalIssueAttachmentServiceImpl) Download(ctx context.Context, attac
 	defer span.End()
 
 	if attachmentID == "" {
-		return nil, model.ErrNoAttachmentID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoAttachmentID)
 	}
 
 	var endpoint strings.Builder
@@ -170,7 +170,7 @@ func (i *internalIssueAttachmentServiceImpl) Metadata(ctx context.Context, attac
 	defer span.End()
 
 	if attachmentID == "" {
-		return nil, nil, model.ErrNoAttachmentID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoAttachmentID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/attachment/%v", i.version, attachmentID)
@@ -194,7 +194,7 @@ func (i *internalIssueAttachmentServiceImpl) Delete(ctx context.Context, attachm
 	defer span.End()
 
 	if attachmentID == "" {
-		return nil, model.ErrNoAttachmentID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoAttachmentID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/attachment/%v", i.version, attachmentID)
@@ -212,7 +212,7 @@ func (i *internalIssueAttachmentServiceImpl) Human(ctx context.Context, attachme
 	defer span.End()
 
 	if attachmentID == "" {
-		return nil, nil, model.ErrNoAttachmentID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoAttachmentID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/attachment/%v/expand/human", i.version, attachmentID)
@@ -236,15 +236,15 @@ func (i *internalIssueAttachmentServiceImpl) Add(ctx context.Context, issueKeyOr
 	defer span.End()
 
 	if issueKeyOrID == "" {
-		return nil, nil, model.ErrNoIssueKeyOrID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	if fileName == "" {
-		return nil, nil, model.ErrNoAttachmentName
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoAttachmentName)
 	}
 
 	if file == nil {
-		return nil, nil, model.ErrNoReader
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoReader)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/attachments", i.version, issueKeyOrID)

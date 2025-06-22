@@ -58,7 +58,7 @@ func (i *internalAttachmentVersionImpl) Gets(ctx context.Context, attachmentID, 
 	defer span.End()
 
 	if attachmentID == "" {
-		return nil, nil, model.ErrNoContentAttachmentID
+		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentAttachmentID)
 	}
 
 	query := url.Values{}
@@ -93,7 +93,7 @@ func (i *internalAttachmentVersionImpl) Get(ctx context.Context, attachmentID st
 	defer span.End()
 
 	if attachmentID == "" {
-		return nil, nil, model.ErrNoContentAttachmentID
+		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentAttachmentID)
 	}
 
 	endpoint := fmt.Sprintf("wiki/api/v2/attachments/%v/versions/%v", attachmentID, versionID)

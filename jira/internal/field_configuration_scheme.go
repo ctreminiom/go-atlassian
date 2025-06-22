@@ -18,7 +18,7 @@ import (
 func NewIssueFieldConfigurationSchemeService(client service.Connector, version string) (*IssueFieldConfigSchemeService, error) {
 
 	if version == "" {
-		return nil, model.ErrNoVersionProvided
+		return nil, fmt.Errorf("jira: %w", model.ErrNoVersionProvided)
 	}
 
 	return &IssueFieldConfigSchemeService{
@@ -200,7 +200,7 @@ func (i *internalIssueFieldConfigSchemeServiceImpl) Create(ctx context.Context, 
 	defer span.End()
 
 	if name == "" {
-		return nil, nil, model.ErrNoFieldConfigurationSchemeName
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoFieldConfigurationSchemeName)
 	}
 
 	payload := map[string]interface{}{"name": name}
@@ -300,11 +300,11 @@ func (i *internalIssueFieldConfigSchemeServiceImpl) Update(ctx context.Context, 
 	defer span.End()
 
 	if schemeID == 0 {
-		return nil, model.ErrNoFieldConfigurationSchemeID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoFieldConfigurationSchemeID)
 	}
 
 	if name == "" {
-		return nil, model.ErrNoFieldConfigurationSchemeName
+		return nil, fmt.Errorf("jira: %w", model.ErrNoFieldConfigurationSchemeName)
 	}
 
 	payload := map[string]interface{}{"name": name}
@@ -328,7 +328,7 @@ func (i *internalIssueFieldConfigSchemeServiceImpl) Delete(ctx context.Context, 
 	defer span.End()
 
 	if schemeID == 0 {
-		return nil, model.ErrNoFieldConfigurationSchemeID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoFieldConfigurationSchemeID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/fieldconfigurationscheme/%v", i.version, schemeID)
@@ -346,7 +346,7 @@ func (i *internalIssueFieldConfigSchemeServiceImpl) Link(ctx context.Context, sc
 	defer span.End()
 
 	if schemeID == 0 {
-		return nil, model.ErrNoFieldConfigurationSchemeID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoFieldConfigurationSchemeID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/fieldconfigurationscheme/%v/mapping", i.version, schemeID)
@@ -364,11 +364,11 @@ func (i *internalIssueFieldConfigSchemeServiceImpl) Unlink(ctx context.Context, 
 	defer span.End()
 
 	if schemeID == 0 {
-		return nil, model.ErrNoFieldConfigurationSchemeID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoFieldConfigurationSchemeID)
 	}
 
 	if len(issueTypeIDs) == 0 {
-		return nil, model.ErrNoIssueTypes
+		return nil, fmt.Errorf("jira: %w", model.ErrNoIssueTypes)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/fieldconfigurationscheme/%v/mapping/delete", i.version, schemeID)

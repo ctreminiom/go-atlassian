@@ -73,15 +73,15 @@ func (i *internalRestrictionOperationUserImpl) Get(ctx context.Context, contentI
 	defer span.End()
 
 	if contentID == "" {
-		return nil, model.ErrNoContentID
+		return nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
 	}
 
 	if operationKey == "" {
-		return nil, model.ErrNoContentRestrictionKey
+		return nil, fmt.Errorf("confluence: %w", model.ErrNoContentRestrictionKey)
 	}
 
 	if accountID == "" {
-		return nil, model.ErrNoAccountID
+		return nil, fmt.Errorf("confluence: %w", model.ErrNoAccountID)
 	}
 
 	query := url.Values{}
@@ -102,15 +102,15 @@ func (i *internalRestrictionOperationUserImpl) Add(ctx context.Context, contentI
 	defer span.End()
 
 	if contentID == "" {
-		return nil, model.ErrNoContentID
+		return nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
 	}
 
 	if operationKey == "" {
-		return nil, model.ErrNoContentRestrictionKey
+		return nil, fmt.Errorf("confluence: %w", model.ErrNoContentRestrictionKey)
 	}
 
 	if accountID == "" {
-		return nil, model.ErrNoAccountID
+		return nil, fmt.Errorf("confluence: %w", model.ErrNoAccountID)
 	}
 
 	query := url.Values{}
@@ -131,15 +131,15 @@ func (i *internalRestrictionOperationUserImpl) Remove(ctx context.Context, conte
 	defer span.End()
 
 	if contentID == "" {
-		return nil, model.ErrNoContentID
+		return nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
 	}
 
 	if operationKey == "" {
-		return nil, model.ErrNoContentRestrictionKey
+		return nil, fmt.Errorf("confluence: %w", model.ErrNoContentRestrictionKey)
 	}
 
 	if accountID == "" {
-		return nil, model.ErrNoAccountID
+		return nil, fmt.Errorf("confluence: %w", model.ErrNoAccountID)
 	}
 
 	query := url.Values{}

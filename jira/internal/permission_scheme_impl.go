@@ -16,7 +16,7 @@ import (
 func NewPermissionSchemeService(client service.Connector, version string, grant *PermissionSchemeGrantService) (*PermissionSchemeService, error) {
 
 	if version == "" {
-		return nil, model.ErrNoVersionProvided
+		return nil, fmt.Errorf("jira: %w", model.ErrNoVersionProvided)
 	}
 
 	return &PermissionSchemeService{
@@ -132,7 +132,7 @@ func (i *internalPermissionSchemeImpl) Get(ctx context.Context, permissionScheme
 	defer span.End()
 
 	if permissionSchemeID == 0 {
-		return nil, nil, model.ErrNoPermissionSchemeID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoPermissionSchemeID)
 	}
 
 	var endpoint strings.Builder
@@ -165,7 +165,7 @@ func (i *internalPermissionSchemeImpl) Delete(ctx context.Context, permissionSch
 	defer span.End()
 
 	if permissionSchemeID == 0 {
-		return nil, model.ErrNoPermissionSchemeID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoPermissionSchemeID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/permissionscheme/%v", i.version, permissionSchemeID)
@@ -203,7 +203,7 @@ func (i *internalPermissionSchemeImpl) Update(ctx context.Context, permissionSch
 	defer span.End()
 
 	if permissionSchemeID == 0 {
-		return nil, nil, model.ErrNoPermissionSchemeID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoPermissionSchemeID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/permissionscheme/%v", i.version, permissionSchemeID)

@@ -21,7 +21,7 @@ import (
 func NewServiceDeskService(client service.Connector, version string, queue *QueueService) (*ServiceDeskService, error) {
 
 	if version == "" {
-		return nil, model.ErrNoVersionProvided
+		return nil, fmt.Errorf("client: %w", model.ErrNoVersionProvided)
 	}
 
 	return &ServiceDeskService{
@@ -112,7 +112,7 @@ func (i *internalServiceDeskImpl) Get(ctx context.Context, serviceDeskID string)
 	defer span.End()
 
 	if serviceDeskID == "" {
-		return nil, nil, model.ErrNoServiceDeskID
+		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoServiceDeskID)
 	}
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/servicedesk/%v", serviceDeskID)
@@ -136,15 +136,15 @@ func (i *internalServiceDeskImpl) Attach(ctx context.Context, serviceDeskID stri
 	defer span.End()
 
 	if serviceDeskID == "" {
-		return nil, nil, model.ErrNoServiceDeskID
+		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoServiceDeskID)
 	}
 
 	if fileName == "" {
-		return nil, nil, model.ErrNoFileName
+		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoFileName)
 	}
 
 	if file == nil {
-		return nil, nil, model.ErrNoFileReader
+		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoFileReader)
 	}
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/servicedesk/%v/attachTemporaryFile", serviceDeskID)

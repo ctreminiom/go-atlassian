@@ -14,7 +14,7 @@ import (
 func NewProjectPropertyService(client service.Connector, version string) (*ProjectPropertyService, error) {
 
 	if version == "" {
-		return nil, model.ErrNoVersionProvided
+		return nil, fmt.Errorf("jira: %w", model.ErrNoVersionProvided)
 	}
 
 	return &ProjectPropertyService{
@@ -92,7 +92,7 @@ func (i *internalProjectPropertyImpl) Gets(ctx context.Context, projectKeyOrID s
 	defer span.End()
 
 	if projectKeyOrID == "" {
-		return nil, nil, model.ErrNoProjectIDOrKey
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoProjectIDOrKey)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/project/%v/properties", i.version, projectKeyOrID)
@@ -116,11 +116,11 @@ func (i *internalProjectPropertyImpl) Get(ctx context.Context, projectKeyOrID, p
 	defer span.End()
 
 	if projectKeyOrID == "" {
-		return nil, nil, model.ErrNoProjectIDOrKey
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoProjectIDOrKey)
 	}
 
 	if propertyKey == "" {
-		return nil, nil, model.ErrNoPropertyKey
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoPropertyKey)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/project/%v/properties/%v", i.version, projectKeyOrID, propertyKey)
@@ -144,11 +144,11 @@ func (i *internalProjectPropertyImpl) Set(ctx context.Context, projectKeyOrID, p
 	defer span.End()
 
 	if projectKeyOrID == "" {
-		return nil, model.ErrNoProjectIDOrKey
+		return nil, fmt.Errorf("jira: %w", model.ErrNoProjectIDOrKey)
 	}
 
 	if propertyKey == "" {
-		return nil, model.ErrNoPropertyKey
+		return nil, fmt.Errorf("jira: %w", model.ErrNoPropertyKey)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/project/%v/properties/%v", i.version, projectKeyOrID, propertyKey)
@@ -166,11 +166,11 @@ func (i *internalProjectPropertyImpl) Delete(ctx context.Context, projectKeyOrID
 	defer span.End()
 
 	if projectKeyOrID == "" {
-		return nil, model.ErrNoProjectIDOrKey
+		return nil, fmt.Errorf("jira: %w", model.ErrNoProjectIDOrKey)
 	}
 
 	if propertyKey == "" {
-		return nil, model.ErrNoPropertyKey
+		return nil, fmt.Errorf("jira: %w", model.ErrNoPropertyKey)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/project/%v/properties/%v", i.version, projectKeyOrID, propertyKey)

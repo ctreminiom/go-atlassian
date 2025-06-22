@@ -143,11 +143,11 @@ func (i *internalCustomerImpl) Add(ctx context.Context, serviceDeskID string, ac
 	defer span.End()
 
 	if serviceDeskID == "" {
-		return nil, model.ErrNoServiceDeskID
+		return nil, fmt.Errorf("sm: %w", model.ErrNoServiceDeskID)
 	}
 
 	if len(accountIDs) == 0 {
-		return nil, model.ErrNoAccountSlice
+		return nil, fmt.Errorf("sm: %w", model.ErrNoAccountSlice)
 	}
 
 	payload := map[string]interface{}{
@@ -169,11 +169,11 @@ func (i *internalCustomerImpl) Remove(ctx context.Context, serviceDeskID string,
 	defer span.End()
 
 	if serviceDeskID == "" {
-		return nil, model.ErrNoServiceDeskID
+		return nil, fmt.Errorf("sm: %w", model.ErrNoServiceDeskID)
 	}
 
 	if len(accountIDs) == 0 {
-		return nil, model.ErrNoAccountSlice
+		return nil, fmt.Errorf("sm: %w", model.ErrNoAccountSlice)
 	}
 
 	payload := map[string]interface{}{

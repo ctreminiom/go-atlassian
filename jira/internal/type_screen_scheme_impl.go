@@ -17,7 +17,7 @@ import (
 func NewTypeScreenSchemeService(client service.Connector, version string) (*TypeScreenSchemeService, error) {
 
 	if version == "" {
-		return nil, model.ErrNoVersionProvided
+		return nil, fmt.Errorf("jira: %w", model.ErrNoVersionProvided)
 	}
 
 	return &TypeScreenSchemeService{
@@ -244,11 +244,11 @@ func (i *internalTypeScreenSchemeImpl) Assign(ctx context.Context, issueTypeScre
 	defer span.End()
 
 	if issueTypeScreenSchemeID == "" {
-		return nil, model.ErrNoIssueTypeScreenSchemeID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoIssueTypeScreenSchemeID)
 	}
 
 	if projectID == "" {
-		return nil, model.ErrNoProjectID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoProjectID)
 	}
 
 	payload := map[string]interface{}{
@@ -327,7 +327,7 @@ func (i *internalTypeScreenSchemeImpl) Update(ctx context.Context, issueTypeScre
 	defer span.End()
 
 	if issueTypeScreenSchemeID == "" {
-		return nil, model.ErrNoIssueTypeScreenSchemeID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoIssueTypeScreenSchemeID)
 	}
 
 	payload := map[string]interface{}{"name": name}
@@ -351,7 +351,7 @@ func (i *internalTypeScreenSchemeImpl) Delete(ctx context.Context, issueTypeScre
 	defer span.End()
 
 	if issueTypeScreenSchemeID == "" {
-		return nil, model.ErrNoIssueTypeScreenSchemeID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoIssueTypeScreenSchemeID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issuetypescreenscheme/%v", i.version, issueTypeScreenSchemeID)
@@ -369,7 +369,7 @@ func (i *internalTypeScreenSchemeImpl) Append(ctx context.Context, issueTypeScre
 	defer span.End()
 
 	if issueTypeScreenSchemeID == "" {
-		return nil, model.ErrNoIssueTypeScreenSchemeID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoIssueTypeScreenSchemeID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issuetypescreenscheme/%v/mapping", i.version, issueTypeScreenSchemeID)
@@ -387,11 +387,11 @@ func (i *internalTypeScreenSchemeImpl) UpdateDefault(ctx context.Context, issueT
 	defer span.End()
 
 	if issueTypeScreenSchemeID == "" {
-		return nil, model.ErrNoIssueTypeScreenSchemeID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoIssueTypeScreenSchemeID)
 	}
 
 	if screenSchemeID == "" {
-		return nil, model.ErrNoScreenSchemeID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoScreenSchemeID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issuetypescreenscheme/%v/mapping/default", i.version, issueTypeScreenSchemeID)
@@ -409,11 +409,11 @@ func (i *internalTypeScreenSchemeImpl) Remove(ctx context.Context, issueTypeScre
 	defer span.End()
 
 	if issueTypeScreenSchemeID == "" {
-		return nil, model.ErrNoIssueTypeScreenSchemeID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoIssueTypeScreenSchemeID)
 	}
 
 	if len(issueTypeIDs) == 0 {
-		return nil, model.ErrNoIssueTypes
+		return nil, fmt.Errorf("jira: %w", model.ErrNoIssueTypes)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issuetypescreenscheme/%v/mapping/remove", i.version, issueTypeScreenSchemeID)

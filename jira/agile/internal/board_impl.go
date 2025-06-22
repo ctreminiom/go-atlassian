@@ -298,7 +298,7 @@ func (i *internalBoardImpl) Get(ctx context.Context, boardID int) (*model.BoardS
 	defer span.End()
 
 	if boardID == 0 {
-		return nil, nil, model.ErrNoBoardID
+		return nil, nil, fmt.Errorf("agile: %w", model.ErrNoBoardID)
 	}
 
 	url := fmt.Sprintf("rest/agile/%v/board/%v", i.version, boardID)
@@ -342,7 +342,7 @@ func (i *internalBoardImpl) Filter(ctx context.Context, filterID, startAt, maxRe
 	defer span.End()
 
 	if filterID == 0 {
-		return nil, nil, model.ErrNoFilterID
+		return nil, nil, fmt.Errorf("agile: %w", model.ErrNoFilterID)
 	}
 
 	params := url.Values{}
@@ -370,7 +370,7 @@ func (i *internalBoardImpl) Backlog(ctx context.Context, boardID int, opts *mode
 	defer span.End()
 
 	if boardID == 0 {
-		return nil, nil, model.ErrNoBoardID
+		return nil, nil, fmt.Errorf("agile: %w", model.ErrNoBoardID)
 	}
 
 	params := url.Values{}
@@ -415,7 +415,7 @@ func (i *internalBoardImpl) Configuration(ctx context.Context, boardID int) (*mo
 	defer span.End()
 
 	if boardID == 0 {
-		return nil, nil, model.ErrNoBoardID
+		return nil, nil, fmt.Errorf("agile: %w", model.ErrNoBoardID)
 	}
 
 	url := fmt.Sprintf("rest/agile/%v/board/%v/configuration", i.version, boardID)
@@ -439,7 +439,7 @@ func (i *internalBoardImpl) Epics(ctx context.Context, boardID, startAt, maxResu
 	defer span.End()
 
 	if boardID == 0 {
-		return nil, nil, model.ErrNoBoardID
+		return nil, nil, fmt.Errorf("agile: %w", model.ErrNoBoardID)
 	}
 
 	params := url.Values{}
@@ -468,7 +468,7 @@ func (i *internalBoardImpl) IssuesWithoutEpic(ctx context.Context, boardID int, 
 	defer span.End()
 
 	if boardID == 0 {
-		return nil, nil, model.ErrNoBoardID
+		return nil, nil, fmt.Errorf("agile: %w", model.ErrNoBoardID)
 	}
 
 	params := url.Values{}
@@ -515,11 +515,11 @@ func (i *internalBoardImpl) IssuesByEpic(ctx context.Context, boardID, epicID in
 	defer span.End()
 
 	if boardID == 0 {
-		return nil, nil, model.ErrNoBoardID
+		return nil, nil, fmt.Errorf("agile: %w", model.ErrNoBoardID)
 	}
 
 	if epicID == 0 {
-		return nil, nil, model.ErrNoEpicID
+		return nil, nil, fmt.Errorf("agile: %w", model.ErrNoEpicID)
 	}
 
 	params := url.Values{}
@@ -566,7 +566,7 @@ func (i *internalBoardImpl) Issues(ctx context.Context, boardID int, opts *model
 	defer span.End()
 
 	if boardID == 0 {
-		return nil, nil, model.ErrNoBoardID
+		return nil, nil, fmt.Errorf("agile: %w", model.ErrNoBoardID)
 	}
 
 	params := url.Values{}
@@ -614,7 +614,7 @@ func (i *internalBoardImpl) Move(ctx context.Context, boardID int, payload *mode
 	defer span.End()
 
 	if boardID == 0 {
-		return nil, model.ErrNoBoardID
+		return nil, fmt.Errorf("agile: %w", model.ErrNoBoardID)
 	}
 
 	url := fmt.Sprintf("rest/agile/%v/board/%v/issue", i.version, boardID)
@@ -632,7 +632,7 @@ func (i *internalBoardImpl) Projects(ctx context.Context, boardID, startAt, maxR
 	defer span.End()
 
 	if boardID == 0 {
-		return nil, nil, model.ErrNoBoardID
+		return nil, nil, fmt.Errorf("agile: %w", model.ErrNoBoardID)
 	}
 
 	params := url.Values{}
@@ -660,7 +660,7 @@ func (i *internalBoardImpl) Sprints(ctx context.Context, boardID, startAt, maxRe
 	defer span.End()
 
 	if boardID == 0 {
-		return nil, nil, model.ErrNoBoardID
+		return nil, nil, fmt.Errorf("agile: %w", model.ErrNoBoardID)
 	}
 
 	params := url.Values{}
@@ -689,11 +689,11 @@ func (i *internalBoardImpl) IssuesBySprint(ctx context.Context, boardID, sprintI
 	defer span.End()
 
 	if boardID == 0 {
-		return nil, nil, model.ErrNoBoardID
+		return nil, nil, fmt.Errorf("agile: %w", model.ErrNoBoardID)
 	}
 
 	if sprintID == 0 {
-		return nil, nil, model.ErrNoSprintID
+		return nil, nil, fmt.Errorf("agile: %w", model.ErrNoSprintID)
 	}
 
 	params := url.Values{}
@@ -740,7 +740,7 @@ func (i *internalBoardImpl) Versions(ctx context.Context, boardID, startAt, maxR
 	defer span.End()
 
 	if boardID == 0 {
-		return nil, nil, model.ErrNoBoardID
+		return nil, nil, fmt.Errorf("agile: %w", model.ErrNoBoardID)
 	}
 
 	params := url.Values{}
@@ -769,7 +769,7 @@ func (i *internalBoardImpl) Delete(ctx context.Context, boardID int) (*model.Res
 	defer span.End()
 
 	if boardID == 0 {
-		return nil, model.ErrNoBoardID
+		return nil, fmt.Errorf("agile: %w", model.ErrNoBoardID)
 	}
 
 	url := fmt.Sprintf("rest/agile/%v/board/%v", i.version, boardID)

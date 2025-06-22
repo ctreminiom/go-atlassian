@@ -14,7 +14,7 @@ import (
 func NewProjectFeatureService(client service.Connector, version string) (*ProjectFeatureService, error) {
 
 	if version == "" {
-		return nil, model.ErrNoVersionProvided
+		return nil, fmt.Errorf("jira: %w", model.ErrNoVersionProvided)
 	}
 
 	return &ProjectFeatureService{
@@ -62,7 +62,7 @@ func (i *internalProjectFeatureImpl) Gets(ctx context.Context, projectKeyOrID st
 	defer span.End()
 
 	if projectKeyOrID == "" {
-		return nil, nil, model.ErrNoProjectIDOrKey
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoProjectIDOrKey)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/project/%v/features", i.version, projectKeyOrID)
@@ -86,15 +86,15 @@ func (i *internalProjectFeatureImpl) Set(ctx context.Context, projectKeyOrID, fe
 	defer span.End()
 
 	if projectKeyOrID == "" {
-		return nil, nil, model.ErrNoProjectIDOrKey
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoProjectIDOrKey)
 	}
 
 	if featureKey == "" {
-		return nil, nil, model.ErrNoProjectFeatureKey
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoProjectFeatureKey)
 	}
 
 	if state == "" {
-		return nil, nil, model.ErrNoProjectFeatureState
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoProjectFeatureState)
 	}
 
 	payload := map[string]interface{}{"state": state}

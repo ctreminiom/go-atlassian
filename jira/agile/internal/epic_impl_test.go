@@ -2,8 +2,10 @@ package internal
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"net/http"
+	"net/url"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -80,11 +82,11 @@ func Test_EpicService_Get(t *testing.T) {
 				client.On("Call",
 					&http.Request{},
 					&model.EpicScheme{}).
-					Return(&model.ResponseScheme{}, errors.New("error, unable to execute the http call"))
+					Return(&model.ResponseScheme{}, model.ErrNoExecHttpCall)
 
 				fields.c = client
 			},
-			Err:     errors.New("error, unable to execute the http call"),
+			Err:     model.ErrNoExecHttpCall,
 			wantErr: true,
 		},
 
@@ -104,11 +106,11 @@ func Test_EpicService_Get(t *testing.T) {
 					"rest/agile/1.0/epic/EPIC-1",
 					"",
 					nil).
-					Return(&http.Request{}, errors.New("unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
-			Err:     errors.New("unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 			wantErr: true,
 		},
 
@@ -144,8 +146,14 @@ func Test_EpicService_Get(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -242,11 +250,11 @@ func Test_EpicService_Issues(t *testing.T) {
 				client.On("Call",
 					&http.Request{},
 					&model.BoardIssuePageScheme{}).
-					Return(&model.ResponseScheme{}, errors.New("error, unable to execute the http call"))
+					Return(&model.ResponseScheme{}, model.ErrNoExecHttpCall)
 
 				fields.c = client
 			},
-			Err:     errors.New("error, unable to execute the http call"),
+			Err:     model.ErrNoExecHttpCall,
 			wantErr: true,
 		},
 
@@ -274,11 +282,11 @@ func Test_EpicService_Issues(t *testing.T) {
 					"rest/agile/1.0/epic/EPIC-1/issue?expand=changelogs&fields=status%2Csummary&jql=project+%3D+EPIC&maxResults=50&startAt=10&validateQuery=true",
 					"",
 					nil).
-					Return(&http.Request{}, errors.New("unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
-			Err:     errors.New("unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 			wantErr: true,
 		},
 
@@ -315,8 +323,14 @@ func Test_EpicService_Issues(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -399,11 +413,11 @@ func Test_EpicService_Move(t *testing.T) {
 				client.On("Call",
 					&http.Request{},
 					nil).
-					Return(&model.ResponseScheme{}, errors.New("error, unable to execute the http call"))
+					Return(&model.ResponseScheme{}, model.ErrNoExecHttpCall)
 
 				fields.c = client
 			},
-			Err:     errors.New("error, unable to execute the http call"),
+			Err:     model.ErrNoExecHttpCall,
 			wantErr: true,
 		},
 
@@ -424,11 +438,11 @@ func Test_EpicService_Move(t *testing.T) {
 					"rest/agile/1.0/epic/EPIC-1/issue",
 					"",
 					payloadMocked).
-					Return(&http.Request{}, errors.New("unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
-			Err:     errors.New("unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 			wantErr: true,
 		},
 
@@ -464,8 +478,14 @@ func Test_EpicService_Move(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)

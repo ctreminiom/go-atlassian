@@ -2,12 +2,14 @@ package internal
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/v2/service"
 	"github.com/ctreminiom/go-atlassian/v2/service/mocks"
 	"github.com/stretchr/testify/assert"
 	"net/http"
+	"net/url"
 	"testing"
 )
 
@@ -121,13 +123,13 @@ func Test_internalIssueFieldConfigServiceImpl_Gets(t *testing.T) {
 					"rest/api/3/fieldconfiguration?id=10000&id=100001&isDefault=false&maxResults=50&startAt=50",
 					"",
 					nil).
-					Return(&http.Request{}, errors.New("error, unable to create the http created"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 
 			},
 			wantErr: true,
-			Err:     errors.New("error, unable to create the http created"),
+			Err:     model.ErrCreateHttpReq,
 		},
 	}
 
@@ -150,8 +152,14 @@ func Test_internalIssueFieldConfigServiceImpl_Gets(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -316,13 +324,13 @@ func Test_internalIssueFieldConfigServiceImpl_Create(t *testing.T) {
 					"rest/api/3/fieldconfiguration",
 					"",
 					payloadWithDescriptionMocked).
-					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 
 			},
 			wantErr: true,
-			Err:     errors.New("error, unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 		},
 	}
 
@@ -344,8 +352,14 @@ func Test_internalIssueFieldConfigServiceImpl_Create(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -529,13 +543,13 @@ func Test_internalIssueFieldConfigServiceImpl_Update(t *testing.T) {
 					"rest/api/3/fieldconfiguration/1001",
 					"",
 					payloadWithDescriptionMocked).
-					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 
 			},
 			wantErr: true,
-			Err:     errors.New("error, unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 		},
 	}
 
@@ -558,8 +572,14 @@ func Test_internalIssueFieldConfigServiceImpl_Update(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -680,12 +700,12 @@ func Test_internalIssueFieldConfigServiceImpl_Delete(t *testing.T) {
 					"rest/api/3/fieldconfiguration/1001",
 					"",
 					nil).
-					Return(&http.Request{}, errors.New("error, unable to create the http request"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
 			wantErr: true,
-			Err:     errors.New("error, unable to create the http request"),
+			Err:     model.ErrCreateHttpReq,
 		},
 	}
 
@@ -707,8 +727,14 @@ func Test_internalIssueFieldConfigServiceImpl_Delete(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -730,7 +756,7 @@ func TestNewIssueFieldConfigurationService(t *testing.T) {
 		name    string
 		args    args
 		wantErr bool
-		err     error
+		Err     error
 	}{
 		{
 			name: "when the parameters are correct",
@@ -748,7 +774,7 @@ func TestNewIssueFieldConfigurationService(t *testing.T) {
 				version: "",
 			},
 			wantErr: true,
-			err:     model.ErrNoVersionProvided,
+			Err:     model.ErrNoVersionProvided,
 		},
 	}
 	for _, testCase := range testCases {
@@ -761,8 +787,14 @@ func TestNewIssueFieldConfigurationService(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)

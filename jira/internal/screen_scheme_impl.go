@@ -17,7 +17,7 @@ import (
 func NewScreenSchemeService(client service.Connector, version string) (*ScreenSchemeService, error) {
 
 	if version == "" {
-		return nil, model.ErrNoVersionProvided
+		return nil, fmt.Errorf("jira: %w", model.ErrNoVersionProvided)
 	}
 
 	return &ScreenSchemeService{
@@ -156,7 +156,7 @@ func (i *internalScreenSchemeImpl) Update(ctx context.Context, screenSchemeID st
 	defer span.End()
 
 	if screenSchemeID == "" {
-		return nil, model.ErrNoScreenSchemeID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoScreenSchemeID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/screenscheme/%v", i.version, screenSchemeID)
@@ -174,7 +174,7 @@ func (i *internalScreenSchemeImpl) Delete(ctx context.Context, screenSchemeID st
 	defer span.End()
 
 	if screenSchemeID == "" {
-		return nil, model.ErrNoScreenSchemeID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoScreenSchemeID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/screenscheme/%v", i.version, screenSchemeID)

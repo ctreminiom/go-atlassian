@@ -221,7 +221,7 @@ func (i *internalPageImpl) Get(ctx context.Context, pageID int, format string, d
 	defer span.End()
 
 	if pageID == 0 {
-		return nil, nil, model.ErrNoPageID
+		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoPageID)
 	}
 
 	query := url.Values{}
@@ -266,7 +266,7 @@ func (i *internalPageImpl) GetsByLabel(ctx context.Context, labelID int, sort, c
 	defer span.End()
 
 	if labelID == 0 {
-		return nil, nil, model.ErrNoLabelID
+		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoLabelID)
 	}
 
 	query := url.Values{}
@@ -301,7 +301,7 @@ func (i *internalPageImpl) GetsBySpace(ctx context.Context, spaceID int, cursor 
 	defer span.End()
 
 	if spaceID == 0 {
-		return nil, nil, model.ErrNoSpaceID
+		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoSpaceID)
 	}
 
 	query := url.Values{}
@@ -332,7 +332,7 @@ func (i *internalPageImpl) GetsByParent(ctx context.Context, parentID int, curso
 	defer span.End()
 
 	if parentID == 0 {
-		return nil, nil, model.ErrNoPageID
+		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoPageID)
 	}
 
 	query := url.Values{}
@@ -383,7 +383,7 @@ func (i *internalPageImpl) Update(ctx context.Context, pageID int, payload *mode
 	defer span.End()
 
 	if pageID == 0 {
-		return nil, nil, model.ErrNoPageID
+		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoPageID)
 	}
 
 	endpoint := fmt.Sprintf("wiki/api/v2/pages/%v", pageID)
@@ -407,7 +407,7 @@ func (i *internalPageImpl) Delete(ctx context.Context, pageID int) (*model.Respo
 	defer span.End()
 
 	if pageID == 0 {
-		return nil, model.ErrNoPageID
+		return nil, fmt.Errorf("confluence: %w", model.ErrNoPageID)
 	}
 
 	endpoint := fmt.Sprintf("wiki/api/v2/pages/%v", pageID)

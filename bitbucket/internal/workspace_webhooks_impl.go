@@ -93,7 +93,7 @@ func (i *internalWorkspaceHookServiceImpl) Gets(ctx context.Context, workspace s
 	defer span.End()
 
 	if workspace == "" {
-		return nil, nil, model.ErrNoWorkspace
+		return nil, nil, fmt.Errorf("bitbucket: %w", model.ErrNoWorkspace)
 	}
 
 	endpoint := fmt.Sprintf("2.0/workspaces/%v/hooks", workspace)
@@ -117,7 +117,7 @@ func (i *internalWorkspaceHookServiceImpl) Create(ctx context.Context, workspace
 	defer span.End()
 
 	if workspace == "" {
-		return nil, nil, model.ErrNoWorkspace
+		return nil, nil, fmt.Errorf("bitbucket: %w", model.ErrNoWorkspace)
 	}
 
 	endpoint := fmt.Sprintf("2.0/workspaces/%v/hooks", workspace)
@@ -141,11 +141,11 @@ func (i *internalWorkspaceHookServiceImpl) Get(ctx context.Context, workspace, w
 	defer span.End()
 
 	if workspace == "" {
-		return nil, nil, model.ErrNoWorkspace
+		return nil, nil, fmt.Errorf("bitbucket: %w", model.ErrNoWorkspace)
 	}
 
 	if webhookID == "" {
-		return nil, nil, model.ErrNoWebhookID
+		return nil, nil, fmt.Errorf("bitbucket: %w", model.ErrNoWebhookID)
 	}
 
 	endpoint := fmt.Sprintf("2.0/workspaces/%v/hooks/%v", workspace, webhookID)
@@ -169,11 +169,11 @@ func (i *internalWorkspaceHookServiceImpl) Update(ctx context.Context, workspace
 	defer span.End()
 
 	if workspace == "" {
-		return nil, nil, model.ErrNoWorkspace
+		return nil, nil, fmt.Errorf("bitbucket: %w", model.ErrNoWorkspace)
 	}
 
 	if webhookID == "" {
-		return nil, nil, model.ErrNoWebhookID
+		return nil, nil, fmt.Errorf("bitbucket: %w", model.ErrNoWebhookID)
 	}
 
 	endpoint := fmt.Sprintf("2.0/workspaces/%v/hooks/%v", workspace, webhookID)
@@ -197,11 +197,11 @@ func (i *internalWorkspaceHookServiceImpl) Delete(ctx context.Context, workspace
 	defer span.End()
 
 	if workspace == "" {
-		return nil, model.ErrNoWorkspace
+		return nil, fmt.Errorf("bitbucket: %w", model.ErrNoWorkspace)
 	}
 
 	if webhookID == "" {
-		return nil, model.ErrNoWebhookID
+		return nil, fmt.Errorf("bitbucket: %w", model.ErrNoWebhookID)
 	}
 
 	endpoint := fmt.Sprintf("2.0/workspaces/%v/hooks/%v", workspace, webhookID)

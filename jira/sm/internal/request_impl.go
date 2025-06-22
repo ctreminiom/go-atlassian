@@ -37,7 +37,7 @@ type ServiceRequestSubServices struct {
 func NewRequestService(client service.Connector, version string, subServices *ServiceRequestSubServices) (*RequestService, error) {
 
 	if version == "" {
-		return nil, model.ErrNoVersionProvided
+		return nil, fmt.Errorf("client: %w", model.ErrNoVersionProvided)
 	}
 
 	requestService := &RequestService{
@@ -256,7 +256,7 @@ func (i *internalServiceRequestImpl) Get(ctx context.Context, issueKeyOrID strin
 	defer span.End()
 
 	if issueKeyOrID == "" {
-		return nil, nil, model.ErrNoIssueKeyOrID
+		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	var endpoint strings.Builder
@@ -288,7 +288,7 @@ func (i *internalServiceRequestImpl) Subscribe(ctx context.Context, issueKeyOrID
 	defer span.End()
 
 	if issueKeyOrID == "" {
-		return nil, model.ErrNoIssueKeyOrID
+		return nil, fmt.Errorf("sm: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/request/%v/notification", issueKeyOrID)
@@ -306,7 +306,7 @@ func (i *internalServiceRequestImpl) Unsubscribe(ctx context.Context, issueKeyOr
 	defer span.End()
 
 	if issueKeyOrID == "" {
-		return nil, model.ErrNoIssueKeyOrID
+		return nil, fmt.Errorf("sm: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/request/%v/notification", issueKeyOrID)
@@ -324,7 +324,7 @@ func (i *internalServiceRequestImpl) Transitions(ctx context.Context, issueKeyOr
 	defer span.End()
 
 	if issueKeyOrID == "" {
-		return nil, nil, model.ErrNoIssueKeyOrID
+		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	params := url.Values{}
@@ -352,11 +352,11 @@ func (i internalServiceRequestImpl) Transition(ctx context.Context, issueKeyOrID
 	defer span.End()
 
 	if issueKeyOrID == "" {
-		return nil, model.ErrNoIssueKeyOrID
+		return nil, fmt.Errorf("sm: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	if transitionID == "" {
-		return nil, model.ErrNoTransitionID
+		return nil, fmt.Errorf("sm: %w", model.ErrNoTransitionID)
 	}
 
 	payload := map[string]interface{}{"id": transitionID}

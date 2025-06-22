@@ -279,7 +279,7 @@ func (i *internalContentImpl) Search(ctx context.Context, cql, cqlContext string
 	defer span.End()
 
 	if cql == "" {
-		return nil, nil, model.ErrNoCQL
+		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoCQL)
 	}
 
 	query := url.Values{}
@@ -319,7 +319,7 @@ func (i *internalContentImpl) Get(ctx context.Context, contentID string, expand 
 	defer span.End()
 
 	if contentID == "" {
-		return nil, nil, model.ErrNoContentID
+		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
 	}
 
 	query := url.Values{}
@@ -350,7 +350,7 @@ func (i *internalContentImpl) Update(ctx context.Context, contentID string, payl
 	defer span.End()
 
 	if contentID == "" {
-		return nil, nil, model.ErrNoContentID
+		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
 	}
 
 	endpoint := fmt.Sprintf("wiki/rest/api/content/%v", contentID)
@@ -374,7 +374,7 @@ func (i *internalContentImpl) Delete(ctx context.Context, contentID, status stri
 	defer span.End()
 
 	if contentID == "" {
-		return nil, model.ErrNoContentID
+		return nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
 	}
 
 	var endpoint strings.Builder
@@ -400,7 +400,7 @@ func (i *internalContentImpl) History(ctx context.Context, contentID string, exp
 	defer span.End()
 
 	if contentID == "" {
-		return nil, nil, model.ErrNoContentID
+		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
 	}
 
 	var endpoint strings.Builder

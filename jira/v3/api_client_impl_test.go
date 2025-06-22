@@ -3,6 +3,7 @@ package v3
 import (
 	"bytes"
 	"context"
+	"encoding/json"
 	"errors"
 	"io"
 	"net/http"
@@ -228,8 +229,14 @@ func TestClient_Call(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 				assert.NoError(t, err)
 				assert.Equal(t, got, testCase.want)
@@ -460,8 +467,14 @@ func TestClient_processResponse(t *testing.T) {
 				}
 
 				assert.Error(t, err)
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 				assert.NoError(t, err)
 				assert.NotEqual(t, got, nil)
@@ -526,7 +539,7 @@ func TestNew(t *testing.T) {
 			},
 			want:    invalidURLClientMocked,
 			wantErr: true,
-			Err:     errors.New("parse \" https://zhidao.baidu.com/special/view?id=sd&preview=1/\": first path segment in URL cannot contain colon"),
+			Err:     errors.New("first path segment in URL cannot contain colon"),
 		},
 	}
 
@@ -542,8 +555,14 @@ func TestNew(t *testing.T) {
 				}
 
 				assert.Error(t, err)
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 				assert.NoError(t, err)
 				assert.NotEqual(t, gotClient, nil)

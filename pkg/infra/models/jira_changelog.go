@@ -12,7 +12,7 @@ type IssueChangelogScheme struct {
 type IssueChangelogHistoryScheme struct {
 	ID      string                             `json:"id,omitempty"`      // The ID of the history.
 	Author  *IssueChangelogAuthor              `json:"author,omitempty"`  // The author of the history.
-	Created string                             `json:"created,omitempty"` // The creation time of the history.
+	Created string                             `json:"created,omitempty"` // The creation time of the history. TODO: Should use *DateTimeScheme for proper RFC3339 formatting. Cannot change without breaking API compatibility.
 	Items   []*IssueChangelogHistoryItemScheme `json:"items,omitempty"`   // The items in the history.
 }
 

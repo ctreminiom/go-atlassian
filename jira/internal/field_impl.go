@@ -20,7 +20,7 @@ func NewIssueFieldService(client service.Connector, version string, configuratio
 	trash *IssueFieldTrashService) (*IssueFieldService, error) {
 
 	if version == "" {
-		return nil, model.ErrNoVersionProvided
+		return nil, fmt.Errorf("jira: %w", model.ErrNoVersionProvided)
 	}
 
 	return &IssueFieldService{
@@ -199,7 +199,7 @@ func (i *internalIssueFieldServiceImpl) Delete(ctx context.Context, fieldID stri
 	defer span.End()
 
 	if fieldID == "" {
-		return nil, nil, model.ErrNoFieldID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoFieldID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/field/%v", i.version, fieldID)

@@ -119,7 +119,7 @@ func (i *internalObjectSchemaImpl) List(ctx context.Context, workspaceID string)
 	defer span.End()
 
 	if workspaceID == "" {
-		return nil, nil, model.ErrNoWorkspaceID
+		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoWorkspaceID)
 	}
 
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/objectschema/list", workspaceID)
@@ -143,7 +143,7 @@ func (i *internalObjectSchemaImpl) Create(ctx context.Context, workspaceID strin
 	defer span.End()
 
 	if workspaceID == "" {
-		return nil, nil, model.ErrNoWorkspaceID
+		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoWorkspaceID)
 	}
 
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/objectschema/create", workspaceID)
@@ -167,11 +167,11 @@ func (i *internalObjectSchemaImpl) Get(ctx context.Context, workspaceID, objectS
 	defer span.End()
 
 	if workspaceID == "" {
-		return nil, nil, model.ErrNoWorkspaceID
+		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoWorkspaceID)
 	}
 
 	if objectSchemaID == "" {
-		return nil, nil, model.ErrNoObjectSchemaID
+		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoObjectSchemaID)
 	}
 
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/objectschema/%v", workspaceID, objectSchemaID)
@@ -195,11 +195,11 @@ func (i *internalObjectSchemaImpl) Update(ctx context.Context, workspaceID, obje
 	defer span.End()
 
 	if workspaceID == "" {
-		return nil, nil, model.ErrNoWorkspaceID
+		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoWorkspaceID)
 	}
 
 	if objectSchemaID == "" {
-		return nil, nil, model.ErrNoObjectSchemaID
+		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoObjectSchemaID)
 	}
 
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/objectschema/%v", workspaceID, objectSchemaID)
@@ -223,11 +223,11 @@ func (i *internalObjectSchemaImpl) Delete(ctx context.Context, workspaceID, obje
 	defer span.End()
 
 	if workspaceID == "" {
-		return nil, nil, model.ErrNoWorkspaceID
+		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoWorkspaceID)
 	}
 
 	if objectSchemaID == "" {
-		return nil, nil, model.ErrNoObjectSchemaID
+		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoObjectSchemaID)
 	}
 
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/objectschema/%v", workspaceID, objectSchemaID)
@@ -251,11 +251,11 @@ func (i *internalObjectSchemaImpl) Attributes(ctx context.Context, workspaceID, 
 	defer span.End()
 
 	if workspaceID == "" {
-		return nil, nil, model.ErrNoWorkspaceID
+		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoWorkspaceID)
 	}
 
 	if objectSchemaID == "" {
-		return nil, nil, model.ErrNoObjectSchemaID
+		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoObjectSchemaID)
 	}
 
 	query := url.Values{}
@@ -304,11 +304,11 @@ func (i *internalObjectSchemaImpl) ObjectTypes(ctx context.Context, workspaceID,
 	defer span.End()
 
 	if workspaceID == "" {
-		return nil, nil, model.ErrNoWorkspaceID
+		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoWorkspaceID)
 	}
 
 	if objectSchemaID == "" {
-		return nil, nil, model.ErrNoObjectSchemaID
+		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoObjectSchemaID)
 	}
 
 	var endpoint strings.Builder

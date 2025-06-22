@@ -79,7 +79,7 @@ func (i *internalSpacePermissionImpl) Add(ctx context.Context, spaceKey string, 
 	defer span.End()
 
 	if spaceKey == "" {
-		return nil, nil, model.ErrNoSpaceKey
+		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoSpaceKey)
 	}
 
 	endpoint := fmt.Sprintf("wiki/rest/api/space/%v/permission", spaceKey)
@@ -103,7 +103,7 @@ func (i *internalSpacePermissionImpl) Bulk(ctx context.Context, spaceKey string,
 	defer span.End()
 
 	if spaceKey == "" {
-		return nil, model.ErrNoSpaceKey
+		return nil, fmt.Errorf("confluence: %w", model.ErrNoSpaceKey)
 	}
 
 	endpoint := fmt.Sprintf("wiki/rest/api/space/%v/permission/custom-content", spaceKey)
@@ -121,7 +121,7 @@ func (i *internalSpacePermissionImpl) Remove(ctx context.Context, spaceKey strin
 	defer span.End()
 
 	if spaceKey == "" {
-		return nil, model.ErrNoSpaceKey
+		return nil, fmt.Errorf("confluence: %w", model.ErrNoSpaceKey)
 	}
 
 	endpoint := fmt.Sprintf("wiki/rest/api/space/%v/permission/%v", spaceKey, permissionID)

@@ -3,13 +3,14 @@ package internal
 import (
 	"context"
 	"fmt"
-	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/v2/service"
-	"github.com/ctreminiom/go-atlassian/v2/service/jira"
 	"net/http"
 	"net/url"
 	"strconv"
 	"strings"
+
+	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/v2/service"
+	"github.com/ctreminiom/go-atlassian/v2/service/jira"
 )
 
 // SearchADFService provides methods to manage advanced document format (ADF) searches in Jira Service Management.
@@ -35,6 +36,9 @@ func (s *SearchADFService) Checks(ctx context.Context, payload *model.IssueSearc
 // GET /rest/api/3/search
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/search#search-for-issues-using-jql-get
+//
+// Deprecated: This endpoint will be removed after May 1, 2025. Use SearchJQL, BulkFetch and ApproximateCount instead.
+// TODO Cannot change without breaking API compatibility. Consider removing in next major version.
 func (s *SearchADFService) Get(ctx context.Context, jql string, fields, expands []string, startAt, maxResults int, validate string) (*model.IssueSearchScheme, *model.ResponseScheme, error) {
 	ctx, span := tracer().Start(ctx, "(*SearchADFService).Get")
 	defer span.End()
@@ -47,11 +51,35 @@ func (s *SearchADFService) Get(ctx context.Context, jql string, fields, expands 
 // POST /rest/api/3/search
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/search#search-for-issues-using-jql-get
+//
+// Deprecated: This endpoint will be removed after May 1, 2025. Use SearchJQL, BulkFetch and ApproximateCount instead.
+// TODO Cannot change without breaking API compatibility. Consider removing in next major version.
 func (s *SearchADFService) Post(ctx context.Context, jql string, fields, expands []string, startAt, maxResults int, validate string) (*model.IssueSearchScheme, *model.ResponseScheme, error) {
 	ctx, span := tracer().Start(ctx, "(*SearchADFService).Post")
 	defer span.End()
 
 	return s.internalClient.Post(ctx, jql, fields, expands, startAt, maxResults, validate)
+}
+
+// SearchJQL searches issues using the new JQL search endpoint
+//
+// POST /rest/api/3/search/jql
+func (s *SearchADFService) SearchJQL(ctx context.Context, jql string, fields, expands []string, maxResults int, nextPageToken string) (*model.IssueSearchJQLScheme, *model.ResponseScheme, error) {
+	return s.internalClient.SearchJQL(ctx, jql, fields, expands, maxResults, nextPageToken)
+}
+
+// ApproximateCount gets an approximate count of issues matching a JQL query
+//
+// POST /rest/api/3/search/approximate-count
+func (s *SearchADFService) ApproximateCount(ctx context.Context, jql string) (*model.IssueSearchApproximateCountScheme, *model.ResponseScheme, error) {
+	return s.internalClient.ApproximateCount(ctx, jql)
+}
+
+// BulkFetch fetches multiple issues by their IDs or keys
+//
+// POST /rest/api/3/issue/bulkfetch
+func (s *SearchADFService) BulkFetch(ctx context.Context, issueIDsOrKeys []string, fields []string) (*model.IssueBulkFetchScheme, *model.ResponseScheme, error) {
+	return s.internalClient.BulkFetch(ctx, issueIDsOrKeys, fields)
 }
 
 type internalSearchADFImpl struct {
@@ -84,7 +112,7 @@ func (i *internalSearchADFImpl) Get(ctx context.Context, jql string, fields, exp
 	defer span.End()
 
 	if jql == "" {
-		return nil, nil, model.ErrNoJQL
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoJQL)
 	}
 
 	params := url.Values{}
@@ -148,6 +176,99 @@ func (i *internalSearchADFImpl) Post(ctx context.Context, jql string, fields, ex
 	}
 
 	issues := new(model.IssueSearchScheme)
+	response, err := i.c.Call(request, issues)
+	if err != nil {
+		return nil, response, err
+	}
+
+	return issues, response, nil
+}
+
+// SearchJQL searches issues using the new JQL search endpoint
+//
+// POST /rest/api/3/search/jql
+// TODO: Missing optional parameters from API spec: properties, fieldsByKeys, failFast, reconcileIssues
+// Cannot add without breaking API compatibility. Consider adding in next major version.
+func (i *internalSearchADFImpl) SearchJQL(ctx context.Context, jql string, fields, expands []string, maxResults int, nextPageToken string) (*model.IssueSearchJQLScheme, *model.ResponseScheme, error) {
+
+	payload := struct {
+		Jql           string   `json:"jql,omitempty"`
+		MaxResults    int      `json:"maxResults,omitempty"`
+		Fields        []string `json:"fields,omitempty"`
+		Expand        []string `json:"expand,omitempty"`
+		NextPageToken string   `json:"nextPageToken,omitempty"`
+	}{
+		Jql:           jql,
+		MaxResults:    maxResults,
+		Fields:        fields,
+		Expand:        expands,
+		NextPageToken: nextPageToken,
+	}
+
+	endpoint := fmt.Sprintf("rest/api/%v/search/jql", i.version)
+
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	issues := new(model.IssueSearchJQLScheme)
+	response, err := i.c.Call(request, issues)
+	if err != nil {
+		return nil, response, err
+	}
+
+	return issues, response, nil
+}
+
+// ApproximateCount gets an approximate count of issues matching a JQL query
+//
+// POST /rest/api/3/search/approximate-count
+func (i *internalSearchADFImpl) ApproximateCount(ctx context.Context, jql string) (*model.IssueSearchApproximateCountScheme, *model.ResponseScheme, error) {
+
+	payload := struct {
+		Jql string `json:"jql,omitempty"`
+	}{
+		Jql: jql,
+	}
+
+	endpoint := fmt.Sprintf("rest/api/%v/search/approximate-count", i.version)
+
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	count := new(model.IssueSearchApproximateCountScheme)
+	response, err := i.c.Call(request, count)
+	if err != nil {
+		return nil, response, err
+	}
+
+	return count, response, nil
+}
+
+// BulkFetch fetches multiple issues by their IDs or keys
+//
+// POST /rest/api/3/issue/bulkfetch
+func (i *internalSearchADFImpl) BulkFetch(ctx context.Context, issueIDsOrKeys []string, fields []string) (*model.IssueBulkFetchScheme, *model.ResponseScheme, error) {
+
+	payload := struct {
+		IssueIDsOrKeys []string `json:"issueIdsOrKeys,omitempty"`
+		Fields         []string `json:"fields,omitempty"`
+	}{
+		IssueIDsOrKeys: issueIDsOrKeys,
+		Fields:         fields,
+	}
+
+	endpoint := fmt.Sprintf("rest/api/%v/issue/bulkfetch", i.version)
+
+	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	issues := new(model.IssueBulkFetchScheme)
 	response, err := i.c.Call(request, issues)
 	if err != nil {
 		return nil, response, err

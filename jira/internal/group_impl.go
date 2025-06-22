@@ -18,7 +18,7 @@ import (
 func NewGroupService(client service.Connector, version string) (*GroupService, error) {
 
 	if version == "" {
-		return nil, model.ErrNoVersionProvided
+		return nil, fmt.Errorf("jira: %w", model.ErrNoVersionProvided)
 	}
 
 	return &GroupService{
@@ -114,7 +114,7 @@ func (i *internalGroupServiceImpl) Create(ctx context.Context, groupName string)
 	defer span.End()
 
 	if groupName == "" {
-		return nil, nil, model.ErrNoGroupName
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoGroupName)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/group", i.version)
@@ -138,7 +138,7 @@ func (i *internalGroupServiceImpl) Delete(ctx context.Context, groupName string)
 	defer span.End()
 
 	if groupName == "" {
-		return nil, model.ErrNoGroupName
+		return nil, fmt.Errorf("jira: %w", model.ErrNoGroupName)
 	}
 
 	params := url.Values{}
@@ -194,7 +194,7 @@ func (i *internalGroupServiceImpl) Members(ctx context.Context, groupName string
 	defer span.End()
 
 	if groupName == "" {
-		return nil, nil, model.ErrNoGroupName
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoGroupName)
 	}
 
 	params := url.Values{}
@@ -224,11 +224,11 @@ func (i *internalGroupServiceImpl) Add(ctx context.Context, groupName, accountID
 	defer span.End()
 
 	if groupName == "" {
-		return nil, nil, model.ErrNoGroupName
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoGroupName)
 	}
 
 	if accountID == "" {
-		return nil, nil, model.ErrNoAccountID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoAccountID)
 	}
 
 	params := url.Values{}
@@ -254,11 +254,11 @@ func (i *internalGroupServiceImpl) Remove(ctx context.Context, groupName, accoun
 	defer span.End()
 
 	if groupName == "" {
-		return nil, model.ErrNoGroupName
+		return nil, fmt.Errorf("jira: %w", model.ErrNoGroupName)
 	}
 
 	if accountID == "" {
-		return nil, model.ErrNoAccountID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoAccountID)
 	}
 
 	params := url.Values{}

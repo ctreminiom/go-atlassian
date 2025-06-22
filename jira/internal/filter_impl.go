@@ -19,7 +19,7 @@ import (
 func NewFilterService(client service.Connector, version string, share jira.FilterSharingConnector) (*FilterService, error) {
 
 	if version == "" {
-		return nil, model.ErrNoVersionProvided
+		return nil, fmt.Errorf("jira: %w", model.ErrNoVersionProvided)
 	}
 
 	return &FilterService{
@@ -268,7 +268,7 @@ func (i *internalFilterServiceImpl) Get(ctx context.Context, filterID int, expan
 	defer span.End()
 
 	if filterID == 0 {
-		return nil, nil, model.ErrNoFilterID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoFilterID)
 	}
 
 	var endpoint strings.Builder
@@ -302,7 +302,7 @@ func (i *internalFilterServiceImpl) Update(ctx context.Context, filterID int, pa
 	defer span.End()
 
 	if filterID == 0 {
-		return nil, nil, model.ErrNoFilterID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoFilterID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/filter/%v", i.version, filterID)
@@ -326,7 +326,7 @@ func (i *internalFilterServiceImpl) Delete(ctx context.Context, filterID int) (*
 	defer span.End()
 
 	if filterID == 0 {
-		return nil, model.ErrNoFilterID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoFilterID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/filter/%v", i.version, filterID)
@@ -349,11 +349,11 @@ func (i *internalFilterServiceImpl) Change(ctx context.Context, filterID int, ac
 	defer span.End()
 
 	if filterID == 0 {
-		return nil, model.ErrNoFilterID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoFilterID)
 	}
 
 	if accountID == "" {
-		return nil, model.ErrNoAccountID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoAccountID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/filter/%v/owner", i.version, filterID)

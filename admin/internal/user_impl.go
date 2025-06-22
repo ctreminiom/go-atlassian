@@ -105,7 +105,7 @@ func (i *internalUserImpl) Permissions(ctx context.Context, accountID string, pr
 	defer span.End()
 
 	if accountID == "" {
-		return nil, nil, model.ErrNoAdminAccountID
+		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminAccountID)
 	}
 
 	var endpoint strings.Builder
@@ -138,7 +138,7 @@ func (i *internalUserImpl) Get(ctx context.Context, accountID string) (*model.Ad
 	defer span.End()
 
 	if accountID == "" {
-		return nil, nil, model.ErrNoAdminAccountID
+		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminAccountID)
 	}
 
 	endpoint := fmt.Sprintf("users/%v/manage/profile", accountID)
@@ -162,7 +162,7 @@ func (i *internalUserImpl) Update(ctx context.Context, accountID string, payload
 	defer span.End()
 
 	if accountID == "" {
-		return nil, nil, model.ErrNoAdminAccountID
+		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminAccountID)
 	}
 
 	endpoint := fmt.Sprintf("users/%v/manage/profile", accountID)
@@ -186,7 +186,7 @@ func (i *internalUserImpl) Disable(ctx context.Context, accountID, message strin
 	defer span.End()
 
 	if accountID == "" {
-		return nil, model.ErrNoAdminAccountID
+		return nil, fmt.Errorf("admin: %w", model.ErrNoAdminAccountID)
 	}
 
 	endpoint := fmt.Sprintf("users/%v/manage/lifecycle/disable", accountID)
@@ -209,7 +209,7 @@ func (i *internalUserImpl) Enable(ctx context.Context, accountID string) (*model
 	defer span.End()
 
 	if accountID == "" {
-		return nil, model.ErrNoAdminAccountID
+		return nil, fmt.Errorf("admin: %w", model.ErrNoAdminAccountID)
 	}
 
 	endpoint := fmt.Sprintf("users/%v/manage/lifecycle/enable", accountID)

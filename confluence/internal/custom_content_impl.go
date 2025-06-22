@@ -100,7 +100,7 @@ func (i *internalCustomContentServiceImpl) Gets(ctx context.Context, typ string,
 	defer span.End()
 
 	if typ == "" {
-		return nil, nil, model.ErrNoCustomContentType
+		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoCustomContentType)
 	}
 
 	query := url.Values{}
@@ -182,7 +182,7 @@ func (i *internalCustomContentServiceImpl) Get(ctx context.Context, customConten
 	defer span.End()
 
 	if customContentID == 0 {
-		return nil, nil, model.ErrNoCustomContentID
+		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoCustomContentID)
 	}
 
 	query := url.Values{}
@@ -221,7 +221,7 @@ func (i *internalCustomContentServiceImpl) Update(ctx context.Context, customCon
 	defer span.End()
 
 	if customContentID == 0 {
-		return nil, nil, model.ErrNoCustomContentID
+		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoCustomContentID)
 	}
 
 	endpoint := fmt.Sprintf("wiki/api/v2/custom-content/%v", customContentID)
@@ -246,7 +246,7 @@ func (i *internalCustomContentServiceImpl) Delete(ctx context.Context, customCon
 	defer span.End()
 
 	if customContentID == 0 {
-		return nil, model.ErrNoCustomContentID
+		return nil, fmt.Errorf("confluence: %w", model.ErrNoCustomContentID)
 	}
 
 	endpoint := fmt.Sprintf("wiki/api/v2/custom-content/%v", customContentID)

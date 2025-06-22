@@ -57,11 +57,11 @@ func (i *internalIconImpl) Get(ctx context.Context, workspaceID, iconID string) 
 	defer span.End()
 
 	if workspaceID == "" {
-		return nil, nil, model.ErrNoWorkspaceID
+		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoWorkspaceID)
 	}
 
 	if iconID == "" {
-		return nil, nil, model.ErrNoIconID
+		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoIconID)
 	}
 
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/icon/%v", workspaceID, iconID)
@@ -85,7 +85,7 @@ func (i *internalIconImpl) Global(ctx context.Context, workspaceID string) ([]*m
 	defer span.End()
 
 	if workspaceID == "" {
-		return nil, nil, model.ErrNoWorkspaceID
+		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoWorkspaceID)
 	}
 
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/icon/global", workspaceID)

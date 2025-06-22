@@ -72,7 +72,7 @@ func (i *internalQueueServiceImpl) Gets(ctx context.Context, serviceDeskID int, 
 	defer span.End()
 
 	if serviceDeskID == 0 {
-		return nil, nil, model.ErrNoServiceDeskID
+		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoServiceDeskID)
 	}
 
 	params := url.Values{}
@@ -101,11 +101,11 @@ func (i *internalQueueServiceImpl) Get(ctx context.Context, serviceDeskID, queue
 	defer span.End()
 
 	if serviceDeskID == 0 {
-		return nil, nil, model.ErrNoServiceDeskID
+		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoServiceDeskID)
 	}
 
 	if queueID == 0 {
-		return nil, nil, model.ErrNoQueueID
+		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoQueueID)
 	}
 
 	params := url.Values{}
@@ -132,11 +132,11 @@ func (i *internalQueueServiceImpl) Issues(ctx context.Context, serviceDeskID, qu
 	defer span.End()
 
 	if serviceDeskID == 0 {
-		return nil, nil, model.ErrNoServiceDeskID
+		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoServiceDeskID)
 	}
 
 	if queueID == 0 {
-		return nil, nil, model.ErrNoQueueID
+		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoQueueID)
 	}
 
 	params := url.Values{}

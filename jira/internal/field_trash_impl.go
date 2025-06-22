@@ -18,7 +18,7 @@ import (
 func NewIssueFieldTrashService(client service.Connector, version string) (*IssueFieldTrashService, error) {
 
 	if version == "" {
-		return nil, model.ErrNoVersionProvided
+		return nil, fmt.Errorf("jira: %w", model.ErrNoVersionProvided)
 	}
 
 	return &IssueFieldTrashService{
@@ -125,7 +125,7 @@ func (i *internalFieldTrashServiceImpl) Move(ctx context.Context, id string) (*m
 	defer span.End()
 
 	if id == "" {
-		return nil, model.ErrNoFieldID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoFieldID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/field/%v/trash", i.version, id)
@@ -143,7 +143,7 @@ func (i *internalFieldTrashServiceImpl) Restore(ctx context.Context, id string) 
 	defer span.End()
 
 	if id == "" {
-		return nil, model.ErrNoFieldID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoFieldID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/field/%v/restore", i.version, id)

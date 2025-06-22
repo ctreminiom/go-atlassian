@@ -168,7 +168,7 @@ func (i *internalSprintImpl) Move(ctx context.Context, sprintID int, payload *mo
 	defer span.End()
 
 	if sprintID == 0 {
-		return nil, model.ErrNoSprintID
+		return nil, fmt.Errorf("agile: %w", model.ErrNoSprintID)
 	}
 
 	url := fmt.Sprintf("/rest/agile/%v/sprint/%v/issue", i.version, sprintID)
@@ -186,7 +186,7 @@ func (i *internalSprintImpl) Get(ctx context.Context, sprintID int) (*model.Spri
 	defer span.End()
 
 	if sprintID == 0 {
-		return nil, nil, model.ErrNoSprintID
+		return nil, nil, fmt.Errorf("agile: %w", model.ErrNoSprintID)
 	}
 
 	url := fmt.Sprintf("rest/agile/%v/sprint/%v", i.version, sprintID)
@@ -230,7 +230,7 @@ func (i *internalSprintImpl) Update(ctx context.Context, sprintID int, payload *
 	defer span.End()
 
 	if sprintID == 0 {
-		return nil, nil, model.ErrNoSprintID
+		return nil, nil, fmt.Errorf("agile: %w", model.ErrNoSprintID)
 	}
 
 	url := fmt.Sprintf("rest/agile/%v/sprint/%v", i.version, sprintID)
@@ -254,7 +254,7 @@ func (i *internalSprintImpl) Path(ctx context.Context, sprintID int, payload *mo
 	defer span.End()
 
 	if sprintID == 0 {
-		return nil, nil, model.ErrNoSprintID
+		return nil, nil, fmt.Errorf("agile: %w", model.ErrNoSprintID)
 	}
 
 	url := fmt.Sprintf("rest/agile/%v/sprint/%v", i.version, sprintID)
@@ -278,7 +278,7 @@ func (i *internalSprintImpl) Delete(ctx context.Context, sprintID int) (*model.R
 	defer span.End()
 
 	if sprintID == 0 {
-		return nil, model.ErrNoSprintID
+		return nil, fmt.Errorf("agile: %w", model.ErrNoSprintID)
 	}
 
 	url := fmt.Sprintf("rest/agile/%v/sprint/%v", i.version, sprintID)
@@ -296,7 +296,7 @@ func (i *internalSprintImpl) Issues(ctx context.Context, sprintID int, opts *mod
 	defer span.End()
 
 	if sprintID == 0 {
-		return nil, nil, model.ErrNoSprintID
+		return nil, nil, fmt.Errorf("agile: %w", model.ErrNoSprintID)
 	}
 
 	params := url.Values{}
@@ -343,7 +343,7 @@ func (i *internalSprintImpl) Start(ctx context.Context, sprintID int) (*model.Re
 	defer span.End()
 
 	if sprintID == 0 {
-		return nil, model.ErrNoSprintID
+		return nil, fmt.Errorf("agile: %w", model.ErrNoSprintID)
 	}
 
 	url := fmt.Sprintf("rest/agile/%v/sprint/%v", i.version, sprintID)
@@ -361,7 +361,7 @@ func (i *internalSprintImpl) Close(ctx context.Context, sprintID int) (*model.Re
 	defer span.End()
 
 	if sprintID == 0 {
-		return nil, model.ErrNoSprintID
+		return nil, fmt.Errorf("agile: %w", model.ErrNoSprintID)
 	}
 
 	url := fmt.Sprintf("rest/agile/%v/sprint/%v", i.version, sprintID)

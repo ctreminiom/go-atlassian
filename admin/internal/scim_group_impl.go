@@ -116,7 +116,7 @@ func (i *internalSCIMGroupImpl) Gets(ctx context.Context, directoryID, filter st
 	defer span.End()
 
 	if directoryID == "" {
-		return nil, nil, model.ErrNoAdminDirectoryID
+		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminDirectoryID)
 	}
 
 	params := url.Values{}
@@ -148,11 +148,11 @@ func (i *internalSCIMGroupImpl) Get(ctx context.Context, directoryID, groupID st
 	defer span.End()
 
 	if directoryID == "" {
-		return nil, nil, model.ErrNoAdminDirectoryID
+		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminDirectoryID)
 	}
 
 	if groupID == "" {
-		return nil, nil, model.ErrNoAdminGroupID
+		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminGroupID)
 	}
 
 	endpoint := fmt.Sprintf("scim/directory/%v/Groups/%v", directoryID, groupID)
@@ -176,15 +176,15 @@ func (i *internalSCIMGroupImpl) Update(ctx context.Context, directoryID, groupID
 	defer span.End()
 
 	if directoryID == "" {
-		return nil, nil, model.ErrNoAdminDirectoryID
+		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminDirectoryID)
 	}
 
 	if groupID == "" {
-		return nil, nil, model.ErrNoAdminGroupID
+		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminGroupID)
 	}
 
 	if newGroupName == "" {
-		return nil, nil, model.ErrNoAdminGroupName
+		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminGroupName)
 	}
 
 	endpoint := fmt.Sprintf("scim/directory/%v/Groups/%v", directoryID, groupID)
@@ -210,11 +210,11 @@ func (i *internalSCIMGroupImpl) Delete(ctx context.Context, directoryID, groupID
 	defer span.End()
 
 	if directoryID == "" {
-		return nil, model.ErrNoAdminDirectoryID
+		return nil, fmt.Errorf("admin: %w", model.ErrNoAdminDirectoryID)
 	}
 
 	if groupID == "" {
-		return nil, model.ErrNoAdminGroupID
+		return nil, fmt.Errorf("admin: %w", model.ErrNoAdminGroupID)
 	}
 
 	endpoint := fmt.Sprintf("scim/directory/%v/Groups/%v", directoryID, groupID)
@@ -232,11 +232,11 @@ func (i *internalSCIMGroupImpl) Create(ctx context.Context, directoryID, groupNa
 	defer span.End()
 
 	if directoryID == "" {
-		return nil, nil, model.ErrNoAdminDirectoryID
+		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminDirectoryID)
 	}
 
 	if groupName == "" {
-		return nil, nil, model.ErrNoAdminGroupName
+		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminGroupName)
 	}
 
 	payload := map[string]interface{}{"displayName": groupName}
@@ -262,11 +262,11 @@ func (i *internalSCIMGroupImpl) Path(ctx context.Context, directoryID, groupID s
 	defer span.End()
 
 	if directoryID == "" {
-		return nil, nil, model.ErrNoAdminDirectoryID
+		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminDirectoryID)
 	}
 
 	if groupID == "" {
-		return nil, nil, model.ErrNoAdminGroupID
+		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminGroupID)
 	}
 
 	endpoint := fmt.Sprintf("scim/directory/%v/Groups/%v", directoryID, groupID)

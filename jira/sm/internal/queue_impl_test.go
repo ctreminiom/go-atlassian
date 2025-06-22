@@ -2,12 +2,14 @@ package internal
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/v2/service"
 	"github.com/ctreminiom/go-atlassian/v2/service/mocks"
 	"github.com/stretchr/testify/assert"
 	"net/http"
+	"net/url"
 	"testing"
 )
 
@@ -86,11 +88,11 @@ func Test_internalQueueServiceImpl_Gets(t *testing.T) {
 				client.On("Call",
 					&http.Request{},
 					&model.ServiceDeskQueuePageScheme{}).
-					Return(&model.ResponseScheme{}, errors.New("client: no http response found"))
+					Return(&model.ResponseScheme{}, model.ErrNoHttpResponse)
 
 				fields.c = client
 			},
-			Err:     errors.New("client: no http response found"),
+			Err:     model.ErrNoHttpResponse,
 			wantErr: true,
 		},
 
@@ -113,11 +115,11 @@ func Test_internalQueueServiceImpl_Gets(t *testing.T) {
 					"rest/servicedeskapi/servicedesk/10001/queue?includeCount=true&limit=50&start=100",
 					"",
 					nil).
-					Return(&http.Request{}, errors.New("client: no http request created"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
-			Err:     errors.New("client: no http request created"),
+			Err:     model.ErrCreateHttpReq,
 			wantErr: true,
 		},
 
@@ -149,8 +151,14 @@ func Test_internalQueueServiceImpl_Gets(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -234,11 +242,11 @@ func Test_internalQueueServiceImpl_Get(t *testing.T) {
 				client.On("Call",
 					&http.Request{},
 					&model.ServiceDeskQueueScheme{}).
-					Return(&model.ResponseScheme{}, errors.New("client: no http response found"))
+					Return(&model.ResponseScheme{}, model.ErrNoHttpResponse)
 
 				fields.c = client
 			},
-			Err:     errors.New("client: no http response found"),
+			Err:     model.ErrNoHttpResponse,
 			wantErr: true,
 		},
 
@@ -260,11 +268,11 @@ func Test_internalQueueServiceImpl_Get(t *testing.T) {
 					"rest/servicedeskapi/servicedesk/10001/queue/29?includeCount=true",
 					"",
 					nil).
-					Return(&http.Request{}, errors.New("client: no http request created"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
-			Err:     errors.New("client: no http request created"),
+			Err:     model.ErrCreateHttpReq,
 			wantErr: true,
 		},
 
@@ -306,8 +314,14 @@ func Test_internalQueueServiceImpl_Get(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)
@@ -396,11 +410,11 @@ func Test_internalQueueServiceImpl_Issues(t *testing.T) {
 				client.On("Call",
 					&http.Request{},
 					&model.ServiceDeskIssueQueueScheme{}).
-					Return(&model.ResponseScheme{}, errors.New("client: no http response found"))
+					Return(&model.ResponseScheme{}, model.ErrNoHttpResponse)
 
 				fields.c = client
 			},
-			Err:     errors.New("client: no http response found"),
+			Err:     model.ErrNoHttpResponse,
 			wantErr: true,
 		},
 
@@ -424,11 +438,11 @@ func Test_internalQueueServiceImpl_Issues(t *testing.T) {
 					"rest/servicedeskapi/servicedesk/10001/queue/29/issue?limit=50&start=100",
 					"",
 					nil).
-					Return(&http.Request{}, errors.New("client: no http request created"))
+					Return(&http.Request{}, model.ErrCreateHttpReq)
 
 				fields.c = client
 			},
-			Err:     errors.New("client: no http request created"),
+			Err:     model.ErrCreateHttpReq,
 			wantErr: true,
 		},
 
@@ -460,8 +474,14 @@ func Test_internalQueueServiceImpl_Issues(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				assert.EqualError(t, err, testCase.Err.Error())
-
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
 			} else {
 
 				assert.NoError(t, err)

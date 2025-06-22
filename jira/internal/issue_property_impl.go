@@ -14,7 +14,7 @@ import (
 func NewIssuePropertyService(client service.Connector, version string) (*IssuePropertyService, error) {
 
 	if version == "" {
-		return nil, model.ErrNoVersionProvided
+		return nil, fmt.Errorf("jira: %w", model.ErrNoVersionProvided)
 	}
 
 	return &IssuePropertyService{
@@ -122,7 +122,7 @@ func (i *internalIssuePropertyImpl) Gets(ctx context.Context, issueKeyOrID strin
 	defer span.End()
 
 	if issueKeyOrID == "" {
-		return nil, nil, model.ErrNoIssueKeyOrID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/properties", i.version, issueKeyOrID)
@@ -147,11 +147,11 @@ func (i *internalIssuePropertyImpl) Get(ctx context.Context, issueKey, propertyK
 	defer span.End()
 
 	if issueKey == "" {
-		return nil, nil, model.ErrNoIssueKeyOrID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	if propertyKey == "" {
-		return nil, nil, model.ErrNoPropertyKey
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoPropertyKey)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/properties/%v", i.version, issueKey, propertyKey)
@@ -175,11 +175,11 @@ func (i *internalIssuePropertyImpl) Set(ctx context.Context, issueKey, propertyK
 	defer span.End()
 
 	if issueKey == "" {
-		return nil, model.ErrNoIssueKeyOrID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	if propertyKey == "" {
-		return nil, model.ErrNoPropertyKey
+		return nil, fmt.Errorf("jira: %w", model.ErrNoPropertyKey)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/properties/%v", i.version, issueKey, propertyKey)
@@ -197,11 +197,11 @@ func (i *internalIssuePropertyImpl) Delete(ctx context.Context, issueKey, proper
 	defer span.End()
 
 	if issueKey == "" {
-		return nil, model.ErrNoIssueKeyOrID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	if propertyKey == "" {
-		return nil, model.ErrNoPropertyKey
+		return nil, fmt.Errorf("jira: %w", model.ErrNoPropertyKey)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/properties/%v", i.version, issueKey, propertyKey)

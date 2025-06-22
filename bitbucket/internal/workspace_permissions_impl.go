@@ -77,7 +77,7 @@ func (i *internalWorkspacePermissionServiceImpl) Members(ctx context.Context, wo
 	defer span.End()
 
 	if workspace == "" {
-		return nil, nil, model.ErrNoWorkspace
+		return nil, nil, fmt.Errorf("bitbucket: %w", model.ErrNoWorkspace)
 	}
 
 	var endpoint strings.Builder
@@ -110,7 +110,7 @@ func (i *internalWorkspacePermissionServiceImpl) Repositories(ctx context.Contex
 	defer span.End()
 
 	if workspace == "" {
-		return nil, nil, model.ErrNoWorkspace
+		return nil, nil, fmt.Errorf("bitbucket: %w", model.ErrNoWorkspace)
 	}
 
 	var endpoint strings.Builder
@@ -147,11 +147,11 @@ func (i *internalWorkspacePermissionServiceImpl) Repository(ctx context.Context,
 	defer span.End()
 
 	if workspace == "" {
-		return nil, nil, model.ErrNoWorkspace
+		return nil, nil, fmt.Errorf("bitbucket: %w", model.ErrNoWorkspace)
 	}
 
 	if repository == "" {
-		return nil, nil, model.ErrNoRepository
+		return nil, nil, fmt.Errorf("bitbucket: %w", model.ErrNoRepository)
 	}
 
 	var endpoint strings.Builder

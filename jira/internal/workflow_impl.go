@@ -17,7 +17,7 @@ import (
 func NewWorkflowService(client service.Connector, version string, scheme *WorkflowSchemeService, status *WorkflowStatusService) (*WorkflowService, error) {
 
 	if version == "" {
-		return nil, model.ErrNoVersionProvided
+		return nil, fmt.Errorf("jira: %w", model.ErrNoVersionProvided)
 	}
 
 	return &WorkflowService{
@@ -490,7 +490,7 @@ func (i *internalWorkflowImpl) Delete(ctx context.Context, workflowID string) (*
 	defer span.End()
 
 	if workflowID == "" {
-		return nil, model.ErrNoWorkflowID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoWorkflowID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/workflow/%v", i.version, workflowID)

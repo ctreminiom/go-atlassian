@@ -14,7 +14,7 @@ import (
 func NewLinkTypeService(client service.Connector, version string) (*LinkTypeService, error) {
 
 	if version == "" {
-		return nil, model.ErrNoVersionProvided
+		return nil, fmt.Errorf("jira: %w", model.ErrNoVersionProvided)
 	}
 
 	return &LinkTypeService{
@@ -122,7 +122,7 @@ func (i *internalLinkTypeImpl) Get(ctx context.Context, issueLinkTypeID string) 
 	defer span.End()
 
 	if issueLinkTypeID == "" {
-		return nil, nil, model.ErrNoLinkTypeID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoLinkTypeID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issueLinkType/%v", i.version, issueLinkTypeID)
@@ -166,7 +166,7 @@ func (i *internalLinkTypeImpl) Update(ctx context.Context, issueLinkTypeID strin
 	defer span.End()
 
 	if issueLinkTypeID == "" {
-		return nil, nil, model.ErrNoLinkTypeID
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoLinkTypeID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issueLinkType/%v", i.version, issueLinkTypeID)
@@ -190,7 +190,7 @@ func (i *internalLinkTypeImpl) Delete(ctx context.Context, issueLinkTypeID strin
 	defer span.End()
 
 	if issueLinkTypeID == "" {
-		return nil, model.ErrNoLinkTypeID
+		return nil, fmt.Errorf("jira: %w", model.ErrNoLinkTypeID)
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issueLinkType/%v", i.version, issueLinkTypeID)

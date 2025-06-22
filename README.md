@@ -48,17 +48,17 @@ go get github.com/ctreminiom/go-atlassian/v2
 ## 📪 Packages
 Then import the package into your project as you normally would. You can import the following packages:
 
-| Module                  	            | Path                                               	     | URL's                                                                                	 |
-|--------------------------------------|----------------------------------------------------------|----------------------------------------------------------------------------------------|
-| Jira v2                 	            | `github.com/ctreminiom/go-atlassian/jira/v2`       	     | [Getting Started](https://docs.go-atlassian.io/jira-software-cloud/introduction)     	 |
-| Jira v3                 	            | `github.com/ctreminiom/go-atlassian/jira/v3`       	     | [Getting Started](https://docs.go-atlassian.io/jira-software-cloud/introduction)     	 |
-| Jira Software Agile     	            | `github.com/ctreminiom/go-atlassian/jira/agile`    	     | [Getting Started](https://docs.go-atlassian.io/jira-agile/introduction)              	 |
-| Jira Service Management 	            | `github.com/ctreminiom/go-atlassian/jira/sm`       	     | [Getting Started](https://docs.go-atlassian.io/jira-service-management/introduction) 	 |
-| Jira Assets             	            | `github.com/ctreminiom/go-atlassian/assets`        	     | [Getting Started](https://docs.go-atlassian.io/jira-assets/overview)                 	 |
-| Confluence              	            | `github.com/ctreminiom/go-atlassian/confluence`    	     | [Getting Started](https://docs.go-atlassian.io/confluence-cloud/introduction)        	 |
-| Confluence v2           	            | `github.com/ctreminiom/go-atlassian/confluence/v2` 	     | [Getting Started](https://docs.go-atlassian.io/confluence-cloud/v2/introduction)     	 |
-| Admin Cloud             	            | `github.com/ctreminiom/go-atlassian/admin`         	     | [Getting Started](https://docs.go-atlassian.io/atlassian-admin-cloud/overview)       	 |
-| Bitbucket Cloud *(In Progress)*<br/> | `github.com/ctreminiom/go-atlassian/bitbucket`         	 | [Getting Started](https://docs.go-atlassian.io/bitbucket-cloud/introduction)       	   |
+| Module                              | Path                                                      | URL's                                                                                  |
+|-------------------------------------|-----------------------------------------------------------|----------------------------------------------------------------------------------------|
+| Jira v2                             | `github.com/ctreminiom/go-atlassian/v2/jira/v2`           | [Getting Started](https://docs.go-atlassian.io/jira-software-cloud/introduction)       |
+| Jira v3                             | `github.com/ctreminiom/go-atlassian/v2/jira/v3`           | [Getting Started](https://docs.go-atlassian.io/jira-software-cloud/introduction)       |
+| Jira Software Agile                 | `github.com/ctreminiom/go-atlassian/v2/jira/agile`        | [Getting Started](https://docs.go-atlassian.io/jira-agile/introduction)                |
+| Jira Service Management             | `github.com/ctreminiom/go-atlassian/v2/jira/sm`           | [Getting Started](https://docs.go-atlassian.io/jira-service-management/introduction)   |
+| Jira Assets                         | `github.com/ctreminiom/go-atlassian/v2/assets`            | [Getting Started](https://docs.go-atlassian.io/jira-assets/overview)                   |
+| Confluence                          | `github.com/ctreminiom/go-atlassian/v2/confluence`        | [Getting Started](https://docs.go-atlassian.io/confluence-cloud/introduction)          |
+| Confluence v2                       | `github.com/ctreminiom/go-atlassian/v2/confluence/v2`     | [Getting Started](https://docs.go-atlassian.io/confluence-cloud/v2/introduction)       |
+| Admin Cloud                         | `github.com/ctreminiom/go-atlassian/v2/admin`             | [Getting Started](https://docs.go-atlassian.io/atlassian-admin-cloud/overview)         |
+| Bitbucket Cloud *(In Progress)*     | `github.com/ctreminiom/go-atlassian/v2/bitbucket`         | [Getting Started](https://docs.go-atlassian.io/bitbucket-cloud/introduction)           |
 
 -------------------------
 ## 🔨 Usage
@@ -173,7 +173,7 @@ package main
 import (  
     "context"  
     "fmt" 
-    "github.com/ctreminiom/go-atlassian/jira/v3" 
+    "github.com/ctreminiom/go-atlassian/v2/jira/v3" 
     "log" 
     "net/http" 
     "os"

@@ -1,6 +1,9 @@
 package models
 
-import "time"
+import (
+	"fmt"
+	"time"
+)
 
 const (
 	// TimeFormat is the format for Jira type "date-time".
@@ -14,7 +17,7 @@ type DateScheme time.Time
 
 // MarshalJSON marshals the DateScheme to JSON.
 func (d *DateScheme) MarshalJSON() ([]byte, error) {
-	return []byte(time.Time(*d).Format(DateFormat)), nil
+	return []byte(fmt.Sprintf("\"%s\"", time.Time(*d).Format(DateFormat))), nil
 }
 
 // UnmarshalJSON unmarshals the DateScheme from JSON.
@@ -37,7 +40,7 @@ type DateTimeScheme time.Time
 
 // MarshalJSON marshals the DateTimeScheme to JSON.
 func (d *DateTimeScheme) MarshalJSON() ([]byte, error) {
-	return []byte(time.Time(*d).Format(TimeFormat)), nil
+	return []byte(fmt.Sprintf("\"%s\"", time.Time(*d).Format(TimeFormat))), nil
 }
 
 // UnmarshalJSON unmarshals the DateTimeScheme from JSON.

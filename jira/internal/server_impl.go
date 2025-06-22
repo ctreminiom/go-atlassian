@@ -13,7 +13,7 @@ import (
 func NewServerService(client service.Connector, version string) (*ServerService, error) {
 
 	if version == "" {
-		return nil, model.ErrNoVersionProvided
+		return nil, fmt.Errorf("jira: %w", model.ErrNoVersionProvided)
 	}
 
 	return &ServerService{

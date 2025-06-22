@@ -11,7 +11,8 @@ import (
 	"github.com/ctreminiom/go-atlassian/v2/service/common"
 )
 
-func main() {
+// ExampleOAuth2AutoRenewal demonstrates using OAuth 2.0 with automatic token renewal
+func ExampleOAuth2AutoRenewal() {
 	// Example of using OAuth 2.0 with automatic token renewal
 	
 	// Step 1: OAuth configuration
@@ -32,14 +33,23 @@ func main() {
 	}
 	
 	// Step 3: Create client with auto-renewal support
+	// Option 1: Using separate options (clearer separation of concerns)
 	client, err := jira.New(
 		http.DefaultClient,
 		"https://your-domain.atlassian.net",
-		jira.WithOAuthAutoRenew(oauthConfig, existingToken),
+		jira.WithOAuth(oauthConfig),
+		jira.WithAutoRenewalToken(existingToken),
 	)
 	if err != nil {
 		log.Fatal(err)
 	}
+	
+	// Option 2: Using convenience method (same result)
+	// client, err := jira.New(
+	//     http.DefaultClient,
+	//     "https://your-domain.atlassian.net",
+	//     jira.WithOAuthWithAutoRenewal(oauthConfig, existingToken),
+	// )
 	
 	fmt.Println("Client created with automatic token renewal")
 	
@@ -103,7 +113,8 @@ func ExampleMultiSiteAutoRenewal() {
 		client, err := jira.New(
 			http.DefaultClient,
 			resource.URL,
-			jira.WithOAuthAutoRenew(oauthConfig, token),
+			jira.WithOAuth(oauthConfig),
+			jira.WithAutoRenewalToken(token),
 		)
 		if err != nil {
 			log.Printf("Failed to create client for %s: %v", resource.Name, err)

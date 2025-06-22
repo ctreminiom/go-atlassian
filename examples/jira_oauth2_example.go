@@ -10,7 +10,8 @@ import (
 	"github.com/ctreminiom/go-atlassian/v2/service/common"
 )
 
-func main() {
+// ExampleOAuth2Flow demonstrates the complete OAuth 2.0 authentication flow
+func ExampleOAuth2Flow() {
 	// Example of using OAuth 2.0 with go-atlassian
 	
 	// Step 1: Prepare OAuth configuration
@@ -27,8 +28,8 @@ func main() {
 	}
 	
 	// Step 2: Create a client with OAuth support
-	// Note: For OAuth flow, we first create a client with empty site URL
-	client, err := jira.New(http.DefaultClient, "", jira.WithOAuth(oauthConfig))
+	// For the initial OAuth flow, we can use a temporary site URL
+	client, err := jira.New(http.DefaultClient, "https://api.atlassian.com", jira.WithOAuth(oauthConfig))
 	if err != nil {
 		log.Fatal(err)
 	}

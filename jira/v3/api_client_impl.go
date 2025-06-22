@@ -39,26 +39,20 @@ func WithOAuth(config *common.OAuth2Config) ClientOption {
 	}
 }
 
-// WithOAuthAutoRenew configures the client with OAuth 2.0 support and automatic token renewal
-func WithOAuthAutoRenew(config *common.OAuth2Config, token *common.OAuth2Token) ClientOption {
+// WithAutoRenewalToken enables automatic OAuth token renewal with the provided token.
+// This option requires WithOAuth to be configured first or used together.
+func WithAutoRenewalToken(token *common.OAuth2Token) ClientOption {
 	return func(c *Client) error {
-		if config == nil {
-			return fmt.Errorf("oauth config cannot be nil")
-		}
 		if token == nil {
-			return fmt.Errorf("initial token cannot be nil")
+			return fmt.Errorf("token cannot be nil for auto-renewal")
 		}
 		
-		// Create OAuth service
-		oauthService, err := oauth2.NewOAuth2Service(c.HTTP, config)
-		if err != nil {
-			return fmt.Errorf("failed to create OAuth service: %w", err)
+		if c.OAuth == nil {
+			return fmt.Errorf("OAuth must be configured before enabling auto-renewal (use WithOAuth first)")
 		}
-		
-		c.OAuth = oauthService
 		
 		// Create token source with auto-renewal
-		refreshSource := oauth2.NewRefreshTokenSource(context.Background(), token.RefreshToken, oauthService)
+		refreshSource := oauth2.NewRefreshTokenSource(context.Background(), token.RefreshToken, c.OAuth)
 		reuseSource := oauth2.NewReuseTokenSource(token, refreshSource)
 		
 		// Determine the base transport
@@ -73,7 +67,7 @@ func WithOAuthAutoRenew(config *common.OAuth2Config, token *common.OAuth2Token) 
 		transport := &oauth2.Transport{
 			Source: reuseSource,
 			Base:   base,
-			auth:   c.Auth,
+			Auth:   c.Auth,
 		}
 		
 		c.HTTP = transport
@@ -82,6 +76,20 @@ func WithOAuthAutoRenew(config *common.OAuth2Config, token *common.OAuth2Token) 
 		c.Auth.SetBearerToken(token.AccessToken)
 		
 		return nil
+	}
+}
+
+// WithOAuthWithAutoRenewal is a convenience option that combines WithOAuth and WithAutoRenewalToken.
+// It configures OAuth support and enables automatic token renewal in one step.
+func WithOAuthWithAutoRenewal(config *common.OAuth2Config, token *common.OAuth2Token) ClientOption {
+	return func(c *Client) error {
+		// First configure OAuth
+		if err := WithOAuth(config)(c); err != nil {
+			return err
+		}
+		
+		// Then enable auto-renewal
+		return WithAutoRenewalToken(token)(c)
 	}
 }
 

@@ -95,7 +95,7 @@ func (s *RefreshTokenSource) Token() (*common.OAuth2Token, error) {
 type Transport struct {
 	Source TokenSource
 	Base   http.RoundTripper
-	auth   common.Authentication
+	Auth   common.Authentication
 }
 
 // RoundTrip implements http.RoundTripper
@@ -106,8 +106,8 @@ func (t *Transport) RoundTrip(req *http.Request) (*http.Response, error) {
 	}
 
 	// Update the authentication with the new token
-	if t.auth != nil {
-		t.auth.SetBearerToken(token.AccessToken)
+	if t.Auth != nil {
+		t.Auth.SetBearerToken(token.AccessToken)
 	}
 
 	// Clone request to avoid modifying the original

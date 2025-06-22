@@ -1,4 +1,4 @@
-package confluence
+package v2
 
 import (
 	"go.opentelemetry.io/otel"

@@ -9,6 +9,8 @@ import (
 	"net/http"
 	"net/url"
 
+	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
+
 	"github.com/ctreminiom/go-atlassian/v2/assets/internal"
 	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/v2/service/common"
@@ -36,9 +38,22 @@ func New(httpClient common.HTTPClient, site string) (*Client, error) {
 		return nil, err
 	}
 
-	// Initialize the Client struct with the provided HTTP client and parsed URL.
+	// Wrap the HTTP client with OpenTelemetry instrumentation
+	var transport http.RoundTripper
+	if httpClient.(*http.Client).Transport != nil {
+		transport = httpClient.(*http.Client).Transport
+	} else {
+		transport = http.DefaultTransport
+	}
+
+	instrumentedClient := &http.Client{
+		Transport: otelhttp.NewTransport(transport),
+		Timeout:   httpClient.(*http.Client).Timeout,
+	}
+
+	// Initialize the Client struct with the instrumented HTTP client and parsed URL.
 	client := &Client{
-		HTTP: httpClient,
+		HTTP: instrumentedClient,
 		Site: u,
 	}
 

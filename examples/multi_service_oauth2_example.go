@@ -145,7 +145,7 @@ func ExampleMultiServiceOAuth() {
 
 	// Test Confluence
 	if confluenceClient != nil {
-		spaces, _, err := confluenceClient.Space.Gets(ctx, nil, 0, 3)
+		spaces, _, err := confluenceClient.Space.Bulk(ctx, nil, "", 3)
 		if err != nil {
 			log.Printf("❌ Confluence space list failed: %v", err)
 		} else {
@@ -158,13 +158,15 @@ func ExampleMultiServiceOAuth() {
 
 	// Test Admin API
 	if adminClient != nil {
-		orgs, _, err := adminClient.Organization.Gets(ctx, nil)
+		orgs, _, err := adminClient.Organization.Gets(ctx, "")
 		if err != nil {
 			log.Printf("❌ Admin organization list failed: %v", err)
 		} else {
-			fmt.Printf("✅ Admin: Found %d organizations\n", len(orgs))
-			for _, org := range orgs {
-				fmt.Printf("   🏢 Organization: %s\n", org.Name)
+			fmt.Printf("✅ Admin: Found %d organizations\n", len(orgs.Data))
+			for _, org := range orgs.Data {
+				if org.Attributes != nil {
+					fmt.Printf("   🏢 Organization: %s\n", org.Attributes.Name)
+				}
 			}
 		}
 	}
@@ -229,7 +231,7 @@ func ExampleCrossServiceWorkflow() {
 	// 3. Check user's Confluence spaces
 	if confluenceClient != nil {
 		fmt.Println("   3. Checking user's Confluence spaces...")
-		spaces, _, err := confluenceClient.Space.Gets(ctx, nil, 0, 5)
+		spaces, _, err := confluenceClient.Space.Bulk(ctx, nil, "", 5)
 		if err == nil {
 			fmt.Printf("      Found %d accessible spaces\n", len(spaces.Results))
 		}
@@ -298,7 +300,7 @@ func ExampleServiceSpecificScopes() {
 	fmt.Println("\nChoose the appropriate scope set based on your application's needs!")
 }
 
-func main() {
+func ExampleMain() {
 	ExampleMultiServiceOAuth()
 	ExampleCrossServiceWorkflow()
 	ExampleServiceSpecificScopes()

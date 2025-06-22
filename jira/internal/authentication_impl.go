@@ -26,6 +26,16 @@ type AuthenticationService struct {
 	userAgentProvided bool
 	// agent is the user agent string.
 	agent string
+	
+	// OAuth 2.0 fields
+	oauth2ConfigProvided bool
+	clientID, clientSecret, redirectURI string
+	
+	oauth2AccessTokenProvided bool
+	oauth2AccessToken string
+	
+	oauth2RefreshTokenProvided bool
+	oauth2RefreshToken string
 }
 
 // SetBearerToken sets the bearer token for authentication.
@@ -77,4 +87,54 @@ func (a *AuthenticationService) GetUserAgent() string {
 // HasUserAgent returns true if a user agent has been provided.
 func (a *AuthenticationService) HasUserAgent() bool {
 	return a.userAgentProvided
+}
+
+// SetOAuth2Config sets the OAuth 2.0 configuration.
+func (a *AuthenticationService) SetOAuth2Config(clientID, clientSecret, redirectURI string) {
+	a.clientID = clientID
+	a.clientSecret = clientSecret
+	a.redirectURI = redirectURI
+	a.oauth2ConfigProvided = true
+}
+
+// GetOAuth2Config returns the OAuth 2.0 configuration.
+func (a *AuthenticationService) GetOAuth2Config() (string, string, string) {
+	return a.clientID, a.clientSecret, a.redirectURI
+}
+
+// HasOAuth2Config returns true if OAuth 2.0 configuration has been provided.
+func (a *AuthenticationService) HasOAuth2Config() bool {
+	return a.oauth2ConfigProvided
+}
+
+// SetOAuth2AccessToken sets the OAuth 2.0 access token.
+func (a *AuthenticationService) SetOAuth2AccessToken(token string) {
+	a.oauth2AccessToken = token
+	a.oauth2AccessTokenProvided = true
+}
+
+// GetOAuth2AccessToken returns the OAuth 2.0 access token.
+func (a *AuthenticationService) GetOAuth2AccessToken() string {
+	return a.oauth2AccessToken
+}
+
+// HasOAuth2AccessToken returns true if an OAuth 2.0 access token has been provided.
+func (a *AuthenticationService) HasOAuth2AccessToken() bool {
+	return a.oauth2AccessTokenProvided
+}
+
+// SetOAuth2RefreshToken sets the OAuth 2.0 refresh token.
+func (a *AuthenticationService) SetOAuth2RefreshToken(token string) {
+	a.oauth2RefreshToken = token
+	a.oauth2RefreshTokenProvided = true
+}
+
+// GetOAuth2RefreshToken returns the OAuth 2.0 refresh token.
+func (a *AuthenticationService) GetOAuth2RefreshToken() string {
+	return a.oauth2RefreshToken
+}
+
+// HasOAuth2RefreshToken returns true if an OAuth 2.0 refresh token has been provided.
+func (a *AuthenticationService) HasOAuth2RefreshToken() bool {
+	return a.oauth2RefreshTokenProvided
 }

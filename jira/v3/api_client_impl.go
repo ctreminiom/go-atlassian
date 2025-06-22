@@ -12,16 +12,38 @@ import (
 
 	"github.com/ctreminiom/go-atlassian/v2/jira/internal"
 	"github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/v2/pkg/infra/oauth2"
 	"github.com/ctreminiom/go-atlassian/v2/service/common"
 )
 
 // APIVersion is the version of the Jira API that this client targets.
 const APIVersion = "3"
 
+// ClientOption is a function that configures a Client
+type ClientOption func(*Client) error
+
+// WithOAuth configures the client with OAuth 2.0 support
+func WithOAuth(config *common.OAuth2Config) ClientOption {
+	return func(c *Client) error {
+		if config == nil {
+			return fmt.Errorf("oauth config cannot be nil")
+		}
+		
+		oauthService, err := oauth2.NewOAuth2Service(c.HTTP, config)
+		if err != nil {
+			return fmt.Errorf("failed to create OAuth service: %w", err)
+		}
+		
+		c.OAuth = oauthService
+		return nil
+	}
+}
+
 // New creates a new Jira API client.
 // If a nil httpClient is provided, http.DefaultClient will be used.
 // If the site is empty, an error will be returned.
-func New(httpClient common.HTTPClient, site string) (*Client, error) {
+// Options can be provided to configure the client.
+func New(httpClient common.HTTPClient, site string, options ...ClientOption) (*Client, error) {
 
 	if httpClient == nil {
 		httpClient = http.DefaultClient
@@ -399,12 +421,20 @@ func New(httpClient common.HTTPClient, site string) (*Client, error) {
 
 	client.Archival = internal.NewIssueArchivalService(client, APIVersion)
 
+	// Apply client options
+	for _, option := range options {
+		if err := option(client); err != nil {
+			return nil, err
+		}
+	}
+
 	return client, nil
 }
 
 type Client struct {
 	HTTP               common.HTTPClient
 	Auth               common.Authentication
+	OAuth              common.OAuth2Service
 	Site               *url.URL
 	Audit              *internal.AuditRecordService
 	Role               *internal.ApplicationRoleService

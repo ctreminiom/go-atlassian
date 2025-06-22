@@ -63,6 +63,8 @@ Then import the package into your project as you normally would. You can import 
 -------------------------
 ## 🔨 Usage
 
+### API Token Authentication
+
 Before using the **go-atlassian** package, you need to have an Atlassian API key. If you do not have a key yet, you can sign up [here](https://support.atlassian.com/atlassian-account/docs/manage-api-tokens-for-your-atlassian-account/).
 
 Create a client with your instance host and access token to start communicating with the Atlassian API's. In this example, we're going to instance a new Confluence Cloud client.
@@ -96,6 +98,93 @@ if err != nil {
 }
 instance.Auth.SetBasicAuth("YOUR_CLIENT_MAIL", "YOUR_APP_ACCESS_TOKEN")
 ```
+
+### OAuth 2.0 (3LO) Authentication
+
+**go-atlassian** now supports OAuth 2.0 (3-legged OAuth) authentication for building apps that authenticate on behalf of users. This allows your app to access Atlassian APIs using the permissions granted by users.
+
+#### Setting up OAuth 2.0
+
+First, create an OAuth 2.0 app in the [Atlassian Developer Console](https://developer.atlassian.com/console/myapps/) to get your client ID and client secret.
+
+```go
+// Configure OAuth
+oauthConfig := &common.OAuth2Config{
+    ClientID:     "YOUR_CLIENT_ID",
+    ClientSecret: "YOUR_CLIENT_SECRET",
+    RedirectURI:  "https://your-app.com/callback",
+}
+
+// Create client with OAuth support using functional options
+client, err := jira.New(http.DefaultClient, "https://your-domain.atlassian.net", jira.WithOAuth(oauthConfig))
+if err != nil {
+    log.Fatal(err)
+}
+
+// Generate authorization URL
+authURL, err := client.OAuth.GetAuthorizationURL([]string{"read:jira-work", "write:jira-work"}, "state")
+if err != nil {
+    log.Fatal(err)
+}
+
+// Direct user to authURL to authorize your app
+fmt.Printf("Visit this URL to authorize: %s\n", authURL.String())
+
+// After authorization, exchange code for tokens
+token, err := client.OAuth.ExchangeAuthorizationCode(context.Background(), "AUTH_CODE")
+if err != nil {
+    log.Fatal(err)
+}
+
+// Use the access token for API calls
+client.Auth.SetBearerToken(token.AccessToken)
+
+// Make API calls
+myself, _, err := client.MySelf.Details(context.Background(), nil)
+if err != nil {
+    log.Fatal(err)
+}
+```
+
+#### Working with Multiple Sites
+
+OAuth 2.0 tokens can provide access to multiple Atlassian sites. Use the `GetAccessibleResources` method to discover available sites:
+
+```go
+resources, err := client.OAuth.GetAccessibleResources(context.Background(), token.AccessToken)
+if err != nil {
+    log.Fatal(err)
+}
+
+for _, resource := range resources {
+    fmt.Printf("Site: %s (%s)\n", resource.Name, resource.URL)
+    
+    // Create a client for this specific site
+    siteClient, err := jira.New(http.DefaultClient, resource.URL, jira.WithOAuth(oauthConfig))
+    if err != nil {
+        continue
+    }
+    
+    siteClient.Auth.SetBearerToken(token.AccessToken)
+    // Use siteClient for API calls to this site
+}
+```
+
+#### Refreshing Tokens
+
+OAuth 2.0 access tokens expire. Use the refresh token to get a new access token:
+
+```go
+newToken, err := client.OAuth.RefreshAccessToken(context.Background(), token.RefreshToken)
+if err != nil {
+    log.Fatal(err)
+}
+
+// Update the access token
+client.Auth.SetBearerToken(newToken.AccessToken)
+```
+
+For a complete example, see [examples/jira_oauth2_example.go](examples/jira_oauth2_example.go).
 
 ## ☕Cookbooks
 

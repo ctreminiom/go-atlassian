@@ -172,7 +172,9 @@ for _, resource := range resources {
 
 #### Refreshing Tokens
 
-OAuth 2.0 access tokens expire. Use the refresh token to get a new access token:
+OAuth 2.0 access tokens expire. You have two options for handling token refresh:
+
+##### Manual Token Refresh
 
 ```go
 newToken, err := client.OAuth.RefreshAccessToken(context.Background(), token.RefreshToken)
@@ -184,7 +186,35 @@ if err != nil {
 client.Auth.SetBearerToken(newToken.AccessToken)
 ```
 
-For a complete example, see [examples/jira_oauth2_example.go](examples/jira_oauth2_example.go).
+##### Automatic Token Renewal
+
+For long-running applications, you can use the `WithOAuthAutoRenew` option to automatically refresh tokens:
+
+```go
+// Create client with automatic token renewal
+client, err := jira.New(
+    http.DefaultClient,
+    "https://your-domain.atlassian.net",
+    jira.WithOAuthAutoRenew(oauthConfig, existingToken),
+)
+if err != nil {
+    log.Fatal(err)
+}
+
+// Use the client normally - tokens will be automatically refreshed
+// when they're about to expire (with a 5-minute buffer)
+issues, _, err := client.Issue.Search(context.Background(), jql, options)
+```
+
+The auto-renewal feature:
+- Automatically refreshes tokens before they expire
+- Reuses valid tokens to minimize API calls
+- Updates refresh tokens when new ones are provided
+- Thread-safe for concurrent use
+
+For complete examples, see:
+- [examples/jira_oauth2_example.go](examples/jira_oauth2_example.go) - Basic OAuth flow
+- [examples/jira_oauth2_auto_renew_example.go](examples/jira_oauth2_auto_renew_example.go) - Automatic token renewal
 
 ## ☕Cookbooks
 

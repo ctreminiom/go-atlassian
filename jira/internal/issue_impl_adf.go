@@ -8,6 +8,8 @@ import (
 	"strings"
 
 	"dario.cat/mergo"
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
 
 	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/v2/service"
@@ -155,10 +157,24 @@ func (i *IssueADFService) Creates(ctx context.Context, payload []*model.IssueBul
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues#get-issue
 func (i *IssueADFService) Get(ctx context.Context, issueKeyOrID string, fields, expand []string) (*model.IssueScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*IssueADFService).Get")
+	ctx, span := tracer().Start(ctx, "(*IssueADFService).Get", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
-	return i.internalClient.Get(ctx, issueKeyOrID, fields, expand)
+	// Add operation attributes
+	addAttributes(span,
+		attribute.String("jira.issue.key", issueKeyOrID),
+		attribute.StringSlice("jira.fields", fields),
+		attribute.StringSlice("jira.expand", expand),
+	)
+
+	result, response, err := i.internalClient.Get(ctx, issueKeyOrID, fields, expand)
+	if err != nil {
+		recordError(span, err)
+		return nil, response, err
+	}
+
+	setOK(span)
+	return result, response, nil
 }
 
 // Update edits an issue.

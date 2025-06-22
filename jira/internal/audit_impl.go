@@ -3,13 +3,17 @@ package internal
 import (
 	"context"
 	"fmt"
-	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/v2/service"
-	"github.com/ctreminiom/go-atlassian/v2/service/jira"
 	"net/http"
 	"net/url"
 	"strconv"
 	"strings"
+
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
+
+	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/v2/service"
+	"github.com/ctreminiom/go-atlassian/v2/service/jira"
 )
 
 // NewAuditRecordService creates a new instance of AuditRecordService.
@@ -38,10 +42,23 @@ type AuditRecordService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/audit-records#get-audit-records
 func (a *AuditRecordService) Get(ctx context.Context, options *model.AuditRecordGetOptions, offSet, limit int) (*model.AuditRecordPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*AuditRecordService).Get")
+	ctx, span := tracer().Start(ctx, "(*AuditRecordService).Get", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
-	return a.internalClient.Get(ctx, options, offSet, limit)
+	addAttributes(span,
+		attribute.String("operation.name", "get_audit_records"),
+		attribute.Int("jira.audit.offset", offSet),
+		attribute.Int("jira.audit.limit", limit),
+	)
+
+	result, response, err := a.internalClient.Get(ctx, options, offSet, limit)
+	if err != nil {
+		recordError(span, err)
+		return nil, response, err
+	}
+
+	setOK(span)
+	return result, response, nil
 }
 
 type internalAuditRecordImpl struct {
@@ -50,8 +67,15 @@ type internalAuditRecordImpl struct {
 }
 
 func (i *internalAuditRecordImpl) Get(ctx context.Context, options *model.AuditRecordGetOptions, offSet, limit int) (*model.AuditRecordPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalAuditRecordImpl).Get")
+	ctx, span := tracer().Start(ctx, "(*internalAuditRecordImpl).Get", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "get_audit_records"),
+		attribute.Int("jira.audit.offset", offSet),
+		attribute.Int("jira.audit.limit", limit),
+		attribute.String("api.version", i.version),
+	)
 
 	params := url.Values{}
 	params.Add("offset", strconv.Itoa(offSet))
@@ -61,14 +85,17 @@ func (i *internalAuditRecordImpl) Get(ctx context.Context, options *model.AuditR
 
 		if options.Filter != "" {
 			params.Add("", options.Filter)
+			addAttributes(span, attribute.String("jira.audit.filter", options.Filter))
 		}
 
 		if !options.To.IsZero() {
 			params.Add("to", options.To.Format("2006-01-02"))
+			addAttributes(span, attribute.String("jira.audit.to", options.To.Format("2006-01-02")))
 		}
 
 		if !options.From.IsZero() {
 			params.Add("from", options.From.Format("2006-01-02"))
+			addAttributes(span, attribute.String("jira.audit.from", options.From.Format("2006-01-02")))
 		}
 
 	}
@@ -82,14 +109,17 @@ func (i *internalAuditRecordImpl) Get(ctx context.Context, options *model.AuditR
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	records := new(model.AuditRecordPageScheme)
 	response, err := i.c.Call(request, records)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
+	setOK(span)
 	return records, response, nil
 }

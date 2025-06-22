@@ -5,6 +5,9 @@ import (
 	"fmt"
 	"net/http"
 
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
+
 	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/v2/service"
 	"github.com/ctreminiom/go-atlassian/v2/service/jira"
@@ -31,10 +34,21 @@ type AnnouncementBannerService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/announcement-banner#get-announcement-banner-configuration
 func (a *AnnouncementBannerService) Get(ctx context.Context) (*model.AnnouncementBannerScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*AnnouncementBannerService).Get")
+	ctx, span := tracer().Start(ctx, "(*AnnouncementBannerService).Get", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
-	return a.internalClient.Get(ctx)
+	addAttributes(span,
+		attribute.String("operation.name", "get_announcement_banner"),
+	)
+
+	result, response, err := a.internalClient.Get(ctx)
+	if err != nil {
+		recordError(span, err)
+		return nil, response, err
+	}
+
+	setOK(span)
+	return result, response, nil
 }
 
 // Update updates the announcement banner configuration.
@@ -43,10 +57,21 @@ func (a *AnnouncementBannerService) Get(ctx context.Context) (*model.Announcemen
 //
 // https://docs.go-atlassian.io/jira-software-cloud/announcement-banner#get-announcement-banner-configuration
 func (a *AnnouncementBannerService) Update(ctx context.Context, payload *model.AnnouncementBannerPayloadScheme) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*AnnouncementBannerService).Update")
+	ctx, span := tracer().Start(ctx, "(*AnnouncementBannerService).Update", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
-	return a.internalClient.Update(ctx, payload)
+	addAttributes(span,
+		attribute.String("operation.name", "update_announcement_banner"),
+	)
+
+	response, err := a.internalClient.Update(ctx, payload)
+	if err != nil {
+		recordError(span, err)
+		return response, err
+	}
+
+	setOK(span)
+	return response, nil
 }
 
 type internalAnnouncementBannerImpl struct {
@@ -55,35 +80,56 @@ type internalAnnouncementBannerImpl struct {
 }
 
 func (i *internalAnnouncementBannerImpl) Get(ctx context.Context) (*model.AnnouncementBannerScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalAnnouncementBannerImpl).Get")
+	ctx, span := tracer().Start(ctx, "(*internalAnnouncementBannerImpl).Get", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "get_announcement_banner"),
+		attribute.String("api.version", i.version),
+	)
 
 	endpoint := fmt.Sprintf("rest/api/%v/announcementBanner", i.version)
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	banner := new(model.AnnouncementBannerScheme)
 	response, err := i.c.Call(request, banner)
 	if err != nil {
+		recordError(span, err)
 		return nil, response, err
 	}
 
+	setOK(span)
 	return banner, response, nil
 }
 
 func (i *internalAnnouncementBannerImpl) Update(ctx context.Context, payload *model.AnnouncementBannerPayloadScheme) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalAnnouncementBannerImpl).Update")
+	ctx, span := tracer().Start(ctx, "(*internalAnnouncementBannerImpl).Update", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "update_announcement_banner"),
+		attribute.String("api.version", i.version),
+	)
 
 	endpoint := fmt.Sprintf("rest/api/%v/announcementBanner", i.version)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
+		recordError(span, err)
 		return nil, err
 	}
 
-	return i.c.Call(request, nil)
+	response, err := i.c.Call(request, nil)
+	if err != nil {
+		recordError(span, err)
+		return response, err
+	}
+
+	setOK(span)
+	return response, nil
 }

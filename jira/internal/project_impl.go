@@ -8,6 +8,9 @@ import (
 	"strconv"
 	"strings"
 
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
+
 	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/v2/service"
 	"github.com/ctreminiom/go-atlassian/v2/service/jira"
@@ -98,10 +101,23 @@ func (p *ProjectService) Create(ctx context.Context, payload *model.ProjectPaylo
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects#get-projects-paginated
 func (p *ProjectService) Search(ctx context.Context, options *model.ProjectSearchOptionsScheme, startAt, maxResults int) (*model.ProjectSearchScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*ProjectService).Search")
+	ctx, span := tracer().Start(ctx, "(*ProjectService).Search", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
-	return p.internalClient.Search(ctx, options, startAt, maxResults)
+	addAttributes(span,
+		attribute.String("operation.name", "search_projects"),
+		attribute.Int("jira.pagination.start_at", startAt),
+		attribute.Int("jira.pagination.max_results", maxResults),
+	)
+
+	result, response, err := p.internalClient.Search(ctx, options, startAt, maxResults)
+	if err != nil {
+		recordError(span, err)
+		return nil, response, err
+	}
+
+	setOK(span)
+	return result, response, nil
 }
 
 // Get returns the project details for a project.
@@ -110,10 +126,23 @@ func (p *ProjectService) Search(ctx context.Context, options *model.ProjectSearc
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects#get-project
 func (p *ProjectService) Get(ctx context.Context, projectKeyOrID string, expand []string) (*model.ProjectScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*ProjectService).Get")
+	ctx, span := tracer().Start(ctx, "(*ProjectService).Get", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
-	return p.internalClient.Get(ctx, projectKeyOrID, expand)
+	addAttributes(span,
+		attribute.String("operation.name", "get_project"),
+		attribute.String("jira.project.key", projectKeyOrID),
+		attribute.StringSlice("jira.expand", expand),
+	)
+
+	result, response, err := p.internalClient.Get(ctx, projectKeyOrID, expand)
+	if err != nil {
+		recordError(span, err)
+		return nil, response, err
+	}
+
+	setOK(span)
+	return result, response, nil
 }
 
 // Update updates the project details of a project.
@@ -122,10 +151,22 @@ func (p *ProjectService) Get(ctx context.Context, projectKeyOrID string, expand 
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects#update-project
 func (p *ProjectService) Update(ctx context.Context, projectKeyOrID string, payload *model.ProjectUpdateScheme) (*model.ProjectScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*ProjectService).Update")
+	ctx, span := tracer().Start(ctx, "(*ProjectService).Update", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
-	return p.internalClient.Update(ctx, projectKeyOrID, payload)
+	addAttributes(span,
+		attribute.String("operation.name", "update_project"),
+		attribute.String("jira.project.key", projectKeyOrID),
+	)
+
+	result, response, err := p.internalClient.Update(ctx, projectKeyOrID, payload)
+	if err != nil {
+		recordError(span, err)
+		return nil, response, err
+	}
+
+	setOK(span)
+	return result, response, nil
 }
 
 // Delete deletes a project.
@@ -138,10 +179,23 @@ func (p *ProjectService) Update(ctx context.Context, projectKeyOrID string, payl
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects#delete-project
 func (p *ProjectService) Delete(ctx context.Context, projectKeyOrID string, enableUndo bool) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*ProjectService).Delete")
+	ctx, span := tracer().Start(ctx, "(*ProjectService).Delete", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
-	return p.internalClient.Delete(ctx, projectKeyOrID, enableUndo)
+	addAttributes(span,
+		attribute.String("operation.name", "delete_project"),
+		attribute.String("jira.project.key", projectKeyOrID),
+		attribute.Bool("jira.enable_undo", enableUndo),
+	)
+
+	response, err := p.internalClient.Delete(ctx, projectKeyOrID, enableUndo)
+	if err != nil {
+		recordError(span, err)
+		return response, err
+	}
+
+	setOK(span)
+	return response, nil
 }
 
 // DeleteAsynchronously deletes a project asynchronously.

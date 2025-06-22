@@ -78,6 +78,9 @@ type Client struct {
 
 // NewRequest creates an API request.
 func (c *Client) NewRequest(ctx context.Context, method, urlStr, typ string, body interface{}) (*http.Request, error) {
+	if ctx == nil {
+		ctx = context.Background()
+	}
 	ctx, span := tracer().Start(ctx, "(*Client).NewRequest")
 	defer span.End()
 

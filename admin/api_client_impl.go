@@ -93,6 +93,9 @@ type Client struct {
 // NewRequest creates a new HTTP request with the given context, method, URL string, content type, and body.
 // It returns an HTTP request and an error.
 func (c *Client) NewRequest(ctx context.Context, method, urlStr, contentType string, body interface{}) (*http.Request, error) {
+	if ctx == nil {
+		ctx = context.Background()
+	}
 	ctx, span := tracer().Start(ctx, "(*Client).NewRequest")
 	defer span.End()
 

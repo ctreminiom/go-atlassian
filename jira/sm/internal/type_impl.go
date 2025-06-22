@@ -2,6 +2,9 @@ package internal
 
 import (
 	"context"
+
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -34,6 +37,12 @@ type TypeService struct {
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request/types#get-all-request-types
 func (t *TypeService) Search(ctx context.Context, query string, start, limit int) (*model.RequestTypePageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*TypeService).Search", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "search"))
+
 	return t.internalClient.Search(ctx, query, start, limit)
 }
 
@@ -43,6 +52,12 @@ func (t *TypeService) Search(ctx context.Context, query string, start, limit int
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request/types#get-request-types
 func (t *TypeService) Gets(ctx context.Context, serviceDeskID, groupID, start, limit int) (*model.ProjectRequestTypePageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*TypeService).Gets", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "gets"))
+
 	return t.internalClient.Gets(ctx, serviceDeskID, groupID, start, limit)
 }
 
@@ -52,6 +67,12 @@ func (t *TypeService) Gets(ctx context.Context, serviceDeskID, groupID, start, l
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request/types#create-request-type
 func (t *TypeService) Create(ctx context.Context, serviceDeskID int, payload *model.RequestTypePayloadScheme) (*model.RequestTypeScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*TypeService).Create", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "create"))
+
 	return t.internalClient.Create(ctx, serviceDeskID, payload)
 }
 
@@ -61,6 +82,12 @@ func (t *TypeService) Create(ctx context.Context, serviceDeskID int, payload *mo
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request/types#get-request-type-by-id
 func (t *TypeService) Get(ctx context.Context, serviceDeskID, requestTypeID int) (*model.RequestTypeScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*TypeService).Get", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "get"))
+
 	return t.internalClient.Get(ctx, serviceDeskID, requestTypeID)
 }
 
@@ -70,6 +97,12 @@ func (t *TypeService) Get(ctx context.Context, serviceDeskID, requestTypeID int)
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request/types#delete-request-type
 func (t *TypeService) Delete(ctx context.Context, serviceDeskID, requestTypeID int) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*TypeService).Delete", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "delete"))
+
 	return t.internalClient.Delete(ctx, serviceDeskID, requestTypeID)
 }
 
@@ -79,6 +112,12 @@ func (t *TypeService) Delete(ctx context.Context, serviceDeskID, requestTypeID i
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request/types#get-request-type-fields
 func (t *TypeService) Fields(ctx context.Context, serviceDeskID, requestTypeID int) (*model.RequestTypeFieldsScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*TypeService).Fields", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "fields"))
+
 	return t.internalClient.Fields(ctx, serviceDeskID, requestTypeID)
 }
 
@@ -88,6 +127,12 @@ func (t *TypeService) Fields(ctx context.Context, serviceDeskID, requestTypeID i
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request/types#get-request-type-groups
 func (t *TypeService) Groups(ctx context.Context, serviceDeskID int) (*model.RequestTypeGroupPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*TypeService).Groups", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "groups"))
+
 	return t.internalClient.Groups(ctx, serviceDeskID)
 }
 
@@ -97,6 +142,11 @@ type internalTypeImpl struct {
 }
 
 func (i *internalTypeImpl) Search(ctx context.Context, query string, start, limit int) (*model.RequestTypePageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalTypeImpl).Search", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "search"))
 
 	params := url.Values{}
 	params.Add("start", strconv.Itoa(start))
@@ -110,22 +160,32 @@ func (i *internalTypeImpl) Search(ctx context.Context, query string, start, limi
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
 	page := new(model.RequestTypePageScheme)
 	res, err := i.c.Call(req, page)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return page, res, nil
 }
 
 func (i *internalTypeImpl) Gets(ctx context.Context, serviceDeskID, groupID, start, limit int) (*model.ProjectRequestTypePageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalTypeImpl).Gets", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "gets"))
 
 	if serviceDeskID == 0 {
-		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoServiceDeskID)
+
+			return nil, nil, fmt.Errorf("sm: %w", model.ErrNoServiceDeskID)
 	}
 
 	params := url.Values{}
@@ -140,67 +200,96 @@ func (i *internalTypeImpl) Gets(ctx context.Context, serviceDeskID, groupID, sta
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	page := new(model.ProjectRequestTypePageScheme)
 	res, err := i.c.Call(req, page)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return page, res, nil
 }
 
 func (i *internalTypeImpl) Create(ctx context.Context, serviceDeskID int, payload *model.RequestTypePayloadScheme) (*model.RequestTypeScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalTypeImpl).Create", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "create"))
 
 	if serviceDeskID == 0 {
-		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoServiceDeskID)
+
+			return nil, nil, fmt.Errorf("sm: %w", model.ErrNoServiceDeskID)
 	}
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/servicedesk/%v/requesttype", serviceDeskID)
 
 	req, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
 	requestType := new(model.RequestTypeScheme)
 	res, err := i.c.Call(req, requestType)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return requestType, res, nil
 }
 
 func (i *internalTypeImpl) Get(ctx context.Context, serviceDeskID, requestTypeID int) (*model.RequestTypeScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalTypeImpl).Get", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "get"))
 
 	if serviceDeskID == 0 {
-		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoServiceDeskID)
+
+			return nil, nil, fmt.Errorf("sm: %w", model.ErrNoServiceDeskID)
 	}
 
 	if requestTypeID == 0 {
-		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoRequestTypeID)
+
+			return nil, nil, fmt.Errorf("sm: %w", model.ErrNoRequestTypeID)
 	}
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/servicedesk/%v/requesttype/%v", serviceDeskID, requestTypeID)
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
 	requestType := new(model.RequestTypeScheme)
 	res, err := i.c.Call(req, requestType)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return requestType, res, nil
 }
 
 func (i *internalTypeImpl) Delete(ctx context.Context, serviceDeskID, requestTypeID int) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalTypeImpl).Delete", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "delete"))
 
 	if serviceDeskID == 0 {
 		return nil, fmt.Errorf("sm: %w", model.ErrNoServiceDeskID)
@@ -214,6 +303,7 @@ func (i *internalTypeImpl) Delete(ctx context.Context, serviceDeskID, requestTyp
 
 	req, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, err
 	}
 
@@ -221,25 +311,35 @@ func (i *internalTypeImpl) Delete(ctx context.Context, serviceDeskID, requestTyp
 }
 
 func (i *internalTypeImpl) Fields(ctx context.Context, serviceDeskID, requestTypeID int) (*model.RequestTypeFieldsScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalTypeImpl).Fields", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "fields"))
 
 	if serviceDeskID == 0 {
-		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoServiceDeskID)
+
+			return nil, nil, fmt.Errorf("sm: %w", model.ErrNoServiceDeskID)
 	}
 
 	if requestTypeID == 0 {
-		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoRequestTypeID)
+
+			return nil, nil, fmt.Errorf("sm: %w", model.ErrNoRequestTypeID)
 	}
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/servicedesk/%v/requesttype/%v/field", serviceDeskID, requestTypeID)
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
 	fields := new(model.RequestTypeFieldsScheme)
 	res, err := i.c.Call(req, fields)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
@@ -247,23 +347,33 @@ func (i *internalTypeImpl) Fields(ctx context.Context, serviceDeskID, requestTyp
 }
 
 func (i *internalTypeImpl) Groups(ctx context.Context, serviceDeskID int) (*model.RequestTypeGroupPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalTypeImpl).Groups", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "groups"))
 
 	if serviceDeskID == 0 {
-		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoServiceDeskID)
+
+			return nil, nil, fmt.Errorf("sm: %w", model.ErrNoServiceDeskID)
 	}
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/servicedesk/%v/requesttypegroup", serviceDeskID)
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
 	groups := new(model.RequestTypeGroupPageScheme)
 	res, err := i.c.Call(req, groups)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return groups, res, nil
 }

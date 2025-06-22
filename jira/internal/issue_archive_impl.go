@@ -51,6 +51,9 @@ type IssueArchivalService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/archiving#archive-issues-by-issue-id-key
 func (i *IssueArchivalService) Preserve(ctx context.Context, issueIDsOrKeys []string) (*model.IssueArchivalSyncResponseScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*IssueArchivalService).Preserve")
+	defer span.End()
+
 	return i.internalClient.Preserve(ctx, issueIDsOrKeys)
 }
 
@@ -67,6 +70,9 @@ func (i *IssueArchivalService) Preserve(ctx context.Context, issueIDsOrKeys []st
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/archiving#archive-issues-by-jql
 func (i *IssueArchivalService) PreserveByJQL(ctx context.Context, jql string) (string, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*IssueArchivalService).PreserveByJQL")
+	defer span.End()
+
 	return i.internalClient.PreserveByJQL(ctx, jql)
 }
 
@@ -83,6 +89,9 @@ func (i *IssueArchivalService) PreserveByJQL(ctx context.Context, jql string) (s
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/archiving#restore-issues-by-issue-id-key
 func (i *IssueArchivalService) Restore(ctx context.Context, issueIDsOrKeys []string) (*model.IssueArchivalSyncResponseScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*IssueArchivalService).Restore")
+	defer span.End()
+
 	return i.internalClient.Restore(ctx, issueIDsOrKeys)
 }
 
@@ -99,6 +108,9 @@ func (i *IssueArchivalService) Restore(ctx context.Context, issueIDsOrKeys []str
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/archiving#export-archived-issues
 func (i *IssueArchivalService) Export(ctx context.Context, payload *model.IssueArchivalExportPayloadScheme) (*model.IssueArchiveExportResultScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*IssueArchivalService).Export")
+	defer span.End()
+
 	return i.internalClient.Export(ctx, payload)
 }
 
@@ -108,6 +120,9 @@ type internalIssueArchivalImpl struct {
 }
 
 func (i *internalIssueArchivalImpl) Preserve(ctx context.Context, issueIDsOrKeys []string) (result *model.IssueArchivalSyncResponseScheme, response *model.ResponseScheme, err error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalIssueArchivalImpl).Preserve")
+	defer span.End()
 
 	if len(issueIDsOrKeys) == 0 {
 		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoIssuesSlice)
@@ -134,6 +149,9 @@ func (i *internalIssueArchivalImpl) Preserve(ctx context.Context, issueIDsOrKeys
 
 func (i *internalIssueArchivalImpl) PreserveByJQL(ctx context.Context, jql string) (taskID string, response *model.ResponseScheme, err error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalIssueArchivalImpl).PreserveByJQL")
+	defer span.End()
+
 	if jql == "" {
 		return "", nil, fmt.Errorf("jira: %w", model.ErrNoJQL)
 	}
@@ -157,6 +175,9 @@ func (i *internalIssueArchivalImpl) PreserveByJQL(ctx context.Context, jql strin
 }
 
 func (i *internalIssueArchivalImpl) Restore(ctx context.Context, issueIDsOrKeys []string) (result *model.IssueArchivalSyncResponseScheme, response *model.ResponseScheme, err error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalIssueArchivalImpl).Restore")
+	defer span.End()
 
 	if len(issueIDsOrKeys) == 0 {
 		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoIssuesSlice)
@@ -182,6 +203,9 @@ func (i *internalIssueArchivalImpl) Restore(ctx context.Context, issueIDsOrKeys 
 }
 
 func (i *internalIssueArchivalImpl) Export(ctx context.Context, payload *model.IssueArchivalExportPayloadScheme) (task *model.IssueArchiveExportResultScheme, response *model.ResponseScheme, err error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalIssueArchivalImpl).Export")
+	defer span.End()
 
 	endpoint := fmt.Sprintf("rest/api/%s/issues/archive/export", i.version)
 

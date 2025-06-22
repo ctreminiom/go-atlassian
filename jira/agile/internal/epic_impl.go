@@ -8,6 +8,9 @@ import (
 	"strconv"
 	"strings"
 
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
+
 	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/v2/service"
 	"github.com/ctreminiom/go-atlassian/v2/service/agile"
@@ -37,6 +40,9 @@ type EpicService struct {
 //
 // https://docs.go-atlassian.io/jira-agile/epics#get-epic
 func (e *EpicService) Get(ctx context.Context, epicIDOrKey string) (*model.EpicScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*EpicService).Get")
+	defer span.End()
+
 	return e.internalClient.Get(ctx, epicIDOrKey)
 }
 
@@ -52,6 +58,9 @@ func (e *EpicService) Get(ctx context.Context, epicIDOrKey string) (*model.EpicS
 //
 // https://docs.go-atlassian.io/jira-agile/epics#get-issues-for-epic
 func (e *EpicService) Issues(ctx context.Context, epicIDOrKey string, opts *model.IssueOptionScheme, startAt, maxResults int) (*model.BoardIssuePageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*EpicService).Issues")
+	defer span.End()
+
 	return e.internalClient.Issues(ctx, epicIDOrKey, opts, startAt, maxResults)
 }
 
@@ -68,6 +77,9 @@ func (e *EpicService) Issues(ctx context.Context, epicIDOrKey string, opts *mode
 //
 // https://docs.go-atlassian.io/jira-agile/epics#move-issues-to-epic
 func (e *EpicService) Move(ctx context.Context, epicIDOrKey string, issues []string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*EpicService).Move")
+	defer span.End()
+
 	return e.internalClient.Move(ctx, epicIDOrKey, issues)
 }
 
@@ -77,31 +89,52 @@ type internalEpicImpl struct {
 }
 
 func (i *internalEpicImpl) Get(ctx context.Context, epicIDOrKey string) (*model.EpicScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalEpicImpl).Get", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("jira.epic.id", epicIDOrKey),
+		attribute.String("operation.name", "get_epic"),
+	)
 
 	if epicIDOrKey == "" {
-		return nil, nil, fmt.Errorf("agile: %w", model.ErrNoEpicID)
+		err := fmt.Errorf("agile: %w", model.ErrNoEpicID)
+		recordError(span, err)
+		return nil, nil, err
 	}
 
 	url := fmt.Sprintf("rest/agile/%v/epic/%v", i.version, epicIDOrKey)
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, url, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	epic := new(model.EpicScheme)
 	res, err := i.c.Call(req, epic)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return epic, res, nil
 }
 
 func (i *internalEpicImpl) Issues(ctx context.Context, epicIDOrKey string, opts *model.IssueOptionScheme, startAt, maxResults int) (*model.BoardIssuePageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalEpicImpl).Issues", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("jira.epic.id", epicIDOrKey),
+		attribute.String("operation.name", "get_epic_issues"),
+	)
 
 	if epicIDOrKey == "" {
-		return nil, nil, fmt.Errorf("agile: %w", model.ErrNoEpicID)
+		err := fmt.Errorf("agile: %w", model.ErrNoEpicID)
+		recordError(span, err)
+		return nil, nil, err
 	}
 
 	params := url.Values{}
@@ -129,22 +162,35 @@ func (i *internalEpicImpl) Issues(ctx context.Context, epicIDOrKey string, opts 
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, url, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	page := new(model.BoardIssuePageScheme)
 	res, err := i.c.Call(req, page)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return page, res, nil
 }
 
 func (i *internalEpicImpl) Move(ctx context.Context, epicIDOrKey string, issues []string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalEpicImpl).Move", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("jira.epic.id", epicIDOrKey),
+		attribute.Int("jira.issue.count", len(issues)),
+		attribute.String("operation.name", "move_issues_to_epic"),
+	)
 
 	if epicIDOrKey == "" {
-		return nil, fmt.Errorf("agile: %w", model.ErrNoEpicID)
+		err := fmt.Errorf("agile: %w", model.ErrNoEpicID)
+		recordError(span, err)
+		return nil, err
 	}
 
 	payload := map[string]interface{}{"issues": issues}
@@ -152,8 +198,16 @@ func (i *internalEpicImpl) Move(ctx context.Context, epicIDOrKey string, issues 
 
 	req, err := i.c.NewRequest(ctx, http.MethodPost, url, "", payload)
 	if err != nil {
+		recordError(span, err)
 		return nil, err
 	}
 
-	return i.c.Call(req, nil)
+	res, err := i.c.Call(req, nil)
+	if err != nil {
+		recordError(span, err)
+		return res, err
+	}
+
+	setOK(span)
+	return res, nil
 }

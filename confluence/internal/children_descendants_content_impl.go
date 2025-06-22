@@ -2,6 +2,9 @@ package internal
 
 import (
 	"context"
+
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
 	"fmt"
 	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/v2/service"
@@ -43,6 +46,12 @@ type ChildrenDescandantsService struct {
 //
 // https://docs.go-atlassian.io/confluence-cloud/content/children-descendants#get-content-children
 func (c *ChildrenDescandantsService) Children(ctx context.Context, contentID string, expand []string, parentVersion int) (*model.ContentChildrenScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ChildrenDescandantsService).Children", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "children"))
+
 	return c.internalClient.Children(ctx, contentID, expand, parentVersion)
 }
 
@@ -64,6 +73,12 @@ func (c *ChildrenDescandantsService) Children(ctx context.Context, contentID str
 //
 // https://docs.go-atlassian.io/confluence-cloud/content/children-descendants#move
 func (c *ChildrenDescandantsService) Move(ctx context.Context, pageID string, position string, targetID string) (*model.ContentMoveScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ChildrenDescandantsService).Move", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "move"))
+
 	return c.internalClient.Move(ctx, pageID, position, targetID)
 }
 
@@ -75,6 +90,12 @@ func (c *ChildrenDescandantsService) Move(ctx context.Context, pageID string, po
 //
 // https://docs.go-atlassian.io/confluence-cloud/content/children-descendants#get-content-children-by-type
 func (c *ChildrenDescandantsService) ChildrenByType(ctx context.Context, contentID, contentType string, parentVersion int, expand []string, startAt, maxResults int) (*model.ContentPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ChildrenDescandantsService).ChildrenByType", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "children_by_type"))
+
 	return c.internalClient.ChildrenByType(ctx, contentID, contentType, parentVersion, expand, startAt, maxResults)
 }
 
@@ -88,6 +109,12 @@ func (c *ChildrenDescandantsService) ChildrenByType(ctx context.Context, content
 //
 // https://docs.go-atlassian.io/confluence-cloud/content/children-descendants#get-content-descendants
 func (c *ChildrenDescandantsService) Descendants(ctx context.Context, contentID string, expand []string) (*model.ContentChildrenScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ChildrenDescandantsService).Descendants", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "descendants"))
+
 	return c.internalClient.Descendants(ctx, contentID, expand)
 }
 
@@ -101,6 +128,12 @@ func (c *ChildrenDescandantsService) Descendants(ctx context.Context, contentID 
 //
 // https://docs.go-atlassian.io/confluence-cloud/content/children-descendants#get-content-descendants-by-type
 func (c *ChildrenDescandantsService) DescendantsByType(ctx context.Context, contentID, contentType, depth string, expand []string, startAt, maxResults int) (*model.ContentPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ChildrenDescandantsService).DescendantsByType", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "descendants_by_type"))
+
 	return c.internalClient.DescendantsByType(ctx, contentID, contentType, depth, expand, startAt, maxResults)
 }
 
@@ -120,6 +153,12 @@ func (c *ChildrenDescandantsService) DescendantsByType(ctx context.Context, cont
 //
 // https://docs.go-atlassian.io/confluence-cloud/content/children-descendants#copy-page-hierarchy
 func (c *ChildrenDescandantsService) CopyHierarchy(ctx context.Context, contentID string, options *model.CopyOptionsScheme) (*model.TaskScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ChildrenDescandantsService).CopyHierarchy", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "copy_hierarchy"))
+
 	return c.internalClient.CopyHierarchy(ctx, contentID, options)
 }
 
@@ -141,6 +180,12 @@ func (c *ChildrenDescandantsService) CopyHierarchy(ctx context.Context, contentI
 //
 // https://docs.go-atlassian.io/confluence-cloud/content/children-descendants#copy-single-page
 func (c *ChildrenDescandantsService) CopyPage(ctx context.Context, contentID string, expand []string, options *model.CopyOptionsScheme) (*model.ContentScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ChildrenDescandantsService).CopyPage", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "copy_page"))
+
 	return c.internalClient.CopyPage(ctx, contentID, expand, options)
 }
 
@@ -149,9 +194,15 @@ type internalChildrenDescandantsImpl struct {
 }
 
 func (i *internalChildrenDescandantsImpl) Children(ctx context.Context, contentID string, expand []string, parentVersion int) (*model.ContentChildrenScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalChildrenDescandantsImpl).Children", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "children"))
 
 	if contentID == "" {
-		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
+
+			return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
 	}
 
 	var endpoint strings.Builder
@@ -173,6 +224,7 @@ func (i *internalChildrenDescandantsImpl) Children(ctx context.Context, contentI
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
@@ -182,21 +234,30 @@ func (i *internalChildrenDescandantsImpl) Children(ctx context.Context, contentI
 		return nil, response, err
 	}
 
+	setOK(span)
 	return children, response, nil
 }
 
 func (i *internalChildrenDescandantsImpl) Move(ctx context.Context, pageID string, position string, targetID string) (*model.ContentMoveScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalChildrenDescandantsImpl).Move", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "move"))
 
 	if pageID == "" {
-		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoPageID)
+
+			return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoPageID)
 	}
 
 	if position == "" {
-		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoPosition)
+
+			return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoPosition)
 	}
 
 	if targetID == "" {
-		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoTargetID)
+
+			return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoTargetID)
 	}
 
 	_, validPosition := model.ValidPositions[position]
@@ -209,6 +270,7 @@ func (i *internalChildrenDescandantsImpl) Move(ctx context.Context, pageID strin
 
 	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint.String(), "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
@@ -218,17 +280,25 @@ func (i *internalChildrenDescandantsImpl) Move(ctx context.Context, pageID strin
 		return nil, response, err
 	}
 
+	setOK(span)
 	return movement, response, nil
 }
 
 func (i *internalChildrenDescandantsImpl) ChildrenByType(ctx context.Context, contentID, contentType string, parentVersion int, expand []string, startAt, maxResults int) (*model.ContentPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalChildrenDescandantsImpl).ChildrenByType", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "children_by_type"))
 
 	if contentID == "" {
-		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
+
+			return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
 	}
 
 	if contentType == "" {
-		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentType)
+
+			return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentType)
 	}
 
 	query := url.Values{}
@@ -247,6 +317,7 @@ func (i *internalChildrenDescandantsImpl) ChildrenByType(ctx context.Context, co
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
@@ -256,13 +327,20 @@ func (i *internalChildrenDescandantsImpl) ChildrenByType(ctx context.Context, co
 		return nil, response, err
 	}
 
+	setOK(span)
 	return page, response, nil
 }
 
 func (i *internalChildrenDescandantsImpl) Descendants(ctx context.Context, contentID string, expand []string) (*model.ContentChildrenScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalChildrenDescandantsImpl).Descendants", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "descendants"))
 
 	if contentID == "" {
-		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
+
+			return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
 	}
 
 	var endpoint strings.Builder
@@ -280,6 +358,7 @@ func (i *internalChildrenDescandantsImpl) Descendants(ctx context.Context, conte
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
@@ -289,17 +368,25 @@ func (i *internalChildrenDescandantsImpl) Descendants(ctx context.Context, conte
 		return nil, response, err
 	}
 
+	setOK(span)
 	return children, response, nil
 }
 
 func (i *internalChildrenDescandantsImpl) DescendantsByType(ctx context.Context, contentID, contentType, depth string, expand []string, startAt, maxResults int) (*model.ContentPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalChildrenDescandantsImpl).DescendantsByType", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "descendants_by_type"))
 
 	if contentID == "" {
-		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
+
+			return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
 	}
 
 	if contentType == "" {
-		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentType)
+
+			return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentType)
 	}
 
 	query := url.Values{}
@@ -318,6 +405,7 @@ func (i *internalChildrenDescandantsImpl) DescendantsByType(ctx context.Context,
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
@@ -327,19 +415,28 @@ func (i *internalChildrenDescandantsImpl) DescendantsByType(ctx context.Context,
 		return nil, response, err
 	}
 
+	setOK(span)
 	return page, response, nil
 }
 
 func (i *internalChildrenDescandantsImpl) CopyHierarchy(ctx context.Context, contentID string, options *model.CopyOptionsScheme) (*model.TaskScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalChildrenDescandantsImpl).CopyHierarchy", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "copy_hierarchy"))
 
 	if contentID == "" {
-		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
+
+			return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
 	}
 
 	endpoint := fmt.Sprintf("wiki/rest/api/content/%v/pagehierarchy/copy", contentID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", options)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
@@ -349,13 +446,20 @@ func (i *internalChildrenDescandantsImpl) CopyHierarchy(ctx context.Context, con
 		return nil, response, err
 	}
 
+	setOK(span)
 	return task, response, nil
 }
 
 func (i *internalChildrenDescandantsImpl) CopyPage(ctx context.Context, contentID string, expand []string, options *model.CopyOptionsScheme) (*model.ContentScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalChildrenDescandantsImpl).CopyPage", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "copy_page"))
 
 	if contentID == "" {
-		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
+
+			return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
 	}
 
 	var endpoint strings.Builder
@@ -370,6 +474,7 @@ func (i *internalChildrenDescandantsImpl) CopyPage(ctx context.Context, contentI
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint.String(), "", options)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
@@ -379,5 +484,6 @@ func (i *internalChildrenDescandantsImpl) CopyPage(ctx context.Context, contentI
 		return nil, response, err
 	}
 
+	setOK(span)
 	return content, response, nil
 }

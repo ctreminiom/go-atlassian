@@ -36,6 +36,9 @@ type PriorityService struct {
 // Deprecated: This endpoint is deprecated in the Jira API spec.
 // TODO: Cannot change without breaking API compatibility. Consider removing in next major version.
 func (p *PriorityService) Gets(ctx context.Context) ([]*model.PriorityScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*PriorityService).Gets")
+	defer span.End()
+
 	return p.internalClient.Gets(ctx)
 }
 
@@ -47,6 +50,9 @@ func (p *PriorityService) Gets(ctx context.Context) ([]*model.PriorityScheme, *m
 // Deprecated: This endpoint is deprecated in the Jira API spec.
 // TODO Cannot change without breaking API compatibility. Consider removing in next major version.
 func (p *PriorityService) Get(ctx context.Context, priorityID string) (*model.PriorityScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*PriorityService).Get")
+	defer span.End()
+
 	return p.internalClient.Get(ctx, priorityID)
 }
 
@@ -56,6 +62,8 @@ type internalPriorityImpl struct {
 }
 
 func (i *internalPriorityImpl) Gets(ctx context.Context) ([]*model.PriorityScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalPriorityImpl).Gets")
+	defer span.End()
 
 	endpoint := fmt.Sprintf("rest/api/%v/priority", i.version)
 
@@ -74,6 +82,8 @@ func (i *internalPriorityImpl) Gets(ctx context.Context) ([]*model.PrioritySchem
 }
 
 func (i *internalPriorityImpl) Get(ctx context.Context, priorityID string) (*model.PriorityScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalPriorityImpl).Get")
+	defer span.End()
 
 	if priorityID == "" {
 		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoPriorityID)

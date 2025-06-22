@@ -3,13 +3,17 @@ package internal
 import (
 	"context"
 	"fmt"
-	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/v2/service"
-	"github.com/ctreminiom/go-atlassian/v2/service/agile"
 	"net/http"
 	"net/url"
 	"strconv"
 	"strings"
+
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
+
+	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/v2/service"
+	"github.com/ctreminiom/go-atlassian/v2/service/agile"
 )
 
 // NewSprintService creates a new instance of SprintService.
@@ -36,6 +40,9 @@ type SprintService struct {
 //
 // https://docs.go-atlassian.io/jira-agile/sprints#get-sprint
 func (s *SprintService) Get(ctx context.Context, sprintID int) (*model.SprintScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SprintService).Get")
+	defer span.End()
+
 	return s.internalClient.Get(ctx, sprintID)
 }
 
@@ -49,6 +56,9 @@ func (s *SprintService) Get(ctx context.Context, sprintID int) (*model.SprintSch
 //
 // https://docs.go-atlassian.io/jira-agile/sprints#create-print
 func (s *SprintService) Create(ctx context.Context, payload *model.SprintPayloadScheme) (*model.SprintScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SprintService).Create")
+	defer span.End()
+
 	return s.internalClient.Create(ctx, payload)
 }
 
@@ -62,6 +72,9 @@ func (s *SprintService) Create(ctx context.Context, payload *model.SprintPayload
 //
 // https://docs.go-atlassian.io/jira-agile/sprints#update-sprint
 func (s *SprintService) Update(ctx context.Context, sprintID int, payload *model.SprintPayloadScheme) (*model.SprintScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SprintService).Update")
+	defer span.End()
+
 	return s.internalClient.Update(ctx, sprintID, payload)
 }
 
@@ -73,6 +86,9 @@ func (s *SprintService) Update(ctx context.Context, sprintID int, payload *model
 //
 // https://docs.go-atlassian.io/jira-agile/sprints#partially-update-sprint
 func (s *SprintService) Path(ctx context.Context, sprintID int, payload *model.SprintPayloadScheme) (*model.SprintScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SprintService).Path")
+	defer span.End()
+
 	return s.internalClient.Path(ctx, sprintID, payload)
 }
 
@@ -84,6 +100,9 @@ func (s *SprintService) Path(ctx context.Context, sprintID int, payload *model.S
 //
 // https://docs.go-atlassian.io/jira-agile/sprints#delete-sprint
 func (s *SprintService) Delete(ctx context.Context, sprintID int) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SprintService).Delete")
+	defer span.End()
+
 	return s.internalClient.Delete(ctx, sprintID)
 }
 
@@ -97,6 +116,9 @@ func (s *SprintService) Delete(ctx context.Context, sprintID int) (*model.Respon
 //
 // https://docs.go-atlassian.io/jira-agile/sprints#get-issues-for-sprint
 func (s *SprintService) Issues(ctx context.Context, sprintID int, opts *model.IssueOptionScheme, startAt, maxResults int) (*model.SprintIssuePageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SprintService).Issues")
+	defer span.End()
+
 	return s.internalClient.Issues(ctx, sprintID, opts, startAt, maxResults)
 }
 
@@ -106,6 +128,9 @@ func (s *SprintService) Issues(ctx context.Context, sprintID int, opts *model.Is
 //
 // https://docs.go-atlassian.io/jira-agile/sprints#start-sprint
 func (s *SprintService) Start(ctx context.Context, sprintID int) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SprintService).Start")
+	defer span.End()
+
 	return s.internalClient.Start(ctx, sprintID)
 }
 
@@ -115,6 +140,9 @@ func (s *SprintService) Start(ctx context.Context, sprintID int) (*model.Respons
 //
 // https://docs.go-atlassian.io/jira-agile/sprints#close-sprint
 func (s *SprintService) Close(ctx context.Context, sprintID int) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SprintService).Close")
+	defer span.End()
+
 	return s.internalClient.Close(ctx, sprintID)
 }
 
@@ -128,6 +156,9 @@ func (s *SprintService) Close(ctx context.Context, sprintID int) (*model.Respons
 //
 // https://docs.go-atlassian.io/jira-agile/sprints#move-issues-to-sprint
 func (s *SprintService) Move(ctx context.Context, sprintID int, payload *model.SprintMovePayloadScheme) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SprintService).Move")
+	defer span.End()
+
 	return s.internalClient.Move(ctx, sprintID, payload)
 }
 
@@ -137,125 +168,213 @@ type internalSprintImpl struct {
 }
 
 func (i *internalSprintImpl) Move(ctx context.Context, sprintID int, payload *model.SprintMovePayloadScheme) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalSprintImpl).Move", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.Int("jira.sprint.id", sprintID),
+		attribute.String("operation.name", "move_issues_to_sprint"),
+	)
 
 	if sprintID == 0 {
-		return nil, fmt.Errorf("agile: %w", model.ErrNoSprintID)
+		err := fmt.Errorf("agile: %w", model.ErrNoSprintID)
+		recordError(span, err)
+		return nil, err
 	}
 
 	url := fmt.Sprintf("/rest/agile/%v/sprint/%v/issue", i.version, sprintID)
 
 	req, err := i.c.NewRequest(ctx, http.MethodPost, url, "", payload)
 	if err != nil {
+		recordError(span, err)
 		return nil, err
 	}
 
-	return i.c.Call(req, nil)
+	res, err := i.c.Call(req, nil)
+	if err != nil {
+		recordError(span, err)
+		return res, err
+	}
+
+	setOK(span)
+	return res, nil
 }
 
 func (i *internalSprintImpl) Get(ctx context.Context, sprintID int) (*model.SprintScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalSprintImpl).Get", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.Int("jira.sprint.id", sprintID),
+		attribute.String("operation.name", "get_sprint"),
+	)
 
 	if sprintID == 0 {
-		return nil, nil, fmt.Errorf("agile: %w", model.ErrNoSprintID)
+		err := fmt.Errorf("agile: %w", model.ErrNoSprintID)
+		recordError(span, err)
+		return nil, nil, err
 	}
 
 	url := fmt.Sprintf("rest/agile/%v/sprint/%v", i.version, sprintID)
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, url, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	sprint := new(model.SprintScheme)
 	res, err := i.c.Call(req, sprint)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return sprint, res, nil
 }
 
 func (i *internalSprintImpl) Create(ctx context.Context, payload *model.SprintPayloadScheme) (*model.SprintScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalSprintImpl).Create", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "create_sprint"),
+	)
 
 	url := fmt.Sprintf("rest/agile/%v/sprint", i.version)
 
 	req, err := i.c.NewRequest(ctx, http.MethodPost, url, "", payload)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	sprint := new(model.SprintScheme)
 	res, err := i.c.Call(req, sprint)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return sprint, res, nil
 }
 
 func (i *internalSprintImpl) Update(ctx context.Context, sprintID int, payload *model.SprintPayloadScheme) (*model.SprintScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalSprintImpl).Update", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.Int("jira.sprint.id", sprintID),
+		attribute.String("operation.name", "update_sprint"),
+	)
 
 	if sprintID == 0 {
-		return nil, nil, fmt.Errorf("agile: %w", model.ErrNoSprintID)
+		err := fmt.Errorf("agile: %w", model.ErrNoSprintID)
+		recordError(span, err)
+		return nil, nil, err
 	}
 
 	url := fmt.Sprintf("rest/agile/%v/sprint/%v", i.version, sprintID)
 
 	req, err := i.c.NewRequest(ctx, http.MethodPut, url, "", payload)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	sprint := new(model.SprintScheme)
 	res, err := i.c.Call(req, sprint)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return sprint, res, nil
 }
 
 func (i *internalSprintImpl) Path(ctx context.Context, sprintID int, payload *model.SprintPayloadScheme) (*model.SprintScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalSprintImpl).Path", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.Int("jira.sprint.id", sprintID),
+		attribute.String("operation.name", "partial_update_sprint"),
+	)
 
 	if sprintID == 0 {
-		return nil, nil, fmt.Errorf("agile: %w", model.ErrNoSprintID)
+		err := fmt.Errorf("agile: %w", model.ErrNoSprintID)
+		recordError(span, err)
+		return nil, nil, err
 	}
 
 	url := fmt.Sprintf("rest/agile/%v/sprint/%v", i.version, sprintID)
 
 	req, err := i.c.NewRequest(ctx, http.MethodPost, url, "", payload)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	sprint := new(model.SprintScheme)
 	res, err := i.c.Call(req, sprint)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return sprint, res, nil
 }
 
 func (i *internalSprintImpl) Delete(ctx context.Context, sprintID int) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalSprintImpl).Delete", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.Int("jira.sprint.id", sprintID),
+		attribute.String("operation.name", "delete_sprint"),
+	)
 
 	if sprintID == 0 {
-		return nil, fmt.Errorf("agile: %w", model.ErrNoSprintID)
+		err := fmt.Errorf("agile: %w", model.ErrNoSprintID)
+		recordError(span, err)
+		return nil, err
 	}
 
 	url := fmt.Sprintf("rest/agile/%v/sprint/%v", i.version, sprintID)
 
 	req, err := i.c.NewRequest(ctx, http.MethodDelete, url, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, err
 	}
 
-	return i.c.Call(req, nil)
+	res, err := i.c.Call(req, nil)
+	if err != nil {
+		recordError(span, err)
+		return res, err
+	}
+
+	setOK(span)
+	return res, nil
 }
 
 func (i *internalSprintImpl) Issues(ctx context.Context, sprintID int, opts *model.IssueOptionScheme, startAt, maxResults int) (*model.SprintIssuePageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalSprintImpl).Issues", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.Int("jira.sprint.id", sprintID),
+		attribute.String("operation.name", "get_sprint_issues"),
+	)
 
 	if sprintID == 0 {
-		return nil, nil, fmt.Errorf("agile: %w", model.ErrNoSprintID)
+		err := fmt.Errorf("agile: %w", model.ErrNoSprintID)
+		recordError(span, err)
+		return nil, nil, err
 	}
 
 	params := url.Values{}
@@ -285,46 +404,83 @@ func (i *internalSprintImpl) Issues(ctx context.Context, sprintID int, opts *mod
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, url, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	page := new(model.SprintIssuePageScheme)
 	res, err := i.c.Call(req, page)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return page, res, nil
 }
 
 func (i *internalSprintImpl) Start(ctx context.Context, sprintID int) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalSprintImpl).Start", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.Int("jira.sprint.id", sprintID),
+		attribute.String("operation.name", "start_sprint"),
+	)
 
 	if sprintID == 0 {
-		return nil, fmt.Errorf("agile: %w", model.ErrNoSprintID)
+		err := fmt.Errorf("agile: %w", model.ErrNoSprintID)
+		recordError(span, err)
+		return nil, err
 	}
 
 	url := fmt.Sprintf("rest/agile/%v/sprint/%v", i.version, sprintID)
 
 	req, err := i.c.NewRequest(ctx, http.MethodPost, url, "", &model.SprintPayloadScheme{State: "Active"})
 	if err != nil {
+		recordError(span, err)
 		return nil, err
 	}
 
-	return i.c.Call(req, nil)
+	res, err := i.c.Call(req, nil)
+	if err != nil {
+		recordError(span, err)
+		return res, err
+	}
+
+	setOK(span)
+	return res, nil
 }
 
 func (i *internalSprintImpl) Close(ctx context.Context, sprintID int) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalSprintImpl).Close", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.Int("jira.sprint.id", sprintID),
+		attribute.String("operation.name", "close_sprint"),
+	)
 
 	if sprintID == 0 {
-		return nil, fmt.Errorf("agile: %w", model.ErrNoSprintID)
+		err := fmt.Errorf("agile: %w", model.ErrNoSprintID)
+		recordError(span, err)
+		return nil, err
 	}
 
 	url := fmt.Sprintf("rest/agile/%v/sprint/%v", i.version, sprintID)
 
 	req, err := i.c.NewRequest(ctx, http.MethodPost, url, "", &model.SprintPayloadScheme{State: "Closed"})
 	if err != nil {
+		recordError(span, err)
 		return nil, err
 	}
 
-	return i.c.Call(req, nil)
+	res, err := i.c.Call(req, nil)
+	if err != nil {
+		recordError(span, err)
+		return res, err
+	}
+
+	setOK(span)
+	return res, nil
 }

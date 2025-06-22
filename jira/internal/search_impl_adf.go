@@ -25,6 +25,9 @@ type SearchADFService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/search#check-issues-against-jql
 func (s *SearchADFService) Checks(ctx context.Context, payload *model.IssueSearchCheckPayloadScheme) (*model.IssueMatchesPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SearchADFService).Checks")
+	defer span.End()
+
 	return s.internalClient.Checks(ctx, payload)
 }
 
@@ -37,6 +40,9 @@ func (s *SearchADFService) Checks(ctx context.Context, payload *model.IssueSearc
 // Deprecated: This endpoint will be removed after May 1, 2025. Use SearchJQL, BulkFetch and ApproximateCount instead.
 // TODO Cannot change without breaking API compatibility. Consider removing in next major version.
 func (s *SearchADFService) Get(ctx context.Context, jql string, fields, expands []string, startAt, maxResults int, validate string) (*model.IssueSearchScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SearchADFService).Get")
+	defer span.End()
+
 	return s.internalClient.Get(ctx, jql, fields, expands, startAt, maxResults, validate)
 }
 
@@ -49,6 +55,9 @@ func (s *SearchADFService) Get(ctx context.Context, jql string, fields, expands 
 // Deprecated: This endpoint will be removed after May 1, 2025. Use SearchJQL, BulkFetch and ApproximateCount instead.
 // TODO Cannot change without breaking API compatibility. Consider removing in next major version.
 func (s *SearchADFService) Post(ctx context.Context, jql string, fields, expands []string, startAt, maxResults int, validate string) (*model.IssueSearchScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SearchADFService).Post")
+	defer span.End()
+
 	return s.internalClient.Post(ctx, jql, fields, expands, startAt, maxResults, validate)
 }
 
@@ -56,6 +65,9 @@ func (s *SearchADFService) Post(ctx context.Context, jql string, fields, expands
 //
 // POST /rest/api/3/search/jql
 func (s *SearchADFService) SearchJQL(ctx context.Context, jql string, fields, expands []string, maxResults int, nextPageToken string) (*model.IssueSearchJQLScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SearchADFService).SearchJQL")
+	defer span.End()
+
 	return s.internalClient.SearchJQL(ctx, jql, fields, expands, maxResults, nextPageToken)
 }
 
@@ -63,6 +75,9 @@ func (s *SearchADFService) SearchJQL(ctx context.Context, jql string, fields, ex
 //
 // POST /rest/api/3/search/approximate-count
 func (s *SearchADFService) ApproximateCount(ctx context.Context, jql string) (*model.IssueSearchApproximateCountScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SearchADFService).ApproximateCount")
+	defer span.End()
+
 	return s.internalClient.ApproximateCount(ctx, jql)
 }
 
@@ -70,6 +85,9 @@ func (s *SearchADFService) ApproximateCount(ctx context.Context, jql string) (*m
 //
 // POST /rest/api/3/issue/bulkfetch
 func (s *SearchADFService) BulkFetch(ctx context.Context, issueIDsOrKeys []string, fields []string) (*model.IssueBulkFetchScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SearchADFService).BulkFetch")
+	defer span.End()
+
 	return s.internalClient.BulkFetch(ctx, issueIDsOrKeys, fields)
 }
 
@@ -79,6 +97,8 @@ type internalSearchADFImpl struct {
 }
 
 func (i *internalSearchADFImpl) Checks(ctx context.Context, payload *model.IssueSearchCheckPayloadScheme) (*model.IssueMatchesPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalSearchADFImpl).Checks")
+	defer span.End()
 
 	endpoint := fmt.Sprintf("rest/api/%v/jql/match", i.version)
 
@@ -97,6 +117,8 @@ func (i *internalSearchADFImpl) Checks(ctx context.Context, payload *model.Issue
 }
 
 func (i *internalSearchADFImpl) Get(ctx context.Context, jql string, fields, expands []string, startAt, maxResults int, validate string) (*model.IssueSearchScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalSearchADFImpl).Get")
+	defer span.End()
 
 	if jql == "" {
 		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoJQL)
@@ -136,6 +158,8 @@ func (i *internalSearchADFImpl) Get(ctx context.Context, jql string, fields, exp
 }
 
 func (i *internalSearchADFImpl) Post(ctx context.Context, jql string, fields, expands []string, startAt, maxResults int, validate string) (*model.IssueSearchScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalSearchADFImpl).Post")
+	defer span.End()
 
 	payload := struct {
 		Expand        []string `json:"expand,omitempty"`
@@ -176,6 +200,9 @@ func (i *internalSearchADFImpl) Post(ctx context.Context, jql string, fields, ex
 // Cannot add without breaking API compatibility. Consider adding in next major version.
 func (i *internalSearchADFImpl) SearchJQL(ctx context.Context, jql string, fields, expands []string, maxResults int, nextPageToken string) (*model.IssueSearchJQLScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalSearchADFImpl).SearchJQL")
+	defer span.End()
+
 	payload := struct {
 		Jql           string   `json:"jql,omitempty"`
 		MaxResults    int      `json:"maxResults,omitempty"`
@@ -211,6 +238,9 @@ func (i *internalSearchADFImpl) SearchJQL(ctx context.Context, jql string, field
 // POST /rest/api/3/search/approximate-count
 func (i *internalSearchADFImpl) ApproximateCount(ctx context.Context, jql string) (*model.IssueSearchApproximateCountScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalSearchADFImpl).ApproximateCount")
+	defer span.End()
+
 	payload := struct {
 		Jql string `json:"jql,omitempty"`
 	}{
@@ -237,6 +267,9 @@ func (i *internalSearchADFImpl) ApproximateCount(ctx context.Context, jql string
 //
 // POST /rest/api/3/issue/bulkfetch
 func (i *internalSearchADFImpl) BulkFetch(ctx context.Context, issueIDsOrKeys []string, fields []string) (*model.IssueBulkFetchScheme, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalSearchADFImpl).BulkFetch")
+	defer span.End()
 
 	payload := struct {
 		IssueIDsOrKeys []string `json:"issueIdsOrKeys,omitempty"`

@@ -8,6 +8,9 @@ import (
 	"strconv"
 	"strings"
 
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
+
 	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/v2/service"
 	"github.com/ctreminiom/go-atlassian/v2/service/sm"
@@ -85,6 +88,9 @@ type RequestService struct {
 //
 // https://docs.go-atlassian.io/jira-service-management/request#create-customer-request
 func (s *RequestService) Create(ctx context.Context, payload *model.CreateCustomerRequestPayloadScheme) (*model.CustomerRequestScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*RequestService).Create")
+	defer span.End()
+
 	return s.internalClient.Create(ctx, payload)
 }
 
@@ -96,6 +102,9 @@ func (s *RequestService) Create(ctx context.Context, payload *model.CreateCustom
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request#get-customer-requests
 func (s *RequestService) Gets(ctx context.Context, options *model.ServiceRequestOptionScheme, start, limit int) (*model.CustomerRequestPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*RequestService).Gets")
+	defer span.End()
+
 	return s.internalClient.Gets(ctx, options, start, limit)
 }
 
@@ -105,6 +114,9 @@ func (s *RequestService) Gets(ctx context.Context, options *model.ServiceRequest
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request#get-customer-request-by-id-or-key
 func (s *RequestService) Get(ctx context.Context, issueKeyOrID string, expand []string) (*model.CustomerRequestScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*RequestService).Get")
+	defer span.End()
+
 	return s.internalClient.Get(ctx, issueKeyOrID, expand)
 }
 
@@ -114,6 +126,9 @@ func (s *RequestService) Get(ctx context.Context, issueKeyOrID string, expand []
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request#subscribe
 func (s *RequestService) Subscribe(ctx context.Context, issueKeyOrID string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*RequestService).Subscribe")
+	defer span.End()
+
 	return s.internalClient.Subscribe(ctx, issueKeyOrID)
 }
 
@@ -123,6 +138,9 @@ func (s *RequestService) Subscribe(ctx context.Context, issueKeyOrID string) (*m
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request#unsubscribe
 func (s *RequestService) Unsubscribe(ctx context.Context, issueKeyOrID string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*RequestService).Unsubscribe")
+	defer span.End()
+
 	return s.internalClient.Unsubscribe(ctx, issueKeyOrID)
 }
 
@@ -132,6 +150,9 @@ func (s *RequestService) Unsubscribe(ctx context.Context, issueKeyOrID string) (
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request#get-customer-transitions
 func (s *RequestService) Transitions(ctx context.Context, issueKeyOrID string, start, limit int) (*model.CustomerRequestTransitionPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*RequestService).Transitions")
+	defer span.End()
+
 	return s.internalClient.Transitions(ctx, issueKeyOrID, start, limit)
 }
 
@@ -143,6 +164,9 @@ func (s *RequestService) Transitions(ctx context.Context, issueKeyOrID string, s
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request#perform-customer-transition
 func (s *RequestService) Transition(ctx context.Context, issueKeyOrID, transitionID, comment string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*RequestService).Transition")
+	defer span.End()
+
 	return s.internalClient.Transition(ctx, issueKeyOrID, transitionID, comment)
 }
 
@@ -152,24 +176,39 @@ type internalServiceRequestImpl struct {
 }
 
 func (i *internalServiceRequestImpl) Create(ctx context.Context, payload *model.CreateCustomerRequestPayloadScheme) (*model.CustomerRequestScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalServiceRequestImpl).Create", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "create_customer_request"),
+	)
 
 	endpoint := "rest/servicedeskapi/request"
 
 	req, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	serviceRequest := new(model.CustomerRequestScheme)
 	res, err := i.c.Call(req, serviceRequest)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return serviceRequest, res, nil
 }
 
 func (i *internalServiceRequestImpl) Gets(ctx context.Context, options *model.ServiceRequestOptionScheme, start, limit int) (*model.CustomerRequestPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalServiceRequestImpl).Gets", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "get_customer_requests"),
+	)
 
 	params := url.Values{}
 	params.Add("start", strconv.Itoa(start))
@@ -214,22 +253,34 @@ func (i *internalServiceRequestImpl) Gets(ctx context.Context, options *model.Se
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	page := new(model.CustomerRequestPageScheme)
 	res, err := i.c.Call(req, page)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return page, res, nil
 }
 
 func (i *internalServiceRequestImpl) Get(ctx context.Context, issueKeyOrID string, expand []string) (*model.CustomerRequestScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalServiceRequestImpl).Get", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("jira.issue.key", issueKeyOrID),
+		attribute.String("operation.name", "get_customer_request"),
+	)
 
 	if issueKeyOrID == "" {
-		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoIssueKeyOrID)
+		err := fmt.Errorf("sm: %w", model.ErrNoIssueKeyOrID)
+		recordError(span, err)
+		return nil, nil, err
 	}
 
 	var endpoint strings.Builder
@@ -244,54 +295,100 @@ func (i *internalServiceRequestImpl) Get(ctx context.Context, issueKeyOrID strin
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	customerRequest := new(model.CustomerRequestScheme)
 	res, err := i.c.Call(req, customerRequest)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return customerRequest, res, nil
 }
 
 func (i *internalServiceRequestImpl) Subscribe(ctx context.Context, issueKeyOrID string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalServiceRequestImpl).Subscribe", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("jira.issue.key", issueKeyOrID),
+		attribute.String("operation.name", "subscribe_to_request"),
+	)
 
 	if issueKeyOrID == "" {
-		return nil, fmt.Errorf("sm: %w", model.ErrNoIssueKeyOrID)
+		err := fmt.Errorf("sm: %w", model.ErrNoIssueKeyOrID)
+		recordError(span, err)
+		return nil, err
 	}
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/request/%v/notification", issueKeyOrID)
 
 	req, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, err
 	}
 
-	return i.c.Call(req, nil)
+	res, err := i.c.Call(req, nil)
+	if err != nil {
+		recordError(span, err)
+		return res, err
+	}
+
+	setOK(span)
+	return res, nil
 }
 
 func (i *internalServiceRequestImpl) Unsubscribe(ctx context.Context, issueKeyOrID string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalServiceRequestImpl).Unsubscribe", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("jira.issue.key", issueKeyOrID),
+		attribute.String("operation.name", "unsubscribe_from_request"),
+	)
 
 	if issueKeyOrID == "" {
-		return nil, fmt.Errorf("sm: %w", model.ErrNoIssueKeyOrID)
+		err := fmt.Errorf("sm: %w", model.ErrNoIssueKeyOrID)
+		recordError(span, err)
+		return nil, err
 	}
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/request/%v/notification", issueKeyOrID)
 
 	req, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, err
 	}
 
-	return i.c.Call(req, nil)
+	res, err := i.c.Call(req, nil)
+	if err != nil {
+		recordError(span, err)
+		return res, err
+	}
+
+	setOK(span)
+	return res, nil
 }
 
 func (i *internalServiceRequestImpl) Transitions(ctx context.Context, issueKeyOrID string, start, limit int) (*model.CustomerRequestTransitionPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalServiceRequestImpl).Transitions", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("jira.issue.key", issueKeyOrID),
+		attribute.String("operation.name", "get_request_transitions"),
+	)
 
 	if issueKeyOrID == "" {
-		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoIssueKeyOrID)
+		err := fmt.Errorf("sm: %w", model.ErrNoIssueKeyOrID)
+		recordError(span, err)
+		return nil, nil, err
 	}
 
 	params := url.Values{}
@@ -302,26 +399,41 @@ func (i *internalServiceRequestImpl) Transitions(ctx context.Context, issueKeyOr
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	page := new(model.CustomerRequestTransitionPageScheme)
 	res, err := i.c.Call(req, page)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return page, res, nil
 }
 
 func (i internalServiceRequestImpl) Transition(ctx context.Context, issueKeyOrID, transitionID, comment string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(internalServiceRequestImpl).Transition", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("jira.issue.key", issueKeyOrID),
+		attribute.String("jira.transition.id", transitionID),
+		attribute.String("operation.name", "transition_request"),
+	)
 
 	if issueKeyOrID == "" {
-		return nil, fmt.Errorf("sm: %w", model.ErrNoIssueKeyOrID)
+		err := fmt.Errorf("sm: %w", model.ErrNoIssueKeyOrID)
+		recordError(span, err)
+		return nil, err
 	}
 
 	if transitionID == "" {
-		return nil, fmt.Errorf("sm: %w", model.ErrNoTransitionID)
+		err := fmt.Errorf("sm: %w", model.ErrNoTransitionID)
+		recordError(span, err)
+		return nil, err
 	}
 
 	payload := map[string]interface{}{"id": transitionID}
@@ -334,8 +446,16 @@ func (i internalServiceRequestImpl) Transition(ctx context.Context, issueKeyOrID
 
 	req, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
+		recordError(span, err)
 		return nil, err
 	}
 
-	return i.c.Call(req, nil)
+	res, err := i.c.Call(req, nil)
+	if err != nil {
+		recordError(span, err)
+		return res, err
+	}
+
+	setOK(span)
+	return res, nil
 }

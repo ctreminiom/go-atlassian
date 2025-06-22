@@ -2,6 +2,9 @@ package internal
 
 import (
 	"context"
+
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
 	"fmt"
 	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/v2/service"
@@ -35,6 +38,12 @@ type RestrictionService struct {
 //
 // https://docs.go-atlassian.io/confluence-cloud/content/restrictions#get-restrictions
 func (r *RestrictionService) Gets(ctx context.Context, contentID string, expand []string, startAt, maxResults int) (*model.ContentRestrictionPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*RestrictionService).Gets", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "gets"))
+
 	return r.internalClient.Gets(ctx, contentID, expand, startAt, maxResults)
 }
 
@@ -44,6 +53,12 @@ func (r *RestrictionService) Gets(ctx context.Context, contentID string, expand 
 //
 // https://docs.go-atlassian.io/confluence-cloud/content/restrictions#add-restrictions
 func (r *RestrictionService) Add(ctx context.Context, contentID string, payload *model.ContentRestrictionUpdatePayloadScheme, expand []string) (*model.ContentRestrictionPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*RestrictionService).Add", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "add"))
+
 	return r.internalClient.Add(ctx, contentID, payload, expand)
 }
 
@@ -53,6 +68,12 @@ func (r *RestrictionService) Add(ctx context.Context, contentID string, payload 
 //
 // https://docs.go-atlassian.io/confluence-cloud/content/restrictions#delete-restrictions
 func (r *RestrictionService) Delete(ctx context.Context, contentID string, expand []string) (*model.ContentRestrictionPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*RestrictionService).Delete", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "delete"))
+
 	return r.internalClient.Delete(ctx, contentID, expand)
 }
 
@@ -62,6 +83,12 @@ func (r *RestrictionService) Delete(ctx context.Context, contentID string, expan
 //
 // https://docs.go-atlassian.io/confluence-cloud/content/restrictions#update-restrictions
 func (r *RestrictionService) Update(ctx context.Context, contentID string, payload *model.ContentRestrictionUpdatePayloadScheme, expand []string) (*model.ContentRestrictionPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*RestrictionService).Update", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "update"))
+
 	return r.internalClient.Update(ctx, contentID, payload, expand)
 }
 
@@ -70,9 +97,15 @@ type internalRestrictionImpl struct {
 }
 
 func (i *internalRestrictionImpl) Gets(ctx context.Context, contentID string, expand []string, startAt, maxResults int) (*model.ContentRestrictionPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalRestrictionImpl).Gets", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "gets"))
 
 	if contentID == "" {
-		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
+
+			return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
 	}
 
 	query := url.Values{}
@@ -87,6 +120,7 @@ func (i *internalRestrictionImpl) Gets(ctx context.Context, contentID string, ex
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
@@ -96,13 +130,20 @@ func (i *internalRestrictionImpl) Gets(ctx context.Context, contentID string, ex
 		return nil, response, err
 	}
 
+	setOK(span)
 	return page, response, nil
 }
 
 func (i *internalRestrictionImpl) Add(ctx context.Context, contentID string, payload *model.ContentRestrictionUpdatePayloadScheme, expand []string) (*model.ContentRestrictionPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalRestrictionImpl).Add", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "add"))
 
 	if contentID == "" {
-		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
+
+			return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
 	}
 
 	var endpoint strings.Builder
@@ -117,6 +158,7 @@ func (i *internalRestrictionImpl) Add(ctx context.Context, contentID string, pay
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint.String(), "", payload)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
@@ -126,13 +168,20 @@ func (i *internalRestrictionImpl) Add(ctx context.Context, contentID string, pay
 		return nil, response, err
 	}
 
+	setOK(span)
 	return page, response, nil
 }
 
 func (i *internalRestrictionImpl) Delete(ctx context.Context, contentID string, expand []string) (*model.ContentRestrictionPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalRestrictionImpl).Delete", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "delete"))
 
 	if contentID == "" {
-		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
+
+			return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
 	}
 
 	var endpoint strings.Builder
@@ -147,6 +196,7 @@ func (i *internalRestrictionImpl) Delete(ctx context.Context, contentID string, 
 
 	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint.String(), "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
@@ -156,13 +206,20 @@ func (i *internalRestrictionImpl) Delete(ctx context.Context, contentID string, 
 		return nil, response, err
 	}
 
+	setOK(span)
 	return page, response, nil
 }
 
 func (i *internalRestrictionImpl) Update(ctx context.Context, contentID string, payload *model.ContentRestrictionUpdatePayloadScheme, expand []string) (*model.ContentRestrictionPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalRestrictionImpl).Update", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "update"))
 
 	if contentID == "" {
-		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
+
+			return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
 	}
 
 	var endpoint strings.Builder
@@ -177,6 +234,7 @@ func (i *internalRestrictionImpl) Update(ctx context.Context, contentID string, 
 
 	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint.String(), "", payload)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
@@ -186,5 +244,6 @@ func (i *internalRestrictionImpl) Update(ctx context.Context, contentID string, 
 		return nil, response, err
 	}
 
+	setOK(span)
 	return page, response, nil
 }

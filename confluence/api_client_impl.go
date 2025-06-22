@@ -10,6 +10,8 @@ import (
 	"net/url"
 	"strings"
 
+	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
+
 	"github.com/ctreminiom/go-atlassian/v2/confluence/internal"
 	"github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/v2/service/common"
@@ -34,8 +36,21 @@ func New(httpClient common.HTTPClient, site string) (*Client, error) {
 		return nil, err
 	}
 
+	// Wrap the HTTP client with OpenTelemetry instrumentation
+	var transport http.RoundTripper
+	if httpClient.(*http.Client).Transport != nil {
+		transport = httpClient.(*http.Client).Transport
+	} else {
+		transport = http.DefaultTransport
+	}
+
+	instrumentedClient := &http.Client{
+		Transport: otelhttp.NewTransport(transport),
+		Timeout:   httpClient.(*http.Client).Timeout,
+	}
+
 	client := &Client{
-		HTTP: httpClient,
+		HTTP: instrumentedClient,
 		Site: u,
 	}
 
@@ -79,7 +94,11 @@ type Client struct {
 }
 
 func (c *Client) NewRequest(ctx context.Context, method, urlStr, contentType string, body interface{}) (*http.Request, error) {
+	if ctx == nil {
+		ctx = context.Background()
+	}
 
+	// Parse the relative URL.
 	rel, err := url.Parse(urlStr)
 	if err != nil {
 		return nil, err
@@ -133,7 +152,6 @@ func (c *Client) NewRequest(ctx context.Context, method, urlStr, contentType str
 }
 
 func (c *Client) Call(request *http.Request, structure interface{}) (*models.ResponseScheme, error) {
-
 	response, err := c.HTTP.Do(request)
 	if err != nil {
 		return nil, err

@@ -2,6 +2,9 @@ package internal
 
 import (
 	"context"
+
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
 	"fmt"
 	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/v2/service"
@@ -31,6 +34,12 @@ type KnowledgebaseService struct {
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/knowledgebase#search-articles
 func (k *KnowledgebaseService) Search(ctx context.Context, query string, highlight bool, start, limit int) (*model.ArticlePageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*KnowledgebaseService).Search", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "search"))
+
 	return k.internalClient.Search(ctx, query, highlight, start, limit)
 }
 
@@ -40,6 +49,12 @@ func (k *KnowledgebaseService) Search(ctx context.Context, query string, highlig
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/knowledgebase#get-articles
 func (k *KnowledgebaseService) Gets(ctx context.Context, serviceDeskID int, query string, highlight bool, start, limit int) (*model.ArticlePageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*KnowledgebaseService).Gets", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "gets"))
+
 	return k.internalClient.Gets(ctx, serviceDeskID, query, highlight, start, limit)
 }
 
@@ -49,9 +64,15 @@ type internalKnowledgebaseImpl struct {
 }
 
 func (i *internalKnowledgebaseImpl) Search(ctx context.Context, query string, highlight bool, start, limit int) (*model.ArticlePageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalKnowledgebaseImpl).Search", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "search"))
 
 	if query == "" {
-		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoKBQuery)
+
+			return nil, nil, fmt.Errorf("sm: %w", model.ErrNoKBQuery)
 	}
 
 	params := url.Values{}
@@ -64,26 +85,36 @@ func (i *internalKnowledgebaseImpl) Search(ctx context.Context, query string, hi
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	page := new(model.ArticlePageScheme)
 	res, err := i.c.Call(req, page)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return page, res, nil
 }
 
 func (i *internalKnowledgebaseImpl) Gets(ctx context.Context, serviceDeskID int, query string, highlight bool, start, limit int) (*model.ArticlePageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalKnowledgebaseImpl).Gets", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "gets"))
 
 	if serviceDeskID == 0 {
-		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoServiceDeskID)
+
+			return nil, nil, fmt.Errorf("sm: %w", model.ErrNoServiceDeskID)
 	}
 
 	if query == "" {
-		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoKBQuery)
+
+			return nil, nil, fmt.Errorf("sm: %w", model.ErrNoKBQuery)
 	}
 
 	params := url.Values{}
@@ -96,14 +127,17 @@ func (i *internalKnowledgebaseImpl) Gets(ctx context.Context, serviceDeskID int,
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	page := new(model.ArticlePageScheme)
 	res, err := i.c.Call(req, page)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return page, res, nil
 }

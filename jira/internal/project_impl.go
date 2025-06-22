@@ -8,6 +8,9 @@ import (
 	"strconv"
 	"strings"
 
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
+
 	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/v2/service"
 	"github.com/ctreminiom/go-atlassian/v2/service/jira"
@@ -86,7 +89,21 @@ type ProjectService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects#create-project
 func (p *ProjectService) Create(ctx context.Context, payload *model.ProjectPayloadScheme) (*model.NewProjectCreatedScheme, *model.ResponseScheme, error) {
-	return p.internalClient.Create(ctx, payload)
+	ctx, span := tracer().Start(ctx, "(*ProjectService).Create", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "create_project"),
+	)
+
+	result, response, err := p.internalClient.Create(ctx, payload)
+	if err != nil {
+		recordError(span, err)
+		return nil, response, err
+	}
+
+	setOK(span)
+	return result, response, nil
 }
 
 // Search returns a paginated list of projects visible to the user.
@@ -95,7 +112,23 @@ func (p *ProjectService) Create(ctx context.Context, payload *model.ProjectPaylo
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects#get-projects-paginated
 func (p *ProjectService) Search(ctx context.Context, options *model.ProjectSearchOptionsScheme, startAt, maxResults int) (*model.ProjectSearchScheme, *model.ResponseScheme, error) {
-	return p.internalClient.Search(ctx, options, startAt, maxResults)
+	ctx, span := tracer().Start(ctx, "(*ProjectService).Search", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "search_projects"),
+		attribute.Int("jira.pagination.start_at", startAt),
+		attribute.Int("jira.pagination.max_results", maxResults),
+	)
+
+	result, response, err := p.internalClient.Search(ctx, options, startAt, maxResults)
+	if err != nil {
+		recordError(span, err)
+		return nil, response, err
+	}
+
+	setOK(span)
+	return result, response, nil
 }
 
 // Get returns the project details for a project.
@@ -104,7 +137,23 @@ func (p *ProjectService) Search(ctx context.Context, options *model.ProjectSearc
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects#get-project
 func (p *ProjectService) Get(ctx context.Context, projectKeyOrID string, expand []string) (*model.ProjectScheme, *model.ResponseScheme, error) {
-	return p.internalClient.Get(ctx, projectKeyOrID, expand)
+	ctx, span := tracer().Start(ctx, "(*ProjectService).Get", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "get_project"),
+		attribute.String("jira.project.key", projectKeyOrID),
+		attribute.StringSlice("jira.expand", expand),
+	)
+
+	result, response, err := p.internalClient.Get(ctx, projectKeyOrID, expand)
+	if err != nil {
+		recordError(span, err)
+		return nil, response, err
+	}
+
+	setOK(span)
+	return result, response, nil
 }
 
 // Update updates the project details of a project.
@@ -113,7 +162,22 @@ func (p *ProjectService) Get(ctx context.Context, projectKeyOrID string, expand 
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects#update-project
 func (p *ProjectService) Update(ctx context.Context, projectKeyOrID string, payload *model.ProjectUpdateScheme) (*model.ProjectScheme, *model.ResponseScheme, error) {
-	return p.internalClient.Update(ctx, projectKeyOrID, payload)
+	ctx, span := tracer().Start(ctx, "(*ProjectService).Update", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "update_project"),
+		attribute.String("jira.project.key", projectKeyOrID),
+	)
+
+	result, response, err := p.internalClient.Update(ctx, projectKeyOrID, payload)
+	if err != nil {
+		recordError(span, err)
+		return nil, response, err
+	}
+
+	setOK(span)
+	return result, response, nil
 }
 
 // Delete deletes a project.
@@ -126,7 +190,23 @@ func (p *ProjectService) Update(ctx context.Context, projectKeyOrID string, payl
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects#delete-project
 func (p *ProjectService) Delete(ctx context.Context, projectKeyOrID string, enableUndo bool) (*model.ResponseScheme, error) {
-	return p.internalClient.Delete(ctx, projectKeyOrID, enableUndo)
+	ctx, span := tracer().Start(ctx, "(*ProjectService).Delete", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "delete_project"),
+		attribute.String("jira.project.key", projectKeyOrID),
+		attribute.Bool("jira.enable_undo", enableUndo),
+	)
+
+	response, err := p.internalClient.Delete(ctx, projectKeyOrID, enableUndo)
+	if err != nil {
+		recordError(span, err)
+		return response, err
+	}
+
+	setOK(span)
+	return response, nil
 }
 
 // DeleteAsynchronously deletes a project asynchronously.
@@ -139,7 +219,22 @@ func (p *ProjectService) Delete(ctx context.Context, projectKeyOrID string, enab
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects#delete-project-asynchronously
 func (p *ProjectService) DeleteAsynchronously(ctx context.Context, projectKeyOrID string) (*model.TaskScheme, *model.ResponseScheme, error) {
-	return p.internalClient.DeleteAsynchronously(ctx, projectKeyOrID)
+	ctx, span := tracer().Start(ctx, "(*ProjectService).DeleteAsynchronously", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "delete_project_async"),
+		attribute.String("jira.project.key", projectKeyOrID),
+	)
+
+	result, response, err := p.internalClient.DeleteAsynchronously(ctx, projectKeyOrID)
+	if err != nil {
+		recordError(span, err)
+		return nil, response, err
+	}
+
+	setOK(span)
+	return result, response, nil
 }
 
 // Archive archives a project. Archived projects cannot be deleted.
@@ -152,7 +247,22 @@ func (p *ProjectService) DeleteAsynchronously(ctx context.Context, projectKeyOrI
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects#archive-project
 func (p *ProjectService) Archive(ctx context.Context, projectKeyOrID string) (*model.ResponseScheme, error) {
-	return p.internalClient.Archive(ctx, projectKeyOrID)
+	ctx, span := tracer().Start(ctx, "(*ProjectService).Archive", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "archive_project"),
+		attribute.String("jira.project.key", projectKeyOrID),
+	)
+
+	response, err := p.internalClient.Archive(ctx, projectKeyOrID)
+	if err != nil {
+		recordError(span, err)
+		return response, err
+	}
+
+	setOK(span)
+	return response, nil
 }
 
 // Restore restores a project from the Jira recycle bin.
@@ -161,7 +271,22 @@ func (p *ProjectService) Archive(ctx context.Context, projectKeyOrID string) (*m
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects#restore-deleted-project
 func (p *ProjectService) Restore(ctx context.Context, projectKeyOrID string) (*model.ProjectScheme, *model.ResponseScheme, error) {
-	return p.internalClient.Restore(ctx, projectKeyOrID)
+	ctx, span := tracer().Start(ctx, "(*ProjectService).Restore", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "restore_project"),
+		attribute.String("jira.project.key", projectKeyOrID),
+	)
+
+	result, response, err := p.internalClient.Restore(ctx, projectKeyOrID)
+	if err != nil {
+		recordError(span, err)
+		return nil, response, err
+	}
+
+	setOK(span)
+	return result, response, nil
 }
 
 // Statuses returns the valid statuses for a project.
@@ -172,7 +297,22 @@ func (p *ProjectService) Restore(ctx context.Context, projectKeyOrID string) (*m
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects#get-all-statuses-for-project
 func (p *ProjectService) Statuses(ctx context.Context, projectKeyOrID string) ([]*model.ProjectStatusPageScheme, *model.ResponseScheme, error) {
-	return p.internalClient.Statuses(ctx, projectKeyOrID)
+	ctx, span := tracer().Start(ctx, "(*ProjectService).Statuses", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "get_project_statuses"),
+		attribute.String("jira.project.key", projectKeyOrID),
+	)
+
+	result, response, err := p.internalClient.Statuses(ctx, projectKeyOrID)
+	if err != nil {
+		recordError(span, err)
+		return nil, response, err
+	}
+
+	setOK(span)
+	return result, response, nil
 }
 
 // NotificationScheme gets the notification scheme associated with the project.
@@ -181,7 +321,23 @@ func (p *ProjectService) Statuses(ctx context.Context, projectKeyOrID string) ([
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects#get-project-notification-scheme
 func (p *ProjectService) NotificationScheme(ctx context.Context, projectKeyOrID string, expand []string) (*model.NotificationSchemeScheme, *model.ResponseScheme, error) {
-	return p.internalClient.NotificationScheme(ctx, projectKeyOrID, expand)
+	ctx, span := tracer().Start(ctx, "(*ProjectService).NotificationScheme", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "get_project_notification_scheme"),
+		attribute.String("jira.project.key", projectKeyOrID),
+		attribute.StringSlice("jira.expand", expand),
+	)
+
+	result, response, err := p.internalClient.NotificationScheme(ctx, projectKeyOrID, expand)
+	if err != nil {
+		recordError(span, err)
+		return nil, response, err
+	}
+
+	setOK(span)
+	return result, response, nil
 }
 
 type internalProjectImpl struct {
@@ -190,24 +346,41 @@ type internalProjectImpl struct {
 }
 
 func (i *internalProjectImpl) Create(ctx context.Context, payload *model.ProjectPayloadScheme) (*model.NewProjectCreatedScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalProjectImpl).Create", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "create_project"),
+	)
 
 	endpoint := fmt.Sprintf("rest/api/%v/project", i.version)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	project := new(model.NewProjectCreatedScheme)
 	response, err := i.c.Call(request, project)
 	if err != nil {
+		recordError(span, err)
 		return nil, response, err
 	}
 
+	setOK(span)
 	return project, response, nil
 }
 
 func (i *internalProjectImpl) Search(ctx context.Context, options *model.ProjectSearchOptionsScheme, startAt, maxResults int) (*model.ProjectSearchScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalProjectImpl).Search", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "search_projects"),
+		attribute.Int("jira.pagination.start_at", startAt),
+		attribute.Int("jira.pagination.max_results", maxResults),
+	)
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -264,22 +437,35 @@ func (i *internalProjectImpl) Search(ctx context.Context, options *model.Project
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	page := new(model.ProjectSearchScheme)
 	response, err := i.c.Call(request, page)
 	if err != nil {
+		recordError(span, err)
 		return nil, response, err
 	}
 
+	setOK(span)
 	return page, response, nil
 }
 
 func (i *internalProjectImpl) Get(ctx context.Context, projectKeyOrID string, expand []string) (*model.ProjectScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalProjectImpl).Get", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "get_project"),
+		attribute.String("jira.project.key", projectKeyOrID),
+		attribute.StringSlice("jira.expand", expand),
+	)
 
 	if projectKeyOrID == "" {
-		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoProjectIDOrKey)
+		err := fmt.Errorf("jira: %w", model.ErrNoProjectIDOrKey)
+		recordError(span, err)
+		return nil, nil, err
 	}
 
 	var endpoint strings.Builder
@@ -295,44 +481,69 @@ func (i *internalProjectImpl) Get(ctx context.Context, projectKeyOrID string, ex
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	project := new(model.ProjectScheme)
 	response, err := i.c.Call(request, project)
 	if err != nil {
+		recordError(span, err)
 		return nil, response, err
 	}
 
+	setOK(span)
 	return project, response, nil
 }
 
 func (i *internalProjectImpl) Update(ctx context.Context, projectKeyOrID string, payload *model.ProjectUpdateScheme) (*model.ProjectScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalProjectImpl).Update", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "update_project"),
+		attribute.String("jira.project.key", projectKeyOrID),
+	)
 
 	if projectKeyOrID == "" {
-		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoProjectIDOrKey)
+		err := fmt.Errorf("jira: %w", model.ErrNoProjectIDOrKey)
+		recordError(span, err)
+		return nil, nil, err
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/project/%v", i.version, projectKeyOrID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	project := new(model.ProjectScheme)
 	response, err := i.c.Call(request, project)
 	if err != nil {
+		recordError(span, err)
 		return nil, response, err
 	}
 
+	setOK(span)
 	return project, response, nil
 }
 
 func (i *internalProjectImpl) Delete(ctx context.Context, projectKeyOrID string, enableUndo bool) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalProjectImpl).Delete", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "delete_project"),
+		attribute.String("jira.project.key", projectKeyOrID),
+		attribute.Bool("jira.enable_undo", enableUndo),
+	)
 
 	if projectKeyOrID == "" {
-		return nil, fmt.Errorf("jira: %w", model.ErrNoProjectIDOrKey)
+		err := fmt.Errorf("jira: %w", model.ErrNoProjectIDOrKey)
+		recordError(span, err)
+		return nil, err
 	}
 
 	params := url.Values{}
@@ -342,98 +553,169 @@ func (i *internalProjectImpl) Delete(ctx context.Context, projectKeyOrID string,
 
 	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, err
 	}
 
-	return i.c.Call(request, nil)
+	response, err := i.c.Call(request, nil)
+	if err != nil {
+		recordError(span, err)
+		return response, err
+	}
+
+	setOK(span)
+	return response, nil
 }
 
 func (i *internalProjectImpl) DeleteAsynchronously(ctx context.Context, projectKeyOrID string) (*model.TaskScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalProjectImpl).DeleteAsynchronously", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "delete_project_async"),
+		attribute.String("jira.project.key", projectKeyOrID),
+	)
 
 	if projectKeyOrID == "" {
-		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoProjectIDOrKey)
+		err := fmt.Errorf("jira: %w", model.ErrNoProjectIDOrKey)
+		recordError(span, err)
+		return nil, nil, err
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/project/%v/delete", i.version, projectKeyOrID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	task := new(model.TaskScheme)
 	response, err := i.c.Call(request, task)
 	if err != nil {
+		recordError(span, err)
 		return nil, response, err
 	}
 
+	setOK(span)
 	return task, response, nil
 }
 
 func (i *internalProjectImpl) Archive(ctx context.Context, projectKeyOrID string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalProjectImpl).Archive", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "archive_project"),
+		attribute.String("jira.project.key", projectKeyOrID),
+	)
 
 	if projectKeyOrID == "" {
-		return nil, fmt.Errorf("jira: %w", model.ErrNoProjectIDOrKey)
+		err := fmt.Errorf("jira: %w", model.ErrNoProjectIDOrKey)
+		recordError(span, err)
+		return nil, err
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/project/%v/archive", i.version, projectKeyOrID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, err
 	}
 
-	return i.c.Call(request, nil)
+	response, err := i.c.Call(request, nil)
+	if err != nil {
+		recordError(span, err)
+		return response, err
+	}
+
+	setOK(span)
+	return response, nil
 }
 
 func (i *internalProjectImpl) Restore(ctx context.Context, projectKeyOrID string) (*model.ProjectScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalProjectImpl).Restore", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "restore_project"),
+		attribute.String("jira.project.key", projectKeyOrID),
+	)
 
 	if projectKeyOrID == "" {
-		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoProjectIDOrKey)
+		err := fmt.Errorf("jira: %w", model.ErrNoProjectIDOrKey)
+		recordError(span, err)
+		return nil, nil, err
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/project/%v/restore", i.version, projectKeyOrID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	project := new(model.ProjectScheme)
 	response, err := i.c.Call(request, project)
 	if err != nil {
+		recordError(span, err)
 		return nil, response, err
 	}
 
+	setOK(span)
 	return project, response, nil
 }
 
 func (i *internalProjectImpl) Statuses(ctx context.Context, projectKeyOrID string) ([]*model.ProjectStatusPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalProjectImpl).Statuses", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "get_project_statuses"),
+		attribute.String("jira.project.key", projectKeyOrID),
+	)
 
 	if projectKeyOrID == "" {
-		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoProjectIDOrKey)
+		err := fmt.Errorf("jira: %w", model.ErrNoProjectIDOrKey)
+		recordError(span, err)
+		return nil, nil, err
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/project/%v/statuses", i.version, projectKeyOrID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	var statuses []*model.ProjectStatusPageScheme
 	response, err := i.c.Call(request, &statuses)
 	if err != nil {
+		recordError(span, err)
 		return nil, response, err
 	}
 
+	setOK(span)
 	return statuses, response, nil
 }
 
 func (i *internalProjectImpl) NotificationScheme(ctx context.Context, projectKeyOrID string, expand []string) (*model.NotificationSchemeScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalProjectImpl).NotificationScheme", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "get_project_notification_scheme"),
+		attribute.String("jira.project.key", projectKeyOrID),
+		attribute.StringSlice("jira.expand", expand),
+	)
 
 	if projectKeyOrID == "" {
-		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoProjectIDOrKey)
+		err := fmt.Errorf("jira: %w", model.ErrNoProjectIDOrKey)
+		recordError(span, err)
+		return nil, nil, err
 	}
 
 	var endpoint strings.Builder
@@ -449,14 +731,17 @@ func (i *internalProjectImpl) NotificationScheme(ctx context.Context, projectKey
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	notificationScheme := new(model.NotificationSchemeScheme)
 	response, err := i.c.Call(request, notificationScheme)
 	if err != nil {
+		recordError(span, err)
 		return nil, response, err
 	}
 
+	setOK(span)
 	return notificationScheme, response, nil
 }

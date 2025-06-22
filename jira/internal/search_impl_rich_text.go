@@ -25,6 +25,9 @@ type SearchRichTextService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/search#check-issues-against-jql
 func (s *SearchRichTextService) Checks(ctx context.Context, payload *model.IssueSearchCheckPayloadScheme) (*model.IssueMatchesPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SearchRichTextService).Checks")
+	defer span.End()
+
 	return s.internalClient.Checks(ctx, payload)
 }
 
@@ -37,6 +40,9 @@ func (s *SearchRichTextService) Checks(ctx context.Context, payload *model.Issue
 // Deprecated: This endpoint will be removed after May 1, 2025. Use SearchJQL, BulkFetch and ApproximateCount instead.
 // TODO Cannot change without breaking API compatibility. Consider removing in next major version.
 func (s *SearchRichTextService) Get(ctx context.Context, jql string, fields, expands []string, startAt, maxResults int, validate string) (*model.IssueSearchSchemeV2, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SearchRichTextService).Get")
+	defer span.End()
+
 	return s.internalClient.Get(ctx, jql, fields, expands, startAt, maxResults, validate)
 }
 
@@ -49,6 +55,9 @@ func (s *SearchRichTextService) Get(ctx context.Context, jql string, fields, exp
 // Deprecated: This endpoint will be removed after May 1, 2025. Use SearchJQL, BulkFetch and ApproximateCount instead.
 // TODO Cannot change without breaking API compatibility. Consider removing in next major version.
 func (s *SearchRichTextService) Post(ctx context.Context, jql string, fields, expands []string, startAt, maxResults int, validate string) (*model.IssueSearchSchemeV2, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SearchRichTextService).Post")
+	defer span.End()
+
 	return s.internalClient.Post(ctx, jql, fields, expands, startAt, maxResults, validate)
 }
 
@@ -56,6 +65,9 @@ func (s *SearchRichTextService) Post(ctx context.Context, jql string, fields, ex
 //
 // POST /rest/api/2/search/jql
 func (s *SearchRichTextService) SearchJQL(ctx context.Context, jql string, fields, expands []string, maxResults int, nextPageToken string) (*model.IssueSearchJQLSchemeV2, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SearchRichTextService).SearchJQL")
+	defer span.End()
+
 	return s.internalClient.SearchJQL(ctx, jql, fields, expands, maxResults, nextPageToken)
 }
 
@@ -63,6 +75,9 @@ func (s *SearchRichTextService) SearchJQL(ctx context.Context, jql string, field
 //
 // POST /rest/api/2/search/approximate-count
 func (s *SearchRichTextService) ApproximateCount(ctx context.Context, jql string) (*model.IssueSearchApproximateCountScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SearchRichTextService).ApproximateCount")
+	defer span.End()
+
 	return s.internalClient.ApproximateCount(ctx, jql)
 }
 
@@ -70,6 +85,9 @@ func (s *SearchRichTextService) ApproximateCount(ctx context.Context, jql string
 //
 // POST /rest/api/2/issue/bulkfetch
 func (s *SearchRichTextService) BulkFetch(ctx context.Context, issueIDsOrKeys []string, fields []string) (*model.IssueBulkFetchSchemeV2, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SearchRichTextService).BulkFetch")
+	defer span.End()
+
 	return s.internalClient.BulkFetch(ctx, issueIDsOrKeys, fields)
 }
 
@@ -79,6 +97,8 @@ type internalSearchRichTextImpl struct {
 }
 
 func (i *internalSearchRichTextImpl) Checks(ctx context.Context, payload *model.IssueSearchCheckPayloadScheme) (*model.IssueMatchesPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalSearchRichTextImpl).Checks")
+	defer span.End()
 
 	endpoint := fmt.Sprintf("rest/api/%v/jql/match", i.version)
 
@@ -97,6 +117,8 @@ func (i *internalSearchRichTextImpl) Checks(ctx context.Context, payload *model.
 }
 
 func (i *internalSearchRichTextImpl) Get(ctx context.Context, jql string, fields, expands []string, startAt, maxResults int, validate string) (*model.IssueSearchSchemeV2, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalSearchRichTextImpl).Get")
+	defer span.End()
 
 	if jql == "" {
 		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoJQL)
@@ -136,6 +158,8 @@ func (i *internalSearchRichTextImpl) Get(ctx context.Context, jql string, fields
 }
 
 func (i *internalSearchRichTextImpl) Post(ctx context.Context, jql string, fields, expands []string, startAt, maxResults int, validate string) (*model.IssueSearchSchemeV2, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalSearchRichTextImpl).Post")
+	defer span.End()
 
 	payload := struct {
 		Expand        []string `json:"expand,omitempty"`
@@ -176,6 +200,9 @@ func (i *internalSearchRichTextImpl) Post(ctx context.Context, jql string, field
 // Cannot add without breaking API compatibility. Consider adding in next major version.
 func (i *internalSearchRichTextImpl) SearchJQL(ctx context.Context, jql string, fields, expands []string, maxResults int, nextPageToken string) (*model.IssueSearchJQLSchemeV2, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalSearchRichTextImpl).SearchJQL")
+	defer span.End()
+
 	payload := struct {
 		Jql           string   `json:"jql,omitempty"`
 		MaxResults    int      `json:"maxResults,omitempty"`
@@ -211,6 +238,9 @@ func (i *internalSearchRichTextImpl) SearchJQL(ctx context.Context, jql string, 
 // POST /rest/api/2/search/approximate-count
 func (i *internalSearchRichTextImpl) ApproximateCount(ctx context.Context, jql string) (*model.IssueSearchApproximateCountScheme, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalSearchRichTextImpl).ApproximateCount")
+	defer span.End()
+
 	payload := struct {
 		Jql string `json:"jql,omitempty"`
 	}{
@@ -237,6 +267,9 @@ func (i *internalSearchRichTextImpl) ApproximateCount(ctx context.Context, jql s
 //
 // POST /rest/api/2/issue/bulkfetch
 func (i *internalSearchRichTextImpl) BulkFetch(ctx context.Context, issueIDsOrKeys []string, fields []string) (*model.IssueBulkFetchSchemeV2, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalSearchRichTextImpl).BulkFetch")
+	defer span.End()
 
 	payload := struct {
 		IssueIDsOrKeys []string `json:"issueIdsOrKeys,omitempty"`

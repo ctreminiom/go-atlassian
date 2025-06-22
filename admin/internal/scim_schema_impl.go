@@ -2,6 +2,9 @@ package internal
 
 import (
 	"context"
+
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
 	"fmt"
 	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/v2/service"
@@ -29,6 +32,12 @@ type SCIMSchemaService struct {
 //
 // https://docs.go-atlassian.io/atlassian-admin-cloud/scim/schemas#get-all-schemas
 func (s *SCIMSchemaService) Gets(ctx context.Context, directoryID string) (*model.SCIMSchemasScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SCIMSchemaService).Gets", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "gets"))
+
 	return s.internalClient.Gets(ctx, directoryID)
 }
 
@@ -40,6 +49,12 @@ func (s *SCIMSchemaService) Gets(ctx context.Context, directoryID string) (*mode
 //
 // https://docs.go-atlassian.io/atlassian-admin-cloud/scim/schemas#get-group-schemas
 func (s *SCIMSchemaService) Group(ctx context.Context, directoryID string) (*model.SCIMSchemaScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SCIMSchemaService).Group", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "group"))
+
 	return s.internalClient.Group(ctx, directoryID)
 }
 
@@ -51,6 +66,12 @@ func (s *SCIMSchemaService) Group(ctx context.Context, directoryID string) (*mod
 //
 // https://docs.go-atlassian.io/atlassian-admin-cloud/scim/schemas#get-user-schemas
 func (s *SCIMSchemaService) User(ctx context.Context, directoryID string) (*model.SCIMSchemaScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SCIMSchemaService).User", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "user"))
+
 	return s.internalClient.User(ctx, directoryID)
 }
 
@@ -62,6 +83,12 @@ func (s *SCIMSchemaService) User(ctx context.Context, directoryID string) (*mode
 //
 // https://docs.go-atlassian.io/atlassian-admin-cloud/scim/schemas#get-user-enterprise-extension-schemas
 func (s *SCIMSchemaService) Enterprise(ctx context.Context, directoryID string) (*model.SCIMSchemaScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SCIMSchemaService).Enterprise", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "enterprise"))
+
 	return s.internalClient.Enterprise(ctx, directoryID)
 }
 
@@ -75,6 +102,12 @@ func (s *SCIMSchemaService) Enterprise(ctx context.Context, directoryID string) 
 //
 // https://docs.go-atlassian.io/atlassian-admin-cloud/scim/schemas#get-feature-metadata
 func (s *SCIMSchemaService) Feature(ctx context.Context, directoryID string) (*model.ServiceProviderConfigScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SCIMSchemaService).Feature", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "feature"))
+
 	return s.internalClient.Feature(ctx, directoryID)
 }
 
@@ -83,15 +116,23 @@ type internalSCIMSchemaImpl struct {
 }
 
 func (i *internalSCIMSchemaImpl) Gets(ctx context.Context, directoryID string) (*model.SCIMSchemasScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalSCIMSchemaImpl).Gets", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "gets"))
 
 	if directoryID == "" {
-		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminDirectoryID)
+
+			return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminDirectoryID)
 	}
 
 	endpoint := fmt.Sprintf("scim/directory/%v/Schemas", directoryID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
@@ -101,19 +142,28 @@ func (i *internalSCIMSchemaImpl) Gets(ctx context.Context, directoryID string) (
 		return nil, response, err
 	}
 
+	setOK(span)
 	return schemas, response, nil
 }
 
 func (i *internalSCIMSchemaImpl) Group(ctx context.Context, directoryID string) (*model.SCIMSchemaScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalSCIMSchemaImpl).Group", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "group"))
 
 	if directoryID == "" {
-		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminDirectoryID)
+
+			return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminDirectoryID)
 	}
 
 	endpoint := fmt.Sprintf("scim/directory/%v/Schemas/urn:ietf:params:scim:schemas:core:2.0:Group", directoryID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
@@ -123,19 +173,28 @@ func (i *internalSCIMSchemaImpl) Group(ctx context.Context, directoryID string) 
 		return nil, response, err
 	}
 
+	setOK(span)
 	return group, response, nil
 }
 
 func (i *internalSCIMSchemaImpl) User(ctx context.Context, directoryID string) (*model.SCIMSchemaScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalSCIMSchemaImpl).User", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "user"))
 
 	if directoryID == "" {
-		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminDirectoryID)
+
+			return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminDirectoryID)
 	}
 
 	endpoint := fmt.Sprintf("scim/directory/%v/Schemas/urn:ietf:params:scim:schemas:core:2.0:User", directoryID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
@@ -145,19 +204,28 @@ func (i *internalSCIMSchemaImpl) User(ctx context.Context, directoryID string) (
 		return nil, response, err
 	}
 
+	setOK(span)
 	return user, response, nil
 }
 
 func (i *internalSCIMSchemaImpl) Enterprise(ctx context.Context, directoryID string) (*model.SCIMSchemaScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalSCIMSchemaImpl).Enterprise", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "enterprise"))
 
 	if directoryID == "" {
-		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminDirectoryID)
+
+			return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminDirectoryID)
 	}
 
 	endpoint := fmt.Sprintf("scim/directory/%v/Schemas/urn:ietf:params:scim:schemas:extension:enterprise:2.0:User", directoryID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
@@ -167,19 +235,28 @@ func (i *internalSCIMSchemaImpl) Enterprise(ctx context.Context, directoryID str
 		return nil, response, err
 	}
 
+	setOK(span)
 	return enterprise, response, nil
 }
 
 func (i *internalSCIMSchemaImpl) Feature(ctx context.Context, directoryID string) (*model.ServiceProviderConfigScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalSCIMSchemaImpl).Feature", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "feature"))
 
 	if directoryID == "" {
-		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminDirectoryID)
+
+			return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminDirectoryID)
 	}
 
 	endpoint := fmt.Sprintf("scim/directory/%v/ServiceProviderConfig", directoryID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
@@ -189,5 +266,6 @@ func (i *internalSCIMSchemaImpl) Feature(ctx context.Context, directoryID string
 		return nil, response, err
 	}
 
+	setOK(span)
 	return provider, response, nil
 }

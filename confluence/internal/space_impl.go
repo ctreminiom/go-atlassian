@@ -2,6 +2,9 @@ package internal
 
 import (
 	"context"
+
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
 	"fmt"
 	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/v2/service"
@@ -37,6 +40,12 @@ type SpaceService struct {
 //
 // https://docs.go-atlassian.io/confluence-cloud/space#get-spaces
 func (s *SpaceService) Gets(ctx context.Context, options *model.GetSpacesOptionScheme, startAt, maxResults int) (result *model.SpacePageScheme, response *model.ResponseScheme, err error) {
+	ctx, span := tracer().Start(ctx, "(*SpaceService).Gets", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "gets"))
+
 	return s.internalClient.Gets(ctx, options, startAt, maxResults)
 }
 
@@ -48,6 +57,12 @@ func (s *SpaceService) Gets(ctx context.Context, options *model.GetSpacesOptionS
 //
 // https://docs.go-atlassian.io/confluence-cloud/space#create-space
 func (s *SpaceService) Create(ctx context.Context, payload *model.CreateSpaceScheme, private bool) (*model.SpaceScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SpaceService).Create", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "create"))
+
 	return s.internalClient.Create(ctx, payload, private)
 }
 
@@ -59,6 +74,12 @@ func (s *SpaceService) Create(ctx context.Context, payload *model.CreateSpaceSch
 //
 // https://docs.go-atlassian.io/confluence-cloud/space#get-space
 func (s *SpaceService) Get(ctx context.Context, spaceKey string, expand []string) (*model.SpaceScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SpaceService).Get", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "get"))
+
 	return s.internalClient.Get(ctx, spaceKey, expand)
 }
 
@@ -68,6 +89,12 @@ func (s *SpaceService) Get(ctx context.Context, spaceKey string, expand []string
 //
 // https://docs.go-atlassian.io/confluence-cloud/space#update-space
 func (s *SpaceService) Update(ctx context.Context, spaceKey string, payload *model.UpdateSpaceScheme) (*model.SpaceScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SpaceService).Update", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "update"))
+
 	return s.internalClient.Update(ctx, spaceKey, payload)
 }
 
@@ -83,6 +110,12 @@ func (s *SpaceService) Update(ctx context.Context, spaceKey string, payload *mod
 //
 // https://docs.go-atlassian.io/confluence-cloud/space#delete-space
 func (s *SpaceService) Delete(ctx context.Context, spaceKey string) (*model.ContentTaskScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SpaceService).Delete", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "delete"))
+
 	return s.internalClient.Delete(ctx, spaceKey)
 }
 
@@ -94,6 +127,12 @@ func (s *SpaceService) Delete(ctx context.Context, spaceKey string) (*model.Cont
 //
 // https://docs.go-atlassian.io/confluence-cloud/space#get-content-for-space
 func (s *SpaceService) Content(ctx context.Context, spaceKey, depth string, expand []string, startAt, maxResults int) (*model.ContentChildrenScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SpaceService).Content", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "content"))
+
 	return s.internalClient.Content(ctx, spaceKey, depth, expand, startAt, maxResults)
 }
 
@@ -105,6 +144,12 @@ func (s *SpaceService) Content(ctx context.Context, spaceKey, depth string, expa
 //
 // https://docs.go-atlassian.io/confluence-cloud/space#get-content-by-type-for-space
 func (s *SpaceService) ContentByType(ctx context.Context, spaceKey, contentType, depth string, expand []string, startAt, maxResults int) (*model.ContentPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*SpaceService).ContentByType", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "content_by_type"))
+
 	return s.internalClient.ContentByType(ctx, spaceKey, contentType, depth, expand, startAt, maxResults)
 }
 
@@ -113,6 +158,11 @@ type internalSpaceImpl struct {
 }
 
 func (i *internalSpaceImpl) Gets(ctx context.Context, options *model.GetSpacesOptionScheme, startAt, maxResults int) (*model.SpacePageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalSpaceImpl).Gets", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "gets"))
 
 	query := url.Values{}
 	query.Add("start", strconv.Itoa(startAt))
@@ -163,6 +213,7 @@ func (i *internalSpaceImpl) Gets(ctx context.Context, options *model.GetSpacesOp
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
@@ -172,19 +223,27 @@ func (i *internalSpaceImpl) Gets(ctx context.Context, options *model.GetSpacesOp
 		return nil, response, err
 	}
 
+	setOK(span)
 	return page, response, nil
 }
 
 func (i *internalSpaceImpl) Create(ctx context.Context, payload *model.CreateSpaceScheme, private bool) (*model.SpaceScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalSpaceImpl).Create", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "create"))
 
 	if payload != nil {
 
 		if payload.Name == "" {
-			return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoSpaceName)
+
+				return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoSpaceName)
 		}
 
 		if payload.Key == "" {
-			return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoSpaceKey)
+
+				return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoSpaceKey)
 		}
 
 	}
@@ -198,6 +257,7 @@ func (i *internalSpaceImpl) Create(ctx context.Context, payload *model.CreateSpa
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint.String(), "", payload)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
@@ -207,13 +267,20 @@ func (i *internalSpaceImpl) Create(ctx context.Context, payload *model.CreateSpa
 		return nil, response, err
 	}
 
+	setOK(span)
 	return space, response, nil
 }
 
 func (i *internalSpaceImpl) Get(ctx context.Context, spaceKey string, expand []string) (*model.SpaceScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalSpaceImpl).Get", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "get"))
 
 	if spaceKey == "" {
-		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoSpaceKey)
+
+			return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoSpaceKey)
 	}
 
 	var endpoint strings.Builder
@@ -228,6 +295,7 @@ func (i *internalSpaceImpl) Get(ctx context.Context, spaceKey string, expand []s
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
@@ -237,19 +305,28 @@ func (i *internalSpaceImpl) Get(ctx context.Context, spaceKey string, expand []s
 		return nil, response, err
 	}
 
+	setOK(span)
 	return space, response, nil
 }
 
 func (i *internalSpaceImpl) Update(ctx context.Context, spaceKey string, payload *model.UpdateSpaceScheme) (*model.SpaceScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalSpaceImpl).Update", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "update"))
 
 	if spaceKey == "" {
-		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoSpaceKey)
+
+			return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoSpaceKey)
 	}
 
 	endpoint := fmt.Sprintf("wiki/rest/api/space/%v", spaceKey)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
@@ -259,19 +336,28 @@ func (i *internalSpaceImpl) Update(ctx context.Context, spaceKey string, payload
 		return nil, response, err
 	}
 
+	setOK(span)
 	return space, response, nil
 }
 
 func (i *internalSpaceImpl) Delete(ctx context.Context, spaceKey string) (*model.ContentTaskScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalSpaceImpl).Delete", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "delete"))
 
 	if spaceKey == "" {
-		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoSpaceKey)
+
+			return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoSpaceKey)
 	}
 
 	endpoint := fmt.Sprintf("wiki/rest/api/space/%v", spaceKey)
 
 	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
@@ -281,13 +367,20 @@ func (i *internalSpaceImpl) Delete(ctx context.Context, spaceKey string) (*model
 		return nil, response, err
 	}
 
+	setOK(span)
 	return task, response, nil
 }
 
 func (i *internalSpaceImpl) Content(ctx context.Context, spaceKey, depth string, expand []string, startAt, maxResults int) (*model.ContentChildrenScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalSpaceImpl).Content", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "content"))
 
 	if spaceKey == "" {
-		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoSpaceKey)
+
+			return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoSpaceKey)
 	}
 
 	query := url.Values{}
@@ -306,6 +399,7 @@ func (i *internalSpaceImpl) Content(ctx context.Context, spaceKey, depth string,
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
@@ -315,13 +409,20 @@ func (i *internalSpaceImpl) Content(ctx context.Context, spaceKey, depth string,
 		return nil, response, err
 	}
 
+	setOK(span)
 	return children, response, nil
 }
 
 func (i *internalSpaceImpl) ContentByType(ctx context.Context, spaceKey, contentType, depth string, expand []string, startAt, maxResults int) (*model.ContentPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalSpaceImpl).ContentByType", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "content_by_type"))
 
 	if spaceKey == "" {
-		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoSpaceKey)
+
+			return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoSpaceKey)
 	}
 
 	query := url.Values{}
@@ -340,6 +441,7 @@ func (i *internalSpaceImpl) ContentByType(ctx context.Context, spaceKey, content
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
@@ -349,5 +451,6 @@ func (i *internalSpaceImpl) ContentByType(ctx context.Context, spaceKey, content
 		return nil, response, err
 	}
 
+	setOK(span)
 	return page, response, nil
 }

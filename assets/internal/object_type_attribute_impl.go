@@ -2,11 +2,15 @@ package internal
 
 import (
 	"context"
+
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
 	"fmt"
+	"net/http"
+
 	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/v2/service"
 	"github.com/ctreminiom/go-atlassian/v2/service/assets"
-	"net/http"
 )
 
 // NewObjectTypeAttributeService creates a new instance of ObjectTypeAttributeService.
@@ -29,6 +33,12 @@ type ObjectTypeAttributeService struct {
 //
 // https://docs.go-atlassian.io/jira-assets/object/type/attribute#create-object-type-attribute
 func (o *ObjectTypeAttributeService) Create(ctx context.Context, workspaceID, objectTypeID string, payload *model.ObjectTypeAttributePayloadScheme) (*model.ObjectTypeAttributeScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ObjectTypeAttributeService).Create", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "create"))
+
 	return o.internalClient.Create(ctx, workspaceID, objectTypeID, payload)
 }
 
@@ -38,6 +48,12 @@ func (o *ObjectTypeAttributeService) Create(ctx context.Context, workspaceID, ob
 //
 // https://docs.go-atlassian.io/jira-assets/object/type/attribute#update-object-type-attribute
 func (o *ObjectTypeAttributeService) Update(ctx context.Context, workspaceID, objectTypeID, attributeID string, payload *model.ObjectTypeAttributePayloadScheme) (*model.ObjectTypeAttributeScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ObjectTypeAttributeService).Update", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "update"))
+
 	return o.internalClient.Update(ctx, workspaceID, objectTypeID, attributeID, payload)
 }
 
@@ -47,6 +63,12 @@ func (o *ObjectTypeAttributeService) Update(ctx context.Context, workspaceID, ob
 //
 // https://docs.go-atlassian.io/jira-assets/object/type/attribute#delete-object-type-attribute
 func (o *ObjectTypeAttributeService) Delete(ctx context.Context, workspaceID, attributeID string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ObjectTypeAttributeService).Delete", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "delete"))
+
 	return o.internalClient.Delete(ctx, workspaceID, attributeID)
 }
 
@@ -55,62 +77,89 @@ type internalObjectTypeAttributeImpl struct {
 }
 
 func (i *internalObjectTypeAttributeImpl) Create(ctx context.Context, workspaceID, objectTypeID string, payload *model.ObjectTypeAttributePayloadScheme) (*model.ObjectTypeAttributeScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalObjectTypeAttributeImpl).Create", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "create"))
 
 	if workspaceID == "" {
-		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoWorkspaceID)
+
+			return nil, nil, fmt.Errorf("assets: %w", model.ErrNoWorkspaceID)
 	}
 
 	if objectTypeID == "" {
-		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoObjectTypeID)
+
+			return nil, nil, fmt.Errorf("assets: %w", model.ErrNoObjectTypeID)
 	}
 
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/objecttypeattribute/%v", workspaceID, objectTypeID)
 
 	req, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
 	attribute := new(model.ObjectTypeAttributeScheme)
 	res, err := i.c.Call(req, attribute)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return attribute, res, nil
 }
 
 func (i *internalObjectTypeAttributeImpl) Update(ctx context.Context, workspaceID, objectTypeID, attributeID string, payload *model.ObjectTypeAttributePayloadScheme) (*model.ObjectTypeAttributeScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalObjectTypeAttributeImpl).Update", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "update"))
 
 	if workspaceID == "" {
-		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoWorkspaceID)
+
+			return nil, nil, fmt.Errorf("assets: %w", model.ErrNoWorkspaceID)
 	}
 
 	if objectTypeID == "" {
-		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoObjectTypeID)
+
+			return nil, nil, fmt.Errorf("assets: %w", model.ErrNoObjectTypeID)
 	}
 
 	if attributeID == "" {
-		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoObjectTypeAttributeID)
+
+			return nil, nil, fmt.Errorf("assets: %w", model.ErrNoObjectTypeAttributeID)
 	}
 
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/objecttypeattribute/%v/%v", workspaceID, objectTypeID, attributeID)
 
 	req, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	attribute := new(model.ObjectTypeAttributeScheme)
 	res, err := i.c.Call(req, attribute)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return attribute, res, nil
 }
 
 func (i *internalObjectTypeAttributeImpl) Delete(ctx context.Context, workspaceID, attributeID string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalObjectTypeAttributeImpl).Delete", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "delete"))
 
 	if workspaceID == "" {
 		return nil, fmt.Errorf("assets: %w", model.ErrNoWorkspaceID)
@@ -124,6 +173,7 @@ func (i *internalObjectTypeAttributeImpl) Delete(ctx context.Context, workspaceI
 
 	req, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, err
 	}
 

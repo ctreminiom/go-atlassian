@@ -36,6 +36,9 @@ type MySelfService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/myself#get-current-user
 func (m *MySelfService) Details(ctx context.Context, expand []string) (*model.UserScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*MySelfService).Details")
+	defer span.End()
+
 	return m.internalClient.Details(ctx, expand)
 }
 
@@ -45,6 +48,9 @@ func (m *MySelfService) Details(ctx context.Context, expand []string) (*model.Us
 //
 // https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-myself/#api-rest-api-3-mypreferences-get
 func (m *MySelfService) Get(ctx context.Context, key string) (map[string]interface{}, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*MySelfService).Get")
+	defer span.End()
+
 	return m.internalClient.Get(ctx, key)
 }
 
@@ -54,6 +60,9 @@ func (m *MySelfService) Get(ctx context.Context, key string) (map[string]interfa
 //
 // https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-myself/#api-rest-api-3-mypreferences-put
 func (m *MySelfService) Set(ctx context.Context, key string, value string) (map[string]interface{}, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*MySelfService).Set")
+	defer span.End()
+
 	return m.internalClient.Set(ctx, key, value)
 }
 
@@ -63,6 +72,9 @@ func (m *MySelfService) Set(ctx context.Context, key string, value string) (map[
 //
 // https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-myself/#api-rest-api-3-mypreferences-delete
 func (m *MySelfService) Delete(ctx context.Context, key string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*MySelfService).Delete")
+	defer span.End()
+
 	return m.internalClient.Delete(ctx, key)
 }
 
@@ -72,6 +84,8 @@ type internalMySelfImpl struct {
 }
 
 func (i *internalMySelfImpl) Details(ctx context.Context, expand []string) (*model.UserScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalMySelfImpl).Details")
+	defer span.End()
 
 	var endpoint strings.Builder
 	endpoint.WriteString(fmt.Sprintf("rest/api/%v/myself", i.version))
@@ -100,6 +114,9 @@ func (i *internalMySelfImpl) Details(ctx context.Context, expand []string) (*mod
 
 func (i *internalMySelfImpl) Get(ctx context.Context, key string) (map[string]interface{}, *model.ResponseScheme, error) {
 
+	ctx, span := tracer().Start(ctx, "(*internalMySelfImpl).Get")
+	defer span.End()
+
 	var endpoint strings.Builder
 	endpoint.WriteString(fmt.Sprintf("rest/api/%v/mypreferences", i.version))
 
@@ -124,6 +141,9 @@ func (i *internalMySelfImpl) Get(ctx context.Context, key string) (map[string]in
 }
 
 func (i *internalMySelfImpl) Set(ctx context.Context, key string, value string) (map[string]interface{}, *model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalMySelfImpl).Set")
+	defer span.End()
 
 	if key == "" {
 		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoKeyError)
@@ -157,6 +177,9 @@ func (i *internalMySelfImpl) Set(ctx context.Context, key string, value string) 
 }
 
 func (i *internalMySelfImpl) Delete(ctx context.Context, key string) (*model.ResponseScheme, error) {
+
+	ctx, span := tracer().Start(ctx, "(*internalMySelfImpl).Delete")
+	defer span.End()
 
 	if key == "" {
 		return nil, fmt.Errorf("jira: %w", model.ErrNoKeyError)

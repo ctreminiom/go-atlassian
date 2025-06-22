@@ -2,6 +2,9 @@ package internal
 
 import (
 	"context"
+
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
 	"fmt"
 	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/v2/service"
@@ -32,6 +35,12 @@ type QueueService struct {
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request/service-desk/queue#get-queues
 func (q *QueueService) Gets(ctx context.Context, serviceDeskID int, includeCount bool, start, limit int) (*model.ServiceDeskQueuePageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*QueueService).Gets", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "gets"))
+
 	return q.internalClient.Gets(ctx, serviceDeskID, includeCount, start, limit)
 }
 
@@ -41,6 +50,12 @@ func (q *QueueService) Gets(ctx context.Context, serviceDeskID int, includeCount
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request/service-desk/queue#get-queue
 func (q *QueueService) Get(ctx context.Context, serviceDeskID, queueID int, includeCount bool) (*model.ServiceDeskQueueScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*QueueService).Get", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "get"))
+
 	return q.internalClient.Get(ctx, serviceDeskID, queueID, includeCount)
 }
 
@@ -50,6 +65,12 @@ func (q *QueueService) Get(ctx context.Context, serviceDeskID, queueID int, incl
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request/service-desk/queue#get-issues-in-queue
 func (q *QueueService) Issues(ctx context.Context, serviceDeskID, queueID, start, limit int) (*model.ServiceDeskIssueQueueScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*QueueService).Issues", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "issues"))
+
 	return q.internalClient.Issues(ctx, serviceDeskID, queueID, start, limit)
 }
 
@@ -59,9 +80,15 @@ type internalQueueServiceImpl struct {
 }
 
 func (i *internalQueueServiceImpl) Gets(ctx context.Context, serviceDeskID int, includeCount bool, start, limit int) (*model.ServiceDeskQueuePageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalQueueServiceImpl).Gets", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "gets"))
 
 	if serviceDeskID == 0 {
-		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoServiceDeskID)
+
+			return nil, nil, fmt.Errorf("sm: %w", model.ErrNoServiceDeskID)
 	}
 
 	params := url.Values{}
@@ -73,26 +100,36 @@ func (i *internalQueueServiceImpl) Gets(ctx context.Context, serviceDeskID int, 
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	page := new(model.ServiceDeskQueuePageScheme)
 	res, err := i.c.Call(req, page)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return page, res, nil
 }
 
 func (i *internalQueueServiceImpl) Get(ctx context.Context, serviceDeskID, queueID int, includeCount bool) (*model.ServiceDeskQueueScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalQueueServiceImpl).Get", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "get"))
 
 	if serviceDeskID == 0 {
-		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoServiceDeskID)
+
+			return nil, nil, fmt.Errorf("sm: %w", model.ErrNoServiceDeskID)
 	}
 
 	if queueID == 0 {
-		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoQueueID)
+
+			return nil, nil, fmt.Errorf("sm: %w", model.ErrNoQueueID)
 	}
 
 	params := url.Values{}
@@ -102,26 +139,36 @@ func (i *internalQueueServiceImpl) Get(ctx context.Context, serviceDeskID, queue
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	queue := new(model.ServiceDeskQueueScheme)
 	res, err := i.c.Call(req, queue)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return queue, res, nil
 }
 
 func (i *internalQueueServiceImpl) Issues(ctx context.Context, serviceDeskID, queueID, start, limit int) (*model.ServiceDeskIssueQueueScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalQueueServiceImpl).Issues", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "issues"))
 
 	if serviceDeskID == 0 {
-		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoServiceDeskID)
+
+			return nil, nil, fmt.Errorf("sm: %w", model.ErrNoServiceDeskID)
 	}
 
 	if queueID == 0 {
-		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoQueueID)
+
+			return nil, nil, fmt.Errorf("sm: %w", model.ErrNoQueueID)
 	}
 
 	params := url.Values{}
@@ -132,14 +179,17 @@ func (i *internalQueueServiceImpl) Issues(ctx context.Context, serviceDeskID, qu
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	issues := new(model.ServiceDeskIssueQueueScheme)
 	res, err := i.c.Call(req, issues)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return issues, res, nil
 }

@@ -35,6 +35,9 @@ type WatcherService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/watcher#get-issue-watchers
 func (w *WatcherService) Gets(ctx context.Context, issueKeyOrID string) (*model.IssueWatcherScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*WatcherService).Gets")
+	defer span.End()
+
 	return w.internalClient.Gets(ctx, issueKeyOrID)
 }
 
@@ -46,6 +49,9 @@ func (w *WatcherService) Gets(ctx context.Context, issueKeyOrID string) (*model.
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/watcher#add-watcher
 func (w *WatcherService) Add(ctx context.Context, issueKeyOrID string, accountID ...string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*WatcherService).Add")
+	defer span.End()
+
 	return w.internalClient.Add(ctx, issueKeyOrID, accountID...)
 }
 
@@ -55,6 +61,9 @@ func (w *WatcherService) Add(ctx context.Context, issueKeyOrID string, accountID
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/watcher#delete-watcher
 func (w *WatcherService) Delete(ctx context.Context, issueKeyOrID, accountID string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*WatcherService).Delete")
+	defer span.End()
+
 	return w.internalClient.Delete(ctx, issueKeyOrID, accountID)
 }
 
@@ -64,6 +73,8 @@ type internalWatcherImpl struct {
 }
 
 func (i *internalWatcherImpl) Gets(ctx context.Context, issueKeyOrID string) (*model.IssueWatcherScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalWatcherImpl).Gets")
+	defer span.End()
 
 	if issueKeyOrID == "" {
 		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoIssueKeyOrID)
@@ -86,6 +97,8 @@ func (i *internalWatcherImpl) Gets(ctx context.Context, issueKeyOrID string) (*m
 }
 
 func (i *internalWatcherImpl) Add(ctx context.Context, issueKeyOrID string, accountID ...string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalWatcherImpl).Add")
+	defer span.End()
 
 	if issueKeyOrID == "" {
 		return nil, fmt.Errorf("jira: %w", model.ErrNoIssueKeyOrID)
@@ -106,6 +119,8 @@ func (i *internalWatcherImpl) Add(ctx context.Context, issueKeyOrID string, acco
 }
 
 func (i *internalWatcherImpl) Delete(ctx context.Context, issueKeyOrID, accountID string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalWatcherImpl).Delete")
+	defer span.End()
 
 	if issueKeyOrID == "" {
 		return nil, fmt.Errorf("jira: %w", model.ErrNoIssueKeyOrID)

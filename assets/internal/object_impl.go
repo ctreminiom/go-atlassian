@@ -2,14 +2,18 @@ package internal
 
 import (
 	"context"
+
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
 	"fmt"
-	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/v2/service"
-	"github.com/ctreminiom/go-atlassian/v2/service/assets"
 	"net/http"
 	"net/url"
 	"strconv"
 	"strings"
+
+	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/v2/service"
+	"github.com/ctreminiom/go-atlassian/v2/service/assets"
 )
 
 // NewObjectService creates a new instance of ObjectService.
@@ -32,6 +36,12 @@ type ObjectService struct {
 //
 // https://docs.go-atlassian.io/jira-assets/object#get-object-by-id
 func (o *ObjectService) Get(ctx context.Context, workspaceID, objectID string) (*model.ObjectScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ObjectService).Get", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "get"))
+
 	return o.internalClient.Get(ctx, workspaceID, objectID)
 }
 
@@ -41,6 +51,12 @@ func (o *ObjectService) Get(ctx context.Context, workspaceID, objectID string) (
 //
 // https://docs.go-atlassian.io/jira-assets/object#update-object-by-id
 func (o *ObjectService) Update(ctx context.Context, workspaceID, objectID string, payload *model.ObjectPayloadScheme) (*model.ObjectScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ObjectService).Update", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "update"))
+
 	return o.internalClient.Update(ctx, workspaceID, objectID, payload)
 }
 
@@ -50,6 +66,12 @@ func (o *ObjectService) Update(ctx context.Context, workspaceID, objectID string
 //
 // https://docs.go-atlassian.io/jira-assets/object#delete-object-by-id
 func (o *ObjectService) Delete(ctx context.Context, workspaceID, objectID string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ObjectService).Delete", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "delete"))
+
 	return o.internalClient.Delete(ctx, workspaceID, objectID)
 }
 
@@ -59,6 +81,12 @@ func (o *ObjectService) Delete(ctx context.Context, workspaceID, objectID string
 //
 // https://docs.go-atlassian.io/jira-assets/object#get-object-attributes
 func (o *ObjectService) Attributes(ctx context.Context, workspaceID, objectID string) ([]*model.ObjectAttributeScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ObjectService).Attributes", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "attributes"))
+
 	return o.internalClient.Attributes(ctx, workspaceID, objectID)
 }
 
@@ -68,6 +96,12 @@ func (o *ObjectService) Attributes(ctx context.Context, workspaceID, objectID st
 //
 // https://docs.go-atlassian.io/jira-assets/object#get-object-changelogs
 func (o *ObjectService) History(ctx context.Context, workspaceID, objectID string, ascOrder bool) ([]*model.ObjectHistoryScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ObjectService).History", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "history"))
+
 	return o.internalClient.History(ctx, workspaceID, objectID, ascOrder)
 }
 
@@ -77,6 +111,12 @@ func (o *ObjectService) History(ctx context.Context, workspaceID, objectID strin
 //
 // https://docs.go-atlassian.io/jira-assets/object#get-object-references
 func (o *ObjectService) References(ctx context.Context, workspaceID, objectID string) ([]*model.ObjectReferenceTypeInfoScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ObjectService).References", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "references"))
+
 	return o.internalClient.References(ctx, workspaceID, objectID)
 }
 
@@ -86,6 +126,12 @@ func (o *ObjectService) References(ctx context.Context, workspaceID, objectID st
 //
 // https://docs.go-atlassian.io/jira-assets/object#create-object
 func (o *ObjectService) Create(ctx context.Context, workspaceID string, payload *model.ObjectPayloadScheme) (*model.ObjectScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ObjectService).Create", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "create"))
+
 	return o.internalClient.Create(ctx, workspaceID, payload)
 }
 
@@ -95,6 +141,12 @@ func (o *ObjectService) Create(ctx context.Context, workspaceID string, payload 
 //
 // https://docs.go-atlassian.io/jira-assets/object#get-object-tickets
 func (o *ObjectService) Relation(ctx context.Context, workspaceID, objectID string) (*model.TicketPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ObjectService).Relation", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "relation"))
+
 	return o.internalClient.Relation(ctx, workspaceID, objectID)
 }
 
@@ -104,6 +156,12 @@ func (o *ObjectService) Relation(ctx context.Context, workspaceID, objectID stri
 //
 // https://docs.go-atlassian.io/jira-assets/object#filter-objects
 func (o *ObjectService) Filter(ctx context.Context, workspaceID, aql string, attributes bool, startAt, maxResults int) (*model.ObjectListResultScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ObjectService).Filter", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "filter"))
+
 	return o.internalClient.Filter(ctx, workspaceID, aql, attributes, startAt, maxResults)
 }
 
@@ -115,6 +173,12 @@ func (o *ObjectService) Filter(ctx context.Context, workspaceID, aql string, att
 //
 // https://docs.go-atlassian.io/jira-assets/object#search-objects
 func (o *ObjectService) Search(ctx context.Context, workspaceID string, payload *model.ObjectSearchParamsScheme) (*model.ObjectListScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*ObjectService).Search", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "search"))
+
 	return o.internalClient.Search(ctx, workspaceID, payload)
 }
 
@@ -123,36 +187,53 @@ type internalObjectImpl struct {
 }
 
 func (i *internalObjectImpl) Search(ctx context.Context, workspaceID string, payload *model.ObjectSearchParamsScheme) (*model.ObjectListScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalObjectImpl).Search", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "search"))
 
 	if workspaceID == "" {
-		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoWorkspaceID)
+
+			return nil, nil, fmt.Errorf("assets: %w", model.ErrNoWorkspaceID)
 	}
 
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/object/navlist/aql", workspaceID)
 
 	req, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
 	object := new(model.ObjectListScheme)
 	res, err := i.c.Call(req, object)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return object, res, nil
 
 }
 
 func (i *internalObjectImpl) Filter(ctx context.Context, workspaceID, aql string, attributes bool, startAt, maxResults int) (*model.ObjectListResultScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalObjectImpl).Filter", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "filter"))
 
 	if workspaceID == "" {
-		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoWorkspaceID)
+
+			return nil, nil, fmt.Errorf("assets: %w", model.ErrNoWorkspaceID)
 	}
 
 	if aql == "" {
-		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoAqlQuery)
+
+			return nil, nil, fmt.Errorf("assets: %w", model.ErrNoAqlQuery)
 	}
 
 	params := url.Values{}
@@ -167,12 +248,14 @@ func (i *internalObjectImpl) Filter(ctx context.Context, workspaceID, aql string
 
 	req, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", map[string]interface{}{"qlQuery": aql})
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	list := new(model.ObjectListResultScheme)
 	res, err := i.c.Call(req, list)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
@@ -180,58 +263,85 @@ func (i *internalObjectImpl) Filter(ctx context.Context, workspaceID, aql string
 }
 
 func (i *internalObjectImpl) Get(ctx context.Context, workspaceID, objectID string) (*model.ObjectScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalObjectImpl).Get", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "get"))
 
 	if workspaceID == "" {
-		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoWorkspaceID)
+
+			return nil, nil, fmt.Errorf("assets: %w", model.ErrNoWorkspaceID)
 	}
 
 	if objectID == "" {
-		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoObjectID)
+
+			return nil, nil, fmt.Errorf("assets: %w", model.ErrNoObjectID)
 	}
 
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/object/%v", workspaceID, objectID)
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
 	object := new(model.ObjectScheme)
 	res, err := i.c.Call(req, object)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return object, res, nil
 }
 
 func (i *internalObjectImpl) Update(ctx context.Context, workspaceID, objectID string, payload *model.ObjectPayloadScheme) (*model.ObjectScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalObjectImpl).Update", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "update"))
 
 	if workspaceID == "" {
-		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoWorkspaceID)
+
+			return nil, nil, fmt.Errorf("assets: %w", model.ErrNoWorkspaceID)
 	}
 
 	if objectID == "" {
-		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoObjectID)
+
+			return nil, nil, fmt.Errorf("assets: %w", model.ErrNoObjectID)
 	}
 
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/object/%v", workspaceID, objectID)
 
 	req, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
 	object := new(model.ObjectScheme)
 	res, err := i.c.Call(req, object)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return object, res, nil
 }
 
 func (i *internalObjectImpl) Delete(ctx context.Context, workspaceID, objectID string) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalObjectImpl).Delete", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "delete"))
 
 	if workspaceID == "" {
 		return nil, fmt.Errorf("assets: %w", model.ErrNoWorkspaceID)
@@ -245,6 +355,7 @@ func (i *internalObjectImpl) Delete(ctx context.Context, workspaceID, objectID s
 
 	req, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, err
 	}
 
@@ -252,39 +363,57 @@ func (i *internalObjectImpl) Delete(ctx context.Context, workspaceID, objectID s
 }
 
 func (i *internalObjectImpl) Attributes(ctx context.Context, workspaceID, objectID string) ([]*model.ObjectAttributeScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalObjectImpl).Attributes", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "attributes"))
 
 	if workspaceID == "" {
-		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoWorkspaceID)
+
+			return nil, nil, fmt.Errorf("assets: %w", model.ErrNoWorkspaceID)
 	}
 
 	if objectID == "" {
-		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoObjectID)
+
+			return nil, nil, fmt.Errorf("assets: %w", model.ErrNoObjectID)
 	}
 
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/object/%v/attributes", workspaceID, objectID)
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
 	var attributes []*model.ObjectAttributeScheme
 	res, err := i.c.Call(req, &attributes)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return attributes, res, nil
 }
 
 func (i *internalObjectImpl) History(ctx context.Context, workspaceID, objectID string, ascOrder bool) ([]*model.ObjectHistoryScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalObjectImpl).History", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "history"))
 
 	if workspaceID == "" {
-		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoWorkspaceID)
+
+			return nil, nil, fmt.Errorf("assets: %w", model.ErrNoWorkspaceID)
 	}
 
 	if objectID == "" {
-		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoObjectID)
+
+			return nil, nil, fmt.Errorf("assets: %w", model.ErrNoObjectID)
 	}
 
 	var endpoint strings.Builder
@@ -300,12 +429,14 @@ func (i *internalObjectImpl) History(ctx context.Context, workspaceID, objectID 
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	var history []*model.ObjectHistoryScheme
 	res, err := i.c.Call(req, &history)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
@@ -313,75 +444,107 @@ func (i *internalObjectImpl) History(ctx context.Context, workspaceID, objectID 
 }
 
 func (i *internalObjectImpl) References(ctx context.Context, workspaceID, objectID string) ([]*model.ObjectReferenceTypeInfoScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalObjectImpl).References", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "references"))
 
 	if workspaceID == "" {
-		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoWorkspaceID)
+
+			return nil, nil, fmt.Errorf("assets: %w", model.ErrNoWorkspaceID)
 	}
 
 	if objectID == "" {
-		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoObjectID)
+
+			return nil, nil, fmt.Errorf("assets: %w", model.ErrNoObjectID)
 	}
 
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/object/%v/referenceinfo", workspaceID, objectID)
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
 	var references []*model.ObjectReferenceTypeInfoScheme
 	res, err := i.c.Call(req, &references)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return references, res, nil
 }
 
 func (i *internalObjectImpl) Create(ctx context.Context, workspaceID string, payload *model.ObjectPayloadScheme) (*model.ObjectScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalObjectImpl).Create", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "create"))
 
 	if workspaceID == "" {
-		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoWorkspaceID)
+
+			return nil, nil, fmt.Errorf("assets: %w", model.ErrNoWorkspaceID)
 	}
 
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/object/create", workspaceID)
 
 	req, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
 	object := new(model.ObjectScheme)
 	res, err := i.c.Call(req, object)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return object, res, nil
 }
 
 func (i *internalObjectImpl) Relation(ctx context.Context, workspaceID, objectID string) (*model.TicketPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalObjectImpl).Relation", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "relation"))
 
 	if workspaceID == "" {
-		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoWorkspaceID)
+
+			return nil, nil, fmt.Errorf("assets: %w", model.ErrNoWorkspaceID)
 	}
 
 	if objectID == "" {
-		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoObjectID)
+
+			return nil, nil, fmt.Errorf("assets: %w", model.ErrNoObjectID)
 	}
 
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/objectconnectedtickets/%v/tickets", workspaceID, objectID)
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
 	page := new(model.TicketPageScheme)
 	res, err := i.c.Call(req, page)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return page, res, nil
 }

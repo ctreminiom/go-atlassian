@@ -2,6 +2,9 @@ package internal
 
 import (
 	"context"
+
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -33,6 +36,12 @@ type CustomContentService struct {
 //
 // https://docs.go-atlassian.io/confluence-cloud/v2/custom-content#get-custom-content-by-type
 func (c *CustomContentService) Gets(ctx context.Context, typ string, options *model.CustomContentOptionsScheme, cursor string, limit int) (*model.CustomContentPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*CustomContentService).Gets", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "gets"))
+
 	return c.internalClient.Gets(ctx, typ, options, cursor, limit)
 }
 
@@ -42,6 +51,12 @@ func (c *CustomContentService) Gets(ctx context.Context, typ string, options *mo
 //
 // https://docs.go-atlassian.io/confluence-cloud/v2/custom-content#create-custom-content
 func (c *CustomContentService) Create(ctx context.Context, payload *model.CustomContentPayloadScheme) (*model.CustomContentScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*CustomContentService).Create", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "create"))
+
 	return c.internalClient.Create(ctx, payload)
 }
 
@@ -51,6 +66,12 @@ func (c *CustomContentService) Create(ctx context.Context, payload *model.Custom
 //
 // https://docs.go-atlassian.io/confluence-cloud/v2/custom-content#get-custom-content-by-id
 func (c *CustomContentService) Get(ctx context.Context, customContentID int, format string, versionID int) (*model.CustomContentScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*CustomContentService).Get", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "get"))
+
 	return c.internalClient.Get(ctx, customContentID, format, versionID)
 }
 
@@ -64,6 +85,12 @@ func (c *CustomContentService) Get(ctx context.Context, customContentID int, for
 //
 // https://docs.go-atlassian.io/confluence-cloud/v2/custom-content#update-custom-content
 func (c *CustomContentService) Update(ctx context.Context, customContentID int, payload *model.CustomContentPayloadScheme) (*model.CustomContentScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*CustomContentService).Update", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "update"))
+
 	return c.internalClient.Update(ctx, customContentID, payload)
 }
 
@@ -73,6 +100,12 @@ func (c *CustomContentService) Update(ctx context.Context, customContentID int, 
 //
 // https://docs.go-atlassian.io/confluence-cloud/v2/custom-content#delete-custom-content
 func (c *CustomContentService) Delete(ctx context.Context, customContentID int) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*CustomContentService).Delete", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "delete"))
+
 	return c.internalClient.Delete(ctx, customContentID)
 }
 
@@ -81,9 +114,15 @@ type internalCustomContentServiceImpl struct {
 }
 
 func (i *internalCustomContentServiceImpl) Gets(ctx context.Context, typ string, options *model.CustomContentOptionsScheme, cursor string, limit int) (*model.CustomContentPageScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalCustomContentServiceImpl).Gets", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "gets"))
 
 	if typ == "" {
-		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoCustomContentType)
+
+			return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoCustomContentType)
 	}
 
 	query := url.Values{}
@@ -128,6 +167,7 @@ func (i *internalCustomContentServiceImpl) Gets(ctx context.Context, typ string,
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
@@ -137,15 +177,23 @@ func (i *internalCustomContentServiceImpl) Gets(ctx context.Context, typ string,
 		return nil, response, err
 	}
 
+	setOK(span)
 	return page, response, nil
 }
 
 func (i *internalCustomContentServiceImpl) Create(ctx context.Context, payload *model.CustomContentPayloadScheme) (*model.CustomContentScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalCustomContentServiceImpl).Create", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "create"))
 
 	endpoint := "wiki/api/v2/custom-content"
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
@@ -155,13 +203,20 @@ func (i *internalCustomContentServiceImpl) Create(ctx context.Context, payload *
 		return nil, response, err
 	}
 
+	setOK(span)
 	return customContent, response, nil
 }
 
 func (i *internalCustomContentServiceImpl) Get(ctx context.Context, customContentID int, format string, versionID int) (*model.CustomContentScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalCustomContentServiceImpl).Get", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "get"))
 
 	if customContentID == 0 {
-		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoCustomContentID)
+
+			return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoCustomContentID)
 	}
 
 	query := url.Values{}
@@ -183,6 +238,7 @@ func (i *internalCustomContentServiceImpl) Get(ctx context.Context, customConten
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
@@ -192,19 +248,28 @@ func (i *internalCustomContentServiceImpl) Get(ctx context.Context, customConten
 		return nil, response, err
 	}
 
+	setOK(span)
 	return customContent, response, nil
 }
 
 func (i *internalCustomContentServiceImpl) Update(ctx context.Context, customContentID int, payload *model.CustomContentPayloadScheme) (*model.CustomContentScheme, *model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalCustomContentServiceImpl).Update", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "update"))
 
 	if customContentID == 0 {
-		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoCustomContentID)
+
+			return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoCustomContentID)
 	}
 
 	endpoint := fmt.Sprintf("wiki/api/v2/custom-content/%v", customContentID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
@@ -214,11 +279,17 @@ func (i *internalCustomContentServiceImpl) Update(ctx context.Context, customCon
 		return nil, response, err
 	}
 
+	setOK(span)
 	return customContent, response, nil
 
 }
 
 func (i *internalCustomContentServiceImpl) Delete(ctx context.Context, customContentID int) (*model.ResponseScheme, error) {
+	ctx, span := tracer().Start(ctx, "(*internalCustomContentServiceImpl).Delete", spanWithKind(trace.SpanKindClient))
+	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "delete"))
 
 	if customContentID == 0 {
 		return nil, fmt.Errorf("confluence: %w", model.ErrNoCustomContentID)
@@ -228,6 +299,7 @@ func (i *internalCustomContentServiceImpl) Delete(ctx context.Context, customCon
 
 	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, err
 	}
 

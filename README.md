@@ -101,9 +101,12 @@ instance.Auth.SetBasicAuth("YOUR_CLIENT_MAIL", "YOUR_APP_ACCESS_TOKEN")
 
 ### OAuth 2.0 (3LO) Authentication
 
-**go-atlassian** now supports OAuth 2.0 (3-legged OAuth) authentication for
-building apps that authenticate on behalf of users. This allows your app to
-access Atlassian APIs using the permissions granted by users.
+**go-atlassian** now supports OAuth 2.0 (3-legged OAuth) authentication across
+**all API clients** for building apps that authenticate on behalf of users. This
+allows your app to access Atlassian APIs using the permissions granted by users.
+
+**Supported clients:** Jira v2, Jira v3, Jira Agile, Jira Service Management,
+Confluence v1, Confluence v2, Admin, Assets, and Bitbucket.
 
 #### Setting up OAuth 2.0
 
@@ -165,6 +168,44 @@ myself, _, err := client.MySelf.Details(ctx, nil)
 if err != nil {
     log.Fatal(err)
 }
+```
+
+#### OAuth with Different Clients
+
+OAuth 2.0 works consistently across all supported clients. Here are examples for
+different Atlassian services:
+
+```go
+// Confluence v2
+confluenceClient, err := confluencev2.New(
+    http.DefaultClient,
+    "https://your-domain.atlassian.net",
+    confluencev2.WithOAuth(oauthConfig),
+    confluencev2.WithAutoRenewalToken(token),
+)
+
+// Admin
+adminClient, err := admin.New(
+    http.DefaultClient,
+    admin.WithOAuth(oauthConfig),
+    admin.WithAutoRenewalToken(token),
+)
+
+// Jira Service Management
+smClient, err := sm.New(
+    http.DefaultClient,
+    "https://your-domain.atlassian.net",
+    sm.WithOAuth(oauthConfig),
+    sm.WithAutoRenewalToken(token),
+)
+
+// Assets
+assetsClient, err := assets.New(
+    http.DefaultClient,
+    "https://api.atlassian.com",
+    assets.WithOAuth(oauthConfig),
+    assets.WithAutoRenewalToken(token),
+)
 ```
 
 #### Working with Multiple Sites
@@ -251,14 +292,10 @@ For complete examples, see:
 
 - [examples/jira_oauth2_example.go](examples/jira_oauth2_example.go) -
   Basic OAuth flow
-- [examples/jira_oauth2_auto_renew_example.go](examples/jira_oauth2_auto_renew_example.go) -
-  Automatic token renewal
-- [examples/jira_oauth2_new_flow_example.go](examples/jira_oauth2_new_flow_example.go) -
-  Complete OAuth flow with auto-renewal
-- [examples/jira_oauth2_simple_server_example.go](examples/jira_oauth2_simple_server_example.go) -
-  Simple HTTP server with OAuth callback
 - [examples/jira_oauth2_http_server_example.go](examples/jira_oauth2_http_server_example.go) -
   Full-featured HTTP server with OAuth flow
+- [examples/multi_service_oauth2_example.go](examples/multi_service_oauth2_example.go) -
+  Using OAuth across multiple Atlassian services
 
 ## ☕Cookbooks
 

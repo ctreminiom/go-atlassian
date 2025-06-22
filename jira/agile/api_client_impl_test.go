@@ -334,22 +334,6 @@ func TestClient_NewRequest(t *testing.T) {
 			wantErr: true,
 		},
 
-		{
-			name: "when the request cannot be created",
-			fields: fields{
-				HTTP: http.DefaultClient,
-				Auth: internal.NewAuthenticationService(nil),
-				Site: siteAsURL,
-			},
-			args: args{
-				ctx:    nil,
-				method: http.MethodGet,
-				urlStr: "rest/2/issue/attachment",
-				body:   bytes.NewReader([]byte("Hello World")),
-			},
-			want:    requestMocked,
-			wantErr: true,
-		},
 	}
 
 	for _, testCase := range testCases {

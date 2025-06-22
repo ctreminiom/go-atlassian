@@ -97,8 +97,6 @@ func (c *Client) NewRequest(ctx context.Context, method, urlStr, contentType str
 	if ctx == nil {
 		ctx = context.Background()
 	}
-	ctx, span := tracer().Start(ctx, "(*Client).NewRequest")
-	defer span.End()
 
 	// Parse the relative URL.
 	rel, err := url.Parse(urlStr)
@@ -154,10 +152,7 @@ func (c *Client) NewRequest(ctx context.Context, method, urlStr, contentType str
 }
 
 func (c *Client) Call(request *http.Request, structure interface{}) (*models.ResponseScheme, error) {
-	ctx, span := tracer().Start(request.Context(), "(*Client).Call")
-	defer span.End()
-
-	response, err := c.HTTP.Do(request.WithContext(ctx))
+	response, err := c.HTTP.Do(request)
 	if err != nil {
 		return nil, err
 	}

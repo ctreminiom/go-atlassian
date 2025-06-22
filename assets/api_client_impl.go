@@ -99,8 +99,6 @@ func (c *Client) NewRequest(ctx context.Context, method, urlStr, contentType str
 	if ctx == nil {
 		ctx = context.Background()
 	}
-	ctx, span := tracer().Start(ctx, "(*Client).NewRequest")
-	defer span.End()
 
 	// Parse the relative URL.
 	rel, err := url.Parse(urlStr)

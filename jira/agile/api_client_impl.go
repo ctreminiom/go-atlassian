@@ -77,8 +77,6 @@ func (c *Client) NewRequest(ctx context.Context, method, urlStr, contentType str
 	if ctx == nil {
 		ctx = context.Background()
 	}
-	ctx, span := tracer().Start(ctx, "(*Client).NewRequest")
-	defer span.End()
 
 	rel, err := url.Parse(urlStr)
 	if err != nil {

@@ -2,6 +2,9 @@ package internal
 
 import (
 	"context"
+
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
 	"fmt"
 	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/v2/service"
@@ -38,8 +41,11 @@ type SCIMUserService struct {
 //
 // https://docs.go-atlassian.io/atlassian-admin-cloud/scim/users#create-a-user
 func (s *SCIMUserService) Create(ctx context.Context, directoryID string, payload *model.SCIMUserScheme, attributes, excludedAttributes []string) (*model.SCIMUserScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*SCIMUserService).Create")
+	ctx, span := tracer().Start(ctx, "(*SCIMUserService).Create", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "create"))
 
 	return s.internalClient.Create(ctx, directoryID, payload, attributes, excludedAttributes)
 }
@@ -56,8 +62,11 @@ func (s *SCIMUserService) Create(ctx context.Context, directoryID string, payloa
 //
 // https://docs.go-atlassian.io/atlassian-admin-cloud/scim/users#get-users
 func (s *SCIMUserService) Gets(ctx context.Context, directoryID string, opts *model.SCIMUserGetsOptionsScheme, startIndex, count int) (*model.SCIMUserPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*SCIMUserService).Gets")
+	ctx, span := tracer().Start(ctx, "(*SCIMUserService).Gets", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "gets"))
 
 	return s.internalClient.Gets(ctx, directoryID, opts, startIndex, count)
 }
@@ -68,8 +77,11 @@ func (s *SCIMUserService) Gets(ctx context.Context, directoryID string, opts *mo
 //
 // https://docs.go-atlassian.io/atlassian-admin-cloud/scim/users#get-a-user-by-id
 func (s *SCIMUserService) Get(ctx context.Context, directoryID, userID string, attributes, excludedAttributes []string) (*model.SCIMUserScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*SCIMUserService).Get")
+	ctx, span := tracer().Start(ctx, "(*SCIMUserService).Get", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "get"))
 
 	return s.internalClient.Get(ctx, directoryID, userID, attributes, excludedAttributes)
 }
@@ -82,8 +94,11 @@ func (s *SCIMUserService) Get(ctx context.Context, directoryID, userID string, a
 //
 // DELETE /scim/directory/{directoryId}/Users/{userId}
 func (s *SCIMUserService) Deactivate(ctx context.Context, directoryID, userID string) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*SCIMUserService).Deactivate")
+	ctx, span := tracer().Start(ctx, "(*SCIMUserService).Deactivate", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "deactivate"))
 
 	return s.internalClient.Deactivate(ctx, directoryID, userID)
 }
@@ -96,8 +111,11 @@ func (s *SCIMUserService) Deactivate(ctx context.Context, directoryID, userID st
 //
 // https://docs.go-atlassian.io/atlassian-admin-cloud/scim/users#update-user-by-id-patch
 func (s *SCIMUserService) Path(ctx context.Context, directoryID, userID string, payload *model.SCIMUserToPathScheme, attributes, excludedAttributes []string) (*model.SCIMUserScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*SCIMUserService).Path")
+	ctx, span := tracer().Start(ctx, "(*SCIMUserService).Path", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "path"))
 
 	return s.internalClient.Path(ctx, directoryID, userID, payload, attributes, excludedAttributes)
 }
@@ -112,8 +130,11 @@ func (s *SCIMUserService) Path(ctx context.Context, directoryID, userID string, 
 //
 // https://docs.go-atlassian.io/atlassian-admin-cloud/scim/users#update-user-via-user-attributes
 func (s *SCIMUserService) Update(ctx context.Context, directoryID, userID string, payload *model.SCIMUserScheme, attributes, excludedAttributes []string) (*model.SCIMUserScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*SCIMUserService).Update")
+	ctx, span := tracer().Start(ctx, "(*SCIMUserService).Update", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "update"))
 
 	return s.internalClient.Update(ctx, directoryID, userID, payload, attributes, excludedAttributes)
 }
@@ -123,11 +144,15 @@ type internalSCIMUserImpl struct {
 }
 
 func (i *internalSCIMUserImpl) Create(ctx context.Context, directoryID string, payload *model.SCIMUserScheme, attributes, excludedAttributes []string) (*model.SCIMUserScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalSCIMUserImpl).Create")
+	ctx, span := tracer().Start(ctx, "(*internalSCIMUserImpl).Create", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "create"))
+
 	if directoryID == "" {
-		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminDirectoryID)
+
+			return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminDirectoryID)
 	}
 
 	params := url.Values{}
@@ -149,6 +174,7 @@ func (i *internalSCIMUserImpl) Create(ctx context.Context, directoryID string, p
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint.String(), "", payload)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
@@ -158,15 +184,20 @@ func (i *internalSCIMUserImpl) Create(ctx context.Context, directoryID string, p
 		return nil, response, err
 	}
 
+	setOK(span)
 	return user, response, nil
 }
 
 func (i *internalSCIMUserImpl) Gets(ctx context.Context, directoryID string, opts *model.SCIMUserGetsOptionsScheme, startIndex, count int) (*model.SCIMUserPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalSCIMUserImpl).Gets")
+	ctx, span := tracer().Start(ctx, "(*internalSCIMUserImpl).Gets", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "gets"))
+
 	if directoryID == "" {
-		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminDirectoryID)
+
+			return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminDirectoryID)
 	}
 
 	params := url.Values{}
@@ -192,6 +223,7 @@ func (i *internalSCIMUserImpl) Gets(ctx context.Context, directoryID string, opt
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
@@ -201,19 +233,25 @@ func (i *internalSCIMUserImpl) Gets(ctx context.Context, directoryID string, opt
 		return nil, response, err
 	}
 
+	setOK(span)
 	return users, response, nil
 }
 
 func (i *internalSCIMUserImpl) Get(ctx context.Context, directoryID, userID string, attributes, excludedAttributes []string) (*model.SCIMUserScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalSCIMUserImpl).Get")
+	ctx, span := tracer().Start(ctx, "(*internalSCIMUserImpl).Get", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "get"))
+
 	if directoryID == "" {
-		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminDirectoryID)
+
+			return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminDirectoryID)
 	}
 
 	if userID == "" {
-		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminUserID)
+
+			return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminUserID)
 	}
 
 	params := url.Values{}
@@ -234,6 +272,7 @@ func (i *internalSCIMUserImpl) Get(ctx context.Context, directoryID, userID stri
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
@@ -243,12 +282,16 @@ func (i *internalSCIMUserImpl) Get(ctx context.Context, directoryID, userID stri
 		return nil, response, err
 	}
 
+	setOK(span)
 	return user, response, nil
 }
 
 func (i *internalSCIMUserImpl) Deactivate(ctx context.Context, directoryID, userID string) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalSCIMUserImpl).Deactivate")
+	ctx, span := tracer().Start(ctx, "(*internalSCIMUserImpl).Deactivate", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "deactivate"))
 
 	if directoryID == "" {
 		return nil, fmt.Errorf("admin: %w", model.ErrNoAdminDirectoryID)
@@ -262,6 +305,7 @@ func (i *internalSCIMUserImpl) Deactivate(ctx context.Context, directoryID, user
 
 	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, err
 	}
 
@@ -269,15 +313,20 @@ func (i *internalSCIMUserImpl) Deactivate(ctx context.Context, directoryID, user
 }
 
 func (i *internalSCIMUserImpl) Path(ctx context.Context, directoryID, userID string, payload *model.SCIMUserToPathScheme, attributes, excludedAttributes []string) (*model.SCIMUserScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalSCIMUserImpl).Path")
+	ctx, span := tracer().Start(ctx, "(*internalSCIMUserImpl).Path", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "path"))
+
 	if directoryID == "" {
-		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminDirectoryID)
+
+			return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminDirectoryID)
 	}
 
 	if userID == "" {
-		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminUserID)
+
+			return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminUserID)
 	}
 
 	params := url.Values{}
@@ -299,6 +348,7 @@ func (i *internalSCIMUserImpl) Path(ctx context.Context, directoryID, userID str
 
 	request, err := i.c.NewRequest(ctx, http.MethodPatch, endpoint.String(), "", payload)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
@@ -308,19 +358,25 @@ func (i *internalSCIMUserImpl) Path(ctx context.Context, directoryID, userID str
 		return nil, response, err
 	}
 
+	setOK(span)
 	return user, response, nil
 }
 
 func (i *internalSCIMUserImpl) Update(ctx context.Context, directoryID, userID string, payload *model.SCIMUserScheme, attributes, excludedAttributes []string) (*model.SCIMUserScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalSCIMUserImpl).Update")
+	ctx, span := tracer().Start(ctx, "(*internalSCIMUserImpl).Update", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "update"))
+
 	if directoryID == "" {
-		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminDirectoryID)
+
+			return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminDirectoryID)
 	}
 
 	if userID == "" {
-		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminUserID)
+
+			return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminUserID)
 	}
 
 	params := url.Values{}
@@ -341,6 +397,7 @@ func (i *internalSCIMUserImpl) Update(ctx context.Context, directoryID, userID s
 
 	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint.String(), "", payload)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
@@ -350,5 +407,6 @@ func (i *internalSCIMUserImpl) Update(ctx context.Context, directoryID, userID s
 		return nil, response, err
 	}
 
+	setOK(span)
 	return user, response, nil
 }

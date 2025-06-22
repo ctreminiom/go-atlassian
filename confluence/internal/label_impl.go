@@ -2,6 +2,9 @@ package internal
 
 import (
 	"context"
+
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
 	"fmt"
 	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/v2/service"
@@ -30,8 +33,11 @@ type LabelService struct {
 //
 // https://docs.go-atlassian.io/confluence-cloud/label#get-label-information
 func (l *LabelService) Get(ctx context.Context, labelName, labelType string, start, limit int) (*model.LabelDetailsScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*LabelService).Get")
+	ctx, span := tracer().Start(ctx, "(*LabelService).Get", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "get"))
 
 	return l.internalClient.Get(ctx, labelName, labelType, start, limit)
 }
@@ -41,11 +47,15 @@ type internalLabelImpl struct {
 }
 
 func (i *internalLabelImpl) Get(ctx context.Context, labelName, labelType string, start, limit int) (*model.LabelDetailsScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalLabelImpl).Get")
+	ctx, span := tracer().Start(ctx, "(*internalLabelImpl).Get", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "get"))
+
 	if labelName == "" {
-		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoLabelName)
+
+			return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoLabelName)
 	}
 
 	query := url.Values{}
@@ -58,6 +68,7 @@ func (i *internalLabelImpl) Get(ctx context.Context, labelName, labelType string
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
@@ -67,5 +78,6 @@ func (i *internalLabelImpl) Get(ctx context.Context, labelName, labelType string
 		return nil, response, err
 	}
 
+	setOK(span)
 	return details, response, nil
 }

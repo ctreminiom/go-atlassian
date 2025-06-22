@@ -2,6 +2,9 @@ package internal
 
 import (
 	"context"
+
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
 	"fmt"
 	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/v2/service"
@@ -43,8 +46,11 @@ type RestrictionOperationService struct {
 //
 // https://docs.go-atlassian.io/confluence-cloud/content/restrictions/operations#get-restrictions-by-operation
 func (r *RestrictionOperationService) Gets(ctx context.Context, contentID string, expand []string) (*model.ContentRestrictionByOperationScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*RestrictionOperationService).Gets")
+	ctx, span := tracer().Start(ctx, "(*RestrictionOperationService).Gets", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "gets"))
 
 	return r.internalClient.Gets(ctx, contentID, expand)
 }
@@ -55,8 +61,11 @@ func (r *RestrictionOperationService) Gets(ctx context.Context, contentID string
 //
 // https://docs.go-atlassian.io/confluence-cloud/content/restrictions/operations#get-restrictions-for-operation
 func (r *RestrictionOperationService) Get(ctx context.Context, contentID, operationKey string, expand []string, startAt, maxResults int) (*model.ContentRestrictionScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*RestrictionOperationService).Get")
+	ctx, span := tracer().Start(ctx, "(*RestrictionOperationService).Get", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "get"))
 
 	return r.internalClient.Get(ctx, contentID, operationKey, expand, startAt, maxResults)
 }
@@ -66,11 +75,15 @@ type internalRestrictionOperationImpl struct {
 }
 
 func (i *internalRestrictionOperationImpl) Gets(ctx context.Context, contentID string, expand []string) (*model.ContentRestrictionByOperationScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalRestrictionOperationImpl).Gets")
+	ctx, span := tracer().Start(ctx, "(*internalRestrictionOperationImpl).Gets", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "gets"))
+
 	if contentID == "" {
-		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
+
+			return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
 	}
 
 	var endpoint strings.Builder
@@ -85,6 +98,7 @@ func (i *internalRestrictionOperationImpl) Gets(ctx context.Context, contentID s
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
@@ -94,19 +108,25 @@ func (i *internalRestrictionOperationImpl) Gets(ctx context.Context, contentID s
 		return nil, response, err
 	}
 
+	setOK(span)
 	return operation, response, nil
 }
 
 func (i *internalRestrictionOperationImpl) Get(ctx context.Context, contentID, operationKey string, expand []string, startAt, maxResults int) (*model.ContentRestrictionScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalRestrictionOperationImpl).Get")
+	ctx, span := tracer().Start(ctx, "(*internalRestrictionOperationImpl).Get", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "get"))
+
 	if contentID == "" {
-		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
+
+			return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
 	}
 
 	if operationKey == "" {
-		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentRestrictionKey)
+
+			return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentRestrictionKey)
 	}
 
 	query := url.Values{}
@@ -121,6 +141,7 @@ func (i *internalRestrictionOperationImpl) Get(ctx context.Context, contentID, o
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
@@ -130,5 +151,6 @@ func (i *internalRestrictionOperationImpl) Get(ctx context.Context, contentID, o
 		return nil, response, err
 	}
 
+	setOK(span)
 	return restriction, response, nil
 }

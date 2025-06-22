@@ -2,6 +2,9 @@ package internal
 
 import (
 	"context"
+
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
 	"fmt"
 	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/v2/service"
@@ -32,8 +35,11 @@ type SearchService struct {
 //
 // https://docs.go-atlassian.io/confluence-cloud/search#search-content
 func (s *SearchService) Content(ctx context.Context, cql string, options *model.SearchContentOptions) (*model.SearchPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*SearchService).Content")
+	ctx, span := tracer().Start(ctx, "(*SearchService).Content", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "content"))
 
 	return s.internalClient.Content(ctx, cql, options)
 }
@@ -48,8 +54,11 @@ func (s *SearchService) Content(ctx context.Context, cql string, options *model.
 //
 // https://docs.go-atlassian.io/confluence-cloud/search#search-users
 func (s *SearchService) Users(ctx context.Context, cql string, start, limit int, expand []string) (*model.SearchPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*SearchService).Users")
+	ctx, span := tracer().Start(ctx, "(*SearchService).Users", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "users"))
 
 	return s.internalClient.Users(ctx, cql, start, limit, expand)
 }
@@ -59,11 +68,15 @@ type internalSearchImpl struct {
 }
 
 func (i *internalSearchImpl) Content(ctx context.Context, cql string, options *model.SearchContentOptions) (*model.SearchPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalSearchImpl).Content")
+	ctx, span := tracer().Start(ctx, "(*internalSearchImpl).Content", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "content"))
+
 	if cql == "" {
-		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoCQL)
+
+			return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoCQL)
 	}
 
 	query := url.Values{}
@@ -122,6 +135,7 @@ func (i *internalSearchImpl) Content(ctx context.Context, cql string, options *m
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
@@ -131,15 +145,20 @@ func (i *internalSearchImpl) Content(ctx context.Context, cql string, options *m
 		return nil, response, err
 	}
 
+	setOK(span)
 	return page, response, nil
 }
 
 func (i *internalSearchImpl) Users(ctx context.Context, cql string, start, limit int, expand []string) (*model.SearchPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalSearchImpl).Users")
+	ctx, span := tracer().Start(ctx, "(*internalSearchImpl).Users", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "users"))
+
 	if cql == "" {
-		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoCQL)
+
+			return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoCQL)
 	}
 
 	query := url.Values{}
@@ -155,6 +174,7 @@ func (i *internalSearchImpl) Users(ctx context.Context, cql string, start, limit
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
@@ -164,5 +184,6 @@ func (i *internalSearchImpl) Users(ctx context.Context, cql string, start, limit
 		return nil, response, err
 	}
 
+	setOK(span)
 	return page, response, nil
 }

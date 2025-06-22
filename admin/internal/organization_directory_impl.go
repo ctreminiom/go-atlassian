@@ -2,6 +2,9 @@ package internal
 
 import (
 	"context"
+
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
 	"fmt"
 	"net/http"
 
@@ -36,8 +39,11 @@ type OrganizationDirectoryService struct {
 //
 // https://docs.go-atlassian.io/atlassian-admin-cloud/organization/directory#users-last-active-dates
 func (o *OrganizationDirectoryService) Activity(ctx context.Context, organizationID, accountID string) (*model.UserProductAccessScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*OrganizationDirectoryService).Activity")
+	ctx, span := tracer().Start(ctx, "(*OrganizationDirectoryService).Activity", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "activity"))
 
 	return o.internalClient.Activity(ctx, organizationID, accountID)
 }
@@ -52,8 +58,11 @@ func (o *OrganizationDirectoryService) Activity(ctx context.Context, organizatio
 //
 // https://docs.go-atlassian.io/atlassian-admin-cloud/organization/directory#remove-user-access
 func (o *OrganizationDirectoryService) Remove(ctx context.Context, organizationID, accountID string) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*OrganizationDirectoryService).Remove")
+	ctx, span := tracer().Start(ctx, "(*OrganizationDirectoryService).Remove", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "remove"))
 
 	return o.internalClient.Remove(ctx, organizationID, accountID)
 }
@@ -68,8 +77,11 @@ func (o *OrganizationDirectoryService) Remove(ctx context.Context, organizationI
 //
 // https://docs.go-atlassian.io/atlassian-admin-cloud/organization/directory#suspend-user-access
 func (o *OrganizationDirectoryService) Suspend(ctx context.Context, organizationID, accountID string) (*model.GenericActionSuccessScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*OrganizationDirectoryService).Suspend")
+	ctx, span := tracer().Start(ctx, "(*OrganizationDirectoryService).Suspend", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "suspend"))
 
 	return o.internalClient.Suspend(ctx, organizationID, accountID)
 }
@@ -84,8 +96,11 @@ func (o *OrganizationDirectoryService) Suspend(ctx context.Context, organization
 //
 // https://docs.go-atlassian.io/atlassian-admin-cloud/organization/directory#restore-user-access
 func (o *OrganizationDirectoryService) Restore(ctx context.Context, organizationID, accountID string) (*model.GenericActionSuccessScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*OrganizationDirectoryService).Restore")
+	ctx, span := tracer().Start(ctx, "(*OrganizationDirectoryService).Restore", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "restore"))
 
 	return o.internalClient.Restore(ctx, organizationID, accountID)
 }
@@ -95,36 +110,48 @@ type internalOrganizationDirectoryServiceImpl struct {
 }
 
 func (i *internalOrganizationDirectoryServiceImpl) Activity(ctx context.Context, organizationID, accountID string) (*model.UserProductAccessScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalOrganizationDirectoryServiceImpl).Activity")
+	ctx, span := tracer().Start(ctx, "(*internalOrganizationDirectoryServiceImpl).Activity", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "activity"))
+
 	if organizationID == "" {
-		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminOrganization)
+
+			return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminOrganization)
 	}
 
 	if accountID == "" {
-		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminAccountID)
+
+			return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminAccountID)
 	}
 
 	endpoint := fmt.Sprintf("admin/v1/orgs/%v/directory/users/%v/last-active-dates", organizationID, accountID)
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
 	activity := new(model.UserProductAccessScheme)
 	res, err := i.c.Call(req, activity)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return activity, res, nil
 }
 
 func (i *internalOrganizationDirectoryServiceImpl) Remove(ctx context.Context, organizationID, accountID string) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalOrganizationDirectoryServiceImpl).Remove")
+	ctx, span := tracer().Start(ctx, "(*internalOrganizationDirectoryServiceImpl).Remove", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "remove"))
 
 	if organizationID == "" {
 		return nil, fmt.Errorf("admin: %w", model.ErrNoAdminOrganization)
@@ -138,6 +165,7 @@ func (i *internalOrganizationDirectoryServiceImpl) Remove(ctx context.Context, o
 
 	req, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, err
 	}
 
@@ -145,57 +173,75 @@ func (i *internalOrganizationDirectoryServiceImpl) Remove(ctx context.Context, o
 }
 
 func (i *internalOrganizationDirectoryServiceImpl) Suspend(ctx context.Context, organizationID, accountID string) (*model.GenericActionSuccessScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalOrganizationDirectoryServiceImpl).Suspend")
+	ctx, span := tracer().Start(ctx, "(*internalOrganizationDirectoryServiceImpl).Suspend", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "suspend"))
+
 	if organizationID == "" {
-		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminOrganization)
+
+			return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminOrganization)
 	}
 
 	if accountID == "" {
-		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminAccountID)
+
+			return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminAccountID)
 	}
 
 	endpoint := fmt.Sprintf("admin/v1/orgs/%v/directory/users/%v/suspend-access", organizationID, accountID)
 
 	req, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
 	message := new(model.GenericActionSuccessScheme)
 	res, err := i.c.Call(req, message)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return message, res, nil
 }
 
 func (i *internalOrganizationDirectoryServiceImpl) Restore(ctx context.Context, organizationID, accountID string) (*model.GenericActionSuccessScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalOrganizationDirectoryServiceImpl).Restore")
+	ctx, span := tracer().Start(ctx, "(*internalOrganizationDirectoryServiceImpl).Restore", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "restore"))
+
 	if organizationID == "" {
-		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminOrganization)
+
+			return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminOrganization)
 	}
 
 	if accountID == "" {
-		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminAccountID)
+
+			return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminAccountID)
 	}
 
 	endpoint := fmt.Sprintf("admin/v1/orgs/%v/directory/users/%v/restore-access", organizationID, accountID)
 
 	req, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
 	message := new(model.GenericActionSuccessScheme)
 	res, err := i.c.Call(req, message)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return message, res, nil
 }

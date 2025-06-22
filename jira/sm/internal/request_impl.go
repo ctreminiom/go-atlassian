@@ -8,6 +8,9 @@ import (
 	"strconv"
 	"strings"
 
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
+
 	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/v2/service"
 	"github.com/ctreminiom/go-atlassian/v2/service/sm"
@@ -173,28 +176,39 @@ type internalServiceRequestImpl struct {
 }
 
 func (i *internalServiceRequestImpl) Create(ctx context.Context, payload *model.CreateCustomerRequestPayloadScheme) (*model.CustomerRequestScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalServiceRequestImpl).Create")
+	ctx, span := tracer().Start(ctx, "(*internalServiceRequestImpl).Create", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "create_customer_request"),
+	)
 
 	endpoint := "rest/servicedeskapi/request"
 
 	req, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	serviceRequest := new(model.CustomerRequestScheme)
 	res, err := i.c.Call(req, serviceRequest)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return serviceRequest, res, nil
 }
 
 func (i *internalServiceRequestImpl) Gets(ctx context.Context, options *model.ServiceRequestOptionScheme, start, limit int) (*model.CustomerRequestPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalServiceRequestImpl).Gets")
+	ctx, span := tracer().Start(ctx, "(*internalServiceRequestImpl).Gets", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "get_customer_requests"),
+	)
 
 	params := url.Values{}
 	params.Add("start", strconv.Itoa(start))
@@ -239,24 +253,34 @@ func (i *internalServiceRequestImpl) Gets(ctx context.Context, options *model.Se
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	page := new(model.CustomerRequestPageScheme)
 	res, err := i.c.Call(req, page)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return page, res, nil
 }
 
 func (i *internalServiceRequestImpl) Get(ctx context.Context, issueKeyOrID string, expand []string) (*model.CustomerRequestScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalServiceRequestImpl).Get")
+	ctx, span := tracer().Start(ctx, "(*internalServiceRequestImpl).Get", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("jira.issue.key", issueKeyOrID),
+		attribute.String("operation.name", "get_customer_request"),
+	)
+
 	if issueKeyOrID == "" {
-		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoIssueKeyOrID)
+		err := fmt.Errorf("sm: %w", model.ErrNoIssueKeyOrID)
+		recordError(span, err)
+		return nil, nil, err
 	}
 
 	var endpoint strings.Builder
@@ -271,60 +295,100 @@ func (i *internalServiceRequestImpl) Get(ctx context.Context, issueKeyOrID strin
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	customerRequest := new(model.CustomerRequestScheme)
 	res, err := i.c.Call(req, customerRequest)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return customerRequest, res, nil
 }
 
 func (i *internalServiceRequestImpl) Subscribe(ctx context.Context, issueKeyOrID string) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalServiceRequestImpl).Subscribe")
+	ctx, span := tracer().Start(ctx, "(*internalServiceRequestImpl).Subscribe", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("jira.issue.key", issueKeyOrID),
+		attribute.String("operation.name", "subscribe_to_request"),
+	)
+
 	if issueKeyOrID == "" {
-		return nil, fmt.Errorf("sm: %w", model.ErrNoIssueKeyOrID)
+		err := fmt.Errorf("sm: %w", model.ErrNoIssueKeyOrID)
+		recordError(span, err)
+		return nil, err
 	}
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/request/%v/notification", issueKeyOrID)
 
 	req, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, err
 	}
 
-	return i.c.Call(req, nil)
+	res, err := i.c.Call(req, nil)
+	if err != nil {
+		recordError(span, err)
+		return res, err
+	}
+
+	setOK(span)
+	return res, nil
 }
 
 func (i *internalServiceRequestImpl) Unsubscribe(ctx context.Context, issueKeyOrID string) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalServiceRequestImpl).Unsubscribe")
+	ctx, span := tracer().Start(ctx, "(*internalServiceRequestImpl).Unsubscribe", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("jira.issue.key", issueKeyOrID),
+		attribute.String("operation.name", "unsubscribe_from_request"),
+	)
+
 	if issueKeyOrID == "" {
-		return nil, fmt.Errorf("sm: %w", model.ErrNoIssueKeyOrID)
+		err := fmt.Errorf("sm: %w", model.ErrNoIssueKeyOrID)
+		recordError(span, err)
+		return nil, err
 	}
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/request/%v/notification", issueKeyOrID)
 
 	req, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, err
 	}
 
-	return i.c.Call(req, nil)
+	res, err := i.c.Call(req, nil)
+	if err != nil {
+		recordError(span, err)
+		return res, err
+	}
+
+	setOK(span)
+	return res, nil
 }
 
 func (i *internalServiceRequestImpl) Transitions(ctx context.Context, issueKeyOrID string, start, limit int) (*model.CustomerRequestTransitionPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalServiceRequestImpl).Transitions")
+	ctx, span := tracer().Start(ctx, "(*internalServiceRequestImpl).Transitions", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("jira.issue.key", issueKeyOrID),
+		attribute.String("operation.name", "get_request_transitions"),
+	)
+
 	if issueKeyOrID == "" {
-		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoIssueKeyOrID)
+		err := fmt.Errorf("sm: %w", model.ErrNoIssueKeyOrID)
+		recordError(span, err)
+		return nil, nil, err
 	}
 
 	params := url.Values{}
@@ -335,28 +399,41 @@ func (i *internalServiceRequestImpl) Transitions(ctx context.Context, issueKeyOr
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	page := new(model.CustomerRequestTransitionPageScheme)
 	res, err := i.c.Call(req, page)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return page, res, nil
 }
 
 func (i internalServiceRequestImpl) Transition(ctx context.Context, issueKeyOrID, transitionID, comment string) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(internalServiceRequestImpl).Transition")
+	ctx, span := tracer().Start(ctx, "(internalServiceRequestImpl).Transition", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("jira.issue.key", issueKeyOrID),
+		attribute.String("jira.transition.id", transitionID),
+		attribute.String("operation.name", "transition_request"),
+	)
+
 	if issueKeyOrID == "" {
-		return nil, fmt.Errorf("sm: %w", model.ErrNoIssueKeyOrID)
+		err := fmt.Errorf("sm: %w", model.ErrNoIssueKeyOrID)
+		recordError(span, err)
+		return nil, err
 	}
 
 	if transitionID == "" {
-		return nil, fmt.Errorf("sm: %w", model.ErrNoTransitionID)
+		err := fmt.Errorf("sm: %w", model.ErrNoTransitionID)
+		recordError(span, err)
+		return nil, err
 	}
 
 	payload := map[string]interface{}{"id": transitionID}
@@ -369,8 +446,16 @@ func (i internalServiceRequestImpl) Transition(ctx context.Context, issueKeyOrID
 
 	req, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
+		recordError(span, err)
 		return nil, err
 	}
 
-	return i.c.Call(req, nil)
+	res, err := i.c.Call(req, nil)
+	if err != nil {
+		recordError(span, err)
+		return res, err
+	}
+
+	setOK(span)
+	return res, nil
 }

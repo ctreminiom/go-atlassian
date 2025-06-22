@@ -2,6 +2,9 @@ package internal
 
 import (
 	"context"
+
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -31,8 +34,11 @@ type OrganizationService struct {
 //
 // https://docs.go-atlassian.io/atlassian-admin-cloud/organization#get-organizations
 func (o *OrganizationService) Gets(ctx context.Context, cursor string) (*model.AdminOrganizationPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*OrganizationService).Gets")
+	ctx, span := tracer().Start(ctx, "(*OrganizationService).Gets", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "gets"))
 
 	return o.internalClient.Gets(ctx, cursor)
 }
@@ -43,8 +49,11 @@ func (o *OrganizationService) Gets(ctx context.Context, cursor string) (*model.A
 //
 // https://docs.go-atlassian.io/atlassian-admin-cloud/organization#get-an-organization-by-id
 func (o *OrganizationService) Get(ctx context.Context, organizationID string) (*model.AdminOrganizationScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*OrganizationService).Get")
+	ctx, span := tracer().Start(ctx, "(*OrganizationService).Get", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "get"))
 
 	return o.internalClient.Get(ctx, organizationID)
 }
@@ -55,8 +64,11 @@ func (o *OrganizationService) Get(ctx context.Context, organizationID string) (*
 //
 // https://docs.go-atlassian.io/atlassian-admin-cloud/organization#get-users-in-an-organization
 func (o *OrganizationService) Users(ctx context.Context, organizationID, cursor string) (*model.OrganizationUserPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*OrganizationService).Users")
+	ctx, span := tracer().Start(ctx, "(*OrganizationService).Users", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "users"))
 
 	return o.internalClient.Users(ctx, organizationID, cursor)
 }
@@ -67,8 +79,11 @@ func (o *OrganizationService) Users(ctx context.Context, organizationID, cursor 
 //
 // https://docs.go-atlassian.io/atlassian-admin-cloud/organization#get-domains-in-an-organization
 func (o *OrganizationService) Domains(ctx context.Context, organizationID, cursor string) (*model.OrganizationDomainPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*OrganizationService).Domains")
+	ctx, span := tracer().Start(ctx, "(*OrganizationService).Domains", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "domains"))
 
 	return o.internalClient.Domains(ctx, organizationID, cursor)
 }
@@ -79,8 +94,11 @@ func (o *OrganizationService) Domains(ctx context.Context, organizationID, curso
 //
 // https://docs.go-atlassian.io/atlassian-admin-cloud/organization#get-domain-by-id
 func (o *OrganizationService) Domain(ctx context.Context, organizationID, domainID string) (*model.OrganizationDomainScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*OrganizationService).Domain")
+	ctx, span := tracer().Start(ctx, "(*OrganizationService).Domain", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "domain"))
 
 	return o.internalClient.Domain(ctx, organizationID, domainID)
 }
@@ -91,8 +109,11 @@ func (o *OrganizationService) Domain(ctx context.Context, organizationID, domain
 //
 // https://docs.go-atlassian.io/atlassian-admin-cloud/organization#get-an-audit-log-of-events
 func (o *OrganizationService) Events(ctx context.Context, organizationID string, options *model.OrganizationEventOptScheme, cursor string) (*model.OrganizationEventPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*OrganizationService).Events")
+	ctx, span := tracer().Start(ctx, "(*OrganizationService).Events", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "events"))
 
 	return o.internalClient.Events(ctx, organizationID, options, cursor)
 }
@@ -103,8 +124,11 @@ func (o *OrganizationService) Events(ctx context.Context, organizationID string,
 //
 // https://docs.go-atlassian.io/atlassian-admin-cloud/organization#get-an-event-by-id
 func (o *OrganizationService) Event(ctx context.Context, organizationID, eventID string) (*model.OrganizationEventScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*OrganizationService).Event")
+	ctx, span := tracer().Start(ctx, "(*OrganizationService).Event", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "event"))
 
 	return o.internalClient.Event(ctx, organizationID, eventID)
 }
@@ -115,8 +139,11 @@ func (o *OrganizationService) Event(ctx context.Context, organizationID, eventID
 //
 // https://docs.go-atlassian.io/atlassian-admin-cloud/organization#get-list-of-event-actions
 func (o *OrganizationService) Actions(ctx context.Context, organizationID string) (*model.OrganizationEventActionScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*OrganizationService).Actions")
+	ctx, span := tracer().Start(ctx, "(*OrganizationService).Actions", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "actions"))
 
 	return o.internalClient.Actions(ctx, organizationID)
 }
@@ -127,8 +154,11 @@ func (o *OrganizationService) Actions(ctx context.Context, organizationID string
 //
 // https://developer.atlassian.com/cloud/admin/organization/rest/api-group-events/#api-v1-orgs-orgid-events-stream-get
 func (o *OrganizationService) EventsStream(ctx context.Context, organizationID string, options *model.OrganizationEventStreamOptScheme) (*model.OrganizationEventStreamPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*OrganizationService).EventsStream")
+	ctx, span := tracer().Start(ctx, "(*OrganizationService).EventsStream", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "events_stream"))
 
 	return o.internalClient.EventsStream(ctx, organizationID, options)
 }
@@ -138,8 +168,11 @@ type internalOrganizationImpl struct {
 }
 
 func (i *internalOrganizationImpl) Gets(ctx context.Context, cursor string) (*model.AdminOrganizationPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalOrganizationImpl).Gets")
+	ctx, span := tracer().Start(ctx, "(*internalOrganizationImpl).Gets", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "gets"))
 
 	var endpoint strings.Builder
 	endpoint.WriteString("admin/v1/orgs")
@@ -153,48 +186,66 @@ func (i *internalOrganizationImpl) Gets(ctx context.Context, cursor string) (*mo
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	organizations := new(model.AdminOrganizationPageScheme)
 	res, err := i.c.Call(req, organizations)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+
+	setOK(span)
 	return organizations, res, nil
 }
 
 func (i *internalOrganizationImpl) Get(ctx context.Context, organizationID string) (*model.AdminOrganizationScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalOrganizationImpl).Get")
+	ctx, span := tracer().Start(ctx, "(*internalOrganizationImpl).Get", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "get"))
+
 	if organizationID == "" {
-		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminOrganization)
+		err := fmt.Errorf("admin: %w", model.ErrNoAdminOrganization)
+		recordError(span, err)
+		return nil, nil, err
 	}
 
 	endpoint := fmt.Sprintf("admin/v1/orgs/%v", organizationID)
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	organization := new(model.AdminOrganizationScheme)
 	res, err := i.c.Call(req, organization)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+
+	setOK(span)
 	return organization, res, nil
 }
 
 func (i *internalOrganizationImpl) Users(ctx context.Context, organizationID, cursor string) (*model.OrganizationUserPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalOrganizationImpl).Users")
+	ctx, span := tracer().Start(ctx, "(*internalOrganizationImpl).Users", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "users"))
+
 	if organizationID == "" {
-		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminOrganization)
+		err := fmt.Errorf("admin: %w", model.ErrNoAdminOrganization)
+		recordError(span, err)
+		return nil, nil, err
 	}
 
 	var endpoint strings.Builder
@@ -209,24 +260,33 @@ func (i *internalOrganizationImpl) Users(ctx context.Context, organizationID, cu
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	users := new(model.OrganizationUserPageScheme)
 	res, err := i.c.Call(req, users)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+
+	setOK(span)
 	return users, res, nil
 }
 
 func (i *internalOrganizationImpl) Domains(ctx context.Context, organizationID, cursor string) (*model.OrganizationDomainPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalOrganizationImpl).Domains")
+	ctx, span := tracer().Start(ctx, "(*internalOrganizationImpl).Domains", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "domains"))
+
 	if organizationID == "" {
-		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminOrganization)
+		err := fmt.Errorf("admin: %w", model.ErrNoAdminOrganization)
+		recordError(span, err)
+		return nil, nil, err
 	}
 
 	var endpoint strings.Builder
@@ -241,52 +301,72 @@ func (i *internalOrganizationImpl) Domains(ctx context.Context, organizationID, 
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	domains := new(model.OrganizationDomainPageScheme)
 	res, err := i.c.Call(req, domains)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+
+	setOK(span)
 	return domains, res, nil
 }
 
 func (i *internalOrganizationImpl) Domain(ctx context.Context, organizationID, domainID string) (*model.OrganizationDomainScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalOrganizationImpl).Domain")
+	ctx, span := tracer().Start(ctx, "(*internalOrganizationImpl).Domain", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "domain"))
+
 	if organizationID == "" {
-		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminOrganization)
+		err := fmt.Errorf("admin: %w", model.ErrNoAdminOrganization)
+		recordError(span, err)
+		return nil, nil, err
 	}
 
 	if domainID == "" {
-		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminDomainID)
+		err := fmt.Errorf("admin: %w", model.ErrNoAdminDomainID)
+		recordError(span, err)
+		return nil, nil, err
 	}
 
 	endpoint := fmt.Sprintf("admin/v1/orgs/%v/domains/%v", organizationID, domainID)
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	domain := new(model.OrganizationDomainScheme)
 	res, err := i.c.Call(req, domain)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+
+	setOK(span)
 	return domain, res, nil
 }
 
 func (i *internalOrganizationImpl) Events(ctx context.Context, organizationID string, options *model.OrganizationEventOptScheme, cursor string) (*model.OrganizationEventPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalOrganizationImpl).Events")
+	ctx, span := tracer().Start(ctx, "(*internalOrganizationImpl).Events", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "events"))
+
 	if organizationID == "" {
-		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminOrganization)
+		err := fmt.Errorf("admin: %w", model.ErrNoAdminOrganization)
+		recordError(span, err)
+		return nil, nil, err
 	}
 
 	params := url.Values{}
@@ -324,76 +404,105 @@ func (i *internalOrganizationImpl) Events(ctx context.Context, organizationID st
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	events := new(model.OrganizationEventPageScheme)
 	res, err := i.c.Call(req, events)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+
+	setOK(span)
 	return events, res, nil
 }
 
 func (i *internalOrganizationImpl) Event(ctx context.Context, organizationID, eventID string) (*model.OrganizationEventScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalOrganizationImpl).Event")
+	ctx, span := tracer().Start(ctx, "(*internalOrganizationImpl).Event", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "event"))
+
 	if organizationID == "" {
-		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminOrganization)
+		err := fmt.Errorf("admin: %w", model.ErrNoAdminOrganization)
+		recordError(span, err)
+		return nil, nil, err
 	}
 
 	if eventID == "" {
-		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoEventID)
+		err := fmt.Errorf("admin: %w", model.ErrNoEventID)
+		recordError(span, err)
+		return nil, nil, err
 	}
 
 	endpoint := fmt.Sprintf("admin/v1/orgs/%v/events/%v", organizationID, eventID)
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	event := new(model.OrganizationEventScheme)
 	res, err := i.c.Call(req, event)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+
+	setOK(span)
 	return event, res, nil
 }
 
 func (i *internalOrganizationImpl) Actions(ctx context.Context, organizationID string) (*model.OrganizationEventActionScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalOrganizationImpl).Actions")
+	ctx, span := tracer().Start(ctx, "(*internalOrganizationImpl).Actions", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "actions"))
+
 	if organizationID == "" {
-		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminOrganization)
+		err := fmt.Errorf("admin: %w", model.ErrNoAdminOrganization)
+		recordError(span, err)
+		return nil, nil, err
 	}
 
 	endpoint := fmt.Sprintf("admin/v1/orgs/%v/event-actions", organizationID)
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	event := new(model.OrganizationEventActionScheme)
 	res, err := i.c.Call(req, event)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+
+	setOK(span)
 	return event, res, nil
 }
 
 func (i *internalOrganizationImpl) EventsStream(ctx context.Context, organizationID string, options *model.OrganizationEventStreamOptScheme) (*model.OrganizationEventStreamPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalOrganizationImpl).EventsStream")
+	ctx, span := tracer().Start(ctx, "(*internalOrganizationImpl).EventsStream", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "events_stream"))
+
 	if organizationID == "" {
-		return nil, nil, model.ErrNoAdminOrganization
+		err := model.ErrNoAdminOrganization
+		recordError(span, err)
+		return nil, nil, err
 	}
 
 	params := url.Values{}
@@ -423,14 +532,18 @@ func (i *internalOrganizationImpl) EventsStream(ctx context.Context, organizatio
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	page := new(model.OrganizationEventStreamPageScheme)
 	res, err := i.c.Call(req, page)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+
+	setOK(span)
 	return page, res, nil
 }

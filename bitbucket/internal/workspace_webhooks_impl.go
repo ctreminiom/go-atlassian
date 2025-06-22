@@ -2,6 +2,9 @@ package internal
 
 import (
 	"context"
+
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
 	"fmt"
 	"net/http"
 
@@ -28,8 +31,11 @@ type WorkspaceHookService struct {
 //
 // https://docs.go-atlassian.io/bitbucket-cloud/workspace/webhooks#list-webhooks-for-a-workspace
 func (w *WorkspaceHookService) Gets(ctx context.Context, workspace string) (*model.WebhookSubscriptionPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*WorkspaceHookService).Gets")
+	ctx, span := tracer().Start(ctx, "(*WorkspaceHookService).Gets", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "gets"))
 
 	return w.internalClient.Gets(ctx, workspace)
 }
@@ -42,8 +48,11 @@ func (w *WorkspaceHookService) Gets(ctx context.Context, workspace string) (*mod
 //
 // https://docs.go-atlassian.io/bitbucket-cloud/workspace/webhooks#create-webhook-for-a-workspace
 func (w *WorkspaceHookService) Create(ctx context.Context, workspace string, payload *model.WebhookSubscriptionPayloadScheme) (*model.WebhookSubscriptionScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*WorkspaceHookService).Create")
+	ctx, span := tracer().Start(ctx, "(*WorkspaceHookService).Create", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "create"))
 
 	return w.internalClient.Create(ctx, workspace, payload)
 }
@@ -54,8 +63,11 @@ func (w *WorkspaceHookService) Create(ctx context.Context, workspace string, pay
 //
 // https://docs.go-atlassian.io/bitbucket-cloud/workspace/webhooks#get-webhook-for-a-workspace
 func (w *WorkspaceHookService) Get(ctx context.Context, workspace, webhookID string) (*model.WebhookSubscriptionScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*WorkspaceHookService).Get")
+	ctx, span := tracer().Start(ctx, "(*WorkspaceHookService).Get", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "get"))
 
 	return w.internalClient.Get(ctx, workspace, webhookID)
 }
@@ -66,8 +78,11 @@ func (w *WorkspaceHookService) Get(ctx context.Context, workspace, webhookID str
 //
 // https://docs.go-atlassian.io/bitbucket-cloud/workspace/webhooks#update-webhook-for-a-workspace
 func (w *WorkspaceHookService) Update(ctx context.Context, workspace, webhookID string, payload *model.WebhookSubscriptionPayloadScheme) (*model.WebhookSubscriptionScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*WorkspaceHookService).Update")
+	ctx, span := tracer().Start(ctx, "(*WorkspaceHookService).Update", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "update"))
 
 	return w.internalClient.Update(ctx, workspace, webhookID, payload)
 }
@@ -78,8 +93,11 @@ func (w *WorkspaceHookService) Update(ctx context.Context, workspace, webhookID 
 //
 // https://docs.go-atlassian.io/bitbucket-cloud/workspace/webhooks#delete-webhook-for-a-workspace
 func (w *WorkspaceHookService) Delete(ctx context.Context, workspace, webhookID string) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*WorkspaceHookService).Delete")
+	ctx, span := tracer().Start(ctx, "(*WorkspaceHookService).Delete", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "delete"))
 
 	return w.internalClient.Delete(ctx, workspace, webhookID)
 }
@@ -89,17 +107,23 @@ type internalWorkspaceHookServiceImpl struct {
 }
 
 func (i *internalWorkspaceHookServiceImpl) Gets(ctx context.Context, workspace string) (*model.WebhookSubscriptionPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalWorkspaceHookServiceImpl).Gets")
+	ctx, span := tracer().Start(ctx, "(*internalWorkspaceHookServiceImpl).Gets", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "gets"))
+
 	if workspace == "" {
-		return nil, nil, fmt.Errorf("bitbucket: %w", model.ErrNoWorkspace)
+
+			return nil, nil, fmt.Errorf("bitbucket: %w", model.ErrNoWorkspace)
 	}
 
 	endpoint := fmt.Sprintf("2.0/workspaces/%v/hooks", workspace)
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
@@ -109,21 +133,28 @@ func (i *internalWorkspaceHookServiceImpl) Gets(ctx context.Context, workspace s
 		return nil, response, err
 	}
 
+	setOK(span)
 	return page, response, nil
 }
 
 func (i *internalWorkspaceHookServiceImpl) Create(ctx context.Context, workspace string, payload *model.WebhookSubscriptionPayloadScheme) (*model.WebhookSubscriptionScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalWorkspaceHookServiceImpl).Create")
+	ctx, span := tracer().Start(ctx, "(*internalWorkspaceHookServiceImpl).Create", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "create"))
+
 	if workspace == "" {
-		return nil, nil, fmt.Errorf("bitbucket: %w", model.ErrNoWorkspace)
+
+			return nil, nil, fmt.Errorf("bitbucket: %w", model.ErrNoWorkspace)
 	}
 
 	endpoint := fmt.Sprintf("2.0/workspaces/%v/hooks", workspace)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
@@ -133,25 +164,33 @@ func (i *internalWorkspaceHookServiceImpl) Create(ctx context.Context, workspace
 		return nil, response, err
 	}
 
+	setOK(span)
 	return webhook, response, nil
 }
 
 func (i *internalWorkspaceHookServiceImpl) Get(ctx context.Context, workspace, webhookID string) (*model.WebhookSubscriptionScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalWorkspaceHookServiceImpl).Get")
+	ctx, span := tracer().Start(ctx, "(*internalWorkspaceHookServiceImpl).Get", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "get"))
+
 	if workspace == "" {
-		return nil, nil, fmt.Errorf("bitbucket: %w", model.ErrNoWorkspace)
+
+			return nil, nil, fmt.Errorf("bitbucket: %w", model.ErrNoWorkspace)
 	}
 
 	if webhookID == "" {
-		return nil, nil, fmt.Errorf("bitbucket: %w", model.ErrNoWebhookID)
+
+			return nil, nil, fmt.Errorf("bitbucket: %w", model.ErrNoWebhookID)
 	}
 
 	endpoint := fmt.Sprintf("2.0/workspaces/%v/hooks/%v", workspace, webhookID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
@@ -161,25 +200,33 @@ func (i *internalWorkspaceHookServiceImpl) Get(ctx context.Context, workspace, w
 		return nil, response, err
 	}
 
+	setOK(span)
 	return webhook, response, nil
 }
 
 func (i *internalWorkspaceHookServiceImpl) Update(ctx context.Context, workspace, webhookID string, payload *model.WebhookSubscriptionPayloadScheme) (*model.WebhookSubscriptionScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalWorkspaceHookServiceImpl).Update")
+	ctx, span := tracer().Start(ctx, "(*internalWorkspaceHookServiceImpl).Update", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "update"))
+
 	if workspace == "" {
-		return nil, nil, fmt.Errorf("bitbucket: %w", model.ErrNoWorkspace)
+
+			return nil, nil, fmt.Errorf("bitbucket: %w", model.ErrNoWorkspace)
 	}
 
 	if webhookID == "" {
-		return nil, nil, fmt.Errorf("bitbucket: %w", model.ErrNoWebhookID)
+
+			return nil, nil, fmt.Errorf("bitbucket: %w", model.ErrNoWebhookID)
 	}
 
 	endpoint := fmt.Sprintf("2.0/workspaces/%v/hooks/%v", workspace, webhookID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
@@ -189,12 +236,16 @@ func (i *internalWorkspaceHookServiceImpl) Update(ctx context.Context, workspace
 		return nil, response, err
 	}
 
+	setOK(span)
 	return webhook, response, nil
 }
 
 func (i *internalWorkspaceHookServiceImpl) Delete(ctx context.Context, workspace, webhookID string) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalWorkspaceHookServiceImpl).Delete")
+	ctx, span := tracer().Start(ctx, "(*internalWorkspaceHookServiceImpl).Delete", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "delete"))
 
 	if workspace == "" {
 		return nil, fmt.Errorf("bitbucket: %w", model.ErrNoWorkspace)
@@ -208,6 +259,7 @@ func (i *internalWorkspaceHookServiceImpl) Delete(ctx context.Context, workspace
 
 	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, err
 	}
 

@@ -2,6 +2,9 @@ package internal
 
 import (
 	"context"
+
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
 	"fmt"
 	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/v2/service"
@@ -34,8 +37,11 @@ type AQLService struct {
 //
 // https://docs.go-atlassian.io/jira-assets/aql#filter-objects
 func (a *AQLService) Filter(ctx context.Context, workspaceID string, parameters *model.AQLSearchParamsScheme) (*model.ObjectListScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*AQLService).Filter")
+	ctx, span := tracer().Start(ctx, "(*AQLService).Filter", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "filter"))
 
 	return a.internalClient.Filter(ctx, workspaceID, parameters)
 }
@@ -45,11 +51,15 @@ type internalAQLImpl struct {
 }
 
 func (i *internalAQLImpl) Filter(ctx context.Context, workspaceID string, parameters *model.AQLSearchParamsScheme) (*model.ObjectListScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalAQLImpl).Filter")
+	ctx, span := tracer().Start(ctx, "(*internalAQLImpl).Filter", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "filter"))
+
 	if workspaceID == "" {
-		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoWorkspaceID)
+
+			return nil, nil, fmt.Errorf("assets: %w", model.ErrNoWorkspaceID)
 	}
 
 	var endpoint strings.Builder
@@ -73,14 +83,17 @@ func (i *internalAQLImpl) Filter(ctx context.Context, workspaceID string, parame
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	object := new(model.ObjectListScheme)
 	res, err := i.c.Call(req, object)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return object, res, nil
 }

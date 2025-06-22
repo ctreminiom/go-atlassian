@@ -2,6 +2,9 @@ package internal
 
 import (
 	"context"
+
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
 	"fmt"
 	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/v2/service"
@@ -30,8 +33,11 @@ type SpaceV2Service struct {
 //
 // https://docs.go-atlassian.io/confluence-cloud/v2/space#get-spaces
 func (s *SpaceV2Service) Bulk(ctx context.Context, options *model.GetSpacesOptionSchemeV2, cursor string, limit int) (*model.SpaceChunkV2Scheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*SpaceV2Service).Bulk")
+	ctx, span := tracer().Start(ctx, "(*SpaceV2Service).Bulk", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "bulk"))
 
 	return s.internalClient.Bulk(ctx, options, cursor, limit)
 }
@@ -42,8 +48,11 @@ func (s *SpaceV2Service) Bulk(ctx context.Context, options *model.GetSpacesOptio
 //
 // https://docs.go-atlassian.io/confluence-cloud/v2/space#get-space-by-id
 func (s *SpaceV2Service) Get(ctx context.Context, spaceID int, descriptionFormat string) (*model.SpaceSchemeV2, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*SpaceV2Service).Get")
+	ctx, span := tracer().Start(ctx, "(*SpaceV2Service).Get", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "get"))
 
 	return s.internalClient.Get(ctx, spaceID, descriptionFormat)
 }
@@ -52,8 +61,11 @@ func (s *SpaceV2Service) Get(ctx context.Context, spaceID int, descriptionFormat
 //
 // GET /wiki/api/v2/spaces/{id}/permissions
 func (s *SpaceV2Service) Permissions(ctx context.Context, spaceID int, cursor string, limit int) (*model.SpacePermissionPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*SpaceV2Service).Permissions")
+	ctx, span := tracer().Start(ctx, "(*SpaceV2Service).Permissions", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "permissions"))
 
 	return s.internalClient.Permissions(ctx, spaceID, cursor, limit)
 }
@@ -70,11 +82,15 @@ type internalSpaceV2Impl struct {
 }
 
 func (i *internalSpaceV2Impl) Permissions(ctx context.Context, spaceID int, cursor string, limit int) (*model.SpacePermissionPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalSpaceV2Impl).Permissions")
+	ctx, span := tracer().Start(ctx, "(*internalSpaceV2Impl).Permissions", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "permissions"))
+
 	if spaceID == 0 {
-		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoSpaceID)
+
+			return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoSpaceID)
 	}
 
 	query := url.Values{}
@@ -88,6 +104,7 @@ func (i *internalSpaceV2Impl) Permissions(ctx context.Context, spaceID int, curs
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
@@ -97,12 +114,16 @@ func (i *internalSpaceV2Impl) Permissions(ctx context.Context, spaceID int, curs
 		return nil, response, err
 	}
 
+	setOK(span)
 	return chunk, response, nil
 }
 
 func (i *internalSpaceV2Impl) Bulk(ctx context.Context, options *model.GetSpacesOptionSchemeV2, cursor string, limit int) (*model.SpaceChunkV2Scheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalSpaceV2Impl).Bulk")
+	ctx, span := tracer().Start(ctx, "(*internalSpaceV2Impl).Bulk", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "bulk"))
 
 	query := url.Values{}
 	query.Add("limit", strconv.Itoa(limit))
@@ -151,6 +172,7 @@ func (i *internalSpaceV2Impl) Bulk(ctx context.Context, options *model.GetSpaces
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
@@ -160,15 +182,20 @@ func (i *internalSpaceV2Impl) Bulk(ctx context.Context, options *model.GetSpaces
 		return nil, response, err
 	}
 
+	setOK(span)
 	return chunk, response, nil
 }
 
 func (i *internalSpaceV2Impl) Get(ctx context.Context, spaceID int, descriptionFormat string) (*model.SpaceSchemeV2, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalSpaceV2Impl).Get")
+	ctx, span := tracer().Start(ctx, "(*internalSpaceV2Impl).Get", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "get"))
+
 	if spaceID == 0 {
-		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoSpaceID)
+
+			return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoSpaceID)
 	}
 
 	var endpoint strings.Builder
@@ -183,6 +210,7 @@ func (i *internalSpaceV2Impl) Get(ctx context.Context, spaceID int, descriptionF
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
@@ -192,5 +220,6 @@ func (i *internalSpaceV2Impl) Get(ctx context.Context, spaceID int, descriptionF
 		return nil, response, err
 	}
 
+	setOK(span)
 	return space, response, nil
 }

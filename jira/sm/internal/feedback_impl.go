@@ -2,6 +2,9 @@ package internal
 
 import (
 	"context"
+
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
 	"fmt"
 	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/v2/service"
@@ -29,8 +32,11 @@ type FeedbackService struct {
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request/feedback#get-feedback
 func (s *FeedbackService) Get(ctx context.Context, requestIDOrKey string) (*model.CustomerFeedbackScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*FeedbackService).Get")
+	ctx, span := tracer().Start(ctx, "(*FeedbackService).Get", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "get"))
 
 	return s.internalClient.Get(ctx, requestIDOrKey)
 }
@@ -41,8 +47,11 @@ func (s *FeedbackService) Get(ctx context.Context, requestIDOrKey string) (*mode
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request/feedback#post-feedback
 func (s *FeedbackService) Post(ctx context.Context, requestIDOrKey string, rating int, comment string) (*model.CustomerFeedbackScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*FeedbackService).Post")
+	ctx, span := tracer().Start(ctx, "(*FeedbackService).Post", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "post"))
 
 	return s.internalClient.Post(ctx, requestIDOrKey, rating, comment)
 }
@@ -53,8 +62,11 @@ func (s *FeedbackService) Post(ctx context.Context, requestIDOrKey string, ratin
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request/feedback#delete-feedback
 func (s *FeedbackService) Delete(ctx context.Context, requestIDOrKey string) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*FeedbackService).Delete")
+	ctx, span := tracer().Start(ctx, "(*FeedbackService).Delete", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "delete"))
 
 	return s.internalClient.Delete(ctx, requestIDOrKey)
 }
@@ -65,35 +77,47 @@ type internalServiceRequestFeedbackImpl struct {
 }
 
 func (i *internalServiceRequestFeedbackImpl) Get(ctx context.Context, requestIDOrKey string) (*model.CustomerFeedbackScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalServiceRequestFeedbackImpl).Get")
+	ctx, span := tracer().Start(ctx, "(*internalServiceRequestFeedbackImpl).Get", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "get"))
+
 	if requestIDOrKey == "" {
-		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoIssueKeyOrID)
+
+			return nil, nil, fmt.Errorf("sm: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/request/%v/feedback", requestIDOrKey)
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
 	feedback := new(model.CustomerFeedbackScheme)
 	res, err := i.c.Call(req, feedback)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return feedback, res, nil
 }
 
 func (i *internalServiceRequestFeedbackImpl) Post(ctx context.Context, requestIDOrKey string, rating int, comment string) (*model.CustomerFeedbackScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalServiceRequestFeedbackImpl).Post")
+	ctx, span := tracer().Start(ctx, "(*internalServiceRequestFeedbackImpl).Post", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "post"))
+
 	if requestIDOrKey == "" {
-		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoIssueKeyOrID)
+
+			return nil, nil, fmt.Errorf("sm: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	payload := map[string]interface{}{
@@ -108,21 +132,27 @@ func (i *internalServiceRequestFeedbackImpl) Post(ctx context.Context, requestID
 
 	req, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	feedback := new(model.CustomerFeedbackScheme)
 	res, err := i.c.Call(req, feedback)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return feedback, res, nil
 }
 
 func (i *internalServiceRequestFeedbackImpl) Delete(ctx context.Context, requestIDOrKey string) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalServiceRequestFeedbackImpl).Delete")
+	ctx, span := tracer().Start(ctx, "(*internalServiceRequestFeedbackImpl).Delete", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "delete"))
 
 	if requestIDOrKey == "" {
 		return nil, fmt.Errorf("sm: %w", model.ErrNoIssueKeyOrID)
@@ -132,6 +162,7 @@ func (i *internalServiceRequestFeedbackImpl) Delete(ctx context.Context, request
 
 	req, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, err
 	}
 

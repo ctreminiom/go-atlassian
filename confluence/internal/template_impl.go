@@ -2,6 +2,9 @@ package internal
 
 import (
 	"context"
+
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
 	"net/http"
 
 	"github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
@@ -29,8 +32,11 @@ type TemplateService struct {
 //
 // https://docs.go-atlassian.io/confluence-cloud/template#create-content-template
 func (t *TemplateService) Create(ctx context.Context, payload *models.CreateTemplateScheme) (*models.ContentTemplateScheme, *models.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*TemplateService).Create")
+	ctx, span := tracer().Start(ctx, "(*TemplateService).Create", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "create"))
 
 	return t.internalClient.Create(ctx, payload)
 }
@@ -41,8 +47,11 @@ func (t *TemplateService) Create(ctx context.Context, payload *models.CreateTemp
 //
 // https://docs.go-atlassian.io/confluence-cloud/template#update-content-template
 func (t *TemplateService) Update(ctx context.Context, payload *models.UpdateTemplateScheme) (*models.ContentTemplateScheme, *models.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*TemplateService).Update")
+	ctx, span := tracer().Start(ctx, "(*TemplateService).Update", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "update"))
 
 	return t.internalClient.Update(ctx, payload)
 }
@@ -53,8 +62,11 @@ func (t *TemplateService) Update(ctx context.Context, payload *models.UpdateTemp
 //
 // https://docs.go-atlassian.io/confluence-cloud/template#get-content-template
 func (t *TemplateService) Get(ctx context.Context, templateID string) (*models.ContentTemplateScheme, *models.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*TemplateService).Get")
+	ctx, span := tracer().Start(ctx, "(*TemplateService).Get", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "get"))
 
 	return t.internalClient.Get(ctx, templateID)
 }
@@ -66,13 +78,18 @@ type internalTemplateImpl struct {
 
 // Create implements TemplateService.Create.
 func (i *internalTemplateImpl) Create(ctx context.Context, payload *models.CreateTemplateScheme) (*models.ContentTemplateScheme, *models.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalTemplateImpl).Create")
+	ctx, span := tracer().Start(ctx, "(*internalTemplateImpl).Create", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "create"))
 
 	endpoint := "/wiki/rest/api/template"
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
@@ -82,18 +99,24 @@ func (i *internalTemplateImpl) Create(ctx context.Context, payload *models.Creat
 		return nil, response, err
 	}
 
+	setOK(span)
 	return result, response, nil
 }
 
 // Update implements TemplateService.Update.
 func (i *internalTemplateImpl) Update(ctx context.Context, payload *models.UpdateTemplateScheme) (*models.ContentTemplateScheme, *models.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalTemplateImpl).Update")
+	ctx, span := tracer().Start(ctx, "(*internalTemplateImpl).Update", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "update"))
 
 	endpoint := "/wiki/rest/api/template"
 
 	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
@@ -103,18 +126,24 @@ func (i *internalTemplateImpl) Update(ctx context.Context, payload *models.Updat
 		return nil, response, err
 	}
 
+	setOK(span)
 	return result, response, nil
 }
 
 // Get implements TemplateService.Get.
 func (i *internalTemplateImpl) Get(ctx context.Context, templateID string) (*models.ContentTemplateScheme, *models.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalTemplateImpl).Get")
+	ctx, span := tracer().Start(ctx, "(*internalTemplateImpl).Get", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "get"))
 
 	endpoint := "/wiki/rest/api/template/" + templateID
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
@@ -124,5 +153,6 @@ func (i *internalTemplateImpl) Get(ctx context.Context, templateID string) (*mod
 		return nil, response, err
 	}
 
+	setOK(span)
 	return result, response, nil
 }

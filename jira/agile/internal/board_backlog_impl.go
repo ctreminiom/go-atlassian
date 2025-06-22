@@ -5,6 +5,9 @@ import (
 	"fmt"
 	"net/http"
 
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
+
 	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/v2/service"
 	"github.com/ctreminiom/go-atlassian/v2/service/agile"
@@ -64,8 +67,13 @@ type internalBoardBacklogImpl struct {
 }
 
 func (i *internalBoardBacklogImpl) Move(ctx context.Context, issues []string) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalBoardBacklogImpl).Move")
+	ctx, span := tracer().Start(ctx, "(*internalBoardBacklogImpl).Move", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.Int("jira.issue.count", len(issues)),
+		attribute.String("operation.name", "move_issues_to_backlog"),
+	)
 
 	payload := map[string]interface{}{"issues": issues}
 
@@ -73,26 +81,49 @@ func (i *internalBoardBacklogImpl) Move(ctx context.Context, issues []string) (*
 
 	req, err := i.c.NewRequest(ctx, http.MethodPost, url, "", payload)
 	if err != nil {
+		recordError(span, err)
 		return nil, err
 	}
 
-	return i.c.Call(req, nil)
+	res, err := i.c.Call(req, nil)
+	if err != nil {
+		recordError(span, err)
+		return res, err
+	}
+
+	setOK(span)
+	return res, nil
 }
 
 func (i *internalBoardBacklogImpl) MoveTo(ctx context.Context, boardID int, payload *model.BoardBacklogPayloadScheme) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalBoardBacklogImpl).MoveTo")
+	ctx, span := tracer().Start(ctx, "(*internalBoardBacklogImpl).MoveTo", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.Int("jira.board.id", boardID),
+		attribute.String("operation.name", "move_issues_to_board_backlog"),
+	)
+
 	if boardID == 0 {
-		return nil, fmt.Errorf("agile: %w", model.ErrNoBoardID)
+		err := fmt.Errorf("agile: %w", model.ErrNoBoardID)
+		recordError(span, err)
+		return nil, err
 	}
 
 	url := fmt.Sprintf("rest/agile/%v/backlog/%v/issue", i.version, boardID)
 
 	req, err := i.c.NewRequest(ctx, http.MethodPost, url, "", payload)
 	if err != nil {
+		recordError(span, err)
 		return nil, err
 	}
 
-	return i.c.Call(req, nil)
+	res, err := i.c.Call(req, nil)
+	if err != nil {
+		recordError(span, err)
+		return res, err
+	}
+
+	setOK(span)
+	return res, nil
 }

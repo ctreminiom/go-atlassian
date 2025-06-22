@@ -2,6 +2,9 @@ package internal
 
 import (
 	"context"
+
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
 	"fmt"
 	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/v2/service"
@@ -29,8 +32,11 @@ type OrganizationPolicyService struct {
 //
 // https://docs.go-atlassian.io/atlassian-admin-cloud/organization/policy#get-list-of-policies
 func (o *OrganizationPolicyService) Gets(ctx context.Context, organizationID, policyType, cursor string) (*model.OrganizationPolicyPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*OrganizationPolicyService).Gets")
+	ctx, span := tracer().Start(ctx, "(*OrganizationPolicyService).Gets", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "gets"))
 
 	return o.internalClient.Gets(ctx, organizationID, policyType, cursor)
 }
@@ -41,8 +47,11 @@ func (o *OrganizationPolicyService) Gets(ctx context.Context, organizationID, po
 //
 // https://docs.go-atlassian.io/atlassian-admin-cloud/organization/policy#get-a-policy-by-id
 func (o *OrganizationPolicyService) Get(ctx context.Context, organizationID, policyID string) (*model.OrganizationPolicyScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*OrganizationPolicyService).Get")
+	ctx, span := tracer().Start(ctx, "(*OrganizationPolicyService).Get", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "get"))
 
 	return o.internalClient.Get(ctx, organizationID, policyID)
 }
@@ -53,8 +62,11 @@ func (o *OrganizationPolicyService) Get(ctx context.Context, organizationID, pol
 //
 // https://docs.go-atlassian.io/atlassian-admin-cloud/organization/policy#create-a-policy
 func (o *OrganizationPolicyService) Create(ctx context.Context, organizationID string, payload *model.OrganizationPolicyData) (*model.OrganizationPolicyScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*OrganizationPolicyService).Create")
+	ctx, span := tracer().Start(ctx, "(*OrganizationPolicyService).Create", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "create"))
 
 	return o.internalClient.Create(ctx, organizationID, payload)
 }
@@ -65,8 +77,11 @@ func (o *OrganizationPolicyService) Create(ctx context.Context, organizationID s
 //
 // https://docs.go-atlassian.io/atlassian-admin-cloud/organization/policy#update-a-policy
 func (o *OrganizationPolicyService) Update(ctx context.Context, organizationID, policyID string, payload *model.OrganizationPolicyData) (*model.OrganizationPolicyScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*OrganizationPolicyService).Update")
+	ctx, span := tracer().Start(ctx, "(*OrganizationPolicyService).Update", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "update"))
 
 	return o.internalClient.Update(ctx, organizationID, policyID, payload)
 }
@@ -77,8 +92,11 @@ func (o *OrganizationPolicyService) Update(ctx context.Context, organizationID, 
 //
 // https://docs.go-atlassian.io/atlassian-admin-cloud/organization/policy#delete-a-policy
 func (o *OrganizationPolicyService) Delete(ctx context.Context, organizationID, policyID string) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*OrganizationPolicyService).Delete")
+	ctx, span := tracer().Start(ctx, "(*OrganizationPolicyService).Delete", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "delete"))
 
 	return o.internalClient.Delete(ctx, organizationID, policyID)
 }
@@ -88,11 +106,15 @@ type internalOrganizationPolicyImpl struct {
 }
 
 func (i *internalOrganizationPolicyImpl) Gets(ctx context.Context, organizationID, policyType, cursor string) (*model.OrganizationPolicyPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalOrganizationPolicyImpl).Gets")
+	ctx, span := tracer().Start(ctx, "(*internalOrganizationPolicyImpl).Gets", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "gets"))
+
 	if organizationID == "" {
-		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminOrganization)
+
+			return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminOrganization)
 	}
 
 	params := url.Values{}
@@ -113,12 +135,14 @@ func (i *internalOrganizationPolicyImpl) Gets(ctx context.Context, organizationI
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	policies := new(model.OrganizationPolicyPageScheme)
 	res, err := i.c.Call(req, policies)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
@@ -126,27 +150,35 @@ func (i *internalOrganizationPolicyImpl) Gets(ctx context.Context, organizationI
 }
 
 func (i *internalOrganizationPolicyImpl) Get(ctx context.Context, organizationID, policyID string) (*model.OrganizationPolicyScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalOrganizationPolicyImpl).Get")
+	ctx, span := tracer().Start(ctx, "(*internalOrganizationPolicyImpl).Get", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "get"))
+
 	if organizationID == "" {
-		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminOrganization)
+
+			return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminOrganization)
 	}
 
 	if policyID == "" {
-		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminPolicy)
+
+			return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminPolicy)
 	}
 
 	endpoint := fmt.Sprintf("admin/v1/orgs/%v/policies/%v", organizationID, policyID)
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
 	policy := new(model.OrganizationPolicyScheme)
 	res, err := i.c.Call(req, policy)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
@@ -154,17 +186,23 @@ func (i *internalOrganizationPolicyImpl) Get(ctx context.Context, organizationID
 }
 
 func (i *internalOrganizationPolicyImpl) Create(ctx context.Context, organizationID string, payload *model.OrganizationPolicyData) (*model.OrganizationPolicyScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalOrganizationPolicyImpl).Create")
+	ctx, span := tracer().Start(ctx, "(*internalOrganizationPolicyImpl).Create", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "create"))
+
 	if organizationID == "" {
-		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminOrganization)
+
+			return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminOrganization)
 	}
 
 	endpoint := fmt.Sprintf("admin/v1/orgs/%v/policies", organizationID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
@@ -178,21 +216,28 @@ func (i *internalOrganizationPolicyImpl) Create(ctx context.Context, organizatio
 }
 
 func (i *internalOrganizationPolicyImpl) Update(ctx context.Context, organizationID, policyID string, payload *model.OrganizationPolicyData) (*model.OrganizationPolicyScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalOrganizationPolicyImpl).Update")
+	ctx, span := tracer().Start(ctx, "(*internalOrganizationPolicyImpl).Update", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "update"))
+
 	if organizationID == "" {
-		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminOrganization)
+
+			return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminOrganization)
 	}
 
 	if policyID == "" {
-		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminPolicy)
+
+			return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminPolicy)
 	}
 
 	endpoint := fmt.Sprintf("admin/v1/orgs/%v/policies/%v", organizationID, policyID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
@@ -206,8 +251,11 @@ func (i *internalOrganizationPolicyImpl) Update(ctx context.Context, organizatio
 }
 
 func (i *internalOrganizationPolicyImpl) Delete(ctx context.Context, organizationID, policyID string) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalOrganizationPolicyImpl).Delete")
+	ctx, span := tracer().Start(ctx, "(*internalOrganizationPolicyImpl).Delete", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "delete"))
 
 	if organizationID == "" {
 		return nil, fmt.Errorf("admin: %w", model.ErrNoAdminOrganization)
@@ -221,6 +269,7 @@ func (i *internalOrganizationPolicyImpl) Delete(ctx context.Context, organizatio
 
 	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, err
 	}
 

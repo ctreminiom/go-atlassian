@@ -2,6 +2,9 @@ package internal
 
 import (
 	"context"
+
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
 	"fmt"
 	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/v2/service"
@@ -33,8 +36,11 @@ type TaskService struct {
 //
 // https://docs.go-atlassian.io/confluence-cloud/long-task#get-long-running-tasks
 func (t *TaskService) Gets(ctx context.Context, start, limit int) (*model.LongTaskPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*TaskService).Gets")
+	ctx, span := tracer().Start(ctx, "(*TaskService).Gets", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "gets"))
 
 	return t.internalClient.Gets(ctx, start, limit)
 }
@@ -47,8 +53,11 @@ func (t *TaskService) Gets(ctx context.Context, start, limit int) (*model.LongTa
 //
 // https://docs.go-atlassian.io/confluence-cloud/long-task#get-long-running-task
 func (t *TaskService) Get(ctx context.Context, taskID string) (*model.LongTaskScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*TaskService).Get")
+	ctx, span := tracer().Start(ctx, "(*TaskService).Get", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "get"))
 
 	return t.internalClient.Get(ctx, taskID)
 }
@@ -58,8 +67,11 @@ type internalTaskImpl struct {
 }
 
 func (i *internalTaskImpl) Gets(ctx context.Context, start, limit int) (*model.LongTaskPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalTaskImpl).Gets")
+	ctx, span := tracer().Start(ctx, "(*internalTaskImpl).Gets", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "gets"))
 
 	query := url.Values{}
 	query.Add("start", strconv.Itoa(start))
@@ -69,6 +81,8 @@ func (i *internalTaskImpl) Gets(ctx context.Context, start, limit int) (*model.L
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
@@ -78,17 +92,23 @@ func (i *internalTaskImpl) Gets(ctx context.Context, start, limit int) (*model.L
 		return nil, response, err
 	}
 
+	setOK(span)
 	return page, response, nil
 }
 
 func (i *internalTaskImpl) Get(ctx context.Context, taskID string) (*model.LongTaskScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalTaskImpl).Get")
+	ctx, span := tracer().Start(ctx, "(*internalTaskImpl).Get", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "get"))
 
 	endpoint := fmt.Sprintf("wiki/rest/api/longtask/%v", taskID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
@@ -98,5 +118,6 @@ func (i *internalTaskImpl) Get(ctx context.Context, taskID string) (*model.LongT
 		return nil, response, err
 	}
 
+	setOK(span)
 	return task, response, nil
 }

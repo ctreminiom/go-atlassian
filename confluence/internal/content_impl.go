@@ -2,6 +2,9 @@ package internal
 
 import (
 	"context"
+
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
 	"fmt"
 	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/v2/service"
@@ -76,8 +79,11 @@ type ContentService struct {
 //
 // https://docs.go-atlassian.io/confluence-cloud/content#get-content
 func (c *ContentService) Gets(ctx context.Context, options *model.GetContentOptionsScheme, startAt, maxResults int) (*model.ContentPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*ContentService).Gets")
+	ctx, span := tracer().Start(ctx, "(*ContentService).Gets", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "gets"))
 
 	return c.internalClient.Gets(ctx, options, startAt, maxResults)
 }
@@ -94,8 +100,11 @@ func (c *ContentService) Gets(ctx context.Context, options *model.GetContentOpti
 //
 // https://docs.go-atlassian.io/confluence-cloud/content#create-content
 func (c *ContentService) Create(ctx context.Context, payload *model.ContentScheme) (*model.ContentScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*ContentService).Create")
+	ctx, span := tracer().Start(ctx, "(*ContentService).Create", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "create"))
 
 	return c.internalClient.Create(ctx, payload)
 }
@@ -106,8 +115,11 @@ func (c *ContentService) Create(ctx context.Context, payload *model.ContentSchem
 //
 // https://docs.go-atlassian.io/confluence-cloud/content#search-contents-by-cql
 func (c *ContentService) Search(ctx context.Context, cql, cqlContext string, expand []string, cursor string, maxResults int) (*model.ContentPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*ContentService).Search")
+	ctx, span := tracer().Start(ctx, "(*ContentService).Search", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "search"))
 
 	return c.internalClient.Search(ctx, cql, cqlContext, expand, cursor, maxResults)
 }
@@ -120,8 +132,11 @@ func (c *ContentService) Search(ctx context.Context, cql, cqlContext string, exp
 //
 // https://docs.go-atlassian.io/confluence-cloud/content#get-content
 func (c *ContentService) Get(ctx context.Context, contentID string, expand []string, version int) (*model.ContentScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*ContentService).Get")
+	ctx, span := tracer().Start(ctx, "(*ContentService).Get", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "get"))
 
 	return c.internalClient.Get(ctx, contentID, expand, version)
 }
@@ -134,8 +149,11 @@ func (c *ContentService) Get(ctx context.Context, contentID string, expand []str
 //
 // https://docs.go-atlassian.io/confluence-cloud/content#update-content
 func (c *ContentService) Update(ctx context.Context, contentID string, payload *model.ContentScheme) (*model.ContentScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*ContentService).Update")
+	ctx, span := tracer().Start(ctx, "(*ContentService).Update", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "update"))
 
 	return c.internalClient.Update(ctx, contentID, payload)
 }
@@ -154,8 +172,11 @@ func (c *ContentService) Update(ctx context.Context, contentID string, payload *
 //
 // https://docs.go-atlassian.io/confluence-cloud/content#delete-content
 func (c *ContentService) Delete(ctx context.Context, contentID, status string) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*ContentService).Delete")
+	ctx, span := tracer().Start(ctx, "(*ContentService).Delete", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "delete"))
 
 	return c.internalClient.Delete(ctx, contentID, status)
 }
@@ -166,8 +187,11 @@ func (c *ContentService) Delete(ctx context.Context, contentID, status string) (
 //
 // https://docs.go-atlassian.io/confluence-cloud/content#get-content-history
 func (c *ContentService) History(ctx context.Context, contentID string, expand []string) (*model.ContentHistoryScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*ContentService).History")
+	ctx, span := tracer().Start(ctx, "(*ContentService).History", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "history"))
 
 	return c.internalClient.History(ctx, contentID, expand)
 }
@@ -184,8 +208,11 @@ func (c *ContentService) History(ctx context.Context, contentID string, expand [
 //
 // https://docs.go-atlassian.io/confluence-cloud/content#archive-pages
 func (c *ContentService) Archive(ctx context.Context, payload *model.ContentArchivePayloadScheme) (*model.ContentArchiveResultScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*ContentService).Archive")
+	ctx, span := tracer().Start(ctx, "(*ContentService).Archive", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "archive"))
 
 	return c.internalClient.Archive(ctx, payload)
 }
@@ -195,8 +222,11 @@ type internalContentImpl struct {
 }
 
 func (i *internalContentImpl) Gets(ctx context.Context, options *model.GetContentOptionsScheme, startAt, maxResults int) (*model.ContentPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalContentImpl).Gets")
+	ctx, span := tracer().Start(ctx, "(*internalContentImpl).Gets", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "gets"))
 
 	query := url.Values{}
 	query.Add("start", strconv.Itoa(startAt))
@@ -242,6 +272,7 @@ func (i *internalContentImpl) Gets(ctx context.Context, options *model.GetConten
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
@@ -251,17 +282,23 @@ func (i *internalContentImpl) Gets(ctx context.Context, options *model.GetConten
 		return nil, response, err
 	}
 
+	setOK(span)
 	return page, response, nil
 }
 
 func (i *internalContentImpl) Create(ctx context.Context, payload *model.ContentScheme) (*model.ContentScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalContentImpl).Create")
+	ctx, span := tracer().Start(ctx, "(*internalContentImpl).Create", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "create"))
 
 	endpoint := "wiki/rest/api/content"
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
@@ -271,15 +308,20 @@ func (i *internalContentImpl) Create(ctx context.Context, payload *model.Content
 		return nil, response, err
 	}
 
+	setOK(span)
 	return content, response, nil
 }
 
 func (i *internalContentImpl) Search(ctx context.Context, cql, cqlContext string, expand []string, cursor string, maxResults int) (*model.ContentPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalContentImpl).Search")
+	ctx, span := tracer().Start(ctx, "(*internalContentImpl).Search", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "search"))
+
 	if cql == "" {
-		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoCQL)
+
+			return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoCQL)
 	}
 
 	query := url.Values{}
@@ -302,6 +344,7 @@ func (i *internalContentImpl) Search(ctx context.Context, cql, cqlContext string
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
@@ -311,15 +354,20 @@ func (i *internalContentImpl) Search(ctx context.Context, cql, cqlContext string
 		return nil, response, err
 	}
 
+	setOK(span)
 	return page, response, nil
 }
 
 func (i *internalContentImpl) Get(ctx context.Context, contentID string, expand []string, version int) (*model.ContentScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalContentImpl).Get")
+	ctx, span := tracer().Start(ctx, "(*internalContentImpl).Get", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "get"))
+
 	if contentID == "" {
-		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
+
+			return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
 	}
 
 	query := url.Values{}
@@ -333,6 +381,7 @@ func (i *internalContentImpl) Get(ctx context.Context, contentID string, expand 
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
@@ -342,21 +391,28 @@ func (i *internalContentImpl) Get(ctx context.Context, contentID string, expand 
 		return nil, response, err
 	}
 
+	setOK(span)
 	return content, response, nil
 }
 
 func (i *internalContentImpl) Update(ctx context.Context, contentID string, payload *model.ContentScheme) (*model.ContentScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalContentImpl).Update")
+	ctx, span := tracer().Start(ctx, "(*internalContentImpl).Update", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "update"))
+
 	if contentID == "" {
-		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
+
+			return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
 	}
 
 	endpoint := fmt.Sprintf("wiki/rest/api/content/%v", contentID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
@@ -366,12 +422,16 @@ func (i *internalContentImpl) Update(ctx context.Context, contentID string, payl
 		return nil, response, err
 	}
 
+	setOK(span)
 	return content, response, nil
 }
 
 func (i *internalContentImpl) Delete(ctx context.Context, contentID, status string) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalContentImpl).Delete")
+	ctx, span := tracer().Start(ctx, "(*internalContentImpl).Delete", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "delete"))
 
 	if contentID == "" {
 		return nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
@@ -389,6 +449,7 @@ func (i *internalContentImpl) Delete(ctx context.Context, contentID, status stri
 
 	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint.String(), "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, err
 	}
 
@@ -396,11 +457,15 @@ func (i *internalContentImpl) Delete(ctx context.Context, contentID, status stri
 }
 
 func (i *internalContentImpl) History(ctx context.Context, contentID string, expand []string) (*model.ContentHistoryScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalContentImpl).History")
+	ctx, span := tracer().Start(ctx, "(*internalContentImpl).History", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "history"))
+
 	if contentID == "" {
-		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
+
+			return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
 	}
 
 	var endpoint strings.Builder
@@ -415,6 +480,7 @@ func (i *internalContentImpl) History(ctx context.Context, contentID string, exp
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
@@ -428,13 +494,18 @@ func (i *internalContentImpl) History(ctx context.Context, contentID string, exp
 }
 
 func (i *internalContentImpl) Archive(ctx context.Context, payload *model.ContentArchivePayloadScheme) (*model.ContentArchiveResultScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalContentImpl).Archive")
+	ctx, span := tracer().Start(ctx, "(*internalContentImpl).Archive", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "archive"))
 
 	endpoint := "wiki/rest/api/content/archive"
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
@@ -444,5 +515,6 @@ func (i *internalContentImpl) Archive(ctx context.Context, payload *model.Conten
 		return nil, response, err
 	}
 
+	setOK(span)
 	return result, response, nil
 }

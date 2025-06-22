@@ -2,6 +2,9 @@ package internal
 
 import (
 	"context"
+
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
 	"fmt"
 	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/v2/service"
@@ -32,8 +35,11 @@ type PropertyService struct {
 //
 // https://docs.go-atlassian.io/confluence-cloud/content/properties#get-content-properties
 func (p *PropertyService) Gets(ctx context.Context, contentID string, expand []string, startAt, maxResults int) (*model.ContentPropertyPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*PropertyService).Gets")
+	ctx, span := tracer().Start(ctx, "(*PropertyService).Gets", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "gets"))
 
 	return p.internalClient.Gets(ctx, contentID, expand, startAt, maxResults)
 }
@@ -44,8 +50,11 @@ func (p *PropertyService) Gets(ctx context.Context, contentID string, expand []s
 //
 // https://docs.go-atlassian.io/confluence-cloud/content/properties#create-content-property
 func (p *PropertyService) Create(ctx context.Context, contentID string, payload *model.ContentPropertyPayloadScheme) (*model.ContentPropertyScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*PropertyService).Create")
+	ctx, span := tracer().Start(ctx, "(*PropertyService).Create", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "create"))
 
 	return p.internalClient.Create(ctx, contentID, payload)
 }
@@ -56,8 +65,11 @@ func (p *PropertyService) Create(ctx context.Context, contentID string, payload 
 //
 // https://docs.go-atlassian.io/confluence-cloud/content/properties#get-content-property
 func (p *PropertyService) Get(ctx context.Context, contentID, key string) (*model.ContentPropertyScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*PropertyService).Get")
+	ctx, span := tracer().Start(ctx, "(*PropertyService).Get", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "get"))
 
 	return p.internalClient.Get(ctx, contentID, key)
 }
@@ -68,8 +80,11 @@ func (p *PropertyService) Get(ctx context.Context, contentID, key string) (*mode
 //
 // https://docs.go-atlassian.io/confluence-cloud/content/properties#delete-content-property
 func (p *PropertyService) Delete(ctx context.Context, contentID, key string) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*PropertyService).Delete")
+	ctx, span := tracer().Start(ctx, "(*PropertyService).Delete", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "delete"))
 
 	return p.internalClient.Delete(ctx, contentID, key)
 }
@@ -79,11 +94,15 @@ type internalPropertyImpl struct {
 }
 
 func (i *internalPropertyImpl) Gets(ctx context.Context, contentID string, expand []string, startAt, maxResults int) (*model.ContentPropertyPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalPropertyImpl).Gets")
+	ctx, span := tracer().Start(ctx, "(*internalPropertyImpl).Gets", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "gets"))
+
 	if contentID == "" {
-		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
+
+			return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
 	}
 
 	query := url.Values{}
@@ -98,6 +117,7 @@ func (i *internalPropertyImpl) Gets(ctx context.Context, contentID string, expan
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
@@ -107,21 +127,28 @@ func (i *internalPropertyImpl) Gets(ctx context.Context, contentID string, expan
 		return nil, response, err
 	}
 
+	setOK(span)
 	return page, response, nil
 }
 
 func (i *internalPropertyImpl) Create(ctx context.Context, contentID string, payload *model.ContentPropertyPayloadScheme) (*model.ContentPropertyScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalPropertyImpl).Create")
+	ctx, span := tracer().Start(ctx, "(*internalPropertyImpl).Create", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "create"))
+
 	if contentID == "" {
-		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
+
+			return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
 	}
 
 	endpoint := fmt.Sprintf("wiki/rest/api/content/%v/property", contentID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
@@ -131,25 +158,33 @@ func (i *internalPropertyImpl) Create(ctx context.Context, contentID string, pay
 		return nil, response, err
 	}
 
+	setOK(span)
 	return property, response, nil
 }
 
 func (i *internalPropertyImpl) Get(ctx context.Context, contentID, key string) (*model.ContentPropertyScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalPropertyImpl).Get")
+	ctx, span := tracer().Start(ctx, "(*internalPropertyImpl).Get", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "get"))
+
 	if contentID == "" {
-		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
+
+			return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
 	}
 
 	if key == "" {
-		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentProperty)
+
+			return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentProperty)
 	}
 
 	endpoint := fmt.Sprintf("wiki/rest/api/content/%v/property/%v", contentID, key)
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
@@ -159,12 +194,16 @@ func (i *internalPropertyImpl) Get(ctx context.Context, contentID, key string) (
 		return nil, response, err
 	}
 
+	setOK(span)
 	return property, response, nil
 }
 
 func (i *internalPropertyImpl) Delete(ctx context.Context, contentID, key string) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalPropertyImpl).Delete")
+	ctx, span := tracer().Start(ctx, "(*internalPropertyImpl).Delete", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "delete"))
 
 	if contentID == "" {
 		return nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
@@ -178,6 +217,7 @@ func (i *internalPropertyImpl) Delete(ctx context.Context, contentID, key string
 
 	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, err
 	}
 

@@ -2,6 +2,9 @@ package internal
 
 import (
 	"context"
+
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
 	"fmt"
 	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/v2/service"
@@ -32,8 +35,11 @@ type CommentService struct {
 //
 // https://docs.go-atlassian.io/confluence-cloud/content/comments#get-content-comments
 func (c *CommentService) Gets(ctx context.Context, contentID string, expand, location []string, startAt, maxResults int) (*model.ContentPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*CommentService).Gets")
+	ctx, span := tracer().Start(ctx, "(*CommentService).Gets", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "gets"))
 
 	return c.internalClient.Gets(ctx, contentID, expand, location, startAt, maxResults)
 }
@@ -43,11 +49,15 @@ type internalCommentImpl struct {
 }
 
 func (i *internalCommentImpl) Gets(ctx context.Context, contentID string, expand, location []string, startAt, maxResults int) (*model.ContentPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalCommentImpl).Gets")
+	ctx, span := tracer().Start(ctx, "(*internalCommentImpl).Gets", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "gets"))
+
 	if contentID == "" {
-		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
+
+			return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
 	}
 
 	query := url.Values{}
@@ -66,6 +76,7 @@ func (i *internalCommentImpl) Gets(ctx context.Context, contentID string, expand
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
@@ -75,5 +86,6 @@ func (i *internalCommentImpl) Gets(ctx context.Context, contentID string, expand
 		return nil, response, err
 	}
 
+	setOK(span)
 	return page, response, nil
 }

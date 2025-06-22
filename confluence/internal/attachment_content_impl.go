@@ -1,7 +1,10 @@
 package internal
 
 import (
-	"bytes"
+	
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
+"bytes"
 	"context"
 	"fmt"
 	"io"
@@ -39,8 +42,11 @@ type ContentAttachmentService struct {
 //
 // https://docs.go-atlassian.io/confluence-cloud/content/attachments#get-attachments
 func (a *ContentAttachmentService) Gets(ctx context.Context, contentID string, startAt, maxResults int, options *model.GetContentAttachmentsOptionsScheme) (*model.ContentPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*ContentAttachmentService).Gets")
+	ctx, span := tracer().Start(ctx, "(*ContentAttachmentService).Gets", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "gets"))
 
 	return a.internalClient.Gets(ctx, contentID, startAt, maxResults, options)
 }
@@ -55,8 +61,11 @@ func (a *ContentAttachmentService) Gets(ctx context.Context, contentID string, s
 //
 // https://docs.go-atlassian.io/confluence-cloud/content/attachments#create-or-update-attachment
 func (a *ContentAttachmentService) CreateOrUpdate(ctx context.Context, attachmentID, status, fileName string, file io.Reader) (*model.ContentPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*ContentAttachmentService).CreateOrUpdate")
+	ctx, span := tracer().Start(ctx, "(*ContentAttachmentService).CreateOrUpdate", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "create_or_update"))
 
 	return a.internalClient.CreateOrUpdate(ctx, attachmentID, status, fileName, file)
 }
@@ -71,8 +80,11 @@ func (a *ContentAttachmentService) CreateOrUpdate(ctx context.Context, attachmen
 //
 // https://docs.go-atlassian.io/confluence-cloud/content/attachments#create-attachment
 func (a *ContentAttachmentService) Create(ctx context.Context, attachmentID, status, fileName string, file io.Reader) (*model.ContentPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*ContentAttachmentService).Create")
+	ctx, span := tracer().Start(ctx, "(*ContentAttachmentService).Create", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "create"))
 
 	return a.internalClient.Create(ctx, attachmentID, status, fileName, file)
 }
@@ -82,11 +94,15 @@ type internalContentAttachmentImpl struct {
 }
 
 func (i *internalContentAttachmentImpl) Gets(ctx context.Context, contentID string, startAt, maxResults int, options *model.GetContentAttachmentsOptionsScheme) (*model.ContentPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalContentAttachmentImpl).Gets")
+	ctx, span := tracer().Start(ctx, "(*internalContentAttachmentImpl).Gets", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "gets"))
+
 	if contentID == "" {
-		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
+
+			return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
 	}
 
 	query := url.Values{}
@@ -113,6 +129,7 @@ func (i *internalContentAttachmentImpl) Gets(ctx context.Context, contentID stri
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
@@ -122,23 +139,30 @@ func (i *internalContentAttachmentImpl) Gets(ctx context.Context, contentID stri
 		return nil, response, err
 	}
 
+	setOK(span)
 	return page, response, nil
 }
 
 func (i *internalContentAttachmentImpl) CreateOrUpdate(ctx context.Context, attachmentID, status, fileName string, file io.Reader) (*model.ContentPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalContentAttachmentImpl).CreateOrUpdate")
+	ctx, span := tracer().Start(ctx, "(*internalContentAttachmentImpl).CreateOrUpdate", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "create_or_update"))
+
 	if attachmentID == "" {
-		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentAttachmentID)
+
+			return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentAttachmentID)
 	}
 
 	if fileName == "" {
-		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentAttachmentName)
+
+			return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentAttachmentName)
 	}
 
 	if file == nil {
-		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentReader)
+
+			return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentReader)
 	}
 
 	var endpoint strings.Builder
@@ -156,11 +180,13 @@ func (i *internalContentAttachmentImpl) CreateOrUpdate(ctx context.Context, atta
 
 	attachment, err := writer.CreateFormFile("file", fileName)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	_, err = io.Copy(attachment, file)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
@@ -172,6 +198,7 @@ func (i *internalContentAttachmentImpl) CreateOrUpdate(ctx context.Context, atta
 
 	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint.String(), writer.FormDataContentType(), reader)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
@@ -181,23 +208,30 @@ func (i *internalContentAttachmentImpl) CreateOrUpdate(ctx context.Context, atta
 		return nil, response, err
 	}
 
+	setOK(span)
 	return page, response, nil
 }
 
 func (i *internalContentAttachmentImpl) Create(ctx context.Context, attachmentID, status, fileName string, file io.Reader) (*model.ContentPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalContentAttachmentImpl).Create")
+	ctx, span := tracer().Start(ctx, "(*internalContentAttachmentImpl).Create", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "create"))
+
 	if attachmentID == "" {
-		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentAttachmentID)
+
+			return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentAttachmentID)
 	}
 
 	if fileName == "" {
-		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentAttachmentName)
+
+			return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentAttachmentName)
 	}
 
 	if file == nil {
-		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentReader)
+
+			return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentReader)
 	}
 
 	var endpoint strings.Builder
@@ -215,11 +249,13 @@ func (i *internalContentAttachmentImpl) Create(ctx context.Context, attachmentID
 
 	attachment, err := writer.CreateFormFile("file", fileName)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	_, err = io.Copy(attachment, file)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
@@ -231,6 +267,7 @@ func (i *internalContentAttachmentImpl) Create(ctx context.Context, attachmentID
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint.String(), writer.FormDataContentType(), reader)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
@@ -240,5 +277,6 @@ func (i *internalContentAttachmentImpl) Create(ctx context.Context, attachmentID
 		return nil, response, err
 	}
 
+	setOK(span)
 	return page, response, nil
 }

@@ -2,6 +2,9 @@ package internal
 
 import (
 	"context"
+
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
 	"fmt"
 	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/v2/service"
@@ -42,8 +45,11 @@ type PermissionService struct {
 //
 // https://docs.go-atlassian.io/confluence-cloud/content/permissions#check-content-permissions
 func (p *PermissionService) Check(ctx context.Context, contentID string, payload *model.CheckPermissionScheme) (*model.PermissionCheckResponseScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*PermissionService).Check")
+	ctx, span := tracer().Start(ctx, "(*PermissionService).Check", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "check"))
 
 	return p.internalClient.Check(ctx, contentID, payload)
 }
@@ -53,17 +59,23 @@ type internalPermissionImpl struct {
 }
 
 func (i *internalPermissionImpl) Check(ctx context.Context, contentID string, payload *model.CheckPermissionScheme) (*model.PermissionCheckResponseScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalPermissionImpl).Check")
+	ctx, span := tracer().Start(ctx, "(*internalPermissionImpl).Check", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "check"))
+
 	if contentID == "" {
-		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
+
+			return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
 	}
 
 	endpoint := fmt.Sprintf("wiki/rest/api/content/%v/permission/check", contentID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
@@ -73,5 +85,6 @@ func (i *internalPermissionImpl) Check(ctx context.Context, contentID string, pa
 		return nil, response, err
 	}
 
+	setOK(span)
 	return checker, response, nil
 }

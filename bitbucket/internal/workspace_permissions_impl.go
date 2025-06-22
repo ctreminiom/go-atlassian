@@ -2,6 +2,9 @@ package internal
 
 import (
 	"context"
+
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -32,8 +35,11 @@ type WorkspacePermissionService struct {
 //
 // https://docs.go-atlassian.io/bitbucket-cloud/workspace/permissions#get-user-permissions-in-a-workspace
 func (w *WorkspacePermissionService) Members(ctx context.Context, workspace, query string) (*model.WorkspaceMembershipPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*WorkspacePermissionService).Members")
+	ctx, span := tracer().Start(ctx, "(*WorkspacePermissionService).Members", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "members"))
 
 	return w.internalClient.Members(ctx, workspace, query)
 }
@@ -48,8 +54,11 @@ func (w *WorkspacePermissionService) Members(ctx context.Context, workspace, que
 //
 // https://docs.go-atlassian.io/bitbucket-cloud/workspace/permissions#gets-all-repository-permissions-in-a-workspace
 func (w *WorkspacePermissionService) Repositories(ctx context.Context, workspace, query, sort string) (*model.RepositoryPermissionPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*WorkspacePermissionService).Repositories")
+	ctx, span := tracer().Start(ctx, "(*WorkspacePermissionService).Repositories", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "repositories"))
 
 	return w.internalClient.Repositories(ctx, workspace, query, sort)
 }
@@ -62,8 +71,11 @@ func (w *WorkspacePermissionService) Repositories(ctx context.Context, workspace
 //
 // https://docs.go-atlassian.io/bitbucket-cloud/workspace/permissions#get-repository-permission-in-a-workspace
 func (w *WorkspacePermissionService) Repository(ctx context.Context, workspace, repository, query, sort string) (*model.RepositoryPermissionPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*WorkspacePermissionService).Repository")
+	ctx, span := tracer().Start(ctx, "(*WorkspacePermissionService).Repository", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "repository"))
 
 	return w.internalClient.Repository(ctx, workspace, repository, query, sort)
 }
@@ -73,11 +85,15 @@ type internalWorkspacePermissionServiceImpl struct {
 }
 
 func (i *internalWorkspacePermissionServiceImpl) Members(ctx context.Context, workspace, query string) (*model.WorkspaceMembershipPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalWorkspacePermissionServiceImpl).Members")
+	ctx, span := tracer().Start(ctx, "(*internalWorkspacePermissionServiceImpl).Members", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "members"))
+
 	if workspace == "" {
-		return nil, nil, fmt.Errorf("bitbucket: %w", model.ErrNoWorkspace)
+
+			return nil, nil, fmt.Errorf("bitbucket: %w", model.ErrNoWorkspace)
 	}
 
 	var endpoint strings.Builder
@@ -93,6 +109,7 @@ func (i *internalWorkspacePermissionServiceImpl) Members(ctx context.Context, wo
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
@@ -102,15 +119,20 @@ func (i *internalWorkspacePermissionServiceImpl) Members(ctx context.Context, wo
 		return nil, response, err
 	}
 
+	setOK(span)
 	return page, response, nil
 }
 
 func (i *internalWorkspacePermissionServiceImpl) Repositories(ctx context.Context, workspace, query, sort string) (*model.RepositoryPermissionPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalWorkspacePermissionServiceImpl).Repositories")
+	ctx, span := tracer().Start(ctx, "(*internalWorkspacePermissionServiceImpl).Repositories", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "repositories"))
+
 	if workspace == "" {
-		return nil, nil, fmt.Errorf("bitbucket: %w", model.ErrNoWorkspace)
+
+			return nil, nil, fmt.Errorf("bitbucket: %w", model.ErrNoWorkspace)
 	}
 
 	var endpoint strings.Builder
@@ -130,6 +152,7 @@ func (i *internalWorkspacePermissionServiceImpl) Repositories(ctx context.Contex
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
@@ -139,19 +162,25 @@ func (i *internalWorkspacePermissionServiceImpl) Repositories(ctx context.Contex
 		return nil, response, err
 	}
 
+	setOK(span)
 	return page, response, nil
 }
 
 func (i *internalWorkspacePermissionServiceImpl) Repository(ctx context.Context, workspace, repository, query, sort string) (*model.RepositoryPermissionPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalWorkspacePermissionServiceImpl).Repository")
+	ctx, span := tracer().Start(ctx, "(*internalWorkspacePermissionServiceImpl).Repository", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "repository"))
+
 	if workspace == "" {
-		return nil, nil, fmt.Errorf("bitbucket: %w", model.ErrNoWorkspace)
+
+			return nil, nil, fmt.Errorf("bitbucket: %w", model.ErrNoWorkspace)
 	}
 
 	if repository == "" {
-		return nil, nil, fmt.Errorf("bitbucket: %w", model.ErrNoRepository)
+
+			return nil, nil, fmt.Errorf("bitbucket: %w", model.ErrNoRepository)
 	}
 
 	var endpoint strings.Builder
@@ -172,6 +201,7 @@ func (i *internalWorkspacePermissionServiceImpl) Repository(ctx context.Context,
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
@@ -181,5 +211,6 @@ func (i *internalWorkspacePermissionServiceImpl) Repository(ctx context.Context,
 		return nil, response, err
 	}
 
+	setOK(span)
 	return page, response, nil
 }

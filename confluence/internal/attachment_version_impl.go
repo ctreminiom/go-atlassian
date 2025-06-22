@@ -2,6 +2,9 @@ package internal
 
 import (
 	"context"
+
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
 	"fmt"
 	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/v2/service"
@@ -31,8 +34,11 @@ type AttachmentVersionService struct {
 //
 // https://docs.go-atlassian.io/confluence-cloud/v2/attachments/versions#get-attachment-versions
 func (a *AttachmentVersionService) Gets(ctx context.Context, attachmentID, cursor, sort string, limit int) (*model.AttachmentVersionPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*AttachmentVersionService).Gets")
+	ctx, span := tracer().Start(ctx, "(*AttachmentVersionService).Gets", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "gets"))
 
 	return a.internalClient.Gets(ctx, attachmentID, cursor, sort, limit)
 }
@@ -43,8 +49,11 @@ func (a *AttachmentVersionService) Gets(ctx context.Context, attachmentID, curso
 //
 // https://docs.go-atlassian.io/confluence-cloud/v2/attachments/versions#get-attachment-version
 func (a *AttachmentVersionService) Get(ctx context.Context, attachmentID string, versionID int) (*model.DetailedVersionScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*AttachmentVersionService).Get")
+	ctx, span := tracer().Start(ctx, "(*AttachmentVersionService).Get", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "get"))
 
 	return a.internalClient.Get(ctx, attachmentID, versionID)
 }
@@ -54,11 +63,15 @@ type internalAttachmentVersionImpl struct {
 }
 
 func (i *internalAttachmentVersionImpl) Gets(ctx context.Context, attachmentID, cursor, sort string, limit int) (*model.AttachmentVersionPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalAttachmentVersionImpl).Gets")
+	ctx, span := tracer().Start(ctx, "(*internalAttachmentVersionImpl).Gets", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "gets"))
+
 	if attachmentID == "" {
-		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentAttachmentID)
+
+			return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentAttachmentID)
 	}
 
 	query := url.Values{}
@@ -76,6 +89,7 @@ func (i *internalAttachmentVersionImpl) Gets(ctx context.Context, attachmentID, 
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
@@ -85,21 +99,28 @@ func (i *internalAttachmentVersionImpl) Gets(ctx context.Context, attachmentID, 
 		return nil, response, err
 	}
 
+	setOK(span)
 	return page, response, nil
 }
 
 func (i *internalAttachmentVersionImpl) Get(ctx context.Context, attachmentID string, versionID int) (*model.DetailedVersionScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalAttachmentVersionImpl).Get")
+	ctx, span := tracer().Start(ctx, "(*internalAttachmentVersionImpl).Get", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "get"))
+
 	if attachmentID == "" {
-		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentAttachmentID)
+
+			return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentAttachmentID)
 	}
 
 	endpoint := fmt.Sprintf("wiki/api/v2/attachments/%v/versions/%v", attachmentID, versionID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
@@ -109,5 +130,6 @@ func (i *internalAttachmentVersionImpl) Get(ctx context.Context, attachmentID st
 		return nil, response, err
 	}
 
+	setOK(span)
 	return version, response, nil
 }

@@ -8,6 +8,9 @@ import (
 	"strconv"
 	"strings"
 
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
+
 	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/v2/service"
 	"github.com/ctreminiom/go-atlassian/v2/service/agile"
@@ -294,55 +297,79 @@ type internalBoardImpl struct {
 }
 
 func (i *internalBoardImpl) Get(ctx context.Context, boardID int) (*model.BoardScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalBoardImpl).Get")
+	ctx, span := tracer().Start(ctx, "(*internalBoardImpl).Get", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.Int("jira.board.id", boardID),
+		attribute.String("operation.name", "get_board"),
+	)
+
 	if boardID == 0 {
-		return nil, nil, fmt.Errorf("agile: %w", model.ErrNoBoardID)
+		err := fmt.Errorf("agile: %w", model.ErrNoBoardID)
+		recordError(span, err)
+		return nil, nil, err
 	}
 
 	url := fmt.Sprintf("rest/agile/%v/board/%v", i.version, boardID)
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, url, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	boards := new(model.BoardScheme)
 	res, err := i.c.Call(req, boards)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return boards, res, nil
 }
 
 func (i *internalBoardImpl) Create(ctx context.Context, payload *model.BoardPayloadScheme) (*model.BoardScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalBoardImpl).Create")
+	ctx, span := tracer().Start(ctx, "(*internalBoardImpl).Create", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "create_board"),
+	)
 
 	url := fmt.Sprintf("rest/agile/%v/board", i.version)
 
 	req, err := i.c.NewRequest(ctx, http.MethodPost, url, "", payload)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	board := new(model.BoardScheme)
 	res, err := i.c.Call(req, board)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return board, res, nil
 }
 
 func (i *internalBoardImpl) Filter(ctx context.Context, filterID, startAt, maxResults int) (*model.BoardPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalBoardImpl).Filter")
+	ctx, span := tracer().Start(ctx, "(*internalBoardImpl).Filter", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.Int("jira.filter.id", filterID),
+		attribute.String("operation.name", "filter_boards"),
+	)
+
 	if filterID == 0 {
-		return nil, nil, fmt.Errorf("agile: %w", model.ErrNoFilterID)
+		err := fmt.Errorf("agile: %w", model.ErrNoFilterID)
+		recordError(span, err)
+		return nil, nil, err
 	}
 
 	params := url.Values{}
@@ -353,24 +380,34 @@ func (i *internalBoardImpl) Filter(ctx context.Context, filterID, startAt, maxRe
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, url, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	page := new(model.BoardPageScheme)
 	res, err := i.c.Call(req, page)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return page, res, nil
 }
 
 func (i *internalBoardImpl) Backlog(ctx context.Context, boardID int, opts *model.IssueOptionScheme, startAt, maxResults int) (*model.BoardIssuePageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalBoardImpl).Backlog")
+	ctx, span := tracer().Start(ctx, "(*internalBoardImpl).Backlog", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.Int("jira.board.id", boardID),
+		attribute.String("operation.name", "get_board_backlog"),
+	)
+
 	if boardID == 0 {
-		return nil, nil, fmt.Errorf("agile: %w", model.ErrNoBoardID)
+		err := fmt.Errorf("agile: %w", model.ErrNoBoardID)
+		recordError(span, err)
+		return nil, nil, err
 	}
 
 	params := url.Values{}
@@ -407,6 +444,7 @@ func (i *internalBoardImpl) Backlog(ctx context.Context, boardID int, opts *mode
 		return nil, res, err
 	}
 
+	setOK(span)
 	return page, res, nil
 }
 
@@ -431,6 +469,7 @@ func (i *internalBoardImpl) Configuration(ctx context.Context, boardID int) (*mo
 		return nil, res, err
 	}
 
+	setOK(span)
 	return conf, res, nil
 }
 
@@ -460,6 +499,7 @@ func (i *internalBoardImpl) Epics(ctx context.Context, boardID, startAt, maxResu
 		return nil, res, err
 	}
 
+	setOK(span)
 	return page, res, nil
 }
 
@@ -507,19 +547,30 @@ func (i *internalBoardImpl) IssuesWithoutEpic(ctx context.Context, boardID int, 
 		return nil, res, err
 	}
 
+	setOK(span)
 	return page, res, nil
 }
 
 func (i *internalBoardImpl) IssuesByEpic(ctx context.Context, boardID, epicID int, opts *model.IssueOptionScheme, startAt, maxResults int) (*model.BoardIssuePageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalBoardImpl).IssuesByEpic")
+	ctx, span := tracer().Start(ctx, "(*internalBoardImpl).IssuesByEpic", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.Int("jira.board.id", boardID),
+		attribute.Int("jira.epic.id", epicID),
+		attribute.String("operation.name", "get_issues_by_epic"),
+	)
+
 	if boardID == 0 {
-		return nil, nil, fmt.Errorf("agile: %w", model.ErrNoBoardID)
+		err := fmt.Errorf("agile: %w", model.ErrNoBoardID)
+		recordError(span, err)
+		return nil, nil, err
 	}
 
 	if epicID == 0 {
-		return nil, nil, fmt.Errorf("agile: %w", model.ErrNoEpicID)
+		err := fmt.Errorf("agile: %w", model.ErrNoEpicID)
+		recordError(span, err)
+		return nil, nil, err
 	}
 
 	params := url.Values{}
@@ -558,15 +609,23 @@ func (i *internalBoardImpl) IssuesByEpic(ctx context.Context, boardID, epicID in
 		return nil, res, err
 	}
 
+	setOK(span)
 	return page, res, nil
 }
 
 func (i *internalBoardImpl) Issues(ctx context.Context, boardID int, opts *model.IssueOptionScheme, startAt, maxResults int) (*model.BoardIssuePageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalBoardImpl).Issues")
+	ctx, span := tracer().Start(ctx, "(*internalBoardImpl).Issues", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.Int("jira.board.id", boardID),
+		attribute.String("operation.name", "get_board_issues"),
+	)
+
 	if boardID == 0 {
-		return nil, nil, fmt.Errorf("agile: %w", model.ErrNoBoardID)
+		err := fmt.Errorf("agile: %w", model.ErrNoBoardID)
+		recordError(span, err)
+		return nil, nil, err
 	}
 
 	params := url.Values{}
@@ -606,33 +665,56 @@ func (i *internalBoardImpl) Issues(ctx context.Context, boardID int, opts *model
 		return nil, res, err
 	}
 
+	setOK(span)
 	return page, res, nil
 }
 
 func (i *internalBoardImpl) Move(ctx context.Context, boardID int, payload *model.BoardMovementPayloadScheme) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalBoardImpl).Move")
+	ctx, span := tracer().Start(ctx, "(*internalBoardImpl).Move", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.Int("jira.board.id", boardID),
+		attribute.String("operation.name", "move_issues_to_board"),
+	)
+
 	if boardID == 0 {
-		return nil, fmt.Errorf("agile: %w", model.ErrNoBoardID)
+		err := fmt.Errorf("agile: %w", model.ErrNoBoardID)
+		recordError(span, err)
+		return nil, err
 	}
 
 	url := fmt.Sprintf("rest/agile/%v/board/%v/issue", i.version, boardID)
 
 	req, err := i.c.NewRequest(ctx, http.MethodPost, url, "", payload)
 	if err != nil {
+		recordError(span, err)
 		return nil, err
 	}
 
-	return i.c.Call(req, nil)
+	res, err := i.c.Call(req, nil)
+	if err != nil {
+		recordError(span, err)
+		return res, err
+	}
+
+	setOK(span)
+	return res, nil
 }
 
 func (i *internalBoardImpl) Projects(ctx context.Context, boardID, startAt, maxResults int) (*model.BoardProjectPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalBoardImpl).Projects")
+	ctx, span := tracer().Start(ctx, "(*internalBoardImpl).Projects", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.Int("jira.board.id", boardID),
+		attribute.String("operation.name", "get_board_projects"),
+	)
+
 	if boardID == 0 {
-		return nil, nil, fmt.Errorf("agile: %w", model.ErrNoBoardID)
+		err := fmt.Errorf("agile: %w", model.ErrNoBoardID)
+		recordError(span, err)
+		return nil, nil, err
 	}
 
 	params := url.Values{}
@@ -643,24 +725,34 @@ func (i *internalBoardImpl) Projects(ctx context.Context, boardID, startAt, maxR
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, url, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	page := new(model.BoardProjectPageScheme)
 	res, err := i.c.Call(req, page)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return page, res, nil
 }
 
 func (i *internalBoardImpl) Sprints(ctx context.Context, boardID, startAt, maxResults int, states []string) (*model.BoardSprintPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalBoardImpl).Sprints")
+	ctx, span := tracer().Start(ctx, "(*internalBoardImpl).Sprints", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.Int("jira.board.id", boardID),
+		attribute.String("operation.name", "get_board_sprints"),
+	)
+
 	if boardID == 0 {
-		return nil, nil, fmt.Errorf("agile: %w", model.ErrNoBoardID)
+		err := fmt.Errorf("agile: %w", model.ErrNoBoardID)
+		recordError(span, err)
+		return nil, nil, err
 	}
 
 	params := url.Values{}
@@ -672,28 +764,41 @@ func (i *internalBoardImpl) Sprints(ctx context.Context, boardID, startAt, maxRe
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, url, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	page := new(model.BoardSprintPageScheme)
 	res, err := i.c.Call(req, page)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return page, res, nil
 }
 
 func (i *internalBoardImpl) IssuesBySprint(ctx context.Context, boardID, sprintID int, opts *model.IssueOptionScheme, startAt, maxResults int) (*model.BoardIssuePageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalBoardImpl).IssuesBySprint")
+	ctx, span := tracer().Start(ctx, "(*internalBoardImpl).IssuesBySprint", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.Int("jira.board.id", boardID),
+		attribute.Int("jira.sprint.id", sprintID),
+		attribute.String("operation.name", "get_issues_by_sprint"),
+	)
+
 	if boardID == 0 {
-		return nil, nil, fmt.Errorf("agile: %w", model.ErrNoBoardID)
+		err := fmt.Errorf("agile: %w", model.ErrNoBoardID)
+		recordError(span, err)
+		return nil, nil, err
 	}
 
 	if sprintID == 0 {
-		return nil, nil, fmt.Errorf("agile: %w", model.ErrNoSprintID)
+		err := fmt.Errorf("agile: %w", model.ErrNoSprintID)
+		recordError(span, err)
+		return nil, nil, err
 	}
 
 	params := url.Values{}
@@ -732,15 +837,23 @@ func (i *internalBoardImpl) IssuesBySprint(ctx context.Context, boardID, sprintI
 		return nil, res, err
 	}
 
+	setOK(span)
 	return page, res, nil
 }
 
 func (i *internalBoardImpl) Versions(ctx context.Context, boardID, startAt, maxResults int, released bool) (*model.BoardVersionPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalBoardImpl).Versions")
+	ctx, span := tracer().Start(ctx, "(*internalBoardImpl).Versions", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.Int("jira.board.id", boardID),
+		attribute.String("operation.name", "get_board_versions"),
+	)
+
 	if boardID == 0 {
-		return nil, nil, fmt.Errorf("agile: %w", model.ErrNoBoardID)
+		err := fmt.Errorf("agile: %w", model.ErrNoBoardID)
+		recordError(span, err)
+		return nil, nil, err
 	}
 
 	params := url.Values{}
@@ -752,39 +865,61 @@ func (i *internalBoardImpl) Versions(ctx context.Context, boardID, startAt, maxR
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, url, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	page := new(model.BoardVersionPageScheme)
 	res, err := i.c.Call(req, page)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return page, res, nil
 }
 
 func (i *internalBoardImpl) Delete(ctx context.Context, boardID int) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalBoardImpl).Delete")
+	ctx, span := tracer().Start(ctx, "(*internalBoardImpl).Delete", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.Int("jira.board.id", boardID),
+		attribute.String("operation.name", "delete_board"),
+	)
+
 	if boardID == 0 {
-		return nil, fmt.Errorf("agile: %w", model.ErrNoBoardID)
+		err := fmt.Errorf("agile: %w", model.ErrNoBoardID)
+		recordError(span, err)
+		return nil, err
 	}
 
 	url := fmt.Sprintf("rest/agile/%v/board/%v", i.version, boardID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodDelete, url, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, err
 	}
 
-	return i.c.Call(request, nil)
+	res, err := i.c.Call(request, nil)
+	if err != nil {
+		recordError(span, err)
+		return res, err
+	}
+
+	setOK(span)
+	return res, nil
 }
 
 func (i *internalBoardImpl) Gets(ctx context.Context, opts *model.GetBoardsOptions, startAt, maxResults int) (*model.BoardPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalBoardImpl).Gets")
+	ctx, span := tracer().Start(ctx, "(*internalBoardImpl).Gets", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "get_boards"),
+	)
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -837,14 +972,17 @@ func (i *internalBoardImpl) Gets(ctx context.Context, opts *model.GetBoardsOptio
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, url, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	page := new(model.BoardPageScheme)
 	res, err := i.c.Call(req, page)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return page, res, nil
 }

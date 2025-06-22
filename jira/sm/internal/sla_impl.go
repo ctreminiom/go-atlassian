@@ -2,6 +2,9 @@ package internal
 
 import (
 	"context"
+
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -34,8 +37,11 @@ type ServiceLevelAgreementService struct {
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request/sla#get-sla-information
 func (s *ServiceLevelAgreementService) Gets(ctx context.Context, issueKeyOrID string, start, limit int) (*model.RequestSLAPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*ServiceLevelAgreementService).Gets")
+	ctx, span := tracer().Start(ctx, "(*ServiceLevelAgreementService).Gets", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "gets"))
 
 	return s.internalClient.Gets(ctx, issueKeyOrID, start, limit)
 }
@@ -46,8 +52,11 @@ func (s *ServiceLevelAgreementService) Gets(ctx context.Context, issueKeyOrID st
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request/sla#get-sla-information-by-id
 func (s *ServiceLevelAgreementService) Get(ctx context.Context, issueKeyOrID string, metricID int) (*model.RequestSLAScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*ServiceLevelAgreementService).Get")
+	ctx, span := tracer().Start(ctx, "(*ServiceLevelAgreementService).Get", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "get"))
 
 	return s.internalClient.Get(ctx, issueKeyOrID, metricID)
 }
@@ -58,11 +67,15 @@ type internalServiceLevelAgreementImpl struct {
 }
 
 func (i *internalServiceLevelAgreementImpl) Gets(ctx context.Context, issueKeyOrID string, start, limit int) (*model.RequestSLAPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalServiceLevelAgreementImpl).Gets")
+	ctx, span := tracer().Start(ctx, "(*internalServiceLevelAgreementImpl).Gets", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "gets"))
+
 	if issueKeyOrID == "" {
-		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoIssueKeyOrID)
+
+			return nil, nil, fmt.Errorf("sm: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	params := url.Values{}
@@ -73,42 +86,55 @@ func (i *internalServiceLevelAgreementImpl) Gets(ctx context.Context, issueKeyOr
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
 	page := new(model.RequestSLAPageScheme)
 	res, err := i.c.Call(req, page)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return page, res, nil
 }
 
 func (i *internalServiceLevelAgreementImpl) Get(ctx context.Context, issueKeyOrID string, metricID int) (*model.RequestSLAScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalServiceLevelAgreementImpl).Get")
+	ctx, span := tracer().Start(ctx, "(*internalServiceLevelAgreementImpl).Get", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "get"))
+
 	if issueKeyOrID == "" {
-		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoIssueKeyOrID)
+
+			return nil, nil, fmt.Errorf("sm: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	if metricID == 0 {
-		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoSLAMetricID)
+
+			return nil, nil, fmt.Errorf("sm: %w", model.ErrNoSLAMetricID)
 	}
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/request/%v/sla/%v", issueKeyOrID, metricID)
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
 	sla := new(model.RequestSLAScheme)
 	res, err := i.c.Call(req, sla)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return sla, res, nil
 }

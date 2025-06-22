@@ -1,7 +1,10 @@
 package internal
 
 import (
-	"bytes"
+	
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
+"bytes"
 	"context"
 	"fmt"
 	"io"
@@ -44,8 +47,11 @@ type ServiceDeskService struct {
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request/service-desk#get-service-desks
 func (s *ServiceDeskService) Gets(ctx context.Context, start, limit int) (*model.ServiceDeskPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*ServiceDeskService).Gets")
+	ctx, span := tracer().Start(ctx, "(*ServiceDeskService).Gets", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "gets"))
 
 	return s.internalClient.Gets(ctx, start, limit)
 }
@@ -60,8 +66,11 @@ func (s *ServiceDeskService) Gets(ctx context.Context, start, limit int) (*model
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request/service-desk#get-service-desk-by-id
 func (s *ServiceDeskService) Get(ctx context.Context, serviceDeskID string) (*model.ServiceDeskScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*ServiceDeskService).Get")
+	ctx, span := tracer().Start(ctx, "(*ServiceDeskService).Get", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "get"))
 
 	return s.internalClient.Get(ctx, serviceDeskID)
 }
@@ -72,8 +81,11 @@ func (s *ServiceDeskService) Get(ctx context.Context, serviceDeskID string) (*mo
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request/service-desk#attach-temporary-file
 func (s *ServiceDeskService) Attach(ctx context.Context, serviceDeskID string, fileName string, file io.Reader) (*model.ServiceDeskTemporaryFileScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*ServiceDeskService).Attach")
+	ctx, span := tracer().Start(ctx, "(*ServiceDeskService).Attach", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "attach"))
 
 	return s.internalClient.Attach(ctx, serviceDeskID, fileName, file)
 }
@@ -84,8 +96,11 @@ type internalServiceDeskImpl struct {
 }
 
 func (i *internalServiceDeskImpl) Gets(ctx context.Context, start, limit int) (*model.ServiceDeskPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalServiceDeskImpl).Gets")
+	ctx, span := tracer().Start(ctx, "(*internalServiceDeskImpl).Gets", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "gets"))
 
 	params := url.Values{}
 	params.Add("start", strconv.Itoa(start))
@@ -95,56 +110,74 @@ func (i *internalServiceDeskImpl) Gets(ctx context.Context, start, limit int) (*
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
 	page := new(model.ServiceDeskPageScheme)
 	res, err := i.c.Call(req, page)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return page, res, nil
 }
 
 func (i *internalServiceDeskImpl) Get(ctx context.Context, serviceDeskID string) (*model.ServiceDeskScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalServiceDeskImpl).Get")
+	ctx, span := tracer().Start(ctx, "(*internalServiceDeskImpl).Get", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "get"))
+
 	if serviceDeskID == "" {
-		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoServiceDeskID)
+
+			return nil, nil, fmt.Errorf("sm: %w", model.ErrNoServiceDeskID)
 	}
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/servicedesk/%v", serviceDeskID)
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
 	serviceDesk := new(model.ServiceDeskScheme)
 	res, err := i.c.Call(req, serviceDesk)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return serviceDesk, res, nil
 }
 
 func (i *internalServiceDeskImpl) Attach(ctx context.Context, serviceDeskID string, fileName string, file io.Reader) (*model.ServiceDeskTemporaryFileScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalServiceDeskImpl).Attach")
+	ctx, span := tracer().Start(ctx, "(*internalServiceDeskImpl).Attach", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "attach"))
+
 	if serviceDeskID == "" {
-		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoServiceDeskID)
+
+			return nil, nil, fmt.Errorf("sm: %w", model.ErrNoServiceDeskID)
 	}
 
 	if fileName == "" {
-		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoFileName)
+
+			return nil, nil, fmt.Errorf("sm: %w", model.ErrNoFileName)
 	}
 
 	if file == nil {
-		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoFileReader)
+
+			return nil, nil, fmt.Errorf("sm: %w", model.ErrNoFileReader)
 	}
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/servicedesk/%v/attachTemporaryFile", serviceDeskID)
@@ -154,11 +187,13 @@ func (i *internalServiceDeskImpl) Attach(ctx context.Context, serviceDeskID stri
 
 	attachment, err := writer.CreateFormFile("file", fileName)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	_, err = io.Copy(attachment, file)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
@@ -168,14 +203,17 @@ func (i *internalServiceDeskImpl) Attach(ctx context.Context, serviceDeskID stri
 
 	req, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, writer.FormDataContentType(), reader)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	attachmentID := new(model.ServiceDeskTemporaryFileScheme)
 	res, err := i.c.Call(req, attachmentID)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return attachmentID, res, nil
 }

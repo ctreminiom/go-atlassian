@@ -2,6 +2,9 @@ package internal
 
 import (
 	"context"
+
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -32,8 +35,11 @@ type ApprovalService struct {
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request/approval#get-approvals
 func (s *ApprovalService) Gets(ctx context.Context, issueKeyOrID string, start, limit int) (*model.CustomerApprovalPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*ApprovalService).Gets")
+	ctx, span := tracer().Start(ctx, "(*ApprovalService).Gets", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "gets"))
 
 	return s.internalClient.Gets(ctx, issueKeyOrID, start, limit)
 }
@@ -44,8 +50,11 @@ func (s *ApprovalService) Gets(ctx context.Context, issueKeyOrID string, start, 
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request/approval#get-approval-by-id
 func (s *ApprovalService) Get(ctx context.Context, issueKeyOrID string, approvalID int) (*model.CustomerApprovalScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*ApprovalService).Get")
+	ctx, span := tracer().Start(ctx, "(*ApprovalService).Get", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "get"))
 
 	return s.internalClient.Get(ctx, issueKeyOrID, approvalID)
 }
@@ -58,8 +67,11 @@ func (s *ApprovalService) Get(ctx context.Context, issueKeyOrID string, approval
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request/approval#answer-approval
 func (s *ApprovalService) Answer(ctx context.Context, issueKeyOrID string, approvalID int, approve bool) (*model.CustomerApprovalScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*ApprovalService).Answer")
+	ctx, span := tracer().Start(ctx, "(*ApprovalService).Answer", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "answer"))
 
 	return s.internalClient.Answer(ctx, issueKeyOrID, approvalID, approve)
 }
@@ -70,11 +82,15 @@ type internalServiceRequestApprovalImpl struct {
 }
 
 func (i *internalServiceRequestApprovalImpl) Gets(ctx context.Context, issueKeyOrID string, start, limit int) (*model.CustomerApprovalPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalServiceRequestApprovalImpl).Gets")
+	ctx, span := tracer().Start(ctx, "(*internalServiceRequestApprovalImpl).Gets", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "gets"))
+
 	if issueKeyOrID == "" {
-		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoIssueKeyOrID)
+
+			return nil, nil, fmt.Errorf("sm: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	params := url.Values{}
@@ -85,56 +101,74 @@ func (i *internalServiceRequestApprovalImpl) Gets(ctx context.Context, issueKeyO
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, url, "", nil)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
 	page := new(model.CustomerApprovalPageScheme)
 	res, err := i.c.Call(req, page)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return page, res, nil
 }
 
 func (i *internalServiceRequestApprovalImpl) Get(ctx context.Context, issueKeyOrID string, approvalID int) (*model.CustomerApprovalScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalServiceRequestApprovalImpl).Get")
+	ctx, span := tracer().Start(ctx, "(*internalServiceRequestApprovalImpl).Get", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "get"))
+
 	if issueKeyOrID == "" {
-		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoIssueKeyOrID)
+
+			return nil, nil, fmt.Errorf("sm: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	if approvalID == 0 {
-		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoApprovalID)
+
+			return nil, nil, fmt.Errorf("sm: %w", model.ErrNoApprovalID)
 	}
 
 	url := fmt.Sprintf("rest/servicedeskapi/request/%v/approval/%v", issueKeyOrID, approvalID)
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, url, "", nil)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
 	approval := new(model.CustomerApprovalScheme)
 	res, err := i.c.Call(req, approval)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return approval, res, nil
 }
 
 func (i *internalServiceRequestApprovalImpl) Answer(ctx context.Context, issueKeyOrID string, approvalID int, approve bool) (*model.CustomerApprovalScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalServiceRequestApprovalImpl).Answer")
+	ctx, span := tracer().Start(ctx, "(*internalServiceRequestApprovalImpl).Answer", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "answer"))
+
 	if issueKeyOrID == "" {
-		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoIssueKeyOrID)
+
+			return nil, nil, fmt.Errorf("sm: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	if approvalID == 0 {
-		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoApprovalID)
+
+			return nil, nil, fmt.Errorf("sm: %w", model.ErrNoApprovalID)
 	}
 
 	url := fmt.Sprintf("rest/servicedeskapi/request/%v/approval/%v", issueKeyOrID, approvalID)
@@ -149,14 +183,17 @@ func (i *internalServiceRequestApprovalImpl) Answer(ctx context.Context, issueKe
 
 	req, err := i.c.NewRequest(ctx, http.MethodPost, url, "", payload)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	approval := new(model.CustomerApprovalScheme)
 	res, err := i.c.Call(req, approval)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return approval, res, nil
 }

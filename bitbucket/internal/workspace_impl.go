@@ -2,6 +2,9 @@ package internal
 
 import (
 	"context"
+
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
 	"fmt"
 	"net/http"
 
@@ -33,8 +36,11 @@ type WorkspaceService struct {
 //
 // https://docs.go-atlassian.io/bitbucket-cloud/workspace#get-a-workspace
 func (w *WorkspaceService) Get(ctx context.Context, workspace string) (*model.WorkspaceScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*WorkspaceService).Get")
+	ctx, span := tracer().Start(ctx, "(*WorkspaceService).Get", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "get"))
 
 	return w.internalClient.Get(ctx, workspace)
 }
@@ -45,8 +51,11 @@ func (w *WorkspaceService) Get(ctx context.Context, workspace string) (*model.Wo
 //
 // https://docs.go-atlassian.io/bitbucket-cloud/workspace#get-a-workspace
 func (w *WorkspaceService) Members(ctx context.Context, workspace string) (*model.WorkspaceMembershipPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*WorkspaceService).Members")
+	ctx, span := tracer().Start(ctx, "(*WorkspaceService).Members", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "members"))
 
 	return w.internalClient.Members(ctx, workspace)
 }
@@ -59,8 +68,11 @@ func (w *WorkspaceService) Members(ctx context.Context, workspace string) (*mode
 //
 // https://docs.go-atlassian.io/bitbucket-cloud/workspace#get-member-in-a-workspace
 func (w *WorkspaceService) Membership(ctx context.Context, workspace, memberID string) (*model.WorkspaceMembershipScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*WorkspaceService).Membership")
+	ctx, span := tracer().Start(ctx, "(*WorkspaceService).Membership", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "membership"))
 
 	return w.internalClient.Membership(ctx, workspace, memberID)
 }
@@ -71,8 +83,11 @@ func (w *WorkspaceService) Membership(ctx context.Context, workspace, memberID s
 //
 // https://docs.go-atlassian.io/bitbucket-cloud/workspace#get-projects-in-a-workspace
 func (w *WorkspaceService) Projects(ctx context.Context, workspace string) (*model.BitbucketProjectPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*WorkspaceService).Projects")
+	ctx, span := tracer().Start(ctx, "(*WorkspaceService).Projects", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "projects"))
 
 	return w.internalClient.Projects(ctx, workspace)
 }
@@ -83,17 +98,23 @@ type internalWorkspaceServiceImpl struct {
 
 // Get returns the requested workspace.
 func (i *internalWorkspaceServiceImpl) Get(ctx context.Context, workspace string) (*model.WorkspaceScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalWorkspaceServiceImpl).Get")
+	ctx, span := tracer().Start(ctx, "(*internalWorkspaceServiceImpl).Get", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "get"))
+
 	if workspace == "" {
-		return nil, nil, fmt.Errorf("bitbucket: %w", model.ErrNoWorkspace)
+
+			return nil, nil, fmt.Errorf("bitbucket: %w", model.ErrNoWorkspace)
 	}
 
 	endpoint := fmt.Sprintf("2.0/workspaces/%v", workspace)
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
@@ -103,22 +124,29 @@ func (i *internalWorkspaceServiceImpl) Get(ctx context.Context, workspace string
 		return nil, response, err
 	}
 
+	setOK(span)
 	return result, response, nil
 }
 
 // Members returns all members of the requested workspace.
 func (i *internalWorkspaceServiceImpl) Members(ctx context.Context, workspace string) (*model.WorkspaceMembershipPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalWorkspaceServiceImpl).Members")
+	ctx, span := tracer().Start(ctx, "(*internalWorkspaceServiceImpl).Members", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "members"))
+
 	if workspace == "" {
-		return nil, nil, fmt.Errorf("bitbucket: %w", model.ErrNoWorkspace)
+
+			return nil, nil, fmt.Errorf("bitbucket: %w", model.ErrNoWorkspace)
 	}
 
 	endpoint := fmt.Sprintf("2.0/workspaces/%v/members", workspace)
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
@@ -128,26 +156,34 @@ func (i *internalWorkspaceServiceImpl) Members(ctx context.Context, workspace st
 		return nil, response, err
 	}
 
+	setOK(span)
 	return page, response, nil
 }
 
 // Membership returns the workspace membership.
 func (i *internalWorkspaceServiceImpl) Membership(ctx context.Context, workspace, memberID string) (*model.WorkspaceMembershipScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalWorkspaceServiceImpl).Membership")
+	ctx, span := tracer().Start(ctx, "(*internalWorkspaceServiceImpl).Membership", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "membership"))
+
 	if workspace == "" {
-		return nil, nil, fmt.Errorf("bitbucket: %w", model.ErrNoWorkspace)
+
+			return nil, nil, fmt.Errorf("bitbucket: %w", model.ErrNoWorkspace)
 	}
 
 	if memberID == "" {
-		return nil, nil, fmt.Errorf("bitbucket: %w", model.ErrNoMemberID)
+
+			return nil, nil, fmt.Errorf("bitbucket: %w", model.ErrNoMemberID)
 	}
 
 	endpoint := fmt.Sprintf("2.0/workspaces/%v/members/%v", workspace, memberID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
@@ -157,22 +193,29 @@ func (i *internalWorkspaceServiceImpl) Membership(ctx context.Context, workspace
 		return nil, response, err
 	}
 
+	setOK(span)
 	return member, response, nil
 }
 
 // Projects returns the list of projects in this workspace.
 func (i *internalWorkspaceServiceImpl) Projects(ctx context.Context, workspace string) (*model.BitbucketProjectPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalWorkspaceServiceImpl).Projects")
+	ctx, span := tracer().Start(ctx, "(*internalWorkspaceServiceImpl).Projects", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "projects"))
+
 	if workspace == "" {
-		return nil, nil, fmt.Errorf("bitbucket: %w", model.ErrNoWorkspace)
+
+			return nil, nil, fmt.Errorf("bitbucket: %w", model.ErrNoWorkspace)
 	}
 
 	endpoint := fmt.Sprintf("2.0/workspaces/%v/projects", workspace)
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
@@ -182,5 +225,6 @@ func (i *internalWorkspaceServiceImpl) Projects(ctx context.Context, workspace s
 		return nil, response, err
 	}
 
+	setOK(span)
 	return page, response, nil
 }

@@ -2,6 +2,9 @@ package internal
 
 import (
 	"context"
+
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
 	"fmt"
 	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/v2/service"
@@ -30,8 +33,11 @@ type RestrictionOperationUserService struct {
 //
 // https://docs.go-atlassian.io/confluence-cloud/content/restrictions/operations/user#get-content-restriction-status-for-user
 func (r *RestrictionOperationUserService) Get(ctx context.Context, contentID, operationKey, accountID string) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*RestrictionOperationUserService).Get")
+	ctx, span := tracer().Start(ctx, "(*RestrictionOperationUserService).Get", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "get"))
 
 	return r.internalClient.Get(ctx, contentID, operationKey, accountID)
 }
@@ -44,8 +50,11 @@ func (r *RestrictionOperationUserService) Get(ctx context.Context, contentID, op
 //
 // https://docs.go-atlassian.io/confluence-cloud/content/restrictions/operations/user#add-user-to-content-restriction
 func (r *RestrictionOperationUserService) Add(ctx context.Context, contentID, operationKey, accountID string) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*RestrictionOperationUserService).Add")
+	ctx, span := tracer().Start(ctx, "(*RestrictionOperationUserService).Add", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "add"))
 
 	return r.internalClient.Add(ctx, contentID, operationKey, accountID)
 }
@@ -58,8 +67,11 @@ func (r *RestrictionOperationUserService) Add(ctx context.Context, contentID, op
 //
 // https://docs.go-atlassian.io/confluence-cloud/content/restrictions/operations/user#remove-user-from-content-restriction
 func (r *RestrictionOperationUserService) Remove(ctx context.Context, contentID, operationKey, accountID string) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*RestrictionOperationUserService).Remove")
+	ctx, span := tracer().Start(ctx, "(*RestrictionOperationUserService).Remove", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "remove"))
 
 	return r.internalClient.Remove(ctx, contentID, operationKey, accountID)
 }
@@ -69,8 +81,11 @@ type internalRestrictionOperationUserImpl struct {
 }
 
 func (i *internalRestrictionOperationUserImpl) Get(ctx context.Context, contentID, operationKey, accountID string) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalRestrictionOperationUserImpl).Get")
+	ctx, span := tracer().Start(ctx, "(*internalRestrictionOperationUserImpl).Get", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "get"))
 
 	if contentID == "" {
 		return nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
@@ -91,6 +106,7 @@ func (i *internalRestrictionOperationUserImpl) Get(ctx context.Context, contentI
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, err
 	}
 
@@ -98,8 +114,11 @@ func (i *internalRestrictionOperationUserImpl) Get(ctx context.Context, contentI
 }
 
 func (i *internalRestrictionOperationUserImpl) Add(ctx context.Context, contentID, operationKey, accountID string) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalRestrictionOperationUserImpl).Add")
+	ctx, span := tracer().Start(ctx, "(*internalRestrictionOperationUserImpl).Add", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "add"))
 
 	if contentID == "" {
 		return nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
@@ -120,6 +139,7 @@ func (i *internalRestrictionOperationUserImpl) Add(ctx context.Context, contentI
 
 	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, err
 	}
 
@@ -127,8 +147,11 @@ func (i *internalRestrictionOperationUserImpl) Add(ctx context.Context, contentI
 }
 
 func (i *internalRestrictionOperationUserImpl) Remove(ctx context.Context, contentID, operationKey, accountID string) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalRestrictionOperationUserImpl).Remove")
+	ctx, span := tracer().Start(ctx, "(*internalRestrictionOperationUserImpl).Remove", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "remove"))
 
 	if contentID == "" {
 		return nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
@@ -149,6 +172,7 @@ func (i *internalRestrictionOperationUserImpl) Remove(ctx context.Context, conte
 
 	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, err
 	}
 

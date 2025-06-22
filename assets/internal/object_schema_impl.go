@@ -2,6 +2,9 @@ package internal
 
 import (
 	"context"
+
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -32,8 +35,11 @@ type ObjectSchemaService struct {
 //
 // https://docs.go-atlassian.io/jira-assets/object/schema#get-object-schema-list
 func (o *ObjectSchemaService) List(ctx context.Context, workspaceID string) (*model.ObjectSchemaPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*ObjectSchemaService).List")
+	ctx, span := tracer().Start(ctx, "(*ObjectSchemaService).List", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "list"))
 
 	return o.internalClient.List(ctx, workspaceID)
 }
@@ -44,8 +50,11 @@ func (o *ObjectSchemaService) List(ctx context.Context, workspaceID string) (*mo
 //
 // https://docs.go-atlassian.io/jira-assets/object/schema#create-object-schema
 func (o *ObjectSchemaService) Create(ctx context.Context, workspaceID string, payload *model.ObjectSchemaPayloadScheme) (*model.ObjectSchemaScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*ObjectSchemaService).Create")
+	ctx, span := tracer().Start(ctx, "(*ObjectSchemaService).Create", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "create"))
 
 	return o.internalClient.Create(ctx, workspaceID, payload)
 }
@@ -56,8 +65,11 @@ func (o *ObjectSchemaService) Create(ctx context.Context, workspaceID string, pa
 //
 // https://docs.go-atlassian.io/jira-assets/object/schema#get-object-schema
 func (o *ObjectSchemaService) Get(ctx context.Context, workspaceID, objectSchemaID string) (*model.ObjectSchemaScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*ObjectSchemaService).Get")
+	ctx, span := tracer().Start(ctx, "(*ObjectSchemaService).Get", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "get"))
 
 	return o.internalClient.Get(ctx, workspaceID, objectSchemaID)
 }
@@ -68,8 +80,11 @@ func (o *ObjectSchemaService) Get(ctx context.Context, workspaceID, objectSchema
 //
 // https://docs.go-atlassian.io/jira-assets/object/schema#update-object-schema
 func (o *ObjectSchemaService) Update(ctx context.Context, workspaceID, objectSchemaID string, payload *model.ObjectSchemaPayloadScheme) (*model.ObjectSchemaScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*ObjectSchemaService).Update")
+	ctx, span := tracer().Start(ctx, "(*ObjectSchemaService).Update", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "update"))
 
 	return o.internalClient.Update(ctx, workspaceID, objectSchemaID, payload)
 }
@@ -80,8 +95,11 @@ func (o *ObjectSchemaService) Update(ctx context.Context, workspaceID, objectSch
 //
 // https://docs.go-atlassian.io/jira-assets/object/schema#delete-object-schema
 func (o *ObjectSchemaService) Delete(ctx context.Context, workspaceID, objectSchemaID string) (*model.ObjectSchemaScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*ObjectSchemaService).Delete")
+	ctx, span := tracer().Start(ctx, "(*ObjectSchemaService).Delete", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "delete"))
 
 	return o.internalClient.Delete(ctx, workspaceID, objectSchemaID)
 }
@@ -92,8 +110,11 @@ func (o *ObjectSchemaService) Delete(ctx context.Context, workspaceID, objectSch
 //
 // https://docs.go-atlassian.io/jira-assets/object/schema#get-object-schema-attributes
 func (o *ObjectSchemaService) Attributes(ctx context.Context, workspaceID, objectSchemaID string, options *model.ObjectSchemaAttributesParamsScheme) ([]*model.ObjectTypeAttributeScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*ObjectSchemaService).Attributes")
+	ctx, span := tracer().Start(ctx, "(*ObjectSchemaService).Attributes", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "attributes"))
 
 	return o.internalClient.Attributes(ctx, workspaceID, objectSchemaID, options)
 }
@@ -104,8 +125,11 @@ func (o *ObjectSchemaService) Attributes(ctx context.Context, workspaceID, objec
 //
 // https://docs.go-atlassian.io/jira-assets/object/schema#get-object-schema-types
 func (o *ObjectSchemaService) ObjectTypes(ctx context.Context, workspaceID, objectSchemaID string, excludeAbstract bool) ([]*model.ObjectTypeScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*ObjectSchemaService).ObjectTypes")
+	ctx, span := tracer().Start(ctx, "(*ObjectSchemaService).ObjectTypes", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "object_types"))
 
 	return o.internalClient.ObjectTypes(ctx, workspaceID, objectSchemaID, excludeAbstract)
 }
@@ -115,147 +139,195 @@ type internalObjectSchemaImpl struct {
 }
 
 func (i *internalObjectSchemaImpl) List(ctx context.Context, workspaceID string) (*model.ObjectSchemaPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalObjectSchemaImpl).List")
+	ctx, span := tracer().Start(ctx, "(*internalObjectSchemaImpl).List", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "list"))
+
 	if workspaceID == "" {
-		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoWorkspaceID)
+
+			return nil, nil, fmt.Errorf("assets: %w", model.ErrNoWorkspaceID)
 	}
 
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/objectschema/list", workspaceID)
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
 	page := new(model.ObjectSchemaPageScheme)
 	res, err := i.c.Call(req, page)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return page, res, nil
 }
 
 func (i *internalObjectSchemaImpl) Create(ctx context.Context, workspaceID string, payload *model.ObjectSchemaPayloadScheme) (*model.ObjectSchemaScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalObjectSchemaImpl).Create")
+	ctx, span := tracer().Start(ctx, "(*internalObjectSchemaImpl).Create", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "create"))
+
 	if workspaceID == "" {
-		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoWorkspaceID)
+
+			return nil, nil, fmt.Errorf("assets: %w", model.ErrNoWorkspaceID)
 	}
 
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/objectschema/create", workspaceID)
 
 	req, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
 	schema := new(model.ObjectSchemaScheme)
 	res, err := i.c.Call(req, schema)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return schema, res, nil
 }
 
 func (i *internalObjectSchemaImpl) Get(ctx context.Context, workspaceID, objectSchemaID string) (*model.ObjectSchemaScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalObjectSchemaImpl).Get")
+	ctx, span := tracer().Start(ctx, "(*internalObjectSchemaImpl).Get", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "get"))
+
 	if workspaceID == "" {
-		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoWorkspaceID)
+
+			return nil, nil, fmt.Errorf("assets: %w", model.ErrNoWorkspaceID)
 	}
 
 	if objectSchemaID == "" {
-		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoObjectSchemaID)
+
+			return nil, nil, fmt.Errorf("assets: %w", model.ErrNoObjectSchemaID)
 	}
 
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/objectschema/%v", workspaceID, objectSchemaID)
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
 	schema := new(model.ObjectSchemaScheme)
 	res, err := i.c.Call(req, schema)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return schema, res, nil
 }
 
 func (i *internalObjectSchemaImpl) Update(ctx context.Context, workspaceID, objectSchemaID string, payload *model.ObjectSchemaPayloadScheme) (*model.ObjectSchemaScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalObjectSchemaImpl).Update")
+	ctx, span := tracer().Start(ctx, "(*internalObjectSchemaImpl).Update", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "update"))
+
 	if workspaceID == "" {
-		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoWorkspaceID)
+
+			return nil, nil, fmt.Errorf("assets: %w", model.ErrNoWorkspaceID)
 	}
 
 	if objectSchemaID == "" {
-		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoObjectSchemaID)
+
+			return nil, nil, fmt.Errorf("assets: %w", model.ErrNoObjectSchemaID)
 	}
 
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/objectschema/%v", workspaceID, objectSchemaID)
 
 	req, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
 	schema := new(model.ObjectSchemaScheme)
 	res, err := i.c.Call(req, schema)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return schema, res, nil
 }
 
 func (i *internalObjectSchemaImpl) Delete(ctx context.Context, workspaceID, objectSchemaID string) (*model.ObjectSchemaScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalObjectSchemaImpl).Delete")
+	ctx, span := tracer().Start(ctx, "(*internalObjectSchemaImpl).Delete", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "delete"))
+
 	if workspaceID == "" {
-		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoWorkspaceID)
+
+			return nil, nil, fmt.Errorf("assets: %w", model.ErrNoWorkspaceID)
 	}
 
 	if objectSchemaID == "" {
-		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoObjectSchemaID)
+
+			return nil, nil, fmt.Errorf("assets: %w", model.ErrNoObjectSchemaID)
 	}
 
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/objectschema/%v", workspaceID, objectSchemaID)
 
 	req, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
 	schema := new(model.ObjectSchemaScheme)
 	res, err := i.c.Call(req, schema)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return schema, res, nil
 }
 
 func (i *internalObjectSchemaImpl) Attributes(ctx context.Context, workspaceID, objectSchemaID string, options *model.ObjectSchemaAttributesParamsScheme) ([]*model.ObjectTypeAttributeScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalObjectSchemaImpl).Attributes")
+	ctx, span := tracer().Start(ctx, "(*internalObjectSchemaImpl).Attributes", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "attributes"))
+
 	if workspaceID == "" {
-		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoWorkspaceID)
+
+			return nil, nil, fmt.Errorf("assets: %w", model.ErrNoWorkspaceID)
 	}
 
 	if objectSchemaID == "" {
-		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoObjectSchemaID)
+
+			return nil, nil, fmt.Errorf("assets: %w", model.ErrNoObjectSchemaID)
 	}
 
 	query := url.Values{}
@@ -287,28 +359,36 @@ func (i *internalObjectSchemaImpl) Attributes(ctx context.Context, workspaceID, 
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	var attributes []*model.ObjectTypeAttributeScheme
 	res, err := i.c.Call(req, &attributes)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return attributes, res, nil
 }
 
 func (i *internalObjectSchemaImpl) ObjectTypes(ctx context.Context, workspaceID, objectSchemaID string, excludeAbstract bool) ([]*model.ObjectTypeScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalObjectSchemaImpl).ObjectTypes")
+	ctx, span := tracer().Start(ctx, "(*internalObjectSchemaImpl).ObjectTypes", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "object_types"))
+
 	if workspaceID == "" {
-		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoWorkspaceID)
+
+			return nil, nil, fmt.Errorf("assets: %w", model.ErrNoWorkspaceID)
 	}
 
 	if objectSchemaID == "" {
-		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoObjectSchemaID)
+
+			return nil, nil, fmt.Errorf("assets: %w", model.ErrNoObjectSchemaID)
 	}
 
 	var endpoint strings.Builder
@@ -323,14 +403,17 @@ func (i *internalObjectSchemaImpl) ObjectTypes(ctx context.Context, workspaceID,
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	var objectTypes []*model.ObjectTypeScheme
 	res, err := i.c.Call(req, &objectTypes)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return objectTypes, res, nil
 }

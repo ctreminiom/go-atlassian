@@ -2,6 +2,9 @@ package internal
 
 import (
 	"context"
+
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -39,8 +42,11 @@ type CommentService struct {
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request/comments#get-request-comments
 func (s *CommentService) Gets(ctx context.Context, issueKeyOrID string, options *model.RequestCommentOptionsScheme) (*model.RequestCommentPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*CommentService).Gets")
+	ctx, span := tracer().Start(ctx, "(*CommentService).Gets", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "gets"))
 
 	return s.internalClient.Gets(ctx, issueKeyOrID, options)
 }
@@ -51,8 +57,11 @@ func (s *CommentService) Gets(ctx context.Context, issueKeyOrID string, options 
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request/comments#get-request-comment-by-id
 func (s *CommentService) Get(ctx context.Context, issueKeyOrID string, commentID int, expand []string) (*model.RequestCommentScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*CommentService).Get")
+	ctx, span := tracer().Start(ctx, "(*CommentService).Get", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "get"))
 
 	return s.internalClient.Get(ctx, issueKeyOrID, commentID, expand)
 }
@@ -63,8 +72,11 @@ func (s *CommentService) Get(ctx context.Context, issueKeyOrID string, commentID
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request/comments#create-request-comment
 func (s *CommentService) Create(ctx context.Context, issueKeyOrID, body string, public bool) (*model.RequestCommentScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*CommentService).Create")
+	ctx, span := tracer().Start(ctx, "(*CommentService).Create", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "create"))
 
 	return s.internalClient.Create(ctx, issueKeyOrID, body, public)
 }
@@ -75,8 +87,11 @@ func (s *CommentService) Create(ctx context.Context, issueKeyOrID, body string, 
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/request/comments#get-comment-attachments
 func (s *CommentService) Attachments(ctx context.Context, issueKeyOrID string, commentID, start, limit int) (*model.RequestAttachmentPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*CommentService).Attachments")
+	ctx, span := tracer().Start(ctx, "(*CommentService).Attachments", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "attachments"))
 
 	return s.internalClient.Attachments(ctx, issueKeyOrID, commentID, start, limit)
 }
@@ -87,11 +102,15 @@ type internalServiceRequestCommentImpl struct {
 }
 
 func (i *internalServiceRequestCommentImpl) Gets(ctx context.Context, issueKeyOrID string, options *model.RequestCommentOptionsScheme) (*model.RequestCommentPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalServiceRequestCommentImpl).Gets")
+	ctx, span := tracer().Start(ctx, "(*internalServiceRequestCommentImpl).Gets", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "gets"))
+
 	if issueKeyOrID == "" {
-		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoIssueKeyOrID)
+
+			return nil, nil, fmt.Errorf("sm: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/request/%v/comment", issueKeyOrID)
@@ -99,6 +118,8 @@ func (i *internalServiceRequestCommentImpl) Gets(ctx context.Context, issueKeyOr
 	if options != nil {
 		q, err := query.Values(options)
 		if err != nil {
+		recordError(span, err)
+
 			return nil, nil, err
 		}
 
@@ -107,28 +128,36 @@ func (i *internalServiceRequestCommentImpl) Gets(ctx context.Context, issueKeyOr
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	page := new(model.RequestCommentPageScheme)
 	res, err := i.c.Call(req, page)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return page, res, nil
 }
 
 func (i *internalServiceRequestCommentImpl) Get(ctx context.Context, issueKeyOrID string, commentID int, expand []string) (*model.RequestCommentScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalServiceRequestCommentImpl).Get")
+	ctx, span := tracer().Start(ctx, "(*internalServiceRequestCommentImpl).Get", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "get"))
+
 	if issueKeyOrID == "" {
-		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoIssueKeyOrID)
+
+			return nil, nil, fmt.Errorf("sm: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	if commentID == 0 {
-		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoCommentID)
+
+			return nil, nil, fmt.Errorf("sm: %w", model.ErrNoCommentID)
 	}
 
 	var endpoint strings.Builder
@@ -143,28 +172,36 @@ func (i *internalServiceRequestCommentImpl) Get(ctx context.Context, issueKeyOrI
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	comment := new(model.RequestCommentScheme)
 	res, err := i.c.Call(req, comment)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return comment, res, nil
 }
 
 func (i *internalServiceRequestCommentImpl) Create(ctx context.Context, issueKeyOrID, body string, public bool) (*model.RequestCommentScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalServiceRequestCommentImpl).Create")
+	ctx, span := tracer().Start(ctx, "(*internalServiceRequestCommentImpl).Create", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "create"))
+
 	if issueKeyOrID == "" {
-		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoIssueKeyOrID)
+
+			return nil, nil, fmt.Errorf("sm: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	if body == "" {
-		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoCommentBody)
+
+			return nil, nil, fmt.Errorf("sm: %w", model.ErrNoCommentBody)
 	}
 
 	payload := map[string]interface{}{"public": public, "body": body}
@@ -172,28 +209,36 @@ func (i *internalServiceRequestCommentImpl) Create(ctx context.Context, issueKey
 
 	req, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	comment := new(model.RequestCommentScheme)
 	res, err := i.c.Call(req, comment)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return comment, res, nil
 }
 
 func (i *internalServiceRequestCommentImpl) Attachments(ctx context.Context, issueKeyOrID string, commentID, start, limit int) (*model.RequestAttachmentPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalServiceRequestCommentImpl).Attachments")
+	ctx, span := tracer().Start(ctx, "(*internalServiceRequestCommentImpl).Attachments", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "attachments"))
+
 	if issueKeyOrID == "" {
-		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoIssueKeyOrID)
+
+			return nil, nil, fmt.Errorf("sm: %w", model.ErrNoIssueKeyOrID)
 	}
 
 	if commentID == 0 {
-		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoContentID)
+
+			return nil, nil, fmt.Errorf("sm: %w", model.ErrNoContentID)
 	}
 
 	params := url.Values{}
@@ -204,14 +249,17 @@ func (i *internalServiceRequestCommentImpl) Attachments(ctx context.Context, iss
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	page := new(model.RequestAttachmentPageScheme)
 	res, err := i.c.Call(req, page)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return page, res, nil
 }

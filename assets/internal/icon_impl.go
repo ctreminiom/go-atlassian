@@ -2,6 +2,9 @@ package internal
 
 import (
 	"context"
+
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
 	"fmt"
 	"net/http"
 
@@ -30,8 +33,11 @@ type IconService struct {
 //
 // https://docs.go-atlassian.io/jira-assets/icons#get-icon
 func (i *IconService) Get(ctx context.Context, workspaceID, iconID string) (*model.IconScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*IconService).Get")
+	ctx, span := tracer().Start(ctx, "(*IconService).Get", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "get"))
 
 	return i.internalClient.Get(ctx, workspaceID, iconID)
 }
@@ -42,8 +48,11 @@ func (i *IconService) Get(ctx context.Context, workspaceID, iconID string) (*mod
 //
 // https://docs.go-atlassian.io/jira-assets/icons#get-global-icons
 func (i *IconService) Global(ctx context.Context, workspaceID string) ([]*model.IconScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*IconService).Global")
+	ctx, span := tracer().Start(ctx, "(*IconService).Global", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "global"))
 
 	return i.internalClient.Global(ctx, workspaceID)
 }
@@ -53,53 +62,70 @@ type internalIconImpl struct {
 }
 
 func (i *internalIconImpl) Get(ctx context.Context, workspaceID, iconID string) (*model.IconScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalIconImpl).Get")
+	ctx, span := tracer().Start(ctx, "(*internalIconImpl).Get", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "get"))
+
 	if workspaceID == "" {
-		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoWorkspaceID)
+
+			return nil, nil, fmt.Errorf("assets: %w", model.ErrNoWorkspaceID)
 	}
 
 	if iconID == "" {
-		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoIconID)
+
+			return nil, nil, fmt.Errorf("assets: %w", model.ErrNoIconID)
 	}
 
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/icon/%v", workspaceID, iconID)
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
 	icon := new(model.IconScheme)
 	res, err := i.c.Call(req, icon)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return icon, res, nil
 }
 
 func (i *internalIconImpl) Global(ctx context.Context, workspaceID string) ([]*model.IconScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalIconImpl).Global")
+	ctx, span := tracer().Start(ctx, "(*internalIconImpl).Global", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "global"))
+
 	if workspaceID == "" {
-		return nil, nil, fmt.Errorf("assets: %w", model.ErrNoWorkspaceID)
+
+			return nil, nil, fmt.Errorf("assets: %w", model.ErrNoWorkspaceID)
 	}
 
 	endpoint := fmt.Sprintf("jsm/assets/workspace/%v/v1/icon/global", workspaceID)
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
 	var icons []*model.IconScheme
 	res, err := i.c.Call(req, &icons)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return icons, res, nil
 }

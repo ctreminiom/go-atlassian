@@ -2,6 +2,9 @@ package internal
 
 import (
 	"context"
+
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -36,8 +39,11 @@ type AttachmentService struct {
 //
 // https://docs.go-atlassian.io/confluence-cloud/v2/attachments#get-attachment-by-id
 func (a *AttachmentService) Get(ctx context.Context, attachmentID string, versionID int, serializeIDs bool) (*model.AttachmentScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*AttachmentService).Get")
+	ctx, span := tracer().Start(ctx, "(*AttachmentService).Get", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "get"))
 
 	return a.internalClient.Get(ctx, attachmentID, versionID, serializeIDs)
 }
@@ -58,8 +64,11 @@ func (a *AttachmentService) Get(ctx context.Context, attachmentID string, versio
 //
 // https://docs.go-atlassian.io/confluence-cloud/v2/attachments#get-attachments-by-type
 func (a *AttachmentService) Gets(ctx context.Context, entityID int, entityType string, options *model.AttachmentParamsScheme, cursor string, limit int) (*model.AttachmentPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*AttachmentService).Gets")
+	ctx, span := tracer().Start(ctx, "(*AttachmentService).Gets", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "gets"))
 
 	return a.internalClient.Gets(ctx, entityID, entityType, options, cursor, limit)
 }
@@ -70,8 +79,11 @@ func (a *AttachmentService) Gets(ctx context.Context, entityID int, entityType s
 //
 // https://docs.go-atlassian.io/confluence-cloud/v2/attachments#delete-attachment
 func (a *AttachmentService) Delete(ctx context.Context, attachmentID string) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*AttachmentService).Delete")
+	ctx, span := tracer().Start(ctx, "(*AttachmentService).Delete", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "delete"))
 
 	return a.internalClient.Delete(ctx, attachmentID)
 }
@@ -81,8 +93,11 @@ type internalAttachmentImpl struct {
 }
 
 func (i *internalAttachmentImpl) Delete(ctx context.Context, attachmentID string) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalAttachmentImpl).Delete")
+	ctx, span := tracer().Start(ctx, "(*internalAttachmentImpl).Delete", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "delete"))
 
 	if attachmentID == "" {
 		return nil, fmt.Errorf("confluence: %w", model.ErrNoContentAttachmentID)
@@ -92,6 +107,7 @@ func (i *internalAttachmentImpl) Delete(ctx context.Context, attachmentID string
 
 	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, err
 	}
 
@@ -99,11 +115,15 @@ func (i *internalAttachmentImpl) Delete(ctx context.Context, attachmentID string
 }
 
 func (i *internalAttachmentImpl) Get(ctx context.Context, attachmentID string, versionID int, serializeIDs bool) (*model.AttachmentScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalAttachmentImpl).Get")
+	ctx, span := tracer().Start(ctx, "(*internalAttachmentImpl).Get", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "get"))
+
 	if attachmentID == "" {
-		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentAttachmentID)
+
+			return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoContentAttachmentID)
 	}
 
 	var endpoint strings.Builder
@@ -124,6 +144,7 @@ func (i *internalAttachmentImpl) Get(ctx context.Context, attachmentID string, v
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
@@ -133,15 +154,20 @@ func (i *internalAttachmentImpl) Get(ctx context.Context, attachmentID string, v
 		return nil, response, err
 	}
 
+	setOK(span)
 	return attachment, response, nil
 }
 
 func (i *internalAttachmentImpl) Gets(ctx context.Context, entityID int, entityType string, options *model.AttachmentParamsScheme, cursor string, limit int) (*model.AttachmentPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalAttachmentImpl).Gets")
+	ctx, span := tracer().Start(ctx, "(*internalAttachmentImpl).Gets", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "gets"))
+
 	if entityID == 0 {
-		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoEntityID)
+
+			return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoEntityID)
 	}
 
 	query := url.Values{}
@@ -188,6 +214,7 @@ func (i *internalAttachmentImpl) Gets(ctx context.Context, entityID int, entityT
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
@@ -197,5 +224,6 @@ func (i *internalAttachmentImpl) Gets(ctx context.Context, entityID int, entityT
 		return nil, response, err
 	}
 
+	setOK(span)
 	return page, response, nil
 }

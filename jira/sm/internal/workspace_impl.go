@@ -2,6 +2,9 @@ package internal
 
 import (
 	"context"
+
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
 	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/v2/service"
 	"github.com/ctreminiom/go-atlassian/v2/service/sm"
@@ -33,8 +36,11 @@ type WorkSpaceService struct {
 //
 // https://docs.go-atlassian.io/jira-service-management/workspaces#get-workspaces
 func (w *WorkSpaceService) Gets(ctx context.Context) (*model.WorkSpacePageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*WorkSpaceService).Gets")
+	ctx, span := tracer().Start(ctx, "(*WorkSpaceService).Gets", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "gets"))
 
 	return w.internalClient.Gets(ctx)
 }
@@ -45,22 +51,29 @@ type internalWorkSpaceImpl struct {
 }
 
 func (i *internalWorkSpaceImpl) Gets(ctx context.Context) (*model.WorkSpacePageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalWorkSpaceImpl).Gets")
+	ctx, span := tracer().Start(ctx, "(*internalWorkSpaceImpl).Gets", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "gets"))
 
 	endpoint := "/rest/servicedeskapi/assets/workspace"
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
 	page := new(model.WorkSpacePageScheme)
 	res, err := i.c.Call(req, page)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return page, res, nil
 
 }

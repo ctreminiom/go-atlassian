@@ -2,6 +2,9 @@ package internal
 
 import (
 	"context"
+
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -38,8 +41,11 @@ type CustomerService struct {
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/customer#create-customer
 func (c *CustomerService) Create(ctx context.Context, email, displayName string) (*model.CustomerScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*CustomerService).Create")
+	ctx, span := tracer().Start(ctx, "(*CustomerService).Create", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "create"))
 
 	return c.internalClient.Create(ctx, email, displayName)
 }
@@ -50,8 +56,11 @@ func (c *CustomerService) Create(ctx context.Context, email, displayName string)
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/customer#get-customers
 func (c *CustomerService) Gets(ctx context.Context, serviceDeskID string, query string, start, limit int) (*model.CustomerPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*CustomerService).Gets")
+	ctx, span := tracer().Start(ctx, "(*CustomerService).Gets", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "gets"))
 
 	return c.internalClient.Gets(ctx, serviceDeskID, query, start, limit)
 }
@@ -62,8 +71,11 @@ func (c *CustomerService) Gets(ctx context.Context, serviceDeskID string, query 
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/customer#add-customers
 func (c *CustomerService) Add(ctx context.Context, serviceDeskID string, accountIDs []string) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*CustomerService).Add")
+	ctx, span := tracer().Start(ctx, "(*CustomerService).Add", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "add"))
 
 	return c.internalClient.Add(ctx, serviceDeskID, accountIDs)
 }
@@ -74,8 +86,11 @@ func (c *CustomerService) Add(ctx context.Context, serviceDeskID string, account
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/customer#remove-customers
 func (c *CustomerService) Remove(ctx context.Context, serviceDeskID string, accountIDs []string) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*CustomerService).Remove")
+	ctx, span := tracer().Start(ctx, "(*CustomerService).Remove", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "remove"))
 
 	return c.internalClient.Remove(ctx, serviceDeskID, accountIDs)
 }
@@ -86,8 +101,11 @@ type internalCustomerImpl struct {
 }
 
 func (i *internalCustomerImpl) Create(ctx context.Context, email, displayName string) (*model.CustomerScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalCustomerImpl).Create")
+	ctx, span := tracer().Start(ctx, "(*internalCustomerImpl).Create", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "create"))
 
 	payload := map[string]interface{}{
 		"displayName": displayName,
@@ -98,21 +116,28 @@ func (i *internalCustomerImpl) Create(ctx context.Context, email, displayName st
 
 	req, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
 	customer := new(model.CustomerScheme)
 	res, err := i.c.Call(req, customer)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return customer, res, nil
 }
 
 func (i *internalCustomerImpl) Gets(ctx context.Context, serviceDeskID string, query string, start, limit int) (*model.CustomerPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalCustomerImpl).Gets")
+	ctx, span := tracer().Start(ctx, "(*internalCustomerImpl).Gets", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "gets"))
 
 	params := url.Values{}
 	params.Add("start", strconv.Itoa(start))
@@ -126,21 +151,28 @@ func (i *internalCustomerImpl) Gets(ctx context.Context, serviceDeskID string, q
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
 	page := new(model.CustomerPageScheme)
 	res, err := i.c.Call(req, page)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return page, res, nil
 }
 
 func (i *internalCustomerImpl) Add(ctx context.Context, serviceDeskID string, accountIDs []string) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalCustomerImpl).Add")
+	ctx, span := tracer().Start(ctx, "(*internalCustomerImpl).Add", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "add"))
 
 	if serviceDeskID == "" {
 		return nil, fmt.Errorf("sm: %w", model.ErrNoServiceDeskID)
@@ -158,6 +190,7 @@ func (i *internalCustomerImpl) Add(ctx context.Context, serviceDeskID string, ac
 
 	req, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
+		recordError(span, err)
 		return nil, err
 	}
 
@@ -165,8 +198,11 @@ func (i *internalCustomerImpl) Add(ctx context.Context, serviceDeskID string, ac
 }
 
 func (i *internalCustomerImpl) Remove(ctx context.Context, serviceDeskID string, accountIDs []string) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalCustomerImpl).Remove")
+	ctx, span := tracer().Start(ctx, "(*internalCustomerImpl).Remove", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "remove"))
 
 	if serviceDeskID == "" {
 		return nil, fmt.Errorf("sm: %w", model.ErrNoServiceDeskID)
@@ -184,6 +220,7 @@ func (i *internalCustomerImpl) Remove(ctx context.Context, serviceDeskID string,
 
 	req, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", payload)
 	if err != nil {
+		recordError(span, err)
 		return nil, err
 	}
 

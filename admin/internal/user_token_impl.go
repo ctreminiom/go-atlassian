@@ -2,6 +2,9 @@ package internal
 
 import (
 	"context"
+
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
 	"fmt"
 	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/v2/service"
@@ -27,8 +30,11 @@ type UserTokenService struct {
 //
 // https://docs.go-atlassian.io/atlassian-admin-cloud/user/token#get-api-tokens
 func (u *UserTokenService) Gets(ctx context.Context, accountID string) ([]*model.UserTokensScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*UserTokenService).Gets")
+	ctx, span := tracer().Start(ctx, "(*UserTokenService).Gets", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "gets"))
 
 	return u.internalClient.Gets(ctx, accountID)
 }
@@ -39,8 +45,11 @@ func (u *UserTokenService) Gets(ctx context.Context, accountID string) ([]*model
 //
 // https://docs.go-atlassian.io/atlassian-admin-cloud/user/token#delete-api-token
 func (u *UserTokenService) Delete(ctx context.Context, accountID, tokenID string) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*UserTokenService).Delete")
+	ctx, span := tracer().Start(ctx, "(*UserTokenService).Delete", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "delete"))
 
 	return u.internalClient.Delete(ctx, accountID, tokenID)
 }
@@ -50,17 +59,23 @@ type internalUserTokenImpl struct {
 }
 
 func (i *internalUserTokenImpl) Gets(ctx context.Context, accountID string) ([]*model.UserTokensScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalUserTokenImpl).Gets")
+	ctx, span := tracer().Start(ctx, "(*internalUserTokenImpl).Gets", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "gets"))
+
 	if accountID == "" {
-		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminAccountID)
+
+			return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminAccountID)
 	}
 
 	endpoint := fmt.Sprintf("users/%v/manage/api-tokens", accountID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
@@ -70,12 +85,16 @@ func (i *internalUserTokenImpl) Gets(ctx context.Context, accountID string) ([]*
 		return nil, response, err
 	}
 
+	setOK(span)
 	return tokens, response, nil
 }
 
 func (i *internalUserTokenImpl) Delete(ctx context.Context, accountID, tokenID string) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalUserTokenImpl).Delete")
+	ctx, span := tracer().Start(ctx, "(*internalUserTokenImpl).Delete", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "delete"))
 
 	if accountID == "" {
 		return nil, fmt.Errorf("admin: %w", model.ErrNoAdminAccountID)
@@ -89,6 +108,7 @@ func (i *internalUserTokenImpl) Delete(ctx context.Context, accountID, tokenID s
 
 	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, err
 	}
 

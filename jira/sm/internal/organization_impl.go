@@ -2,6 +2,9 @@ package internal
 
 import (
 	"context"
+
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
 	"fmt"
 	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/v2/service"
@@ -33,8 +36,11 @@ type OrganizationService struct {
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/organization#get-organizations
 func (o *OrganizationService) Gets(ctx context.Context, accountID string, start, limit int) (*model.OrganizationPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*OrganizationService).Gets")
+	ctx, span := tracer().Start(ctx, "(*OrganizationService).Gets", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "gets"))
 
 	return o.internalClient.Gets(ctx, accountID, start, limit)
 }
@@ -49,8 +55,11 @@ func (o *OrganizationService) Gets(ctx context.Context, accountID string, start,
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/organization#get-organization
 func (o *OrganizationService) Get(ctx context.Context, organizationID int) (*model.OrganizationScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*OrganizationService).Get")
+	ctx, span := tracer().Start(ctx, "(*OrganizationService).Get", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "get"))
 
 	return o.internalClient.Get(ctx, organizationID)
 }
@@ -65,8 +74,11 @@ func (o *OrganizationService) Get(ctx context.Context, organizationID int) (*mod
 //
 // https://docs.go-atlassian.io/jira-service-management/organization#delete-organization
 func (o *OrganizationService) Delete(ctx context.Context, organizationID int) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*OrganizationService).Delete")
+	ctx, span := tracer().Start(ctx, "(*OrganizationService).Delete", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "delete"))
 
 	return o.internalClient.Delete(ctx, organizationID)
 }
@@ -77,8 +89,11 @@ func (o *OrganizationService) Delete(ctx context.Context, organizationID int) (*
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/organization#create-organization
 func (o *OrganizationService) Create(ctx context.Context, name string) (*model.OrganizationScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*OrganizationService).Create")
+	ctx, span := tracer().Start(ctx, "(*OrganizationService).Create", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "create"))
 
 	return o.internalClient.Create(ctx, name)
 }
@@ -93,8 +108,11 @@ func (o *OrganizationService) Create(ctx context.Context, name string) (*model.O
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/organization#get-users-in-organization
 func (o *OrganizationService) Users(ctx context.Context, organizationID, start, limit int) (*model.OrganizationUsersPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*OrganizationService).Users")
+	ctx, span := tracer().Start(ctx, "(*OrganizationService).Users", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "users"))
 
 	return o.internalClient.Users(ctx, organizationID, start, limit)
 }
@@ -105,8 +123,11 @@ func (o *OrganizationService) Users(ctx context.Context, organizationID, start, 
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/organization#add-users-to-organization
 func (o *OrganizationService) Add(ctx context.Context, organizationID int, accountIDs []string) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*OrganizationService).Add")
+	ctx, span := tracer().Start(ctx, "(*OrganizationService).Add", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "add"))
 
 	return o.internalClient.Add(ctx, organizationID, accountIDs)
 }
@@ -117,8 +138,11 @@ func (o *OrganizationService) Add(ctx context.Context, organizationID int, accou
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/organization#remove-users-from-organization
 func (o *OrganizationService) Remove(ctx context.Context, organizationID int, accountIDs []string) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*OrganizationService).Remove")
+	ctx, span := tracer().Start(ctx, "(*OrganizationService).Remove", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "remove"))
 
 	return o.internalClient.Remove(ctx, organizationID, accountIDs)
 }
@@ -129,8 +153,11 @@ func (o *OrganizationService) Remove(ctx context.Context, organizationID int, ac
 //
 // https://docs.go-atlassian.io/jira-service-management/organization#get-project-organizations
 func (o *OrganizationService) Project(ctx context.Context, accountID string, serviceDeskID, start, limit int) (*model.OrganizationPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*OrganizationService).Project")
+	ctx, span := tracer().Start(ctx, "(*OrganizationService).Project", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "project"))
 
 	return o.internalClient.Project(ctx, accountID, serviceDeskID, start, limit)
 }
@@ -145,8 +172,11 @@ func (o *OrganizationService) Project(ctx context.Context, accountID string, ser
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/organization#associate-organization
 func (o *OrganizationService) Associate(ctx context.Context, serviceDeskID, organizationID int) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*OrganizationService).Associate")
+	ctx, span := tracer().Start(ctx, "(*OrganizationService).Associate", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "associate"))
 
 	return o.internalClient.Associate(ctx, serviceDeskID, organizationID)
 }
@@ -161,8 +191,11 @@ func (o *OrganizationService) Associate(ctx context.Context, serviceDeskID, orga
 //
 // https://docs.go-atlassian.io/jira-service-management-cloud/organization#detach-organization
 func (o *OrganizationService) Detach(ctx context.Context, serviceDeskID, organizationID int) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*OrganizationService).Detach")
+	ctx, span := tracer().Start(ctx, "(*OrganizationService).Detach", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "detach"))
 
 	return o.internalClient.Detach(ctx, serviceDeskID, organizationID)
 }
@@ -173,8 +206,11 @@ type internalOrganizationImpl struct {
 }
 
 func (i *internalOrganizationImpl) Gets(ctx context.Context, accountID string, start, limit int) (*model.OrganizationPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalOrganizationImpl).Gets")
+	ctx, span := tracer().Start(ctx, "(*internalOrganizationImpl).Gets", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "gets"))
 
 	params := url.Values{}
 	params.Add("start", strconv.Itoa(start))
@@ -188,45 +224,60 @@ func (i *internalOrganizationImpl) Gets(ctx context.Context, accountID string, s
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
 	page := new(model.OrganizationPageScheme)
 	res, err := i.c.Call(req, page)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return page, res, nil
 }
 
 func (i *internalOrganizationImpl) Get(ctx context.Context, organizationID int) (*model.OrganizationScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalOrganizationImpl).Get")
+	ctx, span := tracer().Start(ctx, "(*internalOrganizationImpl).Get", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "get"))
+
 	if organizationID == 0 {
-		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoOrganizationID)
+
+			return nil, nil, fmt.Errorf("sm: %w", model.ErrNoOrganizationID)
 	}
 
 	endpoint := fmt.Sprintf("rest/servicedeskapi/organization/%v", organizationID)
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
 	organization := new(model.OrganizationScheme)
 	res, err := i.c.Call(req, organization)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return organization, res, nil
 }
 
 func (i *internalOrganizationImpl) Delete(ctx context.Context, organizationID int) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalOrganizationImpl).Delete")
+	ctx, span := tracer().Start(ctx, "(*internalOrganizationImpl).Delete", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "delete"))
 
 	if organizationID == 0 {
 		return nil, fmt.Errorf("sm: %w", model.ErrNoOrganizationID)
@@ -236,6 +287,7 @@ func (i *internalOrganizationImpl) Delete(ctx context.Context, organizationID in
 
 	req, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, err
 	}
 
@@ -243,35 +295,47 @@ func (i *internalOrganizationImpl) Delete(ctx context.Context, organizationID in
 }
 
 func (i *internalOrganizationImpl) Create(ctx context.Context, name string) (*model.OrganizationScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalOrganizationImpl).Create")
+	ctx, span := tracer().Start(ctx, "(*internalOrganizationImpl).Create", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "create"))
+
 	if name == "" {
-		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoOrganizationName)
+
+			return nil, nil, fmt.Errorf("sm: %w", model.ErrNoOrganizationName)
 	}
 
 	endpoint := "rest/servicedeskapi/organization"
 
 	req, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", map[string]interface{}{"name": name})
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
 	organization := new(model.OrganizationScheme)
 	res, err := i.c.Call(req, organization)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return organization, res, nil
 }
 
 func (i *internalOrganizationImpl) Users(ctx context.Context, organizationID, start, limit int) (*model.OrganizationUsersPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalOrganizationImpl).Users")
+	ctx, span := tracer().Start(ctx, "(*internalOrganizationImpl).Users", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "users"))
+
 	if organizationID == 0 {
-		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoOrganizationID)
+
+			return nil, nil, fmt.Errorf("sm: %w", model.ErrNoOrganizationID)
 	}
 
 	params := url.Values{}
@@ -282,21 +346,28 @@ func (i *internalOrganizationImpl) Users(ctx context.Context, organizationID, st
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
 	page := new(model.OrganizationUsersPageScheme)
 	res, err := i.c.Call(req, page)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return page, res, nil
 }
 
 func (i *internalOrganizationImpl) Add(ctx context.Context, organizationID int, accountIDs []string) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalOrganizationImpl).Add")
+	ctx, span := tracer().Start(ctx, "(*internalOrganizationImpl).Add", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "add"))
 
 	if organizationID == 0 {
 		return nil, fmt.Errorf("sm: %w", model.ErrNoOrganizationID)
@@ -310,6 +381,7 @@ func (i *internalOrganizationImpl) Add(ctx context.Context, organizationID int, 
 
 	req, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", map[string]interface{}{"accountIds": accountIDs})
 	if err != nil {
+		recordError(span, err)
 		return nil, err
 	}
 
@@ -317,8 +389,11 @@ func (i *internalOrganizationImpl) Add(ctx context.Context, organizationID int, 
 }
 
 func (i *internalOrganizationImpl) Remove(ctx context.Context, organizationID int, accountIDs []string) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalOrganizationImpl).Remove")
+	ctx, span := tracer().Start(ctx, "(*internalOrganizationImpl).Remove", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "remove"))
 
 	if organizationID == 0 {
 		return nil, fmt.Errorf("sm: %w", model.ErrNoOrganizationID)
@@ -332,6 +407,7 @@ func (i *internalOrganizationImpl) Remove(ctx context.Context, organizationID in
 
 	req, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", map[string]interface{}{"accountIds": accountIDs})
 	if err != nil {
+		recordError(span, err)
 		return nil, err
 	}
 
@@ -339,11 +415,15 @@ func (i *internalOrganizationImpl) Remove(ctx context.Context, organizationID in
 }
 
 func (i *internalOrganizationImpl) Project(ctx context.Context, accountID string, serviceDeskID, start, limit int) (*model.OrganizationPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalOrganizationImpl).Project")
+	ctx, span := tracer().Start(ctx, "(*internalOrganizationImpl).Project", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "project"))
+
 	if serviceDeskID == 0 {
-		return nil, nil, fmt.Errorf("sm: %w", model.ErrNoServiceDeskID)
+
+			return nil, nil, fmt.Errorf("sm: %w", model.ErrNoServiceDeskID)
 	}
 
 	params := url.Values{}
@@ -358,21 +438,27 @@ func (i *internalOrganizationImpl) Project(ctx context.Context, accountID string
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	page := new(model.OrganizationPageScheme)
 	res, err := i.c.Call(req, page)
 	if err != nil {
+		recordError(span, err)
 		return nil, res, err
 	}
 
+	setOK(span)
 	return page, res, nil
 }
 
 func (i *internalOrganizationImpl) Associate(ctx context.Context, serviceDeskID, organizationID int) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalOrganizationImpl).Associate")
+	ctx, span := tracer().Start(ctx, "(*internalOrganizationImpl).Associate", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "associate"))
 
 	if serviceDeskID == 0 {
 		return nil, fmt.Errorf("sm: %w", model.ErrNoServiceDeskID)
@@ -386,6 +472,7 @@ func (i *internalOrganizationImpl) Associate(ctx context.Context, serviceDeskID,
 
 	req, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", map[string]interface{}{"organizationId": organizationID})
 	if err != nil {
+		recordError(span, err)
 		return nil, err
 	}
 
@@ -393,8 +480,11 @@ func (i *internalOrganizationImpl) Associate(ctx context.Context, serviceDeskID,
 }
 
 func (i *internalOrganizationImpl) Detach(ctx context.Context, serviceDeskID, organizationID int) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalOrganizationImpl).Detach")
+	ctx, span := tracer().Start(ctx, "(*internalOrganizationImpl).Detach", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "detach"))
 
 	if serviceDeskID == 0 {
 		return nil, fmt.Errorf("sm: %w", model.ErrNoServiceDeskID)
@@ -408,6 +498,7 @@ func (i *internalOrganizationImpl) Detach(ctx context.Context, serviceDeskID, or
 
 	req, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", map[string]interface{}{"organizationId": organizationID})
 	if err != nil {
+		recordError(span, err)
 		return nil, err
 	}
 

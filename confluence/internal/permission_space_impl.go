@@ -2,6 +2,9 @@ package internal
 
 import (
 	"context"
+
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
 	"fmt"
 	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/v2/service"
@@ -34,8 +37,11 @@ type SpacePermissionService struct {
 //
 // https://docs.go-atlassian.io/confluence-cloud/space/permissions#add-new-permission-to-space
 func (s *SpacePermissionService) Add(ctx context.Context, spaceKey string, payload *model.SpacePermissionPayloadScheme) (*model.SpacePermissionV2Scheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*SpacePermissionService).Add")
+	ctx, span := tracer().Start(ctx, "(*SpacePermissionService).Add", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "add"))
 
 	return s.internalClient.Add(ctx, spaceKey, payload)
 }
@@ -50,8 +56,11 @@ func (s *SpacePermissionService) Add(ctx context.Context, spaceKey string, paylo
 //
 // https://docs.go-atlassian.io/confluence-cloud/space/permissions#add-new-custom-content-permission-to-space
 func (s *SpacePermissionService) Bulk(ctx context.Context, spaceKey string, payload *model.SpacePermissionArrayPayloadScheme) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*SpacePermissionService).Bulk")
+	ctx, span := tracer().Start(ctx, "(*SpacePermissionService).Bulk", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "bulk"))
 
 	return s.internalClient.Bulk(ctx, spaceKey, payload)
 }
@@ -64,8 +73,11 @@ func (s *SpacePermissionService) Bulk(ctx context.Context, spaceKey string, payl
 //
 // https://docs.go-atlassian.io/confluence-cloud/space/permissions#remove-a-space-permission
 func (s *SpacePermissionService) Remove(ctx context.Context, spaceKey string, permissionID int) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*SpacePermissionService).Remove")
+	ctx, span := tracer().Start(ctx, "(*SpacePermissionService).Remove", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "remove"))
 
 	return s.internalClient.Remove(ctx, spaceKey, permissionID)
 }
@@ -75,17 +87,23 @@ type internalSpacePermissionImpl struct {
 }
 
 func (i *internalSpacePermissionImpl) Add(ctx context.Context, spaceKey string, payload *model.SpacePermissionPayloadScheme) (*model.SpacePermissionV2Scheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalSpacePermissionImpl).Add")
+	ctx, span := tracer().Start(ctx, "(*internalSpacePermissionImpl).Add", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "add"))
+
 	if spaceKey == "" {
-		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoSpaceKey)
+
+			return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoSpaceKey)
 	}
 
 	endpoint := fmt.Sprintf("wiki/rest/api/space/%v/permission", spaceKey)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
@@ -95,12 +113,16 @@ func (i *internalSpacePermissionImpl) Add(ctx context.Context, spaceKey string, 
 		return nil, response, err
 	}
 
+	setOK(span)
 	return permission, response, nil
 }
 
 func (i *internalSpacePermissionImpl) Bulk(ctx context.Context, spaceKey string, payload *model.SpacePermissionArrayPayloadScheme) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalSpacePermissionImpl).Bulk")
+	ctx, span := tracer().Start(ctx, "(*internalSpacePermissionImpl).Bulk", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "bulk"))
 
 	if spaceKey == "" {
 		return nil, fmt.Errorf("confluence: %w", model.ErrNoSpaceKey)
@@ -110,6 +132,7 @@ func (i *internalSpacePermissionImpl) Bulk(ctx context.Context, spaceKey string,
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
+		recordError(span, err)
 		return nil, err
 	}
 
@@ -117,8 +140,11 @@ func (i *internalSpacePermissionImpl) Bulk(ctx context.Context, spaceKey string,
 }
 
 func (i *internalSpacePermissionImpl) Remove(ctx context.Context, spaceKey string, permissionID int) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalSpacePermissionImpl).Remove")
+	ctx, span := tracer().Start(ctx, "(*internalSpacePermissionImpl).Remove", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "remove"))
 
 	if spaceKey == "" {
 		return nil, fmt.Errorf("confluence: %w", model.ErrNoSpaceKey)
@@ -128,6 +154,7 @@ func (i *internalSpacePermissionImpl) Remove(ctx context.Context, spaceKey strin
 
 	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, err
 	}
 

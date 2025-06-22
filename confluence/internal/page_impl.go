@@ -2,6 +2,9 @@ package internal
 
 import (
 	"context"
+
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
 	"fmt"
 	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/v2/service"
@@ -30,8 +33,11 @@ type PageService struct {
 //
 // https://docs.go-atlassian.io/confluence-cloud/v2/page#get-page-by-id
 func (p *PageService) Get(ctx context.Context, pageID int, format string, draft bool, version int) (*model.PageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*PageService).Get")
+	ctx, span := tracer().Start(ctx, "(*PageService).Get", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "get"))
 
 	return p.internalClient.Get(ctx, pageID, format, draft, version)
 }
@@ -42,8 +48,11 @@ func (p *PageService) Get(ctx context.Context, pageID int, format string, draft 
 //
 // https://docs.go-atlassian.io/confluence-cloud/v2/page#get-pages
 func (p *PageService) Gets(ctx context.Context, options *model.PageOptionsScheme, cursor string, limit int) (*model.PageChunkScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*PageService).Gets")
+	ctx, span := tracer().Start(ctx, "(*PageService).Gets", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "gets"))
 
 	return p.internalClient.Gets(ctx, options, cursor, limit)
 }
@@ -56,8 +65,11 @@ func (p *PageService) Gets(ctx context.Context, options *model.PageOptionsScheme
 //
 // https://docs.go-atlassian.io/confluence-cloud/v2/page#get-pages
 func (p *PageService) Bulk(ctx context.Context, cursor string, limit int) (*model.PageChunkScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*PageService).Bulk")
+	ctx, span := tracer().Start(ctx, "(*PageService).Bulk", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "bulk"))
 
 	return p.internalClient.Bulk(ctx, cursor, limit)
 }
@@ -68,8 +80,11 @@ func (p *PageService) Bulk(ctx context.Context, cursor string, limit int) (*mode
 //
 // https://docs.go-atlassian.io/confluence-cloud/v2/page#get-pages-for-label
 func (p *PageService) GetsByLabel(ctx context.Context, labelID int, sort, cursor string, limit int) (*model.PageChunkScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*PageService).GetsByLabel")
+	ctx, span := tracer().Start(ctx, "(*PageService).GetsByLabel", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "gets_by_label"))
 
 	return p.internalClient.GetsByLabel(ctx, labelID, sort, cursor, limit)
 }
@@ -84,8 +99,11 @@ func (p *PageService) GetsByLabel(ctx context.Context, labelID int, sort, cursor
 //
 // https://docs.go-atlassian.io/confluence-cloud/v2/page#get-pages-in-space
 func (p *PageService) GetsBySpace(ctx context.Context, spaceID int, cursor string, limit int) (*model.PageChunkScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*PageService).GetsBySpace")
+	ctx, span := tracer().Start(ctx, "(*PageService).GetsBySpace", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "gets_by_space"))
 
 	return p.internalClient.GetsBySpace(ctx, spaceID, cursor, limit)
 }
@@ -100,8 +118,11 @@ func (p *PageService) GetsBySpace(ctx context.Context, spaceID int, cursor strin
 //
 // https://docs.go-atlassian.io/confluence-cloud/v2/page#get-pages-by-parent
 func (p *PageService) GetsByParent(ctx context.Context, pageID int, cursor string, limit int) (*model.ChildPageChunkScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*PageService).GetsByParent")
+	ctx, span := tracer().Start(ctx, "(*PageService).GetsByParent", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "gets_by_parent"))
 
 	return p.internalClient.GetsByParent(ctx, pageID, cursor, limit)
 }
@@ -116,8 +137,11 @@ func (p *PageService) GetsByParent(ctx context.Context, pageID int, cursor strin
 //
 // https://docs.go-atlassian.io/confluence-cloud/v2/page#create-page
 func (p *PageService) Create(ctx context.Context, payload *model.PageCreatePayloadScheme) (*model.PageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*PageService).Create")
+	ctx, span := tracer().Start(ctx, "(*PageService).Create", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "create"))
 
 	return p.internalClient.Create(ctx, payload)
 }
@@ -128,8 +152,11 @@ func (p *PageService) Create(ctx context.Context, payload *model.PageCreatePaylo
 //
 // https://docs.go-atlassian.io/confluence-cloud/v2/page#update-page
 func (p *PageService) Update(ctx context.Context, pageID int, payload *model.PageUpdatePayloadScheme) (*model.PageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*PageService).Update")
+	ctx, span := tracer().Start(ctx, "(*PageService).Update", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "update"))
 
 	return p.internalClient.Update(ctx, pageID, payload)
 }
@@ -140,8 +167,11 @@ func (p *PageService) Update(ctx context.Context, pageID int, payload *model.Pag
 //
 // https://docs.go-atlassian.io/confluence-cloud/v2/page#delete-page
 func (p *PageService) Delete(ctx context.Context, pageID int) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*PageService).Delete")
+	ctx, span := tracer().Start(ctx, "(*PageService).Delete", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "delete"))
 
 	return p.internalClient.Delete(ctx, pageID)
 }
@@ -151,8 +181,11 @@ type internalPageImpl struct {
 }
 
 func (i *internalPageImpl) Gets(ctx context.Context, options *model.PageOptionsScheme, cursor string, limit int) (*model.PageChunkScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalPageImpl).Gets")
+	ctx, span := tracer().Start(ctx, "(*internalPageImpl).Gets", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "gets"))
 
 	query := url.Values{}
 	query.Add("limit", strconv.Itoa(limit))
@@ -204,6 +237,7 @@ func (i *internalPageImpl) Gets(ctx context.Context, options *model.PageOptionsS
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
@@ -213,15 +247,20 @@ func (i *internalPageImpl) Gets(ctx context.Context, options *model.PageOptionsS
 		return nil, response, err
 	}
 
+	setOK(span)
 	return chunk, response, nil
 }
 
 func (i *internalPageImpl) Get(ctx context.Context, pageID int, format string, draft bool, version int) (*model.PageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalPageImpl).Get")
+	ctx, span := tracer().Start(ctx, "(*internalPageImpl).Get", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "get"))
+
 	if pageID == 0 {
-		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoPageID)
+
+			return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoPageID)
 	}
 
 	query := url.Values{}
@@ -242,6 +281,7 @@ func (i *internalPageImpl) Get(ctx context.Context, pageID int, format string, d
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
@@ -251,22 +291,30 @@ func (i *internalPageImpl) Get(ctx context.Context, pageID int, format string, d
 		return nil, response, err
 	}
 
+	setOK(span)
 	return page, response, nil
 }
 
 func (i *internalPageImpl) Bulk(ctx context.Context, cursor string, limit int) (*model.PageChunkScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalPageImpl).Bulk")
+	ctx, span := tracer().Start(ctx, "(*internalPageImpl).Bulk", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "bulk"))
 
 	return i.Gets(ctx, nil, cursor, limit)
 }
 
 func (i *internalPageImpl) GetsByLabel(ctx context.Context, labelID int, sort, cursor string, limit int) (*model.PageChunkScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalPageImpl).GetsByLabel")
+	ctx, span := tracer().Start(ctx, "(*internalPageImpl).GetsByLabel", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "gets_by_label"))
+
 	if labelID == 0 {
-		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoLabelID)
+
+			return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoLabelID)
 	}
 
 	query := url.Values{}
@@ -284,6 +332,7 @@ func (i *internalPageImpl) GetsByLabel(ctx context.Context, labelID int, sort, c
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
@@ -293,15 +342,20 @@ func (i *internalPageImpl) GetsByLabel(ctx context.Context, labelID int, sort, c
 		return nil, response, err
 	}
 
+	setOK(span)
 	return chunk, response, nil
 }
 
 func (i *internalPageImpl) GetsBySpace(ctx context.Context, spaceID int, cursor string, limit int) (*model.PageChunkScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalPageImpl).GetsBySpace")
+	ctx, span := tracer().Start(ctx, "(*internalPageImpl).GetsBySpace", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "gets_by_space"))
+
 	if spaceID == 0 {
-		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoSpaceID)
+
+			return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoSpaceID)
 	}
 
 	query := url.Values{}
@@ -315,6 +369,7 @@ func (i *internalPageImpl) GetsBySpace(ctx context.Context, spaceID int, cursor 
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
@@ -324,15 +379,20 @@ func (i *internalPageImpl) GetsBySpace(ctx context.Context, spaceID int, cursor 
 		return nil, response, err
 	}
 
+	setOK(span)
 	return chunk, response, nil
 }
 
 func (i *internalPageImpl) GetsByParent(ctx context.Context, parentID int, cursor string, limit int) (*model.ChildPageChunkScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalPageImpl).GetsByParent")
+	ctx, span := tracer().Start(ctx, "(*internalPageImpl).GetsByParent", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "gets_by_parent"))
+
 	if parentID == 0 {
-		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoPageID)
+
+			return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoPageID)
 	}
 
 	query := url.Values{}
@@ -346,6 +406,7 @@ func (i *internalPageImpl) GetsByParent(ctx context.Context, parentID int, curso
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
@@ -355,17 +416,23 @@ func (i *internalPageImpl) GetsByParent(ctx context.Context, parentID int, curso
 		return nil, response, err
 	}
 
+	setOK(span)
 	return chunk, response, nil
 }
 
 func (i *internalPageImpl) Create(ctx context.Context, payload *model.PageCreatePayloadScheme) (*model.PageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalPageImpl).Create")
+	ctx, span := tracer().Start(ctx, "(*internalPageImpl).Create", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "create"))
 
 	endpoint := "wiki/api/v2/pages"
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
@@ -375,21 +442,28 @@ func (i *internalPageImpl) Create(ctx context.Context, payload *model.PageCreate
 		return nil, response, err
 	}
 
+	setOK(span)
 	return page, response, nil
 }
 
 func (i *internalPageImpl) Update(ctx context.Context, pageID int, payload *model.PageUpdatePayloadScheme) (*model.PageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalPageImpl).Update")
+	ctx, span := tracer().Start(ctx, "(*internalPageImpl).Update", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "update"))
+
 	if pageID == 0 {
-		return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoPageID)
+
+			return nil, nil, fmt.Errorf("confluence: %w", model.ErrNoPageID)
 	}
 
 	endpoint := fmt.Sprintf("wiki/api/v2/pages/%v", pageID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
@@ -399,12 +473,16 @@ func (i *internalPageImpl) Update(ctx context.Context, pageID int, payload *mode
 		return nil, response, err
 	}
 
+	setOK(span)
 	return page, response, nil
 }
 
 func (i *internalPageImpl) Delete(ctx context.Context, pageID int) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalPageImpl).Delete")
+	ctx, span := tracer().Start(ctx, "(*internalPageImpl).Delete", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "delete"))
 
 	if pageID == 0 {
 		return nil, fmt.Errorf("confluence: %w", model.ErrNoPageID)
@@ -414,6 +492,7 @@ func (i *internalPageImpl) Delete(ctx context.Context, pageID int) (*model.Respo
 
 	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, err
 	}
 

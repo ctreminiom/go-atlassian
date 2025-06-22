@@ -2,6 +2,9 @@ package internal
 
 import (
 	"context"
+
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
 	"fmt"
 	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/v2/service"
@@ -34,8 +37,11 @@ type UserService struct {
 //
 // https://docs.go-atlassian.io/atlassian-admin-cloud/user#get-user-management-permissions
 func (u *UserService) Permissions(ctx context.Context, accountID string, privileges []string) (*model.AdminUserPermissionScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*UserService).Permissions")
+	ctx, span := tracer().Start(ctx, "(*UserService).Permissions", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "permissions"))
 
 	return u.internalClient.Permissions(ctx, accountID, privileges)
 }
@@ -46,8 +52,11 @@ func (u *UserService) Permissions(ctx context.Context, accountID string, privile
 //
 // https://docs.go-atlassian.io/atlassian-admin-cloud/user#get-profile
 func (u *UserService) Get(ctx context.Context, accountID string) (*model.AdminUserScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*UserService).Get")
+	ctx, span := tracer().Start(ctx, "(*UserService).Get", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "get"))
 
 	return u.internalClient.Get(ctx, accountID)
 }
@@ -58,8 +67,11 @@ func (u *UserService) Get(ctx context.Context, accountID string) (*model.AdminUs
 //
 // https://docs.go-atlassian.io/atlassian-admin-cloud/user#update-profile
 func (u *UserService) Update(ctx context.Context, accountID string, payload map[string]interface{}) (*model.AdminUserScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*UserService).Update")
+	ctx, span := tracer().Start(ctx, "(*UserService).Update", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "update"))
 
 	return u.internalClient.Update(ctx, accountID, payload)
 }
@@ -76,8 +88,11 @@ func (u *UserService) Update(ctx context.Context, accountID string, payload map[
 //
 // https://docs.go-atlassian.io/atlassian-admin-cloud/user#disable-a-user
 func (u *UserService) Disable(ctx context.Context, accountID, message string) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*UserService).Disable")
+	ctx, span := tracer().Start(ctx, "(*UserService).Disable", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "disable"))
 
 	return u.internalClient.Disable(ctx, accountID, message)
 }
@@ -90,8 +105,11 @@ func (u *UserService) Disable(ctx context.Context, accountID, message string) (*
 //
 // https://docs.go-atlassian.io/atlassian-admin-cloud/user#enable-a-user
 func (u *UserService) Enable(ctx context.Context, accountID string) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*UserService).Enable")
+	ctx, span := tracer().Start(ctx, "(*UserService).Enable", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "enable"))
 
 	return u.internalClient.Enable(ctx, accountID)
 }
@@ -101,11 +119,15 @@ type internalUserImpl struct {
 }
 
 func (i *internalUserImpl) Permissions(ctx context.Context, accountID string, privileges []string) (*model.AdminUserPermissionScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalUserImpl).Permissions")
+	ctx, span := tracer().Start(ctx, "(*internalUserImpl).Permissions", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "permissions"))
+
 	if accountID == "" {
-		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminAccountID)
+
+			return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminAccountID)
 	}
 
 	var endpoint strings.Builder
@@ -121,6 +143,7 @@ func (i *internalUserImpl) Permissions(ctx context.Context, accountID string, pr
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
@@ -130,21 +153,28 @@ func (i *internalUserImpl) Permissions(ctx context.Context, accountID string, pr
 		return nil, response, err
 	}
 
+	setOK(span)
 	return permissions, response, nil
 }
 
 func (i *internalUserImpl) Get(ctx context.Context, accountID string) (*model.AdminUserScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalUserImpl).Get")
+	ctx, span := tracer().Start(ctx, "(*internalUserImpl).Get", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "get"))
+
 	if accountID == "" {
-		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminAccountID)
+
+			return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminAccountID)
 	}
 
 	endpoint := fmt.Sprintf("users/%v/manage/profile", accountID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
@@ -154,21 +184,28 @@ func (i *internalUserImpl) Get(ctx context.Context, accountID string) (*model.Ad
 		return nil, response, err
 	}
 
+	setOK(span)
 	return user, response, nil
 }
 
 func (i *internalUserImpl) Update(ctx context.Context, accountID string, payload map[string]interface{}) (*model.AdminUserScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalUserImpl).Update")
+	ctx, span := tracer().Start(ctx, "(*internalUserImpl).Update", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "update"))
+
 	if accountID == "" {
-		return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminAccountID)
+
+			return nil, nil, fmt.Errorf("admin: %w", model.ErrNoAdminAccountID)
 	}
 
 	endpoint := fmt.Sprintf("users/%v/manage/profile", accountID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPatch, endpoint, "", payload)
 	if err != nil {
+		recordError(span, err)
+
 		return nil, nil, err
 	}
 
@@ -178,12 +215,16 @@ func (i *internalUserImpl) Update(ctx context.Context, accountID string, payload
 		return nil, response, err
 	}
 
+	setOK(span)
 	return user, response, nil
 }
 
 func (i *internalUserImpl) Disable(ctx context.Context, accountID, message string) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalUserImpl).Disable")
+	ctx, span := tracer().Start(ctx, "(*internalUserImpl).Disable", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "disable"))
 
 	if accountID == "" {
 		return nil, fmt.Errorf("admin: %w", model.ErrNoAdminAccountID)
@@ -198,6 +239,7 @@ func (i *internalUserImpl) Disable(ctx context.Context, accountID, message strin
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
+		recordError(span, err)
 		return nil, err
 	}
 
@@ -205,8 +247,11 @@ func (i *internalUserImpl) Disable(ctx context.Context, accountID, message strin
 }
 
 func (i *internalUserImpl) Enable(ctx context.Context, accountID string) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalUserImpl).Enable")
+	ctx, span := tracer().Start(ctx, "(*internalUserImpl).Enable", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "enable"))
 
 	if accountID == "" {
 		return nil, fmt.Errorf("admin: %w", model.ErrNoAdminAccountID)
@@ -216,6 +261,7 @@ func (i *internalUserImpl) Enable(ctx context.Context, accountID string) (*model
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, err
 	}
 

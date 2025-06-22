@@ -8,6 +8,9 @@ import (
 	"strconv"
 	"strings"
 
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
+
 	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/v2/service"
 	"github.com/ctreminiom/go-atlassian/v2/service/jira"
@@ -44,10 +47,21 @@ type FilterService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/filters#create-filter
 func (f *FilterService) Create(ctx context.Context, payload *model.FilterPayloadScheme) (*model.FilterScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*FilterService).Create")
+	ctx, span := tracer().Start(ctx, "(*FilterService).Create", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
-	return f.internalClient.Create(ctx, payload)
+	addAttributes(span,
+		attribute.String("operation.name", "create_filter"),
+	)
+
+	result, response, err := f.internalClient.Create(ctx, payload)
+	if err != nil {
+		recordError(span, err)
+		return nil, response, err
+	}
+
+	setOK(span)
+	return result, response, nil
 }
 
 // Favorite returns the visible favorite filters of the user.
@@ -56,10 +70,21 @@ func (f *FilterService) Create(ctx context.Context, payload *model.FilterPayload
 //
 // https://docs.go-atlassian.io/jira-software-cloud/filters#get-favorites
 func (f *FilterService) Favorite(ctx context.Context) ([]*model.FilterScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*FilterService).Favorite")
+	ctx, span := tracer().Start(ctx, "(*FilterService).Favorite", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
-	return f.internalClient.Favorite(ctx)
+	addAttributes(span,
+		attribute.String("operation.name", "get_favorite_filters"),
+	)
+
+	result, response, err := f.internalClient.Favorite(ctx)
+	if err != nil {
+		recordError(span, err)
+		return nil, response, err
+	}
+
+	setOK(span)
+	return result, response, nil
 }
 
 // My returns the filters owned by the user. If includeFavourites is true,
@@ -69,10 +94,23 @@ func (f *FilterService) Favorite(ctx context.Context) ([]*model.FilterScheme, *m
 //
 // https://docs.go-atlassian.io/jira-software-cloud/filters#get-my-filters
 func (f *FilterService) My(ctx context.Context, favorites bool, expand []string) ([]*model.FilterScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*FilterService).My")
+	ctx, span := tracer().Start(ctx, "(*FilterService).My", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
-	return f.internalClient.My(ctx, favorites, expand)
+	addAttributes(span,
+		attribute.String("operation.name", "get_my_filters"),
+		attribute.Bool("jira.filter.include_favorites", favorites),
+		attribute.Int("jira.expand.count", len(expand)),
+	)
+
+	result, response, err := f.internalClient.My(ctx, favorites, expand)
+	if err != nil {
+		recordError(span, err)
+		return nil, response, err
+	}
+
+	setOK(span)
+	return result, response, nil
 }
 
 // Search returns a paginated list of filters
@@ -82,10 +120,23 @@ func (f *FilterService) My(ctx context.Context, favorites bool, expand []string)
 // https://docs.go-atlassian.io/jira-software-cloud/filters#search-filters
 func (f *FilterService) Search(ctx context.Context, options *model.FilterSearchOptionScheme, startAt, maxResults int) (*model.FilterSearchPageScheme,
 	*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*FilterService).Search")
+	ctx, span := tracer().Start(ctx, "(*FilterService).Search", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
-	return f.internalClient.Search(ctx, options, startAt, maxResults)
+	addAttributes(span,
+		attribute.String("operation.name", "search_filters"),
+		attribute.Int("jira.pagination.start_at", startAt),
+		attribute.Int("jira.pagination.max_results", maxResults),
+	)
+
+	result, response, err := f.internalClient.Search(ctx, options, startAt, maxResults)
+	if err != nil {
+		recordError(span, err)
+		return nil, response, err
+	}
+
+	setOK(span)
+	return result, response, nil
 }
 
 // Get returns a filter.
@@ -94,10 +145,23 @@ func (f *FilterService) Search(ctx context.Context, options *model.FilterSearchO
 //
 // https://docs.go-atlassian.io/jira-software-cloud/filters#get-filter
 func (f *FilterService) Get(ctx context.Context, filterID int, expand []string) (*model.FilterScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*FilterService).Get")
+	ctx, span := tracer().Start(ctx, "(*FilterService).Get", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
-	return f.internalClient.Get(ctx, filterID, expand)
+	addAttributes(span,
+		attribute.String("operation.name", "get_filter"),
+		attribute.Int("jira.filter.id", filterID),
+		attribute.Int("jira.expand.count", len(expand)),
+	)
+
+	result, response, err := f.internalClient.Get(ctx, filterID, expand)
+	if err != nil {
+		recordError(span, err)
+		return nil, response, err
+	}
+
+	setOK(span)
+	return result, response, nil
 }
 
 // Update updates a filter. Use this operation to update a filter's name, description, JQL, or sharing.
@@ -106,10 +170,22 @@ func (f *FilterService) Get(ctx context.Context, filterID int, expand []string) 
 //
 // https://docs.go-atlassian.io/jira-software-cloud/filters#update-filter
 func (f *FilterService) Update(ctx context.Context, filterID int, payload *model.FilterPayloadScheme) (*model.FilterScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*FilterService).Update")
+	ctx, span := tracer().Start(ctx, "(*FilterService).Update", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
-	return f.internalClient.Update(ctx, filterID, payload)
+	addAttributes(span,
+		attribute.String("operation.name", "update_filter"),
+		attribute.Int("jira.filter.id", filterID),
+	)
+
+	result, response, err := f.internalClient.Update(ctx, filterID, payload)
+	if err != nil {
+		recordError(span, err)
+		return nil, response, err
+	}
+
+	setOK(span)
+	return result, response, nil
 }
 
 // Delete a filter.
@@ -118,10 +194,22 @@ func (f *FilterService) Update(ctx context.Context, filterID int, payload *model
 //
 // https://docs.go-atlassian.io/jira-software-cloud/filters#delete-filter
 func (f *FilterService) Delete(ctx context.Context, filterID int) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*FilterService).Delete")
+	ctx, span := tracer().Start(ctx, "(*FilterService).Delete", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
-	return f.internalClient.Delete(ctx, filterID)
+	addAttributes(span,
+		attribute.String("operation.name", "delete_filter"),
+		attribute.Int("jira.filter.id", filterID),
+	)
+
+	response, err := f.internalClient.Delete(ctx, filterID)
+	if err != nil {
+		recordError(span, err)
+		return response, err
+	}
+
+	setOK(span)
+	return response, nil
 }
 
 // Change changes the owner of the filter.
@@ -130,10 +218,23 @@ func (f *FilterService) Delete(ctx context.Context, filterID int) (*model.Respon
 //
 // https://docs.go-atlassian.io/jira-software-cloud/filters#change-filter-owner
 func (f *FilterService) Change(ctx context.Context, filterID int, accountID string) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*FilterService).Change")
+	ctx, span := tracer().Start(ctx, "(*FilterService).Change", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
-	return f.internalClient.Change(ctx, filterID, accountID)
+	addAttributes(span,
+		attribute.String("operation.name", "change_filter_owner"),
+		attribute.Int("jira.filter.id", filterID),
+		attribute.String("jira.account.id", accountID),
+	)
+
+	response, err := f.internalClient.Change(ctx, filterID, accountID)
+	if err != nil {
+		recordError(span, err)
+		return response, err
+	}
+
+	setOK(span)
+	return response, nil
 }
 
 type internalFilterServiceImpl struct {
@@ -142,47 +243,53 @@ type internalFilterServiceImpl struct {
 }
 
 func (i *internalFilterServiceImpl) Create(ctx context.Context, payload *model.FilterPayloadScheme) (*model.FilterScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalFilterServiceImpl).Create")
+	ctx, span := tracer().Start(ctx, "(*internalFilterServiceImpl).Create", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
 	endpoint := fmt.Sprintf("rest/api/%v/filter", i.version)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	filter := new(model.FilterScheme)
 	response, err := i.c.Call(request, filter)
 	if err != nil {
+		recordError(span, err)
 		return nil, response, err
 	}
 
+	setOK(span)
 	return filter, response, nil
 }
 
 func (i *internalFilterServiceImpl) Favorite(ctx context.Context) ([]*model.FilterScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalFilterServiceImpl).Favorite")
+	ctx, span := tracer().Start(ctx, "(*internalFilterServiceImpl).Favorite", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
 	endpoint := fmt.Sprintf("rest/api/%v/filter/favourite", i.version)
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	var filters []*model.FilterScheme
 	response, err := i.c.Call(request, filters)
 	if err != nil {
+		recordError(span, err)
 		return nil, response, err
 	}
 
+	setOK(span)
 	return filters, response, nil
 }
 
 func (i *internalFilterServiceImpl) My(ctx context.Context, favorites bool, expand []string) ([]*model.FilterScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalFilterServiceImpl).My")
+	ctx, span := tracer().Start(ctx, "(*internalFilterServiceImpl).My", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
 	params := url.Values{}
@@ -196,20 +303,23 @@ func (i *internalFilterServiceImpl) My(ctx context.Context, favorites bool, expa
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	var filters []*model.FilterScheme
 	response, err := i.c.Call(request, filters)
 	if err != nil {
+		recordError(span, err)
 		return nil, response, err
 	}
 
+	setOK(span)
 	return filters, response, nil
 }
 
 func (i *internalFilterServiceImpl) Search(ctx context.Context, options *model.FilterSearchOptionScheme, startAt, maxResults int) (*model.FilterSearchPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalFilterServiceImpl).Search")
+	ctx, span := tracer().Start(ctx, "(*internalFilterServiceImpl).Search", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
 	params := url.Values{}
@@ -251,24 +361,29 @@ func (i *internalFilterServiceImpl) Search(ctx context.Context, options *model.F
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	page := new(model.FilterSearchPageScheme)
 	response, err := i.c.Call(request, page)
 	if err != nil {
+		recordError(span, err)
 		return nil, response, err
 	}
 
+	setOK(span)
 	return page, response, nil
 }
 
 func (i *internalFilterServiceImpl) Get(ctx context.Context, filterID int, expand []string) (*model.FilterScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalFilterServiceImpl).Get")
+	ctx, span := tracer().Start(ctx, "(*internalFilterServiceImpl).Get", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
 	if filterID == 0 {
-		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoFilterID)
+		err := fmt.Errorf("jira: %w", model.ErrNoFilterID)
+		recordError(span, err)
+		return nil, nil, err
 	}
 
 	var endpoint strings.Builder
@@ -285,83 +400,108 @@ func (i *internalFilterServiceImpl) Get(ctx context.Context, filterID int, expan
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	filter := new(model.FilterScheme)
 	response, err := i.c.Call(request, filter)
 	if err != nil {
+		recordError(span, err)
 		return nil, response, err
 	}
 
+	setOK(span)
 	return filter, response, nil
 }
 
 func (i *internalFilterServiceImpl) Update(ctx context.Context, filterID int, payload *model.FilterPayloadScheme) (*model.FilterScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalFilterServiceImpl).Update")
+	ctx, span := tracer().Start(ctx, "(*internalFilterServiceImpl).Update", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
 	if filterID == 0 {
-		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoFilterID)
+		err := fmt.Errorf("jira: %w", model.ErrNoFilterID)
+		recordError(span, err)
+		return nil, nil, err
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/filter/%v", i.version, filterID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	filter := new(model.FilterScheme)
 	response, err := i.c.Call(request, filter)
 	if err != nil {
+		recordError(span, err)
 		return nil, response, err
 	}
 
+	setOK(span)
 	return filter, response, nil
 }
 
 func (i *internalFilterServiceImpl) Delete(ctx context.Context, filterID int) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalFilterServiceImpl).Delete")
+	ctx, span := tracer().Start(ctx, "(*internalFilterServiceImpl).Delete", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
 	if filterID == 0 {
-		return nil, fmt.Errorf("jira: %w", model.ErrNoFilterID)
+		err := fmt.Errorf("jira: %w", model.ErrNoFilterID)
+		recordError(span, err)
+		return nil, err
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/filter/%v", i.version, filterID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, err
 	}
 
 	response, err := i.c.Call(request, nil)
 	if err != nil {
+		recordError(span, err)
 		return response, err
 	}
 
-	return i.c.Call(request, nil)
+	setOK(span)
+	return response, nil
 }
 
 func (i *internalFilterServiceImpl) Change(ctx context.Context, filterID int, accountID string) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalFilterServiceImpl).Change")
+	ctx, span := tracer().Start(ctx, "(*internalFilterServiceImpl).Change", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
 	if filterID == 0 {
-		return nil, fmt.Errorf("jira: %w", model.ErrNoFilterID)
+		err := fmt.Errorf("jira: %w", model.ErrNoFilterID)
+		recordError(span, err)
+		return nil, err
 	}
 
 	if accountID == "" {
-		return nil, fmt.Errorf("jira: %w", model.ErrNoAccountID)
+		err := fmt.Errorf("jira: %w", model.ErrNoAccountID)
+		recordError(span, err)
+		return nil, err
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/filter/%v/owner", i.version, filterID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", map[string]interface{}{"accountId": accountID})
 	if err != nil {
+		recordError(span, err)
 		return nil, err
 	}
 
-	return i.c.Call(request, nil)
+	response, err := i.c.Call(request, nil)
+	if err != nil {
+		recordError(span, err)
+		return response, err
+	}
+
+	setOK(span)
+	return response, nil
 }

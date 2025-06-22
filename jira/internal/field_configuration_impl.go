@@ -3,12 +3,16 @@ package internal
 import (
 	"context"
 	"fmt"
-	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/v2/service"
-	"github.com/ctreminiom/go-atlassian/v2/service/jira"
 	"net/http"
 	"net/url"
 	"strconv"
+
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
+
+	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/v2/service"
+	"github.com/ctreminiom/go-atlassian/v2/service/jira"
 )
 
 // NewIssueFieldConfigurationService creates a new instance of IssueFieldConfigService.
@@ -44,10 +48,25 @@ type IssueFieldConfigService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration#get-all-field-configurations
 func (i *IssueFieldConfigService) Gets(ctx context.Context, ids []int, isDefault bool, startAt, maxResults int) (*model.FieldConfigurationPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*IssueFieldConfigService).Gets")
+	ctx, span := tracer().Start(ctx, "(*IssueFieldConfigService).Gets", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
-	return i.internalClient.Gets(ctx, ids, isDefault, startAt, maxResults)
+	addAttributes(span,
+		attribute.String("operation.name", "get_field_configurations"),
+		attribute.Bool("jira.field_config.is_default", isDefault),
+		attribute.Int("jira.pagination.start_at", startAt),
+		attribute.Int("jira.pagination.max_results", maxResults),
+		attribute.Int("jira.field_config.ids_count", len(ids)),
+	)
+
+	result, response, err := i.internalClient.Gets(ctx, ids, isDefault, startAt, maxResults)
+	if err != nil {
+		recordError(span, err)
+		return nil, response, err
+	}
+
+	setOK(span)
+	return result, response, nil
 }
 
 // Create creates a field configuration. The field configuration is created with the same field properties as the
@@ -59,10 +78,22 @@ func (i *IssueFieldConfigService) Gets(ctx context.Context, ids []int, isDefault
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration#create-field-configuration
 func (i *IssueFieldConfigService) Create(ctx context.Context, name, description string) (*model.FieldConfigurationScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*IssueFieldConfigService).Create")
+	ctx, span := tracer().Start(ctx, "(*IssueFieldConfigService).Create", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
-	return i.internalClient.Create(ctx, name, description)
+	addAttributes(span,
+		attribute.String("operation.name", "create_field_configuration"),
+		attribute.String("jira.field_config.name", name),
+	)
+
+	result, response, err := i.internalClient.Create(ctx, name, description)
+	if err != nil {
+		recordError(span, err)
+		return nil, response, err
+	}
+
+	setOK(span)
+	return result, response, nil
 }
 
 // Update updates a field configuration. The name and the description provided in the request override the existing values.
@@ -73,10 +104,23 @@ func (i *IssueFieldConfigService) Create(ctx context.Context, name, description 
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration#update-field-configuration
 func (i *IssueFieldConfigService) Update(ctx context.Context, id int, name, description string) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*IssueFieldConfigService).Update")
+	ctx, span := tracer().Start(ctx, "(*IssueFieldConfigService).Update", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
-	return i.internalClient.Update(ctx, id, name, description)
+	addAttributes(span,
+		attribute.String("operation.name", "update_field_configuration"),
+		attribute.Int("jira.field_config.id", id),
+		attribute.String("jira.field_config.name", name),
+	)
+
+	response, err := i.internalClient.Update(ctx, id, name, description)
+	if err != nil {
+		recordError(span, err)
+		return response, err
+	}
+
+	setOK(span)
+	return response, nil
 }
 
 // Delete deletes a field configuration.
@@ -87,10 +131,22 @@ func (i *IssueFieldConfigService) Update(ctx context.Context, id int, name, desc
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration#delete-field-configuration
 func (i *IssueFieldConfigService) Delete(ctx context.Context, id int) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*IssueFieldConfigService).Delete")
+	ctx, span := tracer().Start(ctx, "(*IssueFieldConfigService).Delete", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
-	return i.internalClient.Delete(ctx, id)
+	addAttributes(span,
+		attribute.String("operation.name", "delete_field_configuration"),
+		attribute.Int("jira.field_config.id", id),
+	)
+
+	response, err := i.internalClient.Delete(ctx, id)
+	if err != nil {
+		recordError(span, err)
+		return response, err
+	}
+
+	setOK(span)
+	return response, nil
 }
 
 type internalIssueFieldConfigServiceImpl struct {
@@ -99,7 +155,7 @@ type internalIssueFieldConfigServiceImpl struct {
 }
 
 func (i *internalIssueFieldConfigServiceImpl) Gets(ctx context.Context, ids []int, isDefault bool, startAt, maxResults int) (*model.FieldConfigurationPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalIssueFieldConfigServiceImpl).Gets")
+	ctx, span := tracer().Start(ctx, "(*internalIssueFieldConfigServiceImpl).Gets", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
 	params := url.Values{}
@@ -115,24 +171,29 @@ func (i *internalIssueFieldConfigServiceImpl) Gets(ctx context.Context, ids []in
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	page := new(model.FieldConfigurationPageScheme)
 	response, err := i.c.Call(request, page)
 	if err != nil {
+		recordError(span, err)
 		return nil, response, err
 	}
 
+	setOK(span)
 	return page, response, nil
 }
 
 func (i *internalIssueFieldConfigServiceImpl) Create(ctx context.Context, name, description string) (*model.FieldConfigurationScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalIssueFieldConfigServiceImpl).Create")
+	ctx, span := tracer().Start(ctx, "(*internalIssueFieldConfigServiceImpl).Create", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
 	if name == "" {
-		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoFieldConfigurationName)
+		err := fmt.Errorf("jira: %w", model.ErrNoFieldConfigurationName)
+		recordError(span, err)
+		return nil, nil, err
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/fieldconfiguration", i.version)
@@ -145,28 +206,35 @@ func (i *internalIssueFieldConfigServiceImpl) Create(ctx context.Context, name, 
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	issueConfig := new(model.FieldConfigurationScheme)
 	response, err := i.c.Call(request, issueConfig)
 	if err != nil {
+		recordError(span, err)
 		return nil, response, err
 	}
 
+	setOK(span)
 	return issueConfig, response, nil
 }
 
 func (i *internalIssueFieldConfigServiceImpl) Update(ctx context.Context, id int, name, description string) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalIssueFieldConfigServiceImpl).Update")
+	ctx, span := tracer().Start(ctx, "(*internalIssueFieldConfigServiceImpl).Update", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
 	if id == 0 {
-		return nil, fmt.Errorf("jira: %w", model.ErrNoFieldConfigurationID)
+		err := fmt.Errorf("jira: %w", model.ErrNoFieldConfigurationID)
+		recordError(span, err)
+		return nil, err
 	}
 
 	if name == "" {
-		return nil, fmt.Errorf("jira: %w", model.ErrNoFieldConfigurationName)
+		err := fmt.Errorf("jira: %w", model.ErrNoFieldConfigurationName)
+		recordError(span, err)
+		return nil, err
 	}
 
 	payload := map[string]interface{}{"name": name}
@@ -179,26 +247,44 @@ func (i *internalIssueFieldConfigServiceImpl) Update(ctx context.Context, id int
 
 	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
+		recordError(span, err)
 		return nil, err
 	}
 
-	return i.c.Call(request, nil)
+	response, err := i.c.Call(request, nil)
+	if err != nil {
+		recordError(span, err)
+		return response, err
+	}
+
+	setOK(span)
+	return response, nil
 }
 
 func (i *internalIssueFieldConfigServiceImpl) Delete(ctx context.Context, id int) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalIssueFieldConfigServiceImpl).Delete")
+	ctx, span := tracer().Start(ctx, "(*internalIssueFieldConfigServiceImpl).Delete", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
 	if id == 0 {
-		return nil, fmt.Errorf("jira: %w", model.ErrNoFieldConfigurationID)
+		err := fmt.Errorf("jira: %w", model.ErrNoFieldConfigurationID)
+		recordError(span, err)
+		return nil, err
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/fieldconfiguration/%v", i.version, id)
 
 	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, err
 	}
 
-	return i.c.Call(request, nil)
+	response, err := i.c.Call(request, nil)
+	if err != nil {
+		recordError(span, err)
+		return response, err
+	}
+
+	setOK(span)
+	return response, nil
 }

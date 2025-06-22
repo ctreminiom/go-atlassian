@@ -8,6 +8,9 @@ import (
 	"strconv"
 	"strings"
 
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
+
 	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/v2/service"
 	"github.com/ctreminiom/go-atlassian/v2/service/jira"
@@ -177,8 +180,14 @@ type internalTypeScreenSchemeImpl struct {
 }
 
 func (i *internalTypeScreenSchemeImpl) Gets(ctx context.Context, options *model.ScreenSchemeParamsScheme, startAt, maxResults int) (*model.IssueTypeScreenSchemePageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalTypeScreenSchemeImpl).Gets")
+	ctx, span := tracer().Start(ctx, "(*internalTypeScreenSchemeImpl).Gets", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation", "get_issue_type_screen_schemes"),
+		attribute.Int("start_at", startAt),
+		attribute.Int("max_results", maxResults),
+	)
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -207,48 +216,68 @@ func (i *internalTypeScreenSchemeImpl) Gets(ctx context.Context, options *model.
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	page := new(model.IssueTypeScreenSchemePageScheme)
 	response, err := i.c.Call(request, page)
 	if err != nil {
+		recordError(span, err)
 		return nil, response, err
 	}
 
+	setOK(span)
 	return page, response, nil
 }
 
 func (i *internalTypeScreenSchemeImpl) Create(ctx context.Context, payload *model.IssueTypeScreenSchemePayloadScheme) (*model.IssueTypeScreenScreenCreatedScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalTypeScreenSchemeImpl).Create")
+	ctx, span := tracer().Start(ctx, "(*internalTypeScreenSchemeImpl).Create", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation", "create_issue_type_screen_scheme"),
+	)
 
 	endpoint := fmt.Sprintf("rest/api/%v/issuetypescreenscheme", i.version)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	scheme := new(model.IssueTypeScreenScreenCreatedScheme)
 	response, err := i.c.Call(request, scheme)
 	if err != nil {
+		recordError(span, err)
 		return nil, response, err
 	}
 
+	setOK(span)
 	return scheme, response, nil
 }
 
 func (i *internalTypeScreenSchemeImpl) Assign(ctx context.Context, issueTypeScreenSchemeID, projectID string) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalTypeScreenSchemeImpl).Assign")
+	ctx, span := tracer().Start(ctx, "(*internalTypeScreenSchemeImpl).Assign", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation", "assign_issue_type_screen_scheme_to_project"),
+		attribute.String("issue_type_screen_scheme_id", issueTypeScreenSchemeID),
+		attribute.String("project_id", projectID),
+	)
+
 	if issueTypeScreenSchemeID == "" {
-		return nil, fmt.Errorf("jira: %w", model.ErrNoIssueTypeScreenSchemeID)
+		err := fmt.Errorf("jira: %w", model.ErrNoIssueTypeScreenSchemeID)
+		recordError(span, err)
+		return nil, err
 	}
 
 	if projectID == "" {
-		return nil, fmt.Errorf("jira: %w", model.ErrNoProjectID)
+		err := fmt.Errorf("jira: %w", model.ErrNoProjectID)
+		recordError(span, err)
+		return nil, err
 	}
 
 	payload := map[string]interface{}{
@@ -260,15 +289,30 @@ func (i *internalTypeScreenSchemeImpl) Assign(ctx context.Context, issueTypeScre
 
 	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
+		recordError(span, err)
 		return nil, err
 	}
 
-	return i.c.Call(request, nil)
+	response, err := i.c.Call(request, nil)
+	if err != nil {
+		recordError(span, err)
+		return response, err
+	}
+
+	setOK(span)
+	return response, nil
 }
 
 func (i *internalTypeScreenSchemeImpl) Projects(ctx context.Context, projectIDs []int, startAt, maxResults int) (*model.IssueTypeProjectScreenSchemePageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalTypeScreenSchemeImpl).Projects")
+	ctx, span := tracer().Start(ctx, "(*internalTypeScreenSchemeImpl).Projects", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation", "get_issue_type_screen_scheme_projects"),
+		attribute.Int("start_at", startAt),
+		attribute.Int("max_results", maxResults),
+		attribute.Int("project_ids_count", len(projectIDs)),
+	)
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -282,21 +326,31 @@ func (i *internalTypeScreenSchemeImpl) Projects(ctx context.Context, projectIDs 
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	page := new(model.IssueTypeProjectScreenSchemePageScheme)
 	response, err := i.c.Call(request, page)
 	if err != nil {
+		recordError(span, err)
 		return nil, response, err
 	}
 
+	setOK(span)
 	return page, response, nil
 }
 
 func (i *internalTypeScreenSchemeImpl) Mapping(ctx context.Context, issueTypeScreenSchemeIDs []int, startAt, maxResults int) (*model.IssueTypeScreenSchemeMappingScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalTypeScreenSchemeImpl).Mapping")
+	ctx, span := tracer().Start(ctx, "(*internalTypeScreenSchemeImpl).Mapping", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation", "get_issue_type_screen_scheme_mapping"),
+		attribute.Int("start_at", startAt),
+		attribute.Int("max_results", maxResults),
+		attribute.Int("scheme_ids_count", len(issueTypeScreenSchemeIDs)),
+	)
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -310,24 +364,35 @@ func (i *internalTypeScreenSchemeImpl) Mapping(ctx context.Context, issueTypeScr
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	mapping := new(model.IssueTypeScreenSchemeMappingScheme)
 	response, err := i.c.Call(request, mapping)
 	if err != nil {
+		recordError(span, err)
 		return nil, response, err
 	}
 
+	setOK(span)
 	return mapping, response, nil
 }
 
 func (i *internalTypeScreenSchemeImpl) Update(ctx context.Context, issueTypeScreenSchemeID, name, description string) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalTypeScreenSchemeImpl).Update")
+	ctx, span := tracer().Start(ctx, "(*internalTypeScreenSchemeImpl).Update", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation", "update_issue_type_screen_scheme"),
+		attribute.String("issue_type_screen_scheme_id", issueTypeScreenSchemeID),
+		attribute.String("name", name),
+	)
+
 	if issueTypeScreenSchemeID == "" {
-		return nil, fmt.Errorf("jira: %w", model.ErrNoIssueTypeScreenSchemeID)
+		err := fmt.Errorf("jira: %w", model.ErrNoIssueTypeScreenSchemeID)
+		recordError(span, err)
+		return nil, err
 	}
 
 	payload := map[string]interface{}{"name": name}
@@ -340,95 +405,176 @@ func (i *internalTypeScreenSchemeImpl) Update(ctx context.Context, issueTypeScre
 
 	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
+		recordError(span, err)
 		return nil, err
 	}
 
-	return i.c.Call(request, nil)
+	response, err := i.c.Call(request, nil)
+	if err != nil {
+		recordError(span, err)
+		return response, err
+	}
+
+	setOK(span)
+	return response, nil
 }
 
 func (i *internalTypeScreenSchemeImpl) Delete(ctx context.Context, issueTypeScreenSchemeID string) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalTypeScreenSchemeImpl).Delete")
+	ctx, span := tracer().Start(ctx, "(*internalTypeScreenSchemeImpl).Delete", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation", "delete_issue_type_screen_scheme"),
+		attribute.String("issue_type_screen_scheme_id", issueTypeScreenSchemeID),
+	)
+
 	if issueTypeScreenSchemeID == "" {
-		return nil, fmt.Errorf("jira: %w", model.ErrNoIssueTypeScreenSchemeID)
+		err := fmt.Errorf("jira: %w", model.ErrNoIssueTypeScreenSchemeID)
+		recordError(span, err)
+		return nil, err
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issuetypescreenscheme/%v", i.version, issueTypeScreenSchemeID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, err
 	}
 
-	return i.c.Call(request, nil)
+	response, err := i.c.Call(request, nil)
+	if err != nil {
+		recordError(span, err)
+		return response, err
+	}
+
+	setOK(span)
+	return response, nil
 }
 
 func (i *internalTypeScreenSchemeImpl) Append(ctx context.Context, issueTypeScreenSchemeID string, payload *model.IssueTypeScreenSchemePayloadScheme) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalTypeScreenSchemeImpl).Append")
+	ctx, span := tracer().Start(ctx, "(*internalTypeScreenSchemeImpl).Append", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation", "append_issue_type_screen_scheme_mapping"),
+		attribute.String("issue_type_screen_scheme_id", issueTypeScreenSchemeID),
+	)
+
 	if issueTypeScreenSchemeID == "" {
-		return nil, fmt.Errorf("jira: %w", model.ErrNoIssueTypeScreenSchemeID)
+		err := fmt.Errorf("jira: %w", model.ErrNoIssueTypeScreenSchemeID)
+		recordError(span, err)
+		return nil, err
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issuetypescreenscheme/%v/mapping", i.version, issueTypeScreenSchemeID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
+		recordError(span, err)
 		return nil, err
 	}
 
-	return i.c.Call(request, nil)
+	response, err := i.c.Call(request, nil)
+	if err != nil {
+		recordError(span, err)
+		return response, err
+	}
+
+	setOK(span)
+	return response, nil
 }
 
 func (i *internalTypeScreenSchemeImpl) UpdateDefault(ctx context.Context, issueTypeScreenSchemeID, screenSchemeID string) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalTypeScreenSchemeImpl).UpdateDefault")
+	ctx, span := tracer().Start(ctx, "(*internalTypeScreenSchemeImpl).UpdateDefault", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation", "update_issue_type_screen_scheme_default"),
+		attribute.String("issue_type_screen_scheme_id", issueTypeScreenSchemeID),
+		attribute.String("screen_scheme_id", screenSchemeID),
+	)
+
 	if issueTypeScreenSchemeID == "" {
-		return nil, fmt.Errorf("jira: %w", model.ErrNoIssueTypeScreenSchemeID)
+		err := fmt.Errorf("jira: %w", model.ErrNoIssueTypeScreenSchemeID)
+		recordError(span, err)
+		return nil, err
 	}
 
 	if screenSchemeID == "" {
-		return nil, fmt.Errorf("jira: %w", model.ErrNoScreenSchemeID)
+		err := fmt.Errorf("jira: %w", model.ErrNoScreenSchemeID)
+		recordError(span, err)
+		return nil, err
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issuetypescreenscheme/%v/mapping/default", i.version, issueTypeScreenSchemeID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", map[string]interface{}{"screenSchemeId": screenSchemeID})
 	if err != nil {
+		recordError(span, err)
 		return nil, err
 	}
 
-	return i.c.Call(request, nil)
+	response, err := i.c.Call(request, nil)
+	if err != nil {
+		recordError(span, err)
+		return response, err
+	}
+
+	setOK(span)
+	return response, nil
 }
 
 func (i *internalTypeScreenSchemeImpl) Remove(ctx context.Context, issueTypeScreenSchemeID string, issueTypeIDs []string) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalTypeScreenSchemeImpl).Remove")
+	ctx, span := tracer().Start(ctx, "(*internalTypeScreenSchemeImpl).Remove", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation", "remove_issue_type_screen_scheme_mapping"),
+		attribute.String("issue_type_screen_scheme_id", issueTypeScreenSchemeID),
+		attribute.Int("issue_type_ids_count", len(issueTypeIDs)),
+	)
+
 	if issueTypeScreenSchemeID == "" {
-		return nil, fmt.Errorf("jira: %w", model.ErrNoIssueTypeScreenSchemeID)
+		err := fmt.Errorf("jira: %w", model.ErrNoIssueTypeScreenSchemeID)
+		recordError(span, err)
+		return nil, err
 	}
 
 	if len(issueTypeIDs) == 0 {
-		return nil, fmt.Errorf("jira: %w", model.ErrNoIssueTypes)
+		err := fmt.Errorf("jira: %w", model.ErrNoIssueTypes)
+		recordError(span, err)
+		return nil, err
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issuetypescreenscheme/%v/mapping/remove", i.version, issueTypeScreenSchemeID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", map[string]interface{}{"issueTypeIds": issueTypeIDs})
 	if err != nil {
+		recordError(span, err)
 		return nil, err
 	}
 
-	return i.c.Call(request, nil)
+	response, err := i.c.Call(request, nil)
+	if err != nil {
+		recordError(span, err)
+		return response, err
+	}
+
+	setOK(span)
+	return response, nil
 }
 
 func (i *internalTypeScreenSchemeImpl) SchemesByProject(ctx context.Context, issueTypeScreenSchemeID int, startAt, maxResults int) (*model.IssueTypeScreenSchemeByProjectPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalTypeScreenSchemeImpl).SchemesByProject")
+	ctx, span := tracer().Start(ctx, "(*internalTypeScreenSchemeImpl).SchemesByProject", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation", "get_issue_type_screen_scheme_by_project"),
+		attribute.Int("issue_type_screen_scheme_id", issueTypeScreenSchemeID),
+		attribute.Int("start_at", startAt),
+		attribute.Int("max_results", maxResults),
+	)
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -438,14 +584,17 @@ func (i *internalTypeScreenSchemeImpl) SchemesByProject(ctx context.Context, iss
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	page := new(model.IssueTypeScreenSchemeByProjectPageScheme)
 	response, err := i.c.Call(request, page)
 	if err != nil {
+		recordError(span, err)
 		return nil, response, err
 	}
 
+	setOK(span)
 	return page, response, nil
 }

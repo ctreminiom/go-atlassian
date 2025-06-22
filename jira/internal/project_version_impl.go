@@ -8,6 +8,9 @@ import (
 	"strconv"
 	"strings"
 
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
+
 	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/v2/service"
 	"github.com/ctreminiom/go-atlassian/v2/service/jira"
@@ -41,10 +44,22 @@ type ProjectVersionService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/versions#get-project-versions
 func (p *ProjectVersionService) Gets(ctx context.Context, projectKeyOrID string) ([]*model.VersionScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*ProjectVersionService).Gets")
+	ctx, span := tracer().Start(ctx, "(*ProjectVersionService).Gets", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
-	return p.internalClient.Gets(ctx, projectKeyOrID)
+	addAttributes(span,
+		attribute.String("operation.name", "get_project_versions"),
+		attribute.String("jira.project.key", projectKeyOrID),
+	)
+
+	result, response, err := p.internalClient.Gets(ctx, projectKeyOrID)
+	if err != nil {
+		recordError(span, err)
+		return nil, response, err
+	}
+
+	setOK(span)
+	return result, response, nil
 }
 
 // Search returns a paginated list of all versions in a project.
@@ -53,10 +68,24 @@ func (p *ProjectVersionService) Gets(ctx context.Context, projectKeyOrID string)
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/versions#get-project-versions-paginated
 func (p *ProjectVersionService) Search(ctx context.Context, projectKeyOrID string, options *model.VersionGetsOptions, startAt, maxResults int) (*model.VersionPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*ProjectVersionService).Search")
+	ctx, span := tracer().Start(ctx, "(*ProjectVersionService).Search", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
-	return p.internalClient.Search(ctx, projectKeyOrID, options, startAt, maxResults)
+	addAttributes(span,
+		attribute.String("operation.name", "search_project_versions"),
+		attribute.String("jira.project.key", projectKeyOrID),
+		attribute.Int("jira.pagination.start_at", startAt),
+		attribute.Int("jira.pagination.max_results", maxResults),
+	)
+
+	result, response, err := p.internalClient.Search(ctx, projectKeyOrID, options, startAt, maxResults)
+	if err != nil {
+		recordError(span, err)
+		return nil, response, err
+	}
+
+	setOK(span)
+	return result, response, nil
 }
 
 // Create creates a project version.
@@ -65,10 +94,21 @@ func (p *ProjectVersionService) Search(ctx context.Context, projectKeyOrID strin
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/versions#create-version
 func (p *ProjectVersionService) Create(ctx context.Context, payload *model.VersionPayloadScheme) (*model.VersionScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*ProjectVersionService).Create")
+	ctx, span := tracer().Start(ctx, "(*ProjectVersionService).Create", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
-	return p.internalClient.Create(ctx, payload)
+	addAttributes(span,
+		attribute.String("operation.name", "create_version"),
+	)
+
+	result, response, err := p.internalClient.Create(ctx, payload)
+	if err != nil {
+		recordError(span, err)
+		return nil, response, err
+	}
+
+	setOK(span)
+	return result, response, nil
 }
 
 // Get returns a project version.
@@ -77,10 +117,23 @@ func (p *ProjectVersionService) Create(ctx context.Context, payload *model.Versi
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/versions#get-version
 func (p *ProjectVersionService) Get(ctx context.Context, versionID string, expand []string) (*model.VersionScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*ProjectVersionService).Get")
+	ctx, span := tracer().Start(ctx, "(*ProjectVersionService).Get", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
-	return p.internalClient.Get(ctx, versionID, expand)
+	addAttributes(span,
+		attribute.String("operation.name", "get_version"),
+		attribute.String("jira.version.id", versionID),
+		attribute.StringSlice("jira.expand", expand),
+	)
+
+	result, response, err := p.internalClient.Get(ctx, versionID, expand)
+	if err != nil {
+		recordError(span, err)
+		return nil, response, err
+	}
+
+	setOK(span)
+	return result, response, nil
 }
 
 // Update updates a project version.
@@ -89,10 +142,22 @@ func (p *ProjectVersionService) Get(ctx context.Context, versionID string, expan
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/versions#update-version
 func (p *ProjectVersionService) Update(ctx context.Context, versionID string, payload *model.VersionPayloadScheme) (*model.VersionScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*ProjectVersionService).Update")
+	ctx, span := tracer().Start(ctx, "(*ProjectVersionService).Update", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
-	return p.internalClient.Update(ctx, versionID, payload)
+	addAttributes(span,
+		attribute.String("operation.name", "update_version"),
+		attribute.String("jira.version.id", versionID),
+	)
+
+	result, response, err := p.internalClient.Update(ctx, versionID, payload)
+	if err != nil {
+		recordError(span, err)
+		return nil, response, err
+	}
+
+	setOK(span)
+	return result, response, nil
 }
 
 // Merge merges two project versions.
@@ -103,10 +168,23 @@ func (p *ProjectVersionService) Update(ctx context.Context, versionID string, pa
 //
 // PUT /rest/api/{2-3}/version/{id}/mergeto/{moveIssuesTo}
 func (p *ProjectVersionService) Merge(ctx context.Context, versionID, versionMoveIssuesTo string) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*ProjectVersionService).Merge")
+	ctx, span := tracer().Start(ctx, "(*ProjectVersionService).Merge", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
-	return p.internalClient.Merge(ctx, versionID, versionMoveIssuesTo)
+	addAttributes(span,
+		attribute.String("operation.name", "merge_versions"),
+		attribute.String("jira.version.id", versionID),
+		attribute.String("jira.version.move_to", versionMoveIssuesTo),
+	)
+
+	response, err := p.internalClient.Merge(ctx, versionID, versionMoveIssuesTo)
+	if err != nil {
+		recordError(span, err)
+		return response, err
+	}
+
+	setOK(span)
+	return response, nil
 }
 
 // RelatedIssueCounts returns the following counts for a version:
@@ -121,10 +199,22 @@ func (p *ProjectVersionService) Merge(ctx context.Context, versionID, versionMov
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/versions#get-versions-related-issues-count
 func (p *ProjectVersionService) RelatedIssueCounts(ctx context.Context, versionID string) (*model.VersionIssueCountsScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*ProjectVersionService).RelatedIssueCounts")
+	ctx, span := tracer().Start(ctx, "(*ProjectVersionService).RelatedIssueCounts", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
-	return p.internalClient.RelatedIssueCounts(ctx, versionID)
+	addAttributes(span,
+		attribute.String("operation.name", "get_version_related_issue_counts"),
+		attribute.String("jira.version.id", versionID),
+	)
+
+	result, response, err := p.internalClient.RelatedIssueCounts(ctx, versionID)
+	if err != nil {
+		recordError(span, err)
+		return nil, response, err
+	}
+
+	setOK(span)
+	return result, response, nil
 }
 
 // UnresolvedIssueCount returns counts of the issues and unresolved issues for the project version.
@@ -133,10 +223,22 @@ func (p *ProjectVersionService) RelatedIssueCounts(ctx context.Context, versionI
 //
 // https://docs.go-atlassian.io/jira-software-cloud/projects/versions#get-versions-unresolved-issues-count
 func (p *ProjectVersionService) UnresolvedIssueCount(ctx context.Context, versionID string) (*model.VersionUnresolvedIssuesCountScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*ProjectVersionService).UnresolvedIssueCount")
+	ctx, span := tracer().Start(ctx, "(*ProjectVersionService).UnresolvedIssueCount", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
-	return p.internalClient.UnresolvedIssueCount(ctx, versionID)
+	addAttributes(span,
+		attribute.String("operation.name", "get_version_unresolved_issue_count"),
+		attribute.String("jira.version.id", versionID),
+	)
+
+	result, response, err := p.internalClient.UnresolvedIssueCount(ctx, versionID)
+	if err != nil {
+		recordError(span, err)
+		return nil, response, err
+	}
+
+	setOK(span)
+	return result, response, nil
 }
 
 type internalProjectVersionImpl struct {
@@ -145,35 +247,54 @@ type internalProjectVersionImpl struct {
 }
 
 func (i *internalProjectVersionImpl) Gets(ctx context.Context, projectKeyOrID string) ([]*model.VersionScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalProjectVersionImpl).Gets")
+	ctx, span := tracer().Start(ctx, "(*internalProjectVersionImpl).Gets", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "get_project_versions"),
+		attribute.String("jira.project.key", projectKeyOrID),
+	)
+
 	if projectKeyOrID == "" {
-		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoProjectIDOrKey)
+		err := fmt.Errorf("jira: %w", model.ErrNoProjectIDOrKey)
+		recordError(span, err)
+		return nil, nil, err
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/project/%v/versions", i.version, projectKeyOrID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	var versions []*model.VersionScheme
 	response, err := i.c.Call(request, &versions)
 	if err != nil {
+		recordError(span, err)
 		return nil, response, err
 	}
 
+	setOK(span)
 	return versions, response, nil
 }
 
 func (i *internalProjectVersionImpl) Search(ctx context.Context, projectKeyOrID string, options *model.VersionGetsOptions, startAt, maxResults int) (*model.VersionPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalProjectVersionImpl).Search")
+	ctx, span := tracer().Start(ctx, "(*internalProjectVersionImpl).Search", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "search_project_versions"),
+		attribute.String("jira.project.key", projectKeyOrID),
+		attribute.Int("jira.pagination.start_at", startAt),
+		attribute.Int("jira.pagination.max_results", maxResults),
+	)
+
 	if projectKeyOrID == "" {
-		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoProjectIDOrKey)
+		err := fmt.Errorf("jira: %w", model.ErrNoProjectIDOrKey)
+		recordError(span, err)
+		return nil, nil, err
 	}
 
 	params := url.Values{}
@@ -203,44 +324,62 @@ func (i *internalProjectVersionImpl) Search(ctx context.Context, projectKeyOrID 
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	page := new(model.VersionPageScheme)
 	response, err := i.c.Call(request, page)
 	if err != nil {
+		recordError(span, err)
 		return nil, response, err
 	}
 
+	setOK(span)
 	return page, response, nil
 }
 
 func (i *internalProjectVersionImpl) Create(ctx context.Context, payload *model.VersionPayloadScheme) (*model.VersionScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalProjectVersionImpl).Create")
+	ctx, span := tracer().Start(ctx, "(*internalProjectVersionImpl).Create", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation.name", "create_version"),
+	)
 
 	endpoint := fmt.Sprintf("rest/api/%v/version", i.version)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	version := new(model.VersionScheme)
 	response, err := i.c.Call(request, version)
 	if err != nil {
+		recordError(span, err)
 		return nil, response, err
 	}
 
+	setOK(span)
 	return version, response, nil
 }
 
 func (i *internalProjectVersionImpl) Get(ctx context.Context, versionID string, expand []string) (*model.VersionScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalProjectVersionImpl).Get")
+	ctx, span := tracer().Start(ctx, "(*internalProjectVersionImpl).Get", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "get_version"),
+		attribute.String("jira.version.id", versionID),
+		attribute.StringSlice("jira.expand", expand),
+	)
+
 	if versionID == "" {
-		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoVersionID)
+		err := fmt.Errorf("jira: %w", model.ErrNoVersionID)
+		recordError(span, err)
+		return nil, nil, err
 	}
 
 	var endpoint strings.Builder
@@ -256,108 +395,159 @@ func (i *internalProjectVersionImpl) Get(ctx context.Context, versionID string, 
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	version := new(model.VersionScheme)
 	response, err := i.c.Call(request, version)
 	if err != nil {
+		recordError(span, err)
 		return nil, response, err
 	}
 
+	setOK(span)
 	return version, response, nil
 }
 
 func (i *internalProjectVersionImpl) Update(ctx context.Context, versionID string, payload *model.VersionPayloadScheme) (*model.VersionScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalProjectVersionImpl).Update")
+	ctx, span := tracer().Start(ctx, "(*internalProjectVersionImpl).Update", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "update_version"),
+		attribute.String("jira.version.id", versionID),
+	)
+
 	if versionID == "" {
-		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoVersionID)
+		err := fmt.Errorf("jira: %w", model.ErrNoVersionID)
+		recordError(span, err)
+		return nil, nil, err
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/version/%v", i.version, versionID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	version := new(model.VersionScheme)
 	response, err := i.c.Call(request, version)
 	if err != nil {
+		recordError(span, err)
 		return nil, response, err
 	}
 
+	setOK(span)
 	return version, response, nil
 }
 
 func (i *internalProjectVersionImpl) Merge(ctx context.Context, versionID, versionMoveIssuesTo string) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalProjectVersionImpl).Merge")
+	ctx, span := tracer().Start(ctx, "(*internalProjectVersionImpl).Merge", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "merge_versions"),
+		attribute.String("jira.version.id", versionID),
+		attribute.String("jira.version.move_to", versionMoveIssuesTo),
+	)
+
 	if versionID == "" {
-		return nil, fmt.Errorf("jira: %w", model.ErrNoVersionID)
+		err := fmt.Errorf("jira: %w", model.ErrNoVersionID)
+		recordError(span, err)
+		return nil, err
 	}
 
 	if versionMoveIssuesTo == "" {
-		return nil, fmt.Errorf("jira: %w", model.ErrNoVersionID)
+		err := fmt.Errorf("jira: %w", model.ErrNoVersionID)
+		recordError(span, err)
+		return nil, err
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/version/%v/mergeto/%v", i.version, versionID, versionMoveIssuesTo)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, err
 	}
 
-	return i.c.Call(request, nil)
+	response, err := i.c.Call(request, nil)
+	if err != nil {
+		recordError(span, err)
+		return response, err
+	}
+
+	setOK(span)
+	return response, nil
 }
 
 func (i *internalProjectVersionImpl) RelatedIssueCounts(ctx context.Context, versionID string) (*model.VersionIssueCountsScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalProjectVersionImpl).RelatedIssueCounts")
+	ctx, span := tracer().Start(ctx, "(*internalProjectVersionImpl).RelatedIssueCounts", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "get_version_related_issue_counts"),
+		attribute.String("jira.version.id", versionID),
+	)
+
 	if versionID == "" {
-		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoVersionID)
+		err := fmt.Errorf("jira: %w", model.ErrNoVersionID)
+		recordError(span, err)
+		return nil, nil, err
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/version/%v/relatedIssueCounts", i.version, versionID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	issues := new(model.VersionIssueCountsScheme)
 	response, err := i.c.Call(request, issues)
 	if err != nil {
+		recordError(span, err)
 		return nil, response, err
 	}
 
+	setOK(span)
 	return issues, response, nil
 }
 
 func (i *internalProjectVersionImpl) UnresolvedIssueCount(ctx context.Context, versionID string) (*model.VersionUnresolvedIssuesCountScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalProjectVersionImpl).UnresolvedIssueCount")
+	ctx, span := tracer().Start(ctx, "(*internalProjectVersionImpl).UnresolvedIssueCount", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "get_version_unresolved_issue_count"),
+		attribute.String("jira.version.id", versionID),
+	)
+
 	if versionID == "" {
-		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoVersionID)
+		err := fmt.Errorf("jira: %w", model.ErrNoVersionID)
+		recordError(span, err)
+		return nil, nil, err
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/version/%v/unresolvedIssueCount", i.version, versionID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	issues := new(model.VersionUnresolvedIssuesCountScheme)
 	response, err := i.c.Call(request, issues)
 	if err != nil {
+		recordError(span, err)
 		return nil, response, err
 	}
 
+	setOK(span)
 	return issues, response, nil
 }

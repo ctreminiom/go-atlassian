@@ -55,6 +55,22 @@ return result, response, nil
 3. ✅ attachment_impl.go
 4. ✅ audit_impl.go
 5. ✅ issue_impl_adf.go (example provided)
+6. ✅ comment_impl_adf.go
+7. ✅ comment_impl_rich_text.go
+8. ✅ dashboard_impl.go
+9. ✅ field_configuration_impl.go
+10. ✅ field_configuration_item_impl.go
+11. ✅ field_context_impl.go (24 functions)
+12. ✅ filter_impl.go (16 functions)
+13. ✅ project_impl.go (20 functions)
+14. ✅ issue_impl.go (utility functions)
+15. ✅ project_version_impl.go (16 functions)
+16. ✅ notification_scheme_impl.go (16 functions)
+17. ✅ type_scheme_impl.go (20 functions)
+18. ✅ type_screen_scheme_impl.go (22 functions)
+19. ✅ workflow_impl.go (18 functions)
+20. ✅ workflow_scheme_impl.go (14 functions)
+21. ✅ workflow_status_impl.go (14 functions)
 
 ### Remaining Files (58):
 - authentication_impl.go (no tracer calls - skip)

@@ -8,6 +8,9 @@ import (
 	"strconv"
 	"strings"
 
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
+
 	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/v2/service"
 	"github.com/ctreminiom/go-atlassian/v2/service/jira"
@@ -138,8 +141,14 @@ type internalWorkflowSchemeImpl struct {
 }
 
 func (i *internalWorkflowSchemeImpl) Gets(ctx context.Context, startAt, maxResults int) (*model.WorkflowSchemePageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalWorkflowSchemeImpl).Gets")
+	ctx, span := tracer().Start(ctx, "(*internalWorkflowSchemeImpl).Gets", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation", "get_workflow_schemes"),
+		attribute.Int("start_at", startAt),
+		attribute.Int("max_results", maxResults),
+	)
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -149,44 +158,62 @@ func (i *internalWorkflowSchemeImpl) Gets(ctx context.Context, startAt, maxResul
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	page := new(model.WorkflowSchemePageScheme)
 	response, err := i.c.Call(request, page)
 	if err != nil {
+		recordError(span, err)
 		return nil, response, err
 	}
 
+	setOK(span)
 	return page, response, nil
 }
 
 func (i *internalWorkflowSchemeImpl) Create(ctx context.Context, payload *model.WorkflowSchemePayloadScheme) (*model.WorkflowSchemeScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalWorkflowSchemeImpl).Create")
+	ctx, span := tracer().Start(ctx, "(*internalWorkflowSchemeImpl).Create", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation", "create_workflow_scheme"),
+	)
 
 	endpoint := fmt.Sprintf("rest/api/%v/workflowscheme", i.version)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	workflowScheme := new(model.WorkflowSchemeScheme)
 	response, err := i.c.Call(request, workflowScheme)
 	if err != nil {
+		recordError(span, err)
 		return nil, response, err
 	}
 
+	setOK(span)
 	return workflowScheme, response, nil
 }
 
 func (i *internalWorkflowSchemeImpl) Get(ctx context.Context, schemeID int, returnDraftIfExists bool) (*model.WorkflowSchemeScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalWorkflowSchemeImpl).Get")
+	ctx, span := tracer().Start(ctx, "(*internalWorkflowSchemeImpl).Get", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation", "get_workflow_scheme"),
+		attribute.Int("scheme_id", schemeID),
+		attribute.Bool("return_draft_if_exists", returnDraftIfExists),
+	)
+
 	if schemeID == 0 {
-		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoWorkflowSchemeID)
+		err := fmt.Errorf("jira: %w", model.ErrNoWorkflowSchemeID)
+		recordError(span, err)
+		return nil, nil, err
 	}
 
 	var endpoint strings.Builder
@@ -202,66 +229,101 @@ func (i *internalWorkflowSchemeImpl) Get(ctx context.Context, schemeID int, retu
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	workflowScheme := new(model.WorkflowSchemeScheme)
 	response, err := i.c.Call(request, workflowScheme)
 	if err != nil {
+		recordError(span, err)
 		return nil, response, err
 	}
 
+	setOK(span)
 	return workflowScheme, response, nil
 }
 
 func (i *internalWorkflowSchemeImpl) Update(ctx context.Context, schemeID int, payload *model.WorkflowSchemePayloadScheme) (*model.WorkflowSchemeScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalWorkflowSchemeImpl).Update")
+	ctx, span := tracer().Start(ctx, "(*internalWorkflowSchemeImpl).Update", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation", "update_workflow_scheme"),
+		attribute.Int("scheme_id", schemeID),
+	)
+
 	if schemeID == 0 {
-		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoWorkflowSchemeID)
+		err := fmt.Errorf("jira: %w", model.ErrNoWorkflowSchemeID)
+		recordError(span, err)
+		return nil, nil, err
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/workflowscheme/%v", i.version, schemeID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	workflowScheme := new(model.WorkflowSchemeScheme)
 	response, err := i.c.Call(request, workflowScheme)
 	if err != nil {
+		recordError(span, err)
 		return nil, response, err
 	}
 
+	setOK(span)
 	return workflowScheme, response, nil
 }
 
 func (i *internalWorkflowSchemeImpl) Delete(ctx context.Context, schemeID int) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalWorkflowSchemeImpl).Delete")
+	ctx, span := tracer().Start(ctx, "(*internalWorkflowSchemeImpl).Delete", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation", "delete_workflow_scheme"),
+		attribute.Int("scheme_id", schemeID),
+	)
+
 	if schemeID == 0 {
-		return nil, fmt.Errorf("jira: %w", model.ErrNoWorkflowSchemeID)
+		err := fmt.Errorf("jira: %w", model.ErrNoWorkflowSchemeID)
+		recordError(span, err)
+		return nil, err
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/workflowscheme/%v", i.version, schemeID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, err
 	}
 
-	return i.c.Call(request, nil)
+	response, err := i.c.Call(request, nil)
+	if err != nil {
+		recordError(span, err)
+		return response, err
+	}
+
+	setOK(span)
+	return response, nil
 }
 
 func (i *internalWorkflowSchemeImpl) Associations(ctx context.Context, projectIDs []int) (*model.WorkflowSchemeAssociationPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalWorkflowSchemeImpl).Associations")
+	ctx, span := tracer().Start(ctx, "(*internalWorkflowSchemeImpl).Associations", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation", "get_workflow_scheme_associations"),
+		attribute.Int("project_ids_count", len(projectIDs)),
+	)
+
 	if len(projectIDs) == 0 {
-		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoProjects)
+		err := fmt.Errorf("jira: %w", model.ErrNoProjects)
+		recordError(span, err)
+		return nil, nil, err
 	}
 
 	params := url.Values{}
@@ -273,36 +335,57 @@ func (i *internalWorkflowSchemeImpl) Associations(ctx context.Context, projectID
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	mapping := new(model.WorkflowSchemeAssociationPageScheme)
 	response, err := i.c.Call(request, mapping)
 	if err != nil {
+		recordError(span, err)
 		return nil, response, err
 	}
 
+	setOK(span)
 	return mapping, response, nil
 }
 
 func (i *internalWorkflowSchemeImpl) Assign(ctx context.Context, schemeID, projectID string) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalWorkflowSchemeImpl).Assign")
+	ctx, span := tracer().Start(ctx, "(*internalWorkflowSchemeImpl).Assign", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation", "assign_workflow_scheme_to_project"),
+		attribute.String("scheme_id", schemeID),
+		attribute.String("project_id", projectID),
+	)
+
 	if schemeID == "" {
-		return nil, fmt.Errorf("jira: %w", model.ErrNoWorkflowSchemeID)
+		err := fmt.Errorf("jira: %w", model.ErrNoWorkflowSchemeID)
+		recordError(span, err)
+		return nil, err
 	}
 
 	if projectID == "" {
-		return nil, fmt.Errorf("jira: %w", model.ErrNoProjectIDOrKey)
+		err := fmt.Errorf("jira: %w", model.ErrNoProjectIDOrKey)
+		recordError(span, err)
+		return nil, err
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/workflowscheme/project", i.version)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", map[string]interface{}{"workflowSchemeId": schemeID, "projectId": projectID})
 	if err != nil {
+		recordError(span, err)
 		return nil, err
 	}
 
-	return i.c.Call(request, nil)
+	response, err := i.c.Call(request, nil)
+	if err != nil {
+		recordError(span, err)
+		return response, err
+	}
+
+	setOK(span)
+	return response, nil
 }

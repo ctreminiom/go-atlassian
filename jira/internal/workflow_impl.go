@@ -8,6 +8,9 @@ import (
 	"strconv"
 	"strings"
 
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
+
 	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/v2/service"
 	"github.com/ctreminiom/go-atlassian/v2/service/jira"
@@ -258,8 +261,14 @@ type internalWorkflowImpl struct {
 }
 
 func (i *internalWorkflowImpl) Search(ctx context.Context, options *model.WorkflowSearchCriteria, expand []string, transitionLinks bool) (*model.WorkflowReadResponseScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalWorkflowImpl).Search")
+	ctx, span := tracer().Start(ctx, "(*internalWorkflowImpl).Search", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation", "search_workflows"),
+		attribute.Bool("transition_links", transitionLinks),
+		attribute.Int("expand_count", len(expand)),
+	)
 
 	params := url.Values{}
 
@@ -280,21 +289,31 @@ func (i *internalWorkflowImpl) Search(ctx context.Context, options *model.Workfl
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint.String(), "", options)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	page := new(model.WorkflowReadResponseScheme)
 	response, err := i.c.Call(request, page)
 	if err != nil {
+		recordError(span, err)
 		return nil, response, err
 	}
 
+	setOK(span)
 	return page, response, nil
 }
 
 func (i *internalWorkflowImpl) Capabilities(ctx context.Context, workflowID, projectID, issueTypeID string) (*model.WorkflowCapabilitiesScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalWorkflowImpl).Capabilities")
+	ctx, span := tracer().Start(ctx, "(*internalWorkflowImpl).Capabilities", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation", "get_workflow_capabilities"),
+		attribute.String("workflow_id", workflowID),
+		attribute.String("project_id", projectID),
+		attribute.String("issue_type_id", issueTypeID),
+	)
 
 	params := url.Values{}
 
@@ -319,61 +338,83 @@ func (i *internalWorkflowImpl) Capabilities(ctx context.Context, workflowID, pro
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	capabilities := new(model.WorkflowCapabilitiesScheme)
 	response, err := i.c.Call(request, capabilities)
 	if err != nil {
+		recordError(span, err)
 		return nil, response, err
 	}
 
+	setOK(span)
 	return capabilities, response, nil
 }
 
 func (i *internalWorkflowImpl) Creates(ctx context.Context, payload *model.WorkflowCreatesPayload) (*model.WorkflowCreateResponseScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalWorkflowImpl).Creates")
+	ctx, span := tracer().Start(ctx, "(*internalWorkflowImpl).Creates", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation", "create_workflows"),
+	)
 
 	endpoint := fmt.Sprintf("rest/api/%v/workflows/create", i.version)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	result := new(model.WorkflowCreateResponseScheme)
 	response, err := i.c.Call(request, result)
 	if err != nil {
+		recordError(span, err)
 		return nil, response, err
 	}
 
+	setOK(span)
 	return result, response, nil
 }
 
 func (i *internalWorkflowImpl) ValidateCreateWorkflows(ctx context.Context, payload *model.ValidationOptionsForCreateScheme) (*model.WorkflowValidationErrorListScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalWorkflowImpl).ValidateCreateWorkflows")
+	ctx, span := tracer().Start(ctx, "(*internalWorkflowImpl).ValidateCreateWorkflows", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation", "validate_create_workflows"),
+	)
 
 	endpoint := fmt.Sprintf("rest/api/%v/workflows/create/validation", i.version)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	errorList := new(model.WorkflowValidationErrorListScheme)
 	response, err := i.c.Call(request, errorList)
 	if err != nil {
+		recordError(span, err)
 		return nil, response, err
 	}
 
+	setOK(span)
 	return errorList, response, nil
 }
 
 func (i *internalWorkflowImpl) Updates(ctx context.Context, payload *model.WorkflowUpdatesPayloadScheme, expand []string) (*model.WorkflowUpdateResponseScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalWorkflowImpl).Updates")
+	ctx, span := tracer().Start(ctx, "(*internalWorkflowImpl).Updates", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation", "update_workflows"),
+		attribute.Int("expand_count", len(expand)),
+	)
 
 	params := url.Values{}
 	if len(expand) != 0 {
@@ -389,61 +430,84 @@ func (i *internalWorkflowImpl) Updates(ctx context.Context, payload *model.Workf
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint.String(), "", payload)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	result := new(model.WorkflowUpdateResponseScheme)
 	response, err := i.c.Call(request, result)
 	if err != nil {
+		recordError(span, err)
 		return nil, response, err
 	}
 
+	setOK(span)
 	return result, response, nil
 }
 
 func (i *internalWorkflowImpl) ValidateUpdateWorkflows(ctx context.Context, payload *model.ValidationOptionsForUpdateScheme) (*model.WorkflowValidationErrorListScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalWorkflowImpl).ValidateUpdateWorkflows")
+	ctx, span := tracer().Start(ctx, "(*internalWorkflowImpl).ValidateUpdateWorkflows", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation", "validate_update_workflows"),
+	)
 
 	endpoint := fmt.Sprintf("rest/api/%v/workflows/update/validation", i.version)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	errorList := new(model.WorkflowValidationErrorListScheme)
 	response, err := i.c.Call(request, errorList)
 	if err != nil {
+		recordError(span, err)
 		return nil, response, err
 	}
 
+	setOK(span)
 	return errorList, response, nil
 }
 
 func (i *internalWorkflowImpl) Create(ctx context.Context, payload *model.WorkflowPayloadScheme) (*model.WorkflowCreatedResponseScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalWorkflowImpl).Create")
+	ctx, span := tracer().Start(ctx, "(*internalWorkflowImpl).Create", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation", "create_workflow"),
+	)
 
 	endpoint := fmt.Sprintf("rest/api/%v/workflow", i.version)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	workflow := new(model.WorkflowCreatedResponseScheme)
 	response, err := i.c.Call(request, workflow)
 	if err != nil {
+		recordError(span, err)
 		return nil, response, err
 	}
 
+	setOK(span)
 	return workflow, response, nil
 }
 
 func (i *internalWorkflowImpl) Gets(ctx context.Context, options *model.WorkflowSearchOptions, startAt, maxResults int) (*model.WorkflowPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalWorkflowImpl).Gets")
+	ctx, span := tracer().Start(ctx, "(*internalWorkflowImpl).Gets", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation", "get_workflows"),
+		attribute.Int("start_at", startAt),
+		attribute.Int("max_results", maxResults),
+	)
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -473,32 +537,50 @@ func (i *internalWorkflowImpl) Gets(ctx context.Context, options *model.Workflow
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	page := new(model.WorkflowPageScheme)
 	response, err := i.c.Call(request, page)
 	if err != nil {
+		recordError(span, err)
 		return nil, response, err
 	}
 
+	setOK(span)
 	return page, response, nil
 }
 
 func (i *internalWorkflowImpl) Delete(ctx context.Context, workflowID string) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalWorkflowImpl).Delete")
+	ctx, span := tracer().Start(ctx, "(*internalWorkflowImpl).Delete", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation", "delete_workflow"),
+		attribute.String("workflow_id", workflowID),
+	)
+
 	if workflowID == "" {
-		return nil, fmt.Errorf("jira: %w", model.ErrNoWorkflowID)
+		err := fmt.Errorf("jira: %w", model.ErrNoWorkflowID)
+		recordError(span, err)
+		return nil, err
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/workflow/%v", i.version, workflowID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, err
 	}
 
-	return i.c.Call(request, nil)
+	response, err := i.c.Call(request, nil)
+	if err != nil {
+		recordError(span, err)
+		return response, err
+	}
+
+	setOK(span)
+	return response, nil
 }

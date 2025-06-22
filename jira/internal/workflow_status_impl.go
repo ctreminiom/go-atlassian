@@ -8,6 +8,9 @@ import (
 	"strconv"
 	"strings"
 
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
+
 	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/v2/service"
 	"github.com/ctreminiom/go-atlassian/v2/service/jira"
@@ -129,52 +132,75 @@ type internalWorkflowStatusImpl struct {
 }
 
 func (i *internalWorkflowStatusImpl) Get(ctx context.Context, idOrName string) (*model.StatusDetailScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalWorkflowStatusImpl).Get")
+	ctx, span := tracer().Start(ctx, "(*internalWorkflowStatusImpl).Get", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation", "get_workflow_status"),
+		attribute.String("id_or_name", idOrName),
+	)
+
 	if idOrName == "" {
-		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoWorkflowStatusNameOrID)
+		err := fmt.Errorf("jira: %w", model.ErrNoWorkflowStatusNameOrID)
+		recordError(span, err)
+		return nil, nil, err
 	}
 
 	endpoint := fmt.Sprintf("/rest/api/%v/status/%v", i.version, idOrName)
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	workflowStatus := new(model.StatusDetailScheme)
 	response, err := i.c.Call(request, workflowStatus)
 	if err != nil {
+		recordError(span, err)
 		return nil, response, err
 	}
 
+	setOK(span)
 	return workflowStatus, response, nil
 }
 
 func (i *internalWorkflowStatusImpl) Bulk(ctx context.Context) ([]*model.StatusDetailScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalWorkflowStatusImpl).Bulk")
+	ctx, span := tracer().Start(ctx, "(*internalWorkflowStatusImpl).Bulk", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation", "get_workflow_statuses_bulk"),
+	)
 
 	endpoint := fmt.Sprintf("/rest/api/%v/status", i.version)
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	var statuses []*model.StatusDetailScheme
 	response, err := i.c.Call(request, &statuses)
 	if err != nil {
+		recordError(span, err)
 		return nil, response, err
 	}
 
+	setOK(span)
 	return statuses, response, nil
 }
 
 func (i *internalWorkflowStatusImpl) Gets(ctx context.Context, ids, expand []string) ([]*model.WorkflowStatusDetailScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalWorkflowStatusImpl).Gets")
+	ctx, span := tracer().Start(ctx, "(*internalWorkflowStatusImpl).Gets", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation", "get_workflow_statuses"),
+		attribute.Int("ids_count", len(ids)),
+		attribute.Int("expand_count", len(expand)),
+	)
 
 	var endpoint strings.Builder
 	endpoint.WriteString(fmt.Sprintf("rest/api/%v/statuses", i.version))
@@ -194,66 +220,99 @@ func (i *internalWorkflowStatusImpl) Gets(ctx context.Context, ids, expand []str
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	var statuses []*model.WorkflowStatusDetailScheme
 	response, err := i.c.Call(request, &statuses)
 	if err != nil {
+		recordError(span, err)
 		return nil, response, err
 	}
 
+	setOK(span)
 	return statuses, response, nil
 }
 
 func (i *internalWorkflowStatusImpl) Update(ctx context.Context, payload *model.WorkflowStatusPayloadScheme) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalWorkflowStatusImpl).Update")
+	ctx, span := tracer().Start(ctx, "(*internalWorkflowStatusImpl).Update", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation", "update_workflow_statuses"),
+	)
 
 	endpoint := fmt.Sprintf("rest/api/%v/statuses", i.version)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
+		recordError(span, err)
 		return nil, err
 	}
 
-	return i.c.Call(request, nil)
+	response, err := i.c.Call(request, nil)
+	if err != nil {
+		recordError(span, err)
+		return response, err
+	}
+
+	setOK(span)
+	return response, nil
 }
 
 func (i *internalWorkflowStatusImpl) Create(ctx context.Context, payload *model.WorkflowStatusPayloadScheme) ([]*model.WorkflowStatusDetailScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalWorkflowStatusImpl).Create")
+	ctx, span := tracer().Start(ctx, "(*internalWorkflowStatusImpl).Create", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
-	if len(payload.Statuses) == 0 {
-		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoWorkflowStatuses)
+	addAttributes(span,
+		attribute.String("operation", "create_workflow_statuses"),
+	)
+
+	if payload == nil || len(payload.Statuses) == 0 {
+		err := fmt.Errorf("jira: %w", model.ErrNoWorkflowStatuses)
+		recordError(span, err)
+		return nil, nil, err
 	}
 
 	if payload.Scope == nil {
-		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoWorkflowScope)
+		err := fmt.Errorf("jira: %w", model.ErrNoWorkflowScope)
+		recordError(span, err)
+		return nil, nil, err
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/statuses", i.version)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint, "", payload)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	var workflowStatuses []*model.WorkflowStatusDetailScheme
 	response, err := i.c.Call(request, &workflowStatuses)
 	if err != nil {
+		recordError(span, err)
 		return nil, response, err
 	}
 
+	setOK(span)
 	return workflowStatuses, response, nil
 }
 
 func (i *internalWorkflowStatusImpl) Delete(ctx context.Context, ids []string) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalWorkflowStatusImpl).Delete")
+	ctx, span := tracer().Start(ctx, "(*internalWorkflowStatusImpl).Delete", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation", "delete_workflow_statuses"),
+		attribute.Int("ids_count", len(ids)),
+	)
+
 	if len(ids) == 0 {
-		return nil, fmt.Errorf("jira: %w", model.ErrNoWorkflowStatuses)
+		err := fmt.Errorf("jira: %w", model.ErrNoWorkflowStatuses)
+		recordError(span, err)
+		return nil, err
 	}
 
 	params := url.Values{}
@@ -265,15 +324,29 @@ func (i *internalWorkflowStatusImpl) Delete(ctx context.Context, ids []string) (
 
 	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, err
 	}
 
-	return i.c.Call(request, nil)
+	response, err := i.c.Call(request, nil)
+	if err != nil {
+		recordError(span, err)
+		return response, err
+	}
+
+	setOK(span)
+	return response, nil
 }
 
 func (i *internalWorkflowStatusImpl) Search(ctx context.Context, options *model.WorkflowStatusSearchParams, startAt, maxResults int) (*model.WorkflowStatusDetailPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalWorkflowStatusImpl).Search")
+	ctx, span := tracer().Start(ctx, "(*internalWorkflowStatusImpl).Search", spanWithKind(trace.SpanKindClient))
 	defer span.End()
+
+	addAttributes(span,
+		attribute.String("operation", "search_workflow_statuses"),
+		attribute.Int("start_at", startAt),
+		attribute.Int("max_results", maxResults),
+	)
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
@@ -302,14 +375,17 @@ func (i *internalWorkflowStatusImpl) Search(ctx context.Context, options *model.
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	page := new(model.WorkflowStatusDetailPageScheme)
 	response, err := i.c.Call(request, page)
 	if err != nil {
+		recordError(span, err)
 		return nil, response, err
 	}
 
+	setOK(span)
 	return page, response, nil
 }

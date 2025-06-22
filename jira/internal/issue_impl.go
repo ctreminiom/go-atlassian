@@ -6,6 +6,9 @@ import (
 	"net/http"
 	"net/url"
 
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
+
 	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/v2/service"
 )
@@ -116,11 +119,19 @@ func NewIssueService(client service.Connector, version string, services *IssueSe
 // -------------------------------------------
 
 func deleteIssue(ctx context.Context, client service.Connector, version, issueKeyOrID string, deleteSubTasks bool) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "deleteIssue")
+	ctx, span := tracer().Start(ctx, "deleteIssue", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "delete_issue"),
+		attribute.String("jira.issue.key", issueKeyOrID),
+		attribute.Bool("jira.delete_subtasks", deleteSubTasks),
+	)
+
 	if issueKeyOrID == "" {
-		return nil, fmt.Errorf("jira: %w", model.ErrNoIssueKeyOrID)
+		err := fmt.Errorf("jira: %w", model.ErrNoIssueKeyOrID)
+		recordError(span, err)
+		return nil, err
 	}
 
 	params := url.Values{}
@@ -130,73 +141,124 @@ func deleteIssue(ctx context.Context, client service.Connector, version, issueKe
 
 	request, err := client.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, err
 	}
 
-	return client.Call(request, nil)
+	response, err := client.Call(request, nil)
+	if err != nil {
+		recordError(span, err)
+		return response, err
+	}
+
+	setOK(span)
+	return response, nil
 }
 
 func assignIssue(ctx context.Context, client service.Connector, version, issueKeyOrID, accountID string) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "assignIssue")
+	ctx, span := tracer().Start(ctx, "assignIssue", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "assign_issue"),
+		attribute.String("jira.issue.key", issueKeyOrID),
+		attribute.String("jira.account_id", accountID),
+	)
+
 	if issueKeyOrID == "" {
-		return nil, fmt.Errorf("jira: %w", model.ErrNoIssueKeyOrID)
+		err := fmt.Errorf("jira: %w", model.ErrNoIssueKeyOrID)
+		recordError(span, err)
+		return nil, err
 	}
 
 	if accountID == "" {
-		return nil, fmt.Errorf("jira: %w", model.ErrNoAccountID)
+		err := fmt.Errorf("jira: %w", model.ErrNoAccountID)
+		recordError(span, err)
+		return nil, err
 	}
 
 	endpoint := fmt.Sprintf("/rest/api/%v/issue/%v/assignee", version, issueKeyOrID)
 
 	request, err := client.NewRequest(ctx, http.MethodPut, endpoint, "", map[string]interface{}{"accountId": accountID})
 	if err != nil {
+		recordError(span, err)
 		return nil, err
 	}
 
-	return client.Call(request, nil)
+	response, err := client.Call(request, nil)
+	if err != nil {
+		recordError(span, err)
+		return response, err
+	}
+
+	setOK(span)
+	return response, nil
 }
 
 func sendNotification(ctx context.Context, client service.Connector, version, issueKeyOrID string, options *model.IssueNotifyOptionsScheme) (
 	*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "sendNotification")
+	ctx, span := tracer().Start(ctx, "sendNotification", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "send_issue_notification"),
+		attribute.String("jira.issue.key", issueKeyOrID),
+	)
+
 	if issueKeyOrID == "" {
-		return nil, fmt.Errorf("jira: %w", model.ErrNoIssueKeyOrID)
+		err := fmt.Errorf("jira: %w", model.ErrNoIssueKeyOrID)
+		recordError(span, err)
+		return nil, err
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/notify", version, issueKeyOrID)
 
 	request, err := client.NewRequest(ctx, http.MethodPost, endpoint, "", options)
 	if err != nil {
+		recordError(span, err)
 		return nil, err
 	}
 
-	return client.Call(request, nil)
+	response, err := client.Call(request, nil)
+	if err != nil {
+		recordError(span, err)
+		return response, err
+	}
+
+	setOK(span)
+	return response, nil
 }
 
 func getTransitions(ctx context.Context, client service.Connector, version, issueKeyOrID string) (*model.IssueTransitionsScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "getTransitions")
+	ctx, span := tracer().Start(ctx, "getTransitions", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
+	addAttributes(span,
+		attribute.String("operation.name", "get_issue_transitions"),
+		attribute.String("jira.issue.key", issueKeyOrID),
+	)
+
 	if issueKeyOrID == "" {
-		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoIssueKeyOrID)
+		err := fmt.Errorf("jira: %w", model.ErrNoIssueKeyOrID)
+		recordError(span, err)
+		return nil, nil, err
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/issue/%v/transitions", version, issueKeyOrID)
 
 	request, err := client.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	transitions := new(model.IssueTransitionsScheme)
 	response, err := client.Call(request, transitions)
 	if err != nil {
+		recordError(span, err)
 		return nil, response, err
 	}
 
+	setOK(span)
 	return transitions, response, nil
 }

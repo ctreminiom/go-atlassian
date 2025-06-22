@@ -3,12 +3,16 @@ package internal
 import (
 	"context"
 	"fmt"
-	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/v2/service"
-	"github.com/ctreminiom/go-atlassian/v2/service/jira"
 	"net/http"
 	"net/url"
 	"strconv"
+
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
+
+	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/v2/service"
+	"github.com/ctreminiom/go-atlassian/v2/service/jira"
 )
 
 // NewIssueFieldConfigurationItemService creates a new instance of IssueFieldConfigItemService.
@@ -37,10 +41,24 @@ type IssueFieldConfigItemService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration/items#get-field-configuration-items
 func (i *IssueFieldConfigItemService) Gets(ctx context.Context, id, startAt, maxResults int) (*model.FieldConfigurationItemPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*IssueFieldConfigItemService).Gets")
+	ctx, span := tracer().Start(ctx, "(*IssueFieldConfigItemService).Gets", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
-	return i.internalClient.Gets(ctx, id, startAt, maxResults)
+	addAttributes(span,
+		attribute.String("operation.name", "get_field_configuration_items"),
+		attribute.Int("jira.field_config.id", id),
+		attribute.Int("jira.pagination.start_at", startAt),
+		attribute.Int("jira.pagination.max_results", maxResults),
+	)
+
+	result, response, err := i.internalClient.Gets(ctx, id, startAt, maxResults)
+	if err != nil {
+		recordError(span, err)
+		return nil, response, err
+	}
+
+	setOK(span)
+	return result, response, nil
 }
 
 // Update updates fields in a field configuration. The properties of the field configuration fields provided
@@ -52,10 +70,22 @@ func (i *IssueFieldConfigItemService) Gets(ctx context.Context, id, startAt, max
 //
 // https://docs.go-atlassian.io/jira-software-cloud/issues/fields/configuration/items#update-field-configuration-items
 func (i *IssueFieldConfigItemService) Update(ctx context.Context, id int, payload *model.UpdateFieldConfigurationItemPayloadScheme) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*IssueFieldConfigItemService).Update")
+	ctx, span := tracer().Start(ctx, "(*IssueFieldConfigItemService).Update", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
-	return i.internalClient.Update(ctx, id, payload)
+	addAttributes(span,
+		attribute.String("operation.name", "update_field_configuration_items"),
+		attribute.Int("jira.field_config.id", id),
+	)
+
+	response, err := i.internalClient.Update(ctx, id, payload)
+	if err != nil {
+		recordError(span, err)
+		return response, err
+	}
+
+	setOK(span)
+	return response, nil
 }
 
 type internalIssueFieldConfigItemServiceImpl struct {
@@ -64,11 +94,13 @@ type internalIssueFieldConfigItemServiceImpl struct {
 }
 
 func (i *internalIssueFieldConfigItemServiceImpl) Gets(ctx context.Context, id, startAt, maxResults int) (*model.FieldConfigurationItemPageScheme, *model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalIssueFieldConfigItemServiceImpl).Gets")
+	ctx, span := tracer().Start(ctx, "(*internalIssueFieldConfigItemServiceImpl).Gets", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
 	if id == 0 {
-		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoFieldConfigurationID)
+		err := fmt.Errorf("jira: %w", model.ErrNoFieldConfigurationID)
+		recordError(span, err)
+		return nil, nil, err
 	}
 
 	params := url.Values{}
@@ -79,32 +111,45 @@ func (i *internalIssueFieldConfigItemServiceImpl) Gets(ctx context.Context, id, 
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
+		recordError(span, err)
 		return nil, nil, err
 	}
 
 	page := new(model.FieldConfigurationItemPageScheme)
 	response, err := i.c.Call(request, page)
 	if err != nil {
+		recordError(span, err)
 		return nil, response, err
 	}
 
+	setOK(span)
 	return page, response, nil
 }
 
 func (i *internalIssueFieldConfigItemServiceImpl) Update(ctx context.Context, id int, payload *model.UpdateFieldConfigurationItemPayloadScheme) (*model.ResponseScheme, error) {
-	ctx, span := tracer().Start(ctx, "(*internalIssueFieldConfigItemServiceImpl).Update")
+	ctx, span := tracer().Start(ctx, "(*internalIssueFieldConfigItemServiceImpl).Update", spanWithKind(trace.SpanKindClient))
 	defer span.End()
 
 	if id == 0 {
-		return nil, fmt.Errorf("jira: %w", model.ErrNoFieldConfigurationID)
+		err := fmt.Errorf("jira: %w", model.ErrNoFieldConfigurationID)
+		recordError(span, err)
+		return nil, err
 	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/fieldconfiguration/%v/fields", i.version, id)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
+		recordError(span, err)
 		return nil, err
 	}
 
-	return i.c.Call(request, nil)
+	response, err := i.c.Call(request, nil)
+	if err != nil {
+		recordError(span, err)
+		return response, err
+	}
+
+	setOK(span)
+	return response, nil
 }

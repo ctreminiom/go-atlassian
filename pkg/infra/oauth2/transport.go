@@ -23,6 +23,7 @@ type ReuseTokenSource struct {
 	token       *common.OAuth2Token
 	expiryTime  time.Time
 	tokenSource TokenSource
+	store       TokenStore // Optional external token storage
 }
 
 // NewReuseTokenSource creates a new ReuseTokenSource
@@ -35,10 +36,30 @@ func NewReuseTokenSource(token *common.OAuth2Token, tokenSource TokenSource) *Re
 	}
 }
 
+// NewReuseTokenSourceWithStore creates a new ReuseTokenSource with external storage
+func NewReuseTokenSourceWithStore(token *common.OAuth2Token, tokenSource TokenSource, store TokenStore) *ReuseTokenSource {
+	expiryTime := time.Now().Add(time.Duration(token.ExpiresIn) * time.Second)
+	return &ReuseTokenSource{
+		token:       token,
+		expiryTime:  expiryTime,
+		tokenSource: tokenSource,
+		store:       store,
+	}
+}
+
 // Token returns the current token if it's still valid, otherwise refreshes it
 func (s *ReuseTokenSource) Token() (*common.OAuth2Token, error) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
+
+	// Try to load from external storage if available and we don't have a token
+	if s.token == nil && s.store != nil {
+		storedToken, err := s.store.GetToken(context.Background())
+		if err == nil && storedToken != nil {
+			s.token = storedToken
+			s.expiryTime = time.Now().Add(time.Duration(storedToken.ExpiresIn) * time.Second)
+		}
+	}
 
 	// If token is still valid (with 5 minute buffer), return it
 	if s.token != nil && time.Now().Add(5*time.Minute).Before(s.expiryTime) {
@@ -53,6 +74,15 @@ func (s *ReuseTokenSource) Token() (*common.OAuth2Token, error) {
 
 	s.token = token
 	s.expiryTime = time.Now().Add(time.Duration(token.ExpiresIn) * time.Second)
+	
+	// Store token if external storage is configured
+	if s.store != nil {
+		// Store asynchronously to avoid blocking
+		go func() {
+			_ = s.store.SetToken(context.Background(), token)
+		}()
+	}
+	
 	return token, nil
 }
 
@@ -62,6 +92,8 @@ type RefreshTokenSource struct {
 	refreshToken string
 	oauth2       common.OAuth2Service
 	mu           sync.Mutex
+	store        TokenStore    // Optional external token storage
+	callback     TokenCallback // Optional callback for token refresh events
 }
 
 // NewRefreshTokenSource creates a new RefreshTokenSource
@@ -73,10 +105,36 @@ func NewRefreshTokenSource(ctx context.Context, refreshToken string, oauth2 comm
 	}
 }
 
+// NewRefreshTokenSourceWithStorage creates a new RefreshTokenSource with external storage and callback
+func NewRefreshTokenSourceWithStorage(ctx context.Context, refreshToken string, oauth2 common.OAuth2Service, store TokenStore, callback TokenCallback) *RefreshTokenSource {
+	source := &RefreshTokenSource{
+		ctx:          ctx,
+		refreshToken: refreshToken,
+		oauth2:       oauth2,
+		store:        store,
+		callback:     callback,
+	}
+	
+	// If store is provided, try to load refresh token from storage
+	if store != nil {
+		if storedRefreshToken, err := store.GetRefreshToken(ctx); err == nil && storedRefreshToken != "" {
+			source.refreshToken = storedRefreshToken
+		}
+	}
+	
+	return source
+}
+
 // Token refreshes and returns a new token
 func (s *RefreshTokenSource) Token() (*common.OAuth2Token, error) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
+
+	// Get the old token for callback (if needed)
+	var oldToken *common.OAuth2Token
+	if s.callback != nil && s.store != nil {
+		oldToken, _ = s.store.GetToken(s.ctx)
+	}
 
 	token, err := s.oauth2.RefreshAccessToken(s.ctx, s.refreshToken)
 	if err != nil {
@@ -86,6 +144,27 @@ func (s *RefreshTokenSource) Token() (*common.OAuth2Token, error) {
 	// Update refresh token if a new one was provided
 	if token.RefreshToken != "" {
 		s.refreshToken = token.RefreshToken
+		
+		// Store new refresh token if external storage is configured
+		if s.store != nil {
+			go func() {
+				_ = s.store.SetRefreshToken(context.Background(), token.RefreshToken)
+			}()
+		}
+	}
+
+	// Store complete token if external storage is configured
+	if s.store != nil {
+		go func() {
+			_ = s.store.SetToken(context.Background(), token)
+		}()
+	}
+
+	// Call callback if configured
+	if s.callback != nil {
+		go func() {
+			_ = s.callback.OnTokenRefreshed(context.Background(), oldToken, token)
+		}()
 	}
 
 	return token, nil

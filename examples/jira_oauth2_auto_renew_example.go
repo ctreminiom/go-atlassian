@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"sync"
 	"time"
 
 	jira "github.com/ctreminiom/go-atlassian/v2/jira/v3"
@@ -76,6 +77,96 @@ func ExampleOAuth2AutoRenewal() {
 	
 	// The token is automatically refreshed behind the scenes when needed!
 	// No manual token management required
+}
+
+// Example: Using auto-renewal with custom token storage
+func ExampleAutoRenewalWithCustomStorage() {
+	// Simple in-memory storage implementation
+	storage := &InMemoryTokenStore{
+		tokens: make(map[string]interface{}),
+	}
+	
+	// OAuth configuration
+	oauthConfig := &common.OAuth2Config{
+		ClientID:     "your-client-id",
+		ClientSecret: "your-client-secret",
+		RedirectURI:  "https://your-app.com/callback",
+	}
+	
+	// Existing token
+	existingToken := &common.OAuth2Token{
+		AccessToken:  "existing-access-token",
+		TokenType:    "Bearer",
+		ExpiresIn:    3600,
+		RefreshToken: "existing-refresh-token",
+		Scope:        "read:jira-work write:jira-work offline_access",
+	}
+	
+	// Create client with custom storage
+	client, err := jira.New(
+		http.DefaultClient,
+		"https://your-domain.atlassian.net",
+		jira.WithOAuth(oauthConfig),
+		jira.WithTokenStore(storage),
+		jira.WithAutoRenewalToken(existingToken),
+	)
+	if err != nil {
+		log.Fatal(err)
+	}
+	
+	fmt.Println("Client created with custom token storage")
+	
+	// Use the client - tokens will be automatically stored when refreshed
+	myself, _, err := client.MySelf.Details(context.Background(), nil)
+	if err != nil {
+		log.Printf("Error: %v", err)
+	} else {
+		fmt.Printf("Authenticated as: %s\n", myself.DisplayName)
+	}
+}
+
+// InMemoryTokenStore is a simple in-memory implementation of oauth2.TokenStore
+type InMemoryTokenStore struct {
+	tokens map[string]interface{}
+	mu     sync.RWMutex
+}
+
+func (s *InMemoryTokenStore) GetToken(ctx context.Context) (*common.OAuth2Token, error) {
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+	
+	if token, ok := s.tokens["token"].(*common.OAuth2Token); ok {
+		return token, nil
+	}
+	return nil, fmt.Errorf("token not found")
+}
+
+func (s *InMemoryTokenStore) SetToken(ctx context.Context, token *common.OAuth2Token) error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	
+	s.tokens["token"] = token
+	fmt.Printf("Token stored: expires in %d seconds\n", token.ExpiresIn)
+	return nil
+}
+
+func (s *InMemoryTokenStore) GetRefreshToken(ctx context.Context) (string, error) {
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+	
+	if refreshToken, ok := s.tokens["refresh_token"].(string); ok {
+		return refreshToken, nil
+	}
+	return "", fmt.Errorf("refresh token not found")
+}
+
+func (s *InMemoryTokenStore) SetRefreshToken(ctx context.Context, refreshToken string) error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	
+	s.tokens["refresh_token"] = refreshToken
+	fmt.Println("Refresh token updated")
+	return nil
 }
 
 // Example: Using auto-renewal with multiple sites

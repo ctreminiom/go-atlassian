@@ -52,8 +52,28 @@ func WithAutoRenewalToken(token *common.OAuth2Token) ClientOption {
 		}
 		
 		// Create token source with auto-renewal
-		refreshSource := oauth2.NewRefreshTokenSource(context.Background(), token.RefreshToken, c.OAuth)
-		reuseSource := oauth2.NewReuseTokenSource(token, refreshSource)
+		var refreshSource *oauth2.RefreshTokenSource
+		var reuseSource *oauth2.ReuseTokenSource
+		
+		// Check if we have token store or callback from previous options
+		if tokenStore, ok := c.HTTP.(*tokenStoreWrapper); ok {
+			// Use storage-aware token sources
+			refreshSource = oauth2.NewRefreshTokenSourceWithStorage(
+				context.Background(), 
+				token.RefreshToken, 
+				c.OAuth,
+				tokenStore.store,
+				tokenStore.callback,
+			)
+			reuseSource = oauth2.NewReuseTokenSourceWithStore(token, refreshSource, tokenStore.store)
+			
+			// Restore original HTTP client
+			c.HTTP = tokenStore.originalHTTP
+		} else {
+			// Use regular token sources
+			refreshSource = oauth2.NewRefreshTokenSource(context.Background(), token.RefreshToken, c.OAuth)
+			reuseSource = oauth2.NewReuseTokenSource(token, refreshSource)
+		}
 		
 		// Determine the base transport
 		var base http.RoundTripper
@@ -90,6 +110,61 @@ func WithOAuthWithAutoRenewal(config *common.OAuth2Config, token *common.OAuth2T
 		
 		// Then enable auto-renewal
 		return WithAutoRenewalToken(token)(c)
+	}
+}
+
+// tokenStoreWrapper is used to temporarily store token storage configuration
+// before the OAuth transport is created
+type tokenStoreWrapper struct {
+	originalHTTP common.HTTPClient
+	store        oauth2.TokenStore
+	callback     oauth2.TokenCallback
+}
+
+// Do implements HTTPClient interface
+func (w *tokenStoreWrapper) Do(req *http.Request) (*http.Response, error) {
+	return w.originalHTTP.Do(req)
+}
+
+// WithTokenStore configures the client to use external token storage
+func WithTokenStore(store oauth2.TokenStore) ClientOption {
+	return func(c *Client) error {
+		if store == nil {
+			return fmt.Errorf("token store cannot be nil")
+		}
+		
+		// Wrap the HTTP client to store the token store configuration
+		wrapper, ok := c.HTTP.(*tokenStoreWrapper)
+		if !ok {
+			wrapper = &tokenStoreWrapper{
+				originalHTTP: c.HTTP,
+			}
+			c.HTTP = wrapper
+		}
+		wrapper.store = store
+		
+		return nil
+	}
+}
+
+// WithTokenCallback configures the client to use a callback for token refresh events
+func WithTokenCallback(callback oauth2.TokenCallback) ClientOption {
+	return func(c *Client) error {
+		if callback == nil {
+			return fmt.Errorf("token callback cannot be nil")
+		}
+		
+		// Wrap the HTTP client to store the callback configuration
+		wrapper, ok := c.HTTP.(*tokenStoreWrapper)
+		if !ok {
+			wrapper = &tokenStoreWrapper{
+				originalHTTP: c.HTTP,
+			}
+			c.HTTP = wrapper
+		}
+		wrapper.callback = callback
+		
+		return nil
 	}
 }
 

@@ -1,6 +1,8 @@
 module github.com/ctreminiom/go-atlassian/v2
 
-go 1.22
+go 1.23.0
+
+toolchain go1.24.1
 
 require (
 	dario.cat/mergo v1.0.2
@@ -8,8 +10,8 @@ require (
 	github.com/google/uuid v1.6.0
 	github.com/stretchr/testify v1.10.0
 	github.com/tidwall/gjson v1.18.0
-	go.opentelemetry.io/otel v1.32.0
-	go.opentelemetry.io/otel/trace v1.32.0
+	go.opentelemetry.io/otel v1.36.0
+	go.opentelemetry.io/otel/trace v1.36.0
 )
 
 require (
@@ -20,6 +22,7 @@ require (
 	github.com/stretchr/objx v0.5.2 // indirect
 	github.com/tidwall/match v1.1.1 // indirect
 	github.com/tidwall/pretty v1.2.0 // indirect
-	go.opentelemetry.io/otel/metric v1.32.0 // indirect
+	go.opentelemetry.io/auto/sdk v1.1.0 // indirect
+	go.opentelemetry.io/otel/metric v1.36.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

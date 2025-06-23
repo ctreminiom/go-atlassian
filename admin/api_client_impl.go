@@ -49,26 +49,25 @@ func WithAutoRenewalToken(token *common.OAuth2Token) ClientOption {
 			return fmt.Errorf("OAuth must be configured before enabling auto-renewal (use WithOAuth first)")
 		}
 		
-		// Create token source with auto-renewal
-		refreshSource := oauth2.NewRefreshTokenSource(context.Background(), token.RefreshToken, c.OAuth)
-		reuseSource := oauth2.NewReuseTokenSource(token, refreshSource)
-		
-		// Determine the base transport
-		var base http.RoundTripper
-		if transport, ok := c.HTTP.(*http.Client); ok && transport.Transport != nil {
-			base = transport.Transport
-		} else if rt, ok := c.HTTP.(http.RoundTripper); ok {
-			base = rt
+		// Create token sources with storage support if configured
+		_, reuseSource, err := oauth2.SetupTokenSourcesWithStorage(
+			context.Background(),
+			token,
+			c.OAuth,
+			c.HTTP,
+		)
+		if err != nil {
+			return fmt.Errorf("failed to setup token sources: %w", err)
 		}
 		
-		// Wrap the HTTP client with OAuth transport
-		transport := &oauth2.Transport{
-			Source: reuseSource,
-			Base:   base,
-			Auth:   c.Auth,
+		// Extract base transport and restore original HTTP client if wrapped
+		base := oauth2.ExtractBaseTransport(c.HTTP)
+		if wrapper, ok := oauth2.ExtractWrapper(c.HTTP); ok {
+			c.HTTP = wrapper.OriginalClient
 		}
 		
-		c.HTTP = transport
+		// Create OAuth transport
+		c.HTTP = oauth2.CreateOAuthTransport(reuseSource, base, c.Auth)
 		
 		// Set initial token
 		c.Auth.SetBearerToken(token.AccessToken)
@@ -88,6 +87,30 @@ func WithOAuthWithAutoRenewal(config *common.OAuth2Config, token *common.OAuth2T
 		
 		// Then enable auto-renewal
 		return WithAutoRenewalToken(token)(c)
+	}
+}
+
+// WithTokenStore configures the client to use external token storage
+func WithTokenStore(store oauth2.TokenStore) ClientOption {
+	return func(c *Client) error {
+		if store == nil {
+			return fmt.Errorf("token store cannot be nil")
+		}
+		
+		c.HTTP = oauth2.WrapHTTPClient(c.HTTP).WithStore(store)
+		return nil
+	}
+}
+
+// WithTokenCallback configures the client to use a callback for token refresh events
+func WithTokenCallback(callback oauth2.TokenCallback) ClientOption {
+	return func(c *Client) error {
+		if callback == nil {
+			return fmt.Errorf("token callback cannot be nil")
+		}
+		
+		c.HTTP = oauth2.WrapHTTPClient(c.HTTP).WithCallback(callback)
+		return nil
 	}
 }
 

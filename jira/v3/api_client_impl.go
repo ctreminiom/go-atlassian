@@ -51,46 +51,25 @@ func WithAutoRenewalToken(token *common.OAuth2Token) ClientOption {
 			return fmt.Errorf("OAuth must be configured before enabling auto-renewal (use WithOAuth first)")
 		}
 		
-		// Create token source with auto-renewal
-		var refreshSource *oauth2.RefreshTokenSource
-		var reuseSource *oauth2.ReuseTokenSource
-		
-		// Check if we have token store or callback from previous options
-		if tokenStore, ok := c.HTTP.(*tokenStoreWrapper); ok {
-			// Use storage-aware token sources
-			refreshSource = oauth2.NewRefreshTokenSourceWithStorage(
-				context.Background(), 
-				token.RefreshToken, 
-				c.OAuth,
-				tokenStore.store,
-				tokenStore.callback,
-			)
-			reuseSource = oauth2.NewReuseTokenSourceWithStore(token, refreshSource, tokenStore.store)
-			
-			// Restore original HTTP client
-			c.HTTP = tokenStore.originalHTTP
-		} else {
-			// Use regular token sources
-			refreshSource = oauth2.NewRefreshTokenSource(context.Background(), token.RefreshToken, c.OAuth)
-			reuseSource = oauth2.NewReuseTokenSource(token, refreshSource)
+		// Create token sources with storage support if configured
+		_, reuseSource, err := oauth2.SetupTokenSourcesWithStorage(
+			context.Background(),
+			token,
+			c.OAuth,
+			c.HTTP,
+		)
+		if err != nil {
+			return fmt.Errorf("failed to setup token sources: %w", err)
 		}
 		
-		// Determine the base transport
-		var base http.RoundTripper
-		if transport, ok := c.HTTP.(*http.Client); ok && transport.Transport != nil {
-			base = transport.Transport
-		} else if rt, ok := c.HTTP.(http.RoundTripper); ok {
-			base = rt
+		// Extract base transport and restore original HTTP client if wrapped
+		base := oauth2.ExtractBaseTransport(c.HTTP)
+		if wrapper, ok := oauth2.ExtractWrapper(c.HTTP); ok {
+			c.HTTP = wrapper.OriginalClient
 		}
 		
-		// Wrap the HTTP client with OAuth transport
-		transport := &oauth2.Transport{
-			Source: reuseSource,
-			Base:   base,
-			Auth:   c.Auth,
-		}
-		
-		c.HTTP = transport
+		// Create OAuth transport
+		c.HTTP = oauth2.CreateOAuthTransport(reuseSource, base, c.Auth)
 		
 		// Set initial token
 		c.Auth.SetBearerToken(token.AccessToken)
@@ -113,19 +92,6 @@ func WithOAuthWithAutoRenewal(config *common.OAuth2Config, token *common.OAuth2T
 	}
 }
 
-// tokenStoreWrapper is used to temporarily store token storage configuration
-// before the OAuth transport is created
-type tokenStoreWrapper struct {
-	originalHTTP common.HTTPClient
-	store        oauth2.TokenStore
-	callback     oauth2.TokenCallback
-}
-
-// Do implements HTTPClient interface
-func (w *tokenStoreWrapper) Do(req *http.Request) (*http.Response, error) {
-	return w.originalHTTP.Do(req)
-}
-
 // WithTokenStore configures the client to use external token storage
 func WithTokenStore(store oauth2.TokenStore) ClientOption {
 	return func(c *Client) error {
@@ -133,16 +99,7 @@ func WithTokenStore(store oauth2.TokenStore) ClientOption {
 			return fmt.Errorf("token store cannot be nil")
 		}
 		
-		// Wrap the HTTP client to store the token store configuration
-		wrapper, ok := c.HTTP.(*tokenStoreWrapper)
-		if !ok {
-			wrapper = &tokenStoreWrapper{
-				originalHTTP: c.HTTP,
-			}
-			c.HTTP = wrapper
-		}
-		wrapper.store = store
-		
+		c.HTTP = oauth2.WrapHTTPClient(c.HTTP).WithStore(store)
 		return nil
 	}
 }
@@ -154,16 +111,7 @@ func WithTokenCallback(callback oauth2.TokenCallback) ClientOption {
 			return fmt.Errorf("token callback cannot be nil")
 		}
 		
-		// Wrap the HTTP client to store the callback configuration
-		wrapper, ok := c.HTTP.(*tokenStoreWrapper)
-		if !ok {
-			wrapper = &tokenStoreWrapper{
-				originalHTTP: c.HTTP,
-			}
-			c.HTTP = wrapper
-		}
-		wrapper.callback = callback
-		
+		c.HTTP = oauth2.WrapHTTPClient(c.HTTP).WithCallback(callback)
 		return nil
 	}
 }

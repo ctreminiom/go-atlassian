@@ -6,25 +6,21 @@ import (
 	"log"
 	"net/http"
 	"sync"
-	"time"
 
 	jira "github.com/ctreminiom/go-atlassian/v2/jira/v3"
 	"github.com/ctreminiom/go-atlassian/v2/service/common"
 )
 
-// ExampleOAuth2AutoRenewal demonstrates using OAuth 2.0 with automatic token renewal
-func ExampleOAuth2AutoRenewal() {
-	// Example of using OAuth 2.0 with automatic token renewal
-	
-	// Step 1: OAuth configuration
+// Example1BasicAutoRenewal demonstrates the simplest way to use OAuth 2.0 with automatic token renewal
+func Example1BasicAutoRenewal() {
+	// OAuth configuration
 	oauthConfig := &common.OAuth2Config{
 		ClientID:     "your-client-id",
 		ClientSecret: "your-client-secret",
 		RedirectURI:  "https://your-app.com/callback",
 	}
 	
-	// Step 2: Assume you already have a token (from previous authorization)
-	// In a real application, you would load this from secure storage
+	// Your existing token (from previous OAuth flow)
 	existingToken := &common.OAuth2Token{
 		AccessToken:  "existing-access-token",
 		TokenType:    "Bearer",
@@ -33,8 +29,7 @@ func ExampleOAuth2AutoRenewal() {
 		Scope:        "read:jira-work write:jira-work offline_access",
 	}
 	
-	// Step 3: Create client with auto-renewal support
-	// Option 1: Using separate options (clearer separation of concerns)
+	// Create client with auto-renewal - tokens will be refreshed automatically
 	client, err := jira.New(
 		http.DefaultClient,
 		"https://your-domain.atlassian.net",
@@ -45,42 +40,18 @@ func ExampleOAuth2AutoRenewal() {
 		log.Fatal(err)
 	}
 	
-	// Option 2: Using convenience method (same result)
-	// client, err := jira.New(
-	//     http.DefaultClient,
-	//     "https://your-domain.atlassian.net",
-	//     jira.WithOAuthWithAutoRenewal(oauthConfig, existingToken),
-	// )
-	
-	fmt.Println("Client created with automatic token renewal")
-	
-	// Step 4: Use the client normally - tokens will be automatically renewed
-	// The client will automatically refresh the token when it's about to expire
-	
-	// Example: Long-running operation that might span token expiry
-	for i := 0; i < 5; i++ {
-		fmt.Printf("\n--- Iteration %d (Time: %s) ---\n", i+1, time.Now().Format("15:04:05"))
-		
-		// Make API call - token will be automatically refreshed if needed
-		myself, _, err := client.MySelf.Details(context.Background(), nil)
-		if err != nil {
-			log.Printf("Error getting user details: %v", err)
-			continue
-		}
-		
-		fmt.Printf("Authenticated as: %s (%s)\n", myself.DisplayName, myself.EmailAddress)
-		
-		// Simulate some work
-		fmt.Println("Doing some work...")
-		time.Sleep(30 * time.Minute) // In real app, this would be actual work
+	// Use the client normally - no manual token management needed
+	myself, _, err := client.MySelf.Details(context.Background(), nil)
+	if err != nil {
+		log.Printf("Error: %v", err)
+		return
 	}
 	
-	// The token is automatically refreshed behind the scenes when needed!
-	// No manual token management required
+	fmt.Printf("Authenticated as: %s (%s)\n", myself.DisplayName, myself.EmailAddress)
 }
 
-// Example: Using auto-renewal with custom token storage
-func ExampleAutoRenewalWithCustomStorage() {
+// Example2WithCustomStorage demonstrates using auto-renewal with custom token storage
+func Example2WithCustomStorage() {
 	// Simple in-memory storage implementation
 	storage := &InMemoryTokenStore{
 		tokens: make(map[string]interface{}),
@@ -169,8 +140,8 @@ func (s *InMemoryTokenStore) SetRefreshToken(ctx context.Context, refreshToken s
 	return nil
 }
 
-// Example: Using auto-renewal with multiple sites
-func ExampleMultiSiteAutoRenewal() {
+// Example3MultiSiteAutoRenewal demonstrates using auto-renewal with multiple Atlassian sites
+func Example3MultiSiteAutoRenewal() {
 	oauthConfig := &common.OAuth2Config{
 		ClientID:     "your-client-id",
 		ClientSecret: "your-client-secret",

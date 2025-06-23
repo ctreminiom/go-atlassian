@@ -1,3 +1,11 @@
+// Package main demonstrates OAuth 2.0 authentication with go-atlassian.
+//
+// OAuth 2.0 Examples Structure:
+// 1. jira_oauth2_basic_example.go (this file) - Basic OAuth flow and manual token management
+// 2. jira_oauth2_auto_renewal_example.go - Automatic token renewal patterns
+// 3. jira_oauth2_server_example.go - Complete HTTP server with OAuth callback handling
+// 4. jira_oauth2_storage_file_example.go - Persistent token storage using files
+// 5. jira_oauth2_storage_redis_example.go - Distributed token storage using Redis
 package main
 
 import (

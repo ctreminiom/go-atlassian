@@ -8,17 +8,26 @@ import (
 
 // TokenStore provides an interface for persistent storage of OAuth2 tokens.
 // Implementations can use any storage backend (Redis, database, file system, etc.)
+//
+// Error Handling:
+// - SetRefreshToken errors are critical and will fail the token refresh operation
+// - SetToken errors are logged but ignored to prioritize availability over consistency
+// - GetToken/GetRefreshToken errors should return nil token and let the system refresh
 type TokenStore interface {
 	// GetToken retrieves the current OAuth2 token from storage
 	GetToken(ctx context.Context) (*common.OAuth2Token, error)
 	
-	// SetToken stores the OAuth2 token in the storage backend
+	// SetToken stores the OAuth2 token in the storage backend.
+	// Implementations should be fast as this is called frequently.
+	// Errors from this method are ignored by the library.
 	SetToken(ctx context.Context, token *common.OAuth2Token) error
 	
 	// GetRefreshToken retrieves only the refresh token from storage
 	GetRefreshToken(ctx context.Context) (string, error)
 	
-	// SetRefreshToken stores only the refresh token in the storage backend
+	// SetRefreshToken stores only the refresh token in the storage backend.
+	// This is critical - errors will cause the token refresh to fail.
+	// Implementations MUST reliably store refresh tokens or return an error.
 	SetRefreshToken(ctx context.Context, refreshToken string) error
 }
 

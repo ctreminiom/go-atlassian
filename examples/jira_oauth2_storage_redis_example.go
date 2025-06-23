@@ -85,6 +85,9 @@ func (r *RedisTokenStore) GetRefreshToken(ctx context.Context) (string, error) {
 }
 
 // SetRefreshToken stores only the refresh token in Redis
+// IMPORTANT: This method MUST be reliable. Errors from this method will cause
+// the entire token refresh operation to fail. This is by design - refresh tokens
+// are critical and losing them means the user must re-authenticate.
 func (r *RedisTokenStore) SetRefreshToken(ctx context.Context, refreshToken string) error {
 	key := r.keyPrefix + "refresh_token"
 	// Refresh tokens typically don't expire, but set a long TTL for safety

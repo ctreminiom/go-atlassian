@@ -76,9 +76,12 @@ func (s *ReuseTokenSource) Token() (*common.OAuth2Token, error) {
 	s.expiryTime = time.Now().Add(time.Duration(token.ExpiresIn) * time.Second)
 	
 	// Store token if external storage is configured
+	// This is done asynchronously for performance since this method is called
+	// frequently and access tokens can be regenerated if storage fails
 	if s.store != nil {
-		// Store asynchronously to avoid blocking
 		go func() {
+			// We intentionally ignore errors here - access token storage failures
+			// are non-critical since we can always refresh the token
 			_ = s.store.SetToken(context.Background(), token)
 		}()
 	}
@@ -146,16 +149,24 @@ func (s *RefreshTokenSource) Token() (*common.OAuth2Token, error) {
 		s.refreshToken = token.RefreshToken
 		
 		// Store new refresh token if external storage is configured
+		// This is done synchronously because refresh tokens are critical - if we fail
+		// to store a new refresh token, we could lose the ability to refresh tokens
+		// permanently. The OAuth provider may not provide the refresh token again.
 		if s.store != nil {
-			go func() {
-				_ = s.store.SetRefreshToken(context.Background(), token.RefreshToken)
-			}()
+			if err := s.store.SetRefreshToken(s.ctx, token.RefreshToken); err != nil {
+				// Return error to caller - they need to handle this critical failure
+				return nil, fmt.Errorf("failed to store refresh token: %w", err)
+			}
 		}
 	}
 
 	// Store complete token if external storage is configured
+	// This is done asynchronously for performance since access tokens are refreshed
+	// frequently (every ~1 hour) and can be regenerated if storage fails
 	if s.store != nil {
 		go func() {
+			// We intentionally ignore errors here - access token storage failures
+			// are non-critical since we can always refresh the token
 			_ = s.store.SetToken(context.Background(), token)
 		}()
 	}

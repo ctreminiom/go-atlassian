@@ -63,6 +63,8 @@ Then import the package into your project as you normally would. You can import 
 -------------------------
 ## 🔨 Usage
 
+### API Token Authentication
+
 Before using the **go-atlassian** package, you need to have an Atlassian API key. If you do not have a key yet, you can sign up [here](https://support.atlassian.com/atlassian-account/docs/manage-api-tokens-for-your-atlassian-account/).
 
 Create a client with your instance host and access token to start communicating with the Atlassian API's. In this example, we're going to instance a new Confluence Cloud client.
@@ -96,6 +98,204 @@ if err != nil {
 }
 instance.Auth.SetBasicAuth("YOUR_CLIENT_MAIL", "YOUR_APP_ACCESS_TOKEN")
 ```
+
+### OAuth 2.0 (3LO) Authentication
+
+**go-atlassian** now supports OAuth 2.0 (3-legged OAuth) authentication across
+**all API clients** for building apps that authenticate on behalf of users. This
+allows your app to access Atlassian APIs using the permissions granted by users.
+
+**Supported clients:** Jira v2, Jira v3, Jira Agile, Jira Service Management,
+Confluence v1, Confluence v2, Admin, Assets, and Bitbucket.
+
+#### Setting up OAuth 2.0
+
+First, create an OAuth 2.0 app in the
+[Atlassian Developer Console](https://developer.atlassian.com/console/myapps/)
+to get your client ID and client secret.
+
+```go
+// Configure OAuth
+oauthConfig := &common.OAuth2Config{
+    ClientID:     "YOUR_CLIENT_ID",
+    ClientSecret: "YOUR_CLIENT_SECRET",
+    RedirectURI:  "https://your-app.com/callback",
+}
+
+// Create client with OAuth support for the authorization flow
+client, err := jira.New(
+    http.DefaultClient,
+    "https://api.atlassian.com", // Temporary URL for OAuth flow
+    jira.WithOAuth(oauthConfig),
+)
+if err != nil {
+    log.Fatal(err)
+}
+
+// Generate authorization URL
+scopes := []string{"read:jira-work", "write:jira-work"}
+authURL, err := client.OAuth.GetAuthorizationURL(scopes, "state")
+if err != nil {
+    log.Fatal(err)
+}
+
+// Direct user to authURL to authorize your app
+fmt.Printf("Visit this URL to authorize: %s\n", authURL.String())
+
+// After authorization, exchange code for tokens
+ctx := context.Background()
+token, err := client.OAuth.ExchangeAuthorizationCode(ctx, "AUTH_CODE")
+if err != nil {
+    log.Fatal(err)
+}
+
+// Option 1: Manual token management
+client.Auth.SetBearerToken(token.AccessToken)
+
+// Option 2: Create new client with auto-renewal (recommended)
+client, err = jira.New(
+    http.DefaultClient,
+    "https://your-domain.atlassian.net",
+    jira.WithOAuth(oauthConfig),      // OAuth service
+    jira.WithAutoRenewalToken(token), // Auto-renewal
+)
+if err != nil {
+    log.Fatal(err)
+}
+
+// Make API calls
+myself, _, err := client.MySelf.Details(ctx, nil)
+if err != nil {
+    log.Fatal(err)
+}
+```
+
+#### OAuth with Different Clients
+
+OAuth 2.0 works consistently across all supported clients. Here are examples for
+different Atlassian services:
+
+```go
+// Confluence v2
+confluenceClient, err := confluencev2.New(
+    http.DefaultClient,
+    "https://your-domain.atlassian.net",
+    confluencev2.WithOAuth(oauthConfig),
+    confluencev2.WithAutoRenewalToken(token),
+)
+
+// Admin
+adminClient, err := admin.New(
+    http.DefaultClient,
+    admin.WithOAuth(oauthConfig),
+    admin.WithAutoRenewalToken(token),
+)
+
+// Jira Service Management
+smClient, err := sm.New(
+    http.DefaultClient,
+    "https://your-domain.atlassian.net",
+    sm.WithOAuth(oauthConfig),
+    sm.WithAutoRenewalToken(token),
+)
+
+// Assets
+assetsClient, err := assets.New(
+    http.DefaultClient,
+    "https://api.atlassian.com",
+    assets.WithOAuth(oauthConfig),
+    assets.WithAutoRenewalToken(token),
+)
+```
+
+#### Working with Multiple Sites
+
+OAuth 2.0 tokens can provide access to multiple Atlassian sites. Use the
+`GetAccessibleResources` method to discover available sites:
+
+```go
+resources, err := client.OAuth.GetAccessibleResources(ctx, token.AccessToken)
+if err != nil {
+    log.Fatal(err)
+}
+
+for _, resource := range resources {
+    fmt.Printf("Site: %s (%s)\n", resource.Name, resource.URL)
+
+    // Create a client for this specific site
+    siteClient, err := jira.New(
+        http.DefaultClient,
+        resource.URL,
+        jira.WithOAuth(oauthConfig),
+    )
+    if err != nil {
+        continue
+    }
+
+    siteClient.Auth.SetBearerToken(token.AccessToken)
+    // Use siteClient for API calls to this site
+}
+```
+
+#### Refreshing Tokens
+
+OAuth 2.0 access tokens expire. You have two options for handling token
+refresh:
+
+##### Manual Token Refresh
+
+```go
+newToken, err := client.OAuth.RefreshAccessToken(ctx, token.RefreshToken)
+if err != nil {
+    log.Fatal(err)
+}
+
+// Update the access token
+client.Auth.SetBearerToken(newToken.AccessToken)
+```
+
+##### Automatic Token Renewal
+
+For long-running applications, you can enable automatic token renewal:
+
+```go
+// Create client with automatic token renewal
+client, err := jira.New(
+    http.DefaultClient,
+    "https://your-domain.atlassian.net",
+    jira.WithOAuth(oauthConfig),      // OAuth service configuration
+    jira.WithAutoRenewalToken(token), // Enable auto-renewal with token
+)
+if err != nil {
+    log.Fatal(err)
+}
+
+// Alternative: Use the convenience method
+client, err := jira.New(
+    http.DefaultClient,
+    "https://your-domain.atlassian.net",
+    jira.WithOAuthWithAutoRenewal(oauthConfig, token),
+)
+
+// Use the client normally - tokens will be automatically refreshed
+// when they're about to expire (with a 5-minute buffer)
+issues, _, err := client.Issue.Search(ctx, jql, options)
+```
+
+The auto-renewal feature:
+- Automatically refreshes tokens before they expire
+- Reuses valid tokens to minimize API calls
+- Updates refresh tokens when new ones are provided
+- Thread-safe for concurrent use
+
+For complete examples, see:
+
+- [examples/jira_oauth2_example.go](examples/jira_oauth2_example.go) -
+  Basic OAuth flow
+- [examples/jira_oauth2_http_server_example.go](examples/jira_oauth2_http_server_example.go) -
+  Full-featured HTTP server with OAuth flow
+- [examples/multi_service_oauth2_example.go](examples/multi_service_oauth2_example.go) -
+  Using OAuth across multiple Atlassian services
 
 ## ☕Cookbooks
 

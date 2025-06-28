@@ -180,13 +180,13 @@ func (i *internalSearchADFImpl) SearchJQL(ctx context.Context, jql string, field
 		Jql           string   `json:"jql,omitempty"`
 		MaxResults    int      `json:"maxResults,omitempty"`
 		Fields        []string `json:"fields,omitempty"`
-		Expand        []string `json:"expand,omitempty"`
+		Expand        string   `json:"expand,omitempty"`
 		NextPageToken string   `json:"nextPageToken,omitempty"`
 	}{
 		Jql:           jql,
 		MaxResults:    maxResults,
 		Fields:        fields,
-		Expand:        expands,
+		Expand:        strings.Join(expands, ","),
 		NextPageToken: nextPageToken,
 	}
 

@@ -534,13 +534,13 @@ func Test_internalSearchRichTextImpl_SearchJQL(t *testing.T) {
 					Jql           string   `json:"jql,omitempty"`
 					MaxResults    int      `json:"maxResults,omitempty"`
 					Fields        []string `json:"fields,omitempty"`
-					Expand        []string `json:"expand,omitempty"`
+					Expand        string   `json:"expand,omitempty"`
 					NextPageToken string   `json:"nextPageToken,omitempty"`
 				}{
 					Jql:           "project = FOO",
 					MaxResults:    50,
 					Fields:        []string{"summary", "status"},
-					Expand:        []string{"changelog", "names"},
+					Expand:        "changelog,names",
 					NextPageToken: "CAEaAggD",
 				}
 
@@ -581,13 +581,13 @@ func Test_internalSearchRichTextImpl_SearchJQL(t *testing.T) {
 					Jql           string   `json:"jql,omitempty"`
 					MaxResults    int      `json:"maxResults,omitempty"`
 					Fields        []string `json:"fields,omitempty"`
-					Expand        []string `json:"expand,omitempty"`
+					Expand        string   `json:"expand,omitempty"`
 					NextPageToken string   `json:"nextPageToken,omitempty"`
 				}{
 					Jql:           "project = FOO",
 					MaxResults:    50,
 					Fields:        []string{"summary", "status"},
-					Expand:        []string{"changelog", "names"},
+					Expand:        "changelog,names",
 					NextPageToken: "CAEaAggD",
 				}
 

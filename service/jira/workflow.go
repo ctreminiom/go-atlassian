@@ -10,10 +10,6 @@ type WorkflowConnector interface {
 
 	// Create creates a workflow.
 	//
-	// Deprecated: This endpoint is deprecated by Atlassian and will be removed on February 1, 2026. 
-	// Use Creates() for bulk workflow creation instead.
-	// TODO: Cannot change without breaking API compatibility. Consider removing in next major version.
-	//
 	// You can define transition rules using the shapes detailed in the following sections.
 	//
 	// If no transitional rules are specified the default system transition rules are used.
@@ -21,21 +17,23 @@ type WorkflowConnector interface {
 	// POST /rest/api/{2-3}/workflow
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/workflow#create-workflow
+	//
+	// Deprecated: This endpoint will be removed after February 1, 2026. Use Creates() for bulk workflow creation instead.
 	Create(ctx context.Context, payload *model.WorkflowPayloadScheme) (*model.WorkflowCreatedResponseScheme, *model.ResponseScheme, error)
 
 	// Gets returns a paginated list of published classic workflows.
-	//
-	// Deprecated: This operation does not return next-gen workflows and is deprecated by Atlassian.
-	// Will be removed on June 1, 2026. Use Search() for bulk workflow operations instead.
-	// TODO: Cannot change without breaking API compatibility. Consider removing in next major version.
 	//
 	// When workflow names are specified, details of those workflows are returned.
 	//
 	// Otherwise, all published classic workflows are returned.
 	//
+	// This operation does not return next-gen workflows.
+	//
 	// GET /rest/api/{2-3}/workflow/search
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/workflow#search-workflows
+	//
+	// Deprecated: This endpoint will be removed after June 1, 2026. Use Search() for bulk workflow operations instead.
 	Gets(ctx context.Context, options *model.WorkflowSearchOptions, startAt, maxResults int) (*model.WorkflowPageScheme, *model.ResponseScheme, error)
 
 	// Delete deletes a workflow.

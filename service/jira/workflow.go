@@ -17,6 +17,8 @@ type WorkflowConnector interface {
 	// POST /rest/api/{2-3}/workflow
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/workflow#create-workflow
+	//
+	// Deprecated: This endpoint will be removed after February 1, 2026. Use Creates() for bulk workflow creation instead.
 	Create(ctx context.Context, payload *model.WorkflowPayloadScheme) (*model.WorkflowCreatedResponseScheme, *model.ResponseScheme, error)
 
 	// Gets returns a paginated list of published classic workflows.
@@ -25,9 +27,13 @@ type WorkflowConnector interface {
 	//
 	// Otherwise, all published classic workflows are returned.
 	//
+	// This operation does not return next-gen workflows.
+	//
 	// GET /rest/api/{2-3}/workflow/search
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/workflow#search-workflows
+	//
+	// Deprecated: This endpoint will be removed after June 1, 2026. Use Search() for bulk workflow operations instead.
 	Gets(ctx context.Context, options *model.WorkflowSearchOptions, startAt, maxResults int) (*model.WorkflowPageScheme, *model.ResponseScheme, error)
 
 	// Delete deletes a workflow.
@@ -53,7 +59,7 @@ type WorkflowConnector interface {
 	// When search criteria are provided in the `options` parameter, only workflows matching those criteria are returned.
 	// If no criteria are specified, all workflows are returned.
 	//
-	// GET /rest/api/{2-3}/workflow/search
+	// POST /rest/api/{2-3}/workflows
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/workflow#bulk-get-workflows
 	Search(ctx context.Context, options *model.WorkflowSearchCriteria, expand []string, transitionLinks bool) (*model.WorkflowReadResponseScheme, *model.ResponseScheme, error)

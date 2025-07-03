@@ -10,6 +10,8 @@ type WorkflowConnector interface {
 
 	// Create creates a workflow.
 	//
+	// Deprecated: This endpoint is deprecated by Atlassian. Use Creates() for bulk workflow creation instead.
+	//
 	// You can define transition rules using the shapes detailed in the following sections.
 	//
 	// If no transitional rules are specified the default system transition rules are used.
@@ -20,6 +22,9 @@ type WorkflowConnector interface {
 	Create(ctx context.Context, payload *model.WorkflowPayloadScheme) (*model.WorkflowCreatedResponseScheme, *model.ResponseScheme, error)
 
 	// Gets returns a paginated list of published classic workflows.
+	//
+	// Deprecated: This operation does not return next-gen workflows and is deprecated by Atlassian. 
+	// Use Search() for bulk workflow operations instead.
 	//
 	// When workflow names are specified, details of those workflows are returned.
 	//
@@ -53,7 +58,7 @@ type WorkflowConnector interface {
 	// When search criteria are provided in the `options` parameter, only workflows matching those criteria are returned.
 	// If no criteria are specified, all workflows are returned.
 	//
-	// GET /rest/api/{2-3}/workflow/search
+	// POST /rest/api/{2-3}/workflows
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/workflow#bulk-get-workflows
 	Search(ctx context.Context, options *model.WorkflowSearchCriteria, expand []string, transitionLinks bool) (*model.WorkflowReadResponseScheme, *model.ResponseScheme, error)

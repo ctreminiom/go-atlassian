@@ -10,7 +10,8 @@ type WorkflowConnector interface {
 
 	// Create creates a workflow.
 	//
-	// Deprecated: This endpoint is deprecated by Atlassian. Use Creates() for bulk workflow creation instead.
+	// Deprecated: This endpoint is deprecated by Atlassian and will be removed in 2026. 
+	// Use Creates() for bulk workflow creation instead.
 	// TODO: Cannot change without breaking API compatibility. Consider removing in next major version.
 	//
 	// You can define transition rules using the shapes detailed in the following sections.
@@ -24,8 +25,8 @@ type WorkflowConnector interface {
 
 	// Gets returns a paginated list of published classic workflows.
 	//
-	// Deprecated: This operation does not return next-gen workflows and is deprecated by Atlassian. 
-	// Use Search() for bulk workflow operations instead.
+	// Deprecated: This operation does not return next-gen workflows and is deprecated by Atlassian.
+	// Will be removed in 2026. Use Search() for bulk workflow operations instead.
 	// TODO: Cannot change without breaking API compatibility. Consider removing in next major version.
 	//
 	// When workflow names are specified, details of those workflows are returned.

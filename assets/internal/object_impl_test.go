@@ -1184,6 +1184,32 @@ func Test_internalObjectImpl_Filter(t *testing.T) {
 			wantErr: true,
 			Err:     model.ErrNoAqlQuery,
 		},
+		{
+			name: "when the parameters are correct with attributes enabled",
+			args: args{
+				ctx:         context.Background(),
+				workspaceID: "workspace-uuid-sample",
+				aql:         "objectType = Office AND Name LIKE SYD",
+				attributes:  true,
+				startAt:     50,
+				maxResults:  50,
+			},
+			on: func(fields *fields) {
+				client := mocks.NewConnector(t)
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodPost,
+					"jsm/assets/workspace/workspace-uuid-sample/v1/object/aql?includeAttributes=true&maxResults=50&startAt=50",
+					"",
+					map[string]interface{}{"qlQuery": "objectType = Office AND Name LIKE SYD"}).
+					Return(&http.Request{}, nil)
+				client.On("Call",
+					&http.Request{},
+					&model.ObjectListResultScheme{}).
+					Return(&model.ResponseScheme{}, nil)
+				fields.c = client
+			},
+		},
 	}
 
 	for _, testCase := range testCases {

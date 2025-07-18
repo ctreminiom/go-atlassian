@@ -159,7 +159,9 @@ func (i *internalObjectImpl) Filter(ctx context.Context, workspaceID, aql string
 	params.Add("startAt", strconv.Itoa(startAt))
 	params.Add("maxResults", strconv.Itoa(maxResults))
 
-	if !attributes {
+	if attributes {
+		params.Add("includeAttributes", "true")
+	} else {
 		params.Add("includeAttributes", "false")
 	}
 

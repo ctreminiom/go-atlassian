@@ -47,7 +47,7 @@ type WorkflowService struct {
 //
 // https://docs.go-atlassian.io/jira-software-cloud/workflow#create-workflow
 func (w *WorkflowService) Create(ctx context.Context, payload *model.WorkflowPayloadScheme) (*model.WorkflowCreatedResponseScheme, *model.ResponseScheme, error) {
-	return w.internalClient.Create(ctx, payload)
+	return w.internalClient.Create(ctx, payload) //nolint:staticcheck // SA1019: Deprecated method still needs to be implemented
 }
 
 // Gets returns a paginated list of published classic workflows.
@@ -60,7 +60,7 @@ func (w *WorkflowService) Create(ctx context.Context, payload *model.WorkflowPay
 //
 // https://docs.go-atlassian.io/jira-software-cloud/workflow#search-workflows
 func (w *WorkflowService) Gets(ctx context.Context, options *model.WorkflowSearchOptions, startAt, maxResults int) (*model.WorkflowPageScheme, *model.ResponseScheme, error) {
-	return w.internalClient.Gets(ctx, options, startAt, maxResults)
+	return w.internalClient.Gets(ctx, options, startAt, maxResults) //nolint:staticcheck // SA1019: Deprecated method still needs to be implemented
 }
 
 // Delete deletes a workflow.

@@ -52,14 +52,15 @@ type WorkflowTransitionScheme struct {
 	To                 *WorkflowStatusAndPortScheme       `json:"to,omitempty"`   // The status to which this transition goes.
 	ToStatusReference  string                             `json:"toStatusReference,omitempty"`
 	TransitionScreen   *WorkflowRuleConfigurationScheme   `json:"transitionScreen,omitempty"`
-	Triggers           []*WorkflowTriggerScheme           `json:"triggers,omitempty"`
+	Triggers           []*WorkflowRuleConfigurationScheme `json:"triggers,omitempty"`
 	Type               string                             `json:"type,omitempty"` // The type of the transition.
 	Validators         []*WorkflowRuleConfigurationScheme `json:"validators,omitempty"`
 }
 
 type WorkflowRuleConfigurationScheme struct {
-	ID      string `json:"id,omitempty"`
-	RuleKey string `json:"ruleKey,omitempty"`
+	ID         string         `json:"id,omitempty"`
+	RuleKey    string         `json:"ruleKey"`
+	Parameters map[string]any `json:"parameters,omitempty"` // Not required for rule config payload
 }
 
 type ConditionGroupConfigurationScheme struct {
@@ -77,11 +78,6 @@ type WorkflowTransitionLinkScheme struct {
 	FromPort            int    `json:"fromPort,omitempty"`
 	FromStatusReference string `json:"fromStatusReference,omitempty"`
 	ToPort              int    `json:"toPort,omitempty"`
-}
-
-type WorkflowTriggerScheme struct {
-	ID      string `json:"id,omitempty"`
-	RuleKey string `json:"ruleKey,omitempty"`
 }
 
 // WorkflowTransitionScreenScheme represents a screen associated with a transition in a workflow in Jira.
@@ -378,7 +374,7 @@ type TransitionUpdateDTOScheme struct {
 	To                 *StatusReferenceAndPortScheme      `json:"to,omitempty"`                 // To is the status to which this transition goes.
 	ToStatusReference  string                             `json:"toStatusReference,omitempty"`  // ToStatusReference is the reference of the status to which this transition goes.
 	TransitionScreen   *WorkflowRuleConfigurationScheme   `json:"transitionScreen,omitempty"`   // TransitionScreen is the screen associated with the transition.
-	Triggers           []*WorkflowTriggerScheme           `json:"triggers,omitempty"`           // Triggers is a list of triggers associated with the transition.
+	Triggers           []*WorkflowRuleConfigurationScheme `json:"triggers,omitempty"`           // Triggers is a list of triggers associated with the transition.
 	Type               string                             `json:"type,omitempty"`               // Type is the type of the transition.
 	Validators         []*WorkflowRuleConfigurationScheme `json:"validators,omitempty"`         // Validators is a list of validators associated with the transition.
 }

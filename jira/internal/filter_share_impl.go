@@ -145,7 +145,7 @@ func (i *internalFilterShareImpl) Gets(ctx context.Context, filterID int) ([]*mo
 	}
 
 	var filters []*model.SharePermissionScheme
-	response, err := i.c.Call(request, filters)
+	response, err := i.c.Call(request, &filters)
 	if err != nil {
 		return nil, response, err
 	}
@@ -167,7 +167,7 @@ func (i *internalFilterShareImpl) Add(ctx context.Context, filterID int, payload
 	}
 
 	var permissions []*model.SharePermissionScheme
-	response, err := i.c.Call(request, permissions)
+	response, err := i.c.Call(request, &permissions)
 	if err != nil {
 		return nil, response, err
 	}

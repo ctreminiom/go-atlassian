@@ -9,6 +9,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 
 	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/v2/service"
@@ -205,7 +206,7 @@ func TestFilterService_Favorite(t *testing.T) {
 
 				client.On("Call",
 					&http.Request{},
-					[]*model.FilterScheme(nil)).
+					mock.Anything).
 					Return(&model.ResponseScheme{}, nil)
 
 				fields.c = client
@@ -233,7 +234,7 @@ func TestFilterService_Favorite(t *testing.T) {
 
 				client.On("Call",
 					&http.Request{},
-					[]*model.FilterScheme(nil)).
+					mock.Anything).
 					Return(&model.ResponseScheme{}, nil)
 
 				fields.c = client
@@ -349,7 +350,7 @@ func TestFilterService_My(t *testing.T) {
 
 				client.On("Call",
 					&http.Request{},
-					[]*model.FilterScheme(nil)).
+					mock.Anything).
 					Return(&model.ResponseScheme{}, nil)
 
 				fields.c = client
@@ -379,7 +380,7 @@ func TestFilterService_My(t *testing.T) {
 
 				client.On("Call",
 					&http.Request{},
-					[]*model.FilterScheme(nil)).
+					mock.Anything).
 					Return(&model.ResponseScheme{}, nil)
 
 				fields.c = client

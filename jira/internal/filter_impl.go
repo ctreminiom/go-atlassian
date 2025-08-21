@@ -145,7 +145,7 @@ func (i *internalFilterServiceImpl) Favorite(ctx context.Context) ([]*model.Filt
 	}
 
 	var filters []*model.FilterScheme
-	response, err := i.c.Call(request, filters)
+	response, err := i.c.Call(request, &filters)
 	if err != nil {
 		return nil, response, err
 	}
@@ -170,7 +170,7 @@ func (i *internalFilterServiceImpl) My(ctx context.Context, favorites bool, expa
 	}
 
 	var filters []*model.FilterScheme
-	response, err := i.c.Call(request, filters)
+	response, err := i.c.Call(request, &filters)
 	if err != nil {
 		return nil, response, err
 	}

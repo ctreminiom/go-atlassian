@@ -121,7 +121,7 @@ func (i *internalProjectComponentImpl) Gets(ctx context.Context, projectKeyOrID 
 	}
 
 	var components []*model.ComponentScheme
-	response, err := i.c.Call(request, components)
+	response, err := i.c.Call(request, &components)
 	if err != nil {
 		return nil, response, err
 	}

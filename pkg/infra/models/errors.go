@@ -322,6 +322,9 @@ var (
 	// ErrNoFieldID indicates that a required field ID was not provided
 	ErrNoFieldID = errors.New("no field id set")
 
+	// ErrInvalidCustomFieldUpdate represents an error indicating the custom field update payload contains an invalid type attribute.
+	ErrInvalidCustomFieldUpdate = errors.New("invalid custom field update payload, type is not a valid attribute for update")
+
 	// ErrNoEditOperator indicates that a required update operation was not provided
 	ErrNoEditOperator = errors.New("no update operation set")
 

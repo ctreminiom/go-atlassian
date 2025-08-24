@@ -31,6 +31,15 @@ type FieldConnector interface {
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/fields#create-custom-field
 	Create(ctx context.Context, payload *model.CustomFieldScheme) (*model.IssueFieldScheme, *model.ResponseScheme, error)
 
+	// Update updates a custom field with the provided payload.
+	//
+	// PUT /rest/api/{2-3}/field/{id}
+	//
+	// Returns 204 No Content on success.
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/issues/fields#update-field
+	Update(ctx context.Context, fieldId string, payload *model.CustomFieldScheme) (*model.ResponseScheme, error)
+
 	// Search returns a paginated list of fields for Classic Jira projects.
 	//
 	// GET /rest/api/{2-3}/field/search

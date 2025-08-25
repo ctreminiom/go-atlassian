@@ -79,6 +79,17 @@ func (i *IssueFieldService) Search(ctx context.Context, options *model.FieldSear
 	return i.internalClient.Search(ctx, options, startAt, maxResults)
 }
 
+// Update updates a custom field.
+//
+// PUT /rest/api/{2-3}/field/{id}
+//
+// Returns 204 No Content on success.
+//
+// https://docs.go-atlassian.io/jira-software-cloud/issues/fields#update-field
+func (i *IssueFieldService) Update(ctx context.Context, fieldId string, payload *model.CustomFieldScheme) (*model.ResponseScheme, error) {
+	return i.internalClient.Update(ctx, fieldId, payload)
+}
+
 // Delete deletes a custom field. The custom field is deleted whether it is in the trash or not.
 //
 // See Edit or delete a custom field for more information on trashing and deleting custom fields.
@@ -129,6 +140,34 @@ func (i *internalIssueFieldServiceImpl) Create(ctx context.Context, payload *mod
 	}
 
 	return field, response, nil
+}
+
+func (i *internalIssueFieldServiceImpl) Update(ctx context.Context, fieldId string, payload *model.CustomFieldScheme) (*model.ResponseScheme, error) {
+
+	if fieldId == "" {
+		return nil, fmt.Errorf("jira: %w", model.ErrNoFieldID)
+	}
+
+	if payload.FieldType != "" {
+		return nil, fmt.Errorf("jira: %w", model.ErrInvalidCustomFieldUpdate)
+	}
+
+	endpoint := fmt.Sprintf("rest/api/%v/field/%v", i.version, fieldId)
+
+	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
+
+	if err != nil {
+		return nil, err
+	}
+
+	response, err := i.c.Call(request, nil)
+
+	if err != nil || response.StatusCode != http.StatusNoContent {
+		return response, err
+	}
+
+	return response, nil
+
 }
 
 func (i *internalIssueFieldServiceImpl) Search(ctx context.Context, options *model.FieldSearchOptionsScheme, startAt, maxResults int) (*model.FieldSearchPageScheme, *model.ResponseScheme, error) {

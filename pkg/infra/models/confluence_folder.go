@@ -4,18 +4,18 @@ import "time"
 
 // FolderScheme represents a folder in Confluence.
 type FolderScheme struct {
-	ID         string                 `json:"id,omitempty"`         // The ID of the folder.
-	Type       string                 `json:"type,omitempty"`       // The type of the folder.
-	Status     string                 `json:"status,omitempty"`     // The status of the folder.
-	Title      string                 `json:"title,omitempty"`      // The title of the folder.
-	ParentID   string                 `json:"parentId,omitempty"`   // The ID of the parent of the folder.
-	ParentType string                 `json:"parentType,omitempty"` // The type of the parent of the folder.
-	Position   int                    `json:"position,omitempty"`   // The position of the folder.
-	AuthorID   string                 `json:"authorId,omitempty"`   // The ID of the author of the folder.
-	OwnerID    string                 `json:"ownerId,omitempty"`    // The ID of the owner of the folder.
-	CreatedAt  *time.Time             `json:"createdAt,omitempty"`  // The creation time of the folder.
-	Version    *FolderVersionScheme   `json:"version,omitempty"`    // The version information of the folder.
-	Links      *FolderLinksScheme     `json:"_links,omitempty"`     // The links of the folder.
+	ID         string               `json:"id,omitempty"`         // The ID of the folder.
+	Type       string               `json:"type,omitempty"`       // The type of the folder.
+	Status     string               `json:"status,omitempty"`     // The status of the folder.
+	Title      string               `json:"title,omitempty"`      // The title of the folder.
+	ParentID   string               `json:"parentId,omitempty"`   // The ID of the parent of the folder.
+	ParentType string               `json:"parentType,omitempty"` // The type of the parent of the folder.
+	Position   int                  `json:"position,omitempty"`   // The position of the folder.
+	AuthorID   string               `json:"authorId,omitempty"`   // The ID of the author of the folder.
+	OwnerID    string               `json:"ownerId,omitempty"`    // The ID of the owner of the folder.
+	CreatedAt  *time.Time           `json:"createdAt,omitempty"`  // The creation time of the folder.
+	Version    *FolderVersionScheme `json:"version,omitempty"`    // The version information of the folder.
+	Links      *FolderLinksScheme   `json:"_links,omitempty"`     // The links of the folder.
 }
 
 // FolderVersionScheme represents the version information of a folder.
@@ -42,15 +42,15 @@ type FolderChunkLinksScheme struct {
 
 // FolderCreatePayloadScheme represents the payload for creating a folder.
 type FolderCreatePayloadScheme struct {
-	SpaceID  string `json:"spaceId"`           // The ID of the space where the folder will be created.
-	Title    string `json:"title"`             // The title of the folder.
+	SpaceID  string `json:"spaceId"`            // The ID of the space where the folder will be created.
+	Title    string `json:"title"`              // The title of the folder.
 	ParentID string `json:"parentId,omitempty"` // The ID of the parent folder (optional).
 }
 
 // FolderUpdatePayloadScheme represents the payload for updating a folder.
 type FolderUpdatePayloadScheme struct {
-	Title    string                           `json:"title,omitempty"`    // The updated title of the folder.
-	ParentID string                           `json:"parentId,omitempty"` // The updated parent ID of the folder.
+	Title    string                            `json:"title,omitempty"`    // The updated title of the folder.
+	ParentID string                            `json:"parentId,omitempty"` // The updated parent ID of the folder.
 	Version  *FolderUpdatePayloadVersionScheme `json:"version"`            // The version information for the update.
 }
 
@@ -65,3 +65,4 @@ type FolderOptionsScheme struct {
 	Sort     string `json:"sort,omitempty"`     // The sort order of the folders.
 	ParentID string `json:"parentId,omitempty"` // The parent ID to filter folders by.
 }
+

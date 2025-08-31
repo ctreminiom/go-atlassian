@@ -2,6 +2,7 @@ package confluence
 
 import (
 	"context"
+
 	"github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
 )
 
@@ -70,3 +71,4 @@ type FolderConnector interface {
 	// https://developer.atlassian.com/cloud/confluence/rest/v2/api-group-folder
 	Delete(ctx context.Context, folderID string) (*models.ResponseScheme, error)
 }
+

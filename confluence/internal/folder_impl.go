@@ -3,13 +3,14 @@ package internal
 import (
 	"context"
 	"fmt"
-	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/v2/service"
-	"github.com/ctreminiom/go-atlassian/v2/service/confluence"
 	"net/http"
 	"net/url"
 	"strconv"
 	"strings"
+
+	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/v2/service"
+	"github.com/ctreminiom/go-atlassian/v2/service/confluence"
 )
 
 // NewFolderService creates a new instance of FolderService.
@@ -280,3 +281,4 @@ func (i *internalFolderImpl) Delete(ctx context.Context, folderID string) (*mode
 
 	return i.c.Call(request, nil)
 }
+

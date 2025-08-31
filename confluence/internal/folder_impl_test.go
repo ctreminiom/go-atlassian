@@ -437,3 +437,4 @@ func Test_internalFolderImpl_Delete(t *testing.T) {
 		})
 	}
 }
+

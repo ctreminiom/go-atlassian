@@ -6,9 +6,7 @@ import (
 	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
 	"github.com/ctreminiom/go-atlassian/v2/service"
 	"github.com/ctreminiom/go-atlassian/v2/service/confluence"
-	"github.com/google/uuid"
 	"net/http"
-	"strings"
 )
 
 // NewRestrictionOperationGroupService creates a new instance of RestrictionOperationGroupService.
@@ -78,20 +76,9 @@ func (i *internalRestrictionOperationGroupImpl) Get(ctx context.Context, content
 		return nil, fmt.Errorf("confluence: %w", model.ErrNoConfluenceGroup)
 	}
 
-	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("wiki/rest/api/content/%v/restriction/byOperation/%v/", contentID, operationKey))
+	endpoint := fmt.Sprintf("wiki/rest/api/content/%v/restriction/byOperation/%v/byGroupId/%v", contentID, operationKey, groupNameOrID)
 
-	// check if the group id is an uuid type
-	// if so, it's the group id
-	groupID, err := uuid.Parse(groupNameOrID)
-
-	if err == nil {
-		endpoint.WriteString(fmt.Sprintf("byGroupId/%v", groupID.String()))
-	} else {
-		endpoint.WriteString(fmt.Sprintf("group/%v", groupNameOrID))
-	}
-
-	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -113,20 +100,9 @@ func (i *internalRestrictionOperationGroupImpl) Add(ctx context.Context, content
 		return nil, fmt.Errorf("confluence: %w", model.ErrNoConfluenceGroup)
 	}
 
-	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("wiki/rest/api/content/%v/restriction/byOperation/%v/", contentID, operationKey))
+	endpoint := fmt.Sprintf("wiki/rest/api/content/%v/restriction/byOperation/%v/byGroupId/%v", contentID, operationKey, groupNameOrID)
 
-	// check if the group id is an uuid type
-	// if so, it's the group id
-	groupID, err := uuid.Parse(groupNameOrID)
-
-	if err == nil {
-		endpoint.WriteString(fmt.Sprintf("byGroupId/%v", groupID.String()))
-	} else {
-		endpoint.WriteString(fmt.Sprintf("group/%v", groupNameOrID))
-	}
-
-	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint.String(), "", nil)
+	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -148,20 +124,9 @@ func (i *internalRestrictionOperationGroupImpl) Remove(ctx context.Context, cont
 		return nil, fmt.Errorf("confluence: %w", model.ErrNoConfluenceGroup)
 	}
 
-	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("wiki/rest/api/content/%v/restriction/byOperation/%v/", contentID, operationKey))
+	endpoint := fmt.Sprintf("wiki/rest/api/content/%v/restriction/byOperation/%v/byGroupId/%v", contentID, operationKey, groupNameOrID)
 
-	// check if the group id is an uuid type
-	// if so, it's the group id
-	groupID, err := uuid.Parse(groupNameOrID)
-
-	if err == nil {
-		endpoint.WriteString(fmt.Sprintf("byGroupId/%v", groupID.String()))
-	} else {
-		endpoint.WriteString(fmt.Sprintf("group/%v", groupNameOrID))
-	}
-
-	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint.String(), "", nil)
+	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint, "", nil)
 	if err != nil {
 		return nil, err
 	}

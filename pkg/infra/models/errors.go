@@ -537,4 +537,16 @@ var (
 
 	// ErrInvalidIssueTypeSchemeAfter represents an error indicating an invalid 'after' attribute in the issue type scheme configuration.
 	ErrInvalidIssueTypeSchemeAfter = errors.New("issue type scheme invalid 'after' attr, issue type id found in 'issueTypeIds'")
+
+	// ErrNoFolderID indicates that a required folder ID was not provided
+	ErrNoFolderID = errors.New("confluence: no folder id set")
+
+	// ErrNoWhiteboardID indicates that a required whiteboard ID was not provided
+	ErrNoWhiteboardID = errors.New("confluence: no whiteboard id set")
+
+	// ErrNoDatabaseID indicates that a required database ID was not provided
+	ErrNoDatabaseID = errors.New("confluence: no database id set")
+
+	// ErrNoEmbedID indicates that a required embed ID was not provided
+	ErrNoEmbedID = errors.New("confluence: no embed id set")
 )

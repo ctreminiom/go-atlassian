@@ -47,7 +47,7 @@ func Test_internalRestrictionOperationGroupImpl_Get(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"wiki/rest/api/content/100001/restriction/byOperation/read/group/confluence-users",
+					"wiki/rest/api/content/100001/restriction/byOperation/read/byGroupId/confluence-users",
 					"", nil).
 					Return(&http.Request{}, nil)
 
@@ -76,7 +76,7 @@ func Test_internalRestrictionOperationGroupImpl_Get(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodGet,
-					"wiki/rest/api/content/100001/restriction/byOperation/read/group/confluence-users",
+					"wiki/rest/api/content/100001/restriction/byOperation/read/byGroupId/confluence-users",
 					"", nil).
 					Return(&http.Request{}, model.ErrCreateHttpReq)
 
@@ -188,7 +188,7 @@ func Test_internalRestrictionOperationGroupImpl_Add(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
-					"wiki/rest/api/content/100001/restriction/byOperation/read/group/confluence-users",
+					"wiki/rest/api/content/100001/restriction/byOperation/read/byGroupId/confluence-users",
 					"", nil).
 					Return(&http.Request{}, nil)
 
@@ -217,7 +217,7 @@ func Test_internalRestrictionOperationGroupImpl_Add(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodPut,
-					"wiki/rest/api/content/100001/restriction/byOperation/read/group/confluence-users",
+					"wiki/rest/api/content/100001/restriction/byOperation/read/byGroupId/confluence-users",
 					"", nil).
 					Return(&http.Request{}, model.ErrCreateHttpReq)
 
@@ -329,7 +329,7 @@ func Test_internalRestrictionOperationGroupImpl_Remove(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
-					"wiki/rest/api/content/100001/restriction/byOperation/read/group/confluence-users",
+					"wiki/rest/api/content/100001/restriction/byOperation/read/byGroupId/confluence-users",
 					"", nil).
 					Return(&http.Request{}, nil)
 
@@ -387,7 +387,7 @@ func Test_internalRestrictionOperationGroupImpl_Remove(t *testing.T) {
 				client.On("NewRequest",
 					context.Background(),
 					http.MethodDelete,
-					"wiki/rest/api/content/100001/restriction/byOperation/read/group/confluence-users",
+					"wiki/rest/api/content/100001/restriction/byOperation/read/byGroupId/confluence-users",
 					"", nil).
 					Return(&http.Request{}, model.ErrCreateHttpReq)
 

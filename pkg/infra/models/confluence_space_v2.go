@@ -27,13 +27,14 @@ type GetSpacesOptionSchemeV2 struct {
 
 // SpaceSchemeV2 represents a space in Confluence.
 type SpaceSchemeV2 struct {
-	ID          string                    `json:"id,omitempty"`          // The ID of the space.
-	Key         string                    `json:"key,omitempty"`         // The key of the space.
-	Name        string                    `json:"name,omitempty"`        // The name of the space.
-	Type        string                    `json:"type,omitempty"`        // The type of the space.
-	Status      string                    `json:"status,omitempty"`      // The status of the space.
-	HomepageID  string                    `json:"homepageId,omitempty"`  // The ID of the home page of the space.
-	Description *SpaceDescriptionSchemeV2 `json:"description,omitempty"` // The description of the space.
+	ID           string                    `json:"id,omitempty"`           // The ID of the space.
+	Key          string                    `json:"key,omitempty"`          // The key of the space.
+	Name         string                    `json:"name,omitempty"`         // The name of the space.
+	Type         string                    `json:"type,omitempty"`         // The type of the space.
+	Status       string                    `json:"status,omitempty"`       // The status of the space.
+	SpaceOwnerID string                    `json:"spaceOwnerId,omitempty"` // The account ID of the current space owner. This can differ from the space creator.
+	HomepageID   string                    `json:"homepageId,omitempty"`   // The ID of the home page of the space.
+	Description  *SpaceDescriptionSchemeV2 `json:"description,omitempty"`  // The description of the space.
 }
 
 // SpaceDescriptionSchemeV2 represents the description of a space in Confluence.

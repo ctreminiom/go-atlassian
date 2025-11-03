@@ -142,6 +142,7 @@ func New(httpClient common.HTTPClient, site string, options ...ClientOption) (*C
 	client.Space = internal.NewSpaceV2Service(client)
 	client.Attachment = internal.NewAttachmentService(client, internal.NewAttachmentVersionService(client))
 	client.CustomContent = internal.NewCustomContentService(client)
+	client.Folder = internal.NewFolderService(client)
 
 	// Apply client options
 	for _, option := range options {
@@ -162,6 +163,7 @@ type Client struct {
 	Space         *internal.SpaceV2Service
 	Attachment    *internal.AttachmentService
 	CustomContent *internal.CustomContentService
+	Folder        *internal.FolderService
 }
 
 func (c *Client) NewRequest(ctx context.Context, method, urlStr, contentType string, body interface{}) (*http.Request, error) {

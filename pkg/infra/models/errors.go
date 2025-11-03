@@ -53,6 +53,9 @@ var (
 	// ErrNoFilterID indicates that a required filter ID was not provided
 	ErrNoFilterID = errors.New("no filter id set")
 
+	// ErrNoFolderID indicates that a required folder ID was not provided
+	ErrNoFolderID = errors.New("no folder id set")
+
 	// ErrNoEpicID indicates that a required epic ID was not provided
 	ErrNoEpicID = errors.New("no epic id set")
 

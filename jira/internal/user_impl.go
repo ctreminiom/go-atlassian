@@ -96,8 +96,8 @@ func (u *UserService) Groups(ctx context.Context, accountIDs string) ([]*model.U
 // GET /rest/api/{2-3}/users/search
 //
 // https://docs.go-atlassian.io/jira-software-cloud/users#get-all-users
-func (u *UserService) Gets(ctx context.Context, startAt, maxResults int) ([]*model.UserScheme, *model.ResponseScheme, error) {
-	return u.internalClient.Gets(ctx, startAt, maxResults)
+func (u *UserService) Gets(ctx context.Context, startAt, maxResults int, expand []string) ([]*model.UserScheme, *model.ResponseScheme, error) {
+	return u.internalClient.Gets(ctx, startAt, maxResults, expand)
 }
 
 type internalUserImpl struct {
@@ -224,11 +224,15 @@ func (i *internalUserImpl) Groups(ctx context.Context, accountID string) ([]*mod
 	return groups, response, nil
 }
 
-func (i *internalUserImpl) Gets(ctx context.Context, startAt, maxResults int) ([]*model.UserScheme, *model.ResponseScheme, error) {
+func (i *internalUserImpl) Gets(ctx context.Context, startAt, maxResults int, expand []string) ([]*model.UserScheme, *model.ResponseScheme, error) {
 
 	params := url.Values{}
 	params.Add("startAt", strconv.Itoa(startAt))
 	params.Add("maxResults", strconv.Itoa(maxResults))
+
+	if len(expand) != 0 {
+		params.Add("expand", strings.Join(expand, ","))
+	}
 
 	endpoint := fmt.Sprintf("rest/api/%v/users/search?%v", i.version, params.Encode())
 

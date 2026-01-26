@@ -4,17 +4,19 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
-	"github.com/ctreminiom/go-atlassian/v2/service"
-	"github.com/ctreminiom/go-atlassian/v2/service/mocks"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
 	"io"
 	"net/http"
 	"net/url"
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
+
+	model "github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
+	"github.com/ctreminiom/go-atlassian/v2/service"
+	"github.com/ctreminiom/go-atlassian/v2/service/mocks"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 )
 
 func Test_internalContentAttachmentImpl_Gets(t *testing.T) {
@@ -502,10 +504,12 @@ func Test_internalContentAttachmentImpl_Download(t *testing.T) {
 					"", nil).
 					Return(&http.Request{}, nil)
 
-				client.On("Call",
-					&http.Request{},
-					nil).
-					Return(&model.ResponseScheme{}, nil)
+				client.On("Do",
+					&http.Request{}).
+					Return(&http.Response{
+						StatusCode: http.StatusOK,
+						Body:       io.NopCloser(strings.NewReader("file content")),
+					}, nil)
 
 				fields.c = client
 
@@ -566,7 +570,7 @@ func Test_internalContentAttachmentImpl_Download(t *testing.T) {
 
 			attachmentService := NewContentAttachmentService(testCase.fields.c)
 
-			gotResponse, err := attachmentService.Download(testCase.args.ctx, testCase.args.contentID, testCase.args.attachmentID)
+			gotReader, err := attachmentService.Download(testCase.args.ctx, testCase.args.contentID, testCase.args.attachmentID)
 
 			if testCase.wantErr {
 
@@ -574,18 +578,12 @@ func Test_internalContentAttachmentImpl_Download(t *testing.T) {
 					t.Logf("error returned: %v", err.Error())
 				}
 
-				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
-				var urlErr *url.Error
-				var jsonErr *json.SyntaxError
-				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
-					assert.Contains(t, err.Error(), testCase.Err.Error())
-				} else {
-					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
-				}
+				assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
 			} else {
 
 				assert.NoError(t, err)
-				assert.NotEqual(t, gotResponse, nil)
+				assert.NotNil(t, gotReader)
+				gotReader.Close()
 			}
 
 		})

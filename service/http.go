@@ -10,4 +10,5 @@ import (
 type Connector interface {
 	NewRequest(ctx context.Context, method, urlStr, contentType string, body interface{}) (*http.Request, error)
 	Call(request *http.Request, structure interface{}) (*models.ResponseScheme, error)
+	Do(request *http.Request) (*http.Response, error)
 }

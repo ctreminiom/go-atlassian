@@ -39,7 +39,7 @@ type RestrictionOperationService struct {
 //
 // of the return object, rather than items in a results array.
 //
-// GET /wiki/rest/api/content/{id}/restriction
+// GET /wiki/rest/api/content/{id}/restriction/byOperation
 //
 // https://docs.go-atlassian.io/confluence-cloud/content/restrictions/operations#get-restrictions-by-operation
 func (r *RestrictionOperationService) Gets(ctx context.Context, contentID string, expand []string) (*model.ContentRestrictionByOperationScheme, *model.ResponseScheme, error) {

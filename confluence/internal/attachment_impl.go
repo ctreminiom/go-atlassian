@@ -3,6 +3,7 @@ package internal
 import (
 	"context"
 	"fmt"
+	"io"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -65,6 +66,17 @@ func (a *AttachmentService) Gets(ctx context.Context, entityID int, entityType s
 // https://docs.go-atlassian.io/confluence-cloud/v2/attachments#delete-attachment
 func (a *AttachmentService) Delete(ctx context.Context, attachmentID string) (*model.ResponseScheme, error) {
 	return a.internalClient.Delete(ctx, attachmentID)
+}
+
+// Download returns the contents of an attachment by its ID as a reader.
+//
+// The caller is responsible for closing the returned io.ReadCloser.
+//
+// GET /wiki/api/v2/attachments/{id}/download
+//
+// https://docs.go-atlassian.io/confluence-cloud/v2/attachments#download-attachment
+func (a *AttachmentService) Download(ctx context.Context, attachmentID string) (io.ReadCloser, error) {
+	return a.internalClient.Download(ctx, attachmentID)
 }
 
 type internalAttachmentImpl struct {
@@ -183,4 +195,30 @@ func (i *internalAttachmentImpl) Gets(ctx context.Context, entityID int, entityT
 	}
 
 	return page, response, nil
+}
+
+func (i *internalAttachmentImpl) Download(ctx context.Context, attachmentID string) (io.ReadCloser, error) {
+
+	if attachmentID == "" {
+		return nil, fmt.Errorf("confluence: %w", model.ErrNoContentAttachmentID)
+	}
+
+	endpoint := fmt.Sprintf("wiki/api/v2/attachments/%v/download", attachmentID)
+
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
+	if err != nil {
+		return nil, err
+	}
+
+	response, err := i.c.Do(request)
+	if err != nil {
+		return nil, err
+	}
+
+	if response.StatusCode != http.StatusOK {
+		response.Body.Close()
+		return nil, fmt.Errorf("confluence: unexpected status code %d", response.StatusCode)
+	}
+
+	return response.Body, nil
 }

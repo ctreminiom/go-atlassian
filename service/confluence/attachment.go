@@ -38,6 +38,15 @@ type ContentAttachmentConnector interface {
 	//
 	// https://docs.go-atlassian.io/confluence-cloud/content/attachments#create-attachment
 	Create(ctx context.Context, attachmentID, status, fileName string, file io.Reader) (*model.ContentPageScheme, *model.ResponseScheme, error)
+
+	// Download returns the contents of an attachment as a reader.
+	//
+	// The caller is responsible for closing the returned io.ReadCloser.
+	//
+	// GET /wiki/rest/api/content/{id}/child/attachment/{attachmentId}/download
+	//
+	// https://docs.go-atlassian.io/confluence-cloud/content/attachments#download-attachment
+	Download(ctx context.Context, contentID, attachmentID string) (io.ReadCloser, error)
 }
 
 type AttachmentConnector interface {
@@ -72,6 +81,15 @@ type AttachmentConnector interface {
 	//
 	// https://docs.go-atlassian.io/confluence-cloud/v2/attachments#delete-attachment
 	Delete(ctx context.Context, attachmentID string) (*model.ResponseScheme, error)
+
+	// Download returns the contents of an attachment by its ID as a reader.
+	//
+	// The caller is responsible for closing the returned io.ReadCloser.
+	//
+	// GET /wiki/api/v2/attachments/{id}/download
+	//
+	// https://docs.go-atlassian.io/confluence-cloud/v2/attachments#download-attachment
+	Download(ctx context.Context, attachmentID string) (io.ReadCloser, error)
 }
 
 type AttachmentVersionConnector interface {

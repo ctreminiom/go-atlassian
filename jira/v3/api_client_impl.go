@@ -601,6 +601,10 @@ func (c *Client) Call(request *http.Request, structure interface{}) (*models.Res
 	return c.processResponse(response, structure)
 }
 
+func (c *Client) Do(request *http.Request) (*http.Response, error) {
+	return c.HTTP.Do(request)
+}
+
 func (c *Client) processResponse(response *http.Response, structure interface{}) (*models.ResponseScheme, error) {
 
 	defer response.Body.Close()

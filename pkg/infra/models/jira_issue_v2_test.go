@@ -48,6 +48,28 @@ func TestIssueSchemeV2_MergeCustomFields(t *testing.T) {
 			wantErr: false,
 			Err:     nil,
 		},
+		{
+			name: "when custom fields is nil, should preserve issue scheme fields",
+			fields: fields{
+				ID:  "10001",
+				Key: "TEST-1",
+				Fields: &IssueFieldsSchemeV2{
+					Summary: "Test Summary",
+				},
+			},
+			args: args{
+				fields: nil,
+			},
+			want: map[string]interface{}{
+				"id":  "10001",
+				"key": "TEST-1",
+				"fields": map[string]interface{}{
+					"summary": "Test Summary",
+				},
+			},
+			wantErr: false,
+			Err:     nil,
+		},
 	}
 	for _, testCase := range testCases {
 		t.Run(testCase.name, func(t *testing.T) {
@@ -116,6 +138,28 @@ func TestIssueSchemeV2_MergeOperations(t *testing.T) {
 							"remove": "triaged",
 						},
 					},
+				},
+			},
+			wantErr: false,
+			Err:     nil,
+		},
+		{
+			name: "when operations is nil, should preserve issue scheme fields",
+			fields: fields{
+				ID:  "10001",
+				Key: "TEST-1",
+				Fields: &IssueFieldsSchemeV2{
+					Summary: "Test Summary",
+				},
+			},
+			args: args{
+				operations: nil,
+			},
+			want: map[string]interface{}{
+				"id":  "10001",
+				"key": "TEST-1",
+				"fields": map[string]interface{}{
+					"summary": "Test Summary",
 				},
 			},
 			wantErr: false,

@@ -19,14 +19,10 @@ type IssueScheme struct {
 
 // MergeCustomFields merges custom fields into the issue scheme.
 // It returns a map representation of the issue scheme with the merged fields.
-// If the provided fields are nil or empty, it returns an error.
+// If the provided fields are nil or empty, it returns the issue scheme as a map.
 func (i *IssueScheme) MergeCustomFields(fields *CustomFields) (map[string]interface{}, error) {
 
-	if fields == nil || len(fields.Fields) == 0 {
-		return map[string]interface{}{}, nil
-	}
-
-	//Convert the IssueScheme struct to map[string]interface{}
+	// Convert the IssueScheme struct to map[string]interface{}
 	issueSchemeAsBytes, err := json.Marshal(i)
 	if err != nil {
 		return nil, err
@@ -37,7 +33,11 @@ func (i *IssueScheme) MergeCustomFields(fields *CustomFields) (map[string]interf
 		return nil, err
 	}
 
-	//For each customField created, merge it into the eAsMap
+	if fields == nil || len(fields.Fields) == 0 {
+		return issueSchemeAsMap, nil
+	}
+
+	// For each customField created, merge it into the eAsMap
 	for _, customField := range fields.Fields {
 		if err := mergo.Merge(&issueSchemeAsMap, customField, mergo.WithOverride); err != nil {
 			return nil, err
@@ -49,21 +49,17 @@ func (i *IssueScheme) MergeCustomFields(fields *CustomFields) (map[string]interf
 
 // MergeOperations merges operations into the issue scheme.
 // It returns a map representation of the issue scheme with the merged operations.
-// If the provided operations are nil or empty, it returns an error.
+// If the provided operations are nil or empty, it returns the issue scheme as a map.
 //
 // Parameters:
 // - operations: A pointer to UpdateOperations containing the operations to be merged.
 //
 // Returns:
 // - A map[string]interface{} representing the issue scheme with the merged operations.
-// - An error if the operations are nil, empty, or if there is an issue during the merging process.
+// - An error if there is an issue during the merging process.
 func (i *IssueScheme) MergeOperations(operations *UpdateOperations) (map[string]interface{}, error) {
 
-	if operations == nil || len(operations.Fields) == 0 {
-		return map[string]interface{}{}, nil
-	}
-
-	//Convert the IssueScheme struct to map[string]interface{}
+	// Convert the IssueScheme struct to map[string]interface{}
 	issueSchemeAsBytes, err := json.Marshal(i)
 	if err != nil {
 		return nil, err
@@ -74,7 +70,11 @@ func (i *IssueScheme) MergeOperations(operations *UpdateOperations) (map[string]
 		return nil, err
 	}
 
-	//For each customField created, merge it into the eAsMap
+	if operations == nil || len(operations.Fields) == 0 {
+		return issueSchemeAsMap, nil
+	}
+
+	// For each customField created, merge it into the eAsMap
 	for _, customField := range operations.Fields {
 		if err := mergo.Merge(&issueSchemeAsMap, customField, mergo.WithOverride); err != nil {
 			return nil, err

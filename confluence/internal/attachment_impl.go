@@ -67,6 +67,15 @@ func (a *AttachmentService) Delete(ctx context.Context, attachmentID string) (*m
 	return a.internalClient.Delete(ctx, attachmentID)
 }
 
+// Download returns the contents of an attachment by its ID.
+//
+// GET /wiki/api/v2/attachments/{id}/download
+//
+// https://docs.go-atlassian.io/confluence-cloud/v2/attachments#download-attachment
+func (a *AttachmentService) Download(ctx context.Context, attachmentID string) (*model.ResponseScheme, error) {
+	return a.internalClient.Download(ctx, attachmentID)
+}
+
 type internalAttachmentImpl struct {
 	c service.Connector
 }
@@ -183,4 +192,20 @@ func (i *internalAttachmentImpl) Gets(ctx context.Context, entityID int, entityT
 	}
 
 	return page, response, nil
+}
+
+func (i *internalAttachmentImpl) Download(ctx context.Context, attachmentID string) (*model.ResponseScheme, error) {
+
+	if attachmentID == "" {
+		return nil, fmt.Errorf("confluence: %w", model.ErrNoContentAttachmentID)
+	}
+
+	endpoint := fmt.Sprintf("wiki/api/v2/attachments/%v/download", attachmentID)
+
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return i.c.Call(request, nil)
 }

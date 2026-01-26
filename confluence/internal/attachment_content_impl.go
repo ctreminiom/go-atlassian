@@ -67,6 +67,15 @@ func (a *ContentAttachmentService) Create(ctx context.Context, attachmentID, sta
 	return a.internalClient.Create(ctx, attachmentID, status, fileName, file)
 }
 
+// Download returns the contents of an attachment.
+//
+// GET /wiki/rest/api/content/{id}/child/attachment/{attachmentId}/download
+//
+// https://docs.go-atlassian.io/confluence-cloud/content/attachments#download-attachment
+func (a *ContentAttachmentService) Download(ctx context.Context, contentID, attachmentID string) (*model.ResponseScheme, error) {
+	return a.internalClient.Download(ctx, contentID, attachmentID)
+}
+
 type internalContentAttachmentImpl struct {
 	c service.Connector
 }
@@ -225,4 +234,24 @@ func (i *internalContentAttachmentImpl) Create(ctx context.Context, attachmentID
 	}
 
 	return page, response, nil
+}
+
+func (i *internalContentAttachmentImpl) Download(ctx context.Context, contentID, attachmentID string) (*model.ResponseScheme, error) {
+
+	if contentID == "" {
+		return nil, fmt.Errorf("confluence: %w", model.ErrNoContentID)
+	}
+
+	if attachmentID == "" {
+		return nil, fmt.Errorf("confluence: %w", model.ErrNoContentAttachmentID)
+	}
+
+	endpoint := fmt.Sprintf("wiki/rest/api/content/%v/child/attachment/%v/download", contentID, attachmentID)
+
+	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint, "", nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return i.c.Call(request, nil)
 }

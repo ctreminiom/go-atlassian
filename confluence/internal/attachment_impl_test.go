@@ -400,3 +400,118 @@ func Test_internalAttachmentImpl_Delete(t *testing.T) {
 		})
 	}
 }
+
+func Test_internalAttachmentImpl_Download(t *testing.T) {
+
+	type fields struct {
+		c service.Connector
+	}
+
+	type args struct {
+		ctx          context.Context
+		attachmentID string
+	}
+
+	testCases := []struct {
+		name    string
+		fields  fields
+		args    args
+		on      func(*fields)
+		wantErr bool
+		Err     error
+	}{
+		{
+			name: "when the parameters are correct",
+			args: args{
+				ctx:          context.Background(),
+				attachmentID: "att10001",
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewConnector(t)
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodGet,
+					"wiki/api/v2/attachments/att10001/download",
+					"", nil).
+					Return(&http.Request{}, nil)
+
+				client.On("Call",
+					&http.Request{},
+					nil).
+					Return(&model.ResponseScheme{}, nil)
+
+				fields.c = client
+
+			},
+		},
+
+		{
+			name: "when the http request cannot be created",
+			args: args{
+				ctx:          context.Background(),
+				attachmentID: "att10001",
+			},
+			on: func(fields *fields) {
+
+				client := mocks.NewConnector(t)
+
+				client.On("NewRequest",
+					context.Background(),
+					http.MethodGet,
+					"wiki/api/v2/attachments/att10001/download",
+					"", nil).
+					Return(&http.Request{}, model.ErrCreateHttpReq)
+
+				fields.c = client
+
+			},
+			wantErr: true,
+			Err:     model.ErrCreateHttpReq,
+		},
+
+		{
+			name: "when the attachment id is not provided",
+			args: args{
+				ctx: context.Background(),
+			},
+			wantErr: true,
+			Err:     model.ErrNoContentAttachmentID,
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+
+			if testCase.on != nil {
+				testCase.on(&testCase.fields)
+			}
+
+			attachmentService := NewAttachmentService(testCase.fields.c, nil)
+
+			gotResponse, err := attachmentService.Download(testCase.args.ctx, testCase.args.attachmentID)
+
+			if testCase.wantErr {
+
+				if err != nil {
+					t.Logf("error returned: %v", err.Error())
+				}
+
+				// the first if statement is to handle wrapped errors from url and json packages for more accurate comparison
+				var urlErr *url.Error
+				var jsonErr *json.SyntaxError
+				if errors.As(err, &urlErr) || errors.As(err, &jsonErr) {
+					assert.Contains(t, err.Error(), testCase.Err.Error())
+				} else {
+					assert.True(t, errors.Is(err, testCase.Err), "expected error: %v, got: %v", testCase.Err, err)
+				}
+			} else {
+
+				assert.NoError(t, err)
+				assert.NotEqual(t, gotResponse, nil)
+			}
+
+		})
+	}
+}

@@ -55,6 +55,15 @@ func (c *CommentRichTextService) Add(ctx context.Context, issueKeyOrID string, p
 	return c.internalClient.Add(ctx, issueKeyOrID, payload, expand)
 }
 
+// Update updates a comment.
+//
+// PUT /rest/api/{2-3}/issue/{issueKeyOrID}/comment/{commentID}
+//
+// https://docs.go-atlassian.io/jira-software-cloud/issues/comments#update-comment
+func (c *CommentRichTextService) Update(ctx context.Context, issueKeyOrID, commentID string, payload *model.CommentPayloadSchemeV2, expand []string) (*model.IssueCommentSchemeV2, *model.ResponseScheme, error) {
+	return c.internalClient.Update(ctx, issueKeyOrID, commentID, payload, expand)
+}
+
 type internalRichTextCommentImpl struct {
 	c       service.Connector
 	version string
@@ -159,6 +168,42 @@ func (i *internalRichTextCommentImpl) Add(ctx context.Context, issueKeyOrID stri
 	}
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint.String(), "", payload)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	comment := new(model.IssueCommentSchemeV2)
+	response, err := i.c.Call(request, comment)
+	if err != nil {
+		return nil, response, err
+	}
+
+	return comment, response, nil
+}
+
+func (i *internalRichTextCommentImpl) Update(ctx context.Context, issueKeyOrID, commentID string, payload *model.CommentPayloadSchemeV2, expand []string) (*model.IssueCommentSchemeV2, *model.ResponseScheme, error) {
+
+	if issueKeyOrID == "" {
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoIssueKeyOrID)
+	}
+
+	if commentID == "" {
+		return nil, nil, fmt.Errorf("jira: %w", model.ErrNoCommentID)
+	}
+
+	params := url.Values{}
+	if len(expand) != 0 {
+		params.Add("expand", strings.Join(expand, ","))
+	}
+
+	var endpoint strings.Builder
+	endpoint.WriteString(fmt.Sprintf("rest/api/%v/issue/%v/comment/%v", i.version, issueKeyOrID, commentID))
+
+	if params.Encode() != "" {
+		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
+	}
+
+	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint.String(), "", payload)
 	if err != nil {
 		return nil, nil, err
 	}

@@ -29,6 +29,13 @@ type CommentRichTextConnector interface {
 	//
 	//https://docs.go-atlassian.io/jira-software-cloud/issues/comments#add-comment
 	Add(ctx context.Context, issueKeyOrID string, payload *model.CommentPayloadSchemeV2, expand []string) (*model.IssueCommentSchemeV2, *model.ResponseScheme, error)
+
+	// Update updates a comment.
+	//
+	// PUT /rest/api/{2-3}/issue/{issueKeyOrID}/comment/{commentID}
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/issues/comments#update-comment
+	Update(ctx context.Context, issueKeyOrID, commentID string, payload *model.CommentPayloadSchemeV2, expand []string) (*model.IssueCommentSchemeV2, *model.ResponseScheme, error)
 }
 
 type CommentADFConnector interface {
@@ -54,6 +61,13 @@ type CommentADFConnector interface {
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/issues/comments#add-comment
 	Add(ctx context.Context, issueKeyOrID string, payload *model.CommentPayloadScheme, expand []string) (*model.IssueCommentScheme, *model.ResponseScheme, error)
+
+	// Update updates a comment.
+	//
+	// PUT /rest/api/{2-3}/issue/{issueKeyOrID}/comment/{commentID}
+	//
+	// https://docs.go-atlassian.io/jira-software-cloud/issues/comments#update-comment
+	Update(ctx context.Context, issueKeyOrID, commentID string, payload *model.CommentPayloadScheme, expand []string) (*model.IssueCommentScheme, *model.ResponseScheme, error)
 }
 
 type CommentSharedConnector interface {

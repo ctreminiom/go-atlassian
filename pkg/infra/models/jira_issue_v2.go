@@ -145,8 +145,11 @@ type ParentScheme struct {
 
 // ParentFieldsScheme represents the fields of a parent issue in Jira.
 type ParentFieldsScheme struct {
-	Summary string        `json:"summary,omitempty"` // The summary of the parent issue.
-	Status  *StatusScheme `json:"status,omitempty"`  // The status of the parent issue.
+	Summary   string           `json:"summary,omitempty"`   // The summary of the parent issue.
+	Status    *StatusScheme    `json:"status,omitempty"`    // The status of the parent issue.
+	IssueType *IssueTypeScheme `json:"issuetype,omitempty"` // The type of the parent issue.
+	Priority  *PriorityScheme  `json:"priority,omitempty"`  // The priority of the parent issue.
+	Assignee  *UserScheme      `json:"assignee,omitempty"`  // The assignee of the parent issue.
 }
 
 // IssueResponseScheme represents the response of an issue operation in Jira.

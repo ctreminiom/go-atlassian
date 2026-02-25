@@ -106,7 +106,7 @@ func (i *internalAttachmentImpl) Get(ctx context.Context, attachmentID string, v
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("wiki/api/v2/attachments/%v", attachmentID))
+	fmt.Fprintf(&endpoint, "wiki/api/v2/attachments/%v", attachmentID)
 
 	query := url.Values{}
 	if versionID != 0 {
@@ -118,7 +118,7 @@ func (i *internalAttachmentImpl) Get(ctx context.Context, attachmentID string, v
 	}
 
 	if query.Encode() != "" {
-		endpoint.WriteString(fmt.Sprintf("?%v", query.Encode()))
+		fmt.Fprintf(&endpoint, "?%v", query.Encode())
 	}
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)

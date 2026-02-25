@@ -55,13 +55,13 @@ func (i *internalAnalyticsServiceImpl) Get(ctx context.Context, contentID, fromD
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("wiki/rest/api/analytics/content/%v/views", contentID))
+	fmt.Fprintf(&endpoint, "wiki/rest/api/analytics/content/%v/views", contentID)
 
 	if fromDate != "" {
 		query := url.Values{}
 		query.Add("fromDate", fromDate)
 
-		endpoint.WriteString(fmt.Sprintf("?%v", query.Encode()))
+		fmt.Fprintf(&endpoint, "?%v", query.Encode())
 	}
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
@@ -85,13 +85,13 @@ func (i *internalAnalyticsServiceImpl) Distinct(ctx context.Context, contentID, 
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("wiki/rest/api/analytics/content/%v/viewers", contentID))
+	fmt.Fprintf(&endpoint, "wiki/rest/api/analytics/content/%v/viewers", contentID)
 
 	if fromDate != "" {
 		query := url.Values{}
 		query.Add("fromDate", fromDate)
 
-		endpoint.WriteString(fmt.Sprintf("?%v", query.Encode()))
+		fmt.Fprintf(&endpoint, "?%v", query.Encode())
 	}
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)

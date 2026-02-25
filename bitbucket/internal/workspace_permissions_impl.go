@@ -69,14 +69,14 @@ func (i *internalWorkspacePermissionServiceImpl) Members(ctx context.Context, wo
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("2.0/workspaces/%v/permissions", workspace))
+	fmt.Fprintf(&endpoint, "2.0/workspaces/%v/permissions", workspace)
 
 	if query != "" {
 
 		params := url.Values{}
 		params.Add("q", query)
 
-		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
+		fmt.Fprintf(&endpoint, "?%v", params.Encode())
 	}
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
@@ -100,7 +100,7 @@ func (i *internalWorkspacePermissionServiceImpl) Repositories(ctx context.Contex
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("2.0/workspaces/%v/permissions/repositories", workspace))
+	fmt.Fprintf(&endpoint, "2.0/workspaces/%v/permissions/repositories", workspace)
 
 	params := url.Values{}
 	if query != "" {
@@ -111,7 +111,7 @@ func (i *internalWorkspacePermissionServiceImpl) Repositories(ctx context.Contex
 	}
 
 	if params.Encode() != "" {
-		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
+		fmt.Fprintf(&endpoint, "?%v", params.Encode())
 	}
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
@@ -139,7 +139,7 @@ func (i *internalWorkspacePermissionServiceImpl) Repository(ctx context.Context,
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("2.0/workspaces/%v/permissions/repositories/%v", workspace, repository))
+	fmt.Fprintf(&endpoint, "2.0/workspaces/%v/permissions/repositories/%v", workspace, repository)
 
 	params := url.Values{}
 
@@ -151,7 +151,7 @@ func (i *internalWorkspacePermissionServiceImpl) Repository(ctx context.Context,
 	}
 
 	if params.Encode() != "" {
-		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
+		fmt.Fprintf(&endpoint, "?%v", params.Encode())
 	}
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)

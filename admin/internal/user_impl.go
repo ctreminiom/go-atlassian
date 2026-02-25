@@ -92,14 +92,14 @@ func (i *internalUserImpl) Permissions(ctx context.Context, accountID string, pr
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("users/%v/manage", accountID))
+	fmt.Fprintf(&endpoint, "users/%v/manage", accountID)
 
 	if len(privileges) != 0 {
 
 		params := url.Values{}
 		params.Add("privileges", strings.Join(privileges, ","))
 
-		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
+		fmt.Fprintf(&endpoint, "?%v", params.Encode())
 	}
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)

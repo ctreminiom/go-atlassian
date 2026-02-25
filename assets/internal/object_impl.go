@@ -290,14 +290,14 @@ func (i *internalObjectImpl) History(ctx context.Context, workspaceID, objectID 
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("jsm/assets/workspace/%v/v1/object/%v/history", workspaceID, objectID))
+	fmt.Fprintf(&endpoint, "jsm/assets/workspace/%v/v1/object/%v/history", workspaceID, objectID)
 
 	if ascOrder {
 
 		query := url.Values{}
 		query.Add("asc", "true")
 
-		endpoint.WriteString(fmt.Sprintf("?%v", query.Encode()))
+		fmt.Fprintf(&endpoint, "?%v", query.Encode())
 	}
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)

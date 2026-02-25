@@ -163,14 +163,14 @@ func (i *internalWorkflowSchemeImpl) Get(ctx context.Context, schemeID int, retu
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("rest/api/%v/workflowscheme/%v", i.version, schemeID))
+	fmt.Fprintf(&endpoint, "rest/api/%v/workflowscheme/%v", i.version, schemeID)
 
 	if returnDraftIfExists {
 
 		params := url.Values{}
 		params.Add("returnDraftIfExists", "true")
 
-		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
+		fmt.Fprintf(&endpoint, "?%v", params.Encode())
 	}
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)

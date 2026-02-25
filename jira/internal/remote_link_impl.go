@@ -112,13 +112,13 @@ func (i *internalRemoteLinkImpl) Gets(ctx context.Context, issueKeyOrID, globalI
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("rest/api/%v/issue/%v/remotelink", i.version, issueKeyOrID))
+	fmt.Fprintf(&endpoint, "rest/api/%v/issue/%v/remotelink", i.version, issueKeyOrID)
 
 	if globalID != "" {
 
 		params := url.Values{}
 		params.Add("globalId", globalID)
-		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
+		fmt.Fprintf(&endpoint, "?%v", params.Encode())
 	}
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)

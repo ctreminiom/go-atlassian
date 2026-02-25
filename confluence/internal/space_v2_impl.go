@@ -157,13 +157,13 @@ func (i *internalSpaceV2Impl) Get(ctx context.Context, spaceID int, descriptionF
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("wiki/api/v2/spaces/%v", spaceID))
+	fmt.Fprintf(&endpoint, "wiki/api/v2/spaces/%v", spaceID)
 
 	if descriptionFormat != "" {
 		query := url.Values{}
 		query.Add("description-format", descriptionFormat)
 
-		endpoint.WriteString(fmt.Sprintf("?%v", query.Encode()))
+		fmt.Fprintf(&endpoint, "?%v", query.Encode())
 	}
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)

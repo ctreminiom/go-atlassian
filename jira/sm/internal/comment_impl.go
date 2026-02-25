@@ -116,13 +116,13 @@ func (i *internalServiceRequestCommentImpl) Get(ctx context.Context, issueKeyOrI
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("rest/servicedeskapi/request/%v/comment/%v", issueKeyOrID, commentID))
+	fmt.Fprintf(&endpoint, "rest/servicedeskapi/request/%v/comment/%v", issueKeyOrID, commentID)
 
 	if expand != nil {
 		params := url.Values{}
 		params.Add("expand", strings.Join(expand, ","))
 
-		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
+		fmt.Fprintf(&endpoint, "?%v", params.Encode())
 	}
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)

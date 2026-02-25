@@ -217,13 +217,13 @@ func (i *internalSpaceImpl) Get(ctx context.Context, spaceKey string, expand []s
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("wiki/rest/api/space/%v", spaceKey))
+	fmt.Fprintf(&endpoint, "wiki/rest/api/space/%v", spaceKey)
 
 	if expand != nil {
 		query := url.Values{}
 		query.Add("expand", strings.Join(expand, ","))
 
-		endpoint.WriteString(fmt.Sprintf("?%v", query.Encode()))
+		fmt.Fprintf(&endpoint, "?%v", query.Encode())
 	}
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)

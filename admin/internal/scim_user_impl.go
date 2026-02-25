@@ -121,10 +121,10 @@ func (i *internalSCIMUserImpl) Create(ctx context.Context, directoryID string, p
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("scim/directory/%v/Users", directoryID))
+	fmt.Fprintf(&endpoint, "scim/directory/%v/Users", directoryID)
 
 	if params.Encode() != "" {
-		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
+		fmt.Fprintf(&endpoint, "?%v", params.Encode())
 	}
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint.String(), "", payload)
@@ -202,10 +202,10 @@ func (i *internalSCIMUserImpl) Get(ctx context.Context, directoryID, userID stri
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("scim/directory/%v/Users/%v", directoryID, userID))
+	fmt.Fprintf(&endpoint, "scim/directory/%v/Users/%v", directoryID, userID)
 
 	if params.Encode() != "" {
-		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
+		fmt.Fprintf(&endpoint, "?%v", params.Encode())
 	}
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
@@ -263,10 +263,10 @@ func (i *internalSCIMUserImpl) Path(ctx context.Context, directoryID, userID str
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("scim/directory/%v/Users/%v", directoryID, userID))
+	fmt.Fprintf(&endpoint, "scim/directory/%v/Users/%v", directoryID, userID)
 
 	if params.Encode() != "" {
-		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
+		fmt.Fprintf(&endpoint, "?%v", params.Encode())
 	}
 
 	request, err := i.c.NewRequest(ctx, http.MethodPatch, endpoint.String(), "", payload)
@@ -303,10 +303,10 @@ func (i *internalSCIMUserImpl) Update(ctx context.Context, directoryID, userID s
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("scim/directory/%v/Users/%v", directoryID, userID))
+	fmt.Fprintf(&endpoint, "scim/directory/%v/Users/%v", directoryID, userID)
 
 	if params.Encode() != "" {
-		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
+		fmt.Fprintf(&endpoint, "?%v", params.Encode())
 	}
 
 	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint.String(), "", payload)

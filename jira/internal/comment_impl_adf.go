@@ -161,10 +161,10 @@ func (i *internalAdfCommentImpl) Add(ctx context.Context, issueKeyOrID string, p
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("rest/api/%v/issue/%v/comment", i.version, issueKeyOrID))
+	fmt.Fprintf(&endpoint, "rest/api/%v/issue/%v/comment", i.version, issueKeyOrID)
 
 	if params.Encode() != "" {
-		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
+		fmt.Fprintf(&endpoint, "?%v", params.Encode())
 	}
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint.String(), "", payload)
@@ -197,10 +197,10 @@ func (i *internalAdfCommentImpl) Update(ctx context.Context, issueKeyOrID, comme
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("rest/api/%v/issue/%v/comment/%v", i.version, issueKeyOrID, commentID))
+	fmt.Fprintf(&endpoint, "rest/api/%v/issue/%v/comment/%v", i.version, issueKeyOrID, commentID)
 
 	if params.Encode() != "" {
-		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
+		fmt.Fprintf(&endpoint, "?%v", params.Encode())
 	}
 
 	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint.String(), "", payload)

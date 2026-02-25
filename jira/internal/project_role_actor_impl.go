@@ -90,7 +90,7 @@ func (i *internalProjectRoleActorImpl) Delete(ctx context.Context, projectKeyOrI
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("rest/api/%v/project/%v/role/%v", i.version, projectKeyOrID, roleID))
+	fmt.Fprintf(&endpoint, "rest/api/%v/project/%v/role/%v", i.version, projectKeyOrID, roleID)
 
 	params := url.Values{}
 
@@ -103,7 +103,7 @@ func (i *internalProjectRoleActorImpl) Delete(ctx context.Context, projectKeyOrI
 	}
 
 	if params.Encode() != "" {
-		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
+		fmt.Fprintf(&endpoint, "?%v", params.Encode())
 	}
 
 	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint.String(), "", nil)

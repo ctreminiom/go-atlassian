@@ -93,13 +93,13 @@ func (i *internalWorkflowSchemeIssueTypeImpl) Get(ctx context.Context, schemeID 
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("rest/api/%v/workflowscheme/%v/issuetype/%v", i.version, schemeID, issueTypeID))
+	fmt.Fprintf(&endpoint, "rest/api/%v/workflowscheme/%v/issuetype/%v", i.version, schemeID, issueTypeID)
 
 	if returnDraft {
 		params := url.Values{}
 		params.Add("returnDraftIfExists", "true")
 
-		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
+		fmt.Fprintf(&endpoint, "?%v", params.Encode())
 	}
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
@@ -153,13 +153,13 @@ func (i *internalWorkflowSchemeIssueTypeImpl) Delete(ctx context.Context, scheme
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("rest/api/%v/workflowscheme/%v/issuetype/%v", i.version, schemeID, issueTypeID))
+	fmt.Fprintf(&endpoint, "rest/api/%v/workflowscheme/%v/issuetype/%v", i.version, schemeID, issueTypeID)
 
 	if updateDraft {
 		params := url.Values{}
 		params.Add("updateDraftIfNeeded", "true")
 
-		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
+		fmt.Fprintf(&endpoint, "?%v", params.Encode())
 	}
 
 	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint.String(), "", nil)
@@ -183,7 +183,7 @@ func (i *internalWorkflowSchemeIssueTypeImpl) Mapping(ctx context.Context, schem
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("rest/api/%v/workflowscheme/%v/workflow", i.version, schemeID))
+	fmt.Fprintf(&endpoint, "rest/api/%v/workflowscheme/%v/workflow", i.version, schemeID)
 
 	params := url.Values{}
 
@@ -196,7 +196,7 @@ func (i *internalWorkflowSchemeIssueTypeImpl) Mapping(ctx context.Context, schem
 	}
 
 	if params.Encode() != "" {
-		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
+		fmt.Fprintf(&endpoint, "?%v", params.Encode())
 	}
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)

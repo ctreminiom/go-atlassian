@@ -107,13 +107,13 @@ func (i *internalVersionImpl) Get(ctx context.Context, contentID string, version
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("wiki/rest/api/content/%v/version/%v", contentID, versionNumber))
+	fmt.Fprintf(&endpoint, "wiki/rest/api/content/%v/version/%v", contentID, versionNumber)
 
 	if len(expand) != 0 {
 		query := url.Values{}
 		query.Add("expand", strings.Join(expand, ","))
 
-		endpoint.WriteString(fmt.Sprintf("?%v", query.Encode()))
+		fmt.Fprintf(&endpoint, "?%v", query.Encode())
 	}
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
@@ -137,13 +137,13 @@ func (i *internalVersionImpl) Restore(ctx context.Context, contentID string, pay
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("wiki/rest/api/content/%v/version", contentID))
+	fmt.Fprintf(&endpoint, "wiki/rest/api/content/%v/version", contentID)
 
 	if len(expand) != 0 {
 		query := url.Values{}
 		query.Add("expand", strings.Join(expand, ","))
 
-		endpoint.WriteString(fmt.Sprintf("?%v", query.Encode()))
+		fmt.Fprintf(&endpoint, "?%v", query.Encode())
 	}
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint.String(), "", payload)

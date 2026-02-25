@@ -79,16 +79,16 @@ func (i *internalRestrictionOperationGroupImpl) Get(ctx context.Context, content
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("wiki/rest/api/content/%v/restriction/byOperation/%v/", contentID, operationKey))
+	fmt.Fprintf(&endpoint, "wiki/rest/api/content/%v/restriction/byOperation/%v/", contentID, operationKey)
 
 	// check if the group id is an uuid type
 	// if so, it's the group id
 	groupID, err := uuid.Parse(groupNameOrID)
 
 	if err == nil {
-		endpoint.WriteString(fmt.Sprintf("byGroupId/%v", groupID.String()))
+		fmt.Fprintf(&endpoint, "byGroupId/%v", groupID.String())
 	} else {
-		endpoint.WriteString(fmt.Sprintf("group/%v", groupNameOrID))
+		fmt.Fprintf(&endpoint, "group/%v", groupNameOrID)
 	}
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
@@ -114,16 +114,16 @@ func (i *internalRestrictionOperationGroupImpl) Add(ctx context.Context, content
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("wiki/rest/api/content/%v/restriction/byOperation/%v/", contentID, operationKey))
+	fmt.Fprintf(&endpoint, "wiki/rest/api/content/%v/restriction/byOperation/%v/", contentID, operationKey)
 
 	// check if the group id is an uuid type
 	// if so, it's the group id
 	groupID, err := uuid.Parse(groupNameOrID)
 
 	if err == nil {
-		endpoint.WriteString(fmt.Sprintf("byGroupId/%v", groupID.String()))
+		fmt.Fprintf(&endpoint, "byGroupId/%v", groupID.String())
 	} else {
-		endpoint.WriteString(fmt.Sprintf("group/%v", groupNameOrID))
+		fmt.Fprintf(&endpoint, "group/%v", groupNameOrID)
 	}
 
 	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint.String(), "", nil)
@@ -149,16 +149,16 @@ func (i *internalRestrictionOperationGroupImpl) Remove(ctx context.Context, cont
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("wiki/rest/api/content/%v/restriction/byOperation/%v/", contentID, operationKey))
+	fmt.Fprintf(&endpoint, "wiki/rest/api/content/%v/restriction/byOperation/%v/", contentID, operationKey)
 
 	// check if the group id is an uuid type
 	// if so, it's the group id
 	groupID, err := uuid.Parse(groupNameOrID)
 
 	if err == nil {
-		endpoint.WriteString(fmt.Sprintf("byGroupId/%v", groupID.String()))
+		fmt.Fprintf(&endpoint, "byGroupId/%v", groupID.String())
 	} else {
-		endpoint.WriteString(fmt.Sprintf("group/%v", groupNameOrID))
+		fmt.Fprintf(&endpoint, "group/%v", groupNameOrID)
 	}
 
 	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint.String(), "", nil)

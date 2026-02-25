@@ -271,10 +271,10 @@ func (i *internalIssueADFServiceImpl) Get(ctx context.Context, issueKeyOrID stri
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("rest/api/%v/issue/%v", i.version, issueKeyOrID))
+	fmt.Fprintf(&endpoint, "rest/api/%v/issue/%v", i.version, issueKeyOrID)
 
 	if params.Encode() != "" {
-		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
+		fmt.Fprintf(&endpoint, "?%v", params.Encode())
 	}
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)

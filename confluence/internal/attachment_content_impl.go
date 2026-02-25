@@ -139,13 +139,13 @@ func (i *internalContentAttachmentImpl) CreateOrUpdate(ctx context.Context, atta
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("wiki/rest/api/content/%v/child/attachment", attachmentID))
+	fmt.Fprintf(&endpoint, "wiki/rest/api/content/%v/child/attachment", attachmentID)
 
 	if status != "" {
 		query := url.Values{}
 		query.Add("status", status)
 
-		endpoint.WriteString(fmt.Sprintf("?%v", query.Encode()))
+		fmt.Fprintf(&endpoint, "?%v", query.Encode())
 	}
 
 	reader := &bytes.Buffer{}
@@ -196,13 +196,13 @@ func (i *internalContentAttachmentImpl) Create(ctx context.Context, attachmentID
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("wiki/rest/api/content/%v/child/attachment", attachmentID))
+	fmt.Fprintf(&endpoint, "wiki/rest/api/content/%v/child/attachment", attachmentID)
 
 	if status != "" {
 		query := url.Values{}
 		query.Add("status", status)
 
-		endpoint.WriteString(fmt.Sprintf("?%v", query.Encode()))
+		fmt.Fprintf(&endpoint, "?%v", query.Encode())
 	}
 
 	reader := &bytes.Buffer{}

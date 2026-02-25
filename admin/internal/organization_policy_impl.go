@@ -88,10 +88,10 @@ func (i *internalOrganizationPolicyImpl) Gets(ctx context.Context, organizationI
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("admin/v1/orgs/%v/policies", organizationID))
+	fmt.Fprintf(&endpoint, "admin/v1/orgs/%v/policies", organizationID)
 
 	if params.Encode() != "" {
-		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
+		fmt.Fprintf(&endpoint, "?%v", params.Encode())
 	}
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)

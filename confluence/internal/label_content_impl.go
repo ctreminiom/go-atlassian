@@ -94,13 +94,13 @@ func (i *internalContentLabelImpl) Add(ctx context.Context, contentID string, pa
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("wiki/rest/api/content/%v/label", contentID))
+	fmt.Fprintf(&endpoint, "wiki/rest/api/content/%v/label", contentID)
 
 	if want400Response {
 		query := url.Values{}
 		query.Add("use-400-error-response", "true")
 
-		endpoint.WriteString(fmt.Sprintf("?%v", query.Encode()))
+		fmt.Fprintf(&endpoint, "?%v", query.Encode())
 	}
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint.String(), "", payload)

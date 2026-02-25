@@ -342,13 +342,13 @@ func (i *internalContentImpl) Delete(ctx context.Context, contentID, status stri
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("wiki/rest/api/content/%v", contentID))
+	fmt.Fprintf(&endpoint, "wiki/rest/api/content/%v", contentID)
 
 	if status != "" {
 		query := url.Values{}
 		query.Add("status", status)
 
-		endpoint.WriteString(fmt.Sprintf("?%v", query.Encode()))
+		fmt.Fprintf(&endpoint, "?%v", query.Encode())
 	}
 
 	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint.String(), "", nil)
@@ -366,13 +366,13 @@ func (i *internalContentImpl) History(ctx context.Context, contentID string, exp
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("wiki/rest/api/content/%v/history", contentID))
+	fmt.Fprintf(&endpoint, "wiki/rest/api/content/%v/history", contentID)
 
 	if len(expand) != 0 {
 		query := url.Values{}
 		query.Add("expand", strings.Join(expand, ","))
 
-		endpoint.WriteString(fmt.Sprintf("?%v", query.Encode()))
+		fmt.Fprintf(&endpoint, "?%v", query.Encode())
 	}
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)

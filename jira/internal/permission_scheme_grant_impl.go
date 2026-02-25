@@ -100,14 +100,14 @@ func (i *internalPermissionSchemeGrantImpl) Gets(ctx context.Context, permission
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("rest/api/%v/permissionscheme/%v/permission", i.version, permissionSchemeID))
+	fmt.Fprintf(&endpoint, "rest/api/%v/permissionscheme/%v/permission", i.version, permissionSchemeID)
 
 	if expand != nil {
 
 		params := url.Values{}
 		params.Add("expand", strings.Join(expand, ","))
 
-		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
+		fmt.Fprintf(&endpoint, "?%v", params.Encode())
 	}
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
@@ -135,14 +135,14 @@ func (i *internalPermissionSchemeGrantImpl) Get(ctx context.Context, permissionS
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("rest/api/%v/permissionscheme/%v/permission/%v", i.version, permissionSchemeID, permissionGrantID))
+	fmt.Fprintf(&endpoint, "rest/api/%v/permissionscheme/%v/permission/%v", i.version, permissionSchemeID, permissionGrantID)
 
 	if expand != nil {
 
 		params := url.Values{}
 		params.Add("expand", strings.Join(expand, ","))
 
-		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
+		fmt.Fprintf(&endpoint, "?%v", params.Encode())
 	}
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)

@@ -146,10 +146,10 @@ func (i *internalWorklogAdfImpl) Gets(ctx context.Context, worklogIDs []int, exp
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("rest/api/%v/worklog/list", i.version))
+	fmt.Fprintf(&endpoint, "rest/api/%v/worklog/list", i.version)
 
 	if params.Encode() != "" {
-		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
+		fmt.Fprintf(&endpoint, "?%v", params.Encode())
 	}
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint.String(), "", map[string]interface{}{"ids": worklogIDs})
@@ -182,10 +182,10 @@ func (i *internalWorklogAdfImpl) Get(ctx context.Context, issueKeyOrID, worklogI
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("rest/api/%v/issue/%v/worklog/%v", i.version, issueKeyOrID, worklogID))
+	fmt.Fprintf(&endpoint, "rest/api/%v/issue/%v/worklog/%v", i.version, issueKeyOrID, worklogID)
 
 	if params.Encode() != "" {
-		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
+		fmt.Fprintf(&endpoint, "?%v", params.Encode())
 	}
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
@@ -247,7 +247,7 @@ func (i *internalWorklogAdfImpl) Delete(ctx context.Context, issueKeyOrID, workl
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("rest/api/%v/issue/%v/worklog/%v", i.version, issueKeyOrID, worklogID))
+	fmt.Fprintf(&endpoint, "rest/api/%v/issue/%v/worklog/%v", i.version, issueKeyOrID, worklogID)
 
 	if options != nil {
 
@@ -271,7 +271,7 @@ func (i *internalWorklogAdfImpl) Delete(ctx context.Context, issueKeyOrID, workl
 			params.Add("expand", strings.Join(options.Expand, ","))
 		}
 
-		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
+		fmt.Fprintf(&endpoint, "?%v", params.Encode())
 	}
 
 	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint.String(), "", nil)
@@ -290,10 +290,10 @@ func (i *internalWorklogAdfImpl) Deleted(ctx context.Context, since int) (*model
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("rest/api/%v/worklog/deleted", i.version))
+	fmt.Fprintf(&endpoint, "rest/api/%v/worklog/deleted", i.version)
 
 	if params.Encode() != "" {
-		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
+		fmt.Fprintf(&endpoint, "?%v", params.Encode())
 	}
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
@@ -322,10 +322,10 @@ func (i *internalWorklogAdfImpl) Updated(ctx context.Context, since int, expand 
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("rest/api/%v/worklog/updated", i.version))
+	fmt.Fprintf(&endpoint, "rest/api/%v/worklog/updated", i.version)
 
 	if params.Encode() != "" {
-		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
+		fmt.Fprintf(&endpoint, "?%v", params.Encode())
 	}
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
@@ -349,7 +349,7 @@ func (i *internalWorklogAdfImpl) Add(ctx context.Context, issueKeyOrID string, p
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("rest/api/%v/issue/%v/worklog", i.version, issueKeyOrID))
+	fmt.Fprintf(&endpoint, "rest/api/%v/issue/%v/worklog", i.version, issueKeyOrID)
 
 	if options != nil {
 
@@ -374,7 +374,7 @@ func (i *internalWorklogAdfImpl) Add(ctx context.Context, issueKeyOrID string, p
 			params.Add("expand", strings.Join(options.Expand, ","))
 		}
 
-		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
+		fmt.Fprintf(&endpoint, "?%v", params.Encode())
 	}
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint.String(), "", payload)
@@ -402,7 +402,7 @@ func (i *internalWorklogAdfImpl) Update(ctx context.Context, issueKeyOrID, workl
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("rest/api/%v/issue/%v/worklog/%v", i.version, issueKeyOrID, worklogID))
+	fmt.Fprintf(&endpoint, "rest/api/%v/issue/%v/worklog/%v", i.version, issueKeyOrID, worklogID)
 
 	if options != nil {
 
@@ -427,7 +427,7 @@ func (i *internalWorklogAdfImpl) Update(ctx context.Context, issueKeyOrID, workl
 			params.Add("expand", strings.Join(options.Expand, ","))
 		}
 
-		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
+		fmt.Fprintf(&endpoint, "?%v", params.Encode())
 	}
 
 	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint.String(), "", payload)

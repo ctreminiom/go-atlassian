@@ -242,10 +242,10 @@ func (i *internalWorkflowImpl) Search(ctx context.Context, options *model.Workfl
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("rest/api/%v/workflows", i.version))
+	fmt.Fprintf(&endpoint, "rest/api/%v/workflows", i.version)
 
 	if params.Encode() != "" {
-		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
+		fmt.Fprintf(&endpoint, "?%v", params.Encode())
 	}
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint.String(), "", options)
@@ -279,10 +279,10 @@ func (i *internalWorkflowImpl) Capabilities(ctx context.Context, workflowID, pro
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("rest/api/%v/workflows/capabilities", i.version))
+	fmt.Fprintf(&endpoint, "rest/api/%v/workflows/capabilities", i.version)
 
 	if params.Encode() != "" {
-		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
+		fmt.Fprintf(&endpoint, "?%v", params.Encode())
 	}
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
@@ -343,10 +343,10 @@ func (i *internalWorkflowImpl) Updates(ctx context.Context, payload *model.Workf
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("rest/api/%v/workflows/update", i.version))
+	fmt.Fprintf(&endpoint, "rest/api/%v/workflows/update", i.version)
 
 	if params.Encode() != "" {
-		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
+		fmt.Fprintf(&endpoint, "?%v", params.Encode())
 	}
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint.String(), "", payload)

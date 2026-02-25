@@ -90,14 +90,14 @@ func (i *internalScreenTabImpl) Gets(ctx context.Context, screenID int, projectK
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("rest/api/%v/screens/%v/tabs", i.version, screenID))
+	fmt.Fprintf(&endpoint, "rest/api/%v/screens/%v/tabs", i.version, screenID)
 
 	if projectKey != "" {
 
 		params := url.Values{}
 		params.Add("projectKey", projectKey)
 
-		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
+		fmt.Fprintf(&endpoint, "?%v", params.Encode())
 	}
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)

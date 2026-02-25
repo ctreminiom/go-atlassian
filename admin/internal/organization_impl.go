@@ -119,7 +119,7 @@ func (i *internalOrganizationImpl) Gets(ctx context.Context, cursor string) (*mo
 		params := url.Values{}
 		params.Add("cursor", cursor)
 
-		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
+		fmt.Fprintf(&endpoint, "?%v", params.Encode())
 	}
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
@@ -165,13 +165,13 @@ func (i *internalOrganizationImpl) Users(ctx context.Context, organizationID, cu
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("admin/v1/orgs/%v/users", organizationID))
+	fmt.Fprintf(&endpoint, "admin/v1/orgs/%v/users", organizationID)
 
 	if cursor != "" {
 		params := url.Values{}
 		params.Add("cursor", cursor)
 
-		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
+		fmt.Fprintf(&endpoint, "?%v", params.Encode())
 	}
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
@@ -195,13 +195,13 @@ func (i *internalOrganizationImpl) Domains(ctx context.Context, organizationID, 
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("admin/v1/orgs/%v/domains", organizationID))
+	fmt.Fprintf(&endpoint, "admin/v1/orgs/%v/domains", organizationID)
 
 	if cursor != "" {
 		params := url.Values{}
 		params.Add("cursor", cursor)
 
-		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
+		fmt.Fprintf(&endpoint, "?%v", params.Encode())
 	}
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
@@ -277,10 +277,10 @@ func (i *internalOrganizationImpl) Events(ctx context.Context, organizationID st
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("admin/v1/orgs/%v/events", organizationID))
+	fmt.Fprintf(&endpoint, "admin/v1/orgs/%v/events", organizationID)
 
 	if params.Encode() != "" {
-		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
+		fmt.Fprintf(&endpoint, "?%v", params.Encode())
 	}
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
@@ -370,9 +370,9 @@ func (i *internalOrganizationImpl) EventsStream(ctx context.Context, organizatio
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("admin/v1/orgs/%v/events-stream", organizationID))
+	fmt.Fprintf(&endpoint, "admin/v1/orgs/%v/events-stream", organizationID)
 	if params.Encode() != "" {
-		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
+		fmt.Fprintf(&endpoint, "?%v", params.Encode())
 	}
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)

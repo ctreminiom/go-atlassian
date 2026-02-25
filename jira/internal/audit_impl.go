@@ -69,10 +69,10 @@ func (i *internalAuditRecordImpl) Get(ctx context.Context, options *model.AuditR
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("rest/api/%v/auditing/record", i.version))
+	fmt.Fprintf(&endpoint, "rest/api/%v/auditing/record", i.version)
 
 	if params.Encode() != "" {
-		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
+		fmt.Fprintf(&endpoint, "?%v", params.Encode())
 	}
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)

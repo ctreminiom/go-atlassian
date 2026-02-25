@@ -117,14 +117,14 @@ func (i *internalPermissionSchemeImpl) Get(ctx context.Context, permissionScheme
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("rest/api/%v/permissionscheme/%v", i.version, permissionSchemeID))
+	fmt.Fprintf(&endpoint, "rest/api/%v/permissionscheme/%v", i.version, permissionSchemeID)
 
 	if expand != nil {
 
 		params := url.Values{}
 		params.Add("expand", strings.Join(expand, ","))
 
-		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
+		fmt.Fprintf(&endpoint, "?%v", params.Encode())
 	}
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)

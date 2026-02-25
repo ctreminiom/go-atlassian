@@ -216,14 +216,14 @@ func (i *internalNotificationSchemeImpl) Get(ctx context.Context, schemeID strin
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("rest/api/%v/notificationscheme/%v", i.version, schemeID))
+	fmt.Fprintf(&endpoint, "rest/api/%v/notificationscheme/%v", i.version, schemeID)
 
 	if len(expand) != 0 {
 
 		params := url.Values{}
 		params.Add("expand", strings.Join(expand, ","))
 
-		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
+		fmt.Fprintf(&endpoint, "?%v", params.Encode())
 	}
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)

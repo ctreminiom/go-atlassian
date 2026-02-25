@@ -155,7 +155,7 @@ func (i *internalChildrenDescandantsImpl) Children(ctx context.Context, contentI
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("wiki/rest/api/content/%v/child", contentID))
+	fmt.Fprintf(&endpoint, "wiki/rest/api/content/%v/child", contentID)
 
 	query := url.Values{}
 
@@ -168,7 +168,7 @@ func (i *internalChildrenDescandantsImpl) Children(ctx context.Context, contentI
 	}
 
 	if query.Encode() != "" {
-		endpoint.WriteString(fmt.Sprintf("?%v", query.Encode()))
+		fmt.Fprintf(&endpoint, "?%v", query.Encode())
 	}
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
@@ -205,7 +205,7 @@ func (i *internalChildrenDescandantsImpl) Move(ctx context.Context, pageID strin
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("wiki/rest/api/content/%v/move/%s/%v", pageID, position, targetID))
+	fmt.Fprintf(&endpoint, "wiki/rest/api/content/%v/move/%s/%v", pageID, position, targetID)
 
 	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint.String(), "", nil)
 	if err != nil {
@@ -266,7 +266,7 @@ func (i *internalChildrenDescandantsImpl) Descendants(ctx context.Context, conte
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("wiki/rest/api/content/%v/descendant", contentID))
+	fmt.Fprintf(&endpoint, "wiki/rest/api/content/%v/descendant", contentID)
 
 	query := url.Values{}
 
@@ -275,7 +275,7 @@ func (i *internalChildrenDescandantsImpl) Descendants(ctx context.Context, conte
 	}
 
 	if query.Encode() != "" {
-		endpoint.WriteString(fmt.Sprintf("?%v", query.Encode()))
+		fmt.Fprintf(&endpoint, "?%v", query.Encode())
 	}
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
@@ -359,13 +359,13 @@ func (i *internalChildrenDescandantsImpl) CopyPage(ctx context.Context, contentI
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("wiki/rest/api/content/%v/copy", contentID))
+	fmt.Fprintf(&endpoint, "wiki/rest/api/content/%v/copy", contentID)
 
 	if len(expand) != 0 {
 		query := url.Values{}
 		query.Add("expand", strings.Join(expand, ","))
 
-		endpoint.WriteString(fmt.Sprintf("?%v", query.Encode()))
+		fmt.Fprintf(&endpoint, "?%v", query.Encode())
 	}
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint.String(), "", options)

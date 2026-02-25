@@ -107,14 +107,14 @@ func (i *internalIssueAttachmentServiceImpl) Download(ctx context.Context, attac
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("rest/api/%v/attachment/content/%v", i.version, attachmentID))
+	fmt.Fprintf(&endpoint, "rest/api/%v/attachment/content/%v", i.version, attachmentID)
 
 	if !redirect {
 
 		params := url.Values{}
 		params.Add("redirect", "false") //default: true
 
-		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
+		fmt.Fprintf(&endpoint, "?%v", params.Encode())
 	}
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)

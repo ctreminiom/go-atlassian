@@ -48,13 +48,13 @@ type internalJQLServiceImpl struct {
 func (i *internalJQLServiceImpl) Parse(ctx context.Context, validationType string, JqlQueries []string) (*model.ParsedQueryPageScheme, *model.ResponseScheme, error) {
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("/rest/api/%v/jql/parse", i.version))
+	fmt.Fprintf(&endpoint, "/rest/api/%v/jql/parse", i.version)
 
 	if validationType != "" {
 		params := url.Values{}
 		params.Add("validation", validationType)
 
-		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
+		fmt.Fprintf(&endpoint, "?%v", params.Encode())
 	}
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint.String(), "", map[string]interface{}{"queries": JqlQueries})

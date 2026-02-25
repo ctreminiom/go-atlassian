@@ -283,14 +283,14 @@ func (i *internalProjectImpl) Get(ctx context.Context, projectKeyOrID string, ex
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("rest/api/%v/project/%v", i.version, projectKeyOrID))
+	fmt.Fprintf(&endpoint, "rest/api/%v/project/%v", i.version, projectKeyOrID)
 
 	if expand != nil {
 
 		params := url.Values{}
 		params.Add("expand", strings.Join(expand, ","))
 
-		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
+		fmt.Fprintf(&endpoint, "?%v", params.Encode())
 	}
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
@@ -437,14 +437,14 @@ func (i *internalProjectImpl) NotificationScheme(ctx context.Context, projectKey
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("rest/api/%v/project/%v/notificationscheme", i.version, projectKeyOrID))
+	fmt.Fprintf(&endpoint, "rest/api/%v/project/%v/notificationscheme", i.version, projectKeyOrID)
 
 	if expand != nil {
 
 		params := url.Values{}
 		params.Add("expand", strings.Join(expand, ","))
 
-		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
+		fmt.Fprintf(&endpoint, "?%v", params.Encode())
 	}
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)

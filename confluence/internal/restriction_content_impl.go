@@ -106,13 +106,13 @@ func (i *internalRestrictionImpl) Add(ctx context.Context, contentID string, pay
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("wiki/rest/api/content/%v/restriction", contentID))
+	fmt.Fprintf(&endpoint, "wiki/rest/api/content/%v/restriction", contentID)
 
 	if len(expand) != 0 {
 		query := url.Values{}
 		query.Add("expand", strings.Join(expand, ","))
 
-		endpoint.WriteString(fmt.Sprintf("?%v", query.Encode()))
+		fmt.Fprintf(&endpoint, "?%v", query.Encode())
 	}
 
 	request, err := i.c.NewRequest(ctx, http.MethodPost, endpoint.String(), "", payload)
@@ -136,13 +136,13 @@ func (i *internalRestrictionImpl) Delete(ctx context.Context, contentID string, 
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("wiki/rest/api/content/%v/restriction", contentID))
+	fmt.Fprintf(&endpoint, "wiki/rest/api/content/%v/restriction", contentID)
 
 	if len(expand) != 0 {
 		query := url.Values{}
 		query.Add("expand", strings.Join(expand, ","))
 
-		endpoint.WriteString(fmt.Sprintf("?%v", query.Encode()))
+		fmt.Fprintf(&endpoint, "?%v", query.Encode())
 	}
 
 	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint.String(), "", nil)
@@ -166,13 +166,13 @@ func (i *internalRestrictionImpl) Update(ctx context.Context, contentID string, 
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("wiki/rest/api/content/%v/restriction", contentID))
+	fmt.Fprintf(&endpoint, "wiki/rest/api/content/%v/restriction", contentID)
 
 	if len(expand) != 0 {
 		query := url.Values{}
 		query.Add("expand", strings.Join(expand, ","))
 
-		endpoint.WriteString(fmt.Sprintf("?%v", query.Encode()))
+		fmt.Fprintf(&endpoint, "?%v", query.Encode())
 	}
 
 	request, err := i.c.NewRequest(ctx, http.MethodPut, endpoint.String(), "", payload)

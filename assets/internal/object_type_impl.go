@@ -194,7 +194,7 @@ func (i *internalObjectTypeImpl) Attributes(ctx context.Context, workspaceID, ob
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("jsm/assets/workspace/%v/v1/objecttype/%v/attributes", workspaceID, objectTypeID))
+	fmt.Fprintf(&endpoint, "jsm/assets/workspace/%v/v1/objecttype/%v/attributes", workspaceID, objectTypeID)
 
 	query := url.Values{}
 	if options != nil {
@@ -229,7 +229,7 @@ func (i *internalObjectTypeImpl) Attributes(ctx context.Context, workspaceID, ob
 	}
 
 	if query.Encode() != "" {
-		endpoint.WriteString(fmt.Sprintf("?%v", query.Encode()))
+		fmt.Fprintf(&endpoint, "?%v", query.Encode())
 	}
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)

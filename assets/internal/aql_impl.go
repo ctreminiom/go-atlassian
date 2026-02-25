@@ -48,7 +48,7 @@ func (i *internalAQLImpl) Filter(ctx context.Context, workspaceID string, parame
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("jsm/assets/workspace/%v/v1/aql/objects", workspaceID))
+	fmt.Fprintf(&endpoint, "jsm/assets/workspace/%v/v1/aql/objects", workspaceID)
 
 	if parameters != nil {
 
@@ -62,7 +62,7 @@ func (i *internalAQLImpl) Filter(ctx context.Context, workspaceID string, parame
 		query.Add("includeExtendedInfo", fmt.Sprintf("%v", parameters.IncludeExtendedInfo))
 
 		if query.Encode() != "" {
-			endpoint.WriteString(fmt.Sprintf("?%v", query.Encode()))
+			fmt.Fprintf(&endpoint, "?%v", query.Encode())
 		}
 	}
 

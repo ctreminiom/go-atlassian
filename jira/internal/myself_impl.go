@@ -74,14 +74,14 @@ type internalMySelfImpl struct {
 func (i *internalMySelfImpl) Details(ctx context.Context, expand []string) (*model.UserScheme, *model.ResponseScheme, error) {
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("rest/api/%v/myself", i.version))
+	fmt.Fprintf(&endpoint, "rest/api/%v/myself", i.version)
 
 	if expand != nil {
 
 		params := url.Values{}
 		params.Add("expand", strings.Join(expand, ","))
 
-		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
+		fmt.Fprintf(&endpoint, "?%v", params.Encode())
 	}
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
@@ -101,12 +101,12 @@ func (i *internalMySelfImpl) Details(ctx context.Context, expand []string) (*mod
 func (i *internalMySelfImpl) Get(ctx context.Context, key string) (map[string]interface{}, *model.ResponseScheme, error) {
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("rest/api/%v/mypreferences", i.version))
+	fmt.Fprintf(&endpoint, "rest/api/%v/mypreferences", i.version)
 
 	if key != "" {
 		params := url.Values{}
 		params.Add("key", key)
-		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
+		fmt.Fprintf(&endpoint, "?%v", params.Encode())
 	}
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
@@ -130,11 +130,11 @@ func (i *internalMySelfImpl) Set(ctx context.Context, key string, value string) 
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("rest/api/%v/mypreferences", i.version))
+	fmt.Fprintf(&endpoint, "rest/api/%v/mypreferences", i.version)
 
 	params := url.Values{}
 	params.Add("key", key)
-	endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
+	fmt.Fprintf(&endpoint, "?%v", params.Encode())
 
 	payload := struct {
 		Value string `json:"value"`
@@ -163,11 +163,11 @@ func (i *internalMySelfImpl) Delete(ctx context.Context, key string) (*model.Res
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("rest/api/%v/mypreferences", i.version))
+	fmt.Fprintf(&endpoint, "rest/api/%v/mypreferences", i.version)
 
 	params := url.Values{}
 	params.Add("key", key)
-	endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
+	fmt.Fprintf(&endpoint, "?%v", params.Encode())
 
 	request, err := i.c.NewRequest(ctx, http.MethodDelete, endpoint.String(), "", nil)
 	if err != nil {

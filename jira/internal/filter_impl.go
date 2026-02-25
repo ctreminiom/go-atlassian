@@ -238,7 +238,7 @@ func (i *internalFilterServiceImpl) Get(ctx context.Context, filterID int, expan
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("rest/api/%v/filter/%v", i.version, filterID))
+	fmt.Fprintf(&endpoint, "rest/api/%v/filter/%v", i.version, filterID)
 
 	params := url.Values{}
 	if len(expand) != 0 {
@@ -246,7 +246,7 @@ func (i *internalFilterServiceImpl) Get(ctx context.Context, filterID int, expan
 	}
 
 	if params.Encode() != "" {
-		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
+		fmt.Fprintf(&endpoint, "?%v", params.Encode())
 	}
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)

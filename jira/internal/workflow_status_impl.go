@@ -150,7 +150,7 @@ func (i *internalWorkflowStatusImpl) Bulk(ctx context.Context) ([]*model.StatusD
 func (i *internalWorkflowStatusImpl) Gets(ctx context.Context, ids, expand []string) ([]*model.WorkflowStatusDetailScheme, *model.ResponseScheme, error) {
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("rest/api/%v/statuses", i.version))
+	fmt.Fprintf(&endpoint, "rest/api/%v/statuses", i.version)
 
 	params := url.Values{}
 	for _, id := range ids {
@@ -162,7 +162,7 @@ func (i *internalWorkflowStatusImpl) Gets(ctx context.Context, ids, expand []str
 	}
 
 	if params.Encode() != "" {
-		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
+		fmt.Fprintf(&endpoint, "?%v", params.Encode())
 	}
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)

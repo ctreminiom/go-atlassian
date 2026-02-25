@@ -245,10 +245,10 @@ func (i *internalObjectSchemaImpl) Attributes(ctx context.Context, workspaceID, 
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("jsm/assets/workspace/%v/v1/objectschema/%v/attributes", workspaceID, objectSchemaID))
+	fmt.Fprintf(&endpoint, "jsm/assets/workspace/%v/v1/objectschema/%v/attributes", workspaceID, objectSchemaID)
 
 	if query.Encode() != "" {
-		endpoint.WriteString(fmt.Sprintf("?%v", query.Encode()))
+		fmt.Fprintf(&endpoint, "?%v", query.Encode())
 	}
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)
@@ -276,13 +276,13 @@ func (i *internalObjectSchemaImpl) ObjectTypes(ctx context.Context, workspaceID,
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("jsm/assets/workspace/%v/v1/objectschema/%v/objecttypes", workspaceID, objectSchemaID))
+	fmt.Fprintf(&endpoint, "jsm/assets/workspace/%v/v1/objectschema/%v/objecttypes", workspaceID, objectSchemaID)
 
 	if excludeAbstract {
 		query := url.Values{}
 		query.Add("excludeAbstract", "true")
 
-		endpoint.WriteString(fmt.Sprintf("?%v", query.Encode()))
+		fmt.Fprintf(&endpoint, "?%v", query.Encode())
 	}
 
 	req, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)

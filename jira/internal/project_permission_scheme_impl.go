@@ -69,13 +69,13 @@ func (i *internalProjectPermissionSchemeImpl) Get(ctx context.Context, projectKe
 	}
 
 	var endpoint strings.Builder
-	endpoint.WriteString(fmt.Sprintf("rest/api/%v/project/%v/permissionscheme", i.version, projectKeyOrID))
+	fmt.Fprintf(&endpoint, "rest/api/%v/project/%v/permissionscheme", i.version, projectKeyOrID)
 
 	if expand != nil {
 		params := url.Values{}
 		params.Add("expand", strings.Join(expand, ","))
 
-		endpoint.WriteString(fmt.Sprintf("?%v", params.Encode()))
+		fmt.Fprintf(&endpoint, "?%v", params.Encode())
 	}
 
 	request, err := i.c.NewRequest(ctx, http.MethodGet, endpoint.String(), "", nil)

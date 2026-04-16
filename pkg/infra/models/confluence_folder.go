@@ -1,7 +1,5 @@
 package models
 
-import "time"
-
 // FolderScheme represents a folder in Confluence.
 type FolderScheme struct {
 	ID         string               `json:"id,omitempty"`         // The ID of the folder.
@@ -13,15 +11,19 @@ type FolderScheme struct {
 	Position   int                  `json:"position,omitempty"`   // The position of the folder.
 	AuthorID   string               `json:"authorId,omitempty"`   // The ID of the author of the folder.
 	OwnerID    string               `json:"ownerId,omitempty"`    // The ID of the owner of the folder.
-	CreatedAt  *time.Time           `json:"createdAt,omitempty"`  // The creation time of the folder.
+	CreatedAt  *ConfluenceDateTimeScheme `json:"createdAt,omitempty"`  // The timestamp of the creation of the folder.
+	SpaceID    string               `json:"spaceId,omitempty"`    // The ID of the space of the folder.
 	Version    *FolderVersionScheme `json:"version,omitempty"`    // The version information of the folder.
 	Links      *FolderLinksScheme   `json:"_links,omitempty"`     // The links of the folder.
 }
 
 // FolderVersionScheme represents the version information of a folder.
 type FolderVersionScheme struct {
-	Number    int        `json:"number,omitempty"`    // The version number.
-	CreatedAt *time.Time `json:"createdAt,omitempty"` // The creation time of the version.
+	CreatedAt *ConfluenceDateTimeScheme `json:"createdAt,omitempty"` // The timestamp of the creation of the version.
+	Message   string `json:"message,omitempty"`   // The message of the version.
+	Number    int    `json:"number,omitempty"`    // The version number.
+	MinorEdit bool   `json:"minorEdit,omitempty"` // Indicates if the version is a minor edit.
+	AuthorID  string `json:"authorId,omitempty"`  // The ID of the author of the version.
 }
 
 // FolderLinksScheme represents the links of a folder.

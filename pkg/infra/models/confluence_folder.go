@@ -11,7 +11,7 @@ type FolderScheme struct {
 	Position   int                  `json:"position,omitempty"`   // The position of the folder.
 	AuthorID   string               `json:"authorId,omitempty"`   // The ID of the author of the folder.
 	OwnerID    string               `json:"ownerId,omitempty"`    // The ID of the owner of the folder.
-	CreatedAt  string               `json:"createdAt,omitempty"`  // The timestamp of the creation of the folder.
+	CreatedAt  *ConfluenceDateTimeScheme `json:"createdAt,omitempty"`  // The timestamp of the creation of the folder.
 	SpaceID    string               `json:"spaceId,omitempty"`    // The ID of the space of the folder.
 	Version    *FolderVersionScheme `json:"version,omitempty"`    // The version information of the folder.
 	Links      *FolderLinksScheme   `json:"_links,omitempty"`     // The links of the folder.
@@ -19,7 +19,7 @@ type FolderScheme struct {
 
 // FolderVersionScheme represents the version information of a folder.
 type FolderVersionScheme struct {
-	CreatedAt string `json:"createdAt,omitempty"` // The timestamp of the creation of the version.
+	CreatedAt *ConfluenceDateTimeScheme `json:"createdAt,omitempty"` // The timestamp of the creation of the version.
 	Message   string `json:"message,omitempty"`   // The message of the version.
 	Number    int    `json:"number,omitempty"`    // The version number.
 	MinorEdit bool   `json:"minorEdit,omitempty"` // Indicates if the version is a minor edit.

@@ -18,13 +18,13 @@ type IssueTransitionsScheme struct {
 
 // IssueSearchJQLScheme represents the response from the new JQL search endpoint for ADF (v3 API)
 type IssueSearchJQLScheme struct {
-	StartAt       int               `json:"startAt,omitempty"`
-	MaxResults    int               `json:"maxResults,omitempty"`
-	Total         int               `json:"total,omitempty"`
-	Issues        []*IssueScheme    `json:"issues,omitempty"`
-	Names         map[string]string `json:"names,omitempty"`
-	Schema        map[string]string `json:"schema,omitempty"`
-	NextPageToken string            `json:"nextPageToken,omitempty"`
+	StartAt       int                          `json:"startAt,omitempty"`
+	MaxResults    int                          `json:"maxResults,omitempty"`
+	Total         int                          `json:"total,omitempty"`
+	Issues        []*IssueScheme               `json:"issues,omitempty"`
+	Names         map[string]string            `json:"names,omitempty"`
+	Schema        map[string]*IssueFieldSchema `json:"schema,omitempty"`
+	NextPageToken string                       `json:"nextPageToken,omitempty"`
 }
 
 // IssueBulkFetchScheme represents the response from the bulk fetch endpoint for ADF (v3 API)

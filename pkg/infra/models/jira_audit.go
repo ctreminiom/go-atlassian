@@ -15,6 +15,7 @@ type AuditRecordScheme struct {
 	ID              int                                `json:"id,omitempty"`              // The ID of the audit record.
 	Summary         string                             `json:"summary,omitempty"`         // The summary of the audit record.
 	RemoteAddress   string                             `json:"remoteAddress,omitempty"`   // The remote address of the audit record.
+	AuthorAccountID string                             `json:"authorAccountId,omitempty"` // The account ID of the author of the audit record.
 	AuthorKey       string                             `json:"authorKey,omitempty"`       // The author key of the audit record.
 	Created         string                             `json:"created,omitempty"`         // The creation time of the audit record.
 	Category        string                             `json:"category,omitempty"`        // The category of the audit record.

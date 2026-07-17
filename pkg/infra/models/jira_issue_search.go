@@ -16,3 +16,9 @@ type IssueMatchesScheme struct {
 	MatchedIssues []int    `json:"matchedIssues,omitempty"` // The matched issues.
 	Errors        []string `json:"errors,omitempty"`        // The errors occurred during the matching process.
 }
+
+// IssueFieldSchema represents the schema information for a field in the JQL search response
+type IssueFieldSchema struct {
+	Type   string `json:"type"`
+	System string `json:"system"`
+}

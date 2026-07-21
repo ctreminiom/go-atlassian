@@ -61,7 +61,7 @@ type UserConnector interface {
 	// GET /rest/api/{2-3}/users/search
 	//
 	// https://docs.go-atlassian.io/jira-software-cloud/users#get-all-users
-	Gets(ctx context.Context, startAt, maxResults int) ([]*model.UserScheme, *model.ResponseScheme, error)
+	Gets(ctx context.Context, startAt, maxResults int, expand []string) ([]*model.UserScheme, *model.ResponseScheme, error)
 }
 
 type UserSearchConnector interface {

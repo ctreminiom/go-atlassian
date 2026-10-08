@@ -7,7 +7,7 @@ require (
 	github.com/google/go-querystring v1.2.0
 	github.com/google/uuid v1.6.0
 	github.com/stretchr/testify v1.12.0
-	github.com/tidwall/gjson v1.19.1
+	github.com/tidwall/gjson v1.20.0
 )
 
 require (

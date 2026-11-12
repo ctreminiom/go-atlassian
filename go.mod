@@ -7,12 +7,12 @@ require (
 	github.com/google/go-querystring v1.2.0
 	github.com/google/uuid v1.6.0
 	github.com/stretchr/testify v1.12.0
-	github.com/tidwall/gjson v1.19.1
+	github.com/tidwall/gjson v1.20.2
 )
 
 require (
 	github.com/stretchr/objx v0.5.3 // indirect
 	github.com/tidwall/match v1.1.1 // indirect
-	github.com/tidwall/pretty v1.2.0 // indirect
+	github.com/tidwall/pretty v1.3.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

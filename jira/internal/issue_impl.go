@@ -146,7 +146,16 @@ func assignIssue(ctx context.Context, client service.Connector, version, issueKe
 
 	endpoint := fmt.Sprintf("/rest/api/%v/issue/%v/assignee", version, issueKeyOrID)
 
-	request, err := client.NewRequest(ctx, http.MethodPut, endpoint, "", map[string]interface{}{"accountId": accountID})
+	var payload map[string]interface{}
+	if accountID == "null" {
+		// Special case: if "null" is passed, send a JSON null value to unassign the issue
+		// TODO: allow the user to pass a nil value in next major version
+		payload = map[string]interface{}{"accountId": nil}
+	} else {
+		payload = map[string]interface{}{"accountId": accountID}
+	}
+
+	request, err := client.NewRequest(ctx, http.MethodPut, endpoint, "", payload)
 	if err != nil {
 		return nil, err
 	}
